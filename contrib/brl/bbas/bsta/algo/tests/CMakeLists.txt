@@ -21,7 +21,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/beta_distr_100_10.txt ${CMAKE_CURRENT
 
 add_test( NAME bsta_algo_test_fit_weibull COMMAND $<TARGET_FILE:bsta_algo_test_all> test_fit_weibull )
 add_test( NAME bsta_algo_test_gaussian_model COMMAND $<TARGET_FILE:bsta_algo_test_all> test_gaussian_model )
-if( HACK_FORCE_BRL_FAILING_TESTS )
+if( VXL_RUN_FAILING_TESTS )
 add_test( NAME bsta_algo_test_mean_shift COMMAND $<TARGET_FILE:bsta_algo_test_all> test_mean_shift )
 endif()
 add_test( NAME bsta_algo_test_fit_gaussian COMMAND $<TARGET_FILE:bsta_algo_test_all> test_fit_gaussian )

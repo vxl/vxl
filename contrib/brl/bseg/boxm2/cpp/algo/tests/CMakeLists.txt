@@ -10,7 +10,7 @@ target_link_libraries( boxm2_cpp_algo_test_all ${VXL_LIB_PREFIX}testlib boxm2_cp
 add_test( NAME boxm2_test_merge_mixtures COMMAND $<TARGET_FILE:boxm2_cpp_algo_test_all>  test_merge_mixtures  )
 add_test( NAME boxm2_test_cone_ray_trace COMMAND $<TARGET_FILE:boxm2_cpp_algo_test_all>  test_cone_ray_trace  )
 add_test( NAME boxm2_test_cone_update COMMAND $<TARGET_FILE:boxm2_cpp_algo_test_all>  test_cone_update     )
-if( HACK_FORCE_BRL_FAILING_TESTS ) ## This test is fails on Mac with clang
+if( VXL_RUN_FAILING_TESTS ) ## This test is fails on Mac with clang
 add_test( NAME boxm2_test_merge_function COMMAND $<TARGET_FILE:boxm2_cpp_algo_test_all>  test_merge_function  )
 endif()
 

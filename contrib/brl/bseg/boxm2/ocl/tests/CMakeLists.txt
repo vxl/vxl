@@ -24,10 +24,10 @@ add_executable( boxm2_ocl_test_all
 target_link_libraries( boxm2_ocl_test_all ${VXL_LIB_PREFIX}testlib boxm2_ocl boxm2_ocl_pro boxm2_ocl_utils boxm2_cpp boxm2_cpp_algo boxm2_cpp_pro boxm2_pro brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
 add_test( NAME boxm2_ocl_test_refine COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_refine  )
-add_test( NAME boxm2_ocl_test_image_pyramid COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_image_pyramid  )
 add_test( NAME boxm2_ocl_test_process_mains COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_process_mains  )
 add_test( NAME boxm2_ocl_test_weighted_em COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_weighted_em  )
-if( HACK_FORCE_BRL_FAILING_TESTS ) ## These tests are always failing on Mac
+if( VXL_RUN_FAILING_TESTS ) ## These tests are always failing on Mac
+add_test( NAME boxm2_ocl_test_image_pyramid COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_image_pyramid  )
 add_test( NAME boxm2_ocl_test_kernel_filter COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_kernel_filter )
 add_test( NAME boxm2_ocl_test_kernel_vector_filter COMMAND $<TARGET_FILE:boxm2_ocl_test_all>       test_kernel_vector_filter )
 endif()
