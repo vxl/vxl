@@ -39,7 +39,7 @@ int main(int argc, char** argv)
   bwm_video_corr_processor cp;
   cp.set_verbose(true);
   if (!cp.open_video_site(site_file().c_str(), true))
-    return false;
+    return -1;
   std::string cam_path = cp.camera_path();
   bwm_video_cam_istream_sptr cstr = new bwm_video_cam_istream(cam_path);
 

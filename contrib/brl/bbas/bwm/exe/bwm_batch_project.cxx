@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   if (!poly_fs)
   {
     std::cerr << "Error in bwm_batch_porject: Failed to open polygon list file\n";
-    return false;
+    return -1;
   }
 
   //Retrieve poly filenames
@@ -95,7 +95,7 @@ int main(int argc, char** argv)
 
     if ( !ratcam.as_pointer() ) {
       std::cerr << "Failed to load rational camera from file" <<cam_file << std::endl;
-      return false;
+      return -1;
     }
 #endif // 0
 

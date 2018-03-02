@@ -80,7 +80,7 @@ int main(int argc, char** argv)
     bwm_video_corr_processor cp;
     cp.set_verbose(true);
     if (!cp.open_video_site(file.c_str(), true))
-      return false;
+      return -1;
     std::vector<bwm_video_corr_sptr> corrs_it = cp.correspondences();
     std::cout << "there are: " << corrs_it.size() << " corrs in the file: "  << file << "\n";
     for (unsigned j = 0; j < corrs_it.size(); j++) {
