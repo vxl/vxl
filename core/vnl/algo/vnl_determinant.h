@@ -51,7 +51,7 @@ T vnl_determinant(vnl_matrix<T> const &M, bool balance = false);
 //: evaluation using direct methods for sizes of 2x2, 3x3, and 4x4 or qr decomposition for other matrices.
 //  convenience overload from vnl_matrix<T> variant
 //  \relatesalso vnl_matrix_fixed
-template <class T, unsigned m, unsigned n>
+template <class T, vxl::indexsize_t m, vxl::indexsize_t n>
 inline T vnl_determinant(vnl_matrix_fixed<T,m,n> const &M, bool balance = false)
 {
   return vnl_determinant( M.as_ref(), balance );

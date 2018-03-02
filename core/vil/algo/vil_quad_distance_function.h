@@ -142,7 +142,7 @@ inline void vil_quad_distance_function_1D(const srcT* src,std::ptrdiff_t s_step,
 //  dest(x) = dest[x*d_step], src(x)=src[x*s_step], pos(x)=pos[x*p_step]
 template<class srcT, class destT, class posT>
 inline void vil_quad_distance_function_1D(const srcT* src,std::ptrdiff_t s_step,
-                                          unsigned int n,
+                                          vxl::indexsize_t n,
                                           double a,
                                           destT* dest, std::ptrdiff_t d_step,
                                           posT* pos, std::ptrdiff_t p_step)

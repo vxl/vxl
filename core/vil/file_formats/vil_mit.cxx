@@ -343,7 +343,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
         for (unsigned int x = x0; x < x0+ni; ++x)
         {
           is_->seek(8L + y*((ni_*pix_size+7)/8) + x*pix_size/8);
-          for (unsigned int p=0; p<components_; ++p)
+          for (vxl::indexsize_t p=0; p<components_; ++p)
             if (sz != is_->write(ob+p*ni*nj*sz, sz))
               std::cerr << "WARNING: " << __FILE__ << ":\n"
                        << " could not write "<<sz<<" bytes to stream; y,x="<<y<<','<<x<<'\n';
@@ -377,7 +377,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
       for (unsigned int y = y0; y < y0+nj; ++y)
         for (unsigned int x = x0; x < x0+ni; ++x)
         {
-          for (unsigned int p=0; p<components_; ++p) {
+          for (vxl::indexsize_t p=0; p<components_; ++p) {
             std::memcpy(tempbuf+p*sz, ob+p*ni*nj, sz);
             swap(tempbuf+p*sz,sz);
           }

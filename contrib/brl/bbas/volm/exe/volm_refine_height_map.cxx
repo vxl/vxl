@@ -143,7 +143,7 @@ int main(int argc, char** argv)
       out_height().compare("") == 0 || out_class().compare("") == 0 || class_map_folder().compare("") == 0)
   {
     vul_arg_display_usage_and_exit();
-    return false;
+    return EXIT_FAILURE;
   }
   std::stringstream log_file;
   std::stringstream log;

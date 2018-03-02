@@ -13,7 +13,7 @@
 //    only getting/putting elements, and multiply by vector or another
 //    sparse matrix.
 //
-//    Each row is stored as a vector of std::pair<unsigned int,T>, where the first
+//    Each row is stored as a vector of std::pair<vxl::indexsize_t,T>, where the first
 //    of the pair indicates the column index, and the second the
 //    value.  All rows are stored, as std::vector< row >;
 //
@@ -33,9 +33,9 @@
 //   David Capel May 2000   Added set_row, scale_row, mult, vcat and const
 //                          methods where appropriate.
 //   Peter Vanroose - Jan.2009 - Added several methods, modelled after vnl_matrix<T>:
-//     const version of operator()(unsigned int, unsigned int)
-//     T get(unsigned int, unsigned int)
-//     void put(unsigned int, unsigned int, T)
+//     const version of operator()(vxl::indexsize_t, vxl::indexsize_t)
+//     T get(vxl::indexsize_t, vxl::indexsize_t)
+//     void put(vxl::indexsize_t, vxl::indexsize_t, T)
 //     void clear()
 //     vnl_sparse_matrix& normalize_rows()
 //     bool operator==()
@@ -67,7 +67,7 @@
 //  only getting/putting elements, and multiply by vector or another
 //  sparse matrix.
 //
-//  Each row is stored as a vector of std::pair<unsigned int,T>, where the first
+//  Each row is stored as a vector of std::pair<vxl::indexsize_t,T>, where the first
 //  of the pair indicates the column index, and the second the
 //  value.  All rows are stored, as std::vector< row >;
 //
@@ -75,14 +75,14 @@ template <class T>
 class VNL_TEMPLATE_EXPORT vnl_sparse_matrix_pair
 {
  public:
-  unsigned int first;
+  vxl::indexsize_t first;
   T second;
 
   //: Constructs a pair with null values
   vnl_sparse_matrix_pair() : first(0), second(T(0)) {}
 
   //: Constructs a pair with position a and value b
-  vnl_sparse_matrix_pair(unsigned int const& a, T const& b) : first(a), second(b) {}
+  vnl_sparse_matrix_pair(vxl::indexsize_t const& a, T const& b) : first(a), second(b) {}
 
   vnl_sparse_matrix_pair(const vnl_sparse_matrix_pair<T>& o) : first(o.first), second(o.second) {}
 
@@ -117,7 +117,7 @@ class VNL_TEMPLATE_EXPORT vnl_sparse_matrix
   vnl_sparse_matrix();
 
   //: Construct an empty m*n matrix
-  vnl_sparse_matrix(unsigned int m, unsigned int n);
+  vnl_sparse_matrix(vxl::indexsize_t m, vxl::indexsize_t n);
 
   //: Construct an m*n Matrix and copy rhs into it.
   vnl_sparse_matrix(vnl_sparse_matrix<T> const& rhs);
@@ -129,57 +129,57 @@ class VNL_TEMPLATE_EXPORT vnl_sparse_matrix
   void mult(vnl_vector<T> const& rhs, vnl_vector<T>& result) const;
 
   //: Multiply this*p, a fortran order matrix.
-  void mult(unsigned int n, unsigned int m, T const* p, T* q) const;
+  void mult(vxl::indexsize_t n, vxl::indexsize_t m, T const* p, T* q) const;
 
   //: Multiplies lhs*this, where lhs is a vector
   void pre_mult(const vnl_vector<T>& lhs, vnl_vector<T>& result) const;
 
   //: Get a reference to an entry in the matrix.
-  T& operator()(unsigned int row, unsigned int column);
+  T& operator()(vxl::operatorbrctsize_t row, vxl::operatorbrctsize_t column);
 
   //: Get the value of an entry in the matrix.
-  T operator()(unsigned int row, unsigned int column) const;
+  T operator()(vxl::operatorbrctsize_t row, vxl::operatorbrctsize_t column) const;
 
   //: Get an entry in the matrix.
   //  This is the "const" version of operator().
-  T get(unsigned int row, unsigned int column) const;
+  T get(vxl::indexsize_t row, vxl::indexsize_t column) const;
 
   //: Put (i.e., add or overwrite) an entry into the matrix.
-  void put(unsigned int row, unsigned int column, T value);
+  void put(vxl::indexsize_t row, vxl::indexsize_t column, T value);
 
   //: Get diag(A_transpose * A).
   // Useful for forming Jacobi preconditioners for linear solvers.
   void diag_AtA(vnl_vector<T>& result) const;
 
   //: Set a whole row at once. Much faster. Returns *this.
-  vnl_sparse_matrix& set_row(unsigned int r,
+  vnl_sparse_matrix& set_row(vxl::indexsize_t r,
                              std::vector<int> const& cols,
                              std::vector<T> const& vals);
 
   //: Return row as vector of pairs
   //  Added to aid binary I/O
-  row& get_row(unsigned int r) {return elements[r];}
+  row& get_row(vxl::indexsize_t r) {return elements[r];}
 
   //: Laminate matrix A onto the bottom of this one
   vnl_sparse_matrix<T>& vcat(vnl_sparse_matrix<T> const& A);
 
   //: Get the number of rows in the matrix.
-  unsigned int rows() const { return rs_; }
+  vxl::indexsize_t rows() const { return rs_; }
 
   //: Get the number of columns in the matrix.
-  unsigned int columns() const { return cs_; }
+  vxl::indexsize_t columns() const { return cs_; }
 
   //: Get the number of columns in the matrix.
-  unsigned int cols() const { return cs_; }
+  vxl::indexsize_t cols() const { return cs_; }
 
   //: Return whether a given row is empty
-  bool empty_row(unsigned int r) const { return elements[r].empty(); }
+  bool empty_row(vxl::indexsize_t r) const { return elements[r].empty(); }
 
   //: This is occasionally useful.
-  T sum_row(unsigned int r);
+  T sum_row(vxl::indexsize_t r);
 
   //: Useful for normalizing row sums in convolution operators
-  vnl_sparse_matrix& scale_row(unsigned int r, T scale);
+  vnl_sparse_matrix& scale_row(vxl::indexsize_t r, T scale);
 
   //: Set all elements to null
   void clear() { elements.clear(); }
@@ -295,10 +295,10 @@ class VNL_TEMPLATE_EXPORT vnl_sparse_matrix
 
  protected:
   vnl_sparse_matrix_elements elements;
-  unsigned int rs_, cs_;
+  vxl::indexsize_t rs_, cs_;
 
   // internal iterator
-  mutable unsigned int itr_row;
+  mutable vxl::indexsize_t itr_row;
   mutable typename row::const_iterator itr_cur;
   mutable bool itr_isreset;
 };

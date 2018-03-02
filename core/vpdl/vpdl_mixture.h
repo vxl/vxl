@@ -25,7 +25,7 @@
 // This class is the most general, polymorphic version of a mixture.
 // Internally it keeps base class pointers to clones of the supplied distributions.
 // Each distribution in the mixture could potentially be of a different type.
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_mixture : public vpdl_multi_cmp_dist<T,n>
 {
  public:

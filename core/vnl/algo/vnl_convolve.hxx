@@ -13,7 +13,7 @@ inline
 vnl_vector<U> vnl_convolve_cyclic_using_fft(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U*)
 {
   assert (v1.size() == v2.size());
-  unsigned int n = v1.size();
+  vxl::indexsize_t n = v1.size();
 
   typedef std::complex<double> C;
   vnl_vector<C> w1(n, C(0)); for (unsigned i=0; i<n; ++i) w1[i]=v1[i];
@@ -40,7 +40,7 @@ template <class T1, class T2, class U>
 vnl_vector<U> vnl_convolve_cyclic(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U*, bool use_fft)
 {
   assert (v1.size() == v2.size());
-  unsigned int n = v1.size();
+  vxl::indexsize_t n = v1.size();
 
   // Quick return if possible:
   if (n == 0) return vnl_vector<U>(0, U(0));
@@ -61,7 +61,7 @@ vnl_vector<U> vnl_convolve_cyclic(vnl_vector<T1> const& v1, vnl_vector<T2> const
   return ret;
 }
 
-inline bool has_only_primefactors_2_3_5(unsigned int n)
+inline bool has_only_primefactors_2_3_5(vxl::indexsize_t n)
 {
   if (n <= 1) return true;
   while (n%2 == 0) n /= 2;
@@ -100,7 +100,7 @@ vnl_vector<T> vnl_convolve(vnl_vector<T> const& v1, vnl_vector<T> const& v2, int
   if (use_fft != 0)
     return vnl_convolve_using_fft(v1, v2, (T*)VXL_NULLPTR, use_fft);
 
-  unsigned int n = v1.size() + v2.size() - 1;
+  vxl::indexsize_t n = v1.size() + v2.size() - 1;
   vnl_vector<T> ret(n, (T)0); // all elements already initialized to zero
   for (unsigned int k=0; k<v1.size(); ++k)
     for (unsigned int i=0; i<=k && i<v2.size(); ++i)
@@ -122,7 +122,7 @@ vnl_vector<U> vnl_convolve(vnl_vector<T1> const& v1, vnl_vector<T2> const& v2, U
   if (use_fft != 0)
     return vnl_convolve_using_fft(v1, v2, (U*)VXL_NULLPTR, use_fft);
 
-  unsigned int n = v1.size() + v2.size() - 1;
+  vxl::indexsize_t n = v1.size() + v2.size() - 1;
   vnl_vector<U> ret(n, (U)0); // all elements already initialized to zero
   for (unsigned int k=0; k<v1.size(); ++k)
     for (unsigned int i=0; i<=k && i<v2.size(); ++i)

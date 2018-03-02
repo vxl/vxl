@@ -67,7 +67,7 @@ bool operator<(vnl_matrix<T> const& lhs, vnl_matrix<T> const& rhs)
 //
 // \relatesalso vnl_vector_fixed
 
-template<class T, unsigned int n> VNL_TEMPLATE_EXPORT
+template<class T, vxl::indexsize_t n> VNL_TEMPLATE_EXPORT
 bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rhs)
 {
   return lhs.as_ref() < rhs.as_ref();
@@ -78,7 +78,7 @@ bool operator<(vnl_vector_fixed<T,n> const& lhs, vnl_vector_fixed<T,n> const& rh
 //
 // \relatesalso vnl_matrix_fixed
 
-template<class T, unsigned int n, unsigned int m> VNL_TEMPLATE_EXPORT
+template<class T, vxl::indexsize_t n, vxl::indexsize_t m> VNL_TEMPLATE_EXPORT
 bool operator<(vnl_matrix_fixed<T,n,m> const& lhs, vnl_matrix_fixed<T,n,m> const& rhs)
 {
   return lhs.as_ref() < rhs.as_ref();

@@ -44,14 +44,14 @@ class bvpl_discriminative_non_max_suppression
                                     bvpl_kernel_sptr kernel);
 
   //: Keeps the n top responses after non-maxima suppression
-  template<unsigned n_responses>
+  template<vxl::indexsize_t n_responses>
   void  keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
                            bvxm_voxel_grid<float>* grid_in,
                            bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
                            int this_id);
 
   //: Keeps the n top responses after non-maxima suppression
-  template<unsigned n_responses>
+  template<vxl::indexsize_t n_responses>
   void  keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
                            bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* grid_in,
                            bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
@@ -177,7 +177,7 @@ void bvpl_discriminative_non_max_suppression::local_non_maxima_suppression(bvxm_
 }
 
 
-template<unsigned n_responses>
+template<vxl::indexsize_t n_responses>
 void  bvpl_discriminative_non_max_suppression::keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
                                                                   bvxm_voxel_grid<float>* grid_in,
                                                                   bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
@@ -224,7 +224,7 @@ void  bvpl_discriminative_non_max_suppression::keep_top_responses(bvxm_voxel_gri
   }
 }
 
-template<unsigned n_responses>
+template<vxl::indexsize_t n_responses>
 void  bvpl_discriminative_non_max_suppression::keep_top_responses(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* top_resp_grid,
                                                                   bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* grid_in,
                                                                   bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,

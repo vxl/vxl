@@ -127,7 +127,7 @@ class boct_tree
 #endif
 
 
-  template <unsigned DIM>
+  template < vxl::indexsize_t DIM>
   boct_tree<T_loc,vnl_vector_fixed<T_data, DIM> >* clone_to_vector() {
 
     std::vector<boct_tree_cell<T_loc, T_data>*> cells = leaf_cells();

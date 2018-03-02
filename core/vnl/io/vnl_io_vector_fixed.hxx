@@ -11,7 +11,7 @@
 
 //=================================================================================
 //: Binary save self to stream.
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 void vsl_b_write(vsl_b_ostream & os, const vnl_vector_fixed<T,n> & p)
 {
   const short io_version_no = 2;
@@ -23,7 +23,7 @@ void vsl_b_write(vsl_b_ostream & os, const vnl_vector_fixed<T,n> & p)
 
 //=================================================================================
 //: Binary load self from stream.
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
 {
   if (!is) return;
@@ -67,7 +67,7 @@ void vsl_b_read(vsl_b_istream &is, vnl_vector_fixed<T,n> & p)
 
 //====================================================================================
 //: Output a human readable summary to the stream
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 void vsl_print_summary(std::ostream & os,const vnl_vector_fixed<T,n> & p)
 {
   os<<"Len: "<<p.size()<<" [fixed] (";

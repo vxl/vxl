@@ -16,10 +16,10 @@
 #include <vnl/vnl_math.h>
 
 //: forward declare vnl_vector_fixed
-template<class T, unsigned n> class vnl_vector_fixed;
+template<class T,  vxl::indexsize_t n> class vnl_vector_fixed;
 
 
-template<unsigned n>
+template< vxl::indexsize_t n>
 struct two_pi_power
 {
   static inline double value()
@@ -35,7 +35,7 @@ struct two_pi_power<0>
 
 //: A Gaussian distribution
 // used as a component of the mixture
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_gaussian : public bsta_distribution<T,n>
 {
   typedef typename bsta_distribution<T,n>::vector_type vector_;

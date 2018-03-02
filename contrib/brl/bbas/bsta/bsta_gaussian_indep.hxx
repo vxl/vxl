@@ -13,7 +13,7 @@
 namespace
 {
   //: Unrol the mahalanobis distance calculation
-  template <class T, unsigned n, unsigned index>
+  template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
   struct bsta_gaussian_indep_compute_sqr_mahalanobis
   {
     static inline T value(const vnl_vector_fixed<T,n>& d,
@@ -26,7 +26,7 @@ namespace
 
   //: base case
   //  This is partial specialization
-  template <class T, unsigned n>
+  template <class T,  vxl::indexsize_t n>
   struct bsta_gaussian_indep_compute_sqr_mahalanobis<T,n,0>
   {
     static inline T value(const vnl_vector_fixed<T,n>& /*d*/,
@@ -36,7 +36,7 @@ namespace
 
 
   //: Unrol the determinant calculation
-  template <class T, unsigned n, unsigned index>
+  template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
   struct bsta_gaussian_indep_determinant
   {
     static inline T value(const vnl_vector_fixed<T,n>& covar)
@@ -47,7 +47,7 @@ namespace
 
   //: base case
   //  This is partial specialization
-  template <class T, unsigned n>
+  template <class T,  vxl::indexsize_t n>
   struct bsta_gaussian_indep_determinant<T,n,0>
   {
     static inline T value(const vnl_vector_fixed<T,n>& /*covar*/)
@@ -57,7 +57,7 @@ namespace
 
 
 //: The squared Mahalanobis distance to this point
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T
 bsta_gaussian_indep<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) const
 {
@@ -69,7 +69,7 @@ bsta_gaussian_indep<T,n>::sqr_mahalanobis_dist(const vnl_vector_fixed<T,n>& pt) 
 
 
 //: The determinant of the covariance matrix
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_gaussian_indep<T,n>::compute_det()
 {
@@ -78,7 +78,7 @@ bsta_gaussian_indep<T,n>::compute_det()
 
 //: Unrol the compute probability calculation
 //  The general induction step
-template <class T, unsigned n, unsigned index>
+template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
 struct bsta_gaussian_indep_compute_probability_box
 {
   static inline T value(const vnl_vector_fixed<T,n>& min_minus_mean,
@@ -102,7 +102,7 @@ struct bsta_gaussian_indep_compute_probability_box
 
 //: base case
 //  This is partial specialization
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 struct bsta_gaussian_indep_compute_probability_box<T,n,0>
 {
   static inline T value(const vnl_vector_fixed<T,n>& min_minus_mean,
@@ -121,7 +121,7 @@ struct bsta_gaussian_indep_compute_probability_box<T,n,0>
 
 //: The probability that a sample lies inside a n-d bounding box
 //  \note min_pt and max_pt are the corners of the box
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
                                         const vnl_vector_fixed<T,n>& max_pt) const
 {
@@ -133,7 +133,7 @@ T bsta_gaussian_indep<T,n>::probability(const vnl_vector_fixed<T,n>& min_pt,
 }
 
 //: Gradient vector at this point
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 vnl_vector_fixed<T,n> bsta_gaussian_indep<T,n>::gradient(const vnl_vector_fixed<T,n>& pt) const
 {
   T pd = prob_density(pt);

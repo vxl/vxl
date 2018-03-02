@@ -285,7 +285,7 @@ class bsta_diag_covar_functor
 //       This solution is really just a hack.
 //       The correct solution requires is_base_of from Boost or TR1.
 //       This class should work for any derived class of bsta_gaussian_indep
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_diag_covar_functor<bsta_num_obs<bsta_gaussian_indep<T,n> > >
 {
  public:

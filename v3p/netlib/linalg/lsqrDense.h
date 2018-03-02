@@ -39,7 +39,7 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  void Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const;
+  void Aprod1(vxl::indexsize_t m, vxl::indexsize_t n, const double * x, double * y ) const;
 
   /**
    * computes x = x + A'*y without altering y,
@@ -47,12 +47,12 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  void Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const;
+  void Aprod2(vxl::indexsize_t m, vxl::indexsize_t n, double * x, const double * y ) const;
 
   /** Householder Transformation: reflects the vector "x" across the
    * hyperplane whose normal is defined by vector "z". The dimension of
    * the hyperspace is given by "n". */
-  void HouseholderTransformation(unsigned int n, const double * z, double * x ) const;
+  void HouseholderTransformation(vxl::indexsize_t n, const double * z, double * x ) const;
 
   /** Set the matrix A of the equation to be solved A*x = b. */
   void SetMatrix( double ** A );

@@ -17,7 +17,7 @@
 
 #include <boxm/boxm_scene.h>
 
-template <unsigned feature_dim>
+template <vxl::indexsize_t feature_dim>
 class bvpl_global_pca: public vbl_ref_count
 {
  public:

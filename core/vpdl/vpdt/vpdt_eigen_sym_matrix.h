@@ -22,7 +22,7 @@
 
 
 //: wrapper for the vnl eigensystem function for fixed size data
-template<class T, unsigned int n>
+template<class T, vxl::indexsize_t n>
 inline void vnl_symmetric_eigensystem_compute(const vnl_matrix_fixed<T,n,n>& A,
                                               vnl_matrix_fixed<T,n,n>& V,
                                               vnl_vector_fixed<T,n>& D)
@@ -34,7 +34,7 @@ inline void vnl_symmetric_eigensystem_compute(const vnl_matrix_fixed<T,n,n>& A,
 
 
 //: A symmetric matrix represented in eigenvalue decomposition
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdt_eigen_sym_matrix
 {
  public:
@@ -293,7 +293,7 @@ inline void vpdt_set_size(vpdt_eigen_sym_matrix<T,0>& m, unsigned int s)
 
 
 //: Fill a vpdt_eigen_sym_matrix
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 inline void vpdt_fill(vpdt_eigen_sym_matrix<T,n>& m, const T& val)
 {
   typename vpdt_eigen_sym_matrix<T,n>::vector v;

@@ -26,7 +26,7 @@
 #include <vnl/vnl_double_3x3.h>
 
 //: Constructor  from xml file
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const std::string &path, const std::string kernel_names[])
 {
   std::cout << "Loading taylor info from xml-file" << std::endl;
@@ -106,7 +106,7 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const std::string &path, con
 }
 
 //: Compute the DIM taylor kernels for this scene at current block. The output is saved to the projection scene as a DIM-d vector
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;
@@ -144,7 +144,7 @@ void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, 
   valid_scene->unload_active_blocks();
 }
 
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;
@@ -272,7 +272,7 @@ bool bvpl_global_taylor<T_data, DIM>::compute_approximation_error(int scene_id, 
 
 
 //: Threshold non-salient features according to Harris' measure
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 void bvpl_global_taylor<T_data, DIM>::threshold_corners(int scene_id, int block_i, int block_j, int block_k, double harris_k)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
@@ -319,7 +319,7 @@ void bvpl_global_taylor<T_data, DIM>::threshold_corners(int scene_id, int block_
 }
 
 //: Init auxiliary scenes and smallest cell length values
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 void bvpl_global_taylor<T_data, DIM>::init()
 {
   for (unsigned i = 0; i < aux_dirs_.size(); i++)
@@ -372,7 +372,7 @@ void bvpl_global_taylor<T_data, DIM>::init()
 
 
 //: Load scene info
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -400,7 +400,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_scene (int scene_id)
 }
 
 //: Load auxiliary scene indicating if a cell is valid. e.g border cells are not valid
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_valid_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -431,7 +431,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_valid_scene (int scen
 
 
 //: Load auxiliary scene info
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_error_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>=(int)scenes_.size())
@@ -514,7 +514,7 @@ boxm_scene_base_sptr bvpl_global_taylor::load_train_scene (int scene_id)
 
 
 //: Load auxiliary scene info
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_projection_scene (int scene_id)
 {
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
@@ -545,7 +545,7 @@ boxm_scene_base_sptr bvpl_global_taylor<T_data, DIM>::load_projection_scene (int
 }
 
 //: Write this class to xml file
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 void bvpl_global_taylor<T_data, DIM>::xml_write()
 {
   bxml_document doc;
@@ -581,7 +581,7 @@ void bvpl_global_taylor<T_data, DIM>::xml_write()
 
 
 //: Extract a particular coefficient scene
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 void bvpl_global_taylor<T_data, DIM>::extract_coefficient_scene(int scene_id, int coefficient_id, boxm_scene<boct_tree<short, float > > *float_scene)
 {
   typedef boct_tree<short, float> float_tree_type;

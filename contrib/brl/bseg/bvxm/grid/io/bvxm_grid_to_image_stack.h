@@ -56,7 +56,7 @@ class bvxm_image_traits<vnl_vector_fixed<float,4> >
 class bvxm_grid_to_image_stack
 {
  public:
-  template<class T, unsigned N>
+  template<class T,  vxl::indexsize_t N>
   static bool write_grid_to_image_stack(bvxm_voxel_grid<vnl_vector_fixed<T,N> > *grid, std::string directory);
 
   template<class T>
@@ -65,7 +65,7 @@ class bvxm_grid_to_image_stack
 
 
 // saves a voxel grid as a stack of images that can ble loaded by dristhi
-template<class T, unsigned N>
+template<class T,  vxl::indexsize_t N>
 bool bvxm_grid_to_image_stack::write_grid_to_image_stack(bvxm_voxel_grid<vnl_vector_fixed<T, N> > *grid, std::string directory)
 {
   if (vul_file::is_directory(directory))

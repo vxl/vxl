@@ -10,7 +10,7 @@
 template <class T>
 bool local_minima(vbl_array_1d<T> const& in, vbl_array_1d<T>& minima, T thresh)
 {
-  const unsigned int n = (unsigned int)(in.size());
+  const vxl::indexsize_t n = (unsigned int)(in.size());
   assert(minima.size()==n);
   //special cases
   // minimum is not defined for n<3
@@ -20,7 +20,7 @@ bool local_minima(vbl_array_1d<T> const& in, vbl_array_1d<T>& minima, T thresh)
   for (unsigned int i=0; i<n; ++i)
     minima[i] = T(0);
   //the general case
-  for (unsigned int c=1; c<n-1; ++c) {
+  for (vxl::indexsize_t c=1; c<n-1; ++c) {
     T dm = in[c-1]-in[c], dp = in[c+1]-in[c];
     if (dm>thresh && dp > thresh) {
       T dmin = dm;

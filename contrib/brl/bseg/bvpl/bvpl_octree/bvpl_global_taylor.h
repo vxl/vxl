@@ -19,7 +19,7 @@
 //Forward declaration
 class bvpl_global_corners;
 
-template <class T_data, unsigned DIM>
+template <class T_data,  vxl::indexsize_t DIM>
 boxm_apm_type bvpl_taylor_apm();
 
 namespace bvpl_global_tylor_defaults
@@ -28,7 +28,7 @@ namespace bvpl_global_tylor_defaults
 ;
 }
 
-template<class T_data, unsigned DIM>
+template<class T_data,  vxl::indexsize_t DIM>
 class bvpl_global_taylor : public vbl_ref_count
 {
  public:

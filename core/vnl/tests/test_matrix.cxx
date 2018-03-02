@@ -62,7 +62,7 @@ void test_int()
   try { m0.get(0,25); }  // Raise out of bounds exception.
   catch(...) { exceptionThrownAndCaught = true; }
   TEST("Out of bounds get(0,25)", exceptionThrownAndCaught, true);
-  
+
   exceptionThrownAndCaught = false;
   try { m0.get(25,0); }  // Raise out of bounds exception.
   catch(...) { exceptionThrownAndCaught = true; }
@@ -124,7 +124,7 @@ void test_int()
           (v.get(0)==3 && v.get(1)==6)), true);
 
     // Indices: {1, 0, 1}
-    vnl_vector<unsigned int> indices(3, 1);
+    vnl_vector<vxl::indexsize_t> indices(3, 1);
     indices.put(1,0);
     vnl_matrix<int> mi;
 
@@ -339,10 +339,10 @@ void test_int()
   {
   vnl_matrix<int> m(5,10,1);
   vnl_vector<int> vr = m.apply_rowwise(sum_vector);
-  for (unsigned int i = 0; i < vr.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vr.size(); ++i)
     TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
   vnl_vector<int> vc = m.apply_columnwise(sum_vector);
-  for (unsigned int i = 0; i < vc.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vc.size(); ++i)
     TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
   }
 
@@ -471,10 +471,10 @@ void test_float()
   {
   vnl_matrix<float> m(5,10,1);
   vnl_vector<float> vr = m.apply_rowwise(sum_vector);
-  for (unsigned int i = 0; i < vr.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vr.size(); ++i)
     TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
   vnl_vector<float> vc = m.apply_columnwise(sum_vector);
-  for (unsigned int i = 0; i < vc.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vc.size(); ++i)
     TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
   }
 
@@ -582,10 +582,10 @@ void test_double()
   {
   vnl_matrix<double> m(5,10,1);
   vnl_vector<double> vr = m.apply_rowwise(sum_vector);
-  for (unsigned int i = 0; i < vr.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vr.size(); ++i)
     TEST("vr.apply_rowwise(sum_vector)", vr.get(i), 10);
   vnl_vector<double> vc = m.apply_columnwise(sum_vector);
-  for (unsigned int i = 0; i < vc.size(); ++i)
+  for (vxl::indexsize_t i = 0; i < vc.size(); ++i)
     TEST("vc.apply_columnwise(sum_vector)", vc.get(i), 5);
   }
 

@@ -11,7 +11,7 @@
 
 
 //: Return inv(D) * b.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 vnl_vector_fixed<T,N> vnl_diag_matrix_fixed<T,N>::solve(vnl_vector_fixed<T,N> const& b) const
 {
   vnl_vector_fixed<T,N> ret;
@@ -21,7 +21,7 @@ vnl_vector_fixed<T,N> vnl_diag_matrix_fixed<T,N>::solve(vnl_vector_fixed<T,N> co
 }
 
 //: Return inv(D) * b.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 void vnl_diag_matrix_fixed<T,N>::solve(vnl_vector_fixed<T,N> const& b, vnl_vector_fixed<T,N>* out) const
 {
   for (unsigned i = 0; i < N; ++i)
@@ -29,7 +29,7 @@ void vnl_diag_matrix_fixed<T,N>::solve(vnl_vector_fixed<T,N> const& b, vnl_vecto
 }
 
 //: Print in MATLAB diag([1 2 3]) form.
-template <class T, unsigned int N>
+template <class T, vxl::indexsize_t N>
 std::ostream& operator<< (std::ostream& s, const vnl_diag_matrix_fixed<T,N>& D)
 {
   s << "diag([ ";

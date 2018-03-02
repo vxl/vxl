@@ -14,7 +14,7 @@
 namespace
 {
   //: Unrol the Mahalanobis distance calculation
-  template <class T, unsigned n, unsigned index>
+  template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
   struct bsta_gaussian_sphere_compute_dot
   {
     static inline T value(const vnl_vector_fixed<T,n>& d)
@@ -26,7 +26,7 @@ namespace
 
   //: base case
   // this is partial specialization
-  template <class T, unsigned n>
+  template <class T,  vxl::indexsize_t n>
   struct bsta_gaussian_sphere_compute_dot<T,n,0>
   {
     static inline T value(const vnl_vector_fixed<T,n>& /*d*/)
@@ -44,7 +44,7 @@ namespace
 
 
   //: Unroll the determinant calculation
-  template <class T, unsigned n, unsigned index>
+  template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
   struct bsta_gaussian_sphere_determinant
   {
     static inline T value(const T& var)
@@ -55,7 +55,7 @@ namespace
 
   //: base case
   // this is partial specialization
-  template <class T, unsigned n>
+  template <class T,  vxl::indexsize_t n>
   struct bsta_gaussian_sphere_determinant<T,n,0>
   {
     static inline T value(const T& /*var*/) { return 1; }
@@ -64,7 +64,7 @@ namespace
 
 
 //: The squared Mahalanobis distance to this point
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T
 bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
 {
@@ -76,7 +76,7 @@ bsta_gaussian_sphere<T,n>::sqr_mahalanobis_dist(const vector_& pt) const
 
 //: Unrol the compute probability calculation
 //  The general induction step
-template <class T, class vector_, unsigned n, unsigned index>
+template <class T, class vector_,  vxl::indexsize_t n,  vxl::indexsize_t index>
 struct bsta_gaussian_sphere_compute_probability_box
 {
   static inline T value(const vector_& min_minus_mean,
@@ -100,7 +100,7 @@ struct bsta_gaussian_sphere_compute_probability_box
 
 //: base case
 //  This is partial specialization
-template <class T, class vector_, unsigned n>
+template <class T, class vector_,  vxl::indexsize_t n>
 struct bsta_gaussian_sphere_compute_probability_box<T,vector_,n,0>
 {
   static inline T value(const vector_& min_minus_mean,
@@ -139,7 +139,7 @@ struct bsta_gaussian_sphere_compute_probability_box<T,vector_,1,0>
 
 //: The probability that a sample lies inside a n-d bounding box
 //  \note min_pt and max_pt are the corners of the box
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 T bsta_gaussian_sphere<T,n>::probability(const vector_& min_pt,
                                          const vector_& max_pt) const
 {
@@ -151,7 +151,7 @@ T bsta_gaussian_sphere<T,n>::probability(const vector_& min_pt,
 }
 
 //: The determinant of the covariance matrix
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 void
 bsta_gaussian_sphere<T,n>::compute_det()
 {
@@ -162,7 +162,7 @@ bsta_gaussian_sphere<T,n>::compute_det()
 
 //: Unrol the sampling calculation
 //  The general induction step
-template <class T, class vector_, unsigned n, unsigned index>
+template <class T, class vector_,  vxl::indexsize_t n,  vxl::indexsize_t index>
 struct var_from_dist
 {
   static inline vector_ value(const T& var, vnl_random& rng)
@@ -177,7 +177,7 @@ struct var_from_dist
 
 //: base case
 //  This is partial specialization
-template <class T, class vector_, unsigned n>
+template <class T, class vector_,  vxl::indexsize_t n>
 struct var_from_dist<T,vector_,n,0>
 {
   static inline vector_ value(const T& var, vnl_random& rng)
@@ -205,7 +205,7 @@ struct var_from_dist<T,vector_,1,0>
 
 
 //: sample
-template <class T, unsigned int n>
+template <class T,  vxl::indexsize_t n>
 typename bsta_gaussian_sphere<T,n>::vector_ bsta_gaussian_sphere<T,n>::sample(vnl_random& rng) const
 {
   vector_ mean = bsta_gaussian<T,n>::mean_;

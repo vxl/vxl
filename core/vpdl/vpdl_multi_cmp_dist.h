@@ -15,7 +15,7 @@
 #include <vpdl/vpdl_distribution.h>
 
 //: The base class for all multiple component probability distributions.
-template<class T, unsigned int n=0>
+template<class T, vxl::indexsize_t n=0>
 class vpdl_multi_cmp_dist : public vpdl_distribution<T,n>
 {
 public:

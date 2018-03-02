@@ -17,7 +17,7 @@
 namespace
 {
   //: Unroll the dot product of two vectors
-  template <class T, unsigned n, unsigned index>
+  template <class T,  vxl::indexsize_t n,  vxl::indexsize_t index>
   struct bsta_von_mises_compute_dot
   {
     static inline T value(const vnl_vector_fixed<T,n>& v0,
@@ -30,7 +30,7 @@ namespace
 
   //: base case
   // this is a partial specialization
-  template <class T, unsigned n>
+  template <class T,  vxl::indexsize_t n>
   struct bsta_von_mises_compute_dot<T,n,0>
   {
     static inline T value(const vnl_vector_fixed<T,n>& /*v0*/,

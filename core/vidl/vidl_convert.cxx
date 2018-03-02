@@ -105,7 +105,7 @@ bool convert_generic(vidl_frame const& in_frame,
   const unsigned int num_pix = in_frame.ni() * in_frame.nj();
   // assume pixels are no more than 32 bytes (that's 4 doubles)
   vxl_byte in_pixel[32], out_pixel[32];
-  for (unsigned int c=0; c<num_pix; ++c, ++in_itr, ++out_itr) {
+  for (vxl::indexsize_t c=0; c<num_pix; ++c, ++in_itr, ++out_itr) {
     in_itr.get_data(in_pixel);
     color_conv(in_pixel, out_pixel);
     out_itr.set_data(out_pixel);
@@ -131,7 +131,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_UYVY_422>
     const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* uyvy = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(rgb++);
       const vxl_byte& g1 = *(rgb++);
       const vxl_byte& b1 = *(rgb++);
@@ -164,7 +164,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_RGB_24>
     const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& u1 = *(uyvy++);
       const vxl_byte& y1 = *(uyvy++);
       const vxl_byte& v1 = *(uyvy++);
@@ -197,7 +197,7 @@ struct convert<VIDL_PIXEL_FORMAT_UYVY_422, VIDL_PIXEL_FORMAT_MONO_8>
     const vxl_byte* uyvy = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       ++uyvy;
       const vxl_byte& y1 = *(uyvy++);
       ++uyvy;
@@ -223,7 +223,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24, VIDL_PIXEL_FORMAT_YUYV_422>
     const vxl_byte* rgb = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(rgb++);
       const vxl_byte& g1 = *(rgb++);
       const vxl_byte& b1 = *(rgb++);
@@ -256,7 +256,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24>
     const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* rgb = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       const vxl_byte& u1 = *(yuyv++);
       const vxl_byte& y2 = *(yuyv++);
@@ -291,7 +291,7 @@ struct convert<VIDL_PIXEL_FORMAT_RGB_24P, VIDL_PIXEL_FORMAT_YUYV_422>
     const vxl_byte* blue= green+in_frame.ni() * in_frame.nj();
     vxl_byte* yuyv = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& r1 = *(red++);
       const vxl_byte& g1 = *(green++);
       const vxl_byte& b1 = *(blue++);
@@ -325,7 +325,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_RGB_24P>
     vxl_byte* green = red+out_frame.ni()*out_frame.nj();
     vxl_byte* blue = green+out_frame.ni()*out_frame.nj();
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       const vxl_byte& u1 = *(yuyv++);
       const vxl_byte& y2 = *(yuyv++);
@@ -357,7 +357,7 @@ struct convert<VIDL_PIXEL_FORMAT_YUYV_422, VIDL_PIXEL_FORMAT_MONO_8>
     const vxl_byte* yuyv = reinterpret_cast<const vxl_byte*>(in_frame.data());
     vxl_byte* mono = reinterpret_cast<vxl_byte*>(out_frame.data());
     unsigned int num_half_pix = (in_frame.ni() * in_frame.nj() + 1)/2;
-    for (unsigned int c=0; c<num_half_pix; ++c) {
+    for (vxl::indexsize_t c=0; c<num_half_pix; ++c) {
       const vxl_byte& y1 = *(yuyv++);
       ++yuyv;
       const vxl_byte& y2 = *(yuyv++);

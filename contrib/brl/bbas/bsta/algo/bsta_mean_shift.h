@@ -26,7 +26,7 @@
 #include <vcl_compiler.h>
 #include <bsta/algo/bsta_sample_set.h>
 
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_mean_shift
 {
  public:

@@ -47,7 +47,7 @@ class bvpl_vector_operator
                        int targed_id, bvxm_voxel_grid<float>* out_grid);
 
   //: Returns a grid containing single responses from a grid containing vectors of responses
-  template<unsigned n_responses>
+  template<vxl::indexsize_t n_responses>
   void get_response(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* resp_grid,
                     bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
                     unsigned idx,
@@ -197,7 +197,7 @@ void  bvpl_vector_operator::filter_response(bvxm_voxel_grid<T>* grid_in, bvxm_vo
 
 
 //: Returns a grid containing single responses from a grid containing vectors of responses
-template<unsigned n_responses>
+template<vxl::indexsize_t n_responses>
 void bvpl_vector_operator::get_response(bvxm_voxel_grid<vnl_vector_fixed<float, n_responses> >* resp_grid,
                                         bvxm_voxel_grid<vnl_vector_fixed<int, n_responses> >* id_grid,
                                         unsigned idx,

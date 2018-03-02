@@ -15,7 +15,7 @@
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_scene.h>
 
-template <unsigned DIM>
+template < vxl::indexsize_t DIM>
 bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,DIM> > > *scene, bsta_histogram<float> &response_hist )
 {
   typedef boct_tree<short, vnl_vector_fixed<float,DIM> > tree_type;

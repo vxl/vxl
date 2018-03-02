@@ -298,7 +298,7 @@ class boxm_scene :public boxm_scene_base
   }
 
   //: Returns a scene of a vector type with the same structure and vector initialized to the the same data
-  template <unsigned DIM>
+  template < vxl::indexsize_t DIM>
   void clone_blocks_to_vector(boxm_scene<boct_tree<short, vnl_vector_fixed<datatype, DIM> > > &scene_out)
   {
     typedef boct_tree<short, vnl_vector_fixed<datatype, DIM> > type_tree_out;

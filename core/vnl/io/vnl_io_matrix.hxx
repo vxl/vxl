@@ -70,7 +70,7 @@ void vsl_print_summary(std::ostream & os,const vnl_matrix<T> & p)
 {
   os<<"Size: "<<p.rows()<<" x "<<p.cols()<<std::endl;
 
-  unsigned int m = 5; unsigned int n = 5;
+  vxl::indexsize_t m = 5; vxl::indexsize_t n = 5;
 
 
   if (m>p.rows()) m=p.rows();

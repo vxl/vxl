@@ -106,9 +106,9 @@ class VNL_EXPORT vnl_real_polynomial
   int     degree() const { return int(coeffs_.size()) - 1; }
 
   //: Access to the polynomial coefficients
-  double& operator [] (int i)       { return coeffs_[i]; }
+  double& operator [] (vxl::operatorbrctsize_t i)       { return coeffs_[i]; }
   //: Access to the polynomial coefficients
-  double  operator [] (int i) const { return coeffs_[i]; }
+  double  operator [] (vxl::operatorbrctsize_t i) const { return coeffs_[i]; }
 
   //: Return the vector of coefficients
   const vnl_vector<double>& coefficients() const { return coeffs_; }

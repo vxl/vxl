@@ -25,7 +25,7 @@ T vpdl_compute_inverse_cdf(const vpdl_distribution<T,1>& /*dist*/, double /*p*/)
 namespace{
 
 //: Define helper classes to create partial specialization of member functions.
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 class inverse_cdf_helper
 {
  public:
@@ -71,7 +71,7 @@ class inverse_cdf_helper<T,0>
 // The value of x: P(x'<x) = P for x' drawn from the distribution.
 // This is only valid for univariate distributions
 // multivariate distributions will return -infinity
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 typename vpdl_distribution<T,n>::vector
 vpdl_distribution<T,n>::inverse_cdf(const T& p) const
 {
@@ -83,7 +83,7 @@ vpdl_distribution<T,n>::inverse_cdf(const T& p) const
 //: The probability of being in an axis-aligned box
 // The box is defined by two points, the minimum and maximum.
 // Implemented in terms of \c cumulative_prob() by default.
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 T vpdl_distribution<T,n>::box_prob(const vector& min_pt,
                                    const vector& max_pt) const
 {

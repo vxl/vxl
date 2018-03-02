@@ -121,7 +121,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
     static unsigned int t_ = 0; // cached value
     if (t_ != 0) return t_;
     std::vector<unsigned int> d = decompose();
-    t_ = 1; unsigned int p = 1;
+    t_ = 1; vxl::indexsize_t p = 1;
     for (unsigned int i=0; i<d.size(); ++i)
     {
       if (p != d[i]) t_ *= d[i]-1;
@@ -138,7 +138,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
     if (val_==1) return *this;
     Base z = smallest_generator();
     if (z!=1) return exp(Base::totient()-log());
-    for (unsigned int r=1; r<=N/2; ++r) {
+    for (vxl::indexsize_t r=1; r<=N/2; ++r) {
       unsigned int t=int(*this*int(r));
       if (t==1) return r; else if (t==N-1) return N-r;
     }
@@ -164,7 +164,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
   static std::vector<unsigned int> decompose() {
     static std::vector<unsigned int> decomposition_ = std::vector<unsigned int>(); // cached value
     if (decomposition_.size() > 0) return decomposition_;
-    unsigned int r = N;
+    vxl::indexsize_t r = N;
     for (unsigned int d=2; d*d<=r; ++d)
       while (r%d == 0) { decomposition_.push_back(d); r /= d; }
     if (r > 1) decomposition_.push_back(r);
@@ -249,7 +249,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
   }
 
   //: Calculate the greatest common divisor of l and N.
-  static inline unsigned int gcd(unsigned int l, unsigned int n) {
+  static inline unsigned int gcd(unsigned int l, vxl::indexsize_t n) {
     unsigned int l1 = n;
     while (l!=0) { unsigned int t = l; l = l1 % l; l1 = t; }
     return l1;
@@ -258,7 +258,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
 
  private:
   //: private function to set cached value of lp1_ when available
-  void set_log(unsigned int r) const { r %= Base::totient(); lp1_ = r+1; }
+  void set_log(vxl::indexsize_t r) const { r %= Base::totient(); lp1_ = r+1; }
 
   mutable unsigned int mo_; //!< cached value for multiplicative order
   mutable unsigned int lp1_; //!< cached value for 1+log()
@@ -434,7 +434,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int_poly
   std::vector<Scalar> val_; //!< M-tuple (or degree M-1 polynomial) representing this
 
   // This essentially implements std::pow(N,int) which is not always available
-  static unsigned int Ntothe(unsigned int m) { return m==0?1:m==1?N:Ntothe(m/2)*Ntothe((m+1)/2); }
+  static unsigned int Ntothe(vxl::indexsize_t m) { return m==0?1:m==1?N:Ntothe(m/2)*Ntothe((m+1)/2); }
  public:
   //: The number of different finite_int polynomials of this type
   static unsigned int cardinality() { return Ntothe(M); }
@@ -457,7 +457,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int_poly
   int degree() const { for (int i=deg(); i>=0; --i) if (val_[i]!=0) return i; return -1; }
 
   //: Access to individual coefficients
-  inline Scalar operator[](unsigned int i) const { assert(i<M); return i<=deg() ? val_[i] : Scalar(0); }
+  inline Scalar operator[](vxl::operatorbrctsize_t i) const { assert(i<M); return i<=deg() ? val_[i] : Scalar(0); }
 
   //: Assignment
   inline Base& operator=(Base const& x) { val_ = x.val_; return *this; }
@@ -506,7 +506,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int_poly
 
   //: The additive order of x is the smallest positive r such that r*x == 0.
   unsigned int additive_order() const {
-    unsigned int r = N;
+    vxl::indexsize_t r = N;
     for (unsigned int i=0; i<=deg(); ++i)
       if (val_[i] != 0) r=Scalar::gcd(val_[i],r);
     return N/r;
@@ -573,7 +573,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int_poly
 
  private:
   //: Add x to the i-th degree coefficient of val_, possibly reducing modulo the "modulo" poly.
-  void add_modulo_poly(unsigned int m, Scalar const& x)
+  void add_modulo_poly(vxl::indexsize_t m, Scalar const& x)
   {
     if (m < M) val_[m] += x;
     else {

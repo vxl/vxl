@@ -104,7 +104,7 @@ static void test_I()
 template <class T>
 void test_svd_recomposition(char const *type, double maxres, T* /* tag */, vnl_random &rng)
 {
-  const unsigned int n = 3;
+  const vxl::indexsize_t n = 3;
   // Test inversion of 3x3 matrix of T :
   std::cout << "----- Testing vnl_svd_fixed<" << type << "> recomposition -----" << std::endl;
 

@@ -48,7 +48,7 @@ class bsta_mixture_weight_by_obs_updater
 
 
 //: Unrol the power calculation
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 struct bsta_compute_pow
 {
   static inline T value(const T& v)
@@ -83,7 +83,7 @@ struct bsta_gaussian_fitness
 
 //: Used to sort a mixture of gaussians in decreasing order of fitness
 // Partial specialization optimized for the spherical case
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 struct bsta_gaussian_fitness<bsta_gaussian_sphere<T,n> >
 {
   static bool order (const bsta_gaussian_sphere<T,n>& d1, const T& w1,

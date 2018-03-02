@@ -24,11 +24,11 @@ vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)
   }
 }
 
-vbl_bit_array_2d::vbl_bit_array_2d(unsigned int m, unsigned int n, bool v[])
+vbl_bit_array_2d::vbl_bit_array_2d(vxl::indexsize_t m, vxl::indexsize_t n, bool v[])
 {
   construct(m,n);
-  for (unsigned int x=0; x<m; ++x)
-    for (unsigned int y=0; y<n; ++y)
+  for (vxl::indexsize_t x=0; x<m; ++x)
+    for (vxl::indexsize_t y=0; y<n; ++y)
       set(x,y, v[m*y+x]);
 }
 
@@ -44,24 +44,24 @@ vbl_bit_array_2d& vbl_bit_array_2d::operator=(vbl_bit_array_2d const& that)
 }
 
 //: Resizes and pads with zeros; keeps existing data
-void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
+void vbl_bit_array_2d::enlarge( vxl::indexsize_t num_rows, vxl::indexsize_t num_cols)
 {
   assert (num_rows >= num_rows_ && num_cols >= num_cols_);
 
   unsigned char *tempdata= data_;
-  unsigned int tempm= num_rows_;
-  unsigned int tempn= num_cols_;
+  vxl::indexsize_t tempm= num_rows_;
+  vxl::indexsize_t tempn= num_cols_;
 
   construct( num_rows, num_cols);
   fill(false); // fill with zeros
 
   if (tempdata)
   {
-    for (unsigned int i=0; i< tempm; ++i)
+    for (vxl::indexsize_t i=0; i< tempm; ++i)
     {
       // find start of new column
       unsigned long byteindex;
-      unsigned int bitindex;
+      vxl::indexsize_t bitindex;
       index( i, 0, byteindex, bitindex);
 
       // find start of old column
@@ -86,7 +86,7 @@ unsigned long vbl_bit_array_2d::size() const
   return (num_rows_*num_cols_+CHAR_BIT-1)/CHAR_BIT;
 }
 
-void vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
+void vbl_bit_array_2d::construct(vxl::indexsize_t num_rows, vxl::indexsize_t num_cols)
 {
   // quick return if possible
   if (num_rows==0 || num_cols==0) { num_rows_=num_cols_=0; data_ = VXL_NULLPTR; return; }
@@ -96,7 +96,7 @@ void vbl_bit_array_2d::construct(unsigned int num_rows, unsigned int num_cols)
   data_[this->size()-1]=0; // avoids uninitialized data problems in operator==()
 }
 
-void vbl_bit_array_2d::index( unsigned int x, unsigned int y, unsigned long &byteindex, unsigned int &bitindex) const
+void vbl_bit_array_2d::index( vxl::indexsize_t x, vxl::indexsize_t y, unsigned long &byteindex, vxl::indexsize_t &bitindex) const
 {
   unsigned long idx= x* num_cols_ + y;
 
@@ -111,10 +111,10 @@ bool vbl_bit_array_2d::operator==(vbl_bit_array_2d const &a) const
   return 0 == std::memcmp(data_, a.data_, this->size());
 }
 
-bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
+bool vbl_bit_array_2d::operator() (vxl::indexsize_t i, vxl::indexsize_t j) const
 {
   unsigned long byteindex;
-  unsigned int bitindex;
+  vxl::indexsize_t bitindex;
   index( i, j, byteindex, bitindex);
 
   unsigned char mask= (unsigned char)(1<<bitindex);
@@ -122,10 +122,10 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
   return (data_[byteindex] & mask) != 0;
 }
 
-bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j)
+bool vbl_bit_array_2d::operator() (vxl::indexsize_t i, vxl::indexsize_t j)
 {
   unsigned long byteindex;
-  unsigned int bitindex;
+  vxl::indexsize_t bitindex;
   index( i, j, byteindex, bitindex);
 
   unsigned char mask= (unsigned char)(1<<bitindex);
@@ -133,10 +133,10 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j)
   return (data_[byteindex] & mask) != 0;
 }
 
-void vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const &x)
+void vbl_bit_array_2d::put(vxl::indexsize_t i, vxl::indexsize_t j, bool const &x)
 {
   unsigned long byteindex;
-  unsigned int bitindex;
+  vxl::indexsize_t bitindex;
 
   index( i, j, byteindex, bitindex);
 
@@ -146,7 +146,7 @@ void vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const &x)
   data_[byteindex]= mask|(nmask & data_[byteindex]);
 }
 
-bool vbl_bit_array_2d::get(unsigned int i, unsigned int j) const
+bool vbl_bit_array_2d::get(vxl::indexsize_t i, vxl::indexsize_t j) const
 {
   return operator()(i,j);
 }
@@ -154,9 +154,9 @@ bool vbl_bit_array_2d::get(unsigned int i, unsigned int j) const
 //
 std::ostream& operator<< (std::ostream &os, const vbl_bit_array_2d &array)
 {
-  for (unsigned int i=0; i< array.rows(); i++)
+  for (vxl::indexsize_t i=0; i< array.rows(); i++)
   {
-    for (unsigned int j=0; j< array.columns(); j++)
+    for (vxl::indexsize_t j=0; j< array.columns(); j++)
       os << array(i,j) << ' ';
 
     os << std::endl;

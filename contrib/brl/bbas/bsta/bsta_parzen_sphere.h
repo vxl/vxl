@@ -23,12 +23,12 @@
 #include <vcl_compiler.h>
 
 //: forward declare vnl_matrix_fixed and vnl_vector_fixed
-template<class T, unsigned n, unsigned m> class vnl_matrix_fixed;
-template<class T, unsigned n>             class vnl_vector_fixed;
+template<class T,  vxl::indexsize_t n,  vxl::indexsize_t m> class vnl_matrix_fixed;
+template<class T,  vxl::indexsize_t n>             class vnl_vector_fixed;
 
 //: A parzen distribution
 // the Gaussian sphere is used as a component of the mixture
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_parzen_sphere : public bsta_parzen<T,n>
 {
  public:

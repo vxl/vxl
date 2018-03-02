@@ -56,7 +56,7 @@ class VNL_ALGO_EXPORT vnl_rpoly_roots
   // Operations----------------------------------------------------------------
 
   //: Return i'th complex root
-  std::complex<double> operator [] (int i) const { return std::complex<double>(r_[i], i_[i]); }
+  std::complex<double> operator [] (vxl::operatorbrctsize_t i) const { return std::complex<double>(r_[i], i_[i]); }
 
   //: Complex vector of all roots.
   vnl_vector<std::complex<double> > roots() const;

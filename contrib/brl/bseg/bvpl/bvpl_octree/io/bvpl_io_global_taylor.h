@@ -21,7 +21,7 @@
 
 
 //: Binary save parameters to stream.
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_b_write(vsl_b_ostream & os, bvpl_global_taylor<T,N> const &)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
@@ -29,14 +29,14 @@ void vsl_b_write(vsl_b_ostream & os, bvpl_global_taylor<T,N> const &)
 }
 
 //: Binary load parameters from stream.
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_b_read(vsl_b_istream & is, bvpl_global_taylor<T,N> &p)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_print_summary(std::ostream &os, const bvpl_global_taylor<T,N> &p)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
@@ -44,7 +44,7 @@ void vsl_print_summary(std::ostream &os, const bvpl_global_taylor<T,N> &p)
 }
 
 
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_b_read(vsl_b_istream& is, bvpl_global_taylor<T,N>* p)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
@@ -52,14 +52,14 @@ void vsl_b_read(vsl_b_istream& is, bvpl_global_taylor<T,N>* p)
 }
 
 
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_b_write(vsl_b_ostream& os, const bvpl_global_taylor<T,N>* &mp)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-template <class T, unsigned N>
+template <class T,  vxl::indexsize_t N>
 void vsl_print_summary(std::ostream& os, const bvpl_global_taylor<T,N>* &p)
 {
   if (p==0)

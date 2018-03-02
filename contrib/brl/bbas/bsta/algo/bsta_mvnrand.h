@@ -21,7 +21,7 @@
 
 
 // generic interface
-template<template<class, unsigned> class G, class T, unsigned n>
+template<template<class, unsigned> class G, class T,  vxl::indexsize_t n>
 class bsta_mvnrand
 {
 private:
@@ -31,7 +31,7 @@ private:
 
 
 //partial specialization for full covariance
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 class bsta_mvnrand<bsta_gaussian_full, T, n>
 {
 public:
@@ -97,7 +97,7 @@ private:
 };
 
 //specialization for independent gaussian
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 class bsta_mvnrand<bsta_gaussian_indep, T, n>
 {
 public:
@@ -141,7 +141,7 @@ private:
 };
 
 //specialization for spherical gaussian
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 class bsta_mvnrand<bsta_gaussian_sphere, T, n>
 {
 public:

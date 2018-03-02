@@ -211,7 +211,7 @@ bool vgl_intersection(vgl_box_3d<T> const& b, vgl_plane_3d<T> const& plane)
 
   // find the signed distance from the box corners to the plane
   int pos=0, neg=0;
-  for (unsigned int c=0; c<corners.size(); c++) {
+  for (vxl::indexsize_t c=0; c<corners.size(); c++) {
     vgl_point_3d<T> corner=corners[c];
     double d=(plane.a()*corner.x());
     d+=(plane.b()*corner.y());
@@ -967,7 +967,7 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   unsigned int ns = poly.num_sheets();
   bool hit = false;
   for (unsigned int s = 0; s<ns&&!hit; ++s) {
-    unsigned int n = (unsigned int)(poly[s].size());
+    vxl::indexsize_t n = (unsigned int)(poly[s].size());
     for (unsigned int i = 0; i<n&&!hit; ++i) {
       vgl_point_2d<T> p = poly[s][i];
       hit = b.contains(p.x(), p.y());
@@ -983,7 +983,7 @@ bool vgl_intersection(const vgl_box_2d<T>& b,
   // check if any polygon edges intersect the box
   for (unsigned int s = 0; s<ns&&!hit; ++s)
   {
-    unsigned int n = (unsigned int)(poly[s].size());
+    vxl::indexsize_t n = (unsigned int)(poly[s].size());
     vgl_point_2d<T> ia, ib;
     vgl_point_2d<T> last = poly[s][0];
     for (unsigned int i = 1; i<n&&!hit; ++i)

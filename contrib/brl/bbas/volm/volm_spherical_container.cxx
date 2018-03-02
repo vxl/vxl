@@ -270,7 +270,7 @@ void volm_spherical_container::draw_template(std::string vrml_file_name, double 
 }
 
 //: paint the wireframe of the voxels with the given ids with the given color
-void volm_spherical_container::draw_template_painted(std::string vrml_file_name, double dmin, std::vector<unsigned int>& ids, float r, float g, float b, float trans)
+void volm_spherical_container::draw_template_painted(std::string vrml_file_name, double dmin, std::vector< vxl::indexsize_t >& ids, float r, float g, float b, float trans)
 {
   std::ofstream ofs(vrml_file_name.c_str());
   // write the header

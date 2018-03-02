@@ -41,14 +41,14 @@ lsqrDense::SetMatrix( double ** inputA )
  * computes y = y + A*x without altering x.
  */
 void lsqrDense::
-Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const
+Aprod1(vxl::indexsize_t m, vxl::indexsize_t n, const double * x, double * y ) const
 {
-  for ( unsigned int row = 0; row < m; row++ )
+  for ( vxl::indexsize_t row = 0; row < m; row++ )
     {
     const double * rowA = this->A[row];
     double sum = 0.0;
 
-    for ( unsigned int col = 0; col < n; col++ )
+    for ( vxl::indexsize_t col = 0; col < n; col++ )
       {
       sum += rowA[col] * x[col];
       }
@@ -62,13 +62,13 @@ Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const
  * computes x = x + A'*y without altering y.
  */
 void lsqrDense::
-Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const
+Aprod2(vxl::indexsize_t m, vxl::indexsize_t n, double * x, const double * y ) const
 {
-  for ( unsigned int col = 0; col < n; col++ )
+  for ( vxl::indexsize_t col = 0; col < n; col++ )
     {
     double sum = 0.0;
 
-    for ( unsigned int row = 0; row < m; row++ )
+    for ( vxl::indexsize_t row = 0; row < m; row++ )
       {
       sum += this->A[row][col] * y[row];
       }
@@ -86,7 +86,7 @@ Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const
 
 */
 void lsqrDense::
-HouseholderTransformation(unsigned int n, const double * z, double * x ) const
+HouseholderTransformation(vxl::indexsize_t n, const double * z, double * x ) const
 {
   // First, compute z'*x as a scalar product.
   double scalarProduct = 0.0;

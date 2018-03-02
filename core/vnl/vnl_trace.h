@@ -25,19 +25,19 @@ template <class T> VNL_TEMPLATE_EXPORT
 T vnl_trace(vnl_matrix<T> const& M)
 {
   T sum(0);
-  const unsigned int N = M.rows()<M.cols() ? M.rows() : M.cols();
-  for (unsigned int i=0; i<N; ++i)
+  const vxl::indexsize_t N = M.rows()<M.cols() ? M.rows() : M.cols();
+  for (vxl::indexsize_t i=0; i<N; ++i)
     sum += M(i, i);
   return sum;
 }
 
 //: Calculate trace of a matrix
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned int N1, unsigned int N2> VNL_TEMPLATE_EXPORT
+template <class T, vxl::indexsize_t N1, vxl::indexsize_t N2> VNL_TEMPLATE_EXPORT
 T vnl_trace(vnl_matrix_fixed<T,N1,N2> const& M)
 {
   T sum(0);
-  for (unsigned int i=0; i<N1 && i<N2; ++i)
+  for (vxl::indexsize_t i=0; i<N1 && i<N2; ++i)
     sum += M(i, i);
   return sum;
 }

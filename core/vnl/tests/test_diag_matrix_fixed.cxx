@@ -14,15 +14,15 @@
 
 void test_diag_matrix_fixed()
 {
-  const unsigned int N = 3;
+  const vxl::indexsize_t N = 3;
 
   vnl_diag_matrix_fixed<double, N> m1;
-  for (unsigned i=0; i<N; i++)
+  for (vxl::indexsize_t i=0; i<N; i++)
     m1(i,i) = i*0.25-0.25;
 
   vnl_diag_matrix_fixed<double, N> const m1c=m1; // must be const in order to use m(i,j)
   std::cout << "m1 = " << m1 << " =\n";
-  for (unsigned i=0; i<N; i++) {
+  for (vxl::indexsize_t i=0; i<N; i++) {
     std::cout << '\t';
     for (unsigned j=0; j<N; j++)
       std::cout << m1c(i,j) << ' ';
@@ -30,12 +30,12 @@ void test_diag_matrix_fixed()
   }
 
   vnl_diag_matrix_fixed<double, N> m2;
-  for (unsigned i=0; i<N; i++)
+  for (vxl::indexsize_t i=0; i<N; i++)
     m2(i,i) = 2.0-1.25*i;
 
   vnl_diag_matrix_fixed<double, N> const m2c=m2;
   std::cout << "m2 = " << m2 << " =\n";
-  for (unsigned i=0; i<N; i++) {
+  for (vxl::indexsize_t i=0; i<N; i++) {
     std::cout << '\t';
     for (unsigned j=0; j<N; j++)
       std::cout << m2c(i,j) << ' ';

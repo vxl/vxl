@@ -979,4 +979,44 @@ __inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
 
 #endif //VXL_LEGACY_FUTURE_REMOVE
 
+namespace vxl {
+/*
+  Typedefs for VXL sizes to differentiate between intended uses
+  of integer types used for variables that represent
+  indexing into arrays or returning memory offsets. In standard
+  libraries these are std::size_t and std::ptrdiff_t
+
+  The OSX -Wshorten-64-to-32 compiler warnings help to identify
+  implicit conversions that are hypothesized to be silently
+  blocking the compiler from identifying potential performance
+  improvments.
+*/
+//#define VXL_LEGACY_INDEX_TYPES
+#undef VXL_LEGACY_INDEX_TYPES
+#ifdef VXL_LEGACY_INDEX_TYPES
+  typedef unsigned int  indexsize_t ;        // <-- Just std::size_t     Used for any index, size, dimension, or count template parameter
+  typedef unsigned long normalsize_t;        // <-- Just std::size_t
+  typedef int           signedindexsize_t;   // <-- Just std::ptrdiff_t
+  typedef long          signednormalsize_t;  // <-- Just std::ptrdiff_t
+
+  /* TEMP REFACTORING types */
+  typedef ::size_t      operatorbrctsize_t;
+  typedef unsigned      argminmaxreturnsize_t;
+  typedef ::size_t      size_t;
+#else
+  typedef ::size_t      indexsize_t ;        // <-- Just std::size_t
+  typedef ::size_t      normalsize_t;        // <-- Just std::size_t
+  typedef ::size_t      signedindexsize_t;   // <-- Just std::ptrdiff_t
+  typedef ::size_t      signednormalsize_t;  // <-- Just std::ptrdiff_t
+
+  /* TEMP REFACTORING types */
+  typedef ::size_t      operatorbrctsize_t;
+  typedef ::size_t      argminmaxreturnsize_t;
+  typedef ::size_t      size_t;
+
+#endif
+}
+
+
+
 #endif // vcl_compiler_h_

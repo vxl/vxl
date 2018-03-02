@@ -41,7 +41,7 @@ decimate_block(std::vector<std::vector<vil_image_view<float> > > const& blocks)
   dec_block.set_size(sbi, sbj);
   for (unsigned int dj = 0; dj<sbj; ++dj)
   {
-    unsigned int r = 0, j0 = 2*dj;
+    vxl::indexsize_t r = 0, j0 = 2*dj;
     if (2*dj>=sbj)
     {
       r = 1;
@@ -49,7 +49,7 @@ decimate_block(std::vector<std::vector<vil_image_view<float> > > const& blocks)
     }
     for (unsigned int di = 0; di<sbi; ++di)
     {
-      unsigned int c = 0, i0 = 2*di;
+      vxl::indexsize_t c = 0, i0 = 2*di;
       if (2*di>=sbi)
       {
         c = 1;
@@ -76,7 +76,7 @@ bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
   if (fmt == VIL_PIXEL_FORMAT_BYTE)
   {
     vil_image_view<unsigned char> bv = blk;
-    for (unsigned int p = 0; p<np; ++p){
+    for (vxl::indexsize_t p = 0; p<np; ++p){
       vil_image_view<float> bvf(ni, nj);
       for (unsigned int j = 0; j<nj; ++j)
         for (unsigned int i= 0; i<ni; ++i)
@@ -88,7 +88,7 @@ bool convert_multi_plane_to_float(vil_image_view_base_sptr& blk,
   else if (fmt == VIL_PIXEL_FORMAT_UINT_16)
   {
     vil_image_view<unsigned short> bv = blk;
-    for (unsigned int p = 0; p<np; ++p){
+    for (vxl::indexsize_t p = 0; p<np; ++p){
       vil_image_view<float> bvf(ni, nj);
       for (unsigned int j = 0; j<nj; ++j)
         for (unsigned int i= 0; i<ni; ++i)
@@ -106,7 +106,7 @@ void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
   unsigned int np = (unsigned int)(fblk.size());
-  for (unsigned int p = 0; p<np; ++p)
+  for (vxl::indexsize_t p = 0; p<np; ++p)
     for (unsigned int j = 0; j<nj; ++j)
       for (unsigned int i= 0; i<ni; ++i)
         blk(i,j,p) = static_cast<unsigned char>(fblk[p](i,j));
@@ -118,7 +118,7 @@ void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
   unsigned int np = (unsigned int)(fblk.size());
-  for (unsigned int p = 0; p<np; ++p)
+  for (vxl::indexsize_t p = 0; p<np; ++p)
     for (unsigned int j = 0; j<nj; ++j)
       for (unsigned int i= 0; i<ni; ++i)
         blk(i,j,p) = static_cast<unsigned short>(fblk[p](i,j));
@@ -186,8 +186,8 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
         for (unsigned int bi=0; bi<nbi; bi+=2)
         {
           //construct the 2x2 block neighborhood
-          for (unsigned int r = 0; r<2; ++r)
-            for (unsigned int c = 0; c<2; ++c)
+          for (vxl::indexsize_t r = 0; r<2; ++r)
+            for (vxl::indexsize_t c = 0; c<2; ++c)
             {
               unsigned int ki = bi+c;
               if (ki>=nbi)//make sure there are enough blocks in the row
@@ -262,9 +262,9 @@ blocked_decimate(vil_blocked_image_resource_sptr const& brsc,
         {
           std::vector<vil_image_view<float> >dec_fblk(np);
           //create decimated blocks for each plane
-          for (unsigned int p = 0; p<np; ++p){
-            for (unsigned int r = 0; r<2; ++r)
-              for (unsigned int c = 0; c<2; ++c)
+          for (vxl::indexsize_t p = 0; p<np; ++p){
+            for (vxl::indexsize_t r = 0; r<2; ++r)
+              for (vxl::indexsize_t c = 0; c<2; ++c)
               {
                 unsigned int ki = bi+c;
                 if (ki>=nbi)

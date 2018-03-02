@@ -24,7 +24,7 @@ scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
             vgl_point_3d<double> const& initial_pt,
             double elevation, double& xm, double& ym)
 {
-  unsigned int n = cams.size();
+  vxl::indexsize_t n = cams.size();
   vgl_plane_3d<double> pl(0, 0, 1, -elevation);
   double xsq = 0, ysq = 0;
   xm = 0; ym = 0;
@@ -56,7 +56,7 @@ scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
             double elevation, double& xm, double& ym,
             double const& relative_diameter = 1.0)
 {
-  unsigned int n = cams.size();
+  vxl::indexsize_t n = cams.size();
   vgl_plane_3d<double> pl(0, 0, 1, -elevation);
   double xsq = 0, ysq = 0;
   xm = 0; ym = 0;
@@ -126,7 +126,7 @@ find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
                         std::vector<vgl_point_2d<double> > const& corrs,
                         vgl_point_3d<double>& p_3d)
 {
-  unsigned int n = cams.size();
+  vxl::indexsize_t n = cams.size();
   if (!n || n!=corrs.size())
     return false;
   //the average view volume center
@@ -186,7 +186,7 @@ find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
                         vgl_point_3d<double> & p_3d,
                         double const& relative_diameter)
 {
-  unsigned int n = cams.size();
+  vxl::indexsize_t n = cams.size();
   if (!n || n != corrs.size())
     return false;
   // define the iteration layer along z

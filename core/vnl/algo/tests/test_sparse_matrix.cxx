@@ -12,7 +12,7 @@
 // Test the sparse matrix operations.
 void doTest1()
 {
-  const unsigned int n = 20;
+  const vxl::indexsize_t n = 20;
 
   vnl_sparse_matrix<double> m1(n,n);
   for (unsigned i=0; i<n; i++) {
@@ -71,7 +71,7 @@ void doTest1()
 void doTest2()
 {
   std::clock_t t = std::clock();
-  for (unsigned int n = 1000; n<4000; n+=1000)
+  for (vxl::indexsize_t n = 1000; n<4000; n+=1000)
   {
     vnl_sparse_matrix<double> m1(n,n);
     for (unsigned i=0; i<n; i++) {
@@ -95,7 +95,7 @@ void doTest2()
 
 void doTest3()
 {
-  const unsigned int n = 20;
+  const vxl::indexsize_t n = 20;
 
   vnl_sparse_matrix<double> ms(n,n);
   vnl_matrix<double> md(n,n); md = 0.0; // Initialise to all zeros
@@ -132,7 +132,7 @@ void doTest3()
 
 void doTest4()
 {
-  const unsigned int n = 20;
+  const vxl::indexsize_t n = 20;
 
   vnl_sparse_matrix<double> ms(n,n);
   vnl_matrix<double> md(n,n); md = 0.0; // Initialise to all zeros
@@ -164,7 +164,7 @@ void doTest4()
 
 void doTest5()
 {
-  const unsigned int n = 20;
+  const vxl::indexsize_t n = 20;
 
   // testing the generaized case of CalculateNPairs
   // A * x = lambda * B * x

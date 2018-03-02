@@ -28,7 +28,7 @@
 // The first argument may correspond to the number of planes on an image. The second argument is
 // determined by the user based on the data.
 
-template <unsigned int dim, unsigned int modes> class bvxm_mog_mc_processor
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes> class bvxm_mog_mc_processor
 {
  protected:
 

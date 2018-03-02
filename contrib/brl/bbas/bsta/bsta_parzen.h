@@ -22,13 +22,13 @@
 #include <vcl_compiler.h>
 
 //: forward declare vnl_vector_fixed
-template<class T, unsigned n> class vnl_vector_fixed;
+template<class T,  vxl::indexsize_t n> class vnl_vector_fixed;
 
 //: forward declare parzen
-template<class T, unsigned n> class bsta_parzen;
+template<class T,  vxl::indexsize_t n> class bsta_parzen;
 
 //: functor for sorting samples in descending order of likelihood
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 class vless
 {
  public:
@@ -56,7 +56,7 @@ class vless
 
 //: A Parzen distribution
 // used as a component of the mixture
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 class bsta_parzen : public bsta_distribution<T,n>
 {
  public:

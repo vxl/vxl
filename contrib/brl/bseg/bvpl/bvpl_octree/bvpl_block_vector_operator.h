@@ -28,7 +28,7 @@ class bvpl_block_vector_operator
  public:
   //: "Convolves" kernel with an input octree, storing the output in an output octree.
   //  This function only iterate through leaf_cells at level 0;
-  template<class T_data_in, class T_data_out,class F, unsigned dim >
+  template<class T_data_in, class T_data_out,class F,  vxl::indexsize_t dim >
   void operate(boxm_scene<boct_tree<short, T_data_in > > &scene_in,
                F functor,
                bvpl_kernel_vector_sptr kernel_vector,
@@ -38,7 +38,7 @@ class bvpl_block_vector_operator
 };
 
 //: Operates a kernel on a scene by : (1)Traverse input scene and for every leaf cell, (2) request a region around it, and (3) apply the functor
-template<class T_data_in, class T_data_out,class F, unsigned dim >
+template<class T_data_in, class T_data_out,class F,  vxl::indexsize_t dim >
 void bvpl_block_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in > > &scene_in,
                                          F functor,
                                          bvpl_kernel_vector_sptr kernel_vector,

@@ -803,7 +803,7 @@ vil_openjpeg_image
     chunk, reinterpret_cast<T_PIXEL*>(chunk->data()),
     ni, nj, np, 1, ni, ni*nj);
 
-  for ( unsigned int p = 0; p < np; ++p )
+  for ( vxl::indexsize_t p = 0; p < np; ++p )
   {
     T_PIXEL sign = opj_view_t->comps[p].sgnd ?
                    1 << (opj_view_t->comps[p].prec - 1) : 0;

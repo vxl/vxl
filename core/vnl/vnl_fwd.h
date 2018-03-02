@@ -17,12 +17,12 @@ template <class T> class vnl_vector_ref;
 template <class T> class vnl_matrix;
 template <class T> class vnl_matrix_ref;
 
-template <class T, unsigned int n> class vnl_vector_fixed;
-template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
-template <class T, unsigned int n> class vnl_vector_fixed_ref;
-template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed_ref;
-template <class T, unsigned int n> class vnl_vector_fixed_ref_const;
-template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed_ref_const;
+template <class T, vxl::indexsize_t n> class vnl_vector_fixed;
+template <class T, vxl::indexsize_t num_rows, vxl::indexsize_t num_cols> class vnl_matrix_fixed;
+template <class T, vxl::indexsize_t n> class vnl_vector_fixed_ref;
+template <class T, vxl::indexsize_t num_rows, vxl::indexsize_t num_cols> class vnl_matrix_fixed_ref;
+template <class T, vxl::indexsize_t n> class vnl_vector_fixed_ref_const;
+template <class T, vxl::indexsize_t num_rows, vxl::indexsize_t num_cols> class vnl_matrix_fixed_ref_const;
 
 template <class T> class vnl_quaternion;
 template <class Return, class Argument> class vnl_unary_function;

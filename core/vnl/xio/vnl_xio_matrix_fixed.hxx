@@ -7,7 +7,7 @@
 #include <vsl/vsl_basic_xml_element.h>
 
 //=================================================================================
-template<class T, unsigned m, unsigned n>
+template<class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void x_write(std::ostream & os, vnl_matrix_fixed<T,m,n> const& M, std::string name)
 {
   vsl_basic_xml_element element(name);
@@ -21,7 +21,7 @@ void x_write(std::ostream & os, vnl_matrix_fixed<T,m,n> const& M, std::string na
 }
 
 //=================================================================================
-template<class T, unsigned m, unsigned n>
+template<class T, vxl::indexsize_t m, vxl::indexsize_t n>
 void x_write_tree(std::ostream & os, vnl_matrix_fixed<T,m,n> const& M, std::string name)
 {
   vsl_basic_xml_element element(name);

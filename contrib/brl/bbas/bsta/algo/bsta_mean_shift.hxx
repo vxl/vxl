@@ -9,7 +9,7 @@
 
 #include <vcl_compiler.h>
 
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, float percentage, T epsilon)
 {
@@ -60,7 +60,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, vnl_random & rng, fl
 }
 
 //: use all the samples to get its mode, no need for random seed picking
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
 {
@@ -97,7 +97,7 @@ bsta_mean_shift<T,n>::find_modes(bsta_sample_set<T,n>& set, T epsilon)
 }
 
 //: merge the mode with samples less than cnt to one of the modes depending on its samples mean-shift paths
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
 {
@@ -165,7 +165,7 @@ bsta_mean_shift<T,n>::merge_modes(bsta_sample_set<T,n>& set, int cnt, T epsilon)
 }
 
 
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 bool
 bsta_mean_shift<T,n>::trim_modes(bsta_sample_set<T,n>& set, T epsilon)
 {

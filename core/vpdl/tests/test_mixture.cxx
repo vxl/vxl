@@ -32,7 +32,7 @@ fit_gaussian(typename std::vector<vnl_vector_fixed<T,3> >::const_iterator begin,
 
 
 // function to sort distributions by increasing weight
-template <class T, unsigned int n>
+template <class T, vxl::indexsize_t n>
 bool weight_less(const vpdl_distribution<T,n>& /*d1*/, const T& w1,
                  const vpdl_distribution<T,n>& /*d2*/, const T& w2)
 {

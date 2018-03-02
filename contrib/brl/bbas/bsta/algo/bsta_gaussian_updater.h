@@ -45,7 +45,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,1>& gaussian, T rho,
 
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
@@ -65,7 +65,7 @@ void bsta_update_gaussian(bsta_gaussian_sphere<T,n>& gaussian, T rho,
 
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
@@ -86,7 +86,7 @@ void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
 
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
                           const vnl_vector_fixed<T,n>& sample )
 {
@@ -119,7 +119,7 @@ inline T element_max(const T& a, const T& b)
 
 
 //: element-wise minimum of vector.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
                                   const T& b)
 {
@@ -133,7 +133,7 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
 
 
 //: element-wise minimum of vector.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
                                   const vnl_vector_fixed<T,n>& b_vector)
 {
@@ -148,7 +148,7 @@ vnl_vector_fixed<T,n> element_max(const vnl_vector_fixed<T,n>& a_vector,
 
 
 //: element-wise minimum on the matrix diagonal.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
                                     const T& b)
 {
@@ -163,7 +163,7 @@ vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
 
 
 //: element-wise minimum of matrix.
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 vnl_matrix_fixed<T,n,n> element_max(const vnl_matrix_fixed<T,n,n>& a_matrix,
                                     const vnl_matrix_fixed<T,n,n>& b_matrix)
 {
@@ -195,7 +195,7 @@ inline void bsta_update_gaussian(gauss_& gaussian,
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \param min_var forces all the variances to stay above this limit
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 inline void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
                                  const vnl_vector_fixed<T,n>& sample,
                                  T min_var)
@@ -208,7 +208,7 @@ inline void bsta_update_gaussian(bsta_gaussian_indep<T,n>& gaussian, T rho,
 //: Update the statistics given a Gaussian distribution and a learning rate
 // \param min_var forces the diagonal covariance to stay above this limit
 // \note if rho = 1/(num observations) then this just an online cumulative average
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 inline void bsta_update_gaussian(bsta_gaussian_full<T,n>& gaussian, T rho,
                                  const vnl_vector_fixed<T,n>& sample,
                                  T min_var)

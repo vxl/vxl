@@ -124,26 +124,26 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   //: Construct a matrix of size r rows by c columns
   // Contents are unspecified.
   // Complexity $O(1)$
-  vnl_matrix(unsigned r, unsigned c);                           // r rows, c cols.
+  vnl_matrix(vxl::indexsize_t r, vxl::indexsize_t c);                           // r rows, c cols.
 
   //: Construct a matrix of size r rows by c columns, and all elements equal to v0
   // Complexity $O(r.c)$
-  vnl_matrix(unsigned r, unsigned c, T const& v0);              // r rows, c cols, value v0.
+  vnl_matrix(vxl::indexsize_t r, vxl::indexsize_t c, T const& v0);              // r rows, c cols, value v0.
 
   //: Construct a matrix of size r rows by c columns, with a special type
   // Contents are specified by t
   // Complexity $O(r.c)$
-  vnl_matrix(unsigned r, unsigned c, vnl_matrix_type t);        // r rows, c cols, special type
+  vnl_matrix(vxl::indexsize_t r, vxl::indexsize_t c, vnl_matrix_type t);        // r rows, c cols, special type
 
   //: Construct a matrix of size r rows by c columns, initialised by an automatic array
   // The first n elements, are initialised row-wise, to values.
   // Complexity $O(n)$
-  vnl_matrix(unsigned r, unsigned c, unsigned n, T const values[]);  // use automatic arrays.
+  vnl_matrix(vxl::indexsize_t r, vxl::indexsize_t c, vxl::indexsize_t n, T const values[]);  // use automatic arrays.
 
   //: Construct a matrix of size r rows by c columns, initialised by a memory block
   // The values are initialise row wise from the data.
   // Complexity $O(r.c)$
-  vnl_matrix(T const* data_block, unsigned r, unsigned c);      // fill row-wise.
+  vnl_matrix(T const* data_block, vxl::indexsize_t r, vxl::indexsize_t c);      // fill row-wise.
 
   //: Copy construct a matrix
   // Complexity $O(r.c)$
@@ -173,36 +173,36 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
   //: Return the total number of elements stored by the matrix.
   // This equals rows() * cols()
-  inline unsigned int size() const { return this->num_rows*this->num_cols; }
+  inline vxl::indexsize_t size() const { return this->num_rows*this->num_cols; }
 
   //: Return the number of rows.
-  inline unsigned int rows() const { return this->num_rows; }
+  inline vxl::indexsize_t rows() const { return this->num_rows; }
 
   //: Return the number of columns.
   // A synonym for columns().
-  inline unsigned int cols() const { return this->num_cols; }
+  inline vxl::indexsize_t cols() const { return this->num_cols; }
 
   //: Return the number of columns.
   // A synonym for cols().
-  inline unsigned int columns() const { return this->num_cols; }
+  inline vxl::indexsize_t columns() const { return this->num_cols; }
 
   //: set element with boundary checks if error checking is on.
-  inline void put(unsigned r, unsigned c, T const&);
+  inline void put(vxl::indexsize_t r, vxl::indexsize_t c, T const&);
 
   //: get element with boundary checks if error checking is on.
-  inline T get(unsigned r, unsigned c) const;
+  inline T get(vxl::indexsize_t r, vxl::indexsize_t c) const;
 
   //: return pointer to given row
   // No boundary checking here.
-  T       * operator[](unsigned r) { return data[r]; }
+  T       * operator[](vxl::operatorbrctsize_t r) { return data[r]; }
 
   //: return pointer to given row
   // No boundary checking here.
-  T const * operator[](unsigned r) const { return data[r]; }
+  T const * operator[](vxl::operatorbrctsize_t r) const { return data[r]; }
 
   //: Access an element for reading or writing
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T       & operator()(unsigned r, unsigned c)
+  T       & operator()(vxl::operatorbrctsize_t r, vxl::operatorbrctsize_t c)
   {
 #if VNL_CONFIG_CHECK_BOUNDS
     assert(r<rows());   // Check the row index is valid
@@ -213,7 +213,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
   //: Access an element for reading
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T const & operator()(unsigned r, unsigned c) const
+  T const & operator()(vxl::operatorbrctsize_t r, vxl::operatorbrctsize_t c) const
   {
 #if VNL_CONFIG_CHECK_BOUNDS
     assert(r<rows());   // Check the row index is valid
@@ -358,33 +358,33 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   vnl_matrix<T> conjugate_transpose() const;
 
   //: Set values of this matrix to those of M, starting at [top,left]
-  vnl_matrix<T>& update(vnl_matrix<T> const&, unsigned top=0, unsigned left=0);
+  vnl_matrix<T>& update(vnl_matrix<T> const&, vxl::indexsize_t top=0, vxl::indexsize_t left=0);
 
   //: Set the elements of the i'th column to v[i]  (No bounds checking)
-  vnl_matrix& set_column(unsigned i, T const * v);
+  vnl_matrix& set_column(vxl::indexsize_t i, T const * v);
 
   //: Set the elements of the i'th column to value, then return *this.
-  vnl_matrix& set_column(unsigned i, T value );
+  vnl_matrix& set_column(vxl::indexsize_t i, T value );
 
   //: Set j-th column to v, then return *this.
-  vnl_matrix& set_column(unsigned j, vnl_vector<T> const& v);
+  vnl_matrix& set_column(vxl::indexsize_t j, vnl_vector<T> const& v);
 
   //: Set columns to those in M, starting at starting_column, then return *this.
-  vnl_matrix& set_columns(unsigned starting_column, vnl_matrix<T> const& M);
+  vnl_matrix& set_columns(vxl::indexsize_t starting_column, vnl_matrix<T> const& M);
 
   //: Set the elements of the i'th row to v[i]  (No bounds checking)
-  vnl_matrix& set_row(unsigned i, T const * v);
+  vnl_matrix& set_row(vxl::indexsize_t i, T const * v);
 
   //: Set the elements of the i'th row to value, then return *this.
-  vnl_matrix& set_row(unsigned i, T value );
+  vnl_matrix& set_row(vxl::indexsize_t i, T value );
 
   //: Set the i-th row
-  vnl_matrix& set_row(unsigned i, vnl_vector<T> const&);
+  vnl_matrix& set_row(vxl::indexsize_t i, vnl_vector<T> const&);
 
   //: Extract a sub-matrix of size r x c, starting at (top,left)
   //  Thus it contains elements  [top,top+r-1][left,left+c-1]
-  vnl_matrix<T> extract(unsigned r, unsigned c,
-                        unsigned top=0, unsigned left=0) const;
+  vnl_matrix<T> extract(vxl::indexsize_t r, vxl::indexsize_t c,
+                        vxl::indexsize_t top=0, vxl::indexsize_t left=0) const;
 
   //: Extract a sub-matrix starting at (top,left)
   //
@@ -392,26 +392,26 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   //  required size on entry.  Thus the result will contain elements
   //  [top,top+sub_matrix.rows()-1][left,left+sub_matrix.cols()-1]
   void extract ( vnl_matrix<T>& sub_matrix,
-                 unsigned top=0, unsigned left=0) const;
+                 vxl::indexsize_t top=0, vxl::indexsize_t left=0) const;
 
 
   //: Get a vector equal to the given row
-  vnl_vector<T> get_row(unsigned r) const;
+  vnl_vector<T> get_row(vxl::indexsize_t r) const;
 
   //: Get a vector equal to the given column
-  vnl_vector<T> get_column(unsigned c) const;
+  vnl_vector<T> get_column(vxl::indexsize_t c) const;
 
   //: Get a matrix composed of rows from the indices specified in the supplied vector.
-  vnl_matrix<T> get_rows(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T> get_rows(vnl_vector<vxl::indexsize_t> i) const;
 
   //: Get a matrix composed of columns from the indices specified in the supplied vector.
-  vnl_matrix<T> get_columns(vnl_vector<unsigned int> i) const;
+  vnl_matrix<T> get_columns(vnl_vector<vxl::indexsize_t> i) const;
 
   //: Get n rows beginning at rowstart
-  vnl_matrix<T> get_n_rows(unsigned rowstart, unsigned n) const;
+  vnl_matrix<T> get_n_rows(vxl::indexsize_t rowstart, vxl::indexsize_t n) const;
 
   //: Get n columns beginning at colstart
-  vnl_matrix<T> get_n_columns(unsigned colstart, unsigned n) const;
+  vnl_matrix<T> get_n_columns(vxl::indexsize_t colstart, vxl::indexsize_t n) const;
 
   //: Return a vector with the content of the (main) diagonal
   vnl_vector<T> get_diagonal() const;
@@ -496,7 +496,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   //  \code
   //     M.set_identity().scale_row(0,3).scale_column(1,2);
   //  \endcode
-  vnl_matrix& scale_row(unsigned row, T value);
+  vnl_matrix& scale_row(vxl::indexsize_t row, T value);
 
   //: Scales elements in given column by a factor T, and returns "*this".
   //  Returning "*this" allows "chaining" two or more operations:
@@ -504,7 +504,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   //  \code
   //     M.set_identity().scale_row(0,3).scale_column(1,2);
   //  \endcode
-  vnl_matrix& scale_column(unsigned col, T value);
+  vnl_matrix& scale_column(vxl::indexsize_t col, T value);
 
   //: Swap this matrix with that matrix
   void swap(vnl_matrix<T> & that);
@@ -549,10 +549,10 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   T max_value() const { return vnl_c_vector<T>::max_value(begin(), size()); }
 
   //: Return location of minimum value of elements
-  unsigned arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
+  vxl::argminmaxreturnsize_t arg_min() const { return vnl_c_vector<T>::arg_min(begin(), size()); }
 
   //: Return location of maximum value of elements
-  unsigned arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
+  vxl::argminmaxreturnsize_t arg_max() const { return vnl_c_vector<T>::arg_max(begin(), size()); }
 
   //: Return mean of all matrix elements
   T mean() const { return vnl_c_vector<T>::mean(begin(), size()); }
@@ -585,7 +585,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
-  void assert_size(unsigned VXL_USED_IN_DEBUG(r), unsigned VXL_USED_IN_DEBUG(c)) const
+  void assert_size(vxl::indexsize_t VXL_USED_IN_DEBUG(r), vxl::indexsize_t VXL_USED_IN_DEBUG(c)) const
   {
 #ifndef NDEBUG
     assert_size_internal(r, c);
@@ -670,13 +670,13 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
   //: Resize to r rows by c columns. Old data lost.
   // Returns true if size changed.
-  bool set_size(unsigned r, unsigned c);
+  bool set_size(vxl::indexsize_t r, vxl::indexsize_t c);
 
 //--------------------------------------------------------------------------------
 
  protected:
-  unsigned num_rows;   // Number of rows
-  unsigned num_cols;   // Number of columns
+  vxl::indexsize_t num_rows;   // Number of rows
+  vxl::indexsize_t num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix
 
 #if VCL_HAS_SLICED_DESTRUCTOR_BUG
@@ -685,7 +685,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   char vnl_matrix_own_data;
 #endif
 
-  void assert_size_internal(unsigned r, unsigned c) const;
+  void assert_size_internal(vxl::indexsize_t r, vxl::indexsize_t c) const;
   void assert_finite_internal() const;
 
   //: Delete data
@@ -704,7 +704,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
 template<class T>
 inline T vnl_matrix<T>
-::get(unsigned r, unsigned c) const
+::get(vxl::indexsize_t r, vxl::indexsize_t c) const
 {
 #if VNL_CONFIG_CHECK_BOUNDS
   if (r >= this->num_rows)                // If invalid size specified
@@ -720,7 +720,7 @@ inline T vnl_matrix<T>
 
 template<class T>
 inline void vnl_matrix<T>
-::put(unsigned r, unsigned c, T const& v)
+::put(vxl::indexsize_t r, vxl::indexsize_t c, T const& v)
 {
 #if VNL_CONFIG_CHECK_BOUNDS
   if (r >= this->num_rows)                // If invalid size specified

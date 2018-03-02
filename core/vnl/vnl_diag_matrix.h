@@ -77,19 +77,19 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix
 
   // Data Access---------------------------------------------------------------
 
-  inline T operator () (unsigned i, unsigned j) const {
+  inline T operator () (vxl::operatorbrctsize_t i, vxl::operatorbrctsize_t j) const {
     return (i != j) ? T(0) : diagonal_[i];
   }
 
-  inline T& operator () (unsigned i, unsigned j) {
+  inline T& operator () (vxl::operatorbrctsize_t i, vxl::operatorbrctsize_t j) {
     assert(i == j); (void)j;
     return diagonal_[i];
   }
   inline T& operator() (unsigned i) { return diagonal_[i]; }
   inline T const& operator() (unsigned i) const { return diagonal_[i]; }
 
-  inline T& operator[] (unsigned i) { return diagonal_[i]; }
-  inline T const& operator[] (unsigned i) const { return diagonal_[i]; }
+  inline T& operator[] (vxl::operatorbrctsize_t i) { return diagonal_[i]; }
+  inline T const& operator[] (vxl::operatorbrctsize_t i) const { return diagonal_[i]; }
 
   //: Return a vector (copy) with the content of the (main) diagonal
   inline vnl_vector<T> get_diagonal() const { return diagonal_; }
@@ -129,7 +129,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix
   inline unsigned int columns() const { return diagonal_.size(); }
 
   //: set element with boundary checks.
-  inline void put (unsigned r, unsigned c, T const& v) {
+  inline void put (vxl::indexsize_t r, vxl::indexsize_t c, T const& v) {
     assert(r == c);
     (void)c;
 #if VNL_CONFIG_CHECK_BOUNDS
@@ -140,7 +140,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix
   }
 
   //: get element with boundary checks.
-  inline T get (unsigned r, unsigned c) const {
+  inline T get (vxl::indexsize_t r, vxl::indexsize_t c) const {
     assert(r == c);
     (void)c;
 #if VNL_CONFIG_CHECK_BOUNDS

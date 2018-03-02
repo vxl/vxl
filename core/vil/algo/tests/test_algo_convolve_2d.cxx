@@ -12,7 +12,7 @@ static void test_algo_convolve_2d_byte()
            << " Testing vil_algo_convolve_2d\n"
            << "******************************\n";
 
-  const unsigned int n=10, m=5;
+  const vxl::indexsize_t n=10, m=5;
 
   vil_image_view<vxl_byte> src_im(n,n,1);
 

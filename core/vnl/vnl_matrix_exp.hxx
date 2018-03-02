@@ -28,7 +28,7 @@ bool vnl_matrix_exp(Matrix const &X, Matrix &expX, double max_err)
   expX.set_identity();
   Matrix acc(X);
   double norm_acc_bound = norm_X;
-  for (unsigned n=1; true; ++n) {
+  for (vxl::indexsize_t n=1; true; ++n) {
     expX += acc;
 #ifdef DEBUG
     std::cerr << "n=" << n << std::endl;

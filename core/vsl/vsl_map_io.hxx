@@ -47,7 +47,7 @@ void vsl_b_read(vsl_b_istream& is, std::map<Key, T, Compare>& v)
   {
   case 1:
     vsl_b_read(is, map_size);
-    for (unsigned i=0; i<map_size; i++)
+    for (vxl::indexsize_t i=0; i<map_size; i++)
     {
       Key first_val;
       T second_val;
@@ -70,7 +70,7 @@ template <class Key, class T, class Compare>
 void vsl_print_summary(std::ostream& os, const std::map<Key, T, Compare> &v)
 {
   os << "Map size: " << v.size() << '\n';
-  unsigned i=0;
+  vxl::indexsize_t i=0;
   for (typename std::map<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {
@@ -123,7 +123,7 @@ void vsl_b_read(vsl_b_istream& is, std::multimap<Key, T, Compare>& v)
   {
   case 1:
     vsl_b_read(is, multimap_size);
-    for (unsigned i=0; i<multimap_size; i++)
+    for (vxl::indexsize_t i=0; i<multimap_size; i++)
     {
       Key first_val;
       T second_val;
@@ -146,7 +146,7 @@ template <class Key, class T, class Compare>
 void vsl_print_summary(std::ostream& os, const std::multimap<Key, T, Compare> &v)
 {
   os << "multimap size: " << v.size() << '\n';
-  unsigned i=0;
+  vxl::indexsize_t i=0;
   for (typename std::multimap<Key, T, Compare>::const_iterator iter = v.begin();
        iter != v.end() && i< 5; ++iter,++i)
   {

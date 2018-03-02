@@ -13,7 +13,7 @@
 // \date   February 24, 2008
 // \verbatim
 //  Modifications
-//   8/5/2008 Isabel Restrepo -Added template class bvxm_voxel_traits_mc<unsigned dim, unsigned modes>
+//   8/5/2008 Isabel Restrepo -Added template class bvxm_voxel_traits_mc< vxl::indexsize_t dim,  vxl::indexsize_t modes>
 //                             This class is in charge of proper instantiation of multi-channel appearance model processor
 //                            -Added bvxm_voxel_traits<APM_MOG_MC_3_3> : public bvxm_voxel_traits_mc<3,3>,
 //                             Everytime a user needs a mog appearance model with nonexisting dimension of number
@@ -51,7 +51,7 @@ template <bvxm_voxel_type>
 class bvxm_voxel_traits;
 
 //: Specialization of Pixel properties for bvxm_mog_mc_processor templates.
-template <unsigned int dim, unsigned int modes>
+template < vxl::indexsize_t dim,  vxl::indexsize_t modes>
 class bvxm_voxel_traits_mc
 {
  public:

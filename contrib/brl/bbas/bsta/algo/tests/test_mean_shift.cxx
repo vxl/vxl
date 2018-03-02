@@ -80,7 +80,7 @@ void test_sample_set(T epsilon, const std::string& type_name)
   std::cout << "likelihood for ss: " << likelihood << '\n';
 }
 
-template<class T, unsigned n>
+template<class T,  vxl::indexsize_t n>
 void test_sample_set(T epsilon, const std::string& type_name)
 {
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;
@@ -229,7 +229,7 @@ void test_sample_set(T epsilon, const std::string& type_name)
   }
 }
 
-template <class T, unsigned n>
+template <class T,  vxl::indexsize_t n>
 void test_mean_shift_algo(T epsilon, const std::string& type_name)
 {
   typedef typename bsta_gaussian_indep<T,n>::vector_type vect_t;

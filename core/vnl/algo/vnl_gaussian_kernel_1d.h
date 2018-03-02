@@ -29,7 +29,7 @@ class VNL_ALGO_EXPORT vnl_gaussian_kernel_1d
   double G(double x) const;
 
   int width() const { return vec_.size(); }
-  double operator [] (int i) const { return vec_[i]; }
+  double operator [] (vxl::operatorbrctsize_t i) const { return vec_[i]; }
 
  protected:
   // Data Members--------------------------------------------------------------
