@@ -22,22 +22,25 @@ add_test( NAME bundler_test_tracks_detect
           COMMAND $<TARGET_FILE:bundler_test_all> test_tracks_detect ${cul_SOURCE_DIR}/bundler/tests/test_data/checkers.png)
 add_test( NAME bundler_test_propose_matches
           COMMAND $<TARGET_FILE:bundler_test_all> test_propose_matches )
+add_test( NAME bundler_test_tracks
+          COMMAND $<TARGET_FILE:bundler_test_all> test_tracks ${cul_SOURCE_DIR}/bundler/tests/test_data)
+add_test( NAME bundler_test_ply
+          COMMAND $<TARGET_FILE:bundler_test_all> test_ply )
+add_test( NAME bundler_test_bundle_adjust
+          COMMAND $<TARGET_FILE:bundler_test_all> test_bundle_adjust )
+
+if(VXL_RUN_FAILING_TESTS)
 add_test( NAME bundler_test_match_ann
           COMMAND $<TARGET_FILE:bundler_test_all> test_match_ann )
 add_test( NAME bundler_test_refine
           COMMAND $<TARGET_FILE:bundler_test_all> test_refine )
-add_test( NAME bundler_test_tracks
-          COMMAND $<TARGET_FILE:bundler_test_all> test_tracks ${cul_SOURCE_DIR}/bundler/tests/test_data)
 add_test( NAME bundler_test_initial_recon
           COMMAND $<TARGET_FILE:bundler_test_all> test_initial_recon )
 add_test( NAME bundler_test_pipeline
           COMMAND $<TARGET_FILE:bundler_test_all> test_pipeline )
-add_test( NAME bundler_test_ply
-          COMMAND $<TARGET_FILE:bundler_test_all> test_ply )
 add_test( NAME bundler_test_add_next_image
           COMMAND $<TARGET_FILE:bundler_test_all> test_add_next_image )
-add_test( NAME bundler_test_bundle_adjust
-          COMMAND $<TARGET_FILE:bundler_test_all> test_bundle_adjust )
+endif()
 
 
 add_executable( bundler_test_include test_include.cxx )

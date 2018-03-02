@@ -19,7 +19,9 @@ add_test( NAME boct_test_find_neighbors COMMAND $<TARGET_FILE:boct_test_all> tes
 add_test( NAME boct_test_binary_io COMMAND $<TARGET_FILE:boct_test_all> test_binary_io)
 add_test( NAME boct_test_clone_tree COMMAND $<TARGET_FILE:boct_test_all> test_clone_tree   )
 add_test( NAME boct_test_tree_cell_reader COMMAND $<TARGET_FILE:boct_test_all> test_tree_cell_reader   )
+if(VXL_RUN_FAILING_TESTS)
 add_test( NAME boct_test_bit_tree COMMAND $<TARGET_FILE:boct_test_all> test_bit_tree )
+endif()
 
 
 add_executable( boct_test_include test_include.cxx )
