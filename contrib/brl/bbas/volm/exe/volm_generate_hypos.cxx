@@ -661,7 +661,7 @@ int main(int argc,  char** argv)
     std::vector<volm_tile> tiles;
     if (world_id() == 1)       tiles = volm_tile::generate_p1_wr1_tiles();
     else if (world_id() == 2)  tiles = volm_tile::generate_p1_wr2_tiles();
-    else {  std::cout << "ERROR: unknown world id in phase 1a" << std::endl;  return false;  }
+    else {  std::cout << "ERROR: unknown world id in phase 1a" << std::endl;  return -1;  }
     std::cout << " number of tiles: " << tiles.size() << std::endl;
     unsigned t_id = tile_id();
     if ( t_id >= tiles.size() ) {
@@ -782,7 +782,7 @@ int main(int argc,  char** argv)
         volm_io_tools::load_nlcd_imgs(land(), info_tmp);
         if (info_tmp.size() != tiles.size()) {
           std::cout << "ERROR: mismatch in create tiles " << tiles.size() << " and loaded " << info_tmp.size() << " nlcd images, check input nlcd folder\n";
-          return false;
+          return -1;
         }
         std::vector<volm_img_info> nlcd_infos;
         for (unsigned i = 0; i < tiles.size(); i++) {
