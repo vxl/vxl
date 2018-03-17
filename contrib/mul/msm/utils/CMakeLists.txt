@@ -12,6 +12,7 @@ doxygen_add_library(contrib/mul/msm_utils
 set(msm_utils_sources
   msm_draw_shape_to_eps.h       msm_draw_shape_to_eps.cxx
   msm_shape_mode_view.h         msm_shape_mode_view.cxx
+  msm_make_grid.h               msm_make_grid.cxx
 )
 
 # aux_source_directory(Templates msm_utils_sources)
