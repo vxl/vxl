@@ -16,6 +16,7 @@
 
 //: forward declare vgl_homg_point_2d<T> and vgl_vector_2d<T>
 #include <vgl/vgl_fwd.h>
+#include "vcl_compiler_detection.h"
 
 //: A base class for lens distortions
 template <class T>
@@ -32,7 +33,7 @@ class vpgl_lens_distortion
   // \param init is an initial guess at the solution for the iterative solver
   // if \p init is NULL then \p point is used as the initial guess
   virtual vgl_homg_point_2d<T> undistort( const vgl_homg_point_2d<T>& point,
-                                          const vgl_homg_point_2d<T>* init=0) const;
+                                          const vgl_homg_point_2d<T>* init=VXL_NULLPTR) const;
 
   //: Set a translation to apply before of after distortion
   // This is needed when distorting an image to translate the resulting image

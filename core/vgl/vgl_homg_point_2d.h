@@ -99,7 +99,7 @@ class vgl_homg_point_2d
   // The method checks whether |w| <= tol * max(|x|,|y|)
   inline bool ideal(T tol = (T)0) const
   {
-#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+#define vgl_Abs(x) ((x)<0?-(x):(x)) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(w()) <= tol * vgl_Abs(x()) ||
            vgl_Abs(w()) <= tol * vgl_Abs(y());
 #undef vgl_Abs

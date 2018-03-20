@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "vgl_point_2d.h"
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_line_2d.h>
@@ -48,31 +49,71 @@ double cross_ratio(vgl_point_2d<T>const& p1, vgl_point_2d<T>const& p2,
 template <class Type>
 std::ostream&  operator<<(std::ostream& s, vgl_point_2d<Type> const& p)
 {
-  return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << "> ";
+  return s << "<vgl_point_2d "<< p.x() << ',' << p.y() << " > ";
 }
 
 //: Read from stream, possibly with formatting
 //  Either just reads two blank-separated numbers,
 //  or reads two comma-separated numbers,
 //  or reads two numbers in parenthesized form "(123, 321)"
+//  or reads form written by <<, "<vgl_point_2d 123, 321 >"
 template <class Type>
 std::istream& vgl_point_2d<Type>::read(std::istream& is)
 {
   if (! is.good()) return is; // (TODO: should throw an exception)
   bool paren = false;
+  bool angle = false;
   Type tx, ty;
   is >> std::ws; // jump over any leading whitespace
-  if (is.eof()) return is; // nothing to be set because of EOF (TODO: should throw an exception)
-  if (is.peek() == '(') { is.ignore(); paren=true; }
-  is >> std::ws >> tx >> std::ws;
-  if (is.eof()) return is;
-  if (is.peek() == ',') is.ignore();
-  is >> std::ws >> ty >> std::ws;
-  if (paren) {
-    if (is.eof()) return is;
-    if (is.peek() == ')') is.ignore();
-    else                  return is; // closing parenthesis is missing (TODO: throw an exception)
+  char c;
+  c = is.peek();
+  if(c == '<')
+  {
+    // read the <vgl_point_2d string
+    std::string temp;
+    is >> temp;
+    angle = true;
   }
+
+  if (is.eof())
+    return is; // nothing to be set because of EOF (TODO: should throw an exception)
+
+  if (is.peek() == '(')
+  {
+    is.ignore();
+    paren=true;
+  }
+
+  is >> std::ws >> tx >> std::ws;
+  if (is.eof())
+    return is;
+
+  if (is.peek() == ',')
+    is.ignore();
+
+  is >> std::ws >> ty;
+  if (paren)
+  {
+    is >> std::ws;
+    if (is.eof())
+      return is;
+    if (is.peek() == ')')
+      is.ignore();
+    else
+      return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+
+  if (angle)
+  {
+    is >> std::ws;
+    if (is.eof())
+      return is;
+    if (is.peek() == '>')
+      is.ignore();
+    else
+      return is; // closing parenthesis is missing (TODO: throw an exception)
+  }
+
   set(tx,ty);
   return is;
 }

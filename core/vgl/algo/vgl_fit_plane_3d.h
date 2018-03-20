@@ -53,12 +53,12 @@ class vgl_fit_plane_3d
 
   //:fits a plane to the stored points
   // report issues over an ostream if declared
-  bool fit(const T error_marg, std::ostream* outstream=0);
+  bool fit(const T error_marg, std::ostream* outstream=VXL_NULLPTR);
 
   //:fits a plane returning the smallest singular value
   //:of the data scatter matrix decomposition, a measure
   //:of variance in the direction of the plane normal
-  T fit(std::ostream* outstream=0);
+  T fit(std::ostream* outstream=VXL_NULLPTR);
 
   // Data Access---------------------------------------------------------------
 

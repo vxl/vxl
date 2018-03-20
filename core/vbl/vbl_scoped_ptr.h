@@ -25,7 +25,7 @@
 //  deletion of the object pointed to, either on destruction of the
 //  vbl_scoped_ptr or via an explicit reset(). vbl_scoped_ptr is a
 //  simple solution for simple needs; use vbl_shared_ptr or
-//  std::auto_ptr if your needs are more complex.
+//  vcl_unique_ptr if your needs are more complex.
 //
 //  To use this to manage pointer member variables using forward
 //  declaration, explicitly define a destructor in your .cxx so that
@@ -65,7 +65,7 @@ class vbl_scoped_ptr
   typedef T element_type;
 
   //:
-  explicit vbl_scoped_ptr( T* p = 0 )
+  explicit vbl_scoped_ptr( T* p = VXL_NULLPTR )
     : ptr_(p) // never throws
   {
   }
@@ -78,7 +78,7 @@ class vbl_scoped_ptr
   }
 
   //: Make this own \p p, releasing any existing pointer.
-  void reset( T* p = 0 ) // never throws
+  void reset( T* p = VXL_NULLPTR ) // never throws
   {
     this_type(p).swap(*this);
   }

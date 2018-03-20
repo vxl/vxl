@@ -13,8 +13,10 @@ contrib/brl/bseg/bvxm/pyscripts/*pyc
 *.swp
 ## Ignore files that are used for auto_completion with clang
 *.clang_complete
+
 ## YouCompleteMe vim plugin configuration file
 .ycm_extra_conf.py
+compile_commands.json
 
 
 # KWStyle hook output
@@ -40,3 +42,7 @@ CMakeLists.txt.user*
 
 # Clion editor internal project information
 .idea
+cmake-build-*/
+
+# Exclude to keep j2k implementation separate from vxl
+v3p/j2k/*

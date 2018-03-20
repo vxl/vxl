@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include <map>
-#include <memory>
+#include <vcl_memory.h>
 #include <string>
 #include <sstream>
 #include <vcl_compiler.h>
@@ -40,7 +40,7 @@
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_2d());
 // mbl_cloneables_factory<vimt_image>::add(vimt_image_3d());
 //
-// std::auto_ptr<vimt_image> p = mbl_cloneables_factory<vimt_image>::get_clone("vimt_image_2d()");
+// vcl_unique_ptr<vimt_image> p = mbl_cloneables_factory<vimt_image>::get_clone("vimt_image_2d()");
 // assert(dynamic_cast<vimt_image_2d>(p));
 // \endcode
 
@@ -58,7 +58,7 @@ class mbl_cloneables_factory
   //: Get singleton instance.
   static MAP &objects()
   {
-    static std::auto_ptr<MAP> objects_;
+    static vcl_unique_ptr<MAP> objects_;
     if (objects_.get() == 0)
       objects_.reset(new MAP);
 
@@ -81,7 +81,7 @@ class mbl_cloneables_factory
 
   //: Get a pointer to a new copy of the object identified by name.
   // An exception will be thrown if name does not exist.
-  static std::auto_ptr<BASE > get_clone(const std::string & name)
+  static vcl_unique_ptr<BASE > get_clone(const std::string & name)
   {
     typedef typename MAP::const_iterator IT;
 
@@ -99,9 +99,9 @@ class mbl_cloneables_factory
           ss << ", " << it->first;
       }
       mbl_exception_error(mbl_exception_no_name_in_factory(name, ss.str()));
-      return std::auto_ptr<BASE >();
+      return vcl_unique_ptr<BASE >();
     }
-    return std::auto_ptr<BASE >(found->second->clone());
+    return vcl_unique_ptr<BASE >(found->second->clone());
   }
 };
 

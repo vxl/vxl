@@ -40,7 +40,7 @@ bool boxm2_export_stack_images_process_cons(bprb_func_process& pro)
     std::vector<std::string> input_types_(n_inputs_);
     input_types_[i++] = "boxm2_scene_sptr";
     input_types_[i++] = "boxm2_cache_sptr";
-    input_types_[i++] = "vcl_string";                
+    input_types_[i++] = "vcl_string";
     input_types_[i++] = "vcl_string";
 
     brdb_value_sptr out_app = new brdb_value_t<bool>(true);
@@ -72,8 +72,8 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
         }
     }
     //boxm2_export_stack_images_function::export_opacity_stack_images(scene,cache,outdir);
- 
-    
+
+
     if (datatype == "boxm2_gauss_rgb" && scene->has_data_type("boxm2_gauss_rgb"))
     {
         vil3d_image_view<unsigned char> img3d;
@@ -100,7 +100,7 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
             vil_save(img, ss.str().c_str());
         }
     }
-        
+
     else if (datatype.find("aux") != -1)
     {
         vil3d_image_view<float> img3d;

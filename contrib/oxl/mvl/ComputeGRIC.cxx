@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-#include <memory>
 #include "ComputeGRIC.h"
 #include <mvl/FMatrixComputeMLESAC.h>
 #include <mvl/HMatrix2DComputeMLESAC.h>
@@ -20,7 +19,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
 
   // Compute the two differing relations using MLE
   F_.reset(new FMatrix);
-  std::auto_ptr<FMatrixComputeRobust> computor1(new FMatrixComputeMLESAC(true, std_));
+  vcl_unique_ptr<FMatrixComputeRobust> computor1(new FMatrixComputeMLESAC(true, std_));
   computor1->compute(matches_copy1, F_.get());
   residualsF_ = computor1->get_residuals();
   inliersF_ = computor1->get_inliers();
@@ -28,7 +27,7 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   computor1.reset();
 
   H_.reset(new HMatrix2D);
-  std::auto_ptr<HMatrix2DComputeRobust> computor2(new HMatrix2DComputeMLESAC(std_));
+  vcl_unique_ptr<HMatrix2DComputeRobust> computor2(new HMatrix2DComputeMLESAC(std_));
   computor2->compute(matches_copy2, H_.get());
   residualsH_ = computor2->get_residuals();
   inliersH_ = computor2->get_inliers();

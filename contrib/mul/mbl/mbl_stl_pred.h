@@ -19,7 +19,7 @@
 
 //: Return true if a string contains a substring
 // Note without this you'd need bind2nd mem_fun which can cause reference to reference compile errors
-class mbl_stl_pred_str_contains : public std::unary_function<std::string, bool>
+class mbl_stl_pred_str_contains
 {
   //: The sought substring
   const std::string& substr_;
@@ -35,7 +35,7 @@ class mbl_stl_pred_str_contains : public std::unary_function<std::string, bool>
 //: Adapt a predicate over a vector to the operation specified on an index into that vector
 // T is type of the vector, and Pred the boolean predicate to really be applied
 template <class T, class Pred>
-class mbl_stl_pred_index_adapter : public std::unary_function<unsigned, bool>
+class mbl_stl_pred_index_adapter
 {
   //:const reference to vector used to store the objects indexed
   const std::vector<T >& vec_;
@@ -51,7 +51,7 @@ class mbl_stl_pred_index_adapter : public std::unary_function<unsigned, bool>
 };
 
 template <class T, class Pred>
-class mbl_stl_pred_index_adapter_n : public std::unary_function<unsigned, bool>
+class mbl_stl_pred_index_adapter_n
 {
   //:const reference to vector used to store the objects indexed
   const vnl_vector<T >& vec_;
@@ -88,7 +88,7 @@ inline mbl_stl_pred_index_adapter_n<T,Pred> mbl_stl_pred_create_index_adapter(co
 //: Adapt a predicate over a vector to the operation specified on an index into that vector
 // T is type of the vector, and Pred the boolean predicate to really be applied
 template <class T, class Pred>
-class mbl_stl_pred_binary_index_adapter : public std::binary_function<unsigned, unsigned, bool>
+class mbl_stl_pred_binary_index_adapter
 {
   //:const reference to vector used to store the objects indexed
   const std::vector<T >& vec_;
@@ -119,7 +119,7 @@ inline mbl_stl_pred_binary_index_adapter<T,Pred> mbl_stl_pred_create_binary_inde
 //Can also be used for collections of pointers or objects supporting
 //dereferencing operator like *p.
 template <class Iter>
-struct mbl_stl_pred_iter_deref_order : public std::binary_function<Iter,Iter, bool>
+struct mbl_stl_pred_iter_deref_order
 {
   inline bool  operator()(const Iter& iter1, const Iter& iter2 ) const
   {
@@ -131,7 +131,7 @@ struct mbl_stl_pred_iter_deref_order : public std::binary_function<Iter,Iter, bo
 //Order a collection of pair iterators according to their dereferenced keys
 //NB assumes the key type supports operator<
 template <class PairIter>
-struct mbl_stl_pred_pair_iter_key_order : public std::binary_function<PairIter,PairIter, bool>
+struct mbl_stl_pred_pair_iter_key_order
 {
   inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
   {
@@ -142,7 +142,7 @@ struct mbl_stl_pred_pair_iter_key_order : public std::binary_function<PairIter,P
 //Order a collection of pair iterators according to their dereferenced values
 //NB assumes the key type supports operator<
 template <class PairIter>
-struct mbl_stl_pred_pair_iter_value_order : public std::binary_function<PairIter,PairIter, bool>
+struct mbl_stl_pred_pair_iter_value_order
 {
   inline bool  operator()(const PairIter& iter1, const PairIter& iter2 ) const
   {
@@ -154,7 +154,7 @@ struct mbl_stl_pred_pair_iter_value_order : public std::binary_function<PairIter
 //Order a collection of pairs according to their first elements
 //NB assumes the key type supports operator<
 template <class Pair>
-struct mbl_stl_pred_pair_key_order : public std::binary_function<Pair,Pair, bool>
+struct mbl_stl_pred_pair_key_order
 {
   inline bool  operator()(const Pair& pair1, const Pair& pair2 ) const
   {
@@ -165,7 +165,7 @@ struct mbl_stl_pred_pair_key_order : public std::binary_function<Pair,Pair, bool
 //Order a collection of pairs according to their second elements
 //NB assumes the key type supports operator<
 template <class Pair>
-struct mbl_stl_pred_pair_value_order : public std::binary_function<Pair,Pair, bool>
+struct mbl_stl_pred_pair_value_order
 {
   inline bool  operator()(const Pair& pair1, const Pair& pair2 ) const
   {
@@ -180,7 +180,7 @@ struct mbl_stl_pred_pair_value_order : public std::binary_function<Pair,Pair, bo
 //First is the primary key, second is the secondary key
 //NB assumes both the pair types supports operator<
 template <class T1, class T2>
-struct mbl_stl_pred_pair_order : public std::binary_function<std::pair<T1,T2>,std::pair<T1,T2>, bool>
+struct mbl_stl_pred_pair_order
 {
   inline bool  operator()(const std::pair<T1,T2>& pair1, const std::pair<T1,T2>& pair2 ) const
   {
@@ -199,7 +199,7 @@ struct mbl_stl_pred_pair_order : public std::binary_function<std::pair<T1,T2>,st
 //(e.g. auto_ptr mbl_cloneable_ptr etc)
 template <class T>
 //NB assumes templated class provides is_a to return its typename
-class mbl_stl_pred_is_a : public std::unary_function<T, bool>
+class mbl_stl_pred_is_a
 {
   //:const reference to name of required class type
   const std::string& ctype_;
@@ -212,7 +212,7 @@ class mbl_stl_pred_is_a : public std::unary_function<T, bool>
   }
 };
 
-class mbl_stl_pred_is_near : public std::unary_function<double, bool>
+class mbl_stl_pred_is_near
 {
   double epsilon_;
   double xtarget_;

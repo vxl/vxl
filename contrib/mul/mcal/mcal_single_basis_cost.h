@@ -6,7 +6,7 @@
 // \brief Base for objects which compute a cost function for one basis direction
 
 #include <string>
-#include <memory>
+#include <vcl_memory.h>
 #include <iostream>
 #include <iosfwd>
 #include <vsl/vsl_fwd.h>
@@ -76,7 +76,7 @@ class mcal_single_basis_cost
   virtual void config_from_stream(std::istream &);
 
   //: Create a concrete mcal_single_basis_cost object, from a text specification.
-  static std::auto_ptr<mcal_single_basis_cost> create_from_stream(std::istream &is);
+  static vcl_unique_ptr<mcal_single_basis_cost> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

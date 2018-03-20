@@ -4,7 +4,7 @@
 // \file
 //      Process to register a source image to a target image by minimizing the root-mean-square-error (RMSE) of pixel value difference, in a given range of offset adjustment
 //      RMSE is computed as sqrt( sum(src(xi-dx, yi-dy) - tar(xi,yi))^2 / N ) where summation is applied on valid pixels used for registration and N is the number of valid pixels
-//      The output will be the RMSE along image column, image row and the minimized RMSE of pixel values.  Note that the registration is obtained by explicitly computing the 
+//      The output will be the RMSE along image column, image row and the minimized RMSE of pixel values.  Note that the registration is obtained by explicitly computing the
 //      RMSE given all possible shift, instead of optimization
 //
 // \verbatim

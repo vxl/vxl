@@ -466,7 +466,22 @@ unsigned int vil_nitf2_image_subheader::get_pixels_per_block_x() const
 {
   int pixels_per_block;
   if (get_property("NPPBH", pixels_per_block)) {
-    return pixels_per_block;
+
+    // Fix added 4/12/17 by tpollard to conform to NITF spec 5.4.2.2d in
+    // special case of single block image and width/height > 8192
+    if (pixels_per_block == 0) {
+
+      int blocks_per_row = 0;
+      get_property("NBPR", blocks_per_row);
+      if (blocks_per_row != 1) return 0;
+
+      if (get_property("NCOLS", pixels_per_block))
+        return pixels_per_block;
+      return 0;
+
+    // Standard case
+    } else
+      return pixels_per_block;
   }
   return 0;
 }
@@ -475,7 +490,22 @@ unsigned int vil_nitf2_image_subheader::get_pixels_per_block_y() const
 {
   int pixels_per_block;
   if (get_property("NPPBV", pixels_per_block)) {
-    return pixels_per_block;
+
+    // Fix added 4/12/17 by tpollard to conform to NITF spec 5.4.2.2d in
+    // special case of single block image and width/height > 8192
+    if (pixels_per_block == 0) {
+
+      int blocks_per_col = 0;
+      get_property("NBPC", blocks_per_col);
+      if (blocks_per_col != 1) return 0;
+
+      if (get_property("NROWS", pixels_per_block))
+        return pixels_per_block;
+      return 0;
+
+    // Standard case
+    } else
+      return pixels_per_block;
   }
   return 0;
 }

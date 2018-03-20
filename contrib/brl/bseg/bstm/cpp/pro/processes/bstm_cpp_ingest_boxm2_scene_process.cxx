@@ -50,7 +50,7 @@ bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
   input_types_[6] = "double"; //app_threshold
 
 
-  // process has 1 output:
+  // process has 0 output:
   // output[0]: scene sptr
   std::vector<std::string>  output_types_(n_outputs_);
 
@@ -89,7 +89,10 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   valid_types.push_back(bstm_data_traits<BSTM_GAUSS_RGB>::prefix());
 
   if ( !bstm_util::verify_appearance( *scene, valid_types, data_type, apptypesize ) ) {
-    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: scene doesn't have BSTM_MOG6_VIEW or BSTM_MOG3_GREY data type"<<std::endl;
+    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: bstm scene doesn't have one of the following data types:"<<std::endl;
+    for(std::vector<std::string>::const_iterator iter = valid_types.begin(); iter != valid_types.end(); ++iter){
+      std::cout << *iter << std::endl;
+    }
     return false;
   }
 
@@ -103,7 +106,10 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   boxm2_valid_types.push_back(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
 
   if ( !boxm2_util::verify_appearance( *boxm2_scene, boxm2_valid_types, boxm2_data_type, boxm2_apptypesize ) ) {
-    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have BOXM2_MOG3_GREY or BOXM2_MOG3_GREY_16 data type"<<std::endl;
+    std::cout<<"bstm_cpp_ingest_boxm2_scene_process ERROR: boxm2 scene doesn't have one of the following data types: "<<std::endl;
+    for(std::vector<std::string>::const_iterator iter = boxm2_valid_types.begin(); iter != boxm2_valid_types.end(); ++iter){
+      std::cout << *iter << std::endl;
+    }
     return false;
   }
 
@@ -136,12 +142,12 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          }
 
          double local_time;
-         if(!bstm_metadata.contains_t(time,local_time))
+         if(!bstm_metadata.contains_t(time,local_time)) {
            continue;
-
+         }
 
          //now do the work
-         //std::cout << "Ingesting " << boxm2_id << " into " <<  bstm_metadata.id_ << std::endl;
+         std::cout << "Ingesting " << boxm2_id << " into " <<  bstm_metadata.id_  << " with local time = " << local_time << std::endl;
 
          //get data from bstm scene
          bstm_block* blk = cache->get_block(bstm_metadata.id_);

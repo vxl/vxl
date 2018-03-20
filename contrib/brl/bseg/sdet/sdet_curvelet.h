@@ -39,8 +39,9 @@
 //forward declaration
 class sdet_curvelet;
 
-typedef std::list<sdet_curvelet*> cvlet_list;
-typedef std::list<sdet_curvelet*>::iterator cvlet_list_iter;
+typedef std::list<sdet_curvelet*> sdet_curvelet_list;
+typedef std::list<sdet_curvelet*>::iterator sdet_curvelet_list_iter;
+typedef std::list<sdet_curvelet*>::const_iterator sdet_curvelet_list_const_iter;
 
 //: The curvelet class: stores the ordered list of edgels defining the curvelet
 //  and also the curve model defined by the grouping

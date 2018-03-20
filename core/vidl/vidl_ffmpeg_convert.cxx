@@ -24,7 +24,7 @@ extern "C" {
 # include <libavcodec/version.h>
 # if LIBAVCODEC_VERSION_MAJOR >= 56
 #   include <libavutil/pixfmt.h>
-# else 
+# else
 #   ifndef __STDC_CONSTANT_MACROS
 #     define __STDC_CONSTANT_MACROS
 #   endif

@@ -49,6 +49,10 @@ DECLARE_FUNC_CONS(vpgl_get_perspective_cam_center_process);
 #if HAS_GEOTIFF
 DECLARE_FUNC_CONS(vpgl_create_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_load_geo_camera_process);
+DECLARE_FUNC_CONS(vpgl_find_connected_component_process);
+DECLARE_FUNC_CONS(vpgl_create_dem_manager_process);
+DECLARE_FUNC_CONS(vpgl_backproject_dem_process);
+DECLARE_FUNC_CONS(vpgl_dem_image_projection_process);
 #endif
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process3);
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_process4);
@@ -63,6 +67,7 @@ DECLARE_FUNC_CONS(vpgl_geo_footprint_process2);
 #if HAS_GEOTIFF
 DECLARE_FUNC_CONS(vpgl_translate_geo_camera_process);
 DECLARE_FUNC_CONS(vpgl_convert_geo_camera_to_generic_process);
+DECLARE_FUNC_CONS(vpgl_convert_geotiff_to_point_cloud_process);
 #endif
 DECLARE_FUNC_CONS(vpgl_create_perspective_camera_from_kml_process);
 DECLARE_FUNC_CONS(vpgl_convert_to_local_coordinates_process2);
@@ -96,9 +101,13 @@ DECLARE_FUNC_CONS(vpgl_crop_img_using_3d_box_dem_process);
 DECLARE_FUNC_CONS(vpgl_offset_cam_using_3d_box_process);
 DECLARE_FUNC_CONS(vpgl_compute_utm_zone_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_img_to_global_process);
-DECLARE_FUNC_CONS(vpgl_get_backproject_ray_processs);
+DECLARE_FUNC_CONS(vpgl_get_backproject_ray_process);
+DECLARE_FUNC_CONS(vpgl_get_rpc_backproject_ray_process);
 DECLARE_FUNC_CONS(vpgl_construct_height_map_process);
+DECLARE_FUNC_CONS(vpgl_construct_disparity_map_process);
 DECLARE_FUNC_CONS(vpgl_rational_cam_nadirness_process);
+DECLARE_FUNC_CONS(vpgl_rational_cam_rotation_to_north_process);
+DECLARE_FUNC_CONS(vpgl_rational_cam_rotation_to_up_vector_process);
 DECLARE_FUNC_CONS(vpgl_compute_image_to_world_homography_process);
 DECLARE_FUNC_CONS(vpgl_crop_ortho_using_3d_box_process);
 #if HAS_GEOTIFF

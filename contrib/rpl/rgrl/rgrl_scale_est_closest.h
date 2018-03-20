@@ -7,7 +7,7 @@
 // \date   25 Nov 2002
 
 #include <iostream>
-#include <memory>
+#include <vcl_memory.h>
 #include "rgrl_scale_estimator.h"
 
 #include <vcl_compiler.h>
@@ -36,7 +36,7 @@ class rgrl_scale_est_closest
   //robust scale.  The one that is commonly used is the MUSE objective
   //function. The flag \a do_signature_scale determines whether a signature
   //covariance will be estimated.
-  rgrl_scale_est_closest( std::auto_ptr<rrel_objective>  obj,
+  rgrl_scale_est_closest( vcl_unique_ptr<rrel_objective>  obj,
                           bool                          do_signature_scale = false );
 
   ~rgrl_scale_est_closest();
@@ -71,7 +71,7 @@ class rgrl_scale_est_closest
 
  protected:
   bool do_signature_scale_;
-  std::auto_ptr<rrel_objective> obj_;
+  vcl_unique_ptr<rrel_objective> obj_;
 };
 
 #endif // rgrl_scale_est_closest_h_

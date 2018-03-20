@@ -21,7 +21,7 @@ add_test( NAME bvpl_test_bvpl_kernel_functors COMMAND $<TARGET_FILE:bvpl_test_al
 add_test( NAME bvpl_test_direction_to_color_map COMMAND $<TARGET_FILE:bvpl_test_all> test_direction_to_color_map  )
 add_test( NAME bvpl_test_vector_operator COMMAND $<TARGET_FILE:bvpl_test_all> test_bvpl_vector_operator  )
 add_test( NAME bvpl_test_vector_directions COMMAND $<TARGET_FILE:bvpl_test_all> test_vector_directions  )
-if( HACK_FORCE_BRL_FAILING_TESTS )
+if( VXL_RUN_FAILING_TESTS )
 add_test( NAME bvpl_test_detect_corner COMMAND $<TARGET_FILE:bvpl_test_all> test_detect_corner  )
 endif()
 

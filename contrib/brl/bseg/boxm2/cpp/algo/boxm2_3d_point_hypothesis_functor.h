@@ -79,7 +79,7 @@ class boxm2_3d_point_hypothesis_functor
 
 #if DEBUG
     //if (index%1000000 == 0)
-    if (index == 5822246) 
+    if (index == 5822246)
     //if (spt_bid_ == id_ && index == spt_data_index_)
       std::cout << "pt after update: " << pt << std::endl;
 #endif
@@ -113,7 +113,7 @@ class boxm2_3d_point_hypothesis_functor
 
 #if DEBUG
     //if (index%1000000 == 0)
-    if (index == 5822246) 
+    if (index == 5822246)
     //if (spt_bid_ == id_ && index == spt_data_index_)
       std::cout << "sums: " << sums << std::endl;
 #endif

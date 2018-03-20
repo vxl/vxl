@@ -142,7 +142,7 @@ class vul_reg_exp
 
  private:
   //: private function to clear startp[] and endp[]
-  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=0; }
+  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=VXL_NULLPTR; }
 };
 
 #endif // vul_reg_exph

@@ -8,19 +8,15 @@ Adds the error of a portion of voxels. Each block is processed in a separate thr
 This script assumes that the reconstruction error at each voxel has been computed
 """
 import os
-import bvpl_octree_batch
 import multiprocessing
 import Queue
 import time
 import random
 import optparse
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 
 class taylor_error_job():
@@ -48,7 +44,7 @@ def execute_jobs(jobs, num_procs=4):
         worker.start()
         print("worker with name ", worker.name, " started!")
 
-     # collect the results off the queue
+       # collect the results off the queue
     results = []
     while len(results) < len(jobs):
         result = result_queue.get()
@@ -69,7 +65,7 @@ class taylor_error_worker(multiprocessing.Process):
 
     def run(self):
         while not self.kill_received:
-             # get a task
+           # get a task
             try:
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
@@ -78,16 +74,16 @@ class taylor_error_worker(multiprocessing.Process):
             start_time = time.time()
 
             print("Adding Errors")
-            bvpl_octree_batch.init_process("bvplAddTaylorErrorsProcess")
-            bvpl_octree_batch.set_input_from_db(0, job.error_scene)
-            bvpl_octree_batch.set_input_double(1, job.fraction)
-            bvpl_octree_batch.set_input_int(2, job.block_i)
-            bvpl_octree_batch.set_input_int(3, job.block_j)
-            bvpl_octree_batch.set_input_int(4, job.block_k)
-            bvpl_octree_batch.run_process()
-            (id, type) = bvpl_octree_batch.commit_output(0)
+            batch.init_process("bvplAddTaylorErrorsProcess")
+            batch.set_input_from_db(0, job.error_scene)
+            batch.set_input_double(1, job.fraction)
+            batch.set_input_int(2, job.block_i)
+            batch.set_input_int(3, job.block_j)
+            batch.set_input_int(4, job.block_k)
+            batch.run_process()
+            (id, type) = batch.commit_output(0)
             error_val = dbvalue(id, type)
-            error = bvpl_octree_batch.get_output_double(id)
+            error = batch.get_output_double(id)
 
             self.result_queue.put(error)
 
@@ -102,8 +98,8 @@ class taylor_error_worker(multiprocessing.Process):
 
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     # Parse inputs
     parser = optparse.OptionParser(description='Add Taylor Errors in a Scene')
@@ -140,10 +136,10 @@ if __name__ == "__main__":
         sys.exit(-1)
 
     print("Loading Error Scene")
-    bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-    bvpl_octree_batch.set_input_string(0,  taylor_dir + "/error_scene.xml")
-    bvpl_octree_batch.run_process()
-    (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("boxmCreateSceneProcess")
+    batch.set_input_string(0,  taylor_dir + "/error_scene.xml")
+    batch.run_process()
+    (scene_id, scene_type) = batch.commit_output(0)
     error_scene = dbvalue(scene_id, scene_type)
 
     # Begin multiprocessing

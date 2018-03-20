@@ -34,7 +34,7 @@ bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)
   using namespace boxm2_cpp_query_cell_process_globals;
 
   bool ok=false;
- 
+
   //process takes 7 inputs
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "boxm2_scene_sptr";
@@ -49,15 +49,15 @@ bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   std::vector<std::string>  output_types_(n_outputs_);
-  output_types_[0]="bbas_1d_array_float_sptr"; 
+  output_types_[0]="bbas_1d_array_float_sptr";
   ok = pro.set_output_types(output_types_);
   if (!ok) return ok;
-  
+
   return true;
 
 }
 
-// template <boxm2_data_type data_type> 
+// template <boxm2_data_type data_type>
 // bool get(boxm2_data_base* data_base, int index, int num_entries, vnl_vector <float>* return_data)
 // {
 
@@ -106,11 +106,11 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   // boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   // int bit_index=tree.traverse(local);
   // int index=tree.get_data_index(bit_index,false);
-  
+
   boxm2_data_base* data_base = cache->get_data_base(scene, id,ident);
-  
+
   std::vector<float> return_data;
-  
+
   if (ident_type.compare("BOXM2_FLOAT16")==0)
   {
 
@@ -194,6 +194,6 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   for(int x=0; x<return_data.size(); x++)
     return_data_sptr->data_array[x] = return_data[x];
   pro.set_output_val<bbas_1d_array_float_sptr>(0, return_data_sptr);
-  
+
   return true;
 }

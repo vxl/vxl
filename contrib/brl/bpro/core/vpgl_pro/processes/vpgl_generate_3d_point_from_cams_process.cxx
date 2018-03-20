@@ -65,7 +65,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   for (unsigned int i=0; i<cam_ids.size(); ++i) {
     unsigned cam_id = cam_ids[i];
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, cam_id);
-    brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", Q);
+    brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", vcl_move(Q));
     if (S->size()!=1) {
       std::cout << "in vpgl_generate_3d_point_from_cams_process - bad input value\n";
       return false;

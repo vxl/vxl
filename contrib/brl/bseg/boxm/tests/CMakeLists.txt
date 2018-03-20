@@ -21,7 +21,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/camera0.txt ${CMAKE_CURRENT_BINARY_DI
 add_test( NAME boxm_test_binary_io COMMAND $<TARGET_FILE:boxm_test_all>    test_binary_io  )
 add_test( NAME boxm_test_block_iter COMMAND $<TARGET_FILE:boxm_test_all>    test_block_iter  )
 #add_test( NAME boxm_test_region_finder COMMAND $<TARGET_FILE:boxm_test_all>    test_region_finder )
-if( HACK_FORCE_BRL_FAILING_TESTS ) ## SEGFAULT when testing with ctest -j16 (perhaps files are shared between tests)
+if( VXL_RUN_FAILING_TESTS ) ## SEGFAULT when testing with ctest -j16 (perhaps files are shared between tests)
 add_test( NAME boxm_test_cell_iterator COMMAND $<TARGET_FILE:boxm_test_all>    test_cell_iterator )
 endif()
 add_test( NAME boxm_test_load_neighboring_blocks COMMAND $<TARGET_FILE:boxm_test_all>    test_load_neighboring_blocks )

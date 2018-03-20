@@ -44,14 +44,14 @@ void mipa_vector_normaliser::config_from_stream(
 
 //=======================================================================
 //: Create a concrete mipa_vector_normaliser-derived object, from a text specification.
-std::auto_ptr<mipa_vector_normaliser>
+vcl_unique_ptr<mipa_vector_normaliser>
   mipa_vector_normaliser::new_normaliser_from_stream(
     std::istream &is, const mbl_read_props_type &extra_props)
 {
   std::string name;
   is >> name;
 
-  std::auto_ptr<mipa_vector_normaliser> ps =
+  vcl_unique_ptr<mipa_vector_normaliser> ps =
     mbl_cloneables_factory<mipa_vector_normaliser>::get_clone(name);
 
   ps -> config_from_stream(is, extra_props);

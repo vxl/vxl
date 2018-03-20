@@ -176,6 +176,15 @@ vpgl_orientation_position_focal_lsqr::f(vnl_vector<double> const& x, vnl_vector<
   vgl_rotation_3d<double> R(q);
   vgl_vector_3d<double> t(x[4], x[5], x[6]);
 
+  // Check that it is a valid focal length
+  if (x[7]<=0) {
+    for (unsigned int i=0; i<world_points_.size(); ++i) {
+      fx[2*i]   = 100000000;
+      fx[2*i+1] = 100000000;
+    }
+    return;
+  }
+
   vpgl_calibration_matrix<double> K(K_init_);
   K.set_focal_length(x[7]);
   vpgl_perspective_camera<double> cam(K, R, t);
@@ -200,7 +209,7 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
   // Quaternion gets normalized after getting passed to R
   q = R.as_quaternion();
   double x, y, z, r;
-  x = q.x(); y = q.y(); z = q.z(); r = q.r(); 
+  x = q.x(); y = q.y(); z = q.z(); r = q.r();
 
   vgl_vector_3d<double> t(xvec[4], xvec[5], xvec[6]);
 
@@ -210,7 +219,7 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
 
   // The 3 rows of [R | t] matrix
   double A, B, C;
-  // camera translation 
+  // camera translation
   double t1, t2, t3;
   t1 = t.x(); t2 = t.y(); t3 = t.z();
   // 3D point coordinates
@@ -222,7 +231,7 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
   {
     vgl_homg_point_3d<double> wp = world_points_[idx];
     X = world_points_[idx].x(); Y = world_points_[idx].y(); Z = world_points_[idx].z(); W = world_points_[idx].w();
-    
+
     A = Rmat[0][0]*X + Rmat[0][1]*Y + Rmat[0][2]*Z + t1*W;
     B = Rmat[1][0]*X + Rmat[1][1]*Y + Rmat[1][2]*Z + t2*W;
     C = Rmat[2][0]*X + Rmat[2][1]*Y + Rmat[2][2]*Z + t3*W;
@@ -231,7 +240,7 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
 
     double dex_dr1, dex_dr2, dex_dr3, dex_dr4, dey_dr1, dey_dr2, dey_dr3, dey_dr4;
     double dex_dt1, dey_dt1, dex_dt2, dey_dt2, dex_dt3, dey_dt3, dex_df, dey_df;
-   
+
     dex_dr1 = 2*((W*t1*x + X*x + Y*y + Z*z)*C - (W*t3*x + X*z + Y*r - Z*x)*A)/(C*C);
     dex_dr2 = 2*((W*t1*y - X*y + Y*x + Z*r)*C - (W*t3*y - X*r + Y*z - Z*y)*A)/(C*C);
     dex_dr3 = 2*((W*t1*z - X*z - Y*r + Z*x)*C - (W*t3*z + X*x + Y*y + Z*z)*A)/(C*C);
@@ -251,16 +260,16 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
     dey_dt3 = F*B / (C*C);
     dex_df = -A/C;
     dey_df = -B/C;
-    
-    jacobian(2*idx,0) = dex_dr1; 
-    jacobian(2*idx,1) = dex_dr2; 
-    jacobian(2*idx,2) = dex_dr3; 
+
+    jacobian(2*idx,0) = dex_dr1;
+    jacobian(2*idx,1) = dex_dr2;
+    jacobian(2*idx,2) = dex_dr3;
     jacobian(2*idx,3) = dex_dr4;
 
-    jacobian(2*idx,4) = dex_dt1; 
-    jacobian(2*idx,5) = dex_dt2; 
-    jacobian(2*idx,6) = dex_dt3; 
-    jacobian(2*idx,7) = dex_df; 
+    jacobian(2*idx,4) = dex_dt1;
+    jacobian(2*idx,5) = dex_dt2;
+    jacobian(2*idx,6) = dex_dt3;
+    jacobian(2*idx,7) = dex_df;
 
     jacobian(2*idx+1,0) = dey_dr1;
     jacobian(2*idx+1,1) = dey_dr2;
@@ -271,7 +280,7 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
     jacobian(2*idx+1,5) = dey_dt2;
     jacobian(2*idx+1,6) = dey_dt3;
     jacobian(2*idx+1,7) = dey_df;
-  }   
+  }
 }
 
 //===============================================================

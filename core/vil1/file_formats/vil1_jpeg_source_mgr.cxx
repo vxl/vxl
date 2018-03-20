@@ -193,7 +193,7 @@ vil1_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil1_stream *vs)
 {
   { // verify
     vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
-    assert(src != 0);
+    assert(src != VXL_NULLPTR);
     assert(src->stream == vs);
     if (!src) return;
   }

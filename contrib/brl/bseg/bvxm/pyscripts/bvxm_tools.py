@@ -1,18 +1,3 @@
-from bvxm_register import bvxm_batch, dbvalue
-from bvxm_adaptor import *
-from bvxm_volm_adaptor import *
-from bvxm_vpgl_adaptor import *
-from bvxm_vil_adaptor import *
-import os
-import time
-import glob
-import sys
-#############################################################################
-# PROVIDES higher level python functions to make bvxm_batch
-# code more readable/refactored
-#############################################################################
-
-
 def get_satellite_uncertainty(sat_name):
     if "QuickBird" in sat_name:
         return 40

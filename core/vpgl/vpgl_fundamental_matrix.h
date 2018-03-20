@@ -48,11 +48,11 @@ class vpgl_fundamental_matrix
   //: Main constructor takes two projective cameras.
   //  The RHS of the fundamental matrix will correspond to cr and the LHS to cl.
   vpgl_fundamental_matrix( const vpgl_proj_camera<T>& cr,
-                           const vpgl_proj_camera<T>& cl ) : cached_svd_(NULL)
+                           const vpgl_proj_camera<T>& cl ) : cached_svd_(VXL_NULLPTR)
   { set_matrix( cr, cl ); }
 
   //: Construct from a fundamental matrix in vnl form.
-  vpgl_fundamental_matrix( const vnl_matrix_fixed<T,3,3>& F ) : cached_svd_(NULL)
+  vpgl_fundamental_matrix( const vnl_matrix_fixed<T,3,3>& F ) : cached_svd_(VXL_NULLPTR)
   { set_matrix( F ); }
 
   //: Copy Constructor

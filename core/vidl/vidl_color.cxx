@@ -28,7 +28,7 @@ struct type_index;
 template <> \
 struct type_index<T> \
 {\
-enum { index = NUM };\
+enum { index = (NUM) };\
 }
 
 vidl_type_index_mac(vxl_byte, 0);

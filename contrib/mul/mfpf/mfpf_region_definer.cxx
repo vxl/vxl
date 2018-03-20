@@ -48,12 +48,12 @@ bool mfpf_region_definer::set_from_stream(std::istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-std::auto_ptr<mfpf_region_definer> mfpf_region_definer::
+vcl_unique_ptr<mfpf_region_definer> mfpf_region_definer::
   create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
-  std::auto_ptr<mfpf_region_definer> vcb;
+  vcl_unique_ptr<mfpf_region_definer> vcb;
   try {
     vcb = mbl_cloneables_factory<mfpf_region_definer>::get_clone(name);
   }

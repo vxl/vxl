@@ -47,9 +47,18 @@ set( vpdl_sources
 
 aux_source_directory(Templates vpdl_sources)
 
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vpdl LIBRARY_SOURCES ${vpdl_sources})
 target_link_libraries( ${VXL_LIB_PREFIX}vpdl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl )
-
+set(CURR_LIB_NAME vpdl)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${VXLCORE_BINARY_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR   ${VXL_INSTALL_INCLUDE_DIR}/core/${CURR_LIB_NAME}
+     #USE_HIDDEN_VISIBILITY
+)
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()

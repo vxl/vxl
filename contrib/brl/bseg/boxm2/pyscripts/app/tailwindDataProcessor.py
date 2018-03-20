@@ -6,13 +6,19 @@ import time
 import re
 import subprocess
 import shlex
-import boxm2_batch
 from xml.dom.minidom import parse, parseString
-from boxm2_scene_adaptor import *
-from vil_adaptor import *
-from vpgl_adaptor import *
 import random
 import shutil
+
+import brl_init
+import boxm2_batch as batch
+dbvalue = brl_init.register_batch(batch)
+
+import boxm2_scene_adaptor
+import boxm2_adaptor
+import vil_adaptor_boxm2_batch as vil
+import vpgl_adaptor_boxm2_batch as vpgl
+
 dryrun = False
 
 
@@ -138,8 +144,8 @@ class TailwindPipelineRunner():
             self.moveData,
             # Step 2. Create the scene using the .nvm file produced above.
             self.createSceneFromBox,
-            self.updateScene,	 # Step 3. Update the scene
-            self.exportScene	 # Step 4. Export the scene
+            self.updateScene,  # Step 3. Update the scene
+            self.exportScene   # Step 4. Export the scene
         ]
         for stepIndex in xrange(self.config.resumeAtStep, len(steps)):
             retVal = steps[stepIndex](stepIndex + 1)
@@ -235,8 +241,10 @@ class TailwindPipelineRunner():
 
         success = 0
         if(len(pts) == 6):
-            success = get_scene_from_box_cams(self.config.CAMDirName, pts[0], pts[1], pts[
-                                              2], pts[3] - pts[0], pts[4] - pts[1], pts[5] - pts[2], ".")
+            success = boxm2_adaptor.get_scene_from_box_cams(self.config.CAMDirName,
+                                                            pts[0], pts[1], pts[2], pts[
+                                                                3] - pts[0], pts[4] - pts[1],
+                                                            pts[5] - pts[2], ".")
         if success:
             return 0
         else:
@@ -271,13 +279,13 @@ class TailwindPipelineRunner():
                     (stepNum, os.path.relpath(self.config.SRCImageDirName)))
                 return -stepNum
 
-        commandLineArgs = "sfm+k=%d,%d,%d,%d %s %s" % (	self.config.focalLength, self.srcJPGDimensions[0] / 2,
-                                                        self.config.focalLength, self.srcJPGDimensions[
-                                                            1] / 2,
-                                                        os.path.abspath(
-                                                            self.config.JPEGDirName),
-                                                        self.config.NVMFileName
-                                                        )
+        commandLineArgs = "sfm+k=%d,%d,%d,%d %s %s" % (self.config.focalLength, self.srcJPGDimensions[0] / 2,
+                                                       self.config.focalLength, self.srcJPGDimensions[
+            1] / 2,
+            os.path.abspath(
+            self.config.JPEGDirName),
+            self.config.NVMFileName
+        )
 
         retVal = self.callSystem(
             "/home/vsi/projects/vsfm/vsfm/bin/VisualSFM", commandLineArgs)
@@ -314,7 +322,7 @@ class TailwindPipelineRunner():
 
         # Should initialize a GPU
         scenePath = os.path.abspath(self.config.uSceneFileName)
-        scene = boxm2_scene_adaptor(scenePath,  "gpu0")
+        scene = boxm2_scene_adaptor.boxm2_scene_adaptor(scenePath,  "gpu0")
 
         # Get list of imgs and cams
         imgsDir = os.path.abspath(os.path.join(
@@ -353,9 +361,9 @@ class TailwindPipelineRunner():
                 random.shuffle(frames)
 
             for idx, i in enumerate(frames):
-                pcam = load_perspective_camera(
+                pcam = vpgl.load_perspective_camera(
                     os.path.join(camsDir, camFiles[i]))
-                img, ni, nj = load_image(os.path.join(imgsDir, imgFiles[i]))
+                img, ni, nj = vil.load_image(os.path.join(imgsDir, imgFiles[i]))
 
                 scene.update(pcam, img, 1, "", "gpu0")
 
@@ -418,29 +426,18 @@ class TailwindPipelineRunner():
         log("Creating scene with bundleFile %s." % (bundleFile))
         log("Output will be written to %s." % (outDir))
 
-        boxm2_batch.not_verbose()
-        boxm2_batch.register_processes()
-        boxm2_batch.register_datatypes()
-
-        # class used for python/c++ pointers in database
-        class dbvalue:
-
-            def __init__(self, index, type):
-                self.id = index    # unsigned integer
-                self.type = type   # string
-
         # run process
-        boxm2_batch.init_process("boxm2BundleToSceneProcess")
-        boxm2_batch.set_input_string(0, bundleFile)
-        boxm2_batch.set_input_string(1, imgDir)
-        boxm2_batch.set_input_string(2, self.config.NVMAppModel)
-        boxm2_batch.set_input_string(3, self.config.NVMNobsModel)
-        boxm2_batch.set_input_int(4, 8)
-        boxm2_batch.set_input_string(5, outDir)
-        boxm2_batch.run_process()
-        (scene_id, scene_type) = boxm2_batch.commit_output(0)
+        batch.init_process("boxm2BundleToSceneProcess")
+        batch.set_input_string(0, bundleFile)
+        batch.set_input_string(1, imgDir)
+        batch.set_input_string(2, self.config.NVMAppModel)
+        batch.set_input_string(3, self.config.NVMNobsModel)
+        batch.set_input_int(4, 8)
+        batch.set_input_string(5, outDir)
+        batch.run_process()
+        (scene_id, scene_type) = batch.commit_output(0)
         uscene = dbvalue(scene_id, scene_type)
-        (scene_id, scene_type) = boxm2_batch.commit_output(1)
+        (scene_id, scene_type) = batch.commit_output(1)
         rscene = dbvalue(scene_id, scene_type)
 
         return 0
@@ -510,7 +507,7 @@ if __name__ == '__main__':
 
     try:
         opts, args = getopt.getopt(sys.argv[1:], "d:b:i:e:rs:u:", [
-                                   "dryrun", "bbfile=", "inputlist=", "exportDir=", "randomize", "step=", "updatePassCount="])
+            "dryrun", "bbfile=", "inputlist=", "exportDir=", "randomize", "step=", "updatePassCount="])
         print opts
     except getopt.GetoptError, err:
         print str(err) + "\n"

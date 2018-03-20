@@ -73,7 +73,7 @@ $saw_queue_h         = 0; # <queue>
 $saw_map_h           = 0; # <map>
 $saw_set_h           = 0; # <set>
 $saw_string_h        = 0; # <string>
-$saw_memory_h        = 0; # <memory>
+$saw_memory_h        = 0; # <vcl_memory.h>
 
 # flags to indicate that certain types have been used.
 $saw_less      = 0; # less<>
@@ -232,7 +232,7 @@ sub process_headers {
       s/include\s*<typeinfo>/include <vcl_typeinfo.h>/;
       s/include\s*<deque>/include <vcl_deque.h>/;
       s/include\s*<iostream>/include <vcl_iostream.h>/;
-      s/include\s*<memory>/include <vcl_memory.h>/;
+      s/include\s*<vcl_memory.h>/include <vcl_memory.h>/;
       s/include\s*<sstream>/include <vcl_sstream.h>/;
       s/include\s*<utility>/include <vcl_utility.h>/;
       s/include\s*<exception>/include <vcl_exception.h>/;
@@ -929,7 +929,7 @@ sub output_lines {
         print "#include <vcl_set.h>\n"     if ($saw_set    && !$saw_set_h);
       }
 
-      # we need <memory> with allocator<> :
+      # we need <vcl_memory.h> with allocator<> :
       print "#include <vcl_memory.h>\n"    if ($saw_allocator && !$saw_memory_h);
 
       # we need <functional> with less<> :

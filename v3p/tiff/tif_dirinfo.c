@@ -721,8 +721,11 @@ _TIFFCreateAnonField(TIFF *tif, uint32 tag, TIFFDataType field_type)
 	 * note that this name is a special sign to TIFFClose() and
 	 * _TIFFSetupFields() to free the field
 	 */
-	(void) snprintf(fld->field_name, 32, "Tag %d", (int) tag);
-
+#if defined(_MSC_VER) && _MSC_VER < 1900 // classical problem with sprintf on Windows(JLM)
+        (void) sprintf_s(fld->field_name, 32, "Tag %d", (int) tag);
+#else
+        (void) snprintf(fld->field_name, 32, "Tag %d", (int) tag); 
+#endif
 	return fld;    
 }
 

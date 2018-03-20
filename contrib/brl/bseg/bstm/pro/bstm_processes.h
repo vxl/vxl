@@ -15,6 +15,8 @@ DECLARE_FUNC_CONS(bstm_add_block_process);
 DECLARE_FUNC_CONS(bstm_scene_statistics_process);
 DECLARE_FUNC_CONS(bstm_bundle_to_scene_process);
 DECLARE_FUNC_CONS(bstm_boxm2_scene_to_bstm_process);
-
+DECLARE_FUNC_CONS(bstm_describe_scene_process);
+DECLARE_FUNC_CONS(bstm_scene_bbox_process);
+DECLARE_FUNC_CONS(bstm_scene_lvcs_process);
 
 #endif

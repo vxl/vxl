@@ -17,15 +17,15 @@ bool vpgl_project_process_cons(bprb_func_process& pro)
   //input[0]: the camera
   std::vector<std::string> input_types;
   input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("float");
+  input_types.push_back("double");
+  input_types.push_back("double");
+  input_types.push_back("double");
   pro.set_input_types(input_types);
 
   // this process has two outputs:
   std::vector<std::string> output_types;
-  output_types.push_back("float");
-  output_types.push_back("float");
+  output_types.push_back("double");
+  output_types.push_back("double");
   pro.set_output_types(output_types);
 
   return true;
@@ -43,15 +43,15 @@ bool vpgl_project_process(bprb_func_process& pro)
   int i=0;
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i);
 
-  float x=pro.get_input<float>(++i);
-  float y=pro.get_input<float>(++i);
-  float z=pro.get_input<float>(++i);
+  double x=pro.get_input<double>(++i);
+  double y=pro.get_input<double>(++i);
+  double z=pro.get_input<double>(++i);
 
   double u,v;
   camera->project(x,y,z,u,v);
 
-  pro.set_output_val<float>(0, (float)u);
-  pro.set_output_val<float>(1, (float)v);
+  pro.set_output_val<double>(0, (double)u);
+  pro.set_output_val<double>(1, (double)v);
 
   return true;
 }

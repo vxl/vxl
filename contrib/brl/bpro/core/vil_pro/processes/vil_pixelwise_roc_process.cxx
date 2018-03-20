@@ -260,7 +260,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 }
 
 //: process to compute ROC curve of classified probability image with respect to ground truth image
-//  Note that the operational threshold ranges from min and max of the input probability image.  
+//  Note that the operational threshold ranges from min and max of the input probability image.
 //  Both ground truth image are binary mask with 0 and 255.
 //  If negative ground truth image is not given, then the negative ground truth are obtained from zero pixels in positive ground truth image
 namespace vil_pixelwise_roc_process2_globals
@@ -293,7 +293,7 @@ bool vil_pixelwise_roc_process2_cons(bprb_func_process& pro)
   pro.set_input(2, empty_neg_gt);
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
   pro.set_input(3, empty_mask);
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -422,10 +422,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
       }
     }
   }
-  
-  
+
+
   std::cout << "In ground truth map, " << pos_pixels.size() << " pixels are positive and " << neg_pixels.size() << " are negative." << std::endl;
-  
+
   // create threshold based on image range
   float min_val, max_val;
   vil_math_value_range(*detection_map, min_val, max_val);

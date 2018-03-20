@@ -22,9 +22,8 @@
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <gdk/gdkkeysyms.h>
-#include <gtk/gtk.h>
-#include <gdk/gdkgl.h>
 #include <gtk/gtkgl.h>
+#include <gdk/gdkgl.h>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_popup_params.h>

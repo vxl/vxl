@@ -19,7 +19,7 @@
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
-#include <limits.h>
+#include <climits>
 
 /*
 Parameter file format:

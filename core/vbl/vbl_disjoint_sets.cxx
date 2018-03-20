@@ -29,21 +29,19 @@ vbl_disjoint_sets::vbl_disjoint_sets(const vbl_disjoint_sets & s)
   this->num_sets_ = s.num_sets_;
 
   // Copy nodes
-  nodes_.resize(num_elements_);
+  node nd;
+  nodes_= vbl_array_1d<node>(num_elements_, nd);
   for (int i = 0; i < num_elements_; ++i)
-    nodes_[i] = new node(*s.nodes_[i]);
+    nodes_[i] = node(s.nodes_[i]);
 
   // Update parent pointers to point to newly created nodes rather than the old ones
   for (int i = 0; i < num_elements_; ++i)
-    if (nodes_[i]->parent != VXL_NULLPTR)
-      nodes_[i]->parent = nodes_[s.nodes_[i]->parent->index];
+    if (nodes_[i].parent != VXL_NULLPTR)
+      nodes_[i].parent = &nodes_[s.nodes_[i].parent->index];
 }
 
 vbl_disjoint_sets::~vbl_disjoint_sets()
 {
-  for (int i = 0; i < num_elements_; ++i)
-    delete nodes_[i];
-  nodes_.clear();
   num_elements_ = 0;
   num_sets_ = 0;
 }
@@ -56,14 +54,14 @@ int vbl_disjoint_sets::find_set(int element_id) const
   node* curnode;
 
   // Find the root element that represents the set which `element_id` belongs to
-  curnode = nodes_[element_id];
+  curnode = const_cast<node*>(nodes_.begin() + element_id);
   while (curnode->parent != VXL_NULLPTR)
     curnode = curnode->parent;
   node* root = curnode;
 
   // Walk to the root, updating the parents of `element_id`. Make those elements the direct
   // children of `root`. This optimizes the tree for future find_set invokations.
-  curnode = nodes_[element_id];
+  curnode = const_cast<node*>(nodes_.begin()+element_id);
   while (curnode != root)
   {
     node* next = curnode->parent;
@@ -82,8 +80,8 @@ void vbl_disjoint_sets::set_union(int setId1, int setId2)
   if (setId1 == setId2)
     return; // already unioned
 
-  node* set1 = nodes_[setId1];
-  node* set2 = nodes_[setId2];
+  node* set1 = const_cast<node*>(nodes_.begin()+setId1);
+  node* set2 = const_cast<node*>(nodes_.begin()+setId2);
 
   // Determine which node representing a set has a higher rank. The node with the higher rank is
   // likely to have a bigger subtree so in order to better balance the tree representing the
@@ -113,16 +111,13 @@ void vbl_disjoint_sets::add_elements(int num_to_add)
   assert(num_to_add >= 0);
 
   // insert and initialize the specified number of element nodes to the end of the `nodes_` array
-  nodes_.insert(nodes_.end(), num_to_add, (node*)VXL_NULLPTR);
-  for (int i = num_elements_; i < num_elements_ + num_to_add; ++i)
+  int n = nodes_.size();
+  for (int i = n; i < num_to_add + n; ++i)
   {
-    nodes_[i] = new node();
-    nodes_[i]->parent = VXL_NULLPTR;
-    nodes_[i]->index = i;
-    nodes_[i]->rank = 0;
-    nodes_[i]->size = 1;
+    node nd;
+    nd.index = i;
+    nodes_.push_back(nd);
   }
-
   // update element and set counts
   num_elements_ += num_to_add;
   num_sets_ += num_to_add;
@@ -141,5 +136,5 @@ int vbl_disjoint_sets::num_sets() const
 int vbl_disjoint_sets::size(int set_id) const
 {
   assert(set_id < num_elements_);
-  return nodes_[set_id]->size;
+  return nodes_[set_id].size;
 }

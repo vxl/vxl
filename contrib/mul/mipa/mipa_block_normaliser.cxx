@@ -175,7 +175,7 @@ void mipa_block_normaliser::config_from_stream(
         mbl_exception_error(x);
     }
     std::istringstream ss2(props["normaliser"]);
-    std::auto_ptr<mipa_vector_normaliser> norm = new_normaliser_from_stream(ss2, extra_props);
+    vcl_unique_ptr<mipa_vector_normaliser> norm = new_normaliser_from_stream(ss2, extra_props);
     normaliser_=norm.release();
     props.erase("normaliser");
 

@@ -1,23 +1,18 @@
 # Computes normalized pca training error
 
-import bvpl_octree_batch
 import os
 import optparse
 import time
 import sys
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
-
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     # Parse inputs
     parser = optparse.OptionParser(description='Compute PCA basis')
@@ -39,9 +34,9 @@ if __name__ == "__main__":
 
     start_time = time.time()
 
-    bvpl_octree_batch.init_process("bvplNormalizePCATrainingErrorProcess")
-    bvpl_octree_batch.set_input_string(0,  pca_dir)
-    bvpl_octree_batch.run_process()
+    batch.init_process("bvplNormalizePCATrainingErrorProcess")
+    batch.set_input_string(0,  pca_dir)
+    batch.run_process()
 
     print ("Runing time for bvplNormalizePCATrainingErrorProcess:")
     print(time.time() - start_time)

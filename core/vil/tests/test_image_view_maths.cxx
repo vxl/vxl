@@ -376,16 +376,16 @@ static void test_image_view_maths_byte()
 static void test_image_view_maths_float()
 {
   // dim > nxblock_size, n > 1
-  test_image_abs_diff<vxl_byte>(11, 13, 100.0f, 113.0f, 1e-8);
+  test_image_abs_diff<vxl_byte>(11, 13, 100.0f, 113.0f, 0);
 
   // dim = nxblock_size, n > 1
-  test_image_abs_diff<vxl_byte>(8, 12, 100.0f, 113.0f, 1e-8);
+  test_image_abs_diff<vxl_byte>(8, 12, 100.0f, 113.0f, 0);
 
   // dim = nxblock_size, n = 1
-  test_image_abs_diff<vxl_byte>(4, 4, 100.0f, 113.0f, 1e-8);
+  test_image_abs_diff<vxl_byte>(4, 4, 100.0f, 113.0f, 0);
 
   // dim r< nxblock_size, n = 1
-  test_image_abs_diff<vxl_byte>(2, 3, 100.0f, 113.0f, 1e-8);
+  test_image_abs_diff<vxl_byte>(2, 3, 100.0f, 113.0f, 0);
 }
 
 static void test_image_view_maths()

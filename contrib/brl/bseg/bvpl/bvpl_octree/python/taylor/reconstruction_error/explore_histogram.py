@@ -1,17 +1,13 @@
 import os
-import bvpl_octree_batch
 import multiprocessing
 import Queue
 import time
 import random
 import optparse
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 
 class histogram_job():
@@ -44,7 +40,7 @@ class histogram_worker(multiprocessing.Process):
 
     def run(self):
         while not self.kill_received:
-             # get a task
+           # get a task
             try:
                 job = self.work_queue.get_nowait()
             except Queue.Empty:
@@ -53,16 +49,16 @@ class histogram_worker(multiprocessing.Process):
             start_time = time.time()
 
             print("Creating a Scene")
-            bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-            bvpl_octree_batch.set_input_string(0,  job.scene_path)
-            bvpl_octree_batch.run_process()
-            (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+            batch.init_process("boxmCreateSceneProcess")
+            batch.set_input_string(0,  job.scene_path)
+            batch.run_process()
+            (scene_id, scene_type) = batch.commit_output(0)
             scene = dbvalue(scene_id, scene_type)
 
             print("Explore Histogram")
-            bvpl_octree_batch.init_process("bvplSceneHistorgramProcess")
-            bvpl_octree_batch.set_input_from_db(0, scene)
-            bvpl_octree_batch.run_process()
+            batch.init_process("bvplSceneHistorgramProcess")
+            batch.set_input_from_db(0, scene)
+            batch.run_process()
 
             print("Runing time for worker:", self.name)
             print(time.time() - start_time)
@@ -71,8 +67,8 @@ class histogram_worker(multiprocessing.Process):
 
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     parser = optparse.OptionParser(description='Run Taylor Kernels')
 

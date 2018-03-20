@@ -29,8 +29,8 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
   const unsigned int num_verts = mesh.num_verts();
   const unsigned int num_faces = mesh.num_faces();
 
-  std::auto_ptr<imesh_face_array> new_faces(new imesh_face_array);
-  std::auto_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
+  vcl_unique_ptr<imesh_face_array> new_faces(new imesh_face_array);
+  vcl_unique_ptr<imesh_vertex_array<3> > new_verts(new imesh_vertex_array<3>);
 
   for (unsigned int i=0; i<num_verts; ++i)
   {
@@ -73,9 +73,9 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
     new_verts->push_back(p1);
   }
 
-  std::auto_ptr<imesh_face_array_base> nf(new_faces);
-  std::auto_ptr<imesh_vertex_array_base > nv(new_verts);
-  return imesh_mesh(nv,nf);
+  vcl_unique_ptr<imesh_face_array_base> nf(vcl_move(new_faces));
+  vcl_unique_ptr<imesh_vertex_array_base > nv(vcl_move(new_verts));
+  return imesh_mesh(vcl_move(nv),vcl_move(nf));
 }
 
 
@@ -164,7 +164,7 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
   assert(mesh.vertices().dim() == 3);
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
-  std::auto_ptr<imesh_face_array_base> tris_base(new imesh_regular_face_array<3>);
+  vcl_unique_ptr<imesh_face_array_base> tris_base(new imesh_regular_face_array<3>);
   imesh_regular_face_array<3>* tris =
       static_cast<imesh_regular_face_array<3>*> (tris_base.get());
   int group = -1;
@@ -215,5 +215,5 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
     }
   }
 
-  mesh.set_faces(tris_base);
+  mesh.set_faces(vcl_move(tris_base));
 }

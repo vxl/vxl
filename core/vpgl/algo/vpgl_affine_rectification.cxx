@@ -28,7 +28,7 @@ vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const 
 }
 
 
-//:Backproject an image point onto a plane, start with initial_guess
+//:Extract the fundamental matrix from affine cameras
 bool vpgl_affine_rectification::compute_affine_f(const vpgl_affine_camera<double>* cam1,
                                                  const vpgl_affine_camera<double>* cam2,
                                                  vpgl_affine_fundamental_matrix<double>& FA)

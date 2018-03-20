@@ -28,7 +28,7 @@ class vsol_line_2d;
 class vsol_conic_2d;
 class vsol_polyline_2d;
 class vsol_digital_curve_2d;
-class dbsol_circ_arc_2d;
+class bsold_circ_arc_2d;
 
 class vsol_curve_2d : public vsol_spatial_object_2d
 {
@@ -94,8 +94,8 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual dbsol_circ_arc_2d const*cast_to_circ_arc()const{return VXL_NULLPTR;}
-  virtual dbsol_circ_arc_2d *cast_to_circ_arc() {return VXL_NULLPTR;}
+  virtual bsold_circ_arc_2d const*cast_to_circ_arc()const{return VXL_NULLPTR;}
+  virtual bsold_circ_arc_2d *cast_to_circ_arc() {return VXL_NULLPTR;}
 
 
   //---------------------------------------------------------------------------

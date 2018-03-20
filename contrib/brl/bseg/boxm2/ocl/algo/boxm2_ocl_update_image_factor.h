@@ -30,7 +30,7 @@ private:
 
     //compile kernels and place in static map
     static vcl_vector<bocl_kernel*>& get_image_kernels(bocl_device_sptr device, vcl_string opts = "");
-  
+
 
     //map of paint kernel by device
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > image_kernels_;
@@ -41,7 +41,7 @@ private:
 class boxm2_ocl_compute_pre_post
 {
 
-public: 
+public:
     static bool compute_pre_post(boxm2_scene_sptr         scene,
         bocl_device_sptr         device,
         boxm2_opencl_cache_sptr  opencl_cache,
@@ -68,7 +68,7 @@ private:
                             vcl_string view_identifier,
                             float resnearfactor = 100000.0,
                             float resfarfactor = 100000.0);
- 
+
     //compile kernels and place in static map
     static vcl_vector<bocl_kernel*>& get_pre_kernels(bocl_device_sptr device, vcl_string opts = "");
     //compile kernels and place in static map

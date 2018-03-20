@@ -37,5 +37,10 @@ DECLARE_FUNC_CONS(sdet_texture_classify_satellite_clouds_process);
 DECLARE_FUNC_CONS(sdet_texture_classify_satellite_clouds_process2);
 DECLARE_FUNC_CONS(sdet_dump_vsol_binary_data_process);
 DECLARE_FUNC_CONS(sdet_add_responses_to_filter_bank_process);
+DECLARE_FUNC_CONS(sdet_extract_filter_bank_img_process);
+DECLARE_FUNC_CONS(sdet_selective_search_process);
+DECLARE_FUNC_CONS(sdet_fit_oriented_boxes_process);
+DECLARE_FUNC_CONS(sdet_fit_oriented_boxes_from_geotiff_process);
+DECLARE_FUNC_CONS(sdet_texture_unsupervised_classifier_process);
 
 #endif

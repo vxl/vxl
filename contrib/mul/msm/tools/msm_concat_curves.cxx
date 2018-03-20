@@ -40,17 +40,17 @@ int main(int argc, char** argv)
       return 1;
     }
     std::cout<<"Loaded "<<curves.size()<<" curves from "<<path<<std::endl;
-    
+
     unsigned n_pts = 1+curves.max_index();
     vcl_cout<<"n_points: "<<n_pts<<vcl_endl;
-    
+
     // Add offset to each curve, allowing for points in previous examples
     for (unsigned j=0;j<curves.size();++j)
       curves[j].add_index_offset(offset);
-    
+
     offset+=n_pts;
-    
-    // Add curves to list 
+
+    // Add curves to list
     for (unsigned j=0;j<curves.size();++j) all_curves.push_back(curves[j]);
   }
 

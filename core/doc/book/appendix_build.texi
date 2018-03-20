@@ -413,7 +413,7 @@ You can tell CMake to be a bit more picky and to warn about the use of
 deprecated syntax with the following command.
 
 @example
-CMAKE_MINIMUM_REQUIRED( VERSION 2.8.9 )
+CMAKE_MINIMUM_REQUIRED( VERSION 3.3.0 )
 @end example
 
 If your programs or libraries are to use libraries that are outside of

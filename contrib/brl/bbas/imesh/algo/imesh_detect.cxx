@@ -173,7 +173,7 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
                             unsigned int num_dir_samples,
                             unsigned int img_size)
 {
-  std::auto_ptr<imesh_mesh> tri_mesh;
+  vcl_unique_ptr<imesh_mesh> tri_mesh;
   const imesh_mesh* mesh_ptr = &mesh;
   std::vector<unsigned int> tri_map;
   if (mesh.faces().regularity() != 3) {
@@ -182,9 +182,9 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
       for (unsigned int j=2; j<mesh.faces().num_verts(i); ++j)
         tri_map.push_back(i);
     }
-    std::auto_ptr<imesh_vertex_array_base> verts_copy(mesh.vertices().clone());
-    std::auto_ptr<imesh_face_array_base> faces_tri(imesh_triangulate(mesh.faces()));
-    tri_mesh.reset(new imesh_mesh(verts_copy,faces_tri));
+    vcl_unique_ptr<imesh_vertex_array_base> verts_copy(mesh.vertices().clone());
+    vcl_unique_ptr<imesh_face_array_base> faces_tri(imesh_triangulate(mesh.faces()));
+    tri_mesh.reset(new imesh_mesh(vcl_move(verts_copy),vcl_move(faces_tri)));
     tri_mesh->compute_face_normals();
     mesh_ptr = tri_mesh.get();
   }
@@ -227,7 +227,7 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
                             unsigned int num_dir_samples,
                             unsigned int img_size)
 {
-  std::auto_ptr<imesh_mesh> tri_mesh;
+  vcl_unique_ptr<imesh_mesh> tri_mesh;
   const imesh_mesh* mesh_ptr = &mesh;
   std::vector<unsigned int> tri_map;
   if (mesh.faces().regularity() != 3) {
@@ -236,9 +236,9 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
       for (unsigned int j=2; j<mesh.faces().num_verts(i); ++j)
         tri_map.push_back(i);
     }
-    std::auto_ptr<imesh_vertex_array_base> verts_copy(mesh.vertices().clone());
-    std::auto_ptr<imesh_face_array_base> faces_tri(imesh_triangulate(mesh.faces()));
-    tri_mesh.reset(new imesh_mesh(verts_copy,faces_tri));
+    vcl_unique_ptr<imesh_vertex_array_base> verts_copy(mesh.vertices().clone());
+    vcl_unique_ptr<imesh_face_array_base> faces_tri(imesh_triangulate(mesh.faces()));
+    tri_mesh.reset(new imesh_mesh(vcl_move(verts_copy),vcl_move(faces_tri)));
     tri_mesh->compute_face_normals();
     mesh_ptr = tri_mesh.get();
   }

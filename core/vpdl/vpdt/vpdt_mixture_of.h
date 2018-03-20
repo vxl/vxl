@@ -14,7 +14,7 @@
 
 #include <vector>
 #include <algorithm>
-#include <memory>
+#include <vcl_memory.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vcl_cassert.h>

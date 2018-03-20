@@ -239,9 +239,9 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
   }
   else if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    vimt_image_2d_of<vxl_byte> byte_image;	  
+    vimt_image_2d_of<vxl_byte> byte_image;
     vimt_load_as_grey_or_rgb(im_path.c_str(), byte_image, unit_scaling);
-	vimt_convert_cast(byte_image, image);
+        vimt_convert_cast(byte_image, image);
   }
   else
   {

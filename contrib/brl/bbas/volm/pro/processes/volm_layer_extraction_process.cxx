@@ -242,7 +242,7 @@ bool volm_building_layer_extraction_process_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";  // output binary image
   output_types_[1] = "vil_image_view_base_sptr";  // a binary mask that shows pixels where both land cover image and height image are available
   output_types_[2] = "vpgl_camera_double_sptr";   // output camera
-  
+
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -296,7 +296,7 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
     std::cerr << pro.name() << ": can not load height image camera!\n";
     return false;
   }
-  
+
   std::vector<unsigned char> land_ids;
   vcl_ifstream ifs(land_txt.c_str());
   if (!ifs.is_open()) {
@@ -455,7 +455,7 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
   // write to kml
   std::ofstream ofs(out_file.c_str());
   if (!ofs.is_open()) {
-    std::cerr << pro.name() << ": Failed to write " << out_file << "\n!";
+    std::cerr << pro.name() << ": Failed to write " << out_file << "!\n";
     return false;
   }
   bkml_write::open_document(ofs);

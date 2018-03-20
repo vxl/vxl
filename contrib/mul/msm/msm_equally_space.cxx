@@ -17,9 +17,9 @@ void msm_equally_space(msm_points& points,
   // Construct a smooth curve through selected points
   vcl_vector<vgl_point_2d<double> > pts(curve.size());
   for (unsigned i=0;i<curve.size();++i) pts[i]=points[curve[i]];
-  msm_cubic_bezier bezier(pts,!curve.open()); 
+  msm_cubic_bezier bezier(pts,!curve.open());
   unsigned n_pts = pts.size();
-  
+
   vcl_vector<vgl_point_2d<double> > new_pts;
   int last_index=n_pts-1;
   if (curve.open())
@@ -29,7 +29,7 @@ void msm_equally_space(msm_points& points,
     bezier.equal_space(0,0,n_pts,min_bez_sep,new_pts);
     last_index=n_pts;
   }
-  
+
   // Replace the points on the curve with pts
   for (unsigned i=1;i<last_index;++i)
   {

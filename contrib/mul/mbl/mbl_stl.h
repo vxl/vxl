@@ -109,7 +109,7 @@ template<typename InputIterator,
 //NB something like this is in the SGI extension to the STL but is not included in the standard VCL
 //However this is very useful with map iterators so include it here
 template <class Pair>
-struct mbl_stl_select1st : public std::unary_function<Pair, typename Pair::first_type>
+struct mbl_stl_select1st
 {
   inline typename Pair::first_type const & operator()(Pair const & pair) const
   {
@@ -121,7 +121,7 @@ struct mbl_stl_select1st : public std::unary_function<Pair, typename Pair::first
 //NB something like this is in the SGI extension to the STL but is not included in the standard VCL
 //However this is very useful with map iterators so include it here
 template <class Pair>
-struct mbl_stl_select2nd : public std::unary_function<Pair, typename Pair::second_type>
+struct mbl_stl_select2nd
 {
   inline typename Pair::second_type const & operator()(Pair const & pair) const
   {
@@ -131,7 +131,7 @@ struct mbl_stl_select2nd : public std::unary_function<Pair, typename Pair::secon
 
 //Accumulate the second elements of a pair (e.g. for accumulating values through a map)
 template <class Pair>
-struct mbl_stl_add2nd : public std::binary_function<typename Pair::second_type, Pair, typename Pair::second_type>
+struct mbl_stl_add2nd
 {
   inline typename Pair::second_type  operator()(typename Pair::second_type partSum, Pair const & x2 ) const
   {

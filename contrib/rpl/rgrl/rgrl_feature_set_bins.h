@@ -12,7 +12,7 @@
 // \endverbatim
 
 #include <iostream>
-#include <memory>
+#include <vcl_memory.h>
 #include <rsdl/rsdl_fwd.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
@@ -103,7 +103,7 @@ class rgrl_feature_set_bins
   rgrl_mask_box bounding_box_;
 
   // Using bins as the data structure
-  std::auto_ptr< bin_type > bins_;
+  vcl_unique_ptr< bin_type > bins_;
 
   // Using kd_tree as the data structure
   //feature_vector features_;

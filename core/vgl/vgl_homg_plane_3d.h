@@ -87,7 +87,7 @@ class vgl_homg_plane_3d
   // If called without an argument, tol=0, i.e., a, b and c must be 0.
   inline bool ideal(Type tol = (Type)0) const
   {
-#define vgl_Abs(x) (x<0?-x:x) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
+#define vgl_Abs(x) ((x)<0?-(x):(x)) // avoid #include of vcl_cmath.h AND vcl_cstdlib.h
     return vgl_Abs(a()) <= tol * vgl_Abs(d()) &&
            vgl_Abs(b()) <= tol * vgl_Abs(d()) &&
            vgl_Abs(c()) <= tol * vgl_Abs(d());

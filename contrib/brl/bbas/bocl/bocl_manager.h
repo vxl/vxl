@@ -69,7 +69,7 @@ class bocl_manager
   std::string platform_name()      const { return curr_device_->info().platform_name_; }
   cl_device_type device_type()    const { return curr_device_->info().device_type_; }
   //////////////////////////////////////////////////////////////////////////////
-  
+
   static bool is_instantiated() { return instantiated_; }
 
   //: Clear the opencl environment smart pointers

@@ -13,7 +13,7 @@
 // \endverbatim
 
 #include <iostream>
-#include <memory>
+#include <vcl_memory.h>
 #include <vcl_compiler.h>
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_event.h>
@@ -92,7 +92,7 @@ class bgui3d_tableau : public vgui_tableau
 
   //: Get the scene camera
   // creates a vpgl camera (either perspective or affine) from the graphics camera
-  virtual std::auto_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual vcl_unique_ptr<vpgl_proj_camera<double> > camera() const;
   //----------------------------------------------------------------
 
   //: Set the viewport

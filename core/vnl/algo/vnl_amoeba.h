@@ -43,7 +43,7 @@ class vnl_least_squares_function;
 //  are obtained by adding each dx[i] to the elements of x, one at a time.
 //  This is useful if you know roughly the scale of your space.
 
-class vnl_amoeba
+class VNL_ALGO_EXPORT vnl_amoeba
 {
  public:
   int verbose;
@@ -103,7 +103,7 @@ class vnl_amoeba
   //: Modify x so as to minimise f(x)
   static void minimize(vnl_least_squares_function& f, vnl_vector<double>& x);
 
-  static VNL_ALGO_EXPORT bool default_verbose;
+  static bool default_verbose;
 
  protected:
   vnl_cost_function* fptr;

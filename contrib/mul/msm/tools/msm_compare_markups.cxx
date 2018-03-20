@@ -27,7 +27,7 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_load.h>
 /*
-Points from different annotators are assumed to have the same filenames, but 
+Points from different annotators are assumed to have the same filenames, but
 live in separate directories.
 
 Parameter file format:
@@ -41,7 +41,7 @@ point_colour2: blue
 //: Aligner used to map to common frame
 aligner: msm_similarity_aligner
 
-//: Radius of points to display 
+//: Radius of points to display
 point_radius: 1.5
 
 //: Line width
@@ -70,11 +70,11 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_auto_ptr<msm_aligner> aligner;
-  
-  //: Radius of points to display 
+  vcl_unique_ptr<msm_aligner> aligner;
+
+  //: Radius of points to display
   double point_radius;
-  
+
   //: Line width
   double line_width;
 
@@ -83,7 +83,7 @@ struct tool_params
 
   //: Directories containing points
   vcl_vector<vcl_string> points_dir;
-  
+
   //: Colours for points
   vcl_vector<vcl_string> point_colour;
 
@@ -113,7 +113,7 @@ void tool_params::read_from_file(const vcl_string& path)
   }
 
   mbl_read_props_type props = mbl_read_props_ws(ifs);
-  
+
   // Initially assume exactly two directories.
   // Later may generalise.
   points_dir.resize(2);
@@ -156,7 +156,7 @@ void load_shapes(const vcl_string& points_dir,
       mbl_exception_parse_error x("Failed to load points from "+path);
       mbl_exception_error(x);
     }
-    
+
     if (shapes[i].size()!=shapes[0].size())
     {
       vcl_cerr<<"WARNING: "<<path<<" has different number of points ("
@@ -217,7 +217,7 @@ class mbm_covar_stats_2d
     sum11+=x*x; sum12+=x*y; sum22+=y*y;
     n++;
   }
-  
+
   void obs(vgl_point_2d<double> p) { obs(p.x(),p.y()); }
 
   unsigned n_obs() const { return n; }
@@ -229,7 +229,7 @@ class mbm_covar_stats_2d
   double var11() const { return sum11/n-mean_x()*mean_x(); }
   double var12() const { return sum12/n-mean_x()*mean_y(); }
   double var22() const { return sum22/n-mean_y()*mean_y(); }
-  
+
   //: Calculate eigenvalues of the covariance matrix and angle of evector 1
   void eigen_values(double& eval1, double& eval2, double& A)
   {
@@ -239,7 +239,7 @@ class mbm_covar_stats_2d
     double hac = 0.5*(var11()+var22());
     eval1=hac+d;
     eval2=hac-d;
-    
+
     A = vcl_atan2(eval1-var11(),var12());
   }
 
@@ -272,16 +272,16 @@ int main(int argc, char** argv)
   }
 
   unsigned n_sets = params.points_dir.size();
-  
+
   // Load in all points
   vcl_vector<vcl_vector<msm_points> > points(n_sets);
   for (unsigned i=0;i<n_sets;++i)
     load_shapes(params.points_dir[i],params.points_names,points[i]);
-  
+
   // Compute mean of points on first image to use as a reference.
   msm_points ref_shape=mean_shape(points,0);
-  
-  // Transform all points into a common reference frame 
+
+  // Transform all points into a common reference frame
   // Compute mean of points on each image, then transform all by same function.
   unsigned n_egs=points[0].size();
   vnl_vector<double> pose;
@@ -292,7 +292,7 @@ int main(int argc, char** argv)
     for (unsigned i=0;i<n_sets;++i)
       params.aligner->apply_transform(points[i][j],pose,points[i][j]);
   }
-  
+
   unsigned n_pts = points[0][0].size();
   vcl_vector<vcl_vector<mbm_covar_stats_2d> > pt_stats(n_sets);
   vcl_vector<vcl_vector<mbl_sample_stats_1d> > d_stats(n_sets);  // Dist. to mean.
@@ -322,15 +322,15 @@ int main(int argc, char** argv)
   vimt_image_2d_of<vxl_byte> image;
   vcl_string image_path = params.image_dir+"/"+params.image_names[0];
   vimt_load_to_byte(image_path.c_str(), image, 1000.0f);
-  
+
   vimt_transform_2d i2w=image.world2im().inverse();
   double pixel_width_i = (i2w(1,0)-i2w(0,0)).length();
   double pixel_width_j = (i2w(0,1)-i2w(0,0)).length();
-  
+
   double region_width=pixel_width_i*image.image().ni();
   double region_height=pixel_width_j*image.image().nj();
   mbl_eps_writer writer(out_path().c_str(),region_width,region_height);
-   
+
   writer.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
 
   writer.set_colour("cyan");
@@ -360,16 +360,16 @@ int main(int argc, char** argv)
                               ref_shape[k].y()+pt_stats[i][k].mean_y());
       writer.set_colour(params.point_colour[i]);
       writer.draw_disk(pt,params.point_radius);
-      
+
       double rx,ry,A;
       pt_stats[i][k].eigen_values(rx,ry,A);
       draw_ellipse(writer.ofs(),region_height,pt,2*vcl_sqrt(rx),2*vcl_sqrt(ry),A*180/3.14159);
     }
   }
-  
+
   writer.close();
   vcl_cout<<"Graphics saved to "<<out_path()<<vcl_endl;
-  
+
   if (n_sets==2)
   {
     // Write distance stats to file.
@@ -412,6 +412,6 @@ int main(int argc, char** argv)
     ofs.close();
     vcl_cout<<"Saved set_index, pt_index, mean, SD, median, 95% to "<<d_stats_path()<<vcl_endl;
   }
-  
+
   return 0;
 }

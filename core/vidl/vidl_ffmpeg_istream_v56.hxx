@@ -113,6 +113,11 @@ struct vidl_ffmpeg_istream::pimpl
   double stream_time_base_to_frame()
     {
     assert(this->vid_str_);
+    if(this->vid_str_->avg_frame_rate.num == 0.0)
+    {
+      return av_q2d(av_inv_q(av_mul_q(this->vid_str_->time_base,
+                                      this->vid_str_->r_frame_rate)));
+    }
     return av_q2d(
       av_inv_q(
         av_mul_q(this->vid_str_->time_base, this->vid_str_->avg_frame_rate)));
@@ -452,7 +457,7 @@ advance()
     {
        int err = avcodec_decode_video2( is_->video_enc_,
                                        is_->frame_, &got_picture,
-                                       &is_->packet_); 
+                                       &is_->packet_);
        if (err == AVERROR_INVALIDDATA)
        {// Ignore the frame and move to the next
          av_free_packet(&is_->packet_);

@@ -8,9 +8,9 @@ extern "C" {
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <stdlib.h>
-#include <string.h>  // for strdup
 }
+#include <cstdlib>
+#include <cstring>  // for strdup
 #include <vxl_config.h> // for VXL_UNISTD_*
 
 char *

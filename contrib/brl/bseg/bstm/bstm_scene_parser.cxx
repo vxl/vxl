@@ -95,7 +95,7 @@ void bstm_scene_parser::init_params()
 //   * P_INIT_TAG "p_init"
 //   * MAX_MB_TAG "max_mb"
 void
-bstm_scene_parser::startElement(const char* name, const char** atts)
+bstm_scene_parser::startElement(const char* name, const XML_Char** atts)
 {
 #if 0
   std::cout<< "element=" << name << '\n'

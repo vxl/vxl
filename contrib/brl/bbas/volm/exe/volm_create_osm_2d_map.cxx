@@ -19,6 +19,7 @@
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <vgl/vgl_intersection.h>
+#include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
 #include <vgl/vgl_box_2d.h>
 #include <vil/vil_save.h>
@@ -987,11 +988,11 @@ int main(int argc, char** argv)
   if (nlcd_folder().compare("") == 0 || lidar_folder().compare("") == 0 || osm_folder().compare("") == 0 || roi_kml().compare("") == 0 ||
       build_folder().compare("") == 0 || sme_folder().compare("") == 0 || out_folder().compare("") == 0 ||
       tile_id() == 100 )
-  {  vul_arg_display_usage_and_exit();  return false;  }
+  {  vul_arg_display_usage_and_exit();  return -1;  }
 
   if (world_str().compare("coast") != 0) {
     std::cout << "ERROR: input ROI world: " << world_str() << " is not supported (only coast allowed)" << std::endl;
-    return false;
+    return -1;
   }
 
   std::string log_file = out_folder() + "/log_osm_2d_map_wr_" + world_str() + ".xml";
@@ -1035,7 +1036,7 @@ int main(int argc, char** argv)
   volm_io_tools::load_nlcd_imgs(nlcd_folder(), info_tmp);
   if (info_tmp.size() != tile_size) {
     log << "ERROR: mismatch in create tiles " << tiles.size() << " and loaded " << info_tmp.size() << " nlcd images, check input nlcd folder\n";  error(log_file, log.str());
-    return false;
+    return -1;
   }
   std::vector<volm_img_info> nlcd_infos;
   for (unsigned i = 0; i < tile_size; i++) {
@@ -1074,7 +1075,7 @@ int main(int argc, char** argv)
   std::stringstream osm_file;  osm_file << osm_folder() << "/p1" << phase_str << "_wr" << world_id << "_tile_" << t_id << "_osm.bin";
   if (!vul_file::exists(osm_file.str())) {
     log << "ERROR: can not find osm binary file: " << osm_file.str() << '\n';  error(log_file, log.str());
-    return false;
+    return -1;
   }
   volm_osm_objects osm(osm_file.str());
 
@@ -1092,7 +1093,7 @@ int main(int argc, char** argv)
   vil_image_view<vxl_byte>* nlcd_img = dynamic_cast<vil_image_view<vxl_byte>*>(nlcd_info.img_r.ptr());
   if (!nlcd_img) {
     log << "ERROR: unsupported NLCD image pixel format: " << nlcd_info.img_r->pixel_format() << '\n';  error(log_file, log.str());
-    return false;
+    return -1;
   }
   std::cout << "NLCD image covers the given tile: " << nlcd_info.img_name << std::endl;
   // retrieve leaves for current tile
@@ -1144,11 +1145,11 @@ int main(int argc, char** argv)
     // obtain LIDAR images that intersect with current leaf
     std::vector<std::pair<vil_image_view<float>, vpgl_geo_camera*> > lidar_imgs;
     for (std::vector<volm_img_info>::iterator vit = lidar_infos.begin(); vit != lidar_infos.end(); ++vit) {
-      if (vgl_intersection(vit->bbox, leaf_bbox_geo).area() <= 0.0)
+      if (vgl_area(vgl_intersection(vit->bbox, leaf_bbox_geo)) <= 0.0)
         continue;
       if (vit->img_r->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
         log << "ERROR: unsupported LIDAR image pixel format: " << vit->img_r->pixel_format() << '\n';  error(log_file, log.str());
-        return false;
+        return -1;
       }
       vil_image_view<float> img(vit->img_r);
       lidar_imgs.push_back(std::pair<vil_image_view<float>, vpgl_geo_camera*>(img, vit->cam));
@@ -1284,7 +1285,7 @@ int main(int argc, char** argv)
       if (!volm_io_tools::expend_line(line_img, width, img_poly)) {
         log << " expending osm line in tile " << t_id << ", leaf " << leaf->extent_ << " failed given width " << width << std::endl;
         error(log_file, log.str());
-        return false;
+        return -1;
       }
       cnt++;
       vgl_polygon_scan_iterator<double> it(img_poly, true);
@@ -1320,7 +1321,7 @@ int main(int argc, char** argv)
       if (!volm_io_tools::search_junctions(curr_rd, curr_rd_prop, net, net_props, cross_pts, cross_props, cross_geo_props)) {
         log << "ERROR: find road junction for tile " << t_id << " leaf " << leaf_bbox_geo << " road " << r_idx << " failed\n";
         error(log_file, log.str());
-        return false;
+        return -1;
       }
       // ingest junction for current roads (note we will overwrite anything but buildings
       for (unsigned c_idx = 0; c_idx < cross_pts.size(); c_idx++) {
@@ -1467,6 +1468,6 @@ int main(int argc, char** argv)
     std::cout << l_idx << " finished successfully!" << std::endl;
   } // end of leaf loop
 
-  return true;
+  return -1;
 }
 #endif

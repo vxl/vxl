@@ -33,6 +33,9 @@ target_link_libraries(generate_tiff_pyramids ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREF
 add_executable(generate_tiff_rset generate_tiff_rset.cxx)
 target_link_libraries(generate_tiff_rset ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil)
 
+add_executable(generate_tiff_rset_from_arg_image generate_tiff_rset_from_arg_image.cxx)
+target_link_libraries(generate_tiff_rset_from_arg_image ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vpl)
+
 #New executable to generate rsets for all files in directory
 add_executable(gen_tiff_rset_dir gen_tiff_rset_dir.cxx)
 

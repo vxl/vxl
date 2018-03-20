@@ -225,7 +225,7 @@ bool vgl_fit_sphere_3d<T>::fit_linear(const T error_marg, std::ostream* outstrea
 }
 
 template <class T>
-bool vgl_fit_sphere_3d<T>::fit_(const T error_marg, std::ostream* outstream, bool verbose){
+bool vgl_fit_sphere_3d<T>::fit(const T error_marg, std::ostream* outstream, bool verbose){
   T error = fit(outstream, verbose);
   return (error<error_marg);
 }

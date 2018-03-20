@@ -26,6 +26,7 @@
 #include <limits>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_compiler.h>
+#include <vgl/vgl_infinite_line_3d.h>
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>
 void vgl_closest_point_to_linesegment(T& ret_x, T& ret_y,
@@ -265,7 +266,7 @@ template <class T>
 std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_3d_2_points<T>& l1,
                    const vgl_line_3d_2_points<T>& l2,
-                   bool* unique=0);
+                   bool* unique=VXL_NULLPTR);
 
 
 //: Return the points of closest approach on two infinite 3D lines.
@@ -279,7 +280,7 @@ template <class T>
 std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_infinite_line_3d<T>& l1,
                    const vgl_infinite_line_3d<T>& l2,
-                   bool* unique=0)
+                   bool* unique=VXL_NULLPTR)
 {
   vgl_line_3d_2_points<T> l21(l1.point(), l1.point_t(T(1)));
   vgl_line_3d_2_points<T> l22(l2.point(), l2.point_t(T(1)));
@@ -297,7 +298,7 @@ template <class T>
 std::pair<vgl_point_3d<T>, vgl_point_3d<T> >
 vgl_closest_points(const vgl_line_segment_3d<T>& l1,
                    const vgl_line_segment_3d<T>& l2,
-                   bool* unique=0);
+                   bool* unique=VXL_NULLPTR);
 
 //: Return the closest point on a line segment \a l to a point \a p in 2D
 // \relatesalso vgl_point_2d

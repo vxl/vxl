@@ -13,7 +13,7 @@
 //   Yi Dong --- Feb, 2013  added method to write Photo overlay
 //   Yi Dong --- Oct, 2014  added method to write Polygon with inner boundary
 //   Yi Dong --- Oct, 2014  added method to write a point as a 2-d box
-//   Yi Dong --- Dec, 2015  update box write method to have 'fill' option 
+//   Yi Dong --- Dec, 2015  update box write method to have 'fill' option
 // \endverbatim
 
 #include <iostream>

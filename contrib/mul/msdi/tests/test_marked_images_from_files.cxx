@@ -36,13 +36,13 @@ inline void test_n_samples(msdi_marked_images_from_files& data, unsigned n)
     vcl_cout<<"Points: "<<data.points_name();
     if (vcl_fabs(data.points()[0].x()-1.0)<1e-5) vcl_cout<<" (Raw)";
     else                        vcl_cout<<" (Ref)";
-    
+
 //    vcl_cout<<" Image: "<<data.image_name();
 //    if (is_reflected(data.image())) vcl_cout<<" (Ref) ";
 //    else                          vcl_cout<<" (Raw)";
 
      vcl_cout<<vcl_endl;
-    
+
   } while (data.next());
   TEST("Iterated N.Samples",count,n);
 }
@@ -55,18 +55,18 @@ void test_marked_images_from_files()
 
   // Current test just checks the filename - doesn't actually load in the images/points.
   std::vector<std::string > image_names,points_names;
-  
+
   vil_image_view<vxl_byte> image(5,5);
   image.fill(0);
   image(0,0)=100;
-  
+
   vil_save(image,"image00.png");
   vil_save(image,"image01.png");
   vil_save(image,"image02.png");
   image_names.push_back(std::string("image00.png"));
   image_names.push_back(std::string("image01.png"));
   image_names.push_back(std::string("image02.png"));
-  
+
   msm_points points(2);
   points.set_point(0,1,0);
   points.set_point(1,3.5,0);
@@ -76,37 +76,37 @@ void test_marked_images_from_files()
   points_names.push_back(std::string("image00.pts"));
   points_names.push_back(std::string("image01.pts"));
   points_names.push_back(std::string("image02.pts"));
-  
+
   points.write_text_file("ref-image00.pts");
   points.write_text_file("ref-image01.pts");
   points.write_text_file("ref-image02.pts");
 
-  
+
   std::string image_dir("./"),points_dir("./");
-  
+
   msdi_marked_images_from_files data;
   data.set(image_dir,image_names,points_dir,points_names);
-  
+
   data.set_ref_prefix("ref-");
-  
+
   data.set_state(Raw);
   test_n_samples(data,3);
-  
+
   data.set_state(ReflectOnly);
   test_n_samples(data,3);
-  
+
   data.set_state(OnlyReflectIm);
   test_n_samples(data,3);
-  
+
   data.set_state(ReflectSym);
   test_n_samples(data,6);
-  
+
   data.set_state(ReflectAsymRawPts);
   test_n_samples(data,6);
-  
+
   data.set_state(ReflectAsymRefPts);
   test_n_samples(data,6);
-  
+
 }
 
 TESTMAIN(test_marked_images_from_files);

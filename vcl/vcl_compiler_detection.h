@@ -128,7 +128,7 @@
 # undef VXL_COMPILER_IS_GNU
 # define VXL_COMPILER_IS_GNU 1
 
-#elif defined(_MSC_VER)
+#elif defined(_MSC_VER) && _MSC_VER >= 1600
 # undef VXL_COMPILER_IS_MSVC
 # define VXL_COMPILER_IS_MSVC 1
 
@@ -249,10 +249,8 @@
 
 #  if VXL_COMPILER_CXX_NOEXCEPT
 #    define VXL_NOEXCEPT noexcept
-#    define VXL_NOEXCEPT_EXPR(X) noexcept(X)
 #  else
-#    define VXL_NOEXCEPT
-#    define VXL_NOEXCEPT_EXPR(X)
+#    define VXL_NOEXCEPT throw()
 #  endif
 
 

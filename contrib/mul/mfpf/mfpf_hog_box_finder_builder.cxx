@@ -254,7 +254,7 @@ bool mfpf_hog_box_finder_builder::set_from_stream(std::istream &is)
   {
     std::istringstream ss2(props["norm"]);
     mbl_read_props_type dummy_extra_props;
-    std::auto_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
+    vcl_unique_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss2, dummy_extra_props);
     normaliser_=norm.release();
     reonfigureNormaliser=true;
 #if 0
@@ -298,7 +298,7 @@ bool mfpf_hog_box_finder_builder::set_from_stream(std::istream &is)
   if (props.find("cost_builder")!=props.end())
   {
     std::istringstream b_ss(props["cost_builder"]);
-    std::auto_ptr<mfpf_vec_cost_builder> bb =
+    vcl_unique_ptr<mfpf_vec_cost_builder> bb =
       mfpf_vec_cost_builder::create_from_stream(b_ss);
     cost_builder_ = bb->clone();
     props.erase("cost_builder");

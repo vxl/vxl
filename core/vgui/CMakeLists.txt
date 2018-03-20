@@ -421,10 +421,26 @@ endif()
 # GTK2
 ##################################################
 
-message("GTK2_INCLUDE_DIRS: ${GTK2_INCLUDE_DIRS}")
 if(GTK2_FOUND)
-
   # We need to make sure we have the gl extension before building this component.
+  find_package(PkgConfig)
+  if (PkgConfig_FOUND)
+    pkg_search_module(GTKGL2 gtkglext-1.0) # despite the 1.0, works w/ gtk2
+    if (GTKGL2_FOUND)
+      list(APPEND GTK2_INCLUDE_DIRS ${GTKGL2_INCLUDE_DIRS})
+      list(REMOVE_DUPLICATES GTK2_INCLUDE_DIRS)
+      list(APPEND GTK2_LIBRARIES ${GTKGL2_LIBRARIES})
+      list(REMOVE_DUPLICATES GTK2_LIBRARIES)
+      # TODO: libraries are not full paths, a known limitation of pkg_*_module.
+      # If a GTK library is installed on a non-standard path, this will fail.
+      # One can either work on the cmake dev list to improve PkgConfig,
+      # or else use a function to append a full path to each library as
+      # provided by a patch in the original Mantis issue for 
+      # https://gitlab.kitware.com/cmake/cmake/issues/15804
+    endif()
+  endif()
+  # message("GTK2_INCLUDE_DIRS: ${GTK2_INCLUDE_DIRS}")
+  # message("GTK2 FINAL Libraries" "${GTK2_LIBRARIES}")
   find_file(GTKGL gtk/gtkgl.h PATHS ${GTK2_INCLUDE_DIRS})
   if (GTKGL)
     option(VGUI_USE_GTK2 "Should GTK2 support be compiled into vgui?" YES)

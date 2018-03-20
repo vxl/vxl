@@ -18,10 +18,10 @@
 
 
 //: Define whether to use reflections of images and/or points.
-// Raw: Return raw data 
+// Raw: Return raw data
 // ReflectOnly: Return reflected points and reflected images (but not originals)
 // OnlyReflectIm: Return reflected images and original points from files (without reflecting them)
-// ReflectSym: Return raw + reflected images, with original points + their reflections 
+// ReflectSym: Return raw + reflected images, with original points + their reflections
 // ReflectAsymRawPts: Return raw image+points, then reflected image and raw points (separate file)
 // ReflectAsymRefPts: Return raw image+points, then reflected image and reflected points (separate file)
 enum msdi_reflection_state { Raw, ReflectOnly, OnlyReflectIm, ReflectSym, ReflectAsymRawPts, ReflectAsymRefPts };
@@ -44,18 +44,18 @@ bool msdi_state_from_string(const vcl_string& str, msdi_reflection_state& state)
 //
 // The way that reflections are used is controlled by the msdi_reflection_state value.
 // In summary:
-// Raw: Return raw data 
+// Raw: Return raw data
 // ReflectOnly: Return reflected points and reflected images (but not originals)
 // OnlyReflectIm: Return reflected images and original points from files (without reflecting them)
 // ReflectSym: Return raw image + raw points, then reflected image and reflected points.
 // ReflectAsymRawPts: Return raw image+points, then reflected image and raw points (separate file)
-// ReflectAsymRefPts: Return raw image+points, then reflected image and reflected points (separate file) 
+// ReflectAsymRefPts: Return raw image+points, then reflected image and reflected points (separate file)
 class msdi_marked_images_from_files : public msdi_marked_images
 {
  private:
   //: Define behaviour of this iterator regarding reflections of points/images
   msdi_reflection_state ref_state_;
-  
+
   //: Text to be added to beginning of points names to get reflected version
   //  Only significant for ref_state_==ReflectAsymRawPts
   vcl_string ref_prefix_;
@@ -67,7 +67,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: When true, convert multiplane images to single plane
   bool grey_only_;
-  
+
   //: Scaling required to convert from units in image to desired world units
   // (e.g. 1000 for mm if image units are metres)
   // Only used if load_as_float_ is true.
@@ -86,7 +86,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
   std::vector<std::string> points_name_;
 
   //  ==== Workspace variables ====
-  
+
   //: Current points
   msm_points points_;
 
@@ -101,14 +101,14 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: Current base image (using float)
   vimt_image_2d_of<float> float_image_;
-  
+
 
   //: True if image is reflection of that loaded from disk
   bool image_is_reflected_;
 
   //: True if points are a reflection of those loaded from disk
   bool points_are_reflected_;
-  
+
   //: True if image_ is current
   bool image_ok_;
 
@@ -139,13 +139,13 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   // Private copy operator to prevent copying
   msdi_marked_images_from_files& operator=(const msdi_marked_images_from_files&);
-  
+
   //: Reflect current points
   void reflect_points();
-  
+
   //: Reflect current image
   void reflect_image();
-  
+
  public:
   //: Default constructor
   msdi_marked_images_from_files();
@@ -169,19 +169,19 @@ class msdi_marked_images_from_files : public msdi_marked_images
            const std::vector<std::string>& image_names,
            const std::string& points_dir,
            bool load_as_float=false);
-  
-  //: Define behaviour with reflections 
+
+  //: Define behaviour with reflections
   // Options: Raw,ReflectOnly,OnlyReflectIm,ReflectAsymRawPts,ReflectSym
   void set_state(msdi_reflection_state s);
-  
-  //: Indicate behaviour with reflections 
+
+  //: Indicate behaviour with reflections
   // Options: Raw,ReflectOnly,OnlyReflectIm,ReflectAsymRawPts,ReflectAsymRefPts,ReflectSym
   msdi_reflection_state reflection_state() const { return ref_state_; }
-  
-  //: Define prefix to be used for reflected points. 
+
+  //: Define prefix to be used for reflected points.
   // Default is "ref_".  Only used for ReflectAsymRawPts state.
   void set_ref_prefix(const vcl_string& ref_prefix);
-  
+
   //: Define point mapping for reflected points
   //  rpi[i] is index in old list of reflected point i
   //  Only used for ReflectSym state.
@@ -239,7 +239,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: Return current points file name
   virtual std::string points_name() const;
-  
+
   //: Image directory
   const std::string& image_dir() const { return image_dir_; }
 
@@ -251,11 +251,11 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: List of points file names
   const std::vector<std::string>& points_names() const { return points_name_; }
-  
+
   //: Set up from information in props object
   // Expects to find parameters for reflection_symmetry, reflection_state and ref_prefix.
   void set_reflection_state_from_props(mbl_read_props_type& props);
-  
+
   //: Set up from information in props object
   // Expects to find parameters for images, image_dir, points_dir, and optionally
   // reflection_symmetry, reflection_state and ref_prefix.
@@ -293,17 +293,17 @@ inline void msdi_get_reflection_params_from_props(mbl_read_props_type& props, pa
     mbl_parse_int_list(ss, vcl_back_inserter(params.reflection_symmetry),
                        unsigned());
   }
-  
+
   // For backwards compatability
   bool only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
-  
+
   vcl_string ref_prefix=props.get_optional_property("ref_prefix","");
 
   vcl_string ref_state_str=props.get_optional_property("reflection_state","Undefined");
   if (ref_state_str=="Undefined")
   {
     // For backwards compatability.
-    if (params.reflection_symmetry.size()>0) 
+    if (params.reflection_symmetry.size()>0)
     {
       if (only_reflect) params.reflection_state=ReflectOnly;
       else              params.reflection_state=ReflectSym;
@@ -318,7 +318,7 @@ inline void msdi_get_reflection_params_from_props(mbl_read_props_type& props, pa
   {
     if (!msdi_state_from_string(ref_state_str,params.reflection_state))
     {
-      throw (mbl_exception_parse_error("Unknown reflection_state: "+ref_state_str));     
+      throw (mbl_exception_parse_error("Unknown reflection_state: "+ref_state_str));
     }
   }
 

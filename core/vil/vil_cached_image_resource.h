@@ -58,7 +58,7 @@ class vil_cached_image_resource : public vil_blocked_image_resource
 
 
   //: Extra property information
- inline virtual bool get_property(char const* tag, void* property_value = 0) const
+ inline virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const
     {return bir_->get_property(tag, property_value);}
 
  protected:

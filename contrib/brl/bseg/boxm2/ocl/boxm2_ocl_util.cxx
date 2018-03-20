@@ -311,23 +311,23 @@ void boxm2_ocl_util::get_render_transfer_function(std::vector<std::string> imgfi
 
 std::string boxm2_ocl_util::mog_options(std::string data_type)
 {
-  if (data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos)
+  if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     return "-D MOG_TYPE_8 ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     return "-D MOG_TYPE_16 ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     return "-D GAUSS_TYPE_2 ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
     return "-D SHORT ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
     return "-D MOG_VIEW_DEP ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() )
     return "-D MOG_VIEW_DEP_COMPACT ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix() )
      return "-D MOG_VIEW_DEP_COLOR ";
-  else if ( data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix()) != std::string::npos )
+  else if ( data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix() )
      return "-D MOG_VIEW_DEP_COLOR_COMPACT ";
-  else if (data_type.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != std::string::npos )
+  else if (data_type == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
     return "-D FLOAT8 ";
   else
     return "";

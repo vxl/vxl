@@ -24,7 +24,7 @@ boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene,
 {
   //store mesh triangles
   std::cout<<"Triangulating points:"<<std::endl;
-  std::auto_ptr<imesh_regular_face_array<3> > meshTris = imesh_triangulate(points_.faces());
+  vcl_unique_ptr<imesh_regular_face_array<3> > meshTris = imesh_triangulate(points_.faces());
   std::cout<<"   ... done."<<std::endl;
 
   //store bvpgl triangles
@@ -285,7 +285,7 @@ boxm2_points_to_volume::tris_in_box(const imesh_mesh& mesh, vgl_box_3d<double>& 
 {
   std::vector<bvgl_triangle_3d<double> > contained;
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
-  std::auto_ptr<imesh_regular_face_array<3> > tris = imesh_triangulate(mesh.faces());
+  vcl_unique_ptr<imesh_regular_face_array<3> > tris = imesh_triangulate(mesh.faces());
   imesh_regular_face_array<3>::const_iterator iter;
   for (iter = tris->begin(); iter != tris->end(); ++iter) {
     imesh_regular_face<3> idx =(*iter);

@@ -75,6 +75,44 @@ void test_bsta_histogram()
   std::cout << "Uniform Entropy for " << bins << " bins = " << ent  << " bits.\n";
   TEST_NEAR("test histogram uniform distribution entropy", ent, 31.0/8, 1e-9);
 
+  //Test Jensen-Shannon divergence, a symmetric form of Kullback-Liebler divergence
+  bsta_histogram<double> ha(range, bins), hb(range, bins);
+  unsigned enda = (bins*5)/8;
+  unsigned startb = (bins*3)/8;
+  for (unsigned a =0; a<=enda; a++)
+    ha.set_count(a, 10.0);
+  std::cout << "Histogram a\n";
+  ha.print();
+  for (unsigned b =startb; b<static_cast<unsigned>(bins); b++)
+    hb.set_count(b, 10.0);
+  std::cout << "\nHistogram b\n";
+  hb.print();
+  std::cout << '\n';
+  double js_div = js_divergence(ha, hb);
+  std::cout << "js_divergence = " << js_div << '\n';
+  TEST_NEAR("jensen-shannon divergence", js_div, 0.362868, 0.0001);
+
+  //Scaling a histogram
+  // hb from above is a resonable test
+  double s = 0.5;
+  bsta_histogram<double> scaled_hb_0 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_0.print(); std::cout << '\n';
+  s = 0.25;
+  bsta_histogram<double> scaled_hb_1 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_1.print(); std::cout << '\n';
+
+  s = 0.75;
+  bsta_histogram<double> scaled_hb_2 = scale(hb, s);
+  std::cout << "Scaled Hist b at s = " << s << '\n';
+  scaled_hb_2.print(); std::cout << '\n';
+
+  double smin_2 = minimum_js_divergence_scale(hb, scaled_hb_2);
+  double smin_1 = minimum_js_divergence_scale(hb, scaled_hb_1);
+  double smin_0 = minimum_js_divergence_scale(hb, scaled_hb_0);
+  double er = std::fabs(smin_2-0.75)+std::fabs(smin_1-0.25)+std::fabs(smin_0-0.5);
+  TEST_NEAR("scaling and min_scale", er, 0.0, 0.05);
   //Joint Histogram Tests
   bsta_joint_histogram<double> jh(range, bins);
   double va = 0;
@@ -119,7 +157,7 @@ void test_bsta_histogram()
   double vol = jh_m.volume();
   double pv = jh_m.p(0.0, 0.0);
   double pb = jh_m.p(r0, c0);
-  TEST_NEAR("test min, max joint histogram ", (vol-1.0)+(pv-pb), 0.0, 0.0001);
+  TEST_NEAR("test min, max joint histogram ", fabs(vol-1.0)+fabs(pv-pb), 0.0, 0.0001);
 
   //Test smart pointer
   bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
@@ -136,6 +174,31 @@ void test_bsta_histogram()
   double mutual_information_error = joint_histogram_mi.mutual_information() - double(0.005802149014346);
   TEST_NEAR("Mutual Information",mutual_information_error,0.0,0.0001);
 
+  //--- test conditional probability
+  bsta_joint_histogram<double> joint_histogram_cond(1.0,2);
+  joint_histogram_cond.upcount(0.0, 0.05, 0.0, 0.05);
+  joint_histogram_cond.upcount(1.0, 0.1, 0.0, 0.1);
+  joint_histogram_cond.upcount(0.0, 0.2, 1.0, 0.2);
+  joint_histogram_cond.upcount(1.0, 0.3, 1.0, 0.3);
+  std::cout << "p_b_given_a(0.0, 0.0)-> " << joint_histogram_cond.p_b_given_a(0.0, 0.0) << std::endl;
+  std::cout << "p_b_given_a(0.0, 1.0)-> " << joint_histogram_cond.p_b_given_a(0.0, 1.0)<< std::endl;
+  std::cout << "p_b_given_a(1.0, 0.0)-> " << joint_histogram_cond.p_b_given_a(1.0, 0.0)<< std::endl;
+  std::cout << "p_b_given_a(1.0, 1.0)-> " << joint_histogram_cond.p_b_given_a(1.0, 1.0)<< std::endl;
+  double er0 = fabs(joint_histogram_cond.p_b_given_a(0.0, 0.0) - 0.2);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(0.0, 1.0) - 0.8);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(1.0, 0.0) - 0.25);
+  er0 += fabs(joint_histogram_cond.p_b_given_a(1.0, 1.0) - 0.75);
+
+  std::cout << "p_a_given_b(0.0, 0.0)-> " << joint_histogram_cond.p_a_given_b(0.0, 0.0) << std::endl;
+  std::cout << "p_a_given_b(0.0, 1.0)-> " << joint_histogram_cond.p_a_given_b(0.0, 1.0)<< std::endl;
+  std::cout << "p_a_given_b(1.0, 0.0)-> " << joint_histogram_cond.p_a_given_b(1.0, 0.0)<< std::endl;
+  std::cout << "p_a_given_b(1.0, 1.0)-> " << joint_histogram_cond.p_a_given_b(1.0, 1.0)<< std::endl;
+
+  double er1 = fabs(joint_histogram_cond.p_a_given_b(0.0, 0.0) - 1.0/3.0);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(0.0, 1.0) - 0.4);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(1.0, 0.0) - 2.0/3.0);
+  er1 += fabs(joint_histogram_cond.p_a_given_b(1.0, 1.0) - 0.6);
+  TEST_NEAR("conditional prob", er0 + er1, 0.0, 0.001);
   // ---- test bsta_joint_histogram_3d
   bsta_joint_histogram_3d<float> hist_default;
   bsta_joint_histogram_3d<float> hist_cons1(1.0, 10);

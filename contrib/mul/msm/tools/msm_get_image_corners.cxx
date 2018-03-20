@@ -46,16 +46,16 @@ int main(int argc, char** argv)
 
   int ni=int(image.image().ni());
   int nj=int(image.image().nj());
-  
+
   // Transformation from image to world
   vimt_transform_2d i2w=image.world2im().inverse();
-  
+
   msm_points corners(4);
   corners.set_point(0,i2w(bi(),bj()));
   corners.set_point(1,i2w(ni-1-bi(),bj()));
   corners.set_point(2,i2w(bi(),nj-1-bj()));
   corners.set_point(3,i2w(ni-1-bi(),nj-1-bj()));
-  
+
   if (!corners.write_text_file(points_path()))
   {
     std::cerr<<"Failed to write points to "<<points_path()<<std::endl;

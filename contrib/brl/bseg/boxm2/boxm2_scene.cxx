@@ -4,7 +4,7 @@
 #include <fstream>
 #include <sstream>
 #include <cmath>
-#include <stddef.h>
+#include <cstddef>
 #include "boxm2_scene.h"
 //:
 // \file

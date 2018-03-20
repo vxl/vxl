@@ -1,5 +1,5 @@
 #include "boxm2_refine_block_function_with_labels.h"
-#include <stdlib.h>
+#include <cstdlib>
 //:
 // \file
 

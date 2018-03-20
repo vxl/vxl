@@ -29,8 +29,8 @@
 # define RANGECHECK(i,j,k) ((void)0)
 #else
 # include <vcl_cassert.h>
-# define RANGECHECK(i,j,k) assert(((size_type)i < row1_count_) && \
-                   ((size_type)j < row2_count_) && ((size_type)k < row3_count_))
+# define RANGECHECK(i,j,k) assert(((size_type)(i) < row1_count_) && \
+                   ((size_type)(j) < row2_count_) && ((size_type)(k) < row3_count_))
 #endif
 
 //: Templated 3-dimensional array
@@ -56,7 +56,7 @@ class vbl_array_3d
   typedef T const &const_reference;
  public:
 
-  vbl_array_3d(): element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
+  vbl_array_3d(): element_(VXL_NULLPTR), row1_count_(0), row2_count_(0), row3_count_(0)
   {}
 
   vbl_array_3d(size_type n1, size_type n2, size_type n3)
@@ -73,7 +73,7 @@ class vbl_array_3d
   }
 
   vbl_array_3d(vbl_array_3d<T> const& that)
-  : element_(0), row1_count_(0), row2_count_(0), row3_count_(0)
+  : element_(VXL_NULLPTR), row1_count_(0), row2_count_(0), row3_count_(0)
   {
     if (that.element_) {
       construct(that.row1_count_,that.row2_count_,that.row3_count_);

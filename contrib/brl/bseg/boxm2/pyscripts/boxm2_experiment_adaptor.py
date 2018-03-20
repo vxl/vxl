@@ -1,4 +1,6 @@
-from boxm2_register import boxm2_batch, dbvalue
+import brl_init
+import boxm2_batch as batch
+dbvalue = brl_init.register_batch(batch)
 import os
 #############################################################################
 # PROVIDES higher level python functions to make boxm2_batch
@@ -10,27 +12,27 @@ import os
 
 def update_auxQ(scene, device, opencl_cache, cam, img, ident="", view_ident=""):
     #print("Init Manager");
-    boxm2_batch.init_process("boxm2OclUpdateAuxQPerViewProcess")
-    boxm2_batch.set_input_from_db(0, device)
-    boxm2_batch.set_input_from_db(1, scene)
-    boxm2_batch.set_input_from_db(2, opencl_cache)
-    boxm2_batch.set_input_from_db(3, cam)
-    boxm2_batch.set_input_from_db(4, img)
-    boxm2_batch.set_input_string(5, ident)
-    boxm2_batch.set_input_string(6, view_ident)
-    status = boxm2_batch.run_process()
+    batch.init_process("boxm2OclUpdateAuxQPerViewProcess")
+    batch.set_input_from_db(0, device)
+    batch.set_input_from_db(1, scene)
+    batch.set_input_from_db(2, opencl_cache)
+    batch.set_input_from_db(3, cam)
+    batch.set_input_from_db(4, img)
+    batch.set_input_string(5, ident)
+    batch.set_input_string(6, view_ident)
+    status = batch.run_process()
     if(status != True):
         print "Error in Running Aux Q "
 
 
 def update_PusingQ(scene, device, opencl_cache, operation=2, view_ident=""):
     #print("Init Manager");
-    boxm2_batch.init_process("boxm2OclUpdateUsingQProcess")
-    boxm2_batch.set_input_from_db(0, device)
-    boxm2_batch.set_input_from_db(1, scene)
-    boxm2_batch.set_input_from_db(2, opencl_cache)
-    boxm2_batch.set_input_int(3, operation)
-    boxm2_batch.set_input_string(4, view_ident)
-    status = boxm2_batch.run_process()
+    batch.init_process("boxm2OclUpdateUsingQProcess")
+    batch.set_input_from_db(0, device)
+    batch.set_input_from_db(1, scene)
+    batch.set_input_from_db(2, opencl_cache)
+    batch.set_input_int(3, operation)
+    batch.set_input_string(4, view_ident)
+    status = batch.run_process()
     if(status != True):
         print "Error in Running Aux Q "

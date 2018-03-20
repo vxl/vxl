@@ -13,7 +13,7 @@
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()
 {
-  if (instance_ == 0)
+  if (instance_ == VXL_NULLPTR)
   {
     instance_ = new vsl_clipon_binary_loader<BaseClass,BaseClassIO>;
 
@@ -107,7 +107,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::read_object( vsl_b_istream
   if (name=="VSL_NULL_PTR")
   {
     // Zero pointer
-    b=0;
+    b=VXL_NULLPTR;
     return;
   }
 
@@ -120,7 +120,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::read_object( vsl_b_istream
 template<class BaseClass, class BaseClassIO>
 void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::write_object( vsl_b_ostream& os, const BaseClass* b)
 {
-  if (b==0)
+  if (b==VXL_NULLPTR)
   {
     vsl_b_write(os,std::string("VSL_NULL_PTR"));
     return;
@@ -135,7 +135,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::write_object( vsl_b_ostrea
 template<class BaseClass, class BaseClassIO>
 void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( std::ostream& os, const BaseClass* b)
 {
-  if (b==0)
+  if (b==VXL_NULLPTR)
   {
     os<<"No object defined.";
     return;
@@ -146,7 +146,7 @@ void vsl_clipon_binary_loader<BaseClass,BaseClassIO>::print_object_summary( std:
 }
 
 template <class B, class IO>
-vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = 0;
+vsl_clipon_binary_loader<B, IO>* vsl_clipon_binary_loader<B, IO>::instance_ = VXL_NULLPTR;
 
 #define VSL_CLIPON_BINARY_LOADER_INSTANTIATE(B,IO) \
 template class vsl_clipon_binary_loader<B, IO >;

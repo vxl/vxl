@@ -19,6 +19,7 @@ add_executable( boxm2_vecf_test_all
   test_fit_face.cxx
   test_fit_fat_pocket.cxx
   test_orbicularis_oris.cxx
+  test_shuttle.cxx   
 )
  target_link_libraries(boxm2_vecf_test_all ${VXL_LIB_PREFIX}testlib  boxm2_vecf brdb ${VXL_LIB_PREFIX}vpgl_algo vpgl_pro vil_pro sdet ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl )
 
@@ -37,6 +38,7 @@ add_test( NAME boxm2_vecf_test_fat_pocket_scene COMMAND $<TARGET_FILE:boxm2_vecf
 add_test( NAME boxm2_vecf_test_fit_face COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_face  )
 add_test( NAME boxm2_vecf_test_fit_fat_pocket COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_fit_fat_pocket  )
 add_test( NAME boxm2_vecf_test_orbicularis_oris  COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_orbicularis_oris  )
+add_test( NAME boxm2_vecf_test_shuttle  COMMAND $<TARGET_FILE:boxm2_vecf_test_all>  test_shuttle  )
 
 #add_executable( boxm2_vecf_test_include test_include.cxx )
 #target_link_libraries( boxm2_vecf_test_include boxm2_vecf )

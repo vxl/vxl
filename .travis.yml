@@ -1,40 +1,40 @@
 #Travis CI configuration for VXL
 # See http://travis-ci.org/vxl/vxl
 
+#dist: trusty # This is the default as of August 2017
 sudo: false
 
 language: cpp
 compiler:
-  - gcc
   - clang
+  - gcc
 
 # https://docs.travis-ci.com/user/customizing-the-build/
 git:
   depth: 3
-
-#cache: false
-#  directories:
-#  - $HOME/deps
-
-# Need to install cmake 2.8.9 because default 2.8.7 bugs fail to build
-before_script:
-  - bash .travis/install-deps.sh
+before_install:
+  - TOOLS_DIR=$(pwd)
+  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then CMAKE_URL="http://www.cmake.org/files/v3.10/cmake-3.10.2-Linux-x86_64.tar.gz"; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then mkdir -p cmake && travis_retry wget --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake ; fi
+  - if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then export PATH=${TOOLS_DIR}/cmake/bin:${PATH} ; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then echo "need cmake 3.3.0"; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then brew update && brew install ccache cmake; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then export PATH="/usr/local/opt/ccache/libexec:/usr/local/opt/cmake/bin:$PATH"; fi
 
 script:
-  - export PATH=${HOME}/deps/bin:$PATH
   - export HERE=$(pwd)
-  - ${HOME}/deps/bin/cmake --version
+  - ${TOOLS_DIR}/cmake/bin/cmake --version
   - mkdir -p ${HERE}/build
   - mkdir -p ${HERE}/install
   - cd ${HERE}/build
-  - ${HOME}/deps/bin/cmake
+  - ${TOOLS_DIR}/cmake/bin/cmake
           -DCMAKE_INSTALL_PREFIX:PATH=${HERE}/install
           -DCMAKE_CXX_STANDARD:STRING=98
           -DBUILD_BRL:BOOL=OFF
           ../
-  - ${HOME}/deps/bin/ctest -D ExperimentalStart
-  - ${HOME}/deps/bin/ctest -D ExperimentalConfigure
-  - ${HOME}/deps/bin/ctest -D ExperimentalBuild -j2
-  - ${HOME}/deps/bin/ctest -D ExperimentalTest --schedule-random -j2
-  - ${HOME}/deps/bin/ctest -D ExperimentalSubmit
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalStart
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalConfigure
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalBuild -j2
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalTest --schedule-random -j2
+  - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalSubmit
   - make install

@@ -74,12 +74,12 @@ void vsl_add_to_binary_loader(const mmn_solver& b)
 }
 
 //: Create a concrete region_model-derived object, from a text specification.
-std::auto_ptr<mmn_solver> mmn_solver::
+vcl_unique_ptr<mmn_solver> mmn_solver::
   create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
-  std::auto_ptr<mmn_solver> pair_cost;
+  vcl_unique_ptr<mmn_solver> pair_cost;
   try {
     pair_cost = mbl_cloneables_factory<mmn_solver>::get_clone(name);
   }

@@ -300,7 +300,7 @@ bool vil1_bmp_generic_image::write_header()
 
 bool vil1_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h) const
 {
-  assert(ib != 0);
+  assert(ib != VXL_NULLPTR);
   char *bp = static_cast<char*>(ib);
 
   //
@@ -329,7 +329,7 @@ bool vil1_bmp_generic_image::get_section(void* ib, int x0, int y0, int w, int h)
 
 bool vil1_bmp_generic_image::put_section(void const *ib, int x0, int y0, int xs, int ys)
 {
-  assert(ib != 0);
+  assert(ib != VXL_NULLPTR);
   int bypp = (components() * bits_per_component() +7) / 8;
   int rowlen = width() * bypp;
   rowlen += (3-(rowlen-1)%4); // round up to a multiple of 4

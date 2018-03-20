@@ -130,10 +130,10 @@ int main(int argc, char ** argv)
 
   good= fo.set_left_iris_radius();
   if(!good)
-    return false;
+    return -1;
   good= fo.set_right_iris_radius();
   if(!good)
-    return false;
+    return -1;
 
   if(fo.from_image_data())
     fo.normalize_eye_data(mm_per_pix);

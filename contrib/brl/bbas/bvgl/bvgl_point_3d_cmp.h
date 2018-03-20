@@ -19,7 +19,7 @@
 
 //: A comparison functor for vgl_point_3d's. Needed to create a std::set of vgl_point_3d<int>'s.
 template <class T>
-class bvgl_point_3d_cmp : public std::binary_function<vgl_point_3d<T>, vgl_point_3d<T>, bool>
+class bvgl_point_3d_cmp
 {
  public:
   bvgl_point_3d_cmp() {}

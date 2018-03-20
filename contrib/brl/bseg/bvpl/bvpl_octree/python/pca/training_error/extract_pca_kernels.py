@@ -1,23 +1,18 @@
 # Computes the gaussian gradients on a boxm_alpha_scene
 
-import bvpl_octree_batch
 import os
 import optparse
 import time
 import sys
 
-
-class dbvalue:
-
-    def __init__(self, index, type):
-        self.id = index   # unsigned integer
-        self.type = type  # string
-
+import brl_init
+import bvpl_octree_batch as batch
+dbvalue = brl_init.register_batch(batch)
 
 if __name__ == "__main__":
 
-    bvpl_octree_batch.register_processes()
-    bvpl_octree_batch.register_datatypes()
+    batch.register_processes()
+    batch.register_datatypes()
 
     # Parse inputs
     parser = optparse.OptionParser(description='Compute PCA basis')
@@ -46,26 +41,26 @@ if __name__ == "__main__":
     print("Extracting Principal Components patches")
 
     print("Creating a Scene")
-    bvpl_octree_batch.init_process("boxmCreateSceneProcess")
-    bvpl_octree_batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
-    bvpl_octree_batch.run_process()
-    (scene_id, scene_type) = bvpl_octree_batch.commit_output(0)
+    batch.init_process("boxmCreateSceneProcess")
+    batch.set_input_string(0,  model_dir + "/mean_color_scene.xml")
+    batch.run_process()
+    (scene_id, scene_type) = batch.commit_output(0)
     scene = dbvalue(scene_id, scene_type)
 
     start_time = time.time()
 
     print("Extract PC")
-    bvpl_octree_batch.init_process("bvplDiscoverPCAFeaturesProcess")
-    bvpl_octree_batch.set_input_from_db(0, scene)
-    bvpl_octree_batch.set_input_string(1,  pca_dir)
-    bvpl_octree_batch.set_input_double(2,  train_fraction)
-    bvpl_octree_batch.set_input_int(3, -2)  # min and max points of the kernel
-    bvpl_octree_batch.set_input_int(4, -2)
-    bvpl_octree_batch.set_input_int(5, -2)
-    bvpl_octree_batch.set_input_int(6, 2)
-    bvpl_octree_batch.set_input_int(7, 2)
-    bvpl_octree_batch.set_input_int(8, 2)
-    bvpl_octree_batch.run_process()
+    batch.init_process("bvplDiscoverPCAFeaturesProcess")
+    batch.set_input_from_db(0, scene)
+    batch.set_input_string(1,  pca_dir)
+    batch.set_input_double(2,  train_fraction)
+    batch.set_input_int(3, -2)  # min and max points of the kernel
+    batch.set_input_int(4, -2)
+    batch.set_input_int(5, -2)
+    batch.set_input_int(6, 2)
+    batch.set_input_int(7, 2)
+    batch.set_input_int(8, 2)
+    batch.run_process()
 
     print ("Runing time for bvplDiscoverPCAFeaturesProcess:")
     print(time.time() - start_time)

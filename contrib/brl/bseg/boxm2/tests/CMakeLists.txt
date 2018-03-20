@@ -16,7 +16,7 @@ target_link_libraries( boxm2_test_all ${VXL_LIB_PREFIX}testlib boxm2_cpp_pro brd
 add_test( NAME boxm2_test_scene COMMAND $<TARGET_FILE:boxm2_test_all>  test_scene  )
 add_test( NAME boxm2_test_cache COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache  )
 add_test( NAME boxm2_test_cache2 COMMAND $<TARGET_FILE:boxm2_test_all>  test_cache2  )
-if( HACK_FORCE_BRL_FAILING_TESTS ) ## These tests are always failing on Mac.  An infinite loop occurs in while statement
+if( VXL_RUN_FAILING_TESTS ) ## These tests are always failing on Mac.  An infinite loop occurs in while statement
                                    ## due to failure in aio_read function on Mac.
 add_test( NAME boxm2_test_io COMMAND $<TARGET_FILE:boxm2_test_all>  test_io  )
 endif()

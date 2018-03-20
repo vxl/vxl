@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <complex>
 #include <bprb/bprb_func_process.h>
+#include <vgl/vgl_area.h>
 //:
 // \file
 //     process to generate a normalized height image for given input land cover image from series of height image tiles
@@ -119,7 +120,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
   // get the ids of intersected leaves
   std::vector<unsigned> leaf_ids;
   for (unsigned i = 0; i < leaves.size(); i++) {
-    if (vgl_intersection(l_bbox, leaves[i]->extent_).area() > 0)
+    if (vgl_area(vgl_intersection(l_bbox, leaves[i]->extent_)) > 0)
       leaf_ids.push_back(i);
   }
 
@@ -296,7 +297,7 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
         (*out_ndsm)(i,j) = 254;
       else if (v < 0.0f)
         (*out_ndsm)(i,j) = 0;
-      else 
+      else
         (*out_ndsm)(i,j) = (unsigned char)std::floor(v+0.5f);
     }
   }

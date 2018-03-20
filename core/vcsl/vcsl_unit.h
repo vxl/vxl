@@ -67,14 +67,14 @@ class vcsl_unit
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_acceleration_unit *cast_to_acceleration_unit() const { return 0; }
-  virtual const vcsl_angle_unit *cast_to_angle_unit() const { return 0; }
-  virtual const vcsl_charge_unit *cast_to_charge_unit() const { return 0; }
-  virtual const vcsl_length_unit *cast_to_length_unit() const { return 0; }
-  virtual const vcsl_mass_unit *cast_to_mass_unit() const { return 0; }
-  virtual const vcsl_temperature_unit *cast_to_temperature_unit() const { return 0; }
-  virtual const vcsl_time_unit *cast_to_time_unit() const { return 0; }
-  virtual const vcsl_velocity_unit *cast_to_velocity_unit() const { return 0; }
+  virtual const vcsl_acceleration_unit *cast_to_acceleration_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_angle_unit *cast_to_angle_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_charge_unit *cast_to_charge_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_length_unit *cast_to_length_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_mass_unit *cast_to_mass_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_temperature_unit *cast_to_temperature_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_time_unit *cast_to_time_unit() const { return VXL_NULLPTR; }
+  virtual const vcsl_velocity_unit *cast_to_velocity_unit() const { return VXL_NULLPTR; }
 };
 
 #endif // vcsl_unit_h_

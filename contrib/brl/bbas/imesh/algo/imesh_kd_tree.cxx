@@ -138,7 +138,7 @@ best_split(const std::vector<vgl_box_3d<double> >& boxes,
 
 
 //: recursively construct a kd-tree of mesh triangles
-std::auto_ptr<imesh_kd_tree_node>
+vcl_unique_ptr<imesh_kd_tree_node>
 imesh_build_kd_tree_rec(const std::vector<vgl_box_3d<double> >& boxes,
                         const vgl_box_3d<double>& outer_box,
                         const vgl_box_3d<double>& inner_box,
@@ -146,7 +146,7 @@ imesh_build_kd_tree_rec(const std::vector<vgl_box_3d<double> >& boxes,
 {
   // If only one triangle is left, create and return a leaf node.
   if (indices.size() == 1) {
-    return std::auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node( outer_box,
+    return vcl_unique_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node( outer_box,
                                                                     inner_box,
                                                                     indices[0] ));
   }
@@ -214,20 +214,20 @@ imesh_build_kd_tree_rec(const std::vector<vgl_box_3d<double> >& boxes,
   }
 
   // recursively construct child nodes
-  std::auto_ptr<imesh_kd_tree_node>
+  vcl_unique_ptr<imesh_kd_tree_node>
       left_child(imesh_build_kd_tree_rec(boxes,left_outer_box,left_inner_box,left_indices));
-  std::auto_ptr<imesh_kd_tree_node>
+  vcl_unique_ptr<imesh_kd_tree_node>
       right_child(imesh_build_kd_tree_rec(boxes,right_outer_box,right_inner_box,right_indices));
 
-  return std::auto_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node(outer_box,
+  return vcl_unique_ptr<imesh_kd_tree_node>(new imesh_kd_tree_node(outer_box,
                                                                  inner_box,
-                                                                 left_child,
-                                                                 right_child));
+                                                                 vcl_move(left_child),
+                                                                 vcl_move(right_child) ));
 }
 
 
 //: Construct a kd-tree (in 3d) of axis aligned boxes
-std::auto_ptr<imesh_kd_tree_node>
+vcl_unique_ptr<imesh_kd_tree_node>
 imesh_build_kd_tree(const std::vector<vgl_box_3d<double> >& boxes)
 {
   // make the outer box
@@ -247,7 +247,7 @@ imesh_build_kd_tree(const std::vector<vgl_box_3d<double> >& boxes)
   }
 
   // call recursive function to do the real work
-  std::auto_ptr<imesh_kd_tree_node> root(imesh_build_kd_tree_rec(boxes, outer_box, inner_box, indices));
+  vcl_unique_ptr<imesh_kd_tree_node> root(imesh_build_kd_tree_rec(boxes, outer_box, inner_box, indices));
 
   // assign additional indices to internal nodes
   // reverse breadth first (root gets last index)
@@ -269,7 +269,7 @@ imesh_build_kd_tree(const std::vector<vgl_box_3d<double> >& boxes)
 
 
 //: construct a kd-tree of mesh faces
-std::auto_ptr<imesh_kd_tree_node>
+vcl_unique_ptr<imesh_kd_tree_node>
 imesh_build_kd_tree(const imesh_vertex_array<3>& verts,
                     const imesh_face_array_base& faces)
 {
@@ -339,7 +339,7 @@ class tri_dist_func
 unsigned int
 imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             const imesh_mesh& mesh,
-                            const std::auto_ptr<imesh_kd_tree_node>& root,
+                            const vcl_unique_ptr<imesh_kd_tree_node>& root,
                             vgl_point_3d<double>& cp,
                             std::vector<imesh_kd_tree_queue_entry>* dists)
 {
@@ -357,7 +357,7 @@ imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
 //  Also returns a vector of the unexplored internal node-distance^2 pairs
 //  Resulting vectors are unsorted
 void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
-                            const std::auto_ptr<imesh_kd_tree_node>& root,
+                            const vcl_unique_ptr<imesh_kd_tree_node>& root,
                             std::vector<imesh_kd_tree_queue_entry>& leaf,
                             std::vector<imesh_kd_tree_queue_entry>& internal_node)
 {

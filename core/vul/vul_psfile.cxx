@@ -10,9 +10,9 @@
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
-#define RANGE(a,b,c) { if (a < b) a = b;  if (a > c) a = c; }
-#define in_range(a) (a < 0x100)
-#define Hex4bit(a) ((char)((a<=9) ? (a+'0') : (a - 10 + 'a')))
+#define RANGE(a,b,c) { if ((a) < (b)) (a) = b;  if ((a) > (c)) (a) = c; }
+#define in_range(a) ((a) < 0x100)
+#define Hex4bit(a) ((char)(((a)<=9) ? ((a)+'0') : ((a) - 10 + 'a')))
 
 static const float PIX2INCH = 72.0f;
 static bool debug = true;
