@@ -733,7 +733,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
   // input memory
   unsigned encoded_block_size = h_->encoded_bytes_per_block();
   assert(encoded_block_size>0);
-  vxl_byte* data = new vxl_byte[encoded_block_size];
+  //vxl_byte* data = new vxl_byte[encoded_block_size];
 
   //compute the block index
   unsigned blk_indx = this->block_index(block_index_i, block_index_j);
@@ -749,6 +749,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   if (h_->is_tiled())
   {
+	vxl_byte* data = new vxl_byte[encoded_block_size];
     if (TIFFReadEncodedTile(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
@@ -763,8 +764,9 @@ vil_tiff_image::get_block( unsigned block_index_i,
     return this->fill_block_from_tile(buf);
   }
 
-  if (h_->is_striped())
+  if (h_->is_striped()&&h_->planar_config.val ==1)
   {
+	vxl_byte* data = new vxl_byte[encoded_block_size];
     if (TIFFReadEncodedStrip(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
@@ -777,8 +779,80 @@ vil_tiff_image::get_block( unsigned block_index_i,
                    encoded_block_size,
                    expanded_sample_bytes);
     return this->fill_block_from_strip(buf);
-  }
+  }else if (h_->is_striped()&&h_->planar_config.val ==2)
+    {
+      // planes are storted in multiple strips (n_planes) for planar_config == 2
+      // the layout of the file is sequential by band (plane)
+      //  b0 ---- ...  ---- b0|b1 ---- ...  ---- b1|b2 ---- ...  ---- b2| ... |b_np_1 ---- ...  ---- b_np-1|
+      //  |strip 0|srip 1|... |strip_spp|...       |strip_2*spp|...           |strip_(np-1)*spp| ...
+      //
+      //  b0 -> b_np-1 - bands 0 through band np-1;
+      //  np - number of planes,  spp - number of strips per plane
+      //
+      size_t nplanes = h_->nplanes;
+      size_t strip_data_size = encoded_block_size/nplanes;
+      size_t n_rows = h_->image_length.val;
+      size_t rows_per_strip = h_->rows_per_strip.val;
+      size_t strips_per_plane = n_rows/rows_per_strip;
+      if(strips_per_plane*rows_per_strip < n_rows)
+        strips_per_plane++;
+      size_t bytes_per_row = encoded_block_size/rows_per_strip;
+      size_t samples_per_pixel = h_->samples_per_pixel.val;//same as nplanes
+      size_t bytes_per_row_per_sample = bytes_per_row/samples_per_pixel;
+      size_t ni = h_->image_width.val;// pixels per row
+      size_t bytes_per_pixel = bytes_per_row/ni;
+      size_t bytes_per_sample = h_->bytes_per_sample();
 
+      // hold the strips extracted from each plane section of the file
+      std::vector<vxl_byte*> strip_plane_data(nplanes);
+
+      // read the multiple strips -  one from each plane in the file
+      for(size_t s = 0; s<samples_per_pixel; ++s){
+        strip_plane_data[s] = new vxl_byte[strip_data_size];
+        size_t strip_indx = blk_indx + s*strips_per_plane;
+        size_t strip_size = TIFFReadEncodedStrip(t_.tif(), strip_indx, strip_plane_data[s], (tsize_t) -1);
+        if (strip_size <=0)// if the read fails, bail--
+          {
+            for(size_t d = 0; d<=s; ++d)
+              delete [] strip_plane_data[d];
+            std::cout << "Error in reading tiff strip - " << strip_size
+                      << " bytes returned instead of " << strip_data_size << std::endl;
+            return view;
+          }
+      }
+      //the start of block buffer to be filled from the cached strips
+      vxl_byte* buf_adr = reinterpret_cast<vxl_byte*>(buf->data());
+
+      // iterate over rows of the band strips and interleave bands as:
+      //      |b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1|
+      //row r |    pix 0     ||    pix1      ||  pix2 ...    ||  pix (ni-1)
+      //  where np is number of samples (planes) per pixel, ni pixels per row
+      // 
+      for(size_t r = 0; r< rows_per_strip; ++r){
+        size_t rb_off = r*bytes_per_row, rs_off =r*bytes_per_row_per_sample;
+        for(size_t i = 0; i<ni; ++i){
+          size_t ib_off = i*bytes_per_pixel, is_off = i*bytes_per_sample;
+          for(size_t s =0; s<samples_per_pixel; ++s){
+            size_t sb_off = s*bytes_per_sample;
+            for(size_t b = 0; b<bytes_per_sample; ++b){
+            size_t buf_off =  rb_off +  ib_off + sb_off + b;
+            size_t strip_off = rs_off + is_off +b;
+            *(buf_adr + buf_off) = *(strip_plane_data[s] + strip_off);
+            }
+          }
+        }
+      }
+      // delete the chached strips 
+      for(size_t p = 0; p<nplanes; ++p)
+        delete [] strip_plane_data[p]; 
+
+      //might need to correct an endian mismatch
+      if (h_->need_byte_swap())
+        endian_swap( reinterpret_cast<vxl_byte*>(buf->data()), encoded_block_size,  expanded_sample_bytes);
+
+      // transfer the buffer to the block view
+      return this->fill_block_from_strip(buf);
+    } 
   return view;
 }
 
@@ -814,7 +888,7 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   unsigned bpl = h_->bytes_per_line();
   unsigned bytes_per_strip = h_->bytes_per_strip();
   unsigned lines_per_strip = bytes_per_strip/bpl;
-
+  unsigned planar_config = h_->planar_config.val;
   vil_pixel_format fmt = vil_pixel_format_component_format(h_->pix_fmt);
   unsigned expanded_bytes_per_sample =
     vil_pixel_format_sizeof_components(fmt);
@@ -828,12 +902,10 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   vxl_byte* buf_ptr = reinterpret_cast<vxl_byte*>(buf->data());
 
   //buffer for each scan line
-  vil_memory_chunk_sptr line_buf =
-    new vil_memory_chunk(bpl, fmt);
+  vil_memory_chunk_sptr line_buf = new vil_memory_chunk(bpl, fmt);
 
   //a buffer of zeros for filling partial strips to tile size
-  vil_memory_chunk_sptr zero_buf =
-    new vil_memory_chunk(bytes_expanded_line, fmt);
+  vil_memory_chunk_sptr zero_buf = new vil_memory_chunk(bytes_expanded_line, fmt);
   vxl_byte* zero_ptr = reinterpret_cast<vxl_byte*>(zero_buf->data());
   for (unsigned i = 0; i<bytes_expanded_line; ++i)
     zero_ptr[i]=0;
@@ -853,7 +925,7 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
       vil_memory_chunk_sptr out_line_buf;
       switch (fmt)
       {
-#define GET_LINE_CASE(FORMAT, T) \
+#define GET_LINE_CASE(FORMAT, T)               \
        case FORMAT:\
         out_line_buf = \
           tiff_maybe_byte_align_data<T>(line_buf,\
@@ -882,14 +954,13 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
       //buffer.
       vxl_byte* out_line_buf_ptr =
         reinterpret_cast<vxl_byte*>(out_line_buf->data());
+
       std::memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
     }
     else
       std::memcpy(block_ptr, zero_ptr, bytes_expanded_line);
   }
-
-  return this->view_from_buffer(fmt, block_buf, spl*tl,
-                                expanded_bytes_per_sample*8);
+  return this->view_from_buffer(fmt, block_buf, spl*tl, expanded_bytes_per_sample*8);
 }
 
 void vil_tiff_image::pad_block_with_zeros(unsigned ioff, unsigned joff,

@@ -598,7 +598,35 @@ bool vil_tiff_header::compute_pixel_format()
         pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
         return false;
     }
-  }
+  }else if(planar_config.val == 2){//TIFF multiband images
+	// only handle unsigned pixel types for planar config == 2
+	if(sample_format.val != 1){
+		pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+        return false;
+	}
+	vxl_uint_16 const s = samples_per_pixel.val;
+	  switch (b){
+	   case 16://only handle 2 byte pixels for now
+            pix_fmt = VIL_PIXEL_FORMAT_UINT_16;
+            switch (s)
+            {
+              case 3:
+                nplanes = 3;
+                return true;
+              case 4:{
+                nplanes = 4;
+                return true;
+				}
+			  case 8:{
+                nplanes = 8;
+                return true;
+				}
+              default:
+                pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
+                return false;
+            }		
+		}
+	}
   //Separate TIFF transparency mask - not handled
   if (photometric.val==PHOTOMETRIC_MASK)
   {
