@@ -1174,7 +1174,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           {
               for(unsigned int j = 0; j < factor; j++)
               {
-                  if(j+offsetj < gnj && i+offseti <gni )
+                  if(j+offsetj < static_cast<unsigned>(gnj) && i+offseti < static_cast<unsigned>(gni) )
                       finalrays[j+offsetj][i+offseti] = ray_pyr[0][j][i];
               }
           }
@@ -1202,9 +1202,9 @@ convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
   // initialize the ray pyramid
   // convert the required number of levels
     vbl_array_2d<vgl_ray_3d<double> > finalrays(gnj,gni);
-  for(unsigned i = 0 ; i < gni; i++)
+  for(unsigned i = 0 ; i < static_cast<unsigned>(gni); i++)
   {
-      for(unsigned j = 0 ; j < gnj; j++)
+      for(unsigned j = 0 ; j < static_cast<unsigned>(gnj); j++)
       {
           vgl_point_2d<double> ip(i,j);
           constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
