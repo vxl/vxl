@@ -19,6 +19,7 @@ DECLARE( test_ba_fixed_k_lsqr );
 DECLARE( test_ba_shared_k_lsqr );
 DECLARE( test_affine_rect );
 DECLARE( test_backproject_dem );
+DECLARE( test_affine_tensor_transfer );
 
 void register_tests()
 {
@@ -40,6 +41,7 @@ REGISTER( test_bundle_adjust );
 REGISTER( test_ba_fixed_k_lsqr );
 REGISTER( test_ba_shared_k_lsqr );
 REGISTER( test_affine_rect );
+REGISTER( test_affine_tensor_transfer );
 #if HAS_GEOTIFF
  REGISTER( test_backproject_dem );
 #endif
