@@ -3,6 +3,7 @@
 DECLARE( test_fm_compute );
 DECLARE( test_camera_compute );
 DECLARE( test_camera_convert );
+DECLARE( test_camera_homographies );
 DECLARE( test_lens_warp_mapper );
 DECLARE( test_backproject );
 DECLARE( test_ray );
@@ -24,6 +25,7 @@ void register_tests()
 REGISTER( test_fm_compute );
 REGISTER( test_camera_compute );
 REGISTER( test_camera_convert );
+REGISTER( test_camera_homographies );
 REGISTER( test_lens_warp_mapper );
 REGISTER( test_backproject );
 REGISTER( test_ray );

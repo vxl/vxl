@@ -25,9 +25,8 @@ static vgl_h_matrix_3d<double> plane_trans(vgl_plane_3d<double> const& plane,
   //note the composition is [R][t], i.e. first translate then rotate
   //correct the transformation if the reference point is inverse transformed
   //to negative z
-  vgl_h_matrix_3d<double> Trinv = Tr.get_inverse();
   vgl_homg_point_3d<double> hp(ref_pt);
-  vgl_homg_point_3d<double> thp = Trinv(hp);
+  vgl_homg_point_3d<double> thp = Tr(hp);
   vgl_point_3d<double> tp(thp);
   //This flip is here to standardize the reference point
   //(typically a camera center)
