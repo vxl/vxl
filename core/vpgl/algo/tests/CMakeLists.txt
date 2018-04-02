@@ -31,6 +31,7 @@ add_executable( vpgl_algo_test_all
   test_ba_shared_k_lsqr.cxx
   test_bundle_adjust.cxx
   test_affine_rectification.cxx
+  test_affine_tensor_transfer.cxx
 )
 target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 endif()
@@ -56,6 +57,7 @@ add_executable( vpgl_algo_test_all
   test_ba_shared_k_lsqr.cxx
   test_bundle_adjust.cxx
   test_affine_rectification.cxx
+  test_affine_tensor_transfer.cxx
   test_backproject_dem.cxx
 )
 target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
@@ -80,6 +82,7 @@ add_test( NAME vpgl_algo_test_bundle_adjust COMMAND $<TARGET_FILE:vpgl_algo_test
 add_test( NAME vpgl_algo_test_ba_fixed_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_ba_fixed_k_lsqr )
 add_test( NAME vpgl_algo_test_ba_shared_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_ba_shared_k_lsqr )
 add_test( NAME vpgl_algo_test_affine_rect COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_rect )
+add_test( NAME vpgl_algo_test_affine_tensor_transfer COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_tensor_transfer )
 
 add_executable( vpgl_algo_test_include test_include.cxx )
 target_link_libraries( vpgl_algo_test_include ${VXL_LIB_PREFIX}vpgl_algo )

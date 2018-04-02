@@ -29,6 +29,8 @@ set( vpgl_sources
   vpgl_utm.h                       vpgl_utm.cxx
   vpgl_earth_constants.h
   vpgl_datum_conversion.h          vpgl_datum_conversion.cxx
+  vpgl_tri_focal_tensor.h          vpgl_tri_focal_tensor.hxx
+  vpgl_affine_tri_focal_tensor.h   vpgl_affine_tri_focal_tensor.hxx
 )
 
 aux_source_directory(Templates vpgl_sources)
