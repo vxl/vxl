@@ -32,6 +32,11 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   vpgl_affine_camera( const vnl_vector_fixed<T,4>& row1,
                       const vnl_vector_fixed<T,4>& row2 );
 
+  //: Construct from the first two rows as a 2x4 matrix.
+  vpgl_affine_camera( const vnl_matrix_fixed<T,2,4>& camera_matrix ) {
+    *this = vpgl_affine_camera(camera_matrix.get_row(0), camera_matrix.get_row(1));
+  }
+
   //: Construct from a 3x4 matrix, sets the last row to 0001.
   // The bottom right entry had better not be 0.
   vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera_matrix );
@@ -95,6 +100,35 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   T view_distance_; // distance from origin along rays
   vgl_vector_3d<T> ray_dir_;//needed to assign a consistent sense to the ray
 };
+
+//: Return the 3D H-matrix s.t. A * H = [1 0 0 0]
+//                                      [0 1 0 0]
+//                                      [0 0 0 1]
+template <class T>
+vgl_h_matrix_3d<T> get_canonical_h( const vpgl_affine_camera<T>& camera );
+
+//: compute At = H_3x3 * A
+//(note the _a suffix is needed to prevent compiler confustion with the parent proj_camera's premultiply)
+template <class T>
+vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                     const vnl_matrix_fixed<T,3,3>& transform );
+//: compute At = H_3x3 * A
+template <class T>
+vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                     const vgl_h_matrix_2d<T>& transform ){
+  return premultiply_a(in_camera, transform.get_matrix());
+}
+
+//: compute At = A*H_4x4;
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                      const vnl_matrix_fixed<T,4,4>& transform );
+//: compute At = A*H;
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                      const vgl_h_matrix_3d<T>& transform ){
+  return postmultiply_a(in_camera, transform.get_matrix());
+}
 
 //: Read vpgl_affine_camera  from stream
 template <class Type>

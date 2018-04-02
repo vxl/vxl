@@ -242,13 +242,55 @@ std::istream&  operator >>(std::istream& s,
   return s ;
 }
 
+// the homography that transforms the camera to [I2x2|02x2]
+//                                              [  01x3 |1]
+//
+// Note that A  = [I2x2|02x2] H, where H4x4 = [  A_3x4  ]
+//                [  01x3 |1]                 [ 01x3  |1]
+//
+// thus, canonical_h = H^-1
+//
+template <class T>
+vgl_h_matrix_3d<T> get_canonical_h(const vpgl_affine_camera<T>& camera ){
+
+  vnl_matrix_fixed<T, 3,4> A = camera.get_matrix();
+  vnl_svd<T> temp(A);
+  vnl_matrix_fixed<T, 4,3> Ainv = temp.pinverse();
+  vnl_matrix_fixed<T, 4, 4> Hinv(0.0), Hp(0.0);
+  for(size_t r = 0; r<4; ++r){
+    Hp[r][r] = T(1);
+    for(size_t c = 0; c<3; ++c){
+      Hinv[r][c] = Ainv[r][c];
+    }
+  }
+  Hinv[3][3]=T(1); Hp[0][3]=-A[0][3]; Hp[1][3]=-A[1][3];//remove 4th column (translation)
+  vgl_h_matrix_3d<T> ret(Hinv*Hp);
+  return ret;
+}
+
+template <class T>
+vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                   const vnl_matrix_fixed<T, 3, 3>& transform ){
+  return vpgl_affine_camera<T>(transform*in_camera.get_matrix());
+}
+
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                    const vnl_matrix_fixed<T,4,4>& transform ){
+  return vpgl_affine_camera<T>(in_camera.get_matrix()*transform);
+}
 
 // Code for easy instantiation.
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
 #define vpgl_AFFINE_CAMERA_INSTANTIATE(T) \
 template class vpgl_affine_camera<T >; \
 template std::ostream& operator<<(std::ostream&, const vpgl_affine_camera<T >&); \
-template std::istream& operator>>(std::istream&, vpgl_affine_camera<T >&)
+template std::istream& operator>>(std::istream&, vpgl_affine_camera<T >&); \
+template vgl_h_matrix_3d<T> get_canonical_h(const vpgl_affine_camera<T>&); \
+template vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>&, const vnl_matrix_fixed<T,3,3>&); \
+template vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>&, const vgl_h_matrix_2d<T>&); \
+template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vnl_matrix_fixed<T,4,4>&); \
+template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vgl_h_matrix_3d<T>&)
 
 
 #endif // vpgl_affine_camera_hxx_
