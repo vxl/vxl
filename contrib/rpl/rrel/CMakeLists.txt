@@ -42,9 +42,19 @@ set(rrel_sources
 )
 
 aux_source_directory(Templates rrel_sources)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 vxl_add_library(LIBRARY_NAME rrel LIBRARY_SOURCES ${rrel_sources})
 target_link_libraries(rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
+
+set(CURR_LIB_NAME rrel)
+set_vxl_library_properties(
+     TARGET_NAME ${VXL_LIB_PREFIX}${CURR_LIB_NAME}
+     BASE_NAME ${CURR_LIB_NAME}
+     EXPORT_HEADER_FILE ${RPL_INSTALL_INCLUDE_DIR}/${CURR_LIB_NAME}/${CURR_LIB_NAME}_export.h
+     INSTALL_DIR ${RPL_INSTALL_INCLUDE_DIR}/${CURR_LIB_NAME}
+     USE_HIDDEN_VISIBILITY
+)
 
 include_directories(${MUL_INCLUDE_DIR})
 if(BUILD_EXAMPLES)
