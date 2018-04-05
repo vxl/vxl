@@ -36,6 +36,9 @@ static void test_proj_camera()
   vpgl_proj_camera<double> P1;
   TEST( "Default constructor", P1.get_matrix(), identity_camera );
 
+  // P1 is of the form [I|0] up to a scale factor
+  TEST( "P1 is canonical", P1.is_canonical(), true);
+
   // Construct from array and vnl_fixed_matrix.
   vpgl_proj_camera<double> P2( random_list );
   TEST( "Array constructor", P2.get_matrix(), random_matrix );

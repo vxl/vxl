@@ -150,6 +150,9 @@ class vpgl_proj_camera : public vpgl_camera<T>
   vgl_homg_point_2d<T> y_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,1), P_(1,1), P_(2,1) ); }
   vgl_homg_point_2d<T> z_vanishing_point() const{ return vgl_homg_point_2d<T>( P_(0,2), P_(1,2), P_(2,2) ); }
 
+  // is the projective camera matrix of the form [I | 0]
+  bool is_canonical(T tol = T(0)) const;
+
   // --------------------- Getters and Setters:---------------------
 
   //: Return a copy of the camera matrix.
@@ -164,6 +167,20 @@ class vpgl_proj_camera : public vpgl_camera<T>
   // matrices with improper form.
   virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
   virtual bool set_matrix( const T* new_camera_matrix ); // i.e., T new_camera_matrix[12]
+
+  //: decomposition into a 3x3 and a 3x1 matrix  [M | p]
+  void decompose(vnl_matrix_fixed<T,3,3>& M, vnl_vector_fixed<T, 3>& p) const{
+    for(size_t r = 0; r<3; ++r){ for(size_t c = 0; c<3; ++c) M(r,c) = P_(r,c);
+      p[r]=P_(r,3);
+    }
+  }
+  //: set matrix from decomposed sub-matrices
+  virtual bool set_matrix(const vnl_matrix_fixed<T, 3, 3>& M, const vnl_vector_fixed<T, 3>& p){
+    for(size_t r = 0; r<3; ++r){ for(size_t c = 0; c<3; ++c) P_(r,c) = M(r,c);
+      P_(r,3) = p[r];
+    }
+    return true;
+  }
 
   // --------------------- I/O :---------------------
 
@@ -183,7 +200,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
 
 //: Return the 3D H-matrix s.t. P * H = [I 0].
 template <class T>
-vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera );
+vgl_h_matrix_3d<T> get_canonical_h(const vpgl_proj_camera<T>& camera );
 
 //: Scale the camera matrix so determinant of first 3x3 is 1.
 template <class T>
@@ -206,7 +223,6 @@ vpgl_proj_camera<T> premultiply( const vpgl_proj_camera<T>& in_camera,
   return premultiply(in_camera, transform.get_matrix());
 }
 
-
 //: Post-multiply this projection matrix with a 3-d projective transform.
 template <class T>
 vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
@@ -219,6 +235,7 @@ vpgl_proj_camera<T> postmultiply( const vpgl_proj_camera<T>& in_camera,
 {
   return postmultiply(in_camera, transform.get_matrix());
 }
+
 //: Linearly intersect two camera rays to form a 3-d point
 template <class T>
 vgl_point_3d<T> triangulate_3d_point(const vpgl_proj_camera<T>& c1,

@@ -15,6 +15,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
+#include <vgl/vgl_tolerance.h>
 
 
 // CONSTRUCTORS:--------------------------------------------------------------------
@@ -195,6 +196,24 @@ vgl_homg_point_3d<T> vpgl_proj_camera<T>::camera_center() const
   return vgl_homg_point_3d<T>(ns(0,0), ns(1,0), ns(2,0), ns(3,0));
 }
 
+template <class T>
+bool vpgl_proj_camera<T>::is_canonical(T tol) const{
+  if(tol == T(0)){tol = vgl_tolerance<T>::position;}
+  vnl_matrix_fixed<T,3,3> M, I;
+  vnl_vector_fixed<T, 3> p;
+  this->decompose(M, p);
+  bool p_eq_zero =( fabs(p[0])<tol)&&(fabs(p[1])<tol)&&(fabs(p[2])<tol);
+  I.set_identity();
+  T scale = (fabs(M[0][0]) + fabs(M[1][1]) + fabs(M[2][2]))/T(3);
+  if(fabs(scale)<tol)
+    return false;
+  M/=scale;
+  if(M[0][0] < T(0))
+    M *= -T(1);
+  T id = (M-I).frobenius_norm();
+  return p_eq_zero && id < T(10)*tol;
+}
+
 
 // ACCESSORS:-----------------------------------------------------------------
 
@@ -277,7 +296,7 @@ void vpgl_proj_camera<T>::save(std::string cam_path)
 
 //-------------------------------
 template <class T>
-vgl_h_matrix_3d<T> get_canonical_h( vpgl_proj_camera<T>& camera )
+vgl_h_matrix_3d<T> get_canonical_h( const vpgl_proj_camera<T>& camera )
 {
   // If P is a 3x4 rank 3 matrix, Pinv is the pseudo-inverse of P, and l is a
   // vector such that P*l = 0, then P*[Pinv | l] = [I | 0].
@@ -408,13 +427,17 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
 #undef vpgl_PROJ_CAMERA_INSTANTIATE
 #define vpgl_PROJ_CAMERA_INSTANTIATE(T) \
 template class vpgl_proj_camera<T >; \
-template vgl_h_matrix_3d<T > get_canonical_h( vpgl_proj_camera<T >& camera ); \
+template vgl_h_matrix_3d<T > get_canonical_h(const vpgl_proj_camera<T >& camera ); \
 template void fix_cheirality( vpgl_proj_camera<T >& camera ); \
 template void make_canonical( vpgl_proj_camera<T >& camera ); \
 template vpgl_proj_camera<T > premultiply( const vpgl_proj_camera<T >& in_camera, \
                                            const vnl_matrix_fixed<T,3,3>& transform ); \
+template vpgl_proj_camera<T > premultiply( const vpgl_proj_camera<T >& in_camera, \
+                                           const vgl_h_matrix_2d<T >& transform ); \
 template vpgl_proj_camera<T > postmultiply(const vpgl_proj_camera<T >& in_camera, \
                                            const vnl_matrix_fixed<T,4,4>& transform ); \
+template vpgl_proj_camera<T > postmultiply(const vpgl_proj_camera<T >& in_camera, \
+                                           const vgl_h_matrix_3d<T >& transform ); \
 template vgl_point_3d<T > triangulate_3d_point(const vpgl_proj_camera<T >& c1, \
                                                const vgl_point_2d<T >& x1, \
                                                const vpgl_proj_camera<T >& c2, \
