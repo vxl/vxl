@@ -18,8 +18,8 @@ def sgm_matching_stereo(rect_img_1, rect_img_2, min_disparity, num_disparity,
     batch.set_input_int(4, num_active_disparity)
     batch.set_input_int(5, error_check_mode)
     batch.set_input_int(6, multi_scale_mode)
-    batch.set_input_int(7, out_disp_txt)
-    batch.set_input_string(8, shadow_intensity)
+    batch.set_input_string(7, out_disp_txt)
+    batch.set_input_int(8, shadow_intensity)
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
