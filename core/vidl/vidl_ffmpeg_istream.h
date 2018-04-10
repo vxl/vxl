@@ -24,7 +24,7 @@
 
 
 //: A video input stream using FFMPEG to decoded files
-class vidl_ffmpeg_istream
+class VIDL_EXPORT vidl_ffmpeg_istream
   : public vidl_istream
 {
  public:

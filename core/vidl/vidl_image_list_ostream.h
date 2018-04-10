@@ -16,7 +16,7 @@
 #include <vcl_compiler.h>
 
 //:A video output stream to a list of images
-class vidl_image_list_ostream
+class VIDL_EXPORT vidl_image_list_ostream
   : public vidl_ostream
 {
  public:

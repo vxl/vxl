@@ -37,10 +37,10 @@ std::ostream& operator<< (std::ostream& os, vil_smart_ptr<T> const& r)
 //------------------------------------------------------------------------------
 
 #undef  VIL_SMART_PTR_INSTANTIATE
-#define VIL_SMART_PTR_INSTANTIATE(T) \
-template class vil_smart_ptr<T >; \
-template <> struct vil_smart_ptr_T_as_string<T > \
+#define VIL_SMART_PTR_INSTANTIATE(T,...) \
+template class __VA_ARGS__ vil_smart_ptr<T >; \
+template <> struct __VA_ARGS__ vil_smart_ptr_T_as_string<T > \
 { static char const *str() { return #T; } }; \
-template std::ostream& operator<< (std::ostream&, vil_smart_ptr<T > const&)
+template __VA_ARGS__ std::ostream& operator<< (std::ostream&, vil_smart_ptr<T > const&)
 
 #endif // vil_smart_ptr_hxx_

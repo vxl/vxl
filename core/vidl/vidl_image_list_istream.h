@@ -25,7 +25,7 @@
 // The number of simultaneously open files is limited on many platforms.
 // The paths are tested for validity at the "open" stage rather than the "stream"
 // stage so that we have random access to the frames (i.e. the stream is seekable).
-class vidl_image_list_istream
+class VIDL_EXPORT vidl_image_list_istream
   : public vidl_istream
 {
  public:
