@@ -18,6 +18,7 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#include <vidl/vidl_export.h>
 
 //: A parameters struct for vidl_ffmpeg_ostream
 //
@@ -29,7 +30,7 @@
 //                 .encoder( vidl_ffmpeg_ostream_params::DVVIDEO )
 //                 .frame_rate( 29.95 ) );
 // \endcode
-struct vidl_ffmpeg_ostream_params
+struct VIDL_EXPORT vidl_ffmpeg_ostream_params
 {
   //: Available video encoders
   enum encoder_type { DEFAULT,

@@ -23,7 +23,7 @@
 
 
 //: A ref counted video frame
-class vidl_frame
+class VIDL_EXPORT vidl_frame
 {
   public:
     //: Destructor
@@ -83,7 +83,7 @@ class vidl_frame
 
 
 //: A frame buffer that shares someone else's data
-class vidl_shared_frame : public vidl_frame
+class VIDL_EXPORT vidl_shared_frame : public vidl_frame
 {
   public:
     //: Constructor
@@ -114,7 +114,7 @@ class vidl_shared_frame : public vidl_frame
 
 //: A frame buffer that wraps a vil_memory_chunk
 //  This is useful when the frame actually came from a vil_image
-class vidl_memory_chunk_frame : public vidl_frame
+class VIDL_EXPORT vidl_memory_chunk_frame : public vidl_frame
 {
   public:
     //: Constructor

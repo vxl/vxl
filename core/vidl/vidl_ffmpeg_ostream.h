@@ -27,7 +27,7 @@ struct vidl_ffmpeg_ostream_params;
 
 
 //: A video output stream to an encoded file using FFMPEG
-class vidl_ffmpeg_ostream
+class VIDL_EXPORT vidl_ffmpeg_ostream
   : public vidl_ostream
 {
  public:
