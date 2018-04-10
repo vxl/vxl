@@ -26,11 +26,11 @@ vsol_spatial_object_2d* vdgl_digital_region::clone() const
 //
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
   : vsol_region_2d(r),
-    npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
-    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0),npts_given_(false)
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
   if(r.Npix() == 0)
     return;
@@ -45,11 +45,11 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
   : vsol_region_2d(),
-    npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
-    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0), npts_given_(false)
+    X2_(0), Y2_(0), I2_(0), XY_(0), XI_(0), YI_(0), error_(0), sigma_sq_(0)
 {
   assert(npts > 0);
   for (int i = 0; i<npts; i++)

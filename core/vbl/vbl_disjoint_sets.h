@@ -65,7 +65,7 @@ class vbl_disjoint_sets
   // Internal node data structure used for representing an element
   struct node
   {
-  node():rank(0), index(0), size(1), parent(VXL_NULLPTR){}
+  node():rank(0), index(0), parent(VXL_NULLPTR), size(1){}
     //: represents the approximate max height of the node in its subtree
     int rank;
     int index; // The index of the element the node represents
