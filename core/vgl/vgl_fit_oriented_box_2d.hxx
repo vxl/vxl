@@ -5,7 +5,7 @@
 #include <limits>
 
 template <class T>
-vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):dtheta_(dtheta), fit_valid_(false), fixed_theta_(false){
+vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):fixed_theta_(false), fit_valid_(false), dtheta_(dtheta){
   // extract points
   pts_.clear();
   size_t ns = poly.num_sheets();

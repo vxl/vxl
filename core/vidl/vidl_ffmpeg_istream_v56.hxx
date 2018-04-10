@@ -46,14 +46,14 @@ struct vidl_ffmpeg_istream::pimpl
     vid_index_( -1 ),
     data_index_( -1 ),
     vid_str_( NULL ),
+    video_enc_( 0 ),
     frame_( NULL ),
     num_frames_( -2 ), // sentinel value to indicate not yet computed
     sws_context_( NULL ),
     cur_frame_( NULL ),
     metadata_( 0 ),
-    pts_( 0 ),
     frame_number_offset_( 0 ),
-    video_enc_( 0 )
+    pts_( 0 )
   {
     packet_.data = NULL;
   }

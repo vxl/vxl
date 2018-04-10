@@ -16,7 +16,7 @@
 class dem_bproj_cost_function : public vnl_cost_function{
 public:
   dem_bproj_cost_function(vil_image_view<float> const& dem_view, vpgl_geo_camera* geo_cam, vgl_ray_3d<double> const& ray, bool verbose=false) :
-    vnl_cost_function(1), geo_cam_(geo_cam), dview_(&dem_view),ray_(ray), verbose_(verbose){}
+    vnl_cost_function(1), ray_(ray), geo_cam_(geo_cam), dview_(&dem_view), verbose_(verbose){}
   //: x is the parameter that runs along the ray, with x=0 at the ray origin
   virtual double f(vnl_vector<double> const& x){
     //get the lon and lat values for a given parameter value
@@ -44,7 +44,7 @@ private:
   const vil_image_view<float>* dview_;
   bool verbose_;
 };
-vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):dem_(dem), min_samples_(5000.0), tail_fract_(0.025), verbose_(false)
+vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, double zmin, double zmax):verbose_(false), min_samples_(5000.0), tail_fract_(0.025), dem_(dem)
 {
   //construct a geo_camera for the dem (an orthographic view looking straight down)
   if(!vpgl_geo_camera::init_geo_camera(dem_, geo_cam_)){

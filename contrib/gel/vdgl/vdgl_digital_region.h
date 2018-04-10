@@ -46,7 +46,7 @@ class vdgl_digital_region : public vsol_region_2d
   // Constructors/Initializers/Destructors---------------------------------
   vdgl_digital_region()
   : vsol_region_2d(),
-    npts_(0), npts_given_(false), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(0), yp_(0), pix_(0),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
