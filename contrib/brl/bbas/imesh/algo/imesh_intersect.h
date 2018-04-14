@@ -70,7 +70,7 @@ bool imesh_intersect_triangle_min_dist(const vgl_point_3d<double>& p,
 int imesh_intersect_min_dist(const vgl_point_3d<double>& p,
                              const vgl_vector_3d<double>& d,
                              const imesh_mesh& mesh,
-                             double& dist, double* u=0, double* v=0);
+                             double& dist, double* u=VXL_NULLPTR, double* v=VXL_NULLPTR);
 
 
 //: Find the closest point on the triangle a,b,c to point p
@@ -126,7 +126,7 @@ imesh_triangle_closest_point(const vgl_point_3d<double>& p,
 int imesh_closest_point(const vgl_point_3d<double>& p,
                         const imesh_mesh& mesh,
                         vgl_point_3d<double>& cp,
-                        double* u=0, double* v=0);
+                        double* u=VXL_NULLPTR, double* v=VXL_NULLPTR);
 
 
 //: Find the closest intersection point from p along d with triangle a,b,c

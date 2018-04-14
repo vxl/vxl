@@ -37,7 +37,7 @@ class bpgl_construct_cameras
     bpgl_construct_cameras(
       std::vector<vgl_point_2d<double> > p0,
       std::vector<vgl_point_2d<double> > p1,
-      const vpgl_calibration_matrix<double>* K = NULL );
+      const vpgl_calibration_matrix<double>* K = VXL_NULLPTR );
 
     ~bpgl_construct_cameras();
 

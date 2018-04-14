@@ -56,10 +56,10 @@ public:
   // virtual sdet_curve_model* intersect(sdet_curve_model* cm)=0;
 
   //: construct and return a curve model of the same type by transporting it to a new extrinsic anchor
-  virtual sdet_curve_model* transport(vgl_point_2d<double> /*pt*/, double /*theta*/){ return 0;}//temp :make it virtual
+  virtual sdet_curve_model* transport(vgl_point_2d<double> /*pt*/, double /*theta*/){ return VXL_NULLPTR;}//temp :make it virtual
 
   //: construct and return a curve model of the same type by looking for legal transitions with another curve bundle
-  virtual sdet_curve_model* transition(sdet_curve_model* /*cm*/, int& /*trans_k*/, int& /*trans_type*/, double & /*bundle_size*/){ return 0;}//temp :make it virtual
+  virtual sdet_curve_model* transition(sdet_curve_model* /*cm*/, int& /*trans_k*/, int& /*trans_type*/, double & /*bundle_size*/){ return VXL_NULLPTR;}//temp :make it virtual
 
   //: is the bundle valid?
   virtual bool bundle_is_valid()=0;

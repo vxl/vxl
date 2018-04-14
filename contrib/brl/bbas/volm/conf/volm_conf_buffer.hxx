@@ -12,14 +12,14 @@
 
 template <class T>
 volm_conf_buffer<T>::volm_conf_buffer()
- : current_id_(0), buffer_size_(0), active_buffer_(0), m_(NOT_INITIALIZED), file_name_(""), global_current_id_(0), ofs_ptr_(0), ifs_ptr_(0), prev_length_(-1), read_in_(0)
+ : current_id_(0), buffer_size_(0), active_buffer_(VXL_NULLPTR), m_(NOT_INITIALIZED), file_name_(""), global_current_id_(0), ofs_ptr_(VXL_NULLPTR), ifs_ptr_(VXL_NULLPTR), prev_length_(-1), read_in_(0)
 {
   length_vec_.clear();
 }
 
 template <class T>
 volm_conf_buffer<T>::volm_conf_buffer(float const& buffer_capacity)
- : current_id_(0), m_(NOT_INITIALIZED), file_name_(""), global_current_id_(0), ofs_ptr_(0), ifs_ptr_(0), prev_length_(-1), read_in_(0)
+ : current_id_(0), m_(NOT_INITIALIZED), file_name_(""), global_current_id_(0), ofs_ptr_(VXL_NULLPTR), ifs_ptr_(VXL_NULLPTR), prev_length_(-1), read_in_(0)
 {
   length_vec_.clear();
   buffer_size_ = (unsigned)std::floor( (buffer_capacity*1024.0f*1024.0f*1024.0f)/(2.0f*unit_size_));
@@ -34,10 +34,10 @@ volm_conf_buffer<T>::~volm_conf_buffer()
     delete [] active_buffer_;
   // delete file stream pointer
   if (ifs_ptr_) {
-    delete ifs_ptr_;  ifs_ptr_ = 0;
+    delete ifs_ptr_;  ifs_ptr_ = VXL_NULLPTR;
   }
   if (ofs_ptr_) {
-    delete ofs_ptr_;  ofs_ptr_ = 0;
+    delete ofs_ptr_;  ofs_ptr_ = VXL_NULLPTR;
   }
 }
 
@@ -63,7 +63,7 @@ bool volm_conf_buffer<T>::initialize_write(std::string const& filename)
   if (ifs_ptr_) {
     (*ifs_ptr_).close();
     delete ifs_ptr_;
-    ifs_ptr_ = 0;
+    ifs_ptr_ = VXL_NULLPTR;
   }
   ofs_ptr_ = new vsl_b_ofstream(filename);
   current_id_ = 0;
@@ -85,7 +85,7 @@ bool volm_conf_buffer<T>::initialize_read(std::string const& filename)
   if (ofs_ptr_) {
     (*ofs_ptr_).close();
     delete ofs_ptr_;
-    ofs_ptr_ = 0;
+    ofs_ptr_ = VXL_NULLPTR;
   }
   ifs_ptr_ = new vsl_b_ifstream(filename);
   current_id_ = 0;

@@ -30,8 +30,8 @@ class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { MANDIBLE, LEFT_RAMUS, LEFT_ANGLE, BODY, RIGHT_ANGLE, RIGHT_RAMUS, NO_TYPE};
- boxm2_vecf_mandible_scene(): boxm2_vecf_articulated_scene(),mandible_data_(0), left_ramus_(0), left_angle_(0),body_(0),right_angle_(0),
-    right_ramus_(0), extrinsic_only_(false){}
+ boxm2_vecf_mandible_scene(): boxm2_vecf_articulated_scene(),mandible_data_(VXL_NULLPTR), left_ramus_(VXL_NULLPTR), left_angle_(VXL_NULLPTR),body_(VXL_NULLPTR),right_angle_(VXL_NULLPTR),
+    right_ramus_(VXL_NULLPTR), extrinsic_only_(false){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);

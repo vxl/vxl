@@ -27,7 +27,7 @@ public:
   // ==================== constructor =======================
 
   //: default constructor
-  volm_conf_2d_indexer() : radius_(0.0), land_map_root_(0) { land_map_leaves_.clear(); }
+  volm_conf_2d_indexer() : radius_(0.0), land_map_root_(VXL_NULLPTR) { land_map_leaves_.clear(); }
   //: constructor by giving out_put folder, land map index folder and radius
   volm_conf_2d_indexer(double const& radius, std::string const& out_folder, std::string const& land_map_folder, unsigned const& tile_id);
 

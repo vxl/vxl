@@ -97,7 +97,7 @@ class bil_convert_resource_to_grey{
       return;
     }
     std::cout << "conversion failed with type " << resc->pixel_format() << std::endl;
-    grey_resc = 0;
+    grey_resc = VXL_NULLPTR;
   }
   }
   }

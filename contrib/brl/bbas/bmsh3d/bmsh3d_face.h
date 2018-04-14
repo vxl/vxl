@@ -69,7 +69,7 @@ class bmsh3d_face : public vispt_elm
  public:
   //###### Constructor/Destructor ######
   bmsh3d_face() {
-    halfedge_ = NULL;
+    halfedge_ = VXL_NULLPTR;
     i_value_  = 0;
     id_       = -1;
   }
@@ -79,7 +79,7 @@ class bmsh3d_face : public vispt_elm
     id_       = -1;
   }
   bmsh3d_face(const int id) {
-    halfedge_ = NULL;
+    halfedge_ = VXL_NULLPTR;
     id_         = id;
     i_value_  = 0;
   }
@@ -88,7 +88,7 @@ class bmsh3d_face : public vispt_elm
     vertices_.clear();
     //  make sure that all halfedges are deleted before the destructor.
     //  You should use bmsh3d_mesh::delete_face to delete a face.
-    assert (halfedge_ == NULL);
+    assert (halfedge_ == VXL_NULLPTR);
   }
 
   //###### Data access functions ######
@@ -166,7 +166,7 @@ class bmsh3d_face : public vispt_elm
         return vertices_[i-1];
     }
     assert (0);
-    return NULL;
+    return VXL_NULLPTR;
   }
   bmsh3d_vertex* _ifs_next_V(bmsh3d_vertex* inputV) const {
     if (vertices_[vertices_.size()-1] == inputV)
@@ -177,7 +177,7 @@ class bmsh3d_face : public vispt_elm
         return vertices_[i+1];
     }
     assert (0);
-    return NULL;
+    return VXL_NULLPTR;
   }
   //: track incident vertices and reset ifs_face::vertices_[]
   void _ifs_track_ordered_vertices();

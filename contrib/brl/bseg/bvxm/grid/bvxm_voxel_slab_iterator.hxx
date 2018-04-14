@@ -11,7 +11,7 @@
 
 template <class T>
 bvxm_voxel_slab_iterator_base<T>::bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage, vgl_vector_3d<unsigned int> grid_size, unsigned slice_idx, unsigned slab_thickness)
-: storage_(storage), slab_thickness_(slab_thickness), slice_idx_(slice_idx), end_slab_(0,0,0,0,0), grid_size_(grid_size)
+: storage_(storage), slab_thickness_(slab_thickness), slice_idx_(slice_idx), end_slab_(0,0,0,VXL_NULLPTR,VXL_NULLPTR), grid_size_(grid_size)
 {
   if ( slice_idx >= grid_size_.z() ) {
     slab_ = this->end_slab_;

@@ -29,12 +29,12 @@ class bsta_gaussian_full : public bsta_gaussian<T,n>
 
   //: Constructor
   bsta_gaussian_full()
-  : bsta_gaussian<T,n>(), covar_(T(0)), det_covar_(T(0)), inv_covar_(NULL) {}
+  : bsta_gaussian<T,n>(), covar_(T(0)), det_covar_(T(0)), inv_covar_(VXL_NULLPTR) {}
 
   //: Constructor
   bsta_gaussian_full(const vnl_vector_fixed<T,n>& mean,
                      const vnl_matrix_fixed<T,n,n>& covar)
-  : bsta_gaussian<T,n>(mean), covar_(covar), det_covar_(T(-1)), inv_covar_(NULL)
+  : bsta_gaussian<T,n>(mean), covar_(covar), det_covar_(T(-1)), inv_covar_(VXL_NULLPTR)
   { compute_det(); }
 
   //: Destructor

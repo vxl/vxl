@@ -90,13 +90,13 @@ class vgui_image_tableau
   // The image will be stored as a vil_image_view_base, and thus can be
   // retrieved with get_image_view() but not with get_image().
   virtual void set_image_view( char const* filename,
-                               vgui_range_map_params_sptr const& rmp = 0);
+                               vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
   //: Make image loaded from the given file, the image rendered by this tableau.
   // The image will be stored as a vil1_image, and thus can be
   // retrieved with get_image() but not with get_image_view().
   virtual void set_image( char const* filename,
-                          vgui_range_map_params_sptr const& rmp = 0);
+                          vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
   //: Reread the image from file.
   virtual void reread_image();
@@ -144,23 +144,23 @@ class vgui_image_tableau
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image.
-  vgui_image_tableau( vil1_image const& img, vgui_range_map_params_sptr const& rmp = 0);
+  vgui_image_tableau( vil1_image const& img, vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image view.
   vgui_image_tableau( vil_image_view_base const& img,
-                      vgui_range_map_params_sptr const& rmp = 0);
+                      vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau displaying the given image resource.
   vgui_image_tableau( vil_image_resource_sptr const& img,
-                      vgui_range_map_params_sptr const& rmp = 0);
+                      vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
   //: Constructor - don't use this, use vgui_image_tableau_new.
   //  Creates a tableau which loads and displays an image from
   //  the given file. File loaded as a vil1_image.
   vgui_image_tableau( char const* filename,
-                      vgui_range_map_params_sptr const& rmp = 0);
+                      vgui_range_map_params_sptr const& rmp = VXL_NULLPTR);
 
  protected:
   //: Destructor - called by vgui_image_tableau_sptr.
@@ -178,19 +178,19 @@ struct vgui_image_tableau_new
 
   //:  Constructor - creates a tableau displaying the given image.
   vgui_image_tableau_new( vil1_image const &t,
-                          vgui_range_map_params_sptr const& rmp = 0 )
+                          vgui_range_map_params_sptr const& rmp = VXL_NULLPTR )
     : vgui_image_tableau_sptr( new vgui_image_tableau(t, rmp) )
     { }
 
   //:  Constructor - creates a tableau displaying the given image.
   vgui_image_tableau_new( vil_image_view_base const& t,
-                          vgui_range_map_params_sptr const& rmp = 0 )
+                          vgui_range_map_params_sptr const& rmp = VXL_NULLPTR )
     : vgui_image_tableau_sptr( new vgui_image_tableau(t, rmp) )
     { }
 
   //:  Constructor - creates a tableau displaying the given image.
   vgui_image_tableau_new( vil_image_resource_sptr const& t,
-                          vgui_range_map_params_sptr const& rmp = 0 )
+                          vgui_range_map_params_sptr const& rmp = VXL_NULLPTR )
     : vgui_image_tableau_sptr( new vgui_image_tableau(t, rmp) )
     { }
 
@@ -198,7 +198,7 @@ struct vgui_image_tableau_new
   // The image will be stored as a vil1_image, and thus can be
   // retrieved with get_image() but not with get_image_view().
   vgui_image_tableau_new(char const *f,
-                         vgui_range_map_params_sptr const& rmp = 0)
+                         vgui_range_map_params_sptr const& rmp = VXL_NULLPTR)
     : vgui_image_tableau_sptr( new vgui_image_tableau(f, rmp) )
     { }
 };

@@ -38,14 +38,14 @@ class rrel_kernel_density_obj : public rrel_objective
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter scale_begin,
-                      vnl_vector<double>* param_vector=0 ) const;
+                      vnl_vector<double>* param_vector=VXL_NULLPTR ) const;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  prior_scale is needed if the type RREL_KERNEL_PRIOR is used.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       double prior_scale = 0,
-                      vnl_vector<double>* = 0) const;
+                      vnl_vector<double>* = VXL_NULLPTR) const;
 
   //: Set the type of the scale.
   //  RREL_KERNEL_MAD uses median absolute deviations to estimate the scale.

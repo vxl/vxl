@@ -56,9 +56,9 @@ class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
   // -+-+- constructors/destructors: -+-+-
  public:
   inline vipl_erode_disk(float r=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0){}
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(VXL_NULLPTR){}
   inline vipl_erode_disk(vipl_erode_disk const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(0) {}
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(VXL_NULLPTR) {}
   inline ~vipl_erode_disk() {}
 
 // -+-+- required method for filters: -+-+-

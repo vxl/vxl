@@ -27,7 +27,7 @@ std::set<unsigned int>
 imesh_detect_exterior_faces(const imesh_mesh& mesh,
                             const vgl_vector_3d<double>& dir,
                             unsigned int img_size = 1000,
-                            std::set<unsigned int> *backfacing = NULL);
+                            std::set<unsigned int> *backfacing = VXL_NULLPTR);
 
 
 //: Return the set of triangles that are visible in some of the many sample view directions

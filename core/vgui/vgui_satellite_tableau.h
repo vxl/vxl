@@ -122,7 +122,7 @@ struct vgui_satellite_tableau_t : public vgui_tableau
   void add_popup(vgui_menu &mnu) { mnu.include(a_menu); }
 
  protected:
-  ~vgui_satellite_tableau_t() { p = 0; m = 0; }
+  ~vgui_satellite_tableau_t() { p = VXL_NULLPTR; m = VXL_NULLPTR; }
 };
 
 //----------------------------------------------------------------------------
@@ -154,7 +154,7 @@ struct vgui_satellite_tableau : public vgui_tableau
   { return std::string("vgui_satellite_tableau[") + n + std::string("]"); }
 
  protected:
-  ~vgui_satellite_tableau() { p = 0; m = 0; }
+  ~vgui_satellite_tableau() { p = VXL_NULLPTR; m = VXL_NULLPTR; }
 };
 
 //----------------------------------------------------------------------------

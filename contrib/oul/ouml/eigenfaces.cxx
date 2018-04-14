@@ -66,7 +66,7 @@ EigenFace::~EigenFace()
 bool EigenFace::add_training_image(Image *im, const char * label)
 {
   // precondition
-  assert(im!=NULL);
+  assert(im!=VXL_NULLPTR);
   vnl_vector<double> *image_vector = convert_image_to_vector(im);
   if (!image_vector) return false;
   if (image_size==0)
@@ -252,7 +252,7 @@ void EigenFace::check_training()
 
 vnl_vector<double> *EigenFace::convert_image_to_vector(Image *im)
 {
-  assert(im!=NULL);
+  assert(im!=VXL_NULLPTR);
   int index=0;
   vnl_vector<double> *new_vec = new vnl_vector<double>(im->width()*im->height());
   for (int j=0; j<im->height(); j++)

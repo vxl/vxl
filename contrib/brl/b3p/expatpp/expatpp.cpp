@@ -78,7 +78,7 @@ void
 expatpp::ReleaseParser()
 {
   ::XML_ParserFree(mParser);
-  mParser = 0;
+  mParser = VXL_NULLPTR;
 }
 
 

@@ -22,7 +22,7 @@ class rgrl_initializer_prior
  public:
   //: Initialize with a view
   rgrl_initializer_prior( rgrl_view_sptr            prior_view,
-                          rgrl_scale_sptr           prior_scale = 0);
+                          rgrl_scale_sptr           prior_scale = VXL_NULLPTR);
 
   //: Initialize with a set of information without packing everything into a view
   rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
@@ -31,7 +31,7 @@ class rgrl_initializer_prior
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
                            unsigned                   resolution,
-                           rgrl_scale_sptr            prior_scale = 0);
+                           rgrl_scale_sptr            prior_scale = VXL_NULLPTR);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always
   rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
@@ -39,7 +39,7 @@ class rgrl_initializer_prior
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
                            unsigned                   resolution = 0,
-                           rgrl_scale_sptr            prior_scale = 0);
+                           rgrl_scale_sptr            prior_scale = VXL_NULLPTR);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always;
   //  And \a from_image_roi and \a to_image_roi are the same
@@ -47,7 +47,7 @@ class rgrl_initializer_prior
                            rgrl_estimator_sptr        xform_estimator,
                            rgrl_transformation_sptr   xform_estimate,
                            unsigned                   resolution = 0,
-                           rgrl_scale_sptr            prior_scale = 0);
+                           rgrl_scale_sptr            prior_scale = VXL_NULLPTR);
 
   //: Add more potential prior transformations
   void add_prior_xform( rgrl_transformation_sptr   xform_estimate );

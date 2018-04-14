@@ -31,7 +31,7 @@ class bgrl2_hg_hypergraph : public bgrl2_hg_graph
   bgrl2_hg_hyperedge* hyperedges(const int i) {
     std::map<int, bgrl2_hg_hyperedge*>::iterator H_it = hyperedges_.find(i);
     if (H_it == hyperedges_.end())
-      return NULL;
+      return VXL_NULLPTR;
 
     bgrl2_hg_hyperedge* hyperedge = (*H_it).second;
     return hyperedge;

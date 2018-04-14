@@ -70,19 +70,19 @@ class vgl_fit_quadric_3d
   // No restriction on type.
   // returns the average distance from the points to the quadric.
   // error conditions are reported on outstream, if defined.
-  T fit_linear_Taubin(std::ostream* outstream=0);
+  T fit_linear_Taubin(std::ostream* outstream=VXL_NULLPTR);
 
   //: fit an ellipsoid using the linear Allaire method
   // returns the average distance from the points to the ellipsoid
   // error conditions are reported on outstream, if defined.
-  T fit_ellipsoid_linear_Allaire(std::ostream* outstream=0);
+  T fit_ellipsoid_linear_Allaire(std::ostream* outstream=VXL_NULLPTR);
 
   //: fit a quadric class from the set{ hyperboloid_of_one_sheets,
   //  hyperboloid_of_two_sheets, real_elliptic_cone,
   //  hyperbolic_paraboloid, hyperbolic_cylinder}
   // returns the average distance from the points to the ellipsoid
   // error conditions are reported on outstream, if defined.
-  T fit_saddle_shaped_quadric_linear_Allaire(std::ostream* outstream=0);
+  T fit_saddle_shaped_quadric_linear_Allaire(std::ostream* outstream=VXL_NULLPTR);
 
   // Data Access---------------------------------------------------------------
 

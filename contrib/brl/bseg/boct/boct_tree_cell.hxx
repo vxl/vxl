@@ -21,15 +21,15 @@ boct_tree_cell<T_loc,T_data>::boct_tree_cell(const boct_loc_code<T_loc>& code)
   n_created_++;
 #endif
   code_=code;
-  parent_=NULL;
-  children_=NULL;
-  vis_node_=0;
+  parent_=VXL_NULLPTR;
+  children_=VXL_NULLPTR;
+  vis_node_=VXL_NULLPTR;
 }
 
 template<class T_loc,class T_data>
 bool boct_tree_cell<T_loc,T_data>::is_leaf()
 {
-  return children_== NULL;
+  return children_== VXL_NULLPTR;
 }
 
 template<class T_loc,class T_data>
@@ -61,7 +61,7 @@ boct_tree_cell<T_loc,T_data>::~boct_tree_cell()
   delete_children();
   if (vis_node_) {
     delete vis_node_;
-    vis_node_ = NULL;
+    vis_node_ = VXL_NULLPTR;
   }
 }
 
@@ -72,13 +72,13 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
   cell->data_ = this->data();
   cell->parent_ = parent;
   if (this->is_leaf())
-    cell->children_=NULL;
+    cell->children_=VXL_NULLPTR;
   else {
     cell->split();
     for (unsigned i=0; i<8; i++) {
       boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone(cell);
       cell->children_[i] = *c;
-      c->children_=NULL;
+      c->children_=VXL_NULLPTR;
       delete c;
     }
   }
@@ -95,13 +95,13 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone(boct_tree_cell
   cell->data_ = this->data();
   cell->parent_ = parent;
   if (this->is_leaf())
-    cell->children_=NULL;
+    cell->children_=VXL_NULLPTR;
   else {
     cell->split();
     for (unsigned i=0; i<8; i++) {
       boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone(cell, shift_code);
       cell->children_[i] = *c;
-      c->children_=NULL;
+      c->children_=VXL_NULLPTR;
       delete c;
     }
   }
@@ -125,13 +125,13 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
     cell->data_ = this->data();
     cell->parent_ = parent;
     if (this->is_leaf())
-      cell->children_=NULL;
+      cell->children_=VXL_NULLPTR;
     else {
       cell->split();
       for (unsigned i=0; i<8; i++) {
         boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone_and_intersect(cell, local_crop_box,root_level);
         cell->children_[i] = *c;
-        c->children_=NULL;
+        c->children_=VXL_NULLPTR;
         delete c;
       }
     }
@@ -139,7 +139,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
   else {
     cell->data_ = T_data();
     cell->parent_ = parent;
-    cell->children_ = NULL;
+    cell->children_ = VXL_NULLPTR;
   }
   return cell;
 }
@@ -165,13 +165,13 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
     cell->data_ = this->data();
     cell->parent_ = parent;
     if (this->is_leaf())
-      cell->children_=NULL;
+      cell->children_=VXL_NULLPTR;
     else {
       cell->split();
       for (unsigned i=0; i<8; i++) {
         boct_tree_cell<T_loc,T_data>* c=this->children_[i].clone_and_intersect(cell, shift_code, local_crop_box, root_level);
         cell->children_[i] = *c;
-        c->children_=NULL;
+        c->children_=VXL_NULLPTR;
         delete c;
       }
     }
@@ -181,7 +181,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::clone_and_intersect(
     //Set the cell to be empty and be a leaf
     cell->parent_ = parent;
     cell->data_ = T_data();
-    cell->children_=NULL;
+    cell->children_=VXL_NULLPTR;
   }
 
   return cell;
@@ -225,15 +225,15 @@ void boct_tree_cell<T_loc,T_data>::delete_children()
 #endif
     }
     delete [] children_;
-    children_=NULL;
+    children_=VXL_NULLPTR;
     if (vis_node_) {
       delete vis_node_;
-      vis_node_ = NULL;
+      vis_node_ = VXL_NULLPTR;
     }
   }
   else if (vis_node_) {
     delete vis_node_;
-    vis_node_ = NULL;
+    vis_node_ = VXL_NULLPTR;
   }
 }
 
@@ -242,7 +242,7 @@ template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse_to_level(boct_loc_code<T_loc> * code, short level)
 {
   if (level<0)
-    return NULL;
+    return VXL_NULLPTR;
   boct_tree_cell<T_loc,T_data>* curr_cell=this;
   while (level<curr_cell->level() && curr_cell->children())
   {
@@ -258,7 +258,7 @@ template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse(boct_loc_code<T_loc> & code)
 {
   if (code.level<0)
-    return NULL;
+    return VXL_NULLPTR;
   boct_tree_cell<T_loc,T_data>* curr_cell=this;
   while (code.level<curr_cell->level() && !curr_cell->is_leaf())
   {
@@ -274,7 +274,7 @@ template<class T_loc,class T_data>
 boct_tree_cell<T_loc,T_data>* boct_tree_cell<T_loc,T_data>::traverse_force(boct_loc_code<T_loc> & code)
 {
   if (code.level<0)
-    return NULL;
+    return VXL_NULLPTR;
   boct_tree_cell<T_loc,T_data>* curr_cell=this;
   while (code.level<curr_cell->level() && !curr_cell->is_leaf())
   {
@@ -317,7 +317,7 @@ bool boct_tree_cell<T_loc,T_data>::split()
       children_[i].code_.level = child_level;
       children_[i].set_parent(this);
       children_[i].data_ = this->data_;
-      children_[i].children_ = 0;
+      children_[i].children_ = VXL_NULLPTR;
     }
     return true;
   }
@@ -418,7 +418,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -455,7 +455,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -491,7 +491,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -527,7 +527,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -563,7 +563,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -599,7 +599,7 @@ void  boct_tree_cell<T_loc,T_data>::find_neighbors(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return;
       // at the same or greater level ( towards the root)
       boct_tree_cell<T_loc,T_data>* neighborcell=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -652,7 +652,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -671,7 +671,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -690,7 +690,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -709,7 +709,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -728,7 +728,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -747,7 +747,7 @@ bool  boct_tree_cell<T_loc,T_data>::find_neighbor(boct_face_idx face,
 
       boct_tree_cell<T_loc,T_data>* commonancestor=get_common_ancestor(diff);
 
-      if (commonancestor==NULL)
+      if (commonancestor==VXL_NULLPTR)
         return false;
       // at the same or greater level ( towards the root)
       neighbor=commonancestor->traverse_to_level(&neighborcode,this->level());
@@ -909,7 +909,7 @@ void vsl_b_read(vsl_b_istream & is, boct_tree_cell<T_loc,T_data>& c, boct_tree_c
     vsl_b_read(is, data);
     c.set_data(data);
     c.set_parent(parent);
-    c.set_vis_node(NULL);
+    c.set_vis_node(VXL_NULLPTR);
     bool leaf = true;
     vsl_b_read(is, leaf);
     if (!leaf) {

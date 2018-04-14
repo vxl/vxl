@@ -61,7 +61,7 @@ mbl_data_wrapper<T >& mbl_data_collector_list<T>::data_wrapper()
     wrapper_.set(&data_[0],data_.size()); // not data_.begin() since set() expects T*, not vector_iterator
   }
   else
-    wrapper_.set(0, 0);
+    wrapper_.set(VXL_NULLPTR, 0);
   return wrapper_;
 }
 

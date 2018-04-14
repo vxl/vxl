@@ -120,7 +120,7 @@ faces( ) const
   std::vector< vtol_intensity_face_sptr > faces;
   for ( unsigned i = 0; i < region_list.size(); ++i ) {
     if ( ! region_list[i].empty() ) {
-      compute_faces( region_list[i], faces, 0 );
+      compute_faces( region_list[i], faces, VXL_NULLPTR );
     }
   }
 
@@ -749,7 +749,7 @@ compute_faces( std::vector< region_type_sptr > const& chains,
   // into a tree. The adding process makes sure that the chain falls
   // into the appropriate place in the containment hierarchy.
 
-  chain_tree_node universe( 0 );
+  chain_tree_node universe( VXL_NULLPTR );
   for ( unsigned i = 0; i < chains.size(); ++i ) {
     universe.add( chains[i] );
   }
@@ -763,7 +763,7 @@ compute_faces( std::vector< region_type_sptr > const& chains,
     delete finder;
   }
   else {
-    add_faces( faces, 0, 0, &universe );
+    add_faces( faces, VXL_NULLPTR, VXL_NULLPTR, &universe );
   }
 }
 

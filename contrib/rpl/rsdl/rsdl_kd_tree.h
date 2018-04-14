@@ -18,7 +18,7 @@ class rsdl_kd_node
                 const rsdl_bounding_box& inner_box,
                 unsigned int depth )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
-      point_indices_(0), left_(0), right_(0) {}
+      point_indices_(0), left_(VXL_NULLPTR), right_(VXL_NULLPTR) {}
 
   //: ctor for leaf node
   rsdl_kd_node( const rsdl_bounding_box& outer_box,
@@ -26,7 +26,7 @@ class rsdl_kd_node
                 unsigned int depth,
                 const std::vector<int>& indices )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
-      point_indices_(indices), left_(0), right_(0) {}
+      point_indices_(indices), left_(VXL_NULLPTR), right_(VXL_NULLPTR) {}
 
   //: outer bounding box in both cartesian and angular dimensions
   rsdl_bounding_box outer_box_;

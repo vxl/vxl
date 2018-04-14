@@ -16,7 +16,7 @@ template <class DataType>
 vipl_section_container<DataType>*
 vipl_filterable_section_container_generator(const vil_image_view<DataType>& im, DataType*)
 {
-  vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)0);
+  vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)VXL_NULLPTR);
   rtn->put_imgptr((const void*) &im);
   rtn->ref_imgsz()[0] = im.ni();
   rtn->ref_imgsz()[1] = im.nj();

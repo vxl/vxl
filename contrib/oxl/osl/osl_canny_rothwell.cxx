@@ -74,7 +74,7 @@ osl_canny_rothwell::~osl_canny_rothwell()
 
 void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edge*> *edges, bool adaptive)
 {
-  assert(edges!=0);
+  assert(edges!=VXL_NULLPTR);
 
   xsize_  = image.height();
   ysize_  = image.width();

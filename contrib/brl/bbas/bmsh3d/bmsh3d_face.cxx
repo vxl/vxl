@@ -36,7 +36,7 @@ void bmsh3d_face::get_incident_HEs (std::vector<bmsh3d_halfedge*>& incident_HEs)
   if (HE == VXL_NULLPTR)
     return;
   do {
-    assert (HE != NULL);
+    assert (HE != VXL_NULLPTR);
     incident_HEs.push_back (HE);
     HE = HE->next();
   }
@@ -1228,8 +1228,8 @@ bool is_tri_non_acute (const std::vector<bmsh3d_vertex*>& vertices)
 //
 bool is_F_extraneous (bmsh3d_face* F)
 {
-  assert (F->halfedge() != NULL);
-  assert (F->halfedge()->next() != NULL);
+  assert (F->halfedge() != VXL_NULLPTR);
+  assert (F->halfedge()->next() != VXL_NULLPTR);
   bmsh3d_halfedge* HE = F->halfedge();
   do {
     bmsh3d_edge* E = HE->edge();

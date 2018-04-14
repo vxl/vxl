@@ -23,7 +23,7 @@ class boxm2_ocl_update
                         vpgl_camera_double_sptr  cam,
                         vil_image_view_base_sptr img,
                         std::string               in_identifier="",
-                        vil_image_view_base_sptr mask=NULL,
+                        vil_image_view_base_sptr mask=VXL_NULLPTR,
                         bool                     update_alpha = true,
                         float                    mog_var = -1.0f,
                         bool                     update_app = true,

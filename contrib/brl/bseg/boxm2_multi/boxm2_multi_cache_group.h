@@ -40,8 +40,8 @@ class boxm2_multi_cache_group
       caches_.push_back(cache);
 
       //so they are the right size...
-      vis_imgs_.push_back(NULL);
-      pre_imgs_.push_back(NULL);
+      vis_imgs_.push_back(VXL_NULLPTR);
+      pre_imgs_.push_back(VXL_NULLPTR);
     }
 
     //: visibility order of blocks from camera (returns indices)

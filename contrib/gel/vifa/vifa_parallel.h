@@ -40,12 +40,12 @@ class vifa_parallel: public vifa_parallel_params
   //: Face-based constructor
   vifa_parallel(iface_list&      faces,
                 bool             contrast_weighted,
-                vifa_parallel_params*  params = 0
+                vifa_parallel_params*  params = VXL_NULLPTR
                );
 
   //: Orientation-based constructor
   vifa_parallel(std::vector<float>&  pixel_orientations,
-                vifa_parallel_params*  params = 0
+                vifa_parallel_params*  params = VXL_NULLPTR
                );
 
   //: Constructor based on line statistics

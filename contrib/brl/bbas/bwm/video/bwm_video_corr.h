@@ -32,7 +32,7 @@ class bwm_video_corr : public vbl_ref_count
   // Constructors/Initializers/Destructors-------------------------------------
 
   //: Constructor - default
-  bwm_video_corr() : id_(unique_id_++), observer_(0), world_pt_valid_(false) {}
+  bwm_video_corr() : id_(unique_id_++), observer_(VXL_NULLPTR), world_pt_valid_(false) {}
 
   //: Constructor - from data
   bwm_video_corr(bwm_observer_video* obs, unsigned frame_index,

@@ -48,7 +48,7 @@ class HomgMetric
  public:
   // Constructors/Destructors--------------------------------------------------
 
-  HomgMetric() : metric_(0) {}
+  HomgMetric() : metric_(VXL_NULLPTR) {}
   HomgMetric(const ImageMetric* metric);
 
   // HomgMetric(const HomgMetric& that); - use default

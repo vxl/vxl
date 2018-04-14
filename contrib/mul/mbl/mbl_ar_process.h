@@ -61,7 +61,7 @@ class mbl_ar_process
   // of a vector given the two previous vectors
   // \param rng Use an externally provided random number generator,
   // rather than one statically local to the function.
-  vnl_vector<T> predict(vnl_vector<T>& Xm1, vnl_vector<T>& Xm2, vnl_random *rng=0);
+  vnl_vector<T> predict(vnl_vector<T>& Xm1, vnl_vector<T>& Xm2, vnl_random *rng=VXL_NULLPTR);
 };
 
 //: Write  to binary stream

@@ -60,7 +60,7 @@ class rgrl_feature_based_registration: public rgrl_object
             rgrl_mask_box              to_image_region,
             rgrl_estimator_sptr        estimator,
             rgrl_transformation_sptr   initial_xform,
-            rgrl_scale_sptr            prior_scale = 0,
+            rgrl_scale_sptr            prior_scale = VXL_NULLPTR,
             unsigned                   init_resolution = 0);
 
   //////////////// functions to access internal data  ////////////////////////

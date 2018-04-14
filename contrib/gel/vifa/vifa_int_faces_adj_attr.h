@@ -63,12 +63,12 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
                           int              depth,
                           int              size_filter = -1,
-                          vdgl_fit_lines_params*    fitter_params = NULL,
-                          vifa_group_pgram_params*  gpp_s = NULL,
-                          vifa_group_pgram_params*  gpp_w = NULL,
-                          vifa_coll_lines_params*    cpp = NULL,
-                          vifa_norm_params*      np = NULL,
-                          vifa_int_face_attr_factory*  factory = NULL,
+                          vdgl_fit_lines_params*    fitter_params = VXL_NULLPTR,
+                          vifa_group_pgram_params*  gpp_s = VXL_NULLPTR,
+                          vifa_group_pgram_params*  gpp_w = VXL_NULLPTR,
+                          vifa_coll_lines_params*    cpp = VXL_NULLPTR,
+                          vifa_norm_params*      np = VXL_NULLPTR,
+                          vifa_int_face_attr_factory*  factory = VXL_NULLPTR,
                           float          junk_area_percentage = 0.2
                          );
 
@@ -76,12 +76,12 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
                           int                       depth,
                           iface_list&               neighborhood,
                           int                       size_filter  =  -1,
-                          vdgl_fit_lines_params*    fitter_params  =  NULL,
-                          vifa_group_pgram_params*  gpp_s  =  NULL,
-                          vifa_group_pgram_params*  gpp_w  =  NULL,
-                          vifa_coll_lines_params*   cpp  =  NULL,
-                          vifa_norm_params*         np  =  NULL,
-                          vifa_int_face_attr_factory*    factory  =  NULL,
+                          vdgl_fit_lines_params*    fitter_params  =  VXL_NULLPTR,
+                          vifa_group_pgram_params*  gpp_s  =  VXL_NULLPTR,
+                          vifa_group_pgram_params*  gpp_w  =  VXL_NULLPTR,
+                          vifa_coll_lines_params*   cpp  =  VXL_NULLPTR,
+                          vifa_norm_params*         np  =  VXL_NULLPTR,
+                          vifa_int_face_attr_factory*    factory  =  VXL_NULLPTR,
                           float                     junk_area_percentage  =  0.2
                          );
 

@@ -18,19 +18,19 @@ class bvgl_k_nearest_neighbors_3d
 {
  public:
   //: default constructor
- bvgl_k_nearest_neighbors_3d():tolerance_(Type(0)), search_tree_(0){}
+ bvgl_k_nearest_neighbors_3d():tolerance_(Type(0)), search_tree_(VXL_NULLPTR){}
   //: Construct from a vgl_pointset
   bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance = Type(0));
   //: destructor
   ~bvgl_k_nearest_neighbors_3d(){
     if(search_tree_)
       delete search_tree_;
-    search_tree_ = 0;
+    search_tree_ = VXL_NULLPTR;
   }
   //: copy constructor
   bvgl_k_nearest_neighbors_3d(bvgl_k_nearest_neighbors_3d const& other) :
     tolerance_(other.tolerance_), ptset_(other.ptset_),
-    search_tree_(0)
+    search_tree_(VXL_NULLPTR)
   {
     // create handles init of M_ and search_tree_, and flags_
     create();
@@ -102,13 +102,13 @@ template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::create(){
   if(search_tree_){
     delete search_tree_;
-    search_tree_ = 0;
+    search_tree_ = VXL_NULLPTR;
   }
   flags_ = 0;
   flags_ = flags_ |  Nabo::NearestNeighbourSearch<Type>::ALLOW_SELF_MATCH;
   unsigned n = ptset_.npts(), dim = 3;
   if(n==0){
-    search_tree_ = 0;
+    search_tree_ = VXL_NULLPTR;
     return false;
   }
   M_.set_size(dim, n);
@@ -121,7 +121,7 @@ bool bvgl_k_nearest_neighbors_3d<Type>::create(){
 }
 template <class Type>
 bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance):
-search_tree_(0), tolerance_(tolerance), ptset_(ptset){
+search_tree_(VXL_NULLPTR), tolerance_(tolerance), ptset_(ptset){
   create();
 }
 

@@ -658,7 +658,7 @@ void bmsh3d_mesh::m2_mesh_merge_face (bmsh3d_face* F1, bmsh3d_face* F2 ,bmsh3d_e
   //Remove HE1: the other incidence of edge E.
   E->_disconnect_HE (HE1);
   delete HE1;
-  assert (E->halfedge() == NULL);
+  assert (E->halfedge() == VXL_NULLPTR);
   remove_edge (E);
 
   //Sort F1's HE list.

@@ -65,7 +65,7 @@ class vil3d_crop_image_resource : public vil3d_image_resource
                                                    unsigned j0, unsigned n_j,
                                                    unsigned k0, unsigned n_k) const
   {
-    if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return 0;
+    if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return VXL_NULLPTR;
     return src_->get_copy_view(i0+i0_, n_i, j0+j0_, n_j, k0+k0_, n_k);
   }
 
@@ -73,7 +73,7 @@ class vil3d_crop_image_resource : public vil3d_image_resource
                                               unsigned j0, unsigned n_j,
                                               unsigned k0, unsigned n_k) const
   {
-    if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return 0;
+    if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return VXL_NULLPTR;
     return src_->get_view(i0+i0_, n_i, j0+j0_, n_j, k0+k0_, n_k);
   }
 
@@ -85,7 +85,7 @@ class vil3d_crop_image_resource : public vil3d_image_resource
   }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = 0) const
+  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const
   {
     return src_->get_property(tag, property_value);
   }

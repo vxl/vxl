@@ -88,7 +88,7 @@ class msm_ref_shape_instance
 
   //: Reference to current model
   const msm_ref_shape_model& model() const
-  { assert(model_!=0); return *model_; }
+  { assert(model_!=VXL_NULLPTR); return *model_; }
 
   //: Current shape parameters
   const vnl_vector<double>& params() const { return b_; }

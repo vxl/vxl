@@ -144,11 +144,11 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
     int data_size = ncells*ncells*ncells;
-    unsigned char *data = 0;
+    unsigned char *data = VXL_NULLPTR;
     std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)unsigned char[data_size];
 
-    if (data == 0) {
+    if (data == VXL_NULLPTR) {
       std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
@@ -256,7 +256,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, bool > > &scene,
   // we will read the data a column at a time and this is enough
   int row_data_size = ncells;
   unsigned char* read_data = new (std::nothrow) unsigned char[row_data_size];
-  if (read_data == 0) {
+  if (read_data == VXL_NULLPTR) {
     std::cout << "boxm_save_block_raw: Could not allocate read data!" << std::endl;
     return;
   }
@@ -393,11 +393,11 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
     int data_size = ncells*ncells*ncells;
-    T_data *data = 0;
+    T_data *data = VXL_NULLPTR;
     std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)T_data[data_size];
 
-    if (data == 0) {
+    if (data == VXL_NULLPTR) {
       std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
@@ -499,7 +499,7 @@ void boxm_save_scene_raw_general(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   // we will read the data a column at a time and this is enough
   int row_data_size = ncells;
   T_data* read_data = new (std::nothrow) T_data[row_data_size];
-  if (read_data == 0) {
+  if (read_data == VXL_NULLPTR) {
     std::cout << "boxm_save_block_raw: Could not allocate read data!" << std::endl;
     return;
   }
@@ -626,11 +626,11 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
     vgl_point_3d<double> data_og(min.x() + (step_len/2.0), min.y() + (step_len/2.0), min.z() + (step_len/2.0));
 
     int data_size = ncells*ncells*ncells;
-    float *data = 0;
+    float *data = VXL_NULLPTR;
     std::cout << "Data Size=" << data_size << std::endl;
     data = new (std::nothrow)float[data_size];
 
-    if (data == 0) {
+    if (data == VXL_NULLPTR) {
       std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
       return;
     }
@@ -739,7 +739,7 @@ void boxm_save_scene_raw_general_to_byte(boxm_scene<boct_tree<T_loc, T_data > > 
   // we will read the data a column at a time and this is enough
   int row_data_size = ncells;
   char* byte_data = new (std::nothrow) char[row_data_size];
-  if (byte_data == 0) {
+  if (byte_data == VXL_NULLPTR) {
     std::cout << "boxm_save_block_raw: Could not allocate byte data!" << std::endl;
     return;
   }

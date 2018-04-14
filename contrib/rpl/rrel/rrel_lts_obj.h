@@ -39,13 +39,13 @@ class rrel_lts_obj : public rrel_objective
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
 
   //: False.
   //  The LTS objective is based on order statistics, and does not

@@ -61,7 +61,7 @@ public:
   // writes it to the disk
   virtual block_data_base *get_data_base_new(scene_sptr &scene,
                                              block_id_t id,
-                                             vcl_string type = 0,
+                                             vcl_string type = VXL_NULLPTR,
                                              vcl_size_t num_bytes = 0,
                                              bool read_only = true) = 0;
 

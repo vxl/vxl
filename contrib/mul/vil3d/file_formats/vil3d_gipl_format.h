@@ -151,7 +151,7 @@ class vil3d_gipl_image: public vil3d_image_resource
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* label, void* property_value = 0) const;
+  virtual bool get_property(char const* label, void* property_value = VXL_NULLPTR) const;
 #if 0
   bool put_view(const vil3d_image_view_base& im,
                         unsigned i0=0, unsigned j0=0, unsigned k0=0);

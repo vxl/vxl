@@ -27,7 +27,7 @@ void clsfy_binary_pdf_classifier::deleteStuff()
 // Returns either class1 (Inside PDF mode) or class 0 (Outside PDF mode).
 unsigned clsfy_binary_pdf_classifier::classify(const vnl_vector<double> &input) const
 {
-  assert(pdf_!=0);
+  assert(pdf_!=VXL_NULLPTR);
 
   if (pdf_->log_p(input) >= log_prob_limit_)
     return 1;
@@ -60,7 +60,7 @@ void clsfy_binary_pdf_classifier::class_probabilities(
 // greater than 1.0 or less than 0.0, (or indeed between 0.0 and 1.0).
 double clsfy_binary_pdf_classifier::log_l(const vnl_vector<double> &input) const
 {
-  assert(pdf_!=0);
+  assert(pdf_!=VXL_NULLPTR);
 
   // likelihood = P(input|InClass) / prob_limit_
   return pdf_->log_p(input) - log_prob_limit_;

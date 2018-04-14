@@ -69,8 +69,8 @@ template < class DataType >
 
 template < class DataType >
   vipl_section_iterator< DataType > ::vipl_section_iterator()
-  : hsreal_descriptor(0),
-    hscontainer(0),
+  : hsreal_descriptor(VXL_NULLPTR),
+    hscontainer(VXL_NULLPTR),
     hsincr_count(0)
 // C++ auto-generated low-level constructor
 {
@@ -78,8 +78,8 @@ template < class DataType >
 
 template < class DataType >
   vipl_section_iterator< DataType > ::vipl_section_iterator(const vipl_section_iterator< DataType > &t)
-  : hsreal_descriptor(0),
-    hscontainer(0),
+  : hsreal_descriptor(VXL_NULLPTR),
+    hscontainer(VXL_NULLPTR),
     hsincr_count(t.hsincr_count)
 // C++ auto-generated low-level copy constructor
 {

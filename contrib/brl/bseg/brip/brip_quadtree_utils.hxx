@@ -57,7 +57,7 @@ extract_nodes_from_image(vil_image_view<T> const & img,
   // the size of nodes is 1/2 of the image dimensions
   unsigned ni = img.ni(), nj = img.nj();
   nodes.resize(nj/2, ni/2);
-  nodes.fill(0);
+  nodes.fill(VXL_NULLPTR);
   bool parent = parent_img.ni()>0;
   for (unsigned j = 0; j<nj; j+=2)
     for (unsigned i = 0; i<ni; i+=2)

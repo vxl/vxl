@@ -2308,7 +2308,7 @@ void Clipper::SetHoleState(TEdge *e, OutRec *outrec)
     if (e2->OutIdx >= 0 && e2->WindDelta != 0)
     {
       if (!eTmp) eTmp = e2;
-      else if (eTmp->OutIdx == e2->OutIdx) eTmp = 0;
+      else if (eTmp->OutIdx == e2->OutIdx) eTmp = VXL_NULLPTR;
     }
     e2 = e2->PrevInAEL;
   }

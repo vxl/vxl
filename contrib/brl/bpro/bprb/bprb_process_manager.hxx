@@ -50,7 +50,7 @@ bprb_process_manager<T>::get_process_by_name( const std::string& name ) const
 {
   std::map< std::string , bprb_process_sptr >::const_iterator it = process_map.find( name );
   if ( it == process_map.end() ) {
-    return NULL ;
+    return VXL_NULLPTR ;
   }
   return it->second->clone();
 }

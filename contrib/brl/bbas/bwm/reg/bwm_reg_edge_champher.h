@@ -62,7 +62,7 @@ class bwm_reg_edge_champher
     if ( (col<ncols_-1) && (row<nrows_-1) )
       return edges_[row+1][col+1];
     else
-      return 0;
+      return VXL_NULLPTR;
   }
 
   //: the index of the vertex of the digital curve inserted at (col, row)

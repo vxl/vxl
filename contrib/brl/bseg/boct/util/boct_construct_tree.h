@@ -32,7 +32,7 @@ boct_tree_cell<T_loc,T_data>* boct_construct_tree(std::vector<boct_tree_cell<T_l
   }
   else {
     std::cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 
   for (unsigned i=0; i<leaf_nodes.size(); i++)

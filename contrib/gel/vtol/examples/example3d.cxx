@@ -83,7 +83,7 @@ class example_vertex_3d : public vtol_vertex
 
   virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
   {
-    assert(v->cast_to_vertex_2d()==0);
+    assert(v->cast_to_vertex_2d()==VXL_NULLPTR);
     assert(v != this);
     std::list<vtol_topology_object*>::const_iterator zp;
     for (zp=superiors_.begin();zp!=superiors_.end();++zp)
@@ -100,7 +100,7 @@ class example_vertex_3d : public vtol_vertex
   }
   virtual vsol_spatial_object_2d* clone() const {return new T(x(),y(),z()); }
   std::string is_a() const { return std::string("example_vertex_3d"); }
-  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==0); operator=(*(T const*)(&v)); }
+  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==VXL_NULLPTR); operator=(*(T const*)(&v)); }
   virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==VXL_NULLPTR && operator==(*(T const*)(&v)); }
 
   void print(std::ostream &strm=std::cout) const { strm<<"<vertex "<<x()<<','<<y()<<','<<z()<<"> with id "<<get_id()<<'\n'; }

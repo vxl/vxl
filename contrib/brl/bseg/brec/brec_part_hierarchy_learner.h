@@ -87,7 +87,7 @@ class brec_part_hierarchy_learner : public vbl_ref_count
          delete (itm->second).second.first.first;
          delete (itm->second).second.first.second;
          delete (itm->second).second.second;
-         (itm->second).first = 0;
+         (itm->second).first = VXL_NULLPTR;
        }
        v->clear();
        delete v;

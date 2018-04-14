@@ -187,12 +187,12 @@ void vmap_2_tmap< V,E,F,D >::set_edge_cycles()
   dart_iterator d ;
   for (d=this->begin_dart(); d!=this->end_dart(); ++d)
   {
-    d->set_edge(NULL) ;
+    d->set_edge(VXL_NULLPTR) ;
   }
   int count_vertex =0 ;
   for (d=this->begin_dart(); d!=this->end_dart(); ++d)
   {
-    if (d->get_edge_pointer() == (vmap_2_tmap_edge*)NULL)
+    if (d->get_edge_pointer() == (vmap_2_tmap_edge*)VXL_NULLPTR)
     {
       edge(count_vertex).set_begin(d) ;
       d->set_edge(get_edge_pointer(count_vertex)) ;
@@ -210,12 +210,12 @@ void vmap_2_tmap< V,E,F,D >::set_face_cycles()
   dart_iterator d ;
   for (d=this->begin_dart(); d!=this->end_dart(); ++d)
   {
-    d->set_face(NULL) ;
+    d->set_face(VXL_NULLPTR) ;
   }
   vmap_face_index count_vertex =0 ;
   for (d=this->begin_dart(); d!=this->end_dart(); ++d)
   {
-    if (d->get_face_pointer() == NULL)
+    if (d->get_face_pointer() == VXL_NULLPTR)
     {
       dart_iterator end=d ;
       do

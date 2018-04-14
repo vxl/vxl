@@ -57,7 +57,7 @@ class bapl_affine2d_est : public rrel_estimation_problem
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=0 ) const;
+                                   const std::vector<double>* weights=VXL_NULLPTR ) const;
 
  public:  // testing / debugging utility
     //: \brief Print information as a test utility.

@@ -111,7 +111,7 @@ class bprb_process : public vbl_ref_count
 
   //: get a particular output
   brdb_value_sptr output(unsigned i)
-  { if (i<n_outputs()) return output_data_[i]; else return 0; }
+  { if (i<n_outputs()) return output_data_[i]; else return VXL_NULLPTR; }
 
   //: Insure that inputs are valid
   bool verify_inputs();

@@ -88,7 +88,7 @@ void boxm_scene<T>::create_blocks(const vgl_vector_3d<double>& /*block_dim*/,
   unsigned z_dim = world_dim.z(); // = static_cast<int>(std::floor(world_dim.z()/block_dim.z()));
 
   // pointers are initialized to NULL
-  blocks_ =  vbl_array_3d<boxm_block<T>*>(x_dim, y_dim, z_dim, (boxm_block<T>*)NULL);
+  blocks_ =  vbl_array_3d<boxm_block<T>*>(x_dim, y_dim, z_dim, (boxm_block<T>*)VXL_NULLPTR);
   for (unsigned i=0; i<x_dim; ++i) {
     for (unsigned j=0; j<y_dim; ++j) {
       for (unsigned k=0; k<z_dim; ++k) {
@@ -204,7 +204,7 @@ void boxm_scene<T>::write_active_block(bool unload_block)
     {
       boxm_block<T>* block = blocks_(x,y,z);
       block->delete_tree();
-      block->set_tree(0);
+      block->set_tree(VXL_NULLPTR);
       active_block_.set(-1,-1,-1);
     }
     os.close();
@@ -255,7 +255,7 @@ void boxm_scene<T>::write_active_blocks(bool unload_block)
       {
         boxm_block<T>* block = blocks_(x,y,z);
         block->delete_tree();
-        block->set_tree(0);
+        block->set_tree(VXL_NULLPTR);
         active_block_.set(-1,-1,-1);
       }
       os.close();
@@ -301,7 +301,7 @@ void boxm_scene<T>::write_block_thread_safe(unsigned i, unsigned j, unsigned k)
     // delete the block's data
     boxm_block<T>* block = blocks_(i,j,k);
     block->delete_tree();
-    block->set_tree(0);
+    block->set_tree(VXL_NULLPTR);
 
     os.close();
   }
@@ -315,7 +315,7 @@ void boxm_scene<T>::force_write_blocks()
   while (!iter.end())
   {
     int x=iter.index().x(), y=iter.index().y(), z=iter.index().z();
-    if (blocks_(x,y,z)->get_tree()!=NULL)
+    if (blocks_(x,y,z)->get_tree()!=VXL_NULLPTR)
     {
       std::cout<<" ? ";
       std::string path = gen_block_path(x,y,z);
@@ -343,7 +343,7 @@ boxm_block<T>* boxm_scene<T>::get_block(vgl_point_3d<double> const& p) const
 #ifdef DEBUG
     std::cerr << "Point " << p << " is out of world " << world << '\n';
 #endif
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -383,13 +383,13 @@ boxm_block<T>* boxm_scene<T>::get_active_block()
 {
   if (valid_index(active_block_)) {
     boxm_block<T>* block = blocks_(active_block_.x(),active_block_.y(),active_block_.z());
-    if (block->get_tree() == 0)
+    if (block->get_tree() == VXL_NULLPTR)
       load_block(active_block_.x(),active_block_.y(),active_block_.z());
     return block;
   }
   else {
     std::cerr << "index"<<active_block_<<"  is out of world\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 
@@ -463,21 +463,21 @@ bool boxm_scene<T>::load_block(unsigned i, unsigned j, unsigned k)
         int x=active_block_.x(), y=active_block_.y(), z=active_block_.z();
         boxm_block<T>* block = blocks_(x,y,z);
         block->delete_tree();
-        block->set_tree(0);
+        block->set_tree(VXL_NULLPTR);
       }
     }
   }
 
   active_block_.set(i,j,k);
 
-  if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
+  if (blocks_(i,j,k)->get_tree()==VXL_NULLPTR) // read it from file
   {
     std::string block_path = gen_block_path(i,j,k);
     vsl_b_ifstream os(block_path);
 
     // if the binary block file is not found
     if (!os) {
-      if (blocks_(i,j,k)->get_tree()==NULL) {
+      if (blocks_(i,j,k)->get_tree()==VXL_NULLPTR) {
         T* tree= new T(max_tree_level_,init_tree_level_);
         blocks_(i,j,k)->init_tree(tree);
       }
@@ -498,14 +498,14 @@ bool boxm_scene<T>::load_block_thread_safe(unsigned i, unsigned j, unsigned k)
   if (!valid_index(vgl_point_3d<int>(i,j,k)))
     return false;
 
-  if (blocks_(i,j,k)->get_tree()==NULL) // read it from file
+  if (blocks_(i,j,k)->get_tree()==VXL_NULLPTR) // read it from file
   {
     std::string block_path = gen_block_path(i,j,k);
     vsl_b_ifstream os(block_path);
 
     // if the binary block file is not found
     if (!os) {
-      if (blocks_(i,j,k)->get_tree()==NULL) {
+      if (blocks_(i,j,k)->get_tree()==VXL_NULLPTR) {
         T* tree= new T(max_tree_level_,init_tree_level_);
         blocks_(i,j,k)->init_tree(tree);
       }
@@ -528,14 +528,14 @@ bool boxm_scene<T>::read_all_blocks()
   for (unsigned block_i = 0; block_i < blocks_.get_row1_count(); block_i++){
     for (unsigned block_j = 0; block_j < blocks_.get_row2_count(); block_j++){
       for (unsigned block_k = 0; block_k < blocks_.get_row3_count(); block_k++){
-        if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) // read it from file
+        if (blocks_(block_i,block_j,block_k)->get_tree()==VXL_NULLPTR) // read it from file
         {
           std::string block_path = gen_block_path(block_i,block_j,block_k);
           vsl_b_ifstream os(block_path);
 
           // if the binary block file is not found
           if (!os) {
-            if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) {
+            if (blocks_(block_i,block_j,block_k)->get_tree()==VXL_NULLPTR) {
               T* tree= new T(max_tree_level_,init_tree_level_);
               blocks_(block_i,block_j,block_k)->init_tree(tree);
             }
@@ -586,7 +586,7 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
   {
     boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
     block->delete_tree();
-    block->set_tree(0);
+    block->set_tree(VXL_NULLPTR);
   }
 
   std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator load_it = blocks_to_load.begin();
@@ -597,14 +597,14 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
     int block_j = (*load_it).y();
     int block_k = (*load_it).z();
 
-    if (blocks_(block_i,block_j,block_k)->get_tree() == NULL)// read it from file
+    if (blocks_(block_i,block_j,block_k)->get_tree() == VXL_NULLPTR)// read it from file
     {
       std::string block_path = gen_block_path(block_i,block_j,block_k);
       vsl_b_ifstream os(block_path);
 
       // if the binary block file is not found
       if (!os) {
-        if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) {
+        if (blocks_(block_i,block_j,block_k)->get_tree()==VXL_NULLPTR) {
           T* tree= new T(max_tree_level_,init_tree_level_);
           blocks_(block_i,block_j,block_k)->init_tree(tree);
         }
@@ -612,7 +612,7 @@ bool boxm_scene<T>::load_block_and_neighbors(unsigned i, unsigned j, unsigned k)
       }
       blocks_(block_i,block_j,block_k)->b_read(os);
       assert(blocks_(block_i,block_j,block_k)!=NULL);
-      assert(blocks_(block_i,block_j,block_k)->get_tree()!=NULL);
+      assert(blocks_(block_i,block_j,block_k)->get_tree()!=VXL_NULLPTR);
 
       os.close();
     }
@@ -978,7 +978,7 @@ bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max
   {
     boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
     block->delete_tree();
-    block->set_tree(0);
+    block->set_tree(VXL_NULLPTR);
   }
 
   std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> >::iterator load_it = blocks_to_load.begin();
@@ -989,14 +989,14 @@ bool boxm_scene<T>::load_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> max
     int block_j = (*load_it).y();
     int block_k = (*load_it).z();
 
-    if (blocks_(block_i,block_j,block_k)->get_tree() == NULL)// read it from file
+    if (blocks_(block_i,block_j,block_k)->get_tree() == VXL_NULLPTR)// read it from file
     {
       std::string block_path = gen_block_path(block_i,block_j,block_k);
       vsl_b_ifstream os(block_path);
 
       // if the binary block file is not found
       if (!os) {
-        if (blocks_(block_i,block_j,block_k)->get_tree()==NULL) {
+        if (blocks_(block_i,block_j,block_k)->get_tree()==VXL_NULLPTR) {
           T* tree= new T(max_tree_level_,init_tree_level_);
           blocks_(block_i,block_j,block_k)->init_tree(tree);
         }
@@ -1023,7 +1023,7 @@ bool boxm_scene<T>::unload_blocks(vgl_point_3d<int> min_idx, vgl_point_3d<int> m
       {
         boxm_block<T>* block = blocks_(i,j,k);
         block->delete_tree();
-        block->set_tree(0);
+        block->set_tree(VXL_NULLPTR);
       }
   return true;
 }
@@ -1037,7 +1037,7 @@ void boxm_scene<T>::unload_active_blocks() const
   {
     boxm_block<T>* block = blocks_(active_block_.x(), active_block_.y(),active_block_.z());
     block->delete_tree();
-    block->set_tree(0);
+    block->set_tree(VXL_NULLPTR);
     active_block_ = vgl_point_3d<int>(-1,-1,-1);
   }
 
@@ -1050,7 +1050,7 @@ void boxm_scene<T>::unload_active_blocks() const
   {
     boxm_block<T>* block = blocks_((*unload_it).x(),(*unload_it).y(),(*unload_it).z());
     block->delete_tree();
-    block->set_tree(0);
+    block->set_tree(VXL_NULLPTR);
   }
   active_blocks_.clear();
 
@@ -1463,7 +1463,7 @@ boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locat
   // get the indices for the block containing this point
   vgl_point_3d<int> block_idx;
   if (!get_block_index(p, block_idx))
-    return NULL;
+    return VXL_NULLPTR;
 
 #ifdef DEBUG
   std::cout << "Requesting blocks : "<< block_idx<< '\n'
@@ -1484,12 +1484,12 @@ boct_tree_cell<typename T::loc_type, typename T::datatype>* boxm_scene<T>::locat
   boxm_block<T>* block = blocks_(block_idx.x(), block_idx.y(), block_idx.z());
   if (!block) {
     std::cerr << "In locate_point_in_memory: NULL block\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
   T *tree = block->get_tree();
   if (!tree) {
     std::cerr << "In locate_point_in_memory: NULL tree\n";
-    return NULL;
+    return VXL_NULLPTR;
   }
   return tree->locate_point_global(p, (short)level);
 }
@@ -1605,7 +1605,7 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::begin(bool use_internal_cells)
   // load active block using function pointer, retrieve pointer to all cells
   (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
   T *tree = (*block_iterator_)->get_tree();
-  assert(tree != NULL);
+  assert(tree != VXL_NULLPTR);
   if(use_internal_cells_)
     cells_=tree->all_cells();
   else
@@ -1666,7 +1666,7 @@ boxm_cell_iterator<T>& boxm_cell_iterator<T>::operator++()
       // load active block using function pointer, retrieve pointer to all cells
       (block_iterator_.scene_->*block_loading_func_)(block_iterator_.index().x(),block_iterator_.index().y(),block_iterator_.index().z());
       T *tree = (*block_iterator_)->get_tree();
-      assert(tree != NULL);
+      assert(tree != VXL_NULLPTR);
 
       if(use_internal_cells_)
         cells_=tree->all_cells();

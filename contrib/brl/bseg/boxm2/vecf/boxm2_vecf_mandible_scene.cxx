@@ -101,21 +101,21 @@ void boxm2_vecf_mandible_scene::cache_cell_centers_from_anatomy_labels(){
 }
 // main constructors
 boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_file):
-  boxm2_vecf_articulated_scene(scene_file),mandible_base_(0), left_ramus_(0), left_angle_(0), body_(0),
-  right_angle_(0), right_ramus_(0), intrinsic_change_(false){
+  boxm2_vecf_articulated_scene(scene_file),mandible_base_(VXL_NULLPTR), left_ramus_(VXL_NULLPTR), left_angle_(VXL_NULLPTR), body_(VXL_NULLPTR),
+  right_angle_(VXL_NULLPTR), right_ramus_(VXL_NULLPTR), intrinsic_change_(false){
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
   this->cache_cell_centers_from_anatomy_labels();
   mandible_geo_.set_params(params_);
 }
 boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const& geometry_file):
-  boxm2_vecf_articulated_scene(scene_file),mandible_base_(0),
-  left_ramus_(0), left_angle_(0), body_(0), right_angle_(0), right_ramus_(0), intrinsic_change_(false)
+  boxm2_vecf_articulated_scene(scene_file),mandible_base_(VXL_NULLPTR),
+  left_ramus_(VXL_NULLPTR), left_angle_(VXL_NULLPTR), body_(VXL_NULLPTR), right_angle_(VXL_NULLPTR), right_ramus_(VXL_NULLPTR), intrinsic_change_(false)
 {
   mandible_geo_ = boxm2_vecf_mandible(geometry_file);
   mandible_geo_.set_params(params_);
   this->extrinsic_only_ = true;
-  target_blk_ = 0;
+  target_blk_ = VXL_NULLPTR;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
@@ -134,7 +134,7 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_fi
  }
 
 boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const& geometry_file, std::string const& params_file_name):
-  boxm2_vecf_articulated_scene(scene_file),left_ramus_(0), left_angle_(0), body_(0), right_angle_(0), right_ramus_(0){
+  boxm2_vecf_articulated_scene(scene_file),left_ramus_(VXL_NULLPTR), left_angle_(VXL_NULLPTR), body_(VXL_NULLPTR), right_angle_(VXL_NULLPTR), right_ramus_(VXL_NULLPTR){
 
   std::ifstream params_file(params_file_name.c_str());
   if (!params_file){
@@ -144,7 +144,7 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_fi
   params_file >> this->params_;
   mandible_geo_.set_params(params_);
   this->extrinsic_only_ = true;
-  target_blk_ = 0;
+  target_blk_ = VXL_NULLPTR;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();

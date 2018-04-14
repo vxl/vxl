@@ -717,7 +717,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
 
   else if (view.pixel_format() == VIL_PIXEL_FORMAT_SBYTE)
   {
-    assert(sbyte_im!=0);
+    assert(sbyte_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -733,7 +733,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
 
   else if (view.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
-    assert(byte_im!=0);
+    assert(byte_im!=VXL_NULLPTR);
     os_->seek(byte_start);
     for (unsigned k = 0; k < view.nk(); ++k)
     {
@@ -751,7 +751,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(uint_16_im!=0);
+      assert(uint_16_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -769,7 +769,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(uint_16_im!=0);
+      assert(uint_16_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -791,7 +791,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(int_16_im!=0);
+      assert(int_16_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -809,7 +809,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(int_16_im!=0);
+      assert(int_16_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -831,7 +831,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(uint_32_im!=0);
+      assert(uint_32_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -849,7 +849,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(uint_32_im!=0);
+      assert(uint_32_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -871,7 +871,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(int_32_im!=0);
+      assert(int_32_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -889,7 +889,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(int_32_im!=0);
+      assert(int_32_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -911,7 +911,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(float_im!=0);
+      assert(float_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -929,7 +929,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(float_im!=0);
+      assert(float_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -951,7 +951,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
   {
     if (VXL_BIG_ENDIAN)
     {
-      assert(double_im!=0);
+      assert(double_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {
@@ -969,7 +969,7 @@ bool vil3d_gipl_image::put_view(const vil3d_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(double_im!=0);
+      assert(double_im!=VXL_NULLPTR);
       os_->seek(byte_start);
       for (unsigned k = 0; k < view.nk(); ++k)
       {

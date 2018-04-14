@@ -45,7 +45,7 @@ class rgrl_view
              rgrl_estimator_sptr        xform_estimator,
              rgrl_transformation_sptr   xform_estimate,
              unsigned                   resolution = 0,
-             rgrl_transformation_sptr   inverse_estimate = 0 );
+             rgrl_transformation_sptr   inverse_estimate = VXL_NULLPTR );
 
   // default copy and assignment are good.
 

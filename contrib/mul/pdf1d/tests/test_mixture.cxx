@@ -113,14 +113,14 @@ void test_mixture()
   vsl_b_write(bfs_out,builder);
   vsl_b_write(bfs_out,static_cast<pdf1d_builder*>( &builder));
   vsl_b_write(bfs_out,p_pdf);
-  vsl_b_write(bfs_out,static_cast<pdf1d_pdf*>(0));
+  vsl_b_write(bfs_out,static_cast<pdf1d_pdf*>(VXL_NULLPTR));
   bfs_out.close();
 
   std::cout<<"Loading data...\n";
   pdf1d_mixture_builder builder2;
-  pdf1d_builder*  p_builder2 = 0;
-  pdf1d_pdf*         p_pdf2 = 0;
-  pdf1d_pdf*         p_pdf3 = 0;
+  pdf1d_builder*  p_builder2 = VXL_NULLPTR;
+  pdf1d_pdf*         p_pdf2 = VXL_NULLPTR;
+  pdf1d_pdf*         p_pdf3 = VXL_NULLPTR;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened "+test_path+" for reading").c_str(), (!bfs_in), false);

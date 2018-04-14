@@ -26,13 +26,13 @@ class bwm_observer_video : public bwm_observer_cam
                      vpgl_camera<double> *camera, std::string cam_path)
   : bwm_observer_cam(img, camera, cam_path), display_corrs_(false),
     display_world_pts_(false), play_video_(false), time_interval_(0.0f),
-    video_istr_(0), cam_istr_(0), tracked_corr_(0)
+    video_istr_(VXL_NULLPTR), cam_istr_(VXL_NULLPTR), tracked_corr_(VXL_NULLPTR)
     {init();}
 
   bwm_observer_video(bgui_image_tableau_sptr const& img)
   : bwm_observer_cam(img), display_corrs_(false),
     display_world_pts_(false), play_video_(false),
-    time_interval_(0.0f), video_istr_(0), cam_istr_(0), tracked_corr_(0)
+    time_interval_(0.0f), video_istr_(VXL_NULLPTR), cam_istr_(VXL_NULLPTR), tracked_corr_(VXL_NULLPTR)
     {init();}
 
   virtual ~bwm_observer_video(){this->clear_video_corrs_display();}

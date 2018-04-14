@@ -169,13 +169,13 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsoutput_state(Not_Ready),
     hsnuminputs(1),
     hsinf(std::vector<inimagept>(hsnuminputs)),
-    hsoutf(0),
-    hssrc_section(0),
-    hsinsecp(0),
-    hsdst_section(0),
-    hssecp(0),
-    hsinROA (NULL),
-    hsROA (NULL),
+    hsoutf(VXL_NULLPTR),
+    hssrc_section(VXL_NULLPTR),
+    hsinsecp(VXL_NULLPTR),
+    hsdst_section(VXL_NULLPTR),
+    hssecp(VXL_NULLPTR),
+    hsinROA (VXL_NULLPTR),
+    hsROA (VXL_NULLPTR),
     hsis_input_driven(false)
 {
 #if 0
@@ -195,7 +195,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     hsoutput_state(t.hsoutput_state),
     hsnuminputs(t.hsnuminputs),
     hsinf(std::vector<inimagept>(hsnuminputs)),
-    hsoutf(0),
+    hsoutf(VXL_NULLPTR),
     hssrc_section(t.hssrc_section),
     hsinsecp(t.hsinsecp),
     hsdst_section(t.hsdst_section),
@@ -513,7 +513,7 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
     return ref_outf();
   else {
     std::cerr << "Warning: Tried to reference a NOT READY output-data, returned 0\n";
-    return 0;
+    return VXL_NULLPTR;
   }
 }
 

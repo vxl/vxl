@@ -97,7 +97,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
   bmsh3d_face* facemap(const int i) {
     std::map<int, bmsh3d_face*>::iterator it = facemap_.find(i);
     if (it == facemap_.end())
-      return NULL;
+      return VXL_NULLPTR;
     return (*it).second;
   }
   int face_id_counter() const {
@@ -119,7 +119,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
 
   bool next_face(bmsh3d_face* &face) {
     if (this->face_traversal_pos_ == this->facemap_.end()) {
-      face = NULL;
+      face = VXL_NULLPTR;
       return false;
     }
     face = (this->face_traversal_pos_->second);
@@ -286,7 +286,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   {
     std::map<int, bmsh3d_edge*>::iterator it = edgemap_.find(i);
     if (it == edgemap_.end())
-      return NULL;
+      return VXL_NULLPTR;
     return (*it).second;
   }
 
@@ -311,7 +311,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   {
     if (this->edge_traversal_pos_ == this->edgemap_.end())
     {
-      E = 0;
+      E = VXL_NULLPTR;
       return false;
     }
     E = (this->edge_traversal_pos_->second);
@@ -370,7 +370,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   void _disconnect_edge_vertex(bmsh3d_edge* E, const unsigned int vidx)
   {
     E->vertices(vidx)->del_incident_E(E);
-    E->set_vertex(vidx, NULL);
+    E->set_vertex(vidx, VXL_NULLPTR);
   }
 
   void _disconnect_vertex_edge(bmsh3d_vertex* V, bmsh3d_edge* E)

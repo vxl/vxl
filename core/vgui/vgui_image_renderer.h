@@ -78,7 +78,7 @@ class vgui_image_renderer
   void reread_image();
 
   //: Renders the image pixels.
-  void render(vgui_range_map_params_sptr const& mp = 0);
+  void render(vgui_range_map_params_sptr const& mp = VXL_NULLPTR);
 
   //: Render the pixels in hardware using the glPixelMap with range_map data
   // Note that some OpenGL environments have no graphics hardware

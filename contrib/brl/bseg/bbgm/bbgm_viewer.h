@@ -20,7 +20,7 @@ class bbgm_viewer : public vbl_ref_count
 {
  public:
   //: Constructor
-  bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(NULL))
+  bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(VXL_NULLPTR))
   {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
   //: Destructor
   virtual ~bbgm_viewer() {}

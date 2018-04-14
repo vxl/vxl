@@ -64,7 +64,7 @@ bool bocl_manager<T>::initialize_cl()
   // Check the number of available platforms
   //////////////////////////////////////////////////////////////////////////////
   cl_uint num_platforms = 0;
-  status = clGetPlatformIDs(0, NULL, &num_platforms);
+  status = clGetPlatformIDs(0, VXL_NULLPTR, &num_platforms);
   if (status != CL_SUCCESS) {
     std::cerr << "bocl_manager: clGetPlatformIDs (call 1) returned " << status << '\n';
     return false;
@@ -78,7 +78,7 @@ bool bocl_manager<T>::initialize_cl()
   }
   // Get the first platform ID
   cl_platform_id* platform_id = new cl_platform_id[num_platforms];
-  status = clGetPlatformIDs (num_platforms, platform_id, NULL);
+  status = clGetPlatformIDs (num_platforms, platform_id, VXL_NULLPTR);
   if (status != CL_SUCCESS) {
     std::cerr << "bocl_manager: clGetPlatformIDs (call 2) returned " << status << '\n';
     delete [] platform_id;
@@ -174,9 +174,9 @@ cl_context bocl_manager<T>::create_context(cl_device_id* device, int num_devices
 
   //Create a context from the device ID
   int status = 1;
-  cl_context context = clCreateContext(0, num_devices, device, NULL, NULL, &status);
+  cl_context context = clCreateContext(VXL_NULLPTR, num_devices, device, VXL_NULLPTR, VXL_NULLPTR, &status);
   if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed: " + error_to_string(status))) {
-    return 0;
+    return VXL_NULLPTR;
   }
 
 #if 0 //below is the old method of storing devices - seemed roundabout
@@ -276,7 +276,7 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, std::string opti
   if (!sourceSize[0]) return SDK_FAILURE;
   if (program) {
     status = clReleaseProgram(program);
-    program = 0;
+    program = VXL_NULLPTR;
     if (!check_val(status, CL_SUCCESS, "clReleaseProgram failed."))
       return SDK_FAILURE;
   }
@@ -295,8 +295,8 @@ int bocl_manager<T>::build_kernel_program(cl_program & program, std::string opti
                           1,
                           this->devices(),
                           options.c_str(),
-                          NULL,
-                          NULL);
+                          VXL_NULLPTR,
+                          VXL_NULLPTR);
   if (!check_val(status, CL_SUCCESS, error_to_string(status)))
   {
     std::size_t len;

@@ -328,7 +328,7 @@ static void create_new_track(
     const bundler_inters_feature_sptr &f2,
     bundler_inters_track_sptr &new_track)
 {
-    assert(new_track != NULL);
+    assert(new_track != VXL_NULLPTR);
     assert(!f1->visited);
     assert(!f2->visited);
 

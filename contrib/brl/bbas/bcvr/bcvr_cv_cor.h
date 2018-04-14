@@ -40,7 +40,7 @@ class bcvr_cv_cor : public vbl_ref_count
               std::vector<std::pair<int,int> >& map,
               int n1);
 
-  virtual ~bcvr_cv_cor()  { poly1_ = 0; poly2_ = 0; };
+  virtual ~bcvr_cv_cor()  { poly1_ = VXL_NULLPTR; poly2_ = VXL_NULLPTR; };
 
   //access functions
   std::vector<vgl_point_2d<double> >& get_contour_pts1() { return pts1_; }

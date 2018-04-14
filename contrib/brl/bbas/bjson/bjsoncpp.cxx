@@ -343,8 +343,8 @@ bool Reader::parse(const char* beginDoc,
   end_ = endDoc;
   collectComments_ = collectComments;
   current_ = begin_;
-  lastValueEnd_ = 0;
-  lastValue_ = 0;
+  lastValueEnd_ = VXL_NULLPTR;
+  lastValue_ = VXL_NULLPTR;
   commentsBefore_ = "";
   errors_.clear();
   while (!nodes_.empty())
@@ -606,7 +606,7 @@ Reader::addComment(Location begin, Location end, CommentPlacement placement) {
   assert(collectComments_);
   const JSONCPP_STRING& normalized = normalizeEOL(begin, end);
   if (placement == commentAfterOnSameLine) {
-    assert(lastValue_ != 0);
+    assert(lastValue_ != VXL_NULLPTR);
     lastValue_->setComment(normalized, placement);
   } else {
     commentsBefore_ += normalized;
@@ -1079,7 +1079,7 @@ bool Reader::pushError(const Value& value, const JSONCPP_STRING& message) {
   ErrorInfo info;
   info.token_ = token;
   info.message_ = message;
-  info.extra_ = 0;
+  info.extra_ = VXL_NULLPTR;
   errors_.push_back(info);
   return true;
 }
@@ -1217,7 +1217,7 @@ private:
                                    Location& current,
                                    Location end,
                                    unsigned int& unicode);
-  bool addError(const JSONCPP_STRING& message, Token& token, Location extra = 0);
+  bool addError(const JSONCPP_STRING& message, Token& token, Location extra = VXL_NULLPTR);
   bool recoverFromError(TokenType skipUntilToken);
   bool addErrorAndRecover(const JSONCPP_STRING& message,
                           Token& token,
@@ -1268,8 +1268,8 @@ bool OurReader::parse(const char* beginDoc,
   end_ = endDoc;
   collectComments_ = collectComments;
   current_ = begin_;
-  lastValueEnd_ = 0;
-  lastValue_ = 0;
+  lastValueEnd_ = VXL_NULLPTR;
+  lastValue_ = VXL_NULLPTR;
   commentsBefore_ = "";
   errors_.clear();
   while (!nodes_.empty())
@@ -1566,7 +1566,7 @@ OurReader::addComment(Location begin, Location end, CommentPlacement placement) 
   assert(collectComments_);
   const JSONCPP_STRING& normalized = normalizeEOL(begin, end);
   if (placement == commentAfterOnSameLine) {
-    assert(lastValue_ != 0);
+    assert(lastValue_ != VXL_NULLPTR);
     lastValue_->setComment(normalized, placement);
   } else {
     commentsBefore_ += normalized;
@@ -2081,7 +2081,7 @@ bool OurReader::pushError(const Value& value, const JSONCPP_STRING& message) {
   ErrorInfo info;
   info.token_ = token;
   info.message_ = message;
-  info.extra_ = 0;
+  info.extra_ = VXL_NULLPTR;
   errors_.push_back(info);
   return true;
 }
@@ -2374,8 +2374,8 @@ char const* ValueIteratorBase::memberName() const {
 char const* ValueIteratorBase::memberName(char const** end) const {
   const char* cname = (*current_).first.data();
   if (!cname) {
-    *end = NULL;
-    return NULL;
+    *end = VXL_NULLPTR;
+    return VXL_NULLPTR;
   }
   *end = cname + (*current_).first.length();
   return cname;
@@ -2550,7 +2550,7 @@ static inline char* duplicateStringValue(const char* value,
     length = Value::maxInt - 1;
 
   char* newString = static_cast<char*>(malloc(length + 1));
-  if (newString == NULL) {
+  if (newString == VXL_NULLPTR) {
     throwRuntimeError(
         "in Json::Value::duplicateStringValue(): "
         "Failed to allocate string value buffer");
@@ -2573,7 +2573,7 @@ static inline char* duplicateAndPrefixStringValue(
                       "length too big for prefixing");
   unsigned actualLength = length + static_cast<unsigned>(sizeof(unsigned)) + 1U;
   char* newString = static_cast<char*>(malloc(actualLength));
-  if (newString == 0) {
+  if (newString == VXL_NULLPTR) {
     throwRuntimeError(
         "in Json::Value::duplicateAndPrefixStringValue(): "
         "Failed to allocate string value buffer");
@@ -2669,7 +2669,7 @@ JSONCPP_NORETURN void throwLogicError(JSONCPP_STRING const& msg)
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
 
-Value::CommentInfo::CommentInfo() : comment_(0)
+Value::CommentInfo::CommentInfo() : comment_(VXL_NULLPTR)
 {}
 
 Value::CommentInfo::~CommentInfo() {
@@ -2680,9 +2680,9 @@ Value::CommentInfo::~CommentInfo() {
 void Value::CommentInfo::setComment(const char* text, size_t len) {
   if (comment_) {
     releaseStringValue(comment_, 0u);
-    comment_ = 0;
+    comment_ = VXL_NULLPTR;
   }
-  JSON_ASSERT(text != 0);
+  JSON_ASSERT(text != VXL_NULLPTR);
   JSON_ASSERT_MESSAGE(
       text[0] == '\0' || text[0] == '/',
       "in Json::Value::setComment(): Comments must start with /");
@@ -2701,7 +2701,7 @@ void Value::CommentInfo::setComment(const char* text, size_t len) {
 // Notes: policy_ indicates if the string was allocated when
 // a string is stored.
 
-Value::CZString::CZString(ArrayIndex aindex) : cstr_(0), index_(aindex) {}
+Value::CZString::CZString(ArrayIndex aindex) : cstr_(VXL_NULLPTR), index_(aindex) {}
 
 Value::CZString::CZString(char const* str, unsigned ulength, DuplicationPolicy allocate)
     : cstr_(str) {
@@ -2711,7 +2711,7 @@ Value::CZString::CZString(char const* str, unsigned ulength, DuplicationPolicy a
 }
 
 Value::CZString::CZString(const CZString& other) {
-  cstr_ = (other.storage_.policy_ != noDuplication && other.cstr_ != 0
+  cstr_ = (other.storage_.policy_ != noDuplication && other.cstr_ != VXL_NULLPTR
                                  ? duplicateStringValue(other.cstr_, other.storage_.length_)
                                  : other.cstr_);
   storage_.policy_ = static_cast<unsigned>(other.cstr_
@@ -2724,7 +2724,7 @@ Value::CZString::CZString(const CZString& other) {
 #if JSON_HAS_RVALUE_REFERENCES
 Value::CZString::CZString(CZString&& other)
   : cstr_(other.cstr_), index_(other.index_) {
-  other.cstr_ = nullptr;
+  other.cstr_ = VXL_NULLPTR;
 }
 #endif
 
@@ -2880,7 +2880,7 @@ Value::Value(bool value) {
 Value::Value(Value const& other)
     : type_(other.type_), allocated_(false)
       ,
-      comments_(0), start_(other.start_), limit_(other.limit_)
+      comments_(VXL_NULLPTR), start_(other.start_), limit_(other.limit_)
 {
   switch (type_) {
   case nullValue:
@@ -3003,7 +3003,7 @@ bool Value::operator<(const Value& other) const {
     return value_.bool_ < other.value_.bool_;
   case stringValue:
   {
-    if ((value_.string_ == 0) || (other.value_.string_ == 0)) {
+    if ((value_.string_ == VXL_NULLPTR) || (other.value_.string_ == VXL_NULLPTR)) {
       if (other.value_.string_) return true;
       else return false;
     }
@@ -3060,7 +3060,7 @@ bool Value::operator==(const Value& other) const {
     return value_.bool_ == other.value_.bool_;
   case stringValue:
   {
-    if ((value_.string_ == 0) || (other.value_.string_ == 0)) {
+    if ((value_.string_ == VXL_NULLPTR) || (other.value_.string_ == VXL_NULLPTR)) {
       return (value_.string_ == other.value_.string_);
     }
     unsigned this_len;
@@ -3089,7 +3089,7 @@ bool Value::operator!=(const Value& other) const { return !(*this == other); }
 const char* Value::asCString() const {
   JSON_ASSERT_MESSAGE(type_ == stringValue,
                       "in Json::Value::asCString(): requires stringValue");
-  if (value_.string_ == 0) return 0;
+  if (value_.string_ == VXL_NULLPTR) return VXL_NULLPTR;
   unsigned this_len;
   char const* this_str;
   decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
@@ -3110,7 +3110,7 @@ unsigned Value::getCStringLength() const {
 
 bool Value::getString(char const** str, char const** cend) const {
   if (type_ != stringValue) return false;
-  if (value_.string_ == 0) return false;
+  if (value_.string_ == VXL_NULLPTR) return false;
   unsigned length;
   decodePrefixedString(this->allocated_, this->value_.string_, &length, str);
   *cend = *str + length;
@@ -3123,7 +3123,7 @@ JSONCPP_STRING Value::asString() const {
     return "";
   case stringValue:
   {
-    if (value_.string_ == 0) return "";
+    if (value_.string_ == VXL_NULLPTR) return "";
     unsigned this_len;
     char const* this_str;
     decodePrefixedString(this->allocated_, this->value_.string_, &this_len, &this_str);
@@ -3467,7 +3467,7 @@ const Value& Value::operator[](int index) const {
 void Value::initBasic(ValueType vtype, bool allocated) {
   type_ = vtype;
   allocated_ = allocated;
-  comments_ = 0;
+  comments_ = VXL_NULLPTR;
   start_ = 0;
   limit_ = 0;
 }
@@ -3525,10 +3525,10 @@ Value const* Value::find(char const* key, char const* cend) const
   JSON_ASSERT_MESSAGE(
       type_ == nullValue || type_ == objectValue,
       "in Json::Value::find(key, end, found): requires objectValue or nullValue");
-  if (type_ == nullValue) return NULL;
+  if (type_ == nullValue) return VXL_NULLPTR;
   CZString actualKey(key, static_cast<unsigned>(cend-key), CZString::noDuplication);
   ObjectValues::const_iterator it = value_.map_->find(actualKey);
-  if (it == value_.map_->end()) return NULL;
+  if (it == value_.map_->end()) return VXL_NULLPTR;
   return &(*it).second;
 }
 const Value& Value::operator[](const char* key) const
@@ -3655,7 +3655,7 @@ Value Value::get(const CppTL::ConstString& key,
 bool Value::isMember(char const* key, char const* cend) const
 {
   Value const* value = find(key, cend);
-  return NULL != value;
+  return VXL_NULLPTR != value;
 }
 bool Value::isMember(char const* key) const
 {
@@ -3830,7 +3830,7 @@ void Value::setComment(const JSONCPP_STRING& comment, CommentPlacement placement
 }
 
 bool Value::hasComment(CommentPlacement placement) const {
-  return comments_ != 0 && comments_[placement].comment_ != 0;
+  return comments_ != VXL_NULLPTR && comments_[placement].comment_ != VXL_NULLPTR;
 }
 
 JSONCPP_STRING Value::getComment(CommentPlacement placement) const {
@@ -4239,10 +4239,10 @@ JSONCPP_STRING valueToString(double value) { return valueToString(value, false, 
 JSONCPP_STRING valueToString(bool value) { return value ? "true" : "false"; }
 
 JSONCPP_STRING valueToQuotedString(const char* value) {
-  if (value == NULL)
+  if (value == VXL_NULLPTR)
     return "";
   // Not sure how to handle unicode...
-  if (strpbrk(value, "\"\\\b\f\n\r\t") == NULL &&
+  if (strpbrk(value, "\"\\\b\f\n\r\t") == VXL_NULLPTR &&
       !containsControlCharacter(value))
     return JSONCPP_STRING("\"") + value + "\"";
   // We have to walk value and escape any special characters.
@@ -4313,13 +4313,13 @@ static char const* strnpbrk(char const* s, char const* accept, size_t n) {
       }
     }
   }
-  return NULL;
+  return VXL_NULLPTR;
 }
 static JSONCPP_STRING valueToQuotedStringN(const char* value, unsigned length) {
-  if (value == NULL)
+  if (value == VXL_NULLPTR)
     return "";
   // Not sure how to handle unicode...
-  if (strnpbrk(value, "\"\\\b\f\n\r\t", length) == NULL &&
+  if (strnpbrk(value, "\"\\\b\f\n\r\t", length) == VXL_NULLPTR &&
       !containsControlCharacter0(value, length))
     return JSONCPP_STRING("\"") + value + "\"";
   // We have to walk value and escape any special characters.
@@ -4674,7 +4674,7 @@ bool StyledWriter::hasCommentForValue(const Value& value) {
 // //////////////////////////////////////////////////////////////////
 
 StyledStreamWriter::StyledStreamWriter(JSONCPP_STRING indentation)
-    : document_(NULL), rightMargin_(74), indentation_(indentation),
+    : document_(VXL_NULLPTR), rightMargin_(74), indentation_(indentation),
       addChildValues_() {}
 
 void StyledStreamWriter::write(JSONCPP_OSTREAM& out, const Value& root) {
@@ -4688,7 +4688,7 @@ void StyledStreamWriter::write(JSONCPP_OSTREAM& out, const Value& root) {
   writeValue(root);
   writeCommentAfterValueOnSameLine(root);
   *document_ << "\n";
-  document_ = NULL; // Forget the stream, for safety.
+  document_ = VXL_NULLPTR; // Forget the stream, for safety.
 }
 
 void StyledStreamWriter::writeValue(const Value& value) {
@@ -4969,7 +4969,7 @@ int BuiltStyledStreamWriter::write(Value const& root, JSONCPP_OSTREAM* sout)
   writeValue(root);
   writeCommentAfterValueOnSameLine(root);
   *sout_ << endingLineFeedSymbol_;
-  sout_ = NULL;
+  sout_ = VXL_NULLPTR;
   return 0;
 }
 void BuiltStyledStreamWriter::writeValue(Value const& value) {
@@ -5178,7 +5178,7 @@ bool BuiltStyledStreamWriter::hasCommentForValue(const Value& value) {
 // StreamWriter
 
 StreamWriter::StreamWriter()
-    : sout_(NULL)
+    : sout_(VXL_NULLPTR)
 {
 }
 StreamWriter::~StreamWriter()

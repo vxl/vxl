@@ -19,7 +19,7 @@ class bvxm_image_metadata
  public:
 
   bvxm_image_metadata()
-  : img(0),camera(0),light(),timestamp(-1), name("NONE") {}
+  : img(VXL_NULLPTR),camera(VXL_NULLPTR),light(),timestamp(-1), name("NONE") {}
 
   bvxm_image_metadata(vil_image_view_base_sptr img_arg, vpgl_camera_double_sptr camera_arg,
                       vnl_vector<double> light_arg = vnl_vector<double>(), double timestamp_arg = -1,

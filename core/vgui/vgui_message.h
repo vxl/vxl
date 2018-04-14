@@ -1,6 +1,7 @@
 // This is core/vgui/vgui_message.h
 #ifndef vgui_message_h_
 #define vgui_message_h_
+#include <vcl_compiler_detection.h>
 //:
 // \file
 // \author  fsm
@@ -82,7 +83,7 @@
 class vgui_message
 {
  public:
-  vgui_message() : from(0), user(0), data(0) {}
+  vgui_message() : from(VXL_NULLPTR), user(VXL_NULLPTR), data(VXL_NULLPTR) {}
 
   //: Pointer to sender.
   //  When the message was broadcast from a vgui_observer

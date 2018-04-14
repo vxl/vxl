@@ -73,7 +73,7 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  vtol_edge() : v1_(0), v2_(0){ link_inferior(new vtol_zero_chain); }
+  vtol_edge() : v1_(VXL_NULLPTR), v2_(VXL_NULLPTR){ link_inferior(new vtol_zero_chain); }
 
   //---------------------------------------------------------------------------
   //: Destructor
@@ -149,12 +149,12 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge_2d *cast_to_edge_2d() const {return 0;}
+  virtual const vtol_edge_2d *cast_to_edge_2d() const {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge_2d *cast_to_edge_2d() {return 0;}
+  virtual vtol_edge_2d *cast_to_edge_2d() {return VXL_NULLPTR;}
 
   //***************************************************************************
   // Status report
@@ -167,7 +167,7 @@ class vtol_edge : public vtol_topology_object
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
-  { return inferior->cast_to_zero_chain() != 0; }
+  { return inferior->cast_to_zero_chain() != VXL_NULLPTR; }
   bool valid_inferior_type(vtol_zero_chain_sptr const& ) const { return true; }
   bool valid_superior_type(vtol_one_chain_sptr const& ) const { return true; }
 

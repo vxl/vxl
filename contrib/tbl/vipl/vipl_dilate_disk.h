@@ -59,9 +59,9 @@ class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixel
   // -+-+- constructors/destructors: -+-+-
  public:
   inline vipl_dilate_disk(float r=1)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(0) {}
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(VXL_NULLPTR) {}
   inline vipl_dilate_disk(vipl_dilate_disk const& A)
-           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(0) {}
+           : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(VXL_NULLPTR) {}
   inline ~vipl_dilate_disk() {}
 
 // -+-+- required method for filters: -+-+-
