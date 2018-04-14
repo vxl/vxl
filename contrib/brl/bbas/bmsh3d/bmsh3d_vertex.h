@@ -89,16 +89,16 @@ class bmsh3d_vertex : public vispt_elm
  public:
   //###### Constructor/Destructor ######
   bmsh3d_vertex(int id) {
-    E_list_ = NULL;
-    F_list_ = NULL;
+    E_list_ = VXL_NULLPTR;
+    F_list_ = VXL_NULLPTR;
     id_ = id;
     i_value_  = 0;
     c_value_  = '?';
     flow_type_ = '?';
   }
   bmsh3d_vertex(const double& x, const double& y, const double& z, const int id) {
-    E_list_ = NULL;
-    F_list_ = NULL;
+    E_list_ = VXL_NULLPTR;
+    F_list_ = VXL_NULLPTR;
     id_ = id;
     i_value_  = 0;
     c_value_  = '?';
@@ -107,7 +107,7 @@ class bmsh3d_vertex : public vispt_elm
   }
   virtual ~bmsh3d_vertex() {
     //can not delete a vertex with any incident edge
-    assert(E_list_ == NULL);
+    assert(E_list_ == VXL_NULLPTR);
   }
 
   //###### Data access functions ######
@@ -222,7 +222,7 @@ class bmsh3d_vertex : public vispt_elm
     return clear_ptr_list(E_list_);
   }
   bool has_incident_Es() const {
-    return E_list_!=NULL;
+    return E_list_!=VXL_NULLPTR;
   }
   bool is_E_incident(const bmsh3d_edge* E) const {
     return is_in_ptr_list(E_list_, E);
@@ -238,8 +238,8 @@ class bmsh3d_vertex : public vispt_elm
   }
 
   const bmsh3d_edge* get_1st_incident_E() const {
-    if (E_list_ == NULL)
-      return NULL;
+    if (E_list_ == VXL_NULLPTR)
+      return VXL_NULLPTR;
     return (const bmsh3d_edge*)E_list_->ptr();
   }
 

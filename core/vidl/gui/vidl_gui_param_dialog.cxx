@@ -54,7 +54,7 @@ vidl_istream* vidl_gui_open_istream_dialog()
   dlg.choice("Stream Type",choices,idx);
 
   if (!dlg.ask())
-    return NULL;
+    return VXL_NULLPTR;
 
   switch (choice_codes[idx]) {
     case IMAGE_LIST:
@@ -76,7 +76,7 @@ vidl_istream* vidl_gui_open_istream_dialog()
   }
 
   vgui_error_dialog("Invalid input stream type");
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 
@@ -97,7 +97,7 @@ vidl_ostream* vidl_gui_open_ostream_dialog()
   dlg.choice("Stream Type",choices,idx);
 
   if (!dlg.ask())
-    return NULL;
+    return VXL_NULLPTR;
 
   switch (choice_codes[idx]) {
     case IMAGE_LIST:
@@ -111,7 +111,7 @@ vidl_ostream* vidl_gui_open_ostream_dialog()
   }
 
   vgui_error_dialog("Invalid output stream type");
-  return NULL;
+  return VXL_NULLPTR;
 }
 
 // The rest of this file contains namespace vidl_gui_param_dialog functions
@@ -129,13 +129,13 @@ namespace vidl_gui_param_dialog
   dlg.message("Specify the images using a file glob");
   dlg.file("Filename:", ext, image_filename);
   if (!dlg.ask())
-    return NULL;
+    return VXL_NULLPTR;
 
   vidl_image_list_istream* i_stream = new vidl_image_list_istream(image_filename);
   if (!i_stream || !i_stream->is_open()) {
     vgui_error_dialog("Failed to open the input stream");
     delete i_stream;
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   return i_stream;
@@ -172,7 +172,7 @@ namespace vidl_gui_param_dialog
   dlg.field("Starting Index", start_index);
 
   if (!dlg.ask())
-    return NULL;
+    return VXL_NULLPTR;
 
   vidl_image_list_ostream* o_stream = new vidl_image_list_ostream(directory,
                                                                   name_format,
@@ -182,7 +182,7 @@ namespace vidl_gui_param_dialog
   if (!o_stream || !o_stream->is_open()) {
     vgui_error_dialog("Failed to create output image list stream");
     delete o_stream;
-    return NULL;
+    return VXL_NULLPTR;
   }
 
   return o_stream;
@@ -212,7 +212,7 @@ namespace vidl_gui_param_dialog
 
  #else // VIDL_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
-  return NULL;
+  return VXL_NULLPTR;
  #endif // VIDL_HAS_FFMPEG
  }
 
@@ -261,7 +261,7 @@ namespace vidl_gui_param_dialog
 
  #else // VIDL_HAS_FFMPEG
   vgui_error_dialog("FFMPEG support not compiled in");
-  return NULL;
+  return VXL_NULLPTR;
  #endif // VIDL_HAS_FFMPEG
  }
 
@@ -338,7 +338,7 @@ namespace vidl_gui_param_dialog
   return i_stream;
  #else // VIDL_HAS_VIDEODEV2
   vgui_error_dialog("v4l2 support not compiled in");
-  return NULL;
+  return VXL_NULLPTR;
  #endif // VIDL_HAS_VIDEODEV2
  }
 
@@ -487,7 +487,7 @@ namespace vidl_gui_param_dialog
 
  #else // VIDL_HAS_DC1394
   vgui_error_dialog("dc1394 support not compiled in");
-  return NULL;
+  return VXL_NULLPTR;
  #endif // VIDL_HAS_DC1394
  }
 

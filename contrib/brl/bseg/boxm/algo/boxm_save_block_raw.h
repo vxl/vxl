@@ -47,10 +47,10 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   int data_size = ncells*ncells*ncells;
   int y_size = ncells*ncells;
-  float *data = 0;
+  float *data = VXL_NULLPTR;
   data = new (std::nothrow)float[data_size];
 
-  if (data == 0) {
+  if (data == VXL_NULLPTR) {
     std::cout << "boxm_save_block_raw: Could not allocate data!" << std::endl;
     return;
   }
@@ -111,9 +111,9 @@ void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,
   }
   // convert float values to char
 
-  unsigned char *byte_data = 0;
+  unsigned char *byte_data = VXL_NULLPTR;
   byte_data = new (std::nothrow) unsigned char[data_size];
-  if (byte_data == 0) {
+  if (byte_data == VXL_NULLPTR) {
     std::cout << "boxm_save_block_raw: Could not allocate byte data!" << std::endl;
     return;
   }

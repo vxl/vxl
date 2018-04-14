@@ -30,7 +30,7 @@ public:
   double cost;
 
   sdet_CFTG_link(sdet_edgel* e1, sdet_edgel* e2): eS(e1), eE(e2), cCFs(0), cost(0.0){}
-  ~sdet_CFTG_link(){ eS = 0; eE = 0; cCFs.clear(); cost = 0;}
+  ~sdet_CFTG_link(){ eS = VXL_NULLPTR; eE = VXL_NULLPTR; cCFs.clear(); cost = 0;}
 
   void add_fragment(sdet_edgel_chain* chain)
   {
@@ -94,7 +94,7 @@ public:
     sdet_edgel* e2 = chain->edgels.back();
 
     //if there is a link already, add it to the existing link
-    sdet_CFTG_link* cur_Link = 0;
+    sdet_CFTG_link* cur_Link = VXL_NULLPTR;
     if (cLinks[e1->id].size()>0){
       //find the link in here
       sdet_CFTG_link_list_iter l_it = cLinks[e1->id].begin();

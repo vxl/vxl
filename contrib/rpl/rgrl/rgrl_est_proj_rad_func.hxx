@@ -367,7 +367,7 @@ f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 
   for ( unsigned ms = 0; ms<this->matches_ptr_->size(); ++ms )
   {
-    if ( (*this->matches_ptr_)[ms] != 0 ) // if pointer is valid
+    if ( (*this->matches_ptr_)[ms] != VXL_NULLPTR ) // if pointer is valid
     {
       rgrl_match_set const& one_set = *((*this->matches_ptr_)[ms]);
       for ( FIter fi=one_set.from_begin(); fi!=one_set.from_end(); ++fi ) {

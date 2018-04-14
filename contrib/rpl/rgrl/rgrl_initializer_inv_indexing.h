@@ -35,7 +35,7 @@ class rgrl_initializer_inv_indexing
 
   rgrl_initializer_inv_indexing( rgrl_mask_sptr const&     from_image_roi,
                                  rgrl_mask_sptr const&     to_image_roi,
-                                 rgrl_estimator_sptr xform_estimator = 0,
+                                 rgrl_estimator_sptr xform_estimator = VXL_NULLPTR,
                                  unsigned             initial_resolution = 0,
                                  bool should_estimate_global_region = true,
                                  int max_num_matches_tried = -1);

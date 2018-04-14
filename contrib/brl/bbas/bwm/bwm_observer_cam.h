@@ -40,15 +40,15 @@ class bwm_observer_cam : public bwm_observer_vgui
   bwm_observer_cam(bgui_image_tableau_sptr const& img, vpgl_camera<double> *camera, std::string cam_path)
   : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
     camera_(camera), cam_path_(cam_path), cam_adjusted_(false),
-    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
-    horizon_soview_(0)
+    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(VXL_NULLPTR),
+    horizon_soview_(VXL_NULLPTR)
   {}
   // set the initial projection plane to z=0
   bwm_observer_cam(bgui_image_tableau_sptr const& img, const char* /*n*/="unnamed")
   : bwm_observer_vgui(img), sun_elev_angle_(vnl_math::pi_over_4), sun_azim_angle_(vnl_math::pi_over_4),
-    camera_(0), cam_adjusted_(false),
-    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(0),
-    horizon_soview_(0)
+    camera_(VXL_NULLPTR), cam_adjusted_(false),
+    proj_plane_(vgl_plane_3d<double>(0, 0, 1, 0)), extrude_mode_(false), show_geo_position_(false), focal_length_(3000.0), cam_height_(1.6),horizon_(VXL_NULLPTR),
+    horizon_soview_(VXL_NULLPTR)
   {}
 
   virtual ~bwm_observer_cam() { delete camera_; }

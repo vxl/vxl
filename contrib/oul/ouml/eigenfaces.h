@@ -45,7 +45,7 @@ class EigenFace
     bool operator<(const LabelDist &x) const {return dist>x.dist;}
   };
 
-  EigenFace(): image_size(0), average_training_image(NULL){}
+  EigenFace(): image_size(0), average_training_image(VXL_NULLPTR){}
   ~EigenFace();
   bool add_training_image(Image *im, const char * label);
   bool calculate_eigenfaces();
@@ -53,7 +53,7 @@ class EigenFace
   double get_eigenvalue(int i);
   inline char *get_label(unsigned int i){
     if (i<training_labels.size()) return training_labels[i];
-    else return NULL;}
+    else return VXL_NULLPTR;}
   bool check_eigenvectors();
   void save_as_images(int width, int height);
   vnl_vector<double>* encode(Image *im);

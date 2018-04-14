@@ -26,8 +26,8 @@ class rgrl_initializer_reader
   rgrl_initializer_reader( std::istream& istr,
                            rgrl_mask_sptr             const& from_image_roi,
                            rgrl_mask_sptr             const& to_image_roi,
-                           rgrl_scale_sptr            const& prior_scale=0,
-                           rgrl_estimator_sptr        const& estimator = 0,
+                           rgrl_scale_sptr            const& prior_scale=VXL_NULLPTR,
+                           rgrl_estimator_sptr        const& estimator = VXL_NULLPTR,
                            unsigned int                      resolution = 0 );
 
   //: Add more potential prior transformations

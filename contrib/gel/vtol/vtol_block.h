@@ -129,7 +129,7 @@ class vtol_block : public vtol_topology_object
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
-  { return inferior->cast_to_two_chain()!=0; }
+  { return inferior->cast_to_two_chain()!=VXL_NULLPTR; }
   bool valid_inferior_type(vtol_two_chain_sptr const& ) const { return true; }
 
   virtual vertex_list *outside_boundary_vertices();

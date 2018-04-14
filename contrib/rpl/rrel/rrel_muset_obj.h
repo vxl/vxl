@@ -67,13 +67,13 @@ class rrel_muset_obj : public rrel_objective
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
-                      vnl_vector<double>* = 0 /* param vector is unused */ ) const;
+                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
 
   //: Computes the MUSE estimate and best value of k
   //  \a begin and \a end give the residuals. \a objective is the

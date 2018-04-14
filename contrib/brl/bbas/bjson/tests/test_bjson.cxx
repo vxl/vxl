@@ -51,7 +51,7 @@ class CJsonSerializer
 {
 public:
   static bool Serialize( IJsonSerializable* pObj, std::string& output ){
-    if (pObj == NULL)
+    if (pObj == VXL_NULLPTR)
       return false;
 
     Json::Value serializeRoot;
@@ -63,7 +63,7 @@ public:
     return true;
   }
   static bool Deserialize( IJsonSerializable* pObj, std::string& input ){
-    if (pObj == NULL)
+    if (pObj == VXL_NULLPTR)
       return false;
 
     Json::Value deserializeRoot;

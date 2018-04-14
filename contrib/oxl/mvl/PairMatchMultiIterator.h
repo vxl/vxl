@@ -50,7 +50,7 @@ class PairMatchMultiIterator
 
   //: Return true if the iterator is still valid.
   operator safe_bool () const
-    { return (first_ != last_)? VCL_SAFE_BOOL_TRUE : 0; }
+    { return (first_ != last_)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
 
   //: Return false if the iterator is still valid.
   bool operator!() const

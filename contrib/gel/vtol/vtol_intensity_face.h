@@ -119,7 +119,7 @@ class vtol_intensity_face : public vtol_face_2d
   float const* Xj() const { return region_->Xj(); }
   float const* Yj() const { return region_->Yj(); }
   // \deprecated since intensity_face is strictly 2d in VXL
-  float const* Zj() const { return 0; }
+  float const* Zj() const { return VXL_NULLPTR; }
   unsigned short const* Ij() const { return region_->Ij(); }
 
   int Npix()const {return region_->Npix(); }

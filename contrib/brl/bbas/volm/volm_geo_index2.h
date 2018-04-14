@@ -43,7 +43,7 @@ public:
   volm_geo_index2_node(vgl_box_2d<double> const& extent)
   {
     extent_ = extent;
-    parent_ = 0;
+    parent_ = VXL_NULLPTR;
   }
 
   //: Destructor

@@ -37,7 +37,7 @@ class bocl_kernel
 {
  public:
 
-  bocl_kernel() : kernel_(0), program_(0) {}
+  bocl_kernel() : kernel_(VXL_NULLPTR), program_(VXL_NULLPTR) {}
   ~bocl_kernel();
 
   //: create kernel from a list of sources, and a kernel name, and an ID
@@ -60,7 +60,7 @@ class bocl_kernel
   bool execute(const cl_command_queue& cmd_queue, cl_uint dim,
                std::size_t* local_threads,
                std::size_t* global_threads,
-               std::size_t* global_offsets=NULL);
+               std::size_t* global_offsets=VXL_NULLPTR);
 
   //: set a bocl_mem buffer arg (pushes it on the back)
   bool set_arg(bocl_mem* buffer);

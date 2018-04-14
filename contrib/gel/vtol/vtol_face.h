@@ -101,22 +101,22 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d() const {return 0;}
+  virtual const vtol_face_2d *cast_to_face_2d() const {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d() {return 0;}
+  virtual vtol_face_2d *cast_to_face_2d() {return VXL_NULLPTR;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_intensity_face *cast_to_intensity_face() const { return 0; }
+  virtual const vtol_intensity_face *cast_to_intensity_face() const { return VXL_NULLPTR; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_intensity_face *cast_to_intensity_face() { return 0; }
+  virtual vtol_intensity_face *cast_to_intensity_face() { return VXL_NULLPTR; }
 
   //***************************************************************************
   // Status report
@@ -129,7 +129,7 @@ class vtol_face : public vtol_topology_object
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
-  { return inferior->cast_to_one_chain()!=0; }
+  { return inferior->cast_to_one_chain()!=VXL_NULLPTR; }
   bool valid_inferior_type(vtol_one_chain_sptr const& ) const { return true; }
   bool valid_superior_type(vtol_two_chain_sptr const& ) const { return true; }
 

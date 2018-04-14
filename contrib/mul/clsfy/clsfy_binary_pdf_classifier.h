@@ -28,7 +28,7 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
  public:
 
   // default constructor
-  clsfy_binary_pdf_classifier(): pdf_(0), log_prob_limit_(0.0) {}
+  clsfy_binary_pdf_classifier(): pdf_(VXL_NULLPTR), log_prob_limit_(0.0) {}
 
   //: A useful constructor
   // Specify the log probability density limit
@@ -77,18 +77,18 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 
   bool has_pdf() const
   {
-    return pdf_!=0;
+    return pdf_!=VXL_NULLPTR;
   }
   //: Get the internal PDFs
   // The object will return a reference to the internal data.
   const vpdfl_pdf_base & pdf() const
   {
-    assert(pdf_!=0);
+    assert(pdf_!=VXL_NULLPTR);
     return *pdf_;
   }
 
   //: The dimensionality of input vectors.
-  virtual unsigned n_dims() const { assert(pdf_!=0); return pdf_->n_dims();}
+  virtual unsigned n_dims() const { assert(pdf_!=VXL_NULLPTR); return pdf_->n_dims();}
 
   //: The number of possible output classes.
   virtual unsigned n_classes() const {return 1;}
@@ -119,7 +119,7 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
 
   // Copy constructor
   clsfy_binary_pdf_classifier( const clsfy_binary_pdf_classifier& b ):
-    clsfy_classifier_base(), pdf_(0), log_prob_limit_(0.0) { *this = b; }
+    clsfy_classifier_base(), pdf_(VXL_NULLPTR), log_prob_limit_(0.0) { *this = b; }
 
   //:Assignment operator
   clsfy_binary_pdf_classifier& operator=(const clsfy_binary_pdf_classifier& classifier);

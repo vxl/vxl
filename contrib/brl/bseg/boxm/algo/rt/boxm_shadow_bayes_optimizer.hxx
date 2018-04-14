@@ -50,7 +50,7 @@ bool boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::optimize_cells(double damping_f
     scene_.load_block(iter.index());
     boxm_block<tree_type>* block = *iter;
     boct_tree<T_loc, boxm_sample<APM> >* tree = block->get_tree();
-    boct_tree_cell<T_loc,boxm_sample<APM> >* debug_cell  = 0;
+    boct_tree_cell<T_loc,boxm_sample<APM> >* debug_cell  = VXL_NULLPTR;
     if (verbose_)
       debug_cell = tree->locate_point_global(debug_pt_);
     std::vector<boct_tree_cell<T_loc,boxm_sample<APM> >*> cells = tree->leaf_cells();

@@ -24,7 +24,7 @@ class bstm_cache: public vbl_ref_count
 
   //: Use this instead of constructor
   static bstm_cache_sptr instance();
-  static bool         exists() { return bstm_cache::instance_!=0; }
+  static bool         exists() { return bstm_cache::instance_!=VXL_NULLPTR; }
 
   //: the destructor instance to make sure memory is deallocated when the program exits
   static bstm_cache_destroyer destroyer_;  // it's not a pointer so C++ will make sure that its destructor will be called
@@ -44,7 +44,7 @@ class bstm_cache: public vbl_ref_count
   //: returns a data_base pointer which is initialized to the default value of the type.
   //  If a block for this type exists on the cache, it is removed and replaced with the new one.
   //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-  virtual bstm_data_base* get_data_base_new(bstm_block_id id, std::string type=0, std::size_t num_bytes=0, bool read_only = true) = 0;
+  virtual bstm_data_base* get_data_base_new(bstm_block_id id, std::string type=VXL_NULLPTR, std::size_t num_bytes=0, bool read_only = true) = 0;
 
   //: removes data from this cache (may or may not write to disk first)
   //  Note that this function does not delete the memory, just removes it from the cache
@@ -102,7 +102,7 @@ void vsl_b_read(vsl_b_istream& is, bstm_cache_sptr const& sptr);
 class bstm_cache_destroyer
 {
  public:
-  bstm_cache_destroyer(bstm_cache_sptr s = 0);
+  bstm_cache_destroyer(bstm_cache_sptr s = VXL_NULLPTR);
   ~bstm_cache_destroyer();
 
   void set_singleton(bstm_cache_sptr s);

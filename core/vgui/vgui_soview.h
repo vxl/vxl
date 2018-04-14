@@ -34,7 +34,7 @@ class vgui_soview
 {
  public:
   //: Constructor - create a default soview.
-  vgui_soview() : selectable(true), style(0) { add_id(); }
+  vgui_soview() : selectable(true), style(VXL_NULLPTR) { add_id(); }
 
   //: Destructor - delete this soview.
   virtual ~vgui_soview();

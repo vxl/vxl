@@ -82,7 +82,7 @@ void msm_shape_mode_view::set_display_width(double width)
 //: Current shape model
 const msm_ref_shape_model& msm_shape_mode_view::shape_model() const
 {
-  assert(shape_model_!=0);
+  assert(shape_model_!=VXL_NULLPTR);
   return *shape_model_;
 }
 

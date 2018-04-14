@@ -105,11 +105,11 @@ class vil3d_image_resource
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return 0; }
+  virtual char const* file_format() const { return VXL_NULLPTR; }
 
   //: Extra property information
   // Note that get_properties() returns voxel sizes in metres, not mm.
-  virtual bool get_property(char const* label, void* property_value = 0) const =0;
+  virtual bool get_property(char const* label, void* property_value = VXL_NULLPTR) const =0;
 
  private:
   // You probably should not use a vil3d_image_resource in a vbl_smart_ptr, so the

@@ -60,11 +60,11 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
 
  public:
   //: Default constructor.
-  vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params = 0,
-                                   vifa_group_pgram_params*  gpp_s = NULL,
-                                   vifa_group_pgram_params*  gpp_w = NULL,
-                                   vifa_coll_lines_params*   cpp = NULL,
-                                   vifa_norm_params*         np = NULL
+  vifa_int_face_attr_common_params(vdgl_fit_lines_params*    fitter_params = VXL_NULLPTR,
+                                   vifa_group_pgram_params*  gpp_s = VXL_NULLPTR,
+                                   vifa_group_pgram_params*  gpp_w = VXL_NULLPTR,
+                                   vifa_coll_lines_params*   cpp = VXL_NULLPTR,
+                                   vifa_norm_params*         np = VXL_NULLPTR
                                   );
 
   //: Copy constructor.

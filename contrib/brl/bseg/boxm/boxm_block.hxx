@@ -48,7 +48,7 @@ void boxm_block<T>::b_read(vsl_b_istream &is)
     case (1):
       vsl_b_read(is, bbox_);
       // if already allocated, destroy it and read from the file
-      if (octree_ != 0) {
+      if (octree_ != VXL_NULLPTR) {
         delete octree_;
       }
       octree_ = new T();

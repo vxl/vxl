@@ -60,7 +60,7 @@ class vil3d_memory_image : public vil3d_image_resource
   virtual bool put_view(const vil3d_image_view_base& im,
                         unsigned i0, unsigned j0, unsigned k0);
 
-  bool get_property(char const * /*tag*/, void * /*prop*/ = 0) const {return false;}
+  bool get_property(char const * /*tag*/, void * /*prop*/ = VXL_NULLPTR) const {return false;}
 };
 
 #endif // vil3d_memory_image_h_

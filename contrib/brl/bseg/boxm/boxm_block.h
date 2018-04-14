@@ -19,11 +19,11 @@ class boxm_block
 {
  public:
   //: Default Constructor
-  boxm_block(): octree_(0) {}
+  boxm_block(): octree_(VXL_NULLPTR) {}
   //: Destructor
   ~boxm_block() { if (octree_) delete octree_; }
   //: Constructor from boundinf box
-  boxm_block(vgl_box_3d<double> bbox): bbox_(bbox), octree_(0) {}
+  boxm_block(vgl_box_3d<double> bbox): bbox_(bbox), octree_(VXL_NULLPTR) {}
   //: Constructor from bounding box and octree
   boxm_block(vgl_box_3d<double> bbox, T* tree) : bbox_(bbox), octree_(tree) {octree_->set_bbox(bbox_);}
   //: Returns the number of leaf cells in the tree
@@ -38,7 +38,7 @@ class boxm_block
   T* get_tree() { return octree_; }
 
   //: Releases memory
-  void delete_tree() { delete octree_; octree_ = 0; }
+  void delete_tree() { delete octree_; octree_ = VXL_NULLPTR; }
 
   // IO
   void b_read(vsl_b_istream &s);

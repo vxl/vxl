@@ -61,8 +61,8 @@
 class boxm2_vecf_eye_scene : public boxm2_scene
 {
  public:
- boxm2_vecf_eye_scene(): alpha_data_(0), app_data_(0), nobs_data_(0), sphere_(0), sphere_dist_(0), iris_(0), pupil_(0),
-    target_alpha_data_(0),target_app_data_(0), target_nobs_data_(0){}
+ boxm2_vecf_eye_scene(): alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), sphere_(VXL_NULLPTR), sphere_dist_(VXL_NULLPTR), iris_(VXL_NULLPTR), pupil_(VXL_NULLPTR),
+    target_alpha_data_(VXL_NULLPTR),target_app_data_(VXL_NULLPTR), target_nobs_data_(VXL_NULLPTR){}
 
   //: set parameters
   void set_params(boxm2_vecf_eye_params const& params){ params_ = params;}

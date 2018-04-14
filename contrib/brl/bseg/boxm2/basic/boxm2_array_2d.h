@@ -114,7 +114,7 @@ class boxm2_array_2d
   size_type num_cols_;
 
   void construct() {
-    rows_ = 0;
+    rows_ = VXL_NULLPTR;
     num_rows_ = 0;
     num_cols_ = 0;
   }
@@ -129,7 +129,7 @@ class boxm2_array_2d
         rows_[i] = buffer + i * n;
     }
     else {
-      rows_ = 0;
+      rows_ = VXL_NULLPTR;
     }
   }
 

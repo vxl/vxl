@@ -34,7 +34,7 @@
 // \endcode
 
 template <class S>
-bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exceptions=0 )
+bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exceptions=VXL_NULLPTR )
 {
   std::stringstream ssa, ssb;
   std::string sa, sb;

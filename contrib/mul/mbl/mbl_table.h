@@ -126,7 +126,7 @@ public:
   // \note It is recommended that you provide and check the parameter success.
   double get_element(const std::string& header,
                      const unsigned r,
-                     bool* success=0) const;
+                     bool* success=VXL_NULLPTR) const;
 
 
   //: Load this table's data from specified text stream.

@@ -51,8 +51,8 @@ class rgrl_matcher_pseudo
   rgrl_matcher_pseudo( vil_image_view<PixelType> from_image,
                        vil_image_view<PixelType> to_image,
                        rgrl_evaluator_sptr evaluator,
-                       rgrl_mask_sptr from_mask = 0,
-                       rgrl_mask_sptr to_mask = 0 );
+                       rgrl_mask_sptr from_mask = VXL_NULLPTR,
+                       rgrl_mask_sptr to_mask = VXL_NULLPTR );
 
   //: Match the features in the "from" image to the intensity in the "to" image.
   //
@@ -62,7 +62,7 @@ class rgrl_matcher_pseudo
                    rgrl_view const&            current_view,
                    rgrl_transformation const&  current_xform,
                    rgrl_scale const&           current_scale,
-                   rgrl_match_set_sptr const& old_matches = 0 );
+                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR );
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_pseudo, rgrl_matcher );

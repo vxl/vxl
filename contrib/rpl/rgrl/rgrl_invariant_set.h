@@ -27,7 +27,7 @@ class rgrl_invariant_set
   virtual ~rgrl_invariant_set() {}
 
   virtual void
-  as_invariants( std::vector<rgrl_invariant_sptr>& invariant_key_points, rgrl_mask_sptr const& mask=0 ) = 0;
+  as_invariants( std::vector<rgrl_invariant_sptr>& invariant_key_points, rgrl_mask_sptr const& mask=VXL_NULLPTR ) = 0;
 
   //: return a bounding box
   virtual rgrl_mask_sptr bounding_box() const = 0;

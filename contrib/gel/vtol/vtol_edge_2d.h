@@ -70,7 +70,7 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   //: Default constructor. Empty edge. Not a valid edge.
   //---------------------------------------------------------------------------
-  vtol_edge_2d() : vtol_edge(), curve_(0) {}
+  vtol_edge_2d() : vtol_edge(), curve_(VXL_NULLPTR) {}
 
   //---------------------------------------------------------------------------
   //: Constructor from the two endpoints `new_v1', `new_v2' and from a curve `new_curve'.
@@ -78,16 +78,16 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   vtol_edge_2d(vtol_vertex_2d_sptr const& new_v1,
                vtol_vertex_2d_sptr const& new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
+               const vsol_curve_2d_sptr &new_curve=VXL_NULLPTR);
 
   vtol_edge_2d(vtol_vertex_sptr const& new_v1,
                vtol_vertex_sptr const& new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
+               const vsol_curve_2d_sptr &new_curve=VXL_NULLPTR);
  private:
   // deprecated interface:
   vtol_edge_2d(vtol_vertex_2d &new_v1,
                vtol_vertex_2d &new_v2,
-               const vsol_curve_2d_sptr &new_curve=0);
+               const vsol_curve_2d_sptr &new_curve=VXL_NULLPTR);
 
   //---------------------------------------------------------------------------
   //: Copy constructor. Deep copy.  Deprecated.
@@ -115,7 +115,7 @@ class vtol_edge_2d : public vtol_edge
   explicit vtol_edge_2d(vsol_curve_2d &);
 
   //: Constructor from two vertices (alternate interface)
-  vtol_edge_2d(double, double, double, double, vsol_curve_2d_sptr c=0);
+  vtol_edge_2d(double, double, double, double, vsol_curve_2d_sptr c=VXL_NULLPTR);
 
   //---------------------------------------------------------------------------
   //: Destructor

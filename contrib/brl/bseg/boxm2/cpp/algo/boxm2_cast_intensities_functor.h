@@ -49,7 +49,7 @@ class boxm2_data_print_functor
   {
     int byte_ind = index*(int)data_size_;
     char * arr = buf_->cell_buffer(byte_ind, data_size_);
-    return arr != 0;
+    return arr != VXL_NULLPTR;
   }
 
  private:

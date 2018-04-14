@@ -37,7 +37,7 @@ void pdf1d_sampler::set_model(const pdf1d_pdf& model)
 //: PDF of which this is an instance
 const pdf1d_pdf& pdf1d_sampler::model() const
 {
-  assert (pdf_model_ != 0);
+  assert (pdf_model_ != VXL_NULLPTR);
   return *pdf_model_;
 }
 

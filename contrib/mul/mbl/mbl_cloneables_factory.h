@@ -59,7 +59,7 @@ class mbl_cloneables_factory
   static MAP &objects()
   {
     static vcl_unique_ptr<MAP> objects_;
-    if (objects_.get() == 0)
+    if (objects_.get() == VXL_NULLPTR)
       objects_.reset(new MAP);
 
     return *objects_;

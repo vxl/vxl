@@ -30,7 +30,7 @@ class bgrl2_edge : public vbl_ref_count
 
  public:
   // Constructor
-  bgrl2_edge() : vbl_ref_count(), source_(0), target_(0) {}
+  bgrl2_edge() : vbl_ref_count(), source_(VXL_NULLPTR), target_(VXL_NULLPTR) {}
 
   // Constructor
   bgrl2_edge(V_sptr v1, V_sptr v2) : vbl_ref_count(), source_(v1), target_(v2) {}

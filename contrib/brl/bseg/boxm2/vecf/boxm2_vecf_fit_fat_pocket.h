@@ -50,8 +50,8 @@ class boxm2_vecf_fit_fat_pocket
   //: find the parameters that adjust the shape of the fat pocket model to match the neutral face
   // returns the average distance from the data points to the fat_pocket model
   // error conditions are reported on outstream
-  double fit_neutral(std::ostream* outstream=0, bool verbose=false);
-  double fit_deformed(std::ostream* outstream=0, bool verbose=false);
+  double fit_neutral(std::ostream* outstream=VXL_NULLPTR, bool verbose=false);
+  double fit_deformed(std::ostream* outstream=VXL_NULLPTR, bool verbose=false);
 
 // Data Access---------------------------------------------------------------
 

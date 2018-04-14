@@ -223,7 +223,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
   {
     scene->load_block_and_neighbors(it.index());
     boct_tree<short, float>   *tree = (*it)->get_tree();
-    assert(tree != NULL);
+    assert(tree != VXL_NULLPTR);
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
@@ -269,7 +269,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
 
             boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
 
-            assert(neighbor_cell !=NULL);
+            assert(neighbor_cell !=VXL_NULLPTR);
             this_feature[curr_dim] = (double)neighbor_cell->data();
             ++curr_dim;
           }
@@ -332,7 +332,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
   {
     scene->load_block_and_neighbors(it.index());
     boct_tree<short, float>   *tree = (*it)->get_tree();
-    assert(tree != NULL);
+    assert(tree != VXL_NULLPTR);
 
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
@@ -375,7 +375,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
 
             boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
 
-            assert(neighbor_cell !=NULL);
+            assert(neighbor_cell !=VXL_NULLPTR);
             this_feature[curr_dim] = (double)neighbor_cell->data();
             ++curr_dim;
           }
@@ -531,7 +531,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
 
           boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
 
-          assert(neighbor_cell !=NULL);
+          assert(neighbor_cell !=VXL_NULLPTR);
           this_feature[curr_dim] = (double)neighbor_cell->data();
           ++curr_dim;
         }
@@ -829,7 +829,7 @@ void bvpl_discover_pca_kernels::compute_mean_feature(boxm_scene<boct_tree<short,
 
           boct_tree_cell<short,float> *neighbor_cell = scene->locate_point_in_memory(neighbor_centroid);
 
-          assert(neighbor_cell !=NULL);
+          assert(neighbor_cell !=VXL_NULLPTR);
           this_feature[curr_dim] = (double)neighbor_cell->data();
           ++curr_dim;
         }

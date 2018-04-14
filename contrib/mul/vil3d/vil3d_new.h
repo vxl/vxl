@@ -23,7 +23,7 @@ vil3d_image_resource_sptr vil3d_new_image_resource(unsigned ni, unsigned nj, uns
 vil3d_image_resource_sptr vil3d_new_image_resource(const char* filename, unsigned ni, unsigned nj,
                                                    unsigned nk, unsigned nplanes,
                                                    vil_pixel_format format,
-                                                   char const* file_format = 0);
+                                                   char const* file_format = VXL_NULLPTR);
 
 
 //: Create an image view whose i step is 1.

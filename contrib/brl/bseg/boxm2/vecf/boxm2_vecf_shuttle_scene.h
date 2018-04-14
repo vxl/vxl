@@ -41,7 +41,7 @@ class boxm2_vecf_particle{
 class boxm2_vecf_shuttle_scene : public boxm2_scene
 {
  public:
- boxm2_vecf_shuttle_scene(): alpha_data_(0), app_data_(0), nobs_data_(0){}
+ boxm2_vecf_shuttle_scene(): alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR){}
 
   boxm2_vecf_shuttle_scene(std::string const& scene_file, std::string const& imesh_file);
 

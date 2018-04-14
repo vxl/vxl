@@ -364,7 +364,7 @@ namespace Nabo
        *        \param dists2 squared distances to nearest neighbours, must be of size k x query.cols()
        *        \param optionFlags the options passed to knn()
        \param maxRadii if non 0, maximum radii, must be of size k */
-      void checkSizesKnn(const Matrix& query, const IndexMatrix& indices, const Matrix& dists2, const Index k, const unsigned optionFlags, const Vector* maxRadii = 0) const;
+      void checkSizesKnn(const Matrix& query, const IndexMatrix& indices, const Matrix& dists2, const Index k, const unsigned optionFlags, const Vector* maxRadii = VXL_NULLPTR) const;
  };
 
   // Convenience typedefs

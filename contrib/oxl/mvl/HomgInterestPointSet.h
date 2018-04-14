@@ -50,7 +50,7 @@ class HomgInterestPointSet
 
   HomgInterestPointSet();
   HomgInterestPointSet(const HomgMetric&);
-  HomgInterestPointSet(const char* filename, const HomgMetric& = 0);
+  HomgInterestPointSet(const char* filename, const HomgMetric& = VXL_NULLPTR);
   HomgInterestPointSet(const std::vector<HomgPoint2D>&, ImageMetric* conditioner);
   HomgInterestPointSet(std::vector<vgl_homg_point_2d<double> > const&, ImageMetric* conditioner);
   HomgInterestPointSet(const HomgInterestPointSet& that);
@@ -92,15 +92,15 @@ class HomgInterestPointSet
   void clear();
 
   // Input/Output--------------------------------------------------------------
-  bool read(const char* filename, const HomgMetric& c = 0);
-  bool read(const char* filename, vil1_image const& src, const HomgMetric& c = 0);
+  bool read(const char* filename, const HomgMetric& c = VXL_NULLPTR);
+  bool read(const char* filename, vil1_image const& src, const HomgMetric& c = VXL_NULLPTR);
   bool write(const char* filename) const;
 
   bool read(std::istream& f, const ImageMetric* c);
   bool write(std::ostream& f, const ImageMetric* c) const;
 
  protected:
-  void init_conditioner(const HomgMetric& c = 0);
+  void init_conditioner(const HomgMetric& c = VXL_NULLPTR);
   void delete_conditioner();
 };
 

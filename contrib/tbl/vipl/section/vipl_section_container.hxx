@@ -17,8 +17,8 @@ template < class DataType >
     hsimgstart (2,0),
     hssecsz (2,0),
     hsoverlap (2,0),
-    hsrawdata (0),
-    hsimgptr (0),
+    hsrawdata (VXL_NULLPTR),
+    hsimgptr (VXL_NULLPTR),
     refcount_ (1)
 {}
 
@@ -31,7 +31,7 @@ template < class DataType >
     hssecsz (2,0),
     hsoverlap (2,0),
     hsrawdata (0),
-    hsimgptr (0),
+    hsimgptr (VXL_NULLPTR),
     refcount_ (1)
 {
   hsthe = pt->virtual_copy();
@@ -52,7 +52,7 @@ template < class DataType >
     hssecsz (2,0),
     hsoverlap (2,0),
     hsrawdata (0),
-    hsimgptr (0),
+    hsimgptr (VXL_NULLPTR),
     refcount_ (1)
 // C++ auto-generated low-level constructor
 {}
@@ -81,7 +81,7 @@ template < class DataType >
 template < class DataType >
    vipl_section_iterator< DataType > vipl_section_container< DataType > ::begin()
 {
-  vipl_section_descriptor<DataType> *ptr = new vipl_section_descriptor<DataType>(0, virtual_copy());
+  vipl_section_descriptor<DataType> *ptr = new vipl_section_descriptor<DataType>(VXL_NULLPTR, virtual_copy());
   ptr->put_real_descriptor(ptr);
   ptr->ref_i_curr_sec_start()[0] = 0;
   ptr->ref_i_curr_sec_start()[1] = 0;
@@ -101,7 +101,7 @@ template < class DataType >
    vipl_section_iterator< DataType > vipl_section_container< DataType > ::end()
 {
   // the "end" iterator has 0 as the real_descriptor
-  vipl_section_iterator<DataType> i(0, virtual_copy());
+  vipl_section_iterator<DataType> i(VXL_NULLPTR, virtual_copy());
   return i;
 }
 
@@ -109,7 +109,7 @@ template < class DataType >
   const vipl_section_iterator< DataType > vipl_section_container< DataType > ::begin() const
 {
   vipl_section_descriptor<DataType> *ptr =
-    new vipl_section_descriptor<DataType>(0, virtual_copy());
+    new vipl_section_descriptor<DataType>(VXL_NULLPTR, virtual_copy());
   ptr->put_real_descriptor(ptr);
   ptr->ref_i_curr_sec_start()[0] = 0;
   ptr->ref_i_curr_sec_start()[1] = 0;
@@ -127,7 +127,7 @@ template < class DataType >
   const vipl_section_iterator< DataType > vipl_section_container< DataType > ::end() const
 {
   // the "end" iterator has 0 as the real_descriptor
-  vipl_section_iterator<DataType> i(0, virtual_copy());
+  vipl_section_iterator<DataType> i(VXL_NULLPTR, virtual_copy());
   return i;
 }
 
@@ -398,7 +398,7 @@ template < class DataType >
 template < class DataType >
    vipl_section_container< DataType >* vipl_section_container< DataType > ::virtual_copy() const
 {
-  vipl_section_container< DataType >*rtn = new vipl_section_container<DataType> (0);
+  vipl_section_container< DataType >*rtn = new vipl_section_container<DataType> (VXL_NULLPTR);
   rtn->put_the(rtn);
   rtn->put_imgsz(imgsz());
   rtn->put_secsz(secsz());

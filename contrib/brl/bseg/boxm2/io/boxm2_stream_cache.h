@@ -17,7 +17,7 @@
 class boxm2_stream_cache_helper : public vbl_ref_count
 {
   public:
-    boxm2_stream_cache_helper() : index_(-1), buf_(0) {}
+    boxm2_stream_cache_helper() : index_(-1), buf_(VXL_NULLPTR) {}
     ~boxm2_stream_cache_helper();
 
     bool open_file(std::string filename);

@@ -45,9 +45,9 @@ struct osl_topology_base : public vbl_ref_count
   int GetId() const;
 
   //: add another stash under that name.
-  void  stash_add     (char const *name, void const *data, void (*dtor)(void *) = 0);
+  void  stash_add     (char const *name, void const *data, void (*dtor)(void *) = VXL_NULLPTR);
   //: replace first stash ith given name. the old dtor is \e not called.
-  void  stash_replace (char const *name, void const *data, void (*dtor)(void *) = 0);
+  void  stash_replace (char const *name, void const *data, void (*dtor)(void *) = VXL_NULLPTR);
   //: return first stash with given name, 0 if none.
   void *stash_retrieve(char const *name) const;
   //: remove first stash with given name. the dtor is \e not called.

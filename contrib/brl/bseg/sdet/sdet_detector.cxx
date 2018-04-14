@@ -287,8 +287,8 @@ bool sdet_detector::DoFold()
   }
   else {
     njunction = 0;
-    delete [] junctionx; junctionx = NULL;
-    delete [] junctiony; junctiony = NULL;
+    delete [] junctionx; junctionx = VXL_NULLPTR;
+    delete [] junctiony; junctiony = VXL_NULLPTR;
   }
 
   this->noiseThreshold = fold.NoiseThreshold();

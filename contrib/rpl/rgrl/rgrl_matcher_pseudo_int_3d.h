@@ -50,7 +50,7 @@ class rgrl_matcher_pseudo_int_3d
                               vnl_vector< double > const& from_spacing_ratio,
                               vnl_vector< double > const& to_spacing_ratio,
                               rgrl_evaluator_sptr evaluator,
-                              rgrl_mask_sptr mask = 0 );
+                              rgrl_mask_sptr mask = VXL_NULLPTR );
 
   //:  Match the features in the "from" image to the intensity in the "to" image.
   //
@@ -60,7 +60,7 @@ class rgrl_matcher_pseudo_int_3d
                    rgrl_view const&            current_view,
                    rgrl_transformation const&  current_xform,
                    rgrl_scale const&           current_scale ,
-                   rgrl_match_set_sptr const& old_matches = 0);
+                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR);
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_pseudo_int_3d, rgrl_matcher);

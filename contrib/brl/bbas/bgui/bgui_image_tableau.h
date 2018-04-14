@@ -62,16 +62,16 @@ class bgui_image_tableau : public vgui_image_tableau
   bgui_image_tableau();
 
   bgui_image_tableau(vil_image_resource_sptr const & img,
-                     vgui_range_map_params_sptr const & rmp = 0);
+                     vgui_range_map_params_sptr const & rmp = VXL_NULLPTR);
 
   bgui_image_tableau( vil_image_view_base const & img,
-                      vgui_range_map_params_sptr const & rmp = 0);
+                      vgui_range_map_params_sptr const & rmp = VXL_NULLPTR);
 
   bgui_image_tableau(vil1_image const & img,
-                     vgui_range_map_params_sptr const & rmp = 0);
+                     vgui_range_map_params_sptr const & rmp = VXL_NULLPTR);
 
   bgui_image_tableau(char const* filename,
-                     vgui_range_map_params_sptr const & rmp = 0);
+                     vgui_range_map_params_sptr const & rmp = VXL_NULLPTR);
 
 
   std::string type_name() const { return "vgui_image_tableau"; }
@@ -159,22 +159,22 @@ struct bgui_image_tableau_new : public bgui_image_tableau_sptr {
   //:  Constructors - create a tableau displaying the given image.
 
   bgui_image_tableau_new(vil_image_resource_sptr const & img,
-                         vgui_range_map_params_sptr const & rmp = 0)
+                         vgui_range_map_params_sptr const & rmp = VXL_NULLPTR)
     : bgui_image_tableau_sptr( new bgui_image_tableau(img, rmp) )
   { }
 
   bgui_image_tableau_new(vil_image_view_base const & img,
-                         vgui_range_map_params_sptr const & rmp = 0)
+                         vgui_range_map_params_sptr const & rmp = VXL_NULLPTR)
     : bgui_image_tableau_sptr( new bgui_image_tableau(img, rmp) )
   { }
 
   bgui_image_tableau_new(vil1_image const & img,
-                         vgui_range_map_params_sptr const & rmp = 0)
+                         vgui_range_map_params_sptr const & rmp = VXL_NULLPTR)
     : bgui_image_tableau_sptr( new bgui_image_tableau(img, rmp) )
   { }
 
   bgui_image_tableau_new(char const* filename,
-                         vgui_range_map_params_sptr const & rmp = 0)
+                         vgui_range_map_params_sptr const & rmp = VXL_NULLPTR)
     : bgui_image_tableau_sptr( new bgui_image_tableau(filename, rmp) )
   { }
 

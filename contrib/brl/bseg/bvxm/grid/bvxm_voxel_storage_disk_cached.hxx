@@ -22,7 +22,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
-:  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(storage_filename), fio_(0)
+:  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(storage_filename), fio_(VXL_NULLPTR)
 {
   //set up cache
   vxl_int_64 slice_size = sizeof(T)*grid_size.x()*grid_size.y();
@@ -86,10 +86,10 @@ bvxm_voxel_storage_disk_cached<T>::~bvxm_voxel_storage_disk_cached()
   if (fio_) {
     fio_->ref();
     fio_->unref();
-    fio_ = 0;
+    fio_ = VXL_NULLPTR;
   }
 
-  cache_mem_ = 0;
+  cache_mem_ = VXL_NULLPTR;
 }
 
 
@@ -146,7 +146,7 @@ bool bvxm_voxel_storage_disk_cached<T>::initialize_data(T const& value)
   // this will delete the stream object.
   fio_->ref();
   fio_->unref();
-  fio_ = 0;
+  fio_ = VXL_NULLPTR;
 
   return true;
 }
@@ -172,7 +172,7 @@ bvxm_voxel_slab<T> bvxm_voxel_storage_disk_cached<T>::get_slab(unsigned slice_id
   unsigned last_slice_idx = slice_idx + slab_thickness - 1;
 
   // check to see if slab is already in cache
-  T* first_voxel = 0;
+  T* first_voxel = VXL_NULLPTR;
   if ( ((int)slice_idx < first_cache_slice_ ) || ((int)slice_idx > last_cache_slice_) ){
     // slab is not in cache
     purge_cache();

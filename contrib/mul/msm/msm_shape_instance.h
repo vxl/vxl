@@ -64,7 +64,7 @@ class msm_shape_instance
 
   //: Reference to current model
   const msm_shape_model& model() const
-  { assert(model_!=0); return *model_; }
+  { assert(model_!=VXL_NULLPTR); return *model_; }
 
   //: Current pose parameters
   const vnl_vector<double>& pose() const { return pose_; }

@@ -200,23 +200,23 @@ class vsol_spatial_object_3d : public vsol_spatial_object
   virtual vsol_spatial_object_3d* cast_to_spatial_object() { return this; }
   virtual vsol_spatial_object_3d const* cast_to_spatial_object() const{return this;}
 
-  virtual vtol_topology_object* cast_to_topology_object() {return 0;}
-  virtual vtol_topology_object const* cast_to_topology_object()const{return 0;}
+  virtual vtol_topology_object* cast_to_topology_object() {return VXL_NULLPTR;}
+  virtual vtol_topology_object const* cast_to_topology_object()const{return VXL_NULLPTR;}
 
-  virtual vsol_spatial_object_3d* cast_to_vsol_spatial_object() { return 0; }
-  virtual vsol_spatial_object_3d const* cast_to_vsol_spatial_object() const { return 0; }
-  virtual vsol_point_3d* cast_to_point() { return 0; }
-  virtual vsol_point_3d const* cast_to_point() const { return 0; }
-  virtual vsol_curve_3d *cast_to_curve() { return 0; }
-  virtual vsol_curve_3d const* cast_to_curve() const { return 0; }
-  virtual vsol_surface_3d* cast_to_surface() { return 0; }
-  virtual vsol_surface_3d const* cast_to_surface() const { return 0; }
-  virtual vsol_volume_3d* cast_to_volume() { return 0; }
-  virtual vsol_volume_3d const* cast_to_volume() const { return 0; }
-  virtual vsol_region_3d* cast_to_region() { return 0; }
-  virtual vsol_region_3d const* cast_to_region() const { return 0; }
-  virtual vsol_group_3d *cast_to_group() { return 0; }
-  virtual vsol_group_3d const* cast_to_group() const { return 0; }
+  virtual vsol_spatial_object_3d* cast_to_vsol_spatial_object() { return VXL_NULLPTR; }
+  virtual vsol_spatial_object_3d const* cast_to_vsol_spatial_object() const { return VXL_NULLPTR; }
+  virtual vsol_point_3d* cast_to_point() { return VXL_NULLPTR; }
+  virtual vsol_point_3d const* cast_to_point() const { return VXL_NULLPTR; }
+  virtual vsol_curve_3d *cast_to_curve() { return VXL_NULLPTR; }
+  virtual vsol_curve_3d const* cast_to_curve() const { return VXL_NULLPTR; }
+  virtual vsol_surface_3d* cast_to_surface() { return VXL_NULLPTR; }
+  virtual vsol_surface_3d const* cast_to_surface() const { return VXL_NULLPTR; }
+  virtual vsol_volume_3d* cast_to_volume() { return VXL_NULLPTR; }
+  virtual vsol_volume_3d const* cast_to_volume() const { return VXL_NULLPTR; }
+  virtual vsol_region_3d* cast_to_region() { return VXL_NULLPTR; }
+  virtual vsol_region_3d const* cast_to_region() const { return VXL_NULLPTR; }
+  virtual vsol_group_3d *cast_to_group() { return VXL_NULLPTR; }
+  virtual vsol_group_3d const* cast_to_group() const { return VXL_NULLPTR; }
 };
 
 // inline member functions

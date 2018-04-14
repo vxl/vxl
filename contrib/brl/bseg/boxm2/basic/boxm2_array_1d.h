@@ -25,7 +25,7 @@ struct boxm2_array_1d
     typedef T const &const_reference;
 
     //: empty constructor
-    boxm2_array_1d() : begin_(0), end_(0), n_(0) {}
+    boxm2_array_1d() : begin_(VXL_NULLPTR), end_(VXL_NULLPTR), n_(0) {}
 
     //: create a wrapper for a buffer of size n
     boxm2_array_1d(size_type n, T* buffer) {

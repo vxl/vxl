@@ -69,30 +69,30 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   //: the vtol display methods for individual topology classes
   bgui_vtol_soview2D_vertex* add_vertex(vtol_vertex_2d_sptr const& v,
-                                        const vgui_style_sptr& style = NULL);
+                                        const vgui_style_sptr& style = VXL_NULLPTR);
 
   bgui_vtol_soview2D_edge* add_edge(vtol_edge_2d_sptr const& e,
-                                    const vgui_style_sptr& style = NULL);
+                                    const vgui_style_sptr& style = VXL_NULLPTR);
 
   bgui_vtol_soview2D_edge_group* add_edge_group(std::vector<vtol_edge_2d_sptr>& edges,
-                                                const vgui_style_sptr& style = NULL);
+                                                const vgui_style_sptr& style = VXL_NULLPTR);
 
   bgui_vtol_soview2D_face* add_face(vtol_face_2d_sptr const& f,
-                                    const vgui_style_sptr& style = NULL);
+                                    const vgui_style_sptr& style = VXL_NULLPTR);
 
   //: display methods for vectors of topology classes (not grouped)
   void add_topology_object(vtol_topology_object_sptr const& tos,
-                           const vgui_style_sptr& style = NULL);
+                           const vgui_style_sptr& style = VXL_NULLPTR);
 
   void add_topology_objects(std::vector<vtol_topology_object_sptr> const& tos,
-                            const vgui_style_sptr& style = NULL);
+                            const vgui_style_sptr& style = VXL_NULLPTR);
 
   void add_edges(std::vector<vtol_edge_2d_sptr> const & edges,
                  bool verts=false,
-                 const vgui_style_sptr& style = NULL);
+                 const vgui_style_sptr& style = VXL_NULLPTR);
 
   void add_faces(std::vector<vtol_face_2d_sptr> const & faces, bool verts=false,
-                 const vgui_style_sptr& style = NULL);
+                 const vgui_style_sptr& style = VXL_NULLPTR);
 
   //: clear the tableau including the highlight map
   void clear_all();
@@ -105,7 +105,7 @@ class bgui_vtol2D_tableau : public bgui_vsol2D_tableau
 
   //: Methods for changing the default style of displayable objects
   void set_vtol_topology_object_style(vtol_topology_object_sptr tos,
-                                      const vgui_style_sptr& style = NULL);
+                                      const vgui_style_sptr& style = VXL_NULLPTR);
   void set_vertex_style(const vgui_style_sptr& style);
   void set_edge_style(const vgui_style_sptr& style);
   void set_edge_group_style(const vgui_style_sptr& style);

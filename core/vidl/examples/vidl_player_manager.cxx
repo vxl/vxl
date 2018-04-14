@@ -22,7 +22,7 @@
 
 
 // static manager instance
-vidl_player_manager *vidl_player_manager::instance_ = 0;
+vidl_player_manager *vidl_player_manager::instance_ = VXL_NULLPTR;
 
 // The vidl_player_manager is a singleton class
 vidl_player_manager *vidl_player_manager::instance()
@@ -60,9 +60,9 @@ vidl_player_manager::vidl_player_manager()
     time_interval_(0.0f),
     width_(640),
     height_(480),
-    istream_(static_cast<vidl_istream *>(NULL)),
-    ostream_(static_cast<vidl_ostream *>(NULL)),
-    win_(0)
+    istream_(static_cast<vidl_istream *>(VXL_NULLPTR)),
+    ostream_(static_cast<vidl_ostream *>(VXL_NULLPTR)),
+    win_(VXL_NULLPTR)
 {
 }
 
@@ -223,20 +223,20 @@ void vidl_player_manager::redraw()
 
     vidl_frame_sptr frame = istream_->current_frame();
     if (!frame)
-      itab_->set_image_resource(NULL);
+      itab_->set_image_resource(VXL_NULLPTR);
     else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
       static vil_image_view<vxl_uint_16> img;
       if (vidl_convert_to_view(*frame,img))
         itab_->set_image_view(img);
       else
-        itab_->set_image_resource(NULL);
+        itab_->set_image_resource(VXL_NULLPTR);
     }
     else {
       static vil_image_view<vxl_byte> img;
       if (vidl_convert_to_view(*frame,img,VIDL_PIXEL_COLOR_RGB))
         itab_->set_image_view(img);
       else
-        itab_->set_image_resource(NULL);
+        itab_->set_image_resource(VXL_NULLPTR);
     }
   }
 

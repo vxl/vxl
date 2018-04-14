@@ -51,7 +51,7 @@ public:
   ~boct_bit_tree() {
     if (is_owning_ && bits_) {
       delete[] bits_;
-      bits_ = NULL;
+      bits_ = VXL_NULLPTR;
     }
   }
 

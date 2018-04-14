@@ -74,20 +74,20 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   vifa_parallel* npobj_;
   vifa_int_face_attr_factory* factory_;
  public:
-  vifa_int_faces_attr(vdgl_fit_lines_params*       fitter_params = NULL,
-                      vifa_group_pgram_params*     gpp_s = NULL,
-                      vifa_group_pgram_params*     gpp_w = NULL,
-                      vifa_coll_lines_params*      cpp = NULL,
-                      vifa_norm_params*            np = NULL,
-                      vifa_int_face_attr_factory*  factory = NULL
+  vifa_int_faces_attr(vdgl_fit_lines_params*       fitter_params = VXL_NULLPTR,
+                      vifa_group_pgram_params*     gpp_s = VXL_NULLPTR,
+                      vifa_group_pgram_params*     gpp_w = VXL_NULLPTR,
+                      vifa_coll_lines_params*      cpp = VXL_NULLPTR,
+                      vifa_norm_params*            np = VXL_NULLPTR,
+                      vifa_int_face_attr_factory*  factory = VXL_NULLPTR
                      );
   vifa_int_faces_attr(iface_list&                  v,
-                      vdgl_fit_lines_params*       fitter_params = NULL,
-                      vifa_group_pgram_params*     gpp_s = NULL,
-                      vifa_group_pgram_params*     gpp_w = NULL,
-                      vifa_coll_lines_params*      cpp = NULL,
-                      vifa_norm_params*            np = NULL,
-                      vifa_int_face_attr_factory*  factory = NULL
+                      vdgl_fit_lines_params*       fitter_params = VXL_NULLPTR,
+                      vifa_group_pgram_params*     gpp_s = VXL_NULLPTR,
+                      vifa_group_pgram_params*     gpp_w = VXL_NULLPTR,
+                      vifa_coll_lines_params*      cpp = VXL_NULLPTR,
+                      vifa_norm_params*            np = VXL_NULLPTR,
+                      vifa_int_face_attr_factory*  factory = VXL_NULLPTR
                      );
 
   virtual ~vifa_int_faces_attr();

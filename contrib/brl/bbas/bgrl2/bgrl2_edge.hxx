@@ -26,7 +26,7 @@ shared_vertex(const bgrl2_edge<V >& other) const
     return this->source();
   if (this->target() == other.source() || this->target() == other.target())
     return this->target();
-  return 0;
+  return VXL_NULLPTR;
 }
 
 

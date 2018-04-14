@@ -28,7 +28,7 @@ class boxm2_vecf_skin_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { SKIN, NO_TYPE};
- boxm2_vecf_skin_scene(): skin_data_(0),boxm2_vecf_articulated_scene(){}
+ boxm2_vecf_skin_scene(): skin_data_(VXL_NULLPTR),boxm2_vecf_articulated_scene(){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);

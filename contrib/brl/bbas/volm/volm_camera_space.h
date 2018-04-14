@@ -226,7 +226,7 @@ class volm_camera_space : public vbl_ref_count
 class camera_space_iterator
 {
  public:
- camera_space_iterator(volm_camera_space* cam_space = 0)
+ camera_space_iterator(volm_camera_space* cam_space = VXL_NULLPTR)
    : end_(false), cam_space_(cam_space) {}
 
   ~camera_space_iterator() {}

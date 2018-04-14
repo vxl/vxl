@@ -83,7 +83,7 @@ void bgrl2_vertex<E>::del_all_in_edges()
   //remove connections from all the in_edges to the node
   for ( edge_iterator itr = in_edges_.begin();
         itr != in_edges_.end(); ++itr )
-    (*itr)->set_source(0);
+    (*itr)->set_source(VXL_NULLPTR);
 
   in_edges_.clear();
 }
@@ -95,7 +95,7 @@ void bgrl2_vertex<E>::del_all_out_edges()
   //remove connections from all the out_edges to the node
   for ( edge_iterator itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
-    (*itr)->set_source(0);
+    (*itr)->set_source(VXL_NULLPTR);
 
   out_edges_.clear();
 }

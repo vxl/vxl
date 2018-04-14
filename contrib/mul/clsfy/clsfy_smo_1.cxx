@@ -327,7 +327,7 @@ int clsfy_smo_1_lin::calc()
 {
   //Check a bunch of things
 
-  assert (data_ != 0); // Check that the data has been set.
+  assert (data_ != VXL_NULLPTR); // Check that the data has been set.
 
   const unsigned long N = data_->size();
   assert(N != 0);     // Check that there is some data.

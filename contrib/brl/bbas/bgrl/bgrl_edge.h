@@ -30,7 +30,7 @@ class bgrl_edge : public vbl_ref_count
   friend class bgrl_graph;
 
   // Constructor
-  bgrl_edge() : from_(NULL), to_(NULL) {}
+  bgrl_edge() : from_(VXL_NULLPTR), to_(VXL_NULLPTR) {}
   // Copy constructor
   bgrl_edge(bgrl_edge const& e) : vbl_ref_count(), from_(e.from_), to_(e.to_) {}
   // Destructor

@@ -44,11 +44,11 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   virtual vsol_volume_3d* cast_to_volume() { return this;}
   virtual vsol_volume_3d const* cast_to_volume() const { return this;}
 
-  virtual vsol_polyhedron* cast_to_polyhedron() { return 0;}
-  virtual vsol_polyhedron const* cast_to_polyhedron() const { return 0;}
+  virtual vsol_polyhedron* cast_to_polyhedron() { return VXL_NULLPTR;}
+  virtual vsol_polyhedron const* cast_to_polyhedron() const { return VXL_NULLPTR;}
 
-  virtual vsol_mesh_3d* cast_to_mesh() { return 0;}
-  virtual vsol_mesh_3d const* cast_to_mesh() const { return 0;}
+  virtual vsol_mesh_3d* cast_to_mesh() { return VXL_NULLPTR;}
+  virtual vsol_mesh_3d const* cast_to_mesh() const { return VXL_NULLPTR;}
   //---------------------------------------------------------------------------
   //: Is the point `p' inside `this' volume ?
   //---------------------------------------------------------------------------

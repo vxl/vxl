@@ -26,7 +26,7 @@ class bgui_image_utils
   bgui_image_utils();
 
   bgui_image_utils(vil_image_resource_sptr const& image,
-                   vsol_polygon_2d_sptr const& poly = 0);
+                   vsol_polygon_2d_sptr const& poly = VXL_NULLPTR);
 
   ~bgui_image_utils(){}
 

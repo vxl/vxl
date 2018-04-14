@@ -453,7 +453,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       std::cerr << "error initializing voxel grid\n";
-      return bvxm_voxel_grid_base_sptr(0);
+      return bvxm_voxel_grid_base_sptr(VXL_NULLPTR);
     }
 
     // Insert voxel grid into map
@@ -488,7 +488,7 @@ bvxm_voxel_grid_base_sptr bvxm_voxel_world::get_grid(unsigned bin_index, unsigne
     // fill grid with default value
     if (!grid->initialize_data(bvxm_voxel_traits<VOX_T>::initial_val())) {
       std::cerr << "error initializing voxel grid\n";
-      return bvxm_voxel_grid_base_sptr(0);
+      return bvxm_voxel_grid_base_sptr(VXL_NULLPTR);
     }
 
     // Insert voxel grid into map

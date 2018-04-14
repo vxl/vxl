@@ -134,7 +134,7 @@ class vtol_zero_chain : public vtol_topology_object
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
   virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
-  { return inferior->cast_to_vertex()!=0; }
+  { return inferior->cast_to_vertex()!=VXL_NULLPTR; }
   bool valid_inferior_type(vtol_vertex_sptr const& )  const { return true; }
   bool valid_superior_type(vtol_edge_sptr const& )    const { return true; }
   bool valid_superior_type(vtol_edge_2d_sptr const& ) const { return true; }

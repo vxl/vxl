@@ -30,11 +30,11 @@ bool vgui_section_render(void const *pixels,
                          GLenum format,
                          GLenum type ,
                          bool hardware_map = false,
-                         vbl_array_1d<float>* fLmap=0,
-                         vbl_array_1d<float>* fRmap=0,
-                         vbl_array_1d<float>* fGmap=0,
-                         vbl_array_1d<float>* fBmap=0,
-                         vbl_array_1d<float>* fAmap=0);
+                         vbl_array_1d<float>* fLmap=VXL_NULLPTR,
+                         vbl_array_1d<float>* fRmap=VXL_NULLPTR,
+                         vbl_array_1d<float>* fGmap=VXL_NULLPTR,
+                         vbl_array_1d<float>* fBmap=VXL_NULLPTR,
+                         vbl_array_1d<float>* fAmap=VXL_NULLPTR);
 
 
 bool vgui_view_render(void const *pixels,
@@ -43,11 +43,11 @@ bool vgui_view_render(void const *pixels,
                       GLenum format,
                       GLenum type ,
                       bool hardware_map = false,
-                      vbl_array_1d<float>* fLmap=0,
-                      vbl_array_1d<float>* fRmap=0,
-                      vbl_array_1d<float>* fGmap=0,
-                      vbl_array_1d<float>* fBmap=0,
-                      vbl_array_1d<float>* fAmap=0);
+                      vbl_array_1d<float>* fLmap=VXL_NULLPTR,
+                      vbl_array_1d<float>* fRmap=VXL_NULLPTR,
+                      vbl_array_1d<float>* fGmap=VXL_NULLPTR,
+                      vbl_array_1d<float>* fBmap=VXL_NULLPTR,
+                      vbl_array_1d<float>* fAmap=VXL_NULLPTR);
 
 
 

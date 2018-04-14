@@ -75,7 +75,7 @@ osl_canny_ox::~osl_canny_ox()
 
 void osl_canny_ox::detect_edges(vil1_image const &image_in, std::list<osl_edge*> *edges)
 {
-  assert(edges!=0);
+  assert(edges!=VXL_NULLPTR);
 
   // Get the image size
   xsize_ = image_in.height();

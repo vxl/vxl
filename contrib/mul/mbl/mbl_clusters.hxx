@@ -20,7 +20,7 @@
 //: Default constructor
 template<class T, class D>
 mbl_clusters<T,D>::mbl_clusters()
-  : data_(0)
+  : data_(VXL_NULLPTR)
 {
 }
 
@@ -68,7 +68,7 @@ void mbl_clusters<T,D>::set_data_ptr(const std::vector<T>& data)
 template<class T, class D>
 unsigned mbl_clusters<T,D>::nearest(const T& t, double& d) const
 {
-  assert(data_!=0);
+  assert(data_!=VXL_NULLPTR);
 
   // Initialise with first in data
   unsigned best_i = 0;
@@ -102,7 +102,7 @@ template<class T, class D>
 unsigned mbl_clusters<T,D>::nearest(const T& t, double& d,
                    const std::vector<unsigned>& c_list) const
 {
-  assert(data_!=0);
+  assert(data_!=VXL_NULLPTR);
 
   // Initialise with first in set for c_list[0]
   unsigned best_i = 0;
@@ -428,7 +428,7 @@ void mbl_clusters<T,D>::b_read(vsl_b_istream& bfs)
     return;
   }
 
-  data_=0;
+  data_=VXL_NULLPTR;
 }
 
 //: Binary file stream output operator for class reference

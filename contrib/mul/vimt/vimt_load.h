@@ -51,7 +51,7 @@ void vimt_load(const std::string& path,
                float unit_scaling=1.0f)
 {
   vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
     image.image().set_size(0,0);
     return;
@@ -70,7 +70,7 @@ void vimt_load_as_grey_or_rgb(const std::string& path,
 {
   vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
 
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
     image.image().set_size(0,0);
     return;
@@ -107,7 +107,7 @@ void vimt_load_right_hand(const std::string& path,
                           float unit_scaling=1.0f)
 {
   vil_image_resource_sptr ir = vil_load_image_resource(path.c_str());
-  if (ir.ptr()==0)
+  if (ir.ptr()==VXL_NULLPTR)
   {
     image.image().set_size(0,0);
     return;

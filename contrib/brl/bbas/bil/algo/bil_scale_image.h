@@ -50,7 +50,7 @@ class bil_scale_image
 
   //: Populate the scale space by Gaussian smoothing of \p image
   //  \param diff If not NULL, it is populated with the difference of Gaussians (DoG) scale space.
-  void build_gaussian(const vil_image_view<T>& image, bil_scale_image<T>* diff = NULL);
+  void build_gaussian(const vil_image_view<T>& image, bil_scale_image<T>* diff = VXL_NULLPTR);
 
   //: Find the scale for the given octave and level
   float scale(int octave, unsigned int level) const

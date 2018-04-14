@@ -363,7 +363,7 @@ boxm2_scene_sptr boxm2_vecf_composite_face_scene::
 construct_target_scene(std::string const& scene_dir,std::string const& scene_name, std::string const& data_path,
                       double sub_block_len, bool save_scene_xml){
   if(target_box_.is_empty())
-    return 0;
+    return VXL_NULLPTR;
   std::vector<std::string> prefixes;
   prefixes.push_back("boxm2_mog3_grey");
   prefixes.push_back("boxm2_num_obs");

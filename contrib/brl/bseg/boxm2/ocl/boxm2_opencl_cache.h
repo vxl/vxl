@@ -35,7 +35,7 @@ class boxm2_opencl_cache: public vbl_ref_count
 
   public:
     boxm2_opencl_cache(bocl_device_sptr device);
-    ~boxm2_opencl_cache() { if (cpu_cache_) cpu_cache_ = 0;
+    ~boxm2_opencl_cache() { if (cpu_cache_) cpu_cache_ = VXL_NULLPTR;
                             this->clear_cache();
                           }
 
@@ -62,7 +62,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, std::size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
-    bocl_mem* alloc_mem(std::size_t num_bytes, void* cpu_buff=NULL, std::string id="bocl_mem in pool");
+    bocl_mem* alloc_mem(std::size_t num_bytes, void* cpu_buff=VXL_NULLPTR, std::string id="bocl_mem in pool");
     void      unref_mem(bocl_mem* mem);
     void      free_mem(bocl_mem* mem);
     void      free_mem_pool();

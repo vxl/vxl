@@ -24,7 +24,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
                  vipl_section_container< DataType >* container)
   : hsreal_descriptor(desc),
     hsreal_container(container),
-    hsi_data_ptr(0),
+    hsi_data_ptr(VXL_NULLPTR),
     hsi_data_offsets(2,0),
     hsi_curr_sec_start(2,0),
     hsi_curr_sec_end(2,0),
@@ -106,8 +106,8 @@ vipl_section_descriptor< DataType > ::~vipl_section_descriptor()
 template < class DataType >
 vipl_section_descriptor< DataType > ::vipl_section_descriptor()
   : hsreal_descriptor(this),
-    hsreal_container(0),
-    hsi_data_ptr(0),
+    hsreal_container(VXL_NULLPTR),
+    hsi_data_ptr(VXL_NULLPTR),
     hsi_data_offsets(2,0),
     hsi_curr_sec_start(2,0),
     hsi_curr_sec_end(2,0),
@@ -159,7 +159,7 @@ template < class DataType >
 DataType* vipl_section_descriptor< DataType > ::data_ptr()
 {
   std::cerr << "Warning: called unimplemented method vipl_section_descriptor::data_ptr\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //: Returns a const pointer to the first data item in the current section.
@@ -168,7 +168,7 @@ template < class DataType >
 const DataType* vipl_section_descriptor< DataType > ::data_ptr() const
 {
   std::cerr << "Warning: called unimplemented method vipl_section_descriptor::data_ptr\n";
-  return 0;
+  return VXL_NULLPTR;
 }
 
 //:
@@ -191,7 +191,7 @@ vipl_section_descriptor< DataType >* vipl_section_descriptor< DataType > ::virtu
   if (real_container())
     rtn->put_real_container(real_container()->virtual_copy());
   else
-    rtn->put_real_container(0);
+    rtn->put_real_container(VXL_NULLPTR);
   rtn->put_i_curr_sec_start(i_curr_sec_start());
   rtn->put_i_curr_sec_end(i_curr_sec_end());
   rtn->put_i_curr_sec_size(i_curr_sec_size());
