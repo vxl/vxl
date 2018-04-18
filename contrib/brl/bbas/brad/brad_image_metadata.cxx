@@ -1031,8 +1031,12 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
     return false;
   }
   n_bands_ = 0;
-  lower_left_.set(181, 91, 10000);
-  upper_right_.set(-181,-91, -10000);
+
+  vgl_point_3d<double> lower_left_local(181, 91, 10000);  // x is lon, y is lat 
+  vgl_point_3d<double> upper_right_local(-181,-91, -10000);
+  bool parsed_llx = false, parsed_lly = false, parsed_llz = false;
+  bool parsed_urx = false, parsed_ury = false, parsed_urz = false;
+
   double val;
 
   bool parsed_gain_offset = false, parsed_sun_irradiance = false;
@@ -1101,33 +1105,39 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
     }
     if (tag.compare("LLLat") == 0) {
       linestr >> val;
-      lower_left_.set(lower_left_.x(), val, lower_left_.z());
+      lower_left_local.set(lower_left_.x(), val, lower_left_.z());
+      parsed_lly = true;
       continue;
     }
     if (tag.compare("LLLon") == 0) {
       linestr >> val;
-      lower_left_.set(val, lower_left_.y(), lower_left_.z());
+      lower_left_local.set(val, lower_left_.y(), lower_left_.z());
+      parsed_llx = true;
       continue;
     }
     if (tag.compare("LLHAE") == 0) {
       linestr >> val;
-      lower_left_.set(lower_left_.x(), lower_left_.y(), val);
+      lower_left_local.set(lower_left_.x(), lower_left_.y(), val);
+      parsed_llz = true;
       continue;
     }
 
     if (tag.compare("URLat") == 0) {
       linestr >> val;
-      upper_right_.set(upper_right_.x(), val, upper_right_.z());
+      upper_right_local.set(upper_right_.x(), val, upper_right_.z());
+      parsed_ury = true;
       continue;
     }
     if (tag.compare("URLon") == 0) {
       linestr >> val;
-      upper_right_.set(val, upper_right_.y(), upper_right_.z());
+      upper_right_local.set(val, upper_right_.y(), upper_right_.z());
+      parsed_urx = true;
       continue;
     }
     if (tag.compare("URHAE") == 0) {
       linestr >> val;
-      upper_right_.set(upper_right_.x(), upper_right_.y(), val);
+      upper_right_local.set(upper_right_.x(), upper_right_.y(), val);
+      parsed_urz = true;
       continue;
     }
     if (tag.compare("numberOfSpectralBands") == 0) {
@@ -1197,6 +1207,15 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
     if(verbose_)
       std::cout << "cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
   }
+
+  if (parsed_llx && parsed_lly && parsed_llz) {
+    lower_left_.set(lower_left_local.x(), lower_left_local.y(), lower_left_local.z());
+  }
+
+  if (parsed_urx && parsed_ury && parsed_urz) {
+    upper_right_.set(upper_right_local.x(), upper_right_local.y(), upper_right_local.z());
+  }
+
 
   return true;
 }
