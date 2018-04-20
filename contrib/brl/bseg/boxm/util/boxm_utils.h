@@ -47,7 +47,7 @@ class boxm_utils
                               vpgl_camera_double_sptr const& camera);
 
   //:
-  static bool is_face_visible(double * xverts, double *yerts,
+  static bool is_face_visible(const double * xverts, const double *yerts,
                               unsigned id1,unsigned id2,unsigned id3,unsigned id4);
 
   //: returns the visible faces of a box given a camera.

@@ -230,8 +230,8 @@ class boxm2_volm_matcher_p1
   //: a test function to check the kernel implementation
   bool volm_matcher_p1_test_ori(unsigned n_ind,
                                 unsigned char* index,
-                                unsigned char* index_ori,
-                                unsigned char* index_lnd,
+                                const unsigned char* index_ori,
+                                const unsigned char* index_lnd,
                                 float* score_buff,
                                 float* mu_buff);
 };

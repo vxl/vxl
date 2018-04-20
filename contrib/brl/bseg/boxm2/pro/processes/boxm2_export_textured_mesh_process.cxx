@@ -55,8 +55,8 @@ namespace boxm2_export_textured_mesh_process_globals
   //checks if a triangle in UV space is visible.  us and vs are double buffers of length 3
   bool face_is_visible( vpgl_perspective_camera<double>* cam,
                         vil_image_view<int>* vis_img,
-                        double* us,
-                        double* vs,
+                        const double* us,
+                        const double* vs,
                         int face_id);
 }
 
@@ -435,8 +435,8 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
 
 bool boxm2_export_textured_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam,
                                                                   vil_image_view<int>* vis_img,
-                                                                  double* us,
-                                                                  double* vs,
+                                                                  const double* us,
+                                                                  const double* vs,
                                                                   int face_id)
 {
   //now create a polygon, and find the integer image coordinates (U,V) that this polygon covers

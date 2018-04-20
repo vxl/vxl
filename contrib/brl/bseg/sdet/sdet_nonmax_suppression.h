@@ -109,7 +109,7 @@ class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
   // get the corners related to the given face
   void get_relative_corner_coordinates(int face_num, int *corners);
   // used for 3 points parabola fit
-  double subpixel_s(double *s, double *f);
+  double subpixel_s(const double *s, const double *f);
   // used for 9 points parabola fit
   double subpixel_s(int x, int y, vgl_vector_2d<double> direction);
   void find_distance_s_and_f_for_point(int x, int y, vgl_homg_line_2d<double> line,

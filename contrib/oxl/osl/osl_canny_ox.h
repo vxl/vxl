@@ -65,7 +65,7 @@ class osl_canny_ox : public osl_canny_base
   void Add_linkOX(int,int,osl_LINK *[]);
   void Link_edgelsOX(std::vector<unsigned> const &, std::vector<unsigned> const &,osl_LINK *[]);
   int Get_n_edgels_hysteresisOX(osl_edgel_chain *&,int *&);
-  void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, int *x_, int *y_);
+  void Get_hysteresis_edgelsOX(osl_edgel_chain *&,int *&, osl_edgel_chain *&, const int *x_, const int *y_);
   void Delete_linksOX(osl_LINK **, int);
   osl_edge *NO_FollowerOX(osl_edgel_chain *);
 

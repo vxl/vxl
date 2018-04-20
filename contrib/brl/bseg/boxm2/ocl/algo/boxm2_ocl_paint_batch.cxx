@@ -212,7 +212,7 @@ bocl_kernel* boxm2_ocl_paint_batch::compile_kernels( bocl_device_sptr device,
 }
 
 
-void boxm2_ocl_paint_batch::weighted_mean_var(float* obs, float* vis, int numSamples, float& mean, float& var)
+void boxm2_ocl_paint_batch::weighted_mean_var(const float* obs, const float* vis, int numSamples, float& mean, float& var)
 {
   var = 0.0f, mean = 0.0f;
   if (numSamples == 0)

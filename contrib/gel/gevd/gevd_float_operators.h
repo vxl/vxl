@@ -329,7 +329,7 @@ class gevd_float_operators
                                float* yline, const int len,
                                const float ka, const float kb, const float kc);
   static void ShrinkBy2AlongX_D( const gevd_bufferxy& from, int from_sizeX,
-                                 int sizeX, int y, float kernel[],
+                                 int sizeX, int y, const float kernel[],
                                  float no_value, float* yline, float* wline );
   static float ExpandBy2AlongX(const gevd_bufferxy& cfrom, const int y,
                                float* yline, const int len,

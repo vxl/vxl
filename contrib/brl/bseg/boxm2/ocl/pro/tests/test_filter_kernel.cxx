@@ -35,7 +35,7 @@
 #include <brdb/brdb_value.h>
 
 
-void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int /*dataSize*/)
+void print_probs(boxm2_block* blk, const float* alphas, boxm2_block_metadata data, int /*dataSize*/)
 {
   //print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
@@ -76,7 +76,7 @@ void print_probs(boxm2_block* blk, float* alphas, boxm2_block_metadata data, int
   }
 }
 
-void print_alphas(boxm2_block* blk, float* alphas, boxm2_block_metadata /*data*/, int /*dataSize*/)
+void print_alphas(boxm2_block* blk, const float* alphas, boxm2_block_metadata /*data*/, int /*dataSize*/)
 {
   //print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;

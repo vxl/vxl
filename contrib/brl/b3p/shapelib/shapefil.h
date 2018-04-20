@@ -216,9 +216,9 @@ void SHPAPI_CALL
       SHPComputeExtents( SHPObject * psObject );
 SHPObject SHPAPI_CALL1(*)
       SHPCreateObject( int nSHPType, int nShapeId,
-                       int nParts, int * panPartStart, int * panPartType,
-                       int nVertices, double * padfX, double * padfY,
-                       double * padfZ, double * padfM );
+                       int nParts, const int * panPartStart, const int * panPartType,
+                       int nVertices, const double * padfX, const double * padfY,
+                       const double * padfZ, const double * padfM );
 SHPObject SHPAPI_CALL1(*)
       SHPCreateSimpleObject( int nSHPType, int nVertices,
                              double * padfX, double * padfY, double * padfZ );
@@ -295,7 +295,7 @@ int    SHPAPI_CALL1(*)
                                double * padfBoundsMax,
                                int * );
 int     SHPAPI_CALL
-      SHPCheckBoundsOverlap( double *, double *, double *, double *, int );
+      SHPCheckBoundsOverlap( const double *, const double *, const double *, const double *, int );
 
 /************************************************************************/
 /*                             DBF Support.                             */

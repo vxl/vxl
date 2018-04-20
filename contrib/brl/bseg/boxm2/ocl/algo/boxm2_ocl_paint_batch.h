@@ -36,7 +36,7 @@ class boxm2_ocl_paint_batch
     //map of paint kernel by device
     static std::map<std::string, bocl_kernel*> kernels_;
 
-    static void weighted_mean_var(float* obs, float* vis, int numSamples, float& mean, float& var);
+    static void weighted_mean_var(const float* obs, const float* vis, int numSamples, float& mean, float& var);
 };
 
 #endif // boxm2_ocl_paint_batch_h_

@@ -68,7 +68,7 @@ class boxm2_vecf_articulated_scene : public vbl_ref_count{
   std::string color_apm_id() {return color_apm_id_;}
 
   static  double8 interp_generic_double8(vgl_point_3d<double>* neighbors, double8* probs, vgl_point_3d<double> p );
-  static  double interp_generic_double(vgl_point_3d<double>* neighbors, double* probs, vgl_point_3d<double> p );
+  static  double interp_generic_double(vgl_point_3d<double>* neighbors, const double* probs, vgl_point_3d<double> p );
   double8 to_double8(color_APM& apm){
     double8 apm_f; apm_f.fill(0);
     apm_f[0] = (double) apm[0]; apm_f[1] =(double) apm[1] ; apm_f[2] =(double) apm[2];

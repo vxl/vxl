@@ -17,7 +17,7 @@ class boxm2_test_utils
     //: creates a valid, though predictable block byte stream
     static char* construct_block_test_stream( int numBuffers,
                                               int treeLen,
-                                              int* nums,
+                                              const int* nums,
                                               double* dims,
                                               int init_level,
                                               int max_level,

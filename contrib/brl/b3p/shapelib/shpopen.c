@@ -771,9 +771,9 @@ SHPComputeExtents( SHPObject * psObject )
 
 SHPObject SHPAPI_CALL1(*)
 SHPCreateObject( int nSHPType, int nShapeId, int nParts,
-                 int * panPartStart, int * panPartType,
-                 int nVertices, double * padfX, double * padfY,
-                 double * padfZ, double * padfM )
+                 const int * panPartStart, const int * panPartType,
+                 int nVertices, const double * padfX, const double * padfY,
+                 const double * padfZ, const double * padfM )
 {
     SHPObject *psObject;
     int  i, bHasM, bHasZ;

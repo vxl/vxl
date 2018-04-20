@@ -305,7 +305,7 @@ void sdet_nms::get_relative_corner_coordinates(int face_num, int *corners)
   }
 }
 
-double sdet_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
+double sdet_nms::subpixel_s(const double *s, const double *f, double &max_f, double &max_d)
 {
   //double A = f[2] / ((s[2]-s[0])*(s[2]-s[1]));
   //double B = f[1] / ((s[1]-s[0])*(s[1]-s[2]));

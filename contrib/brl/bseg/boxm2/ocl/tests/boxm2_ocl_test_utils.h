@@ -20,7 +20,7 @@ class boxm2_ocl_test_utils
 public:
     static char* construct_block_test_stream( int numBuffers,
                                               int treeLen,
-                                              int* nums,
+                                              const int* nums,
                                               double* dims,
                                               int init_level,
                                               int max_level,

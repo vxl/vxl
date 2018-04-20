@@ -496,7 +496,7 @@ int osl_canny_ox::Get_n_edgels_hysteresisOX(osl_edgel_chain *&edgels_NMS,
 void osl_canny_ox::Get_hysteresis_edgelsOX(osl_edgel_chain *& edgels_NMS,
                                            int *&status,
                                            osl_edgel_chain *& edgels_Hysteresis,
-                                           int *x_, int *y_)
+                                           const int *x_, const int *y_)
 {
   // Initialise thin_ to zero's
   osl_canny_base_fill_raw_image(thin_, xsize_, ysize_, 0.0f);

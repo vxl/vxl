@@ -117,8 +117,8 @@ class gevd_memory_mixin : public gevd_status_mixin
   //
   int  ReadBytes(void* ib, int b);
   int  ReadBytes(void* ib, int b, int loc);
-  int  ReadBytes(void* ib, int b, int* mapping);
-  int  ReadBytes(void* ib, int b, int loc, int* mapping);
+  int  ReadBytes(void* ib, int b, const int* mapping);
+  int  ReadBytes(void* ib, int b, int loc, const int* mapping);
   int  WriteBytes(const void* ib, int b);
   int  WriteBytes(const void* ib, int b, int loc);
   void Clear();

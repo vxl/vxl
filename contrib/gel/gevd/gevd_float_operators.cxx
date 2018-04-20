@@ -2101,7 +2101,7 @@ gevd_float_operators::ShrinkBy2AlongX_D(const gevd_bufferxy& from,
                                         int from_sizeX,
                                         int sizeX,
                                         int y,
-                                        float kernel[],
+                                        const float kernel[],
                                         float no_value,
                                         float* yline,
                                         float* wline )
