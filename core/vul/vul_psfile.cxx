@@ -227,7 +227,7 @@ void vul_psfile::set_min_max_xy(int x, int y)
 //-----------------------------------------------------------------------------
 //: Write 8 bit grey scale image.
 //-----------------------------------------------------------------------------
-void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int sizey)
+void vul_psfile::print_greyscale_image(const unsigned char* buffer, int sizex, int sizey)
 {
   if (debug)
     std::cout << "vul_psfile::print_greyscale_image, width = " << sizex
@@ -326,7 +326,7 @@ void vul_psfile::print_greyscale_image(unsigned char* buffer, int sizex, int siz
 //-----------------------------------------------------------------------------
 //: Write 24 bit colour image.
 //-----------------------------------------------------------------------------
-void vul_psfile::print_color_image(unsigned char* data, int sizex, int sizey)
+void vul_psfile::print_color_image(const unsigned char* data, int sizex, int sizey)
 {
   if (debug)
     std::cout << "vul_psfile::print_color_image, width = " << sizex

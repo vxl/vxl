@@ -1033,7 +1033,7 @@ bool vil_tiff_image::write_block_to_file(unsigned bi, unsigned bj,
 // Just support packing of bool data for now
 // ultimately we need the opposite of maybe_byte_align_data
 void vil_tiff_image::bitpack_block(unsigned bytes_per_block,
-                                   vxl_byte* in_block_buf,
+                                   const vxl_byte* in_block_buf,
                                    vxl_byte* out_block_buf)
 {
   unsigned bytes_per_bool = sizeof(bool);
