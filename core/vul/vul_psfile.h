@@ -54,9 +54,9 @@ class vul_psfile: public std::ofstream
   float line_width() const { return line_width_; }
 
   //: Write 8 bit grey scale image.
-  void print_greyscale_image(unsigned char* data, int sizex, int sizey);
+  void print_greyscale_image(const unsigned char* data, int sizex, int sizey);
   //: Write 24 bit colour image.
-  void print_color_image(unsigned char* data, int sizex, int sizey);
+  void print_color_image(const unsigned char* data, int sizex, int sizey);
 
   //:  Add a line between the given points to the Postscript file.
   void line(float x1, float y1, float x2, float y2);

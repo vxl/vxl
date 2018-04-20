@@ -28,7 +28,7 @@
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <vnl/vnl_det.h>
 
-static bool equals(double x[16], double y[16])
+static bool equals(const double x[16], const double y[16])
 {
   for (int i=0; i<12; ++i) if (x[i] != y[i]) return false;
   return true;

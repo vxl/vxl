@@ -309,7 +309,7 @@ class vil_tiff_image : public vil_blocked_image_resource
                             vxl_byte*& block_buf);
 
   void bitpack_block(unsigned bytes_per_block,
-                     vxl_byte* in_block_buf,
+                     const vxl_byte* in_block_buf,
                      vxl_byte* out_block_buf);
 
   bool write_block_to_file(unsigned bi, unsigned bj,

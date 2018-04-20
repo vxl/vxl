@@ -30,7 +30,7 @@ static double d(double x0, double x1, double y0, double y1)
   return std::sqrt((x0-x1)*(x0-x1) + (y0-y1)*(y0-y1));
 }
 
-static bool equals(double x[12], double y[12])
+static bool equals(const double x[12], const double y[12])
 {
   for (int i=0; i<12; ++i) if (x[i] != y[i]) return false;
   return true;
