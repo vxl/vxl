@@ -41,7 +41,7 @@ class boxm_quad_scan_iterator : public vgl_region_scan_iterator
   //: returns the amount of pixel at location x in the current scanline covered by the triangle
   float pix_coverage(int x);
 
-  bool x_start_end_val(double * vals,double & start_val,double & end_val);
+  bool x_start_end_val(const double * vals,double & start_val,double & end_val);
 
 
  protected:

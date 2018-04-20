@@ -26,7 +26,7 @@ void boxm2_vecf_articulated_scene::clear_target(boxm2_scene_sptr target_scene){
   alpha_db->set_default_value(alpha_prefix, m_data);
 
 }
-  double boxm2_vecf_articulated_scene::interp_generic_double(vgl_point_3d<double>* neighbors, double* probs, vgl_point_3d<double> p ){
+  double boxm2_vecf_articulated_scene::interp_generic_double(vgl_point_3d<double>* neighbors, const double* probs, vgl_point_3d<double> p ){
 
   double dx00 = LERP(probs[0],probs[2],  p.x(),neighbors[0].x(),neighbors[2].x()); // interp   between (x0,y0,z0) and (x1,y0,z0)
   double dx10 = LERP(probs[1],probs[3],  p.x(),neighbors[1].x(),neighbors[3].x()); // interp   between (x0,y1,z0) and (x1,y1,z0)

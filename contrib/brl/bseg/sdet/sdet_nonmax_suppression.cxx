@@ -401,7 +401,7 @@ void sdet_nonmax_suppression::get_relative_corner_coordinates(int face_num, int 
   }
 }
 
-double sdet_nonmax_suppression::subpixel_s(double *s, double *f)
+double sdet_nonmax_suppression::subpixel_s(const double *s, const double *f)
 {
   double A = f[2] / ((s[2]-s[0])*(s[2]-s[1]));
   double B = f[1] / ((s[1]-s[0])*(s[1]-s[2]));

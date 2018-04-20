@@ -31,7 +31,7 @@ class bstm_analyze_coherency_function
 
    //: "default" constructor does all the work
    bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *app,
-                                       bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double init_local_time, double end_local_time, vgl_box_3d<double> box,
+                                       const bstm_data_traits<BSTM_ALPHA>::datatype * alpha, double init_local_time, double end_local_time, vgl_box_3d<double> box,
                                        float p_threshold, std::ofstream & output_file);
 
 };

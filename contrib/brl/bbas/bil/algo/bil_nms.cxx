@@ -250,7 +250,7 @@ void bil_nms::get_relative_corner_coordinates(int face_num, int *corners)
   }
 }
 
-double bil_nms::subpixel_s(double *s, double *f, double &max_f, double &max_d)
+double bil_nms::subpixel_s(const double *s, const double *f, double &max_f, double &max_d)
 {
   // new version: assumes s[1]=0 and s[2]=-s[0]
   double A = -(f[1] - (f[0]+f[2])/2.0)/(s[2]*s[2]);

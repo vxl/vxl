@@ -255,8 +255,8 @@ SHPDestroyTree( SHPTree * psTree )
 /************************************************************************/
 
 int SHPAPI_CALL
-SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
-                       double * padfBox2Min, double * padfBox2Max,
+SHPCheckBoundsOverlap( const double * padfBox1Min, const double * padfBox1Max,
+                       const double * padfBox2Min, const double * padfBox2Max,
                        int nDimension )
 {
     int  iDim;
@@ -280,7 +280,7 @@ SHPCheckBoundsOverlap( double * padfBox1Min, double * padfBox1Max,
 /************************************************************************/
 
 static int SHPCheckObjectContained( SHPObject * psObject, int nDimension,
-                           double * padfBoundsMin, double * padfBoundsMax )
+                           const double * padfBoundsMin, const double * padfBoundsMax )
 {
     if( psObject->dfXMin < padfBoundsMin[0]
         || psObject->dfXMax > padfBoundsMax[0] )

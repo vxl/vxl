@@ -9,7 +9,7 @@
 
 
 //: constructor
-boxm_triangle_scan_iterator::boxm_triangle_scan_iterator(double *verts_x, double *verts_y, unsigned int v0, unsigned int v1, unsigned int v2)
+boxm_triangle_scan_iterator::boxm_triangle_scan_iterator(const double *verts_x, const double *verts_y, unsigned int v0, unsigned int v1, unsigned int v2)
 : tri_it_()
 {
   tri_it_.a.x = verts_x[v0] - 0.5;

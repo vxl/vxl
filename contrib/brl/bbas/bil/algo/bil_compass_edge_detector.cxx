@@ -369,7 +369,7 @@ void CreateWedgeHistograms(vil_image_view<vxl_byte>& image, double *mask,
 
 
 //: compute the optimal orientation and edge strength from the vector of edge strengths computed at discrete orientations
-void compute_strength_and_orient(double* dist, int n_orient, float& strength, double& orientation)
+void compute_strength_and_orient(const double* dist, int n_orient, float& strength, double& orientation)
 {
   double wedgesize = vnl_math::pi/n_orient;
 

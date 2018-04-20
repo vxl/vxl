@@ -32,7 +32,7 @@
 template <class T>
 bool test_image_equal(char const* type_name,
                       vil3d_image_view<T> const & image,
-                      float voxel_size[3],
+                      const float voxel_size[3],
                       vil3d_image_resource_sptr const& pimage2,
                       bool exact = true)
 {

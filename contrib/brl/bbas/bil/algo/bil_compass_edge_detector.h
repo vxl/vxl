@@ -29,7 +29,7 @@ inline double CArea(double Xhigh, double Xlow, double Y, double r);
 double* MakeQtrMask(double r, int n_wedges);
 
 //: compute the optimal orientation and edge strength from the vector of edge strengths computed at discrete orientations
-void compute_strength_and_orient(double* dist, int n_orient, float& strength, double& orientation);
+void compute_strength_and_orient(const double* dist, int n_orient, float& strength, double& orientation);
 
 typedef struct bin_struct
 {

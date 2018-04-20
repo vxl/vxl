@@ -176,7 +176,7 @@ bool boxm2_volm_wr3db_index::add_to_index(std::vector<uchar>& values)
 }
 
 //: caller is responsible to pass a valid array of size layer_size
-bool boxm2_volm_wr3db_index::add_to_index(uchar* values)
+bool boxm2_volm_wr3db_index::add_to_index(const uchar* values)
 {
   if (m_ == READ) {
     std::cout << "index object is in READ mode! cannot add to index!\n";

@@ -33,12 +33,12 @@ class boxm2_merge_block_function
   bool merge(std::vector<boxm2_data_base*>& datas);
 
   //: refine bit tree
-  boct_bit_tree merge_bit_tree(boct_bit_tree& curr_tree, float* alphas, float prob_thresh);
+  boct_bit_tree merge_bit_tree(boct_bit_tree& curr_tree, const float* alphas, float prob_thresh);
 
   //: move data into new location
   int move_data( boct_bit_tree& unrefined_tree,
                  boct_bit_tree& merged_tree,
-                 float*   alpha,
+                 const float*   alpha,
                  uchar8*  mog,
                  ushort4* num_obs,
                  float*   alpha_cpy,

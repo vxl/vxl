@@ -129,7 +129,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int loc)
 }
 
 int
-gevd_memory_mixin::ReadBytes(void* ib, int b, int* mapping)
+gevd_memory_mixin::ReadBytes(void* ib, int b, const int* mapping)
 {
   if ((ib == VXL_NULLPTR) || !(GetStatusCode()&MM_READ))
     return 0;
@@ -150,7 +150,7 @@ gevd_memory_mixin::ReadBytes(void* ib, int b, int* mapping)
 //: Read b bytes from loc to ib, thru mapping.  New @ 6/11/91 gbs
 //====================================================================
 int
-gevd_memory_mixin::ReadBytes(void* ib, int b, int loc, int* mapping)
+gevd_memory_mixin::ReadBytes(void* ib, int b, int loc, const int* mapping)
 {
   if ((ib == VXL_NULLPTR) || !(GetStatusCode()&MM_READ))
     return 0;

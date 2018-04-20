@@ -207,7 +207,7 @@ bool volm_buffered_index::add_to_index(std::vector<uchar>& values)
 }
 
 //: caller is responsible to pass a valid array of size layer_size
-bool volm_buffered_index::add_to_index(uchar* values)
+bool volm_buffered_index::add_to_index(const uchar* values)
 {
   if (m_ == READ) {
     std::cout << "index object is in READ mode! cannot add to index!\n";

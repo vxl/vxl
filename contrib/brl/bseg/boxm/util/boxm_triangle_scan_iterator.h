@@ -14,7 +14,7 @@ class boxm_triangle_scan_iterator : public vgl_region_scan_iterator
 {
  public:
   //: constructor
-  boxm_triangle_scan_iterator(double *verts_x, double *verts_y, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
+  boxm_triangle_scan_iterator(const double *verts_x, const double *verts_y, unsigned int v0 = 0, unsigned int v1 = 1, unsigned int v2 = 2);
 
   //: Resets the scan iterator to before the first scan line
   //  After calling this function, next() needs to be called before

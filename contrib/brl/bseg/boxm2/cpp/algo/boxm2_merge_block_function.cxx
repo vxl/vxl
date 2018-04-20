@@ -182,7 +182,7 @@ bool boxm2_merge_block_function::merge(std::vector<boxm2_data_base*>& datas)
 // so no tree_buffer information is needed, whereas the data is modified
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
-boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefined_tree, float* alphas, float prob_thresh)
+boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefined_tree, const float* alphas, float prob_thresh)
 {
   //initialize tree to return
   boct_bit_tree merged_tree(unrefined_tree.get_bits(), max_level_);
@@ -262,7 +262,7 @@ boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefine
 //       data[dataIndex++] = old_data[unrefined_tree.data_ptr(bit)];
 int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
                                            boct_bit_tree& merged_tree,
-                                           float*  alpha,
+                                           const float*  alpha,
                                            uchar8* mog,
                                            ushort4* num_obs,
                                            float*  alpha_cpy,

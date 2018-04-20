@@ -11,7 +11,7 @@ const double boxm2_test_utils::dims_[] = {0.5,0.5,0.5,0};
 
 char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
                                                     int treeLen,
-                                                    int* nums,
+                                                    const int* nums,
                                                     double* dims,
                                                     int init_level,
                                                     int max_level,

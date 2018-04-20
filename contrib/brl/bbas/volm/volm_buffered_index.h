@@ -81,7 +81,7 @@ class volm_buffered_index : public vbl_ref_count
     //  caller is responsible to keep the ordering consistent with the hypotheses ordering
     bool add_to_index(std::vector<uchar>& values);
     //: caller is responsible to pass a valid array of size layer_size
-    bool add_to_index(uchar* values);
+    bool add_to_index(const uchar* values);
 
     //: retrieve the next index, use the active_cache, if all on the active_cache has been retrieved, read from disc
     //  caller is responsible to resize values array to layer_size before passing to this method
