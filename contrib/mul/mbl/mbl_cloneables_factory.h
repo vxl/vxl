@@ -49,21 +49,13 @@ template <class BASE>
 class mbl_cloneables_factory
 {
  private:
-  typedef std::map<std::string, mbl_cloneable_ptr<BASE> > MAP;
-
   //: Singleton array of names, and association concrete instantiations of BASE.
+  typedef std::map<std::string, mbl_cloneable_ptr<BASE> > MAP;
 
  private:
 
   //: Get singleton instance.
-  static MAP &objects()
-  {
-    static vcl_unique_ptr<MAP> objects_;
-    if (objects_.get() == VXL_NULLPTR)
-      objects_.reset(new MAP);
-
-    return *objects_;
-  }
+  static MAP &objects();
 
  public:
 
@@ -106,7 +98,20 @@ class mbl_cloneables_factory
 };
 
 // Macro to instantiate template, and initialise singleton data item.
+// Should only be called once in any library suite - usually near where
+// the baseclass (T) is defined.
+// Arrange that the static objects_ thing only exists in the one place this
+// is called.
 #define MBL_CLONEABLES_FACTORY_INSTANTIATE(T) \
-template class mbl_cloneables_factory< T >
+template class mbl_cloneables_factory< T >; \
+template<>\
+  std::map<std::string, mbl_cloneable_ptr<T > >& mbl_cloneables_factory< T >::objects() \
+  { \
+    static vcl_unique_ptr<std::map<std::string, mbl_cloneable_ptr<T > > > objects_; \
+    if (objects_.get() == VXL_NULLPTR) \
+      objects_.reset(new MAP); \
+    return *objects_; \
+  }
+
 
 #endif  // mbl_cloneables_factory_h
