@@ -332,9 +332,12 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
   vul_awk awk(ifs);
   double absCalfact = 1.0;
   double effectiveBand = 1.0;
+  double gain = 1.0;
+  double offset = 0.0;
+  double solar_irradiance = 1500.0;
   lower_left_.set(181, 91, 10000);
   upper_right_.set(-181,-91, -10000);
-  // ugh, introducting a sequential dependency...need all points in order to add to polygon
+  // ugh, introducing a sequential dependency...need all points in order to add to polygon
   // parse_from_pvl() does this a little cleaner
   std::vector<vgl_point_2d<double> > footprint_corners(4);
   for (; awk; ++awk)
@@ -353,6 +356,24 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
       linestr >> tag;  // read =
       linestr >> effectiveBand;
       this->effect_band_width_.push_back(effectiveBand);
+      continue;
+    }
+    if (tag.compare("gain") == 0) {
+      linestr >> tag;
+      linestr >> gain;
+      this->gains_.push_back(gain);
+      continue;
+    }
+    if (tag.compare("offset") == 0) {
+      linestr >> tag;
+      linestr >> offset;
+      this->offsets_.push_back(offset);
+      continue;
+    }
+    if (tag.compare("solar_irradiance") == 0) {
+      linestr >> tag;
+      linestr >> solar_irradiance;
+      this->normal_sun_irradiance_values_.push_back(solar_irradiance);
       continue;
     }
     if (tag.compare("cloudCover") == 0) {
@@ -474,6 +495,9 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
   number_of_bits_ = 11;
   double absCalfact = 1.0;
   double effectiveBand = 1.0;
+  double gain = 1.0;
+  double offset = 0.0;
+  double solar_irrad = 1500.0;
   lower_left_.set(181, 91, 10000);
   upper_right_.set(-181,-91, -10000);
   std::vector<vgl_point_2d<double> > footprint_corners(4);
@@ -495,6 +519,24 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
       linestr >> tag;
       linestr >> effectiveBand;
       this->effect_band_width_.push_back(effectiveBand);
+      continue;
+    }
+    if (tag.compare("gain") == 0) {
+      linestr >> tag;
+      linestr >> gain;
+      this->gains_.push_back(gain);
+      continue;
+    }
+    if (tag.compare("offset") == 0) {
+      linestr >> tag;
+      linestr >> offset;
+      this->offsets_.push_back(offset);
+      continue;
+    }
+    if (tag.compare("solar_irradiance") == 0) {
+      linestr >> tag;
+      linestr >> solar_irrad;
+      this->normal_sun_irradiance_values_.push_back(solar_irrad);
       continue;
     }
     // cloud coverage
@@ -641,6 +683,7 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     std::cout << "  cloud coverage percentage : " << cloud_coverage_percentage_ << " band: " << band_ << " number of bands: " << n_bands_ << std::endl;
 
   footprint_ = vgl_polygon<double>(footprint_corners);
+
   return true;
 }
 
@@ -1375,9 +1418,6 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // Parse from metadata file for further improvement
   // Also set band dependent adjustment factors gain and offset, could either obtained from hardcoded table or specified from
   // user prepared text metadata file
-  std::vector<double> solar_irrads; // for multi-spectral imagery there are multiple values
-  bool parsed_sun_irradiance = false;
-  bool parsed_gain_offset = false;
   if (meta_filename.size() == 0)  // no metadata file available; try providing some known value for IKNOOS PAN imagery
   {
     std::string type = hdr->get_image_type();  // type mono is band PAN
@@ -1412,14 +1452,8 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
     }
     else if (ext.compare(".TXT") == 0 || ext.compare(".txt") == 0)  // parse from TXT file
     {
-      // note that the band denpendent gain/offset are now read from user prepared txt file
+      // note that the band dependent gain/offset are now read from user prepared txt file
       parsed_fine = this->parse_from_txt(meta_filename);
-      if (!parsed_fine) {
-        std::cerr << "ERROR parsing metadata text file: " << meta_filename << " failed!!!\n";
-        return false;
-      }
-      parsed_sun_irradiance = true;
-      parsed_gain_offset = true;
     }
     else {
       std::cerr << "ERROR unrecognized metadata file format: " << ext << " in satellite name: " << imagename << "!!!\n";
@@ -1461,12 +1495,13 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // (http://www.digitalglobe.com/resources/technical-information)
   // this table is stored in source/contrib/brl/bbas/brad/brad_sat_img_calibration_table.txt or
   //                      compile/lib/brad_sat_img_calibration_table.txt
-  if (!parsed_gain_offset)
+  if (this->gains_.empty()) {
     if (!this->read_band_dependent_gain_offset()) {
       std::cerr << "ERROR: Parse gain offset value from default table failed for satellite: " << this->satellite_name_
                 << ", can not find this satellite in default gain/offset table!!!\n";
       return false;
     }
+  }
   // screen output radiometric correction parameters
   if (this->verbose_)
     this->print_out_radiometric_parameter();
@@ -1474,18 +1509,19 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // read default solar irradiance
   // same as default gain/offset, values are from annual published DigitalGlobe tech spec
   // (http://www.digitalglobe.com/resources/technical-information)
-  if (!parsed_sun_irradiance)
+  if (this->normal_sun_irradiance_values_.empty()) {
     if (!this->read_band_dependent_solar_irradiance()) {
       std::cerr << "ERROR: Parse solar irradiance value from default table failed for satellite: " << this->satellite_name_
                 << ", can not find this satellite in default solar irradiance table!!!\n";
       return false;
     }
+  }
 
   if (this->verbose_) {
     this->print_out_solar_irradiance();
   }
 
-  // check consistancy of gain, offset, sun irradiance w.r.t number of bands
+  // check consistency of gain, offset, sun irradiance w.r.t number of bands
   if (this->gains_.size() != this->n_bands_ || this->offsets_.size() != this->n_bands_) {
     std::cerr << "ERROR: mismatch between calibration factor gain/offset length " << this->gains_.size() << "/"
               << this->offsets_.size()
@@ -1550,6 +1586,10 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
     std::cout << "ERROR unrecognized metadata file format: " << ext << " in name: " << meta_file << "!\n";
     return false;
   }
+  if (!parsed_fine) {
+    std::cerr << "ERROR parsing meta data file " << meta_file << " failed!!!\n";
+    return false;
+  }
 
   // regularize satellite name
   if (this->satellite_name_.find("IKONOS") != std::string::npos)
@@ -1573,10 +1613,12 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
   // (http://www.digitalglobe.com/resources/technical-information)
   // this table is stored in source/contrib/brl/bbas/brad/brad_sat_img_calibration_table.txt or
   //                      compile/lib/brad_sat_img_calibration_table.txt
-  if (!this->read_band_dependent_gain_offset()) {
-    std::cerr << "ERROR: Parse gain offset value from default table failed for satellite: " << this->satellite_name_
-                << ", can not find this satellite in default gain/offset table!!!\n";
-    return false;
+  if (this->gains_.empty()) {
+    if (!this->read_band_dependent_gain_offset()) {
+      std::cerr << "ERROR: Parse gain offset value from default table failed for satellite: " << this->satellite_name_
+                  << ", can not find this satellite in default gain/offset table!!!\n";
+      return false;
+    }
   }
   // screen output radiometric correction parameters
   if (this->verbose_)
@@ -1585,18 +1627,19 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
   // read default solar irradiance
   // same as default gain/offset, values are from annual published DigitalGlobe tech spec
   // (http://www.digitalglobe.com/resources/technical-information)
-
+  if (this->normal_sun_irradiance_values_.empty()) {
     if (!this->read_band_dependent_solar_irradiance()) {
       std::cerr << "ERROR: Parse solar irradiance value from default table failed for satellite: " << this->satellite_name_
                 << ", can not find this satellite in default solar irradiance table!!!\n";
       return false;
     }
+  }
 
   if (this->verbose_) {
     this->print_out_solar_irradiance();
   }
 
-  // check consistancy of gain, offset, sun irradiance w.r.t number of bands
+  // check consistency of gain, offset, sun irradiance w.r.t number of bands
   if (this->gains_.size() != this->n_bands_ || this->offsets_.size() != this->n_bands_) {
     std::cerr << "ERROR: mismatch between calibration factor gain/offset length " << this->gains_.size() << "/"
               << this->offsets_.size()
@@ -1615,7 +1658,7 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
     return false;
   }
 
-  // normalize the soalr irradiance by earth-sun distance
+  // normalize the solar irradiance by earth-sun distance
   double d = brad_sun_distance(this->t_.year, this->t_.month, this->t_.day, this->t_.hour, this->t_.min);
   double d_sqr = d*d;
   auto vit = this->normal_sun_irradiance_values_.begin();

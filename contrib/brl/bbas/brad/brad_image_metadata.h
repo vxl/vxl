@@ -8,6 +8,7 @@
 // \verbatim
 //  Modifications
 //   Yi Dong Nov, 2017 -- Major update to adopt new image calibration mechanism
+//   Yi Dong Apr, 2018 -- Add gain/offset parsing from IMD file
 // \endverbatim
 //----------------------------------------------------------------------------
 #ifndef brad_image_metadata_h_
