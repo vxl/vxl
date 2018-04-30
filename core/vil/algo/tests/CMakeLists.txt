@@ -33,6 +33,7 @@ add_executable( vil_algo_test_all
   test_suppress_non_max.cxx
   test_algo_suppress_non_plateau.cxx
   test_algo_sobel.cxx
+  test_algo_2nd_deriv_3x3.cxx
   test_algo_abs_shuffle_distance.cxx
   test_algo_suppress_non_max_edges.cxx
   test_algo_checker_board.cxx
@@ -80,6 +81,7 @@ add_test( NAME vil_algo_test_median COMMAND $<TARGET_FILE:vil_algo_test_all> tes
 add_test( NAME vil_algo_test_suppress_non_max COMMAND $<TARGET_FILE:vil_algo_test_all> test_suppress_non_max )
 add_test( NAME vil_algo_test_suppress_non_plateau COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_suppress_non_plateau )
 add_test( NAME vil_algo_test_algo_sobel COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_sobel)
+add_test( NAME vil_algo_test_algo_2nd_deriv_3x3 COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_2nd_deriv_3x3)
 add_test( NAME vil_algo_test_abs_shuffle_distance COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_abs_shuffle_distance)
 add_test( NAME vil_algo_test_suppress_non_max_edges COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_suppress_non_max_edges)
 add_test( NAME vil_algo_test_checker_board COMMAND $<TARGET_FILE:vil_algo_test_all> test_algo_checker_board)

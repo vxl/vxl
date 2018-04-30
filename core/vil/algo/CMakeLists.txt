@@ -6,6 +6,7 @@ project(vil_algo)
 set( vil_algo_sources
   vil_sobel_1x3.cxx                vil_sobel_1x3.h    vil_sobel_1x3.hxx
   vil_sobel_3x3.cxx                vil_sobel_3x3.h    vil_sobel_3x3.hxx
+                                   vil_2nd_deriv_3x3.h    vil_2nd_deriv_3x3.hxx
   vil_gauss_filter.cxx             vil_gauss_filter.h vil_gauss_filter.hxx
   vil_gauss_reduce.cxx             vil_gauss_reduce.h vil_gauss_reduce.hxx
   vil_median.hxx                   vil_median.h

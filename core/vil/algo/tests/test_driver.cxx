@@ -31,6 +31,7 @@ DECLARE( test_median );
 DECLARE( test_suppress_non_max );
 DECLARE( test_algo_suppress_non_plateau );
 DECLARE( test_algo_sobel );
+DECLARE( test_algo_2nd_deriv_3x3 );
 DECLARE( test_algo_abs_shuffle_distance );
 DECLARE( test_algo_suppress_non_max_edges );
 DECLARE( test_algo_checker_board );
@@ -71,6 +72,7 @@ register_tests()
   REGISTER( test_suppress_non_max );
   REGISTER( test_algo_suppress_non_plateau );
   REGISTER( test_algo_sobel );
+  REGISTER( test_algo_2nd_deriv_3x3 );
   REGISTER( test_algo_abs_shuffle_distance );
   REGISTER( test_algo_suppress_non_max_edges );
   REGISTER( test_algo_checker_board );
