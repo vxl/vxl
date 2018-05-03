@@ -69,7 +69,7 @@ PyObject *get_boxm_array_1d_float(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, Q);
+  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_boxm_array_1d_float() - no relation with type" << relation_name << " id: " << id << std::endl;
