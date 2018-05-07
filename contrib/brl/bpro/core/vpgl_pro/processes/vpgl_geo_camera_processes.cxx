@@ -560,7 +560,27 @@ bool vpgl_load_geo_camera_process3(bprb_func_process& pro)
 
 
 
-//: construct the camera reading from a tfw file
+//: construct the camera as an ESRI world file (.tfw)
+//
+// World file uses the following transformation:
+//  [ x_geo ]   [ A B C ] [ x_tfw ]
+//  [ y_geo ] = [ D E F ] [ y_tfw ]
+//                        [ 1     ]
+//
+// World file is a six line file written as follows
+// (see https://en.wikipedia.org/wiki/World_file)
+//   Line 1: A: x-component of the pixel width (x-scale)
+//   Line 2: D: y-component of the pixel width (y-skew)
+//   Line 3: B: x-component of the pixel height (x-skew)
+//   Line 4: E: y-component of the pixel height (y-scale), typically negative
+//   Line 5: C: x-coordinate of the center of the upper left pixel
+//   Line 6: F: y-coordinate of the center of the upper left pixel
+//
+// World file (.tfw) origin has a half-pixel offset with respect to
+// the vpgl_geo_camera origin:
+//   x_vpgl = x_tfw + 0.5 (in pixels)
+//   y_vpgl = y_tfw + 0.5 (in pixels)
+//
 bool vpgl_save_geo_camera_tfw_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
@@ -589,15 +609,20 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
     return false;
   }
 
-  std::ofstream ofs(filename.c_str());
   vnl_matrix<double> trans_matrix = geo_cam->trans_matrix();
+
+  double A,B,C,D,E,F;
+  A = trans_matrix[0][0];
+  B = trans_matrix[1][0];
+  C = 0.5*A + 0.5*B + trans_matrix[0][3];
+  D = trans_matrix[0][1];
+  E = trans_matrix[1][1];
+  F = 0.5*D + 0.5*E + trans_matrix[1][3];
+
+  std::ofstream ofs(filename.c_str());
   ofs.precision(12);
-  ofs << trans_matrix[0][0] << '\n';
-  ofs << trans_matrix[0][1] << '\n';
-  ofs << trans_matrix[1][0] << '\n';
-  ofs << trans_matrix[1][1] << '\n';
-  ofs << trans_matrix[0][3] << '\n';
-  ofs << trans_matrix[1][3] << '\n';
+  ofs << A << std::endl << D << std::endl << B << std::endl;
+  ofs << E << std::endl << C << std::endl << F << std::endl;
   ofs.close();
 
   return true;
