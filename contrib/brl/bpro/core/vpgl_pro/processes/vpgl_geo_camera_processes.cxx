@@ -602,4 +602,65 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
 
   return true;
 }
+
+
+//: return GeoTransform suitable for GDAL GeoTiff
+//  Xgeo = GT(0) + Xpixel*GT(1) + Yline*GT(2)
+//  Ygeo = GT(3) + Xpixel*GT(4) + Yline*GT(5)
+//  http://www.gdal.org/gdal_datamodel.html
+// Note that the pixel/line coordinates in the above are from (0.0,0.0) at the top
+// left corner of the top left pixel to (width_in_pixels,height_in_pixels) at the
+// bottom right corner of the bottom right pixel. The pixel/line location of the
+// center of the top left pixel would therefore be (0.5,0.5).
+bool vpgl_get_geotransform_process_cons(bprb_func_process& pro)
+{
+  std::vector<std::string> input_types;
+  input_types.push_back("vpgl_camera_double_sptr");
+
+  std::vector<std::string> output_types;
+  output_types.push_back("double");          // GT(0)
+  output_types.push_back("double");          // GT(1)
+  output_types.push_back("double");          // GT(2)
+  output_types.push_back("double");          // GT(3)
+  output_types.push_back("double");          // GT(4)
+  output_types.push_back("double");          // GT(5)
+
+  return pro.set_input_types(input_types)
+      && pro.set_output_types(output_types);
+}
+
+//: Execute the process
+bool vpgl_get_geotransform_process(bprb_func_process& pro)
+{
+  if (pro.n_inputs()!= 1) {
+    std::cout << "vpgl_get_geotransform_process: The number of inputs should be 1" << std::endl;
+    return false;
+  }
+
+  // get the inputs
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
+
+  // convert to geocamera if possible
+  vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  if (!geo_cam) {
+    std::cerr << "vpgl_get_geotransform_process: Cannot cast camera to a geo cam! Exiting!\n";
+    return false;
+  }
+
+  // output 6 doubles in expected order
+  vnl_matrix<double> trans_matrix = geo_cam->trans_matrix();
+  pro.set_output_val<double>(0, (double)trans_matrix[0][3]);
+  pro.set_output_val<double>(1, (double)trans_matrix[0][0]);
+  pro.set_output_val<double>(2, (double)trans_matrix[1][0]);
+  pro.set_output_val<double>(3, (double)trans_matrix[1][3]);
+  pro.set_output_val<double>(4, (double)trans_matrix[0][1]);
+  pro.set_output_val<double>(5, (double)trans_matrix[1][1]);
+
+  return true;
+}
+
+
 #endif
+
+
+

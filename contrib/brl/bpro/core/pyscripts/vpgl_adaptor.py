@@ -855,6 +855,21 @@ def save_geocam_to_tfw(cam, tfw_filename):
     batch.run_process()
 
 
+def get_geotransform(cam):
+    batch.init_process("vpglGetGeoTransformProcess")
+    batch.set_input_from_db(0, cam)
+    status = batch.run_process()
+    if status:
+        GT = [None]*6
+        for idx,gt in enumerate(GT):
+            (id, type) = batch.commit_output(idx)
+            GT[idx] = batch.get_output_double(id)
+            batch.remove_data(id)
+        return GT
+    else:
+        raise VpglException("Failed to return geotransform")
+
+
 def load_geotiff_cam2(filename, ni, nj):
     batch.init_process("vpglLoadGeoCameraProcess2")
     batch.set_input_string(0, filename)
@@ -1020,10 +1035,13 @@ def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, 
     batch.set_input_double(5, max_y)
     batch.set_input_double(6, max_z)
     batch.set_input_unsigned(7, n_points)
-    batch.run_process()
-    (id, type) = batch.commit_output(0)
-    out_cam = dbvalue(id, type)
-    return out_cam
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        out_cam = dbvalue(id, type)
+        return out_cam
+    else:
+        raise VpglException("Failed to compute affine from rational camera")
 
 # use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
 # use the 3-d box that the cameras see to compute correspondences for
@@ -1079,16 +1097,19 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
     batch.set_input_double(13, local_ground_plane_height)
     batch.set_input_string(14, output_path_H1)
     batch.set_input_string(15, output_path_H2)
-    batch.run_process()
-    (id, type) = batch.commit_output(0)
-    out_img1 = dbvalue(id, type)
-    (id, type) = batch.commit_output(1)
-    out_cam1 = dbvalue(id, type)
-    (id, type) = batch.commit_output(2)
-    out_img2 = dbvalue(id, type)
-    (id, type) = batch.commit_output(3)
-    out_cam2 = dbvalue(id, type)
-    return out_img1, out_cam1, out_img2, out_cam2
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        out_img1 = dbvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        out_cam1 = dbvalue(id, type)
+        (id, type) = batch.commit_output(2)
+        out_img2 = dbvalue(id, type)
+        (id, type) = batch.commit_output(3)
+        out_cam2 = dbvalue(id, type)
+        return out_img1, out_cam1, out_img2, out_cam2
+    else:
+        raise VpglException("Image rectification from affine cameras failed")
 
 
 # use the affine cameras of the images to compute an affine fundamental
@@ -1121,12 +1142,16 @@ def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_ra
     batch.set_input_double(12, voxel_size)
     batch.set_input_string(13, path_H1)
     batch.set_input_string(14, path_H2)
-    batch.run_process()
-    (id, type) = batch.commit_output(0)
-    out_map = dbvalue(id, type)
-    (id, type) = batch.commit_output(1)
-    disparity_map = dbvalue(id, type)
-    return out_map, disparity_map
+    status = batch.run_process()
+    if status:
+        (id, type) = batch.commit_output(0)
+        out_map = dbvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        disparity_map = dbvalue(id, type)
+        return out_map, disparity_map
+    else:
+        raise VpglException("DSM from Disparity failed")
+
 
 
 def compute_camera_to_world_homography(cam, plane, inverse=False):
