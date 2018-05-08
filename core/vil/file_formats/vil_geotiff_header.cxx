@@ -167,29 +167,31 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
   }
 }
 
-//: returns true if in geographic coords, linear units are in meters and angular units are in degrees
+//: returns true if in geographic coords (required), linear units (optional) are in meters,
+// and angular units (required) are in degrees
 bool vil_geotiff_header::GCS_WGS84_MET_DEG()
 {
   modeltype_t type;
   if (gtif_modeltype(type) && type == ModelTypeGeographic) {
     void *value; int size; int length; tagtype_t ttype;
+    bool status; short *val;
 
-    bool status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
-    if (!status) {
-      std::cerr << "Missing GeogLinearUnitsGeoKey (" << GeogLinearUnitsGeoKey << ") key!\n";
-      return false;
-    }
-    if(length != 1 || ttype != TYPE_SHORT) {
-      std::cerr << "Expected a single value with type int16 (short)!\n";
-      return false;
-    }
-    auto *val = static_cast<short*> (value);
+    // confirm linear units (optional) are in meters
+    status = get_key_value(GeogLinearUnitsGeoKey, &value, size, length, ttype);
+    if (status) {
+      if(length != 1 || ttype != TYPE_SHORT) {
+        std::cerr << "Expected a single value with type int16 (short)!\n";
+        return false;
+      }
+      val = static_cast<short*> (value);
 
-    if (*val != Linear_Meter) {
-      std::cerr << "Linear units are not in Meters!\n";
-      return false;
+      if (*val != Linear_Meter) {
+        std::cerr << "Linear units are not in Meters!\n";
+        return false;
+      }
     }
 
+    // confirm angular units (required) are in degrees
     status = get_key_value(GeogAngularUnitsGeoKey, &value, size, length, ttype);
     if (!status) {
       std::cerr << "Missing GeogAngularUnitsGeoKey (" << GeogAngularUnitsGeoKey << ") key!\n";
