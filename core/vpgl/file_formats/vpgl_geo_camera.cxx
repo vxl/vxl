@@ -48,10 +48,6 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const& geotiff_img
       std::cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
       return false;
   }
-  if (!geotiff_tiff->get_geotiff_header()) {
-    std::cerr << "no geotiff header!\n";
-    return false;
-  }
 
   // check if the tiff file is geotiff
   if (!geotiff_tiff->is_GEOTIFF()) {
@@ -59,7 +55,13 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const& geotiff_img
     return false;
   }
 
+  // retrieve header
   vil_geotiff_header* gtif = geotiff_tiff->get_geotiff_header();
+  if (!gtif) {
+    std::cerr << "vpgl_geo_camera::init_geo_camera -- no geotiff header!\n";
+    return false;
+  }
+
   int utm_zone;
   vil_geotiff_header::GTIF_HEMISPH h;
 
