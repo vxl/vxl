@@ -30,6 +30,7 @@
 #include <bvgl/bvgl_changes_sptr.h>
 
 #define VERTEX_TYPE "bwm_soview2D_vertex"
+#define LINE_SEG_TYPE "bgui_vsol_soview2D_line_seg"
 #define POLYLINE_TYPE "bgui_vsol_soview2D_polyline"
 #define POLYGON_TYPE "bgui_vsol_soview2D_polygon"
 #define POINT_TYPE "bgui_vsol_soview2D_point"
@@ -76,12 +77,18 @@ class bwm_observer_img : public bgui_vsol2D_tableau
 
   unsigned create_point(vsol_point_2d_sptr);
 
+  void add_obj(bgui_vsol_soview2D* obj){
+    if(!obj) return;
+    obj_list[obj->get_id()] = obj;
+  }
   void copy();
 
   void paste(float x, float y);
 
   void clear_objects();
   //: various types of selected objects
+  bool get_selected_line(bgui_vsol_soview2D_line_seg* &line);
+  void print_selected_line();
   bool get_selected_box(bgui_vsol_soview2D_polygon* &box);
   bool get_selected_poly(bgui_vsol_soview2D_polygon* &poly);
 

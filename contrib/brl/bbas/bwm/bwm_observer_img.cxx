@@ -310,6 +310,25 @@ void bwm_observer_img::clear_objects()
   }
   vert_list.clear();
 }
+bool bwm_observer_img::get_selected_line(bgui_vsol_soview2D_line_seg* &line)
+{
+  bgui_vsol_soview2D_line_seg* lseg = (bgui_vsol_soview2D_line_seg*)get_selected_object(LINE_SEG_TYPE);
+  if (lseg) {
+    line = lseg;
+    return true;
+  }
+  return false;
+}
+void bwm_observer_img::print_selected_line(){
+  bgui_vsol_soview2D_line_seg* line_seg;
+  if(!get_selected_line(line_seg))
+    std::cout << "No selected line segment" << std::endl;
+  else{
+    vsol_point_2d_sptr p0 = line_seg->sptr()->p0();
+    vsol_point_2d_sptr p1 = line_seg->sptr()->p1();
+    std::cout << "sel line seg: " << vgl_point_2d<double>(p0->x(), p0->y()) << " -> " << vgl_point_2d<double>(p1->x(), p1->y()) << std::endl;
+  }
+}
 
 bool bwm_observer_img::get_selected_box(bgui_vsol_soview2D_polygon* &box)
 {
@@ -705,6 +724,8 @@ void bwm_observer_img::lines_vd()
        lit != lines.end(); ++lit)
   {
     bgui_vsol_soview2D_line_seg* line = this->add_vsol_line_2d(*lit);
+    // store in object list in order to save later if desired
+    obj_list[line->get_id()] = line;
     // Gamze - do not add the lines one by one: create a vector and map it to the box
     soviews.push_back(line);
   }

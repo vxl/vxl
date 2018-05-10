@@ -452,6 +452,7 @@ void bwm_observer_vgui::delete_all()
     }
   }
   objects_.clear();
+  this->clear_objects();
 }
 
 void bwm_observer_vgui::set_corr(float x, float y)
