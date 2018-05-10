@@ -8,6 +8,7 @@
 #include <vsl/vsl_vector_io.h>
 #include <vil/vil_save.h>
 #include <vsol/vsol_point_2d.h>
+#include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
@@ -306,6 +307,72 @@ void bwm_tableau_img::load_spatial_objects_2d(){
   my_observer_->post_redraw();
 }
 
+void bwm_tableau_img::save_lines_vgl_ascii(){
+  std::vector<vsol_spatial_object_2d_sptr> sos =
+    my_observer_->get_spatial_objects_2d();
+  if (sos.size() == 0)
+    return;
+  std::vector<vsol_line_2d*> lines;
+  for (unsigned i=0; i<sos.size(); ++i) {
+    vsol_spatial_object_2d_sptr so = sos[i];
+	if(!so)
+	 continue;
+    vsol_curve_2d * curve = so->cast_to_curve();
+	if(!curve)
+	  continue;
+    vsol_line_2d* line = curve->cast_to_line();
+    if (line)
+      lines.push_back(line);
+  }
+  vgui_dialog save_dlg("Save 2d lines as vgl");
+  std::string ext, line_filename;
+  save_dlg.file("Line Filename", ext, line_filename);
+  if (!save_dlg.ask())
+    return;
+  std::ofstream os(line_filename.c_str());
+  if (os.is_open()) {
+    os << lines.size()<< '\n';
+    for (unsigned i=0; i<lines.size(); ++i){
+      vgl_point_2d<double> p0(lines[i]->p0()->x(), lines[i]->p0()->y()), p1(lines[i]->p1()->x(), lines[i]->p1()->y());
+      vgl_line_segment_2d<double> seg(p0, p1);
+      os << seg << '\n';
+    }
+    os.close();
+  }
+}
+
+void bwm_tableau_img::load_lines_vgl_ascii(){
+  // the style toggling is just to
+  // allow comparison of two or three point sets
+  static float r = 0.0;
+  if(r == 1.5f)
+    r = 0.0f;
+  vgui_style_sptr sty = vgui_style::new_style( r, 1.0f, 0.0f, 3.0, 2.0);
+
+  vgui_dialog load_dlg("Load 2d vgl lines ");
+  std::string ext, pt_filename;
+  load_dlg.file("Line Filename", ext, pt_filename);
+  if (!load_dlg.ask())
+    return;
+  std::ifstream istr(pt_filename.c_str());
+  if (istr.is_open()) {
+    unsigned n;
+    istr >> n; //number of lines
+    for(unsigned i = 0; i<n; ++i){
+      vgl_line_segment_2d<double> gline;
+      istr >> gline;
+      vgl_point_2d<double> gp0 = gline.point1(), gp1 = gline.point2();
+      vsol_point_2d_sptr p0 = new vsol_point_2d(gp0);
+      vsol_point_2d_sptr p1 = new vsol_point_2d(gp1);
+      vsol_line_2d_sptr line = new vsol_line_2d(p0, p1);
+      bgui_vsol_soview2D* soview = my_observer_->add_vsol_line_2d(line, sty);
+      my_observer_->add_obj(soview);
+    }
+	my_observer_->post_redraw();
+    istr.close();
+  }
+  r = r+0.5f;
+}
 void bwm_tableau_img::save_pointset_2d_ascii()
 {
   std::vector<vsol_spatial_object_2d_sptr> sos =
@@ -360,6 +427,10 @@ void bwm_tableau_img::load_pointset_2d_ascii()
   }
   r = r+0.5f;
 }
+void bwm_tableau_img::print_selected_line(){
+  my_observer_->print_selected_line();
+}
+
 void bwm_tableau_img::load_bounding_boxes_2d_ascii()
 {
   // the style toggling is just to

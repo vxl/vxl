@@ -80,6 +80,15 @@ void bwm_popup_menu::get_menu(vgui_menu &menu)
   submenu.add( "Load Pointset 2D (ascii)",
                new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                         &bwm_tableau_img::load_pointset_2d_ascii));
+  submenu.add( "Print Selected Line Seg",
+               new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                        &bwm_tableau_img::print_selected_line));
+  submenu.add( "Save vgl line segs 2d (ascii)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                        &bwm_tableau_img::save_lines_vgl_ascii));
+  submenu.add( "Load vgl line segs 2d (ascii)",
+               new vgui_command_simple<bwm_tableau_img>(img_tab,
+                                                        &bwm_tableau_img::load_lines_vgl_ascii));
   submenu.add( "Load bounding boxes (ascii)",
              new vgui_command_simple<bwm_tableau_img>(img_tab,
                                                       &bwm_tableau_img::load_bounding_boxes_2d_ascii));
