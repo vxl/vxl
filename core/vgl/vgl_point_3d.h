@@ -52,6 +52,13 @@ class vgl_point_3d
                 vgl_plane_3d<Type> const& pl2,
                 vgl_plane_3d<Type> const& pl3);
 
+  //: Casting constructors
+  vgl_point_3d(vgl_point_3d<Type> const&) = default;
+
+  template<typename Other>
+  explicit vgl_point_3d(vgl_point_3d<Other> const& other)
+    : x_(other.x()), y_(other.y()), z_(other.z()) {}
+
 #if 0 // The compiler defaults for these are doing what they should do:
   //: Copy constructor
   inline vgl_point_3d(vgl_point_3d<Type> const& p) : x_(p.x()), y_(p.y()), z_(p.z()) {}

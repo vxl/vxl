@@ -41,6 +41,13 @@ class vgl_vector_2d
   //: Creates the vector \a (x,y).
   inline vgl_vector_2d (T vx, T vy) : x_(vx) , y_(vy) {}
 
+  //: Casting Constructor
+  vgl_vector_2d(vgl_vector_2d<T> const&) = default;
+
+  template<typename Other>
+  explicit vgl_vector_2d(vgl_vector_2d<Other> const& other)
+    : x_(other.x()), y_(other.y()) {}
+
 #if 0 // The defaults do exactly what they should do...
   //: Copy constructor
   inline vgl_vector_2d (vgl_vector_2d<T> const& v) : x_(v.x()) , y_(v.y()) {}

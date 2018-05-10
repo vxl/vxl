@@ -20,6 +20,7 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
+#include <algorithm>
 #include <vgl/vgl_point_3d.h>
 template <class Type>
 class vgl_pointset_3d
@@ -47,6 +48,39 @@ class vgl_pointset_3d
                  std::vector<vgl_vector_3d<Type> >  normals,
                  std::vector< Type >  scalars):
   has_normals_(true), has_scalars_(true), points_(std::move(points)), normals_(std::move(normals)), scalars_(std::move(scalars)){}
+
+  //: Cast to a new type
+  template<typename> friend class vgl_pointset_3d;
+
+  vgl_pointset_3d(vgl_pointset_3d<Type> const&) = default;
+
+  template<typename Other>
+  explicit vgl_pointset_3d(vgl_pointset_3d<Other> const& other)
+    : has_normals_(other.has_normals_), has_scalars_(other.has_scalars_),
+      points_(other.points_.begin(), other.points_.end()),
+      normals_(other.normals_.begin(), other.normals_.end()),
+      scalars_(other.scalars_.begin(), other.scalars_.end())
+  {
+
+  }
+
+  //: Subset
+  vgl_pointset_3d subindex(size_t begin, size_t end) const{
+
+    vgl_pointset_3d output;
+    output.has_normals_ = has_normals_;
+    output.has_scalars_ = has_scalars_;
+
+    output.points_.assign(points_.begin()+begin, points_.begin()+end);
+    if(has_normals_){
+      output.normals_.assign(normals_.begin()+begin, normals_.begin()+end);
+    }
+    if(has_scalars_){
+      output.scalars_.assign(scalars_.begin()+begin, scalars_.begin()+end);
+    }
+
+    return output;
+  }
 
   //: incrementally grow points, duplicate points are allowed
   void add_point(vgl_point_3d<Type> const& p){
