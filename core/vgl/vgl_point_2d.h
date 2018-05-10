@@ -50,6 +50,13 @@ class vgl_point_2d
   vgl_point_2d (vgl_line_2d<Type> const& l1,
                 vgl_line_2d<Type> const& l2);
 
+  //: Casting constructors
+  vgl_point_2d(vgl_point_2d<Type> const&) = default;
+
+  template<typename Other>
+  explicit vgl_point_2d(vgl_point_2d<Other> const& other)
+    : x_(other.x()), y_(other.y()) {}
+
 #if 0 // The compiler defaults for these are doing what they should do:
   //: Copy constructor
   inline vgl_point_2d(vgl_point_2d<Type> const& p) : x_(p.x()), y_(p.y()) {}
