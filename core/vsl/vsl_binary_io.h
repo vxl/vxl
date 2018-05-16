@@ -318,7 +318,7 @@ inline void vsl_print_summary(std::ostream& os, const char* s )
 //             to be used. A new version of MS .NET compiler required this change.
 //             Add compilers as needed. This could be moved to vcl_compiler.h.
 //             [Nils Krahnstoever]
-#ifdef VCL_VC_DOTNET
+#ifdef VCL_VC
 # define VCL_64BIT_ATTR __w64
 #else
 # define VCL_64BIT_ATTR /* */

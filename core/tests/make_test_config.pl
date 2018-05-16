@@ -167,25 +167,9 @@ for $var_exp (
   'VXL_UNISTD_USLEEP_IS_VOID',
   'VXL_HAS_IEEEFP_H',
 
-  # from vcl_compiler.h
-  'VCL_GCC',
-  'VCL_GCC_4',
-  'VCL_GCC_40',
-  'VCL_GCC_41',
-  'VCL_GCC_5',
-  'VCL_GCC_50',
-  'VCL_GCC_51',
-  'VCL_GCC_52',
-  'VCL_GCC_53',
-  'VCL_GCC_6',
-  'VCL_GCC_60',
-  'VCL_GCC_61',
-  'VCL_GCC_62',
-  'VCL_GCC_63',
   'VCL_ICC',
   'VCL_WIN32',
   'VCL_VC',
-  'VCL_VC_DOTNET',
 
   # from VXL CMake configuration files
   'VXL_WARN_DEPRECATED',
