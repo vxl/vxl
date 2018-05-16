@@ -918,110 +918,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_GCC_4 ";
-#ifdef VCL_GCC_4
-  std::cout << "is set to " << quote(VCL_GCC_4);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_40 ";
-#ifdef VCL_GCC_40
-  std::cout << "is set to " << quote(VCL_GCC_40);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_41 ";
-#ifdef VCL_GCC_41
-  std::cout << "is set to " << quote(VCL_GCC_41);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_5 ";
-#ifdef VCL_GCC_5
-  std::cout << "is set to " << quote(VCL_GCC_5);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_50 ";
-#ifdef VCL_GCC_50
-  std::cout << "is set to " << quote(VCL_GCC_50);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_51 ";
-#ifdef VCL_GCC_51
-  std::cout << "is set to " << quote(VCL_GCC_51);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_52 ";
-#ifdef VCL_GCC_52
-  std::cout << "is set to " << quote(VCL_GCC_52);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_53 ";
-#ifdef VCL_GCC_53
-  std::cout << "is set to " << quote(VCL_GCC_53);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_6 ";
-#ifdef VCL_GCC_6
-  std::cout << "is set to " << quote(VCL_GCC_6);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_60 ";
-#ifdef VCL_GCC_60
-  std::cout << "is set to " << quote(VCL_GCC_60);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_61 ";
-#ifdef VCL_GCC_61
-  std::cout << "is set to " << quote(VCL_GCC_61);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_62 ";
-#ifdef VCL_GCC_62
-  std::cout << "is set to " << quote(VCL_GCC_62);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_GCC_63 ";
-#ifdef VCL_GCC_63
-  std::cout << "is set to " << quote(VCL_GCC_63);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_ICC ";
 #ifdef VCL_ICC
   std::cout << "is set to " << quote(VCL_ICC);
@@ -1041,14 +937,6 @@ void test_config()
   std::cout << "VCL_VC ";
 #ifdef VCL_VC
   std::cout << "is set to " << quote(VCL_VC);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_VC_DOTNET ";
-#ifdef VCL_VC_DOTNET
-  std::cout << "is set to " << quote(VCL_VC_DOTNET);
 #else
   std::cout << "is not set";
 #endif
