@@ -111,6 +111,7 @@ char const *vil_save_guess_file_format(char const* filename)
     macro(viff, viff);
     macro(mit, mit);
     macro(v2i, v2i);
+    macro(sgi, sgi);
 #undef macro
     else
       std::cerr << __FILE__ ": assuming pnm format for \'" << filename << "\'\n";

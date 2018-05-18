@@ -169,6 +169,9 @@ set( vil_sources ${vil_sources}
   file_formats/vil_bmp_info_header.cxx  file_formats/vil_bmp_info_header.h
   file_formats/vil_bmp.cxx              file_formats/vil_bmp.h
 
+  file_formats/vil_sgi.cxx              file_formats/vil_sgi.h
+  file_formats/vil_sgi_file_header.cxx  file_formats/vil_sgi_file_header.h
+
   file_formats/vil_ras.cxx              file_formats/vil_ras.h
 
   file_formats/vil_iris.cxx             file_formats/vil_iris.h
