@@ -15,6 +15,7 @@
 #define HAS_BMP   1
 #define HAS_RAS   1
 #define HAS_NITF  1
+#define HAS_SGI   1
 
 //: These formats have not yet been ported from vil1
 #define HAS_GIF   0

@@ -76,6 +76,10 @@ vil_file_format::~vil_file_format()
 #include <vil/file_formats/vil_openjpeg.h>
 #endif
 
+#if HAS_SGI
+#include <vil/file_formats/vil_sgi.h>
+#endif
+
 const unsigned MAX_FILE_FORMATS=256;
 //: Local class to hold file format list
 // Clears list on deletion.
@@ -139,6 +143,10 @@ struct vil_file_format_storage
 #if HAS_TIFF
     l.push_back(new vil_tiff_file_format);
     l.push_back(new vil_pyramid_image_list_format);
+#endif
+
+#if HAS_SGI
+  l.push_back(new vil_sgi_file_format);
 #endif
   }
 
