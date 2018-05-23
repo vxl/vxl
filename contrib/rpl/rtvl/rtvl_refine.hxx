@@ -291,7 +291,7 @@ bool rtvl_refine_internal<N>::build_next_level()
   selection.clear();
 
   // Replace the current level with the next level.
-  level = next_level;
+  level = vcl_move(next_level);
   this->setup_level();
   this->refine_level();
 
