@@ -84,6 +84,7 @@ set(mbl_sources
   mbl_chord.h
   mbl_chord_3d.h
   mbl_cloneable_ptr.h
+  mbl_cloneables_factory_def.h
   mbl_cloneables_factory.h
   mbl_combination.h
   mbl_draw_line.h
