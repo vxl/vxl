@@ -18,6 +18,7 @@ set(rgtl_sources
   rgtl_object_closest_polygon_3d.h
   rgtl_object_once.h                  rgtl_object_once.cxx
   rgtl_octree_cell_bounds.h           rgtl_octree_cell_bounds.hxx
+  rgtl_octree_cell_geometry.h         rgtl_octree_cell_geometry.hxx
   rgtl_octree_cell_location.h         rgtl_octree_cell_location.hxx
   rgtl_octree_data_fixed.h            rgtl_octree_data_fixed.hxx
   rgtl_octree_dual.h
