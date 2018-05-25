@@ -10,6 +10,7 @@
 #include "vil_sgi.h"
 
 #define where (std::cerr << __FILE__ " : " << __LINE__ << " : ")
+#define SGI_HDR_SIZE 512
 
 //--------------------------------------------------------------------------------
 
@@ -51,7 +52,6 @@ char const* vil_sgi_image::file_format() const
 
 vil_sgi_image::vil_sgi_image(vil_stream* is)
   : is_(is)
-  , bit_map_start(-1L)
 {
   is_->ref();
   if (!read_header())
@@ -65,7 +65,7 @@ bool vil_sgi_image::get_property(char const * tag, void * value) const
 
 vil_sgi_image::vil_sgi_image(vil_stream* vs, unsigned nx, unsigned ny,
                              unsigned nplanes, vil_pixel_format format):
-  is_(vs), bit_map_start(-1L)
+  is_(vs)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
   {
@@ -147,11 +147,6 @@ bool vil_sgi_image::read_header()
     return false;
   }
 
-  // we have a fixed size header, but store a pointer to the start of the bitmap to make things easier later
-  bit_map_start = is_->tell();
-#ifdef DEBUG
-  where << "bit_map_start = " << bit_map_start << '\n'; // blather
-#endif
   return true;
 }
 
@@ -188,7 +183,7 @@ vil_image_view_base_sptr vil_sgi_image::get_copy_view(
 
   for(int i = 0; i < ny; i++)
   {
-    is_->seek(bit_map_start+ni()*nplanes()*(i+y0)+x0*nplanes());
+    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(i+y0)+x0*nplanes());
     is_->read(reinterpret_cast<vxl_byte *>(chunk->data()) + i*nx*nplanes(), nx*nplanes());
   }
 
@@ -213,7 +208,7 @@ bool vil_sgi_image::put_view(const vil_image_view_base& view,
 
   for(int i = 0; i < view2.nj(); i++)
   {
-    is_->seek(bit_map_start+ni()*nplanes()*(i+y0)+x0*nplanes());
+    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(i+y0)+x0*nplanes());
     is_->write(&view2(0, i, view2.nplanes()-1), view2.ni()*view2.nplanes());
   }
 
