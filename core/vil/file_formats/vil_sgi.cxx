@@ -183,7 +183,7 @@ vil_image_view_base_sptr vil_sgi_image::get_copy_view(
 
   for(int i = 0; i < ny; i++)
   {
-    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(i+y0)+x0*nplanes());
+    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(nj()-1-y0-i)+x0*nplanes());
     is_->read(reinterpret_cast<vxl_byte *>(chunk->data()) + i*nx*nplanes(), nx*nplanes());
   }
 
@@ -208,7 +208,7 @@ bool vil_sgi_image::put_view(const vil_image_view_base& view,
 
   for(int i = 0; i < view2.nj(); i++)
   {
-    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(i+y0)+x0*nplanes());
+    is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(nj()-1-y0-i)+x0*nplanes());
     is_->write(&view2(0, i, view2.nplanes()-1), view2.ni()*view2.nplanes());
   }
 
