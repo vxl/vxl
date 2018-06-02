@@ -30,7 +30,7 @@
 //                                         x Origin
 // \endverbatim
 //  r can be expressed as  r = N.(M - O)  where N is the line normal,
-//  O is the origin position vector and M is the line midposize_t.
+//  O is the origin position vector and M is the line midpoint.
 //  Note that N = (-Sin(theta), Cos(theta)).
 //  The values of theta and r for a vsol_line_2d are computed by
 //  the method ::array_loc(..).
@@ -44,7 +44,7 @@
 //  of the bounding box of the space containing the lines.  The resolution in
 //  r is assumed to be 1.  It is necessary to specify the bounding box
 //  of the line coordinate space at construction time, so that new lines
-//  entered size_to the index do not exceed array bounds.
+//  entered into the index do not exceed array bounds.
 //
 //  internally, the r space is defined on an origin at the center of the
 //  bounding box diagonal. This choice minimizes the error in normal distance
@@ -80,7 +80,7 @@
 // \verbatim
 //  Modifications
 //   10-sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
-//   May 5, 2018 J.L. Mundy moved to vgl/algo
+//   May 5, 2018 J.L. Mundy moved to vgl/algo - fix angle range to 180
 // \endverbatim
 //-----------------------------------------------------------------------------
 #include <iostream>
@@ -92,7 +92,7 @@
 template <class T>
 class vgl_hough_index_2d 
 {
-  // PUBLIC SIZE_TERFACE----------------------------------------------------------
+  // PUBLIC INTERFACE----------------------------------------------------------
 
  public:
 
@@ -101,11 +101,9 @@ class vgl_hough_index_2d
   vgl_hough_index_2d(const size_t r_dimension, const size_t theta_dimension);
   vgl_hough_index_2d(const T x0, const T y0,
                      const T xsize, const T ysize,
-                     const T angle_range = T(180),
                      const T angle_increment = T(5));
 
   vgl_hough_index_2d(vgl_box_2d<T> const & box,
-                     const T angle_range = T(180),
                      const T angle_increment= T(5.0));
 
   vgl_hough_index_2d(vgl_hough_index_2d const& i)
@@ -125,8 +123,8 @@ class vgl_hough_index_2d
   size_t get_theta_dimension() const {return th_dim_;}
 
   //: Get the vgl_hough_index_2d array location of a line segment
-  void array_loc(vgl_line_segment_2d<T> const& line, T& r, T& theta);
-  void array_loc(vgl_line_segment_2d<T> const& line, size_t& r, size_t& theta);
+  void array_loc(vgl_line_segment_2d<T> const& line, T& r, T& theta) const;
+  void array_loc(vgl_line_segment_2d<T> const& line, size_t& r, size_t& theta) const;
 
   //: r Location for a translated line position
   size_t trans_loc(const size_t transx, const size_t transy,
@@ -135,10 +133,10 @@ class vgl_hough_index_2d
   //: Get line count at a particular location in vgl_hough_index_2d space
   size_t count(const size_t r, const size_t theta);
 
-  //: Insert a new line size_to the index
+  //: Insert a new line to the index
   bool insert(vgl_line_segment_2d<T> const& line);
 
-  //: Insert a unique new line size_to the index
+  //: Insert a unique new line to the index
   bool insert_new(vgl_line_segment_2d<T> const& line);
 
   //: find if a line is in the index
@@ -150,12 +148,19 @@ class vgl_hough_index_2d
   //: remove a line
   bool remove(vgl_line_segment_2d<T> const& line);
 
+  //: Line indices in a line index bin at r and theta bin indices.
+  void line_indices_at_index(const size_t r, const size_t theta,
+                      std::vector<size_t>& line_indices);
+
+  std::vector<size_t> line_indices_at_index(const size_t r,
+                                            const size_t theta);
+  
   //: Lines in a line index bin at r and theta bin indices.
   void lines_at_index(const size_t r, const size_t theta,
                       std::vector<vgl_line_segment_2d<T> >& lines);
 
   std::vector<vgl_line_segment_2d<T> > lines_at_index(const size_t r,
-                                                    const size_t theta);
+                                                      const size_t theta);
 
   //: Lines in a tolerance box around the r and theta of a given line.
   // r is in distance units and theta is in degrees.
@@ -167,6 +172,24 @@ class vgl_hough_index_2d
     lines_in_interval(vgl_line_segment_2d<T> const & l,
                       const T r_dist,
                       const T theta_dist);
+
+
+  void lines_in_interval(const size_t r_index, const size_t theta_index,
+                         const T r_dist, const T theta_dist,
+                         std::vector<vgl_line_segment_2d<T> > & lines);
+
+  std::vector<vgl_line_segment_2d<T> >
+    lines_in_interval(const size_t r_index, const size_t theta_index,
+                      const T r_dist, const T theta_dist);
+
+  void line_indices_in_interval(const size_t r_index, const size_t theta_index,
+                                 const T r_dist, const T theta_dist,
+                                 std::vector<size_t> & lines);
+
+  std::vector<size_t >
+    line_indices_in_interval(const size_t r_index, const size_t theta_index,
+                             const T r_dist, const T theta_dist);
+
 
   //:Lines parallel to a given angle in degrees
   void parallel_lines(const T angle,
@@ -213,8 +236,14 @@ class vgl_hough_index_2d
   size_t max_count() const;
   size_t min_count() const;
   T average_count() const;
+
+  //: all hough cells with cell count greater and equal to min_count
+  //                                                               r_index ang_index
+  void cells_ge_count(const size_t min_count, std::vector<std::pair<size_t, size_t> >& cells) const;
+
   //: all lines with cell count greater and equal to min_count
   void lines_with_cells_ge_count(const size_t min_count, std::vector<vgl_line_segment_2d<T> >& lines) const;
+
 
   // Data Control--------------------------------------------------------------
 
@@ -230,7 +259,7 @@ class vgl_hough_index_2d
   void init(const size_t r_dimension, const size_t theta_dimension);
   std::vector<size_t> non_maximum_suppress(const size_t radius,
                                            std::vector<size_t> const & bins);
-  
+  bool lines_near_eq(vgl_line_segment_2d<T> const& la, vgl_line_segment_2d<T> const& lb, const T r_tol, const T theta_tol) const;
   // Data Members--------------------------------------------------------------
 
  private:

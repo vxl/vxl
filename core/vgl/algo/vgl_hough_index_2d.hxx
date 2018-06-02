@@ -58,13 +58,12 @@ vgl_hough_index_2d<T>::vgl_hough_index_2d(const T x0,
                                        const T y0,
                                        const T xsize,
                                        const T ysize,
-                                       const T angle_range,
                                        const T angle_increment): xo_(x0), yo_(y0), xsize_(xsize), ysize_(ysize), 
-                                                                 angle_range_(angle_range),angle_increment_(angle_increment)
+                                                                 angle_range_(T(180)),angle_increment_(angle_increment)
 {
 
   size_t theta_dimension = static_cast<size_t>(std::ceil(angle_range_/angle_increment_));
-  theta_dimension++; //Include both 0 and angle_range_
+  //theta_dimension++; //Include both 0 and angle_range_  (no! near test across cut will fail)
   T diag = std::sqrt(xsize*xsize + ysize*ysize);
   size_t rmax = size_t(diag);
   rmax++; //Round off.
@@ -73,15 +72,15 @@ vgl_hough_index_2d<T>::vgl_hough_index_2d(const T x0,
 template <class T>
 vgl_hough_index_2d<T>::
 vgl_hough_index_2d(vgl_box_2d<T> const& box,
-                   const T angle_range,
-                   const T angle_increment):angle_range_(angle_range), angle_increment_(angle_increment)
+                   const T angle_increment):angle_range_(T(180)), angle_increment_(angle_increment)
 {
+  
   xo_ = box.min_x();  yo_ = box.min_y();
   xsize_ = box.max_x()-xo_;
   ysize_ = box.max_y()-yo_;
 
 size_t theta_dimension = static_cast<size_t>(std::ceil(angle_range_/angle_increment_));
-  theta_dimension++; //Include both 0 and angle_range_
+//theta_dimension++; //Include both 0 and angle_range_ (no! near test across cut will fail)
   T diag = std::sqrt(xsize_*xsize_ + ysize_*ysize_);
   size_t rmax = size_t(diag);
   rmax++; //Round off.
@@ -100,7 +99,7 @@ T vgl_hough_index_2d<T>::tangent_angle(vgl_line_segment_2d<T> const& line){
 //
 template <class T>
 void vgl_hough_index_2d<T>::array_loc(vgl_line_segment_2d<T> const& line,
-                                      T& r, T& theta)
+                                      T& r, T& theta) const
 {
   //Compute angle index
   T one_eighty = static_cast<T>(180);
@@ -140,7 +139,7 @@ void vgl_hough_index_2d<T>::array_loc(vgl_line_segment_2d<T> const& line,
 //
 template <class T>
 void vgl_hough_index_2d<T>::array_loc(vgl_line_segment_2d<T> const& line,
-                                      size_t& r, size_t& theta)
+                                      size_t& r, size_t& theta) const
 {
   T angle = 0, radius = 0;
   this->array_loc(line, radius, angle);
@@ -305,6 +304,26 @@ bool vgl_hough_index_2d<T>::remove(vgl_line_segment_2d<T> const& line)
    //lines_.erase(lines_.begin()+ idx); //don't erase since corrupts index space
   return true;
 }
+//-----------------------------------------------------------------------------
+//
+//: Fill a vector of line indices at the index location
+//
+//-----------------------------------------------------------------------------
+template <class T>
+void vgl_hough_index_2d<T>::line_indices_at_index(const size_t r, const size_t theta,
+                                                  std::vector<size_t>& line_indices){
+  line_indices.clear();
+  if ((theta<0)||(theta>=th_dim_)||(r<0)||(r>=r_dim_))
+    return;
+  line_indices = index_[r][theta];
+}
+template <class T>
+std::vector<size_t> vgl_hough_index_2d<T>::line_indices_at_index(const size_t r,
+                                                                   const size_t theta){
+  std::vector<size_t> ret;
+  this->line_indices_at_index(r, theta, ret);
+  return ret;
+}
 
 //-----------------------------------------------------------------------------
 //
@@ -348,6 +367,42 @@ lines_at_index(const size_t r, const size_t theta)
 //
 //-----------------------------------------------------------------------------
 template <class T>
+bool vgl_hough_index_2d<T>::lines_near_eq(vgl_line_segment_2d<T> const& la, vgl_line_segment_2d<T> const& lb, const T r_tol, const T theta_tol) const{
+  T a_angle, b_angle;
+  T a_ndist, b_ndist;
+  this->array_loc(la, a_ndist, a_angle);
+  this->array_loc(lb, b_ndist, b_angle);
+  //Test error in normal distance
+  bool within_r_radius = std::fabs(a_ndist - b_ndist) <= r_tol;
+  if (!within_r_radius)
+    return false;
+
+  //Tests for angular error taking into account the cut at 180 degrees
+  bool a_is_safe = ((180.0-a_angle)>=theta_tol) && (a_angle>=theta_tol);
+  bool b_is_safe = ((180.0-b_angle)>=theta_tol) && (b_angle>=theta_tol);
+  T one_eighty = T(180);
+  if(a_is_safe && b_is_safe && std::fabs(a_angle - b_angle) <= theta_tol)
+  return true;
+  bool a_near_180 = ((one_eighty - a_angle)<theta_tol), b_near_180 = ((one_eighty - b_angle)<theta_tol);
+  bool a_near_0 = (a_angle < theta_tol), b_near_0 = (b_angle < theta_tol);
+
+  if(a_near_180 && b_near_180 && fabs(a_angle - b_angle) <= theta_tol)
+    return true;
+
+  if(a_near_0 && b_near_0 && fabs(a_angle - b_angle) <= theta_tol)
+    return true;
+
+  if(a_near_0 && b_near_180){
+    T temp = b_angle - one_eighty;
+    return fabs(a_angle -temp) <= theta_tol;
+  }
+  if(a_near_180 && b_near_0){
+    T temp = a_angle - one_eighty;
+    return fabs(b_angle -temp) <= theta_tol;
+  }
+  return false;
+}
+template <class T>
 void vgl_hough_index_2d<T>::
 lines_in_interval(vgl_line_segment_2d<T> const & l,
                   const T r_dist,
@@ -366,7 +421,7 @@ lines_in_interval(vgl_line_segment_2d<T> const & l,
   for (int i = -angle_radius; i<=angle_radius; i++)
   {
     //The angle space is circular
-    int t_indx = (theta + i) % (th_dim_m1);
+    int t_indx = (theta + i) % (th_dim_);
     if (t_indx<0)
       t_indx += th_dim_m1;
 
@@ -383,6 +438,8 @@ lines_in_interval(vgl_line_segment_2d<T> const & l,
         //Note, these tests should eventually be more
         //sophisticated - JLM
         const vgl_line_segment_2d<T>& line = *lit;
+#if 0
+
         T l_angle, line_angle;
         T l_ndist, line_ndist;
         this->array_loc(l, l_ndist, l_angle);
@@ -397,9 +454,9 @@ lines_in_interval(vgl_line_segment_2d<T> const & l,
         bool within_angle_radius = std::fabs(l_angle - line_angle) < theta_dist;
         if (!within_angle_radius)
           continue;
-
-        //line, passed both tests
-        lines.push_back(line);
+#endif
+        if(lines_near_eq(l, line, r_dist, theta_dist) )
+        lines.push_back(line); //line, passed both tests
       }
     }
   }
@@ -419,6 +476,92 @@ vgl_hough_index_2d<T>::lines_in_interval(vgl_line_segment_2d<T> const & l,
   std::vector<vgl_line_segment_2d<T> > out;
   this->lines_in_interval(l, r_dist, theta_dist, out);
   return out;
+}
+
+ template <class T>
+void vgl_hough_index_2d<T>::lines_in_interval(const size_t r_index, const size_t theta_index,
+                                              const T r_dist, const T theta_dist,
+                                              std::vector<vgl_line_segment_2d<T> > & lines){
+   lines.clear();
+   std::vector<size_t> line_indices;
+   this->line_indices_in_interval( r_index, theta_index, r_dist, theta_dist, line_indices);
+   for(std::vector<size_t>::iterator lit = line_indices.begin();
+       lit != line_indices.end(); ++lit)
+     lines.push_back(lines_[*lit]);
+ }
+template <class T>
+std::vector<vgl_line_segment_2d<T> >
+vgl_hough_index_2d<T>::lines_in_interval(const size_t r_index, const size_t theta_index,
+                                         const T r_dist, const T theta_dist){
+  std::vector<vgl_line_segment_2d<T> > ret;
+  this->lines_in_interval(r_index, theta_index, r_dist, theta_dist, ret);
+  return ret;
+}
+
+template <class T>
+void vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const size_t theta_index,
+                                                     const T r_dist, const T theta_dist,
+                                                     std::vector<size_t> & line_indices){
+  if ((theta_index>=th_dim_)||(r_index>=r_dim_))
+    return;
+  int angle_radius = static_cast<int>(std::ceil(theta_dist/angle_increment_));
+  int r_radius = static_cast<int>(std::ceil(r_dist));
+  size_t th_dim_m1 = th_dim_ - 1;
+
+  std::vector<size_t> line_indices_at_center;
+  line_indices_at_index(r_index, theta_index, line_indices_at_center);
+
+  std::vector<vgl_line_segment_2d<T> > lines_at_center;
+  lines_at_index(r_index, theta_index, lines_at_center);
+
+  line_indices = line_indices_at_center;
+
+  for (int i = -angle_radius; i<=angle_radius; i++)
+  {
+    
+    //The angle space is circular
+    int t_indx = (theta_index + i) % (th_dim_);
+    if (t_indx<0)
+      t_indx += th_dim_m1;
+
+    for (int j = -r_radius; j<=r_radius; j++)
+    {
+      if (i==0 && j == 0) continue;//skip center query bin
+	  
+      int r_indx = r_index + j;
+	  if (t_indx == 5 && r_indx == 43)
+		  std::cout << ' ';
+      if ((r_indx<0)||(r_indx>=static_cast<int>(r_dim_)))
+        continue;
+      std::vector<vgl_line_segment_2d<T> > temp;
+      this->lines_at_index(r_indx, t_indx,temp);
+      std::vector<size_t> temp_i;
+      this ->line_indices_at_index(r_indx, t_indx, temp_i);
+      size_t idx_tmp = 0;
+      for (std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
+           lit != temp.end(); lit++, ++idx_tmp)
+      {
+        //Note, these tests should eventually be more
+        //sophisticated - JLM
+        const vgl_line_segment_2d<T>& line = *lit;
+        size_t idx_cent = 0;
+        for(std::vector<vgl_line_segment_2d<T> >::iterator cit = lines_at_center.begin();
+            cit != lines_at_center.end(); ++cit, ++idx_cent){
+          if(lines_near_eq(*cit, line, r_dist, theta_dist))
+            line_indices.push_back(temp_i[idx_tmp]); //line, passed both tests
+        }
+      }
+    }
+  }
+}
+
+template <class T>
+std::vector<size_t >
+vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const size_t theta_index,
+                                                const T r_dist, const T theta_dist){
+  std::vector<size_t > ret;
+  this->line_indices_in_interval(r_index, theta_index, r_dist, theta_dist, ret);
+  return ret;
 }
 
 //-----------------------------------------------------------------------------
@@ -873,6 +1016,18 @@ T vgl_hough_index_2d<T>::average_count() const{
      return T(0);
   return avg_cnt/ncells;
 }
+template <class T>
+void vgl_hough_index_2d<T>::cells_ge_count(const size_t min_count, std::vector<std::pair<size_t, size_t> >& cells) const{
+  cells.clear();
+  for(size_t r = 0; r<r_dim_;++r)
+    for(size_t theta=0; theta<th_dim_; ++theta){
+      if(index_[r][theta].size()<min_count)
+        continue;
+      std::pair<size_t, size_t> pr(r, theta);
+      cells.push_back(pr);
+    }
+}
+
 template <class T>
 void vgl_hough_index_2d<T>::lines_with_cells_ge_count(const size_t min_count, std::vector<vgl_line_segment_2d<T> >& lines) const{
   lines.clear();
