@@ -584,7 +584,7 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
       linestr >> band_str;
       if (band_str.find('P') != std::string::npos) {
         band_ = "PAN";
-      } else if (band_str.find('S') != std::string::npos) {
+      } else if (band_str.find("All-S") != std::string::npos) {
         band_ = "SWIR";
       } else
         band_ = "MULTI";
