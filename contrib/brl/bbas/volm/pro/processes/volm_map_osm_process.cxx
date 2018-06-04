@@ -76,6 +76,13 @@ bool volm_map_osm_process(bprb_func_process& pro)
       out_img(i, j).b = bimg(i,j);
     }
 
+  // form the bbox of the geotiff camera
+  double ll_lon, ll_lat;
+  geo_cam->img_to_global(0,  out_img.nj(),  ll_lon, ll_lat);
+  double ur_lon, ur_lat;
+  geo_cam->img_to_global(out_img.ni(),  0, ur_lon, ur_lat);
+  vgl_box_2d<double> scene_bbox(ll_lon, ur_lon, ll_lat, ur_lat);
+
   // read the osm objects
   // load the volm_osm object
   volm_osm_objects osm_objs(osm_file);
@@ -84,34 +91,52 @@ bool volm_map_osm_process(bprb_func_process& pro)
 
   bool hit = false;
   std::vector<std::vector<std::pair<int, int> > > img_lines;
+  std::vector<double> line_width;
   std::vector<volm_osm_object_line_sptr> loc_lines = osm_objs.loc_lines();
+
   for (auto & loc_line : loc_lines) {
+
+    // ignore some line types
+    if (loc_line->prop().name_ == "fence" || loc_line->prop().name_ == "wall")
+      continue;
+
+    // line inside scene bounds
     std::vector<vgl_point_2d<double> > pts = loc_line->line();
+    std::vector<vgl_point_2d<double> > pts_bounded;
+    if (!volm_io_tools::line_inside_the_box(scene_bbox, pts, pts_bounded))
+      continue;
+
+    // convert to image line
     std::vector<std::pair<int, int> > img_line;
-    for (auto & pt : pts) {
+    for (auto & pt : pts_bounded) {
       double u, v;
       geo_cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       auto uu = (unsigned)std::floor(u + 0.5f);
       auto vv = (unsigned)std::floor(v + 0.5f);
-      if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
-        //out_img(uu, vv).r = 255;
-        img_line.emplace_back(uu,vv);
-        hit = true;
-      }
+      img_line.emplace_back(uu,vv);
+      hit = true;
     }
-    if (img_line.size() > 0)
+
+    if (img_line.size() > 0) {
       img_lines.push_back(img_line);
+      double width = loc_line->prop().width_;
+      if (width <= 8) width = 15.0;
+      line_width.push_back(width);
+    }
   }
+
   std::cout << "number of img lines: " << img_lines.size() << std::endl;
   std::vector<vsol_spatial_object_2d_sptr> sos;
   if (hit) {
     for (unsigned i = 0; i < img_lines.size(); i++) {
-      std::cout << "img line: " << i << " number of pts: " << img_lines[i].size() << " ";
       std::vector<vsol_point_2d_sptr> vertices;
-      for (unsigned j = 0; j < img_lines.size(); j++)
+      for (unsigned j = 0; j < img_lines[i].size(); j++)
         vertices.push_back(new vsol_point_2d(img_lines[i][j].first, img_lines[i][j].second));
       vsol_polyline_2d_sptr vsolp = new vsol_polyline_2d(vertices);
       sos.emplace_back(vsolp->cast_to_spatial_object());
+
+      // line with no width
+      #if 0
       out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
       for (unsigned j = 1; j < img_lines[i].size(); j++) {
         double prev_u = img_lines[i][j-1].first;
@@ -135,6 +160,32 @@ bool volm_map_osm_process(bprb_func_process& pro)
         }
         std::cout << cnt << " pts in the image!\n";
       }
+
+      // expand line to polygon
+      #else
+      std::vector<vgl_point_2d<double> > img_line;
+      for (unsigned j = 0; j < img_lines[i].size(); j++)
+      {
+        vgl_point_2d<double> pt((double)(img_lines[i][j].first), (double)(img_lines[i][j].second));
+        img_line.push_back(pt);
+      }
+      vgl_polygon<double> img_poly;
+      double width = line_width[i];
+      std::cout << "img line: " << i << " number of pts: " << img_lines[i].size()
+                << ", width: " << width << std::endl;
+      if (!volm_io_tools::expend_line(img_line, width, img_poly)) {
+        std::cerr << pro.name() << ": Expanding OSM road to polygon failed!!!\n";
+        return false;
+      }
+      vgl_polygon_scan_iterator<double> poly_it(img_poly, true);
+      for (poly_it.reset(); poly_it.next(); ) {
+        int y = poly_it.scany();
+        for (int x = poly_it.startx(); x <= poly_it.endx(); ++x) {
+          if ( x >= 0 && y >= 0 && x < img_sptr->ni() && y < img_sptr->nj() )
+            out_img(x, y).r = 255;
+        }
+      }
+      #endif
     }
   }
 
