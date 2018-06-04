@@ -577,8 +577,8 @@ bool boxm2_initialize_ground_xyz_process(bprb_func_process& pro)
 
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++) {
-      (*out_img_x)(i,j) = scene_bbox.min_x() + i + 0.5;
-      (*out_img_y)(i,j) = scene_bbox.max_y() - j + 0.5;
+      (*out_img_x)(i,j) = i + 0.5;
+      (*out_img_y)(i,j) = nj - j + 0.5;
       (*out_img_z)(i,j) = scene_bbox.min_z() + g_h;  // g_h meters higher than min z
     }
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_x);
