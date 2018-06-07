@@ -93,6 +93,29 @@ test_gevd_bufferxy()
         good_buf = false;
   TEST("Unsigned char vil bufferxy constructor ", good_buf, true);
 
+  // Test byte constructor with non-contiguous memory
+  vil_image_resource_sptr rsbn = vil_new_image_resource(5,7,1,VIL_PIXEL_FORMAT_BYTE);
+  vil_image_view<unsigned char> bviewn = rsbn->get_view();
+  for (unsigned i = 0; i < bviewn.ni(); ++i){
+    for (unsigned j = 0; j < bviewn.nj(); ++j){
+      bviewn(i,j) = (unsigned char)(i*j);
+    }
+  }
+
+  vil_image_view<unsigned char> bviewn2 = rsbn->get_view(1,3,2,4);
+  vil_image_resource_sptr rsbn2 = vil_new_image_resource_of_view(bviewn2);
+  gevd_bufferxy bbufn(rsbn2);
+
+  good_buf = true;
+  for (unsigned i = 0; i < bviewn2.ni(); ++i){
+    for (unsigned j = 0; j < bviewn2.nj(); ++j){
+      if (*((unsigned char*)bbufn.GetElementAddr(i,j)) != bviewn2(i,j)){
+        good_buf = false;
+      }
+    }
+  }
+  TEST("Unsigned char vil non-contiguous bufferxy constructor ", good_buf, true);
+
   // Test unsigned short constructor
   vil_image_resource_sptr rs = vil_new_image_resource(3,4,1,VIL_PIXEL_FORMAT_UINT_16);
   vil_image_view<unsigned short> usview = rs->get_view(0,3,0,4);
@@ -112,6 +135,30 @@ test_gevd_bufferxy()
 #endif
         good_buf = false;
   TEST("Unsigned short vil bufferxy constructor ", good_buf, true);
+
+  // Test unsigned short constructor with non-contiguous memory
+  vil_image_resource_sptr rsn = vil_new_image_resource(5,7,1,VIL_PIXEL_FORMAT_UINT_16);
+  vil_image_view<unsigned short> usviewn = rsn->get_view();
+  for (unsigned i = 0; i<usviewn.ni(); ++i){
+    for (unsigned j = 0; j<usviewn.nj(); ++j){
+      usviewn(i,j) = (unsigned short)(1000+i*j);
+    }
+  }
+
+  vil_image_view<unsigned short> usviewn2 = rsn->get_view(1,3,2,4);
+  vil_image_resource_sptr rsn2 = vil_new_image_resource_of_view(usviewn2);
+  gevd_bufferxy bufn(rsn2);
+
+  good_buf = true;
+  for (unsigned i = 0; i < usviewn2.ni(); ++i){
+    for (unsigned j = 0; j < usviewn2.nj(); ++j){
+      // Minimum value of usviewn2 is 1002, maximum value is 1015, range is thus 13
+      if (*((unsigned char*)bufn.GetElementAddr(i,j)) != (usviewn2(i,j)-1002)*255/13){
+        good_buf = false;
+      }
+    }
+  }
+  TEST("Unsigned short vil non-contiguous bufferxy constructor ", good_buf, true);
 }
 
 TESTMAIN(test_gevd_bufferxy);
