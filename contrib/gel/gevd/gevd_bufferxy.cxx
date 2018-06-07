@@ -102,15 +102,15 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
    case 1:// unsigned byte pixels
    {
     unsigned char* buf = gevd_memory_mixin::GetBufferPtr();
-    vil_image_view<unsigned char> view = image.get_view(0, n_cols,
-                                                        0, n_rows);
+    const vil_image_view<unsigned char> view = image.get_view();
     std::ptrdiff_t istep=view.istep(),jstep=view.jstep();
+
     const unsigned char* row = view.top_left_ptr();
-    for (unsigned j=0;j<n_rows;++j,row += jstep, buf += jstep)
+    for (unsigned j=0;j<n_rows;++j,row += jstep, buf += n_cols)
     {
       const unsigned char* pixel = row;
       unsigned char* buf_pixel = buf;
-      for (unsigned i=0;i<n_cols;++i,pixel+=istep, buf_pixel += istep)
+      for (unsigned i=0;i<n_cols;++i,pixel+=istep, ++buf_pixel)
         *buf_pixel = *pixel;
     }
     break;
