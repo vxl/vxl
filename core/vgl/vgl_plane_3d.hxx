@@ -87,6 +87,23 @@ vgl_plane_3d<T>::vgl_plane_3d (vgl_ray_3d<T> const& r0,
   vgl_plane_3d<T> pln(norm, p0);
   a_=pln.a();   b_=pln.b();   c_=pln.c();   d_=pln.d();
 }
+template <class T>
+bool vgl_plane_3d<T>::normalize(){
+  double sum = a_*a_ + b_*b_ + c_*c_;
+  if (sum<1e-12) // don't normalize plane at infinity
+    return false;
+  double den = std::sqrt(sum);
+  double an= (double)a()/den; a_ = (T)an;
+  double bn= (double)b()/den; b_ = (T)bn;
+  double cn= (double)c()/den; c_ = (T)cn;
+  double dn= (double)d()/den; d_ = (T)dn;
+  //standardize so that largest of (|a|,|b|,|c|) is positive
+  if ((std::fabs(an)>=std::fabs(bn) && std::fabs(an)>=std::fabs(cn) && an < 0) ||
+      (std::fabs(bn)>std::fabs(an) && std::fabs(bn)>=std::fabs(cn) && bn < 0) ||
+      (std::fabs(cn)>std::fabs(an) && std::fabs(cn)>std::fabs(bn) && cn < 0))
+    a_ = -a_, b_ = -b_, c_ = -c_, d_ = -d_;
+  return true;
+}
 //: Return true if p is on the plane
 template <class T>
 bool vgl_plane_3d<T>::contains(vgl_point_3d<T> const& p, T tol) const

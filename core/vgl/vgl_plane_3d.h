@@ -110,6 +110,9 @@ class vgl_plane_3d
   //  Always returns false
   inline bool ideal(T = (T)0) const { return false; }
 
+  // divide all plane coefs by sqrt(a^2 +b^2 +c^2)
+  bool normalize();
+
   //: Return the normal direction, i.e., a unit vector orthogonal to this plane
   inline vgl_vector_3d<T> normal() const
   { return normalized(vgl_vector_3d<T>(a(),b(),c())); }
