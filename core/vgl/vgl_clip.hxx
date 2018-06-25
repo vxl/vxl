@@ -142,7 +142,7 @@ namespace {
 
 #elif HAS_CLIPPER
 
-#include <clipper.h>
+#include <clipper.hxx>
 
 namespace {
   //: Creates a Clipper polygon from a vgl_polygon.
