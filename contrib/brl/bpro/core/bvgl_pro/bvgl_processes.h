@@ -11,4 +11,7 @@ DECLARE_FUNC_CONS(bvgl_set_change_type_process);
 DECLARE_FUNC_CONS(bvgl_2d_box_intersection_process);
 DECLARE_FUNC_CONS(bvgl_geo_index_region_resource_process);
 DECLARE_FUNC_CONS(bvgl_geo_index_region_poly_resource_process);
+DECLARE_FUNC_CONS(bvgl_geo_index_region_overlap_process);
+DECLARE_FUNC_CONS(bvgl_geo_index_region_distance_process);
+DECLARE_FUNC_CONS(bvgl_geo_index_extent_process);
 #endif
