@@ -190,6 +190,10 @@ class volm_io
 
   //: read peak files (first element in pair is the location represented by it wgs84 coords,
   static bool read_dem_peak_file(std::string const& file, std::vector<std::pair<vgl_point_2d<double>, double> >& objects);
+
+  //: fallback_category table
+  static const std::string category_dir;                // (VXL_LIB_DIR)
+  static const std::string fallback_category_txt;       // ("fallback_category.txt")
 };
 
 class volm_rationale

@@ -84,7 +84,7 @@ int main(int argc, char** argv)
   }
 
   // load osm_to_volm table
-  std::string osm_to_volm_txt = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
+  std::string osm_to_volm_txt = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
   if (!vul_file::exists(osm_to_volm_txt)) {
     log << "ERROR: can not find osm_to_volm txt file: " << osm_to_volm_txt << '\n';
     error(log_file, log.str());

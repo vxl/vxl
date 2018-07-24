@@ -21,6 +21,17 @@
 #include <cassert>
 #include <utility>
 #include <vsl/vsl_vector_io.h>
+#include <volm/volm_category_io.h>
+
+#ifdef VOLM_WHERE_BRL_LIB_DIR_H_EXISTS
+  #include <volm_where_brl_lib_dir.h>
+  const std::string volm_io::category_dir = std::string(BRL_LIB_DIR);
+#else
+  const std::string volm_io::category_dir = std::string();
+#endif
+
+const std::string volm_io::fallback_category_txt = std::string("fallback_category.txt");
+
 
 std::map<std::string, depth_map_region::orientation> create_orient_map()
 {
@@ -110,14 +121,6 @@ std::map<int, vil_rgb<vxl_byte> > volm_orient_table::ori_index_colors = create_o
 unsigned volm_label_table::compute_number_of_labels()
 {
   return volm_osm_category_io::volm_land_table.size();
-#if 0
-  unsigned max = 0;
-  for (std::map<int, volm_attributes >::iterator it = land_id.begin(); it != land_id.end(); it++) {
-    if (it->second.id_ > max)
-      max = it->second.id_;
-  }
-  return max+1;
-#endif
 }
 
 unsigned volm_label_table::number_of_labels_ = compute_number_of_labels();
@@ -148,7 +151,7 @@ std::map<unsigned char, std::vector<unsigned char> > create_fallback_label()
   std::map<unsigned char, std::vector<unsigned char> > m;
   std::vector<unsigned char> f(4,0);
   // load the text file
-  std::string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
+  std::string txt_file = volm_io::category_dir + std::string("/") + volm_io::fallback_category_txt;
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
@@ -170,53 +173,14 @@ std::map<unsigned char, std::vector<unsigned char> > create_fallback_label()
     m[id] = f;
   }
   return m;
-#if 0
-  std::map<unsigned char, std::vector<unsigned char> > m;
-  std::vector<unsigned char> f(4,0);
-  f.clear();  f.push_back(0);  f.push_back(0);  f.push_back(0);  f.push_back(0);  m[0] = f;   // invalid    ----------> [invalid, invalid, invalid, invalid]
-  f.clear();  f.push_back(1);  f.push_back(6);  f.push_back(17); f.push_back(3);  m[1] = f;   // open water ----------> [open water, sand, beach, develop(open space)]
-  f.clear();  f.push_back(2);  f.push_back(1);  f.push_back(6);  f.push_back(3);  m[2] = f;   // perennial ice/snow --> [perennial ice/snow, water, sand, develop(open)]
-  f.clear();  f.push_back(3);  f.push_back(4);  f.push_back(5);  f.push_back(6);  m[3] = f;   //
-  f.clear();  f.push_back(4);  f.push_back(15);  f.push_back(5);  f.push_back(6);  m[4] = f;  //
-  f.clear();  f.push_back(5);  f.push_back(4);  f.push_back(15); f.push_back(24); m[5] = f;   //
-  f.clear();  f.push_back(6);  f.push_back(1);  f.push_back(3);  f.push_back(17); m[6] = f;   //
-  f.clear();  f.push_back(7);  f.push_back(8);  f.push_back(9);  f.push_back(3);  m[7] = f;   //
-  f.clear();  f.push_back(8);  f.push_back(7);  f.push_back(9);  f.push_back(3);  m[8] = f;   //
-  f.clear();  f.push_back(9);  f.push_back(7);  f.push_back(8);  f.push_back(3);  m[9] = f;   //
-  f.clear();  f.push_back(10); f.push_back(11); f.push_back(12); f.push_back(3);  m[10] = f;  //
-  f.clear();  f.push_back(11); f.push_back(10); f.push_back(3);  f.push_back(12); m[11] = f;  //
-  f.clear();  f.push_back(12); f.push_back(11); f.push_back(10); f.push_back(3);  m[12] = f;  //
-  f.clear();  f.push_back(13); f.push_back(12); f.push_back(3);  f.push_back(4);  m[13] = f;  //
-  f.clear();  f.push_back(14); f.push_back(1);  f.push_back(4);  f.push_back(6); m[14] = f;   //
-  f.clear();  f.push_back(15); f.push_back(4);  f.push_back(5);  f.push_back(34); m[15] = f;  //  building --> building ,developed low, developed high, tall_building
-  f.clear();  f.push_back(16); f.push_back(4);  f.push_back(3);  f.push_back(5);  m[16] = f;  //
-  f.clear();  f.push_back(17); f.push_back(1);  f.push_back(6);  f.push_back(3);  m[17] = f;  //
-  f.clear();  f.push_back(18); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[18] = f;  //
-  f.clear();  f.push_back(19); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[19] = f;  //
-  f.clear();  f.push_back(20); f.push_back(4);  f.push_back(5);  f.push_back(15); m[20] = f;  //
-  f.clear();  f.push_back(21); f.push_back(4);  f.push_back(5);  f.push_back(15); m[21] = f;  //
-  f.clear();  f.push_back(22); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[22] = f;  //
-  f.clear();  f.push_back(23); f.push_back(1);  f.push_back(4);  f.push_back(26); m[23] = f;  //
-  f.clear();  f.push_back(24); f.push_back(4);  f.push_back(5);  f.push_back(15); m[24] = f;  //
-  f.clear();  f.push_back(25); f.push_back(4);  f.push_back(5);  f.push_back(15); m[25] = f;  //
-  f.clear();  f.push_back(26); f.push_back(23); f.push_back(1);  f.push_back(4);  m[26] = f;  //
-  f.clear();  f.push_back(27); f.push_back(3);  f.push_back(6);  f.push_back(4);  m[27] = f;  //
-  f.clear();  f.push_back(28); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[28] = f;  //
-  f.clear();  f.push_back(29); f.push_back(1);  f.push_back(15); f.push_back(6);  m[29] = f;  //
-  f.clear();  f.push_back(30); f.push_back(1);  f.push_back(29); f.push_back(23); m[30] = f;  //
-  f.clear();  f.push_back(31); f.push_back(4);  f.push_back(5);  f.push_back(3);  m[31] = f;  //
-  f.clear();  f.push_back(32); f.push_back(31); f.push_back(4);  f.push_back(5);  m[32] = f;  //
-  f.clear();  f.push_back(33); f.push_back(6);  f.push_back(15); f.push_back(1);  m[33] = f;  //
-  f.clear();  f.push_back(34); f.push_back(15); f.push_back(4);  f.push_back(5);  m[34] = f;  // tall_building --> high_building, building, developed low, developed high
-  return m;
-#endif
+
 }
 
 std::map<unsigned char, std::vector<float> > create_fallback_weight()
 {
   std::map<unsigned char, std::vector<float> > m;
   std::vector<float> w(4,0.0f);
-  std::string txt_file = volm_utils::volm_src_root() + "fallback_category.txt";
+  std::string txt_file = volm_io::category_dir + std::string("/") + volm_io::fallback_category_txt;
   std::ifstream ifs(txt_file.c_str());
   if (!ifs.is_open()) {
     std::cerr << " cannot open: " << txt_file << '\n';
