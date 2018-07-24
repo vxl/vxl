@@ -60,6 +60,7 @@ def create_scene_large_scale(roi_kml, scene_root, world_dir, dem_folder, world_s
     if status:
         (id, type) = batch.commit_output(0)
         n_scenes = batch.get_output_unsigned(id)
+        batch.remove_data(id)
         return n_scenes
     else:
         return 0
@@ -71,16 +72,22 @@ def scene_box(scene):
     batch.run_process()
     (id, type) = batch.commit_output(0)
     lower_left_lon = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(1)
     lower_left_lat = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(2)
     lower_left_elev = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(3)
     upper_right_lon = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(4)
     upper_right_lat = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(5)
     upper_right_elev = batch.get_output_double(id)
+    batch.remove_data(id)
     return lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev
 
 # changed to always draw a filled polygon, default alpha value (a) is set to 0 so that the box is completely transparent though so it will look as an empty polygon
@@ -117,10 +124,13 @@ def scene_origin(scene):
     batch.run_process()
     (id, type) = batch.commit_output(0)
     lower_left_lon = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(1)
     lower_left_lat = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(2)
     lower_left_z = batch.get_output_double(id)
+    batch.remove_data(id)
     return lower_left_lon, lower_left_lat, lower_left_z
 
 # return the scene bbox and voxel size in local coordinates
@@ -132,18 +142,25 @@ def scene_local_box(scene):
     batch.run_process()
     (id, type) = batch.commit_output(0)
     lower_left_x = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(1)
     lower_left_y = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(2)
     upper_right_x = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(3)
     upper_right_y = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(4)
     voxel_size = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(5)
     lower_left_z = batch.get_output_double(id)  # min z
+    batch.remove_data(id)
     (id, type) = batch.commit_output(6)
     upper_right_z = batch.get_output_double(id)  # max z
+    batch.remove_data(id)
     return lower_left_x, lower_left_y, upper_right_x, upper_right_y, voxel_size, lower_left_z, upper_right_z
 
 # return the scene world directory
@@ -155,6 +172,7 @@ def model_dir(scene):
     batch.run_process()
     (id, type) = batch.commit_output(0)
     model_dir = batch.get_output_string(id)
+    batch.remove_data(id)
     return model_dir
 
 
