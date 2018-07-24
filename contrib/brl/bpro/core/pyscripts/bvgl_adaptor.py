@@ -17,12 +17,16 @@ def box_2d_intersection(in_kml, out_kml=""):
     if status:
         (id, type) = batch.commit_output(0)
         ll_lon = batch.get_output_double(id)
+        batch.remove_data(id)
         (id, type) = batch.commit_output(1)
         ll_lat = batch.get_output_double(id)
+        batch.remove_data(id)
         (id, type) = batch.commit_output(2)
         ur_lon = batch.get_output_double(id)
+        batch.remove_data(id)
         (id, type) = batch.commit_output(3)
         ur_lat = batch.get_output_double(id)
+        batch.remove_data(id)
         return True, ll_lon, ll_lat, ur_lon, ur_lat
     else:
         return False, 0.0, 0.0, 0.0, 0.0
@@ -41,6 +45,7 @@ def geo_index_region_resource(geo_index_txt, ll_lon, ll_lat, ur_lon, ur_lat, out
     if status:
         (id, type) = batch.commit_output(0)
         n_leaves = batch.get_output_unsigned(id)
+        batch.remove_data(id)
         return n_leaves
     else:
         return 0
@@ -57,6 +62,7 @@ def geo_index_region_poly_resource(geo_index_txt, poly_kml, out_file):
     if status:
         (id, type) = batch.commit_output(0)
         n_leaves = batch.get_output_unsigned(id)
+        batch.remove_data(id)
         return n_leaves
     else:
         return 0
