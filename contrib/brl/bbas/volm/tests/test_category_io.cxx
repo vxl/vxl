@@ -61,8 +61,9 @@ static void test_category_io()
 
   // test the method of loading land category
   std::string osm_to_volm_file;
-  osm_to_volm_file = std::string(VCL_SOURCE_ROOT_DIR) + "/contrib/brl/bbas/volm/osm_to_volm_labels.txt";
-  std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
+
+  osm_to_volm_file = volm_osm_category_io::category_dir + std::string("/") + volm_osm_category_io::osm_to_volm_labels_txt;
+  std::cout << osm_to_volm_file << std::endl;
   test_category_io_read_land_category(osm_to_volm_file);
 
   // output the hard coded ncld table

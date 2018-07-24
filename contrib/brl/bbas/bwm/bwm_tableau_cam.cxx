@@ -729,56 +729,6 @@ std::vector<std::string> bwm_tableau_cam::set_land_types()
 #if 1
   return volm_osm_category_io::volm_category_name_table;
 #endif
-#if 0
-  std::map<unsigned, volm_land_layer> m;
-  std::map<int, volm_land_layer> nlcd_table = volm_osm_category_io::nlcd_land_table;
-  std::map<int, volm_land_layer> geo_table = volm_osm_category_io::geo_land_table;
-  std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
-  std::map<std::pair<int, int>, volm_land_layer> road_junction_table;
-  std::string osm_to_volm_txt = "./osm_to_volm_labels.txt";
-  volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
-  std::string road_junction_txt = "./road_junction_category.txt";
-  volm_osm_category_io::load_road_junction_table(road_junction_txt, road_junction_table);
-
-  for (std::map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
-
-  for (std::map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
-
-  for (std::map<std::pair<std::string, std::string>, volm_land_layer>::iterator mit = osm_land_table.begin();
-       mit != osm_land_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
-
-  for (std::map<std::pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
-       mit != road_junction_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
-
-  std::vector<std::string> out;
-  for (std::map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
-    out.push_back(mit->second.name_);
-  return out;
-#endif
-
-#if 0
-  std::vector<std::string> land_types;
-  std::map<unsigned char, std::vector<std::string> > temp;
-  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
-  unsigned cnt = 0;
-  for (; mit != volm_label_table::land_id.end(); ++mit) {
-    temp[mit->second.id_].push_back(mit->second.name_);
-  }
-  std::map<unsigned char, std::vector<std::string> >::iterator it = temp.begin();
-  for (; it != temp.end(); ++it) {
-    std::string land_name;
-    for ( std::vector<std::string>::iterator vit = it->second.begin(); vit != it->second.end(); ++vit) {
-      land_name += (*vit);
-      if (vit != it->second.end()-1) land_name += " OR ";
-    }
-    land_types.push_back(land_name);
-  }
-  return land_types;
-#endif
 }
 
 std::vector<std::string> bwm_tableau_cam::set_orient_types()
