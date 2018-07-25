@@ -12,6 +12,7 @@
 #include <vil/algo/vil_gauss_reduce.h>
 
 #include "bsgm_disparity_estimator.h"
+#include "bsgm_error_checking.h"
 #include "bsgm_census.h"
 
 
@@ -54,7 +55,8 @@ bsgm_disparity_estimator::compute(
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<int>& min_disp,
   float invalid_disp,
-  vil_image_view<float>& disp_tar )
+  vil_image_view<float>& disp_tar,
+  bool skip_error_check)
 {
   disp_tar.set_size( w_, h_ );
 
@@ -136,15 +138,17 @@ bsgm_disparity_estimator::compute(
     print_time( "Disparity map extraction", timer );
 
   // Find and fix errors if configured.
-  if( params_.error_check_mode > 0 ){
-    flag_nonunique( disp_tar, disp_cost, img_tar, invalid_disp );
+  if( params_.error_check_mode > 0 && !skip_error_check){
+    bsgm_check_nonunique( disp_tar, disp_cost,
+      img_tar, invalid_disp, params_.shadow_thresh);
 
     if( params_.error_check_mode > 1 )
-      interpolate_errors( disp_tar, invalid_tar, img_tar, invalid_disp );
-  }
+      bsgm_interpolate_errors( disp_tar, invalid_tar,
+        img_tar, invalid_disp, params_.shadow_thresh);
 
-  if( params_.print_timing )
-    print_time( "Consistency check", timer );
+    if (params_.print_timing)
+      print_time("Consistency check", timer);
+  }
 
   if( params_.print_timing )
     print_time( "TOTAL TIME", total_timer );
@@ -362,7 +366,7 @@ bsgm_disparity_estimator::run_multi_dp(
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
   const vil_image_view<float>& grad_y,
-  const vil_image_view<int>& min_disparity )
+  const vil_image_view<int>& min_disparity)
 {
   int volume_size = w_*h_*num_disparities_;
   int row_size = w_*num_disparities_;
@@ -744,220 +748,6 @@ bsgm_disparity_estimator::compute_best_disparity_img(
 }
 
 
-//-----------------------------------------------------------------------------
-void
-bsgm_disparity_estimator::flag_nonunique(
-  vil_image_view<float>& disp_img,
-  const vil_image_view<unsigned short>& disp_cost,
-  const vil_image_view<vxl_byte>& img,
-  float invalid_disparity,
-  int disp_thresh )
-{
-  std::vector<unsigned short> inv_cost( w_ );
-  std::vector<int> inv_disp( w_ );
-
-  for( int y = 0; y < h_; y++ ){
-
-    // Initialize an inverse disparity map for this row
-    for( int x = 0; x < w_; x++ ){
-      inv_cost[x] = 65535;
-      inv_disp[x] = -1;
-    }
-
-    // Construct the inverse disparity map
-    for( int x = 0; x < w_; x++ ){
-
-      if( disp_img(x,y) == invalid_disparity ) continue;
-
-      // Get an integer disparity and location in reference image
-      int d = (int)( disp_img(x,y)+0.5f );
-      int x_l = x + d;
-
-      if( x_l < 0 || x_l >= w_ ) continue;
-
-      // Record the min cost pixel mapping back to x_l
-      if( inv_cost[x_l] > disp_cost(x,y) ){
-        inv_cost[x_l] = disp_cost(x,y);
-        inv_disp[x_l] = d;
-      }
-    } //x
-
-    // Check the uniqueness of each disparity.
-    for( int x = 0; x < w_; x++ ){
-
-      if( disp_img(x,y) == invalid_disparity ) continue;
-
-      // Label dark pixels as invalid, if thresh=0 nothing happens
-      if (img(x, y) < params_.shadow_thresh) {
-        disp_img(x, y) = invalid_disparity;
-        continue;
-      }
-
-      // Compute the floor and ceiling of each disparity
-      int d_floor = (int)floor(disp_img(x,y));
-      int d_ceil = (int)ceil(disp_img(x,y));
-      int x_floor = x + d_floor, x_ceil = x + d_ceil;
-
-      if( x_floor < 0 || x_ceil < 0 || x_floor >= w_ || x_ceil >= w_ )
-        continue;
-
-      // Check if either inverse disparity is consistent and flag if not.
-      if( abs( inv_disp[x_floor] - d_floor ) > disp_thresh &&
-        abs( inv_disp[x_ceil] - d_ceil ) > disp_thresh )
-        disp_img(x,y) = invalid_disparity;
-    } //x
-  } //y
-
-}
-
-
-//-----------------------------------------------------------------------
-void
-bsgm_disparity_estimator::interpolate_errors(
-  vil_image_view<float>& disp_img,
-  const vil_image_view<bool>& invalid,
-  const vil_image_view<vxl_byte>& img,
-  float invalid_disparity )
-{
-  int num_sample_dirs = 8;
-  float sample_percentile = 0.5f;
-  float shadow_sample_percentile = 0.75f;
-
-  std::vector<float> sample_vol( w_*h_*num_sample_dirs, 0.0f );
-  vil_image_view<vxl_byte> sample_count( w_, h_ );
-  sample_count.fill( 0 );
-
-  // Setup buffers
-  std::vector<float> dir_sample_cur( w_, 0.0f );
-  std::vector<float> dir_sample_prev( w_, 0.0f );
-
-  // The following directional smoothing is adapted from run_multi_dp
-  for( int dir = 0; dir < num_sample_dirs; dir++ ){
-
-    int dx, dy, temp_dx = 0, temp_dy = 0;
-    int x_start, y_start, x_end, y_end;
-
-    // - - -
-    // X X X
-    // - - -
-    if( dir == 0 ){
-      dx = -1; dy = 0;
-      x_start = 1; x_end = w_-1;
-      y_start = 0; y_end = h_-1;
-
-    } else if( dir == 1 ){
-      dx = 1; dy = 0;
-      x_start = w_-2; x_end = 0;
-      y_start = h_-1; y_end = 0;
-
-    // X - -
-    // - X -
-    // - - X
-    } else if( dir == 2 ){
-      dx = -1; dy = -1;
-      x_start = 1; x_end = w_-1;
-      y_start = 1; y_end = h_-1;
-
-    } else if( dir == 3 ){
-      dx = 1; dy = 1;
-      x_start = w_-2; x_end = 0;
-      y_start = h_-2; y_end = 0;
-
-    // - X -
-    // - X -
-    // - X -
-    } else if( dir == 4 ){
-      dx = 0; dy = -1;
-      x_start = 0; x_end = w_-1;
-      y_start = 1; y_end = h_-1;
-
-    } else if( dir == 5 ){
-      dx = 0; dy = 1;
-      x_start = w_-1; x_end = 0;
-      y_start = h_-2; y_end = 0;
-
-    // - - X
-    // - X -
-    // X - -
-    } else if( dir == 6 ){
-      dx = 1; dy = -1;
-      x_start = w_-2; x_end = 0;
-      y_start = 1; y_end = h_-1;
-
-    } else if( dir == 7 ){
-      dx = -1; dy = 1;
-      x_start = 1; x_end = w_-1;
-      y_start = h_-2; y_end = 0;
-    }
-
-    // Automatically determine iteration direction from end points
-    int x_inc = (x_start < x_end) ? 1 : -1;
-    int y_inc = (y_start < y_end) ? 1 : -1;
-
-    // Initialize previous row
-    for( int v = 0; v < w_; v++ )
-      dir_sample_prev[v] = invalid_disparity;
-
-    // Loop through rows
-    for( int y = y_start; y != y_end + y_inc; y += y_inc ){
-
-      // Re-initialize current row in case dir follows row
-      for( int x = 0; x < w_; x++ )
-        dir_sample_cur[x] = invalid_disparity;
-
-      for( int x = x_start; x != x_end + x_inc; x += x_inc ){
-
-        // If good sample at this pixel, record it
-        if( disp_img(x,y) != invalid_disparity ){
-          dir_sample_cur[x] = disp_img(x,y);
-
-        } else {
-
-          // Otherwise propagate previous sample
-          if( dy == 0 )
-            dir_sample_cur[x] = dir_sample_cur[x+dx];
-          else
-            dir_sample_cur[x] = dir_sample_prev[x+dx];
-
-          // And add sample to this pixel's sample set
-          if( dir_sample_cur[x] != invalid_disparity ){
-            sample_vol[ num_sample_dirs*(y*w_ + x) + sample_count(x,y) ] =
-              dir_sample_cur[x];
-            sample_count(x,y)++;
-          }
-        }
-
-      } //x
-
-      // Copy current row to prev
-      dir_sample_prev = dir_sample_cur;
-    } //y
-  }//dir
-
-  // Iterpolate any invalid pixels by taking the median (or specified
-  // percentile) of accumulated sample set.
-  auto sample_itr = sample_vol.begin();
-  for( int y = 0; y < h_; y++ ){
-    for( int x = 0; x < w_; x++, sample_itr += num_sample_dirs ){
-      if( sample_count(x,y) == 0 ) continue;
-      if( invalid(x,y) ) continue;
-
-      std::sort( sample_itr, sample_itr + sample_count(x,y) );
-
-      int interp_idx;
-
-      // Choose a sample index depending on whether pixel is shadow or not
-      if (img(x, y) < params_.shadow_thresh)
-        interp_idx = (int)(shadow_sample_percentile*sample_count(x, y));
-      else
-        interp_idx = (int)(sample_percentile*sample_count(x, y));
-
-      disp_img(x,y) = *( sample_itr + interp_idx );
-    }
-  }
-
-}
-
 
 //----------------------------------------------------------------------
 void
@@ -969,86 +759,3 @@ bsgm_disparity_estimator::print_time(
   timer.mark();
 }
 
-
-//------------------------------------------------------------------------
-void
-compute_invalid_map(
-  const vil_image_view<vxl_byte>& img_tar,
-  const vil_image_view<vxl_byte>& img_ref,
-  vil_image_view<bool>& invalid_tar,
-  int min_disparity,
-  int num_disparities,
-  vxl_byte border_val )
-{
-  int w = img_tar.ni(), h = img_tar.nj();
-
-  invalid_tar.set_size( w, h );
-
-  // Initialize map
-  for( int y = 0; y < h; y++ )
-    for( int x = 0; x < w; x++ )
-      invalid_tar(x,y) = false;
-
-   // Find the border in the target image
-  for( int y = 0; y < h; y++ ){
-
-    // Find the left border
-    for( int x = 0; x < w; x++ ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != border_val )
-        break;
-    } //x
-
-    // Find the right border
-    for( int x = w-1; x >= 0; x-- ){
-      invalid_tar(x,y) = true;
-      if( img_tar(x,y) != border_val )
-        break;
-    } //x
-  } //y
-
-  int max_disparity = min_disparity + num_disparities;
-
-  // Find the border in the reference image
-  for( int y = 0; y < h; y++ ){
-
-    // Find the left border
-    int lb = 0;
-    for( int x = 0; x < w; x++, lb++ )
-      if( img_ref(x,y) != border_val )
-        break;
-
-    // Mask any pixels in the target image which map into the left border
-    for( int x = 0; x < std::min( w, lb - min_disparity ); x++ )
-      invalid_tar(x,y) = true;
-
-    // Find the right border
-    int rb = w-1;
-    for( int x = w-1; x >= 0; x--, rb-- )
-      if( img_ref(x,y) != border_val )
-        break;
-
-    // Mask any pixels in the target image which map into the right border
-    for( int x = std::max( 0, rb - max_disparity ); x < w ; x++ )
-      invalid_tar(x,y) = true;
-  } //y
-
-  //vil_image_view<vxl_byte> vis( w_, h_ );
-  //for( int y = 0; y < h_; y++ )
-  //  for( int x = 0; x < w_; x++ )
-  //    vis(x,y) = invalid_tar(x,y) ? 255 : 0;
-  //vil_save( vis, "D:/results/sattel/invalid.png" );
-}
-
-
-//-----------------------------------------------------------------------
-void
-bsgm_invert_disparities(
-  vil_image_view<float>& disp_img,
-  int old_invalid,
-  int new_invalid )
-{
-  for( int y = 0; y < (int)disp_img.nj(); y++ )
-    for( int x = 0; x < (int)disp_img.ni(); x++ )
-      disp_img(x,y) = disp_img(x,y) == old_invalid ? new_invalid : -disp_img(x,y);
-}

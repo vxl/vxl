@@ -11,6 +11,7 @@
 #include <vil/vil_save.h>
 
 #include <bsgm/bsgm_disparity_estimator.h>
+#include <bsgm/bsgm_error_checking.h>
 #include <bsgm/bsgm_multiscale_disparity_estimator.h>
 
 
@@ -42,7 +43,7 @@ int main(int argc,char * argv[])
   int num_active_disparities = atoi(argv[6]);
   int multi_scale_mode = atoi(argv[7]);
   params.error_check_mode = (argc==8) ? 1 : atoi(argv[8]);
-  params.shadow_thresh = 20;
+  params.shadow_thresh = 0;//20;
 
   // Load images
   vil_image_view<vxl_byte> img_right =
@@ -58,9 +59,11 @@ int main(int argc,char * argv[])
   }
 
   // Compute invalid map
-  vil_image_view<bool> invalid_right;
-  compute_invalid_map( img_right, img_left,
+  vil_image_view<bool> invalid_right, invalid_left;
+  bsgm_compute_invalid_map( img_right, img_left,
     invalid_right, min_disparity, num_disparities );
+  bsgm_compute_invalid_map(img_left, img_right,
+    invalid_left, -num_disparities-min_disparity+1, num_disparities);
 
   // Flip the sign of the disparities to match OpenCV implementation. Set the
   // invalid disparity to one less than the min value, befor and after flip.
@@ -68,7 +71,7 @@ int main(int argc,char * argv[])
   float min_disparity_inv =  -( min_disparity + num_disparities - 1 );
   float invalid_disp_inv = min_disparity_inv - 1.0f;
 
-  vil_image_view<float> disp_right;
+  vil_image_view<float> disp_right, disp_left;
 
   // Run single-scale SGM if all disparities are active
   if( num_active_disparities >= num_disparities ){
@@ -94,8 +97,10 @@ int main(int argc,char * argv[])
     bsgm_multiscale_disparity_estimator sgm(
       params, img_width, img_height, num_disparities, num_active_disparities );
 
-    if( !sgm.compute( img_right, img_left, invalid_right,
-        min_disparity_inv, invalid_disp_inv, multi_scale_mode, disp_right ) ){
+    if (!sgm.compute_both(img_right, img_left, invalid_right, invalid_left,
+      min_disparity_inv, invalid_disp_inv, multi_scale_mode, disp_right, disp_left)) {
+    //if( !sgm.compute( img_right, img_left, invalid_right,
+    //    min_disparity_inv, invalid_disp_inv, multi_scale_mode, disp_right ) ){
       std::cerr << "SGM failed\n";
       return 1;
     }
