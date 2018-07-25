@@ -14,6 +14,7 @@
 #include <vil/algo/vil_gauss_reduce.h>
 
 #include "bsgm_multiscale_disparity_estimator.h"
+#include "bsgm_error_checking.h"
 
 using namespace std;
 
@@ -48,7 +49,7 @@ int bsgm_compute_median_of_image(
   if( hist_count == 0 ) return 0;
 
   // Find the median of the histogram
-  auto med_count = (long int)( hist_count*0.5 );
+  long int med_count = (long int)( hist_count*0.5 );
   hist_count = 0;
   for( int s = 0; s < num_img_vals; s++ ){
     hist_count += hist[s];
@@ -72,7 +73,8 @@ bsgm_multiscale_disparity_estimator::bsgm_multiscale_disparity_estimator(
     fine_w_( img_width ),
     fine_h_( img_height ),
     num_fine_disparities_( num_disparities ),
-    num_active_disparities_( num_active_disparities )
+    num_active_disparities_( num_active_disparities ),
+    params_(params)
 {
   if( downscale_exp <= 0 || downscale_exp > 4 ) downscale_exponent_ = 2;
   else downscale_exponent_ = downscale_exp;
@@ -115,7 +117,8 @@ bsgm_multiscale_disparity_estimator::compute(
   int min_disp,
   float invalid_disp,
   int const& multi_scale_mode,
-  vil_image_view<float>& disp_tar)
+  vil_image_view<float>& disp_tar,
+  bool skip_error_check)
 {
   //int multi_scale_mode = 1;
 
@@ -231,10 +234,56 @@ bsgm_multiscale_disparity_estimator::compute(
 
   // Run fine-scale SGM
   if( !fine_de_->compute( img_tar, img_ref, invalid_tar,
-      min_disp_img_fine, invalid_disp, disp_tar ) )
+      min_disp_img_fine, invalid_disp, disp_tar, skip_error_check ) )
     return false;
 
   //fine_de_->write_cost_debug_imgs( std::string("C:/data/results"), true );
+
+  return true;
+}
+
+
+//--------------------------------------------------------------
+bool
+bsgm_multiscale_disparity_estimator::compute_both(
+  const vil_image_view<vxl_byte>& img_tar,
+  const vil_image_view<vxl_byte>& img_ref,
+  const vil_image_view<bool>& invalid_tar,
+  const vil_image_view<bool>& invalid_ref,
+  int min_disparity,
+  float invalid_disparity,
+  int const& multi_scale_mode,
+  vil_image_view<float>& disp_tar,
+  vil_image_view<float>& disp_ref)
+{
+  // Compute disparity maps for both images
+  compute(img_tar, img_ref, invalid_tar, min_disparity,
+    invalid_disparity, multi_scale_mode, disp_tar, true);
+  compute(img_ref, img_tar, invalid_ref,
+    (-num_fine_disparities_-min_disparity+1),
+    invalid_disparity, multi_scale_mode, disp_ref, true);
+
+  // Compute error maps
+  vil_image_view<bool> error_tar, error_ref;
+  bsgm_check_leftright(disp_tar, disp_ref, invalid_tar, invalid_ref, error_tar);
+  bsgm_check_leftright(disp_ref, disp_tar, invalid_ref, invalid_tar, error_ref);
+
+  // Set bad pixels to invalid
+  for (int y = 0; y < img_tar.nj(); y++)
+    for (int x = 0; x < img_tar.ni(); x++)
+      if (error_tar(x, y)) disp_tar(x, y) = invalid_disparity;
+
+  for (int y = 0; y < img_ref.nj(); y++)
+    for (int x = 0; x < img_ref.ni(); x++)
+      if (error_ref(x, y)) disp_ref(x, y) = invalid_disparity;
+
+  // Interpolate
+  if (params_.error_check_mode > 1) {
+    bsgm_interpolate_errors(disp_tar, invalid_tar,
+      img_tar, invalid_disparity, params_.shadow_thresh);
+    bsgm_interpolate_errors(disp_ref, invalid_ref,
+      img_ref, invalid_disparity, params_.shadow_thresh);
+  }
 
   return true;
 }

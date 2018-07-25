@@ -58,7 +58,22 @@ class bsgm_multiscale_disparity_estimator
     int min_disparity,
     float invalid_disparity,
     int const& multi_scale_mode,
-    vil_image_view<float>& disp_target);
+    vil_image_view<float>& disp_target,
+    bool skip_error_check = false);
+
+  //: Same as above, except compute disparity maps for both images and use a
+  // full left-right consistency check to detect and fix errors in the
+  // disparity maps.
+  bool compute_both(
+    const vil_image_view<vxl_byte>& img_target,
+    const vil_image_view<vxl_byte>& img_ref,
+    const vil_image_view<bool>& invalid_target,
+    const vil_image_view<bool>& invalid_ref,
+    int min_disparity,
+    float invalid_disparity,
+    int const& multi_scale_mode,
+    vil_image_view<float>& disp_target,
+    vil_image_view<float>& disp_ref);
 
  protected:
 
@@ -74,6 +89,7 @@ class bsgm_multiscale_disparity_estimator
   //: Single-scale SGMs for coarse and fine scales
   bsgm_disparity_estimator* coarse_de_;
   bsgm_disparity_estimator* fine_de_;
+  bsgm_disparity_estimator_params params_;
 };
 
 
