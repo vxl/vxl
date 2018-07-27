@@ -56,6 +56,7 @@ bsgm_disparity_estimator::compute(
   const vil_image_view<int>& min_disp,
   float invalid_disp,
   vil_image_view<float>& disp_tar,
+  vgl_vector_2d<float> bias_dir,
   bool skip_error_check)
 {
   disp_tar.set_size( w_, h_ );
@@ -117,7 +118,7 @@ bsgm_disparity_estimator::compute(
   // volume incorporating appearance + smoothing.
   run_multi_dp(
     *active_app_cost_, total_cost_,
-    invalid_tar, grad_x_tar, grad_y_tar, min_disp );
+    invalid_tar, grad_x_tar, grad_y_tar, min_disp, bias_dir );
 
   if( params_.print_timing )
     print_time( "Dynamic programming", timer );
@@ -366,13 +367,17 @@ bsgm_disparity_estimator::run_multi_dp(
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
   const vil_image_view<float>& grad_y,
-  const vil_image_view<int>& min_disparity)
+  const vil_image_view<int>& min_disparity,
+  vgl_vector_2d<float> bias_dir)
 {
   int volume_size = w_*h_*num_disparities_;
   int row_size = w_*num_disparities_;
   int num_dirs = params_.use_16_directions ? 16 : 8;
   float sqrt2norm = 1.0f/sqrt(2.0f);
   float grad_norm = 1.0f/params_.max_grad;
+
+  bool using_dir_bias = params_.directional_bias > 0.0f;
+  if (using_dir_bias) bias_dir = normalize(bias_dir);
 
   // Compute directional derivatives used for gradient-weighted smoothing
   std::vector< vil_image_view<float> > deriv_img(4);
@@ -419,7 +424,7 @@ bsgm_disparity_estimator::run_multi_dp(
   for( int dir = 0; dir < num_dirs; dir++ ){
 
     // HACK HERE TO RUN A SINGLE DIRECTION
-    //if( dir != 15 ) continue;
+    //if( dir != 3 ) continue;
 
     // The 8 or 16 dynamic programming directions are set in the following
     // section.  Each even/odd dir index pair correspond to the same path but
@@ -550,6 +555,15 @@ bsgm_disparity_estimator::run_multi_dp(
       deriv_idx = 0;
     }
 
+    // Calculate directional weight if necessary
+    float dir_weight = 1.0f;
+    if (using_dir_bias) {
+      vgl_vector_2d<float> dp_dir((float)dx, -(float)dy);
+      dp_dir = normalize(dp_dir);
+      float cosa = dot_product(dp_dir, bias_dir);
+      dir_weight = 1.0f - params_.directional_bias*0.5f*(1.0f - cosa);
+    }
+
     // Automatically determine iteration direction from end points
     int x_inc = (x_start < x_end) ? 1 : -1;
     int y_inc = (y_start < y_end) ? 1 : -1;
@@ -589,14 +603,14 @@ bsgm_disparity_estimator::run_multi_dp(
             &dir_cost_cur[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
-            total_cost[y][x], p1, p2,
+            total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
             min_disparity(x+dx,y+dy), min_disparity(x,y) );
         else
           compute_dir_cost(
             &dir_cost_prev[(x+dx)*num_disparities_],
             (*active_app_cost_)[y][x],
             &dir_cost_cur[x*num_disparities_],
-            total_cost[y][x], p1, p2,
+            total_cost[y][x], dir_weight*p1, dir_weight*p2,// p1, p2,
             min_disparity(x+dx,y+dy), min_disparity(x,y) );
       } //x
 
