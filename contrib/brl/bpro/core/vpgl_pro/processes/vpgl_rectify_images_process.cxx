@@ -551,13 +551,15 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   auto img_size_y = (unsigned)std::ceil(depth/voxel_size);
   vil_image_view<float> out_map(img_size_x, img_size_y);
   out_map.fill((float)min_z);
-
+  double dz = voxel_size;
+  if (voxel_size >= 1.0)
+    dz = voxel_size / 2.0;
   for (double x = 0; x < width; x += voxel_size)
     for (double y = 0; y < depth; y += voxel_size) {
       // try each height
       double min_dif = 2.0;  // 2 pixels error in projection
       double best_z = min_z;
-      for (double z = min_z; z < height; z += (voxel_size/2.0)) {
+      for (double z = min_z; z < height; z += dz) {
         // project this x,y,z using the camera onto the images
         double u1,v1,u2,v2;
         cam1_rational->project(x+min_x, max_y-y, z, u1, v1);
