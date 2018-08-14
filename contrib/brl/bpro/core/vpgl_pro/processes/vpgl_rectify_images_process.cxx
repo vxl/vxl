@@ -554,12 +554,28 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   double dz = voxel_size;
   if (voxel_size >= 1.0)
     dz = voxel_size / 2.0;
-  for (double x = 0; x < width; x += voxel_size)
-    for (double y = 0; y < depth; y += voxel_size) {
+
+  size_t xi_max=static_cast<size_t>(std::ceil(width/voxel_size));
+  size_t yi_max=static_cast<size_t>(std::ceil(depth/voxel_size));
+
+  #ifdef HAVE_OPENMP
+    #ifdef _WIN32
+      #pragma omp parallel
+    #else
+      #pragma omp parallel for collapse(2)
+    #endif
+  #endif
+  for (size_t xi = 0; xi < xi_max; ++xi)
+  {
+    for (size_t yi = 0; yi < yi_max; ++yi)
+    {
+      double x = xi * voxel_size;
+      double y = yi * voxel_size;
       // try each height
       double min_dif = 2.0;  // 2 pixels error in projection
       double best_z = min_z;
-      for (double z = min_z; z < height; z += dz) {
+      for (double z = min_z; z < height; z += dz)
+      {
         // project this x,y,z using the camera onto the images
         double u1,v1,u2,v2;
         cam1_rational->project(x+min_x, max_y-y, z, u1, v1);
@@ -574,11 +590,15 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
         auto v1w = (unsigned)std::floor((p1w[1]/p1w[2])+0.5);
 
         if (u1w >= img1_disp.ni() || v1w >= img1_disp.nj())
+        {
           continue;
+        }
 
         float disp = img1_disp(u1w, v1w);
         if (disp < min_disparity)
+        {
           continue;
+        }
 
         vnl_vector_fixed<double,3> p2(u2, v2, 1);
         vnl_vector_fixed<double,3> p2w = H2*p2;
@@ -587,7 +607,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 
         // check if with disparity the warped pixels are exactly the same, i.e. (u1w-d,v1w) = (u2w,v2w)
         double dif = std::sqrt((u1w-disp-u2w)*(u1w-disp-u2w) + (v1w-v2w)*(v1w-v2w));
-        if (dif < min_dif) {
+        if (dif < min_dif)
+        {
           min_dif = dif;
           best_z = z;
         }
@@ -595,8 +616,11 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
       auto xx = (unsigned)std::floor(x/voxel_size+0.5);
       auto yy = (unsigned)std::floor(y/voxel_size+0.5);
       if (xx < img_size_x && yy < img_size_y)
+      {
         out_map(xx,yy) = (float)best_z;
+      }
     }
+  }
 
   vil_image_view_base_sptr out_sptr = new vil_image_view<float>(out_map);
   pro.set_output_val<vil_image_view_base_sptr>(0, out_sptr);
