@@ -53,6 +53,8 @@ bool sdet_region::compute_boundary()
     region_points.emplace_back(this->X(), this->Y());
   vgl_convex_hull_2d<double> ch(region_points);
   vgl_polygon<double> h = ch.hull();
+  if (h.num_sheets() == 0 || h[0].size() < 3)
+    return false;
   vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(h);
   if (!poly)
     return false;
