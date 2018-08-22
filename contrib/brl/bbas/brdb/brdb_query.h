@@ -21,7 +21,7 @@
 class brdb_query
 {
  protected:
-#if __cplusplus >= 201103L
+#if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
   friend std::unique_ptr<brdb_query>;
 #else
   friend class std::unique_ptr<brdb_query>;
