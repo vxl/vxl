@@ -286,7 +286,14 @@ def convert_to_local_rational_camera(rational_cam, lvcs):
 # ;
 # camera saving;
 # ;
-
+def print_rational_camera(camera):
+    batch.init_process("vpglPrintRationalCameraProcess")
+    batch.set_input_from_db(0, camera)
+    status = batch.run_process()
+    if status:
+        return
+    else:
+        raise VpglException("Failed to print rational camera")
 
 def save_rational_camera(camera, path):
     batch.init_process("vpglSaveRationalCameraProcess")
