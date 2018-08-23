@@ -94,3 +94,7 @@ endif()
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vul-obj OBJECT ${vul_sources})
+endif()
