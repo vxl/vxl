@@ -20,3 +20,7 @@ target_link_libraries( ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PR
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vil_io-obj OBJECT ${vil_io_sources})
+endif ()
