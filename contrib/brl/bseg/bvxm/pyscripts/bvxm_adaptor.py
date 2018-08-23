@@ -44,7 +44,7 @@ def create_scene_xml(scene_xml, world_dir, lvcs, lvcs_file, dim_x, dim_y, dim_z,
     return batch.run_process()
 
 
-def create_scene_large_scale(roi_kml, scene_root, world_dir, dem_folder, world_size=500.0, voxel_size=1.0, height_diff=120.0, height_sub=25.0, land_folder=""):
+def create_scene_large_scale(roi_kml, scene_root, world_dir, dem_folder, world_size=500.0, voxel_size=1.0, height_diff=120.0, height_sub=25.0, extension = 500.0, land_folder=""):
     batch.init_process("bvxmCreateSceneXmlLargeScaleProcess")
     batch.set_input_string(0, roi_kml)
     batch.set_input_string(1, scene_root)
@@ -55,6 +55,7 @@ def create_scene_large_scale(roi_kml, scene_root, world_dir, dem_folder, world_s
     batch.set_input_float(6, voxel_size)
     batch.set_input_float(7, height_diff)
     batch.set_input_float(8, height_sub)
+    batch.set_input_float(9, extension)
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
