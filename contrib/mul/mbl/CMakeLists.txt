@@ -129,3 +129,7 @@ if(BUILD_MUL_TOOLS)
   add_subdirectory(tools)
   add_subdirectory(examples)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(mbl-obj OBJECT ${mbl_sources})
+endif()
