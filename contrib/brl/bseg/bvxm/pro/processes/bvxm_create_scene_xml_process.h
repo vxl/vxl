@@ -10,8 +10,11 @@
 // \verbatim
 // Modifications
 //    July, 2015, Yi Dong, add a process to generate quad-tree structured scenes for a large region
+//    Aug,  2018, Yi Dong, add extension on the input ROI to enlarge the region
+//                         also returns scenes that cover the bounding box of input ROI
 // \endverbatim
 #include <bprb/bprb_func_process.h>
+#include <vgl_box_2d.h>
 
 // generate a bvxm scene xml
 //: global variables
@@ -29,8 +32,10 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro);
 //: global variables
 namespace bvxm_create_scene_xml_large_scale_process_globals
 {
-  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_inputs_  = 10;
   constexpr unsigned n_outputs_ = 1;
+
+  vgl_box_2d<double> enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extension);
 }
 //: set input and output types
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro);

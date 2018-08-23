@@ -91,6 +91,25 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   return true;
 }
 
+vgl_box_2d<double> bvxm_create_scene_xml_large_scale_process_globals::
+enlarge_region_by_meter(vgl_box_2d<double> const& box_ori, double const& extension)
+{
+  double abs_ext = std::fabs(extension);
+  // create a local lvcs that convert degree to meter
+  double ll_lon = box_ori.min_x();
+  double ll_lat = box_ori.min_y();
+  double ur_lon = box_ori.max_x();
+  double ur_lat = box_ori.max_y();
+  vpgl_lvcs_sptr lvcs_ll = new vpgl_lvcs(ll_lat, ll_lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  vpgl_lvcs_sptr lvcs_ur = new vpgl_lvcs(ur_lat, ur_lon, 0.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
+  double ext_ll_lon, ext_ll_lat, ext_ll_z;
+  lvcs_ll->local_to_global(-abs_ext, -abs_ext, 0.0, vpgl_lvcs::wgs84, ext_ll_lon, ext_ll_lat, ext_ll_z);
+  double ext_ur_lon, ext_ur_lat, ext_ur_z;
+  lvcs_ur->local_to_global(abs_ext, abs_ext, 0.0, vpgl_lvcs::wgs84, ext_ur_lon, ext_ur_lat, ext_ur_z);
+  vgl_box_2d<double> out_box(ext_ll_lon, ext_ur_lon, ext_ll_lat, ext_ur_lat);
+  return out_box;
+}
+
 // process to generate scenes that are arranged by a quad-tree structure to cover a large scale region
 // Note that the scene may have a land mask ratio to quantify the scene urban coverage, if land masks are available.  (-1.0 is unknown)
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
@@ -106,6 +125,7 @@ bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)
   input_types_[6] = "float";         // scene voxel size
   input_types_[7] = "float";         // the amount to be added on top of the terrain height (large enough to cover highest building)
   input_types_[8] = "float";         // the amount to be subtracted on bottom of the terrain height (to overcome the height map inaccuracy)
+  input_types_[9] = "float";         // outline extension in meter
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "unsigned";     // number of scenes created
 
@@ -131,16 +151,24 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   auto voxel_size    = pro.get_input<float>(in_i++);
   auto height        = pro.get_input<float>(in_i++);
   auto height_sub    = pro.get_input<float>(in_i++);
+  auto en_in         = pro.get_input<float>(in_i++);
 
+  double extension = static_cast<double>(en_in);
   // find the bounding box from the given region
   vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
   if (poly[0].size() == 0) {
     std::cerr << pro.name() << ": can not get region from input kml: " << roi_kml << "!\n";
     return false;
   }
-  vgl_box_2d<double> bbox_rect;
+
+  vgl_box_2d<double> bbox_rect_ori;
   for (auto i : poly[0])
-    bbox_rect.add(i);
+    bbox_rect_ori.add(i);
+
+  // enlarge the input box in meters unit
+  vgl_box_2d<double> bbox_rect = enlarge_region_by_meter(bbox_rect_ori, extension);
+
+  // generate square box to ensure scene coverage
   double square_size = (bbox_rect.width() >= bbox_rect.height()) ? bbox_rect.width() : bbox_rect.height();
   vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);
 
@@ -163,10 +191,16 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   scale_set.insert(scale_ur_x);  scale_set.insert(scale_ur_y);  scale_set.insert(scale_ll_x);  scale_set.insert(scale_ll_y);
   double min_size = *scale_set.begin();
 
-
   // create 2-d quad-tree
   // each leaf refers to a bvxm scene and scene content is unban land ratio of the scene, if land mask is available, otherwise -1.0
-  bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::construct_tree<float>(bbox, min_size, poly);
+  std::vector<vgl_point_2d<double> > box_pts;
+  box_pts.push_back(bbox_rect.min_point());
+  box_pts.push_back(vgl_point_2d<double>(bbox_rect.max_x(), bbox_rect.min_y()));
+  box_pts.push_back(bbox_rect.max_point());
+  box_pts.push_back(vgl_point_2d<double>(bbox_rect.min_x(), bbox_rect.max_y()));
+  vgl_polygon<double> poly_box(box_pts);
+
+  bvgl_2d_geo_index_node_sptr root = bvgl_2d_geo_index::construct_tree<float>(bbox, min_size, poly_box);
   std::string txt_filename = scene_root + "/geo_index.txt";
   bvgl_2d_geo_index::write(root, txt_filename, min_size);
   unsigned tree_depth = bvgl_2d_geo_index::depth(root);
