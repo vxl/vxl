@@ -217,3 +217,7 @@ endif()
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vcl-obj OBJECT ${vcl_sources})
+endif()

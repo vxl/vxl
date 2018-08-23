@@ -448,3 +448,7 @@ endif()
 if(BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(v3p_netlib-obj OBJECT ${v3p_netlib_sources})
+endif()
