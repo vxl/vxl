@@ -7,7 +7,17 @@ doxygen_add_library(core/vil
   DESCRIPTION "Core image library"
 )
 
+# By default, vil contains wrappers around various image readers.
+# Setting this flag to OFF enables a version to be built which
+# does not include any third-party I/O functions.
+# This is useful when building APIs where the caller is responsible
+# for loading/saving images, reducing the number of dependencies of the library.
+option(VXL_VIL_INCLUDE_IMAGE_IO "Include image file format readers?" ON)
+
+
 # List of all file_format reader sources.
+# Collected into one list so that we can easily build a version
+# without any image I/O if required (by setting the VXL_VIL_INCLUDE_IMAGE_IO to OFF)
 set( vil_ff_sources
   # file format readers/writers (see below for conditional ones)
   file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
@@ -194,7 +204,6 @@ endif()
 vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vil_config.h.in
                     ${PROJECT_BINARY_DIR}/vil_config.h include/vxl/core/vil)
 
-option(VXL_VIL_INCLUDE_IMAGE_IO "Include image file format readers?" ON)
 
 # Create empty list
 set( vil_sources )
