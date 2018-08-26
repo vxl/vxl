@@ -135,6 +135,8 @@ ptset_(std::move(ptset)){
 template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::knn_indices(vgl_point_3d<Type> const& p, unsigned k, vnl_vector<int> &indices) const
 {
+  if(k == 0)
+    return false;
   indices.set_size(k);
   vnl_vector<Type> q(3),dists2(k);
   q[0]=p.x();  q[1]=p.y();  q[2]=p.z();
@@ -173,6 +175,8 @@ bool bvgl_k_nearest_neighbors_3d<Type>::closest_point(vgl_point_3d<Type> const& 
 
 template <class Type>
 bool bvgl_k_nearest_neighbors_3d<Type>::knn(vgl_point_3d<Type> const& p, unsigned k, vgl_pointset_3d<Type>& neighbors) const{
+  if(k == 0)
+    return false;
   vnl_vector<int> indices(k);
   return knn_util(p, k, neighbors, indices);
 }

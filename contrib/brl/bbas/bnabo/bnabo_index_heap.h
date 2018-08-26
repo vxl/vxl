@@ -53,7 +53,19 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 namespace Nabo
 {
-  //! balanced-tree implementation of heap
+    //! an entry of the heap tree
+  template<typename IT, typename VT>
+  struct Entry
+    {
+      IT index; //!< index of point
+      VT value; //!< distance for this point
+
+      //! create a new entry
+      Entry(const IT index, const VT value): index(index), value(value) {}
+      //! return true if e0 is of lower value than e1, false otherwise
+      bool operator<(const Entry& e) { return value < e.value; }
+    };
+    //! balanced-tree implementation of heap
   /** It uses a binary heap, which provides replacement in O(log(n)),
    *        however the constant overhead is significative. */
   template<typename IT, typename VT>
@@ -63,20 +75,8 @@ namespace Nabo
     typedef IT Index;
     //! type of a value
     typedef VT Value;
-
-    //! an entry of the heap tree
-    struct Entry
-    {
-      IT index; //!< index of point
-      VT value; //!< distance for this point
-
-      //! create a new entry
-      Entry(const IT index, const VT value): index(index), value(value) {}
-      //! return true if e0 is of lower value than e1, false otherwise
-      friend bool operator<(const Entry& e0, const Entry& e1) { return e0.value < e1.value; }
-    };
     //! vector of entry, type for the storage of the tree
-    typedef std::vector<Entry> Entries;
+    typedef std::vector<Entry<IT, VT> > Entries;
     //! vector of indices
     typedef vnl_vector<Index> Vector;
     //! vector of values
@@ -91,7 +91,7 @@ namespace Nabo
     //! Constructor
     /*! \param size number of elements in the heap */
     IndexHeapSTL(const size_t size):
-      data(1, Entry(0, std::numeric_limits<VT>::infinity())),
+      data(1, Entry<IT,VT>(0, std::numeric_limits<VT>::infinity())),
       nbNeighbours(size)
     {
       data.reserve(size);
@@ -101,7 +101,7 @@ namespace Nabo
     inline void reset()
     {
       data.clear();
-      data.push_back(Entry(0, std::numeric_limits<VT>::infinity()));
+      data.push_back(Entry<IT,VT>(0, std::numeric_limits<VT>::infinity()));
     }
 
     //! get the largest value of the heap
@@ -117,11 +117,11 @@ namespace Nabo
       if (data.size() == nbNeighbours)
         {        // we have enough neighbours to discard largest
           pop_heap(data.begin(), data.end());
-          data.back() = Entry(index, value);
+          data.back() = Entry<IT,VT>(index, value);
         }
       else
         {        // missing neighbours
-          data.push_back(Entry(index, value));
+          data.push_back(Entry<IT,VT>(index, value));
         }
       // ensure heap
       push_heap(data.begin(), data.end());
