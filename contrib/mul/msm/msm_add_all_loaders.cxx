@@ -6,6 +6,7 @@
 #include <msm/msm_rigid_aligner.h>
 #include <msm/msm_similarity_aligner.h>
 #include <msm/msm_affine_aligner.h>
+#include <msm/msm_subset_aligner.h>
 
 #include <msm/msm_no_limiter.h>
 #include <msm/msm_box_limiter.h>
@@ -22,12 +23,14 @@ void msm_add_all_loaders()
   mbl_cloneables_factory<msm_aligner>::add(msm_rigid_aligner());
   mbl_cloneables_factory<msm_aligner>::add(msm_similarity_aligner());
   mbl_cloneables_factory<msm_aligner>::add(msm_affine_aligner());
+  mbl_cloneables_factory<msm_aligner>::add(msm_subset_aligner());
 
   vsl_add_to_binary_loader(msm_translation_aligner());
   vsl_add_to_binary_loader(msm_zoom_aligner());
   vsl_add_to_binary_loader(msm_rigid_aligner());
   vsl_add_to_binary_loader(msm_similarity_aligner());
   vsl_add_to_binary_loader(msm_affine_aligner());
+  vsl_add_to_binary_loader(msm_subset_aligner());
 
   // msm_param_limiter classes:
   mbl_cloneables_factory<msm_param_limiter>::add(msm_no_limiter());
