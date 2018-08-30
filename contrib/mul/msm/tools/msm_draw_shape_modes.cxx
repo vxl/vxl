@@ -81,7 +81,7 @@ output_dir: ./
 
 void print_usage()
 {
-  std::cout << "msm_draw_shape_modes -p param_file\n"
+  std::cout << "msm_draw_shape_modes -p param_file [-s shape_model.msm] [-c curves.crvs] [-c base_name]\n"
            << "Tool to write eps files showing modes of model.\n"
            << std::endl;
 
@@ -347,6 +347,9 @@ std::cout<<"new_var: "<<new_var<<std::endl;
 int main(int argc, char** argv)
 {
   vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> model_path("-s","Shape model (overriding that in parameter file)");
+  vul_arg<std::string> curves_path("-c","Curves path (overriding that in parameter file)");
+  vul_arg<std::string> base_name("-b","Base name for output (overriding that in parameter file)");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -367,6 +370,10 @@ int main(int argc, char** argv)
     std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
+
+  if (model_path()!="") params.shape_model_path=model_path();
+  if (curves_path()!="") params.curves_path=curves_path();
+  if (base_name()!="") params.base_name=base_name();
 
   msm_shape_model shape_model;
 
