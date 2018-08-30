@@ -79,8 +79,6 @@ int main( int argc, char* argv[] )
     std::cerr<<"Failed to read points from "<<pts_path()<<'\n';
     return 2;
   }
-  std::vector< vgl_point_2d<double> > pts;
-  points.get_points(pts);
 
   //================ Attempt to load image ========
   vimt_image_2d_of<vxl_byte> image;
@@ -95,11 +93,13 @@ int main( int argc, char* argv[] )
       return 1;
     }
 
+    // Project points into image frame
+    points.transform_by(image.world2im());
+
     std::cout<<"Image is "<<image.image()<<std::endl;
 
     if (border_prop()>-0.5) crop_image_to_points(points,image.image(),border_prop());
   }
-
 
   if (scale() > 1.001 || scale() < 0.999)
   {
