@@ -15,6 +15,7 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stats_1d.h>
 #include <msm/msm_box_limiter.h>
+#include <vnl/algo/vnl_svd.h>
 
 void print_usage()
 {
@@ -88,6 +89,21 @@ vnl_vector<double> calc_mean(std::vector<vnl_vector<double> >& v)
   return sum;
 }
 
+vnl_matrix<double> calc_covar(const vnl_vector<double>& mean,
+                              std::vector<vnl_vector<double> >& v)
+{
+  vnl_matrix<double> sum(mean.size(),mean.size());
+  sum.fill(0.0);
+  for (unsigned k=0;k<v.size();++k)
+  {
+    vnl_vector<double> dv=v[k]-mean;
+    for (unsigned j=0;j<mean.size();++j)
+      for (unsigned i=0;i<mean.size();++i)
+        sum(i,j)+=dv[i]*dv[j];
+  }
+  return sum/v.size();
+}
+
 int main(int argc, char** argv)
 {
   vul_arg<std::string> model_path("-s","Shape model path");
@@ -128,12 +144,20 @@ int main(int argc, char** argv)
 
   vnl_vector<double> mean1 = calc_mean(b1);
   vnl_vector<double> mean2 = calc_mean(b2);
+  vnl_matrix<double> covar1=calc_covar(mean1,b1);
+  vnl_matrix<double> covar2=calc_covar(mean2,b2);
+  vnl_svd<double> svd(0.5*(covar1+covar2));
 
   // Simplest approach: Compute direction as mean2-mean1
-  std::cout<<"Initially just compute difference between class means"<<std::endl;
+//  std::cout<<"Initially just compute difference between class means"<<std::endl;
   // Could use LDA, ie multiply by inverse of in-class covar.
   vnl_vector<double>  dir=mean2-mean1;
+
+  // Optimal direction is solution to (mean2-mean1)=S*x
+  dir=svd.solve(mean2-mean1);
   dir.normalize();
+
+  std::cout<<"Direction : "<<dir<<std::endl;
 
   // Compute variance along this direction
   mbl_stats_1d d_stats;
@@ -143,6 +167,7 @@ int main(int argc, char** argv)
   // Construct a new shape model with a single mode based on this.
   vnl_vector<double> dir1 = shape_model.modes()*dir;  // Projection into shape space
   dir1.normalize();  // Should be unit long, but this forces it.
+
   vnl_matrix<double> new_modes(dir1.size(),1);
   new_modes.set_column(0,dir1);
 
