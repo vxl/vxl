@@ -16,6 +16,7 @@
 #include <mbl/mbl_stats_1d.h>
 #include <msm/msm_box_limiter.h>
 #include <vnl/algo/vnl_svd.h>
+#include <mbl/mbl_index_sort.h>
 
 void print_usage()
 {
@@ -46,7 +47,9 @@ void load_shapes(const std::string& points_dir,
   }
 }
 
-void load_shapes(const std::string& image_list_path, std::vector<msm_points>& shapes)
+void load_shapes(const std::string& image_list_path, 
+                 std::vector<msm_points>& shapes,
+                 std::vector<std::string>& points_names)
 {
   std::ifstream ifs(image_list_path.c_str());
   if (!ifs)
@@ -59,7 +62,7 @@ void load_shapes(const std::string& image_list_path, std::vector<msm_points>& sh
   std::string image_dir=props.get_optional_property("image_dir","./");
   std::string points_dir=props.get_optional_property("points_dir","./");
 
-  std::vector<std::string> points_names,image_names;
+  std::vector<std::string> image_names;
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -90,7 +93,7 @@ vnl_vector<double> calc_mean(std::vector<vnl_vector<double> >& v)
 }
 
 vnl_matrix<double> calc_covar(const vnl_vector<double>& mean,
-                              std::vector<vnl_vector<double> >& v)
+                              const std::vector<vnl_vector<double> >& v)
 {
   vnl_matrix<double> sum(mean.size(),mean.size());
   sum.fill(0.0);
@@ -103,6 +106,86 @@ vnl_matrix<double> calc_covar(const vnl_vector<double>& mean,
   }
   return sum/v.size();
 }
+
+
+//: Create file containing points (b[i].d1,b[i],d2)
+void plot_scatter(const std::string& path,
+                  const std::vector<vnl_vector<double> >& b,
+                  const vnl_vector<double>& d1,
+                  const vnl_vector<double>& d2)
+{
+  std::ofstream ofs(path.c_str());
+  for (unsigned i=0;i<b.size();++i)
+  {
+    ofs<<dot_product(d1,b[i])<<" "<<dot_product(d2,b[i])<<std::endl;
+  }
+  ofs.close();
+  std::cout<<"Saved scatter to "<<path<<std::endl;
+}
+
+//: Create text file containing points of ROC curve
+//  x[i] contains score to be used for classification.
+//  First nc1 elements are assumed to be from class 1.
+void plot_roc(const std::string& path,
+              const std::vector<double>& x,
+              unsigned nc1)
+{
+  unsigned n=x.size();
+  unsigned nc2=n-nc1;
+  unsigned n_true_pos=nc2, n_false_pos=nc1;
+  double area=0.0;
+  
+  vcl_vector<unsigned> index;
+  mbl_index_sort(x,index);
+  unsigned last_i=0;  
+  unsigned max_n_pts=100;
+  unsigned step=vcl_max(1u,n/max_n_pts);
+
+
+  std::ofstream ofs(path.c_str());
+  ofs<<"1 1"<<std::endl;
+  for (unsigned i=0;i<n;++i)
+  {
+    if (index[i]>=nc1) 
+      n_true_pos--;
+    else
+    {
+      n_false_pos--;
+      area += double(n_true_pos)/nc2 * (1.0/nc1);
+    }
+
+    if (i>0 && vcl_fabs(x[index[i]]-x[index[i-1]])<1e-6) continue;  // Avoid splitting samples with same value
+
+    double tpr = double(n_true_pos)/nc2;
+    double fpr = double(n_false_pos)/nc1;
+    
+    if (i>last_i+step)
+    {
+      ofs<<fpr<<" "<<tpr<<std::endl;
+      last_i=i;
+    }
+  }
+  ofs<<"0 0"<<std::endl;
+  ofs.close();
+  std::cout<<"ROC saved to "<<path<<std::endl;
+  std::cout<<"Area under ROC curve: "<<area<<std::endl;
+}
+
+// Save file containing names[i] x[i], sorted by x[i]
+void write_value_list(const std::string& path,
+                      const std::vector<std::string>& names,
+                      const std::vector<double>& x)
+{
+  std::vector<unsigned> index;
+  mbl_index_sort(x,index);
+  
+  std::ofstream ofs(path.c_str());
+  if (!ofs) return;
+  for (unsigned i=0;i<x.size();++i)
+    ofs<<names[index[i]]<<" "<<x[index[i]]<<std::endl;
+  ofs.close();
+  std::cout<<"Saved ranked list of values and names to "<<path<<vcl_endl;
+} 
 
 int main(int argc, char** argv)
 {
@@ -131,9 +214,11 @@ int main(int argc, char** argv)
   std::cout<<"Shape Model: "<<shape_model<<std::endl;
 
   std::vector<msm_points> shapes1, shapes2;
-  load_shapes(list_path1(),shapes1);
+  std::vector<std::string> points_names1, points_names2;
+  
+  load_shapes(list_path1(),shapes1,points_names1);
   std::cout<<"Loaded "<<shapes1.size()<<" examples of class 1"<<std::endl;
-  load_shapes(list_path2(),shapes2);
+  load_shapes(list_path2(),shapes2,points_names2);
   std::cout<<"Loaded "<<shapes2.size()<<" examples of class 2"<<std::endl;
 
   msm_shape_instance sm_instance(shape_model);
@@ -193,6 +278,28 @@ int main(int argc, char** argv)
     std::cerr<<"Failed to save to "<<output_path()<<std::endl;
     return 2;
   }
+  
+  // === Scatter plots ===
+  // Construct a vector orthogonal to dir
+  vnl_vector<double> dir2(dir.size());
+  dir2.fill(0);
+  dir2[0]=-dir[1];
+  dir2[1]= dir[0];
+  if (dir2.magnitude()<1e-5) dir2[0]=1.0;  
+  
+  std::cout<<"Creating scatter files. First axis is separation direction."<<std::endl;
+  plot_scatter("scatter1.txt",b1,dir,dir2);
+  plot_scatter("scatter2.txt",b2,dir,dir2);
+
+  // ======== Create ROC =============
+  std::vector<double> x, x1(b1.size()), x2(b2.size());
+  for (unsigned i=0;i<b1.size();++i) { x1[i]=dot_product(dir,b1[i]); x.push_back(x1[i]); }
+  for (unsigned i=0;i<b2.size();++i) { x2[i]=dot_product(dir,b2[i]); x.push_back(x2[i]); }
+  plot_roc("ROC.txt",x,b1.size());
+  
+  write_value_list("class_value1.txt",points_names1,x1);
+  write_value_list("class_value2.txt",points_names2,x2);;
+
 
   return 0;
 }
