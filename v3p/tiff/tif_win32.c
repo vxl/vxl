@@ -55,6 +55,7 @@
 
 #include "tiffiop.h"
 
+#include <stdlib.h>
 #include <windows.h>
 
 static tmsize_t
@@ -351,7 +352,7 @@ TIFFOpenW(const wchar_t* name, const char* mode)
 
 #endif /* ndef _WIN32_WCE */
 
-void*
+__inline void*
 _TIFFmalloc(tmsize_t s)
 {
         if (s == 0)
