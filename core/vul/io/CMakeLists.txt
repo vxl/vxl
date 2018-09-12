@@ -10,3 +10,7 @@ target_link_libraries(${VXL_LIB_PREFIX}vul_io ${VXL_LIB_PREFIX}vul ${VXL_LIB_PRE
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vul_io-obj OBJECT ${vul_io_sources})
+endif()

@@ -18,3 +18,7 @@ target_link_libraries( ${VXL_LIB_PREFIX}vgl_xio ${VXL_LIB_PREFIX}vgl ${VXL_LIB_P
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vgl_xio-obj OBJECT ${vgl_xio_sources})
+endif()

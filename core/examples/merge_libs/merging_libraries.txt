@@ -1,0 +1,37 @@
+This directory gives an example of creating a single library file (all_vxl_libs) from multiple individual libraries.
+
+This is useful for creating API's to pass to third parties, in which you need only send a single library file (rather than many individual library files).
+
+It makes use of the options within CMake for OBJECT libraries.
+See: https://gitlab.kitware.com/cmake/community/wikis/doc/tutorials/Object-Library
+
+The basic idea is that in the CMakeLists.txt file for each library (say, vbl), you add lines such as:
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vbl-obj OBJECT ${vbl_sources})
+endif ()
+
+You can then combine multiple libraries into one using a CMake command like:
+
+add_library(all_vxl_libs $<TARGET_OBJECTS:vcl-obj>
+                     $<TARGET_OBJECTS:vsl-obj>
+                     $<TARGET_OBJECTS:vbl-obj>
+                     $<TARGET_OBJECTS:vbl_io-obj>
+                     $<TARGET_OBJECTS:vgl-obj> )
+
+
+In the CMakeLists.txt in this directory we combine most of the core libraries into a single library.
+We demonstrate that it works by linking a test programme: test_link_all_vxl.cxx, which calls functions in several of the libraries.
+
+Note: Since the list of libraries doesn't include any image IO libraries (e.g. png, jpg etc) [yet], the test will only compile/link if the flag VXL_VIL_INCLUDE_IMAGE_IO is set to false (OFF).
+
+When the flag is off, vil does not include any of the image loading/saving using standard libraries.
+This simplifies things, and is useful for APIs where all the image I/O will be handled by the caller, outside the API library.
+
+To test this, ensure the following flag settings when you set up the system.
+
+BUILD_SHARED_LIBS:BOOL=OFF
+VXL_VIL_INCLUDE_IMAGE_IO:BOOL=OFF
+VXL_BUILD_OBJECT_LIBRARIES:BOOL=ON
+
+The approach can be extended to include all the libraries one needs for a particular API.

@@ -16,3 +16,7 @@ target_link_libraries( vimt_algo vimt ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vimt_algo-obj OBJECT ${vimt_algo_sources})
+endif()

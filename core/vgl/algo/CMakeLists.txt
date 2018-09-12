@@ -52,3 +52,7 @@ target_link_libraries( ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_
 if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vgl_algo-obj OBJECT ${vgl_algo_sources})
+endif()

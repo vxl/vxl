@@ -60,9 +60,13 @@ vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil_algo LIBRARY_SOURCES ${vil_alg
 
 target_link_libraries( ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vcl )
 
-if( BUILD_EXAMPLES )
+if( BUILD_EXAMPLES AND VXL_VIL_INCLUDE_IMAGE_IO)
   add_subdirectory(examples)
 endif()
-if( BUILD_TESTING )
+if( BUILD_TESTING AND VXL_VIL_INCLUDE_IMAGE_IO)
   add_subdirectory(tests)
+endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vil_algo-obj OBJECT ${vil_algo_sources})
 endif()

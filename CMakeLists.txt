@@ -283,3 +283,5 @@ configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
 if(NOT VXL_NO_EXPORT)
   include(${CMAKE_CURRENT_LIST_DIR}/config/cmake/export/VXLCreateProject.cmake)
 endif()
+
+option(VXL_BUILD_OBJECT_LIBRARIES "Build object libraries (to enable all in a single library)?" OFF)

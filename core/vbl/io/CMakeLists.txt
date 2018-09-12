@@ -22,3 +22,7 @@ target_link_libraries( ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PR
 if( BUILD_TESTING)
   add_subdirectory(tests)
 endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vbl_io-obj OBJECT ${vbl_io_sources})
+endif()

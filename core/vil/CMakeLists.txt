@@ -7,161 +7,19 @@ doxygen_add_library(core/vil
   DESCRIPTION "Core image library"
 )
 
-# avoid undefined macro in subsequent SETs:
-set( vil_sources)
-
-include(${VXL_CMAKE_DIR}/FindPNG.cmake)
-if(PNG_FOUND)
-  include_directories( ${PNG_INCLUDE_DIR})
-  add_definitions( ${PNG_DEFINITIONS} )
-  set( HAS_PNG 1 )
-  set( vil_sources ${vil_sources}
-    file_formats/vil_png.cxx file_formats/vil_png.h
-  )
-else()
-  set( HAS_PNG 0 )
-endif()
-
-include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
-if(JPEG_FOUND)
-  include_directories( ${JPEG_INCLUDE_DIR} )
-  set( HAS_JPEG 1 )
-  set( vil_sources ${vil_sources}
-    file_formats/vil_jpeglib.h
-    file_formats/vil_jpeg.cxx                 file_formats/vil_jpeg.h
-    file_formats/vil_jpeg_source_mgr.cxx      file_formats/vil_jpeg_source_mgr.h
-    file_formats/vil_jpeg_decompressor.cxx    file_formats/vil_jpeg_decompressor.h
-    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
-    file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
-  )
-else()
-  set( HAS_JPEG 0 )
-endif()
-
-################################
-# JPEG 2000
-################################
-include( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
-if(ECW_FOUND)
-  set( vil_sources ${vil_sources}
-    file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
-    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx
-    file_formats/vil_j2k_nitf2_pyramid_image_resource.h
-    file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
-    file_formats/vil_j2k_pyramid_image_resource.h
-    file_formats/vil_j2k_pyramid_image_resource.cxx
-  )
-  include_directories(${ECW_INCLUDE_DIR})
-  set( HAS_J2K 1 )
-else()
-  set( HAS_J2K 0 )
-endif()
-
-##############################
-# JPEG2000 via OpenJPEG
-##############################
-include( ${VXL_CMAKE_DIR}/FindOpenJPEG2.cmake )
-if(OPENJPEG2_FOUND)
-  include_directories(${OPENJPEG2_INCLUDE_DIR})
-  add_definitions( ${OPENJPEG2_DEFINITIONS} )
-  set( vil_sources ${vil_sources}
-    file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
-    file_formats/vil_openjpeg_pyramid_image_resource.h
-    file_formats/vil_openjpeg_pyramid_image_resource.cxx
-  )
-  add_definitions( ${OPENJPEG2_DEFINITIONS} )
-  set( HAS_OPENJPEG2 1 )
-else()
-  set( HAS_OPENJPEG2 0 )
-endif()
-
-set( HAS_TIFF 0 )
-set( HAS_GEOTIFF 0 )
-include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
-if(TIFF_FOUND)
-  include_directories(${TIFF_INCLUDE_DIR})
-  set( HAS_TIFF 1 )
-  set( vil_sources ${vil_sources}
-    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
-    file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
-  )
-
-  option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" True)
-  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
-  if(GEOTIFF_FOUND)
-    set(HAS_GEOTIFF 1 )
-    include_directories(${GEOTIFF_INCLUDE_DIR})
-    set( vil_sources ${vil_sources}
-      file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
-    )
-  endif()
-endif()
-
-# Let users decide if they should include DCMTK since we don't build against all versions.
-option(VXL_USE_DCMTK "" TRUE)
-set( HAS_DCMTK 0 )
-if (VXL_USE_DCMTK)
-  include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
-  if(DCMTK_FOUND)
-    include_directories(${DCMTK_INCLUDE_DIR})
-    set( HAS_DCMTK 1 )
-    set( vil_sources ${vil_sources}
-      file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
-      file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
-      file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
-      )
-  endif()
-endif()
-
-option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
-       "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
-       ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
-if( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
-  if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
-    if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
-      message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
-    endif()
-    message( SEND_ERROR "Cannot have VIL_CONFIG_ENABLE_SSE2_ROUNDING because"
-                        " there is no SSE2 hardware or no compiler support enabled" )
-    set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-  endif()
-endif()
+# By default, vil contains wrappers around various image readers.
+# Setting this flag to OFF enables a version to be built which
+# does not include any third-party I/O functions.
+# This is useful when building APIs where the caller is responsible
+# for loading/saving images, reducing the number of dependencies of the library.
+option(VXL_VIL_INCLUDE_IMAGE_IO "Include image file format readers?" ON)
 
 
-if(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
-  set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 1)
-else()
-  set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
-endif()
-
-
-# Store the external library configurations in to the config file
-vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vil_config.h.in
-                    ${PROJECT_BINARY_DIR}/vil_config.h include/vxl/core/vil)
-
-set( vil_sources ${vil_sources}
-
-  # basic things
-  vil_memory_chunk.cxx                  vil_memory_chunk.h
-  vil_image_view_base.h
-  vil_chord.h
-  vil_image_view.h                      vil_image_view.hxx
-  vil_image_resource.cxx                vil_image_resource.h
-                                        vil_image_resource_sptr.h
-  vil_blocked_image_resource.cxx        vil_blocked_image_resource.h
-                                        vil_blocked_image_resource_sptr.h
-  vil_blocked_image_facade.cxx          vil_blocked_image_facade.h
-  vil_file_format.cxx                   vil_file_format.h
-  vil_memory_image.cxx                  vil_memory_image.h
-  vil_block_cache.cxx                   vil_block_cache.h
-  vil_cached_image_resource.cxx         vil_cached_image_resource.h
-  vil_pyramid_image_resource.cxx        vil_pyramid_image_resource.h
-                                        vil_pyramid_image_resource_sptr.h
-  vil_pyramid_image_view.hxx            vil_pyramid_image_view.h
-  vil_image_list.cxx                    vil_image_list.h
-  # file format readers/writers (see above for conditional ones)
-
-
+# List of all file_format reader sources.
+# Collected into one list so that we can easily build a version
+# without any image I/O if required (by setting the VXL_VIL_INCLUDE_IMAGE_IO to OFF)
+set( vil_ff_sources
+  # file format readers/writers (see below for conditional ones)
   file_formats/vil_pnm.cxx              file_formats/vil_pnm.h
 
   file_formats/vil_bmp_file_header.cxx  file_formats/vil_bmp_file_header.h
@@ -215,6 +73,165 @@ set( vil_sources ${vil_sources}
   file_formats/vil_nitf2_typed_field_formatter.h    file_formats/vil_nitf2_typed_field_formatter.cxx
 
   file_formats/vil_pyramid_image_list.h             file_formats/vil_pyramid_image_list.cxx
+)
+
+include(${VXL_CMAKE_DIR}/FindPNG.cmake)
+if(PNG_FOUND)
+  include_directories( ${PNG_INCLUDE_DIR})
+  add_definitions( ${PNG_DEFINITIONS} )
+  set( HAS_PNG 1 )
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_png.cxx file_formats/vil_png.h
+  )
+else()
+  set( HAS_PNG 0 )
+endif()
+
+include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
+if(JPEG_FOUND)
+  include_directories( ${JPEG_INCLUDE_DIR} )
+  set( HAS_JPEG 1 )
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_jpeglib.h
+    file_formats/vil_jpeg.cxx                 file_formats/vil_jpeg.h
+    file_formats/vil_jpeg_source_mgr.cxx      file_formats/vil_jpeg_source_mgr.h
+    file_formats/vil_jpeg_decompressor.cxx    file_formats/vil_jpeg_decompressor.h
+    file_formats/vil_jpeg_destination_mgr.cxx file_formats/vil_jpeg_destination_mgr.h
+    file_formats/vil_jpeg_compressor.cxx      file_formats/vil_jpeg_compressor.h
+  )
+else()
+  set( HAS_JPEG 0 )
+endif()
+
+################################
+# JPEG 2000
+################################
+include( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
+if(ECW_FOUND)
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
+    file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx
+    file_formats/vil_j2k_nitf2_pyramid_image_resource.h
+    file_formats/vil_j2k_nitf2_pyramid_image_resource.cxx
+    file_formats/vil_j2k_pyramid_image_resource.h
+    file_formats/vil_j2k_pyramid_image_resource.cxx
+  )
+  include_directories(${ECW_INCLUDE_DIR})
+  set( HAS_J2K 1 )
+else()
+  set( HAS_J2K 0 )
+endif()
+
+##############################
+# JPEG2000 via OpenJPEG
+##############################
+include( ${VXL_CMAKE_DIR}/FindOpenJPEG2.cmake )
+if(OPENJPEG2_FOUND)
+  include_directories(${OPENJPEG2_INCLUDE_DIR})
+  add_definitions( ${OPENJPEG2_DEFINITIONS} )
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_openjpeg.h  file_formats/vil_openjpeg.cxx
+    file_formats/vil_openjpeg_pyramid_image_resource.h
+    file_formats/vil_openjpeg_pyramid_image_resource.cxx
+  )
+  add_definitions( ${OPENJPEG2_DEFINITIONS} )
+  set( HAS_OPENJPEG2 1 )
+else()
+  set( HAS_OPENJPEG2 0 )
+endif()
+
+set( HAS_TIFF 0 )
+set( HAS_GEOTIFF 0 )
+include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
+if(TIFF_FOUND)
+  include_directories(${TIFF_INCLUDE_DIR})
+  set( HAS_TIFF 1 )
+  set( vil_ff_sources ${vil_ff_sources}
+    file_formats/vil_tiff.cxx file_formats/vil_tiff.h
+    file_formats/vil_tiff_header.cxx file_formats/vil_tiff_header.h
+  )
+
+  option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" True)
+  include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
+  if(GEOTIFF_FOUND)
+    set(HAS_GEOTIFF 1 )
+    include_directories(${GEOTIFF_INCLUDE_DIR})
+    set( vil_ff_sources ${vil_ff_sources}
+      file_formats/vil_geotiff_header.cxx file_formats/vil_geotiff_header.h
+    )
+  endif()
+endif()
+
+# Let users decide if they should include DCMTK since we don't build against all versions.
+option(VXL_USE_DCMTK "" TRUE)
+set( HAS_DCMTK 0 )
+if (VXL_USE_DCMTK)
+  include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
+  if(DCMTK_FOUND)
+    include_directories(${DCMTK_INCLUDE_DIR})
+    set( HAS_DCMTK 1 )
+    set( vil_ff_sources ${vil_ff_sources}
+      file_formats/vil_dicom.cxx        file_formats/vil_dicom.h
+      file_formats/vil_dicom_stream.cxx file_formats/vil_dicom_stream.h
+      file_formats/vil_dicom_header.cxx file_formats/vil_dicom_header.h
+      )
+  endif()
+endif()
+
+option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
+       "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
+       ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
+if( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
+  if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
+    if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
+      message( ${VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE_HELP} )
+    endif()
+    message( SEND_ERROR "Cannot have VIL_CONFIG_ENABLE_SSE2_ROUNDING because"
+                        " there is no SSE2 hardware or no compiler support enabled" )
+    set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
+  endif()
+endif()
+
+
+if(VIL_CONFIG_ENABLE_SSE2_ROUNDING)
+  set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 1)
+else()
+  set(VIL_CONFIG_ENABLE_SSE2_ROUNDING 0)
+endif()
+
+
+# Store the external library configurations in to the config file
+vxl_configure_file( ${CMAKE_CURRENT_LIST_DIR}/vil_config.h.in
+                    ${PROJECT_BINARY_DIR}/vil_config.h include/vxl/core/vil)
+
+
+# Create empty list
+set( vil_sources )
+
+if (VXL_VIL_INCLUDE_IMAGE_IO)
+  set( vil_sources ${vil_ff_sources} )
+endif()
+
+set( vil_sources ${vil_sources}
+  # Basic things
+  vil_memory_chunk.cxx                  vil_memory_chunk.h
+  vil_image_view_base.h
+  vil_chord.h
+  vil_image_view.h                      vil_image_view.hxx
+  vil_image_resource.cxx                vil_image_resource.h
+                                        vil_image_resource_sptr.h
+  vil_blocked_image_resource.cxx        vil_blocked_image_resource.h
+                                        vil_blocked_image_resource_sptr.h
+  vil_blocked_image_facade.cxx          vil_blocked_image_facade.h
+  vil_file_format.cxx                   vil_file_format.h
+  vil_memory_image.cxx                  vil_memory_image.h
+  vil_block_cache.cxx                   vil_block_cache.h
+  vil_cached_image_resource.cxx         vil_cached_image_resource.h
+  vil_pyramid_image_resource.cxx        vil_pyramid_image_resource.h
+                                        vil_pyramid_image_resource_sptr.h
+  vil_pyramid_image_view.hxx            vil_pyramid_image_view.h
+  vil_image_list.cxx                    vil_image_list.h
+
   # image operations
   vil_crop.cxx                          vil_crop.h
   vil_clamp.cxx                         vil_clamp.h
@@ -357,9 +374,14 @@ if(OPENJPEG2_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${OPENJPEG2_LIBRARIES} )
 endif()
 
-if( BUILD_EXAMPLES )
+# Examples and tests use a lot of image I/O
+if( BUILD_EXAMPLES AND VXL_VIL_INCLUDE_IMAGE_IO)
   add_subdirectory(examples)
 endif()
-if( BUILD_TESTING )
+if( BUILD_TESTING AND VXL_VIL_INCLUDE_IMAGE_IO)
   add_subdirectory(tests)
+endif()
+
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(vil-obj OBJECT ${vil_sources})
 endif()

@@ -28,4 +28,6 @@ if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
 
-#add_subdirectory(tools)
+if (VXL_BUILD_OBJECT_LIBRARIES)
+  add_library(mcal-obj OBJECT ${mcal_sources})
+endif()
