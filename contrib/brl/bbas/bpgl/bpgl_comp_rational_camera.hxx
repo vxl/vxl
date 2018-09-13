@@ -93,7 +93,7 @@ bpgl_comp_rational_camera<T>::bpgl_comp_rational_camera(std::string cam_path)
   }
   if  (!good)
   {
-    std::cout << "error: not a composite rational camera file\n";
+    //std::cout << "error: not a composite rational camera file\n";
     return;
   }
   *this = bpgl_comp_rational_camera<T>(M, *rcam);
