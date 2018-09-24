@@ -134,7 +134,7 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object_sptr inferior)
   assert(*i==this);
 
   inferior->superiors_.erase(i); // unlink this from superiors_ list of inferior
-
+  inferior->touch();
   topology_list::iterator j=inferiors_.begin();
   while ( j!=inferiors_.end() && (*j)!=inferior) ++j;
   // check presence in "inferiors_" list:
