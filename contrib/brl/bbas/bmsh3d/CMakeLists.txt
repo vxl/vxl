@@ -38,7 +38,11 @@ target_link_libraries( bmsh3d ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${V
 add_subdirectory(algo)
 add_subdirectory(pro)
 add_subdirectory(vis)
-add_subdirectory(tests)
-add_subdirectory(examples)
+if(BUILD_TESTING)
+  add_subdirectory(tests)
+endif()
+if(BUILD_EXAMPLES)
+  add_subdirectory(examples)
+endif()
 
 #install the .h .hxx and libs
