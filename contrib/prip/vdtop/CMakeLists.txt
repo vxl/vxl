@@ -29,6 +29,6 @@ set(vdtop_sources
 vxl_add_library(LIBRARY_NAME vdtop LIBRARY_SOURCES ${vdtop_sources})
 target_link_libraries(vdtop vmap ${VXL_LIB_PREFIX}vil)
 
-#if(BUILD_TESTING)
+if(BUILD_TESTING)
   add_subdirectory(tests)
-#endif()
+endif()
