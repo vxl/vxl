@@ -507,6 +507,7 @@ void msm_cubic_bezier::equal_space(unsigned start, unsigned end, unsigned n_pts,
 
     // Calculate proportion along this fragment
     double L = length[j+1]-length[j];
+    if (L<1e-8) L=1e-8;  // Avoid divide by zero.
     double f = (target_len-length[j])/L;
     double t2=t[j+1];  if (t2==0.0) t2=1.0;  // start of next segment
     new_pts[i] = point(index[j],(1.0-f)*t[j]+f*t2);
@@ -581,6 +582,7 @@ void msm_cubic_bezier::get_extra_points(double approx_sep,
 
       // Calculate proportion along this fragment
       double L = length[k+1]-length[k];
+      if (L<1e-8) L=1e-8;  // Avoid divide by zero.
       double f = (target_len-length[k])/L;
       double t1=(1.0-f)*t[k]+f*t[k+1];
       new_pts[index] = point(i,t1);
