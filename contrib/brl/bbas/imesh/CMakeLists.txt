@@ -22,7 +22,7 @@ aux_source_directory(Templates imesh_sources)
 
 vxl_add_library(LIBRARY_NAME imesh LIBRARY_SOURCES  ${imesh_sources})
 
-target_link_libraries(imesh ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul brdb ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
+target_link_libraries(imesh ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
 # Algorithms
 add_subdirectory(algo)
