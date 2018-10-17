@@ -114,6 +114,7 @@ set( vnl_sources
 
   # matrix operators
   vnl_fortran_copy.hxx         vnl_fortran_copy.h
+  vnl_fortran_copy_fixed.hxx   vnl_fortran_copy_fixed.h
   vnl_det.hxx                  vnl_det.h
                                vnl_transpose.h
                                vnl_inverse.h
