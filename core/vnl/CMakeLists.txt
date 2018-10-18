@@ -255,19 +255,6 @@ set( vnl_sources
 aux_source_directory(Templates vnl_sources)
 
 if(CMAKE_COMPILER_IS_GNUCXX)
-  # with optimisation, the is_finite etc functions fail on Alpha for long double:
-  set_source_files_properties(vnl_math.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(vnl_bignum.cxx PROPERTIES COMPILE_FLAGS -O0)
-  # and these need too much memory with gcc 3.0 on Alpha:
-  set_source_files_properties(Templates/vnl_matrix+long-.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_matrix+ulong-.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_matrix+vcl_complex+double--.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_matrix+vcl_complex+long_double--.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_matrix_fixed+vnl_bignum.3.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_vector+vnl_rational-.cxx PROPERTIES COMPILE_FLAGS -O0)
-  set_source_files_properties(Templates/vnl_vector_fixed+vnl_rational.3-.cxx PROPERTIES COMPILE_FLAGS -O0)
-  # with optimisation, the vnl_na etc functions fail on x86_64:
-  set_source_files_properties(vnl_na.cxx PROPERTIES COMPILE_FLAGS -O1)
   # gcc must have -msse2 option to enable sse2 support
   if(VNL_CONFIG_ENABLE_SSE2)
     add_definitions( -msse2 )
