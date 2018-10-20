@@ -199,11 +199,11 @@ void
 vil_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil_stream *vs)
 {
   // verify
-  assert((vil_jpeg_srcptr)(cinfo->src) != VXL_NULLPTR);
+  assert((vil_jpeg_srcptr)(cinfo->src) != nullptr);
   assert(((vil_jpeg_srcptr)(cinfo->src))->stream == vs);
 
   cinfo->src->bytes_in_buffer = 0; // forces fill_input_buffer on first read
-  cinfo->src->next_input_byte = VXL_NULLPTR; // until buffer loaded
+  cinfo->src->next_input_byte = nullptr; // until buffer loaded
 
   vs->seek(0L);
 }

@@ -18,7 +18,7 @@
 int main(int argc, char *argv[])
 {
 
-  vul_arg<std::string> re_string(VXL_NULLPTR, "Regular expression");
+  vul_arg<std::string> re_string(nullptr, "Regular expression");
   vul_arg_parse(argc,argv);
 
   std::string s;

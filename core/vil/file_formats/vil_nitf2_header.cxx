@@ -10,14 +10,14 @@
 
 #include <vcl_cassert.h>
 
-vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_1 = VXL_NULLPTR;
-vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_20 = VXL_NULLPTR;
-vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_21 = VXL_NULLPTR;
+vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_1 = nullptr;
+vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_20 = nullptr;
+vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_21 = nullptr;
 
 vil_nitf2_header::vil_nitf2_header()
   : m_field_sequence1(*get_field_definitions_1()),
-    m_field_sequence2(VXL_NULLPTR),
-    m_field_sequence_classification(VXL_NULLPTR)
+    m_field_sequence2(nullptr),
+    m_field_sequence_classification(nullptr)
 { }
 
 vil_nitf2_header::~vil_nitf2_header()
@@ -106,76 +106,76 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_2(
   field_defs = new vil_nitf2_field_definitions();
 
   (*field_defs)
-    .field("FSCOP",  "File Copy Number",      NITF_INT(5), true /*in NITF2.0*/, VXL_NULLPTR, VXL_NULLPTR)
-    .field("FSCPYS", "File Number of Copies", NITF_INT(5), true /*in NITF2.0*/, VXL_NULLPTR, VXL_NULLPTR)
-    .field("ENCRYP", "Encryption",            NITF_INT(1), false, VXL_NULLPTR, VXL_NULLPTR);
+    .field("FSCOP",  "File Copy Number",      NITF_INT(5), true /*in NITF2.0*/, nullptr, nullptr)
+    .field("FSCPYS", "File Number of Copies", NITF_INT(5), true /*in NITF2.0*/, nullptr, nullptr)
+    .field("ENCRYP", "Encryption",            NITF_INT(1), false, nullptr, nullptr);
 
   if (version == vil_nitf2_classification::V_NITF_20) {
     (*field_defs)
-      .field("ONAME", "Originator's Name",    NITF_STR_ECSA(27), true, VXL_NULLPTR, VXL_NULLPTR);
+      .field("ONAME", "Originator's Name",    NITF_STR_ECSA(27), true, nullptr, nullptr);
   } else {
     // TODO: These next three values should actually be read in as a std::vector of 3 (8bit) unsigned binary integers
     (*field_defs)
-      .field("FBKGC", "File Background Color 1", NITF_BIN(3),       true, VXL_NULLPTR, VXL_NULLPTR)
-      .field("ONAME", "Originator's Name",       NITF_STR_ECSA(24), true, VXL_NULLPTR, VXL_NULLPTR);
+      .field("FBKGC", "File Background Color 1", NITF_BIN(3),       true, nullptr, nullptr)
+      .field("ONAME", "Originator's Name",       NITF_STR_ECSA(24), true, nullptr, nullptr);
   }
 
   (*field_defs)
-    .field("OPHONE", "Originator's Phone Number", NITF_STR_ECSA(18), true,  VXL_NULLPTR, VXL_NULLPTR)
-    .field("FL",     "File Length",               NITF_LONG(12),     false, VXL_NULLPTR, VXL_NULLPTR)
-    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("OPHONE", "Originator's Phone Number", NITF_STR_ECSA(18), true,  nullptr, nullptr)
+    .field("FL",     "File Length",               NITF_LONG(12),     false, nullptr, nullptr)
+    .field("HL",     "NITF File Header Length",   NITF_INT(6),       false, nullptr, nullptr)
 
-    .field("NUMI",   "Number of Image Segments",  NITF_INT(3),   false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUMI",   "Number of Image Segments",  NITF_INT(3),   false, nullptr, nullptr)
     .repeat("NUMI",   vil_nitf2_field_definitions()
 
-            .field("LISH", "Lengh of Image Subheader",  NITF_INT(6),   false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LI",   "Length of Image Segment",   NITF_LONG(10), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LISH", "Lengh of Image Subheader",  NITF_INT(6),   false, nullptr, nullptr)
+            .field("LI",   "Length of Image Segment",   NITF_LONG(10), false, nullptr, nullptr))
 
-    .field("NUMS",   "Number of Graphic Segments", NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUMS",   "Number of Graphic Segments", NITF_INT(3), false, nullptr, nullptr)
     .repeat("NUMS",   vil_nitf2_field_definitions()
 
-            .field("LSSH", "Length of Graphic Subheader", NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LS",   "Length of Graphic Segment",   NITF_INT(6), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LSSH", "Length of Graphic Subheader", NITF_INT(4), false, nullptr, nullptr)
+            .field("LS",   "Length of Graphic Segment",   NITF_INT(6), false, nullptr, nullptr))
 
-    .field("NUML",   "Number of Label Segments",   NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUML",   "Number of Label Segments",   NITF_INT(3), false, nullptr, nullptr)
     .repeat("NUML",   vil_nitf2_field_definitions()
 
-            .field("LLSH", "Length of Label Subheader",  NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LL",   "Length of Label Segment",    NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LLSH", "Length of Label Subheader",  NITF_INT(4), false, nullptr, nullptr)
+            .field("LL",   "Length of Label Segment",    NITF_INT(3), false, nullptr, nullptr))
 
-    .field("NUMT",   "Number of Text Segments",    NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUMT",   "Number of Text Segments",    NITF_INT(3), false, nullptr, nullptr)
     .repeat("NUMT",   vil_nitf2_field_definitions()
 
-            .field("LTSH", "Length of Text Subheader",   NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LT",   "Length of Text Segment",     NITF_INT(5), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LTSH", "Length of Text Subheader",   NITF_INT(4), false, nullptr, nullptr)
+            .field("LT",   "Length of Text Segment",     NITF_INT(5), false, nullptr, nullptr))
 
-    .field("NUMDES", "Number of Data Extension Segments", NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUMDES", "Number of Data Extension Segments", NITF_INT(3), false, nullptr, nullptr)
     .repeat("NUMDES", vil_nitf2_field_definitions()
 
-            .field("LDSH", "Length of Data Extension Subheader", NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LD",   "Length of Data Extension Segment",   NITF_INT(9), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LDSH", "Length of Data Extension Subheader", NITF_INT(4), false, nullptr, nullptr)
+            .field("LD",   "Length of Data Extension Segment",   NITF_INT(9), false, nullptr, nullptr))
 
-    .field("NUMRES", "Number of Reserved Extension Segments", NITF_INT(3), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("NUMRES", "Number of Reserved Extension Segments", NITF_INT(3), false, nullptr, nullptr)
     .repeat("NUMRES", vil_nitf2_field_definitions()
 
-            .field("LRESH", "Length of Reserved Extension Subheader", NITF_INT(4), false, VXL_NULLPTR, VXL_NULLPTR)
-            .field("LRE",   "Length of Reserved Extension Segment",   NITF_INT(7), false, VXL_NULLPTR, VXL_NULLPTR))
+            .field("LRESH", "Length of Reserved Extension Subheader", NITF_INT(4), false, nullptr, nullptr)
+            .field("LRE",   "Length of Reserved Extension Segment",   NITF_INT(7), false, nullptr, nullptr))
 
-    .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, VXL_NULLPTR, VXL_NULLPTR) // range [00000,00003-99999]
+    .field("UDHDL",  "User Defined Header Data Length", NITF_INT(5), false, nullptr, nullptr) // range [00000,00003-99999]
 
-    .field("UDHOFL", "User Defined Header Overflow",    NITF_INT(3), false, VXL_NULLPTR,
+    .field("UDHOFL", "User Defined Header Overflow",    NITF_INT(3), false, nullptr,
            new vil_nitf2_field_value_greater_than<int>("UDHDL", 0))
 
     .field("UDHD", "User Defined Header Data",          NITF_TRES(), false,
-           new vil_nitf2_max_field_value_plus_offset_and_threshold("UDHDL", -3), VXL_NULLPTR)
+           new vil_nitf2_max_field_value_plus_offset_and_threshold("UDHDL", -3), nullptr)
 
-    .field("XHDL",    "Extended Header Data Length",    NITF_INT(5), false, VXL_NULLPTR, VXL_NULLPTR)
+    .field("XHDL",    "Extended Header Data Length",    NITF_INT(5), false, nullptr, nullptr)
 
-    .field("XHDLOFL", "Extended Header Data Overflow",  NITF_INT(3), false, VXL_NULLPTR,
+    .field("XHDLOFL", "Extended Header Data Overflow",  NITF_INT(3), false, nullptr,
            new vil_nitf2_field_value_greater_than<int>("XHDL", 0))
 
     .field("XHD", "Extended Header Data",               NITF_TRES(), false,
-           new vil_nitf2_max_field_value_plus_offset_and_threshold("XHDL", -3), VXL_NULLPTR);
+           new vil_nitf2_max_field_value_plus_offset_and_threshold("XHDL", -3), nullptr);
 
   // Save them for future use
   if (version == vil_nitf2_classification::V_NITF_20) {
@@ -196,19 +196,19 @@ vil_nitf2_field_definitions* vil_nitf2_header::get_field_definitions_1()
              NITF_ENUM(4, vil_nitf2_enum_values()
                .value("NITF", "NITF File")
                .value("NSIF", "NSIF File")),
-              false, VXL_NULLPTR, VXL_NULLPTR)
-    .field("FVER", "File Version",           NITF_STR_BCSA(5),  false, VXL_NULLPTR, VXL_NULLPTR)
-    .field("CLEVEL", "Complexity Level",     NITF_INT(2),       false, VXL_NULLPTR, VXL_NULLPTR)
+              false, nullptr, nullptr)
+    .field("FVER", "File Version",           NITF_STR_BCSA(5),  false, nullptr, nullptr)
+    .field("CLEVEL", "Complexity Level",     NITF_INT(2),       false, nullptr, nullptr)
     // NITF2.1 - BF01, NITF2.0: <blank>
     .field("STYPE", "Standard Type",
            NITF_ENUM(4, vil_nitf2_enum_values()
              .value("BF01", "ISO/IEC IS 12087-5")),
-            true, VXL_NULLPTR, VXL_NULLPTR)
-    .field("OSTAID", "Operating Station ID", NITF_STR_BCSA(10), false, VXL_NULLPTR, VXL_NULLPTR)
+            true, nullptr, nullptr)
+    .field("OSTAID", "Operating Station ID", NITF_STR_BCSA(10), false, nullptr, nullptr)
     // order of data/time depends on NITF2.1 or NITF2.0, so just read in as string for now
     //.field("FDT", "File date and time", NITF_DAT(14),  false, 0, 0));
-    .field("FDT", "File Date and Time",      NITF_STR_BCSA(14), false, VXL_NULLPTR, VXL_NULLPTR)
-    .field("FTITLE", "File Title",           NITF_STR_ECSA(80), true, VXL_NULLPTR, VXL_NULLPTR);
+    .field("FDT", "File Date and Time",      NITF_STR_BCSA(14), false, nullptr, nullptr)
+    .field("FTITLE", "File Title",           NITF_STR_ECSA(80), true, nullptr, nullptr);
   }
   return s_field_definitions_1;
 }

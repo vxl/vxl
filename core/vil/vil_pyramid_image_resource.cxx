@@ -302,7 +302,7 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
          char const* format)
 {
   if (!resc)
-    return VXL_NULLPTR;
+    return nullptr;
   vil_pixel_format fmt = vil_pixel_format_component_format(resc->pixel_format());
   switch (fmt)
   {
@@ -322,14 +322,14 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
       break;
     default:
       std::cout << "unrecognized pixel format in vil_pyramid_image_resource::decimate()\n";
-      return VXL_NULLPTR;
+      return nullptr;
   }
   //first determine if the resource is blocked, if not create a facade
   vil_blocked_image_resource_sptr brsc = blocked_image_resource(resc);
   if (brsc&&(brsc->size_block_i()%2!=0||brsc->size_block_j()%2!=0))
   {
     std::cout << "Blocked pyramid images must have even block sizes\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   if (!brsc)
     brsc = new vil_blocked_image_facade(resc);
@@ -349,7 +349,7 @@ decimate(vil_image_resource_sptr const& resc, char const* filename,
                                      format);
     //fill the resource with decimated blocks.
     if (!blocked_decimate(brsc, dec_resc))
-      return VXL_NULLPTR;
+      return nullptr;
   } //file scope to close resource
   //reopen resource for reading
   vil_image_resource_sptr temp = vil_load_image_resource(filename);

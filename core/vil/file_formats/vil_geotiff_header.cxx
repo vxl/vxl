@@ -14,7 +14,7 @@ vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
   if (tif) {
     gtif_ = GTIFNew(tif);
     if (gtif_) {
-      GTIFPrint(gtif_, VXL_NULLPTR, VXL_NULLPTR);
+      GTIFPrint(gtif_, nullptr, nullptr);
 
       // read the header of the GeoDirectoryKey Tag
       int version[3];
@@ -28,7 +28,7 @@ vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
 
 bool vil_geotiff_header::gtif_tiepoints(std::vector<std::vector<double> > &tiepoints)
 {
-  double* points=VXL_NULLPTR;
+  double* points=nullptr;
   short count;
   if (TIFFGetField(tif_, GTIFF_TIEPOINTS, &count, &points) < 0)
     return false;

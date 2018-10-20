@@ -46,7 +46,7 @@ public:
   long const *pqr () const { return pqr_; }
 
   operator safe_bool () const
-    { return (trigs_ && info_ >= 0)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+    { return (trigs_ && info_ >= 0)? VCL_SAFE_BOOL_TRUE : nullptr; }
   bool operator!() const
     { return (trigs_ && info_ >= 0)? false : true; }
 

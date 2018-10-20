@@ -48,7 +48,7 @@ class vil_nitf2_scalar_field : public vil_nitf2_field
   static vil_nitf2_scalar_field* read(vil_nitf2_istream& input,
                                       vil_nitf2_field_definition* definition,
                                       int variable_width = -1,
-                                      bool* error = VXL_NULLPTR);
+                                      bool* error = nullptr);
 
   virtual field_tree* get_tree() const;
 

@@ -79,16 +79,16 @@ struct vgui_menu_item
   } short_cut;
 
   //: Return true if the item is a command (item which performs an action).
-  bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == VXL_NULLPTR) && !is_toggle_button(); }
+  bool is_command()       const { return name!="" &&  (bool)cmnd && (menu == nullptr) && !is_toggle_button(); }
 
   //: Returns true if the item is a sub-menu.
-  bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != VXL_NULLPTR) && !is_toggle_button(); }
+  bool is_submenu()       const { return name!="" && !(bool)cmnd && (menu != nullptr) && !is_toggle_button(); }
 
   //: Returns true if the item is a toggle button.
   bool is_toggle_button() const;
 
   //: Returns true if the item is a separator.
-  bool is_separator()     const { return name=="" && !(bool)cmnd && (menu == VXL_NULLPTR) && !is_toggle_button(); }
+  bool is_separator()     const { return name=="" && !(bool)cmnd && (menu == nullptr) && !is_toggle_button(); }
 };
 
 //: Representation of a menu for both pop-up and menubar menus.

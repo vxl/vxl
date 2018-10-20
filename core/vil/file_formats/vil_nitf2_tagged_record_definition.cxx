@@ -105,7 +105,7 @@ void vil_nitf2_tagged_record_definition::end()
 vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(std::string name)
 {
   tagged_record_definition_map::iterator definition = all_definitions().find(name);
-  if (definition == all_definitions().end()) return VXL_NULLPTR;
+  if (definition == all_definitions().end()) return nullptr;
   return definition->second;
 }
 

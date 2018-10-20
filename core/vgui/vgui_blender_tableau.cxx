@@ -30,8 +30,8 @@ vgui_blender_tableau::
 vgui_blender_tableau(char const* file,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(VXL_NULLPTR),
-    vil_renderer_(VXL_NULLPTR),
+  : renderer_(nullptr),
+    vil_renderer_(nullptr),
     rmp_(rmp),
     alpha_(a)
 {
@@ -47,8 +47,8 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil1_image const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(VXL_NULLPTR),
-    vil_renderer_(VXL_NULLPTR),
+  : renderer_(nullptr),
+    vil_renderer_(nullptr),
     rmp_(rmp),
     alpha_(a)
 {
@@ -64,8 +64,8 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil_image_resource_sptr const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(VXL_NULLPTR),
-    vil_renderer_(VXL_NULLPTR),
+  : renderer_(nullptr),
+    vil_renderer_(nullptr),
     rmp_(rmp),
     alpha_(a)
 {
@@ -81,8 +81,8 @@ vgui_blender_tableau::
 vgui_blender_tableau(vil_image_view_base const& img,
                      vgui_range_map_params_sptr const& rmp,
                      float a)
-  : renderer_(VXL_NULLPTR),
-    vil_renderer_(VXL_NULLPTR),
+  : renderer_(nullptr),
+    vil_renderer_(nullptr),
     rmp_(rmp),
     alpha_(a)
 {

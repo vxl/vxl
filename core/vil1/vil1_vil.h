@@ -108,7 +108,7 @@ class vil1_vil_image_resource: public vil_image_resource
   virtual unsigned nj() const { if (src_) return src_.height(); else return 0; }
   virtual unsigned nplanes() const { if (!src_) return 0; else return src_.components(); }
 
-  virtual bool get_property(char const *tag, void *property_value=VXL_NULLPTR) const
+  virtual bool get_property(char const *tag, void *property_value=nullptr) const
   {
     if (src_)
       return src_.get_property(tag, property_value);
@@ -119,7 +119,7 @@ class vil1_vil_image_resource: public vil_image_resource
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
   {
     if (!src_)
-      return VXL_NULLPTR;
+      return nullptr;
 
     switch (pixel_format())
     {
@@ -140,7 +140,7 @@ class vil1_vil_image_resource: public vil_image_resource
         macro(VIL_PIXEL_FORMAT_FLOAT , float )
         macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
-    default: return VXL_NULLPTR;
+    default: return nullptr;
     }
   }
 
@@ -174,7 +174,7 @@ class vil1_vil_image_resource: public vil_image_resource
 
 inline vil_image_resource_sptr vil1_to_vil_image_resource(const vil1_image &vil1_im)
 {
-  if (!vil1_im) return VXL_NULLPTR;
+  if (!vil1_im) return nullptr;
   return new vil1_vil_image_resource(vil1_im);
 }
 

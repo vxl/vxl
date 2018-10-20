@@ -65,7 +65,7 @@ bool vil_nitf2_location_formatter::read_vcl_stream(std::istream& input,
       return true;
     } else {
       delete location;
-      out_value = VXL_NULLPTR;
+      out_value = nullptr;
       return false;
     }
   }

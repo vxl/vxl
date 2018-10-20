@@ -49,7 +49,7 @@ implement_read_complex_data(double)
 
 //--------------------------------------------------------------------------------
 
-vnl_matlab_readhdr::vnl_matlab_readhdr(std::istream &s_) : s(s_), varname(VXL_NULLPTR), data_read(false), need_swap(false)
+vnl_matlab_readhdr::vnl_matlab_readhdr(std::istream &s_) : s(s_), varname(nullptr), data_read(false), need_swap(false)
 {
   read_hdr();
 }
@@ -58,12 +58,12 @@ vnl_matlab_readhdr::~vnl_matlab_readhdr()
 {
   if (varname)
     delete [] varname;
-  varname = VXL_NULLPTR;
+  varname = nullptr;
 }
 
 vnl_matlab_readhdr::operator vnl_matlab_readhdr::safe_bool () const
 {
-  return (s.good() && !s.eof())? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; // FIXME
+  return (s.good() && !s.eof())? VCL_SAFE_BOOL_TRUE : nullptr; // FIXME
 }
 
 bool vnl_matlab_readhdr::operator!() const

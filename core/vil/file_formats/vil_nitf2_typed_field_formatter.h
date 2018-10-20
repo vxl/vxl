@@ -81,9 +81,9 @@ vil_nitf2_scalar_field* vil_nitf2_typed_field_formatter<T>::read_field(
 {
   T value;
   if (read( input, value, out_blank )) {
-    return new vil_nitf2_typed_scalar_field<T>(value, VXL_NULLPTR);
+    return new vil_nitf2_typed_scalar_field<T>(value, nullptr);
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 template<typename T>

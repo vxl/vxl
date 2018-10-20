@@ -21,7 +21,7 @@
 
 lsqrDense::lsqrDense()
 {
-  this->A = VXL_NULLPTR;
+  this->A = nullptr;
 }
 
 

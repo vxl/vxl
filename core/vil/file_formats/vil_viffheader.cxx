@@ -35,14 +35,14 @@ vil_viff_xvimage::vil_viff_xvimage(
   pixsizy = 1.0;
   location_type = VFF_LOC_IMPLICIT;
   location_dim = 0;
-  location = VXL_NULLPTR;
+  location = nullptr;
   num_of_images = 1;
   num_data_bands = num_bands;
   data_storage_type = storage_type;
   data_encode_scheme = VFF_DES_RAW;
   map_scheme = VFF_MS_NONE;
   map_storage_type = VFF_MAPTYP_NONE;
-  maps = VXL_NULLPTR;
+  maps = nullptr;
   map_row_size = 0;
   map_col_size = 0;
   map_subrow_size = 0;
@@ -56,7 +56,7 @@ vil_viff_xvimage::vil_viff_xvimage(
 
   unsigned long image_data_n_bytes=0L; // dummy initialisation to avoid compiler warning
 
-  imagedata = VXL_NULLPTR;
+  imagedata = nullptr;
 }
 
 vil_viff_xvimage::vil_viff_xvimage()

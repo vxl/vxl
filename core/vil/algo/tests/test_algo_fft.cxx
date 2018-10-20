@@ -10,7 +10,7 @@
 static void test_algo_fft()
 {
   vil_image_view<std::complex<double> > img0(4, 8, 2);
-  unsigned int seed = (unsigned int)std::time(VXL_NULLPTR);
+  unsigned int seed = (unsigned int)std::time(nullptr);
 
   // fill in image
   for (unsigned i=0; i<img0.ni(); i++)

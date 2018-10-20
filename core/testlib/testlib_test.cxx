@@ -34,7 +34,7 @@ void testlib_test_start(const char* name)
   test_name = name;
   std::cout << "-----------------------------------------------------------------------------\n"
            << "Start Testing";
-  if (test_name != VXL_NULLPTR) std::cout << ' ' << test_name;
+  if (test_name != nullptr) std::cout << ' ' << test_name;
   std::cout << ":\n-----------------------------------------------------------------------------\n" << std::flush;
  }
 

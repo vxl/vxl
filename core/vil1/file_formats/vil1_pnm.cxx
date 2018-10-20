@@ -43,7 +43,7 @@ vil1_image_impl* vil1_pnm_file_format::make_input_image(vil1_stream* vs)
              iseol(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
-    return VXL_NULLPTR;
+    return nullptr;
 
   return new vil1_pnm_generic_image(vs);
 }

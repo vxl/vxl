@@ -133,11 +133,11 @@ class vil1_image_impl
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return VXL_NULLPTR; }
+  virtual char const* file_format() const { return nullptr; }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const;
-  virtual bool set_property(char const* tag, void const* property_value = VXL_NULLPTR) const;
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
+  virtual bool set_property(char const* tag, void const* property_value = nullptr) const;
 
   //: Return the name of the class;
   virtual std::string is_a() const { return "vil1_image_impl"; }

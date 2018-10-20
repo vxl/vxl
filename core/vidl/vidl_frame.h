@@ -88,7 +88,7 @@ class VIDL_EXPORT vidl_shared_frame : public vidl_frame
   public:
     //: Constructor
     vidl_shared_frame():
-      vidl_frame(), buffer_(VXL_NULLPTR) {}
+      vidl_frame(), buffer_(nullptr) {}
 
     //: Constructor
     vidl_shared_frame(void * buffer, unsigned ni, unsigned nj, vidl_pixel_format fmt):
@@ -98,7 +98,7 @@ class VIDL_EXPORT vidl_shared_frame : public vidl_frame
     virtual ~vidl_shared_frame() {}
 
     //: Make the buffer invalid (data()==0 and size()==0)
-    virtual void invalidate() { buffer_ = VXL_NULLPTR; vidl_frame::invalidate(); }
+    virtual void invalidate() { buffer_ = nullptr; vidl_frame::invalidate(); }
 
     //: Return a pointer to the first element of data
     virtual void * data() { return buffer_; }
@@ -118,7 +118,7 @@ class VIDL_EXPORT vidl_memory_chunk_frame : public vidl_frame
 {
   public:
     //: Constructor
-    vidl_memory_chunk_frame() : memory_(VXL_NULLPTR) {}
+    vidl_memory_chunk_frame() : memory_(nullptr) {}
 
     //: Constructor - from a vil_memory_chunk_sptr
     vidl_memory_chunk_frame(unsigned ni, unsigned nj, vidl_pixel_format fmt,
@@ -139,11 +139,11 @@ class VIDL_EXPORT vidl_memory_chunk_frame : public vidl_frame
     virtual ~vidl_memory_chunk_frame() {}
 
     //: Make the buffer invalid (data()==0 and size()==0)
-    virtual void invalidate() { memory_ = VXL_NULLPTR;  vidl_frame::invalidate(); }
+    virtual void invalidate() { memory_ = nullptr;  vidl_frame::invalidate(); }
 
     //: Return a pointer to the first element of data
-    virtual void * data () { return memory_?memory_->data():VXL_NULLPTR; }
-    virtual const void * data () const { return memory_?memory_->data():VXL_NULLPTR; }
+    virtual void * data () { return memory_?memory_->data():nullptr; }
+    virtual const void * data () const { return memory_?memory_->data():nullptr; }
 
     //: The size of the buffer in bytes
     virtual unsigned long size() const { return (unsigned long)(memory_?memory_->size():0L); }

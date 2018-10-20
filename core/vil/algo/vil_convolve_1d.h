@@ -331,7 +331,7 @@ class vil_convolve_1d_resource : public vil_image_resource
   virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                  unsigned j0, unsigned n_j) const
   {
-    if (i0 + n_i > src_->ni() || j0 + n_j > src_->nj())  return VXL_NULLPTR;
+    if (i0 + n_i > src_->ni() || j0 + n_j > src_->nj())  return nullptr;
     const unsigned lsrc = (unsigned) std::max(0,(int)i0 + klo_); // lhs of input window
     const unsigned hsrc = std::min(src_->ni(),i0 + n_i - klo_ + khi_); // 1+rhs of input window.
     const unsigned lboundary = std::min((unsigned) -klo_, i0); // width of lhs boundary area.
@@ -359,7 +359,7 @@ class vil_convolve_1d_resource : public vil_image_resource
 // maybe need a better compiler, maybe there is a code fix - IMS
 #undef macro
      default:
-      return VXL_NULLPTR;
+      return nullptr;
     }
   }
 
@@ -380,7 +380,7 @@ class vil_convolve_1d_resource : public vil_image_resource
   }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const
   {
     if (0==std::strcmp(tag, vil_property_read_only))
       return property_value ? (*static_cast<bool*>(property_value)) = true : true;

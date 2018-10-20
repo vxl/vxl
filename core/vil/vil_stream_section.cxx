@@ -22,7 +22,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin)
   , end_((vil_streampos)(-1L))
   , current_(begin)
 {
-  assert(underlying != VXL_NULLPTR);
+  assert(underlying != nullptr);
   assert(begin >= 0);
   underlying_->ref();
 }
@@ -33,7 +33,7 @@ vil_stream_section::vil_stream_section(vil_stream *underlying, int begin, int en
   , end_(end)
   , current_(begin)
 {
-  assert(underlying != VXL_NULLPTR);
+  assert(underlying != nullptr);
   assert(begin >= 0);
   assert(begin <= end);
   underlying->ref();
@@ -44,7 +44,7 @@ vil_stream_section::~vil_stream_section()
   // unreffing the underlying stream might cause deletion of *this, so
   // zero out the pointer first.
   vil_stream *u = underlying_;
-  underlying_ = VXL_NULLPTR;
+  underlying_ = nullptr;
   u->unref();
 }
 

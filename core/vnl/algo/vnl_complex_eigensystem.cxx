@@ -50,9 +50,9 @@ void vnl_complex_eigensystem::compute(vnl_matrix<std::complex<double> > const & 
          tmp.data_block(),           // a
          &tmpN,                      // lda
          W.data_block(),             // w
-         right ? R.data_block() : VXL_NULLPTR, // vl
+         right ? R.data_block() : nullptr, // vl
          &tmpN,                      // ldvl
-         left  ? L.data_block() : VXL_NULLPTR, // vr
+         left  ? L.data_block() : nullptr, // vr
          &tmpN,                      // ldvr
          work.data_block(),          // work
          &work_space,                // lwork

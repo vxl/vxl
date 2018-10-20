@@ -378,7 +378,7 @@ template< class sumT >
 inline bool vil_math_mean_and_variance(sumT& mean, sumT& var, const vil_image_resource_sptr im,
                                        const vil_image_view<bool> & mask, unsigned p)
 {
-  if(im == VXL_NULLPTR || im->get_view() == VXL_NULLPTR)
+  if(im == nullptr || im->get_view() == nullptr)
   {
     return false;
   }

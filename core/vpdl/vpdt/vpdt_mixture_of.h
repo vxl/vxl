@@ -116,7 +116,7 @@ class vpdt_mixture_of
 
   // Copy Constructor
   vpdt_mixture_of(const vpdt_mixture_of<dist_t>& other)
-    : components_(other.components_.size(),VXL_NULLPTR)
+    : components_(other.components_.size(),nullptr)
   {
     // deep copy of the data
     for (unsigned int i=0; i<components_.size(); ++i) {

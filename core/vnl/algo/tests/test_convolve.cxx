@@ -17,7 +17,7 @@ void test_convolve()
   vnl_vector<int> b(6, 6, b_data);
   vnl_vector<double> k1 = vnl_double_2(0.5,-0.5).as_vector();
 
-  vnl_vector<double> r1 = vnl_convolve(b, k1, (double*)VXL_NULLPTR);
+  vnl_vector<double> r1 = vnl_convolve(b, k1, (double*)nullptr);
   TEST("vnl_convolve() simple length", r1.size(), 7);
   std::cout << r1 << std::endl;
   TEST("vnl_convolve() simple values", true,
@@ -29,14 +29,14 @@ void test_convolve()
   std::cout << r2 << std::endl;
   TEST("vnl_convolve() simple values", true,
        r2[0]==-2 && r2[1]==2 && r2[2]==4 && r2[3]==2 && r2[4]==-4 && r2[5]==-2 && r2[6]==0);
-  vnl_vector<int> r3 = vnl_convolve(b, k2, (int*)VXL_NULLPTR);
+  vnl_vector<int> r3 = vnl_convolve(b, k2, (int*)nullptr);
   TEST("vnl_convolve() 2nd form", r3, r2);
   vnl_vector<int> r4 = vnl_convolve(k2, b);
   TEST("vnl_convolve() commutativity", r4, r2);
-  vnl_vector<double> r7 = vnl_convolve(b, k1, (double*)VXL_NULLPTR, 1);
+  vnl_vector<double> r7 = vnl_convolve(b, k1, (double*)nullptr, 1);
   std::cout << r7 << std::endl;
   TEST_NEAR("vnl_convolve() with_fft(7)", (r7-r1).two_norm(), 0.0, 1e-6);
-  vnl_vector<double> r8 = vnl_convolve(b, k1, (double*)VXL_NULLPTR, 8);
+  vnl_vector<double> r8 = vnl_convolve(b, k1, (double*)nullptr, 8);
   std::cout << r8 << std::endl;
   TEST_NEAR("vnl_convolve() with_fft(8)", (r8-r1).two_norm(), 0.0, 1e-6);
 
@@ -86,12 +86,12 @@ void test_convolve()
   vnl_vector<double> c1(6, 6, c1_data);
   double c2_data[] = { 5, 3, 1, -1, -3, -5 };
   vnl_vector<double> c2(6, 6, c2_data);
-  vnl_vector<double> r5 = vnl_convolve_cyclic(c1, c2, (double*)VXL_NULLPTR);
+  vnl_vector<double> r5 = vnl_convolve_cyclic(c1, c2, (double*)nullptr);
   TEST("vnl_convolve_cyclic() length", r5.size(), 6);
   std::cout << r5 << std::endl;
   TEST("vnl_convolve_cyclic() values", true,
        r5[0]==5 && r5[1]==-13 && r5[2]==-19 && r5[3]==-13 && r5[4]==5 && r5[5]==35);
-  vnl_vector<double> r6 = vnl_convolve_cyclic(c1, c2, (double*)VXL_NULLPTR, true);
+  vnl_vector<double> r6 = vnl_convolve_cyclic(c1, c2, (double*)nullptr, true);
   std::cout << r6 << std::endl;
   TEST_NEAR("vnl_convolve_cyclic() with_fft", (r6-r5).two_norm(), 0.0, 1e-6);
 }

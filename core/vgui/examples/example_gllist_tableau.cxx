@@ -22,7 +22,7 @@ class basic_manager : public vgui_wrapper_tableau
 
   static basic_manager *instance()
   {
-    static basic_manager *instance_ = VXL_NULLPTR;
+    static basic_manager *instance_ = nullptr;
     if (!instance_) {
       instance_ = new basic_manager();
       instance_->init();

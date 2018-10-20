@@ -50,7 +50,7 @@ class vil1_memory_image_impl : public vil1_image_impl
   virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
   virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
 
-  virtual bool get_property(char const *tag, void *property_value = VXL_NULLPTR) const;
+  virtual bool get_property(char const *tag, void *property_value = nullptr) const;
 
   void resize(int planes, int width, int height);
   void resize(int planes, int width, int height, int components, int bits_per_component,

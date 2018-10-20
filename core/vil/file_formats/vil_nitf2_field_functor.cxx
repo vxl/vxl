@@ -16,7 +16,7 @@ operator() (vil_nitf2_field_sequence* record,
     return false;
   }
   vil_nitf2_field* field = record->get_field(tag);
-  if (field != VXL_NULLPTR) {
+  if (field != nullptr) {
     std::string value;
     bool is_string_value = record->get_value(tag, indexes, value, true);
     if (is_string_value) {

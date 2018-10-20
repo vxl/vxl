@@ -168,13 +168,13 @@ extern "C" void test_qr()
   double_test();
 
   std::cout << "-------------------- float\n";
-  new_test((float*)VXL_NULLPTR);
+  new_test((float*)nullptr);
   std::cout << "-------------------- double\n";
-  new_test((double*)VXL_NULLPTR);
+  new_test((double*)nullptr);
   std::cout << "-------------------- float_complex\n";
-  new_test((std::complex<float>*)VXL_NULLPTR);
+  new_test((std::complex<float>*)nullptr);
   std::cout << "-------------------- double_complex\n";
-  new_test((std::complex<double>*)VXL_NULLPTR);
+  new_test((std::complex<double>*)nullptr);
 }
 
 TESTMAIN(test_qr);

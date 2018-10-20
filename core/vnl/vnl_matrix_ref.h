@@ -65,7 +65,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_ref : public vnl_matrix<T>
   }
 
   ~vnl_matrix_ref() {
-    Base::data[0] = VXL_NULLPTR; // Prevent base dtor from releasing our memory
+    Base::data[0] = nullptr; // Prevent base dtor from releasing our memory
   }
 
   //: Reference to self to make non-const temporaries.

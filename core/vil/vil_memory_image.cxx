@@ -106,7 +106,7 @@ vil_memory_image::vil_memory_image(vil_image_view_base const &view)
 vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n_i,
                                                          unsigned j0, unsigned n_j) const
 {
-  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return VXL_NULLPTR;
+  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return nullptr;
 
   switch (view_->pixel_format())
   {
@@ -134,7 +134,7 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -143,7 +143,7 @@ vil_image_view_base_sptr vil_memory_image::get_copy_view(unsigned i0, unsigned n
 vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned n_i,
                                                     unsigned j0, unsigned n_j) const
 {
-  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return VXL_NULLPTR;
+  if (i0 + n_i > view_->ni() || j0 + n_j > view_->nj()) return nullptr;
 
   switch (view_->pixel_format())
   {
@@ -170,7 +170,7 @@ vil_image_view_base_sptr vil_memory_image::get_view(unsigned i0, unsigned n_i,
    macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
    default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

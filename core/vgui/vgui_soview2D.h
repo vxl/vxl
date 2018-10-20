@@ -304,7 +304,7 @@ class vgui_soview2D_linestrip : public vgui_soview2D
   vgui_soview2D_linestrip(unsigned, float const *, float const *);
 
   //: Constructor - create a default 2D linestrip.
-  vgui_soview2D_linestrip() : n(0), x(VXL_NULLPTR), y(VXL_NULLPTR) {}
+  vgui_soview2D_linestrip() : n(0), x(nullptr), y(nullptr) {}
 
   //: Destructor - delete this 2D linestrip.
   ~vgui_soview2D_linestrip();
@@ -344,7 +344,7 @@ class vgui_soview2D_polygon : public vgui_soview2D
   vgui_soview2D_polygon(unsigned, float const *, float const *, bool fill);
 
   //: Constructor - create a default 2D polygon.
-  vgui_soview2D_polygon() : n(0), x(VXL_NULLPTR), y(VXL_NULLPTR) {}
+  vgui_soview2D_polygon() : n(0), x(nullptr), y(nullptr) {}
 
   //: Destructor - delete this 2D polygon.
   ~vgui_soview2D_polygon();

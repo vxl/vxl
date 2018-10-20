@@ -73,7 +73,7 @@ class vil_png_image : public vil_image_resource
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  bool get_property(char const *tag, void *prop = nullptr) const;
 };
 
 #endif // vil_png_file_format_h_

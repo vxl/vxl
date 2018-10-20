@@ -37,7 +37,7 @@ struct vil1_gif_color_map
   int size;
   char *cmap;
   vil1_gif_color_map(int sz) : size(sz), cmap(new char [3*size]) { }
-  ~vil1_gif_color_map() { delete [] cmap; cmap = VXL_NULLPTR; }
+  ~vil1_gif_color_map() { delete [] cmap; cmap = nullptr; }
 };
 
 struct vil1_gif_image_record
@@ -79,7 +79,7 @@ struct vil1_gif_loader_saver : public vil1_image_impl
   bool put_section(int, void const *, int, int, int, int) { return false; }
 
   char const *file_format() const;
-  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  bool get_property(char const *tag, void *prop = nullptr) const;
 
  private:
   vil1_stream *s;

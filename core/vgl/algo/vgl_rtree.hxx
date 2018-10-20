@@ -33,7 +33,7 @@ vgl_rtree_node<V, B, C>::vgl_rtree_node(node *parent_node, V const &v)
 template <class V, class B, class C>
 vgl_rtree_node<V, B, C>::~vgl_rtree_node()
 {
-  parent = VXL_NULLPTR;
+  parent = nullptr;
   for (unsigned int i=0; i<local_chs; ++i)
     delete chs[i];
 }
@@ -150,7 +150,7 @@ vgl_rtree_node<V, B, C> *vgl_rtree_node<V, B, C>::add(V const &v)
   }
 
   // all full up, so add the vertex to a suitable child.
-  node *child = VXL_NULLPTR;
+  node *child = nullptr;
 #if 0
   // get the smallest subtree :
   child = chs[0];
@@ -230,7 +230,7 @@ void vgl_rtree_node<V, B, C>::erase(unsigned int i)
         p->chs[j] = p->chs[p->local_chs];
 
       // delete the node.
-      delete n; n=VXL_NULLPTR;
+      delete n; n=nullptr;
 
       // recompute the bounding boxes all the way up to the root.
       for (node *t = p; t; t=t->parent)
@@ -359,7 +359,7 @@ void vgl_rtree_iterator_base<V, B, C>::operator_pp()
   p = current->parent;
 
   if (!p) { // reached the end
-    current = VXL_NULLPTR;
+    current = nullptr;
     return;
   }
 

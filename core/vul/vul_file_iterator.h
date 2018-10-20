@@ -50,7 +50,7 @@ class vul_file_iterator
   VCL_SAFE_BOOL_DEFINE;
  public:
 
-  vul_file_iterator() : p(VXL_NULLPTR) {}
+  vul_file_iterator() : p(nullptr) {}
 
   //: Initialize, and scan to get first file from "glob"
   vul_file_iterator(char const* glob);

@@ -26,7 +26,7 @@
 #include <vgui/internals/vgui_dialog_extensions_impl.h>
 
 // static data
-vgui_toolkit *vgui::instance_ = VXL_NULLPTR;
+vgui_toolkit *vgui::instance_ = nullptr;
 bool vgui::init_called = false;
 bool vgui::quit_called = false;
 
@@ -220,7 +220,7 @@ vgui_window *vgui::produce_window(int width,
     return instance_->produce_window(width, height, menubar, title.c_str());
   else {
     vgui_macro_warning << "no toolkit selected\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -234,7 +234,7 @@ vgui_window *vgui::produce_window(int width,
     return instance_->produce_window(width, height, title.c_str());
   else {
     vgui_macro_warning << "no toolkit selected\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -246,7 +246,7 @@ vgui_dialog_impl *vgui::produce_dialog(std::string const &name)
     return instance_->produce_dialog(name.c_str());
   else {
     vgui_macro_warning << "no toolkit selected\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -258,7 +258,7 @@ vgui_dialog_extensions_impl *vgui::produce_extension_dialog(std::string const &n
     return instance_->produce_dialog_extension(name.c_str());
   else {
     vgui_macro_warning << "no toolkit selected\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 //----------------------------------------------------------------------------

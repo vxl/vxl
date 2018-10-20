@@ -37,7 +37,7 @@ void keyboard(unsigned char k, int, int)
 void idle()
 {
   static std::time_t last = 0;
-  std::time_t now = time(VXL_NULLPTR);
+  std::time_t now = time(nullptr);
   if (now > last) {
     // Advance the deck
     deck->next();

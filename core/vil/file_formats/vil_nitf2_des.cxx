@@ -41,8 +41,8 @@ vil_nitf2_des::define(std::string desId )
 }
 
 vil_nitf2_des::vil_nitf2_des( vil_nitf2_classification::file_version version, int data_width )
-  : m_field_sequence1( VXL_NULLPTR ),
-    m_field_sequence2( VXL_NULLPTR )
+  : m_field_sequence1( nullptr ),
+    m_field_sequence2( nullptr )
 {
   m_field_sequence1 = new vil_nitf2_field_sequence( *create_field_definitions( version, data_width ) );
 }
@@ -79,10 +79,10 @@ vil_nitf2_field_definitions* vil_nitf2_des::create_field_definitions( vil_nitf2_
 void vil_nitf2_des::add_shared_field_defs_1( vil_nitf2_field_definitions* defs )
 {
   (*defs)
-    .field( "DE", "Data Extension Subheader", NITF_ENUM( 2, vil_nitf2_enum_values().value( "DE" ) ), false, VXL_NULLPTR, VXL_NULLPTR )
+    .field( "DE", "Data Extension Subheader", NITF_ENUM( 2, vil_nitf2_enum_values().value( "DE" ) ), false, nullptr, nullptr )
     .field( "DESID", "Unique DES Type Identifier", NITF_STR( 25 ),
-            false, VXL_NULLPTR, VXL_NULLPTR )
-    .field( "DESVER", "Version of the Data Definition", NITF_INT( 2, false ), false, VXL_NULLPTR, VXL_NULLPTR );
+            false, nullptr, nullptr )
+    .field( "DESVER", "Version of the Data Definition", NITF_INT( 2, false ), false, nullptr, nullptr );
 }
 
 void vil_nitf2_des::add_shared_field_defs_2( vil_nitf2_field_definitions* defs, int data_width )
@@ -96,10 +96,10 @@ void vil_nitf2_des::add_shared_field_defs_2( vil_nitf2_field_definitions* defs, 
                .value( "TXSHD", "Text Extended Subheader Data" );
   (*defs)
     .field( "DESOFLW", "Overflowed Header Type", NITF_ENUM( 6, overflow_enum ),
-            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ) )
+            false, nullptr, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ) )
     .field( "DESITEM", "Data Item Overflowed", NITF_INT( 3, false ),
-            false, VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ))
-    .field( "DESSHL", "Length of DES-Defined Subheader Fields", NITF_INT( 4, false ), false, VXL_NULLPTR, VXL_NULLPTR )
+            false, nullptr, new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ))
+    .field( "DESSHL", "Length of DES-Defined Subheader Fields", NITF_INT( 4, false ), false, nullptr, nullptr )
     .field( "DESDATA", "DES-Defined Data Field", NITF_TRES(), false,
             new vil_nitf2_max_field_value_plus_offset_and_threshold( "DESSHL", data_width, 0, -1 ),
             new vil_nitf2_field_value_one_of<std::string>( "DESID", "TRE_OVERFLOW" ) )

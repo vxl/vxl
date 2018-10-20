@@ -32,7 +32,7 @@ class vil_pyramid_image_list_format : public vil_file_format
 
   //: should return 0 so that no attempt is made to create a single image resource
   virtual vil_image_resource_sptr make_input_image(vil_stream* /*vs*/)
-  { return VXL_NULLPTR; }
+  { return nullptr; }
 
   //: Read a pyramid resource. Image list files are stored in directory.
   virtual vil_pyramid_image_resource_sptr
@@ -59,7 +59,7 @@ class vil_pyramid_image_list_format : public vil_file_format
                                                     unsigned int /*nj*/,
                                                     unsigned int /*nplanes*/,
                                                     enum vil_pixel_format)
-  { return VXL_NULLPTR; }
+  { return nullptr; }
 
   virtual vil_pyramid_image_resource_sptr
     make_pyramid_output_image(char const* directory);
@@ -145,7 +145,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
     if (levels_.size()>0)
       return levels_[0]->image_->get_copy_view(i0, n_i, j0, n_j);
     else
-      return VXL_NULLPTR;
+      return nullptr;
   }
 
   //: Return a string describing the file format.
@@ -171,7 +171,7 @@ class vil_pyramid_image_list : public vil_pyramid_image_resource
 
   //: Get a level image resource of the pyramid
   inline vil_image_resource_sptr get_level(const unsigned int level) const
-  { if (level<levels_.size()) return levels_[level]->image_; else return VXL_NULLPTR; }
+  { if (level<levels_.size()) return levels_[level]->image_; else return nullptr; }
 
   //:Get a partial view from the image from a specified pyramid level
   virtual vil_image_view_base_sptr get_copy_view(unsigned int i0, unsigned int n_i,

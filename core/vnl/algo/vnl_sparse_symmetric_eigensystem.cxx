@@ -17,7 +17,7 @@
 
 #include <vnl/algo/vnl_netlib.h> // dnlaso_() dseupd_() dsaupd_()
 
-static vnl_sparse_symmetric_eigensystem * current_system = VXL_NULLPTR;
+static vnl_sparse_symmetric_eigensystem * current_system = nullptr;
 
 //------------------------------------------------------------
 //: Callback for multiplying our matrix by a number of vectors.
@@ -29,7 +29,7 @@ void sse_op_callback(const long* n,
                      const double* p,
                      double* q)
 {
-  assert(current_system != VXL_NULLPTR);
+  assert(current_system != nullptr);
 
   current_system->CalculateProduct(*n,*m,p,q);
 }
@@ -46,7 +46,7 @@ void sse_iovect_callback(const long* n,
                          const long* j,
                          const long* k)
 {
-  assert(current_system != VXL_NULLPTR);
+  assert(current_system != nullptr);
 
   if (*k==0)
     current_system->SaveVectors(*n,*m,q,*j-*m);
@@ -55,14 +55,14 @@ void sse_iovect_callback(const long* n,
 }
 
 vnl_sparse_symmetric_eigensystem::vnl_sparse_symmetric_eigensystem()
-  : nvalues(0), vectors(VXL_NULLPTR), values(VXL_NULLPTR)
+  : nvalues(0), vectors(nullptr), values(nullptr)
 {
 }
 
 vnl_sparse_symmetric_eigensystem::~vnl_sparse_symmetric_eigensystem()
 {
-  delete[] vectors; vectors = VXL_NULLPTR;
-  delete[] values; values = VXL_NULLPTR;
+  delete[] vectors; vectors = nullptr;
+  delete[] values; values = nullptr;
   for (unsigned i=0; i<temp_store.size(); ++i)
     delete temp_store[i];
   temp_store.clear();
@@ -84,8 +84,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
 
   // Clear current vectors.
   if (vectors) {
-    delete[] vectors; vectors = VXL_NULLPTR;
-    delete[] values; values = VXL_NULLPTR;
+    delete[] vectors; vectors = nullptr;
+    delete[] values; values = nullptr;
   }
   nvalues = 0;
 
@@ -217,8 +217,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
 
   // Clear current vectors.
   if (vectors) {
-    delete[] vectors; vectors = VXL_NULLPTR;
-    delete[] values; values = VXL_NULLPTR;
+    delete[] vectors; vectors = nullptr;
+    delete[] values; values = nullptr;
   }
   nvalues = 0;
 

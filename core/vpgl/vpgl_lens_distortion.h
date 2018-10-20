@@ -33,7 +33,7 @@ class vpgl_lens_distortion
   // \param init is an initial guess at the solution for the iterative solver
   // if \p init is NULL then \p point is used as the initial guess
   virtual vgl_homg_point_2d<T> undistort( const vgl_homg_point_2d<T>& point,
-                                          const vgl_homg_point_2d<T>* init=VXL_NULLPTR) const;
+                                          const vgl_homg_point_2d<T>* init=nullptr) const;
 
   //: Set a translation to apply before of after distortion
   // This is needed when distorting an image to translate the resulting image

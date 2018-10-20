@@ -20,7 +20,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
 {
   // check for null pointer or empty strings.
   if (!what || !*what)
-    return VXL_NULLPTR;
+    return nullptr;
 
   // try to open as file first.
   vil1_stream *is = new vil1_stream_fstream(what, how);
@@ -40,7 +40,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = VXL_NULLPTR;
+    is = nullptr;
   }
 
   if (!is) {
@@ -62,7 +62,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = VXL_NULLPTR;
+    is = nullptr;
   }
 
   if (!is) {
@@ -83,7 +83,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
     // this will delete the stream object.
     is->ref();
     is->unref();
-    is = VXL_NULLPTR;
+    is = nullptr;
   }
 
   return is;

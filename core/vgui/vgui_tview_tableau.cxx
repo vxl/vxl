@@ -33,8 +33,8 @@ vgui_tview_tableau::vgui_tview_tableau(vgui_tableau_sptr const& t)
   , spacing(10)
   , icon_height(2)
   , icon_width(2)
-  , active_icon(VXL_NULLPTR)
-  , closest_icon(VXL_NULLPTR)
+  , active_icon(nullptr)
+  , closest_icon(nullptr)
 {
 }
 
@@ -344,7 +344,7 @@ bool vgui_tview_tableau::handle(const vgui_event& e)
     post_redraw();
   }
   else if (e.type==vgui_BUTTON_UP) {
-    active_icon = VXL_NULLPTR;
+    active_icon = nullptr;
     post_redraw();
   }
   else {

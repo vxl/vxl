@@ -69,7 +69,7 @@ vul_timer::vul_timer()
 vul_timer::~vul_timer()
 {
   delete data;
-  data = VXL_NULLPTR;
+  data = nullptr;
 }
 
 //: Sets the reference time to now.

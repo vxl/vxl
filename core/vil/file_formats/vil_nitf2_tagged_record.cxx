@@ -67,7 +67,7 @@ vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& inpu
   }
   else {
     delete record;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -97,7 +97,7 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
     vil_nitf2_tagged_record_definition::find(cetag);
 
   // ... if not, skip ahead to next record ...
-  if (record_definition == VXL_NULLPTR) {
+  if (record_definition == nullptr) {
     VIL_NITF2_LOG(log_info) << "Skipping unknown record " << cetag << ".\n";
     // Return whether I've found end of record
     //input.seekg(ceLength, std::ios::cur);
@@ -202,7 +202,7 @@ VIL_NITF2_TAGGED_RECORD_GET_VALUES(vil_nitf2_date_time);
 
 
 vil_nitf2_tagged_record::vil_nitf2_tagged_record()
-  : m_length_field(VXL_NULLPTR), m_tag_field(VXL_NULLPTR), m_length(0), m_definition(VXL_NULLPTR), m_field_sequence(VXL_NULLPTR)
+  : m_length_field(nullptr), m_tag_field(nullptr), m_length(0), m_definition(nullptr), m_field_sequence(nullptr)
 {}
 
 // TO DO: rewrite this method a sequence of unit tests!
@@ -239,9 +239,9 @@ bool vil_nitf2_tagged_record::test()
                             .value("W", "Wheeled")),
                   true))
    .field("TEST_NEG_COND", "Test False Condition", NITF_STR_BCSA(14), false,
-          VXL_NULLPTR, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
+          nullptr, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 5))
    .field("TEST_POS_COND", "Test True Condition",  NITF_STR_BCSA(14), false,
-          VXL_NULLPTR, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
+          nullptr, new vil_nitf2_field_value_greater_than<int>("MTI_DP", 1))
    .field("CLASS",  "Security Classification",
           NITF_ENUM(1, vil_nitf2_enum_values()
             .value("T", "Top Secret")
@@ -249,20 +249,20 @@ bool vil_nitf2_tagged_record::test()
             .value("C", "Confindential")
             .value("R", "Restricted")
             .value("U", "Unclassified")),
-            true, VXL_NULLPTR, VXL_NULLPTR)
+            true, nullptr, nullptr)
    .field("CODEW", "Code Words",                  NITF_STR_BCSA(15), false,
-          VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "T" ) )
+          nullptr, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "T" ) )
    .field("CWTEST", "Another Code Word Test",     NITF_STR_BCSA(15), false,
-          VXL_NULLPTR, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "U" ) )
+          nullptr, new vil_nitf2_field_value_one_of<std::string>( "CLASS", "U" ) )
    .field("NBANDS", "Number of bands",            NITF_INT(1), false,
-          VXL_NULLPTR, VXL_NULLPTR )
+          nullptr, nullptr )
    .field("XBANDS", "Large number of bands",      NITF_INT(2), false,
-          VXL_NULLPTR, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
+          nullptr, new vil_nitf2_field_value_one_of<int>("NBANDS",0))
    .repeat(new vil_nitf2_choose_field_value<int>("NBANDS", "XBANDS",
              new vil_nitf2_field_value_greater_than<int>("NBANDS", 0)),
              vil_nitf2_field_definitions()
      .field("BAND_LTR", "Band Description",       NITF_CHAR(), true,
-            VXL_NULLPTR)
+            nullptr)
    )
    .field( "EXP_TEST", "Exponential format test",  NITF_EXP(6,1))
    // test nested repeats and functor references to tags within and
@@ -498,7 +498,7 @@ vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(std:
     }
   }
   // tag definition not found
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const

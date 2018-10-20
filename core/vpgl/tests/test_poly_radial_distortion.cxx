@@ -12,7 +12,7 @@ static void test_poly_radial_distortion_constructors()
     bool did_construct = false;
     try
     {
-        vpgl_poly_radial_distortion<double,3> lens (vgl_point_2d<double>(100.0,100.0), VXL_NULLPTR );
+        vpgl_poly_radial_distortion<double,3> lens (vgl_point_2d<double>(100.0,100.0), nullptr );
         did_construct = true;
     }
     catch( std::exception& exception )

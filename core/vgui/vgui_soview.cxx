@@ -81,7 +81,7 @@ vgui_soview* vgui_soview::id_to_object(unsigned id)
   }
 #endif
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -175,7 +175,7 @@ const void * const vgui_soview::msg_unhighlight="unhighlight";
 typedef std::multimap<void *, void *, std::less<void *> > mmap_Pv_Pv;
 static mmap_Pv_Pv &the_map()
 {
-  static mmap_Pv_Pv *ptr = VXL_NULLPTR;
+  static mmap_Pv_Pv *ptr = nullptr;
   if (!ptr)
     ptr = new mmap_Pv_Pv;
   return *ptr;
