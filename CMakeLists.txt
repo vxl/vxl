@@ -12,17 +12,24 @@
 # Root vxl
 #
 #   vxl-maintainers@lists.sf.net
+
+cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
 if( "${CMAKE_CXX_STANDARD}" MATCHES "(11|14|17|20)")
    # If building for modern C++ language standards,
    # require use of newer cmake version
-   cmake_minimum_required(VERSION 3.9.5 FATAL_ERROR)
 else()
-   cmake_minimum_required(VERSION 3.3.0 FATAL_ERROR)
+   set(CMAKE_CXX_STANDARD "11")
 endif()
+if(NOT CMAKE_CXX_STANDARD_REQUIRED)
+  set(CMAKE_CXX_STANDARD_REQUIRED ON)
+endif()
+if(NOT CMAKE_CXX_EXTENSIONS)
+  set(CMAKE_CXX_EXTENSIONS OFF)
+endif()
+
 # Set policies consistent with newer versions of cmake
 # to ease integration with projects that require newer
 # cmake versions.
-
 foreach(p
     ## Only policies introduced after the cmake_minimum_required
     ## version need to explicitly be set to NEW.
@@ -32,24 +39,11 @@ foreach(p
     ##----- Policies Introduced by CMake 3.10
     CMP0071  #: Let AUTOMOC and AUTOUIC process GENERATED files.
     CMP0070  #: Define file(GENERATE) behavior for relative paths.
-    ##----- Policies Introduced by CMake 3.9
-    CMP0069  #: INTERPROCEDURAL_OPTIMIZATION is enforced when enabled.
-    CMP0068  #: RPATH settings on macOS do not affect install_name.
-    ##----- Policies Introduced by CMake 3.8
-    CMP0067  #: Honor language standard in try_compile() source-file signature.
-    ##----- Policies Introduced by CMake 3.7
-    CMP0066  #: Honor per-config flags in try_compile() source-file signature.
-    ##----- Policies Introduced by CMake 3.4
-    CMP0065  #: Do not add flags to export symbols from executables without the ENABLE_EXPORTS target property.
-    CMP0064  #: Support new TEST if() operator.
-    ##----- Policies Introduced by CMake 3.4
-    CMP0074  #:.`find_package()`` uses ``<PackageName>_ROOT`` variables.
     )
   if(POLICY ${p})
     cmake_policy(SET ${p} NEW)
   endif()
 endforeach()
-
 
 project(vxl)
 
@@ -78,7 +72,6 @@ if(NOT COMMAND SETIFEMPTY)
     endif()
   endmacro()
 endif()
-
 
 #-----------------------------------------------------------------------------
 SETIFEMPTY(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
