@@ -26,7 +26,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
   for (unsigned j=0; j<= ny; ++j)
     for (unsigned i=0; i<= nx; ++i)
       pts.push_back(vgl_point_2d<double>(i*dx,j*dy));
-    
+
   points.set_points(pts);
 
   curves.resize(0);
@@ -34,7 +34,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
   // Set up vertical lines
   for (unsigned i=0;i<=nx;++i)
     curves.push_back(msm_make_curve(i,ny+1,ny+1));
-  
+
   // Set up horizontal lines
   for (unsigned j=0;j<=ny;++j)
     curves.push_back(msm_make_curve(j*(nx+1),1,nx+1));
@@ -43,7 +43,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
 //: Generate points and curves to display a grid
 //  Grid contains nx x ny squares, each of size dx x dy.
 //  Draw in n_per_seg points along each line
-//  Creates (nx+1)*(ny+1)*n_per_seg^2 points and 2+nx+ny curves 
+//  Creates (nx+1)*(ny+1)*n_per_seg^2 points and 2+nx+ny curves
 //  (describing the horizontal and vertical lines)
 void msm_make_grid(msm_points& points, msm_curves& curves,
                    unsigned nx, double dx, unsigned ny, double dy, unsigned n_per_seg)
@@ -66,7 +66,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
   // Set up vertical lines
   for (unsigned i=0;i<=nx;++i)
     curves.push_back(msm_make_curve(i*ns,ny1,ny1));
-  
+
   // Set up horizontal lines
   for (unsigned j=0;j<=ny;++j)
     curves.push_back(msm_make_curve(j*ns*nx1,1,nx1));

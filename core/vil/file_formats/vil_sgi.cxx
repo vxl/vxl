@@ -133,7 +133,7 @@ bool vil_sgi_image::read_header()
     return false;
   }
 
-  // RLE should be added in - FIXME 
+  // RLE should be added in - FIXME
   if ( hdr.storage == 1 )
   {
     where << "The RLE storage format is not yet supported for SGI images\n";

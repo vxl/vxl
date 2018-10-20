@@ -827,7 +827,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
       //      |b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1|
       //row r |    pix 0     ||    pix1      ||  pix2 ...    ||  pix (ni-1)
       //  where np is number of samples (planes) per pixel, ni pixels per row
-      // 
+      //
       for(size_t r = 0; r< rows_per_strip; ++r){
         size_t rb_off = r*bytes_per_row, rs_off =r*bytes_per_row_per_sample;
         for(size_t i = 0; i<ni; ++i){
@@ -842,9 +842,9 @@ vil_tiff_image::get_block( unsigned block_index_i,
           }
         }
       }
-      // delete the chached strips 
+      // delete the chached strips
       for(size_t p = 0; p<nplanes; ++p)
-        delete [] strip_plane_data[p]; 
+        delete [] strip_plane_data[p];
 
       //might need to correct an endian mismatch
       if (h_->need_byte_swap())
@@ -852,7 +852,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
       // transfer the buffer to the block view
       return this->fill_block_from_strip(buf);
-    } 
+    }
   return view;
 }
 
