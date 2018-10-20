@@ -39,6 +39,10 @@ VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long);
 #if VCL_HAS_LONG_LONG
 VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long long);
 #endif
+//3.9.1 Fundamental types [basic.fundamental]
+//Plain char, signed char, and unsigned char are three distinct types
+// We must explicitly instantiate the char type without signed/unsigned prefix
+VCL_DEFINE_SPECIALIZATION_MACRO(char);
 #undef VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED
 #undef VCL_DEFINE_SPECIALIZATION_MACRO
 
