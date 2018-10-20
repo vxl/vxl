@@ -20,7 +20,7 @@
 
 lsmrDense::lsmrDense()
 {
-  this->A = VXL_NULLPTR;
+  this->A = nullptr;
 }
 
 

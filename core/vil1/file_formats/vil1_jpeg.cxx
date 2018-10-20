@@ -53,7 +53,7 @@ char const* vil1_jpeg_file_format::tag() const
 //:
 vil1_image_impl *vil1_jpeg_file_format::make_input_image(vil1_stream *vs)
 {
-  return vil1_jpeg_file_probe(vs) ? new vil1_jpeg_generic_image(vs) : VXL_NULLPTR;
+  return vil1_jpeg_file_probe(vs) ? new vil1_jpeg_generic_image(vs) : nullptr;
 }
 
 vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
@@ -65,7 +65,7 @@ vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
                                                           vil1_component_format format)
 {
   if (format != VIL1_COMPONENT_FORMAT_UNSIGNED_INT)
-    return VXL_NULLPTR;
+    return nullptr;
   return new vil1_jpeg_generic_image(vs, planes, width, height, components, bits_per_component, format);
 }
 
@@ -74,7 +74,7 @@ vil1_image_impl *vil1_jpeg_file_format::make_output_image(vil1_stream *vs,
 // class vil1_jpeg_generic_image
 
 vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s)
-  : jc(VXL_NULLPTR)
+  : jc(nullptr)
   , jd(new vil1_jpeg_decompressor(s))
   , stream(s)
 {
@@ -100,7 +100,7 @@ vil1_jpeg_generic_image::vil1_jpeg_generic_image(vil1_stream *s,
                                                  int bits_per_component,
                                                  vil1_component_format format)
   : jc(new vil1_jpeg_compressor(s))
-  , jd(VXL_NULLPTR)
+  , jd(nullptr)
   , stream(s)
 {
   stream->ref();
@@ -128,12 +128,12 @@ vil1_jpeg_generic_image::~vil1_jpeg_generic_image()
   // free the vil1_jpeg_stream_source_mgr allocated in vil1_jpeg_stream_xxx_set()
   if (jd)
     delete jd;
-  jd = VXL_NULLPTR;
+  jd = nullptr;
   if (jc)
     delete jc;
-  jc = VXL_NULLPTR;
+  jc = nullptr;
   stream->unref();
-  stream = VXL_NULLPTR;
+  stream = nullptr;
 }
 
 //--------------------------------------------------------------------------------

@@ -47,7 +47,7 @@ T* vbl_sparse_array_base<T, Index>::get_addr(Index i)
   typename Map::iterator p = storage_.find(i);
 
   if (p == storage_.end())
-    return VXL_NULLPTR;
+    return nullptr;
 
   return &(*p).second;
 }

@@ -66,7 +66,7 @@ void vgui_tview_launcher_tableau::go(vgui_adaptor* a)
   vgui_dialog tview_dialog("Tableau hierarchy");
   tview_dialog.inline_tableau(viewer, 300,300);
   tview_dialog.set_ok_button("close");
-  tview_dialog.set_cancel_button(VXL_NULLPTR);
+  tview_dialog.set_cancel_button(nullptr);
   tview_dialog.ask();
   this->post_redraw();
 }

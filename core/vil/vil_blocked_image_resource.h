@@ -71,7 +71,7 @@ class vil_blocked_image_resource : public vil_image_resource
                            std::vector< std::vector< vil_image_view_base_sptr > > const& blocks );
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const = 0;
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const = 0;
 
  protected:
   //Internal functions

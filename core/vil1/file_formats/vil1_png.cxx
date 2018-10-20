@@ -44,11 +44,11 @@ vil1_image_impl* vil1_png_file_format::make_input_image(vil1_stream* is)
   png_byte sig_buf [SIG_CHECK_SIZE];
   if (is->read(sig_buf, SIG_CHECK_SIZE) != SIG_CHECK_SIZE) {
     problem("Initial header fread");
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   if (png_sig_cmp (sig_buf, (png_size_t) 0, (png_size_t) SIG_CHECK_SIZE) != 0)
-    return VXL_NULLPTR;
+    return nullptr;
 
   return new vil1_png_generic_image(is);
 }
@@ -131,7 +131,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   }
 
   vil1_jmpbuf_wrapper  *jmpbuf_ptr = (vil1_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
-  if (jmpbuf_ptr == VXL_NULLPTR) {         // we are completely hosed now
+  if (jmpbuf_ptr == nullptr) {         // we are completely hosed now
     std::cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     std::exit(99);
   }
@@ -151,18 +151,18 @@ struct vil1_png_structures
   vil1_png_structures(bool reading)
   {
     reading_ = reading;
-    png_ptr = VXL_NULLPTR;
-    info_ptr = VXL_NULLPTR;
-    rows = VXL_NULLPTR;
+    png_ptr = nullptr;
+    info_ptr = nullptr;
+    rows = nullptr;
     channels = 0;
     ok = false;
 
     png_setjmp_on(return);
 
     if (reading)
-      png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, VXL_NULLPTR);
+      png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, nullptr);
     else
-      png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, VXL_NULLPTR);
+      png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, nullptr);
 
     if (!png_ptr) {
       problem("cannot allocate LIBPNG structure");
@@ -184,7 +184,7 @@ struct vil1_png_structures
   bool alloc_image()
   {
     rows = new png_byte* [png_get_image_height(png_ptr, info_ptr)];
-    if (rows == VXL_NULLPTR)
+    if (rows == nullptr)
       return ok = problem("couldn't allocate space for image");
 
     unsigned long linesize;
@@ -220,7 +220,7 @@ struct vil1_png_structures
     if (reading_) {
       if (!rows) {
         if (alloc_image()) {
-          png_setjmp_on(return VXL_NULLPTR);
+          png_setjmp_on(return nullptr);
           png_read_image (png_ptr, rows);
           png_read_end (png_ptr, info_ptr);
           png_setjmp_off();
@@ -228,7 +228,7 @@ struct vil1_png_structures
       }
     }
     else {
-      assert(rows != VXL_NULLPTR);
+      assert(rows != nullptr);
     }
 
     return rows;
@@ -239,7 +239,7 @@ struct vil1_png_structures
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
-      png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)VXL_NULLPTR);
+      png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)nullptr);
     }
     else {
       // Writing - save the rows

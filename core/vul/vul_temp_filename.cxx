@@ -42,7 +42,7 @@
     // randomness is that crucial.
     int init_randomizer()
     {
-      std::srand( std::time( VXL_NULLPTR ) );
+      std::srand( std::time( nullptr ) );
       return 0;
     }
     static int random_seed_trigger = init_randomizer();

@@ -90,7 +90,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const& lvcs_sptr)
 //: Binary load lvcs sptr from stream.
 void vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr &lvcs_sptr)
 {
-  vpgl_lvcs* lvcs = VXL_NULLPTR;
+  vpgl_lvcs* lvcs = nullptr;
   vsl_b_read(is, *lvcs);
   lvcs_sptr = lvcs;
 }

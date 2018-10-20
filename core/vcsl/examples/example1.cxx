@@ -45,12 +45,12 @@ int main()
   // Graph and coordinate systems instantiations
   std::cout<<"Creation of graph..."<< std::flush;
   vcsl_graph_sptr graph=new vcsl_graph;
-  assert(graph.ptr()!=VXL_NULLPTR);
+  assert(graph.ptr()!=nullptr);
   std::cout<<" done\n";
 
   std::cout<<"Creation of acs..."<< std::flush;
   vcsl_spatial_sptr acs=new vcsl_cartesian_3d;
-  assert(acs.ptr()!=VXL_NULLPTR);
+  assert(acs.ptr()!=nullptr);
   std::cout<<acs.ptr()<<" done\n"
           <<"Adding acs to graph..."<< std::flush;
   acs->set_graph(graph);
@@ -58,7 +58,7 @@ int main()
 
   std::cout<<"Creation of cs0..."<< std::flush;
   vcsl_spatial_sptr cs0=new vcsl_cartesian_3d;
-  assert(cs0.ptr()!=VXL_NULLPTR);
+  assert(cs0.ptr()!=nullptr);
   std::cout<<cs0.ptr()<<" done\n"
           <<"Adding cs0 to graph..."<< std::flush;
   cs0->set_graph(graph);
@@ -66,7 +66,7 @@ int main()
 
   std::cout<<"Creation of lcs..."<< std::flush;
   vcsl_spatial_sptr lcs=new vcsl_cartesian_3d;
-  assert(lcs.ptr()!=VXL_NULLPTR);
+  assert(lcs.ptr()!=nullptr);
   std::cout<<lcs.ptr()<<" done\n"
           <<"Adding lcs to graph..."<< std::flush;
   lcs->set_graph(graph);
@@ -75,7 +75,7 @@ int main()
   // Static transformation between acs and cs0
   std::cout<<"Creation of the static translation..."<< std::flush;
   vcsl_translation_sptr static_t=new vcsl_translation;
-  assert(static_t.ptr()!=VXL_NULLPTR);
+  assert(static_t.ptr()!=nullptr);
   std::cout<<static_t.ptr()<<" done\n"
           <<"Creation of v0..."<< std::flush;
   vnl_vector<double> v0(3);
@@ -102,7 +102,7 @@ int main()
   // 1. translation
   std::cout<<"Creation of the dynamic translation..."<< std::flush;
   vcsl_translation_sptr dynamic_t=new vcsl_translation;
-  assert(dynamic_t.ptr()!=VXL_NULLPTR);
+  assert(dynamic_t.ptr()!=nullptr);
   std::cout<<dynamic_t.ptr()<<" done\n";
 
   std::cout<<"Creation of t_beat..."<< std::flush;
@@ -164,7 +164,7 @@ int main()
   // 2. displacement
   std::cout<<"Creation of the dynamic displacement..."<< std::flush;
   vcsl_displacement_sptr dynamic_d=new vcsl_displacement;
-  assert(dynamic_d.ptr()!=VXL_NULLPTR);
+  assert(dynamic_d.ptr()!=nullptr);
   std::cout<<dynamic_d.ptr()<<" done\n";
 
   std::cout<<"Creation of d_beat..."<< std::flush;

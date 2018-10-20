@@ -29,7 +29,7 @@ vul_awk::vul_awk(std::istream& s, ModeFlags mode):
 {
   done_ = false;
   line_number_ = 0;
-  split_line_ = VXL_NULLPTR;
+  split_line_ = nullptr;
 
   next();
 }

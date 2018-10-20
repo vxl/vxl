@@ -48,7 +48,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: Assumes geographic coordinates are global
   static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
                               vpgl_geo_camera*& camera){
-    vpgl_lvcs_sptr lvcs = VXL_NULLPTR;
+    vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(geotiff_img, lvcs, camera);
   }
 
@@ -65,7 +65,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: init without lvcs. Assumes geographic coordinates are global
   static bool init_geo_camera(std::string tfw_name,  int utm_zone, unsigned northing, vpgl_geo_camera*& camera){
-    vpgl_lvcs_sptr lvcs = VXL_NULLPTR;
+    vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
   }
   ~vpgl_geo_camera() {}

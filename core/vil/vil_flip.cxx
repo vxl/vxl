@@ -28,9 +28,9 @@ vil_flip_lr_image_resource::vil_flip_lr_image_resource(vil_image_resource_sptr c
 vil_image_view_base_sptr vil_flip_lr_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                    unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
+  if (i0 + ni > src_->ni()) return nullptr;
   vil_image_view_base_sptr vs = src_->get_copy_view(src_->ni()- i0-ni, ni, j0, nj);
-  if (!vs) return VXL_NULLPTR;
+  if (!vs) return nullptr;
 
   switch (vs->pixel_format())
   {
@@ -54,16 +54,16 @@ vil_image_view_base_sptr vil_flip_lr_image_resource::get_copy_view(unsigned i0, 
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
 vil_image_view_base_sptr vil_flip_lr_image_resource::get_view(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
+  if (i0 + ni > src_->ni()) return nullptr;
   vil_image_view_base_sptr vs = src_->get_view(src_->ni()- i0-ni, ni, j0, nj);
-  if (!vs) return VXL_NULLPTR;
+  if (!vs) return nullptr;
 
   switch (vs->pixel_format())
   {
@@ -87,7 +87,7 @@ vil_image_view_base_sptr vil_flip_lr_image_resource::get_view(unsigned i0, unsig
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -136,9 +136,9 @@ vil_flip_ud_image_resource::vil_flip_ud_image_resource(vil_image_resource_sptr c
 vil_image_view_base_sptr vil_flip_ud_image_resource::get_copy_view(unsigned i0, unsigned ni,
                                                                    unsigned j0, unsigned nj) const
 {
-  if (j0 + nj > src_->nj()) return VXL_NULLPTR;
+  if (j0 + nj > src_->nj()) return nullptr;
   vil_image_view_base_sptr vs = src_->get_copy_view(i0, ni, src_->nj()- j0-nj, nj);
-  if (!vs) return VXL_NULLPTR;
+  if (!vs) return nullptr;
 
   switch (vs->pixel_format())
   {
@@ -162,16 +162,16 @@ vil_image_view_base_sptr vil_flip_ud_image_resource::get_copy_view(unsigned i0, 
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
 vil_image_view_base_sptr vil_flip_ud_image_resource::get_view(unsigned i0, unsigned ni,
                                                               unsigned j0, unsigned nj) const
 {
-  if (i0 + ni > src_->ni()) return VXL_NULLPTR;
+  if (i0 + ni > src_->ni()) return nullptr;
   vil_image_view_base_sptr vs = src_->get_view(i0, ni, src_->nj()-j0-nj, nj);
-  if (!vs) return VXL_NULLPTR;
+  if (!vs) return nullptr;
 
   switch (vs->pixel_format())
   {
@@ -195,7 +195,7 @@ vil_image_view_base_sptr vil_flip_ud_image_resource::get_view(unsigned i0, unsig
     macro(VIL_PIXEL_FORMAT_COMPLEX_DOUBLE , std::complex<double>)
 #undef macro
   default:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

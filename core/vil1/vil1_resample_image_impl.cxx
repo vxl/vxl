@@ -48,7 +48,7 @@ bool vil1_resample_image_impl::get_property(char const *, void *) const
 
 bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int h) const
 {
-  assert(buf!=VXL_NULLPTR);
+  assert(buf!=nullptr);
 #ifdef DEBUG
   std::cerr << "get_section() x0 y0 w h = " << x0 << ' ' << y0 << ' ' << w << ' ' << h << '\n';
 #endif
@@ -68,11 +68,11 @@ bool vil1_resample_image_impl::get_section(void *buf, int x0, int y0, int w, int
   switch ( vil1_pixel_format(base) ) {
   case VIL1_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                               (vxl_byte*)buf, (unsigned*)VXL_NULLPTR,
+                               (vxl_byte*)buf, (unsigned*)nullptr,
                                x0, y0, w, h);
   case VIL1_RGB_BYTE:
     return vil1_resample_image(base, new_width, new_height,
-                               (vil1_rgb<vxl_byte>*)buf, (vil1_rgb<int>*)VXL_NULLPTR,
+                               (vil1_rgb<vxl_byte>*)buf, (vil1_rgb<int>*)nullptr,
                                x0, y0, w, h);
 
   default:

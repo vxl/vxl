@@ -36,7 +36,7 @@ vbl_disjoint_sets::vbl_disjoint_sets(const vbl_disjoint_sets & s)
 
   // Update parent pointers to point to newly created nodes rather than the old ones
   for (int i = 0; i < num_elements_; ++i)
-    if (nodes_[i].parent != VXL_NULLPTR)
+    if (nodes_[i].parent != nullptr)
       nodes_[i].parent = &nodes_[s.nodes_[i].parent->index];
 }
 
@@ -55,7 +55,7 @@ int vbl_disjoint_sets::find_set(int element_id) const
 
   // Find the root element that represents the set which `element_id` belongs to
   curnode = const_cast<node*>(nodes_.begin() + element_id);
-  while (curnode->parent != VXL_NULLPTR)
+  while (curnode->parent != nullptr)
     curnode = curnode->parent;
   node* root = curnode;
 

@@ -34,7 +34,7 @@ vidl_frame::unref()
 vidl_memory_chunk_frame::
 vidl_memory_chunk_frame(const vil_image_view_base& image,
                         vidl_pixel_format fmt)
-  : vidl_frame(), memory_(VXL_NULLPTR)
+  : vidl_frame(), memory_(nullptr)
 {
   ni_ = image.ni();
   nj_ = image.nj();
@@ -109,7 +109,7 @@ vidl_memory_chunk_frame(const vil_image_view_base& image,
     format_ = VIDL_PIXEL_FORMAT_UNKNOWN;
 
   if (format_ == VIDL_PIXEL_FORMAT_UNKNOWN)
-    memory_ = VXL_NULLPTR;
+    memory_ = nullptr;
 }
 
 

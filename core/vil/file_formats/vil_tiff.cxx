@@ -135,7 +135,7 @@ static int vil_tiff_closeproc(thandle_t h)
 {
   tif_stream_structures* p = (tif_stream_structures*)h;
   p->vs->unref();
-  p->vs = VXL_NULLPTR;
+  p->vs = nullptr;
   delete p;
   return 0;
 }
@@ -185,7 +185,7 @@ static TIFF* open_tiff(tif_stream_structures* tss, const char* mode)
 #endif // HAS_GEOTIFF
 
   if (!tiff)
-    return VXL_NULLPTR;
+    return nullptr;
   else
     return tiff;
 }
@@ -193,13 +193,13 @@ static TIFF* open_tiff(tif_stream_structures* tss, const char* mode)
 vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 {
   if (!vil_tiff_file_format_probe(is))
-    return VXL_NULLPTR;
+    return nullptr;
   tif_stream_structures* tss = new tif_stream_structures(is);
 
   tss->tif = open_tiff(tss, "rC");
 
   if (!tss->tif)
-    return VXL_NULLPTR;
+    return nullptr;
   vil_tiff_header* h = new vil_tiff_header(tss->tif);
 
   if (!h->format_supported)
@@ -210,7 +210,7 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
     TIFFClose(tss->tif);
 #endif // HAS_GEOTIFF
     delete h;
-    return VXL_NULLPTR;
+    return nullptr;
   }
   unsigned n = nimg(tss->tif);
   tif_smart_ptr tif_sptr = new tif_ref_cnt(tss->tif);
@@ -222,10 +222,10 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
 {
   bool trace = false;
   if (vil_image_list::vil_is_directory(file))
-    return VXL_NULLPTR;
+    return nullptr;
   TIFF* in  = TIFFOpen(file, "rC");
   if (!in)
-    return VXL_NULLPTR;
+    return nullptr;
   bool open_for_reading = true;
   if (trace) // find test failure
     std::cerr << "make_input_pyramid_image::opening multi-image tiff pyramid resource\n";
@@ -233,7 +233,7 @@ vil_tiff_file_format::make_input_pyramid_image(char const* file)
   vil_pyramid_image_resource_sptr pyr =
     new vil_tiff_pyramid_resource(tif_sptr, open_for_reading);
   if (pyr->nlevels()<=1)
-    return VXL_NULLPTR;
+    return nullptr;
   else
     return pyr;
 }
@@ -309,7 +309,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
   if (size_block_i%16!=0||size_block_j%16!=0)
   {
     std::cerr << "In vil_tiff_file_format - Block dimensions must be a multiple of 16\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   tif_stream_structures* tss = new tif_stream_structures(vs);
@@ -321,7 +321,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
     mode += '8';   // enable bigtiff
   tss->tif = open_tiff(tss, mode.c_str());
   if (!tss->tif)
-    return VXL_NULLPTR;
+    return nullptr;
 
   //size_block_i==0 && size_block_j==0 specifies strips of one scanline
   //this constructor for h defines that the resource is to
@@ -336,7 +336,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
     TIFFClose(tss->tif);
 #endif // HAS_GEOTIFF
     delete h;
-    return VXL_NULLPTR;
+    return nullptr;
   }
   tif_smart_ptr tsptr = new tif_ref_cnt(tss->tif);
   return new vil_tiff_image(tsptr, h);
@@ -358,7 +358,7 @@ vil_tiff_file_format::make_pyramid_output_image(char const* filename)
 {
   TIFF* out  = TIFFOpen(filename, "w");
   if (!out)
-    return VXL_NULLPTR;
+    return nullptr;
   bool open_for_reading = false;
   tif_smart_ptr tsptr = new tif_ref_cnt(out);
   return new vil_tiff_pyramid_resource(tsptr, open_for_reading);
@@ -440,7 +440,7 @@ vil_geotiff_header* vil_tiff_image::get_geotiff_header()
   vil_geotiff_header* gtif = new vil_geotiff_header(t_.tif());
   if (gtif->gtif_number_of_keys() == 0) {
     delete gtif;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return gtif;
@@ -667,7 +667,7 @@ view_from_buffer(vil_pixel_format& fmt, vil_memory_chunk_sptr const& buf,
                  unsigned samples_per_block, unsigned bits_per_sample
                 ) const
 {
-  vil_image_view_base_sptr view = VXL_NULLPTR;
+  vil_image_view_base_sptr view = nullptr;
   vil_memory_chunk_sptr  buf_out;
   unsigned spp = h_->samples_per_pixel.val;
   switch (fmt)
@@ -719,7 +719,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
   if (nimages_>1)
   {
     if (TIFFSetDirectory(t_.tif(), index_)<=0)
-      return VXL_NULLPTR;
+      return nullptr;
     vil_tiff_header* h = new vil_tiff_header(t_.tif());
     //Cast away const
     vil_tiff_image* ti = (vil_tiff_image*)this;
@@ -727,7 +727,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
     ti->h_=h;
   }
 
-  vil_image_view_base_sptr view = VXL_NULLPTR;
+  vil_image_view_base_sptr view = nullptr;
 
   //allocate input memory
   // input memory
@@ -862,7 +862,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 vil_image_view_base_sptr vil_tiff_image::
 fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 {
-  vil_image_view_base_sptr view = VXL_NULLPTR;
+  vil_image_view_base_sptr view = nullptr;
 
   //the size of the buffer when expanded to byte representation
   unsigned samples_per_block = this->samples_per_block();
@@ -882,7 +882,7 @@ fill_block_from_tile(vil_memory_chunk_sptr const & buf) const
 // may be truncated.
 vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_sptr const & buf) const
 {
-  vil_image_view_base_sptr view = VXL_NULLPTR;
+  vil_image_view_base_sptr view = nullptr;
   vxl_uint_32 tl = size_block_j();
 
   unsigned bpl = h_->bytes_per_line();
@@ -1273,7 +1273,7 @@ tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
 {
   unsigned nlevels = this->nlevels();
   if (nlevels == 0)
-    return VXL_NULLPTR;
+    return nullptr;
   if (nlevels == 1)
     return levels_[0];
   float mind = 1.0e08f;//huge scale;
@@ -1294,7 +1294,7 @@ tiff_pyramid_level* vil_tiff_pyramid_resource::closest(const float scale) const
 }
 
 vil_tiff_pyramid_resource::vil_tiff_pyramid_resource()
-  : read_(true), t_(VXL_NULLPTR)
+  : read_(true), t_(nullptr)
 {
 }
 
@@ -1385,7 +1385,7 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   // Get the closest scale
   tiff_pyramid_level* pl  = this->closest(scale);
   if (!pl)
-    return VXL_NULLPTR;
+    return nullptr;
   actual_scale = pl->scale_;
   return this->get_copy_view(i0, n_i, j0, n_j, pl->cur_level_);
 }
@@ -1426,12 +1426,12 @@ vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned l
 {
   unsigned nl = this->nlevels();
   if (level>=nl)
-    return VXL_NULLPTR;
+    return nullptr;
   // setup the image header for the level
   unsigned header_index = levels_[level]->header_index_;
   // The status value should be checked here
   if (TIFFSetDirectory(t_.tif(), header_index)<=0)
-    return VXL_NULLPTR;
+    return nullptr;
   vil_tiff_header* h = new vil_tiff_header(t_.tif());
   vil_tiff_image* i = new vil_tiff_image(t_, h, nl);
   i->set_index(header_index);

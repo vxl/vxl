@@ -24,7 +24,7 @@ public:
 
   lsqrVNL()
     {
-    this->ls_ = VXL_NULLPTR;
+    this->ls_ = nullptr;
     }
 
   virtual ~lsqrVNL()

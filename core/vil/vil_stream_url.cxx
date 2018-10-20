@@ -117,7 +117,7 @@ static std::string encode_base64(const std::string& in)
 
 
 vil_stream_url::vil_stream_url(char const *url)
-  : u_(VXL_NULLPTR)
+  : u_(nullptr)
 {
   if (std::strncmp(url, "http://", 7) != 0)
     return; // doesn't look like a URL to me....
@@ -325,6 +325,6 @@ vil_stream_url::~vil_stream_url()
 {
   if (u_) {
     u_->unref();
-    u_ = VXL_NULLPTR;
+    u_ = nullptr;
   }
 }

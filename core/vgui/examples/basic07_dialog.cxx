@@ -89,7 +89,7 @@ static void test_dialog2()
 
   std::string button_txt("close");
   mydialog.set_ok_button(button_txt.c_str());
-  mydialog.set_cancel_button(VXL_NULLPTR);
+  mydialog.set_cancel_button(nullptr);
   mydialog.ask();
 }
 

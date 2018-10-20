@@ -36,7 +36,7 @@
 template<class T>
 vil_image_view<T>::vil_image_view(unsigned n_i, unsigned n_j, unsigned n_planes,
                                   unsigned n_interleaved_planes)
-: top_left_(VXL_NULLPTR), istep_(n_interleaved_planes)
+: top_left_(nullptr), istep_(n_interleaved_planes)
 {
   assert(n_planes==1 || n_interleaved_planes==1);
   assert(vil_pixel_format_of(T()) == VIL_PIXEL_FORMAT_UNKNOWN ||
@@ -94,7 +94,7 @@ vil_image_view<T>::vil_image_view(vil_memory_chunk_sptr const& mem_chunk,
 template<class T>
 vil_image_view<T>::vil_image_view(const vil_image_view<T>& that)
 : vil_image_view_base(that.ni(),that.nj(),that.nplanes()),
-  top_left_(VXL_NULLPTR), istep_(0), jstep_(0), planestep_(0), ptr_(VXL_NULLPTR)
+  top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
 {
   operator=( static_cast<vil_image_view_base const&>(that) );
 }
@@ -104,7 +104,7 @@ vil_image_view<T>::vil_image_view(const vil_image_view<T>& that)
 // types are incompatible) it will set itself to empty.
 template<class T>
 vil_image_view<T>::vil_image_view(const vil_image_view_base& that):
-top_left_(VXL_NULLPTR), istep_(0), jstep_(0), planestep_(0), ptr_(VXL_NULLPTR)
+top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
 {
   operator=(that);
 }
@@ -114,7 +114,7 @@ top_left_(VXL_NULLPTR), istep_(0), jstep_(0), planestep_(0), ptr_(VXL_NULLPTR)
 // types are incompatible) it will set itself to empty.
 template <class T>
 vil_image_view<T>::vil_image_view(const vil_image_view_base_sptr& that):
-top_left_(VXL_NULLPTR), istep_(0), jstep_(0), planestep_(0), ptr_(VXL_NULLPTR)
+top_left_(nullptr), istep_(0), jstep_(0), planestep_(0), ptr_(nullptr)
 {
   operator=(that);
 }
@@ -585,7 +585,7 @@ const vil_image_view<T> & vil_image_view<T>::operator= (const vil_image_view_bas
 
   vil_exception_warning(vil_exception_pixel_formats_incompatible(
     rhs.pixel_format(), this->pixel_format(), "vil_image_view::operator =") );
-  set_to_memory(VXL_NULLPTR, 0, 0, 0, 0, 0, 0);
+  set_to_memory(nullptr, 0, 0, 0, 0, 0, 0);
   return *this;
 }
 
@@ -878,7 +878,7 @@ template <class T> std::string vil_image_view_type_name(T*);
 template <class T>
 std::string vil_image_view<T>::is_a() const
 {
-  return vil_image_view_type_name(static_cast<T*>(VXL_NULLPTR));
+  return vil_image_view_type_name(static_cast<T*>(nullptr));
 }
 
 #define VIL_IMAGE_VIEW_INSTANTIATE(T) \

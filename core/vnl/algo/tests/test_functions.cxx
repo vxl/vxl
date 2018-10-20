@@ -98,7 +98,7 @@ int test_functions()
 
   // rand() is not always a good random number generator,
   // so use the following congruential random number generator - PVr
-  static unsigned long sample_seed = (unsigned long)std::time(VXL_NULLPTR);
+  static unsigned long sample_seed = (unsigned long)std::time(nullptr);
 
   double hist1[20];
   for (int i=0; i<20; i++)

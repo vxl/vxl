@@ -7,7 +7,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
                                    unsigned w, unsigned h,
                                    int posx, int posy)
   : vgui_window()
-  , glutwin(VXL_NULLPTR)
+  , glutwin(nullptr)
   , pending_reshape(false)
   , pending_reposition(false)
 {
@@ -35,7 +35,7 @@ vgui_glut_window::vgui_glut_window(char const *title,
 vgui_glut_window::~vgui_glut_window()
 {
   delete glutwin;
-  glutwin = VXL_NULLPTR;
+  glutwin = nullptr;
 }
 
 void vgui_glut_window::show()

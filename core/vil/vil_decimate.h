@@ -67,7 +67,7 @@ class vil_decimate_image_resource : public vil_image_resource
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const
   {
     return src_->get_property(tag, property_value);
   }

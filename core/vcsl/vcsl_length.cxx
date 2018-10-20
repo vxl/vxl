@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 bool vcsl_length::compatible_unit(vcsl_unit_sptr const& new_unit) const
 {
-  return new_unit->cast_to_length_unit()!=VXL_NULLPTR;
+  return new_unit->cast_to_length_unit()!=nullptr;
 }
 
 //---------------------------------------------------------------------------

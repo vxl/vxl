@@ -293,17 +293,17 @@ static void test_blocked_image_resource()
   // set sptr's to 0 so the underlying objects are destructed and the
   // temporary image files are closed.  Otherwise the unlink below will
   // fail.
-  ir = VXL_NULLPTR;
-  bir = VXL_NULLPTR;
-  lir = VXL_NULLPTR;
-  bir2 = VXL_NULLPTR;
-  bif = VXL_NULLPTR;
-  dir = VXL_NULLPTR;
-  dbif = VXL_NULLPTR;
-  flbir = VXL_NULLPTR;
-  fabir = VXL_NULLPTR;
-  cflbir = VXL_NULLPTR;
-  cfabir = VXL_NULLPTR;
+  ir = nullptr;
+  bir = nullptr;
+  lir = nullptr;
+  bir2 = nullptr;
+  bif = nullptr;
+  dir = nullptr;
+  dbif = nullptr;
+  flbir = nullptr;
+  fabir = nullptr;
+  cflbir = nullptr;
+  cfabir = nullptr;
   // delete temporary files
   vpl_unlink(path.c_str());
   vpl_unlink(path2.c_str());

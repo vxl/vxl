@@ -94,8 +94,8 @@ struct vul_file
 
   //: Return basename
   // Only strip specified suffix.
-  static std::string basename(char const* filename, char const* suffix = VXL_NULLPTR);
-  static std::string basename(std::string const& filename, char const* suffix = VXL_NULLPTR) {
+  static std::string basename(char const* filename, char const* suffix = nullptr);
+  static std::string basename(std::string const& filename, char const* suffix = nullptr) {
     return basename(filename.c_str(), suffix );
   }
 

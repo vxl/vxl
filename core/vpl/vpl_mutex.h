@@ -19,7 +19,7 @@
 # include <pthread.h>
 struct VPL_EXPORT vpl_mutex
 {
-  vpl_mutex() { pthread_mutex_init(&mutex_, VXL_NULLPTR); }
+  vpl_mutex() { pthread_mutex_init(&mutex_, nullptr); }
 
   void lock() { pthread_mutex_lock(&mutex_); }
 

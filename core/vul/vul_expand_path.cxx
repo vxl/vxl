@@ -214,7 +214,7 @@ std::string vul_expand_path_internal(std::string path)
   // expand ./ or just .
   if ((path.size()>=2 && path[0] == '.' && path[1] == '/') || path == ".") {
     char cwd[4096];
-    if( getcwd(cwd, sizeof cwd) == VXL_NULLPTR ) {
+    if( getcwd(cwd, sizeof cwd) == nullptr ) {
       path = "<error: current working directory path > 4096 characters>";
     } else {
       path = std::string(cwd) + path.substr(1);

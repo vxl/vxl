@@ -26,7 +26,7 @@ vil1_image_impl* vil1_gen_file_format::make_input_image(vil1_stream* vs)
   for (;;) {
     char buf;
     if (vs->read(&buf, 1L) == 0L)
-      return VXL_NULLPTR;
+      return nullptr;
     if (buf == 0)
       break;
     s += buf;
@@ -39,7 +39,7 @@ vil1_image_impl* vil1_gen_file_format::make_input_image(vil1_stream* vs)
              s[3] == ':');
 
   if (!ok)
-    return VXL_NULLPTR;
+    return nullptr;
 
   std::cerr << "vil1_gen_file_format: s= [" << s << "]\n";
 

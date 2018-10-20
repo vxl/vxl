@@ -136,7 +136,7 @@ vil1_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil1_stream *vs)
 {
   vil1_jpeg_dstptr dst = ( vil1_jpeg_dstptr )( cinfo->dest );
   { // verify
-    assert(dst != VXL_NULLPTR);
+    assert(dst != nullptr);
     assert(dst->stream == vs);
   }
 

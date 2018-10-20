@@ -30,7 +30,7 @@ vil_image_resource_sptr vil_bmp_file_format::make_input_image(vil_stream* vs)
   if ( hdr.signature_valid() )
     return new vil_bmp_image(vs);
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 vil_image_resource_sptr vil_bmp_file_format::make_output_image(vil_stream* vs,
@@ -366,7 +366,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   if (x0+nx > ni() || y0+ny > nj())
   {
     vil_exception_warning(vil_exception_out_of_bounds("vil_bmp_image::get_copy_view"));
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //
   unsigned const bytes_per_pixel = core_hdr.bitsperpixel / 8;
@@ -427,7 +427,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
   {
     vil_exception_warning(
       vil_exception_corrupt_image_file("vil_bmp_image::get_copy_view", "BMP", ""));
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   unsigned np;

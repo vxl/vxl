@@ -99,7 +99,7 @@ class VNL_EXPORT vnl_alloc
     // This ensures that it is released in exit or during stack
     // unwinding.
     result = *my_free_list;
-    if (result == VXL_NULLPTR) {
+    if (result == nullptr) {
       void *r = refill(ROUND_UP(n));
       return r;
     }

@@ -65,7 +65,7 @@ std::vector<std::string> vil_image_list::files()
   DIR* dir_handle = opendir(directory_.c_str());
   dirent* de;
   de = readdir(dir_handle);
-  if (de==VXL_NULLPTR)
+  if (de==nullptr)
     return temp;
   std::string s = de->d_name;
   std::string filename = directory_+ "/" + s;
@@ -79,7 +79,7 @@ std::vector<std::string> vil_image_list::files()
   while ( true )
   {
     de = readdir(dir_handle);
-    if (de == VXL_NULLPTR) {
+    if (de == nullptr) {
       closedir(dir_handle);
       return temp;
     }

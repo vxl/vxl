@@ -81,7 +81,7 @@ int test_iostream_main(int /*argc*/,char* /*argv*/[])
   vcl_streampos b = vcl_cout.tellp();
   a = b; b = a; // quell warning about unused vars. compilers are sooo gullible.
 
-  vcl_streambuf *ptr = VXL_NULLPTR;
+  vcl_streambuf *ptr = nullptr;
   if (ptr) // quell warning.
     ++ ptr;
 

@@ -136,7 +136,7 @@ class vil_nitf2_image : public vil_blocked_image_resource
 
   virtual vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
 
-  virtual bool get_property (char const *tag, void *property_value=VXL_NULLPTR) const;
+  virtual bool get_property (char const *tag, void *property_value=nullptr) const;
 
   //const vil_nitf2_header& getFileHeader() const;
   const std::vector< vil_nitf2_image_subheader* >& get_image_headers() const

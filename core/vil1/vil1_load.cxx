@@ -41,7 +41,7 @@ vil1_image vil1_load_raw(vil1_stream *is)
     std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
   std::cerr << ": none succeeded\n";
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 vil1_image vil1_load_raw(char const* filename)

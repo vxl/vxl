@@ -38,11 +38,11 @@ void vgui_event::init()
       secs_0 = secs_now, msecs_0 = msecs_now;
     timestamp = 1000*(secs_now - secs_0) + (msecs_now - msecs_0);
   }
-  origin = VXL_NULLPTR;
+  origin = nullptr;
   timer_id = 0;
   str = "";
-  user = VXL_NULLPTR;
-  data = VXL_NULLPTR;
+  user = nullptr;
+  data = nullptr;
 }
 
 //----------------------------------------------------------------------------

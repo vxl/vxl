@@ -144,7 +144,7 @@ class vbl_array_2d
 
  private:
   void construct() {
-    rows_ = VXL_NULLPTR;
+    rows_ = nullptr;
     num_rows_ = 0;
     num_cols_ = 0;
   }
@@ -159,7 +159,7 @@ class vbl_array_2d
         rows_[i] = p + i * n;
     }
     else {
-      rows_ = VXL_NULLPTR;
+      rows_ = nullptr;
     }
   }
 

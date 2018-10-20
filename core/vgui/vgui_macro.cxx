@@ -20,7 +20,7 @@ extern bool vgui_glerrors_are_bad;
 
 void vgui_macro_error_reporter(char const *FILE, int LINE)
 {
-  static char const *last_file = VXL_NULLPTR;
+  static char const *last_file = nullptr;
   static int last_line = 0;
   static int numerrors = 0;
 

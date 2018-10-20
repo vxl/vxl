@@ -81,7 +81,7 @@ class VNL_TEMPLATE_EXPORT vnl_vector
   friend class vnl_matrix<T>;
 
   //: Creates an empty vector. O(1).
-  vnl_vector() : num_elmts(0) , data(VXL_NULLPTR) {}
+  vnl_vector() : num_elmts(0) , data(nullptr) {}
 
   //: Creates a vector containing n uninitialized elements.
   explicit vnl_vector(size_t len);
@@ -134,7 +134,7 @@ class VNL_TEMPLATE_EXPORT vnl_vector
   vnl_vector(vnl_vector<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // v * M
   vnl_vector(vnl_vector<T> &that, vnl_tag_grab)
     : num_elmts(that.num_elmts), data(that.data)
-  { that.num_elmts=0; that.data=VXL_NULLPTR; } // "*this" now uses "that"'s data.
+  { that.num_elmts=0; that.data=nullptr; } // "*this" now uses "that"'s data.
 // </internal>
 #endif
 

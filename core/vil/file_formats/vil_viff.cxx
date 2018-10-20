@@ -43,15 +43,15 @@ static inline void swap(void* p,int length)
 vil_image_resource_sptr vil_viff_file_format::make_input_image(vil_stream* is)
 {
   // Attempt to read header
-  if (!is) return VXL_NULLPTR;
+  if (!is) return nullptr;
   is->seek(0L);
   vil_viff_xvimage header;
   if (VIFF_HEADERSIZE != is->read((void*)(&header),VIFF_HEADERSIZE))
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (header.identifier != (char)XV_FILE_MAGIC_NUM ||
       header.file_type != (char)XV_FILE_TYPE_XVIFF)
-    return VXL_NULLPTR;
+    return nullptr;
 
   vxl_uint_32 dst = header.data_storage_type;
   if ((dst & 0xff) == 0)
@@ -70,7 +70,7 @@ vil_image_resource_sptr vil_viff_file_format::make_input_image(vil_stream* is)
     default:
       std::cout << "vil_viff: non supported data type: VFF_TYP "
                << header.data_storage_type << std::endl;
-      return VXL_NULLPTR;
+      return nullptr;
   }
 }
 
@@ -275,7 +275,7 @@ vil_image_view_base_sptr vil_viff_image::get_copy_view(unsigned int x0, unsigned
   else if (format_ == VIL_PIXEL_FORMAT_DOUBLE)         return new vil_image_view<double>              (ARGS(double));
   else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_FLOAT)  return new vil_image_view<std::complex<float> > (ARGS(std::complex<float>));
   else if (format_ == VIL_PIXEL_FORMAT_COMPLEX_DOUBLE) return new vil_image_view<std::complex<double> >(ARGS(std::complex<double>));
-  else return VXL_NULLPTR;
+  else return nullptr;
 #undef ARGS
 }
 

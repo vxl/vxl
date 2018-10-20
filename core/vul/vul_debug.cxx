@@ -216,7 +216,7 @@ void vul_debug_set_coredump_and_throw_on_windows_se(const char * /*filename*/)
 #endif // _WIN32
 
 
-static const char* out_of_memory_coredump_filename = VXL_NULLPTR;
+static const char* out_of_memory_coredump_filename = nullptr;
 
 void
 #ifdef _WIN32

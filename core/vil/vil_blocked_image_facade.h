@@ -63,7 +63,7 @@ class vil_blocked_image_facade : public vil_blocked_image_resource
 
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const;
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
 
  protected:
   //Internal functions

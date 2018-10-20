@@ -117,7 +117,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   vnl_matrix() :
     num_rows(0),
     num_cols(0),
-    data(VXL_NULLPTR)
+    data(nullptr)
   {
   }
 
@@ -162,7 +162,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   vnl_matrix(vnl_matrix<T> const &, vnl_matrix<T> const &, vnl_tag_mul); // M * M
   vnl_matrix(vnl_matrix<T> &that, vnl_tag_grab)
     : num_rows(that.num_rows), num_cols(that.num_cols), data(that.data)
-  { that.num_cols=that.num_rows=0; that.data=VXL_NULLPTR; } // "*this" now uses "that"'s data.
+  { that.num_cols=that.num_rows=0; that.data=nullptr; } // "*this" now uses "that"'s data.
 // </internal>
 #endif
 
@@ -631,16 +631,16 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
   //: Iterators
   typedef T       *iterator;
   //: Iterator pointing to start of data
-  iterator       begin() { return data?data[0]:VXL_NULLPTR; }
+  iterator       begin() { return data?data[0]:nullptr; }
   //: Iterator pointing to element beyond end of data
-  iterator       end() { return data?data[0]+num_rows*num_cols:VXL_NULLPTR; }
+  iterator       end() { return data?data[0]+num_rows*num_cols:nullptr; }
 
   //: Const iterators
   typedef T const *const_iterator;
   //: Iterator pointing to start of data
-  const_iterator begin() const { return data?data[0]:VXL_NULLPTR; }
+  const_iterator begin() const { return data?data[0]:nullptr; }
   //: Iterator pointing to element beyond end of data
-  const_iterator end() const { return data?data[0]+num_rows*num_cols:VXL_NULLPTR; }
+  const_iterator end() const { return data?data[0]+num_rows*num_cols:nullptr; }
 
   //: Return a reference to this.
   // Useful in code which would prefer not to know if its argument

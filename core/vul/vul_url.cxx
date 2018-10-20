@@ -129,7 +129,7 @@ std::istream * vul_http_open(char const *url)
   if (tcp_socket < 0) {
 #endif
     std::cerr << __FILE__ ": failed to create socket.\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 #ifdef DEBUG
@@ -147,7 +147,7 @@ std::istream * vul_http_open(char const *url)
     close(tcp_socket);
 #endif
 
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // make socket address.
@@ -168,7 +168,7 @@ std::istream * vul_http_open(char const *url)
     close(tcp_socket);
 #endif
 
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // buffer for data transfers over socket.
@@ -202,7 +202,7 @@ std::istream * vul_http_open(char const *url)
 #else
     close(tcp_socket);
 #endif
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -235,12 +235,12 @@ std::istream * vul_http_open(char const *url)
 
   if (contents.find("HTTP/1.1 200") == contents.npos)
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
   std::string::size_type n = contents.find("\r\n\r\n");
   if (n == contents.npos)
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   contents.erase(0,n+4);
@@ -445,7 +445,7 @@ std::istream * vul_url::open(const char * url, std::ios::openmode mode)
 {
   // check for null pointer or empty strings.
   if (!url || !*url)
-    return VXL_NULLPTR;
+    return nullptr;
   unsigned int l = (unsigned int)std::strlen(url);
 
   // check for filenames beginning "file:".
@@ -461,7 +461,7 @@ std::istream * vul_url::open(const char * url, std::ios::openmode mode)
   {
     std::cerr << __LINE__ << "ERROR:\n vul_read_url(const char * url)\n"
       "Doesn't support FTP yet, url=" << url << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // try an ordinary filename

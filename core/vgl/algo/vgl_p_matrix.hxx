@@ -22,7 +22,7 @@
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix() :
-  svd_(VXL_NULLPTR)
+  svd_(nullptr)
 {
   for (int row_index = 0; row_index < 3; row_index++)
     for (int col_index = 0; col_index < 4; col_index++)
@@ -36,7 +36,7 @@ vgl_p_matrix<T>::vgl_p_matrix() :
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(std::istream& i) :
-  svd_(VXL_NULLPTR)
+  svd_(nullptr)
 {
   read_ascii(i);
 }
@@ -45,7 +45,7 @@ vgl_p_matrix<T>::vgl_p_matrix(std::istream& i) :
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
-  p_matrix_(pmatrix), svd_(VXL_NULLPTR)
+  p_matrix_(pmatrix), svd_(nullptr)
 {
 }
 
@@ -53,7 +53,7 @@ vgl_p_matrix<T>::vgl_p_matrix(vnl_matrix_fixed<T, 3, 4> const& pmatrix) :
 //
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
-  p_matrix_(c_matrix), svd_(VXL_NULLPTR)
+  p_matrix_(c_matrix), svd_(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ vgl_p_matrix<T>::vgl_p_matrix(const T *c_matrix) :
 // - Copy ctor
 template <class T>
 vgl_p_matrix<T>::vgl_p_matrix(const vgl_p_matrix& that) :
-  p_matrix_(that.get_matrix()), svd_(VXL_NULLPTR)
+  p_matrix_(that.get_matrix()), svd_(nullptr)
 {
 }
 
@@ -71,7 +71,7 @@ template <class T>
 vgl_p_matrix<T>& vgl_p_matrix<T>::operator=(const vgl_p_matrix& that)
 {
   p_matrix_ = that.get_matrix();
-  svd_ = VXL_NULLPTR;
+  svd_ = nullptr;
   return *this;
 }
 
@@ -81,7 +81,7 @@ vgl_p_matrix<T>& vgl_p_matrix<T>::operator=(const vgl_p_matrix& that)
 template <class T>
 vgl_p_matrix<T>::~vgl_p_matrix()
 {
-  delete svd_; svd_ = VXL_NULLPTR;
+  delete svd_; svd_ = nullptr;
 }
 
 // OPERATIONS
@@ -193,7 +193,7 @@ vgl_p_matrix<T> vgl_p_matrix<T>::read(std::istream& s)
 template <class T>
 vnl_svd<T>* vgl_p_matrix<T>::svd() const
 {
-  if (svd_ == VXL_NULLPTR) {
+  if (svd_ == nullptr) {
     svd_ = new vnl_svd<T>(p_matrix_.as_ref()); // size 3x4; mutable const
   }
   return svd_;
@@ -202,7 +202,7 @@ vnl_svd<T>* vgl_p_matrix<T>::svd() const
 template <class T>
 void vgl_p_matrix<T>::clear_svd() const
 {
-  delete svd_; svd_ = VXL_NULLPTR;
+  delete svd_; svd_ = nullptr;
 }
 
 //-----------------------------------------------------------------------------

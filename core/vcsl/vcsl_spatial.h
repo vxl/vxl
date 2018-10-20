@@ -56,11 +56,11 @@ class vcsl_spatial
   //***************************************************************************
 
   virtual const vcsl_spatial *cast_to_spatial() const { return this; }
-  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d() const {return VXL_NULLPTR; }
-  virtual const vcsl_polar *cast_to_polar() const {return VXL_NULLPTR; }
-  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const {return VXL_NULLPTR; }
-  virtual const vcsl_cylindrical *cast_to_cylindrical() const {return VXL_NULLPTR; }
-  virtual const vcsl_spherical *cast_to_spherical() const {return VXL_NULLPTR; }
+  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d() const {return nullptr; }
+  virtual const vcsl_polar *cast_to_polar() const {return nullptr; }
+  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const {return nullptr; }
+  virtual const vcsl_cylindrical *cast_to_cylindrical() const {return nullptr; }
+  virtual const vcsl_spherical *cast_to_spherical() const {return nullptr; }
 
   //***************************************************************************
   // Status report

@@ -56,9 +56,9 @@ vil_blocked_image_facade::fill_block(vil_image_view_base_sptr& view) const
 #undef FILL_BLOCK_CASE
    default:
     assert(!"Unknown vil data type.");
-    return VXL_NULLPTR;
+    return nullptr;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //Get a view that is the size of a block. If the block is on the
@@ -69,7 +69,7 @@ vil_blocked_image_facade::get_block( unsigned  block_index_i,
 {
   unsigned ni = src_->ni(), nj = src_->nj();
   unsigned i0 = block_index_i*sbi_, j0 =  block_index_j*sbj_;
-  if (i0>ni-1||j0>nj-1) return VXL_NULLPTR;
+  if (i0>ni-1||j0>nj-1) return nullptr;
   //check if the view that is supplied is smaller than a block
   unsigned icrop = ni-i0, jcrop = nj-j0;
   bool needs_fill = false;
