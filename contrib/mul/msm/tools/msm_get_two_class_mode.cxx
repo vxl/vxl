@@ -47,7 +47,7 @@ void load_shapes(const std::string& points_dir,
   }
 }
 
-void load_shapes(const std::string& image_list_path, 
+void load_shapes(const std::string& image_list_path,
                  std::vector<msm_points>& shapes,
                  std::vector<std::string>& points_names)
 {
@@ -134,10 +134,10 @@ void plot_roc(const std::string& path,
   unsigned nc2=n-nc1;
   unsigned n_true_pos=nc2, n_false_pos=nc1;
   double area=0.0;
-  
+
   vcl_vector<unsigned> index;
   mbl_index_sort(x,index);
-  unsigned last_i=0;  
+  unsigned last_i=0;
   unsigned max_n_pts=100;
   unsigned step=vcl_max(1u,n/max_n_pts);
 
@@ -146,7 +146,7 @@ void plot_roc(const std::string& path,
   ofs<<"1 1"<<std::endl;
   for (unsigned i=0;i<n;++i)
   {
-    if (index[i]>=nc1) 
+    if (index[i]>=nc1)
       n_true_pos--;
     else
     {
@@ -158,7 +158,7 @@ void plot_roc(const std::string& path,
 
     double tpr = double(n_true_pos)/nc2;
     double fpr = double(n_false_pos)/nc1;
-    
+
     if (i>last_i+step)
     {
       ofs<<fpr<<" "<<tpr<<std::endl;
@@ -178,14 +178,14 @@ void write_value_list(const std::string& path,
 {
   std::vector<unsigned> index;
   mbl_index_sort(x,index);
-  
+
   std::ofstream ofs(path.c_str());
   if (!ofs) return;
   for (unsigned i=0;i<x.size();++i)
     ofs<<names[index[i]]<<" "<<x[index[i]]<<std::endl;
   ofs.close();
   std::cout<<"Saved ranked list of values and names to "<<path<<vcl_endl;
-} 
+}
 
 int main(int argc, char** argv)
 {
@@ -215,7 +215,7 @@ int main(int argc, char** argv)
 
   std::vector<msm_points> shapes1, shapes2;
   std::vector<std::string> points_names1, points_names2;
-  
+
   load_shapes(list_path1(),shapes1,points_names1);
   std::cout<<"Loaded "<<shapes1.size()<<" examples of class 1"<<std::endl;
   load_shapes(list_path2(),shapes2,points_names2);
@@ -278,15 +278,15 @@ int main(int argc, char** argv)
     std::cerr<<"Failed to save to "<<output_path()<<std::endl;
     return 2;
   }
-  
+
   // === Scatter plots ===
   // Construct a vector orthogonal to dir
   vnl_vector<double> dir2(dir.size());
   dir2.fill(0);
   dir2[0]=-dir[1];
   dir2[1]= dir[0];
-  if (dir2.magnitude()<1e-5) dir2[0]=1.0;  
-  
+  if (dir2.magnitude()<1e-5) dir2[0]=1.0;
+
   std::cout<<"Creating scatter files. First axis is separation direction."<<std::endl;
   plot_scatter("scatter1.txt",b1,dir,dir2);
   plot_scatter("scatter2.txt",b2,dir,dir2);
@@ -296,7 +296,7 @@ int main(int argc, char** argv)
   for (unsigned i=0;i<b1.size();++i) { x1[i]=dot_product(dir,b1[i]); x.push_back(x1[i]); }
   for (unsigned i=0;i<b2.size();++i) { x2[i]=dot_product(dir,b2[i]); x.push_back(x2[i]); }
   plot_roc("ROC.txt",x,b1.size());
-  
+
   write_value_list("class_value1.txt",points_names1,x1);
   write_value_list("class_value2.txt",points_names2,x2);;
 
