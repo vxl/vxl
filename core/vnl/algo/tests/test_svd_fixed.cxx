@@ -101,24 +101,23 @@ static void test_I()
   TEST_NEAR ("Singular values", vnl_vector_ssd(w_expected, svd.W().diagonal().as_ref()), 0, 1e-16);
 }
 
-template <class T>
+template <class T, unsigned int N>
 void test_svd_recomposition(char const *type, double maxres, T* /* tag */, vnl_random &rng)
 {
-  const unsigned int n = 3;
   // Test inversion of 3x3 matrix of T :
   std::cout << "----- Testing vnl_svd_fixed<" << type << "> recomposition -----" << std::endl;
 
-  vnl_matrix_fixed<T,n,n> A;
+  vnl_matrix_fixed<T,N,N> A;
   test_util_fill_random(A.begin(), A.end(), rng);
 
   std::cout << "A = [\n" << A << "]\n";
-  vnl_svd_fixed<T,n,n> svd(A);
+  vnl_svd_fixed<T,N,N> svd(A);
 
-  vnl_matrix_fixed<T,n,n> B=svd.recompose();
+  vnl_matrix_fixed<T,N,N> B=svd.recompose();
   std::cout << "B = [\n" << B << "]\n";
 
-  double residual=(A - B).fro_norm();
-  TEST_NEAR("vnl_svd<float> recomposition residual", residual, 0, maxres);
+  const double residual=(A - B).fro_norm();
+  TEST_NEAR("vnl_svd_fixed<T,N,N> recomposition residual", residual, 0, maxres);
 }
 
 
@@ -205,10 +204,18 @@ void test_svd_fixed()
   test_pmatrix();
   test_I();
 
-//  test_svd_recomposition("float",              1e-5 , (float*)0, rng);
-  test_svd_recomposition("double",             1e-10, (double*)VXL_NULLPTR, rng);
-//  test_svd_recomposition("std::complex<float>",  1e-5 , (std::complex<float>*)0, rng);
-//  test_svd_recomposition("std::complex<double>", 1e-10, (std::complex<double>*)0, rng);
+//  test_svd_recomposition<float, 3>("float",              1e-5 , (float*)0, rng);
+  test_svd_recomposition<double, 2>("double",             1e-10, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 3>("double",             1e-10, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 4>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 5>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 6>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 7>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 8>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 9>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double,10>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+//  test_svd_recomposition<std::complex<float>, 3>("std::complex<float>",  1e-5 , (std::complex<float>*)0, rng);
+//  test_svd_recomposition<std::complex<double>, 3>("std::complex<double>", 1e-10, (std::complex<double>*)0, rng);
 
 //  test_nullvector("float",               5e-7,  (float*)0, rng);
   test_nullvector("double",              5e-15, (double*)VXL_NULLPTR, rng);
