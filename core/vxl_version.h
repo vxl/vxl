@@ -10,12 +10,12 @@
 //: Major version number.
 // This will only increase after major changes, or a large accumulation of
 // significant smaller ones.
-#define VXL_VERSION_MAJOR 1
+#define VXL_VERSION_MAJOR 2
 
 //: Minor version number.
 // This increments between versions. There is no
 // "even = release, odd = development" pattern, or anything like that.
-#define VXL_VERSION_MINOR 17
+#define VXL_VERSION_MINOR 0
 
 //: Patch number.
 // This is only likely to be non-zero if a serious bug is found soon after the
