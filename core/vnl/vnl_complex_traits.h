@@ -22,25 +22,25 @@
 template <class T> // the primary template is empty, by design.
 struct vnl_complex_traits;
 
-#define macro(T) \
+#define VCL_DEFINE_SPECIALIZATION_MACRO(T) \
 template <> struct VNL_EXPORT vnl_complex_traits<T > \
 { \
   enum { isreal = true }; \
   static T conjugate(T x) { return x; } \
   static std::complex<T> complexify(T x) { return std::complex<T >(x, (T)0); } \
 }
-#define makro(T) \
-macro(signed T); \
-macro(unsigned T)
-makro(char);
-makro(short);
-makro(int);
-makro(long);
+#define VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(T) \
+VCL_DEFINE_SPECIALIZATION_MACRO(signed T); \
+VCL_DEFINE_SPECIALIZATION_MACRO(unsigned T)
+VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(char);
+VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(short);
+VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(int);
+VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long);
 #if VCL_HAS_LONG_LONG
-makro(long long);
+VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long long);
 #endif
-#undef makro
-#undef macro
+#undef VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED
+#undef VCL_DEFINE_SPECIALIZATION_MACRO
 
 
 template <> struct VNL_EXPORT vnl_complex_traits<float>
