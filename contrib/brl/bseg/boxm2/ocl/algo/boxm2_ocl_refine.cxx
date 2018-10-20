@@ -200,7 +200,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
       int dataBytes = boxm2_data_info::datasize(prefixes[i]) * newDataSize;
       vcl_cout << "# of bytes " << prefixes[i] << ' ' << dataBytes << vcl_endl;
       bocl_mem *new_dat = opencl_cache->alloc_mem(
-          dataBytes, VXL_NULLPTR, "new data buffer " + prefixes[i]);
+          dataBytes, nullptr, "new data buffer " + prefixes[i]);
       new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
       // grab the block out of the cache as well

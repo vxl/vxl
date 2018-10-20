@@ -18,151 +18,151 @@ bocl_device_info::bocl_device_info(cl_device_id* device)
 
   //get platform associated with device
   cl_platform_id platform;
-  status = clGetDeviceInfo(*device_, CL_DEVICE_PLATFORM, sizeof(platform), (void*) &platform, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_PLATFORM, sizeof(platform), (void*) &platform, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_PLATFORM failed."))
     return;
   char platform_name[512];
-  status = clGetPlatformInfo(platform,CL_PLATFORM_NAME,sizeof(platform_name),platform_name,VXL_NULLPTR);
+  status = clGetPlatformInfo(platform,CL_PLATFORM_NAME,sizeof(platform_name),platform_name,nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_NAME failed."))
     return;
   platform_name_ = std::string(platform_name);
-  status = clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(platform_name),platform_name,VXL_NULLPTR);
+  status = clGetPlatformInfo(platform,CL_PLATFORM_VERSION,sizeof(platform_name),platform_name,nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_PLATFORM_VERSION failed."))
     return;
   platform_version_ = std::string(platform_name);
 
   //get device name
   char device_string[1024];
-  status = clGetDeviceInfo(*device_, CL_DEVICE_NAME, sizeof(device_string), &device_string, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_NAME, sizeof(device_string), &device_string, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_NAME failed."))
     return;
   device_name_ = std::string(device_string);
 
   //get Device Type
-  status = clGetDeviceInfo(*device_,CL_DEVICE_TYPE,sizeof(device_type_),(void*) &device_type_,VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_,CL_DEVICE_TYPE,sizeof(device_type_),(void*) &device_type_,nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_TYPE failed."))
     return;
 
   //get device vendor
-  status = clGetDeviceInfo(*device_, CL_DEVICE_VENDOR, sizeof(device_string), &device_string, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_VENDOR, sizeof(device_string), &device_string, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return;
   device_vendor_ = std::string(device_string);
 
   //store driver version
-  status = clGetDeviceInfo(*device_, CL_DRIVER_VERSION, sizeof(device_string), &device_string, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DRIVER_VERSION, sizeof(device_string), &device_string, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_VENDOR failed."))
     return;
   driver_version_ = std::string(device_string);
 
 
   //Get device max work gropu size
-  status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_GROUP_SIZE,sizeof(std::size_t),(void*)&max_work_group_size_,VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_GROUP_SIZE,sizeof(std::size_t),(void*)&max_work_group_size_,nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_GROUP_SIZE failed."))
     return;
   max_work_group_size_ = max_work_group_size_/sizeof(std::size_t);
   //get max work item dimensions
-  status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint),  (void*)&max_dimensions_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_,CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS, sizeof(cl_uint),  (void*)&max_dimensions_, nullptr);
   if (!check_val(status,CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_DIMENSIONS failed."))
     return;
   //get max work item sizes
-  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(std::size_t) * 3, (void*)max_work_item_sizes_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_WORK_ITEM_SIZES, sizeof(std::size_t) * 3, (void*)max_work_item_sizes_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_WORK_ITEM_SIZES failed."))
     return;
 
   //get device local memory size (for each compute unit...)
-  status = clGetDeviceInfo(*device_, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), (void *)&total_local_memory_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_LOCAL_MEM_SIZE, sizeof(cl_ulong), (void *)&total_local_memory_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_LOCAL_MEM_SIZE failed."))
     return;
 
   //get device global memory size
-  status = clGetDeviceInfo(*device_, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), (void *)&total_global_memory_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_GLOBAL_MEM_SIZE, sizeof(cl_ulong), (void *)&total_global_memory_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_GLOBAL_MEM_SIZE failed."))
     return;
 
   //store max buffer alloc size
-  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), (void *)&max_mem_alloc_size_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_MEM_ALLOC_SIZE, sizeof(cl_ulong), (void *)&max_mem_alloc_size_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_MEM_ALLOC_SIZE failed."))
     return;
 
   //store max param size
-  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(cl_ulong), (void *)&max_parameter_size_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_PARAMETER_SIZE, sizeof(cl_ulong), (void *)&max_parameter_size_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_PARAMETER_SIZE failed."))
     return;
 
   //address bits (pointer size on device)
-  status = clGetDeviceInfo(*device_, CL_DEVICE_ADDRESS_BITS, sizeof(addr_bits_), &addr_bits_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_ADDRESS_BITS, sizeof(addr_bits_), &addr_bits_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_ADDRESS_BITS failed."))
     return;
 
   //get device maximum compute units
-  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(cl_uint), (void *)&max_compute_units_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_COMPUTE_UNITS, sizeof(cl_uint), (void *)&max_compute_units_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_MAX_COMPUTE_UNITS failed."))
     return;
 
   //get preferred vector width
-  status = clGetDeviceInfo(*device_, CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, sizeof(cl_uint), (void *)&vector_width_short_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT, sizeof(cl_uint), (void *)&vector_width_short_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_SHORT failed."))
     return;
 
   //get device preferred vector width float
-  status = clGetDeviceInfo(*device_, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint), (void *)&vector_width_float_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT, sizeof(cl_uint), (void *)&vector_width_float_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_PREFERRED_VECTOR_WIDTH_FLOAT failed."))
     return;
 
   //get device max clock freq
-  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(cl_uint), (void *)&max_clock_freq_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_MAX_CLOCK_FREQUENCY, sizeof(cl_uint), (void *)&max_clock_freq_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_MAX_CLOCK_FREQUENCY failed."))
     return;
 
   //get device image support
-  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), (void *)&image_support_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE_SUPPORT, sizeof(cl_bool), (void *)&image_support_, nullptr);
   if (!check_val(status,CL_SUCCESS,"clGetDeviceInfo CL_DEVICE_IMAGE_SUPPORT failed."))
     return;
 
   //get device image2d max width
-  status = clGetDeviceInfo(*device_,CL_DEVICE_IMAGE2D_MAX_WIDTH,sizeof(std::size_t),(void *)&image2d_max_width_,VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_,CL_DEVICE_IMAGE2D_MAX_WIDTH,sizeof(std::size_t),(void *)&image2d_max_width_,nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE2D_MAX_WIDTH failed."))
     return;
   //get device image2d max height
-  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE2D_MAX_HEIGHT, sizeof(std::size_t), (void *)&image2d_max_height_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE2D_MAX_HEIGHT, sizeof(std::size_t), (void *)&image2d_max_height_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE2D_MAX_HEIGHT failed."))
     return;
   //get device image3d max width
-  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_WIDTH, sizeof(std::size_t), (void *)&image3d_max_width_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_WIDTH, sizeof(std::size_t), (void *)&image3d_max_width_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_WIDTH failed."))
     return;
   //get device image3d max height
-  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_HEIGHT, sizeof(std::size_t), (void *)&image3d_max_height_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_HEIGHT, sizeof(std::size_t), (void *)&image3d_max_height_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_HEIGHT failed."))
     return;
   //get device image3d max width
-  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_DEPTH, sizeof(std::size_t), (void *)&image3d_max_depth_, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_IMAGE3D_MAX_DEPTH, sizeof(std::size_t), (void *)&image3d_max_depth_, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_IMAGE3D_MAX_DEPTH failed."))
     return;
 
   //get device extension list
   char extensions[2000];
-  status = clGetDeviceInfo(*device_, CL_DEVICE_EXTENSIONS,  sizeof(extensions), (void*) extensions, VXL_NULLPTR);
+  status = clGetDeviceInfo(*device_, CL_DEVICE_EXTENSIONS,  sizeof(extensions), (void*) extensions, nullptr);
   if (!check_val(status, CL_SUCCESS, "clGetDeviceInfo CL_DEVICE_EXTENSIONS failed."))
     return;
   extensions_supported_ = std::string(extensions);
 
   //see if it is an NVIDIA device
-  is_nvidia_device_ = std::strstr(extensions_supported_.c_str(), "cl_nv_device_attribute_query") != VXL_NULLPTR;
+  is_nvidia_device_ = std::strstr(extensions_supported_.c_str(), "cl_nv_device_attribute_query") != nullptr;
 
   //if it's an nvidia device, get nvidia specific attributes
   if(is_nvidia_device_)
   {
-      clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV, sizeof(cl_uint), &compute_capability_major_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV, sizeof(cl_uint), &compute_capability_minor_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_REGISTERS_PER_BLOCK_NV, sizeof(cl_uint), &regs_per_block_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_WARP_SIZE_NV, sizeof(cl_uint), &warp_size_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_GPU_OVERLAP_NV, sizeof(cl_bool), &gpu_overlap_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV, sizeof(cl_bool), &exec_timeout_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_INTEGRATED_MEMORY_NV, sizeof(cl_bool), &integrated_memory_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_PCI_BUS_ID_NV, sizeof(cl_uint), &bus_id_, VXL_NULLPTR);
-      clGetDeviceInfo(*device_, CL_DEVICE_PCI_SLOT_ID_NV, sizeof(cl_uint), &slot_id_, VXL_NULLPTR);
+      clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV, sizeof(cl_uint), &compute_capability_major_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_COMPUTE_CAPABILITY_MINOR_NV, sizeof(cl_uint), &compute_capability_minor_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_REGISTERS_PER_BLOCK_NV, sizeof(cl_uint), &regs_per_block_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_WARP_SIZE_NV, sizeof(cl_uint), &warp_size_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_GPU_OVERLAP_NV, sizeof(cl_bool), &gpu_overlap_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_KERNEL_EXEC_TIMEOUT_NV, sizeof(cl_bool), &exec_timeout_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_INTEGRATED_MEMORY_NV, sizeof(cl_bool), &integrated_memory_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_PCI_BUS_ID_NV, sizeof(cl_uint), &bus_id_, nullptr);
+      clGetDeviceInfo(*device_, CL_DEVICE_PCI_SLOT_ID_NV, sizeof(cl_uint), &slot_id_, nullptr);
   }
 
 

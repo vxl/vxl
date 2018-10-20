@@ -381,12 +381,12 @@ vpgl_rational_camera<double>* volm_correct_rational_cameras_ransac_with_initial_
   vil_image_resource_sptr image = vil_load_image_resource(nitf_img_path.c_str());
   if (!image)
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
   std::string format = image->file_format();
   std::string prefix = format.substr(0,4);
   if (prefix != "nitf") {
-    return VXL_NULLPTR;
+    return nullptr;
   }
   // cast to an nitf2_image
   vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());

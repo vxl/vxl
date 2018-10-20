@@ -65,14 +65,14 @@ static void test_linear_reg()
   //  The first set of tests are for the constructor, and parameter access methods.
   //
   rrel_linear_regression * lr1 = new rrel_linear_regression( pts, true );
-  TEST( "ctor 1", lr1 != VXL_NULLPTR, true);
+  TEST( "ctor 1", lr1 != nullptr, true);
 #if 0
   std::cout << "\nPoints with intercept...\n";
   lr1->print_points();
 #endif
 
   rrel_linear_regression * lr2 = new rrel_linear_regression( pts, false );
-  TEST( "ctor 2", lr2 != VXL_NULLPTR, true);
+  TEST( "ctor 2", lr2 != nullptr, true);
 #if 0
   std::cout << "\nPoints without intercept...\n";
   lr2->print_points();

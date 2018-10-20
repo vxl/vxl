@@ -88,7 +88,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
       std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
+    vil_image_view<unsigned char >* mask_map = nullptr;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
@@ -468,7 +468,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
       std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
+    vil_image_view<unsigned char >* mask_map = nullptr;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {
@@ -874,7 +874,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
       std::cout<<"Change detection using mask."<<std::endl;
       use_mask = true;
     }
-    vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
+    vil_image_view<unsigned char >* mask_map = nullptr;
     if (use_mask) {
       mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
       if (!mask_map) {

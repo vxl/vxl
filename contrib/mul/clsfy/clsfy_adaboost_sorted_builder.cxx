@@ -33,7 +33,7 @@
 //=======================================================================
 
 clsfy_adaboost_sorted_builder::clsfy_adaboost_sorted_builder()
-: save_data_to_disk_(false), bs_(-1), max_n_clfrs_(-1), weak_builder_(VXL_NULLPTR)
+: save_data_to_disk_(false), bs_(-1), max_n_clfrs_(-1), weak_builder_(nullptr)
 {
 }
 
@@ -87,7 +87,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
             <<max_n_clfrs_<<'\n';
   }
 
-  if ( weak_builder_ == VXL_NULLPTR )
+  if ( weak_builder_ == nullptr )
   {
     std::cout<<"Error: clsfy_adaboost_sorted_builder::build\n"
             <<"weak_builder_ pointer has not been set\n"

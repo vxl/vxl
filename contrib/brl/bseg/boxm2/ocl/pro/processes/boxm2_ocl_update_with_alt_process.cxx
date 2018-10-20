@@ -195,7 +195,7 @@ bool boxm2_ocl_update_with_alt_process(bprb_func_process& pro)
     std::cout<<"Update using mask."<<std::endl;
     use_mask = true;
   }
-  vil_image_view<unsigned char>* mask_map = VXL_NULLPTR;
+  vil_image_view<unsigned char>* mask_map = nullptr;
   if (use_mask) {
     mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
     if (!mask_map) {

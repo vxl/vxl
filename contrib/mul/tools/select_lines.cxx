@@ -22,7 +22,7 @@ int main2(int argc, char*argv[])
   const std::string sep="\n";
 
   // Parse the program arguments
-  vul_arg<std::string> in_fname(VXL_NULLPTR, "input filename (or \"-\" for stdin)");
+  vul_arg<std::string> in_fname(nullptr, "input filename (or \"-\" for stdin)");
   vul_arg<std::string> out_fname("-o", "output filename (defaults to stdout)", "-");
   vul_arg<std::vector<unsigned> > lines_arg("-l", "List of line ");
   vul_arg<std::string > lines_fname("-f", "Filename containing list of lines ");
@@ -56,7 +56,7 @@ int main2(int argc, char*argv[])
 
   // Load the input data
   std::ifstream in_file;
-  std::istream *in_stream=VXL_NULLPTR;
+  std::istream *in_stream=nullptr;
   if (in_fname() == "-")
     in_stream = &std::cin;
   else
@@ -105,7 +105,7 @@ int main2(int argc, char*argv[])
 
 
   // write data to output
-  std::ostream *out_stream=VXL_NULLPTR;
+  std::ostream *out_stream=nullptr;
   std::ofstream out_file;
   if (out_fname() == "-")
     out_stream = &std::cout;

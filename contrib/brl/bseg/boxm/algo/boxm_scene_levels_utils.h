@@ -71,7 +71,7 @@ void boxm_remove_level_0_leaves(boxm_scene<boct_tree<short, T_data> > *scene_in)
       //check for level
       short level = cell_in->level();
       if (level == 0) {
-        cell_in = VXL_NULLPTR;
+        cell_in = nullptr;
       }
       else {
         if (level == 1)

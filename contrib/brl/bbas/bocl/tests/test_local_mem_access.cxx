@@ -16,7 +16,7 @@ bool test_workspace()
   bocl_command_queue_mgr &mgr = bocl_command_queue_mgr::instance();
 
   //create command queue
-  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, VXL_NULLPTR);
+  cl_command_queue queue = clCreateCommandQueue(mgr.context(), mgr.devices()[0], CL_QUEUE_PROFILING_ENABLE, nullptr);
 
   //create kernel
   std::string src_path = testlib_root_dir() + "/contrib/brl/bbas/bocl/tests/test_local_mem_access.cl";

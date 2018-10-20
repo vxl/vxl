@@ -118,7 +118,7 @@ bool bprb_parameters::parse_XML(const std::string& xml_path,
         std::string value = param->attribute("value");
         std::string type = param->attribute("type");
         std::string desc = param->attribute("desc");
-        bprb_param* p=VXL_NULLPTR;
+        bprb_param* p=nullptr;
         if (!type.compare("float")) {
           p =  new bprb_param_type<float>(param->name(), desc, 0);
         } else if ( (!type.compare("unsigned int")) || (!type.compare("unsigned")) ) {

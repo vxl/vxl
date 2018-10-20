@@ -121,7 +121,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
   std::map<boxm2_block_id, boxm2_data_base*>& data_map =this->cached_data_map(scene, type);
   std::size_t data_size  = boxm2_data_info::datasize(type);
   if (!scene->block_exists(id)){
-    return VXL_NULLPTR;
+    return nullptr;
   }
   boxm2_block* blk = this->get_block(scene,id);
   unsigned n_cells = blk->num_cells();
@@ -146,7 +146,7 @@ boxm2_data_base* boxm2_lru_cache::get_data_base(boxm2_scene_sptr & scene, boxm2_
       std::stringstream ss;
       ss<<"Attempting to retrieve "<<num_bytes<<" bytes for datatype " << type <<" when actual buffer size should be "<<byte_length;
       throw std::runtime_error(ss.str());
-      loaded = VXL_NULLPTR;
+      loaded = nullptr;
       return loaded;
     }
     // if loaded from disk is good and it matches size, you found it, return

@@ -90,8 +90,8 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view_base_sptr roi_first=VXL_NULLPTR, roi_second=VXL_NULLPTR;
-  vpgl_geo_camera *cam_first=VXL_NULLPTR, *cam_second=VXL_NULLPTR;
+  vil_image_view_base_sptr roi_first=nullptr, roi_second=nullptr;
+  vpgl_geo_camera *cam_first=nullptr, *cam_second=nullptr;
 
   if (!lidar_init(first_ret, world_params, roi_first, cam_first)) {
     std::cout << "bvxm_lidar_init_process -- The process has failed!\n";
@@ -105,7 +105,7 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
     }
   }
 
-  vil_image_view_base_sptr mask=VXL_NULLPTR;
+  vil_image_view_base_sptr mask=nullptr;
   if (!gen_mask(roi_first, cam_first, roi_second, cam_second, mask, thresh)) {
     std::cout << "bvxm_lidar_init_process -- The process has failed!\n";
     return false;

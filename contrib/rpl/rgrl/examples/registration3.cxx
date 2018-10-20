@@ -230,7 +230,7 @@ main( int argc, char* argv[] )
   //\endlatexonly
 
   int starting_resolution = 1;
-  reg.run( moving_image_roi, fixed_image_roi, affine_model, initial_transformation, VXL_NULLPTR,
+  reg.run( moving_image_roi, fixed_image_roi, affine_model, initial_transformation, nullptr,
            starting_resolution );
 
   // Output Results

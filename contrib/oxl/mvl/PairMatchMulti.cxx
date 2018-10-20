@@ -29,20 +29,20 @@ void vcl_multimap_uint_uint::clear() { base::erase(begin(), end()); }
 //: Default constructor
 PairMatchMulti::PairMatchMulti()
 {
-  scores_ = VXL_NULLPTR;
+  scores_ = nullptr;
 }
 
 // - Construct and load matches (via operator>>) from std::istream.
 PairMatchMulti::PairMatchMulti(std::istream& f)
 {
-  scores_ = VXL_NULLPTR;
+  scores_ = nullptr;
   f >> *this;
 }
 
 //: Copy ctor
 PairMatchMulti::PairMatchMulti(const PairMatchMulti& that)
 {
-  scores_ = VXL_NULLPTR;
+  scores_ = nullptr;
   operator=(that);
 }
 
@@ -50,7 +50,7 @@ PairMatchMulti::PairMatchMulti(const PairMatchMulti& that)
 PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
 {
   matches12_ = that.matches12_;
-  delete scores_; scores_ = VXL_NULLPTR;
+  delete scores_; scores_ = nullptr;
   if (that.scores_)
     scores_ = new vbl_sparse_array_2d<double>(*that.scores_);
   return *this;
@@ -59,7 +59,7 @@ PairMatchMulti& PairMatchMulti::operator=(const PairMatchMulti& that)
 //: Destructor
 PairMatchMulti::~PairMatchMulti()
 {
-  delete scores_; scores_ = VXL_NULLPTR;
+  delete scores_; scores_ = nullptr;
 }
 
 void PairMatchMulti::add_match(int i1, int i2, double score)
@@ -86,11 +86,11 @@ bool PairMatchMulti::contains(int i1, int i2) const
 
 double PairMatchMulti::get_score(int i1, int i2) const
 {
-  if (scores_ == VXL_NULLPTR)
+  if (scores_ == nullptr)
     return -1.0;
 
   double* p = scores_->get_addr(i1, i2);
-  if (p == VXL_NULLPTR)
+  if (p == nullptr)
     return -1.0;
 
   return *p;

@@ -48,7 +48,7 @@ std::vector<std::string> mvl2_video_reader::load_configs(std::string filename)
   if (!(*config_file))
   {
     const char* val;
-    if ((val=std::getenv("VIDL2RC"))==VXL_NULLPTR)
+    if ((val=std::getenv("VIDL2RC"))==nullptr)
     {
       std::cerr << "VIDL2RC environment variable not defined.\n"
                << "Cannot find configuration file for video input.\n";

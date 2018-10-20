@@ -99,7 +99,7 @@ class rrel_fm_reg_problem : public rrel_estimation_problem
   //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=VXL_NULLPTR ) const;
+                                   const std::vector<double>* weights=nullptr ) const;
 
   // Toggles detailed printing of computations.
   bool verbose;

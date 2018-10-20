@@ -34,7 +34,7 @@
 #define SHRINK_MESH 1
 
 bwm_observer_vgui::bwm_observer_vgui(bgui_image_tableau_sptr const& img)
-  : bwm_observer_img(img), corr_valid_(false), moving_face_(VXL_NULLPTR)
+  : bwm_observer_img(img), corr_valid_(false), moving_face_(nullptr)
 {
   //corr_.second = 0;
   mesh_style_= vgui_style::new_style();
@@ -513,7 +513,7 @@ bwm_observable_sptr bwm_observer_vgui::find_object(unsigned soview2D_id, unsigne
     }
     v_iter++;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Translates the 3D objects by vector T, only one if specified, all otherwise
@@ -525,8 +525,8 @@ void bwm_observer_vgui::translate(vgl_vector_3d<double> T,
 
   while (iter != objects_.end()) {
     bwm_observable_sptr obs = iter->first;
-    if (obs==VXL_NULLPTR) continue;
-    if (object==VXL_NULLPTR) {
+    if (obs==nullptr) continue;
+    if (object==nullptr) {
       obs->translate(T);
       continue;
     }
@@ -581,12 +581,12 @@ bwm_observable_sptr bwm_observer_vgui::selected_face(unsigned& face_id)
     bwm_observable_sptr obs = find_object(polygon->get_id(), face_id);
     return obs;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 unsigned bwm_observer_vgui::get_selected_3d_vertex_index(unsigned poly_id)
 {
-  bwm_observable_sptr found_obj = VXL_NULLPTR;
+  bwm_observable_sptr found_obj = nullptr;
   for (std::map<bwm_observable_sptr, std::map<unsigned, bgui_vsol_soview2D* > >::iterator
        oit = objects_.begin();
        oit != objects_.end(); ++oit)
@@ -633,7 +633,7 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
 
     if (!found)
     {
-      return (vsol_point_3d*)VXL_NULLPTR;
+      return (vsol_point_3d*)nullptr;
     }
 
     unsigned id = select_list[list_index]->get_id();
@@ -643,7 +643,7 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
 
     if (!polygon) {
       std::cout << "Is a face selected?\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
 
     //deselect the polygon since we have it
@@ -654,17 +654,17 @@ vsol_point_3d_sptr bwm_observer_vgui::selected_vertex()
 
     if (!obs) {
       std::cout << "Is a face selected?\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
     vsol_polygon_3d_sptr poly3d = obs->extract_face(face_id);
     unsigned vindex =  get_selected_3d_vertex_index(id);
     if (vindex<poly3d->size())
       selected_vertex = poly3d->vertex(vindex);
     else
-      selected_vertex = (vsol_point_3d*)VXL_NULLPTR;
+      selected_vertex = (vsol_point_3d*)nullptr;
   }
   else
-    selected_vertex = (vsol_point_3d*)VXL_NULLPTR;
+    selected_vertex = (vsol_point_3d*)nullptr;
 
   return selected_vertex;
 }

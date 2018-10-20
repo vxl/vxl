@@ -171,7 +171,7 @@ public:
       if ((*cit1)->ce == e1)
         return (*cit1); //return link
     }
-    return VXL_NULLPTR; //not linked
+    return nullptr; //not linked
   }
 
   //: link edgels if not already linked

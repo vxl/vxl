@@ -53,7 +53,7 @@ transform(vtol_vertex_2d_sptr const& v,
   vnl_vector_fixed<double,3> P(v->x(), v->y(), 1.0);
   vnl_vector_fixed<double,3> p = T*P;
   if (std::fabs(p[2])<1e-06)
-    return VXL_NULLPTR;
+    return nullptr;
   else
     return new vtol_vertex_2d(p[0]/p[2], p[1]/p[2]);
 }

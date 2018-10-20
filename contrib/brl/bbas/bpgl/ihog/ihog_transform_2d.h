@@ -147,7 +147,7 @@ inline ihog_transform_2d operator*(const ihog_transform_2d& L, const ihog_transf
 //: Binary save ihog_transform_2d* to stream.
 inline void vsl_b_write(vsl_b_ostream &os, ihog_transform_2d const* t)
 {
-  if (t==VXL_NULLPTR) {
+  if (t==nullptr) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else {
@@ -168,7 +168,7 @@ inline void vsl_b_read(vsl_b_istream &is, ihog_transform_2d* &t)
     t->b_read(is);
   }
   else
-    t = VXL_NULLPTR;
+    t = nullptr;
 }
 
 

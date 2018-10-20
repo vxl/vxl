@@ -13,7 +13,7 @@
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id)
 : cpu_buf_(buffer),
   delete_cpu_(false),
-  queue_(VXL_NULLPTR),
+  queue_(nullptr),
   num_bytes_(num_bytes),
   context_(context),
   id_(id),
@@ -56,7 +56,7 @@ bool bocl_mem::create_buffer(const cl_mem_flags& flags, cl_command_queue& queue)
                                   CL_MAP_READ & CL_MAP_WRITE,
                                   0,
                                   this->num_bytes_,
-                                  0,VXL_NULLPTR, VXL_NULLPTR, &status);
+                                  0,nullptr, nullptr, &status);
     clFinish(queue);
     if (!check_val(status, MEM_FAILURE, "clEnqueueMapBuffer CL_MEM_HOST_PTR failed: " + this->id_))
       return MEM_FAILURE;
@@ -101,7 +101,7 @@ bool bocl_mem::release_memory()
 {
   //release mapped memory
   if (delete_cpu_ && cpu_buf_ && queue_) {
-    cl_int status = clEnqueueUnmapMemObject (*queue_, buffer_, cpu_buf_, 0, VXL_NULLPTR, VXL_NULLPTR);
+    cl_int status = clEnqueueUnmapMemObject (*queue_, buffer_, cpu_buf_, 0, nullptr, nullptr);
     if (!check_val(status,MEM_FAILURE,"clEnqueueUnmapMemObject failed: " + this->id_))
       return MEM_FAILURE;
   }
@@ -135,7 +135,7 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, std::size_t value_size, cl_
     buff_ptr += value_size;
   }
   // copy buffer over to GPU
-  ceEvent_ = VXL_NULLPTR;
+  ceEvent_ = nullptr;
   cl_int status = MEM_FAILURE;
   status = clEnqueueWriteBuffer(cmd_queue,
                                 this->buffer_,
@@ -144,7 +144,7 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, std::size_t value_size, cl_
                                 this->num_bytes_,
                                 init_buff,
                                 0,                //cl_uint num_events_in_wait_list
-                                VXL_NULLPTR,
+                                nullptr,
                                 &ceEvent_);
   delete[] init_buff;
   if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (INIT BUFFER) failed: " + this->id_ + error_to_string(status)))
@@ -171,7 +171,7 @@ bool bocl_mem::read_to_buffer(const cl_command_queue& cmd_queue, bool blocking)
 bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, std::size_t size, bool blocking)
 {
   assert(size <= this->num_bytes_);
-  ceEvent_ = VXL_NULLPTR;
+  ceEvent_ = nullptr;
   cl_int status = MEM_FAILURE;
   status = clEnqueueWriteBuffer(cmd_queue,
                                 this->buffer_,
@@ -180,7 +180,7 @@ bool bocl_mem::write_to_gpu_mem(const cl_command_queue& cmd_queue, void* buff, s
                                 size,
                                 buff,
                                 0,                //cl_uint num_events_in_wait_list
-                                VXL_NULLPTR,
+                                nullptr,
                                 &ceEvent_);
   if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer failed: " + this->id_ + error_to_string(status)))
     return MEM_FAILURE;
@@ -198,7 +198,7 @@ bool bocl_mem::read_from_gpu_mem(const cl_command_queue& cmd_queue, void* buff, 
                               size,
                               buff,
                               0,
-                              VXL_NULLPTR,
+                              nullptr,
                               &ceEvent_);
   if (!check_val(status,MEM_FAILURE,"clEnqueueReadBuffer failed: " + this->id_ + error_to_string(status)))
     return MEM_FAILURE;
@@ -217,7 +217,7 @@ bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmd_queue)
                                   this->num_bytes_,
                                   this->cpu_buf_,
                                   0,                //cl_uint num_events_in_wait_list
-                                  VXL_NULLPTR,
+                                  nullptr,
                                   &ceEvent_);
     if (!check_val(status,MEM_FAILURE,"clEnqueueWriteBuffer (async) failed: " + this->id_))
       return MEM_FAILURE;
@@ -243,16 +243,16 @@ void* bocl_mem::enqueue_map(const cl_command_queue& cmd_queue)
 {
   int status = MEM_FAILURE;
   void* ptr = clEnqueueMapBuffer(cmd_queue,this->buffer_,CL_TRUE,CL_MAP_READ,
-                                 0,this->num_bytes_,0,VXL_NULLPTR,&ceEvent_,&status);
+                                 0,this->num_bytes_,0,nullptr,&ceEvent_,&status);
   if (!check_val(status,MEM_FAILURE,"clEnqueueMapBuffer failed: " + this->id_ + error_to_string(status)))
-    return VXL_NULLPTR;
+    return nullptr;
   return ptr;
 }
 
 bool bocl_mem::enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr)
 {
   int status = MEM_FAILURE;
-  status = clEnqueueUnmapMemObject(cmd_queue,this->buffer_, mapped_ptr, 0, VXL_NULLPTR, &ceEvent_);
+  status = clEnqueueUnmapMemObject(cmd_queue,this->buffer_, mapped_ptr, 0, nullptr, &ceEvent_);
   if (!check_val(status,MEM_FAILURE,"clEnqueueUnmapMemObject failed: " + this->id_ + error_to_string(status)))
     return false;
   return true;
@@ -263,8 +263,8 @@ bool bocl_mem::enqueue_unmap(const cl_command_queue& cmd_queue, void* mapped_ptr
 float bocl_mem::exec_time()
 {
   cl_ulong tend, tstart;
-  int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,VXL_NULLPTR);
-  status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,VXL_NULLPTR);
+  int status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_END,sizeof(cl_ulong),&tend,nullptr);
+  status = clGetEventProfilingInfo(ceEvent_,CL_PROFILING_COMMAND_START,sizeof(cl_ulong),&tstart,nullptr);
   if ( !check_val(status,CL_SUCCESS,"clFinish/ProfilingInfo failed (" + id_ + ") " +error_to_string(status)) )
     return false;
 

@@ -185,7 +185,7 @@ static int read_from_file(const char* filename)
 
 //: Read from file.  Note that this can be OS-specific!
 gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from_file(filename)),
-  yra(VXL_NULLPTR), xra(VXL_NULLPTR)
+  yra(nullptr), xra(nullptr)
 {
   if (gevd_memory_mixin::GetSize() > 0) {
     std::ifstream f(filename,std::ios::in|std::ios::binary); // ios::nocreate is on by default for VCL_WIN32

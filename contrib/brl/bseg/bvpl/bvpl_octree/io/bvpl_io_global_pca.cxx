@@ -41,7 +41,7 @@ void vsl_b_write(vsl_b_ostream& os, const bvpl_global_pca_125* &p)
 
 void vsl_print_summary(std::ostream& os, const bvpl_global_pca_125* &p)
 {
-  if (p==VXL_NULLPTR)
+  if (p==nullptr)
     os << "NULL PTR";
   else {
     os << "T: ";

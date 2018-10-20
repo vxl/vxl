@@ -187,7 +187,7 @@ bool bvrml_load_points_ply(const std::string &ply_file, float dist_thres,
   parsed_ply.data = data;
   parsed_ply.dist_thres = dist_thres;
 
-  p_ply ply = ply_open(ply_file.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply ply = ply_open(ply_file.c_str(), nullptr, 0, nullptr);
   if (!ply){
     std::cerr << "Couldn't open ply file: " << ply_file << '\n';
     return false;

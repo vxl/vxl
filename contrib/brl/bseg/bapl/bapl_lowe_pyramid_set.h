@@ -35,20 +35,20 @@ class bapl_lowe_pyramid_set : public vbl_ref_count
 
   //: Accessor for the Gaussian pyramid
   const vil_image_view<float>& gauss_at( float scale,
-                                         float *actual_scale=VXL_NULLPTR,
-                                         float *rel_scale=VXL_NULLPTR ) const;
+                                         float *actual_scale=nullptr,
+                                         float *rel_scale=nullptr ) const;
   //: Accessor for the Difference of Gaussians pyramid
   const vil_image_view<float>& dog_at( float scale,
-                                       float *actual_scale=VXL_NULLPTR,
-                                       float *rel_scale=VXL_NULLPTR ) const;
+                                       float *actual_scale=nullptr,
+                                       float *rel_scale=nullptr ) const;
   //: Accessor for the Gradient orientation pyramid
   const vil_image_view<float>& grad_orient_at( float scale,
-                                               float *actual_scale=VXL_NULLPTR,
-                                               float *rel_scale=VXL_NULLPTR ) const;
+                                               float *actual_scale=nullptr,
+                                               float *rel_scale=nullptr ) const;
   //: Accessor for the Gradient magnitude pyramid
   const vil_image_view<float>& grad_mag_at( float scale,
-                                            float *actual_scale=VXL_NULLPTR,
-                                            float *rel_scale=VXL_NULLPTR ) const;
+                                            float *actual_scale=nullptr,
+                                            float *rel_scale=nullptr ) const;
 
   //: Accessor for the Gaussian pyramid
   const vil_image_view<float>& gauss_pyramid(unsigned octave, unsigned sub_index) const
@@ -82,8 +82,8 @@ class bapl_lowe_pyramid_set : public vbl_ref_count
  protected:
   //: Return image in the pyramid closest to scale, and adjust i and j if provided
   const vil_image_view<float>& pyramid_at( const bapl_lowe_pyramid<float> & pyramid,
-                                           float scale, float *actual_scale=VXL_NULLPTR,
-                                           float *rel_scale=VXL_NULLPTR ) const;
+                                           float scale, float *actual_scale=nullptr,
+                                           float *rel_scale=nullptr ) const;
 
  private:
   //: Gaussian pyramid

@@ -16,7 +16,7 @@ class bvxm_voxel_slab : public bvxm_voxel_slab_base
 {
  public:
   //: Default Constructor. Create an empty slab.
-  bvxm_voxel_slab() : bvxm_voxel_slab_base(0,0,0), first_voxel_(VXL_NULLPTR), mem_(VXL_NULLPTR) {}
+  bvxm_voxel_slab() : bvxm_voxel_slab_base(0,0,0), first_voxel_(nullptr), mem_(nullptr) {}
 
   //: Create a voxel slab using its own memory.
   bvxm_voxel_slab(unsigned nx, unsigned ny, unsigned nz);
@@ -83,7 +83,7 @@ class bvxm_voxel_slab : public bvxm_voxel_slab_base
   bvxm_memory_chunk_sptr mem_;
 
   //: Disconnect this slab from the underlying data.
-  void release_memory() { mem_ = VXL_NULLPTR; }
+  void release_memory() { mem_ = nullptr; }
 };
 
 #endif // bvxm_voxel_slab_h_

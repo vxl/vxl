@@ -332,7 +332,7 @@ sdet_grid_finder::sdet_grid_finder(sdet_grid_finder_params& gfp)
   projective_homography_valid_ = false;
   affine_homography_valid_ = false;
   homography_valid_ = false;
-  index_ = VXL_NULLPTR;
+  index_ = nullptr;
 }
 
 //:Default Destructor

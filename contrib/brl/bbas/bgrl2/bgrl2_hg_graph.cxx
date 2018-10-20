@@ -33,8 +33,8 @@ void bgrl2_hg_graph::_internal_add_edge (bgrl2_hg_edge* edge)
 
 bool bgrl2_hg_graph::_internal_del_edge (bgrl2_hg_edge* edge)
 {
-  assert (edge->connecting_s_vertex() == VXL_NULLPTR &&
-          edge->connecting_e_vertex() == VXL_NULLPTR);
+  assert (edge->connecting_s_vertex() == nullptr &&
+          edge->connecting_e_vertex() == nullptr);
   int n_removed = edges_.erase (edge->id());
   return n_removed == 1;
 }

@@ -26,7 +26,7 @@ class bgrl_search_func : public vbl_ref_count
 {
  public:
   // Constructor
-  bgrl_search_func(const bgrl_vertex_sptr& init_vertex = VXL_NULLPTR)
+  bgrl_search_func(const bgrl_vertex_sptr& init_vertex = nullptr)
     : curr_vertex_(init_vertex) {}
 
   // Copy constructor
@@ -52,7 +52,7 @@ class bgrl_breadth_search : public bgrl_search_func
 {
  public:
   //: Constructor
-  bgrl_breadth_search(const bgrl_vertex_sptr& init_vertex = VXL_NULLPTR)
+  bgrl_breadth_search(const bgrl_vertex_sptr& init_vertex = nullptr)
     : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor
@@ -75,7 +75,7 @@ class bgrl_depth_search : public bgrl_search_func
 {
  public:
   //: Constructor
-  bgrl_depth_search(const bgrl_vertex_sptr& init_vertex = VXL_NULLPTR)
+  bgrl_depth_search(const bgrl_vertex_sptr& init_vertex = nullptr)
     : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor

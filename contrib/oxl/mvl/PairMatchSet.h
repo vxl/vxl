@@ -92,7 +92,7 @@ class PairMatchSet : public MatchSet
     iterator& operator ++ (/*prefix*/) { next(); return *this; }
     bool isfull() const;
     //: Return true if the iterator has not yet enumerated all matches.
-    operator safe_bool() const { return match_index_ < c_->size() ? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+    operator safe_bool() const { return match_index_ < c_->size() ? VCL_SAFE_BOOL_TRUE : nullptr; }
     //: Return false if the iterator has not yet enumerated all matches.
     bool operator!() const { return match_index_ < c_->size() ? false : true; }
    private:

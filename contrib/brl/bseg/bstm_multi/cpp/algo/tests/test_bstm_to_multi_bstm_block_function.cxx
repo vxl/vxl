@@ -178,25 +178,25 @@ void test_volume() {
 }
 
 void test_get_bstm_data_buffers() {
-  bstm_data_base *alpha = VXL_NULLPTR, *app = VXL_NULLPTR;
+  bstm_data_base *alpha = nullptr, *app = nullptr;
   vcl_string app_type, alpha_prefix = bstm_data_traits<BSTM_ALPHA>::prefix();
   vcl_map<vcl_string, bstm_data_base *> map;
   get_bstm_data_buffers(map, alpha, app, app_type);
-  TEST("get bstm data buffs, empty map", alpha, VXL_NULLPTR);
-  TEST("get bstm data buffs, empty map", app, VXL_NULLPTR);
+  TEST("get bstm data buffs, empty map", alpha, nullptr);
+  TEST("get bstm data buffs, empty map", app, nullptr);
 
-  map[alpha_prefix] = new bstm_data_base(VXL_NULLPTR, 0, bstm_block_id());
+  map[alpha_prefix] = new bstm_data_base(nullptr, 0, bstm_block_id());
   get_bstm_data_buffers(map, alpha, app, app_type);
   TEST("get bstm data buffs, no app", alpha, map[alpha_prefix]);
-  TEST("get bstm data buffs, no app", app, VXL_NULLPTR);
+  TEST("get bstm data buffs, no app", app, nullptr);
 
-  map["BSTM_SCHMERZ"] = new bstm_data_base(VXL_NULLPTR, 0, bstm_block_id());
+  map["BSTM_SCHMERZ"] = new bstm_data_base(nullptr, 0, bstm_block_id());
   get_bstm_data_buffers(map, alpha, app, app_type);
   TEST("get bstm data buffs, no matching app", alpha, map[alpha_prefix]);
-  TEST("get bstm data buffs, no matching app", app, VXL_NULLPTR);
+  TEST("get bstm data buffs, no matching app", app, nullptr);
 
   map[bstm_data_traits<BSTM_MOG3_GREY>::prefix()] =
-      new bstm_data_base(VXL_NULLPTR, 0, bstm_block_id());
+      new bstm_data_base(nullptr, 0, bstm_block_id());
   get_bstm_data_buffers(map, alpha, app, app_type);
   TEST("get bstm data buffs, has app", alpha, map[alpha_prefix]);
   TEST("get bstm data buffs, has app",
@@ -262,7 +262,7 @@ void test_convert_bstm_space_trees() {
 
   /* Initialize data buffers */
   boxm2_array_3d<space_tree_b> &trees = bstm_blk->trees();
-  array_4d<int> cell_indices_4d(VXL_NULLPTR, 10 * 8, 10 * 8, 10 * 8, 10 * 32);
+  array_4d<int> cell_indices_4d(nullptr, 10 * 8, 10 * 8, 10 * 8, 10 * 32);
   for (int i = 0; i < 10; ++i) {
     for (int j = 0; j < 10; ++j) {
       for (int k = 0; k < 10; ++k) {

@@ -75,7 +75,7 @@ void vsl_b_write(vsl_b_ostream& os, volm_conf_score const& score)
 
 void vsl_b_write(vsl_b_ostream& os, volm_conf_score const* score_ptr)
 {
-  if (score_ptr == VXL_NULLPTR)
+  if (score_ptr == nullptr)
     vsl_b_write(os,false);
   else {
     vsl_b_write(os, true);
@@ -95,7 +95,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_score& score)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_score*& score_ptr)
 {
-  delete score_ptr;  score_ptr = VXL_NULLPTR;
+  delete score_ptr;  score_ptr = nullptr;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -107,7 +107,7 @@ void vsl_b_read(vsl_b_istream& is, volm_conf_score*& score_ptr)
 
 void vsl_b_read(vsl_b_istream& is, volm_conf_score_sptr& score_sptr)
 {
-  volm_conf_score* score_ptr = VXL_NULLPTR;
+  volm_conf_score* score_ptr = nullptr;
   vsl_b_read(is, score_ptr);
   score_sptr = score_ptr;
 }

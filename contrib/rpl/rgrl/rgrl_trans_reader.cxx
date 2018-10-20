@@ -33,7 +33,7 @@ read( char const* fn )
   if( ifs.good() )
     return read( ifs );
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 #undef READ_THIS_TRANSFORMATION
@@ -109,7 +109,7 @@ read( std::istream& is )
           << "       " << "Tag [" << tag_str
           << "] cannot match with any existing transformations.\n"
           << "         Try to open istream in BINARY mode!" << std::endl;
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 void

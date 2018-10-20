@@ -78,7 +78,7 @@ namespace boxm2_ocl_batch_update_scene_process_globals
       std::string filename = scene->data_path() + data_type.prefix(image_ids[j]) +"_"+ id.to_string() + ".bin";
       if (vul_file::exists(filename)) {
         char * buffer = new(std::nothrow) char[vul_file::size(filename)];
-        if (buffer == VXL_NULLPTR) std::cout<<"Failed to Allocate Memory"<<std::endl;
+        if (buffer == nullptr) std::cout<<"Failed to Allocate Memory"<<std::endl;
         std::ifstream ifs;
         ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
         if (!ifs) std::cerr << "Failed to open file " << filename << '\n';
@@ -86,7 +86,7 @@ namespace boxm2_ocl_batch_update_scene_process_globals
         map[image_ids[j]] = buffer;
       }
       else {
-        map[image_ids[j]] = VXL_NULLPTR;
+        map[image_ids[j]] = nullptr;
       }
     }
     return map;
@@ -272,7 +272,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
           boxm2_data_traits<BOXM2_AUX2>::datatype* pre_exp_imgK = (boxm2_data_traits<BOXM2_AUX2>::datatype*) (pre_expectations[image_ids[k]]);
           boxm2_data_traits<BOXM2_AUX3>::datatype* seglen_imgK = (boxm2_data_traits<BOXM2_AUX3>::datatype*) (seglens[image_ids[k]]);
 
-          if (exp_imgK == VXL_NULLPTR || obs_imgK == VXL_NULLPTR) {
+          if (exp_imgK == nullptr || obs_imgK == nullptr) {
             std::cerr << "ERROR!!!! exp/obs arrays empty..." << '\n';
             continue;
           }

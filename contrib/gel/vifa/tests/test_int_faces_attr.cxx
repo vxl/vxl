@@ -71,9 +71,9 @@ static void test_int_faces_attr(int argc, char* argv[])
     test_ifa_factory  tif;
     vifa_int_faces_attr  ifsa(region_list,
                               &flp,
-                              VXL_NULLPTR,
-                              VXL_NULLPTR,
-                              VXL_NULLPTR,
+                              nullptr,
+                              nullptr,
+                              nullptr,
                               &np,
                               &tif);
 

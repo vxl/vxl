@@ -394,7 +394,7 @@ void mfpf_hog_box_finder::print_summary(std::ostream& os) const
   normaliser_->print_summary(os);
 
   os << vsl_indent()<< "cost: ";
-  if (cost_.ptr()==VXL_NULLPTR) os << "--"<<std::endl; else os << cost_<<'\n';
+  if (cost_.ptr()==nullptr) os << "--"<<std::endl; else os << cost_<<'\n';
   os << vsl_indent();
   mfpf_point_finder::print_summary(os);
   os << '\n'

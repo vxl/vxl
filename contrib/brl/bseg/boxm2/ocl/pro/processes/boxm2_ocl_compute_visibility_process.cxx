@@ -217,10 +217,10 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
 
     std::vector<boxm2_block_id> vis_order = boxm2_util::order_about_a_block(scene,pt_id);
     std::vector<boxm2_block_id>::iterator id;
-    bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float),VXL_NULLPTR,"ray direction buffer");
+    bocl_mem * ray_image = opencl_cache->alloc_mem(4*cl_ni*cl_nj*sizeof(float),nullptr,"ray direction buffer");
     ray_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
 
-    bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), VXL_NULLPTR,"ray direction buffer");
+    bocl_mem * vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), nullptr,"ray direction buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {

@@ -12,7 +12,7 @@
 
 //: Construct an empty tree from maximum number of levels and levels, to initialize
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): num_levels_(num_levels), root_level_(num_levels-1), max_val_((double)(1 << root_level_)), root_(VXL_NULLPTR)
+boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): num_levels_(num_levels), root_level_(num_levels-1), max_val_((double)(1 << root_level_)), root_(nullptr)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
@@ -35,7 +35,7 @@ boct_tree<T_loc,T_data>::boct_tree(short num_levels, short init_levels): num_lev
 }
 
 template <class T_loc,class T_data>
-boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_levels): num_levels_(num_levels), root_level_(num_levels-1), max_val_((double)(1 << root_level_)), root_(VXL_NULLPTR)
+boct_tree<T_loc,T_data>::boct_tree(T_data data,short num_levels, short init_levels): num_levels_(num_levels), root_level_(num_levels-1), max_val_((double)(1 << root_level_)), root_(nullptr)
 {
   // root is allocated at (max_level_-1) with code [0,0,0]
   boct_loc_code<T_loc> code;
@@ -99,7 +99,7 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::construct_tree(std::vecto
   }
   else {
     std::cerr << "boct_tree: the tree max level is 0, cannot create a tree!\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   for (unsigned i=0; i<leaf_nodes.size(); i++)
@@ -170,7 +170,7 @@ boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone()
 template <class T_loc,class T_data>
 boct_tree<T_loc,T_data>* boct_tree<T_loc,T_data>::clone_all()
 {
-  boct_tree_cell<T_loc, T_data>* cloned_root = root_->clone(VXL_NULLPTR);
+  boct_tree_cell<T_loc, T_data>* cloned_root = root_->clone(nullptr);
   boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(cloned_root,  this->number_levels());
   tree->set_bbox(this->bounding_box());
   return tree;
@@ -187,19 +187,19 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_subtree(boct_tree_cell<
   if (shift_level>0)
   {
     shift_code.set_code(((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1), ((1<<(parent_tree_root_level - subtree_root->level()) )-1));
-    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(VXL_NULLPTR, &shift_code);
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(nullptr, &shift_code);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else if (shift_level == 0)
   {
-    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(VXL_NULLPTR);
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone(nullptr);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else {
     std::cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -216,19 +216,19 @@ boct_tree<T_loc, T_data>* boct_tree<T_loc,T_data>::clone_and_intersect(boct_tree
   if (shift_level>0)
   {
     shift_code.set_code(((1<<(subtree_root->level()))-1), ((1<<(subtree_root->level()))-1), ((1<<(subtree_root->level()))-1));
-    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(VXL_NULLPTR, &shift_code,local_crop_box, parent_tree_root_level);
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(nullptr, &shift_code,local_crop_box, parent_tree_root_level);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else if (shift_level == 0)
   {
-    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(VXL_NULLPTR,local_crop_box, parent_tree_root_level);
+    boct_tree_cell<T_loc, T_data>* root = subtree_root->clone_and_intersect(nullptr,local_crop_box, parent_tree_root_level);
     boct_tree<T_loc,T_data>* tree = new boct_tree<T_loc,T_data>(root, subtree_root->level() +1 );
     return tree;
   }
   else {
     std::cerr << "Error in boct_tree<T_loc,T_data>::clone_subtree\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -253,11 +253,11 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point(const vgl_po
   if (check_out_of_bounds)
   {
     if ((loccode_->x_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
     if ((loccode_->y_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
     if ((loccode_->z_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
   }
 
 #if 0
@@ -368,11 +368,11 @@ boct_tree_cell<T_loc,T_data>* boct_tree<T_loc,T_data>::locate_point_at_level(con
   if (check_out_of_bounds)
   {
     if ((loccode_->x_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
     if ((loccode_->y_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
     if ((loccode_->z_loc_ >> root_level_)^ 0)
-      return VXL_NULLPTR;
+      return nullptr;
   }
   // temporary pointer to traverse
   boct_tree_cell<T_loc,T_data>* curr_cell=root_;
@@ -703,7 +703,7 @@ void boct_tree<T_loc,T_data>::b_read(vsl_b_istream & is)
     vsl_b_read(is, num_levels_);
     vsl_b_read(is, global_bbox_);
     root_ = new boct_tree_cell<T_loc,T_data>();
-    vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)VXL_NULLPTR);
+    vsl_b_read(is, *root_, (boct_tree_cell<T_loc,T_data>*)nullptr);
     this->root_level_ = num_levels_ -1;
     this->max_val_ = (double)(1<<root_level_);
     break;

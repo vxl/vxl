@@ -257,7 +257,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     std::cout << "central_p instance passed is not compatible with the upper layer part passed\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
@@ -297,7 +297,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     }
 
     if (best_fit <= 0)
-      return VXL_NULLPTR;  // this sub-part not found
+      return nullptr;  // this sub-part not found
     strength *= best_fit*best_fit_str;
     if (best_part) {
       brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
@@ -322,7 +322,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     std::cout << "central_p instance passed is not compatible with the upper layer part passes\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
@@ -357,7 +357,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     }
 
     if (best_fit <= 0 || !best_part)
-      return VXL_NULLPTR;  // this sub-part not found
+      return nullptr;  // this sub-part not found
 
     brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
     pi->add_outgoing_edge(e2);
@@ -411,7 +411,7 @@ brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     std::cout << "central_p instance passed is not compatible with the upper layer part passes\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brec_part_instance_sptr pi = new brec_part_instance(upper_p->layer_, upper_p->type_, brec_part_instance_kind::COMPOSED, central_p->x_, central_p->y_, 0.0f);
@@ -444,7 +444,7 @@ brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
     }
 
     if (best_fit <= 0 || !best_part)
-      return VXL_NULLPTR;  // this sub-part not found
+      return nullptr;  // this sub-part not found
 
     brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
     pi->add_outgoing_edge(e2);
@@ -469,7 +469,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
   // first check if types and layers of central_p instance matches with upper_p's info
   if (upper_p->central_part()->type_ != central_p->type_ || upper_p->layer_ != central_p->layer_ + 1) {
     std::cout << "central_p instance passed is not compatible with the upper layer part passes\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   double uniform = 1.0/radius * 1.0/8.0;
@@ -524,7 +524,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
     }
 
     if (best_score <= 0 || !best_part)
-      return VXL_NULLPTR;  // this sub-part not found
+      return nullptr;  // this sub-part not found
 
     brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(pi->cast_to_base(), best_part->cast_to_base(), false);
     e2->set_model(best_edge->dist_model_, best_edge->angle_model_, best_edge->weight_);
@@ -642,12 +642,12 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_detector* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = VXL_NULLPTR;
+    ph = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_detector* &ph)
 {
-  if (ph==VXL_NULLPTR)
+  if (ph==nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

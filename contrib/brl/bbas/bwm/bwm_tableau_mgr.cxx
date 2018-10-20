@@ -15,7 +15,7 @@
 #include <bgui/bgui_image_utils.h>
 #include <vgui/vgui_dialog.h>
 
-bwm_tableau_mgr* bwm_tableau_mgr::instance_ = VXL_NULLPTR;
+bwm_tableau_mgr* bwm_tableau_mgr::instance_ = nullptr;
 std::map<std::string, bwm_command_sptr> bwm_tableau_mgr::tab_types_;
 
 bwm_tableau_mgr* bwm_tableau_mgr::instance()
@@ -96,7 +96,7 @@ void bwm_tableau_mgr::register_tableau(bwm_command_sptr tab_comm)
 
 bwm_command_sptr bwm_tableau_mgr::load_tableau_by_type(std::string tableau_type)
 {
-  bwm_command_sptr comm = VXL_NULLPTR;
+  bwm_command_sptr comm = nullptr;
   std::map<std::string, bwm_command_sptr>::iterator iter = tab_types_.find(tableau_type);
   if (iter != tab_types_.end())
     comm = iter->second;
@@ -223,7 +223,7 @@ vgui_tableau_sptr bwm_tableau_mgr::find_tableau(std::string name)
   if (iter != tableaus_.end()) {
     return iter->second;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 void bwm_tableau_mgr::exit()

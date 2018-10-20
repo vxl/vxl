@@ -187,7 +187,7 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   }
   std::cout << "loading image: " << dem_file << std::endl;
   vil_image_resource_sptr dem_res = vil_load_image_resource(dem_file.c_str());
-  vpgl_geo_camera* dem_cam = VXL_NULLPTR;
+  vpgl_geo_camera* dem_cam = nullptr;
   /*if (dem_cam_sptr) {
     std::cout << "Using the input geo camera for dem image!\n";
     dem_cam = dynamic_cast<vpgl_geo_camera*>(dem_cam_sptr.ptr());

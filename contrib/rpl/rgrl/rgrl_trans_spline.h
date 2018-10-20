@@ -28,12 +28,12 @@ class rgrl_trans_spline
   //: Constructor
   rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                      vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                     rgrl_transformation_sptr xform = VXL_NULLPTR );
+                     rgrl_transformation_sptr xform = nullptr );
   //: Constructor
   rgrl_trans_spline( std::vector<rgrl_spline_sptr> const& splines,
                      vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                      vnl_matrix< double > const& covar,
-                     rgrl_transformation_sptr xform = VXL_NULLPTR );
+                     rgrl_transformation_sptr xform = nullptr );
 
   ~rgrl_trans_spline() {}
 

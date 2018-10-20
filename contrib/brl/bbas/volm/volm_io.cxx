@@ -984,7 +984,7 @@ int volm_io::read_gt_file(std::string gt_file, std::vector<std::pair<vgl_point_3
 
     char *tok = std::strtok(name_buf, "-");
     char *tok2 = std::strtok(tok, "_");
-    tok2 = std::strtok(VXL_NULLPTR, "_"); // tokenize the remaining string
+    tok2 = std::strtok(nullptr, "_"); // tokenize the remaining string
     int img_id;
     std::stringstream tv(tok2); tv >> img_id;
 
@@ -1171,36 +1171,36 @@ bool volm_io::read_building_file(std::string file, std::vector<std::pair<vgl_pol
     char *tok = std::strtok(buffer, ",");
     std::stringstream th(tok); th >> height;
 
-    tok = std::strtok(VXL_NULLPTR, ","); // tokenize the remaining string
+    tok = std::strtok(nullptr, ","); // tokenize the remaining string
     std::stringstream tv(tok); tv >> volume;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream ta(tok); ta >> area;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream tc(tok); tc >> confidence;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream tcl(tok); tcl >> cent_lon;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream tcla(tok); tcla >> cent_lat;
 
     vgl_point_2d<double> cent_pt(cent_lon, cent_lat);
 
     vgl_polygon<double> poly(1);
-    tok = std::strtok(VXL_NULLPTR, ",");
-    while (tok != VXL_NULLPTR) {
+    tok = std::strtok(nullptr, ",");
+    while (tok != nullptr) {
       std::stringstream tl(tok);
       tl >> lon;
 
-      tok = std::strtok(VXL_NULLPTR, ",");
+      tok = std::strtok(nullptr, ",");
       std::stringstream tlat(tok);
       tlat >> lat;
 
       vgl_point_2d<double> pt(lon, lat);  // lon is x
       poly[0].push_back(pt);
-      tok = std::strtok(VXL_NULLPTR, ",");
+      tok = std::strtok(nullptr, ",");
     }
     // remove the duplicated points inside polygon
     vgl_polygon<double> prune_poly(1);
@@ -1234,13 +1234,13 @@ bool volm_io::read_sme_file(std::string file, std::vector<std::pair<vgl_point_2d
     char *tok = std::strtok(buffer, ",");
     std::stringstream th(tok); th >> name;
 
-    tok = std::strtok(VXL_NULLPTR, ","); // tokenize the remaining string
+    tok = std::strtok(nullptr, ","); // tokenize the remaining string
     std::stringstream tv(tok); tv >> lon;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream ta(tok); ta >> lat;
 
-    tok = std::strtok(VXL_NULLPTR, ",");
+    tok = std::strtok(nullptr, ",");
     std::stringstream tc(tok); tc >> type;
 
     vgl_point_2d<double> pt(lon, lat);
@@ -1309,10 +1309,10 @@ bool volm_io::read_dem_peak_file(std::string const& file, std::vector<std::pair<
     char *tok = std::strtok(buffer, " ");
     std::stringstream tlat(tok);  tlat >> lat;
 
-    tok = std::strtok(VXL_NULLPTR, " ");
+    tok = std::strtok(nullptr, " ");
     std::stringstream tlon(tok);  tlon >> lon;
 
-    tok = std::strtok(VXL_NULLPTR, " ");
+    tok = std::strtok(nullptr, " ");
     std::stringstream theight(tok);  theight >> height;
 
     vgl_point_2d<double> peak_loc(lon, lat);

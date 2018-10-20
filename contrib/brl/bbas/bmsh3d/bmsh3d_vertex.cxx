@@ -27,10 +27,10 @@
 int bmsh3d_vertex::get_incident_Fs(std::set<bmsh3d_face*>& face_set)
 {
   //: loop through all incident edges and put all faces into the set.
-  for (bmsh3d_ptr_node* cur = E_list_; cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = E_list_; cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     //loop through all incident halfedges of this edge and get the associated faces
-    if (E->halfedge() && E->halfedge()->pair() == VXL_NULLPTR)
+    if (E->halfedge() && E->halfedge()->pair() == nullptr)
     {
       face_set.insert(E->halfedge()->face());
     }
@@ -64,7 +64,7 @@ VTOPO_TYPE bmsh3d_vertex::detect_vtopo_type() const
 
   //2) Reset all incident edges to be unvisited.
   unsigned int countE = 0;
-  for (bmsh3d_ptr_node* cur = E_list_; cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = E_list_; cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     E->set_i_visited(0);
     countE++;
@@ -100,7 +100,7 @@ VTOPO_TYPE bmsh3d_vertex::detect_vtopo_type() const
   //4) Remaining: VTOPO_NON_MANIFOLD and VTOPO_NON_MANIFOLD_1RING
   //   Run check_2_manifold_() on all remaining unvisited edges.
   const bmsh3d_edge* nextE = find_unvisited_E_();
-  while (nextE != VXL_NULLPTR) {
+  while (nextE != nullptr) {
     check_2_manifold_(nextE, cond);
 
     if (cond == VTOPO_EDGE_ONLY)
@@ -131,7 +131,7 @@ unsigned int bmsh3d_vertex::check_2_manifold_(const bmsh3d_edge* startE,
   unsigned int nE = 0;
   const bmsh3d_edge* E = (const bmsh3d_edge*) startE;
   bmsh3d_halfedge* startHE = E->halfedge();
-  if (startHE == VXL_NULLPTR) {
+  if (startHE == nullptr) {
     cond = VTOPO_EDGE_ONLY;
     return nE;
   }
@@ -147,7 +147,7 @@ unsigned int bmsh3d_vertex::check_2_manifold_(const bmsh3d_edge* startE,
 
     bmsh3d_halfedge* otherHE = HE->face()->find_other_HE(this, HE);
     bmsh3d_halfedge* nextHE = otherHE->pair();
-    if (nextHE == VXL_NULLPTR) { //hit the boundary
+    if (nextHE == nullptr) { //hit the boundary
       cond = BOGUS_VTOPO_TYPE;
       return nE+1;
     }
@@ -163,12 +163,12 @@ unsigned int bmsh3d_vertex::check_2_manifold_(const bmsh3d_edge* startE,
 
 const bmsh3d_edge* bmsh3d_vertex::find_unvisited_E_() const
 {
-  for (bmsh3d_ptr_node* cur = E_list_; cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = E_list_; cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (! E->b_visited())
       return E;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 void bmsh3d_vertex::getInfo(std::ostringstream& ostrm)
@@ -222,13 +222,13 @@ void bmsh3d_vertex::getInfo(std::ostringstream& ostrm)
 
 const bmsh3d_halfedge* bmsh3d_vertex::get_1st_bnd_HE() const
 {
-  for (bmsh3d_ptr_node* cur = E_list_; cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = E_list_; cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E->halfedge())
-      if (E->halfedge()->pair() == VXL_NULLPTR)
+      if (E->halfedge()->pair() == nullptr)
         return E->halfedge();
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: for 2-manifold mesh, return all incident halfedges (without duplicate pairs) in order return the last halfedge
@@ -236,10 +236,10 @@ bmsh3d_halfedge* bmsh3d_vertex::m2_get_ordered_HEs(std::vector<const bmsh3d_half
 {
   const bmsh3d_halfedge* startHE = get_1st_bnd_HE();
 
-  if (startHE == VXL_NULLPTR) { //if no boundary halfedge, just get any halfedge.
+  if (startHE == nullptr) { //if no boundary halfedge, just get any halfedge.
     const bmsh3d_edge* E = get_1st_incident_E();
-    if (E == VXL_NULLPTR)
-      return VXL_NULLPTR;
+    if (E == nullptr)
+      return nullptr;
     startHE = E->halfedge();
   }
 
@@ -248,14 +248,14 @@ bmsh3d_halfedge* bmsh3d_vertex::m2_get_ordered_HEs(std::vector<const bmsh3d_half
     ordered_halfedges.push_back(HE);
     bmsh3d_halfedge* otherHE = HE->face()->find_other_HE(this, HE);
     bmsh3d_halfedge* nextHE = otherHE->pair();
-    if (nextHE == VXL_NULLPTR)
+    if (nextHE == nullptr)
       return otherHE; //hit the boundary, return.
 
     HE = nextHE;
   }
   while (HE->edge() != startHE->edge());
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 bmsh3d_halfedge* bmsh3d_vertex::m2_get_next_bnd_HE(const bmsh3d_halfedge* inputHE) const
@@ -263,14 +263,14 @@ bmsh3d_halfedge* bmsh3d_vertex::m2_get_next_bnd_HE(const bmsh3d_halfedge* inputH
   do {
     bmsh3d_halfedge* otherHE = inputHE->face()->find_other_HE(this, inputHE);
     bmsh3d_halfedge* nextHE = otherHE->pair();
-    if (nextHE == VXL_NULLPTR)
+    if (nextHE == nullptr)
       return otherHE; //hit the boundary, return.
 
     inputHE = nextHE;
   }
   while (inputHE->edge() != inputHE->edge());
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //:
@@ -283,7 +283,7 @@ bool bmsh3d_vertex::m2_is_on_bnd(bmsh3d_halfedge* inputHE) const
   do {
     bmsh3d_halfedge* otherHE = HE->face()->find_other_HE(this, HE);
     bmsh3d_halfedge* nextHE = otherHE->pair();
-    if (nextHE == VXL_NULLPTR)
+    if (nextHE == nullptr)
       return true; //hit the boundary, return.
 
     HE = nextHE;
@@ -312,12 +312,12 @@ double bmsh3d_vertex::m2_sum_theta() const
 bmsh3d_edge* E_sharing_2V(const bmsh3d_vertex* V1,
                           const bmsh3d_vertex* V2)
 {
-  for (bmsh3d_ptr_node* cur = V1->E_list(); cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = V1->E_list(); cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E->is_V_incident(V2))
       return (bmsh3d_edge*)E; // casting away const!!!
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 bmsh3d_face* find_F_sharing_Vs(std::vector<bmsh3d_vertex*>& vertices)
@@ -332,7 +332,7 @@ bmsh3d_face* find_F_sharing_Vs(std::vector<bmsh3d_vertex*>& vertices)
     if (F->all_Vs_incident(vertices))
       return F;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 bmsh3d_face* get_non_manifold_1ring_extra_Fs(bmsh3d_vertex* V)
@@ -341,7 +341,7 @@ bmsh3d_face* get_non_manifold_1ring_extra_Fs(bmsh3d_vertex* V)
 
   //Reset all incident edges to be unvisited.
   const bmsh3d_edge* firstE = V->get_1st_incident_E();
-  for (bmsh3d_ptr_node* cur = V->E_list(); cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = V->E_list(); cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (! E->b_visited())
       E->set_i_visited(0);
@@ -375,7 +375,7 @@ bool is_F_V_incidence(bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_ve
     return false; //if V has no incident edges or faces, no problem.
 
   //Go through V's incident edges and check if any one is (V, V1) or (V, V2).
-  for (bmsh3d_ptr_node* cur = V->E_list(); cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = V->E_list(); cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E->both_Vs_incident(V, V1) || E->both_Vs_incident(V, V2))
       return false;
@@ -385,13 +385,13 @@ bool is_F_V_incidence(bmsh3d_vertex* V, const bmsh3d_vertex* V1, const bmsh3d_ve
 
 const bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inputE)
 {
-  for (bmsh3d_ptr_node* cur = V->E_list(); cur != VXL_NULLPTR; cur = cur->next()) {
+  for (bmsh3d_ptr_node* cur = V->E_list(); cur != nullptr; cur = cur->next()) {
     const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
     if (E == inputE)
       continue;
     assert(E);
     return E;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 

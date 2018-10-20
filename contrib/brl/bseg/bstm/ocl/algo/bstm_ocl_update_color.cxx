@@ -62,7 +62,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
      use_mask = true;
    }
 
-   vil_image_view<unsigned char >* mask_map = VXL_NULLPTR;
+   vil_image_view<unsigned char >* mask_map = nullptr;
    if (use_mask) {
      mask_map = dynamic_cast<vil_image_view<unsigned char> *>(mask_sptr.ptr());
      if (!mask_map) {

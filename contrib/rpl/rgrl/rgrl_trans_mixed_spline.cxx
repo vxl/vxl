@@ -9,7 +9,7 @@ map_loc( vnl_vector< double > const& from,
          vnl_vector< double > & to ) const
 {
   vnl_vector< double > temp_to;
-  to.set( VXL_NULLPTR );
+  to.set( nullptr );
 
   for ( unsigned i = 0; i < trans_splines_.size(); ++i ) {
     trans_splines_[i].map_location( from, temp_to );
@@ -49,7 +49,7 @@ rgrl_trans_mixed_spline::
 scale_by( double scale ) const
 {
   assert( !"rgrl_trans_mixed_spline::scale_by() is not implemented!" );
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 

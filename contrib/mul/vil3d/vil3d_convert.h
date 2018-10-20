@@ -212,7 +212,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_cast(outP /*dummy*/,
     macro( VIL_PIXEL_FORMAT_DOUBLE, double )
     macro( VIL_PIXEL_FORMAT_BOOL, bool )
 #undef macro
-    default: dest=VXL_NULLPTR;
+    default: dest=nullptr;
   }
   return dest;
 }
@@ -262,7 +262,7 @@ inline vil3d_image_view_base_sptr vil3d_convert_round(
     macro(VIL_PIXEL_FORMAT_FLOAT , float )
     macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
-   default: dest=VXL_NULLPTR;
+   default: dest=nullptr;
   }
   return dest;
 }

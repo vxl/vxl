@@ -127,7 +127,7 @@ convert_to_frame(std::vector<vil_image_view<float> >const&  views,
 {
   unsigned np = views.size();
   if (!np)
-    return VXL_NULLPTR;
+    return nullptr;
   unsigned ni = views[0].ni(), nj = views[0].nj();
   if (!preserve_float){
     std::vector<vil_image_view<unsigned char> > cviews;

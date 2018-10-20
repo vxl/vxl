@@ -92,7 +92,7 @@ void parse_cmdline(int argc, const char **argv, vbl_array_3d<std::string>& fname
 
 vil3d_image_resource_sptr fname_to_resource(const std::string& fname)
 {
-  if (fname.empty()) return VXL_NULLPTR;
+  if (fname.empty()) return nullptr;
 
   vil3d_image_resource_sptr im = vil3d_load_image_resource(fname.c_str());
 

@@ -28,18 +28,18 @@ public :
   sdet_EHT_node* parent;
   std::list<sdet_EHT_node*> children;
 
-  sdet_EHT_node(sdet_edgel* new_e): e(new_e), parent(VXL_NULLPTR), children(0) {}
+  sdet_EHT_node(sdet_edgel* new_e): e(new_e), parent(nullptr), children(0) {}
   ~sdet_EHT_node()
   {
-    if (parent!=VXL_NULLPTR){
+    if (parent!=nullptr){
       parent->children.remove(this);
-      parent = VXL_NULLPTR;
+      parent = nullptr;
     }
 
     while(children.size()>0)
       delete children.front();
 
-    e = VXL_NULLPTR;
+    e = nullptr;
   }
 
   void add_child(sdet_EHT_node* new_node)
@@ -56,14 +56,14 @@ public:
   sdet_EHT_node* root;
 
   //: constructor 1
-  sdet_EHT(sdet_EHT_node* new_root=VXL_NULLPTR): root(new_root) {}
+  sdet_EHT(sdet_EHT_node* new_root=nullptr): root(new_root) {}
 
   //: constructor 2
   sdet_EHT(sdet_edgel* root_e){ root = new sdet_EHT_node(root_e); }
 
   ~sdet_EHT(){ delete_tree(); }
 
-  void delete_tree(){ delete root; root = VXL_NULLPTR;}
+  void delete_tree(){ delete root; root = nullptr;}
 
   //: DFS iterator
   class path_iterator
@@ -102,9 +102,9 @@ public:
           return;
 
         //if the current node has no parents, it must be the root node, go oto its first child
-        if (ptr_->parent==VXL_NULLPTR){
+        if (ptr_->parent==nullptr){
           if (ptr_->children.size()==0){ //only one element in the tree
-            ptr_ = VXL_NULLPTR; //set the pointer
+            ptr_ = nullptr; //set the pointer
             cur_path_.clear();
             return;
           }
@@ -127,8 +127,8 @@ public:
             cur = parent;
             parent = cur->parent;
 
-            if (parent==VXL_NULLPTR){ //we have reached the root node again so terminate
-              ptr_ = VXL_NULLPTR;
+            if (parent==nullptr){ //we have reached the root node again so terminate
+              ptr_ = nullptr;
               cur_path_.clear();
               return;
             }
@@ -167,7 +167,7 @@ public:
   path_iterator path_begin() { path_iterator it(root); it++; return it; }
 
   //: Return an iterator to a null pointer (only at the very last leaf node)
-  path_iterator path_end() { return path_iterator(VXL_NULLPTR); }
+  path_iterator path_end() { return path_iterator(nullptr); }
 
   //delete a subtree pointed to by the given iterator
   void delete_subtree(path_iterator& it)

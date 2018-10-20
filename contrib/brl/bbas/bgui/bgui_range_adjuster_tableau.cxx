@@ -52,23 +52,23 @@ void bgui_range_adjuster_tableau::init()
 // Constructors
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(const char* n) :
-  vgui_easy2D_tableau(n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
+  vgui_easy2D_tableau(n), min_bar_(nullptr), max_bar_(nullptr),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(nullptr), hist_(0,0)
 {   this->init(); }
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(vgui_tableau_sptr const& t,
                                                          const char* n) :
-  vgui_easy2D_tableau(t, n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
+  vgui_easy2D_tableau(t, n), min_bar_(nullptr), max_bar_(nullptr),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(nullptr), hist_(0,0)
 {   this->init(); }
 
 bgui_range_adjuster_tableau::bgui_range_adjuster_tableau(vgui_image_tableau_sptr const& t,
                                                          const char* n) :
-  vgui_easy2D_tableau(t,n), min_bar_(VXL_NULLPTR), max_bar_(VXL_NULLPTR),
+  vgui_easy2D_tableau(t,n), min_bar_(nullptr), max_bar_(nullptr),
   left_offset_(10), top_offset_(10),
-  graph_width_(256), graph_height_(200), plot_(VXL_NULLPTR), hist_(0,0)
+  graph_width_(256), graph_height_(200), plot_(nullptr), hist_(0,0)
 {   this->init(); }
 
 //========================================================================
@@ -255,7 +255,7 @@ vgui_image_tableau_sptr bgui_range_adjuster_tableau::get_child_image_tableau()
     return itab;
   }
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 float bgui_range_adjuster_tableau::screen_to_bar(const float sx)
@@ -370,6 +370,6 @@ void bgui_range_adjuster_tableau::clear()
 {
   this->remove(plot_);
   delete plot_;
-  plot_ = VXL_NULLPTR;
+  plot_ = nullptr;
   this->post_redraw();
 }

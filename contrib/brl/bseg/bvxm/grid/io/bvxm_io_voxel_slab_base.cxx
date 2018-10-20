@@ -30,12 +30,12 @@ void vsl_b_read(vsl_b_istream& is, bvxm_voxel_slab_base* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = VXL_NULLPTR;
+    ph = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_slab_base* &ph)
 {
-  if (ph==VXL_NULLPTR)
+  if (ph==nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

@@ -63,7 +63,7 @@ class bgrl_graph : public vbl_ref_count
   //: Add an edge between \p v1 and \p v2
   bgrl_edge_sptr add_edge( const bgrl_vertex_sptr& v1,
                            const bgrl_vertex_sptr& v2,
-                           const bgrl_edge_sptr& model_edge = VXL_NULLPTR);
+                           const bgrl_edge_sptr& model_edge = nullptr);
 
   //: Add an edge between \p v1 and \p v2
   bool remove_edge( const bgrl_vertex_sptr& v1, const bgrl_vertex_sptr& v2 );
@@ -142,7 +142,7 @@ class bgrl_graph : public vbl_ref_count
   friend class bgrl_graph::iterator;
 
   //: Depth first search begin iterator
-  iterator begin(const bgrl_search_func_sptr& func = VXL_NULLPTR) { return iterator(this, func); }
+  iterator begin(const bgrl_search_func_sptr& func = nullptr) { return iterator(this, func); }
   //: Depth first search end iterator
   iterator end()   { return iterator(this); }
 };

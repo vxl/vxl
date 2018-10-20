@@ -49,11 +49,11 @@ vifa_histogram::vifa_histogram(int xres, float val1, float val2)
   stats_consistent |= (MEAN_FLAG | SD_FLAG);
   delimiter = ' ';
 
-  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
+  if (vals == nullptr || counts == nullptr)
   {
     std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = VXL_NULLPTR;
-    counts = VXL_NULLPTR;
+    vals = nullptr;
+    counts = nullptr;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -104,11 +104,11 @@ vifa_histogram::vifa_histogram(const vifa_histogram& h)
   counts = new float[num];
   float const* his_counts = h.GetCounts();
 
-  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
+  if (vals == nullptr || counts == nullptr)
   {
     std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = VXL_NULLPTR;
-    counts = VXL_NULLPTR;
+    vals = nullptr;
+    counts = nullptr;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -195,11 +195,11 @@ vifa_histogram::vifa_histogram(vifa_histogram const* his, float width, bool pres
   vmax =  mean_val + half_range;
   vmin =  mean_val - half_range;
 
-  if (vals == VXL_NULLPTR || counts == VXL_NULLPTR)
+  if (vals == nullptr || counts == nullptr)
   {
     std::cerr << "vifa_histogram : Ran out of array memory.\n\n";
-    vals = VXL_NULLPTR;
-    counts = VXL_NULLPTR;
+    vals = nullptr;
+    counts = nullptr;
     num = 0;
     vmin = 0;
     vmax = 0;
@@ -637,7 +637,7 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
   if ((2*radius +1)> num/2)
   {
     std::cerr << "In vifa_histogram::NonMaximumSupress(): radius is too large\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   // Get the counts array of "this"
   vifa_histogram* h_new = new vifa_histogram(*this);

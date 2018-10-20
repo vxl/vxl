@@ -91,15 +91,15 @@ boxm2_ocl_vis_score_renderer
   delete[] max_omega_buff_;
 
   opencl_cache_->unref_mem(exp_vis_score_image_.ptr());
-  exp_vis_score_image_ = bocl_mem_sptr(VXL_NULLPTR);
+  exp_vis_score_image_ = bocl_mem_sptr(nullptr);
   opencl_cache_->unref_mem(vis_image_.ptr());
-  vis_image_ = bocl_mem_sptr(VXL_NULLPTR);
+  vis_image_ = bocl_mem_sptr(nullptr);
   opencl_cache_->unref_mem(max_omega_image_.ptr());
-  max_omega_image_ = bocl_mem_sptr(VXL_NULLPTR);
+  max_omega_image_ = bocl_mem_sptr(nullptr);
   opencl_cache_->unref_mem(img_dim_.ptr());
-  img_dim_ = bocl_mem_sptr(VXL_NULLPTR);
+  img_dim_ = bocl_mem_sptr(nullptr);
   opencl_cache_->unref_mem(tnearfar_.ptr());
-  tnearfar_ = bocl_mem_sptr(VXL_NULLPTR);
+  tnearfar_ = bocl_mem_sptr(nullptr);
 
   buffers_allocated_ = false;
   return true;

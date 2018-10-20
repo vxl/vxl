@@ -68,7 +68,7 @@ class rsdl_borgefors
   void set(int org_x, int org_y, int size_x, int size_y,
            iterator_type begin, iterator_type end,
            vbl_array_2d<int> index_map,
-           vbl_array_2d<int>* distance_map = VXL_NULLPTR );
+           vbl_array_2d<int>* distance_map = nullptr );
 
   //: resets the data members
   void reset();

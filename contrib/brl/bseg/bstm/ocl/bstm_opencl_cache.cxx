@@ -9,8 +9,8 @@ bstm_opencl_cache
                     bocl_device_sptr device) :
   scene_(scene),
   bytesInCache_(0),
-  block_info_(VXL_NULLPTR),
-  block_info_t_(VXL_NULLPTR),
+  block_info_(nullptr),
+  block_info_t_(nullptr),
   device_(device)
 {
   // store max bytes allowed in cache - use only 80 percent of the memory
@@ -68,14 +68,14 @@ bstm_opencl_cache
     bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
-    block_info_=VXL_NULLPTR;
+    block_info_=nullptr;
   }
 
   if (block_info_t_) {
     bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
     delete buff;
     delete block_info_t_;
-    block_info_t_=VXL_NULLPTR;
+    block_info_t_=nullptr;
   }
 
 
@@ -243,7 +243,7 @@ bstm_opencl_cache
       bstm_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          std::cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << std::endl;
-         return (bocl_mem*)VXL_NULLPTR;
+         return (bocl_mem*)nullptr;
       }
 #ifdef DEBUG
       std::cout<<lru_id<<" ... ";
@@ -319,7 +319,7 @@ bstm_opencl_cache
       bstm_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          std::cerr << "ERROR: bstm_opencl_cache::get_block(): lru is empty" << std::endl;
-         return (bocl_mem*)VXL_NULLPTR;
+         return (bocl_mem*)nullptr;
       }
       if (lru_id == id)
         std::cout<<"bstm_opencl_cache:: Single Block Size is too big for GPU RAM"<<std::endl;
@@ -418,7 +418,7 @@ bstm_opencl_cache
       bstm_block_id lru_id;
       if(!this->lru_remove_last(lru_id)) {
          std::cerr << "ERROR: bstm_opencl_cache::get_data() : lru is empty" << std::endl;
-         return (bocl_mem*)VXL_NULLPTR;
+         return (bocl_mem*)nullptr;
       }
 #ifdef DEBUG
       std::cout<<lru_id<<" ... ";
@@ -435,7 +435,7 @@ bstm_opencl_cache
   // if num bytes is specified and the data doesn't match, create empty buffer
   if (num_bytes > 0 && data_base->buffer_length() != num_bytes )
   {
-    bocl_mem* data = new bocl_mem(*context_, VXL_NULLPTR, num_bytes, type);
+    bocl_mem* data = new bocl_mem(*context_, nullptr, num_bytes, type);
     data->create_buffer(CL_MEM_READ_WRITE);
     this->deep_replace_data(id,type,data,read_only);
     //data->zero_gpu_buffer(*queue_);
@@ -488,7 +488,7 @@ bstm_opencl_cache
       bstm_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          std::cerr << "ERROR: bstm_opencl_cache::get_data_new() : lru is empty " << std::endl;
-         return (bocl_mem*)VXL_NULLPTR;
+         return (bocl_mem*)nullptr;
       }
 #ifdef DEBUG
       std::cout<<lru_id<<" ... ";
@@ -529,7 +529,7 @@ bstm_opencl_cache
       bstm_block_id lru_id;
       if (!this->lru_remove_last(lru_id)) {
          std::cerr << "ERROR: lru empty. unable to alloc buffer of requested size. " << std::endl;
-         return (bocl_mem*)VXL_NULLPTR;
+         return (bocl_mem*)nullptr;
       }
 #ifdef DEBUG
       std::cout<<lru_id<<" ... ";

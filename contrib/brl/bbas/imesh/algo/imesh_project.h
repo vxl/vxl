@@ -62,7 +62,7 @@ void imesh_project(const imesh_mesh& mesh,
                    const vpgl_proj_camera<double>& camera,
                    const vpgl_lens_distortion<double>& lens,
                    vil_image_view<bool>& image,
-                   vgl_box_2d<unsigned int>* bbox = VXL_NULLPTR);
+                   vgl_box_2d<unsigned int>* bbox = nullptr);
 
 //: project the mesh onto the image plane using the camera
 //  Set each pixel of the image to true if the mesh projects onto it

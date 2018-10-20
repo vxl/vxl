@@ -57,10 +57,10 @@ bool RawPMatrixStore::Save(int)
 PMatrix_sptr RawPMatrixStore::Get(int i)
 {
   if (i< 0)
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (!check_index(i))
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (!pmatrix_[i])
     Load(i);

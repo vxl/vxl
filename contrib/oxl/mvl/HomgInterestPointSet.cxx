@@ -33,7 +33,7 @@ HomgInterestPointSet::HomgInterestPointSet()
 {
   data_ = new HomgInterestPointSetData;
 
-  init_conditioner(VXL_NULLPTR);
+  init_conditioner(nullptr);
 }
 
 //: Construct an empty corner set which will use the given conditioner to convert from image to homogeneous coordinates.
@@ -47,7 +47,7 @@ HomgInterestPointSet::HomgInterestPointSet(const HomgMetric& c)
 //: Load corners from ASCII disk file
 HomgInterestPointSet::HomgInterestPointSet(const char* filename, const HomgMetric& c)
 {
-  data_ = VXL_NULLPTR;
+  data_ = nullptr;
   read(filename, c);
   init_conditioner(c);
 }
@@ -137,7 +137,7 @@ void HomgInterestPointSet::clear()
 {
   delete data_;
   data_ = new HomgInterestPointSetData;
-  set_conditioner(VXL_NULLPTR);
+  set_conditioner(nullptr);
 }
 
 //: Destructor

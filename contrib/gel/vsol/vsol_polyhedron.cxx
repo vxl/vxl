@@ -196,7 +196,7 @@ void vsol_polyhedron::print_summary(std::ostream &os) const
 void
 vsl_b_write(vsl_b_ostream &os, vsol_polyhedron const* p)
 {
-  if (p==VXL_NULLPTR) {
+  if (p==nullptr) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -217,5 +217,5 @@ vsl_b_read(vsl_b_istream &is, vsol_polyhedron* &p)
     p->b_read(is);
   }
   else
-    p = VXL_NULLPTR;
+    p = nullptr;
 }

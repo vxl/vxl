@@ -74,7 +74,7 @@ osl_canny_rothwell::~osl_canny_rothwell()
 
 void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edge*> *edges, bool adaptive)
 {
-  assert(edges!=VXL_NULLPTR);
+  assert(edges!=nullptr);
 
   xsize_  = image.height();
   ysize_  = image.width();
@@ -91,17 +91,17 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edg
              << "Lower threshold = " << low_ << std::endl
              << "Smoothing range = " << range_ << std::endl << std::endl;
 
-  smooth_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  dx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  dy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  grad_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  thick_    = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  thin_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  theta_    = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)VXL_NULLPTR);
-  dangling_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
-  junction_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
-  jx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
-  jy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)VXL_NULLPTR);
+  smooth_   = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  dx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  dy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  grad_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  thick_    = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  thin_     = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  theta_    = osl_canny_base_make_raw_image(xsize_, ysize_, (float*)nullptr);
+  dangling_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)nullptr);
+  junction_ = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)nullptr);
+  jx_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)nullptr);
+  jy_       = osl_canny_base_make_raw_image(xsize_, ysize_, (int*)nullptr);
 
   osl_canny_base_fill_raw_image(theta_ ,xsize_, ysize_, DUMMYTHETA);
   osl_canny_base_fill_raw_image(smooth_,xsize_, ysize_, 0.0f);
@@ -674,9 +674,9 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
                         << "Kernel size     = " << k_size_ << std::endl;
 
   // Set up the new images
-  float **dx   = osl_canny_base_make_raw_image(image_size,image_size, (float*)VXL_NULLPTR);
-  float **dy   = osl_canny_base_make_raw_image(image_size,image_size, (float*)VXL_NULLPTR);
-  float **grad = osl_canny_base_make_raw_image(image_size,image_size, (float*)VXL_NULLPTR);
+  float **dx   = osl_canny_base_make_raw_image(image_size,image_size, (float*)nullptr);
+  float **dy   = osl_canny_base_make_raw_image(image_size,image_size, (float*)nullptr);
+  float **grad = osl_canny_base_make_raw_image(image_size,image_size, (float*)nullptr);
 
   // For each dangling-end (X,Y), search for more edges at the reduced scale
   int count=0;

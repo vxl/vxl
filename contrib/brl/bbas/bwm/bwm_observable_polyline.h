@@ -22,7 +22,7 @@
 class bwm_observable_polyline : public bwm_observable
 {
  public:
-  bwm_observable_polyline() : object_(VXL_NULLPTR) {}
+  bwm_observable_polyline() : object_(nullptr) {}
   ~bwm_observable_polyline() {}
 
   std::string type_name() const { return "bwm_observable_polyline"; }

@@ -173,7 +173,7 @@ class depth_map_scene : public vbl_ref_count
 class scene_depth_iterator
 {
  public:
-  scene_depth_iterator(depth_map_scene* scene = VXL_NULLPTR)
+  scene_depth_iterator(depth_map_scene* scene = nullptr)
   : end_(false), scene_(scene) {}
 
   ~scene_depth_iterator() {}

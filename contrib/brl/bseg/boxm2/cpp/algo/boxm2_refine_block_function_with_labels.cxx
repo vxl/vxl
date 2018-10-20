@@ -28,22 +28,22 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, std
     if(datas.size()>=4)
         flow_res_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_res_ = VXL_NULLPTR;
+        flow_res_ = nullptr;
 
     if(datas.size()>=5)
         alpha_sav_   =  (float*)   datas[i++]->data_buffer();
     else
-        alpha_sav_ = VXL_NULLPTR;
+        alpha_sav_ = nullptr;
 
      if(datas.size()>=6)
         mog_sav_   =  (T*)   datas[i++]->data_buffer();
     else
-        mog_sav_ = VXL_NULLPTR;
+        mog_sav_ = nullptr;
 
      if(datas.size()>=7)
         flow_   =  (vnl_vector_fixed<float,4>*)   datas[i++]->data_buffer();
     else
-        flow_ = VXL_NULLPTR;
+        flow_ = nullptr;
 
 
 
@@ -141,10 +141,10 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
   std::cout << "data size is "<<app_type_size_<<" , "<<sizeof(T)<<" and id is "<<app_type_<<std::endl;
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * app_type_size_], dataSize * app_type_size_, id);
-  boxm2_data_base* newF = VXL_NULLPTR;
-  boxm2_data_base* newF_res = VXL_NULLPTR;
-  boxm2_data_base* newA_sav = VXL_NULLPTR;
-  boxm2_data_base* newM_sav = VXL_NULLPTR;
+  boxm2_data_base* newF = nullptr;
+  boxm2_data_base* newF_res = nullptr;
+  boxm2_data_base* newA_sav = nullptr;
+  boxm2_data_base* newM_sav = nullptr;
   T fills;
   fills.fill(0);
 
@@ -170,10 +170,10 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
 
   float*   alpha_cpy = (float*) newA->data_buffer();
   T* mog_cpy   = (T*) newM->data_buffer();
-  float4*   flow_cpy = VXL_NULLPTR;
-  float4*  flow_res_cpy =VXL_NULLPTR;
-  float*   alpha_sav_cpy = VXL_NULLPTR;
-  T*  mog_sav_cpy = VXL_NULLPTR;
+  float4*   flow_cpy = nullptr;
+  float4*  flow_res_cpy =nullptr;
+  float*   alpha_sav_cpy = nullptr;
+  T*  mog_sav_cpy = nullptr;
   if(flow_)
           flow_cpy =(float4*)newF->data_buffer();
   if(flow_res_)

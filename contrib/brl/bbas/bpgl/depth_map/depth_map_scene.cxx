@@ -384,7 +384,7 @@ void depth_map_scene::b_read(vsl_b_istream& is)
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
 {
-  if (ds_ptr ==VXL_NULLPTR)
+  if (ds_ptr ==nullptr)
     vsl_b_write(os, false);
   else
     vsl_b_write(os, true);
@@ -401,7 +401,7 @@ void vsl_b_read(vsl_b_istream &is, depth_map_scene*& ds_ptr)
     ds_ptr->b_read(is);
     return;
   }
-  ds_ptr = VXL_NULLPTR;
+  ds_ptr = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
@@ -412,7 +412,7 @@ void vsl_b_write(vsl_b_ostream& os, const depth_map_scene_sptr& ds_ptr)
 
 void vsl_b_read(vsl_b_istream &is, depth_map_scene_sptr& ds_ptr)
 {
-  depth_map_scene* ds=VXL_NULLPTR;
+  depth_map_scene* ds=nullptr;
   vsl_b_read(is, ds);
   ds_ptr = ds;
 }

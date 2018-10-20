@@ -119,8 +119,8 @@ void test_weighted_epanech_kernel_pdf()
   vsl_b_write(bfs_out,p_pdf_built);
   bfs_out.close();
 
-  pdf1d_pdf*         p_pdf_in = VXL_NULLPTR;
-  pdf1d_builder*     p_builder_in = VXL_NULLPTR;
+  pdf1d_pdf*         p_pdf_in = nullptr;
+  pdf1d_builder*     p_builder_in = nullptr;
 
   vsl_b_ifstream bfs_in("test_gaussian_kernel_pdf.bvl.tmp");
   TEST("Opened test_gaussian_kernel_pdf.bvl.tmp for reading", (!bfs_in), false);

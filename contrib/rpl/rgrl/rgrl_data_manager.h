@@ -162,10 +162,10 @@ class rgrl_data_manager: public rgrl_object
   void add_data( unsigned stage,
                  rgrl_feature_set_sptr                    from_set,
                  rgrl_feature_set_sptr                    to_set,
-                 rgrl_matcher_sptr                        matcher = VXL_NULLPTR,
-                 rgrl_weighter_sptr                       weighter = VXL_NULLPTR,
-                 rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = VXL_NULLPTR,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = VXL_NULLPTR,
+                 rgrl_matcher_sptr                        matcher = nullptr,
+                 rgrl_weighter_sptr                       weighter = nullptr,
+                 rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = nullptr,
+                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = nullptr,
                  const std::string&                        label = std::string() );
 
   //: Add a data item to a single-stage data storage.
@@ -174,10 +174,10 @@ class rgrl_data_manager: public rgrl_object
   //
   void add_data( rgrl_feature_set_sptr                    from_set,
                  rgrl_feature_set_sptr                    to_set,
-                 rgrl_matcher_sptr                        matcher = VXL_NULLPTR,
-                 rgrl_weighter_sptr                       weighter = VXL_NULLPTR,
-                 rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = VXL_NULLPTR,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = VXL_NULLPTR,
+                 rgrl_matcher_sptr                        matcher = nullptr,
+                 rgrl_weighter_sptr                       weighter = nullptr,
+                 rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = nullptr,
+                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = nullptr,
                  const std::string&                        label = std::string() );
 
   //: Add an estimator to a multi-stage data storage.

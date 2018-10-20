@@ -80,8 +80,8 @@ void test_gaussian()
 
   pdf1d_gaussian          pdf_in;
   pdf1d_gaussian_builder  builder_in;
-  pdf1d_pdf*         p_pdf_in = VXL_NULLPTR;
-  pdf1d_builder*     p_builder_in = VXL_NULLPTR;
+  pdf1d_pdf*         p_pdf_in = nullptr;
+  pdf1d_builder*     p_builder_in = nullptr;
 
   vsl_b_ifstream bfs_in("test_gaussian.bvl.tmp");
   TEST("Opened test_gaussian.bvl.tmp for reading", (!bfs_in), false);

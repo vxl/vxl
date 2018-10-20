@@ -43,7 +43,7 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
 
 
 
-  vil3d_image_resource_sptr outimage = VXL_NULLPTR;
+  vil3d_image_resource_sptr outimage = nullptr;
   for (unsigned i=0; i < vil3d_file_format::n_formats(); ++i)
   {
     const vil3d_file_format& fmt = vil3d_file_format::format(i);
@@ -64,5 +64,5 @@ vil3d_image_resource_sptr vil3d_new_image_resource(const char* name,
   }
   std::cerr << '.' << std::endl;
 
-  return VXL_NULLPTR;
+  return nullptr;
 }

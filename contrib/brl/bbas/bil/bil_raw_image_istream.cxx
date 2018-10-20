@@ -32,7 +32,7 @@ bil_raw_image_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(VXL_NULLPTR),
+    current_frame_(nullptr),
     time_stamp_(-1) {}
 
 
@@ -42,7 +42,7 @@ bil_raw_image_istream(const std::string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(VXL_NULLPTR),
+    current_frame_(nullptr),
     time_stamp_(-1)
 {
   open(glob);
@@ -92,7 +92,7 @@ open(const std::string& rawFile)
 
   //index is invalid until advance is called
   index_ = INIT_INDEX;
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   return true;
 }
 
@@ -103,7 +103,7 @@ close()
 {
   //image_paths_.clear();
   index_ = INIT_INDEX;
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   ni_ = 0;
   nj_ = 0;
   format_ = VIL_PIXEL_FORMAT_UNKNOWN;
@@ -117,7 +117,7 @@ bool
 bil_raw_image_istream::
 advance()
 {
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   if (index_ < num_frames_ || index_ == INIT_INDEX )
     return ++index_ < num_frames_;
 
@@ -172,7 +172,7 @@ bil_raw_image_istream::current_frame()
     }
     return current_frame_;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -192,7 +192,7 @@ seek_frame(unsigned int frame_nr)
 {
   if (is_open() && frame_nr < num_frames_) {
     if (index_ != frame_nr)
-      current_frame_ = VXL_NULLPTR;
+      current_frame_ = nullptr;
     index_ = frame_nr;
     std::cout<<"Index is "<<index_<<std::endl;
     return true;

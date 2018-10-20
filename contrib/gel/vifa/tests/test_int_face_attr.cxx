@@ -78,7 +78,7 @@ static void test_int_face_attr(int argc, char* argv[])
 
       // Compute the attributes.  Set the normalization params
       // for the image, but use defaults otherwise.
-      vifa_int_face_attr  ifa(face, &flp, VXL_NULLPTR, VXL_NULLPTR, &np);
+      vifa_int_face_attr  ifa(face, &flp, nullptr, nullptr, &np);
       if (ifa.ComputeAttributes())
       {
         // Retrieve the attribute vector

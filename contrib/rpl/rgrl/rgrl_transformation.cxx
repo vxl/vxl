@@ -611,6 +611,6 @@ rgrl_transformation::
 inverse_transform() const
 {
   assert( !"Should never reach rgrl_transformation::inverse_transform()" );
-  return VXL_NULLPTR;
+  return nullptr;
 }
 

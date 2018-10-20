@@ -49,7 +49,7 @@ bool brad_create_eigenspace_process(bprb_func_process& pro)
   unsigned nib = pro.get_input<unsigned>(i++);
   unsigned njb = pro.get_input<unsigned>(i++);
 
-  brad_eigenspace_sptr eptr = VXL_NULLPTR;
+  brad_eigenspace_sptr eptr = nullptr;
   CAST_CREATE_EIGENSPACE(feature_vector_type, nbins, max_int, max_grad)
   pro.set_output_val<brad_eigenspace_sptr>(0, eptr);
   return true;

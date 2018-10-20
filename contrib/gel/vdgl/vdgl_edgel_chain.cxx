@@ -284,7 +284,7 @@ vsl_b_read(vsl_b_istream &is, vdgl_edgel_chain* &ec)
     ec->b_read(is);
   }
   else
-    ec = VXL_NULLPTR;
+    ec = nullptr;
 }
 
 //: Print human readable summary of vdgl_edgel_chain* to a stream.

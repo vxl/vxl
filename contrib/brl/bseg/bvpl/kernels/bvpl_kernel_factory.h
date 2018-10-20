@@ -92,7 +92,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   virtual bxml_data_sptr xml_element()
   {
     std::cout << "Calling xml write in parent class, xml data will be NULL" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   virtual bvpl_kernel_factory_sptr self(){return this;}

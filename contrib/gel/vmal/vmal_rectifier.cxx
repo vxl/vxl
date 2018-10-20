@@ -21,12 +21,12 @@
 
 vmal_rectifier::vmal_rectifier()
 {
-  lines0_p_=VXL_NULLPTR;
-  lines0_q_=VXL_NULLPTR;
-  lines1_p_=VXL_NULLPTR;
-  lines1_q_=VXL_NULLPTR;
-  points0_=VXL_NULLPTR;
-  points1_=VXL_NULLPTR;
+  lines0_p_=nullptr;
+  lines0_q_=nullptr;
+  lines1_p_=nullptr;
+  lines1_q_=nullptr;
+  points0_=nullptr;
+  points1_=nullptr;
   rectL =  new vil_image_view<vxl_byte>(1,1,1);
   rectR =  new vil_image_view<vxl_byte>(1,1,1);
   //  rectL =  NULL;
@@ -38,11 +38,11 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
                                int ima_height, int ima_width) :
   is_f_compute_(false)
 {
-  lines0_p_=VXL_NULLPTR;
-  lines0_q_=VXL_NULLPTR;
-  lines1_p_=VXL_NULLPTR;
-  lines1_q_=VXL_NULLPTR;
-  points0_=VXL_NULLPTR;
+  lines0_p_=nullptr;
+  lines0_q_=nullptr;
+  lines1_p_=nullptr;
+  lines1_q_=nullptr;
+  points0_=nullptr;
   rectL =  new vil_image_view<vxl_byte>(1,1,1);
   rectR =  new vil_image_view<vxl_byte>(1,1,1);
 
@@ -75,7 +75,7 @@ vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
 vmal_rectifier::vmal_rectifier(std::vector< vnl_vector<double> >* pts0,
                                std::vector< vnl_vector<double> >* pts1,
                                int ima_height, int ima_width) :
-  lines0_p_(VXL_NULLPTR), lines0_q_(VXL_NULLPTR), lines1_p_(VXL_NULLPTR), lines1_q_(VXL_NULLPTR),
+  lines0_p_(nullptr), lines0_q_(nullptr), lines1_p_(nullptr), lines1_q_(nullptr),
   numpoints_(pts0->size()), height_(ima_height), width_(ima_width),
   is_f_compute_(false)
 {

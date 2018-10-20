@@ -37,7 +37,7 @@ gmvl_node_sptr gmvl_database::find_tag( const std::string &string) const
       return tags[i];
   }
 
-  return gmvl_node_sptr(VXL_NULLPTR);
+  return gmvl_node_sptr(nullptr);
 }
 
 // specific connection references

@@ -106,7 +106,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
   if (filenames.empty() || filenames.size()==1)
     parse_globbed_filenames(filename, filenames);
 
-  if (filenames.empty()) return VXL_NULLPTR;
+  if (filenames.empty()) return nullptr;
 
   // load all the slices
   std::vector<vil_image_resource_sptr> images(filenames.size());
@@ -125,7 +125,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
         im->ni() != images.front()->ni() ||
         im->nj() != images.front()->nj() ||
         im->pixel_format() != images.front()->pixel_format())
-      return VXL_NULLPTR;
+      return nullptr;
     // decide if all slices are of the same type.
     if (std::strcmp(im->file_format(), images.front()->file_format())!=0)
       same=true;
@@ -144,7 +144,7 @@ vil3d_slice_list_format::make_input_image(const char * filename) const
 vil3d_image_resource_sptr
 vil3d_slice_list_to_volume(const std::vector<vil_image_resource_sptr> & images)
 {
-  if (!images.empty() && !images.front()) return VXL_NULLPTR;
+  if (!images.empty() && !images.front()) return nullptr;
   for (unsigned i=1; i<images.size(); ++i)
   {
     // make sure all slices are consistent,
@@ -153,7 +153,7 @@ vil3d_slice_list_to_volume(const std::vector<vil_image_resource_sptr> & images)
         images[i]->ni() != images.front()->ni() ||
         images[i]->nj() != images.front()->nj() ||
         images[i]->pixel_format() != images.front()->pixel_format())
-      return VXL_NULLPTR;
+      return nullptr;
   }
   // everything seems fine so create the volume
   return new vil3d_slice_list_image(images);
@@ -175,7 +175,7 @@ vil3d_slice_list_format::make_output_image(const char* /*filename*/,
   // If you are able to construct them all, then create the slice_image.
   std::cerr <<"vil3d_slice_list_format::make_output_image() NYI\n";
   std::abort();
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -232,7 +232,7 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
                                       unsigned j0, unsigned nj,
                                       unsigned k0, unsigned nk) const
 {
-  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return VXL_NULLPTR;
+  if (i0+ni > this->ni() || j0+nj > this->nj() || k0+nk > this->nk()) return nullptr;
 
 #define macro( type ) { \
   vil3d_image_view< type > vv(ni, nj, nk, nplanes()); \
@@ -270,7 +270,7 @@ vil3d_slice_list_image::get_copy_view(unsigned i0, unsigned ni,
   default:
     std::cerr<< "ERROR: vil3d_slice_list_image::get_copy_view\n"
             << "       Can't deal with pixel_format " << pixel_format() << '\n';
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

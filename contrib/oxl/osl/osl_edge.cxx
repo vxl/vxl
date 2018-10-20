@@ -44,8 +44,8 @@ osl_edge::~osl_edge() {
   v1->unref();
   v2->unref();
 #endif
-  v1 = VXL_NULLPTR;
-  v2 = VXL_NULLPTR;
+  v1 = nullptr;
+  v2 = nullptr;
 }
 
 void osl_edge::set_v1(osl_vertex *newv) {

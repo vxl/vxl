@@ -30,7 +30,7 @@ unsigned int
 imesh_closest_index(const vgl_point_3d<double>& query,
                     const vcl_unique_ptr<imesh_kd_tree_node>& kd_root,
                     F dist,
-                    std::vector<imesh_kd_tree_queue_entry>* dists = VXL_NULLPTR)
+                    std::vector<imesh_kd_tree_queue_entry>* dists = nullptr)
 {
   // find the root leaves containing the query point
   std::vector<imesh_kd_tree_queue_entry> leaf_queue, internal_queue;

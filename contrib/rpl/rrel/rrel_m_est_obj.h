@@ -29,13 +29,13 @@ public:
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter scale_begin,
-                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn( vect_const_iter begin, vect_const_iter end,
                       double scale,
-                      vnl_vector<double>* = VXL_NULLPTR /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_wls_obj::wgt()

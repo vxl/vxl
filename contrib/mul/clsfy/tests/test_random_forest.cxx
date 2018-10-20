@@ -48,14 +48,14 @@ void test_random_forest()
 
     pdf1d_gaussian pdfx(mux,varx);
     pdf1d_gaussian pdfy(muy,vary);
-    pdf1d_sampler* pdfx_sampler = VXL_NULLPTR;
-    pdf1d_sampler* pdfy_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdfx_sampler = nullptr;
+    pdf1d_sampler* pdfy_sampler = nullptr;
 
     pdf1d_gaussian pdfz(muz,varz);
-    pdf1d_sampler* pdfz_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdfz_sampler = nullptr;
 
     pdf1d_gaussian pdferror(0.0,0.02*0.02);
-    pdf1d_sampler* pdferror_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdferror_sampler = nullptr;
 
     pdfx_sampler = pdfx.new_sampler();
 
@@ -121,7 +121,7 @@ void test_random_forest()
     TEST("Type is binary tree",
          pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
     clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
-    TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
+    TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
     builder.build(*pClassifier,
                   training_set_inputs,
@@ -229,7 +229,7 @@ void test_random_forest()
     TEST("Type is random forest",
          pBaseClassifierIn->is_a()==std::string("clsfy_random_forest"), true);
     clsfy_random_forest* pClassifierIn=dynamic_cast<clsfy_random_forest*>(pBaseClassifierIn);
-    TEST("Can cast to random forest",pClassifierIn != VXL_NULLPTR,true);
+    TEST("Can cast to random forest",pClassifierIn != nullptr,true);
 
     {
         unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
@@ -361,7 +361,7 @@ void test_random_forest()
         pca_model1.set(mean1,var1);
 
         pdf1d_flat flatDist;
-        pdf1d_sampler* flat_sampler=VXL_NULLPTR;
+        pdf1d_sampler* flat_sampler=nullptr;
         flat_sampler = flatDist.new_sampler();
         vnl_vector<double  > example(3);
 
@@ -422,7 +422,7 @@ void test_random_forest()
         TEST("Type is random forest",
              pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
         clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
-        TEST("Can cast to random forest",pClassifier != VXL_NULLPTR,true);
+        TEST("Can cast to random forest",pClassifier != nullptr,true);
 
         builder.build(*pClassifier,
                       training_set_inputs,

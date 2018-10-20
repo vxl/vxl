@@ -58,7 +58,7 @@ static bool tt_verbose = false;
 
 //: Default constructor.
 TriTensor::TriTensor()
-  : T(3, 3, 3), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(3, 3, 3), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
 }
 
@@ -67,13 +67,13 @@ TriTensor::TriTensor()
 // The doubles are stored in ``matrix'' order, with the last index
 // increasing fastest.
 TriTensor::TriTensor(const double *tritensor_array)
-  : T(3, 3, 3, tritensor_array), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(3, 3, 3, tritensor_array), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
 }
 
 //: Copy constructor.
 TriTensor::TriTensor(const TriTensor& that)
-  : T(that.T), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(that.T), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
 }
 
@@ -81,7 +81,7 @@ TriTensor::TriTensor(const TriTensor& that)
 TriTensor::TriTensor(PMatrix const& P1,
                      PMatrix const& P2,
                      PMatrix const& P3)
-  : T(3, 3, 3), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(3, 3, 3), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
   set(P1, P2, P3);
 }
@@ -89,7 +89,7 @@ TriTensor::TriTensor(PMatrix const& P1,
 //: Construct from 2 projection matrices, as described in set.
 TriTensor::TriTensor(PMatrix const& P2,
                      PMatrix const& P3)
-  : T(3, 3, 3), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(3, 3, 3), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
   set(P2, P3);
 }
@@ -98,7 +98,7 @@ TriTensor::TriTensor(PMatrix const& P2,
 TriTensor::TriTensor(vnl_matrix<double> const& T1,
                      vnl_matrix<double> const& T2,
                      vnl_matrix<double> const& T3)
-  : T(3, 3, 3), e12_(VXL_NULLPTR), e13_(VXL_NULLPTR), fmp12_(VXL_NULLPTR), fmp13_(VXL_NULLPTR), fmp23_(VXL_NULLPTR)
+  : T(3, 3, 3), e12_(nullptr), e13_(nullptr), fmp12_(nullptr), fmp13_(nullptr), fmp23_(nullptr)
 {
   set(T1, T2, T3);
 }
@@ -121,11 +121,11 @@ TriTensor::~TriTensor()
 // - Delete and zero epipole and manifold projector classes.
 void TriTensor::delete_caches() const
 {
-  delete e12_; e12_ = VXL_NULLPTR;
-  delete e13_; e13_ = VXL_NULLPTR;
-  delete fmp12_; fmp12_ = VXL_NULLPTR;
-  delete fmp13_; fmp13_ = VXL_NULLPTR;
-  delete fmp23_; fmp23_ = VXL_NULLPTR;
+  delete e12_; e12_ = nullptr;
+  delete e13_; e13_ = nullptr;
+  delete fmp12_; fmp12_ = nullptr;
+  delete fmp13_; fmp13_ = nullptr;
+  delete fmp23_; fmp23_ = nullptr;
 }
 
 //: Convert T to 27x1 matrix. Out is assumed to have been appropriately resized.
@@ -1928,7 +1928,7 @@ bool TriTensor::compute_epipoles() const
   delete e13_;
   e13_ = new HomgPoint2D(svdu.left_nullvector());
 
-  return e12_!=VXL_NULLPTR && e13_!=VXL_NULLPTR;
+  return e12_!=nullptr && e13_!=nullptr;
 }
 
 //: Return epipoles e2 and e3, from image 1 into images 2 and 3 respectively.
@@ -1959,28 +1959,28 @@ bool TriTensor::get_epipoles(HomgPoint2D* e2,
 //: Return epipole12.
 HomgPoint2D TriTensor::get_epipole_12() const
 {
-  get_epipoles(VXL_NULLPTR,VXL_NULLPTR);
+  get_epipoles(nullptr,nullptr);
   return *e12_;
 }
 
 //: Return epipole13.
 HomgPoint2D TriTensor::get_epipole_13() const
 {
-  get_epipoles(VXL_NULLPTR,VXL_NULLPTR);
+  get_epipoles(nullptr,nullptr);
   return *e13_;
 }
 
 //: Return F12, the fundamental matrix between images 1 and 2
 FMatrix TriTensor::get_fmatrix_12() const
 {
-  get_epipoles(VXL_NULLPTR,VXL_NULLPTR);
+  get_epipoles(nullptr,nullptr);
   return FMatrix(vnl_cross_product_matrix(e12_->get_vector()) * dot3(e13_->get_vector().as_ref()).transpose().as_ref());
 }
 
 //: Return F13, the fundamental matrix between images 1 and 3
 FMatrix TriTensor::get_fmatrix_13() const
 {
-  get_epipoles(VXL_NULLPTR,VXL_NULLPTR);
+  get_epipoles(nullptr,nullptr);
   return FMatrix(vnl_cross_product_matrix(e13_->get_vector()) * dot2(e12_->get_vector().as_ref()).transpose().as_ref());
 }
 

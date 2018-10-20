@@ -71,8 +71,8 @@ class boxm2_vecf_ocl_orbit_scene : public boxm2_vecf_articulated_scene
 friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
  public:
   enum anat_type { SPHERE, IRIS, PUPIL, UPPER_LID, LOWER_LID, EYELID_CREASE, NO_TYPE};
- boxm2_vecf_ocl_orbit_scene(): alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), sphere_(VXL_NULLPTR), iris_(VXL_NULLPTR), pupil_(VXL_NULLPTR),
-                               eyelid_(VXL_NULLPTR), target_alpha_data_(VXL_NULLPTR),target_app_data_(VXL_NULLPTR), target_nobs_data_(VXL_NULLPTR), extrinsic_only_(false),target_blk_(VXL_NULLPTR),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f),device_(VXL_NULLPTR),opencl_cache_(VXL_NULLPTR),scene_transformer_(VXL_NULLPTR){
+ boxm2_vecf_ocl_orbit_scene(): alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr), sphere_(nullptr), iris_(nullptr), pupil_(nullptr),
+                               eyelid_(nullptr), target_alpha_data_(nullptr),target_app_data_(nullptr), target_nobs_data_(nullptr), extrinsic_only_(false),target_blk_(nullptr),target_data_extracted_(false),boxm2_vecf_articulated_scene(),sigma_(0.5f),device_(nullptr),opencl_cache_(nullptr),scene_transformer_(nullptr){
  }
 
   //: set parameters

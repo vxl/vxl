@@ -8,6 +8,6 @@ rgrl_mask_box
 rgrl_invariant::
 region() const
 {
-  assert( "region() not implemented in the base class" == VXL_NULLPTR );
+  assert( "region() not implemented in the base class" == nullptr );
   return rgrl_mask_box(vnl_vector<double>(0), vnl_vector<double>(0)); // to suppress compiler warnings
 }

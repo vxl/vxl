@@ -38,7 +38,7 @@ bmsh3d_halfedge* bmsh3d_face_mc::face_mc_map(int i)
 {
   std::map<int, bmsh3d_halfedge*>::iterator it = set_he_.find(i);
   if (it == set_he_.end())
-    return VXL_NULLPTR;
+    return nullptr;
   return (*it).second;
 }
 

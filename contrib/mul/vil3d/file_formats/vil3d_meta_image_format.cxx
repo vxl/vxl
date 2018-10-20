@@ -620,7 +620,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_input_image(const char *
   vil3d_meta_image_header header;
   std::string filename(fname);
 
-  if (!header.read_header(fname)) return VXL_NULLPTR;
+  if (!header.read_header(fname)) return nullptr;
   //std::cout<<"vil3d_meta_image_format::make_input_image() Header: "<<header<<std::endl;
 
   return new vil3d_meta_image(header,filename);
@@ -644,7 +644,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
   {
     std::cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
              << "  Unable to deal with pixel format : " << format << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   vil3d_meta_image_header header;
@@ -667,7 +667,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
   default:
       std::cerr << "vil3d_meta_image_format::make_output_image() WARNING\n"
                << "  Unable to deal with pixel format : " << format << std::endl;
-      return VXL_NULLPTR;
+      return nullptr;
   }
 
   std::string str_fname(filename);
@@ -679,7 +679,7 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
     base_filename = str_fname;
   std::string im_file = vul_file::strip_directory(base_filename);
   header.set_image_fname(im_file + ".raw");
-  if (!header.write_header(base_filename+".mhd")) return VXL_NULLPTR;
+  if (!header.write_header(base_filename+".mhd")) return nullptr;
   return new vil3d_meta_image(header,base_filename);
 }
 
@@ -781,11 +781,11 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
   if (i0!=0 || ni!=header_.ni() ||
       j0!=0 || nj!=header_.nj() ||
       k0!=0 || nk!=header_.nk()   )
-    return VXL_NULLPTR;
+    return nullptr;
 
   std::string image_data_path=header_.image_fname();
   vil_smart_ptr<vil_stream> is = new vil_stream_fstream(image_data_path.c_str(),"r");
-  if (!is->ok()) return VXL_NULLPTR;
+  if (!is->ok()) return nullptr;
 
 // NOTE: See GIPL loader for more general data reading
 #define read_data_of_type(type) \
@@ -829,7 +829,7 @@ vil3d_image_view_base_sptr vil3d_meta_image::get_copy_view(unsigned int i0, unsi
    default:
     std::cout<<"ERROR: vil3d_meta_image_format::get_copy_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

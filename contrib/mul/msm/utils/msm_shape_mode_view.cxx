@@ -18,7 +18,7 @@
 //=======================================================================
 
 msm_shape_mode_view::msm_shape_mode_view():
-  shape_model_(VXL_NULLPTR),
+  shape_model_(nullptr),
   points_(3),
   n_per_mode_(3),
   mode_(0),
@@ -34,7 +34,7 @@ void msm_shape_mode_view::set_overlap_shapes(bool b)
 {
   msm_shape_mode_view::overlap_shapes_=b;
 
-  if (shape_model_!=VXL_NULLPTR)
+  if (shape_model_!=nullptr)
     compute_shapes();
 }
 
@@ -82,7 +82,7 @@ void msm_shape_mode_view::set_display_width(double width)
 //: Current shape model
 const msm_ref_shape_model& msm_shape_mode_view::shape_model() const
 {
-  assert(shape_model_!=VXL_NULLPTR);
+  assert(shape_model_!=nullptr);
   return *shape_model_;
 }
 
@@ -186,14 +186,14 @@ void msm_shape_mode_view::set_display_window(const vgl_box_2d<int> & win)
 {
   display_win_ = win;
 
-  if (shape_model_!=VXL_NULLPTR)
+  if (shape_model_!=nullptr)
     compute_shapes();
 }
 
     //: Define current mode to use
 void msm_shape_mode_view::set_mode(unsigned m)
 {
-  if (shape_model_==VXL_NULLPTR) return;
+  if (shape_model_==nullptr) return;
 
   if (m>=shape_model().n_modes()) m = shape_model().n_modes();
   mode_ = m;
@@ -221,7 +221,7 @@ void msm_shape_mode_view::set_n_per_mode(unsigned n)
 //: Maximum number of shape modes available
 unsigned msm_shape_mode_view::max_modes() const
 {
-  if (shape_model_==VXL_NULLPTR)
+  if (shape_model_==nullptr)
     return 0;
   else
     return shape_model_->n_modes();

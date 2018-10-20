@@ -28,7 +28,7 @@ class bprb_func_process: public bprb_process_ext
   bprb_func_process() {}
 
   bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name)
-  : fpt_(fpt), fpt_cons_(VXL_NULLPTR), fpt_init_(VXL_NULLPTR), fpt_finish_(VXL_NULLPTR), name_(name)
+  : fpt_(fpt), fpt_cons_(nullptr), fpt_init_(nullptr), fpt_finish_(nullptr), name_(name)
   {}
 
   bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name,

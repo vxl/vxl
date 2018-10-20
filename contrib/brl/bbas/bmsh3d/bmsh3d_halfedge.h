@@ -59,25 +59,25 @@ class bmsh3d_halfedge
   {
     face_ = face;
     edge_ = edge;
-    pair_ = VXL_NULLPTR;
-    next_ = VXL_NULLPTR;
+    pair_ = nullptr;
+    next_ = nullptr;
   }
 
   virtual ~bmsh3d_halfedge () {
     //: make sure that its pair_ is properly disconnected!
-    assert (pair_ == VXL_NULLPTR);
+    assert (pair_ == nullptr);
 
     //  don't need to worry about the next_ here
     //  assume the topological consistency is handled
     //  when a face is deleted!
 
     //: make sure that no empty halfedge exists
-    assert (face_ != VXL_NULLPTR);
+    assert (face_ != nullptr);
 
     //  make sure that it is already disconnected from the edge
     //  You should use bmsh3d::remove_face() and
     //  bmsh3d::remove_edge() to ensure topological consistency.
-    assert (edge_ == VXL_NULLPTR);
+    assert (edge_ == nullptr);
   }
 
   //###### Data access functions ######
@@ -118,8 +118,8 @@ class bmsh3d_halfedge
   //: brute-force search for the previous halfedge pair
   const bmsh3d_halfedge* get_prev () const {
     //: be careful on the only-one-halfedge case!
-    if (pair_ == VXL_NULLPTR)
-      return VXL_NULLPTR;
+    if (pair_ == nullptr)
+      return nullptr;
     const bmsh3d_halfedge* HE = this;
     while (HE->pair() != this)
       HE = HE->pair();

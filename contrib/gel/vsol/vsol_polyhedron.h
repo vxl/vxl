@@ -77,8 +77,8 @@ class vsol_polyhedron : public vsol_volume_3d
   virtual vsol_polyhedron *cast_to_polyhedron(void) {return this;}
   virtual vsol_polyhedron const* cast_to_polyhedron(void) const {return this;}
 
-  virtual vsol_tetrahedron* cast_to_tetrahedron(void) {return VXL_NULLPTR;}
-  virtual const vsol_tetrahedron* cast_to_tetrahedron(void) const {return VXL_NULLPTR;}
+  virtual vsol_tetrahedron* cast_to_tetrahedron(void) {return nullptr;}
+  virtual const vsol_tetrahedron* cast_to_tetrahedron(void) const {return nullptr;}
 
   //***************************************************************************
   // Access

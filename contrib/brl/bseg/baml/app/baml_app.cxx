@@ -199,7 +199,7 @@ int main(int argc, char * argv[])
       read_rational_camera_from_txt<double>(ref_cam_file);
 
     // Check cameras
-    if (target_rpc == VXL_NULLPTR || ref_rpc == VXL_NULLPTR) {
+    if (target_rpc == nullptr || ref_rpc == nullptr) {
       std::cerr << "Failed to load cameras\n";
       return 1;
     }

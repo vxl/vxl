@@ -46,8 +46,8 @@ class ClosestImagePointFinder
   void get_all_within_search_region(double cx, double cy, double w, double h, std::vector<int>* out_indices);
   void get_all_within_search_region(vgl_box_2d<double> const& region, std::vector<int>* out_indices);
 
-  int get_closest_within_region(double cx, double cy, double w, double h, int* out_index = VXL_NULLPTR);
-  int get_closest_within_distance(double cx, double cy, double r, int* out_index = VXL_NULLPTR);
+  int get_closest_within_region(double cx, double cy, double w, double h, int* out_index = nullptr);
+  int get_closest_within_distance(double cx, double cy, double r, int* out_index = nullptr);
 
   // Data Access---------------------------------------------------------------
   double get_last_squared_distance() const { return last_d2_; }

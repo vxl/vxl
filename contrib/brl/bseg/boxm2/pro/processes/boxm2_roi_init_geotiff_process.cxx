@@ -66,7 +66,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   unsigned int level = pro.get_input<unsigned>(3);
 
   vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_fname.c_str());
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   if (cam) {
     std::cout << "Using the provided loaded camera.\n";
     geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());

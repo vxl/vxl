@@ -267,7 +267,7 @@ bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
       return vil_image_view_base_sptr(img_float);
     } else {
       std::cerr << "Failed to load image\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
     vil_image_view_base_sptr toReturn(floatimg);
     return toReturn;
@@ -275,5 +275,5 @@ bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
 
   // otherwise it's messed up, return a null pointer
   std::cerr << "Failed to recognize input image type\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }

@@ -142,7 +142,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process_cons(bprb_func_process& pro)
   bool good =  pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
  //set defaults inputs
- brdb_value_sptr cam    = new brdb_value_t<vpgl_camera_double_sptr>(VXL_NULLPTR);
+ brdb_value_sptr cam    = new brdb_value_t<vpgl_camera_double_sptr>(nullptr);
 
   pro.set_input(6, cam);
 
@@ -176,7 +176,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
 
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   if (geocam_in->is_a()=="vpgl_geo_camera")
   {
     std::cout<<"LOADING EXTERNAL CAMERA"<<std::endl;

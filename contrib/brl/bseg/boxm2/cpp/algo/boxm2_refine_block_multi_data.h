@@ -23,7 +23,7 @@ class boxm2_refine_block_multi_data
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
- boxm2_refine_block_multi_data():alpha_(VXL_NULLPTR),alpha_index_(0), old_bufs_(0){}
+ boxm2_refine_block_multi_data():alpha_(nullptr),alpha_index_(0), old_bufs_(0){}
 
   //: initialize generic data base pointers as their data type
   bool init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, std::vector<std::string> const& prefixes, float prob_thresh);

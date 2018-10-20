@@ -43,7 +43,7 @@ class rgrl_matcher_k_nearest_pick_one
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
                    rgrl_scale const&             /* current_scale */,
-                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR );
+                   rgrl_match_set_sptr const& old_matches = nullptr );
 
 
   // Defines type-related functions

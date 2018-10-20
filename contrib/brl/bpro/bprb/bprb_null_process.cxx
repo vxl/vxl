@@ -2,8 +2,8 @@
 
 bprb_null_process::bprb_null_process()
 {
-  input_data_.resize(6, brdb_value_sptr(VXL_NULLPTR));
-  output_data_.resize(6,brdb_value_sptr(VXL_NULLPTR));
+  input_data_.resize(6, brdb_value_sptr(nullptr));
+  output_data_.resize(6,brdb_value_sptr(nullptr));
   input_types_.resize(6);
   output_types_.resize(6);
   input_types_[0]="vcl_string";

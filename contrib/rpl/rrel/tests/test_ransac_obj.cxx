@@ -10,7 +10,7 @@ inline double rho( rrel_objective* obj, double r )
 {
   std::vector<double> res;
   res.push_back( r );
-  return obj->fcn( res.begin(), res.end(), 1.0, VXL_NULLPTR );
+  return obj->fcn( res.begin(), res.end(), 1.0, nullptr );
 }
 
 static void test_ransac_obj()

@@ -20,8 +20,8 @@
 
 rgrl_match_set::
 rgrl_match_set(  )
-  : from_type_( VXL_NULLPTR ),
-    to_type_( VXL_NULLPTR ),
+  : from_type_( nullptr ),
+    to_type_( nullptr ),
     num_constraints_per_match_( 0 )
 {
 }

@@ -36,7 +36,7 @@ template <class T>
 double
 rrel_util_median_abs_dev_scale( const T& begin,  const T& end, int dof=1 )
 {
-  return rrel_util_median_abs_dev_scale( begin,  end, dof, (double*)VXL_NULLPTR );
+  return rrel_util_median_abs_dev_scale( begin,  end, dof, (double*)nullptr );
 }
 
 //: \brief Compute the scale using robustly weighted residuals.
@@ -69,7 +69,7 @@ rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
                           const InpIter& weights_first, int dof=1 )
 {
   return rrel_util_weighted_scale( residuals_first, residuals_end,
-                                   weights_first, dof, (double*)VXL_NULLPTR );
+                                   weights_first, dof, (double*)nullptr );
 }
 
 #endif

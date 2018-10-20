@@ -58,9 +58,9 @@ vimt3d_transform_3d vimt3d_load_transform(const vil3d_image_resource_sptr &im, b
 vimt3d_image_3d* vimt3d_load(const std::string& path, bool use_mm)
 {
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(path.c_str());
-  if (ir.ptr()==VXL_NULLPTR)
+  if (ir.ptr()==nullptr)
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   if (ir->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
@@ -101,5 +101,5 @@ vimt3d_image_3d* vimt3d_load(const std::string& path, bool use_mm)
   }
 
   std::cerr<<"vimt3d_load() Unknown pixel format: "<<ir->pixel_format()<<std::endl;
-  return VXL_NULLPTR;
+  return nullptr;
 }

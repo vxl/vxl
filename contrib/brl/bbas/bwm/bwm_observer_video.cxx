@@ -195,7 +195,7 @@ void bwm_observer_video::display_current_frame()
 
     vidl_frame_sptr frame = video_istr_->current_frame();
     if (!frame)
-      img_tab_->set_image_resource(VXL_NULLPTR);
+      img_tab_->set_image_resource(nullptr);
 #if 0  // Now not needed since vidl handles these types
     else if (frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16) {
       static vil_image_view<vxl_uint_16> img;
@@ -357,7 +357,7 @@ bool bwm_observer_video::find_selected_video_corr(unsigned& frame,
 void bwm_observer_video::set_selected_corr_for_tracking()
 {
   unsigned frame = 0, corr_index = 0;
-  bwm_soview2D_cross* cross =VXL_NULLPTR;
+  bwm_soview2D_cross* cross =nullptr;
   if (!this->find_selected_video_corr(frame, corr_index, cross))
     return;
   tracked_corr_ = video_corrs_[corr_index];
@@ -367,14 +367,14 @@ void bwm_observer_video::set_selected_corr_for_tracking()
 //: unset selected corr for tracking
 void bwm_observer_video::unset_selected_corr_for_tracking()
 {
-  tracked_corr_ = VXL_NULLPTR;
+  tracked_corr_ = nullptr;
 }
 
 
 void bwm_observer_video::remove_selected_corr_match()
 {
   unsigned frame = 0, corr_index = 0;
-  bwm_soview2D_cross* cross =VXL_NULLPTR;
+  bwm_soview2D_cross* cross =nullptr;
   if (!this->find_selected_video_corr(frame, corr_index, cross))
     return;
   // remove the cross from the tableau
@@ -395,7 +395,7 @@ void bwm_observer_video::remove_selected_corr_match()
 void bwm_observer_video::remove_selected_corr()
 {
   unsigned frame = 0, corr_index = 0;
-  bwm_soview2D_cross* cross =VXL_NULLPTR;
+  bwm_soview2D_cross* cross =nullptr;
   if (!this->find_selected_video_corr(frame, corr_index, cross))
     return;
   bwm_video_corr_sptr c = video_corrs_[corr_index];
@@ -493,7 +493,7 @@ bool bwm_observer_video::add_video_corr()
 void bwm_observer_video::set_world_pt(double lat, double lon, double elev)
 {
   unsigned frame = 0, corr_index = 0;
-  bwm_soview2D_cross* cross =VXL_NULLPTR;
+  bwm_soview2D_cross* cross =nullptr;
   if (!this->find_selected_video_corr(frame, corr_index, cross))
     return;
   bwm_video_corr_sptr c = video_corrs_[corr_index];
@@ -508,7 +508,7 @@ bool bwm_observer_video::add_match()
   if (!tracked_corr_)
   {
     unsigned frame = 0, corr_index = 0;
-    bwm_soview2D_cross* cross =VXL_NULLPTR;
+    bwm_soview2D_cross* cross =nullptr;
     if (!this->find_selected_video_corr(frame, corr_index, cross))
     {
       // no corr exists or no previous corr selected
@@ -551,7 +551,7 @@ bool bwm_observer_video::add_match()
 bool bwm_observer_video::remove_match()
 {
   unsigned frame = 0, corr_index = 0;
-  bwm_soview2D_cross* cross =VXL_NULLPTR;
+  bwm_soview2D_cross* cross =nullptr;
   if (!this->find_selected_video_corr(frame, corr_index, cross))
     return false;
 
@@ -570,7 +570,7 @@ bool bwm_observer_video::update_match(vgl_point_2d<double> &pt)
   if (!tracked_corr_)
   {
     unsigned frame = 0, corr_index = 0;
-    bwm_soview2D_cross* cross =VXL_NULLPTR;
+    bwm_soview2D_cross* cross =nullptr;
     if (this->find_selected_video_corr(frame, corr_index, cross))
     {//Selected cross found!
       if (cur_frame == frame)
@@ -600,7 +600,7 @@ bool bwm_observer_video::update_match(vgl_point_2d<double> &pt)
 bwm_soview2D_cross* bwm_observer_video::corr_soview(unsigned corr_index)
 {
   if (!video_istr_)
-    return VXL_NULLPTR;
+    return nullptr;
 
   unsigned frame_index = video_istr_->frame_number();
   return corr_soview_map_[frame_index][corr_index];
@@ -1016,7 +1016,7 @@ void bwm_observer_video::proj_line(vsol_line_3d_sptr line_3d,
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
   if (!cam) {
     std::cout << "ERROR: null camera in ::proj_line(..)\n";
-    line_2d = VXL_NULLPTR;
+    line_2d = nullptr;
     return;
   }
   bwm_observer_cam::camera_ = cam;
@@ -1029,7 +1029,7 @@ void bwm_observer_video::proj_poly(vsol_polygon_3d_sptr poly3d,
   vpgl_perspective_camera<double>* cam = cam_istr_->current_camera();
   if (!cam) {
     std::cout << "ERROR: null camera in ::proj_poly(..)\n";
-    poly2d = VXL_NULLPTR;
+    poly2d = nullptr;
     return;
   }
   bwm_observer_cam::camera_ = cam;

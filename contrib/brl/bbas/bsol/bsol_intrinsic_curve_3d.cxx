@@ -140,9 +140,9 @@ void bsol_intrinsic_curve_3d::computeProperties()
   theta_.push_back(-1);
   thetas_.push_back(-1); thetas_.push_back(-1);
   thetass_.push_back(-1); thetass_.push_back(-1);
-  Tangent_.push_back(VXL_NULLPTR);
-  Normal_.push_back(VXL_NULLPTR); Normal_.push_back(VXL_NULLPTR);
-  Binormal_.push_back(VXL_NULLPTR); Binormal_.push_back(VXL_NULLPTR);
+  Tangent_.push_back(nullptr);
+  Normal_.push_back(nullptr); Normal_.push_back(nullptr);
+  Binormal_.push_back(nullptr); Binormal_.push_back(nullptr);
   curvature_.push_back(-1.0); curvature_.push_back(-1.0);
   torsion_.push_back(-1); torsion_.push_back(-1);
 
@@ -416,7 +416,7 @@ bool bsol_intrinsic_curve_3d::LoadCON3File(std::string fileName)
   std::FILE* fp;
   char buffer[128];
 
-  if ((fp = std::fopen(fileName.c_str(), "r")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(fileName.c_str(), "r")) == nullptr) {
     std::fprintf(stderr, "ERROR: Can't open input .con3 file %s.\n", fileName.c_str());
     return false;
   }
@@ -454,7 +454,7 @@ bool bsol_intrinsic_curve_3d::SaveCON3File(std::string fileName)
 {
   std::FILE* fp;
 
-  if ((fp = std::fopen(fileName.c_str(), "w")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(fileName.c_str(), "w")) == nullptr) {
     std::fprintf(stderr, "ERROR( bsol_intrinsic_curve_3d::SaveCON3File): Can't open output .con3 file %s.\n", fileName.c_str());
     return false;
   }

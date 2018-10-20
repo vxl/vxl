@@ -65,7 +65,7 @@ public:
 
   //: returns copy of portion of buffer corresponding a cell. Returns
   // cell_size bytes starting at index i of data buffer. Returns
-  // VXL_NULLPTR if request goes outside of bounds. Caller owns returns data.
+  // nullptr if request goes outside of bounds. Caller owns returns data.
   char *cell_buffer(vcl_size_t i, vcl_size_t cell_size) const {
     if ((i + cell_size - 1) < buffer_length_) {
       char *out = new char[cell_size];
@@ -74,7 +74,7 @@ public:
       }
       return out;
     } else {
-      return VXL_NULLPTR;
+      return nullptr;
     }
   }
 

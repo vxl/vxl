@@ -3,7 +3,7 @@
 // \file
 
 //: global initialization for singleton instance_
-boxm2_cache1_sptr boxm2_cache1::instance_ = VXL_NULLPTR;
+boxm2_cache1_sptr boxm2_cache1::instance_ = nullptr;
 
 //: global initialization for singleton destroyer instance
 boxm2_cache1_destroyer boxm2_cache1::destroyer_;
@@ -37,7 +37,7 @@ boxm2_cache1_destroyer::boxm2_cache1_destroyer(boxm2_cache1_sptr s)
 //: the destructor deletes the instance
 boxm2_cache1_destroyer::~boxm2_cache1_destroyer()
 {
-  if (s_ != VXL_NULLPTR)
+  if (s_ != nullptr)
     s_->unref();  // smart pointer is deleted when ref cnt is zero
 }
 

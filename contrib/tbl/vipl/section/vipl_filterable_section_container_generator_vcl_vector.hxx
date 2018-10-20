@@ -18,7 +18,7 @@ template <class DataType>
 vipl_section_container<DataType>*
 vipl_filterable_section_container_generator(const std::vector<DataType>& vec, DataType*)
 {
-  vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)VXL_NULLPTR);
+  vipl_section_container<DataType> *rtn = new vipl_section_container<DataType>((vipl_section_container<DataType>*)nullptr);
   rtn->put_imgptr((const void*) &vec);
   rtn->ref_imgsz()[0] = vec.size();
   rtn->ref_imgsz()[1] = 1;

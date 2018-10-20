@@ -129,7 +129,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
         bocl_mem* alphas = opencl_cache->get_data<BOXM2_ALPHA>(scene,id, 0, false);
         std::size_t dataSize = alphas->num_bytes();
 
-        bocl_mem* new_alphas = new bocl_mem(device->context(), VXL_NULLPTR, dataSize, "new alpha buffer ");
+        bocl_mem* new_alphas = new bocl_mem(device->context(), nullptr, dataSize, "new alpha buffer ");
         new_alphas->create_buffer(CL_MEM_READ_WRITE, queue);
 
         //grab the block out of the cache as well

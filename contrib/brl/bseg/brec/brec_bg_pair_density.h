@@ -40,7 +40,7 @@ class brec_bg_pair_density : public brec_pair_density
 
   //: if an existing density map will be used there is no need to generate mixture of gaussians image, hence no need for world, camera etc.
   brec_bg_pair_density(unsigned ni, unsigned nj)
-  : brec_pair_density(), verbose(false), world_(VXL_NULLPTR), cam_(VXL_NULLPTR), voxel_type_(""),
+  : brec_pair_density(), verbose(false), world_(nullptr), cam_(nullptr), voxel_type_(""),
     bin_(0), scale_(0), ni_(ni), nj_(nj), i_(0), j_(0) {}
 
   //: generates a mixture of gaussians image of the current world using the given camera as done in brec_normalize_image_process

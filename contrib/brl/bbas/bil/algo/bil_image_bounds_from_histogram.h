@@ -15,7 +15,7 @@
 #include <vgl/vgl_polygon.h>
 class bil_image_bounds_from_histogram{
  public:
- bil_image_bounds_from_histogram():imgr_(VXL_NULLPTR), bin_limit_(1000), n_skip_upper_bins_(0),
+ bil_image_bounds_from_histogram():imgr_(nullptr), bin_limit_(1000), n_skip_upper_bins_(0),
     n_skip_lower_bins_(1), min_blocks_(50), scan_fraction_(0.005), np_(1){}
 
  bil_image_bounds_from_histogram(vil_image_resource_sptr const& imgr):

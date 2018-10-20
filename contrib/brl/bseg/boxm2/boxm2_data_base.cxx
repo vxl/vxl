@@ -115,7 +115,7 @@ char * boxm2_data_base::cell_buffer(int i, std::size_t cell_size)
     }
     return out;
   }
-  else return VXL_NULLPTR;
+  else return nullptr;
 }
 
 

@@ -138,7 +138,7 @@ double clsfy_binary_tree_builder::build(clsfy_classifier_base& classifier,
     mbl_stl_increments(base_indices_.begin(),base_indices_.end(),0);
 
     clsfy_binary_tree_op rootOp;
-    clsfy_binary_tree_bnode* root=new clsfy_binary_tree_bnode(VXL_NULLPTR,rootOp);
+    clsfy_binary_tree_bnode* root=new clsfy_binary_tree_bnode(nullptr,rootOp);
 
     // Start with all indices
     std::set<unsigned> indices;
@@ -182,7 +182,7 @@ double clsfy_binary_tree_builder::build(clsfy_classifier_base& classifier,
 
 
     // Then copy into the classifier (like b_write, b_read)
-    clsfy_binary_tree_node* classRoot=new clsfy_binary_tree_node(VXL_NULLPTR,root->op_);
+    clsfy_binary_tree_node* classRoot=new clsfy_binary_tree_node(nullptr,root->op_);
     set_node_prob(classRoot,root);
 
     copy_children(root,classRoot);
@@ -237,9 +237,9 @@ void clsfy_binary_tree_builder::build_children(
         // Backtrack
         delete pChild;
         if (left)
-            parent->left_child_=VXL_NULLPTR;
+            parent->left_child_=nullptr;
         else
-            parent->right_child_=VXL_NULLPTR;
+            parent->right_child_=nullptr;
         // Can't go any deeper on this branch
         std::set<unsigned >& subIndices=(left ? parent->subIndicesL : parent->subIndicesR);
         bool pure=isNodePure(subIndices,outputs);
@@ -257,9 +257,9 @@ void clsfy_binary_tree_builder::build_children(
             // Backtrack
             delete pChild;
             if (left)
-                parent->left_child_=VXL_NULLPTR;
+                parent->left_child_=nullptr;
             else
-                parent->right_child_=VXL_NULLPTR;
+                parent->right_child_=nullptr;
             // Can't go any deeper on this branch
             std::set<unsigned >& subIndices=(left ? parent->subIndicesL : parent->subIndicesR);
             bool pure=isNodePure(subIndices,outputs);
@@ -352,7 +352,7 @@ void clsfy_binary_tree_builder::build_a_node(
         param_indices.resize(ndims);
         mbl_stl_increments(param_indices.begin(),param_indices.end(),0);
     }
-    std::vector<clsfy_classifier_1d*> pBranchClassifiers(ndims,VXL_NULLPTR);
+    std::vector<clsfy_classifier_1d*> pBranchClassifiers(ndims,nullptr);
     vnl_vector<double > wts(subIndices.size());
     wts.fill(1.0/double (vin.size())-1.0E-12);
     unsigned npoints=subIndices.size();
@@ -406,7 +406,7 @@ void clsfy_binary_tree_builder::build_a_node(
 
         pNode->subIndicesL.clear();
         pNode->subIndicesR.clear();
-        clsfy_binary_tree_op op(VXL_NULLPTR,param_indices[ibest]);
+        clsfy_binary_tree_op op(nullptr,param_indices[ibest]);
         op.classifier() = *(static_cast<clsfy_binary_threshold_1d*>(pBranchClassifiers[ibest]));
 
         pNode->op_=op;
@@ -460,7 +460,7 @@ void clsfy_binary_tree_builder::add_terminator(
     double thresholdBig=1.0E30;
 
     int dummyIndex=0;
-    clsfy_binary_tree_op dummyOp(VXL_NULLPTR,dummyIndex);
+    clsfy_binary_tree_op dummyOp(nullptr,dummyIndex);
 
 
     unsigned classification=0;

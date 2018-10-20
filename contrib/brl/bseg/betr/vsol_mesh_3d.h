@@ -25,7 +25,7 @@
 class vsol_mesh_3d : public vsol_volume_3d
 {
  public:
- vsol_mesh_3d():mesh_(VXL_NULLPTR),current_extr_face_(VXL_NULLPTR){}
+ vsol_mesh_3d():mesh_(nullptr),current_extr_face_(nullptr){}
   vsol_mesh_3d(vsol_box_3d_sptr box);
   ~vsol_mesh_3d(){delete mesh_;}
 
@@ -34,7 +34,7 @@ class vsol_mesh_3d : public vsol_volume_3d
   virtual bool in(vsol_point_3d_sptr const& p) const;
   virtual double volume(void) const{return 0.0;}
   virtual void compute_bounding_box() const;
-  virtual vsol_spatial_object_3d* clone() const{return VXL_NULLPTR;}
+  virtual vsol_spatial_object_3d* clone() const{return nullptr;}
 
   //: old style downcasting methods from vsol
   virtual vsol_mesh_3d* cast_to_mesh() { return this;}
