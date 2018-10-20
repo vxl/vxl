@@ -20,7 +20,7 @@ class bwm_observable_textured_mesh : public bwm_observable_mesh
 
   //: constructors
   bwm_observable_textured_mesh()
-    : object_(VXL_NULLPTR)/*, base_(0)*/ {}
+    : object_(nullptr)/*, base_(0)*/ {}
 
   bwm_observable_textured_mesh(bmsh3d_textured_mesh_mc* object)
     : object_(object) {}

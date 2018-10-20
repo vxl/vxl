@@ -227,7 +227,7 @@ void test_rbf_svm_smo()
   bfs_out.close();
 
   clsfy_rbf_svm svmi;
-  clsfy_classifier_base *pClassifier2=VXL_NULLPTR;
+  clsfy_classifier_base *pClassifier2=nullptr;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);

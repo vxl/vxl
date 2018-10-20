@@ -274,7 +274,7 @@ void sdet_mrf_bp::print_belief_vectors()
 
 vil_image_resource_sptr sdet_mrf_bp::belief_image()
 {
-  vil_image_resource_sptr ret = VXL_NULLPTR;
+  vil_image_resource_sptr ret = nullptr;
   if (nj_==0||ni_==0)
     return ret;
   vil_image_view<float> view(ni_, nj_);

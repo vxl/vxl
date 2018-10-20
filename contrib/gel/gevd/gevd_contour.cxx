@@ -149,9 +149,9 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
 
   // 1. Setup lookup maps based on (x,y) integer location.
   vertexMap = new vbl_array_2d<vtol_vertex_2d_sptr>(edgels.GetSizeX(), edgels.GetSizeY());
-  vertexMap->fill(VXL_NULLPTR);
+  vertexMap->fill(nullptr);
   edgeMap = new vbl_array_2d<vtol_edge_2d_sptr>(edgels.GetSizeX(), edgels.GetSizeY());
-  edgeMap->fill(VXL_NULLPTR);
+  edgeMap->fill(nullptr);
 
   // 2. Collect 4/8-connected pixels into chains
   int n; // = std::max(10*njunction, // preallocated size from junctions or
@@ -400,7 +400,7 @@ gevd_contour::FindChains(gevd_bufferxy& edgels, const int njunction,
 
   // 3. Restore cache to original state
   for (int k = 0; k < njunction; k++)  // clear all void*/float labels
-    vertexMap->put(junctionx[k], junctiony[k],VXL_NULLPTR);
+    vertexMap->put(junctionx[k], junctiony[k],nullptr);
   for (int j = rmax; j <= ymax; j++)
     for (int i = rmax; i <= xmax; i++)
       if (floatPixel(edgels, i, j) < 0) // undo mark put by RecordPixel
@@ -448,17 +448,17 @@ DetectJunction(vtol_vertex_2d& end, int& index,
     for (int r = 0; r < rfuzz; r++) {
       vdgl_edgel edgel= dc->get_interpolator()->get_edgel_chain()->edgel( r);
       labels[r] = edgeMap.get( int(edgel.get_x()), int(edgel.get_y()));
-      edgeMap.put(int(edgel.get_x()), int(edgel.get_y()), VXL_NULLPTR);
+      edgeMap.put(int(edgel.get_x()), int(edgel.get_y()), nullptr);
     }
   else
     for (int r = 0; r < rfuzz; r++) {
       vdgl_edgel edgel= dc->get_interpolator()->get_edgel_chain()->edgel(len-1-r);
       labels[r] = edgeMap.get( int( edgel.get_x()), int( edgel.get_y()));
-      edgeMap.put(int(edgel.get_x()), int(edgel.get_y()), VXL_NULLPTR);
+      edgeMap.put(int(edgel.get_x()), int(edgel.get_y()), nullptr);
     }
 
   // 2. Find another stronger contour touched by this end point < gap.
-  stronger = VXL_NULLPTR;              // contour can join with itself
+  stronger = nullptr;              // contour can join with itself
   int jx = int(end.x()), jy = int(end.y());
   for (int l = 0, n = 0; l < maxSpiral; l++) {  // increasing radius of spiral
     float maxpix = 0; int maxn = 0;     // strongest strength at this radius
@@ -554,13 +554,13 @@ BreakCycle(vtol_vertex_2d& junction, const int index,
 
   // 1. Move location of junction
   int jx = int(junction.x()), jy = int(junction.y());
-  vertexMap.put(jx, jy, VXL_NULLPTR); // erase old location
+  vertexMap.put(jx, jy, nullptr); // erase old location
 
   vdgl_edgel tempedgel= dc->get_interpolator()->get_edgel_chain()->edgel( index);
   jx = int( tempedgel.x()), jy = int( tempedgel.y());
   junction.set_x(jx), junction.set_y(jy); // update new location
   vertexMap.put(jx, jy, &junction);
-  edgeMap.put(jx, jy, VXL_NULLPTR);
+  edgeMap.put(jx, jy, nullptr);
 
   // 2. Create 1-cycle, including junction pixel
   split = new vtol_edge_2d();
@@ -636,12 +636,12 @@ BreakChain(vtol_vertex_2d& junction, const int index,
 
   // 1. Move location of junction
   int jx = int(junction.x()), jy = int(junction.y());
-  vertexMap.put(jx, jy, VXL_NULLPTR); // erase old location
+  vertexMap.put(jx, jy, nullptr); // erase old location
   vdgl_edgel c= dc->get_interpolator()->get_edgel_chain()->edgel( index);
   jx = int(c.x()), jy = int(c.y());
   junction.set_x(jx), junction.set_y(jy);       // update new location
   vertexMap.put(jx, jy, &junction);
-  edgeMap.put( jx, jy, VXL_NULLPTR);
+  edgeMap.put( jx, jy, nullptr);
 
   // 2. Create first subchain up to and including junction pixel.
   vtol_edge_2d_sptr edge1 = new vtol_edge_2d();    // create subchains, broken at junction.
@@ -665,7 +665,7 @@ BreakChain(vtol_vertex_2d& junction, const int index,
   vtol_vertex_sptr  v1 = stronger.v1();
 
   if (v1->numsup() == 1)        // dangling chain with end pt at v1
-    edgeMap.put( int((*cxy1)[0].x()), int((*cxy1)[0].y()), VXL_NULLPTR);
+    edgeMap.put( int((*cxy1)[0].x()), int((*cxy1)[0].y()), nullptr);
   edge1->set_v1(v1.ptr());            // link both directions v-e
   edge1->set_v2(&junction);     // unlink when stronger.UnProtect()
 
@@ -691,7 +691,7 @@ BreakChain(vtol_vertex_2d& junction, const int index,
   vtol_vertex_sptr  v2 = stronger.v2();
 
   if (v2->numsup() == 1)        // dangling chain with end pt at v2
-    edgeMap.put( int((*cxy2)[l2-1].x()), int((*cxy2)[l2-1].y()), VXL_NULLPTR);
+    edgeMap.put( int((*cxy2)[l2-1].x()), int((*cxy2)[l2-1].y()), nullptr);
 
   edge2->set_v1(&junction);     // link both directions v-e
   edge2->set_v2(v2.ptr());            // unlink when stronger.UnProtect()
@@ -718,11 +718,11 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 
   // 1. Move location of junction
   int jx = int(junction.x()), jy = int(junction.y());
-  vertexMap.put(jx, jy, VXL_NULLPTR); // erase old location
+  vertexMap.put(jx, jy, nullptr); // erase old location
   jx = int((*cxy)[index].x()), jy = int((*cxy)[index].y());
   junction.set_x(jx), junction.set_y(jy);       // update new location
   vertexMap.put(jx, jy, &junction);
-  edgeMap.put( jx, jy, VXL_NULLPTR);
+  edgeMap.put( jx, jy, nullptr);
 
   // 1. Find straight/curled chains
   straight = new vtol_edge_2d(), curled = new vtol_edge_2d();
@@ -765,7 +765,7 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 
     if (chain.v2()->numsup()==1)
     {
-      edgeMap.put( int((*xy)[l2-1].x()), int((*xy)[l2-1].y()), VXL_NULLPTR);
+      edgeMap.put( int((*xy)[l2-1].x()), int((*xy)[l2-1].y()), nullptr);
     }
 
     straight->set_v1(&junction);
@@ -791,7 +791,7 @@ LoopChain(vtol_vertex_2d& junction, const int index,
 
     if (chain.v1()->numsup()==1)
     {
-      edgeMap.put( int((*xy)[0].x()), int((*xy)[0].y()), VXL_NULLPTR);
+      edgeMap.put( int((*xy)[0].x()), int((*xy)[0].y()), nullptr);
     }
 
     straight->set_v1(chain.v1().ptr());
@@ -839,7 +839,7 @@ DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
 {
   const int jx = int(end.x()), jy = int(end.y());
   for (int l = 0, n = 0; l < maxSpiral; l++) {  // increasing radius of spiral
-    vtol_vertex_2d_sptr  other = VXL_NULLPTR;      // prefer junction over endpt
+    vtol_vertex_2d_sptr  other = nullptr;      // prefer junction over endpt
     int maxray = 0;            // largest number of rays
     for (; n < RNS[l]; n++) {  // 4- then 8-connected
       vtol_vertex_2d_sptr nbr = vertexMap.get(jx+RIS[n], jy+RJS[n]);
@@ -852,7 +852,7 @@ DetectTouch(const vtol_vertex_2d& end, const int maxSpiral,
     if (maxray)                // find larger/other junction
       return other;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -865,7 +865,7 @@ DanglingEdge(vtol_vertex_2d& v)
   if (segs.size()==1)
     return segs[0]->cast_to_edge_2d();
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 
@@ -876,7 +876,7 @@ MergeEndPtsOfChain(vtol_vertex_2d& endpt, vtol_vertex_2d& other, vtol_edge_2d& c
                    vbl_array_2d<vtol_edge_2d_sptr>& edgeMap, vbl_array_2d<vtol_vertex_2d_sptr>&vertexMap)
 {
   int px = int(other.x()), py = int(other.y());
-  vertexMap.put(px, py, VXL_NULLPTR); // erase old location
+  vertexMap.put(px, py, nullptr); // erase old location
   edgeMap.put( px, py, &common);
   if (common.v1() == &other)  // remove links to other endpt
     common.set_v1(&endpt);
@@ -959,8 +959,8 @@ MergeEndPtTouchingEndPt(vtol_vertex_2d& end1, vtol_vertex_2d& end2,
   merge->set_v2(v2.ptr());
 
   // 3. Update global maps
-  vertexMap.put(int(end1.x()), int(end1.y()), VXL_NULLPTR);
-  vertexMap.put(int(end2.x()), int(end2.y()), VXL_NULLPTR);
+  vertexMap.put(int(end1.x()), int(end1.y()), nullptr);
+  vertexMap.put(int(end2.x()), int(end2.y()), nullptr);
   const int last = len-1;
   for (k = 1; k < last; k++)
     edgeMap.put( int((*cxy)[k].x()), int((*cxy)[k].y()), merge);
@@ -985,7 +985,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d &endpt, vtol_vertex_2d& junction,
   std::vector<vtol_edge_sptr> edges; endpt.edges(edges);
   vtol_edge_2d_sptr edge = edges[0]->cast_to_edge_2d(); // dangling edge terminating at end pt
   int px = int(endpt.x()), py = int(endpt.y());
-  vertexMap.put(px, py, VXL_NULLPTR); // erase old location
+  vertexMap.put(px, py, nullptr); // erase old location
   edgeMap.put( px, py, edge);
   if (edge->v1() == &endpt)     // change the links both directions v-e
     edge->set_v1(&junction);    // unlink when endpt.UnProtect()
@@ -1053,7 +1053,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       }
       else
       {
-        edgeMap->put( x, y, VXL_NULLPTR); // erase junction point
+        edgeMap->put( x, y, nullptr); // erase junction point
       }
 
       edge->set_v1(v1->cast_to_vertex());         // link both directions v-e
@@ -1069,7 +1069,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       }
       else
       {
-        edgeMap->put( x, y, VXL_NULLPTR); // erase junction point
+        edgeMap->put( x, y, nullptr); // erase junction point
       }
 
       edge->set_v2(v2->cast_to_vertex());         // link both directions v-e
@@ -1084,7 +1084,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   for (unsigned int i=0; i< vertices.size(); i++)
   {
     vtol_vertex_2d_sptr  end = vertices[i];
-    vtol_edge_2d_sptr weaker = VXL_NULLPTR, stronger = VXL_NULLPTR; // weaker touches stronger
+    vtol_edge_2d_sptr weaker = nullptr, stronger = nullptr; // weaker touches stronger
     int index;                  // location on stronger contour
     if (DetectJunction(*end, index,
                        weaker, stronger, maxSpiral,
@@ -1092,7 +1092,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
       if (!stronger->v1()) { // touch 1-cycle
         if (ConfirmJunctionOnCycle(index, minJump,
                                    *stronger, edgels)) {
-          vtol_edge_2d_sptr split = VXL_NULLPTR;          // cycle is now split at junction
+          vtol_edge_2d_sptr split = nullptr;          // cycle is now split at junction
           BreakCycle(*end, index,
                      *stronger,
                      split,     // find split 1-cycle
@@ -1105,7 +1105,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
         if (ConfirmJunctionOnChain(index, minJump,
                                    *stronger, edgels)) {
           if (weaker == stronger) {
-            vtol_edge_2d_sptr straight = VXL_NULLPTR, curled = VXL_NULLPTR;
+            vtol_edge_2d_sptr straight = nullptr, curled = nullptr;
             LoopChain(*end, index, // break its own chain
                       *stronger, // and make a loop
                       straight, curled,
@@ -1115,7 +1115,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
             jchain++;
           }
           else {
-            vtol_edge_2d_sptr longer = VXL_NULLPTR, shorter = VXL_NULLPTR;
+            vtol_edge_2d_sptr longer = nullptr, shorter = nullptr;
             BreakChain(*end, index, // break another stronger chain in 2
                        *stronger,
                        longer, shorter, // find sub chains
@@ -1157,7 +1157,7 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
             std::cout << "endpt1=" << *end1 << std::endl
                      << "endpt2=" << *end2 << std::endl;
 #endif
-            vtol_edge_2d_sptr merge=VXL_NULLPTR, longer=VXL_NULLPTR, shorter=VXL_NULLPTR; // merge 2 different edges
+            vtol_edge_2d_sptr merge=nullptr, longer=nullptr, shorter=nullptr; // merge 2 different edges
             MergeEndPtTouchingEndPt(*end1, *end2, // merge 2 subchains
                                     merge, longer, shorter, // deleting
                                     *edgeMap, *vertexMap); // end points
@@ -1356,7 +1356,7 @@ gevd_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
     {
       vtol_vertex_2d_sptr  v = vertexMap->get(x, y);
       if (v)
-        vertexMap->put(x, y, VXL_NULLPTR);
+        vertexMap->put(x, y, nullptr);
       else continue;
       if (d)
         ymax_verts.push_back(v);
@@ -1372,7 +1372,7 @@ gevd_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
     {
       vtol_vertex_2d_sptr  v = vertexMap->get(x, y);
       if (v)
-        vertexMap->put(x, y, VXL_NULLPTR);
+        vertexMap->put(x, y, nullptr);
       else continue;
       if (d)
         xmax_verts.push_back(v);
@@ -1763,7 +1763,7 @@ gevd_contour::ClearNetwork(std::vector<vtol_edge_2d_sptr>*& edges,
       delete (vdgl_digital_curve *) dc; // delete dc
 #endif
     }
-    delete edges; edges = VXL_NULLPTR;
+    delete edges; edges = nullptr;
   }
   if (vertices) {
 #if 0
@@ -1771,7 +1771,7 @@ gevd_contour::ClearNetwork(std::vector<vtol_edge_2d_sptr>*& edges,
     for (unsigned int i=0; i< vertices->size(); ++i)
       vertices[i]->UnProtect();
 #endif
-    delete vertices; vertices = VXL_NULLPTR;
+    delete vertices; vertices = nullptr;
   }
 }
 
@@ -1940,7 +1940,7 @@ void
 gevd_contour::LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set,
                                 vtol_edge_2d_sptr elmt)
 {
-  set[elmt->get_id()] = VXL_NULLPTR;   // remove from global array
+  set[elmt->get_id()] = nullptr;   // remove from global array
 }
 
 
@@ -1949,7 +1949,7 @@ void
 gevd_contour::LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set,
                                 vtol_vertex_2d_sptr  elmt)
 {
-  set[elmt->get_id()] = VXL_NULLPTR;   // remove from global array
+  set[elmt->get_id()] = nullptr;   // remove from global array
 }
 
 
@@ -1960,7 +1960,7 @@ gevd_contour::LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set)
   int i = 0;
   for (int j = set.size()-1; i <= j; i++)
     if (!set[i]) {      // find empty hole
-      vtol_edge_2d_sptr last = VXL_NULLPTR;
+      vtol_edge_2d_sptr last = nullptr;
       for (; i < j; j--)
         if (set[j]) {
           last = set[j]; j--; // remove from the end
@@ -1984,7 +1984,7 @@ gevd_contour::LookupTableCompress(std::vector<vtol_vertex_2d_sptr >& set)
   int i = 0;
   for (int j = set.size()-1; i <= j; i++)
     if (!set[i]) {              // find empty hole
-      vtol_vertex_2d_sptr  last = VXL_NULLPTR;
+      vtol_vertex_2d_sptr  last = nullptr;
       for (; i < j; j--)
         if (set[j]) {
           last = set[j]; j--; // remove from the end

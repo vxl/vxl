@@ -35,7 +35,7 @@ class rgrl_matcher
                    rgrl_view const&           current_view,
                    rgrl_transformation const& current_xform,
                    rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR ) = 0;
+                   rgrl_match_set_sptr const& old_matches = nullptr ) = 0;
 
   //: Build the matches with a view (new interface)
   //
@@ -45,7 +45,7 @@ class rgrl_matcher
                    rgrl_feature_set const&    to_features,
                    rgrl_view const&           current_view,
                    rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR );
+                   rgrl_match_set_sptr const& old_matches = nullptr );
 
   //: Build the matches without a view
   //
@@ -56,7 +56,7 @@ class rgrl_matcher
                    rgrl_mask_box const&       from_region,
                    rgrl_mask_box const&       to_region,
                    rgrl_scale const&          current_scale,
-                   rgrl_match_set_sptr const& old_matches = VXL_NULLPTR );
+                   rgrl_match_set_sptr const& old_matches = nullptr );
 
   //: invert the matches according to inverse transformation
   virtual

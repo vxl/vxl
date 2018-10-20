@@ -18,7 +18,7 @@
 # include <vul/vul_timer.h>
 #endif
 
-gevd_bufferxy* gevd_fold::null_bufferxy = VXL_NULLPTR;
+gevd_bufferxy* gevd_fold::null_bufferxy = nullptr;
 
 const unsigned char TWOPI = 8, FULLPI = 4, HALFPI = 2;
 const int DIS[] = { 1, 1, 0,-1,-1,-1, 0, 1, // 8-connected neighbors
@@ -75,13 +75,13 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
   // -tpk @@ missing check if the requested buffer size is too small to contain the convolution operations
 
   // 1. Smooth image to regularize data, before taking derivatives
-  gevd_bufferxy* smooth = VXL_NULLPTR;      // Gaussian smoothed image
+  gevd_bufferxy* smooth = nullptr;      // Gaussian smoothed image
   // use float to avoid overflow/truncation
   filterFactor = gevd_float_operators::Gaussian((gevd_bufferxy&)image, // well-condition before
                                                 smooth, smoothSigma); // 2nd-difference
 
   // 2. Use 2nd-difference to estimate local curvature, filter is ddG.
-  gevd_bufferxy *curvature = VXL_NULLPTR;
+  gevd_bufferxy *curvature = nullptr;
   // need to make new arrays since later NonMaximumSupression clears
   // locationx locationy
   gevd_bufferxy *dirx = gevd_float_operators::SimilarBuffer(image);
@@ -312,7 +312,7 @@ gevd_fold::RecoverJunctions(const gevd_bufferxy& image,
   //          << length*100 / float((xmax/kmax)*(ymax/kmax)) << std::endl;
 
   // 2. Extend from end points until they touch other contours
-  gevd_bufferxy* smooth = VXL_NULLPTR;
+  gevd_bufferxy* smooth = nullptr;
   gevd_float_operators::Gaussian((gevd_bufferxy&)image, smooth, smoothSigma/2); // avoid oversmoothing
   const bool shortp = true;     // short contours
   const float threshold = NoiseThreshold(shortp);

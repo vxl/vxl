@@ -61,7 +61,7 @@ public:
       (*it).second.second = l_.begin();
       return &((*it).second.first);
     }
-    else return VXL_NULLPTR;
+    else return nullptr;
   }
 
 

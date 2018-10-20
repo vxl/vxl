@@ -145,7 +145,7 @@ void test_binary_1d_wrapper()
   vsl_b_write(bfs_out, b_thresh_clsfr.get());
   bfs_out.close();
 
-  clsfy_classifier_base *classifier_in = VXL_NULLPTR;
+  clsfy_classifier_base *classifier_in = nullptr;
 
   vsl_b_ifstream bfs_in(test_path);
   TEST(("Opened " + test_path + " for reading").c_str(), (!bfs_in ), false);

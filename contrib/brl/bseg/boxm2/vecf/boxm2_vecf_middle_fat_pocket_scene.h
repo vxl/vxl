@@ -25,7 +25,7 @@ class boxm2_vecf_middle_fat_pocket_scene : public boxm2_vecf_articulated_scene
 {
  public:
   enum anat_type { MIDDLE_FAT_POCKET, NO_TYPE};
- boxm2_vecf_middle_fat_pocket_scene(): middle_fat_pocket_data_(VXL_NULLPTR),boxm2_vecf_articulated_scene(){}
+ boxm2_vecf_middle_fat_pocket_scene(): middle_fat_pocket_data_(nullptr),boxm2_vecf_articulated_scene(){}
 
   //: set parameters
   bool set_params(boxm2_vecf_articulated_params const& params);

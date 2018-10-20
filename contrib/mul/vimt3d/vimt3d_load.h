@@ -24,7 +24,7 @@ void vimt3d_load(const std::string& path,
                  bool use_millimetres=false)
 {
   vil3d_image_resource_sptr ir = vil3d_load_image_resource(path.c_str());
-  if (ir.ptr()==VXL_NULLPTR)
+  if (ir.ptr()==nullptr)
   {
     image.image().set_size(0,0,0);
     return;

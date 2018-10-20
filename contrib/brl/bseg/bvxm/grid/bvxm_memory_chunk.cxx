@@ -11,14 +11,14 @@
 #include <vbl/vbl_smart_ptr.hxx>
 
 //: Default constructor
-bvxm_memory_chunk::bvxm_memory_chunk() : data_(VXL_NULLPTR), size_(0) {}
+bvxm_memory_chunk::bvxm_memory_chunk() : data_(nullptr), size_(0) {}
 
 //: Allocate n bytes of memory
 bvxm_memory_chunk::bvxm_memory_chunk(vxl_uint_64 n)
 {
   data_ = new (std::nothrow)char[(unsigned)n];
 
-  if (data_ == VXL_NULLPTR) {
+  if (data_ == nullptr) {
     std::cout << "bvxm_memory_chunk: Could not allocate data!" << std::endl;
   }
 
@@ -55,7 +55,7 @@ void bvxm_memory_chunk::set_size(vxl_uint_64 n)
 {
   if (size_==n) return;
   delete [] reinterpret_cast<char*>(data_);
-  data_ = VXL_NULLPTR;
+  data_ = nullptr;
   if (n>0)
     data_ = new char[(unsigned)n];
   size_ = n;

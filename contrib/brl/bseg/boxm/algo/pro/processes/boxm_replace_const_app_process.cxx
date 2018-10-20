@@ -55,7 +55,7 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
   float meanval = pro.get_input<float>(i++);
 
   // check the input validity
-  if (scene == VXL_NULLPTR) {
+  if (scene == nullptr) {
     std::cout << "boxm_replace_const_app_process: scene is null, cannot run" << std::endl;
     return false;
   }

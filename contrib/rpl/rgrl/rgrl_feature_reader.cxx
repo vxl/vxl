@@ -80,7 +80,7 @@ read( std::istream& is )
       << "       " << "Tag " << tag_str
       << " cannot match with any existing features.\n"
       << "         Try to open istream in BINARY mode!" << std::endl;
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Read a feature from input stream

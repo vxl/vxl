@@ -63,7 +63,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
   //sanity check
   if (search_kernels->size() != corner_kernels->size()){
     std::cerr << "Error: kernels have different size()\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;

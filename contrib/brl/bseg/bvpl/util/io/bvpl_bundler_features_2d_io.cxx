@@ -23,14 +23,14 @@ void vsl_b_read(vsl_b_istream &is, bvpl_bundler_features_2d* &p)
     vsl_b_read(is,*p);
   }//end if not null
   else
-    p = VXL_NULLPTR;
+    p = nullptr;
 
   return;
 }
 
 void vsl_b_write(vsl_b_ostream &os, const bvpl_bundler_features_2d* p)
 {
-  if (p == VXL_NULLPTR)
+  if (p == nullptr)
     vsl_b_write(os,false);//indicate null ptr
   else
   {

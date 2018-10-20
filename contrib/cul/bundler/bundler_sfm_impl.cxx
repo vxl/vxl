@@ -60,7 +60,7 @@ bool bundler_sfm_impl_create_initial_recon::operator()(
     // First step: Find the two images to base the reconstruction on.
     // We do this by selecting the match in the set that is modeled the
     // worst by a homography (i.e. has the fewest number of inliers).
-    bundler_inters_match_set *best_match = VXL_NULLPTR;
+    bundler_inters_match_set *best_match = nullptr;
     double best_inlier_p = 1.0;
 
     std::vector<bundler_inters_match_set>::iterator i;

@@ -14,7 +14,7 @@ class icam_view_sphere : public vbl_ref_count
 {
  public:
   //: Constructor, creates a view sphere around the box, centered at box's center with radius
-  icam_view_sphere(): view_sphere_(VXL_NULLPTR),ICAM_LOCAL_MIN_THRESH_(0.0){}
+  icam_view_sphere(): view_sphere_(nullptr),ICAM_LOCAL_MIN_THRESH_(0.0){}
   icam_view_sphere(vgl_box_3d<double> bb, double radius);
 
   //: Destructor

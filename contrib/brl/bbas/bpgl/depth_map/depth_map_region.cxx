@@ -49,7 +49,7 @@ region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
                 vpgl_perspective_camera<double> const& cam)
 {
   if (depth == std::numeric_limits<double>::max())
-    return VXL_NULLPTR;
+    return nullptr;
   unsigned nverts = region_2d->size();
   vgl_point_2d<double> centroid = (region_2d->centroid())->get_p();
   // ray from camera through centroid
@@ -99,8 +99,8 @@ depth_map_region
   depth_inc_(1.0),
   height_(-1.0),
   region_plane_(),
-  region_2d_(VXL_NULLPTR),
-  region_3d_(VXL_NULLPTR)
+  region_2d_(nullptr),
+  region_3d_(nullptr)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -124,7 +124,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   height_(height),
   region_plane_(region_plane),
   region_2d_(region),
-  region_3d_(VXL_NULLPTR)
+  region_3d_(nullptr)
 {}
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
@@ -145,7 +145,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   height_(-1.0),
   region_plane_(region_plane),
   region_2d_(region),
-  region_3d_(VXL_NULLPTR)
+  region_3d_(nullptr)
 {}
 
 // constructor for sky region
@@ -164,13 +164,13 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   height_(-1.0),
   region_plane_(),
   region_2d_(region),
-  region_3d_(VXL_NULLPTR)
+  region_3d_(nullptr)
 {}
 
 vsol_point_2d_sptr depth_map_region::centroid_2d() const
 {
   if (region_2d_) return region_2d_->centroid();
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 vgl_vector_3d<double> depth_map_region::
@@ -431,7 +431,7 @@ update_depth_image(vil_image_view<float>& depth_image,
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_region* dm_ptr)
 {
-  if (dm_ptr ==VXL_NULLPTR) {
+  if (dm_ptr ==nullptr) {
     vsl_b_write(os, false);
     return;
   }
@@ -450,7 +450,7 @@ void vsl_b_read(vsl_b_istream &is, depth_map_region*& dm_ptr)
     dm_ptr->b_read(is);
     return;
   }
-  dm_ptr = VXL_NULLPTR;
+  dm_ptr = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& dm_ptr)
@@ -461,7 +461,7 @@ void vsl_b_write(vsl_b_ostream& os, const depth_map_region_sptr& dm_ptr)
 
 void vsl_b_read(vsl_b_istream &is, depth_map_region_sptr& dm_ptr)
 {
-  depth_map_region* dm=VXL_NULLPTR;
+  depth_map_region* dm=nullptr;
   vsl_b_read(is, dm);
   dm_ptr = dm;
 }
@@ -505,10 +505,10 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, max_depth_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
-    vsol_polygon_2d* r2d=VXL_NULLPTR;
+    vsol_polygon_2d* r2d=nullptr;
     vsl_b_read(is, r2d);
     region_2d_ = r2d;
-    vsol_polygon_3d* r3d=VXL_NULLPTR;
+    vsol_polygon_3d* r3d=nullptr;
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
     is_ref_ = false;
@@ -527,10 +527,10 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, land_id_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
-    vsol_polygon_2d* r2d=VXL_NULLPTR;
+    vsol_polygon_2d* r2d=nullptr;
     vsl_b_read(is, r2d);
     region_2d_ = r2d;
-    vsol_polygon_3d* r3d=VXL_NULLPTR;
+    vsol_polygon_3d* r3d=nullptr;
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
     is_ref_ = false;
@@ -550,10 +550,10 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, land_id_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
-    vsol_polygon_2d* r2d=VXL_NULLPTR;
+    vsol_polygon_2d* r2d=nullptr;
     vsl_b_read(is, r2d);
     region_2d_ = r2d;
-    vsol_polygon_3d* r3d=VXL_NULLPTR;
+    vsol_polygon_3d* r3d=nullptr;
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
     height_ = -1.0;
@@ -573,10 +573,10 @@ void depth_map_region::b_read(vsl_b_istream& is)
     vsl_b_read(is, land_id_);
     vsl_b_read(is, depth_inc_);
     vsl_b_read(is, region_plane_);
-    vsol_polygon_2d* r2d=VXL_NULLPTR;
+    vsol_polygon_2d* r2d=nullptr;
     vsl_b_read(is, r2d);
     region_2d_ = r2d;
-    vsol_polygon_3d* r3d=VXL_NULLPTR;
+    vsol_polygon_3d* r3d=nullptr;
     vsl_b_read(is, r3d);
     region_3d_ = r3d;
   }

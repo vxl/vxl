@@ -136,7 +136,7 @@ block_simple_cache<Scene, Block>::get_data_base(scene_sptr &scene,
   id_data_map_t &data_map = this->cached_data_map(scene, type);
   vcl_size_t data_size = bstm_data_info::datasize(type);
   if (!scene->block_exists(id)) {
-    return VXL_NULLPTR;
+    return nullptr;
   }
   Block *blk = this->get_block(scene, id);
   // then look for the block you're requesting

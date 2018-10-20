@@ -17,13 +17,13 @@ static const unsigned int INIT_INDEX = unsigned(-1);
 //: Constructor
 bwm_video_cam_istream::
 bwm_video_cam_istream()
-  : index_(INIT_INDEX), current_camera_(VXL_NULLPTR) {}
+  : index_(INIT_INDEX), current_camera_(nullptr) {}
 
 
 //: Constructor
 bwm_video_cam_istream::
 bwm_video_cam_istream(const std::string& glob)
-  : index_(INIT_INDEX), current_camera_(VXL_NULLPTR) { open(glob); }
+  : index_(INIT_INDEX), current_camera_(nullptr) { open(glob); }
 
 
 //: Open a new stream using a file glob (see vul_file_iterator)
@@ -63,7 +63,7 @@ open(const std::vector<std::string>& paths)
   index_ = INIT_INDEX;
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = VXL_NULLPTR;
+  current_camera_ = nullptr;
   return !cam_paths_.empty();
 }
 
@@ -77,7 +77,7 @@ close()
   index_ = INIT_INDEX;
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = VXL_NULLPTR;
+  current_camera_ = nullptr;
 }
 
 
@@ -88,7 +88,7 @@ advance()
 {
   if (current_camera_)
     delete current_camera_;
-  current_camera_ = VXL_NULLPTR;
+  current_camera_ = nullptr;
   if (index_ < cam_paths_.size() || index_ == INIT_INDEX )
     return ++index_ < cam_paths_.size();
 
@@ -128,7 +128,7 @@ bwm_video_cam_istream::current_camera()
     }
     return current_camera_;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -142,7 +142,7 @@ seek_camera(unsigned int camera_number)
     if (index_ != camera_number)
       if (current_camera_) {
         delete current_camera_;
-        current_camera_ = VXL_NULLPTR;
+        current_camera_ = nullptr;
       }
     index_ = camera_number;
     return true;

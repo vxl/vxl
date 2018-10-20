@@ -13,8 +13,8 @@
 // Default ctor
 PairMatchSet2D3D::PairMatchSet2D3D()
 {
-  corners_ = VXL_NULLPTR;
-  structure_ = VXL_NULLPTR;
+  corners_ = nullptr;
+  structure_ = nullptr;
 }
 
 // Copy ctor
@@ -51,7 +51,7 @@ void PairMatchSet2D3D::set(const HomgInterestPointSet* corners, std::vector<Homg
 
 void PairMatchSet2D3D::set(int num_corners, std::vector<HomgPoint3D>* structure)
 {
-  corners_ = VXL_NULLPTR;
+  corners_ = nullptr;
   structure_ = structure;
   set_size(num_corners);
 }
@@ -75,7 +75,7 @@ HomgMetric PairMatchSet2D3D::get_conditioner() const
 {
   if (!corners_) {
     std::cerr << "PairMatchSet2D3D::get_conditioner() WARNING corners_ not set!\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   return corners_->get_conditioner();
 }
@@ -99,7 +99,7 @@ const HomgInterestPointSet* PairMatchSet2D3D::get_corners() const
 {
   if (!corners_) {
     std::cerr << "PairMatchSet2D3D::get_point_2d() WARNING corners_ not set!\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   return corners_;
 }

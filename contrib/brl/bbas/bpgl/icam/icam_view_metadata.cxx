@@ -33,8 +33,8 @@ void icam_view_metadata::register_image(vil_image_view<float> const& source_img,
                                         icam_minimizer_params const& params)
 {
   // create the images
-  vil_image_view<float> *exp_img=VXL_NULLPTR;
-  vil_image_view<double> *depth_img=VXL_NULLPTR;
+  vil_image_view<float> *exp_img=nullptr;
+  vil_image_view<double> *depth_img=nullptr;
   icam_minimizer* minimizer;
   create_minimizer(exp_img,depth_img,camera,params,minimizer);
   if (minimizer) {

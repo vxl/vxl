@@ -326,12 +326,12 @@ void vsl_b_read(vsl_b_istream& is, bapl_conn_table* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = VXL_NULLPTR;
+    ph = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const bapl_conn_table* &ph)
 {
-  if (ph==VXL_NULLPTR)
+  if (ph==nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

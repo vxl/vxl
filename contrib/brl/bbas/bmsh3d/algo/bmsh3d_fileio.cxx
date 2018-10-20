@@ -918,7 +918,7 @@ void setup_IFS_M_label_Fs_vids(bmsh3d_mesh* M, const int label,
 bool bmsh3d_save_label_faces_ply2(bmsh3d_mesh* M, const int label, const char* file)
 {
   FILE* fp;
-  if ((fp = std::fopen(file, "w")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(file, "w")) == nullptr) {
 #ifdef DEBUG
      std::cerr << "  can't open PLY2 file " << file << " to write.\n";
 #endif // DEBUG
@@ -1120,7 +1120,7 @@ bool bmsh3d_save_list_file(const std::string& list_file,
   std::cerr << "  Saving list file " << list_file.c_str() << ".\n";
   std::FILE* fp;
   assert (data_files.size() == align_files.size());
-  if ((fp = std::fopen(list_file.c_str(), "w")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(list_file.c_str(), "w")) == nullptr) {
     std::cerr << "Can't open output txt file " << list_file << '\n';
     return false;
   }
@@ -1136,7 +1136,7 @@ bool bmsh3d_save_list_view_run_file(const std::string& list_view_run,
 {
   std::cerr << "  Saving list view run file " << list_file.c_str() << ".\n";
   std::FILE* fp;
-  if ((fp = std::fopen(list_view_run.c_str(), "w")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(list_view_run.c_str(), "w")) == nullptr) {
     std::cerr << "Can't open output txt file " << list_file << '\n';
     return false;
   }
@@ -1150,7 +1150,7 @@ bool bmsh3d_save_list_view_run_file(const std::string& list_view_run,
 bool bmsh3d_save_xml(bmsh3d_mesh* mesh, const char* file)
 {
   FILE* fp;
-  if ((fp = std::fopen(file, "w")) == VXL_NULLPTR) {
+  if ((fp = std::fopen(file, "w")) == nullptr) {
     std::cerr << "Can't open xml file " << file << " to write.\n";
     return false;
   }

@@ -650,7 +650,7 @@ const std::string bvgl_eulerspiral_lookup_table::
 file_name = std::string("bvgl_eulerspiral_lookup_table.bvl");
 
 //: static bvgl_eulerspiral_lookup_table instance
-bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = VXL_NULLPTR;
+bvgl_eulerspiral_lookup_table* bvgl_eulerspiral_lookup_table::instance_ = nullptr;
 
 //: Return the pointer to the only instance of the class
 bvgl_eulerspiral_lookup_table *bvgl_eulerspiral_lookup_table::instance(){
@@ -822,7 +822,7 @@ bvgl_eulerspiral_optimization_function(unsigned int number_of_unknowns,
                                        UseGradient g):
 vnl_least_squares_function(number_of_unknowns, number_of_residuals, g)
 {
-  this->es_ = VXL_NULLPTR;
+  this->es_ = nullptr;
 }
 
 //: Main function for optimization

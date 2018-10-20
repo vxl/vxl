@@ -108,7 +108,7 @@ class vil3d_slice_list_image: public vil3d_image_resource
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* tag, void* property_value = VXL_NULLPTR) const;
+  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
 };
 
 #endif // vil3d_slice_list_h_

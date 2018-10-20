@@ -26,7 +26,7 @@ vsol_spatial_object_2d* vdgl_digital_region::clone() const
 //
 vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
   : vsol_region_2d(r),
-    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(nullptr), yp_(nullptr), pix_(nullptr),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -45,7 +45,7 @@ vdgl_digital_region::vdgl_digital_region(vdgl_digital_region const& r)
 vdgl_digital_region::vdgl_digital_region(int npts, const float* xp, const float* yp,
                                          const unsigned short *pix)
   : vsol_region_2d(),
-    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(nullptr), yp_(nullptr), pix_(nullptr),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -135,9 +135,9 @@ void vdgl_digital_region::set_I(unsigned short I)
 void vdgl_digital_region::ResetPixelData()
 {
   npts_ = 0;
-  delete [] xp_; xp_ = VXL_NULLPTR;
-  delete [] yp_; yp_ = VXL_NULLPTR;
-  delete [] pix_; pix_ = VXL_NULLPTR;
+  delete [] xp_; xp_ = nullptr;
+  delete [] yp_; yp_ = nullptr;
+  delete [] pix_; pix_ = nullptr;
   xo_ = yo_ = io_ = io_stdev_=0.0f;
 }
 
@@ -574,12 +574,12 @@ std::vector<unsigned int> vdgl_digital_region::residual_histogram(int nbins,
 void merge(vdgl_digital_region* r1, vdgl_digital_region* r2, vdgl_digital_region*& r12 )
 {
   if(!r1 || !r2){
-    r12 = VXL_NULLPTR;
+    r12 = nullptr;
     return;
   }
   unsigned int n1 = r1->Npix(), n2 = r2->Npix();
   if(n1 == 0 && n2 == 0){
-    r12 = VXL_NULLPTR;
+    r12 = nullptr;
     return;
   }
   if (n1==0)

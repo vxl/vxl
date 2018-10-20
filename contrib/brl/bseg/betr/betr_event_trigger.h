@@ -32,14 +32,14 @@
 class betr_event_trigger : public vbl_ref_count{
  public:
  betr_event_trigger(): name_("no_name"), lvcs_valid_(false),
-    local_bbox_(VXL_NULLPTR), verbose_(false){register_algorithms();}
+    local_bbox_(nullptr), verbose_(false){register_algorithms();}
 
   betr_event_trigger(vpgl_lvcs const& lvcs): name_("no_name"), lvcs_(lvcs), lvcs_valid_(true),
-    local_bbox_(VXL_NULLPTR), verbose_(false){
+    local_bbox_(nullptr), verbose_(false){
     register_algorithms();
   }
   betr_event_trigger(std::string const& name, vpgl_lvcs const& lvcs): name_(name), lvcs_(lvcs), lvcs_valid_(true),
-    local_bbox_(VXL_NULLPTR), verbose_(false){
+    local_bbox_(nullptr), verbose_(false){
     register_algorithms();
   }
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}

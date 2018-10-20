@@ -160,7 +160,7 @@ void boxm2_vecf_eye_scene::reset_indices(){
 }
 
 boxm2_vecf_eye_scene::boxm2_vecf_eye_scene(std::string const& scene_file, bool initialize):
-  base_model_(new boxm2_scene(scene_file)), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), sphere_(VXL_NULLPTR), sphere_dist_(VXL_NULLPTR), iris_(VXL_NULLPTR), pupil_(VXL_NULLPTR)
+  base_model_(new boxm2_scene(scene_file)), alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr), sphere_(nullptr), sphere_dist_(nullptr), iris_(nullptr), pupil_(nullptr)
 {
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();

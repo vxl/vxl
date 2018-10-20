@@ -49,7 +49,7 @@ bpgl_vsol_lens_warp(const vsol_spatial_object_2d_sptr& obj,
       return bpgl_vsol_lens_warp(pg, lens, invert, midpt_thresh).ptr();
     }
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Apply lens distortion to this vsol_point_2d and produce a new point
@@ -60,7 +60,7 @@ bpgl_vsol_lens_warp(const vsol_point_2d_sptr& pt,
                     double midpt_thresh)
 {
   if ( midpt_thresh <= 0 )
-    return VXL_NULLPTR;
+    return nullptr;
   if (invert)
     return new vsol_point_2d( lens.undistort( vgl_homg_point_2d<double>(pt->get_p()) ) );
   else
@@ -110,7 +110,7 @@ bpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
   vsol_point_2d_sptr p0 = bpgl_vsol_lens_warp(ln->p0(), lens, invert, midpt_thresh);
   vsol_point_2d_sptr p1 = bpgl_vsol_lens_warp(ln->p1(), lens, invert, midpt_thresh);
   if (!p0 || !p1)
-    return VXL_NULLPTR;
+    return nullptr;
   vsol_line_2d_sptr line = new vsol_line_2d(p0,p1);
   std::list<vsol_point_2d_sptr> pts;
   bpgl_vsol_warp_divide(ln,line,lens,invert,midpt_thresh,pts);
@@ -142,7 +142,7 @@ bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
     vsol_point_2d_sptr p = pln->vertex(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return VXL_NULLPTR;
+      return nullptr;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     std::list<vsol_point_2d_sptr> new_pts;
@@ -175,7 +175,7 @@ bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
     vsol_point_2d_sptr p = dc->point(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return VXL_NULLPTR;
+      return nullptr;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     std::list<vsol_point_2d_sptr> new_pts;
@@ -207,7 +207,7 @@ bpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
     vsol_point_2d_sptr p = pg->vertex(i);
     vsol_point_2d_sptr dp = bpgl_vsol_lens_warp(p, lens, invert, midpt_thresh);
     if (!dp)
-      return VXL_NULLPTR;
+      return nullptr;
     vsol_line_2d_sptr ln = new vsol_line_2d(last_p,p);
     vsol_line_2d_sptr wln = new vsol_line_2d(last_dp,dp);
     std::list<vsol_point_2d_sptr> new_pts;

@@ -21,7 +21,7 @@
 #include <vcl_compiler.h>
 
 namespace {
-  vidl_istream_sptr istr = VXL_NULLPTR;
+  vidl_istream_sptr istr = nullptr;
   unsigned ni = 0;
   unsigned nj = 0;
 };
@@ -66,7 +66,7 @@ bool bbgm_update_dist_image_stream_process_init(bprb_func_process& pro)
   std::cout << " initialized, stream frame size: " << ni << ", " << nj << ", stream at frame # " << istr->frame_number() << std::endl;
   std::cout.flush();
 
-  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(VXL_NULLPTR));
+  pro.set_input(0, new brdb_value_t<bbgm_image_sptr>(nullptr));
 
   return true;
 }

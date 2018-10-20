@@ -78,7 +78,7 @@ class bmsh3d_pt_set
   bmsh3d_vertex* vertexmap (const int i) {
     std::map<int, bmsh3d_vertex*>::iterator it = vertexmap_.find (i);
     if (it == vertexmap_.end())
-      return VXL_NULLPTR;
+      return nullptr;
     return (*it).second;
   }
 

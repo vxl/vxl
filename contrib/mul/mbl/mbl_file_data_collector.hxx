@@ -23,8 +23,8 @@
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector( const std::string & path )
 //: bfs_( path ),
-: bfs_( VXL_NULLPTR ),
-  wrapper_( VXL_NULLPTR )
+: bfs_( nullptr ),
+  wrapper_( nullptr )
 {
   path_ = path;
   while ( vul_file::exists( path_ ) )
@@ -48,8 +48,8 @@ mbl_file_data_collector<T>::mbl_file_data_collector( const std::string & path )
 //: Constructor from mbl_data_collector_base
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_base& c)
-: bfs_( VXL_NULLPTR ),
-  wrapper_( VXL_NULLPTR )
+: bfs_( nullptr ),
+  wrapper_( nullptr )
 {
   assert( c.is_class("mbl_file_data_collector<T>") );
   *this= dynamic_cast< const mbl_file_data_collector<T>& > ( c );
@@ -59,8 +59,8 @@ mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_data_collector_bas
 template<class T>
 mbl_file_data_collector<T>::mbl_file_data_collector(const mbl_file_data_collector & c)
 : mbl_data_collector<T>( c ),
-  bfs_( VXL_NULLPTR ),
-  wrapper_( VXL_NULLPTR )
+  bfs_( nullptr ),
+  wrapper_( nullptr )
 {
   assert( c.is_class( is_a() ) );
   *this = dynamic_cast< const mbl_file_data_collector<T>& > ( c );
@@ -150,13 +150,13 @@ void mbl_file_data_collector<T>::delete_stuff()
   {
     ( *bfs_ ).close();
     delete bfs_;
-    bfs_ = VXL_NULLPTR;
+    bfs_ = nullptr;
   }
 
   if ( wrapper_ )
   {
     delete wrapper_;
-    wrapper_ = VXL_NULLPTR;
+    wrapper_ = nullptr;
   }
 }
 

@@ -73,27 +73,27 @@ class segv_misc_manager : public vgui_wrapper_tableau
  protected:
   void draw_edges(std::vector<vtol_edge_2d_sptr>& edges, bool verts=false);
   void draw_lines(std::vector<vsol_line_2d_sptr> const & line_segs,
-                  const vgui_style_sptr& style = VXL_NULLPTR);
+                  const vgui_style_sptr& style = nullptr);
 
   void draw_conics(std::vector<vsol_conic_2d_sptr> const & conic_segs,
-                  const vgui_style_sptr& style = VXL_NULLPTR);
+                  const vgui_style_sptr& style = nullptr);
 
   void draw_polylines(std::vector<vsol_polyline_2d_sptr> const & polys,
-                      vgui_style_sptr style=(vgui_style*)VXL_NULLPTR);
+                      vgui_style_sptr style=(vgui_style*)nullptr);
   void draw_regions(std::vector<vtol_intensity_face_sptr>& regions,
                     bool verts=false);
   void draw_points(std::vector<vsol_point_2d_sptr> const & points,
                    const vgui_style_sptr& style);
 
   void set_selected_grid_image(vil_image_resource_sptr const& image,
-                               vgui_range_map_params_sptr const& rmps =VXL_NULLPTR);
+                               vgui_range_map_params_sptr const& rmps =nullptr);
 
   void add_image_at(vil_image_resource_sptr const& image,
                     const unsigned col, const unsigned row,
-                    vgui_range_map_params_sptr const& rmps = VXL_NULLPTR);
+                    vgui_range_map_params_sptr const& rmps = nullptr);
 
   void add_image(vil_image_resource_sptr const& image,
-                 vgui_range_map_params_sptr const& rmps =VXL_NULLPTR);
+                 vgui_range_map_params_sptr const& rmps =nullptr);
 
   vil_image_resource_sptr selected_image();
   vil_image_resource_sptr image_at(const unsigned col, const unsigned row);

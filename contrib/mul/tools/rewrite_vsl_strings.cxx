@@ -24,10 +24,10 @@ int main2(int argc, char*argv[])
   const std::string sep="\n";
 
   // Parse the program arguments
-  vul_arg<std::string> find_str(VXL_NULLPTR, "find string");
-  vul_arg<std::string> replace_str(VXL_NULLPTR, "replace string");
-  vul_arg<std::string> in_fname(VXL_NULLPTR, "input filename");
-  vul_arg<std::string> out_fname(VXL_NULLPTR, "output filename");
+  vul_arg<std::string> find_str(nullptr, "find string");
+  vul_arg<std::string> replace_str(nullptr, "replace string");
+  vul_arg<std::string> in_fname(nullptr, "input filename");
+  vul_arg<std::string> out_fname(nullptr, "output filename");
   vul_arg<std::vector<unsigned> > selection_list("-s", "Only replace the specified matches");
   vul_arg_parse(argc, argv);
 

@@ -57,8 +57,8 @@ class vsol_region_3d : public vsol_surface_3d
   virtual vsol_region_3d* cast_to_region(void) { return this; }
   virtual vsol_region_3d const* cast_to_region(void) const { return this; }
 
-  virtual vsol_polygon_3d *cast_to_polygon(void) {return VXL_NULLPTR;}
-  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return VXL_NULLPTR;}
+  virtual vsol_polygon_3d *cast_to_polygon(void) {return nullptr;}
+  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return nullptr;}
 
   //***************************************************************************
   // Status report

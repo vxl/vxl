@@ -151,12 +151,12 @@ int main(int argc,  char** argv)
         buf[kk] = radii_string()[kk];
 
       char *tok = std::strtok(buf, "_");;
-      while (tok != VXL_NULLPTR) {
+      while (tok != nullptr) {
         std::stringstream tokstr(tok);
         double radius;
         tokstr >> radius;
         radii.push_back(radius);
-        tok = std::strtok(VXL_NULLPTR, "_"); // tokenize the remaining string
+        tok = std::strtok(nullptr, "_"); // tokenize the remaining string
       }
       std::cout << " will index 2d maps using radii: ";
       for (unsigned i = 0; i < radii.size(); i++) {

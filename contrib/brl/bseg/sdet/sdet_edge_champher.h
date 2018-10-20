@@ -51,7 +51,7 @@ class sdet_edge_champher
     if ( (i>=0) && (i<xsize_) && (j>=0) && (j<ysize_) )
         return edges_[j][i];
     else
-        return VXL_NULLPTR;
+        return nullptr;
     }
 
   // Data Control--------------------------------------------------------------

@@ -37,7 +37,7 @@ class bgrl2_hg_graph
     //  instead, use find to avoid inserting NULL objects
     std::map<int, bgrl2_hg_vertex*>::iterator V_it = vertices_.find (i);
     if (V_it == vertices_.end())
-      return VXL_NULLPTR;
+      return nullptr;
 
     bgrl2_hg_vertex* vertex = (*V_it).second;
     return vertex;
@@ -49,7 +49,7 @@ class bgrl2_hg_graph
   bgrl2_hg_edge* edges (const int i) {
     std::map<int, bgrl2_hg_edge*>::iterator E_it = edges_.find (i);
     if (E_it == edges_.end())
-      return VXL_NULLPTR;
+      return nullptr;
 
     bgrl2_hg_edge* edge = (*E_it).second;
     return edge;

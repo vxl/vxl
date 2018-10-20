@@ -222,11 +222,11 @@ brdb_selection_sptr
 brdb_selection::selection_and(const brdb_selection_sptr& s)
 {
   if (!s)
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (s->relation_ && s->relation_ != this->relation_){
     std::cerr << "warning: attempting to combine selections on different relations\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brdb_selection_sptr result = new brdb_selection(this->relation_);
@@ -249,11 +249,11 @@ brdb_selection_sptr
 brdb_selection::selection_or(const brdb_selection_sptr& s)
 {
   if (!s)
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (s->relation_ && s->relation_ != this->relation_){
     std::cerr << "warning: attempting to combine selections on different relations\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brdb_selection_sptr result = new brdb_selection(this->relation_);
@@ -276,11 +276,11 @@ brdb_selection_sptr
 brdb_selection::selection_xor(const brdb_selection_sptr& s)
 {
   if (!s)
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (s->relation_ && s->relation_ != this->relation_) {
     std::cerr << "warning: attempting to combine selections on different relations\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brdb_selection_sptr result = new brdb_selection(this->relation_);
@@ -422,7 +422,7 @@ brdb_selection::contains(const std::vector<brdb_tuple_sptr>::iterator& relation_
 void
 brdb_selection::check_and_update()
 {
-  if (this->relation_ == VXL_NULLPTR)
+  if (this->relation_ == nullptr)
     return;
 
   if (this->time_stamp_ == this->relation_->get_timestamp())

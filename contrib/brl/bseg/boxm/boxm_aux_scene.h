@@ -25,7 +25,7 @@ class boxm_aux_scene
    typedef enum {EMPTY=0, CLONE, LOAD, UNDEFINED } tree_creation_type ;
    typedef  boct_tree<T_loc, T> tree_type;
    typedef  boct_tree<T_loc, T_AUX> aux_tree_type;
-   boxm_aux_scene() : aux_scene_(VXL_NULLPTR), aux_storage_dir_("") {}
+   boxm_aux_scene() : aux_scene_(nullptr), aux_storage_dir_("") {}
    boxm_aux_scene(boxm_scene<tree_type>* scene, std::string suffix,
                   tree_creation_type type, boxm_apm_type app_model=BOXM_APM_UNKNOWN);
 

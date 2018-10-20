@@ -47,7 +47,7 @@ void osl_break_edge(osl_edge const *in,
                     double threshold,
                     unsigned nbhd_size)
 {
-  assert(in!=VXL_NULLPTR);
+  assert(in!=nullptr);
 
   float const *x = in->GetX();
   float const *y = in->GetY();

@@ -50,7 +50,7 @@ class bwm_observer_vgui : public bwm_observer_img, public bwm_observer
 
   void update_all();
 
-  void translate(vgl_vector_3d<double> T, bwm_observable_sptr object=VXL_NULLPTR);
+  void translate(vgl_vector_3d<double> T, bwm_observable_sptr object=nullptr);
 
   void delete_object();
 

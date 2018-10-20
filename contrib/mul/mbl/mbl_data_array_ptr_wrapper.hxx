@@ -14,7 +14,7 @@
 //: Default constructor
 template<class T>
 mbl_data_array_ptr_wrapper<T>::mbl_data_array_ptr_wrapper()
-  : data_(VXL_NULLPTR),n_(0),index_(0)
+  : data_(nullptr),n_(0),index_(0)
 {
 }
 

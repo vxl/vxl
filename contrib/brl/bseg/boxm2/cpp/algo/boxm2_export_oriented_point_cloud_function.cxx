@@ -430,7 +430,7 @@ void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const std::string
   ply_bb_reader parsed_ply;
   parsed_ply.bbox = box;
 
-  p_ply ply = ply_open(filename.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply ply = ply_open(filename.c_str(), nullptr, 0, nullptr);
   if (!ply) {
     std::cout << "File " << filename << " doesn't exist.";
   }

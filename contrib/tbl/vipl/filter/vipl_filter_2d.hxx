@@ -72,14 +72,14 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   // the name of the section container generator.
   // do not generate a new one if there is one already.
   if (!this->ref_dst_section()) {
-    this->ref_dst_section() = vipl_filterable_section_container_generator(*this->ref_outf(),(DataOut*)VXL_NULLPTR);
+    this->ref_dst_section() = vipl_filterable_section_container_generator(*this->ref_outf(),(DataOut*)nullptr);
   }
   if (!this->ref_dst_section()) {
     std::cerr << "Warning: empty dst section in vipl_filter_2d::applyop, returning without processing\n";
     return false;
   }
   if (!this->ref_src_section()) {
-    this->ref_src_section() = vipl_filterable_section_container_generator(*this->ref_inf()[0],(DataIn*)VXL_NULLPTR);
+    this->ref_src_section() = vipl_filterable_section_container_generator(*this->ref_inf()[0],(DataIn*)nullptr);
   }
   if (!this->ref_src_section()) {
     std::cerr << "Warning: empty src section in vipl_filter_2d::applyop, presuming output driving but cannot be ptr safe\n";

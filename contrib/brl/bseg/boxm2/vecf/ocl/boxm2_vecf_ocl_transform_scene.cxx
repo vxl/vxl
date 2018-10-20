@@ -100,7 +100,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
                                                                bool do_interp)
 
   :  source_scene_(source_scene),
-     target_scene_(VXL_NULLPTR),
+     target_scene_(nullptr),
      opencl_cache_(ocl_cache),
      grey_app_id_(gray_app_id), color_app_id_(color_app_id),
      do_alpha_(do_alpha),do_interp_(do_interp)
@@ -291,20 +291,20 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
     int status = 0;
     queue_ = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
 
-    octree_depth_ = VXL_NULLPTR;
-    blk_info_target_ = VXL_NULLPTR;
-    blk_info_source = VXL_NULLPTR;
-    info_buffer_ = VXL_NULLPTR;
-    blk_target_ = VXL_NULLPTR;
-    alpha_target_ = VXL_NULLPTR;
-    mog_target_ = VXL_NULLPTR;
-    info_buffer_source = VXL_NULLPTR;
-    blk_source = VXL_NULLPTR;
-    alpha_source = VXL_NULLPTR;
-    mog_source = VXL_NULLPTR;
-    nobs_target_ = VXL_NULLPTR;
-    rgb_target_ = VXL_NULLPTR;
-    long_output=VXL_NULLPTR;
+    octree_depth_ = nullptr;
+    blk_info_target_ = nullptr;
+    blk_info_source = nullptr;
+    info_buffer_ = nullptr;
+    blk_target_ = nullptr;
+    alpha_target_ = nullptr;
+    mog_target_ = nullptr;
+    info_buffer_source = nullptr;
+    blk_source = nullptr;
+    alpha_source = nullptr;
+    mog_source = nullptr;
+    nobs_target_ = nullptr;
+    rgb_target_ = nullptr;
+    long_output=nullptr;
     return true;
 }
 // the transform is the inverse, i.e. a map from the target to the source
@@ -751,7 +751,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
      std::cout << "ERROR: boxm2_vecf_ocl_transform_scene: Unsupported appearance type for source_scene " << boxm2_data_info::prefix(app_type_) << '\n';
      return false;
    }
-   bocl_mem* rgb_source = VXL_NULLPTR;
+   bocl_mem* rgb_source = nullptr;
    if(color_app_type_id_ !=""){
      rgb_source = opencl_cache_->get_data(source_scene_, *iter_blk_source,color_app_type_id_,0,true);
    }

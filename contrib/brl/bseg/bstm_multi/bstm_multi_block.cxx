@@ -40,14 +40,14 @@ space_tree_b *bstm_multi_block::get_space_data(int level, std::nothrow_t) {
   case STE_SPACE:
     return reinterpret_cast<space_tree_b *>(this->get_data(level));
   case STE_TIME:
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
 time_tree_b *bstm_multi_block::get_time_data(int level, std::nothrow_t) {
   switch (this->metadata().subdivisions_[level]) {
   case STE_SPACE:
-    return VXL_NULLPTR;
+    return nullptr;
   case STE_TIME:
     return reinterpret_cast<time_tree_b *>(this->get_data(level));
   }

@@ -17,7 +17,7 @@
 
 //: Constructor using a vector of db value references
 brdb_tuple::brdb_tuple(const std::vector<brdb_value*>& values)
-: values_(values.size(),VXL_NULLPTR)
+: values_(values.size(),nullptr)
 {
   for (unsigned int i=0; i<values.size(); ++i){
     values_[i] = values[i]->clone();
@@ -32,14 +32,14 @@ brdb_tuple::make_prototype(const std::vector<std::string>& types)
   typedef std::map<std::string, const brdb_value*> reg_t;
   const reg_t& reg =  brdb_value::registry();
 
-  std::vector<brdb_value* > values(types.size(),VXL_NULLPTR);
+  std::vector<brdb_value* > values(types.size(),nullptr);
   for (unsigned int i=0; i<types.size(); ++i){
     reg_t::const_iterator f = reg.find(types[i]);
     if (f != reg.end())
       values[i] = f->second->clone();
     else{
       std::cerr << "brdb_tuple: can not create instance of unknown type: "<< types[i] << std::endl;
-      return VXL_NULLPTR;
+      return nullptr;
     }
   }
 
@@ -49,7 +49,7 @@ brdb_tuple::make_prototype(const std::vector<std::string>& types)
 
 //: Copy Constructor
 brdb_tuple::brdb_tuple(const brdb_tuple& other)
-: vbl_ref_count(), values_(other.values_.size(),VXL_NULLPTR)
+: vbl_ref_count(), values_(other.values_.size(),nullptr)
 {
   for (unsigned int i=0; i<other.values_.size(); ++i){
     if (other.values_[i])
@@ -95,7 +95,7 @@ brdb_tuple::set_value(unsigned int index, const brdb_value& value)
   // check for whether this value exists
   if (!values_[index]){
     values_[index] = value.clone();
-    return values_[index] != VXL_NULLPTR;
+    return values_[index] != nullptr;
   }
   // check the type of the existing value
   assert(value.is_a() == values_[index]->is_a());
@@ -103,7 +103,7 @@ brdb_tuple::set_value(unsigned int index, const brdb_value& value)
   // remove the old value;
 //  delete values_[index];
   values_[index] = value.clone();
-  return values_[index] != VXL_NULLPTR;
+  return values_[index] != nullptr;
 }
 
 //: Get a value by index

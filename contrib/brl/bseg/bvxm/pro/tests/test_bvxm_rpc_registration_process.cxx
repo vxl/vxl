@@ -164,7 +164,7 @@ static void test_bvxm_rpc_registration_process()
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " didn't get value\n";
     }
-    TEST("vpgl_camera_double_sptr non-null", value_cam != VXL_NULLPTR, true);
+    TEST("vpgl_camera_double_sptr non-null", value_cam != nullptr, true);
 
     brdb_value_t<vpgl_camera_double_sptr>* result_cam =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value_cam.ptr());
@@ -182,7 +182,7 @@ static void test_bvxm_rpc_registration_process()
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " didn't get value\n";
     }
-    TEST("image output non-null", value_img != VXL_NULLPTR, true);
+    TEST("image output non-null", value_img != nullptr, true);
 
     brdb_value_t<vil_image_view_base_sptr>* result_img =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());

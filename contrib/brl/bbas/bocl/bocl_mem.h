@@ -145,9 +145,9 @@ bool bocl_mem::fill(const cl_command_queue& cmd_queue, T val, std::string type_s
   cl_device_id dev_id;
   cl_context context;
   /* cl_int status = */ clGetCommandQueueInfo(cmd_queue, CL_QUEUE_DEVICE,
-                                              sizeof(dev_id), &dev_id, VXL_NULLPTR);
+                                              sizeof(dev_id), &dev_id, nullptr);
   /* cl_int status = */ clGetCommandQueueInfo(cmd_queue, CL_QUEUE_CONTEXT,
-                                              sizeof(context), &context, VXL_NULLPTR);
+                                              sizeof(context), &context, nullptr);
 
   //grab kernel
   bocl_kernel* fillKernel = this->get_set_kernel(dev_id, context, type_string);

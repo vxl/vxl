@@ -503,7 +503,7 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id const& id)
   if ( blocks_.find(id) == blocks_.end() )
   {
     std::cerr<<"\nboxm2_scene::get_blk_metadata: Block doesn't exist: "<<id<<"\n\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   boxm2_block_metadata data = blocks_[id];

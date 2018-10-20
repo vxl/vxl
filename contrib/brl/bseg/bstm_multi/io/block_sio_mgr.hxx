@@ -21,7 +21,7 @@ Block *block_sio_mgr<Block>::load_block(const vcl_string &dir,
   if (!myFile) {
     // vcl_cerr<<"block_sio_mgr::load_block cannot read file
     // "<<filepath<<vcl_endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // instantiate new block
@@ -45,7 +45,7 @@ block_data_base *block_sio_mgr<Block>::load_block_data_generic(
   if (!myFile) {
     // vcl_cerr<<"block_sio_mgr::load_data cannot read file
     // "<<filename<<vcl_endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // instantiate new block

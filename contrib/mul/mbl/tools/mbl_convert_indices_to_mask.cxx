@@ -57,9 +57,9 @@ int main2(int argc, char *argv[])
   );
 
   // Parse command line arguments
-  vul_arg<std::string> inds_file(VXL_NULLPTR, "INPUT indices file");
+  vul_arg<std::string> inds_file(nullptr, "INPUT indices file");
   vul_arg<unsigned> n("-n", "Length of mask; default is to use highest index in indices file");
-  vul_arg<std::string> mask_file(VXL_NULLPTR, "OUTPUT mask file");
+  vul_arg<std::string> mask_file(nullptr, "OUTPUT mask file");
   vul_arg_parse(argc, argv);
 
   std::vector<unsigned> inds;

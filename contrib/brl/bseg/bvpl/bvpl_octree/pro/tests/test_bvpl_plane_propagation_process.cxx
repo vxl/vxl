@@ -109,7 +109,7 @@ static void test_bvpl_plane_propagation_process()
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != VXL_NULLPTR);
+  bool non_null = (value != nullptr);
   TEST("the output scene non-null", non_null, true);
 
   brdb_value_t<boxm_scene_base_sptr>* result=static_cast<brdb_value_t<boxm_scene_base_sptr>* >(value.ptr());

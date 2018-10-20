@@ -62,7 +62,7 @@ class bmsh3d_edge : public vispt_elm
   bmsh3d_edge(bmsh3d_vertex* sv, bmsh3d_vertex* ev, int id)
   {
     id_           = id;
-    halfedge_     = VXL_NULLPTR;
+    halfedge_     = nullptr;
     vertices_[0]  = sv;
     vertices_[1]  = ev;
     i_visited_    = 0;
@@ -98,7 +98,7 @@ class bmsh3d_edge : public vispt_elm
     if (vertices_[1] == V)
       return vertices_[0];
 
-    return VXL_NULLPTR;
+    return nullptr;
   }
   bool is_V_incident(const bmsh3d_vertex* V) const {
     return vertices_[0] == V || vertices_[1] == V;
@@ -167,7 +167,7 @@ inline bmsh3d_vertex* incident_V_of_Es(const bmsh3d_edge* E0, const bmsh3d_edge*
   V = E0->sV();
   if (E1->is_V_incident(V))
     return V;
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Return the first found vertex that is incident to both E1 and E2.
@@ -177,7 +177,7 @@ inline bmsh3d_vertex* Es_sharing_V(const bmsh3d_edge* E1, const bmsh3d_edge* E2)
     return E2->sV();
   if (E1->is_V_incident(E2->eV()))
     return E2->eV();
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Return the first found vertex that is incident to both E1 and E2.
@@ -185,8 +185,8 @@ inline bmsh3d_vertex* Es_sharing_V(const bmsh3d_edge* E1, const bmsh3d_edge* E2)
 inline bmsh3d_vertex* Es_sharing_V_check(const bmsh3d_edge* E1, const bmsh3d_edge* E2,
                                          bool& loop)
 {
-  bmsh3d_vertex* V1 = VXL_NULLPTR;
-  bmsh3d_vertex* V2 = VXL_NULLPTR;
+  bmsh3d_vertex* V1 = nullptr;
+  bmsh3d_vertex* V2 = nullptr;
   loop = false;
   if (E1->is_V_incident(E2->sV()))
     V1 = E2->sV();
@@ -200,7 +200,7 @@ inline bmsh3d_vertex* Es_sharing_V_check(const bmsh3d_edge* E1, const bmsh3d_edg
   else if (V2)
     return V2;
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 inline bool same_incident_Vs(const bmsh3d_edge* E1, const bmsh3d_edge* E2)

@@ -29,7 +29,7 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
         total_bytes_per_data_type= bytes_per_data_type* identifier_list_.size();
         char * buffer = new(std::nothrow) char[total_bytes_per_data_type];
 
-        if (buffer == VXL_NULLPTR)
+        if (buffer == nullptr)
            std::cout<<"Failed to Allocate Memory"<<std::endl;
 
         unsigned long global_index = 0;

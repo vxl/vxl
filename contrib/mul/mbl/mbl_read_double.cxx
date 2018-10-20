@@ -49,7 +49,7 @@ double RD_ReadDouble1(const char *q_str, double default_d,
     std::cout<<q_str<<" ["<<min_d<<".."<<max_d<<"] ("<<default_d<<") :";
     std::cout.flush();
 
-    if (std::fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
+    if (std::fgets(reply,MAX_LEN,stdin)!=nullptr)
     {
       double r = default_d;
       if (reply[0]=='\n' || std::sscanf(reply,"%lf",&r)>0)

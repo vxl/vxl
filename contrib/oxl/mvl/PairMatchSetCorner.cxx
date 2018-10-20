@@ -15,7 +15,7 @@
 #include <mvl/HomgInterestPointSet.h>
 
 //: Constructor
-PairMatchSetCorner::PairMatchSetCorner() : corners1_(VXL_NULLPTR) , corners2_(VXL_NULLPTR)
+PairMatchSetCorner::PairMatchSetCorner() : corners1_(nullptr) , corners2_(nullptr)
 {
 }
 
@@ -24,14 +24,14 @@ PairMatchSetCorner::PairMatchSetCorner() : corners1_(VXL_NULLPTR) , corners2_(VX
 // live longer than the PairMatchSetCorner (for example in an MViewDatabase).
 PairMatchSetCorner::PairMatchSetCorner(HomgInterestPointSet const* corners1,
                                        HomgInterestPointSet const* corners2)
-  : corners1_(VXL_NULLPTR) , corners2_(VXL_NULLPTR)
+  : corners1_(nullptr) , corners2_(nullptr)
 {
   set(corners1, corners2);
 }
 
 //: Copy a PairMatchSetCorner
 PairMatchSetCorner::PairMatchSetCorner(const PairMatchSetCorner& that):
-  PairMatchSet(that) , corners1_(VXL_NULLPTR) , corners2_(VXL_NULLPTR)
+  PairMatchSet(that) , corners1_(nullptr) , corners2_(nullptr)
 {
   set(that.corners1_, that.corners2_);
 }

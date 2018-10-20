@@ -73,59 +73,59 @@ class bgui_vsol2D_tableau : public vgui_easy2D_tableau
   //: display for vsol_point_2d
   bgui_vsol_soview2D_point*
     add_vsol_point_2d(vsol_point_2d_sptr const& p,
-                      const vgui_style_sptr& style = VXL_NULLPTR);
+                      const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_line_2d
   bgui_vsol_soview2D_line_seg*
     add_vsol_line_2d(vsol_line_2d_sptr const& line,
-                     const vgui_style_sptr& style = VXL_NULLPTR);
+                     const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_conic_2d
   bgui_vsol_soview2D_conic_seg*
     add_vsol_conic_2d(vsol_conic_2d_sptr const& conic,
-                      const vgui_style_sptr& style = VXL_NULLPTR);
+                      const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_polyline_2d
   bgui_vsol_soview2D_polyline*
     add_vsol_polyline_2d(vsol_polyline_2d_sptr const& pline,
-                         const vgui_style_sptr& style = VXL_NULLPTR);
+                         const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_polygon_2d
   bgui_vsol_soview2D_polygon*
     add_vsol_polygon_2d(vsol_polygon_2d_sptr const& pline,
-                        const vgui_style_sptr& style = VXL_NULLPTR);
+                        const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_polygon_2d
   bgui_vsol_soview2D_polygon_set*
     add_vsol_polygon_2d_set(vsol_poly_set_2d_sptr const& set,
-                            const vgui_style_sptr& style = VXL_NULLPTR);
+                            const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_digital_curve_2d
   bgui_vsol_soview2D_digital_curve*
     add_digital_curve(vsol_digital_curve_2d_sptr const& dc,
-                      const vgui_style_sptr& style = VXL_NULLPTR);
+                      const vgui_style_sptr& style = nullptr);
 
   //: display for vsol_digital_curve_2d (dotted)
   bgui_vsol_soview2D_digital_curve*
     add_dotted_digital_curve(vsol_digital_curve_2d_sptr const& dc,
-                             const vgui_style_sptr& style = VXL_NULLPTR);
+                             const vgui_style_sptr& style = nullptr);
 
   //: display for vdgl_digital_curve
   bgui_vsol_soview2D_edgel_curve*
     add_edgel_curve(vdgl_digital_curve_sptr const& dc,
-                      const vgui_style_sptr& style = VXL_NULLPTR);
+                      const vgui_style_sptr& style = nullptr);
 
   //: display for vdgl_digital_curve (dotted)
   bgui_vsol_soview2D_edgel_curve*
     add_dotted_edgel_curve(vdgl_digital_curve_sptr const& dc,
-                             const vgui_style_sptr& style = VXL_NULLPTR);
+                             const vgui_style_sptr& style = nullptr);
 
   void add_spatial_object(vsol_spatial_object_2d_sptr const& sos,
-                          const vgui_style_sptr& style = VXL_NULLPTR);
+                          const vgui_style_sptr& style = nullptr);
 
   //: display methods for vectors of vsol classes (not grouped)
   void add_spatial_objects(std::vector<vsol_spatial_object_2d_sptr> const& sos,
-                           const vgui_style_sptr& style = VXL_NULLPTR);
+                           const vgui_style_sptr& style = nullptr);
 
 
   //: Methods for changing the default style of displayable objects

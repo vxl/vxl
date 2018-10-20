@@ -39,7 +39,7 @@ int main(int argc,  char** argv)
   std::vector<vpgl_geo_camera* > cams;
   vil_image_resource_sptr dem_res = vil_load_image_resource(dem_file().c_str());
   vil_image_view<float> dem = dem_res->get_view();
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   vpgl_geo_camera::init_geo_camera(dem_res, lvcs, geocam);
 
   dems.push_back(dem);

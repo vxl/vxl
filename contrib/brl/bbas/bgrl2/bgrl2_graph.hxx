@@ -87,9 +87,9 @@ template<class V, class E>
 typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::add_edge(V_sptr v1, V_sptr v2)
 {
   if (!v1 || !v2)
-    return VXL_NULLPTR;
+    return nullptr;
   if (v1==v2)
-    return VXL_NULLPTR; //can't add the edge to itself
+    return nullptr; //can't add the edge to itself
 
   //add the vertices first
   if (!this->exists(v1))
@@ -113,7 +113,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::add_edge(V_sptr v1, V_sptr v
     return e;
   }
 
-  return VXL_NULLPTR; //edge wasn't added
+  return nullptr; //edge wasn't added
 }
 
 //: Remove an edge
@@ -251,7 +251,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::first_in_edge(V_sptr v)
   if (v->in_edges().size()>0)
     return v->in_edges().front();
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 //:  returns the last edge of in_edges(v) (nil if this list is empty).
@@ -261,7 +261,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::last_in_edge(V_sptr v)
   if (v->in_edges().size()>0)
     return v->in_edges().back();
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 //: returns the first edge of out_edges(v) (nil if this list is empty).
@@ -271,7 +271,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::first_out_edge(V_sptr v)
   if (v->out_edges().size()>0)
     return v->out_edges().front();
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 //:  returns the last edge of out_edges(v) (nil if this list is empty).
@@ -281,7 +281,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::last_out_edge(V_sptr v)
   if (v->out_edges().size()>0)
     return v->out_edges().back();
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 //:  returns the successor of edge e in in_edges(target(e)) (nil if it does not exist).
@@ -361,7 +361,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::last_adj_edge(V_sptr v)
 template<class V, class E>
 typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_succ(E_sptr /*e*/, V_sptr /*v*/)
 {
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: returns the predecessor of edge e in the adjacency list of v.
@@ -369,7 +369,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_succ(E_sptr /*e*/, V_spt
 template<class V, class E>
 typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_pred(E_sptr /*e*/, V_sptr /*v*/)
 {
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: returns the cyclic successor(CW) of edge e in the adjacency list of v.
@@ -378,7 +378,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::adj_pred(E_sptr /*e*/, V_spt
 template<class V, class E>
 typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::cyclic_adj_succ(E_sptr e, V_sptr v)
 {
-  E_sptr adj_edge=VXL_NULLPTR;
+  E_sptr adj_edge=nullptr;
 
   //find the edge e in the adjacency list of v
 
@@ -437,7 +437,7 @@ typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::cyclic_adj_succ(E_sptr e, V_
 template<class V, class E>
 typename bgrl2_graph<V,E>::E_sptr bgrl2_graph<V,E>::cyclic_adj_pred(E_sptr e, V_sptr v)
 {
-  E_sptr adj_edge=VXL_NULLPTR;
+  E_sptr adj_edge=nullptr;
 
   //find the edge e in the adjacency list of v
 

@@ -18,7 +18,7 @@ bocl_device::bocl_device(cl_device_id& device) : device_(device)
 
   //Create a context from the device ID
   int status = 1;
-  context_ = clCreateContext(VXL_NULLPTR, 1, &device_, VXL_NULLPTR, VXL_NULLPTR, &status);
+  context_ = clCreateContext(nullptr, 1, &device_, nullptr, nullptr, &status);
   if (!check_val(status,CL_SUCCESS,"clCreateContextFromType failed: " + error_to_string(status))) {
     return;
   }

@@ -85,7 +85,7 @@ imesh_pca_mesh::imesh_pca_mesh(const imesh_pca_mesh& other)
   : imesh_mesh(other),
     std_devs_(other.std_devs_),
     pc_(other.pc_),
-    mean_verts_((other.mean_verts_.get()) ? other.mean_verts_->clone() : VXL_NULLPTR),
+    mean_verts_((other.mean_verts_.get()) ? other.mean_verts_->clone() : nullptr),
     params_(other.params_)
 {
 }
@@ -99,7 +99,7 @@ imesh_pca_mesh& imesh_pca_mesh::operator=(const imesh_pca_mesh& other)
     std_devs_ = other.std_devs_;
     pc_ = other.pc_;
     mean_verts_ = vcl_unique_ptr<imesh_vertex_array_base>((other.mean_verts_.get()) ?
-                                                        other.mean_verts_->clone() : VXL_NULLPTR);
+                                                        other.mean_verts_->clone() : nullptr);
     params_ = other.params_;
   }
   return *this;

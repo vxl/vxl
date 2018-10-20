@@ -77,7 +77,7 @@ inline void mbl_stl_clean(iterType first, iterType last)
   for (; first != last; ++first)
   {
     delete *first;
-    *first=VXL_NULLPTR;
+    *first=nullptr;
   }
 }
 

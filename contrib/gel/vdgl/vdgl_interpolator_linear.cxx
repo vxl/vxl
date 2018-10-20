@@ -42,7 +42,7 @@ vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point
     }
   }
   if ( index == -1 )
-    return VXL_NULLPTR;
+    return nullptr;
   else
     return new vsol_point_2d ( chain_->edgel(index).get_pt() );
 }

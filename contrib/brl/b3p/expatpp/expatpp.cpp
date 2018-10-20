@@ -27,12 +27,12 @@
 #endif
 
 expatpp::expatpp(bool createParser) :
-  mParser(VXL_NULLPTR),  // in case of exception below
+  mParser(nullptr),  // in case of exception below
   mHaveParsed(false)
 {
   if (createParser) {
   // subclasses may call this ctor after parser created!
-    mParser = XML_ParserCreate(VXL_NULLPTR);
+    mParser = XML_ParserCreate(nullptr);
     SetupHandlers();
   }
 }
@@ -78,7 +78,7 @@ void
 expatpp::ReleaseParser()
 {
   ::XML_ParserFree(mParser);
-  mParser = VXL_NULLPTR;
+  mParser = nullptr;
 }
 
 
@@ -347,7 +347,7 @@ expatpp::getAttribute(const XML_Char* matchingName, const XML_Char** atts)
       return atts[i];  // if 2nd item was missing, this returns 0 safely indicating failure
     }
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -616,11 +616,11 @@ expatpp::xmlDecl( const XML_Char      *version,
   certainly assumes the parent type.
 */
 expatppNesting::expatppNesting(expatppNesting* parent) :
-  expatpp(parent==VXL_NULLPTR),  // don't create parser - we're taking over from parent if given
+  expatpp(parent==nullptr),  // don't create parser - we're taking over from parent if given
   mDepth(0),
   mSelfDeleting(true),
   mParent(parent),
-  mOwnedChild(VXL_NULLPTR)
+  mOwnedChild(nullptr)
 {
   if ( parent )
   {
@@ -660,7 +660,7 @@ void
 expatppNesting::DeleteChild()
 {
   delete mOwnedChild;
-  mOwnedChild = VXL_NULLPTR;
+  mOwnedChild = nullptr;
 }
 
 
@@ -721,8 +721,8 @@ expatppNesting::returnToParent()
 {
   expatppNesting* ret = mParent;
   ::XML_SetUserData(mParser, mParent);
-  mParent=VXL_NULLPTR;
-  mParser=VXL_NULLPTR;  // prevent parser shutdown by expatpp::~expatpp!!
+  mParent=nullptr;
+  mParser=nullptr;  // prevent parser shutdown by expatpp::~expatpp!!
   if (mSelfDeleting) {
     ret->OwnedChildOrphansItself(this);
     delete this;  // MUST BE LAST THING CALLED IN NON-VIRTUAL FUNCTION, NO MEMBER ACCESS

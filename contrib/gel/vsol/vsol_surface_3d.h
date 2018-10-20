@@ -42,8 +42,8 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   virtual vsol_surface_3d* cast_to_surface(void) { return this; }
   virtual vsol_surface_3d const* cast_to_surface(void) const { return this; }
 
-  virtual vsol_region_3d *cast_to_region(void) {return VXL_NULLPTR;}
-  virtual vsol_region_3d const* cast_to_region(void) const {return VXL_NULLPTR;}
+  virtual vsol_region_3d *cast_to_region(void) {return nullptr;}
+  virtual vsol_region_3d const* cast_to_region(void) const {return nullptr;}
 
   //***************************************************************************
   // Basic operations

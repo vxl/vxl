@@ -84,7 +84,7 @@ template<>\
   std::map<std::string, mbl_cloneable_ptr<T > >& mbl_cloneables_factory< T >::objects() \
   { \
     static vcl_unique_ptr<std::map<std::string, mbl_cloneable_ptr<T > > > objects_; \
-    if (objects_.get() == VXL_NULLPTR) \
+    if (objects_.get() == nullptr) \
       objects_.reset(new MAP); \
     return *objects_; \
   }

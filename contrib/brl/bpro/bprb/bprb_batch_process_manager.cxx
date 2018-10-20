@@ -17,7 +17,7 @@
 #include <vcl_compiler.h>
 
 //: Constructor
-bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(VXL_NULLPTR),
+bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(nullptr),
                                                            verbose_(true)
 {
 }
@@ -286,7 +286,7 @@ void bprb_batch_process_manager::print_db()
 
 bool bprb_batch_process_manager::set_stdout(std::string file)
 {
-   return std::freopen (file.c_str(),"a",stdout) != VXL_NULLPTR;
+   return std::freopen (file.c_str(),"a",stdout) != nullptr;
 }
 
 
@@ -295,7 +295,7 @@ bool bprb_batch_process_manager::reset_stdout()
 #ifdef WIN32
   return std::fclose(stdout) == 0 && std::freopen("CON","w",stdout) != NULL;
 #else
-  return std::fclose(stdout) == 0 && std::freopen("/dev/tty","w",stdout) != VXL_NULLPTR;
+  return std::fclose(stdout) == 0 && std::freopen("/dev/tty","w",stdout) != nullptr;
 #endif
 }
 

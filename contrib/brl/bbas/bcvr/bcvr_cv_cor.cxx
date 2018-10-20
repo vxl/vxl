@@ -242,7 +242,7 @@ void bcvr_cv_cor::b_read(vsl_b_istream &is)
         poly1_->b_read(is);
       }
       else
-        poly1_ = VXL_NULLPTR;
+        poly1_ = nullptr;
 
       vsl_b_read(is, poly_available);
       if (poly_available) {
@@ -250,7 +250,7 @@ void bcvr_cv_cor::b_read(vsl_b_istream &is)
         poly2_->b_read(is);
       }
       else
-        poly2_ = VXL_NULLPTR;
+        poly2_ = nullptr;
 
       unsigned cnt;
       vsl_b_read(is, cnt);

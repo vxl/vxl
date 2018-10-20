@@ -363,7 +363,7 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(2);
 
   // check camera for the label image
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   if (cam) {
     std::cout << "Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
@@ -578,7 +578,7 @@ bool boxm2_label_to_xyz_process2(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(2);
 
   // check camera for the label image
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   if (cam) {
     std::cout << "Using the loaded camera!\n";
     geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());

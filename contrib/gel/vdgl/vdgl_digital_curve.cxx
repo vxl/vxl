@@ -257,7 +257,7 @@ void vsl_b_read(vsl_b_istream &is, vdgl_digital_curve* &dc)
     dc->b_read(is);
   }
   else
-    dc = VXL_NULLPTR;
+    dc = nullptr;
 }
 
 //: Print human readable summary of vdgl_digital_curve* to a stream.

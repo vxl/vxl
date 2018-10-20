@@ -21,7 +21,7 @@ static void set_size(std::vector<HomgPoint2D>& v, unsigned n)
 
 
 TripleMatchSetCorner::TripleMatchSetCorner():
-  TripleMatchSet(VXL_NULLPTR,VXL_NULLPTR)
+  TripleMatchSet(nullptr,nullptr)
 {
 }
 

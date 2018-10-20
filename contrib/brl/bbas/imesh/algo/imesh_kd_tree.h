@@ -42,7 +42,7 @@ struct imesh_kd_tree_node
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
       left_(), right_()
 #else
-      left_(VXL_NULLPTR), right_(VXL_NULLPTR)
+      left_(nullptr), right_(nullptr)
 #endif
   {}
 
@@ -51,8 +51,8 @@ struct imesh_kd_tree_node
     : outer_box_(other.outer_box_),
       inner_box_(other.inner_box_),
       index_(other.index_),
-      left_(other.left_.get() ? new imesh_kd_tree_node(*other.left_) : VXL_NULLPTR),
-      right_(other.right_.get() ? new imesh_kd_tree_node(*other.right_) : VXL_NULLPTR) {}
+      left_(other.left_.get() ? new imesh_kd_tree_node(*other.left_) : nullptr),
+      right_(other.right_.get() ? new imesh_kd_tree_node(*other.right_) : nullptr) {}
 
 
   //: Return true if this node is a leaf node
@@ -121,7 +121,7 @@ imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             const imesh_mesh& mesh,
                             const vcl_unique_ptr<imesh_kd_tree_node>& root,
                             vgl_point_3d<double>& cp,
-                            std::vector<imesh_kd_tree_queue_entry>* dists = VXL_NULLPTR);
+                            std::vector<imesh_kd_tree_queue_entry>* dists = nullptr);
 
 
 //: Traverse the tree looking for leaf nodes that contain the query

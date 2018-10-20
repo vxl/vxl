@@ -49,7 +49,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro( 0, "No data!\n" );
-    return VXL_NULLPTR; // no data!
+    return nullptr; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m==3 || m==2 ); // currently only 2D and 3D estimation is implemented
@@ -106,7 +106,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // if the weight is too small or zero,
   // that means there is no good match
   if ( sum_wgt < 1e-13 ) {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -254,12 +254,12 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   if ( (unsigned)svd.rank() < p_size*m ) {
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<p_size*m<<"; no solution." );
     DebugMacro_abv(1,"(used " << count << " correspondences)\n" );
-    return VXL_NULLPTR; // no solution
+    return nullptr; // no solution
   }
   double cond_num = svd.well_condition();
   if ( condition_num_thrd_ > cond_num ) {
     DebugMacro(1, "Unstable xform with condition number = "<<cond_num<<'\n' );
-    return VXL_NULLPTR; //no solution
+    return nullptr; //no solution
   }
 
   // Compute the solution into XtWy

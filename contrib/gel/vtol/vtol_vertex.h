@@ -91,12 +91,12 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d() const {return VXL_NULLPTR;}
+  virtual const vtol_vertex_2d *cast_to_vertex_2d() const {return nullptr;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d() {return VXL_NULLPTR;}
+  virtual vtol_vertex_2d *cast_to_vertex_2d() {return nullptr;}
 
   //***************************************************************************
   // Status report

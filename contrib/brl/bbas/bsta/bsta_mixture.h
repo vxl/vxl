@@ -92,7 +92,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
 
   // Copy Constructor
   bsta_mixture<dist_>(const bsta_mixture<dist_>& other)
-    : components_(other.components_.size(),VXL_NULLPTR)
+    : components_(other.components_.size(),nullptr)
   {
     // deep copy of the data
     for (unsigned int i=0; i<components_.size(); ++i){

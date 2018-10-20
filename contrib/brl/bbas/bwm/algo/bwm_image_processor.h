@@ -21,7 +21,7 @@ class bwm_image_processor
 {
  public:
   static void hist_plot(bgui_image_tableau_sptr img,
-                        vsol_polygon_2d_sptr p = VXL_NULLPTR);
+                        vsol_polygon_2d_sptr p = nullptr);
 
   static void intensity_profile(bgui_image_tableau_sptr img,
                                 float start_col, float start_row,

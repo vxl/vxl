@@ -35,7 +35,7 @@ init(void)
 
   delta = 1.0;
 
-  if (vals != VXL_NULLPTR && counts != VXL_NULLPTR)
+  if (vals != nullptr && counts != nullptr)
   {
     float*  pval = vals;
     float*  pcount = counts;

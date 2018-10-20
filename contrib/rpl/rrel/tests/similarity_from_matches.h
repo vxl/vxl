@@ -55,7 +55,7 @@ class similarity_from_matches : public rrel_estimation_problem
                                 std::vector<double>& weights ) const;
   virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& cofact,
-                                           const std::vector<double>* weights=VXL_NULLPTR ) const;
+                                           const std::vector<double>* weights=nullptr ) const;
 };
 
 void

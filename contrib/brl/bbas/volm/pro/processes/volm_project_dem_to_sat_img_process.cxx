@@ -102,7 +102,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
     return false;
   }
   vil_image_resource_sptr dem_res = vil_load_image_resource(dem_file.c_str());
-  vpgl_geo_camera* dem_cam = VXL_NULLPTR;
+  vpgl_geo_camera* dem_cam = nullptr;
   if (dem_cam_sptr) {
     std::cout << "Using the input geo camera for dem image!\n";
     dem_cam = dynamic_cast<vpgl_geo_camera*>(dem_cam_sptr.ptr());

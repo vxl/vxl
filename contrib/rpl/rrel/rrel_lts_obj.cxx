@@ -26,7 +26,7 @@ rrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
                    vect_const_iter /*scale begin*/,
                    vnl_vector<double>* /*param_vector*/ ) const
 {
-  return fcn( begin, end, 0.0, (vnl_vector<double>*)VXL_NULLPTR );
+  return fcn( begin, end, 0.0, (vnl_vector<double>*)nullptr );
 }
 
 

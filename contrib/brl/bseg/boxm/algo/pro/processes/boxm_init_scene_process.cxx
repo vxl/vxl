@@ -66,7 +66,7 @@ bool boxm_init_scene_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
 
   // check the input validity
-  if (scene == VXL_NULLPTR) {
+  if (scene == nullptr) {
     std::cout << "boxm_init_scene_process: scene is null, cannot run" << std::endl;
     return false;
   }

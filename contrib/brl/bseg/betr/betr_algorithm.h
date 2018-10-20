@@ -17,9 +17,9 @@
 class betr_algorithm : public vbl_ref_count
 {
  public:
-  betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
- betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(VXL_NULLPTR){}
- betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(VXL_NULLPTR), multiple_ref_(false) {}
+  betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
+ betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
+ betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(nullptr), multiple_ref_(false) {}
  betr_algorithm(std::string const& name, betr_params_sptr const& params, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
 
   //: sigmoid performance parameters - may be specialized for each algorithm
@@ -63,16 +63,16 @@ class betr_algorithm : public vbl_ref_count
   virtual double prob_change() const {return 0.0;}
   //: An image of pixel change values (0:255) - used for change display purposes
   //  offset is with respect to the event image coordinate system
-  virtual vil_image_resource_sptr change_image(unsigned& i_offset, unsigned& j_offset) const {return VXL_NULLPTR;}
+  virtual vil_image_resource_sptr change_image(unsigned& i_offset, unsigned& j_offset) const {return nullptr;}
   //: clear the algorithm state to process a new event region and/or new reference image(s)
   // subclasses may have additonal clear operations
   virtual void clear(){
     ref_rescs_.clear();
-    evt_imgr_ = VXL_NULLPTR;
+    evt_imgr_ = nullptr;
     ref_ref_polys_.clear();
     ref_evt_polys_.clear();
-    evt_ref_poly_ = VXL_NULLPTR;
-    evt_evt_poly_ = VXL_NULLPTR;
+    evt_ref_poly_ = nullptr;
+    evt_evt_poly_ = nullptr;
   }
     //: debug
   //======================

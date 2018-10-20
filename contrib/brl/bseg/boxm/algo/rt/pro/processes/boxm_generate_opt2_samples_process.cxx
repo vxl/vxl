@@ -75,7 +75,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
   bool use_black_background =  pro.get_input<bool>(6);
 
   // check the input validity
-  if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
+  if ((input_image == nullptr) || (camera == nullptr) || (scene == nullptr)) {
     std::cout << "boxm_generate_opt2_samples_process: null input value, cannot run" << std::endl;
     return false;
   }

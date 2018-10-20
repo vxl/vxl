@@ -65,7 +65,7 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>()
            , sigma_(s)
            , cutoff_(c)
-           , mask_(VXL_NULLPTR)
+           , mask_(nullptr)
            , masksize_(0)
     { if (s < 0) ref_sigma() = -s;
       if (c < 0.005) ref_cutoff() = 0.005;
@@ -75,7 +75,7 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A)
            , sigma_(A.sigma())
            , cutoff_(A.cutoff())
-           , mask_(VXL_NULLPTR)
+           , mask_(nullptr)
            , masksize_(0) {}
 
   inline ~vipl_gaussian_convolution() {}

@@ -27,7 +27,7 @@ class  bvxm_edge_ray_processor
   typedef bvxm_von_mises_tangent_processor<float>::pos_t pos_t;
   typedef bvxm_von_mises_tangent_processor<float>::dir_t dir_t;
 
-  bvxm_edge_ray_processor(): world_(VXL_NULLPTR) {}
+  bvxm_edge_ray_processor(): world_(nullptr) {}
   bvxm_edge_ray_processor(bvxm_voxel_world_sptr& world): world_(world) {}
 
   void set_voxel_world(bvxm_voxel_world_sptr& world) { world_ = world; }

@@ -50,8 +50,8 @@ int main2(int argc, char*argv[])
   );
 
   // Parse the program arguments
-  vul_arg<std::string> img_src(VXL_NULLPTR, "input image filename");
-  vul_arg<std::string> img_dst(VXL_NULLPTR, "output image filename");
+  vul_arg<std::string> img_src(nullptr, "input image filename");
+  vul_arg<std::string> img_dst(nullptr, "output image filename");
   vul_arg<std::vector<unsigned> > bbi("-bbi", "bounding box in image coords (i0,j0,k0,i1,j1,k1)");
   vul_arg<std::vector<double> > bbf("-bbf", "bounding box in image fraction e.g. 0.2,0.2,0.2,0.75,0.75,0.75");
   vul_arg<std::vector<double> > bbw("-bbw", "bounding box in world coords (x0,y0,z0,x1,y1,z1)");

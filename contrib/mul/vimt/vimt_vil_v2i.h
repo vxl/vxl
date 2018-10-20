@@ -134,7 +134,7 @@ class vimt_vil_v2i_image: public vil_image_resource
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* label, void* property_value = VXL_NULLPTR) const;
+  virtual bool get_property(char const* label, void* property_value = nullptr) const;
 };
 
 #endif

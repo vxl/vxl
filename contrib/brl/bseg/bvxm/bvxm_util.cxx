@@ -190,7 +190,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr cam
   }
   else
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -215,7 +215,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sp
   }
   else
   {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

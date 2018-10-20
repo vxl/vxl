@@ -113,7 +113,7 @@ bool boxm_create_scene_from_ply_process(bprb_func_process& pro)
   }
 
   if (!boxm_load_color_ply(ply_file, scene, data, grey_offset)){
-    pro.set_output_val<boxm_scene_base_sptr>(0, VXL_NULLPTR);
+    pro.set_output_val<boxm_scene_base_sptr>(0, nullptr);
     return false;
   }
 
@@ -162,7 +162,7 @@ bool boxm_load_color_ply(const std::string &ply_file,  boxm_scene<boct_tree<shor
 
 #endif
 
-  p_ply ply = ply_open(ply_file.c_str(), VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply ply = ply_open(ply_file.c_str(), nullptr, 0, nullptr);
   if (!ply){
     std::cerr << "Couldn't open ply file: " << ply_file << '\n';
     return false;

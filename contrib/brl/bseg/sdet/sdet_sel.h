@@ -61,7 +61,7 @@ public:
     if (app_usage_==2){
       if (e2->left_app->dist(*(ref_e->left_app))>app_thresh_ ||
           e2->right_app->dist(*(ref_e->right_app))>app_thresh_)
-          return VXL_NULLPTR; //appearance is not consistent
+          return nullptr; //appearance is not consistent
     }
 
     // Do the dot product test to determine if this pair of edgels can produce a valid hypothesis
@@ -111,7 +111,7 @@ public:
         }
       }
     }
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   virtual void form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2);
@@ -327,7 +327,7 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
     bool forward,  bool centered, bool leading)
 {
   //1) Go over the edgels in the chain and attempt to form a curvelet from it
-  curve_model* chain_cm=VXL_NULLPTR;
+  curve_model* chain_cm=nullptr;
 
   // 2) form an ordered list based on distance from ref_edgel
   std::map<double, unsigned > dist_order; // ordered list of edgels (closest to furthest)
@@ -367,7 +367,7 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
           delete new_cm;
 
           if (chain_cm)  delete chain_cm;
-          chain_cm = VXL_NULLPTR;
+          chain_cm = nullptr;
 
           break; //break the for loop (no curve bundle possible)
         }
@@ -378,13 +378,13 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
       //delete any existing curve bundles
       if (cm)        delete cm;
       if (chain_cm)  delete chain_cm;
-      chain_cm = VXL_NULLPTR;
+      chain_cm = nullptr;
 
       break; //break the for loop (no curve bundle possible)
     }
   }
 
-  sdet_curvelet* new_cvlet=VXL_NULLPTR;
+  sdet_curvelet* new_cvlet=nullptr;
   //if all the pairwise bundles intersect,
   //form a new curvelet and assign the curve bundle and the edgel chain to it...
   if (chain_cm)

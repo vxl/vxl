@@ -84,26 +84,26 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_line_3d const*cast_to_line()const{return VXL_NULLPTR;}
-  virtual vsol_line_3d *cast_to_line() {return VXL_NULLPTR;}
+  virtual vsol_line_3d const*cast_to_line()const{return nullptr;}
+  virtual vsol_line_3d *cast_to_line() {return nullptr;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_3d const*cast_to_conic()const{return VXL_NULLPTR;}
-  virtual vsol_conic_3d *cast_to_conic() {return VXL_NULLPTR;}
+  virtual vsol_conic_3d const*cast_to_conic()const{return nullptr;}
+  virtual vsol_conic_3d *cast_to_conic() {return nullptr;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a polyline, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_polyline_3d const*cast_to_polyline()const{return VXL_NULLPTR;}
-  virtual vsol_polyline_3d *cast_to_polyline() {return VXL_NULLPTR;}
+  virtual vsol_polyline_3d const*cast_to_polyline()const{return nullptr;}
+  virtual vsol_polyline_3d *cast_to_polyline() {return nullptr;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve_3d, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_digital_curve_3d const*cast_to_digital_curve()const{return VXL_NULLPTR;}
-  virtual vsol_digital_curve_3d *cast_to_digital_curve() {return VXL_NULLPTR;}
+  virtual vsol_digital_curve_3d const*cast_to_digital_curve()const{return nullptr;}
+  virtual vsol_digital_curve_3d *cast_to_digital_curve() {return nullptr;}
 
   //***************************************************************************
   // Status report

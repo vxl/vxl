@@ -9,7 +9,7 @@ std::string volm_utils::volm_src_root()
 {
     std::string volm_src_dir;
     char* volm_dir_env = getenv("VOLM_DIR");
-    if (volm_dir_env != VXL_NULLPTR) {
+    if (volm_dir_env != nullptr) {
       volm_src_dir = std::string(volm_dir_env) + "/";
     }
 //    std::cout<<"VOLM dir "<<volm_src_dir<<std::endl;

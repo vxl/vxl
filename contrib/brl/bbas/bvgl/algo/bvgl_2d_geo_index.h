@@ -41,7 +41,7 @@ public:
   bvgl_2d_geo_index_node(vgl_box_2d<double> const& extent)
   {
     extent_ = extent;
-    parent_ = VXL_NULLPTR;
+    parent_ = nullptr;
   }
 
   //: destructor

@@ -35,7 +35,7 @@
 // occur if any of the first k data samples are identical.
 unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
                      std::vector<vnl_vector<double> >* cluster_centres,
-                     std::vector<unsigned> * partition =VXL_NULLPTR );
+                     std::vector<unsigned> * partition =nullptr );
 
 
 //: Find k cluster centres with weighted data
@@ -60,6 +60,6 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
 unsigned mbl_k_means_weighted(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
                               const std::vector<double>& wts,
                               std::vector<vnl_vector<double> >* cluster_centres,
-                              std::vector<unsigned> * partition =VXL_NULLPTR);
+                              std::vector<unsigned> * partition =nullptr);
 
 #endif // mbl_k_means_h

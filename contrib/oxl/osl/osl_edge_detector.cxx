@@ -82,7 +82,7 @@ void osl_edge_detector::detect_edges(vil1_image const &image,
                                      std::list<osl_edge*> *edges,
                                      bool maintain_topology)
 {
-  assert(edges!=VXL_NULLPTR);
+  assert(edges!=nullptr);
 
   //
   xsize_ = image.height();

@@ -79,7 +79,7 @@ std::string boxm2_ocl_util::ocl_src_root()
 {
     std::string boxm2_ocl_src_dir;
     char* ocl_dir_env = getenv("BOXM2_OPENCL_DIR");
-    if (ocl_dir_env != VXL_NULLPTR) {
+    if (ocl_dir_env != nullptr) {
       boxm2_ocl_src_dir = std::string(ocl_dir_env) + "/";
     }
     if ( boxm2_ocl_src_dir == "" )

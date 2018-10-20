@@ -46,7 +46,7 @@ class vdgl_digital_region : public vsol_region_2d
   // Constructors/Initializers/Destructors---------------------------------
   vdgl_digital_region()
   : vsol_region_2d(),
-    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(VXL_NULLPTR), yp_(VXL_NULLPTR), pix_(VXL_NULLPTR),
+    npts_given_(false), npts_(0), pixel_size_(1.f), xp_(nullptr), yp_(nullptr), pix_(nullptr),
     max_(0), min_((unsigned short)(-1)), xo_(0.f), yo_(0.f),
     io_(0.f), io_stdev_(0.0f), pix_index_(0),
     fit_valid_(false), scatter_matrix_valid_(false),
@@ -123,7 +123,7 @@ class vdgl_digital_region : public vsol_region_2d
   std::vector<unsigned int> histogram(int nbins);
   //: Compute the residual intensity histogram
   //  The intensity range is returned as the last two arguments.
-  std::vector<unsigned int> residual_histogram(int nbins, float* min=VXL_NULLPTR, float* max=VXL_NULLPTR);
+  std::vector<unsigned int> residual_histogram(int nbins, float* min=nullptr, float* max=nullptr);
 
   //: Return true if this region is convex
   virtual bool is_convex() const { return false; } // virtual of vsol_region_2d

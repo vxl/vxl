@@ -31,7 +31,7 @@ struct osl_stash_link {
   osl_stash_link *next;
 };
 
-osl_topology_base::osl_topology_base() : id(0), stash_head(VXL_NULLPTR) { }
+osl_topology_base::osl_topology_base() : id(0), stash_head(nullptr) { }
 void  osl_topology_base::stash_add(char const *name,
                                    void const *data,
                                    void (*dtor)(void *))
@@ -61,11 +61,11 @@ void *osl_topology_base::stash_retrieve(char const *name) const {
     if (std::strcmp(l->name, name) == 0)
       return l->data;
   // not found
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 void *osl_topology_base::stash_remove(char const *name) {
-  for (osl_stash_link *p = VXL_NULLPTR, *l = stash_head; l; p=l, l=p->next) {
+  for (osl_stash_link *p = nullptr, *l = stash_head; l; p=l, l=p->next) {
     if (std::strcmp(l->name, name) == 0) {
       if (p)
         p->next = l->next;
@@ -75,7 +75,7 @@ void *osl_topology_base::stash_remove(char const *name) {
     }
   }
   // not found
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 osl_topology_base::~osl_topology_base() {

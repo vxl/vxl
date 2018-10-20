@@ -42,14 +42,14 @@ void test_binary_tree()
 
     pdf1d_gaussian pdfx(mux,varx);
     pdf1d_gaussian pdfy(muy,vary);
-    pdf1d_sampler* pdfx_sampler = VXL_NULLPTR;
-    pdf1d_sampler* pdfy_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdfx_sampler = nullptr;
+    pdf1d_sampler* pdfy_sampler = nullptr;
 
     pdf1d_gaussian pdfz(muz,varz);
-    pdf1d_sampler* pdfz_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdfz_sampler = nullptr;
 
     pdf1d_gaussian pdferror(0.0,0.02*0.02);
-    pdf1d_sampler* pdferror_sampler = VXL_NULLPTR;
+    pdf1d_sampler* pdferror_sampler = nullptr;
 
     pdfx_sampler = pdfx.new_sampler();
 
@@ -114,7 +114,7 @@ void test_binary_tree()
     TEST("Type is binary tree",
          pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
     clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
-    TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
+    TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
     builder.build(*pClassifier,
                   training_set_inputs,
@@ -219,7 +219,7 @@ void test_binary_tree()
     TEST("Type is binary tree",
          pBaseClassifierIn->is_a()==std::string("clsfy_binary_tree"), true);
     clsfy_binary_tree* pClassifierIn=dynamic_cast<clsfy_binary_tree*>(pBaseClassifierIn);
-    TEST("Can cast to binary tree",pClassifierIn != VXL_NULLPTR,true);
+    TEST("Can cast to binary tree",pClassifierIn != nullptr,true);
 
     {
         unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
@@ -429,7 +429,7 @@ void test_binary_tree()
         TEST("Type is binary tree",
              pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
         clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
-        TEST("Can cast to binary tree",pClassifier != VXL_NULLPTR,true);
+        TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
         builder.build(*pClassifier,
                       training_set_inputs,

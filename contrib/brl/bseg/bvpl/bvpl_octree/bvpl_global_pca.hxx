@@ -386,7 +386,7 @@ bool bvpl_global_pca<feature_dim>::sample_statistics( int scene_id, int block_i,
 
           boct_tree_cell<short,float> *neighbor_cell = data_scene->locate_point_in_memory(neighbor_centroid);
 
-          assert(neighbor_cell !=VXL_NULLPTR);
+          assert(neighbor_cell !=nullptr);
           this_feature[curr_dim] = (double)neighbor_cell->data();
           curr_dim++;
         }
@@ -735,7 +735,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
     std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr scene_base = new boxm_scene_base();
@@ -750,7 +750,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_scene (int scene_id)
   }
   else {
     std::cerr << "Error in bvpl_global_pca::load_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return scene_base;
@@ -763,7 +763,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_i
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
     std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
@@ -780,7 +780,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_valid_scene (int scene_i
   }
   else {
     std::cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return aux_scene_base;
@@ -793,7 +793,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_i
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
     std::cerr << "Error in bvpl_global_pca::load_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
@@ -810,7 +810,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_train_scene (int scene_i
   }
   else {
     std::cerr << "Error in bvpl_global_pca::load_aux_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return aux_scene_base;
@@ -825,7 +825,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
     std::cerr << "Error in bvpl_global_pca::load_projection_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr proj_scene_base = new boxm_scene_base();
@@ -843,7 +843,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_projection_scene (int sc
   }
   else {
     std::cerr << "Error in bvpl_global_pca::load_proj_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return proj_scene_base;
@@ -857,14 +857,14 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
   if (scene_id<0 || scene_id>((int)scenes_.size() -1))
   {
     std::cerr << "Error in bvpl_global_pca::load_error_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   boxm_scene_base_sptr data_scene_base = load_scene(scene_id);
   boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
   if (!data_scene) {
     std::cerr << "Error in bvpl_global_pca<feature_dim>::init(): Could not cast data scene\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   std::stringstream aux_scene_ss;
@@ -894,7 +894,7 @@ boxm_scene_base_sptr bvpl_global_pca<feature_dim>::load_error_scene (int scene_i
   }
   else {
     std::cerr << "Error in bvpl_global_pca::load_error_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return error_scene_base;

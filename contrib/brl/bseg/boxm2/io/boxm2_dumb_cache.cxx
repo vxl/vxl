@@ -3,7 +3,7 @@
 // \file
 
 //: constructor from scene pointer
-boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : boxm2_cache1(scene), cached_block_(VXL_NULLPTR)
+boxm2_dumb_cache::boxm2_dumb_cache(boxm2_scene* scene) : boxm2_cache1(scene), cached_block_(nullptr)
 {
   scene_dir_ = scene->data_path();
 }

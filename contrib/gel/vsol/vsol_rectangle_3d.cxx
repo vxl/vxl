@@ -282,5 +282,5 @@ vsl_b_read(vsl_b_istream &is, vsol_rectangle_3d* &r)
     r->b_read(is);
   }
   else
-    r = VXL_NULLPTR;
+    r = nullptr;
 }

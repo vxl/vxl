@@ -34,7 +34,7 @@ template <class V, class E, class F, class D>
 void vpyr_2_tpyramid_level<V,E,F,D>::contraction(const contraction_kernel &arg_kernel)
 {
   self_type * l=pyramid().level_below(vmap_contraction_type,*this) ;
-  if (l!=VXL_NULLPTR)
+  if (l!=nullptr)
   {
     int level=l->index() ;
     int ld=this->nb_darts(),
@@ -94,7 +94,7 @@ template <class V, class E, class F, class D>
 void vpyr_2_tpyramid_level<V,E,F,D>::removal(const removal_kernel &arg_kernel)
 {
   self_type * l=pyramid().level_below(vmap_removal_type,*this) ;
-  if (l!=VXL_NULLPTR)
+  if (l!=nullptr)
   {
     int level=l->index() ;
     int ld=this->nb_darts(),

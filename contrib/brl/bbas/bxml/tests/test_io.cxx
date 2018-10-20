@@ -91,7 +91,7 @@ static void test_io(int argc, char* argv[])
 
     //std::ifstream file("text_out.xml");
     unsigned int depth = 0;
-    bxml_data_sptr data = VXL_NULLPTR;
+    bxml_data_sptr data = nullptr;
     bool fail = false;
     int count = 0;
     while ((data = str_reader.next_element(s, depth))) { // assignment, no comparison

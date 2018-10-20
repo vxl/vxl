@@ -18,7 +18,7 @@ template <class T>
 class bvxm_voxel_slab_iterator_base
 {
  public:
-  bvxm_voxel_slab_iterator_base() : storage_(VXL_NULLPTR), slab_thickness_(0), slice_idx_(0), end_slab_(0,0,0,VXL_NULLPTR,VXL_NULLPTR) {}
+  bvxm_voxel_slab_iterator_base() : storage_(nullptr), slab_thickness_(0), slice_idx_(0), end_slab_(0,0,0,nullptr,nullptr) {}
   bvxm_voxel_slab_iterator_base(bvxm_voxel_storage<T> *storage,
                                 vgl_vector_3d<unsigned int> grid_size,
                                 unsigned slice_idx, unsigned slab_thickness);

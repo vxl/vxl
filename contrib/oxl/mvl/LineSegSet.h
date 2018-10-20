@@ -30,7 +30,7 @@ class LineSegSet
 
   LineSegSet();
   LineSegSet(const HomgMetric& c, const std::vector<HomgLineSeg2D>& lines, bool is_conditioned = true);
-  LineSegSet(const char* filename, const HomgMetric& c = VXL_NULLPTR);
+  LineSegSet(const char* filename, const HomgMetric& c = nullptr);
   LineSegSet(const LineSegSet& that);
  ~LineSegSet();
 

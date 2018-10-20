@@ -117,7 +117,7 @@ template <class T, uint N> class section : public section_<T>
   section(const uint sz[N], T* b=0) { init(sz,b); }
   section(T* b=0) { assert(N==0); init(0,b); }
   section(uint sz0, T* b=0) { assert(N==1); uint sz[1]={sz0}; init(sz,b); }
-  section(uint sz0, uint sz1, T* b=VXL_NULLPTR) { assert(N==2); uint sz[2]={sz0,sz1}; init(sz,b); }
+  section(uint sz0, uint sz1, T* b=nullptr) { assert(N==2); uint sz[2]={sz0,sz1}; init(sz,b); }
   section(uint sz0, uint sz1, uint sz2, T* b=0) { assert(N==3); uint sz[3]={sz0,sz1,sz2}; init(sz,b); }
   section(section<T,N> const& s) {
     init(s.Size(),0); std::memcpy(buffer,s.buffer,offset[N]*sizeof(T));
@@ -128,7 +128,7 @@ template <class T, uint N> class section : public section_<T>
 
  private:
   void init(const uint sz[N], T* buf) {
-    allocated = (buf == VXL_NULLPTR);
+    allocated = (buf == nullptr);
     offset[0] = 1;
     for (uint i=0; i<N; ++i) {
       size[i] = sz[i]; offset[i+1] = sz[i]*offset[i];

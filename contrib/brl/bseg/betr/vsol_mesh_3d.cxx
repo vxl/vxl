@@ -32,7 +32,7 @@ static vsol_polygon_3d_sptr move_poly_points_to_plane(vsol_polygon_3d_sptr polyg
   }
   else {
     std::cout << "NO FITTING" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -68,7 +68,7 @@ static vsol_polygon_3d_sptr move_points_to_plane(std::vector<vsol_point_3d_sptr>
   }
   else {
     std::cout << "NO FITTING" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -232,7 +232,7 @@ void vsol_mesh_3d::attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly
 {
   bmsh3d_face* inner_face = create_inner_face(poly);
   bmsh3d_face_mc* outer_face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
-  if (outer_face != VXL_NULLPTR) {
+  if (outer_face != nullptr) {
     bmsh3d_halfedge* he = (bmsh3d_halfedge*) inner_face->halfedge();
     outer_face->add_mc_halfedge(he);
   }
@@ -574,7 +574,7 @@ bool vsol_mesh_3d::single_face_with_vertices(unsigned face_id,
 }
 void vsol_mesh_3d::set_mesh(bmsh3d_mesh_mc* obj)
 {
-  if (mesh_ != VXL_NULLPTR){
+  if (mesh_ != nullptr){
     delete mesh_;
   }
   mesh_ = obj;
@@ -582,7 +582,7 @@ void vsol_mesh_3d::set_mesh(bmsh3d_mesh_mc* obj)
 
 void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly, double z)
 {
-  if (mesh_ != VXL_NULLPTR)
+  if (mesh_ != nullptr)
     delete mesh_;
 
   mesh_ = new bmsh3d_mesh_mc;
@@ -595,7 +595,7 @@ void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly)
   if (!poly || poly->size()==0)
     return;
 
-  if (mesh_ != VXL_NULLPTR)
+  if (mesh_ != nullptr)
     delete mesh_;
 
   mesh_ = new bmsh3d_mesh_mc;
@@ -609,7 +609,7 @@ bmsh3d_face_mc* vsol_mesh_3d::create_face(vsol_polygon_3d_sptr polygon)
   //  polygon = bwm_algo::move_points_to_plane(polygon); //later
   unsigned n = polygon->size();
   // create vertices
-  bmsh3d_vertex* prev_v = VXL_NULLPTR;
+  bmsh3d_vertex* prev_v = nullptr;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
     double y = polygon->vertex(i)->y();
@@ -617,7 +617,7 @@ bmsh3d_face_mc* vsol_mesh_3d::create_face(vsol_polygon_3d_sptr polygon)
     bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->get_pt().set(x, y, z);
     mesh_->_add_vertex(v);
-    if (prev_v != VXL_NULLPTR)
+    if (prev_v != nullptr)
       mesh_->add_new_edge (v, prev_v);
     prev_v = v;
   }
@@ -696,7 +696,7 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
   unsigned n = polygon->size();
   bmsh3d_face* inner_face = new bmsh3d_face();
   // create vertices
-  bmsh3d_vertex* prev_v = VXL_NULLPTR;
+  bmsh3d_vertex* prev_v = nullptr;
   bmsh3d_vertex* v_first;
   for (unsigned i=0; i<n; i++) {
     double x = polygon->vertex(i)->x();
@@ -705,7 +705,7 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
     bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->get_pt().set(x, y, z);
     mesh_->_add_vertex(v); //??? do we add this vertex to the mesh
-    if (prev_v != VXL_NULLPTR) {
+    if (prev_v != nullptr) {
       bmsh3d_edge* edge = new  bmsh3d_edge(prev_v, v, 100);
       bmsh3d_halfedge *he = new bmsh3d_halfedge (edge, inner_face);
       inner_face->_connect_HE_to_end(he);
@@ -839,7 +839,7 @@ void vsol_mesh_3d::create_interior()
 
 void vsol_mesh_3d::extrude(int face_id, double dist)
 {
-  if (mesh_ != VXL_NULLPTR) {
+  if (mesh_ != nullptr) {
     bmsh3d_face_mc* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
     if (face) {
       if (mesh_->facemap().size() == 1) {
@@ -858,7 +858,7 @@ void vsol_mesh_3d::extrude(int face_id, double dist)
       }
     }
     else
-      current_extr_face_ = VXL_NULLPTR;
+      current_extr_face_ = nullptr;
   }
 }
 void vsol_mesh_3d::divide_face(unsigned face_id,
@@ -869,7 +869,7 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
 {
   bmsh3d_face_mc* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
   std::vector<bmsh3d_halfedge *> halfedges;
-  if (face == VXL_NULLPTR) {
+  if (face == nullptr) {
     print_faces();
     std::cerr << "Face " << face_id << " is not found in the facemap\n";
   }
@@ -886,8 +886,8 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
   mesh_->_add_vertex(v2);
 
   // find the halfedges corresponding to edge segments
-  bmsh3d_edge* edge1=VXL_NULLPTR;
-  bmsh3d_edge* edge2=VXL_NULLPTR;
+  bmsh3d_edge* edge1=nullptr;
+  bmsh3d_edge* edge2=nullptr;
 
 #ifdef DEBUG
   std::cout << "p1=" << p1 << " p2=" << p2 << '\n'
@@ -941,7 +941,7 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
   bmsh3d_halfedge* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
   edge2 = he2->edge();
 
-  if (edge1 == VXL_NULLPTR || edge2 == VXL_NULLPTR) {
+  if (edge1 == nullptr || edge2 == nullptr) {
     std::cerr << "vsol_mesh_3d::divide_face -- edges are not found in polygon\n";
     return;
   }

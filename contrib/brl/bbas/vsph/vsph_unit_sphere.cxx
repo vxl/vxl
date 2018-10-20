@@ -713,7 +713,7 @@ std::ostream& operator<<(std::ostream& os, vsph_unit_sphere const& vs)
 
 void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr)
 {
-  if (usph_ptr==VXL_NULLPTR)
+  if (usph_ptr==nullptr)
     vsl_b_write(os, false);
   else {
     vsl_b_write(os, true);
@@ -723,7 +723,7 @@ void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere const* usph_ptr)
 
 void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere*& usph_ptr)
 {
-  delete usph_ptr; usph_ptr = VXL_NULLPTR;
+  delete usph_ptr; usph_ptr = nullptr;
   bool not_null_ptr;
   vsl_b_read(is, not_null_ptr);
   if (not_null_ptr)
@@ -740,7 +740,7 @@ void vsl_b_write(vsl_b_ostream &os, vsph_unit_sphere_sptr const&  usph_sptr)
 
 void vsl_b_read(vsl_b_istream &is, vsph_unit_sphere_sptr& usph_sptr)
 {
-  vsph_unit_sphere* usph_ptr = VXL_NULLPTR;
+  vsph_unit_sphere* usph_ptr = nullptr;
   vsl_b_read(is, usph_ptr);
   usph_sptr = usph_ptr;
 }

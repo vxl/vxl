@@ -14,8 +14,8 @@ bprb_test_process::bprb_test_process()
   {
     std::cerr << " Error in adding parameters\n";
   }
-  input_data_.resize(2, brdb_value_sptr(VXL_NULLPTR));
-  output_data_.resize(1,brdb_value_sptr(VXL_NULLPTR));
+  input_data_.resize(2, brdb_value_sptr(nullptr));
+  output_data_.resize(1,brdb_value_sptr(nullptr));
   input_types_.resize(2);
   output_types_.resize(1);
   input_types_[0]="float";

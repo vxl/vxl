@@ -28,7 +28,7 @@ void osl_easy_canny(int which_canny,
                     std::list<osl_edge*> *edges,
                     double sigma)
 {
-  assert(edges!=VXL_NULLPTR);
+  assert(edges!=nullptr);
 
   switch (which_canny) {
   case 0: {

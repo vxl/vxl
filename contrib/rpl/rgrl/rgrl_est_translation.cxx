@@ -40,7 +40,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     ++ms;
   if ( ms == matches.size() ) {
     DebugMacro(0, "No data!\n");
-    return VXL_NULLPTR; // no data!
+    return nullptr; // no data!
   }
   const unsigned int m = matches[ms]->from_begin().from_feature()->location().size();
   assert ( m>=1 );
@@ -82,7 +82,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   // if the weight is too small or zero,
   // that means there is no good match
   if( sum_wgt < 1e-13 ) {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   from_centre /= sum_wgt;
@@ -134,7 +134,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     DebugMacro(1, "rank ("<<svd.rank()<<") < "<<m<<"; no solution." );
     DebugMacro_abv(1,"  (used " << count << " correspondences)\n" );
     //DebugMacro_abv(1,"  use pseudo inverse instead\n" );
-    return VXL_NULLPTR; //no solution
+    return nullptr; //no solution
   }
 
   // Compute the solution into XtWy
