@@ -59,7 +59,7 @@ class vidl_istream_image_resource : public vil_image_resource
   //: Put the data in this view back into the image source.
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
-  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  bool get_property(char const *tag, void *prop = nullptr) const;
 
  private:
   //: try to find the image format and size from the current frame

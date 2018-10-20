@@ -268,8 +268,8 @@ class boxm_raytrace_function
 
                 tree_type * tree=curr_block->get_tree();
 
-                boxm_block<aux_tree_type> * curr_aux_block=VXL_NULLPTR;
-                aux_tree_type * aux_tree=VXL_NULLPTR;
+                boxm_block<aux_tree_type> * curr_aux_block=nullptr;
+                aux_tree_type * aux_tree=nullptr;
                 if (step_functor.is_aux_)
                 {
                    curr_aux_block=aux_scene_.get_block(block_indices[i]);
@@ -347,7 +347,7 @@ class boxm_raytrace_function
 
                             // obtain the code for the exit point
                             boct_loc_code<T_loc> exit_loc_code(exit_pt_norm,tree->root_level(), tree->max_val());
-                            cell_type *neighborcell=VXL_NULLPTR;
+                            cell_type *neighborcell=nullptr;
                             if (curr_cell->find_neighbor(face_id,neighborcell,tree->root_level()))
                                 curr_cell=neighborcell->traverse_force(exit_loc_code);
                             else

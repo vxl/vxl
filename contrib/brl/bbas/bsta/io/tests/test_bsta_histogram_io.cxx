@@ -56,10 +56,10 @@ void test_bsta_histogram_io()
   vsl_b_write(sos, hptr);
   sos.close();
   vsl_b_ifstream sis("./sptr_temp.bin");
-  bsta_histogram_sptr hptr_in = VXL_NULLPTR;
+  bsta_histogram_sptr hptr_in = nullptr;
   vsl_b_read(sis, hptr_in);
-  TEST("histogram sptr read", hptr_in!=VXL_NULLPTR, true);
-  if (hptr_in!=VXL_NULLPTR) {
+  TEST("histogram sptr read", hptr_in!=nullptr, true);
+  if (hptr_in!=nullptr) {
     bsta_histogram<double>* hp =
       static_cast<bsta_histogram<double>*>(hptr_in.ptr());
     nbins_in = hp->nbins();
@@ -105,10 +105,10 @@ void test_bsta_histogram_io()
   vsl_b_write(jsos, jhptr);
   jsos.close();
   vsl_b_ifstream jsis("./sptr_temp.bin");
-  bsta_joint_histogram_sptr jhptr_in = VXL_NULLPTR;
+  bsta_joint_histogram_sptr jhptr_in = nullptr;
   vsl_b_read(jsis, jhptr_in);
   jsis.close();
-  TEST("joint histogram sptr read", jhptr_in!=VXL_NULLPTR, true);
+  TEST("joint histogram sptr read", jhptr_in!=nullptr, true);
   if (jhptr_in) {
     if (jhptr_in->type_ == bsta_joint_histogram_base::HIST_TYPE_DOUBLE) {
       bsta_joint_histogram<double>* hdbl =
@@ -173,10 +173,10 @@ void test_bsta_histogram_io()
   vsl_b_write(j3dsos, jh3dptr);
   j3dsos.close();
   vsl_b_ifstream j3dsis("./sptr_temp.bin");
-  bsta_joint_histogram_3d_sptr j3dhptr_in = VXL_NULLPTR;
+  bsta_joint_histogram_3d_sptr j3dhptr_in = nullptr;
   vsl_b_read(j3dsis, j3dhptr_in);
   j3dsis.close();
-  TEST("joint histogram sptr read", j3dhptr_in!=VXL_NULLPTR, true);
+  TEST("joint histogram sptr read", j3dhptr_in!=nullptr, true);
   if (j3dhptr_in) {
     if (j3dhptr_in->type_ == bsta_joint_histogram_3d_base::HIST_TYPE_FLOAT) {
       bsta_joint_histogram_3d<float>* h3ddbl =

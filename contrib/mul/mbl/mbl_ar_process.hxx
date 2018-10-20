@@ -234,7 +234,7 @@ void mbl_ar_process<T>::learn(std::vector<vnl_vector<T> >& data)
 template<class T>
 void vsl_b_write(vsl_b_ostream& os, const mbl_ar_process<T>* p)
 {
-  if (p==VXL_NULLPTR)
+  if (p==nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
@@ -260,7 +260,7 @@ void vsl_b_read(vsl_b_istream& is, mbl_ar_process<T>* & v)
     //vsl_b_read(is, *v);
   }
   else
-    v = VXL_NULLPTR;
+    v = nullptr;
 }
 
 //: Print class to os

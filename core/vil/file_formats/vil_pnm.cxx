@@ -45,12 +45,12 @@ vil_image_resource_sptr vil_pnm_file_format::make_input_image(vil_stream* vs)
   // Attempt to read header
   unsigned char buf[3];
   if (vs->read(buf, 3L) != 3L)
-    return VXL_NULLPTR;
+    return nullptr;
   bool ok = ((buf[0] == 'P') &&
              isws(buf[2]) &&
              (buf[1] >= '1' && buf[2] <= '6'));
   if (!ok)
-    return VXL_NULLPTR;
+    return nullptr;
 
   return new vil_pnm_image(vs);
 }
@@ -315,10 +315,10 @@ static bool operator>>(vil_stream& vs, int& a)
 vil_image_view_base_sptr vil_pnm_image::get_copy_view(
   unsigned x0, unsigned ni, unsigned y0, unsigned nj) const
 {
-  bool* bb = VXL_NULLPTR;
-  unsigned char* ib = VXL_NULLPTR;
-  unsigned short* jb = VXL_NULLPTR;
-  unsigned int* kb = VXL_NULLPTR;
+  bool* bb = nullptr;
+  unsigned char* ib = nullptr;
+  unsigned short* jb = nullptr;
+  unsigned int* kb = nullptr;
 
   vil_memory_chunk_sptr buf;
 
@@ -360,7 +360,7 @@ vil_image_view_base_sptr vil_pnm_image::get_copy_view(
     if ( bytes_per_sample > 2 )
     {
       std::cerr << "ERROR: pnm: reading rawbits format with > 16bit samples\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
 #if VXL_LITTLE_ENDIAN
     else if ( bytes_per_sample==2 )
@@ -495,10 +495,10 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     return false;
   }
 
-  const vil_image_view<bool>*  bb=VXL_NULLPTR;
-  const vil_image_view<vxl_byte>*  ob = VXL_NULLPTR;
-  const vil_image_view<vxl_uint_16>* pb = VXL_NULLPTR;
-  const vil_image_view<vxl_uint_32>*   qb = VXL_NULLPTR;
+  const vil_image_view<bool>*  bb=nullptr;
+  const vil_image_view<vxl_byte>*  ob = nullptr;
+  const vil_image_view<vxl_uint_16>* pb = nullptr;
+  const vil_image_view<vxl_uint_32>*   qb = nullptr;
 
   if (view.pixel_format() == VIL_PIXEL_FORMAT_BOOL)
     bb = &static_cast<const vil_image_view<bool>& >(view);
@@ -525,7 +525,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 
     if ( bytes_per_sample==1 )
     {
-      assert(ob!=VXL_NULLPTR);
+      assert(ob!=nullptr);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -535,7 +535,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     }
     else if ( bytes_per_sample==2 && VXL_BIG_ENDIAN )
     {
-      assert(pb!=VXL_NULLPTR);
+      assert(pb!=nullptr);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -549,7 +549,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
       //
       // Convert line by line to avoid duplicating a potentially large image.
       std::vector<vxl_byte> tempbuf(byte_out_width);
-      assert(pb!=VXL_NULLPTR);
+      assert(pb!=nullptr);
       for (unsigned y = 0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -575,7 +575,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
 
     if ( bytes_per_sample==1 )
     {
-      assert(ob!=VXL_NULLPTR);
+      assert(ob!=nullptr);
 
       // capes_at_robots - Modified to write a scan-line at once. Writing single bytes
       // to disk was extremely slow.
@@ -593,7 +593,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
     }
     else if ( bytes_per_sample==2 )
     {
-      assert(pb!=VXL_NULLPTR);
+      assert(pb!=nullptr);
       for (unsigned y = y0; y < view.nj(); ++y)
       {
         vs_->seek(byte_start);
@@ -619,7 +619,7 @@ bool vil_pnm_image::put_view(const vil_image_view_base& view,
   {
     int byte_width = (ni_+7)/8;
 
-    assert(bb!=VXL_NULLPTR);
+    assert(bb!=nullptr);
     for (unsigned y = 0; y < view.nj(); ++y)
     {
       vil_streampos byte_start = start_of_data_ + (y0+y) * byte_width + x0/8;

@@ -52,7 +52,7 @@ class example_edge_3d : public vtol_edge
   virtual void print(std::ostream &strm=std::cout) const { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
   virtual void describe(std::ostream &strm=std::cout,int=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
   virtual void copy_geometry(vtol_edge const& e) { v1()->copy_geometry(*e.v1()); v2()->copy_geometry(*e.v2()); }
-  virtual bool compare_geometry(vtol_edge const& e) const { return e.cast_to_edge_2d() == VXL_NULLPTR && operator==(*(T const*)(&e)); }
+  virtual bool compare_geometry(vtol_edge const& e) const { return e.cast_to_edge_2d() == nullptr && operator==(*(T const*)(&e)); }
 #undef T
 #undef S
 #undef V
@@ -83,7 +83,7 @@ class example_vertex_3d : public vtol_vertex
 
   virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
   {
-    assert(v->cast_to_vertex_2d()==VXL_NULLPTR);
+    assert(v->cast_to_vertex_2d()==nullptr);
     assert(v != this);
     std::list<vtol_topology_object*>::const_iterator zp;
     for (zp=superiors_.begin();zp!=superiors_.end();++zp)
@@ -100,8 +100,8 @@ class example_vertex_3d : public vtol_vertex
   }
   virtual vsol_spatial_object_2d* clone() const {return new T(x(),y(),z()); }
   std::string is_a() const { return std::string("example_vertex_3d"); }
-  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==VXL_NULLPTR); operator=(*(T const*)(&v)); }
-  virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==VXL_NULLPTR && operator==(*(T const*)(&v)); }
+  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==nullptr); operator=(*(T const*)(&v)); }
+  virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==nullptr && operator==(*(T const*)(&v)); }
 
   void print(std::ostream &strm=std::cout) const { strm<<"<vertex "<<x()<<','<<y()<<','<<z()<<"> with id "<<get_id()<<'\n'; }
   void describe(std::ostream &strm=std::cout,int b=0) const { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
@@ -155,7 +155,7 @@ class example_face_3d : public vtol_face
   virtual void print(std::ostream &strm=std::cout) const { strm << "<example_face_3d>"; }
   virtual void describe(std::ostream &strm=std::cout, int=0) const { print(strm); }
   virtual void copy_geometry(vtol_face const& /*f*/) { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
-  virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==VXL_NULLPTR && operator==(*(T const*)(&f)); }
+  virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==nullptr && operator==(*(T const*)(&f)); }
   virtual vtol_face* copy_with_arrays(topology_list&, topology_list&) const { return new T(*this); } // NYI
   virtual vtol_face* shallow_copy_with_no_links() const { return new T(*this); }
 #undef T

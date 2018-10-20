@@ -57,7 +57,7 @@ bool bvxm_get_grid_process(bprb_func_process& pro)
     return false;
   }
 
-  bvxm_voxel_grid_base_sptr grid = VXL_NULLPTR;
+  bvxm_voxel_grid_base_sptr grid = nullptr;
   if (voxeltype == "occupancy") {
     grid = world->get_grid<OCCUPANCY>(index, scale);
   }

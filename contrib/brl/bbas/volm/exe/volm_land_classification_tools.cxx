@@ -61,7 +61,7 @@ void load_naip_imgs(std::string img_folder, std::vector<img_info>& imgs, int utm
     //std::cout << tfw_name << std::endl; std::cout.flush();
     if (!vul_file::exists(tfw_name) || !vul_file::exists(img_name))
       continue;
-    vpgl_geo_camera *cam = VXL_NULLPTR;
+    vpgl_geo_camera *cam = nullptr;
     if (!vpgl_geo_camera::init_geo_camera(tfw_name, lvcs, utm_zone, northing, cam))
       continue;
     vil_image_resource_sptr img = vil_load_image_resource(img_name.c_str());
@@ -186,7 +186,7 @@ bool collect_img_pixels(vpgl_lvcs_sptr lvcs, int utm_zone, std::string const& ma
 {
   vil_image_view<vxl_byte> mask = vil_load(mask_name.c_str());
 
-  vpgl_geo_camera *cam = VXL_NULLPTR;
+  vpgl_geo_camera *cam = nullptr;
   if (!vpgl_geo_camera::init_geo_camera(img_tfw_name, lvcs, utm_zone, northing, cam))
     return false;
   int ni = mask.ni(); int nj = mask.nj();

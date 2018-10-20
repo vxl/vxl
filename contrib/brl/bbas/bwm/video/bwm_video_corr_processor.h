@@ -84,7 +84,7 @@ class bwm_video_corr_processor
 
   //: Constructor - default
   bwm_video_corr_processor() : verbose_(false), site_path_(""), site_name_(""),
-    video_path_(""), camera_path_(""), video_istr_(VXL_NULLPTR), cam_istr_(VXL_NULLPTR),
+    video_path_(""), camera_path_(""), video_istr_(nullptr), cam_istr_(nullptr),
     world_pts_valid_(false){}
 
   //: Destructor

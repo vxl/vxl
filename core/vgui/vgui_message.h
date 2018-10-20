@@ -83,7 +83,7 @@
 class vgui_message
 {
  public:
-  vgui_message() : from(VXL_NULLPTR), user(VXL_NULLPTR), data(VXL_NULLPTR) {}
+  vgui_message() : from(nullptr), user(nullptr), data(nullptr) {}
 
   //: Pointer to sender.
   //  When the message was broadcast from a vgui_observer

@@ -86,7 +86,7 @@
 #include <sdet/sdet_region_proc.h>
 #include <sdet/sdet_third_order_edge_det_params.h>
 #include <sdet/sdet_third_order_edge_det.h>
-segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance_ = VXL_NULLPTR;
+segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance_ = nullptr;
 
 segv_vil_segmentation_manager *segv_vil_segmentation_manager::instance()
 {
@@ -140,7 +140,7 @@ range_params(vil_image_resource_sptr const& image)
   { gl_map = true; cache = true;}
 
   //Check if the image is a pyramid
-  bool pyr = image->get_property(vil_property_pyramid, VXL_NULLPTR);
+  bool pyr = image->get_property(vil_property_pyramid, nullptr);
   if (pyr)
   { gl_map = true; cache = true;}
 
@@ -152,7 +152,7 @@ range_params(vil_image_resource_sptr const& image)
     return rmps;
   if (iu.default_range_map(rmps, gamma, invert, gl_map, cache))
     return rmps;
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: set the image at the currently selected grid cell
@@ -290,7 +290,7 @@ vil_image_resource_sptr segv_vil_segmentation_manager::selected_image()
 {
   bgui_image_tableau_sptr itab = this->selected_image_tab();
   if (!itab)
-    return VXL_NULLPTR;
+    return nullptr;
   return itab->get_image_resource();
 }
 
@@ -299,7 +299,7 @@ vil_image_resource_sptr segv_vil_segmentation_manager::image_at(const unsigned c
 {
   vgui_tableau_sptr top_tab = grid_->get_tableau_at(col, row);
   if (!top_tab)
-    return VXL_NULLPTR;
+    return nullptr;
 
   bgui_image_tableau_sptr itab;
   itab.vertical_cast(vgui_find_below_by_type_name(top_tab,
@@ -308,7 +308,7 @@ vil_image_resource_sptr segv_vil_segmentation_manager::image_at(const unsigned c
   {
     std::cout << "Unable to get bgui_image_tableau at (" << col
              << ", " << row << ")\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   return itab->get_image_resource();
 }
@@ -704,7 +704,7 @@ void segv_vil_segmentation_manager::save_nitf_camera()
     return;
   }
 
-  vil_nitf2_image* nitf = VXL_NULLPTR;
+  vil_nitf2_image* nitf = nullptr;
   std::string format = img->file_format();
   std::string prefix = format.substr(0,4);
   if (prefix == "nitf") {
@@ -765,7 +765,7 @@ void segv_vil_segmentation_manager::set_range_params()
                                      gamma, gamma, gamma, invert,
                                      gl_map, cache);
   else
-    rmps = VXL_NULLPTR;
+    rmps = nullptr;
   itab->set_mapping(rmps);
 }
 
@@ -860,7 +860,7 @@ void segv_vil_segmentation_manager::nonmaximal_suppression()
     macro( VIL_PIXEL_FORMAT_FLOAT, float )
     macro( VIL_PIXEL_FORMAT_DOUBLE, double )
     macro( VIL_PIXEL_FORMAT_BOOL, bool )
-    default: img->get_view() = VXL_NULLPTR;
+    default: img->get_view() = nullptr;
 #undef macro
   }
 
@@ -1184,7 +1184,7 @@ void segv_vil_segmentation_manager::project_points()
 {
   this->clear_display(); // apparently this call is needed?
   vil_image_resource_sptr img = this->selected_image();
-  vil_nitf2_image* nitf = VXL_NULLPTR;
+  vil_nitf2_image* nitf = nullptr;
   std::string format = img->file_format();
   std::string prefix = format.substr(0,4);
   if (prefix == "nitf")
@@ -1192,7 +1192,7 @@ void segv_vil_segmentation_manager::project_points()
   else
   {
     //Check if the image is a pyramid
-    bool pyr = img->get_property(vil_property_pyramid, VXL_NULLPTR);
+    bool pyr = img->get_property(vil_property_pyramid, nullptr);
     if (!pyr)
     {
       std::cout << "Current image is not a NITF image\n";

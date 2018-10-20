@@ -336,7 +336,7 @@ void vtol_topology_object::describe(std::ostream &strm,
 std::vector<vtol_vertex *> *vtol_topology_object::compute_vertices(void)
 {
   std::cout << "Compute vertices\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -347,7 +347,7 @@ std::vector<vtol_zero_chain *> *
 vtol_topology_object::compute_zero_chains(void)
 {
   std::cout << "Compute zero_chains\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -357,7 +357,7 @@ vtol_topology_object::compute_zero_chains(void)
 std::vector<vtol_edge *> *vtol_topology_object::compute_edges(void)
 {
   std::cout << "Compute edges\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -367,7 +367,7 @@ std::vector<vtol_one_chain *> *
 vtol_topology_object::compute_one_chains(void)
 {
   std::cout << "Compute one chains\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -376,7 +376,7 @@ vtol_topology_object::compute_one_chains(void)
 std::vector<vtol_face *> *vtol_topology_object::compute_faces(void)
 {
   std::cout << "Compute faces\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -386,7 +386,7 @@ std::vector<vtol_two_chain *> *
 vtol_topology_object::compute_two_chains(void)
 {
   std::cout << "Compute two chains\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------
@@ -395,7 +395,7 @@ vtol_topology_object::compute_two_chains(void)
 std::vector<vtol_block *> *vtol_topology_object::compute_blocks(void)
 {
   std::cout << "Compute blocks\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //---------------------------------------------------------------------------

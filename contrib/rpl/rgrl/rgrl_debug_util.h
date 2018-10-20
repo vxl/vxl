@@ -38,7 +38,7 @@ class rgrl_debug_feature_iteration_save_matches: public rgrl_command
   //: constructor
   rgrl_debug_feature_iteration_save_matches( const std::string& path,
                                              const std::string& prefix,
-                                             const rgrl_mask_sptr& from_roi = VXL_NULLPTR );
+                                             const rgrl_mask_sptr& from_roi = nullptr );
 
   void execute(rgrl_object* caller, const rgrl_event & event )
   {

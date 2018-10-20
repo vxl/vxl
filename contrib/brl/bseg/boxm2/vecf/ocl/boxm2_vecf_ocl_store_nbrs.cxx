@@ -87,12 +87,12 @@ bool boxm2_vecf_ocl_store_nbrs::init_ocl_store()
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
     status = 0;
     queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),CL_QUEUE_PROFILING_ENABLE,&status);
-    ocl_depth = VXL_NULLPTR;
-    blk_info_source = VXL_NULLPTR;
-    info_buffer = VXL_NULLPTR;
-    info_buffer_source = VXL_NULLPTR;
-    blk_source = VXL_NULLPTR;
-    mog_source = VXL_NULLPTR;
+    ocl_depth = nullptr;
+    blk_info_source = nullptr;
+    info_buffer = nullptr;
+    info_buffer_source = nullptr;
+    blk_source = nullptr;
+    mog_source = nullptr;
     return true;
 }
 // input is a block (source scene) output is the source scene with neighbor information

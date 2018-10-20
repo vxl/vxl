@@ -68,6 +68,6 @@ template<class T>
 unsigned long mbl_data_collector_merge_all(mbl_data_collector<T > &dest,
                                            mbl_data_wrapper<T > &src0,
                                            mbl_data_wrapper<T > &src1,
-                                           std::vector<unsigned> *order = VXL_NULLPTR);
+                                           std::vector<unsigned> *order = nullptr);
 
 #endif // mbl_data_collector_h_

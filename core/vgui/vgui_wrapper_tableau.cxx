@@ -59,7 +59,7 @@ bool vgui_wrapper_tableau::remove_child(vgui_tableau_sptr const& c)
     return false;
   }
   else {
-    child.assign(VXL_NULLPTR);
+    child.assign(nullptr);
     return true;
   }
 }

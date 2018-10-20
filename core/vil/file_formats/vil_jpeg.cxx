@@ -58,7 +58,7 @@ char const* vil_jpeg_file_format::tag() const
 //:
 vil_image_resource_sptr  vil_jpeg_file_format::make_input_image(vil_stream *vs)
 {
-  return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : VXL_NULLPTR;
+  return vil_jpeg_file_probe(vs) ? new vil_jpeg_image(vs) : nullptr;
 }
 
 vil_image_resource_sptr
@@ -72,7 +72,7 @@ vil_image_resource_sptr
   {
     std::cout<<"ERROR! vil_jpeg_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   return new vil_jpeg_image(vs, nx, ny, nplanes, format);
 }
@@ -82,7 +82,7 @@ vil_image_resource_sptr
 // class vil_jpeg_image
 
 vil_jpeg_image::vil_jpeg_image(vil_stream *s)
-  : jc(VXL_NULLPTR)
+  : jc(nullptr)
   , jd(new vil_jpeg_decompressor(s))
   , stream(s)
 {
@@ -107,7 +107,7 @@ vil_jpeg_image::vil_jpeg_image(vil_stream *s,
                                unsigned nplanes,
                                enum vil_pixel_format format)
   : jc(new vil_jpeg_compressor(s))
-  , jd(VXL_NULLPTR)
+  , jd(nullptr)
   , stream(s)
 {
   if (format != VIL_PIXEL_FORMAT_BYTE)
@@ -133,12 +133,12 @@ vil_jpeg_image::~vil_jpeg_image()
   // free the vil_jpeg_stream_source_mgr allocated in vil_jpeg_stream_xxx_set()
   if (jd)
     delete jd;
-  jd = VXL_NULLPTR;
+  jd = nullptr;
   if (jc)
     delete jc;
-  jc = VXL_NULLPTR;
+  jc = nullptr;
   stream->unref();
-  stream = VXL_NULLPTR;
+  stream = nullptr;
 }
 
 //--------------------------------------------------------------------------------
@@ -151,7 +151,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
 {
   if (!jd) {
     std::cerr << "attempted get_copy_view() failed -- no jpeg decompressor\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 #ifdef DEBUG
   std::cerr << "get_copy_view " << ' ' << x0 << ' ' << nx << ' ' << y0 << ' ' << ny << '\n';
@@ -165,7 +165,7 @@ vil_image_view_base_sptr vil_jpeg_image::get_copy_view(unsigned x0,
   for (unsigned int i=0; i<ny; ++i) {
     JSAMPLE const *scanline = jd->read_scanline(y0+i);
     if (!scanline)
-      return VXL_NULLPTR; // failed
+      return nullptr; // failed
 
     std::memcpy(reinterpret_cast<char*>(chunk->data()) + i*nx*bpp, &scanline[x0*bpp], nx*bpp);
   }

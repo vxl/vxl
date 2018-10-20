@@ -59,19 +59,19 @@ void gtrl_triangulation::run()
   in.pointmarkerlist= markers;
   in.numberofpointattributes= 0;
   in.numberofholes= 0;
-  in.trianglelist= VXL_NULLPTR;
+  in.trianglelist= nullptr;
 
   // output
   triangulateio out;
-  out.pointlist= VXL_NULLPTR;
-  out.trianglelist= VXL_NULLPTR;
-  out.pointmarkerlist= VXL_NULLPTR;
+  out.pointlist= nullptr;
+  out.trianglelist= nullptr;
+  out.pointmarkerlist= nullptr;
   out.numberofpointattributes= 0;
   out.numberofholes= 0;
   out.numberoftriangleattributes= 0;
 
   // do triangulation
-  triangulate( "-z -i -q", &in, &out, VXL_NULLPTR);
+  triangulate( "-z -i -q", &in, &out, nullptr);
 
   // create any new points that are necessary
   for (int i=0; i< out.numberofpoints; i++)

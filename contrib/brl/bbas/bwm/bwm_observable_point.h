@@ -29,7 +29,7 @@
 class bwm_observable_point : public bwm_observable
 {
  public:
-  bwm_observable_point() : object_(VXL_NULLPTR) {}
+  bwm_observable_point() : object_(nullptr) {}
   ~bwm_observable_point() {}
 
   std::string type_name() const { return "bwm_observable_point"; }

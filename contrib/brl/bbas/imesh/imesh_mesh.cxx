@@ -12,8 +12,8 @@
 //: Copy Constructor
 imesh_mesh::imesh_mesh(const imesh_mesh& other)
   : vbl_ref_count(),
-    verts_((other.verts_.get()) ? other.verts_->clone() : VXL_NULLPTR),
-    faces_((other.faces_.get()) ? other.faces_->clone() : VXL_NULLPTR),
+    verts_((other.verts_.get()) ? other.verts_->clone() : nullptr),
+    faces_((other.faces_.get()) ? other.faces_->clone() : nullptr),
     half_edges_(other.half_edges_),
     tex_coords_(other.tex_coords_),
     tex_source_(other.tex_source_),
@@ -28,9 +28,9 @@ imesh_mesh& imesh_mesh::operator=(imesh_mesh const& other)
 {
   if (this != &other) {
     verts_ = vcl_unique_ptr<imesh_vertex_array_base>((other.verts_.get()) ?
-                                                   other.verts_->clone() : VXL_NULLPTR);
+                                                   other.verts_->clone() : nullptr);
     faces_ = vcl_unique_ptr<imesh_face_array_base>((other.faces_.get()) ?
-                                                 other.faces_->clone() : VXL_NULLPTR);
+                                                 other.faces_->clone() : nullptr);
     half_edges_ = other.half_edges_;
     tex_coords_ = other.tex_coords_;
     valid_tex_faces_ = other.valid_tex_faces_;

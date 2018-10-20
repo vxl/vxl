@@ -23,7 +23,7 @@ const char * vsol_spatial_object_2d::SpatialTypes[] =
 };
 
 vsol_spatial_object_2d::vsol_spatial_object_2d()
-  : bounding_box_(VXL_NULLPTR)
+  : bounding_box_(nullptr)
 {
   this->tag_ = 0;
   this->id_ = 0;
@@ -31,7 +31,7 @@ vsol_spatial_object_2d::vsol_spatial_object_2d()
 }
 
 vsol_spatial_object_2d::vsol_spatial_object_2d(vsol_spatial_object_2d const& s)
-  : vsol_spatial_object(s), bounding_box_(VXL_NULLPTR)
+  : vsol_spatial_object(s), bounding_box_(nullptr)
 {
   this->tag_ = 0;
   this->id_ = s.get_id();

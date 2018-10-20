@@ -123,7 +123,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
 vpgl_backproject_dem::~vpgl_backproject_dem(){
   if(geo_cam_)
     delete geo_cam_;
-  geo_cam_ = VXL_NULLPTR;
+  geo_cam_ = nullptr;
 }
 // the function to backproject onto the dem using vgl objects
 bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam,

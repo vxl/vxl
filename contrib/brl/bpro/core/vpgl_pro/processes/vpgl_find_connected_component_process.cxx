@@ -58,7 +58,7 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   in_img = *vil_convert_cast(float(), img_sptr);
 
   // load the geo camera
-  vpgl_geo_camera* geocam = VXL_NULLPTR;
+  vpgl_geo_camera* geocam = nullptr;
   geocam = dynamic_cast<vpgl_geo_camera*> (cam_sptr.ptr());
   if (!geocam) {
     std::cerr << pro.name() << ": load geo camera failed!!\n";

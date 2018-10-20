@@ -119,7 +119,7 @@ void
 bsta_gaussian_full<T,n>::set_covar(const vnl_matrix_fixed<T,n,n>& covar)
 {
   delete inv_covar_;
-  inv_covar_ = VXL_NULLPTR;
+  inv_covar_ = nullptr;
   covar_ = covar;
   compute_det();
 }

@@ -125,7 +125,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
       {
         // Evaluate its width functor, if any.
         int variable_width = -1;
-        if (field_def->width_functor != VXL_NULLPTR) {
+        if (field_def->width_functor != nullptr) {
           bool computed_width = (*(field_def->width_functor))(this, indexes, variable_width);
           if (!computed_width) {
             // Cannot evaluate width functor; therefore I don't know the length
@@ -183,7 +183,7 @@ bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
       // Compute how many times it repeats
       int repeat_count = 0;
       bool computed_repeat = false;
-      if (repeat_node->repeat_functor != VXL_NULLPTR) {
+      if (repeat_node->repeat_functor != nullptr) {
         computed_repeat = (*(repeat_node->repeat_functor))(this, indexes, repeat_count);
       }
       if (!computed_repeat) {
@@ -292,7 +292,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
       {
         // Will emit field. Evaluate its width functor, if any.
         int variable_width = -1;
-        if (field_def->width_functor != VXL_NULLPTR) {
+        if (field_def->width_functor != nullptr) {
           bool computed_width = (*(field_def->width_functor))(this, indexes, variable_width);
           if (!computed_width) {
             // Cannot evaluate width functor; therefore I don't know the length
@@ -330,7 +330,7 @@ bool vil_nitf2_field_sequence::write(vil_nitf2_ostream& output,
       // Compute how many times it repeats
       int repeat_count = 0;
       bool computed_repeat = false;
-      if (repeat_node->repeat_functor != VXL_NULLPTR) {
+      if (repeat_node->repeat_functor != nullptr) {
         computed_repeat = (*(repeat_node->repeat_functor))(this, indexes, repeat_count);
       }
       if (!computed_repeat) {
@@ -368,7 +368,7 @@ vil_nitf2_field* vil_nitf2_field_sequence::get_field(std::string tag) const
 {
   std::map<std::string, vil_nitf2_field*>::const_iterator field_map_entry = fields.find(tag);
   if (field_map_entry == fields.end())
-    return VXL_NULLPTR;
+    return nullptr;
   return field_map_entry->second;
 }
 

@@ -232,7 +232,7 @@ assert(section_ok);
 
 void vgui_cache_wizard::TexImage2D_Brownie(vil1_image img)
 {
-  void *the_pixels = VXL_NULLPTR;
+  void *the_pixels = nullptr;
   bool section_ok;
   // FIXME: the calls to fsm_macro_magic() are identical for each image pixel type.
   // They could be coalesced to reduce code maintenance.

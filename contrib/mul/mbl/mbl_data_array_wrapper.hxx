@@ -14,7 +14,7 @@
 //: Default constructor
 template<class T>
 mbl_data_array_wrapper<T>::mbl_data_array_wrapper()
-  : data_(VXL_NULLPTR),n_(0),index_(0)
+  : data_(nullptr),n_(0),index_(0)
 {
 }
 
@@ -36,7 +36,7 @@ mbl_data_array_wrapper<T>::mbl_data_array_wrapper(const std::vector<T > &data)
   // implementations do store data this way.
   // Check this assumption holds.
   assert(data.size() == 0 || &data[data.size() - 1] + 1 == &data[0] + data.size());
-  set(data.empty()?VXL_NULLPTR:&data[0], data.size());
+  set(data.empty()?nullptr:&data[0], data.size());
 }
 
 //: Copy Constructor

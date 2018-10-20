@@ -36,7 +36,7 @@ obtain_int_face_attr(vtol_intensity_face_sptr  face)
   }
 
   // Cache miss
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 vifa_int_face_attr_sptr test_ifa_factory::

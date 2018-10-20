@@ -68,7 +68,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
   bmsh3d_edge* edgemap (const int i) {
     std::map<int, bmsh3d_edge*>::iterator it = edgemap_.find (i);
     if (it == edgemap_.end())
-      return VXL_NULLPTR;
+      return nullptr;
     return (*it).second;
   }
 
@@ -133,7 +133,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
 
   void _disconnect_edge_vertex (bmsh3d_edge* E, const unsigned int vidx) {
     E->vertices(vidx)->del_incident_E (E);
-    E->set_vertex (vidx, VXL_NULLPTR);
+    E->set_vertex (vidx, nullptr);
   }
   void _disconnect_vertex_edge (bmsh3d_vertex* V, bmsh3d_edge* E) {
     if (V == E->sV())
@@ -151,8 +151,8 @@ class bmsh3d_graph : public bmsh3d_pt_set
     LV->add_incident_E (L);
   }
   bool _disconnect_loop_vertex (bmsh3d_edge* L, bmsh3d_vertex* LV) {
-    L->set_vertex (0, VXL_NULLPTR);
-    L->set_vertex (1, VXL_NULLPTR);
+    L->set_vertex (0, nullptr);
+    L->set_vertex (1, nullptr);
     return LV->del_incident_E (L);
   }
 
@@ -209,7 +209,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
   }
 
   bool try_remove_edge (bmsh3d_edge* E) {
-    if (E->halfedge() == VXL_NULLPTR) {
+    if (E->halfedge() == nullptr) {
       remove_edge (E->id());
       return true;
     }

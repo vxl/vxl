@@ -286,7 +286,7 @@ void boxm2_vecf_ocl_orbit_scene::cache_cell_centers_from_anatomy_labels(){
 
 //Main constructor
 boxm2_vecf_ocl_orbit_scene::boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache, bool is_single_instance , bool is_right ):
-  boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR), sphere_(VXL_NULLPTR), iris_(VXL_NULLPTR), pupil_(VXL_NULLPTR),device_(device),opencl_cache_(opencl_cache)
+  boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr), sphere_(nullptr), iris_(nullptr), pupil_(nullptr),device_(device),opencl_cache_(opencl_cache)
 {
 
   this->extrinsic_only_ = false; int status;
@@ -297,7 +297,7 @@ boxm2_vecf_ocl_orbit_scene::boxm2_vecf_ocl_orbit_scene(std::string const& scene_
 
   boxm2_lru_cache::create(base_model_);
   is_single_instance_ = is_single_instance;
-  target_blk_ = VXL_NULLPTR;
+  target_blk_ = nullptr;
   target_data_extracted_ = false;
   this->compile_kernels();
   this->extract_block_data();

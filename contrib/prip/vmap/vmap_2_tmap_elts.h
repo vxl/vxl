@@ -24,7 +24,7 @@ template <class V, class E, class F>
 class vmap_2_tmap_tuple
 {
  public:
-  vmap_2_tmap_tuple() : edge_(VXL_NULLPTR), vertex_(VXL_NULLPTR), face_(VXL_NULLPTR) {}
+  vmap_2_tmap_tuple() : edge_(nullptr), vertex_(nullptr), face_(nullptr) {}
 
   //: Associated edge.
   const E & edge() const
@@ -101,7 +101,7 @@ class vmap_2_tmap_tuple
   //:
   bool valid() const
   {
-    return edge_!=VXL_NULLPTR && vertex_!=VXL_NULLPTR && face_!=VXL_NULLPTR ;
+    return edge_!=nullptr && vertex_!=nullptr && face_!=nullptr ;
   }
 
  protected :

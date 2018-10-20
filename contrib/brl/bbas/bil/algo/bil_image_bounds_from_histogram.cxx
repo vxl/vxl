@@ -166,7 +166,7 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
     return false;
 
   vil_image_resource_sptr image;
-  bool pyr = imgr_->get_property(vil_property_pyramid, VXL_NULLPTR);
+  bool pyr = imgr_->get_property(vil_property_pyramid, nullptr);
   if (pyr)
   {
     // cast to pyramid resource

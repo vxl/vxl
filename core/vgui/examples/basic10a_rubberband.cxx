@@ -10,7 +10,7 @@
 #include <vgui/vgui_viewer2D_tableau.h>
 #include <vgui/vgui_shell_tableau.h>
 //global pointer to the rubberband tableau
-static vgui_rubberband_tableau_sptr rubber = VXL_NULLPTR;
+static vgui_rubberband_tableau_sptr rubber = nullptr;
 
 //the meunu callback functions
 static void create_line()

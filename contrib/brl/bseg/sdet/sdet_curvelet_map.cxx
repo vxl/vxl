@@ -17,7 +17,7 @@ sdet_curvelet_map
 ::~sdet_curvelet_map()
 {
   clear(); //delete everything upon exit
-  EM_=VXL_NULLPTR; //delete the reference to the edgemap
+  EM_=nullptr; //delete the reference to the edgemap
 }
 
 //: resize the graph
@@ -149,7 +149,7 @@ sdet_curvelet_map
       return cvlet; //return matching curvelet
   }
 
-  return VXL_NULLPTR; //curvelet does not exist
+  return nullptr; //curvelet does not exist
 }
 
 //: does the given edgel pair exist on the ref edgel?
@@ -165,7 +165,7 @@ sdet_curvelet_map
         p1->edgel_chain[0]==eA && p1->edgel_chain[1]==eB)
       return p1; //pair found
   }
-  return VXL_NULLPTR; //not found
+  return nullptr; //not found
 }
 
 //: does the given triplet exist on the ref edgel?
@@ -181,7 +181,7 @@ sdet_curvelet_map
         t1->edgel_chain[0]==eA && t1->edgel_chain[1]==eB && t1->edgel_chain[2]==eC)
       return t1; //triplet found
   }
-  return VXL_NULLPTR; //not found
+  return nullptr; //not found
 }
 
 //: return largest curvelet formed at the given edgel
@@ -190,7 +190,7 @@ sdet_curvelet_map
 ::largest_curvelet(sdet_edgel* e)
 {
   unsigned largest_size = 0;
-  sdet_curvelet* largest_cvlet = VXL_NULLPTR;
+  sdet_curvelet* largest_cvlet = nullptr;
 
   sdet_curvelet_list_iter cv_it = map_[e->id].begin();
   for ( ; cv_it!=map_[e->id].end(); cv_it++)

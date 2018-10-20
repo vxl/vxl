@@ -524,7 +524,7 @@ bool get_view(vil_image_resource_sptr const& ir,
   static unsigned i0 = 0, j0 = 0;
   static unsigned bi = 0, bj = 0;
   static vil_image_view<float> cblock;
-  static vil_blocked_image_resource_sptr bif = VXL_NULLPTR;
+  static vil_blocked_image_resource_sptr bif = nullptr;
   if (first) {
     unsigned si = ni*16, sj = nj*16;
     bif = vil_new_blocked_image_facade(ir, si, sj);

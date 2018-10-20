@@ -109,7 +109,7 @@ vil_jpeg_compressor::~vil_jpeg_compressor()
 
   //
   stream->unref();
-  stream = VXL_NULLPTR;
+  stream = nullptr;
 }
 
 void vil_jpeg_compressor::set_quality(int q)

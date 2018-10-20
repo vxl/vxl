@@ -33,7 +33,7 @@
 //------------
 // Every tableau is on this array.
 // It must be a ptr as must live longer than any vgui_tableau_sptr
-static vgui_DLLDATA std::vector<vgui_tableau*>* all = VXL_NULLPTR;
+static vgui_DLLDATA std::vector<vgui_tableau*>* all = nullptr;
 
 //-----------------------------------------------------------------------------
 //: Constructor.
@@ -46,7 +46,7 @@ vgui_tableau::vgui_tableau()
   std::cerr << "vgui_tableau constructor: this = " << (void*)this << '\n';
 #endif
   // register :
-  if (all == VXL_NULLPTR) {
+  if (all == nullptr) {
     all = new std::vector<vgui_tableau*>;
   }
   all->push_back(this);
@@ -71,7 +71,7 @@ vgui_tableau::~vgui_tableau()
   if (all->size() == 0)
   {
     delete all;
-    all = VXL_NULLPTR;
+    all = nullptr;
   }
 }
 

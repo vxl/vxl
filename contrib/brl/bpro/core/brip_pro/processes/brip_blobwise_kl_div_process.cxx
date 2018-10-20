@@ -60,13 +60,13 @@ namespace brip_blobwise_kl_div_process_globals
       }
       else {
         std::cerr << "Failed to load image\n";
-        return VXL_NULLPTR;
+        return nullptr;
       }
       return floatimg;
     }
     //otherwise it's messed up, return a null pointer
     std::cerr<<"Failed to recognize input image type\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 };
 

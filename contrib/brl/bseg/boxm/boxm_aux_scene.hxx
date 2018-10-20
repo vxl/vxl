@@ -12,7 +12,7 @@ boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,
                                               std::string storage_suffix,
                                               tree_creation_type type,
                                               boxm_apm_type app_model)
-: aux_scene_(VXL_NULLPTR)
+: aux_scene_(nullptr)
 {
   std::string aux_storage_dir;
   aux_storage_dir_ = scene->path();
@@ -66,7 +66,7 @@ boct_tree_cell_reader<T_loc, T_AUX>* boxm_aux_scene<T_loc,T,T_AUX>::get_block_in
     return reader;
   }
   else {
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -90,10 +90,10 @@ void boxm_aux_scene<T_loc,T,T_AUX>::clean_scene()
   else
   {
     while (!iter.end()) {
-      if (iter->get_tree()!=VXL_NULLPTR)
+      if (iter->get_tree()!=nullptr)
       {
         iter->delete_tree();
-        iter->set_tree(VXL_NULLPTR);
+        iter->set_tree(nullptr);
       }
       iter++;
     }

@@ -120,12 +120,12 @@ void test_pc_gaussian()
   pdf.set_partition_chooser(&builder);
   vsl_b_write(bfs_out,pdf);
   bfs_out.close();
-  pdf.set_partition_chooser(VXL_NULLPTR);
+  pdf.set_partition_chooser(nullptr);
 
   vpdfl_pc_gaussian          pdf_in, pdf_in2;
   vpdfl_pc_gaussian_builder  builder_in;
-  vpdfl_pdf_base*            p_base_pdf_in = VXL_NULLPTR;
-  vpdfl_builder_base*        p_base_builder_in = VXL_NULLPTR;
+  vpdfl_pdf_base*            p_base_pdf_in = nullptr;
+  vpdfl_builder_base*        p_base_builder_in = nullptr;
 
 
   vsl_b_ifstream bfs_in("test_pc_gaussian.bvl.tmp");
@@ -182,7 +182,7 @@ void test_pc_gaussian()
     dynamic_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser());
 #else
     pdf_in2.partition_chooser()->is_class("vpdfl_pc_gaussian_builder") ?
-    static_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser()) : VXL_NULLPTR;
+    static_cast<const vpdfl_pc_gaussian_builder *>(pdf_in2.partition_chooser()) : nullptr;
 #endif
 
   //std::cout << "Chooser " << *chooser <<std::endl;

@@ -237,7 +237,7 @@ class bprb_parameters : public vbl_ref_count
   template<class T>
   bool get_value( const std::string& name , T& value ) const
   {
-    bprb_param_type<T> * param = VXL_NULLPTR;
+    bprb_param_type<T> * param = nullptr;
     if ( get_param(name, param) && param ){
       value = param->value();
       return true;

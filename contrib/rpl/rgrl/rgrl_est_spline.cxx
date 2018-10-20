@@ -143,7 +143,7 @@ rgrl_est_spline( unsigned dof,
       use_thin_plate_( use_thin_plate ),
       lambda_(lambda),
       optimize_method_( RGRL_LEVENBERG_MARQUARDT ),
-      global_xform_( VXL_NULLPTR )
+      global_xform_( nullptr )
 {
   unsigned num_control = 1;
   for ( unsigned i=0; i<m.size(); ++i )

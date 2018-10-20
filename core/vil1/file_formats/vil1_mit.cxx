@@ -71,12 +71,12 @@ vil1_image_impl* vil1_mit_file_format::make_input_image(vil1_stream* is)
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ||
         type == MIT_EDGE      ))
-    return VXL_NULLPTR;
+    return nullptr;
 
   int bits_per_pixel = vil1_16bit_read_little_endian(is);
   if (bits_per_pixel > 32) {
     std::cerr << "vil1_mit_file_format:: Thought it was MIT, but bpp = " << bits_per_pixel << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   /*int width =*/ vil1_16bit_read_little_endian(is);
@@ -199,7 +199,7 @@ bool vil1_mit_generic_image::write_header()
 
 bool vil1_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
-  assert(buf != VXL_NULLPTR);
+  assert(buf != nullptr);
 
   vil1_streampos offset = 8; // fsm: was 4
 
@@ -223,7 +223,7 @@ bool vil1_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
 bool vil1_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
-  assert(buf != VXL_NULLPTR);
+  assert(buf != nullptr);
 
   int skip = bytes_per_pixel() * (width_ - xs);
 

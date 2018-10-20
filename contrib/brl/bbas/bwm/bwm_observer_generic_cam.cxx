@@ -55,7 +55,7 @@ bwm_observer_generic_cam::bwm_observer_generic_cam(bgui_image_tableau_sptr img,
   if (!cam)
     cam = bwm_observer_rat_cam::read_camera(cam_path, local);
   if (!cam||!local)
-    camera_ = VXL_NULLPTR;
+    camera_ = nullptr;
   else {
     vpgl_generic_camera<double> gcam;
     vpgl_generic_camera_convert::convert(cam, ni, nj, gcam);
@@ -91,7 +91,7 @@ bwm_observer_generic_cam::ray_image(int component, int level=0) const
   bool dirt = (component == 1);
   vpgl_generic_camera<double>* gcam =
     static_cast<vpgl_generic_camera<double> *> (camera_);
-  if (!gcam) return VXL_NULLPTR;
+  if (!gcam) return nullptr;
   vbl_array_2d<vgl_ray_3d<double> > rays = gcam->rays(level);
   int nc = rays.cols(), nr = rays.rows();
 
@@ -110,7 +110,7 @@ bwm_observer_generic_cam::ray_image(int component, int level=0) const
         view(c,r,1) = static_cast<float>(dir.y());
         view(c,r,2) = static_cast<float>(dir.z());
       }
-      else return VXL_NULLPTR;
+      else return nullptr;
     }
   return vil_new_image_resource_of_view(view);
 }

@@ -479,7 +479,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
         {
           std::cerr << "join: trying to join relations which having same name "
                    << "attributes with different types!\n";
-          return VXL_NULLPTR;
+          return nullptr;
         }
 
         common_attribute_count++;
@@ -518,7 +518,7 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     {
       std::cerr << "join: trying to join relations which don't have any "
                << "common attributes.\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
 
     // compose a new relation
@@ -554,25 +554,25 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
           for (unsigned int m=0; m<arity1; m++)
           {
             if (!new_tup->add_value((*(*itr_1))[m]))
-              return VXL_NULLPTR;
+              return nullptr;
           }
 
           // add all non-common values of tuple in r2
           for (unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
           {
             if (!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))
-              return VXL_NULLPTR;
+              return nullptr;
           }
 
           // check the size of the new tuple
           if (new_tup->arity() != (arity1+arity2-common_attribute_count))
-            return VXL_NULLPTR;
+            return nullptr;
 
           // add the new tuple into the resulting relation
           if (!new_relation->add_tuple(new_tup))
           {
             std::cerr << "join: failed to add tuple.\n";
-            return VXL_NULLPTR;
+            return nullptr;
           }
         }
       }

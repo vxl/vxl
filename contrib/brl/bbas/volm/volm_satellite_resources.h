@@ -27,7 +27,7 @@
 class volm_satellite_resource
 {
   public:
-    volm_satellite_resource() : full_path_(""), name_(""), pair_(""), meta_(VXL_NULLPTR) {}
+    volm_satellite_resource() : full_path_(""), name_(""), pair_(""), meta_(nullptr) {}
 
   // ===========  binary I/O ================
   short version() const { return 0; }

@@ -53,7 +53,7 @@ template <class T>
 class bsta_fit_weibull
 {
  public:
-  bsta_fit_weibull() : wcf_(VXL_NULLPTR), residual_(T(0)){}
+  bsta_fit_weibull() : wcf_(nullptr), residual_(T(0)){}
   bsta_fit_weibull(bsta_weibull_cost_function* wcf) : wcf_(wcf), residual_(T(0)){}
 
   void set_cost_function(bsta_weibull_cost_function* wcf)

@@ -100,7 +100,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(vsol_polygon_3d_sptr polygon
   }
   else {
     std::cout << "NO FITTING" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -136,7 +136,7 @@ vsol_polygon_3d_sptr bwm_algo::move_points_to_plane(std::vector<vsol_point_3d_sp
   }
   else {
     std::cout << "NO FITTING" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
 
@@ -231,10 +231,10 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
   if (!img)
   {
     std::cerr << "Null image in bwm_tableau_mgr::extract_nitf_camera\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
-  vil_nitf2_image* nitf = VXL_NULLPTR;
+  vil_nitf2_image* nitf = nullptr;
   std::string format = img->file_format();
   std::string prefix = format.substr(0,4);
   if (prefix == "nitf") {
@@ -244,7 +244,7 @@ bwm_algo::extract_nitf_camera(vil_image_resource_sptr img)
   }
   else {
     std::cout << "The image is not an NITF" << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

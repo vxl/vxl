@@ -84,9 +84,9 @@ static void test_int_faces_adj_attr(int argc, char* argv[])
                                      1,  // Adjacent regions only
                                      -1,  // No size filter
                                      &flp,
-                                     VXL_NULLPTR,
-                                     VXL_NULLPTR,
-                                     VXL_NULLPTR,
+                                     nullptr,
+                                     nullptr,
+                                     nullptr,
                                      &np,
                                      &tif,
                                      0.0);  // No junk -- use all regions

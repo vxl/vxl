@@ -260,7 +260,7 @@ rsdl_kd_tree::destroy_tree( rsdl_kd_node*&  p )
     destroy_tree( p->left_ );
     destroy_tree( p->right_ );
     delete p;
-    p = VXL_NULLPTR;
+    p = nullptr;
   }
 }
 

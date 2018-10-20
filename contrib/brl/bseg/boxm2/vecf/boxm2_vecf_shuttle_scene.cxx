@@ -44,13 +44,13 @@ void boxm2_vecf_shuttle_scene::extract_block_data(){
   nobs_data_=new boxm2_data<BOXM2_NUM_OBS>(nobs_base->data_buffer(),nobs_base->buffer_length(),nobs_base->block_id());
 }
 boxm2_vecf_shuttle_scene::boxm2_vecf_shuttle_scene(std::string const& scene_file):
-  base_model_(new boxm2_scene(scene_file)), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR)
+  base_model_(new boxm2_scene(scene_file)), alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr)
 {
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
 }
 boxm2_vecf_shuttle_scene::boxm2_vecf_shuttle_scene(std::string const& scene_file, std::string const& imesh_file):
-  base_model_(new boxm2_scene(scene_file)), alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR)
+  base_model_(new boxm2_scene(scene_file)), alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr)
 {
   //need to delete scene files
   boxm2_lru_cache::create(base_model_);

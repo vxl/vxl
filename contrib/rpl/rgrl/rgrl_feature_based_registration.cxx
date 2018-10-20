@@ -57,10 +57,10 @@ rgrl_feature_based_registration::
 clear_results()
 {
   num_xforms_tested_ = 0;
-  best_xform_estimate_ = VXL_NULLPTR;
+  best_xform_estimate_ = nullptr;
   best_matches_.clear();
   best_scales_.clear();
-  best_status_ = VXL_NULLPTR;
+  best_status_ = nullptr;
 }
 
 //: Running from multiple initial estimates, produced by the initializer during registration.
@@ -192,7 +192,7 @@ bool
 rgrl_feature_based_registration::
 has_final_transformation() const
 {
-  return best_xform_estimate_ != VXL_NULLPTR;
+  return best_xform_estimate_ != nullptr;
 }
 
 //: Set the max number of icp iteration per level
@@ -303,7 +303,7 @@ register_single_feature( rgrl_mask_box            from_image_region,
   do { // for each stage/resolution
     data_->get_data_at_stage( resolution, from_set, to_set, matcher, weighter,
                               unwgted_scale_est, wgted_scale_est, xform_estimators);
-    match_set = VXL_NULLPTR;
+    match_set = nullptr;
     current_stage_ = resolution;
 
     DebugMacro(  1, " Current resolution "<< resolution <<'\n' );
@@ -319,7 +319,7 @@ register_single_feature( rgrl_mask_box            from_image_region,
     assert ( xform_estimator );
 
     iterations_at_stage_ = 0; //keeps track of total iter at stage
-    current_status = VXL_NULLPTR;
+    current_status = nullptr;
     bool should_estimate_scale = true;
     int  scale_est_count = 0;
 
@@ -346,7 +346,7 @@ register_single_feature( rgrl_mask_box            from_image_region,
         should_estimate_scale = false;
       }
 
-      rgrl_scale_sptr  new_scale = VXL_NULLPTR;
+      rgrl_scale_sptr  new_scale = nullptr;
       if ( !should_estimate_scale ) {
         DebugMacro(  2, "No scale estimation\n" );
       }
@@ -607,7 +607,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
     }
 
     iterations_at_stage_ = 0; //keeps track of total iter at level
-    current_status = VXL_NULLPTR;
+    current_status = nullptr;
     bool should_estimate_scale = true;
     int  scale_est_count = 0;
 
@@ -635,7 +635,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
           should_estimate_scale = false;
         }
 
-        rgrl_scale_sptr new_scale = VXL_NULLPTR;
+        rgrl_scale_sptr new_scale = nullptr;
         if ( !should_estimate_scale ) {
           DebugMacro(  2, "No scale estimation\n" );
         }

@@ -49,7 +49,7 @@ double sdet_bhat_dist(const sdet_bin hist1[], const sdet_bin hist2[]);
 //------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 //Color Histogram distance functions
-double sdet_color_EMD(sdet_color_sig *sig1, sdet_color_sig *sig2, sdet_flow* flow=VXL_NULLPTR, int* flowsize=VXL_NULLPTR);
+double sdet_color_EMD(sdet_color_sig *sig1, sdet_color_sig *sig2, sdet_flow* flow=nullptr, int* flowsize=nullptr);
 double sdet_color_chi_sq_dist(const sdet_color_sig &sig1, const sdet_color_sig &sig2);
 double sdet_color_bhat_dist(const sdet_color_sig &sig1, const sdet_color_sig &sig2);
 //------------------------------------------------------------------------------------------

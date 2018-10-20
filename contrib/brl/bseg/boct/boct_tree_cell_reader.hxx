@@ -85,7 +85,7 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
            T_data data;
            vsl_b_read(*is_, data);
            c.set_data(data);
-           c.set_vis_node(VXL_NULLPTR);
+           c.set_vis_node(nullptr);
            vsl_b_read(*is_, leaf);
            if (leaf)
              return true;
@@ -100,7 +100,7 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
       T_data data;
       vsl_b_read(*is_, data);
       c.set_data(data);
-      c.set_vis_node(VXL_NULLPTR);
+      c.set_vis_node(nullptr);
       return true;
     }
     else {
@@ -118,7 +118,7 @@ bool boct_tree_cell_reader<T_loc,T_data>::next(boct_tree_cell<T_loc,T_data>& c)
       is_->is().read(reinterpret_cast<char*>(&read_cell),sizeof(store_struct));
       c.code_ = read_cell.code;
       c.set_data(read_cell.data);
-      c.set_vis_node(VXL_NULLPTR);
+      c.set_vis_node(nullptr);
       return true;
     }
     else {

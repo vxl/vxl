@@ -279,7 +279,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     assert(valid_index(i));
     if (i==0 || i==1) {
       if (size()<3)
-        return VXL_NULLPTR; //assert (size()>2);
+        return nullptr; //assert (size()>2);
       else
         return Normal_[2];
     }
@@ -291,7 +291,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     assert(valid_index(i));
     if (i==0 || i==1) {
       if (size()<3)
-        return VXL_NULLPTR; //assert (size()>2);
+        return nullptr; //assert (size()>2);
       else
         return Binormal_[2];
     }

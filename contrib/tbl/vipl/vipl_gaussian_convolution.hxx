@@ -88,7 +88,7 @@ bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr>
 bool vipl_gaussian_convolution <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
 {
-  delete[] ref_mask(); ref_mask()=VXL_NULLPTR;
+  delete[] ref_mask(); ref_mask()=nullptr;
   return true;
 }
 

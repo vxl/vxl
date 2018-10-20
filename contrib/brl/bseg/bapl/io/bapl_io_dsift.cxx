@@ -24,12 +24,12 @@ void vsl_b_read(vsl_b_istream &is, bapl_dsift* &p)
     vsl_b_read(is,*p);
   }
   else
-    p = VXL_NULLPTR;
+    p = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream &os, const bapl_dsift* p)
 {
-  if ( p == VXL_NULLPTR )
+  if ( p == nullptr )
     vsl_b_write(os,false); //indicate null pointer stored
   else
   {

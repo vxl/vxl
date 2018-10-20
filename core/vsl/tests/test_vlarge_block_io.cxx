@@ -77,9 +77,9 @@ void test_vlarge_block_io()
   std::cout << "Start by trying to allocate " << (s/(1024*1024))+1 << "MiB" << std::endl;
   while (true)
   {
-    char *block = VXL_NULLPTR;
+    char *block = nullptr;
     block = (char *)std::malloc(s);
-    if (block != VXL_NULLPTR)
+    if (block != nullptr)
     {
       std::free(block);
       break;
@@ -116,10 +116,10 @@ void test_vlarge_block_io()
       free_blocks(blocks);
       std::exit(3);
     }
-    void * block = VXL_NULLPTR;
+    void * block = nullptr;
     block = std::malloc(s);
     // if we have run out of memory, go on to next section.
-    if (block == VXL_NULLPTR)
+    if (block == nullptr)
       break;
     //otherwise store memory pointer, and try and use up some more.
     blocks.push_back(block);

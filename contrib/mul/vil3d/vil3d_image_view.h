@@ -54,7 +54,7 @@ class vil3d_image_view : public vil3d_image_view_base
   vil_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
-  void release_memory() { ptr_ = VXL_NULLPTR; }
+  void release_memory() { ptr_ = nullptr; }
 
  public:
 
@@ -159,11 +159,11 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Cast to bool is true if pointing at some data.
   operator safe_bool () const
-    { return (top_left_ != (T*)VXL_NULLPTR)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+    { return (top_left_ != (T*)nullptr)? VCL_SAFE_BOOL_TRUE : nullptr; }
 
   //: Return false if pointing at some data.
   bool operator!() const
-    { return (top_left_ != (T*)VXL_NULLPTR)? false : true; }
+    { return (top_left_ != (T*)nullptr)? false : true; }
 
   //: The number of bytes in the data
   inline std::size_t size_bytes() const { return size() * sizeof(T); }
@@ -219,7 +219,7 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: Make empty.
   // Disconnects view from underlying data.
-  inline void clear() { release_memory(); ni_=nj_=nk_=nplanes_=0; top_left_=VXL_NULLPTR; }
+  inline void clear() { release_memory(); ni_=nj_=nk_=nplanes_=0; top_left_=nullptr; }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and

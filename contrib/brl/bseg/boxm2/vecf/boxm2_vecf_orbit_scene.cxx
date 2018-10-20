@@ -236,18 +236,18 @@ boxm2_vecf_orbit_scene
                          bool is_right) :
   boxm2_vecf_articulated_scene(scene_file),
   is_right_(is_right),
-  alpha_data_(VXL_NULLPTR),
-  app_data_(VXL_NULLPTR),
-  nobs_data_(VXL_NULLPTR),
-  sphere_(VXL_NULLPTR),
-  iris_(VXL_NULLPTR),
-  pupil_(VXL_NULLPTR)
+  alpha_data_(nullptr),
+  app_data_(nullptr),
+  nobs_data_(nullptr),
+  sphere_(nullptr),
+  iris_(nullptr),
+  pupil_(nullptr)
 {
 
   this->extrinsic_only_ = false;
   this->init_eyelids();
   is_single_instance_ = is_single_instance;
-  target_blk_ = VXL_NULLPTR;
+  target_blk_ = nullptr;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();
@@ -265,13 +265,13 @@ boxm2_vecf_orbit_scene
                          bool is_right ) :
   boxm2_vecf_articulated_scene(scene_file),
   is_right_(is_right),
-  alpha_data_(VXL_NULLPTR),
-  app_data_(VXL_NULLPTR),
-  nobs_data_(VXL_NULLPTR),
-  sphere_(VXL_NULLPTR),
-  iris_(VXL_NULLPTR),
-  pupil_(VXL_NULLPTR),
-  target_blk_(VXL_NULLPTR)
+  alpha_data_(nullptr),
+  app_data_(nullptr),
+  nobs_data_(nullptr),
+  sphere_(nullptr),
+  iris_(nullptr),
+  pupil_(nullptr),
+  target_blk_(nullptr)
 {
   std::ifstream params_file(params_file_name.c_str());
 

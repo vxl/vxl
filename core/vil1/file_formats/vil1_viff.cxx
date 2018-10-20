@@ -49,15 +49,15 @@ static inline void swap(void* p,int length)
 vil1_image_impl* vil1_viff_file_format::make_input_image(vil1_stream* is)
 {
   // Attempt to read header
-  if (!is) return VXL_NULLPTR;
+  if (!is) return nullptr;
   is->seek(0L);
   vil1_viff_xvimage header;
   if (VIFF_HEADERSIZE != is->read((void*)(&header),VIFF_HEADERSIZE))
-    return VXL_NULLPTR;
+    return nullptr;
 
   if (header.identifier != (char)XV_FILE_MAGIC_NUM ||
       header.file_type != (char)XV_FILE_TYPE_XVIFF)
-    return VXL_NULLPTR;
+    return nullptr;
 
   vxl_uint_32 dst = header.data_storage_type;
   if ((dst & 0xff) == 0)
@@ -76,7 +76,7 @@ vil1_image_impl* vil1_viff_file_format::make_input_image(vil1_stream* is)
     default:
       std::cout << "vil1_viff: non supported data type: VFF_TYP "
                << header.data_storage_type << std::endl;
-      return VXL_NULLPTR;
+      return nullptr;
   }
 }
 

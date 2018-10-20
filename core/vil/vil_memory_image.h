@@ -78,7 +78,7 @@ class vil_memory_image : public vil_image_resource
   virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
 
   //: Declare that this is an in-memory image which is not read-only
-  bool get_property(char const * tag, void * prop = VXL_NULLPTR) const
+  bool get_property(char const * tag, void * prop = nullptr) const
   {
     if (0==std::strcmp(tag, vil_property_memory))
       return prop ? (*static_cast<bool*>(prop)) = true : true;

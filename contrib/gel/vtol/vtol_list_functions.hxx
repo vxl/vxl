@@ -13,7 +13,7 @@
 template <class T>
 std::vector<T>* tagged_union(std::vector<T>* topolist)
 {
-  if (!topolist) return VXL_NULLPTR; // null pointer invalid
+  if (!topolist) return nullptr; // null pointer invalid
   std::vector<T> temp;
   typename std::vector<T>::iterator i;
 
@@ -38,7 +38,7 @@ std::vector<T>* tagged_union(std::vector<T>* topolist)
 template <class T>
 std::list<T>* tagged_union(std::list<T>* topolist)
 {
-  if (!topolist) return VXL_NULLPTR; // null pointer invalid
+  if (!topolist) return nullptr; // null pointer invalid
   std::list<T> temp;
   typename std::list<T>::iterator i;
 

@@ -72,7 +72,7 @@ class boxm2_vecf_fit_margins
   // respect to the margin points.
   // returns the average distance from the points to the margin curves
   // error conditions are reported on outstream
-  double fit(std::ostream* outstream=VXL_NULLPTR, bool verbose=false);
+  double fit(std::ostream* outstream=nullptr, bool verbose=false);
 
 // Data Access---------------------------------------------------------------
 

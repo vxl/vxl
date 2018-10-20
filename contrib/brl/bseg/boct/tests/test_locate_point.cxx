@@ -12,7 +12,7 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vecto
   double max_val = (double)(1<<root_level);
  boct_loc_code<short> code(p,root_level, max_val);
 
- boct_tree_cell<short,vgl_point_3d<double> >* point_container=VXL_NULLPTR;
+ boct_tree_cell<short,vgl_point_3d<double> >* point_container=nullptr;
 
  for (unsigned i=0; i<leafcells.size(); ++i)
  {

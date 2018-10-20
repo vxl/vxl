@@ -264,7 +264,7 @@ vtol_one_chain_sptr vtol_face::get_one_chain(int which)
   else
   {
     std::cerr << "Tried to get bad edge_loop from face\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 
@@ -348,7 +348,7 @@ void vtol_face::describe(std::ostream &strm,
   print();
   for (unsigned int i=0;i<inferiors()->size();++i)
   {
-    if ((inferiors_[i])->cast_to_one_chain()!=VXL_NULLPTR)
+    if ((inferiors_[i])->cast_to_one_chain()!=nullptr)
       (inferiors_[i])->cast_to_one_chain()->describe(strm,blanking);
     else
       std::cout << "*** Odd inferior for a face\n";

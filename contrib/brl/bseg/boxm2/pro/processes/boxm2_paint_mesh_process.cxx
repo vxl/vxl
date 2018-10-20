@@ -96,7 +96,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   input_mesh.print_summary(std::cout);
 
   //write outgoing mesh header
-  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply oply = ply_create(output_mesh_filename.c_str(), PLY_ASCII, nullptr, 0, nullptr);
 
   // HEADER SECTION
   // vertex

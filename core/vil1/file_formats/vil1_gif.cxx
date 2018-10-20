@@ -50,7 +50,7 @@ char const *vil1_gif_file_format::tag() const { return "gif"; }
 vil1_image_impl *vil1_gif_file_format::make_input_image(vil1_stream *s)
 {
   if (! vil1_gif_probe(s))
-    return VXL_NULLPTR;
+    return nullptr;
   else
     return new vil1_gif_loader_saver(s);
 }
@@ -58,7 +58,7 @@ vil1_image_impl *vil1_gif_file_format::make_input_image(vil1_stream *s)
 vil1_image_impl *vil1_gif_file_format::make_output_image(vil1_stream*, int, int, int, int, int, vil1_component_format)
 {
   std::cerr << "GIF writer not yet implemented\n";
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 bool vil1_gif_loader_saver::get_property(char const *tag, void *prop) const
@@ -231,7 +231,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream *s_)
 #if VERBOSE
       std::cerr << "no local colour map\n";
 #endif
-      ir->color_map = VXL_NULLPTR;
+      ir->color_map = nullptr;
     }
 #if VERBOSE
     std::cerr << "position is 0x" << std::hex << s->tell() << std::dec << std::endl;
@@ -290,7 +290,7 @@ vil1_gif_loader_saver::~vil1_gif_loader_saver()
 
   if (global_color_map) {
     delete global_color_map;
-    global_color_map = VXL_NULLPTR;
+    global_color_map = nullptr;
   }
 
   for (unsigned int i=0; i<images.size(); ++i) {
@@ -309,7 +309,7 @@ vil1_image vil1_gif_loader_saver::get_plane(unsigned int p) const
   if (p<images.size())
     return new vil1_gif_loader_saver_proxy(p, const_cast<vil1_gif_loader_saver*>(this));
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 bool vil1_gif_loader_saver::get_section(void *buf, int x0, int y0, int w, int h) const

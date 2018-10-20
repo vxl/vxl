@@ -21,7 +21,7 @@
 //=======================================================================
 
 msm_shape_instance::msm_shape_instance()
-  : model_(VXL_NULLPTR)
+  : model_(nullptr)
 {
 }
 

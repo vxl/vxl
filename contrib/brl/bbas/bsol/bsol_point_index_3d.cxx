@@ -33,7 +33,7 @@ bsol_point_index_3d::bsol_point_index_3d()
   nrows_ = 0;
   ncols_ = 0;
   nslabs_ = 0;
-  b_box_ = (vsol_box_3d*)VXL_NULLPTR;
+  b_box_ = (vsol_box_3d*)nullptr;
 }
 
 bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,

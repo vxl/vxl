@@ -56,12 +56,12 @@ class vil_image_view : public vil_image_view_base
   vil_memory_chunk_sptr ptr_;
 
   //: Disconnect this view from the underlying data,
-  void release_memory() { ptr_ = VXL_NULLPTR; }
+  void release_memory() { ptr_ = nullptr; }
 
  public:
   //: Dflt ctor
   //  Creates an empty one-plane image.
-  vil_image_view(): top_left_(VXL_NULLPTR),istep_(0),jstep_(0),planestep_(0) {}
+  vil_image_view(): top_left_(nullptr),istep_(0),jstep_(0),planestep_(0) {}
 
   //: Create an image of ni x nj pixels in (n_planes * n_interleaved_planes) planes
   //  If n_interleaved_planes > 1, the planes are interleaved.
@@ -154,11 +154,11 @@ class vil_image_view : public vil_image_view_base
 
   //: Cast to bool is true if pointing at some data.
   operator safe_bool() const
-  { return (top_left_ != VXL_NULLPTR)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+  { return (top_left_ != nullptr)? VCL_SAFE_BOOL_TRUE : nullptr; }
 
   //: Return false if pointing at some data.
   bool operator!() const
-  { return (top_left_ != VXL_NULLPTR)? false : true; }
+  { return (top_left_ != nullptr)? false : true; }
 
   //: The number of bytes in the data
   inline unsigned size_bytes() const { return size() * sizeof(T); }
@@ -223,7 +223,7 @@ class vil_image_view : public vil_image_view_base
 
   //: Make empty.
   // Disconnects view from underlying data.
-  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=VXL_NULLPTR; istep_=jstep_=planestep_=0; }
+  inline void clear() { release_memory(); ni_=nj_=nplanes_=0; top_left_=nullptr; istep_=jstep_=planestep_=0; }
 
   //: Set this view to look at someone else's memory data.
   //  If the data goes out of scope then this view could be invalid, and

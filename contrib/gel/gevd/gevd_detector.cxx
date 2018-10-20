@@ -22,10 +22,10 @@
 //
 gevd_detector::gevd_detector(gevd_detector_params& params)
   : gevd_detector_params(params),
-    edgel(VXL_NULLPTR), direction(VXL_NULLPTR),
-    locationx(VXL_NULLPTR), locationy(VXL_NULLPTR), grad_mag(VXL_NULLPTR),
-    angle(VXL_NULLPTR), junctionx(VXL_NULLPTR), junctiony(VXL_NULLPTR), njunction(0),
-    vertices(VXL_NULLPTR), edges(VXL_NULLPTR),
+    edgel(nullptr), direction(nullptr),
+    locationx(nullptr), locationy(nullptr), grad_mag(nullptr),
+    angle(nullptr), junctionx(nullptr), junctiony(nullptr), njunction(0),
+    vertices(nullptr), edges(nullptr),
     filterFactor(2), hysteresisFactor(2.0), noiseThreshold(0.0)
 {
   if (params.automatic_threshold)
@@ -33,16 +33,16 @@ gevd_detector::gevd_detector(gevd_detector_params& params)
   else
     noise = params.noise_multiplier;
 
-  image_float_buf_ = VXL_NULLPTR;
+  image_float_buf_ = nullptr;
 }
 
 gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
-  : image(img), noise(noiseSigma), edgel(VXL_NULLPTR), direction(VXL_NULLPTR),
-    locationx(VXL_NULLPTR), locationy(VXL_NULLPTR), grad_mag(VXL_NULLPTR),
-    angle(VXL_NULLPTR), junctionx(VXL_NULLPTR), junctiony(VXL_NULLPTR), njunction(0),
-    vertices(VXL_NULLPTR), edges(VXL_NULLPTR),
+  : image(img), noise(noiseSigma), edgel(nullptr), direction(nullptr),
+    locationx(nullptr), locationy(nullptr), grad_mag(nullptr),
+    angle(nullptr), junctionx(nullptr), junctiony(nullptr), njunction(0),
+    vertices(nullptr), edges(nullptr),
     filterFactor(2), hysteresisFactor(2.0f), noiseThreshold(0.0f)
 {
   gevd_detector_params::smooth = smoothSigma;
@@ -51,7 +51,7 @@ gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma
   gevd_detector_params::minLength = min_length;
   gevd_detector_params::maxGap = maxgap;
   gevd_detector_params::minJump = min_jump;
-  image_float_buf_ = VXL_NULLPTR;
+  image_float_buf_ = nullptr;
 }
 
 //--------------------------------------------------------------------------
@@ -205,13 +205,13 @@ bool gevd_detector::DoStep()
   }
   else {
     njunction = 0;
-    delete [] junctionx; junctionx = VXL_NULLPTR;
-    delete [] junctiony; junctiony = VXL_NULLPTR;
+    delete [] junctionx; junctionx = nullptr;
+    delete [] junctiony; junctiony = nullptr;
   }
 
   this->noiseThreshold = step.NoiseThreshold();
 
-  return edgel!=VXL_NULLPTR;
+  return edgel!=nullptr;
 }
 
 #if 0 // commented out
@@ -264,7 +264,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   if (!image)
   {
     std::cout << "No image\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   //  RectROI* roi = image->GetROI(); // find user-selected region of interest
@@ -298,7 +298,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
   if (! gevd_float_operators::BufferToFloat(image_buf, *image_float_buf_))
   {
     delete image_float_buf_;
-    image_float_buf_ = VXL_NULLPTR;
+    image_float_buf_ = nullptr;
   }
 
   return image_float_buf_;
@@ -310,7 +310,7 @@ void gevd_detector::SetImage(vil1_image img)
   image = img;
   if (image_float_buf_) {
     delete image_float_buf_;
-    image_float_buf_ = VXL_NULLPTR;
+    image_float_buf_ = nullptr;
   }
   if (edgel) delete edgel;
   if (vertices) delete vertices;

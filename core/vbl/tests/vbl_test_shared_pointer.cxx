@@ -40,7 +40,7 @@ static void test_class()
   typedef vbl_shared_pointer<some_class> sp;
 
   sp a(new some_class);
-  sp b((some_class*)VXL_NULLPTR);
+  sp b((some_class*)nullptr);
 
   void* olda = (void*)a.as_pointer();
   void* oldb = (void*)b.as_pointer();

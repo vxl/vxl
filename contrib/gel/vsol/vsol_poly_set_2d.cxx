@@ -41,7 +41,7 @@ vsol_poly_set_2d::vsol_poly_set_2d(const vsol_poly_set_2d &other)
 vsol_poly_set_2d::~vsol_poly_set_2d()
 {
   for (unsigned i = 0; i < storage_->size(); i++)
-   (*storage_)[i] = VXL_NULLPTR;
+   (*storage_)[i] = nullptr;
   delete storage_;
 }
 
@@ -295,7 +295,7 @@ vsol_poly_set_2d::vsol_poly_set_2d(void)
 void
 vsl_b_write(vsl_b_ostream &os, const vsol_poly_set_2d* p)
 {
-  if (p==VXL_NULLPTR) {
+  if (p==nullptr) {
     vsl_b_write(os, false); // Indicate null pointer stored
   }
   else{
@@ -317,7 +317,7 @@ vsl_b_read(vsl_b_istream &is, vsol_poly_set_2d* &p)
     p->b_read(is);
   }
   else
-    p = VXL_NULLPTR;
+    p = nullptr;
 }
 
 

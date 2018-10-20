@@ -44,7 +44,7 @@ bool compute_ground(vil_image_resource_sptr ground,
                     vil_image_view_base_sptr last_roi,
                     vil_image_view_base_sptr& ground_roi)
 {
-  if (ground == VXL_NULLPTR)
+  if (ground == nullptr)
   {
     if ((first_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) &&
         (last_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)) {
@@ -99,7 +99,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
   vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
   vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
-  if (vpgl_geo_camera::init_geo_camera(tiff_first, VXL_NULLPTR, camera))
+  if (vpgl_geo_camera::init_geo_camera(tiff_first, nullptr, camera))
   {
     vgl_box_2d<double> roi_box;
 
@@ -146,7 +146,7 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
                                         (unsigned int)bb->height());
 
     // if no ground input, create an estimated one
-    if (ground == VXL_NULLPTR) {
+    if (ground == nullptr) {
       compute_ground(ground, first_roi, last_roi, ground_roi);
     }
     else {   // crop the given one
@@ -221,13 +221,13 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
   }
 
   // Ground image path can be invalid or empty, in that case an estimated ground will be computed
-  vil_image_resource_sptr ground_img =VXL_NULLPTR;
+  vil_image_resource_sptr ground_img =nullptr;
   if (ground.size() > 0) {
     ground_img = vil_load_image_resource(ground.c_str());
   }
 
-  vil_image_view_base_sptr first_roi=VXL_NULLPTR, last_roi=VXL_NULLPTR, ground_roi;
-  vpgl_geo_camera* lidar_cam =VXL_NULLPTR;
+  vil_image_view_base_sptr first_roi=nullptr, last_roi=nullptr, ground_roi;
+  vpgl_geo_camera* lidar_cam =nullptr;
   if (!lidar_roi(type, first_ret, last_ret, ground_img,
     min_lat, min_lon, max_lat, max_lon, first_roi, last_roi, ground_roi, lidar_cam)) {
     std::cout << "bmdl_lidar_roi_process -- The process has failed!\n";

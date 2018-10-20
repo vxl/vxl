@@ -23,7 +23,7 @@ static unsigned long vnl_sample_seed = 12345;
 void vnl_sample_reseed()
 {
 #if VXL_STDLIB_HAS_SRAND48
-  srand48( std::time(VXL_NULLPTR) );
+  srand48( std::time(nullptr) );
 #elif !VXL_STDLIB_HAS_DRAND48
   vnl_sample_seed = (unsigned long)std::time(0);
 #endif
@@ -65,7 +65,7 @@ void vnl_sample_normal_2(double *x, double *y)
 double vnl_sample_normal(double mean, double sigma)
 {
   double x;
-  vnl_sample_normal_2(&x, VXL_NULLPTR);
+  vnl_sample_normal_2(&x, nullptr);
   return mean + sigma * x;
 }
 

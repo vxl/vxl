@@ -266,8 +266,8 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
    std::cout << "null spatial object on  " << obj_name << '\n';
     return false;
   }
-  vsol_region_3d* reg_ptr = VXL_NULLPTR;
-  vsol_volume_3d* vol_ptr = VXL_NULLPTR;
+  vsol_region_3d* reg_ptr = nullptr;
+  vsol_volume_3d* vol_ptr = nullptr;
   if( ( reg_ptr = so_ptr->cast_to_region() ) )
     {
       vsol_polygon_3d* poly_3d = reg_ptr->cast_to_polygon();

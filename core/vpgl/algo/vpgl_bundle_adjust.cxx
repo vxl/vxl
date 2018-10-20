@@ -18,7 +18,7 @@
 
 
 vpgl_bundle_adjust::vpgl_bundle_adjust()
-  : ba_func_(VXL_NULLPTR),
+  : ba_func_(nullptr),
     use_m_estimator_(false),
     m_estimator_scale_(1.0),
     use_gradient_(true),

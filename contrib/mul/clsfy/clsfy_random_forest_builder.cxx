@@ -27,7 +27,7 @@
 clsfy_random_forest_builder::clsfy_random_forest_builder()
   : ntrees_(100),
     max_depth_(-1), min_node_size_(-1),
-    poob_indices_(VXL_NULLPTR),
+    poob_indices_(nullptr),
     calc_test_error_(true)
 {
     unsigned long default_seed=123654987;
@@ -39,7 +39,7 @@ clsfy_random_forest_builder::clsfy_random_forest_builder(unsigned ntrees,
                                                          int min_node_size)
   : ntrees_(ntrees),
     max_depth_(max_depth), min_node_size_(min_node_size),
-    poob_indices_(VXL_NULLPTR),
+    poob_indices_(nullptr),
     calc_test_error_(true)
 {
     unsigned long default_seed=123654987;

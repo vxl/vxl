@@ -49,7 +49,7 @@ int RD_ReadInt1(const char* q_str, int default_int,
       std::cout<<q_str<<" ["<<min_int<<".."<<max_int<<"] ("<<default_int<<") :";
     std::cout.flush();
 
-    if (std::fgets(reply,MAX_LEN,stdin)!=VXL_NULLPTR)
+    if (std::fgets(reply,MAX_LEN,stdin)!=nullptr)
     {
       int r = default_int;
       if (reply[0]=='\n' || std::sscanf(reply,"%d",&r)>0)

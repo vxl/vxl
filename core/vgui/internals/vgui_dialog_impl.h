@@ -174,7 +174,7 @@ class vgui_dialog_impl
     // The derived GUI implementation should not delete these.
     vgui_dialog_field *field;
 
-    element() : type(unknown), widget(VXL_NULLPTR), field(VXL_NULLPTR) {}
+    element() : type(unknown), widget(nullptr), field(nullptr) {}
   };
 
  protected:

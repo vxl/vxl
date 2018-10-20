@@ -70,7 +70,7 @@ bool boxm_update_process(bprb_func_process& pro)
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
-  if ((input_image == VXL_NULLPTR) || (camera == VXL_NULLPTR) || (scene == VXL_NULLPTR)) {
+  if ((input_image == nullptr) || (camera == nullptr) || (scene == nullptr)) {
     std::cout << "boxm_update_process: null input value, cannot run" << std::endl;
     return false;
   }

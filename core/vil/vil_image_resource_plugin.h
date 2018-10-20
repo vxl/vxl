@@ -41,9 +41,9 @@ class vil_image_resource_plugin : public vil_image_resource
   virtual unsigned nj() const { return 0; }
   virtual unsigned nplanes() const { return 0; }
 
-  virtual bool get_property(char const * /*tag*/, void * /*property_value*/=VXL_NULLPTR) const { return false; }
+  virtual bool get_property(char const * /*tag*/, void * /*property_value*/=nullptr) const { return false; }
   virtual vil_image_view_base_sptr get_copy_view(unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
-  { return vil_image_view_base_sptr(VXL_NULLPTR); }
+  { return vil_image_view_base_sptr(nullptr); }
 
   virtual bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
 

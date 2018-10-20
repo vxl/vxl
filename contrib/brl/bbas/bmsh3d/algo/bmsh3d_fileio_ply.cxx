@@ -51,7 +51,7 @@ bool bmsh3d_load_ply (bmsh3d_mesh* M, const char* file)
   parsed_mesh.mesh = M;
 
   // OPEN file
-  p_ply ply = ply_open(file, VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply ply = ply_open(file, nullptr, 0, nullptr);
   if (!ply)
     return false;
 
@@ -93,7 +93,7 @@ bool bmsh3d_load_ply_v (bmsh3d_mesh* M, const char* file)
   parsed_mesh.mesh = M;
 
   // OPEN file
-  p_ply ply = ply_open(file, VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply ply = ply_open(file, nullptr, 0, nullptr);
   if (!ply)
     return false;
 
@@ -196,12 +196,12 @@ int bmsh3d_fileio_vertex_cb_(p_ply_argument argument)
 int bmsh3d_fileio_face_cb_(p_ply_argument argument)
 {
   void* temp;
-  ply_get_argument_user_data(argument, &temp, VXL_NULLPTR);
+  ply_get_argument_user_data(argument, &temp, nullptr);
   bmsh3d_fileio_parsed_mesh_* parsed_mesh =
     (bmsh3d_fileio_parsed_mesh_*) temp;
 
   long length, value_index, value;
-  ply_get_argument_property(argument, VXL_NULLPTR, &length, &value_index);
+  ply_get_argument_property(argument, nullptr, &length, &value_index);
   value = (int) ply_get_argument_value(argument);
 
   if (value_index == -1)
@@ -243,7 +243,7 @@ bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, std::st
   e_ply_storage_mode storage_mode = (ascii_mode) ? PLY_ASCII : PLY_LITTLE_ENDIAN;
 
   // OPEN FILE
-  p_ply oply = ply_create(file, storage_mode, VXL_NULLPTR, 0, VXL_NULLPTR);
+  p_ply oply = ply_create(file, storage_mode, nullptr, 0, nullptr);
 
   std::cerr << "  saving " << file << " :\n\t"
            << M->vertexmap().size() << " points, "

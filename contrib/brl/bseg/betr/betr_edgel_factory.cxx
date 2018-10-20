@@ -294,7 +294,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
   brip_roi_sptr roi = rois_[iname];
   if(!roi){
     std::cout << "roi for " << iname << " not found in map \n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   unsigned region_id = regions_[iname][region_name];
   unsigned ni = roi->csize(region_id);
@@ -306,13 +306,13 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
   vsol_polygon_2d_sptr poly = polys_[iname][region_id];
   if(!poly){
     std::cout << "Null polygon in edgel_image for " << iname << ':' << region_name << "\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly);
   std::vector< vdgl_digital_curve_sptr > edges = edgels_[iname][region_name];
   if(edges.size() == 0){
     std::cout << "No edgels for " << iname << ':' << region_name << "\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   double grad_scale = 255.0/params_.gradient_range_;
   for(std::vector< vdgl_digital_curve_sptr >::iterator vit = edges.begin();
@@ -320,7 +320,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
     vdgl_edgel_chain_sptr echain = (*vit)->get_interpolator()->get_edgel_chain();
     if(!echain){
       std::cout << "Null edgel chain " << iname << ':' << region_name << "\n";
-      return VXL_NULLPTR;
+      return nullptr;
     }
     unsigned n = echain->size();
     unsigned bdr = 3;

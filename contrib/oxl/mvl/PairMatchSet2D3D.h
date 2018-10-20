@@ -35,7 +35,7 @@ class PairMatchSet2D3D : public PairMatchSet
   // Data Access---------------------------------------------------------------
 
   // Data Control--------------------------------------------------------------
-  bool is_set() const { return (corners_ != VXL_NULLPTR) && (structure_ != VXL_NULLPTR); }
+  bool is_set() const { return (corners_ != nullptr) && (structure_ != nullptr); }
   void set(const HomgInterestPointSet* corners, std::vector<HomgPoint3D>* structure);
   void set(int corners_size, std::vector<HomgPoint3D>* structure);
 

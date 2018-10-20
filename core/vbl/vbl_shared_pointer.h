@@ -39,7 +39,7 @@ class vbl_shared_pointer
 
   typedef vbl_shared_pointer_data data_t;
 
-  vbl_shared_pointer() : pointer(VXL_NULLPTR), count_data(VXL_NULLPTR) { }
+  vbl_shared_pointer() : pointer(nullptr), count_data(nullptr) { }
 
   explicit
   vbl_shared_pointer(T *p) {
@@ -47,8 +47,8 @@ class vbl_shared_pointer
       pointer = p;
       count_data = new data_t(1);
     } else {
-      pointer = VXL_NULLPTR;
-      count_data = VXL_NULLPTR;
+      pointer = nullptr;
+      count_data = nullptr;
     }
   }
 

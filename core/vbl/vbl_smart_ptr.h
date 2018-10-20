@@ -62,7 +62,7 @@ class vbl_smart_ptr
   VCL_SAFE_BOOL_DEFINE;
  public:
   vbl_smart_ptr ()
-    : protected_(true), ptr_(VXL_NULLPTR) { }
+    : protected_(true), ptr_(nullptr) { }
 
   template<class Y>
   vbl_smart_ptr (vbl_smart_ptr<Y> const &p)
@@ -81,12 +81,12 @@ class vbl_smart_ptr
     if (protected_)
     {
       T *old_ptr = ptr_;
-      ptr_ = VXL_NULLPTR;
+      ptr_ = nullptr;
       if (old_ptr)
         unref(old_ptr);
     }
     else
-      ptr_ = VXL_NULLPTR;
+      ptr_ = nullptr;
   }
 
   //: Assignment
@@ -118,7 +118,7 @@ class vbl_smart_ptr
   }
 
   //: Cast to bool
-   operator safe_bool () const { return ptr_? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+   operator safe_bool () const { return ptr_? VCL_SAFE_BOOL_TRUE : nullptr; }
 
   //: Inverse boolean value
   bool operator!() const { return ptr_? false : true; }

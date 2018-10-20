@@ -12,7 +12,7 @@ vil_block_cache::~vil_block_cache()
   for(std::vector<bcell*>::iterator bit = blocks_.begin();
       bit != blocks_.end(); ++bit){
     delete *bit;
-    *bit = VXL_NULLPTR;
+    *bit = nullptr;
   }
   blocks_.clear();//empty the index
 }

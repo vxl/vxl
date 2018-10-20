@@ -631,7 +631,7 @@ void test_matrix()
 #ifdef LEAK
   test_leak();
 #endif
-  test_extract( (double*)VXL_NULLPTR );
+  test_extract( (double*)nullptr );
 }
 
 TESTMAIN(test_matrix);

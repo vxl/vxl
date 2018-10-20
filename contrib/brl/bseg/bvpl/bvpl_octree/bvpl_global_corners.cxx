@@ -389,7 +389,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_corner_scene(int scene_id)
   if (scene_id<0 || scene_id>((int)aux_dirs_.size() -1))
   {
     std::cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr scene_base = new boxm_scene_base();
@@ -406,7 +406,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_corner_scene(int scene_id)
   }
   else {
     std::cerr << "Error in bvpl_global_corners::load_corner_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return scene_base;
@@ -418,7 +418,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_valid_scene (int scene_id)
   if (scene_id<0 || scene_id>((int)aux_dirs_.size() -1))
   {
     std::cerr << "Error in bvpl_global_corners::load_scene: Invalid scene id\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
   //load scene
   boxm_scene_base_sptr aux_scene_base = new boxm_scene_base();
@@ -435,7 +435,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_valid_scene (int scene_id)
   }
   else {
     std::cerr << "Error in bvpl_global_corners::load_aux_scene: Invalid appearance model\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return aux_scene_base;

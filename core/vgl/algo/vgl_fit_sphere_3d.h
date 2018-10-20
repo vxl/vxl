@@ -79,17 +79,17 @@ class vgl_fit_sphere_3d
   // returns the average distance from the points to the sphere
   // used as an initial condition for Levenberg Marquardt
   // error conditions are reported on outstream
-  T fit_linear(std::ostream* outstream=VXL_NULLPTR);
+  T fit_linear(std::ostream* outstream=nullptr);
 
   //:fits a sphere to the stored points using a linear method
-  bool fit_linear(const T error_marg, std::ostream* outstream=VXL_NULLPTR);
+  bool fit_linear(const T error_marg, std::ostream* outstream=nullptr);
 
   //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
   // returns the average distance from the points to the sphere
-  T fit(std::ostream* outstream=VXL_NULLPTR, bool verbose = false);
+  T fit(std::ostream* outstream=nullptr, bool verbose = false);
 
   //:fits a sphere nonlinearly to the stored points using Levenberg Marquardt
-  bool fit(const T error_marg, std::ostream* outstream=VXL_NULLPTR, bool verbose = false);
+  bool fit(const T error_marg, std::ostream* outstream=nullptr, bool verbose = false);
 
 // Data Access---------------------------------------------------------------
 

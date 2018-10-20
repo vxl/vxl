@@ -45,7 +45,7 @@ static void test_m_est_obj()
     m_est->rho( res[0] / sigma ) + m_est->rho( res[1] / sigma ) +
     m_est->rho( res[2] / sigma ) + m_est->rho( res[3] / sigma ) +
     m_est->rho( res[4] / sigma ) + m_est->rho( res[5] / sigma );
-  double obj = m_est->fcn( res.begin(), res.end(), sigma, VXL_NULLPTR );
+  double obj = m_est->fcn( res.begin(), res.end(), sigma, nullptr );
   TEST_NEAR("Objective function", obj, hand_obj, 1e-6);
 
   std::vector<double> weights(num_res);

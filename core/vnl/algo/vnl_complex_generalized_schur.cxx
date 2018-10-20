@@ -30,10 +30,10 @@ bool vnl_generalized_schur(vnl_matrix<std::complex<double> > *A,
   assert(B->rows() == B->cols());
 
   long n = A->rows();
-  assert(alpha!=VXL_NULLPTR); alpha->set_size(n);    alpha->fill(0);
-  assert(beta!=VXL_NULLPTR);  beta ->set_size(n);    beta ->fill(0);
-  assert(L!=VXL_NULLPTR);     L    ->set_size(n, n); L    ->fill(0);
-  assert(R!=VXL_NULLPTR);     R    ->set_size(n, n); R    ->fill(0);
+  assert(alpha!=nullptr); alpha->set_size(n);    alpha->fill(0);
+  assert(beta!=nullptr);  beta ->set_size(n);    beta ->fill(0);
+  assert(L!=nullptr);     L    ->set_size(n, n); L    ->fill(0);
+  assert(R!=nullptr);     R    ->set_size(n, n); R    ->fill(0);
 
   long sdim = 0;
   long lwork = 1000 + (8*n + 16);
@@ -45,7 +45,7 @@ bool vnl_generalized_schur(vnl_matrix<std::complex<double> > *A,
   B->inplace_transpose();
   v3p_netlib_zgges_ ("V", "V",
                      "N",
-                     VXL_NULLPTR,
+                     nullptr,
                      &n,
                      A->data_block(), &n,
                      B->data_block(), &n,

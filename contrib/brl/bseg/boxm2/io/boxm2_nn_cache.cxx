@@ -187,7 +187,7 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, std::string ty
 boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
 {
   std::cout<<"BOXM2_DUMB_CACHE::get_data_base_new not implemented"<<std::endl;
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 void boxm2_nn_cache::remove_data_base(boxm2_block_id, std::string type)

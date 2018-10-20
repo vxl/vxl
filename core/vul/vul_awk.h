@@ -76,7 +76,7 @@ class vul_awk
     if (i < fields_.size())
       return fields_[i];
     else
-      return VXL_NULLPTR;
+      return nullptr;
   }
 
 //: Return the current "record number", i.e. line number
@@ -94,7 +94,7 @@ class vul_awk
 
 //: Return true if this line is not the last.
   operator safe_bool () const
-    { return (!done_)? VCL_SAFE_BOOL_TRUE : VXL_NULLPTR; }
+    { return (!done_)? VCL_SAFE_BOOL_TRUE : nullptr; }
 
 //: Return false if this line is not the last.
   bool operator!() const

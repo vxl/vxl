@@ -22,7 +22,7 @@
 clsfy_binary_tree::clsfy_binary_tree(const clsfy_binary_tree& srcTree)
 : clsfy_classifier_base(srcTree)
 {
-    root_=cache_node_=VXL_NULLPTR;
+    root_=cache_node_=nullptr;
     copy(srcTree);
 }
 
@@ -41,12 +41,12 @@ void clsfy_binary_tree::copy(const clsfy_binary_tree& srcTree)
     //Then copy into the classifier
     if (srcTree.root_)
     {
-        root_ = new clsfy_binary_tree_node(VXL_NULLPTR,srcTree.root_->op_);
+        root_ = new clsfy_binary_tree_node(nullptr,srcTree.root_->op_);
         root_->prob_ = srcTree.root_->prob_;
         copy_children(srcTree.root_,root_);
     }
     else
-        root_=VXL_NULLPTR;
+        root_=nullptr;
     cache_node_ = root_;
 }
 
@@ -81,7 +81,7 @@ unsigned clsfy_binary_tree::classify(const vnl_vector<double> &input) const
                 <<"Return default classification zero\n";
         return 0;
     }
-    clsfy_binary_tree_node* pChild=VXL_NULLPTR;
+    clsfy_binary_tree_node* pChild=nullptr;
     do //Keep dropping down the tree till reach base level
     {
         pNode->op_.set_data(input);
@@ -259,7 +259,7 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
     if (!bfs) return;
 
     remove_tree(root_);
-    root_=VXL_NULLPTR;
+    root_=nullptr;
 
     short version;
     vsl_b_read(bfs,version);
@@ -270,7 +270,7 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
             std::map<int,clsfy_binary_tree_node*> workmap;
             std::vector<graph_rep> arcs;
 
-            clsfy_binary_tree_node* pNull=VXL_NULLPTR;
+            clsfy_binary_tree_node* pNull=nullptr;
             unsigned N;
             vsl_b_read(bfs,N);
             for (unsigned i=0;i<N;++i)
@@ -301,8 +301,8 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
                 if (link.me!= -1)
                 {
                     clsfy_binary_tree_node* parent=workmap[link.me];
-                    clsfy_binary_tree_node* left_child=VXL_NULLPTR;
-                    clsfy_binary_tree_node* right_child=VXL_NULLPTR;
+                    clsfy_binary_tree_node* left_child=nullptr;
+                    clsfy_binary_tree_node* right_child=nullptr;
                     if (link.left_child != -1)
                         left_child=workmap[link.left_child];
                     if (link.right_child != -1)
@@ -378,7 +378,7 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
 clsfy_binary_tree::~clsfy_binary_tree()
 {
     remove_tree(root_);
-    root_=VXL_NULLPTR;
+    root_=nullptr;
 }
 
 void  clsfy_binary_tree::remove_tree(clsfy_binary_tree_node* root)

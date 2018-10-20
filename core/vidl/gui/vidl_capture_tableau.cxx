@@ -25,7 +25,7 @@ std::string vidl_capture_tableau::type_name() const
 // Default constructor
 vidl_capture_tableau::vidl_capture_tableau( vgui_tableau_sptr const& child_tableau)
   : vgui_wrapper_tableau(child_tableau),
-    ostream_(VXL_NULLPTR)
+    ostream_(nullptr)
 {
 }
 
@@ -67,7 +67,7 @@ void vidl_capture_tableau::close_ostream()
   if (ostream_)
   {
     ostream_->close();
-    ostream_ = VXL_NULLPTR;
+    ostream_ = nullptr;
   }
 }
 

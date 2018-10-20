@@ -32,21 +32,21 @@ public:
   std::list<sdet_hyp_tree_node*> children;
 
   //: constructors
-  sdet_hyp_tree_node(int id=-1, bool newdir=true): tree_id(id), dir(newdir), cvlet(VXL_NULLPTR), parent(VXL_NULLPTR){}
-  sdet_hyp_tree_node(sdet_curvelet* cvlet_, int id=-1, bool newdir=true): tree_id(id), dir(newdir), cvlet(cvlet_), parent(VXL_NULLPTR){}
+  sdet_hyp_tree_node(int id=-1, bool newdir=true): tree_id(id), dir(newdir), cvlet(nullptr), parent(nullptr){}
+  sdet_hyp_tree_node(sdet_curvelet* cvlet_, int id=-1, bool newdir=true): tree_id(id), dir(newdir), cvlet(cvlet_), parent(nullptr){}
 
   //: destructor
   ~sdet_hyp_tree_node()
   {
     //cvlets are cloned from the CM to assign to the HTs so delete them
     delete cvlet;
-    cvlet = VXL_NULLPTR;
+    cvlet = nullptr;
 
     //first remove this node from the parent's list (if it has a parent)
     if (parent)
       parent->children.remove(this);
 
-    parent = VXL_NULLPTR; //remove pointer to the parent
+    parent = nullptr; //remove pointer to the parent
 
     //delete all children
     while (children.size()>0)
@@ -79,11 +79,11 @@ public:
   double least_cost;
 
   //: default constructor
-  sdet_hyp_tree(int id=-1): tree_id(id), root(VXL_NULLPTR), resolved(false), best_path(VXL_NULLPTR), least_cost(1000)  {}
+  sdet_hyp_tree(int id=-1): tree_id(id), root(nullptr), resolved(false), best_path(nullptr), least_cost(1000)  {}
 
   //: constructor given a root node
   sdet_hyp_tree(sdet_hyp_tree_node* new_root, int id=-1) :
-    tree_id(id), root(new_root), resolved(false), best_path(VXL_NULLPTR), least_cost(1000) {}
+    tree_id(id), root(new_root), resolved(false), best_path(nullptr), least_cost(1000) {}
 
   //: destructor
   ~sdet_hyp_tree(){ delete_tree(); }
@@ -113,9 +113,9 @@ public:
       void operator++(int) //post increment operator
       {
         //if the current node has no parents, it must be the root node, go oto its first child
-        if (ptr_->parent==VXL_NULLPTR){
+        if (ptr_->parent==nullptr){
           if (ptr_->children.size()==0){ //only one element in the tree
-            ptr_ = VXL_NULLPTR; //set the pointer
+            ptr_ = nullptr; //set the pointer
             cur_path_.clear();
             return;
           }
@@ -138,8 +138,8 @@ public:
             cur = parent;
             parent = cur->parent;
 
-            if (parent==VXL_NULLPTR){ //we have reached the root node again so terminate
-              ptr_ = VXL_NULLPTR;
+            if (parent==nullptr){ //we have reached the root node again so terminate
+              ptr_ = nullptr;
               cur_path_.clear();
               return;
             }
@@ -178,13 +178,13 @@ public:
   iterator begin() { return iterator(root); }
 
   //: Return an iterator to a null pointer (only at the very last leaf node)
-  iterator end() { return iterator(VXL_NULLPTR); }
+  iterator end() { return iterator(nullptr); }
 
   //we could also use a path_iterator where the iterator steps through the independent paths instead of nodes
 
   //also a reverse iterator that traverses from a given node the the root, while compiling the curvelet list would be useful
 
-  void delete_tree(){ if (root) delete root; root = VXL_NULLPTR; resolved=false;  best_path=VXL_NULLPTR; least_cost=1000; }
+  void delete_tree(){ if (root) delete root; root = nullptr; resolved=false;  best_path=nullptr; least_cost=1000; }
 
   void delete_subtree(iterator& it)
   {
@@ -331,7 +331,7 @@ public:
   double cost;
   std::vector<sdet_curvelet*> cvlets;
 
-  sdet_HTG_link_path(sdet_hyp_tree* sHT=VXL_NULLPTR, sdet_hyp_tree* tHT=VXL_NULLPTR): src(sHT), tgt(tHT), cost(0.0), cvlets(0) {}
+  sdet_HTG_link_path(sdet_hyp_tree* sHT=nullptr, sdet_hyp_tree* tHT=nullptr): src(sHT), tgt(tHT), cost(0.0), cvlets(0) {}
 
 };
 

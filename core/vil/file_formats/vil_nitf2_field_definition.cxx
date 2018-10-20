@@ -13,13 +13,13 @@
 vil_nitf2_field_definition*
 vil_nitf2_field_definition_node::field_definition()
 {
-  return is_field_definition() ? (vil_nitf2_field_definition*)this : VXL_NULLPTR;
+  return is_field_definition() ? (vil_nitf2_field_definition*)this : nullptr;
 }
 
 vil_nitf2_field_definition_repeat_node*
 vil_nitf2_field_definition_node::repeat_node()
 {
-  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : VXL_NULLPTR;
+  return is_repeat_node() ? (vil_nitf2_field_definition_repeat_node*)this : nullptr;
 }
 
 //==============================================================================
@@ -45,7 +45,7 @@ vil_nitf2_field_definition(std::string tag,
     description(description)
 {
   assert(!tag.empty() && "vil_nitf2_field_definition:: null tag");
-  assert(formatter != VXL_NULLPTR && "vil_nitf2_field_definition:: null formatter");
+  assert(formatter != nullptr && "vil_nitf2_field_definition:: null formatter");
 }
 
 vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
@@ -55,20 +55,20 @@ vil_nitf2_field_definition_node* vil_nitf2_field_definition::copy() const
     pretty_name,
     formatter->copy(),
     blanks_ok,
-    width_functor ? width_functor->copy() : VXL_NULLPTR,
-    condition_functor ? condition_functor->copy() : VXL_NULLPTR,
+    width_functor ? width_functor->copy() : nullptr,
+    condition_functor ? condition_functor->copy() : nullptr,
     units,
     description);
 }
 
 bool vil_nitf2_field_definition::is_required() const
 {
-  return condition_functor == VXL_NULLPTR;
+  return condition_functor == nullptr;
 }
 
 bool vil_nitf2_field_definition::is_variable_width() const
 {
-  return width_functor != VXL_NULLPTR;
+  return width_functor != nullptr;
 }
 
 vil_nitf2_field_definition::~vil_nitf2_field_definition()

@@ -27,7 +27,7 @@ class clsfy_binary_tree_op
 
  public:
 
-  clsfy_binary_tree_op() : data_index_(-1), data_ptr_(VXL_NULLPTR) {}
+  clsfy_binary_tree_op() : data_index_(-1), data_ptr_(nullptr) {}
   clsfy_binary_tree_op(const vnl_vector<double>* data_ptr,
                        int data_index=-1)
     : data_index_(data_index), data_ptr_(data_ptr) {}
@@ -71,7 +71,7 @@ class clsfy_binary_tree_node
 
   clsfy_binary_tree_node(clsfy_binary_tree_node* parent,
                          const clsfy_binary_tree_op& op)
-  : nodeId_(-1),parent_(parent),left_child_(VXL_NULLPTR),right_child_(VXL_NULLPTR),op_(op),prob_(0.5) {}
+  : nodeId_(-1),parent_(parent),left_child_(nullptr),right_child_(nullptr),op_(op),prob_(0.5) {}
 
   virtual clsfy_binary_tree_node* create_child(const clsfy_binary_tree_op& op);
   void add_child(const clsfy_binary_tree_op& op,bool bLeft)
@@ -110,7 +110,7 @@ class clsfy_binary_tree : public clsfy_classifier_base
   };
 
   //: Constructor
-  clsfy_binary_tree(): root_(VXL_NULLPTR),cache_node_(VXL_NULLPTR) {}
+  clsfy_binary_tree(): root_(nullptr),cache_node_(nullptr) {}
 
   virtual ~clsfy_binary_tree();
 

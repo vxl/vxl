@@ -65,7 +65,7 @@ static void test_bvxm_change_detection_display_process()
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value_img != VXL_NULLPTR);
+  bool non_null = (value_img != nullptr);
   TEST("display output non-null", non_null ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

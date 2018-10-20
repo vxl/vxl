@@ -45,16 +45,16 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
 
  public:
 
-  vifa_int_face_attr(vdgl_fit_lines_params*    fitter_params = VXL_NULLPTR,
-                     vifa_group_pgram_params*  gpp = VXL_NULLPTR,
-                     vifa_group_pgram_params*  gpp_w = VXL_NULLPTR,
-                     vifa_norm_params*         np = VXL_NULLPTR
+  vifa_int_face_attr(vdgl_fit_lines_params*    fitter_params = nullptr,
+                     vifa_group_pgram_params*  gpp = nullptr,
+                     vifa_group_pgram_params*  gpp_w = nullptr,
+                     vifa_norm_params*         np = nullptr
                     );
   vifa_int_face_attr(vtol_intensity_face_sptr  f,
-                     vdgl_fit_lines_params*    fitter_params = VXL_NULLPTR,
-                     vifa_group_pgram_params*  gpp = VXL_NULLPTR,
-                     vifa_group_pgram_params*  gpp_w = VXL_NULLPTR,
-                     vifa_norm_params*         np = VXL_NULLPTR
+                     vdgl_fit_lines_params*    fitter_params = nullptr,
+                     vifa_group_pgram_params*  gpp = nullptr,
+                     vifa_group_pgram_params*  gpp_w = nullptr,
+                     vifa_norm_params*         np = nullptr
                     );
   virtual ~vifa_int_face_attr();
 

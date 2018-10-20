@@ -65,7 +65,7 @@ class vbl_scoped_ptr
   typedef T element_type;
 
   //:
-  explicit vbl_scoped_ptr( T* p = VXL_NULLPTR )
+  explicit vbl_scoped_ptr( T* p = nullptr )
     : ptr_(p) // never throws
   {
   }
@@ -78,7 +78,7 @@ class vbl_scoped_ptr
   }
 
   //: Make this own \p p, releasing any existing pointer.
-  void reset( T* p = VXL_NULLPTR ) // never throws
+  void reset( T* p = nullptr ) // never throws
   {
     this_type(p).swap(*this);
   }

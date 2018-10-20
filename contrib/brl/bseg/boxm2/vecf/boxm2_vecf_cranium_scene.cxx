@@ -55,7 +55,7 @@ void boxm2_vecf_cranium_scene::cache_cell_centers_from_anatomy_labels(){
   }
 }
 // constructors
-boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(std::string const& scene_file): boxm2_vecf_articulated_scene(scene_file), cranium_data_(VXL_NULLPTR){
+boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(std::string const& scene_file): boxm2_vecf_articulated_scene(scene_file), cranium_data_(nullptr){
   boxm2_lru_cache::create(base_model_);
   cranium_geo_.set_params(params_);
   vul_timer t;
@@ -69,7 +69,7 @@ boxm2_vecf_cranium_scene::boxm2_vecf_cranium_scene(std::string const& scene_file
 {
   cranium_geo_ = boxm2_vecf_cranium(geometry_file);
   cranium_geo_.set_params(params_);
-  target_blk_ = VXL_NULLPTR;
+  target_blk_ = nullptr;
   target_data_extracted_ = false;
   boxm2_lru_cache::create(base_model_);
   this->extract_block_data();

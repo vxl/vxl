@@ -86,7 +86,7 @@ static void test_depth_map()
   double depth = 10000;
   std::string name =  "vert_perp";
   std::string image_path = "dummy_path";
-  depth_map_scene dms(ni, nj, image_path, cam, gpr, VXL_NULLPTR, std::vector<depth_map_region_sptr>());
+  depth_map_scene dms(ni, nj, image_path, cam, gpr, nullptr, std::vector<depth_map_region_sptr>());
   dms.add_ortho_perp_region(vp, min_depth, max_depth, name);
   /* bool success = */ dms.set_depth(depth, name);
 

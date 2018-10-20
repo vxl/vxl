@@ -177,7 +177,7 @@ void vimt_load_to_byte(const std::string& im_path, vimt_image_2d_of<vxl_byte>& i
 {
   vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
 
-  if (ir.ptr()==VXL_NULLPTR)
+  if (ir.ptr()==nullptr)
   {
     image.image().set_size(0,0);
     return;
@@ -219,7 +219,7 @@ void vimt_load_to_float(const std::string& im_path, vimt_image_2d_of<float>& ima
 {
   vil_image_resource_sptr ir = vil_load_image_resource(im_path.c_str());
 
-  if (ir.ptr()==VXL_NULLPTR)
+  if (ir.ptr()==nullptr)
   {
     image.image().set_size(0,0);
     return;

@@ -121,7 +121,7 @@ bool volm_buffered_index_params::read_size_file(std::string index_file_name, uns
 
 
 volm_buffered_index::volm_buffered_index(unsigned layer_size, float buffer_capacity) :
-layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(VXL_NULLPTR)
+layer_size_(layer_size), buffer_size_(0), current_id_(0), current_global_id_(0), m_(NOT_INITIALIZED), file_name_(""), active_buffer_(nullptr)
 {
   buffer_size_ = (unsigned int)std::floor((buffer_capacity*1024*1024*1024)/(2.0f*layer_size));
   active_buffer_ = new uchar[buffer_size_*layer_size_];

@@ -34,7 +34,7 @@ void bwm_video_site_io::init_params()
   site_dir_ = "";
   video_path_ = "";
   camera_path_ = "";
-  corr_ = VXL_NULLPTR;
+  corr_ = nullptr;
   object_dir_ = "";
   fail_ = false;
 }
@@ -45,7 +45,7 @@ void bwm_video_site_io::clear()
   site_dir_ = "";
   video_path_ = "";
   camera_path_ = "";
-  corr_ = VXL_NULLPTR;
+  corr_ = nullptr;
   corrs_.clear();
   object_dir_ = "";
   fail_=false;

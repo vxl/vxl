@@ -44,7 +44,7 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: preop()
   int size = (radius() < 0) ? 0 : int(radius());
   float rs = (radius() < 0) ? 0 : radius() * radius();
   typedef bool* boolptr;
-  if (mask() == VXL_NULLPTR)
+  if (mask() == nullptr)
          ref_mask() = new boolptr[1+size];
   else {
     for (int x=0; x<=size; ++x)
@@ -70,7 +70,7 @@ bool vipl_dilate_disk <ImgIn,ImgOut,DataIn,DataOut,PixelItr> :: postop()
     for (int x=0; x<=size; ++x)
       if (mask()[x]) delete[] ref_mask()[x];
     delete[] ref_mask();
-    ref_mask()=VXL_NULLPTR;
+    ref_mask()=nullptr;
   }
   return true;
 }

@@ -161,7 +161,7 @@ brdb_database::get_relation(const std::string& name) const
 {
   std::map<std::string, brdb_relation_sptr>::const_iterator itr = relations_.find(name);
   if (itr == relations_.end())
-    return VXL_NULLPTR;
+    return nullptr;
   return itr->second;
 }
 
@@ -208,7 +208,7 @@ brdb_database::join(const std::string& r1, const std::string& r2) const
   {
     std::cerr << "Database warning: trying to join relation that does not exist in database: "
              << r1 << " or " << r2 << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return brdb_join(find_r1->second, find_r2->second);
@@ -239,7 +239,7 @@ brdb_database::select(const std::string& relation_name, brdb_query_aptr q) const
   if (!exists(relation_name)){
     std::cerr << "Database warning: trying to select in a nonexisting relation: "
              << relation_name << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   brdb_relation_sptr relation = this->get_relation(relation_name);

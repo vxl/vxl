@@ -462,7 +462,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
         }
         else {
             std::cerr << "Failed to load image\n";
-            return VXL_NULLPTR;
+            return nullptr;
         }
         vil_image_view_base_sptr toReturn(floatimg);
         return toReturn;
@@ -470,7 +470,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
 
     //otherwise it's messed up, return a null pointer
     std::cerr<<"Failed to recognize input image type\n";
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& img)

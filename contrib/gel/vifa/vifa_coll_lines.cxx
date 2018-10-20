@@ -28,7 +28,7 @@ vifa_coll_lines::vifa_coll_lines(vtol_edge_2d_sptr  e,
 
 vifa_coll_lines::~vifa_coll_lines(void)
 {
-  hypothesized_line_ = VXL_NULLPTR;
+  hypothesized_line_ = nullptr;
 }
 
 bool vifa_coll_lines::get_discard_flag(void) const

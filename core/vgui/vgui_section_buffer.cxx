@@ -327,7 +327,7 @@ vgui_section_buffer( unsigned in_x, unsigned in_y,
     zoomy_(1.0f),
     allocw_( w_ ),
     alloch_( h_ ),
-    buffer_( VXL_NULLPTR ),
+    buffer_( nullptr ),
     buffer_ok_( false )
 {
   assert( w_ > 0 && h_ > 0 );

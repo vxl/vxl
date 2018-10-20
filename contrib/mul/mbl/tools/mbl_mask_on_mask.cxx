@@ -17,9 +17,9 @@ int main(int argc, char **argv)
     "Input mask B has n elements (of which m are TRUE) and thus transforms a vector X of n elements to a vector Y of m elements.\n"
     "Input mask A has m elements (of which l are TRUE) and thus transforms a vector Y of m elements to a vector Z of l elements.\n"
     "Output mask C has n elements (of which l are TRUE) and thus transforms a vector X of n elements to a vector Z of l elements.\n");
-  vul_arg<std::string> maskA_filename(VXL_NULLPTR,"Filename of mask A");
-  vul_arg<std::string> maskB_filename(VXL_NULLPTR,"Filename of mask B");
-  vul_arg<std::string> maskout_filename(VXL_NULLPTR,"Filename of the output mask");
+  vul_arg<std::string> maskA_filename(nullptr,"Filename of mask A");
+  vul_arg<std::string> maskB_filename(nullptr,"Filename of mask B");
+  vul_arg<std::string> maskout_filename(nullptr,"Filename of the output mask");
   vul_arg_parse(argc, argv);
 
   mbl_mask maskA, maskB;

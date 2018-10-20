@@ -24,7 +24,7 @@ MAIN( test_sel )
   sdet_edgel* eB = new sdet_edgel(vgl_point_2d<double>(1.0,0.0), 0.0);
   sdet_edgel* eC = new sdet_edgel(vgl_point_2d<double>(2.0,0.0), 0.0);
 
-  TEST("Constructor", &eA!=VXL_NULLPTR, true);
+  TEST("Constructor", &eA!=nullptr, true);
 
   //*******************************************************
   START (" Test sdet_ES_curve_model class");
@@ -80,7 +80,7 @@ MAIN( test_sel )
   //sdet_sel constructors
   sdet_sel<sdet_ES_curve_model> edge_linker(edgemap, cvlet_map, edge_link_graph, curve_frag_graph);
 
-  TEST("Constructor", &edge_linker != VXL_NULLPTR, true);
+  TEST("Constructor", &edge_linker != nullptr, true);
 
   //*******************************************************
 

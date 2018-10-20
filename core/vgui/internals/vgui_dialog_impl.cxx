@@ -209,7 +209,7 @@ void vgui_dialog_impl::inline_tab(const vgui_tableau_sptr tab, unsigned width,
   element l;
   l.type = inline_tabl;
   l.widget = inline_tableau_widget(tab, width, height);
-  l.field = VXL_NULLPTR;
+  l.field = nullptr;
 
   elements.push_back(l);
 }
@@ -237,20 +237,20 @@ void vgui_dialog_impl::line_break()
   elements.push_back(l);
 }
 
-void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::int_field_widget(const char*, int&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::long_field_widget(const char*, long&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::float_field_widget(const char*, float&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::double_field_widget(const char*, double&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::string_field_widget(const char*, std::string&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::choice_field_widget(const char*, const std::vector<std::string>&, int&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::text_message_widget(const char*) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::file_browser_widget(const char*, std::string&, std::string&) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::inline_file_browser_widget(const char*, std::string&, std::string&) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::bool_field_widget(const char*, bool&) { return nullptr; }
+void* vgui_dialog_impl::int_field_widget(const char*, int&) { return nullptr; }
+void* vgui_dialog_impl::long_field_widget(const char*, long&) { return nullptr; }
+void* vgui_dialog_impl::float_field_widget(const char*, float&) { return nullptr; }
+void* vgui_dialog_impl::double_field_widget(const char*, double&) { return nullptr; }
+void* vgui_dialog_impl::string_field_widget(const char*, std::string&) { return nullptr; }
+void* vgui_dialog_impl::choice_field_widget(const char*, const std::vector<std::string>&, int&) { return nullptr; }
+void* vgui_dialog_impl::text_message_widget(const char*) { return nullptr; }
+void* vgui_dialog_impl::file_browser_widget(const char*, std::string&, std::string&) { return nullptr; }
+void* vgui_dialog_impl::inline_file_browser_widget(const char*, std::string&, std::string&) { return nullptr; }
 void* vgui_dialog_impl::color_chooser_widget(const char* txt, std::string& val) { return string_field_widget(txt, val); }
 void* vgui_dialog_impl::inline_color_chooser_widget(const char* txt, std::string& val) { return string_field_widget(txt, val); }
-void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return VXL_NULLPTR; }
-void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { return VXL_NULLPTR; }
+void* vgui_dialog_impl::inline_tableau_widget(const vgui_tableau_sptr, unsigned /*width*/, unsigned /*height*/) { return nullptr; }
+void* vgui_dialog_impl::pushbutton_field_widget(const char*, const void*) { return nullptr; }
 
 //------------------------------------------------------------------------------
 //: Changes the modality of the dialog.  True makes the dialog modal

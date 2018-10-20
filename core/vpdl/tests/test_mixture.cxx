@@ -146,7 +146,7 @@ void test_mixture_type(T epsilon, const std::string& type_name)
     const vpdl_gaussian_indep<T,3>* gauss_indep = dynamic_cast<const vpdl_gaussian_indep<T,3>*>(&mixture2.distribution(0));
     TEST(("copy constructor <"+type_name+">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) &&
-         gauss_indep != VXL_NULLPTR, true);
+         gauss_indep != nullptr, true);
 
     vnl_vector_fixed<T,3> pt(T(0), T(1.5), T(1));
     T prob = T( 0.1*gauss1.prob_density(pt)
@@ -246,7 +246,7 @@ void test_mixture_type(T epsilon, const std::string& type_name)
     const vpdl_gaussian<T,1>* gaussian = dynamic_cast<const vpdl_gaussian<T,1>*>(&mixture2.distribution(0));
     TEST(("copy constructor <"+type_name+">").c_str(),
          mixture2.num_components() == 3 && mixture2.weight(1) == T(0.15) &&
-         gaussian != VXL_NULLPTR, true);
+         gaussian != nullptr, true);
 
     T pt = T(1);
     T prob = T( 0.1*gauss1.prob_density(pt)

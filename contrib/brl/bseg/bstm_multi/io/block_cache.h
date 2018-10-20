@@ -61,7 +61,7 @@ public:
   // writes it to the disk
   virtual block_data_base *get_data_base_new(scene_sptr &scene,
                                              block_id_t id,
-                                             vcl_string type = VXL_NULLPTR,
+                                             vcl_string type = nullptr,
                                              vcl_size_t num_bytes = 0,
                                              bool read_only = true) = 0;
 
@@ -131,6 +131,6 @@ protected:
 // define static members
 template <typename Scene, typename Block>
 vbl_smart_ptr<block_cache<Scene, Block> > block_cache<Scene, Block>::instance_ =
-    VXL_NULLPTR;
+    nullptr;
 
 #endif // bstm_multi_block_cache_h_

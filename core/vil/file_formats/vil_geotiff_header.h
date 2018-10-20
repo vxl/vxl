@@ -61,7 +61,7 @@ class vil_geotiff_header
   bool get_key_value(geokey_t key, void** value,
                      int& size, int& length, tagtype_t& type);
 
-  void print_gtif(){ if (gtif_) GTIFPrint(gtif_, VXL_NULLPTR, VXL_NULLPTR); }
+  void print_gtif(){ if (gtif_) GTIFPrint(gtif_, nullptr, nullptr); }
 
  private:
 

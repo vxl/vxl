@@ -218,7 +218,7 @@ bool make_unrefined_space_tree(
   // to coordinates.  We can't directly wrap the child buffer
   // because we don't know (at compile time) if it contains time
   // or space trees
-  array_4d<int> child_indices(VXL_NULLPTR,
+  array_4d<int> child_indices(nullptr,
                               num_regions.first.x() * 8,
                               num_regions.first.y() * 8,
                               num_regions.first.z() * 8,
@@ -226,7 +226,7 @@ bool make_unrefined_space_tree(
   // Similar empty array for indices. Note that each leaf
   // node in a space tree contains 8 sub-voxels, so each
   // space tree is actually 4x4x4.
-  boxm2_array_3d<int> leaf_node_indices(4, 4, 4, VXL_NULLPTR);
+  boxm2_array_3d<int> leaf_node_indices(4, 4, 4, nullptr);
   // iterate over children in lower level (8 in each space
   // dimension)
   for (int i_sub = 0; i_sub < 8; ++i_sub) {
@@ -311,8 +311,8 @@ void coalesce_trees(bstm_multi_block *blk,
       child_num_regions.second *= 32;
       break;
     }
-    array_4d<int> current_level_array(VXL_NULLPTR, num_regions);
-    array_4d<int> child_level_array(VXL_NULLPTR, child_num_regions);
+    array_4d<int> current_level_array(nullptr, num_regions);
+    array_4d<int> child_level_array(nullptr, child_num_regions);
     vcl_vector<unsigned char> &buffer = blk->get_buffer(level);
     vcl_vector<unsigned char> &child_buffer = blk->get_buffer(level + 1);
     vcl_vector<unsigned char> new_child_buffer = vcl_vector<unsigned char>();
@@ -530,17 +530,17 @@ bool bstm_block_to_bstm_multi_block(
     double p_threshold,
     double app_threshold) {
   // extract BSTM data buffers
-  bstm_data_base *alpha = VXL_NULLPTR, *appearance = VXL_NULLPTR;
+  bstm_data_base *alpha = nullptr, *appearance = nullptr;
   vcl_string appearance_type,
       alpha_prefix = bstm_data_traits<BSTM_ALPHA>::prefix();
   get_bstm_data_buffers(bstm_datas, alpha, appearance, appearance_type);
-  if (alpha == VXL_NULLPTR || appearance == VXL_NULLPTR) {
+  if (alpha == nullptr || appearance == nullptr) {
     vcl_cerr << "Could not find either alpha or appearance model in bstm_datas."
              << vcl_endl;
     return false;
   }
-  if (datas[alpha_prefix] == VXL_NULLPTR ||
-      datas[appearance_type] == VXL_NULLPTR) {
+  if (datas[alpha_prefix] == nullptr ||
+      datas[appearance_type] == nullptr) {
     vcl_cerr << "Multi-BSTM scene is lacking data buffers either for "
                 "BSTM_ALPHA or for "
              << appearance_type << "." << vcl_endl;

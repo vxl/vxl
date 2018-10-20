@@ -25,7 +25,7 @@ msdi_array_of_marked_images::msdi_array_of_marked_images(
                  const std::vector<vil_image_view<vxl_byte> >& images,
                  const std::vector<msm_points>& points,
                  bool grey_only)
-  : images_(VXL_NULLPTR),points_(VXL_NULLPTR),index_(0)
+  : images_(nullptr),points_(nullptr),index_(0)
 {
   set(images,points,grey_only);
 }
@@ -57,14 +57,14 @@ msdi_array_of_marked_images::~msdi_array_of_marked_images()
 
 unsigned msdi_array_of_marked_images::size() const
 {
-  assert(images_!=VXL_NULLPTR);
+  assert(images_!=nullptr);
   return images_->size();
 }
 
 //: Return current image
 const vimt_image_2d& msdi_array_of_marked_images::image()
 {
-  assert(images_!=VXL_NULLPTR);
+  assert(images_!=nullptr);
   assert(index_ < (int)size());
   if (!image_ok_) get_image();
   return image_;
@@ -74,7 +74,7 @@ const vimt_image_2d& msdi_array_of_marked_images::image()
   //: Return current image pyramid
 const vimt_image_pyramid& msdi_array_of_marked_images::image_pyr()
 {
-  assert(images_!=VXL_NULLPTR);
+  assert(images_!=nullptr);
   assert(index_ < (int)size());
   if (!image_ok_) get_image();
   if (!image_pyr_ok_)
@@ -88,7 +88,7 @@ const vimt_image_pyramid& msdi_array_of_marked_images::image_pyr()
 
 const msm_points& msdi_array_of_marked_images::points()
 {
-  assert(points_!=VXL_NULLPTR);
+  assert(points_!=nullptr);
   assert(index_ < (int)size());
   return points_->operator[](index_);
 }

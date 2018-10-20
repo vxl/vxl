@@ -176,7 +176,7 @@ inverse_transform() const
   if ( backward_xform_ )
     return new rgrl_trans_couple( backward_xform_, forward_xform_ );
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 //: make a clone copy

@@ -35,7 +35,7 @@ private:
 public:
   clsfy_logit_loss_function(mbl_data_wrapper<vnl_vector<double> >& x,
                             const vnl_vector<double> & c,
-                            double min_p, vnl_cost_function* reg_fn=VXL_NULLPTR);
+                            double min_p, vnl_cost_function* reg_fn=nullptr);
 
   //:  The main function: Compute f(v)
   virtual double f(vnl_vector<double> const& v);

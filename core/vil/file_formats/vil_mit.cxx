@@ -61,18 +61,18 @@ static char const* vil_mit_format_tag = "mit";
 vil_image_resource_sptr vil_mit_file_format::make_input_image(vil_stream* is)
 {
   is->seek(0L);
-  if (is->file_size() < 8L) return VXL_NULLPTR;
+  if (is->file_size() < 8L) return nullptr;
   unsigned int type = vil_stream_read_little_endian_uint_16(is);
 
   if (!(type == MIT_UNSIGNED ||
         type == MIT_RGB      ||
         type == MIT_SIGNED   ||
         type == MIT_FLOAT    ))
-    return VXL_NULLPTR;
+    return nullptr;
 
   unsigned int bpp = vil_stream_read_little_endian_uint_16(is);
   if (bpp != 1 && bpp != 8 && bpp != 16 && bpp != 32 && bpp != 64)
-    return VXL_NULLPTR;
+    return nullptr;
 
 #ifdef DEBUG
   unsigned int width = vil_stream_read_little_endian_uint_16(is);
@@ -288,7 +288,7 @@ vil_image_view_base_sptr vil_mit_image::get_copy_view(unsigned int x0, unsigned 
   else if (format_ == VIL_PIXEL_FORMAT_INT_32)  return new vil_image_view<vxl_int_32> (ARGS(vxl_int_32));
   else if (format_ == VIL_PIXEL_FORMAT_FLOAT)   return new vil_image_view<float>      (ARGS(float));
   else if (format_ == VIL_PIXEL_FORMAT_DOUBLE)  return new vil_image_view<double>     (ARGS(double));
-  else return VXL_NULLPTR;
+  else return nullptr;
 #undef ARGS
 }
 

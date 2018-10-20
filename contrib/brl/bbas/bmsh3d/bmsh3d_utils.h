@@ -35,7 +35,7 @@ class vispt_elm
   // ====== Constructor/Destructor ======
 
  public:
-  vispt_elm()  { vis_pointer_ = VXL_NULLPTR; }
+  vispt_elm()  { vis_pointer_ = nullptr; }
   virtual ~vispt_elm() {}
 
   // ====== Data access functions ======

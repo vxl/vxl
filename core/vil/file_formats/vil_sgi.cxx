@@ -24,7 +24,7 @@ vil_image_resource_sptr vil_sgi_file_format::make_input_image(vil_stream* vs)
   if ( hdr.signature_valid() )
     return new vil_sgi_image(vs);
   else
-    return VXL_NULLPTR;
+    return nullptr;
 }
 
 vil_image_resource_sptr vil_sgi_file_format::make_output_image(vil_stream* vs,
@@ -175,7 +175,7 @@ vil_image_view_base_sptr vil_sgi_image::get_copy_view(
   if (x0+nx > ni() || y0+ny > nj())
   {
     vil_exception_warning(vil_exception_out_of_bounds("vil_sgi_image::get_copy_view"));
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   // Number of bytes per pixel is equal to the number of channels

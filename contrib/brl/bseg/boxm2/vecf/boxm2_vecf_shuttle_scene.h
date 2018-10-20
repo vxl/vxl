@@ -18,7 +18,7 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 class boxm2_vecf_particle{
  public:
- boxm2_vecf_particle(): p_(0.0f), cam_(VXL_NULLPTR), tx_(0.0), ty_(0.0), s_(0.0),
+ boxm2_vecf_particle(): p_(0.0f), cam_(nullptr), tx_(0.0), ty_(0.0), s_(0.0),
     rx_(0.0),ry_(0.0),rz_(0.0){}
  boxm2_vecf_particle(float p, vpgl_camera_double_sptr const& cam): p_(p), cam_(cam),
     tx_(0.0), ty_(0.0), s_(0.0), rx_(0.0),ry_(0.0),rz_(0.0){}
@@ -41,7 +41,7 @@ class boxm2_vecf_particle{
 class boxm2_vecf_shuttle_scene : public boxm2_scene
 {
  public:
- boxm2_vecf_shuttle_scene(): alpha_data_(VXL_NULLPTR), app_data_(VXL_NULLPTR), nobs_data_(VXL_NULLPTR){}
+ boxm2_vecf_shuttle_scene(): alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr){}
 
   boxm2_vecf_shuttle_scene(std::string const& scene_file, std::string const& imesh_file);
 

@@ -21,8 +21,8 @@ OctreeLevel::OctreeLevel( const int d) :
   depth( d),
   size( d<0 ? 0 : (1<<d)),
   color( size, size, size),
-  next( VXL_NULLPTR),
-  prev( VXL_NULLPTR)
+  next( nullptr),
+  prev( nullptr)
 {
   std::cout << "Size = " << size << std::endl;
 }
@@ -32,7 +32,7 @@ OctreeLevel::OctreeLevel( OctreeLevel *p) :
   depth( p->GetDepth()+1),
   size( 1<<depth),
   color( size, size, size),
-  next( VXL_NULLPTR),
+  next( nullptr),
   prev( p)
 {
   prev->SetNext( this);

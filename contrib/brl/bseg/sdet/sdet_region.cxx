@@ -13,7 +13,7 @@
 #include <limits>
 sdet_region::sdet_region()
 {
-  boundary_ = VXL_NULLPTR;
+  boundary_ = nullptr;
   bbox_valid_ = false;
   obox_valid_ = false;
   boundary_valid_ = false;
@@ -26,7 +26,7 @@ sdet_region::sdet_region(int npts, const float* xp, const float* yp,
 {
   bbox_valid_ = false;
   obox_valid_ = false;
-  boundary_ = VXL_NULLPTR;
+  boundary_ = nullptr;
   boundary_valid_ = false;
   region_label_ = 0;
 }
@@ -36,7 +36,7 @@ sdet_region::sdet_region(vdgl_digital_region const& reg)
 {
   bbox_valid_ = false;
   obox_valid_ = false;
-  boundary_ = VXL_NULLPTR;
+  boundary_ = nullptr;
   boundary_valid_ = false;
   region_label_ = 0;
 }

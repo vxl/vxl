@@ -14,14 +14,14 @@
 
 //: Constructor
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_view_base const& img)
- : vgui_image_tableau(img, VXL_NULLPTR)
+ : vgui_image_tableau(img, nullptr)
 {}
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img)
- : vgui_image_tableau(img, VXL_NULLPTR)
+ : vgui_image_tableau(img, nullptr)
 {}
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& img,
                                                vsph_view_sphere<vsph_view_point<std::string> > sphere)
- : vgui_image_tableau(img, VXL_NULLPTR), curr_pyramid_(VXL_NULLPTR)
+ : vgui_image_tableau(img, nullptr), curr_pyramid_(nullptr)
 {
   img_sphere_ = sphere;
   vsph_view_point<std::string> first_view = img_sphere_.begin()->second;
@@ -31,7 +31,7 @@ cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_resource_sptr const& im
 
 cvg_hemisphere_tableau::cvg_hemisphere_tableau(vil_image_view_base const& img,
                                                vsph_view_sphere<vsph_view_point<std::string> > sphere)
- : vgui_image_tableau(img, VXL_NULLPTR), curr_pyramid_(VXL_NULLPTR)
+ : vgui_image_tableau(img, nullptr), curr_pyramid_(nullptr)
 {
   img_sphere_ = sphere;
   vsph_view_point<std::string> first_view = img_sphere_.begin()->second;

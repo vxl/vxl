@@ -12,7 +12,7 @@
 
 //: Sets vec to have zero mean and unit length
 inline void mfpf_norm_vec(vnl_vector<double>& vec, double var_min=1.0E-6,
-                          double* pvar=VXL_NULLPTR)
+                          double* pvar=nullptr)
 {
   unsigned n=vec.size();
   double *v=vec.data_block();

@@ -71,7 +71,7 @@ TLevel * vpyr_2_pyramid<TLevel>::level_below(vmap_level_type type, const level_t
     ++level;
   }
   if (level>=(vmap_level_index)(above.index()))
-    return VXL_NULLPTR ;
+    return nullptr ;
   else if (level!=(vmap_level_index)((*it).index()))
   {
     level_type tmp(above) ;

@@ -158,7 +158,7 @@ generate_match_set(rgrl_transformation_sptr trans)
 
   rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
   for ( unsigned i=0; i < from_pts.size(); ++i ) {
-    ms->add_feature_and_match( from_pts[i], VXL_NULLPTR, to_pts[i] );
+    ms->add_feature_and_match( from_pts[i], nullptr, to_pts[i] );
   }
 
   return ms;
@@ -239,7 +239,7 @@ generate_ambiguous_match_set(rgrl_transformation_sptr trans)
 
   rgrl_match_set_sptr ms = new rgrl_match_set( rgrl_feature_point::type_id() );
   for ( unsigned i=0; i < from_pts.size(); ++i ) {
-    ms->add_feature_and_match( from_pts[i], VXL_NULLPTR, to_pts[i] );
+    ms->add_feature_and_match( from_pts[i], nullptr, to_pts[i] );
   }
 
   //another 5 matches, each with 2 matches, one correct and one incorrect
@@ -287,7 +287,7 @@ generate_ambiguous_match_set(rgrl_transformation_sptr trans)
   }
 
   for ( unsigned i=0; i < from_pts_II.size(); ++i ) {
-    ms->add_feature_and_matches( from_pts_II[i], VXL_NULLPTR, to_pts_II[i] );
+    ms->add_feature_and_matches( from_pts_II[i], nullptr, to_pts_II[i] );
   }
 
   return ms;

@@ -146,7 +146,7 @@ bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<doubl
     if (!root->children_[i])
       continue;
     if (!prune_tree(root->children_[i], poly)) // the child does not intersect poly
-      root->children_[i] = VXL_NULLPTR;  // sptr deallocates this child
+      root->children_[i] = nullptr;  // sptr deallocates this child
   }
 
   return true;
@@ -172,7 +172,7 @@ bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_z
     if (!root->children_[i])
       continue;
     if (!prune_by_zone(root->children_[i], utm_zone)) // the child is not in zone
-      root->children_[i] = VXL_NULLPTR;  // sptr deallocates this child
+      root->children_[i] = nullptr;  // sptr deallocates this child
   }
   return true;
 }
@@ -423,7 +423,7 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, std::ve
 volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr root, double lat, double lon, unsigned& hyp_id)
 {
   if (!root)
-    return VXL_NULLPTR;
+    return nullptr;
 
   vgl_point_3d<double> h;
   if (root->hyps_) {
@@ -431,7 +431,7 @@ volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr ro
     return root;
   }
   if (!root->children_.size())
-    return VXL_NULLPTR;
+    return nullptr;
   for (unsigned i = 0; i < root->children_.size(); i++) {
     if (!root->children_[i])
       continue;
@@ -441,7 +441,7 @@ volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr ro
         return c;
     }
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: return true if a hyp exists within the given radius to the given point

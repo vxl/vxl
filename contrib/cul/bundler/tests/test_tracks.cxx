@@ -141,7 +141,7 @@ static void test_tracks(int argc, char** argv)
             // tracks, unless this feature doesn't have a track. A feature
             // wouldn't have a track if it is unmatched, so it views a
             // 3D point that no other image contains.
-            if ( (*fs_it)->features[i]->track != VXL_NULLPTR) {
+            if ( (*fs_it)->features[i]->track != nullptr) {
                 for (unsigned int j = i+1; j < (*fs_it)->features.size(); ++j) {
                     Assert(
                         "Features in an image come from different tracks.",
@@ -159,10 +159,10 @@ static void test_tracks(int argc, char** argv)
         for (int i = 0; i < m->num_features(); ++i)
         {
             Assert("Anything in a matched pair has a track (first).",
-                   m->matches[i].first->track != VXL_NULLPTR);
+                   m->matches[i].first->track != nullptr);
 
             Assert("Anything in a matched pair has a track (second).",
-                   m->matches[i].second->track != VXL_NULLPTR);
+                   m->matches[i].second->track != nullptr);
 
             TEST("A pair of matched features is always in the same track.",
                  m->matches[i].first->track, m->matches[i].second->track);

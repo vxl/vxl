@@ -65,7 +65,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
 
   // don't allow users to create their own instance
   bocl_global_memory_bandwidth_manager()
-    : program_(VXL_NULLPTR),time_in_secs_(0.0f) {}
+    : program_(nullptr),time_in_secs_(0.0f) {}
 
   ~bocl_global_memory_bandwidth_manager();
 

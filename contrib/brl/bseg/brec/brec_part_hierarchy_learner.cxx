@@ -929,12 +929,12 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_learner* ph)
     vsl_b_read(is, *ph);
   }
   else
-    ph = VXL_NULLPTR;
+    ph = nullptr;
 }
 
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &ph)
 {
-  if (ph==VXL_NULLPTR)
+  if (ph==nullptr)
   {
     vsl_b_write(os, false); // Indicate null pointer stored
   }

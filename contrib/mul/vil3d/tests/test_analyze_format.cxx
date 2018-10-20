@@ -20,8 +20,8 @@ inline void test_analyze_format(const std::string& dir,std::string type, vil_pix
 
   std::string filepath=dir+"/ff_"+type+".hdr";
   vil3d_image_resource_sptr image_res = vil3d_load_image_resource(filepath.c_str());
-  TEST("Load header successful",image_res!=VXL_NULLPTR,true);
-  if (image_res==VXL_NULLPTR) return;
+  TEST("Load header successful",image_res!=nullptr,true);
+  if (image_res==nullptr) return;
   TEST("Resource image format",image_res->pixel_format(),format);
   TEST("ni",image_res->ni(),5);
   TEST("nj",image_res->nj(),4);
@@ -37,7 +37,7 @@ inline void test_analyze_format(const std::string& dir,std::string type, vil_pix
   vil3d_image_view_base_sptr image = image_res->get_view(0, image_res->ni(),
                                                          0, image_res->nj(),
                                                          0, image_res->nk());
-  TEST("Loaded an image",image!=VXL_NULLPTR,true);
+  TEST("Loaded an image",image!=nullptr,true);
   TEST("Image type",image->pixel_format(),format);
   vil3d_image_view<T> im=static_cast<vil3d_image_view<T>&>(*image);
   TEST_NEAR("Pixel value (0,0,0)",im(0,0,0),0,1e-6);

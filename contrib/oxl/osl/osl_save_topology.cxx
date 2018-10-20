@@ -13,7 +13,7 @@
 
 void osl_save_topology(std::ostream &f, std::list<osl_edge*> const &es, std::list<osl_vertex*> const &vs)
 {
-  unsigned char* vid = VXL_NULLPTR;
+  unsigned char* vid = nullptr;
   char const *name = "fred";
 
   // list of all vertices

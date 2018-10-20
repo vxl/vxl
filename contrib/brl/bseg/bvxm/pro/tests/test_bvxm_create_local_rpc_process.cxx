@@ -74,7 +74,7 @@ static void test_bvxm_create_local_rpc_process()
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " didn't get value\n";
   }
-  bool non_null = (value != VXL_NULLPTR);
+  bool non_null = (value != nullptr);
   TEST("vpgl_camera_double_sptr non-null", non_null ,true);
 
   brdb_value_t<vpgl_camera_double_sptr>* result =

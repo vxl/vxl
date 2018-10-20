@@ -34,9 +34,9 @@ class volm_conf_indexer : public vbl_ref_count
 {
 public:
   // ================ constructor ===================
-  volm_conf_indexer() : out_index_folder_(""), loc_root_(VXL_NULLPTR), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
+  volm_conf_indexer() : out_index_folder_(""), loc_root_(nullptr), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
   volm_conf_indexer(std::string const& out_index_folder)
-    : out_index_folder_(out_index_folder), loc_root_(VXL_NULLPTR), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
+    : out_index_folder_(out_index_folder), loc_root_(nullptr), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
 
   ~volm_conf_indexer() {}
 

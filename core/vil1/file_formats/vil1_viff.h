@@ -95,7 +95,7 @@ class vil1_viff_generic_image : public vil1_image_impl
   virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
 
   char const* file_format() const;
-  bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  bool get_property(char const *tag, void *prop = nullptr) const;
 
   //: User defined spare values in header
   vxl_uint_32 ispare1() const { return header_.ispare1;}

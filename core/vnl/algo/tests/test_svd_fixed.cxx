@@ -205,20 +205,20 @@ void test_svd_fixed()
   test_I();
 
 //  test_svd_recomposition<float, 3>("float",              1e-5 , (float*)0, rng);
-  test_svd_recomposition<double, 2>("double",             1e-10, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 3>("double",             1e-10, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 4>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 5>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 6>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 7>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 8>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double, 9>("double",             1e-5, (double*)VXL_NULLPTR, rng);
-  test_svd_recomposition<double,10>("double",             1e-5, (double*)VXL_NULLPTR, rng);
+  test_svd_recomposition<double, 2>("double",             1e-10, (double*)nullptr, rng);
+  test_svd_recomposition<double, 3>("double",             1e-10, (double*)nullptr, rng);
+  test_svd_recomposition<double, 4>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double, 5>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double, 6>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double, 7>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double, 8>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double, 9>("double",             1e-5, (double*)nullptr, rng);
+  test_svd_recomposition<double,10>("double",             1e-5, (double*)nullptr, rng);
 //  test_svd_recomposition<std::complex<float>, 3>("std::complex<float>",  1e-5 , (std::complex<float>*)0, rng);
 //  test_svd_recomposition<std::complex<double>, 3>("std::complex<double>", 1e-10, (std::complex<double>*)0, rng);
 
 //  test_nullvector("float",               5e-7,  (float*)0, rng);
-  test_nullvector("double",              5e-15, (double*)VXL_NULLPTR, rng);
+  test_nullvector("double",              5e-15, (double*)nullptr, rng);
 //  test_nullvector("std::complex<float>",  5e-7,  (std::complex<float>*)0, rng);
 //  test_nullvector("std::complex<double>", 5e-15, (std::complex<double>*)0, rng);
 

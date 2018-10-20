@@ -36,7 +36,7 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
     return false;
   }
 
-  bool non_null = (value_img != VXL_NULLPTR);
+  bool non_null = (value_img != nullptr);
   TEST("display output non-null", non_null ,true);
 
   brdb_value_t<vil_image_view_base_sptr>* result =

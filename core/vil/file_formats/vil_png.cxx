@@ -45,11 +45,11 @@ vil_image_resource_sptr vil_png_file_format::make_input_image(vil_stream* is)
   png_byte sig_buf [SIG_CHECK_SIZE];
   if (is->read(sig_buf, SIG_CHECK_SIZE) != SIG_CHECK_SIZE) {
     problem("Initial header fread");
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   if (png_sig_cmp (sig_buf, (png_size_t) 0, (png_size_t) SIG_CHECK_SIZE) != 0)
-    return VXL_NULLPTR;
+    return nullptr;
 
   return new vil_png_image(is);
 }
@@ -67,7 +67,7 @@ vil_image_resource_sptr vil_png_file_format::make_output_image(vil_stream* vs,
   {
     std::cout<<"ERROR! vil_png_file_format::make_output_image()\n"
             <<"Pixel format should be byte, but is "<<format<<" instead.\n";
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   return new vil_png_image(vs, nx, ny, nplanes, format);
@@ -138,7 +138,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
   }
 
   vil_jmpbuf_wrapper  *jmpbuf_ptr = static_cast<vil_jmpbuf_wrapper*>(png_get_error_ptr(png_ptr));
-  if (jmpbuf_ptr == VXL_NULLPTR) {         // we are completely hosed now
+  if (jmpbuf_ptr == nullptr) {         // we are completely hosed now
     std::cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     std::exit(99);
   }
@@ -158,18 +158,18 @@ struct vil_png_structures
   vil_png_structures(bool reading)
   {
     reading_ = reading;
-    png_ptr = VXL_NULLPTR;
-    info_ptr = VXL_NULLPTR;
-    rows = VXL_NULLPTR;
+    png_ptr = nullptr;
+    info_ptr = nullptr;
+    rows = nullptr;
     channels = 0;
     ok = false;
 
     png_setjmp_on(return);
 
     if (reading)
-      png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, VXL_NULLPTR);
+      png_ptr = png_create_read_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, nullptr);
     else
-      png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, VXL_NULLPTR);
+      png_ptr = png_create_write_struct (PNG_LIBPNG_VER_STRING, &pngtopnm_jmpbuf_struct, pngtopnm_error_handler, nullptr);
 
     if (!png_ptr) {
       problem("cannot allocate LIBPNG structure");
@@ -178,7 +178,7 @@ struct vil_png_structures
 
     info_ptr = png_create_info_struct (png_ptr);
     if (!info_ptr) {
-      png_destroy_read_struct(&png_ptr, VXL_NULLPTR, VXL_NULLPTR);
+      png_destroy_read_struct(&png_ptr, nullptr, nullptr);
       problem("cannot allocate LIBPNG structures");
       return;
     }
@@ -192,7 +192,7 @@ struct vil_png_structures
   bool alloc_image()
   {
     rows = new png_byte* [png_get_image_height(png_ptr, info_ptr)];
-    if (rows == VXL_NULLPTR)
+    if (rows == nullptr)
       return ok = problem("couldn't allocate space for image");
 
     unsigned long linesize;
@@ -228,7 +228,7 @@ struct vil_png_structures
     if (reading_) {
       if (!rows) {
         if (alloc_image()) {
-          png_setjmp_on(return VXL_NULLPTR);
+          png_setjmp_on(return nullptr);
           png_read_image (png_ptr, rows);
           png_read_end (png_ptr, info_ptr);
           png_setjmp_off();
@@ -236,7 +236,7 @@ struct vil_png_structures
       }
     }
     else {
-      assert(rows != VXL_NULLPTR);
+      assert(rows != nullptr);
     }
 
     return rows;
@@ -247,7 +247,7 @@ struct vil_png_structures
     png_setjmp_on(goto del);
     if (reading_) {
       // Reading - just delete
-      png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)VXL_NULLPTR);
+      png_destroy_read_struct (&png_ptr, &info_ptr, (png_infopp)nullptr);
     }
     else {
       // Writing - save the rows
@@ -462,11 +462,11 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
                                                       unsigned ny) const
 {
   if (!p_->ok)
-    return VXL_NULLPTR;
+    return nullptr;
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
   png_byte** rows = p_->get_rows();
-  if (!rows) return VXL_NULLPTR;
+  if (!rows) return nullptr;
 
   int bit_depth = bits_per_component_;  // value can be 1, 8, or 16
   int bytes_per_pixel = (bit_depth * p_->channels + 7) / 8;
@@ -500,7 +500,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
       return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
-    else return VXL_NULLPTR;
+    else return nullptr;
   }
   else   // not whole row
   {
@@ -532,7 +532,7 @@ vil_image_view_base_sptr vil_png_image::get_copy_view(unsigned x0,
       return new vil_image_view<vxl_byte>(chunk, reinterpret_cast<vxl_byte*>(chunk->data()),
         nx, ny, nplanes(), nplanes(), nplanes()*nx, 1);
     }
-    else return VXL_NULLPTR;
+    else return nullptr;
   }
 }
 

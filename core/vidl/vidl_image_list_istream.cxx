@@ -33,7 +33,7 @@ vidl_image_list_istream()
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(VXL_NULLPTR) {}
+    current_frame_(nullptr) {}
 
 
 //: Constructor
@@ -42,7 +42,7 @@ vidl_image_list_istream(const std::string& glob)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(VXL_NULLPTR)
+    current_frame_(nullptr)
 {
   open(glob);
 }
@@ -53,7 +53,7 @@ vidl_image_list_istream(const std::vector<std::string>& paths)
   : index_(INIT_INDEX),
     ni_(0), nj_(0),
     format_(VIDL_PIXEL_FORMAT_UNKNOWN),
-    current_frame_(VXL_NULLPTR)
+    current_frame_(nullptr)
 {
   open(paths);
 }
@@ -121,7 +121,7 @@ open(const std::vector<std::string>& paths)
     }
   }
   index_ = INIT_INDEX;
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   return !image_paths_.empty();
 }
 
@@ -133,7 +133,7 @@ close()
 {
   image_paths_.clear();
   index_ = INIT_INDEX;
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   ni_ = 0;
   nj_ = 0;
   format_ = VIDL_PIXEL_FORMAT_UNKNOWN;
@@ -145,7 +145,7 @@ bool
 vidl_image_list_istream::
 advance()
 {
-  current_frame_ = VXL_NULLPTR;
+  current_frame_ = nullptr;
   if (index_ < image_paths_.size() || index_ == INIT_INDEX )
     return ++index_ < image_paths_.size();
 
@@ -173,7 +173,7 @@ vidl_image_list_istream::current_frame()
     }
     return current_frame_;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -196,7 +196,7 @@ seek_frame(unsigned int frame_nr)
 {
   if (is_open() && frame_nr < image_paths_.size()) {
     if (index_ != frame_nr)
-      current_frame_ = VXL_NULLPTR;
+      current_frame_ = nullptr;
     index_ = frame_nr;
     return true;
   }

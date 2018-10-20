@@ -117,7 +117,7 @@ struct tif_ref_cnt
 //The smart pointer to the tiff handle
 struct tif_smart_ptr
 {
-  tif_smart_ptr(): tptr_(VXL_NULLPTR){}
+  tif_smart_ptr(): tptr_(nullptr){}
 
   tif_smart_ptr(tif_ref_cnt* tptr):tptr_(tptr)
   { if (tptr_) tptr_->ref(); }
@@ -130,18 +130,18 @@ struct tif_smart_ptr
     // the strange order of events in this function is to avoid
     // heap corruption if unref() causes *this to be deleted.
     tif_ref_cnt* old_ptr = tptr_;
-    tptr_ = VXL_NULLPTR;
+    tptr_ = nullptr;
     if (old_ptr)
       old_ptr->unref();
   }
   //: Inverse bool
   bool operator!() const
   {
-    return (tptr_ != VXL_NULLPTR)? false : true;
+    return (tptr_ != nullptr)? false : true;
   }
 
   //: Convenient get TIFF* for header construction; assumes temporary use
-  TIFF* tif() const {if (tptr_) return tptr_->tif(); return VXL_NULLPTR;}
+  TIFF* tif() const {if (tptr_) return tptr_->tif(); return nullptr;}
  private:
   tif_ref_cnt* tptr_;
 };
@@ -218,7 +218,7 @@ class vil_tiff_image : public vil_blocked_image_resource
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
 
-  virtual bool get_property(char const *tag, void *prop = VXL_NULLPTR) const;
+  virtual bool get_property(char const *tag, void *prop = nullptr) const;
 
   bool set_compression_method(compression_methods cm);
 

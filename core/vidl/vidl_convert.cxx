@@ -515,7 +515,7 @@ vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
                                    vidl_pixel_format format)
 {
   if (format == VIDL_PIXEL_FORMAT_UNKNOWN)
-    return VXL_NULLPTR;
+    return nullptr;
 
   unsigned ni = in_frame->ni();
   unsigned nj = in_frame->nj();
@@ -526,7 +526,7 @@ vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
   if (vidl_convert_frame(*in_frame, *out_frame))
     return out_frame;
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 
@@ -536,7 +536,7 @@ vidl_frame_sptr vidl_convert_frame(const vidl_frame_sptr& in_frame,
 vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base_sptr& image)
 {
   if (!image)
-    return VXL_NULLPTR;
+    return nullptr;
   return vidl_convert_to_frame(*image);
 }
 
@@ -598,7 +598,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image)
   else if (num_channels == 4)
     format = VIDL_PIXEL_FORMAT_RGBA_32P;
   else
-    return VXL_NULLPTR;
+    return nullptr;
 
   vil_image_view<vxl_byte> img;
   if (image.pixel_format() == VIL_PIXEL_FORMAT_BYTE)
@@ -608,7 +608,7 @@ vidl_frame_sptr vidl_convert_to_frame(const vil_image_view_base& image)
     vil_image_resource_sptr resrc = vil_new_image_resource_of_view(image);
     vil_image_view_base_sptr bimage = vil_convert_cast(vxl_byte(),resrc->get_view());
     if (!bimage)
-      return VXL_NULLPTR;
+      return nullptr;
     img = *bimage;
   }
   return new vidl_memory_chunk_frame(ni, nj, format,
@@ -624,7 +624,7 @@ bool vidl_convert_to_view(vidl_frame const& frame,
                           vidl_pixel_color require_color)
 {
   if (frame.pixel_format() == VIDL_PIXEL_FORMAT_UNKNOWN ||
-      frame.data() == VXL_NULLPTR)
+      frame.data() == nullptr)
     return false;
 
   vidl_pixel_color in_color = vidl_pixel_format_color(frame.pixel_format());
@@ -761,7 +761,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
   vidl_pixel_traits pt =  vidl_pixel_format_traits(format);
   if ( pt.chroma_shift_x != 0 || pt.chroma_shift_y != 0 ||
        pt.bits_per_pixel % pt.num_channels != 0)
-    return VXL_NULLPTR;
+    return nullptr;
 
   unsigned ni = frame.ni(), nj = frame.nj();
   unsigned np = pt.num_channels;
@@ -779,7 +779,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
       break;
     default:
       // Cannot wrap other pixel arrangements
-      return VXL_NULLPTR;
+      return nullptr;
   }
   std::ptrdiff_t top_left_offset = 0;
 

@@ -121,7 +121,7 @@ class vmap_ptr_sequence
 
  public:
   //:
-  vmap_ptr_sequence() : begin_(VXL_NULLPTR), end_(VXL_NULLPTR) {}
+  vmap_ptr_sequence() : begin_(nullptr), end_(nullptr) {}
 
   //:
   vmap_ptr_sequence(const vmap_ptr_sequence<D> & arg ) : begin_(arg.begin_), end_(arg.end_) {}
@@ -219,7 +219,7 @@ class vmap_ptr_sequence
   //:
   void clear()
   {
-    begin_=end_=VXL_NULLPTR ;
+    begin_=end_=nullptr ;
   }
 
  private:

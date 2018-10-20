@@ -80,11 +80,11 @@ bgrl_graph::add_edge( const bgrl_vertex_sptr& v1,
                       const bgrl_edge_sptr& model_edge )
 {
   if (!v1 || !v2)
-    return VXL_NULLPTR;
+    return nullptr;
   if ( vertices_.count(v1) == 0 && !this->add_vertex(v1) )
-    return VXL_NULLPTR;
+    return nullptr;
   if ( vertices_.count(v2) == 0 && !this->add_vertex(v2) )
-    return VXL_NULLPTR;
+    return nullptr;
 
   return v1->add_edge_to(v2, model_edge);
 }
@@ -230,7 +230,7 @@ bgrl_graph::iterator::iterator( bgrl_graph* graph, bgrl_search_func_sptr func )
 
 //: Constructor - for end iterator
 bgrl_graph::iterator::iterator( bgrl_graph* graph )
- : graph_(graph),  search_func_(VXL_NULLPTR),
+ : graph_(graph),  search_func_(nullptr),
    use_internal_(true), internal_(graph->vertices_.end())
 {
 }
@@ -272,7 +272,7 @@ bgrl_graph::iterator::operator * () const
 {
   if (use_internal_)
     if (internal_ == this->graph_->vertices_.end())
-      return VXL_NULLPTR;
+      return nullptr;
     else
       return *internal_;
   else
@@ -326,7 +326,7 @@ vsl_b_read(vsl_b_istream &is, bgrl_graph* &g)
     g->b_read(is);
   }
   else
-    g = VXL_NULLPTR;
+    g = nullptr;
 }
 
 

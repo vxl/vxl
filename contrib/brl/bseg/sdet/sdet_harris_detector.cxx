@@ -48,8 +48,8 @@ static int compare(sdet_harris_point*  pa,
 sdet_harris_detector::sdet_harris_detector(sdet_harris_detector_params& rpp)
   : sdet_harris_detector_params(rpp)
 {
-  image_ = VXL_NULLPTR;
-  vimage_ = VXL_NULLPTR;
+  image_ = nullptr;
+  vimage_ = nullptr;
   //don't really know but have to pick one
   use_vil_image_ = true;
 }

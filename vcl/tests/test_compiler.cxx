@@ -16,7 +16,7 @@ X<T>::X() : x(1728) { }
 
 // definition (not specialization) of static template member.
 template <class T>
-X<T> *X<T>::pl = VXL_NULLPTR;
+X<T> *X<T>::pl = nullptr;
 
 // explicit instantiation of class also instantiates statics.
 template struct X<int>;
@@ -44,7 +44,7 @@ int test_compiler_main(int /*argc*/,char* /*argv*/[])
   int result = 0;
 
   vcl_cout << "Testing static template member..." << vcl_flush;
-  if ( X<int>::pl == VXL_NULLPTR ) {
+  if ( X<int>::pl == nullptr ) {
     vcl_cout << "  PASSED" << vcl_endl;
   }
   else {

@@ -41,14 +41,14 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
     std::cerr << std::endl;
   }
 
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
                                                     bool verbose)
 {
   vil_smart_ptr<vil_stream> is = vil_open(filename, "r");
-  vil_image_resource_sptr isp = VXL_NULLPTR;
+  vil_image_resource_sptr isp = nullptr;
   if (is)
   {
 #ifdef VCL_HAS_EXCEPTIONS
@@ -98,7 +98,7 @@ vil_image_resource_sptr vil_load_image_resource_plugin(char const* filename)
         return im;
     }
   }
-  return vil_image_resource_sptr(VXL_NULLPTR);
+  return vil_image_resource_sptr(nullptr);
 }
 
 vil_pyramid_image_resource_sptr
@@ -126,14 +126,14 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
       std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
     std::cerr << std::endl;
   }
-  return VXL_NULLPTR;
+  return nullptr;
 }
 
 //: Convenience function for loading an image into an image view.
 vil_image_view_base_sptr vil_load(const char *file, bool verbose)
 {
   vil_image_resource_sptr data = vil_load_image_resource(file, verbose);
-  if (!data) return VXL_NULLPTR;
+  if (!data) return nullptr;
   return data -> get_view();
 }
 

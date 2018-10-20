@@ -17,7 +17,7 @@ public:
   typedef T *iterator;
   typedef const T *const_iterator;
 
-  array_4d() : buffer_(VXL_NULLPTR), x_(0), y_(0), z_(0), t_(0) {}
+  array_4d() : buffer_(nullptr), x_(0), y_(0), z_(0), t_(0) {}
   array_4d(T *buffer, vcl_size_t x, vcl_size_t y, vcl_size_t z, vcl_size_t t)
       : buffer_(buffer), x_(x), y_(y), z_(z), t_(t) {}
   // no delegating constructors before C++11 :-(

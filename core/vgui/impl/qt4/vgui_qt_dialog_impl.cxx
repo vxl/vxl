@@ -51,7 +51,7 @@ bool vgui_qt_dialog_impl::ask()
      total->addLayout(lower);
      lower->addStretch(1);
 
-     QPushButton *ok = VXL_NULLPTR;
+     QPushButton *ok = nullptr;
      if (use_ok_button)
      {
        ok = new QPushButton( ok_button_text_.c_str(), this );

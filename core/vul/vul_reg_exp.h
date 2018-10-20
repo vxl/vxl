@@ -96,9 +96,9 @@ class vul_reg_exp
   const char* searchstring;
  public:
   //: Creates an empty regular expression.
-  inline vul_reg_exp() : program(VXL_NULLPTR) { clear_bufs(); }
+  inline vul_reg_exp() : program(nullptr) { clear_bufs(); }
   //: Creates a regular expression from string s, and compiles s.
-  inline vul_reg_exp(char const* s) : program(VXL_NULLPTR) { clear_bufs(); compile(s); }
+  inline vul_reg_exp(char const* s) : program(nullptr) { clear_bufs(); compile(s); }
   //: Copy constructor
   vul_reg_exp(vul_reg_exp const&);
   //: Frees space allocated for regular expression.
@@ -120,9 +120,9 @@ class vul_reg_exp
   //: Same regexp and state?
   bool deep_equal(vul_reg_exp const&) const;
   //: Returns true if a valid RE is compiled and ready for pattern matching.
-  inline bool is_valid() const { return this->program != VXL_NULLPTR; }
+  inline bool is_valid() const { return this->program != nullptr; }
   //: Invalidates regular expression.
-  inline void set_invalid() { delete[] this->program; this->program = VXL_NULLPTR; clear_bufs(); }
+  inline void set_invalid() { delete[] this->program; this->program = nullptr; clear_bufs(); }
 
   //: Return start index of nth submatch.
   // start(0) is the start of the full match.
@@ -142,7 +142,7 @@ class vul_reg_exp
 
  private:
   //: private function to clear startp[] and endp[]
-  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=VXL_NULLPTR; }
+  void clear_bufs() { for (int n=0; n<vul_reg_exp_nsubexp; ++n) startp[n]=endp[n]=nullptr; }
 };
 
 #endif // vul_reg_exph

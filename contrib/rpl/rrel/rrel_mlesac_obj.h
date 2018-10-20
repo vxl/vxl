@@ -53,13 +53,13 @@ public:
   //  \sa rrel_objective::fcn.
   virtual double fcn(vect_const_iter res_begin, vect_const_iter res_end,
                      vect_const_iter scale_begin,
-                     vnl_vector<double>* param_vector=VXL_NULLPTR ) const;
+                     vnl_vector<double>* param_vector=nullptr ) const;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
   virtual double fcn(vect_const_iter begin, vect_const_iter end,
                      double scale,
-                     vnl_vector<double>* param_vector=VXL_NULLPTR ) const;
+                     vnl_vector<double>* param_vector=nullptr ) const;
 
   //: True.
   //  The MLESAC algorithm is sensitive to the scale, and requires a prior scale.

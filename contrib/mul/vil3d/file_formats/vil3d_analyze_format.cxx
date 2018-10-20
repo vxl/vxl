@@ -466,7 +466,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *fil
   else
     base_filename = filename;
 
-  if (!header.read_file(std::string(base_filename)+".hdr")) return VXL_NULLPTR;
+  if (!header.read_file(std::string(base_filename)+".hdr")) return nullptr;
   std::cout<<"vil3d_analyze_format::make_input_image() Header: "<<header<<std::endl;
 
   return new vil3d_analyze_image(header,base_filename);
@@ -489,7 +489,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
   {
     std::cerr << "vil3d_analyze_format::make_output_image() WARNING\n"
              << "  Unable to deal with pixel format : " << format << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 
   vil3d_analyze_header header;
@@ -505,7 +505,7 @@ vil3d_image_resource_sptr vil3d_analyze_format::make_output_image(const char* fi
     base_filename = filename.substr(0,n-4);
   else
     base_filename = filename;
-  if (!header.write_file(std::string(base_filename)+".hdr")) return VXL_NULLPTR;
+  if (!header.write_file(std::string(base_filename)+".hdr")) return nullptr;
   return new vil3d_analyze_image(header,base_filename);
 }
 
@@ -565,11 +565,11 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
   // Can only cope with loading whole image at present.
   if (i0!=0 || int(ni)!=header_.ni() ||
       j0!=0 || int(nj)!=header_.nj() ||
-      k0!=0 || int(nk)!=header_.nk()   ) return VXL_NULLPTR;
+      k0!=0 || int(nk)!=header_.nk()   ) return nullptr;
 
   std::string image_data_path=base_path_+".img";
   vil_smart_ptr<vil_stream> is = new vil_stream_fstream(image_data_path.c_str(),"r");
-  if (!is->ok()) return VXL_NULLPTR;
+  if (!is->ok()) return nullptr;
 
 // NOTE: See GIPL loader for more general data reading
 #define read_data_of_type(type) \
@@ -615,11 +615,11 @@ vil3d_image_view_base_sptr vil3d_analyze_image::get_copy_view(
    case VIL_PIXEL_FORMAT_BOOL:
     std::cout<<"ERROR: vil3d_analyze_format::get_copy_view()"
             <<pixel_format() << " pixel type not yet implemented\n";
-    return VXL_NULLPTR;
+    return nullptr;
    default:
     std::cout<<"ERROR: vil3d_analyze_format::get_copy_view()\n"
             <<"Can't deal with pixel type " << pixel_format() << std::endl;
-    return VXL_NULLPTR;
+    return nullptr;
   }
 }
 

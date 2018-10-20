@@ -99,23 +99,23 @@ class TriTensor
 
   vgl_homg_point_2d<double> image1_transfer(vgl_homg_point_2d<double> const& point2,
                                             vgl_homg_point_2d<double> const& point3,
-                                            vgl_homg_point_2d<double> corrected[] = VXL_NULLPTR) const;
+                                            vgl_homg_point_2d<double> corrected[] = nullptr) const;
   vgl_homg_point_2d<double> image2_transfer(vgl_homg_point_2d<double> const& point1,
                                             vgl_homg_point_2d<double> const& point3,
-                                            vgl_homg_point_2d<double> corrected[] = VXL_NULLPTR) const;
+                                            vgl_homg_point_2d<double> corrected[] = nullptr) const;
   vgl_homg_point_2d<double> image3_transfer(vgl_homg_point_2d<double> const& point1,
                                             vgl_homg_point_2d<double> const& point2,
-                                            vgl_homg_point_2d<double> corrected[] = VXL_NULLPTR) const;
+                                            vgl_homg_point_2d<double> corrected[] = nullptr) const;
 
   HomgPoint2D image1_transfer(HomgPoint2D const& point2,
                               HomgPoint2D const& point3,
-                              HomgPoint2D corrected[] = VXL_NULLPTR) const;
+                              HomgPoint2D corrected[] = nullptr) const;
   HomgPoint2D image2_transfer(HomgPoint2D const& point1,
                               HomgPoint2D const& point3,
-                              HomgPoint2D corrected[] = VXL_NULLPTR) const;
+                              HomgPoint2D corrected[] = nullptr) const;
   HomgPoint2D image3_transfer(HomgPoint2D const& point1,
                               HomgPoint2D const& point2,
-                              HomgPoint2D corrected[] = VXL_NULLPTR) const;
+                              HomgPoint2D corrected[] = nullptr) const;
 
   vgl_homg_point_2d<double> image1_transfer_qd(vgl_homg_point_2d<double> const& point2,
                                                vgl_homg_point_2d<double> const& point3) const;

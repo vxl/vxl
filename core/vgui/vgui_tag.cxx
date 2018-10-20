@@ -25,7 +25,7 @@ int vgui_tag_add(vgui_tag_function f, char const * /*tk*/) {
 }
 
 vgui_tag_function const *vgui_tag_list() {
-  tags[numtags] = VXL_NULLPTR;
+  tags[numtags] = nullptr;
   return tags;
 }
 

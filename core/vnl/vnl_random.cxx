@@ -69,7 +69,7 @@ vnl_random::~vnl_random()
 
 void vnl_random::reseed()
 {
-  reseed((unsigned long)std::time(VXL_NULLPTR));
+  reseed((unsigned long)std::time(nullptr));
 }
 
 void vnl_random::reseed(unsigned long seed)

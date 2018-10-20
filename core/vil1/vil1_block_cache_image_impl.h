@@ -52,7 +52,7 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   bool put_section(void const *buf, int x0, int y0, int w, int h); // write-through
 
   //: Get info about block-characteristics
-  bool get_property(char const *tag, void *property_value_out = VXL_NULLPTR) const;
+  bool get_property(char const *tag, void *property_value_out = nullptr) const;
 
   //: Return the name of the class;
   virtual std::string is_a() const;

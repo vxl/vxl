@@ -94,7 +94,7 @@ static void test_vertex_2d()
 
   // check casting
 
-  TEST("vtol_vertex_2d::cast_to_vertex_2d()", v1->cast_to_vertex_2d()==VXL_NULLPTR, false);
+  TEST("vtol_vertex_2d::cast_to_vertex_2d()", v1->cast_to_vertex_2d()==nullptr, false);
 
   // check distance from
 
@@ -108,7 +108,7 @@ static void test_vertex_2d()
 
   // checking the vertex side of things
 
-  TEST("vtol_vertex_2d::cast_to_vertex()", v1->cast_to_vertex()==VXL_NULLPTR, false);
+  TEST("vtol_vertex_2d::cast_to_vertex()", v1->cast_to_vertex()==nullptr, false);
 
   vtol_edge_sptr new_edge = v1->new_edge(v2);
   edge_list e_list; v1->edges(e_list);
@@ -134,8 +134,8 @@ static void test_vertex_2d()
   (*v1v_copy) = (*v1v);
   TEST("vtol_vertex assignment", *v1v_copy, *v1v);
 
-  TEST("vtol_vertex::cast_to_vertex()", v1v->cast_to_vertex()==VXL_NULLPTR, false);
-  TEST("vtol_vertex::cast_to_vertex_2d()", v1v->cast_to_vertex_2d()==VXL_NULLPTR, false);
+  TEST("vtol_vertex::cast_to_vertex()", v1v->cast_to_vertex()==nullptr, false);
+  TEST("vtol_vertex::cast_to_vertex_2d()", v1v->cast_to_vertex_2d()==nullptr, false);
 
   TEST("vtol_vertex::is_connected()", v1v->is_connected(v2v), true);
 
@@ -152,7 +152,7 @@ static void test_vertex_2d()
   std::cout << "Testing superiors_list\n"
            << "ve before superiors access " << *ve << std::endl;
   const std::list<vtol_topology_object*>* sups = ve->superiors_list();
-  TEST("vtol_vertex::superiors_list()", sups==VXL_NULLPTR, false);
+  TEST("vtol_vertex::superiors_list()", sups==nullptr, false);
   for (std::list<vtol_topology_object*>::const_iterator sit = sups->begin();
        sit !=sups->end(); sit++)
   {

@@ -12,7 +12,7 @@
 template<class BaseClass>
 vsl_binary_loader<BaseClass>& vsl_binary_loader<BaseClass>::instance()
 {
-  if (instance_ == VXL_NULLPTR)
+  if (instance_ == nullptr)
   {
     instance_ = new vsl_binary_loader<BaseClass>;
 
@@ -34,7 +34,7 @@ template<class BaseClass>
 vsl_binary_loader<BaseClass>::~vsl_binary_loader()
 {
   make_empty();
-  instance_=VXL_NULLPTR;
+  instance_=nullptr;
 }
 
 // IO for  pointers to BaseClass:
@@ -55,7 +55,7 @@ void vsl_binary_loader<BaseClass>::load_object( vsl_b_istream& is, BaseClass*& b
   if (name=="VSL_NULL_PTR")
   {
     // Zero pointer
-    b=VXL_NULLPTR;
+    b=nullptr;
     return;
   }
 
@@ -93,7 +93,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const BaseClass* b)
 }
 
 template <class BaseClass>
-vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = VXL_NULLPTR;
+vsl_binary_loader<BaseClass>* vsl_binary_loader<BaseClass>::instance_ = nullptr;
 
 
 #undef VSL_BINARY_LOADER_INSTANTIATE
