@@ -5,9 +5,7 @@
 #include "vpyr_top_tmap.h"
 
 template < class TPyramid , class V , class E , class F , class D >
-vpyr_top_tmap< TPyramid , V , E , F , D >::~vpyr_top_tmap()
-{
-}
+vpyr_top_tmap< TPyramid , V , E , F , D >::~vpyr_top_tmap() = default;
 
 template < class TPyramid  , class V , class E , class F , class D >
 void vpyr_top_tmap< TPyramid , V , E , F , D >::contraction(const contraction_kernel & arg)

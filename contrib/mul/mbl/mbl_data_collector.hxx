@@ -16,18 +16,14 @@
 //=======================================================================
 
 template<class T>
-mbl_data_collector<T>::mbl_data_collector()
-{
-}
+mbl_data_collector<T>::mbl_data_collector() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
 template<class T>
-mbl_data_collector<T>::~mbl_data_collector()
-{
-}
+mbl_data_collector<T>::~mbl_data_collector() = default;
 
 
 //: Copy all the data from a mbl_data_wrapper<T> into a mbl_data_collector<T>

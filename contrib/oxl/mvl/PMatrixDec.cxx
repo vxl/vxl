@@ -26,7 +26,7 @@ PMatrixDec::PMatrixDec(const vnl_matrix<double>& p_matrix)
 //--------------------------------------------------------------
 //: Destructor
 
-PMatrixDec::~PMatrixDec() {}
+PMatrixDec::~PMatrixDec() = default;
 
 
 //--------------------------------------------------------------

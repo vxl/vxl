@@ -142,8 +142,7 @@ class rgrl_linear_estimator
   { }
 
   virtual
-  ~rgrl_linear_estimator()
-  { }
+  ~rgrl_linear_estimator() = default;
 
   //: Linear estimator is non-iterative
   //
@@ -183,8 +182,7 @@ class rgrl_nonlinear_estimator
   { }
 
   virtual
-  ~rgrl_nonlinear_estimator()
-  { }
+  ~rgrl_nonlinear_estimator() = default;
 
   //: Linear estimator is non-iterative
   //

@@ -102,7 +102,7 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_face_2d() {}
+  virtual ~vtol_face_2d() = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization

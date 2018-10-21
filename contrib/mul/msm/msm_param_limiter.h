@@ -20,7 +20,7 @@ class msm_param_limiter
 {
  public:
 
-  virtual ~msm_param_limiter() {}
+  virtual ~msm_param_limiter() = default;
 
   //: Define variance on each parameter
   virtual void set_param_var(const vnl_vector<double>& v)=0;

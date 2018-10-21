@@ -26,17 +26,13 @@
 // Dflt ctor
 //=======================================================================
 
-vpdfl_axis_gaussian::vpdfl_axis_gaussian()
-{
-}
+vpdfl_axis_gaussian::vpdfl_axis_gaussian() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-vpdfl_axis_gaussian::~vpdfl_axis_gaussian()
-{
-}
+vpdfl_axis_gaussian::~vpdfl_axis_gaussian() = default;
 
 //=======================================================================
 

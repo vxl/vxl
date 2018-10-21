@@ -21,9 +21,7 @@
 
 //=======================================================================
 
-pdf1d_gaussian_kernel_pdf::pdf1d_gaussian_kernel_pdf()
-{
-}
+pdf1d_gaussian_kernel_pdf::pdf1d_gaussian_kernel_pdf() = default;
 
 //: Define n kernels centred at i*sep (i=0..n-1)
 pdf1d_gaussian_kernel_pdf::pdf1d_gaussian_kernel_pdf(
@@ -36,9 +34,7 @@ pdf1d_gaussian_kernel_pdf::pdf1d_gaussian_kernel_pdf(
 
 //=======================================================================
 
-pdf1d_gaussian_kernel_pdf::~pdf1d_gaussian_kernel_pdf()
-{
-}
+pdf1d_gaussian_kernel_pdf::~pdf1d_gaussian_kernel_pdf() = default;
 
 //=======================================================================
 

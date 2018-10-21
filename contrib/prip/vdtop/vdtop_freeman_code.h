@@ -27,7 +27,7 @@ class vdtop_freeman_code
     code_ = arg ;
   }
 
-  vdtop_freeman_code (const vdtop_freeman_code & arg) : code_(arg.code_) {}
+  vdtop_freeman_code (const vdtop_freeman_code & arg)  = default;
 
   vdtop_freeman_code & operator= (vdtop_freeman_code arg)
   {

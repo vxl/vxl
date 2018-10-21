@@ -30,9 +30,7 @@ pdf1d_exponential::pdf1d_exponential(double lambda)
 
 //=======================================================================
 
-pdf1d_exponential::~pdf1d_exponential()
-{
-}
+pdf1d_exponential::~pdf1d_exponential() = default;
 
 //=======================================================================
 

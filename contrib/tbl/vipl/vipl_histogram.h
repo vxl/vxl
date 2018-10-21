@@ -112,7 +112,7 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
       {
         this->put_is_input_driven(true); // get sections from input
       }
-  inline ~vipl_histogram() {}
+  inline ~vipl_histogram() = default;
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();

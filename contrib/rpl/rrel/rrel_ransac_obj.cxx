@@ -6,9 +6,7 @@ rrel_ransac_obj::rrel_ransac_obj( double scale_mult )
 {
 }
 
-rrel_ransac_obj::~rrel_ransac_obj( )
-{
-}
+rrel_ransac_obj::~rrel_ransac_obj( ) = default;
 
 
 double

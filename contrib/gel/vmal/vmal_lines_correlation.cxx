@@ -18,9 +18,7 @@ delta_(delta),radius_(radius)
 {
 }
 
-vmal_lines_correlation::~vmal_lines_correlation()
-{
-}
+vmal_lines_correlation::~vmal_lines_correlation() = default;
 
 double vmal_lines_correlation::find_min_corr(vnl_double_3 &line0p, vnl_double_3 &line0q,
                                              vnl_double_3 &line1p, vnl_double_3 &line1q,

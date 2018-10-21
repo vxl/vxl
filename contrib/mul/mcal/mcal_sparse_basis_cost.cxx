@@ -31,9 +31,7 @@ mcal_sparse_basis_cost::mcal_sparse_basis_cost()
 // Destructor
 //=======================================================================
 
-mcal_sparse_basis_cost::~mcal_sparse_basis_cost()
-{
-}
+mcal_sparse_basis_cost::~mcal_sparse_basis_cost() = default;
 
 //: Weighting for sparseness penalty
 void mcal_sparse_basis_cost::set_alpha(double a)

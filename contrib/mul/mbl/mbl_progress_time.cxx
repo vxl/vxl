@@ -27,9 +27,7 @@ mbl_progress_time::mbl_progress_time(std::ostream& os/*=std::cout*/)
 //========================================================================
 // Destructor
 //========================================================================
-mbl_progress_time::~mbl_progress_time()
-{
-}
+mbl_progress_time::~mbl_progress_time() = default;
 
 
 //========================================================================

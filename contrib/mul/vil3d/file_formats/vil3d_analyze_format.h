@@ -32,7 +32,7 @@ class vil3d_analyze_header
     char hkey_un0;
 
     Key() { reset(); }
-    ~Key() {}
+    ~Key() = default;
 
     void reset();
   };
@@ -65,7 +65,7 @@ class vil3d_analyze_header
     int glmin;
 
     Dimensions() { reset(); }
-    ~Dimensions() {}
+    ~Dimensions() = default;
 
     void reset();
   };
@@ -94,7 +94,7 @@ class vil3d_analyze_header
     int smin;
 
     History() { reset(); }
-    ~History() {}
+    ~History() = default;
 
     void reset();
   };
@@ -108,7 +108,7 @@ class vil3d_analyze_header
 
  public:
   vil3d_analyze_header() : swap_bytes_(false) {}
-  ~vil3d_analyze_header() {}
+  ~vil3d_analyze_header() = default;
 
   void reset();
 

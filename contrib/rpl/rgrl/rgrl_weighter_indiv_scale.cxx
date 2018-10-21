@@ -25,9 +25,7 @@ rgrl_weighter_indiv_scale( vcl_unique_ptr<rrel_m_est_obj>  m_est,
 
 
 rgrl_weighter_indiv_scale::
-~rgrl_weighter_indiv_scale()
-{
-}
+~rgrl_weighter_indiv_scale() = default;
 
 
 void

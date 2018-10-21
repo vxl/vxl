@@ -11,9 +11,9 @@
 #include <mvl/AffineMetric.h>
 #include <mvl/HomgInterestPointSet.h>
 
-HMatrix2DComputeRobust::HMatrix2DComputeRobust() {}
+HMatrix2DComputeRobust::HMatrix2DComputeRobust() = default;
 
-HMatrix2DComputeRobust::~HMatrix2DComputeRobust() {}
+HMatrix2DComputeRobust::~HMatrix2DComputeRobust() = default;
 
 
 HMatrix2D HMatrix2DComputeRobust::compute(PairMatchSetCorner& matches)

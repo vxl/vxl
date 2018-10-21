@@ -14,9 +14,7 @@
 //--------------------------------------------------------------
 //
 //: Default constructor
-HomgLineSeg3D::HomgLineSeg3D ()
-{
-}
+HomgLineSeg3D::HomgLineSeg3D () = default;
 
 //--------------------------------------------------------------
 //
@@ -32,9 +30,7 @@ HomgLineSeg3D::HomgLineSeg3D (const HomgPoint3D& point1, const HomgPoint3D& poin
 //--------------------------------------------------------------
 //
 //: Destructor
-HomgLineSeg3D::~HomgLineSeg3D()
-{
-}
+HomgLineSeg3D::~HomgLineSeg3D() = default;
 
 
 //--------------------------------------------------------------

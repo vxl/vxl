@@ -17,9 +17,7 @@
 // Dflt ctor
 //=======================================================================
 
-msm_points::msm_points()
-{
-}
+msm_points::msm_points() = default;
 
 msm_points::msm_points(unsigned n)
 {
@@ -30,9 +28,7 @@ msm_points::msm_points(unsigned n)
 // Destructor
 //=======================================================================
 
-msm_points::~msm_points()
-{
-}
+msm_points::~msm_points() = default;
 
 //: Set to hold n points (initially all (x,y))
 void msm_points::set_size(unsigned n, double x, double y)

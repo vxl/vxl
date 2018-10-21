@@ -79,9 +79,7 @@ struct tool_params
   void read_from_file(const std::string& path);
 };
 
-tool_params::tool_params()
-{
-}
+tool_params::tool_params() = default;
 
 //: Parse named text file to read in data
 //  Throws a upf_exception_parse_error if fails

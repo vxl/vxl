@@ -21,9 +21,7 @@ pdf1d_epanech_kernel_pdf_sampler::pdf1d_epanech_kernel_pdf_sampler():
 {
 }
 
-pdf1d_epanech_kernel_pdf_sampler::~pdf1d_epanech_kernel_pdf_sampler()
-{
-}
+pdf1d_epanech_kernel_pdf_sampler::~pdf1d_epanech_kernel_pdf_sampler() = default;
 
 //=======================================================================
 

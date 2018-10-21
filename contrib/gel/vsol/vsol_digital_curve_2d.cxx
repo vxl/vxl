@@ -47,9 +47,7 @@ vsol_digital_curve_2d::vsol_digital_curve_2d(const vsol_digital_curve_2d &other)
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
-vsol_digital_curve_2d::~vsol_digital_curve_2d()
-{
-}
+vsol_digital_curve_2d::~vsol_digital_curve_2d() = default;
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization

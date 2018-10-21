@@ -27,7 +27,7 @@ class PMatrixDecompAa
   //{genman, do not do anything to this line -- awf}
 
 //: Default constructor
-  PMatrixDecompAa() {}
+  PMatrixDecompAa() = default;
 
 //: Construct from PMatrix.
   PMatrixDecompAa(const PMatrix& P) { set(P); }

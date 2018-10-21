@@ -26,9 +26,7 @@ vpdfl_axis_gaussian_sampler::vpdfl_axis_gaussian_sampler():
 // Destructor
 //=======================================================================
 
-vpdfl_axis_gaussian_sampler::~vpdfl_axis_gaussian_sampler()
-{
-}
+vpdfl_axis_gaussian_sampler::~vpdfl_axis_gaussian_sampler() = default;
 
 
 //=======================================================================

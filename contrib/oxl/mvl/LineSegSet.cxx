@@ -30,17 +30,10 @@ LineSegSet::LineSegSet(const LineSegSet& that):
 }
 
 // Assignment
-LineSegSet& LineSegSet::operator=(const LineSegSet& that)
-{
-  hlines_ = that.hlines_;
-  conditioner_ = that.conditioner_;
-  return *this;
-}
+LineSegSet& LineSegSet::operator=(const LineSegSet& that) = default;
 
 // Destructor
-LineSegSet::~LineSegSet()
-{
-}
+LineSegSet::~LineSegSet() = default;
 
 //: Construct from ascii file
 LineSegSet::LineSegSet(const char* filename, const HomgMetric& c)

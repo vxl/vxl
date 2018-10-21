@@ -12,15 +12,11 @@
 
 //=======================================================================
 
-pdf1d_builder::pdf1d_builder()
-{
-}
+pdf1d_builder::pdf1d_builder() = default;
 
 //=======================================================================
 
-pdf1d_builder::~pdf1d_builder()
-{
-}
+pdf1d_builder::~pdf1d_builder() = default;
 
 //: Build model from data
 void pdf1d_builder::build_from_array(pdf1d_pdf& model, const double* data, int n) const

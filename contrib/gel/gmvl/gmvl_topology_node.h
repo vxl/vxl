@@ -17,7 +17,7 @@ class gmvl_topology_node : public gmvl_node
 {
  public:
   gmvl_topology_node( vtol_topology_object_sptr t) : topology_(t) { type_="gmvl_topology_node"; }
-  ~gmvl_topology_node() {}
+  ~gmvl_topology_node() = default;
 
   vtol_topology_object_sptr get() const { return topology_; }
 

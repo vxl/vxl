@@ -28,10 +28,10 @@ class vimt_image
 
  public:
     //: Dflt ctor
-  vimt_image() {}
+  vimt_image() = default;
 
     //: Destructor
-  virtual ~vimt_image() {}
+  virtual ~vimt_image() = default;
 
     //: Return dimensionality of image
   virtual unsigned n_dims() const = 0;

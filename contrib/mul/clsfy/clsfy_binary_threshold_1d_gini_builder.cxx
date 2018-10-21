@@ -21,15 +21,11 @@
 
 //=======================================================================
 
-clsfy_binary_threshold_1d_gini_builder::clsfy_binary_threshold_1d_gini_builder()
-{
-}
+clsfy_binary_threshold_1d_gini_builder::clsfy_binary_threshold_1d_gini_builder() = default;
 
 //=======================================================================
 
-clsfy_binary_threshold_1d_gini_builder::~clsfy_binary_threshold_1d_gini_builder()
-{
-}
+clsfy_binary_threshold_1d_gini_builder::~clsfy_binary_threshold_1d_gini_builder() = default;
 
 //=======================================================================
 

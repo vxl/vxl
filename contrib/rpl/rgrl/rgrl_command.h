@@ -19,13 +19,13 @@ class rgrl_command: public vbl_ref_count
 {
  public:
   //:
-  rgrl_command() {}
+  rgrl_command() = default;
 
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   rgrl_command(rgrl_command const&) : vbl_ref_count() {}
 
   //:
-  virtual ~rgrl_command() {}
+  virtual ~rgrl_command() = default;
 
   //: Abstract method that defines the action to be taken by the command
   virtual void execute(rgrl_object* caller, rgrl_event const& event ) = 0;

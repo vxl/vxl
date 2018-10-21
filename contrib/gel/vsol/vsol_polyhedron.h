@@ -179,7 +179,7 @@ class vsol_polyhedron : public vsol_volume_3d
   //---------------------------------------------------------------------------
   //: Default constructor. Do nothing. Just to enable inheritance. Protected.
   //---------------------------------------------------------------------------
-  vsol_polyhedron() {}
+  vsol_polyhedron() = default;
 };
 
 //: Binary save vsol_polyhedron* to stream.

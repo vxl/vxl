@@ -17,15 +17,11 @@
 
 //: Constructor
 template<class T>
-mbl_ar_process<T>::mbl_ar_process()
-{
-}
+mbl_ar_process<T>::mbl_ar_process() = default;
 
 //: Destructor
 template<class T>
-mbl_ar_process<T>::~mbl_ar_process()
-{
-}
+mbl_ar_process<T>::~mbl_ar_process() = default;
 
 //: Version number for I/O
 template<class T>

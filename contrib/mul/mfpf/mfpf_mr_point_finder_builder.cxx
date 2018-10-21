@@ -25,9 +25,7 @@
 // Constructors
 //=======================================================================
 
-mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder()
-{
-}
+mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder() = default;
 
 //: Copy ctor
 mfpf_mr_point_finder_builder::mfpf_mr_point_finder_builder(const mfpf_mr_point_finder_builder& b)

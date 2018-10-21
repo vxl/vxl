@@ -33,9 +33,7 @@ mfpf_dp_snake::mfpf_dp_snake()
 // Destructor
 //=======================================================================
 
-mfpf_dp_snake::~mfpf_dp_snake()
-{
-}
+mfpf_dp_snake::~mfpf_dp_snake() = default;
 
 //: Finder used to search for good points along profiles
 mfpf_point_finder& mfpf_dp_snake::finder()

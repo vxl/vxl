@@ -23,9 +23,7 @@ vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)
   recompute_all();
 }
 
-vdgl_interpolator_linear::~vdgl_interpolator_linear()
-{
-}
+vdgl_interpolator_linear::~vdgl_interpolator_linear() = default;
 
 vsol_point_2d_sptr vdgl_interpolator_linear::closest_point_on_curve ( vsol_point_2d_sptr p )
 {

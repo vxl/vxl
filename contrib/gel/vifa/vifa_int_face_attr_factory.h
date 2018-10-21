@@ -19,8 +19,8 @@
 class vifa_int_face_attr_factory
 {
  public:
-  vifa_int_face_attr_factory() {}
-  virtual ~vifa_int_face_attr_factory() {}
+  vifa_int_face_attr_factory() = default;
+  virtual ~vifa_int_face_attr_factory() = default;
 
   virtual vifa_int_face_attr_sptr
     obtain_int_face_attr(vtol_intensity_face_sptr  face) = 0;

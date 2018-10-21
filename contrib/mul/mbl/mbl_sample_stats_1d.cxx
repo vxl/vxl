@@ -40,9 +40,7 @@ mbl_sample_stats_1d::mbl_sample_stats_1d()
 
 
 //=========================================================================
-mbl_sample_stats_1d::~mbl_sample_stats_1d()
-{
-}
+mbl_sample_stats_1d::~mbl_sample_stats_1d() = default;
 
 
 //=========================================================================

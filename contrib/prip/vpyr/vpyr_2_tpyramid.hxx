@@ -8,9 +8,7 @@
 #include <vcl_compiler.h>
 
 template <class TLevel>
-vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid()
-{
-}
+vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid() = default;
 
 #if 0
 template <class TLevel>
@@ -21,9 +19,7 @@ vpyr_2_tpyramid<TLevel>::vpyr_2_tpyramid(const self_type &pyr)
 #endif // 0
 
 template <class TLevel>
-vpyr_2_tpyramid<TLevel>::~vpyr_2_tpyramid()
-{
-}
+vpyr_2_tpyramid<TLevel>::~vpyr_2_tpyramid() = default;
 
 #if 0
 template <class TLevel>

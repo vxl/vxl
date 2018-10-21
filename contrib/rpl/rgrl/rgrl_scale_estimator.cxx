@@ -7,24 +7,16 @@
 
 
 rgrl_scale_estimator_unwgted::
-rgrl_scale_estimator_unwgted()
-{
-}
+rgrl_scale_estimator_unwgted() = default;
 
 
 rgrl_scale_estimator_unwgted::
-~rgrl_scale_estimator_unwgted()
-{
-}
+~rgrl_scale_estimator_unwgted() = default;
 
 
 rgrl_scale_estimator_wgted::
-rgrl_scale_estimator_wgted()
-{
-}
+rgrl_scale_estimator_wgted() = default;
 
 
 rgrl_scale_estimator_wgted::
-~rgrl_scale_estimator_wgted()
-{
-}
+~rgrl_scale_estimator_wgted() = default;

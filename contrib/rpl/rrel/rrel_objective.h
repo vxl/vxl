@@ -32,8 +32,8 @@ class rrel_objective
   typedef std::vector<double>::iterator vect_iter;
 
  public:
-  rrel_objective() {}
-  virtual ~rrel_objective() {}
+  rrel_objective() = default;
+  virtual ~rrel_objective() = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   // This version is used for heteroscedastic data, where each

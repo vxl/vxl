@@ -34,9 +34,7 @@ pdf1d_gaussian::pdf1d_gaussian(double mean, double variance)
 
 //=======================================================================
 
-pdf1d_gaussian::~pdf1d_gaussian()
-{
-}
+pdf1d_gaussian::~pdf1d_gaussian() = default;
 
 //=======================================================================
 

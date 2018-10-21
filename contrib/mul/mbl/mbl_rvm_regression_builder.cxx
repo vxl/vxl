@@ -23,17 +23,13 @@
 // Dflt ctor
 //=======================================================================
 
-mbl_rvm_regression_builder::mbl_rvm_regression_builder()
-{
-}
+mbl_rvm_regression_builder::mbl_rvm_regression_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mbl_rvm_regression_builder::~mbl_rvm_regression_builder()
-{
-}
+mbl_rvm_regression_builder::~mbl_rvm_regression_builder() = default;
 
 //: Compute design matrix F from subset of elements in kernel matrix
 void mbl_rvm_regression_builder::design_matrix(const vnl_matrix<double>& K,

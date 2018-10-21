@@ -25,9 +25,7 @@ msdi_points_subset::msdi_points_subset(
 // Destructor
 //=======================================================================
 
-msdi_points_subset::~msdi_points_subset()
-{
-}
+msdi_points_subset::~msdi_points_subset() = default;
 
 unsigned msdi_points_subset::size() const
 {

@@ -34,7 +34,7 @@ class msm_ellipsoid_limiter : public msm_param_limiter
 
   msm_ellipsoid_limiter();
 
-  virtual ~msm_ellipsoid_limiter() {}
+  virtual ~msm_ellipsoid_limiter() = default;
 
   //: Define variance on each parameter
   virtual void set_param_var(const vnl_vector<double>& v);

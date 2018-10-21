@@ -19,15 +19,11 @@
 
 //=======================================================================
 
-clsfy_mean_square_1d_builder::clsfy_mean_square_1d_builder()
-{
-}
+clsfy_mean_square_1d_builder::clsfy_mean_square_1d_builder() = default;
 
 //=======================================================================
 
-clsfy_mean_square_1d_builder::~clsfy_mean_square_1d_builder()
-{
-}
+clsfy_mean_square_1d_builder::~clsfy_mean_square_1d_builder() = default;
 
 //=======================================================================
 

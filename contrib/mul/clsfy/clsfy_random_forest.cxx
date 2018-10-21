@@ -19,9 +19,7 @@
 #include <mbl/mbl_cloneable_ptr.h>
 
 
-clsfy_random_forest::clsfy_random_forest()
-{
-}
+clsfy_random_forest::clsfy_random_forest() = default;
 
 //=======================================================================
 //: Return the classification of the given probe vector.

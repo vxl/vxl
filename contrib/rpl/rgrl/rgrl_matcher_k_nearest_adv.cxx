@@ -23,8 +23,7 @@ struct feature_sptr_iterator_pair {
   rgrl_feature_sptr                   feature_;
   from_feature_iterator               fea_iterator_;
 
-  feature_sptr_iterator_pair()
-  { }
+  feature_sptr_iterator_pair() = default;
 
   feature_sptr_iterator_pair( rgrl_feature_sptr const& fea, from_feature_iterator const& it )
   : feature_( fea), fea_iterator_( it )

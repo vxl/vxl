@@ -12,15 +12,11 @@
 
 //=======================================================================
 
-mcal_single_basis_cost::mcal_single_basis_cost()
-{
-}
+mcal_single_basis_cost::mcal_single_basis_cost() = default;
 
 //=======================================================================
 
-mcal_single_basis_cost::~mcal_single_basis_cost()
-{
-}
+mcal_single_basis_cost::~mcal_single_basis_cost() = default;
 
 
 //=======================================================================

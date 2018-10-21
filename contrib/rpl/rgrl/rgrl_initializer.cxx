@@ -8,9 +8,7 @@
 #include <rgrl/rgrl_scale.h>
 
 rgrl_initializer::
-~rgrl_initializer()
-{
-}
+~rgrl_initializer() = default;
 
 bool
 rgrl_initializer::

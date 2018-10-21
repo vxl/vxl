@@ -10,9 +10,7 @@ rgrl_object()
 {}
 
 rgrl_object::
-~rgrl_object()
-{
-}
+~rgrl_object() = default;
 
 void
 rgrl_object::

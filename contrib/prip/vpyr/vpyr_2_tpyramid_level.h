@@ -215,7 +215,7 @@ class vpyr_2_tpyramid_level: public vpyr_2_pyramid_level<D>,
       face_sequence(arg)                       {}
 
   //:
-  virtual ~vpyr_2_tpyramid_level() {}
+  virtual ~vpyr_2_tpyramid_level() = default;
 
   //:
   int index() const

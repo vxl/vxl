@@ -69,9 +69,7 @@ void mfpf_lin_clsfy_finder_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_lin_clsfy_finder_builder::~mfpf_lin_clsfy_finder_builder()
-{
-}
+mfpf_lin_clsfy_finder_builder::~mfpf_lin_clsfy_finder_builder() = default;
 
 //: Create new mfpf_region_finder on heap
 mfpf_point_finder* mfpf_lin_clsfy_finder_builder::new_finder() const

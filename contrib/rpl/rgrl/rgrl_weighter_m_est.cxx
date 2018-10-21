@@ -29,9 +29,7 @@ rgrl_weighter_m_est( vcl_unique_ptr<rrel_m_est_obj>  m_est,
 
 
 rgrl_weighter_m_est::
-~rgrl_weighter_m_est()
-{
-}
+~rgrl_weighter_m_est() = default;
 
 
 void

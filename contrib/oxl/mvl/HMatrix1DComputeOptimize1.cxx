@@ -91,7 +91,7 @@ void do_compute(const std::vector<double> &z1,const std::vector<double> &z2,HMat
 }
 
 HMatrix1DComputeOptimize1::HMatrix1DComputeOptimize1(void) : HMatrix1DCompute() { }
-HMatrix1DComputeOptimize1::~HMatrix1DComputeOptimize1() { }
+HMatrix1DComputeOptimize1::~HMatrix1DComputeOptimize1() = default;
 
 bool
 HMatrix1DComputeOptimize1::compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&p1,

@@ -19,17 +19,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_edge_finder::mfpf_edge_finder()
-{
-}
+mfpf_edge_finder::mfpf_edge_finder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_edge_finder::~mfpf_edge_finder()
-{
-}
+mfpf_edge_finder::~mfpf_edge_finder() = default;
 
 //: Radius of circle containing modelled region
 double mfpf_edge_finder::radius() const

@@ -22,7 +22,7 @@ class vpyr_2_pyramid_level_dart
   typedef vpyr_2_pyramid_base_dart base_type ;
 
   //:
-  vpyr_2_pyramid_level_dart() {}
+  vpyr_2_pyramid_level_dart() = default;
 
   //:
   void set(base_type* arg_link, vmap_level_index arg_level)
@@ -32,8 +32,7 @@ class vpyr_2_pyramid_level_dart
   }
 
   //:
-  vpyr_2_pyramid_level_dart(const vpyr_2_pyramid_level_dart & arg)
-    :link_(arg.link_),level_(arg.level_)                           {}
+  vpyr_2_pyramid_level_dart(const vpyr_2_pyramid_level_dart & arg) = default;
 
   //: Returns true if the dart is a pendant dart.
   bool is_pendant() const
@@ -97,7 +96,7 @@ class vmap_2_pdl_dart : public vpyr_2_pyramid_level_dart
   typedef vmap_2_pd_dart< value_set > base_type ;
 
   //:
-  vmap_2_pdl_dart() {}
+  vmap_2_pdl_dart() = default;
 
   //:
   vmap_2_pdl_dart(vmap_2_pdl_dart<D> const& arg) :vpyr_2_pyramid_level_dart(arg) {}
@@ -131,7 +130,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   typedef FD element_type ;
 
   //:
-  vpyr_2_pyramid_level_dart_base_iterator() {}
+  vpyr_2_pyramid_level_dart_base_iterator() = default;
 
 #ifndef VCL_VC // already covered by the next, more general, copy constructor
   //:
@@ -157,7 +156,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   }
 
   //:
-  ~vpyr_2_pyramid_level_dart_base_iterator() {}
+  ~vpyr_2_pyramid_level_dart_base_iterator() = default;
 
   //:
   self_type & operator=(const self_type &it)

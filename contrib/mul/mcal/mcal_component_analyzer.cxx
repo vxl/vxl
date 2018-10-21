@@ -13,15 +13,11 @@
 
 //=======================================================================
 
-mcal_component_analyzer::mcal_component_analyzer()
-{
-}
+mcal_component_analyzer::mcal_component_analyzer() = default;
 
 //=======================================================================
 
-mcal_component_analyzer::~mcal_component_analyzer()
-{
-}
+mcal_component_analyzer::~mcal_component_analyzer() = default;
 
 //: Compute the mean of the supplied data
 void mcal_component_analyzer::compute_mean(mbl_data_wrapper<vnl_vector<double> >& data,

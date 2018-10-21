@@ -15,9 +15,7 @@ rgrl_matcher_fixed( rgrl_match_set_sptr  init_match_set_ ):
 }
 
 rgrl_matcher_fixed::
-~rgrl_matcher_fixed()
-{
-}
+~rgrl_matcher_fixed() = default;
 
 rgrl_match_set_sptr
 rgrl_matcher_fixed::

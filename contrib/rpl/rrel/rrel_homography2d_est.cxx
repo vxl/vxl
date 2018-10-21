@@ -56,9 +56,7 @@ rrel_homography2d_est :: rrel_homography2d_est( std::vector< vnl_vector<double> 
   min_num_pts_ = homog_dof_ / 2;
 }
 
-rrel_homography2d_est::~rrel_homography2d_est()
-{
-}
+rrel_homography2d_est::~rrel_homography2d_est() = default;
 
 
 unsigned int

@@ -76,9 +76,7 @@ gevd_clean_edgels::gevd_clean_edgels()
 
 
 //:Default Destructor
-gevd_clean_edgels::~gevd_clean_edgels()
-{
-}
+gevd_clean_edgels::~gevd_clean_edgels() = default;
 
 
 //: The main process method.  The input edgel group is filtered to remove bridges and short edges.

@@ -8,7 +8,7 @@
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}
 
-ComputeGRIC::~ComputeGRIC(){}
+ComputeGRIC::~ComputeGRIC()= default;
 
 bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
 

@@ -20,7 +20,7 @@ class mipa_l2norm_vector_normaliser : public mipa_vector_normaliser
 {
  public:
 
-  virtual ~mipa_l2norm_vector_normaliser() {}
+  virtual ~mipa_l2norm_vector_normaliser() = default;
 
   //: Normalise the sample.
   virtual void normalise(vnl_vector<double>& sample) const;

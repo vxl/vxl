@@ -34,8 +34,7 @@ vimt_gaussian_pyramid_builder_2d_general<T>::vimt_gaussian_pyramid_builder_2d_ge
 //=======================================================================
 
 template <class T>
-vimt_gaussian_pyramid_builder_2d_general<T>::~vimt_gaussian_pyramid_builder_2d_general()
-{}
+vimt_gaussian_pyramid_builder_2d_general<T>::~vimt_gaussian_pyramid_builder_2d_general() = default;
 
 //: Set the Scale step
 template <class T>

@@ -46,9 +46,7 @@ vpdfl_kernel_pdf_builder::vpdfl_kernel_pdf_builder()
 // Destructor
 //=======================================================================
 
-vpdfl_kernel_pdf_builder::~vpdfl_kernel_pdf_builder()
-{
-}
+vpdfl_kernel_pdf_builder::~vpdfl_kernel_pdf_builder() = default;
 
 //=======================================================================
 

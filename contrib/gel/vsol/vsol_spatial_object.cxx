@@ -8,6 +8,4 @@ vsol_spatial_object::vsol_spatial_object()
 {
 }
 
-vsol_spatial_object::~vsol_spatial_object()
-{
-}
+vsol_spatial_object::~vsol_spatial_object() = default;

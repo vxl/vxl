@@ -78,7 +78,7 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
            , mask_(nullptr)
            , masksize_(0) {}
 
-  inline ~vipl_gaussian_convolution() {}
+  inline ~vipl_gaussian_convolution() = default;
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();

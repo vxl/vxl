@@ -62,9 +62,7 @@ vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(
 }
 
 template < class DataType >
-vipl_section_descriptor_2d< DataType > ::~vipl_section_descriptor_2d()
-{
-}
+vipl_section_descriptor_2d< DataType > ::~vipl_section_descriptor_2d() = default;
 
 template < class DataType >
 vipl_section_descriptor_2d< DataType > ::vipl_section_descriptor_2d(): hsreal_descriptor (0),

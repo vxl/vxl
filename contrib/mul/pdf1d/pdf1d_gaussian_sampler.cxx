@@ -23,9 +23,7 @@ pdf1d_gaussian_sampler::pdf1d_gaussian_sampler():
 // Destructor
 //=======================================================================
 
-pdf1d_gaussian_sampler::~pdf1d_gaussian_sampler()
-{
-}
+pdf1d_gaussian_sampler::~pdf1d_gaussian_sampler() = default;
 
 
 //=======================================================================

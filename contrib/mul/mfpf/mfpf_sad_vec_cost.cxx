@@ -17,17 +17,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_sad_vec_cost::mfpf_sad_vec_cost()
-{
-}
+mfpf_sad_vec_cost::mfpf_sad_vec_cost() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_sad_vec_cost::~mfpf_sad_vec_cost()
-{
-}
+mfpf_sad_vec_cost::~mfpf_sad_vec_cost() = default;
 
 //: Define mean and weights
 void mfpf_sad_vec_cost::set(const vnl_vector<double>& mean,

@@ -104,7 +104,7 @@ class mbl_log_null_streambuf: public std::streambuf
 class mbl_log_output_base
 {
  public:
-  virtual ~mbl_log_output_base() {}
+  virtual ~mbl_log_output_base() = default;
   //: Start a new log entry, with id info.
   // Future calls to terminate_flush will be ignored.
   virtual void start_with_manual_termination(int level, const char *srcfile, int srcline)=0;

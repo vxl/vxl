@@ -29,9 +29,7 @@ PairMatchSet::PairMatchSet(unsigned size):
 }
 
 //: Destructor
-PairMatchSet::~PairMatchSet()
-{
-}
+PairMatchSet::~PairMatchSet() = default;
 
 // == OPERATIONS ==
 

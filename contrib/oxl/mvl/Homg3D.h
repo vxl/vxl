@@ -30,12 +30,12 @@ class Homg3D : public Homg
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  Homg3D() {}
+  Homg3D() = default;
   Homg3D(const Homg3D& that):homg_vector_(that.homg_vector_) {}
   Homg3D(double px, double py, double pz, double pw = 1): homg_vector_(px,py,pz,pw) {}
   Homg3D(const vnl_vector<double>& v): homg_vector_(v) { }
   Homg3D(const vnl_vector_fixed<double,4>& v): homg_vector_(v) { }
- ~Homg3D() {}
+ ~Homg3D() = default;
 
   Homg3D& operator=(const Homg3D& that) { homg_vector_ = that.homg_vector_; return *this; }
 

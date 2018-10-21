@@ -45,8 +45,8 @@ class ImageMetric
 {
  public:
   // Constructors/Destructors--------------------------------------------------
-  ImageMetric() {}
-  virtual ~ImageMetric() {}
+  ImageMetric() = default;
+  virtual ~ImageMetric() = default;
   //ImageMetric(ImageMetric const& that); - use default
   //ImageMetric& operator=(ImageMetric const& that); - use default
 

@@ -46,9 +46,7 @@ ProjectiveBasis2D& ProjectiveBasis2D::operator=(const ProjectiveBasis2D&)
 }
 
 //: Destructor
-ProjectiveBasis2D::~ProjectiveBasis2D()
-{
-}
+ProjectiveBasis2D::~ProjectiveBasis2D() = default;
 
 //:
 // Find the transformation which maps the 4 points to the canonical

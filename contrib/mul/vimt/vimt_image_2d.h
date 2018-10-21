@@ -21,10 +21,10 @@ class vimt_image_2d : public vimt_image
 
  public:
   //: Dflt ctor
-  vimt_image_2d() {}
+  vimt_image_2d() = default;
 
   //: Destructor
-  virtual ~vimt_image_2d() {}
+  virtual ~vimt_image_2d() = default;
 
   //: Return dimensionality of image
   virtual unsigned n_dims() const { return 2; }

@@ -73,7 +73,7 @@ class msm_cubic_bezier
   void set_points(const std::vector<vgl_point_2d<double> >&pts, bool closed=false);
 
   // Destructor
-  ~msm_cubic_bezier() {}
+  ~msm_cubic_bezier() = default;
 
   //: Number of points defining the curve
   std::size_t size() const { return bnode_.size(); }

@@ -27,17 +27,10 @@ rgrl_feature_landmark( vnl_vector<double> const& loc,
 
 
 rgrl_feature_landmark::
-rgrl_feature_landmark( rgrl_feature_landmark const& other )
-  : rgrl_feature(other),
-    error_proj_( other.error_proj_ ),
-    outgoing_directions_( other.outgoing_directions_ )
-{
-}
+rgrl_feature_landmark( rgrl_feature_landmark const& other ) = default;
 
 rgrl_feature_landmark::
-rgrl_feature_landmark( )
-{
-}
+rgrl_feature_landmark( ) = default;
 
 vnl_matrix<double> const&
 rgrl_feature_landmark::

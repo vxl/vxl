@@ -13,7 +13,7 @@ HMatrix2DComputeMLESAC::HMatrix2DComputeMLESAC(double std)
   std_ = std;
 }
 
-HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() {}
+HMatrix2DComputeMLESAC::~HMatrix2DComputeMLESAC() = default;
 
 double HMatrix2DComputeMLESAC::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {

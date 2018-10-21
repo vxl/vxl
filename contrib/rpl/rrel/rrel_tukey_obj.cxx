@@ -13,9 +13,7 @@ rrel_tukey_obj::rrel_tukey_obj( double B )
 }
 
 
-rrel_tukey_obj::~rrel_tukey_obj()
-{
-}
+rrel_tukey_obj::~rrel_tukey_obj() = default;
 
 
 double

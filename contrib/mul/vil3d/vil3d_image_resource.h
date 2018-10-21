@@ -29,7 +29,7 @@ class vil3d_image_resource
 {
  public:
   vil3d_image_resource(): reference_count_(0) {}
-  virtual ~vil3d_image_resource() {}
+  virtual ~vil3d_image_resource() = default;
 
   //: Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.

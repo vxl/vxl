@@ -3,9 +3,7 @@
 #include <rgrl/rgrl_converge_status.h>
 
 rgrl_convergence_tester::
-~rgrl_convergence_tester()
-{
-}
+~rgrl_convergence_tester() = default;
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::

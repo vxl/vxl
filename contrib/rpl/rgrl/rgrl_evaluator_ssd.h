@@ -17,8 +17,8 @@ class rgrl_evaluator_ssd
   : public rgrl_evaluator
 {
 public:
-  rgrl_evaluator_ssd() {}
-  ~rgrl_evaluator_ssd() {}
+  rgrl_evaluator_ssd() = default;
+  ~rgrl_evaluator_ssd() = default;
 
   double evaluate( std::vector< double > const& a,
                    std::vector< double > const& b,

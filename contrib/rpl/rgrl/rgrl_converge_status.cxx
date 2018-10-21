@@ -68,9 +68,7 @@ rgrl_converge_status( bool     in_has_converged,
 }
 
 rgrl_converge_status::
-~rgrl_converge_status()
-{
-}
+~rgrl_converge_status() = default;
 
 
 bool

@@ -21,18 +21,14 @@
 // Constructors
 //=======================================================================
 
-mcal_trivial_ca::mcal_trivial_ca()
-{
-}
+mcal_trivial_ca::mcal_trivial_ca() = default;
 
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mcal_trivial_ca::~mcal_trivial_ca()
-{
-}
+mcal_trivial_ca::~mcal_trivial_ca() = default;
 
 
 //: Compute modes of the supplied data relative to the supplied mean

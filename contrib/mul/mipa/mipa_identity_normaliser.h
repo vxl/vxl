@@ -19,7 +19,7 @@ class mipa_identity_normaliser : public mipa_vector_normaliser
 {
  public:
 
-  virtual ~mipa_identity_normaliser() {}
+  virtual ~mipa_identity_normaliser() = default;
 
   //: Normalise the sample.
   virtual void normalise(vnl_vector<double>& sample) const;

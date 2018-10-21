@@ -51,7 +51,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_region_2d() {}
+  virtual ~vsol_region_2d() = default;
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_2d

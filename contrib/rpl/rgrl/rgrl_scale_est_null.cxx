@@ -15,9 +15,7 @@ rgrl_scale_est_null( )
 
 
 rgrl_scale_est_null::
-~rgrl_scale_est_null()
-{
-}
+~rgrl_scale_est_null() = default;
 
 
 rgrl_scale_sptr

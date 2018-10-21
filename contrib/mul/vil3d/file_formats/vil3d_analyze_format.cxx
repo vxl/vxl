@@ -448,12 +448,10 @@ std::ostream& operator<<(std::ostream& os, const vil3d_analyze_header& header)
 // =================== vil3d_analyze_format =========================
 // ==================================================================
 
-vil3d_analyze_format::vil3d_analyze_format() {}
+vil3d_analyze_format::vil3d_analyze_format() = default;
 
 // The destructor must be virtual so that the memory chunk is destroyed.
-vil3d_analyze_format::~vil3d_analyze_format()
-{
-}
+vil3d_analyze_format::~vil3d_analyze_format() = default;
 
 vil3d_image_resource_sptr vil3d_analyze_format::make_input_image(const char *filename1) const
 {
@@ -520,9 +518,7 @@ vil3d_analyze_image::vil3d_analyze_image(const vil3d_analyze_header& header,
   base_path_ = base_path;
 }
 
-vil3d_analyze_image::~vil3d_analyze_image()
-{
-}
+vil3d_analyze_image::~vil3d_analyze_image() = default;
 
 //: Number of planes (or time points in an image sequence).
 unsigned vil3d_analyze_image::nplanes() const

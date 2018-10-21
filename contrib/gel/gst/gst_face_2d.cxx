@@ -21,6 +21,4 @@ gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon, std::vector<gst_polygon_2
 {
 }
 
-gst_face_2d::~gst_face_2d()
-{
-}
+gst_face_2d::~gst_face_2d() = default;

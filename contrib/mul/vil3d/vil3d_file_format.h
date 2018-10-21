@@ -15,7 +15,7 @@
 class vil3d_file_format
 {
  public:
-  virtual ~vil3d_file_format() {}
+  virtual ~vil3d_file_format() = default;
 
   //: Add a format reader to current list of those available
   // This function will take ownership of the passed object, and will

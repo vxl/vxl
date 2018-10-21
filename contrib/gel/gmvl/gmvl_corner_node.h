@@ -16,7 +16,7 @@ class gmvl_corner_node : public gmvl_node
 {
  public:
   gmvl_corner_node(double x, double y) : x_(x),y_(y) {type_="gmvl_corner_node";}
-  ~gmvl_corner_node() {}
+  ~gmvl_corner_node() = default;
 
   double x() const { return x_; }
   double y() const { return y_; }

@@ -13,7 +13,7 @@ FMatrixComputeRANSAC::FMatrixComputeRANSAC(bool rank2_truncate, double std)
   inthresh_ = (1.96*std_)*(1.96*std_);
 }
 
-FMatrixComputeRANSAC::~FMatrixComputeRANSAC() {}
+FMatrixComputeRANSAC::~FMatrixComputeRANSAC() = default;
 
 double FMatrixComputeRANSAC::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {

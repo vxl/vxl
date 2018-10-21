@@ -75,9 +75,7 @@ rgrl_feature_set_bins( feature_vector const& features,
 
 template<unsigned N>
 rgrl_feature_set_bins<N>::
-~rgrl_feature_set_bins()
-{
-}
+~rgrl_feature_set_bins() = default;
 
 
 template<unsigned N>

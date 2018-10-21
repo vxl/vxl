@@ -47,7 +47,7 @@ class vsol_tetrahedron : public vsol_polyhedron
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_tetrahedron() {}
+  virtual ~vsol_tetrahedron() = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization

@@ -17,17 +17,13 @@
 // Dflt ctor
 //=======================================================================
 
-msm_shape_model::msm_shape_model()
-{
-}
+msm_shape_model::msm_shape_model() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-msm_shape_model::~msm_shape_model()
-{
-}
+msm_shape_model::~msm_shape_model() = default;
 
 //: Set up model
 void msm_shape_model::set(const msm_points& mean,

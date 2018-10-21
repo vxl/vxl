@@ -61,9 +61,7 @@ void mfpf_region_finder_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_region_finder_builder::~mfpf_region_finder_builder()
-{
-}
+mfpf_region_finder_builder::~mfpf_region_finder_builder() = default;
 
 //: Create new mfpf_region_finder on heap
 mfpf_point_finder* mfpf_region_finder_builder::new_finder() const

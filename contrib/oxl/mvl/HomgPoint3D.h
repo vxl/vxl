@@ -26,13 +26,13 @@ class HomgPoint3D : public Homg3D
  public:
   // Constructors/Initializers/Destructors-----------------------------------
 
-  HomgPoint3D () {}
-  HomgPoint3D (const HomgPoint3D& p): Homg3D(p) {}
+  HomgPoint3D () = default;
+  HomgPoint3D (const HomgPoint3D& p) = default;
   HomgPoint3D (const vnl_vector<double>& p): Homg3D(p) {}
   HomgPoint3D (const vnl_vector_fixed<double,4>& p): Homg3D(p) {}
   //: Constructor. The homogeneous parameter w defaults to 1.
   HomgPoint3D (double x, double y, double z, double w=1.0) : Homg3D(x,y,z,w) {}
- ~HomgPoint3D () {}
+ ~HomgPoint3D () = default;
 
   // Data Access-------------------------------------------------------------
 

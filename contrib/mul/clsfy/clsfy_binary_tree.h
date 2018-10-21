@@ -86,7 +86,7 @@ class clsfy_binary_tree_node
 
   //Note the owning classifier removes the tree - beware as once deleted its children
   //may be inaccessible for deletion
-  virtual ~clsfy_binary_tree_node() {}
+  virtual ~clsfy_binary_tree_node() = default;
 
   friend class clsfy_binary_tree;
   friend class clsfy_binary_tree_builder;

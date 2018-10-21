@@ -54,10 +54,10 @@ class rrel_muse_table
   //  pre-computed).
   rrel_muse_table( unsigned int /* max_n_stored */ ) {}
 
-  rrel_muse_table( ) {}
+  rrel_muse_table( ) = default;
 
   //: Destructor
-  ~rrel_muse_table() {}
+  ~rrel_muse_table() = default;
 
   //: Expected value of the kth ordered residual from n samples.
   //  The value is retrieved from the lookup table when possible.

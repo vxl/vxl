@@ -27,9 +27,7 @@ vdgl_interpolator_cubic::vdgl_interpolator_cubic(vdgl_edgel_chain_sptr chain)
   recompute_all();
 }
 
-vdgl_interpolator_cubic::~vdgl_interpolator_cubic()
-{
-}
+vdgl_interpolator_cubic::~vdgl_interpolator_cubic() = default;
 
 
 double vdgl_interpolator_cubic::get_x(double index)

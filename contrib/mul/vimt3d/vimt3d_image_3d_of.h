@@ -34,7 +34,7 @@ private:
 public:
 
   //: Construct an empty one-plane image.
-  vimt3d_image_3d_of() {}
+  vimt3d_image_3d_of() = default;
 
 
   //: Construct an image of size (ni, nj, nk, np) with optional world_to_image transform w2i.
@@ -51,7 +51,7 @@ public:
 
 
   //: Destructor
-  virtual ~vimt3d_image_3d_of() {}
+  virtual ~vimt3d_image_3d_of() = default;
 
   //: Base class view of image
   virtual const vil3d_image_view_base& image_base() const { return image_; }

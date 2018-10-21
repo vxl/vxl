@@ -18,7 +18,7 @@ class msm_points;
 class msdi_marked_images
 {
  public:
-  virtual ~msdi_marked_images() {}
+  virtual ~msdi_marked_images() = default;
 
   //: Move to start of data
   virtual void reset()=0;

@@ -74,9 +74,7 @@ void mfpf_hog_box_finder_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_hog_box_finder_builder::~mfpf_hog_box_finder_builder()
-{
-}
+mfpf_hog_box_finder_builder::~mfpf_hog_box_finder_builder() = default;
 
 //: Create new mfpf_hog_box_finder on heap
 mfpf_point_finder* mfpf_hog_box_finder_builder::new_finder() const

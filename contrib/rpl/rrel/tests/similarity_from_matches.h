@@ -19,20 +19,14 @@ class image_point_match
   vnl_vector_fixed<double,2> to_loc_;
   int point_id_;   // competing matches share the same point_id
  public:
-  image_point_match() {}
+  image_point_match() = default;
   image_point_match( const vnl_vector_fixed<double,2>& from,
                      const vnl_vector_fixed<double,2>& to,
                      int id )
     : from_loc_(from), to_loc_(to), point_id_(id) {}
   image_point_match( const image_point_match& old ) { *this = old; }
 
-  const image_point_match& operator= ( const image_point_match& old )
-  {
-    from_loc_ = old.from_loc_;
-    to_loc_ = old.to_loc_;
-    point_id_ = old.point_id_;
-    return *this;
-  }
+  image_point_match & operator= ( const image_point_match& old ) = default;
 };
 
 class similarity_from_matches : public rrel_estimation_problem
@@ -42,7 +36,7 @@ class similarity_from_matches : public rrel_estimation_problem
  public:
   similarity_from_matches() : rrel_estimation_problem(2,2) {}
   similarity_from_matches( std::vector<image_point_match>  matches );
-  ~similarity_from_matches() {}
+  ~similarity_from_matches() = default;
   virtual unsigned int num_unique_samples( ) const{ return num_points_to_match_; }
   virtual unsigned int num_samples( ) const;
   virtual bool fit_from_minimal_set( const std::vector<int>& match_indices,

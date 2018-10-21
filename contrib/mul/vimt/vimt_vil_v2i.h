@@ -34,9 +34,9 @@
 class vimt_vil_v2i_format: public vil_file_format
 {
  public:
-  vimt_vil_v2i_format() {}
+  vimt_vil_v2i_format() = default;
   //: The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vimt_vil_v2i_format() {}
+  virtual ~vimt_vil_v2i_format() = default;
 
   virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
 

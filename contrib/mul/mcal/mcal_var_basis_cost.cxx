@@ -20,17 +20,13 @@
 // Constructors
 //=======================================================================
 
-mcal_var_basis_cost::mcal_var_basis_cost()
-{
-}
+mcal_var_basis_cost::mcal_var_basis_cost() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mcal_var_basis_cost::~mcal_var_basis_cost()
-{
-}
+mcal_var_basis_cost::~mcal_var_basis_cost() = default;
 
 //: Returns true since cost can be computed from the variance.
 bool mcal_var_basis_cost::can_use_variance() const

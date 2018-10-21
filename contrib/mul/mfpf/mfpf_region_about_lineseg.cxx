@@ -28,9 +28,7 @@ mfpf_region_about_lineseg::mfpf_region_about_lineseg()
 // Destructor
 //=======================================================================
 
-mfpf_region_about_lineseg::~mfpf_region_about_lineseg()
-{
-}
+mfpf_region_about_lineseg::~mfpf_region_about_lineseg() = default;
 
 //: Returns false as the region is not centred on an input point
 bool mfpf_region_about_lineseg::is_centred_on_pt() const

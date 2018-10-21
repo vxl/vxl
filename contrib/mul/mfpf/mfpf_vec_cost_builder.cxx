@@ -18,17 +18,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_vec_cost_builder::mfpf_vec_cost_builder()
-{
-}
+mfpf_vec_cost_builder::mfpf_vec_cost_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_vec_cost_builder::~mfpf_vec_cost_builder()
-{
-}
+mfpf_vec_cost_builder::~mfpf_vec_cost_builder() = default;
 
 
 //: Initialise from a string stream

@@ -5,15 +5,11 @@
 #include "mbl_progress_composite.h"
 
 //=======================================================================
-mbl_progress_composite::mbl_progress_composite()
-{
-}
+mbl_progress_composite::mbl_progress_composite() = default;
 
 
 //=======================================================================
-mbl_progress_composite::~mbl_progress_composite()
-{
-}
+mbl_progress_composite::~mbl_progress_composite() = default;
 
 
 //=======================================================================

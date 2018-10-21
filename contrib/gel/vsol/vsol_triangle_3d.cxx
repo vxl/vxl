@@ -29,17 +29,12 @@ vsol_triangle_3d::vsol_triangle_3d(vsol_point_3d_sptr const& new_p0,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_triangle_3d::vsol_triangle_3d(vsol_triangle_3d const& other)
-  : vsol_polygon_3d(other)
-{
-}
+vsol_triangle_3d::vsol_triangle_3d(vsol_triangle_3d const& other) = default;
 
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
-vsol_triangle_3d::~vsol_triangle_3d()
-{
-}
+vsol_triangle_3d::~vsol_triangle_3d() = default;
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization

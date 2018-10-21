@@ -31,7 +31,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   vgl_cylinder<double> cyl_;
 
  public:
-  vsol_cylinder() {}
+  vsol_cylinder() = default;
 
   vsol_cylinder(vgl_point_3d<double> centre, double radius, double length)
   : cyl_(centre, radius, length) {}
@@ -41,8 +41,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   : cyl_(centre, radius, length){ cyl_.set_orientation(orient); }
 
   // copy constructor
-  vsol_cylinder(vsol_cylinder const& cyl)
-    : vsol_spatial_object_3d(cyl), cyl_(cyl.cyl_) {}
+  vsol_cylinder(vsol_cylinder const& cyl) = default;
 
   //: Return true iff the point p is inside (or on) this cylinder
   bool contains(vgl_point_3d<double> const& p);
@@ -89,7 +88,7 @@ class vsol_cylinder : public  vsol_spatial_object_3d
 
   vsol_spatial_object_3d* clone() const { return new vsol_cylinder(*this); }
 
-  virtual ~vsol_cylinder(void) {}
+  virtual ~vsol_cylinder(void) = default;
 };
 
 //: Binary save vsol_cylinder* to stream.

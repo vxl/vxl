@@ -33,7 +33,7 @@ class vdgl_ortho_regress
 
   vdgl_ortho_regress() { reset(); }
 
-  ~vdgl_ortho_regress() { }
+  ~vdgl_ortho_regress() = default;
 
   void add_point(double x, double y) {
     ++S1;

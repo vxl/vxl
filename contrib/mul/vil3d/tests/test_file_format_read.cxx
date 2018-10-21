@@ -27,7 +27,7 @@ typedef vxl_uint_32 TruePixelType;
 class CheckPixel
 {
  public:
-  virtual ~CheckPixel() {}
+  virtual ~CheckPixel() = default;
   virtual bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
                             const std::vector<TruePixelType>& pixel ) const = 0;
 };

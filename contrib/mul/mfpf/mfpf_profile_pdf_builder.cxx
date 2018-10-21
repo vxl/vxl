@@ -46,9 +46,7 @@ void mfpf_profile_pdf_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_profile_pdf_builder::~mfpf_profile_pdf_builder()
-{
-}
+mfpf_profile_pdf_builder::~mfpf_profile_pdf_builder() = default;
 
 //: Create new mfpf_profile_pdf on heap
 mfpf_point_finder* mfpf_profile_pdf_builder::new_finder() const

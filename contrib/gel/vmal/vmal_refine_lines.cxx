@@ -4,13 +4,9 @@
 #include <vmal/vmal_operators.h>
 #include <vnl/vnl_inverse.h>
 
-vmal_refine_lines::vmal_refine_lines()
-{
-}
+vmal_refine_lines::vmal_refine_lines() = default;
 
-vmal_refine_lines::~vmal_refine_lines()
-{
-}
+vmal_refine_lines::~vmal_refine_lines() = default;
 
 //Need to be improve. Perhaps a normalization of the lines would give better results
 void vmal_refine_lines::refine_lines_f(vnl_double_3 &line0p, vnl_double_3 &line0q,

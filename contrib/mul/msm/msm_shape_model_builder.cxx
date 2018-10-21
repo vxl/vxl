@@ -32,9 +32,7 @@ msm_shape_model_builder::msm_shape_model_builder()
 // Destructor
 //=======================================================================
 
-msm_shape_model_builder::~msm_shape_model_builder()
-{
-}
+msm_shape_model_builder::~msm_shape_model_builder() = default;
 
 //: Set up model
 void msm_shape_model_builder::set_aligner(

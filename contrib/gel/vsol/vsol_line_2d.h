@@ -91,13 +91,12 @@ class vsol_line_2d : public vsol_curve_2d
   //: Copy constructor
   //  no duplication of the points
   //---------------------------------------------------------------------------
-  vsol_line_2d(vsol_line_2d const& other)
-    : vsol_curve_2d(other), p0_(other.p0_), p1_(other.p1_) {}
+  vsol_line_2d(vsol_line_2d const& other) = default;
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_line_2d() {}
+  virtual ~vsol_line_2d() = default;
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line_2d, 0 otherwise
