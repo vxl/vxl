@@ -18,7 +18,7 @@ static double rnd(double r){
   return b;
 }
 static vgl_vector_2d<double>  rand_vector(double r){
-  return vgl_vector_2d<double>(rnd(r), rnd(r));
+  return {rnd(r), rnd(r)};
 }
 static vgl_point_3d<double> trans_3d(std::vector<std::vector<double> > const&  T,
                                      std::vector<double> const& t, vgl_point_3d<double> const& P){
@@ -26,13 +26,13 @@ static vgl_point_3d<double> trans_3d(std::vector<std::vector<double> > const&  T
   double py = T[1][0]*P.x() +  T[1][1]*P.y() + T[1][2]*P.z();
   double pz = T[2][0]*P.x() +  T[2][1]*P.y() + T[2][2]*P.z();
   px += t[0]; py+=t[1]; pz += t[2];
-  return vgl_point_3d<double>(px, py, pz);
+  return {px, py, pz};
 }
 // C is a 2x3 affine camera matrix without the translation column, t is the 2x1 translation vector
 static vgl_point_2d<double> proj_3d(std::vector<std::vector<double> > const&  C, std::vector<double> const& t, vgl_point_3d<double> const& P){
   double px = C[0][0]*P.x() + C[0][1]*P.y() +  C[0][2]*P.z() + t[0];
   double py = C[1][0]*P.x() + C[1][1]*P.y() +  C[1][2]*P.z() + t[1];
-  return vgl_point_2d<double>(px, py);
+  return {px, py};
 }
 static void test_all()
 {

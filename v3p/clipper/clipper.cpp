@@ -3777,7 +3777,7 @@ DoublePoint GetUnitNormal(const IntPoint &pt1, const IntPoint &pt2)
   double f = 1 *1.0/ std::sqrt( Dx*Dx + dy*dy );
   Dx *= f;
   dy *= f;
-  return DoublePoint(dy, -Dx);
+  return {dy, -Dx};
 }
 
 //------------------------------------------------------------------------------
