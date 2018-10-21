@@ -218,7 +218,7 @@ class mbl_logger
   //: Default constructor only available to root's default logger.
   mbl_logger();
 
-  mbl_logger(const mbl_logger&); // Hide copy constructor.
+  mbl_logger(const mbl_logger&) = delete; // Hide copy constructor.
 
   //: Update settings in light of changes to the root / configuration.
   void reinitialise();

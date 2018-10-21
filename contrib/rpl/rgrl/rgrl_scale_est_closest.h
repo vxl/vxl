@@ -57,8 +57,8 @@ class rgrl_scale_est_closest
 
  private:
   //disabled
-  rgrl_scale_est_closest( rgrl_scale_est_closest const& );
-  rgrl_scale_est_closest& operator=( rgrl_scale_est_closest const& );
+  rgrl_scale_est_closest( rgrl_scale_est_closest const& ) = delete;
+  rgrl_scale_est_closest& operator=( rgrl_scale_est_closest const& ) = delete;
 
   bool
   compute_geometric_scale( double& scale,
