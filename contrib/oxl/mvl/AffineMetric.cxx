@@ -97,7 +97,7 @@ vgl_homg_point_2d<double> AffineMetric::image_to_homg(vgl_point_2d<double> const
   double h2 = a[1][0] * p.x() + a[1][1] * p.y() + a[1][2];
   double h3 = a[2][0] * p.x() + a[2][1] * p.y() + a[2][2];
 
-  return vgl_homg_point_2d<double>(h1, h2, h3);
+  return {h1, h2, h3};
 }
 
 HomgPoint2D AffineMetric::image_to_homg(double x, double y) const
@@ -127,7 +127,7 @@ vnl_double_2 AffineMetric::homg_to_image(const HomgPoint2D& p) const
   vnl_double_3 x = A_ * p.get_vector();
   double s = 1/x[2];
 
-  return vnl_double_2(x[0] * s, x[1] * s);
+  return {x[0] * s, x[1] * s};
 }
 
 //: print to std::ostream

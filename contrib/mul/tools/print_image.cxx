@@ -48,7 +48,7 @@ vgl_vector_2d<double> pixel_size_from_transform(const vimt_transform_2d& w2i)
   vgl_vector_2d<double> j(0,1);
   double dx = i2w.delta(p, i).length();
   double dy = i2w.delta(p, j).length();
-  return vgl_vector_2d<double>(dx, dy);
+  return {dx, dy};
 }
 
 
@@ -64,7 +64,7 @@ static vgl_vector_3d<double> voxel_size_from_transform(const vimt3d_transform_3d
   double dx = i2w.delta(p, i).length();
   double dy = i2w.delta(p, j).length();
   double dz = i2w.delta(p, k).length();
-  return vgl_vector_3d<double>(dx, dy, dz);
+  return {dx, dy, dz};
 }
 
 

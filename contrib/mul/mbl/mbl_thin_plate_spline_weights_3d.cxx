@@ -438,7 +438,7 @@ vgl_point_3d<double>  mbl_thin_plate_spline_weights_3d::operator()(double x, dou
     z_sum += (Ui * Wz_data[i]);
   }
 
-  return vgl_point_3d<double>(x_sum,y_sum,z_sum);
+  return {x_sum,y_sum,z_sum};
 }
 
 //=======================================================================

@@ -238,7 +238,7 @@ vgl_point_2d<double> mbl_clamped_plate_spline_2d::operator()(double x, double y)
     y_sum += (Ui * Wy_data[i]);
   }
 
-  return vgl_point_2d<double>(x_sum,y_sum);
+  return {x_sum,y_sum};
 }
 
 //=======================================================================

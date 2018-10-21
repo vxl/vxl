@@ -108,7 +108,7 @@ PolygonMesh::DPoint PolygonMesh::get_vertex(int index)
   if ((unsigned int)index>=vertex_list.size())
   {
     std::cerr << "Warning: vertex doesn't exist\n";
-    return DPoint();
+    return {};
   }
   return vertex_list[index];
 }

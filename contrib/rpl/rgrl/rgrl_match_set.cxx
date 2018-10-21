@@ -61,7 +61,7 @@ rgrl_match_set::const_from_iterator
 rgrl_match_set::
 from_begin() const
 {
-  return const_from_iterator( this, 0 );
+  return { this, 0 };
 }
 
 
@@ -69,7 +69,7 @@ rgrl_match_set::const_from_iterator
 rgrl_match_set::
 from_end() const
 {
-  return const_from_iterator( this, from_features_.size() );
+  return { this, from_features_.size() };
 }
 
 
@@ -77,7 +77,7 @@ rgrl_match_set::from_iterator
 rgrl_match_set::
 from_begin()
 {
-  return from_iterator( this, 0 );
+  return { this, 0 };
 }
 
 
@@ -85,7 +85,7 @@ rgrl_match_set::from_iterator
 rgrl_match_set::
 from_end()
 {
-  return from_iterator( this, from_features_.size() );
+  return { this, from_features_.size() };
 }
 
 

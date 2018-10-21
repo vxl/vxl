@@ -23,8 +23,8 @@ vgl_point_2d<double> msm_cubic_bezier_node::point(double t, const vgl_point_2d<d
   double t2=t*t,s2=s*s;
   double a=s*s2, b=3.0*t*s2, c=3.0*t2*s, d=t*t2;
 
-  return vgl_point_2d<double>(a*p.x() + b*c1.x() + c*c2.x() + d*q.x(),
-                              a*p.y() + b*c1.y() + c*c2.y() + d*q.y());
+  return {a*p.x() + b*c1.x() + c*c2.x() + d*q.x(),
+                              a*p.y() + b*c1.y() + c*c2.y() + d*q.y()};
 }
 
 //: Return tangent to curve at t (in [0,1]) given end point q
@@ -35,9 +35,9 @@ vgl_vector_2d<double> msm_cubic_bezier_node::tangent(double t, const vgl_point_2
   double s2 = s*s;
   double st = s*t;
 
-  return vgl_vector_2d<double>(
+  return {
     3.0*(-s2*p.x() + (s2-2*st)*c1.x() + (2*st - t2)*c2.x() + t2*q.x()),
-    3.0*(-s2*p.y() + (s2-2*st)*c1.y() + (2*st - t2)*c2.y() + t2*q.y()));
+    3.0*(-s2*p.y() + (s2-2*st)*c1.y() + (2*st - t2)*c2.y() + t2*q.y())};
 }
 
 //: Estimate approximate length of curve by piece-wise linear curve with k extra points

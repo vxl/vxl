@@ -376,7 +376,7 @@ TriTensor::image1_transfer(vgl_homg_line_2d<double> const& line2,
       for (int k = 0; k < 3; k++)
         l1 [i] +=  T(i,j,k) * l2 [j] * l3 [k];
 
-  return vgl_homg_line_2d<double>(l1[0],l1[1],l1[2]);
+  return {l1[0],l1[1],l1[2]};
 }
 
 HomgLine2D
@@ -407,7 +407,7 @@ TriTensor::image2_transfer(vgl_homg_line_2d<double> const& line1,
   vnl_double_3 l1(line1.a(),line1.b(),line1.c());
   vnl_double_3 l3(line3.a(),line3.b(),line3.c());
   vnl_double_3 l = vnl_inverse(dot3(l3)) * l1;
-  return vgl_homg_line_2d<double>(l[0],l[1],l[2]);
+  return {l[0],l[1],l[2]};
 }
 
 HomgLine2D
@@ -429,7 +429,7 @@ TriTensor::image3_transfer(vgl_homg_line_2d<double> const& line1,
   vnl_double_3 l1(line1.a(),line1.b(),line1.c());
   vnl_double_3 l2(line2.a(),line2.b(),line2.c());
   vnl_double_3 l = vnl_inverse(dot2(l2)) * l1;
-  return vgl_homg_line_2d<double>(l[0],l[1],l[2]);
+  return {l[0],l[1],l[2]};
 }
 
 HomgLine2D

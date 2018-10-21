@@ -224,7 +224,7 @@ class mbm_covar_stats_2d
 
   double mean_x() const { return sum1/n; }
   double mean_y() const { return sum2/n; }
-  vgl_point_2d<double> mean() const { return vgl_point_2d<double>(mean_x(),mean_y()); }
+  vgl_point_2d<double> mean() const { return {mean_x(),mean_y()}; }
 
   double var11() const { return sum11/n-mean_x()*mean_x(); }
   double var12() const { return sum12/n-mean_x()*mean_y(); }

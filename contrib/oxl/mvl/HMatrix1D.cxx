@@ -61,7 +61,7 @@ HMatrix1D::~HMatrix1D() = default;
 vgl_homg_point_1d<double> HMatrix1D::operator()(const vgl_homg_point_1d<double>& x1) const
 {
   vnl_double_2 v = t12_matrix_ * vnl_double_2(x1.x(),x1.w());
-  return vgl_homg_point_1d<double>(v[0], v[1]);
+  return {v[0], v[1]};
 }
 
 //
@@ -69,7 +69,7 @@ vgl_homg_point_1d<double> HMatrix1D::operator()(const vgl_homg_point_1d<double>&
 vgl_homg_point_1d<double> HMatrix1D::preimage(const vgl_homg_point_1d<double>& x2) const
 {
   vnl_double_2 v = t21_matrix_ * vnl_double_2(x2.x(),x2.w());
-  return vgl_homg_point_1d<double>(v[0], v[1]);
+  return {v[0], v[1]};
 }
 
 //-----------------------------------------------------------------------------

@@ -84,7 +84,7 @@ inline vgl_point_2d<double> msm_wtd_cog(const msm_points& pts,
   { cx+=w[0]*v[0]; cy+=w[0]*v[1]; w_sum+=w[0]; }
 
   if (w_sum>0) { cx/=w_sum; cy/=w_sum; }
-  return vgl_point_2d<double>(cx,cy);
+  return {cx,cy};
 }
 
   //: Estimate parameters which map points1 to points2 allowing for weights

@@ -100,7 +100,7 @@ class msm_cubic_bezier
   vgl_vector_2d<double> normal(unsigned i, double t) const
   {
     vgl_vector_2d<double> v=tangent(i,t);
-    return vgl_vector_2d<double>(-v.y(),v.x());
+    return {-v.y(),v.x()};
   }
 
   //: Create n_pts points equally spaced between start and end nodes (inclusive)

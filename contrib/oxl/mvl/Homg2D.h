@@ -56,7 +56,7 @@ class Homg2D : public vnl_double_3, public Homg
 
   // Data Access-------------------------------------------------------------
 
-  vnl_double_3 get_vector() const { return vnl_double_3(x(),y(),w()); }
+  vnl_double_3 get_vector() const { return {x(),y(),w()}; }
   vnl_double_3& asVector() { return *this; }
 
   //: Retrieve components.  Do not attempt to write into null pointers.

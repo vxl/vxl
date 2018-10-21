@@ -165,7 +165,7 @@ HomgLineSeg2D PMatrix::project (const HomgLineSeg3D& L) const
 vgl_homg_point_3d<double> PMatrix::backproject_pseudoinverse (const vgl_homg_point_2d<double>& x) const
 {
   vnl_double_4 p = svd()->solve(vnl_double_3(x.x(),x.y(),x.w()).as_ref());
-  return vgl_homg_point_3d<double>(p[0],p[1],p[2],p[3]);
+  return {p[0],p[1],p[2],p[3]};
 }
 
 HomgPoint3D PMatrix::backproject_pseudoinverse (const HomgPoint2D& x) const
@@ -306,7 +306,7 @@ vgl_homg_point_3d<double> PMatrix::get_focal() const
 
   vnl_matrix<double> ns = svd()->nullspace();
 
-  return vgl_homg_point_3d<double>(ns(0,0), ns(1,0), ns(2,0), ns(3,0));
+  return {ns(0,0), ns(1,0), ns(2,0), ns(3,0)};
 }
 
 HomgPoint3D PMatrix::get_focal_point() const
