@@ -25,6 +25,7 @@
 class vcsl_geocentric
   : public vcsl_geographic
 {
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -32,7 +33,6 @@ class vcsl_geocentric
   // Default constructor.
   vcsl_geocentric();
 
- public:
   // Destructor
   virtual ~vcsl_geocentric() = default;
 };

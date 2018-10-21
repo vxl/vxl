@@ -54,8 +54,8 @@ class vbl_scoped_ptr
   T* ptr_;
 
   // not copyable, not assignable.
-  vbl_scoped_ptr( vbl_scoped_ptr const& );
-  vbl_scoped_ptr& operator=( vbl_scoped_ptr const& );
+  vbl_scoped_ptr( vbl_scoped_ptr const& ) = delete;
+  vbl_scoped_ptr& operator=( vbl_scoped_ptr const& ) = delete;
 
   typedef vbl_scoped_ptr<T> this_type;
 

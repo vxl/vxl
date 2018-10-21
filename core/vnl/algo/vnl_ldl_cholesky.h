@@ -118,9 +118,9 @@ class VNL_ALGO_EXPORT vnl_ldl_cholesky
 
  private:
   //: Copy constructor - privatised to avoid it being used
-  vnl_ldl_cholesky(vnl_ldl_cholesky const & that);
+  vnl_ldl_cholesky(vnl_ldl_cholesky const & that) = delete;
   //: Assignment operator - privatised to avoid it being used
-  vnl_ldl_cholesky& operator=(vnl_ldl_cholesky const & that);
+  vnl_ldl_cholesky& operator=(vnl_ldl_cholesky const & that) = delete;
 
   //: Solve Mx=b, overwriting input vector with the solution.
   //  x points to beginning of an n-element vector containing b

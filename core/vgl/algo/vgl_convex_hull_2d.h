@@ -29,7 +29,7 @@ class vgl_convex_hull_2d
   //: the oriented box enclosing the hull with minimum area
   vgl_oriented_box_2d<T> min_area_enclosing_rectangle();
  private:
-  vgl_convex_hull_2d();
+  vgl_convex_hull_2d() = delete;
   bool hull_valid_;
   void compute_hull();
   std::vector<vgl_point_2d<T> > points_;

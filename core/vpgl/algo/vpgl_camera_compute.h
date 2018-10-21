@@ -35,7 +35,7 @@ class vpgl_proj_camera_compute
                        vpgl_proj_camera<double>& camera );
  private:
   //:default constructor (is private)
-  vpgl_proj_camera_compute();
+  vpgl_proj_camera_compute() = delete;
 };
 
 
@@ -50,7 +50,7 @@ class vpgl_affine_camera_compute
                        const std::vector< vgl_point_3d<double> >& world_pts,
                        vpgl_affine_camera<double>& camera );
  private:
-  vpgl_affine_camera_compute();
+  vpgl_affine_camera_compute() = delete;
 };
 
 
@@ -92,7 +92,7 @@ class vpgl_perspective_camera_compute
                        vpgl_perspective_camera<double>& camera );
 
  private:
-  vpgl_perspective_camera_compute();
+  vpgl_perspective_camera_compute() = delete;
 };
 
 #endif // vpgl_camera_compute_h_

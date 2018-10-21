@@ -21,6 +21,7 @@
 class vcsl_utm
   : public vcsl_geographic
 {
+ public:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -28,7 +29,6 @@ class vcsl_utm
   // Default constructor.
   vcsl_utm();
 
- public:
   // Destructor
   virtual ~vcsl_utm() = default;
 };

@@ -60,7 +60,7 @@ public:
 
 private:
   // Purely static class; don't instantiate.
-  vil_nitf2_classification();
+  vil_nitf2_classification() = delete;
 
   // A cache of field definitions, indexed by version, tag_prefix and
   // pretty_name_prefix.

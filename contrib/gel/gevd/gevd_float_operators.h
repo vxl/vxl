@@ -42,7 +42,7 @@ class gevd_bufferxy;       // buffer of floats
 class gevd_float_operators
 {
 // Do not instantiate this class; access methods by name scoping
-  gevd_float_operators();
+  gevd_float_operators() = delete;
 
  public:
   // convolution

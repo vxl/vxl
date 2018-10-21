@@ -118,7 +118,7 @@ class VNL_ALGO_EXPORT vnl_lbfgsb : public vnl_nonlinear_minimizer
   double inf_norm_projected_gradient_;
 
  private:
-  vnl_lbfgsb(); // Not implemented
+  vnl_lbfgsb() = delete; // Not implemented
   void init_parameters();
   vnl_cost_function* f_;
 };

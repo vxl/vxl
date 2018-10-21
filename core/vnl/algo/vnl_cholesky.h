@@ -92,9 +92,9 @@ class VNL_ALGO_EXPORT vnl_cholesky
 
  private:
   //: Copy constructor - privatised to avoid it being used
-  vnl_cholesky(vnl_cholesky const & that);
+  vnl_cholesky(vnl_cholesky const & that) = delete;
   //: Assignment operator - privatised to avoid it being used
-  vnl_cholesky& operator=(vnl_cholesky const & that);
+  vnl_cholesky& operator=(vnl_cholesky const & that) = delete;
 };
 
 #endif // vnl_cholesky_h_
