@@ -6,7 +6,7 @@
 #include <vector>
 #include <set>
 #include <utility>
-#include <float.h>
+#include <cfloat>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>

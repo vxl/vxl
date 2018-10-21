@@ -33,7 +33,7 @@
 #include <boost/cstdint.hpp>
 using boost::uint32_t;
 #else // BOOST_STDINT
-#include <stdint.h>
+#include <cstdint>
 #endif // BOOST_STDINT
 
 // OpenCL

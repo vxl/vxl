@@ -24,6 +24,7 @@ extern "C" {
 
 #include <triangle.h> // from netlib, for triangulate()
 }
+#include <utility>
 
 
 gtrl_triangulation::gtrl_triangulation( gtrl_polygon poly)

@@ -1,6 +1,6 @@
 // expatpp
 #ifdef UNDER_CE
-  #include <string.h>
+  #include <cstring>
   #include <windows.h>
   #include <dbgapi.h>
   #define assert ASSERT

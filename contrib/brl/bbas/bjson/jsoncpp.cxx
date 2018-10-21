@@ -2455,7 +2455,7 @@ ValueIterator& ValueIterator::operator=(const SelfType& other) {
 #include <json/value.h>
 #include <json/writer.h>
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <math.h>
+#include <cmath>
 #include <sstream>
 #include <utility>
 #include <cstring>
@@ -4082,7 +4082,7 @@ Value& Path::make(Value& root) const {
 #include <cstdio>
 
 #if defined(_MSC_VER) && _MSC_VER >= 1200 && _MSC_VER < 1800 // Between VC++ 6.0 and VC++ 11.0
-#include <float.h>
+#include <cfloat>
 #define isfinite _finite
 #elif defined(__sun) && defined(__SVR4) //Solaris
 #if !defined(isfinite)
@@ -4091,7 +4091,7 @@ Value& Path::make(Value& root) const {
 #endif
 #elif defined(_AIX)
 #if !defined(isfinite)
-#include <math.h>
+#include <cmath>
 #define isfinite finite
 #endif
 #elif defined(__hpux)
@@ -4100,7 +4100,7 @@ Value& Path::make(Value& root) const {
 #define isfinite(x) ((sizeof(x) == sizeof(float) ? \
                      _Isfinitef(x) : _IsFinite(x)))
 #else
-#include <math.h>
+#include <cmath>
 #define isfinite finite
 #endif
 #endif
@@ -4128,7 +4128,7 @@ Value& Path::make(Value& root) const {
 #endif
 
 #if defined(__BORLANDC__)
-#include <float.h>
+#include <cfloat>
 #define isfinite _finite
 #define snprintf _snprintf
 #endif
