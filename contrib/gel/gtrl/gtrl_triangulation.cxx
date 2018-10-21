@@ -28,7 +28,7 @@ extern "C" {
 
 
 gtrl_triangulation::gtrl_triangulation( gtrl_polygon poly)
-  : poly_( poly)
+  : poly_(std::move( poly))
 {
 }
 

@@ -1,6 +1,7 @@
-#include <iostream>
-#include <vector>
 #include "rrel_linear_regression.h"
+#include <iostream>
+#include <utility>
+#include <vector>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
@@ -57,8 +58,8 @@ rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<do
 
 // ctor that just copies the independent and dependent variables vectors.
 rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<double> >& ind_vars,
-                                                const std::vector< double >& dep_vars )
-  : rand_vars_(dep_vars), ind_vars_(ind_vars)
+                                                std::vector< double >  dep_vars )
+  : rand_vars_(std::move(dep_vars)), ind_vars_(ind_vars)
 {
   set_param_dof( ind_vars_[0].size() );
   if ( param_dof() > ind_vars.size() ) {

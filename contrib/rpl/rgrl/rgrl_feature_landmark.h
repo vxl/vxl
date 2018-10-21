@@ -33,7 +33,7 @@ class rgrl_feature_landmark
   //
   // Works for 2d and 3d.
   rgrl_feature_landmark( vnl_vector<double> const& loc,
-                         std::vector< vnl_vector<double> > const& outgoing_directions );
+                         std::vector< vnl_vector<double> >  outgoing_directions );
 
   //: read in feature
   virtual

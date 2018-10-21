@@ -62,8 +62,8 @@ class rgrl_match_set
   //:  construct an empty match set, specifying the feature type
   rgrl_match_set( const std::type_info& from_type,
                   const std::type_info& to_type,
-                  const rgrl_feature_set_label& from_label = rgrl_feature_set_label(),
-                  const rgrl_feature_set_label& to_label = rgrl_feature_set_label() );
+                  rgrl_feature_set_label  from_label = rgrl_feature_set_label(),
+                  rgrl_feature_set_label  to_label = rgrl_feature_set_label() );
 
   //: type of from features
   const std::type_info&

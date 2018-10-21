@@ -16,15 +16,16 @@
 //   10-Sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
-#include <iostream>
-#include <iosfwd>
-#include <vector>
-#include <vcl_compiler.h>
-#include <vul/vul_timestamp.h>
-#include <vbl/vbl_ref_count.h>
-#include <vsl/vsl_binary_io.h>
 #include "vdgl_edgel_chain_sptr.h"
+#include <iosfwd>
+#include <iostream>
+#include <utility>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vdgl/vdgl_edgel.h>
+#include <vector>
+#include <vsl/vsl_binary_io.h>
+#include <vul/vul_timestamp.h>
 
 class vdgl_edgel_chain : public vul_timestamp,
                          public vbl_ref_count
@@ -34,7 +35,7 @@ class vdgl_edgel_chain : public vul_timestamp,
 
   // Constructors/Destructors--------------------------------------------------
   vdgl_edgel_chain() {}
-  vdgl_edgel_chain(std::vector<vdgl_edgel> const& edgels) : es_( edgels) {}
+  vdgl_edgel_chain(std::vector<vdgl_edgel>  edgels) : es_(std::move( edgels)) {}
 
   //: make a straight edgel chain from p0 to p1.
   //  Useful for boundary filling and debugging

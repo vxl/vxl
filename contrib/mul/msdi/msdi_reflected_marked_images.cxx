@@ -6,6 +6,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 
@@ -17,10 +18,10 @@
 //: Construct with external vectors of images and points
 msdi_reflected_marked_images::msdi_reflected_marked_images(
                         msdi_marked_images& raw_data,
-                        const std::vector<unsigned>& sym_pts,
+                        std::vector<unsigned>  sym_pts,
                         bool only_reflect)
   : marked_images_(raw_data),
-    sym_pts_(sym_pts),
+    sym_pts_(std::move(sym_pts)),
     only_reflect_(only_reflect)
 {
   pyr_builder_.set_min_size(24,24);

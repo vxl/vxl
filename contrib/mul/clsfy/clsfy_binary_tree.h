@@ -5,10 +5,11 @@
 // \file
 // \brief Binary tree classifier
 // \author Martin Roberts
-#include <iostream>
-#include <iosfwd>
-#include <clsfy/clsfy_classifier_base.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
+#include <clsfy/clsfy_classifier_base.h>
+#include <iosfwd>
+#include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
 
 
@@ -70,8 +71,8 @@ class clsfy_binary_tree_node
  public:
 
   clsfy_binary_tree_node(clsfy_binary_tree_node* parent,
-                         const clsfy_binary_tree_op& op)
-  : nodeId_(-1),parent_(parent),left_child_(nullptr),right_child_(nullptr),op_(op),prob_(0.5) {}
+                         clsfy_binary_tree_op  op)
+  : nodeId_(-1),parent_(parent),left_child_(nullptr),right_child_(nullptr),op_(std::move(op)),prob_(0.5) {}
 
   virtual clsfy_binary_tree_node* create_child(const clsfy_binary_tree_op& op);
   void add_child(const clsfy_binary_tree_op& op,bool bLeft)

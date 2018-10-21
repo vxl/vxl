@@ -16,20 +16,21 @@
 //
 // The main work of loading and saving happens in vil3d_meta_image
 
-#include <iostream>
-#include <algorithm>
-#include <cstring>
-#include <cstdlib>
-#include <cstddef>
 #include "vil3d_meta_image_format.h"
-#include <vul/vul_file.h>
-#include <vil/vil_stream_fstream.h>
-#include <vil3d/vil3d_image_view.h>
-#include <vil3d/vil3d_property.h>
-#include <vil3d/vil3d_image_resource.h>
-#include <vil3d/vil3d_new.h>
-#include <vil3d/vil3d_copy.h>
+#include <algorithm>
+#include <cstddef>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
+#include <vil/vil_stream_fstream.h>
+#include <vil3d/vil3d_copy.h>
+#include <vil3d/vil3d_image_resource.h>
+#include <vil3d/vil3d_image_view.h>
+#include <vil3d/vil3d_new.h>
+#include <vil3d/vil3d_property.h>
+#include <vul/vul_file.h>
 
 //
 // Helper functions
@@ -691,9 +692,9 @@ vil3d_image_resource_sptr vil3d_meta_image_format::make_output_image(const char 
 // Construct an image
 //===================================================================
 vil3d_meta_image::vil3d_meta_image(const vil3d_meta_image_header &header,
-                                   const std::string &fname) :
+                                   std::string fname) :
 header_(header),
-fpath_(fname)
+fpath_(std::move(fname))
 {
   // No code necessary
 }

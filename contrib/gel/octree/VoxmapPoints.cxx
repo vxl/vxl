@@ -19,7 +19,7 @@ VoxmapPoints::VoxmapPoints( int d, vnl_double_3 c, double s)
   : depth(d),
     nocorners( int(1<<depth)+1),
     nocentres( int(1<<depth)),
-    centre(c),
+    centre(std::move(c)),
     size(s)
     //    corners( nocorners, nocorners, nocorners),
     //    centres( nocentres, nocentres, nocentres)
@@ -88,5 +88,6 @@ int VoxmapPoints::GetCornerIndex( int x, int y, int z, int dx, int dy, int dz, i
   return cornerpoints.size()-1;
 }
 
+#include <utility>
 #include <vbl/vbl_sparse_array_3d.hxx>
 VBL_SPARSE_ARRAY_3D_INSTANTIATE(vnl_double_3);

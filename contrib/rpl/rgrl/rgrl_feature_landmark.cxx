@@ -11,14 +11,16 @@
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
 
+#include <utility>
+
 typedef std::vector< vnl_vector<double> > vec_vec_type;
 
 rgrl_feature_landmark::
 rgrl_feature_landmark( vnl_vector<double> const& loc,
-                       std::vector< vnl_vector<double> > const& outgoing_directions)
+                       std::vector< vnl_vector<double> >  outgoing_directions)
   : rgrl_feature( loc ),
     error_proj_( loc.size(), loc.size(), vnl_matrix_identity ),
-    outgoing_directions_( outgoing_directions )
+    outgoing_directions_(std::move( outgoing_directions ))
 {
   assert(outgoing_directions_.size() > 0);
 }

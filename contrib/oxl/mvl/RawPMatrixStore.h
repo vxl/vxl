@@ -19,10 +19,11 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
-#include <vector>
-#include <vcl_compiler.h>
 #include <mvl/FileNameGenerator.h>
 #include <mvl/PMatrix_sptr.h>
+#include <utility>
+#include <vcl_compiler.h>
+#include <vector>
 
 class RawPMatrixStore
 {
@@ -30,7 +31,7 @@ class RawPMatrixStore
   // Constructors/Destructors--------------------------------------------------
 
   //: Construct a PMatrix store given a FileNameGenerator
-  RawPMatrixStore(FileNameGenerator const& fng) : fng_(fng) {}
+  RawPMatrixStore(FileNameGenerator  fng) : fng_(std::move(fng)) {}
 
   // Operations----------------------------------------------------------------
 

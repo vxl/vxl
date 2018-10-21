@@ -2,19 +2,20 @@
 #define rgrl_trans_mixed_spline_h_
 //:
 // \file
-#include <iostream>
-#include <vector>
-#include "rgrl_transformation.h"
 #include "rgrl_trans_spline.h"
+#include "rgrl_transformation.h"
+#include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
+#include <vector>
 
 class rgrl_trans_mixed_spline
   : public rgrl_transformation
 {
  public:
   //: Constructor
-  rgrl_trans_mixed_spline( std::vector< rgrl_trans_spline > const& trans_splines )
-    : trans_splines_( trans_splines ){}
+  rgrl_trans_mixed_spline( std::vector< rgrl_trans_spline >  trans_splines )
+    : trans_splines_(std::move( trans_splines )){}
 
   ~rgrl_trans_mixed_spline() {}
 
