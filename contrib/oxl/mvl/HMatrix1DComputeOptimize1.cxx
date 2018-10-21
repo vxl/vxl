@@ -1,7 +1,8 @@
-#include <iostream>
-#include <iomanip>
 #include "HMatrix1DComputeOptimize1.h"
 #include "HMatrix1DComputeDesign.h"
+#include <iomanip>
+#include <iostream>
+#include <utility>
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
@@ -23,10 +24,10 @@ class XXX : public vnl_least_squares_function
   unsigned N;
   const std::vector<double> &z1,z2;
  public:
-  XXX(const std::vector<double> &z1_,const std::vector<double> &z2_)
+  XXX(const std::vector<double> &z1_,std::vector<double> z2_)
     : vnl_least_squares_function(3, z1_.size(), no_gradient)
     , N(z1_.size())
-    , z1(z1_) , z2(z2_)
+    , z1(z1_) , z2(std::move(z2_))
     {
       assert(N == z1.size());
       assert(N == z2.size());

@@ -63,7 +63,7 @@ class vil3d_slice_list_image: public vil3d_image_resource
   friend class vil3d_slice_list_format;
 
  protected:
-  vil3d_slice_list_image(const std::vector<vil_image_resource_sptr>&);
+  vil3d_slice_list_image(std::vector<vil_image_resource_sptr> );
 
  public:
   virtual ~vil3d_slice_list_image();

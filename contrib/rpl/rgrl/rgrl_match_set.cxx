@@ -1,7 +1,8 @@
-#include <vector>
-#include <iostream>
-#include <algorithm>
 #include "rgrl_match_set.h"
+#include <algorithm>
+#include <iostream>
+#include <utility>
+#include <vector>
 //:
 // \file
 // \brief  Represents a set of matches.
@@ -37,12 +38,12 @@ rgrl_match_set( const std::type_info& feature_type )
 rgrl_match_set::
 rgrl_match_set( const std::type_info& from_type,
                 const std::type_info& to_type,
-                const rgrl_feature_set_label& from_label,
-                const rgrl_feature_set_label& to_label )
+                rgrl_feature_set_label  from_label,
+                rgrl_feature_set_label  to_label )
   : from_type_( &from_type ),
     to_type_( &to_type ),
-    from_label_( from_label ),
-    to_label_( to_label ),
+    from_label_(std::move( from_label )),
+    to_label_(std::move( to_label )),
     num_constraints_per_match_( 0 )
 {
 }

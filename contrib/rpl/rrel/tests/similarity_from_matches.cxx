@@ -1,21 +1,22 @@
-#include <iostream>
-#include <vector>
 #include "similarity_from_matches.h"
-#include <vcl_compiler.h>
+#include <iostream>
+#include <utility>
 #include <vcl_cassert.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_inverse.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_det.h>
-#include <vnl/vnl_inverse.h>
 
 double noise( double sigma );
 
 // Assume throughout that the format of the parameter vector is a, b, tx, ty
 
-similarity_from_matches::similarity_from_matches( const std::vector<image_point_match>& matches )
+similarity_from_matches::similarity_from_matches( std::vector<image_point_match>  matches )
   : rrel_estimation_problem(2,2),
-    matches_(matches)
+    matches_(std::move(matches))
 {
   assert( matches_.size() >= 2 );
 

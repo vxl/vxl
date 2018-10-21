@@ -36,7 +36,7 @@ class rgrl_feature_set_label
 {
  public:
   //:
-  rgrl_feature_set_label( const std::string& name = std::string() );
+  rgrl_feature_set_label( std::string  name = std::string() );
 
   //: return name
   std::string const& name() const
@@ -66,7 +66,7 @@ class rgrl_feature_set
   typedef std::vector<rgrl_feature_sptr>  feature_vector;
 
  public:
-  rgrl_feature_set( feature_vector const& fea_vec, rgrl_feature_set_label const& label = rgrl_feature_set_label() );
+  rgrl_feature_set( feature_vector  fea_vec, rgrl_feature_set_label  label = rgrl_feature_set_label() );
 
   virtual ~rgrl_feature_set();
 

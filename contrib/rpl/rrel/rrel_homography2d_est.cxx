@@ -1,7 +1,8 @@
 // This is rpl/rrel/rrel_homography2d_est.cxx
-#include <iostream>
-#include <cmath>
 #include "rrel_homography2d_est.h"
+#include <cmath>
+#include <iostream>
+#include <utility>
 
 #include <vgl/vgl_homg_point_2d.h>
 #include <vnl/vnl_vector.h>
@@ -38,11 +39,11 @@ rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vgl_homg_poin
   min_num_pts_ = homog_dof_ / 2;
 }
 
-rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vnl_vector<double> > & from_pts,
-                                                const std::vector< vnl_vector<double> > & to_pts,
+rrel_homography2d_est :: rrel_homography2d_est( std::vector< vnl_vector<double> >  from_pts,
+                                                std::vector< vnl_vector<double> >  to_pts,
                                                 unsigned int homog_dof )
   : rrel_estimation_problem( homog_dof /*dof*/, ( homog_dof / 2 ) /*points to instantiate*/ ),
-    from_pts_( from_pts ), to_pts_( to_pts )
+    from_pts_(std::move( from_pts )), to_pts_(std::move( to_pts ))
 {
   assert( homog_dof%2 == 0 ); // Make sure DOF is even
   assert( from_pts_.size() == to_pts_.size() );

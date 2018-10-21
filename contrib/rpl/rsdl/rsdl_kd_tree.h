@@ -4,11 +4,12 @@
 // \file
 
 #include <iostream>
-#include <vector>
-#include <vcl_compiler.h>
-#include <rsdl/rsdl_point.h>
 #include <rsdl/rsdl_bounding_box.h>
+#include <rsdl/rsdl_point.h>
+#include <utility>
 #include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
+#include <vector>
 
 class rsdl_kd_node
 {
@@ -24,9 +25,9 @@ class rsdl_kd_node
   rsdl_kd_node( const rsdl_bounding_box& outer_box,
                 const rsdl_bounding_box& inner_box,
                 unsigned int depth,
-                const std::vector<int>& indices )
+                std::vector<int>  indices )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
-      point_indices_(indices), left_(nullptr), right_(nullptr) {}
+      point_indices_(std::move(indices)), left_(nullptr), right_(nullptr) {}
 
   //: outer bounding box in both cartesian and angular dimensions
   rsdl_bounding_box outer_box_;
@@ -68,7 +69,7 @@ class rsdl_kd_tree : public vbl_ref_count
 
  public:
   //: ctor requires the points and values associated with the tree;
-  rsdl_kd_tree( const std::vector< rsdl_point >& points,
+  rsdl_kd_tree( std::vector< rsdl_point >  points,
                 double min_angle = 0,
                 int points_per_leaf=4 );
 

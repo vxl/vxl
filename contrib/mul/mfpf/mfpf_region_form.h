@@ -5,9 +5,10 @@
 // \brief Defines pose and shape (box/ellipse etc) of a region
 // \author Tim Cootes
 
-#include <iostream>
 #include <cstdlib>
+#include <iostream>
 #include <mfpf/mfpf_pose.h>
+#include <utility>
 #include <vcl_compiler.h>
 
 //: Defines pose and shape (box/ellipse etc) of a region
@@ -33,7 +34,7 @@ struct mfpf_region_form
   //: Constructor
   mfpf_region_form(const mfpf_pose& p, std::string form,
                    double wi, double wj)
-   : pose_(p),wi_(wi),wj_(wj),form_(form) {}
+   : pose_(p),wi_(wi),wj_(wj),form_(std::move(form)) {}
 
   //: Default constructor
   mfpf_region_form() {}

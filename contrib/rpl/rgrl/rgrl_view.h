@@ -40,8 +40,8 @@ class rgrl_view
   //:  Build a view for registration estimation problem.
   rgrl_view( rgrl_mask_sptr      const& from_image_roi,
              rgrl_mask_sptr      const& to_image_roi,
-             rgrl_mask_box       const& region,
-             rgrl_mask_box       const& global_region,
+             rgrl_mask_box  region,
+             rgrl_mask_box  global_region,
              rgrl_estimator_sptr        xform_estimator,
              rgrl_transformation_sptr   xform_estimate,
              unsigned                   resolution = 0,

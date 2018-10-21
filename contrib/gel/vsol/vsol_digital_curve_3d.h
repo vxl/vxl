@@ -9,16 +9,17 @@
 // \author Peter Vanroose
 // \date   24 September 2004
 
-#include <vector>
-#include <string>
-#include <iostream>
 #include <iosfwd>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_3d.h>
-#include <vsol/vsol_point_3d_sptr.h>
 #include <vsol/vsol_digital_curve_3d_sptr.h>
-#include <vcl_compiler.h>
+#include <vsol/vsol_point_3d_sptr.h>
 
 //: Digital curve class, part of the vsol_curve_3d hierarchy
 // The curve is made up of vsol points and has no addition data members
@@ -35,8 +36,8 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   vsol_digital_curve_3d() : vsol_curve_3d(), samples_() {}
 
   //: Constructor from a list of points
-  vsol_digital_curve_3d(std::vector<vsol_point_3d_sptr> const& sample_points)
-    : vsol_curve_3d(), samples_(sample_points) {}
+  vsol_digital_curve_3d(std::vector<vsol_point_3d_sptr>  sample_points)
+    : vsol_curve_3d(), samples_(std::move(sample_points)) {}
 
   // Copy constructor
   vsol_digital_curve_3d(vsol_digital_curve_3d const& other);

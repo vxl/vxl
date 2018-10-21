@@ -14,10 +14,10 @@
 #include <rsdl/rsdl_dist.h>
 
 
-rsdl_kd_tree::rsdl_kd_tree( const std::vector< rsdl_point >& points,
+rsdl_kd_tree::rsdl_kd_tree( std::vector< rsdl_point >  points,
                             double min_angle,
                             int points_per_leaf )
-  : points_(points), min_angle_(min_angle)
+  : points_(std::move(points)), min_angle_(min_angle)
 {
   assert(points_per_leaf > 0);
 

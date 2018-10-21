@@ -20,7 +20,13 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_int_3.h>
+
+#include <utility>
+
+#include <utility>
+
 #include "rgrl_evaluator_sptr.h"
+#include <utility>
 
 #if 0 // ITK-specific
 template < class PixelType, int Dimension > class itkImage;
@@ -81,8 +87,8 @@ class rgrl_matcher_pseudo_int_3d
 
     discrete_shift_node(): shift_(), step_(0.0) {}
 
-    discrete_shift_node(const vnl_int_3& shift, const double& step)
-      : shift_(shift), step_(step) {}
+    discrete_shift_node(vnl_int_3  shift, const double& step)
+      : shift_(std::move(shift)), step_(step) {}
 
     discrete_shift_node operator-() const {
       discrete_shift_node that;
