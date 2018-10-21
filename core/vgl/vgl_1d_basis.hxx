@@ -27,7 +27,7 @@ vgl_homg_point_1d<double> vgl_1d_basis<T>::project(T const& p)
   if (affine_) // In this case, do not use the uninitialised inf_pt_
   {
     double d = ratio(origin_,unity_,p);
-    return vgl_homg_point_1d<double>(d,1);
+    return {d,1};
   }
   else // !affine_
   {

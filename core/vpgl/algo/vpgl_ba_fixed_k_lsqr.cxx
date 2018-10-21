@@ -94,7 +94,7 @@ vpgl_ba_fixed_k_lsqr::param_to_point(int j,
                                      const double* bj,
                                      const vnl_vector<double>& c) const
 {
-  return vgl_homg_point_3d<double>(bj[0], bj[1], bj[2]);
+  return {bj[0], bj[1], bj[2]};
 }
 
 //: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c

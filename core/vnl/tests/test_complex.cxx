@@ -117,5 +117,5 @@ std::complex<double> tc_acos(std::complex<double> x)
   double aa = a/std::sqrt(t), bb = b/std::sqrt(1-t);
   double r_real = std::acos(std::sqrt(t));
   double r_imag = std::log(std::fabs(aa-bb));
-  return std::complex<double>(r_real, r_imag);
+  return {r_real, r_imag};
 }
