@@ -1,7 +1,8 @@
-#include <iostream>
+#include "rgrl_debug_util.h"
 #include <cstdio>
 #include <fstream>
-#include "rgrl_debug_util.h"
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief Utility functions/classes to help debug registration
@@ -52,10 +53,10 @@ execute(const rgrl_object* caller, const rgrl_event & event )
 
 //: constructor
 rgrl_debug_feature_iteration_save_matches::
-rgrl_debug_feature_iteration_save_matches( const std::string& path,
-                                           const std::string& prefix,
+rgrl_debug_feature_iteration_save_matches( std::string  path,
+                                           std::string  prefix,
                                            const rgrl_mask_sptr& from_roi )
-  : path_(path), file_prefix_(prefix), from_roi_sptr_(from_roi)
+  : path_(std::move(path)), file_prefix_(std::move(prefix)), from_roi_sptr_(from_roi)
 {
 }
 

@@ -1,12 +1,13 @@
 // not used? #include <iostream>
 #include <cmath>
+#include <testlib/testlib_test.h>
+#include <utility>
 #include <vcl_compiler.h>
+#include <vnl/algo/vnl_adaptsimpson_integral.h>
+#include <vnl/algo/vnl_simpson_integral.h>
+#include <vnl/vnl_analytic_integrant.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_math.h>
-#include <vnl/vnl_analytic_integrant.h>
-#include <vnl/algo/vnl_simpson_integral.h>
-#include <vnl/algo/vnl_adaptsimpson_integral.h>
-#include <testlib/testlib_test.h>
 
 class my_test_integrant : public vnl_analytic_integrant
 {
@@ -17,7 +18,7 @@ class my_test_integrant : public vnl_analytic_integrant
 class gaussian_integrant : public vnl_analytic_integrant
 {
  public:
-  gaussian_integrant(double sr, double sz,  vnl_double_3 p0) : sr_(sr), sz_(sz), p0_(p0)
+  gaussian_integrant(double sr, double sz,  vnl_double_3 p0) : sr_(sr), sz_(sz), p0_(std::move(p0))
   {
     oneoversr2_ = 1.0 / sr_ / sr_;
     oneoversz2_ = 1.0 / sz_ / sz_;

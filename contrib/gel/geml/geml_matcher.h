@@ -25,8 +25,8 @@ class geml_matcher
 
   geml_matcher( const vil1_memory_image_of<vxl_byte> image1,
                 const vil1_memory_image_of<vxl_byte> image2,
-                const std::vector< std::pair<float,float> > &corners1,
-                const std::vector< std::pair<float,float> > &corners2);
+                std::vector< std::pair<float,float> > corners1,
+                std::vector< std::pair<float,float> > corners2);
 
   virtual ~geml_matcher();
 

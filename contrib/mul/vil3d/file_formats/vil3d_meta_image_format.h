@@ -133,7 +133,7 @@ class vil3d_meta_image: public vil3d_image_resource
 
  public:
    vil3d_meta_image(const vil3d_meta_image_header &header,
-                    const std::string &fname);
+                    std::string fname);
 
   virtual ~vil3d_meta_image();
 

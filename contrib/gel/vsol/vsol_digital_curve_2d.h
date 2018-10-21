@@ -57,7 +57,7 @@ class vsol_digital_curve_2d : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Constructor from a std::vector of points
   //---------------------------------------------------------------------------
-  vsol_digital_curve_2d(const std::vector<vsol_point_2d_sptr> &samples);
+  vsol_digital_curve_2d(std::vector<vsol_point_2d_sptr> samples);
 
   //---------------------------------------------------------------------------
   //: Copy constructor

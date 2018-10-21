@@ -34,9 +34,9 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
  public:
   //: Constructor
   vpgl_cam_trans_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
-                             std::vector<float> const& cam_weights,
+                             std::vector<float>  cam_weights,
                              std::vector< std::vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
-                             std::vector< vgl_point_3d<double> > const& initial_pts);
+                             std::vector< vgl_point_3d<double> >  initial_pts);
   //: Destructor
   virtual ~vpgl_cam_trans_search_lsqr() {}
 

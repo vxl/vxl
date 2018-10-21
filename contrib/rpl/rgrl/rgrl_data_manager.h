@@ -6,21 +6,22 @@
 // \author Charlene Tsai
 // \date   Feb 2004
 
-#include <vector>
 #include <iostream>
 #include <map>
-#include <string>
-#include <rgrl/rgrl_estimator_sptr.h>
-#include <rgrl/rgrl_feature_set_sptr.h>
-#include <rgrl/rgrl_matcher_sptr.h>
-#include <rgrl/rgrl_scale_estimator_sptr.h>
-#include <rgrl/rgrl_weighter_sptr.h>
 #include <rgrl/rgrl_estimator.h>
+#include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
+#include <rgrl/rgrl_feature_set_sptr.h>
 #include <rgrl/rgrl_matcher.h>
-#include <rgrl/rgrl_scale_estimator.h>
-#include <rgrl/rgrl_weighter.h>
+#include <rgrl/rgrl_matcher_sptr.h>
 #include <rgrl/rgrl_object.h>
+#include <rgrl/rgrl_scale_estimator.h>
+#include <rgrl/rgrl_scale_estimator_sptr.h>
+#include <rgrl/rgrl_weighter.h>
+#include <rgrl/rgrl_weighter_sptr.h>
+#include <string>
+#include <utility>
+#include <vector>
 
 #include <vcl_compiler.h>
 
@@ -40,14 +41,14 @@ class rgrl_data_manager_data_item
                                rgrl_weighter_sptr                 in_weighter,
                                rgrl_scale_estimator_unwgted_sptr  in_unwgted_scale_est,
                                rgrl_scale_estimator_wgted_sptr    in_wgted_scale_est,
-                               const std::string&                  in_label = std::string() )
+                               std::string                   in_label = std::string() )
     : from_set( in_from_set ),
       to_set( in_to_set ),
       matcher( in_matcher ),
       unwgted_scale_est( in_unwgted_scale_est ),
       wgted_scale_est( in_wgted_scale_est ),
       weighter( in_weighter ),
-      label( in_label )
+      label(std::move( in_label ))
     {
     }
 

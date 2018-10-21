@@ -66,7 +66,7 @@ public:
     // /params sym_pts[i] indicates symmetric match to point i
     // /params only_reflect: When true, only supply reflected shapes.
   msdi_reflected_marked_images(msdi_marked_images& raw_data,
-                             const std::vector<unsigned>& sym_pts,
+                             std::vector<unsigned>  sym_pts,
                              bool only_reflect=false);
 
     //: Construct with external vectors of images and points

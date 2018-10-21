@@ -27,8 +27,8 @@ public:
                     const std::vector< vgl_homg_point_2d<double> > & to_pts );
 
   //: Constructor from vnl_vectors
-  rrel_shift2d_est( const std::vector< vnl_vector<double> > & from_pts,
-                    const std::vector< vnl_vector<double> > & to_pts );
+  rrel_shift2d_est( std::vector< vnl_vector<double> >  from_pts,
+                    std::vector< vnl_vector<double> >  to_pts );
 
   //: Destructor.
   virtual ~rrel_shift2d_est();

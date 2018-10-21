@@ -1,7 +1,8 @@
 // This is gel/vsol/vsol_digital_curve_2d.cxx
-#include <iostream>
-#include <cmath>
 #include "vsol_digital_curve_2d.h"
+#include <cmath>
+#include <iostream>
+#include <utility>
 //:
 // \file
 #include <vsol/vsol_point_2d.h>
@@ -27,8 +28,8 @@ vsol_digital_curve_2d::vsol_digital_curve_2d()
 //: Constructor from a std::vector of points
 //---------------------------------------------------------------------------
 
-vsol_digital_curve_2d::vsol_digital_curve_2d(const std::vector<vsol_point_2d_sptr> &samples)
- : vsol_curve_2d(), samples_(samples)
+vsol_digital_curve_2d::vsol_digital_curve_2d(std::vector<vsol_point_2d_sptr> samples)
+ : vsol_curve_2d(), samples_(std::move(samples))
 {
 }
 

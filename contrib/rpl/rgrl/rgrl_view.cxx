@@ -1,6 +1,7 @@
-#include <iostream>
-#include <cstdlib>
 #include "rgrl_view.h"
+#include <cstdlib>
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief  Represent a "view" of the registration problem.
@@ -27,16 +28,16 @@ rgrl_view()
 rgrl_view::
 rgrl_view( rgrl_mask_sptr          const& from_image_roi,
            rgrl_mask_sptr          const& to_image_roi,
-           rgrl_mask_box           const& region,
-           rgrl_mask_box           const& global_region,
+           rgrl_mask_box  region,
+           rgrl_mask_box  global_region,
            rgrl_estimator_sptr       xform_estimator,
            rgrl_transformation_sptr  xform_estimate,
            unsigned                  resolution,
            rgrl_transformation_sptr  inverse_estimate )
   : from_image_roi_( from_image_roi ),
     to_image_roi_( to_image_roi ),
-    current_region_( region ),
-    global_region_( global_region ),
+    current_region_(std::move( region )),
+    global_region_(std::move( global_region )),
     xform_estimator_( xform_estimator ),
     xform_estimate_( xform_estimate ),
     inverse_estimate_( inverse_estimate ),

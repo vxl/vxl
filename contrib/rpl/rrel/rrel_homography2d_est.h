@@ -49,8 +49,8 @@ class rrel_homography2d_est : public rrel_estimation_problem
 
   //: Constructor from vnl_vectors
   //  By default, we want a full 8-DOF homography
-  rrel_homography2d_est( const std::vector< vnl_vector<double> > & from_pts,
-                         const std::vector< vnl_vector<double> > & to_pts,
+  rrel_homography2d_est( std::vector< vnl_vector<double> >  from_pts,
+                         std::vector< vnl_vector<double> >  to_pts,
                          unsigned int homog_dof = 8 );
 
   //: Destructor.

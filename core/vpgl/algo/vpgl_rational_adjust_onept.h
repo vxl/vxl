@@ -33,9 +33,9 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
 {
  public:
   //: Constructor
-  vpgl_z_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
-                     std::vector<float> const& cam_weights,
-                     std::vector<vgl_point_2d<double> > const& image_pts,
+  vpgl_z_search_lsqr(std::vector<vpgl_rational_camera<double> >  cams,
+                     std::vector<float>  cam_weights,
+                     std::vector<vgl_point_2d<double> >  image_pts,
                      vgl_point_3d<double> const& initial_pt,
                      double const& relative_diameter = 1.0);
   //: Destructor

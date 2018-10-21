@@ -34,7 +34,7 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
   vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                           unsigned int num_params_per_b,
                           unsigned int num_params_c,
-                          const std::vector<vgl_point_2d<double> >& image_points,
+                          std::vector<vgl_point_2d<double> >  image_points,
                           const std::vector<std::vector<bool> >& mask);
 
   //: Constructor

@@ -23,8 +23,8 @@ class vpgl_camera_transform_f : public vnl_least_squares_function
   //: Constructor. The source image is mapped to the destination frame by dt. nbins is the number of histogram bins used to compute entropies.
   vpgl_camera_transform_f(unsigned cnt_residuals, unsigned n_unknowns,
                           const std::vector<vpgl_perspective_camera<double>  >& input_cams,
-                          const std::vector< std::vector< std::pair<vnl_vector_fixed<double, 2>, unsigned> > >& cam_ids_img_pts,
-                          const std::vector<vnl_vector_fixed<double, 4> >& pts_3d, bool minimize_R = true);
+                          std::vector< std::vector< std::pair<vnl_vector_fixed<double, 2>, unsigned> > >  cam_ids_img_pts,
+                          std::vector<vnl_vector_fixed<double, 4> >  pts_3d, bool minimize_R = true);
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.

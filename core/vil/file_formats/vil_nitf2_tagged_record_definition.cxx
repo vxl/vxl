@@ -31,8 +31,8 @@ vil_nitf2_tagged_record_definition::tagged_record_definition_map&
 
 vil_nitf2_tagged_record_definition::vil_nitf2_tagged_record_definition(
   std::string name, std::string pretty_name, vil_nitf2_field_definitions* defs)
-  : m_name(name),
-    m_pretty_name(pretty_name),
+  : m_name(std::move(name)),
+    m_pretty_name(std::move(pretty_name)),
     m_field_definitions(defs ? defs : new vil_nitf2_field_definitions()),
     m_definition_completed(false)
 {

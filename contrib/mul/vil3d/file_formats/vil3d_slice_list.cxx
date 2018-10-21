@@ -1,8 +1,9 @@
-#include <cstring>
-#include <cstdlib>
-#include <iostream>
-#include <algorithm>
 #include "vil3d_slice_list.h"
+#include <algorithm>
+#include <cstdlib>
+#include <cstring>
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief Reader/Writer for a volume made up of a list of slices.
@@ -179,8 +180,8 @@ vil3d_slice_list_format::make_output_image(const char* /*filename*/,
 }
 
 
-vil3d_slice_list_image::vil3d_slice_list_image(const std::vector<vil_image_resource_sptr>& images):
-slices_(images)
+vil3d_slice_list_image::vil3d_slice_list_image(std::vector<vil_image_resource_sptr>  images):
+slices_(std::move(images))
 {
 }
 

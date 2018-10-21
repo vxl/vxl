@@ -299,7 +299,7 @@ class vil_nitf2_enum_string_formatter : public vil_nitf2_string_formatter
 {
  public:
   // Constructor
-  vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values&);
+  vil_nitf2_enum_string_formatter(int field_width, vil_nitf2_enum_values );
 
   vil_nitf2_field_formatter* copy() const;
 

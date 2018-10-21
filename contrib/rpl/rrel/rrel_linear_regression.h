@@ -57,7 +57,7 @@ public:
 
   //: Constructor with data pre-separated into arrays of independent and dependent variables.
   rrel_linear_regression( const std::vector< vnl_vector<double> >&  ind_vars,
-                          const std::vector< double >&  dep_vars );
+                          std::vector< double >   dep_vars );
 
   //: Destructor.
   virtual ~rrel_linear_regression();

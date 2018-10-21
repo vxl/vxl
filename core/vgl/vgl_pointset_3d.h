@@ -14,13 +14,14 @@
 // Initial version August 29,  2015
 // \endverbatim
 
-#include <vector>
 #include <iostream>
 #include <sstream>
 #include <string>
-#include <vgl/vgl_point_3d.h>
+#include <utility>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
+#include <vector>
+#include <vgl/vgl_point_3d.h>
 template <class Type>
 class vgl_pointset_3d
 {
@@ -35,18 +36,18 @@ class vgl_pointset_3d
  vgl_pointset_3d(): has_normals_(false), has_scalars_(false){}
 
   //: Construct from a list
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points): has_normals_(false), has_scalars_(false), points_(points){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> >  points): has_normals_(false), has_scalars_(false), points_(std::move(points)){}
 
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points, std::vector<vgl_vector_3d<Type> > const& normals):
-  has_normals_(true), has_scalars_(false), points_(points), normals_(normals){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> >  points, std::vector<vgl_vector_3d<Type> >  normals):
+  has_normals_(true), has_scalars_(false), points_(std::move(points)), normals_(std::move(normals)){}
 
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points,  std::vector< Type > const& scalars):
-  has_normals_(false), has_scalars_(true), points_(points), scalars_(scalars){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> >  points,  std::vector< Type >  scalars):
+  has_normals_(false), has_scalars_(true), points_(std::move(points)), scalars_(std::move(scalars)){}
 
- vgl_pointset_3d(std::vector<vgl_point_3d<Type> > const& points,
-                 std::vector<vgl_vector_3d<Type> > const& normals,
-                 std::vector< Type > const& scalars):
-  has_normals_(true), has_scalars_(true), points_(points), normals_(normals), scalars_(scalars){}
+ vgl_pointset_3d(std::vector<vgl_point_3d<Type> >  points,
+                 std::vector<vgl_vector_3d<Type> >  normals,
+                 std::vector< Type >  scalars):
+  has_normals_(true), has_scalars_(true), points_(std::move(points)), normals_(std::move(normals)), scalars_(std::move(scalars)){}
 
   //: incrementally grow points, duplicate points are allowed
   void add_point(vgl_point_3d<Type> const& p){

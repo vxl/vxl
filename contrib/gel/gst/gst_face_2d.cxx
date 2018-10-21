@@ -6,6 +6,8 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <utility>
+
 #include "gst_face_2d.h"
 
 gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon)
@@ -13,9 +15,9 @@ gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon)
 {
 }
 
-gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon, const std::vector<gst_polygon_2d_sptr> &holes)
+gst_face_2d::gst_face_2d( gst_polygon_2d_sptr polygon, std::vector<gst_polygon_2d_sptr> holes)
   : outside_( polygon),
-    holes_( holes)
+    holes_(std::move( holes))
 {
 }
 

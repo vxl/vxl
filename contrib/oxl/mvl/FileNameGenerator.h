@@ -15,9 +15,10 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
-#include <string>
-#include <vcl_compiler.h>
 #include <mvl/FileNameGeneratorBase.h>
+#include <string>
+#include <utility>
+#include <vcl_compiler.h>
 
 class FileNameGenerator
 {
@@ -28,8 +29,8 @@ class FileNameGenerator
   // default copy ctor OK
  public:
   FileNameGenerator(FileNameGeneratorBase* fng,
-                    std::string const& suffix)
-  : fng_(fng), subdir_(), suffix_(suffix)
+                    std::string  suffix)
+  : fng_(fng), subdir_(), suffix_(std::move(suffix))
   {
   }
 
@@ -41,8 +42,8 @@ class FileNameGenerator
 
   FileNameGenerator(FileNameGeneratorBase* fng,
                     std::string const& subdir,
-                    std::string const& suffix)
-  : fng_(fng), subdir_(), suffix_(suffix)
+                    std::string  suffix)
+  : fng_(fng), subdir_(), suffix_(std::move(suffix))
   {
     if (fng->use_subdirs) subdir_ = subdir;
   }

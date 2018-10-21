@@ -3,25 +3,26 @@
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
-#include <iostream>
 #include "rgrl_est_spline.h"
-#include "rgrl_spline.h"
-#include "rgrl_match_set.h"
-#include "rgrl_trans_spline.h"
 #include "rgrl_cast.h"
-#include <vnl/vnl_math.h>
-#include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_vector.h>
-#include <vnl/algo/vnl_levenberg_marquardt.h>
-#include <vnl/vnl_least_squares_function.h>
-#include <vnl/vnl_cost_function.h>
-#include <vnl/algo/vnl_conjugate_gradient.h>
-#include <vnl/algo/vnl_amoeba.h>
-#include <vnl/algo/vnl_powell.h>
-#include <vnl/algo/vnl_lbfgs.h>
-#include <vcl_compiler.h>
-#include <vul/vul_timer.h>
+#include "rgrl_match_set.h"
+#include "rgrl_spline.h"
+#include "rgrl_trans_spline.h"
+#include <iostream>
+#include <utility>
 #include <vcl_cassert.h>
+#include <vcl_compiler.h>
+#include <vnl/algo/vnl_amoeba.h>
+#include <vnl/algo/vnl_conjugate_gradient.h>
+#include <vnl/algo/vnl_lbfgs.h>
+#include <vnl/algo/vnl_levenberg_marquardt.h>
+#include <vnl/algo/vnl_powell.h>
+#include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_cost_function.h>
+#include <vnl/vnl_least_squares_function.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector.h>
+#include <vul/vul_timer.h>
 
 namespace{
   // for Levenberg Marquardt
@@ -134,11 +135,11 @@ namespace{
 
 rgrl_est_spline::
 rgrl_est_spline( unsigned dof,
-                 rgrl_mask_box const& roi, vnl_vector<double> const& delta,
+                 rgrl_mask_box  roi, vnl_vector<double> const& delta,
                  vnl_vector< unsigned > const& m,
                  bool use_thin_plate, double lambda )
     : rgrl_nonlinear_estimator( dof ),
-      roi_(roi), delta_(delta),
+      roi_(std::move(roi)), delta_(delta),
       m_( m ),
       use_thin_plate_( use_thin_plate ),
       lambda_(lambda),
@@ -155,11 +156,11 @@ rgrl_est_spline( unsigned dof,
 rgrl_est_spline::
 rgrl_est_spline( unsigned dof,
                  rgrl_transformation_sptr global_xform,
-                 rgrl_mask_box const& roi, vnl_vector<double> const& delta,
+                 rgrl_mask_box  roi, vnl_vector<double> const& delta,
                  vnl_vector< unsigned > const& m,
                  bool use_thin_plate, double lambda )
   : rgrl_nonlinear_estimator( dof ),
-    roi_(roi), delta_(delta),
+    roi_(std::move(roi)), delta_(delta),
     m_( m ),
     use_thin_plate_( use_thin_plate ),
     lambda_(lambda),

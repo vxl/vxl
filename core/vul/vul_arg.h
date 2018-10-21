@@ -16,13 +16,14 @@
 //   Feb.2002 - Peter Vanroose - brief doxygen comment placed on single line
 // \endverbatim
 
-#include <vector>
-#include <string>
-#include <list>
 #include <iosfwd>
+#include <list>
+#include <string>
+#include <utility>
 #include <vcl_compiler.h>
-#include <vxl_config.h>
+#include <vector>
 #include <vul/vul_export.h>
+#include <vxl_config.h>
 
 //: forward declare all classes and their helper functions.
 class vul_arg_info_list;
@@ -150,7 +151,7 @@ class vul_arg : public vul_arg_base
           T default_value = T()
          )
     : vul_arg_base(option_string,helpstring, false),
-      value_(default_value) { settype(); }
+      value_(std::move(default_value)) { settype(); }
 
   //: As above, but add the arg to the list \a l, on which \c parse() can be called later.
   vul_arg(vul_arg_info_list & l,
@@ -158,7 +159,7 @@ class vul_arg : public vul_arg_base
           char const * helpstring = nullptr,
           T default_value = T() )
     : vul_arg_base(l, option_string, helpstring, false),
-      value_(default_value) { settype(); }
+      value_(std::move(default_value)) { settype(); }
 
   //: Dummy parameter to be passed during construction. It sets a flag as required.
 
