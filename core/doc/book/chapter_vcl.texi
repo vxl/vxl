@@ -99,7 +99,7 @@ standard error to a window (but see also @code{vul_redirector}).
 @section Macros and standard C++
 
 The C++ ISO standard library headers include the functionality of the C ISO standard
-library headers.  For example, the declarations found in @code{<stdlib.h>} can be
+library headers.  For example, the declarations found in @code{<cstdlib>} can be
 found in @code{<cstdlib>} but in namespace @code{std::}.  This means that functions
 like @code{printf()} should be called using @code{std::printf()} instead; omitting
 the @code{std::} is wrong and won't work if the compiler is truly conforming.  The

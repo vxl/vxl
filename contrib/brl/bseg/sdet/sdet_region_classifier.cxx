@@ -3,7 +3,7 @@
 #include <functional>
 #include <algorithm>
 #include <limits>
-#include <math.h>
+#include <cmath>
 #include <vul/vul_timer.h>
 #if 0
 void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_region_sptr >& regions){

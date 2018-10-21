@@ -4,7 +4,7 @@
 #include <windows.h>
 #undef WIN32_LEAN_AND_MEAN
 #include <memory.h>
-#include <string.h>
+#include <cstring>
 #define XML_BYTE_ORDER 12
 
 #else

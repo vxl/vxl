@@ -43,4 +43,4 @@ enum {
   BT_VERBAR
 };
 
-#include <stddef.h>
+#include <cstddef>

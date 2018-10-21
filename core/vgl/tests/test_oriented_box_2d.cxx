@@ -8,7 +8,7 @@
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
 #include <vgl/vgl_fit_oriented_box_2d.h>
-#include <math.h>
+#include <cmath>
 
 static void test_oriented_box_2d()
 {

@@ -33,7 +33,7 @@ Copyright: (C) 1997-2004, Advanced Interfaces Group,
 #ifndef gpc_h_
 #define gpc_h_
 
-#include <stdio.h>
+#include <cstdio>
 
 
 /*

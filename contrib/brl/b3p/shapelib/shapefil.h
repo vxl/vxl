@@ -35,7 +35,7 @@
  ******************************************************************************
  */
 
-#include <stdio.h>
+#include <cstdio>
 
 #ifdef USE_DBMALLOC
 #include <dbmalloc.h>

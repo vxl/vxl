@@ -744,7 +744,7 @@ int main() { int x = usleep(0); return x*0; }
 
 // This is not a C++ header, strictly speaking.
 // Actually, it is normative but deprecated, strictly speaking :)
-#include <stdlib.h>
+#include <cstdlib>
 int f(const void *a,const void *b) { return 1; }
 
 int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
@@ -862,7 +862,7 @@ int main()
 // ~B() first (or ever).  This program will return 1 if the bug exists
 // and 0 otherwise.
 
-#include <stdlib.h>
+#include <cstdlib>
 
 struct A
 {
@@ -933,7 +933,7 @@ int main()
 // functional. (It can't be cast to a double, for example.)
 
 // CHAR_BIT is the number of bits per char.
-#include <limits.h>
+#include <climits>
 #ifndef CHAR_BIT
 # define CHAR_BIT 8
 #endif
@@ -1025,7 +1025,7 @@ int main() { MINIDUMP_EXCEPTION_INFORMATION dummy; return 0; }
 #ifdef VXL_HAS_WIN_WCHAR_T
 
 #ifdef _WCHAR_T_DEFINED
-#include <wchar.h>
+#include <cwchar>
 int main()
 {
   wchar_t buf [10];

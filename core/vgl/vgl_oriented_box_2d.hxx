@@ -4,7 +4,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <cmath>
-#include <math.h>
+#include <cmath>
 #include <vgl/vgl_tolerance.h>
 #include <iostream>
 #include <string>
