@@ -28,9 +28,7 @@ mfpf_region_about_pt::mfpf_region_about_pt()
 // Destructor
 //=======================================================================
 
-mfpf_region_about_pt::~mfpf_region_about_pt()
-{
-}
+mfpf_region_about_pt::~mfpf_region_about_pt() = default;
 
 //: Returns true as the region is centred on an input point
 bool mfpf_region_about_pt::is_centred_on_pt() const

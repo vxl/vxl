@@ -19,17 +19,13 @@
 // Dflt ctor
 //=======================================================================
 
-vpdfl_kernel_pdf::vpdfl_kernel_pdf()
-{
-}
+vpdfl_kernel_pdf::vpdfl_kernel_pdf() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-vpdfl_kernel_pdf::~vpdfl_kernel_pdf()
-{
-}
+vpdfl_kernel_pdf::~vpdfl_kernel_pdf() = default;
 
 //: Compute mean/variance given current centres and widths
 void vpdfl_kernel_pdf::calc_mean_var()

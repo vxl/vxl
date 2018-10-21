@@ -86,7 +86,7 @@ class gevd_fold
             float junction_factor=1.5); //!< threshold factor for junction edgels
 
   //: Free space allocated for detecting fold profiles.  Does nothing.
-  ~gevd_fold() {}
+  ~gevd_fold() = default;
 
   static gevd_bufferxy* null_bufferxy;
 

@@ -22,7 +22,7 @@ class rgrl_feature_region
   rgrl_feature_region()  : pixel_coordinates_cached_( false ) {}
 
   // destructor
-  virtual ~rgrl_feature_region() {}
+  virtual ~rgrl_feature_region() = default;
 
 #if 0
   // Defines type-related functions

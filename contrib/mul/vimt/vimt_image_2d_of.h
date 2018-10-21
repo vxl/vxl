@@ -28,7 +28,7 @@ public:
 
   //: Default constructor
   //  Creates an empty one-plane image.
-  vimt_image_2d_of() {}
+  vimt_image_2d_of() = default;
 
 
   //: Construct an image of size (ni, nj, np) with optional world_to_image transform.
@@ -44,7 +44,7 @@ public:
 
 
   //: Destructor
-  virtual ~vimt_image_2d_of() {}
+  virtual ~vimt_image_2d_of() = default;
 
   //: Baseclass view of image
   virtual const vil_image_view_base& image_base() const { return image_; }

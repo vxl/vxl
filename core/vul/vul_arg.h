@@ -80,7 +80,7 @@ class vul_arg_base
   vul_arg_base(vul_arg_info_list& l, char const* option_string,
                char const*helpstring, bool required= false);
   vul_arg_base(char const* option_string, char const*helpstring, bool required= false);
-  virtual ~vul_arg_base() {}
+  virtual ~vul_arg_base() = default;
 
   virtual int parse(char ** argv) = 0;
 };
@@ -218,7 +218,7 @@ class vul_arg_info_list
     : help_("-?"), // default help operator!
       verbose_(false), autonomy_(autonomy__) {}
 
-  ~vul_arg_info_list() {}
+  ~vul_arg_info_list() = default;
 
   void add(vul_arg_base* arg);
   void parse(int& argc, char **& argv, bool warn_about_unrecognized_arguments);

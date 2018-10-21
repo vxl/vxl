@@ -36,9 +36,7 @@ mvl_multi_view_matches::mvl_multi_view_matches(int N)
 }
 
 
-mvl_multi_view_matches::~mvl_multi_view_matches()
-{
-}
+mvl_multi_view_matches::~mvl_multi_view_matches() = default;
 
 void mvl_multi_view_matches::set_views(std::vector<int> const& views)
 {

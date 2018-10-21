@@ -59,9 +59,7 @@ vgl_norm_trans_3d<T>::vgl_norm_trans_3d(const T* H)
 
 //: Destructor
 template <class T>
-vgl_norm_trans_3d<T>::~vgl_norm_trans_3d()
-{
-}
+vgl_norm_trans_3d<T>::~vgl_norm_trans_3d() = default;
 
 // == OPERATIONS ==
 //----------------------------------------------------------------

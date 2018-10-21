@@ -33,7 +33,7 @@ class vil_nitf2_array_field : public vil_nitf2_field
     : vil_nitf2_field(definition), m_num_dimensions(num_dimensions) {}
 
   // Destructor
-  virtual ~vil_nitf2_array_field() {}
+  virtual ~vil_nitf2_array_field() = default;
 
   //: Number of dimensions.
   // \returns this vector's number of dimensions, which equals

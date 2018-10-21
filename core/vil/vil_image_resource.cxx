@@ -17,7 +17,7 @@
 //: the reference count starts at 0.
 vil_image_resource::vil_image_resource() : reference_count_(0) { }
 
-vil_image_resource::~vil_image_resource() { }
+vil_image_resource::~vil_image_resource() = default;
 
 
 bool vil_image_resource::get_property(char const *, void *) const

@@ -14,7 +14,7 @@
 
 
 HMatrix1DComputeDesign::HMatrix1DComputeDesign(void) : HMatrix1DCompute() { }
-HMatrix1DComputeDesign::~HMatrix1DComputeDesign() { }
+HMatrix1DComputeDesign::~HMatrix1DComputeDesign() = default;
 
 bool
 HMatrix1DComputeDesign::compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&P,

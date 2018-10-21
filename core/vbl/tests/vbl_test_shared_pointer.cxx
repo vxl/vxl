@@ -58,7 +58,7 @@ static void test_class()
 
 struct base_class
 {
-  virtual ~base_class() {}
+  virtual ~base_class() = default;
   virtual int who() const { return 0; }
 };
 

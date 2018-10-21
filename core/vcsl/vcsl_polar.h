@@ -28,7 +28,7 @@ class vcsl_polar
   vcsl_polar();
 
   // Destructor
-  virtual ~vcsl_polar() {}
+  virtual ~vcsl_polar() = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>

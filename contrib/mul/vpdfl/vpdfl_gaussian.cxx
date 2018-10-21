@@ -69,15 +69,11 @@ static bool vectorHasDescendingOrder(const vnl_vector<double>& v)
 
 //=======================================================================
 
-vpdfl_gaussian::vpdfl_gaussian()
-{
-}
+vpdfl_gaussian::vpdfl_gaussian() = default;
 
 //=======================================================================
 
-vpdfl_gaussian::~vpdfl_gaussian()
-{
-}
+vpdfl_gaussian::~vpdfl_gaussian() = default;
 
 //=======================================================================
 

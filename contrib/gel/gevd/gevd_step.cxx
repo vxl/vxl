@@ -101,7 +101,7 @@ gevd_step::gevd_step(float smooth_sigma, // width of filter dG
 
 
 //: Free space allocated for detecting step profiles.  Does nothing.
-gevd_step::~gevd_step() {}
+gevd_step::~gevd_step() = default;
 
 //: Detect step profiles with Canny edge detector.
 // The image is convolved with a Gaussian to smooth away

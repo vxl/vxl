@@ -40,17 +40,12 @@ vsol_triangle_2d::vsol_triangle_2d(const vsol_point_2d_sptr &new_p0,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_triangle_2d::vsol_triangle_2d(const vsol_triangle_2d &other)
-  : vsol_polygon_2d(other)
-{
-}
+vsol_triangle_2d::vsol_triangle_2d(const vsol_triangle_2d &other) = default;
 
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
-vsol_triangle_2d::~vsol_triangle_2d()
-{
-}
+vsol_triangle_2d::~vsol_triangle_2d() = default;
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization

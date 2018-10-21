@@ -46,7 +46,7 @@ class gevd_param_mixin
   //: Constructor.  By default a constructed parameter block is valid.
   gevd_param_mixin() : valid_(true) {}
   // Destructor
-  virtual ~gevd_param_mixin() {}
+  virtual ~gevd_param_mixin() = default;
   //=====================================================
   virtual bool SanityCheck();
   bool Valid() const { return valid_; }

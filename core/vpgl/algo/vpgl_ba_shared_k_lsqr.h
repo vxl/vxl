@@ -34,7 +34,7 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
                         const std::vector<std::vector<bool> >& mask);
 
   // Destructor
-  virtual ~vpgl_ba_shared_k_lsqr() {}
+  virtual ~vpgl_ba_shared_k_lsqr() = default;
 
 
   //: compute the Jacobian Aij

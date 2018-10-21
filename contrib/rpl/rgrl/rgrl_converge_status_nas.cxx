@@ -40,9 +40,7 @@ rgrl_converge_status_nas( rgrl_converge_status const& old )
 }
 
 rgrl_converge_status_nas::
-~rgrl_converge_status_nas()
-{
-}
+~rgrl_converge_status_nas() = default;
 
 
 void

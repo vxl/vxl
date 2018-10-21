@@ -25,9 +25,7 @@ vpdfl_gaussian_kernel_pdf_sampler::vpdfl_gaussian_kernel_pdf_sampler():
 // Destructor
 //=======================================================================
 
-vpdfl_gaussian_kernel_pdf_sampler::~vpdfl_gaussian_kernel_pdf_sampler()
-{
-}
+vpdfl_gaussian_kernel_pdf_sampler::~vpdfl_gaussian_kernel_pdf_sampler() = default;
 
 
 //=======================================================================

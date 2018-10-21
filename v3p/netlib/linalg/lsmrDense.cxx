@@ -24,9 +24,7 @@ lsmrDense::lsmrDense()
 }
 
 
-lsmrDense::~lsmrDense()
-{
-}
+lsmrDense::~lsmrDense() = default;
 
 
 void

@@ -16,17 +16,13 @@
 // Dflt ctor
 //=======================================================================
 
-mbl_dyn_prog::mbl_dyn_prog()
-{
-}
+mbl_dyn_prog::mbl_dyn_prog() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mbl_dyn_prog::~mbl_dyn_prog()
-{
-}
+mbl_dyn_prog::~mbl_dyn_prog() = default;
 
 
 //: Construct path from links_, assuming it ends at end_state

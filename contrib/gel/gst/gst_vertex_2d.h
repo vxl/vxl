@@ -18,7 +18,7 @@ class gst_vertex_2d : public vbl_ref_count
  public:
 
   // default constructor
-  gst_vertex_2d() {}
+  gst_vertex_2d() = default;
 
   // useful constructor
   gst_vertex_2d(double x, double y) : vbl_ref_count(), x_(x), y_(y) {}
@@ -27,7 +27,7 @@ class gst_vertex_2d : public vbl_ref_count
   gst_vertex_2d( const gst_vertex_2d &v) : vbl_ref_count(), x_(v.get_x()), y_(v.get_y()) {}
 
   // destructor
-  ~gst_vertex_2d() {}
+  ~gst_vertex_2d() = default;
 
   // getters
   double get_x() const { return x_; }

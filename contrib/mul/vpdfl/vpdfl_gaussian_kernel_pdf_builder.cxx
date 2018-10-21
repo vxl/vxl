@@ -15,17 +15,13 @@
 // Dflt ctor
 //=======================================================================
 
-vpdfl_gaussian_kernel_pdf_builder::vpdfl_gaussian_kernel_pdf_builder()
-{
-}
+vpdfl_gaussian_kernel_pdf_builder::vpdfl_gaussian_kernel_pdf_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-vpdfl_gaussian_kernel_pdf_builder::~vpdfl_gaussian_kernel_pdf_builder()
-{
-}
+vpdfl_gaussian_kernel_pdf_builder::~vpdfl_gaussian_kernel_pdf_builder() = default;
 
 
 vpdfl_pdf_base* vpdfl_gaussian_kernel_pdf_builder::new_model() const

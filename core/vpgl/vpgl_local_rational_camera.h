@@ -38,7 +38,7 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
                              vpgl_rational_camera<T> const& rcam);
 
 
-  virtual ~vpgl_local_rational_camera() {}
+  virtual ~vpgl_local_rational_camera() = default;
 
   virtual std::string type_name() const { return "vpgl_local_rational_camera"; }
 

@@ -21,7 +21,7 @@
 //
 //
 HMatrix2DSimilarityCompute::HMatrix2DSimilarityCompute(void) : HMatrix2DCompute() { }
-HMatrix2DSimilarityCompute::~HMatrix2DSimilarityCompute() { }
+HMatrix2DSimilarityCompute::~HMatrix2DSimilarityCompute() = default;
 
 //
 //

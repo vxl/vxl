@@ -37,9 +37,7 @@ mcal_pca::mcal_pca()
 // Destructor
 //=======================================================================
 
-mcal_pca::~mcal_pca()
-{
-}
+mcal_pca::~mcal_pca() = default;
 
 
 //: Return the number of modes to retain

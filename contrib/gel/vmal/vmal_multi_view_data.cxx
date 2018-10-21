@@ -20,9 +20,7 @@ nbviews_(nbviews),size_vect_ft_(0),matchnum_(-1),closed_track_(true),MVM(0)
 }
 
 template <class T>
-vmal_multi_view_data<T>::~vmal_multi_view_data()
-{
-}
+vmal_multi_view_data<T>::~vmal_multi_view_data() = default;
 
 template <class T>
 void vmal_multi_view_data<T>::set_params(int nbviews)

@@ -24,11 +24,11 @@ class vcsl_angle
   //***************************************************************************
 
   // Default constructor
-  vcsl_angle() {}
+  vcsl_angle() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_angle() {}
+  virtual ~vcsl_angle() = default;
 
   //***************************************************************************
   // Status report

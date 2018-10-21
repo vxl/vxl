@@ -26,11 +26,11 @@ class vcsl_length
   //***************************************************************************
 
   // Default constructor
-  vcsl_length() {}
+  vcsl_length() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_length() {}
+  virtual ~vcsl_length() = default;
 
   //***************************************************************************
   // Status report

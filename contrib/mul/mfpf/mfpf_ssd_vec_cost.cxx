@@ -13,17 +13,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_ssd_vec_cost::mfpf_ssd_vec_cost()
-{
-}
+mfpf_ssd_vec_cost::mfpf_ssd_vec_cost() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_ssd_vec_cost::~mfpf_ssd_vec_cost()
-{
-}
+mfpf_ssd_vec_cost::~mfpf_ssd_vec_cost() = default;
 
 //: Define mean and weights
 void mfpf_ssd_vec_cost::set(const vnl_vector<double>& mean,

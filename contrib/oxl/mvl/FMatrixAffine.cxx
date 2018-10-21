@@ -11,16 +11,12 @@
 //--------------------------------------------------------------
 //
 //: Constructor
-FMatrixAffine::FMatrixAffine ()
-{
-}
+FMatrixAffine::FMatrixAffine () = default;
 
 //--------------------------------------------------------------
 //
 //: Destructor
-FMatrixAffine::~FMatrixAffine()
-{
-}
+FMatrixAffine::~FMatrixAffine() = default;
 
 //--------------------------------------------------------------
 //

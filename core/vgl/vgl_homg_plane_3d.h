@@ -37,7 +37,7 @@ class vgl_homg_plane_3d
   Type d_;
 
  public:
-  inline vgl_homg_plane_3d () {}
+  inline vgl_homg_plane_3d () = default;
 
   //: Construct from four Types.
   inline vgl_homg_plane_3d(Type ta, Type tb, Type tc, Type td) : a_(ta), b_(tb), c_(tc), d_(td) {}

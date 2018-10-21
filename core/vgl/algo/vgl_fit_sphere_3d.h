@@ -60,11 +60,11 @@ class vgl_fit_sphere_3d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_fit_sphere_3d() {}
+   vgl_fit_sphere_3d() = default;
 
    vgl_fit_sphere_3d(std::vector<vgl_point_3d<T> > points);
 
-  ~vgl_fit_sphere_3d() {}
+  ~vgl_fit_sphere_3d() = default;
 
   // Operations---------------------------------------------------------------
 

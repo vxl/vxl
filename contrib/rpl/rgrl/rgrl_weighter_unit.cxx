@@ -7,9 +7,7 @@
 #include "rgrl_match_set.h"
 
 rgrl_weighter_unit::
-rgrl_weighter_unit()
-{
-}
+rgrl_weighter_unit() = default;
 
 
 void

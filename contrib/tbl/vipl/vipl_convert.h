@@ -34,7 +34,7 @@ class vipl_convert : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>() {}
   inline vipl_convert(vipl_convert const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A) {}
-  inline ~vipl_convert() {}
+  inline ~vipl_convert() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

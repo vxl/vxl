@@ -36,7 +36,7 @@ class vgl_point_2d
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor
-  inline vgl_point_2d () {}
+  inline vgl_point_2d () = default;
 
   //: Construct from two Types.
   inline vgl_point_2d (Type px, Type py) : x_(px), y_(py) {}

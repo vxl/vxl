@@ -34,9 +34,7 @@ mbl_clamped_plate_spline_2d::mbl_clamped_plate_spline_2d()
 // Destructor
 //=======================================================================
 
-mbl_clamped_plate_spline_2d::~mbl_clamped_plate_spline_2d()
-{
-}
+mbl_clamped_plate_spline_2d::~mbl_clamped_plate_spline_2d() = default;
 
 //: Check that all points are inside unit circle
 bool mbl_clamped_plate_spline_2d::all_in_unit_circle(const std::vector<vgl_point_2d<double> >& pts)

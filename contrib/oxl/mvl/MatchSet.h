@@ -32,8 +32,8 @@ class MatchSet
 //: Return true if i is not the "NoMatch" value.
   static inline bool matchp(int i) { return i != NoMatch; }
 
-  MatchSet() {}
-  virtual ~MatchSet() {}
+  MatchSet() = default;
+  virtual ~MatchSet() = default;
 };
 
 #endif // MatchSet_h_

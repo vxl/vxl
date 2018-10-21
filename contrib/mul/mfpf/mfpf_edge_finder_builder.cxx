@@ -20,17 +20,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_edge_finder_builder::mfpf_edge_finder_builder()
-{
-}
+mfpf_edge_finder_builder::mfpf_edge_finder_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_edge_finder_builder::~mfpf_edge_finder_builder()
-{
-}
+mfpf_edge_finder_builder::~mfpf_edge_finder_builder() = default;
 
 //: Define region size in world co-ordinates
 //  Sets up ROI to cover given box (with samples at step_size()),

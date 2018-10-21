@@ -76,7 +76,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   vpgl_perspective_camera( const vpgl_perspective_camera& cam );
 
   //: Destructor
-  virtual ~vpgl_perspective_camera() {}
+  virtual ~vpgl_perspective_camera() = default;
 
   virtual std::string type_name() const { return "vpgl_perspective_camera"; }
 

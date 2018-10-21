@@ -65,9 +65,7 @@ void mfpf_hog_box_finder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_hog_box_finder::~mfpf_hog_box_finder()
-{
-}
+mfpf_hog_box_finder::~mfpf_hog_box_finder() = default;
 
 //: Define region and cost of region
 void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,

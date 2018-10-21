@@ -32,9 +32,7 @@ msdi_reflected_marked_images::msdi_reflected_marked_images(
 // Destructor
 //=======================================================================
 
-msdi_reflected_marked_images::~msdi_reflected_marked_images()
-{
-}
+msdi_reflected_marked_images::~msdi_reflected_marked_images() = default;
 
 unsigned msdi_reflected_marked_images::size() const
 {

@@ -40,14 +40,14 @@ class vcsl_unit
 
  protected:
   // Default constructor
-  vcsl_unit() {}
+  vcsl_unit() = default;
 
  public:
   // Copy constructor
   vcsl_unit(vcsl_unit const&) : vbl_ref_count() {}
 
   // Destructor
-  virtual ~vcsl_unit() {}
+  virtual ~vcsl_unit() = default;
 
   //***************************************************************************
   // Status report

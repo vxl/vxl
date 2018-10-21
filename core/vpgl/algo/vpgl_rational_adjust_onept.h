@@ -39,7 +39,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
                      vgl_point_3d<double> const& initial_pt,
                      double const& relative_diameter = 1.0);
   //: Destructor
-  virtual ~vpgl_z_search_lsqr() {}
+  virtual ~vpgl_z_search_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -62,7 +62,7 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
 class vpgl_rational_adjust_onept
 {
  public:
-  ~vpgl_rational_adjust_onept() {}
+  ~vpgl_rational_adjust_onept() = default;
 
   static bool
   find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,

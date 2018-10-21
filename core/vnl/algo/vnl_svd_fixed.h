@@ -56,7 +56,7 @@ class vnl_svd_fixed
   // zeroing is relative to |zero_out_tol| * sigma_max();
 
   vnl_svd_fixed(vnl_matrix_fixed<T,R,C> const &M, double zero_out_tol = 0.0);
- ~vnl_svd_fixed() {}
+ ~vnl_svd_fixed() = default;
 
   // Data Access---------------------------------------------------------------
 

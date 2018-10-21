@@ -5,9 +5,7 @@
 
 #include "vil1_file_format.h"
 
-vil1_file_format::~vil1_file_format()
-{
-}
+vil1_file_format::~vil1_file_format() = default;
 
 #define HAS_PNM  1
 #define HAS_VIFF 1

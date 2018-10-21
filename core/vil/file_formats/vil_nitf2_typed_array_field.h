@@ -58,7 +58,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   virtual std::ostream& output(std::ostream& os) const;
 
   //: Destructor (overridden below for instantiations where T is a pointer)
-  ~vil_nitf2_typed_array_field() {}
+  ~vil_nitf2_typed_array_field();
 
  protected:
   // Helper method for output() method above. Iterates over one
@@ -235,6 +235,12 @@ inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_
     delete it->second;
   }
   m_value_map.clear();
+}
+
+template<typename T>
+inline vil_nitf2_typed_array_field<T>::~vil_nitf2_typed_array_field()
+{
+  // Nothing to do for POD types
 }
 
 #endif // VIL_NITF2_TYPED_ARRAY_FIELD_H

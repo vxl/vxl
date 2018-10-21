@@ -25,9 +25,7 @@ pdf1d_weighted_epanech_kernel_sampler::pdf1d_weighted_epanech_kernel_sampler():
 
 //=======================================================================
 
-pdf1d_weighted_epanech_kernel_sampler::~pdf1d_weighted_epanech_kernel_sampler()
-{
-}
+pdf1d_weighted_epanech_kernel_sampler::~pdf1d_weighted_epanech_kernel_sampler() = default;
 
 //=======================================================================
 

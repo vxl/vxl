@@ -38,9 +38,7 @@ PairMatchSet2D3D& PairMatchSet2D3D::operator=(const PairMatchSet2D3D& )
 }
 
 // Destructor
-PairMatchSet2D3D::~PairMatchSet2D3D()
-{
-}
+PairMatchSet2D3D::~PairMatchSet2D3D() = default;
 
 void PairMatchSet2D3D::set(const HomgInterestPointSet* corners, std::vector<HomgPoint3D>* structure)
 {

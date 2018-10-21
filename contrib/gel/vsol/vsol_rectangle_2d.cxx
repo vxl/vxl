@@ -103,17 +103,12 @@ vsol_rectangle_2d::vsol_rectangle_2d(const vsol_point_2d_sptr &center,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_rectangle_2d::vsol_rectangle_2d(const vsol_rectangle_2d &other)
-  : vsol_polygon_2d(other)
-{
-}
+vsol_rectangle_2d::vsol_rectangle_2d(const vsol_rectangle_2d &other) = default;
 
 //---------------------------------------------------------------------------
 // Destructor
 //---------------------------------------------------------------------------
-vsol_rectangle_2d::~vsol_rectangle_2d()
-{
-}
+vsol_rectangle_2d::~vsol_rectangle_2d() = default;
 
 //---------------------------------------------------------------------------
 //: Clone `this': creation of a new object and initialization

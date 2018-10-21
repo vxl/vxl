@@ -89,9 +89,7 @@ FMatrix::FMatrix(const PMatrix& P2)
 //--------------------------------------------------------------
 //
 //: Destructor
-FMatrix::~FMatrix()
-{
-}
+FMatrix::~FMatrix() = default;
 
 //---------------------------------------------------------------
 //: Read from ASCII std::istream

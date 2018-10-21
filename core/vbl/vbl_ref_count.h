@@ -24,7 +24,7 @@ class vbl_ref_count
   operator=(vbl_ref_count const& /*rhs*/)
   { /* should not copy the ref count */ return *this; }
 
-  virtual ~vbl_ref_count() {}
+  virtual ~vbl_ref_count() = default;
 
   void ref() { ++ref_count_; }
   void unref() { /*assert(ref_count_>0);*/ if (--ref_count_ == 0) delete this; }

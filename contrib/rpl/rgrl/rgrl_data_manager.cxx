@@ -29,9 +29,7 @@ rgrl_data_manager( bool multi_stage )
 
 
 rgrl_data_manager::
-~rgrl_data_manager()
-{
-}
+~rgrl_data_manager() = default;
 
 //: For multi-stage
 void

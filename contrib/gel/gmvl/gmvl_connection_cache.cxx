@@ -15,13 +15,9 @@
 
 // constructors / destructors
 
-gmvl_connection_cache::gmvl_connection_cache()
-{
-}
+gmvl_connection_cache::gmvl_connection_cache() = default;
 
-gmvl_connection_cache::~gmvl_connection_cache()
-{
-}
+gmvl_connection_cache::~gmvl_connection_cache() = default;
 
 // simple accessors
 

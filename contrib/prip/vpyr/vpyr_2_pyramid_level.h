@@ -92,7 +92,7 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
       pyramid_(arg.pyramid_)                  {}
 
   //:
-  virtual ~vpyr_2_pyramid_level() {}
+  virtual ~vpyr_2_pyramid_level() = default;
 
   //: Returns the number of darts.
   int nb_darts () const

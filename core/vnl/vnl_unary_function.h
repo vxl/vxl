@@ -45,7 +45,7 @@ class VNL_TEMPLATE_EXPORT vnl_unary_function
   // applications will never call it, so this may not be a problem for you.
   virtual vnl_unary_function<Return, Argument> * Copy() const { return nullptr; }
 
-  virtual ~vnl_unary_function() {}
+  virtual ~vnl_unary_function() = default;
 };
 
 #endif // vnl_unary_function_h_

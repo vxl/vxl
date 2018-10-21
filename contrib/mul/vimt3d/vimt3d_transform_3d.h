@@ -71,7 +71,7 @@ class vimt3d_transform_3d
   // error in icc 8.0 (internal error: 0_1270)
 
   //: Destructor
-  ~vimt3d_transform_3d() {}
+  ~vimt3d_transform_3d() = default;
 
   //: True if identity.
   bool is_identity() const { return form_==Identity; }

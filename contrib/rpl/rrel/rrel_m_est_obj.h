@@ -19,10 +19,10 @@
 class rrel_m_est_obj : public rrel_wls_obj {
 public:
   //: Constructor.
-  rrel_m_est_obj() {}
+  rrel_m_est_obj() = default;
 
   //: Destructor.
-  virtual ~rrel_m_est_obj() {}
+  virtual ~rrel_m_est_obj() = default;
 
 
   //: Evaluate the objective function on heteroscedastic residuals.

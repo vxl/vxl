@@ -27,7 +27,7 @@ class mbl_read_props_type;
 class msm_aligner
 {
  public:
-  virtual ~msm_aligner() {}
+  virtual ~msm_aligner() = default;
 
   //: Return number of parameters defining the transformation
   virtual unsigned size() const=0;

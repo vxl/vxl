@@ -44,7 +44,7 @@ class vgl_fit_conics_2d
   vgl_fit_conics_2d(const unsigned min_length = 10,
                     const T tol = 0.01);
 
-  ~vgl_fit_conics_2d() {}
+  ~vgl_fit_conics_2d() = default;
 
   // Operations----------------------------------------------------------------
 

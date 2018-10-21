@@ -26,7 +26,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
     : vil_nitf2_scalar_field(definition), m_value(std::move(value)) {}
 
   // Destructor
-  ~vil_nitf2_typed_scalar_field() {}
+  ~vil_nitf2_typed_scalar_field();
 
   // Set out_value to my value and return true.
   // (This is a partial override of overloaded method
@@ -94,6 +94,12 @@ template<>
 inline vil_nitf2_typed_scalar_field<vil_nitf2_location*>::~vil_nitf2_typed_scalar_field()
 {
   delete m_value;
+}
+
+template<typename T>
+inline vil_nitf2_typed_scalar_field<T>::~vil_nitf2_typed_scalar_field()
+{
+ // NO operations needed for pod types
 }
 
 #endif // VIL_NITF2_TYPED_SCALAR_FIELD_H

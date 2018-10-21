@@ -46,9 +46,7 @@ clsfy_random_forest_builder::clsfy_random_forest_builder(unsigned ntrees,
     seed_sampler(default_seed);
 }
 
-clsfy_random_forest_builder::~clsfy_random_forest_builder()
-{
-}
+clsfy_random_forest_builder::~clsfy_random_forest_builder() = default;
 //=======================================================================
 
 short clsfy_random_forest_builder::version_no() const

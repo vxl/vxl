@@ -24,7 +24,7 @@
 class vil_pyramid_image_list_format : public vil_file_format
 {
  public:
-  ~vil_pyramid_image_list_format(){}
+  ~vil_pyramid_image_list_format()= default;
 
   //: Return a character string which uniquely identifies this format.
   //E.g. "pnm", "jpeg", etc.

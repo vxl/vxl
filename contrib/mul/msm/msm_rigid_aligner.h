@@ -17,7 +17,7 @@ class msm_rigid_aligner : public msm_aligner
 {
  public:
 
-  virtual ~msm_rigid_aligner() {}
+  virtual ~msm_rigid_aligner() = default;
 
   //: Return number of parameters defining the transformation
   virtual unsigned size() const { return 3; }

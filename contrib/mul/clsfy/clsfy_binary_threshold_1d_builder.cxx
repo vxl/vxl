@@ -17,15 +17,11 @@
 
 //=======================================================================
 
-clsfy_binary_threshold_1d_builder::clsfy_binary_threshold_1d_builder()
-{
-}
+clsfy_binary_threshold_1d_builder::clsfy_binary_threshold_1d_builder() = default;
 
 //=======================================================================
 
-clsfy_binary_threshold_1d_builder::~clsfy_binary_threshold_1d_builder()
-{
-}
+clsfy_binary_threshold_1d_builder::~clsfy_binary_threshold_1d_builder() = default;
 
 //=======================================================================
 

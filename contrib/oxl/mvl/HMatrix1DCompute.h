@@ -20,7 +20,7 @@ class HMatrix1DCompute
  public:
   //
   HMatrix1DCompute() : verbose_(false) { }
-  virtual ~HMatrix1DCompute() { }
+  virtual ~HMatrix1DCompute() = default;
 
   //
   void verbose(bool); // set this to true for verbose run-time information

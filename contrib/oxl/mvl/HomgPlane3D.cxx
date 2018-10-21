@@ -17,9 +17,7 @@
 //--------------------------------------------------------------
 //
 //: Constructor
-HomgPlane3D::HomgPlane3D ()
-{
-}
+HomgPlane3D::HomgPlane3D () = default;
 
 //--------------------------------------------------------------
 //
@@ -40,9 +38,7 @@ HomgPlane3D::HomgPlane3D (const vnl_double_3& n, double d)
 //--------------------------------------------------------------
 //
 //: Destructor
-HomgPlane3D::~HomgPlane3D ()
-{
-}
+HomgPlane3D::~HomgPlane3D () = default;
 
 //: closest point
 HomgPoint3D HomgPlane3D::closest_point(const HomgPoint3D& p) const

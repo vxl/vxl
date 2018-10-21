@@ -17,7 +17,7 @@ class rgrl_trans_mixed_spline
   rgrl_trans_mixed_spline( std::vector< rgrl_trans_spline >  trans_splines )
     : trans_splines_(std::move( trans_splines )){}
 
-  ~rgrl_trans_mixed_spline() {}
+  ~rgrl_trans_mixed_spline() = default;
 
   void add_trans( rgrl_trans_spline trans_spline )
   {

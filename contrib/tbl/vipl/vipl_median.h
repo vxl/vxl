@@ -59,7 +59,7 @@ class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr){}
   inline vipl_median(vipl_median const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_median() {}
+  inline ~vipl_median() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

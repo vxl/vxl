@@ -310,7 +310,7 @@ class vil_nitf2_tagged_record_sequence : public std::list<vil_nitf2_tagged_recor
   vil_nitf2_tagged_record_sequence() : std::list<vil_nitf2_tagged_record*>() {}
 
   // Destructor
-  virtual ~vil_nitf2_tagged_record_sequence() {}
+  virtual ~vil_nitf2_tagged_record_sequence() = default;
 };
 
 std::ostream& operator << (std::ostream& os, const vil_nitf2_tagged_record_sequence& seq);

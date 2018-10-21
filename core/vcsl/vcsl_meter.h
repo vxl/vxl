@@ -24,11 +24,11 @@ class vcsl_meter
   //***************************************************************************
 
   // Default constructor
-  vcsl_meter() {}
+  vcsl_meter() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_meter() {}
+  virtual ~vcsl_meter() = default;
 
   //***************************************************************************
   // Status report

@@ -70,9 +70,7 @@ rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<do
 }
 
 
-rrel_linear_regression::~rrel_linear_regression()
-{
-}
+rrel_linear_regression::~rrel_linear_regression() = default;
 
 unsigned int
 rrel_linear_regression::num_samples( ) const

@@ -27,7 +27,7 @@ class VNL_EXPORT vnl_double_3x2 : public vnl_matrix_fixed<double, 3, 2>
   typedef vnl_matrix_fixed<double, 3, 2> Base;
  public:
 
-  vnl_double_3x2() {}
+  vnl_double_3x2() = default;
 
   vnl_double_3x2(double r00, double r01,
                  double r10, double r11,

@@ -45,9 +45,7 @@ vpdfl_pc_gaussian_builder::vpdfl_pc_gaussian_builder() :
 
 //=======================================================================
 
-vpdfl_pc_gaussian_builder::~vpdfl_pc_gaussian_builder()
-{
-}
+vpdfl_pc_gaussian_builder::~vpdfl_pc_gaussian_builder() = default;
 
 //=======================================================================
 

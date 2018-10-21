@@ -24,7 +24,7 @@ class vgl_convex_hull_2d
 {
  public:
   vgl_convex_hull_2d (std::vector<vgl_point_2d<T> > const& points);
-  ~vgl_convex_hull_2d () {}
+  ~vgl_convex_hull_2d () = default;
   vgl_polygon<T>  hull();
   //: the oriented box enclosing the hull with minimum area
   vgl_oriented_box_2d<T> min_area_enclosing_rectangle();

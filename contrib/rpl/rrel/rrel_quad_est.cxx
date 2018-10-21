@@ -57,9 +57,7 @@ rrel_quad_est( const std::vector< vnl_vector<double> > & from_pts,
   num_samples_ = size;
 }
 
-rrel_quad_est::~rrel_quad_est()
-{
-}
+rrel_quad_est::~rrel_quad_est() = default;
 
 
 unsigned int

@@ -45,8 +45,8 @@ class vgl_h_matrix_1d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_h_matrix_1d() {}
- ~vgl_h_matrix_1d() {}
+  vgl_h_matrix_1d() = default;
+ ~vgl_h_matrix_1d() = default;
 
   //: Copy constructor
   vgl_h_matrix_1d(vgl_h_matrix_1d<T> const& M) : t12_matrix_(M.get_matrix()) {}

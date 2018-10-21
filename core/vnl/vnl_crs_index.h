@@ -37,7 +37,7 @@ class VNL_EXPORT vnl_crs_index
   vnl_crs_index(const std::vector<std::vector<bool> >& mask);
 
   //: Destructor
-  ~vnl_crs_index(){}
+  ~vnl_crs_index()= default;
 
   //: number of rows in the sparse matrix
   int num_rows() const { return int(row_ptr_.size())-1; }

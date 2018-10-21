@@ -10,9 +10,7 @@
 #include "vnl_linear_system.h"
 #include <vcl_cassert.h>
 
-vnl_linear_system::~vnl_linear_system()
-{
-}
+vnl_linear_system::~vnl_linear_system() = default;
 
 void vnl_linear_system::apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const
 {

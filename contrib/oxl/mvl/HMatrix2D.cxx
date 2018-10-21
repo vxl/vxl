@@ -15,9 +15,7 @@
 //--------------------------------------------------------------
 //
 //: Default constructor
-HMatrix2D::HMatrix2D()
-{
-}
+HMatrix2D::HMatrix2D() = default;
 
 //: Copy constructor
 HMatrix2D::HMatrix2D(const HMatrix2D& M)
@@ -59,9 +57,7 @@ HMatrix2D::HMatrix2D (const double* H)
 }
 
 //: Destructor
-HMatrix2D::~HMatrix2D()
-{
-}
+HMatrix2D::~HMatrix2D() = default;
 
 // == OPERATIONS ==
 

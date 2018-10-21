@@ -21,9 +21,7 @@ rgrl_estimator()
 }
 
 rgrl_estimator::
-~rgrl_estimator()
-{
-}
+~rgrl_estimator() = default;
 
 
 rgrl_transformation_sptr

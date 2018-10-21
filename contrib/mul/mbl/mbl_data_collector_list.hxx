@@ -15,18 +15,14 @@
 //=======================================================================
 
 template<class T>
-mbl_data_collector_list<T>::mbl_data_collector_list()
-{
-}
+mbl_data_collector_list<T>::mbl_data_collector_list() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
 template<class T>
-mbl_data_collector_list<T>::~mbl_data_collector_list()
-{
-}
+mbl_data_collector_list<T>::~mbl_data_collector_list() = default;
 
 //: Clear any stored data
 template<class T>

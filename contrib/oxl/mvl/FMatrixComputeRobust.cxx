@@ -12,9 +12,9 @@
 #include <vnl/vnl_double_3x3.h>
 #include <vcl_compiler.h>
 
-FMatrixComputeRobust::FMatrixComputeRobust() {}
+FMatrixComputeRobust::FMatrixComputeRobust() = default;
 
-FMatrixComputeRobust::~FMatrixComputeRobust() {}
+FMatrixComputeRobust::~FMatrixComputeRobust() = default;
 //-----------------------------------------------------------------------------
 //
 //: Compute a robust fundamental matrix.

@@ -68,7 +68,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
   }
-  ~vpgl_geo_camera() {}
+  ~vpgl_geo_camera() = default;
 
   virtual std::string type_name() const { return "vpgl_geo_camera"; }
 

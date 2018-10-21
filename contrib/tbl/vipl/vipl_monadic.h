@@ -46,7 +46,7 @@ class vipl_monadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), func_(f) {}
   inline vipl_monadic(vipl_monadic const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), func_(A.func()) {}
-  inline ~vipl_monadic() {}
+  inline ~vipl_monadic() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

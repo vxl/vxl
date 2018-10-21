@@ -48,9 +48,7 @@ pdf1d_compare_to_pdf_bhat::pdf1d_compare_to_pdf_bhat(const pdf1d_builder& builde
 // Destructor
 //=======================================================================
 
-pdf1d_compare_to_pdf_bhat::~pdf1d_compare_to_pdf_bhat()
-{
-}
+pdf1d_compare_to_pdf_bhat::~pdf1d_compare_to_pdf_bhat() = default;
 
 //: Define method of building pdf from data
 void pdf1d_compare_to_pdf_bhat::set_builder(const pdf1d_builder& b)

@@ -18,11 +18,9 @@
 #include <vil/vil_load.h>
 
 
-vil_pyramid_image_resource::vil_pyramid_image_resource()
-{}
+vil_pyramid_image_resource::vil_pyramid_image_resource() = default;
 
-vil_pyramid_image_resource::~vil_pyramid_image_resource()
-{}
+vil_pyramid_image_resource::~vil_pyramid_image_resource() = default;
 
 bool vil_pyramid_image_resource::get_property(char const* tag, void* /*value*/) const
 {

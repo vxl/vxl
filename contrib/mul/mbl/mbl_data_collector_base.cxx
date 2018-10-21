@@ -14,15 +14,11 @@
 //=======================================================================
 
 
-mbl_data_collector_base::mbl_data_collector_base()
-{
-}
+mbl_data_collector_base::mbl_data_collector_base() = default;
 
 //=======================================================================
 
-mbl_data_collector_base::~mbl_data_collector_base()
-{
-}
+mbl_data_collector_base::~mbl_data_collector_base() = default;
 
 //=======================================================================
 

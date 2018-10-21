@@ -19,8 +19,8 @@
 class vgl_h_matrix_1d_compute_optimize : public vgl_h_matrix_1d_compute
 {
  public:
-  vgl_h_matrix_1d_compute_optimize(void) {}
-  ~vgl_h_matrix_1d_compute_optimize() {}
+  vgl_h_matrix_1d_compute_optimize(void) = default;
+  ~vgl_h_matrix_1d_compute_optimize() = default;
  protected:
   bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >& points1,
                          const std::vector<vgl_homg_point_1d<double> >& points2,

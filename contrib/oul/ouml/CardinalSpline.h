@@ -40,8 +40,7 @@ class CardinalSpline
     {
         setMc(s);
     }
-    CardinalSpline(const CardinalSpline &cs):
-        controlPoints(cs.controlPoints), Mc(cs.Mc), s(cs.s) {}
+    CardinalSpline(const CardinalSpline &cs) = default;
     CardinalSpline &operator =(const CardinalSpline &cs) {
         if (&cs != this)
         {
@@ -51,7 +50,7 @@ class CardinalSpline
         }
         return *this;
     }
-    ~CardinalSpline() {}
+    ~CardinalSpline() = default;
 
     Vector3D getPoint(double t) const;
     std::vector<Vector3D> getPoints(int num_points) const;

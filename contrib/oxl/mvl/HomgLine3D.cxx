@@ -13,18 +13,12 @@
 //--------------------------------------------------------------
 //
 //: Constructor
-HomgLine3D::HomgLine3D()
-{
-}
+HomgLine3D::HomgLine3D() = default;
 
 //--------------------------------------------------------------
 //
 //: Constructor
-HomgLine3D::HomgLine3D( const HomgLine3D &that)
-  : point_finite_(that.point_finite_)
-  , point_infinite_(that.point_infinite_)
-{
-}
+HomgLine3D::HomgLine3D( const HomgLine3D &that) = default;
 
 //--------------------------------------------------------------
 //
@@ -62,9 +56,7 @@ HomgLine3D::HomgLine3D (const HomgPoint3D& start,
 //--------------------------------------------------------------
 //
 //: Destructor
-HomgLine3D::~HomgLine3D()
-{
-}
+HomgLine3D::~HomgLine3D() = default;
 
 //-----------------------------------------------------------------------------
 //

@@ -22,19 +22,11 @@ rsdl_bounding_box::rsdl_bounding_box( const rsdl_point& min_point,
 }
 
 
-rsdl_bounding_box::rsdl_bounding_box( const rsdl_bounding_box& old )
-  : min_point_(old.min_point_), max_point_(old.max_point_)
-{
-}
+rsdl_bounding_box::rsdl_bounding_box( const rsdl_bounding_box& old ) = default;
 
 
 rsdl_bounding_box &
-rsdl_bounding_box::operator= ( const rsdl_bounding_box& old )
-{
-  min_point_ = old.min_point_;
-  max_point_ = old.max_point_;
-  return *this;
-}
+rsdl_bounding_box::operator= ( const rsdl_bounding_box& old ) = default;
 
 
 std::ostream& operator<< ( std::ostream& ostr, const rsdl_bounding_box& box )

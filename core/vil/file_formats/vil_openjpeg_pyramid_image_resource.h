@@ -23,7 +23,7 @@ class vil_openjpeg_pyramid_image_resource : public vil_pyramid_image_resource
 {
  public:
   vil_openjpeg_pyramid_image_resource(vil_image_resource_sptr const& openjpeg);
-  virtual ~vil_openjpeg_pyramid_image_resource(){}
+  virtual ~vil_openjpeg_pyramid_image_resource()= default;
 
   //: The number of planes (or components) in the image.
   // Dimensions:  Planes x ni x nj.

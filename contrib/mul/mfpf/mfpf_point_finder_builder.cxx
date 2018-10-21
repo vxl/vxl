@@ -33,9 +33,7 @@ mfpf_point_finder_builder::mfpf_point_finder_builder()
 // Destructor
 //=======================================================================
 
-mfpf_point_finder_builder::~mfpf_point_finder_builder()
-{
-}
+mfpf_point_finder_builder::~mfpf_point_finder_builder() = default;
 
 //: Size of step between sample points
 void mfpf_point_finder_builder::set_step_size(double s)

@@ -33,7 +33,7 @@ class vsol_surface_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_surface_3d() {}
+  virtual ~vsol_surface_3d() = default;
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_3d

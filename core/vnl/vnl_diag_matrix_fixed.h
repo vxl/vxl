@@ -53,7 +53,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
   //: Construct a diagonal matrix from a vnl_vector_fixed.
   //  The vector elements become the diagonal elements.
   explicit vnl_diag_matrix_fixed(vnl_vector_fixed<T,N> const& that): diagonal_(that) {}
- ~vnl_diag_matrix_fixed() {}
+ ~vnl_diag_matrix_fixed() = default;
 
   inline vnl_diag_matrix_fixed& operator=(vnl_diag_matrix_fixed<T,N> const& that) {
     this->diagonal_ = that.diagonal_;

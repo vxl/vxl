@@ -32,9 +32,7 @@ mbl_eps_writer::mbl_eps_writer(const char* path, double nx, double ny)
 // Destructor
 //=======================================================================
 
-mbl_eps_writer::~mbl_eps_writer()
-{
-}
+mbl_eps_writer::~mbl_eps_writer() = default;
 
 //: Define shade of subsequent lines [0,1] = black-white
 void mbl_eps_writer::set_grey_shade(double shade)

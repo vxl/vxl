@@ -62,7 +62,7 @@ class vipl_dilate_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixel
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr) {}
   inline vipl_dilate_disk(vipl_dilate_disk const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_dilate_disk() {}
+  inline ~vipl_dilate_disk() = default;
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();

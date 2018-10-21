@@ -17,17 +17,13 @@
 // Dflt ctor
 //=======================================================================
 
-vpdfl_sampler_base::vpdfl_sampler_base()
-{
-}
+vpdfl_sampler_base::vpdfl_sampler_base() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-vpdfl_sampler_base::~vpdfl_sampler_base()
-{
-}
+vpdfl_sampler_base::~vpdfl_sampler_base() = default;
 
 
 //: Set model for which this is an instance

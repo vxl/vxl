@@ -120,7 +120,7 @@ class vtol_edge_2d : public vtol_edge
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_edge_2d() {}
+  virtual ~vtol_edge_2d() = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization

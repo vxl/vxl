@@ -20,7 +20,7 @@ class vil_nitf2_scalar_field : public vil_nitf2_field
   vil_nitf2_scalar_field(vil_nitf2_field_definition* definition)
     : vil_nitf2_field(definition) {}
 
-  virtual ~vil_nitf2_scalar_field() {}
+  virtual ~vil_nitf2_scalar_field() = default;
 
   virtual int num_dimensions() const { return 0; }
 

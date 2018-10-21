@@ -21,11 +21,11 @@
 class HomgInterestPointSetData : public std::vector<HomgInterestPoint>
 {
  public:
-  HomgInterestPointSetData() {}
+  HomgInterestPointSetData() = default;
   HomgInterestPointSetData(int n):
     std::vector<HomgInterestPoint>(n, HomgInterestPoint())
   {}
-  ~HomgInterestPointSetData() { }
+  ~HomgInterestPointSetData() = default;
 };
 
 //: Construct an empty corner set.

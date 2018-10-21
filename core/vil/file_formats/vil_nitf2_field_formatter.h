@@ -47,7 +47,7 @@ class vil_nitf2_field_formatter
     : field_type(field_type), field_width(field_width) {}
 
   // Destructor
-  virtual ~vil_nitf2_field_formatter() {}
+  virtual ~vil_nitf2_field_formatter() = default;
 
   // Virtual copy method
   virtual vil_nitf2_field_formatter* copy() const = 0;

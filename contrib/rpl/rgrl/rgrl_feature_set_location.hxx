@@ -70,9 +70,7 @@ rgrl_feature_set_location( feature_vector const& features,
 
 template<unsigned N>
 rgrl_feature_set_location<N>::
-~rgrl_feature_set_location()
-{
-}
+~rgrl_feature_set_location() = default;
 
 
 template<unsigned N>

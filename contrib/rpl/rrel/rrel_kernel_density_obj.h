@@ -31,7 +31,7 @@ class rrel_kernel_density_obj : public rrel_objective
   rrel_kernel_density_obj(rrel_kernel_scale_type scale_type=RREL_KERNEL_MAD);
 
   //: Destructor.
-  virtual ~rrel_kernel_density_obj() {}
+  virtual ~rrel_kernel_density_obj() = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Not implemented.

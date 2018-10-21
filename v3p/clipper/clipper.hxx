@@ -137,7 +137,7 @@ class PolyNode
 {
 public:
     PolyNode();
-    virtual ~PolyNode(){};
+    virtual ~PolyNode()= default;;
     Path Contour;
     PolyNodes Childs;
     PolyNode* Parent;
@@ -392,7 +392,7 @@ class clipperException : public std::exception
 {
   public:
     clipperException(const char* description): m_descr(description) {}
-    virtual ~clipperException() throw() {}
+    virtual ~clipperException() throw() = default;
     virtual const char* what() const throw() {return m_descr.c_str();}
   private:
     std::string m_descr;

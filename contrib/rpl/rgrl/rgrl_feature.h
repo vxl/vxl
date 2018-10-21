@@ -44,7 +44,7 @@ class rgrl_feature
   }
 
   //:
-  virtual ~rgrl_feature() {}
+  virtual ~rgrl_feature() = default;
 
   //:  Apply a transformation to create a new feature.
   virtual

@@ -50,9 +50,7 @@ void mfpf_grad_corr2d_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_grad_corr2d_builder::~mfpf_grad_corr2d_builder()
-{
-}
+mfpf_grad_corr2d_builder::~mfpf_grad_corr2d_builder() = default;
 
 //: Create new mfpf_grad_corr2d on heap
 mfpf_point_finder* mfpf_grad_corr2d_builder::new_finder() const

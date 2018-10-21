@@ -68,7 +68,7 @@ class VNL_TEMPLATE_EXPORT vnl_quaternion : public vnl_vector_fixed<T, 4>
  public:
 
   //: Constructor for null quaternion
-  vnl_quaternion() {}
+  vnl_quaternion() = default;
 
   //: Construct quaternion from components x,y,z,r
   vnl_quaternion(T x, T y, T z, T r);
@@ -98,7 +98,7 @@ class VNL_TEMPLATE_EXPORT vnl_quaternion : public vnl_vector_fixed<T, 4>
   inline vnl_quaternion(vnl_quaternion<T> const& from) : Base(from) {}
 
   //: Free internal array
-  inline ~vnl_quaternion() {} // vnl_vector_fixed will free data array
+  inline ~vnl_quaternion() = default; // vnl_vector_fixed will free data array
 
   //:  Overloads assignment operator to copy rhs quaternion into lhs quaternion.
   inline vnl_quaternion& operator= (vnl_quaternion<T> const& rhs) { Base::operator=(rhs); return *this; }

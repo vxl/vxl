@@ -21,9 +21,9 @@
 class vil3d_gen_synthetic_format : public vil3d_file_format
 {
  public:
-  vil3d_gen_synthetic_format() {}
+  vil3d_gen_synthetic_format() = default;
   //: The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil3d_gen_synthetic_format() {}
+  virtual ~vil3d_gen_synthetic_format() = default;
 
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
 
@@ -76,7 +76,7 @@ class vil3d_gen_synthetic_image: public vil3d_image_resource
     enum vil_pixel_format format,
     vil3d_gen_synthetic_pixel_value pv);
 
-  virtual ~vil3d_gen_synthetic_image() {}
+  virtual ~vil3d_gen_synthetic_image() = default;
 
   //: Dimensions:  nplanes x ni x nj x nk.
   // This concept is treated as a synonym to components.

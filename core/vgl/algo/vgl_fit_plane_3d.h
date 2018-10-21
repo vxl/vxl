@@ -36,11 +36,11 @@ class vgl_fit_plane_3d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_fit_plane_3d() {}
+   vgl_fit_plane_3d() = default;
 
    vgl_fit_plane_3d(std::vector<vgl_homg_point_3d<T> > points);
 
-  ~vgl_fit_plane_3d() {}
+  ~vgl_fit_plane_3d() = default;
 
   // Operations---------------------------------------------------------------
 

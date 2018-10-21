@@ -37,9 +37,7 @@ clsfy_direct_boost_builder::clsfy_direct_boost_builder()
 
 //=======================================================================
 
-clsfy_direct_boost_builder::~clsfy_direct_boost_builder()
-{
-}
+clsfy_direct_boost_builder::~clsfy_direct_boost_builder() = default;
 
 
 //=======================================================================

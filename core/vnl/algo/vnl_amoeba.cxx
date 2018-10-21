@@ -405,7 +405,7 @@ class vnl_amoeba_LSCF : public vnl_cost_function
    : vnl_cost_function(ls.get_number_of_unknowns()),
      ls_(&ls), fx(ls.get_number_of_residuals()) {}
 
-  ~vnl_amoeba_LSCF() {}
+  ~vnl_amoeba_LSCF() = default;
 
   double f(vnl_vector<double> const& x) {
     ls_->f(x, fx);
@@ -422,11 +422,6 @@ void vnl_amoeba::minimize(vnl_least_squares_function& f, vnl_vector<double>& x)
 /////////////////////////////////////////////////////////////////////////////
 vnl_amoeba_SimplexCorner::vnl_amoeba_SimplexCorner(int n) : v(n) {}
 
-vnl_amoeba_SimplexCorner& vnl_amoeba_SimplexCorner::operator=(const vnl_amoeba_SimplexCorner& that)
-{
-  v = that.v;
-  fv = that.fv;
-  return *this;
-}
+vnl_amoeba_SimplexCorner& vnl_amoeba_SimplexCorner::operator=(const vnl_amoeba_SimplexCorner& that) = default;
 
 //--------------------------------------------------------------------------------

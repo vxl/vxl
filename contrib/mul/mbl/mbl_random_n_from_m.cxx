@@ -8,9 +8,7 @@
 #include "mbl_random_n_from_m.h"
 #include <vcl_compiler.h>
 
-mbl_random_n_from_m::mbl_random_n_from_m()
-{
-}
+mbl_random_n_from_m::mbl_random_n_from_m() = default;
 
 void mbl_random_n_from_m::reseed(long new_seed)
 {

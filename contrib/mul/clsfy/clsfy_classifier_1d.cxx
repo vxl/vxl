@@ -13,15 +13,11 @@
 
 //=======================================================================
 
-clsfy_classifier_1d::clsfy_classifier_1d()
-{
-}
+clsfy_classifier_1d::clsfy_classifier_1d() = default;
 
 //=======================================================================
 
-clsfy_classifier_1d::~clsfy_classifier_1d()
-{
-}
+clsfy_classifier_1d::~clsfy_classifier_1d() = default;
 
 //=======================================================================
 

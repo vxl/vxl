@@ -39,9 +39,7 @@ void mfpf_profile_pdf::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_profile_pdf::~mfpf_profile_pdf()
-{
-}
+mfpf_profile_pdf::~mfpf_profile_pdf() = default;
 
 //: Define filter kernel to search with
 void mfpf_profile_pdf::set(int ilo, int ihi, const vpdfl_pdf_base& pdf)

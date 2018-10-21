@@ -32,7 +32,7 @@ class vifa_imp_line : public vbl_ref_count, public vgl_line_segment_2d<Type>
 
  public:
   //: Default constructor - does not initialize
-  inline vifa_imp_line(void) {}
+  inline vifa_imp_line(void) = default;
 
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   vifa_imp_line(vifa_imp_line const& l)

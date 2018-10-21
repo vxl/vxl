@@ -27,7 +27,7 @@ class rgrl_invariant_match
                        rgrl_invariant_sptr to);
 
   //: Destructor
-  ~rgrl_invariant_match(){}
+  ~rgrl_invariant_match()= default;
 
   //: Returns a smart pointer to the "from" invariant
   rgrl_invariant_sptr from() const {return from_;}

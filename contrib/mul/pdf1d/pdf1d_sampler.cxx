@@ -15,17 +15,13 @@
 // Dflt ctor
 //=======================================================================
 
-pdf1d_sampler::pdf1d_sampler()
-{
-}
+pdf1d_sampler::pdf1d_sampler() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-pdf1d_sampler::~pdf1d_sampler()
-{
-}
+pdf1d_sampler::~pdf1d_sampler() = default;
 
 
 //: Set model for which this is an instance

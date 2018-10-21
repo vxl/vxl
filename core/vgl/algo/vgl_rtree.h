@@ -25,7 +25,7 @@ template <class V, class B, class C>
 class vgl_rtree_probe
 {
  public:
-  virtual ~vgl_rtree_probe() { }
+  virtual ~vgl_rtree_probe() = default;
   //: return true if the probe "meets" the given object.
   virtual bool meets(V const &v) const { B b; C::init(b, v); return meets(b); }
   virtual bool meets(B const &b) const =0;
@@ -147,7 +147,7 @@ class vgl_rtree_iterator : public vgl_rtree_iterator_base<V, B, C>
   typedef vgl_rtree_node<V, B, C> node;
 
   vgl_rtree_iterator(node *root) : base(root) { }
-  vgl_rtree_iterator() { }
+  vgl_rtree_iterator() = default;
 
   V &operator*() const { return base::current->vts[base::i]; }
 
@@ -169,7 +169,7 @@ class vgl_rtree_const_iterator : public vgl_rtree_iterator_base<V, B, C>
 
   vgl_rtree_const_iterator(node *root) : base(root) { }
   vgl_rtree_const_iterator(vgl_rtree_iterator<V, B, C> const &that) : base(that) { }
-  vgl_rtree_const_iterator() { }
+  vgl_rtree_const_iterator() = default;
 
   V const &operator*() const { return base::current->vts[base::i]; }
 

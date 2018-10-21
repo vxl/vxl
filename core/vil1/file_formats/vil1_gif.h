@@ -105,7 +105,7 @@ struct vil1_gif_loader_saver_proxy : public vil1_image_impl
     //up_ref_is_private(other);
   }
 
-  ~vil1_gif_loader_saver_proxy() { }
+  ~vil1_gif_loader_saver_proxy() = default;
 
   int planes() const { return 1; }
   int width() const { return other->width(); }

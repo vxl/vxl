@@ -45,9 +45,7 @@ vimt3d_gaussian_pyramid_builder_3d<T>::vimt3d_gaussian_pyramid_builder_3d()
 //=======================================================================
 
 template<class T>
-vimt3d_gaussian_pyramid_builder_3d<T>::~vimt3d_gaussian_pyramid_builder_3d()
-{
-}
+vimt3d_gaussian_pyramid_builder_3d<T>::~vimt3d_gaussian_pyramid_builder_3d() = default;
 
 //=======================================================================
 //: Define maximum number of levels to build

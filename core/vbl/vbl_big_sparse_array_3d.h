@@ -67,8 +67,8 @@ class vbl_big_sparse_array_3d
   // Constructors/Destructor---------------------------------------------------
 
   //: Construct a vbl_big_sparse_array_3d
-  vbl_big_sparse_array_3d() {}
- ~vbl_big_sparse_array_3d() {}
+  vbl_big_sparse_array_3d() = default;
+ ~vbl_big_sparse_array_3d() = default;
 
   // Potentially clunky copy constructor
   vbl_big_sparse_array_3d(vbl_big_sparse_array_3d<T> const& b) : storage_(b.storage_) {}

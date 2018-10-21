@@ -26,9 +26,7 @@ pdf1d_exponential_sampler::pdf1d_exponential_sampler():
 // Destructor
 //=======================================================================
 
-pdf1d_exponential_sampler::~pdf1d_exponential_sampler()
-{
-}
+pdf1d_exponential_sampler::~pdf1d_exponential_sampler() = default;
 
 
 //=======================================================================

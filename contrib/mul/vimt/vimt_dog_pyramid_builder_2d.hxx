@@ -34,9 +34,7 @@ vimt_dog_pyramid_builder_2d<T>::vimt_dog_pyramid_builder_2d()
 //=======================================================================
 
 template<class T>
-vimt_dog_pyramid_builder_2d<T>::~vimt_dog_pyramid_builder_2d()
-{
-}
+vimt_dog_pyramid_builder_2d<T>::~vimt_dog_pyramid_builder_2d() = default;
 
 //=======================================================================
 //: Define maximum number of levels to build

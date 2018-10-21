@@ -19,7 +19,7 @@ class vil1_skip_image_impl : public vil1_image_impl
 {
  public:
   vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy);
-  ~vil1_skip_image_impl() {}
+  ~vil1_skip_image_impl() = default;
 
   //: these inlines partly document the semantics of vil1_skip_image.
   int planes() const { return base.planes(); }

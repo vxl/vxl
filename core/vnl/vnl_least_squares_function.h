@@ -56,7 +56,7 @@ class VNL_EXPORT vnl_least_squares_function
     use_gradient_(g == use_gradient)
   { dim_warning(p_,n_); }
 
-  virtual ~vnl_least_squares_function() {}
+  virtual ~vnl_least_squares_function() = default;
 
   // the virtuals may call this to signal a failure.
   void throw_failure() { failure = true; }

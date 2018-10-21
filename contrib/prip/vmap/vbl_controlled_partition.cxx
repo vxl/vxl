@@ -6,9 +6,7 @@ vbl_controlled_partition::vbl_controlled_partition()
   nb_sets_=0 ;
 }
 
-vbl_controlled_partition::~vbl_controlled_partition()
-{
-}
+vbl_controlled_partition::~vbl_controlled_partition() = default;
 
 void vbl_controlled_partition::initialise(int size)
 {

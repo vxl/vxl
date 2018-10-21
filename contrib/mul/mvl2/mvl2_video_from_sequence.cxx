@@ -24,9 +24,7 @@ mvl2_video_from_sequence::mvl2_video_from_sequence()
   height_=0;
 }
 
-mvl2_video_from_sequence::~mvl2_video_from_sequence()
-{
-}
+mvl2_video_from_sequence::~mvl2_video_from_sequence() = default;
 
 std::string mvl2_video_from_sequence::is_a() const
 {

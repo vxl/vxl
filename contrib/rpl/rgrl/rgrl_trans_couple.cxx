@@ -21,9 +21,7 @@ rgrl_trans_couple::
 }
 
 rgrl_trans_couple::
-~rgrl_trans_couple()
-{
-}
+~rgrl_trans_couple() = default;
 
 void
 rgrl_trans_couple::

@@ -99,8 +99,7 @@ class VNL_EXPORT vnl_decnum
   //: Default constructor - creates the number zero.
   vnl_decnum() : sign_(' '), data_(""), exp_(0L) {}
   // Copy constructor
-  vnl_decnum(vnl_decnum const& r)
-  : sign_(r.sign_), data_(r.data_), exp_(r.exp_) {}
+  vnl_decnum(vnl_decnum const& r) = default;
   //: Constructor from string
   //  This is the principal constructor for vnl_decnum; it essentially parses
   //  the input into (in that order) the sign, the mantissa, and the exponent,
@@ -131,7 +130,7 @@ class VNL_EXPORT vnl_decnum
   // Integers will be correctly converted, though.
   vnl_decnum(double);
 
-  ~vnl_decnum() {}    // Destructor
+  ~vnl_decnum() = default;    // Destructor
 
   //: Implicit type conversion to a decimal string
   operator std::string() const;

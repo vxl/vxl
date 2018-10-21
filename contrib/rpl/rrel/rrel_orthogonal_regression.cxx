@@ -40,9 +40,7 @@ rrel_orthogonal_regression::rrel_orthogonal_regression( const std::vector<vnl_ve
 }
 
 
-rrel_orthogonal_regression::~rrel_orthogonal_regression()
-{
-}
+rrel_orthogonal_regression::~rrel_orthogonal_regression() = default;
 
 unsigned int
 rrel_orthogonal_regression::num_samples( ) const

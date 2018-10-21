@@ -46,7 +46,7 @@ class vcsl_spatial
   //***************************************************************************
 
   // Default constructor
-  vcsl_spatial() {}
+  vcsl_spatial() = default;
 
   // Destructor
   virtual ~vcsl_spatial();

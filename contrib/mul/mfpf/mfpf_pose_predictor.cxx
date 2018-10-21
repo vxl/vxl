@@ -88,9 +88,7 @@ void mfpf_pose_predictor::set_pose_type(const mfpf_pose_type& pt)
 // Destructor
 //=======================================================================
 
-mfpf_pose_predictor::~mfpf_pose_predictor()
-{
-}
+mfpf_pose_predictor::~mfpf_pose_predictor() = default;
 
 //: Define region and cost of region
 void mfpf_pose_predictor::set(const std::vector<mbl_chord>& roi,

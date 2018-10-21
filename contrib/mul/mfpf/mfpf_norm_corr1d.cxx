@@ -37,9 +37,7 @@ void mfpf_norm_corr1d::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_norm_corr1d::~mfpf_norm_corr1d()
-{
-}
+mfpf_norm_corr1d::~mfpf_norm_corr1d() = default;
 
 //: Generate points in ref frame that represent boundary
 //  Points of a contour around the shape.

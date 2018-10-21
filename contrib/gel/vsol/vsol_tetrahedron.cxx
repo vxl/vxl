@@ -29,10 +29,7 @@ vsol_tetrahedron::vsol_tetrahedron(const vsol_point_3d_sptr &new_p0,
 //---------------------------------------------------------------------------
 // Copy constructor
 //---------------------------------------------------------------------------
-vsol_tetrahedron::vsol_tetrahedron(const vsol_tetrahedron &other)
-  : vsol_polyhedron(other)
-{
-}
+vsol_tetrahedron::vsol_tetrahedron(const vsol_tetrahedron &other) = default;
 
 //***************************************************************************
 // Access

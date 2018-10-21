@@ -1,9 +1,7 @@
 // This is prip/vmap/vmap_2_map.cxx
 #include "vmap_2_map.h"
 
-vmap_2_map_dart::~vmap_2_map_dart()
-{
-}
+vmap_2_map_dart::~vmap_2_map_dart() = default;
 
 void vmap_2_map_dart::set_sigma(vmap_2_map_dart *arg)
 {

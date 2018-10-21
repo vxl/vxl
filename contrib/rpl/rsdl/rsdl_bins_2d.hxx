@@ -46,9 +46,7 @@ rsdl_bins_2d( const vnl_vector_fixed< COORD_T, 2 > & min_pt,
 
 template < class COORD_T, class VALUE_T >
 rsdl_bins_2d< COORD_T, VALUE_T > ::
-~rsdl_bins_2d()
-{
-}
+~rsdl_bins_2d() = default;
 
 template < class COORD_T, class VALUE_T >
 void

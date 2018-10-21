@@ -17,9 +17,7 @@ operator<( flip_node const& other ) const
 }
 
 rgrl_matcher::
-~rgrl_matcher()
-{
-}
+~rgrl_matcher() = default;
 
 rgrl_match_set_sptr
 rgrl_matcher::

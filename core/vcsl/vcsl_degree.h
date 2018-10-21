@@ -24,11 +24,11 @@ class vcsl_degree
   //***************************************************************************
 
   // Default constructor
-  vcsl_degree() {}
+  vcsl_degree() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_degree() {}
+  virtual ~vcsl_degree() = default;
 
   //***************************************************************************
   // Status report

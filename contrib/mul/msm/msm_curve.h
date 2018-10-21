@@ -41,7 +41,7 @@ class msm_curve
             bool open=true, std::string name="");
 
   // Destructor
-  ~msm_curve() {}
+  ~msm_curve() = default;
 
   //: Number of points defining the curve
   std::size_t size() const { return index_.size(); }

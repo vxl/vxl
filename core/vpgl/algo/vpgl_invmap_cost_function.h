@@ -16,7 +16,7 @@ class vpgl_invmap_cost_function: public vnl_cost_function
   vpgl_invmap_cost_function(vnl_vector_fixed<double, 2> const& image_point,
                             vnl_vector_fixed<double, 4> const& plane,
                             const vpgl_camera<double>* rcam);
-  ~vpgl_invmap_cost_function() {}
+  ~vpgl_invmap_cost_function() = default;
   //: The cost function. x is a vector holding the two plane parameters
   double f(vnl_vector<double> const& x);
   //: set the parameter values from the 3-d point

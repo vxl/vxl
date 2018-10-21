@@ -17,9 +17,7 @@ rrel_lms_obj::rrel_lms_obj( unsigned int num_sam_inst, double inlier_frac )
 {
 }
 
-rrel_lms_obj::~rrel_lms_obj()
-{
-}
+rrel_lms_obj::~rrel_lms_obj() = default;
 
 
 double

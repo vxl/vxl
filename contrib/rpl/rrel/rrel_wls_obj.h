@@ -21,10 +21,10 @@
 class rrel_wls_obj : public rrel_objective {
 public:
   //: Constructor.
-  rrel_wls_obj() {}
+  rrel_wls_obj() = default;
 
   //: Destructor.
-  virtual ~rrel_wls_obj() {}
+  virtual ~rrel_wls_obj() = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   // This version is used for heteroscedastic data, where each

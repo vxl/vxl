@@ -18,17 +18,13 @@
 // The list is owned by the caller, and must remain in scope at least
 // as long as the FMatrixCompute.
 //
-FMatrixCompute::FMatrixCompute ()
-{
-}
+FMatrixCompute::FMatrixCompute () = default;
 
 //---------------------------------------------------------------
 //
 //: Destructor.
 //
-FMatrixCompute::~FMatrixCompute()
-{
-}
+FMatrixCompute::~FMatrixCompute() = default;
 
 // == COMPUTATIONS ==
 

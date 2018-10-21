@@ -57,7 +57,7 @@ class vbl_batch_compact_multimap
     { return comp(x.first, y.first); }
   };
 
-  vbl_batch_compact_multimap() {}
+  vbl_batch_compact_multimap() = default;
 
   template <typename CI>
   vbl_batch_compact_multimap(CI start, CI finish)

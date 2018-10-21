@@ -52,7 +52,7 @@ public:
   msm_shape_mode_view();
 
     //: Destructor
-  virtual ~msm_shape_mode_view() {}
+  virtual ~msm_shape_mode_view() = default;
 
     //: Define shape model
   void set_shape_model(const msm_ref_shape_model&);

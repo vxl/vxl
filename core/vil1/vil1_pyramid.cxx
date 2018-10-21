@@ -19,9 +19,7 @@ vil1_pyramid::vil1_pyramid(vil1_image const &I, cache_strategy cs_)
   levels.push_back(I);
 }
 
-vil1_pyramid::~vil1_pyramid()
-{
-}
+vil1_pyramid::~vil1_pyramid() = default;
 
 vil1_image vil1_pyramid::operator[](unsigned i)
 {

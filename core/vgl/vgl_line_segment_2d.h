@@ -30,7 +30,7 @@ class vgl_line_segment_2d
 
  public:
   //: Default constructor - does not initialise!
-  inline vgl_line_segment_2d() {}
+  inline vgl_line_segment_2d() = default;
 
   //: Copy constructor
   inline vgl_line_segment_2d(vgl_line_segment_2d<Type> const& l)
@@ -42,7 +42,7 @@ class vgl_line_segment_2d
     : point1_(p1), point2_(p2) {}
 
   //: Destructor
-  inline ~vgl_line_segment_2d() {}
+  inline ~vgl_line_segment_2d() = default;
 
   //: One end-point of the line segment.
   inline vgl_point_2d<Type> point1() const { return point1_; } // return a copy

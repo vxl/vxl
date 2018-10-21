@@ -34,7 +34,7 @@ class vtol_cycle_processor
                        bool debug1=false, bool debug_2=false);
   vtol_cycle_processor(std::vector<vtol_edge*>& edges,
                        bool debug1=false, bool debug_2=false);
-  ~vtol_cycle_processor() {}
+  ~vtol_cycle_processor() = default;
 
   // PUBLIC INTERFACE----------------------------------------------------------
   bool nested_one_cycles(std::vector<vtol_one_chain_sptr>& one_chains,

@@ -24,9 +24,7 @@ vgl_ellipse_scan_iterator<T>::vgl_ellipse_scan_iterator( T xc, T yc, T rx, T ry,
 }
 
 template <class T>
-vgl_ellipse_scan_iterator<T>::~vgl_ellipse_scan_iterator()
-{
-}
+vgl_ellipse_scan_iterator<T>::~vgl_ellipse_scan_iterator() = default;
 
 template <class T>
 void vgl_ellipse_scan_iterator<T>::reset()

@@ -118,7 +118,7 @@ class vgl_conic_segment_2d
  public:
   //: Default constructor - does not initialise!
   //  Use the set() method to make this conic segment useful.
-  inline vgl_conic_segment_2d() {}
+  inline vgl_conic_segment_2d() = default;
 
   //: Copy constructor
   inline vgl_conic_segment_2d(vgl_conic_segment_2d<Type> const& l)
@@ -158,7 +158,7 @@ class vgl_conic_segment_2d
     conic_(co), counterclockwise_(counterclockwise) {}
 
   //: Destructor
-  inline ~vgl_conic_segment_2d() {}
+  inline ~vgl_conic_segment_2d() = default;
 
   //: Normalise the direction of the segment to counterclockwise.
   //  This will also swap the end points if the direction is to be swapped.

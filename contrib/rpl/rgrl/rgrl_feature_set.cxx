@@ -14,9 +14,7 @@ rgrl_feature_set(feature_vector  fea_vec, rgrl_feature_set_label  label)
 }
 
 rgrl_feature_set::
-~rgrl_feature_set()
-{
-}
+~rgrl_feature_set() = default;
 
 
 // ============================================================================

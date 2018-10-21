@@ -24,7 +24,7 @@ class rsdl_bounding_box
 {
  private:
   //: default ctor is private!
-  rsdl_bounding_box() {}
+  rsdl_bounding_box() = default;
 
  public:
 

@@ -23,7 +23,7 @@ class clsfy_builder_1d
  public:
 
   // Destructor
-  virtual ~clsfy_builder_1d() {}
+  virtual ~clsfy_builder_1d() = default;
 
   //: Create empty model
   virtual clsfy_classifier_1d* new_classifier() const = 0;

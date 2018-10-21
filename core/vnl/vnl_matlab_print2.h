@@ -43,7 +43,7 @@ struct VNL_TEMPLATE_EXPORT vnl_matlab_print_proxy
                          char const *name_,
                          vnl_matlab_print_format format_)
     : obj(obj_), name(name_), format(format_) { }
-  ~vnl_matlab_print_proxy() { }
+  ~vnl_matlab_print_proxy() = default;
 };
 
 // Output operator for the proxies.

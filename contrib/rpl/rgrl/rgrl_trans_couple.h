@@ -21,7 +21,7 @@ class rgrl_trans_couple
   virtual ~rgrl_trans_couple();
 
   //: default constructor
-  rgrl_trans_couple() {  }
+  rgrl_trans_couple() = default;
 
   //: initialize with covariance matrix
   rgrl_trans_couple( rgrl_transformation_sptr const& forward, rgrl_transformation_sptr const& backward );

@@ -541,7 +541,7 @@ class my_int
   int a;
  public:
   my_int(): a(0) {};
-  my_int(const my_int& i): a(i.a) {};
+  my_int(const my_int& i) = default;;
   explicit my_int(int i): a(i) {};
   my_int operator +(const my_int& rhs) const
   {

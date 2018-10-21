@@ -20,9 +20,7 @@ pdf1d_gaussian_kernel_pdf_sampler::pdf1d_gaussian_kernel_pdf_sampler():
 {
 }
 
-pdf1d_gaussian_kernel_pdf_sampler::~pdf1d_gaussian_kernel_pdf_sampler()
-{
-}
+pdf1d_gaussian_kernel_pdf_sampler::~pdf1d_gaussian_kernel_pdf_sampler() = default;
 
 //=======================================================================
 

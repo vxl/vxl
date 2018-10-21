@@ -48,9 +48,7 @@ void mcal_general_ca::set_defaults()
 // Destructor
 //=======================================================================
 
-mcal_general_ca::~mcal_general_ca()
-{
-}
+mcal_general_ca::~mcal_general_ca() = default;
 
 class mcal_pair_cost1 : public vnl_cost_function
 {

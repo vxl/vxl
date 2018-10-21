@@ -37,7 +37,7 @@ struct mfpf_region_form
    : pose_(p),wi_(wi),wj_(wj),form_(std::move(form)) {}
 
   //: Default constructor
-  mfpf_region_form() {}
+  mfpf_region_form() = default;
 
   //: Pose (position + scale/orientation)
   mfpf_pose& pose() { return pose_; }

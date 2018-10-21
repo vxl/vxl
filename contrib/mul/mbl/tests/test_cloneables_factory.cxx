@@ -6,7 +6,7 @@
 class mbl_test_cf_base
 {
  public:
-  virtual ~mbl_test_cf_base() {}
+  virtual ~mbl_test_cf_base() = default;
   virtual std::string is_a() const=0;
   virtual mbl_test_cf_base* clone() const=0;
 };
@@ -14,7 +14,7 @@ class mbl_test_cf_base
 class mbl_test_cf_A : public mbl_test_cf_base
 {
  public:
-  virtual ~mbl_test_cf_A() {}
+  virtual ~mbl_test_cf_A() = default;
   virtual std::string is_a() const { return std::string("mbl_test_cf_A"); }
   virtual mbl_test_cf_base* clone() const { return new mbl_test_cf_A(*this); }
 };
@@ -22,7 +22,7 @@ class mbl_test_cf_A : public mbl_test_cf_base
 class mbl_test_cf_B : public mbl_test_cf_base
 {
  public:
-  virtual ~mbl_test_cf_B() {}
+  virtual ~mbl_test_cf_B() = default;
   virtual std::string is_a() const { return std::string("mbl_test_cf_B"); }
   virtual mbl_test_cf_base* clone() const { return new mbl_test_cf_B(*this); }
 };

@@ -10,15 +10,11 @@
 
 //=======================================================================
 
-vimt_image_pyramid_builder::vimt_image_pyramid_builder()
-{
-}
+vimt_image_pyramid_builder::vimt_image_pyramid_builder() = default;
 
 //=======================================================================
 
-vimt_image_pyramid_builder::~vimt_image_pyramid_builder()
-{
-}
+vimt_image_pyramid_builder::~vimt_image_pyramid_builder() = default;
 
 //=======================================================================
 

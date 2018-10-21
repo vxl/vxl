@@ -37,7 +37,7 @@ class clsfy_random_classifier : public clsfy_classifier_base
   clsfy_random_classifier();
 
   // Destructor
-  virtual ~clsfy_random_classifier() {}
+  virtual ~clsfy_random_classifier() = default;
 
   //: Return the probability the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i

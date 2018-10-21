@@ -47,7 +47,7 @@ class vipl_y_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
   inline vipl_y_gradient(vipl_y_gradient const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A),
              shift_(A.shift()), scale_(A.scale()) {}
-  inline ~vipl_y_gradient() {}
+  inline ~vipl_y_gradient() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

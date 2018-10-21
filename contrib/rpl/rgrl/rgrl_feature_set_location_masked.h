@@ -30,7 +30,7 @@ class rgrl_feature_set_location_masked
     mask_( mask )
   {}
 
-  ~rgrl_feature_set_location_masked() {}
+  ~rgrl_feature_set_location_masked() = default;
 
   //:  Return all the features
   feature_vector const&

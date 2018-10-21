@@ -36,7 +36,7 @@ class rgrl_mask
  public:
   rgrl_mask( unsigned dim=0 ) : x0_(dim, 0.0), x1_(dim, 0.0) { }
 
-  virtual ~rgrl_mask(){}
+  virtual ~rgrl_mask()= default;
 
   //: True if a point is inside the region
   virtual bool inside( vnl_vector<double> const& ) const = 0;

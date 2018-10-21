@@ -102,9 +102,7 @@ void SimilarityMetric::make_matrices()
 }
 
 //: Destructor
-SimilarityMetric::~SimilarityMetric()
-{
-}
+SimilarityMetric::~SimilarityMetric() = default;
 
 //: One line printout
 void SimilarityMetric::print(char* msg) const

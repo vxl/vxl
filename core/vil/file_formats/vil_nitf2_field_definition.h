@@ -45,7 +45,7 @@ class vil_nitf2_field_definition_node
  public:
   enum node_type { type_field, type_repeat };
   vil_nitf2_field_definition_node(node_type type) : type(type) {}
-  virtual ~vil_nitf2_field_definition_node() {}
+  virtual ~vil_nitf2_field_definition_node() = default;
 
   // Downcast test methods (for convenience)
   bool is_field_definition() const { return type==type_field; }
@@ -151,7 +151,7 @@ class vil_nitf2_field_definitions : public std::list<vil_nitf2_field_definition_
   vil_nitf2_field_definitions(const vil_nitf2_field_definitions&);
 
   // Default constructor
-  vil_nitf2_field_definitions() {}
+  vil_nitf2_field_definitions() = default;
 
   // Destructor
   virtual ~vil_nitf2_field_definitions();

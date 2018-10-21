@@ -83,7 +83,7 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_vertex_2d() {}
+  virtual ~vtol_vertex_2d() = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization

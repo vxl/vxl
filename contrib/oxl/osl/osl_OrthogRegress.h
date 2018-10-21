@@ -20,7 +20,7 @@ class osl_OrthogRegress : public osl_ortho_regress
 {
  public:
   typedef osl_ortho_regress base;
-  osl_OrthogRegress() { }
+  osl_OrthogRegress() = default;
   osl_OrthogRegress(double, double, double) { } // FIXME
   void IncrByXY(double x, double y) { base::add_point(x, y); }
   void DecrByXY(double x, double y) { base::remove_point(x, y); }

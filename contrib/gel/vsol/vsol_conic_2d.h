@@ -161,7 +161,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_conic_2d() {}
+  virtual ~vsol_conic_2d() = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization

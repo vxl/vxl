@@ -22,7 +22,7 @@
 //
 HMatrix2DEuclideanCompute::HMatrix2DEuclideanCompute(void) : HMatrix2DCompute() { }
 
-HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() { }
+HMatrix2DEuclideanCompute::~HMatrix2DEuclideanCompute() = default;
 
 //
 //

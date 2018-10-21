@@ -31,7 +31,7 @@ class msm_box_limiter : public msm_param_limiter
 
   msm_box_limiter();
 
-  virtual ~msm_box_limiter() {}
+  virtual ~msm_box_limiter() = default;
 
   //: Define variance on each parameter
   virtual void set_param_var(const vnl_vector<double>& v);

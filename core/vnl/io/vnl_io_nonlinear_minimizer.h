@@ -20,10 +20,10 @@ class vnl_io_nonlinear_minimizer
 {
  public:
   //: Constructor
-  vnl_io_nonlinear_minimizer() {}
+  vnl_io_nonlinear_minimizer() = default;
 
   //: Destructor
-  virtual ~vnl_io_nonlinear_minimizer() {}
+  virtual ~vnl_io_nonlinear_minimizer() = default;
 
   //: Create new object of type vnl_nonlinear_minimizer on heap
   virtual vnl_nonlinear_minimizer* new_object() const;

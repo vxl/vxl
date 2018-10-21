@@ -27,9 +27,7 @@ public:
     this->ls_ = nullptr;
     }
 
-  virtual ~lsqrVNL()
-    {
-    }
+  virtual ~lsqrVNL() = default;
 
   /**
    * computes y = y + A*x without altering x,
@@ -83,9 +81,7 @@ private:
 };
 
 
-vnl_lsqr::~vnl_lsqr()
-{
-}
+vnl_lsqr::~vnl_lsqr() = default;
 
 // Requires number_of_residuals() of workspace in rw.
 int vnl_lsqr::aprod_(const long* mode, const long* m, const long* n, double* x, double* y, long* /*leniw*/, long* /*lenrw*/, long* /*iw*/, double* rw, void* userdata)

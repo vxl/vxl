@@ -33,9 +33,7 @@ mfpf_mr_point_finder::mfpf_mr_point_finder()
 // Destructor
 //=======================================================================
 
-mfpf_mr_point_finder::~mfpf_mr_point_finder()
-{
-}
+mfpf_mr_point_finder::~mfpf_mr_point_finder() = default;
 
 //: Maximum number of candidates to retain during multi_search_and_prune
 //  If zero, then refine all.

@@ -46,9 +46,7 @@ void mfpf_norm_corr2d::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_norm_corr2d::~mfpf_norm_corr2d()
-{
-}
+mfpf_norm_corr2d::~mfpf_norm_corr2d() = default;
 
 //: Define filter kernel to search with
 void mfpf_norm_corr2d::set(const vil_image_view<double>& k,

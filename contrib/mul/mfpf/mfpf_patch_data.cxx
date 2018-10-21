@@ -19,17 +19,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_patch_data::mfpf_patch_data()
-{
-}
+mfpf_patch_data::mfpf_patch_data() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_patch_data::~mfpf_patch_data()
-{
-}
+mfpf_patch_data::~mfpf_patch_data() = default;
 
 //: Initialise from a string stream
 bool mfpf_patch_data::set_from_stream(std::istream &is)

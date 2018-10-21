@@ -39,9 +39,7 @@ void mfpf_ssd_vec_cost_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_ssd_vec_cost_builder::~mfpf_ssd_vec_cost_builder()
-{
-}
+mfpf_ssd_vec_cost_builder::~mfpf_ssd_vec_cost_builder() = default;
 
 //: Create new mfpf_ssd_vec_cost on heap
 mfpf_vec_cost* mfpf_ssd_vec_cost_builder::new_cost() const

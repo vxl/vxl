@@ -41,7 +41,7 @@ class rgrl_initializer_inv_indexing
                                  int max_num_matches_tried = -1);
 
   //: Destructor
-  ~rgrl_initializer_inv_indexing() {}
+  ~rgrl_initializer_inv_indexing() = default;
 
   //: Add the set of invariants from the fixed image and the set from one moving image
   //

@@ -41,9 +41,7 @@ vimt_scale_pyramid_builder_2d<T>::vimt_scale_pyramid_builder_2d(double scale_ste
 //=======================================================================
 
 template <class T>
-vimt_scale_pyramid_builder_2d<T>::~vimt_scale_pyramid_builder_2d()
-{
-}
+vimt_scale_pyramid_builder_2d<T>::~vimt_scale_pyramid_builder_2d() = default;
 
 template <class T>
 void vimt_scale_pyramid_builder_2d<T>::scale_reduce(

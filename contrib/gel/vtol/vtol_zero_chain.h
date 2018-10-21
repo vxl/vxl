@@ -48,7 +48,7 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Default constructor. Empty zero-chain
   //---------------------------------------------------------------------------
-  vtol_zero_chain() {}
+  vtol_zero_chain() = default;
 
   //---------------------------------------------------------------------------
   //: Constructor from two vertices (to make edge creation easier)

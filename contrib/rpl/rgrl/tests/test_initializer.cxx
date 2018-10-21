@@ -35,7 +35,7 @@ class simple_invariant_feature: public rgrl_invariant
       cart_inv_(cart_inv),
       ang_inv_(ang_inv)
   {}
-  ~simple_invariant_feature(){}
+  ~simple_invariant_feature()= default;
 
   //estimate the a translation using the location
   bool estimate(rgrl_invariant_sptr         from,

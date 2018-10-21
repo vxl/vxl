@@ -47,9 +47,7 @@ const char * vsol_spatial_object_3d::get_name() const
     return SpatialTypes[0];
 }
 
-vsol_spatial_object_3d::~vsol_spatial_object_3d()
-{
-}
+vsol_spatial_object_3d::~vsol_spatial_object_3d() = default;
 
 //: Return IO version number;
 short vsol_spatial_object_3d::version() const

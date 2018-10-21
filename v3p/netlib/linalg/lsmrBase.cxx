@@ -58,9 +58,7 @@ lsmrBase::lsmrBase()
 }
 
 
-lsmrBase::~lsmrBase()
-{
-}
+lsmrBase::~lsmrBase() = default;
 
 
 unsigned int

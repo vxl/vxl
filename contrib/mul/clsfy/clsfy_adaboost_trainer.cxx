@@ -27,15 +27,11 @@
 
 //=======================================================================
 
-clsfy_adaboost_trainer::clsfy_adaboost_trainer()
-{
-}
+clsfy_adaboost_trainer::clsfy_adaboost_trainer() = default;
 
 //=======================================================================
 
-clsfy_adaboost_trainer::~clsfy_adaboost_trainer()
-{
-}
+clsfy_adaboost_trainer::~clsfy_adaboost_trainer() = default;
 
 
 //: Extracts the j-th element of each vector in data and puts into v

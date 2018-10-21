@@ -29,7 +29,7 @@
 template <class T>
 class vgl_orient_box_3d_operators
 {
-  vgl_orient_box_3d_operators() {} // The default constructor is private
+  vgl_orient_box_3d_operators() = default; // The default constructor is private
  public:
 
   static vgl_orient_box_3d<T> minimal_box(vgl_point_3d<T> const& p) {

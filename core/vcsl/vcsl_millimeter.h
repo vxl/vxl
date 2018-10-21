@@ -14,11 +14,11 @@ class vcsl_millimeter
   //***************************************************************************
 
   // Default constructor
-  vcsl_millimeter() {}
+  vcsl_millimeter() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_millimeter() {}
+  virtual ~vcsl_millimeter() = default;
 
   //***************************************************************************
   // Status report
