@@ -132,8 +132,8 @@ class vpgl_ray
   static vgl_rotation_3d<double> rot_to_point_ray(double azimuth, double elevation);
  private:
   //: constructor/destructor private - static methods only
-  vpgl_ray();
-  ~vpgl_ray();
+  vpgl_ray() = delete;
+  ~vpgl_ray() = delete;
 };
 
 #endif // vpgl_ray_h_

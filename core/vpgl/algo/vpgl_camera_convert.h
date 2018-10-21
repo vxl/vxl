@@ -42,7 +42,7 @@ class vpgl_proj_camera_convert
 
  private:
   //:default constructor (is private)
-  vpgl_proj_camera_convert();
+  vpgl_proj_camera_convert() = delete;
 };
 
 
@@ -69,7 +69,7 @@ class vpgl_perspective_camera_convert
                              vgl_h_matrix_3d<double>& norm_trans);
 
  private:
-  vpgl_perspective_camera_convert();
+  vpgl_perspective_camera_convert() = delete;
 };
 
 //:Various methods for converting to a generic camera
@@ -150,7 +150,7 @@ class vpgl_generic_camera_convert
                                               int n_levels,std::vector<int> nr, std::vector<int> nc,
                                               std::vector<unsigned int> scl,std::vector<vbl_array_2d<vgl_ray_3d<double> > > & ray_pyr );
 
-  vpgl_generic_camera_convert();
+  vpgl_generic_camera_convert() = delete;
 };
 
 #endif // vpgl_camera_convert_h_
