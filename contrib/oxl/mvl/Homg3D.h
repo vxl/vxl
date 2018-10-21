@@ -41,7 +41,7 @@ class Homg3D : public Homg
 
   // Data Access---------------------------------------------------------------
 
-  vnl_double_4 get_vector() const { return vnl_double_4(x(),y(),z(),w()); }
+  vnl_double_4 get_vector() const { return {x(),y(),z(),w()}; }
   vnl_double_4& asVector() { return homg_vector_; }
 
   // get x,y,z,w.  Do not try to fill null pointers.

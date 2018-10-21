@@ -79,5 +79,5 @@ vnl_double_3 HomgLine3D::dir() const
     std::cerr << *this;
     std::cerr << "*** HomgLine3D: Infinite point not at infinity!! ***\n";
   }
-  return vnl_double_3(d[0], d[1], d[2]);
+  return {d[0], d[1], d[2]};
 }

@@ -51,21 +51,21 @@ template <> struct VNL_EXPORT vnl_complex_traits<float>
 {
   enum { isreal = true };
   static float conjugate(float x) { return x; }
-  static std::complex<float> complexify(float x) { return std::complex<float>(x, 0.0f); }
+  static std::complex<float> complexify(float x) { return {x, 0.0f}; }
 };
 
 template <> struct VNL_EXPORT vnl_complex_traits<double>
 {
   enum { isreal = true };
   static double conjugate(double x) { return x; }
-  static std::complex<double> complexify(double x) { return std::complex<double>(x, 0.0); }
+  static std::complex<double> complexify(double x) { return {x, 0.0}; }
 };
 
 template <> struct VNL_EXPORT vnl_complex_traits<long double>
 {
   enum { isreal = true };
   static long double conjugate(long double x) { return x; }
-  static std::complex<long double> complexify(long double x) { return std::complex<long double>(x, 0.0); }
+  static std::complex<long double> complexify(long double x) { return {x, 0.0}; }
 };
 
 template <> struct VNL_EXPORT vnl_complex_traits<std::complex<float> >

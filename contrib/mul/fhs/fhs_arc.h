@@ -30,12 +30,12 @@ public:
     : i_(0),j_(0),dx_(0),dy_(0),var_x_(1.0),var_y_(1.0) {}
 
     //: Constructor
-  fhs_arc(int i, int j, double dx, double dy, double var_x, double var_y)
+  fhs_arc(unsigned i, unsigned j, double dx, double dy, double var_x, double var_y)
     : i_(i),j_(j),dx_(dx),dy_(dy),var_x_(var_x),var_y_(var_y) {}
 
   //: Return arc from j to i (ie directions reversed)
   fhs_arc flipped() const
-  { return fhs_arc(j(),i(),-dx(),-dy(),var_x(),var_y()); }
+  { return {j(),i(),-dx(),-dy(),var_x(),var_y()}; }
 
     //: Index of first node
   unsigned i() const { return i_; }

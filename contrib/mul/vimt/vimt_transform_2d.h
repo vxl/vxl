@@ -160,7 +160,7 @@ class vimt_transform_2d
 
     //: Returns the coordinates of the origin.
     // I.e. operator()(vgl_point_2d<double> (0,0))
-    vgl_point_2d<double>  origin() const { return vgl_point_2d<double>(xt_/tt_,yt_/tt_); }
+    vgl_point_2d<double>  origin() const { return {xt_/tt_,yt_/tt_}; }
 
     //: Modifies the transformation so that operator()(vgl_point_2d<double> (0,0)) == p.
     // The rest of the transformation is unaffected.

@@ -63,7 +63,7 @@ class vil3d_image_view_base
   vgl_box_3d<int> bounds() const
   {
     if (size()==0) return vgl_box_3d<int>();  // Empty
-    return vgl_box_3d<int>(0,0,0,ni()-1,nj()-1,nk()-1);
+    return {0,0,0,static_cast<int>(ni()-1),static_cast<int>(nj()-1),static_cast<int>(nk()-1)};
   }
 
   //: The number of pixels.

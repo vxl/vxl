@@ -168,7 +168,7 @@ vgl_point_2d<double> mfpf_dp_snake::cog() const
     xsum+=pts_[i].x();
     ysum+=pts_[i].y();
   }
-  return vgl_point_2d<double>(xsum/n,ysum/n);
+  return {xsum/n,ysum/n};
 }
 
 //: Mean distance of points to cog()

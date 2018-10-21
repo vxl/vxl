@@ -221,7 +221,7 @@ vgl_homg_point_2d<double> HomgInterestPointSet::homg_point(int i) const
 {
   assert(i >= 0 && i < int(data_->size()));
   HomgPoint2D& p = (*data_)[i].homg_;
-  return vgl_homg_point_2d<double>(p.x(),p.y(),p.w());
+  return {p.x(),p.y(),p.w()};
 }
 
 //: Return the i'th corner as a HomgPoint2D
