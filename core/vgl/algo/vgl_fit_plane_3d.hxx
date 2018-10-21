@@ -4,16 +4,17 @@
 //:
 // \file
 
-#include <iostream>
 #include "vgl_fit_plane_3d.h"
+#include <iostream>
+#include <utility>
+#include <vcl_compiler.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
-#include <vcl_compiler.h>
 
 template <class T>
 vgl_fit_plane_3d<T>::vgl_fit_plane_3d(std::vector<vgl_homg_point_3d<T> > points)
-: points_(points)
+: points_(std::move(points))
 {
 }
 

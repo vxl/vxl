@@ -40,11 +40,11 @@ class vul_sequence_filename_map
 {
  public:
   vul_sequence_filename_map ();
-  vul_sequence_filename_map (std::string const & seq_template,
-                             std::vector<int> const & indices);
-  vul_sequence_filename_map (std::string const & seq_template,
+  vul_sequence_filename_map (std::string  seq_template,
+                             std::vector<int>  indices);
+  vul_sequence_filename_map (std::string  seq_template,
                              int start, int end, int step = 1);
-  vul_sequence_filename_map (std::string const & seq_template,
+  vul_sequence_filename_map (std::string  seq_template,
                              int step = 1);
   ~vul_sequence_filename_map ();
 

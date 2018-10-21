@@ -5,10 +5,11 @@
 #ifndef VIL_NITF2_TYPED_SCALAR_FIELD_H
 #define VIL_NITF2_TYPED_SCALAR_FIELD_H
 
-#include <iosfwd>
+#include "vil_nitf2.h"
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_tagged_record.h"
-#include "vil_nitf2.h"
+#include <iosfwd>
+#include <utility>
 #include <vcl_compiler.h>
 
 // Typed concrete class for scalar NITF fields.
@@ -22,7 +23,7 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
  public:
   // Constructor
   vil_nitf2_typed_scalar_field(T value, vil_nitf2_field_definition* definition)
-    : vil_nitf2_scalar_field(definition), m_value(value) {}
+    : vil_nitf2_scalar_field(definition), m_value(std::move(value)) {}
 
   // Destructor
   ~vil_nitf2_typed_scalar_field() {}

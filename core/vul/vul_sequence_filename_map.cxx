@@ -8,11 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
+#include "vul_sequence_filename_map.h"
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <string>
-#include "vul_sequence_filename_map.h"
+#include <utility>
 #include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>
@@ -44,22 +45,22 @@ vul_sequence_filename_map::vul_sequence_filename_map ()
 {
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, std::vector<int> const & indices)
-  : seq_template_(seq_template), indices_(indices), start_(-1), step_(-1), end_(-1)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string  seq_template, std::vector<int>  indices)
+  : seq_template_(std::move(seq_template)), indices_(std::move(indices)), start_(-1), step_(-1), end_(-1)
 {
   parse();
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, int start, int end, int step)
-  : seq_template_(seq_template), start_(start), step_(step), end_(end)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string  seq_template, int start, int end, int step)
+  : seq_template_(std::move(seq_template)), start_(start), step_(step), end_(end)
 {
   for (int i=start; i <= end; i+=step)
     indices_.push_back(i);
   parse();
 }
 
-vul_sequence_filename_map::vul_sequence_filename_map (std::string const & seq_template, int step)
-  : seq_template_(seq_template), start_(-1), step_(step), end_(-1)
+vul_sequence_filename_map::vul_sequence_filename_map (std::string  seq_template, int step)
+  : seq_template_(std::move(seq_template)), start_(-1), step_(step), end_(-1)
 {
   parse();
 }

@@ -1,6 +1,7 @@
+#include "vpgl_rational_adjust_onept.h"
 #include <cmath>
 #include <limits>
-#include "vpgl_rational_adjust_onept.h"
+#include <utility>
 //:
 // \file
 #include <vcl_cassert.h>
@@ -99,17 +100,17 @@ scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
 
 
 vpgl_z_search_lsqr::
-vpgl_z_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
-                   std::vector<float> const& cam_weights,
-                   std::vector<vgl_point_2d<double> > const& image_pts,
+vpgl_z_search_lsqr(std::vector<vpgl_rational_camera<double> >  cams,
+                   std::vector<float>  cam_weights,
+                   std::vector<vgl_point_2d<double> >  image_pts,
                    vgl_point_3d<double> const& initial_pt,
                    double const& relative_diameter)
   :  vnl_least_squares_function(1, 1,
                                 vnl_least_squares_function::no_gradient ),
      initial_pt_(initial_pt),
-     cameras_(cams),
-     cam_weights_(cam_weights),
-     image_pts_(image_pts),
+     cameras_(std::move(cams)),
+     cam_weights_(std::move(cam_weights)),
+     image_pts_(std::move(image_pts)),
      xm_(0), ym_(0),
      relative_diameter_(relative_diameter)
 {}

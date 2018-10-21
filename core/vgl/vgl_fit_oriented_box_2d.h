@@ -3,13 +3,14 @@
 #define vgl_fit_oriented_box_2d_h_
 
 #include <iostream>
-#include <vgl/vgl_line_segment_2d.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_point_2d.h>
-#include <vgl/vgl_tolerance.h>
-#include <vector>
 #include <map>
+#include <utility>
+#include <vector>
+#include <vgl/vgl_line_segment_2d.h>
 #include <vgl/vgl_oriented_box_2d.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_tolerance.h>
 //:
 // \file
 // \brief Fit an oriented box to a set of 2d points
@@ -28,8 +29,8 @@ class vgl_fit_oriented_box_2d {
   vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta = default_dtheta);
 
   //: constructor with points
- vgl_fit_oriented_box_2d(std::vector<vgl_point_2d<T> > const& pts, double dtheta = default_dtheta):
-  fixed_theta_(false), fit_valid_(false), dtheta_(dtheta), pts_(pts){}
+ vgl_fit_oriented_box_2d(std::vector<vgl_point_2d<T> >  pts, double dtheta = default_dtheta):
+  fixed_theta_(false), fit_valid_(false), dtheta_(dtheta), pts_(std::move(pts)){}
 
   //: brute force search
   vgl_oriented_box_2d<T> fitted_box();

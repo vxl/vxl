@@ -16,9 +16,9 @@
 // \endverbatim
 
 #include <iosfwd>
-#include <vector>
 #include <utility>
 #include <vcl_compiler.h>
+#include <vector>
 #include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
 
 //: Store a polygon.
@@ -67,7 +67,7 @@ class vgl_polygon
   explicit vgl_polygon(sheet_t const& points, unsigned n_sheets=1) : sheets_(n_sheets,points) {}
 
   //: Construct by specifying all of its sheets
-  explicit vgl_polygon(std::vector<sheet_t> const& sheets) : sheets_(sheets) {}
+  explicit vgl_polygon(std::vector<sheet_t>  sheets) : sheets_(std::move(sheets)) {}
 
   // Copy constructor
   vgl_polygon(vgl_polygon const& a) : sheets_(a.sheets_) {}

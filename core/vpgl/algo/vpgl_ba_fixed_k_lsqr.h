@@ -21,7 +21,7 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
   //: Constructor
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
-  vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+  vpgl_ba_fixed_k_lsqr(std::vector<vpgl_calibration_matrix<double> >  K,
                        const std::vector<vgl_point_2d<double> >& image_points,
                        const std::vector<std::vector<bool> >& mask);
 
@@ -29,7 +29,7 @@ class vpgl_ba_fixed_k_lsqr : public vpgl_bundle_adjust_lsqr
   //  Each image point is assigned an inverse covariance (error projector) matrix
   // \note image points are not homogeneous because they require finite points
   //       to measure projection error
-  vpgl_ba_fixed_k_lsqr(const std::vector<vpgl_calibration_matrix<double> >& K,
+  vpgl_ba_fixed_k_lsqr(std::vector<vpgl_calibration_matrix<double> >  K,
                        const std::vector<vgl_point_2d<double> >& image_points,
                        const std::vector<vnl_matrix<double> >& inv_covars,
                        const std::vector<std::vector<bool> >& mask);

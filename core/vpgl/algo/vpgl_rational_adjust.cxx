@@ -1,5 +1,6 @@
-#include <cmath>
 #include "vpgl_rational_adjust.h"
+#include <cmath>
+#include <utility>
 //:
 // \file
 
@@ -15,11 +16,11 @@
 vpgl_adjust_lsqr::
 vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
                  std::vector<vgl_point_2d<double> > const& img_pts,
-                 std::vector<vgl_point_3d<double> > const& geo_pts,
+                 std::vector<vgl_point_3d<double> >  geo_pts,
                  unsigned num_unknowns, unsigned num_residuals)
   : vnl_least_squares_function(num_unknowns, num_residuals,
                                vnl_least_squares_function::no_gradient),
-    rcam_(rcam), img_pts_(img_pts), geo_pts_(geo_pts)
+    rcam_(rcam), img_pts_(img_pts), geo_pts_(std::move(geo_pts))
 {
   num_corrs_ = img_pts.size();
 }
