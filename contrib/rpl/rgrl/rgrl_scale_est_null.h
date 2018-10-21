@@ -36,8 +36,8 @@ public:
 
 private:
   //disabled
-  rgrl_scale_est_null( rgrl_scale_est_null const& );
-  rgrl_scale_est_null& operator=( rgrl_scale_est_null const& );
+  rgrl_scale_est_null( rgrl_scale_est_null const& ) = delete;
+  rgrl_scale_est_null& operator=( rgrl_scale_est_null const& ) = delete;
 
 };
 

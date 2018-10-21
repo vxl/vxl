@@ -171,7 +171,7 @@ class rgrl_feature
 
  private:
   // disabled
-  rgrl_feature& operator=( rgrl_feature const& );
+  rgrl_feature& operator=( rgrl_feature const& ) = delete;
 };
 
 

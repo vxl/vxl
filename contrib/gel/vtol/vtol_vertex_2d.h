@@ -78,7 +78,7 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Copy constructor. Copy the point but not the links.  Deprecated.
   //---------------------------------------------------------------------------
-  vtol_vertex_2d(const vtol_vertex_2d &other);
+  vtol_vertex_2d(const vtol_vertex_2d &other) = delete;
  public:
   //---------------------------------------------------------------------------
   //: Destructor

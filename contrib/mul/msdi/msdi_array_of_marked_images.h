@@ -49,7 +49,7 @@ private:
   vimt_gaussian_pyramid_builder_2d<vxl_byte> pyr_builder_;
 
   // Private copy operator to prevent copying
-  msdi_array_of_marked_images& operator=(const msdi_array_of_marked_images&);
+  msdi_array_of_marked_images& operator=(const msdi_array_of_marked_images&) = delete;
 public:
     //: Default constructor
   msdi_array_of_marked_images();

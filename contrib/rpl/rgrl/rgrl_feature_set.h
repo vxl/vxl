@@ -144,8 +144,8 @@ class rgrl_feature_set
 
  private:
   //disabled
-  rgrl_feature_set( rgrl_feature_set const& other );
-  rgrl_feature_set& operator=( rgrl_feature_set const& other );
+  rgrl_feature_set( rgrl_feature_set const& other ) = delete;
+  rgrl_feature_set& operator=( rgrl_feature_set const& other ) = delete;
 
  protected:
   rgrl_feature_set_label label_;

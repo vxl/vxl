@@ -82,7 +82,7 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
-  vtol_two_chain(vtol_two_chain const& other);
+  vtol_two_chain(vtol_two_chain const& other) = delete;
  public:
   //---------------------------------------------------------------------------
   //: Destructor

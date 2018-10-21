@@ -99,9 +99,9 @@ class rsdl_borgefors
 
  private:
   //: copy constructor, not implemented
-  rsdl_borgefors(const rsdl_borgefors<T>& old);
+  rsdl_borgefors(const rsdl_borgefors<T>& old) = delete;
   //: assignment operator, not implemented
-  rsdl_borgefors<T>& operator=(const rsdl_borgefors<T>& rhs);
+  rsdl_borgefors<T>& operator=(const rsdl_borgefors<T>& rhs) = delete;
 
   void initialize(iterator_type  begin, iterator_type end);
   void chamfer34();

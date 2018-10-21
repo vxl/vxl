@@ -84,7 +84,7 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Copy constructor.  Deep copy.  Deprecated.
   //---------------------------------------------------------------------------
-  vtol_one_chain(vtol_one_chain const& other);
+  vtol_one_chain(vtol_one_chain const& other) = delete;
  public:
   //---------------------------------------------------------------------------
   //: Destructor

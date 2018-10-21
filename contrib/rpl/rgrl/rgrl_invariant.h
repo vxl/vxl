@@ -49,7 +49,7 @@ class rgrl_invariant
 
  private:
   // disabled
-  rgrl_invariant& operator=( rgrl_invariant const& );
+  rgrl_invariant& operator=( rgrl_invariant const& ) = delete;
 
  private:
   // a 0-length dummy vector

@@ -138,7 +138,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
   vimt_gaussian_pyramid_builder_2d<float> float_pyr_builder_;
 
   // Private copy operator to prevent copying
-  msdi_marked_images_from_files& operator=(const msdi_marked_images_from_files&);
+  msdi_marked_images_from_files& operator=(const msdi_marked_images_from_files&) = delete;
 
   //: Reflect current points
   void reflect_points();
