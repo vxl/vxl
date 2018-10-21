@@ -138,7 +138,7 @@ vsol_point_3d::plus_vector(vgl_vector_3d<double> const& v) const
 vgl_vector_3d<double>
 vsol_point_3d::to_vector(vsol_point_3d const& other) const
 {
-  return vgl_vector_3d<double>(other.x() - x(),other.y() - y(),other.z() - z());
+  return {other.x() - x(),other.y() - y(),other.z() - z()};
 }
 
 //----------------------------------------------------------------

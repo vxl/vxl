@@ -63,7 +63,7 @@ class msm_points
   vgl_point_2d<double> operator[](unsigned i) const
   {
     assert(i<size());
-    return vgl_point_2d<double>(v_[2*i],v_[2*i+1]);
+    return {v_[2*i],v_[2*i+1]};
   }
 
   //: Set this to be equal to supplied points

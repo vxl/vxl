@@ -62,7 +62,7 @@ vgl_box_2d<double> world_bounding_box(const vimt_image_2d& img)
   std::vector<double> b_lo(2,0.0);
   std::vector<double> b_hi(2,0.0);
   img.world_bounds(b_lo,b_hi);
-  return vgl_box_2d<double>(b_lo[0],b_hi[0],b_lo[1],b_hi[1]);
+  return {b_lo[0],b_hi[0],b_lo[1],b_hi[1]};
 }
 
 // Translate the image so that its centre is at the origin of the world coordinate system.
@@ -84,5 +84,5 @@ vgl_vector_2d<double> vimt_pixel_size_from_transform(const vimt_image_2d& image)
   vgl_vector_2d<double> j(0,1);
   double dx = i2w.delta(p, i).length();
   double dy = i2w.delta(p, j).length();
-  return vgl_vector_2d<double>(dx, dy);
+  return {dx, dy};
 }

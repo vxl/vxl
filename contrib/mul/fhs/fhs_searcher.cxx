@@ -241,7 +241,7 @@ static vgl_point_2d<int> min_image_point(const vil_image_view<float>& image)
       if (*pixel<min_val) {min_val=*pixel, best_i=i; best_j=j; }
   }
 
-  return vgl_point_2d<int>(best_i,best_j);
+  return {static_cast<int>(best_i),static_cast<int>(best_j)};
 }
 
 //: Compute optimal position of all points

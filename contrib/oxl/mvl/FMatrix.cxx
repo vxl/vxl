@@ -138,7 +138,7 @@ FMatrix FMatrix::read(std::istream& s)
 vgl_homg_line_2d<double> FMatrix::image1_epipolar_line(const vgl_homg_point_2d<double>& x2) const
 {
   vgl_homg_point_2d<double> p = ft_matrix_ * x2;
-  return vgl_homg_line_2d<double>(p.x(),p.y(),p.w()); // dual point
+  return {p.x(),p.y(),p.w()}; // dual point
 }
 
 //--------------------------------------------------------------
@@ -156,7 +156,7 @@ HomgLine2D FMatrix::image1_epipolar_line(const HomgPoint2D& x2) const
 vgl_homg_line_2d<double> FMatrix::image2_epipolar_line(const vgl_homg_point_2d<double>& x1) const
 {
   vgl_homg_point_2d<double> p = f_matrix_ * x1;
-  return vgl_homg_line_2d<double>(p.x(),p.y(),p.w()); // dual point
+  return {p.x(),p.y(),p.w()}; // dual point
 }
 
 //----------------------------------------------------------------

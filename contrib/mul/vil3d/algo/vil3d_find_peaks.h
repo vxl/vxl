@@ -72,7 +72,7 @@ inline void vil3d_find_peaks_26(std::vector<vgl_point_3d<int> >& peaks,
 template <class T>
 inline vgl_point_3d<int> vil3d_find_max(const vil3d_image_view<T>& image)
 {
-  if (image.size()==0) return vgl_point_3d<int>();
+  if (image.size()==0) return {};
 
   const unsigned ni=image.ni(),nj=image.nj(),nk=image.nk();
   const std::ptrdiff_t istep = image.istep(),jstep=image.jstep(),kstep=image.kstep();

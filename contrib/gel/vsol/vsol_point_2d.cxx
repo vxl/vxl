@@ -130,7 +130,7 @@ vsol_point_2d::plus_vector(vgl_vector_2d<double> const& v) const
 vgl_vector_2d<double>
 vsol_point_2d::to_vector(const vsol_point_2d &other) const
 {
-  return vgl_vector_2d<double>(other.x() - x(), other.y() - y());
+  return {other.x() - x(), other.y() - y()};
 }
 
 //----------------------------------------------------------------

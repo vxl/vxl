@@ -39,8 +39,8 @@ struct msm_line_seg_pt
     if (i0<0) return vgl_point_2d<double>();
     if (i1<0) return pts[i0];
     double b=1.0-alpha;
-    return vgl_point_2d<double>(b*pts[i0].x()+alpha*pts[i1].x(),
-                                b*pts[i0].y()+alpha*pts[i1].y() );
+    return {b*pts[i0].x()+alpha*pts[i1].x(),
+                                b*pts[i0].y()+alpha*pts[i1].y() };
   }
 };
 
@@ -85,7 +85,7 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
   if (curve.size()==0)
   {
     sqr_dist=9.9e9;
-    return msm_line_seg_pt();
+    return {};
   }
 
   // If only one point, then find distance to it from pt

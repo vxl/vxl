@@ -39,7 +39,7 @@ HomgPoint2D::get_nonhomogeneous(double& ex, double& ey) const
 vnl_double_2 HomgPoint2D::get_double2() const
 {
   double scale = 1.0 / (*this)[2];
-  return vnl_double_2((*this)[0] * scale, (*this)[1] * scale);
+  return {(*this)[0] * scale, (*this)[1] * scale};
 }
 
 //-----------------------------------------------------------------------------

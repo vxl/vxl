@@ -469,7 +469,7 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
             std::abort();
     }
 
-    return vgl_point_2d<double> (); // To keep over-zealous compilers happy
+    return {}; // To keep over-zealous compilers happy
 }
 
 vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<double>& dp) const
@@ -493,7 +493,7 @@ vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, c
             std::abort();
     }
 
-    return vgl_vector_2d<double> (); // To keep over-zealous compilers happy
+    return {}; // To keep over-zealous compilers happy
 }
 
 

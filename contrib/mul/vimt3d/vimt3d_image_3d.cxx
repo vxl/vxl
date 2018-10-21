@@ -68,7 +68,7 @@ vgl_box_3d<double> world_bounding_box(const vimt3d_image_3d& img)
   std::vector<double> b_hi(3,0.0);
   img.world_bounds(b_lo,b_hi);
   //Use C-style vector interface for corner points, passing address of data as the C-style vector
-  return vgl_box_3d<double>(&(b_lo[0]),&(b_hi[0]));
+  return {&(b_lo[0]),&(b_hi[0])};
 }
 
 // Translate the image so that its centre is at the origin of the world coordinate system.
@@ -92,5 +92,5 @@ vgl_vector_3d<double> vimt3d_voxel_size_from_transform(const vimt3d_image_3d& im
   double dx = i2w.delta(p, i).length();
   double dy = i2w.delta(p, j).length();
   double dz = i2w.delta(p, k).length();
-  return vgl_vector_3d<double>(dx, dy, dz);
+  return {dx, dy, dz};
 }

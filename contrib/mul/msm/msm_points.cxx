@@ -79,7 +79,7 @@ vgl_point_2d<double> msm_points::cog() const
   double cx=0.0,cy=0.0;
   for (;v!=end_v;v+=2) { cx+=v[0]; cy+=v[1]; }
   if (n>0) { cx/=n; cy/=n; }
-  return vgl_point_2d<double>(cx,cy);
+  return {cx,cy};
 }
 
 //: Return RMS of distance of points to CoG.

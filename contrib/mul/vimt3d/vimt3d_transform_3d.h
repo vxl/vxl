@@ -218,7 +218,7 @@ class vimt3d_transform_3d
 
   //: Returns the coordinates of the origin
   vgl_point_3d<double>  origin() const
-    { return vgl_point_3d<double> (tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_,tt_==1?zt_:zt_/tt_); }
+    { return {tt_==1?xt_:xt_/tt_,tt_==1?yt_:yt_/tt_,tt_==1?zt_:zt_/tt_}; }
 
   //: Modifies the transformation so that origin == p.
   // Modifies the transformation so that
@@ -238,7 +238,7 @@ class vimt3d_transform_3d
     switch (form_)
     {
      case Identity :
-      return vgl_point_3d<double> (x,y,z);
+      return {x,y,z};
      case Translation :
       return vgl_point_3d<double> (x+xt_,y+yt_,z+zt_);
      case ZoomOnly :
@@ -277,9 +277,9 @@ class vimt3d_transform_3d
      case Translation:
       return dp;
      case ZoomOnly :
-      return vgl_vector_3d<double> (dp.x()*xx_,
+      return {dp.x()*xx_,
                                     dp.y()*yy_,
-                                    dp.z()*zz_);
+                                    dp.z()*zz_};
 //   case RigidBody, Similarity, Affine :
      default : // Don't worry that the returned value is independent of p --- this is correct.
       return vgl_vector_3d<double> (dp.x()*xx_+dp.y()*xy_+dp.z()*xz_,

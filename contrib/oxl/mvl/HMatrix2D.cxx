@@ -188,7 +188,7 @@ HMatrix2D HMatrix2D::get_inverse() const
 vnl_double_4 HMatrix2D::transform_bounding_box(double /*x0*/, double /*y0*/, double /*x1*/, double /*y1*/)
 {
   std::cerr << "FIXME: HMatrix2D::transform_bounding_box() is not yet implemented\n";
-  return vnl_double_4();
+  return {};
 
 #if 0
   // Find bbox of transformed image
