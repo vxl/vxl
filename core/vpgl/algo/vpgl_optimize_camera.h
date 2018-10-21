@@ -22,7 +22,7 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
   vpgl_orientation_lsqr(const vpgl_calibration_matrix<double>& K,
                         const vgl_point_3d<double>& c,
                         const std::vector<vgl_homg_point_3d<double> >& world_points,
-                        const std::vector<vgl_point_2d<double> >& image_points );
+                        std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
   virtual ~vpgl_orientation_lsqr() {}
 
@@ -58,7 +58,7 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
                                  const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                 const std::vector<vgl_point_2d<double> >& image_points );
+                                 std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_lsqr() {}
 
@@ -90,7 +90,7 @@ class vpgl_orientation_position_calibration_lsqr : public vnl_least_squares_func
   //: Constructor
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                             const std::vector<vgl_point_2d<double> >& image_points );
+                                             std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_calibration_lsqr() {}
 
@@ -121,7 +121,7 @@ class vpgl_orientation_position_focal_lsqr : public vnl_least_squares_function
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_orientation_position_focal_lsqr(const vpgl_calibration_matrix<double>& K_init,
                                        const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                       const std::vector<vgl_point_2d<double> >& image_points );
+                                       std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
   virtual ~vpgl_orientation_position_focal_lsqr() {}
 

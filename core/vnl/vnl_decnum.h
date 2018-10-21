@@ -74,10 +74,11 @@
 //   16 Aug. 2011 - Peter Vanroose - added Inf & NaN and constructor from double
 // \endverbatim
 
+#include "vnl/vnl_export.h"
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
-#include "vnl/vnl_export.h"
 
 class VNL_EXPORT vnl_decnum
 {
@@ -90,7 +91,7 @@ class VNL_EXPORT vnl_decnum
   long exp_;       // The exponent; nonnegative for integers. Zero for Inf and NaN.
 
   // private constructor: arguments should satisfy the above constraints
-  vnl_decnum(char s, std::string const& d, long e) : sign_(s), data_(d), exp_(e) {}
+  vnl_decnum(char s, std::string  d, long e) : sign_(s), data_(std::move(d)), exp_(e) {}
  public:
   std::string data() const { return data_; }
   char       sign() const { return sign_; }

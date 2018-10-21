@@ -45,12 +45,13 @@
 //  normalizations.
 //
 #include <iostream>
-#include <vector>
 #include <string>
-#include <vgl/vgl_fwd.h>
+#include <utility>
 #include <vcl_compiler.h>
-#include <vnl/vnl_vector_fixed.h>
+#include <vector>
+#include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_camera.h>
 
 // Represent scale and offset transformations used in normalization
@@ -142,8 +143,8 @@ class vpgl_rational_camera : public vpgl_camera<T>
 
   //: Constructor with a coefficient matrix
   vpgl_rational_camera(vnl_matrix_fixed<T, 4, 20> const& rational_coeffs,
-                       std::vector<vpgl_scale_offset<T> > const& scale_offsets)
-    : rational_coeffs_(rational_coeffs), scale_offsets_(scale_offsets) {}
+                       std::vector<vpgl_scale_offset<T> >  scale_offsets)
+    : rational_coeffs_(rational_coeffs), scale_offsets_(std::move(scale_offsets)) {}
 
   virtual ~vpgl_rational_camera() {}
 

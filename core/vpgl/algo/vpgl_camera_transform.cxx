@@ -1,6 +1,7 @@
+#include "vpgl_camera_transform.h"
 #include <iostream>
 #include <limits>
-#include "vpgl_camera_transform.h"
+#include <utility>
 //:
 // \file
 
@@ -20,10 +21,10 @@
 
 vpgl_camera_transform_f::vpgl_camera_transform_f(unsigned cnt_residuals, unsigned n_unknowns,
                                                  const std::vector<vpgl_perspective_camera<double>  >& input_cams,
-                                                 const std::vector< std::vector< std::pair<vnl_vector_fixed<double, 2>, unsigned> > >& cam_ids_img_pts,
-                                                 const std::vector<vnl_vector_fixed<double, 4> >& pts_3d, bool minimize_R) :
+                                                 std::vector< std::vector< std::pair<vnl_vector_fixed<double, 2>, unsigned> > >  cam_ids_img_pts,
+                                                 std::vector<vnl_vector_fixed<double, 4> >  pts_3d, bool minimize_R) :
                                                  vnl_least_squares_function(n_unknowns,cnt_residuals,vnl_least_squares_function::no_gradient),
-                                                 cam_ids_img_pts_(cam_ids_img_pts), pts_3d_(pts_3d), input_cams_(input_cams), minimize_R_(minimize_R)
+                                                 cam_ids_img_pts_(std::move(cam_ids_img_pts)), pts_3d_(std::move(pts_3d)), input_cams_(input_cams), minimize_R_(minimize_R)
 {
 
   for (unsigned i = 0; i < input_cams.size(); i++) {

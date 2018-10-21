@@ -4,10 +4,11 @@
 //:
 // \file
 
-#include <iostream>
-#include <fstream>
-#include <algorithm>
 #include "vpgl_perspective_camera.h"
+#include <algorithm>
+#include <fstream>
+#include <iostream>
+#include <utility>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -45,8 +46,8 @@ template <class T>
 vpgl_perspective_camera<T>::vpgl_perspective_camera(
   const vpgl_calibration_matrix<T>& K,
   const vgl_point_3d<T>& camera_center,
-  const vgl_rotation_3d<T>& R ) :
-  K_( K ), camera_center_( camera_center ), R_( R )
+  const vgl_rotation_3d<T> R ) :
+  K_( K ), camera_center_( camera_center ), R_(std::move( R ))
 {
   recompute_matrix();
 }
@@ -55,9 +56,9 @@ vpgl_perspective_camera<T>::vpgl_perspective_camera(
 template <class T>
 vpgl_perspective_camera<T>::vpgl_perspective_camera(
   const vpgl_calibration_matrix<T>& K,
-  const vgl_rotation_3d<T>& R,
+  const vgl_rotation_3d<T> R,
   const vgl_vector_3d<T>& t) :
-  K_( K ),  R_( R )
+  K_( K ),  R_(std::move( R ))
 {
   this->set_translation(t);
   recompute_matrix();

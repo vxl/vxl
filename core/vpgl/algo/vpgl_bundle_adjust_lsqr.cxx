@@ -1,7 +1,8 @@
 // This is vpgl/algo/vpgl_bundle_adjust_lsqr.cxx
-#include <iostream>
-#include <algorithm>
 #include "vpgl_bundle_adjust_lsqr.h"
+#include <algorithm>
+#include <iostream>
+#include <utility>
 //:
 // \file
 
@@ -17,12 +18,12 @@ vpgl_bundle_adjust_lsqr::
 vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
                         unsigned int num_params_per_b,
                         unsigned int num_params_c,
-                        const std::vector<vgl_point_2d<double> >& image_points,
+                        std::vector<vgl_point_2d<double> >  image_points,
                         const std::vector<std::vector<bool> >& mask)
  : vnl_sparse_lst_sqr_function(mask.size(),num_params_per_a,
                                mask[0].size(),num_params_per_b,
                                num_params_c,mask,2,use_gradient,use_weights),
-   image_points_(image_points),
+   image_points_(std::move(image_points)),
    use_covars_(false),
    scale2_(1.0),
    iteration_count_(0)

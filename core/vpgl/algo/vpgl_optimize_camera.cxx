@@ -13,17 +13,19 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_cassert.h>
 
+#include <utility>
+
 //: Constructor
 vpgl_orientation_lsqr::
   vpgl_orientation_lsqr(const vpgl_calibration_matrix<double>& K,
                         const vgl_point_3d<double>& c,
                         const std::vector<vgl_homg_point_3d<double> >& world_points,
-                        const std::vector<vgl_point_2d<double> >& image_points )
+                        std::vector<vgl_point_2d<double> >  image_points )
  : vnl_least_squares_function(3,2*world_points.size(),no_gradient),
    K_(K),
    c_(c),
    world_points_(world_points),
-   image_points_(image_points)
+   image_points_(std::move(image_points))
 {
   assert(world_points_.size() == image_points_.size());
 }
@@ -52,11 +54,11 @@ vpgl_orientation_lsqr::f(vnl_vector<double> const& x, vnl_vector<double>& fx)
 vpgl_orientation_position_lsqr::
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
                                  const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                 const std::vector<vgl_point_2d<double> >& image_points )
+                                 std::vector<vgl_point_2d<double> >  image_points )
  : vnl_least_squares_function(6,2*world_points.size(),no_gradient),
    K_(K),
    world_points_(world_points),
-   image_points_(image_points)
+   image_points_(std::move(image_points))
 {
   assert(world_points_.size() == image_points_.size());
 }
@@ -105,10 +107,10 @@ vpgl_orientation_position_lsqr::trace(int iteration,
 //: Constructor
 vpgl_orientation_position_calibration_lsqr::
 vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                           const std::vector<vgl_point_2d<double> >& image_points )
+                                           std::vector<vgl_point_2d<double> >  image_points )
  : vnl_least_squares_function(10,2*world_points.size(),no_gradient),
    world_points_(world_points),
-   image_points_(image_points)
+   image_points_(std::move(image_points))
 {
   assert(world_points_.size() == image_points_.size());
 }
@@ -154,11 +156,11 @@ vpgl_orientation_position_calibration_lsqr::f(vnl_vector<double> const& x, vnl_v
 vpgl_orientation_position_focal_lsqr::
 vpgl_orientation_position_focal_lsqr(const vpgl_calibration_matrix<double>& K_init,
                                      const std::vector<vgl_homg_point_3d<double> >& world_points,
-                                     const std::vector<vgl_point_2d<double> >& image_points )
+                                     std::vector<vgl_point_2d<double> >  image_points )
  : vnl_least_squares_function(8,2*world_points.size(),use_gradient),
    K_init_(K_init),
    world_points_(world_points),
-   image_points_(image_points)
+   image_points_(std::move(image_points))
 {
   assert(world_points_.size() == image_points_.size());
 }

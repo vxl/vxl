@@ -401,8 +401,8 @@ bool vil_nitf2_string_formatter::is_valid(std::string /*value*/) const
 // Class vil_nitf2_enum_string_formatter
 
 vil_nitf2_enum_string_formatter::
-vil_nitf2_enum_string_formatter(int field_width, const vil_nitf2_enum_values& value_map)
-  : vil_nitf2_string_formatter(field_width), value_map(value_map)
+vil_nitf2_enum_string_formatter(int field_width, vil_nitf2_enum_values  value_map)
+  : vil_nitf2_string_formatter(field_width), value_map(std::move(value_map))
 {
   //field_type = Nitf::Enum;
   validate_value_map();

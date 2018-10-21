@@ -64,11 +64,11 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   //: Main constructor takes all of the camera parameters.
   vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
                            const vgl_point_3d<T>& camera_center,
-                           const vgl_rotation_3d<T>& R );
+                           vgl_rotation_3d<T>  R );
 
   //: Main constructor based on K[R|t]
   vpgl_perspective_camera( const vpgl_calibration_matrix<T>& K,
-                           const vgl_rotation_3d<T>& R,
+                           vgl_rotation_3d<T>  R,
                            const vgl_vector_3d<T>& t);
 
 

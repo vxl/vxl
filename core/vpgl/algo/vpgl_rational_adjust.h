@@ -29,7 +29,7 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
   // \note image points are not homogeneous because require finite points to measure projection error
   vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
                    std::vector<vgl_point_2d<double> > const& img_pts,
-                   std::vector<vgl_point_3d<double> > const& geo_pts,
+                   std::vector<vgl_point_3d<double> >  geo_pts,
                    unsigned num_unknowns, unsigned num_residuals);
 
   //: Destructor

@@ -7,6 +7,8 @@
 
 #include <vcl_cassert.h>
 
+#include <utility>
+
 //==============================================================================
 // Class vil_nitf2_field_definition_node
 
@@ -36,13 +38,13 @@ vil_nitf2_field_definition(std::string tag,
                            std::string description)
   : vil_nitf2_field_definition_node(type_field),
     tag(tag),
-    pretty_name(pretty_name),
+    pretty_name(std::move(pretty_name)),
     formatter(formatter),
     blanks_ok(blanks_ok),
     width_functor(width_functor),
     condition_functor(condition_functor),
-    units(units),
-    description(description)
+    units(std::move(units)),
+    description(std::move(description))
 {
   assert(!tag.empty() && "vil_nitf2_field_definition:: null tag");
   assert(formatter != nullptr && "vil_nitf2_field_definition:: null formatter");

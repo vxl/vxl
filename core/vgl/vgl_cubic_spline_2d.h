@@ -23,11 +23,12 @@
 // computations are simple enough so everything is in the .h file
 //
 #include <iosfwd>
-#include <vector>
-#include <vcl_compiler.h>
-#include <vgl/vgl_vector_2d.h>
-#include <vgl/vgl_point_2d.h>
+#include <utility>
 #include <vcl_cassert.h>
+#include <vcl_compiler.h>
+#include <vector>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_vector_2d.h>
 
 template <class Type>
 class vgl_cubic_spline_2d
@@ -40,10 +41,10 @@ class vgl_cubic_spline_2d
   vgl_cubic_spline_2d(): closed_curve_(false), s_(Type(0.5)) {}
 
   //: Construct from set of knots
-  vgl_cubic_spline_2d(std::vector<vgl_point_2d<Type> > const& knots,
+  vgl_cubic_spline_2d(std::vector<vgl_point_2d<Type> >  knots,
                       Type s = Type(0.5),
                       bool closed = false)
-    : closed_curve_(closed), s_(s), knots_(knots){}
+    : closed_curve_(closed), s_(s), knots_(std::move(knots)){}
 
   //: accessors
   bool closed() const {return closed_curve_;}

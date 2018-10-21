@@ -1,6 +1,7 @@
+#include "vpgl_rational_adjust_multipt.h"
 #include <cmath>
 #include <limits>
-#include "vpgl_rational_adjust_multipt.h"
+#include <utility>
 //:
 // \file
 #include <vcl_cassert.h>
@@ -228,13 +229,13 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
 
 vpgl_cam_trans_search_lsqr::
 vpgl_cam_trans_search_lsqr(std::vector<vpgl_rational_camera<double> > const& cams,
-                           std::vector<float> const& cam_weights,
+                           std::vector<float>  cam_weights,
                            std::vector< std::vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
-                           std::vector< vgl_point_3d<double> > const& initial_pts)
+                           std::vector< vgl_point_3d<double> >  initial_pts)
   :  vnl_least_squares_function(2*(unsigned)cams.size(), (unsigned)(cams.size()*image_pts.size()), vnl_least_squares_function::no_gradient),
-     initial_pts_(initial_pts),
+     initial_pts_(std::move(initial_pts)),
      cameras_(cams),
-     cam_weights_(cam_weights),
+     cam_weights_(std::move(cam_weights)),
      corrs_(image_pts)
 {}
 

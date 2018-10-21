@@ -2,8 +2,9 @@
 #ifndef vpgl_ray_intersect_hxx_
 #define vpgl_ray_intersect_hxx_
 
-#include <iostream>
 #include "vpgl_ray_intersect.h"
+#include <iostream>
+#include <utility>
 //:
 // \file
 #include <vnl/vnl_least_squares_function.h>
@@ -19,8 +20,8 @@ class vpgl_ray_intersect_lsqr : public vnl_least_squares_function
 {
 public:
     //: Constructor
-    vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* > const& cams,
-                            std::vector<vgl_point_2d<T> > const& image_pts,
+    vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* >  cams,
+                            std::vector<vgl_point_2d<T> >  image_pts,
                             unsigned num_residuals);
 
     //: Destructor
@@ -45,13 +46,13 @@ protected:
 
 template<typename T>
 vpgl_ray_intersect_lsqr<T>::
-vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* > const& cams,
-                        std::vector<vgl_point_2d<T> > const& image_pts,
+vpgl_ray_intersect_lsqr(std::vector<const vpgl_camera<T>* > cams,
+                        std::vector<vgl_point_2d<T> > image_pts,
                         unsigned num_residuals) :
 vnl_least_squares_function(3, num_residuals,
                            vnl_least_squares_function::no_gradient ),
-f_cameras_(cams),
-f_image_pts_(image_pts)
+f_cameras_(std::move(cams)),
+f_image_pts_(std::move(image_pts))
 {}
 
 // Define virtual function for the LeastSquaresFunction class.  Given
