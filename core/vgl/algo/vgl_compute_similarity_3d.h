@@ -33,12 +33,12 @@ class vgl_compute_similarity_3d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-   vgl_compute_similarity_3d() {}
+   vgl_compute_similarity_3d() = default;
 
    vgl_compute_similarity_3d(std::vector<vgl_point_3d<T> > const& points1,
                              std::vector<vgl_point_3d<T> > const& points2);
 
-  ~vgl_compute_similarity_3d() {}
+  ~vgl_compute_similarity_3d() = default;
 
   // Operations---------------------------------------------------------------
 

@@ -27,11 +27,11 @@ class vcsl_length_unit
 
  protected:
   // Default constructor
-  vcsl_length_unit() {}
+  vcsl_length_unit() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_length_unit() {}
+  virtual ~vcsl_length_unit() = default;
 
   //***************************************************************************
   // Status report

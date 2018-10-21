@@ -21,6 +21,7 @@
 class vcsl_utm
   : public vcsl_geographic
 {
+ private:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -30,7 +31,7 @@ class vcsl_utm
 
  public:
   // Destructor
-  virtual ~vcsl_utm() {}
+  virtual ~vcsl_utm() = default;
 };
 
 #endif // vcsl_utm_h_

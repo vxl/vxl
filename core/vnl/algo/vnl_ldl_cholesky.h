@@ -41,7 +41,7 @@ class VNL_ALGO_EXPORT vnl_ldl_cholesky
 
   //: Make cholesky decomposition of M optionally computing the reciprocal condition number.
   vnl_ldl_cholesky(vnl_matrix<double> const& M, Operation mode = verbose);
- ~vnl_ldl_cholesky() {}
+ ~vnl_ldl_cholesky() = default;
 
   //: Solve LS problem M x = b
   vnl_vector<double> solve(vnl_vector<double> const& b) const;

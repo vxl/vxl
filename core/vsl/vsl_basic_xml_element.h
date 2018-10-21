@@ -36,7 +36,7 @@ class vsl_basic_xml_element
     : tag_(std::move(tag)), attrs_(std::move(attrs)) {}
 
   //destructor
-  ~vsl_basic_xml_element() {}
+  ~vsl_basic_xml_element() = default;
 
   //: overloaded methods to add attribute values
   void add_attribute(std::string attr_name, std::string value);

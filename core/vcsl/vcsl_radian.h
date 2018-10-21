@@ -25,11 +25,11 @@ class vcsl_radian
   //***************************************************************************
 
   // Default constructor
-  vcsl_radian() {}
+  vcsl_radian() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_radian() {}
+  virtual ~vcsl_radian() = default;
 
   //***************************************************************************
   // Status report

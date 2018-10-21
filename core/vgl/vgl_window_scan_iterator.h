@@ -50,7 +50,7 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
   { set_window_corners(x - r, y - r, x + r, y + r); }
 
   //: makes uninitialized iterator.
-  inline vgl_window_scan_iterator() {}
+  inline vgl_window_scan_iterator() = default;
 
   //: region is [x1, x2] x [y1, y2].  No assumption about x1<x2 or y1<y2.
   inline vgl_window_scan_iterator(T x1_, T y1_, T x2_, T y2_)

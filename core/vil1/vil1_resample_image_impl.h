@@ -21,7 +21,7 @@ class vil1_resample_image_impl : public vil1_image_impl
 {
  public:
   vil1_resample_image_impl(vil1_image const &underlying, unsigned nw, unsigned nh);
-  ~vil1_resample_image_impl() {}
+  ~vil1_resample_image_impl() = default;
 
   //: these inlines partly document the semantics of vil1_resample_image.
   int planes() const { return base.planes(); }

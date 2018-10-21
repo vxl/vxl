@@ -37,8 +37,8 @@ class vgl_h_matrix_3d
  protected:
   vnl_matrix_fixed<T,4,4> t12_matrix_;
  public:
-  vgl_h_matrix_3d() {}
- ~vgl_h_matrix_3d() {}
+  vgl_h_matrix_3d() = default;
+ ~vgl_h_matrix_3d() = default;
   //: Copy constructor
   vgl_h_matrix_3d(vgl_h_matrix_3d<T> const& M) : t12_matrix_(M.get_matrix()) {}
   //: Constructor from a 4x4 matrix, and implicit cast from vnl_matrix_fixed<T,4,4>

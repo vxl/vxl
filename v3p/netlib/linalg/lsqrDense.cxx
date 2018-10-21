@@ -25,9 +25,7 @@ lsqrDense::lsqrDense()
 }
 
 
-lsqrDense::~lsqrDense()
-{
-}
+lsqrDense::~lsqrDense() = default;
 
 
 void

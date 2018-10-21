@@ -35,7 +35,7 @@ class vcsl_rotation
   vcsl_rotation() : mode_2d_(false) {}
 
   // Destructor
-  virtual ~vcsl_rotation() {}
+  virtual ~vcsl_rotation() = default;
 
   //***************************************************************************
   // Status report

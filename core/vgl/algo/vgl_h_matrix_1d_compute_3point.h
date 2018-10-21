@@ -25,8 +25,8 @@
 class vgl_h_matrix_1d_compute_3point : public vgl_h_matrix_1d_compute
 {
  public:
-  vgl_h_matrix_1d_compute_3point(void) {}
-  ~vgl_h_matrix_1d_compute_3point() {}
+  vgl_h_matrix_1d_compute_3point(void) = default;
+  ~vgl_h_matrix_1d_compute_3point() = default;
  protected:
   virtual bool
     compute_cool_homg(const std::vector<vgl_homg_point_1d<double> > & points1,

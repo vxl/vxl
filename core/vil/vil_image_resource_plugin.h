@@ -30,7 +30,7 @@ class vil_image_resource_plugin : public vil_image_resource
   vil_image_resource_plugin() : filetype_(""), colour_(""), width_(-1), height_(-1) {}
 
   //: Destructor
-  virtual ~vil_image_resource_plugin() {}
+  virtual ~vil_image_resource_plugin() = default;
 
   //: Name of the class
   virtual std::string is_a() const { return "vil_image_resource_plugin"; }

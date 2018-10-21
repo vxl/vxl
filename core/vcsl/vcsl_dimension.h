@@ -27,14 +27,14 @@ class vcsl_dimension
 
  protected:
   // Default constructor
-  vcsl_dimension() {}
+  vcsl_dimension() = default;
 
  public:
   // Copy constructor
   vcsl_dimension(vcsl_dimension const&) : vbl_ref_count() {}
 
   // Destructor
-  virtual ~vcsl_dimension() {}
+  virtual ~vcsl_dimension() = default;
 
   //***************************************************************************
   // Status report

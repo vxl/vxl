@@ -30,11 +30,11 @@ class vcsl_geodetic
   //***************************************************************************
 
   // Default constructor.
-  vcsl_geodetic() {}
+  vcsl_geodetic() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_geodetic() {}
+  virtual ~vcsl_geodetic() = default;
 };
 
 #endif // vcsl_geodetic_h_

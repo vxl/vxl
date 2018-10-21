@@ -21,8 +21,7 @@ vil1_block_cache_image_impl::vil1_block_cache_image_impl(vil1_image i_, unsigned
 {
 }
 
-vil1_block_cache_image_impl::~vil1_block_cache_image_impl() {
-}
+vil1_block_cache_image_impl::~vil1_block_cache_image_impl() = default;
 
 vil1_image vil1_block_cache_image_impl::get_plane(unsigned int p) const {
   assert((int)p < base.planes());

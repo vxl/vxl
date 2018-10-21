@@ -17,8 +17,8 @@
 class vgl_region_scan_iterator
 {
  protected:
-  inline vgl_region_scan_iterator() {}
-  virtual ~vgl_region_scan_iterator() {}
+  inline vgl_region_scan_iterator() = default;
+  virtual ~vgl_region_scan_iterator() = default;
  public:
 
   //: Resets the scan iterator to before the first scan line

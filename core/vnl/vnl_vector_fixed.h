@@ -101,7 +101,7 @@ class VNL_TEMPLATE_EXPORT vnl_vector_fixed
   // couple of assembly instructions.)
 
   //: Construct an uninitialized n-vector
-  vnl_vector_fixed() {}
+  vnl_vector_fixed() = default;
 
   //: Copy constructor
   //  The dimensions must match.

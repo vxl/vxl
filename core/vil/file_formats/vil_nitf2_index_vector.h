@@ -32,7 +32,7 @@ class vil_nitf2_index_vector : public std::vector<int>
   vil_nitf2_index_vector(const std::vector<int>& v) : std::vector<int>(v) {}
 
   // Destructor
-  virtual ~vil_nitf2_index_vector() {}
+  virtual ~vil_nitf2_index_vector() = default;
 };
 
 inline std::ostream& operator << (std::ostream& os, const vil_nitf2_index_vector& vec)

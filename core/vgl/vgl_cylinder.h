@@ -43,7 +43,7 @@ class vgl_cylinder
   vgl_cylinder(vgl_point_3d<Type> cntr, Type rad, Type len, vgl_vector_3d<Type> orient)
     :center_(cntr), radius_(rad), length_(len), orient_(orient) {}
 
-  ~vgl_cylinder(void) {}
+  ~vgl_cylinder(void) = default;
 
   //: getters
   vgl_point_3d<Type> center() const { return center_; }

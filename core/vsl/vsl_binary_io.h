@@ -46,7 +46,7 @@ class vsl_b_ostream
   std::ostream& os() const;
 
   //: Virtual destructor.
-  virtual ~vsl_b_ostream() {}
+  virtual ~vsl_b_ostream() = default;
 
   //: Returns true if the underlying stream has its fail bit set.
   bool operator!() const;
@@ -174,7 +174,7 @@ class vsl_b_istream
   std::istream & is() const;
 
   //: Virtual destructor.so that it can be overloaded
-  virtual ~vsl_b_istream() {}
+  virtual ~vsl_b_istream() = default;
 
   //: Returns true if the underlying stream has its fail bit set.
   bool operator!() const;

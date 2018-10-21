@@ -28,7 +28,7 @@ class VNL_EXPORT vnl_double_2x3 : public vnl_matrix_fixed<double, 2, 3>
   typedef vnl_matrix_fixed<double, 2, 3> Base;
  public:
 
-  vnl_double_2x3() {}
+  vnl_double_2x3() = default;
   vnl_double_2x3(const vnl_double_3& row1, const vnl_double_3& row2)
   {
     vnl_double_2x3& M = *this;

@@ -28,10 +28,10 @@ class vcsl_scale
   //***************************************************************************
 
   // Default constructor
-  vcsl_scale() {}
+  vcsl_scale() = default;
 
   // Destructor
-  virtual ~vcsl_scale() {}
+  virtual ~vcsl_scale() = default;
 
   //***************************************************************************
   // Status report

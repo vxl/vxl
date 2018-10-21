@@ -32,7 +32,7 @@ class vcsl_coordinate_system
 
  protected:
   // Default constructor
-  vcsl_coordinate_system() {}
+  vcsl_coordinate_system() = default;
 
  public:
   // Copy constructor
@@ -40,7 +40,7 @@ class vcsl_coordinate_system
     : vbl_ref_count(), axes_(c.axes_) {}
 
   // Destructor
-  virtual ~vcsl_coordinate_system() {}
+  virtual ~vcsl_coordinate_system() = default;
 
   //***************************************************************************
   // Status report

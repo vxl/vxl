@@ -28,7 +28,7 @@ class vcsl_spherical
   vcsl_spherical();
 
   // Destructor
-  virtual ~vcsl_spherical() {}
+  virtual ~vcsl_spherical() = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>

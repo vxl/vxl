@@ -15,9 +15,7 @@ vnl_brent::vnl_brent(vnl_cost_function* functor)
 {
 }
 
-vnl_brent::~vnl_brent()
-{
-}
+vnl_brent::~vnl_brent() = default;
 
 double vnl_brent::minimize_given_bounds(double ax, double bx, double cx,
                                         double tol,

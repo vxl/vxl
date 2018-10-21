@@ -334,7 +334,7 @@ struct tiff_pyramid_level
      nplanes_(nplanes), pix_fmt_(fmt), cur_level_(0)
   {}
 
-  ~tiff_pyramid_level() {}
+  ~tiff_pyramid_level() = default;
 
   //:the tiff header index
   unsigned header_index_;

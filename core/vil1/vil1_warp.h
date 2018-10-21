@@ -16,7 +16,7 @@
 class vil1_warp_mapping
 {
  public:
-  virtual ~vil1_warp_mapping() {}
+  virtual ~vil1_warp_mapping() = default;
   virtual void forward_map(double x1, double y1, double* x2, double* y2) const = 0;
   virtual void inverse_map(double x2, double y2, double* x1, double* y1) const = 0;
 };

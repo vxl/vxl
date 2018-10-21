@@ -15,8 +15,8 @@
 class vgl_h_matrix_1d_compute_linear : public vgl_h_matrix_1d_compute
 {
  public:
-  vgl_h_matrix_1d_compute_linear(void) {}
-  ~vgl_h_matrix_1d_compute_linear() {}
+  vgl_h_matrix_1d_compute_linear(void) = default;
+  ~vgl_h_matrix_1d_compute_linear() = default;
  protected:
   virtual bool
     compute_cool_homg(const std::vector<vgl_homg_point_1d<double> > & points1,

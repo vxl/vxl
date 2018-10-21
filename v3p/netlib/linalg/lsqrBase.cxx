@@ -46,9 +46,7 @@ lsqrBase::lsqrBase()
 }
 
 
-lsqrBase::~lsqrBase()
-{
-}
+lsqrBase::~lsqrBase() = default;
 
 
 unsigned int

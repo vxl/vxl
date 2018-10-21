@@ -36,7 +36,7 @@ struct vil_rgba
   inline T B() const { return b; }
   inline T A() const { return a; }
 
-  vil_rgba() {}
+  vil_rgba() = default;
 
   //: Create grey (v,v,v,1) vil_rgba cell from value v.
   // This provides a conversion from T to vil_rgba<T>, needed by e.g. two constructors in IUE_filter.h.

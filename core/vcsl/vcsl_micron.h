@@ -14,11 +14,11 @@ class vcsl_micron
   //***************************************************************************
 
   // Default constructor
-  vcsl_micron() {}
+  vcsl_micron() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_micron() {}
+  virtual ~vcsl_micron() = default;
 
   //***************************************************************************
   // Status report

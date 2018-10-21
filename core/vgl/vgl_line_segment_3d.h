@@ -29,7 +29,7 @@ class vgl_line_segment_3d
 
  public:
   //: Default constructor - does not initialise!
-  inline vgl_line_segment_3d() {}
+  inline vgl_line_segment_3d() = default;
 
   //: Copy constructor
   inline vgl_line_segment_3d(vgl_line_segment_3d<Type> const& l)
@@ -40,7 +40,7 @@ class vgl_line_segment_3d
                              vgl_point_3d<Type> const& p2)
     : point1_(p1), point2_(p2) {}
 
-  inline ~vgl_line_segment_3d() {}
+  inline ~vgl_line_segment_3d() = default;
 
   inline vgl_point_3d<Type> point1() const { return point1_; } // return a copy
   inline vgl_point_3d<Type> point2() const { return point2_; } // return a copy

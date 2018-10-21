@@ -25,7 +25,7 @@ public:
                             unsigned num_residuals);
 
     //: Destructor
-    virtual ~vpgl_ray_intersect_lsqr() {}
+    virtual ~vpgl_ray_intersect_lsqr() = default;
 
     //: The main function.
     //  Given the parameter vector x, compute the vector of residuals fx.

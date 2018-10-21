@@ -37,9 +37,7 @@ vnl_brent_minimizer::vnl_brent_minimizer(vnl_cost_function& functor)
   set_x_tolerance(1e-6);
 }
 
-vnl_brent_minimizer::~vnl_brent_minimizer()
-{
-}
+vnl_brent_minimizer::~vnl_brent_minimizer() = default;
 
 //: Find the minimum value of f(x) within a<= x <= c.
 // The minimum x is the return value.

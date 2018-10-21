@@ -76,7 +76,7 @@ class vgl_conic_2d_regression
 
   vgl_conic_2d_regression();
 
-  ~vgl_conic_2d_regression(){}
+  ~vgl_conic_2d_regression()= default;
 
   // Operations----------------------------------------------------------------
 

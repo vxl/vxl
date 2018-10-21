@@ -50,7 +50,7 @@ class vil_nitf2_field
   vil_nitf2_array_field* array_field();
 
   // Destructor
-  virtual ~vil_nitf2_field() {}
+  virtual ~vil_nitf2_field() = default;
 
   // Output to stream (required overload as a reminder to implement operator <<)
   virtual std::ostream& output(std::ostream& os) const = 0;

@@ -31,10 +31,10 @@ class vcsl_composition
   //***************************************************************************
 
   // Default constructor
-  vcsl_composition() {}
+  vcsl_composition() = default;
 
   // Destructor
-  virtual ~vcsl_composition() {}
+  virtual ~vcsl_composition() = default;
 
   //***************************************************************************
   // Status report

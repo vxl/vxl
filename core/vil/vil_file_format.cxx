@@ -7,9 +7,7 @@
 #include <cstdlib>
 #include "vil_file_format.h"
 
-vil_file_format::~vil_file_format()
-{
-}
+vil_file_format::~vil_file_format() = default;
 
 #include <vcl_compiler.h>
 #include <vil/vil_config.h> // for list of configured file formats

@@ -43,8 +43,8 @@ class vgl_h_matrix_2d
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  vgl_h_matrix_2d() {}
- ~vgl_h_matrix_2d() {}
+  vgl_h_matrix_2d() = default;
+ ~vgl_h_matrix_2d() = default;
   //: Copy constructor
   vgl_h_matrix_2d(vgl_h_matrix_2d<T> const& M) : t12_matrix_(M.get_matrix()) {}
   //: Constructor from a 3x3 matrix, and implicit cast from vnl_matrix_fixed<T,3,3>

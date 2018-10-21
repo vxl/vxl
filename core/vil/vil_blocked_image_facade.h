@@ -20,7 +20,7 @@ class vil_blocked_image_facade : public vil_blocked_image_resource
  public:
   vil_blocked_image_facade(const vil_image_resource_sptr &src,
                            const unsigned sbi=0, const unsigned sbj=0);
-  virtual ~vil_blocked_image_facade() {}
+  virtual ~vil_blocked_image_facade() = default;
 
   inline virtual unsigned nplanes() const
   { return src_->nplanes();}

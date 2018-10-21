@@ -30,8 +30,8 @@ class vpgl_camera : public vbl_ref_count
 {
  public:
 
-  vpgl_camera() {}
-  virtual ~vpgl_camera() {}
+  vpgl_camera() = default;
+  virtual ~vpgl_camera() = default;
 
   //: class identity functions for casting
   virtual std::string type_name() const { return "vpgl_camera"; }

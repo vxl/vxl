@@ -13,9 +13,7 @@
 #include <vgl/algo/vgl_norm_trans_2d.h>
 
 //: Construct a vgl_h_matrix_2d_compute_rigid_body object.
-vgl_h_matrix_2d_compute_rigid_body::vgl_h_matrix_2d_compute_rigid_body()
-{
-}
+vgl_h_matrix_2d_compute_rigid_body::vgl_h_matrix_2d_compute_rigid_body() = default;
 
 const int TM_UNKNOWNS_COUNT = 3;
 const double DEGENERACY_THRESHOLD = 0.01;

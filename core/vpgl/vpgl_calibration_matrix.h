@@ -33,7 +33,7 @@ class vpgl_calibration_matrix
   vpgl_calibration_matrix();
 
   //: Destructor
-  virtual ~vpgl_calibration_matrix() {}
+  virtual ~vpgl_calibration_matrix() = default;
 
   //: Construct using all of the camera parameters.
   // Must satisfy the following requirements: x,y_scales must be > 0, focal_length must be not equal to 0.

@@ -33,7 +33,7 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
                    unsigned num_unknowns, unsigned num_residuals);
 
   //: Destructor
-  virtual ~vpgl_adjust_lsqr() {}
+  virtual ~vpgl_adjust_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -55,7 +55,7 @@ class vpgl_adjust_lsqr : public vnl_least_squares_function
 class vpgl_rational_adjust
 {
  public:
-  ~vpgl_rational_adjust(){}
+  ~vpgl_rational_adjust()= default;
 
   static bool adjust(vpgl_rational_camera<double> const& initial_rcam,
                      std::vector<vgl_point_2d<double> > img_pts,

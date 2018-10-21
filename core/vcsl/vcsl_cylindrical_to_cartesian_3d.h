@@ -25,11 +25,11 @@ class vcsl_cylindrical_to_cartesian_3d
   //***************************************************************************
 
   // Default constructor
-  vcsl_cylindrical_to_cartesian_3d() {}
+  vcsl_cylindrical_to_cartesian_3d() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_cylindrical_to_cartesian_3d() {}
+  virtual ~vcsl_cylindrical_to_cartesian_3d() = default;
 
   //***************************************************************************
   // Status report

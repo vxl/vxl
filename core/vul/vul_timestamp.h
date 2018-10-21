@@ -23,7 +23,7 @@ class vul_timestamp
   //: Constructor
   vul_timestamp() { this->touch(); }
   //: Destructor
-  virtual ~vul_timestamp() {}
+  virtual ~vul_timestamp() = default;
 
   //: Get a new timestamp
   void touch() { timestamp_ = get_unique_timestamp(); }

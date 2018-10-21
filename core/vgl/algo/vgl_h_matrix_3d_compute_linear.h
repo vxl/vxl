@@ -41,7 +41,7 @@ class vgl_h_matrix_3d_compute_linear : public vgl_h_matrix_3d_compute
                             vgl_h_matrix_3d<double>& H);
 
  public:
-   vgl_h_matrix_3d_compute_linear() {}
+   vgl_h_matrix_3d_compute_linear() = default;
    int minimum_number_of_correspondences() const { return 5; }
 };
 

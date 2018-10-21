@@ -28,7 +28,7 @@ typedef double TruePixelType;
 class CheckPixel
 {
  public:
-  virtual ~CheckPixel() { }
+  virtual ~CheckPixel() = default;
   virtual bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const = 0;
 };
 

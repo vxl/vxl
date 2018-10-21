@@ -24,7 +24,7 @@ class vpgl_lens_distortion
 {
  public:
 
-  virtual ~vpgl_lens_distortion(){}
+  virtual ~vpgl_lens_distortion()= default;
 
   //: Distort a projected point on the image plane
   virtual vgl_homg_point_2d<T> distort( const vgl_homg_point_2d<T>& point ) const = 0;

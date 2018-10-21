@@ -27,7 +27,7 @@ class vcsl_cartesian_2d
   vcsl_cartesian_2d();
 
   // Destructor
-  virtual ~vcsl_cartesian_2d() {}
+  virtual ~vcsl_cartesian_2d() = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
