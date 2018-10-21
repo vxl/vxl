@@ -1,4 +1,4 @@
-#include <math.h>
+#include <cmath>
 #include <bsol/bsol_algs.h>
 #include "betr_gridded_geo_polygon_3d.h"
 void betr_gridded_geo_polygon_3d::construct_grid(){

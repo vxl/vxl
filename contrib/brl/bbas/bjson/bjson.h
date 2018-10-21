@@ -165,9 +165,9 @@ license you like.
 
 #ifndef JSON_CONFIG_H_INCLUDED
 #define JSON_CONFIG_H_INCLUDED
-#include <stddef.h>
+#include <cstddef>
 #include <string> //typedef String
-#include <stdint.h> //typedef int64_t, uint64_t
+#include <cstdint> //typedef int64_t, uint64_t
 
 /// If defined, indicates that json library is embedded in CppTL library.
 //# define JSON_IN_CPPTL 1
@@ -2130,7 +2130,7 @@ JSON_API JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM&, const Value& root);
 #ifndef CPPTL_JSON_ASSERTIONS_H_INCLUDED
 #define CPPTL_JSON_ASSERTIONS_H_INCLUDED
 
-#include <stdlib.h>
+#include <cstdlib>
 #include <sstream>
 
 #if !defined(JSON_IS_AMALGAMATION)

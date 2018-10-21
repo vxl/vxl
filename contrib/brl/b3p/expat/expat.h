@@ -6,7 +6,7 @@ See the file COPYING for copying permission.
 #ifndef XmlParse_INCLUDED
 #define XmlParse_INCLUDED 1
 
-#include <stdlib.h>
+#include <cstdlib>
 
 #include "expatDllConfig.h"
 
