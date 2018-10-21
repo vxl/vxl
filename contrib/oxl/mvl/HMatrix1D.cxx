@@ -16,16 +16,10 @@
 //--------------------------------------------------------------
 //
 //: Default constructor
-HMatrix1D::HMatrix1D()
-{
-}
+HMatrix1D::HMatrix1D() = default;
 
 //: Copy constructor
-HMatrix1D::HMatrix1D(const HMatrix1D& M)
-  : t12_matrix_(M.t12_matrix_)
-  , t21_matrix_(M.t21_matrix_)
-{
-}
+HMatrix1D::HMatrix1D(const HMatrix1D& M) = default;
 
 //--------------------------------------------------------------
 //
@@ -60,9 +54,7 @@ HMatrix1D::HMatrix1D (std::istream &is)
 }
 
 //: Destructor
-HMatrix1D::~HMatrix1D()
-{
-}
+HMatrix1D::~HMatrix1D() = default;
 
 // == OPERATIONS ==
 

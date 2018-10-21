@@ -6,9 +6,7 @@
 #include "vpyr_2_pyramid.h"
 
 template <class TLevel>
-vpyr_2_pyramid<TLevel>::vpyr_2_pyramid()
-{
-}
+vpyr_2_pyramid<TLevel>::vpyr_2_pyramid() = default;
 
 #if 0 // method commented out
 template <class TLevel>

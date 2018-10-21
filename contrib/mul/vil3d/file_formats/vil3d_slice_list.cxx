@@ -18,11 +18,9 @@
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/file_formats/vil3d_dicom.h>
 
-vil3d_slice_list_format::vil3d_slice_list_format() {}
+vil3d_slice_list_format::vil3d_slice_list_format() = default;
 
-vil3d_slice_list_format::~vil3d_slice_list_format()
-{
-}
+vil3d_slice_list_format::~vil3d_slice_list_format() = default;
 
 // Look for a set of filenames that match the glob spec in filename
 // The globbing format expects only '#' to represent numbers.
@@ -185,9 +183,7 @@ slices_(std::move(images))
 {
 }
 
-vil3d_slice_list_image::~vil3d_slice_list_image()
-{
-}
+vil3d_slice_list_image::~vil3d_slice_list_image() = default;
 
 //: Dimensions:  nplanes x ni x nj x nk.
 // This concept is treated as a synonym to components.

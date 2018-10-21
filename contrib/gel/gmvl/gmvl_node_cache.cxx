@@ -11,13 +11,9 @@
 #include <vcl_compiler.h>
 
 // constructors and destructors
-gmvl_node_cache::gmvl_node_cache()
-{
-}
+gmvl_node_cache::gmvl_node_cache() = default;
 
-gmvl_node_cache::~gmvl_node_cache()
-{
-}
+gmvl_node_cache::~gmvl_node_cache() = default;
 
 // trivial accessors
 void gmvl_node_cache::add( const gmvl_node_sptr node)

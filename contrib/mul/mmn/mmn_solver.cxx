@@ -19,17 +19,13 @@
 // Dflt ctor
 //=======================================================================
 
-mmn_solver::mmn_solver()
-{
-}
+mmn_solver::mmn_solver() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mmn_solver::~mmn_solver()
-{
-}
+mmn_solver::~mmn_solver() = default;
 
 
 //: Initialise from a string stream

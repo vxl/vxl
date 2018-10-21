@@ -49,9 +49,7 @@ FMatrixSkew::FMatrixSkew(const vnl_matrix<double>& f_matrix)
 //
 //: Destructor.
 
-FMatrixSkew::~FMatrixSkew()
-{
-}
+FMatrixSkew::~FMatrixSkew() = default;
 
 
 //--------------------------------------------------------------

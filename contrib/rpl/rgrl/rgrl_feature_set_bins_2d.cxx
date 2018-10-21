@@ -70,9 +70,7 @@ rgrl_feature_set_bins_2d( feature_vector const& features,
 
 
 rgrl_feature_set_bins_2d::
-~rgrl_feature_set_bins_2d()
-{
-}
+~rgrl_feature_set_bins_2d() = default;
 
 
 void

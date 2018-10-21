@@ -43,7 +43,7 @@ class mfpf_pf_cost : public vnl_cost_function
   vgl_vector_2d<double> v_;
   double ds_,dA_;
  public:
-  virtual ~mfpf_pf_cost() {}
+  virtual ~mfpf_pf_cost() = default;
   mfpf_pf_cost(mfpf_point_finder& pf,
                const vimt_image_2d_of<float>& image,
                const vgl_point_2d<double>& p0,
@@ -130,9 +130,7 @@ mfpf_point_finder::mfpf_point_finder()
 // Destructor
 //=======================================================================
 
-mfpf_point_finder::~mfpf_point_finder()
-{
-}
+mfpf_point_finder::~mfpf_point_finder() = default;
 
 //: Size of step between sample points
 void mfpf_point_finder::set_step_size(double s)

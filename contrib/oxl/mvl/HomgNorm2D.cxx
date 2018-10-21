@@ -28,9 +28,7 @@ HomgNorm2D::HomgNorm2D(const std::vector<HomgPoint2D>& points, bool unit_omega):
 }
 
 // Destructor
-HomgNorm2D::~HomgNorm2D()
-{
-}
+HomgNorm2D::~HomgNorm2D() = default;
 
 static bool paranoid = true;
 static void centre(const std::vector<HomgPoint2D>& in, std::vector<HomgPoint2D>& out, double* cx_out, double* cy_out);

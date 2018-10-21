@@ -63,7 +63,7 @@ void mbl_exception_warning(T exception)
     mbl_exception_no_name_in_factory(const std::string& failed_name, const std::string& valid_names):
       std::logic_error(std::string("No such value: ") +failed_name + "\nValid values are: ["+valid_names+"]"),
         failed_value(failed_name), valid_values(valid_names) {}
-    virtual ~mbl_exception_no_name_in_factory() throw() {}
+    virtual ~mbl_exception_no_name_in_factory() throw() = default;
   };
 
 #endif
@@ -93,7 +93,7 @@ void mbl_exception_warning(T exception)
   {
    public:
     mbl_exception_abort(const std::string& comment);
-    virtual ~mbl_exception_abort() throw() {}
+    virtual ~mbl_exception_abort() throw() = default;
   };
 
 #endif
@@ -119,7 +119,7 @@ void mbl_exception_warning(T exception)
    public:
     mbl_exception_parse_error(const std::string &msg)
       : std::runtime_error(msg) {}
-    virtual ~mbl_exception_parse_error() throw() {}
+    virtual ~mbl_exception_parse_error() throw() = default;
   };
 
 #endif
@@ -148,7 +148,7 @@ void mbl_exception_warning(T exception)
      mbl_exception_parse_file_error(const std::string &msg, const std::string& filename):
        mbl_exception_parse_error(filename.empty() ? msg : msg+" in "+filename), filename_(filename) {}
     const char * filename() const {return filename_.c_str();}
-    virtual ~mbl_exception_parse_file_error() throw() {}
+    virtual ~mbl_exception_parse_file_error() throw() = default;
   };
 
 #endif
@@ -189,7 +189,7 @@ void mbl_exception_warning(T exception)
         source1_(source1), source2_(source2) {}
     const char * source1() const {return source1_.c_str();}
     const char * source2() const {return source2_.c_str();}
-    virtual ~mbl_exception_inconsistent_external_data() throw() {}
+    virtual ~mbl_exception_inconsistent_external_data() throw() = default;
   };
 
 #endif
@@ -219,7 +219,7 @@ void mbl_exception_warning(T exception)
           std::string("Couldn't find expected property label: \""+missing+'\"')),
         missing_label(missing)
     {}
-    virtual ~mbl_exception_missing_property() throw() {}
+    virtual ~mbl_exception_missing_property() throw() = default;
   };
 
 #endif
@@ -246,7 +246,7 @@ void mbl_exception_warning(T exception)
     mbl_exception_unused_props(const std::string &fn_name, const std::string &unused_props)
       : mbl_exception_parse_error(fn_name + ": Unused properties found:\n" + unused_props),
         function_name(fn_name), unused_properties(unused_props) {}
-    virtual ~mbl_exception_unused_props() throw() {}
+    virtual ~mbl_exception_unused_props() throw() = default;
   };
 
 #endif
@@ -272,7 +272,7 @@ void mbl_exception_warning(T exception)
    public:
     mbl_exception_read_props_parse_error(const std::string &msg)
       : mbl_exception_parse_error(std::string("mbl_read_props: ") + msg) {}
-    virtual ~mbl_exception_read_props_parse_error() throw() {}
+    virtual ~mbl_exception_read_props_parse_error() throw() = default;
   };
 
 #endif
@@ -305,7 +305,7 @@ void mbl_exception_warning(T exception)
       const std::string &contents)
     : mbl_exception_parse_error(std::string("mbl_parse_block: ") + msg +
       "Contents of block:\n" + contents), msg(msg), contents(contents) {}
-    virtual ~mbl_exception_parse_block_parse_error() throw() {}
+    virtual ~mbl_exception_parse_block_parse_error() throw() = default;
   };
 
 #endif
@@ -353,7 +353,7 @@ void mbl_exception_throw_os_error(const std::string& filename,
     std::string additional_comment;
     mbl_exception_os_error(int errnum, const std::string &file_name,
       const std::string &comment="");
-    virtual ~mbl_exception_os_error() throw() {}
+    virtual ~mbl_exception_os_error() throw() = default;
   };
 
 #endif

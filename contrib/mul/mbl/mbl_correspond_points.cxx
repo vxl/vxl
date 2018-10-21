@@ -17,9 +17,7 @@
 // Dflt ctor
 //=======================================================================
 
-mbl_correspond_points::mbl_correspond_points()
-{
-}
+mbl_correspond_points::mbl_correspond_points() = default;
 
 //: Return index of row in H2 most similar to row i of H1
 unsigned mbl_correspond_points::closest_row(const vnl_matrix<double>& H1,

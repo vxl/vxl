@@ -61,7 +61,7 @@ class rrel_irls
   rrel_irls( int max_iterations = dflt_max_iterations_ );
 
   //: Destructor.
-  ~rrel_irls() {}
+  ~rrel_irls() = default;
 
   // -----------------------------------------------------------
   // Functions related to setting / estimation / access to scale

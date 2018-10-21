@@ -7,9 +7,7 @@ rrel_trunc_quad_obj::rrel_trunc_quad_obj( double T )
 }
 
 
-rrel_trunc_quad_obj::~rrel_trunc_quad_obj()
-{
-}
+rrel_trunc_quad_obj::~rrel_trunc_quad_obj() = default;
 
 
 double

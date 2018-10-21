@@ -52,9 +52,7 @@ void mfpf_region_pdf::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_region_pdf::~mfpf_region_pdf()
-{
-}
+mfpf_region_pdf::~mfpf_region_pdf() = default;
 
 //: Define region and PDF of region
 void mfpf_region_pdf::set(const std::vector<mbl_chord>& roi,

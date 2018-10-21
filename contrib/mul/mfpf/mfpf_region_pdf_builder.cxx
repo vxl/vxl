@@ -58,9 +58,7 @@ void mfpf_region_pdf_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_region_pdf_builder::~mfpf_region_pdf_builder()
-{
-}
+mfpf_region_pdf_builder::~mfpf_region_pdf_builder() = default;
 
 //: Create new mfpf_region_pdf on heap
 mfpf_point_finder* mfpf_region_pdf_builder::new_finder() const

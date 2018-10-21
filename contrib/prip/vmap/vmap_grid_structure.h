@@ -18,7 +18,7 @@
 class vmap_grid_structure
 {
  public :
-  vmap_grid_structure(){}
+  vmap_grid_structure()= default;
   vmap_grid_structure(int arg_width, int arg_height) ;
 
   //: returns the index of the vertex located at i,j

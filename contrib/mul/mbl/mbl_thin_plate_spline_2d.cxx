@@ -37,9 +37,7 @@ mbl_thin_plate_spline_2d::mbl_thin_plate_spline_2d()
 // Destructor
 //=======================================================================
 
-mbl_thin_plate_spline_2d::~mbl_thin_plate_spline_2d()
-{
-}
+mbl_thin_plate_spline_2d::~mbl_thin_plate_spline_2d() = default;
 // First some useful maths functions
 
 #if 0 // unused

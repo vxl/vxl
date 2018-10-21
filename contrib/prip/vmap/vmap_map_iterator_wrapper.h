@@ -18,7 +18,7 @@ class vmap_map_iterator_wrapper
 {
  public:
   //:
-  vmap_map_iterator_wrapper() {}
+  vmap_map_iterator_wrapper() = default;
 
   //:
   vmap_map_iterator_wrapper(vmap_map_iterator_wrapper const& w) :current_(w.current_) {}
@@ -27,7 +27,7 @@ class vmap_map_iterator_wrapper
   vmap_map_iterator_wrapper(It const& w) : current_(w) {}
 
   //:
-  ~vmap_map_iterator_wrapper() {}
+  ~vmap_map_iterator_wrapper() = default;
 
   //:
   vmap_map_iterator_wrapper & operator=(vmap_map_iterator_wrapper const& w)

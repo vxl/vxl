@@ -24,9 +24,7 @@ vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,
   this->init();
 }
 
-vifa_int_face_attr_common::~vifa_int_face_attr_common()
-{
-}
+vifa_int_face_attr_common::~vifa_int_face_attr_common() = default;
 
 
 // ------------------------------------------------------------

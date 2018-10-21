@@ -67,13 +67,12 @@ class vsol_line_3d : public vsol_curve_3d
   //: Copy constructor
   //  no duplication of the points
   //---------------------------------------------------------------------------
-  vsol_line_3d(vsol_line_3d const& other)
-  : vsol_curve_3d(other), p0_(other.p0_), p1_(other.p1_) {}
+  vsol_line_3d(vsol_line_3d const& other) = default;
 
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_line_3d() {}
+  virtual ~vsol_line_3d() = default;
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line_3d, 0 otherwise

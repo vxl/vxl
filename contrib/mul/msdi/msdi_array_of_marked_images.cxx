@@ -51,9 +51,7 @@ void msdi_array_of_marked_images::set(
 // Destructor
 //=======================================================================
 
-msdi_array_of_marked_images::~msdi_array_of_marked_images()
-{
-}
+msdi_array_of_marked_images::~msdi_array_of_marked_images() = default;
 
 unsigned msdi_array_of_marked_images::size() const
 {

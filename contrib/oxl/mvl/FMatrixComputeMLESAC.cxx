@@ -13,7 +13,7 @@ FMatrixComputeMLESAC::FMatrixComputeMLESAC(bool rank2_truncate, double std)
   inthresh_ = (1.96*std_)*(1.96*std_);
 }
 
-FMatrixComputeMLESAC::~FMatrixComputeMLESAC() {}
+FMatrixComputeMLESAC::~FMatrixComputeMLESAC() = default;
 
 // The robust Huber cost function
 double FMatrixComputeMLESAC::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)

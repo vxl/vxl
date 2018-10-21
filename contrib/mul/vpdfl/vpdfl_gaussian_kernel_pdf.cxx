@@ -22,15 +22,11 @@
 
 //=======================================================================
 
-vpdfl_gaussian_kernel_pdf::vpdfl_gaussian_kernel_pdf()
-{
-}
+vpdfl_gaussian_kernel_pdf::vpdfl_gaussian_kernel_pdf() = default;
 
 //=======================================================================
 
-vpdfl_gaussian_kernel_pdf::~vpdfl_gaussian_kernel_pdf()
-{
-}
+vpdfl_gaussian_kernel_pdf::~vpdfl_gaussian_kernel_pdf() = default;
 
 
 //=======================================================================

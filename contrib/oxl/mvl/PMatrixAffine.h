@@ -20,8 +20,8 @@
 class PMatrixAffine : public PMatrix
 {
  public:
-  PMatrixAffine(void) {}
-  ~PMatrixAffine(void) {}
+  PMatrixAffine(void) = default;
+  ~PMatrixAffine(void) = default;
 };
 
 #endif // PMatrixAffine_h_

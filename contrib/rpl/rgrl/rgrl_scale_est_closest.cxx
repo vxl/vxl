@@ -26,9 +26,7 @@ rgrl_scale_est_closest( vcl_unique_ptr<rrel_objective>  obj,
 
 
 rgrl_scale_est_closest::
-~rgrl_scale_est_closest()
-{
-}
+~rgrl_scale_est_closest() = default;
 
 
 rgrl_scale_sptr

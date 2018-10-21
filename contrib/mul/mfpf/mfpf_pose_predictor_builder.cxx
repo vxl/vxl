@@ -41,9 +41,7 @@ void mfpf_pose_predictor_builder::set_n_per_eg(unsigned n)
 // Destructor
 //=======================================================================
 
-mfpf_pose_predictor_builder::~mfpf_pose_predictor_builder()
-{
-}
+mfpf_pose_predictor_builder::~mfpf_pose_predictor_builder() = default;
 
 //: Define sampling region and method
 //  Supplied predictor is partially initialised

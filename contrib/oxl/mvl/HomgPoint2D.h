@@ -28,16 +28,12 @@ class HomgPoint2D : public Homg2D
  public:
   // Constructors/Initializers/Destructors-----------------------------------
 
-  HomgPoint2D () {}
-  HomgPoint2D (const HomgPoint2D& that): Homg2D(that) {}
+  HomgPoint2D () = default;
+  HomgPoint2D (const HomgPoint2D& that) = default;
   HomgPoint2D (double px, double py, double pw = 1.0): Homg2D(px,py,pw) {}
   HomgPoint2D (const vnl_double_3& vector_ptr): Homg2D(vector_ptr) {}
 
-  HomgPoint2D& operator=(const HomgPoint2D& that)
-  {
-    Homg2D::operator=(that);
-    return *this;
-  }
+  HomgPoint2D& operator=(const HomgPoint2D& that) = default;
 
   // Operations------------------------------------------------------------
 

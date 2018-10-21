@@ -20,17 +20,13 @@
 // Dflt ctor
 //=======================================================================
 
-pdf1d_compare_to_pdf_ks::pdf1d_compare_to_pdf_ks()
-{
-}
+pdf1d_compare_to_pdf_ks::pdf1d_compare_to_pdf_ks() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-pdf1d_compare_to_pdf_ks::~pdf1d_compare_to_pdf_ks()
-{
-}
+pdf1d_compare_to_pdf_ks::~pdf1d_compare_to_pdf_ks() = default;
 
 //=======================================================================
 

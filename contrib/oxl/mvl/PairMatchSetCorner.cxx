@@ -44,9 +44,7 @@ PairMatchSetCorner& PairMatchSetCorner::operator=(const PairMatchSetCorner&that)
 }
 
 //: Destructor
-PairMatchSetCorner::~PairMatchSetCorner()
-{
-}
+PairMatchSetCorner::~PairMatchSetCorner() = default;
 
 // Data Control--------------------------------------------------------------
 

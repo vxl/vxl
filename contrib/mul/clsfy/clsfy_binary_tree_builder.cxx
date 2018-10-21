@@ -543,6 +543,4 @@ clsfy_binary_tree_node* clsfy_binary_tree_bnode::create_child(const clsfy_binary
     return new clsfy_binary_tree_bnode(this,op);
 }
 
-clsfy_binary_tree_bnode::~clsfy_binary_tree_bnode()
-{
-}
+clsfy_binary_tree_bnode::~clsfy_binary_tree_bnode() = default;

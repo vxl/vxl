@@ -70,9 +70,7 @@ void mbl_file_data_wrapper<T>::calc_data_size()
 
 //: Default destructor
 template<class T>
-mbl_file_data_wrapper<T>::~mbl_file_data_wrapper()
-{
-}
+mbl_file_data_wrapper<T>::~mbl_file_data_wrapper() = default;
 
 //: return number of items in file
 template<class T>

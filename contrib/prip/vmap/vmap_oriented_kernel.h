@@ -39,7 +39,7 @@ class vmap_oriented_kernel : public TKernel
   vmap_oriented_kernel(map_type & arg) : Base_(arg) {}
 
   //:
-  ~vmap_oriented_kernel() {}
+  ~vmap_oriented_kernel() = default;
 
   //: Before any addition/test
   void initialise() ;

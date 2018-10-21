@@ -27,7 +27,7 @@ class PairMatchSetCorner;
 class HMatrix2DCompute {
 public:
   HMatrix2DCompute() : verbose_(false) { }
-  virtual ~HMatrix2DCompute() { }
+  virtual ~HMatrix2DCompute() = default;
 
   // set this to true for verbose run-time information
   void verbose(bool v) { verbose_ = v; }

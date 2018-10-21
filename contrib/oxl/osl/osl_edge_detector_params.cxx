@@ -26,7 +26,7 @@ osl_edge_detector_params::osl_edge_detector_params()
 }
 #endif
 
-osl_edge_detector_params::~osl_edge_detector_params() { }
+osl_edge_detector_params::~osl_edge_detector_params() = default;
 
 #if 0 // commented out
 //-----------------------------------------------------------------------------

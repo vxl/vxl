@@ -31,7 +31,7 @@ FManifoldProject::FManifoldProject(const FMatrix& Fobj)
 }
 
 //: Construct an FManifoldProject object with the intention of later setting its F.
-FManifoldProject::FManifoldProject() {}
+FManifoldProject::FManifoldProject() = default;
 
 //: Use the given F to correct point pairs.
 void FManifoldProject::set_F(const FMatrix& Fobj)

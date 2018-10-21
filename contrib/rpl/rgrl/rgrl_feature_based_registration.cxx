@@ -48,9 +48,7 @@ rgrl_feature_based_registration( rgrl_data_manager_sptr data )
 }
 
 rgrl_feature_based_registration::
-~rgrl_feature_based_registration()
-{
-}
+~rgrl_feature_based_registration() = default;
 
 void
 rgrl_feature_based_registration::

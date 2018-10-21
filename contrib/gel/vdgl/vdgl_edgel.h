@@ -21,9 +21,9 @@ class vdgl_edgel
  public:
 
   // Constructors/Destructor---------------------------------------------------
-  vdgl_edgel() {}
+  vdgl_edgel() = default;
   vdgl_edgel( const double x, const double y, const double grad= -1, const double theta= 0 );
-  ~vdgl_edgel() {}
+  ~vdgl_edgel() = default;
 
   // Operators-----------------------------------------------------------------
 

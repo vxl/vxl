@@ -20,9 +20,7 @@ BaseTriTensorCompute::BaseTriTensorCompute ()
 }
 
 // Destructor.
-BaseTriTensorCompute::~BaseTriTensorCompute()
-{
-}
+BaseTriTensorCompute::~BaseTriTensorCompute() = default;
 
 //-----------------------------------------------------------------------------
 //

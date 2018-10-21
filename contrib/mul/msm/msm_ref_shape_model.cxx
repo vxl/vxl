@@ -27,9 +27,7 @@ msm_ref_shape_model::msm_ref_shape_model()
 // Destructor
 //=======================================================================
 
-msm_ref_shape_model::~msm_ref_shape_model()
-{
-}
+msm_ref_shape_model::~msm_ref_shape_model() = default;
 
 //: Set up model
 void msm_ref_shape_model::set(const msm_points& mean,

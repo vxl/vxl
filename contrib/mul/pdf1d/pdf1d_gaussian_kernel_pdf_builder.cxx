@@ -12,17 +12,13 @@
 // Dflt ctor
 //=======================================================================
 
-pdf1d_gaussian_kernel_pdf_builder::pdf1d_gaussian_kernel_pdf_builder()
-{
-}
+pdf1d_gaussian_kernel_pdf_builder::pdf1d_gaussian_kernel_pdf_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-pdf1d_gaussian_kernel_pdf_builder::~pdf1d_gaussian_kernel_pdf_builder()
-{
-}
+pdf1d_gaussian_kernel_pdf_builder::~pdf1d_gaussian_kernel_pdf_builder() = default;
 
 //=======================================================================
 

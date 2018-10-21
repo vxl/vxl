@@ -27,15 +27,14 @@ class vsol_orient_box_3d : public vsol_volume_3d
 
  public:
   //: create an empty box
-  vsol_orient_box_3d() {}
+  vsol_orient_box_3d() = default;
 
   //: creates a bounding box from an oriented box
   vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box);
 
-  vsol_orient_box_3d(vsol_orient_box_3d const& b)
-    : vsol_volume_3d(b), box_(b.box_), orient_box_(b.orient_box_) {}
+  vsol_orient_box_3d(vsol_orient_box_3d const& b) = default;
 
-  ~vsol_orient_box_3d() {}
+  ~vsol_orient_box_3d() = default;
 
   virtual vsol_spatial_object_3d* clone(void) const {return new vsol_orient_box_3d(*this); }
 

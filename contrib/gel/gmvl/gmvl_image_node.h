@@ -17,7 +17,7 @@ class gmvl_image_node : public gmvl_node
 {
  public:
   gmvl_image_node(vil1_image image) : image_(image) { type_="gmvl_image_node"; }
-  ~gmvl_image_node() {}
+  ~gmvl_image_node() = default;
 
   vil1_image image() const { return image_; }
 

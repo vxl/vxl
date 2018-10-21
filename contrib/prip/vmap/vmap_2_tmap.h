@@ -197,8 +197,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
  public:
 
   //:
-  vmap_2_tmap()
-  {}
+  vmap_2_tmap() = default;
 
   //:
   vmap_2_tmap(self_type const& m) ;

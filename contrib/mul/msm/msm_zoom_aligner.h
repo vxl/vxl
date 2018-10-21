@@ -16,7 +16,7 @@ class msm_zoom_aligner : public msm_aligner
 {
  public:
 
-  virtual ~msm_zoom_aligner() {}
+  virtual ~msm_zoom_aligner() = default;
 
   //: Return number of parameters defining the transformation
   virtual unsigned size() const { return 3; }

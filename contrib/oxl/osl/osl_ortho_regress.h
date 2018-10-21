@@ -37,7 +37,7 @@ class osl_ortho_regress
 
   osl_ortho_regress() { reset(); }
 
-  ~osl_ortho_regress() { }
+  ~osl_ortho_regress() = default;
 
   void add_point(double x, double y) {
     ++S1;

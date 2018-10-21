@@ -16,9 +16,7 @@ rgrl_convergence_on_weighted_error( double tol )
 }
 
 rgrl_convergence_on_weighted_error::
-~rgrl_convergence_on_weighted_error()
-{
-}
+~rgrl_convergence_on_weighted_error() = default;
 
 rgrl_converge_status_sptr
 rgrl_convergence_on_weighted_error::

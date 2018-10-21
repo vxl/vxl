@@ -17,14 +17,10 @@
 
 // default constructor
 
-vtol_topology_io::vtol_topology_io()
-{
-}
+vtol_topology_io::vtol_topology_io() = default;
 
 // default destructor
-vtol_topology_io::~vtol_topology_io()
-{
-}
+vtol_topology_io::~vtol_topology_io() = default;
 
 
 // write out a list of topology objects

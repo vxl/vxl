@@ -19,9 +19,7 @@
 #include <vcl_cassert.h>
 
 // Default Constructor
-msm_curve::msm_curve()
-{
-}
+msm_curve::msm_curve() = default;
 
 //: Define as range of indices [lo,hi]
 msm_curve::msm_curve(unsigned lo, unsigned hi,
@@ -220,9 +218,7 @@ void vsl_print_summary(std::ostream& os,const msm_curve& b)
 
 
 //: Default constructor
-msm_curves::msm_curves()
-{
-}
+msm_curves::msm_curves() = default;
 
 
 //: Construct as a single curve

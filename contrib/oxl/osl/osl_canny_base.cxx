@@ -41,7 +41,7 @@ osl_canny_base::osl_canny_base(float sigma, float low, float high, bool v)
 }
 
 //: Destructor does nothing at all.
-osl_canny_base::~osl_canny_base() {  }
+osl_canny_base::~osl_canny_base() = default;
 
 
 //-----------------------------------------------------------------------------

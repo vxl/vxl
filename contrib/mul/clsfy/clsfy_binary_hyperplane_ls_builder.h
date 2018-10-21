@@ -19,7 +19,7 @@ class clsfy_binary_hyperplane_ls_builder : public clsfy_builder_base
 {
  public:
   // Dflt ctor
-  clsfy_binary_hyperplane_ls_builder() {}
+  clsfy_binary_hyperplane_ls_builder() = default;
 
   //: Create a new untrained linear classifier with binary output
   virtual clsfy_classifier_base* new_classifier() const

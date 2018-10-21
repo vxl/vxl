@@ -29,17 +29,13 @@ class HomgLine2D : public Homg2D
 {
  public:
 
-  HomgLine2D () {}
-  HomgLine2D (const HomgLine2D& that): Homg2D(that) {}
+  HomgLine2D () = default;
+  HomgLine2D (const HomgLine2D& that) = default;
   HomgLine2D (double px, double py, double pw): Homg2D (px, py, pw) {}
   explicit HomgLine2D (const vnl_double_3& vector_ptr): Homg2D (vector_ptr) {}
- ~HomgLine2D () {}
+ ~HomgLine2D () = default;
 
-  HomgLine2D& operator=(const HomgLine2D& that)
-  {
-    Homg2D::operator=(that);
-    return *this;
-  }
+  HomgLine2D& operator=(const HomgLine2D& that) = default;
 
   //: Return true iff the line is the line at infinity.
   //  If tol == 0, x() and y() must be exactly 0.

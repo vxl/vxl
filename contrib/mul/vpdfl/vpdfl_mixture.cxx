@@ -30,9 +30,7 @@
 //=======================================================================
 
 
-vpdfl_mixture::vpdfl_mixture()
-{
-}
+vpdfl_mixture::vpdfl_mixture() = default;
 
 vpdfl_mixture::vpdfl_mixture(const vpdfl_mixture& m):
   vpdfl_pdf_base()

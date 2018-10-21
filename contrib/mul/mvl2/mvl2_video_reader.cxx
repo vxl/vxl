@@ -13,9 +13,7 @@
 #include "mvl2_video_reader.h"
 #include <vcl_compiler.h>
 
-mvl2_video_reader::mvl2_video_reader()
-{
-}
+mvl2_video_reader::mvl2_video_reader() = default;
 
 mvl2_video_reader::~mvl2_video_reader()
 {

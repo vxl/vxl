@@ -18,17 +18,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_region_definer::mfpf_region_definer()
-{
-}
+mfpf_region_definer::mfpf_region_definer() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_region_definer::~mfpf_region_definer()
-{
-}
+mfpf_region_definer::~mfpf_region_definer() = default;
 
 //: Initialise from a string stream
 bool mfpf_region_definer::set_from_stream(std::istream &is)

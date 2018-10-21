@@ -22,15 +22,11 @@
 
 //=======================================================================
 
-pdf1d_kernel_pdf::pdf1d_kernel_pdf()
-{
-}
+pdf1d_kernel_pdf::pdf1d_kernel_pdf() = default;
 
 //=======================================================================
 
-pdf1d_kernel_pdf::~pdf1d_kernel_pdf()
-{
-}
+pdf1d_kernel_pdf::~pdf1d_kernel_pdf() = default;
 
 //=======================================================================
 //: Initialise so all kernels have the same width

@@ -52,8 +52,8 @@
 
 typedef unsigned int uint;
 
-class section__ { protected: section__(){} public: virtual ~section__(){} };
-template <class T> class section_ : public section__ { protected: section_():section__(){} virtual ~section_(){} };
+class section__ { protected: section__()= default; public: virtual ~section__()= default; };
+template <class T> class section_ : public section__ { protected: section_():section__(){} virtual ~section_()= default; };
 
 template <class T, uint N> class section_iterator; // forward declaration
 

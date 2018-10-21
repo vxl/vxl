@@ -28,7 +28,7 @@ class clsfy_builder_base
 {
  public:
   // Destructor
-  virtual ~clsfy_builder_base() {}
+  virtual ~clsfy_builder_base() = default;
 
   //: Create empty model
   virtual clsfy_classifier_base* new_classifier() const = 0;

@@ -12,9 +12,7 @@ rrel_cauchy_obj::rrel_cauchy_obj( double C )
 }
 
 
-rrel_cauchy_obj::~rrel_cauchy_obj()
-{
-}
+rrel_cauchy_obj::~rrel_cauchy_obj() = default;
 
 
 double

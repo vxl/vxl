@@ -2,13 +2,9 @@
 #include "vmal_homog2d.h"
 #include <vnl/algo/vnl_svd.h>
 
-vmal_homog2d::vmal_homog2d()
-{
-}
+vmal_homog2d::vmal_homog2d() = default;
 
-vmal_homog2d::~vmal_homog2d()
-{
-}
+vmal_homog2d::~vmal_homog2d() = default;
 
 void vmal_homog2d::compute_homo(const std::vector<vnl_double_3 > &pima1,
                                 const std::vector<vnl_double_3 > &pima2,

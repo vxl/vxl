@@ -55,7 +55,7 @@ class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), order_(n), width_(w), height_(h) {}
   inline vipl_moment(vipl_moment const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), order_(A.order()), width_(A.width()), height_(A.height()) {}
-  inline ~vipl_moment() {}
+  inline ~vipl_moment() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

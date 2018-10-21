@@ -31,7 +31,7 @@ class vipl_sobel : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>() {}
   inline vipl_sobel(vipl_sobel const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A) {}
-  inline ~vipl_sobel() {}
+  inline ~vipl_sobel() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

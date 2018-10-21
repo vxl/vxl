@@ -52,9 +52,7 @@ void mbl_data_array_ptr_wrapper<T>::set(const T*const* data, unsigned long n)
 
 //: Default destructor
 template<class T>
-mbl_data_array_ptr_wrapper<T>::~mbl_data_array_ptr_wrapper()
-{
-}
+mbl_data_array_ptr_wrapper<T>::~mbl_data_array_ptr_wrapper() = default;
 
 //: Number of objects available
 template<class T>

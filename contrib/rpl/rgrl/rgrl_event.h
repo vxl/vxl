@@ -26,13 +26,13 @@ class rgrl_event: public vbl_ref_count
 {
  public:
   //:
-  rgrl_event() {}
+  rgrl_event() = default;
 
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   rgrl_event(rgrl_event const&) : vbl_ref_count() {}
 
   //:
-  virtual ~rgrl_event() {}
+  virtual ~rgrl_event() = default;
 
   //: Return the string name associated with the event
   virtual std::string name(void) const = 0;

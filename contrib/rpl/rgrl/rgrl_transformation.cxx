@@ -27,9 +27,7 @@ rgrl_transformation( const vnl_matrix<double>& cov )
 }
 
 rgrl_transformation::
-~rgrl_transformation()
-{
-}
+~rgrl_transformation() = default;
 
 void
 rgrl_transformation::

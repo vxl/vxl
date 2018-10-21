@@ -22,13 +22,13 @@
 class rgrl_object_observer
 {
  public:
-  rgrl_object_observer() {}
+  rgrl_object_observer() = default;
   rgrl_object_observer(rgrl_command_sptr c,
                        rgrl_event_sptr event )
     :command_(c),
      event_(event)
   {}
-  ~rgrl_object_observer(){}
+  ~rgrl_object_observer()= default;
   rgrl_command_sptr command_;
   rgrl_event_sptr event_;
 };

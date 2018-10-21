@@ -21,10 +21,10 @@ class vimt3d_image_3d : public vimt_image
 
  public:
   //: Dflt ctor
-  vimt3d_image_3d() {}
+  vimt3d_image_3d() = default;
 
   //: Destructor
-  virtual ~vimt3d_image_3d() {}
+  virtual ~vimt3d_image_3d() = default;
 
   //: Return dimensionality of image
   virtual unsigned n_dims() const { return 3; }

@@ -39,7 +39,7 @@ protected:
 
  public:
 
-  virtual ~msm_subset_aligner() {}
+  virtual ~msm_subset_aligner() = default;
 
   //: Aligner to apply to subset
   const msm_aligner& aligner() const { return aligner_; }

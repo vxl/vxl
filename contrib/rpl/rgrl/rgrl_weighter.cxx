@@ -5,6 +5,4 @@
 #include "rgrl_weighter.h"
 
 rgrl_weighter::
-~rgrl_weighter()
-{
-}
+~rgrl_weighter() = default;

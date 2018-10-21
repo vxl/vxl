@@ -80,7 +80,7 @@ void vmap_2_tmap< V,E,F,D >::initialise_faces(int arg_nb_faces)
 }
 
 template <class V, class E, class F, class D>
-vmap_2_tmap< V,E,F,D >::~ vmap_2_tmap() {}
+vmap_2_tmap< V,E,F,D >::~ vmap_2_tmap() = default;
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D > & vmap_2_tmap< V,E,F,D >::operator=(self_type const& tmap)

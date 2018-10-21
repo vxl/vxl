@@ -108,9 +108,7 @@ void msdi_marked_images_from_files::set(const std::string& image_dir,
 // Destructor
 //=======================================================================
 
-msdi_marked_images_from_files::~msdi_marked_images_from_files()
-{
-}
+msdi_marked_images_from_files::~msdi_marked_images_from_files() = default;
 
 //: Reflect current points
 void msdi_marked_images_from_files::reflect_points()

@@ -33,9 +33,7 @@ samples_(n), nPresented_(0), rand(9667566)
 
 template <class T>
 mbl_stochastic_data_collector<T>::
-~mbl_stochastic_data_collector()
-{
-}
+~mbl_stochastic_data_collector() = default;
 //=======================================================================
 
 //: Clear any stored data

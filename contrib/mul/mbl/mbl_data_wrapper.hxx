@@ -14,15 +14,11 @@
 
 //: Default constructor
 template<class T>
-mbl_data_wrapper<T>::mbl_data_wrapper()
-{
-}
+mbl_data_wrapper<T>::mbl_data_wrapper() = default;
 
 //: Default destructor
 template<class T>
-mbl_data_wrapper<T>::~mbl_data_wrapper()
-{
-}
+mbl_data_wrapper<T>::~mbl_data_wrapper() = default;
 
 //: Move to element n
 //  First example has index 0

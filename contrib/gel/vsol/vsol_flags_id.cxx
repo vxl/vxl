@@ -5,10 +5,6 @@
 
 int vsol_flags_id::tagcount_=0;
 
-vsol_flags_id::vsol_flags_id()
-{
-}
+vsol_flags_id::vsol_flags_id() = default;
 
-vsol_flags_id::~vsol_flags_id()
-{
-}
+vsol_flags_id::~vsol_flags_id() = default;

@@ -23,15 +23,10 @@
 //--------------------------------------------------------------
 //
 //: Default constructor
-HMatrix3D::HMatrix3D()
-{
-}
+HMatrix3D::HMatrix3D() = default;
 
 //: Copy constructor
-HMatrix3D::HMatrix3D(const HMatrix3D& M):
-  Base(M)
-{
-}
+HMatrix3D::HMatrix3D(const HMatrix3D& M) = default;
 
 //--------------------------------------------------------------
 //
@@ -79,9 +74,7 @@ HMatrix3D::HMatrix3D (const double* t_matrix) :
 }
 
 //: Destructor
-HMatrix3D::~HMatrix3D()
-{
-}
+HMatrix3D::~HMatrix3D() = default;
 
 // == OPERATIONS ==
 

@@ -15,17 +15,13 @@
 // Dflt ctor
 //=======================================================================
 
-pdf1d_epanech_kernel_pdf_builder::pdf1d_epanech_kernel_pdf_builder()
-{
-}
+pdf1d_epanech_kernel_pdf_builder::pdf1d_epanech_kernel_pdf_builder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-pdf1d_epanech_kernel_pdf_builder::~pdf1d_epanech_kernel_pdf_builder()
-{
-}
+pdf1d_epanech_kernel_pdf_builder::~pdf1d_epanech_kernel_pdf_builder() = default;
 
 //=======================================================================
 

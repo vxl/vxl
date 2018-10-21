@@ -8,9 +8,7 @@
 #include <vsl/vsl_binary_loader.h>
 
 //=======================================================================
-msm_no_limiter::msm_no_limiter()
-{
-}
+msm_no_limiter::msm_no_limiter() = default;
 
 //: Define number of SDs to limit at
 void msm_no_limiter::set_n_sds(double)

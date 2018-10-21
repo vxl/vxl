@@ -551,9 +551,7 @@ match_info( rgrl_feature_sptr to_feat,
 //
 
 rgrl_match_set_from_iterator::
-rgrl_match_set_from_iterator()
-{
-};
+rgrl_match_set_from_iterator() = default;;
 
 
 rgrl_match_set_from_iterator&
@@ -651,9 +649,7 @@ rgrl_match_set_from_iterator( rgrl_match_set* ms,
 
 
 rgrl_match_set_from_to_iterator::
-rgrl_match_set_from_to_iterator()
-{
-};
+rgrl_match_set_from_to_iterator() = default;;
 
 
 rgrl_match_set_from_to_iterator&
@@ -757,9 +753,7 @@ rgrl_match_set_from_to_iterator( MatchInfoIter const& itr )
 //
 
 rgrl_match_set_const_from_iterator::
-rgrl_match_set_const_from_iterator()
-{
-};
+rgrl_match_set_const_from_iterator() = default;;
 
 rgrl_match_set_const_from_iterator::
 rgrl_match_set_const_from_iterator( rgrl_match_set_from_iterator const& from_iter )
@@ -863,9 +857,7 @@ rgrl_match_set_const_from_iterator( rgrl_match_set const* ms,
 //
 
 rgrl_match_set_const_from_to_iterator::
-rgrl_match_set_const_from_to_iterator()
-{
-};
+rgrl_match_set_const_from_to_iterator() = default;;
 
 //: copy constructor
 //  it is used to convert from_to_iterator to const type

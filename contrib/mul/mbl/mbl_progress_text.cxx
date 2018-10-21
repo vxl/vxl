@@ -22,9 +22,7 @@ mbl_progress_text::mbl_progress_text(std::ostream& os/*=std::cout*/)
 //========================================================================
 // Destructor
 //========================================================================
-mbl_progress_text::~mbl_progress_text()
-{
-}
+mbl_progress_text::~mbl_progress_text() = default;
 
 
 //========================================================================

@@ -35,7 +35,7 @@ class rgrl_trans_spline
                      vnl_matrix< double > const& covar,
                      rgrl_transformation_sptr xform = nullptr );
 
-  ~rgrl_trans_spline() {}
+  ~rgrl_trans_spline() = default;
 
   vnl_vector< double > const& get_delta() const { return delta_; }
   void set_covar( vnl_matrix<double> const& cov ) { covar_ = cov; }

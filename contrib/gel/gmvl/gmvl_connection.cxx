@@ -15,9 +15,7 @@ gmvl_connection::gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sp
 {
 }
 
-gmvl_connection::~gmvl_connection()
-{
-}
+gmvl_connection::~gmvl_connection() = default;
 
 // input / output
 

@@ -45,9 +45,9 @@
 class vimt3d_vil3d_v3m_format: public vil3d_file_format
 {
  public:
-  vimt3d_vil3d_v3m_format() {}
+  vimt3d_vil3d_v3m_format() = default;
   //: The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vimt3d_vil3d_v3m_format() {}
+  virtual ~vimt3d_vil3d_v3m_format() = default;
 
   virtual vil3d_image_resource_sptr make_input_image(const char *) const;
 

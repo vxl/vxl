@@ -35,9 +35,7 @@ msm_shape_instance::msm_shape_instance(const msm_shape_model& model)
 // Destructor
 //=======================================================================
 
-msm_shape_instance::~msm_shape_instance()
-{
-}
+msm_shape_instance::~msm_shape_instance() = default;
 
 //: Set up model (retains pointer to model)
 void msm_shape_instance::set_shape_model(const msm_shape_model& model)

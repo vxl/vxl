@@ -88,12 +88,10 @@ inline void swap64_for_big_endian(char *a, unsigned n)
 #endif //VXL_LITTLE_ENDIAN
 
 
-vil3d_gipl_format::vil3d_gipl_format() {}
+vil3d_gipl_format::vil3d_gipl_format() = default;
 
 // The destructor must be virtual so that the memory chunk is destroyed.
-vil3d_gipl_format::~vil3d_gipl_format()
-{
-}
+vil3d_gipl_format::~vil3d_gipl_format() = default;
 
 
 vil3d_image_resource_sptr vil3d_gipl_format::make_input_image(const char *filename) const

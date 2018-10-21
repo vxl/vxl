@@ -47,9 +47,7 @@ const char * vsol_spatial_object_2d::get_name() const
     return SpatialTypes[0];
 }
 
-vsol_spatial_object_2d::~vsol_spatial_object_2d()
-{
-}
+vsol_spatial_object_2d::~vsol_spatial_object_2d() = default;
 
 //: Return IO version number;
 short vsol_spatial_object_2d::version() const

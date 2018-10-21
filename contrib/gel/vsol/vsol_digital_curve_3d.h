@@ -43,7 +43,7 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   vsol_digital_curve_3d(vsol_digital_curve_3d const& other);
 
   // Destructor
-  virtual ~vsol_digital_curve_3d() {}
+  virtual ~vsol_digital_curve_3d() = default;
 
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern

@@ -27,5 +27,4 @@ osl_canny_ox_params::osl_canny_ox_params()
 }
 
 
-osl_canny_ox_params::~osl_canny_ox_params() {
-}
+osl_canny_ox_params::~osl_canny_ox_params() = default;

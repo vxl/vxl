@@ -27,9 +27,7 @@ pdf1d_kernel_pdf_builder::pdf1d_kernel_pdf_builder()
 
 //=======================================================================
 
-pdf1d_kernel_pdf_builder::~pdf1d_kernel_pdf_builder()
-{
-}
+pdf1d_kernel_pdf_builder::~pdf1d_kernel_pdf_builder() = default;
 
 //=======================================================================
 

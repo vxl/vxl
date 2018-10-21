@@ -12,9 +12,7 @@
 
 template<typename T>
 rgrl_set_of<T>::
-rgrl_set_of()
-{
-}
+rgrl_set_of() = default;
 
 
 template<typename T>

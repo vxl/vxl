@@ -42,7 +42,7 @@ class vipl_gradient_dir : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,Pixe
   inline vipl_gradient_dir(vipl_gradient_dir const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A),
              shift_(A.shift()), scale_(A.scale()) {}
-  inline ~vipl_gradient_dir() {}
+  inline ~vipl_gradient_dir() = default;
 
   // -+-+- required method for filters: -+-+-
   bool section_applyop();

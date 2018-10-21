@@ -48,7 +48,7 @@ class vil3d_image_view_base
 
  public:
   // The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil3d_image_view_base() {}
+  virtual ~vil3d_image_view_base() = default;
 
   //: Width
   unsigned ni()  const {return ni_;}

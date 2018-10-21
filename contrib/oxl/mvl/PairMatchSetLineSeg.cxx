@@ -23,9 +23,7 @@ PairMatchSetLineSeg::PairMatchSetLineSeg(LineSegSet& linesegs1, LineSegSet& line
   linesegs2_ = &linesegs2;
 }
 
-PairMatchSetLineSeg::~PairMatchSetLineSeg()
-{
-}
+PairMatchSetLineSeg::~PairMatchSetLineSeg() = default;
 
 //: Extract the point vectors for only the valid matches.
 void PairMatchSetLineSeg::extract_matches(std::vector <HomgLineSeg2D>& linesegs1,

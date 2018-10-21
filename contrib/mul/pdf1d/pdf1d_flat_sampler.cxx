@@ -23,9 +23,7 @@ pdf1d_flat_sampler::pdf1d_flat_sampler():
 // Destructor
 //=======================================================================
 
-pdf1d_flat_sampler::~pdf1d_flat_sampler()
-{
-}
+pdf1d_flat_sampler::~pdf1d_flat_sampler() = default;
 
 
 //=======================================================================

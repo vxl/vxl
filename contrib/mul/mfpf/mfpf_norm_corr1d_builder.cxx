@@ -42,9 +42,7 @@ void mfpf_norm_corr1d_builder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_norm_corr1d_builder::~mfpf_norm_corr1d_builder()
-{
-}
+mfpf_norm_corr1d_builder::~mfpf_norm_corr1d_builder() = default;
 
 //: Create new mfpf_norm_corr1d on heap
 mfpf_point_finder* mfpf_norm_corr1d_builder::new_finder() const

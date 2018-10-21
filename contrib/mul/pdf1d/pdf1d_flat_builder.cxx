@@ -28,9 +28,7 @@ pdf1d_flat_builder::pdf1d_flat_builder()
 // Destructor
 //=======================================================================
 
-pdf1d_flat_builder::~pdf1d_flat_builder()
-{
-}
+pdf1d_flat_builder::~pdf1d_flat_builder() = default;
 
 //=======================================================================
 

@@ -62,9 +62,7 @@ void mbl_data_wrapper_mixer<T>::set(mbl_data_wrapper<T> **wrapper, unsigned long
 
 //: Default destructor
 template<class T>
-mbl_data_wrapper_mixer<T>::~mbl_data_wrapper_mixer()
-{
-}
+mbl_data_wrapper_mixer<T>::~mbl_data_wrapper_mixer() = default;
 
 //: Number of objects available
 template<class T>

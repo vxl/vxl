@@ -105,7 +105,7 @@ class vrml_out_vertex_to_texture
 
  public:
   vrml_out_vertex_to_texture(int xsize, int ysize): image_xsize(xsize), image_ysize(ysize) {}
-  virtual ~vrml_out_vertex_to_texture() {}
+  virtual ~vrml_out_vertex_to_texture() = default;
 
   virtual void get_texture_coords(const void* vertex, double* u, double* v) const = 0;
 };

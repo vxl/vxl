@@ -15,8 +15,8 @@ class vsol_box
 {
  public:
   // Constructors/Destructor---------------------------------------------------
-  vsol_box() {}
-  virtual ~vsol_box() {}
+  vsol_box() = default;
+  virtual ~vsol_box() = default;
 };
 
 #endif // vsol_box_h_

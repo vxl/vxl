@@ -47,9 +47,7 @@ rrel_shift2d_est::rrel_shift2d_est(
   compute_del_pts ();
 }
 
-rrel_shift2d_est::~rrel_shift2d_est()
-{
-}
+rrel_shift2d_est::~rrel_shift2d_est() = default;
 
 unsigned int
 rrel_shift2d_est::num_samples( ) const

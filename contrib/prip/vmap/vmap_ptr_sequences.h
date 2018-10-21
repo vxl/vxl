@@ -32,13 +32,13 @@ class vmap_ptr_iterator_wrapper
   typedef F element_type ;
 
   //:
-  vmap_ptr_iterator_wrapper() {}
+  vmap_ptr_iterator_wrapper() = default;
 
   //:
   vmap_ptr_iterator_wrapper(const self_type &it) :it_(it.it_) {}
 
   //:
-  ~vmap_ptr_iterator_wrapper() {}
+  ~vmap_ptr_iterator_wrapper() = default;
 
   //:
   self_type & operator=(const self_type &it)
@@ -251,7 +251,7 @@ class vmap_owning_sequence: public vmap_ptr_sequence<D>
 
  public:
   //:
-  vmap_owning_sequence() {}
+  vmap_owning_sequence() = default;
 
   //:
   vmap_owning_sequence(const self_type & arg ) : vmap_ptr_sequence<D>(arg)

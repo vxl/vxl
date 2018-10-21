@@ -16,17 +16,13 @@
 // Dflt ctor
 //=======================================================================
 
-mfpf_max_finder::mfpf_max_finder()
-{
-}
+mfpf_max_finder::mfpf_max_finder() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-mfpf_max_finder::~mfpf_max_finder()
-{
-}
+mfpf_max_finder::~mfpf_max_finder() = default;
 
 //: Radius of circle containing modelled region
 double mfpf_max_finder::radius() const

@@ -40,7 +40,7 @@ class vdgl_fit_lines : public vdgl_fit_lines_params
   vdgl_fit_lines(vdgl_fit_lines_params& flp)
   : vdgl_fit_lines_params(flp), fitter_(vgl_fit_lines_2d<double>()) {}
 
-  ~vdgl_fit_lines() {}
+  ~vdgl_fit_lines() = default;
 
   //: Set the curves to be processed
   void set_curves(std::vector<vdgl_digital_curve_sptr> const& curves) { line_segs_.clear(); curves_=curves; }

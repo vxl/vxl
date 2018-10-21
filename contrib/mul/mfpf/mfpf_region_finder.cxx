@@ -55,9 +55,7 @@ void mfpf_region_finder::set_defaults()
 // Destructor
 //=======================================================================
 
-mfpf_region_finder::~mfpf_region_finder()
-{
-}
+mfpf_region_finder::~mfpf_region_finder() = default;
 
 //: Define region and cost of region
 void mfpf_region_finder::set(const std::vector<mbl_chord>& roi,

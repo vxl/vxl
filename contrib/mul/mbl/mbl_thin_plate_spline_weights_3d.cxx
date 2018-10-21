@@ -40,9 +40,7 @@ mbl_thin_plate_spline_weights_3d::mbl_thin_plate_spline_weights_3d()
 // Destructor
 //=======================================================================
 
-mbl_thin_plate_spline_weights_3d::~mbl_thin_plate_spline_weights_3d()
-{
-}
+mbl_thin_plate_spline_weights_3d::~mbl_thin_plate_spline_weights_3d() = default;
 
 // First some useful maths functions
 

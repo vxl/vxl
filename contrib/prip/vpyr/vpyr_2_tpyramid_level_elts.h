@@ -27,11 +27,10 @@ class vpyr_2_tpyramid_level_dart : public vpyr_2_pyramid_level_dart
   typedef vpyr_2_tpyramid_base_dart base_type ;
 
   //:
-  vpyr_2_tpyramid_level_dart() {}
+  vpyr_2_tpyramid_level_dart() = default;
 
   //:
-  vpyr_2_tpyramid_level_dart(const vpyr_2_tpyramid_level_dart & arg)
-    :vpyr_2_pyramid_level_dart(arg)                                  {}
+  vpyr_2_tpyramid_level_dart(const vpyr_2_tpyramid_level_dart & arg) = default;
 
   //: Associated edge.
   inline const vpyr_2_tpyramid_level_edge edge() const ;
@@ -113,7 +112,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   typedef FD element_type ;
 
   //:
-  vpyr_2_tpyramid_level_element_iterator() {}
+  vpyr_2_tpyramid_level_element_iterator() = default;
 
   //:
   vpyr_2_tpyramid_level_element_iterator(const self_type &it)
@@ -124,7 +123,7 @@ class vpyr_2_tpyramid_level_element_iterator : protected FD
   }
 
   //:
-  ~vpyr_2_tpyramid_level_element_iterator() {}
+  ~vpyr_2_tpyramid_level_element_iterator() = default;
 
   //:
   self_type & operator=(const self_type &it)

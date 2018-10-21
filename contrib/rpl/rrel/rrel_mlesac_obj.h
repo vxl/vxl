@@ -47,7 +47,7 @@ public:
   rrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma = 20.0, double outlier_frac = 0.5 );
 
   //: Destructor.
-  ~rrel_mlesac_obj() {}
+  ~rrel_mlesac_obj() = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.

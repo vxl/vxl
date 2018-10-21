@@ -20,9 +20,7 @@ vmal_dense_matching::vmal_dense_matching(const vnl_double_3x3 & H0,
   H1_=H1;
 }
 
-vmal_dense_matching::~vmal_dense_matching()
-{
-}
+vmal_dense_matching::~vmal_dense_matching() = default;
 
 void vmal_dense_matching::set_fmatrix(const vnl_double_3x3 & F)
 {

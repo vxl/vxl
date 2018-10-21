@@ -18,7 +18,7 @@ class rgrl_est_similarity2d
   // Does nothing. This constructor is adequate for algorithms that
   // call \a estimate(.) function only. An example of the algorithm is
   // the rgrl_feature_based_registration.
-  rgrl_est_similarity2d(){}
+  rgrl_est_similarity2d()= default;
 
   // Constructor which takes the dimension of the dataset that the
   // estimator will be applied on.

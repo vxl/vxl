@@ -15,7 +15,7 @@ FMatrixComputeLMedSq::FMatrixComputeLMedSq(bool rank2_truncate, int size)
   inthresh_ = (2.5*std)*(2.5*std);
 }
 
-FMatrixComputeLMedSq::~FMatrixComputeLMedSq() {}
+FMatrixComputeLMedSq::~FMatrixComputeLMedSq() = default;
 
 double FMatrixComputeLMedSq::calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count)
 {

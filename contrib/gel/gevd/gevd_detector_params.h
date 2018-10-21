@@ -80,7 +80,7 @@ class gevd_detector_params : public gevd_param_mixin
                        int cyc = 2, int ndim = 2);
 
   gevd_detector_params(const gevd_detector_params& old_params);
-  ~gevd_detector_params() {}
+  ~gevd_detector_params() = default;
 
   bool SanityCheck();
 #if 0//not implemented in vxl

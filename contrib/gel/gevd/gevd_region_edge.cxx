@@ -9,9 +9,7 @@ gevd_region_edge::gevd_region_edge(vtol_edge_2d_sptr e)
 {
 }
 
-gevd_region_edge::~gevd_region_edge()
-{
-}
+gevd_region_edge::~gevd_region_edge() = default;
 
 bool gevd_region_edge::is_vertex() const
 {

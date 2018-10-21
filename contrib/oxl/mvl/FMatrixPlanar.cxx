@@ -53,9 +53,7 @@ FMatrixPlanar::FMatrixPlanar(const vnl_double_3x3& f_matrix)
 //
 //: Destructor.
 
-FMatrixPlanar::~FMatrixPlanar()
-{
-}
+FMatrixPlanar::~FMatrixPlanar() = default;
 
 //--------------------------------------------------------------
 //

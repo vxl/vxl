@@ -32,7 +32,7 @@ class msm_wt_mat_2d
   { assert(m11_>=0); assert(m22_>=0);}
 
   // Destructor
-  ~msm_wt_mat_2d() {}
+  ~msm_wt_mat_2d() = default;
 
   //: Sets axis (eigenvector) of matrix and var along each
   //  Sets to s1*u*u' + s2*v*v', where u is the unit vector

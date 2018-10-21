@@ -29,9 +29,7 @@ vpdfl_gaussian_sampler::vpdfl_gaussian_sampler():
 // Destructor
 //=======================================================================
 
-vpdfl_gaussian_sampler::~vpdfl_gaussian_sampler()
-{
-}
+vpdfl_gaussian_sampler::~vpdfl_gaussian_sampler() = default;
 
 
 //=======================================================================

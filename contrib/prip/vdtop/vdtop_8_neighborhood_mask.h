@@ -23,14 +23,10 @@ class vdtop_8_neighborhood_mask
 {
  public:
   vdtop_8_neighborhood_mask() :mask_(0) {}
-  vdtop_8_neighborhood_mask(vdtop_8_neighborhood_mask const& arg) :mask_(arg.mask_) {}
+  vdtop_8_neighborhood_mask(vdtop_8_neighborhood_mask const& arg)  = default;
   vdtop_8_neighborhood_mask(vxl_byte arg_code) :mask_(arg_code) {}
 
-  vdtop_8_neighborhood_mask& operator=(const vdtop_8_neighborhood_mask & arg)
-  {
-    mask_=arg.mask_ ;
-    return *this ;
-  }
+  vdtop_8_neighborhood_mask& operator=(const vdtop_8_neighborhood_mask & arg) = default;
 
   bool operator==(vdtop_8_neighborhood_mask arg) const
   {

@@ -22,7 +22,7 @@ osl_vertex::osl_vertex(float x_, float y_, int id_) : x(x_), y(y_) {
 #endif
 }
 
-osl_vertex::~osl_vertex() { }
+osl_vertex::~osl_vertex() = default;
 
 bool operator==(osl_vertex const &a, osl_vertex const &b) {
   return a.x==b.x && a.y==b.y && a.id==b.id;

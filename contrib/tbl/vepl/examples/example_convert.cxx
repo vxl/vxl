@@ -24,7 +24,7 @@
 class rgbcell: public vil_rgb<vxl_byte>
 {
  public:
-  rgbcell() {}
+  rgbcell() = default;
   rgbcell(double x): vil_rgb<vxl_byte>(vxl_byte(x)) {}
 };
 

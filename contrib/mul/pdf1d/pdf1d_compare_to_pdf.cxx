@@ -15,17 +15,13 @@
 // Dflt ctor
 //=======================================================================
 
-pdf1d_compare_to_pdf::pdf1d_compare_to_pdf()
-{
-}
+pdf1d_compare_to_pdf::pdf1d_compare_to_pdf() = default;
 
 //=======================================================================
 // Destructor
 //=======================================================================
 
-pdf1d_compare_to_pdf::~pdf1d_compare_to_pdf()
-{
-}
+pdf1d_compare_to_pdf::~pdf1d_compare_to_pdf() = default;
 
 
 //: Test whether data came from the given distribution, using bootstrap

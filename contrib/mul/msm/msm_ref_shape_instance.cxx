@@ -34,9 +34,7 @@ msm_ref_shape_instance::msm_ref_shape_instance()
 // Destructor
 //=======================================================================
 
-msm_ref_shape_instance::~msm_ref_shape_instance()
-{
-}
+msm_ref_shape_instance::~msm_ref_shape_instance() = default;
 
 //: Set up model (retains pointer to model)
 void msm_ref_shape_instance::set_shape_model(const msm_ref_shape_model& model)

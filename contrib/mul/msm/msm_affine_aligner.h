@@ -16,7 +16,7 @@ class msm_affine_aligner : public msm_aligner
 {
  public:
 
-  virtual ~msm_affine_aligner() {}
+  virtual ~msm_affine_aligner() = default;
 
   //: Return number of parameters defining the transformation
   virtual unsigned size() const { return 6; }

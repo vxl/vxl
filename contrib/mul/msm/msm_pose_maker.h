@@ -29,7 +29,7 @@ class msm_pose_maker
   std::vector<unsigned> end1_;
 
  public:
-  ~msm_pose_maker() {}
+  ~msm_pose_maker() = default;
 
   //: Set up definitions of directions from the curves.
   //  Where multiple curves pass through a point, the direction

@@ -17,13 +17,9 @@
 
 #define PI vnl_math::pi
 
-vmal_track_lines::vmal_track_lines()
-{
-}
+vmal_track_lines::vmal_track_lines() = default;
 
-vmal_track_lines::~vmal_track_lines()
-{
-}
+vmal_track_lines::~vmal_track_lines() = default;
 
 void vmal_track_lines::track_lines(const std::vector<std::vector<vtol_edge_2d_sptr>*>* fit_lines,
                                    const std::vector<std::vector<vtol_edge_2d_sptr>*>* transformed_lines,

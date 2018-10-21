@@ -47,7 +47,7 @@ class rsdl_kd_node
 class rsdl_kd_heap_entry
 {
  public:
-  rsdl_kd_heap_entry() {}
+  rsdl_kd_heap_entry() = default;
   rsdl_kd_heap_entry( double dist, rsdl_kd_node* p )
     : dist_(dist), p_(p) {}
   bool operator< ( const rsdl_kd_heap_entry& right ) const

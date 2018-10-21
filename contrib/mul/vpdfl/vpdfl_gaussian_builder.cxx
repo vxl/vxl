@@ -46,9 +46,7 @@ vpdfl_gaussian_builder::vpdfl_gaussian_builder()
 // Destructor
 //=======================================================================
 
-vpdfl_gaussian_builder::~vpdfl_gaussian_builder()
-{
-}
+vpdfl_gaussian_builder::~vpdfl_gaussian_builder() = default;
 
 //=======================================================================
 

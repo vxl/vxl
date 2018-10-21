@@ -38,10 +38,10 @@ class vpdfl_builder_base
 {
  public:
   //: Dflt ctor
-  vpdfl_builder_base() {}
+  vpdfl_builder_base() = default;
 
   //: Destructor
-  virtual ~vpdfl_builder_base() {}
+  virtual ~vpdfl_builder_base() = default;
 
   //: Create empty model
   virtual vpdfl_pdf_base* new_model() const = 0;

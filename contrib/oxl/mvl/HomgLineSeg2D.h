@@ -30,10 +30,10 @@ class HomgLineSeg2D : public HomgLine2D
 
   // Constructors/Initializers/Destructors-------------------------------------
 
-  HomgLineSeg2D () {}
+  HomgLineSeg2D () = default;
   HomgLineSeg2D (const HomgPoint2D& point1, const HomgPoint2D& point2);
   HomgLineSeg2D (double x0, double y0, double x1, double y1);
-  ~HomgLineSeg2D () {}
+  ~HomgLineSeg2D () = default;
 
   // Data Access---------------------------------------------------------------
 

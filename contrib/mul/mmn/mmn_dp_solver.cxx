@@ -16,9 +16,7 @@
 #include <mbl/mbl_read_props.h>
 
 //: Default constructor
-mmn_dp_solver::mmn_dp_solver()
-{
-}
+mmn_dp_solver::mmn_dp_solver() = default;
 
 //: Input the arcs that define the graph
 void mmn_dp_solver::set_arcs(unsigned num_nodes,

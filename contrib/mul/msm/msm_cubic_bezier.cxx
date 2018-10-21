@@ -90,9 +90,7 @@ void msm_cubic_bezier_node::set_to_line(const vgl_point_2d<double>& q)
 
 
 // Default Constructor
-msm_cubic_bezier::msm_cubic_bezier()
-{
-}
+msm_cubic_bezier::msm_cubic_bezier() = default;
 
 //: Construct from set of points. Curve will pass through these.
 msm_cubic_bezier::msm_cubic_bezier(const std::vector<vgl_point_2d<double> >&pts, bool closed)

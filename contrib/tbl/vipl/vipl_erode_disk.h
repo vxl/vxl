@@ -59,7 +59,7 @@ class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr){}
   inline vipl_erode_disk(vipl_erode_disk const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_erode_disk() {}
+  inline ~vipl_erode_disk() = default;
 
 // -+-+- required method for filters: -+-+-
   bool section_applyop();

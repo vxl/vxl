@@ -28,7 +28,7 @@ class gevd_region_proc_params : public gevd_param_mixin
                           gevd_detector_params const& = gevd_detector_params());
 
   gevd_region_proc_params(const gevd_region_proc_params& old_params);
-  ~gevd_region_proc_params(){}
+  ~gevd_region_proc_params()= default;
 
   bool SanityCheck();
   friend
