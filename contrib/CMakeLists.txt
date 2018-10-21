@@ -6,10 +6,18 @@ if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/conversions/CMakeLists.txt )
 endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/gel/CMakeLists.txt )
+  if( BUILD_SHARED )
+     MESSAGE(FATAL_ERROR "BUILD_GEL not valid with shared libraries due to circular dependancies
+between brad/brip libraries. The brad_wv3_bands and theh brad_spectral_angle_mapper::compute_sam_img
+functions are needed by the brip library, but the the brad library depends upon the brip library.")
+  endif()
   CMAKE_DEPENDENT_OPTION(BUILD_GEL "Build the GE library package?" ON "BUILD_CONTRIB" OFF)
 endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/brl/CMakeLists.txt )
+  if( BUILD_SHARED )
+    message(FATAL_ERROR "BRL can not be built with BUILD_SHARED due to incompatibilities")
+  endif()
   CMAKE_DEPENDENT_OPTION(BUILD_BRL "Build the Brown University library package?" ON "BUILD_CONTRIB" OFF)
   # Optionally Build this library only if VGUI is available
   CMAKE_DEPENDENT_OPTION(BUILD_BGUI3D "Build VGUI wrapper for Coin3d" ON "BUILD_CONTRIB;BUILD_BRL;BUILD_GEL;BUILD_VGUI" OFF)
