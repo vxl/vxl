@@ -19,7 +19,7 @@
 VCL_TEMPLATE_EXPORT template <int D, class T>
 struct vnl_fft_base
 {
-  vnl_fft_base() { }
+  vnl_fft_base() = default;
 
   //: dir = +1/-1 according to direction of transform.
   void transform(std::complex<T> *signal, int dir);

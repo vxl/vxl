@@ -43,7 +43,7 @@ class projection_lsqf : public vnl_least_squares_function
     }
   }
 
-  ~projection_lsqf() {}
+  ~projection_lsqf() = default;
 
   //: compute the projection error given a set of h parameters.
   // The residuals required by f are the Euclidean x and y coordinate
@@ -76,7 +76,7 @@ class vgl_h_matrix_2d_optimize
     : verbose_(false), trace_(false), ftol_(1e-9), gtol_(1e-9),
     htol_(1e-9), max_iter_(2000), initial_h_(initial_h){}
 
-  virtual ~vgl_h_matrix_2d_optimize() {}
+  virtual ~vgl_h_matrix_2d_optimize() = default;
 
   //: set this to true for verbose run-time information
   void set_verbose(bool v) { verbose_ = v; }

@@ -29,10 +29,10 @@ class vcsl_displacement
   //***************************************************************************
 
   // Default constructor
-  vcsl_displacement() {}
+  vcsl_displacement() = default;
 
   // Destructor
-  virtual ~vcsl_displacement() {}
+  virtual ~vcsl_displacement() = default;
 
   //***************************************************************************
   // Status report

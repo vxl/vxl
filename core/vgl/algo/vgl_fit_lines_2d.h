@@ -43,7 +43,7 @@ class vgl_fit_lines_2d
 
   vgl_fit_lines_2d(unsigned int min_length = 10, T tol = 0.15);
 
-  ~vgl_fit_lines_2d() {}
+  ~vgl_fit_lines_2d() = default;
 
   // Operations----------------------------------------------------------------
   void set_verbose(bool verbose){verbose_ = verbose;}

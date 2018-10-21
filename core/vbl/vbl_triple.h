@@ -24,7 +24,7 @@ struct vbl_triple
   T2 second;
   T3 third;
 
-  vbl_triple() { }
+  vbl_triple() = default;
   vbl_triple(T1 const &a, T2 const &b, T3 const &c)
     : first (a)
     , second(b)

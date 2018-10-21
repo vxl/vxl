@@ -11,11 +11,9 @@
 #include <vil/vil_copy.h>
 
 
-vil_blocked_image_resource::vil_blocked_image_resource()
-{}
+vil_blocked_image_resource::vil_blocked_image_resource() = default;
 
-vil_blocked_image_resource::~vil_blocked_image_resource()
-{}
+vil_blocked_image_resource::~vil_blocked_image_resource() = default;
 
 unsigned int vil_blocked_image_resource::n_block_i() const
 {

@@ -110,7 +110,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   typedef size_t size_type;
 
   //: Construct an empty num_rows*num_cols matrix
-  vnl_matrix_fixed() {}
+  vnl_matrix_fixed() = default;
 
   //: Construct an empty num_rows*num_cols matrix
   //
@@ -157,7 +157,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   // An explicit destructor seems to be necessary, at least for gcc 3.0.0,
   // to avoid the compiler generating multiple versions of it.
   // (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
-  ~vnl_matrix_fixed() {}
+  ~vnl_matrix_fixed() = default;
 
   //: Set all elements to value v
   // Complexity $O(r.c)$

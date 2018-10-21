@@ -43,7 +43,7 @@ struct vil_rgb
 {
   typedef T value_type;
 
-  inline vil_rgb() { }
+  inline vil_rgb() = default;
 
   //:Create grey (v,v,v) vil_rgb cell from value v.
   // This provides a conversion from T to vil_rgb<T>

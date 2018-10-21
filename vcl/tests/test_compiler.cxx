@@ -98,17 +98,14 @@ void vcl_test_implicit_instantiation(int n)
   m.clear();
 }
 
-mystery_type::mystery_type()
-{ }
+mystery_type::mystery_type() = default;
 
 mystery_type::mystery_type(int a_, float b_)
   : a(a_), b(b_) { }
 
-mystery_type::mystery_type(mystery_type const &that)
-  : a(that.a), b(that.b) { }
+mystery_type::mystery_type(mystery_type const &that) = default;
 
-mystery_type &mystery_type::operator=(mystery_type const &that)
-{ a = that.a; b = that.b; return *this; }
+mystery_type &mystery_type::operator=(mystery_type const &that) = default;
 
 bool operator==(mystery_type const &x, mystery_type const &y)
 { return (x.a == y.a) && (x.b == y.b); }

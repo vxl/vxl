@@ -28,7 +28,7 @@ class vgl_h_matrix_1d_compute
  public:
   //
   vgl_h_matrix_1d_compute() : verbose_(false) {}
-  virtual ~vgl_h_matrix_1d_compute() {}
+  virtual ~vgl_h_matrix_1d_compute() = default;
 
   //: set this to true for verbose run-time information; default is false
   void verbose(bool v) { verbose_=v; }

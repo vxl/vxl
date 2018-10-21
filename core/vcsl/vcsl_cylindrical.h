@@ -27,7 +27,7 @@ class vcsl_cylindrical
   vcsl_cylindrical();
 
   // Destructor
-  virtual ~vcsl_cylindrical() {}
+  virtual ~vcsl_cylindrical() = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>

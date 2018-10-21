@@ -43,7 +43,7 @@ class vgl_polygon
   // Constructors/Destructor---------------------------------------------------
 
   //: Default constructor - constructs an empty polygon with no sheets
-  vgl_polygon() {}
+  vgl_polygon() = default;
 
   //: Construct an empty polygon, setting the number of (empty) sheets
   explicit vgl_polygon(unsigned int nr_sheets) : sheets_(nr_sheets) {}
@@ -73,7 +73,7 @@ class vgl_polygon
   vgl_polygon(vgl_polygon const& a) : sheets_(a.sheets_) {}
 
   // Destructor
-  ~vgl_polygon() {}
+  ~vgl_polygon() = default;
 
   //: Returns true if \a p(x,y) is inside the polygon, else false
   bool contains(point_t const& p) const { return contains(p.x(),p.y()); }

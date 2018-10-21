@@ -20,7 +20,7 @@ class vil_cached_image_resource : public vil_blocked_image_resource
                             const unsigned cache_size):
     bir_(bir), cache_(vil_block_cache(cache_size)){}
 
-  virtual ~vil_cached_image_resource(){}
+  virtual ~vil_cached_image_resource()= default;
 
  inline virtual unsigned nplanes() const
     {return bir_->nplanes();}

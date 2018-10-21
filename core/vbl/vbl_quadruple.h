@@ -25,7 +25,7 @@ struct vbl_quadruple
   T3 third;
   T4 fourth;
 
-  vbl_quadruple() { }
+  vbl_quadruple() = default;
   vbl_quadruple(T1 const &a, T2 const &b, T3 const &c, T4 const &d)
     : first (a)
     , second(b)

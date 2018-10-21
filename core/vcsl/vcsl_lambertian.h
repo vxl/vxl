@@ -21,6 +21,7 @@
 class vcsl_lambertian
   : public vcsl_geographic
 {
+ private:
   //***************************************************************************
   // Constructors/Destructor
   //***************************************************************************
@@ -30,7 +31,7 @@ class vcsl_lambertian
 
  public:
   // Destructor
-  virtual ~vcsl_lambertian() {}
+  virtual ~vcsl_lambertian() = default;
 };
 
 #endif // vcsl_lambertian_h_

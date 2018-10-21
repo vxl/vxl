@@ -54,7 +54,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix
   //: Construct a diagonal matrix from a vnl_vector.
   //  The vector elements become the diagonal elements.
   vnl_diag_matrix(vnl_vector<T> const& that): diagonal_(that) {}
- ~vnl_diag_matrix() {}
+ ~vnl_diag_matrix() = default;
 
   inline vnl_diag_matrix& operator=(vnl_diag_matrix<T> const& that) {
     this->diagonal_ = that.diagonal_;

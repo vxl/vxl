@@ -29,10 +29,10 @@ class vcsl_translation
   //***************************************************************************
 
   // Default constructor
-  vcsl_translation() {}
+  vcsl_translation() = default;
 
   // Destructor
-  virtual ~vcsl_translation() {}
+  virtual ~vcsl_translation() = default;
 
   //***************************************************************************
   // Status report

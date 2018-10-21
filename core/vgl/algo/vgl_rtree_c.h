@@ -73,7 +73,7 @@ class vgl_bbox_2d : public vgl_box_2d<Type>
 {
  public:
   //: Default constructor (creates empty box)
-  vgl_bbox_2d() {}
+  vgl_bbox_2d() = default;
 
   //: Construct using two corner points
   vgl_bbox_2d(Type const min_position[2],

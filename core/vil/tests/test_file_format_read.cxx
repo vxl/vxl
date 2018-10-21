@@ -44,7 +44,7 @@ static std::string image_base;
 template<class TruePixelType, class ImgPixelType>
 struct Compare
 {
-  virtual ~Compare() {}
+  virtual ~Compare() = default;
   virtual bool operator() ( vil_image_view<ImgPixelType> const&,
                             int p, int i, int j,
                             const std::vector<TruePixelType>& pixel ) const = 0;

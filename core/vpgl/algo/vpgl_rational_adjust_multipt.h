@@ -38,7 +38,7 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
                              std::vector< std::vector<vgl_point_2d<double> > > const& image_pts,  // for each 3D corr, an array of 2D corrs for each camera
                              std::vector< vgl_point_3d<double> >  initial_pts);
   //: Destructor
-  virtual ~vpgl_cam_trans_search_lsqr() {}
+  virtual ~vpgl_cam_trans_search_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -60,7 +60,7 @@ class vpgl_cam_trans_search_lsqr : public vnl_least_squares_function
 class vpgl_rational_adjust_multiple_pts
 {
  public:
-  ~vpgl_rational_adjust_multiple_pts() {}
+  ~vpgl_rational_adjust_multiple_pts() = default;
 
   //: exhaustively searches the parameter space to find the best parameter setting
   static bool adjust(std::vector<vpgl_rational_camera<double> > const& cams,

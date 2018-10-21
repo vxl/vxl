@@ -31,10 +31,10 @@ class vcsl_matrix
   //***************************************************************************
 
   // Default constructor
-  vcsl_matrix() {}
+  vcsl_matrix() = default;
 
   // Destructor
-  virtual ~vcsl_matrix() {}
+  virtual ~vcsl_matrix() = default;
 
   //***************************************************************************
   // Status report

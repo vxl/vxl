@@ -22,7 +22,7 @@ class vil_image_list
 {
  public:
   vil_image_list(char const* directory):directory_(directory){}
-  ~vil_image_list(){}
+  ~vil_image_list()= default;
 
   //: finds all the files in the directory, regardless of extension
   std::vector<std::string> files();

@@ -65,9 +65,7 @@ vul_sequence_filename_map::vul_sequence_filename_map (std::string  seq_template,
   parse();
 }
 
-vul_sequence_filename_map::~vul_sequence_filename_map()
-{
-}
+vul_sequence_filename_map::~vul_sequence_filename_map() = default;
 
 std::string vul_sequence_filename_map::name(int frame)
 {

@@ -15,10 +15,10 @@ class vsl_binary_loader_base
 {
  public:
   //: Dflt ctor
-  vsl_binary_loader_base() {}
+  vsl_binary_loader_base() = default;
 
   //: Destructor
-  virtual ~vsl_binary_loader_base() {}
+  virtual ~vsl_binary_loader_base() = default;
 
  protected:
   //: Register this, so it can be deleted by vsl_delete_all_loaders();

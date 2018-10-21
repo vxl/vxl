@@ -45,7 +45,7 @@ class vcsl_spatial_transformation : public vbl_ref_count
 
  protected:
   // Default constructor. Do nothing
-  vcsl_spatial_transformation() {}
+  vcsl_spatial_transformation() = default;
 
  public:
   // Copy constructor
@@ -53,7 +53,7 @@ class vcsl_spatial_transformation : public vbl_ref_count
     : vbl_ref_count(), beat_(x.beat_), interpolator_(x.interpolator_) {}
 
   // Destructor. Do nothing
-  virtual ~vcsl_spatial_transformation() {}
+  virtual ~vcsl_spatial_transformation() = default;
 
   //***************************************************************************
   // Status report

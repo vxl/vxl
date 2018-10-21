@@ -26,11 +26,11 @@ class vcsl_angle_unit
 
  protected:
   // Default constructor
-  vcsl_angle_unit() {}
+  vcsl_angle_unit() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_angle_unit() {}
+  virtual ~vcsl_angle_unit() = default;
 
   //***************************************************************************
   // Status report

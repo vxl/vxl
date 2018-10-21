@@ -79,9 +79,7 @@ void vnl_sparse_lm::init(vnl_sparse_lst_sqr_function* f)
   allocate_matrices();
 }
 
-vnl_sparse_lm::~vnl_sparse_lm()
-{
-}
+vnl_sparse_lm::~vnl_sparse_lm() = default;
 
 
 //: Minimize the function supplied in the constructor until convergence or failure.

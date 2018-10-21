@@ -91,7 +91,7 @@ class vil1_image_impl
   //:
   // the reference count starts at 0.
   vil1_image_impl() : reference_count(0) {}
-  virtual ~vil1_image_impl() {}
+  virtual ~vil1_image_impl() = default;
 
   //: Dimensions:  Planes x W x H x Components
   virtual int planes() const = 0;

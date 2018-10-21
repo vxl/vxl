@@ -64,7 +64,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int
   //  Copy constructor
   inline vnl_finite_int(Base const& x) : val_(int(x)), mo_(x.mo_), lp1_(x.lp1_) {}
   //  Destructor
-  inline ~vnl_finite_int() {}
+  inline ~vnl_finite_int() = default;
   // Implicit conversions
   inline operator int() const { return val_; }
   inline operator int() { return val_; }
@@ -448,7 +448,7 @@ class VNL_TEMPLATE_EXPORT vnl_finite_int_poly
   //  Copy constructor
   inline vnl_finite_int_poly(Base const& x) : val_(x.val_) {}
   //  Destructor
-  inline ~vnl_finite_int_poly() {}
+  inline ~vnl_finite_int_poly() = default;
 
   //: Formal degree of this polynomial
   inline std::size_t deg() const { return val_.size() - 1; }

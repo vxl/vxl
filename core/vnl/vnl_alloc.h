@@ -77,8 +77,8 @@ class VNL_EXPORT vnl_alloc
   class lock
   {
    public:
-    lock() {}
-    ~lock() {}
+    lock() = default;
+    ~lock() = default;
   };
   friend class lock;
 

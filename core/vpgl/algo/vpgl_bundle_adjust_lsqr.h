@@ -49,7 +49,7 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
                           const std::vector<std::vector<bool> >& mask);
 
   // Destructor
-  virtual ~vpgl_bundle_adjust_lsqr() {}
+  virtual ~vpgl_bundle_adjust_lsqr() = default;
 
   //: Compute all the reprojection errors
   //  Given the parameter vectors a, b, and c, compute the vector of residuals e.

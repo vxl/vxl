@@ -33,7 +33,7 @@ class vgl_infinite_line_3d
   vgl_vector_3d<Type> t_;  //!< line direction vector (tangent)
  public:
   //: Default constructor - does not initialise!
-  inline vgl_infinite_line_3d() {}
+  inline vgl_infinite_line_3d() = default;
 
   //: Copy constructor
   inline vgl_infinite_line_3d(vgl_infinite_line_3d<Type> const& l)
@@ -67,7 +67,7 @@ class vgl_infinite_line_3d
   }
 
   //: Destructor
-  inline ~vgl_infinite_line_3d() {}
+  inline ~vgl_infinite_line_3d() = default;
 
   //: Accessors
   inline vgl_vector_2d<Type> x0() const { return x0_; } // return a copy

@@ -329,8 +329,7 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   return true;
 }
 
-vpgl_nitf_rational_camera::vpgl_nitf_rational_camera() {
-}
+vpgl_nitf_rational_camera::vpgl_nitf_rational_camera() = default;
 
 
 vpgl_nitf_rational_camera::

@@ -19,9 +19,7 @@
 
 /////////////////////////////////////
 
-vnl_conjugate_gradient::~vnl_conjugate_gradient()
-{
-}
+vnl_conjugate_gradient::~vnl_conjugate_gradient() = default;
 
 void vnl_conjugate_gradient::init(vnl_cost_function &f)
 {

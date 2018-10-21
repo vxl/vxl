@@ -49,7 +49,7 @@ class vil_nitf2_field_functor
  public:
   virtual bool operator() (vil_nitf2_field_sequence* record,
                            const vil_nitf2_index_vector& indexes, T& out_value) = 0;
-  virtual ~vil_nitf2_field_functor() {}
+  virtual ~vil_nitf2_field_functor() = default;
 
   // Virtual copy method
   virtual vil_nitf2_field_functor<T>* copy() const = 0;
@@ -306,7 +306,7 @@ class vil_nitf2_constant_functor : public vil_nitf2_field_functor<T>
     return new vil_nitf2_constant_functor(value_);
   }
 
-  virtual ~vil_nitf2_constant_functor() {}
+  virtual ~vil_nitf2_constant_functor() = default;
 
   bool operator() (vil_nitf2_field_sequence* /*record*/,
                   const vil_nitf2_index_vector& /*indexes*/, T& value) {

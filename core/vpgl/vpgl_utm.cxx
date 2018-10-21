@@ -145,12 +145,9 @@ vpgl_utm::vpgl_utm()
   :   a_(6378137), b_(6356752.3142) //WGS-84 by default
 {}
 
-vpgl_utm::vpgl_utm(const vpgl_utm& t)
-  :    a_(t.a_), b_(t.b_)
-{}
+vpgl_utm::vpgl_utm(const vpgl_utm& t) = default;
 
-vpgl_utm::~vpgl_utm()
-{}
+vpgl_utm::~vpgl_utm() = default;
 
 // Applies the transform to the instance of 3d point representing a location in the from_coordinate_system (UTM_coordinate_system) and creates a point represented the transformed location in the to_coordinate_system(geodetic_coordinate_system).
 void vpgl_utm::transform(int utm_zone, double x, double y, double z,

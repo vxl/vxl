@@ -25,7 +25,7 @@ class vil1_file_image : public vil1_image
   };
 
   // Default constructor
-  vil1_file_image() {}
+  vil1_file_image() = default;
 
   //: Attempt to load named file
   vil1_file_image(char const* filename, verbosity v=verbose) {load(filename,v);}

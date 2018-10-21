@@ -65,7 +65,7 @@ class vil1_gen_generic_image : public vil1_image_impl
                          int components,
                          int bits_per_component,
                          vil1_component_format format);
-  ~vil1_gen_generic_image() {}
+  ~vil1_gen_generic_image() = default;
 
   //: Dimensions:  planes x width x height x components
   virtual int planes() const { return 1; }

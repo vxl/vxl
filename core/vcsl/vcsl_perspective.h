@@ -31,11 +31,11 @@ class vcsl_perspective
   //***************************************************************************
 
   // Default constructor
-  vcsl_perspective() {}
+  vcsl_perspective() = default;
 
  public:
   // Destructor
-  virtual ~vcsl_perspective() {}
+  virtual ~vcsl_perspective() = default;
 
   //***************************************************************************
   // Status report

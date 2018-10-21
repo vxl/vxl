@@ -98,7 +98,7 @@ class vgl_1d_basis
   T inf_pt_;    //!< The point to be mapped to homogeneous (1,0)
   bool affine_; //!< normally false; if true, inf_pt_ is not used: affine basis
   // No usable default constructor:
-  inline vgl_1d_basis() {}
+  inline vgl_1d_basis() = default;
 
  public:
   inline T origin() const { return origin_; }

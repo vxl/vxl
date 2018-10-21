@@ -31,7 +31,7 @@ class vgl_ray_3d
   vgl_vector_3d<Type> t_;  //!< ray direction vector
  public:
   //: Default constructor - does not initialise!
-  inline vgl_ray_3d() {}
+  inline vgl_ray_3d() = default;
 
   //: Copy constructor
   inline vgl_ray_3d(vgl_ray_3d<Type> const& l)
@@ -61,7 +61,7 @@ class vgl_ray_3d
   }
 
   //: Destructor
-  inline ~vgl_ray_3d() {}
+  inline ~vgl_ray_3d() = default;
 
   //: Accessors
   inline vgl_point_3d<Type> origin() const { return p0_; } // return a copy

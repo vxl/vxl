@@ -24,7 +24,7 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
                         const std::vector<vgl_homg_point_3d<double> >& world_points,
                         std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_lsqr() {}
+  virtual ~vpgl_orientation_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -60,7 +60,7 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
                                  const std::vector<vgl_homg_point_3d<double> >& world_points,
                                  std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_lsqr() {}
+  virtual ~vpgl_orientation_position_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -92,7 +92,7 @@ class vpgl_orientation_position_calibration_lsqr : public vnl_least_squares_func
   vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
                                              std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_calibration_lsqr() {}
+  virtual ~vpgl_orientation_position_calibration_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -123,7 +123,7 @@ class vpgl_orientation_position_focal_lsqr : public vnl_least_squares_function
                                        const std::vector<vgl_homg_point_3d<double> >& world_points,
                                        std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_focal_lsqr() {}
+  virtual ~vpgl_orientation_position_focal_lsqr() = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.

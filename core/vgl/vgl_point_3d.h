@@ -37,7 +37,7 @@ class vgl_point_3d
   // Constructors/Initializers/Destructor------------------------------------
 
   //: Default constructor
-  inline vgl_point_3d () {}
+  inline vgl_point_3d () = default;
 
   //: Construct from three Types.
   inline vgl_point_3d(Type px, Type py, Type pz) : x_(px), y_(py), z_(pz) {}

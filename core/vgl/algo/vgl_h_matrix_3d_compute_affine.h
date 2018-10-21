@@ -31,7 +31,7 @@ class vgl_h_matrix_3d_compute_affine : public vgl_h_matrix_3d_compute
 
 
  public:
-   vgl_h_matrix_3d_compute_affine() {}
+   vgl_h_matrix_3d_compute_affine() = default;
    int minimum_number_of_correspondences() const { return 4; }
 };
 

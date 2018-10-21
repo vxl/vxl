@@ -42,7 +42,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
   vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays);
   vpgl_generic_camera( std::vector<vbl_array_2d<vgl_ray_3d<T> > > const& rays,
                                               std::vector<int> nrs,   std::vector<int> ncs  );
-  virtual ~vpgl_generic_camera() {}
+  virtual ~vpgl_generic_camera() = default;
 
   virtual std::string type_name() const { return "vpgl_generic_camera"; }
 

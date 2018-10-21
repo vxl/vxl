@@ -111,7 +111,7 @@ class vil_image_view : public vil_image_view_base
   vil_image_view(const vil_image_view_base_sptr& rhs);
 
   //  Destructor
-  virtual ~vil_image_view() {}
+  virtual ~vil_image_view() = default;
 
   // === Standard container stuff ===
   // This assumes that the data is arranged contiguously.

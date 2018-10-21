@@ -127,7 +127,7 @@ class VNL_TEMPLATE_EXPORT vnl_scalar_join_iterator_indexed_pair
   const T* object;
   int original_index;
 
-  vnl_scalar_join_iterator_indexed_pair() {}
+  vnl_scalar_join_iterator_indexed_pair() = default;
   vnl_scalar_join_iterator_indexed_pair(const T* object_, int original_index_):object(object_), original_index(original_index_) {}
 
   bool operator == (const vnl_scalar_join_iterator_indexed_pair<T>& that) const;

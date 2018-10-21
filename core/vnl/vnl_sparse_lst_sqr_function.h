@@ -110,7 +110,7 @@ class VNL_EXPORT vnl_sparse_lst_sqr_function
                               UseGradient g = use_gradient,
                               UseWeights w = no_weights);
 
-  virtual ~vnl_sparse_lst_sqr_function() {}
+  virtual ~vnl_sparse_lst_sqr_function() = default;
 
   // the virtuals may call this to signal a failure.
   void throw_failure() { failure = true; }

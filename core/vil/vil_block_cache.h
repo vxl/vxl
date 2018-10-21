@@ -49,7 +49,7 @@ struct bcell
 class bcell_less
 {
  public:
-  bcell_less(){}
+  bcell_less()= default;
   //the predicate function
   bool operator()(bcell* const& ba, bcell* const& bb) const
   {

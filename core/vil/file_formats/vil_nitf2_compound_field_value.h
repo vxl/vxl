@@ -34,7 +34,7 @@ public:
   // Returns true iff all members lie within their expected ranges
   virtual bool is_valid() const = 0;
 
-  virtual ~vil_nitf2_compound_field_value() {}
+  virtual ~vil_nitf2_compound_field_value() = default;
 };
 
 // A date and time, down to the second or decimal fraction thereof.
@@ -52,7 +52,7 @@ public:
   int sec_precision; // second's significant decimal places
   vil_nitf2_date_time() : year(0), month(0), day(0), hour(0), minute(0), second(0), sec_precision(0) {}
   vil_nitf2_date_time(std::string format);
-  virtual ~vil_nitf2_date_time() {}
+  virtual ~vil_nitf2_date_time() = default;
   bool is_valid() const;
   bool read(std::istream& input, int field_width, bool& out_blank);
   bool write(std::ostream& output, int field_width) const;
@@ -70,7 +70,7 @@ public:
   enum format_type { format_degrees, format_dmsh };
   format_type format;
   vil_nitf2_location(format_type format) : format(format) {}
-  virtual ~vil_nitf2_location() {}
+  virtual ~vil_nitf2_location() = default;
   virtual bool read(std::istream& input, int field_width, bool& out_blank) = 0;
   virtual bool write(std::ostream& output, int field_width) = 0;
 };

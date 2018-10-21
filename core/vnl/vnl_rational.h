@@ -123,7 +123,7 @@ class VNL_EXPORT vnl_rational
   inline vnl_rational(vnl_rational const& from)
     : num_(from.numerator()), den_(from.denominator()) {}
   //  Destructor
-  inline ~vnl_rational() {}
+  inline ~vnl_rational() = default;
   //  Assignment: overwrite an existing vnl_rational
   inline void set(long num, long den) { assert(num!=0||den!=0); num_=num; den_=den; normalize(); }
 

@@ -57,7 +57,7 @@ class VNL_TEMPLATE_EXPORT vnl_hungarian_algorithm
 
   vnl_hungarian_algorithm() : m_TotalCost(0) {}
 
-  ~vnl_hungarian_algorithm() {}
+  ~vnl_hungarian_algorithm() = default;
 
   //: This constructor (and the following cast operator) is provided for backward compatibility with the original function implementation
   vnl_hungarian_algorithm(vnl_matrix<T> const& cost) { SetCostMatrix(cost); StartAssignment(); }

@@ -26,7 +26,7 @@ template <class Type>
 class vgl_orient_box_3d
 {
  public:
-  vgl_orient_box_3d() {}
+  vgl_orient_box_3d() = default;
 
   //: constructor with only box definition, the direction will be set to (0,0,1) with no rotation
   vgl_orient_box_3d(vgl_box_3d<Type> const& box)
@@ -41,7 +41,7 @@ class vgl_orient_box_3d
   //  The three directions from the first of these to the three other points must be mutually orthogonal.
   vgl_orient_box_3d(vgl_point_3d<Type> const& p0, vgl_point_3d<Type> const& px, vgl_point_3d<Type> const& py, vgl_point_3d<Type> const& pz);
 
-  virtual ~vgl_orient_box_3d(void) {}
+  virtual ~vgl_orient_box_3d(void) = default;
 
   inline bool operator==(vgl_orient_box_3d<Type> const& obb) const {
     return obb.box_ == this->box_ && obb.orient_ == this->orient_;
