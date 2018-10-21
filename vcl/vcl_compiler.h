@@ -477,8 +477,8 @@
 // versions you can simulate it as below.
 #if defined(_MSC_VER) && _MSC_VER < 1900
 #include <cstdarg>
-#include <stdio.h> //From Microsoft VS2008 documentation these are needed.
-#include <stdarg.h>
+#include <cstdio> //From Microsoft VS2008 documentation these are needed.
+#include <cstdarg>
 __inline int c99_vsnprintf(char *outBuf, size_t size, const char *format, va_list ap)
 {
     int count = -1;

@@ -17,7 +17,7 @@
 
 #if defined(VCL_VC) || defined(__MINGW32__)
 // I don't think we need this, because <ieeefp.h> is available -- fsm
-# include <float.h> // for 'isnan' and 'finite'
+# include <cfloat> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
 # define finitef _finite
@@ -44,7 +44,7 @@
 # endif
 
 #elif VXL_C_MATH_HAS_FINITE
-# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
+# include <cmath> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # if !VXL_C_MATH_HAS_FINITEF
 #  define finitef finite
 # endif
@@ -53,7 +53,7 @@
 # endif
 
 #elif defined(__hpux)
-# include <math.h> // dont_vxl_filter: this is *not* supposed to be <cmath>
+# include <cmath> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # define finite _Isfinite
 # define finitef _Isfinitef
 # define finitel _Isfinite
