@@ -27,8 +27,8 @@ template <class T>
 class vgl_rtree_point_box_2d
 {
   // only static methods
-  vgl_rtree_point_box_2d();
-  ~vgl_rtree_point_box_2d();
+  vgl_rtree_point_box_2d() = delete;
+  ~vgl_rtree_point_box_2d() = delete;
 
  public:
   typedef vgl_point_2d<T> v_type;
@@ -102,8 +102,8 @@ template <class T>
 class vgl_rtree_box_box_2d
 {
   // only static methods
-  vgl_rtree_box_box_2d();
-  ~vgl_rtree_box_box_2d();
+  vgl_rtree_box_box_2d() = delete;
+  ~vgl_rtree_box_box_2d() = delete;
 
  public:
   typedef vgl_box_2d<T> v_type;

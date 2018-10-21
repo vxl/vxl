@@ -133,8 +133,8 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
 
  private:
   // avoid copy constructor a operator=
-  vgl_polygon_scan_iterator(const vgl_polygon_scan_iterator& );
-  vgl_polygon_scan_iterator& operator= (const vgl_polygon_scan_iterator& );
+  vgl_polygon_scan_iterator(const vgl_polygon_scan_iterator& ) = delete;
+  vgl_polygon_scan_iterator& operator= (const vgl_polygon_scan_iterator& ) = delete;
 
   vertind * yverts;       //!< array of all vertices ordered by y coordinate
   crossedge * crossedges; //!< array of edges crossing current scan line
