@@ -21,8 +21,8 @@
 
 namespace bstm_bundle_to_scene_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool bstm_bundle_to_scene_process_cons(bprb_func_process& pro)
@@ -62,13 +62,13 @@ bool bstm_bundle_to_scene_process(bprb_func_process& pro)
   //----------------------------------------------------------------------------
   unsigned i = 0;
   std::string bundler_out = pro.get_input<std::string>(i++); //bundler out
-  std::string in_img_dir  = pro.get_input<std::string>(i++); //input png/tiff images
+  std::string in_img_dir = pro.get_input<std::string>(i++); //input png/tiff images
   std::vector<std::string> appearance(2,"");
-  appearance[0]          = pro.get_input<std::string>(i++); //Appearance Model String
-  appearance[1]          = pro.get_input<std::string>(i++); //Occupancy Model String
-  bool axis_align        = pro.get_input<bool>(i++);
-  unsigned time_steps   = pro.get_input<unsigned>(i++);
-  std::string out_dir     = pro.get_input<std::string>(i++); //output dir for imgs/files
+  appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
+  appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
+  bool axis_align = pro.get_input<bool>(i++);
+  unsigned time_steps = pro.get_input<unsigned>(i++);
+  std::string out_dir = pro.get_input<std::string>(i++); //output dir for imgs/files
 
 
   //----------------------------------------------------------------------------
@@ -125,11 +125,11 @@ bool bstm_bundle_to_scene_process(bprb_func_process& pro)
       {
         //image basename
         std::string full_img_name = iter->first;
-        std::string img_name      = vul_file::basename(full_img_name);
+        std::string img_name = vul_file::basename(full_img_name);
         std::string stripped_name = vul_file::strip_extension(img_name);
 
         //good camera
-        CamType    cam      = *iter->second;
+        CamType    cam = *iter->second;
 
         //save cam file
         char filename[1024];

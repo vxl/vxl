@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_compute_3d_points_and_covs_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_compute_3d_points_and_covs_process_cons(bprb_func_process& pro)
@@ -99,8 +99,8 @@ bool boxm2_cpp_compute_3d_points_and_covs_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_compute_3d_points_and_covs_normalize_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_compute_3d_points_and_covs_normalize_process_cons(bprb_func_process& pro)

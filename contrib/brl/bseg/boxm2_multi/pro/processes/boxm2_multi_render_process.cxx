@@ -31,8 +31,8 @@
 
 namespace boxm2_multi_render_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_multi_render_process_cons(bprb_func_process& pro)
@@ -58,8 +58,8 @@ bool boxm2_multi_render_process_cons(bprb_func_process& pro)
 
   // in case the 7th input is not set
   brdb_value_sptr idx = new brdb_value_t<std::string>("");
-  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
 
   pro.set_input(5, idx);
   pro.set_input(6, tnearfactor);
@@ -85,8 +85,8 @@ bool boxm2_multi_render_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
-  float   nearfactor   = pro.get_input<float>(i++);
-  float   farfactor    = pro.get_input<float>(i++);
+  float   nearfactor = pro.get_input<float>(i++);
+  float   farfactor = pro.get_input<float>(i++);
   boxm2_multi_render renderer;
   vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
   float gpu_time = renderer.render(*(multi_cache.ptr()), *exp_img_out, cam);

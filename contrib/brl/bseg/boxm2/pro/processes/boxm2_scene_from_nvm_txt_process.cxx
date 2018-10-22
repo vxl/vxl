@@ -23,8 +23,8 @@
 
 namespace boxm2_scene_from_nvm_txt_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 0;
 }
 bool boxm2_scene_from_nvm_txt_process_cons(bprb_func_process& pro)
 {
@@ -59,14 +59,14 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
     return false;
   }
   //get the inputs
-  std::string nvm_filename  = pro.get_input<std::string>(0);
-  std::string input_img_folder  = pro.get_input<std::string>(1);
-  float x_center         = pro.get_input<float>(2);
-  float y_center        = pro.get_input<float>(3);
-  float z_center         = pro.get_input<float>(4);
-  float width        = pro.get_input<float>(5);
-  float height       = pro.get_input<float>(6);
-  float depth        = pro.get_input<float>(7);
+  std::string nvm_filename = pro.get_input<std::string>(0);
+  std::string input_img_folder = pro.get_input<std::string>(1);
+  float x_center = pro.get_input<float>(2);
+  float y_center = pro.get_input<float>(3);
+  float z_center = pro.get_input<float>(4);
+  float width = pro.get_input<float>(5);
+  float height = pro.get_input<float>(6);
+  float depth = pro.get_input<float>(7);
   std::string modeldir= pro.get_input<std::string>(8);
 
   // get the scene bounding box
@@ -118,11 +118,11 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
       {
         //image basename
         std::string full_img_name = iter->first;
-        std::string img_name      = vul_file::basename(full_img_name);
+        std::string img_name = vul_file::basename(full_img_name);
         std::string stripped_name = vul_file::strip_extension(img_name);
 
         //good camera
-        CamType    cam      = *iter->second;
+        CamType    cam = *iter->second;
 
         //save cam file
         char filename[1024];

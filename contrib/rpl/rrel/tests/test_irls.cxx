@@ -24,7 +24,7 @@ regression_points( const vnl_vector<double>& a,
                    double sigma,
                    std::vector< vnl_vector<double> >& pts )
 {
-  const int num_pts=20;
+  constexpr int num_pts = 20;
   pts.resize( num_pts );
 
   //  Initialize variables.

@@ -16,8 +16,8 @@
 //:global variables
 namespace bvpl_combine_pairwise_statistics_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 

@@ -47,7 +47,7 @@ int bvxm_synth_world_generator::on_box_surface(vgl_box_3d<double> box, vgl_point
 {
   // create a box a size smaller
   vgl_box_3d<double> in_box;
-  const int thickness = 1;
+  constexpr int thickness = 1;
   in_box.set_min_point(vgl_point_3d<double>(box.min_x()+thickness, box.min_y()+thickness, box.min_z()+thickness));
   in_box.set_max_point(vgl_point_3d<double>(box.max_x()-thickness, box.max_y()-thickness, box.max_z()-thickness));
 

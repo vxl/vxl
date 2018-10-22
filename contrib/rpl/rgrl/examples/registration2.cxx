@@ -151,7 +151,7 @@ main( int argc, char* argv[] )
   read_feature_file( moving_file_name, moving_feature_points );
   read_feature_file( fixed_file_name, fixed_feature_points );
 
-  const unsigned int dimension = 2;
+  constexpr unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set;
   rgrl_feature_set_sptr fixed_feature_set;
   moving_feature_set =

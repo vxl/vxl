@@ -15,8 +15,8 @@
 //:global variables
 namespace bvpl_discover_pca_features_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 

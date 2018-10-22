@@ -286,7 +286,7 @@ vimt_vil_v2i_image::~vimt_vil_v2i_image()
 
     vsl_b_write(vslstream, V2I_MAGIC);
 
-    const short version = 1;
+    constexpr short version = 1;
     vsl_b_write(vslstream, version);
 
 

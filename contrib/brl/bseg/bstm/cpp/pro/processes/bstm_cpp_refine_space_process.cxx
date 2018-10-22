@@ -23,8 +23,8 @@
 
 namespace bstm_cpp_refine_space_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bstm_cpp_refine_space_process_cons(bprb_func_process& pro)
@@ -105,12 +105,12 @@ bool bstm_cpp_refine_space_process(bprb_func_process& pro)
       continue;
     std::cout<<"Refining Block: "<<id<<std::endl;
 
-    bstm_block     * blk     = cache->get_block(id);
-    bstm_time_block* blk_t   = cache->get_time_block(id);
-    bstm_data_base * alph    = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
+    bstm_block     * blk = cache->get_block(id);
+    bstm_time_block* blk_t = cache->get_time_block(id);
+    bstm_data_base * alph = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
     int num_el = alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize();
     int tree_buffer_len = blk_t->tree_buff_length();
-    bstm_data_base * mog     = cache->get_data_base(id, app_data_type, apptypesize * num_el);
+    bstm_data_base * mog = cache->get_data_base(id, app_data_type, apptypesize * num_el);
     bstm_data_base * num_obs = cache->get_data_base(id, nobs_data_type,nobstypesize * num_el );
     bstm_data_base * change = cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix(), bstm_data_traits<BSTM_CHANGE>::datasize() *tree_buffer_len );
 

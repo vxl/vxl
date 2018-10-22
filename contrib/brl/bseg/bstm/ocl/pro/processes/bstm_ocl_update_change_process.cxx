@@ -33,8 +33,8 @@
 
 namespace bstm_ocl_update_change_process_globals
 {
-  const unsigned n_inputs_     = 7;
-  const unsigned n_outputs_    = 1;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool bstm_ocl_update_change_process_cons(bprb_func_process& pro)
@@ -71,20 +71,20 @@ bool bstm_ocl_update_change_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  bocl_device_sptr         device        = pro.get_input<bocl_device_sptr>(i++);
-  bstm_scene_sptr          scene         = pro.get_input<bstm_scene_sptr>(i++);
-  bstm_opencl_cache_sptr   opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr  cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr img           = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr mask_img      = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                   time          = pro.get_input<float>(i++);
+  bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
+  bstm_scene_sptr          scene = pro.get_input<bstm_scene_sptr>(i++);
+  bstm_opencl_cache_sptr   opencl_cache = pro.get_input<bstm_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr mask_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  float                   time = pro.get_input<float>(i++);
 
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    vis_img     = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>*    vis_img = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

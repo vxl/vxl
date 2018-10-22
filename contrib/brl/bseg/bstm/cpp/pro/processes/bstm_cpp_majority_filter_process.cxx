@@ -20,8 +20,8 @@
 
 namespace bstm_cpp_majority_filter_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bstm_cpp_majority_filter_process_cons (bprb_func_process& pro)
@@ -67,8 +67,8 @@ bool bstm_cpp_majority_filter_process (bprb_func_process& pro)
 
     std::cout << "Filtering " << id << std::endl;
 
-    bstm_block *     blk     = cache->get_block(id);
-    bstm_time_block *     blk_t     = cache->get_time_block(id);
+    bstm_block *     blk = cache->get_block(id);
+    bstm_time_block *     blk_t = cache->get_time_block(id);
 
     bstm_data_base * change = cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix());
     bstm_majority_filter(data, blk, blk_t,change);

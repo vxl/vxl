@@ -26,8 +26,8 @@
 
 namespace volm_layer_extraction_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 bool volm_layer_extraction_process_cons(bprb_func_process& pro)
@@ -221,8 +221,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
 //: process to generate various building layers from LandCover images and height images
 namespace volm_building_layer_extraction_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 bool volm_building_layer_extraction_process_cons(bprb_func_process& pro)
@@ -473,7 +473,7 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
 //: process to downsample the generate land layer image
 namespace volm_downsample_binary_layer_process_globals
 {
-  unsigned n_inputs_  = 6;
+  unsigned n_inputs_ = 6;
   unsigned n_outputs_ = 0;
 }
 
@@ -501,12 +501,12 @@ bool volm_downsample_binary_layer_process(bprb_func_process& pro)
   }
   // get the inputs
   unsigned in_i = 0;
-  vil_image_view_base_sptr in_img_sptr   = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vil_image_view_base_sptr in_mask_sptr  = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vpgl_camera_double_sptr  in_cam_sptr   = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  vil_image_view_base_sptr out_img_sptr  = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr in_mask_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  vil_image_view_base_sptr out_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr out_mask_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vpgl_camera_double_sptr  out_cam_sptr  = pro.get_input<vpgl_camera_double_sptr>(in_i++);
+  vpgl_camera_double_sptr  out_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
 
   vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
@@ -693,18 +693,18 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
   const unsigned n_thres = thresholds.size();
   std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
 
-  bbas_1d_array_float* tp  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tn  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fp  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tp = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tn = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fp = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fn = new bbas_1d_array_float(n_thres);
   bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
   bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
   // initialize
   for (unsigned i = 0; i < n_thres; i++) {
-    tp->data_array[i]  = 0.0f;
-    tn->data_array[i]  = 0.0f;
-    fp->data_array[i]  = 0.0f;
-    fn->data_array[i]  = 0.0f;
+    tp->data_array[i] = 0.0f;
+    tn->data_array[i] = 0.0f;
+    fp->data_array[i] = 0.0f;
+    fn->data_array[i] = 0.0f;
     tpr->data_array[i] = 0.0f;
     fpr->data_array[i] = 0.0f;
   }

@@ -37,8 +37,8 @@
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 11;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_ = 11;
+  constexpr unsigned n_outputs_ = 5;
 }
 
 // === functions ===
@@ -107,13 +107,13 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   unsigned img_res_ni = pro.get_input<unsigned>(i++);
   unsigned img_res_nj = pro.get_input<unsigned>(i++);
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);      // rational camera
-  double lower_left_lon   = pro.get_input<double>(i++);
-  double lower_left_lat   = pro.get_input<double>(i++);
-  double lower_left_elev  = pro.get_input<double>(i++);
-  double upper_right_lon  = pro.get_input<double>(i++);
-  double upper_right_lat  = pro.get_input<double>(i++);
+  double lower_left_lon = pro.get_input<double>(i++);
+  double lower_left_lat = pro.get_input<double>(i++);
+  double lower_left_elev = pro.get_input<double>(i++);
+  double upper_right_lon = pro.get_input<double>(i++);
+  double upper_right_lat = pro.get_input<double>(i++);
   double upper_right_elev = pro.get_input<double>(i++);
-  double uncertainty      = pro.get_input<double>(i++);
+  double uncertainty = pro.get_input<double>(i++);
   vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
 
   vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
@@ -176,8 +176,8 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
 // global variables and functions
 namespace vpgl_offset_cam_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 5;
 }
 
 // initialization
@@ -226,13 +226,13 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   // get the input
   unsigned i = 0;
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++); // rational camera
-  double lower_left_lon   = pro.get_input<double>(i++);
-  double lower_left_lat   = pro.get_input<double>(i++);
-  double lower_left_elev  = pro.get_input<double>(i++);
-  double upper_right_lon  = pro.get_input<double>(i++);
-  double upper_right_lat  = pro.get_input<double>(i++);
+  double lower_left_lon = pro.get_input<double>(i++);
+  double lower_left_lat = pro.get_input<double>(i++);
+  double lower_left_elev = pro.get_input<double>(i++);
+  double upper_right_lon = pro.get_input<double>(i++);
+  double upper_right_lat = pro.get_input<double>(i++);
   double upper_right_elev = pro.get_input<double>(i++);
-  double uncertainty      = pro.get_input<double>(i++);
+  double uncertainty = pro.get_input<double>(i++);
   vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
 
   vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
@@ -356,8 +356,8 @@ bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sp
 // global variables and functions
 namespace vpgl_crop_ortho_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 5;
 }
 
 // initialization
@@ -399,11 +399,11 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
 
-  double lower_left_lon   = pro.get_input<double>(i++);
-  double lower_left_lat   = pro.get_input<double>(i++);
-  double lower_left_elev  = pro.get_input<double>(i++);
-  double upper_right_lon  = pro.get_input<double>(i++);
-  double upper_right_lat  = pro.get_input<double>(i++);
+  double lower_left_lon = pro.get_input<double>(i++);
+  double lower_left_lat = pro.get_input<double>(i++);
+  double lower_left_elev = pro.get_input<double>(i++);
+  double upper_right_lon = pro.get_input<double>(i++);
+  double upper_right_lat = pro.get_input<double>(i++);
   double upper_right_elev = pro.get_input<double>(i++);
 
   // create the 3D box given input coordinates (in geo-coordinates)
@@ -487,8 +487,8 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_dem_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 5;
   //: find the min and max height in a given region from height map resources
   bool find_min_max_height(double const& ll_lon, double const& ll_lat, double const& uu_lon, double const& uu_lat,
                            std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,
@@ -543,11 +543,11 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(in_i++);  // image resource
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);      // rational camera
-  double lower_left_lon  = pro.get_input<double>(in_i++);
-  double lower_left_lat  = pro.get_input<double>(in_i++);
+  double lower_left_lon = pro.get_input<double>(in_i++);
+  double lower_left_lat = pro.get_input<double>(in_i++);
   double upper_right_lon = pro.get_input<double>(in_i++);
   double upper_right_lat = pro.get_input<double>(in_i++);
-  std::string dem_folder  = pro.get_input<std::string>(in_i++);
+  std::string dem_folder = pro.get_input<std::string>(in_i++);
   double box_height = pro.get_input<double>(in_i++);
   double uncertainty = pro.get_input<double>(in_i++);
   vpgl_lvcs_sptr lvcs_sptr = pro.get_input<vpgl_lvcs_sptr>(in_i++);

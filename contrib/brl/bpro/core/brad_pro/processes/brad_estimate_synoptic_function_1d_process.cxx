@@ -10,8 +10,8 @@
 
 namespace brad_estimate_synoptic_function_1d_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 

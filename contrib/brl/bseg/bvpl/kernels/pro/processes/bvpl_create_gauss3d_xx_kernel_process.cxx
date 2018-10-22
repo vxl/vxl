@@ -18,8 +18,8 @@
 namespace bvpl_create_gauss3d_xx_kernel_process_globals
 {
   //the specs of this kernel are specified as parameters
-  const unsigned n_inputs_ = 0;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 0;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 

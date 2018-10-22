@@ -32,8 +32,8 @@
 
 namespace boxm2_ocl_change_detection_process2_globals
 {
-  const unsigned n_inputs_     = 9;
-  const unsigned n_outputs_    = 2;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
@@ -56,12 +56,12 @@ bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)
   output_types_[0] = "vil_image_view_base_sptr";  // prob of change image
   output_types_[1] = "vil_image_view_base_sptr";  // vis image
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
-  brdb_value_sptr identifier        = new brdb_value_t<std::string>("");
+  brdb_value_sptr identifier = new brdb_value_t<std::string>("");
   pro.set_input(5, identifier);
-  brdb_value_sptr idx        = new brdb_value_t<bool>(false);
+  brdb_value_sptr idx = new brdb_value_t<bool>(false);
   pro.set_input(6, idx);
-  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
   pro.set_input(7, tnearfactor);
   pro.set_input(8, tfarfactor);
@@ -78,23 +78,23 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  bocl_device_sptr          device        = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr          scene         = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr   opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
+  bocl_device_sptr          device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr          scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr   cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr  img = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string identifier = pro.get_input<std::string>(i++);
-   bool  max_density           = pro.get_input<bool>(i++);
-  float                    nearfactor   = pro.get_input<float>(i++);
-  float                    farfactor    = pro.get_input<float>(i++);
+   bool  max_density = pro.get_input<bool>(i++);
+  float                    nearfactor = pro.get_input<float>(i++);
+  float                    farfactor = pro.get_input<float>(i++);
 
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img     = new vil_image_view<float>(ni, nj);
-  vil_image_view<float>*    vis_img     = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>*    change_img = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>*    vis_img = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

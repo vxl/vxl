@@ -33,7 +33,7 @@
 #include "mbl_read_int.h"
 #include <vcl_compiler.h>
 
-const int MAX_LEN = 20;
+constexpr int MAX_LEN = 20;
 
 // If min_int != 0 or max_int != 0 then prints range but doesn't check that reply is in range
 int RD_ReadInt1(const char* q_str, int default_int,

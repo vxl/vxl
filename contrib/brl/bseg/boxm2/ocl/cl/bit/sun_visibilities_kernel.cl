@@ -39,7 +39,7 @@ void step_cell_seglen_vis(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     (* aux_args.ray_vis) *= temp;
 
     // keep track of vis at last "empty" cell to prevent self-shadowing within uncertain regions
-    const float passthrough_prob_thresh = 0.9;
+    constexpr float passthrough_prob_thresh = 0.9;
     if (temp >= passthrough_prob_thresh) {
        *(aux_args.last_vis) = *(aux_args.ray_vis);
     }

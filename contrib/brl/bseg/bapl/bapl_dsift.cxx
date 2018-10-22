@@ -130,7 +130,7 @@ vnl_vector<double> bapl_dsift::vnl_dsift( unsigned const& key_x, unsigned const&
 
 void bapl_dsift::b_write(vsl_b_ostream& os) const
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(os, version_no);
   vsl_b_write(os, this->grad_valid_);
 

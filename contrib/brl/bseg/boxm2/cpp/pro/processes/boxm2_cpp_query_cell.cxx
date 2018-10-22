@@ -25,8 +25,8 @@
 
 namespace boxm2_cpp_query_cell_process_globals
 {
-  const unsigned n_inputs_ =  8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)
@@ -114,7 +114,7 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   if (ident_type.compare("BOXM2_FLOAT16")==0)
   {
 
-    boxm2_data<BOXM2_FLOAT16>* data  = new boxm2_data<BOXM2_FLOAT16>(data_base->data_buffer(),
+    boxm2_data<BOXM2_FLOAT16>* data = new boxm2_data<BOXM2_FLOAT16>(data_base->data_buffer(),
                                                                      data_base->buffer_length(),
                                                                      data_base->block_id());
     boxm2_array_1d<boxm2_data_traits<BOXM2_FLOAT16>::datatype> data_array=data->data();
@@ -125,7 +125,7 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   else if (ident_type.compare("BOXM2_COVARIANCE")==0)
   {
 
-    boxm2_data<BOXM2_COVARIANCE>* data  = new boxm2_data<BOXM2_COVARIANCE>(data_base->data_buffer(),
+    boxm2_data<BOXM2_COVARIANCE>* data = new boxm2_data<BOXM2_COVARIANCE>(data_base->data_buffer(),
                                                                      data_base->buffer_length(),
                                                                      data_base->block_id());
     boxm2_array_1d<boxm2_data_traits<BOXM2_COVARIANCE>::datatype> data_array=data->data();
@@ -136,7 +136,7 @@ bool  boxm2_cpp_query_cell_process(bprb_func_process& pro)
   else if (ident_type.compare("BOXM2_POINT")==0)
   {
 
-    boxm2_data<BOXM2_POINT>* data  = new boxm2_data<BOXM2_POINT>(data_base->data_buffer(),
+    boxm2_data<BOXM2_POINT>* data = new boxm2_data<BOXM2_POINT>(data_base->data_buffer(),
                                                                      data_base->buffer_length(),
                                                                      data_base->block_id());
     boxm2_array_1d<boxm2_data_traits<BOXM2_POINT>::datatype> data_array=data->data();

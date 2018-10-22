@@ -730,7 +730,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
   double I1,Ix,dI1,dIx,dIx2,u_1,denom,k1,k2;
   double u = alpha;
   // integrate using the trapezoid rule with non-uniform sampling
-  const double lower_bound = 0.01;//((t6<t4)?(t6/t4):1.0) * 0.01;
+  constexpr double lower_bound = 0.01;//((t6<t4)?(t6/t4):1.0) * 0.01;
   for (; u>lower_bound; u*=alpha) {
     i_data += last_i_data;
     u_1 = 1.0-u;

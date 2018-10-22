@@ -408,7 +408,7 @@ void batch_update_alpha (   __global RenderSceneInfo  * info,
         }
 
 
-        const short max_iterations  = 500;
+        constexpr short max_iterations = 500;
         const float TOL = 1e-2f;
         short i = 0;
 

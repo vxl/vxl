@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_update_histogram_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
@@ -199,9 +199,9 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
       {
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem * blk       = opencl_cache->get_block(scene,*id);
-        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
+        bocl_mem * blk = opencl_cache->get_block(scene,*id);
+        bocl_mem * blk_info = opencl_cache->loaded_block_info();
+        bocl_mem * aux = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
 
         transfer_time += (float) transfer.all();
 
@@ -228,11 +228,11 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
       else if (kernelindex==1)
       {
         vul_timer transfer;
-        bocl_mem * blk       = opencl_cache->get_block(scene,*id);
-        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-        bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
-        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
+        bocl_mem * blk = opencl_cache->get_block(scene,*id);
+        bocl_mem * blk_info = opencl_cache->loaded_block_info();
+        bocl_mem * alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+        bocl_mem * hist = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
+        bocl_mem * aux = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
 
         transfer_time += (float) transfer.all();
 
@@ -261,8 +261,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
       else if (kernelindex==2) // clean seg len
       {
         vul_timer transfer;
-        bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem * aux       = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
+        bocl_mem * blk_info = opencl_cache->loaded_block_info();
+        bocl_mem * aux = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
 
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int aux_type_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());

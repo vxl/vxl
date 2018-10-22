@@ -32,8 +32,8 @@
 
 namespace bvpl_vector_operator_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 //: process takes 6 inputs and has 2 outputs.

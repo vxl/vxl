@@ -23,8 +23,8 @@
 
 namespace bstm_cpp_refine_spacetime_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bstm_cpp_refine_spacetime_process_cons(bprb_func_process& pro)
@@ -97,11 +97,11 @@ bool bstm_cpp_refine_spacetime_process(bprb_func_process& pro)
       continue;
     std::cout<<"Refining Block: "<<id<<std::endl;
 
-    bstm_block     * blk     = cache->get_block(id);
-    bstm_time_block* blk_t   = cache->get_time_block(id);
-    bstm_data_base * alph    = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
+    bstm_block     * blk = cache->get_block(id);
+    bstm_time_block* blk_t = cache->get_time_block(id);
+    bstm_data_base * alph = cache->get_data_base(id,bstm_data_traits<BSTM_ALPHA>::prefix());
     int num_el = alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize();
-    bstm_data_base * mog     = cache->get_data_base(id,bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() * num_el);
+    bstm_data_base * mog = cache->get_data_base(id,bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix(), bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() * num_el);
     bstm_data_base * num_obs = cache->get_data_base(id,bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix(),bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() * num_el );
 
     std::vector<bstm_data_base*> datas;

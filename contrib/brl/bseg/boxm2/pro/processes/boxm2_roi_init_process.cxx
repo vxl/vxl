@@ -53,8 +53,8 @@
 //: globals variables and functions
 namespace boxm2_roi_init_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 3;
 
   // === functions ===
 

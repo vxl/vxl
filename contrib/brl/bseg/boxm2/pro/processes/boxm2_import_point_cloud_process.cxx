@@ -50,8 +50,8 @@ void readPointsFromXYZ(const std::string& filename, std::vector<vgl_point_3d<dou
 
 namespace boxm2_import_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_import_point_cloud_process_cons(bprb_func_process& pro)
@@ -112,7 +112,7 @@ bool boxm2_import_point_cloud_process(bprb_func_process& pro)
       if(depth >= (int)min_depth )
       {
         int data_offset=tree.get_data_index(bit_index,false);
-        boxm2_data_base *  alpha_base  = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        boxm2_data_base *  alpha_base = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         alpha_base->enable_write();
         boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
         double side_len = 1.0 / (double) (1 << depth);

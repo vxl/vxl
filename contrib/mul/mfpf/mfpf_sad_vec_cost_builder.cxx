@@ -120,7 +120,7 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
       }
       std::vector<double>::iterator medIter=mads.begin()+mads.size()/2;
       std::nth_element(mads.begin(),medIter,mads.end());
-      const double kMADtoSD=1.4826;
+      constexpr double kMADtoSD = 1.4826;
       min_mad_ = std::max(min_mad_,(*medIter/kMADtoSD));
   }
 

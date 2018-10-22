@@ -16,8 +16,8 @@
 //: globals
 namespace bvxm_estimate_camera_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 3;
 
   // parameter strings
   const std::string theta_range_ =  "theta_range";

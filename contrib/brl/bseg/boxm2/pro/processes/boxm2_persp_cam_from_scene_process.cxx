@@ -11,8 +11,8 @@
 #include <bpgl/algo/bpgl_camera_from_box.h>
 namespace boxm2_persp_cam_from_scene_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 1;
 }
 bool boxm2_persp_cam_from_scene_process_cons(bprb_func_process& pro)
 {
@@ -44,9 +44,9 @@ bool boxm2_persp_cam_from_scene_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
-  float xc  = pro.get_input<float>(1);
-  float yc  = pro.get_input<float>(2);
-  float zc  = pro.get_input<float>(3);
+  float xc = pro.get_input<float>(1);
+  float yc = pro.get_input<float>(2);
+  float zc = pro.get_input<float>(3);
   unsigned ni = pro.get_input<unsigned>(4);
   unsigned nj = pro.get_input<unsigned>(5);
   // get the scene bounding box

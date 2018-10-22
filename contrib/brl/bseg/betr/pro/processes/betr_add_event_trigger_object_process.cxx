@@ -15,8 +15,8 @@
 
 namespace betr_add_event_trigger_object_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool betr_add_event_trigger_object_process_cons(bprb_func_process& pro)
@@ -25,13 +25,13 @@ bool betr_add_event_trigger_object_process_cons(bprb_func_process& pro)
 
   //process takes 7 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "betr_event_trigger_sptr"; //event_trigger
-  input_types_[1]  = "vcl_string";//name
-  input_types_[2]  = "float";// lon
-  input_types_[3]  = "float";// lat
-  input_types_[4]  = "float";// elev
-  input_types_[5]  = "vcl_string";// geom path
-  input_types_[6]  = "bool"; // is a reference object (or if false an event object)
+  input_types_[0] = "betr_event_trigger_sptr"; //event_trigger
+  input_types_[1] = "vcl_string";//name
+  input_types_[2] = "float";// lon
+  input_types_[3] = "float";// lat
+  input_types_[4] = "float";// elev
+  input_types_[5] = "vcl_string";// geom path
+  input_types_[6] = "bool"; // is a reference object (or if false an event object)
   // process has 0 outputs
   std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);

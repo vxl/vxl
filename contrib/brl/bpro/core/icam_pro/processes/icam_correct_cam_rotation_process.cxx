@@ -32,8 +32,8 @@
 // global variables
 namespace icam_correct_cam_rotation_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 //: sets input and output types

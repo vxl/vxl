@@ -17,8 +17,8 @@
 //: global variables
 namespace bvxm_create_scene_xml_process_globals
 {
-  const unsigned n_inputs_  = 14;
-  const unsigned n_outputs_ =  0;
+  constexpr unsigned n_inputs_ = 14;
+  constexpr unsigned n_outputs_ = 0;
 }
 //: set input and output types
 bool bvxm_create_scene_xml_process_cons(bprb_func_process& pro);
@@ -29,8 +29,8 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro);
 //: global variables
 namespace bvxm_create_scene_xml_large_scale_process_globals
 {
-  const unsigned n_inputs_  = 9;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 1;
 }
 //: set input and output types
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro);

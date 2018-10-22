@@ -35,8 +35,8 @@
 
 namespace boxm2_create_index_process_globals
 {
-  const unsigned n_inputs_ = 14;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 14;
+  constexpr unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
@@ -348,8 +348,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
       vul_timer transfer;
 
-      bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+      bocl_mem* blk = opencl_cache->get_block(scene, id_inner);
+      bocl_mem* blk_info = opencl_cache->loaded_block_info();
       bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
       transfer_time += (float) transfer.all();
@@ -488,8 +488,8 @@ bool boxm2_create_index_process(bprb_func_process& pro)
 
 namespace boxm2_visualize_index_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_visualize_index_process_cons(bprb_func_process& pro)
@@ -579,8 +579,8 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
 //       assumes that hyp file order and index file order are the same, so uses hyp_id to retrieve index from the binary index file
 namespace boxm2_visualize_index_process2_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_visualize_index_process2_cons(bprb_func_process& pro)

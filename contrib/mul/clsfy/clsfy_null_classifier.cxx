@@ -50,7 +50,7 @@ void clsfy_null_classifier::print_summary(std::ostream& os) const
 //=======================================================================
 void clsfy_null_classifier::b_write(vsl_b_ostream& bfs) const
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(bfs, version_no);
   vsl_b_write(bfs, n_dims_);
   vsl_b_write(bfs, default_class_);

@@ -24,8 +24,8 @@
 
 namespace boxm2_cpp_change_detection_process2_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_cpp_change_detection_process2_cons(bprb_func_process& pro)
@@ -112,9 +112,9 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
           std::vector<boxm2_block_id>::iterator id;
           for (id = vis_order.begin(); id != vis_order.end(); ++id)
           {
-              boxm2_block *     blk  = cache->get_block(scene,*id);
+              boxm2_block *     blk = cache->get_block(scene,*id);
               boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-              boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
+              boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type);
               std::vector<boxm2_data_base*> datas;
               datas.push_back(alph);
               datas.push_back(mog);

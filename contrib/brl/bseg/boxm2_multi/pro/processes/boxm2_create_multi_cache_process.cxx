@@ -20,8 +20,8 @@
 
 namespace boxm2_create_multi_cache_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 1;
 }
 bool boxm2_create_multi_cache_process_cons(bprb_func_process& pro)
 {
@@ -52,7 +52,7 @@ bool boxm2_create_multi_cache_process(bprb_func_process& pro)
     //get the inputs
     unsigned i = 0;
     boxm2_scene_sptr scene= pro.get_input<boxm2_scene_sptr>(i++);
-    int numGPU   = pro.get_input<int>(i++);
+    int numGPU = pro.get_input<int>(i++);
     bocl_manager_child &mgr = bocl_manager_child::instance();
     //make a multicache
     if ( numGPU > mgr.gpus_.size() ) {
@@ -73,8 +73,8 @@ bool boxm2_create_multi_cache_process(bprb_func_process& pro)
 
 namespace boxm2_write_multi_cache_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 0;
 }
 bool boxm2_write_multi_cache_process_cons(bprb_func_process& pro)
 {

@@ -27,7 +27,7 @@ boxm_opt3_optimizer<T_loc,APM,AUX_APM>::boxm_opt3_optimizer(boxm_scene<boct_tree
 template <class T_loc, boxm_apm_type APM, boxm_apm_type AUX_APM>
 bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
 {
-  const unsigned int n_samples_per_obs = 10;
+  constexpr unsigned int n_samples_per_obs = 10;
 
   // get auxiliary scenes associated with each input image
   typedef boxm_opt3_sample<AUX_APM> aux_type;

@@ -20,8 +20,8 @@
 //: global variables
 namespace sdet_segment_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool sdet_segment_image_process_cons(bprb_func_process& pro);
@@ -30,8 +30,8 @@ bool sdet_segment_image_process(bprb_func_process& pro);
 
 namespace sdet_segment_image_using_edge_map_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool sdet_segment_image_using_edge_map_process_cons(bprb_func_process& pro);
@@ -40,8 +40,8 @@ bool sdet_segment_image_using_edge_map_process(bprb_func_process& pro);
 
 namespace sdet_segment_image_using_height_map_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool sdet_segment_image_using_height_map_process_cons(bprb_func_process& pro);
@@ -49,8 +49,8 @@ bool sdet_segment_image_using_height_map_process(bprb_func_process& pro);
 
 namespace sdet_segment_image_using_height_map_process2_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool sdet_segment_image_using_height_map_process2_cons(bprb_func_process& pro);

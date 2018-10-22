@@ -18,8 +18,8 @@
 //: global variables
 namespace bvpl_compute_sf_raw_response_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 

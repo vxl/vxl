@@ -26,8 +26,8 @@
 
 namespace boxm2_ocl_batch_probability_process_globals
 {
-  const unsigned n_inputs_ =  3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     std::vector<std::string> src_paths;
@@ -121,12 +121,12 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     bocl_kernel* kern =  kernels[(device->device_id())][0];
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk       = opencl_cache->get_block(scene,*id);
+    bocl_mem * blk = opencl_cache->get_block(scene,*id);
     std::cout<<" Block Num: "<<(*id)<<std::endl;
     std::cout.flush();
-    bocl_mem * blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem * alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    bocl_mem * hist      = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
+    bocl_mem * alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * hist = opencl_cache->get_data<BOXM2_BATCH_HISTOGRAM>(scene,*id);
     bocl_mem * intensity = opencl_cache->get_data<BOXM2_MOG3_GREY>(scene,*id);
 
     transfer_time += (float) transfer.all();

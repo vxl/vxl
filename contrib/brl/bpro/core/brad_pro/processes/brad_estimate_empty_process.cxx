@@ -11,8 +11,8 @@
 // \file
 namespace brad_estimate_empty_process_globals
 {
-    const unsigned n_inputs_  = 4;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_ = 4;
+    constexpr unsigned n_outputs_ = 1;
 }
 
 
@@ -82,7 +82,7 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
             index =0;
         float gradI = (float)std::fabs(Iobs[i]-Iobs[index]);
 
-        int bin_index  = (int) std::floor(gradI*8);
+        int bin_index = (int) std::floor(gradI*8);
         bin_index = bin_index>7 ? 7:bin_index;
         temp_histogram[bin_index] += (float)std::min(vis[i],vis[index]);
         sum += (float)std::min(vis[i],vis[index]);

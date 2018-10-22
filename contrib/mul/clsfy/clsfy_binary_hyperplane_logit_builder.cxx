@@ -106,7 +106,7 @@ double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& class
 
 void clsfy_binary_hyperplane_logit_builder::b_write(vsl_b_ostream &bfs) const
 {
-  const int version_no=1;
+  constexpr int version_no = 1;
   vsl_b_write(bfs, version_no);
   clsfy_binary_hyperplane_ls_builder::b_write(bfs);
   vsl_b_write(bfs,min_p_);

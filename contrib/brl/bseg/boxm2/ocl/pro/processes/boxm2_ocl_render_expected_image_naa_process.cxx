@@ -37,8 +37,8 @@
 
 namespace boxm2_ocl_render_expected_image_naa_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 2;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -197,7 +197,7 @@ bool boxm2_ocl_render_expected_image_naa_process(bprb_func_process& pro)
 
   float background_rad_buff[1];
   // assume expected value of albedo is around 0.2
-  const double expected_albedo = 0.2;
+  constexpr double expected_albedo = 0.2;
   double expected_radiance = brad_expected_radiance_chavez(expected_albedo,vgl_vector_3d<double>(0,0,1),*metadata,*atm_params);
   background_rad_buff[0] = expected_radiance;
   bocl_mem_sptr background_rad = new bocl_mem(device->context(), background_rad_buff, sizeof(float), "background radiance value");

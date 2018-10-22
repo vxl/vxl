@@ -29,8 +29,8 @@
 
 namespace bvpl_scene_kernel_operator_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: process takes 5 inputs and has 1 output.

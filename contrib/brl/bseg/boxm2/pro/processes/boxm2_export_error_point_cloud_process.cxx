@@ -18,8 +18,8 @@
 
 namespace boxm2_export_error_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_export_error_point_cloud_process_cons(bprb_func_process& pro)
@@ -99,7 +99,7 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
   for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
   {
     boxm2_block_id id = blk_iter->first;
-    boxm2_block *     blk     = cache->get_block(scene, id);
+    boxm2_block *     blk = cache->get_block(scene, id);
 
     //: the following code does not work
     boxm2_block_metadata data = blk_iter->second;

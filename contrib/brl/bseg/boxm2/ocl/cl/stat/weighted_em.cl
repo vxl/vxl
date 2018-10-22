@@ -41,8 +41,8 @@ float2 weighted_mean_var(SAMPLE_TYPE* obs, GAUSS_WEIGHT_TYPE* vis, int numSample
   else if (numSamples == 1)
     return (float2) ( SAMPLE2FLOAT(obs[0]), .1f );
 
-  float sample_mean     = 0.0f;
-  float sum_weights     = 0.0f;
+  float sample_mean = 0.0f;
+  float sum_weights = 0.0f;
 
   for (uint i=0; i<numSamples; ++i) {
     float w = GAUSS_WEIGHT2FLOAT( vis[i] );
@@ -108,10 +108,10 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
                         float           min_sigma )
 {
   //EM Defines
-  const uint  nmodes    = 3;
-  const float min_var   = min_sigma*min_sigma;
+  constexpr uint  nmodes = 3;
+  const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float) SQRT1_2;      // maximum possible std. dev for set of samples drawn from [0 1]
-  const float big_var   = big_sigma * big_sigma;
+  const float big_var = big_sigma * big_sigma;
 
   //initialize to pretty flat distribution
   float8 mog3 = (float8) (  .5f/nmodes, .3f, 1.0f/nmodes,  //mu0, sigma0, w0
@@ -151,7 +151,7 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
   mode_probs[2] = mode2_probs;
 
   // run EM algorithm to maximize expected probability of observations
-  const unsigned int max_iterations              = 50;
+  constexpr unsigned int max_iterations = 50;
   const float        max_converged_weight_change = 1e-3f;
   for (uint i=0; i<max_iterations; ++i) {
     float max_weight_change = 0.0f;
@@ -209,13 +209,13 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
 
       //train this gaussian
       float  mode_mean = 0.5f;
-      float  mode_var  = 1.0f;
+      float  mode_var = 1.0f;
       float2 mode_gauss = weighted_mean_var(obs, (GAUSS_WEIGHT_TYPE*) mode_probs[m], numSamples);
       mode_mean = mode_gauss.x;
-      mode_var  = mode_gauss.y;// mode_gauss.clamp(mode_gauss.y, min_var, big_var);
+      mode_var = mode_gauss.y;// mode_gauss.clamp(mode_gauss.y, min_var, big_var);
 
       // update mode parameters
-      mog3Arr[ m*3 ]   = mode_mean;
+      mog3Arr[ m*3 ] = mode_mean;
       mog3Arr[ m*3+1 ] =sqrt( mode_var);
     }
 

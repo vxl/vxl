@@ -20,8 +20,8 @@
 //: globals
 namespace bvxm_detect_scale_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: set input and output types

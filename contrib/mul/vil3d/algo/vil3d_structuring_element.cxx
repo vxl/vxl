@@ -98,7 +98,7 @@ void vil3d_structuring_element::set_to_circle_i(double r)
   std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
-  const int i = 0;
+  constexpr int i = 0;
   for (int k=-r0;k<=r0;++k)
     for (int j=-r0;j<=r0;++j)
       if (i*i+j*j+k*k<r2)
@@ -113,7 +113,7 @@ void vil3d_structuring_element::set_to_circle_j(double r)
   std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
-  const int j = 0;
+  constexpr int j = 0;
   for (int k=-r0;k<=r0;++k)
     for (int i=-r0;i<=r0;++i)
       if (i*i+j*j+k*k<r2)
@@ -128,7 +128,7 @@ void vil3d_structuring_element::set_to_circle_k(double r)
   std::vector<int> px,py,pz;
   double r2 = r*r;
   int r0 = int(r+1);
-  const int k = 0;
+  constexpr int k = 0;
   for (int j=-r0;j<=r0;++j)
     for (int i=-r0;i<=r0;++i)
       if (i*i+j*j+k*k<r2)

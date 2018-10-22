@@ -317,16 +317,16 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
 
   // now the entire rotation matrices
   vnl_matrix<double> R = Rphi * Ralpha * Rtheta;
-  vnl_matrix<double> dRdphi  = Rphid * Ralpha  * Rtheta;
+  vnl_matrix<double> dRdphi = Rphid * Ralpha  * Rtheta;
   vnl_matrix<double> dRdalpha = Rphi  * Ralphad * Rtheta;
   vnl_matrix<double> dRdtheta = Rphi  * Ralpha  * Rthetad;
 
-  vnl_matrix<double> d2Rdphidtheta   = Rphid * Ralpha  * Rthetad;
-  vnl_matrix<double> d2Rdphidalpha   = Rphid * Ralphad * Rtheta;
+  vnl_matrix<double> d2Rdphidtheta = Rphid * Ralpha  * Rthetad;
+  vnl_matrix<double> d2Rdphidalpha = Rphid * Ralphad * Rtheta;
   vnl_matrix<double> d2Rdthetadalpha = Rphi  * Ralphad * Rthetad;
 
 
-  vnl_matrix<double> d2Rdphi2   = Rphidd * Ralpha   * Rtheta;
+  vnl_matrix<double> d2Rdphi2 = Rphidd * Ralpha   * Rtheta;
   vnl_matrix<double> d2Rdalpha2 = Rphi   * Ralphadd * Rtheta;
   vnl_matrix<double> d2Rdtheta2 = Rphi   * Ralpha   * Rthetadd;
 
@@ -337,7 +337,7 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
   vnl_matrix<double> Hoo(3,3,0.0);
   vnl_matrix<double> Hot(3,3,0.0);
 
-  const unsigned m = 3;
+  constexpr unsigned m = 3;
 
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );

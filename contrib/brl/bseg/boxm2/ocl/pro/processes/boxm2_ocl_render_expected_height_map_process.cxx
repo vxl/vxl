@@ -27,8 +27,8 @@
 
 namespace boxm2_ocl_render_expected_height_map_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 5;
   std::size_t local_threads[2]={8,8};
   static vcl_map<vcl_string, std::vector<bocl_kernel*> > kernels_;
   vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts)
@@ -321,7 +321,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
       (*exp_var_out)(r,c) = var_buff[c*cl_ni+r];
       (*xcoord_img)(r, c) = ray_origins[(c*cl_ni + r) * 4 + 0];
       (*ycoord_img)(r, c) = ray_origins[(c*cl_ni + r) * 4 + 1];
-      (*prob_img)(r,c)    = prob_buff[c*cl_ni+r];
+      (*prob_img)(r,c) = prob_buff[c*cl_ni+r];
     }
   // store scene smaprt pointer
   pro.set_output_val<vil_image_view_base_sptr>(i++, exp_img_out);

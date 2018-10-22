@@ -24,8 +24,8 @@
 
 namespace volm_dsm_ground_plane_estimation_process_globals
 {
-  const unsigned int n_inputs_ = 4;
-  const unsigned int n_outputs_ = 1;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 1;
 }
 
 bool volm_dsm_ground_plane_estimation_process_cons(bprb_func_process& pro)
@@ -182,8 +182,8 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
 //: process to estimate a ground plane from original height maps using an edge map.  The edge map is used to control windows size
 namespace volm_dsm_ground_plane_estimation_edge_process_globals
 {
-  const unsigned int n_inputs_ = 4;
-  const unsigned int n_outputs_ = 1;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 1;
 
   int window_size_from_nearest_edge(vil_image_view<vxl_byte>* edge_img, int const& i, int const& j, int const& search_range);
 }
@@ -330,8 +330,8 @@ int volm_dsm_ground_plane_estimation_edge_process_globals::window_size_from_near
 // reference http://www.sciencedirect.com/science/article/pii/S0924271608000956
 namespace volm_dsm_ground_filter_mgf_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 2;
 
   bool nearest_ground_elev(vil_image_view<float> const& img,
                            vil_image_view<vxl_byte> const& grd_mask,
@@ -375,7 +375,7 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
   float window_size = pro.get_input<float>(in_i++);
   float elev_thres = pro.get_input<float>(in_i++);
   float slop_thres_deg = pro.get_input<float>(in_i++);
-  float pixel_res  = pro.get_input<float>(in_i++);
+  float pixel_res = pro.get_input<float>(in_i++);
 
   // compute slope threshold
   float slop_thres = std::tan(slop_thres_deg / vnl_math::deg_per_rad) * pixel_res;

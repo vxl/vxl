@@ -52,9 +52,9 @@ class rrel_wls_obj;
 class rrel_irls
 {
   //  default parameters
-  static rrel_EXPORT const double dflt_convergence_tol_;
-  static rrel_EXPORT const int dflt_max_iterations_;
-  static rrel_EXPORT const int dflt_iterations_for_scale_ ;
+  static constexpr double dflt_convergence_tol_ = 1e-4;
+  static constexpr int dflt_max_iterations_ = 25;
+  static constexpr int dflt_iterations_for_scale_ = 1;
 
  public:
   //: Constructor.

@@ -163,12 +163,12 @@ void test_quantile()
   // using "{}" blocks for higher autonomy and reusablility of variables
   {
     std::cout << "test_quantile(): odd number of samples (nsamples=5)\n";
-    const unsigned ns=5;
+    constexpr unsigned ns = 5;
     mbl_sample_stats_1d stats;
     for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
-    const unsigned nq = 10; // will actually calculate nq+1 quantiles
+    constexpr unsigned nq = 10; // will actually calculate nq+1 quantiles
     std::vector<double> quantiles;
     for (unsigned j=0; j<=nq; ++j)
     {
@@ -183,12 +183,12 @@ void test_quantile()
   }
   {
     std::cout << "test_quantile(): even number of samples (nsamples=6)\n";
-    const unsigned ns=6;
+    constexpr unsigned ns = 6;
     mbl_sample_stats_1d stats;
     for (unsigned int i=0; i<ns; ++i)
       stats.add_sample(i);
 
-    const unsigned nq = 10; // will actually calculate nq+1 quantiles
+    constexpr unsigned nq = 10; // will actually calculate nq+1 quantiles
     std::vector<double> quantiles;
     for (unsigned j=0; j<=nq; ++j)
     {

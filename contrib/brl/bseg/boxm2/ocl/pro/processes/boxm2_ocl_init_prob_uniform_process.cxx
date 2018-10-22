@@ -25,8 +25,8 @@
 
 namespace boxm2_ocl_init_prob_uniform_process_globals
 {
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 3;
+    constexpr unsigned n_outputs_ = 0;
     vcl_size_t local_threads[2] = { 8, 8 };
     static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > kernels_;
     vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts)

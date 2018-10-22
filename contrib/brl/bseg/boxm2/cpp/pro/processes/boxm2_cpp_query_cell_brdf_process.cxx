@@ -28,8 +28,8 @@
 
 namespace boxm2_cpp_query_cell_brdf_process_globals
 {
-  const unsigned n_inputs_ =  6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
 
   typedef boxm2_data_traits<BOXM2_FLOAT8>::datatype float8_datatype;
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
@@ -87,8 +87,8 @@ bool  boxm2_cpp_query_cell_brdf_process(bprb_func_process& pro)
   boct_bit_tree tree(treebits.data_block(),mdata.max_level_);
   int bit_index=tree.traverse(local);
   int index=tree.get_data_index(bit_index,false);
-  boxm2_data_base          *  phongs_base  = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(ident));
-  boxm2_data<BOXM2_FLOAT8> *  phongs_data  = new boxm2_data<BOXM2_FLOAT8>(phongs_base->data_buffer(),
+  boxm2_data_base          *  phongs_base = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_FLOAT8>::prefix(ident));
+  boxm2_data<BOXM2_FLOAT8> *  phongs_data = new boxm2_data<BOXM2_FLOAT8>(phongs_base->data_buffer(),
                                                                           phongs_base->buffer_length(),
                                                                           phongs_base->block_id());
 

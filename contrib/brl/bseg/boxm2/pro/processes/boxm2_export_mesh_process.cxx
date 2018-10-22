@@ -31,8 +31,8 @@
 
 namespace boxm2_export_mesh_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_export_mesh_process_cons(bprb_func_process& pro)
@@ -67,7 +67,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr ximg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vil_image_view_base_sptr yimg = pro.get_input<vil_image_view_base_sptr>(argIdx++);
-  std::string out_dir           = pro.get_input<std::string>(argIdx++);
+  std::string out_dir = pro.get_input<std::string>(argIdx++);
 
   //create the mesh directory
   if (out_dir != "") {

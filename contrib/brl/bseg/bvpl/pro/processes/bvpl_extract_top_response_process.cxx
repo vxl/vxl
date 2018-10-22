@@ -23,8 +23,8 @@
 
 namespace bvpl_extract_top_response_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 //: process takes 5 inputs and has 2 outputs.

@@ -28,8 +28,8 @@
 
 namespace bstm_ocl_render_expected_change_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -218,18 +218,18 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
 
        //write the image values to the buffer
        vul_timer transfer;
-       bocl_mem* blk       = opencl_cache->get_block(*id);
-       bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
-       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+       bocl_mem* blk = opencl_cache->get_block(*id);
+       bocl_mem* blk_t = opencl_cache->get_time_block(*id);
+       bocl_mem* blk_info = opencl_cache->loaded_block_info();
        bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
 
        bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
 
 
-       bocl_mem* alpha     = opencl_cache->get_data<BSTM_ALPHA>(*id);
-       int alphaTypeSize   = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
+       bocl_mem* alpha = opencl_cache->get_data<BSTM_ALPHA>(*id);
+       int alphaTypeSize = (int)bstm_data_info::datasize(bstm_data_traits<BSTM_ALPHA>::prefix());
 
-       bocl_mem *change_array   = opencl_cache->get_data(*id, bstm_data_traits<BSTM_CHANGE>::prefix(), info_buffer_t->tree_buffer_length * bstm_data_traits<BSTM_CHANGE>::datasize() ,false);
+       bocl_mem *change_array = opencl_cache->get_data(*id, bstm_data_traits<BSTM_CHANGE>::prefix(), info_buffer_t->tree_buffer_length * bstm_data_traits<BSTM_CHANGE>::datasize() ,false);
 
        //if rendering label, actually get the data for it, otherwise don't bother.
        bocl_mem* label = change_array;

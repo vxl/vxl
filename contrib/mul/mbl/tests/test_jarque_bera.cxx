@@ -12,7 +12,7 @@ void test_jarque_bera()
            << " Testing mbl_jarque_bera\n"
            << "*************************\n";
 
-  const unsigned n = 200;
+  constexpr unsigned n = 200;
   vnl_random rng(9667566ul);
   std::vector<double> x(n);
   for (unsigned i=0; i!=n; ++i)

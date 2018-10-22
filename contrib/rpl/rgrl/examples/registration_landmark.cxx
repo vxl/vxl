@@ -180,7 +180,7 @@ main( int argc, char* argv[] )
   // differs from its super-class, \code{rgrl\_feature\_set\_location}, by
   // checking if the requested features are in the valid region.
   //
-  const unsigned int dimension = 2;
+  constexpr unsigned int dimension = 2;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location_masked( new  rgrl_feature_set_bins<dimension>(moving_landmark_set),
                                           mask);

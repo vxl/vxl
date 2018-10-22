@@ -20,8 +20,8 @@
 
 namespace boxm2_create_scene_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_create_scene_process_cons(bprb_func_process& pro)
@@ -68,15 +68,15 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   std::vector<std::string> appearance(2,"");
   unsigned i = 0;
   std::string datapath = pro.get_input<std::string>(i++);
-  appearance[0]       = pro.get_input<std::string>(i++); //Appearance Model String
-  appearance[1]       = pro.get_input<std::string>(i++); //Occupancy Model String
-  float origin_x      = pro.get_input<float>(i++);
-  float origin_y      = pro.get_input<float>(i++);
-  float origin_z      = pro.get_input<float>(i++);
-  float lon           = pro.get_input<float>(i++);
-  float lat           = pro.get_input<float>(i++);
-  float elev          = pro.get_input<float>(i++);
-  int num_bins        = pro.get_input<int>(i++);
+  appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
+  appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
+  float origin_x = pro.get_input<float>(i++);
+  float origin_y = pro.get_input<float>(i++);
+  float origin_z = pro.get_input<float>(i++);
+  float lon = pro.get_input<float>(i++);
+  float lat = pro.get_input<float>(i++);
+  float elev = pro.get_input<float>(i++);
+  int num_bins = pro.get_input<int>(i++);
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;
@@ -100,8 +100,8 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
 //  lvcs is used to figure out the local origins of the blocks
 namespace boxm2_create_scene_and_blocks_process_globals
 {
-  const unsigned n_inputs_ = 17;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 17;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_create_scene_and_blocks_process_cons(bprb_func_process& pro)
@@ -150,22 +150,22 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   std::vector<std::string> appearance(2,"");
   unsigned i = 0;
   std::string datapath = pro.get_input<std::string>(i++);
-  appearance[0]       = pro.get_input<std::string>(i++); //Appearance Model String
-  appearance[1]       = pro.get_input<std::string>(i++); //Occupancy Model String
-  float lon1          = pro.get_input<float>(i++);
-  float lat1          = pro.get_input<float>(i++);
-  float elev1         = pro.get_input<float>(i++);
-  float lon2          = pro.get_input<float>(i++);
-  float lat2          = pro.get_input<float>(i++);
-  float elev2         = pro.get_input<float>(i++);
-  float origin_lon    = pro.get_input<float>(i++);
-  float origin_lat    = pro.get_input<float>(i++);
-  float origin_elev   = pro.get_input<float>(i++);
-  float voxel_size    = pro.get_input<float>(i++);
-  float block_len     = pro.get_input<float>(i++);  // blocks have equal length on x and y direction
-  float block_lenz     = pro.get_input<float>(i++);
-  int num_bins        = pro.get_input<int>(i++);
-  std::string cs_name  = pro.get_input<std::string>(i++);
+  appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
+  appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
+  float lon1 = pro.get_input<float>(i++);
+  float lat1 = pro.get_input<float>(i++);
+  float elev1 = pro.get_input<float>(i++);
+  float lon2 = pro.get_input<float>(i++);
+  float lat2 = pro.get_input<float>(i++);
+  float elev2 = pro.get_input<float>(i++);
+  float origin_lon = pro.get_input<float>(i++);
+  float origin_lat = pro.get_input<float>(i++);
+  float origin_elev = pro.get_input<float>(i++);
+  float voxel_size = pro.get_input<float>(i++);
+  float block_len = pro.get_input<float>(i++);  // blocks have equal length on x and y direction
+  float block_lenz = pro.get_input<float>(i++);
+  int num_bins = pro.get_input<int>(i++);
+  std::string cs_name = pro.get_input<std::string>(i++);
 
   unsigned init_level = 1;
   unsigned max_level = 4;
@@ -268,8 +268,8 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
 //  The polygon stored in kml should follow counterclockwise
 namespace boxm2_create_poly_scene_and_blocks_process_globals
 {
-  const unsigned n_inputs_ = 13;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 13;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_create_poly_scene_and_blocks_process_cons(bprb_func_process& pro)
@@ -316,18 +316,18 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   std::vector<std::string> appearance(2,"");
   unsigned i = 0;
   std::string datapath = pro.get_input<std::string>(i++);
-  appearance[0]       = pro.get_input<std::string>(i++);
-  appearance[1]       = pro.get_input<std::string>(i++);
+  appearance[0] = pro.get_input<std::string>(i++);
+  appearance[1] = pro.get_input<std::string>(i++);
   std::string poly_kml_name = pro.get_input<std::string>(i++);
-  float origin_lon    = pro.get_input<float>(i++);
-  float origin_lat    = pro.get_input<float>(i++);
-  float origin_elev   = pro.get_input<float>(i++);
-  float scene_height  = pro.get_input<float>(i++);
-  float voxel_size    = pro.get_input<float>(i++);
-  float block_len     = pro.get_input<float>(i++);
-  float block_lenz    = pro.get_input<float>(i++);
-  int   num_bins      = pro.get_input<int>(i++);
-  std::string cs_name  = pro.get_input<std::string>(i++);
+  float origin_lon = pro.get_input<float>(i++);
+  float origin_lat = pro.get_input<float>(i++);
+  float origin_elev = pro.get_input<float>(i++);
+  float scene_height = pro.get_input<float>(i++);
+  float voxel_size = pro.get_input<float>(i++);
+  float block_len = pro.get_input<float>(i++);
+  float block_lenz = pro.get_input<float>(i++);
+  int   num_bins = pro.get_input<int>(i++);
+  std::string cs_name = pro.get_input<std::string>(i++);
   unsigned init_level = 1;
   unsigned max_level = 4;
   float max_data_mb = 4000.0;
@@ -425,7 +425,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
     std::cerr << "input polygon has no inner boundary\n";
   }
   else {
-    n_in  = (unsigned int)parser->polyinner_.size();
+    n_in = (unsigned int)parser->polyinner_.size();
     n_in--;
   }
   // set up the local coordinates system using lvcs(lat, long, altit) and create polygon
@@ -612,8 +612,8 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
 //  lvcs is used to figure out the local origins of the blocks
 namespace boxm2_distribute_scene_blocks_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_distribute_scene_blocks_process_cons(bprb_func_process& pro)
@@ -751,8 +751,8 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
 //: A process to prune the blocks which has never been refined, i.e. with the default alpha size
 namespace boxm2_prune_scene_blocks_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_prune_scene_blocks_process_cons(bprb_func_process& pro)
@@ -850,8 +850,8 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
 //: A process to prune the blocks which are below the ground surface defined by ASTER DEM
 namespace boxm2_prune_scene_blocks_by_dem_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 
   //: find the maximum and minimum height from dem images given a region
   bool find_min_max_height(vgl_point_2d<double> const& lower_left, vgl_point_2d<double> const& upper_right,
@@ -1218,8 +1218,8 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
 //: e.g: rural regon like mountain can be low resolution but urban region requires high resolution
 namespace boxm2_change_scene_res_by_geo_cover_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 
   // function that modify the block metadata accordingly
   void change_block_metadata(boxm2_block_metadata& md, volm_osm_category_io::geo_cover_values const& land_cover, int const& refine_coef)

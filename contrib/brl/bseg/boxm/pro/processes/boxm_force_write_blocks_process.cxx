@@ -30,8 +30,8 @@
 namespace boxm_force_write_blocks_process_globals
 {
   //this process takes no inputs
-  const unsigned int n_inputs_ = 1;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 1;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 //:sets input and output types

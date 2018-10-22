@@ -81,7 +81,7 @@ void test_stepwise_regression()
     coeffs.push_back(0.6);
     coeffs.push_back(0.5);
     coeffs.push_back(0.4);
-    const double mu=100.0;
+    constexpr double mu = 100.0;
     for (unsigned int i=0;i<num_examples;++i)
     {
         double* pxdata = data[i];

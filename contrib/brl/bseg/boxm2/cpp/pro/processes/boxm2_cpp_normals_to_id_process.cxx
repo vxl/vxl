@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_normals_to_id_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 2;
+    constexpr unsigned n_outputs_ = 0;
     std::size_t lthreads[2]={8,8};
 }
 
@@ -75,7 +75,7 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
 
 
         boxm2_data_base * alpha =        cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-        int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
+        int data_buff_length = (int) (alpha->buffer_length()/alphaTypeSize);
 
 
         boxm2_data_base * points = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);

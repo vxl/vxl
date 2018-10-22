@@ -306,7 +306,7 @@ vimt3d_vil3d_v3m_image::~vimt3d_vil3d_v3m_image()
 
     vsl_b_write(os, vimt3d_vil3d_v3m_format::magic_number());
 
-    const short version = 1;
+    constexpr short version = 1;
     vsl_b_write(os, version);
 
     vsl_b_write(os, im_->image_base().ni());

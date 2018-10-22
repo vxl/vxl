@@ -36,8 +36,8 @@
 
 namespace boxm2_ocl_update_process_globals
 {
-  const unsigned int n_inputs_  = 12;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 12;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
@@ -64,13 +64,13 @@ bool boxm2_ocl_update_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default 5, 6 and 7 and 8 inputs
-  brdb_value_sptr idx        = new brdb_value_t<std::string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   brdb_value_sptr empty_mask = new brdb_value_t<vil_image_view_base_sptr>(new vil_image_view<unsigned char>(1,1));
-  brdb_value_sptr up_alpha   = new brdb_value_t<bool>(true);  //by default update alpha
-  brdb_value_sptr def_var    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr up_app     = new brdb_value_t<bool>(true);  //by default update alpha
-  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr up_alpha = new brdb_value_t<bool>(true);  //by default update alpha
+  brdb_value_sptr def_var = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr up_app = new brdb_value_t<bool>(true);  //by default update alpha
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(1e6f);
   pro.set_input(5, idx);
   pro.set_input(6, empty_mask);
   pro.set_input(7, up_alpha);
@@ -92,24 +92,24 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned int i = 0;
-  bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
+  bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr         scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  std::string               ident        = pro.get_input<std::string>(i++);
-  vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+  std::string               ident = pro.get_input<std::string>(i++);
+  vil_image_view_base_sptr mask_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
-  float                    mog_var      = pro.get_input<float>(i++);
-  bool                     update_app   = pro.get_input<bool>(i++);
-  float                    nearfactor   = pro.get_input<float>(i++);
-  float                    farfactor    = pro.get_input<float>(i++);
+  float                    mog_var = pro.get_input<float>(i++);
+  bool                     update_app = pro.get_input<bool>(i++);
+  float                    nearfactor = pro.get_input<float>(i++);
+  float                    farfactor = pro.get_input<float>(i++);
 
   vul_timer t;
   t.mark();
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
-  const std::size_t MAX_PIXELS = 16777216;
+  constexpr std::size_t MAX_PIXELS = 16777216;
   if (img->ni()*img->nj() > MAX_PIXELS) {
     std::size_t sni = RoundUp(img->ni(), 16);
     std::size_t snj = RoundUp(img->nj(), 16);

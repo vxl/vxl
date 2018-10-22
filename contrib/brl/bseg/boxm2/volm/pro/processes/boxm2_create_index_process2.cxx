@@ -36,8 +36,8 @@
 
 namespace boxm2_create_index_process2_globals
 {
-  const unsigned n_inputs_ = 14;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 14;
+  constexpr unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
@@ -472,8 +472,8 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
         vul_timer transfer;
 
-        bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem* blk = opencl_cache->get_block(scene, id_inner);
+        bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
         transfer_time += (float) transfer.all();

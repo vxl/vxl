@@ -23,8 +23,8 @@
 //: global variables and functions
 namespace bvxm_scene_lvcs_process_globals
 {
-  const unsigned n_inputs_  = 1;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 1;
 }
 //: set input and output types
 bool bvxm_scene_lvcs_process_cons(bprb_func_process& pro);

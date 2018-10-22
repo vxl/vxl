@@ -22,8 +22,8 @@
 
 namespace boxm2_export_color_point_cloud_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_export_color_point_cloud_process_cons(bprb_func_process& pro)
@@ -91,14 +91,14 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
       if (vgl_intersection(bb_expanded, blk_info.bbox()).is_empty())
           continue;
       std::cout << "Processing Block: "<<id<< " with prob t: " << prob_t << "Color Model "  << " finest cell length: " << finest_cell_length << std::endl;
-      boxm2_block *     blk     = cache->get_block(scene,id);
+      boxm2_block *     blk = cache->get_block(scene,id);
       //get data sizes
       std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
       int mogSize = (int) boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
       std::size_t expTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_EXPECTATION>::prefix());
       boxm2_data_base * alpha =        cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      int data_buff_length    = (int) (alpha->buffer_length()/alphaTypeSize);
+      int data_buff_length = (int) (alpha->buffer_length()/alphaTypeSize);
       //specify size to make sure data is right size.
       boxm2_data_base * points = cache->get_data_base(scene, id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
       boxm2_data_base * mog;

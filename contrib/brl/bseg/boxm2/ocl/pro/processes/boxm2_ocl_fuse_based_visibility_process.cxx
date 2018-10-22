@@ -33,8 +33,8 @@
 
 namespace boxm2_ocl_fuse_based_visibility_process_globals
 {
-  const unsigned int n_inputs_  = 4;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_fuse_based_visibility_process_cons(bprb_func_process& pro)
@@ -77,8 +77,8 @@ bool boxm2_ocl_fuse_based_visibility_process(bprb_func_process& pro)
 }
 namespace boxm2_ocl_fuse_based_orientation_process_globals
 {
-  const unsigned int n_inputs_  = 4;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_fuse_based_orientation_process_cons(bprb_func_process& pro)
@@ -121,8 +121,8 @@ bool boxm2_ocl_fuse_based_orientation_process(bprb_func_process& pro)
 }
 namespace boxm2_ocl_fuse_surface_density_process_globals
 {
-  const unsigned int n_inputs_  = 4;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_fuse_surface_density_process_cons(bprb_func_process& pro)

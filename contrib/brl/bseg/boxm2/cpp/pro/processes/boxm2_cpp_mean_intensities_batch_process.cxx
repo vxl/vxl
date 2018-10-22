@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_mean_intensities_batch_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_mean_intensities_batch_process_cons(bprb_func_process& pro)
@@ -70,7 +70,7 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base *  output_alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
+    boxm2_data_base *  output_alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(),0,false);
     boxm2_mean_intensities_batch_functor data_functor;
     data_functor.init_data(output_alph, str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
@@ -83,8 +83,8 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_mean_intensities_print_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_mean_intensities_print_process_cons(bprb_func_process& pro)
@@ -125,7 +125,7 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   for (std::vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
   {
     // we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base * output_alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
+    boxm2_data_base * output_alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_print_functor data_functor;
     data_functor.init_data(output_alph,str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
@@ -139,8 +139,8 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
 //: a process to be used for debugging purposes to see the values inside given datatypes
 namespace boxm2_cpp_data_print_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_data_print_process_cons(bprb_func_process& pro)
@@ -188,7 +188,7 @@ bool boxm2_cpp_data_print_process(bprb_func_process& pro)
   {
     boxm2_block * blk = cache->get_block(*id);
     //: we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base * output  = cache->get_data_base(*id,prefix);
+    boxm2_data_base * output = cache->get_data_base(*id,prefix);
     boxm2_data_print_functor data_functor;
     data_functor.init_data(output,TypeSize,prefix);
     int data_buff_length = (int) (output->buffer_length()/(int)TypeSize);

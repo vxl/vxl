@@ -24,9 +24,9 @@ void test_k_means()
   vnl_random rng;
   rng.reseed(123456);
 
-  const unsigned nCentres = 64;
-  const unsigned nSamples = 1000;
-  const unsigned nDims = 3;
+  constexpr unsigned nCentres = 64;
+  constexpr unsigned nSamples = 1000;
+  constexpr unsigned nDims = 3;
 
   std::cout << "Find " << nCentres << " clusters from " << nSamples
            << ' ' << nDims << "-D points.\n";

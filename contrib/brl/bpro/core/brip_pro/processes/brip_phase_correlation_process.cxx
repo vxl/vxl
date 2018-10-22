@@ -15,8 +15,8 @@
 //: global variables
 namespace brip_phase_correlation_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 //: constructor
@@ -55,8 +55,8 @@ bool brip_phase_correlation_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr img_ptr_b = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  float gauss_sigma      = pro.get_input<float>(in_i++);
-  float peak_radius      = pro.get_input<float>(in_i++);
+  float gauss_sigma = pro.get_input<float>(in_i++);
+  float peak_radius = pro.get_input<float>(in_i++);
   float alpha = pro.get_input<float>(in_i++);
 
   // cast to float images

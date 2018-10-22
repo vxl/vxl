@@ -37,8 +37,8 @@
 
 namespace boxm2_export_textured_mesh_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
 
   //helper texture map methods
   void boxm2_texture_mesh_from_imgs(std::string im_dir,
@@ -94,9 +94,9 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(argIdx++);
   vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   boxm2_scene_sptr       scene = pro.get_input<boxm2_scene_sptr>(argIdx++);
-  std::string img_dir           = pro.get_input<std::string>(argIdx++);
-  std::string cam_dir           = pro.get_input<std::string>(argIdx++);
-  std::string out_dir           = pro.get_input<std::string>(argIdx++);
+  std::string img_dir = pro.get_input<std::string>(argIdx++);
+  std::string cam_dir = pro.get_input<std::string>(argIdx++);
+  std::string out_dir = pro.get_input<std::string>(argIdx++);
 
   if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
@@ -254,7 +254,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
   std::vector<std::string> camfiles = boxm2_util::camfiles_from_directory(cam_dir);
-  std::vector<std::string> imfiles  = boxm2_util::images_from_directory(im_dir);
+  std::vector<std::string> imfiles = boxm2_util::images_from_directory(im_dir);
 
   std::vector<vpgl_perspective_camera<double>* > cameras;
   for (unsigned int i=0; i<camfiles.size(); ++i) {
@@ -486,7 +486,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_visible_faces( std::vecto
 
     // render the face_id/distance image
     vil_image_view<double> depth_im(ni, nj);
-    vil_image_view<int>*   face_im     = new vil_image_view<int>(ni, nj);
+    vil_image_view<int>*   face_im = new vil_image_view<int>(ni, nj);
     depth_im.fill(10e100);  //Initial depth is huge,
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)

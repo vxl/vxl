@@ -14,8 +14,8 @@
 
 namespace volm_transfer_geoindex_id_to_str_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool volm_transfer_geoindex_id_to_str_process_cons(bprb_func_process& pro)
@@ -63,8 +63,8 @@ bool volm_transfer_geoindex_id_to_str_process(bprb_func_process& pro)
 
 namespace volm_transfer_geoindex_id_to_str_process2_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool volm_transfer_geoindex_id_to_str_process2_cons(bprb_func_process& pro)

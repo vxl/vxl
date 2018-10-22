@@ -169,7 +169,7 @@ bool test( const char* true_data_file, const CheckPixel& check )
 
 void test_file_format_read( int argc, char* argv[] )
 {
-  const unsigned ndir = 4098;
+  constexpr unsigned ndir = 4098;
   char cwd[ndir];
   char *res = vpl_getcwd(cwd, ndir);
   if ( argc >= 2 )

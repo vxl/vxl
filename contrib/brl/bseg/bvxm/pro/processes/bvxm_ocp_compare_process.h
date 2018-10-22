@@ -31,8 +31,8 @@
 //: globals
 namespace bvxm_ocp_compare_process_gloabals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 
   // functions
   bool save_raw(char *ocp_array, int x, int y, int z, std::string filename);

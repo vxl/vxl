@@ -28,8 +28,8 @@
 
 namespace boxm2_cpp_image_density_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 2;
   std::size_t lthreads[2]={8,8};
 }
 
@@ -123,9 +123,9 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block Id "<<(*id)<<std::endl;
-      boxm2_block *     blk  =  cache->get_block(scene,*id);
+      boxm2_block *     blk = cache->get_block(scene,*id);
       boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
+      boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type);
       std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);
@@ -167,8 +167,8 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_image_density_masked_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 2;
   std::size_t lthreads[2]={8,8};
 }
 
@@ -268,9 +268,9 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block Id "<<(*id)<<std::endl;
-      boxm2_block *     blk  =  cache->get_block(scene,*id);
+      boxm2_block *     blk = cache->get_block(scene,*id);
       boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-      boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
+      boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type);
       std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);

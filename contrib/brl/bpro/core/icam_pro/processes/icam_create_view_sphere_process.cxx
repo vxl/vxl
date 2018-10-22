@@ -29,8 +29,8 @@
 namespace icam_create_view_sphere_process_globals
 {
   // this process takes 0 inputs and 2 outputs
-  const unsigned n_inputs_ = 0;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 0;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 //: sets input and output types

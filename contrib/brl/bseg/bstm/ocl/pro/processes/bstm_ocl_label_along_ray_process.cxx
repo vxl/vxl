@@ -32,8 +32,8 @@
 
 namespace bstm_ocl_label_along_ray_process_globals
 {
-  const unsigned n_inputs_     = 8;
-  const unsigned n_outputs_    = 0;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 0;
 
   bocl_kernel* compile_kernel(bocl_device_sptr device,std::string opts)
   {
@@ -92,14 +92,14 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  bocl_device_sptr         device        = pro.get_input<bocl_device_sptr>(i++);
-  bstm_scene_sptr          scene         = pro.get_input<bstm_scene_sptr>(i++);
-  bstm_opencl_cache_sptr   opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr  cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr change_img    = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                   change_p       = pro.get_input<float>(i++);
-  float                   time           = pro.get_input<float>(i++);
-  unsigned char          label          = pro.get_input<int>(i++);
+  bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
+  bstm_scene_sptr          scene = pro.get_input<bstm_scene_sptr>(i++);
+  bstm_opencl_cache_sptr   opencl_cache = pro.get_input<bstm_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr change_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  float                   change_p = pro.get_input<float>(i++);
+  float                   time = pro.get_input<float>(i++);
+  unsigned char          label = pro.get_input<int>(i++);
 
   ///////////////////////
   float transfer_time=0.0f;
@@ -126,11 +126,11 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
   //----- PREP INPUT BUFFERS -------------
   //prepare input images
-  vil_image_view<float>*   img_view      = static_cast<vil_image_view<float>* >(change_img.ptr());
+  vil_image_view<float>*   img_view = static_cast<vil_image_view<float>* >(change_img.ptr());
 
   //prepare workspace size
-  unsigned cl_ni    = RoundUp(img_view->ni(),local_threads[0]);
-  unsigned cl_nj    = RoundUp(img_view->nj(),local_threads[1]);
+  unsigned cl_ni = RoundUp(img_view->ni(),local_threads[0]);
+  unsigned cl_nj = RoundUp(img_view->nj(),local_threads[1]);
   global_threads[0] = cl_ni;
   global_threads[1] = cl_nj;
 
@@ -142,8 +142,8 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //prepare image buffers (cpu)
-  float* input_buff           = new float[cl_ni*cl_nj];
-  float* vis_buff             = new float[cl_ni*cl_nj];
+  float* input_buff = new float[cl_ni*cl_nj];
+  float* vis_buff = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -151,7 +151,7 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
           input_buff[count] = 0.0f;
           vis_buff[count]=1.0f;
           if (i<img_view->ni() && j< img_view->nj())
-              input_buff[count]     = (*img_view)(i,j);
+              input_buff[count] = (*img_view)(i,j);
           ++count;
       }
   }
@@ -207,10 +207,10 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
      //write the image values to the buffer
      vul_timer transfer;
-     bocl_mem* blk       = opencl_cache->get_block(*id);
-     bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
-     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-     bocl_mem *alpha  = opencl_cache->get_data<BSTM_ALPHA>(*id,0);
+     bocl_mem* blk = opencl_cache->get_block(*id);
+     bocl_mem* blk_t = opencl_cache->get_time_block(*id);
+     bocl_mem* blk_info = opencl_cache->loaded_block_info();
+     bocl_mem *alpha = opencl_cache->get_data<BSTM_ALPHA>(*id,0);
 
 
      bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
@@ -218,7 +218,7 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
      int num_time_trees = info_buffer_t->tree_buffer_length;
 
      int auxTypeSize = (int) bstm_data_info::datasize(bstm_data_traits<BSTM_LABEL>::prefix());
-     bocl_mem *label_buff  = opencl_cache->get_data<BSTM_LABEL>(*id, num_time_trees*auxTypeSize);
+     bocl_mem *label_buff = opencl_cache->get_data<BSTM_LABEL>(*id, num_time_trees*auxTypeSize);
 
      transfer_time += (float) transfer.all();
 

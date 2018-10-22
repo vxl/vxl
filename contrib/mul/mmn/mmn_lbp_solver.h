@@ -113,8 +113,8 @@ class mmn_lbp_solver: public mmn_solver
     msg_update_t msg_upd_mode_;
 
     //: Magic numbers for cycle detection
-    static const unsigned NHISTORY_;
-    static const unsigned NCYCLE_DETECT_;
+    static constexpr unsigned NHISTORY_ = 5;
+    static constexpr unsigned NCYCLE_DETECT_ = 7;
 
     //: Check if we carry on
     bool continue_propagation(std::vector<unsigned>& x);

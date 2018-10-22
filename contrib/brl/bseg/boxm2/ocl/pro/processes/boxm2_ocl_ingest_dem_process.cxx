@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_ingest_dem_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
@@ -104,19 +104,19 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   vil_image_view_base_sptr y_img = pro.get_input<vil_image_view_base_sptr>(i++);
   bool zero_out_alpha = pro.get_input<bool>(i++);
 
-  unsigned int ni     = z_img->ni();
-  unsigned int nj     = z_img->nj();
+  unsigned int ni = z_img->ni();
+  unsigned int nj = z_img->nj();
 
-  unsigned int cl_ni  = RoundUp(z_img->ni(),8);
-  unsigned int cl_nj  = RoundUp(z_img->nj(),8);
+  unsigned int cl_ni = RoundUp(z_img->ni(),8);
+  unsigned int cl_nj = RoundUp(z_img->nj(),8);
 
   vil_image_view<float> * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
   vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
   vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
 
   // form the ray buffer
-  cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
-  cl_float* outimg         = new float[cl_ni*cl_nj];
+  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
+  cl_float* outimg = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -196,9 +196,9 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk           = opencl_cache->get_block(scene,*id);
-    bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    bocl_mem * blk_info      = opencl_cache->loaded_block_info();
+    bocl_mem * blk = opencl_cache->get_block(scene,*id);
+    bocl_mem * alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
 
     if (zero_out_alpha)
@@ -257,8 +257,8 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
 
 namespace boxm2_ocl_ingest_dem_space_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
@@ -333,19 +333,19 @@ bool boxm2_ocl_ingest_dem_space_process(bprb_func_process& pro)
   vil_image_view_base_sptr y_img = pro.get_input<vil_image_view_base_sptr>(i++);
   double thickness = pro.get_input<double>(i++);
 
-  unsigned int ni     = z_img->ni();
-  unsigned int nj     = z_img->nj();
+  unsigned int ni = z_img->ni();
+  unsigned int nj = z_img->nj();
 
-  unsigned int cl_ni  = RoundUp(z_img->ni(),8);
-  unsigned int cl_nj  = RoundUp(z_img->nj(),8);
+  unsigned int cl_ni = RoundUp(z_img->ni(),8);
+  unsigned int cl_nj = RoundUp(z_img->nj(),8);
 
   vil_image_view<float> * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
   vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
   vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
 
   // form the ray buffer
-  cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
-  cl_float* outimg         = new float[cl_ni*cl_nj];
+  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
+  cl_float* outimg = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -425,9 +425,9 @@ bool boxm2_ocl_ingest_dem_space_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk           = opencl_cache->get_block(scene,*id);
-    bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    bocl_mem * blk_info      = opencl_cache->loaded_block_info();
+    bocl_mem * blk = opencl_cache->get_block(scene,*id);
+    bocl_mem * alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
 
     ////3. SET args

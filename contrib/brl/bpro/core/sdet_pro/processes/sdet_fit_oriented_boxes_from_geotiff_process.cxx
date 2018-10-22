@@ -17,8 +17,8 @@
 
 namespace sdet_fit_oriented_boxes_from_geotiff_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 2;
   unsigned polygon_size(vgl_polygon<int> const& poly);
 }
 
@@ -64,7 +64,7 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
   vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   unsigned pixel_thres = pro.get_input<unsigned>(in_i++);
-  std::string out_kml  = pro.get_input<std::string>(in_i++);
+  std::string out_kml = pro.get_input<std::string>(in_i++);
 
   // check inputs
   vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());

@@ -6,8 +6,8 @@ static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0
 
 static void test_bounding_box()
 {
-  const int Nc = 2;
-  const int Na = 3;
+  constexpr int Nc = 2;
+  constexpr int Na = 3;
 
   rsdl_point min_point(Nc,Na), max_point(Nc,Na);
   min_point.cartesian(0) = 15;               max_point.cartesian(0) = 8;

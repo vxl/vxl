@@ -136,7 +136,7 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
                                 double& x, double& y)
 {
   assert(xs >= 0.0); assert(ys >= 0.0);
-  const double pix_edge = 1.0; //We are working at scale = 1.0
+  constexpr double pix_edge = 1.0; //We are working at scale = 1.0
   static double xi=0.0, yi=0.0;
   if (init)
   {

@@ -11,7 +11,7 @@
 #include "gevd_float_operators.h"
 
 const int INVALID = -1;
-const int KRADIUS = 10; // smooth raw histogram
+constexpr int KRADIUS = 10; // smooth raw histogram
 
 //: Generate the histogram curve at low responses to estimate the sensor/texture noise in data.
 gevd_noise::gevd_noise(const float* data, const int n, // data in typical region

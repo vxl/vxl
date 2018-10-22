@@ -25,8 +25,8 @@
 
 namespace boxm2_cpp_cast_intensities_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_cast_intensities_process_cons(bprb_func_process& pro)
@@ -85,7 +85,7 @@ bool boxm2_cpp_cast_intensities_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *   blk   = cache->get_block(scene,*id);
+      boxm2_block *   blk = cache->get_block(scene,*id);
 
       //: first make sure that the database is removed from memory if it already exists
       cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));

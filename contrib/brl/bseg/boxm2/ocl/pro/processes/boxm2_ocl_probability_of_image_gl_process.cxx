@@ -30,8 +30,8 @@
 
 namespace boxm2_ocl_probability_of_image_gl_process_globals
 {
-    const unsigned n_inputs_  = 7;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 7;
+    constexpr unsigned n_outputs_ = 0;
     std::size_t lthreads[2]={8,8};
 
     static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -262,10 +262,10 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type);
+      bocl_mem* blk = opencl_cache->get_block(scene,*id);
+      bocl_mem* blk_info = opencl_cache->loaded_block_info();
+      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+      bocl_mem* mog = opencl_cache->get_data(scene,*id,data_type);
       transfer_time += (float) transfer.all();
 
       ////3. SET args

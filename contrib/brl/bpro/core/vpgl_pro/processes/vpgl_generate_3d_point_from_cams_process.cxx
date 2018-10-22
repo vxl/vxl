@@ -20,8 +20,8 @@
 
 namespace vpgl_generate_3d_point_from_cams_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 3;
+    constexpr unsigned n_inputs_ = 2;
+    constexpr unsigned n_outputs_ = 3;
 }
 
 //: Init function
@@ -57,7 +57,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   bbas_1d_array_unsigned_sptr cam_ids_ptr = pro.get_input<bbas_1d_array_unsigned_sptr>(i++);
-  bbas_1d_array_int_sptr      imgPoints   = pro.get_input<bbas_1d_array_int_sptr>(i++);
+  bbas_1d_array_int_sptr      imgPoints = pro.get_input<bbas_1d_array_int_sptr>(i++);
 
   //vector of cams, vector of points
   std::vector<vpgl_perspective_camera<double> > cams;
@@ -76,7 +76,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
       return false;
     }
     vpgl_camera_double_sptr          cam_sptr = value->val<vpgl_camera_double_sptr>();
-    vpgl_perspective_camera<double>* cam_ptr  = (vpgl_perspective_camera<double>*) cam_sptr.ptr();
+    vpgl_perspective_camera<double>* cam_ptr = (vpgl_perspective_camera<double>*) cam_sptr.ptr();
     cams.push_back(*cam_ptr);
   }
 

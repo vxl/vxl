@@ -30,8 +30,8 @@
 //: global variables and functions
 namespace bvxm_dem_to_xyz_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 3;
 }
 //: set input and output types
 bool bvxm_dem_to_xyz_process_cons(bprb_func_process& pro);
@@ -42,8 +42,8 @@ bool bvxm_scene_kml_process(bprb_func_process& pro);
 //: generate x y z images using all available DEM resource in folder (used to handle the situation where scene may overlap with multiple DEM images)
 namespace bvxm_dem_to_xyz_process2_globales
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 bool bvxm_dem_to_xyz_process2_cons(bprb_func_process& pro);

@@ -29,7 +29,7 @@ void boxm_opt_compute_appearance(std::vector<typename boxm_apm_traits<APM>::obs_
   std::vector<float> obs_weights = vis;
 
   const float epsilon = 1e-4f;
-  const unsigned int max_its = 100;
+  constexpr unsigned int max_its = 100;
   const float min_weight_change = 1e-5f;
   for (unsigned int i=0; i<max_its; ++i) {
     float max_weight_change = 0.0f;

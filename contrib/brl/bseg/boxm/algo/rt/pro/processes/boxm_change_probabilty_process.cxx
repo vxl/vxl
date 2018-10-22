@@ -25,8 +25,8 @@
 
 namespace boxm_change_probability_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool boxm_change_probability_process_cons(bprb_func_process& pro)
@@ -82,7 +82,7 @@ bool boxm_change_probability_process(bprb_func_process& pro)
     vil_image_view<float> expected(ni,nj,1);
 
     vil_image_view<vxl_byte> *img_byte
-      = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
+ = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
     vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 
@@ -96,7 +96,7 @@ bool boxm_change_probability_process(bprb_func_process& pro)
     vil_image_view<float> mask(ni,nj,1);
     vil_image_view<float> expected(ni,nj,1);
     vil_image_view<vxl_byte> *img_byte
-      = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
+ = dynamic_cast<vil_image_view<vxl_byte>*>(input_img_ptr.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img_in(img_byte->ni(), img_byte->nj(), 1);
     vil_convert_stretch_range_limited(*img_byte ,img_in, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
 

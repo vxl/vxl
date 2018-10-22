@@ -34,8 +34,8 @@
 
 namespace boxm2_ocl_render_expected_albedo_normal_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 3;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -207,7 +207,7 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
       (*mask_out)(c,r)= 1.0f - vis_buff[r*cl_ni+c];
 
   // normalize images
-  const float mask_thresh = 0.1;
+  constexpr float mask_thresh = 0.1;
   for (unsigned int j=0; j<nj; ++j) {
      for (unsigned int i=0; i<ni; ++i) {
         float &mask_val = (*mask_out)(i,j);

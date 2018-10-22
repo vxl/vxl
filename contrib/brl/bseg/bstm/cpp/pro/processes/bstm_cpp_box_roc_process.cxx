@@ -28,8 +28,8 @@
 
 namespace bstm_cpp_box_roc_process_globals
 {
-  const unsigned n_inputs_ =  14;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 14;
+  constexpr unsigned n_outputs_ = 2;
 
   typedef unsigned char uchar;
   typedef unsigned short ushort;
@@ -138,7 +138,7 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
     bstm_block* blk = cache->get_block(bstm_metadata.id_);
     bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
 
-    bstm_data_base *change_buffer   =   cache->get_data_base(bstm_metadata.id_,bstm_data_traits<BSTM_CHANGE>::prefix()  );
+    bstm_data_base *change_buffer = cache->get_data_base(bstm_metadata.id_,bstm_data_traits<BSTM_CHANGE>::prefix()  );
     bstm_data_traits<BSTM_CHANGE>::datatype* change_array = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();
 
     //iterate through each tree

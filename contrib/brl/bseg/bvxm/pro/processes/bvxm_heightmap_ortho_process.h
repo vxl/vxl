@@ -25,8 +25,8 @@
 //: global variables
 namespace bvxm_heightmap_ortho_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 //: set input and output types
@@ -40,8 +40,8 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro);
 // generate an expected heightmap using the input camera
 namespace bvxm_heightmap_exp_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 2;
 }
 //: set input and output types
 bool bvxm_heightmap_exp_process_cons(bprb_func_process& pro);
@@ -52,8 +52,8 @@ bool bvxm_heightmap_exp_process(bprb_func_process& pro);
 //: global variables
 namespace bvxm_uncertainty_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: set input and output types

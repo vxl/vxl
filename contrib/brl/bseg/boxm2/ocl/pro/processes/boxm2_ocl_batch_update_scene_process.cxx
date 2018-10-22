@@ -38,8 +38,8 @@
 
 namespace boxm2_ocl_batch_update_scene_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
   enum {
     COMPUTE_ALPHA = 0,
     COMPUTE_MOG = 1
@@ -129,11 +129,11 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
   float gpu_time=0.0f;
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(i++);
+  bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  unsigned int num_imgs               = pro.get_input<unsigned>(i++);
-  std::string identifier_filename      = pro.get_input<std::string>(i++);
+  unsigned int num_imgs = pro.get_input<unsigned>(i++);
+  std::string identifier_filename = pro.get_input<std::string>(i++);
 
   bool foundDataType = false;
   std::string data_type,num_obs_type,options;
@@ -200,15 +200,15 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
   for (id = block_ids.begin(); id != block_ids.end(); ++id)
   {
       std::cout << "Processing " << *id << std::endl;
-      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+      bocl_mem* blk = opencl_cache->get_block(scene,*id);
+      bocl_mem* blk_info = opencl_cache->loaded_block_info();
+      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
 
-      bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type, alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
+      bocl_mem* mog = opencl_cache->get_data(scene,*id,data_type, alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
 
       boxm2_stream_block_cache str_blk_cache(scene, type_names_mog_update, image_ids);
 
@@ -219,11 +219,11 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
       //get data indices from str cache
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["boxm2_data_index"];
-      unsigned int* indices  = static_cast<unsigned int *> ((void*)data_type0->data_buffer() );
+      unsigned int* indices = static_cast<unsigned int *> ((void*)data_type0->data_buffer() );
 
       //get nobs from str cache
       boxm2_data_base * data_type1 = str_blk_cache.data_types_["boxm2_num_obs_single_int"];
-      unsigned int* nobs  = static_cast<unsigned int *> ((void*)data_type1->data_buffer() );
+      unsigned int* nobs = static_cast<unsigned int *> ((void*)data_type1->data_buffer() );
 
       //read exp, obs from files
       boxm2_data_traits<BOXM2_EXPECTATION> exp_type;
@@ -246,7 +246,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       cl_float* seglen_sum = new cl_float[datasize];
 
       cl_uint* sampleIndex = new cl_uint[datasize];
-      cl_uint  currIdx     = 0;
+      cl_uint  currIdx = 0;
 
       //snap over each voxel
       unsigned max_obs_per_cell = 0;
@@ -262,8 +262,8 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
         unsigned obs_per_cell = 0;
         for (unsigned short k = 0; k < num_imgs; ++k)
         {
-          unsigned int index  = indices[datasize*k+s];
-          unsigned int obs_num  = nobs[datasize*k+s];
+          unsigned int index = indices[datasize*k+s];
+          unsigned int obs_num = nobs[datasize*k+s];
           if (obs_num == 0)
             continue;
 
@@ -297,7 +297,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
         }
 
         if (max_obs_per_cell < obs_per_cell)
-          max_obs_per_cell  = obs_per_cell;
+          max_obs_per_cell = obs_per_cell;
       }
       std::cout << "Max obs per cell: " << max_obs_per_cell << std::endl;
 
@@ -411,7 +411,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
             std::cout<<"float16_exp buffer was not created"<<std::endl;
 
           int niterTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
-          bocl_mem* num_iter   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(),alpha->num_bytes()/alphaTypeSize*niterTypeSize,false);
+          bocl_mem* num_iter = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_NUM_OBS>::prefix(),alpha->num_bytes()/alphaTypeSize*niterTypeSize,false);
 
 
           std::cout << opencl_cache->bytes_in_cache() << " bytes in ocl cache for mog update..." << std::endl;

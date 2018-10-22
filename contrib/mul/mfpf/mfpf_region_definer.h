@@ -14,7 +14,7 @@
 
 #include <vcl_compiler.h>
 
-const unsigned mfpf_invalid_index=99999;
+constexpr unsigned mfpf_invalid_index = 99999;
 
 //: Base for objects which generate regions from sets of points
 //  Given a set of points, derived classes can generate a region.

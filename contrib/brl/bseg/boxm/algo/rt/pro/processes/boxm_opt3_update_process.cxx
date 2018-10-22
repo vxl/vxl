@@ -29,8 +29,8 @@
 
 namespace boxm_opt3_update_process_globals
 {
-  const unsigned int n_inputs_ = 2;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 2;
+  constexpr unsigned int n_outputs_ = 0;
   //Define parameters here
 }
 

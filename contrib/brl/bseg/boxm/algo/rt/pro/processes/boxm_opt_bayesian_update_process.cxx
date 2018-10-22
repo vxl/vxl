@@ -30,8 +30,8 @@
 
 namespace boxm_opt_bayesian_update_process_globals
 {
-  const unsigned int n_inputs_ = 3;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 3;
+  constexpr unsigned int n_outputs_ = 0;
   //Define parameters here
 }
 

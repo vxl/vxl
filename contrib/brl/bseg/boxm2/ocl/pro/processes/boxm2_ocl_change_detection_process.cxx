@@ -34,8 +34,8 @@
 
 namespace boxm2_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 10;
-  const unsigned n_outputs_    = 2;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
@@ -61,7 +61,7 @@ bool boxm2_ocl_change_detection_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   // default is 1x1, with no ray belief
-  brdb_value_sptr nxn  = new brdb_value_t<int>(1);
+  brdb_value_sptr nxn = new brdb_value_t<int>(1);
   brdb_value_sptr rayb = new brdb_value_t<std::string>(""); // use ray belief?
   brdb_value_sptr pmax = new brdb_value_t<bool>(false);    // use max-mode probability instead of mixture?
   brdb_value_sptr ident = new brdb_value_t<std::string>(""); // identifier
@@ -82,15 +82,15 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  bocl_device_sptr          device        = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr          scene         = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr   opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr   cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr  img           = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr  exp_img       = pro.get_input<vil_image_view_base_sptr>(i++);
-  int                       n             = pro.get_input<unsigned>(i++);                 // nxn
-  std::string                norm_type     = pro.get_input<std::string>(i++);
-  bool                      pmax          = pro.get_input<bool>(i++);
+  bocl_device_sptr          device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr          scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr   opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr   cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr  img = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr  exp_img = pro.get_input<vil_image_view_base_sptr>(i++);
+  int                       n = pro.get_input<unsigned>(i++);                 // nxn
+  std::string                norm_type = pro.get_input<std::string>(i++);
+  bool                      pmax = pro.get_input<bool>(i++);
   std::string                identifier = pro.get_input<std::string>(i++);
 
   // img dims
@@ -98,7 +98,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img     = new vil_image_view<float>(ni, nj);
+  vil_image_view<float>*    change_img = new vil_image_view<float>(ni, nj);
   vil_image_view<vxl_byte>* rgb_change_img = new vil_image_view<vxl_byte>(ni,nj,4);
 
   // check to see which type of change detection to do, either two pass, or regular
@@ -119,7 +119,7 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
     bool ret = true;
     //TODO Factor this out to a utility function
     //make sure this image small enough (or else carve it into image pieces)
-    const std::size_t MAX_PIXELS = 16777216;
+    constexpr std::size_t MAX_PIXELS = 16777216;
     if (ni*nj > MAX_PIXELS) {
       std::size_t sni = RoundUp(ni, 16);
       std::size_t snj = RoundUp(nj, 16);

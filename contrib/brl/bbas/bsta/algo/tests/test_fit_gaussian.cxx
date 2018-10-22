@@ -26,7 +26,7 @@ MAIN( test_fit_gaussian)
     float var = 0.2f;
     float sigma = std::sqrt(var);
 
-    const unsigned int n_samples = 500;
+    constexpr unsigned int n_samples = 500;
 
     bsta_gaussian_sphere<float,1> gauss_est;
 
@@ -53,7 +53,7 @@ MAIN( test_fit_gaussian)
 
     float sigma = std::sqrt(var);
 
-    const unsigned int n_samples = 500;
+    constexpr unsigned int n_samples = 500;
 
     bsta_gaussian_sphere<float,3> gauss_est;
 
@@ -86,7 +86,7 @@ MAIN( test_fit_gaussian)
 
     vnl_vector_fixed<float,3> sigmas(std::sqrt(covar_diag[0]),std::sqrt(covar_diag[1]),std::sqrt(covar_diag[2]));
 
-    const unsigned int n_samples = 1000;
+    constexpr unsigned int n_samples = 1000;
 
     bsta_gaussian_indep<float,3> gauss_est;
     // generate samples
@@ -118,7 +118,7 @@ MAIN( test_fit_gaussian)
     A(0,0) = 1.5f; A(1,0) = 0.05f; A(1,1) = 1.1f; A(2,0) = 0.08f; A(2,1) = -0.10f; A(2,2) = 0.7f;
     vnl_matrix_fixed<float,3,3> covar = A * A.transpose();
 
-    const unsigned int n_samples = 4000;
+    constexpr unsigned int n_samples = 4000;
 
     bsta_gaussian_full<float,3> gauss_est;
     // generate samples

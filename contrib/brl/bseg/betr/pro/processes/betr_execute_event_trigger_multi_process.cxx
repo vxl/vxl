@@ -17,8 +17,8 @@
 
 namespace betr_execute_event_trigger_multi_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool betr_execute_event_trigger_multi_process_cons(bprb_func_process& pro)
@@ -27,9 +27,9 @@ bool betr_execute_event_trigger_multi_process_cons(bprb_func_process& pro)
 
   //process takes 3 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "betr_event_trigger_sptr"; //event_trigger
-  input_types_[1]  = "vcl_string"; //algorithm name
-  input_types_[2]  = "vcl_string"; //algorithm name
+  input_types_[0] = "betr_event_trigger_sptr"; //event_trigger
+  input_types_[1] = "vcl_string"; //algorithm name
+  input_types_[2] = "vcl_string"; //algorithm name
   // process has 1 output
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_double_sptr"; // change probability

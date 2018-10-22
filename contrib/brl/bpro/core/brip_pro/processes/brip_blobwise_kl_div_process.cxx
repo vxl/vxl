@@ -16,8 +16,8 @@
 //: global variables
 namespace brip_blobwise_kl_div_process_globals
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 2;
 
   // private helper method prepares an input image to be processed by update
   vil_image_view<float>* prepare_input_image(vil_image_view_base_sptr loaded_image) {
@@ -27,7 +27,7 @@ namespace brip_blobwise_kl_div_process_globals
       std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 
       //load image from file and format it into grey
-      vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
+      vil_image_view<vxl_byte>* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
       vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
       vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
@@ -109,13 +109,13 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i=0;
-  vil_image_view_base_sptr in_img_ptr   = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr exp_img_ptr  = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr in_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr exp_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr blob_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                    thresh       = pro.get_input<float>(i++);
+  float                    thresh = pro.get_input<float>(i++);
 
   //prepare input images
-  vil_image_view<float>*  in_img  = prepare_input_image(in_img_ptr);
+  vil_image_view<float>*  in_img = prepare_input_image(in_img_ptr);
   vil_image_view<float>*  exp_img = prepare_input_image(exp_img_ptr);
   unsigned ni=blob_img_ptr->ni(),
            nj=blob_img_ptr->nj();

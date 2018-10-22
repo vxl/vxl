@@ -18,8 +18,8 @@
 //: global variables
 namespace bvxm_detect_changes_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 //: initialize input and output types

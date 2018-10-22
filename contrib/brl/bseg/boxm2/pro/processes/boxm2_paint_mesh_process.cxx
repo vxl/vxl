@@ -28,8 +28,8 @@
 
 namespace boxm2_paint_mesh_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_paint_mesh_process_cons(bprb_func_process& pro)
@@ -141,7 +141,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     int depth=tree.depth_at(bit_index);
 
     int data_offset=tree.get_data_index(bit_index,false);
-    boxm2_data_base *  alpha_base  = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    boxm2_data_base *  alpha_base = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     float alpha=(alpha_data->data())[data_offset];
@@ -149,7 +149,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
     //store cell probability
     prob = 1.0f - (float)std::exp(-alpha * side_len * mdata.sub_block_dim_.x());
 
-    boxm2_data_base *  int_base  = cache->get_data_base(scene,id, data_type);
+    boxm2_data_base *  int_base = cache->get_data_base(scene,id, data_type);
     if (data_type.find(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix()) != std::string::npos) {
       boxm2_data<BOXM2_GAUSS_RGB> *int_data = new boxm2_data<BOXM2_GAUSS_RGB>(int_base->data_buffer(),int_base->buffer_length(),int_base->block_id());
       intensity = boxm2_gauss_rgb_processor::expected_color( (int_data->data())[data_offset]);

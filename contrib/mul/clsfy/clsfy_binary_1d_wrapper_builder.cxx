@@ -108,7 +108,7 @@ double clsfy_binary_1d_wrapper_builder::build(
 
 void clsfy_binary_1d_wrapper_builder::b_write(vsl_b_ostream &bfs) const
 {
-  const short version_no=1;
+  constexpr short version_no = 1;
   vsl_b_write(bfs, version_no);
   vsl_b_write(bfs, builder_1d_);
 }

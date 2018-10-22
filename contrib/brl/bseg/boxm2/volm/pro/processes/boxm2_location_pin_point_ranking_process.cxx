@@ -13,8 +13,8 @@
 
 namespace boxm2_location_pin_point_ranking_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_location_pin_point_ranking_process_cons(bprb_func_process& pro)

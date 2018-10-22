@@ -27,8 +27,8 @@
 
 namespace boxm2_cpp_ray_probe_process_globals
 {
-    const unsigned n_inputs_ = 7;
-    const unsigned n_outputs_ = 7;
+    constexpr unsigned n_inputs_ = 7;
+    constexpr unsigned n_outputs_ = 7;
 }
 
 bool boxm2_cpp_ray_probe_process_cons(bprb_func_process& pro)
@@ -108,7 +108,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     int nelems = 0; // initialise here, in case the "for" loop is empty
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
-        boxm2_block *     blk  =  cache->get_block(scene,*id);
+        boxm2_block *     blk = cache->get_block(scene,*id);
         boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -123,7 +123,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
             int dataTypeSize = (int)boxm2_data_info::datasize(name);
             if (identifier!="")
                 name+= ("_"+identifier);
-            boxm2_data_base *  data_of_interest  = cache->get_data_base(scene,*id,name,data_buffer_length*dataTypeSize);
+            boxm2_data_base *  data_of_interest = cache->get_data_base(scene,*id,name,data_buffer_length*dataTypeSize);
 
             datas.push_back(data_of_interest);
         }

@@ -35,8 +35,8 @@
 
 namespace volm_ndsm_generation_process_globals
 {
-  const unsigned n_inputs_  = 11;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 11;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 bool volm_ndsm_generation_process_cons(bprb_func_process& pro)
@@ -44,16 +44,16 @@ bool volm_ndsm_generation_process_cons(bprb_func_process& pro)
   using namespace volm_ndsm_generation_process_globals;
   // this process takes 6 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "double";                   // lower left lon of the region
-  input_types_[1]  = "double";                   // lower left lat of the region
-  input_types_[2]  = "double";                   // upper right lon of the region
-  input_types_[3]  = "double";                   // upper right lat of the region
-  input_types_[4]  = "unsigned";                 // desired image size along latitude
-  input_types_[5]  = "unsigned";                 // desired image size along longitude
-  input_types_[6]  = "vcl_string";               // geo index for height maps
-  input_types_[7]  = "vcl_string";               // folder of height map tiles
-  input_types_[8]  = "vcl_string";               // folder of ground images
-  input_types_[9]  = "unsigned";                 // window size
+  input_types_[0] = "double";                   // lower left lon of the region
+  input_types_[1] = "double";                   // lower left lat of the region
+  input_types_[2] = "double";                   // upper right lon of the region
+  input_types_[3] = "double";                   // upper right lat of the region
+  input_types_[4] = "unsigned";                 // desired image size along latitude
+  input_types_[5] = "unsigned";                 // desired image size along longitude
+  input_types_[6] = "vcl_string";               // geo index for height maps
+  input_types_[7] = "vcl_string";               // folder of height map tiles
+  input_types_[8] = "vcl_string";               // folder of ground images
+  input_types_[9] = "unsigned";                 // window size
   input_types_[10] = "float";                    // maximum height limit
   // this process takes 2 outputs
   std::vector<std::string> output_types_(n_outputs_);

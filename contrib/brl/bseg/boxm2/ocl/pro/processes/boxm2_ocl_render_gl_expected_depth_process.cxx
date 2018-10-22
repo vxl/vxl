@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_render_gl_expected_depth_process_globals
 {
-  const unsigned n_inputs_ = 10 ;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -224,10 +224,10 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
     bocl_kernel* kern =  kernels[identifier][0];
 
     // write the image values to the buffer
-    bocl_mem* blk           = opencl_cache->get_block(scene,*id);
-    bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    bocl_mem * blk_info     = opencl_cache->loaded_block_info();
-    subblk_dim              = mdata.sub_block_dim_.x();
+    bocl_mem* blk = opencl_cache->get_block(scene,*id);
+    bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
+    subblk_dim = mdata.sub_block_dim_.x();
     ////3. SET args
     kern->set_arg( blk_info );
     kern->set_arg( blk );

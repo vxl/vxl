@@ -19,8 +19,8 @@
 //: globals
 namespace bvxm_update_edge_tangent_process_globals
 {
-  const unsigned int n_inputs_ = 5;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 5;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 //: set input and output types

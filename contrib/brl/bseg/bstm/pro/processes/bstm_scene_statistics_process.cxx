@@ -21,8 +21,8 @@
 #include <vgl/vgl_intersection.h>
 namespace bstm_scene_statistics_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 #define MAX_CELLS_ 585
@@ -48,12 +48,12 @@ bool bstm_scene_statistics_process_cons(bprb_func_process& pro)
   output_types[2] = "unsigned";
 
   //default values for the box is empty
-  brdb_value_sptr def_center_x    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr def_center_y    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr def_center_z    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr def_len_x    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr def_len_y    = new brdb_value_t<float>(-1.0f);
-  brdb_value_sptr def_len_z    = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_center_x = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_center_y = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_center_z = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_x = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_y = new brdb_value_t<float>(-1.0f);
+  brdb_value_sptr def_len_z = new brdb_value_t<float>(-1.0f);
   pro.set_input(2, def_center_x);
   pro.set_input(3, def_center_y);
   pro.set_input(4, def_center_z);

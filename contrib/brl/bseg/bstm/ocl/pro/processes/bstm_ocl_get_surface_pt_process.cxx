@@ -38,8 +38,8 @@
 
 namespace bstm_ocl_get_surface_pt_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 3;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -206,10 +206,10 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* blk_t     = opencl_cache->get_time_block(*id);
-      bocl_mem* alpha     = opencl_cache->get_data<BSTM_ALPHA>(*id);
+      bocl_mem* blk = opencl_cache->get_block(*id);
+      bocl_mem* blk_info = opencl_cache->loaded_block_info();
+      bocl_mem* blk_t = opencl_cache->get_time_block(*id);
+      bocl_mem* alpha = opencl_cache->get_data<BSTM_ALPHA>(*id);
       transfer_time += (float) transfer.all();
 
       ////3. SET args

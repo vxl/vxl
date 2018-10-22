@@ -21,8 +21,8 @@
 // global variables
 namespace bvpl_compute_pca_error_scene_process_globals
 {
-  const unsigned n_inputs_ = 3;        //directory path, where pca_info.xml is
-  const unsigned n_outputs_ = 0;       //error file
+  constexpr unsigned n_inputs_ = 3;        //directory path, where pca_info.xml is
+  constexpr unsigned n_outputs_ = 0;       //error file
 }
 
 

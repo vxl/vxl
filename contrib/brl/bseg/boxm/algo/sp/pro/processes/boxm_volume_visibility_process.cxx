@@ -25,8 +25,8 @@
 
 namespace boxm_volume_visibility_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm_volume_visibility_process_cons(bprb_func_process& pro)

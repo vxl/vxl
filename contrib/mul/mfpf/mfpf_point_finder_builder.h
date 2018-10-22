@@ -116,7 +116,7 @@ class mfpf_point_finder_builder
   //: Add one example to the model
   virtual void add_example(const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u)=0;
+                           const vgl_vector_2d<double>& u) = 0;
 
   //: Build object from the data supplied in add_example()
   virtual void build(mfpf_point_finder&)=0;

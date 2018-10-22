@@ -23,8 +23,8 @@
 
 namespace boxm2_add_aux_info_to_ply_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 
   //helper class to read in bb from file
   class ply_points_reader

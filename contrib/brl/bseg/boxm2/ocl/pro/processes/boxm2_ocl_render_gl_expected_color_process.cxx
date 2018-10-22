@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_render_gl_expected_color_process_globals
 {
-  const unsigned n_inputs_   = 10;
-  const unsigned n_outputs_  = 1;
+  constexpr unsigned n_inputs_ = 10;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t     lthreads[2] = {8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -120,18 +120,18 @@ bool boxm2_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   //get the inputs
 
   unsigned i = 0;
-  bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
+  bocl_device_sptr        device = pro.get_input<bocl_device_sptr>(i++);
 
-  boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_scene_sptr        scene = pro.get_input<boxm2_scene_sptr>(i++);
 
   boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned                ni           = pro.get_input<unsigned>(i++);
-  unsigned                nj           = pro.get_input<unsigned>(i++);
-  bocl_mem_sptr           exp_image    = pro.get_input<bocl_mem_sptr>(i++);
-  bocl_mem_sptr           exp_img_dim  = pro.get_input<bocl_mem_sptr>(i++);
-  std::string              ident        = pro.get_input<std::string>(i++);
-  bool                    is_bw        = pro.get_input<bool>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned                ni = pro.get_input<unsigned>(i++);
+  unsigned                nj = pro.get_input<unsigned>(i++);
+  bocl_mem_sptr           exp_image = pro.get_input<bocl_mem_sptr>(i++);
+  bocl_mem_sptr           exp_img_dim = pro.get_input<bocl_mem_sptr>(i++);
+  std::string              ident = pro.get_input<std::string>(i++);
+  bool                    is_bw = pro.get_input<bool>(i++);
 
 
   bool foundDataType = false;

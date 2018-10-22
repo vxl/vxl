@@ -106,7 +106,7 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
                 float alpha = target_alpha_data[target_data_idx];
                 float src_prob = static_cast<float>(1.0 - std::exp( - source_alpha_data[data_idx] * source_side_len));
                 //double prob = static_cast<float>(1.0 - std::exp(-alpha*side_len));
-                const double prob_thresh = 0.0;
+                constexpr double prob_thresh = 0.0;
 
                 if (src_prob >= prob_thresh) {
                   // get data can copy from source to target

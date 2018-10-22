@@ -16,8 +16,8 @@
 #include <bocl/bocl_device.h>
 namespace boxm2_ocl_refine_process_globals
 {
-    const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_ = 4;
+    constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_ocl_refine_process_cons(bprb_func_process& pro)
@@ -47,10 +47,10 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
 
     //get the inputs
     unsigned i = 0;
-    bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
-    boxm2_scene_sptr        scene        = pro.get_input<boxm2_scene_sptr>(i++);
+    bocl_device_sptr        device = pro.get_input<bocl_device_sptr>(i++);
+    boxm2_scene_sptr        scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float                   thresh       = pro.get_input<float>(i++);
+    float                   thresh = pro.get_input<float>(i++);
 
     unsigned num_cells = boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh);
     std::cout<<"boxm2_ocl_refine_process num split: "<<num_cells<<std::endl;

@@ -31,8 +31,8 @@
 
 namespace boxm2_geo_cover_with_osm_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 5; // temporary set 6 output for debuging purpose
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 5; // temporary set 6 output for debuging purpose
 }
 
 bool boxm2_geo_cover_with_osm_to_xyz_process_cons(bprb_func_process& pro)

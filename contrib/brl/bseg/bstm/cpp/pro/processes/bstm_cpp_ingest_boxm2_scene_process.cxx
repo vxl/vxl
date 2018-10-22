@@ -30,8 +30,8 @@
 
 namespace bstm_cpp_ingest_boxm2_scene_process_globals
 {
-  const unsigned n_inputs_ =  7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)
@@ -152,8 +152,8 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          //get data from bstm scene
          bstm_block* blk = cache->get_block(bstm_metadata.id_);
          bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
-         bstm_data_base * alph    = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
-         bstm_data_base * mog     = cache->get_data_base(bstm_metadata.id_, data_type);
+         bstm_data_base * alph = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
+         bstm_data_base * mog = cache->get_data_base(bstm_metadata.id_, data_type);
 
 
          std::map<std::string, bstm_data_base*> datas;
@@ -161,9 +161,9 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
          datas[data_type] = mog;
 
          //get data from boxm2 scene
-         boxm2_block *     boxm2_blk     = boxm2_cache->get_block(boxm2_scene, bstm_metadata.id_);
-         boxm2_data_base * boxm2_alph    = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-         boxm2_data_base * boxm2_mog     = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_type);
+         boxm2_block *     boxm2_blk = boxm2_cache->get_block(boxm2_scene, bstm_metadata.id_);
+         boxm2_data_base * boxm2_alph = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+         boxm2_data_base * boxm2_mog = boxm2_cache->get_data_base(boxm2_scene, bstm_metadata.id_,boxm2_data_type);
 
 
 

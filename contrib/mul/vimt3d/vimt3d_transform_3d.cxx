@@ -1086,7 +1086,7 @@ void vimt3d_transform_3d::config(std::istream& is)
 
 void vimt3d_transform_3d::b_write(vsl_b_ostream& bfs) const
 {
-  const short version_no = 2;
+  constexpr short version_no = 2;
   vsl_b_write(bfs,version_no);
   vsl_b_write(bfs,int(form_));
   vsl_b_write(bfs,xx_); vsl_b_write(bfs,xy_); vsl_b_write(bfs,xz_); vsl_b_write(bfs,xt_);

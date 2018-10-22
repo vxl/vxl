@@ -30,7 +30,7 @@ const int DJS[] = { 0, 1, 1, 1, 0,-1,-1,-1,
 const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
 
 // const unsigned char DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
-const int FRAME = 4; // 3 for NMS and extension, 4 for contour
+constexpr int FRAME = 4; // 3 for NMS and extension, 4 for contour
 
 gevd_fold::gevd_fold(float smooth_sigma, // width of filter dG
                      float noise_sigma,   // sensor/texture intensity noise -[0 1]
