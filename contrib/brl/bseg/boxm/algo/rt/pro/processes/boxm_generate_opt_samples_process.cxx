@@ -27,8 +27,8 @@
 
 namespace boxm_generate_opt_samples_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm_generate_opt_samples_process_cons(bprb_func_process& pro)
@@ -77,7 +77,7 @@ bool boxm_generate_opt_samples_process(bprb_func_process& pro)
 
   if (scene->appearence_model() == BOXM_APM_SIMPLE_GREY) {
     vil_image_view<vxl_byte> *img_byte
-        = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+ = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
     vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     if (!scene->multi_bin())

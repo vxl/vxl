@@ -25,7 +25,7 @@
 
 
 // Seven parameters for a minimal parametrization of the F matrix
-const int FMatrixComputeNonLinear_nparams = 7;
+constexpr int FMatrixComputeNonLinear_nparams = 7;
 
 //-----------------------------------------------------------------------------
 //: Constructor

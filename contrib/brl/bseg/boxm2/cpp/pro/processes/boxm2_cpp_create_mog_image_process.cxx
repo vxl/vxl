@@ -36,8 +36,8 @@
 
 namespace boxm2_cpp_create_mog_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t lthreads[2]={8,8};
 }
 
@@ -143,10 +143,10 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     std::cout<<"Block Id "<<(*id)<<std::endl;
-    boxm2_block *     blk  =  cache->get_block(scene,*id);
+    boxm2_block *     blk = cache->get_block(scene,*id);
     boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    boxm2_data_base *  nobs  = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
-    boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type);
+    boxm2_data_base *  nobs = cache->get_data_base(scene,*id,num_obs_type,alph->buffer_length()/alphaTypeSize*nobsTypeSize,false);
+    boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type);
     std::vector<boxm2_data_base*> datas;
     datas.push_back(alph);
     datas.push_back(mog);

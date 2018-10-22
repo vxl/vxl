@@ -25,8 +25,8 @@
 //: global variables and functions
 namespace bvxm_scene_kml_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 //: set input and output types
@@ -39,8 +39,8 @@ bool bvxm_scene_kml_process(bprb_func_process& pro);
 //: global variable
 namespace bvxm_scene_poly_overlap_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bvxm_scene_poly_overlap_process_cons(bprb_func_process& pro);

@@ -20,8 +20,8 @@
 // global variables
 namespace vil_grey_to_rgb_process_globals
 {
-  const unsigned  n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned  n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 1;
 
   std::map<float, vil_rgb<vxl_byte> > get_color_id(std::string color_text)
   {

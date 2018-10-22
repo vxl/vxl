@@ -18,8 +18,8 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
                      vdgl_digital_region_sptr const& r2)
 {
   //need this many points for standard deviation and mean to be valid
-  const unsigned int min_npts = 5;
-  const float SMALL = 1;
+  constexpr unsigned int min_npts = 5;
+  constexpr float SMALL = 1;
   if (!r1 || !r2)
     return -1.f;
   if (r1->Npix()<min_npts || r2->Npix()<min_npts)
@@ -42,8 +42,8 @@ mahalanobis_distance(vdgl_digital_region_sptr const& r1,
 float bdgl_region_algs::intensity_distance(vdgl_digital_region_sptr const& r1,
                                            vdgl_digital_region_sptr const& r2)
 {
-  const unsigned int min_npts = 5;
-  const float SMALL = 1;
+  constexpr unsigned int min_npts = 5;
+  constexpr float SMALL = 1;
   if (!r1 || !r2)
     return -1.f;
   if (r1->Npix()<min_npts || r2->Npix()<min_npts)
@@ -137,7 +137,7 @@ float
 bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
                                        vdgl_digital_region_sptr const& r2)
 {
-  const unsigned int min_npts = 5;
+  constexpr unsigned int min_npts = 5;
   if (!r1 || !r2)
     return -1.f;
   const unsigned int n1 = r1->Npix(), n2 = r2->Npix();

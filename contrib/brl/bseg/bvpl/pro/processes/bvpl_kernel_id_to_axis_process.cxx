@@ -23,8 +23,8 @@
 
 namespace bvpl_kernel_id_to_axis_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 
@@ -67,7 +67,7 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
     return false;
   }
   bvxm_voxel_grid<int > *grid
-  = dynamic_cast< bvxm_voxel_grid<int>* >(grid_base.ptr());
+ = dynamic_cast< bvxm_voxel_grid<int>* >(grid_base.ptr());
   if (grid)
   {
     bvxm_voxel_grid<vnl_float_3> *axes_grid = new bvxm_voxel_grid<vnl_float_3>(output_world_dir, grid->grid_size());

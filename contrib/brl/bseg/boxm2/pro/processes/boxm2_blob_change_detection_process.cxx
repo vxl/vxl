@@ -17,8 +17,8 @@
 
 namespace boxm2_blob_change_detection_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 
   const float EPSILON = .02f;
 }
@@ -58,7 +58,7 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   vil_image_view_base_sptr  change_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                     thresh     = pro.get_input<float>(i++);
+  float                     thresh = pro.get_input<float>(i++);
   vil_image_view_base_sptr  depth_img1 = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  depth_img2 = pro.get_input<vil_image_view_base_sptr>(i++);
 

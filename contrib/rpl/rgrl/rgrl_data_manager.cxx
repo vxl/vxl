@@ -190,8 +190,8 @@ get_data_at_stage( unsigned stage,
                                         estimators );
 
   from_set = from_sets[0];
-  to_set   = to_sets[0];
-  matcher  = matchers[0];
+  to_set = to_sets[0];
+  matcher = matchers[0];
   unwgted_scale_est = unwgted_scale_ests[0];
   wgted_scale_est = wgted_scale_ests[0];
   weighter = weighters[0];
@@ -296,7 +296,7 @@ get_label( std::vector<std::string>& labels) const
 {
   assert( !multi_stage_ );
 
-  const unsigned stage = 0;
+  constexpr unsigned stage = 0;
   get_label( stage, labels );
 }
 

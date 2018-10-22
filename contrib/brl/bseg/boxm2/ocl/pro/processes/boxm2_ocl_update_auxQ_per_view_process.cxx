@@ -36,8 +36,8 @@
 
 namespace boxm2_ocl_update_auxQ_per_view_process_globals
 {
-  const unsigned int n_inputs_  = 7;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 7;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_auxQ_per_view_process_cons(bprb_func_process& pro)

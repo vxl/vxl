@@ -14,8 +14,8 @@
 
 namespace betr_create_site_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool betr_create_site_process_cons(bprb_func_process& pro)
@@ -24,9 +24,9 @@ bool betr_create_site_process_cons(bprb_func_process& pro)
 
   //process takes 1 input
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "float";
-  input_types_[1]  = "float";
-  input_types_[2]  = "float";
+  input_types_[0] = "float";
+  input_types_[1] = "float";
+  input_types_[2] = "float";
 
   // process has 1 output
   std::vector<std::string> output_types_(n_outputs_);

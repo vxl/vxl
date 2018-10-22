@@ -281,7 +281,7 @@ bool FMatrixSkew::set (const double* f_matrix )
   int row_index, col_index;
 
   // should be set to 0.0
-  const double tolerance=0.0;
+  constexpr double tolerance = 0.0;
 
   // CRUDE test for skewness with tolerance 0
   // test diagonal is zero and asymmetric

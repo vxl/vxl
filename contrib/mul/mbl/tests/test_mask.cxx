@@ -256,7 +256,7 @@ void test_mask()
 
   // Test mbl_mask_to_indices() and mbl_indices_to_mask()
   std::cout << "\nTesting mbl mask-indices conversions" << std::endl;
-  const unsigned n=10;
+  constexpr unsigned n = 10;
   mbl_mask mask_true(n, false);
   mask_true[1]=true; mask_true[3]=true; mask_true[6]=true; mask_true[8]=true;
   std::vector<unsigned> inds, inds_true;

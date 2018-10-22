@@ -16,8 +16,8 @@
 
 namespace betr_create_event_trigger_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool betr_create_event_trigger_process_cons(bprb_func_process& pro)
@@ -26,11 +26,11 @@ bool betr_create_event_trigger_process_cons(bprb_func_process& pro)
 
   //process takes 5 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "float";
-  input_types_[1]  = "float";
-  input_types_[2]  = "float";
-  input_types_[3]  = "vcl_string";
-  input_types_[4]  = "bool";
+  input_types_[0] = "float";
+  input_types_[1] = "float";
+  input_types_[2] = "float";
+  input_types_[3] = "vcl_string";
+  input_types_[4] = "bool";
   // process has 1 output
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "betr_event_trigger_sptr";

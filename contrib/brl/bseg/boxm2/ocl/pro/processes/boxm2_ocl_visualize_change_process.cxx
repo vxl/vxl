@@ -21,8 +21,8 @@
 
 namespace boxm2_ocl_visualize_change_process_globals
 {
-  const unsigned n_inputs_     = 4;
-  const unsigned n_outputs_    = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
@@ -43,7 +43,7 @@ bool boxm2_ocl_visualize_change_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   //default is .5 thresh val
-  brdb_value_sptr thresh  = new brdb_value_t<float>(.5);
+  brdb_value_sptr thresh = new brdb_value_t<float>(.5);
   pro.set_input(2, thresh);
   brdb_value_sptr low_is_change_default = new brdb_value_t<bool>(false);
   pro.set_input(3, low_is_change_default);
@@ -60,14 +60,14 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
 
   //get the inputs
   unsigned i = 0;
-  vil_image_view_base_sptr  change_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr  in_sptr        = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                     thresh         = pro.get_input<float>(i++);                 //nxn
-  bool                      low_is_change  = pro.get_input<bool>(i++);
+  vil_image_view_base_sptr  change_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr  in_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
+  float                     thresh = pro.get_input<float>(i++);                 //nxn
+  bool                      low_is_change = pro.get_input<bool>(i++);
 
   //prep in image, cast to grey float
-  vil_image_view_base_sptr  f_in       = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
-  vil_image_view<float>*    in_img     = dynamic_cast<vil_image_view<float>* >(f_in.ptr());
+  vil_image_view_base_sptr  f_in = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
+  vil_image_view<float>*    in_img = dynamic_cast<vil_image_view<float>* >(f_in.ptr());
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();
 

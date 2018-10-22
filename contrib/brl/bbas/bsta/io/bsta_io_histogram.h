@@ -29,7 +29,7 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_histogram<T>& h)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   bsta_histogram_base::bsta_hist_type type = h.type_;
   int itype = static_cast<int>(type);
@@ -100,7 +100,7 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram<T>& h)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   bsta_joint_histogram_base::bsta_joint_hist_type type = h.type_;
   int itype = static_cast<int>(type);
@@ -179,7 +179,7 @@ template <class T>
 void
 vsl_b_write(vsl_b_ostream &os, const bsta_joint_histogram_3d<T>& h)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   bsta_joint_histogram_3d_base::bsta_joint_hist_3d_type type = h.type_;
   int itype = static_cast<int>(type);

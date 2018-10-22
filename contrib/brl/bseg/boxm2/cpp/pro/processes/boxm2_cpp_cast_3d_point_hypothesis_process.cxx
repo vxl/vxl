@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_cast_3d_point_hypothesis_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_cast_3d_point_hypothesis_process_cons(bprb_func_process& pro)
@@ -127,7 +127,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     std::cout<<"Block id "<<(*id)<<' ';
-    boxm2_block *   blk   = cache->get_block(scene,*id);
+    boxm2_block *   blk = cache->get_block(scene,*id);
 
     boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     std::size_t buf_len = alph->buffer_length();
@@ -163,8 +163,8 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_cast_3d_point_hypothesis_process2_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_cast_3d_point_hypothesis_process2_cons(bprb_func_process& pro)
@@ -257,7 +257,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
   for (id = vis_order.begin(); id != vis_order.end(); ++id)
   {
     std::cout<<"Block id "<<(*id)<<' ';
-    boxm2_block *   blk   = cache->get_block(scene,*id);
+    boxm2_block *   blk = cache->get_block(scene,*id);
 
     boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     std::size_t buf_len = alph->buffer_length();

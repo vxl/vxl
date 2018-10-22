@@ -211,7 +211,7 @@ fit_lines()
 
   if (!fitter_params_.ptr())
   {
-    const int  fit_length = 6;
+    constexpr int fit_length = 6;
     fitter_params_ = new vdgl_fit_lines_params(fit_length);
   }
 

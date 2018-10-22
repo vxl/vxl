@@ -128,8 +128,8 @@ read_feature_file( char const* filename,
     std::exit(3);
   }
 
-  const double min_sigma=1.3; // don't want to take the lowest sigma=1
-  const double max_sigma=6;   // stop after the 5th resolution
+  constexpr double min_sigma = 1.3; // don't want to take the lowest sigma=1
+  constexpr double max_sigma = 6;   // stop after the 5th resolution
   std::string type_str;
   std::getline( istr, type_str );
   vbl_bounding_box<double, 2> box;

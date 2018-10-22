@@ -382,7 +382,7 @@ void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3
                                                   bsta_sigma_normalizer_sptr n_table,
                                                   float min_sigma)
 {
-  const unsigned int nmodes = 3;
+  constexpr unsigned int nmodes = 3;
   const float min_var = min_sigma*min_sigma;
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
@@ -425,7 +425,7 @@ void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3
   std::vector<float> mode_weight_sum(nmodes,0.0f);
 
   // run EM algorithm to maximize expected probability of observations
-  const unsigned int max_its = 50;
+  constexpr unsigned int max_its = 50;
   const float max_converged_weight_change = 1e-3f;
 
   for (unsigned int i=0; i<max_its; ++i) {

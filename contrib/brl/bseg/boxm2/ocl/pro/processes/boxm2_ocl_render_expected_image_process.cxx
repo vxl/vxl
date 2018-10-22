@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
@@ -59,8 +59,8 @@ bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
   // in case the 7th input is not set
   brdb_value_sptr idx = new brdb_value_t<std::string>("");
-  brdb_value_sptr tnearfactor  = new brdb_value_t<float>(1e6f);
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(1e6f);
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(1e6f);
 
   pro.set_input(6, idx);
   pro.set_input(7, tnearfactor);
@@ -86,8 +86,8 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   unsigned ni=pro.get_input<unsigned>(i++);
   unsigned nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
-  float   nearfactor   = pro.get_input<float>(i++);
-  float   farfactor    = pro.get_input<float>(i++);
+  float   nearfactor = pro.get_input<float>(i++);
+  float   farfactor = pro.get_input<float>(i++);
 
 
   vil_image_view<float> exp_img(ni, nj, 1);
@@ -98,7 +98,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bool ret = true;
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
-  const std::size_t MAX_PIXELS = 16777216;
+  constexpr std::size_t MAX_PIXELS = 16777216;
   if (ni*nj > MAX_PIXELS) {
     std::size_t sni = RoundUp(ni, 16);
     std::size_t snj = RoundUp(nj, 16);

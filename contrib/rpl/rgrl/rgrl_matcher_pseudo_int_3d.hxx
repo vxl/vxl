@@ -464,7 +464,7 @@ slide_window(rgrl_feature_sptr         mapped_feature,
   //  At this point, find the most similar region within the sliding window
   unsigned int dim = mapped_feature -> location().size();
 
-  const double scale_multiplier = 4;   // magic number.  frown.
+  constexpr double scale_multiplier = 4;   // magic number.  frown.
 
   DebugMacro(2, " geometric scale = " << current_scale.geometric_scale() << std::endl );
 

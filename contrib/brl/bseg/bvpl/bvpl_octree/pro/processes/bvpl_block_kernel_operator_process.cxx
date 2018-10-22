@@ -25,8 +25,8 @@
 
 namespace bvpl_block_kernel_operator_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 //: process takes 6 inputs and has 1 output.

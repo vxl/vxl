@@ -34,8 +34,8 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 namespace boxm2_ocl_fuse_factors_process_globals
 {
-    const unsigned int n_inputs_ = 5;
-    const unsigned int n_outputs_ = 0;
+    constexpr unsigned int n_inputs_ = 5;
+    constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_fuse_factors_process_cons(bprb_func_process& pro)

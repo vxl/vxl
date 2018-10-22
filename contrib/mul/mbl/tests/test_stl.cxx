@@ -14,7 +14,7 @@ static void test_stl_sequence()
            << " Testing mbl_stl_sequence\n"
            << "**************************\n";
 
-  const unsigned int n = 20;
+  constexpr unsigned int n = 20;
   std::vector<double> x(n);
 
   for (unsigned int i=0;i<n;++i) x[i]=double(i);

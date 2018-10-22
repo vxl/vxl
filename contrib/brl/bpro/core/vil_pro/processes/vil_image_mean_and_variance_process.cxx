@@ -12,8 +12,8 @@
 
 namespace vil_image_mean_and_variance_process_globals
 {
-    const unsigned int n_inputs_ = 2;
-    const unsigned int n_outputs_ = 2;
+    constexpr unsigned int n_inputs_ = 2;
+    constexpr unsigned int n_outputs_ = 2;
 }
 
 bool vil_image_mean_and_variance_process_cons(bprb_func_process& pro)
@@ -74,8 +74,8 @@ bool vil_image_mean_and_variance_process(bprb_func_process& pro)
 // compute mean and variance image using a specified nxn mask
 namespace vil_mean_and_variance_image_process_globals
 {
-    const unsigned int n_inputs_ = 2;
-    const unsigned int n_outputs_ = 2;
+    constexpr unsigned int n_inputs_ = 2;
+    constexpr unsigned int n_outputs_ = 2;
 }
 
 bool vil_mean_and_variance_image_process_cons(bprb_func_process& pro)

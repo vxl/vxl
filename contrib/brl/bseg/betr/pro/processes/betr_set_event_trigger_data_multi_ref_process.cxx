@@ -24,8 +24,8 @@
 
 namespace betr_set_event_trigger_data_multi_ref_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool betr_set_event_trigger_data_multi_ref_process_cons(bprb_func_process& pro)
@@ -34,11 +34,11 @@ bool betr_set_event_trigger_data_multi_ref_process_cons(bprb_func_process& pro)
 
   //process takes 5 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "betr_event_trigger_sptr";// event_trigger
-  input_types_[1]  = "bbas_1d_array_string_sptr";// reference image paths
-  input_types_[2]  = "bbas_1d_array_string_sptr";// reference camera paths
-  input_types_[3]  = "vcl_string";// event image path
-  input_types_[4]  = "vcl_string";// event camera path
+  input_types_[0] = "betr_event_trigger_sptr";// event_trigger
+  input_types_[1] = "bbas_1d_array_string_sptr";// reference image paths
+  input_types_[2] = "bbas_1d_array_string_sptr";// reference camera paths
+  input_types_[3] = "vcl_string";// event image path
+  input_types_[4] = "vcl_string";// event camera path
   // process has 0 outputs
   std::vector<std::string> output_types_(n_outputs_);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -57,10 +57,10 @@ bool betr_set_event_trigger_data_multi_ref_process(bprb_func_process& pro)
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
   bbas_1d_array_string_sptr ref_img_paths = pro.get_input<bbas_1d_array_string_sptr>(i++);
   // Assumed to be a global rational camera, projecting lon, lat, elv to (u,v)
-  bbas_1d_array_string_sptr ref_cam_paths  = pro.get_input<bbas_1d_array_string_sptr>(i++);
+  bbas_1d_array_string_sptr ref_cam_paths = pro.get_input<bbas_1d_array_string_sptr>(i++);
   std::string evt_img_path = pro.get_input<vcl_string>(i++);
   // Assumed to be a global rational camera, projecting lon, lat, elv to (u,v)
-  std::string evt_cam_path  = pro.get_input<vcl_string>(i);
+  std::string evt_cam_path = pro.get_input<vcl_string>(i);
   unsigned nimg = (ref_img_paths->data_array).size();
   unsigned ncam = (ref_cam_paths->data_array).size();
   if(!event_trigger||!nimg || !ncam || evt_img_path=="" || evt_cam_path==""){

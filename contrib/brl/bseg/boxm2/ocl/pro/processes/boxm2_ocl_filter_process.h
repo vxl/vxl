@@ -16,8 +16,8 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro);
 
 namespace boxm2_ocl_filter_process_globals
 {
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 3;
+    constexpr unsigned n_outputs_ = 0;
 
     void compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel);
     static std::map<std::string,bocl_kernel* > kernels;

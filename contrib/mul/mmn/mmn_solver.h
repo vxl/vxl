@@ -32,7 +32,7 @@ public:
 
     //: Input the arcs that define the graph
   virtual void set_arcs(unsigned num_nodes,
-                        const std::vector<mmn_arc>& arcs) =0;
+                        const std::vector<mmn_arc>& arcs) = 0;
 
   //: Find values for each node with minimise the total cost
   //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i

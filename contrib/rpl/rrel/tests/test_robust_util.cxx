@@ -56,7 +56,7 @@ static void test_robust_util()
                          13.1,  6.2, 55.8 };
   std::vector<double> test_vect4( test_arr4, test_arr4+18 );
   double median, scale;
-  const double corr_median = 1.1;
+  constexpr double corr_median = 1.1;
   dof = 1;
   const double corr_scale = 3.2 * (1.0 + 5.0/(18.0-dof)) * 1.4826;
   rrel_util_median_and_scale_copy( test_vect4.begin(), test_vect4.end(), median, scale, dof);

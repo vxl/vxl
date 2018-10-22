@@ -39,7 +39,7 @@ void gtrl_triangulation::run()
 
   // for some reason, the markers don't seem to
   //   like starting at 0
-  const int offset = 100;
+  constexpr int offset = 100;
 
   std::vector<gtrl_vertex_sptr> pointlist;
 

@@ -31,11 +31,11 @@
 
 namespace boxm2_ocl_create_norm_intensities_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
   enum {
-    UPDATE_CREATE_NORM        = 0,
-    CONVERT_NOBS_INT_SHORT    = 1
+    UPDATE_CREATE_NORM = 0,
+    CONVERT_NOBS_INT_SHORT = 1
   };
 
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
@@ -120,12 +120,12 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
   float gpu_time=0.0f;
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr device               = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene                = pro.get_input<boxm2_scene_sptr>(i++);
-  boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam           = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  std::string ident                      = pro.get_input<std::string>(i++);
+  bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+  boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+  std::string ident = pro.get_input<std::string>(i++);
 
   long binCache = opencl_cache.ptr()->bytes_in_cache();
   std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
@@ -252,15 +252,15 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
 
       //write the image values to the buffer
       vul_timer transfer;
-      bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-      bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-      bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+      bocl_mem* blk = opencl_cache->get_block(scene,*id);
+      bocl_mem* blk_info = opencl_cache->loaded_block_info();
+      bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
       boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
       // data type string may contain an identifier so determine the buffer size
-      //bocl_mem* mog       = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
+      //bocl_mem* mog = opencl_cache->get_data(*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize,false);
 
       //std::cout << "Printing contents of lru cache: " << *(static_cast<boxm2_lru_cache*>( opencl_cache->get_cpu_cache().ptr() )) << std::endl;
 
@@ -269,13 +269,13 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
       {
         //allocate appropriate size bocl_mem objects for number of observations, segment lengths and normalized intensities.
         int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
-        bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type, alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
+        bocl_mem* num_obs = opencl_cache->get_data(scene,*id,num_obs_type, alpha->num_bytes()/alphaTypeSize*nobsTypeSize,false);
 
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux0  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux0 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
 
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-        bocl_mem *aux1  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux1 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
 
         aux0->zero_gpu_buffer(queue);
         aux1->zero_gpu_buffer(queue);
@@ -330,12 +330,12 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
       else if (i==CONVERT_NOBS_INT_SHORT)
       {
         int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE_INT>::prefix());
-        bocl_mem* num_obs   = opencl_cache->get_data(*id,num_obs_type,0,true);
+        bocl_mem* num_obs = opencl_cache->get_data(*id,num_obs_type,0,true);
 
         //////////////////////////////
 
         int nobsTypeSizeShort = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix());
-        bocl_mem* num_obsShort   = opencl_cache->get_data(*id, num_obs_type_short, info_buffer->data_buffer_length*nobsTypeSizeShort);
+        bocl_mem* num_obsShort = opencl_cache->get_data(*id, num_obs_type_short, info_buffer->data_buffer_length*nobsTypeSizeShort);
         //num_obsShort->zero_gpu_buffer(queue);
 
         local_threads[0] = 64;

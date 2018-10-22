@@ -139,8 +139,8 @@ namespace boxm_construct_scene_from_image_process_globals
       }
     }
   }
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm_construct_scene_from_image_process_cons(bprb_func_process& pro)
@@ -204,7 +204,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     vgl_vector_3d<double> block_dim(bb.width(),bb.height(),bb.depth());
     vgl_vector_3d<unsigned> world_dim(1,1,1);
     boxm_scene<boct_tree<short, data_type> >* scene
-      = new boxm_scene<boct_tree<short, data_type> >(origin, block_dim, world_dim);
+ = new boxm_scene<boct_tree<short, data_type> >(origin, block_dim, world_dim);
     scene->set_appearance_model(BOXM_APM_SIMPLE_GREY);
     scene->set_block(vgl_point_3d<int>(0,0,0), blk);
     scene->set_path(scene_dir, block_prefix);

@@ -382,7 +382,7 @@ boxm_compute_shadow_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
     return;
   }
   const float epsilon = 1e-4f;
-  const unsigned int max_its = 100;
+  constexpr unsigned int max_its = 100;
   const float min_weight_change = 1e-5f;
   unsigned int i=0;
   for (; i<max_its; ++i) {

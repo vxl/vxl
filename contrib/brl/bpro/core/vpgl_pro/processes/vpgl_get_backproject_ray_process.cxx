@@ -13,8 +13,8 @@
 
 namespace vpgl_get_backproject_ray_process_globals
 {
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 3;
+    constexpr unsigned n_inputs_ = 3;
+    constexpr unsigned n_outputs_ = 3;
 }
 //: Init function
 bool vpgl_get_backproject_ray_process_cons(bprb_func_process& pro)
@@ -70,8 +70,8 @@ bool vpgl_get_backproject_ray_process(bprb_func_process& pro)
 
 namespace vpgl_get_rpc_backproject_ray_process_globals
 {
-    const unsigned n_inputs_ = 7;
-    const unsigned n_outputs_ = 3;
+    constexpr unsigned n_inputs_ = 7;
+    constexpr unsigned n_outputs_ = 3;
 }
 //: Init function
 bool vpgl_get_rpc_backproject_ray_process_cons(bprb_func_process& pro)

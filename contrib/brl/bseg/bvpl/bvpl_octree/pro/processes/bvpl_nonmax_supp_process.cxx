@@ -33,8 +33,8 @@
 
 namespace bvpl_nonmax_supp_process_globals
 {
-  const unsigned int n_inputs_ = 4;
-  const unsigned int n_outputs_ = 1;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 1;
   //Define parameters here
 }
 

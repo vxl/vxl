@@ -35,8 +35,8 @@
 
 namespace boxm2_ocl_update_max_vis_score_process_globals
 {
-  const unsigned int n_inputs_  = 9;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 9;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_max_vis_score_process_cons(bprb_func_process& pro)
@@ -99,8 +99,8 @@ bool boxm2_ocl_update_max_vis_score_process(bprb_func_process& pro)
 
 namespace boxm2_ocl_update_view_normal_dot_process_globals
 {
-  const unsigned int n_inputs_  = 9;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 9;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_view_normal_dot_process_cons(bprb_func_process& pro)
@@ -160,8 +160,8 @@ bool boxm2_ocl_update_view_normal_dot_process(bprb_func_process& pro)
 
 namespace boxm2_ocl_update_surface_density_process_globals
 {
-  const unsigned int n_inputs_  = 10;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 10;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_surface_density_process_cons(bprb_func_process& pro)

@@ -819,7 +819,7 @@ gevd_float_operators::Gradient(const gevd_bufferxy& smooth,
   grady = gevd_float_operators::Allocate(grady, smooth);
 
   // 1. Inside image frame, compute values based on 3x3 window.
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = smooth.GetSizeX() - frame; // exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
   for (int j = frame; j < highy; ++j)
@@ -968,7 +968,7 @@ gevd_float_operators::Hessian(const gevd_bufferxy& smooth,
   diry = gevd_float_operators::Allocate(diry, smooth);
 
   // 1. Inside image frame, compute values based on 3x3 window.
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = smooth.GetSizeX() - frame;  // exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
   for (int j = frame; j < highy; ++j)
@@ -1081,7 +1081,7 @@ gevd_float_operators::Laplacian(const gevd_bufferxy& smooth,
   diry = gevd_float_operators::Allocate(diry, smooth);
 
   // 1. Inside image frame, compute values based on 3x3 window.
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = smooth.GetSizeX() - frame;// exclusive bounds
   const int highy = smooth.GetSizeY() - frame;
   for (int j = frame; j < highy; ++j)
@@ -1314,7 +1314,7 @@ gevd_float_operators::NonMaximumSuppression(const gevd_bufferxy& magnitude,
   locationx->Clear(); locationy->Clear(); // clear subpixel locs
 
   // 1. Inside image frame, compute values based on 3x3 window.
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = magnitude.GetSizeX() - frame;// exclusive bounds
   const int highy = magnitude.GetSizeY() - frame;
   for (int j = frame; j < highy; ++j)
@@ -1500,7 +1500,7 @@ gevd_float_operators::SupportAngle(const gevd_bufferxy& dirx, const gevd_bufferx
 void
 gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& normal)
 {
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
@@ -1527,7 +1527,7 @@ gevd_float_operators::SurfaceNormal(const gevd_bufferxy& range, gevd_bufferxy*& 
 void
 gevd_float_operators::SurfaceCurvature(const gevd_bufferxy& normal, gevd_bufferxy*& curvature)
 {
-  const int frame = 2;
+  constexpr int frame = 2;
   const int highx = normal.GetSizeX()-frame, highy = normal.GetSizeY()-frame;
   curvature = gevd_float_operators::Allocate(curvature, normal, bits_per_float);
   for (int j = frame; j < highy; j++)
@@ -1619,7 +1619,7 @@ gevd_float_operators::SurfaceNormalD(const gevd_bufferxy& range,
                                      float no_value,
                                      float pixel_distance)
 {
-  const int frame = 1;
+  constexpr int frame = 1;
   const int highx = range.GetSizeX()-frame, highy = range.GetSizeY()-frame;
   normal = gevd_float_operators::Allocate(normal, range, bits_per_ptr);
   normal->Clear();              // NULL vector on border
@@ -1762,7 +1762,7 @@ gevd_float_operators::SurfaceCurvatureD(const gevd_bufferxy& normal,
                                         float dflt,
                                         float pixel_distance )
 {
-  const int frame = 2;
+  constexpr int frame = 2;
   const int highx = normal.GetSizeX()-frame, highy = normal.GetSizeY()-frame;
   curvature = gevd_float_operators::Allocate(curvature, normal, bits_per_float);
   float sq_unit_normalize = 1.0f/(pixel_distance*pixel_distance);
@@ -2241,7 +2241,7 @@ gevd_float_operators::Pyramid(const float* data, const int length,
                               float*& pyramid, int& nlevels, int trim,
                               const float burt_ka)
 {
-  const int MINLENGTH = 16;     // coarsest length for reliable correlation
+  constexpr int MINLENGTH = 16;     // coarsest length for reliable correlation
   if (!pyramid)
     pyramid = new float[length << 1]; // allocate or reuse space
   int i, ii;

@@ -19,8 +19,8 @@
 
 namespace betr_set_event_trigger_partial_data_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool betr_set_event_trigger_partial_data_process_cons(bprb_func_process& pro)
@@ -29,11 +29,11 @@ bool betr_set_event_trigger_partial_data_process_cons(bprb_func_process& pro)
 
   //process takes 5 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "betr_event_trigger_sptr";// event_trigger
-  input_types_[1]  = "vil_image_resource_sptr";// image
-  input_types_[2]  = "vpgl_camera_double_sptr";// camera
-  input_types_[3]  = "bool"; // is a reference object (or if false an event object)
-  input_types_[4]  = "bool"; // keep reference data (false = clear reference data)
+  input_types_[0] = "betr_event_trigger_sptr";// event_trigger
+  input_types_[1] = "vil_image_resource_sptr";// image
+  input_types_[2] = "vpgl_camera_double_sptr";// camera
+  input_types_[3] = "bool"; // is a reference object (or if false an event object)
+  input_types_[4] = "bool"; // keep reference data (false = clear reference data)
 
   // process has 0 outputs
   std::vector<std::string> output_types_(n_outputs_);
@@ -55,7 +55,7 @@ bool betr_set_event_trigger_partial_data_process(bprb_func_process& pro)
   unsigned i = 0;
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
   vil_image_resource_sptr imgr = pro.get_input<vil_image_resource_sptr>(i++);
-  vpgl_camera_double_sptr cam  = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   bool is_reference = pro.get_input<bool>(i++);
   bool keep_data = pro.get_input<bool>(i++);
 

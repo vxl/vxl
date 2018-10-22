@@ -27,8 +27,8 @@
 
 namespace boxm2_ocl_update_parents_alpha_process_globals
 {
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 3;
+    constexpr unsigned n_outputs_ = 0;
     void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
@@ -126,9 +126,9 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
 
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(scene,id);
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
+        bocl_mem* blk = opencl_cache->get_block(scene,id);
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,id);
+        bocl_mem* blk_info = opencl_cache->loaded_block_info();
         transfer_time += (float) transfer.all();
         std::size_t lThreads[] = {16, 1};
         std::size_t gThreads[] = {RoundUp(numTrees,lThreads[0]), 1};

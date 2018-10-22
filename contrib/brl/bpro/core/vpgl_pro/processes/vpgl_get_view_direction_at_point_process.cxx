@@ -12,8 +12,8 @@
 
 namespace vpgl_get_view_direction_at_point_process_globals
 {
-    const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 2;
+    constexpr unsigned n_inputs_ = 4;
+    constexpr unsigned n_outputs_ = 2;
 }
 //: Init function
 bool vpgl_get_view_direction_at_point_process_cons(bprb_func_process& pro)
@@ -63,7 +63,7 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
   normalize(view_direction);
 
   float theta = (float)std::acos(view_direction.z());
-  float phi   = (float)std::atan2(view_direction.y(),view_direction.x());
+  float phi = (float)std::atan2(view_direction.y(),view_direction.x());
   pro.set_output_val<float>(0, theta);
   pro.set_output_val<float>(1, phi);
   return true;

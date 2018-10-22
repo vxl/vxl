@@ -17,8 +17,8 @@
 
 namespace boxm2_blob_precision_recall_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 4;
 
   // do pixelwise sort on the image, and then
   struct Pair {
@@ -68,9 +68,9 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i=0;
-  vil_image_view_base_sptr detection_map_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr detection_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr mask_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
 
   // catch a "null" mask (not really null because that throws an error)
   bool use_mask = true;
@@ -80,9 +80,9 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 100;
+  constexpr unsigned int numPoints = 100;
   bbas_1d_array_float * precision = new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * recall    = new bbas_1d_array_float(numPoints);
+  bbas_1d_array_float * recall = new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;
 
   // check bounds to make sure they match
@@ -138,7 +138,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
     for (unsigned i=0; i<detection_map->ni(); ++i) {
       Pair p;
       p.change = (*detection_map)(i,j);
-      p.gt     = gt_map(i,j);
+      p.gt = gt_map(i,j);
       pairs[c] = p;
       ++c;
     }
@@ -149,7 +149,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 
   //grab thresholds by evenly dispersing them through examples
   float* thresholds = new float[numPoints];
-  float  incr       = 1.0f/(float)numPoints; // = totPix / numPoints;
+  float  incr = 1.0f/(float)numPoints; // = totPix / numPoints;
   for (unsigned int i=0; i<numPoints; ++i) {
     thresholds[i] = i*incr + .01f; //pairs[i*incr].change;
 #ifdef DEBUG
@@ -192,7 +192,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 
     //set precision and recall
     precision->data_array[pnt] = blobs.size()==0 ? 0 : true_positives / blobs.size();
-    recall->data_array[pnt]    = true_positives / gt_blobs.size();
+    recall->data_array[pnt] = true_positives / gt_blobs.size();
   }
 
   // set outputs

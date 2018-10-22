@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_ingest_label_with_cam_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
@@ -98,16 +98,16 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   vil_image_view_base_sptr label_img = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string out_ident = pro.get_input<std::string>(i++);  // identifier for the output label data blocks
 
-  unsigned int ni     = label_img->ni();
-  unsigned int nj     = label_img->nj();
+  unsigned int ni = label_img->ni();
+  unsigned int nj = label_img->nj();
 
-  unsigned int cl_ni  = RoundUp(label_img->ni(),8);
-  unsigned int cl_nj  = RoundUp(label_img->nj(),8);
+  unsigned int cl_ni = RoundUp(label_img->ni(),8);
+  unsigned int cl_nj = RoundUp(label_img->nj(),8);
   std::cout << "casting images of size: " << label_img->ni() << " x " << label_img->nj() << " rounded up size: " << cl_ni << " x " << cl_nj << std::endl;
 
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
@@ -119,16 +119,16 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
 
   // form the ray buffer
-  //cl_float* ray_origins    = new float[4*cl_ni*cl_nj];
+  //cl_float* ray_origins = new float[4*cl_ni*cl_nj];
 
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);  // ocl_update_process does not have this line!
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  cl_uchar* labels        = new unsigned char[cl_ni*cl_nj];
+  cl_uchar* labels = new unsigned char[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -217,15 +217,15 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem * blk           = opencl_cache->get_block(scene,*id);
+    bocl_mem * blk = opencl_cache->get_block(scene,*id);
 
     // to go back to ingesting labels as is with the input data_type, uncomment below and comment the next get_data, also see below
     //// get alpha to get size, TODO: Fix This!
-    //bocl_mem * alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    //bocl_mem * label_data    = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
-    bocl_mem* label_data       = opencl_cache->get_data(scene,*id,data_type,0,true);
+    //bocl_mem * alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    //bocl_mem * label_data = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+    bocl_mem* label_data = opencl_cache->get_data(scene,*id,data_type,0,true);
 
-    bocl_mem * blk_info      = opencl_cache->loaded_block_info();
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
     transfer_time           += (float) transfer.all();
 
     ////3. SET args

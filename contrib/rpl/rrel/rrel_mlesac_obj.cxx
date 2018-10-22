@@ -35,7 +35,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double inlier_frac = 1.0;
   double new_inlier_frac = 1 - outlier_frac_;
 
-  const double EPS = 0.01;
+  constexpr double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
   while ( new_inlier_frac > EPS && std::abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {
@@ -80,7 +80,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
   double const1 = std::pow(mult1, (int)residual_dof_) ;
   double exp_mult2 = -1.0 / (2.0 * sqr(scale));
 
-  const double EPS = 0.01;
+  constexpr double EPS = 0.01;
 
   //EM algorithm to get outlier_frac, the mixing parameter
   while ( new_inlier_frac > EPS && std::abs((new_inlier_frac - inlier_frac) / inlier_frac) > EPS) {

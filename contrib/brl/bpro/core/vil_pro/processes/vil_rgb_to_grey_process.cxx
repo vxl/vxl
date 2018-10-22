@@ -10,8 +10,8 @@
 //:global variables
 namespace vil_rgb_to_grey_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: Constructor

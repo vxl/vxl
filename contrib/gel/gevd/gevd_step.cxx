@@ -44,7 +44,7 @@ const int DJS[] = { 0, 1, 1, 1, 0,-1,-1,-1,
 const int RDS[] = {0,-1, 1,-2, 2,-3, 3,-4, 4,-5, 5}; // radial search
 
 // const unsigned char DIR0 = 8, DIR1 = 9, DIR2 = 10, DIR3 = 11;
-const int FRAME = 4; // 3 for NMS and extension, 4 for contour
+constexpr int FRAME = 4; // 3 for NMS and extension, 4 for contour
 
 //: Save parameters and create workspace for detecting step profiles.
 // High frequency features are smoothed away by smooth_sigma.

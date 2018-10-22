@@ -115,7 +115,7 @@ main( int argc, char* argv[] )
   vector_2d direction;
 
   // BeginCodeSnippet
-  const unsigned int dimension = 2;
+  constexpr unsigned int dimension = 2;
   bool done = false;
   while ( !done && istr ) {
     if ( !(istr >> location[0] >> location[1] >> direction[0] >> direction[1]) )

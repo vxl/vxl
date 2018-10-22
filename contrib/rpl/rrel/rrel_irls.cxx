@@ -16,10 +16,6 @@
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
-const double rrel_irls::dflt_convergence_tol_ = 1e-4;
-const int rrel_irls::dflt_max_iterations_ = 25;
-const int rrel_irls::dflt_iterations_for_scale_ = 1;
-
 // -------------------------------------------------------------------------
 rrel_irls::rrel_irls( int max_iterations )
   : max_iterations_(max_iterations), test_converge_(true),

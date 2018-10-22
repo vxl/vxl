@@ -31,8 +31,8 @@
 
 namespace bvpl_operate_ocp_and_app_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 7;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 //: process takes 7 inputs and has 2 outputs.

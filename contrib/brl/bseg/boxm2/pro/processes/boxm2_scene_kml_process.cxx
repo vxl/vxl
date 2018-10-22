@@ -15,8 +15,8 @@
 
 namespace boxm2_scene_kml_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 0;
 }
 bool boxm2_scene_kml_process_cons(bprb_func_process& pro)
 {

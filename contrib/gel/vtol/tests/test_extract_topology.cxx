@@ -32,7 +32,7 @@ class test_vtol_extract_topology
 static label_image_type
 image_to_label(const image_type& img)
 {
-  const int nplanes = 1;
+  constexpr int nplanes = 1;
   label_image_type img2(img.ni(), img.nj(), nplanes);
   for (unsigned int i=0; i<img.ni(); i++) {
     for (unsigned int j=0; j<img.nj(); j++) {
@@ -155,10 +155,10 @@ test_image_1a()
   label_image_type img( image_to_label( image_1a() ) );
 
   // edge directions
-  const unsigned R = 1;
-  const unsigned D = 2;
-  const unsigned L = 4;
-  const unsigned U = 8;
+  constexpr unsigned R = 1;
+  constexpr unsigned D = 2;
+  constexpr unsigned L = 4;
+  constexpr unsigned U = 8;
   const unsigned LD = L | D;
   const unsigned LR = L | R;
   const unsigned LU = L | U;
@@ -218,10 +218,10 @@ test_image_1b()
   label_image_type img = image_to_label( image_1b() );
 
   // edge directions
-  const unsigned R = 1;
-  const unsigned D = 2;
-  const unsigned L = 4;
-  const unsigned U = 8;
+  constexpr unsigned R = 1;
+  constexpr unsigned D = 2;
+  constexpr unsigned L = 4;
+  constexpr unsigned U = 8;
   const unsigned LD = L | D;
   const unsigned LR = L | R;
   const unsigned LU = L | U;

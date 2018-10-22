@@ -202,7 +202,7 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
          double airlight_mean = radiance_offsets_[m][n];
          double marginal_density;
          if (radiance_scales_[m][n] > 1.0) {
-            const double Lmin = 0;
+            constexpr double Lmin = 0;
             const double Lmax = radiance_scales_[m][n];
             // assume radiance is a sum of uniform random variable (function of albedo) + gaussian distributed variable (airlight)
             //marginal_density = (vnl_erf(vnl_math::sqrt2*(Lmin + airlight_mean - radiance)/(2.0*boxm2_normal_albedo_array_constants::sigma_airlight)) - vnl_erf(vnl_math::sqrt2*(Lmax + airlight_mean - radiance)/(2.0*boxm2_normal_albedo_array_constants::sigma_airlight)))/(2.0*(Lmax-Lmin));

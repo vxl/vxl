@@ -53,8 +53,8 @@ int boxm_plyio_vertex_cb_(p_ply_argument argument);
 //: global variables
 namespace boxm_create_scene_from_ply_process_globals
 {
-  const unsigned n_inputs_ = 3 ;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 

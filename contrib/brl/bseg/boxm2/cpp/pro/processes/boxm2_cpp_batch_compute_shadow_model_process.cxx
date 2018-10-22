@@ -25,8 +25,8 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_shadow_model_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool boxm2_cpp_batch_compute_shadow_model_process_cons(bprb_func_process& pro)
@@ -88,9 +88,9 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   float weighted_intensities=0.0;
   float ambient_light=0.0;
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block     *  blk   = cache->get_block(scene,*id);
+    boxm2_block     *  blk = cache->get_block(scene,*id);
     // pass num_bytes = 0 to make sure disc is read if not already in memory
-    boxm2_data_base *  sunvis  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("sunvis"),0,true);
+    boxm2_data_base *  sunvis = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("sunvis"),0,true);
     //std::cout << "buffer length of sunvis: " << sunvis->buffer_length() << '\n';
     boxm2_compute_ambient_functor data_functor;
     data_functor.init_data(sunvis, str_cache,weights,weighted_intensities, float(blk->sub_block_dim().x()), blk->max_level());

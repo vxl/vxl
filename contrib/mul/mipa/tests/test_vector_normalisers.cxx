@@ -217,7 +217,7 @@ static void test_vector_normalisers()
         //-------------------------------------------------------------------------
         //
         // Test multi-scale block normaliser
-        const unsigned nLevels=2;
+        constexpr unsigned nLevels = 2;
         const bool include_overall_histogram=true;
 
         mipa_ms_block_normaliser msBlockNormaliser(*pBlockNormaliser,nLevels,include_overall_histogram);

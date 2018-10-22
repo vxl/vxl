@@ -34,7 +34,7 @@ void step_cell_vis_score(AuxArgs aux_args, int data_ptr, uchar llid, float d)
     float cell_vis = (*aux_args.ray_vis);
 
     // apply sigmoid function to push towards 0 or 1
-    const float sigmoid_center = 0.4;
+    constexpr float sigmoid_center = 0.4;
     const float sigmoid_slope = 15.0f;
     float vis_score = 1.0f/(1.0f + exp(-sigmoid_slope * (cell_vis - sigmoid_center)));
 

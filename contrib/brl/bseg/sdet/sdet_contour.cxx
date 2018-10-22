@@ -76,8 +76,8 @@ const float RGS[] = { 1.f, 1.414213f, 2.f, 2.236067f, 2.828427f, // values of ga
                       3.f, 3.162277f, 3.605551f, 4.f};
 
 // - win32 - moved to here for MSVC++
-const int MINLENGTH = 3;        // minimum number of pixels for a chain
-const int FRAME = 4;            // border of image
+constexpr int MINLENGTH = 3;        // minimum number of pixels for a chain
+constexpr int FRAME = 4;            // border of image
 
 //: A container to support sorting of edge lengths
 // Will result in descending order according to length
@@ -679,7 +679,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
   //edge unless the stronger curve is a cycle without a vertex
   //In the case of a cycle there is no real origin to be used as
   //a junction later during merging tests
-  const int s = 3;
+  constexpr int s = 3;
   if ((index<=s || index+s+1 > (int)ec->size())&&
       stronger->v1()&&stronger->v2())
     return false;
@@ -830,7 +830,7 @@ ConfirmJunctionOnCycle(int index, float threshold,
   vdgl_digital_curve_sptr dc = cycle.curve()->cast_to_vdgl_digital_curve();
   const int len = dc->get_interpolator()->get_edgel_chain()->size();
   const int wrap = 10*len;      // for positive index
-  const int radius = 3;         // gap < 3, around junction pixel
+  constexpr int radius = 3;         // gap < 3, around junction pixel
 
   for (int n = index-radius; n <= index+radius; n++)
   {
@@ -938,7 +938,7 @@ ConfirmJunctionOnChain(int index, float threshold,
     return false;          // breaking up chains
 
   const int fuzz = MINLENGTH-1; // from min length of broken chains
-  const int radius = 3;         // gap < 3, around junction pixel
+  constexpr int radius = 3;         // gap < 3, around junction pixel
   //search a neighborhood around index on the input chain
   //for long chains this amounts to index+-radius
   for (int n = std::max(index-radius, fuzz); n <= std::min(index+radius,len-1-fuzz); n++)
@@ -1748,7 +1748,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
     return 0;
   }
   // 1. Create vertices at the end of edges (digital_curve geometry)
-  const float connect_fuzz = 2;
+  constexpr float connect_fuzz = 2;
 
   for (unsigned int i=0; i< edges.size(); i++)
   {

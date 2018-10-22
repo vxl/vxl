@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_query_hist_data_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 7;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 7;
 }
 
 bool boxm2_ocl_query_hist_data_process_cons(bprb_func_process& pro)
@@ -98,7 +98,7 @@ bool boxm2_ocl_query_hist_data_process(bprb_func_process& pro)
     //int buff_index=(int)treebits[12]*256+(int)treebits[13];
     int data_offset=tree.get_data_index(bit_index,false);//buff_index*65536+tree.get_data_index(bit_index);
 
-    boxm2_data_base *  hist_base  = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
+    boxm2_data_base *  hist_base = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_BATCH_HISTOGRAM>::prefix());
     boxm2_data<BOXM2_BATCH_HISTOGRAM> *hist_data=new boxm2_data<BOXM2_BATCH_HISTOGRAM>(hist_base->data_buffer(),hist_base->buffer_length(),hist_base->block_id());
 
     boxm2_array_1d<vnl_vector_fixed<float,8> > hist_data_array=hist_data->data();

@@ -187,10 +187,10 @@ inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from,
          vnl_vector<double>& from_next_est) const
 {
-  const double epsilon = 0.01;
+  constexpr double epsilon = 0.01;
   const double eps_squared = epsilon*epsilon;
   int t=0;
-  const int max_t = 20;  //  Generally, only one or two iterations should be needed.
+  constexpr int max_t = 20;  //  Generally, only one or two iterations should be needed.
   assert (to.size() == from.size());
   int m = to.size();
   vnl_vector<double> to_est = this->map_location(from);

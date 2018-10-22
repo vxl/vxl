@@ -21,8 +21,8 @@
 //: global variables
 namespace bvxm_detect_edges_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_=1;
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 1;
 
   // parameter strings
   const std::string param_noise_multiplier_ =  "noise_multiplier";

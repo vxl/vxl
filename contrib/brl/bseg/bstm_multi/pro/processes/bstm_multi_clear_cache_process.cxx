@@ -16,8 +16,8 @@
 #include <bstm_multi/space_time_scene.h>
 
 namespace {
-const unsigned n_inputs_ = 1;
-const unsigned n_outputs_ = 0;
+constexpr unsigned n_inputs_ = 1;
+constexpr unsigned n_outputs_ = 0;
 }
 bool bstm_clear_cache_process_cons(bprb_func_process &pro) {
   vcl_vector<vcl_string> input_types_(n_inputs_);

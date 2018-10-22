@@ -23,8 +23,8 @@
 
 namespace volm_combine_height_map_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool volm_combine_height_map_process_cons(bprb_func_process& pro)
@@ -52,10 +52,10 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
   // get the input
   unsigned in_i = 0;
   std::string dem_folder = pro.get_input<std::string>(in_i++);
-  std::string poly_file  = pro.get_input<std::string>(in_i++);
+  std::string poly_file = pro.get_input<std::string>(in_i++);
   std::string out_folder = pro.get_input<std::string>(in_i++);
   float min_size = pro.get_input<float>(in_i++);
-  int   leaf_id  = pro.get_input<int>(in_i++);
+  int   leaf_id = pro.get_input<int>(in_i++);
 
   // get the images
   std::vector<volm_img_info> h_info;
@@ -123,8 +123,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     // create a filename
     std::stringstream filename;
     std::string hemisphere = "N";
-    std::string direction  = "E";
-    if (lon_min < 0)  direction  = "W";
+    std::string direction = "E";
+    if (lon_min < 0)  direction = "W";
     if (lat_min < 0)  hemisphere = "S";
     filename << "HeightMap_" << hemisphere << std::setprecision(12) << lat_min << direction << std::setprecision(12) << lon_min
              << "_S" << scale_x << 'x' << scale_y;
@@ -231,8 +231,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
 // combine multiple height maps by taking the median values of all pixels from multiple maps
 namespace volm_combine_height_map_process2_globals
 {
-  const unsigned n_inputs_  = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 1;
 
   //: function to obtain the median
   float median(std::vector<float> values);
@@ -243,8 +243,8 @@ bool volm_combine_height_map_process2_cons(bprb_func_process& pro)
   using namespace volm_combine_height_map_process2_globals;
   // process takes 1 input
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "vcl_string";  // folder that stores all height maps
-  input_types_[1]  = "float";       // threshold
+  input_types_[0] = "vcl_string";  // folder that stores all height maps
+  input_types_[1] = "float";       // threshold
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output image
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
@@ -261,7 +261,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
   // get the input
   unsigned in_i = 0;
   std::string img_folder = pro.get_input<std::string>(in_i++);
-  float threshold       = pro.get_input<float>(in_i++);
+  float threshold = pro.get_input<float>(in_i++);
   // get all images from the folder
   std::vector<std::string> img_files;
   std::string in_dir = img_folder + "*.tif";

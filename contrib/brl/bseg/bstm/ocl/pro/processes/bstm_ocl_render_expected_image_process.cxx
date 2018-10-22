@@ -27,8 +27,8 @@
 
 namespace bstm_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 4;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -115,7 +115,7 @@ bool bstm_ocl_render_expected_image_process_cons(bprb_func_process& pro)
   input_types_[6] = "float"; // time
   input_types_[7] = "bool"; // render label?
 
-  brdb_value_sptr render_label_val    = new brdb_value_t<bool>(false);
+  brdb_value_sptr render_label_val = new brdb_value_t<bool>(false);
   pro.set_input(7, render_label_val);
 
   std::vector<std::string> output_types_(n_outputs_);

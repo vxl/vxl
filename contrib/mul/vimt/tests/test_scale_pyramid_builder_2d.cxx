@@ -21,7 +21,7 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
            << " Testing vimt_scale_pyramid_builder_2d (byte)(nx="<<nx<<", ny="<<ny<<")\n"
            << "************************************************************\n";
 
-  const double scale_step = 1.2;
+  constexpr double scale_step = 1.2;
   const unsigned int nx_scaled = (unsigned int)(nx/scale_step+0.5), // round
                      ny_scaled = (unsigned int)(ny/scale_step+0.5);
 

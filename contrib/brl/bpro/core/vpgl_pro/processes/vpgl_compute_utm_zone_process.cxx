@@ -14,8 +14,8 @@
 // global variables and functions
 namespace vpgl_compute_utm_zone_process_globals
 {
-  const unsigned n_inputs_  = 2;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 //: initialization

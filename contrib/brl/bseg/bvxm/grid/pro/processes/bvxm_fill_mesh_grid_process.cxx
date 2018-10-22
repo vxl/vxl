@@ -31,8 +31,8 @@
 
 namespace bvxm_fill_mesh_grid_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 

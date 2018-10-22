@@ -99,7 +99,7 @@ inv_map( const vnl_vector<double>& to,
          vnl_vector<double>& from,
          vnl_vector<double>& from_next_est) const
 {
-  const double epsilon = 0.01;
+  constexpr double epsilon = 0.01;
   vnl_vector<double> to_est = this->map_location(from);
 
   // update from to become true inv_map of to, based on (to - to_est)

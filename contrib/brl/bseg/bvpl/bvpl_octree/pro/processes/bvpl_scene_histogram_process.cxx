@@ -14,8 +14,8 @@
 //:global variables
 namespace bvpl_scene_histogram_process_globals
 {
-  const unsigned n_inputs_  = 1;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 

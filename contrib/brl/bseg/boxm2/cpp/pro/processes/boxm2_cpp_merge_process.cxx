@@ -24,8 +24,8 @@
 
 namespace boxm2_cpp_merge_process_globals
 {
-  const unsigned n_inputs_ =  3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_merge_process_cons(bprb_func_process& pro)
@@ -87,9 +87,9 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
   {
     boxm2_block_id id = blk_iter->first;
     std::cout<<"Merging Block: "<<id<<std::endl;
-    boxm2_block *     blk     = cache->get_block(scene, id);
-    boxm2_data_base * alph    = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
-    boxm2_data_base * mog     = cache->get_data_base(scene,id,data_type, 0, false);
+    boxm2_block *     blk = cache->get_block(scene, id);
+    boxm2_data_base * alph = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix(), 0, false);
+    boxm2_data_base * mog = cache->get_data_base(scene,id,data_type, 0, false);
     boxm2_data_base * num_obs = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix(), 0, false);
 
     std::vector<boxm2_data_base*> datas;

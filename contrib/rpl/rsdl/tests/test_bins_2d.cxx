@@ -74,7 +74,7 @@ static void test_bins_2d()
                                      stored_value == added_value, true);
 
   //  Generate a bunch of points:
-  const int M=60;
+  constexpr int M = 60;
   std::vector< vnl_vector_fixed< double, 2 > > points( M );
   std::vector< int > indices( M );
   vnl_random mz_rand;
@@ -89,7 +89,7 @@ static void test_bins_2d()
 
   //  test  "is_any_point_within_radius" and "points_with_radius"
 
-  const int num_tests = 5;
+  constexpr int num_tests = 5;
   for ( int t=0; t<num_tests; ++t ) {
     vnl_vector_fixed< double, 2 > q;
     q[0] = (max_pt[0] - min_pt[0]) * mz_rand.drand32() + min_pt[0];

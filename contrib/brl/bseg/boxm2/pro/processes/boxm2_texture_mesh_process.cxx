@@ -39,8 +39,8 @@
 
 namespace boxm2_texture_mesh_process_globals
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 
   //struct for passing 3d triangles (couldn't find a 3d triangle in VGL...)
   struct triangle_3d {
@@ -132,9 +132,9 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
   }
   unsigned argIdx = 0;
   imesh_mesh_sptr mesh = pro.get_input<imesh_mesh_sptr>(argIdx++);
-  std::string img_dir   = pro.get_input<std::string>(argIdx++);
-  std::string cam_dir   = pro.get_input<std::string>(argIdx++);
-  std::string out_dir   = pro.get_input<std::string>(argIdx++);
+  std::string img_dir = pro.get_input<std::string>(argIdx++);
+  std::string cam_dir = pro.get_input<std::string>(argIdx++);
+  std::string out_dir = pro.get_input<std::string>(argIdx++);
 
   //create the mesh directory
   if (out_dir != "") {
@@ -185,7 +185,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
   // BEGIN TEXTURE MAPPING
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
-  std::vector<std::string> allims  = boxm2_util::images_from_directory(im_dir);
+  std::vector<std::string> allims = boxm2_util::images_from_directory(im_dir);
 
   //create blank texturemap image
   vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
@@ -680,7 +680,7 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_p
 
     // render the face_id/distance image
     vil_image_view<double> depth_im(ni, nj);
-    vil_image_view<int>*   face_im     = new vil_image_view<int>(ni, nj);
+    vil_image_view<int>*   face_im = new vil_image_view<int>(ni, nj);
     depth_im.fill(10e100);  //Initial depth is huge,
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)

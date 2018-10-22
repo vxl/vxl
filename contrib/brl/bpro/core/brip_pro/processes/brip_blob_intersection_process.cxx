@@ -16,8 +16,8 @@
 
 namespace brip_blob_intersection_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 //: Constructor
@@ -52,7 +52,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
 
   // get the inputs
   vil_image_view_base_sptr blob_sptr = pro.get_input<vil_image_view_base_sptr>(0);
-  vil_image_view_base_sptr gt_sptr   = pro.get_input<vil_image_view_base_sptr>(1);
+  vil_image_view_base_sptr gt_sptr = pro.get_input<vil_image_view_base_sptr>(1);
 
   // check bounds to make sure they match
   if (blob_sptr->ni() != gt_sptr->ni() || blob_sptr->nj() != gt_sptr->nj()) {
@@ -77,7 +77,7 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
                         blob_map(gt_uchar->ni(), gt_uchar->nj());
   for (unsigned int i=0; i<gt_uchar->ni(); ++i)
     for (unsigned int j=0; j<gt_uchar->nj(); ++j) {
-      gt_map(i,j)   = (*gt_uchar)(i,j) == 0 ? false : true;
+      gt_map(i,j) = (*gt_uchar)(i,j) == 0 ? false : true;
       blob_map(i,j) = (*blob_uchar)(i,j) == 0 ? false : true;
     }
 

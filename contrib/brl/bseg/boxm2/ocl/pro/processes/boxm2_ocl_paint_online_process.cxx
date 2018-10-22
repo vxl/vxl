@@ -24,8 +24,8 @@
 
 namespace boxm2_ocl_paint_online_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_ocl_paint_online_process_cons(bprb_func_process& pro)
@@ -61,11 +61,11 @@ bool boxm2_ocl_paint_online_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr           device    = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr           scene     = pro.get_input<boxm2_scene_sptr>(i++);
+  bocl_device_sptr           device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr           scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr    ocl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
+  vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+  vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   //get scene data type and appTypeSize
   std::string data_type;

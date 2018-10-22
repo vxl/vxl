@@ -20,8 +20,8 @@
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
@@ -60,13 +60,13 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr img_ref_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr img_tgr_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  int min_disparity                     = pro.get_input<int>(in_i++);
-  int num_disparity                     = pro.get_input<int>(in_i++);
-  int num_active_disparities            = pro.get_input<int>(in_i++);
-  int error_check_mode                  = pro.get_input<int>(in_i++);
-  int multi_scale_mode                  = pro.get_input<int>(in_i++);
-  std::string out_disparity_txt         = pro.get_input<std::string>(in_i++);
-  unsigned shadow_thresh                = pro.get_input<unsigned>(in_i++);
+  int min_disparity = pro.get_input<int>(in_i++);
+  int num_disparity = pro.get_input<int>(in_i++);
+  int num_active_disparities = pro.get_input<int>(in_i++);
+  int error_check_mode = pro.get_input<int>(in_i++);
+  int multi_scale_mode = pro.get_input<int>(in_i++);
+  std::string out_disparity_txt = pro.get_input<std::string>(in_i++);
+  unsigned shadow_thresh = pro.get_input<unsigned>(in_i++);
 
   // load image
   vil_image_view<vxl_byte>* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
@@ -80,7 +80,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
     return false;
   }
   vil_image_view<vxl_byte> img_right = vil_convert_to_grey_using_rgb_weighting(img_ref);
-  vil_image_view<vxl_byte> img_left  = vil_convert_to_grey_using_rgb_weighting(img_tgr);
+  vil_image_view<vxl_byte> img_left = vil_convert_to_grey_using_rgb_weighting(img_tgr);
   int img_width = img_right.ni(), img_height = img_right.nj();
 
   // setup sgm parameters

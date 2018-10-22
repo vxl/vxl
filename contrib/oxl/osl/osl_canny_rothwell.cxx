@@ -17,7 +17,7 @@
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
-const float DUMMYTHETA = 10000.0;
+constexpr float DUMMYTHETA = 10000.0;
 
 //-----------------------------------------------------------------------------
 

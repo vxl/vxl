@@ -22,8 +22,8 @@
 
 namespace bvpl_bundler_features_2d_read_bin_process_globals
 {
-    const unsigned n_inputs_ = 1;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_ = 1;
+    constexpr unsigned n_outputs_ = 1;
 }//end bvpl_bundler_features_2d_read_bin_process_globals
 
 bool bvpl_bundler_features_2d_read_bin_process_cons( bprb_func_process& pro )
@@ -65,12 +65,12 @@ bool bvpl_bundler_features_2d_read_bin_process( bprb_func_process& pro )
     }
 
     //get input
-    std::string filename     = pro.get_input<std::string>(0);
+    std::string filename = pro.get_input<std::string>(0);
 
     vsl_b_ifstream is(filename);
 
     bvpl_bundler_features_2d_sptr
-        bundler_features_sptr  = new bvpl_bundler_features_2d();
+        bundler_features_sptr = new bvpl_bundler_features_2d();
 
     vsl_b_read(is, bundler_features_sptr);
 

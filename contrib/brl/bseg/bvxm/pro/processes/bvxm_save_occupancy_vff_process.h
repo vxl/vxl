@@ -20,8 +20,8 @@
 //: global variables
 namespace bvxm_save_occupancy_vff_process_globals
 {
-  const unsigned int n_inputs_ = 3;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 3;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool bvxm_save_occupancy_vff_process_cons(bprb_func_process& pro);

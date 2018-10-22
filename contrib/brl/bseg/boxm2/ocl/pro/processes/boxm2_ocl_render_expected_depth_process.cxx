@@ -32,8 +32,8 @@
 
 namespace boxm2_ocl_render_expected_depth_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 6;
+  constexpr unsigned n_outputs_ = 3;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
@@ -291,11 +291,11 @@ bool boxm2_ocl_render_expected_depth_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk           = opencl_cache->get_block(scene,*id);
-    bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    bocl_mem * blk_info     = opencl_cache->loaded_block_info();
+    bocl_mem* blk = opencl_cache->get_block(scene,*id);
+    bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    bocl_mem * blk_info = opencl_cache->loaded_block_info();
     transfer_time          += (float) transfer.all();
-    subblk_dim              = mdata.sub_block_dim_.x();
+    subblk_dim = mdata.sub_block_dim_.x();
     ////3. SET args
     kern->set_arg( blk_info );
     kern->set_arg( blk );

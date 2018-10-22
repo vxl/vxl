@@ -14,8 +14,8 @@
 
 namespace vpgl_generate_xyz_from_depth_image_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 3;
+    constexpr unsigned n_inputs_ = 2;
+    constexpr unsigned n_outputs_ = 3;
 }
 //: Init function
 bool vpgl_generate_xyz_from_depth_image_process_cons(bprb_func_process& pro)

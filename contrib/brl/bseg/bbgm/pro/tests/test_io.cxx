@@ -55,8 +55,8 @@ namespace
 void test_io_function_2(void)
 {
   std::cout << "Starting test_io2\n";
-  const float window_size = 50.0;
-  const unsigned int max_components = 3;
+  constexpr float window_size = 50.0;
+  constexpr unsigned int max_components = 3;
   const float init_var = 0.01f;
   const unsigned int ni = 640, nj = 480;
 
@@ -115,8 +115,8 @@ static void test_io()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process, "bbgmLoadImageOfProcess");
   std::cout << "Starting test_io\n";
   bbgm_loader::register_loaders();
-  const float window_size = 50.0;
-  const unsigned int max_components = 3;
+  constexpr float window_size = 50.0;
+  constexpr unsigned int max_components = 3;
   const float init_var = 0.01f;
   const unsigned int ni = 640, nj = 480;
 

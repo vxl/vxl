@@ -19,8 +19,8 @@
 
 namespace vpgl_persp_cam_from_photo_overlay_process_globals
 {
-  const unsigned n_inputs_ = 11;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 11;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 bool vpgl_persp_cam_from_photo_overlay_process_cons(bprb_func_process& pro)

@@ -89,7 +89,7 @@ void mipa_ms_block_normaliser::print_summary(std::ostream& os) const
 // required if data is present in this base class
 void mipa_ms_block_normaliser::b_write(vsl_b_ostream& bfs) const
 {
-    const short version_no=1;
+    constexpr short version_no = 1;
     vsl_b_write(bfs, version_no);
 
     vsl_b_write(bfs, nscales_);

@@ -32,8 +32,8 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_normal_albedo_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_batch_compute_normal_albedo_process_cons(bprb_func_process& pro)
@@ -132,8 +132,8 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   std::vector<boxm2_block_id>::iterator id;
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); id++) {
-    boxm2_block *     blk     = cache->get_block(scene,*id);
-    boxm2_data_base *  alpha  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0, false);
+    boxm2_block *     blk = cache->get_block(scene,*id);
+    boxm2_data_base *  alpha = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0, false);
     unsigned int n_cells = alpha->buffer_length() / boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     std::string naa_prefix = boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix();
     std::cout << "naa_prefix = " << naa_prefix << std::endl;
@@ -143,7 +143,7 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
     std::cout << "na_model_size2 = " << sizeof(boxm2_normal_albedo_array) << std::endl;
     std::cout << "n_cells = " << n_cells << std::endl;
     std::cout << "na_data_size = " << na_data_size << std::endl;
-    boxm2_data_base *  na_model_data  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(), na_data_size, false);
+    boxm2_data_base *  na_model_data = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix(), na_data_size, false);
 
     bool update_alpha = false;
     boxm2_compute_normal_albedo_functor_opt data_functor(update_alpha);

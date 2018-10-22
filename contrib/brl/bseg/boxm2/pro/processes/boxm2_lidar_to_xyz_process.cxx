@@ -28,8 +28,8 @@
 
 namespace boxm2_lidar_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 bool boxm2_lidar_to_xyz_process_cons(bprb_func_process& pro)
@@ -323,8 +323,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 // turn an ortho image of unsigned int to xyz and a label (e.g. each pixel has an id of some class) image ready to be ingested
 namespace boxm2_label_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 bool boxm2_label_to_xyz_process_cons(bprb_func_process& pro)
@@ -542,8 +542,8 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
 // Note in this case the ortho image size can be smaller than scene bounding box and the output xyz image has input image resolution
 namespace boxm2_label_to_xyz_process2_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 4;
 }
 
 bool boxm2_label_to_xyz_process2_cons(bprb_func_process& pro)

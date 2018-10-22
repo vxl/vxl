@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_create_coarser_scene_process_globals
 {
-    const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 4;
+    constexpr unsigned n_outputs_ = 0;
     void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
@@ -94,7 +94,7 @@ bool copy_fine_to_coarse(boxm2_block & blk,
         {
             for (unsigned k = 0; k < nk; k++)
             {
-                uchar16 tree  = trees(i,j,k);
+                uchar16 tree = trees(i,j,k);
                 boct_bit_tree curr_tree( (unsigned char*) tree.data_block(), 4);
                 for (int ti=0; ti<585; ti++)
                 {

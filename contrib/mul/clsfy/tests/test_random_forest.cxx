@@ -38,13 +38,13 @@ void test_random_forest()
              << " Testing clsfy_random_forest_builder\n"
              << "*******************************************\n";
 
-    const double varx= 1.0;
-    const double vary = 1.0;
-    const double varz = 1.0;
+    constexpr double varx = 1.0;
+    constexpr double vary = 1.0;
+    constexpr double varz = 1.0;
 
-    const double mux=0.5;
-    const double muy=1.0;
-    const double muz=2.0;
+    constexpr double mux = 0.5;
+    constexpr double muy = 1.0;
+    constexpr double muz = 2.0;
 
     pdf1d_gaussian pdfx(mux,varx);
     pdf1d_gaussian pdfy(muy,vary);
@@ -72,7 +72,7 @@ void test_random_forest()
 
     pdferror_sampler = pdferror.new_sampler();
 
-    const unsigned NPOINTS=500;
+    constexpr unsigned NPOINTS = 500;
     std::vector<vnl_vector<double > > data(NPOINTS);
 
     vnl_vector<double> xerr(1);
@@ -131,7 +131,7 @@ void test_random_forest()
     std::vector<vnl_vector<double > > testData(NPOINTS);
 
     std::vector<unsigned > test_outputs(NPOINTS,0);
-    const double epsilon=0.05;
+    constexpr double epsilon = 0.05;
     vnl_vector<double > error(1);
     unsigned tp=0;
     for (unsigned i=0; i<NPOINTS; ++i)
@@ -295,7 +295,7 @@ void test_random_forest()
                   training_outputs);
 
     {
-        const unsigned NPOINTS=500;
+        constexpr unsigned NPOINTS = 500;
         unsigned tp=std::count(test_outputs.begin(),test_outputs.end(),1U);
         unsigned tpr=0;
         unsigned tnr=0;
@@ -333,7 +333,7 @@ void test_random_forest()
     {
         std::cout<<"TESTING 3D Data..."<<std::endl;
 
-        const unsigned NPOINTS=500;
+        constexpr unsigned NPOINTS = 500;
         std::vector<vnl_vector<double > > data(NPOINTS);
         std::vector<unsigned  > training_outputs(NPOINTS,0);
 
@@ -510,7 +510,7 @@ void test_random_forest()
 
     {
         std::cout<<"TESTING 5D-Hypersphere Data..."<<std::endl;
-        const unsigned NPOINTS=2000;
+        constexpr unsigned NPOINTS = 2000;
         std::vector<vnl_vector<double > > data(NPOINTS);
 
         pdf1d_gaussian pdferror2(0.0,0.02*0.02);

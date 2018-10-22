@@ -27,8 +27,8 @@
 //: globals variables and functions
 namespace bvxm_scene_local_box_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 7;  // box_min_x, box_min_y, box_max_x, box_max_y, voxel_size, min_z, max_z
+  constexpr unsigned n_inputs_ = 1;
+  constexpr unsigned n_outputs_ = 7;  // box_min_x, box_min_y, box_max_x, box_max_y, voxel_size, min_z, max_z
 }
 
 //: set input and output types

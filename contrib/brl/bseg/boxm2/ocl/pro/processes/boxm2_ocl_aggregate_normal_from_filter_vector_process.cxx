@@ -37,8 +37,8 @@
 
 namespace boxm2_ocl_aggregate_normal_from_filter_vector_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 
   static std::map<std::string, boxm2_ocl_aggregate_normal_from_filter_vector*> engines;
 }

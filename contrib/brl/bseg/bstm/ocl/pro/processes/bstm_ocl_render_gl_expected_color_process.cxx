@@ -25,8 +25,8 @@
 
 namespace bstm_ocl_render_gl_expected_color_process_globals
 {
-  const unsigned n_inputs_   = 9;
-  const unsigned n_outputs_  = 1;
+  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t     lthreads[2] = {8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -111,14 +111,14 @@ bool bstm_ocl_render_gl_expected_color_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr        device       = pro.get_input<bocl_device_sptr>(i++);
-  bstm_scene_sptr        scene        = pro.get_input<bstm_scene_sptr>(i++);
+  bocl_device_sptr        device = pro.get_input<bocl_device_sptr>(i++);
+  bstm_scene_sptr        scene = pro.get_input<bstm_scene_sptr>(i++);
   bstm_opencl_cache_sptr opencl_cache = pro.get_input<bstm_opencl_cache_sptr>(i++);
-  vpgl_camera_double_sptr cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned                ni           = pro.get_input<unsigned>(i++);
-  unsigned                nj           = pro.get_input<unsigned>(i++);
-  bocl_mem_sptr           exp_image    = pro.get_input<bocl_mem_sptr>(i++);
-  bocl_mem_sptr           exp_img_dim  = pro.get_input<bocl_mem_sptr>(i++);
+  vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+  unsigned                ni = pro.get_input<unsigned>(i++);
+  unsigned                nj = pro.get_input<unsigned>(i++);
+  bocl_mem_sptr           exp_image = pro.get_input<bocl_mem_sptr>(i++);
+  bocl_mem_sptr           exp_img_dim = pro.get_input<bocl_mem_sptr>(i++);
   float time = pro.get_input<float>(i++);
 
   std::cout << "rendering at time " << time << std::endl;

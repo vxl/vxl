@@ -11,10 +11,10 @@
 #include <vcl_compiler.h>
 
 //: Value to indicate no valid arc
-const unsigned mmn_no_arc=99999;
+constexpr unsigned mmn_no_arc = 99999;
 
 //: Value to indicate no valid triangle
-const unsigned mmn_no_tri=99999;
+constexpr unsigned mmn_no_tri = 99999;
 
 //: Store information about which node a given node depends on
 //  If n_dep==1, then v0 depends only on v1 through arc1

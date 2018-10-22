@@ -83,7 +83,7 @@ static void test_ran_sam_residuals()
 static void test_ran_sam_search()
 {
   vnl_double_3 true_params(10.0, 0.02, -0.1);
-  const int num_pts=12;
+  constexpr int num_pts = 12;
 
   //  Build LinearRegression objects.
   std::vector< vnl_vector<double> > pts(num_pts);

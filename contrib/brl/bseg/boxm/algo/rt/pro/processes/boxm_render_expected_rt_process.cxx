@@ -25,8 +25,8 @@
 
 namespace boxm_render_expected_rt_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 2;
 }
 
 bool boxm_render_expected_rt_process_cons(bprb_func_process& pro)

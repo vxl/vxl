@@ -32,8 +32,8 @@
 
 namespace boxm2_ocl_batch_uncertainty_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     std::vector<std::string> src_paths;
@@ -79,11 +79,11 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  bocl_device_sptr device             = pro.get_input<bocl_device_sptr>(i++);
-  boxm2_scene_sptr scene              = pro.get_input<boxm2_scene_sptr>(i++);
+  bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+  boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  unsigned int nobs                   = pro.get_input<unsigned>(i++);
-  std::string identifier_filename      = pro.get_input<std::string>(i++);
+  unsigned int nobs = pro.get_input<unsigned>(i++);
+  std::string identifier_filename = pro.get_input<std::string>(i++);
 
   boxm2_cache_sptr cache = opencl_cache->get_cpu_cache();
   //: Read data types and identifier file names.
@@ -133,15 +133,15 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
   {
     //choose correct render kernel
     /* bocl_mem* blk = */ opencl_cache->get_block(scene,*id);
-    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,true);
+    bocl_mem* blk_info = opencl_cache->loaded_block_info();
+    bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,true);
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
 
     //grab an appropriately sized AUX data buffer
     int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_FLOAT8>::prefix());
-    bocl_mem *coeffs_buff  = opencl_cache->get_data(scene,*id,
+    bocl_mem *coeffs_buff = opencl_cache->get_data(scene,*id,
                                                     boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),
                                                     info_buffer->data_buffer_length*auxTypeSize,false);
 
@@ -192,9 +192,9 @@ bool boxm2_ocl_batch_uncertainty_process(bprb_func_process& pro)
     coeffs_buff->read_to_buffer(queue);
     clFinish(queue);
 #if 0
-    boxm2_block *     cpu_blk     = cache->get_block(*id);
-    boxm2_data_base *  cpu_alpha  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  cubic_model_data  = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
+    boxm2_block *     cpu_blk = cache->get_block(*id);
+    boxm2_data_base *  cpu_alpha = cache->get_data_base(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  cubic_model_data = cache->get_data_base(*id,boxm2_data_traits<BOXM2_FLOAT8>::prefix("cubic_model"),cpu_alpha->buffer_length()* 8 ,false);
     boxm2_update_synoptic_probability data_functor;
     data_functor.init_data(cpu_alpha,cubic_model_data);
 

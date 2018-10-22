@@ -42,7 +42,7 @@ void test_stochastic_data_collector()
 
   std::cout << "===========Generate data\n";
   std::vector<unsigned> hist(10, 0u);
-  const int n_expts = 50;
+  constexpr int n_expts = 50;
   for (int i=0;i<n_expts;++i)
   {
     vnl_vector<double> v(1);

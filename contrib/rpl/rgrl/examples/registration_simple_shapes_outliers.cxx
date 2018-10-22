@@ -173,7 +173,7 @@ main()
 
   // Set up the feature sets
   //
-  const unsigned int  dimension = 2;
+  constexpr unsigned int dimension = 2;
    rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points);
   rgrl_mask_box moving_image_roi = moving_feature_set->bounding_box();

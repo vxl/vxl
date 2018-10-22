@@ -88,12 +88,12 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
                               vox_world->get_params()->corner().z() + vox_world->get_params()->num_voxels().z());
   vgl_box_3d<double> world(min_pt, max_pt);
 
-  const int IMAGE_U = 200;
-  const int IMAGE_V = 200;
-  const double x_scale = 900;
-  const double y_scale = 900;
-  const double focal_length = 1.;
-  const double camera_dist= 200;
+  constexpr int IMAGE_U = 200;
+  constexpr int IMAGE_V = 200;
+  constexpr double x_scale = 900;
+  constexpr double y_scale = 900;
+  constexpr double focal_length = 1.;
+  constexpr double camera_dist = 200;
 
   vgl_point_2d<double> principal_point(IMAGE_U/2., IMAGE_V/2.);
 

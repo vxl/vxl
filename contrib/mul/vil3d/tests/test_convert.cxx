@@ -64,7 +64,7 @@ static void test_convert_stretch_range()
 
 static void test_convert_to_n_planes()
 {
-  const unsigned n=10;
+  constexpr unsigned n = 10;
   std::cout<<"testing vil3d_convert_to_n_planes(src,dest):\n";
   vil3d_image_view<float> f_image(n,n,n,2);
   vil3d_image_view<float> f_image_expected(n,n,n,3);

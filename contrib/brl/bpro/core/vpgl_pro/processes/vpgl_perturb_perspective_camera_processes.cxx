@@ -48,8 +48,8 @@ ang_pair sample_3d(double kappa)
 //: perturb the orientation of the given camera randomly in a cone around its pointing direction by the given angle
 namespace vpgl_perturb_persp_cam_orient_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 //: Init function
@@ -148,8 +148,8 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
 //: perturb the orientation of the given camera by the given angles in a cone around its pointing direction
 namespace vpgl_rotate_persp_cam_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: Init function
@@ -213,8 +213,8 @@ bool vpgl_rotate_persp_cam_process(bprb_func_process& pro)
 // perturb the orientation of the given camera randomly in a cone around it's pointing direction by the given angle
 namespace vpgl_perturb_loc_persp_cam_orient_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 //: Init function
@@ -274,8 +274,8 @@ bool vpgl_perturb_persp_loc_cam_orient_process(bprb_func_process& pro)
 // sample the angle in the cone uniformly as opposed to normally in vpgl_perturb_persp_cam_orient_process
 namespace vpgl_perturb_uniform_persp_cam_orient_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 3;
 }
 
 //: Init function

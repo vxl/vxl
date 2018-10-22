@@ -19,7 +19,7 @@
 static int pass = 0;
 #endif
 
-const float n_sigma = 2.0;  // on either side of center
+constexpr float n_sigma = 2.0;  // on either side of center
 
 
 vifa_parallel::
@@ -183,7 +183,7 @@ map_gaussian(float&  max_angle,
 {
   bool    set_min_res_flag = true;
 
-  const float  incr = 3.0;  // put me in the params!
+  constexpr float incr = 3.0;  // put me in the params!
   float    max_value;
   float    local_max_angle = find_peak(max_value);
   max_angle = 0.0;

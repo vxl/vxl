@@ -9,7 +9,7 @@
 
 #include <vcl_compiler.h>
 
-const double f1 = 0.001;
+constexpr double f1 = 0.001;
 const double f2 = 1.0e-8;
 
 //: Probability used in Kolmogorov-Smirnov test

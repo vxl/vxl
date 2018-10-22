@@ -37,8 +37,8 @@
 //: global variables and functions
 namespace volm_project_dem_to_sat_img_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 0;
 
   // function to project dem image pixel to satellite image pixel
   bool project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam,
@@ -85,8 +85,8 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
   vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   std::string dem_file = pro.get_input<std::string>(in_i++);
   vpgl_camera_double_sptr  dem_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  double lower_left_lon  = pro.get_input<double>(in_i++);
-  double lower_left_lat  = pro.get_input<double>(in_i++);
+  double lower_left_lon = pro.get_input<double>(in_i++);
+  double lower_left_lat = pro.get_input<double>(in_i++);
   double upper_right_lon = pro.get_input<double>(in_i++);
   double upper_right_lat = pro.get_input<double>(in_i++);
 

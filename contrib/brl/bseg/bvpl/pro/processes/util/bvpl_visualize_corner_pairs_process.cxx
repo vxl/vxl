@@ -25,8 +25,8 @@
 
 namespace bvpl_visualize_corner_pairs_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 //:
@@ -72,8 +72,8 @@ bool bvpl_visualize_corner_pairs_process(bprb_func_process& pro)
 #endif
                          pro.get_input<unsigned>(i++);
   std::string vrml_path = pro.get_input<std::string>(i++);
-  bool write_header    = pro.get_input<bool>(i++);
-  float hue            = pro.get_input<float>(i++)*360.0f;
+  bool write_header = pro.get_input<bool>(i++);
+  float hue = pro.get_input<float>(i++)*360.0f;
 
   std::ofstream os;
 

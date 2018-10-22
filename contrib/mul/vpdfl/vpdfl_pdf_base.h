@@ -68,7 +68,7 @@ class vpdfl_pdf_base
   //: Gradient and value of PDF at x
   //  Computes gradient of PDF at x, and returns the prob at x in p
   virtual void gradient(vnl_vector<double>& g,
-                        const vnl_vector<double>& x, double& p) const =0;
+                        const vnl_vector<double>& x, double& p) const = 0;
 
   //: Gradient and value of log(p(x)) at x
   //  Computes gradient df/dx of f(x)=log(p(x)) at x.

@@ -26,8 +26,8 @@
 
 namespace bstm_cpp_change_btw_frames_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 
   typedef unsigned char uchar;
   typedef unsigned short ushort;
@@ -91,9 +91,9 @@ bool bstm_cpp_change_btw_frames_process(bprb_func_process& pro)
 
       bstm_block* blk = cache->get_block(bstm_metadata.id_);
       bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
-      bstm_data_base * alph    = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
+      bstm_data_base * alph = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
       bstm_data_traits<BSTM_ALPHA>::datatype * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alph->data_buffer();
-      bstm_data_base *change_buffer   =   cache->get_data_base_new(bstm_metadata.id_,
+      bstm_data_base *change_buffer = cache->get_data_base_new(bstm_metadata.id_,
                                                         bstm_data_traits<BSTM_CHANGE>::prefix(),
                                                         blk_t->tree_buff_length() * bstm_data_traits<BSTM_CHANGE>::datasize()  );
       bstm_data_traits<BSTM_CHANGE>::datatype* change_array = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();

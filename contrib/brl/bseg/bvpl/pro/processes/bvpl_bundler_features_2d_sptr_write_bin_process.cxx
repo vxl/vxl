@@ -22,8 +22,8 @@
 
 namespace bvpl_bundler_features_2d_write_bin_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 2;
+    constexpr unsigned n_outputs_ = 0;
 }//end bvpl_bundler_features_2d_write_bin_process_globals
 
 
@@ -66,8 +66,8 @@ bool bvpl_bundler_features_2d_write_bin_process( bprb_func_process& pro )
     //get inputs
     unsigned i = 0;
     bvpl_bundler_features_2d_sptr
-        bundler_features_sptr           = pro.get_input<bvpl_bundler_features_2d_sptr>(i++);
-    std::string filename                 = pro.get_input<std::string>(i++);
+        bundler_features_sptr = pro.get_input<bvpl_bundler_features_2d_sptr>(i++);
+    std::string filename = pro.get_input<std::string>(i++);
 
     vsl_b_ofstream of(filename);
     vsl_b_write(of,bundler_features_sptr);

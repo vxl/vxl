@@ -35,8 +35,8 @@
 
 namespace boxm2_ocl_compute_visibility_process_globals
 {
-    const unsigned n_inputs_ = 10;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 10;
+    constexpr unsigned n_outputs_ = 0;
     std::size_t lthreads[2]={8,8};
     void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
     {
@@ -226,9 +226,9 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     {
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         vul_timer transfer;
-        bocl_mem* blk           = opencl_cache->get_block(scene,*id);
-        bocl_mem* alpha         = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-        bocl_mem * blk_info     = opencl_cache->loaded_block_info();
+        bocl_mem* blk = opencl_cache->get_block(scene,*id);
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+        bocl_mem * blk_info = opencl_cache->loaded_block_info();
         transfer_time          += (float) transfer.all();
 
         //std::cout<<"bytes in cache "<<opencl_cache->bytes_in_cache()<<std::endl;

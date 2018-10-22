@@ -23,7 +23,7 @@
 namespace bvxm_create_synth_lidar_data_process_globals
 {
   // this process takes no inputs
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_outputs_ = 2;
   // Define parameters here
   const std::string param_input_directory_ =  "input_directory";
   const std::string param_voxel_dim_x_ = "voxel_dim_x";

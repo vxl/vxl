@@ -30,8 +30,8 @@
 
 namespace boxm2_ocl_render_expected_color_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 2;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -97,8 +97,8 @@ bool boxm2_ocl_render_expected_color_process_cons(bprb_func_process& pro)
   input_types_[6] = "float";                        // near factor ( maximum # of pixels should map to the finest voxel )
   input_types_[7] = "float";                        // far factor ( minimum # of pixels should map to the finest voxel )
 
-  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
 
   pro.set_input(6, tnearfactor);
   pro.set_input(7, tfarfactor);
@@ -127,8 +127,8 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(argIdx++);
   unsigned ni=pro.get_input<unsigned>(argIdx++);
   unsigned nj=pro.get_input<unsigned>(argIdx++);
-  float   nearfactor   = pro.get_input<float>(argIdx++);
-  float   farfactor    = pro.get_input<float>(argIdx++);
+  float   nearfactor = pro.get_input<float>(argIdx++);
+  float   farfactor = pro.get_input<float>(argIdx++);
   //make sure the data types match the scene
   bool foundDataType = false;
   std::string data_type,options;
@@ -190,7 +190,7 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   if(cam->type_name() == "vpgl_perspective_camera")
   {
 
-      float f  = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
+      float f = ((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().focal_length()*((vpgl_perspective_camera<double> *)cam.ptr())->get_calibration().x_scale();
       std::cout<<"Focal Length " << f<<std::endl;
       tnearfar[0] = f* scene->finest_resolution()/nearfactor ;
       tnearfar[1] = f* scene->finest_resolution()*farfactor ;

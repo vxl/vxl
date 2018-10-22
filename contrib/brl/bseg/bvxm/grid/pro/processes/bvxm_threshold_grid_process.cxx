@@ -26,11 +26,11 @@
 namespace bvxm_threshold_grid_process_globals
 {
   // Inputs
-  const unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_inputs_ = 4;
 
   //Outputs
   // This process has no outputs to the database because the outputs grids are disk based
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 

@@ -24,8 +24,8 @@
 
 namespace betr_execute_etr_multi_chimg_evt_poly_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 6;
+  constexpr unsigned n_inputs_ = 3;
+  constexpr unsigned n_outputs_ = 6;
 }
 
 bool betr_execute_etr_multi_chimg_evt_poly_process_cons(bprb_func_process& pro)
@@ -34,9 +34,9 @@ bool betr_execute_etr_multi_chimg_evt_poly_process_cons(bprb_func_process& pro)
 
   //process takes 2 inputs
   std::vector<std::string> input_types_(n_inputs_);
-  input_types_[0]  = "betr_event_trigger_sptr"; //event_trigger
-  input_types_[1]  = "vcl_string"; //algorithm name
-  input_types_[2]  = "vcl_string"; //json prarameters
+  input_types_[0] = "betr_event_trigger_sptr"; //event_trigger
+  input_types_[1] = "vcl_string"; //algorithm name
+  input_types_[2] = "vcl_string"; //json prarameters
   // process has 6 outputs
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "bbas_1d_array_double_sptr"; // change probability
@@ -85,7 +85,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
     if(!imgr)
       continue;
     unsigned ni = imgr->ni(), nj = imgr->nj();
-    unsigned area  = ni*nj;
+    unsigned area = ni*nj;
     area_total += area;
     dims_offset->data_array[k]=ni;
     dims_offset->data_array[k+1]=nj;

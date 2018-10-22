@@ -23,8 +23,8 @@
 
 namespace volm_refine_bvxm_height_map_process_globals
 {
-  const unsigned int n_inputs_  = 3;
-  const unsigned int n_outputs_ = 1;
+  constexpr unsigned int n_inputs_ = 3;
+  constexpr unsigned int n_outputs_ = 1;
   float neighbor_min_height(std::vector<unsigned> const& ri, std::vector<unsigned> const& rj, vil_image_view<float> const& in_img)
   {
     // create a neighbor list
@@ -324,8 +324,8 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
 
 namespace volm_stereo_height_fix_process_globals
 {
-  const unsigned int n_inputs_ = 2;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 2;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool volm_stereo_height_fix_process_cons(bprb_func_process& pro)

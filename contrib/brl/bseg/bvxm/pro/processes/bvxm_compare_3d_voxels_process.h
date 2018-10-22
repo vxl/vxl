@@ -17,8 +17,8 @@
 //: globals
 namespace bvxm_compare_3d_voxels_process_globals
 {
-  const unsigned int n_inputs_ = 4;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 4;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 //: set input and output types

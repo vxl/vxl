@@ -34,8 +34,8 @@
 
 namespace boxm2_ocl_compute_expectation_view_direction_process_globals
 {
-    const unsigned n_inputs_  = 5;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 5;
+    constexpr unsigned n_outputs_ = 0;
 
     void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
     {
@@ -102,11 +102,11 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     float gpu_time=0.0f;
     //get the inputs
     unsigned i = 0;
-    bocl_device_sptr device               = pro.get_input<bocl_device_sptr>(i++);
-    boxm2_scene_sptr scene                = pro.get_input<boxm2_scene_sptr>(i++);
-    boxm2_opencl_cache_sptr opencl_cache  = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    std::string identifier_file            = pro.get_input<std::string>(i++);
-    std::string coordinate_type            = pro.get_input<std::string>(i++);
+    bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
+    boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
+    boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
+    std::string identifier_file = pro.get_input<std::string>(i++);
+    std::string coordinate_type = pro.get_input<std::string>(i++);
     long binCache = opencl_cache.ptr()->bytes_in_cache();
     std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
 
@@ -158,21 +158,21 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         boxm2_block_metadata mdata = scene->get_block_metadata(*id);
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+        bocl_mem* blk = opencl_cache->get_block(scene,*id);
+        bocl_mem* blk_info = opencl_cache->loaded_block_info();
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_x  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_x = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_y  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_y = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_z  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_z = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_vis_expectation  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_vis_expectation = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),info_buffer->data_buffer_length*auxTypeSize,false);
 
         bocl_kernel* kern =  kernels[identifier][0];
         //choose correct render kernel
@@ -182,17 +182,17 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
             std::string suffix = suffixes[k];
             //grab an appropriately sized AUX data buffer
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-            bocl_mem *aux0  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux0 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX1>::prefix());
-            bocl_mem *aux1  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux1 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX1>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-            bocl_mem *aux2  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux2 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-            bocl_mem *aux3  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux3 = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX3>::prefix("viewdir_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-            bocl_mem *aux0_img  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix("img_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux0_img = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX0>::prefix("img_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX2>::prefix());
-            bocl_mem *aux2_img  = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix("img_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux2_img = opencl_cache->get_data(*id, boxm2_data_traits<BOXM2_AUX2>::prefix("img_"+suffix),info_buffer->data_buffer_length*auxTypeSize,false);
             kern->set_arg( blk_info );
             kern->set_arg( aux0 );
             kern->set_arg( aux1 );
@@ -227,7 +227,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         kern =  kernels[identifier][1];
         {
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-            bocl_mem *aux_dispersion  = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux_dispersion = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),info_buffer->data_buffer_length*auxTypeSize,false);
             kern->set_arg( blk_info );
             kern->set_arg( alpha );
             kern->set_arg( aux_direction_expectation_x );

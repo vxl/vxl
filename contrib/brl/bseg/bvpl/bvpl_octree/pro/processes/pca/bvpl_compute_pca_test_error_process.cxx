@@ -15,8 +15,8 @@
 //:global variables
 namespace bvpl_compute_pca_test_error_process_globals
 {
-  const unsigned n_inputs_ = 1;        //directory path, where pca_info.xml is
-  const unsigned n_outputs_ = 1;       //error file
+  constexpr unsigned n_inputs_ = 1;        //directory path, where pca_info.xml is
+  constexpr unsigned n_outputs_ = 1;       //error file
 }
 
 

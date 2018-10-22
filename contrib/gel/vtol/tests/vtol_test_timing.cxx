@@ -12,7 +12,7 @@ static void vtol_test_timing()
 
   vul_timer t;
   // make a network of s^2 vertices and edges on an s by s grid
-  const int s = 100;
+  constexpr int s = 100;
   // make the vertices
   vertex_list verts(s*s);
   t.mark();

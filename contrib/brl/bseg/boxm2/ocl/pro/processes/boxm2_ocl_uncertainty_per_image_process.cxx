@@ -31,13 +31,13 @@
 
 namespace boxm2_ocl_uncertainty_per_image_process_globals
 {
-    const unsigned n_inputs_  = 6;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_ = 6;
+    constexpr unsigned n_outputs_ = 0;
     enum {
         UPDATE_SEGLEN = 0,
         UPDATE_PREINF = 1,
-        UPDATE_PROC   = 2,
-        UPDATE_AVG_RATIO_EMPTY_SURFACE  = 3,
+        UPDATE_PROC = 2,
+        UPDATE_AVG_RATIO_EMPTY_SURFACE = 3,
         CONVERT_AUX_INT_FLOAT = 4
     };
     void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
@@ -111,7 +111,7 @@ bool boxm2_ocl_uncertainty_per_image_process_cons(bprb_func_process& pro)
     std::vector<std::string>  output_types_(n_outputs_);
     bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
     // default 6 and 7 inputs
-    brdb_value_sptr idx        = new brdb_value_t<std::string>("");
+    brdb_value_sptr idx = new brdb_value_t<std::string>("");
     pro.set_input(5, idx);
     return good;
 }
@@ -132,12 +132,12 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 
     //get the inputs
     unsigned i = 0;
-    bocl_device_sptr         device       = pro.get_input<bocl_device_sptr>(i++);
-    boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
+    bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
+    boxm2_scene_sptr         scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
-    vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-    std::string               ident        = pro.get_input<std::string>(i++);                //viewpoint identifier
+    vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
+    vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
+    std::string               ident = pro.get_input<std::string>(i++);                //viewpoint identifier
     //cache size sanity check
     long binCache = opencl_cache.ptr()->bytes_in_cache();
     std::cout<<"Update MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
@@ -186,7 +186,7 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     global_threads[1]=cl_nj;
 
     //set generic cam
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
     cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_origins,   "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
@@ -196,9 +196,9 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
     //Visibility, Preinf, Norm, and input image buffers
     float* vis_buff = new float[cl_ni*cl_nj];
     float* vis_inf_buff = new float[cl_ni*cl_nj];
-    float* pre_buff  = new float[cl_ni*cl_nj];
-    float* pre_inf_buff  = new float[cl_ni*cl_nj];
-    float* norm_buff  = new float[cl_ni*cl_nj];
+    float* pre_buff = new float[cl_ni*cl_nj];
+    float* pre_inf_buff = new float[cl_ni*cl_nj];
+    float* norm_buff = new float[cl_ni*cl_nj];
     float* input_buff=new float[cl_ni*cl_nj];
     for (unsigned i=0;i<cl_ni*cl_nj;i++)
     {
@@ -275,17 +275,17 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 bocl_kernel* kern =  kernels[identifier][i];
                 //write the image values to the buffer
                 vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(scene, *id);
-                bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+                bocl_mem* blk = opencl_cache->get_block(scene, *id);
+                bocl_mem* blk_info = opencl_cache->loaded_block_info();
+                bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
                 int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
                 blk_info->write_to_buffer((queue));
                 //grab an appropriately sized AUX data buffer
                 int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0   = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux1   = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux0 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux1 = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
 
                 transfer_time += (float) transfer.all();
                 aux0->zero_gpu_buffer(queue);
@@ -327,9 +327,9 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 bocl_kernel* kern =  kernels[identifier][i];
                 //write the image values to the buffer
                 vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-                bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+                bocl_mem* blk = opencl_cache->get_block(scene,*id);
+                bocl_mem* blk_info = opencl_cache->loaded_block_info();
+                bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
                 int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -337,13 +337,13 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 
                 int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
                 // data type string may contain an identifier so determine the buffer size
-                bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize);
-                bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize);
+                bocl_mem* mog = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize);
+                bocl_mem* num_obs = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize);
 
                 //grab an appropriately sized AUX data buffer
                 int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux1   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux0 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux1 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
                 transfer_time += (float) transfer.all();
                 kern->set_arg(blk_info );
                 kern->set_arg(blk );
@@ -382,9 +382,9 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 bocl_kernel* kern =  kernels[identifier][i];
                 //write the image values to the buffer
                 vul_timer transfer;
-                bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-                bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+                bocl_mem* blk = opencl_cache->get_block(scene,*id);
+                bocl_mem* blk_info = opencl_cache->loaded_block_info();
+                bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
                 int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -392,14 +392,14 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 
                 int nobsTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
                 // data type string may contain an identifier so determine the buffer size
-                bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
-                bocl_mem* num_obs   = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
+                bocl_mem* mog = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*appTypeSize);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+                bocl_mem* num_obs = opencl_cache->get_data(scene,*id,num_obs_type,alpha->num_bytes()/alphaTypeSize*nobsTypeSize);//,info_buffer->data_buffer_length*boxm2_data_info::datasize(num_obs_type));
                 //grab an appropriately sized AUX data buffer
                 int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux1   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux2   = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux3   = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux0 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux1 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux2 = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux3 = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
                 transfer_time += (float) transfer.all();
 
                 aux2->zero_gpu_buffer(queue);
@@ -450,8 +450,8 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
                 bocl_kernel* kern =  kernels[identifier][i];
                 //write the image values to the buffer
                 /* bocl_mem* blk = */ opencl_cache->get_block(scene,*id);
-                bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-                bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+                bocl_mem* blk_info = opencl_cache->loaded_block_info();
+                bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
                 boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
                 int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
                 info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
@@ -463,10 +463,10 @@ bool boxm2_ocl_uncertainty_per_image_process(bprb_func_process& pro)
 
                 //grab an appropriately sized AUX data buffer
                 int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-                bocl_mem *aux0   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux1   = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux2   = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
-                bocl_mem *aux3   = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux0 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux1 = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX1>::prefix(ident),info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux2 = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX2>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
+                bocl_mem *aux3 = opencl_cache->get_data(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(ident), info_buffer->data_buffer_length*auxTypeSize,false);
 
                 kern->set_arg( blk_info );
                 kern->set_arg( aux0 );

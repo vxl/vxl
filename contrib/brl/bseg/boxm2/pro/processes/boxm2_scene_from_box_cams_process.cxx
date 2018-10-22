@@ -14,8 +14,8 @@
 #include <bpgl/bpgl_camera_utils.h>
 namespace boxm2_scene_from_box_cams_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 0;
 }
 bool boxm2_scene_from_box_cams_process_cons(bprb_func_process& pro)
 {
@@ -48,13 +48,13 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
     return false;
   }
   //get the inputs
-  std::string camdir  = pro.get_input<std::string>(0);
-  float xmin         = pro.get_input<float>(1);
-  float ymin         = pro.get_input<float>(2);
-  float zmin         = pro.get_input<float>(3);
-  float width        = pro.get_input<float>(4);
-  float height       = pro.get_input<float>(5);
-  float depth        = pro.get_input<float>(6);
+  std::string camdir = pro.get_input<std::string>(0);
+  float xmin = pro.get_input<float>(1);
+  float ymin = pro.get_input<float>(2);
+  float zmin = pro.get_input<float>(3);
+  float width = pro.get_input<float>(4);
+  float height = pro.get_input<float>(5);
+  float depth = pro.get_input<float>(6);
   std::string modeldir= pro.get_input<std::string>(7);
   double lvcs_origin_lat = pro.get_input<double>(8);
   double lvcs_origin_lon = pro.get_input<double>(9);

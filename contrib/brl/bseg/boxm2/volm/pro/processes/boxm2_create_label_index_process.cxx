@@ -36,8 +36,8 @@
 
 namespace boxm2_create_label_index_process_globals
 {
-  const unsigned n_inputs_ = 15;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 15;
+  constexpr unsigned n_outputs_ = 0;
 
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
@@ -374,13 +374,13 @@ bool boxm2_create_label_index_process(bprb_func_process& pro)
 
         vul_timer transfer;
 
-        bocl_mem* blk       = opencl_cache->get_block(scene, id_inner);
-        bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-        bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
+        bocl_mem* blk = opencl_cache->get_block(scene, id_inner);
+        bocl_mem* blk_info = opencl_cache->loaded_block_info();
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, id_inner);
 
-        bocl_mem* mog       = opencl_cache->get_data(scene, id_inner,data_type,0,true);
+        bocl_mem* mog = opencl_cache->get_data(scene, id_inner,data_type,0,true);
 #if 0 // was:
-        bocl_mem* mog       = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+        bocl_mem* mog = opencl_cache->get_data(id_inner,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
 #endif
         transfer_time += (float) transfer.all();
 

@@ -26,8 +26,8 @@
 
 namespace bstm_cpp_label_bb_process_globals
 {
-  const unsigned n_inputs_ =  11;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 11;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool bstm_cpp_label_bb_process_cons(bprb_func_process& pro)
@@ -100,7 +100,7 @@ bool bstm_cpp_label_bb_process(bprb_func_process& pro)
 
         bstm_block* blk = cache->get_block(bstm_metadata.id_);
         bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
-        bstm_data_base * alph    = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
+        bstm_data_base * alph = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
         bstm_data_base * label_data_base = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_LABEL>::prefix(),
                                         alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize() * bstm_data_traits<BSTM_LABEL>::datasize() );
 

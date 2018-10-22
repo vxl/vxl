@@ -10,7 +10,7 @@ void test_index_sort()
            << "Testing mbl_index_sort\n"
            << "**********************\n";
 
-  const unsigned int n = 20;
+  constexpr unsigned int n = 20;
   std::vector<double> x(n);
   std::vector<int> index;
 

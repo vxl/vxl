@@ -26,8 +26,8 @@
 //: create a normalized intensity value in each cell using the segment lengths of all the rays that intersect the cell
 namespace boxm2_cpp_create_norm_intensities_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_create_norm_intensities_process_cons(bprb_func_process& pro)
@@ -84,7 +84,7 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *     blk   = cache->get_block(scene,*id);
+      boxm2_block *     blk = cache->get_block(scene,*id);
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
       // first remove from memory just in case to ensure proper initialization
       cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
@@ -117,8 +117,8 @@ bool boxm2_cpp_create_norm_intensities_process(bprb_func_process& pro)
 //: create a normalized intensity value in each cell using the segment lengths of all the rays that intersect the cell
 namespace boxm2_cpp_create_aux_data_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_create_aux_data_process_cons(bprb_func_process& pro)
@@ -210,9 +210,9 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *     blk   = cache->get_block(scene,*id);
-      boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+      boxm2_block *     blk = cache->get_block(scene,*id);
+      boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+      boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type,0,false);
       // read from disc
       boxm2_data_base *aux0 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(identifier));
       boxm2_data_base *aux1 = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX1>::prefix(identifier));
@@ -260,9 +260,9 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
     for (id = vis_order.begin(); id != vis_order.end(); ++id)
     {
       std::cout<<"Block id "<<(*id)<<' ';
-      boxm2_block *     blk   = cache->get_block(scene,*id);
-      boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-      boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,0,false);
+      boxm2_block *     blk = cache->get_block(scene,*id);
+      boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+      boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type,0,false);
 
       boxm2_block_metadata mdata = scene->get_block_metadata(*id);
 
@@ -313,8 +313,8 @@ bool boxm2_cpp_create_aux_data_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_batch_update_process_cons(bprb_func_process& pro)
@@ -387,8 +387,8 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // reads disc if not already in memory
-    boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,0,false);
+    boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type,0,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
     {
@@ -412,8 +412,8 @@ bool boxm2_cpp_batch_update_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_app_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_batch_update_app_process_cons(bprb_func_process& pro)
@@ -491,9 +491,9 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
     std::cout<<" block "<<bid<<std::endl;
 
     // reads from disc if not already in memory
-    boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     int numData = alph->buffer_length() / alphaTypeSize;
-    boxm2_data_base *  mog   = cache->get_data_base(scene,*id,data_type,numData*appTypeSize,false);
+    boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type,numData*appTypeSize,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
     {
@@ -518,8 +518,8 @@ bool boxm2_cpp_batch_update_app_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_alpha_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 bool boxm2_cpp_batch_update_alpha_process_cons(bprb_func_process& pro)
@@ -592,8 +592,8 @@ bool boxm2_cpp_batch_update_alpha_process(bprb_func_process& pro)
   id = blk_ids.begin();
   for (id = blk_ids.begin(); id != blk_ids.end(); ++id) {
     // reads from disc if not already in memory
-    boxm2_data_base *  alph  = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
-    boxm2_data_base *  mog  = cache->get_data_base(scene,*id,data_type,0,false);
+    boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
+    boxm2_data_base *  mog = cache->get_data_base(scene,*id,data_type,0,false);
 
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
     {

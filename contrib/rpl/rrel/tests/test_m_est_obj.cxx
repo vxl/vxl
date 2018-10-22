@@ -11,9 +11,9 @@
 
 static void test_m_est_obj()
 {
-  const double c=4.0;
+  constexpr double c = 4.0;
   rrel_m_est_obj * m_est = new rrel_tukey_obj( c);
-  const double sigma=2.5;
+  constexpr double sigma = 2.5;
 
   //
   // Test the functions specific to the Beaton-Tukey biweight rho function.

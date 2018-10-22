@@ -15,8 +15,8 @@
 #include <vcl_compiler.h>
 namespace boxm2_compute_sun_affine_camera_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_ = 4;
+  constexpr unsigned n_outputs_ = 3;
 }
 bool boxm2_compute_sun_affine_camera_process_cons(bprb_func_process& pro)
 {
@@ -56,8 +56,8 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   std::cout << "scene = " << scene.ptr() << std::endl;
-  float elevation  = pro.get_input<float>(1);
-  float azimuthal  = pro.get_input<float>(2);
+  float elevation = pro.get_input<float>(1);
+  float azimuthal = pro.get_input<float>(2);
   bool astro_coords = pro.get_input<bool>(3);
 
   vgl_vector_3d<double> sun_dir_downwards;
@@ -85,7 +85,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   unsigned int dimx = (unsigned int) std::floor(box.width()/(mdata.sub_block_dim_.x()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
   unsigned int dimy = (unsigned int) std::floor(box.height()/(mdata.sub_block_dim_.y()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
 
-  vpgl_affine_camera<double> affine_camera  = bpgl_camera_from_box::affine_camera_from_box(box,
+  vpgl_affine_camera<double> affine_camera = bpgl_camera_from_box::affine_camera_from_box(box,
                                                        sun_dir_downwards,
                                                        dimx,
                                                        dimy);

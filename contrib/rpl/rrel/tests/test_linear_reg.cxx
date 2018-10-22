@@ -17,7 +17,7 @@ static void test_linear_reg()
   vnl_double_3 true_params(10.0,0.02,-0.1);
   vnl_double_3 a = true_params;
 
-  const unsigned int num_pts=7;
+  constexpr unsigned int num_pts = 7;
 
   //  Build LinearRegression objects exercising both constructors and
   //  the two different options for the first constructor.

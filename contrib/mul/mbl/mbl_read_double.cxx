@@ -33,7 +33,7 @@
 #include "mbl_read_double.h"
 #include <vcl_compiler.h>
 
-const int MAX_LEN = 40;
+constexpr int MAX_LEN = 40;
 
 // If min_d != 0 or max_d != 0 then prints range but doesn't check that reply is in range
 double RD_ReadDouble1(const char *q_str, double default_d,

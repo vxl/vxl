@@ -94,7 +94,7 @@ rrel_muset_obj::internal_fcn( vect_const_iter begin, vect_const_iter end,
   double best_objective = 0;
 
   best_k = 0;
-  const double min_exp_kth_to_stddev_ratio = 3.0;
+  constexpr double min_exp_kth_to_stddev_ratio = 3.0;
   static bool notwarned = true;
 
   switch ( muse_type_ )

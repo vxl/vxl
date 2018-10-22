@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_probability_of_image_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 1;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
@@ -106,10 +106,10 @@ bool boxm2_ocl_probability_of_image_process_cons(bprb_func_process& pro)
   std::vector<std::string>  output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";
 
-  brdb_value_sptr idx        = new brdb_value_t<std::string>("");
+  brdb_value_sptr idx = new brdb_value_t<std::string>("");
   pro.set_input(5, idx);
-  brdb_value_sptr tnearfactor   = new brdb_value_t<float>(100000.0f);  //by default update alpha
-  brdb_value_sptr tfarfactor   = new brdb_value_t<float>(0.0001f);  //by default update alpha
+  brdb_value_sptr tnearfactor = new brdb_value_t<float>(100000.0f);  //by default update alpha
+  brdb_value_sptr tfarfactor = new brdb_value_t<float>(0.0001f);  //by default update alpha
 
   pro.set_input(6, tnearfactor);
   pro.set_input(7, tfarfactor);
@@ -137,8 +137,8 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img =pro.get_input<vil_image_view_base_sptr>(i++);
   std::string data_identifier =pro.get_input<std::string>(i++);
-  float                    nearfactor   = pro.get_input<float>(i++);
-  float                    farfactor    = pro.get_input<float>(i++);
+  float                    nearfactor = pro.get_input<float>(i++);
+  float                    farfactor = pro.get_input<float>(i++);
   unsigned ni=img->ni();
   unsigned nj=img->nj();
   bool foundDataType = false;
@@ -262,16 +262,16 @@ bool boxm2_ocl_probability_of_image_process(bprb_func_process& pro)
 
     //write the image values to the buffer
     vul_timer transfer;
-    bocl_mem* blk       = opencl_cache->get_block(scene,*id);
-    bocl_mem* blk_info  = opencl_cache->loaded_block_info();
-    bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
-    int mogTypeSize    = (int) boxm2_data_info::datasize(data_type);
+    bocl_mem* blk = opencl_cache->get_block(scene,*id);
+    bocl_mem* blk_info = opencl_cache->loaded_block_info();
+    bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
+    int mogTypeSize = (int) boxm2_data_info::datasize(data_type);
     boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
 
-    bocl_mem* mog       = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*mogTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
+    bocl_mem* mog = opencl_cache->get_data(scene,*id,data_type,alpha->num_bytes()/alphaTypeSize*mogTypeSize,false);    //info_buffer->data_buffer_length*boxm2_data_info::datasize(data_type));
     transfer_time += (float) transfer.all();
 
     ////3. SET args

@@ -18,8 +18,8 @@
 
 namespace bvpl_create_generic_kernel_vector_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_ = 8;
+  constexpr unsigned n_outputs_ = 1;
 }
 
 
@@ -105,8 +105,8 @@ bool bvpl_create_generic_kernel_vector_process(bprb_func_process& pro)
 // write the vectors to txt files
 namespace bvpl_write_generic_kernel_vector_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_ = 2;
+  constexpr unsigned n_outputs_ = 0;
 }
 
 

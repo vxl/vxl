@@ -74,9 +74,9 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i=0;
-  vil_image_view_base_sptr detection_map_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr detection_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(i++);
+  vil_image_view_base_sptr mask_map_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   bool use_pair_sorter = pro.get_input<bool>(i++);
 
   // catch a "null" mask (not really null because that throws an error)
@@ -87,7 +87,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 10000;
+  constexpr unsigned int numPoints = 10000;
   bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
@@ -151,7 +151,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
       {
       Pair p;
       p.change = (*detection_map)(i,j);
-      p.gt     = (*ground_truth_map)(i,j);
+      p.gt = (*ground_truth_map)(i,j);
       p.i = i;
       p.j = j;
       //pairs[c] = p;
@@ -265,8 +265,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 //  If negative ground truth image is not given, then the negative ground truth are obtained from zero pixels in positive ground truth image
 namespace vil_pixelwise_roc_process2_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 7;
+  constexpr unsigned n_inputs_ = 5;
+  constexpr unsigned n_outputs_ = 7;
 }
 
 bool vil_pixelwise_roc_process2_cons(bprb_func_process& pro)
@@ -306,10 +306,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   }
   // get the inputs
   unsigned in_i = 0;
-  vil_image_view_base_sptr detection_map_sptr    = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr detection_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr ground_truth_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vil_image_view_base_sptr neg_gt_map_sptr  = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  vil_image_view_base_sptr mask_map_sptr         = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr neg_gt_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
+  vil_image_view_base_sptr mask_map_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   std::string positive_sign = pro.get_input<std::string>(in_i++);
 
   // catch a "null" mask (not really null because that throws an error)
@@ -438,17 +438,17 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   const unsigned n_thres = thresholds.size();
   std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
 
-  bbas_1d_array_float* tp  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tn  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fp  = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fn  = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tp = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* tn = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fp = new bbas_1d_array_float(n_thres);
+  bbas_1d_array_float* fn = new bbas_1d_array_float(n_thres);
   bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
   bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
 
   // initialize
   for (unsigned i = 0; i < n_thres; i++) {
-    tp->data_array[i]  = 0.0f;  tn->data_array[i] = 0.0f;
-    fp->data_array[i]  = 0.0f;  fn->data_array[i] = 0.0f;
+    tp->data_array[i] = 0.0f;  tn->data_array[i] = 0.0f;
+    fp->data_array[i] = 0.0f;  fn->data_array[i] = 0.0f;
     tpr->data_array[i] = 0.0f;
     fpr->data_array[i] = 0.0f;
   }

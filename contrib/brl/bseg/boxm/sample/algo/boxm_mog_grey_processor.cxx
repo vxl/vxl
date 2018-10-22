@@ -174,7 +174,7 @@ void boxm_mog_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOX
   std::vector<float> mode_weight_sum(nmodes,0.0f);
 
   // run EM algorithm to maximize expected probability of observations
-  const unsigned int max_its = 50;
+  constexpr unsigned int max_its = 50;
   const float max_converged_weight_change = 1e-3f;
 
   for (unsigned int i=0; i<max_its; ++i) {

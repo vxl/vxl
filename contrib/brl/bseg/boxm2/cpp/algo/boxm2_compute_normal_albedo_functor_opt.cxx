@@ -41,7 +41,7 @@ double boxm2_compute_normal_albedo_cost_function::f(vnl_vector<double> const& x)
          double diff = (radiance_scales_[m]*rho + radiance_offsets_[m] - radiances_[m]);
          prob = visibilities_[m] * std::exp(-diff*diff/(2.0*rad_var)) / std::sqrt(vnl_math::twopi*rad_var);
       }
-      const double background_density = 0.01; // TODO: compute actual uniform density value
+      constexpr double background_density = 0.01; // TODO: compute actual uniform density value
       prob += (1.0 - visibilities_[m])*background_density;
       if (!(prob >= 1e-6)) {
          prob = 1e-6;
