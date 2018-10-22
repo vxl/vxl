@@ -132,7 +132,7 @@ static void test_sparse_lst_sqr_function()
    ai[0] = 5.0;  ai[1] = -1.0;
    bj[0] = 1.2;  bj[1] = 1.5;  bj[2] = 2.2;
    c[0] = 1.0;   c[1] = 2.0;
-   const double step = 0.001;
+   constexpr double step = 0.001;
 
    my_func.fij(0,0,ai,bj,c,e);
    std::cout << "e  = " << e << std::endl;

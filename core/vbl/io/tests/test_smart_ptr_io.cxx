@@ -11,7 +11,7 @@ void test_smart_ptr_io()
            << "Testing smart_ptr<impl> io\n"
            << "**************************\n";
 
-  const int n = 50;
+  constexpr int n = 50;
 
   vbl_smart_ptr<impl > sp1_out(new impl(n));
   vbl_smart_ptr<impl> sp2_out(sp1_out);

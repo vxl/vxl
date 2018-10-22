@@ -16,7 +16,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const std::stack<T>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   // Make a copy of v since we have to change a stack to get
   // the values out:

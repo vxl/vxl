@@ -14,8 +14,8 @@ void test_array_2d_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  const int array_rows = 8;
-  const int array_cols = 6;
+  constexpr int array_rows = 8;
+  constexpr int array_cols = 6;
   vbl_array_2d<int> v_out(array_rows, array_cols), v_in;
 
   for (int i=0; i<array_rows; i++)

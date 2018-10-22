@@ -10,8 +10,8 @@
 #include <testlib/testlib_test.h>
 #include <vul/vul_temp_filename.h>
 
-const int W = 768;
-const int H = 256;
+constexpr int W = 768;
+constexpr int H = 256;
 
 static void test_memory_image_of()
 {

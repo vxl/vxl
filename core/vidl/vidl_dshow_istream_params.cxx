@@ -26,8 +26,8 @@
 namespace
 {
   // widths for formatting help (iomanip setw)
-  const int w1 = 25;
-  const int w2 = 8;
+  constexpr int w1 = 25;
+  constexpr int w2 = 8;
 
   std::map<std::string,vpa_property_wrap> vpa_properties(void)
   {

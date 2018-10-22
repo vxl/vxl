@@ -264,7 +264,7 @@ void vul_psfile::print_greyscale_image(const unsigned char* buffer, int sizex, i
     << new_width << ' ' << new_height << " 8             % dimensions of data\n"
     << '[' << new_width << " 0 0 -" << new_height << " 0 " << new_height
     << "]  % mapping matrix\n{currentfile pix readhexstring pop}\nimage\n\n";
-  const int linesize = 72;
+  constexpr int linesize = 72;
 
   // write image data to output PostScript file
   for (int j=0; j<new_height; j++)
@@ -333,7 +333,7 @@ void vul_psfile::print_color_image(const unsigned char* data, int sizex, int siz
              << ", height = " << sizey  << ", reduction_factor = "
              << reduction_factor << '\n';
 
-  const int bytes_per_pixel = 3;
+  constexpr int bytes_per_pixel = 3;
   exist_image = true;
   width = sizex;
   height = sizey;
@@ -422,7 +422,7 @@ void vul_psfile::print_color_image(const unsigned char* data, int sizex, int siz
     << "false 3 colorimage\n\n";
 
   // write image data into PostScript file.
-  const int linesize = 72;
+  constexpr int linesize = 72;
 
   // extract RGB data from pixel value and write it to output file
   for (int j = 0; j < new_height;j++)

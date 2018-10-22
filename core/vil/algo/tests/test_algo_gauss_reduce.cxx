@@ -169,7 +169,7 @@ static void test_algo_gauss_reduce_uint_16(unsigned nx)
 
   vil_image_view<vxl_uint_16> test2;
   test2.set_size(nx,3);
-  const vxl_uint_16 FILLVAL=65532;
+  constexpr vxl_uint_16 FILLVAL = 65532;
   test2.fill(FILLVAL);
   vil_gauss_reduce_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                           image0.istep(),image0.jstep(),
@@ -360,7 +360,7 @@ static void test_algo_gauss_reduce_121_uint_16(unsigned nx, unsigned ny)
 
   vil_image_view<vxl_uint_16> test2;
   test2.set_size(nx,ny);
-  const vxl_uint_16 FILLVAL = 65532;
+  constexpr vxl_uint_16 FILLVAL = 65532;
   test2.fill(FILLVAL);
   vil_gauss_reduce_121_1plane(image0.top_left_ptr(),image0.ni(),image0.nj(),
                               image0.istep(),image0.jstep(),

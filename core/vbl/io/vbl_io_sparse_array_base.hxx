@@ -14,7 +14,7 @@
 template<class T, class Index>
 void vsl_b_write(vsl_b_ostream &os, const vbl_sparse_array_base<T, Index> & p)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
   vsl_b_write(os, p.count_nonempty());

@@ -9,7 +9,7 @@
 #include <vcl_compiler.h>
 
 //: The total number of pixel datatypes
-const unsigned int num_types = 5;
+constexpr unsigned int num_types = 5;
 
 namespace {
 

@@ -12,7 +12,7 @@ void test_real_polynomial_io()
            << "Testing vnl_real_polynomial io\n"
            << "******************************\n";
   //// test constructors, accessors
-  const int n = 10;
+  constexpr int n = 10;
   vnl_vector<double> v(n);
 
   for (int i=0; i<n; i++)

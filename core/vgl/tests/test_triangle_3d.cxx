@@ -29,7 +29,7 @@ inline void test_non_intersecting()
   vgl_line_segment_3d<double> iline;
   unsigned edge_p1, edge_p2;
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, iline, edge_p1, edge_p2);
+ = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3, iline, edge_p1, edge_p2);
   TEST("Non-intersecting 1", ret, None);
   ret = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
   TEST("Non-intersecting 1 faster version", ret, None);
@@ -57,7 +57,7 @@ inline void test_intersecting1()
   vgl_point_3d<double> b_p3(4, 4, 0);
 
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+ = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
   TEST("Intersecting 1 coplanar", ret, Coplanar);
   vgl_line_segment_3d<double> iline;
   unsigned edge_p1, edge_p2;
@@ -78,7 +78,7 @@ inline void test_intersecting2()
   vgl_point_3d<double> b_p3(0, 0, 0);
 
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+ = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
   TEST("Intersecting 2 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
@@ -108,7 +108,7 @@ inline void test_intersecting3()
   vgl_point_3d<double> b_p3(0, 0, 4);
 
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+ = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
   TEST("Intersecting 3 Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
@@ -144,7 +144,7 @@ inline void test_intersecting4()
   vgl_point_3d<double> b_p3(-4, 0, 0);
 
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
+ = vgl_triangle_3d_triangle_intersection(a_p1,a_p2,a_p3,b_p1,b_p2,b_p3);
   TEST("Intersecting 4 coplanar", ret, Coplanar);
 
   vgl_line_segment_3d<double> i_line;
@@ -176,7 +176,7 @@ inline void test_intersecting5_arrangement(
   unsigned expected_edge_1, unsigned expected_edge_2)
 {
   vgl_triangle_3d_intersection_t ret
-    = vgl_triangle_3d_triangle_intersection(a_A,a_B,a_C,b_A,b_B,b_C);
+ = vgl_triangle_3d_triangle_intersection(a_A,a_B,a_C,b_A,b_B,b_C);
   TEST("Intersecting Skew", ret, Skew);
 
   vgl_line_segment_3d<double> i_line;
@@ -264,8 +264,8 @@ inline void test_intersecting_degenerate_triangles1()
 
   //Test on a number of different types of degenerate triangle
 
-  const unsigned NUM_TESTS = 7;
-  const unsigned NUM_VARIANTS = 3;
+  constexpr unsigned NUM_TESTS = 7;
+  constexpr unsigned NUM_VARIANTS = 3;
 
   vgl_point_3d<double> degen[NUM_TESTS][3] = {
     { vgl_point_3d<double>(-4, 5, 0), vgl_point_3d<double>(-3, 4, 0), vgl_point_3d<double>(-2, 0, 0) }, //Coplanar non-intersecting

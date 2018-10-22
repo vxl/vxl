@@ -14,7 +14,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const std::basic_string<T>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   unsigned n = v.length();
   vsl_b_write(s,n);

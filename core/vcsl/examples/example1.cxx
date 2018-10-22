@@ -37,10 +37,10 @@
 //-----------------------------------------------------------------------------
 int main()
 {
-  const double t0=0;
-  const double t1=0.4;
-  const double t2=0.6;
-  const double t3=1;
+  constexpr double t0 = 0;
+  constexpr double t1 = 0.4;
+  constexpr double t2 = 0.6;
+  constexpr double t3 = 1;
 
   // Graph and coordinate systems instantiations
   std::cout<<"Creation of graph..."<< std::flush;

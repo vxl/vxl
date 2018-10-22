@@ -30,7 +30,7 @@
 #include <cstddef>
 #include <vcl_compiler.h>
 
-const int vul_reg_exp_nsubexp = 10;
+constexpr int vul_reg_exp_nsubexp = 10;
 
 //: Pattern matching with regular expressions.
 //  A regular expression allows a programmer to specify complex

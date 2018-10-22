@@ -247,7 +247,7 @@ void vgui_soview2D_infinite_line::translate(float tx, float ty)
 
 //--------------------------------------------------------------------------//
 
-const int vgui__CIRCLE2D_LIST = 1;
+constexpr int vgui__CIRCLE2D_LIST = 1;
 
 void vgui_soview2D_circle::compile()
 {

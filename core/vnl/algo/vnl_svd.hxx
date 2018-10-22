@@ -62,7 +62,7 @@ vnl_svd<T>::vnl_svd(vnl_matrix<T> const& M, double zero_out_tol):
 
     // Call Linpack SVD
     long info = 0;
-    const long job = 21; // min(n,p) svs in U, n svs in V (i.e. economy size)
+    constexpr long job = 21; // min(n,p) svs in U, n svs in V (i.e. economy size)
     vnl_linpack_svdc((T*)X, &n, &n, &p,
                      wspace.data_block(),
                      espace.data_block(),

@@ -10,8 +10,8 @@ static void test_rotate_image()
            << " Testing vil_rotate_image\n"
            << "**************************\n";
 
-  const unsigned int ni = 55;
-  const unsigned int nj = 35;
+  constexpr unsigned int ni = 55;
+  constexpr unsigned int nj = 35;
   vil_image_view<float> image, dest1, dest2;
   image.set_size(ni,nj);  image.fill(17.f);
 

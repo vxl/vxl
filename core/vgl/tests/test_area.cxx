@@ -29,7 +29,7 @@ static void test_simple3()
 {
   const double x[4]= { 1.0, 20.0, 20.0, 1.0};
   const double y[4]= { 1.0, 1.0, 20.0, 20.0};
-  const unsigned int size = 4;
+  constexpr unsigned int size = 4;
 
   vgl_polygon<double> poly;
   poly.new_sheet();

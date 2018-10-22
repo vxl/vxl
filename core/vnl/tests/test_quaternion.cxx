@@ -112,7 +112,7 @@ static void test_rotation_matrix_and_euler_angles()
 {
   bool success = true;
   vnl_random rng(13241ul);
-  const unsigned ntrials=100;
+  constexpr unsigned ntrials = 100;
   for (unsigned i=0; i<ntrials; ++i)
   {
     bool this_trial_ok = true;

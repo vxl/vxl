@@ -15,8 +15,8 @@
 #include <vil1/vil1_rgb.h>
 #include <vil/vil_rgb.h>
 
-const unsigned NI=256;
-const unsigned NJ=256;
+constexpr unsigned NI = 256;
+constexpr unsigned NJ = 256;
 
 template <class T>
 unsigned width(const vil_image_view<T> & im){return im.ni();}

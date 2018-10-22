@@ -34,8 +34,8 @@ int main(int argc, char ** argv)
 }
 
 
-const int SCALE = 4096;
-const int HALFSCALE = 2048;
+constexpr int SCALE = 4096;
+constexpr int HALFSCALE = 2048;
 
 struct pnmscale {
   int rows, cols, format, newformat, newrows, newcols, newpixels;

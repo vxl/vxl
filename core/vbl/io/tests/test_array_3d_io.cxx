@@ -14,9 +14,9 @@ void test_array_3d_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  const int array_row1 = 8;
-  const int array_row2 = 7;
-  const int array_row3 = 9;
+  constexpr int array_row1 = 8;
+  constexpr int array_row2 = 7;
+  constexpr int array_row3 = 9;
   vbl_array_3d<int> v_out(array_row1, array_row2, array_row3), v_in;
 
   for (int i=0; i<array_row1; i++)

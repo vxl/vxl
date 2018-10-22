@@ -14,7 +14,7 @@ void test_array_1d_io()
            << "******************************\n";
 
   //// test constructors, accessors
-  const int n = 50;
+  constexpr int n = 50;
   vbl_array_1d<float> v_out, v_in;
 
   v_out.reserve(n+10);

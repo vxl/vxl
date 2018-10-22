@@ -14,8 +14,8 @@
 #include <mbl/mbl_stats_1d.h>
 #include <vil/vil_rgb.h>
 
-const unsigned NI=256;
-const unsigned NJ=256;
+constexpr unsigned NI = 256;
+constexpr unsigned NJ = 256;
 
 template <class imT>
 double method1(vil_image_view<imT>& image, int n_loops)

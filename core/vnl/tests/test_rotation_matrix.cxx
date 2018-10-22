@@ -118,7 +118,7 @@ static bool calc_and_test_matrix(const vnl_vector<double>& axis,
 static void test_euler_rotations()
 {
   bool success = true;
-  const unsigned ntrials=100;
+  constexpr unsigned ntrials = 100;
   for (unsigned i=0; i<ntrials; ++i)
   {
     bool this_trial_ok = true;

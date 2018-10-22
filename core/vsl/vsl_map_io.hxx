@@ -22,7 +22,7 @@
 template <class Key, class T, class Compare>
 void vsl_b_write(vsl_b_ostream& s, const std::map<Key, T, Compare>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (typename std::map<Key, T, Compare>::const_iterator iter = v.begin(); iter != v.end(); iter++)
@@ -97,7 +97,7 @@ template void vsl_b_read(vsl_b_istream& s, std::map<Key, T, Compare >& v)
 template <class Key, class T, class Compare>
 void vsl_b_write(vsl_b_ostream& s, const std::multimap<Key, T, Compare>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (typename std::multimap<Key, T, Compare>::const_iterator iter = v.begin();

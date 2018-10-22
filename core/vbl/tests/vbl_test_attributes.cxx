@@ -10,7 +10,7 @@
 static void vbl_test_attributes_1d()
 {
   std::cout << "\n Testing vbl_attributes 1d\n +++++++++++++++++++++++++\n\n";
-  const unsigned n = 10;
+  constexpr unsigned n = 10;
   vbl_array_1d<double> v(n,1.0);
   // set up minima at middle and two ends
   v[0]=0.06;   v[n/2]= 0.05;  v[n-1]=0.04; v[1]=10.0;

@@ -11,8 +11,8 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
 
-const int TM_UNKNOWNS_COUNT = 9;
-const double DEGENERACY_THRESHOLD = 0.00001;
+constexpr int TM_UNKNOWNS_COUNT = 9;
+constexpr double DEGENERACY_THRESHOLD = 0.00001;
 
 
 //: Compute a 3D-to-3D affine transformation without translation 3 x 3 matrix

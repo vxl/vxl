@@ -228,7 +228,7 @@ static void test_alignment_type()
            << "VNL_CONFIG_ENABLE_SSE2 is " << VNL_CONFIG_ENABLE_SSE2 << std::endl;
 
   // Set up random data arrays.
-  const unsigned ndata = 13; // not a multiple of 2
+  constexpr unsigned ndata = 13; // not a multiple of 2
   float matrix_data[ndata*ndata];
   float vector_data[ndata];
   float result_data[ndata];

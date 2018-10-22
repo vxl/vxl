@@ -20,7 +20,7 @@ vsl_block_binary_write(os,(const T*) chunk.const_data(),chunk.size()/sizeof(T))
 //: Binary save vil_memory_chunk to stream.
 void vsl_b_write(vsl_b_ostream &os, const vil_memory_chunk& chunk)
 {
-  const short io_version_no = 3;
+  constexpr short io_version_no = 3;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, int(chunk.pixel_format()));
 

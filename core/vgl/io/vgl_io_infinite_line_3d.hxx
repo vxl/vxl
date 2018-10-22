@@ -14,7 +14,7 @@
 template<class T>
 void vsl_b_write(vsl_b_ostream &os, const vgl_infinite_line_3d<T>& v)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, v.x0());
   vsl_b_write(os, v.direction());
