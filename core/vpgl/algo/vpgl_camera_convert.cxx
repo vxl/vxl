@@ -891,7 +891,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
           double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
           prev_endpt = prev_org + (prev_dir * ray_len);
         }
-        const double error_tol = 0.25; // allow projection error of 0.25 pixel
+        constexpr double error_tol = 0.25; // allow projection error of 0.25 pixel
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
           return false;
         if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
@@ -1026,7 +1026,7 @@ bool vpgl_generic_camera_convert::pyramid_est(vpgl_local_rational_camera<double>
                   double ray_len = (local_z_min - prev_org.z()) / prev_dir.z();
                   prev_endpt = prev_org + (prev_dir * ray_len);
               }
-              const double error_tol = 0.5; // allow projection error of 0.25 pixel
+              constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
               if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, prev_org, org, error_tol))
                   return false;
               if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, prev_endpt, endpt, error_tol))
@@ -1204,7 +1204,7 @@ convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
       for(unsigned j = 0 ; j < gnj; j++)
       {
           vgl_point_2d<double> ip(i,j);
-          const double error_tol = 0.5; // allow projection error of 0.25 pixel
+          constexpr double error_tol = 0.5; // allow projection error of 0.25 pixel
           if (!vpgl_backproject::bproj_plane(&rat_cam, ip, high, org, org, error_tol))
               return false;
           if (!vpgl_backproject::bproj_plane(&rat_cam, ip, low, endpt, endpt, error_tol))

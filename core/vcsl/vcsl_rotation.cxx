@@ -7,7 +7,7 @@
 //---------------------------------------------------------------------------
 bool vcsl_rotation::are_unit_axes(list_of_vectors const& new_axis) const
 {
-  const double epsilon=0.001;
+  constexpr double epsilon = 0.001;
 
   list_of_vectors::const_iterator i;
 

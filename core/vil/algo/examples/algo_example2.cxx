@@ -37,7 +37,7 @@ int main( int argc, char* argv[] )
   std::cout << "Creating kernel...\n";
   float sigma = 2.f;
   float scaleFactor = 1.f / ( 2.f * sigma * sigma );
-  const int halfSupport = 1;
+  constexpr int halfSupport = 1;
 
   // build kernel
   float kernel[2*halfSupport+1];

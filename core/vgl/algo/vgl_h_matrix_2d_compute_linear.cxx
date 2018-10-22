@@ -27,8 +27,8 @@ vgl_h_matrix_2d_compute_linear::vgl_h_matrix_2d_compute_linear(bool allow_ideal_
 //
 // FSM - this is now done by vgl_h_matrix_2d_compute_design.
 
-const int TM_UNKNOWNS_COUNT = 9;
-const double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
+constexpr int TM_UNKNOWNS_COUNT = 9;
+constexpr double DEGENERACY_THRESHOLD = 0.00001;  // FSM. see below.
 
 //-----------------------------------------------------------------------------
 //

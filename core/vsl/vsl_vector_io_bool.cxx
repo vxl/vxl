@@ -14,7 +14,7 @@
 template <>
 void vsl_b_write(vsl_b_ostream& s, const std::vector<bool>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   unsigned int n = (unsigned int)(v.size());
   vsl_b_write(s,n);

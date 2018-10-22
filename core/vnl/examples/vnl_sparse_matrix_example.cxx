@@ -8,7 +8,7 @@
 
 int main()
 {
-  const int N = 100;
+  constexpr int N = 100;
   vnl_sparse_matrix<double> a(N, N);
   vnl_random rg;
 

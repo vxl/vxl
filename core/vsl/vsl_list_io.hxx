@@ -19,7 +19,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream& s, const std::list<T>& v)
 {
-  const short version_no = 1;
+  constexpr short version_no = 1;
   vsl_b_write(s, version_no);
   vsl_b_write(s, v.size());
   for (typename std::list<T>::const_iterator iter = v.begin(); iter != v.end(); iter++)

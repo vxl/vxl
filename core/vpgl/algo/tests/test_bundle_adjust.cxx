@@ -174,7 +174,7 @@ void similarity_to_truth(const std::vector<vgl_point_3d<double> >& truth_pts,
 
 static void test_bundle_adjust()
 {
-  const double max_p_err = 0.25;//1; // maximum image error to introduce (pixels)
+  constexpr double max_p_err = 0.25;//1; // maximum image error to introduce (pixels)
 
   std::vector<vgl_point_3d<double> > world;
   std::vector<vpgl_perspective_camera<double> > cameras;

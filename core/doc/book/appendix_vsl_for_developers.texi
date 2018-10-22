@@ -839,7 +839,7 @@ template<class T>
 void vsl_b_write(vsl_b_ostream& os, vbl_smart_ptr<T> const& p)
 @{
   // write version number
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
   if (p.ptr() == 0)  // Deal with Null pointers first.
@@ -1218,7 +1218,7 @@ bool BaseClassIO()::is_io_for(BaseClass const& b) const
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream& os, BaseClass const& p)
 @{
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());
@@ -1402,7 +1402,7 @@ bool DerivedClassIO()::is_io_for(BaseClass const& b) const
 //: Binary write to stream.
 void vsl_b_write(vsl_b_ostream& os, DerivedClass const& p)
 @{
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.x());
   vsl_b_write(os, p.y());

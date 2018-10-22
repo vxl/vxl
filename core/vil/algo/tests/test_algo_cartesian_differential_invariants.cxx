@@ -14,7 +14,7 @@ static void test_algo_cartesian_differential_invariants()
            << " Testing test_algo_cartesian_differential_invariants\n"
            << "*****************************************************\n";
 
-  const unsigned n = 11;
+  constexpr unsigned n = 11;
 
   vil_image_view<float> src(n,n);
   vil_image_view<float> dest, dest2;

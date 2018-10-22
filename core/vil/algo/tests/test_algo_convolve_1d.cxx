@@ -25,7 +25,7 @@ static void test_algo_convolve_1d_double()
            << " Testing vil_convolve_1d\n"
            << "*************************\n";
 
-  const int n = 10;
+  constexpr int n = 10;
   std::vector<double> src(n), dest(n+2);
   for (int i=0;i<n;++i) src[i]=i+1;
   // edge -888.88 values are not part of the kernel proper, but to detect misreadings

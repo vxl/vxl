@@ -9,7 +9,7 @@
 template <class T>
 void vsl_b_write(vsl_b_ostream &os, vgl_polygon<T> const& p)
 {
-    const short io_version_no = 1;
+    constexpr short io_version_no = 1;
     vsl_b_write(os, io_version_no);
     vsl_b_write(os, p.num_sheets());
     for (unsigned int i=0;i<p.num_sheets();i++)

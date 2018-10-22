@@ -299,7 +299,7 @@ bool vul_reg_exp::deep_equal (vul_reg_exp const& rxp) const
 #define NEXT(p)     (((*((p)+1)&0377)<<8) + (*((p)+2)&0377))
 #define OPERAND(p)    ((p) + 3)
 
-const unsigned char MAGIC = 0234;
+constexpr unsigned char MAGIC = 0234;
 
 //
 // Utility definitions.

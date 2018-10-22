@@ -66,12 +66,12 @@ namespace {
   // From http://gmt.soest.hawaii.edu/gmt/doc/html/GMT_Docs/node111.html
   // and other documents on the web.
   const vxl_uint_8 RAS_MAGIC[] = { 0x59, 0xA6, 0x6A, 0x95 };
-  const vxl_uint_32 RT_OLD = 0;          // Raw pixrect image in MSB-first order
-  const vxl_uint_32 RT_STANDARD = 1;     // Raw pixrect image in MSB-first order
-  const vxl_uint_32 RT_BYTE_ENCODED = 2; // (Run-length compression of bytes)
-  const vxl_uint_32 RT_FORMAT_RGB = 3;   // ([X]RGB instead of [X]BGR)
-  const vxl_uint_32 RMT_NONE = 0;        // No colourmap (ras_maplength is expected to be 0)
-  const vxl_uint_32 RMT_EQUAL_RGB = 1;   // (red[ras_maplength/3],green[],blue[])
+  constexpr vxl_uint_32 RT_OLD = 0;          // Raw pixrect image in MSB-first order
+  constexpr vxl_uint_32 RT_STANDARD = 1;     // Raw pixrect image in MSB-first order
+  constexpr vxl_uint_32 RT_BYTE_ENCODED = 2; // (Run-length compression of bytes)
+  constexpr vxl_uint_32 RT_FORMAT_RGB = 3;   // ([X]RGB instead of [X]BGR)
+  constexpr vxl_uint_32 RMT_NONE = 0;        // No colourmap (ras_maplength is expected to be 0)
+  constexpr vxl_uint_32 RMT_EQUAL_RGB = 1;   // (red[ras_maplength/3],green[],blue[])
 }
 
 

@@ -18,8 +18,8 @@
 #include <vcl_compiler.h>
 
 // The following defaults can be overridden with options -n and -m of the standalone version
-const int cNumElRows = 10;
-const int cNumElCols = 6;
+constexpr int cNumElRows = 10;
+constexpr int cNumElCols = 6;
 // And these are the effectivly used values:
 static int numelrows;
 static int numelcols;

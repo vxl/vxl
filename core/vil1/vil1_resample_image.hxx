@@ -41,7 +41,7 @@ bool vil1_resample_image(vil1_image const &base, unsigned new_width, unsigned ne
   }
 
   // "e" is as close as possible to 1.
-  const double e = 0.999999999999;
+  constexpr double e = 0.999999999999;
 
   // iterate over the destination buffer.
   for (int u=0; u<w; ++u) {

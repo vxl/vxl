@@ -31,7 +31,7 @@ double vnl_log_gamma(double x)
   return std::log(zp)+(x-0.5)*std::log(x1)-x1;
 }
 
-const int MAX_ITS = 100;
+constexpr int MAX_ITS = 100;
 const double MaxRelError = 3.0e-7;
 const double vnl_very_small = 1.0e-30;
 

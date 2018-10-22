@@ -100,7 +100,7 @@ void test_symmetric_eigensystem()
   }
 
   { // compare speed and values of specialised 3x3 version with nxn version
-    const unsigned n = 20000;
+    constexpr unsigned n = 20000;
     double fixed_data[n][3];
     double netlib_data[n][3];
 

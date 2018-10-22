@@ -324,7 +324,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
   if (!file_format) // avoid segfault in strcmp()
     file_format = L"pnm";
 
-  const unsigned int size = 200;
+  constexpr unsigned int size = 200;
   char fmt_buffer[size];  // should be enough
   BOOL useless;
   // ret indicates the number of characters successfully converted
@@ -348,7 +348,7 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
   vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
 #endif //VIL_USE_FSTREAM64
 
-  const unsigned int size = 200;  // should be enough
+  constexpr unsigned int size = 200;  // should be enough
   wchar_t tag_buffer[size];
   if ( !file_format )
   {

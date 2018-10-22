@@ -54,7 +54,7 @@ enum vil_dicom_header_image_type
 };
 
 // Max size (number of groups/elements)
-const unsigned VIL_DICOM_HEADER_MAXHEADERSIZE             =100;
+constexpr unsigned VIL_DICOM_HEADER_MAXHEADERSIZE = 100;
 
 // Define the dicom groups
 const vxl_uint_16 VIL_DICOM_HEADER_COMMANDGROUP             =0x0000;
@@ -312,7 +312,7 @@ vr_macro( vil_dicom_header_UT, std::string );
 #undef vr_macro
 
 
-const vxl_uint_32 VIL_DICOM_HEADER_ALLSET                   = 0xffffffff;
+const vxl_uint_32 VIL_DICOM_HEADER_ALLSET = 0xffffffff;
 
 // For determining the endian of the file or the transfer type (JPEG or RLE)
 const char * const VIL_DICOM_HEADER_IMPLICITLITTLE            ="1.2.840.10008.1.2";
@@ -477,7 +477,7 @@ void vil_dicom_header_info_clear( vil_dicom_header_info& info );
 
 const short VIL_DICOM_HEADER_UNSPECIFIED = -1;
 const unsigned short VIL_DICOM_HEADER_UNSPECIFIED_UNSIGNED = (unsigned short) -1;
-const double VIL_DICOM_HEADER_DEFAULTSIZE = 1.0;
+constexpr double VIL_DICOM_HEADER_DEFAULTSIZE = 1.0;
 const float VIL_DICOM_HEADER_DEFAULTSIZE_FLOAT = 1.0f;
 const float VIL_DICOM_HEADER_DEFAULTINTERCEPT = 0.0f;
 const float VIL_DICOM_HEADER_DEFAULTSLOPE = 1.0f;

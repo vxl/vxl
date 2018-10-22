@@ -27,7 +27,7 @@ void vsl_b_write(vsl_b_ostream& s, const std::vector<T>& v)
   // Check this assumption holds.
   assert(n == 0 || &v[n-1] + 1 == &v[0] + n);
 
-  const short version_no = 3;
+  constexpr short version_no = 3;
   vsl_b_write(s, version_no);
   vsl_b_write(s,n);
   if (n!=0)

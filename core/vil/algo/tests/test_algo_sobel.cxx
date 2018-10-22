@@ -17,7 +17,7 @@ static void test_algo_sobel()
            << "*******************\n";
 
   const unsigned int WD=5, HT=6, X=2, Y=3;
-  const int step=9;
+  constexpr int step = 9;
   const double halfstep=0.5*step,
                qrtrstep=0.25*step,
                eigtstep=0.125*step;
