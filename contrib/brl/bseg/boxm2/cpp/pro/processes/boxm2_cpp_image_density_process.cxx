@@ -28,8 +28,8 @@
 
 namespace boxm2_cpp_image_density_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 2;
   std::size_t lthreads[2]={8,8};
 }
 
@@ -167,8 +167,8 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_image_density_masked_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 2;
   std::size_t lthreads[2]={8,8};
 }
 

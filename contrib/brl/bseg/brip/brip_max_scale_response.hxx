@@ -132,7 +132,7 @@ void brip_max_scale_response<T>::compute_trace_pyramid()
       std::cout <<'\n';
     }
 #endif
-    const unsigned radius = 2;
+    constexpr unsigned radius  = 2;
     vil_image_view<float> tr =
       brip_vil_float_ops::trace_grad_matrix_NxN(smooth, radius);
     trace_.push_back(tr);

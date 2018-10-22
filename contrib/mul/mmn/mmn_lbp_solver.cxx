@@ -15,9 +15,6 @@
 // \brief Run loopy belief propagation to estimate maximum marginal probabilities of all node states
 // \author Martin Roberts
 
-const unsigned mmn_lbp_solver::NHISTORY_=5;
-const unsigned mmn_lbp_solver::NCYCLE_DETECT_=7;
-
 //: Default constructor
 mmn_lbp_solver::mmn_lbp_solver()
     : nnodes_(0), max_iterations_(100), min_simple_iterations_(25),

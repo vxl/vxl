@@ -140,7 +140,7 @@ bool vpgl_backproject::direction_to_camera(vpgl_local_rational_camera<double> co
   // assumes that camera is above point of interest
   // project point to image, and backproject to another z-plane, vector points to sensor
   vgl_point_2d<double> img_pt = cam.project(point);
-  const double z_off = 10.0;
+  constexpr double z_off = 10.0;
   vgl_plane_3d<double> plane_high(0,0,1,-(point.z()+z_off));
   vgl_point_3d<double> point_high;
   vgl_point_3d<double> guess(point.x(),point.y(),point.z() + z_off);

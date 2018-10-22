@@ -21,9 +21,9 @@ void test_rbf_network()
   rng.reseed(123456);
 
 //const unsigned nCentres = 64;
-  const unsigned nSamples = 100;
-  const unsigned nDims = 3;
-  const unsigned nTests = 3;
+  constexpr unsigned nSamples  = 100;
+  constexpr unsigned nDims  = 3;
+  constexpr unsigned nTests  = 3;
 
 
   std::vector<vnl_vector<double> >

@@ -13,8 +13,8 @@
 
 namespace bstm_create_scene_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool bstm_create_scene_process_cons(bprb_func_process& pro)
@@ -73,8 +73,8 @@ bool bstm_create_scene_process(bprb_func_process& pro)
 
 namespace bstm_write_scene_xml_process_globals
 {
-  const unsigned n_inputs_  =2;
-  const unsigned n_outputs_ =0;
+  constexpr unsigned n_inputs_   = 2;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_write_scene_xml_process_cons(bprb_func_process& pro)

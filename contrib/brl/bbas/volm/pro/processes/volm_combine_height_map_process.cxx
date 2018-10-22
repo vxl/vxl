@@ -23,8 +23,8 @@
 
 namespace volm_combine_height_map_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 5;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool volm_combine_height_map_process_cons(bprb_func_process& pro)
@@ -231,8 +231,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
 // combine multiple height maps by taking the median values of all pixels from multiple maps
 namespace volm_combine_height_map_process2_globals
 {
-  const unsigned n_inputs_  = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_   = 2;
+  constexpr unsigned n_outputs_  = 1;
 
   //: function to obtain the median
   float median(std::vector<float> values);

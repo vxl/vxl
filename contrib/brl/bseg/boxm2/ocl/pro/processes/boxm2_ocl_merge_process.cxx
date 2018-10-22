@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_merge_process_globals
 {
-    const unsigned n_inputs_ = 4;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_  = 4;
+    constexpr unsigned n_outputs_  = 0;
     void compile_merge_tree_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...

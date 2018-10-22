@@ -264,8 +264,8 @@ inline void test_intersecting_degenerate_triangles1()
 
   //Test on a number of different types of degenerate triangle
 
-  const unsigned NUM_TESTS = 7;
-  const unsigned NUM_VARIANTS = 3;
+  constexpr unsigned NUM_TESTS  = 7;
+  constexpr unsigned NUM_VARIANTS  = 3;
 
   vgl_point_3d<double> degen[NUM_TESTS][3] = {
     { vgl_point_3d<double>(-4, 5, 0), vgl_point_3d<double>(-3, 4, 0), vgl_point_3d<double>(-2, 0, 0) }, //Coplanar non-intersecting

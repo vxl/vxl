@@ -34,8 +34,8 @@
 
 namespace bstm_ocl_change_detection_process_globals
 {
-  const unsigned n_inputs_     = 9;
-  const unsigned n_outputs_    = 1;
+  constexpr unsigned n_inputs_      = 9;
+  constexpr unsigned n_outputs_     = 1;
 }
 
 bool bstm_ocl_change_detection_process_cons(bprb_func_process& pro)

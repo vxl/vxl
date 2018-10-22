@@ -17,7 +17,7 @@ void test_opt_orient_pos(vpgl_perspective_camera<double> const& cam,
                          std::vector<vgl_homg_point_3d<double> > const& world,
                          std::vector<vgl_point_2d<double> > const& image,
                          vnl_random &rnd) {
-  const double max_t_err = 10.0; // maximum translation error to introduce
+  constexpr double max_t_err = 10.0; // maximum translation error to introduce
   const double max_r_err = vnl_math::pi/4; // maximum rotation error to introduce (radians)
 
   // select a random rotation axis
@@ -60,8 +60,8 @@ void test_opt_orient_pos_f(vpgl_perspective_camera<double> const& cam,
                            std::vector<vgl_point_2d<double> > const& image,
                            vnl_random &rnd) {
 
-  const double max_t_err = 0;//10.0; // maximum translation error to introduce
-  const double max_r_err = 0;//vnl_math::pi/4; // maximum rotation error to introduce (radians)
+  constexpr double max_t_err = 0;//10.0; // maximum translation error to introduce
+  constexpr double max_r_err = 0;//vnl_math::pi/4; // maximum rotation error to introduce (radians)
 
   // select a random rotation axis
   vnl_double_3 dw = (vnl_double_3(rnd.drand32(), rnd.drand32(), rnd.drand32())-0.5).normalize();
@@ -107,7 +107,7 @@ void test_opt_orient_pos_f(vpgl_perspective_camera<double> const& cam,
 
 static void test_optimize_camera()
 {
-  const double max_p_err = 0.25; // maximum image error to introduce (pixels)
+  constexpr double max_p_err = 0.25; // maximum image error to introduce (pixels)
 
   std::vector<vgl_homg_point_3d<double> > world;
   double side_len = 1.0;

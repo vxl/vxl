@@ -88,7 +88,7 @@ class vsl_b_ostream
   //: The length of the b_stream header.
   // You can move to this offset from the start of the file to get to
   // the first real data item.
-  static VSL_EXPORT const std::streamoff header_length;
+  static constexpr std::streamoff header_length = 6;
 
  protected:
   //: The member stream
@@ -115,7 +115,7 @@ class vsl_b_ostream
   serialisation_records_type serialisation_records_;
 
   //: The version number of the IO scheme.
-  static const unsigned short version_no_;
+  static constexpr unsigned short version_no_ = 1;
 };
 
 

@@ -33,8 +33,8 @@
 //: Take pre-created projection geometry (vsol binary file) to compute the deviation from ground truth
 namespace volm_registration_error_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_   = 6;
+  constexpr unsigned n_outputs_  = 4;
 
   //: return the closest, along with the normal components, from a point to a line segment
   double closest_distance(vsol_point_2d_sptr const& p, std::vector<vsol_point_2d_sptr> const& point_set,

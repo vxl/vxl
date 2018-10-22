@@ -31,8 +31,8 @@ void init_random_image(vil_image_view<float>& img)
 
 static void test_measure()
 {
-  const unsigned window_size = 50;
-  const unsigned int max_components = 3;
+  constexpr unsigned window_size  = 50;
+  constexpr unsigned int max_components = 3;
   const float init_var = 0.1f;
   const float g_thresh = 3.0f;
   const float min_stdev = 0.02f;

@@ -23,8 +23,8 @@
 //: globals
 namespace boxm_estimate_camera_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 3;
 
   // parameter strings
   const std::string theta_range_ =  "theta_range";

@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 
   //declare the response data type used to store in boxm2CppFilterResponseProcess.
   typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATYPE;

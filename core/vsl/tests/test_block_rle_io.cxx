@@ -18,7 +18,7 @@ void test_block_rle_io()
            << " Testing vsl_block_binary_rle io\n"
            << "*********************************\n";
 
-  const int n = 100;
+  constexpr int n = 100;
   bool v_bool_out[n];
   for (int i=0;i<n;++i) v_bool_out[i]=i<20;
   std::vector<int> v_int_out(n);

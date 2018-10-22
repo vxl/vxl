@@ -45,7 +45,7 @@ void test_convolve()
   vnl_random rng;
   test_util_fill_random(l.begin(), l.end(), rng);
   test_util_fill_random(k3.begin(), k3.end(), rng);
-  const unsigned ntimes = 10; // repeat some expts to get more accurate timings.
+  constexpr unsigned ntimes  = 10; // repeat some expts to get more accurate timings.
   vnl_vector<double> r9;
   const std::clock_t timer_01 = std::clock();
   for (unsigned i=0; i < ntimes; ++i)

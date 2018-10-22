@@ -12,8 +12,8 @@
 
 namespace boxm2_load_scene_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 1;
 }
 bool boxm2_load_scene_process_cons(bprb_func_process& pro)
 {
@@ -58,8 +58,8 @@ bool boxm2_load_scene_process(bprb_func_process& pro)
 
 namespace boxm2_modify_scene_appearance_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 }
 bool boxm2_modify_scene_appearance_process_cons(bprb_func_process& pro)
 {

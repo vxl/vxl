@@ -27,8 +27,8 @@
 
 namespace boxm_generate_opt3_samples_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm_generate_opt3_samples_process_cons(bprb_func_process& pro)

@@ -19,7 +19,7 @@ void test_selected_data_wrapper()
            <<    "***********************************\n";
 
 
-  const unsigned n = 10;
+  constexpr unsigned n  = 10;
   std::vector<double> data(n);
 
   for (unsigned i = 0; i < n; i++)

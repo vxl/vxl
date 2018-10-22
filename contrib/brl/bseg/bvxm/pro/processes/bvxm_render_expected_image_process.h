@@ -18,8 +18,8 @@
 //: globals
 namespace bvxm_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 //: set input and output types

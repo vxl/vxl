@@ -19,8 +19,8 @@
 //:global variables
 namespace bocl_info_process_globals
 {
-  const unsigned n_inputs_ = 0;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 0;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 

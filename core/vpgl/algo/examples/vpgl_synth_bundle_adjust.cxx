@@ -20,7 +20,7 @@ int main(int argc, char** argv)
   vul_arg<bool>   a_no_gradient("-no_grad", "use numeric differencing instead of gradients", false);
   vul_arg_parse(argc, argv);
 
-  const double max_p_err = 1.0; // maximum image error to introduce (pixels)
+  constexpr double max_p_err = 1.0; // maximum image error to introduce (pixels)
 
   // deterministic random number generator -- random but repeatable
   long int seed = 0;

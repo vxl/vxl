@@ -28,8 +28,8 @@
 
 namespace boxm2_ocl_query_hist_data_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 7;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 7;
 }
 
 bool boxm2_ocl_query_hist_data_process_cons(bprb_func_process& pro)

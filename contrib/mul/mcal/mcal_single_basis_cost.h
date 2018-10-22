@@ -42,7 +42,7 @@ class mcal_single_basis_cost
   // \param[in] unit_basis   Unit vector defining basis direction
   // \param[in] projections  Projections of the dataset onto this basis vector
   virtual double cost(const vnl_vector<double>& unit_basis,
-                      const vnl_vector<double>& projections) =0;
+                      const vnl_vector<double>& projections) = 0;
 
   //: Compute component of the cost function from given basis vector
   // Only relevant if can_use_variance() is true.  This allows more

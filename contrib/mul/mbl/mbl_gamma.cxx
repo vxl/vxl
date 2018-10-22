@@ -4,7 +4,7 @@
 #include "mbl_gamma.h"
 #include <vcl_compiler.h>
 
-const int MAX_ITS = 200;
+constexpr int MAX_ITS = 200;
 const double EPS = 3.0e-7;
 const double FPMIN = 1.0e-30;
 

@@ -44,8 +44,8 @@ void add_random_noise(vil_image_view<float>& img, float std)
 
 static void test_bg_model_speed()
 {
-  const float window_size = 50.0;
-  const unsigned int max_components = 3;
+  constexpr float window_size = 50.0;
+  constexpr unsigned int max_components = 3;
   const float init_var = 0.01f;
   const unsigned int ni = 640, nj = 480;
 

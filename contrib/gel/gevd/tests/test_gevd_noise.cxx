@@ -17,7 +17,7 @@
 void
 test_gevd_noise()
 {
-  const int size=100000;
+  constexpr int size = 100000;
   vnl_sample_reseed();
   float* data = new float[size];
   for (int i=0; i<size; ++i) data[i]=(float)vnl_sample_normal(.5,.1);

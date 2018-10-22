@@ -68,8 +68,8 @@ struct kernel
 
 namespace bvpl_bundler_features_2d_compute_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 1;
 }//end bvpl_bundler_features_2d_compute_process_globals
 
 bool bvpl_bundler_features_2d_compute_process_cons( bprb_func_process& pro )

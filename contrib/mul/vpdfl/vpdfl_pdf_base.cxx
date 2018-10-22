@@ -45,7 +45,7 @@ double vpdfl_pdf_base::log_prob_thresh(double pass_proportion) const
 
   // The number of samples on the less likely side of the boundary.
   // Increase the number for greater reliabililty
-  const unsigned n_stat = 20;
+  constexpr unsigned n_stat  = 20;
 
   double /* above, */ below, lP;
   unsigned int nSamples, i;

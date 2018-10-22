@@ -28,8 +28,8 @@
 
 namespace bstm_ocl_track_process_globals
 {
-  const unsigned n_inputs_ = 12;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 12;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_ocl_track_process_cons(bprb_func_process& pro)

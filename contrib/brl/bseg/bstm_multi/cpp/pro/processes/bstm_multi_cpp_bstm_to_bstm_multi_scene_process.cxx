@@ -18,8 +18,8 @@
 #include <bstm_multi/cpp/algo/bstm_multi_bstm_block_to_bstm_multi_block_function.h>
 
 namespace {
-const unsigned n_inputs_ = 7;
-const unsigned n_outputs_ = 0;
+constexpr unsigned n_inputs_  = 7;
+constexpr unsigned n_outputs_  = 0;
 }
 
 // Calls verify_appearances with a pre-set list of valid types

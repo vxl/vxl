@@ -32,8 +32,8 @@
 //: create a normalized intensity value in each cell using the segment lengths of all the rays that intersect the cell
 namespace boxm2_cpp_create_aux_data_opt2_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_create_aux_data_opt2_process_cons(bprb_func_process& pro)
@@ -258,8 +258,8 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_opt2_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_batch_update_opt2_process_cons(bprb_func_process& pro)

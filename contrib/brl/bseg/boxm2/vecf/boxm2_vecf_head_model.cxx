@@ -143,7 +143,7 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
                 source_blk->data_index( inv_scaled_cell_center, source_data_idx);
                 float alpha = source_alpha_data[source_data_idx];
                 double prob = 1 - std::exp(-alpha*side_len);
-                const double prob_thresh = 0.0;
+                constexpr double prob_thresh = 0.0;
 
                   // get data can copy from source to target
                 target_alpha_data[data_idx] = source_alpha_data[source_data_idx];

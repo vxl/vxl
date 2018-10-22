@@ -38,8 +38,8 @@
 
 namespace bstm_ocl_get_surface_pt_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 3;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;

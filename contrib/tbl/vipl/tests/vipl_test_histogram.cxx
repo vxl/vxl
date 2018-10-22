@@ -45,8 +45,8 @@ int vipl_test_histogram()
   std::cout << "Starting vipl_histogram test\n";
 
   {
-    const unsigned int expected_n = 45;
-    const int scale = 2;
+    constexpr unsigned int expected_n = 45;
+    constexpr int scale = 2;
     vnl_vector<unsigned int> byte_out(expected_n / scale + 1);
     vipl_histogram<vil_image_view<vxl_byte>,vnl_vector<unsigned int>, vxl_byte,unsigned int> op(scale);
     op.put_in_data_ptr(&byte_img); op.put_out_data_ptr(&byte_out); op.filter();

@@ -15,8 +15,8 @@
 
 namespace vil_shadow_ridge_detection_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_   = 3;
+  constexpr unsigned n_outputs_  = 3;
 
   float dist_angles(float a,float b)
   {

@@ -24,8 +24,8 @@
 
 namespace boxm2_export_oriented_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 9;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_export_oriented_point_cloud_process_cons(bprb_func_process& pro)

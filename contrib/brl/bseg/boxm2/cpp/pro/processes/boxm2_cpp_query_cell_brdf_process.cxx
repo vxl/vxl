@@ -28,8 +28,8 @@
 
 namespace boxm2_cpp_query_cell_brdf_process_globals
 {
-  const unsigned n_inputs_ =  6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 0;
 
   typedef boxm2_data_traits<BOXM2_FLOAT8>::datatype float8_datatype;
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;

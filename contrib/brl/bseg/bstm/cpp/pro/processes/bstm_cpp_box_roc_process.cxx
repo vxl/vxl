@@ -28,8 +28,8 @@
 
 namespace bstm_cpp_box_roc_process_globals
 {
-  const unsigned n_inputs_ =  14;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 14;
+  constexpr unsigned n_outputs_  = 2;
 
   typedef unsigned char uchar;
   typedef unsigned short ushort;

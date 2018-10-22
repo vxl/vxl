@@ -35,8 +35,8 @@
 
 namespace boxm2_ingest_convex_mesh_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 0;
 
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 }

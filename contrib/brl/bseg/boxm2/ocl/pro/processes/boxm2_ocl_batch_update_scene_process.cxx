@@ -38,8 +38,8 @@
 
 namespace boxm2_ocl_batch_update_scene_process_globals
 {
-  const unsigned n_inputs_ =  5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 0;
   enum {
     COMPUTE_ALPHA = 0,
     COMPUTE_MOG = 1

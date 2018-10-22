@@ -37,8 +37,8 @@
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 11;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_  = 11;
+  constexpr unsigned n_outputs_  = 5;
 }
 
 // === functions ===
@@ -176,8 +176,8 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
 // global variables and functions
 namespace vpgl_offset_cam_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_  = 9;
+  constexpr unsigned n_outputs_  = 5;
 }
 
 // initialization
@@ -356,8 +356,8 @@ bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sp
 // global variables and functions
 namespace vpgl_crop_ortho_using_3d_box_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 5;
 }
 
 // initialization
@@ -487,8 +487,8 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
 // global variables and functions
 namespace vpgl_crop_img_using_3d_box_dem_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 5;
   //: find the min and max height in a given region from height map resources
   bool find_min_max_height(double const& ll_lon, double const& ll_lat, double const& uu_lon, double const& uu_lat,
                            std::vector<std::pair<vil_image_view_base_sptr, vpgl_geo_camera*> >& infos,

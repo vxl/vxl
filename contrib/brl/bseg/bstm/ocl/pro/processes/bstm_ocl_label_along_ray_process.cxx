@@ -32,8 +32,8 @@
 
 namespace bstm_ocl_label_along_ray_process_globals
 {
-  const unsigned n_inputs_     = 8;
-  const unsigned n_outputs_    = 0;
+  constexpr unsigned n_inputs_      = 8;
+  constexpr unsigned n_outputs_     = 0;
 
   bocl_kernel* compile_kernel(bocl_device_sptr device,std::string opts)
   {

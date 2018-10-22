@@ -365,7 +365,7 @@ class boxm2_batch_update_app_functor
     std::vector<aux_datatype> out = str_cache_->get_next<BOXM2_AUX>(id_, index);
     std::vector<nrays_datatype> nrays = str_cache_->get_next<BOXM2_NUM_OBS_SINGLE>(id_, index);
 
-    const int cell_no = 2000000;
+    constexpr int cell_no = 2000000;
 #endif
 
     std::vector<aux0_datatype> obs;

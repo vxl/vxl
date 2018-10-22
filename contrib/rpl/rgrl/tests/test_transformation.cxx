@@ -281,7 +281,7 @@ void test_trans_rigid()
 
   bool statusdet = true;
 
-  const int NUM_TRIALS = 1000;
+  constexpr int NUM_TRIALS = 1000;
 
   for (int qqq=0; qqq<NUM_TRIALS; qqq++)
   {

@@ -13,7 +13,7 @@
 template<class T, class DIM_>
 void vsl_b_write(vsl_b_ostream &os, const vbl_bounding_box_base<T, DIM_> & p)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, !p.empty());
   for (int i = 0; i< p.dimension(); i++)

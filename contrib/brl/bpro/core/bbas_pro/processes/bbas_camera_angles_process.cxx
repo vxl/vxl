@@ -78,7 +78,7 @@ bool bbas_camera_angles_process(bprb_func_process& pro)
   camera->project(pt_x,pt_y,pt_z, pt_u,pt_v);
 
   // backproject to plane above and below point
-  const double plane_dist = 10.0; // arbitrary distance above and below focus point to backproject to.
+  constexpr double plane_dist = 10.0; // arbitrary distance above and below focus point to backproject to.
   const double z_low = pt_z - plane_dist;
   const double z_high = pt_z + plane_dist;
   vgl_point_2d<double> img_pt(pt_u,pt_v);

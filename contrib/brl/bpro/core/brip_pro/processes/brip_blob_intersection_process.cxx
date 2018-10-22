@@ -16,8 +16,8 @@
 
 namespace brip_blob_intersection_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 //: Constructor

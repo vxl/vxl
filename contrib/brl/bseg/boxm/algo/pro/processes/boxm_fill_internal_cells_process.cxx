@@ -19,8 +19,8 @@
 
 namespace boxm_fill_internal_cells_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 //: process takes 1 input and 1 output.

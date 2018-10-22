@@ -33,8 +33,8 @@
 
 namespace boxm2_ocl_update_aux_per_view_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 7;
+  constexpr unsigned n_outputs_  = 0;
   enum {
     UPDATE_AUX_LEN_INT_VIS        = 0,
     CONVERT_AUX_INT_FLOAT     = 1

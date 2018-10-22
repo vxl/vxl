@@ -26,7 +26,7 @@ static void test_bins_2D()
   bin_sizes[0] = 6; bin_sizes[1] = 4;
 
   bin_type bins( min_pt, max_pt, bin_sizes );
-  const double dist_tol = 0.0001;
+  constexpr double dist_tol = 0.0001;
   bins.set_distance_tolerance( dist_tol );
   vnl_vector_fixed< double, 2 >  pt( 12.5, 3 );
   int added_value = 0, stored_value = -1;
@@ -48,7 +48,7 @@ static void test_bins_2D()
 
   {
     //  Generate a bunch of points:
-    const int M=60;
+    constexpr int M = 60;
     std::vector< vnl_vector_fixed< double, 2 > > points( M );
     std::vector< int > indices( M );
     vnl_random mz_rand;
@@ -63,7 +63,7 @@ static void test_bins_2D()
 
   //  test  "is_any_point_within_radius" and "points_with_radius"
 
-    const int num_tests = 5;
+    constexpr int num_tests = 5;
     for ( int t=0; t<num_tests; ++t )
     {
       vnl_vector_fixed< double, 2 > q;
@@ -166,7 +166,7 @@ static void test_bins_3D()
 
   {
     bin_type bins( min_pt, max_pt, bin_sizes );
-    const double dist_tol = 0.0001;
+    constexpr double dist_tol = 0.0001;
     bins.set_distance_tolerance( dist_tol );
     vnl_double_3  pt( 12.5, 3.0, -5.0 );
     int added_value = 0, stored_value = -1;
@@ -189,7 +189,7 @@ static void test_bins_3D()
 
   {
     //  Generate a bunch of points:
-    const int M=60;
+    constexpr int M = 60;
     std::vector< vnl_vector_fixed< double, 3 > > points( M );
     std::vector< int > indices( M );
     vnl_random mz_rand;
@@ -203,7 +203,7 @@ static void test_bins_3D()
       bins.add_point( points[ i ], i );
     }
 
-    const int num_tests = 5;
+    constexpr int num_tests = 5;
     for ( int t=0; t<num_tests; ++t )
     {
       vnl_vector_fixed< double, 3 > q;
@@ -366,7 +366,7 @@ test_bins_nearest ( unsigned n,
   bool pass_size_all = true;
   bool pass_match_all = true;
 
-  const unsigned num_trials = 64;
+  constexpr unsigned num_trials  = 64;
   for ( unsigned tn=0; tn<num_trials; ++tn )
   {
     // pick a random test point

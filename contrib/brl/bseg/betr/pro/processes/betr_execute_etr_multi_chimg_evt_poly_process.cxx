@@ -24,8 +24,8 @@
 
 namespace betr_execute_etr_multi_chimg_evt_poly_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 6;
+  constexpr unsigned n_inputs_   = 3;
+  constexpr unsigned n_outputs_  = 6;
 }
 
 bool betr_execute_etr_multi_chimg_evt_poly_process_cons(bprb_func_process& pro)

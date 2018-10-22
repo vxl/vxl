@@ -29,8 +29,8 @@
 //: create a norm img = pre_inf+vis_inf;
 namespace boxm2_cpp_pre_infinity_opt2_phongs_process_globals
 {
-    const unsigned n_inputs_ = 9;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_  = 9;
+    constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_cpp_pre_infinity_opt2_phongs_process_cons(bprb_func_process& pro)
@@ -209,8 +209,8 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_opt2_phongs_process_globals
 {
-    const unsigned n_inputs_ = 6;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_  = 6;
+    constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_batch_update_opt2_phongs_process_cons(bprb_func_process& pro)
@@ -282,8 +282,8 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
 //: run batch update
 namespace boxm2_cpp_batch_update_nonray_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_  = 2;
+    constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_batch_update_nonray_process_cons(bprb_func_process& pro)

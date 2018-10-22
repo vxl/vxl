@@ -32,8 +32,8 @@
 
 namespace boxm2_ocl_change_detection_process2_globals
 {
-  const unsigned n_inputs_     = 9;
-  const unsigned n_outputs_    = 2;
+  constexpr unsigned n_inputs_      = 9;
+  constexpr unsigned n_outputs_     = 2;
 }
 
 bool boxm2_ocl_change_detection_process2_cons(bprb_func_process& pro)

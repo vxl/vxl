@@ -13,8 +13,8 @@
 
 namespace bstm_add_block_process_globals
 {
-  const unsigned n_inputs_  = 21;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 21;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_add_block_process_cons(bprb_func_process& pro)

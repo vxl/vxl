@@ -15,8 +15,8 @@
 
 namespace betr_add_gridded_event_trigger_object_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 7;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool betr_add_gridded_event_trigger_object_process_cons(bprb_func_process& pro)

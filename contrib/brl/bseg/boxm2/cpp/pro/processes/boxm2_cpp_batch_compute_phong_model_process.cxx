@@ -25,8 +25,8 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_phong_model_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_batch_compute_phong_model_process_cons(bprb_func_process& pro)

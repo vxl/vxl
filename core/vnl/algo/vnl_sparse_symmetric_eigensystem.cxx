@@ -222,7 +222,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   }
   nvalues = 0;
 
-  const long whichLength = 2;
+  constexpr long whichLength  = 2;
   char which[whichLength + 1];
   which[whichLength] = '\0';
   if (smallest)
@@ -254,7 +254,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   double *V = new double[matSize * numberLanczosVecsL + 1];
 
 #define DONE 99
-  const int genEigProblemLength = 1;
+  constexpr int genEigProblemLength = 1;
   char genEigProblem = 'G';
   long    info = 0;   // Initialization info (INPUT) and error flag (OUTPUT)
 
@@ -400,7 +400,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   long rvec   = 1;  // get the values and vectors
 
   // which Ritz vctors do we want?
-  const int howMnyLength = 1;
+  constexpr int howMnyLength = 1;
   char howMny = 'A';  // all
 
   // selection vector for which Ritz vectors to calc.

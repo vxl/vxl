@@ -14,7 +14,7 @@ void test_diag_matrix_double_io()
            << "test_diag_matrix_io\n"
            << "*******************\n";
   //// test constructors, accessors
-  const int n = 50;
+  constexpr int n = 50;
   vnl_vector<double> v_out(n), v_in(n);
 
   for (int i=0; i<n; i++)

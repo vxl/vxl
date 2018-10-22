@@ -25,8 +25,8 @@
 
 namespace boxm2_cpp_query_cell_process_globals
 {
-  const unsigned n_inputs_ =  8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_cpp_query_cell_process_cons(bprb_func_process& pro)

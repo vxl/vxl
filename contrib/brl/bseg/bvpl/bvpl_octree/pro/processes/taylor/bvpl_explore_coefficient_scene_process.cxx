@@ -14,8 +14,8 @@
 //:global variables
 namespace bvpl_explore_coefficient_scene_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

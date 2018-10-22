@@ -17,8 +17,8 @@
 #include <bstm_multi/space_time_scene.h>
 
 namespace {
-const unsigned n_inputs_ = 2;
-const unsigned n_outputs_ = 0;
+constexpr unsigned n_inputs_  = 2;
+constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_multi_write_cache_process_cons(bprb_func_process &pro) {

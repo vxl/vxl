@@ -177,7 +177,7 @@ main( int argc, char* argv[] )
   read_feature_file( moving_file_name, moving_feature_points, 50 );
   read_feature_file( fixed_file_name, fixed_feature_points, 1 );
 
-  const unsigned int dimension = 3;
+  constexpr unsigned int dimension = 3;
   rgrl_feature_set_sptr moving_feature_set =
     new rgrl_feature_set_location<dimension>(moving_feature_points );
   rgrl_feature_set_sptr fixed_feature_set =

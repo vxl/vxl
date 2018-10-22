@@ -32,8 +32,8 @@
 //: run batch update
 namespace boxm2_cpp_batch_compute_normal_albedo_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_batch_compute_normal_albedo_process_cons(bprb_func_process& pro)

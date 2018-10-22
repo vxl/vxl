@@ -37,8 +37,8 @@
 //: global variables and functions
 namespace volm_project_dem_to_sat_img_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 8;
+  constexpr unsigned n_outputs_  = 0;
 
   // function to project dem image pixel to satellite image pixel
   bool project_dem_to_sat(vpgl_geo_camera const& dem_cam, vpgl_rational_camera<double>* sat_cam,

@@ -15,8 +15,8 @@
 #include <vcl_compiler.h>
 namespace boxm2_compute_sun_affine_camera_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 3;
 }
 bool boxm2_compute_sun_affine_camera_process_cons(bprb_func_process& pro)
 {

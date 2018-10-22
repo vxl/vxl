@@ -27,8 +27,8 @@
 
 namespace boxm2_ocl_render_expected_height_map_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 5;
+  constexpr unsigned n_inputs_   = 3;
+  constexpr unsigned n_outputs_  = 5;
   std::size_t local_threads[2]={8,8};
   static vcl_map<vcl_string, std::vector<bocl_kernel*> > kernels_;
   vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts)

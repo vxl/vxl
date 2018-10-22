@@ -30,8 +30,8 @@
 
 namespace bstm_cpp_ingest_boxm2_scene_process_globals
 {
-  const unsigned n_inputs_ =  7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_cpp_ingest_boxm2_scene_process_cons(bprb_func_process& pro)

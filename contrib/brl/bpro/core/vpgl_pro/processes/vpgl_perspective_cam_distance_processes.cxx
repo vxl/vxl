@@ -12,8 +12,8 @@
 // compute the distance between two distance cameras as the angle between their principle axis vectors
 namespace vpgl_persp_cam_distance_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 //: Init function

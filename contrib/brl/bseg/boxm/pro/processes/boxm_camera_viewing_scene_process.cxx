@@ -29,8 +29,8 @@
 namespace boxm_camera_viewing_scene_process_globals
 {
   //this process takes no inputs
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 //:sets input and output types

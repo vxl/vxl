@@ -23,7 +23,7 @@ double vpgl_triangulate_points::triangulate(
         const std::vector<vpgl_perspective_camera<double> > &cameras,
         vgl_point_3d<double> &point_3d)
 {
-    const int num_vars = 3;// One var for x, y, z of output 3d point
+    constexpr int num_vars = 3;// One var for x, y, z of output 3d point
     const int num_eqs = 2 * points.size();
 
     // Set up the least-squares solution.

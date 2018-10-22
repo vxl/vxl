@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_mean_intensities_batch_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_mean_intensities_batch_process_cons(bprb_func_process& pro)
@@ -83,8 +83,8 @@ bool boxm2_cpp_mean_intensities_batch_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_mean_intensities_print_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_mean_intensities_print_process_cons(bprb_func_process& pro)
@@ -139,8 +139,8 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
 //: a process to be used for debugging purposes to see the values inside given datatypes
 namespace boxm2_cpp_data_print_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_data_print_process_cons(bprb_func_process& pro)

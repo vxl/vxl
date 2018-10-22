@@ -126,7 +126,7 @@ template <class T> static
 void test_nullvector(char const *type, double max_err, T *, vnl_random &rng)
 {
   std::cout << "----- Testing vnl_svd_fixed<" << type << "> null vector -----" << std::endl;
-  const int n = 3;
+  constexpr int n = 3;
   vnl_matrix_fixed<T,n,n+1> A;
   test_util_fill_random(A.begin(), A.end(), rng);
   vnl_svd_fixed<T,n,n+1> svd(A);

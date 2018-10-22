@@ -74,7 +74,7 @@ void msm_box_limiter::print_summary(std::ostream& os) const
     <<" accept_prop: "<<accept_prop_<<" } ";
 }
 
-const static short version_no = 1;
+constexpr static short version_no  = 1;
 
 //: Save class to binary file stream
 void msm_box_limiter::b_write(vsl_b_ostream& bfs) const

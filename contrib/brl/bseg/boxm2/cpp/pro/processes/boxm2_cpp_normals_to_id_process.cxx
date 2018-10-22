@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_normals_to_id_process_globals
 {
-    const unsigned n_inputs_ = 2;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_  = 2;
+    constexpr unsigned n_outputs_  = 0;
     std::size_t lthreads[2]={8,8};
 }
 

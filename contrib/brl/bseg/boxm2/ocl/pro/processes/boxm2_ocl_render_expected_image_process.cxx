@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 9;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 bool boxm2_ocl_render_expected_image_process_cons(bprb_func_process& pro)
@@ -98,7 +98,7 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
   bool ret = true;
   //TODO Factor this out to a utility function
   //make sure this image small enough (or else carve it into image pieces)
-  const std::size_t MAX_PIXELS = 16777216;
+  constexpr std::size_t MAX_PIXELS  = 16777216;
   if (ni*nj > MAX_PIXELS) {
     std::size_t sni = RoundUp(ni, 16);
     std::size_t snj = RoundUp(nj, 16);

@@ -14,7 +14,7 @@
 
 void test_diag_matrix_fixed()
 {
-  const unsigned int N = 3;
+  constexpr unsigned int N = 3;
 
   vnl_diag_matrix_fixed<double, N> m1;
   for (unsigned i=0; i<N; i++)

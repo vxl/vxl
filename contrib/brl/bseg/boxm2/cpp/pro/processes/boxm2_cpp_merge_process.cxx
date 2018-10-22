@@ -24,8 +24,8 @@
 
 namespace boxm2_cpp_merge_process_globals
 {
-  const unsigned n_inputs_ =  3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_merge_process_cons(bprb_func_process& pro)

@@ -19,8 +19,8 @@
 //: global variables
 namespace bvxm_update_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 bool bvxm_update_process_cons(bprb_func_process& pro);

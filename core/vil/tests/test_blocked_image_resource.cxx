@@ -21,8 +21,8 @@ static void test_blocked_image_resource()
            << " Testing vil_blocked_image_resource\n"
            << "************************************\n";
   // Test Resource
-  const unsigned int ni = 73;
-  const unsigned int nj = 43;
+  constexpr unsigned int ni = 73;
+  constexpr unsigned int nj = 43;
   vil_image_view<unsigned short> image;
   image.set_size(ni,nj);
   for (unsigned i = 0; i<ni; ++i)

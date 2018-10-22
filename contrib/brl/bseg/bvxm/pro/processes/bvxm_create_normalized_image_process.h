@@ -19,8 +19,8 @@
 //: global variables
 namespace bvxm_create_normalized_image_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 //: sets input and output types for bvxm_create_normalized_image_process

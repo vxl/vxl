@@ -55,7 +55,7 @@ void test_k_nearest_neighbour()
   clsfy_add_all_loaders();
 
   std::vector<vpdfl_axis_gaussian_sampler *> generator(4);//
-  const unsigned nDims = 2;
+  constexpr unsigned nDims  = 2;
   vnl_vector<double> mean0(nDims), var0(nDims), mean1(nDims), var1(nDims), mean2(nDims), var2(nDims), mean3(nDims), var3(nDims);
   vpdfl_axis_gaussian PDF0, PDF1, PDF2, PDF3;
 
@@ -82,8 +82,8 @@ void test_k_nearest_neighbour()
   vnl_random rng;
   rng.reseed(333233);
 
-  const unsigned nSamples = 200;
-  const unsigned nTestSamples = 500;
+  constexpr unsigned nSamples  = 200;
+  constexpr unsigned nTestSamples  = 500;
 
   std::vector<unsigned> labels(nSamples);
   std::vector<unsigned> testLabels(nTestSamples);

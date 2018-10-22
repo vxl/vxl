@@ -294,10 +294,10 @@ bool vgui_win32_dialog_impl::ask()
   const int cyChar = HIWORD(GetDialogBaseUnits());
 
   const int height_sep = 6*cyChar/4; // vertical distance between two adjacent controls.
-  const int width_sep = 2; // horizontal distance between two adjacent controls.
-  const int edit_length = 20;
-  const int browser_length = 40;
-  const int button_length = 12;
+  constexpr int width_sep = 2; // horizontal distance between two adjacent controls.
+  constexpr int edit_length = 20;
+  constexpr int browser_length = 40;
+  constexpr int button_length = 12;
   const int button_height = 6*cyChar/4;
   const int edit_height = 5*cyChar/4;
 

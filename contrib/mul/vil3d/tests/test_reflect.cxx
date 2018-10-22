@@ -18,9 +18,9 @@ static void test_reflect_int()
            << " Testing vil3d_reflect<vxl_int_32>\n"
            << "***********************************\n";
 
-  const unsigned ni = 5;
-  const unsigned nj = 5;
-  const unsigned nk = 5;
+  constexpr unsigned ni  = 5;
+  constexpr unsigned nj  = 5;
+  constexpr unsigned nk  = 5;
 
   vil3d_image_view<vxl_int_32> image(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)
@@ -94,9 +94,9 @@ static void time_reflect()
            << " Timing vil3d_reflect<vxl_int_32>\n"
            << "**********************************\n";
 
-  const unsigned ni = 256;
-  const unsigned nj = 256;
-  const unsigned nk = 256;
+  constexpr unsigned ni  = 256;
+  constexpr unsigned nj  = 256;
+  constexpr unsigned nk  = 256;
 
   vil3d_image_view<vxl_int_32> image(ni, nj, nk);
   for (unsigned k=0; k<nk; ++k)

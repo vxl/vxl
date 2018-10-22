@@ -36,8 +36,8 @@
 
 namespace boxm2_cpp_create_mog_image_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 1;
   std::size_t lthreads[2]={8,8};
 }
 

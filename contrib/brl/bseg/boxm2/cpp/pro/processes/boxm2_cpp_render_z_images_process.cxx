@@ -30,8 +30,8 @@
 
 namespace boxm2_cpp_render_z_images_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_render_z_images_process_cons(bprb_func_process& pro)

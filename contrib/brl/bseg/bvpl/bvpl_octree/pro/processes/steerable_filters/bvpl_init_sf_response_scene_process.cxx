@@ -21,8 +21,8 @@
 //: global variables
 namespace bvpl_init_sf_response_scene_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 

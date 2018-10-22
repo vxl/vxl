@@ -21,8 +21,8 @@ void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_
 
 namespace boxm_replace_const_app_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm_replace_const_app_process_cons(bprb_func_process& pro)

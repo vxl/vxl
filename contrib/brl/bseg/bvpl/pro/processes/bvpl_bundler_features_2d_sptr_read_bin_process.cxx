@@ -22,8 +22,8 @@
 
 namespace bvpl_bundler_features_2d_read_bin_process_globals
 {
-    const unsigned n_inputs_ = 1;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_  = 1;
+    constexpr unsigned n_outputs_  = 1;
 }//end bvpl_bundler_features_2d_read_bin_process_globals
 
 bool bvpl_bundler_features_2d_read_bin_process_cons( bprb_func_process& pro )

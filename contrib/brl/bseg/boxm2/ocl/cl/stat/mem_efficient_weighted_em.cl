@@ -125,7 +125,7 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
   float log_likelihood = 0;
 
   //EM Defines
-  const uint  nmodes    = 3;
+  constexpr uint  nmodes     = 3;
   const float big_sigma = (float) SQRT1_2;      // maximum possible std. dev for set of samples drawn from [0 1]
 
   //init with old mog
@@ -153,7 +153,7 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
 
 
   // run EM algorithm to maximize expected probability of observations
-  const short max_iterations  = 250;
+  constexpr short max_iterations = 250;
   const float TOL = 5e-4f;
   float old_likelihood = 0.0;
 

@@ -726,7 +726,7 @@ SoSeparator* shift_output (SoSeparator* vis, float shift_x, float shift_y, float
 
 void draw_point_test (SoSeparator* root)
 {
-  const int NUMPOINTS = 5000;
+  constexpr int NUMPOINTS = 5000;
   float xyz[NUMPOINTS][3];
 
   for (int i=0; i < NUMPOINTS; i++) {
@@ -910,7 +910,7 @@ void draw_indexed_line_test (SoSeparator* root)
   //          4                                5
   // \endverbatim
 
-  const int numCubeVerts = 8;
+  constexpr int numCubeVerts = 8;
   static float cubeVerts[numCubeVerts][3] =
   {
     { CubeMin[0],  CubeMin[1],  CubeMax[2] },  // vert  0
@@ -936,7 +936,7 @@ void draw_indexed_line_test (SoSeparator* root)
   vertexList->vertex.setValues( 0,  numCubeVerts,  cubeVerts);
   root->addChild(vertexList);
 
-  const int numEdgeIndexes = 36;
+  constexpr int numEdgeIndexes = 36;
   static int32_t cubeIndex[numEdgeIndexes] =
   {
     0, 1, -1,              // -1 terminates the edge.

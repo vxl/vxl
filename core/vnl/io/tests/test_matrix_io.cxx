@@ -13,8 +13,8 @@ void test_matrix_double_io()
            << "Testing vnl_matrix<double> io\n"
            << "*****************************\n";
   //// test constructors, accessors
-  const int m = 10;
-  const int n = 6;
+  constexpr int m = 10;
+  constexpr int n = 6;
   vnl_matrix<double> m_out(m, n), m_in1(m,n),m_in2;
 
   for (int i=0; i<m; i++)

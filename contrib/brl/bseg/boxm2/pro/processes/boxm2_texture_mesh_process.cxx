@@ -39,8 +39,8 @@
 
 namespace boxm2_texture_mesh_process_globals
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 4;
+  constexpr unsigned n_outputs_  = 0;
 
   //struct for passing 3d triangles (couldn't find a 3d triangle in VGL...)
   struct triangle_3d {

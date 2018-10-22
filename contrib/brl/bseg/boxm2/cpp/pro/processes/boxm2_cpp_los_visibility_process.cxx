@@ -24,8 +24,8 @@
 
 namespace boxm2_cpp_los_visibility_process_globals
 {
-    const unsigned n_inputs_  = 9;
-    const unsigned n_outputs_ = 1;
+    constexpr unsigned n_inputs_   = 9;
+    constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_cpp_los_visibility_process_cons(bprb_func_process& pro)

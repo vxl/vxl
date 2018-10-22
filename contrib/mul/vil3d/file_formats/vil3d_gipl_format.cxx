@@ -23,7 +23,7 @@
 #include <vcl_cassert.h>
 
 // GIPL magic number
-const unsigned GIPL_MAGIC1 = 719555000;
+constexpr unsigned GIPL_MAGIC1  = 719555000;
 const unsigned GIPL_MAGIC2 = 4026526128U;
 
 // GIPL header size

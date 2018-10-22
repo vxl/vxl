@@ -14,7 +14,7 @@ static void test_algo_correlate_1d_double()
            << " Testing vil_correlate_1d\n"
            << "**************************\n";
 
-  const int n = 10;
+  constexpr int n = 10;
   std::vector<double> src(n), dest(n+2), kernel(3);
   for (int i=0;i<n;++i) src[i]=i+1;
   for (int i=0;i<3;++i) kernel[i]=i+1;

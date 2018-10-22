@@ -21,8 +21,8 @@
 //: global variables
 namespace bvxm_illum_index_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 1;
 
   unsigned bin_index(std::string map_type, double sun_el, double sun_az,
                      unsigned num_lat, unsigned num_long);

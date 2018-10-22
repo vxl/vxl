@@ -17,8 +17,8 @@
 
 namespace betr_add_event_trigger_process_globals
 {
-  const unsigned n_inputs_  = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 2;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool betr_add_event_trigger_process_cons(bprb_func_process& pro)

@@ -40,8 +40,8 @@
 //: globals variables and functions
 namespace boxm_roi_init_rational_camera_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 3;
 
   // functions
   bool roi_init(std::string const& image_path,

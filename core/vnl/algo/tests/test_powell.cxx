@@ -71,7 +71,7 @@ static void test_quadratic_2d()
            << "---------------------\n";
 
   // No. of dimensions
-  const unsigned n = 2;
+  constexpr unsigned n  = 2;
 
   // Start at (1,...,1)
   {
@@ -110,7 +110,7 @@ static void test_quadratic_2d()
 static void test_quadratic_nd()
 {
   // Max. no. of dimensions
-  const unsigned max_n = 16;
+  constexpr unsigned max_n  = 16;
   for (unsigned n=1; n<max_n; ++n)
   {
     std::cout << "-------------------\n"

@@ -98,7 +98,7 @@ static void test_kd_tree()
   points.resize( M );
   std::vector< std::pair< double, int > > dist_pairs( M );
   int num_tests = 20;
-  const int n=5;
+  constexpr int n = 5;
   vnl_random mz_rand;
 
   // generate points

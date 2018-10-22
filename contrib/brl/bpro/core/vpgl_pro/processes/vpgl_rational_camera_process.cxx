@@ -26,8 +26,8 @@
 //: global variables and functions
 namespace vpgl_rational_cam_img_to_global_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 3;
 }
 //: initialization
 bool vpgl_rational_cam_img_to_global_process_cons(bprb_func_process& pro)

@@ -163,7 +163,7 @@ bool mbl_stats_1d::operator==(const mbl_stats_1d& s) const
 
 void mbl_stats_1d::b_write(vsl_b_ostream& bfs) const
 {
-  const short version = 2;
+  constexpr short version = 2;
   vsl_b_write(bfs,version);
   vsl_b_write(bfs,n_obs_);
   if (n_obs_==0) return;

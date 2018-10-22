@@ -49,7 +49,7 @@ vnl_vector<double> arp_vars(const std::vector<vnl_vector<double> >& v)
 
 void test_ar_process()
 {
-  const unsigned int SIZE = 100;
+  constexpr unsigned int SIZE = 100;
   std::cout << "************************\n"
            << " Testing mbl_ar_process\n"
            << "************************\n";

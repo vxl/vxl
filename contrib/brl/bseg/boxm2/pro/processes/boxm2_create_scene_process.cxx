@@ -20,8 +20,8 @@
 
 namespace boxm2_create_scene_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_create_scene_process_cons(bprb_func_process& pro)
@@ -100,8 +100,8 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
 //  lvcs is used to figure out the local origins of the blocks
 namespace boxm2_create_scene_and_blocks_process_globals
 {
-  const unsigned n_inputs_ = 17;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 17;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_create_scene_and_blocks_process_cons(bprb_func_process& pro)
@@ -268,8 +268,8 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
 //  The polygon stored in kml should follow counterclockwise
 namespace boxm2_create_poly_scene_and_blocks_process_globals
 {
-  const unsigned n_inputs_ = 13;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 13;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_create_poly_scene_and_blocks_process_cons(bprb_func_process& pro)
@@ -612,8 +612,8 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
 //  lvcs is used to figure out the local origins of the blocks
 namespace boxm2_distribute_scene_blocks_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_distribute_scene_blocks_process_cons(bprb_func_process& pro)
@@ -751,8 +751,8 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
 //: A process to prune the blocks which has never been refined, i.e. with the default alpha size
 namespace boxm2_prune_scene_blocks_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_prune_scene_blocks_process_cons(bprb_func_process& pro)
@@ -850,8 +850,8 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
 //: A process to prune the blocks which are below the ground surface defined by ASTER DEM
 namespace boxm2_prune_scene_blocks_by_dem_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 1;
 
   //: find the maximum and minimum height from dem images given a region
   bool find_min_max_height(vgl_point_2d<double> const& lower_left, vgl_point_2d<double> const& upper_right,
@@ -1218,8 +1218,8 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
 //: e.g: rural regon like mountain can be low resolution but urban region requires high resolution
 namespace boxm2_change_scene_res_by_geo_cover_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 1;
 
   // function that modify the block metadata accordingly
   void change_block_metadata(boxm2_block_metadata& md, volm_osm_category_io::geo_cover_values const& land_cover, int const& refine_coef)

@@ -1435,7 +1435,7 @@ bool brip_vil1_float_ops::
 resize_to_power_of_two(vil1_memory_image_of<float> const & input,
                        vil1_memory_image_of<float>& output)
 {
-  const int max_exp = 13; //we wouldn't want to have such large images in memory
+  constexpr int max_exp = 13; //we wouldn't want to have such large images in memory
   const int w = input.width(), h = input.height();
   int prodw = 1, prodh = 1;
   //Find power of two width

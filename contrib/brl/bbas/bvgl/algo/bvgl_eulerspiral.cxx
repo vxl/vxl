@@ -20,7 +20,7 @@
 
 
 //some defines for Euler-spiral optimization
-const int bvgl_eulerspiral_max_gradient_descent_iter = 50000;  // maxinum number of iterations for gradient descent
+constexpr int bvgl_eulerspiral_max_gradient_descent_iter = 50000;  // maxinum number of iterations for gradient descent
 const double bvgl_eulerspiral_e_error = 1e-5;   // epsilon for error
 const double bvgl_eulerspiral_e_gamma = 1e-8;   // epsilon for gamma
 const double bvgl_eulerspiral_e_k = 1e-4;   //Epsilon for curvature

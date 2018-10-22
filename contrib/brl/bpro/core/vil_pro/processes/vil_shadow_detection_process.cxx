@@ -13,8 +13,8 @@
 
 namespace vil_shadow_detection_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 }
 //: Init function
 bool vil_shadow_detection_process_cons(bprb_func_process& pro)

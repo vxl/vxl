@@ -13,8 +13,8 @@
 //: global variables
 namespace bvxm_report_statistics_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bvxm_report_statistics_point_cloud_process_cons(bprb_func_process& pro);

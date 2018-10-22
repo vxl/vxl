@@ -26,8 +26,8 @@
 
 namespace bstm_cpp_change_btw_frames_process_globals
 {
-  const unsigned n_inputs_ =  4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 
   typedef unsigned char uchar;
   typedef unsigned short ushort;

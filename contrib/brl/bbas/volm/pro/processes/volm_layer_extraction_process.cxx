@@ -26,8 +26,8 @@
 
 namespace volm_layer_extraction_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_   = 8;
+  constexpr unsigned n_outputs_  = 4;
 }
 
 bool volm_layer_extraction_process_cons(bprb_func_process& pro)
@@ -221,8 +221,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
 //: process to generate various building layers from LandCover images and height images
 namespace volm_building_layer_extraction_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_   = 7;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 bool volm_building_layer_extraction_process_cons(bprb_func_process& pro)

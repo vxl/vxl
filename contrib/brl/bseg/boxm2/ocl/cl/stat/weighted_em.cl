@@ -108,7 +108,7 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
                         float           min_sigma )
 {
   //EM Defines
-  const uint  nmodes    = 3;
+  constexpr uint  nmodes     = 3;
   const float min_var   = min_sigma*min_sigma;
   const float big_sigma = (float) SQRT1_2;      // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var   = big_sigma * big_sigma;
@@ -151,7 +151,7 @@ float8 weighted_mog3_em(SAMPLE_TYPE*    obs,     //samples from MOG3 distributio
   mode_probs[2] = mode2_probs;
 
   // run EM algorithm to maximize expected probability of observations
-  const unsigned int max_iterations              = 50;
+  constexpr unsigned int max_iterations = 50;
   const float        max_converged_weight_change = 1e-3f;
   for (uint i=0; i<max_iterations; ++i) {
     float max_weight_change = 0.0f;

@@ -59,8 +59,8 @@ bool vil_crop_image_process(bprb_func_process& pro)
 //: A crop process that takes vil_image_resource as input to crop the image
 namespace vil_crop_image_res_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_   = 5;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool vil_crop_image_res_process_cons(bprb_func_process& pro)

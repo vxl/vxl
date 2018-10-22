@@ -14,9 +14,9 @@
 
 static void test_optimize_camera()
 {
-  const double max_t_err = 100.0; // maximum translation error to introduce
+  constexpr double max_t_err = 100.0; // maximum translation error to introduce
   const double max_r_err = vnl_math::pi/2; // maximum rotation error to introduce (radians)
-  const double max_p_err = 0.5; // maximum image error to introduce (pixels)
+  constexpr double max_p_err = 0.5; // maximum image error to introduce (pixels)
 
   std::vector<vgl_homg_point_3d<double> > world;
   world.push_back(vgl_homg_point_3d<double>(1.0, 0.0, 0.0));

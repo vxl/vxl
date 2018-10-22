@@ -9,8 +9,8 @@
 
 namespace vil_image_normalise_process_globals
 {
-    const unsigned int n_inputs_ = 1;
-    const unsigned int n_outputs_ = 0;
+    constexpr unsigned int n_inputs_ = 1;
+    constexpr unsigned int n_outputs_ = 0;
 }
 
 bool vil_image_normalise_process_cons(bprb_func_process& pro)

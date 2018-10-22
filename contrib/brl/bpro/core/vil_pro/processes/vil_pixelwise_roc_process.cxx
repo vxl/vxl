@@ -87,7 +87,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 10000;
+  constexpr unsigned int numPoints = 10000;
   bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
@@ -265,8 +265,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 //  If negative ground truth image is not given, then the negative ground truth are obtained from zero pixels in positive ground truth image
 namespace vil_pixelwise_roc_process2_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 7;
+  constexpr unsigned n_inputs_   = 5;
+  constexpr unsigned n_outputs_  = 7;
 }
 
 bool vil_pixelwise_roc_process2_cons(bprb_func_process& pro)

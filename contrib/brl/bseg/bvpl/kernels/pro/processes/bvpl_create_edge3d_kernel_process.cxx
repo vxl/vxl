@@ -18,8 +18,8 @@
 namespace bvpl_create_edge3d_kernel_process_globals
 {
   //the specs of this kernel are specified as parameters
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

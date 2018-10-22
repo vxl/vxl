@@ -21,8 +21,8 @@
 #include <vgl/vgl_intersection.h>
 namespace bstm_scene_statistics_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 #define MAX_CELLS_ 585

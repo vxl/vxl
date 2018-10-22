@@ -26,8 +26,8 @@
 
 namespace bstm_cpp_label_bb_process_globals
 {
-  const unsigned n_inputs_ =  11;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 11;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bstm_cpp_label_bb_process_cons(bprb_func_process& pro)

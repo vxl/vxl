@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_batch_synoptic_phongs_process_globals
 {
-  const unsigned n_inputs_ =  6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 0;
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {
     std::vector<std::string> src_paths;

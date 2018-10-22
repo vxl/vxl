@@ -41,7 +41,7 @@ vnl_svd_economy<real_t>::vnl_svd_economy( vnl_matrix<real_t> const& M ) :
   // Call Linpack SVD
   long ldu = 0;
   long info = 0;
-  const long job = 01; // no U, n svs in V (i.e. super-economy size)
+  constexpr long job  = 01; // no U, n svs in V (i.e. super-economy size)
   vnl_linpack_svdc_economy((real_t*)X, &m_, &m_, &n_,
                            wspace.data_block(),
                            espace.data_block(),

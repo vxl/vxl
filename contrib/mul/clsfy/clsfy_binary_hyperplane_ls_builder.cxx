@@ -133,7 +133,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
 
 void clsfy_binary_hyperplane_ls_builder::b_write(vsl_b_ostream &bfs) const
 {
-  const short version_no=1;
+  constexpr short version_no = 1;
   vsl_b_write(bfs, version_no);
 }
 

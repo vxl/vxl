@@ -21,8 +21,8 @@
 //: global variables
 namespace bvpl_compute_gauss_gradients_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

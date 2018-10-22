@@ -28,8 +28,8 @@
 
 namespace boxm2_cpp_compute_derivative_process_globals
 {
-  const unsigned n_inputs_ =  10;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_compute_derivative_process_cons(bprb_func_process& pro)

@@ -33,7 +33,7 @@ void msm_aligner::print_summary(std::ostream& os) const
   os<<" { } ";
 }
 
-const static short version_no = 1;
+constexpr static short version_no  = 1;
 
 //: Save class to binary file stream
 void msm_aligner::b_write(vsl_b_ostream& bfs) const

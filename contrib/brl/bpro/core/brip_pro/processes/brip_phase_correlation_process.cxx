@@ -15,8 +15,8 @@
 //: global variables
 namespace brip_phase_correlation_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_   = 5;
+  constexpr unsigned n_outputs_  = 4;
 }
 
 //: constructor

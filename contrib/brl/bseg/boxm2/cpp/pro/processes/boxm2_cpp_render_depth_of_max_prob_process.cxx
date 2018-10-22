@@ -25,8 +25,8 @@
 
 namespace boxm2_cpp_render_depth_of_max_prob_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 3;
   std::size_t lthreads[2]={8,8};
 }
 

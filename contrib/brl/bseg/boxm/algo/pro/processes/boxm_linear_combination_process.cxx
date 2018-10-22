@@ -15,8 +15,8 @@
 //:global variables
 namespace boxm_linear_combination_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 

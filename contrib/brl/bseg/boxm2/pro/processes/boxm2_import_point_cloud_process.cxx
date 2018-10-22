@@ -50,8 +50,8 @@ void readPointsFromXYZ(const std::string& filename, std::vector<vgl_point_3d<dou
 
 namespace boxm2_import_point_cloud_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_import_point_cloud_process_cons(bprb_func_process& pro)

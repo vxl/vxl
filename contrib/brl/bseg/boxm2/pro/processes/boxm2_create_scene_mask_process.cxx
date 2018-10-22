@@ -16,8 +16,8 @@
 
 namespace boxm2_create_scene_mask_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 void fill_in(vil_image_view<vxl_byte>* mask, vgl_polygon<double>& poly) {

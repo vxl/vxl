@@ -17,8 +17,8 @@
 
 namespace boxm2_blob_change_detection_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 1;
 
   const float EPSILON = .02f;
 }

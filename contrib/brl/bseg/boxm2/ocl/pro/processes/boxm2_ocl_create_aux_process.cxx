@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_create_aux_process_globals
 {
-  const unsigned n_inputs_  = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 7;
+  constexpr unsigned n_outputs_  = 0;
   enum {
     UPDATE_PRE_INF        = 0,
     UPDATE_PREVISPOST    = 1,

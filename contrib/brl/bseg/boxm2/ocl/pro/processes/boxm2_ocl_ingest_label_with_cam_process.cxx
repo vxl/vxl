@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_ingest_label_with_cam_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 6;
+  constexpr unsigned n_outputs_  = 0;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {

@@ -27,8 +27,8 @@
 //:global variables
 namespace boxm2_ocl_kernel_filter_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 
   bool compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts);
 

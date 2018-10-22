@@ -26,8 +26,8 @@
 //: globals variables and functions
 namespace bvxm_scene_box_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 6;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 6;
 }
 
 //: set input and output types

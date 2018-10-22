@@ -17,8 +17,8 @@
 //: global variables
 namespace brip_blobwise_mutual_info_process_globals
 {
-  const unsigned n_inputs_  = 3;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_   = 3;
+  constexpr unsigned n_outputs_  = 1;
 
 
   // private helper method prepares an input image to be processed by update

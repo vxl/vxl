@@ -20,8 +20,8 @@
 
 namespace boxm2_ocl_update_color_process_globals
 {
-  const unsigned int n_inputs_  = 8;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 8;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_color_process_cons(bprb_func_process& pro)
@@ -72,7 +72,7 @@ bool boxm2_ocl_update_color_process(bprb_func_process& pro)
   bool       updateAlpha   = pro.get_input<bool>(argIdx++);
 
   //make sure this image small enough (or else carve it into image pieces)
-  const std::size_t MAX_PIXELS = 16777216;
+  constexpr std::size_t MAX_PIXELS  = 16777216;
   if (img->ni()*img->nj() > MAX_PIXELS) {
     std::size_t sni = RoundUp(img->ni(), 16);
     std::size_t snj = RoundUp(img->nj(), 16);

@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_render_expected_depth_region_process_globals
 {
-  const unsigned n_inputs_ = 10;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 10;
+  constexpr unsigned n_outputs_  = 3;
   std::size_t local_threads[2]={8,8};
   void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
   {

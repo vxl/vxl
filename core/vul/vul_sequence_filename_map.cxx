@@ -20,7 +20,7 @@
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_file_iterator.h>
 
-const bool debug = 0;
+constexpr bool debug  = 0;
 
 static struct
 {

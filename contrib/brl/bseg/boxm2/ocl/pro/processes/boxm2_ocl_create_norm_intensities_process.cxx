@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_create_norm_intensities_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 6;
+  constexpr unsigned n_outputs_  = 0;
   enum {
     UPDATE_CREATE_NORM        = 0,
     CONVERT_NOBS_INT_SHORT    = 1

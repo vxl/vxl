@@ -25,7 +25,7 @@ void
 test_complexify_instance(const ValueType &re, const ValueType &im)
 {
 
-  const unsigned int length = 2;
+  constexpr unsigned int length = 2;
 
   std::cout << "##################" << std::endl;
   std::cout << "Testing vnl_vector" << std::endl;

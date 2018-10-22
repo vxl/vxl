@@ -31,8 +31,8 @@
 namespace boxm_compute_scene_difference_process_globals
 {
   //this process takes no outputs
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 //: sets input and output types

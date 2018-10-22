@@ -296,7 +296,7 @@ get_label( std::vector<std::string>& labels) const
 {
   assert( !multi_stage_ );
 
-  const unsigned stage = 0;
+  constexpr unsigned stage  = 0;
   get_label( stage, labels );
 }
 

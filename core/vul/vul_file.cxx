@@ -32,7 +32,7 @@
 
 std::string vul_file::get_cwd()
 {
-  const int BIG = 65536;
+  constexpr int BIG = 65536;
   char buf[BIG];
   if (getcwd(buf,BIG-1))
     return buf;
@@ -290,7 +290,7 @@ std::string vul_file::expand_tilde(char const* vul_filename)
 std::wstring
 vul_file::get_cwd(wchar_t* /*dummy*/)
 {
-  const int BIG = 65536;
+  constexpr int BIG = 65536;
   wchar_t buf[BIG];
   buf[0] = L'\0';
   _wgetcwd(buf,BIG-1);

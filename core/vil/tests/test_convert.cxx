@@ -159,7 +159,7 @@ static void test_convert_stretch_range_limited()
 
 static void test_convert_to_n_planes()
 {
-  const unsigned n=10;
+  constexpr unsigned n = 10;
   std::cout<<"testing test_convert_to_n_planes(src,dest):\n";
   vil_image_view<float> f_image(n,n,2);
   vil_image_view<float> f_image_expected(n,n,3);

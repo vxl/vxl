@@ -22,8 +22,8 @@
 #include <vnl/vnl_float_4.h>
 namespace bvpl_convert_direction_to_hue_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

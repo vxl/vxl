@@ -147,7 +147,7 @@ vgl_point_3d<double> boct_loc_code<T>::get_point(short max_level)
 template <class T>
 void vsl_b_write(vsl_b_ostream & os, const boct_loc_code<T>& c)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
 
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, c.x_loc_);

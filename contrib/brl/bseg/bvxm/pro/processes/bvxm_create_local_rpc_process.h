@@ -24,8 +24,8 @@
 //: global variables
 namespace bvxm_create_local_rpc_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 //: initialize input and output types

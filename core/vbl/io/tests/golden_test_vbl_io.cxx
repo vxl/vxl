@@ -56,8 +56,8 @@ static void golden_test_vbl_io(bool save_file)
 
 
   // 2d Array
-  const int array_rows = 8;
-  const int array_cols = 6;
+  constexpr int array_rows = 8;
+  constexpr int array_cols = 6;
   vbl_array_2d<int> a2_out(array_rows, array_cols), a2_in;
 
   for (int i=0; i<array_rows; i++)
@@ -68,9 +68,9 @@ static void golden_test_vbl_io(bool save_file)
 
 
   // 3d Array
-  const int array_row1 = 8;
-  const int array_row2 = 7;
-  const int array_row3 = 9;
+  constexpr int array_row1 = 8;
+  constexpr int array_row2 = 7;
+  constexpr int array_row3 = 9;
   vbl_array_3d<int> a3_out(array_row1, array_row2, array_row3), a3_in;
   for (int i=0; i<array_row1; i++)
     for (int j=0; j< array_row2; j++)

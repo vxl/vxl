@@ -27,8 +27,8 @@
 
 namespace boxm2_ocl_update_parents_alpha_process_globals
 {
-    const unsigned n_inputs_ = 3;
-    const unsigned n_outputs_ = 0;
+    constexpr unsigned n_inputs_  = 3;
+    constexpr unsigned n_outputs_  = 0;
     void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...

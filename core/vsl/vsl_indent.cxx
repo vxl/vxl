@@ -11,7 +11,7 @@
 #include "vsl_indent.h"
 #include <vcl_compiler.h>
 
-const int default_tab = 2;
+constexpr int default_tab = 2;
 
 typedef std::pair<int,int> indent_data_type;
 

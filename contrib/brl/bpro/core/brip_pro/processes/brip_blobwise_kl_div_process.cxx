@@ -16,8 +16,8 @@
 //: global variables
 namespace brip_blobwise_kl_div_process_globals
 {
-  const unsigned n_inputs_  = 4;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_   = 4;
+  constexpr unsigned n_outputs_  = 2;
 
   // private helper method prepares an input image to be processed by update
   vil_image_view<float>* prepare_input_image(vil_image_view_base_sptr loaded_image) {

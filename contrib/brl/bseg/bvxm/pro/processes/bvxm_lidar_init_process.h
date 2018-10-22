@@ -39,8 +39,8 @@
 //: global variables/functions
 namespace bvxm_lidar_init_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 4;
 
   // parameters identifying strings
   const std::string param_mask_thresh_ = "mask_thresh";

@@ -88,8 +88,8 @@ bool bocl_manager<T>::initialize_cl()
   //////////////////////////////////////////////////////////////////////////////
   // Get devices from platforms
   //////////////////////////////////////////////////////////////////////////////
-  const std::size_t MAX_GPUS = 16;
-  const std::size_t MAX_CPUS = 16;
+  constexpr std::size_t MAX_GPUS  = 16;
+  constexpr std::size_t MAX_CPUS  = 16;
   char platform_name[256];
   std::size_t ret_size;
 

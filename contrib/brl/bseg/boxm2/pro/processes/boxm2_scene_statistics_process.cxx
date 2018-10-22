@@ -21,8 +21,8 @@
 #include <vgl/vgl_intersection.h>
 namespace boxm2_scene_statistics_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 #define MAX_CELLS_ 585

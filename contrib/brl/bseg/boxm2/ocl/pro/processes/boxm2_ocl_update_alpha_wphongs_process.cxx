@@ -30,8 +30,8 @@
 
 namespace boxm2_ocl_update_alpha_wphongs_process_globals
 {
-  const unsigned n_inputs_  = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 6;
+  constexpr unsigned n_outputs_  = 0;
   enum {
       UPDATE_SEGLEN = 0,
       UPDATE_PREINF = 1,

@@ -18,7 +18,7 @@ rrel_quad_est( const std::vector< vgl_point_2d<double> > & from_pts,
 {
   assert( from_pts.size() == to_pts.size() );
 
-  const unsigned dim  = 2;
+  constexpr unsigned dim   = 2;
   const unsigned size = from_pts.size();
 
   // convert from vector to vnl_vector type

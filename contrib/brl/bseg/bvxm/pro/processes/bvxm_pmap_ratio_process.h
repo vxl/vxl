@@ -26,8 +26,8 @@
 //: globals variables/functions
 namespace bvxm_pmap_ratio_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 
   // functions
   bool compute(std::string pmap1,std::string pmap2, std::string path);

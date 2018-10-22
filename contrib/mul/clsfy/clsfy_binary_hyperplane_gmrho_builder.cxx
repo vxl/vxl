@@ -156,7 +156,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     //To avoid local minima perform deterministic annealing starting from a large initial sigma
     //Set initial kappa so that everything is an inlier
     double kappa = 5.0;
-    const double alpha_anneal=0.75;
+    constexpr double alpha_anneal = 0.75;
     //Num of iterations to reduce back to 10% on top of required sigma
     int N = 1+int(std::log(1.1/kappa)/std::log(alpha_anneal));
     if (N<1) N=1;
@@ -265,7 +265,7 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
 
 void clsfy_binary_hyperplane_gmrho_builder::b_write(vsl_b_ostream &bfs) const
 {
-    const int version_no=1;
+    constexpr int version_no = 1;
     vsl_b_write(bfs, version_no);
     clsfy_binary_hyperplane_ls_builder::b_write(bfs);
 }

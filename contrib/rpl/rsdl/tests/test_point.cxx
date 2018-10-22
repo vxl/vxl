@@ -12,8 +12,8 @@ static inline bool close( double x, double y ) { return vnl_math::abs(x-y) < 1.0
 
 static void test_point()
 {
-  const unsigned int Nc = 2;
-  const unsigned int Na = 3;
+  constexpr unsigned int Nc = 2;
+  constexpr unsigned int Na = 3;
 
   testlib_test_begin( "default ctor, num_cartesian and num_angular" );
   {

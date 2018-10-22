@@ -305,8 +305,8 @@ void test_diffusion_solver_loop_b(unsigned n)
 
 void test_diff_best_xy_line()
 {
-    const unsigned NSTAGES=5;
-    const unsigned NPOINTS_PER_STAGE=10;
+    constexpr unsigned NSTAGES = 5;
+    constexpr unsigned NPOINTS_PER_STAGE = 10;
     std::cout<<"==== test test_diffusion_solver best y line ====="<<std::endl;
 
     unsigned n=NSTAGES;
@@ -456,14 +456,14 @@ void test_diff_best_xy_line()
 
 void test_diff_5x5grid_easy()
 {
-    const unsigned NSTAGES=5;
-    const unsigned NPOINTS_PER_NODE=10;
+    constexpr unsigned NSTAGES = 5;
+    constexpr unsigned NPOINTS_PER_NODE = 10;
     std::cout<<"==== test test_diffusion_solver 5x5 grid ====="<<std::endl;
 
     unsigned n=NSTAGES*NSTAGES;
     // Generate linked list
     std::vector<mmn_arc> arcs;
-    const double DG=100.0;
+    constexpr double DG = 100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
         for (unsigned ix=0;ix<NSTAGES;++ix)
@@ -675,14 +675,14 @@ void test_diff_5x5grid_easy()
 
 void test_diff_5x5grid_hard()
 {
-    const unsigned NSTAGES=5;
-    const unsigned NPOINTS_PER_NODE=10;
+    constexpr unsigned NSTAGES = 5;
+    constexpr unsigned NPOINTS_PER_NODE = 10;
     std::cout<<"==== test test_diffusion_solver 5x5 grid ====="<<std::endl;
 
     unsigned n=NSTAGES*NSTAGES;
     // Generate linked list
     std::vector<mmn_arc> arcs;
-    const double DG=100.0;
+    constexpr double DG = 100.0;
     for (unsigned iy=0;iy<NSTAGES;++iy)
     {
         for (unsigned ix=0;ix<NSTAGES;++ix)

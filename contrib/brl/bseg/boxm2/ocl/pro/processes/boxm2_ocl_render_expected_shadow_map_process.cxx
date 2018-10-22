@@ -31,8 +31,8 @@
 
 namespace boxm2_ocl_render_expected_shadow_map_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool boxm2_ocl_render_expected_shadow_map_process_cons(bprb_func_process& pro)

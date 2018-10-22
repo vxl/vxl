@@ -29,7 +29,7 @@ void brip_blobwise_mutual_info (const vil_image_view<T>& img1,
 {
 #if 0
   //pixel gradient weight must be higher than this
-  const T minWeight = .1;
+  constexpr T minWeight  = .1;
 #endif
   //blob region is just a vector of vil_chords (rows in image)
   bil_blob_finder finder(mask);

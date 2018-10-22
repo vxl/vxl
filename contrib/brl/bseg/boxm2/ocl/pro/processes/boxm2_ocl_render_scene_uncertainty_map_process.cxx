@@ -29,8 +29,8 @@
 
 namespace boxm2_ocl_render_scene_uncertainty_map_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 bool boxm2_ocl_render_scene_uncertainty_map_process_cons(bprb_func_process& pro)

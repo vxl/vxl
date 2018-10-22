@@ -14,8 +14,8 @@
 //: global variables
 namespace bvpl_create_gauss3d_x_kernel_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

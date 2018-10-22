@@ -23,8 +23,8 @@
 #include <vil1/vil1_convolve.h>
 #include <vil1/vil1_image_as.h>
 
-const unsigned NI=256;
-const unsigned NJ=256;
+constexpr unsigned NI = 256;
+constexpr unsigned NJ = 256;
 
 template <class T>
 double fill(vil_image_view<T>& image, int n_loops, bool print)

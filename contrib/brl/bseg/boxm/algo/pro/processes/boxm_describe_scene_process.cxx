@@ -21,8 +21,8 @@
 
 namespace boxm_describe_scene_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 4;
 }
 
 bool boxm_describe_scene_process_cons(bprb_func_process& pro)

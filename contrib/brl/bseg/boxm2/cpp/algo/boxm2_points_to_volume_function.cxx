@@ -175,7 +175,7 @@ void boxm2_points_to_volume::refine_tree(boct_bit_tree& tree,
                                          bvgl_triangle_3d<double>& tri,
                                          std::vector<float>& alpha)
 {
-  const int maxCell = 9;
+  constexpr int maxCell = 9;
   double blockLen = treeBox.width();
   boct_bit_tree orig(tree);
   unsigned int origSize = tree.num_cells();

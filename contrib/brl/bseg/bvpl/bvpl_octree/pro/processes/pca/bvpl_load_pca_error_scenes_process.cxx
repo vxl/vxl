@@ -13,8 +13,8 @@
 //:global variables
 namespace bvpl_load_pca_error_scenes_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ =1;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

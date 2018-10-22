@@ -21,8 +21,8 @@
 // global variables/functions for bvxm_atmospheric_corr_process_globals
 namespace bvxm_atmospheric_corr_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 
   // other global variables
   unsigned ni_= 0;

@@ -22,8 +22,8 @@
 
 namespace boxm_save_scene_raw_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm_save_scene_raw_process_cons(bprb_func_process& pro)

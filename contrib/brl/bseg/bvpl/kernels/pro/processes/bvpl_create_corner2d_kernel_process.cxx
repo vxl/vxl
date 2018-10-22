@@ -18,8 +18,8 @@
 
 namespace bvpl_create_corner2d_kernel_process_globals
 {
-  const unsigned n_inputs_ = 0;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 0;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 

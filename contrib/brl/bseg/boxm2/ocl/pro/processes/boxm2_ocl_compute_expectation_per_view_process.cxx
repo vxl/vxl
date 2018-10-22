@@ -39,8 +39,8 @@
 
 namespace boxm2_ocl_compute_expectation_per_view_process_globals
 {
-  const unsigned n_inputs_  = 8;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_   = 8;
+  constexpr unsigned n_outputs_  = 2;
   enum {
     COMPUTE_SEGLEN = 0,
     COMPUTE_EXPSUM = 1,

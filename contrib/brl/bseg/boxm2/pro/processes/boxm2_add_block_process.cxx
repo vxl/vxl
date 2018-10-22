@@ -14,8 +14,8 @@
 
 namespace boxm2_add_block_process_globals
 {
-  const unsigned n_inputs_  = 15;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 15;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_add_block_process_cons(bprb_func_process& pro)

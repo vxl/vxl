@@ -24,7 +24,7 @@
 #include <mvl/HomgOperator2D.h>
 #include <mvl/FMatrixPlanar.h>
 
-const int FMPlanarNonLinFun_nparams = 9;
+constexpr int FMPlanarNonLinFun_nparams = 9;
 
 //-----------------------------------------------------------------------------
 //: Constructor

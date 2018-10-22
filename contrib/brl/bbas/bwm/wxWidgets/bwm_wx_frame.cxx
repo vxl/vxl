@@ -29,7 +29,7 @@
 #include <vgui/vgui_grid_tableau.h>
 #include <vgui/impl/wx/vgui_wx_menu.h>
 
-const int ID_TOOLBAR = 500;
+constexpr int ID_TOOLBAR = 500;
 
 
 //-------------------------------------------------------------------------

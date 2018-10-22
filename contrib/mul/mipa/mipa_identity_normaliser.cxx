@@ -32,7 +32,7 @@ void mipa_identity_normaliser::print_summary(std::ostream& os) const
     os<<is_a()<<'\n';
 }
 
-const static short version_no = 1;
+constexpr static short version_no  = 1;
 
 //: Save class to binary file stream
 void mipa_identity_normaliser::b_write(vsl_b_ostream& bfs) const

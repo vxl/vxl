@@ -26,8 +26,8 @@
 
 namespace boxm2_cpp_cast_3d_point_hypothesis_process_globals
 {
-  const unsigned n_inputs_ = 7;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 7;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_cast_3d_point_hypothesis_process_cons(bprb_func_process& pro)
@@ -163,8 +163,8 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
 
 namespace boxm2_cpp_cast_3d_point_hypothesis_process2_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm2_cpp_cast_3d_point_hypothesis_process2_cons(bprb_func_process& pro)

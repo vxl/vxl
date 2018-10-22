@@ -16,7 +16,7 @@
 template<class T>
 void vsl_b_write(vsl_b_ostream & os, const vbl_array_3d<T> &p)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
 
   typedef typename vbl_array_3d<T>::size_type size_type;

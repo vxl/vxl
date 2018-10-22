@@ -37,8 +37,8 @@
 
 namespace boxm2_export_textured_mesh_process_globals
 {
-  const unsigned n_inputs_ = 6;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 6;
+  constexpr unsigned n_outputs_  = 0;
 
   //helper texture map methods
   void boxm2_texture_mesh_from_imgs(std::string im_dir,

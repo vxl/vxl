@@ -24,8 +24,8 @@
 
 namespace betr_set_event_trigger_data_multi_ref_process_globals
 {
-  const unsigned n_inputs_  = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 5;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool betr_set_event_trigger_data_multi_ref_process_cons(bprb_func_process& pro)

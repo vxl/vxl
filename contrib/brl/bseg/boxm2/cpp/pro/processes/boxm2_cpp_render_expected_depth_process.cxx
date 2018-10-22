@@ -25,8 +25,8 @@
 
 namespace boxm2_cpp_render_expected_depth_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 1;
   std::size_t lthreads[2]={8,8};
 }
 

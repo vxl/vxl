@@ -26,8 +26,8 @@
 
 namespace boxm_render_expected_edge_vrml_process_globals
 {
-  const unsigned n_inputs_ = 4;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 4;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool boxm_render_expected_edge_vrml_process_cons(bprb_func_process& pro)

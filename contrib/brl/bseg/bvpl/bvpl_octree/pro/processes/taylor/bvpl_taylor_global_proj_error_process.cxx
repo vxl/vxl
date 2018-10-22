@@ -14,8 +14,8 @@
 //:global variables
 namespace bvpl_taylor_global_proj_error_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 

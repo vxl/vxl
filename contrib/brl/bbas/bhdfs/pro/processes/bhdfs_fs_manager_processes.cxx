@@ -12,8 +12,8 @@
 
 namespace bhdfs_create_fs_manager_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool bhdfs_create_fs_manager_process_cons(bprb_func_process& pro)
@@ -59,8 +59,8 @@ bool bhdfs_create_fs_manager_process(bprb_func_process& pro)
 
 namespace bhdfs_fs_create_dir_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bhdfs_fs_create_dir_process_cons(bprb_func_process& pro)
@@ -102,8 +102,8 @@ bool bhdfs_fs_create_dir_process(bprb_func_process& pro)
 
 namespace bhdfs_fs_copy_file_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bhdfs_fs_copy_file_process_cons(bprb_func_process& pro)
@@ -143,8 +143,8 @@ bool bhdfs_fs_copy_file_process(bprb_func_process& pro)
 
 namespace bhdfs_fs_copy_files_to_local_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 0;
 }
 
 bool bhdfs_fs_copy_files_to_local_process_cons(bprb_func_process& pro)
@@ -201,8 +201,8 @@ bool bhdfs_fs_copy_files_to_local_process(bprb_func_process& pro)
 
 namespace bhdfs_fs_get_working_dir_process_globals
 {
-  const unsigned n_inputs_ = 0;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 0;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool bhdfs_fs_get_working_dir_process_cons(bprb_func_process& pro)

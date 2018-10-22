@@ -337,7 +337,7 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
   vnl_matrix<double> Hoo(3,3,0.0);
   vnl_matrix<double> Hot(3,3,0.0);
 
-  const unsigned m = 3;
+  constexpr unsigned m  = 3;
 
   vnl_vector<double> from_pt( m );
   vnl_vector<double> to_pt( m );

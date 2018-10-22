@@ -36,8 +36,8 @@
 
 namespace boxm2_ocl_update_usingQ_process_globals
 {
-  const unsigned int n_inputs_  = 5;
-  const unsigned int n_outputs_ = 0;
+  constexpr unsigned int n_inputs_ = 5;
+  constexpr unsigned int n_outputs_ = 0;
 }
 
 bool boxm2_ocl_update_usingQ_process_cons(bprb_func_process& pro)

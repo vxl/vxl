@@ -14,8 +14,8 @@
 #include <bpgl/bpgl_camera_utils.h>
 namespace boxm2_scene_from_box_cams_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 0;
 }
 bool boxm2_scene_from_box_cams_process_cons(bprb_func_process& pro)
 {

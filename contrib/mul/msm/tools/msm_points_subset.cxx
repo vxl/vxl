@@ -34,7 +34,7 @@ bool load_index(const char* path, size_t n_points, std::vector<int>& index)
     return false;
   }
 
-  const int MAXLEN=255;
+  constexpr int MAXLEN = 255;
   char comment[MAXLEN];
 
   ifs>>std::ws;

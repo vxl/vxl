@@ -46,7 +46,7 @@ vnl_io_nonlinear_minimizer* vnl_io_nonlinear_minimizer::clone() const
 //: Binary save self to stream.
 void vsl_b_write(vsl_b_ostream & os, const vnl_nonlinear_minimizer & p)
 {
-  const short io_version_no = 1;
+  constexpr short io_version_no = 1;
   vsl_b_write(os, io_version_no);
   vsl_b_write(os, p.get_f_tolerance());
   vsl_b_write(os, p.get_x_tolerance());

@@ -27,8 +27,8 @@
 
 namespace bstm_ocl_render_expected_image_process_globals
 {
-  const unsigned n_inputs_ = 8;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_  = 8;
+  constexpr unsigned n_outputs_  = 4;
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;

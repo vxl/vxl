@@ -35,8 +35,8 @@
 
 namespace volm_ndsm_generation_process_globals
 {
-  const unsigned n_inputs_  = 11;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_   = 11;
+  constexpr unsigned n_outputs_  = 4;
 }
 
 bool volm_ndsm_generation_process_cons(bprb_func_process& pro)

@@ -35,8 +35,8 @@
 
 namespace boxm2_dem_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 bool boxm2_dem_to_xyz_process_cons(bprb_func_process& pro)
@@ -235,8 +235,8 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
 
 namespace boxm2_shadow_heights_to_xyz_process_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 bool boxm2_shadow_heights_to_xyz_process_cons(bprb_func_process& pro)
@@ -354,8 +354,8 @@ bool boxm2_shadow_heights_to_xyz_process(bprb_func_process& pro)
 
 namespace boxm2_dem_to_xyz_process2_globals
 {
-  const unsigned n_inputs_ = 5;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 5;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 bool boxm2_dem_to_xyz_process2_cons(bprb_func_process& pro)
@@ -514,8 +514,8 @@ bool boxm2_dem_to_xyz_process2(bprb_func_process& pro)
 
 namespace boxm2_initialize_ground_xyz_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ = 3;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 3;
 }
 
 bool boxm2_initialize_ground_xyz_process_cons(bprb_func_process& pro)

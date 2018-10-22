@@ -41,8 +41,8 @@ void test_cplx(vnl_fft_prime_factors<double> const &/*prx*/,
 
 void test_fft2d ()
 {
-  const unsigned int rows = 64;
-  const unsigned int cols = 64;
+  constexpr unsigned int rows = 64;
+  constexpr unsigned int cols = 64;
 
   // calculate prime factors for this size array
   vnl_fft_prime_factors<double> prx (rows);

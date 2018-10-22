@@ -22,7 +22,7 @@
 //  scales the x and y axes according to x_min, x_max values so that it spans the document area
 
 const float default_stroke_width = 2.0f;
-const int default_font_size = 15;
+constexpr int default_font_size = 15;
 const float default_margin = 20.0f;
 
 class bsvg_plot : public bsvg_document

@@ -1709,7 +1709,7 @@ namespace {
       // error STD = 0.5
       {
         vnl_double_3x3 perturbed_H( H );
-        const double err_std = 0.5;
+        constexpr double err_std = 0.5;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
@@ -1727,7 +1727,7 @@ namespace {
       // error STD = 1
       {
         vnl_double_3x3 perturbed_H( H );
-        const double err_std = 1;
+        constexpr double err_std = 1;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
@@ -1745,7 +1745,7 @@ namespace {
       // error STD = 50
       {
         vnl_double_3x3 perturbed_H( H );
-        const double err_std = 50;
+        constexpr double err_std = 50;
         for ( unsigned i=0; i<3; ++i )
           for ( unsigned j=0; j<3; ++j )
             perturbed_H( 0, 0 ) += random.drand32()*err_std;
@@ -1800,7 +1800,7 @@ namespace {
 
 
     vnl_double_2 pt, mapped;
-    const double c = 10;
+    constexpr double c = 10;
     bool xform_is_good=true;
 
     for ( unsigned int num=20; num<200; num+=16 )
@@ -1881,7 +1881,7 @@ namespace {
 
 
     vnl_double_2 pt, mapped, centre_mapped;
-    const double c = 20;
+    constexpr double c = 20;
     bool xform_is_good=true;
 
     for ( unsigned int num=12; num<100; num+=16 )
@@ -1964,7 +1964,7 @@ namespace {
     std::vector< vnl_double_2 > p, q;
 
     vnl_double_2 pt, mapped;
-    const double c = 20;
+    constexpr double c = 20;
     bool cov_is_good = true;
     bool homography_is_good = true;
     for ( unsigned int num=12; num<200; num+=16 )
@@ -2074,7 +2074,7 @@ test_rad_dis_homo2d_lm()
   vnl_double_3x3 H;  H.set_identity();
   vnl_double_3x3 initH(H);
   const double k1_from = -1e-6;
-  const double k1_to = 0;
+  constexpr double k1_to = 0;
   vnl_vector<double> centre(2,0.0);
   rgrl_transformation_sptr true_xform = new rgrl_trans_rad_dis_homo2d( H.as_ref(), k1_from, k1_to, centre, centre );
 

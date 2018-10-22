@@ -26,8 +26,8 @@
 //: global variables
 namespace bvxm_change_detection_display_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 2;
   // The parameters strings
   const std::string param_prob_thresh_ = "prob_thresh";
   const std::string param_prob_image_scale_ = "prob_image_scale";

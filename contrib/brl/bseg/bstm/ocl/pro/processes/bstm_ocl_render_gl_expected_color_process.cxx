@@ -25,8 +25,8 @@
 
 namespace bstm_ocl_render_gl_expected_color_process_globals
 {
-  const unsigned n_inputs_   = 9;
-  const unsigned n_outputs_  = 1;
+  constexpr unsigned n_inputs_    = 9;
+  constexpr unsigned n_outputs_   = 1;
   std::size_t     lthreads[2] = {8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;

@@ -35,8 +35,8 @@
 
 namespace boxm2_ocl_update_aux_per_view_naa_process_globals
 {
-  const unsigned n_inputs_  = 10;
-  const unsigned n_outputs_ = 0;
+  constexpr unsigned n_inputs_   = 10;
+  constexpr unsigned n_outputs_  = 0;
   enum {
     UPDATE_SEGLEN         = 0,
     UPDATE_AUX_PREVIS     = 1,

@@ -38,7 +38,7 @@ global_region_from_inv_xformed_points(
   const vnl_vector<double> from_x0 =  from_image_roi->x0();
   const vnl_vector<double> from_x1 =  from_image_roi->x1();
   const unsigned m = from_x0.size();
-  const int debug_flag = 0;
+  constexpr int debug_flag = 0;
 
   vnl_vector<double> inv_mapped_x0 = from_image_roi->x1();
   vnl_vector<double> inv_mapped_x1 = from_image_roi->x0();
@@ -156,7 +156,7 @@ rgrl_util_estimate_global_region_with_inverse_xform(
   // apply permutation on ind
   // the position of 1 will change for each iteration
   do {
-    const double step = 30;
+    constexpr double step = 30;
     for (double i = to_x0[ind[0]]; i<= to_x1[ind[0]]; i+=step) {
       for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]; j+=step) {
         if (m == 3) {
@@ -219,7 +219,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
 
   typedef std::vector<vnl_vector<double> > pt_vector;
   typedef pt_vector::iterator pt_iter;
-  const double epsilon = 1;
+  constexpr double epsilon = 1;
   const double eps_squared = epsilon*epsilon;
 
   vnl_vector<double> const& from_x0 =  from_image_roi->x0();
@@ -249,7 +249,7 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   // the position of 1 will change for each iteration
   do{
 
-    const double step = 30;
+    constexpr double step = 30;
     for (double i = to_x0[ind[0]]; i<= to_x1[ind[0]]; i+=step) {
       for (double j = to_x0[ind[1]]; j<= to_x1[ind[1]]&&j>= to_x0[ind[1]]; j+=(to_x1[ind[1]]-to_x0[ind[1]])) {
         if (m == 3) {

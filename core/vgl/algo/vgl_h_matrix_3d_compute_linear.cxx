@@ -10,8 +10,8 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 
-const int TM_UNKNOWNS_COUNT = 16;
-const double DEGENERACY_THRESHOLD = 0.00001;
+constexpr int TM_UNKNOWNS_COUNT = 16;
+constexpr double DEGENERACY_THRESHOLD = 0.00001;
 
 
 //: Compute a 3D-to-3D homography using linear least squares.

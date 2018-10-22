@@ -19,8 +19,8 @@
 
 namespace boxm_split_scene_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 //: process takes 1 input and two outputs.

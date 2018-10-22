@@ -29,8 +29,8 @@
 //: global variables/functions
 namespace bvxm_lidar_edge_detection_process_globals
 {
-  const unsigned n_inputs_ = 2;
-  const unsigned n_outputs_ =3;
+  constexpr unsigned n_inputs_  = 2;
+  constexpr unsigned n_outputs_  = 3;
 
   // set parameter identifying strings
   const std::string param_thresh_diff_ =  "threshold_edge_difference";

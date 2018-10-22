@@ -17,8 +17,8 @@
 
 namespace boxm2_blob_precision_recall_process_globals
 {
-  const unsigned n_inputs_ = 3;
-  const unsigned n_outputs_ = 4;
+  constexpr unsigned n_inputs_  = 3;
+  constexpr unsigned n_outputs_  = 4;
 
   // do pixelwise sort on the image, and then
   struct Pair {
@@ -80,7 +80,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   }
 
   // true positive, true negative, false positive, false negative
-  const unsigned int numPoints = 100;
+  constexpr unsigned int numPoints = 100;
   bbas_1d_array_float * precision = new bbas_1d_array_float(numPoints);
   bbas_1d_array_float * recall    = new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;

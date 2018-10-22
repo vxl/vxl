@@ -19,8 +19,8 @@
 
 namespace bocl_get_device_process_globals
 {
-  const unsigned n_inputs_ = 1;
-  const unsigned n_outputs_ = 1;
+  constexpr unsigned n_inputs_  = 1;
+  constexpr unsigned n_outputs_  = 1;
 }
 
 bool bocl_get_device_process_cons(bprb_func_process& pro)

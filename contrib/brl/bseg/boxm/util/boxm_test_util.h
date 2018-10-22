@@ -8,14 +8,14 @@
 
 typedef boct_tree<short,vgl_point_3d<double> > tree_type;
 
-const int IMAGE_U = 800;
-const int IMAGE_V = 500;
-const int boxm_x_scale = 500;
-const int boxm_y_scale = 500;
-const double boxm_focal_length = 1.0;
-const double boxm_camera_dist = 300;
-const unsigned num_train_images= 20;
-const bool verbose = 1;
+constexpr int IMAGE_U = 800;
+constexpr int IMAGE_V = 500;
+constexpr int boxm_x_scale = 500;
+constexpr int boxm_y_scale = 500;
+constexpr double boxm_focal_length = 1.0;
+constexpr double boxm_camera_dist = 300;
+constexpr unsigned num_train_images = 20;
+constexpr bool verbose  = 1;
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point

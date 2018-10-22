@@ -20,8 +20,8 @@
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
 {
-  const unsigned n_inputs_ = 9;
-  const unsigned n_outputs_ = 2;
+  constexpr unsigned n_inputs_  = 9;
+  constexpr unsigned n_outputs_  = 2;
 }
 
 bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
