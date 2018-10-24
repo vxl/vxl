@@ -13,6 +13,8 @@
 #include "vil_nitf2_field.h"
 #include "vil_nitf2_index_vector.h"
 
+#include "vil_nitf2_field_sequence.h"
+
 class vil_nitf2_field_definition;
 class vil_nitf2_location;
 class vil_nitf2_date_time;
@@ -92,6 +94,7 @@ class vil_nitf2_array_field : public vil_nitf2_field
   virtual bool value(const vil_nitf2_index_vector&, std::string& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_location*& ) const { return false; }
   virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_date_time& ) const { return false; }
+  virtual bool value(const vil_nitf2_index_vector&, vil_nitf2_tagged_record_sequence& ) const { return false; }
 
  protected:
   void do_dimension( const vil_nitf2_index_vector& index,

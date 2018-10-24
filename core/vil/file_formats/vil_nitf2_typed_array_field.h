@@ -36,14 +36,14 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // false if the value is undefined at the specified index.
   // (This is a partial override of overloaded method
   // vil_nitf2_array_field::value() for my specific type.)
-  bool value(const vil_nitf2_index_vector& indexes, T& out_value) const;
+  bool value(const vil_nitf2_index_vector& indexes, T& out_value) const override ;
 
   //: Reads from input stream the scalar value at specified index.
   // check_index(indexes) must be true, or this will emit an error.
   // Returns success.
   bool read_vector_element(vil_nitf2_istream& input,
                            const vil_nitf2_index_vector& indexes,
-                           int variable_width);
+                           int variable_width) override;
 
   //: Writes to output stream the scalar value at specified index.
   // check_index(indexes) must be true, of this will emit an error.
@@ -51,11 +51,11 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   // formatter's field_width.
   bool write_vector_element(vil_nitf2_ostream& output,
                             const vil_nitf2_index_vector& indexes,
-                            int variable_width) const;
+                            int variable_width) const override;
 
   //: Output in human-readable form.
   // Implementation provides an example of how to iterate over all elements.
-  virtual std::ostream& output(std::ostream& os) const;
+  std::ostream& output(std::ostream& os) const override;
 
   //: Destructor (overridden below for instantiations where T is a pointer)
   ~vil_nitf2_typed_array_field();

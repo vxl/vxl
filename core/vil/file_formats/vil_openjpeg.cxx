@@ -711,7 +711,7 @@ vil_openjpeg_image
 
 const char *
 vil_openjpeg_image
-::file_format()
+::file_format() const
 {
   switch ( this->impl_->opj_codec_format_ )
   {

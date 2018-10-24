@@ -362,7 +362,7 @@ class vil_nitf2_tagged_record_sequence_formatter :
   // Constructor
   vil_nitf2_tagged_record_sequence_formatter();
 
-  vil_nitf2_field_formatter* copy() const;
+  vil_nitf2_field_formatter* copy() const override;
 
   // partially overridden read/write methods
   using vil_nitf2_typed_field_formatter<vil_nitf2_tagged_record_sequence>::read_vcl_stream;
@@ -371,11 +371,11 @@ class vil_nitf2_tagged_record_sequence_formatter :
   // Overload read() instead of read_vcl_stream() to read binary data without
   // converting to string, because zero data would prematurely null-terminate
   // the stringstream.
-  virtual bool read( vil_nitf2_istream& input, vil_nitf2_tagged_record_sequence& out_value, bool& out_blank );
+  bool read( vil_nitf2_istream& input, vil_nitf2_tagged_record_sequence& out_value, bool& out_blank ) override;
 
   /// Overload to write() instead of write_vcl_stream() to write binary data
   // (see preceding comment).
-  virtual bool write(vil_nitf2_ostream& output, vil_nitf2_tagged_record_sequence& value);
+  bool write(vil_nitf2_ostream& output, const vil_nitf2_tagged_record_sequence& value) override;
 };
 
 #endif // VIL_NITF2_TYPED_FIELD_FORMATTER_H

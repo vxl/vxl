@@ -493,7 +493,7 @@ read( vil_nitf2_istream& input,
 }
 
 bool vil_nitf2_tagged_record_sequence_formatter::
-write(vil_nitf2_ostream& /*output*/, vil_nitf2_tagged_record_sequence& /*value*/ )
+write(vil_nitf2_ostream& /*output*/, const vil_nitf2_tagged_record_sequence& /*value*/ )
 {
   return false;
 }
