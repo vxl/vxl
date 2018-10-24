@@ -14,13 +14,13 @@
 #include <vcl_compiler.h>
 #include <vxl_config.h>
 
-static const long s16 = 0x7fffL;
-static const unsigned long u16 = 0xffffL;
-static const long s32 = 0x7fffffffL;
-static const unsigned long u32 = 0xffffffffL;
+//static const long s16 = 0x7fffL;
+//static const unsigned long u16 = 0xffffL;
+//static const long s32 = 0x7fffffffL;
+//static const unsigned long u32 = 0xffffffffL;
 #if VXL_HAS_INT_64 // need this arithmetic magic to avoid compiler errors
 static const vxl_uint_64 u64 = (vxl_uint_64)(-1);
-static const vxl_sint_64 s64 = u64/2;
+//static const vxl_sint_64 s64 = u64/2;
 #else // dummy
 static const long s64 = 0L;
 static const unsigned long u64 = 0L;
