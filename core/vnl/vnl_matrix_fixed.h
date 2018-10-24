@@ -111,6 +111,19 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
 
   //: Construct an empty num_rows*num_cols matrix
   vnl_matrix_fixed() = default;
+  //: Construct an m*n Matrix and copy rhs into it.
+  //  Abort if rhs is not the same size.
+  vnl_matrix_fixed(const vnl_matrix_fixed& rhs) = default;
+  vnl_matrix_fixed(vnl_matrix_fixed&& other) = default;
+  //: Copy another vnl_matrix_fixed<T,m,n> into this.
+  vnl_matrix_fixed& operator=(const vnl_matrix_fixed& rhs) = default;
+  vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) = default;
+  //  Destruct the m*n matrix.
+  // An explicit destructor seems to be necessary, at least for gcc 3.0.0,
+  // to avoid the compiler generating multiple versions of it.
+  // (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
+  ~vnl_matrix_fixed() = default;
+
 
   //: Construct an empty num_rows*num_cols matrix
   //
@@ -138,12 +151,7 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
     std::memcpy(data_[0], datablck, num_rows*num_cols*sizeof(T));
   }
 
-  //: Construct an m*n Matrix and copy rhs into it.
-  //  Abort if rhs is not the same size.
-  vnl_matrix_fixed(const vnl_matrix_fixed& rhs)
-  {
-    std::memcpy(data_[0], rhs.data_block(), num_rows*num_cols*sizeof(T));
-  }
+
 
   //: Construct an m*n Matrix and copy rhs into it.
   //  Abort if rhs is not the same size.
@@ -153,11 +161,6 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
     std::memcpy(data_[0], rhs.data_block(), num_rows*num_cols*sizeof(T));
   }
 
-  //  Destruct the m*n matrix.
-  // An explicit destructor seems to be necessary, at least for gcc 3.0.0,
-  // to avoid the compiler generating multiple versions of it.
-  // (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
-  ~vnl_matrix_fixed() = default;
 
   //: Set all elements to value v
   // Complexity $O(r.c)$
@@ -168,13 +171,6 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   vnl_matrix_fixed& operator=(const vnl_matrix<T>& rhs)
   {
     assert(rhs.rows() == num_rows && rhs.columns() == num_cols);
-    std::memcpy(data_[0], rhs.data_block(), num_rows*num_cols*sizeof(T));
-    return *this;
-  }
-
-  //: Copy another vnl_matrix_fixed<T,m,n> into this.
-  vnl_matrix_fixed& operator=(const vnl_matrix_fixed& rhs)
-  {
     std::memcpy(data_[0], rhs.data_block(), num_rows*num_cols*sizeof(T));
     return *this;
   }
