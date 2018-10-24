@@ -145,7 +145,7 @@ std::istream& operator>>(std::istream& i, vgl_p_matrix<T>& p)
   return i;
 }
 
-static bool ok(std::istream& f) { return f.good() || f.eof(); }
+static inline bool ok(std::istream& f) { return f.good() || f.eof(); }
 
 template <class T>
 bool vgl_p_matrix<T>::read_ascii(std::istream& f)
