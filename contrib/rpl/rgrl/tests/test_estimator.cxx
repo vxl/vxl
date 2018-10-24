@@ -63,6 +63,7 @@ namespace {
     return v;
   }
 
+#if 0
   vnl_vector<double>
   random_3d_normal_error( )
   {
@@ -72,6 +73,7 @@ namespace {
     v[2] = random.normal64();
     return v;
   }
+#endif
 
   vnl_vector<double>
   random_2d_vector( )
@@ -91,6 +93,7 @@ namespace {
     return v;
   }
 
+#if 0
   vnl_vector<double>
   random_1d_vector( )
   {
@@ -106,6 +109,7 @@ namespace {
     v[0] = random.normal64();
     return v;
   }
+#endif
 
   vnl_vector<double>
   inhomo( vnl_vector<double> p )

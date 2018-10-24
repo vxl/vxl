@@ -66,8 +66,6 @@ class vimt_vil_v2i_image: public vil_image_resource
   //: If true, write image file on exit.
   bool dirty_;
 
-  //: Expected pixel type.
-  enum vil_pixel_format pixel_format_;
   //: Private constructor, use vil_load instead.
   // This object takes ownership of the file.
   vimt_vil_v2i_image(vil_stream * vs);

@@ -20,8 +20,6 @@
 
 #include <vnl/vnl_random.h>
 
-static const unsigned verbose_ = 0;
-
 // Random number generator. This will be shared by all ran_sam instances.
 static vnl_random global_generator_;
 

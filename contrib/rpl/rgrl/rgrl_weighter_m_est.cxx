@@ -217,7 +217,6 @@ aux_neg_log_likelihood( rgrl_scale const&  scale,
                         rgrl_transformation const&  xform )
 {
   typedef rgrl_match_set::from_iterator  from_iter;
-  typedef from_iter::to_iterator         to_iter;
 
   int n = 0;
 
@@ -240,7 +239,6 @@ aux_avg_neg_log_likelihood( rgrl_scale const&  scale,
                             rgrl_transformation const&  xform )
 {
   typedef rgrl_match_set::from_iterator  from_iter;
-  typedef from_iter::to_iterator         to_iter;
 
   int n = 0;
 

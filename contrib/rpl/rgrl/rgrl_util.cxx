@@ -817,7 +817,6 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
   DebugFuncMacro( debug_flag, 1, " In irls for model "<<estimator->transformation_type().name()<<'\n' );
 
   typedef rgrl_match_set::from_iterator  from_iter;
-  typedef from_iter::to_iterator         to_iter;
 
   unsigned int iteration = 0;
   unsigned int max_iterations = 25;

@@ -119,7 +119,6 @@ bool vimt_is_image_dicom(vil_stream* is)
 {
    if (is)
    {
-     bool is_dicom = false;
      #ifdef _BUILD_DCMTK
        try
        {

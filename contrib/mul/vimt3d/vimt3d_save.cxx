@@ -57,8 +57,6 @@ void vimt3d_save_transform(vil3d_image_resource_sptr &ir,
   }
   else if (dynamic_cast<vil3d_meta_image *>(ir.ptr()) )
   {
-    vgl_vector_3d<double> vx_size = trans.delta(vgl_point_3d<double>(0.0,0.0,0.0),
-                                                vgl_vector_3d<double>(1.0,1.0,1.0));
     double ox =  trans.origin().x();
     double oy =  trans.origin().y();
     double oz =  trans.origin().z();

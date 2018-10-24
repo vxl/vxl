@@ -22,7 +22,7 @@ static void test_knn_index_3d()
   ptset.add_point_with_normal(p5, n);  ptset.add_point_with_normal(p6, n); ptset.add_point_with_normal(p7, n);
   bvgl_knn_index_3d<double> knn_index(ptset);
   vgl_point_3d<double> p(0.4, 0.7, 0.6), pc;
-  bool good = knn_index.closest_point(p, pc);
+  knn_index.closest_point(p, pc);
   TEST_NEAR("grid closest point", (p-pc).length(), 0.0, 0.05);
 #endif
 }

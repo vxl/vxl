@@ -73,8 +73,6 @@ class FMatrixComputeRobust : public FMatrixCompute
   double inthresh_;
   double std_;
  private:
-  int row_;
-  int col_;
   std::vector<int> basis_;
   HomgPoint2D epipole1_;
   HomgPoint2D epipole2_;

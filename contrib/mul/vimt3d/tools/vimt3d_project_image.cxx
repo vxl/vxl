@@ -52,8 +52,6 @@ void i_axis_max_projection(const vil3d_image_view<T>& im3d,
                        vil_image_view<vxl_byte>& byte_image)
 {
   unsigned ni=im3d.ni();
-  unsigned nj=im3d.nj();
-  unsigned nk=im3d.nk();
 
   vil_image_view<float> max_image;
   max_image.deep_copy(vil3d_slice_jk(im3d,0));

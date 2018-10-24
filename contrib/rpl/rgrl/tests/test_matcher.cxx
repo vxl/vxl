@@ -298,7 +298,6 @@ namespace
       // check nearest neighbors
       //
       typedef rgrl_match_set::from_iterator FIter;
-      typedef FIter::to_iterator TIter;
       bool neighbor_size_is_k = true;
       bool nearest_correct = true;
       std::vector<dist_id> dist(4);
