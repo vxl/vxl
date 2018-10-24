@@ -36,7 +36,7 @@ struct msm_line_seg_pt
 
   vgl_point_2d<double> point(const std::vector<vgl_point_2d<double> >& pts) const
   {
-    if (i0<0) return vgl_point_2d<double>();
+    if (i0<0) return {};
     if (i1<0) return pts[i0];
     double b=1.0-alpha;
     return {b*pts[i0].x()+alpha*pts[i1].x(),
@@ -94,7 +94,7 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
     sqr_dist = (all_points[curve[0]]-pt).sqr_length();
 
     // Single point only
-    return msm_line_seg_pt(curve[0]);
+    return {curve[0]};
   }
 
   // Compute distance between each line segment and the point

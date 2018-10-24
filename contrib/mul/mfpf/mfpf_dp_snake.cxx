@@ -160,7 +160,7 @@ void mfpf_dp_snake::smooth_curve()
 vgl_point_2d<double> mfpf_dp_snake::cog() const
 {
   unsigned n = pts_.size();
-  if (n==0) return vgl_point_2d<double>(0,0);
+  if (n==0) return {0,0};
 
   double xsum=0,ysum=0;
   for (unsigned i=0;i<n;++i)

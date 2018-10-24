@@ -450,7 +450,7 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
     switch (form_)
     {
         case Identity :
-            return vgl_point_2d<double> (x,y);
+            return {x,y};
         case Translation :
             return vgl_point_2d<double> (x+xt_,y+yt_);
         case ZoomOnly :
@@ -480,7 +480,7 @@ vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, c
         case Translation:
             return dp;
         case ZoomOnly :
-            return vgl_vector_2d<double> (dp.x()*xx_,dp.y()*yy_);
+            return {dp.x()*xx_,dp.y()*yy_};
         case RigidBody :
         case Similarity :
         case Reflection :

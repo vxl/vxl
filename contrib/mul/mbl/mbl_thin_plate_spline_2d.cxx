@@ -445,7 +445,7 @@ vgl_point_2d<double>  mbl_thin_plate_spline_2d::operator()(double x, double y) c
   double y_sum = Ay0_ + AyX_ * x + AyY_ * y;
 
   if (n<=3 || return_pure_affine_)  // Pure affine
-    return vgl_point_2d<double>(x_sum,y_sum);
+    return {x_sum,y_sum};
 
   const vgl_point_2d<double> * pts_data = &src_pts_[0];
   const double* Wx_data = Wx_.data_block();
