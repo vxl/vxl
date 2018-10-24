@@ -177,10 +177,10 @@ class vpyr_2_pyramid_level : public vmap_ptr_sequence< typename D::base_type >
 #endif // 0
 
   //:
-  virtual void contraction(const contraction_kernel &arg_kernel) ;
+  void contraction(const contraction_kernel &arg_kernel) ;
 
   //:
-  virtual void removal(const removal_kernel &arg_kernel) ;
+  void removal(const removal_kernel &arg_kernel) ;
 
   //:
   void set_level_index(vmap_level_index arg)

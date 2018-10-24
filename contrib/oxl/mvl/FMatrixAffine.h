@@ -25,7 +25,7 @@ class FMatrixAffine : public FMatrix
   ~FMatrixAffine();
 
   bool set (const double *f_matrix);
-  bool set (vnl_matrix<double> const& f_matrix);
+  bool set (const vnl_matrix<double>& f_matrix);
 };
 
 #endif // FMatrixAffine_h_
