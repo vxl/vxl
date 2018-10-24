@@ -644,7 +644,6 @@ bool vpgl_camera_transform::compute_initial_transformation_t(const std::vector<v
   for (unsigned i = 0; i < input_cams.size(); i++) {
     vpgl_calibration_matrix<double> K = input_cams[i].get_calibration();
     vgl_rotation_3d<double> R = input_cams[i].get_rotation();
-    vnl_matrix_fixed<double, 3, 3> Rm = R.as_matrix();
     vgl_vector_3d<double> t = input_cams[i].get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x(); tv[1] = t.y(); tv[2] = t.z();

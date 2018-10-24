@@ -78,7 +78,7 @@ vil_file_format::~vil_file_format() = default;
 #include <vil/file_formats/vil_sgi.h>
 #endif
 
-constexpr unsigned MAX_FILE_FORMATS = 256;
+//constexpr unsigned MAX_FILE_FORMATS = 256;
 //: Local class to hold file format list
 // Clears list on deletion.
 struct vil_file_format_storage

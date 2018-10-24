@@ -888,7 +888,6 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   unsigned bpl = h_->bytes_per_line();
   unsigned bytes_per_strip = h_->bytes_per_strip();
   unsigned lines_per_strip = bytes_per_strip/bpl;
-  unsigned planar_config = h_->planar_config.val;
   vil_pixel_format fmt = vil_pixel_format_component_format(h_->pix_fmt);
   unsigned expanded_bytes_per_sample =
     vil_pixel_format_sizeof_components(fmt);

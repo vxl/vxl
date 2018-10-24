@@ -42,7 +42,6 @@ class vil1_png_generic_image : public vil1_image_impl
   int components_;
   int bits_per_component_;
 
-  int start_of_data_;
 
   bool read_header();
   bool write_header();
