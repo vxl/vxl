@@ -51,26 +51,26 @@ class vil_flip_lr_image_resource : public vil_image_resource
   friend vil_image_resource_sptr vil_flip_lr(const vil_image_resource_sptr &src);
  public:
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return src_->ni(); }
-  virtual unsigned nj() const { return src_->nj(); }
+  unsigned nplanes() const override { return src_->nplanes(); }
+  unsigned ni() const override { return src_->ni(); }
+  unsigned nj() const override { return src_->nj(); }
 
-  virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
+  enum vil_pixel_format pixel_format() const override { return src_->pixel_format(); }
 
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                            unsigned j0, unsigned nj) const override;
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0,
-                        unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0,
+                        unsigned j0) override;
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const {
+  bool get_property(char const* tag, void* property_value = nullptr) const override {
     return src_->get_property(tag, property_value); }
 
 
@@ -92,26 +92,26 @@ class vil_flip_ud_image_resource : public vil_image_resource
   friend vil_image_resource_sptr vil_flip_ud(const vil_image_resource_sptr &src);
  public:
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return src_->ni(); }
-  virtual unsigned nj() const { return src_->nj(); }
+  unsigned nplanes() const override { return src_->nplanes(); }
+  unsigned ni() const override { return src_->ni(); }
+  unsigned nj() const override { return src_->nj(); }
 
-  virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
+  enum vil_pixel_format pixel_format() const override { return src_->pixel_format(); }
 
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                            unsigned j0, unsigned nj) const override;
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0,
-                        unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0,
+                        unsigned j0) override;
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const {
+  bool get_property(char const* tag, void* property_value = nullptr) const override {
     return src_->get_property(tag, property_value); }
 
  protected:

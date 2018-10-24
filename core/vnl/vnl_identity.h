@@ -23,13 +23,13 @@ template <class T>
 class VNL_TEMPLATE_EXPORT vnl_identity : public vnl_unary_function<T,T>
 {
  public:
-  vnl_unary_function<T,T>* Copy() const {
+  vnl_unary_function<T,T>* Copy() const override {
     vnl_identity<T>* copy = new vnl_identity<T>;
     *copy = *this;
     return copy;
   }
 
-  T f(T const& x) {
+  T f(T const& x) override {
     return x;
   }
 };

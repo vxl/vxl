@@ -43,13 +43,13 @@ class projection_lsqf : public vnl_least_squares_function
     }
   }
 
-  ~projection_lsqf() = default;
+  ~projection_lsqf() override = default;
 
   //: compute the projection error given a set of h parameters.
   // The residuals required by f are the Euclidean x and y coordinate
   // differences between the projected from points and the
   // corresponding to points.
-  void f(const vnl_vector<double>& hv, vnl_vector<double>& proj_err)
+  void f(const vnl_vector<double>& hv, vnl_vector<double>& proj_err) override
   {
     assert(hv.size()==9);
     assert(proj_err.size()==2*n_+1);

@@ -27,34 +27,34 @@ class vil_image_view_base;
 class vil_pnm_file_format : public vil_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  char const* tag() const override;
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override;
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned ni,
                                                     unsigned nj,
                                                     unsigned nplanes,
-                                                    vil_pixel_format format);
+                                                    vil_pixel_format format) override;
 };
 
 //: Alias name for pnm; only tag() differs
 class vil_pbm_file_format : public vil_pnm_file_format
 {
  public:
-  virtual char const* tag() const { return "pbm"; }
+  char const* tag() const override { return "pbm"; }
 };
 
 //: Alias name for pnm; only tag() differs
 class vil_pgm_file_format : public vil_pnm_file_format
 {
  public:
-  virtual char const* tag() const { return "pgm"; }
+  char const* tag() const override { return "pgm"; }
 };
 
 //: Alias name for pnm; only tag() differs
 class vil_ppm_file_format : public vil_pnm_file_format
 {
  public:
-  virtual char const* tag() const { return "ppm"; }
+  char const* tag() const override { return "ppm"; }
 };
 
 //: Generic image implementation for PNM files
@@ -83,23 +83,23 @@ class vil_pnm_image : public vil_image_resource
                  unsigned nj, unsigned nplanes,
                  vil_pixel_format format);
   vil_pnm_image(vil_stream* is);
-  ~vil_pnm_image();
+  ~vil_pnm_image() override;
 
   // Inherit the documentation from vil_image_resource
 
-  virtual unsigned nplanes() const { return ncomponents_; }
-  virtual unsigned ni() const { return ni_; }
-  virtual unsigned nj() const { return nj_; }
+  unsigned nplanes() const override { return ncomponents_; }
+  unsigned ni() const override { return ni_; }
+  unsigned nj() const override { return nj_; }
 
-  virtual enum vil_pixel_format pixel_format() const {return format_; }
+  enum vil_pixel_format pixel_format() const override {return format_; }
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 };
 
 #endif // vil_pnm_file_format_h_

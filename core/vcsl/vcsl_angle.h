@@ -28,7 +28,7 @@ class vcsl_angle
 
  public:
   // Destructor
-  virtual ~vcsl_angle() = default;
+  ~vcsl_angle() override = default;
 
   //***************************************************************************
   // Status report
@@ -36,11 +36,11 @@ class vcsl_angle
 
   //: Is `new_unit' a compatible unit for the dimension ?
   // Pure virtual function of vcsl_dimension
-  virtual bool compatible_unit(vcsl_unit_sptr const& new_unit) const;
+  bool compatible_unit(vcsl_unit_sptr const& new_unit) const override;
 
   //: Return the standard unit associated to the dimension
   // Pure virtual function of vcsl_dimension
-  virtual vcsl_unit_sptr standard_unit() const;
+  vcsl_unit_sptr standard_unit() const override;
 
   //***************************************************************************
   // Singleton pattern

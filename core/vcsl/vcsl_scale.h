@@ -31,7 +31,7 @@ class vcsl_scale
   vcsl_scale() = default;
 
   // Destructor
-  virtual ~vcsl_scale() = default;
+  ~vcsl_scale() override = default;
 
   //***************************************************************************
   // Status report
@@ -40,11 +40,11 @@ class vcsl_scale
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual bool is_invertible(double time) const;
+  bool is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const
+  bool is_valid() const override
   { return vcsl_spatial_transformation::is_valid() &&
            ((this->duration()==0&&scale_.size()==1) ||
              this->duration()==scale_.size()); }
@@ -69,15 +69,15 @@ class vcsl_scale
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
 
  protected:
 

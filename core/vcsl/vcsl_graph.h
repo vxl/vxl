@@ -40,7 +40,7 @@ class vcsl_graph
   vcsl_graph(vcsl_graph const& x) : vbl_ref_count(), vertices_(x.vertices_) {}
 
   // Destructor
-  ~vcsl_graph() = default;
+  ~vcsl_graph() override = default;
 
   //***************************************************************************
   // Measurement

@@ -37,7 +37,7 @@ class vul_psfile: public std::ofstream
     MAX };
 
   vul_psfile(char const* filename, bool debug_output=false);
-  ~vul_psfile();
+  ~vul_psfile() override;
   operator bool() { return static_cast<bool>(output_filestream); }
 
   void set_paper_type(vul_psfile::paper_type type){printer_paper_type = type;}

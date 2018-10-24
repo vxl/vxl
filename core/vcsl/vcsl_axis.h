@@ -50,7 +50,7 @@ class vcsl_axis
     : vbl_ref_count(),dimension_(a.dimension_),unit_(a.unit_),label_(a.label_){}
 
   // Destructor
-  ~vcsl_axis() = default;
+  ~vcsl_axis() override = default;
 
   //***************************************************************************
   // Status report

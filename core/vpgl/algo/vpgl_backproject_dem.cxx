@@ -18,7 +18,7 @@ public:
   dem_bproj_cost_function(vil_image_view<float> const& dem_view, vpgl_geo_camera* geo_cam, vgl_ray_3d<double> const& ray, bool verbose=false) :
     vnl_cost_function(1), ray_(ray), geo_cam_(geo_cam), dview_(&dem_view), verbose_(verbose){}
   //: x is the parameter that runs along the ray, with x=0 at the ray origin
-  virtual double f(vnl_vector<double> const& x){
+  double f(vnl_vector<double> const& x) override{
     //get the lon and lat values for a given parameter value
     vgl_point_3d<double> org = ray_.origin(), rayp;
     vgl_vector_3d<double> dir = ray_.direction();

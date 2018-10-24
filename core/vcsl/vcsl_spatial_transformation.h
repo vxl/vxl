@@ -53,7 +53,7 @@ class vcsl_spatial_transformation : public vbl_ref_count
     : vbl_ref_count(), beat_(x.beat_), interpolator_(x.interpolator_) {}
 
   // Destructor. Do nothing
-  virtual ~vcsl_spatial_transformation() = default;
+  ~vcsl_spatial_transformation() override = default;
 
   //***************************************************************************
   // Status report

@@ -12,7 +12,7 @@
 struct testlib_test_amoeba_cubic : public vnl_cost_function {
   testlib_test_amoeba_cubic() : vnl_cost_function(1) {}
 
-  double f(const vnl_vector<double>& x) {
+  double f(const vnl_vector<double>& x) override {
     return (2 - x[0]) * (2 - x[0]) + 10;
   }
 };
@@ -20,7 +20,7 @@ struct testlib_test_amoeba_cubic : public vnl_cost_function {
 struct testlib_test_amoeba_cost1 : public vnl_cost_function {
   testlib_test_amoeba_cost1(int n) : vnl_cost_function(n) {}
 
-  double f(const vnl_vector<double>& x) {
+  double f(const vnl_vector<double>& x) override {
     assert((int)x.size()==dim);
     double sum=0;
     for (unsigned int i=0;i<x.size();++i) sum+=(x[i]-i)*(x[i]-i);

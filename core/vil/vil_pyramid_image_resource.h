@@ -36,47 +36,47 @@ class vil_pyramid_image_resource : public vil_image_resource
 {
  public:
   vil_pyramid_image_resource(std::vector<vil_image_resource_sptr> const& images);
-  virtual ~vil_pyramid_image_resource();
+  ~vil_pyramid_image_resource() override;
 
   //: The number of planes (or components) in the image.
   // Dimensions:  Planes x ni x nj.
   // This method refers to the base (max resolution) image
   // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const = 0;
+  unsigned nplanes() const override = 0;
 
   //: The number of pixels in each row.
   // Dimensions:  Planes x ni x nj.
   // This method refers to the base (max resolution) image
-  virtual unsigned ni() const = 0;
+  unsigned ni() const override = 0;
 
   //: The number of pixels in each column.
   // Dimensions:  Planes x ni x nj.
   // This method refers to the base (max resolution) image
-  virtual unsigned nj() const = 0;
+  unsigned nj() const override = 0;
 
   //: Pixel Format.
-  virtual enum vil_pixel_format pixel_format() const = 0;
+  enum vil_pixel_format pixel_format() const override = 0;
 
   //: Create a read/write view of a copy of this data.
   // Applies only to the base image
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0,
+  vil_image_view_base_sptr get_copy_view(unsigned i0,
                                                  unsigned n_i,
                                                  unsigned j0,
-                                                 unsigned n_j) const
+                                                 unsigned n_j) const override
     {return this->get_copy_view(i0, n_i, j0, n_j, 0);}
 
   //: Put the data in this view back into the base image.
   // Pyramid is readonly.
   // This is essentially (although not formally) a pure virtual function.
-  virtual bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/)
+  bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) override
   { return false; }
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const = 0;
+  char const* file_format() const override = 0;
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
+  bool get_property(char const* tag, void* property_value = nullptr) const override;
 
   // === Methods particular to pyramid resource ===
 

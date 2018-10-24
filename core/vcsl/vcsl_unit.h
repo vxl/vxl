@@ -47,7 +47,7 @@ class vcsl_unit
   vcsl_unit(vcsl_unit const&) : vbl_ref_count() {}
 
   // Destructor
-  virtual ~vcsl_unit() = default;
+  ~vcsl_unit() override = default;
 
   //***************************************************************************
   // Status report

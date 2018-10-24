@@ -27,11 +27,11 @@ class vgl_triangle_scan_iterator : public vgl_region_scan_iterator
  ~vgl_triangle_scan_iterator();
 #endif
 
-  void reset();
-  bool next();
-  inline int scany() const { return scany_; }
-  inline int startx() const { return startx_; }
-  inline int endx() const { return endx_; }
+  void reset() override;
+  bool next() override;
+  inline int scany() const override { return scany_; }
+  inline int startx() const override { return startx_; }
+  inline int endx() const override { return endx_; }
 
  private:
   int scany_;

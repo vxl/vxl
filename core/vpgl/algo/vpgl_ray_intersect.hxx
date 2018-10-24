@@ -25,13 +25,13 @@ public:
                             unsigned num_residuals);
 
     //: Destructor
-    virtual ~vpgl_ray_intersect_lsqr() = default;
+    ~vpgl_ray_intersect_lsqr() override = default;
 
     //: The main function.
     //  Given the parameter vector x, compute the vector of residuals fx.
     //  fx has been sized appropriately before the call.
-    virtual void f(vnl_vector<double> const& intersection_point,
-                   vnl_vector<double>& image_errors);
+    void f(vnl_vector<double> const& intersection_point,
+                   vnl_vector<double>& image_errors) override;
 
 #if 0
     //: Called after each LM iteration to print debugging etc.

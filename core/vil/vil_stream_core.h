@@ -35,16 +35,16 @@ class vil_stream_core : public vil_stream
   vil_streampos m_transfer(char *buf, vil_streampos pos, vil_streampos n, bool read);
 
   // implement virtual vil_stream interface:
-  bool ok() const { return true; }
-  vil_streampos read (void       *buf, vil_streampos n);
-  vil_streampos write(void const *buf, vil_streampos n);
-  vil_streampos tell()     const    { return curpos_; }
-  void seek(vil_streampos position) { curpos_ = position; }
+  bool ok() const override { return true; }
+  vil_streampos read (void       *buf, vil_streampos n) override;
+  vil_streampos write(void const *buf, vil_streampos n) override;
+  vil_streampos tell()     const override    { return curpos_; }
+  void seek(vil_streampos position) override { curpos_ = position; }
 
-  vil_streampos file_size() const { return tailpos_; }
+  vil_streampos file_size() const override { return tailpos_; }
 
  protected:
-  ~vil_stream_core();
+  ~vil_stream_core() override;
 };
 
 #endif // vil_stream_core_h_

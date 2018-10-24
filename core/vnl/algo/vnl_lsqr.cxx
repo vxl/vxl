@@ -27,7 +27,7 @@ public:
     this->ls_ = nullptr;
     }
 
-  virtual ~lsqrVNL() = default;
+  ~lsqrVNL() override = default;
 
   /**
    * computes y = y + A*x without altering x,
@@ -35,7 +35,7 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  void Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const
+  void Aprod1(unsigned int m, unsigned int n, const double * x, double * y ) const override
     {
     vnl_vector_ref<double> x_ref(n, const_cast<double*>(x) );
     vnl_vector_ref<double> y_ref(m,y);
@@ -52,7 +52,7 @@ public:
    * The size of the vector x is n.
    * The size of the vector y is m.
    */
-  void Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const
+  void Aprod2(unsigned int m, unsigned int n, double * x, const double * y ) const override
     {
     vnl_vector_ref<double> x_ref(n,x);
     vnl_vector_ref<double> y_ref(m, const_cast<double*>( y ) );

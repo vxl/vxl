@@ -15,7 +15,7 @@ class base_impl : public vbl_ref_count
   base_impl(int nn);
   base_impl();
   base_impl(base_impl const& x) : vbl_ref_count(), n(x.n) {}
-  ~base_impl();
+  ~base_impl() override;
   void Print (std::ostream &str);
   static bool checkcount ( int count = 0 );
 };

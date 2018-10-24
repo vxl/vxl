@@ -20,9 +20,9 @@ class vul_redirector_streambuf : public std::streambuf
   vul_redirector_data* p;
  public:
   vul_redirector_streambuf(vul_redirector_data* p_):p(p_) {}
-  int sync ();
-  int overflow (int ch);
-  int underflow(){return 0;}
+  int sync () override;
+  int overflow (int ch) override;
+  int underflow() override{return 0;}
   std::streamsize xsputn (const char* text, std::streamsize n) override;
 };
 

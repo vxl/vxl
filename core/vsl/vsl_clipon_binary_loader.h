@@ -92,7 +92,7 @@ class vsl_clipon_binary_loader : public vsl_binary_loader_base
   vsl_clipon_binary_loader() = default;
 
   //: Destructor
-  ~vsl_clipon_binary_loader();
+  ~vsl_clipon_binary_loader() override;
 
   //: Returns the instance variable for the singleton.
   static vsl_clipon_binary_loader<BaseClass,BaseClassIO>& instance();

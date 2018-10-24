@@ -39,13 +39,13 @@ class vpgl_z_search_lsqr : public vnl_least_squares_function
                      vgl_point_3d<double> const& initial_pt,
                      double const& relative_diameter = 1.0);
   //: Destructor
-  virtual ~vpgl_z_search_lsqr() = default;
+  ~vpgl_z_search_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& elevation,
-                 vnl_vector<double>& projection_error);
+  void f(vnl_vector<double> const& elevation,
+                 vnl_vector<double>& projection_error) override;
   double xm() const {return xm_;}
   double ym() const {return ym_;}
  protected:

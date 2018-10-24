@@ -27,13 +27,13 @@ class vcsl_cartesian_2d
   vcsl_cartesian_2d();
 
   // Destructor
-  virtual ~vcsl_cartesian_2d() = default;
+  ~vcsl_cartesian_2d() override = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cartesian_2d *cast_to_cartesian_2d() const { return this; }
+  const vcsl_cartesian_2d *cast_to_cartesian_2d() const override { return this; }
 
   //***************************************************************************
   // Status report

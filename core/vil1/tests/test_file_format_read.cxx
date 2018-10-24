@@ -45,7 +45,7 @@ class CheckRGB : public CheckPixel
       img_ = i;
   };
 
-  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const override
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 3) return false;
@@ -73,7 +73,7 @@ class CheckColourPlanes : public CheckPixel
       img_ = i;
   };
 
-  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const override
   {
     assert( p==0 || p==1 || p==2 );
     if (!img_ || pixel.size() != 1) return false;
@@ -100,7 +100,7 @@ class CheckGrey : public CheckPixel
       img_ = i;
   };
 
-  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const override
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;
@@ -127,7 +127,7 @@ class CheckBit : public CheckPixel
       img_ = i;
   };
 
-  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const
+  bool operator() ( int p, int x, int y, const std::vector<TruePixelType>& pixel ) const override
   {
     assert( p == 0 );
     if (!img_ || pixel.size() != 1) return false;

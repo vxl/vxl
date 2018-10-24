@@ -74,7 +74,7 @@ class vil1_vil_image_resource: public vil_image_resource
   vil1_image src_;
 
  public:
-  virtual vil_pixel_format pixel_format() const
+  vil_pixel_format pixel_format() const override
   {
     if (!src_)
       return VIL_PIXEL_FORMAT_UNKNOWN;
@@ -104,11 +104,11 @@ class vil1_vil_image_resource: public vil_image_resource
     }
   }
 
-  virtual unsigned ni() const { if (src_) return src_.width(); else return 0; }
-  virtual unsigned nj() const { if (src_) return src_.height(); else return 0; }
-  virtual unsigned nplanes() const { if (!src_) return 0; else return src_.components(); }
+  unsigned ni() const override { if (src_) return src_.width(); else return 0; }
+  unsigned nj() const override { if (src_) return src_.height(); else return 0; }
+  unsigned nplanes() const override { if (!src_) return 0; else return src_.components(); }
 
-  virtual bool get_property(char const *tag, void *property_value=nullptr) const
+  bool get_property(char const *tag, void *property_value=nullptr) const override
   {
     if (src_)
       return src_.get_property(tag, property_value);
@@ -116,7 +116,7 @@ class vil1_vil_image_resource: public vil_image_resource
       return false;
   }
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni, unsigned j0, unsigned nj) const override
   {
     if (!src_)
       return nullptr;
@@ -144,7 +144,7 @@ class vil1_vil_image_resource: public vil_image_resource
     }
   }
 
-  virtual bool put_view(const vil_image_view_base &im, unsigned i0, unsigned j0)
+  bool put_view(const vil_image_view_base &im, unsigned i0, unsigned j0) override
   {
     if (!view_fits(im, i0, j0)) return false;
     if (!src_) return false;

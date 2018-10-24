@@ -25,13 +25,13 @@ class vil_nitf2_des;
 class vil_nitf2_file_format : public vil_file_format
 {
  public:
-  virtual char const *tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  char const *tag() const override;
+  vil_image_resource_sptr make_input_image(vil_stream *vs) override;
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned nx,
                                                     unsigned ny,
                                                     unsigned nplanes,
-                                                    enum vil_pixel_format);
+                                                    enum vil_pixel_format) override;
 };
 
 //: Class for reading NITF 2.1 imagery files.
@@ -79,28 +79,28 @@ class vil_nitf2_image : public vil_blocked_image_resource
   vil_nitf2_image( vil_stream* is );
   vil_nitf2_image( const std::string& filePath, const char* mode );
 
-  virtual ~vil_nitf2_image();
+  ~vil_nitf2_image() override;
 
   //:return the image info of the current image
-  virtual unsigned nplanes() const;
-  virtual unsigned ni() const;
-  virtual unsigned nj() const;
-  virtual enum vil_pixel_format pixel_format () const;
+  unsigned nplanes() const override;
+  unsigned ni() const override;
+  unsigned nj() const override;
+  enum vil_pixel_format pixel_format () const override;
 
   //: Block size in columns
-  virtual unsigned size_block_i() const;
+  unsigned size_block_i() const override;
 
   //: Block size in rows
-  virtual unsigned size_block_j() const;
+  unsigned size_block_j() const override;
 
   //: Number of blocks in image width
-  virtual unsigned n_block_i() const;
+  unsigned n_block_i() const override;
 
   //: Number of blocks in image height
-  virtual unsigned n_block_j() const;
+  unsigned n_block_j() const override;
 
   //: returns "nitf vM.N"
-  char const * file_format() const;
+  char const * file_format() const override;
 
 
   // is the current image JPEG 2000 compressed
@@ -122,21 +122,21 @@ class vil_nitf2_image : public vil_blocked_image_resource
   virtual vil_image_view_base_sptr get_copy_view_decimated_j2k( double i_factor, double j_factor ) const
   { return get_copy_view_decimated_j2k( 0, ni(), 0, nj(), i_factor, j_factor ); }
 
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
   virtual vil_image_view_base_sptr get_copy_view( ) const
   { return get_copy_view( 0, ni(), 0, nj() ); }
 
-  virtual bool put_view (const vil_image_view_base& /* im */, unsigned /* i0 */, unsigned /* j0 */ )
+  bool put_view (const vil_image_view_base& /* im */, unsigned /* i0 */, unsigned /* j0 */ ) override
   { return false; }
 
-  virtual bool put_block(unsigned  /*block_index_i*/, unsigned  /*block_index_j*/,
-                         const vil_image_view_base& /*blk*/ )
+  bool put_block(unsigned  /*block_index_i*/, unsigned  /*block_index_j*/,
+                         const vil_image_view_base& /*blk*/ ) override
   { return false; }
 
-  virtual vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const;
+  vil_image_view_base_sptr get_block( unsigned int blockIndexX, unsigned int blockIndexY ) const override;
 
-  virtual bool get_property (char const *tag, void *property_value=nullptr) const;
+  bool get_property (char const *tag, void *property_value=nullptr) const override;
 
   //const vil_nitf2_header& getFileHeader() const;
   const std::vector< vil_nitf2_image_subheader* >& get_image_headers() const

@@ -27,13 +27,13 @@ class vcsl_cylindrical
   vcsl_cylindrical();
 
   // Destructor
-  virtual ~vcsl_cylindrical() = default;
+  ~vcsl_cylindrical() override = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cylindrical *cast_to_cylindrical() const { return this; }
+  const vcsl_cylindrical *cast_to_cylindrical() const override { return this; }
 };
 
 #endif // vcsl_cylindrical_h_

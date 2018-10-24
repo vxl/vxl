@@ -67,8 +67,8 @@ struct derv_class1
 {
   static int cnt;
   derv_class1() { ++cnt; }
-  ~derv_class1() { --cnt; }
-  virtual int who() const { return 1; }
+  ~derv_class1() override { --cnt; }
+  int who() const override { return 1; }
 };
 
 int derv_class1::cnt = 0;
@@ -78,8 +78,8 @@ struct derv_class2
 {
   static int cnt;
   derv_class2() { ++cnt; }
-  ~derv_class2() { --cnt; }
-  virtual int who() const { return 2; }
+  ~derv_class2() override { --cnt; }
+  int who() const override { return 2; }
 };
 
 int derv_class2::cnt = 0;

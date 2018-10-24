@@ -27,13 +27,13 @@ class vcsl_cartesian_3d
   vcsl_cartesian_3d();
 
   // Destructor
-  virtual ~vcsl_cartesian_3d() = default;
+  ~vcsl_cartesian_3d() override = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const { return this; }
+  const vcsl_cartesian_3d *cast_to_cartesian_3d() const override { return this; }
 
   //***************************************************************************
   // Status report

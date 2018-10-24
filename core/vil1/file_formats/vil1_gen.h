@@ -27,14 +27,14 @@
 class vil1_gen_file_format : public vil1_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
-  virtual vil1_image_impl* make_output_image(vil1_stream* /*vs*/, int /*planes*/,
+  char const* tag() const override;
+  vil1_image_impl* make_input_image(vil1_stream* vs) override;
+  vil1_image_impl* make_output_image(vil1_stream* /*vs*/, int /*planes*/,
                                              int /*width*/,
                                              int /*height*/,
                                              int /*components*/,
                                              int /*bits_per_component*/,
-                                             vil1_component_format /*format*/) { return nullptr; }
+                                             vil1_component_format /*format*/) override { return nullptr; }
 };
 
 enum vil1_gen_type
@@ -65,25 +65,25 @@ class vil1_gen_generic_image : public vil1_image_impl
                          int components,
                          int bits_per_component,
                          vil1_component_format format);
-  ~vil1_gen_generic_image() = default;
+  ~vil1_gen_generic_image() override = default;
 
   //: Dimensions:  planes x width x height x components
-  virtual int planes() const { return 1; }
-  virtual int width() const { return width_; }
-  virtual int height() const { return height_; }
-  virtual int components() const { return components_; }
+  int planes() const override { return 1; }
+  int width() const override { return width_; }
+  int height() const override { return height_; }
+  int components() const override { return components_; }
 
-  virtual int bits_per_component() const { return bits_per_component_; }
-  virtual enum vil1_component_format component_format() const { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
+  int bits_per_component() const override { return bits_per_component_; }
+  enum vil1_component_format component_format() const override { return VIL1_COMPONENT_FORMAT_UNSIGNED_INT; }
 
   //: Copy contents of this image to buf
-  virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
+  bool get_section(void* buf, int x0, int y0, int width, int height) const override;
   //: Copy contents of buf to this image
-  virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
+  bool put_section(void const* buf, int x0, int y0, int width, int height) override;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
-  vil1_image get_plane(unsigned int p) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
+  vil1_image get_plane(unsigned int p) const override;
 };
 
 #endif // vil1_gen_file_format_h_

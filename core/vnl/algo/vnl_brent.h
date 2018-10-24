@@ -29,7 +29,7 @@ class VNL_ALGO_EXPORT vnl_brent : public vnl_brent_minimizer
 {
  public:
   vnl_brent(vnl_cost_function* functor);
- ~vnl_brent();
+ ~vnl_brent() override;
 
   //: Find a minimum of f(x) near to ax.
   double minimize(double ax);

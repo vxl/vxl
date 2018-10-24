@@ -30,10 +30,10 @@ class vgl_h_matrix_3d_compute_linear : public vgl_h_matrix_3d_compute
 {
  protected:
   //: compute from matched points
-  virtual
+  
   bool compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
                  std::vector<vgl_homg_point_3d<double> > const& points2,
-                 vgl_h_matrix_3d<double>& H);
+                 vgl_h_matrix_3d<double>& H) override;
 
   //:Assumes all corresponding points have equal weight
   bool solve_linear_problem(std::vector<vgl_homg_point_3d<double> > const& p1,
@@ -42,7 +42,7 @@ class vgl_h_matrix_3d_compute_linear : public vgl_h_matrix_3d_compute
 
  public:
    vgl_h_matrix_3d_compute_linear() = default;
-   int minimum_number_of_correspondences() const { return 5; }
+   int minimum_number_of_correspondences() const override { return 5; }
 };
 
 #endif // vgl_h_matrix_3d_compute_linear_h_

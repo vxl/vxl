@@ -36,10 +36,10 @@ class VNL_EXPORT vnl_cost_function : public vnl_unary_function<double, vnl_vecto
   //! Construct with a specified number of unknowns
   vnl_cost_function(int number_of_unknowns):dim(number_of_unknowns) {}
 
-  virtual ~vnl_cost_function() = default;
+  ~vnl_cost_function() override = default;
 
   //:  The main function.  Given the parameter vector x, compute the value of f(x).
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
 
   //:  Calculate the gradient of f at parameter vector x.
   virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);

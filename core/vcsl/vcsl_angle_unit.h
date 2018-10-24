@@ -30,7 +30,7 @@ class vcsl_angle_unit
 
  public:
   // Destructor
-  virtual ~vcsl_angle_unit() = default;
+  ~vcsl_angle_unit() override = default;
 
   //***************************************************************************
   // Status report
@@ -39,17 +39,17 @@ class vcsl_angle_unit
   //: Are `this' and `other' compatible units ?
   // (Are they associated to the same dimension ?)
   // Pure virtual function of vcsl_unit
-  virtual bool compatible_units(vcsl_unit_sptr const& other) const;
+  bool compatible_units(vcsl_unit_sptr const& other) const override;
 
   //: Return the standard unit associated to the dimension of `this'
   // Pure virtual function of vcsl_unit
-  virtual vcsl_unit_sptr standard_unit() const;
+  vcsl_unit_sptr standard_unit() const override;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_angle_unit *cast_to_angle_unit() const { return this; }
+  const vcsl_angle_unit *cast_to_angle_unit() const override { return this; }
 };
 
 #endif // vcsl_angle_unit_h_

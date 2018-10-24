@@ -58,11 +58,11 @@ class vgl_window_scan_iterator : public vgl_region_scan_iterator
 
   int current_y;
 
-  inline void reset() { current_y = y1<=y2 ? y1-1 : y1+1; }
-  inline bool next () { return y1<=y2 ? ++current_y <= y2 : --current_y >= y2; }
-  inline int  scany () const { return current_y; }
-  inline int  startx() const { return x1; }
-  inline int  endx  () const { return x2; }
+  inline void reset() override { current_y = y1<=y2 ? y1-1 : y1+1; }
+  inline bool next () override { return y1<=y2 ? ++current_y <= y2 : --current_y >= y2; }
+  inline int  scany () const override { return current_y; }
+  inline int  startx() const override { return x1; }
+  inline int  endx  () const override { return x2; }
 };
 
 #define VGL_WINDOW_SCAN_ITERATOR_INSTANTIATE(T) extern "please include <vgl/vgl_window_scan_iterator.hxx> instead"

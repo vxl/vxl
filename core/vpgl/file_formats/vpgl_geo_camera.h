@@ -68,9 +68,9 @@ class vpgl_geo_camera : public vpgl_camera<double>
     vpgl_lvcs_sptr lvcs = nullptr;
     return init_geo_camera(tfw_name, lvcs, utm_zone, northing, camera);
   }
-  ~vpgl_geo_camera() = default;
+  ~vpgl_geo_camera() override = default;
 
-  virtual std::string type_name() const { return "vpgl_geo_camera"; }
+  std::string type_name() const override { return "vpgl_geo_camera"; }
 
   //northing=0 means North, 1 is south
   void set_utm(int utm_zone, unsigned northing) { is_utm=true, utm_zone_=utm_zone; northing_=northing; }
@@ -83,7 +83,7 @@ class vpgl_geo_camera : public vpgl_camera<double>
 
   //: Implementing the generic camera interface of vpgl_camera.
   //  x,y,z are in local coordinates, u represents image column, v image row
-  void project(const double x, const double y, const double z, double& u, double& v) const;
+  void project(const double x, const double y, const double z, double& u, double& v) const override;
 
   //: backprojects an image point into local coordinates (based on lvcs_)
   void backproject(const double u, const double v, double& x, double& y, double& z);

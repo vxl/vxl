@@ -151,8 +151,8 @@ class vgl_rtree_polygon_probe : public vgl_rtree_probe<V, B, C>
   vgl_rtree_polygon_probe(vgl_polygon<T> const& poly): poly_(poly) {}
 
   //: return true if the probe "meets" the given object.
-  virtual bool meets(V const &v) const {return C::meets(v, poly_); }
-  virtual bool meets(B const &b) const {return C::meets(b, poly_); }
+  bool meets(V const &v) const override {return C::meets(v, poly_); }
+  bool meets(B const &b) const override {return C::meets(b, poly_); }
 };
 
 #endif // vgl_rtree_c_h_

@@ -50,10 +50,10 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
     (*this) = vpgl_affine_camera<T>(ry, u, pt, u0, v0, su, sv);
   }
 
-  virtual bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix );
-  virtual bool set_matrix( const T* new_camera_matrix ); // i.e., T new_camera_matrix[12]
+  bool set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix ) override;
+  bool set_matrix( const T* new_camera_matrix ) override; // i.e., T new_camera_matrix[12]
 
-  virtual std::string type_name() const { return "vpgl_affine_camera"; }
+  std::string type_name() const override { return "vpgl_affine_camera"; }
 
   //: Set the top two rows.
   void set_rows( const vnl_vector_fixed<T,4>& row1,
@@ -76,20 +76,20 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
   }
 
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
-  virtual vgl_homg_point_3d<T> camera_center() const;
+  vgl_homg_point_3d<T> camera_center() const override;
 
   //: Find the 3d ray that goes through the camera center.
   // The finite point of the ray is at the viewing distance from the origin
-  virtual  vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const;
+   vgl_homg_line_3d_2_points<T> backproject( const vgl_homg_point_2d<T>& image_point ) const override;
 
   //: Find the 3d ray that goes through the camera center and the provided image point.
-  virtual vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const;
+  vgl_ray_3d<T> backproject_ray( const vgl_homg_point_2d<T>& image_point ) const override;
 
   //: Find the world plane perpendicular to the camera rays at viewing distance from the origin
-  virtual  vgl_homg_plane_3d<T> principal_plane() const;
+   vgl_homg_plane_3d<T> principal_plane() const override;
 
   //: Clone `this': creation of a new object and initialization
-  virtual vpgl_affine_camera<T>* clone(void) const;
+  vpgl_affine_camera<T>* clone(void) const override;
 
  private:
   T view_distance_; // distance from origin along rays

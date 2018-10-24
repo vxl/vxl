@@ -76,17 +76,17 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   vpgl_perspective_camera( const vpgl_perspective_camera& cam );
 
   //: Destructor
-  virtual ~vpgl_perspective_camera() = default;
+  ~vpgl_perspective_camera() override = default;
 
-  virtual std::string type_name() const { return "vpgl_perspective_camera"; }
+  std::string type_name() const override { return "vpgl_perspective_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  virtual vpgl_proj_camera<T>* clone(void) const;
+  vpgl_proj_camera<T>* clone(void) const override;
 
   //: Finite backprojection.
   // This is a virtual function from the parent class vpgl_proj_camera<T>
-  vgl_homg_line_3d_2_points<T> backproject(const vgl_homg_point_2d<T>& image_point ) const;
+  vgl_homg_line_3d_2_points<T> backproject(const vgl_homg_point_2d<T>& image_point ) const override;
   //: Finite backprojection.
   vgl_line_3d_2_points<T> backproject( const vgl_point_2d<T>& image_point ) const;
   //: Finite backprojection.
@@ -126,7 +126,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // Redefined virtual functions -------------------------------------------
 
   //: Return the known camera center instead of computing it in the base class
-  virtual vgl_homg_point_3d<T> camera_center() const
+  vgl_homg_point_3d<T> camera_center() const override
   { return vgl_homg_point_3d<T>(camera_center_); }
 
   // static public functions -----------------------------------------------
@@ -151,7 +151,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   // -------------------- I/O :---------------------
 
   //: Save in ascii format
-  virtual void save(std::string cam_path);
+  void save(std::string cam_path) override;
 
 
   //: Return `this' if `this' is a vpgl_perspective_camera, 0 otherwise

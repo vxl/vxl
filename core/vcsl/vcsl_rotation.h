@@ -35,7 +35,7 @@ class vcsl_rotation
   vcsl_rotation() : mode_2d_(false) {}
 
   // Destructor
-  virtual ~vcsl_rotation() = default;
+  ~vcsl_rotation() override = default;
 
   //***************************************************************************
   // Status report
@@ -44,11 +44,11 @@ class vcsl_rotation
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual bool is_invertible(double /*time*/) const { return true; }
+  bool is_invertible(double /*time*/) const override { return true; }
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const
+  bool is_valid() const override
   { return vcsl_spatial_transformation::is_valid() &&
           this->duration()==axis_.size() &&
           this->duration()==angle_.size(); }
@@ -103,16 +103,16 @@ class vcsl_rotation
   //  REQUIRE: is_valid()
   //  REQUIRE: (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE (is_2d()&&v.size()==2)||(is_3d()&&v.size()==3)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
 
  protected:
   //: Compute the value of the quaternion at time `time'

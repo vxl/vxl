@@ -58,7 +58,7 @@ class vil_nitf2_typed_array_field : public vil_nitf2_array_field
   std::ostream& output(std::ostream& os) const override;
 
   //: Destructor (overridden below for instantiations where T is a pointer)
-  ~vil_nitf2_typed_array_field();
+  ~vil_nitf2_typed_array_field() override;
 
  protected:
   // Helper method for output() method above. Iterates over one

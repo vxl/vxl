@@ -27,11 +27,11 @@
 class vil_iris_file_format : public vil_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  char const* tag() const override;
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override;
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned int ni, unsigned int nj, unsigned int planes,
-                                                    vil_pixel_format format);
+                                                    vil_pixel_format format) override;
 };
 
 //: Generic image implementation for iris (SGI) RGB files
@@ -50,20 +50,20 @@ class vil_iris_generic_image : public vil_image_resource
   vil_iris_generic_image(vil_stream* is,
                          unsigned int ni, unsigned int nj, unsigned int planes,
                          vil_pixel_format format);
-  ~vil_iris_generic_image();
+  ~vil_iris_generic_image() override;
 
   //: Dimensions.  Planes x ni(width) x nj(height).
-  virtual unsigned int ni() const { return ni_; }
-  virtual unsigned int nj() const { return nj_; }
-  virtual unsigned int nplanes() const { return nplanes_; }
+  unsigned int ni() const override { return ni_; }
+  unsigned int nj() const override { return nj_; }
+  unsigned int nplanes() const override { return nplanes_; }
 
-  virtual enum vil_pixel_format pixel_format() const { return format_; }
+  enum vil_pixel_format pixel_format() const override { return format_; }
 
-  virtual vil_image_view_base_sptr get_copy_view( unsigned int x0, unsigned int ni, unsigned int y0, unsigned int nj) const;
-  virtual bool put_view( vil_image_view_base const& buf, unsigned int x0, unsigned int y0);
+  vil_image_view_base_sptr get_copy_view( unsigned int x0, unsigned int ni, unsigned int y0, unsigned int nj) const override;
+  bool put_view( vil_image_view_base const& buf, unsigned int x0, unsigned int y0) override;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 
  protected:
   vil_stream* is_;

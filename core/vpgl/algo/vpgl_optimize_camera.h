@@ -24,14 +24,14 @@ class vpgl_orientation_lsqr : public vnl_least_squares_function
                         const std::vector<vgl_homg_point_3d<double> >& world_points,
                         std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_lsqr() = default;
+  ~vpgl_orientation_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   //  The parameters in x are the {wx, wy, wz}
   //  where w is the Rodrigues vector of the rotation.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.
@@ -60,14 +60,14 @@ class vpgl_orientation_position_lsqr : public vnl_least_squares_function
                                  const std::vector<vgl_homg_point_3d<double> >& world_points,
                                  std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_lsqr() = default;
+  ~vpgl_orientation_position_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
   //  where w is the Rodrigues vector of the rotation and t is the translation.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.
@@ -92,14 +92,14 @@ class vpgl_orientation_position_calibration_lsqr : public vnl_least_squares_func
   vpgl_orientation_position_calibration_lsqr(const std::vector<vgl_homg_point_3d<double> >& world_points,
                                              std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_calibration_lsqr() = default;
+  ~vpgl_orientation_position_calibration_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
   //  where w is the Rodrigues vector of the rotation and t is the translation.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.
@@ -123,18 +123,18 @@ class vpgl_orientation_position_focal_lsqr : public vnl_least_squares_function
                                        const std::vector<vgl_homg_point_3d<double> >& world_points,
                                        std::vector<vgl_point_2d<double> >  image_points );
   //: Destructor
-  virtual ~vpgl_orientation_position_focal_lsqr() = default;
+  ~vpgl_orientation_position_focal_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   //  The parameters in x are really two three component vectors {wx, wy, wz, tx, ty, tz}
   //  where w is the Rodrigues vector of the rotation and t is the translation.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: Gradients of the cost-function w.r.t. to the 7 free parameters of x
   //  The seven parameters are rotation(wx, wy, wz), translation(tx, ty, tz) and focal length (Fx)
-  virtual void gradf(vnl_vector<double> const&x, vnl_matrix<double>& jacobian);
+  void gradf(vnl_vector<double> const&x, vnl_matrix<double>& jacobian) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.

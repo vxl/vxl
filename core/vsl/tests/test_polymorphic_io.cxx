@@ -88,25 +88,25 @@ class test_derived_class : public test_base_class
 
   void set_data(int d) { data_=d; }
 
-  virtual int data() const { return data_; }
+  int data() const override { return data_; }
 
   //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Clone this
-  virtual test_base_class* clone() const;
+  test_base_class* clone() const override;
 
   //: Print summary
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Return true if the argument matches this class' or the parent's identifier
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 };
 
 //: Binary save self to stream.

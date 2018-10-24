@@ -36,7 +36,7 @@ class XXX : public vnl_least_squares_function
       assert(N == z1.size());
       assert(N == z2.size());
     }
-  ~XXX() { N=0; }
+  ~XXX() override { N=0; }
 
   void boo(const vnl_vector<double> &x) {
     assert(x.size()==3);
@@ -51,7 +51,7 @@ class XXX : public vnl_least_squares_function
 
   //    the matrix is   [ 1.0    x[0] ]
   //                    [ x[1] 1+x[2] ]
-  void f(const vnl_vector<double>& x, vnl_vector<double>& fx) {
+  void f(const vnl_vector<double>& x, vnl_vector<double>& fx) override {
     assert(x.size()==3);
     assert(fx.size()==N);
     double z,y;

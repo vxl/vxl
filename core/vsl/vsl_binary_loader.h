@@ -60,7 +60,7 @@ class vsl_binary_loader : public vsl_binary_loader_base
   vsl_binary_loader() = default;
 
   //: Destructor
-  ~vsl_binary_loader();
+  ~vsl_binary_loader() override;
 
   //: Returns the instance variable for the singleton.
   static vsl_binary_loader<BaseClass>& instance();

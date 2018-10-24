@@ -50,24 +50,24 @@ class vil_decimate_image_resource : public vil_image_resource
   vil_decimate_image_resource(vil_image_resource_sptr const&,
                               unsigned i_factor, unsigned j_factor);
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return src_->ni() / i_factor_; }
-  virtual unsigned nj() const { return src_->nj() / j_factor_; }
+  unsigned nplanes() const override { return src_->nplanes(); }
+  unsigned ni() const override { return src_->ni() / i_factor_; }
+  unsigned nj() const override { return src_->nj() / j_factor_; }
 
-  virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
-
-
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                 unsigned j0, unsigned n_j) const;
-
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
-                                            unsigned j0, unsigned n_j) const;
+  enum vil_pixel_format pixel_format() const override { return src_->pixel_format(); }
 
 
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+                                                 unsigned j0, unsigned n_j) const override;
+
+  vil_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
+                                            unsigned j0, unsigned n_j) const override;
+
+
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const
+  bool get_property(char const* tag, void* property_value = nullptr) const override
   {
     return src_->get_property(tag, property_value);
   }

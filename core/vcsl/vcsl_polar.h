@@ -28,13 +28,13 @@ class vcsl_polar
   vcsl_polar();
 
   // Destructor
-  virtual ~vcsl_polar() = default;
+  ~vcsl_polar() override = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_polar *cast_to_polar() const { return this; }
+  const vcsl_polar *cast_to_polar() const override { return this; }
 };
 
 #endif // vcsl_polar_h_

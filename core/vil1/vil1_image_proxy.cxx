@@ -39,32 +39,32 @@ struct vil1_image_proxy_impl : public vil1_image_impl
   }
 
   // cached stuff
-  int planes() const { return planes_; }
-  int width() const { return width_; }
-  int height() const { return height_; }
-  int components() const { return components_; }
-  int bits_per_component() const { return bits_per_component_; }
-  enum vil1_component_format component_format() const { return component_format_; }
-  char const *file_format() const { return file_format_.c_str(); }
+  int planes() const override { return planes_; }
+  int width() const override { return width_; }
+  int height() const override { return height_; }
+  int components() const override { return components_; }
+  int bits_per_component() const override { return bits_per_component_; }
+  enum vil1_component_format component_format() const override { return component_format_; }
+  char const *file_format() const override { return file_format_.c_str(); }
 
   // non-cached stuff
-  vil1_image get_plane(unsigned int p) const { return vil1_load(filename.c_str()).get_plane(p); }
+  vil1_image get_plane(unsigned int p) const override { return vil1_load(filename.c_str()).get_plane(p); }
 
-  bool get_section(void       *buf, int x0, int y0, int width, int height) const
+  bool get_section(void       *buf, int x0, int y0, int width, int height) const override
   { return vil1_load(filename.c_str()).get_section(buf, x0, y0, width, height); }
-  bool put_section(void const *buf, int x0, int y0, int width, int height)
+  bool put_section(void const *buf, int x0, int y0, int width, int height) override
   { return vil1_load(filename.c_str()).put_section(buf, x0, y0, width, height); }
 
-  bool get_property(char const *tag, void       *property_value) const
+  bool get_property(char const *tag, void       *property_value) const override
   { return vil1_load(filename.c_str()).get_property(tag, property_value); }
-  bool set_property(char const *tag, void const *property_value) const
+  bool set_property(char const *tag, void const *property_value) const override
   { return vil1_load(filename.c_str()).set_property(tag, property_value); }
 
   //: Return the name of the class;
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(std::string const&) const;
+  bool is_class(std::string const&) const override;
 };
 
 vil1_image_proxy::vil1_image_proxy(char const *file)

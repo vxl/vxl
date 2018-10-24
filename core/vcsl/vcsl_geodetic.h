@@ -34,7 +34,7 @@ class vcsl_geodetic
 
  public:
   // Destructor
-  virtual ~vcsl_geodetic() = default;
+  ~vcsl_geodetic() override = default;
 };
 
 #endif // vcsl_geodetic_h_
