@@ -110,7 +110,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     unsigned band_size = static_cast<unsigned>(ns*tail_fract_);
     for(unsigned k = band_size; k<(ns-band_size); ++k){
       double z = z_samples[k];
-      if(z<zmin_calc) zmin_calc = z;
+      if(z<zmin_calc) zmin_calc = static_cast<float>(z);
       if(z>zmax_calc) zmax_calc = z;
     }
     //the final elevation bounds

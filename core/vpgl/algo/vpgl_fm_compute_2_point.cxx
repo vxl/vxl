@@ -59,7 +59,7 @@ vpgl_fm_compute_2_point::compute(
     }
   }
   // Solve!
-  vnl_matrix<double> S(pr_norm.size(),3);
+  vnl_matrix<double> S(static_cast<unsigned int>(pr_norm.size()), 3);
   for ( unsigned int i = 0; i < pr_norm.size(); i++ )
   {
     double xl =pl_norm[i].x(), yl = pl_norm[i].y(), wl = pl_norm[i].w();

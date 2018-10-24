@@ -197,7 +197,7 @@ vpgl_proj_camera<T> vpgl_fundamental_matrix<T>::extract_left_camera(
   elxF.put( 2, 0, -el.y() ); elxF.put( 2, 1, el.x() );
   elxF*=F_;
 
-  vnl_matrix<T> A( 3*image_points.size(), 4 );
+  vnl_matrix<T> A(static_cast<unsigned int>(3 * image_points.size()), 4 );
   vnl_vector<T> y( 3*image_points.size() );
   for ( unsigned p = 0; p < image_points.size(); p++ ) {
     vnl_vector_fixed<T,3> wp_vnl(

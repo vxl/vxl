@@ -403,7 +403,7 @@ convert( vpgl_rational_camera<double> const& rat_cam,
   //Normalize world and image points to the range [-1,1]
   std::vector<vgl_point_3d<double> > norm_world_pts;
   std::vector<vgl_point_2d<double> > image_pts, norm_image_pts;
-  unsigned N = world_pts.size();
+  unsigned N = static_cast<unsigned int>(world_pts.size());
   for (unsigned i = 0; i<N; ++i)
   {
     vgl_point_3d<double> wp = world_pts[i];
@@ -565,7 +565,7 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
   //Normalize world and image points to the range [-1,1]
   std::vector<vgl_point_3d<double> > norm_world_pts;
   std::vector<vgl_point_2d<double> > image_pts, norm_image_pts;
-  unsigned N = world_pts.size();
+  unsigned N = static_cast<unsigned int>(world_pts.size());
   for (unsigned i = 0; i<N; ++i)
   {
     vgl_point_3d<double> wp = world_pts[i];
@@ -648,7 +648,7 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
 static bool interp_ray(std::vector<vgl_ray_3d<double> > const& ray_nbrs,
                        vgl_ray_3d<double> & intrp_ray)
 {
-  unsigned nrays = ray_nbrs.size();
+  unsigned nrays = static_cast<unsigned int>(ray_nbrs.size());
   if (nrays!=4) return false;
   vgl_ray_3d<double> r0 = ray_nbrs[0], r1 = ray_nbrs[1];
   vgl_ray_3d<double> r2 = ray_nbrs[2], r3 = ray_nbrs[3];
@@ -721,7 +721,7 @@ upsample_rays(std::vector<vgl_ray_3d<double> > const& ray_nbrs,
               vgl_ray_3d<double> const& ray,
               std::vector<vgl_ray_3d<double> >& interp_rays)
 {
-  unsigned nrays = ray_nbrs.size();
+  unsigned nrays = static_cast<unsigned int>(ray_nbrs.size());
   if (nrays!=4) return false;
   vgl_ray_3d<double> r00 = ray_nbrs[0],
                      r01 = ray_nbrs[1];

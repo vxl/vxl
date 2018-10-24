@@ -65,7 +65,7 @@ void vpgl_ray_intersect_lsqr<T>::f(vnl_vector<double> const& intersection_point,
                                 vnl_vector<double>& image_errors)
 {
     // Get the size of the error vector
-    unsigned dim = image_errors.size()/2;
+    std::size_t dim = static_cast<unsigned int>(image_errors.size() / 2);
 
     // Initialize huge error
     double huge = vnl_numeric_traits<double>::maxval;

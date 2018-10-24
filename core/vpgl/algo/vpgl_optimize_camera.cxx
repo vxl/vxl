@@ -21,7 +21,7 @@ vpgl_orientation_lsqr::
                         const vgl_point_3d<double>& c,
                         const std::vector<vgl_homg_point_3d<double> >& world_points,
                         std::vector<vgl_point_2d<double> >  image_points )
- : vnl_least_squares_function(3,2*world_points.size(),no_gradient),
+ : vnl_least_squares_function(3,static_cast<unsigned int>(2*world_points.size()),no_gradient),
    K_(K),
    c_(c),
    world_points_(world_points),
@@ -55,7 +55,7 @@ vpgl_orientation_position_lsqr::
   vpgl_orientation_position_lsqr(const vpgl_calibration_matrix<double>& K,
                                  const std::vector<vgl_homg_point_3d<double> >& world_points,
                                  std::vector<vgl_point_2d<double> >  image_points )
- : vnl_least_squares_function(6,2*world_points.size(),no_gradient),
+ : vnl_least_squares_function(6, static_cast<unsigned int>(2 * world_points.size()), no_gradient),
    K_(K),
    world_points_(world_points),
    image_points_(std::move(image_points))

@@ -382,7 +382,7 @@ image_jacobians(const vpgl_proj_camera<T>& camera,
   Dv(2,1) = -Dv(1,2);
 
 
-  const unsigned int num_pts = pts.size();
+  const std::size_t num_pts = pts.size();
   std::vector<vnl_matrix_fixed<T,2,3> > img_jac(num_pts);
 
   for (unsigned int i=0; i<num_pts; ++i)

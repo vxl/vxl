@@ -106,7 +106,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 
     ++in_string;
 
-    return in_string-orig;
+    return static_cast<int>(in_string - orig);
   }
   else //DDDdMM'SS"[d]  where [d]=nNsSeEwW
   if (*in_string == 'd')
@@ -165,7 +165,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 
     ++in_string;
 
-    return in_string-orig;
+    return static_cast<int>(in_string - orig);
   }
   else //DDD.DDDD
   if (*in_string == ' ' || *in_string == '-' || *in_string == '+'
@@ -194,7 +194,7 @@ static int geostr_to_double(const char* in_string, double* val, vpgl_nitf_ration
 
     ++in_string;
 
-    return in_string-orig;
+    return static_cast<int>(in_string - orig);
   }
   else
     return 0;
