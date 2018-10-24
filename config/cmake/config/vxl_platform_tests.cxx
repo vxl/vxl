@@ -100,10 +100,10 @@ int main() { return 0; }
 // VCL_DEFAULT_VALUE(x) will be set to "= x" if this test fails, to "" otherwise
 
 // declaration
-void function(int x, char *ptr = "foo");
+char function(int x, const char *ptr = "foo");
 
 // definition
-void function(int x, char *ptr) { ++ ptr[x]; }
+char function(int x, const char *ptr) { return ptr[x]; }
 
 int main() { return 0; }
 #endif // VCL_DEFAULT_VALUE
