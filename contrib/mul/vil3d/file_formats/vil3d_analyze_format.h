@@ -186,12 +186,6 @@ class vil3d_analyze_image: public vil3d_image_resource
   //: Header information
   vil3d_analyze_header header_;
 
-  //: number of planes
-  unsigned nplanes_;
-
-  //: Physical Voxel dimensions ( in mm )
-  float vox_width1_, vox_width2_, vox_width3_;
-
  public:
   //: Create object with given header and base_path, ready for reading/writing
   //  Doesn't actually load/save anything until get_copy_view() or put_view() called.

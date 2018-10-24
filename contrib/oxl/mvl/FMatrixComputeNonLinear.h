@@ -45,7 +45,6 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
  private:
   // Data Members--------------------------------------------------------------
   int data_size_;
-  int terminate_count_;
   PairMatchSetCorner& matches_;
   int p_, q_, r_;
   FMatrix F_orig_;

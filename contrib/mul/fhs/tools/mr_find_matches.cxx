@@ -247,7 +247,6 @@ int main( int argc, char* argv[] )
 
   // Generate more points at each level
   int max_pts = nc();
-  unsigned i0 = 0;          // Record index of first point at level above
   unsigned i1 = pts.size()-1; // Record index of last point at level above
   for (int L=level_hi()-1;L>=level_lo();--L)
   {

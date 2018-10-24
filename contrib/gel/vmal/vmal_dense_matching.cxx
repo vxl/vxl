@@ -228,8 +228,6 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
   convert_lines_double_3(tmp_lines0, lines0_p, lines0_q);
   convert_lines_double_3(tmp_lines1, lines1_p, lines1_q);
 
-  vnl_double_3x3 IH0=vnl_inverse(H0_);
-
   vnl_double_3 int_line0p;
   vnl_double_3 int_line0q;
   vnl_double_3 int_line1p;

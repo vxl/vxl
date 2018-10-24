@@ -386,7 +386,6 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   // count the number of constraints/residuals
   typedef rgrl_match_set::const_from_iterator FIter;
-  typedef FIter::to_iterator TIter;
   unsigned int tot_num = 0;
   for ( unsigned ms = 0; ms<matches.size(); ++ms )
     if ( matches[ms] ) { // if pointer is valid
