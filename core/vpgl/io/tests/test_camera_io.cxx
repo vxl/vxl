@@ -60,13 +60,13 @@ static void test_camera_io()
   if (!cam_r_sptr)
     TEST("camera sptr read ", false, true);
   else {
-    vpgl_proj_camera<double>* pcam_r =
+    vpgl_proj_camera<double>* local_pcam_r =
     dynamic_cast<vpgl_proj_camera<double>*>(cam_r_sptr.as_pointer());
-    if (!pcam_r) {
+    if (!local_pcam_r) {
       TEST("sptr cast to proj camera", false, true);
     }
     else {
-      TEST("recovered proj_camera from sptr", pcam_r->get_matrix(), random_matrix );
+      TEST("recovered proj_camera from sptr", local_pcam_r->get_matrix(), random_matrix );
     }
   }
   //delete cam; cam = 0;

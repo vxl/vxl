@@ -414,7 +414,7 @@ static void get_distinct_indices(
 {
     for (int i = 0; i < n; ++i) {
         bool found = false;
-        int idx;
+        int idx=0;
 
         while (!found) {
             found = true;
