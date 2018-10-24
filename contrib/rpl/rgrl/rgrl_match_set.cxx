@@ -231,7 +231,7 @@ add_feature_and_match( rgrl_feature_sptr from_feature,
   xformed_from_features_.push_back( mapped_feature );
 
   std::vector<match_info> match;
-  match.push_back( match_info( matching_to, wgt, wgt, wgt ) );
+  match.emplace_back( matching_to, wgt, wgt, wgt );
   matches_and_weights_.push_back( match );
 }
 
@@ -373,7 +373,7 @@ write_sorted( std::ostream& os ) const
   std::vector< sort_node > nodes;
 
   for( unsigned i=0; i<from_features_.size(); ++i ){
-    nodes.push_back( sort_node( i, from_features_[i] ) );
+    nodes.emplace_back( i, from_features_[i] );
   }
   std::sort( nodes.begin(), nodes.end() );
 

@@ -312,7 +312,7 @@ int main(int argc, char ** argv)
     for (unsigned int x=0; x< d; x++)
       for (unsigned int y=0; y< d; y++)
         for (unsigned int z=0; z< d; z++)
-          voxels.push_back( Voxel(int(startiteration()),x,y,z));
+          voxels.emplace_back(int(startiteration()),x,y,z);
   }
 
   for (int count=int(startiteration()); count< int(iterations()); count++)
@@ -464,14 +464,14 @@ int main(int argc, char ** argv)
       {
         if (count!= (int(iterations())-1))
         {
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2  ));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2+1));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2  ));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2+1));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2  ));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2+1));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2  ));
-          newvoxels.push_back( Voxel( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2+1));
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2  );
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2  , voxels[i].z*2+1);
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2  );
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2  , voxels[i].y*2+1, voxels[i].z*2+1);
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2  );
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2  , voxels[i].z*2+1);
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2  );
+          newvoxels.emplace_back( voxels[i].depth+1, voxels[i].x*2+1, voxels[i].y*2+1, voxels[i].z*2+1);
         }
         else
         {
@@ -653,13 +653,13 @@ int main(int argc, char ** argv)
 
           if (voxint( x,y,z))
           {
-            faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-            faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+            faces.emplace_back( ii[2], ii[1], ii[0]);
+            faces.emplace_back( ii[3], ii[2], ii[0]);
           }
           else
           {
-            faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-            faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+            faces.emplace_back( ii[0], ii[1], ii[2]);
+            faces.emplace_back( ii[0], ii[2], ii[3]);
           }
         }
       }
@@ -707,13 +707,13 @@ int main(int argc, char ** argv)
 
           if (voxint( x,y,z))
           {
-            faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-            faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+            faces.emplace_back( ii[0], ii[1], ii[2]);
+            faces.emplace_back( ii[0], ii[2], ii[3]);
           }
           else
           {
-            faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-            faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+            faces.emplace_back( ii[2], ii[1], ii[0]);
+            faces.emplace_back( ii[3], ii[2], ii[0]);
           }
         }
       }
@@ -761,13 +761,13 @@ int main(int argc, char ** argv)
 
           if (voxint( x,y,z))
           {
-            faces.push_back( vnl_int_3( ii[0], ii[1], ii[2]));
-            faces.push_back( vnl_int_3( ii[0], ii[2], ii[3]));
+            faces.emplace_back( ii[0], ii[1], ii[2]);
+            faces.emplace_back( ii[0], ii[2], ii[3]);
           }
           else
           {
-            faces.push_back( vnl_int_3( ii[2], ii[1], ii[0]));
-            faces.push_back( vnl_int_3( ii[3], ii[2], ii[0]));
+            faces.emplace_back( ii[2], ii[1], ii[0]);
+            faces.emplace_back( ii[3], ii[2], ii[0]);
           }
         }
       }

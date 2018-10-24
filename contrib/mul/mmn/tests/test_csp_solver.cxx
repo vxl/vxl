@@ -59,7 +59,7 @@ void test_csp_solver_a()
     for (unsigned i=0;i<n-1;++i)
         arcs[i]=mmn_arc(i+1,i);
 
-    arcs.push_back(mmn_arc(0,n-1));
+    arcs.emplace_back(0,n-1);
     std::cout<<"Set up trivial problem. Optimal node=i, pair_costs all flat"<<std::endl;
 
     std::vector<mmn_csp_solver::label_subset_t > node_labels_subset(n);
@@ -399,11 +399,11 @@ void test_5x5grid()
 
             if (ix<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdRight));
+                arcs.emplace_back(nodeId,nodeIdRight);
             }
             if (iy<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdAbove));
+                arcs.emplace_back(nodeId,nodeIdAbove);
             }
         }
     }

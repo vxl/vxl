@@ -42,7 +42,7 @@ inline void vimt_find_image_troughs_3x3(std::vector<vgl_point_2d<unsigned> >& tr
     const T* pixel = row;
     for (unsigned i=1;i<ni-1;++i,pixel+=istep) // do not run over border
       if (vimt_is_trough_3x3(pixel,istep,jstep))
-        troughs.push_back(vgl_point_2d<unsigned>(i,j));
+        troughs.emplace_back(i,j);
   }
 }
 
@@ -64,7 +64,7 @@ inline void vimt_find_image_troughs_3x3(std::vector<vgl_point_2d<unsigned> >& tr
     for (unsigned i=1;i<ni-1;++i,pixel+=istep) // do not run over border
       if (vimt_is_trough_3x3(pixel,istep,jstep))
       {
-        troughs.push_back(vgl_point_2d<unsigned>(i,j));
+        troughs.emplace_back(i,j);
         trough_value.push_back(*pixel);
       }
   }

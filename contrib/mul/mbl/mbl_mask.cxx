@@ -38,7 +38,7 @@ void mbl_masks_from_index_set(const std::vector<unsigned> & indices,
                                          it != end; ++it)
   {
     ordering[*it] = n_masks++;
-    masks.push_back(mbl_mask(n));
+    masks.emplace_back(n);
   }
 
   for (unsigned i = 0 ; i < n ; ++i)

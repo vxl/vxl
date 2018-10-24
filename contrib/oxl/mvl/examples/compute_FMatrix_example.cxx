@@ -22,9 +22,9 @@ int main(int argc, char**argv)
   // Read points
   while (std::cin.good()) {
     double x,y,w=1.0; std::cin >> x >> y; if (ishomg) std::cin >> w; // Read 2 or 3 reals
-    points1.push_back(vgl_homg_point_2d<double>(x,y,w));
+    points1.emplace_back(x,y,w);
     w=1.0; std::cin >> x >> y; if (ishomg) std::cin >> w; // Read 2 or 3 reals
-    points2.push_back(vgl_homg_point_2d<double>(x,y,w));
+    points2.emplace_back(x,y,w);
     std::cin >> std::ws; // Eat whitespace
   }
 

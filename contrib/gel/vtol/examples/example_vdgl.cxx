@@ -47,7 +47,7 @@ int main()
   std::vector<vdgl_edgel> edgels;
 
   for ( int i=0; data[i]!= -999; i+= 2)
-    edgels.push_back( vdgl_edgel( data[i], data[i+1], 0, 1));
+    edgels.emplace_back( data[i], data[i+1], 0, 1);
 
   // Create an edgel chain...
   vdgl_edgel_chain_sptr edgel_chain= new vdgl_edgel_chain( edgels);

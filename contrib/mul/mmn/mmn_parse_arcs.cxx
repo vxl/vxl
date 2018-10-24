@@ -107,7 +107,7 @@ void  mmn_parse_arcs(std::istream& is,
         }
 
         //Finally add the arc
-        arcs.push_back(mmn_arc(nodeIter1->second,nodeIter2->second));
+        arcs.emplace_back(nodeIter1->second,nodeIter2->second);
 
     }
 }

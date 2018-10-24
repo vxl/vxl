@@ -114,8 +114,8 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     arc = arcs[best_arc[best_i]];
     // Record arcs from node best_i to ends of arc best_arcs[best_i]
     node_free[best_i]=false;
-    arcs.push_back(mmn_arc(best_i,arc.v1));
-    arcs.push_back(mmn_arc(best_i,arc.v2));
+    arcs.emplace_back(best_i,arc.v1);
+    arcs.emplace_back(best_i,arc.v2);
 
     // Re-evaluate distances to each free point
     update_best_arcs(D,node_free,arcs,arcs.size()-2,best_arc,best_d);
@@ -193,7 +193,7 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   node_free[arc.v2]=false;
 
   // Create dependency: v1 depends on v2 though arc 0
-  deps0.push_back(mmn_dependancy(arc.v1,arc.v2, 0));
+  deps0.emplace_back(arc.v1,arc.v2, 0);
 
   // Initialise list of best arcs and distances
   for (unsigned i=0;i<n;++i)
@@ -219,15 +219,15 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
     node_free[best_i]=false;
 
     unsigned ai=arcs.size();  // For index
-    arcs.push_back(mmn_arc(best_i,arc.v1));
-    arcs.push_back(mmn_arc(best_i,arc.v2));
+    arcs.emplace_back(best_i,arc.v1);
+    arcs.emplace_back(best_i,arc.v2);
 
     unsigned ti=triplets.size();
-    triplets.push_back(mmn_triplet(best_i,arc.v1,arc.v2));
+    triplets.emplace_back(best_i,arc.v1,arc.v2);
 
     // best_i depends on arc.v1 and arc.v2 through 3 arcs and a triplet
-    deps0.push_back(mmn_dependancy(best_i,arc.v1,arc.v2,
-                                  ai,ai+1, best_arc[best_i], ti));
+    deps0.emplace_back(best_i,arc.v1,arc.v2,
+                                  ai,ai+1, best_arc[best_i], ti);
 
     // Re-evaluate distances to each free point
     update_best_arcs(D,node_free,arcs,ai,  best_arc,best_d);

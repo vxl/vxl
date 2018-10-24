@@ -94,7 +94,7 @@ inline msm_line_seg_pt msm_closest_seg_pt_on_curve(const msm_points& all_points,
     sqr_dist = (all_points[curve[0]]-pt).sqr_length();
 
     // Single point only
-    return {curve[0]};
+    return {static_cast<int>(curve[0])};
   }
 
   // Compute distance between each line segment and the point

@@ -196,132 +196,132 @@ generate_similarity_matches( const vnl_vector<double>& params,
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   int id = 0;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 0 - id 0 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 0 - id 0 - bad
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 0;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 1 - id 0 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 1 - id 0 - good
 
   from_loc[0] = 80;  from_loc[1] = -20;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 1;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 2 - id 1 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 2 - id 1 - good
 
   from_loc[0] = -50;  from_loc[1] = 84;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 2;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 3 - id 2 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 3 - id 2 - good
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 2;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 4 - id 2 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 4 - id 2 - bad
 
   from_loc[0] = 75;  from_loc[1] = 62;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 3;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 5 - id 3 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 5 - id 3 - bad
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 3;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 6 - id 3 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 6 - id 3 - good
 
   from_loc[0] = -16;  from_loc[1] = -83;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 4;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 7 - id 4 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 7 - id 4 - good
 
   from_loc[0] = 32;  from_loc[1] = 7;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 5;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 8 - id 5 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 8 - id 5 - good
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 5;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 9 - id 5 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 9 - id 5 - bad
 
   from_loc[0] = 132;  from_loc[1] = -25;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 6;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 10 - id 6 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 10 - id 6 - good
 
   from_loc[0] = -99;  from_loc[1] = 99;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 7;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 11 - id 7 - bad (all)
+  matches.emplace_back( from_loc, to_loc, id );  // 11 - id 7 - bad (all)
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 7;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 12 - id 7 - bad (all)
+  matches.emplace_back( from_loc, to_loc, id );  // 12 - id 7 - bad (all)
 
   from_loc[0] = 65;  from_loc[1] = 99;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 8;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 13 - id 8 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 13 - id 8 - good
 
   from_loc[0] = 15;  from_loc[1] = -42;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 9;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 14 - id 9 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 14 - id 9 - good
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 9;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 15 - id 9 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 15 - id 9 - bad
 
   from_loc[0] = 51;  from_loc[1] = -24;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 10;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 16 - id 10 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 16 - id 10 - good
 
   from_loc[0] = 44;  from_loc[1] = 66;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( 20 * sigma );
   to_loc[1] += noise( 20 * sigma );
   id = 11;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 17 - id 11 - bad
+  matches.emplace_back( from_loc, to_loc, id );  // 17 - id 11 - bad
 
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 11;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 18 - id 11 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 18 - id 11 - good
 
   from_loc[0] = 71;  from_loc[1] = -39;
   to_loc = A*from_loc + t;
   to_loc[0] += noise( sigma );
   to_loc[1] += noise( sigma );
   id = 12;
-  matches.push_back( image_point_match( from_loc, to_loc, id ) );  // 19 - id 12 - good
+  matches.emplace_back( from_loc, to_loc, id );  // 19 - id 12 - good
 }
 

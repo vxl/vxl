@@ -80,7 +80,7 @@ std::vector<int> Monte_Carlo(std::vector<HomgPoint2D> points, std::vector<int> i
     vnl_double_2 v = points[i].get_double2(); // non-homogeneous representation
     double x = -1.0 + ( v[0] - min_x ) / center_x;
     double y = -1.0 + ( v[1] - min_y ) / center_y;
-    points_rescale.push_back( vnl_double_2( x, y ) );
+    points_rescale.emplace_back( x, y );
   }
 
   // ********************* //

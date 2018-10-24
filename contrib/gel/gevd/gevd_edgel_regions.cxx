@@ -1458,12 +1458,12 @@ bool gevd_edgel_regions::connect_ends(std::vector<vtol_edge_2d_sptr>& edges,
     vtol_vertex_sptr v1 = (*eit)->v1(), v2 = (*eit)->v2();
     if (!v1->get_user_flag(VSOL_FLAG2))
     {
-      edge_verts.push_back(v1.ptr());
+      edge_verts.emplace_back(v1.ptr());
       v1->set_user_flag(VSOL_FLAG2);
     }
     if (!v2->get_user_flag(VSOL_FLAG2))
     {
-      edge_verts.push_back(v2.ptr());
+      edge_verts.emplace_back(v2.ptr());
       v2->set_user_flag(VSOL_FLAG2);
     }
   }
@@ -1505,7 +1505,7 @@ bool gevd_edgel_regions::connect_ends(std::vector<vtol_edge_2d_sptr>& edges,
       if (std::find(edges.begin(), edges.end(), e) != edges.end())
         continue; // 4)
       // Found a connecting edge.
-      edges.push_back((*eit)->cast_to_edge_2d());
+      edges.emplace_back((*eit)->cast_to_edge_2d());
       found_edge = true;
       v->set_user_flag(VSOL_FLAG1);
       (*vit)->set_user_flag(VSOL_FLAG1);

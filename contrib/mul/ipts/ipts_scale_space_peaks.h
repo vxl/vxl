@@ -89,7 +89,7 @@ inline void ipts_scale_space_peaks_2d(std::vector<vgl_point_3d<double> >& peak_p
                                   im_above.istep(),im_above.jstep()))
             {
               vgl_point_2d<double> p = to_base(i,j);
-              peak_pts.push_back(vgl_point_3d<double>(p.x(),p.y(),scale));
+              peak_pts.emplace_back(p.x(),p.y(),scale);
             }
           }
         }

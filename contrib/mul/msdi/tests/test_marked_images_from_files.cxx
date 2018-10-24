@@ -63,9 +63,9 @@ void test_marked_images_from_files()
   vil_save(image,"image00.png");
   vil_save(image,"image01.png");
   vil_save(image,"image02.png");
-  image_names.push_back(std::string("image00.png"));
-  image_names.push_back(std::string("image01.png"));
-  image_names.push_back(std::string("image02.png"));
+  image_names.emplace_back("image00.png");
+  image_names.emplace_back("image01.png");
+  image_names.emplace_back("image02.png");
 
   msm_points points(2);
   points.set_point(0,1,0);
@@ -73,9 +73,9 @@ void test_marked_images_from_files()
   points.write_text_file("image00.pts");
   points.write_text_file("image01.pts");
   points.write_text_file("image02.pts");
-  points_names.push_back(std::string("image00.pts"));
-  points_names.push_back(std::string("image01.pts"));
-  points_names.push_back(std::string("image02.pts"));
+  points_names.emplace_back("image00.pts");
+  points_names.emplace_back("image01.pts");
+  points_names.emplace_back("image02.pts");
 
   points.write_text_file("ref-image00.pts");
   points.write_text_file("ref-image01.pts");

@@ -182,7 +182,7 @@ read_feature_file( char const* filename,
         continue;
 
       // push it into list
-      feature_list.push_back( scaled_feature_node() );
+      feature_list.emplace_back( );
       scaled_feature_node& this_node = feature_list.back();
       this_node.sigma_ = sigma;
 

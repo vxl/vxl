@@ -105,7 +105,7 @@ int main()
   k_builder3.set_use_equal_width();
   comp3.set_builder(k_builder3);
   comparator.push_back(&comp3);
-  name.push_back("Bhat. using Gaussian kernel estimate, width depends on n.samples");
+  name.emplace_back("Bhat. using Gaussian kernel estimate, width depends on n.samples");
 
   // Set up Gaussian kernel estimator
   pdf1d_compare_to_pdf_bhat comp4;
@@ -113,7 +113,7 @@ int main()
   k_builder4.set_use_width_from_separation();
   comp4.set_builder(k_builder4);
   comparator.push_back(&comp4);
-  name.push_back("Bhat. using Gaussian kernel estimate, width depends on local sample separation");
+  name.emplace_back("Bhat. using Gaussian kernel estimate, width depends on local sample separation");
 
   // Set up adaptive Gaussian kernel estimator
   pdf1d_compare_to_pdf_bhat comp5;
@@ -121,12 +121,12 @@ int main()
   k_builder5.set_use_adaptive();
   comp5.set_builder(k_builder5);
   comparator.push_back(&comp5);
-  name.push_back("Bhat. using Adaptive Gaussian kernel estimate");
+  name.emplace_back("Bhat. using Adaptive Gaussian kernel estimate");
 
   // Try with KS statistic
   pdf1d_compare_to_pdf_ks comp_ks;
   comparator.push_back(&comp_ks);
-  name.push_back("KS Statistic");
+  name.emplace_back("KS Statistic");
 
   int n_samples = 100;
   int n_trials = 1000;

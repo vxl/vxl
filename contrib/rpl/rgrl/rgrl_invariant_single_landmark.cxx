@@ -60,8 +60,8 @@ rgrl_invariant_single_landmark(vnl_vector<double> location,
     vnl_double_2 normal = vnl_double_2(-vessel_dirs[i][1], vessel_dirs[i][0]);
     vnl_double_2 trace_pt = location_+radius_*vessel_dirs[i];
 
-    boundary_points_.push_back( trace_pt-normal*local_widths_[i]/2.0 );
-    boundary_points_.push_back( trace_pt+normal*local_widths_[i]/2.0 );
+    boundary_points_.emplace_back(trace_pt-normal*local_widths_[i]/2.0 );
+    boundary_points_.emplace_back(trace_pt+normal*local_widths_[i]/2.0 );
     trace_normals_.push_back(normal);
   }
 

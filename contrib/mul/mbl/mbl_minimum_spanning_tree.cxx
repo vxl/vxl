@@ -54,7 +54,7 @@ void mbl_minimum_spanning_tree(const vnl_matrix<double>& D,
   for (unsigned i=1;i<n;++i)
   {
     std::pair<unsigned,unsigned> p = mbl_mst_next_pair(D,a,b);
-    pairs.push_back(p);
+    pairs.emplace_back(p);
     b.erase(std::find(b.begin(),b.end(),p.second));
     a.push_back(p.second);
   }

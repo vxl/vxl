@@ -280,7 +280,7 @@ bool mbl_table::append_column(const std::string& header,
     column_headers_.push_back(header);
     unsigned c = columns_.size();
     header_to_column_index_[header] = c;
-    columns_.push_back(std::vector<double>());
+    columns_.emplace_back();
     columns_[c].resize(num_rows(), val);
     return true;
   }
@@ -356,7 +356,7 @@ bool mbl_table::read(std::istream& is)
         // Create an empty column vector and enter it into the map
         column_headers_.push_back(str);
         header_to_column_index_[str] = col;
-        columns_.push_back(std::vector<double>(0));
+        columns_.emplace_back(0);
 
         col++;
       }

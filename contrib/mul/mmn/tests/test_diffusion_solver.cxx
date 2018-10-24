@@ -474,11 +474,11 @@ void test_diff_5x5grid_easy()
 
             if (ix<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdRight));
+                arcs.emplace_back(nodeId,nodeIdRight);
             }
             if (iy<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdAbove));
+                arcs.emplace_back(nodeId,nodeIdAbove);
             }
         }
     }
@@ -693,11 +693,11 @@ void test_diff_5x5grid_hard()
 
             if (ix<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdRight));
+                arcs.emplace_back(nodeId,nodeIdRight);
             }
             if (iy<NSTAGES-1)
             {
-                arcs.push_back(mmn_arc(nodeId,nodeIdAbove));
+                arcs.emplace_back(nodeId,nodeIdAbove);
             }
         }
     }

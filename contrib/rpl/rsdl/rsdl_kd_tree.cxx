@@ -405,14 +405,14 @@ rsdl_kd_tree::n_nearest_with_stack( const rsdl_point& query_point,
 #ifdef DEBUG
         std::cout << "going left, pushing right" << std::endl;
 #endif
-        stack_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
+        stack_vec.emplace_back( right_box_sq_dist, current->right_ );
         current = current->left_ ;
       }
       else {
 #ifdef DEBUG
         std::cout << "going right, pushing left" << std::endl;
 #endif
-        stack_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
+        stack_vec.emplace_back( left_box_sq_dist, current->left_ );
         current = current->right_ ;
       }
     }
@@ -445,12 +445,12 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
 
     if ( rsdl_dist_sq( query_point, current-> left_ -> outer_box_ ) < 1.0e-5 ) {
       right_box_sq_dist = rsdl_dist_sq( query_point, current->right_->inner_box_ );
-      heap_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
+      heap_vec.emplace_back( right_box_sq_dist, current->right_ );
       current = current->left_ ;
     }
     else {
       left_box_sq_dist = rsdl_dist_sq( query_point, current->left_->inner_box_ );
-      heap_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
+      heap_vec.emplace_back( left_box_sq_dist, current->left_ );
       current = current->right_ ;
     }
   }
@@ -505,7 +505,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
 #ifdef DEBUG
           std::cout << "pushing left onto the heap" << std::endl;
 #endif
-          heap_vec.push_back( rsdl_kd_heap_entry( left_box_sq_dist, current->left_ ) );
+          heap_vec.emplace_back( left_box_sq_dist, current->left_ );
           std::push_heap( heap_vec.begin(), heap_vec.end() );
         };
 
@@ -517,7 +517,7 @@ rsdl_kd_tree::n_nearest_with_heap( const rsdl_point& query_point,
 #ifdef DEBUG
           std::cout << "pushing right onto the heap" << std::endl;
 #endif
-          heap_vec.push_back( rsdl_kd_heap_entry( right_box_sq_dist, current->right_ ) );
+          heap_vec.emplace_back( right_box_sq_dist, current->right_ );
           std::push_heap( heap_vec.begin(), heap_vec.end() );
         }
       }

@@ -19,7 +19,7 @@ vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,
   bool init = true, done = false;//should be internal statics but seems not to work
   double x, y; // the intermediate pixels
   while (this->line_gen(x0, y0, x1, y1, init, done, x, y))
-      es_.push_back(vdgl_edgel( x, y));
+      es_.emplace_back( x, y);
 }
 
 bool vdgl_edgel_chain::add_edgel( const vdgl_edgel &e)
