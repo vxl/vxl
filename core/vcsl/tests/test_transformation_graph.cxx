@@ -65,7 +65,7 @@ static void test1(void)
   scale1->set_interpolators(interpolators1);
 
   std::vector<vcsl_spatial_transformation_sptr> motion1;
-  motion1.push_back(scale1.ptr());
+  motion1.emplace_back(scale1.ptr());
   cs1->set_motion(motion1);
 
   std::vector<vcsl_spatial_sptr> parent1;
@@ -92,7 +92,7 @@ static void test1(void)
   scale2->set_interpolators(interpolators2);
 
   std::vector<vcsl_spatial_transformation_sptr> motion2;
-  motion2.push_back(scale2.ptr());
+  motion2.emplace_back(scale2.ptr());
   cs2->set_motion(motion2);
 
   std::vector<vcsl_spatial_sptr> parent2; parent2.push_back(cs1);
@@ -117,7 +117,7 @@ static void test1(void)
   scale3->set_interpolators(interpolators3);
 
   std::vector<vcsl_spatial_transformation_sptr> motion3;
-  motion3.push_back(scale3.ptr());
+  motion3.emplace_back(scale3.ptr());
   cs3->set_motion(motion3);
 
   std::vector<vcsl_spatial_sptr> parent3; parent3.push_back(csa);

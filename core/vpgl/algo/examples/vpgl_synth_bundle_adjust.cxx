@@ -28,7 +28,7 @@ int main(int argc, char** argv)
 
   std::vector<vgl_point_3d<double> > world;
   for (int i=0; i<a_num_cameras(); ++i)
-    world.push_back(vgl_point_3d<double>(rnd.drand32(-1,1), rnd.drand32(-1,1), rnd.drand32(-1,1)));
+    world.emplace_back(rnd.drand32(-1,1), rnd.drand32(-1,1), rnd.drand32(-1,1));
 
   // our known internal calibration
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(500,500));
@@ -44,7 +44,7 @@ int main(int argc, char** argv)
     p.normalize();
     p *= 10.0;
     vgl_homg_point_3d<double> c(p[0], p[1], p[2]);
-    cameras.push_back(vpgl_perspective_camera<double>(K,c,I));
+    cameras.emplace_back(K,c,I);
     cameras.back().look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
   }
 
@@ -53,7 +53,7 @@ int main(int argc, char** argv)
   std::vector<vgl_point_2d<double> > image_points;
   for (unsigned int i=0; i<cameras.size(); ++i) {
     for (unsigned int j=0; j<world.size(); ++j) {
-      image_points.push_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
+      image_points.emplace_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
     }
   }
 

@@ -27,13 +27,13 @@ static void vbl_test_batch_multimap1()
 
   // All these values should sort correctly even via their string values
   // assuming the char type is ascii.
-  test_data.push_back(std::make_pair(std::string("3"), 3));
-  test_data.push_back(std::make_pair(std::string("1"), 1));
-  test_data.push_back(std::make_pair(std::string("2"), 2));
-  test_data.push_back(std::make_pair(std::string("3"), 3));
-  test_data.push_back(std::make_pair(std::string("-7"), -7));
-  test_data.push_back(std::make_pair(std::string("5"), 5));
-  test_data.push_back(std::make_pair(std::string("3"), 3));
+  test_data.emplace_back(std::string("3"), 3);
+  test_data.emplace_back(std::string("1"), 1);
+  test_data.emplace_back(std::string("2"), 2);
+  test_data.emplace_back(std::string("3"), 3);
+  test_data.emplace_back(std::string("-7"), -7);
+  test_data.emplace_back(std::string("5"), 5);
+  test_data.emplace_back(std::string("3"), 3);
 
 
   vbl_batch_multimap<std::string, int> bmmap(test_data.begin(), test_data.end());
@@ -67,19 +67,19 @@ static void vbl_test_batch_multimap2()
 
   // All these values should sort correctly even via their string values
   // assuming the char type is ascii.
-  test_data.push_back(std::make_pair(3, std::string("3a")));
-  test_data.push_back(std::make_pair(1, std::string("1a")));
-  test_data.push_back(std::make_pair(3, std::string("3b")));
-  test_data.push_back(std::make_pair(2, std::string("2a")));
-  test_data.push_back(std::make_pair(-7, std::string("-7a")));
-  test_data.push_back(std::make_pair(5, std::string("5a")));
-  test_data.push_back(std::make_pair(3, std::string("3c")));
+  test_data.emplace_back(3, std::string("3a"));
+  test_data.emplace_back(1, std::string("1a"));
+  test_data.emplace_back(3, std::string("3b"));
+  test_data.emplace_back(2, std::string("2a"));
+  test_data.emplace_back(-7, std::string("-7a"));
+  test_data.emplace_back(5, std::string("5a"));
+  test_data.emplace_back(3, std::string("3c"));
   // make sure there is enough data to force default sort heuristics into faster unstable sort range.
   for (char c='a'; c<'z'; c++)
   {
-    test_data.push_back(std::make_pair(6, std::string("6")+c));
-    test_data.push_back(std::make_pair(7, std::string("7")+c));
-    test_data.push_back(std::make_pair(8, std::string("8")+c));
+    test_data.emplace_back(6, std::string("6")+c);
+    test_data.emplace_back(7, std::string("7")+c);
+    test_data.emplace_back(8, std::string("8")+c);
   }
 
   vbl_batch_multimap<int, std::string> bmmap(test_data.begin(), test_data.end());

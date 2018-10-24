@@ -266,8 +266,8 @@ int main()
   std::vector<vcsl_spatial_transformation_sptr> motion;
   std::cout<<" done\n"
           <<"Initialization of motion..."<< std::flush;
-  motion.push_back(dynamic_t.ptr());
-  motion.push_back(dynamic_d.ptr());
+  motion.emplace_back(dynamic_t.ptr());
+  motion.emplace_back(dynamic_d.ptr());
   assert(motion.size()==2);
   std::cout<<" done\n";
 

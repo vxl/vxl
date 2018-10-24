@@ -37,7 +37,7 @@ static void vbl_test_disjoint_sets()
   int n_verts = 10;
   std::vector<vbl_edge> edges;
   for(int i = 1; i<n_verts; ++i)
-    edges.push_back(vbl_edge(i-1, i, 0.0f));
+    edges.emplace_back(i-1, i, 0.0f);
 
   edges[(n_verts/2)-1].w_ = 5.0f;
   edges[n_verts/5].w_ = 5.0f;

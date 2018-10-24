@@ -583,7 +583,7 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
     assert(   std::fabs(nwp.x()) <= 1
            && std::fabs(nwp.y()) <= 1
            && std::fabs(nwp.z()) <= 1 );
-    norm_world_pts.push_back(vgl_point_3d<double>(nwp) );
+    norm_world_pts.emplace_back(nwp );
   }
   //Assume identity calibration matrix initially, since image point
   //normalization remove any scale and offset from image coordinates

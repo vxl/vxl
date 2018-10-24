@@ -228,14 +228,14 @@ std::string vul_expand_path_internal(std::string path)
     // sequence of non-slash characters.
     for (unsigned int i=0; i<path.size(); ) {
       if (path[i] == '/') {
-        bits.push_back("/");
+        bits.emplace_back("/");
         ++i;
       }
       else {
         unsigned int j=i;
         while (j<path.size() && path[j]!='/')
           ++j;
-        bits.push_back(std::string(path.c_str()+i, path.c_str()+j));
+        bits.emplace_back(path.c_str()+i, path.c_str()+j);
         i = j;
       }
     }

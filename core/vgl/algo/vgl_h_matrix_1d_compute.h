@@ -69,8 +69,8 @@ class vgl_h_matrix_1d_compute
     std::vector<vgl_homg_point_1d<double> > pt1; pt1.reserve(length);
     std::vector<vgl_homg_point_1d<double> > pt2; pt2.reserve(length);
     for (unsigned int i=0;i<length; ++i) {
-      pt1.push_back(vgl_homg_point_1d<double>(p1[i],1.0));
-      pt2.push_back(vgl_homg_point_1d<double>(p2[i],1.0));
+      pt1.emplace_back(p1[i],1.0);
+      pt2.emplace_back(p2[i],1.0);
     }
     return compute_cool_homg(pt1,pt2,H); // pure virtual function
   }

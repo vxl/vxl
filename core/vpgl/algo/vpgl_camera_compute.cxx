@@ -41,9 +41,9 @@ vpgl_proj_camera_compute::compute(
   std::vector< vgl_homg_point_2d<double> > image_pts2;
   std::vector< vgl_homg_point_3d<double> > world_pts2;
   for (unsigned int i = 0; i < image_pts.size(); ++i)
-    image_pts2.push_back( vgl_homg_point_2d<double>( image_pts[i] ) );
+    image_pts2.emplace_back( image_pts[i] );
   for (unsigned int i = 0; i < world_pts.size(); ++i)
-    world_pts2.push_back( vgl_homg_point_3d<double>( world_pts[i] ) );
+    world_pts2.emplace_back( world_pts[i] );
   return compute( image_pts2, world_pts2, camera );
 }
 
@@ -276,7 +276,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
   //perform a final non-linear optimization
   std::vector<vgl_homg_point_3d<double> > h_world_pts;
   for (unsigned i = 0; i<N; ++i)
-    h_world_pts.push_back(vgl_homg_point_3d<double>(world_pts[i]));
+    h_world_pts.emplace_back(world_pts[i]);
   camera = vpgl_optimize_camera::opt_orient_pos_cal(tcam, h_world_pts, image_pts, 0.00005, 20000);
   return true;
 }
@@ -439,8 +439,8 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
     std::cout << '('<<image_pts[i].x()<<", "<<image_pts[i].y()<<") -> "
              << '('<<ground_pts[i].x()<<", "<<ground_pts[i].y()<<')'<<std::endl;
 #endif
-    pi.push_back(vgl_homg_point_2d<double>(image_pts[i].x(),image_pts[i].y()));
-    pg.push_back(vgl_homg_point_2d<double>(ground_pts[i].x(),ground_pts[i].y()));
+    pi.emplace_back(image_pts[i].x(),image_pts[i].y());
+    pg.emplace_back(ground_pts[i].x(),ground_pts[i].y());
   }
 
   // compute a homography from the ground plane to image plane
@@ -488,7 +488,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
   //perform a final non-linear optimization
   std::vector<vgl_homg_point_3d<double> > h_world_pts;
   for (unsigned i = 0; i<num_pts; ++i) {
-    h_world_pts.push_back(vgl_homg_point_3d<double>(ground_pts[i].x(),ground_pts[i].y(),0,1));
+    h_world_pts.emplace_back(ground_pts[i].x(),ground_pts[i].y(),0,1);
     if (camera.is_behind_camera(h_world_pts.back())) {
       std::cout << "behind camera" << std::endl;
       return false;

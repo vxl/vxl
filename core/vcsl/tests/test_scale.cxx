@@ -123,7 +123,7 @@ static void test_scale()
 
   std::cout<<"Filling motion..."<< std::flush;
   motion.reserve(1);
-  motion.push_back(scale.ptr());
+  motion.emplace_back(scale.ptr());
   std::cout<<"done"<<std::endl;
 
   std::cout<<"Attaching motion to cs0..."<< std::flush;

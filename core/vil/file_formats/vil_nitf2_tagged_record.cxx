@@ -513,8 +513,8 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   else {
     tr = new vil_nitf2_field::field_tree;
     vil_nitf2_field::field_tree* skipped_node = new vil_nitf2_field::field_tree;
-    skipped_node->columns.push_back( "CEDATA" );
-    skipped_node->columns.push_back( "<skipped unknown TRE>" );
+    skipped_node->columns.emplace_back("CEDATA" );
+    skipped_node->columns.emplace_back("<skipped unknown TRE>" );
     tr->children.push_back( skipped_node );
   }
 
@@ -523,8 +523,8 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   tr->columns.push_back( pretty_name() );
   //add the CEL (length) field to the front
   vil_nitf2_field::field_tree* first_child = new vil_nitf2_field::field_tree;
-  first_child->columns.push_back( "CEL" );
-  first_child->columns.push_back( "Extension Length" );
+  first_child->columns.emplace_back("CEL" );
+  first_child->columns.emplace_back("Extension Length" );
   std::stringstream len_stream;
   len_stream << length();
   first_child->columns.push_back( len_stream.str() );
