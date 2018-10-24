@@ -430,7 +430,7 @@ vil_image_view_base_sptr vil_bmp_image::get_copy_view(
     return nullptr;
   }
 
-  unsigned np;
+  unsigned np = 1;
   std::ptrdiff_t plane_step = 1;
   std::ptrdiff_t top_left_plane0_in_mem = 0;
   if( core_hdr.bitsperpixel == 8 )
