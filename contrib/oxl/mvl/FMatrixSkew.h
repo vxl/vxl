@@ -54,9 +54,9 @@ class FMatrixSkew : public FMatrix
   // Data Access------------------------------------------------------------
 
   bool set (const double* f_matrix );
-  inline bool set (const vnl_matrix<double>& f_matrix );
-  inline bool get_rank2_flag (void) const;
-  inline void set_rank2_flag (bool rank2_flag);
+  bool set (const vnl_matrix<double>& f_matrix );
+  bool get_rank2_flag (void) const;
+  void set_rank2_flag (bool rank2_flag);
 };
 
 #endif // FMatrixSkew_h_
