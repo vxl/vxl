@@ -28,7 +28,7 @@
 //=======================================================================
 
 
-static mbl_logger& images_logger()
+static inline mbl_logger& images_logger()
 {
     static mbl_logger l("mul.vimt3d.gaussian_pyramid_builder_3d");
     return l;
