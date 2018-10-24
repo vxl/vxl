@@ -14,8 +14,6 @@
 class vpgl_affine_rectification
 {
  public:
-  ~vpgl_affine_rectification();
-
   static vpgl_affine_camera<double>* compute_affine_cam(const std::vector< vgl_point_2d<double> >& image_pts,
                                                         const std::vector< vgl_point_3d<double> >& world_pts);
 
@@ -33,9 +31,8 @@ class vpgl_affine_rectification
                                     vnl_matrix_fixed<double, 3, 3>& H1,
                                     vnl_matrix_fixed<double, 3, 3>& H2);
 
- private:
-  //: constructor private - static methods only
-  vpgl_affine_rectification();
+  vpgl_affine_rectification() = delete;
+  ~vpgl_affine_rectification() = delete;
 };
 
 #endif // vpgl_affine_rectification_h_
