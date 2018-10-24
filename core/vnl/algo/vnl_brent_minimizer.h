@@ -57,7 +57,7 @@ class VNL_ALGO_EXPORT vnl_brent_minimizer : public vnl_nonlinear_minimizer
   double f_at_last_minimum_;
  public:
   vnl_brent_minimizer(vnl_cost_function& functor);
- ~vnl_brent_minimizer();
+ ~vnl_brent_minimizer() override;
 
   //: Find a minimum of f(x) near to ax.
   //  The evaluation of f(x) at the returned value can be obtained

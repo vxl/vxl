@@ -36,14 +36,14 @@ class vil1_stream_core : public vil1_stream
   vil1_streampos m_transfer(char *buf, vil1_streampos pos, vil1_streampos n, bool read);
 
   // implement virtual vil1_stream interface:
-  bool ok() const { return true; }
-  vil1_streampos read (void       *buf, vil1_streampos n);
-  vil1_streampos write(void const *buf, vil1_streampos n);
-  vil1_streampos tell()     const    { return curpos_; }
-  void seek(vil1_streampos position) { curpos_ = position; }
+  bool ok() const override { return true; }
+  vil1_streampos read (void       *buf, vil1_streampos n) override;
+  vil1_streampos write(void const *buf, vil1_streampos n) override;
+  vil1_streampos tell()     const override    { return curpos_; }
+  void seek(vil1_streampos position) override { curpos_ = position; }
 
  protected:
-  ~vil1_stream_core();
+  ~vil1_stream_core() override;
 };
 
 #endif // vil1_stream_core_h_

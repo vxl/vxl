@@ -31,7 +31,7 @@ class vcsl_utm
 
  public:
   // Destructor
-  virtual ~vcsl_utm() = default;
+  ~vcsl_utm() override = default;
 };
 
 #endif // vcsl_utm_h_

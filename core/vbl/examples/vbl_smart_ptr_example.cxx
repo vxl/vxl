@@ -23,7 +23,7 @@ class example_sp : public vbl_ref_count
  public:
   example_sp() { std::cout << "example_sp constructor, refcount=" << get_references() << '\n'; }
 
- ~example_sp() { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
+ ~example_sp() override { std::cout << "example_sp destructor, refcount=" << get_references() << '\n'; }
 
   example_sp(example_sp const&) : vbl_ref_count()
   {
@@ -90,7 +90,7 @@ class bigmatrix_impl : public vbl_ref_count
  public:
   double data[256][256];
   bigmatrix_impl() { std::cout << "bigmatrix_impl ctor\n"; }
-  ~bigmatrix_impl() { std::cout << "bigmatrix_impl dtor\n"; }
+  ~bigmatrix_impl() override { std::cout << "bigmatrix_impl dtor\n"; }
 };
 
 class bigmatrix

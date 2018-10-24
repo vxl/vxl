@@ -34,7 +34,7 @@ class vcsl_matrix
   vcsl_matrix() = default;
 
   // Destructor
-  virtual ~vcsl_matrix() = default;
+  ~vcsl_matrix() override = default;
 
   //***************************************************************************
   // Status report
@@ -43,11 +43,11 @@ class vcsl_matrix
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual bool is_invertible(double time) const;
+  bool is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const
+  bool is_valid() const override
   { return vcsl_spatial_transformation::is_valid() && this->duration()==matrix_.size(); }
 
   //***************************************************************************
@@ -63,12 +63,12 @@ class vcsl_matrix
   list_of_vcsl_matrix_param_sptr matrix_list() const { return matrix_; }
 
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
 
  protected:
   vnl_matrix<double> param_to_matrix(vcsl_matrix_param_sptr from,bool type) const;

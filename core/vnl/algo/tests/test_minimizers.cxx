@@ -8,7 +8,7 @@
 struct cubic : public vnl_cost_function {
   cubic() : vnl_cost_function(1) {}
 
-  double f(const vnl_vector<double>& x) {
+  double f(const vnl_vector<double>& x) override {
     std::cout << ' ' << x[0];
     return (2 - x[0]) * (2 - x[0]) + 10;
   }

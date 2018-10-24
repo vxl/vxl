@@ -107,7 +107,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
            vnl_vector<double> const& ai,
            vnl_vector<double> const& bj,
            vnl_vector<double> const& /*c*/,
-           vnl_vector<double>& fxij)
+           vnl_vector<double>& fxij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -119,7 +119,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
-               vnl_matrix<double>& Aij)
+               vnl_matrix<double>& Aij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -135,7 +135,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
-               vnl_matrix<double>& Bij)
+               vnl_matrix<double>& Bij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -149,7 +149,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
              vnl_vector<double> const& /*a*/,
              vnl_vector<double> const& /*b*/,
              vnl_vector<double> const& /*c*/,
-             vnl_vector<double> const& /*e*/)
+             vnl_vector<double> const& /*e*/) override
   {
     //std::cout << "trace "<<iteration<< " a: "<<a<<std::endl;
   }
@@ -339,7 +339,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
            vnl_vector<double> const& ai,
            vnl_vector<double> const& bj,
            vnl_vector<double> const& c,
-           vnl_vector<double>& fxij)
+           vnl_vector<double>& fxij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -351,7 +351,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
-               vnl_matrix<double>& Aij)
+               vnl_matrix<double>& Aij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -366,7 +366,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
-               vnl_matrix<double>& Bij)
+               vnl_matrix<double>& Bij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -380,7 +380,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
-               vnl_matrix<double>& Cij)
+               vnl_matrix<double>& Cij) override
   {
     double sa = std::sin(ai[0]);
     double ca = std::cos(ai[0]);
@@ -569,7 +569,7 @@ class bundle_2d_robust : public bundle_2d
                          vnl_vector<double> const& /*bj*/,
                          vnl_vector<double> const& /*c*/,
                          vnl_vector<double> const& fij,
-                         double& weight)
+                         double& weight) override
   {
     int k = residual_indices_(i,j);
     assert(k>=0);
@@ -601,7 +601,7 @@ class bundle_2d_robust : public bundle_2d
              vnl_vector<double> const& /*a*/,
              vnl_vector<double> const& /*b*/,
              vnl_vector<double> const& /*c*/,
-             vnl_vector<double> const& /*e*/)
+             vnl_vector<double> const& /*e*/) override
   {
     //std::cout << "trace "<<iteration<< " a: "<<a<<std::endl;
   }

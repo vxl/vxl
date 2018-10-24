@@ -28,9 +28,9 @@ class VNL_EXPORT vnl_least_squares_cost_function : public vnl_cost_function
  public:
   vnl_least_squares_cost_function(vnl_least_squares_function* f);
 
-  double f(const vnl_vector<double>& x);
+  double f(const vnl_vector<double>& x) override;
 
-  virtual void gradf(const vnl_vector<double>& x, vnl_vector<double>& gradient);
+  void gradf(const vnl_vector<double>& x, vnl_vector<double>& gradient) override;
 
  protected:
   vnl_vector<double> storage_;

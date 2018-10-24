@@ -31,7 +31,7 @@ class vcsl_lambertian
 
  public:
   // Destructor
-  virtual ~vcsl_lambertian() = default;
+  ~vcsl_lambertian() override = default;
 };
 
 #endif // vcsl_lambertian_h_

@@ -31,16 +31,16 @@ class vil_stream_fstream : public vil_stream
 #endif
 
   // implement virtual vil_stream interface:
-  bool ok() const { return f_.good(); }
-  vil_streampos write(void const* buf, vil_streampos n);
-  vil_streampos read(void* buf, vil_streampos n);
-  vil_streampos tell() const;
-  void seek(vil_streampos position);
+  bool ok() const override { return f_.good(); }
+  vil_streampos write(void const* buf, vil_streampos n) override;
+  vil_streampos read(void* buf, vil_streampos n) override;
+  vil_streampos tell() const override;
+  void seek(vil_streampos position) override;
 
-  vil_streampos file_size() const;
+  vil_streampos file_size() const override;
 
  protected:
-  ~vil_stream_fstream();
+  ~vil_stream_fstream() override;
 
   // There are a (very few) occasions when access to the underlying stream is useful
   std::fstream & underlying_stream() {return f_;}

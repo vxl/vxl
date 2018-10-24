@@ -58,7 +58,7 @@ class vil_exception_pixel_formats_incompatible
 #endif
     src_type(src), dest_type(dest), operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_pixel_formats_incompatible() throw() = default;
+  ~vil_exception_pixel_formats_incompatible() throw() override = default;
 #else
   const char * what() const {return "Pixel formats incompatible.";}
 #endif
@@ -81,7 +81,7 @@ class vil_exception_unsupported_pixel_format
 #endif
     src_type(src), operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_unsupported_pixel_format() throw() = default;
+  ~vil_exception_unsupported_pixel_format() throw() override = default;
 #else
   const char * what() const {return "Unsupported Pixel formats.";}
 #endif
@@ -107,7 +107,7 @@ class vil_exception_out_of_bounds
 #endif
     operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_out_of_bounds() throw() = default;
+  ~vil_exception_out_of_bounds() throw() override = default;
 #else
   const char * what() const {return "Pixel access out-of-bounds.";}
 #endif
@@ -133,7 +133,7 @@ class vil_exception_unsupported_operation
 #endif
     operation_name(operation) {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_unsupported_operation() throw() = default;
+  ~vil_exception_unsupported_operation() throw() override = default;
 #else
   const char * what() const {return "Unsupported operation.";}
 #endif
@@ -164,7 +164,7 @@ class vil_exception_image_io
      + function + " using " + type + " loader. " + description),
     function_name(function), file_type(type), filename(file_name), details(description) {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_image_io() throw() = default;
+  ~vil_exception_image_io() throw() override = default;
 #else
   const char * what() const { return full_what.c_str(); }
 #endif
@@ -193,7 +193,7 @@ class vil_exception_corrupt_image_file
 #endif
   {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_corrupt_image_file() throw() = default;
+  ~vil_exception_corrupt_image_file() throw() override = default;
 #else
   const char * what() const {return "Image file is corrupt.";}
 #endif
@@ -218,7 +218,7 @@ class vil_exception_invalid_version
 #endif
   {}
 #if VCL_HAS_EXCEPTIONS
-  virtual ~vil_exception_invalid_version() throw() = default;
+  ~vil_exception_invalid_version() throw() override = default;
 #else
   const char * what() const {return "Unknown version number detected in file";}
 #endif

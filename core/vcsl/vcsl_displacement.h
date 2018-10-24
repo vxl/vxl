@@ -32,7 +32,7 @@ class vcsl_displacement
   vcsl_displacement() = default;
 
   // Destructor
-  virtual ~vcsl_displacement() = default;
+  ~vcsl_displacement() override = default;
 
   //***************************************************************************
   // Status report
@@ -40,7 +40,7 @@ class vcsl_displacement
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const
+  bool is_valid() const override
   { return vcsl_rotation::is_valid() && this->duration()==point_.size(); }
 
   //***************************************************************************
@@ -63,15 +63,15 @@ class vcsl_displacement
   //: Image of `v' by `this'
   //  REQUIRE: is_valid()
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
  protected:
 
   //: Compute the value of the vector at time `time'

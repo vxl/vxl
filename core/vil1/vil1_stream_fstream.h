@@ -21,14 +21,14 @@ class vil1_stream_fstream : public vil1_stream
   vil1_stream_fstream(char const* filename, char const* mode);
 
   // implement virtual vil1_stream interface:
-  bool ok() const { return f_.good(); }
-  vil1_streampos write(void const* buf, vil1_streampos n);
-  vil1_streampos read(void* buf, vil1_streampos n);
-  vil1_streampos tell() const;
-  void seek(vil1_streampos position);
+  bool ok() const override { return f_.good(); }
+  vil1_streampos write(void const* buf, vil1_streampos n) override;
+  vil1_streampos read(void* buf, vil1_streampos n) override;
+  vil1_streampos tell() const override;
+  void seek(vil1_streampos position) override;
 
  protected:
-  ~vil1_stream_fstream();
+  ~vil1_stream_fstream() override;
 
  private:
   std::ios::openmode flags_;

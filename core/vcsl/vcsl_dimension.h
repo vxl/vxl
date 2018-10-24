@@ -34,7 +34,7 @@ class vcsl_dimension
   vcsl_dimension(vcsl_dimension const&) : vbl_ref_count() {}
 
   // Destructor
-  virtual ~vcsl_dimension() = default;
+  ~vcsl_dimension() override = default;
 
   //***************************************************************************
   // Status report

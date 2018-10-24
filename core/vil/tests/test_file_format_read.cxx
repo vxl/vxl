@@ -58,9 +58,9 @@ template<class PixelType>
 struct CompareRGB
   : public Compare<PixelType, vil_rgb<PixelType> >
 {
-  virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
+  bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
   {
     return p==0 && pixel.size() == 3 &&
            img(i,j).r == pixel[0] &&
@@ -74,9 +74,9 @@ template<class PixelType>
 struct CompareRGBA
   : public Compare<PixelType, vil_rgba<PixelType> >
 {
-  virtual bool operator() ( vil_image_view< vil_rgba<PixelType> > const& img,
+  bool operator() ( vil_image_view< vil_rgba<PixelType> > const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
   {
     return p==0 && pixel.size() == 4 &&
            img(i,j).r == pixel[0] &&
@@ -91,9 +91,9 @@ template<class PixelType>
 struct CompareRGBNear
   : public Compare<PixelType, vil_rgb<PixelType> >
 {
-  virtual bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
+  bool operator() ( vil_image_view< vil_rgb<PixelType> > const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
     {
       if ( p == 0 && pixel.size() == 3 ) {
         // Find difference in two values whilst avoiding unsigned underflow
@@ -125,9 +125,9 @@ template<class PixelType, int num_planes>
 struct ComparePlanes
   : public Compare<PixelType, PixelType >
 {
-  virtual bool operator() ( vil_image_view<PixelType> const& img,
+  bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
   {
     return 0 <= p && p < num_planes && pixel.size() == 1 && img(i,j,p) == pixel[0];
   }
@@ -152,9 +152,9 @@ template<class PixelType>
 struct CompareGreyFloat
   : public Compare<PixelType,PixelType>
 {
-  virtual bool operator() ( vil_image_view<PixelType> const& img,
+  bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
   {
     return p==0 && pixel.size() == 1 &&
            std::fabs( pixel[0] - img(i,j) ) <= 1e-6 * std::fabs( pixel[0] );
@@ -166,9 +166,9 @@ template<class PixelType>
 struct CompareGreyNear
   : public Compare<PixelType,PixelType>
 {
-  virtual bool operator() ( vil_image_view<PixelType> const& img,
+  bool operator() ( vil_image_view<PixelType> const& img,
                             int p, int i, int j,
-                            const std::vector<PixelType>& pixel ) const
+                            const std::vector<PixelType>& pixel ) const override
     {
       if ( p==0 && pixel.size() == 1 ) {
         // Find difference in two values whilst avoiding unsigned underflow

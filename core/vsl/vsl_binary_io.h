@@ -136,7 +136,7 @@ class vsl_b_ofstream: public vsl_b_ostream
     vsl_b_ostream(new std::ofstream(filename, mode | std::ios::binary)) {}
 
   //: Virtual destructor.
-  virtual ~vsl_b_ofstream();
+  ~vsl_b_ofstream() override;
 
 
   //: Close the stream
@@ -248,7 +248,7 @@ class vsl_b_ifstream: public vsl_b_istream
     vsl_b_istream(new std::ifstream(filename, mode | std::ios::binary)) {}
 
   //: Virtual destructor.so that it can be overloaded
-  virtual ~vsl_b_ifstream();
+  ~vsl_b_ifstream() override;
 
   //: Close the stream
   void close();

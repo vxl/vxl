@@ -405,9 +405,9 @@ class vnl_amoeba_LSCF : public vnl_cost_function
    : vnl_cost_function(ls.get_number_of_unknowns()),
      ls_(&ls), fx(ls.get_number_of_residuals()) {}
 
-  ~vnl_amoeba_LSCF() = default;
+  ~vnl_amoeba_LSCF() override = default;
 
-  double f(vnl_vector<double> const& x) {
+  double f(vnl_vector<double> const& x) override {
     ls_->f(x, fx);
     return fx.squared_magnitude();
   }

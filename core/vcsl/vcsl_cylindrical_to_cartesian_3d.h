@@ -29,7 +29,7 @@ class vcsl_cylindrical_to_cartesian_3d
 
  public:
   // Destructor
-  virtual ~vcsl_cylindrical_to_cartesian_3d() = default;
+  ~vcsl_cylindrical_to_cartesian_3d() override = default;
 
   //***************************************************************************
   // Status report
@@ -38,12 +38,12 @@ class vcsl_cylindrical_to_cartesian_3d
   //: Is `this' invertible at time `time'?
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual bool is_invertible(double time) const;
+  bool is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   //  Always true.
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const { return true; }
+  bool is_valid() const override { return true; }
 
   //***************************************************************************
   // Basic operations
@@ -53,16 +53,16 @@ class vcsl_cylindrical_to_cartesian_3d
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time)
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //***************************************************************************
   // Singleton pattern

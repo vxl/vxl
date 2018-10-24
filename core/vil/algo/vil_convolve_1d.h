@@ -328,8 +328,8 @@ class vil_convolve_1d_resource : public vil_image_resource
     vil_convolve_boundary_option end_option);
 
  public:
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
-                                                 unsigned j0, unsigned n_j) const
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+                                                 unsigned j0, unsigned n_j) const override
   {
     if (i0 + n_i > src_->ni() || j0 + n_j > src_->nj())  return nullptr;
     const unsigned lsrc = (unsigned) std::max(0,(int)i0 + klo_); // lhs of input window
@@ -363,16 +363,16 @@ class vil_convolve_1d_resource : public vil_image_resource
     }
   }
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return src_->ni(); }
-  virtual unsigned nj() const { return src_->nj(); }
+  unsigned nplanes() const override { return src_->nplanes(); }
+  unsigned ni() const override { return src_->ni(); }
+  unsigned nj() const override { return src_->nj(); }
 
-  virtual enum vil_pixel_format pixel_format() const
+  enum vil_pixel_format pixel_format() const override
   { return vil_pixel_format_of(accumT()); }
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/)
+  bool put_view(const vil_image_view_base&  /*im*/, unsigned  /*i0*/, unsigned  /*j0*/) override
   {
     std::cerr << "WARNING: vil_convolve_1d_resource::put_back\n"
              << "\tYou can't push data back into a convolve filter.\n";
@@ -380,7 +380,7 @@ class vil_convolve_1d_resource : public vil_image_resource
   }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const
+  bool get_property(char const* tag, void* property_value = nullptr) const override
   {
     if (0==std::strcmp(tag, vil_property_read_only))
       return property_value ? (*static_cast<bool*>(property_value)) = true : true;

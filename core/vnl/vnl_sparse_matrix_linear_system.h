@@ -36,13 +36,13 @@ class VNL_TEMPLATE_EXPORT vnl_sparse_matrix_linear_system : public vnl_linear_sy
     vnl_linear_system(A.columns(), A.rows()), A_(A), b_(b), jacobi_precond_() {}
 
   //:  Implementations of the vnl_linear_system virtuals.
-  void multiply(vnl_vector<double> const& x, vnl_vector<double> & b) const;
+  void multiply(vnl_vector<double> const& x, vnl_vector<double> & b) const override;
   //:  Implementations of the vnl_linear_system virtuals.
-  void transpose_multiply(vnl_vector<double> const& b, vnl_vector<double> & x) const;
+  void transpose_multiply(vnl_vector<double> const& b, vnl_vector<double> & x) const override;
   //:  Implementations of the vnl_linear_system virtuals.
-  void get_rhs(vnl_vector<double>& b) const;
+  void get_rhs(vnl_vector<double>& b) const override;
   //:  Implementations of the vnl_linear_system virtuals.
-  void apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const;
+  void apply_preconditioner(vnl_vector<double> const& x, vnl_vector<double> & px) const override;
 
  protected:
   vnl_sparse_matrix<T> const& A_;

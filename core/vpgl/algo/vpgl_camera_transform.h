@@ -29,7 +29,7 @@ class vpgl_camera_transform_f : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: Calculate the Jacobian, given the parameter vector x using forward differencing
   //virtual void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);

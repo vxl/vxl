@@ -35,12 +35,12 @@ class vil_nitf2_array_field : public vil_nitf2_field
     : vil_nitf2_field(definition), m_num_dimensions(num_dimensions) {}
 
   // Destructor
-  virtual ~vil_nitf2_array_field() = default;
+  ~vil_nitf2_array_field() override = default;
 
   //: Number of dimensions.
   // \returns this vector's number of dimensions, which equals
   // its "repeat" nesting level.
-  int num_dimensions() const;
+  int num_dimensions() const override;
 
   //: Given a partial index vector, set the value of the next dimension.
   // Length of indexes must be less than num_dimensions(). See comment
@@ -72,7 +72,7 @@ class vil_nitf2_array_field : public vil_nitf2_field
                                     const vil_nitf2_index_vector& indexes,
                                     int variable_width) const = 0;
 
-  virtual field_tree* get_tree() const;
+  field_tree* get_tree() const override;
 
   //:
   // Sets out_value to the value of the element selected by specified

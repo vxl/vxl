@@ -22,43 +22,43 @@ class vil1_block_cache_image_impl : public vil1_image_impl
   vil1_block_cache_image_impl(vil1_image , unsigned blocksizex, unsigned blocksizey);
 
   //: Destructor
-  ~vil1_block_cache_image_impl();
+  ~vil1_block_cache_image_impl() override;
 
   //: Number of image planes
-  int planes() const { return base.planes(); }
+  int planes() const override { return base.planes(); }
 
   //: Image width
-  int width() const { return base.width(); }
+  int width() const override { return base.width(); }
 
   //: Image height
-  int height() const { return base.height(); }
+  int height() const override { return base.height(); }
 
   //: Number of measures per pixel
-  int components() const { return base.components(); }
+  int components() const override { return base.components(); }
 
   //: Number of bits per component
-  int bits_per_component() const { return base.bits_per_component(); }
+  int bits_per_component() const override { return base.bits_per_component(); }
 
   //: Component format
-  vil1_component_format component_format() const { return base.component_format(); }
+  vil1_component_format component_format() const override { return base.component_format(); }
 
   //: Access to image-plane
-  vil1_image get_plane(unsigned int p) const;
+  vil1_image get_plane(unsigned int p) const override;
 
   //: Write nominated section of image to buf
-  bool get_section(void *buf, int x0, int y0, int w, int h) const;
+  bool get_section(void *buf, int x0, int y0, int w, int h) const override;
 
   //: Write buf to nominated section of image
-  bool put_section(void const *buf, int x0, int y0, int w, int h); // write-through
+  bool put_section(void const *buf, int x0, int y0, int w, int h) override; // write-through
 
   //: Get info about block-characteristics
-  bool get_property(char const *tag, void *property_value_out = nullptr) const;
+  bool get_property(char const *tag, void *property_value_out = nullptr) const override;
 
   //: Return the name of the class;
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(std::string const&) const;
+  bool is_class(std::string const&) const override;
 
  private:
   // the underlying, uncached image.

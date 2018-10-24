@@ -23,11 +23,11 @@ class vil_blocked_image_resource : public vil_image_resource
  public:
 
   vil_blocked_image_resource();
-  virtual ~vil_blocked_image_resource();
+  ~vil_blocked_image_resource() override;
 
-  virtual unsigned nplanes() const =0;
-  virtual unsigned ni() const = 0;
-  virtual unsigned nj() const = 0;
+  unsigned nplanes() const override =0;
+  unsigned ni() const override = 0;
+  unsigned nj() const override = 0;
 
   //: Block size in columns
   virtual unsigned size_block_i() const = 0;
@@ -42,12 +42,12 @@ class vil_blocked_image_resource : public vil_image_resource
   virtual unsigned n_block_j() const;
 
 
-  virtual enum vil_pixel_format pixel_format() const = 0;
+  enum vil_pixel_format pixel_format() const override = 0;
 
-  virtual vil_image_view_base_sptr
-    get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const;
+  vil_image_view_base_sptr
+    get_copy_view(unsigned i0, unsigned n_i, unsigned j0, unsigned n_j) const override;
 
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) = 0;
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override = 0;
 
   //: Block access
   virtual vil_image_view_base_sptr get_block( unsigned  block_index_i,
@@ -71,7 +71,7 @@ class vil_blocked_image_resource : public vil_image_resource
                            std::vector< std::vector< vil_image_view_base_sptr > > const& blocks );
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const = 0;
+  bool get_property(char const* tag, void* property_value = nullptr) const override = 0;
 
  protected:
   //Internal functions

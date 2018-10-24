@@ -105,10 +105,10 @@ class vil_nitf2_field_definition : public vil_nitf2_field_definition_node
     std::string description = "");
 
   // Copy method
-  vil_nitf2_field_definition_node* copy() const;
+  vil_nitf2_field_definition_node* copy() const override;
 
   // Destructor
-  ~vil_nitf2_field_definition();
+  ~vil_nitf2_field_definition() override;
 };
 
 
@@ -176,10 +176,10 @@ class vil_nitf2_field_definition_repeat_node : public vil_nitf2_field_definition
   vil_nitf2_field_definitions* field_definitions;
 
   // Destructor
-  ~vil_nitf2_field_definition_repeat_node();
+  ~vil_nitf2_field_definition_repeat_node() override;
 
   // Copy method
-  vil_nitf2_field_definition_node* copy() const;
+  vil_nitf2_field_definition_node* copy() const override;
 };
 
 #endif // VIL_NITF2_FIELD_DEFINITION_H

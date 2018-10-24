@@ -59,7 +59,7 @@ class vcsl_spheroid
     : vbl_ref_count(), a_(other.a_), b_(other.b_), e_(other.e_), f_(other.f_) {}
 
   // Destructor
-  ~vcsl_spheroid() = default;
+  ~vcsl_spheroid() override = default;
 
   //***************************************************************************
   // Status report

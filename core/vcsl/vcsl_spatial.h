@@ -49,13 +49,13 @@ class vcsl_spatial
   vcsl_spatial() = default;
 
   // Destructor
-  virtual ~vcsl_spatial();
+  ~vcsl_spatial() override;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_spatial *cast_to_spatial() const { return this; }
+  const vcsl_spatial *cast_to_spatial() const override { return this; }
   virtual const vcsl_cartesian_2d *cast_to_cartesian_2d() const {return nullptr; }
   virtual const vcsl_polar *cast_to_polar() const {return nullptr; }
   virtual const vcsl_cartesian_3d *cast_to_cartesian_3d() const {return nullptr; }

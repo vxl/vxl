@@ -24,7 +24,7 @@ class vnl_test_powell_quadratic : public vnl_cost_function
  public:
   vnl_test_powell_quadratic(int n) : vnl_cost_function(n) {}
 
-  double f(const vnl_vector<double>& x)
+  double f(const vnl_vector<double>& x) override
   {
     assert((int)x.size()==dim);
     double sum = 0;
@@ -44,14 +44,14 @@ class vnl_test_powell_rosenbrock : public vnl_cost_function
  public:
   vnl_test_powell_rosenbrock() : vnl_cost_function(2) {}
 
-  double f(const vnl_vector<double>& x)
+  double f(const vnl_vector<double>& x) override
   {
     double a = 10*(x[1] - x[0]*x[0]);
     double b = 1 - x[0];
     return a*a + b*b;
   }
 
-  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g)
+  void gradf(const vnl_vector<double>& x, vnl_vector<double>& g) override
   {
     double a = 10*(x[1] - x[0]*x[0]);
     double b = 1 - x[0];

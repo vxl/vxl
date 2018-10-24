@@ -26,13 +26,13 @@ struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_
   typedef vil1_memory_image_of_format<T> format;
   vil1_image image;
   vil1_image_as_impl(vil1_image const &underlying) : image(underlying) { }
-  int planes() const { return 1; }
-  int width() const { return image.width(); }
-  int height() const { return image.height(); }
-  int components() const { return format::components; }
-  int bits_per_component() const { return format::bits_per_component; }
-  vil1_component_format component_format() const { return format::component_format; }
-  vil1_image get_plane(unsigned int p) const { assert(p==0); return const_cast<vil1_image_as_impl*>(this); }
+  int planes() const override { return 1; }
+  int width() const override { return image.width(); }
+  int height() const override { return image.height(); }
+  int components() const override { return format::components; }
+  int bits_per_component() const override { return format::bits_per_component; }
+  vil1_component_format component_format() const override { return format::component_format; }
+  vil1_image get_plane(unsigned int p) const override { assert(p==0); return const_cast<vil1_image_as_impl*>(this); }
 
 #if 0
   char const* file_format() const { return 0; }
@@ -41,16 +41,16 @@ struct vil1_image_as_impl : public vil1_image_impl, public vil1_memory_image_of_
 
   // There is no default implementation of this method. It must be
   // specialized by hand for each T.
-  bool get_section(void *buf, int x0, int y0, int width, int height) const;
+  bool get_section(void *buf, int x0, int y0, int width, int height) const override;
 
   // This always fails, even if the underlying image is an image-of-T
-  bool put_section(void const *, int, int, int, int) { return false; }
+  bool put_section(void const *, int, int, int, int) override { return false; }
 
   //: Return the name of the class;
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Return true if the name of the class matches the argument
-  virtual bool is_class(std::string const&) const;
+  bool is_class(std::string const&) const override;
 };
 
 //--------------------------------------------------------------------------------

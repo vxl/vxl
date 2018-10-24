@@ -38,14 +38,14 @@
 class vil1_mit_file_format : public vil1_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
-  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
+  char const* tag() const override;
+  vil1_image_impl* make_input_image(vil1_stream* vs) override;
+  vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil1_component_format format);
+                                             vil1_component_format format) override;
 };
 
 //: Generic image implementation for MIT files
@@ -74,15 +74,15 @@ class vil1_mit_generic_image : public vil1_image_impl
                          int components,
                          int bits_per_component,
                          vil1_component_format format);
-  ~vil1_mit_generic_image();
+  ~vil1_mit_generic_image() override;
 
   //: Dimensions.  Planes x W x H x Components
-  virtual int planes() const { return 1; }
-  virtual int width() const { return width_; }
-  virtual int height() const { return height_; }
-  virtual int components() const { return components_; }
+  int planes() const override { return 1; }
+  int width() const override { return width_; }
+  int height() const override { return height_; }
+  int components() const override { return components_; }
 
-  virtual int bits_per_component() const
+  int bits_per_component() const override
   {
     return (type_ != 2) ? bits_per_pixel_ : bits_per_pixel_ / 3;
   }
@@ -92,24 +92,24 @@ class vil1_mit_generic_image : public vil1_image_impl
     return bits_per_pixel_ / 8;
   }
 
-  virtual enum vil1_component_format component_format() const
+  enum vil1_component_format component_format() const override
   {
     if (type_ == 1 || type_ == 2) return VIL1_COMPONENT_FORMAT_UNSIGNED_INT;
     else return VIL1_COMPONENT_FORMAT_IEEE_FLOAT;
   }
 
   //: Copy this to BUF,
-  virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
-  virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
+  bool get_section(void* buf, int x0, int y0, int width, int height) const override;
+  bool put_section(void const* buf, int x0, int y0, int width, int height) override;
 
   //: Return the image interpreted as rgb bytes.
   //virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;
   //virtual bool get_section_float(void* buf, int x0, int y0, int width, int height) const;
   //virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
-  vil1_image get_plane(unsigned int p) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
+  vil1_image get_plane(unsigned int p) const override;
 };
 
 #endif // vil1_mit_file_format_h_

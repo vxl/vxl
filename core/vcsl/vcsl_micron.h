@@ -18,7 +18,7 @@ class vcsl_micron
 
  public:
   // Destructor
-  virtual ~vcsl_micron() = default;
+  ~vcsl_micron() override = default;
 
   //***************************************************************************
   // Status report
@@ -26,7 +26,7 @@ class vcsl_micron
 
   //: Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
-  virtual double units_per_standard_unit() const { return 1000000; }
+  double units_per_standard_unit() const override { return 1000000; }
 
   //***************************************************************************
   // Singleton pattern

@@ -27,15 +27,15 @@ bool vil1_jpeg_file_probe(vil1_stream *vs);
 class vil1_jpeg_file_format : public vil1_file_format
 {
  public:
-  virtual char const *tag() const;
-  virtual vil1_image_impl *make_input_image(vil1_stream *vs);
-  virtual vil1_image_impl *make_output_image(vil1_stream *vs,
+  char const *tag() const override;
+  vil1_image_impl *make_input_image(vil1_stream *vs) override;
+  vil1_image_impl *make_output_image(vil1_stream *vs,
                                              int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil1_component_format format);
+                                             vil1_component_format format) override;
 };
 
 //
@@ -53,20 +53,20 @@ class vil1_jpeg_generic_image : public vil1_image_impl
                           int components,
                           int bits_per_component,
                           vil1_component_format format);
-  ~vil1_jpeg_generic_image();
+  ~vil1_jpeg_generic_image() override;
 
   //: implementation of virtual interface.
-  int planes() const;
-  int width() const;
-  int height() const;
-  int components() const;
-  int bits_per_component() const;
-  vil1_component_format component_format() const;
-  char const *file_format() const; // returns "jpeg"
-  bool get_property(char const *tag, void *prop = nullptr) const;
-  vil1_image get_plane(unsigned int p) const;
-  bool get_section(void       *buf, int x0, int y0, int w, int h) const;
-  bool put_section(void const *buf, int x0, int y0, int w, int h);
+  int planes() const override;
+  int width() const override;
+  int height() const override;
+  int components() const override;
+  int bits_per_component() const override;
+  vil1_component_format component_format() const override;
+  char const *file_format() const override; // returns "jpeg"
+  bool get_property(char const *tag, void *prop = nullptr) const override;
+  vil1_image get_plane(unsigned int p) const override;
+  bool get_section(void       *buf, int x0, int y0, int w, int h) const override;
+  bool put_section(void const *buf, int x0, int y0, int w, int h) override;
 
  private:
   vil1_jpeg_compressor   *jc;

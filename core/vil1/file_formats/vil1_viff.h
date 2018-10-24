@@ -30,14 +30,14 @@
 class vil1_viff_file_format : public vil1_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil1_image_impl* make_input_image(vil1_stream* vs);
-  virtual vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
+  char const* tag() const override;
+  vil1_image_impl* make_input_image(vil1_stream* vs) override;
+  vil1_image_impl* make_output_image(vil1_stream* vs, int planes,
                                              int width,
                                              int height,
                                              int components,
                                              int bits_per_component,
-                                             vil1_component_format format);
+                                             vil1_component_format format) override;
 };
 
 //: Generic image implementation for VIFF (Khoros) files
@@ -71,31 +71,31 @@ class vil1_viff_generic_image : public vil1_image_impl
                           int components,
                           int bits_per_component,
                           vil1_component_format format);
-  ~vil1_viff_generic_image();
+  ~vil1_viff_generic_image() override;
 
   //: Dimensions.  Planes x W x H x Components
-  virtual int planes() const { return planes_; }
-  virtual int width() const { return width_; }
-  virtual int height() const { return height_; }
-  virtual int components() const { return 1; }
+  int planes() const override { return planes_; }
+  int width() const override { return width_; }
+  int height() const override { return height_; }
+  int components() const override { return 1; }
 
-  virtual int bits_per_component() const { return bits_per_component_; }
-  virtual enum vil1_component_format component_format() const { return format_; }
+  int bits_per_component() const override { return bits_per_component_; }
+  enum vil1_component_format component_format() const override { return format_; }
 
   //: Copy plane PLANE of this to BUF
-  virtual bool get_section(void* buf, int x0, int y0, int width, int height) const;
+  bool get_section(void* buf, int x0, int y0, int width, int height) const override;
   //: Write BUF into image plane PLANE of this
-  virtual bool put_section(void const* buf, int x0, int y0, int width, int height);
+  bool put_section(void const* buf, int x0, int y0, int width, int height) override;
   //: Emulate a single plane image
-  virtual vil1_image get_plane(unsigned int p) const;
+  vil1_image get_plane(unsigned int p) const override;
 
   //: Return the image interpreted as rgb bytes.
   virtual bool get_section_rgb_byte(void* buf, int x0, int y0, int width, int height) const;
   virtual bool get_section_float(void* buf, int x0, int y0, int width, int height) const;
   virtual bool get_section_byte(void* buf, int x0, int y0, int width, int height) const;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 
   //: User defined spare values in header
   vxl_uint_32 ispare1() const { return header_.ispare1;}

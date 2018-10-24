@@ -146,9 +146,9 @@ class vpgl_rational_camera : public vpgl_camera<T>
                        std::vector<vpgl_scale_offset<T> >  scale_offsets)
     : rational_coeffs_(rational_coeffs), scale_offsets_(std::move(scale_offsets)) {}
 
-  virtual ~vpgl_rational_camera() = default;
+  ~vpgl_rational_camera() override = default;
 
-  virtual std::string type_name() const { return "vpgl_rational_camera"; }
+  std::string type_name() const override { return "vpgl_rational_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -212,7 +212,7 @@ class vpgl_rational_camera : public vpgl_camera<T>
   void image_scale(T& u_scale, T& v_scale)
     {u_scale = scale(U_INDX); v_scale = scale(V_INDX);}
   //: The generic camera interface. u represents image column, v image row.
-  virtual void project(const T x, const T y, const T z, T& u, T& v) const;
+  void project(const T x, const T y, const T z, T& u, T& v) const override;
 
         // --- Interface for vnl ---
 

@@ -88,10 +88,10 @@ class vpgl_poly_radial_distortion : public vpgl_radial_distortion<T>
   }
 
   //: Distort a radial length
-  virtual T distort_radius( T radius ) const;
+  T distort_radius( T radius ) const override;
 
   //: Compute the derivative of the distort_radius function
-  virtual T distort_radius_deriv( T radius ) const;
+  T distort_radius_deriv( T radius ) const override;
 
  protected:
   //: The coefficients of the nth-order polynomial

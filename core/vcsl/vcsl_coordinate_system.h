@@ -40,7 +40,7 @@ class vcsl_coordinate_system
     : vbl_ref_count(), axes_(c.axes_) {}
 
   // Destructor
-  virtual ~vcsl_coordinate_system() = default;
+  ~vcsl_coordinate_system() override = default;
 
   //***************************************************************************
   // Status report

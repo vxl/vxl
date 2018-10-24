@@ -19,7 +19,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
            vnl_vector<double> const& ai,
            vnl_vector<double> const& bj,
            vnl_vector<double> const& c,
-           vnl_vector<double>& eij)
+           vnl_vector<double>& eij) override
   {
     eij[0] = (ai[0]*ai[0]-bj[0]*ai[1])*bj[2]*bj[2]*bj[2] + c[0]*ai[0];
     eij[1] = (ai[1]*ai[1]-bj[1]*ai[0])*bj[2]*bj[2]*bj[2] + c[1]*ai[1];
@@ -29,7 +29,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
-               vnl_matrix<double>& Aij)
+               vnl_matrix<double>& Aij) override
   {
     Aij[0][0] = 2.0*ai[0]*bj[2]*bj[2]*bj[2] + c[0];
     Aij[0][1] = -bj[0]*bj[2]*bj[2]*bj[2];
@@ -41,7 +41,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
-               vnl_matrix<double>& Bij)
+               vnl_matrix<double>& Bij) override
   {
     Bij[0][0] = -ai[1]*bj[2]*bj[2]*bj[2];
     Bij[0][1] = 0.0;
@@ -55,7 +55,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
-               vnl_matrix<double>& Cij)
+               vnl_matrix<double>& Cij) override
   {
     Cij[0][0] = ai[0];
     Cij[0][1] = 0.0;
@@ -68,7 +68,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
                          vnl_vector<double> const& /*bj*/,
                          vnl_vector<double> const& /*c*/,
                          vnl_vector<double> const& /*fij*/,
-                         double& weight)
+                         double& weight) override
   {
     weight = double((i+1)*(j+1))/(this->number_of_a()*this->number_of_b());
   }

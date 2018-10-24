@@ -28,7 +28,7 @@ class vcsl_degree
 
  public:
   // Destructor
-  virtual ~vcsl_degree() = default;
+  ~vcsl_degree() override = default;
 
   //***************************************************************************
   // Status report
@@ -36,7 +36,7 @@ class vcsl_degree
 
   //: Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
-  virtual double units_per_standard_unit() const;
+  double units_per_standard_unit() const override;
 
   //***************************************************************************
   // Singleton pattern

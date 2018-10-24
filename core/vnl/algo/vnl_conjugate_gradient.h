@@ -48,7 +48,7 @@ class VNL_ALGO_EXPORT vnl_conjugate_gradient : public vnl_nonlinear_minimizer
   void init(vnl_cost_function &f);
 
   //: Destructor.
-  ~vnl_conjugate_gradient();
+  ~vnl_conjugate_gradient() override;
 
   // Operations----------------------------------------------------------------
 

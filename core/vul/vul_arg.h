@@ -194,10 +194,10 @@ class vul_arg : public vul_arg_base
   //operator T& () { return value_; }
 
   //: returns number of args chomped, or -1 on failure.
-  int parse(char ** argv) { return ::parse(this, argv); }
+  int parse(char ** argv) override { return ::parse(this, argv); }
 
   //: print
-  std::ostream& print_value(std::ostream &s) {
+  std::ostream& print_value(std::ostream &s) override {
     ::print_value(s, *this);
     return s; // << flush
   }

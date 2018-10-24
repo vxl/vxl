@@ -41,7 +41,7 @@ class VNL_ALGO_EXPORT vnl_sparse_lm : public vnl_nonlinear_minimizer
   vnl_sparse_lm(vnl_sparse_lst_sqr_function& f);
 
   //: Destructor
-  ~vnl_sparse_lm();
+  ~vnl_sparse_lm() override;
 
   //: Minimize the function supplied in the constructor until convergence or failure.
   //  On return, a, b, and c are such that f(a,b,c) is the lowest value achieved.

@@ -38,13 +38,13 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
                              vpgl_rational_camera<T> const& rcam);
 
 
-  virtual ~vpgl_local_rational_camera() = default;
+  ~vpgl_local_rational_camera() override = default;
 
-  virtual std::string type_name() const { return "vpgl_local_rational_camera"; }
+  std::string type_name() const override { return "vpgl_local_rational_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  virtual vpgl_local_rational_camera<T>* clone(void) const;
+  vpgl_local_rational_camera<T>* clone(void) const override;
 
   //: Equality test
   inline bool operator==(vpgl_local_rational_camera<T> const &that) const
@@ -61,24 +61,24 @@ void set_lvcs(vpgl_lvcs const& lvcs) {lvcs_ = lvcs;}
 vpgl_lvcs lvcs() const {return lvcs_;}
 
 //: The generic camera interface. u represents image column, v image row.
-virtual void project(const T x, const T y, const T z, T& u, T& v) const;
+void project(const T x, const T y, const T z, T& u, T& v) const override;
 
 // Interface for vnl
 
 //: Project a world point onto the image
-virtual vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const override;
 
 // Interface for vgl
 
 //: Project a world point onto the image
-virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+vgl_point_2d<T> project(vgl_point_3d<T> world_point) const override;
 
 
 //: print the camera parameters
-virtual void print(std::ostream& s = std::cout) const;
+void print(std::ostream& s = std::cout) const override;
 
 //: save to file (the lvcs is after the global rational camera parameters)
-virtual bool save(std::string cam_path);
+bool save(std::string cam_path) override;
 
 
 protected:

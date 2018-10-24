@@ -86,24 +86,24 @@ class vgl_polygon_scan_iterator : public vgl_region_scan_iterator
                             vgl_box_2d<T> const& window);
 
   //: Destructor
-  ~vgl_polygon_scan_iterator();
+  ~vgl_polygon_scan_iterator() override;
 
   //Functions----------------------------------------------------------
 
   //: Resets iterator to first segment of first scan line
-  void reset();
+  void reset() override;
 
   //: Moves iterator to next segment
-  bool next();
+  bool next() override;
 
   //: Returns current scan line
-  inline int scany() const { return y-1; }
+  inline int scany() const override { return y-1; }
 
   //: Returns start of current span
-  inline int startx() const { return xl; }
+  inline int startx() const override { return xl; }
 
   //: Returns end of current span
-  inline int endx() const { return xr; }
+  inline int endx() const override { return xr; }
 
   //: Returns start of current span (floating point value)
   inline T fstartx() const { return fxl; }

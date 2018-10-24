@@ -12,11 +12,11 @@ class VNL_TEMPLATE_EXPORT vnl_analytic_integrant : public vnl_integrant_fnct
 {
  public:
   vnl_analytic_integrant() = default;
-  ~vnl_analytic_integrant() = default;
+  ~vnl_analytic_integrant() override = default;
 
   // the function every derived class has to implement, which is to evaluate
   // the function value at point x
-  virtual double f_(double /*x*/) = 0;
+  double f_(double /*x*/) override = 0;
 };
 
 #endif

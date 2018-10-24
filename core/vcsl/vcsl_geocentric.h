@@ -35,7 +35,7 @@ class vcsl_geocentric
 
  public:
   // Destructor
-  virtual ~vcsl_geocentric() = default;
+  ~vcsl_geocentric() override = default;
 };
 
 #endif // vcsl_geocentric_h_

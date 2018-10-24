@@ -34,60 +34,60 @@ class vpgl_ba_shared_k_lsqr : public vpgl_bundle_adjust_lsqr
                         const std::vector<std::vector<bool> >& mask);
 
   // Destructor
-  virtual ~vpgl_ba_shared_k_lsqr() = default;
+  ~vpgl_ba_shared_k_lsqr() override = default;
 
 
   //: compute the Jacobian Aij
-  virtual void jac_Aij(unsigned int i,
+  void jac_Aij(unsigned int i,
                        unsigned int j,
                        vnl_double_3x4 const& Pi,
                        vnl_vector<double> const& ai,
                        vnl_vector<double> const& bj,
                        vnl_vector<double> const& c,
-                       vnl_matrix<double>& Aij);
+                       vnl_matrix<double>& Aij) override;
 
   //: compute the Jacobian Bij
-  virtual void jac_Bij(unsigned int i,
+  void jac_Bij(unsigned int i,
                        unsigned int j,
                        vnl_double_3x4 const& Pi,
                        vnl_vector<double> const& ai,
                        vnl_vector<double> const& bj,
                        vnl_vector<double> const& c,
-                       vnl_matrix<double>& Bij);
+                       vnl_matrix<double>& Bij) override;
 
   //: compute the Jacobian Cij
-  virtual void jac_Cij(unsigned int i,
+  void jac_Cij(unsigned int i,
                        unsigned int j,
                        vnl_double_3x4 const& Pi,
                        vnl_vector<double> const& ai,
                        vnl_vector<double> const& bj,
                        vnl_vector<double> const& c,
-                       vnl_matrix<double>& Cij);
+                       vnl_matrix<double>& Cij) override;
 
 
   //: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
-  virtual vgl_homg_point_3d<double>
+  vgl_homg_point_3d<double>
   param_to_point(int j,
                  const double* bj,
-                 const vnl_vector<double>& c) const;
+                 const vnl_vector<double>& c) const override;
 
   //: construct the \param j-th perspective camera from a pointer to the j-th parameters of \param b and parameters \param c
-  virtual vnl_vector_fixed<double,4>
+  vnl_vector_fixed<double,4>
   param_to_pt_vector(int j,
                      const double* bj,
-                     const vnl_vector<double>& c) const;
+                     const vnl_vector<double>& c) const override;
 
   //: construct the \param i-th perspective camera from a pointer to the i-th parameters of \param a and parameters \param c
-  virtual vpgl_perspective_camera<double>
+  vpgl_perspective_camera<double>
   param_to_cam(int i,
                const double* ai,
-               const vnl_vector<double>& c) const;
+               const vnl_vector<double>& c) const override;
 
   //: compute a 3x4 camera matrix of camera \param i from a pointer to the i-th parameters of \param a and parameters \param c
-  virtual vnl_double_3x4
+  vnl_double_3x4
   param_to_cam_matrix(int i,
                       const double* ai,
-                      const vnl_vector<double>& c) const;
+                      const vnl_vector<double>& c) const override;
 
   //: Create the parameter vectors \p a and \p c from a vector of cameras
   static void

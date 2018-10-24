@@ -30,22 +30,22 @@ class vil_image_resource_plugin : public vil_image_resource
   vil_image_resource_plugin() : filetype_(""), colour_(""), width_(-1), height_(-1) {}
 
   //: Destructor
-  virtual ~vil_image_resource_plugin() = default;
+  ~vil_image_resource_plugin() override = default;
 
   //: Name of the class
   virtual std::string is_a() const { return "vil_image_resource_plugin"; }
 
-  virtual vil_pixel_format pixel_format() const { return VIL_PIXEL_FORMAT_UNKNOWN; }
+  vil_pixel_format pixel_format() const override { return VIL_PIXEL_FORMAT_UNKNOWN; }
 
-  virtual unsigned ni() const { return 0; }
-  virtual unsigned nj() const { return 0; }
-  virtual unsigned nplanes() const { return 0; }
+  unsigned ni() const override { return 0; }
+  unsigned nj() const override { return 0; }
+  unsigned nplanes() const override { return 0; }
 
-  virtual bool get_property(char const * /*tag*/, void * /*property_value*/=nullptr) const { return false; }
-  virtual vil_image_view_base_sptr get_copy_view(unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const
+  bool get_property(char const * /*tag*/, void * /*property_value*/=nullptr) const override { return false; }
+  vil_image_view_base_sptr get_copy_view(unsigned /*i0*/, unsigned /*ni*/, unsigned /*j0*/, unsigned /*nj*/) const override
   { return vil_image_view_base_sptr(nullptr); }
 
-  virtual bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) { return false; }
+  bool put_view(vil_image_view_base const& /*im*/, unsigned /*i0*/, unsigned /*j0*/) override { return false; }
 
   //: Attempt to load image from named file.
   // \return  true if successful

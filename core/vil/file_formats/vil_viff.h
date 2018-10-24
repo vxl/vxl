@@ -27,11 +27,11 @@
 class vil_viff_file_format : public vil_file_format
 {
  public:
-  virtual char const* tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  char const* tag() const override;
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override;
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned int ni, unsigned int nj, unsigned int nplanes,
-                                                    vil_pixel_format format);
+                                                    vil_pixel_format format) override;
 };
 
 //: Generic image implementation for VIFF (Khoros) files
@@ -59,22 +59,22 @@ class vil_viff_image : public vil_image_resource
   vil_viff_image(vil_stream* is,
                  unsigned int ni, unsigned int nj, unsigned int nplanes,
                  vil_pixel_format format);
-  ~vil_viff_image();
+  ~vil_viff_image() override;
 
   //: Dimensions.  Planes x W x H
-  virtual unsigned int ni() const { return ni_; }
-  virtual unsigned int nj() const { return nj_; }
-  virtual unsigned int nplanes() const { return nplanes_; }
+  unsigned int ni() const override { return ni_; }
+  unsigned int nj() const override { return nj_; }
+  unsigned int nplanes() const override { return nplanes_; }
 
-  virtual enum vil_pixel_format pixel_format() const { return format_; }
+  enum vil_pixel_format pixel_format() const override { return format_; }
 
   //: Return part of this as buffer
-  virtual vil_image_view_base_sptr get_copy_view(unsigned int x0, unsigned int ni, unsigned int y0, unsigned int nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned int x0, unsigned int ni, unsigned int y0, unsigned int nj) const override;
   //: Write buf into this at position (x0,y0)
-  virtual bool put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0);
+  bool put_view(vil_image_view_base const& buf, unsigned int x0, unsigned int y0) override;
 
-  char const* file_format() const;
-  bool get_property(char const *tag, void *prop = nullptr) const;
+  char const* file_format() const override;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 
   //: User defined spare values in header
   vxl_uint_32 ispare1() const { return header_.ispare1;}

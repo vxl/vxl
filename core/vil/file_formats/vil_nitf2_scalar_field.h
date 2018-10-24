@@ -20,9 +20,9 @@ class vil_nitf2_scalar_field : public vil_nitf2_field
   vil_nitf2_scalar_field(vil_nitf2_field_definition* definition)
     : vil_nitf2_field(definition) {}
 
-  virtual ~vil_nitf2_scalar_field() = default;
+  ~vil_nitf2_scalar_field() override = default;
 
-  virtual int num_dimensions() const { return 0; }
+  int num_dimensions() const override { return 0; }
 
   // Sets output argument to the value of field. Subclasses overload the
   // appropriate method to set out parameter and return true. These methods
@@ -50,7 +50,7 @@ class vil_nitf2_scalar_field : public vil_nitf2_field
                                       int variable_width = -1,
                                       bool* error = nullptr);
 
-  virtual field_tree* get_tree() const;
+  field_tree* get_tree() const override;
 
   // Write to NITF stream. Arg variable_width, if non-negative, overrides
   // formatter's field_width.

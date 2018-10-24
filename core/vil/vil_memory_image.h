@@ -55,30 +55,30 @@ class vil_memory_image : public vil_image_resource
 
  public:
 
-  ~vil_memory_image() {delete view_;}
+  ~vil_memory_image() override {delete view_;}
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const { return view_->nplanes(); }
-  virtual unsigned ni() const { return view_->ni(); }
-  virtual unsigned nj() const { return view_->nj(); }
+  unsigned nplanes() const override { return view_->nplanes(); }
+  unsigned ni() const override { return view_->ni(); }
+  unsigned nj() const override { return view_->nj(); }
 
-  virtual enum vil_pixel_format pixel_format() const { return view_->pixel_format(); }
+  enum vil_pixel_format pixel_format() const override { return view_->pixel_format(); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
   //: Create a view of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                            unsigned j0, unsigned nj) const override;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
 
   //: Declare that this is an in-memory image which is not read-only
-  bool get_property(char const * tag, void * prop = nullptr) const
+  bool get_property(char const * tag, void * prop = nullptr) const override
   {
     if (0==std::strcmp(tag, vil_property_memory))
       return prop ? (*static_cast<bool*>(prop)) = true : true;

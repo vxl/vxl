@@ -81,7 +81,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   //: Copy constructor.
   vpgl_proj_camera( const vpgl_proj_camera& cam );
 
-  virtual std::string type_name() const { return "vpgl_proj_camera"; }
+  std::string type_name() const override { return "vpgl_proj_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
@@ -90,7 +90,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   //: Assignment.
   const vpgl_proj_camera<T>& operator=( const vpgl_proj_camera& cam );
 
-  virtual ~vpgl_proj_camera();
+  ~vpgl_proj_camera() override;
 
   //: Equality test
   inline bool operator==(vpgl_proj_camera<T> const &that) const
@@ -99,7 +99,7 @@ class vpgl_proj_camera : public vpgl_camera<T>
   // ----------------- Projections and Backprojections:------------------------
 
   //: Projection from base class
-  virtual void project(const T x, const T y, const T z, T& u, T& v) const;
+  void project(const T x, const T y, const T z, T& u, T& v) const override;
 
   //: Project a point in world coordinates onto the image plane.
   virtual vgl_homg_point_2d<T> project( const vgl_homg_point_3d<T>& world_point ) const;

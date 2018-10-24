@@ -42,7 +42,7 @@ class vnl_powell_1dfun : public vnl_cost_function
     assert(dx.size() == n_);
   }
 
-  double f(const vnl_vector<double>& x)
+  double f(const vnl_vector<double>& x) override
   {
     uninit(x[0], tmpx_);
     double e = f_->f(tmpx_);

@@ -28,13 +28,13 @@ class vcsl_spherical
   vcsl_spherical();
 
   // Destructor
-  virtual ~vcsl_spherical() = default;
+  ~vcsl_spherical() override = default;
 
   //***************************************************************************
   // Because VXL does not necessarily use dynamic_cast<>
   //***************************************************************************
 
-  virtual const vcsl_spherical *cast_to_spherical() const { return this; }
+  const vcsl_spherical *cast_to_spherical() const override { return this; }
 };
 
 #endif // vcsl_spherical_h_

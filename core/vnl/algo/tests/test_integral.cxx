@@ -12,7 +12,7 @@
 class my_test_integrant : public vnl_analytic_integrant
 {
  public:
-   double f_(double x) { return x/(1+x*x); }
+   double f_(double x) override { return x/(1+x*x); }
 };
 
 class gaussian_integrant : public vnl_analytic_integrant
@@ -31,7 +31,7 @@ class gaussian_integrant : public vnl_analytic_integrant
     phi_ = phi;
   }
 
-  double f_(double rho)
+  double f_(double rho) override
   {
     double x2 = std::pow( p0_.get(0) + rho * std::sin(theta_) * std::cos(phi_), 2 );
     double y2 = std::pow( p0_.get(1) + rho * std::sin(theta_) * std::sin(phi_), 2 );

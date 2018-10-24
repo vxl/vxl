@@ -34,25 +34,25 @@ class vgl_ellipse_scan_iterator : public vgl_region_scan_iterator
   vgl_ellipse_scan_iterator( T xc, T yc, T rx, T ry, T theta );
 
   //: Destructor
-  virtual ~vgl_ellipse_scan_iterator();
+  ~vgl_ellipse_scan_iterator() override;
 
   //: Resets the scan iterator to before the first scan line
   //  After calling this function, next() needs to be called before
   //  startx() and endx() form a valid scan line.
-  virtual void reset();
+  void reset() override;
 
   //: Tries to moves to the next scan line.
   //  Returns false if there are no more scan lines.
-  virtual bool next();
+  bool next() override;
 
   //: y-coordinate of the current scan line.
-  virtual int  scany() const { return y_; }
+  int  scany() const override { return y_; }
 
   //: Returns starting x-value of the current scan line.
-  virtual int  startx() const { return start_x_; }
+  int  startx() const override { return start_x_; }
 
   //: Returns ending x-value of the current scan line.
-  virtual int  endx() const { return end_x_; }
+  int  endx() const override { return end_x_; }
 
  private:
   //: Parameters of the ellipse being scan converted.

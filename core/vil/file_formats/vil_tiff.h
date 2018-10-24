@@ -47,11 +47,11 @@
 class vil_tiff_file_format : public vil_file_format
 {
  public:
-  virtual char const *tag() const;
-  virtual vil_image_resource_sptr make_input_image(vil_stream *vs);
+  char const *tag() const override;
+  vil_image_resource_sptr make_input_image(vil_stream *vs) override;
 
-  virtual vil_pyramid_image_resource_sptr
-  make_input_pyramid_image(char const* file);
+  vil_pyramid_image_resource_sptr
+  make_input_pyramid_image(char const* file) override;
 
   //: Construct a pyramid image resource from a base image.
   //  All levels are stored in the same resource file. Each level has the same
@@ -61,30 +61,30 @@ class vil_tiff_file_format : public vil_file_format
   //  resources during the construction of the pyramid. Files are
   //  be removed from the directory after completion.  If temp_dir is 0
   //  then the intermediate resources are created in memory.
-  virtual vil_pyramid_image_resource_sptr
+  vil_pyramid_image_resource_sptr
   make_pyramid_image_from_base(char const* filename,
                                vil_image_resource_sptr const& base_image,
                                unsigned nlevels,
-                               char const* temp_dir);
+                               char const* temp_dir) override;
 
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned ni,
                                                     unsigned nj,
                                                     unsigned nplanes,
-                                                    enum vil_pixel_format);
+                                                    enum vil_pixel_format) override;
 
-  virtual vil_blocked_image_resource_sptr
+  vil_blocked_image_resource_sptr
   make_blocked_output_image(vil_stream* vs,
                             unsigned ni,
                             unsigned nj,
                             unsigned nplanes,
                             unsigned size_block_i,
                             unsigned size_block_j,
-                            enum vil_pixel_format);
+                            enum vil_pixel_format) override;
 
 
-  virtual vil_pyramid_image_resource_sptr
-  make_pyramid_output_image(char const* file);
+  vil_pyramid_image_resource_sptr
+  make_pyramid_output_image(char const* file) override;
 };
 
 struct tif_stream_structures;
@@ -173,17 +173,17 @@ class vil_tiff_image : public vil_blocked_image_resource
   vil_tiff_image(tif_smart_ptr const& tif,
                  vil_tiff_header* th, const unsigned nimages = 1);
 
-  ~vil_tiff_image();
+  ~vil_tiff_image() override;
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const;
-  virtual unsigned ni() const;
-  virtual unsigned nj() const;
+  unsigned nplanes() const override;
+  unsigned ni() const override;
+  unsigned nj() const override;
 
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const override;
 
   //: returns "tiff"
-  char const *file_format() const;
+  char const *file_format() const override;
 
 #if HAS_GEOTIFF
   //: are there any geotiff tags
@@ -193,32 +193,32 @@ class vil_tiff_image : public vil_blocked_image_resource
            // --- Block interface ---
 
   //: Block size in columns (must be a multiple of 16)
-  virtual unsigned size_block_i() const;
+  unsigned size_block_i() const override;
 
   //: Block size in rows (must be a multiple of 16)
-  virtual unsigned size_block_j() const;
+  unsigned size_block_j() const override;
 
   //: Number of blocks in image width
-  virtual unsigned n_block_i() const;
+  unsigned n_block_i() const override;
 
   //: Number of blocks in image height
-  virtual unsigned n_block_j() const;
+  unsigned n_block_j() const override;
 
-  virtual vil_image_view_base_sptr get_block( unsigned  block_index_i,
-                                              unsigned  block_index_j ) const;
+  vil_image_view_base_sptr get_block( unsigned  block_index_i,
+                                              unsigned  block_index_j ) const override;
 
-  virtual bool put_block( unsigned  block_index_i, unsigned  block_index_j,
-                          const vil_image_view_base& blk );
+  bool put_block( unsigned  block_index_i, unsigned  block_index_j,
+                          const vil_image_view_base& blk ) override;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
 
   //: Return true if the property given in the first argument has been set.
   // currently defined:
   //  "quantisation_depth" - number of relevant bits per pixel
   //  "size_block_i" and "size_block_j" - block dimensions
 
-  virtual bool get_property(char const *tag, void *prop = nullptr) const;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 
   bool set_compression_method(compression_methods cm);
 
@@ -368,61 +368,61 @@ class vil_tiff_pyramid_resource : public vil_pyramid_image_resource
  public:
   vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read = true);
 
-  virtual ~vil_tiff_pyramid_resource();
+  ~vil_tiff_pyramid_resource() override;
 
   //: The number of planes (or components) of the image.
   // This method refers to the base (max resolution) image
   // Dimensions:  Planes x ni x nj.
   // This concept is treated as a synonym to components.
-  inline virtual unsigned nplanes() const
+  inline unsigned nplanes() const override
   { if (levels_[0]) return levels_[0]->nplanes_; return 1; }
 
   //: The number of pixels in each row.
   // Dimensions:  Planes x ni x nj.
-  inline virtual unsigned ni() const
+  inline unsigned ni() const override
   { if (levels_[0]) return levels_[0]->ni_; return 0; }
 
   //: The number of pixels in each column.
   // Dimensions:  Planes x ni x nj.
-  inline virtual unsigned nj() const
+  inline unsigned nj() const override
   { if (levels_[0]) return levels_[0]->nj_; return 0; }
 
   //: Pixel Format.
-  inline virtual enum vil_pixel_format pixel_format() const
+  inline enum vil_pixel_format pixel_format() const override
   { if (levels_[0]) return levels_[0]->pix_fmt_; return VIL_PIXEL_FORMAT_UNKNOWN; }
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return "ptif"; }
+  char const* file_format() const override { return "ptif"; }
 
          // --- Methods particular to pyramid resource ---
 
   //: number of pyramid levels
-  virtual unsigned nlevels() const { return (unsigned)(levels_.size()); }
+  unsigned nlevels() const override { return (unsigned)(levels_.size()); }
 
   //:Get a partial view from the image from a specified pyramid level
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                  unsigned j0, unsigned n_j,
-                                                 unsigned level) const;
+                                                 unsigned level) const override;
 
   //:Get a partial view from the image in the pyramid closest to scale.
   // The origin and size parameters are in the coordinate system of the base image.
   // The scale factor is with respect to the base image (base scale = 1.0).
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                  unsigned j0, unsigned n_j,
                                                  const float scale,
-                                                 float& actual_scale) const;
+                                                 float& actual_scale) const override;
 
   //:
   // Caution! The resource is assigned a header and the data is permanently
   // written into the file. Be sure you want to commit to the file.
-  bool put_resource(vil_image_resource_sptr const& resc);
+  bool put_resource(vil_image_resource_sptr const& resc) override;
 
   //: returns the image resource at the specified pyramid level
-  vil_image_resource_sptr get_resource(const unsigned level) const;
+  vil_image_resource_sptr get_resource(const unsigned level) const override;
 
   //: for debug purposes
-  void print(const unsigned level)
+  void print(const unsigned level) override
   { if (level<levels_.size()) levels_[level]->print(level); }
  protected:
   //:default constructor

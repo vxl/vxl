@@ -45,7 +45,7 @@ foreach(p
   endif()
 endforeach()
 
-project(vxl)
+project(vxl LANGUAGES CXX C)
 
 include(CMakeDependentOption)
 

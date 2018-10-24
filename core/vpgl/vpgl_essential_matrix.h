@@ -56,7 +56,7 @@ class vpgl_essential_matrix : public vpgl_fundamental_matrix<T>
   const vpgl_essential_matrix<T>& operator=( const vpgl_essential_matrix<T>& em );
 
   //: Destructor
-  virtual ~vpgl_essential_matrix();
+  ~vpgl_essential_matrix() override;
 };
 
 //Public functions

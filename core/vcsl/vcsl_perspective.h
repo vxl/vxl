@@ -35,7 +35,7 @@ class vcsl_perspective
 
  public:
   // Destructor
-  virtual ~vcsl_perspective() = default;
+  ~vcsl_perspective() override = default;
 
   //***************************************************************************
   // Status report
@@ -44,11 +44,11 @@ class vcsl_perspective
   //: Is `this' invertible at time `time'? Never !
   //  REQUIRE: valid_time(time)
   // Pure virtual function of vcsl_spatial_transformation
-  virtual bool is_invertible(double time) const;
+  bool is_invertible(double time) const override;
 
   //: Is `this' correctly set ?
   // Virtual function of vcsl_spatial_transformation
-  virtual bool is_valid() const
+  bool is_valid() const override
   { return vcsl_spatial_transformation::is_valid() &&
            ((this->duration()==0&&focal_.size()==1) ||
             this->duration()==focal_.size()); }
@@ -74,16 +74,16 @@ class vcsl_perspective
   //  REQUIRE: is_valid()
   //  REQUIRE: v.size()==3
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> execute(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> execute(const vnl_vector<double> &v,
+                                     double time) const override;
 
   //: Image of `v' by the inverse of `this'
   //  REQUIRE: is_valid()
   //  REQUIRE: is_invertible(time) and v.size()==2
   //  The first pre-condition is never true. You can not use this method
   // Pure virtual function of vcsl_spatial_transformation
-  virtual vnl_vector<double> inverse(const vnl_vector<double> &v,
-                                     double time) const;
+  vnl_vector<double> inverse(const vnl_vector<double> &v,
+                                     double time) const override;
 
  protected:
 

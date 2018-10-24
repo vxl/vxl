@@ -48,19 +48,19 @@ class vil_openjpeg_jp2_file_format : public vil_file_format,
                                      public vil_openjpeg_file_format
 {
  public:
-  virtual const char * tag() const { return "jp2"; }
+  const char * tag() const override { return "jp2"; }
 
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override
   {
     return static_cast<vil_openjpeg_file_format*>(this)->
            make_input_image(vs, VIL_OPENJPEG_JP2);
   }
 
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned int ni,
                                                     unsigned int nj,
                                                     unsigned int nplanes,
-                                                    vil_pixel_format format)
+                                                    vil_pixel_format format) override
   {
     return static_cast<vil_openjpeg_file_format*>(this)->
            make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_JP2);
@@ -96,19 +96,19 @@ class vil_openjpeg_j2k_file_format : public vil_file_format,
                                      public vil_openjpeg_file_format
 {
  public:
-  virtual const char * tag() const { return "j2k"; }
+  const char * tag() const override { return "j2k"; }
 
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs)
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override
   {
     return static_cast<vil_openjpeg_file_format*>(this)->
            make_input_image(vs, VIL_OPENJPEG_J2K);
   }
 
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned int ni,
                                                     unsigned int nj,
                                                     unsigned int nplanes,
-                                                    vil_pixel_format format)
+                                                    vil_pixel_format format) override
   {
     return static_cast<vil_openjpeg_file_format*>(this)->
            make_output_image(vs, ni, nj, nplanes, format, VIL_OPENJPEG_J2K);
@@ -125,7 +125,7 @@ class vil_openjpeg_image : public vil_image_resource
                       unsigned int ni, unsigned int nj, unsigned int nplanes,
                       vil_pixel_format format, vil_openjpeg_format opjfmt);
   vil_openjpeg_image(vil_stream* is, vil_openjpeg_format opjfmt);
-  ~vil_openjpeg_image(void);
+  ~vil_openjpeg_image(void) override;
 
   bool is_valid(void) const;
 

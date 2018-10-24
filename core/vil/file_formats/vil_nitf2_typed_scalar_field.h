@@ -26,12 +26,12 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
     : vil_nitf2_scalar_field(definition), m_value(std::move(value)) {}
 
   // Destructor
-  ~vil_nitf2_typed_scalar_field();
+  ~vil_nitf2_typed_scalar_field() override;
 
   // Set out_value to my value and return true.
   // (This is a partial override of overloaded method
   // vil_nitf2_scalar_field::value() for my specific type.)
-  virtual bool value(T& out_value) const {
+  bool value(T& out_value) const override {
     out_value = m_value;
     return true;
   }
@@ -44,9 +44,9 @@ class vil_nitf2_typed_scalar_field : public vil_nitf2_scalar_field
   void set_value(const T& value) { m_value = value; }
 
   // Output to stream. Overload as necessary.
-  virtual std::ostream& output(std::ostream& os) const { return os << m_value; }
+  std::ostream& output(std::ostream& os) const override { return os << m_value; }
 
-  virtual field_tree* get_tree() const { return vil_nitf2_scalar_field::get_tree(); }
+  field_tree* get_tree() const override { return vil_nitf2_scalar_field::get_tree(); }
  private:
   T m_value;
 };

@@ -28,7 +28,7 @@ class vcsl_meter
 
  public:
   // Destructor
-  virtual ~vcsl_meter() = default;
+  ~vcsl_meter() override = default;
 
   //***************************************************************************
   // Status report
@@ -36,7 +36,7 @@ class vcsl_meter
 
   //: Returns the number of units of `this' equal of the standard_unit for the dimension
   // Pure virtual function of vcsl_unit
-  virtual double units_per_standard_unit() const { return 1; }
+  double units_per_standard_unit() const override { return 1; }
 
   //***************************************************************************
   // Singleton pattern
