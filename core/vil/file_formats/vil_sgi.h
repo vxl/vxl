@@ -64,7 +64,6 @@ class vil_sgi_image : public vil_image_resource
   friend class vil_sgi_file_format;
 
   vil_sgi_file_header hdr;
-  vil_streampos bit_map_start; // position in file of bitmap raw data.
 };
 
 

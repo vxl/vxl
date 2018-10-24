@@ -55,8 +55,6 @@ class vil_ras_image : public vil_image_resource
   vxl_uint_32 map_length_;
   vxl_uint_8* col_map_;
 
-  vil_pixel_format format_;
-
   bool read_header();
   bool write_header();
 
