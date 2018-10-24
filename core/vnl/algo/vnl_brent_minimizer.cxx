@@ -15,7 +15,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_bracket_minimum.h>
 
-static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(std::sqrt(5)-1);
+//static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(std::sqrt(5)-1);
 static const double COMPL_GOLD   = 0.381966011250105152; // = 0.5*(3-std::sqrt(5));
 static const double EPS          = 1e-8;
 

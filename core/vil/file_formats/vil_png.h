@@ -42,7 +42,6 @@ class vil_png_image : public vil_image_resource
   int components_;
   int bits_per_component_;
   vil_pixel_format format_;
-  int start_of_data_;
 
   bool read_header();
   bool write_header();

@@ -52,12 +52,9 @@ class vil1_mit_file_format : public vil1_file_format
 class vil1_mit_generic_image : public vil1_image_impl
 {
   vil1_stream* is_;
-  int magic_;
   int width_;
   int height_;
-  int maxval_;
 
-  int start_of_data_;
   int components_;
   int bits_per_component_;
 

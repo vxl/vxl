@@ -29,7 +29,7 @@ static void test_constructor()
 static void test_operations()
 {
   vgl_vector_3d<double> t(0,0,1);
-  vgl_point_3d<double> p(1,2,3), pt(1,2,2), org, clpt;
+  vgl_point_3d<double> p(1,2,3), pt(1,2,2), clpt;
   vgl_ray_3d<double> ray(p, t);
   clpt = vgl_closest_point(ray, pt);
   bool con = ray.contains(clpt);

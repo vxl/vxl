@@ -231,14 +231,11 @@ vpgl_orientation_position_focal_lsqr::gradf(vnl_vector<double> const& xvec, vnl_
 
   for (unsigned int idx=0; idx < world_points_.size(); ++idx)
   {
-    vgl_homg_point_3d<double> wp = world_points_[idx];
     X = world_points_[idx].x(); Y = world_points_[idx].y(); Z = world_points_[idx].z(); W = world_points_[idx].w();
 
     A = Rmat[0][0]*X + Rmat[0][1]*Y + Rmat[0][2]*Z + t1*W;
     B = Rmat[1][0]*X + Rmat[1][1]*Y + Rmat[1][2]*Z + t2*W;
     C = Rmat[2][0]*X + Rmat[2][1]*Y + Rmat[2][2]*Z + t3*W;
-
-    vgl_homg_point_2d<double> proj = cam(world_points_[idx]);
 
     double dex_dr1, dex_dr2, dex_dr3, dex_dr4, dey_dr1, dey_dr2, dey_dr3, dey_dr4;
     double dex_dt1, dey_dt1, dex_dt2, dey_dt2, dex_dt3, dey_dt3, dex_df, dey_df;
@@ -346,7 +343,6 @@ vpgl_optimize_camera::opt_orient_pos_f(const vpgl_perspective_camera<double>& ca
                                        const double xtol, const unsigned nevals)
 {
   const vpgl_calibration_matrix<double>& K = camera.get_calibration();
-  vgl_point_3d<double> c = camera.get_camera_center();
   vgl_vector_3d<double> t= camera.get_translation();
   const vgl_rotation_3d<double>& R = camera.get_rotation();
   vnl_quaternion<double> q = R.as_quaternion();
