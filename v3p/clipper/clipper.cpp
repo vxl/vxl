@@ -3770,7 +3770,7 @@ void Clipper::JoinCommonEdges()
 DoublePoint GetUnitNormal(const IntPoint &pt1, const IntPoint &pt2)
 {
   if(pt2.X == pt1.X && pt2.Y == pt1.Y)
-    return DoublePoint(0, 0);
+    return {0, 0};
 
   double Dx = (double)(pt2.X - pt1.X);
   double dy = (double)(pt2.Y - pt1.Y);

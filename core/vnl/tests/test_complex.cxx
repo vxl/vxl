@@ -104,7 +104,7 @@ std::complex<double> tc_acos(std::complex<double> x)
   double a = std::real(x), b = std::imag(x);
   // special cases:
   if (b==0 && a > 1)
-    return std::complex<double>(0.0, std::log(a+std::sqrt(a*a-1))); // == acosh(a)
+    return {0.0, std::log(a+std::sqrt(a*a-1))}; // == acosh(a)
   else if (b==0 && a >= -1.0)
     return std::acos(a);
 
