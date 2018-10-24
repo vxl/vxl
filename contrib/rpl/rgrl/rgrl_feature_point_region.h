@@ -26,17 +26,17 @@ class rgrl_feature_point_region
 
   //: The result is a rgrl_feature_point_region, without transforming the radius
   rgrl_feature_sptr
-  transform( rgrl_transformation const& xform ) const;
+  transform( rgrl_transformation const& xform ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_point_region, rgrl_feature_point );
 
   //: get pixels coordinates within the region
-  virtual void
-  generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
+  void
+  generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio ) override;
 
   //: make a clone copy
-  virtual rgrl_feature_sptr clone() const;
+  rgrl_feature_sptr clone() const override;
 
 private:
   //:

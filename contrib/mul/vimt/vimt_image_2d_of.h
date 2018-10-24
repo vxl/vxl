@@ -22,7 +22,7 @@ class vimt_image_2d_of : public vimt_image_2d
 
   //: Shallow equality tester.
   //  The parameter must be identical type to this.
-  bool equals(const vimt_image &) const;
+  bool equals(const vimt_image &) const override;
 
 public:
 
@@ -44,10 +44,10 @@ public:
 
 
   //: Destructor
-  virtual ~vimt_image_2d_of() = default;
+  ~vimt_image_2d_of() override = default;
 
   //: Baseclass view of image
-  virtual const vil_image_view_base& image_base() const { return image_; }
+  const vil_image_view_base& image_base() const override { return image_; }
 
   //: Image view
   vil_image_view<T>& image() { return image_; }
@@ -69,7 +69,7 @@ public:
   void set_valid_region(int x0, unsigned nx, int y0, unsigned ny);
 
   //: Get the number of planes in the image.
-  unsigned n_planes() const {return image_.nplanes();}
+  unsigned n_planes() const override {return image_.nplanes();}
 
   //: Take a deep copy of image (copy data, not just pointers)
   void deep_copy(const vimt_image_2d_of& image);
@@ -78,30 +78,30 @@ public:
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
     //: Create a copy on the heap and return base class pointer
     //  Note that this will make a shallow copy of any contained images
-  virtual vimt_image* clone() const { return new vimt_image_2d_of(*this); }
+  vimt_image* clone() const override { return new vimt_image_2d_of(*this); }
 
     //: Create a deep copy on the heap and return base class pointer
     //  This will make a deep copy of any contained images
-  virtual vimt_image* deep_clone() const;
+  vimt_image* deep_clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: print all data to os (rounds output to int)
-  virtual void print_all(std::ostream& os) const;
+  void print_all(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // vimt_image_2d_of_h_

@@ -143,7 +143,7 @@ class mmn_lbp_solver: public mmn_solver
     mmn_lbp_solver(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
 
     //: Input the arcs that define the graph
-    virtual void set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs);
+    void set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arcs) override;
 
     //: Find values for each node with minimise the total cost
     //  \param node_cost: node_cost[i][j] is cost of selecting value j for node i
@@ -167,10 +167,10 @@ class mmn_lbp_solver: public mmn_solver
 
     //: return the beliefs, i.e. the marginal probabilities of each node's states
     //
-    virtual double solve(
+    double solve(
                  const std::vector<vnl_vector<double> >& node_cost,
                  const std::vector<vnl_matrix<double> >& pair_cost,
-                 std::vector<unsigned>& x);
+                 std::vector<unsigned>& x) override;
 
     const std::vector<vnl_vector<double>  >&  belief() const {return belief_;}
 
@@ -189,25 +189,25 @@ class mmn_lbp_solver: public mmn_solver
     void set_msg_upd_mode(msg_update_t msg_upd_mode) {msg_upd_mode_ = msg_upd_mode;}
 
     //: Initialise from a text stream
-    virtual bool set_from_stream(std::istream &is);
+    bool set_from_stream(std::istream &is) override;
 
     //: Version number for I/O
     short version_no() const;
 
     //: Name of the class
-    virtual std::string is_a() const;
+    std::string is_a() const override;
 
     //: Create a copy on the heap and return base class pointer
-    virtual mmn_solver* clone() const;
+    mmn_solver* clone() const override;
 
     //: Print class to os
-    virtual void print_summary(std::ostream& os) const;
+    void print_summary(std::ostream& os) const override;
 
     //: Save class to binary file stream
-    virtual void b_write(vsl_b_ostream& bfs) const;
+    void b_write(vsl_b_ostream& bfs) const override;
 
     //: Load class from binary file stream
-    virtual void b_read(vsl_b_istream& bfs);
+    void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // mmn_lbp_solver_h_

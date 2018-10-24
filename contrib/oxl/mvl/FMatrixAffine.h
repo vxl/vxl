@@ -22,9 +22,9 @@ class FMatrixAffine : public FMatrix
  public:
 
   FMatrixAffine();
-  ~FMatrixAffine();
+  ~FMatrixAffine() override;
 
-  bool set (const double *f_matrix);
+  bool set (const double *f_matrix) override;
   bool set (const vnl_matrix<double>& f_matrix);
 };
 

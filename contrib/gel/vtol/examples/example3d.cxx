@@ -41,18 +41,18 @@ class example_edge_3d : public vtol_edge
  public:
   T(V const& v1, V const& v2);
   T(vtol_vertex_sptr const& v1, vtol_vertex_sptr const& v2);
-  virtual vsol_spatial_object_2d* clone() const {return new T(v1_,v2_); }
-  std::string is_a() const { return std::string("example_edge_3d"); }
+  vsol_spatial_object_2d* clone() const override {return new T(v1_,v2_); }
+  std::string is_a() const override { return std::string("example_edge_3d"); }
 
   bool operator==(T const& e) const { return v1_==e.v1() && v2_==e.v2(); }
-  bool operator==(E const& e) const { return !e.cast_to_edge_2d() && operator==((T const&)e); }
-  bool operator==(S const&  ) const { return false; } // could be worked out better; see vtol_edge_2d.cxx
+  bool operator==(E const& e) const override { return !e.cast_to_edge_2d() && operator==((T const&)e); }
+  bool operator==(S const&  ) const override { return false; } // could be worked out better; see vtol_edge_2d.cxx
   T& operator=(T const& e) { v1_=e.v1(); v2_=e.v2(); return *this; }
 
-  virtual void print(std::ostream &strm=std::cout) const { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
-  virtual void describe(std::ostream &strm=std::cout,int=0) const { print(strm); v1_->print(strm); v2_->print(strm); }
-  virtual void copy_geometry(vtol_edge const& e) { v1()->copy_geometry(*e.v1()); v2()->copy_geometry(*e.v2()); }
-  virtual bool compare_geometry(vtol_edge const& e) const { return e.cast_to_edge_2d() == nullptr && operator==(*(T const*)(&e)); }
+  void print(std::ostream &strm=std::cout) const override { strm<<"<example_edge_3d> with id "<<get_id()<<'\n'; }
+  void describe(std::ostream &strm=std::cout,int=0) const override { print(strm); v1_->print(strm); v2_->print(strm); }
+  void copy_geometry(vtol_edge const& e) override { v1()->copy_geometry(*e.v1()); v2()->copy_geometry(*e.v2()); }
+  bool compare_geometry(vtol_edge const& e) const override { return e.cast_to_edge_2d() == nullptr && operator==(*(T const*)(&e)); }
 #undef T
 #undef S
 #undef V
@@ -76,12 +76,12 @@ class example_vertex_3d : public vtol_vertex
   double z() const { return z_; }
 
   bool operator==(T const& v) const { return x_==v.x()&&y_==v.y()&&z_==v.z(); }
-  bool operator==(V const& v) const { return !v.cast_to_vertex_2d() && operator==((T const&)v); }
-  bool operator==(S const&  ) const { return false; } // could be worked out better; see vtol_vertex_2d.cxx
+  bool operator==(V const& v) const override { return !v.cast_to_vertex_2d() && operator==((T const&)v); }
+  bool operator==(S const&  ) const override { return false; } // could be worked out better; see vtol_vertex_2d.cxx
   T& operator=(T const& v) { x_=v.x();y_=v.y();z_=v.z(); return *this; }
-  T& operator=(V const& v) { if (!v.cast_to_vertex_2d()) operator=((T const&)v); return *this; }
+  T& operator=(V const& v) override { if (!v.cast_to_vertex_2d()) operator=((T const&)v); return *this; }
 
-  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& v)
+  vtol_edge_sptr new_edge(vtol_vertex_sptr const& v) override
   {
     assert(v->cast_to_vertex_2d()==nullptr);
     assert(v != this);
@@ -98,13 +98,13 @@ class example_vertex_3d : public vtol_vertex
     }
     return new example_edge_3d(this,v);
   }
-  virtual vsol_spatial_object_2d* clone() const {return new T(x(),y(),z()); }
-  std::string is_a() const { return std::string("example_vertex_3d"); }
-  virtual void copy_geometry(const vtol_vertex&v) { assert(v.cast_to_vertex_2d()==nullptr); operator=(*(T const*)(&v)); }
-  virtual bool compare_geometry(const vtol_vertex&v) const { return v.cast_to_vertex_2d()==nullptr && operator==(*(T const*)(&v)); }
+  vsol_spatial_object_2d* clone() const override {return new T(x(),y(),z()); }
+  std::string is_a() const override { return std::string("example_vertex_3d"); }
+  void copy_geometry(const vtol_vertex&v) override { assert(v.cast_to_vertex_2d()==nullptr); operator=(*(T const*)(&v)); }
+  bool compare_geometry(const vtol_vertex&v) const override { return v.cast_to_vertex_2d()==nullptr && operator==(*(T const*)(&v)); }
 
-  void print(std::ostream &strm=std::cout) const { strm<<"<vertex "<<x()<<','<<y()<<','<<z()<<"> with id "<<get_id()<<'\n'; }
-  void describe(std::ostream &strm=std::cout,int b=0) const { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
+  void print(std::ostream &strm=std::cout) const override { strm<<"<vertex "<<x()<<','<<y()<<','<<z()<<"> with id "<<get_id()<<'\n'; }
+  void describe(std::ostream &strm=std::cout,int b=0) const override { print(strm);describe_inferiors(strm,b);describe_superiors(strm,b); }
 #undef T
 #undef V
 #undef S
@@ -146,18 +146,18 @@ class example_face_3d : public vtol_face
     }
     link_inferior(new vtol_one_chain(elist,dirs,true));
   }
-  virtual vsol_spatial_object_2d* clone() const {vertex_list vl; this->vertices(vl); return new T(vl); }
+  vsol_spatial_object_2d* clone() const override {vertex_list vl; this->vertices(vl); return new T(vl); }
 
-  std::string is_a() const { return std::string("example_face_3d"); }
+  std::string is_a() const override { return std::string("example_face_3d"); }
   bool operator==(T const&) const { return false; }
-  bool operator==(F const&) const { return false; }
-  bool operator==(S const&) const { return false; }
-  virtual void print(std::ostream &strm=std::cout) const { strm << "<example_face_3d>"; }
-  virtual void describe(std::ostream &strm=std::cout, int=0) const { print(strm); }
-  virtual void copy_geometry(vtol_face const& /*f*/) { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
-  virtual bool compare_geometry(vtol_face const& f) const { return f.cast_to_face_2d()==nullptr && operator==(*(T const*)(&f)); }
-  virtual vtol_face* copy_with_arrays(topology_list&, topology_list&) const { return new T(*this); } // NYI
-  virtual vtol_face* shallow_copy_with_no_links() const { return new T(*this); }
+  bool operator==(F const&) const override { return false; }
+  bool operator==(S const&) const override { return false; }
+  void print(std::ostream &strm=std::cout) const override { strm << "<example_face_3d>"; }
+  void describe(std::ostream &strm=std::cout, int=0) const override { print(strm); }
+  void copy_geometry(vtol_face const& /*f*/) override { /* edge(0)->copy_geometry(f.edge(0)); */ } // NYI
+  bool compare_geometry(vtol_face const& f) const override { return f.cast_to_face_2d()==nullptr && operator==(*(T const*)(&f)); }
+  vtol_face* copy_with_arrays(topology_list&, topology_list&) const override { return new T(*this); } // NYI
+  vtol_face* shallow_copy_with_no_links() const override { return new T(*this); }
 #undef T
 #undef S
 };

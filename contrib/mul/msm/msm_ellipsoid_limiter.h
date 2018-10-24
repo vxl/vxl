@@ -34,20 +34,20 @@ class msm_ellipsoid_limiter : public msm_param_limiter
 
   msm_ellipsoid_limiter();
 
-  virtual ~msm_ellipsoid_limiter() = default;
+  ~msm_ellipsoid_limiter() override = default;
 
   //: Define variance on each parameter
-  virtual void set_param_var(const vnl_vector<double>& v);
+  void set_param_var(const vnl_vector<double>& v) override;
 
   //: Set the limits so that a given proportion pass
   //  Where the parameters are described by a pdf, choose
   //  limits so that on average a proportion prop (in [0,1])
   //  are acceptable when using n_modes modes. If n_modes==0,
   //  then assume all available modes to be used.
-  virtual void set_acceptance(double prop, unsigned n_modes=0);
+  void set_acceptance(double prop, unsigned n_modes=0) override;
 
   //: Apply limit to parameter vector b
-  virtual void apply_limit(vnl_vector<double>& b) const;
+  void apply_limit(vnl_vector<double>& b) const override;
 
   //: Define number of SDs to limit at
   void set_n_sds(double n_sds);
@@ -64,24 +64,24 @@ class msm_ellipsoid_limiter : public msm_param_limiter
                       const vnl_vector<double>& y) const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual msm_param_limiter* clone() const;
+  msm_param_limiter* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,
   // and throws if it finds any data in the stream.
-  virtual void config_from_stream(std::istream &is);
+  void config_from_stream(std::istream &is) override;
 };
 
 #endif // msm_ellipsoid_limiter_h_

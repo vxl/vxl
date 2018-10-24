@@ -33,10 +33,10 @@ class vpdfl_gaussian_sampler :public vpdfl_sampler_base
   vpdfl_gaussian_sampler();
 
   //: Destructor
-  virtual ~vpdfl_gaussian_sampler();
+  ~vpdfl_gaussian_sampler() override;
 
   //: Draw random sample from Gaussian distribution
-  virtual void sample(vnl_vector<double>& x);
+  void sample(vnl_vector<double>& x) override;
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
@@ -47,20 +47,20 @@ class vpdfl_gaussian_sampler :public vpdfl_sampler_base
   // ..
   // sampler.reseed(std::time(0));
   // \endcode
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
   //: Return a reference to the pdf model
   // This is properly cast.
   const vpdfl_gaussian& gaussian() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_sampler_base* clone() const;
+  vpdfl_sampler_base* clone() const override;
 };
 
 //: Stream output operator for class reference

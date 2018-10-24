@@ -30,10 +30,10 @@ public:
                    unsigned int dim = 2 );
 
   //: Destructor.
-  virtual ~rrel_quad_est();
+  ~rrel_quad_est() override;
 
   //: Total number of data points.
-  unsigned int num_samples( ) const;
+  unsigned int num_samples( ) const override;
 
   //: organize into usual representation
   vnl_vector<double>
@@ -44,16 +44,16 @@ public:
 
   //: Generate a parameter estimate from a minimal sample set.
   bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const;
+                             vnl_vector<double>& params ) const override;
 
   //: Compute signed fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const override;
 
   //: \brief Weighted least squares parameter estimate.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const;
+                                   const std::vector<double>* weights=nullptr ) const override;
 
 protected:
 

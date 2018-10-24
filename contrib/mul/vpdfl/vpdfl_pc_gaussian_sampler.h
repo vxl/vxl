@@ -39,13 +39,13 @@ class vpdfl_pc_gaussian_sampler : public vpdfl_gaussian_sampler
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_sampler_base* clone() const;
+  vpdfl_sampler_base* clone() const override;
 };
 //=======================================================================
 

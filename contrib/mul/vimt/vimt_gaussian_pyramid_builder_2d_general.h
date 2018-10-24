@@ -30,7 +30,7 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
 
  public:
     //: Build pyramid
-    virtual void build(vimt_image_pyramid& im_pyr, const vimt_image& im) const;
+    void build(vimt_image_pyramid& im_pyr, const vimt_image& im) const override;
 
     //: Dflt ctor
     vimt_gaussian_pyramid_builder_2d_general();
@@ -39,31 +39,31 @@ class vimt_gaussian_pyramid_builder_2d_general : public vimt_gaussian_pyramid_bu
     vimt_gaussian_pyramid_builder_2d_general(double scale_step);
 
     //: Destructor
-    ~vimt_gaussian_pyramid_builder_2d_general();
+    ~vimt_gaussian_pyramid_builder_2d_general() override;
 
     //: get the current scale step;
-    double scale_step() const { return scale_params_.scale_step(); }
+    double scale_step() const override { return scale_params_.scale_step(); }
 
     //: Set the Scale step
     void set_scale_step(double scale_step);
 
     //: Extend pyramid
     // The first layer of the pyramid must already be set.
-    void extend(vimt_image_pyramid& image_pyr) const;
+    void extend(vimt_image_pyramid& image_pyr) const override;
 
-    vimt_image_pyramid_builder* clone() const;
+    vimt_image_pyramid_builder* clone() const override;
     //: Version number for I/O
     short version_no() const ;
     //: Name of the class
-    virtual std::string is_a() const ;
+    std::string is_a() const override ;
     //: Does the name of the class match the argument?
-    virtual bool is_class(std::string const& s) const;
+    bool is_class(std::string const& s) const override;
     //: Print class to os
-    void print_summary(std::ostream&) const;
+    void print_summary(std::ostream&) const override;
     //: Save class to binary file stream
-    void b_write(vsl_b_ostream& bfs) const;
+    void b_write(vsl_b_ostream& bfs) const override;
     //: Load class from binary file stream
-    void b_read(vsl_b_istream& bfs);
+    void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // vimt_gaussian_pyramid_builder_2d_general_h_

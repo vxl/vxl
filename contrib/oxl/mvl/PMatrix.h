@@ -67,7 +67,7 @@ class PMatrix : public vbl_ref_count
   explicit PMatrix(vnl_double_3x4 const&);
   PMatrix(const vnl_matrix<double>& A, const vnl_vector<double>& a);
   PMatrix(const PMatrix&);
- ~PMatrix();
+ ~PMatrix() override;
 
   static PMatrix read(const char* filename);
   static PMatrix read(std::istream&);

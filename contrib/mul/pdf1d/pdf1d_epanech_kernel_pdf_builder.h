@@ -27,28 +27,28 @@ class pdf1d_epanech_kernel_pdf_builder : public pdf1d_kernel_pdf_builder
   pdf1d_epanech_kernel_pdf_builder();
 
   //: Destructor
-  virtual ~pdf1d_epanech_kernel_pdf_builder();
+  ~pdf1d_epanech_kernel_pdf_builder() override;
 
   //: Create empty model
-  virtual pdf1d_pdf* new_model() const;
+  pdf1d_pdf* new_model() const override;
 
   //: Name of the model class returned by new_model()
-  virtual std::string new_model_type() const;
+  std::string new_model_type() const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_builder* clone() const;
+  pdf1d_builder* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 };
 
 #endif // pdf1d_epanech_kernel_pdf_builder_h

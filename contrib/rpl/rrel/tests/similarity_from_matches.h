@@ -36,20 +36,20 @@ class similarity_from_matches : public rrel_estimation_problem
  public:
   similarity_from_matches() : rrel_estimation_problem(2,2) {}
   similarity_from_matches( std::vector<image_point_match>  matches );
-  ~similarity_from_matches() = default;
-  virtual unsigned int num_unique_samples( ) const{ return num_points_to_match_; }
-  virtual unsigned int num_samples( ) const;
-  virtual bool fit_from_minimal_set( const std::vector<int>& match_indices,
-                                     vnl_vector<double>& params ) const;
-  virtual void compute_residuals( const vnl_vector<double>& params,
-                                  std::vector<double>& residuals ) const;
-  virtual void compute_weights( const std::vector<double>& residuals,
+  ~similarity_from_matches() override = default;
+  unsigned int num_unique_samples( ) const override{ return num_points_to_match_; }
+  unsigned int num_samples( ) const override;
+  bool fit_from_minimal_set( const std::vector<int>& match_indices,
+                                     vnl_vector<double>& params ) const override;
+  void compute_residuals( const vnl_vector<double>& params,
+                                  std::vector<double>& residuals ) const override;
+  void compute_weights( const std::vector<double>& residuals,
                                 const rrel_wls_obj* obj,
                                 double scale,
-                                std::vector<double>& weights ) const;
-  virtual bool weighted_least_squares_fit( vnl_vector<double>& params,
+                                std::vector<double>& weights ) const override;
+  bool weighted_least_squares_fit( vnl_vector<double>& params,
                                            vnl_matrix<double>& cofact,
-                                           const std::vector<double>* weights=nullptr ) const;
+                                           const std::vector<double>* weights=nullptr ) const override;
 };
 
 void

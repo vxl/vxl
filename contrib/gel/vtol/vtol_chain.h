@@ -64,7 +64,7 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_chain();
+  ~vtol_chain() override;
 
   //***************************************************************************
   // Access
@@ -88,12 +88,12 @@ class vtol_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_chain *cast_to_chain() const { return this; }
+  const vtol_chain *cast_to_chain() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_chain *cast_to_chain() { return this; }
+  vtol_chain *cast_to_chain() override { return this; }
 
    //***************************************************************************
    // --- Status report ---
@@ -193,7 +193,7 @@ class vtol_chain : public vtol_topology_object
   virtual void clear();
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_chain"); }
+  std::string is_a() const override { return std::string("vtol_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

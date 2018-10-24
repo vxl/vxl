@@ -45,7 +45,7 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_curve_3d() = default;
+  ~vsol_curve_3d() override = default;
 
   //***************************************************************************
   // Access
@@ -54,7 +54,7 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type() const { return vsol_spatial_object_3d::CURVE; }
+  vsol_spatial_object_3d_type spatial_type() const override { return vsol_spatial_object_3d::CURVE; }
 
  private: // has been superseded by is_a()
   //: Return the curve type
@@ -78,8 +78,8 @@ class vsol_curve_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_curve_3d *cast_to_curve() {return this;}
-  virtual const vsol_curve_3d *cast_to_curve() const {return this;}
+  vsol_curve_3d *cast_to_curve() override {return this;}
+  const vsol_curve_3d *cast_to_curve() const override {return this;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line, 0 otherwise

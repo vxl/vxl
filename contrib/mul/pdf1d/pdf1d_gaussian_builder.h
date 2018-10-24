@@ -28,55 +28,55 @@ class pdf1d_gaussian_builder : public pdf1d_builder
   pdf1d_gaussian_builder();
 
   //: Destructor
-  virtual ~pdf1d_gaussian_builder();
+  ~pdf1d_gaussian_builder() override;
 
   //: Create empty model
-  virtual pdf1d_pdf* new_model() const;
+  pdf1d_pdf* new_model() const override;
 
   //: Name of the model class returned by new_model()
-  virtual std::string new_model_type() const;
+  std::string new_model_type() const override;
 
   //: Define lower threshold on variance for built models
-  virtual void set_min_var(double min_var);
+  void set_min_var(double min_var) override;
 
   //: Get lower threshold on variance for built models
-  virtual double min_var() const;
+  double min_var() const override;
 
   //: Build gaussian from n elements in data[i]
-  virtual void build_from_array(pdf1d_pdf& model, const double* data, int n) const;
+  void build_from_array(pdf1d_pdf& model, const double* data, int n) const override;
 
   //: Build default model with given mean
-  virtual void build(pdf1d_pdf& model, double mean) const;
+  void build(pdf1d_pdf& model, double mean) const override;
 
   //: Build model from data
-  virtual void build(pdf1d_pdf& model,
-                     mbl_data_wrapper<double>& data) const;
+  void build(pdf1d_pdf& model,
+                     mbl_data_wrapper<double>& data) const override;
 
   //: Build model from weighted data
-  virtual void weighted_build(pdf1d_pdf& model,
+  void weighted_build(pdf1d_pdf& model,
                               mbl_data_wrapper<double>& data,
-                              const std::vector<double>& wts) const;
+                              const std::vector<double>& wts) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_builder* clone() const;
+  pdf1d_builder* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // pdf1d_gaussian_builder_h

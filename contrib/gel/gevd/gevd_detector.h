@@ -92,7 +92,7 @@ class gevd_detector : public gevd_detector_params
   gevd_detector(vil1_image, float smoothSigma = 1.0f, float noiseSigma = 2.0f,
                 float contourFactor = 1.0f, float junctionFactor = 1.5f,
                 int minLength = 6, float maxGap = 2.23606f, float minJump=1.0f);
-  ~gevd_detector();
+  ~gevd_detector() override;
 
   // External interfaces
   //Step contour detection

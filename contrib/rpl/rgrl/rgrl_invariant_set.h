@@ -24,7 +24,7 @@ class rgrl_invariant_set
   rgrl_invariant_set() = default;
 
   //:
-  virtual ~rgrl_invariant_set() = default;
+  ~rgrl_invariant_set() override = default;
 
   virtual void
   as_invariants( std::vector<rgrl_invariant_sptr>& invariant_key_points, rgrl_mask_sptr const& mask=nullptr ) = 0;

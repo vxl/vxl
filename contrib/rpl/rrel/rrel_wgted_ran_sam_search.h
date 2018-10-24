@@ -24,16 +24,16 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
   : rrel_ran_sam_search( seed ), is_sim_wgt_set_( false )
   {   }
 
-  ~rrel_wgted_ran_sam_search( );
+  ~rrel_wgted_ran_sam_search( ) override;
 
   // ----------------------------------------
   //  Main estimation functions
   // ----------------------------------------
 
   //: \brief Estimation for an "ordinary" estimation problem.
-  virtual bool
+  bool
   estimate( const rrel_estimation_problem* problem,
-            const rrel_objective* obj_fcn );
+            const rrel_objective* obj_fcn ) override;
 
   // -----------------------------------------
   // Access to results and computed parameters
@@ -46,9 +46,9 @@ class rrel_wgted_ran_sam_search : public rrel_ran_sam_search
   // ------------------------------------------------------------
 
   //: Determine the next random sample, filling in the "sample" vector.
-  virtual void
+  void
   next_sample( unsigned int taken, unsigned int num_points, std::vector<int>& sample,
-               unsigned int points_per_sample );
+               unsigned int points_per_sample ) override;
 
  protected:
   struct prob_interval {

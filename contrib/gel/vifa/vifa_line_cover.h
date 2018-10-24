@@ -45,7 +45,7 @@ class vifa_line_cover : public vbl_ref_count
   inline vifa_line_cover(vifa_line_cover const& c)
     : vbl_ref_count(), dim_(c.dim_), index_(c.index_),
       max_extent_(c.max_extent_), min_extent_(c.min_extent_), line_(c.line_) {}
-  ~vifa_line_cover();
+  ~vifa_line_cover() override;
 
   // Indexing methods
   void InsertLine(imp_line_sptr l);

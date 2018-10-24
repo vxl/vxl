@@ -36,7 +36,7 @@ class rgrl_mask
  public:
   rgrl_mask( unsigned dim=0 ) : x0_(dim, 0.0), x1_(dim, 0.0) { }
 
-  virtual ~rgrl_mask()= default;
+  ~rgrl_mask() override = default;
 
   //: True if a point is inside the region
   virtual bool inside( vnl_vector<double> const& ) const = 0;
@@ -68,7 +68,7 @@ class rgrl_mask_2d_image
                       int org_x = 0, int org_y = 0);
 
   //: True if a point is inside the region
-  bool inside( vnl_vector<double> const& pt ) const;
+  bool inside( vnl_vector<double> const& pt ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_2d_image, rgrl_mask );
@@ -97,7 +97,7 @@ class rgrl_mask_sphere
                     double in_radius );
 
   //: True if a point is inside the region
-  bool inside( vnl_vector<double> const& pt ) const;
+  bool inside( vnl_vector<double> const& pt ) const override;
 
   void set_center( vnl_vector<double> const& pt );
 
@@ -130,7 +130,7 @@ class rgrl_mask_box
   rgrl_mask_box( vnl_vector<double> const& x0, vnl_vector<double> const& x1 );
 
   //: True if a point is inside the region
-  bool inside( vnl_vector<double> const& pt ) const;
+  bool inside( vnl_vector<double> const& pt ) const override;
 
   //: Set the lower coordinate of the box.
   void set_x0( vnl_vector<double> const& v );

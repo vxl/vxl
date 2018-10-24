@@ -90,30 +90,30 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
                       vifa_int_face_attr_factory*  factory = nullptr
                      );
 
-  virtual ~vifa_int_faces_attr();
+  ~vifa_int_faces_attr() override;
 
   // ---
   // Public functional methods
   // ---
 
-  virtual bool  ComputeAttributes();
-  virtual bool  GetAttributes(std::vector<float>& attrs);
+  bool  ComputeAttributes() override;
+  bool  GetAttributes(std::vector<float>& attrs) override;
   static void    GetAttributeNames(std::vector<std::string>& names);
-  virtual bool  GetNativeAttributes(std::vector<float>& attrs);
+  bool  GetNativeAttributes(std::vector<float>& attrs) override;
 
   // Data access for non-attributes
   virtual iface_list&  GetFaces() { return faces_; }
   virtual void    SetFaces(iface_list& v);
-  edge_2d_list&    GetEdges();
+  edge_2d_list&    GetEdges() override;
 
   // hmm, need to think about this
 
   vifa_int_face_attr_sptr factory_new_attr(vtol_intensity_face_sptr face);
 
   //: centroid X
-  float Xo();
+  float Xo() override;
   //: centroid Y
-  float Yo();
+  float Yo() override;
 
   // ---
   // Attribute computation
@@ -128,16 +128,16 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   static int NumHistAttributes() { return NUM_HIST_ATTRIBUTES; }
 
   // non-histogrammed attributes (one value per vifa_int_faces_attr).
-  float Area();                 // area of all faces
-  float AspectRatio();          // ratio of major moments
-  float PerimeterLength();      // length of boundary, in pixels
-  float Complexity();           // edge length^2 / detection area
-  float WeightedComplexity();
-  float WeightedPerimeterLength();
+  float Area() override;                 // area of all faces
+  float AspectRatio() override;          // ratio of major moments
+  float PerimeterLength() override;      // length of boundary, in pixels
+  float Complexity() override;           // edge length^2 / detection area
+  float WeightedComplexity() override;
+  float WeightedPerimeterLength() override;
 
-  float TwoPeakParallel();
-  float FourPeakParallel();
-  float EightyPercentParallel();
+  float TwoPeakParallel() override;
+  float FourPeakParallel() override;
+  float EightyPercentParallel() override;
 
   // a hack for weird linking problems on Windows with attr_get_funcs[]
   static float  CallAttrFunction(vifa_int_face_attr* seed, int i);
@@ -145,7 +145,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
   static const char*  GetBaseAttrName(int i);
 
  protected:
-  virtual void  init();
+  void  init() override;
   void          SetNP();
   void          ComputeCentroid();
   virtual bool  ComputeSingleFaceAttributes(bool forceP=false);

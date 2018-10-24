@@ -35,9 +35,9 @@ struct null_problem : public rrel_estimation_problem
 {
   null_problem( unsigned int num_samples, unsigned int dof, unsigned int min_samples )
     : rrel_estimation_problem( dof, min_samples ), ns(num_samples) { }
-  unsigned int num_samples() const { return ns; }
+  unsigned int num_samples() const override { return ns; }
   void compute_residuals( const vnl_vector<double>& /*params*/,
-                          std::vector<double>& /*residuals*/ ) const { }
+                          std::vector<double>& /*residuals*/ ) const override { }
   unsigned int ns;
 };
 

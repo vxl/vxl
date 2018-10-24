@@ -30,7 +30,7 @@ class mbl_data_collector : public mbl_data_collector_base
   mbl_data_collector();
 
   //: Destructor
-  virtual ~mbl_data_collector();
+  ~mbl_data_collector() override;
 
   //: Clear any stored data
   virtual void clear() =0;

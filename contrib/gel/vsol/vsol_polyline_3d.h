@@ -74,13 +74,13 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_polyline_3d();
+  ~vsol_polyline_3d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone() const;
+  vsol_spatial_object_3d* clone() const override;
 
   //***************************************************************************
   // Access
@@ -89,12 +89,12 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: Return the first point of `this';  pure virtual of vsol_curve_3d
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p0() const { return p0_; }
+  vsol_point_3d_sptr p0() const override { return p0_; }
 
   //---------------------------------------------------------------------------
   //: Return the last point of `this';  pure virtual of vsol_curve_3d
   //---------------------------------------------------------------------------
-  virtual vsol_point_3d_sptr p1() const { return p1_; }
+  vsol_point_3d_sptr p1() const override { return p1_; }
 
   //---------------------------------------------------------------------------
   //: Return vertex `i'
@@ -110,7 +110,7 @@ class vsol_polyline_3d : public vsol_curve_3d
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(vsol_polyline_3d const& other) const;
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(vsol_spatial_object_3d const& obj) const override; // virtual of vsol_spatial_object_3d
 
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
@@ -126,13 +126,13 @@ class vsol_polyline_3d : public vsol_curve_3d
   //: Set the first point of the curve
   //  REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
-  virtual void set_p0(vsol_point_3d_sptr const& new_p0);
+  void set_p0(vsol_point_3d_sptr const& new_p0) override;
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //  REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
-  virtual void set_p1(vsol_point_3d_sptr const& new_p1);
+  void set_p1(vsol_point_3d_sptr const& new_p1) override;
 
   //---------------------------------------------------------------------------
   //: Add another point to the curve
@@ -146,23 +146,23 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a polyline, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_polyline_3d const*cast_to_polyline()const{return this;}
-  virtual vsol_polyline_3d *cast_to_polyline() {return this;}
+  vsol_polyline_3d const*cast_to_polyline()const override{return this;}
+  vsol_polyline_3d *cast_to_polyline() override {return this;}
 
  private: // has been superseded by is_a()
   //: Return the curve type
-  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::POLYLINE; }
+  vsol_curve_3d_type curve_type() const override { return vsol_curve_3d::POLYLINE; }
 
  public:
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length() const; // pure virtual of vsol_curve_3d
+  double length() const override; // pure virtual of vsol_curve_3d
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box() const;
+  void compute_bounding_box() const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
@@ -181,15 +181,15 @@ class vsol_polyline_3d : public vsol_curve_3d
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -198,7 +198,7 @@ class vsol_polyline_3d : public vsol_curve_3d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_polyline_3d"); }
+  std::string is_a() const override { return std::string("vsol_polyline_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(std::string const& cls) const { return cls==is_a(); }

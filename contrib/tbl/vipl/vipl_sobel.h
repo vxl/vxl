@@ -31,10 +31,10 @@ class vipl_sobel : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>() {}
   inline vipl_sobel(vipl_sobel const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A) {}
-  inline ~vipl_sobel() = default;
+  inline ~vipl_sobel() override = default;
 
   // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

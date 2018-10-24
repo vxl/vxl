@@ -38,7 +38,7 @@ class rgrl_matcher_k_nearest_adv
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
                    rgrl_scale const&             /* current_scale */,
-                   rgrl_match_set_sptr const&    old_matches = nullptr );
+                   rgrl_match_set_sptr const&    old_matches = nullptr ) override;
 
 
   // Defines type-related functions

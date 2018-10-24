@@ -54,13 +54,13 @@ class rgrl_initializer_prior
 
   //: Get next initial estimate when first called, but return false thereafter.
   bool next_initial( rgrl_view_sptr           & view,
-                     rgrl_scale_sptr          & prior_scale );
+                     rgrl_scale_sptr          & prior_scale ) override;
 
   void reset_xform_index( ) { xform_index_ = 0; }
 
   //: return number of initializations
   //  It is always 1 for prior
-  virtual int size() const
+  int size() const override
   { return 1; }
 
   // Defines type-related functions

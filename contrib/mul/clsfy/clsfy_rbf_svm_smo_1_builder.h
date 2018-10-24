@@ -32,7 +32,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
    clsfy_rbf_svm_smo_1_builder(): boundC_(0), rbf_width_(1.0) {}
 
   //: Create empty model
-  clsfy_classifier_base* new_classifier() const{return new clsfy_rbf_svm();}
+  clsfy_classifier_base* new_classifier() const override{return new clsfy_rbf_svm();}
 
   //: Build model from data
   // returns the empirical error, or +INF if there is an error.
@@ -40,7 +40,7 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   double build(clsfy_classifier_base& classifier,
                mbl_data_wrapper<vnl_vector<double> >& inputs,
                unsigned nClasses,
-               const std::vector<unsigned> &outputs) const;
+               const std::vector<unsigned> &outputs) const override;
 
   //: Build a classifier from data.
   // returns the empirical error rate, or +INF if there is an error.
@@ -71,28 +71,28 @@ class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base
   { return boundC_; }
 
   //: Name of the class
-  std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Return the class's IO version number
   short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-  clsfy_builder_base* clone() const;
+  clsfy_builder_base* clone() const override;
 
   //: Print class to os
-  void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: Config from a stream.
-  void config(std::istream&);
+  void config(std::istream&) override;
 };
 
 #endif // clsfy_rbf_svm_smo_1_builder_h_

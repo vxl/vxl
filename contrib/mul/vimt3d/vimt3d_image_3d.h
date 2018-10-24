@@ -24,27 +24,27 @@ class vimt3d_image_3d : public vimt_image
   vimt3d_image_3d() = default;
 
   //: Destructor
-  virtual ~vimt3d_image_3d() = default;
+  ~vimt3d_image_3d() override = default;
 
   //: Return dimensionality of image
-  virtual unsigned n_dims() const { return 3; }
+  unsigned n_dims() const override { return 3; }
 
   //: Return 3 element vector indicating size of image in pixels
   //  3D image is v[0] x v[1] x v[2]
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual std::vector<unsigned> image_size() const;
+  std::vector<unsigned> image_size() const override;
 
   //: Return 3D vectors defining bounding box containing image in world co-ords
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual void world_bounds(std::vector<double>& b_lo,
-                            std::vector<double>& b_hi) const;
+  void world_bounds(std::vector<double>& b_lo,
+                            std::vector<double>& b_hi) const override;
 
   //: Return 3 element vector indicating the size of a pixel
   //  Somewhat inefficient: Only use when you absolutely have to.
   //  Usually one only needs to know the size once one knows the exact type.
-  virtual std::vector<double> pixel_size() const;
+  std::vector<double> pixel_size() const override;
 
   //: Current world-to-image transformation
   const vimt3d_transform_3d& world2im() const { return world2im_; }
@@ -60,10 +60,10 @@ class vimt3d_image_3d : public vimt_image
   virtual const vil3d_image_view_base& image_base() const = 0;
 
   //: Name of the class
-  virtual std::string is_a() const { return "vimt3d_image_3d"; }
+  std::string is_a() const override { return "vimt3d_image_3d"; }
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const
+  bool is_class(std::string const& s) const override
   { return s=="vimt3d_image_3d" || vimt_image::is_class(s); }
 };
 

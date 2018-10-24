@@ -60,10 +60,10 @@ class FMPlanarComputeNonLinear : public FMatrixCompute
 
   // FMatrixCompute virtuals
   bool compute(std::vector<vgl_homg_point_2d<double> >& points1,
-               std::vector<vgl_homg_point_2d<double> >& points2, FMatrix& F);
-  bool compute(PairMatchSetCorner& matches, FMatrix* F);
+               std::vector<vgl_homg_point_2d<double> >& points2, FMatrix& F) override;
+  bool compute(PairMatchSetCorner& matches, FMatrix* F) override;
   bool compute(std::vector<HomgPoint2D>& points1,
-               std::vector<HomgPoint2D>& points2, FMatrix* F);
+               std::vector<HomgPoint2D>& points2, FMatrix* F) override;
 };
 
 #endif // FMPlanarComputeNonLinear_h_

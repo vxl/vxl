@@ -42,7 +42,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const { return vsol_spatial_object_2d::REGION; }
+  vsol_spatial_object_2d_type spatial_type(void) const override { return vsol_spatial_object_2d::REGION; }
 
   //***************************************************************************
   // Initialization
@@ -51,14 +51,14 @@ class vsol_region_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   // Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_region_2d() = default;
+  ~vsol_region_2d() override = default;
 
   //***************************************************************************
   // virtuals of vsol_spatial_object_2d
   //***************************************************************************
 
-  virtual vsol_region_2d* cast_to_region(void) { return this; }
-  virtual vsol_region_2d const* cast_to_region(void) const { return this; }
+  vsol_region_2d* cast_to_region(void) override { return this; }
+  vsol_region_2d const* cast_to_region(void) const override { return this; }
 
   virtual vsol_polygon_2d* cast_to_polygon(void) { return nullptr; }
   virtual vsol_polygon_2d const* cast_to_polygon(void) const { return nullptr; }
@@ -85,7 +85,7 @@ class vsol_region_2d : public vsol_spatial_object_2d
   virtual bool is_convex(void) const=0;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_region_2d"); }
+  std::string is_a() const override { return std::string("vsol_region_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

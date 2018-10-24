@@ -51,12 +51,12 @@ public:
   //  unique elements of the symmetric matrix Q=GG', G being the
   //  3(m+1) x 3 matrix formed from the elements of the supplied
   //  vector g.
-  virtual void f(vnl_vector<double> const& g,
-                 vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& g,
+                 vnl_vector<double>& fx) override;
 
   //: Calculate the Jacobian, given the parameter vector g.
-  virtual void gradf(vnl_vector<double> const& g,
-                     vnl_matrix<double>& jacobian);
+  void gradf(vnl_vector<double> const& g,
+                     vnl_matrix<double>& jacobian) override;
 
 };
 

@@ -114,7 +114,7 @@ class vil3d_image_view : public vil3d_image_view_base
   }
 
   //  Destructor
-  virtual ~vil3d_image_view();
+  ~vil3d_image_view() override;
 
   // Standard container stuff
   // This assumes that the data is arranged contiguously.
@@ -208,11 +208,11 @@ class vil3d_image_view : public vil3d_image_view_base
 
   //: resize current planes to ni x nj x nk
   // If already correct size, this function returns quickly
-  virtual void set_size(unsigned ni, unsigned nj, unsigned nk);
+  void set_size(unsigned ni, unsigned nj, unsigned nk) override;
 
   //: resize to ni x nj x nk x nplanes
   // If already correct size, this function returns quickly
-  virtual void set_size(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes);
+  void set_size(unsigned ni, unsigned nj, unsigned nk, unsigned nplanes) override;
 
   //: Make a copy of the data in src and set this to view it
   void deep_copy(const vil3d_image_view<T>& src);
@@ -236,17 +236,17 @@ class vil3d_image_view : public vil3d_image_view_base
   void fill(T value);
 
   //: Print a 1-line summary of contents
-  virtual void print(std::ostream&) const;
+  void print(std::ostream&) const override;
 
   //: Return class name
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: True if this is (or is derived from) class s
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Return a description of the concrete data pixel type.
   // The value corresponds directly to pixel_type.
-  inline vil_pixel_format pixel_format() const { return vil_pixel_format_of(T()); }
+  inline vil_pixel_format pixel_format() const override { return vil_pixel_format_of(T()); }
 
   //: True if they share same view of same image data.
   //  This does not do a deep equality on image data. If the images point

@@ -20,7 +20,7 @@ class gmvl_tag_node : public gmvl_node
 {
  public:
   gmvl_tag_node(std::string  name) : name_(std::move(name)) { type_="gmvl_tag_node"; }
-  ~gmvl_tag_node() = default;
+  ~gmvl_tag_node() override = default;
 
   // accessor
   std::string &get() { return name_; }

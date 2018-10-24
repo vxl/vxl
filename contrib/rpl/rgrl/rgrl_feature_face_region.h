@@ -36,18 +36,18 @@ class rgrl_feature_face_region : public rgrl_feature_face_pt, public rgrl_featur
   double radius() const { return radius_; }
 
   //: Result is a rgrl_feature_face_region, but the region is not transformed.
-  rgrl_feature_sptr transform( rgrl_transformation const& xform ) const;
+  rgrl_feature_sptr transform( rgrl_transformation const& xform ) const override;
 
   //: Result is a rgrl_feature_face_region with a transformed region as well.
   rgrl_feature_sptr transform_region( rgrl_transformation const& xform ) const;
 
   //:  Extract the pixel coordinates within the oriented rectangular solid defined by the feature.
-  virtual void generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio );
+  void generate_pixel_coordinates( vnl_vector< double > const& spacing_ratio ) override;
 
-  unsigned int num_constraints() const;
+  unsigned int num_constraints() const override;
 
   //: make a clone copy
-  virtual rgrl_feature_sptr clone() const;
+  rgrl_feature_sptr clone() const override;
 
  private:
 

@@ -78,13 +78,13 @@ class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,Data
            , mask_(nullptr)
            , masksize_(0) {}
 
-  inline ~vipl_gaussian_convolution() = default;
+  inline ~vipl_gaussian_convolution() override = default;
 
 // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
-  bool preop();
-  bool postop();
+  bool preop() override;
+  bool postop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

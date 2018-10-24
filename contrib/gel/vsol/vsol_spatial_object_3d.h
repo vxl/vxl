@@ -105,7 +105,7 @@ class vsol_spatial_object_3d : public vsol_spatial_object
   static const float eps;
 
   // Constructors/Destructors--------------------------------------------------
-  virtual ~vsol_spatial_object_3d();
+  ~vsol_spatial_object_3d() override;
 
  protected:
   //: constructor initializes basic vsol_spatial_object_3d attributes.

@@ -31,35 +31,35 @@ class rgrl_feature_point
   rgrl_feature_point( vnl_vector<double> const& loc, double scale );
 
   //: read in feature
-  virtual
-  bool read( std::istream& is, bool skip_tag=false );
+  
+  bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  virtual
-  void write( std::ostream& os ) const;
+  
+  void write( std::ostream& os ) const override;
 
   vnl_matrix<double> const&
-  error_projector() const;
+  error_projector() const override;
 
   vnl_matrix<double> const&
-  error_projector_sqrt() const;
+  error_projector_sqrt() const override;
 
   //: Result is a rgrl_feature_point.
-  virtual
+  
   rgrl_feature_sptr
-  transform( rgrl_transformation const& xform ) const;
+  transform( rgrl_transformation const& xform ) const override;
 
   unsigned int
-  num_constraints() const;
+  num_constraints() const override;
 
   //:  Compute the signature weight between two features.
-  virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+  double absolute_signature_weight( rgrl_feature_sptr other ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_point, rgrl_feature );
 
   //: make a clone copy
-  virtual rgrl_feature_sptr clone() const;
+  rgrl_feature_sptr clone() const override;
 
  protected:
   friend class rgrl_feature_reader;

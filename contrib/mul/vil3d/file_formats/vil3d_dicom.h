@@ -49,7 +49,7 @@ class vil3d_dicom_image: public vil3d_slice_list_image
 {
  public:
   //: default filename tag for this image.
-  virtual const char * file_format() const {return "dicom";}
+  const char * file_format() const override {return "dicom";}
   friend class vil3d_slice_list_format;
  protected:
 

@@ -19,7 +19,7 @@ class osl_edge : public osl_topology_base, public osl_edgel_chain
 
   osl_edge(int n, osl_vertex *v1, osl_vertex *v2);
   osl_edge(osl_edgel_chain const &, osl_vertex *v1, osl_vertex *v2);
-  ~osl_edge();
+  ~osl_edge() override;
 
   // set new end-vertex pointers
   osl_vertex *GetV1() const { return v1; }

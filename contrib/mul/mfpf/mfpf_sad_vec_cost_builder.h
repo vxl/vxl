@@ -33,45 +33,45 @@ class mfpf_sad_vec_cost_builder : public mfpf_vec_cost_builder
   mfpf_sad_vec_cost_builder();
 
   // Destructor
-  virtual ~mfpf_sad_vec_cost_builder();
+  ~mfpf_sad_vec_cost_builder() override;
 
 
   //: Create new mfpf_sad_vec_cost on heap
-  virtual mfpf_vec_cost* new_cost() const;
+  mfpf_vec_cost* new_cost() const override;
 
   //: Initialise building
   // Must be called before any calls to add_example(...)
-  virtual void clear(unsigned n_egs);
+  void clear(unsigned n_egs) override;
 
   //: Add one example to the model
-  virtual void add_example(const vnl_vector<double>& v);
+  void add_example(const vnl_vector<double>& v) override;
 
   //: Build object from the data supplied in add_example()
-  virtual void build(mfpf_vec_cost&);
+  void build(mfpf_vec_cost&) override;
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(std::istream &is);
+  bool set_from_stream(std::istream &is) override;
 
   //: Set flag for robust min mad (based on training set)
   void set_impose_robust_min_mad(bool on) {impose_robust_min_mad_=on;}
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mfpf_vec_cost_builder* clone() const;
+  mfpf_vec_cost_builder* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // mfpf_sad_vec_cost_builder_h_

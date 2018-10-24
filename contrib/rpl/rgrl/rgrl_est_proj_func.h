@@ -105,10 +105,10 @@ class rgrl_est_proj_func
                        vnl_vector_fixed<double, Tdim>& to_centre );
 
   //: obj func value
-  void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: Jacobian
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian) override;
 
   //: uncentre projection matrix
   vnl_matrix_fixed<double, Tdim+1, Fdim+1>

@@ -25,15 +25,15 @@ class clsfy_smo_1_lin: public clsfy_smo_base
   // \param i1 first Lagrange multiplier.
   // \param i2 second Lagrange multiplier.
   // \param E1 The amount by which i1 violates KKT conditions.
-  virtual int take_step(int i1, int i2, double E1);
+  int take_step(int i1, int i2, double E1) override;
 
   //: Attempt to optimise sample i1.
   // This attempts to find another value i2,
   // in order to jointly optimise both.
-  virtual int examine_example(int i1);
+  int examine_example(int i1) override;
 
   //: Calculate the kernel for data items i1 and i2.
-  virtual double kernel(int i1, int i2);
+  double kernel(int i1, int i2) override;
 
  public:
 
@@ -50,7 +50,7 @@ class clsfy_smo_1_lin: public clsfy_smo_base
   clsfy_smo_1_lin();
 
   //: Run the optimisation
-  virtual int calc();
+  int calc() override;
 };
 
 //: A sequential minimal optimisation for certain restricted quadratic problems.
@@ -66,7 +66,7 @@ class clsfy_smo_1_rbf: public clsfy_smo_1_lin
   double gamma_;
 
   //: Calculate the kernel for data items i1 and i2
-  virtual double kernel(int i1, int i2);
+  double kernel(int i1, int i2) override;
 
  public:
 
@@ -80,7 +80,7 @@ class clsfy_smo_1_rbf: public clsfy_smo_1_lin
   clsfy_smo_1_rbf();
 
   //: Run the optimisation
-  virtual int calc();
+  int calc() override;
 };
 
 #endif // clsfy_smo_1_h_

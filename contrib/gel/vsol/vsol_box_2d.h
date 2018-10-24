@@ -43,7 +43,7 @@ class vsol_box_2d : public vsol_box, public vbl_ref_count, public vul_timestamp
 
   vsol_box_2d(vbl_bounding_box<double,2> const &b) : box_(b) {}
 
-  ~vsol_box_2d() = default;
+  ~vsol_box_2d() override = default;
 
   // accessors
   bool empty() const { return box_.empty(); }

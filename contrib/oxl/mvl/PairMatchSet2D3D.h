@@ -28,7 +28,7 @@ class PairMatchSet2D3D : public PairMatchSet
   PairMatchSet2D3D(const HomgInterestPointSet* corners, std::vector<HomgPoint3D>* structure);
   PairMatchSet2D3D(const PairMatchSet2D3D& that);
   PairMatchSet2D3D& operator=(const PairMatchSet2D3D&);
- ~PairMatchSet2D3D();
+ ~PairMatchSet2D3D() override;
 
   // Computations--------------------------------------------------------------
 

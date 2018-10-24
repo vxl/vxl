@@ -27,7 +27,7 @@ class pdf1d_exponential : public pdf1d_pdf
   pdf1d_exponential(double lambda);
 
   //: Destructor
-  virtual ~pdf1d_exponential();
+  ~pdf1d_exponential() override;
 
   //: Return standard deviation
   double sd() const { return 1.0/lambda_; }
@@ -40,58 +40,58 @@ class pdf1d_exponential : public pdf1d_pdf
 
   //: Create a sampler object on the heap
   // Caller is responsible for deletion.
-  virtual pdf1d_sampler* new_sampler() const;
+  pdf1d_sampler* new_sampler() const override;
 
   //: Probability density at x
-  virtual double operator()(double x) const;
+  double operator()(double x) const override;
 
   //: Log of probability density at x
   // This value is also the Normalised Mahalanobis distance
   // from the centroid to the given vector.
-  virtual double log_p(double x) const;
+  double log_p(double x) const override;
 
   //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
   //  Returns 1-exp(-x/lambda)
-  virtual double cdf(double x) const;
+  double cdf(double x) const override;
 
   //: Return true if cdf() uses an analytic implementation
-  virtual bool cdf_is_analytic() const;
+  bool cdf_is_analytic() const override;
 
   //: Gradient of PDF at x
-  virtual double gradient(double x, double& p) const;
+  double gradient(double x, double& p) const override;
 
   //: Compute threshold for PDF to pass a given proportion
-  virtual double log_prob_thresh(double pass_proportion) const;
+  double log_prob_thresh(double pass_proportion) const override;
 
   //: Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x returned unchanged.  Otherwise x is moved
   //  (typically up the gradient) until log_p(x)>=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
-  virtual double nearest_plausible(double x, double log_p_min) const;
+  double nearest_plausible(double x, double log_p_min) const override;
 
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_pdf* clone() const;
+  pdf1d_pdf* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // pdf1d_exponential_h

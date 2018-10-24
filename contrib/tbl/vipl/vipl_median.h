@@ -59,13 +59,13 @@ class vipl_median : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr){}
   inline vipl_median(vipl_median const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_median() = default;
+  inline ~vipl_median() override = default;
 
   // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
   // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
-  bool preop();
-  bool postop();
+  bool preop() override;
+  bool postop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

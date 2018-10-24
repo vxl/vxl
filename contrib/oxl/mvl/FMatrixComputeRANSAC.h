@@ -32,17 +32,17 @@ class FMatrixComputeRANSAC : public FMatrixComputeRobust
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
   FMatrixComputeRANSAC(bool rank2_truncate, double std);
-  virtual ~FMatrixComputeRANSAC();
+  ~FMatrixComputeRANSAC() override;
 
-  virtual double calculate_term(std::vector<double>& residuals,
+  double calculate_term(std::vector<double>& residuals,
                                 std::vector<bool>& inlier_list,
-                                int& count);
-  virtual double calculate_residual(HomgPoint2D& one,
+                                int& count) override;
+  double calculate_residual(HomgPoint2D& one,
                                     HomgPoint2D& two,
-                                    FMatrix* F);
-  virtual double calculate_residual(vgl_homg_point_2d<double>& one,
+                                    FMatrix* F) override;
+  double calculate_residual(vgl_homg_point_2d<double>& one,
                                     vgl_homg_point_2d<double>& two,
-                                    FMatrix* F);
+                                    FMatrix* F) override;
 };
 
 #endif // FMatrixComputeRANSAC_h_

@@ -37,21 +37,21 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
       pdf_(pdf.clone()), log_prob_limit_(log_prob_limit) {}
 
   // Destructor
-  ~clsfy_binary_pdf_classifier() { deleteStuff(); }
+  ~clsfy_binary_pdf_classifier() override { deleteStuff(); }
 
   //: Classify the input vector
   // Returns either class1 (Inside PDF mode) or class 0 (Outside PDF mode).
-  virtual unsigned classify(const vnl_vector<double> &input) const;
+  unsigned classify(const vnl_vector<double> &input) const override;
 
   //: Return the probability the input being in class 0.
   // output(0) contains the probability that the input is in class 1
-  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
+  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
 
   //: Log likelihood of being in class 0, i.e. const + log(P(class=0|data)).
   // The constant is chosen such that the decision boundary is at logL ==0;
   // This function is intended for binary classifiers only.
   // logL is related to class probability as P(class=0|data) = exp(logL) / (1+exp(logL))
-  double log_l(const vnl_vector<double> &input) const;
+  double log_l(const vnl_vector<double> &input) const override;
 
   //: Set the log probability density limit,
   // above which the inputs are in class 1.
@@ -88,32 +88,32 @@ class clsfy_binary_pdf_classifier : public clsfy_classifier_base
   }
 
   //: The dimensionality of input vectors.
-  virtual unsigned n_dims() const { assert(pdf_!=nullptr); return pdf_->n_dims();}
+  unsigned n_dims() const override { assert(pdf_!=nullptr); return pdf_->n_dims();}
 
   //: The number of possible output classes.
-  virtual unsigned n_classes() const {return 1;}
+  unsigned n_classes() const override {return 1;}
 
   //: Produce a deep copy.
   // client has responsibility for deletion.
-  clsfy_classifier_base* clone() const;
+  clsfy_classifier_base* clone() const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to a binary File Stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load the class from a Binary File Stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
  public:
 

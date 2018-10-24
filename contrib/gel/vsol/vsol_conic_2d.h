@@ -86,7 +86,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
 
  private: // has been superseded by is_a()
   //: Return the curve type
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::CONIC; }
+  vsol_curve_2d_type curve_type() const override { return vsol_curve_2d::CONIC; }
 
  public:
   //***************************************************************************
@@ -161,13 +161,13 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_conic_2d() = default;
+  ~vsol_conic_2d() override = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //***************************************************************************
   // Access
@@ -176,12 +176,12 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return the first point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p0() const { return p0_; }
+  vsol_point_2d_sptr p0() const override { return p0_; }
 
   //---------------------------------------------------------------------------
   //: Return the last point of `this';  pure virtual of vsol_curve_2d
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr p1() const { return p1_; }
+  vsol_point_2d_sptr p1() const override { return p1_; }
 
   //***************************************************************************
   // Comparison
@@ -191,7 +191,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Has `this' the same coefficients and the same end points than `other' ?
   //---------------------------------------------------------------------------
   virtual bool operator==(vsol_conic_2d const& other) const;
-  virtual bool operator==(vsol_spatial_object_2d const&) const; // virtual of vsol_spatial_object_2d
+  bool operator==(vsol_spatial_object_2d const&) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same coeffs than `other', or different end points ?
@@ -302,7 +302,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return the length of `this'
   //---------------------------------------------------------------------------
-  virtual double length() const; // pure virtual of vsol_curve_2d
+  double length() const override; // pure virtual of vsol_curve_2d
 
   //---------------------------------------------------------------------------
   //: Return the matrix associated with the coefficients.
@@ -317,13 +317,13 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //: Set the first point of the curve
   //  REQUIRE: in(new_p0)
   //---------------------------------------------------------------------------
-  virtual void set_p0(vsol_point_2d_sptr const& new_p0);
+  void set_p0(vsol_point_2d_sptr const& new_p0) override;
 
   //---------------------------------------------------------------------------
   //: Set the last point of the curve
   //  REQUIRE: in(new_p1)
   //---------------------------------------------------------------------------
-  virtual void set_p1(vsol_point_2d_sptr const& new_p1);
+  void set_p1(vsol_point_2d_sptr const& new_p1) override;
 
   //***************************************************************************
   // Basic operations
@@ -373,7 +373,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(std::ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const override
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "vsol_conic_2d<" << static_cast<vgl_conic<double> >(*this)
@@ -383,16 +383,16 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a conic, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_conic_2d const*cast_to_conic() const { return this; }
-  virtual vsol_conic_2d *cast_to_conic() { return this; }
+  vsol_conic_2d const*cast_to_conic() const override { return this; }
+  vsol_conic_2d *cast_to_conic() override { return this; }
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -401,7 +401,7 @@ class vsol_conic_2d : public vsol_curve_2d, public vgl_conic<double>
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return "vsol_conic_2d"; }
+  std::string is_a() const override { return "vsol_conic_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(std::string const& cls) const { return cls==is_a(); }

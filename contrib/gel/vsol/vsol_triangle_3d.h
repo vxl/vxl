@@ -49,13 +49,13 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_triangle_3d();
+  ~vsol_triangle_3d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone(void) const;
+  vsol_spatial_object_3d* clone(void) const override;
 
   //***************************************************************************
   // Access
@@ -85,8 +85,8 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   virtual bool operator==(vsol_triangle_3d const& other) const;
   inline bool operator!=(vsol_triangle_3d const& other)const{return !operator==(other);}
-  virtual bool operator==(vsol_polygon_3d const& other) const; // virtual of vsol_polygon_3d
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(vsol_polygon_3d const& other) const override; // virtual of vsol_polygon_3d
+  bool operator==(vsol_spatial_object_3d const& obj) const override; // virtual of vsol_spatial_object_3d
 
   //***************************************************************************
   // Status report
@@ -95,7 +95,7 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const;
+  double area(void) const override;
 
   //***************************************************************************
   // Element change
@@ -123,7 +123,7 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(vsol_point_3d_sptr const& p) const;
+  bool in(vsol_point_3d_sptr const& p) const override;
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'.
@@ -131,15 +131,15 @@ class vsol_triangle_3d : public vsol_polygon_3d
   //  vertices are aligned, the normal is the null vector.
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const;
+  vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const override;
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -148,16 +148,16 @@ class vsol_triangle_3d : public vsol_polygon_3d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return "vsol_triangle_3d"; }
+  std::string is_a() const override { return "vsol_triangle_3d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vsol_polygon_3d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 };
 
 #endif // vsol_triangle_3d_h_

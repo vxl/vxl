@@ -71,20 +71,20 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_polygon_2d();
+  ~vsol_polygon_2d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  vsol_spatial_object_2d* clone(void) const override;
 
   //---------------------------------------------------------------------------
   //: Safe casting
   //---------------------------------------------------------------------------
 
-  virtual vsol_polygon_2d* cast_to_polygon(void);
-  virtual const vsol_polygon_2d* cast_to_polygon(void) const;
+  vsol_polygon_2d* cast_to_polygon(void) override;
+  const vsol_polygon_2d* cast_to_polygon(void) const override;
 
   virtual vsol_triangle_2d* cast_to_triangle(void);
   virtual const vsol_triangle_2d* cast_to_triangle(void) const;
@@ -110,7 +110,7 @@ class vsol_polygon_2d : public vsol_region_2d
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_polygon_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' in the same order ?
@@ -124,12 +124,12 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_2d_type region_type(void) const { return vsol_region_2d::POLYGON; }
+  vsol_region_2d_type region_type(void) const override { return vsol_region_2d::POLYGON; }
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  void compute_bounding_box(void) const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
@@ -139,17 +139,17 @@ class vsol_polygon_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const; // virtual of vsol_region_2d
+  double area(void) const override; // virtual of vsol_region_2d
 
   //---------------------------------------------------------------------------
   //: Return the centroid of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr centroid(void) const;
+  vsol_point_2d_sptr centroid(void) const override;
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const;
+  bool is_convex(void) const override;
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -166,10 +166,10 @@ class vsol_polygon_2d : public vsol_region_2d
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -178,16 +178,16 @@ class vsol_polygon_2d : public vsol_region_2d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_polygon_2d"); }
+  std::string is_a() const override { return std::string("vsol_polygon_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(std::string const& cls) const
+  bool is_class(std::string const& cls) const override
   { return cls==is_a() || vsol_region_2d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 };
 
 //: Binary save vsol_polygon_2d* to stream.

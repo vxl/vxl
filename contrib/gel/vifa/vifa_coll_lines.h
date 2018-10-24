@@ -43,7 +43,7 @@ class vifa_coll_lines : public vifa_coll_lines_params
                   double        endpt_distance = 3.0,
                   bool        src_from_discard = false
                  );
-  ~vifa_coll_lines(void);
+  ~vifa_coll_lines(void) override;
 
   bool   get_discard_flag(void) const;
   int    get_id(void) const;

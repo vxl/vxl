@@ -102,19 +102,19 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_face_2d() = default;
+  ~vtol_face_2d() override = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_face_2d"); }
+  std::string is_a() const override { return std::string("vtol_face_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vtol_face::is_class(cls); }
 
   // Accessors
@@ -129,36 +129,36 @@ class vtol_face_2d : public vtol_face
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face_2d *cast_to_face_2d() const { return this; }
+  const vtol_face_2d *cast_to_face_2d() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face_2d *cast_to_face_2d() { return this; }
+  vtol_face_2d *cast_to_face_2d() override { return this; }
 
   //---------------------------------------------------------------------------
   //: Copy with no links. Only copy the surface if it exists
   //---------------------------------------------------------------------------
-  virtual vtol_face *shallow_copy_with_no_links() const;
+  vtol_face *shallow_copy_with_no_links() const override;
 
   virtual bool operator==(const vtol_face_2d &other)const;
   inline bool operator!=(const vtol_face_2d &other)const{return !operator==(other);}
-  bool operator==(const vtol_face &other)const; // virtual of vtol_face
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vtol_face &other)const override; // virtual of vtol_face
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
-  virtual void print(std::ostream &strm=std::cout) const;
+  void print(std::ostream &strm=std::cout) const override;
 
-  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
 
   //:  copy the geometry
-  virtual void copy_geometry(const vtol_face &other);
+  void copy_geometry(const vtol_face &other) override;
 
   //: provide a mechanism to compare geometry
-  virtual bool compare_geometry(const vtol_face &other) const;
+  bool compare_geometry(const vtol_face &other) const override;
 
  protected:
   //: this should not called by a client
-  virtual vtol_face* copy_with_arrays(topology_list &verts, topology_list &edges) const;
+  vtol_face* copy_with_arrays(topology_list &verts, topology_list &edges) const override;
 };
 
 #endif // vtol_face_2d_h_

@@ -22,7 +22,7 @@ class rgrl_convergence_tester
   //: ctor
   rgrl_convergence_tester() : rel_tol_thres_(1e-3) { }
 
-  virtual ~rgrl_convergence_tester();
+  ~rgrl_convergence_tester() override;
 
   //:  Compute the converge_status of the current view using multiple match sets
   //   This is the pure virtual function implemented in the derived classes.

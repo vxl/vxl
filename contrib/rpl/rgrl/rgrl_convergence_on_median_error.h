@@ -24,7 +24,7 @@ class rgrl_convergence_on_median_error
                   rgrl_view                        const& current_view,
                   rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
                   rgrl_set_of<rgrl_scale_sptr>     const& current_scales,
-                  bool                                    penalize_scaling = false ) const;
+                  bool                                    penalize_scaling = false ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_convergence_on_median_error, rgrl_convergence_tester );

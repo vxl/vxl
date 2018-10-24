@@ -18,7 +18,7 @@ class rgrl_trans_couple
   : public rgrl_transformation
 {
  public:
-  virtual ~rgrl_trans_couple();
+  ~rgrl_trans_couple() override;
 
   //: default constructor
   rgrl_trans_couple() = default;
@@ -31,69 +31,69 @@ class rgrl_trans_couple
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_tangent( vnl_vector<double> const& from_loc,
+  void map_tangent( vnl_vector<double> const& from_loc,
                             vnl_vector<double> const& from_dir,
-                            vnl_vector<double>      & to_dir    ) const;
+                            vnl_vector<double>      & to_dir    ) const override;
 
   //: Map a normal direction
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_normal( vnl_vector<double> const & from_loc,
+  void map_normal( vnl_vector<double> const & from_loc,
                            vnl_vector<double> const & from_dir,
-                           vnl_vector<double>       & to_dir    ) const;
+                           vnl_vector<double>       & to_dir    ) const override;
 
   //: Map a normal direction, given the tangent subspace
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual void map_normal( vnl_vector<double> const  & from_loc,
+  void map_normal( vnl_vector<double> const  & from_loc,
                            vnl_vector<double> const  & from_dir,
                            vnl_matrix< double > const& tangent_subspace,
-                           vnl_vector<double>        & to_dir    ) const;
+                           vnl_vector<double>        & to_dir    ) const override;
 
   //:  Compute covariance of the transfer error based on transformation covariance
   //
   // This gives the additional uncertainty of the transferred point
   // location due to the uncertainty of the transform estimate.
   //
-  virtual
-  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const;
+  
+  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const override;
 
 
   //:  Inverse map with an initial guess
-  virtual void inv_map( const vnl_vector<double>& to,
+  void inv_map( const vnl_vector<double>& to,
                         bool initialize_next,
                         const vnl_vector<double>& to_delta,
                         vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const;
+                        vnl_vector<double>& from_next_est) const override;
 
   //:  Inverse map based on the transformation.
   //   This function only exist for certain transformations.
-  virtual void inv_map( const vnl_vector<double>& to,
-                        vnl_vector<double>& from ) const;
+  void inv_map( const vnl_vector<double>& to,
+                        vnl_vector<double>& from ) const override;
 
   //: is this an invertible transformation?
-  virtual bool is_invertible() const;
+  bool is_invertible() const override;
 
   //: Return an inverse transformation
   //  This function only exist for certain transformations.
-  virtual rgrl_transformation_sptr inverse_transform() const;
+  rgrl_transformation_sptr inverse_transform() const override;
 
   //: Compute jacobian w.r.t. location
-  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
+  void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const override;
 
   //:  transform the transformation for images of different resolution
-  rgrl_transformation_sptr scale_by( double scale ) const;
+  rgrl_transformation_sptr scale_by( double scale ) const override;
 
   //: output transformation
-  void write( std::ostream& os ) const;
+  void write( std::ostream& os ) const override;
 
   //: input transformation
-  bool read( std::istream& is );
+  bool read( std::istream& is ) override;
 
   //: make a clone copy
-  rgrl_transformation_sptr clone() const;
+  rgrl_transformation_sptr clone() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_couple, rgrl_transformation );
@@ -102,18 +102,18 @@ class rgrl_trans_couple
 
   //:  Apply the transformation to create a new (mapped) location
   //
-  virtual
+  
   void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to    ) const;
+                vnl_vector<double>      & to    ) const override;
 
   //:  Apply the transformation to create a new direction at the (mapped) location
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  virtual
+  
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
-                vnl_vector<double>      & to_dir    ) const;
+                vnl_vector<double>      & to_dir    ) const override;
 
  protected:
 

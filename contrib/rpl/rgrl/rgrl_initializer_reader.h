@@ -35,7 +35,7 @@ class rgrl_initializer_reader
 
   //: Get next initial estimate when first called, but return false thereafter.
   bool next_initial( rgrl_view_sptr           & view,
-                     rgrl_scale_sptr          & prior_scale );
+                     rgrl_scale_sptr          & prior_scale ) override;
 
   //: Set index pointing to vector of initializations to zero.
   void reset_xform_index( ) { xform_index_ = 0; }
@@ -45,7 +45,7 @@ class rgrl_initializer_reader
 
   //: Return number of initializations
   //  -1 stands for unknown
-  virtual int size() const;
+  int size() const override;
 
   //: Defines type-related functions
   rgrl_type_macro( rgrl_initializer_reader, rgrl_initializer );

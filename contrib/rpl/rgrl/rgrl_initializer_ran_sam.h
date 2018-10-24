@@ -34,8 +34,8 @@ class rgrl_initializer_ran_sam
   //: Constructor using a given random-sampling seed.
   rgrl_initializer_ran_sam( int seed );
 
-  virtual
-  ~rgrl_initializer_ran_sam();
+  
+  ~rgrl_initializer_ran_sam() override;
 
   //  Parameters to control the search technique.  The default set
   //  when the constructor is called is to sample as in generate
@@ -90,7 +90,7 @@ class rgrl_initializer_ran_sam
 
   //: Get next initial estimate when first called, but return false thereafter.
   bool next_initial( rgrl_view_sptr           & view,
-                     rgrl_scale_sptr          & prior_scale);
+                     rgrl_scale_sptr          & prior_scale) override;
 
   //:  Get the scale estimate.
   rgrl_scale_sptr scale() const { return scale_; }
@@ -125,7 +125,7 @@ class rgrl_initializer_ran_sam
 
   //: return number of initializations
   //  -1 stands for unknown
-  virtual int size() const
+  int size() const override
   { return -1;}
 
  protected:

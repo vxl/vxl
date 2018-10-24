@@ -43,7 +43,7 @@ class vdgl_edgel_chain : public vul_timestamp,
                     const double x1, const double y1);
   vdgl_edgel_chain(vdgl_edgel_chain const& x)
     : vul_timestamp(), vbl_ref_count(), es_(x.es_) {}
-  ~vdgl_edgel_chain() = default;
+  ~vdgl_edgel_chain() override = default;
 
   // Operators----------------------------------------------------------------
 

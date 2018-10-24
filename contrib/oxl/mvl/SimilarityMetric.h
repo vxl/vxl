@@ -50,7 +50,7 @@ class SimilarityMetric : public ImageMetric
 
   //  SimilarityMetric(const Image* ); -- don't want a dependency on ImageClasses
   // SimilarityMetric(const SimilarityMetric& that); - use default
-  ~SimilarityMetric();
+  ~SimilarityMetric() override;
   // SimilarityMetric& operator=(const SimilarityMetric& that); - use default
 
   void set_from_rectangle(int xsize, int ysize);
@@ -58,39 +58,39 @@ class SimilarityMetric : public ImageMetric
   void scale_matrices(double s);
 
   // Operations----------------------------------------------------------------
-  virtual vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const;
-  virtual HomgPoint2D image_to_homg(const vnl_double_2&) const;
-  virtual HomgPoint2D image_to_homg(double x, double y) const;
+  vgl_homg_point_2d<double> image_to_homg(vgl_point_2d<double> const&) const override;
+  HomgPoint2D image_to_homg(const vnl_double_2&) const override;
+  HomgPoint2D image_to_homg(double x, double y) const override;
 
-  virtual vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const;
-  virtual vnl_double_2 homg_to_image(const HomgPoint2D&) const;
+  vgl_point_2d<double> homg_to_image(vgl_homg_point_2d<double> const&) const override;
+  vnl_double_2 homg_to_image(const HomgPoint2D&) const override;
 
-  virtual HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const;
-  virtual HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const;
-  virtual vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const;
-  virtual vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const;
+  HomgPoint2D imagehomg_to_homg(const HomgPoint2D&) const override;
+  HomgPoint2D homg_to_imagehomg(const HomgPoint2D&) const override;
+  vgl_homg_point_2d<double> imagehomg_to_homg(vgl_homg_point_2d<double> const&) const override;
+  vgl_homg_point_2d<double> homg_to_imagehomg(vgl_homg_point_2d<double> const&) const override;
 
-  virtual double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l) const;
-  virtual double perp_dist_squared(vgl_homg_point_2d<double> const&,
-                                   vgl_homg_line_2d<double> const&) const;
-  virtual double distance_squared(const vgl_homg_point_2d<double>&, const vgl_homg_point_2d<double>&) const;
-  virtual double distance_squared(vgl_line_segment_2d<double> const& segment,
-                                  vgl_homg_line_2d<double> const& line) const;
-  virtual double distance_squared(HomgPoint2D const&, HomgPoint2D const&) const;
-  virtual double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const;
+  double perp_dist_squared(HomgPoint2D const& p, HomgLine2D const& l) const override;
+  double perp_dist_squared(vgl_homg_point_2d<double> const&,
+                                   vgl_homg_line_2d<double> const&) const override;
+  double distance_squared(const vgl_homg_point_2d<double>&, const vgl_homg_point_2d<double>&) const override;
+  double distance_squared(vgl_line_segment_2d<double> const& segment,
+                                  vgl_homg_line_2d<double> const& line) const override;
+  double distance_squared(HomgPoint2D const&, HomgPoint2D const&) const override;
+  double distance_squared(HomgLineSeg2D const& segment, HomgLine2D const& line) const override;
 
-  virtual bool is_linear() const { return true; }
-  virtual vnl_double_3x3 get_C() const { return cond_matrix; }
-  virtual vnl_double_3x3 get_C_inverse() const { return inv_cond_matrix; }
+  bool is_linear() const override { return true; }
+  vnl_double_3x3 get_C() const override { return cond_matrix; }
+  vnl_double_3x3 get_C_inverse() const override { return inv_cond_matrix; }
 
-  virtual bool can_invert_distance() const;
-  virtual double image_to_homg_distance(double image_distance) const;
-  virtual double homg_to_image_distance(double image_distance) const;
+  bool can_invert_distance() const override;
+  double image_to_homg_distance(double image_distance) const override;
+  double homg_to_image_distance(double image_distance) const override;
 
   // virtual bool can_invert_distance() const { return true; }
 
   // Data Control--------------------------------------------------------------
-  std::ostream& print(std::ostream&) const;
+  std::ostream& print(std::ostream&) const override;
   void print() const;
   void print(char* msg) const;
 

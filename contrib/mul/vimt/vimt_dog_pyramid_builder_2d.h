@@ -49,21 +49,21 @@ class vimt_dog_pyramid_builder_2d : public vimt_image_pyramid_builder
   vimt_dog_pyramid_builder_2d();
 
   //: Destructor
-  virtual ~vimt_dog_pyramid_builder_2d();
+  ~vimt_dog_pyramid_builder_2d() override;
 
   //: Create new (empty) pyramid on heap.
   //  Caller responsible for its deletion
-  virtual vimt_image_pyramid* new_image_pyramid() const;
+  vimt_image_pyramid* new_image_pyramid() const override;
 
   //: Define maximum number of levels to build.
   //  Limits levels built in subsequent calls to build()
   //  Useful efficiency measure.  As build() only takes
   //  a shallow copy of the original image, using
   //  max_l=1 avoids any copying or smoothing.
-  virtual void set_max_levels(int max_l);
+  void set_max_levels(int max_l) override;
 
   //: Get the current maximum number levels allowed
-  virtual int max_levels() const;
+  int max_levels() const override;
 
   //: Build difference of gaussian pyramid and a gaussian pyramid
   //  If abs_diff, then use absolute difference of gaussians
@@ -72,10 +72,10 @@ class vimt_dog_pyramid_builder_2d : public vimt_image_pyramid_builder
                  const vimt_image& im, bool abs_diff=true) const;
 
   //: Build pyramid
-  virtual void build(vimt_image_pyramid& dog_pyr, const vimt_image&) const;
+  void build(vimt_image_pyramid& dog_pyr, const vimt_image&) const override;
 
   //: Extend pyramid (not implemented)
-  virtual void extend(vimt_image_pyramid&) const;
+  void extend(vimt_image_pyramid&) const override;
 
   //: Smooth and subsample src_im to produce dest_im.
   //  Applies filter in x and y, then samples every other pixel.
@@ -84,7 +84,7 @@ class vimt_dog_pyramid_builder_2d : public vimt_image_pyramid_builder
                     vimt_image_2d_of<T>& dest_im) const;
 
   //: Scale step between levels
-  virtual double scale_step() const;
+  double scale_step() const override;
 
   //: Get the minimum Y size of the top layer of the pyramid.
   // Defaults to 5.
@@ -101,22 +101,22 @@ class vimt_dog_pyramid_builder_2d : public vimt_image_pyramid_builder
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vimt_image_pyramid_builder* clone() const;
+  vimt_image_pyramid_builder* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // vimt_dog_pyramid_builder_2d_h_

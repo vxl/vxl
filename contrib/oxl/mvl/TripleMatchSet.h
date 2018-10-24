@@ -43,7 +43,7 @@ class TripleMatchSet : public MatchSet
   TripleMatchSet(PairMatchSet* match12, PairMatchSet* match23);
  public:
   TripleMatchSet(int i1_max, int i2_max, int i3_max);
-  ~TripleMatchSet();
+  ~TripleMatchSet() override;
 
   void clear_matches();
   void clear_nontriplets();

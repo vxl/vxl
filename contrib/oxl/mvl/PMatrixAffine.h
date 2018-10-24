@@ -21,7 +21,7 @@ class PMatrixAffine : public PMatrix
 {
  public:
   PMatrixAffine(void) = default;
-  ~PMatrixAffine(void) = default;
+  ~PMatrixAffine(void) override = default;
 };
 
 #endif // PMatrixAffine_h_

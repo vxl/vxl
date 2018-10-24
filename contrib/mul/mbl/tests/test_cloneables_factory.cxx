@@ -14,17 +14,17 @@ class mbl_test_cf_base
 class mbl_test_cf_A : public mbl_test_cf_base
 {
  public:
-  virtual ~mbl_test_cf_A() = default;
-  virtual std::string is_a() const { return std::string("mbl_test_cf_A"); }
-  virtual mbl_test_cf_base* clone() const { return new mbl_test_cf_A(*this); }
+  ~mbl_test_cf_A() override = default;
+  std::string is_a() const override { return std::string("mbl_test_cf_A"); }
+  mbl_test_cf_base* clone() const override { return new mbl_test_cf_A(*this); }
 };
 
 class mbl_test_cf_B : public mbl_test_cf_base
 {
  public:
-  virtual ~mbl_test_cf_B() = default;
-  virtual std::string is_a() const { return std::string("mbl_test_cf_B"); }
-  virtual mbl_test_cf_base* clone() const { return new mbl_test_cf_B(*this); }
+  ~mbl_test_cf_B() override = default;
+  std::string is_a() const override { return std::string("mbl_test_cf_B"); }
+  mbl_test_cf_base* clone() const override { return new mbl_test_cf_B(*this); }
 };
 
 MBL_CLONEABLES_FACTORY_INSTANTIATE(mbl_test_cf_base);

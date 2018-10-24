@@ -36,7 +36,7 @@ class rgrl_transformation
   : public rgrl_object
 {
  public:
-  virtual ~rgrl_transformation();
+  ~rgrl_transformation() override;
 
   //: default constructor
   rgrl_transformation() :  is_covar_set_(false) {  }

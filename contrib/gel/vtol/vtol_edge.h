@@ -78,11 +78,11 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_edge();
+  ~vtol_edge() override;
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const { return EDGE; }
+  vtol_topology_object_type topology_type() const override { return EDGE; }
 
  public:
   //---------------------------------------------------------------------------
@@ -123,7 +123,7 @@ class vtol_edge : public vtol_topology_object
 
   virtual bool operator==(const vtol_edge &other) const;
   inline bool operator!=(const vtol_edge &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   virtual void add_edge_loop(vtol_one_chain_sptr const&);
   virtual void remove_edge_loop(vtol_one_chain_sptr const&);
@@ -139,12 +139,12 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_edge *cast_to_edge() const { return this; }
+  const vtol_edge *cast_to_edge() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_edge *cast_to_edge() { return this; }
+  vtol_edge *cast_to_edge() override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an edge, 0 otherwise
@@ -166,7 +166,7 @@ class vtol_edge : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_zero_chain() != nullptr; }
   bool valid_inferior_type(vtol_zero_chain_sptr const& ) const { return true; }
   bool valid_superior_type(vtol_one_chain_sptr const& ) const { return true; }
@@ -175,13 +175,13 @@ class vtol_edge : public vtol_topology_object
   // Inferior/Superior Accessor Methods
  protected:
   // \warning should not be used by clients
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
  public:
 
   //: get a list of endpoints
@@ -199,9 +199,9 @@ class vtol_edge : public vtol_topology_object
 
   virtual vtol_vertex_sptr other_endpoint(const vtol_vertex &) const;
 
-  virtual void print(std::ostream &strm=std::cout) const;
-  virtual void describe(std::ostream &strm=std::cout,
-                        int blanking=0) const;
+  void print(std::ostream &strm=std::cout) const override;
+  void describe(std::ostream &strm=std::cout,
+                        int blanking=0) const override;
 
   //: have the inherited classes copy the geometry
   virtual void copy_geometry(const vtol_edge &other)=0;
@@ -210,7 +210,7 @@ class vtol_edge : public vtol_topology_object
   virtual bool compare_geometry(const vtol_edge &other) const =0;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_edge"); }
+  std::string is_a() const override { return std::string("vtol_edge"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

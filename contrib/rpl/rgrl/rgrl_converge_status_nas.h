@@ -36,7 +36,7 @@ public:
   //: copy ctor
   rgrl_converge_status_nas( rgrl_converge_status const& old );
 
-  virtual ~rgrl_converge_status_nas();
+  ~rgrl_converge_status_nas() override;
 
   //: get iteration number
   int iteration() const { return iteration_; }

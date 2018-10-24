@@ -60,7 +60,7 @@ class rgrl_object
     return *this;
   }
   //:
-  virtual ~rgrl_object();
+  ~rgrl_object() override;
 
   static const std::type_info& type_id()
   { return typeid(rgrl_object); }

@@ -53,7 +53,7 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_curve_2d() = default;
+  ~vsol_curve_2d() override = default;
 
   //***************************************************************************
   // Access
@@ -62,7 +62,7 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: return the spatial type
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type()const{return vsol_spatial_object_2d::CURVE;}
+  vsol_spatial_object_2d_type spatial_type()const override{return vsol_spatial_object_2d::CURVE;}
 
  public:
   //---------------------------------------------------------------------------
@@ -82,8 +82,8 @@ class vsol_curve_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_curve_2d *cast_to_curve() {return this;}
-  virtual const vsol_curve_2d *cast_to_curve() const {return this;}
+  vsol_curve_2d *cast_to_curve() override {return this;}
+  const vsol_curve_2d *cast_to_curve() const override {return this;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a line, 0 otherwise

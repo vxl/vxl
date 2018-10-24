@@ -15,7 +15,7 @@ class rgrl_evaluator : public rgrl_object
   // Default constructor
   rgrl_evaluator() = default;
   // Destructor
-  virtual ~rgrl_evaluator() = default;
+  ~rgrl_evaluator() override = default;
 
   virtual
   double evaluate( std::vector< double > const& a,

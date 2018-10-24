@@ -17,7 +17,7 @@ class rgrl_matcher_fixed
   //
   rgrl_matcher_fixed( rgrl_match_set_sptr  init_match_set_ );
 
-  virtual ~rgrl_matcher_fixed();
+  ~rgrl_matcher_fixed() override;
 
   rgrl_match_set_sptr
   compute_matches( rgrl_feature_set const&       /* from_features */,
@@ -25,7 +25,7 @@ class rgrl_matcher_fixed
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
                    rgrl_scale const&             /* current_scale */,
-                   rgrl_match_set_sptr const&    old_matches=nullptr );
+                   rgrl_match_set_sptr const&    old_matches=nullptr ) override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_matcher_fixed, rgrl_matcher );

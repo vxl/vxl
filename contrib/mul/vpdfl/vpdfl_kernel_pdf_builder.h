@@ -56,7 +56,7 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   vpdfl_kernel_pdf_builder();
 
   //: Destructor
-  virtual ~vpdfl_kernel_pdf_builder();
+  ~vpdfl_kernel_pdf_builder() override;
 
   //: Use fixed width kernels of given width when building.
   void set_use_fixed_width(double width);
@@ -71,26 +71,26 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   void set_use_adaptive();
 
   //: Define lower threshold on variance for built models
-  virtual void set_min_var(double min_var);
+  void set_min_var(double min_var) override;
 
   //: Get lower threshold on variance for built models
-  virtual double min_var() const;
+  double min_var() const override;
 
   //: Build default model with given mean
-  virtual void build(vpdfl_pdf_base& model, const vnl_vector<double>& mean) const;
+  void build(vpdfl_pdf_base& model, const vnl_vector<double>& mean) const override;
 
   //: Build model from data
-  virtual void build(vpdfl_pdf_base& model,
-                     mbl_data_wrapper<vnl_vector<double> >& data) const;
+  void build(vpdfl_pdf_base& model,
+                     mbl_data_wrapper<vnl_vector<double> >& data) const override;
 
   //: Build kernel_pdf from n elements in data[i]
   void build_from_array(vpdfl_pdf_base& model,
                         const vnl_vector<double>* data, int n) const;
 
   //: Build model from weighted data
-  virtual void weighted_build(vpdfl_pdf_base& model,
+  void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const std::vector<double>& wts) const;
+                              const std::vector<double>& wts) const override;
 
   //: Build from n elements in data[i].  Fixed kernel width.
   void build_fixed_width(vpdfl_kernel_pdf& kpdf,
@@ -117,19 +117,19 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: Read initialisation settings from a stream.
   // Parameters:
@@ -143,7 +143,7 @@ class vpdfl_kernel_pdf_builder : public vpdfl_builder_base
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(std::istream & is);
+  void config_from_stream(std::istream & is) override;
 
 };
 

@@ -83,19 +83,19 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_vertex_2d() = default;
+  ~vtol_vertex_2d() override = default;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_vertex_2d"); }
+  std::string is_a() const override { return std::string("vtol_vertex_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vtol_vertex::is_class(cls); }
 
   // Accessors
@@ -141,14 +141,14 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_vertex_2d &other) const;
   inline bool operator!=(const vtol_vertex_2d &other)const{return !operator==(other);}
-  virtual bool operator== (const vtol_vertex &other) const;
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator== (const vtol_vertex &other) const override;
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Assignment of `this' with `other' (copy the point not the links)
   //---------------------------------------------------------------------------
   virtual vtol_vertex_2d& operator=(const vtol_vertex_2d &other);
-  vtol_vertex_2d& operator=(const vtol_vertex &other); // virtual of vtol_vertex
+  vtol_vertex_2d& operator=(const vtol_vertex &other) override; // virtual of vtol_vertex
 
   //***************************************************************************
   // Replaces dynamic_cast<T>
@@ -157,34 +157,34 @@ class vtol_vertex_2d : public vtol_vertex
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex_2d *cast_to_vertex_2d() const { return this; }
+  const vtol_vertex_2d *cast_to_vertex_2d() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex_2d *cast_to_vertex_2d() { return this; }
+  vtol_vertex_2d *cast_to_vertex_2d() override { return this; }
 
   //---------------------------------------------------------------------------
   //: Create a line edge from `this' and `other' only if this edge does not exist.
   //  Otherwise it just returns the existing edge
   //  REQUIRE: other!=*this
   //---------------------------------------------------------------------------
-  virtual vtol_edge_sptr new_edge(vtol_vertex_sptr const& other);
+  vtol_edge_sptr new_edge(vtol_vertex_sptr const& other) override;
   vtol_edge_sptr new_edge(vtol_vertex_2d_sptr const& v);
 
   double distance_from(const vnl_double_2 &);
 
   double euclidean_distance(vtol_vertex_2d &v); //actual distance, not squared - JLM
 
-  void print(std::ostream &strm=std::cout) const;
-  void describe(std::ostream &strm=std::cout, int blanking=0) const;
-  virtual void compute_bounding_box() const; //A local implementation
+  void print(std::ostream &strm=std::cout) const override;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
+  void compute_bounding_box() const override; //A local implementation
 
   //:  copy the geometry
-  virtual void copy_geometry(const vtol_vertex &other);
+  void copy_geometry(const vtol_vertex &other) override;
 
   //: compare the geometry
-  virtual bool compare_geometry(const vtol_vertex &other) const;
+  bool compare_geometry(const vtol_vertex &other) const override;
 };
 
 #endif // vtol_vertex_2d_h_

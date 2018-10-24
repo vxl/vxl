@@ -19,25 +19,25 @@ class mipa_identity_normaliser : public mipa_vector_normaliser
 {
  public:
 
-  virtual ~mipa_identity_normaliser() = default;
+  ~mipa_identity_normaliser() override = default;
 
   //: Normalise the sample.
-  virtual void normalise(vnl_vector<double>& sample) const;
+  void normalise(vnl_vector<double>& sample) const override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mipa_vector_normaliser* clone() const;
+  mipa_vector_normaliser* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // mipa_identity_normaliser_h_

@@ -21,49 +21,49 @@ class mfpf_edge_finder_builder : public mfpf_point_finder_builder
   mfpf_edge_finder_builder();
 
   //: Destructor
-  virtual ~mfpf_edge_finder_builder();
+  ~mfpf_edge_finder_builder() override;
 
   //: Define region size in world co-ordinates
   //  Sets up ROI to cover given box (with samples at step_size()),
   //  with ref point at centre.
   //  Currently does nothing.
-  virtual void set_region_size(double wi, double wj);
+  void set_region_size(double wi, double wj) override;
 
   //: Create new mfpf_edge_finder on heap
-  virtual mfpf_point_finder* new_finder() const;
+  mfpf_point_finder* new_finder() const override;
 
   //: Initialise building
   // Must be called before any calls to add_example(...)
-  virtual void clear(unsigned n_egs);
+  void clear(unsigned n_egs) override;
 
   //: Add one example to the model
-  virtual void add_example(const vimt_image_2d_of<float>& image,
+  void add_example(const vimt_image_2d_of<float>& image,
                            const vgl_point_2d<double>& p,
-                           const vgl_vector_2d<double>& u);
+                           const vgl_vector_2d<double>& u) override;
 
   //: Build object from the data supplied in add_example()
-  virtual void build(mfpf_point_finder&);
+  void build(mfpf_point_finder&) override;
 
   //: Initialise from a string stream
-  virtual bool set_from_stream(std::istream &is);
+  bool set_from_stream(std::istream &is) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mfpf_point_finder_builder* clone() const;
+  mfpf_point_finder_builder* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif

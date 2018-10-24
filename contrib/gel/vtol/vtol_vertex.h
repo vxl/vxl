@@ -48,13 +48,13 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_vertex();
+  ~vtol_vertex() override;
 
   // Accessors
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const { return VERTEX; }
+  vtol_topology_object_type topology_type() const override { return VERTEX; }
 
  public:
   //---------------------------------------------------------------------------
@@ -67,7 +67,7 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_vertex &other) const;
   inline bool operator!=(const vtol_vertex &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Assignment of `this' with `other' (copy the point not the links)
@@ -81,12 +81,12 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_vertex *cast_to_vertex() const { return this; }
+  const vtol_vertex *cast_to_vertex() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_vertex *cast_to_vertex() { return this; }
+  vtol_vertex *cast_to_vertex() override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D vertex, 0 otherwise
@@ -105,7 +105,7 @@ class vtol_vertex : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* /*inf*/) const
+  bool valid_inferior_type(vtol_topology_object const* /*inf*/) const override
   { return false; } // a vertex can never have an inferior
   bool valid_superior_type(vtol_zero_chain_sptr const& ) const { return true; }
 
@@ -131,11 +131,11 @@ class vtol_vertex : public vtol_topology_object
   //: check to see if the vertex is part of the edge
   bool is_endpoint(vtol_edge_sptr const&) const;
 
-  void print(std::ostream &strm=std::cout) const;
-  void describe(std::ostream &strm=std::cout, int blanking=0) const;
+  void print(std::ostream &strm=std::cout) const override;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_vertex"); }
+  std::string is_a() const override { return std::string("vtol_vertex"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
@@ -147,13 +147,13 @@ class vtol_vertex : public vtol_topology_object
  protected:
   // \warning these should not be used by clients
 
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
 };
 
 #endif // vtol_vertex_h_

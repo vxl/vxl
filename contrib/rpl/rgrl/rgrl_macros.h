@@ -66,7 +66,7 @@
      typedef superclassname  superclass; \
      static const std::type_info& type_id() \
          { return typeid(self); } \
-     virtual bool is_type( const std::type_info& type ) const\
+     bool is_type( const std::type_info& type ) const override\
          { return (typeid(self) == type)!=0 || this->superclass::is_type(type); }
 
 #if 0

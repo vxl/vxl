@@ -51,7 +51,7 @@ class PMatrixDec : public PMatrix
  public:
   // Constructors/Initializers/Destructors----------------------------------
   PMatrixDec(const vnl_matrix<double>& p_matrix);
-  ~PMatrixDec();
+  ~PMatrixDec() override;
 
   // Data Access------------------------------------------------------------
   const vnl_matrix<double>& IntrinsicParameters () { return j_matrix_; }

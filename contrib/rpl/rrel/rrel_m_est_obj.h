@@ -22,32 +22,32 @@ public:
   rrel_m_est_obj() = default;
 
   //: Destructor.
-  virtual ~rrel_m_est_obj() = default;
+  ~rrel_m_est_obj() override = default;
 
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter scale_begin,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
+  double fcn( vect_const_iter begin, vect_const_iter end,
                       double scale,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_wls_obj::wgt()
-  virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
+  void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
-                    vect_iter wgt_begin ) const;
+                    vect_iter wgt_begin ) const override;
 
   //: Computes the weights for homoscedastic residuals.
   //  \sa rrel_wls_obj::wgt()
-  virtual void wgt( vect_const_iter begin, vect_const_iter end,
+  void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
-                    vect_iter wgt_begin ) const;
+                    vect_iter wgt_begin ) const override;
 
   //: The robust loss function for the M-estimator.
   //  \a u is a normalised residual (i.e. u=r/scale).
@@ -60,7 +60,7 @@ public:
   //: The weight of the residual.
   //  \a u is a normalised residual (i.e. u=r/scale). wgt(u) is
   //  normally \f$ (1/u) (\partial{\rho} / \partial{u}) \f$.
-  virtual double wgt( double u ) const = 0;
+  double wgt( double u ) const override = 0;
 
   //: The weight of the residual.
   //  \a r is the residual and \a s is the scale for that residual.
@@ -70,7 +70,7 @@ public:
   //  In general, most M-estimators work quite well with an estimated
   //  scale. The scale estimate should be robust, but not necessarily
   //  efficient (e.g. MAD scale estimate.)
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
     { return false; }
 
 };

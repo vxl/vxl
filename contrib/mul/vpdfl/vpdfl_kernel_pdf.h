@@ -44,7 +44,7 @@ class vpdfl_kernel_pdf : public vpdfl_pdf_base
   vpdfl_kernel_pdf();
 
   //: Destructor
-  virtual ~vpdfl_kernel_pdf();
+  ~vpdfl_kernel_pdf() override;
 
   //: Initialise so all kernels have the same width.
   //  width is essentially the sd on the kernels
@@ -68,19 +68,19 @@ class vpdfl_kernel_pdf : public vpdfl_pdf_base
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // vpdfl_kernel_pdf_h

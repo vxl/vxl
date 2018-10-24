@@ -41,7 +41,7 @@ class rgrl_initializer_inv_indexing
                                  int max_num_matches_tried = -1);
 
   //: Destructor
-  ~rgrl_initializer_inv_indexing() = default;
+  ~rgrl_initializer_inv_indexing() override = default;
 
   //: Add the set of invariants from the fixed image and the set from one moving image
   //
@@ -77,7 +77,7 @@ class rgrl_initializer_inv_indexing
 
   //: Get and remove the next initial estimate from the end of the list for the current moving_set
   bool next_initial( rgrl_view_sptr  & view,
-                     rgrl_scale_sptr & prior_scale);
+                     rgrl_scale_sptr & prior_scale) override;
 
   //: Get and remove the next initial estimate from the end of the list for the current moving_set
   //  Return this match in best_match
@@ -85,7 +85,7 @@ class rgrl_initializer_inv_indexing
 
   //: return number of initializations
   //  -1 stands for unknown
-  virtual int size() const;
+  int size() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_initializer_inv_indexing, rgrl_initializer );

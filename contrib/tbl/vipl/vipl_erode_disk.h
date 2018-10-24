@@ -59,13 +59,13 @@ class vipl_erode_disk : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(), radius_(r), mask_(nullptr){}
   inline vipl_erode_disk(vipl_erode_disk const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), radius_(A.radius()), mask_(nullptr) {}
-  inline ~vipl_erode_disk() = default;
+  inline ~vipl_erode_disk() override = default;
 
 // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 // -+-+- optional method for filters, compute mask only once in preop, free in postop: -+-+-
-  bool preop();
-  bool postop();
+  bool preop() override;
+  bool postop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

@@ -36,7 +36,7 @@ public:
   //Constructors/destructor
   gevd_region_proc();
 
-  ~gevd_region_proc();
+  ~gevd_region_proc() override;
   //Accessors
   void set_image(vil1_image& image);
 //  void set_roi_proc(lung_roi_proc_ref& roi_proc){roi_proc_ = roi_proc;}

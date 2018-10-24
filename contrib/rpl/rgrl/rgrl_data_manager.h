@@ -145,7 +145,7 @@ class rgrl_data_manager: public rgrl_object
   //  sigma value of 2^i.
   rgrl_data_manager( bool multi_stage = false );
 
-  ~rgrl_data_manager();
+  ~rgrl_data_manager() override;
 
   //:  Add a data item to a multi-stage data storage.
   //

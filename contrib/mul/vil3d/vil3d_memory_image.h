@@ -34,33 +34,33 @@ class vil3d_memory_image : public vil3d_image_resource
  public:
 
 
-  ~vil3d_memory_image() {delete view_;}
+  ~vil3d_memory_image() override {delete view_;}
 
   //: Dimensions:  planes x width x height x components
-  virtual unsigned nplanes() const { return view_->nplanes(); }
-  virtual unsigned ni() const { return view_->ni(); }
-  virtual unsigned nj() const { return view_->nj(); }
-  virtual unsigned nk() const { return view_->nk(); }
+  unsigned nplanes() const override { return view_->nplanes(); }
+  unsigned ni() const override { return view_->ni(); }
+  unsigned nj() const override { return view_->nj(); }
+  unsigned nk() const override { return view_->nk(); }
 
-  virtual enum vil_pixel_format pixel_format() const { return view_->pixel_format(); }
+  enum vil_pixel_format pixel_format() const override { return view_->pixel_format(); }
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+  vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                    unsigned j0, unsigned nj,
-                                                   unsigned k0, unsigned nk) const;
+                                                   unsigned k0, unsigned nk) const override;
 
   //: Create a view of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+  vil3d_image_view_base_sptr get_view(unsigned i0, unsigned ni,
                                               unsigned j0, unsigned nj,
-                                              unsigned k0, unsigned nk) const;
+                                              unsigned k0, unsigned nk) const override;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil3d_image_view_base& im,
-                        unsigned i0, unsigned j0, unsigned k0);
+  bool put_view(const vil3d_image_view_base& im,
+                        unsigned i0, unsigned j0, unsigned k0) override;
 
-  bool get_property(char const * /*tag*/, void * /*prop*/ = nullptr) const {return false;}
+  bool get_property(char const * /*tag*/, void * /*prop*/ = nullptr) const override {return false;}
 };
 
 #endif // vil3d_memory_image_h_

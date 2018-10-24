@@ -55,13 +55,13 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_triangle_2d();
+  ~vsol_triangle_2d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  vsol_spatial_object_2d* clone(void) const override;
 
   //***************************************************************************
   // Access
@@ -91,8 +91,8 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_triangle_2d &other) const;
   inline bool operator!=(const vsol_triangle_2d &other)const{return !operator==(other);}
-  virtual bool operator==(const vsol_polygon_2d &other) const; // virtual of vsol_polygon_2d
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_polygon_2d &other) const override; // virtual of vsol_polygon_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //***************************************************************************
   // Status report
@@ -101,7 +101,7 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const;
+  double area(void) const override;
 
   //***************************************************************************
   // Element change
@@ -122,16 +122,16 @@ class vsol_triangle_2d : public vsol_polygon_2d
   //---------------------------------------------------------------------------
   void set_p2(const vsol_point_2d_sptr &new_p2);
 
-  virtual vsol_triangle_2d* cast_to_triangle(void) { return this; }
-  virtual vsol_triangle_2d const* cast_to_triangle(void) const { return this; }
+  vsol_triangle_2d* cast_to_triangle(void) override { return this; }
+  vsol_triangle_2d const* cast_to_triangle(void) const override { return this; }
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -140,16 +140,16 @@ class vsol_triangle_2d : public vsol_polygon_2d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return "vsol_triangle_2d"; }
+  std::string is_a() const override { return "vsol_triangle_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vsol_polygon_2d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 };
 
 //: Binary save vsol_triangle_2d* to stream.

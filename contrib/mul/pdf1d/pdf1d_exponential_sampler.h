@@ -27,18 +27,18 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   pdf1d_exponential_sampler();
 
   //: Destructor
-  virtual ~pdf1d_exponential_sampler();
+  ~pdf1d_exponential_sampler() override;
 
   //: Set model for which this is an instance
   // Error check that it is an axis exponential.
-  virtual void set_model(const pdf1d_pdf&);
+  void set_model(const pdf1d_pdf&) override;
 
   //: Draw random sample from Gaussian distribution
-  virtual double sample();
+  double sample() override;
 
   //: Fill x with samples possibly chosen so as to represent the distribution
   //  5 or fewer samples requested, they are spaced out equally.
-  virtual void regular_samples(vnl_vector<double>& x);
+  void regular_samples(vnl_vector<double>& x) override;
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
@@ -49,7 +49,7 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   // ..
   // sampler.reseed(std::time(0));
   // \endcode
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
 
   //: Return a reference to the pdf model
@@ -57,13 +57,13 @@ class pdf1d_exponential_sampler :public pdf1d_sampler
   const pdf1d_exponential& exponential() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_sampler* clone() const;
+  pdf1d_sampler* clone() const override;
 };
 
 #endif // pdf1d_exponential_sampler_h

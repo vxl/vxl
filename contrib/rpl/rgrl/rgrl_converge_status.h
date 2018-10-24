@@ -45,7 +45,7 @@ public:
                         unsigned oscillation_count,
                         double   error_diff );
 
-  virtual ~rgrl_converge_status();
+  ~rgrl_converge_status() override;
 
 
   //:  Return true if the estimation has converged to a viable estimate.

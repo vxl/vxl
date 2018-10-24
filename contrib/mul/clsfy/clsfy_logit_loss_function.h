@@ -38,15 +38,15 @@ public:
                             double min_p, vnl_cost_function* reg_fn=nullptr);
 
   //:  The main function: Compute f(v)
-  virtual double f(vnl_vector<double> const& v);
+  double f(vnl_vector<double> const& v) override;
 
   //:  Calculate the gradient of f at parameter vector v.
-  virtual void gradf(vnl_vector<double> const& v,
-                     vnl_vector<double>& gradient);
+  void gradf(vnl_vector<double> const& v,
+                     vnl_vector<double>& gradient) override;
 
   //: Compute f(v) and its gradient (if non-zero pointers supplied)
-  virtual void compute(vnl_vector<double> const& v,
-                       double *f, vnl_vector<double>* gradient);
+  void compute(vnl_vector<double> const& v,
+                       double *f, vnl_vector<double>* gradient) override;
 
 };
 
@@ -62,11 +62,11 @@ public:
   clsfy_quad_regulariser(double alpha=1e-6);
 
   //:  The main function: Compute f(v)
-  virtual double f(vnl_vector<double> const& v);
+  double f(vnl_vector<double> const& v) override;
 
   //:  Calculate the gradient of f at parameter vector v.
-  virtual void gradf(vnl_vector<double> const& v,
-                     vnl_vector<double>& gradient);
+  void gradf(vnl_vector<double> const& v,
+                     vnl_vector<double>& gradient) override;
 };
 
 

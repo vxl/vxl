@@ -33,7 +33,7 @@ class FMatrixSkew : public FMatrix
   FMatrixSkew();
   FMatrixSkew(const double* f_matrix);
   FMatrixSkew(const vnl_matrix<double>& f_matrix);
-  ~FMatrixSkew();
+  ~FMatrixSkew() override;
 
   // Computations
 
@@ -53,7 +53,7 @@ class FMatrixSkew : public FMatrix
 
   // Data Access------------------------------------------------------------
 
-  bool set (const double* f_matrix );
+  bool set (const double* f_matrix ) override;
   bool set (const vnl_matrix<double>& f_matrix );
   bool get_rank2_flag (void) const;
   void set_rank2_flag (bool rank2_flag);

@@ -65,10 +65,10 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   clsfy_direct_boost_builder();
 
   // Destructor
-  virtual ~clsfy_direct_boost_builder();
+  ~clsfy_direct_boost_builder() override;
 
   //: Create empty model
-  virtual clsfy_classifier_base* new_classifier() const;
+  clsfy_classifier_base* new_classifier() const override;
 
   //: set batch size
   void set_batch_size(int bs) { bs_ = bs; }
@@ -91,28 +91,28 @@ class clsfy_direct_boost_builder : public clsfy_builder_base
   // Return the mean error over the training set.
   // For many classifiers, you may use nClasses==1 to
   // indicate a binary classifier
-  virtual double build(clsfy_classifier_base& model,
+  double build(clsfy_classifier_base& model,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const std::vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_builder_base* clone() const;
+  clsfy_builder_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 //: Allows derived class to be loaded by base-class pointer

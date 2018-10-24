@@ -21,7 +21,7 @@ class gst_polygon_2d : public vbl_ref_count
 
   // constructors and destructors
   gst_polygon_2d() = default;
-  ~gst_polygon_2d() = default;
+  ~gst_polygon_2d() override = default;
   // copy constructor - compiler-provided one sets ref_count to nonzero which is wrong -PVr
   gst_polygon_2d(gst_polygon_2d const& p) : vbl_ref_count(), edges_(p.edges_) {}
 

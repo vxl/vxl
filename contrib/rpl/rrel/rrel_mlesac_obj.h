@@ -47,23 +47,23 @@ public:
   rrel_mlesac_obj(unsigned int residual_dof, double outlier_sigma = 20.0, double outlier_frac = 0.5 );
 
   //: Destructor.
-  ~rrel_mlesac_obj() = default;
+  ~rrel_mlesac_obj() override = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn(vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn(vect_const_iter res_begin, vect_const_iter res_end,
                      vect_const_iter scale_begin,
-                     vnl_vector<double>* param_vector=nullptr ) const;
+                     vnl_vector<double>* param_vector=nullptr ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn(vect_const_iter begin, vect_const_iter end,
+  double fcn(vect_const_iter begin, vect_const_iter end,
                      double scale,
-                     vnl_vector<double>* param_vector=nullptr ) const;
+                     vnl_vector<double>* param_vector=nullptr ) const override;
 
   //: True.
   //  The MLESAC algorithm is sensitive to the scale, and requires a prior scale.
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
     { return true; }
 
 protected:

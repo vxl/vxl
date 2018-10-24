@@ -44,7 +44,7 @@ namespace{
     }
 
     // x is the parameters
-    void f( vnl_vector< double > const& x, vnl_vector< double > & fx )
+    void f( vnl_vector< double > const& x, vnl_vector< double > & fx ) override
     {
       // x is the dof-reduced parameters. Convert it back to control points
       assert( x.size() == free_control_pt_index_.size() );
@@ -62,7 +62,7 @@ namespace{
     }
 
     // x is the parameters
-    void gradf( vnl_vector< double > const& x, vnl_matrix< double > & jacobian )
+    void gradf( vnl_vector< double > const& x, vnl_matrix< double > & jacobian ) override
     {
       assert( x.size() == free_control_pt_index_.size() );
       vnl_vector< double > c( spline_->num_of_control_points(), 0.0 );
@@ -102,7 +102,7 @@ namespace{
     }
 
     // x is the parameters
-    double f( vnl_vector< double > const& x )
+    double f( vnl_vector< double > const& x ) override
     {
       double fx = 0;
       spline_->set_control_points( x );
@@ -113,7 +113,7 @@ namespace{
       return fx;
     }
 
-    void gradf (vnl_vector< double > const &x, vnl_vector< double > &gradient )
+    void gradf (vnl_vector< double > const &x, vnl_vector< double > &gradient ) override
     {
       gradient.fill( 0.0 );
       vnl_vector< double > gr;

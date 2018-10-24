@@ -38,7 +38,7 @@ class rgrl_feature_based_registration: public rgrl_object
   //  The default convergence tester is set to median error
   rgrl_feature_based_registration( rgrl_data_manager_sptr data );
 
-  ~rgrl_feature_based_registration();
+  ~rgrl_feature_based_registration() override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_based_registration, rgrl_object );

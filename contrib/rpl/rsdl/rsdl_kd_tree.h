@@ -74,7 +74,7 @@ class rsdl_kd_tree : public vbl_ref_count
                 int points_per_leaf=4 );
 
   //: dtor deletes the nodes in tree
-  ~rsdl_kd_tree();
+  ~rsdl_kd_tree() override;
 
   //: find the n points nearest to the query point (and their associate indices).
   // max_leaves = -1 to not use approximate nearest neighbor queries;

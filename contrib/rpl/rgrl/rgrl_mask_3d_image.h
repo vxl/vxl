@@ -25,7 +25,7 @@ class rgrl_mask_3d_image
                       int org_x = 0, int org_y = 0, int org_z = 0 );
 
   //: True if a point is inside the region
-  bool inside( vnl_vector< double > const& pt ) const;
+  bool inside( vnl_vector< double > const& pt ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_mask_3d_image, rgrl_mask );

@@ -36,13 +36,13 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_volume_3d() = default;
+  ~vsol_volume_3d() override = default;
 
   //***************************************************************************
   // Basic operations
   //***************************************************************************
-  virtual vsol_volume_3d* cast_to_volume() { return this;}
-  virtual vsol_volume_3d const* cast_to_volume() const { return this;}
+  vsol_volume_3d* cast_to_volume() override { return this;}
+  vsol_volume_3d const* cast_to_volume() const override { return this;}
 
   virtual vsol_polyhedron* cast_to_polyhedron() { return nullptr;}
   virtual vsol_polyhedron const* cast_to_polyhedron() const { return nullptr;}
@@ -57,7 +57,7 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   //---------------------------------------------------------------------------
   //: Return the spatial type of `this'
   //---------------------------------------------------------------------------
-  vsol_spatial_object_3d_type spatial_type(void) const { return vsol_spatial_object_3d::VOLUME; }
+  vsol_spatial_object_3d_type spatial_type(void) const override { return vsol_spatial_object_3d::VOLUME; }
 
   //---------------------------------------------------------------------------
   //: Return the volume of `this'
@@ -65,7 +65,7 @@ class vsol_volume_3d : public vsol_spatial_object_3d
   virtual double volume(void) const=0;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_volume_3d"); }
+  std::string is_a() const override { return std::string("vsol_volume_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

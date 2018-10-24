@@ -54,28 +54,28 @@ class rrel_homography2d_est : public rrel_estimation_problem
                          unsigned int homog_dof = 8 );
 
   //: Destructor.
-  virtual ~rrel_homography2d_est();
+  ~rrel_homography2d_est() override;
 
   //: Total number of correspondences.
-  unsigned int num_samples( ) const;
+  unsigned int num_samples( ) const override;
 
   //: The degrees of freedom in the residual.
   // Each coordinate of the correspondence pair has Gaussian error, so
   // the Euclidean distance residual has 4 degrees of freedom.
-  unsigned int residual_dof() const { return 4; }
+  unsigned int residual_dof() const override { return 4; }
 
   //: Generate a parameter estimate from a minimal sample.
   bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const;
+                             vnl_vector<double>& params ) const override;
 
   //: Compute unsigned fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const override;
 
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const;
+                                   const std::vector<double>* weights=nullptr ) const override;
 
   //: Convert a homography to a linear parameter list (for estimation).
   //  Overloaded for specialized reduced-DOF homographies (i.e. affine)

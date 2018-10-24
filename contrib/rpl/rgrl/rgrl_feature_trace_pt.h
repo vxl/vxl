@@ -38,22 +38,22 @@ class rgrl_feature_trace_pt
                          double                    radius );
 
   //: read in feature
-  virtual
-  bool read( std::istream& is, bool skip_tag=false );
+  
+  bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  virtual
-  void write( std::ostream& os ) const;
+  
+  void write( std::ostream& os ) const override;
 
   virtual vnl_vector<double> const&
   tangent() const;
 
-  virtual vnl_matrix<double> const&
-  error_projector() const;
+  vnl_matrix<double> const&
+  error_projector() const override;
 
   //: The result is a rgrl_feature_trace_pt, without transforming the radius/length parameters
-  virtual rgrl_feature_sptr
-  transform( rgrl_transformation const& xform ) const;
+  rgrl_feature_sptr
+  transform( rgrl_transformation const& xform ) const override;
 
   //:
   // The result is a vector of boundary locations in the direction of the normal
@@ -69,8 +69,8 @@ class rgrl_feature_trace_pt
   virtual feature_vector
   boundary_points(vnl_vector<double> const& in_direction) const;
 
-  virtual unsigned int
-  num_constraints() const;
+  unsigned int
+  num_constraints() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_trace_pt, rgrl_feature );
@@ -83,10 +83,10 @@ class rgrl_feature_trace_pt
   double radius() const { return radius_; }
 
   //:  Compute the signature weight between two features.
-  virtual double absolute_signature_weight( rgrl_feature_sptr other ) const;
+  double absolute_signature_weight( rgrl_feature_sptr other ) const override;
 
   //: make a clone copy
-  virtual rgrl_feature_sptr clone() const;
+  rgrl_feature_sptr clone() const override;
 
   //  Chuck's note:  I am beginning to wonder if we are trying to do
   //  too much here.  Perhaps we should be make a subclass for the

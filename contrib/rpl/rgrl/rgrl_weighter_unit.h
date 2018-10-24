@@ -23,9 +23,9 @@ public:
   //
   // The weights will be stored in the match_set structure.
   //
-  virtual
+  
   void compute_weights( rgrl_scale const&     scales,
-                        rgrl_match_set&       match_set ) const;
+                        rgrl_match_set&       match_set ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter_unit, rgrl_weighter);

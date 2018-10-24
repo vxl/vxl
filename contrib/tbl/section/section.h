@@ -53,7 +53,7 @@
 typedef unsigned int uint;
 
 class section__ { protected: section__()= default; public: virtual ~section__()= default; };
-template <class T> class section_ : public section__ { protected: section_():section__(){} virtual ~section_()= default; };
+template <class T> class section_ : public section__ { protected: section_():section__(){} ~section_() override = default; };
 
 template <class T, uint N> class section_iterator; // forward declaration
 
@@ -124,7 +124,7 @@ template <class T, uint N> class section : public section_<T>
     for (uint i=0; i<N; ++i)ROI_start[i]=s.ROI_start[i],ROI_end[i]=s.ROI_end[i];
   }
 
-  ~section(){ if (allocated) delete[] buffer; }
+  ~section() override{ if (allocated) delete[] buffer; }
 
  private:
   void init(const uint sz[N], T* buf) {

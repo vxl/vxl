@@ -71,13 +71,13 @@ class vifa_int_face_attr_common_params : public gevd_param_mixin,
   vifa_int_face_attr_common_params(const vifa_int_face_attr_common_params&  old_params);
 
   //: Destructor.
-  virtual ~vifa_int_face_attr_common_params(void);
+  ~vifa_int_face_attr_common_params(void) override;
 
   //: Publicly available setting of parameters.
   void  set_params(const vifa_int_face_attr_common_params&  ifap);
 
   //: Check that parameters are within acceptable bounds.
-  bool  SanityCheck();
+  bool  SanityCheck() override;
 
   //: Output contents
   void  print_info(void);

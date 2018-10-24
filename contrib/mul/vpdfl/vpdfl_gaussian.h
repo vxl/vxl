@@ -48,7 +48,7 @@ class vpdfl_gaussian : public vpdfl_pdf_base
   vpdfl_gaussian();
 
   //: Destructor
-  virtual ~vpdfl_gaussian();
+  ~vpdfl_gaussian() override;
 
   //: Initialise
   // WARNING - the error checking for inconsistent parameters is not
@@ -100,20 +100,20 @@ class vpdfl_gaussian : public vpdfl_pdf_base
 
   //: Create a sampler object on the heap
   // Caller is responsible for deletion.
-  virtual vpdfl_sampler_base* new_sampler() const;
+  vpdfl_sampler_base* new_sampler() const override;
 
   //: Log of probability density at x
   // This value is also the Normalised Mahalanobis distance
   // from the centroid to the given vector.
-  virtual double log_p(const vnl_vector<double>& x) const;
+  double log_p(const vnl_vector<double>& x) const override;
 
   //: Gradient of PDF at x
-  virtual void gradient(vnl_vector<double>& g,
+  void gradient(vnl_vector<double>& g,
                         const vnl_vector<double>& x,
-                        double& p) const;
+                        double& p) const override;
 
   //: Compute threshold for PDF to pass a given proportion
-  virtual double log_prob_thresh(double pass_proportion) const;
+  double log_prob_thresh(double pass_proportion) const override;
 
   //: Compute nearest point to x which has a density above a threshold
   //  If log_p(x)>log_p_min then x unchanged.  Otherwise x is moved
@@ -121,29 +121,29 @@ class vpdfl_gaussian : public vpdfl_pdf_base
   //  Mahalanobis distance) until log_p(x)=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
-  virtual void nearest_plausible(vnl_vector<double>& x, double log_p_min) const;
+  void nearest_plausible(vnl_vector<double>& x, double log_p_min) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_pdf_base* clone() const;
+  vpdfl_pdf_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // vpdfl_gaussian_h

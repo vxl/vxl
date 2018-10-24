@@ -52,7 +52,7 @@ class vifa_histogram : public vul_timestamp,
   // Resampling Constructor
   vifa_histogram(vifa_histogram const*, float width, bool preserveCounts=false);
   // Destructor
-  virtual ~vifa_histogram();
+  ~vifa_histogram() override;
 
   // Formative function(s)
   vifa_histogram* Scale(float scale_factor);

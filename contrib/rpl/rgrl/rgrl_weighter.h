@@ -19,7 +19,7 @@ class rgrl_weighter
   : public rgrl_object
 {
  public:
-  virtual ~rgrl_weighter();
+  ~rgrl_weighter() override;
 
   //:  based on the scales, compute the weights for the matches.
   //

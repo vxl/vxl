@@ -29,18 +29,18 @@ class FMatrixComputeRobust : public FMatrixCompute
 {
  public:
   FMatrixComputeRobust();
-  virtual ~FMatrixComputeRobust();
+  ~FMatrixComputeRobust() override;
 
   // FMatrixCompute virtuals---------------------------------------------------
 
   //: Compute a fundamental matrix for a set of point matches.
   // This is the implemented method, other computes wrap this.
-  bool compute(PairMatchSetCorner& matches, FMatrix* F);
-  bool compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2, FMatrix* F)
+  bool compute(PairMatchSetCorner& matches, FMatrix* F) override;
+  bool compute(std::vector<HomgPoint2D>& p1, std::vector<HomgPoint2D>& p2, FMatrix* F) override
     { return FMatrixCompute::compute(p1,p2,F); }
   bool compute(std::vector<vgl_homg_point_2d<double> >& p1,
                std::vector<vgl_homg_point_2d<double> >& p2,
-               FMatrix& F)
+               FMatrix& F) override
     { return FMatrixCompute::compute(p1,p2,F); }
 
   inline FMatrix compute(PairMatchSetCorner& p) { return FMatrixCompute::compute(p); }

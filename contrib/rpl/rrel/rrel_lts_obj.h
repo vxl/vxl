@@ -33,24 +33,24 @@ class rrel_lts_obj : public rrel_objective
   //  function should be used.
   rrel_lts_obj( unsigned int num_sam_inst, double inlier_frac=0.5 );
 
-  ~rrel_lts_obj();
+  ~rrel_lts_obj() override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
+  double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: False.
   //  The LTS objective is based on order statistics, and does not
   //  require any scale parameter, estimated or otherwise.
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
     { return false; }
 
  protected:

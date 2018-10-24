@@ -35,12 +35,12 @@ class FMatrixComputeLMedSq : public FMatrixComputeRobust
   // If rank2_truncate = false, the resulting solution is not forced to rank 2
   // using the vnl_svd<double>.
   FMatrixComputeLMedSq(bool rank2_truncate, int size);
-  virtual ~FMatrixComputeLMedSq();
+  ~FMatrixComputeLMedSq() override;
 
-  virtual double calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count);
-  virtual double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F);
-  virtual double calculate_residual(vgl_homg_point_2d<double>& one,
-                                    vgl_homg_point_2d<double>& two, FMatrix* F);
+  double calculate_term(std::vector<double>& residuals, std::vector<bool>& inlier_list, int& count) override;
+  double calculate_residual(HomgPoint2D& one, HomgPoint2D& two, FMatrix* F) override;
+  double calculate_residual(vgl_homg_point_2d<double>& one,
+                                    vgl_homg_point_2d<double>& two, FMatrix* F) override;
  private:
   // Helper Functions
   // Return the median value for a vector of residuals

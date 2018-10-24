@@ -63,10 +63,10 @@ class vipl_threshold : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
   inline vipl_threshold(vipl_threshold const& A)
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), threshold_(A.threshold()), below_(A.below()),
       above_(A.above()), aboveset_(A.aboveset()) {}
-  inline ~vipl_threshold() = default;
+  inline ~vipl_threshold() override = default;
 
   // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

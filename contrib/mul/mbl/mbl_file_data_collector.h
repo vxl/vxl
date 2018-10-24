@@ -44,43 +44,43 @@ class mbl_file_data_collector : public mbl_data_collector<T>
 //#endif
 
   //: Destructor
-  virtual ~mbl_file_data_collector();
+  ~mbl_file_data_collector() override;
 
   //: Clear any stored data
-  virtual void clear();
+  void clear() override;
 
   //: delete stuff
   void delete_stuff();
 
   //: Hint about how many examples to expect
-  virtual void set_n_samples(int n);
+  void set_n_samples(int n) override;
 
   //: Record given object
-  virtual void record(const T& v);
+  void record(const T& v) override;
 
   //: Return object describing stored data
-  virtual mbl_data_wrapper<T >& data_wrapper();
+  mbl_data_wrapper<T >& data_wrapper() override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mbl_data_collector_base* clone() const;
+  mbl_data_collector_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
 };
 

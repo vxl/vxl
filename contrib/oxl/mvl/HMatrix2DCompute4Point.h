@@ -21,12 +21,12 @@
 
 class HMatrix2DCompute4Point : public HMatrix2DCompute {
 public:
-  int minimum_number_of_correspondences() const { return 4; }
+  int minimum_number_of_correspondences() const override { return 4; }
 
 protected:
   bool compute_p(PointArray const &,
                  PointArray const &,
-                 HMatrix2D *);
+                 HMatrix2D *) override;
 };
 
 #endif // _HMatrix2DCompute4Point_h

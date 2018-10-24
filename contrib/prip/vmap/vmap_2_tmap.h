@@ -203,7 +203,7 @@ class vmap_2_tmap: public vmap_2_map<D>,
   vmap_2_tmap(self_type const& m) ;
 
   //:
-  virtual ~vmap_2_tmap();
+  ~vmap_2_tmap() override;
 
   //:
   self_type & operator=(self_type const& m);
@@ -516,10 +516,10 @@ class vmap_2_tmap: public vmap_2_map<D>,
   bool valid_permutations() const ;
 
   //:
-  virtual bool valid() const ;
+  bool valid() const override ;
 
   //: Deletes everything.
-  virtual void clear() ;
+  void clear() override ;
 
   //:
   void removal(dart_iterator & arg) ;

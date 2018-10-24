@@ -35,12 +35,12 @@ class simple_invariant_feature: public rgrl_invariant
       cart_inv_(cart_inv),
       ang_inv_(ang_inv)
   {}
-  ~simple_invariant_feature()= default;
+  ~simple_invariant_feature() override = default;
 
   //estimate the a translation using the location
   bool estimate(rgrl_invariant_sptr         from,
                 rgrl_transformation_sptr&   xform,
-                rgrl_scale_sptr&            scale )
+                rgrl_scale_sptr&            scale ) override
   {
     simple_invariant_feature* simple_from =
       rgrl_cast<simple_invariant_feature*>(from);
@@ -52,8 +52,8 @@ class simple_invariant_feature: public rgrl_invariant
   }
 
   const vnl_vector<double>& location() const {return location_;}
-  const vnl_vector<double>& cartesian_invariants() const {return cart_inv_;}
-  const vnl_vector<double>& angular_invariants() const {return ang_inv_;}
+  const vnl_vector<double>& cartesian_invariants() const override {return cart_inv_;}
+  const vnl_vector<double>& angular_invariants() const override {return ang_inv_;}
 
  private:
   vnl_vector<double> location_;

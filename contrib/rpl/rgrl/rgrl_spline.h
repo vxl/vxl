@@ -69,7 +69,7 @@ class rgrl_spline
 //                    vnl_vector<double> const& p0 );
 
   //: Destructor.
-  ~rgrl_spline()= default;
+  ~rgrl_spline() override = default;
 
   //: Set controls points
   void set_control_points( vnl_vector<double> const& c ) ;

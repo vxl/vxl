@@ -32,7 +32,7 @@ class mfpf_log_lin_class_cost : public mfpf_vec_cost
   mfpf_log_lin_class_cost();
 
   //: Destructor
-  virtual ~mfpf_log_lin_class_cost();
+  ~mfpf_log_lin_class_cost() override;
 
   //: Define weights, bias and minp
   void set(const vnl_vector<double>& wts, double bias, double min_p=1e-6);
@@ -41,28 +41,28 @@ class mfpf_log_lin_class_cost : public mfpf_vec_cost
   const vnl_vector<double>& wts() const { return wts_; }
 
   //: Returns -log(minp + (1-minp)/(1+exp(-(x.wts-bias)))
-  virtual double evaluate(const vnl_vector<double>& x);
+  double evaluate(const vnl_vector<double>& x) override;
 
   //: Return the weights
-  virtual void get_average(vnl_vector<double>& v) const;
+  void get_average(vnl_vector<double>& v) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mfpf_vec_cost* clone() const;
+  mfpf_vec_cost* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif

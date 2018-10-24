@@ -24,25 +24,25 @@ public:
   rrel_ransac_obj( double scale_mult = 2.0 );
 
   //: Destructor.
-  ~rrel_ransac_obj();
+  ~rrel_ransac_obj() override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter scale_begin,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
+  double fcn( vect_const_iter begin, vect_const_iter end,
                       double scale,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: True.
   //  Using a RANSAC objective with an estimated scale doesn't make
   //  sense, because the any scale estimate tends to be inaccurate and
   //  RANSAC is sensitive to the threshold (and hence the scale).
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
     { return true; }
 
 protected:

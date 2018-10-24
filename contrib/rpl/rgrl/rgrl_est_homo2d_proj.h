@@ -19,13 +19,13 @@ class rgrl_est_homo2d_proj
   // \sa rgrl_estimator::estimate
   rgrl_transformation_sptr
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   // import base class estimate function
   using rgrl_nonlinear_estimator::estimate;
 
   //: Type of transformation estimated by this estimator.
-  const std::type_info& transformation_type() const;
+  const std::type_info& transformation_type() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_homo2d_proj, rgrl_nonlinear_estimator );

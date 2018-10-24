@@ -172,14 +172,14 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_topology_object();
+  ~vtol_topology_object() override;
 
  public:
   //***************************************************************************
   // Replaces dynamic_cast<T>
   //***************************************************************************
-  virtual vtol_topology_object *cast_to_topology_object() { return this; }
-  virtual const vtol_topology_object*cast_to_topology_object()const{return this;}
+  vtol_topology_object *cast_to_topology_object() override { return this; }
+  const vtol_topology_object*cast_to_topology_object()const override{return this;}
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a vertex, 0 otherwise
@@ -313,7 +313,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the spatial type
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d_type spatial_type()const{return TOPOLOGYOBJECT;}
+  vsol_spatial_object_2d_type spatial_type()const override{return TOPOLOGYOBJECT;}
 
   //***************************************************************************
   // Basic operations
@@ -408,12 +408,12 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: print and describe the objects
   //---------------------------------------------------------------------------
-  virtual void print(std::ostream &strm=std::cout) const;
+  void print(std::ostream &strm=std::cout) const override;
   void describe_inferiors(std::ostream &strm=std::cout, int blanking=0) const;
   void describe_superiors(std::ostream &strm=std::cout, int blanking=0) const;
-  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
 
-  virtual void compute_bounding_box() const; //A local implementation
+  void compute_bounding_box() const override; //A local implementation
 
   //---------------------------------------------------------------------------
   //: compute lists of vertices

@@ -20,50 +20,50 @@ class mvl2_video_from_sequence: public mvl2_video_reader
   mvl2_video_from_sequence();
 
   //: Destructor
-  virtual ~mvl2_video_from_sequence();
+  ~mvl2_video_from_sequence() override;
 
   //: Initialize the file (format can by Grey, RGB, or more complex)
-  virtual bool initialize( int width, int height,
-                           std::string format, std::string file_name);
+  bool initialize( int width, int height,
+                           std::string format, std::string file_name) override;
 
   //: Tidy up
-  virtual void uninitialize();
+  void uninitialize() override;
 
   //: Set the size of image captured
-  virtual void  set_capture_size(int width,int height);
+  void  set_capture_size(int width,int height) override;
 
   //: Return width of image (in pixels)
-  virtual int get_width() const;
+  int get_width() const override;
 
   //: Return height of image (in pixels)
-  virtual int get_height() const;
+  int get_height() const override;
 
   //: Return the frame rate in frames per second
-  virtual double get_frame_rate() const;
+  double get_frame_rate() const override;
 
   //: Set the frame rate in frames per second
-  virtual void set_frame_rate(double frame_rate);
+  void set_frame_rate(double frame_rate) override;
 
   //: Move frame counter on to next frame
-  virtual int next_frame();
+  int next_frame() override;
 
   //: Reset frame counter to zero
-  virtual void reset_frame();
+  void reset_frame() override;
 
   //: Put frame data into the given image
-  virtual bool get_frame(vil_image_view<vxl_byte>& image);
+  bool get_frame(vil_image_view<vxl_byte>& image) override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mvl2_video_reader* clone() const;
+  mvl2_video_reader* clone() const override;
 
   //: Move frame counter on to given frame if relevant
-  virtual int seek(int frame_number);
+  int seek(int frame_number) override;
 
   //: Returns the number of frames available from the beginning of the stream or -1 if unknown
-  virtual int length();
+  int length() override;
 
  private:
 

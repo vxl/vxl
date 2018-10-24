@@ -83,7 +83,7 @@ class CheckGrey : public CheckPixelT<T>
   CheckGrey( const char* file ): CheckPixelT<T>(file) {}
 
   bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
-                    const std::vector<TruePixelType>& pixel ) const
+                    const std::vector<TruePixelType>& pixel ) const override
   {
     assert( p == 0 );
     return this->img_ && pixel.size() == 1 &&
@@ -102,7 +102,7 @@ class CheckColourPlanes : public CheckPixelT<T>
   CheckColourPlanes( const char* file ): CheckPixelT<T>(file) {}
 
   bool operator() ( unsigned int p, unsigned int i, unsigned int j, unsigned int k,
-                    const std::vector<TruePixelType>& pixel) const
+                    const std::vector<TruePixelType>& pixel) const override
   {
     return this->img_ && pixel.size() == 1 && pixel[0] == this->img_(i,j,k,p) &&
       ( !(i > this->img_.ni()/2 && j > this->img_.nj()/2 && k > this->img_.nk()/2)
