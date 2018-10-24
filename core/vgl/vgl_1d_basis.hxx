@@ -31,7 +31,7 @@ vgl_homg_point_1d<double> vgl_1d_basis<T>::project(T const& p)
   }
   else // !affine_
   {
-    if (p == inf_pt_) return vgl_homg_point_1d<double>(1,0);
+    if (p == inf_pt_) return {1,0};
     double d = cross_ratio(inf_pt_,origin_,unity_,p);
     return vgl_homg_point_1d<double>(d,1);
   }
