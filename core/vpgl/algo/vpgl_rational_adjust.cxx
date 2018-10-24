@@ -22,7 +22,7 @@ vpgl_adjust_lsqr(vpgl_rational_camera<double>  const& rcam,
                                vnl_least_squares_function::no_gradient),
     rcam_(rcam), img_pts_(img_pts), geo_pts_(std::move(geo_pts))
 {
-  num_corrs_ = img_pts.size();
+  num_corrs_ = static_cast<unsigned>(img_pts.size());
 }
 // The virtual least-squares cost function.
 // The unknowns are [xscale, xoff, yscale, yoff, zscale, zoff]
@@ -78,7 +78,7 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
                             double& yoff,
                             double& zoff)
 {
-  unsigned npts = img_pts.size();
+  unsigned npts = static_cast<unsigned>( img_pts.size() );
   // get the average elevation
   zoff = 0;
   for (unsigned i = 0; i<npts; ++i)
@@ -121,7 +121,7 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
   double xoff=0, yoff=0, zoff=0;
   if (!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
     return false;
-  unsigned num_corrs = img_pts.size();
+  unsigned num_corrs = static_cast<unsigned>( img_pts.size() );
   unsigned num_unknowns = 3;
   unsigned num_residuals = num_corrs*2;
   // Initialize the least squares function

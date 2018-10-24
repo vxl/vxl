@@ -30,8 +30,9 @@ template <class T>
 vpgl_generic_camera<T>::
     vpgl_generic_camera( vbl_array_2d<vgl_ray_3d<T> > const& rays)
 {
-    int nc = rays.cols(), nr = rays.rows();
-    assert(nc>0&&nr>0);
+    unsigned long nc = rays.cols();
+  unsigned long nr = rays.rows();
+  assert(nc>0&&nr>0);
     //compute bounds on ray origins
     double min_dist = vnl_numeric_traits<double>::maxval;
     double max_dist = 0.0;

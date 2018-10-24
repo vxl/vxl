@@ -480,7 +480,7 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
         std::vector<vgl_point_2d<T> > right_points_to_use;
         std::vector<vgl_point_2d<T> > left_points_to_use;
 
-        get_distinct_indices(5, match_idxs, num_points);
+        get_distinct_indices(5, match_idxs, (int) num_points);
 
         for (int idx = 0; idx < 5; ++idx) {
             right_points_to_use.push_back(right_points[match_idxs[idx]]);

@@ -54,7 +54,7 @@ vpgl_fm_compute_8_point::compute(
   }
 
   // Solve!
-  vnl_matrix<double> S(pr_norm.size(),9);
+  vnl_matrix<double> S(static_cast<unsigned int>(pr_norm.size()), 9);
   for ( unsigned int i = 0; i < pr_norm.size(); i++ ) {
     S(i,0) = pl_norm[i].x()*pr_norm[i].x();
     S(i,1) = pl_norm[i].x()*pr_norm[i].y();

@@ -187,7 +187,7 @@ find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
                         vgl_point_3d<double> & p_3d,
                         double const& relative_diameter)
 {
-  unsigned int n = cams.size();
+  unsigned int n = static_cast<unsigned int>(cams.size());
   if (!n || n != corrs.size())
     return false;
   // define the iteration layer along z

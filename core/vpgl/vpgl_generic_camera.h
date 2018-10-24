@@ -111,7 +111,7 @@ class vpgl_generic_camera : public vpgl_camera<T>
 
   //: a pyramid data structure for the rays to support efficient projection
   // (level == 0 is the highest resolution)
-  int n_levels_;
+  unsigned long n_levels_;
   //: num rows at each resolution level
   std::vector<int> nr_;
   //: num cols at each resolution level

@@ -55,8 +55,8 @@ vpgl_proj_camera_compute::compute(
                                   const std::vector< vgl_homg_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
-  unsigned int num_correspondences = image_pts.size();
-  if ( world_pts.size() < num_correspondences ) num_correspondences = world_pts.size();
+  unsigned int num_correspondences = static_cast<unsigned int>(image_pts.size());
+  if ( world_pts.size() < num_correspondences ) num_correspondences = static_cast<unsigned int>(world_pts.size());
   assert( num_correspondences >= 6 );
 
   // Form the solution matrix.
@@ -102,7 +102,7 @@ vpgl_affine_camera_compute::compute(
   assert( image_pts.size() > 3 );
 
   // Form the solution matrix.
-  vnl_matrix<double> A( world_pts.size(), 4, 1 );
+  vnl_matrix<double> A(static_cast<unsigned int>(world_pts.size()), 4, 1 );
   for (unsigned int i = 0; i < world_pts.size(); ++i) {
     A(i,0) = world_pts[i].x(); A(i,1) = world_pts[i].y(); A(i,2) = world_pts[i].z();
   }
@@ -138,7 +138,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
          const vpgl_calibration_matrix<double>& K,
          vpgl_perspective_camera<double>& camera )
 {
-  unsigned N = world_pts.size();
+  unsigned N = static_cast<unsigned int>(world_pts.size());
   if (image_pts.size()!=N)
   {
     std::cout << "Unequal points sets in"
@@ -222,7 +222,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
 
   //Check if depths are all approximately the same (near affine projection)
   double average_depth = 0;
-  unsigned nd = depth.size();
+  unsigned nd = static_cast<unsigned int>(depth.size());
   for (unsigned i = 0; i<nd; ++i)
     average_depth += depth[i];
   average_depth /= nd;
@@ -313,7 +313,7 @@ compute_dlt (const std::vector< vgl_point_2d<double> >& image_pts,
   {
     // Two equations for each point, one for the x's, the other for
     // the ys
-    int num_eqns = 2 * image_pts.size();
+    int num_eqns = static_cast<int>(2 * image_pts.size());
 
     // A 3x4 projection matrix has 11 free vars
     int num_vars = 11;
@@ -419,7 +419,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
          const std::vector< vgl_point_2d<double> >& ground_pts,
          vpgl_perspective_camera<double>& camera )
 {
-  unsigned num_pts = ground_pts.size();
+  unsigned num_pts = static_cast<unsigned int>(ground_pts.size());
   if (image_pts.size()!=num_pts)
   {
     std::cout << "Unequal points sets in"
