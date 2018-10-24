@@ -136,7 +136,7 @@ std::vector<vil_image_resource_sptr> vil_image_list::pyramids()
     vil_pyramid_image_resource_sptr pyr =
       vil_load_pyramid_resource((*fit).c_str(), il_verbose);
     if (pyr)
-      temp.push_back(pyr.ptr());
+      temp.emplace_back(pyr.ptr());
   }
   return temp;
 }

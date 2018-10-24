@@ -66,19 +66,19 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
   // get the corners of the dem
   geo_cam_->img_to_global(0, 0, lon, lat);
   elev = dem_view_(0, 0);
-  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  dem_corners_.emplace_back(lon, lat, elev);
 
   geo_cam_->img_to_global(ni-1, 0, lon, lat);
   elev = dem_view_(ni-1, 0);
-  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  dem_corners_.emplace_back(lon, lat, elev);
 
   geo_cam_->img_to_global(ni-1, nj-1, lon, lat);
   elev = dem_view_(ni-1, nj-1);
-  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  dem_corners_.emplace_back(lon, lat, elev);
 
   geo_cam_->img_to_global(0, nj-1, lon, lat);
   elev = dem_view_(0, nj-1);
-  dem_corners_.push_back(vgl_point_3d<double>(lon, lat, elev));
+  dem_corners_.emplace_back(lon, lat, elev);
 
   // check for appropriate zmin/zmax inputs
   if (zmax > zmin) {

@@ -111,14 +111,14 @@ static void test_optimize_camera()
 
   std::vector<vgl_homg_point_3d<double> > world;
   double side_len = 1.0;
-  world.push_back(vgl_homg_point_3d<double>(0.0,0.0,0.0));
-  world.push_back(vgl_homg_point_3d<double>(0.0, 0.0, side_len));
-  world.push_back(vgl_homg_point_3d<double>(0.0, side_len, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(0.0, side_len, side_len));
-  world.push_back(vgl_homg_point_3d<double>(side_len, 0.0, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(side_len, 0.0, side_len));
-  world.push_back(vgl_homg_point_3d<double>(side_len, side_len, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(side_len, side_len, side_len));
+  world.emplace_back(0.0,0.0,0.0);
+  world.emplace_back(0.0, 0.0, side_len);
+  world.emplace_back(0.0, side_len, 0.0);
+  world.emplace_back(0.0, side_len, side_len);
+  world.emplace_back(side_len, 0.0, 0.0);
+  world.emplace_back(side_len, 0.0, side_len);
+  world.emplace_back(side_len, side_len, 0.0);
+  world.emplace_back(side_len, side_len, side_len);
 
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384));
   vgl_homg_point_3d<double> c(4.0,4.0,4.0);

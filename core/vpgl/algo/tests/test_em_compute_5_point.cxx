@@ -31,8 +31,7 @@ static void normalize(
 
         vnl_matrix_fixed<double,3,1> normed = k_inv*vec;
 
-        normed_points.push_back(
-            vgl_point_2d<double>(normed.get(0,0), normed.get(1,0)));
+        normed_points.emplace_back(normed.get(0,0), normed.get(1,0));
     }
 }
 

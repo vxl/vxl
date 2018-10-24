@@ -75,7 +75,7 @@ inline vil_nitf2_field::field_tree*
 vil_nitf2_typed_scalar_field<vil_nitf2_tagged_record_sequence>::get_tree() const
 {
   field_tree* tr = new field_tree;
-  tr->columns.push_back( "TREs" );
+  tr->columns.emplace_back("TREs" );
   vil_nitf2_tagged_record_sequence::const_iterator it;
   for ( it = m_value.begin() ; it != m_value.end() ; it++ ) {
     tr->children.push_back( (*it)->get_tree() );

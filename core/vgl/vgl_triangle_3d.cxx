@@ -94,7 +94,7 @@ std::vector<std::pair<unsigned,unsigned> > vgl_triangle_3d_coincident_edges(
           (std::fabs(e2_len - a1_dist) < sqrteps &&
            std::fabs(e2_len - a2_dist) < sqrteps))
       {
-        coinc_edges.push_back(std::make_pair(j,i));
+        coinc_edges.emplace_back(j,i);
         break;
       }
     }

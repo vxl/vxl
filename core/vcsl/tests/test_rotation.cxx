@@ -60,7 +60,7 @@ static void test_rotation()
   rot->set_angle(angles);
 
   std::vector<vcsl_spatial_transformation_sptr> motion;
-  motion.push_back(rot.ptr());
+  motion.emplace_back(rot.ptr());
   cs0->set_motion(motion);
 
   vnl_vector<double> p(3);

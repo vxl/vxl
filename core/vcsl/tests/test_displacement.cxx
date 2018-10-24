@@ -69,7 +69,7 @@ static void test_displacement()
   dis->set_angle(angles);
 
   std::vector<vcsl_spatial_transformation_sptr> motion;
-  motion.push_back(dis.ptr());
+  motion.emplace_back(dis.ptr());
   cs0->set_motion(motion);
 
   vnl_vector<double> p(3);

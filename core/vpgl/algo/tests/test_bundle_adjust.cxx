@@ -23,23 +23,23 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
 {
   world.clear();
   // The world points are the 8 corners of a unit cube
-  world.push_back(vgl_point_3d<double>(0.0, 0.0, 0.0));
-  world.push_back(vgl_point_3d<double>(0.0, 0.0, 1.0));
-  world.push_back(vgl_point_3d<double>(0.0, 1.0, 0.0));
-  world.push_back(vgl_point_3d<double>(0.0, 1.0, 1.0));
-  world.push_back(vgl_point_3d<double>(1.0, 0.0, 0.0));
-  world.push_back(vgl_point_3d<double>(1.0, 0.0, 1.0));
-  world.push_back(vgl_point_3d<double>(1.0, 1.0, 0.0));
-  world.push_back(vgl_point_3d<double>(1.0, 1.0, 1.0));
+  world.emplace_back(0.0, 0.0, 0.0);
+  world.emplace_back(0.0, 0.0, 1.0);
+  world.emplace_back(0.0, 1.0, 0.0);
+  world.emplace_back(0.0, 1.0, 1.0);
+  world.emplace_back(1.0, 0.0, 0.0);
+  world.emplace_back(1.0, 0.0, 1.0);
+  world.emplace_back(1.0, 1.0, 0.0);
+  world.emplace_back(1.0, 1.0, 1.0);
 
   vgl_rotation_3d<double> I; // no rotation initially
 
   cameras.clear();
-  cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(8.0, 0.0, 8.0),I));
-  cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(10.0, 10.0, 0.0),I));
-  cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(7.0, 7.0, 7.0),I));
-  cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(0.0, -15.0, -2.0),I));
-  cameras.push_back(vpgl_perspective_camera<double>(K,vgl_homg_point_3d<double>(5.0, 0.0, 0.0),I));
+  cameras.emplace_back(K,vgl_homg_point_3d<double>(8.0, 0.0, 8.0),I);
+  cameras.emplace_back(K,vgl_homg_point_3d<double>(10.0, 10.0, 0.0),I);
+  cameras.emplace_back(K,vgl_homg_point_3d<double>(7.0, 7.0, 7.0),I);
+  cameras.emplace_back(K,vgl_homg_point_3d<double>(0.0, -15.0, -2.0),I);
+  cameras.emplace_back(K,vgl_homg_point_3d<double>(5.0, 0.0, 0.0),I);
 
   // point all cameras to look at the origin
   for (unsigned int i=0; i<cameras.size(); ++i)
@@ -49,7 +49,7 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
   image_points.clear();
   for (unsigned int i=0; i<cameras.size(); ++i) {
     for (unsigned int j=0; j<world.size(); ++j) {
-      image_points.push_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
+      image_points.emplace_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
     }
   }
 }

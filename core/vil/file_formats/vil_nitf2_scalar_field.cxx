@@ -77,7 +77,7 @@ vil_nitf2_field::field_tree* vil_nitf2_scalar_field::get_tree() const
   buffer = (char*)std::malloc( (std::size_t) num_to_read+1 );
   str->read( (void*)buffer, num_to_read );
   buffer[(std::size_t) num_to_read] = 0;
-  tr->columns.push_back( std::string( buffer ) );
+  tr->columns.emplace_back( buffer );
   free( buffer );
   return tr;
 }

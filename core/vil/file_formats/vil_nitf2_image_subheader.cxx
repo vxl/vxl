@@ -123,17 +123,17 @@ add_shared_field_defs_3(vil_nitf2_field_definitions* defs)
            false, nullptr, nullptr);
 
   std::vector<std::string> comp_ic_values;
-  comp_ic_values.push_back("C1");
-  comp_ic_values.push_back("C3");
-  comp_ic_values.push_back("C4");
-  comp_ic_values.push_back("C5");
-  comp_ic_values.push_back("C8");
-  comp_ic_values.push_back("M1");
-  comp_ic_values.push_back("M3");
-  comp_ic_values.push_back("M4");
-  comp_ic_values.push_back("M5");
-  comp_ic_values.push_back("M8");
-  comp_ic_values.push_back("I1");
+  comp_ic_values.emplace_back("C1");
+  comp_ic_values.emplace_back("C3");
+  comp_ic_values.emplace_back("C4");
+  comp_ic_values.emplace_back("C5");
+  comp_ic_values.emplace_back("C8");
+  comp_ic_values.emplace_back("M1");
+  comp_ic_values.emplace_back("M3");
+  comp_ic_values.emplace_back("M4");
+  comp_ic_values.emplace_back("M5");
+  comp_ic_values.emplace_back("M8");
+  comp_ic_values.emplace_back("I1");
 
   // Using string because the valid enum values are different based on the content of IC
   (*defs)
@@ -226,9 +226,9 @@ void vil_nitf2_image_subheader::add_geo_field_defs(vil_nitf2_field_definitions* 
                false, nullptr, nullptr);
 
       std::vector<std::string> igeolo_icords;
-      igeolo_icords.push_back("U");
-      igeolo_icords.push_back("G");
-      igeolo_icords.push_back("C");
+      igeolo_icords.emplace_back("U");
+      igeolo_icords.emplace_back("G");
+      igeolo_icords.emplace_back("C");
 
       (*defs)
         .field("IGEOLO", "Image Geographic Location", NITF_STR_BCSA(60), false, nullptr,

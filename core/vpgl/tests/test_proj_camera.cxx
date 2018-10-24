@@ -182,8 +182,8 @@ static void test_proj_camera()
 
   P1.set_matrix( random_matrix );
   std::vector<vgl_point_3d<double> > pts;
-  pts.push_back(vgl_point_3d<double>(29,-3, 8));
-  pts.push_back(vgl_point_3d<double>(-0.2,4.1,1.0));
+  pts.emplace_back(29,-3, 8);
+  pts.emplace_back(-0.2,4.1,1.0);
   std::vector<vnl_matrix_fixed<double,2,3> > Jac = image_jacobians(P1,pts);
   double eps = 1e-6;
   bool valid = true;

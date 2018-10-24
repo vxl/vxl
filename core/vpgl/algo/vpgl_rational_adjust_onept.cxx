@@ -67,7 +67,7 @@ scatter_var(std::vector<vpgl_rational_camera<double> > const& cams,
     // no need to perform back-projection for zero weight camera
     if (cam_weights[i] == 0)
     {
-      pb_pts.push_back(vgl_point_3d<double>(0,0,0));
+      pb_pts.emplace_back(0,0,0);
       continue;
     }
     vgl_point_3d<double> pb_pt;

@@ -28,7 +28,7 @@ static void add_pt_and_cam(
     double x,y;
     cam.project(GOAL.x(), GOAL.y(), GOAL.z(), x, y);
 
-    points.push_back(vgl_point_2d<double>(x, y));
+    points.emplace_back(x, y);
 }
 
 // Adds a bunch of cameras and points to the lists using the above method.

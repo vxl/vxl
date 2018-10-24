@@ -49,7 +49,7 @@ void vil_flood_fill4(vil_image_view<T>& image,
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
+  q.emplace_back(seed_i,seed_j);
 
   unsigned k=0;
   while (k<q.size())
@@ -67,14 +67,14 @@ void vil_flood_fill4(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
+            q.emplace_back(i1,j-1);
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
+            q.emplace_back(i1,j+1);
       }
     }
     k++;
@@ -104,7 +104,7 @@ void vil_flood_fill4(vil_image_view<T>& image,
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
+  q.emplace_back(seed_i,seed_j);
 
   unsigned k=0;
   while (k<q.size())
@@ -117,21 +117,21 @@ void vil_flood_fill4(vil_image_view<T>& image,
       unsigned ilo,ihi;
       vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
 
-      region.push_back(vil_chord(ilo,ihi,j));
+      region.emplace_back(ilo,ihi,j);
 
       if (j>0)
       {
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
+            q.emplace_back(i1,j-1);
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
+            q.emplace_back(i1,j+1);
       }
     }
     k++;
@@ -157,7 +157,7 @@ void vil_flood_fill8(vil_image_view<T>& image,
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
+  q.emplace_back(seed_i,seed_j);
 
   unsigned k=0;
   while (k<q.size())
@@ -178,14 +178,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
+            q.emplace_back(i1,j-1);
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
+            q.emplace_back(i1,j+1);
       }
     }
     k++;
@@ -215,7 +215,7 @@ void vil_flood_fill8(vil_image_view<T>& image,
   if (seed_i>ni1 || seed_j>nj1) return;  // Seed outside image
 
   // Initialise the queue with the seed
-  q.push_back(std::pair<unsigned,unsigned>(seed_i,seed_j));
+  q.emplace_back(seed_i,seed_j);
 
   unsigned k=0;
   while (k<q.size())
@@ -228,7 +228,7 @@ void vil_flood_fill8(vil_image_view<T>& image,
       unsigned ilo,ihi;
       vil_flood_fill_row(image,i,j,v,new_v,ilo,ihi);
 
-      region.push_back(vil_chord(ilo,ihi,j));
+      region.emplace_back(ilo,ihi,j);
 
       // Expand by one to allow all 8 neighbours to be examined
       if (ilo>0) ilo--;
@@ -238,14 +238,14 @@ void vil_flood_fill8(vil_image_view<T>& image,
         // Consider row above
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j-1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j-1));
+            q.emplace_back(i1,j-1);
       }
       if (j<nj1)
       {
         // Consider row below
         for (unsigned i1=ilo;i1<=ihi;++i1)
           if (image(i1,j+1)==v)
-            q.push_back(std::pair<unsigned,unsigned>(i1,j+1));
+            q.emplace_back(i1,j+1);
       }
     }
     k++;

@@ -39,7 +39,7 @@ class projection_lsqf : public vnl_least_squares_function
     for (unsigned i = 0; i<n_; ++i)
     {
       from_points_.push_back(from_points[i]);
-      to_points_.push_back(to_points[i]);
+      to_points_.emplace_back(to_points[i]);
     }
   }
 

@@ -53,7 +53,7 @@ static void test_translation()
   vectors.push_back(v1);
   vectors.push_back(v2);
   tr->set_vector(vectors);
-  motion.push_back(tr.ptr());
+  motion.emplace_back(tr.ptr());
 
   cs0->set_motion(motion);
 

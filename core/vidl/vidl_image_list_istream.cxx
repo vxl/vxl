@@ -70,7 +70,7 @@ open(const std::string& glob)
     // check to see if file is a directory.
     if (vul_file::is_directory(fit()))
       continue;
-    filenames.push_back(fit());
+    filenames.emplace_back(fit());
   }
 
   // no matching filenames
