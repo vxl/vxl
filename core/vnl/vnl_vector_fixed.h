@@ -105,10 +105,12 @@ class VNL_TEMPLATE_EXPORT vnl_vector_fixed
 
   //: Copy constructor
   //  The dimensions must match.
-  vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs )
-  {
-    std::memcpy( data_, rhs.data_, sizeof data_ );
-  }
+  vnl_vector_fixed( const vnl_vector_fixed<T,n>& rhs ) = default;
+  vnl_vector_fixed( vnl_vector_fixed<T,n>&& rhs ) = default;
+  //: Copy operator
+  vnl_vector_fixed<T,n>& operator=( const vnl_vector_fixed<T,n>& rhs ) = default;
+  vnl_vector_fixed<T,n>& operator=( vnl_vector_fixed<T,n>&& rhs ) = default;
+
 
   //: Construct a fixed-n-vector copy of \a rhs.
   //  The dimensions must match.
@@ -170,12 +172,6 @@ class VNL_TEMPLATE_EXPORT vnl_vector_fixed
       return;
     }
     data_[0] = x0; data_[1] = x1; data_[2] = x2; data_[3] = x3;
-  }
-
-  //: Copy operator
-  vnl_vector_fixed<T,n>& operator=( const vnl_vector_fixed<T,n>& rhs ) {
-    std::memcpy( data_, rhs.data_, sizeof data_ );
-    return *this;
   }
 
   //: Copy data from a dynamic vector
