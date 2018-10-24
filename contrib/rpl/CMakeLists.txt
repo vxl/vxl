@@ -3,6 +3,7 @@ project( rpl )
 doxygen_add_package(contrib/rpl "RPI Libraries")
 
 set( RPL_INCLUDE_DIR ${rpl_SOURCE_DIR} CACHE STATIC "RPI package include files" )
+set( RPL_BINARY_INCLUDE_DIR ${PROJECT_BINARY_DIR} )
 set( RPL_INSTALL_INCLUDE_DIR
   ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/rpl
   CACHE INTERNAL "RPI package include files"
