@@ -23,18 +23,7 @@ class vul_redirector_streambuf : public std::streambuf
   int sync ();
   int overflow (int ch);
   int underflow(){return 0;}
-  // Some libraries which take char const *, which is
-  // non-standard, but we have to live with it. A
-  // better cpp test would be welcome. fsm.
-#if defined(__INTEL_COMPILER)
-  // RogueWave or ISO?
-# define xsputn_const const
-# define xsputn_sizet std::streamsize
-#else
-# define xsputn_const /* */
-# define xsputn_sizet std::streamsize
-#endif
-  xsputn_sizet xsputn (xsputn_const char* text, xsputn_sizet n);
+  std::streamsize xsputn (const char* text, std::streamsize n) override;
 };
 
 struct vul_redirector_data
@@ -70,7 +59,7 @@ int vul_redirector_streambuf::overflow (int ch)
   return 0;
 }
 
-xsputn_sizet vul_redirector_streambuf::xsputn (xsputn_const char* text, xsputn_sizet n)
+std::streamsize vul_redirector_streambuf::xsputn (const char* text, std::streamsize n)
 {
   return sync () == EOF ? 0 : p->owner->putchunk ( text, n);
 }
