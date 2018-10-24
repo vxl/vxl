@@ -85,7 +85,7 @@ static int make_chain(double** V, int n, int (*cmp)(const void*, const void*))
   return s;
 }
 
-static int ch2d(double **P, int n)
+static inline int ch2d(double **P, int n)
 {
   int u = make_chain(P, n, cmpl);         // make lower hull
   if (!n) return 0;
