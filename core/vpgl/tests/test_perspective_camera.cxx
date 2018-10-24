@@ -80,12 +80,12 @@ static void test_perspective_camera()
     // rotate the camera to look at a target
     // the second point is "above" the first given the "up" direction (defaults to Z)
     vgl_homg_point_3d<double> target(4.0,2.5,-6.2), above(4.0,2.5,-3.2);
-    vgl_homg_point_3d<double> center(8.12, 2.81, 10.0);
-    vpgl_perspective_camera<double> P(K, center, R);
-    P.look_at(target);
-    bool infront = !P.is_behind_camera(target);
-    vgl_point_2d<double> tgt(P(target));
-    vgl_point_2d<double> abv(P(above));
+    vgl_homg_point_3d<double> center_pt2(8.12, 2.81, 10.0);
+    vpgl_perspective_camera<double> P_2(K, center_pt2, R);
+    P_2.look_at(target);
+    bool infront = !P_2.is_behind_camera(target);
+    vgl_point_2d<double> tgt(P_2(target));
+    vgl_point_2d<double> abv(P_2(above));
     std::cout << "target projects to "<< tgt << std::endl
              << "this point should be above "<< abv << std::endl;
     TEST("look_at - in front of camera", infront, true);

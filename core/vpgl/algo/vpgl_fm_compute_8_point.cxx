@@ -68,7 +68,7 @@ vpgl_fm_compute_8_point::compute(
   }
   vnl_svd<double> svdS( S );
   vnl_vector<double> solution = svdS.nullvector();
-  vnl_matrix_fixed<double,3,3> F_vnl;
+  vnl_matrix_fixed<double,3,3> F_vnl{};
   F_vnl(0,0) = solution(0); F_vnl(0,1) = solution(1); F_vnl(0,2) = solution(2);
   F_vnl(1,0) = solution(3); F_vnl(1,1) = solution(4); F_vnl(1,2) = solution(5);
   F_vnl(2,0) = solution(6); F_vnl(2,1) = solution(7); F_vnl(2,2) = solution(8);
