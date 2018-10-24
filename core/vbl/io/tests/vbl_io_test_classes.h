@@ -13,7 +13,7 @@ class impl : public vbl_ref_count
   static int reftotal;
   int n;
 
-  impl(int nn);
+  explicit impl(int nn);
   impl(impl const& x) : vbl_ref_count(), n(x.n) {}
   impl();
   ~impl() override;
