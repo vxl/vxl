@@ -111,7 +111,7 @@ public:
   const_iterator lower_bound(const key_type& key) const
   {
     return std::lower_bound(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare_t(key_compare()));
+      std::make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: Finds the one past the end of a subsequence matching given \p key.
@@ -120,14 +120,14 @@ public:
   const_iterator upper_bound(const key_type& key) const
   {
     return std::upper_bound(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare_t(key_compare()));
+      std::make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: A more efficient  make_pair(lower_bound(...), upper_bound(...))
   std::pair<const_iterator, const_iterator> equal_range(const key_type& key) const
   {
     return std::equal_range(data_.begin(), data_.end(),
-      make_pair(key, mapped_type()), value_compare_t(key_compare()));
+      std::make_pair(key, mapped_type()), value_compare_t(key_compare()));
   }
 
   //: Finds the first matching value in the sequence, or returns end() if no match,
