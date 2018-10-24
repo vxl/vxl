@@ -47,7 +47,7 @@ class vifa_group_pgram : public vifa_group_pgram_params
                    const vifa_group_pgram_params& old_params,
                    double                         angle_range = 180.0
                   );
-  ~vifa_group_pgram();
+  ~vifa_group_pgram() override;
 
   // Index insertion
   void    Index(imp_line_sptr    il);

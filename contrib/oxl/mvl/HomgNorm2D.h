@@ -49,7 +49,7 @@ class HomgNorm2D : public SimilarityMetric
   HomgNorm2D(std::vector<vgl_homg_point_2d<double> > const& points, bool unit_omega = true);
 
 //: Destructor
- ~HomgNorm2D();
+ ~HomgNorm2D() override;
 
   // Computations--------------------------------------------------------------
 

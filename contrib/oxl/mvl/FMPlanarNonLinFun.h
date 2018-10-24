@@ -66,7 +66,7 @@ class FMPlanarNonLinFun : public vnl_least_squares_function
   bool compute(FMatrixPlanar* F);
 
   //: The virtual function from vnl_levenberg_marquardt
-  void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   // Helpers-------------------------------------------------------------------
  private:

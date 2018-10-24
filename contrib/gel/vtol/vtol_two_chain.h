@@ -87,19 +87,19 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_two_chain();
+  ~vtol_two_chain() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_two_chain"); }
+  std::string is_a() const override { return std::string("vtol_two_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vtol_chain::is_class(cls); }
 
   virtual vtol_two_chain * copy_with_arrays(topology_list &verts,
@@ -108,7 +108,7 @@ class vtol_two_chain : public vtol_chain
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const {return TWOCHAIN;}
+  vtol_topology_object_type topology_type() const override {return TWOCHAIN;}
 
  public:
   //: get the direction of the face
@@ -140,12 +140,12 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_two_chain *cast_to_two_chain() const { return this; }
+  const vtol_two_chain *cast_to_two_chain() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a two_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_two_chain *cast_to_two_chain() { return this; }
+  vtol_two_chain *cast_to_two_chain() override { return this; }
 
   //***************************************************************************
   // Status report
@@ -157,7 +157,7 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_face()!=nullptr; }
   bool valid_inferior_type(vtol_face_sptr const& )    const { return true; }
   bool valid_inferior_type(vtol_face_2d_sptr const& ) const { return true; }
@@ -166,7 +166,7 @@ class vtol_two_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
+  bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const override
   { return chain_inf_sup->cast_to_two_chain()!=nullptr; }
   bool valid_chain_type(vtol_two_chain_sptr const& ) const { return true; }
 
@@ -188,13 +188,13 @@ class vtol_two_chain : public vtol_chain
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
 
  public:
   virtual std::vector<vtol_vertex*> *outside_boundary_compute_vertices();
@@ -210,11 +210,11 @@ class vtol_two_chain : public vtol_chain
 
   virtual bool operator==(vtol_two_chain const& other) const;
   inline bool operator!=(const vtol_two_chain &other)const{return !operator==(other);}
-  bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(vsol_spatial_object_2d const& obj) const override; // virtual of vsol_spatial_object_2d
 
-  virtual void print(std::ostream &strm=std::cout) const;
+  void print(std::ostream &strm=std::cout) const override;
   virtual void describe_directions(std::ostream &strm=std::cout, int blanking=0) const;
-  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
 
   virtual bool break_into_connected_components(topology_list &components);
 };

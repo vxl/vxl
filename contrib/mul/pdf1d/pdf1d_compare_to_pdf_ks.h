@@ -21,31 +21,31 @@ class pdf1d_compare_to_pdf_ks : public pdf1d_compare_to_pdf
   pdf1d_compare_to_pdf_ks();
 
   //: Destructor
-  virtual ~pdf1d_compare_to_pdf_ks();
+  ~pdf1d_compare_to_pdf_ks() override;
 
   //: Test whether data came from the given distribution
-  virtual double compare(const double* data, int n, const pdf1d_pdf& pdf);
+  double compare(const double* data, int n, const pdf1d_pdf& pdf) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_compare_to_pdf* clone() const;
+  pdf1d_compare_to_pdf* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // pdf1d_compare_to_pdf_ks_h

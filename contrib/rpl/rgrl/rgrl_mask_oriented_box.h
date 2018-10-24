@@ -44,7 +44,7 @@ class rgrl_mask_oriented_box
                           vnl_matrix<double> const& axes );
 
   //: True if a point is inside the region
-  bool inside( vnl_vector<double> const& pt ) const;
+  bool inside( vnl_vector<double> const& pt ) const override;
 
   //: Set the lengths along each axis
   void set_len( vnl_vector<double> const& len );

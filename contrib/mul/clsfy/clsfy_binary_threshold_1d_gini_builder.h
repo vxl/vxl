@@ -28,10 +28,10 @@ class clsfy_binary_threshold_1d_gini_builder : public clsfy_binary_threshold_1d_
   clsfy_binary_threshold_1d_gini_builder();
 
   // Destructor
-  virtual ~clsfy_binary_threshold_1d_gini_builder();
+  ~clsfy_binary_threshold_1d_gini_builder() override;
 
   //: Create empty model
-  virtual clsfy_classifier_1d* new_classifier() const;
+  clsfy_classifier_1d* new_classifier() const override;
 
 
   //: Build a binary_threshold classifier
@@ -51,25 +51,25 @@ class clsfy_binary_threshold_1d_gini_builder : public clsfy_binary_threshold_1d_
                                              const std::vector<vbl_triple<double,int,int> >& data) const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_builder_1d* clone() const;
+  clsfy_builder_1d* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 

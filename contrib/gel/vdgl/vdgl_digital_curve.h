@@ -42,14 +42,14 @@ class vdgl_digital_curve : public vsol_curve_2d
   // Operators----------------------------------------------------------------
   short order() const;
   // these must be defined as they are virtual in vsol_curve_2d
-  vsol_point_2d_sptr p0() const;
-  vsol_point_2d_sptr p1() const;
-  double length() const;
-  vsol_spatial_object_2d* clone() const;
+  vsol_point_2d_sptr p0() const override;
+  vsol_point_2d_sptr p1() const override;
+  double length() const override;
+  vsol_spatial_object_2d* clone() const override;
 
   // warning: the results of these methods are undefined
-  void set_p0(const vsol_point_2d_sptr &);
-  void set_p1(const vsol_point_2d_sptr &);
+  void set_p0(const vsol_point_2d_sptr &) override;
+  void set_p1(const vsol_point_2d_sptr &) override;
 
   //: Split a digital curve into two pieces at the given point.
   //  If the location is not on the curve, the nearest point which does lie on
@@ -76,22 +76,22 @@ class vdgl_digital_curve : public vsol_curve_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a digital_curve, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vdgl_digital_curve const*cast_to_vdgl_digital_curve()const{return this;}
-  virtual vdgl_digital_curve *cast_to_vdgl_digital_curve() {return this;}
+  vdgl_digital_curve const*cast_to_vdgl_digital_curve()const override{return this;}
+  vdgl_digital_curve *cast_to_vdgl_digital_curve() override {return this;}
 
  private: // has been superseded by is_a()
   //: Return the curve type
-  virtual vsol_curve_2d_type curve_type() const { return vsol_curve_2d::DIGITAL_CURVE; }
+  vsol_curve_2d_type curve_type() const override { return vsol_curve_2d::DIGITAL_CURVE; }
 
  public:
   //: bounding box
-  virtual void compute_bounding_box() const;
+  void compute_bounding_box() const override;
 
   //---------------------------------------------------------------------------
   //: Has `this' the same order interpolation and edgel values as other
   //---------------------------------------------------------------------------
   virtual bool operator==(const vdgl_digital_curve &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same coordinates than `other' ?
@@ -101,10 +101,10 @@ class vdgl_digital_curve : public vsol_curve_2d
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -113,7 +113,7 @@ class vdgl_digital_curve : public vsol_curve_2d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vdgl_digital_curve"); }
+  std::string is_a() const override { return std::string("vdgl_digital_curve"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

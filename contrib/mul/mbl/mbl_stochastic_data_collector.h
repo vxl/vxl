@@ -57,18 +57,18 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   explicit mbl_stochastic_data_collector(unsigned n);
 
   //: Destructor
-  virtual ~mbl_stochastic_data_collector();
+  ~mbl_stochastic_data_collector() override;
 
   //: Clear any stored data
-  virtual void clear();
+  void clear() override;
 
   //: Set number of samples to be stored
   // If not set, the value defaults to 1000.
   // Calling this function implicitly calls clean().
-  virtual void set_n_samples(int n);
+  void set_n_samples(int n) override;
 
   //: Record given value
-  virtual void record(const T& v);
+  void record(const T& v) override;
 
   //: Force recording of this given value
   // This does not increment n_presented()
@@ -81,7 +81,7 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   bool store_next();
 
   //: Return object describing stored data
-  virtual mbl_data_wrapper<T >& data_wrapper();
+  mbl_data_wrapper<T >& data_wrapper() override;
 
   //: Reseed the internal random number generator.
   void  reseed (unsigned long seed);
@@ -93,22 +93,22 @@ class mbl_stochastic_data_collector: public mbl_data_collector<T>
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mbl_data_collector_base* clone() const;
+  mbl_data_collector_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // mbl_stochastic_data_collector_h_

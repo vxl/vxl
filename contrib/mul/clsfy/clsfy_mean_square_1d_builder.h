@@ -24,10 +24,10 @@ class clsfy_mean_square_1d_builder : public clsfy_builder_1d
   clsfy_mean_square_1d_builder();
 
   // Destructor
-  virtual ~clsfy_mean_square_1d_builder();
+  ~clsfy_mean_square_1d_builder() override;
 
   //: Create empty model
-  virtual clsfy_classifier_1d* new_classifier() const;
+  clsfy_classifier_1d* new_classifier() const override;
 
 
   //: Build a binary_threshold classifier
@@ -36,10 +36,10 @@ class clsfy_mean_square_1d_builder : public clsfy_builder_1d
   //  weighting examples appropriately when estimating the misclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
-  virtual double build(clsfy_classifier_1d& classifier,
+  double build(clsfy_classifier_1d& classifier,
                        const vnl_vector<double>& egs,
                        const vnl_vector<double>& wts,
-                       const std::vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const override;
 
   //: Build a mean_square classifier
   // Train classifier, returning weighted error
@@ -47,11 +47,11 @@ class clsfy_mean_square_1d_builder : public clsfy_builder_1d
   //  weighting examples appropriately when estimating the misclassification rate.
   //  Returns weighted sum of error, e.wts, where e_i =0 for correct classifications,
   //  e_i=1 for incorrect.
-  virtual double build(clsfy_classifier_1d& classifier,
+  double build(clsfy_classifier_1d& classifier,
                        vnl_vector<double>& egs0,
                        vnl_vector<double>& wts0,
                        vnl_vector<double>& egs1,
-                       vnl_vector<double>& wts1) const;
+                       vnl_vector<double>& wts1) const override;
 
   //: Train classifier, returning weighted error
   //  Selects parameters of classifier which best separate examples,
@@ -59,30 +59,30 @@ class clsfy_mean_square_1d_builder : public clsfy_builder_1d
   //  data[i] is a triple, {value,class_number,weight}
   //  Returns weighted sum of error.
   //  Note that input "data" must be sorted to use this routine
-  virtual double build_from_sorted_data(clsfy_classifier_1d& classifier,
+  double build_from_sorted_data(clsfy_classifier_1d& classifier,
                                         const vbl_triple<double,int,int> *data,
-                                        const vnl_vector<double>& wts) const;
+                                        const vnl_vector<double>& wts) const override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_builder_1d* clone() const;
+  clsfy_builder_1d* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 //: Binary file stream output operator for class reference

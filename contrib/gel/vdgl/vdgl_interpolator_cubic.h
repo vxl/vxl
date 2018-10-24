@@ -26,35 +26,35 @@ class vdgl_interpolator_cubic : public vdgl_interpolator
   // Constructors/Destructors--------------------------------------------------
 
   vdgl_interpolator_cubic( vdgl_edgel_chain_sptr chain);
-  ~vdgl_interpolator_cubic();
+  ~vdgl_interpolator_cubic() override;
 
   // Operators----------------------------------------------------------------
 
   //: order of interpolation 1=linear, 2 = quadratic, 3 = cubic, ..etc.
-  virtual short order() const {return 3;}
+  short order() const override {return 3;}
 
   //: interpolation 0th degree
-  double get_x(double index);
-  double get_y(double index);
+  double get_x(double index) override;
+  double get_y(double index) override;
 
   //: interpolation 1st degree
-  double get_grad(double index);
-  double get_theta(double index);
-  double get_tangent_angle(double index);
+  double get_grad(double index) override;
+  double get_theta(double index) override;
+  double get_tangent_angle(double index) override;
 
   //: interpolation 2nd degree
-  double get_curvature(double index);
+  double get_curvature(double index) override;
 
   //: integral
-  double get_length();
+  double get_length() override;
 
   //: bounding box
-  double get_min_x();
-  double get_max_x();
-  double get_min_y();
-  double get_max_y();
+  double get_min_x() override;
+  double get_max_x() override;
+  double get_min_y() override;
+  double get_max_y() override;
 
-  virtual vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p );
+  vsol_point_2d_sptr closest_point_on_curve ( vsol_point_2d_sptr p ) override;
   // INTERNALS-----------------------------------------------------------------
  protected:
   // Data Members--------------------------------------------------------------

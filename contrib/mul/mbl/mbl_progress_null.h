@@ -20,19 +20,19 @@ class mbl_progress_null : public mbl_progress
   mbl_progress_null();
 
   //: Destructor
-  ~mbl_progress_null();
+  ~mbl_progress_null() override;
 
   //: Name of the class
   virtual std::string is_a() const;
 
  protected:
-  virtual void on_set_estimated_iterations(const std::string& identifier,
-                                           const int total_iterations);
+  void on_set_estimated_iterations(const std::string& identifier,
+                                           const int total_iterations) override;
 
-  virtual void on_set_progress(const std::string& identifier,
-                               const int progress);
+  void on_set_progress(const std::string& identifier,
+                               const int progress) override;
 
-  virtual void on_end_progress(const std::string& identifier);
+  void on_end_progress(const std::string& identifier) override;
 };
 
 //========================================================================

@@ -37,7 +37,7 @@ class rgrl_matcher_k_nearest
                    rgrl_view const&              current_view,
                    rgrl_transformation const&    current_xform,
                    rgrl_scale const&             /* current_scale */,
-                   rgrl_match_set_sptr const& old_matches = nullptr );
+                   rgrl_match_set_sptr const& old_matches = nullptr ) override;
 
 
   // Defines type-related functions
@@ -61,12 +61,12 @@ class rgrl_matcher_k_nearest
 
   //: This is internal to invert matches function.
   //  It is to restrict the number of nearest neighbors
-  virtual
+  
   void
   add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
                          rgrl_view          const& current_view,
                          nodes_vec_iterator const& begin_iter,
-                         nodes_vec_iterator const& end_iter );
+                         nodes_vec_iterator const& end_iter ) override;
 
  protected:
   unsigned int k_;

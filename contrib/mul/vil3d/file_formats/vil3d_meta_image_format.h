@@ -103,21 +103,21 @@ class vil3d_meta_image_format : public vil3d_file_format
  public:
   vil3d_meta_image_format();
   //: The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vil3d_meta_image_format();
+  ~vil3d_meta_image_format() override;
 
-  virtual vil3d_image_resource_sptr make_input_image(const char *) const;
+  vil3d_image_resource_sptr make_input_image(const char *) const override;
 
   //: Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
-  virtual vil3d_image_resource_sptr make_output_image(const char* filename,
+  vil3d_image_resource_sptr make_output_image(const char* filename,
                                                       unsigned ni,
                                                       unsigned nj,
                                                       unsigned nk,
                                                       unsigned nplanes,
-                                                      vil_pixel_format format) const;
+                                                      vil_pixel_format format) const override;
 
   //: default filename tag for this image.
-  virtual const char * tag() const {return "mhd";}
+  const char * tag() const override {return "mhd";}
 };
 
 // You can't create one of these yourself.
@@ -135,31 +135,31 @@ class vil3d_meta_image: public vil3d_image_resource
    vil3d_meta_image(const vil3d_meta_image_header &header,
                     std::string fname);
 
-  virtual ~vil3d_meta_image();
+  ~vil3d_meta_image() override;
 
   //: Dimensions:  nplanes x ni x nj x nk.
   // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const;
+  unsigned nplanes() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each row.
-  virtual unsigned ni() const;
+  unsigned ni() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each column.
-  virtual unsigned nj() const;
+  unsigned nj() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of slices per image.
-  virtual unsigned nk() const;
+  unsigned nk() const override;
 
   //: Get the current header information
   const vil3d_meta_image_header &header(void) const;
 
   //: Pixel Format.
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const override;
 
   //: Set the size of the each voxel in the i,j,k directions (mm).
   // You can get the voxel sizes via get_properties().
   // \return false if underlying image doesn't store pixel sizes.
-  virtual bool set_voxel_size_mm(float/*i*/,float/*j*/,float/*k*/);
+  bool set_voxel_size_mm(float/*i*/,float/*j*/,float/*k*/) override;
 
   //: Set the offset
   //  \note also sets the voxel size to vx_i, vx_j and vx_k to ensure consistency
@@ -170,9 +170,9 @@ class vil3d_meta_image: public vil3d_image_resource
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+  vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                    unsigned j0, unsigned nj,
-                                                   unsigned k0, unsigned nk) const;
+                                                   unsigned k0, unsigned nk) const override;
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
@@ -180,16 +180,16 @@ class vil3d_meta_image: public vil3d_image_resource
   // \return false if failed, because e.g. resource is read-only,
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
-  virtual bool put_view(const vil3d_image_view_base& im,
-                        unsigned i0, unsigned j0, unsigned k0);
+  bool put_view(const vil3d_image_view_base& im,
+                        unsigned i0, unsigned j0, unsigned k0) override;
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return "meta_image"; }
+  char const* file_format() const override { return "meta_image"; }
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* label, void* property_value = nullptr) const;
+  bool get_property(char const* label, void* property_value = nullptr) const override;
 };
 
 #endif

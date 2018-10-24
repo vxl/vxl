@@ -49,7 +49,7 @@ class PairMatchSet : public MatchSet
   PairMatchSet(const PairMatchSet& that);
   PairMatchSet& operator=(const PairMatchSet& that);
 
-  virtual ~PairMatchSet();
+  ~PairMatchSet() override;
 
   // Data Control--------------------------------------------------------------
   void set_size(unsigned size);

@@ -56,7 +56,7 @@ class rgrl_trans_rad_dis_homo2d
                              vnl_vector<double> const& from_centre,
                              vnl_vector<double> const& to_centre );
 
-  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
+  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 
   //: radial distortion term on From image
   double k1_from() const { return k1_from_; }
@@ -72,19 +72,19 @@ class rgrl_trans_rad_dis_homo2d
 
   //: Inverse map using pseudo-inverse of H_.
   void inv_map( const vnl_vector<double>& to,
-                vnl_vector<double>& from ) const;
+                vnl_vector<double>& from ) const override;
 
   //: is this an invertible transformation?
-  bool is_invertible() const { return false; }
+  bool is_invertible() const override { return false; }
 
   //: Return an inverse transformation of the uncentered transform
-  rgrl_transformation_sptr inverse_transform() const;
+  rgrl_transformation_sptr inverse_transform() const override;
 
   //: Compute jacobian w.r.t. location
-  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
+  void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const override;
 
   //:  transform the transformation for images of different resolution
-  rgrl_transformation_sptr scale_by( double scale ) const;
+  rgrl_transformation_sptr scale_by( double scale ) const override;
 
   //: The H matrix of the transform
   vnl_matrix_fixed<double, 3, 3> const& H() const { return H_; }
@@ -94,29 +94,29 @@ class rgrl_trans_rad_dis_homo2d
   uncenter_H_matrix( ) const;
 
   //: log of determinant of the covariance
-  virtual double
-  log_det_covar() const
+  double
+  log_det_covar() const override
   { return log_det_covar_deficient( 10 ); }
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_rad_dis_homo2d, rgrl_transformation );
 
   // for output UNCENTERED transformation, with the origin as the center.
-  void write(std::ostream& os ) const;
+  void write(std::ostream& os ) const override;
 
   // for input
-  bool read(std::istream& is );
+  bool read(std::istream& is ) override;
 
   //: make a clone copy
-  rgrl_transformation_sptr clone() const;
+  rgrl_transformation_sptr clone() const override;
 
  protected:
   void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to ) const;
+                vnl_vector<double>      & to ) const override;
 
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
-                vnl_vector<double>      & to_dir    ) const;
+                vnl_vector<double>      & to_dir    ) const override;
 
  private:
   vnl_matrix_fixed<double, 3, 3> H_;

@@ -43,7 +43,7 @@ class mfpf_pf_cost : public vnl_cost_function
   vgl_vector_2d<double> v_;
   double ds_,dA_;
  public:
-  virtual ~mfpf_pf_cost() = default;
+  ~mfpf_pf_cost() override = default;
   mfpf_pf_cost(mfpf_point_finder& pf,
                const vimt_image_2d_of<float>& image,
                const vgl_point_2d<double>& p0,
@@ -55,7 +55,7 @@ class mfpf_pf_cost : public vnl_cost_function
       ds_(ds),dA_(dA) {}
 
     //:  Given the parameter vector x, compute the value of f(x).
-  virtual double f(const vnl_vector<double>& params);
+  double f(const vnl_vector<double>& params) override;
 
   void get_pose(const vnl_vector<double>& params,
                 vgl_point_2d<double>& p,

@@ -56,29 +56,29 @@ class clsfy_binary_hyperplane_logit_builder  : public clsfy_binary_hyperplane_ls
   //: Build model from data
   // Return the mean error over the training set.
   // For this classifiers, you must nClasses==1 to indicate a binary classifier
-  virtual double build(clsfy_classifier_base& model,
+  double build(clsfy_classifier_base& model,
                        mbl_data_wrapper<vnl_vector<double> >& inputs,
                        unsigned nClasses,
-                       const std::vector<unsigned> &outputs) const;
+                       const std::vector<unsigned> &outputs) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Create a deep copy.
   // client is responsible for deleting returned object.
-  virtual clsfy_builder_base* clone() const;
+  clsfy_builder_base* clone() const override;
 
-  virtual void b_write(vsl_b_ostream &) const;
-  virtual void b_read(vsl_b_istream &);
+  void b_write(vsl_b_ostream &) const override;
+  void b_read(vsl_b_istream &) override;
 };
 
 #endif // clsfy_binary_hyperplane_logit_builder_h

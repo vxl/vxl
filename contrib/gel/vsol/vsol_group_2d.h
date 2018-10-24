@@ -58,13 +58,13 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: Destructor
   //  The objects of the group are not deleted
   //---------------------------------------------------------------------------
-  virtual ~vsol_group_2d();
+  ~vsol_group_2d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone(void) const;
+  vsol_spatial_object_2d* clone(void) const override;
 
   //***************************************************************************
   // Access
@@ -83,13 +83,13 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Return the real type of a group. It is a SPATIALGROUP
   //---------------------------------------------------------------------------
-  vsol_spatial_object_2d_type spatial_type(void) const;
+  vsol_spatial_object_2d_type spatial_type(void) const override;
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //  REQUIRE: size()>0
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const; // virtual of vsol_spatial_object_2d
+  void compute_bounding_box(void) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Return the number of direct children of the group
@@ -129,14 +129,14 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //: The same behavior than dynamic_cast<>.
   //  Needed because VXL is not compiled with -frtti :-(
   //---------------------------------------------------------------------------
-  virtual const vsol_group_2d *cast_to_group(void) const { return this; }
-  virtual vsol_group_2d *cast_to_group(void) { return this; }
+  const vsol_group_2d *cast_to_group(void) const override { return this; }
+  vsol_group_2d *cast_to_group(void) override { return this; }
 
   //---------------------------------------------------------------------------
   //: Has `this' the same number of elements and as other and equal elements?
   //---------------------------------------------------------------------------
   virtual bool operator==(const vsol_group_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same number of elements and as other and not equal elements?
@@ -146,10 +146,10 @@ class vsol_group_2d : public vsol_spatial_object_2d
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -158,7 +158,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return "vsol_group_2d"; }
+  std::string is_a() const override { return "vsol_group_2d"; }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
@@ -166,7 +166,7 @@ class vsol_group_2d : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  inline void describe(std::ostream &strm, int blanking=0) const
+  inline void describe(std::ostream &strm, int blanking=0) const override
   {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "vsol_group_2d of size " << this->size() << ":\n";

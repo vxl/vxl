@@ -53,25 +53,25 @@ class vil3d_crop_image_resource : public vil3d_image_resource
                             unsigned j0, unsigned nj,
                             unsigned k0, unsigned nk);
 
-  virtual unsigned nplanes() const { return src_->nplanes(); }
-  virtual unsigned ni() const { return ni_; }
-  virtual unsigned nj() const { return nj_; }
-  virtual unsigned nk() const { return nk_; }
+  unsigned nplanes() const override { return src_->nplanes(); }
+  unsigned ni() const override { return ni_; }
+  unsigned nj() const override { return nj_; }
+  unsigned nk() const override { return nk_; }
 
-  virtual enum vil_pixel_format pixel_format() const { return src_->pixel_format(); }
+  enum vil_pixel_format pixel_format() const override { return src_->pixel_format(); }
 
 
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
+  vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned n_i,
                                                    unsigned j0, unsigned n_j,
-                                                   unsigned k0, unsigned n_k) const
+                                                   unsigned k0, unsigned n_k) const override
   {
     if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return nullptr;
     return src_->get_copy_view(i0+i0_, n_i, j0+j0_, n_j, k0+k0_, n_k);
   }
 
-  virtual vil3d_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
+  vil3d_image_view_base_sptr get_view(unsigned i0, unsigned n_i,
                                               unsigned j0, unsigned n_j,
-                                              unsigned k0, unsigned n_k) const
+                                              unsigned k0, unsigned n_k) const override
   {
     if (i0 + n_i > ni() || j0 + n_j > nj() || k0 + n_k > nk()) return nullptr;
     return src_->get_view(i0+i0_, n_i, j0+j0_, n_j, k0+k0_, n_k);
@@ -79,13 +79,13 @@ class vil3d_crop_image_resource : public vil3d_image_resource
 
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil3d_image_view_base& im, unsigned i0, unsigned j0, unsigned k0)
+  bool put_view(const vil3d_image_view_base& im, unsigned i0, unsigned j0, unsigned k0) override
   {
     return src_->put_view(im, i0+i0_, j0+j0_, k0+k0_);
   }
 
   //: Extra property information
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const
+  bool get_property(char const* tag, void* property_value = nullptr) const override
   {
     return src_->get_property(tag, property_value);
   }

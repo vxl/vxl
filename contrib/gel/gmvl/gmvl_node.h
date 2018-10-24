@@ -34,7 +34,7 @@ class gmvl_node : public vbl_ref_count
  public:
   gmvl_node() : type_("gmvl_node"), ref_(-1) {}
   gmvl_node(gmvl_node const& n) : vbl_ref_count(), type_(n.type_), ref_(n.ref_) {}
-  virtual ~gmvl_node() = default;
+  ~gmvl_node() override = default;
 
   // getter
   std::string &type() { return type_; }

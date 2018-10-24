@@ -27,7 +27,7 @@ class mcal_sparse_basis_cost : public mcal_single_basis_cost
   mcal_sparse_basis_cost();
 
   //: Destructor
-  virtual ~mcal_sparse_basis_cost();
+  ~mcal_sparse_basis_cost() override;
 
   //: Weighting for sparseness penalty
   double alpha() const { return alpha_; }
@@ -36,38 +36,38 @@ class mcal_sparse_basis_cost : public mcal_single_basis_cost
   void set_alpha(double a);
 
   //: Returns true since cost can be computed from the variance.
-  virtual bool can_use_variance() const;
+  bool can_use_variance() const override;
 
   //: Compute component of the cost function from given basis vector
   // \param[in] unit_basis   Unit vector defining basis direction
   // \param[in] projections  Projections of the dataset onto this basis vector
-  virtual double cost(const vnl_vector<double>& unit_basis,
-                      const vnl_vector<double>& projections);
+  double cost(const vnl_vector<double>& unit_basis,
+                      const vnl_vector<double>& projections) override;
 
   //: Compute component of the cost function from given basis vector
   // Cost is log(variance) + alpha sum |e_i|.
   // \param[in] unit_basis Unit vector defining basis direction
   // \param[in] variance   Variance of projections of the dataset onto this basis vector
-  virtual double cost_from_variance(const vnl_vector<double>& unit_basis,
-                                    double variance);
+  double cost_from_variance(const vnl_vector<double>& unit_basis,
+                                    double variance) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual  mcal_single_basis_cost*  clone()  const;
+   mcal_single_basis_cost*  clone()  const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: Read initialisation settings from a stream.
   // Parameters:
@@ -77,7 +77,7 @@ class mcal_sparse_basis_cost : public mcal_single_basis_cost
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(std::istream & is);
+  void config_from_stream(std::istream & is) override;
 };
 
 #endif // mcal_sparse_basis_cost_h

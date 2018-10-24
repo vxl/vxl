@@ -61,19 +61,19 @@ class rrel_muset_obj : public rrel_objective
   rrel_muset_obj( rrel_muse_table* table, bool use_sk_refine=true);
 
   //: Destructor.
-  ~rrel_muset_obj();
+  ~rrel_muset_obj() override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter begin, vect_const_iter end,
+  double fcn( vect_const_iter begin, vect_const_iter end,
                       double = 0 /* scale is unused */,
-                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const;
+                      vnl_vector<double>* = nullptr /* param vector is unused */ ) const override;
 
   //: Computes the MUSE estimate and best value of k
   //  \a begin and \a end give the residuals. \a objective is the
@@ -86,15 +86,15 @@ class rrel_muset_obj : public rrel_objective
   //: False.
   //  This MUSE estimator is based on trimmed statistics, and does not
   //  use a scale estimate.
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
     { return false; }
 
   //: True, since MUSE can estimate scale.
   //  \sa rrel_objective::can_estimate_scale.
-  virtual bool can_estimate_scale() const { return true; }
+  bool can_estimate_scale() const override { return true; }
 
   //: Scale estimate.
-  virtual double scale( vect_const_iter res_begin, vect_const_iter res_end ) const;
+  double scale( vect_const_iter res_begin, vect_const_iter res_end ) const override;
 
   //: Set the minimum fraction of the data that are inliers.
   void set_min_inlier_fraction( double min_frac=0.25 )

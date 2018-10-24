@@ -65,13 +65,13 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_face();
+  ~vtol_face() override;
 
   // Accessors
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const { return FACE; }
+  vtol_topology_object_type topology_type() const override { return FACE; }
 
  public:
   virtual vtol_one_chain_sptr get_one_chain(int which = 0);
@@ -91,12 +91,12 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_face *cast_to_face() const { return this; }
+  const vtol_face *cast_to_face() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_face *cast_to_face() { return this; }
+  vtol_face *cast_to_face() override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a 2D face, 0 otherwise
@@ -128,7 +128,7 @@ class vtol_face : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_one_chain()!=nullptr; }
   bool valid_inferior_type(vtol_one_chain_sptr const& ) const { return true; }
   bool valid_superior_type(vtol_two_chain_sptr const& ) const { return true; }
@@ -142,13 +142,13 @@ class vtol_face : public vtol_topology_object
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
 
   virtual std::vector<vtol_vertex*> *outside_boundary_compute_vertices();
   virtual std::vector<vtol_zero_chain*> *outside_boundary_compute_zero_chains();
@@ -178,15 +178,15 @@ class vtol_face : public vtol_topology_object
 
   virtual bool operator==(const vtol_face &other)const;
   inline bool operator!=(const vtol_face &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //: determine bounding box from bounding boxes of underlying edges
-  virtual void compute_bounding_box() const;
+  void compute_bounding_box() const override;
 
-  virtual void print(std::ostream &strm=std::cout) const;
+  void print(std::ostream &strm=std::cout) const override;
 
-  virtual void describe(std::ostream &strm=std::cout,
-                        int blanking=0) const;
+  void describe(std::ostream &strm=std::cout,
+                        int blanking=0) const override;
   //---------------------------------------------------------------------------
   //: Does `this' share an edge with `f' ?
   // Comparison of edge pointers, not geometric values
@@ -200,7 +200,7 @@ class vtol_face : public vtol_topology_object
   virtual bool compare_geometry(const vtol_face &other) const =0;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_face"); }
+  std::string is_a() const override { return std::string("vtol_face"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }

@@ -38,7 +38,7 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   }
 
   //:
-  virtual ~vpyr_top_tmap();
+  ~vpyr_top_tmap() override;
 
   //:
   //  Must be inlined here to circumvent a bug in MSVC.
@@ -50,10 +50,10 @@ class vpyr_top_tmap : public vmap_2_tmap<V,E,F,D>
   }
 
   //:
-  virtual void contraction(const contraction_kernel & arg) ;
+  void contraction(const contraction_kernel & arg) override ;
 
   //:
-  virtual void removal(const removal_kernel & arg) ;
+  void removal(const removal_kernel & arg) override ;
 
   const pyramid_type & pyramid() const
   {

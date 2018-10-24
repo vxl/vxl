@@ -36,22 +36,22 @@ class pdf1d_mixture : public pdf1d_pdf
   pdf1d_mixture& operator=(const pdf1d_mixture&);
 
   //: Destructor
-  virtual ~pdf1d_mixture();
+  ~pdf1d_mixture() override;
 
   //: Probability density at x
-  virtual double operator()(double x) const;
+  double operator()(double x) const override;
 
   //: Log of probability density at x
-  virtual double log_p(double x) const;
+  double log_p(double x) const override;
 
   //: Cumulative Probability (P(x'<x) for x' drawn from the distribution)
-  virtual double cdf(double x) const;
+  double cdf(double x) const override;
 
   //: Return true if cdf() uses an analytic implementation
-  virtual bool cdf_is_analytic() const;
+  bool cdf_is_analytic() const override;
 
   //: Gradient of PDF at x
-  virtual double gradient(double x, double& p) const;
+  double gradient(double x, double& p) const override;
 
   //: Not Yet Implemented
   // Compute nearest point to x which has a density above a threshold
@@ -59,7 +59,7 @@ class pdf1d_mixture : public pdf1d_pdf
   //  (typically up the gradient) until log_p(x)>=log_p_min.
   // \param x This may be modified to the nearest plausible position.
   // \param log_p_min lower threshold for log_p(x)
-  virtual double nearest_plausible(double x, double log_p_min) const;
+  double nearest_plausible(double x, double log_p_min) const override;
 
   //: Initialise to use n components of type comp_type
   //  Clones taken by comp_type
@@ -67,7 +67,7 @@ class pdf1d_mixture : public pdf1d_pdf
 
   //: Return instance object for this PDF
   //  Object is created on heap. Caller responsible for deletion.
-  virtual pdf1d_sampler * new_sampler() const;
+  pdf1d_sampler * new_sampler() const override;
 
   //: Number of components in mixture
   unsigned n_components() const { return component_.size(); }
@@ -115,28 +115,28 @@ class pdf1d_mixture : public pdf1d_pdf
   //: Return true if the object represents a valid PDF.
   // This will return false, if n_dims() is 0, for example just ofter
   // default construction.
-  virtual bool is_valid_pdf() const;
+  bool is_valid_pdf() const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_pdf* clone() const;
+  pdf1d_pdf* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // pdf1d_mixture_h_

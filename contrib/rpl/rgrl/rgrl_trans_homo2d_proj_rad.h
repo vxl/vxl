@@ -59,30 +59,30 @@ class rgrl_trans_homo2d_proj_rad
                               vnl_vector<double> const& from_centre,
                               vnl_vector<double> const& to_centre );
 
-  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
+  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 
   //: Compute jacobian w.r.t. location
-  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
+  void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const override;
 
   //:  transform the transformation for images of different resolution
-  rgrl_transformation_sptr scale_by( double scale ) const;
+  rgrl_transformation_sptr scale_by( double scale ) const override;
 
   //: log of determinant of the covariance
-  virtual double
-  log_det_covar() const
+  double
+  log_det_covar() const override
   { return log_det_covar_deficient( 8+camera_dof_ ); }
 
   //: Defines type-related functions
   rgrl_type_macro( rgrl_trans_homo2d_proj_rad, rgrl_transformation );
 
   //: for output UNCENTERED transformation, with the origin as the center.
-  void write(std::ostream& os ) const;
+  void write(std::ostream& os ) const override;
 
   //: for input
-  bool read(std::istream& is );
+  bool read(std::istream& is ) override;
 
   //: make a clone copy
-  rgrl_transformation_sptr clone() const;
+  rgrl_transformation_sptr clone() const override;
 
   //: The scaling and rotation component of the transform
   vnl_matrix_fixed<double, 3, 3> H() const;
@@ -98,11 +98,11 @@ class rgrl_trans_homo2d_proj_rad
 
  protected:
   void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to  ) const;
+                vnl_vector<double>      & to  ) const override;
 
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
-                vnl_vector<double>      & to_dir  ) const;
+                vnl_vector<double>      & to_dir  ) const override;
 
   void set_up_rad_k(std::vector<double> const & rad_k);
 };

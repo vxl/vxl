@@ -29,15 +29,15 @@ class clsfy_binary_hyperplane : public clsfy_classifier_base
 
   //: Find the posterior probability of the input being in the positive class.
   // The result is outputs(0)
-  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
+  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
 
   //: Classify the input vector.
   // Returns a number between 0 and nClasses-1 inclusive to represent the most likely class
-  virtual unsigned classify(const vnl_vector<double> &input) const;
+  unsigned classify(const vnl_vector<double> &input) const override;
 
   //: Log likelihood of being in the positive class.
   // Class probability = 1 / (1+exp(-log_l))
-  virtual double log_l(const vnl_vector<double> &input) const;
+  double log_l(const vnl_vector<double> &input) const override;
 
   //: Set the position of the hyperplane.
   // The object will take and maintain its own deep copy of the data.
@@ -52,34 +52,34 @@ class clsfy_binary_hyperplane : public clsfy_classifier_base
   double bias() const { return bias_; }
 
   //: The dimensionality of input vectors.
-  virtual unsigned n_dims() const { return weights_.size();}
+  unsigned n_dims() const override { return weights_.size();}
 
   //: The number of possible output classes.
   // 1 indicates a binary classifier
-  virtual unsigned n_classes() const { return 1;}
+  unsigned n_classes() const override { return 1;}
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to a binary File Stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Create a deep copy.
   // Client is responsible for deleting returned object.
-  virtual clsfy_classifier_base* clone() const
+  clsfy_classifier_base* clone() const override
   { return new clsfy_binary_hyperplane(*this); }
 
   //: Load the class from a Binary File Stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // clsfy_binary_hyperplane_bin_h_

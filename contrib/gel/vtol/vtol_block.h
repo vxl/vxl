@@ -81,16 +81,16 @@ class vtol_block : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_block();
+  ~vtol_block() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_block"); }
+  std::string is_a() const override { return std::string("vtol_block"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
@@ -99,7 +99,7 @@ class vtol_block : public vtol_topology_object
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const { return BLOCK; }
+  vtol_topology_object_type topology_type() const override { return BLOCK; }
 
  public:
   virtual vtol_two_chain_sptr get_boundary_cycle();
@@ -111,12 +111,12 @@ class vtol_block : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_block *cast_to_block() const { return this; }
+  const vtol_block *cast_to_block() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a block, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_block *cast_to_block() { return this; }
+  vtol_block *cast_to_block() override { return this; }
 
   //***************************************************************************
   // Status report
@@ -128,7 +128,7 @@ class vtol_block : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_two_chain()!=nullptr; }
   bool valid_inferior_type(vtol_two_chain_sptr const& ) const { return true; }
 
@@ -143,13 +143,13 @@ class vtol_block : public vtol_topology_object
   // \warning these methods should not be used by clients
   // The returned pointers must be deleted after use.
 
-  virtual std::vector<vtol_vertex *> *compute_vertices();
-  virtual std::vector<vtol_edge *> *compute_edges();
-  virtual std::vector<vtol_zero_chain *> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain *> *compute_one_chains();
-  virtual std::vector<vtol_face *> *compute_faces();
-  virtual std::vector<vtol_two_chain *> *compute_two_chains();
-  virtual std::vector<vtol_block *> *compute_blocks();
+  std::vector<vtol_vertex *> *compute_vertices() override;
+  std::vector<vtol_edge *> *compute_edges() override;
+  std::vector<vtol_zero_chain *> *compute_zero_chains() override;
+  std::vector<vtol_one_chain *> *compute_one_chains() override;
+  std::vector<vtol_face *> *compute_faces() override;
+  std::vector<vtol_two_chain *> *compute_two_chains() override;
+  std::vector<vtol_block *> *compute_blocks() override;
 
   virtual std::vector<vtol_vertex *> *outside_boundary_compute_vertices();
   virtual std::vector<vtol_zero_chain *> *outside_boundary_compute_zero_chains();
@@ -167,12 +167,12 @@ class vtol_block : public vtol_topology_object
   //  virtual void update();
   virtual bool operator==(const vtol_block &other) const;
   inline bool operator!=(const vtol_block &other)const{return !operator==(other);}
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
   //: Printing Functions
-  virtual void print(std::ostream &strm=std::cout) const;
-  virtual void describe(std::ostream &strm=std::cout,
-                        int blanking=0) const;
+  void print(std::ostream &strm=std::cout) const override;
+  void describe(std::ostream &strm=std::cout,
+                        int blanking=0) const override;
 };
 
 #endif // vtol_block_h_

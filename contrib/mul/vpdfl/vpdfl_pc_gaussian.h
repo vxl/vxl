@@ -52,7 +52,7 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
   vpdfl_pc_gaussian();
 
   //: Destructor
-  virtual ~vpdfl_pc_gaussian();
+  ~vpdfl_pc_gaussian() override;
 
   //: Number of principal components
   // i.e. the number of dimensions to have full Covariance (i.e. elliptical shape)
@@ -88,9 +88,9 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
   // Turn off assertions to remove error checking.
   // This function takes a fully specified set of Eigenvectors and Eigenvalues, and truncates
   // the principal space as defined in partition_chooser() which must not be null.
-  virtual void set(const vnl_vector<double>& mean,
+  void set(const vnl_vector<double>& mean,
                    const vnl_matrix<double>& evecs,
-                   const vnl_vector<double>& evals);
+                   const vnl_vector<double>& evals) override;
 
   //: log of normalisation constant for Gaussian
   double log_k_principal() const { return log_k_principal_; }
@@ -106,30 +106,30 @@ class vpdfl_pc_gaussian : public vpdfl_gaussian
   // You could use vpdfl_gaussian::log_p() which would give the same answer,
   // but this method, only rotates into the principal components, not the entire rotated space,
   // so saving considerable time.
-  double log_p(const vnl_vector<double>& x) const;
+  double log_p(const vnl_vector<double>& x) const override;
 
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_pdf_base* clone() const;
+  vpdfl_pdf_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 //=======================================================================
 

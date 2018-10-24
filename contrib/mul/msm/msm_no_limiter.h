@@ -17,35 +17,35 @@ class msm_no_limiter : public msm_param_limiter
  public:
   msm_no_limiter();
 
-  virtual ~msm_no_limiter() = default;
+  ~msm_no_limiter() override = default;
 
   //: Define variance on each parameter. Does nothing.
-  virtual void set_param_var(const vnl_vector<double>& v);
+  void set_param_var(const vnl_vector<double>& v) override;
 
   //: Set the limits so that a given proportion pass
   //  Does nothing.
-  virtual void set_acceptance(double prop, unsigned n_modes=0);
+  void set_acceptance(double prop, unsigned n_modes=0) override;
 
   //: Apply limit to parameter vector b. Does nothing.
-  virtual void apply_limit(vnl_vector<double>& b) const;
+  void apply_limit(vnl_vector<double>& b) const override;
 
   //: Define number of SDs to limit at
   void set_n_sds(double n_sds);
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual msm_param_limiter* clone() const;
+  msm_param_limiter* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // msm_no_limiter_h_

@@ -16,11 +16,11 @@ class HMatrix1DCompute3Point : public HMatrix1DCompute
 {
  public:
   HMatrix1DCompute3Point(void);
-  ~HMatrix1DCompute3Point();
+  ~HMatrix1DCompute3Point() override;
  protected:
   bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&,
                          const std::vector<vgl_homg_point_1d<double> >&,
-                         HMatrix1D *);
+                         HMatrix1D *) override;
 };
 
 #endif // HMatrix1DCompute3Point_h_

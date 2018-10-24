@@ -53,21 +53,21 @@ public:
   mfpf_region_about_pt();
 
   //: Destructor
-  virtual ~mfpf_region_about_pt();
+  ~mfpf_region_about_pt() override;
 
   //: Returns true as the region is centred on an input point
-  virtual bool is_centred_on_pt() const;
+  bool is_centred_on_pt() const override;
 
   //: Returns index of reference point on which the region is centred
-  virtual unsigned ref_point_index() const;
+  unsigned ref_point_index() const override;
 
   //: Returns original index of reference point on which the region is centred
-  virtual unsigned orig_ref_point_index() const;
+  unsigned orig_ref_point_index() const override;
 
   //: Replace each point index i with new_index[i]
   //  Allows for re-numbering of the points used.
   //  Returns true if successful.
-  virtual bool replace_index(const std::vector<unsigned>& new_index);
+  bool replace_index(const std::vector<unsigned>& new_index) override;
 
   //: Index of point on which region is centred
   unsigned i0() const { return i0_; }
@@ -94,39 +94,39 @@ public:
   std::string form() const { return form_; }
 
   //: Returns reference point for region, pts[i0()]
-  virtual vgl_point_2d<double> get_ref_point(
-             const std::vector<vgl_point_2d<double> >& pts) const;
+  vgl_point_2d<double> get_ref_point(
+             const std::vector<vgl_point_2d<double> >& pts) const override;
 
   //: Defines a region centred on a point
-  virtual mfpf_region_form set_up(
-             const std::vector<vgl_point_2d<double> >& pts);
+  mfpf_region_form set_up(
+             const std::vector<vgl_point_2d<double> >& pts) override;
 
   //: Defines a region centred on a point
   //  The aspect ratio of the region will be the same as that
   //  from the last call to set_up.
-  virtual mfpf_region_form get_region(
-                const std::vector<vgl_point_2d<double> >& pts) const;
+  mfpf_region_form get_region(
+                const std::vector<vgl_point_2d<double> >& pts) const override;
 
   //: Initialise from a stream
-  virtual bool set_from_stream(std::istream &is);
+  bool set_from_stream(std::istream &is) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mfpf_region_definer* clone() const;
+  mfpf_region_definer* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif

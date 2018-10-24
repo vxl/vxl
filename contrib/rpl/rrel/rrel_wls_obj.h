@@ -24,7 +24,7 @@ public:
   rrel_wls_obj() = default;
 
   //: Destructor.
-  virtual ~rrel_wls_obj() = default;
+  ~rrel_wls_obj() override = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   // This version is used for heteroscedastic data, where each

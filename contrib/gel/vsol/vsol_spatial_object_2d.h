@@ -81,7 +81,7 @@ class vsol_spatial_object_2d : public vsol_spatial_object
   static const float eps;
 
   // Constructors/Destructors--------------------------------------------------
-  virtual ~vsol_spatial_object_2d();
+  ~vsol_spatial_object_2d() override;
 
  protected:
   //: constructor initializes basic vsol_spatial_object_2d attributes.

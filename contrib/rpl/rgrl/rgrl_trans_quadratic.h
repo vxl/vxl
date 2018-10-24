@@ -65,7 +65,7 @@ class rgrl_trans_quadratic
                         vnl_vector<double> const& to_centre );
 
 
-  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const;
+  vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p  ) const override;
 
   //:  Provide the covariance matrix of the estimate (scale is factored in)
   //
@@ -87,37 +87,37 @@ class rgrl_trans_quadratic
   vnl_vector<double> const& t() const;
 
   //:  Inverse map with an initial guess
-  virtual void inv_map( const vnl_vector<double>& to,
+  void inv_map( const vnl_vector<double>& to,
                         bool initialize_next,
                         const vnl_vector<double>& to_delta,
                         vnl_vector<double>& from,
-                        vnl_vector<double>& from_next_est) const;
+                        vnl_vector<double>& from_next_est) const override;
 
   //: Compute jacobian w.r.t. location
-  virtual void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const;
+  void jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const override;
 
   //:  transform the transformation for images of different resolution
-  virtual rgrl_transformation_sptr scale_by( double scale ) const;
+  rgrl_transformation_sptr scale_by( double scale ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_trans_quadratic, rgrl_transformation );
 
   //: Output UNCENTERED transformation, with the origin as the center.
-  void write(std::ostream& os ) const;
+  void write(std::ostream& os ) const override;
 
   // for input
-  bool read(std::istream& is );
+  bool read(std::istream& is ) override;
 
   //: make a clone copy
-  rgrl_transformation_sptr clone() const;
+  rgrl_transformation_sptr clone() const override;
 
  protected:
   void map_loc( vnl_vector<double> const& from,
-                vnl_vector<double>      & to ) const;
+                vnl_vector<double>      & to ) const override;
 
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
-                vnl_vector<double>      & to_dir    ) const;
+                vnl_vector<double>      & to_dir    ) const override;
  private:
   //: Return the vector of 2nd order terms of p = [x y]^t
   vnl_vector<double> higher_order_terms(vnl_vector<double> p) const;
@@ -129,8 +129,8 @@ class rgrl_trans_quadratic
   vnl_vector<double> from_centre_;
 
   // TODO - pure virtual functions of rgrl_transformation
-  virtual void inv_map(vnl_vector<double> const&, vnl_vector<double>&) const;
-  virtual rgrl_transformation_sptr inverse_transform() const;
+  void inv_map(vnl_vector<double> const&, vnl_vector<double>&) const override;
+  rgrl_transformation_sptr inverse_transform() const override;
 };
 
 #endif

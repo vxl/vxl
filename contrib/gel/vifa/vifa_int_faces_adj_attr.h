@@ -85,13 +85,13 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
                           float                     junk_area_percentage  =  0.2
                          );
 
-  virtual iface_list&    GetFaces();
+  iface_list&    GetFaces() override;
   iface_list*        GetFaceList();
 
-  virtual bool  ComputeAttributes();
-  virtual bool  GetAttributes(std::vector<float>&  attrs);
+  bool  ComputeAttributes() override;
+  bool  GetAttributes(std::vector<float>&  attrs) override;
   static  void  GetAttributeNames(std::vector<std::string>&  names);
-  virtual bool  GetNativeAttributes(std::vector<float>&  attrs);
+  bool  GetNativeAttributes(std::vector<float>&  attrs) override;
 
   vtol_intensity_face_sptr  GetSeed() { return seed_; }
   void                      SetSeed(vtol_intensity_face_sptr  seed);
@@ -119,7 +119,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   float  GetMinRatioAttr(int  attr_index);
 
  protected:
-  virtual void  init();
+  void  init() override;
   bool  add_unique_face(iface_list&               facelist,
                         vtol_intensity_face_sptr  face,
                         int                       size_filter);

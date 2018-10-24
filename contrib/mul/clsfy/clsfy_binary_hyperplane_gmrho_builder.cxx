@@ -52,10 +52,10 @@ namespace clsfy_binary_hyperplane_gmrho_builder_helpers
         void set_sigma(double sigma);
 
         //:  The main function.  Given the vector of weights parameters vector , compute the value of f(x).
-        virtual double f(vnl_vector<double> const& w);
+        double f(vnl_vector<double> const& w) override;
 
         //:  Calculate the gradient of f at parameter vector x.
-        virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
+        void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient) override;
     };
 
     //: functor to accumulate gradient contributions for given training example

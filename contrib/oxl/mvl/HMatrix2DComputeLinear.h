@@ -24,11 +24,11 @@ class HMatrix2DComputeLinear : public HMatrix2DCompute
  protected:
   bool compute_p(PointArray const&,
                  PointArray const&,
-                 HMatrix2D* H);
+                 HMatrix2D* H) override;
 
  public:
   HMatrix2DComputeLinear(bool allow_ideal_points = false);
-  int minimum_number_of_correspondences() const { return 4; }
+  int minimum_number_of_correspondences() const override { return 4; }
 };
 
 #endif // _HMatrix2DComputeLinear_h

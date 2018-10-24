@@ -34,9 +34,9 @@ class vsol_orient_box_3d : public vsol_volume_3d
 
   vsol_orient_box_3d(vsol_orient_box_3d const& b) = default;
 
-  ~vsol_orient_box_3d() = default;
+  ~vsol_orient_box_3d() override = default;
 
-  virtual vsol_spatial_object_3d* clone(void) const {return new vsol_orient_box_3d(*this); }
+  vsol_spatial_object_3d* clone(void) const override {return new vsol_orient_box_3d(*this); }
 
   // accessors
   // these min and max points belong to the bounding box
@@ -52,21 +52,21 @@ class vsol_orient_box_3d : public vsol_volume_3d
   double width() const { return orient_box_.width(); }
   double height() const { return orient_box_.height(); }
   double depth() const { return orient_box_.depth(); }
-  double volume() const { return width() * height() * depth(); }
+  double volume() const override { return width() * height() * depth(); }
 
   //---------------------------------------------------------------------------
   //: Is the point `p' inside `this' volume ?
   //---------------------------------------------------------------------------
-  bool in(vsol_point_3d_sptr const& p) const;
+  bool in(vsol_point_3d_sptr const& p) const override;
 
   //: enlarge the bounding box by adding the point (x,y,z) & taking convex hull
   void add_point(double x, double y, double z);
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_orient_box_3d"); }
+  std::string is_a() const override { return std::string("vsol_orient_box_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
+  bool is_class(const std::string& cls) const override { return cls==is_a(); }
 };
 
 

@@ -37,40 +37,40 @@ class clsfy_random_classifier : public clsfy_classifier_base
   clsfy_random_classifier();
 
   // Destructor
-  virtual ~clsfy_random_classifier() = default;
+  ~clsfy_random_classifier() override = default;
 
   //: Return the probability the input being in each class.
   // output(i) i<nClasses, contains the probability that the input is in class i
-  virtual void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const;
+  void class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const override;
 
   //: Log likelihood of being in class (binary classifiers only)
   // class probability = 1 / (1+exp(-log_l))
   // Operation of this method is undefined for multiclass classifiers
-  virtual double log_l(const vnl_vector<double> &input) const;
+  double log_l(const vnl_vector<double> &input) const override;
 
   //: The number of possible output classes.
-  virtual unsigned n_classes() const;
+  unsigned n_classes() const override;
 
   //: The dimensionality of input vectors.
-  virtual unsigned n_dims() const;
+  unsigned n_dims() const override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_classifier_base* clone() const;
+  clsfy_classifier_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: The probabilities of returning a value in each class.
   const std::vector<double> & probs() const;

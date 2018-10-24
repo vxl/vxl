@@ -39,10 +39,10 @@ class rrel_tukey_obj : public rrel_m_est_obj
   rrel_tukey_obj( double B );
 
   //: Destructor.
-  virtual ~rrel_tukey_obj();
+  ~rrel_tukey_obj() override;
 
   //: The robust loss function for the M-estimator.
-  virtual double rho( double u ) const;
+  double rho( double u ) const override;
 
   //: The robust loss function for the M-estimator.
   //  Overriding the overloaded version rho(u) hides the superclass'
@@ -54,16 +54,16 @@ class rrel_tukey_obj : public rrel_m_est_obj
     { return rrel_m_est_obj::rho(r, s); }
 
   //: The weight of the residual.
-  virtual double wgt( double u ) const;
+  double wgt( double u ) const override;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Overriding the overloaded version wgt(u) hides the  superclass'
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \sa rrel_wls_obj::wgt()
-  virtual void wgt( vect_const_iter res_begin, vect_const_iter res_end,
+  void wgt( vect_const_iter res_begin, vect_const_iter res_end,
                     vect_const_iter scale_begin,
-                    vect_iter wgt_begin ) const
+                    vect_iter wgt_begin ) const override
     { rrel_m_est_obj::wgt(res_begin, res_end, scale_begin, wgt_begin); }
 
   //: Computes the weights for homoscedastic residuals.
@@ -71,9 +71,9 @@ class rrel_tukey_obj : public rrel_m_est_obj
   //  implementation of this version of wgt(). This implementation simply
   //  calls the superclass' version of the same routine.
   //  \sa rrel_wls_obj::wgt()
-  virtual void wgt( vect_const_iter begin, vect_const_iter end,
+  void wgt( vect_const_iter begin, vect_const_iter end,
                     double scale,
-                    vect_iter wgt_begin ) const
+                    vect_iter wgt_begin ) const override
     { rrel_m_est_obj::wgt(begin, end, scale, wgt_begin); }
 
   //: The weight of the residual.

@@ -36,20 +36,20 @@ class vimt_vil_v2i_format: public vil_file_format
  public:
   vimt_vil_v2i_format() = default;
   //: The destructor must be virtual so that the memory chunk is destroyed.
-  virtual ~vimt_vil_v2i_format() = default;
+  ~vimt_vil_v2i_format() override = default;
 
-  virtual vil_image_resource_sptr make_input_image(vil_stream* vs);
+  vil_image_resource_sptr make_input_image(vil_stream* vs) override;
 
   //: Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
-  virtual vil_image_resource_sptr make_output_image(vil_stream* vs,
+  vil_image_resource_sptr make_output_image(vil_stream* vs,
                                                     unsigned ni,
                                                     unsigned nj,
                                                     unsigned nplanes,
-                                                    enum vil_pixel_format);
+                                                    enum vil_pixel_format) override;
 
   //: default filename tag for this image.
-  virtual const char * tag() const {return "v2i";}
+  const char * tag() const override {return "v2i";}
 };
 
 
@@ -78,20 +78,20 @@ class vimt_vil_v2i_image: public vil_image_resource
                      unsigned nplanes, vil_pixel_format format);
 
  public:
-  virtual ~vimt_vil_v2i_image();
+  ~vimt_vil_v2i_image() override;
 
   //: Dimensions:  nplanes x ni x nj.
   // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const;
+  unsigned nplanes() const override;
   //: Dimensions:  nplanes x ni x nj.
   // The number of pixels in each row.
-  virtual unsigned ni() const;
+  unsigned ni() const override;
   //: Dimensions:  nplanes x ni x nj.
   // The number of pixels in each column.
-  virtual unsigned nj() const;
+  unsigned nj() const override;
 
   //: Pixel Format.
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const override;
 
   //: Set the size of the each pixel in the i,j directions.
   void set_pixel_size(float i, float j);
@@ -107,15 +107,15 @@ class vimt_vil_v2i_image: public vil_image_resource
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
-                                            unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_view(unsigned i0, unsigned ni,
+                                            unsigned j0, unsigned nj) const override;
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
@@ -123,16 +123,16 @@ class vimt_vil_v2i_image: public vil_image_resource
   // \return false if failed, because e.g. resource is read-only,
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
-  virtual bool put_view(const vil_image_view_base& im,
-                        unsigned i0, unsigned j0);
+  bool put_view(const vil_image_view_base& im,
+                        unsigned i0, unsigned j0) override;
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return "v2i"; }
+  char const* file_format() const override { return "v2i"; }
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* label, void* property_value = nullptr) const;
+  bool get_property(char const* label, void* property_value = nullptr) const override;
 };
 
 #endif

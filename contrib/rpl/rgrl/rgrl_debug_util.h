@@ -16,12 +16,12 @@
 class rgrl_debug_feature_iteration_print: public rgrl_command
 {
  public:
-  void execute(rgrl_object* caller, const rgrl_event & event )
+  void execute(rgrl_object* caller, const rgrl_event & event ) override
   {
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event );
+  void execute(const rgrl_object* caller, const rgrl_event & event ) override;
 };
 
 
@@ -40,12 +40,12 @@ class rgrl_debug_feature_iteration_save_matches: public rgrl_command
                                              std::string  prefix,
                                              const rgrl_mask_sptr& from_roi = nullptr );
 
-  void execute(rgrl_object* caller, const rgrl_event & event )
+  void execute(rgrl_object* caller, const rgrl_event & event ) override
   {
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & event );
+  void execute(const rgrl_object* caller, const rgrl_event & event ) override;
 };
 
 

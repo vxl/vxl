@@ -68,19 +68,19 @@ class vtol_intensity_face : public vtol_face_2d
   vtol_intensity_face(vtol_intensity_face_sptr const& iface);
   vtol_intensity_face(vtol_face_2d_sptr const& face, int npts, float const* xp, float const* yp,
                       unsigned short const* pix);
-  ~vtol_intensity_face();
+  ~vtol_intensity_face() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_intensity_face"); }
+  std::string is_a() const override { return std::string("vtol_intensity_face"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vtol_face_2d::is_class(cls); }
 
  private:
@@ -89,8 +89,8 @@ class vtol_intensity_face : public vtol_face_2d
 
   // MPP 5/9/2003
   // Added API consistent w/ overloaded vtol method
-  virtual vtol_topology_object::vtol_topology_object_type
-  topology_type() const { return GetTopologyType(); }
+  vtol_topology_object::vtol_topology_object_type
+  topology_type() const override { return GetTopologyType(); }
 
  public:
   //***************************************************************************
@@ -100,12 +100,12 @@ class vtol_intensity_face : public vtol_face_2d
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_intensity_face* cast_to_intensity_face() const { return this; }
+  const vtol_intensity_face* cast_to_intensity_face() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is an intensity face, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_intensity_face* cast_to_intensity_face() { return this; }
+  vtol_intensity_face* cast_to_intensity_face() override { return this; }
 
   virtual vdgl_digital_region* cast_to_digital_region() const {return region_;}
   virtual vdgl_digital_region* cast_to_digital_region() {return region_;}

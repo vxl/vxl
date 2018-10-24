@@ -40,7 +40,7 @@ struct osl_topology_base : public vbl_ref_count
     : vbl_ref_count(), id(x.id), stash_head(x.stash_head) {}
   int id;
   osl_topology_base();
-  ~osl_topology_base();
+  ~osl_topology_base() override;
   void SetId(int );
   int GetId() const;
 

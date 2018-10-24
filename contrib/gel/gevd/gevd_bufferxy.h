@@ -57,7 +57,7 @@ class gevd_bufferxy : public gevd_memory_mixin
   gevd_bufferxy(int X, int Y, int B, void* memptr);
   gevd_bufferxy(vil1_image const &img);
   gevd_bufferxy(vil_image_resource_sptr const& img);
-  ~gevd_bufferxy();
+  ~gevd_bufferxy() override;
   gevd_bufferxy(gevd_bufferxy const&);
 
   // ACCESS ROUTINES FOR DIMENSIONS

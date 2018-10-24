@@ -37,7 +37,7 @@ class vtol_topology_cache : public vul_timestamp
   //: private constructor
   vtol_topology_cache(vtol_topology_object* to_be_cached);
   //: private destructor
-  ~vtol_topology_cache();
+  ~vtol_topology_cache() override;
 
   //accessors
 

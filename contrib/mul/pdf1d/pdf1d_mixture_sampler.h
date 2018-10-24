@@ -37,30 +37,30 @@ class pdf1d_mixture_sampler : public pdf1d_sampler
   pdf1d_mixture_sampler& operator=(const pdf1d_mixture_sampler&);
 
   //: Destructor
-  virtual ~pdf1d_mixture_sampler();
+  ~pdf1d_mixture_sampler() override;
 
   //: Set model for which this is an instance
-  virtual void set_model(const pdf1d_pdf&);
+  void set_model(const pdf1d_pdf&) override;
 
   const pdf1d_mixture& mixture() const;
 
   //: Draw random sample from distribution
-  virtual double sample();
+  double sample() override;
 
   //: Reseeds the static random number generator (one per derived class)
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_sampler* clone() const;
+  pdf1d_sampler* clone() const override;
 };
 
 #endif // pdf1d_mixture_sampler_h_

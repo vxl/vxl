@@ -89,26 +89,26 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_one_chain();
+  ~vtol_one_chain() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_one_chain"); }
+  std::string is_a() const override { return std::string("vtol_one_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const
+  bool is_class(const std::string& cls) const override
   { return cls==is_a() || vtol_chain::is_class(cls); }
 
   // Access methods
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const {return ONECHAIN;}
+  vtol_topology_object_type topology_type() const override {return ONECHAIN;}
 
  public:
   virtual signed char direction(vtol_edge const& e) const;
@@ -120,12 +120,12 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_one_chain *cast_to_one_chain() const { return this; }
+  const vtol_one_chain *cast_to_one_chain() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a one_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_one_chain *cast_to_one_chain() { return this; }
+  vtol_one_chain *cast_to_one_chain() override { return this; }
 
   //***************************************************************************
   // Status report
@@ -137,7 +137,7 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_edge() != nullptr; }
   bool valid_inferior_type(vtol_edge_sptr const& )    const { return true; }
   bool valid_inferior_type(vtol_edge_2d_sptr const& ) const { return true; }
@@ -147,7 +147,7 @@ class vtol_one_chain : public vtol_chain
   //---------------------------------------------------------------------------
   //: Is `chain_inf_sup' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const
+  bool valid_chain_type(vtol_chain_sptr chain_inf_sup) const override
   { return chain_inf_sup->cast_to_one_chain() != nullptr; }
   bool valid_chain_type(vtol_one_chain_sptr const& ) const { return true; }
 
@@ -169,7 +169,7 @@ class vtol_one_chain : public vtol_chain
   virtual vtol_one_chain * copy_with_arrays(topology_list &verts,
                                             topology_list &edges) const;
 
-  virtual void compute_bounding_box() const; //A local implementation
+  void compute_bounding_box() const override; //A local implementation
 
   virtual vtol_edge_sptr edge(int i) const;
   int num_edges() const { return numinf(); }
@@ -188,23 +188,23 @@ class vtol_one_chain : public vtol_chain
 
   virtual bool operator==(vtol_one_chain const& other) const;
   inline bool operator!=(const vtol_one_chain &other)const{return !operator==(other);}
-  bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(vsol_spatial_object_2d const& obj) const override; // virtual of vsol_spatial_object_2d
 
-  virtual void print(std::ostream &strm=std::cout) const;
+  void print(std::ostream &strm=std::cout) const override;
   virtual void describe_directions(std::ostream &strm=std::cout, int blanking=0) const;
-  virtual void describe(std::ostream &strm=std::cout, int blanking=0) const;
+  void describe(std::ostream &strm=std::cout, int blanking=0) const override;
 
  protected:
   // \warning clients should not use these methods
   // The returned pointers must be deleted after use.
 
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
 
  public:
   virtual std::vector<vtol_vertex*> *outside_boundary_compute_vertices();

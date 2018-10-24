@@ -31,28 +31,28 @@ public:
                     std::vector< vnl_vector<double> >  to_pts );
 
   //: Destructor.
-  virtual ~rrel_shift2d_est();
+  ~rrel_shift2d_est() override;
 
   //: Total number of correspondences.
-  unsigned int num_samples( ) const;
+  unsigned int num_samples( ) const override;
 
   //: The degrees of freedom in the residual.  Each coordinate has
   // Gaussian error, so the Euclidean distance residual has 2 degrees
   // of freedom.
-  unsigned int residual_dof() const { return 2; }
+  unsigned int residual_dof() const override { return 2; }
 
   //: Generate a parameter estimate from a minimal sample.
   bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const;
+                             vnl_vector<double>& params ) const override;
 
   //: Compute unsigned fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const override;
 
   //: Weighted least squares parameter estimate.  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const;
+                                   const std::vector<double>* weights=nullptr ) const override;
 
 protected:
   std::vector< vnl_vector< double > > del_pts_;

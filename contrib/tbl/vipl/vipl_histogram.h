@@ -112,13 +112,13 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
       {
         this->put_is_input_driven(true); // get sections from input
       }
-  inline ~vipl_histogram() = default;
+  inline ~vipl_histogram() override = default;
 
 // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 
   //: Use the preop stage to zero this histogram.
-  bool section_preop();
+  bool section_preop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

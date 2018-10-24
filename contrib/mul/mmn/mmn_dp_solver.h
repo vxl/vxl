@@ -66,8 +66,8 @@ class mmn_dp_solver : public mmn_solver
   unsigned root() const;
 
   //: Input the arcs that define the graph
-  virtual void set_arcs(unsigned num_nodes,
-                        const std::vector<mmn_arc>& arcs);
+  void set_arcs(unsigned num_nodes,
+                        const std::vector<mmn_arc>& arcs) override;
 
   //: Define dependencies
   void set_dependancies(const std::vector<mmn_dependancy>& deps,
@@ -85,9 +85,9 @@ class mmn_dp_solver : public mmn_solver
   // v1 has value i1, v2 has value i2, then the cost of this choice is
   // (v1<v2?pair_cost(i1,i2):pair_cost(i2,i1))
   // Returns the minimum cost
-  virtual double solve(const std::vector<vnl_vector<double> >& node_cost,
+  double solve(const std::vector<vnl_vector<double> >& node_cost,
                  const std::vector<vnl_matrix<double> >& pair_cost,
-                 std::vector<unsigned>& x);
+                 std::vector<unsigned>& x) override;
 
   //: Find values for each node with minimise the total cost
   //  As solve(node_cost,pair_cost,x), but allows inclusion of
@@ -108,25 +108,25 @@ class mmn_dp_solver : public mmn_solver
   const vnl_vector<double>& root_cost() const { return nc_[root()]; }
 
   //: Initialise from a text stream
-  virtual bool set_from_stream(std::istream &is);
+  bool set_from_stream(std::istream &is) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mmn_solver* clone() const;
+  mmn_solver* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // mmn_dp_solver_h_

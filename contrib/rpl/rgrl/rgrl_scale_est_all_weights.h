@@ -33,7 +33,7 @@ class rgrl_scale_est_all_weights
   estimate_weighted( rgrl_match_set const& match_set,
                      rgrl_scale_sptr const& current_scales,
                      bool use_signature_only =  false,
-                     bool penalize_scaling = false) const;
+                     bool penalize_scaling = false) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale_est_all_weights, rgrl_scale_estimator_wgted );

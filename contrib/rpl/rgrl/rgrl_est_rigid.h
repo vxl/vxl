@@ -30,7 +30,7 @@ class rgrl_est_rigid
   //
   rgrl_transformation_sptr
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
 
   //: Estimates a rigid transform.
@@ -41,10 +41,10 @@ class rgrl_est_rigid
   //
   rgrl_transformation_sptr
   estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   //: Type of transformation estimated by this estimator.
-  const std::type_info& transformation_type() const;
+  const std::type_info& transformation_type() const override;
 
   //: Determine the covariance matrix of this rigid xform given the matches
   void determine_covariance( rgrl_set_of<rgrl_match_set_sptr> const& matches, rgrl_transformation_sptr current_trans) const;

@@ -31,21 +31,21 @@ class rrel_kernel_density_obj : public rrel_objective
   rrel_kernel_density_obj(rrel_kernel_scale_type scale_type=RREL_KERNEL_MAD);
 
   //: Destructor.
-  virtual ~rrel_kernel_density_obj() = default;
+  ~rrel_kernel_density_obj() override = default;
 
   //: Evaluate the objective function on heteroscedastic residuals.
   //  Not implemented.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       vect_const_iter scale_begin,
-                      vnl_vector<double>* param_vector=nullptr ) const;
+                      vnl_vector<double>* param_vector=nullptr ) const override;
 
   //: Evaluate the objective function on homoscedastic residuals.
   //  prior_scale is needed if the type RREL_KERNEL_PRIOR is used.
   //  \sa rrel_objective::fcn.
-  virtual double fcn( vect_const_iter res_begin, vect_const_iter res_end,
+  double fcn( vect_const_iter res_begin, vect_const_iter res_end,
                       double prior_scale = 0,
-                      vnl_vector<double>* = nullptr) const;
+                      vnl_vector<double>* = nullptr) const override;
 
   //: Set the type of the scale.
   //  RREL_KERNEL_MAD uses median absolute deviations to estimate the scale.
@@ -56,7 +56,7 @@ class rrel_kernel_density_obj : public rrel_objective
 
   //: Depends on the scale type used.
   //  \sa rrel_objective::requires_prior_scale.
-  virtual bool requires_prior_scale() const
+  bool requires_prior_scale() const override
   { return scale_type_ == RREL_KERNEL_PRIOR; }
 
   //: x is set to 0;

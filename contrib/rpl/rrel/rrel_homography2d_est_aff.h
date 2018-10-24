@@ -21,7 +21,7 @@ class rrel_homography2d_est_aff : public rrel_homography2d_est
                              const std::vector< vnl_vector<double> > & to_pts );
 
   //: Destructor.
-  virtual ~rrel_homography2d_est_aff();
+  ~rrel_homography2d_est_aff() override;
 
   //: Convert a homography to a linear parameter list (for estimation).
   virtual void  homography_to_parameters(const vnl_matrix<double>&  m,

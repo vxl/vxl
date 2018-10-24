@@ -53,7 +53,7 @@ class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, Pi
                 DataOut fill_val=0) ;
 
   vipl_filter_2d() = default; // argless ctor
-  ~vipl_filter_2d() = default; // (virtual) destructor
+  ~vipl_filter_2d() override = default; // (virtual) destructor
 
   //: User accessed low_level c++ copy constructor.
   // note this does NOT copy input/output image pointers.
@@ -64,9 +64,9 @@ class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, Pi
   //: This walks over the sections calling section_applyop.
   // Now that we know the dim we can write the
   // loop.
-  virtual bool applyop();
+  bool applyop() override;
  //: The main filtering method, derived class must supply it.
-  virtual bool section_applyop() = 0;
+  bool section_applyop() override = 0;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

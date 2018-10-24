@@ -49,23 +49,23 @@ class clsfy_rbf_svm : public clsfy_classifier_base
   clsfy_rbf_svm();
 
   //: Destructor
-  virtual ~clsfy_rbf_svm();
+  ~clsfy_rbf_svm() override;
 
   //: Classify the input vector
   // returns 0 to indicate out of (or negative) class and one to indicate in class (or positive.)
-  virtual unsigned classify(const vnl_vector<double> &input) const;
+  unsigned classify(const vnl_vector<double> &input) const override;
 
   //: Return the probability the input being in each class.
   // output(i) i<<nClasses, contains the probability that the input
   // is in class i;
   // This are not strict probability values, since SVMs do not give Bayesian
   // outputs. However their properties fit the requirements of a probability.
-  virtual void class_probabilities(std::vector<double> &outputs,
-                                   const vnl_vector<double> &input) const;
+  void class_probabilities(std::vector<double> &outputs,
+                                   const vnl_vector<double> &input) const override;
 
   //: Log likelihood of being in class (binary classifiers only)
   // class probability = std::exp(logL) / (1+std::exp(logL)
-  virtual double log_l(const vnl_vector<double> &input) const;
+  double log_l(const vnl_vector<double> &input) const override;
 
   //: Set the internal values defining the classifier.
   // \param supportVectors
@@ -103,31 +103,31 @@ class clsfy_rbf_svm : public clsfy_classifier_base
 
 
   //: The number of possible output classes.
-  virtual unsigned n_classes() const {return 1;}
+  unsigned n_classes() const override {return 1;}
 
   //: The dimensionality of input vectors.
-  virtual unsigned n_dims() const {return supports_[0].size();}
+  unsigned n_dims() const override {return supports_[0].size();}
 
   //: Return the class's IO version number
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const ;
+  std::string is_a() const override ;
 
   //: Name of the class
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual clsfy_classifier_base* clone() const;
+  clsfy_classifier_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
  protected:
   //: Set the private target member values to the correct value.

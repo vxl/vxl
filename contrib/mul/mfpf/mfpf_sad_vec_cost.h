@@ -26,7 +26,7 @@ class mfpf_sad_vec_cost : public mfpf_vec_cost
   mfpf_sad_vec_cost();
 
   //: Destructor
-  virtual ~mfpf_sad_vec_cost();
+  ~mfpf_sad_vec_cost() override;
 
   //: Define mean and weights
   void set(const vnl_vector<double>& mean,
@@ -39,29 +39,29 @@ class mfpf_sad_vec_cost : public mfpf_vec_cost
   const vnl_vector<double>& wts() const { return wts_; }
 
   //: Evaluate weighted sum of absolute difference from mean
-  virtual double evaluate(const vnl_vector<double>& v);
+  double evaluate(const vnl_vector<double>& v) override;
 
   //: Return the mean
-  virtual void get_average(vnl_vector<double>& v) const;
+  void get_average(vnl_vector<double>& v) const override;
 
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual mfpf_vec_cost* clone() const;
+  mfpf_vec_cost* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif

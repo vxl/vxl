@@ -24,7 +24,7 @@
 // Fiddle things to force use of sampling version of pdf1d_pdf::inverse_cdf()
 class pdf1d_test_gaussian_kernel_pdf_test_sample_inverse_cdf : public pdf1d_gaussian_kernel_pdf
 {
-  virtual bool cdf_is_analytic() const {return false;}
+  bool cdf_is_analytic() const override {return false;}
 };
 
 

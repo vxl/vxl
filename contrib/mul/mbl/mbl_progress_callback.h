@@ -32,7 +32,7 @@ class mbl_progress_callback: public mbl_progress_hierarchy
   //: Called when the progress has started, changed, or finished.
   // \param fraction Progress of all identifiers towards the end.
   // value is out of 1.0.
-  virtual void on_changed_progress(double fraction)
+  void on_changed_progress(double fraction) override
   {
     (*func_)(fraction);
   }

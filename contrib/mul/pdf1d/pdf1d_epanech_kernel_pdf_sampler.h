@@ -23,31 +23,31 @@ class pdf1d_epanech_kernel_pdf_sampler : public pdf1d_sampler
   pdf1d_epanech_kernel_pdf_sampler();
 
   //: Destructor
-  virtual ~pdf1d_epanech_kernel_pdf_sampler();
+  ~pdf1d_epanech_kernel_pdf_sampler() override;
 
   const pdf1d_epanech_kernel_pdf& epanech_kernel_pdf() const;
 
   //: Draw random sample from distribution
-  virtual double sample();
+  double sample() override;
 
   //: Fill x with samples possibly chosen so as to represent the distribution
   //  Samples equal numbers from each kernel.
-  virtual void regular_samples(vnl_vector<double>& x);
+  void regular_samples(vnl_vector<double>& x) override;
 
   //: Reseeds the static random number generator (one per derived class)
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual pdf1d_sampler* clone() const;
+  pdf1d_sampler* clone() const override;
 
   //: Transform a unit uniform distribution x into an Epanech distribution y
   // $0 <= x <= 1  =>  -sqrt(5) <= y <= sqrt(5)$

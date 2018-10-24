@@ -54,7 +54,7 @@ class vifa_group_pgram_params : public gevd_param_mixin,
   vifa_group_pgram_params(const vifa_group_pgram_params&  old_params);
 
   //: Check that parameters are within acceptable bounds.
-  bool  SanityCheck();
+  bool  SanityCheck() override;
 
   //: Output contents
   void  print_info(void);

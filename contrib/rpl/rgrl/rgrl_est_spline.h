@@ -42,14 +42,14 @@ class rgrl_est_spline
 
   rgrl_transformation_sptr
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   rgrl_transformation_sptr
   estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   //: Type of transformation estimated by this estimator.
-  const std::type_info& transformation_type() const;
+  const std::type_info& transformation_type() const override;
 
   void set_optimize_method( int optimize_method )
     { optimize_method_ = optimize_method; }

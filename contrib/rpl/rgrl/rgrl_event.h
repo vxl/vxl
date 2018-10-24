@@ -32,7 +32,7 @@ class rgrl_event: public vbl_ref_count
   rgrl_event(rgrl_event const&) : vbl_ref_count() {}
 
   //:
-  virtual ~rgrl_event() = default;
+  ~rgrl_event() override = default;
 
   //: Return the string name associated with the event
   virtual std::string name(void) const = 0;

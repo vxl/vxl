@@ -66,13 +66,13 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_poly_set_2d();
+  ~vsol_poly_set_2d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //***************************************************************************
   // Access
@@ -92,7 +92,7 @@ class vsol_poly_set_2d : public vsol_region_2d
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(vsol_poly_set_2d const& other) const;
-  virtual bool operator==(vsol_spatial_object_2d const& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(vsol_spatial_object_2d const& obj) const override; // virtual of vsol_spatial_object_2d
 
   //---------------------------------------------------------------------------
   //: Has `this' the same points than `other' in the same order ?
@@ -110,19 +110,19 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_2d_type region_type(void) const { return vsol_region_2d::POLYGON_SET; }
+  vsol_region_2d_type region_type(void) const override { return vsol_region_2d::POLYGON_SET; }
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a poly_set, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vsol_poly_set_2d const*cast_to_poly_set()const{return this;}
-  virtual vsol_poly_set_2d *cast_to_poly_set() {return this;}
+  vsol_poly_set_2d const*cast_to_poly_set()const override{return this;}
+  vsol_poly_set_2d *cast_to_poly_set() override {return this;}
 
  public:
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box() const;
+  void compute_bounding_box() const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
@@ -137,17 +137,17 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const; // virtual of vsol_region_2d
+  double area(void) const override; // virtual of vsol_region_2d
 
   //---------------------------------------------------------------------------
   //: Return the centroid of `this'
   //---------------------------------------------------------------------------
-  virtual vsol_point_2d_sptr centroid(void) const;
+  vsol_point_2d_sptr centroid(void) const override;
 
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const;
+  bool is_convex(void) const override;
   //***************************************************************************
   // Basic operations
   //***************************************************************************
@@ -155,15 +155,15 @@ class vsol_poly_set_2d : public vsol_region_2d
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -172,10 +172,10 @@ class vsol_poly_set_2d : public vsol_region_2d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_poly_set_2d"); }
+  std::string is_a() const override { return std::string("vsol_poly_set_2d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
+  bool is_class(std::string const& cls) const override { return cls==is_a(); }
 };
 
 //: Binary save vsol_polyline_2d* to stream.

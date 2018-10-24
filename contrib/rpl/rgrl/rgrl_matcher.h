@@ -24,7 +24,7 @@ class rgrl_matcher
   : public rgrl_object
 {
  public:
-  virtual ~rgrl_matcher();
+  ~rgrl_matcher() override;
 
   //: Build the matches with a view (old interface)
   //

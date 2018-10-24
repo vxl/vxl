@@ -30,7 +30,7 @@ class PairMatchSetLineSeg : public PairMatchSet
   // Constructors/Destructors--------------------------------------------------
   PairMatchSetLineSeg();
   PairMatchSetLineSeg(LineSegSet& corners1, LineSegSet& corners2);
-  ~PairMatchSetLineSeg();
+  ~PairMatchSetLineSeg() override;
 
   // Data Access---------------------------------------------------------------
   LineSegSet* get_linesegs1() const { return linesegs1_; }

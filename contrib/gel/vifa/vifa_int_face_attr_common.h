@@ -90,7 +90,7 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
                            );
 
   //: Destructor.
-  virtual ~vifa_int_face_attr_common();
+  ~vifa_int_face_attr_common() override;
 
   // ---
   // Public functional methods

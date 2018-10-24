@@ -43,12 +43,12 @@ typedef vnl_vector_fixed<double,2>              vector_2d;
 class command_iteration_update: public rgrl_command
 {
  public:
-  void execute(rgrl_object* caller, const rgrl_event & event )
+  void execute(rgrl_object* caller, const rgrl_event & event ) override
   {
     execute( (const rgrl_object*) caller, event );
   }
 
-  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ )
+  void execute(const rgrl_object* caller, const rgrl_event & /*event*/ ) override
   {
     const rgrl_feature_based_registration* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);

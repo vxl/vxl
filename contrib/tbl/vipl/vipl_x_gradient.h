@@ -48,10 +48,10 @@ class vipl_x_gradient : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelI
   inline vipl_x_gradient(vipl_x_gradient const& A)
            : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A),
              shift_(A.shift()), scale_(A.scale()) {}
-  inline ~vipl_x_gradient() = default;
+  inline ~vipl_x_gradient() override = default;
 
   // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

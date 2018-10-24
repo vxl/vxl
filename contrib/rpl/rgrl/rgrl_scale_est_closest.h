@@ -39,18 +39,18 @@ class rgrl_scale_est_closest
   rgrl_scale_est_closest( vcl_unique_ptr<rrel_objective>  obj,
                           bool                          do_signature_scale = false );
 
-  ~rgrl_scale_est_closest();
+  ~rgrl_scale_est_closest() override;
 
   rgrl_scale_sptr
   estimate_unweighted( rgrl_match_set const& match_set,
                        rgrl_scale_sptr const& current_scales,
-                       bool penalize_scaling = false ) const;
+                       bool penalize_scaling = false ) const override;
 
   rgrl_scale_sptr
   estimate_weighted( rgrl_match_set const& match_set,
                      rgrl_scale_sptr const& current_scales,
                      bool use_signature_only = false,
-                     bool penalize_scaling = false) const;
+                     bool penalize_scaling = false) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_scale_est_closest, rgrl_scale_estimator );

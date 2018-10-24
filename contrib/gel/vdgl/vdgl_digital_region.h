@@ -54,7 +54,7 @@ class vdgl_digital_region : public vsol_region_2d
 
   vdgl_digital_region(int npts, const float* xp, const float* yp, const unsigned short *pix);
   vdgl_digital_region(vdgl_digital_region const& r);
-  ~vdgl_digital_region();
+  ~vdgl_digital_region() override;
 
   // Data Access-----------------------------------------------------------
   // Data storage for the pixel arrays
@@ -109,10 +109,10 @@ class vdgl_digital_region : public vsol_region_2d
   float AspectRatio() const;
 
   // distinguish from vtol_face::area()
-  virtual double area() const { return npts_*pixel_size_*pixel_size_; }
+  double area() const override { return npts_*pixel_size_*pixel_size_; }
 
   //: The centroid of the pointset
-  virtual vsol_point_2d_sptr centroid() const
+  vsol_point_2d_sptr centroid() const override
     {return new vsol_point_2d(this->Xo(), this->Yo());}
 
   //: transform this region using the given 3x3 projective transformation matrix
@@ -126,7 +126,7 @@ class vdgl_digital_region : public vsol_region_2d
   std::vector<unsigned int> residual_histogram(int nbins, float* min=nullptr, float* max=nullptr);
 
   //: Return true if this region is convex
-  virtual bool is_convex() const { return false; } // virtual of vsol_region_2d
+  bool is_convex() const override { return false; } // virtual of vsol_region_2d
 
   bool PrincipalOrientation(vnl_float_2& major_axis);
 
@@ -140,10 +140,10 @@ class vdgl_digital_region : public vsol_region_2d
   void DoPlaneFit() const; //!< Fit a plane to the region intensities
   void PrintFit() const;
 
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  std::string is_a() const { return std::string("vdgl_digital_region"); }
+  std::string is_a() const override { return std::string("vdgl_digital_region"); }
 
  protected:
   // Members

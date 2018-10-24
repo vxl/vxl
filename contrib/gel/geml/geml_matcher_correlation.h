@@ -24,7 +24,7 @@ class geml_matcher_correlation : public geml_matcher
 
   // Operations----------------------------------------------------------------
 
-  std::vector< std::pair<int,int> > get_matches();
+  std::vector< std::pair<int,int> > get_matches() override;
 
  protected:
   // Data Members--------------------------------------------------------------

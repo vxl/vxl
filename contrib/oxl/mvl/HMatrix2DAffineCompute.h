@@ -32,12 +32,12 @@ class HMatrix2DAffineCompute : public HMatrix2DCompute
  protected:
   bool compute_p(std::vector<HomgPoint2D> const&,
                  std::vector<HomgPoint2D> const&,
-                 HMatrix2D *);
+                 HMatrix2D *) override;
  public:
   static HMatrix2D compute(const std::vector<HomgPoint2D>&p1, const std::vector<HomgPoint2D>&p2);
   static HMatrix2D compute(std::vector<vgl_homg_point_2d<double> > const& p1,
                            std::vector<vgl_homg_point_2d<double> > const& p2);
-  int minimum_number_of_correspondences() const { return 3; }
+  int minimum_number_of_correspondences() const override { return 3; }
   // left in for capes :
   static HMatrix2D compute(const PairMatchSetCorner &matches);
 };

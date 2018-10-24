@@ -54,7 +54,7 @@ class vifa_parallel: public vifa_parallel_params
                );
 
   //: Destructor
-  ~vifa_parallel(void);
+  ~vifa_parallel(void) override;
 
   void  reset(void);
 

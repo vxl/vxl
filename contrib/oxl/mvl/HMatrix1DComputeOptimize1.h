@@ -9,10 +9,10 @@ class HMatrix1DComputeOptimize1 : public HMatrix1DCompute
  protected:
   bool compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&,
                          const std::vector<vgl_homg_point_1d<double> >&,
-                         HMatrix1D *);
+                         HMatrix1D *) override;
  public:
   HMatrix1DComputeOptimize1(void);
-  ~HMatrix1DComputeOptimize1();
+  ~HMatrix1DComputeOptimize1() override;
 };
 
 typedef HMatrix1DComputeOptimize1 HMatrix1DComputeOptimise1;

@@ -44,7 +44,7 @@ class pdf1d_kernel_pdf : public pdf1d_pdf
   pdf1d_kernel_pdf();
 
   //: Destructor
-  virtual ~pdf1d_kernel_pdf();
+  ~pdf1d_kernel_pdf() override;
 
   //: Initialise so all kernels have the same width
   virtual void set_centres(const vnl_vector<double>& x, double width);
@@ -65,25 +65,25 @@ class pdf1d_kernel_pdf : public pdf1d_pdf
   //: The inverse cdf.
   // The value of x: P(x'<x) = P for x' drawn from distribution pdf.
   // Uses Newton-Raphson.
-  virtual double inverse_cdf(double P) const;
+  double inverse_cdf(double P) const override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 };
 
 #endif // pdf1d_kernel_pdf_h

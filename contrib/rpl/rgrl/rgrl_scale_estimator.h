@@ -35,8 +35,8 @@ class rgrl_scale_estimator_unwgted
  public:
   rgrl_scale_estimator_unwgted();
 
-  virtual
-  ~rgrl_scale_estimator_unwgted();
+  
+  ~rgrl_scale_estimator_unwgted() override;
 
   //: Estimated an unweighted scale.
   //
@@ -66,8 +66,8 @@ class rgrl_scale_estimator_wgted
  public:
   rgrl_scale_estimator_wgted();
 
-  virtual
-  ~rgrl_scale_estimator_wgted();
+  
+  ~rgrl_scale_estimator_wgted() override;
 
   //: Estimated a weighted scale.
   //
@@ -97,7 +97,7 @@ class rgrl_scale_estimator
   static const std::type_info& type_id()
   { return typeid(rgrl_scale_estimator); }
 
-  virtual bool is_type( const std::type_info& type ) const
+  bool is_type( const std::type_info& type ) const override
   { return (typeid(rgrl_scale_estimator) == type)!=0 ||
       this->rgrl_scale_estimator_unwgted::is_type(type) ||
       this->rgrl_scale_estimator_wgted::is_type(type);

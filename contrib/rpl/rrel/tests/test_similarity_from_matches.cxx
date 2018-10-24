@@ -15,10 +15,10 @@ bool close(double,double);
 class null_m_est : public rrel_m_est_obj
 {
  public:
-  double rho( double u ) const { return u; }
-  double wgt( double u ) const { return u; }
-  void wgt( vect_const_iter b, vect_const_iter e, vect_const_iter s, vect_iter w) const { rrel_m_est_obj::wgt(b,e,s,w); }
-  void wgt( vect_const_iter b, vect_const_iter e, double s, vect_iter w) const { rrel_m_est_obj::wgt(b,e,s,w); }
+  double rho( double u ) const override { return u; }
+  double wgt( double u ) const override { return u; }
+  void wgt( vect_const_iter b, vect_const_iter e, vect_const_iter s, vect_iter w) const override { rrel_m_est_obj::wgt(b,e,s,w); }
+  void wgt( vect_const_iter b, vect_const_iter e, double s, vect_iter w) const override { rrel_m_est_obj::wgt(b,e,s,w); }
 };
 
 static void test_similarity_from_matches()

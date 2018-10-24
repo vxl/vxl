@@ -42,30 +42,30 @@ class vpdfl_mixture_sampler : public vpdfl_sampler_base
   vpdfl_mixture_sampler& operator=(const vpdfl_mixture_sampler&);
 
   //: Destructor
-  virtual ~vpdfl_mixture_sampler();
+  ~vpdfl_mixture_sampler() override;
 
   //: Set model for which this is an instance
-  virtual void set_model(const vpdfl_pdf_base&);
+  void set_model(const vpdfl_pdf_base&) override;
 
   const vpdfl_mixture& mixture() const;
 
   //: Draw random sample from distribution
-  virtual void sample(vnl_vector<double>& x);
+  void sample(vnl_vector<double>& x) override;
 
   //: Reseeds the static random number generator (one per derived class)
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
   //: Version number for I/O
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_sampler_base* clone() const;
+  vpdfl_sampler_base* clone() const override;
 };
 
 #endif // vpdfl_mixture_sampler_h_

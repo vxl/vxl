@@ -19,7 +19,7 @@ class vsol_spatial_object : public vul_timestamp, public vbl_ref_count, public v
 {
  public:
   // Constructors/Destructor---------------------------------------------------
-  virtual ~vsol_spatial_object();
+  ~vsol_spatial_object() override;
  protected:
   vsol_spatial_object();
 };

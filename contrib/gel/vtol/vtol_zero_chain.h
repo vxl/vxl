@@ -83,23 +83,23 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vtol_zero_chain();
+  ~vtol_zero_chain() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_2d* clone() const;
+  vsol_spatial_object_2d* clone() const override;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vtol_zero_chain"); }
+  std::string is_a() const override { return std::string("vtol_zero_chain"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(std::string const& cls) const { return cls==is_a(); }
 
  private: // has been superseded by is_a()
   //: Return the topology type
-  virtual vtol_topology_object_type topology_type() const{return ZEROCHAIN;}
+  vtol_topology_object_type topology_type() const override{return ZEROCHAIN;}
 
  public:
   //---------------------------------------------------------------------------
@@ -114,12 +114,12 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual const vtol_zero_chain *cast_to_zero_chain() const { return this; }
+  const vtol_zero_chain *cast_to_zero_chain() const override { return this; }
 
   //---------------------------------------------------------------------------
   //: Return `this' if `this' is a zero_chain, 0 otherwise
   //---------------------------------------------------------------------------
-  virtual vtol_zero_chain *cast_to_zero_chain() { return this; }
+  vtol_zero_chain *cast_to_zero_chain() override { return this; }
 
   //***************************************************************************
   // Status report
@@ -133,7 +133,7 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?
   //---------------------------------------------------------------------------
-  virtual bool valid_inferior_type(vtol_topology_object const* inferior) const
+  bool valid_inferior_type(vtol_topology_object const* inferior) const override
   { return inferior->cast_to_vertex()!=nullptr; }
   bool valid_inferior_type(vtol_vertex_sptr const& )  const { return true; }
   bool valid_superior_type(vtol_edge_sptr const& )    const { return true; }
@@ -149,21 +149,21 @@ class vtol_zero_chain : public vtol_topology_object
   //---------------------------------------------------------------------------
   virtual bool operator==(const vtol_zero_chain &other) const;
   inline bool operator!=(const vtol_zero_chain &other)const{return !operator==(other);}
-  bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
 
-  virtual void print(std::ostream &strm=std::cout) const;
-  virtual void describe(std::ostream &strm=std::cout,
-                        int blanking=0) const;
+  void print(std::ostream &strm=std::cout) const override;
+  void describe(std::ostream &strm=std::cout,
+                        int blanking=0) const override;
 
   //: \warning these should not be used by clients
  protected:
-  virtual std::vector<vtol_vertex*> *compute_vertices();
-  virtual std::vector<vtol_edge*> *compute_edges();
-  virtual std::vector<vtol_zero_chain*> *compute_zero_chains();
-  virtual std::vector<vtol_one_chain*> *compute_one_chains();
-  virtual std::vector<vtol_face*> *compute_faces();
-  virtual std::vector<vtol_two_chain*> *compute_two_chains();
-  virtual std::vector<vtol_block*> *compute_blocks();
+  std::vector<vtol_vertex*> *compute_vertices() override;
+  std::vector<vtol_edge*> *compute_edges() override;
+  std::vector<vtol_zero_chain*> *compute_zero_chains() override;
+  std::vector<vtol_one_chain*> *compute_one_chains() override;
+  std::vector<vtol_face*> *compute_faces() override;
+  std::vector<vtol_two_chain*> *compute_two_chains() override;
+  std::vector<vtol_block*> *compute_blocks() override;
 };
 
 #endif // vtol_zero_chain_h_

@@ -80,10 +80,10 @@ class rgrl_homo2d_func
   }
 
   //: obj func value
-  void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: Jacobian
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian);
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double>& jacobian) override;
 
  protected:
   typedef rgrl_match_set::const_from_iterator FIter;

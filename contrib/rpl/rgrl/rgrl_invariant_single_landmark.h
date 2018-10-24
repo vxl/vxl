@@ -69,19 +69,19 @@ class rgrl_invariant_single_landmark
   //: Estimate the xform mapping \a from to the current feature
   bool estimate(rgrl_invariant_sptr         from,
                 rgrl_transformation_sptr&   xform,
-                rgrl_scale_sptr&            scale );
+                rgrl_scale_sptr&            scale ) override;
 
   //: Returns the vector of invariants normalized by scale
-  const vnl_vector<double>& cartesian_invariants() const;
+  const vnl_vector<double>& cartesian_invariants() const override;
 
   //: Returns the vector of invariants normalized by scale
-  const vnl_vector<double>& angular_invariants() const;
+  const vnl_vector<double>& angular_invariants() const override;
 
   //: Computes the valid match region for the constellation
-  rgrl_mask_box region() const;
+  rgrl_mask_box region() const override;
 
   //: Return true if the feature has an initial ROI
-  bool has_region() const {return true;}
+  bool has_region() const override {return true;}
 
   //: Returns the center of the points in the computation of the parameters
   //

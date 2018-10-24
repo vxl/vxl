@@ -24,19 +24,19 @@ class vpdfl_gaussian_kernel_pdf_builder : public vpdfl_kernel_pdf_builder
   vpdfl_gaussian_kernel_pdf_builder();
 
   //: Destructor
-  virtual ~vpdfl_gaussian_kernel_pdf_builder();
+  ~vpdfl_gaussian_kernel_pdf_builder() override;
 
   //: Create empty model
-  virtual vpdfl_pdf_base* new_model() const;
+  vpdfl_pdf_base* new_model() const override;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_builder_base* clone() const;
+  vpdfl_builder_base* clone() const override;
 };
 
 #endif // vpdfl_gaussian_kernel_pdf_builder_h

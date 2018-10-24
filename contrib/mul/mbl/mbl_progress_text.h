@@ -24,7 +24,7 @@ class mbl_progress_text : public mbl_progress
   mbl_progress_text(std::ostream& os=std::cout);
 
   //: Destructor
-  ~mbl_progress_text();
+  ~mbl_progress_text() override;
 
   //: Name of the class
   virtual std::string is_a() const;
@@ -34,18 +34,18 @@ class mbl_progress_text : public mbl_progress
 
   //: Called when set_estimate_iterations() is called for a given identifier.
   //  \param identifier The operation being monitored.
-  virtual void on_set_estimated_iterations(const std::string& identifier,
-                                           const int total_iterations);
+  void on_set_estimated_iterations(const std::string& identifier,
+                                           const int total_iterations) override;
 
   //: Called when set_progress() is called for a given identifier.
   //  \param identifier The operation being monitored.
   //  \param progress The new progress status.
-  virtual void on_set_progress(const std::string& identifier,
-                               const int progress);
+  void on_set_progress(const std::string& identifier,
+                               const int progress) override;
 
   //: Called when end_progress() is called for a given identifier.
   //  \param identifier The operation being monitored.
-  virtual void on_end_progress(const std::string &identifier);
+  void on_end_progress(const std::string &identifier) override;
 
   std::ostream& os_;
 };

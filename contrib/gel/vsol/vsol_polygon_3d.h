@@ -70,19 +70,19 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Destructor
   //---------------------------------------------------------------------------
-  virtual ~vsol_polygon_3d();
+  ~vsol_polygon_3d() override;
 
   //---------------------------------------------------------------------------
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
   //---------------------------------------------------------------------------
-  virtual vsol_spatial_object_3d* clone(void) const;
+  vsol_spatial_object_3d* clone(void) const override;
 
   //---------------------------------------------------------------------------
   //: Safe down-casting methods
   //---------------------------------------------------------------------------
-  virtual vsol_polygon_3d *cast_to_polygon(void) {return this;}
-  virtual vsol_polygon_3d const* cast_to_polygon(void) const {return this;}
+  vsol_polygon_3d *cast_to_polygon(void) override {return this;}
+  vsol_polygon_3d const* cast_to_polygon(void) const override {return this;}
 
   virtual vsol_triangle_3d* cast_to_triangle(void) {return nullptr;}
   virtual const vsol_triangle_3d* cast_to_triangle(void) const {return nullptr;}
@@ -108,7 +108,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //: Has `this' the same points than `other' in the same order ?
   //---------------------------------------------------------------------------
   virtual bool operator==(vsol_polygon_3d const& other) const;
-  virtual bool operator==(vsol_spatial_object_3d const& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(vsol_spatial_object_3d const& obj) const override; // virtual of vsol_spatial_object_3d
 
   //---------------------------------------------------------------------------
   //: Has `this' not the same points than `other' in the same order ?
@@ -122,12 +122,12 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Return the region type of a polygon.  Its spatial type is a REGION
   //---------------------------------------------------------------------------
-  vsol_region_3d_type region_type(void) const { return vsol_region_3d::POLYGON; }
+  vsol_region_3d_type region_type(void) const override { return vsol_region_3d::POLYGON; }
 
   //---------------------------------------------------------------------------
   //: Compute the bounding box of `this'
   //---------------------------------------------------------------------------
-  virtual void compute_bounding_box(void) const;
+  void compute_bounding_box(void) const override;
 
   //---------------------------------------------------------------------------
   //: Return the number of vertices
@@ -137,7 +137,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Return the area of `this'
   //---------------------------------------------------------------------------
-  virtual double area(void) const; // virtual of vsol_region_3d
+  double area(void) const override; // virtual of vsol_region_3d
 
   //---------------------------------------------------------------------------
   //: Return the plane where 'this' polygon resides
@@ -147,7 +147,7 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Is `this' convex ?
   //---------------------------------------------------------------------------
-  virtual bool is_convex(void) const;
+  bool is_convex(void) const override;
 
   //---------------------------------------------------------------------------
   //: Is `i' a valid index for the list of vertices ?
@@ -167,13 +167,13 @@ class vsol_polygon_3d : public vsol_region_3d
   //---------------------------------------------------------------------------
   //: Is `p' in `this' ?
   //---------------------------------------------------------------------------
-  virtual bool in(vsol_point_3d_sptr const& p) const;
+  bool in(vsol_point_3d_sptr const& p) const override;
 
   //---------------------------------------------------------------------------
   //: Return the unit normal vector at point `p'. Have to be deleted manually
   //  REQUIRE: in(p)
   //---------------------------------------------------------------------------
-  virtual vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const;
+  vgl_vector_3d<double> normal_at_point(vsol_point_3d_sptr const& p) const override;
 
   //---------------------------------------------------------------------------
   //: Return the normal vector
@@ -183,10 +183,10 @@ class vsol_polygon_3d : public vsol_region_3d
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -195,16 +195,16 @@ class vsol_polygon_3d : public vsol_region_3d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_polygon_3d"); }
+  std::string is_a() const override { return std::string("vsol_polygon_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(std::string const& cls) const
+  bool is_class(std::string const& cls) const override
   { return cls==is_a() || vsol_region_3d::is_class(cls); }
 
   //---------------------------------------------------------------------------
   //: output description to stream
   //---------------------------------------------------------------------------
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 
  protected:
   void compute_plane();

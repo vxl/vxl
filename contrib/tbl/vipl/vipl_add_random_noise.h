@@ -58,7 +58,7 @@ class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,
     : vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>(A), type_(A.type()), maxdev_(A.maxdev()), clipping_(A.clipping()) {}
 
   // -+-+- required method for filters: -+-+-
-  bool section_applyop();
+  bool section_applyop() override;
 };
 
 #ifdef INSTANTIATE_TEMPLATES

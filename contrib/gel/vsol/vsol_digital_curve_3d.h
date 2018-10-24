@@ -43,17 +43,17 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   vsol_digital_curve_3d(vsol_digital_curve_3d const& other);
 
   // Destructor
-  virtual ~vsol_digital_curve_3d() = default;
+  ~vsol_digital_curve_3d() override = default;
 
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
-  virtual vsol_spatial_object_3d* clone() const;
+  vsol_spatial_object_3d* clone() const override;
 
   //: Return the first point of `this'
-  virtual vsol_point_3d_sptr p0() const; // pure virtual of vsol_curve_3d
+  vsol_point_3d_sptr p0() const override; // pure virtual of vsol_curve_3d
 
   //: Return the last point of `this'
-  virtual vsol_point_3d_sptr p1() const; // pure virtual of vsol_curve_3d
+  vsol_point_3d_sptr p1() const override; // pure virtual of vsol_curve_3d
 
   //: Return point `i'
   //  REQUIRE: valid_index(i)
@@ -69,36 +69,36 @@ class vsol_digital_curve_3d : public vsol_curve_3d
 
   //: Has `this' the same points than `other' in the same order ?
   virtual bool operator==(vsol_digital_curve_3d const&) const;
-  virtual bool operator==(vsol_spatial_object_3d const&) const; // virtual of vsol_spatial_object_3d
+  bool operator==(vsol_spatial_object_3d const&) const override; // virtual of vsol_spatial_object_3d
 
   //: Has `this' the same points than `other' and in the same order ?
   inline bool operator!=(vsol_digital_curve_3d const& c) const {return !operator==(c);}
 
   //: Set the first point of the curve
   //  REQUIRE: in(new_p0)
-  virtual void set_p0(vsol_point_3d_sptr const& new_p0);
+  void set_p0(vsol_point_3d_sptr const& new_p0) override;
 
   //: Set the last point of the curve
   //  REQUIRE: in(new_p1)
-  virtual void set_p1(vsol_point_3d_sptr const& new_p1);
+  void set_p1(vsol_point_3d_sptr const& new_p1) override;
 
   //: Add another point to the curve
   void add_vertex(vsol_point_3d_sptr const& new_p);
 
   //: Return `this' if `this' is a digital_curve, 0 otherwise
-  virtual vsol_digital_curve_3d const*cast_to_digital_curve()const{return this;}
-  virtual vsol_digital_curve_3d *cast_to_digital_curve() {return this;}
+  vsol_digital_curve_3d const*cast_to_digital_curve()const override{return this;}
+  vsol_digital_curve_3d *cast_to_digital_curve() override {return this;}
 
  private: // has been superseded by is_a()
   //: Return the curve type
-  virtual vsol_curve_3d_type curve_type() const { return vsol_curve_3d::DIGITAL_CURVE; }
+  vsol_curve_3d_type curve_type() const override { return vsol_curve_3d::DIGITAL_CURVE; }
 
  public:
   //: Return the length of `this'
-  virtual double length() const; // pure virtual of vsol_curve_3d
+  double length() const override; // pure virtual of vsol_curve_3d
 
   //: Compute the bounding box of `this'
-  virtual void compute_bounding_box() const;
+  void compute_bounding_box() const override;
 
   //: Return the number of sample points of this digital curve
   unsigned int size() const { return samples_.size(); }
@@ -108,15 +108,15 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   bool valid_index(unsigned int i) const { return i<samples_.size(); }
 
   //: output description to stream
-  void describe(std::ostream &strm, int blanking=0) const;
+  void describe(std::ostream &strm, int blanking=0) const override;
 
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -125,7 +125,7 @@ class vsol_digital_curve_3d : public vsol_curve_3d
   void print_summary(std::ostream &os) const;
 
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_digital_curve_3d"); }
+  std::string is_a() const override { return std::string("vsol_digital_curve_3d"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   virtual bool is_class(std::string const& cls) const { return cls==is_a(); }

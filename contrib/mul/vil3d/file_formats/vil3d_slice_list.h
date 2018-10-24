@@ -26,21 +26,21 @@ class vil3d_slice_list_format : public vil3d_file_format
 {
  public:
   vil3d_slice_list_format();
-  virtual ~vil3d_slice_list_format();
+  ~vil3d_slice_list_format() override;
 
-  virtual vil3d_image_resource_sptr make_input_image(const char *) const;
+  vil3d_image_resource_sptr make_input_image(const char *) const override;
 
   //: Make a "generic_image" on which put_section may be applied.
   // The file may be opened immediately for writing so that a header can be written.
-  virtual vil3d_image_resource_sptr make_output_image(const char* filename,
+  vil3d_image_resource_sptr make_output_image(const char* filename,
                                                       unsigned ni,
                                                       unsigned nj,
                                                       unsigned nk,
                                                       unsigned nplanes,
-                                                      enum vil_pixel_format)const;
+                                                      enum vil_pixel_format)const override;
 
   //: default filename tag for this image.
-  virtual const char * tag() const {return "slice_list";}
+  const char * tag() const override {return "slice_list";}
 };
 
 
@@ -66,32 +66,32 @@ class vil3d_slice_list_image: public vil3d_image_resource
   vil3d_slice_list_image(std::vector<vil_image_resource_sptr> );
 
  public:
-  virtual ~vil3d_slice_list_image();
+  ~vil3d_slice_list_image() override;
 
   //: Dimensions:  nplanes x ni x nj x nk.
   // This concept is treated as a synonym to components.
-  virtual unsigned nplanes() const;
+  unsigned nplanes() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each row.
-  virtual unsigned ni() const;
+  unsigned ni() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of pixels in each column.
-  virtual unsigned nj() const;
+  unsigned nj() const override;
   //: Dimensions:  nplanes x ni x nj x nk.
   // The number of slices per image.
-  virtual unsigned nk() const;
+  unsigned nk() const override;
 
   //: Pixel Format.
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const override;
 
 
   //: Create a read/write view of a copy of this data.
   // This function will always return a
   // multi-plane scalar-pixel view of the data.
   // \return 0 if unable to get view of correct size, or if resource is write-only.
-  virtual vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+  vil3d_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
                                                    unsigned j0, unsigned nj,
-                                                   unsigned k0, unsigned nk) const;
+                                                   unsigned k0, unsigned nk) const override;
 
   //: Put the data in this view back into the image source.
   // The view must be of scalar components. Assign your
@@ -99,16 +99,16 @@ class vil3d_slice_list_image: public vil3d_image_resource
   // \return false if failed, because e.g. resource is read-only,
   // format of view is not correct (if it is a compound pixel type, try
   // assigning it to a multi-plane scalar pixel view.)
-  virtual bool put_view(const vil3d_image_view_base& im,
-                        unsigned i0, unsigned j0, unsigned k0);
+  bool put_view(const vil3d_image_view_base& im,
+                        unsigned i0, unsigned j0, unsigned k0) override;
 
   //: Return a string describing the file format.
   // Only file images have a format, others return 0
-  virtual char const* file_format() const { return "slice_list"; }
+  char const* file_format() const override { return "slice_list"; }
 
   //: Extra property information
   // This will just return the property of the first slice in the list.
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
+  bool get_property(char const* tag, void* property_value = nullptr) const override;
 };
 
 #endif // vil3d_slice_list_h_

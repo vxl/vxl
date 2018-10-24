@@ -28,23 +28,23 @@ class rgrl_weighter_indiv_scale
                              bool                          use_signature_error,
                              bool                          use_precomputed_signature_wgt = false );
 
-  ~rgrl_weighter_indiv_scale();
+  ~rgrl_weighter_indiv_scale() override;
 
-  virtual
+  
   void
   compute_weights( rgrl_scale const&  scale,
-                   rgrl_match_set&    match_set ) const;
+                   rgrl_match_set&    match_set ) const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_weighter_indiv_scale, rgrl_weighter_m_est );
 
   // Auxiliary functions related to the m_est
 
-  virtual
+  
   double
   aux_sum_rho_values( rgrl_scale const&  scale,
                       rgrl_match_set&    match_set,
-                      rgrl_transformation const&  xform);
+                      rgrl_transformation const&  xform) override;
 
 #if 0 // Do not declare these 3 non-implemented virtual functions - they are already implemented in the parent class
   virtual

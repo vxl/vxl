@@ -36,33 +36,33 @@ class rgrl_feature_landmark
                          std::vector< vnl_vector<double> >  outgoing_directions );
 
   //: read in feature
-  virtual
-  bool read( std::istream& is, bool skip_tag=false );
+  
+  bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  virtual
-  void write( std::ostream& os ) const;
+  
+  void write( std::ostream& os ) const override;
 
   vnl_matrix<double> const&
-  error_projector() const;
+  error_projector() const override;
 
   vnl_matrix<double> const&
-  error_projector_sqrt() const;
+  error_projector_sqrt() const override;
 
   unsigned int
-  num_constraints() const;
+  num_constraints() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_feature_landmark, rgrl_feature );
 
-  rgrl_feature_sptr transform( rgrl_transformation const&  xform ) const;
+  rgrl_feature_sptr transform( rgrl_transformation const&  xform ) const override;
 
   //:  signature_weight from the signature similarity
   //
-  double absolute_signature_weight( rgrl_feature_sptr other ) const;
+  double absolute_signature_weight( rgrl_feature_sptr other ) const override;
 
   //: make a clone copy
-  virtual rgrl_feature_sptr clone() const;
+  rgrl_feature_sptr clone() const override;
 
  protected:
   friend class rgrl_feature_reader;

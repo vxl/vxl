@@ -206,7 +206,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
 
   // Destructor
-  virtual ~msdi_marked_images_from_files();
+  ~msdi_marked_images_from_files() override;
 
   //: Pyramid builder to be used
   vimt_gaussian_pyramid_builder_2d<vxl_byte>& pyr_builder()
@@ -217,28 +217,28 @@ class msdi_marked_images_from_files : public msdi_marked_images
   { return float_pyr_builder_; }
 
   //: Move to start of data
-  virtual void reset();
+  void reset() override;
 
   //: Move to next item.  Return true until reach end of items
-  virtual bool next();
+  bool next() override;
 
   //: Return number of examples this will provide
-  virtual unsigned size() const;
+  unsigned size() const override;
 
   //: Return current image
-  virtual const vimt_image_2d& image();
+  const vimt_image_2d& image() override;
 
   //: Return current image pyramid
-  virtual const vimt_image_pyramid& image_pyr();
+  const vimt_image_pyramid& image_pyr() override;
 
   //: points for the current image
-  virtual const msm_points& points();
+  const msm_points& points() override;
 
   //: Return current image file name
-  virtual std::string image_name() const;
+  std::string image_name() const override;
 
   //: Return current points file name
-  virtual std::string points_name() const;
+  std::string points_name() const override;
 
   //: Image directory
   const std::string& image_dir() const { return image_dir_; }

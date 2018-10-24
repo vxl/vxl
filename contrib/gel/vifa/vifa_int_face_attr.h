@@ -56,27 +56,27 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
                      vifa_group_pgram_params*  gpp_w = nullptr,
                      vifa_norm_params*         np = nullptr
                     );
-  virtual ~vifa_int_face_attr();
+  ~vifa_int_face_attr() override;
 
   // ---
   // Public functional methods
   // ---
 
-  bool         ComputeAttributes();
-  bool         GetAttributes(std::vector<float>&  attrs);
+  bool         ComputeAttributes() override;
+  bool         GetAttributes(std::vector<float>&  attrs) override;
   static void  GetAttributeNames(std::vector<std::string>&  names);
-  bool         GetNativeAttributes(std::vector<float>&  attrs);
+  bool         GetNativeAttributes(std::vector<float>&  attrs) override;
 
   // Data access for non-attributes
   vtol_intensity_face_sptr  GetFace() const { return face_; }
   void                      SetFace(vtol_intensity_face_sptr  f);
-  edge_2d_list&             GetEdges();
+  edge_2d_list&             GetEdges() override;
 
   //: Centroid X
-  virtual float  Xo() { return face_->Xo(); }
+  float  Xo() override { return face_->Xo(); }
 
   //: Centroid Y
-  virtual float  Yo() { return face_->Yo(); }
+  float  Yo() override { return face_->Yo(); }
 
   //: Centroid Z
   virtual float  Zo() { return face_->Zo(); }
@@ -102,23 +102,23 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
   // ---
 
   //: Area
-  virtual float  Area() { return (float)(GetFace() ? face_->Npix() : -1); }
+  float  Area() override { return (float)(GetFace() ? face_->Npix() : -1); }
 
   //: Ratio of major moments
-  float  AspectRatio();
+  float  AspectRatio() override;
 
   //: Length of boundary, in pixels
-  float  PerimeterLength();
+  float  PerimeterLength() override;
 
-  float  WeightedPerimeterLength();
-  float  Complexity();
+  float  WeightedPerimeterLength() override;
+  float  Complexity() override;
 
   //: Edge length^2 / detection area
-  float  WeightedComplexity();
+  float  WeightedComplexity() override;
 
-  float  TwoPeakParallel();
-  float  FourPeakParallel();
-  float  EightyPercentParallel();
+  float  TwoPeakParallel() override;
+  float  FourPeakParallel() override;
+  float  EightyPercentParallel() override;
 
  protected:
 

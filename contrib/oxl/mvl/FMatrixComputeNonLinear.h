@@ -40,7 +40,7 @@ class FMatrixComputeNonLinear : public vnl_least_squares_function
   bool compute_basis(FMatrix* F, std::vector<int> basis);
 
   // The virtual function from vnl_levenberg_marquardt
-  void f(const vnl_vector<double>& x, vnl_vector<double>& fx);
+  void f(const vnl_vector<double>& x, vnl_vector<double>& fx) override;
 
  private:
   // Data Members--------------------------------------------------------------

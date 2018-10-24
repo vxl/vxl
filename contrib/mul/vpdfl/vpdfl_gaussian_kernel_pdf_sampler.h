@@ -29,21 +29,21 @@ class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
   vpdfl_gaussian_kernel_pdf_sampler();
 
   // Destructor
-  virtual ~vpdfl_gaussian_kernel_pdf_sampler();
+  ~vpdfl_gaussian_kernel_pdf_sampler() override;
 
   //: Set model for which this is an instance
   // Error check that it is an axis gaussian.
-  virtual void set_model(const vpdfl_pdf_base&);
+  void set_model(const vpdfl_pdf_base&) override;
 
   //: Draw random sample from j-th component of distribution
   void sample_component(vnl_vector<double>& x, int j);
 
   //: Draw random sample from distribution
-  virtual void sample(vnl_vector<double>& x);
+  void sample(vnl_vector<double>& x) override;
 
   //: Fill x with samples possibly chosen so as to represent the distribution
   //  Sample sequentially from each component.
-  virtual void regular_samples(std::vector<vnl_vector<double> >& x);
+  void regular_samples(std::vector<vnl_vector<double> >& x) override;
 
   //: Reseeds the internal random number generator
   // To achieve quasi-random initialisation use;
@@ -54,7 +54,7 @@ class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
   // ..
   // sampler.reseed(std::time(0));
   // \endcode
-  virtual void reseed(unsigned long);
+  void reseed(unsigned long) override;
 
 
   //: Return a reference to the pdf model
@@ -62,13 +62,13 @@ class vpdfl_gaussian_kernel_pdf_sampler :public vpdfl_sampler_base
   const vpdfl_gaussian_kernel_pdf& gaussian_kernel_pdf() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_sampler_base* clone() const;
+  vpdfl_sampler_base* clone() const override;
 };
 
 #endif // vpdfl_gaussian_kernel_pdf_sampler_h

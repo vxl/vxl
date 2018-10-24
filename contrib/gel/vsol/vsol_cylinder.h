@@ -64,10 +64,10 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   // ==== Binary IO methods ======
 
   //: Binary save self to stream.
-  void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
   //: Return IO version number;
   short version() const;
@@ -75,20 +75,20 @@ class vsol_cylinder : public  vsol_spatial_object_3d
   //: Print an ascii summary to the stream
   void print_summary(std::ostream &os) const;
 
-  void describe(std::ostream &strm, int blanking) const;
+  void describe(std::ostream &strm, int blanking) const override;
 
   //: Return a platform independent string identifying the class
-  std::string is_a() const { return std::string("vsol_cylinder"); }
+  std::string is_a() const override { return std::string("vsol_cylinder"); }
 
   //: Return true if the argument matches the string identifying the class or any parent class
   bool is_class(const std::string& cls) const { return cls == is_a(); }
 
    // implementing virtual methods of vsol_spatial_object_3d
-  vsol_spatial_object_3d_type spatial_type() const { return vsol_spatial_object_3d::VOLUME; }
+  vsol_spatial_object_3d_type spatial_type() const override { return vsol_spatial_object_3d::VOLUME; }
 
-  vsol_spatial_object_3d* clone() const { return new vsol_cylinder(*this); }
+  vsol_spatial_object_3d* clone() const override { return new vsol_cylinder(*this); }
 
-  virtual ~vsol_cylinder(void) = default;
+  ~vsol_cylinder(void) override = default;
 };
 
 //: Binary save vsol_cylinder* to stream.

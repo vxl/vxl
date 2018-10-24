@@ -30,7 +30,7 @@ public:
   //
   rgrl_transformation_sptr
   estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   //: Estimates homography transformation w/ radial lens distortion
   //
@@ -38,10 +38,10 @@ public:
   //
   rgrl_transformation_sptr
   estimate( rgrl_match_set_sptr matches,
-            rgrl_transformation const& cur_transform ) const;
+            rgrl_transformation const& cur_transform ) const override;
 
   //: Type of transformation estimated by this estimator.
-  const std::type_info& transformation_type() const;
+  const std::type_info& transformation_type() const override;
 
   // Defines type-related functions
   rgrl_type_macro( rgrl_est_dis_homo2d_lm, rgrl_nonlinear_estimator );

@@ -18,7 +18,7 @@ class rgrl_convergence_on_weighted_error
   //
   rgrl_convergence_on_weighted_error( double tol );
 
-  virtual ~rgrl_convergence_on_weighted_error();
+  ~rgrl_convergence_on_weighted_error() override;
 
   rgrl_converge_status_sptr
   compute_status( rgrl_converge_status_sptr               prev_status,

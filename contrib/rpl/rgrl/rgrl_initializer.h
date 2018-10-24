@@ -27,7 +27,7 @@ class rgrl_initializer
   rgrl_initializer() : use_prior_scale_from_match_(true)
   {   }
 
-  virtual ~rgrl_initializer();
+  ~rgrl_initializer() override;
 
   //: Get next initial view.
   //

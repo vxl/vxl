@@ -67,7 +67,7 @@ class mcal_pair_cost1 : public vnl_cost_function
                   mcal_single_basis_cost& cost)
   : vnl_cost_function(1), proj1_(proj1),proj2_(proj2),mode1_(mode1),mode2_(mode2),cost_(cost) {}
 
-  double f(const vnl_vector<double>& x);
+  double f(const vnl_vector<double>& x) override;
 };
 
 double mcal_pair_cost1::f(const vnl_vector<double>& x)
@@ -110,7 +110,7 @@ class mcal_pair_cost2 : public vnl_cost_function
                   const vnl_vector<double>& mode2,
                   mcal_single_basis_cost& cost);
 
-  double f(const vnl_vector<double>& x);
+  double f(const vnl_vector<double>& x) override;
 
   void covar(const vnl_vector<double>& p1,
              const vnl_vector<double>& p2,

@@ -86,7 +86,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   vpdfl_mixture_builder& operator=(const vpdfl_mixture_builder&);
 
   //: Destructor
-  virtual ~vpdfl_mixture_builder();
+  ~vpdfl_mixture_builder() override;
 
   //: Initialise n builders of type builder
   //  Clone taken of builder
@@ -111,13 +111,13 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   vpdfl_builder_base& builder(unsigned i) { return *builder_[i]; }
 
   //: Create empty model
-  virtual vpdfl_pdf_base* new_model() const;
+  vpdfl_pdf_base* new_model() const override;
 
   //: Define lower threshold on variance for built models
-  virtual void set_min_var(double min_var);
+  void set_min_var(double min_var) override;
 
   //: Get lower threshold on variance for built models
-  virtual double min_var() const;
+  double min_var() const override;
 
   //: Calculate and set the mixture's mean and variance
   // This should be used after the weights or components of
@@ -125,8 +125,8 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   static void calc_mean_and_variance(vpdfl_mixture& model);
 
   //: Build default model with given mean
-  virtual void build(vpdfl_pdf_base& model,
-                     const vnl_vector<double>& mean) const;
+  void build(vpdfl_pdf_base& model,
+                     const vnl_vector<double>& mean) const override;
 
   //: Build model from data
   //  Use EM algorithm to best fit mixture model to given data
@@ -136,8 +136,8 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   //  it is assumed that they have been set to sensible initial
   //  values.  The EM algorithm will be used to optimise their
   //  parameters.
-  virtual void build(vpdfl_pdf_base& model,
-                     mbl_data_wrapper<vnl_vector<double> >& data) const;
+  void build(vpdfl_pdf_base& model,
+                     mbl_data_wrapper<vnl_vector<double> >& data) const override;
 
   //: Build model from weighted data
   //  Use EM algorithm to best fit mixture model to given data
@@ -147,9 +147,9 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   //  it is assumed that they have been set to sensible initial
   //  values.  The EM algorithm will be used to optimise their
   //  parameters.
-  virtual void weighted_build(vpdfl_pdf_base& model,
+  void weighted_build(vpdfl_pdf_base& model,
                               mbl_data_wrapper<vnl_vector<double> >& data,
-                              const std::vector<double>& wts) const;
+                              const std::vector<double>& wts) const override;
 
   //: Preset initial component means
   // When initialise is called these means will be used as the initial guess
@@ -161,22 +161,22 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   short version_no() const;
 
   //: Name of the class
-  virtual std::string is_a() const;
+  std::string is_a() const override;
 
   //: Does the name of the class match the argument?
-  virtual bool is_class(std::string const& s) const;
+  bool is_class(std::string const& s) const override;
 
   //: Create a copy on the heap and return base class pointer
-  virtual vpdfl_builder_base* clone() const;
+  vpdfl_builder_base* clone() const override;
 
   //: Print class to os
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
   //: Save class to binary file stream
-  virtual void b_write(vsl_b_ostream& bfs) const;
+  void b_write(vsl_b_ostream& bfs) const override;
 
   //: Load class from binary file stream
-  virtual void b_read(vsl_b_istream& bfs);
+  void b_read(vsl_b_istream& bfs) override;
 
   //: Read initialisation settings from a stream.
   // Parameters:
@@ -194,7 +194,7 @@ class vpdfl_mixture_builder : public vpdfl_builder_base
   // }
   // \endverbatim
   // \throw mbl_exception_parse_error if the parse fails.
-  virtual void config_from_stream(std::istream & is);
+  void config_from_stream(std::istream & is) override;
 };
 
 #endif // vpdfl_mixture_builder_h_

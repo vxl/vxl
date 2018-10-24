@@ -33,7 +33,7 @@ class vdgl_fit_lines_params : public vbl_ref_count
   vdgl_fit_lines_params(const vdgl_fit_lines_params& flp)
     : vbl_ref_count(), min_fit_length_(flp.min_fit_length_), rms_distance_(flp.rms_distance_) {}
 
- ~vdgl_fit_lines_params() = default;
+ ~vdgl_fit_lines_params() override = default;
 
   //: Check that parameters are within acceptable bounds
   bool SanityCheck();
