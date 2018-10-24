@@ -62,7 +62,7 @@ class vil3d_image_view_base
   //: Return a box describing the voxel region
   vgl_box_3d<int> bounds() const
   {
-    if (size()==0) return vgl_box_3d<int>();  // Empty
+    if (size()==0) return {};  // Empty
     return {0,0,0,static_cast<int>(ni()-1),static_cast<int>(nj()-1),static_cast<int>(nk()-1)};
   }
 

@@ -301,7 +301,7 @@ vgl_homg_point_3d<double> PMatrix::get_focal() const
     std::cerr << "PMatrix::get_focal:\n"
              << "  Nullspace dimension is " << svd()->singularities()
              << "\n  Returning an invalid point (a vector of zeros)\n";
-    return vgl_homg_point_3d<double>(0,0,0,0);
+    return {0,0,0,0};
   }
 
   vnl_matrix<double> ns = svd()->nullspace();

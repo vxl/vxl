@@ -240,7 +240,7 @@ class vimt3d_transform_3d
      case Identity :
       return {x,y,z};
      case Translation :
-      return vgl_point_3d<double> (x+xt_,y+yt_,z+zt_);
+      return {x+xt_,y+yt_,z+zt_};
      case ZoomOnly :
       return vgl_point_3d<double> (
         x*xx_+xt_,
@@ -282,9 +282,9 @@ class vimt3d_transform_3d
                                     dp.z()*zz_};
 //   case RigidBody, Similarity, Affine :
      default : // Don't worry that the returned value is independent of p --- this is correct.
-      return vgl_vector_3d<double> (dp.x()*xx_+dp.y()*xy_+dp.z()*xz_,
+      return {dp.x()*xx_+dp.y()*xy_+dp.z()*xz_,
                                     dp.x()*yx_+dp.y()*yy_+dp.z()*yz_,
-                                    dp.x()*zx_+dp.y()*zy_+dp.z()*zz_);
+                                    dp.x()*zx_+dp.y()*zy_+dp.z()*zz_};
     }
   }
 

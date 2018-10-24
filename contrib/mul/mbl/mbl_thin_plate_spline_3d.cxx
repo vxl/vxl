@@ -383,7 +383,7 @@ vgl_point_3d<double>  mbl_thin_plate_spline_3d::operator()(double x, double y, d
   double z_sum = Az0_ + AzX_ * x + AzY_ * y + AzZ_ * z;
 
   if (n<=4)  // Pure affine
-    return vgl_point_3d<double>(x_sum,y_sum,z_sum);
+    return {x_sum,y_sum,z_sum};
 
   const vgl_point_3d<double> * pts_data = &src_pts_[0];
   const double* Wx_data = Wx_.data_block();
