@@ -97,7 +97,7 @@ unsigned mmn_graph_rep1::remove_leaves(std::vector<mmn_dependancy>& deps)
       unsigned arc12 = node_data_[v1][0].second;
 
       // Record dependency
-      deps.push_back(mmn_dependancy(v1,v2,arc12));
+      deps.emplace_back(v1,v2,arc12);
       n_removed++;
 
       // Remove the record of the arc from v1
@@ -158,9 +158,9 @@ unsigned mmn_graph_rep1::remove_pair_deps(std::vector<mmn_dependancy>& deps)
       // Record dependency
       // If one of v1,v2 is root_index, then re-arrange so that it is v1
       if (v2==root_index_)
-        deps.push_back(mmn_dependancy(v0,v2,v1,arc2,arc1,arc12));
+        deps.emplace_back(v0,v2,v1,arc2,arc1,arc12);
       else
-        deps.push_back(mmn_dependancy(v0,v1,v2,arc1,arc2,arc12));
+        deps.emplace_back(v0,v1,v2,arc1,arc2,arc12);
       n_removed++;
 
       // Remove the record of the arcs from v0

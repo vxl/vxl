@@ -48,7 +48,7 @@ void parse_globbed_filenames(const std::string & input,
 
   // Search for the files
   for (vul_file_iterator fit(filename); fit; ++fit)
-    filenames.push_back(fit());
+    filenames.emplace_back(fit());
 
 
   if (filenames.empty()) return;

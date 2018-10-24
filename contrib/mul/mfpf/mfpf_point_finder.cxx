@@ -353,7 +353,7 @@ void mfpf_point_finder::grid_search_one_pose(
   {
     unsigned x =t_pts[i].x(), y=t_pts[i].y();
     fit.push_back(t_value[i]);
-    pts.push_back(mfpf_pose(im2w(x,y),u));
+    pts.emplace_back(im2w(x,y),u);
   }
 }
 
@@ -435,7 +435,7 @@ void mfpf_point_finder::multi_search_one_pose(
     pf_cost.get_pose(params,p1,u1);
 
     fit.push_back(f1);
-    pts.push_back(mfpf_pose(p1,u1));
+    pts.emplace_back(p1,u1);
   }
 }
 

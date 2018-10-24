@@ -187,7 +187,7 @@ bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr 
     if ( (e->v1()->cast_to_vertex_2d() == v1 && e->v2()->cast_to_vertex_2d() == v2) ||
          (e->v1()->cast_to_vertex_2d() == v2 && e->v2()->cast_to_vertex_2d() == v1) )
     {
-      intersection.push_back(e);
+      intersection.emplace_back(e);
       found = true;
     }
   }

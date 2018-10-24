@@ -43,7 +43,7 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
   std::vector<vul_reg_exp> exceptions_re;
   while (exceptions && *exceptions)
   {
-    exceptions_re.push_back(vul_reg_exp(*exceptions));
+    exceptions_re.emplace_back(*exceptions);
     exceptions++;
   }
 

@@ -339,16 +339,16 @@ GetNativeAttributes(std::vector<float>& attrs)
 void vifa_int_faces_attr::
 GetAttributeNames(std::vector<std::string>& names)
 {
-  names.push_back("gArea");
-  names.push_back("gPerimeterLength");
-  names.push_back("gWeightedPerimeterLength");
-  names.push_back("gComplexity");
-  names.push_back("gWeightedComplexity");
-  names.push_back("gStrongParallel");
-  names.push_back("gWeakParallel");
-  names.push_back("gTwoPeakParallel");
-  names.push_back("gFourPeakParallel");
-  names.push_back("gEightyPercentParallel");
+  names.emplace_back("gArea");
+  names.emplace_back("gPerimeterLength");
+  names.emplace_back("gWeightedPerimeterLength");
+  names.emplace_back("gComplexity");
+  names.emplace_back("gWeightedComplexity");
+  names.emplace_back("gStrongParallel");
+  names.emplace_back("gWeakParallel");
+  names.emplace_back("gTwoPeakParallel");
+  names.emplace_back("gFourPeakParallel");
+  names.emplace_back("gEightyPercentParallel");
 
   for (int i = 0; i < NUM_HIST_ATTRIBUTES; i++)
   {

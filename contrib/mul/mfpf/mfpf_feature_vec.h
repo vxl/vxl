@@ -74,7 +74,7 @@ inline void mfpf_feature_vec_to_pose_set(const mfpf_feature_vec& feature_vec, mf
 
     while(featureIter != featureIterEnd)
     {
-        pose_set.poses.push_back(mfpf_pose(featureIter->pose));
+        pose_set.poses.emplace_back(featureIter->pose);
         pose_set.fits.push_back(featureIter->fit);
         ++featureIter;
     }

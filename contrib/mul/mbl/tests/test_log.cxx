@@ -29,7 +29,7 @@ namespace
       if (n)
         messages.back().append(pbase(), n);
       if (!messages.back().empty()) // Ignore flushes on empty messages
-        messages.push_back(std::string());
+        messages.emplace_back();
 
       pbump(-n);  // Reset pptr().
       return 0;

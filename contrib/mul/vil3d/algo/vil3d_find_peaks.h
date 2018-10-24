@@ -62,7 +62,7 @@ inline void vil3d_find_peaks_26(std::vector<vgl_point_3d<int> >& peaks,
       const T* pixel = row;
       for (unsigned i=1;i<ni1;++i,pixel+=istep)
         if (*pixel>=min_thresh && vil3d_is_peak26(pixel,istep,jstep,kstep))
-        { peaks.push_back(vgl_point_3d<int>(i,j,k)); }
+        { peaks.emplace_back(i,j,k); }
     }
   }
 }

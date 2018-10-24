@@ -150,8 +150,8 @@ void osl_harris::compute_corners()
       {
         double x, y;
         if (droid::compute_subpixel_max (&image_cornerness_buf, row, col, x,y, params_.pab_emulate))
-          cc.push_back(std::pair<float, float>(float(params_.col_start_index+x),
-                                              float(params_.row_start_index+y)));
+          cc.emplace_back(float(params_.col_start_index+x),
+                                              float(params_.row_start_index+y));
       }
   std::cerr << "osl_harris: Final corner count " << cc.size() << std::endl;
 }

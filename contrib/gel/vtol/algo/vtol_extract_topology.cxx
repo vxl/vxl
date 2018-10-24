@@ -97,7 +97,7 @@ make_one_chain( ) const
   std::vector< vtol_edge_sptr > edges;
 
   for ( unsigned i = 0; i < list_.size(); ++i ) {
-    edges.push_back( &*list_[i]->edge );
+    edges.emplace_back(&*list_[i]->edge );
   }
 
   return new vtol_one_chain( edges, /*is_cycle=*/ true );

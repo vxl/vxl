@@ -60,7 +60,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     vertex_list::iterator vi;
     for (vi=vl.begin();vi!=vl.end();vi++)
     {
-      vertices.push_back((*vi)->cast_to_vertex());
+      vertices.emplace_back((*vi)->cast_to_vertex());
     }
 
     // *** get the zero chains
@@ -72,7 +72,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     zero_chain_list::iterator zci;
     for (zci=zcl.begin();zci!=zcl.end();zci++)
     {
-      zero_chains.push_back((*zci)->cast_to_zero_chain());
+      zero_chains.emplace_back((*zci)->cast_to_zero_chain());
     }
 
     // *** get the edges
@@ -84,7 +84,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     edge_list::iterator ei;
     for (ei=el.begin();ei!=el.end();ei++)
     {
-      edges.push_back((*ei)->cast_to_edge());
+      edges.emplace_back((*ei)->cast_to_edge());
     }
 
     // *** get the one chains
@@ -96,7 +96,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     one_chain_list::iterator oci;
     for (oci=ocl.begin();oci!=ocl.end();oci++)
     {
-      one_chains.push_back((*oci)->cast_to_one_chain());
+      one_chains.emplace_back((*oci)->cast_to_one_chain());
     }
 
     // *** get the faces
@@ -108,7 +108,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     face_list::iterator fi;
     for (fi=fl.begin();fi!=fl.end();fi++)
     {
-      faces.push_back((*fi)->cast_to_face());
+      faces.emplace_back((*fi)->cast_to_face());
     }
 
     // *** get the two chains
@@ -120,7 +120,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     two_chain_list::iterator tci;
     for (tci=tcl.begin();tci!=tcl.end();tci++)
     {
-      two_chains.push_back((*tci)->cast_to_two_chain());
+      two_chains.emplace_back((*tci)->cast_to_two_chain());
     }
 
     // *** get the blocks
@@ -132,7 +132,7 @@ void vtol_topology_io::write(std::list<vtol_topology_object_sptr> &topo_objects,
     block_list::iterator bi;
     for (bi=bl.begin();bi!=bl.end();bi++)
     {
-      blocks.push_back((*bi)->cast_to_block());
+      blocks.emplace_back((*bi)->cast_to_block());
     }
   }
 

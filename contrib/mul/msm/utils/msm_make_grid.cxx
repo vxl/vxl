@@ -25,7 +25,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
   vcl_vector<vgl_point_2d<double> > pts;
   for (unsigned j=0; j<= ny; ++j)
     for (unsigned i=0; i<= nx; ++i)
-      pts.push_back(vgl_point_2d<double>(i*dx,j*dy));
+      pts.emplace_back(i*dx,j*dy);
 
   points.set_points(pts);
 
@@ -55,7 +55,7 @@ void msm_make_grid(msm_points& points, msm_curves& curves,
   vcl_vector<vgl_point_2d<double> > pts;
   for (unsigned j=0; j<= ny*ns; ++j)
     for (unsigned i=0; i<= nx*ns; ++i)
-      pts.push_back(vgl_point_2d<double>(i*dx/ns,j*dy/ns));
+      pts.emplace_back(i*dx/ns,j*dy/ns);
   points.set_points(pts);
 
   curves.resize(0);

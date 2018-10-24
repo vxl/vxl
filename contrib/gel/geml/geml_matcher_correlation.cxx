@@ -135,7 +135,7 @@ std::vector< std::pair<int,int> > geml_matcher_correlation::get_matches()
       std::cerr << i << ' ' << a << '\n';
       std::cout << corners1_[i].first << ' ' << corners1_[i].second << ' '
                << corners2_[a].first << ' ' << corners2_[a].second << std::endl;
-      l.push_back( std::pair<int,int>(i,a) );
+      l.emplace_back(i,a );
     }
   }
 

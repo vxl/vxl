@@ -718,7 +718,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
       z1 * x2 * T(2,1,0) - z1 * y2 * T(2,0,0);
 
     double lz = 0;
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 1 */
@@ -735,7 +735,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
     + y1 * x2 * T(1,1,0) - y1 * y2 * T(1,0,0)
     + z1 * x2 * T(2,1,0) - z1 * y2 * T(2,0,0);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 2 */
@@ -753,7 +753,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
       + y1 * x2 * T(1,1,1) - y1 * y2 * T(1,0,1)
       + z1 * x2 * T(2,1,1) - z1 * y2 * T(2,0,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 3 */
@@ -769,7 +769,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
       + z1 * x2 * T(2,2,0) - z1 * z2 * T(2,0,0);
 
     double lz = 0;
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 4 */
@@ -785,7 +785,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
       x1 * x2 * T(0,2,0) - x1 * z2 * T(0,0,0) +
       y1 * x2 * T(1,2,0) - y1 * z2 * T(1,0,0) +
       z1 * x2 * T(2,2,0) - z1 * z2 * T(2,0,0);
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 5 */
@@ -801,7 +801,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
         = x1 * x2 * T(0,2,1) - x1 * z2 * T(0,0,1)
         + y1 * x2 * T(1,2,1) - y1 * z2 * T(1,0,1)
         + z1 * x2 * T(2,2,1) - z1 * z2 * T(2,0,1);
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 6 */
@@ -817,7 +817,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
         + z1 * y2 * T(2,2,0) - z1 * z2 * T(2,1,0);
 
     double lz = 0;
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 7 */
@@ -834,7 +834,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
         + y1 * y2 * T(1,2,0) - y1 * z2 * T(1,1,0)
         + z1 * y2 * T(2,2,0) - z1 * z2 * T(2,1,0);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 8 */
@@ -851,7 +851,7 @@ void TriTensor::get_constraint_lines_image3(vgl_homg_point_2d<double> const& p1,
         + y1 * y2 * T(1,2,1) - y1 * z2 * T(1,1,1)
         + z1 * y2 * T(2,2,1) - z1 * z2 * T(2,1,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   assert(lines.size() == 9);
@@ -1086,7 +1086,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
 
     double lz = 0;
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 1 */
@@ -1103,7 +1103,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
 
     double lz = 0;
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 2 */
@@ -1120,7 +1120,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
 
     double lz = 0;
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 3 */
@@ -1137,7 +1137,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * y3 * T(1,0,0) + y1 * x3 * T(1,0,1)
         - z1 * y3 * T(2,0,0) + z1 * x3 * T(2,0,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 4 */
@@ -1154,7 +1154,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * z3 * T(1,0,0) + y1 * x3 * T(1,0,2)
         - z1 * z3 * T(2,0,0) + z1 * x3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 5 */
@@ -1171,7 +1171,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * z3 * T(1,0,1) + y1 * y3 * T(1,0,2)
         - z1 * z3 * T(2,0,1) + z1 * y3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 6 */
@@ -1188,7 +1188,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * y3 * T(1,1,0) + y1 * x3 * T(1,1,1)
         - z1 * y3 * T(2,1,0) + z1 * x3 * T(2,1,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 7 */
@@ -1205,7 +1205,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * z3 * T(1,1,0) + y1 * x3 * T(1,1,2)
         - z1 * z3 * T(2,1,0) + z1 * x3 * T(2,1,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 8 */
@@ -1222,7 +1222,7 @@ void TriTensor::get_constraint_lines_image2(vgl_homg_point_2d<double> const& p1,
         - y1 * z3 * T(1,1,1) + y1 * y3 * T(1,1,2)
         - z1 * z3 * T(2,1,1) + z1 * y3 * T(2,1,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 }
 
@@ -1433,7 +1433,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * x3 * T(2,1,1)
       + y2 * x3 * T(2,0,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 1 */
@@ -1456,7 +1456,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * x3 * T(2,1,2)
       + y2 * x3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 2 */
@@ -1479,7 +1479,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * y3 * T(2,1,2)
       + y2 * y3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 3 */
@@ -1502,7 +1502,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * x3 * T(2,2,1)
       + z2 * x3 * T(2,0,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 4 */
@@ -1525,7 +1525,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * x3 * T(2,2,2)
       + z2 * x3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 5 */
@@ -1548,7 +1548,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - x2 * y3 * T(2,2,2)
       + z2 * y3 * T(2,0,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 6 */
@@ -1571,7 +1571,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - y2 * x3 * T(2,2,1)
       + z2 * x3 * T(2,1,1);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 7 */
@@ -1594,7 +1594,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - y2 * x3 * T(2,2,2)
       + z2 * x3 * T(2,1,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 
   /* 8 */
@@ -1617,7 +1617,7 @@ void TriTensor::get_constraint_lines_image1(vgl_homg_point_2d<double> const& p2,
       - y2 * y3 * T(2,2,2)
       + z2 * y3 * T(2,1,2);
 
-    lines.push_back(vgl_homg_line_2d<double>(lx, ly, lz));
+    lines.emplace_back(lx, ly, lz);
   }
 }
 

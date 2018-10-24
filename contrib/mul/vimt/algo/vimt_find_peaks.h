@@ -52,7 +52,7 @@ inline void vimt_find_image_peaks_3x3(std::vector<vgl_point_2d<unsigned> >& peak
   {
     const T* pixel = row;
     for (unsigned i=1;i<ni-1;++i,pixel+=istep)
-      if (vimt_is_peak_3x3(pixel,istep,jstep)) peaks.push_back(vgl_point_2d<unsigned>(i,j));
+      if (vimt_is_peak_3x3(pixel,istep,jstep)) peaks.emplace_back(i,j);
   }
 }
 
@@ -75,7 +75,7 @@ inline void vimt_find_image_peaks_3x3(std::vector<vgl_point_2d<unsigned> >& peak
     for (unsigned i=1;i<ni-1;++i,pixel+=istep)
       if (vimt_is_peak_3x3(pixel,istep,jstep))
       {
-        peaks.push_back(vgl_point_2d<unsigned>(i,j));
+        peaks.emplace_back(i,j);
         peak_value.push_back(*pixel);
       }
   }
@@ -102,7 +102,7 @@ inline void vimt_find_image_peaks(std::vector<vgl_point_2d<unsigned> >& peaks,
     for (unsigned i=radius;i<ni-radius;++i,pixel+=istep)
       if (vimt_is_peak(pixel,radius,istep,jstep))
       {
-        peaks.push_back(vgl_point_2d<unsigned>(i,j));
+        peaks.emplace_back(i,j);
         peak_value.push_back(*pixel);
       }
   }
@@ -134,7 +134,7 @@ inline void vimt_find_image_peaks(std::vector<vgl_point_2d<unsigned> >& peaks,
       {
         if (vimt_is_peak(pixel,radius,istep,jstep))
         {
-          peaks.push_back(vgl_point_2d<unsigned>(i,j));
+          peaks.emplace_back(i,j);
           peak_value.push_back(*pixel);
         }
       }

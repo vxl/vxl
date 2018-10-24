@@ -62,7 +62,7 @@ rgrl_feature_set_location( feature_vector const& features,
   std::vector<rsdl_point> search_pts;
   search_pts.reserve( features.size() );
   for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
-    search_pts.push_back( rsdl_point((*itr)->location()) );
+    search_pts.emplace_back((*itr)->location() );
   }
   kd_tree_ = new rsdl_kd_tree( search_pts );
 }

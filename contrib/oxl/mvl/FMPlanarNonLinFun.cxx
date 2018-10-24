@@ -67,9 +67,9 @@ FMPlanarNonLinFun::FMPlanarNonLinFun(const ImageMetric* image_metric1,
   image_metric2_(image_metric2)
 {
   for (unsigned i = 0; i < points1.size(); ++i)
-    points1_.push_back(vgl_homg_point_2d<double>(points1[i].x(),points1[i].y(),points1[i].w()));
+    points1_.emplace_back(points1[i].x(),points1[i].y(),points1[i].w());
   for (unsigned i = 0; i < points2.size(); ++i)
-    points2_.push_back(vgl_homg_point_2d<double>(points2[i].x(),points2[i].y(),points2[i].w()));
+    points2_.emplace_back(points2[i].x(),points2[i].y(),points2[i].w());
   // Form single array
   std::vector<HomgPoint2D> points(points1);
   for (unsigned i = 0; i < points2.size(); ++i)

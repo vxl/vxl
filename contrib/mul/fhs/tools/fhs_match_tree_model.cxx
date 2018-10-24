@@ -250,7 +250,7 @@ void extract_normalised_patches(const vimt_image& image,
     // Compute position of reference point relative to corner
     int kx = px-ilo;
     int ky = py-jlo;
-    ref_pts.push_back(vgl_point_2d<double>(kx,ky));
+    ref_pts.emplace_back(kx,ky);
     vil_image_view<float> patch1;
     vil_convert_cast(vil_crop(byte_im.image(),ilo,1+ihi-ilo, jlo,1+jhi-jlo),
                      patch1);

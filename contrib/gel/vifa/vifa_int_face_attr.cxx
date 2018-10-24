@@ -111,21 +111,21 @@ GetAttributes(std::vector<float>&  attrs)
 void vifa_int_face_attr::
 GetAttributeNames(std::vector<std::string>&  names)
 {
-  names.push_back("IntMax");
-  names.push_back("IntMin");
-  names.push_back("IntMean");
-  names.push_back("IntVar");
-  names.push_back("Area");
-  names.push_back("AspectRatio");
-  names.push_back("PerimeterLength");
-  names.push_back("WeightedPerimeterLength");
-  names.push_back("Complexity");
-  names.push_back("WeightedComplexity");
-  names.push_back("StrongParallel");
-  names.push_back("WeakParallel");
-  names.push_back("TwoPeakParallel");
-  names.push_back("FourPeakParallel");
-  names.push_back("EightyPercentParallel");
+  names.emplace_back("IntMax");
+  names.emplace_back("IntMin");
+  names.emplace_back("IntMean");
+  names.emplace_back("IntVar");
+  names.emplace_back("Area");
+  names.emplace_back("AspectRatio");
+  names.emplace_back("PerimeterLength");
+  names.emplace_back("WeightedPerimeterLength");
+  names.emplace_back("Complexity");
+  names.emplace_back("WeightedComplexity");
+  names.emplace_back("StrongParallel");
+  names.emplace_back("WeakParallel");
+  names.emplace_back("TwoPeakParallel");
+  names.emplace_back("FourPeakParallel");
+  names.emplace_back("EightyPercentParallel");
 }
 
 // Populate a vector containing attributes native to this class (not

@@ -22,9 +22,9 @@ static void test_borgefors()
   int range = 250;
   std::vector<vnl_vector_fixed<double,2> > data;
   for (int i = -range ; i< range; i++)
-    data.push_back(vnl_vector_fixed<double,2>(i,0.0));
+    data.emplace_back(i,0.0);
   for (int j = -range; j< range; j++)
-    data.push_back(vnl_vector_fixed<double,2>(0.0,j));
+    data.emplace_back(0.0,j);
 
   std::cout << "Tests a borgefors map without a mask.\n";
   rsdl_borgefors<vnl_vector_fixed<double,2> >

@@ -285,9 +285,9 @@ void test_read_multi_props_ws()
       std::vector<std::string> val;
       props.get_required_properties("a", val);
       std::vector<std::string> true_val;
-      true_val.push_back("a1");
-      true_val.push_back("a2");
-      true_val.push_back("a3");
+      true_val.emplace_back("a1");
+      true_val.emplace_back("a2");
+      true_val.emplace_back("a3");
       TEST("Case 14a: present, correct", val, true_val);
     }
     {
@@ -348,9 +348,9 @@ void test_read_multi_props_ws()
       std::vector<std::string> val;
       props.get_required_properties("a", val);
       std::vector<std::string> true_val;
-      true_val.push_back("a1");
-      true_val.push_back("a2");
-      true_val.push_back("a3");
+      true_val.emplace_back("a1");
+      true_val.emplace_back("a2");
+      true_val.emplace_back("a3");
       TEST("Case 14a: present, correct", val, true_val);
     }
     {
@@ -411,9 +411,9 @@ void test_read_multi_props_ws()
       std::vector<std::string> val;
       props.get_optional_properties("a", val);
       std::vector<std::string> true_val;
-      true_val.push_back("a1");
-      true_val.push_back("a2");
-      true_val.push_back("a3");
+      true_val.emplace_back("a1");
+      true_val.emplace_back("a2");
+      true_val.emplace_back("a3");
       TEST("Case 15a: \"a\" present, correct", val, true_val);
     }
     {

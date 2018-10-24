@@ -161,7 +161,7 @@ void mfpf_region_pdf_builder::set_as_ellipse(double ri, double rj)
   {
     // Find start and end of line of pixels inside disk
     int x = int(ri*std::sqrt(1.0-j*j/(rj*rj)));
-    roi_.push_back(mbl_chord(ni-x,ni+x,nj+j));
+    roi_.emplace_back(ni-x,ni+x,nj+j);
     n_pixels_+=2*x+1;
   }
 

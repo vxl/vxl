@@ -20,7 +20,7 @@ void vsol_polygon_3d::compute_plane()
   std::vector<vgl_homg_point_3d<double> > pts;
   for (std::vector<vsol_point_3d_sptr>::iterator pit = storage_->begin();
        pit != storage_->end(); ++pit)
-    pts.push_back(vgl_homg_point_3d<double>((*pit)->x(),(*pit)->y(),(*pit)->z(),1.0));
+    pts.emplace_back((*pit)->x(),(*pit)->y(),(*pit)->z(),1.0);
   vgl_fit_plane_3d<double> fp(pts);
   fp.fit(0.1, &std::cerr);
   plane_ = fp.get_plane();
