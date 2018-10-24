@@ -118,7 +118,7 @@ static void UTM_init2(double lat_center2, double r_major, double e, int south_fl
 {
   scale_factor2 = 0.9996;
 
-  es2 = (double) e * (double) e;
+  es2 = e * (double) e;
   e02 = 1.0-0.25*es2*(1.0+es2/16.0*(3.0+1.25*es2));
   e12 = 0.375*es2*(1.0+0.25*es2*(1.0+0.46875*es2));
   e22 = 0.05859375*es2*es2*(1.0+0.75*es2);
