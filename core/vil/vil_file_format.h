@@ -54,6 +54,14 @@ class vil_file_format
                                  char const* /*temp_dir*/)
     {return nullptr;}
 
+  virtual vil_pyramid_image_resource_sptr
+  make_pyramid_image_from_base(char const* directory,
+                               vil_image_resource_sptr const& base_image,
+                               unsigned int nlevels,
+                               bool copy_base,
+                               char const* level_file_format,
+                               char const* filename) { return nullptr; } ;
+
   //: Make a "generic_image" on which put_section may be applied.
   // The stream vs is assumed to be open for writing, as an image header may be
   // written to it immediately.

@@ -131,11 +131,11 @@ class vil_openjpeg_image : public vil_image_resource
 
   // Inherit the documentation from vil_image_resource
 
-  virtual unsigned int nplanes() const;
-  virtual unsigned int ni() const;
-  virtual unsigned int nj() const;
-  virtual enum vil_pixel_format pixel_format() const;
-  virtual const char * file_format();
+  unsigned int nplanes() const override;
+  unsigned int ni() const override;
+  unsigned int nj() const override;
+  enum vil_pixel_format pixel_format() const override;
+  const char * file_format() const override;
 
   //: Reductions.
   // An image may supply lower resolutions.
@@ -143,8 +143,8 @@ class vil_openjpeg_image : public vil_image_resource
   // 0 means only the full size image is available.
   virtual unsigned int nreductions() const;
 
-  virtual vil_image_view_base_sptr get_copy_view(
-    unsigned int i0, unsigned int ni, unsigned int j0, unsigned int nj) const;
+  vil_image_view_base_sptr get_copy_view(
+    unsigned int i0, unsigned int ni, unsigned int j0, unsigned int nj) const override;
 
   //: Create a read/write view of a copy of this data.
   // This is similar to get_copy_view, except that a reduction level may
@@ -156,10 +156,10 @@ class vil_openjpeg_image : public vil_image_resource
     unsigned i0, unsigned ni, unsigned j0, unsigned nj,
     unsigned reduction) const;
 
-  virtual bool put_view(const vil_image_view_base& im,
-                        unsigned int i0, unsigned int j0);
+  bool put_view(const vil_image_view_base& im,
+                        unsigned int i0, unsigned int j0) override;
 
-  virtual bool get_property(char const* tag, void* property_value = nullptr) const;
+  bool get_property(char const* tag, void* property_value = nullptr) const override;
 
  private:
   bool validate_format();

@@ -28,15 +28,15 @@ class vil_pyramid_image_list_format : public vil_file_format
 
   //: Return a character string which uniquely identifies this format.
   //E.g. "pnm", "jpeg", etc.
-  virtual char const* tag() const {return "pyil";}//pyramid image list
+  char const* tag() const override {return "pyil";}//pyramid image list
 
   //: should return 0 so that no attempt is made to create a single image resource
-  virtual vil_image_resource_sptr make_input_image(vil_stream* /*vs*/)
+  vil_image_resource_sptr make_input_image(vil_stream* /*vs*/) override
   { return nullptr; }
 
   //: Read a pyramid resource. Image list files are stored in directory.
-  virtual vil_pyramid_image_resource_sptr
-  make_input_pyramid_image(char const* directory);
+  vil_pyramid_image_resource_sptr
+  make_input_pyramid_image(char const* directory) override;
 
 
   //: Construct a pyramid image resource from a base image
@@ -45,24 +45,24 @@ class vil_pyramid_image_list_format : public vil_file_format
   //  Level 0 is already present in the directory and is used without
   //  modification. Each pyramid file in the directory is named
   //  filename + "level_index", e.g. R0, R1, ... Rn.
-  virtual vil_pyramid_image_resource_sptr
+  vil_pyramid_image_resource_sptr
   make_pyramid_image_from_base(char const* directory,
                                vil_image_resource_sptr const& base_image,
                                unsigned int nlevels,
                                bool copy_base,
                                char const* level_file_format,
-                               char const* filename);
+                               char const* filename) override;
 
   //: A non-pyramid output image doesn't make sense here
-  virtual vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
+  vil_image_resource_sptr make_output_image(vil_stream* /*vs*/,
                                                     unsigned int /*ni*/,
                                                     unsigned int /*nj*/,
                                                     unsigned int /*nplanes*/,
-                                                    enum vil_pixel_format)
+                                                    enum vil_pixel_format) override
   { return nullptr; }
 
-  virtual vil_pyramid_image_resource_sptr
-    make_pyramid_output_image(char const* directory);
+  vil_pyramid_image_resource_sptr
+    make_pyramid_output_image(char const* directory) override;
 };
 
 struct pyramid_level
