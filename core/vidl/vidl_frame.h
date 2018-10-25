@@ -95,17 +95,17 @@ class VIDL_EXPORT vidl_shared_frame : public vidl_frame
       vidl_frame(ni,nj,fmt), buffer_(buffer) {}
 
     //: Destructor
-    virtual ~vidl_shared_frame() {}
+    ~vidl_shared_frame() override {}
 
     //: Make the buffer invalid (data()==0 and size()==0)
-    virtual void invalidate() { buffer_ = nullptr; vidl_frame::invalidate(); }
+    void invalidate() override { buffer_ = nullptr; vidl_frame::invalidate(); }
 
     //: Return a pointer to the first element of data
-    virtual void * data() { return buffer_; }
-    virtual const void * data() const { return buffer_; }
+    void * data() override { return buffer_; }
+    const void * data() const override { return buffer_; }
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() const { return vidl_pixel_format_buffer_size(ni_,nj_,format_); }
+    unsigned long size() const override { return vidl_pixel_format_buffer_size(ni_,nj_,format_); }
 
   private:
     void * buffer_;
@@ -136,17 +136,17 @@ class VIDL_EXPORT vidl_memory_chunk_frame : public vidl_frame
     inline const vil_memory_chunk_sptr& memory_chunk() const { return memory_; }
 
     //: Destructor
-    virtual ~vidl_memory_chunk_frame() {}
+    ~vidl_memory_chunk_frame() override {}
 
     //: Make the buffer invalid (data()==0 and size()==0)
-    virtual void invalidate() { memory_ = nullptr;  vidl_frame::invalidate(); }
+    void invalidate() override { memory_ = nullptr;  vidl_frame::invalidate(); }
 
     //: Return a pointer to the first element of data
-    virtual void * data () { return memory_?memory_->data():nullptr; }
-    virtual const void * data () const { return memory_?memory_->data():nullptr; }
+    void * data () override { return memory_?memory_->data():nullptr; }
+    const void * data () const override { return memory_?memory_->data():nullptr; }
 
     //: The size of the buffer in bytes
-    virtual unsigned long size() const { return (unsigned long)(memory_?memory_->size():0L); }
+    unsigned long size() const override { return (unsigned long)(memory_?memory_->size():0L); }
 
   private:
     vil_memory_chunk_sptr memory_;

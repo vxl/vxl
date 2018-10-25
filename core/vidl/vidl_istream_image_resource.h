@@ -42,24 +42,24 @@ class vidl_istream_image_resource : public vil_image_resource
                               vil_pixel_format format);
   vidl_istream_image_resource(const vidl_istream_sptr& stream, int frame);
   vidl_istream_image_resource(const vidl_istream_sptr& stream);
-  ~vidl_istream_image_resource();
+  ~vidl_istream_image_resource() override;
 
   //: Dimensions
-  virtual unsigned nplanes() const;
-  virtual unsigned ni() const;
-  virtual unsigned nj() const;
+  unsigned nplanes() const override;
+  unsigned ni() const override;
+  unsigned nj() const override;
 
-  virtual enum vil_pixel_format pixel_format() const;
+  enum vil_pixel_format pixel_format() const override;
 
   //: Create a read/write view of a copy of this data.
   // \return 0 if unable to get view of correct size.
-  virtual vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
-                                                 unsigned j0, unsigned nj) const;
+  vil_image_view_base_sptr get_copy_view(unsigned i0, unsigned ni,
+                                                 unsigned j0, unsigned nj) const override;
 
   //: Put the data in this view back into the image source.
-  virtual bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0);
+  bool put_view(const vil_image_view_base& im, unsigned i0, unsigned j0) override;
 
-  bool get_property(char const *tag, void *prop = nullptr) const;
+  bool get_property(char const *tag, void *prop = nullptr) const override;
 
  private:
   //: try to find the image format and size from the current frame

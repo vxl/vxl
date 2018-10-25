@@ -256,14 +256,14 @@ class vidl_pixel_iterator_of : public vidl_pixel_iterator
   vidl_pixel_iterator_of(const vidl_frame& frame) : itr_(frame) {}
 
   //: Destructor
-  virtual ~vidl_pixel_iterator_of<FMT>() {}
+  ~vidl_pixel_iterator_of<FMT>() override {}
 
   //: Return the pixel format
-  virtual vidl_pixel_format pixel_format() const
+  vidl_pixel_format pixel_format() const override
   { return FMT; }
 
   //: Pre-increment: step to the next pixel
-  virtual vidl_pixel_iterator& operator++ ()
+  vidl_pixel_iterator& operator++ () override
   { itr_.next(); return *this; }
 
   //: Access the data
@@ -271,11 +271,11 @@ class vidl_pixel_iterator_of : public vidl_pixel_iterator
   { return itr_(i); }
 
   //: Copy the pixel data into a byte array
-  virtual void get_data(vxl_byte* data) const
+  void get_data(vxl_byte* data) const override
   { itr_.get(reinterpret_cast<cmp_type*>(data)); }
 
   //: Set the pixel data from a byte array
-  virtual void set_data(const vxl_byte* data)
+  void set_data(const vxl_byte* data) override
   { itr_.set(reinterpret_cast<const cmp_type*>(data)); }
 };
 
@@ -305,10 +305,10 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   }
 
   //: Destructor
-  virtual ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>() {}
+  ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>() override {}
 
   //: Return the pixel format
-  virtual vidl_pixel_format pixel_format() const
+  vidl_pixel_format pixel_format() const override
   { return VIDL_PIXEL_FORMAT_MONO_1; }
 
   //: Step to the next pixel
@@ -324,7 +324,7 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   }
 
   //: Pre-increment: step to the next pixel
-  virtual vidl_pixel_iterator& operator++ ()
+  vidl_pixel_iterator& operator++ () override
   {
     return this->next();
   }
@@ -349,13 +349,13 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   }
 
   //: Copy the pixel data into a byte array
-  virtual void get_data(vxl_byte* data) const
+  void get_data(vxl_byte* data) const override
   {
     this->get(reinterpret_cast<bool*>(data));
   }
 
   //: Set the pixel data from a byte array
-  virtual void set_data(const vxl_byte* data)
+  void set_data(const vxl_byte* data) override
   {
     this->set(reinterpret_cast<const bool*>(data));
   }
