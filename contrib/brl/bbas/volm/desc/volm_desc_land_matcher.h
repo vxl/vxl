@@ -28,15 +28,15 @@ public:
   volm_desc_land_matcher(std::string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc);
 
   //: Destrcutor
-  ~volm_desc_land_matcher() {}
+  ~volm_desc_land_matcher() override {}
 
   //: Create a volumetric land descriptor for the query image
-  virtual volm_desc_sptr create_query_desc();
+  volm_desc_sptr create_query_desc() override;
 
   //: Compare two descriptor a and b and return a score to quantifies the similarity
-  virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index);
+  float score(volm_desc_sptr const& query, volm_desc_sptr const& index) override;
 
-  virtual std::string get_index_type_str() { return volm_desc_land_indexer::get_name(); }
+  std::string get_index_type_str() override { return volm_desc_land_indexer::get_name(); }
 
 private:
   //std::string query_category_file_;

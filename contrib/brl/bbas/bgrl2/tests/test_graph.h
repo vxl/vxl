@@ -20,7 +20,7 @@ class test_graph : public bgrl2_graph<test_node, test_edge>
 {
  public:
   test_graph() : bgrl2_graph<test_node, test_edge>() {}
-  ~test_graph() {}
+  ~test_graph() override {}
 };
 
 #endif //test_graph_h_

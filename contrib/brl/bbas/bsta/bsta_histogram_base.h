@@ -25,7 +25,7 @@ class bsta_histogram_base : public vbl_ref_count
   //: Default constructor
   bsta_histogram_base(): type_(HIST_TYPE_UNKNOWN){}
 
-  virtual ~bsta_histogram_base() {}
+  ~bsta_histogram_base() override {}
 
   bsta_hist_type type_;
 };

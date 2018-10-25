@@ -18,7 +18,7 @@ bsta_sigma_normalizer::bsta_sigma_normalizer(float under_estimation_probability,
    public:
     gammainc_error_fn(unsigned int ndof, float under_estimation_prob) : vnl_least_squares_function(1,1,no_gradient), ndof_(ndof), p_(under_estimation_prob) {}
 
-    virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx)
+    void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override
     {
       // don't allow x to become negative
       if (x[0] < 0.0f) {

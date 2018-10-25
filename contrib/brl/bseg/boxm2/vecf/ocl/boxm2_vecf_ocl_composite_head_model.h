@@ -24,7 +24,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
 public:
   boxm2_vecf_ocl_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize =false);
 
-  void map_to_target(boxm2_scene_sptr target);
+  void map_to_target(boxm2_scene_sptr target) override;
 
   // virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) ;
   // virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) ;
@@ -32,7 +32,7 @@ public:
   // virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) ;
 
   void update_gpu_target(boxm2_scene_sptr target_scene);
-  bool set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params) override;
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
   // retrieve the estimated look dir from imagery
   vgl_vector_3d<double> get_estimated_look_dir(bool is_right)

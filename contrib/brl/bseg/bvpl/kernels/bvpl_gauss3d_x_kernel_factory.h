@@ -38,14 +38,14 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
   //  Can also specify the support of the kernel
   bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp_1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
-  virtual ~bvpl_gauss3d_x_kernel_factory() {}
+  ~bvpl_gauss3d_x_kernel_factory() override {}
 
   static std::string name() {return "gauss_x"; }
 
  private:
 
   //:Creates a 2d edge kernel
-  virtual void create_canonical();
+  void create_canonical() override;
 
   float sigma1_;
   float sigma2_;

@@ -105,7 +105,7 @@ class bmsh3d_vertex : public vispt_elm
     flow_type_ = '?';
     pt_.set(x, y, z);
   }
-  virtual ~bmsh3d_vertex() {
+  ~bmsh3d_vertex() override {
     //can not delete a vertex with any incident edge
     assert(E_list_ == nullptr);
   }
@@ -254,7 +254,7 @@ class bmsh3d_vertex : public vispt_elm
   const bmsh3d_edge* find_unvisited_E_() const;
 
   //###### Other functions ######
-  virtual void getInfo(std::ostringstream& ostrm);
+  void getInfo(std::ostringstream& ostrm) override;
 
   //###### For the face of a 2-manifold mesh only ######
   //  these functions start with a tag m2 (manifold-2)

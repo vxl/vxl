@@ -27,18 +27,18 @@ class vsol_mesh_3d : public vsol_volume_3d
  public:
  vsol_mesh_3d():mesh_(nullptr),current_extr_face_(nullptr){}
   vsol_mesh_3d(vsol_box_3d_sptr box);
-  ~vsol_mesh_3d(){delete mesh_;}
+  ~vsol_mesh_3d() override{delete mesh_;}
 
   //: required virtual functions for vsol
-  virtual vsol_volume_3d_type volume_type(void) const { return vsol_volume_3d::MESH; }
-  virtual bool in(vsol_point_3d_sptr const& p) const;
-  virtual double volume(void) const{return 0.0;}
-  virtual void compute_bounding_box() const;
-  virtual vsol_spatial_object_3d* clone() const{return nullptr;}
+  vsol_volume_3d_type volume_type(void) const override { return vsol_volume_3d::MESH; }
+  bool in(vsol_point_3d_sptr const& p) const override;
+  double volume(void) const override{return 0.0;}
+  void compute_bounding_box() const override;
+  vsol_spatial_object_3d* clone() const override{return nullptr;}
 
   //: old style downcasting methods from vsol
-  virtual vsol_mesh_3d* cast_to_mesh() { return this;}
-  virtual vsol_mesh_3d const* cast_to_mesh() const { return this;}
+  vsol_mesh_3d* cast_to_mesh() override { return this;}
+  vsol_mesh_3d const* cast_to_mesh() const override { return this;}
 
   unsigned num_faces() const  { return mesh_->facemap().size(); }
   unsigned num_edges() const { return mesh_->edgemap().size(); }
@@ -88,9 +88,9 @@ class vsol_mesh_3d : public vsol_volume_3d
 
   //: requried for vsol serialization
   //: Return a platform independent string identifying the class
-  virtual std::string is_a() const { return std::string("vsol_mesh_3d"); }
+  std::string is_a() const override { return std::string("vsol_mesh_3d"); }
   //: Return true if the argument matches the string identifying the class or any parent class
-  virtual bool is_class(const std::string& cls) const { return cls==is_a(); }
+  bool is_class(const std::string& cls) const override { return cls==is_a(); }
 
  protected:
   bmsh3d_mesh_mc* mesh_;

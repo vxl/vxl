@@ -37,7 +37,7 @@ class bwm_video_cam_istream : public vbl_ref_count
   bwm_video_cam_istream(const std::vector<std::string>& paths);
 
   //: Destructor
-   ~bwm_video_cam_istream() { close(); }
+   ~bwm_video_cam_istream() override { close(); }
 
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name

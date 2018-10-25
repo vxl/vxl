@@ -35,7 +35,7 @@ class ihog_cost_func : public vnl_cost_function
                   const ihog_world_roi& roi,
                   const ihog_transform_2d& init_xform );
   //: The main function.
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
 
   //: Returns the transformed second image
   vil_image_view<float> last_xformed_image();

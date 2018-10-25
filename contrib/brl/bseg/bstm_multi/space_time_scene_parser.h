@@ -34,7 +34,7 @@ public:
   typedef typename Block::metadata_t block_metadata;
 
   space_time_scene_parser() : version_(1) {}
-  ~space_time_scene_parser(void) {}
+  ~space_time_scene_parser(void) override {}
 
   // ACCESSORS for parser info
   bool lvcs(vpgl_lvcs &lvcs);
@@ -46,9 +46,9 @@ public:
   int version() const { return version_; }
 
 private:
-  virtual void startElement(const XML_Char *name, const XML_Char **atts);
-  virtual void endElement(const XML_Char * /*name*/) {}
-  virtual void charData(const XML_Char * /*s*/, int /*len*/) {}
+  void startElement(const XML_Char *name, const XML_Char **atts) override;
+  void endElement(const XML_Char * /*name*/) override {}
+  void charData(const XML_Char * /*s*/, int /*len*/) override {}
 
   // lvcs temp values
   vcl_string lvcs_cs_name_;

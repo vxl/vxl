@@ -45,7 +45,7 @@ class bstm_block : public vbl_ref_count
   bool init_empty_block(bstm_block_metadata data);
 
   //: default destructor
-  virtual ~bstm_block() { if (buffer_) delete[] buffer_; }
+  ~bstm_block() override { if (buffer_) delete[] buffer_; }
 
   //: all IO manipulates char buffers
   bool b_read(char* buffer);

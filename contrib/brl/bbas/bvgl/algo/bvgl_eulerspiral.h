@@ -60,18 +60,18 @@ public:
   void init(const vgl_point_2d<double >& start, double start_angle, double k0, double gamma, double len);
 
   //: Destructor
-  virtual ~bvgl_eulerspiral(){};
+  ~bvgl_eulerspiral() override{};
 
   //----------------- TYPE ----------------------------
   static const std::type_info& type_id()
   { return typeid(bvgl_eulerspiral); }
 
-  virtual bool is_type( const std::type_info& type ) const {
+  bool is_type( const std::type_info& type ) const override {
     return (typeid(bvgl_eulerspiral) == type) != 0 ||
       this->bvgl_eulerspiral_base::is_type(type);
   }
 
-  bvgl_param_curve *clone() const { return new bvgl_eulerspiral(*this); }
+  bvgl_param_curve *clone() const override { return new bvgl_eulerspiral(*this); }
 
 
   // ------------ ACCESS MEMBER VARIABLES ----------------------------------
@@ -106,35 +106,35 @@ public:
   // double len() const { return this->len_; }
 
   //: length of parametric curve from start point to end point (if any)
-  virtual double length() const { return this->len_;};
+  double length() const override { return this->len_;};
   void set_len( double len ){ this->len_ = len; }
 
   // ---------------- GEOMETRY FUNCTIONS -----------------------
 
   //: Get the point at arclength s away from the starting point
-  virtual vgl_point_2d< double > point_at_length( double s) const;
+  vgl_point_2d< double > point_at_length( double s) const override;
 
   //: Get the point at parameter s along the curve, s within [0,1]
-  virtual vgl_point_2d< double > point_at( double s) const;
+  vgl_point_2d< double > point_at( double s) const override;
 
   //: Get tangent of the point at arclength s away from starting point
-  virtual vgl_vector_2d< double > tangent_at_length( double s) const;
+  vgl_vector_2d< double > tangent_at_length( double s) const override;
 
   //: Get tangent of the point at parameter s within [0,1]
-  virtual vgl_vector_2d< double > tangent_at( double s) const;
+  vgl_vector_2d< double > tangent_at( double s) const override;
 
   //: Get tangent angle (in radian) in [0, 2PI) of the point
   // at arclength s away from the starting point
-  virtual double tangent_angle_at_length(double s) const;
+  double tangent_angle_at_length(double s) const override;
 
   //: Get tangent angle (in radian) in [0, 2PI) at parameter s within [0,1]
-  virtual double tangent_angle_at(double s) const;
+  double tangent_angle_at(double s) const override;
 
   //: Get curvature of the point at s arclength away from starting point
-  virtual double curvature_at_length ( double s) const ;
+  double curvature_at_length ( double s) const override ;
 
   //: Get curvature of the point at s within [0,1]
-  virtual double curvature_at ( double s) const ;
+  double curvature_at ( double s) const override ;
 
   //: Get average curvature of the euler spiral
   double average_curvature() { return curvature_at_length(len_/2.0f); }

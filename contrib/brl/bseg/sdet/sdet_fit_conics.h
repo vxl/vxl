@@ -34,7 +34,7 @@ class sdet_fit_conics : public sdet_fit_conics_params
   //:Constructors/destructor
   sdet_fit_conics(sdet_fit_conics_params& rpp);
 
-  ~sdet_fit_conics();
+  ~sdet_fit_conics() override;
   //: Process methods
   bool fit_conics();
   void clear();

@@ -43,18 +43,18 @@ class bvxm_voxel_storage_disk : public bvxm_voxel_storage<T>
   bvxm_voxel_storage_disk(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size);
   bvxm_voxel_storage_disk(std::string storage_filename);
 
-  virtual ~bvxm_voxel_storage_disk();
+  ~bvxm_voxel_storage_disk() override;
 
-  virtual bool initialize_data(T const& value);
-  virtual bvxm_voxel_slab<T> get_slab(unsigned slice_idx, unsigned slab_thickness);
-  virtual void put_slab();
+  bool initialize_data(T const& value) override;
+  bvxm_voxel_slab<T> get_slab(unsigned slice_idx, unsigned slab_thickness) override;
+  void put_slab() override;
 
   //: return number of observations
-  virtual unsigned num_observations() const;
+  unsigned num_observations() const override;
   //: increment the number of observations
-  virtual void increment_observations();
+  void increment_observations() override;
   //: zero the number of observations
-  virtual void zero_observations();
+  void zero_observations() override;
  private:
 
   std::string storage_fname_;

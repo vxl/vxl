@@ -67,7 +67,7 @@ class bmsh3d_edge : public vispt_elm
     vertices_[1]  = ev;
     i_visited_    = 0;
   }
-  virtual ~bmsh3d_edge();
+  ~bmsh3d_edge() override;
   bmsh3d_edge* clone();
 
   //###### Data access functions ######
@@ -155,7 +155,7 @@ class bmsh3d_edge : public vispt_elm
   bmsh3d_face* m2_other_face(bmsh3d_face* input_face);
 
   //###### Other functions ######
-  virtual void getInfo(std::ostringstream& ostrm);
+  void getInfo(std::ostringstream& ostrm) override;
 };
 
 //: Given two consecutive edges, find the common incident vertex.

@@ -103,7 +103,7 @@ class brdb_tuple : public vbl_ref_count
   brdb_tuple(const brdb_tuple& other);
 
   //: Destructor
-  virtual ~brdb_tuple();
+  ~brdb_tuple() override;
 
   //========================= Accessors / Modifiers ==========================
 
@@ -236,7 +236,7 @@ class brdb_tuple_less : public brdb_tuple_order
   brdb_tuple_less(unsigned int index): index_(index) {}
   //: Main function
   bool operator() (const brdb_tuple_sptr& lhs,
-                   const brdb_tuple_sptr& rhs) const
+                   const brdb_tuple_sptr& rhs) const override
   {
     return (*lhs)[index_] < (*rhs)[index_];
   }
@@ -255,7 +255,7 @@ class brdb_tuple_greater : public brdb_tuple_order
   brdb_tuple_greater(unsigned int index): index_(index) {}
   //: Main function
   bool operator() (const brdb_tuple_sptr& lhs,
-                   const brdb_tuple_sptr& rhs) const
+                   const brdb_tuple_sptr& rhs) const override
   {
     return (*lhs)[index_] > (*rhs)[index_];
   }

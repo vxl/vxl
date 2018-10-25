@@ -37,7 +37,7 @@ class boxm2_opencl_cache1: public vbl_ref_count
     boxm2_opencl_cache1(boxm2_scene_sptr scene,
                        bocl_device_sptr device,
                        unsigned int maxBlocks=1);
-    ~boxm2_opencl_cache1() { if (cpu_cache_) cpu_cache_ = nullptr;
+    ~boxm2_opencl_cache1() override { if (cpu_cache_) cpu_cache_ = nullptr;
                             this->clear_cache();
                           }
 

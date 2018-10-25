@@ -297,7 +297,7 @@ class expatppNesting : public expatpp
 {
  public:
   expatppNesting(expatppNesting* parent=nullptr);  ///< NOT a copy ctor!! this is a recursive situation
-  virtual ~expatppNesting();
+  ~expatppNesting() override;
 
   void switchToNewSubParser( expatppNesting* pAdoptedChild );
   expatppNesting* returnToParent();
@@ -324,7 +324,7 @@ class expatppNesting : public expatpp
 
 /// \name overrideables to customise behaviour, must call parent
 //@{
-  virtual void SetupHandlers();
+  void SetupHandlers() override;
 //@}
 
  private:

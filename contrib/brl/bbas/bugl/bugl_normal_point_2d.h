@@ -30,7 +30,7 @@ class bugl_normal_point_2d: public bugl_gaussian_point_2d<double>, public vbl_re
 
   bugl_normal_point_2d() {}
 
-  ~bugl_normal_point_2d() {}
+  ~bugl_normal_point_2d() override {}
 };
 
 #endif // bugl_normal_point_2d_h_

@@ -51,9 +51,9 @@ class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landm
     typedef boxm2_vecf_landmark_mapper<F> MAPPER_T;
 
     //: Create a function object that maps source pts to target pts.
-    virtual MAPPER_T make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id);
+    MAPPER_T make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id) override;
     //: Create a function object that maps target pts to source pts.
-    virtual MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id);
+    MAPPER_T make_inverse_mapper(boxm2_scene_sptr target, boxm2_block_id const& blk_id) override;
 
     //: data
     const std::vector<vgl_point_3d<double> > control_pts_source_;

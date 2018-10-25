@@ -37,7 +37,7 @@ public:
   { name_ = "descriptor";  nbins_ = (unsigned)values.size(); }
 
   // Destructor
-  virtual ~volm_desc() {};
+  ~volm_desc() override {};
 
   //: return the name of the descriptor
   virtual std::string name() { return "volm_desc base"; }

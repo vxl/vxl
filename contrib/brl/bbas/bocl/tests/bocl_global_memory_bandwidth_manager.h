@@ -67,7 +67,7 @@ class bocl_global_memory_bandwidth_manager : public bocl_manager<bocl_global_mem
   bocl_global_memory_bandwidth_manager()
     : program_(nullptr),time_in_secs_(0.0f) {}
 
-  ~bocl_global_memory_bandwidth_manager();
+  ~bocl_global_memory_bandwidth_manager() override;
 
 };
 

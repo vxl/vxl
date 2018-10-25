@@ -27,12 +27,12 @@ public:
 
   volm_desc_land_indexer(std::string const& NLCD_folder, std::string const& out_index_folder);
 
-  virtual bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values);
+  bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values) override;
 
   //: each driving indexer should overwrite with the size of the descriptor
-  virtual unsigned layer_size() {  return (unsigned)volm_osm_category_io::volm_land_table.size();  }
+  unsigned layer_size() override {  return (unsigned)volm_osm_category_io::volm_land_table.size();  }
 
-  virtual std::string get_index_type_str() { return volm_desc_land_indexer::get_name(); }
+  std::string get_index_type_str() override { return volm_desc_land_indexer::get_name(); }
 
 public:
   std::vector<volm_img_info> NLCD_imgs_;

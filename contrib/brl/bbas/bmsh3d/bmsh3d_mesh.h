@@ -86,7 +86,7 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
     }
   }
 
-  virtual ~bmsh3d_ifs_mesh() {
+  ~bmsh3d_ifs_mesh() override {
     _clear_facemap();
   }
 
@@ -133,18 +133,18 @@ class bmsh3d_ifs_mesh : public bmsh3d_pt_set
   //###### Connectivity Modification Functions ######
 
   //: new/delete function of the class hierarchy
-  virtual bmsh3d_vertex* _new_vertex()
+  bmsh3d_vertex* _new_vertex() override
   {
     return new bmsh3d_vertex(vertex_id_counter_++);
   }
-  virtual bmsh3d_vertex* _new_vertex(const int id)
+  bmsh3d_vertex* _new_vertex(const int id) override
   {
     if (vertex_id_counter_ <= id)
       vertex_id_counter_ = id+1;
     return new bmsh3d_vertex(id);
   }
 
-  virtual void _del_vertex(bmsh3d_vertex* V) { delete V; }
+  void _del_vertex(bmsh3d_vertex* V) override { delete V; }
 
   //: new/delete function of the class hierarchy
   virtual bmsh3d_face* _new_face() { return new bmsh3d_face(face_id_counter_++); }
@@ -261,7 +261,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
     }
   }
 
-  virtual ~bmsh3d_mesh()
+  ~bmsh3d_mesh() override
   {
     //Note that in some case the object is already released.
     //In this case, we don't need to free the memory.
@@ -320,7 +320,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   }
 
   //###### Connectivity Query Functions ######
-  virtual double get_avg_edge_len_from_F();
+  double get_avg_edge_len_from_F() override;
 
   //: Count the size of mesh faces indices for visualization using SoIndexedFaceSet.
   unsigned int count_faces_indices();
@@ -396,7 +396,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
     return V;
   }
 
-  virtual void remove_vertex(bmsh3d_vertex* V)
+  void remove_vertex(bmsh3d_vertex* V) override
   {
     //Delete a vertex only when there's no incident edges or faces.
     assert(! V->has_incident_Es());
@@ -406,7 +406,7 @@ class bmsh3d_mesh : public bmsh3d_ifs_mesh
   }
 
   //: delete vertex from the map and release its memory
-  virtual void remove_vertex(int id)
+  void remove_vertex(int id) override
   {
     bmsh3d_vertex* V = vertexmap(id);
     remove_vertex(V);

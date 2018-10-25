@@ -24,9 +24,9 @@ class sdet_nonmax_suppression_params : public gevd_param_mixin
   sdet_nonmax_suppression_params(const double thresh = 50, const int pfit_type = 0);
 
   sdet_nonmax_suppression_params(const sdet_nonmax_suppression_params& old_params);
-  ~sdet_nonmax_suppression_params(){}
+  ~sdet_nonmax_suppression_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&,const sdet_nonmax_suppression_params& dp);
  protected:

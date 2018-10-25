@@ -63,7 +63,7 @@ public:
                    unsigned char const& land);
 
   //: destructor
-  ~volm_conf_object() {}
+  ~volm_conf_object() override {}
 
   //: access
   float theta()  const        { return theta_; }

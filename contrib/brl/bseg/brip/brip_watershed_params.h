@@ -26,7 +26,7 @@ class brip_watershed_params : public gevd_param_mixin
 
 
   brip_watershed_params(const brip_watershed_params& old_params);
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend std::ostream& operator<<(std::ostream&, const brip_watershed_params& wp);
  protected:
   void InitParams(float sigma, float thresh,

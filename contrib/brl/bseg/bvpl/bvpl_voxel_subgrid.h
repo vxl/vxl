@@ -58,7 +58,7 @@ class bvpl_voxel_subgrid : public bvpl_subgrid_base
                      vgl_point_3d<int> max_point,
                      vgl_point_3d<int> min_point);
 
-  virtual ~bvpl_voxel_subgrid() {}
+  ~bvpl_voxel_subgrid() override {}
 
   bool voxel(int x, int y, int z, T& v);
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }

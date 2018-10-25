@@ -26,13 +26,13 @@ class bugl_gaussian_point_3d : public bugl_uncertainty_point_3d<T>
     : bugl_uncertainty_point_3d<T>(p) { set_covariant_matrix(s); }
   bugl_gaussian_point_3d(T x, T y, T z, vnl_matrix_fixed<T, 3, 3> const& s)
     : bugl_uncertainty_point_3d<T>(x, y, z) { set_covariant_matrix(s); }
-  ~bugl_gaussian_point_3d() {}
+  ~bugl_gaussian_point_3d() override {}
 
   vnl_matrix_fixed<T, 3, 3> get_covariant_matrix() const { return sigma_; }
   void set_covariant_matrix(vnl_matrix_fixed<T, 3, 3> const& sigma);
 
   //: probability density at point p
-  T prob_at(vgl_point_3d<T> const& p) const;
+  T prob_at(vgl_point_3d<T> const& p) const override;
 };
 
 #define BUGL_GAUSSIAN_POINT_3D_INSTANTIATE(T) extern "please include bugl/gaussian_point_3d_.txx first"

@@ -26,7 +26,7 @@ class bocl_device: public vbl_ref_count
   public:
     bocl_device() {}
     bocl_device(cl_device_id& device);
-    virtual ~bocl_device();
+    ~bocl_device() override;
 
     //: accessors for context/device
     cl_device_id*     device_id() { return &device_; }

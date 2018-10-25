@@ -16,15 +16,15 @@ class TestClassA : public IJsonSerializable
 {
 public:
         TestClassA( void ){}
-   virtual ~TestClassA( void ){}
-   virtual void Serialize( Json::Value& root ){
+   ~TestClassA( void ) override{}
+   void Serialize( Json::Value& root ) override{
        // serialize primitives
        root["testintA"] = m_nTestInt;
        root["testfloatA"] = m_fTestFloat;
        root["teststringA"] = m_TestString;
        root["testboolA"] = m_bTestBool;
      }
-     virtual void Deserialize( Json::Value& root){
+     void Deserialize( Json::Value& root) override{
    // deserialize primitives
        m_nTestInt = root.get("testintA",0).asInt();
        m_fTestFloat = root.get("testfloatA", 0.0).asDouble();

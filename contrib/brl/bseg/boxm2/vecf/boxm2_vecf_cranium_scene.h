@@ -32,7 +32,7 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   boxm2_vecf_cranium_scene(): cranium_data_(nullptr),boxm2_vecf_articulated_scene(){}
 
   //: set parameters
-  bool set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params) override;
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise compute voxel contents from the cranium parameters
@@ -41,10 +41,10 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   boxm2_vecf_cranium_scene(std::string const& scene_file, std::string const& geometry_file);
 
   //: map cranium data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene);
+  void map_to_target(boxm2_scene_sptr target_scene) override;
 
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
-  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf);
+  bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override;
+  bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) override;
 
 
   //: compute an inverse vector field for rotation of cranium
@@ -80,10 +80,10 @@ class boxm2_vecf_cranium_scene : public boxm2_vecf_articulated_scene
   void cache_neighbors();
 
   //: refine target cells to match the refinement level of the source block
-  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index);
+  int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) override;
 
   //: compute inverse vector field for unrefined sub_block centers
-  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts);
+  void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) override;
 
     // ============   cranium methods ================
  //: construct manidble from parameters

@@ -100,7 +100,7 @@ class brec_part_hierarchy_detector : public vbl_ref_count
  public:
 
   brec_part_hierarchy_detector(brec_part_hierarchy_sptr h) : h_(h), prior_c_f_(0.15f), prior_non_c_f_(0.15f), prior_c_b_(0.15f) {}
-  ~brec_part_hierarchy_detector();
+  ~brec_part_hierarchy_detector() override;
 
   //: check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
   brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, unsigned ni, unsigned nj, Rtree_type* lower_rtree, float det_threshold);

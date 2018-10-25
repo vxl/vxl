@@ -30,7 +30,7 @@ class bvpl_taylor_basis_factory: public bvpl_kernel_factory
   std::string filename_;
 
   //: Creates canonical kernel from file
-  virtual void create_canonical();
+  void create_canonical() override;
 };
 
 

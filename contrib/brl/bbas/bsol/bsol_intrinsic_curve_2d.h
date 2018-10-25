@@ -88,22 +88,22 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Copy constructor
   bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &other);
   //: Destructor
-  virtual ~bsol_intrinsic_curve_2d();
+  ~bsol_intrinsic_curve_2d() override;
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
-  virtual vsol_spatial_object_2d* clone(void) const;
+  vsol_spatial_object_2d* clone(void) const override;
 
   //: Return a platform independent string identifying the class
-  std::string is_a() const { return std::string("bsol_intrinsic_curve_2d"); }
+  std::string is_a() const override { return std::string("bsol_intrinsic_curve_2d"); }
 
   //***************************************************************************
   // Access
 
   bool isOpen(void) const { return isOpen_; }
   //: Return the first point of `this';  pure virtual of vsol_curve_2d
-  virtual vsol_point_2d_sptr p0() const { return p0_; }
+  vsol_point_2d_sptr p0() const override { return p0_; }
   //: Return the last point of `this';   pure virtual of vsol_curve_2d
-  virtual vsol_point_2d_sptr p1() const { return p1_; }
+  vsol_point_2d_sptr p1() const override { return p1_; }
   //: Is `i' a valid index for the list of vertices ?
   bool valid_index(unsigned int i) const { return i<storage_->size(); }
   //: Return vertex `i'
@@ -136,7 +136,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Return the normalized arclength from vertex `0' to vertex `i'
   double normArcLength (const int i) const;
   //: Return the length of the intrinsic curve
-  virtual double length (void) const { return length_; }
+  double length (void) const override { return length_; }
   //: Return the dx vertex `i-1' to vertex `i'
   double dx (const int i) const {
     assert(valid_index(i));
@@ -162,7 +162,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
 
   //: Has `this' the same points than `other' in the same order ?
   virtual bool operator==(const bsol_intrinsic_curve_2d &other) const;
-  virtual bool operator==(const vsol_spatial_object_2d& obj) const; // virtual of vsol_spatial_object_2d
+  bool operator==(const vsol_spatial_object_2d& obj) const override; // virtual of vsol_spatial_object_2d
   //: Has `this' the same points than `other' in the same order ?
   inline bool operator!=(const bsol_intrinsic_curve_2d &o) const { return !operator==(o); }
 
@@ -184,9 +184,9 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   void setOpen(bool flag) { isOpen_ = flag; }
 
   //: Set the first point of the curve
-  virtual void set_p0 (const vsol_point_2d_sptr &new_p0);
+  void set_p0 (const vsol_point_2d_sptr &new_p0) override;
   //: Set the last point of the curve
-  virtual void set_p1 (const vsol_point_2d_sptr &new_p1);
+  void set_p1 (const vsol_point_2d_sptr &new_p1) override;
   //: Compute intrinsic properties.
   //  Note that if you even call the other modifying function with the
   //  flag bRecomputeProperties set to false, remember to call this function
@@ -219,10 +219,10 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   // Basic operations
 
   //: Compute the bounding box of `this'
-  virtual void compute_bounding_box(void) const;
+  void compute_bounding_box(void) const override;
 
   //: output description to stream
-  inline void describe(std::ostream &strm, int blanking=0) const {
+  inline void describe(std::ostream &strm, int blanking=0) const override {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "<bsol_intrinsic_curve_2d "
       // << static_cast<vsol_curve_2d>(*this) << ' '

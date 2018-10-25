@@ -13,13 +13,13 @@
 class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
  public:
   boxm2_vecf_orbit_articulation();
-  ~boxm2_vecf_orbit_articulation(){
+  ~boxm2_vecf_orbit_articulation() override{
     params_.clear();
   }
 
- unsigned size(){ return static_cast<unsigned>(params_.size()); }
+ unsigned size() override{ return static_cast<unsigned>(params_.size()); }
 
-  bool set_play_sequence(std::string seq_id){
+  bool set_play_sequence(std::string seq_id) override{
    if(play_sequence_map_.find(seq_id) != play_sequence_map_.end()){
      params_ = play_sequence_map_[seq_id];
      return true;
@@ -29,7 +29,7 @@ class boxm2_vecf_orbit_articulation : public boxm2_vecf_scene_articulation{
      return false;
    }
   }
- boxm2_vecf_articulated_params& operator [] (unsigned i) {
+ boxm2_vecf_articulated_params& operator [] (unsigned i) override {
    return params_[i] ; }
  private:
   std::vector<boxm2_vecf_orbit_params> params_;

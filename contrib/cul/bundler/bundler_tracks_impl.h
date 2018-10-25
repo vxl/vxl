@@ -35,7 +35,7 @@ class bundler_tracks_impl_detect_sift
   //: Performs the feature matching
   bundler_inters_image_sptr operator() (
       const vil_image_resource_sptr &image,
-      const double exif_focal_len);
+      const double exif_focal_len) override;
 };
 
 
@@ -58,7 +58,7 @@ class bundler_tracks_impl_propose_matches_all
     //: Performs the match list creation
   void operator() (
       const std::vector<bundler_inters_image_sptr> &features,
-      std::vector<bundler_inters_image_pair> &proposed_matches);
+      std::vector<bundler_inters_image_pair> &proposed_matches) override;
 };
 
 
@@ -81,7 +81,7 @@ class bundler_tracks_impl_match_ann
   //: Performs the feature matching
   void operator() (
     const bundler_inters_image_pair &to_match,
-    bundler_inters_match_set &matches);
+    bundler_inters_match_set &matches) override;
 };
 
 
@@ -102,7 +102,7 @@ class bundler_tracks_impl_refine_epipolar
       bundler_settings_refine_epipolar s) : settings(s) {}
 
   // Performs the feature matching.
-  void operator() (bundler_inters_match_set &matches);
+  void operator() (bundler_inters_match_set &matches) override;
 };
 
 
@@ -126,7 +126,7 @@ class bundler_tracks_impl_chain_matches
   void operator() (
       std::vector<bundler_inters_match_set> &match_set,
       std::vector<bundler_inters_image_sptr> &images,
-      std::vector<bundler_inters_track_sptr> &tracks);
+      std::vector<bundler_inters_track_sptr> &tracks) override;
 };
 
 

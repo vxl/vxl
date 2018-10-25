@@ -29,7 +29,7 @@ class volm_conf_score : public vbl_ref_count
    volm_conf_score(): score_(0.0f), theta_(0.0f) { landmarks_.clear(); }
    volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object> const& landmarks);
    //: destructor
-   ~volm_conf_score() {}
+   ~volm_conf_score() override {}
    //: set method
    void set_score(float const& score) { score_ = score; }
    void set_theta(float const& theta) { theta_ = theta; }

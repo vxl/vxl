@@ -221,7 +221,7 @@ class volm_score : public vbl_ref_count
   volm_score(unsigned leaf_id, unsigned hypo_id) : leaf_id_(leaf_id), hypo_id_(hypo_id) {}
   volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, std::vector<unsigned> const& cam_id)
     : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(cam_id) {}
-  ~volm_score() {}
+  ~volm_score() override {}
   unsigned leaf_id_;
   unsigned hypo_id_;
   float    max_score_;

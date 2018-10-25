@@ -41,15 +41,15 @@ public:
   static void create(scene_sptr scene);
 
   //: returns block pointer to block specified by ID
-  virtual Block *get_block(scene_sptr &scene, block_id_t id);
+  Block *get_block(scene_sptr &scene, block_id_t id) override;
 
   //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS
   // CANNOT BE VIRTUAL)
-  virtual block_data_base *get_data_base(scene_sptr &scene,
+  block_data_base *get_data_base(scene_sptr &scene,
                                          block_id_t id,
                                          vcl_string type,
                                          vcl_size_t num_bytes = 0,
-                                         bool read_only = true);
+                                         bool read_only = true) override;
 
   //: returns a data_base pointer which is initialized to the default value of
   // the type.
@@ -57,45 +57,45 @@ public:
   //  with the new one.
   //  This method does not check whether a block of this type already exists on
   //  the disc nor writes it to the disc
-  virtual block_data_base *get_data_base_new(scene_sptr &scene,
+  block_data_base *get_data_base_new(scene_sptr &scene,
                                              block_id_t id,
                                              vcl_string type,
                                              vcl_size_t num_bytes = 0,
-                                             bool read_only = true);
+                                             bool read_only = true) override;
 
   //: removes data from this cache (may or may not write to disk first)
-  virtual void remove_data_base(scene_sptr &scene,
+  void remove_data_base(scene_sptr &scene,
                                 block_id_t id,
                                 vcl_string type,
-                                bool write_out = true);
+                                bool write_out = true) override;
 
   //: replaces a database in the cache, deletes it
-  virtual void replace_data_base(scene_sptr &scene,
+  void replace_data_base(scene_sptr &scene,
                                  block_id_t id,
                                  vcl_string type,
-                                 block_data_base *replacement);
+                                 block_data_base *replacement) override;
 
   //: dumps writeable data to disk
-  virtual void write_to_disk();
+  void write_to_disk() override;
 
   //: dumps writeable data for specified scene to disk
-  virtual void write_to_disk(scene_sptr &scene);
+  void write_to_disk(scene_sptr &scene) override;
 
   //: add a new scene to the cache
-  virtual bool add_scene(scene_sptr &scene);
+  bool add_scene(scene_sptr &scene) override;
 
   //: remove an existing scene from the cache
-  virtual bool remove_scene(scene_sptr &scene);
+  bool remove_scene(scene_sptr &scene) override;
 
   //: to string method returns a string describing the cache's current state
   vcl_string to_string();
 
   //: delete all the memory, caution: make sure to call write to disc methods
   // not to loose writable data
-  virtual void clear_cache();
+  void clear_cache() override;
 
   //: return the list of scenes with any data in the cache
-  virtual vcl_vector<scene_sptr> get_scenes();
+  vcl_vector<scene_sptr> get_scenes() override;
 
 private:
   //: hidden constructor (private so it cannot be called -- forces the class to
@@ -104,7 +104,7 @@ private:
 
   //: hidden destructor (private so it cannot be called -- forces the class to
   // be singleton)
-  virtual ~block_simple_cache();
+  ~block_simple_cache() override;
 
   //: keep a map of Block pointers (size will be limited to 9 blocks
   scene_block_map_t cached_blocks_;

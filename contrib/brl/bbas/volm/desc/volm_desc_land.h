@@ -25,7 +25,7 @@ public:
   volm_desc_land(std::string& filename);
 
   //: genera similarity metric for two land descriptor
-  virtual float similarity(volm_desc_sptr other);
+  float similarity(volm_desc_sptr other) override;
 
   //static unsigned n_bins;
 

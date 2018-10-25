@@ -64,7 +64,7 @@ class bil_bounded_image_view : public vil_image_view<T>
   bil_bounded_image_view(const vil_image_view_base_sptr& rhs)
     { operator=(rhs);}
 
-  ~bil_bounded_image_view() {}
+  ~bil_bounded_image_view() override {}
   //:accessors
   unsigned ib0() const {return ib0_;}
   unsigned jb0() const {return jb0_;}

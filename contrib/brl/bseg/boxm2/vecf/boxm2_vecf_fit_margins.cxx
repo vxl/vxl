@@ -26,7 +26,7 @@ margin_residual_function(std::vector<vgl_point_2d<double> >  const& inf_pts,
                              vnl_least_squares_function::no_gradient), inf_pts_(inf_pts),
   sup_pts_(sup_pts),  crease_pts_(crease_pts), lat_canth_(lat_canth), med_canth_(med_canth),opr_(opr), is_right_(is_right),estimate_t_(estimate_t){}
 
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx){
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override{
     // extract parameters from x
     opr_.trans_x_ =                     x[0];
     opr_.trans_y_ =                     x[1];

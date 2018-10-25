@@ -53,7 +53,7 @@ public:
 
   //: This destructor is correct - by our design the original data_buffer
   // becomes OWNED by the data_base class
-  virtual ~block_data_base() {
+  ~block_data_base() override {
     if (data_buffer_)
       delete[] data_buffer_;
   }

@@ -48,7 +48,7 @@ class bgrl_graph : public vbl_ref_count
   bgrl_graph(const bgrl_graph& graph);
 
   //: Destructor
-  virtual ~bgrl_graph(){}
+  ~bgrl_graph() override{}
 
   //: Adds a new vertex to the graph
   // \retval true if the vertex was added

@@ -44,7 +44,7 @@ class bvpl_subgrid_iterator_base : public vbl_ref_count
 
     offset_ = vgl_point_3d<int>(x,y,z);
   }
-  ~bvpl_subgrid_iterator_base() {}
+  ~bvpl_subgrid_iterator_base() override {}
 
  protected:
   vgl_vector_3d<int> dim_;
@@ -63,7 +63,7 @@ class bvpl_subgrid_iterator : public bvpl_subgrid_iterator_base,
 
   bvpl_subgrid_iterator(bvxm_voxel_grid<T>* grid, vgl_point_3d<int> min_point,  vgl_point_3d<int> max_point);
 
-  ~bvpl_subgrid_iterator() {}
+  ~bvpl_subgrid_iterator() override {}
 
   bvpl_subgrid_iterator<T>& operator++();
 

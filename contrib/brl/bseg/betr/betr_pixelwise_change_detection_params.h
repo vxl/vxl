@@ -35,9 +35,9 @@ class betr_pixelwise_change_detection_params : public betr_params
   }
 
   //: check values of parameters to flag illegal values
-  virtual bool sanity_check(std::string& errors) const;
+  bool sanity_check(std::string& errors) const override;
 
-  virtual void serialize( Json::Value& root ) const{
+  void serialize( Json::Value& root ) const override{
     int method_idx = 0;
     for( int m = 0; m < method_list_.size(); m++ )
       if( pw_params_.method == method_list_[m] ) method_idx = m;
@@ -61,7 +61,7 @@ class betr_pixelwise_change_detection_params : public betr_params
     root["pGoodness"] = pw_params_.pGoodness;
   }
 
-  virtual void deserialize( Json::Value& root){
+  void deserialize( Json::Value& root) override{
     int method_idx = std::min(
       (int)method_list_.size(), std::max(0, (int)root["method"].asInt()));
     pw_params_.method = method_list_[method_idx];

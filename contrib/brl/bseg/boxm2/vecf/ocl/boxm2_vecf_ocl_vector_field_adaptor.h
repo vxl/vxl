@@ -15,18 +15,18 @@ class boxm2_vecf_ocl_vector_field_adaptor: public boxm2_vecf_ocl_vector_field
     boxm2_vecf_ocl_vector_field_adaptor(boxm2_vecf_vector_field_base_sptr cpu_xform);
 
     //: compute vector field, writing to gpu cache
-    virtual bool compute_forward_transform(boxm2_scene_sptr source,
+    bool compute_forward_transform(boxm2_scene_sptr source,
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_source,
                                            bocl_mem* pts_target,
-                                           cl_command_queue &queue);
+                                           cl_command_queue &queue) override;
 
     //: compute inverse vector field, writing result to gpu cache
-    virtual bool compute_inverse_transform(boxm2_scene_sptr target,
+    bool compute_inverse_transform(boxm2_scene_sptr target,
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_target,
                                            bocl_mem* pts_source,
-                                           cl_command_queue &queue);
+                                           cl_command_queue &queue) override;
 
   private:
     boxm2_vecf_vector_field_base_sptr cpu_xform_;

@@ -32,7 +32,7 @@ class volm_geo_index_node : public vbl_ref_count
  public:
    volm_geo_index_node(vgl_box_2d<double> const& extent, volm_geo_index_node_sptr& parent) : extent_(extent), parent_(parent) {}
    volm_geo_index_node(vgl_box_2d<double> const& extent) : extent_(extent), parent_(nullptr) {}
-   ~volm_geo_index_node();
+   ~volm_geo_index_node() override;
    std::string get_string();
    std::string get_hyp_name(std::string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + ".bin"; }
    std::string get_index_name(std::string const& geo_index_name_pre) { return geo_index_name_pre + "_" + this->get_string() + "_index.bin"; }

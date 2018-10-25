@@ -32,14 +32,14 @@ class bmsh3d_mesh_mc : public bmsh3d_mesh
 
   bmsh3d_mesh_mc(bmsh3d_mesh*);
 
-  virtual ~bmsh3d_mesh_mc();
+  ~bmsh3d_mesh_mc() override;
 
   //: new/delete function of the class hierarchy
-  virtual bmsh3d_face_mc* _new_face () {
+  bmsh3d_face_mc* _new_face () override {
     return new bmsh3d_face_mc (face_id_counter_++);
   }
 
-  virtual bmsh3d_mesh_mc* clone() const;
+  bmsh3d_mesh_mc* clone() const override;
 
   void orient_face_normals();
 

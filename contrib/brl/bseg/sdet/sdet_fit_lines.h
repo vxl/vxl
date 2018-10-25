@@ -36,7 +36,7 @@ class sdet_fit_lines : public sdet_fit_lines_params
   //:Constructors/destructor
   sdet_fit_lines(sdet_fit_lines_params& rpp);
 
-  ~sdet_fit_lines();
+  ~sdet_fit_lines() override;
   //: Process methods
   bool fit_lines();
   void clear();

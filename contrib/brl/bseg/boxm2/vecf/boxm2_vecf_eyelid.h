@@ -26,23 +26,23 @@ class boxm2_vecf_eyelid : public boxm2_vecf_lid_base{
 
   // internal functions
   //: eyelid curves projected onto a plane perpendicular to the zaxis (x horizontal , t vertical)
-  double gi(double xp, double t) const;
+  double gi(double xp, double t) const override;
 
   //: z coordinate of bounded eyelid curve projected onto eyelid sphere with blend to planar regions
-  double z(double xp, double t) const;
+  double z(double xp, double t) const override;
 
   //: parameter t as a function of xp and y
   // initial approximate value - exact if no rotation
   double t0(double xp, double y) const;
   // value after one iteration of beta substitution
-  double t(double xp, double y) const;
+  double t(double xp, double y) const override;
 
   //: distance to closest point on closed eyelid surface
-  double distance(vgl_point_3d<double> const& p) const;
+  double distance(vgl_point_3d<double> const& p) const override;
 
 
   //: return 2nd order coefficients weighted by t
-  void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const;
+  void blended_2nd_order_coefs(double t, double& a0, double& a1, double& a2) const override;
 
 
   // ct is blending parameter for the crease

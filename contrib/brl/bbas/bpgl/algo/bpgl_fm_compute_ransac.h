@@ -80,21 +80,21 @@ class rrel_fm_problem : public rrel_estimation_problem
   rrel_fm_problem( const std::vector< vgl_point_2d<double> > & pr,
                    const std::vector< vgl_point_2d<double> > & pl );
 
-  virtual ~rrel_fm_problem() {}
+  ~rrel_fm_problem() override {}
 
   // Total number of correspondences.
-  unsigned int num_samples() const{ return pr_.size(); }
+  unsigned int num_samples() const override{ return pr_.size(); }
 
   // The degrees of freedom in the residual.
-  unsigned int residual_dof() const { return 4; }
+  unsigned int residual_dof() const override { return 4; }
 
   // Generate a parameter estimate from a minimal sample.
   bool fit_from_minimal_set( const std::vector<int>& point_indices,
-                             vnl_vector<double>& params ) const;
+                             vnl_vector<double>& params ) const override;
 
   // Compute unsigned fit residuals relative to the parameter estimate.
   void compute_residuals( const vnl_vector<double>& params,
-                          std::vector<double>& residuals ) const;
+                          std::vector<double>& residuals ) const override;
 
   // Convert a fundamental matrix into a parameter vector.
   virtual void  fm_to_params( const vpgl_fundamental_matrix<double>&  fm,
@@ -108,7 +108,7 @@ class rrel_fm_problem : public rrel_estimation_problem
   //  The normalized covariance is not yet filled in.
   bool weighted_least_squares_fit( vnl_vector<double>& params,
                                    vnl_matrix<double>& norm_covar,
-                                   const std::vector<double>* weights=nullptr ) const;
+                                   const std::vector<double>* weights=nullptr ) const override;
 
   // Toggles detailed printing of computations.
   bool verbose;

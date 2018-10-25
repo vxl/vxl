@@ -38,7 +38,7 @@ public:
   volm_conf_indexer(std::string const& out_index_folder)
     : out_index_folder_(out_index_folder), loc_root_(nullptr), current_leaf_id_(0), tile_id_(0) { loc_leaves_.clear(); }
 
-  ~volm_conf_indexer() {}
+  ~volm_conf_indexer() override {}
 
   // =================== access =====================
   volm_geo_index_node_sptr loc_root()  const { return loc_root_; }

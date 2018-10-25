@@ -86,7 +86,7 @@ public:
   {}
 
   //: set parameters
-  bool set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params) override;
 
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
@@ -100,7 +100,7 @@ public:
                          bool is_right =false);
 
   //: map eye data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene);
+  void map_to_target(boxm2_scene_sptr target_scene) override;
 
   //: extract the appearance from the target scene
   void extract_appearance_from_target(boxm2_scene_sptr target_scene);
@@ -153,12 +153,12 @@ public:
   void cache_neighbors();
 
   //: refine target cells to match the refinement level of the source block
-  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) override{return -1;}//FIXME
   //: compute inverse vector field for unrefined sub_block centers
-  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
+  void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) override{}//FIXME
 
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
-  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
+  bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override{return false;}//FIXME
+  bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) override{return false;}//FIXME
 
  // ============   eye methods ================
  //: construct eye sphere, iris and pupil

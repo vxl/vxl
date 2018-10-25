@@ -18,7 +18,7 @@ class boxm2_stream_cache_helper : public vbl_ref_count
 {
   public:
     boxm2_stream_cache_helper() : index_(-1), buf_(nullptr) {}
-    ~boxm2_stream_cache_helper();
+    ~boxm2_stream_cache_helper() override;
 
     bool open_file(std::string filename);
     void read(unsigned long size, boxm2_block_id id);
@@ -81,7 +81,7 @@ class boxm2_stream_cache: public vbl_ref_count
   protected:
 
     //: hidden destructor (singleton class)
-    ~boxm2_stream_cache();
+    ~boxm2_stream_cache() override;
 
     boxm2_stream_cache_datatype_helper_sptr get_helper(std::string& data_type);
 

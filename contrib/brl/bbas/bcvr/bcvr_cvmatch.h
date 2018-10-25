@@ -114,7 +114,7 @@ class bcvr_cvmatch : public vbl_ref_count
 
   bcvr_cvmatch ();
   bcvr_cvmatch (bsol_intrinsic_curve_2d_sptr c1, bsol_intrinsic_curve_2d_sptr c2);
-  virtual ~bcvr_cvmatch ();
+  ~bcvr_cvmatch () override;
 
   void initializeDPCosts();
   virtual double computeIntervalCost (int i, int ip, int j, int jp);

@@ -16,22 +16,22 @@ class bprb_test_process : public bprb_process
  public:
   bprb_test_process();
 
-  virtual ~bprb_test_process() {}
+  ~bprb_test_process() override {}
 
   //: Clone the process
-  virtual bprb_process* clone() const { return new bprb_test_process(*this); }
+  bprb_process* clone() const override { return new bprb_test_process(*this); }
 
   //: The name of the process
-  virtual std::string name() const { return "Process"; }
+  std::string name() const override { return "Process"; }
 
   //: Perform any initialization required by the process
-  virtual bool init() {return true;}
+  bool init() override {return true;}
 
   //: Execute the process
-  virtual bool execute();
+  bool execute() override;
 
   //: Perform any clean up or final computation
-  virtual bool finish() {return true;}
+  bool finish() override {return true;}
 
 #if 0
  protected:

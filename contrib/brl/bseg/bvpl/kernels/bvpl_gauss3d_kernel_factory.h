@@ -34,7 +34,7 @@ class bvpl_gauss3d_kernel_factory : public bvpl_kernel_factory
   //: Constructs a kernel form gaussian ellipsoid with sigma parameters s1, s2 and s3. i.e. Cov is diagonal with entries s1, s2,s3
   bvpl_gauss3d_kernel_factory(float s1, float s2, float s3,float supp1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
-  virtual ~bvpl_gauss3d_kernel_factory() {}
+  ~bvpl_gauss3d_kernel_factory() override {}
 
   static std::string name() {return "gauss"; }
 
@@ -52,7 +52,7 @@ class bvpl_gauss3d_kernel_factory : public bvpl_kernel_factory
  private:
 
   //:Creates a 2d edge kernel
-  virtual void create_canonical();
+  void create_canonical() override;
 
   float sigma1_;
   float sigma2_;

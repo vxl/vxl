@@ -34,9 +34,9 @@ class sdet_selective_search_params : public gevd_param_mixin
                                bool debug
                                );
   sdet_selective_search_params(const sdet_selective_search_params& old_params);
- ~sdet_selective_search_params(){}
+ ~sdet_selective_search_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&, const sdet_selective_search_params& rpp);
  protected:

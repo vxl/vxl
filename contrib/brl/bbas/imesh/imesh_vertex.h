@@ -205,22 +205,22 @@ class imesh_vertex_array : public imesh_vertex_array_base
   : verts_(verts) {}
 
   //: Produce a clone of this object (dynamic copy)
-  virtual imesh_vertex_array_base* clone() const
+  imesh_vertex_array_base* clone() const override
   {
     return new imesh_vertex_array<d>(*this);
   }
 
   //: returns the number of vertices
-  virtual unsigned int size() const { return verts_.size(); }
+  unsigned int size() const override { return verts_.size(); }
 
   //: returns the dimension of the vertices
-  virtual unsigned int dim() const { return d; }
+  unsigned int dim() const override { return d; }
 
   //: Access a vertex coordinate by vertex index and coordinate index
-  virtual double operator() (unsigned int v, unsigned int i) const { return verts_[v][i]; }
+  double operator() (unsigned int v, unsigned int i) const override { return verts_[v][i]; }
 
   //: Append these vertices (assuming the same type)
-  virtual void append(const imesh_vertex_array_base& verts)
+  void append(const imesh_vertex_array_base& verts) override
   {
     assert(verts.dim() == d);
     const imesh_vertex_array<d>& v = static_cast<const imesh_vertex_array<d>&>(verts);

@@ -24,16 +24,16 @@ class boxm2_vecf_composite_head_model_articulation : public boxm2_vecf_scene_art
     this->set_play_sequence("default");
   }
 
-  ~boxm2_vecf_composite_head_model_articulation(){
+  ~boxm2_vecf_composite_head_model_articulation() override{
     params_.clear();
   }
 
- unsigned size(){ return static_cast<unsigned>(params_.size()); }
- boxm2_vecf_articulated_params& operator [] (unsigned i) {
+ unsigned size() override{ return static_cast<unsigned>(params_.size()); }
+ boxm2_vecf_articulated_params& operator [] (unsigned i) override {
    return params_[i] ; }
   void register_play_sequences(boxm2_vecf_composite_head_parameters const&  head_params);
 
-bool set_play_sequence(std::string seq_id){
+bool set_play_sequence(std::string seq_id) override{
    if(play_sequence_map_.find(seq_id) != play_sequence_map_.end()){
      params_ = play_sequence_map_[seq_id];
      return true;

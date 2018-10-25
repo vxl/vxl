@@ -39,7 +39,7 @@ public:
   volm_desc_matcher() {}
 
   //: Destructor
-  virtual ~volm_desc_matcher() {}
+  ~volm_desc_matcher() override {}
 
   //: Comparison method to calculate the similarity of descriptor a and b, return a score from 0 to 1
   virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index) {return 0;}

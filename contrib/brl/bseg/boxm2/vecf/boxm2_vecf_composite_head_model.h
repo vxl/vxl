@@ -18,9 +18,9 @@ friend class boxm2_vecf_appearance_extractor; //the appearance extractor needs t
 public:
   boxm2_vecf_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path );
 
-  void map_to_target(boxm2_scene_sptr target);
+  void map_to_target(boxm2_scene_sptr target) override;
 
-  bool set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params) override;
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
 private:
   boxm2_vecf_composite_head_parameters params_;

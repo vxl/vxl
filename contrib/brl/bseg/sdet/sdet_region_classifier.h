@@ -88,7 +88,7 @@ class sdet_region_classifier : public sdet_region_classifier_params
   sdet_region_classifier(){}
   //:specify different parameters
  sdet_region_classifier(sdet_region_classifier_params& rpp):sdet_region_classifier_params(rpp){}
-  ~sdet_region_classifier(){};
+  ~sdet_region_classifier() override{};
   void set_diverse_regions(const std::map<unsigned, sdet_region_sptr >& regions){diverse_regions_ = regions;}
   const std::map<unsigned, sdet_region_sptr>& diverse_regions(){return diverse_regions_;}
   void set_diverse_hists(const std::map<unsigned, bsta_histogram<float> >& hists){diverse_hists_ = hists;}

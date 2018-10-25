@@ -48,7 +48,7 @@ class bwm_video_corr_lsqr_cost_func : public vnl_least_squares_function
 
   void set_base_image(vil_image_view<float> const& base){base_image_ = base;}
 
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
  protected:
   vil_image_view<float> base_image_;
   unsigned match_radius_;
@@ -62,10 +62,10 @@ class bwm_video_corr_cost_function: public vnl_cost_function
   bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
                                unsigned match_radius,
                                std::vector<float> corr_window_ab);
-  ~bwm_video_corr_cost_function(){}
+  ~bwm_video_corr_cost_function() override{}
 
   //: The cost function. x is a 2-element vector holding the corr position
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
 
   void set_base_image(vil_image_view<float> const& base){base_image_ = base;}
  protected:

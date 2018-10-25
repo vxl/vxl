@@ -27,42 +27,42 @@ class boxm2_lru_cache : public boxm2_cache
     static void create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: returns block pointer to block specified by ID
-    virtual boxm2_block* get_block(boxm2_scene_sptr & scene, boxm2_block_id id);
+    boxm2_block* get_block(boxm2_scene_sptr & scene, boxm2_block_id id) override;
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual boxm2_data_base* get_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    boxm2_data_base* get_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) override;
 
     //: returns a data_base pointer which is initialized to the default value of the type.
     //  If a block for this type exists on the cache, it is removed and replaced with the new one.
     //  This method does not check whether a block of this type already exists on the disc nor writes it to the disc
-    virtual boxm2_data_base* get_data_base_new(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    boxm2_data_base* get_data_base_new(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) override;
 
     //: removes data from this cache (may or may not write to disk first)
-    virtual void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, bool write_out=true);
+    void remove_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, bool write_out=true) override;
 
     //: replaces a database in the cache, deletes it
-    virtual void replace_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, boxm2_data_base* replacement);
+    void replace_data_base(boxm2_scene_sptr & scene, boxm2_block_id id, std::string type, boxm2_data_base* replacement) override;
 
     //: dumps writeable data to disk
-    virtual void write_to_disk();
+    void write_to_disk() override;
 
     //: dumps writeable data for specified scene to disk
-    virtual void write_to_disk(boxm2_scene_sptr & scene);
+    void write_to_disk(boxm2_scene_sptr & scene) override;
 
     //: add a new scene to the cache
-    virtual bool add_scene(boxm2_scene_sptr & scene);
+    bool add_scene(boxm2_scene_sptr & scene) override;
 
     //: remove an existing scene from the cache
-    virtual bool remove_scene(boxm2_scene_sptr & scene);
+    bool remove_scene(boxm2_scene_sptr & scene) override;
 
     //: to string method returns a string describing the cache's current state
     std::string to_string();
 
     //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
-    virtual void clear_cache();
+    void clear_cache() override;
 
     //: return the list of scenes with any data in the cache
-    virtual std::vector<boxm2_scene_sptr> get_scenes();
+    std::vector<boxm2_scene_sptr> get_scenes() override;
 
   private:
 
@@ -70,7 +70,7 @@ class boxm2_lru_cache : public boxm2_cache
     boxm2_lru_cache(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE=LOCAL);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
-    virtual ~boxm2_lru_cache();
+    ~boxm2_lru_cache() override;
 
     //: keep a map of boxm2_block pointers (size will be limited to 9 blocks
     std::map< boxm2_scene_sptr, std::map<boxm2_block_id, boxm2_block*>,ltstr1 > cached_blocks_;

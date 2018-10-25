@@ -24,7 +24,7 @@ class sdet_atmospheric_image_classifier : public sdet_texture_classifier
  public:
   sdet_atmospheric_image_classifier(sdet_texture_classifier_params const& params) : sdet_texture_classifier(params){}
 
-  ~sdet_atmospheric_image_classifier(){};
+  ~sdet_atmospheric_image_classifier() override{};
   //: typically the atmospheric categories are "cld" and "haz"
   void set_atmospheric_categories(std::vector<std::string> const& atmos_cats)
     {atmos_categories_ = atmos_cats;}

@@ -79,7 +79,7 @@ class bgrl2_graph : public vbl_ref_count
   bgrl2_graph() : vbl_ref_count(), vertices_(), edges_() {}
 
   //: Destructor
-  virtual ~bgrl2_graph() {}
+  ~bgrl2_graph() override {}
 
   //-------------------------------------------------------------------
   // Standard Graph functions

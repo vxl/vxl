@@ -34,9 +34,9 @@ class sdet_region_classifier_params : public gevd_param_mixin
                                bool debug
                                );
   sdet_region_classifier_params(const sdet_region_classifier_params& old_params);
- ~sdet_region_classifier_params(){}
+ ~sdet_region_classifier_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&, const sdet_region_classifier_params& rpp);
  protected:

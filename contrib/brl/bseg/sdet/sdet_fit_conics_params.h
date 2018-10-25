@@ -23,9 +23,9 @@ class sdet_fit_conics_params : public gevd_param_mixin, public vbl_ref_count
                          double rms_distance = 1.0,int aspect_ratio = 4);
 
   sdet_fit_conics_params(const sdet_fit_conics_params& old_params);
- ~sdet_fit_conics_params() {}
+ ~sdet_fit_conics_params() override {}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
  friend
   std::ostream& operator<<(std::ostream& os, const sdet_fit_conics_params& flp);
  protected:

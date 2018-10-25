@@ -41,7 +41,7 @@ class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
     : vgl_h_matrix_2d<double>(xform), form_(form) {}
 
   //: Destructor
-  ~ihog_transform_2d() {}
+  ~ihog_transform_2d() override {}
 
   Form form() const {return form_;}
   void set_form(const Form form) {form_ = form;}

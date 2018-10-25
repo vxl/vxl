@@ -32,9 +32,9 @@ class sdet_watershed_region_proc_params : public gevd_param_mixin
     merge_priority_(p.merge_priority_), debug_(p.debug_), verbose_(p.verbose_),
     wp_(p.wp_) {}
 
- ~sdet_watershed_region_proc_params() {}
+ ~sdet_watershed_region_proc_params() override {}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
  protected:
   void InitParams(brip_watershed_params const& wp, bool verbose,
                   bool debug, int min_area, float merge_tol, int merge_priority)

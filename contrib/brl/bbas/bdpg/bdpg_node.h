@@ -17,7 +17,7 @@ class bdpg_node : public vbl_ref_count
  public:
 
   bdpg_node();
-  ~bdpg_node();
+  ~bdpg_node() override;
   //: previous row on path
   int previous_row() const { return previous_row_; }
 

@@ -34,7 +34,7 @@ class bxml_data : public vbl_ref_count
  public:
   enum datatype {TEXT, ELEMENT};
 
-  virtual ~bxml_data() {}
+  ~bxml_data() override {}
 
   //: Return the type of XML data
   virtual datatype type() const = 0;
@@ -55,10 +55,10 @@ class bxml_text : public bxml_data
   bxml_text(const std::string& data) : data_(data) {}
 
   //: Destructor
-  virtual ~bxml_text() {}
+  ~bxml_text() override {}
 
   //: Return the type of XML data
-  datatype type() const { return TEXT; }
+  datatype type() const override { return TEXT; }
 
   //: Access the text data
   std::string data() const { return data_; }
@@ -85,10 +85,10 @@ class bxml_element : public bxml_data
   bxml_element(const std::string& name) : name_(name) {}
 
   //: Destructor
-  virtual ~bxml_element() {}
+  ~bxml_element() override {}
 
   //: Return the type of XML data
-  datatype type() const { return ELEMENT; }
+  datatype type() const override { return ELEMENT; }
 
   //: Return the name of the element
   std::string name() const { return name_; }
@@ -207,7 +207,7 @@ class bxml_document : public vbl_ref_count
   bxml_document();
 
   //: Destructor
-  ~bxml_document(){}
+  ~bxml_document() override{}
 
   //: Return the root element
   bxml_data_sptr root_element() const {return root_element_;}

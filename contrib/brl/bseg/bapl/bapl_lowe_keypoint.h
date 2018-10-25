@@ -34,10 +34,10 @@ class bapl_lowe_keypoint : public bapl_keypoint
                       double i , double j, double s, double o, vnl_vector_fixed<double, 128>& desc);
 
   //: Destructor
-  ~bapl_lowe_keypoint();
+  ~bapl_lowe_keypoint() override;
 
   //: Accessor for the descriptor vector
-  virtual const vnl_vector_fixed<double,128>& descriptor() const;
+  const vnl_vector_fixed<double,128>& descriptor() const override;
 
   //: Accessor for the i location
   double location_i() const {return location_i_; }
@@ -61,7 +61,7 @@ class bapl_lowe_keypoint : public bapl_keypoint
   void set_descriptor(const vnl_vector_fixed<double,128>& descriptor);
 
   //: Print a summary of the keypoint data to a stream
-  virtual void print_summary(std::ostream& os) const;
+  void print_summary(std::ostream& os) const override;
 
  protected:
   //: Normalize, threshold, and renormalize

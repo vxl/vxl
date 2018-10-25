@@ -100,7 +100,7 @@ class sdet_grid_finder : public sdet_grid_finder_params
   // Constructors/destructor
   sdet_grid_finder(sdet_grid_finder_params& gfp);
 
-  ~sdet_grid_finder();
+  ~sdet_grid_finder() override;
 
   // Process methods
   bool match_grid();

@@ -122,7 +122,7 @@ class bocl_manager_child: public bocl_manager<bocl_manager_child>
   friend class bocl_manager<bocl_manager_child>;
  private:
   bocl_manager_child() : bocl_manager<bocl_manager_child>() {}
-  virtual ~bocl_manager_child() {}
+  ~bocl_manager_child() override {}
 };
 
 //: Binary write boxm2_scene scene to stream

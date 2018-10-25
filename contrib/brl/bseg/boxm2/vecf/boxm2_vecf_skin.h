@@ -30,10 +30,10 @@ class boxm2_vecf_skin: public boxm2_vecf_geometry_base{
  double distance(vgl_point_3d<double> const& p, double& apc) const {return index_.distance(p, apc);}
  //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
  // can be away from the closest point in the cross-section pointset.
- virtual double operator() (vgl_point_3d<double> const& p) const{ return index_.distance(p);}
+ double operator() (vgl_point_3d<double> const& p) const override{ return index_.distance(p);}
 
  //: inverse vector field
- virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
+ bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override;
 
  bool has_appearance() const { return index_.has_scalars();}
 

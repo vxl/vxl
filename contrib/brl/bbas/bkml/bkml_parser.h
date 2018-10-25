@@ -54,7 +54,7 @@ class bkml_parser : public expatpp
  public:
   bkml_parser(void);
   // parser should not delete the site, it is used afterwards
-  ~bkml_parser(void) {}
+  ~bkml_parser(void) override {}
 
 
   //: parser to load the points defined in kml file
@@ -95,9 +95,9 @@ class bkml_parser : public expatpp
   std::string current_name_;
  private:
 
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* name);
-  virtual void charData(const XML_Char* s, int len);
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* name) override;
+  void charData(const XML_Char* s, int len) override;
   void handleAtts(const XML_Char** atts);
   void cdataHandler(std::string name, std::string data);
   void init_params();

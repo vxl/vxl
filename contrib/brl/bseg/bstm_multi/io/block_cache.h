@@ -116,7 +116,7 @@ protected:
   block_cache() {}
   //: hidden destructor (protected so it cannot be called -- forces the class to
   // be singleton)
-  virtual ~block_cache() {}
+  ~block_cache() override {}
 
   //: singleton instance of block_cache
   static cache_sptr instance_;

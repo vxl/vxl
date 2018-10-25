@@ -39,7 +39,7 @@ class bapl_dsift: public vbl_ref_count
   bapl_dsift() : grad_valid_(false) {}
   bapl_dsift( vil_image_view<float> const& img );
   bapl_dsift( vil_image_view<vxl_byte> const& img);
-   ~bapl_dsift() {}
+   ~bapl_dsift() override {}
 
   bool set_img( vil_image_view<float> const& img );
   bool set_img( vil_image_view<vxl_byte> const& img );

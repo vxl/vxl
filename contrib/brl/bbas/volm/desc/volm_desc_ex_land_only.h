@@ -53,7 +53,7 @@ public:
                          unsigned char const& initial_mag = 0);
 
   //: Destructor
-  ~volm_desc_ex_land_only() {}
+  ~volm_desc_ex_land_only() override {}
 
   //: number of depth bins
   unsigned ndepths() const { return this->ndists_; }
@@ -83,21 +83,21 @@ public:
   void set_count(unsigned const& dist_idx, unsigned const& land_idx, unsigned char const& count);
 
   //: screen print
-  void print() const;
+  void print() const override;
 
   //: similarity method -- calculate the intersection of two histogram, normalized by current histogram
-  float similarity(volm_desc_sptr other);
+  float similarity(volm_desc_sptr other) override;
 
   // ===========  binary I/O ================
 
   //: version
-  unsigned version() const { return 1; }
+  unsigned version() const override { return 1; }
 
   //: binary IO write
-  void b_write(vsl_b_ostream& os);
+  void b_write(vsl_b_ostream& os) override;
 
   //: binary IO read
-  void b_read(vsl_b_istream& is);
+  void b_read(vsl_b_istream& is) override;
 
 private:
   //: histogram structure

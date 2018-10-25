@@ -28,12 +28,12 @@ class bvgl_eulerspiral_base : public bvgl_param_curve
   static const std::type_info& type_id()
   { return typeid(bvgl_eulerspiral_base); }
 
-  virtual bool is_type( const std::type_info& type ) const
+  bool is_type( const std::type_info& type ) const override
   { return (typeid(bvgl_eulerspiral_base) == type)!=0 ||
             this->bvgl_param_curve::is_type(type);
   }
 
-  bvgl_param_curve *clone() const = 0;
+  bvgl_param_curve *clone() const override = 0;
 };
 
 //: Write "<bvgl_param_curve of type euler spiral> to stream"

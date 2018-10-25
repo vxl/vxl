@@ -26,7 +26,7 @@ class brad_eigenspace_base : public vbl_ref_count
   //: Default constructor
   brad_eigenspace_base() {}
 
-  virtual ~brad_eigenspace_base() {}
+  ~brad_eigenspace_base() override {}
 
   virtual std::string feature_vector_type() {return "unknown\n";}
 };

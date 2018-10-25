@@ -30,7 +30,7 @@ class boxm2_stream_scene_cache: public vbl_ref_count
 
     bool clear();
 
-    ~boxm2_stream_scene_cache();
+    ~boxm2_stream_scene_cache() override;
 
     //: map to store various info about each datatype
     std::map<data_type, char *> data_buffers_;

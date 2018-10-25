@@ -35,7 +35,7 @@ class boxm2_compute_normal_albedo_cost_function : public vnl_cost_function
      radiance_var_offsets_(radiance_var_offsets)
    { }
 
-   virtual double f(vnl_vector<double> const& x);
+   double f(vnl_vector<double> const& x) override;
    //virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
 
  private:

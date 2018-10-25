@@ -91,20 +91,20 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   //: Copy constructor
   bsol_intrinsic_curve_3d(const bsol_intrinsic_curve_3d &other);
   //: Destructor
-  virtual ~bsol_intrinsic_curve_3d();
+  ~bsol_intrinsic_curve_3d() override;
   //: Clone `this': creation of a new object and initialization
   // See Prototype pattern
-  virtual vsol_spatial_object_3d* clone(void) const;
+  vsol_spatial_object_3d* clone(void) const override;
   //: Return a platform independent string identifying the class
-  std::string is_a() const { return std::string("bsol_intrinsic_curve_3d"); }
+  std::string is_a() const override { return std::string("bsol_intrinsic_curve_3d"); }
 
   //***************************************************************************
   // Access
 
   //: Return the first point of `this';  pure virtual of vsol_curve_3d
-  virtual vsol_point_3d_sptr p0() const { return p0_; }
+  vsol_point_3d_sptr p0() const override { return p0_; }
   //: Return the last point of `this';   pure virtual of vsol_curve_3d
-  virtual vsol_point_3d_sptr p1() const { return p1_; }
+  vsol_point_3d_sptr p1() const override { return p1_; }
   //: Is `i' a valid index for the list of vertices ?
   bool valid_index(unsigned int i) const { return i<size(); }
   //: Return vertex `i'
@@ -132,7 +132,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
     return storage_->size();
   }
   //: Return the total length of the intrinsic curve
-  virtual double length (void) const {
+  double length (void) const override {
     return arcLength_[storage_->size()-1];
   }
   //: Return the total arclength from vertex `0' to vertex `i'
@@ -313,7 +313,7 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
 
   //: Has `this' the same points than `other' in the same order ?
   virtual bool operator==(const bsol_intrinsic_curve_3d &other) const;
-  virtual bool operator==(const vsol_spatial_object_3d& obj) const; // virtual of vsol_spatial_object_3d
+  bool operator==(const vsol_spatial_object_3d& obj) const override; // virtual of vsol_spatial_object_3d
   //: Has `this' the same points than `other' in the same order ?
   inline bool operator!=(const bsol_intrinsic_curve_3d &o) const {return !operator==(o);}
 
@@ -323,12 +323,12 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   // Status setting
 
   //: Set the first point of the curve
-  virtual void set_p0 (const vsol_point_3d_sptr &new_p0) {
+  void set_p0 (const vsol_point_3d_sptr &new_p0) override {
     p0_=new_p0;
     storage_->push_back(p0_);
   }
   //: Set the last point of the curve
-  virtual void set_p1 (const vsol_point_3d_sptr &new_p1) {
+  void set_p1 (const vsol_point_3d_sptr &new_p1) override {
     p1_=new_p1;
     storage_->push_back(p0_);
   }
@@ -380,10 +380,10 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   // Basic operations
 
   //: Compute the bounding box of `this'
-  virtual void compute_bounding_box(void) const;
+  void compute_bounding_box(void) const override;
 
   //: output description to stream
-  inline void describe(std::ostream &strm, int blanking=0) const {
+  inline void describe(std::ostream &strm, int blanking=0) const override {
     if (blanking < 0) blanking = 0; while (blanking--) strm << ' ';
     strm << "<bsol_intrinsic_curve_3d " << ( isOpen_ ? "open" : "closed" )
          << ", total curvature=" << totalCurvature_

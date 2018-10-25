@@ -18,17 +18,17 @@ class boxm2_vecf_skull_scene : public boxm2_vecf_articulated_scene{
 
 public:
   boxm2_vecf_skull_scene(std::string const& scene_path, std::string const& geo_path);
-  ~boxm2_vecf_skull_scene(){delete mandible_scene_; delete cranium_scene_;}
-  void map_to_target(boxm2_scene_sptr target);
+  ~boxm2_vecf_skull_scene() override{delete mandible_scene_; delete cranium_scene_;}
+  void map_to_target(boxm2_scene_sptr target) override;
 
-  bool set_params(boxm2_vecf_articulated_params const& params);
+  bool set_params(boxm2_vecf_articulated_params const& params) override;
   boxm2_vecf_skull_params const& get_params() const {return params_;}
   //: refine target cells to match the refinement level of the source block
-  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) override{return -1;}//FIXME
   //: compute inverse vector field for unrefined sub_block centers
-  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
-  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
+  void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) override{}//FIXME
+  bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override{return false;}//FIXME
+  bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) override{return false;}//FIXME
 
 private:
   bool target_data_extracted_;

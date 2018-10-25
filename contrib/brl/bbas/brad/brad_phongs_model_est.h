@@ -49,10 +49,10 @@ class brad_phongs_model_est : public vnl_least_squares_function
                         vnl_vector<double> & obs_weights,
                         bool with_grad);
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override;
   float error_var(vnl_vector<double> const& x);
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J);
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override;
 
  protected:
   double sun_elev_;
@@ -97,10 +97,10 @@ class brad_phongs_model_approx_est : public vnl_least_squares_function
                         vnl_vector<double> & obs_weights,
                         bool with_grad);
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override;
   float error_var(vnl_vector<double> const& x);
 
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J);
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override;
 
  protected:
   double sun_elev_;

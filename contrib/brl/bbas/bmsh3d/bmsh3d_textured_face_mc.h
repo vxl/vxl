@@ -48,7 +48,7 @@ class bmsh3d_textured_face_mc : public bmsh3d_face_mc
   bmsh3d_textured_face_mc (const bmsh3d_textured_face_mc& face);
 #endif
 
-  virtual ~bmsh3d_textured_face_mc () {tex_coords_.clear();}
+  ~bmsh3d_textured_face_mc () override {tex_coords_.clear();}
 
   // ====== Data access functions ======
 

@@ -19,22 +19,22 @@ class boxm_triangle_interpolation_iterator : public vgl_region_scan_iterator
   //: Resets the scan iterator to before the first scan line
   //  After calling this function, next() needs to be called before
   //  startx() and endx() form a valid scan line.
-  virtual void reset();
+  void reset() override;
 
   //: Tries to move to the next scan line.
   //  Returns false if there are no more scan lines.
-  virtual bool next();
+  bool next() override;
 
   //: y-coordinate of the current scan line.
-  virtual int  scany() const;
+  int  scany() const override;
 
   //: Returns starting x-value of the current scan line.
   //  startx() should be smaller than endx(), unless the scan line is empty
-  virtual int  startx() const;
+  int  startx() const override;
 
   //: Returns ending x-value of the current scan line.
   //  endx() should be larger than startx(), unless the scan line is empty
-  virtual int  endx() const;
+  int  endx() const override;
 
   //: returns the interpolated value at location x in the current scanline
   T value_at(int x);

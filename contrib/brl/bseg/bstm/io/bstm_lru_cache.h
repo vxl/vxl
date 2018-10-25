@@ -19,35 +19,35 @@ class bstm_lru_cache : public bstm_cache
     static void create(bstm_scene_sptr scene);
 
     //: returns block pointer to block specified by ID
-    virtual bstm_block* get_block(bstm_block_id id);
+    bstm_block* get_block(bstm_block_id id) override;
 
     //: returns pointer to time_block specified by ID
-    virtual bstm_time_block* get_time_block(bstm_block_id id);
+    bstm_time_block* get_time_block(bstm_block_id id) override;
 
-    virtual void replace_time_block(bstm_block_id id, bstm_time_block* replacement);
+    void replace_time_block(bstm_block_id id, bstm_time_block* replacement) override;
 
     //: returns data_base pointer (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual bstm_data_base* get_data_base(bstm_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    bstm_data_base* get_data_base(bstm_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) override;
 
     //: returns a data_base pointer which is initialized to the default value of the type.
     //  If a block for this type exists on the cache, it is removed and replaced with the new one.
     //  This method does not check whether a block of this type already exists on the disc nor writes it to the disc
-    virtual bstm_data_base* get_data_base_new(bstm_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    bstm_data_base* get_data_base_new(bstm_block_id id, std::string type, std::size_t num_bytes=0, bool read_only = true) override;
 
     //: removes data from this cache (may or may not write to disk first)
-    virtual void remove_data_base(bstm_block_id id, std::string type);
+    void remove_data_base(bstm_block_id id, std::string type) override;
 
     //: replaces a database in the cache, deletes it
-    virtual void replace_data_base(bstm_block_id id, std::string type, bstm_data_base* replacement);
+    void replace_data_base(bstm_block_id id, std::string type, bstm_data_base* replacement) override;
 
     //: dumps writeable data to disk
-    virtual void write_to_disk();
+    void write_to_disk() override;
 
     //: to string method returns a string describing the cache's current state
     std::string to_string();
 
     //: delete all the memory, caution: make sure to call write to disc methods not to loose writable data
-    virtual void clear_cache();
+    void clear_cache() override;
 
   private:
 
@@ -55,7 +55,7 @@ class bstm_lru_cache : public bstm_cache
     bstm_lru_cache(bstm_scene_sptr scene);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
-    ~bstm_lru_cache();
+    ~bstm_lru_cache() override;
 
     //: keep a map of bstm_block pointers
     std::map<bstm_block_id, bstm_block*> cached_blocks_;

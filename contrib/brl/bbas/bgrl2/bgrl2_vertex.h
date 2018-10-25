@@ -35,7 +35,7 @@ class bgrl2_vertex : public vbl_ref_count
   bgrl2_vertex() : vbl_ref_count(), out_edges_(), in_edges_() {}
 
   //: Destructor
-  virtual ~bgrl2_vertex(){}
+  ~bgrl2_vertex() override{}
 
   //:  returns all outgoing edges of this vertex
   const std::list<E_sptr>& out_edges() { return out_edges_; }

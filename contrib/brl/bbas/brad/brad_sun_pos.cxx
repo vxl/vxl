@@ -44,7 +44,7 @@ double solve_eccentric_anomaly(double mean_anomaly, double eccentricity)
       kepler_cost_fn(double mean_anomaly, double eccentricity)
          : vnl_cost_function(1), M_(mean_anomaly), e_(eccentricity) {}
 
-      double f(const vnl_vector<double>& x)
+      double f(const vnl_vector<double>& x) override
       {
          double residual = M_ - (x[0] - e_*std::sin(x[0]));
          return residual*residual;

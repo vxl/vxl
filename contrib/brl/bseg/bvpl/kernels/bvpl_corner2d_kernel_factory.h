@@ -33,12 +33,12 @@ class bvpl_corner2d_kernel_factory : public bvpl_kernel_factory
   //: Constructs a kernel form three values, length, width and thickness
   bvpl_corner2d_kernel_factory(unsigned length, unsigned width, unsigned thickness);
 
-  virtual ~bvpl_corner2d_kernel_factory() {}
+  ~bvpl_corner2d_kernel_factory() override {}
 
  private:
 
   //:Creates a 2d edge kernel
-  virtual void create_canonical();
+  void create_canonical() override;
 
   unsigned length_;
   unsigned width_;

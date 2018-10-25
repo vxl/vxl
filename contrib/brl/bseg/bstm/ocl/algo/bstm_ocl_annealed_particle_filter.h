@@ -15,7 +15,7 @@ class bstm_ocl_annealed_particle_filter : public bstm_ocl_particle_filter
                                bstm_ocl_particle_filter( device,  scene, cache, opencl_cache, start_t, end_t, initial_bb, num_particles, t_sigma, w_sigma,
                                                          kernel_opt, nbins, label,  radius ), pf_output_path_(pf_output_path), original_t_sigma_(t_sigma), original_w_sigma_(w_sigma),original_w_kappa_(w_kappa) { }
 
-  virtual void track();
+  void track() override;
 
   void set_num_annealing_layers(unsigned num_annealing_layers) { num_annealing_layers_ = num_annealing_layers; };
 

@@ -25,7 +25,7 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
 {
  public:
   // Destructor
-  virtual ~bprb_batch_process_manager();
+  ~bprb_batch_process_manager() override;
 
   //: clear the database for new script processing
   bool clear();

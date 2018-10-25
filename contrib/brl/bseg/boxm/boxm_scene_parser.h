@@ -35,7 +35,7 @@ class boxm_scene_parser : public expatpp
  public:
   boxm_scene_parser();
 
-  ~boxm_scene_parser(void) {}
+  ~boxm_scene_parser(void) override {}
 
    bool lvcs(vpgl_lvcs& lvcs);
    vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }
@@ -54,9 +54,9 @@ class boxm_scene_parser : public expatpp
    float p_init() const { return p_init_; }
 
  private:
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* /*name*/) {}
-  virtual void charData(const XML_Char* /*s*/, int /*len*/) {}
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* /*name*/) override {}
+  void charData(const XML_Char* /*s*/, int /*len*/) override {}
 
   void init_params();
 

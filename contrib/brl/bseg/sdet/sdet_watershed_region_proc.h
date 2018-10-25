@@ -36,7 +36,7 @@ class sdet_watershed_region_proc : public sdet_watershed_region_proc_params
   //Constructors/destructor
   sdet_watershed_region_proc(sdet_watershed_region_proc_params& wrpp);
 
-  ~sdet_watershed_region_proc();
+  ~sdet_watershed_region_proc() override;
   //Accessors
   //:set image and potentially clip
   void set_image(vil1_image const& image,

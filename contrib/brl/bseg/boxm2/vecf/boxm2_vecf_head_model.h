@@ -21,23 +21,23 @@ class boxm2_vecf_head_model : public boxm2_vecf_articulated_scene
   boxm2_vecf_head_model(std::string const& scene_file,std::string color_apm_ident = "frontalized");
 
   //: map eye data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene);
+  void map_to_target(boxm2_scene_sptr target_scene) override;
 
-  void clear_target(boxm2_scene_sptr target_scene);
+  void clear_target(boxm2_scene_sptr target_scene) override;
 
   void set_scale(vgl_vector_3d<double> scale);
 
   void set_intrinsic_change( bool change){intrinsic_change_ = change;}
 
-  virtual bool set_params(boxm2_vecf_articulated_params const& params){return true;} //blank for now
+  bool set_params(boxm2_vecf_articulated_params const& params) override{return true;} //blank for now
 
   //: refine target cells to match the refinement level of the source block
-  virtual int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){return -1;}//FIXME
+  int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) override{return -1;}//FIXME
 
   //: compute inverse vector field for unrefined sub_block centers
-  virtual void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){}//FIXME
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const{return false;}//FIXME
-  virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf){return false;}//FIXME
+  void inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts) override{}//FIXME
+  bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override{return false;}//FIXME
+  bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) override{return false;}//FIXME
 
 friend class boxm2_vecf_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
  protected:

@@ -25,9 +25,9 @@ class sdet_third_order_edge_det_params : public gevd_param_mixin
   sdet_third_order_edge_det_params(const double sigma=1.0, const double thresh = 2.0, const unsigned interp_factor = 1, const unsigned pfit_type = 0, const unsigned grad_op = 0, const unsigned conv_algo=0, const bool adapt_thresh = false);
 
   sdet_third_order_edge_det_params(const sdet_third_order_edge_det_params& old_params);
-  ~sdet_third_order_edge_det_params(){}
+  ~sdet_third_order_edge_det_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&,const sdet_third_order_edge_det_params& dp);
  protected:

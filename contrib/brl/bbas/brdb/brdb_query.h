@@ -88,12 +88,12 @@ class brdb_query_and : public brdb_query_branch
   //: Constructor from two queries (makes copies)
   brdb_query_and(const brdb_query& q1, const brdb_query& q2);
 
-  brdb_query_aptr clone() const;
+  brdb_query_aptr clone() const override;
 
   //: Destructor
   ~brdb_query_and() {}
 
-  brdb_query_aptr complement() const;
+  brdb_query_aptr complement() const override;
 };
 
 
@@ -111,12 +111,12 @@ class brdb_query_or : public brdb_query_branch
   //: Constructor from two queries (makes copies)
   brdb_query_or(const brdb_query& q1, const brdb_query& q2);
 
-  brdb_query_aptr clone() const;
+  brdb_query_aptr clone() const override;
 
   //: Destructor
   ~brdb_query_or() {}
 
-  brdb_query_aptr complement() const;
+  brdb_query_aptr complement() const override;
 };
 
 
@@ -144,10 +144,10 @@ class brdb_query_comp : public brdb_query
   brdb_query_comp& operator = (const brdb_query_comp& rhs);
 
   //: clone this query
-  brdb_query_aptr clone() const;
+  brdb_query_aptr clone() const override;
 
   //: produce the complement query
-  brdb_query_aptr complement() const;
+  brdb_query_aptr complement() const override;
 
   //: get the value
   const brdb_value& value() const { return *value_; }

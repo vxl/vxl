@@ -34,7 +34,7 @@ class volm_conf_buffered_index : public vbl_ref_count
   //: constructor by specifying the max GBs on RAM for this class to use
   volm_conf_buffered_index(float const& buffer_capacity);
   //: destructor
-  ~volm_conf_buffered_index();
+  ~volm_conf_buffered_index() override;
 
   // ================ access ========================
 

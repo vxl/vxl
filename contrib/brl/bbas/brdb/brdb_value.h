@@ -30,7 +30,7 @@ class brdb_value : public vbl_ref_count
  public:
 
   //: Destructor
-  virtual ~brdb_value() {}
+  ~brdb_value() override {}
 
   //: Return the actual value
   template< class T >
@@ -169,24 +169,24 @@ class brdb_value_t : public brdb_value
    : value_(value) {}
 
   //: Return the string identifying this class
-  virtual std::string is_a() const { return get_type_string(); }
+  std::string is_a() const override { return get_type_string(); }
 
   static std::string const& type() { return get_type_string(); }
 
   //: Clone
-  virtual brdb_value * clone() const { return new brdb_value_t<T>(*this); }
+  brdb_value * clone() const override { return new brdb_value_t<T>(*this); }
 
   //: Test for equality under polymorphism
-  virtual bool eq(const brdb_value& other) const;
+  bool eq(const brdb_value& other) const override;
 
   //: Test for inequality (less than) under polymorphism
-  virtual bool lt(const brdb_value& other) const;
+  bool lt(const brdb_value& other) const override;
 
   //: Assign the value of /p other to this if the types are the same
-  virtual bool assign(const brdb_value& other);
+  bool assign(const brdb_value& other) override;
 
   //: Return the string identifying this class
-  virtual void print() const { std::cout << value_ << "   ";}
+  void print() const override { std::cout << value_ << "   ";}
 
   //: Return the value
   T value() const { return value_; }
@@ -204,7 +204,7 @@ class brdb_value_t : public brdb_value
 
   //: binary io read value only
   //  Handles only the value (without version or type info)
-  virtual void b_read_value(vsl_b_istream& is);
+  void b_read_value(vsl_b_istream& is) override;
 
   //: binary io write value only
   //  Handles only the value (without version or type info)

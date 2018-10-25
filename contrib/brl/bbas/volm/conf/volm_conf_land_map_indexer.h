@@ -55,7 +55,7 @@ public:
   volm_conf_land_map_indexer(std::string const& bin_file);
 
   //: destructor
-  ~volm_conf_land_map_indexer() {}
+  ~volm_conf_land_map_indexer() override {}
 
   // ================ access ===================
   vgl_box_2d<double> bbox() const { return bbox_; }

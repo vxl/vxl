@@ -18,19 +18,19 @@ class test_ifa_factory : public vifa_int_face_attr_factory
   std::vector<ifp>*  table_;
  public:
   test_ifa_factory();
-  virtual ~test_ifa_factory();
+  ~test_ifa_factory() override;
 
-  virtual vifa_int_face_attr_sptr
-    obtain_int_face_attr(vtol_intensity_face_sptr  face);
+  vifa_int_face_attr_sptr
+    obtain_int_face_attr(vtol_intensity_face_sptr  face) override;
 
-  virtual vifa_int_face_attr_sptr
+  vifa_int_face_attr_sptr
     obtain_int_face_attr(vtol_intensity_face_sptr  face,
                          vdgl_fit_lines_params*    fpp,
                          vifa_group_pgram_params*  gpp_s,
                          vifa_group_pgram_params*  gpp_w,
                          vifa_norm_params*         np
-                        );
-  void reset();
+                        ) override;
+  void reset() override;
 };
 
 #endif  // _TEST_IFA_FACTORY_H

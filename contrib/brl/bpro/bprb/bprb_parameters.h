@@ -109,30 +109,30 @@ class bprb_param_type : public bprb_param
   //: A reference for temporary storage of values
   T& temp_ref() { temp_value_ = value_; return temp_value_; }
   //: Attempt to set the value from the temporary reference
-  bool set_from_temp() { return set_value(temp_value_); }
+  bool set_from_temp() override { return set_value(temp_value_); }
   //: Set the current value to \p val
   bool set_value( const T& val );
 
   //: Reset the value to its default
-  virtual void reset() { value_ = default_; }
+  void reset() override { value_ = default_; }
 
   //: Clone the parameter
-  virtual bprb_param * clone() const { return new bprb_param_type<T>(*this); }
+  bprb_param * clone() const override { return new bprb_param_type<T>(*this); }
 
   //: Return a string representation of the current value
-  virtual std::string value_str() const { return create_string(value_); }
+  std::string value_str() const override { return create_string(value_); }
   //: Return a string representation of the default value
-  virtual std::string default_str() const { return create_string(default_); }
+  std::string default_str() const override { return create_string(default_); }
   //: Return a string representation of the default value
-  virtual std::string type_str() const { return typeid(std::string("dummy")) == typeid(default_) ? "string" : typeid(default_).name(); }
+  std::string type_str() const override { return typeid(std::string("dummy")) == typeid(default_) ? "string" : typeid(default_).name(); }
 
   //: Return a string representation of the minimum value
-  virtual std::string min_str() const { return has_bounds_? create_string(min_value_) : ""; }
+  std::string min_str() const override { return has_bounds_? create_string(min_value_) : ""; }
   //: Return a string representation of the maximum value
-  virtual std::string max_str() const { return has_bounds_? create_string(max_value_) : ""; }
+  std::string max_str() const override { return has_bounds_? create_string(max_value_) : ""; }
 
   //: Set the current value by parsing a string
-  virtual bool parse_value_str(const std::string& input) { return set_value(parse_string(input)); }
+  bool parse_value_str(const std::string& input) override { return set_value(parse_string(input)); }
 
  private:
   //: Create a string representation of the value
@@ -165,7 +165,7 @@ class bprb_choice_param_type : public bprb_param_type<unsigned>
    : bprb_param_type<unsigned>(name, desc, def_val, 0, static_cast<unsigned>(choices.size()-1)), choices_(choices) {}
 
   //: Clone the parameter
-  virtual bprb_param * clone() const { return new bprb_choice_param_type(*this); }
+  bprb_param * clone() const override { return new bprb_choice_param_type(*this); }
 
   //: Accessor for the choice list;
   std::vector<std::string> & choices() { return choices_; }
@@ -186,7 +186,7 @@ class bprb_parameters : public vbl_ref_count
   //: Constructor
   bprb_parameters();
   //: Destructor
-  ~bprb_parameters();
+  ~bprb_parameters() override;
 
   //: Deep pseudo copy constructor
   bprb_parameters(const bprb_parameters_sptr& old_params);

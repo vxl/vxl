@@ -18,9 +18,9 @@ class brec_fg_bg_pair_density : public brec_pair_density
 {
  public:
   brec_fg_bg_pair_density() : brec_pair_density() {}
-  virtual ~brec_fg_bg_pair_density() {}
+  ~brec_fg_bg_pair_density() override {}
 
-  virtual double operator()(const double y0, const double y1);
+  double operator()(const double y0, const double y1) override;
 };
 
 #endif // brec_fg_bg_pair_density_h_

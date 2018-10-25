@@ -97,7 +97,7 @@ class boxm2_scene : public vbl_ref_count
     boxm2_scene(boxm2_scene const& other_scene);
 
     //: destructor
-    ~boxm2_scene() { }
+    ~boxm2_scene() override { }
 
     //:create an in-memory copy of the scene with unique id
     boxm2_scene_sptr clone_no_disk();

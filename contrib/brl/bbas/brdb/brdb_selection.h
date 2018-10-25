@@ -37,7 +37,7 @@ class brdb_selection : public vbl_ref_count
   brdb_selection(const brdb_selection_sptr& selection, brdb_query_aptr query);
 
   //: destructor
-  ~brdb_selection();
+  ~brdb_selection() override;
 
   //: get the iterator pointing to the beginning of the selection set
   selection_t::const_iterator begin();
