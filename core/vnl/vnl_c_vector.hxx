@@ -296,20 +296,13 @@ T vnl_c_vector<T>::sum_sq_diff_means(T const* v, unsigned n)
 template <class T, class S>
 void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out)
 {
-#if 1
   // IMS: MSVC's optimiser does much better with *p++ than with p[i];
   // consistently about 30% better over vectors from 4 to 20000 dimensions.
-  // PVr: with gcc 3.0 on alpha this is even a factor 3 faster!
   S val = S(0);
   T const* end = p+n;
   while (p != end)
     val += S(vnl_math::squared_magnitude(*p++));
   *out = val;
-#else
-  *out = 0;
-  for (unsigned i=0; i<n; ++i)
-    *out += vnl_math::squared_magnitude(p[i]);
-#endif
 }
 
 template <class T, class S>

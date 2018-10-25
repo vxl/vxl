@@ -118,10 +118,6 @@ class VNL_TEMPLATE_EXPORT vnl_matrix_fixed
   //: Copy another vnl_matrix_fixed<T,m,n> into this.
   vnl_matrix_fixed& operator=(const vnl_matrix_fixed& rhs) = default;
   vnl_matrix_fixed& operator=(vnl_matrix_fixed&& rhs) = default;
-  //  Destruct the m*n matrix.
-  // An explicit destructor seems to be necessary, at least for gcc 3.0.0,
-  // to avoid the compiler generating multiple versions of it.
-  // (This way, a weak symbol is generated; otherwise not.  A bug of gcc 3.0.)
   ~vnl_matrix_fixed() = default;
 
 
