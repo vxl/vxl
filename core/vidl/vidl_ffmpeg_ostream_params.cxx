@@ -96,8 +96,8 @@ vidl_ffmpeg_ostream_params::vidl_ffmpeg_ostream_params()
     video_b_qoffset_( 1.25f ),
     video_i_qfactor_( -0.8f ),
     video_i_qoffset_( 0.0f ),
-    video_intra_quant_bias_( FF_DEFAULT_QUANT_BIAS ),
-    video_inter_quant_bias_( FF_DEFAULT_QUANT_BIAS ),
+    //DEPRECATED video_intra_quant_bias_( FF_DEFAULT_QUANT_BIAS ),
+    //DEPRECATED video_inter_quant_bias_( FF_DEFAULT_QUANT_BIAS ),
     dct_algo_( FF_DCT_FASTINT ),
     idct_algo_( FF_DCT_AUTO ),
     intra_dc_precision_( 8 ),
@@ -116,7 +116,7 @@ vidl_ffmpeg_ostream_params::vidl_ffmpeg_ostream_params()
     me_range_( 0 ),
     do_psnr_( 0 ),
     packet_size_( 0 ),
-    me_method_( ME_EPZS ),
+    //DEPRECATED me_method_( ME_EPZS ),
     do_pass_( 0 )
 {
 }

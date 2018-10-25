@@ -29,9 +29,25 @@
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES
+#include <libavcodec/avcodec.h>
 #include <libavformat/avformat.h>
 #include <libavutil/imgutils.h>
 #include <libavutil/opt.h>
+
+// https://stackoverflow.com/questions/46884682/error-in-building-opencv-with-ffmpeg
+#define CODEC_FLAG_GLOBAL_HEADER AV_CODEC_FLAG_GLOBAL_HEADER
+#define CODEC_FLAG_QSCALE AV_CODEC_FLAG_QSCALE
+#define CODEC_FLAG_4MV AV_CODEC_FLAG_4MV
+#define CODEC_FLAG_LOOP_FILTER AV_CODEC_FLAG_LOOP_FILTER
+
+#define CODEC_FLAG_CLOSED_GOP AV_CODEC_FLAG_CLOSED_GOP
+#define CODEC_FLAG_QPEL       AV_CODEC_FLAG_QPEL
+#define CODEC_FLAG_INTERLACED_DCT AV_CODEC_FLAG_INTERLACED_DCT
+#define CODEC_FLAG_INTERLACED_ME AV_CODEC_FLAG_INTERLACED_ME
+#define CODEC_FLAG_PSNR AV_CODEC_FLAG_PSNR
+#define CODEC_FLAG_PASS1 AV_CODEC_FLAG_PASS1
+#define CODEC_FLAG_PASS2 AV_CODEC_FLAG_PASS2
+
 #else
 #include <ffmpeg/avformat.h>
 #include <ffmpeg/opt.h>
@@ -357,8 +373,8 @@ open()
   video_enc->b_quant_factor = params_.video_b_qfactor_;
   video_enc->i_quant_offset = params_.video_i_qoffset_;
   video_enc->b_quant_offset = params_.video_b_qoffset_;
-  video_enc->intra_quant_bias = params_.video_intra_quant_bias_;
-  video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
+  //DEPRECATED https://www.ffmpeg.org/doxygen/3.1/structAVCodecContext.html video_enc->intra_quant_bias = params_.video_intra_quant_bias_;
+  //DEPRECATED https://www.ffmpeg.org/doxygen/3.1/structAVCodecContext.html video_enc->inter_quant_bias = params_.video_inter_quant_bias_;
   video_enc->dct_algo = params_.dct_algo_;
   video_enc->idct_algo = params_.idct_algo_;
   video_enc->intra_dc_precision = params_.intra_dc_precision_ - 8;
@@ -374,7 +390,7 @@ open()
   if (params_.do_psnr_)
     video_enc->flags|= CODEC_FLAG_PSNR;
 
-  video_enc->me_method = params_.me_method_;
+  //DEPRECATED:  This option does nothing "https://www.ffmpeg.org/doxygen/3.1/structAVCodecContext.html#aa71b3450f1a508330e907db117ae410e" video_enc->me_method = params_.me_method_;
 
   // two pass mode
   if (params_.do_pass_)
