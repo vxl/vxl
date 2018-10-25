@@ -1041,7 +1041,7 @@ private:
     reference operator*() { return asg_.inds; }
     pointer operator->() { return &*(*this); }
     self_type& operator++() { ++asg_; return *this; }
-    self_type operator++(int junk) { self_type i = *this; ++asg_; return i; }
+    self_type operator++(int  /*junk*/) { self_type i = *this; ++asg_; return i; }
     bool operator==(const self_type& rhs) const { return asg_ == rhs.asg_; }
     bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
   };
@@ -1061,7 +1061,7 @@ private:
     reference operator*() { return asg_.inds; }
     pointer operator->() { return &*(*this); }
     self_type& operator++() { ++asg_; return *this; }
-    self_type operator++(int junk) { self_type i = *this; ++asg_; return i; }
+    self_type operator++(int  /*junk*/) { self_type i = *this; ++asg_; return i; }
     bool operator==(const self_type& rhs) const { return asg_ == rhs.asg_; }
     bool operator!=(const self_type& rhs) const { return !(*this == rhs); }
   };
@@ -1341,23 +1341,23 @@ void volm_satellite_resource::b_read(vsl_b_istream& is)
 
 //dummy vsl io functions to allow volm_satellite_resources to be inserted into
 //brdb as a dbvalue
-void vsl_b_write(vsl_b_ostream & os, volm_satellite_resources const &tc)
+void vsl_b_write(vsl_b_ostream &  /*os*/, volm_satellite_resources const & /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream & is, volm_satellite_resources &tc)
+void vsl_b_read(vsl_b_istream &  /*is*/, volm_satellite_resources & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(std::ostream &os, const volm_satellite_resources &tc)
+void vsl_print_summary(std::ostream & /*os*/, const volm_satellite_resources & /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, volm_satellite_resources* tc)
+void vsl_b_read(vsl_b_istream&  /*is*/, volm_satellite_resources*  /*tc*/)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const volm_satellite_resources* &tc)
+void vsl_b_write(vsl_b_ostream&  /*os*/, const volm_satellite_resources* & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(std::ostream& os, const volm_satellite_resources* &tc)
+void vsl_print_summary(std::ostream&  /*os*/, const volm_satellite_resources* & /*tc*/)
 { /* do nothing */ }
-void vsl_b_read(vsl_b_istream& is, volm_satellite_resources_sptr& tc)
+void vsl_b_read(vsl_b_istream&  /*is*/, volm_satellite_resources_sptr&  /*tc*/)
 { /* do nothing */ }
-void vsl_b_write(vsl_b_ostream& os, const volm_satellite_resources_sptr &tc)
+void vsl_b_write(vsl_b_ostream&  /*os*/, const volm_satellite_resources_sptr & /*tc*/)
 { /* do nothing */ }
-void vsl_print_summary(std::ostream& os, const volm_satellite_resources_sptr &tc)
+void vsl_print_summary(std::ostream&  /*os*/, const volm_satellite_resources_sptr & /*tc*/)
 { /* do nothing */ }
 
 

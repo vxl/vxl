@@ -120,7 +120,7 @@ volm_desc_ex::volm_desc_ex(std::vector<unsigned char> const& index_dst,
   }
 }
 
-void volm_desc_ex::initialize_bin(unsigned char const& mag)
+void volm_desc_ex::initialize_bin(unsigned char const&  /*mag*/)
 {
   for (unsigned bin_id = 0; bin_id < nbins_; bin_id++)
     h_[bin_id] = (unsigned char)0;

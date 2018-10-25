@@ -4,7 +4,7 @@
 #include <bsta/vis/bsta_svg_tools.h>
 #include <vsl/vsl_vector_io.h>
 
-float volm_desc::similarity(volm_desc_sptr other)
+float volm_desc::similarity(volm_desc_sptr  /*other*/)
 {
   return 0.0f;
 }

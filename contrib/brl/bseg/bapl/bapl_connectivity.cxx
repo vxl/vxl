@@ -136,7 +136,7 @@ bool compare_first(const bapl_key_match &k1, const bapl_key_match &k2)
 
 //: compute a set of tracks, each corresponding to a separate 3d point.
 //  assumes a symmetric connectivity table
-bool bapl_conn_table::compute_tracks(std::vector<bapl_track_data>& tracks, int new_image_start)
+bool bapl_conn_table::compute_tracks(std::vector<bapl_track_data>& tracks, int  /*new_image_start*/)
 {
   unsigned num_images = conns_.size();
   //: check if image data is set for each image

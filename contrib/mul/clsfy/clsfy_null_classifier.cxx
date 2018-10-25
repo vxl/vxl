@@ -90,7 +90,7 @@ unsigned clsfy_null_classifier::n_classes() const
 
 //: Return the probability the input being in each class.
 // output(i) i<nClasses, contains the probability that the input is in class i
-void clsfy_null_classifier::class_probabilities(std::vector<double> &outputs, const vnl_vector<double> &input) const
+void clsfy_null_classifier::class_probabilities(std::vector<double> &outputs, const vnl_vector<double> & /*input*/) const
 {
   unsigned n=n_classes();
   outputs.resize(n);
@@ -103,7 +103,7 @@ void clsfy_null_classifier::class_probabilities(std::vector<double> &outputs, co
 //: Log likelihood of being in class (binary classifiers only)
 // class probability = 1 / (1+exp(-log_l))
 // Operation of this method is undefined for multiclass classifiers.
-double clsfy_null_classifier::log_l(const vnl_vector<double> &input) const
+double clsfy_null_classifier::log_l(const vnl_vector<double> & /*input*/) const
 {
   return default_class_?1.0:-1.0 * vnl_huge_val(double());
 }

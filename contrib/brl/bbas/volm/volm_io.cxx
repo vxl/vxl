@@ -798,7 +798,7 @@ unsigned char volm_io::scale_score_to_1_255(float threshold, float score)
     return (unsigned char) (((score-threshold)/(1-threshold))*128 + 127);
 }
 
-unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & ku, float const& threshold, float const& score)
+unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const &  /*ku*/, float const& threshold, float const& score)
 {
   float t = threshold;
   float x;
@@ -810,7 +810,7 @@ unsigned char volm_io::scale_score_to_1_255_sig(float const& kl, float const & k
     return  volm_io::scale_score_to_1_255(threshold, score);
 }
 
-float volm_io::scale_score_to_0_1_sig(float const& kl, float const& ku, float const& threshold, unsigned char pix_value)
+float volm_io::scale_score_to_0_1_sig(float const& kl, float const&  /*ku*/, float const& threshold, unsigned char pix_value)
 {
   if (pix_value < 127)
     if (pix_value == 1)

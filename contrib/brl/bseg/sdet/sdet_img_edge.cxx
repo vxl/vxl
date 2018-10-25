@@ -491,7 +491,7 @@ void sdet_img_edge::convert_true_edge_prob_to_edge_statistics(
   }
 }
 
-float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof)
+float sdet_img_edge::convert_edge_statistics_to_probability(float edge_statistic, float  /*n_normal*/, int dof)
 {
   if (dof<1) {
     return edge_statistic;

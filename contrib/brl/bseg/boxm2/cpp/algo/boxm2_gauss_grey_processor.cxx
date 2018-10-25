@@ -90,7 +90,7 @@ void compute_gaussian_params(std::vector<float> const& obs, std::vector<float> c
 void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned char, 2> & app,
                                                    std::vector<float> const& obs,
                                                    std::vector<float> const& vis,
-                                                   bsta_sigma_normalizer_sptr n_table,
+                                                   bsta_sigma_normalizer_sptr  /*n_table*/,
                                                    float min_sigma)
 {
   const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
@@ -213,7 +213,7 @@ void update_gauss(float & x, float & rho, float & mu, float &  sigma,float min_s
 
 void boxm2_gauss_grey_processor::update_app_model(vnl_vector_fixed<unsigned char, 2> & apm,
                                                   vnl_vector_fixed<float, 4> & nobs,
-                                                  float x, float w, float init_sigma,float min_sigma)
+                                                  float x, float w, float  /*init_sigma*/,float min_sigma)
 {
   float mu = apm[0]/255.0f;
   float sigma = apm[1]/255.0f;

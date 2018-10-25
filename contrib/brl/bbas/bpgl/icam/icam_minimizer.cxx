@@ -226,7 +226,7 @@ exhaustive_rotation_search(vgl_vector_3d<double> const& trans,
                            vgl_rotation_3d<double>& min_rot,
                            double& min_cost,
                            double& min_overlap_fraction,
-                           bool setup,
+                           bool  /*setup*/,
                            bool finish)
 {
   // setup, finish flags used only for GPU implementation
@@ -393,7 +393,7 @@ initialized_rot_search(vgl_vector_3d<double> const& trans,
                        vgl_rotation_3d<double>& min_rot,
                        double& min_cost,
                        double& min_overlap_fraction,
-                       bool setup,
+                       bool  /*setup*/,
                        bool finish)
 {
   // setup, finish flags used only for GPU implementation
@@ -619,7 +619,7 @@ reduce_search_box(vgl_vector_3d<double> const& center_trans,
 
 bool icam_minimizer::
 pyramid_camera_search(vgl_vector_3d<double> const&
-                      start_trans,
+                       /*start_trans*/,
                       vgl_rotation_3d<double> const&
                       start_rotation,
                       vgl_vector_3d<double> const&
@@ -1153,7 +1153,7 @@ void icam_minimizer::print_axis_search_info(unsigned level,
            << " angle between actual and initial axes " << act_ang << " >\n";
 }
 
-void icam_minimizer::print_polar_search_info(unsigned level, vgl_rotation_3d<double> const& actual,
+void icam_minimizer::print_polar_search_info(unsigned level, vgl_rotation_3d<double> const&  /*actual*/,
                                              vgl_rotation_3d<double> const& init, bool top_level)
 {
   std::cout << "Polar search info -< ";

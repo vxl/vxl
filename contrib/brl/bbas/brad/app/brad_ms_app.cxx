@@ -22,7 +22,7 @@
 #include <brad_worldview3_functions.h>
 #include <brad/brad_sam_template_match.h>
 
-int main(int argc, char * argv[])
+int main(int  /*argc*/, char *  /*argv*/[])
 {
 
   // =========================template matching=======================

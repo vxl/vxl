@@ -81,7 +81,7 @@ void bstm_ocl_annealed_particle_filter::dump_particles(unsigned cur_time, unsign
   myfile.close();
 }
 
-void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned prev_time, unsigned cur_time, unsigned m)
+void bstm_ocl_annealed_particle_filter::perturb_particles(unsigned  /*prev_time*/, unsigned cur_time, unsigned  /*m*/)
 {
   t_sigma_ *= ALPHA;
   w_sigma_ *= ALPHA;

@@ -173,7 +173,7 @@ void mfpf_region_pdf_builder::set_as_ellipse(double ri, double rj)
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_region_pdf_builder::clear(unsigned n_egs)
+void mfpf_region_pdf_builder::clear(unsigned  /*n_egs*/)
 {
   data_.resize(0);
 }

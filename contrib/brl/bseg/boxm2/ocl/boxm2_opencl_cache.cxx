@@ -649,12 +649,12 @@ std::string boxm2_opencl_cache::to_string()
 }
 
 // === Dummy (empty) instantiations for binary I/O
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache* &p) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache const&  /*scene*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const boxm2_opencl_cache* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache_sptr&  /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache_sptr const&  /*sptr*/) {}
 
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache &scene) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache* p) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache & /*scene*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache*  /*p*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache_sptr&  /*sptr*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache_sptr const&  /*sptr*/) {}

@@ -30,7 +30,7 @@ void msm_translation_aligner::apply_transform(const msm_points& points,
 
 
 //: Return scaling applied by the transform with given parameters.
-double msm_translation_aligner::scale(const vnl_vector<double>& trans) const
+double msm_translation_aligner::scale(const vnl_vector<double>&  /*trans*/) const
 {
   return 1.0;
 }
@@ -47,7 +47,7 @@ double msm_translation_aligner::scale(const vnl_vector<double>& trans) const
   //  to compute the optimal shape and pose parameters, rather than an iterative
   //  method which is required where the orthogonality properties do not hold,
   //  or where weights are considered.
-void msm_translation_aligner::calc_transform_from_ref(const msm_points& ref_pts,
+void msm_translation_aligner::calc_transform_from_ref(const msm_points&  /*ref_pts*/,
                                                       const msm_points& pts2,
                                                       vnl_vector<double>& trans) const
 {
@@ -142,7 +142,7 @@ void msm_translation_aligner::calc_transform_wt_mat(const msm_points& pts1,
 
   //: Apply transform to weight matrices (ie ignore translation component)
 void msm_translation_aligner::transform_wt_mat(const std::vector<msm_wt_mat_2d>& wt_mat,
-                                               const vnl_vector<double>& trans,
+                                               const vnl_vector<double>&  /*trans*/,
                                                std::vector<msm_wt_mat_2d>& new_wt_mat) const
 {
   new_wt_mat = wt_mat;

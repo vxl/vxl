@@ -339,7 +339,7 @@ set_ground_plane_max_depth(double max_depth,
 }
 
 bool depth_map_region::
-img_to_region_plane(vpgl_perspective_camera<double> const& cam,
+img_to_region_plane(vpgl_perspective_camera<double> const&  /*cam*/,
                     vgl_h_matrix_2d<double>& H) const
 {
   if (this->orient_type() == INFINT) {

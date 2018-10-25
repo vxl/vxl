@@ -506,7 +506,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
+std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;

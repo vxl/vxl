@@ -39,7 +39,7 @@ static void test_poly_contain_box()
 }
 
 template <class T>
-static void test_poly_contain_poly(T type, std::string const& type_name)
+static void test_poly_contain_poly(std::string const& type_name)
 {
   vgl_polygon<T> p_out;
   p_out.new_sheet();
@@ -78,8 +78,8 @@ static void test_utils()
   std::cout << "\n************************\n";
   std::cout << " Testing volm_util: polygon contains polygon\n";
   std::cout << "************************\n\n";
-  test_poly_contain_poly(0.1, "double");
-  test_poly_contain_poly(0.1f, "float");
+  test_poly_contain_poly<double>("double");
+  test_poly_contain_poly<float>("float");
 
   return;
 }

@@ -285,7 +285,7 @@ void boxm2_refine_block( boxm2_scene_sptr scene,
                          boxm2_block* blk,
                          std::vector<boxm2_data_base*> & datas,
                          float prob_thresh,
-                         bool is_random)
+                         bool  /*is_random*/)
 {
   boxm2_refine_block_function refine_block;
   refine_block.init_data(scene, blk, datas, prob_thresh);

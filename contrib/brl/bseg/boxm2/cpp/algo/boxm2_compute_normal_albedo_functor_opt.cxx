@@ -119,7 +119,7 @@ bool boxm2_compute_normal_albedo_functor_opt::init_data(std::vector<brad_image_m
 }
 
 
-bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, bool is_leaf, float side_len)
+bool boxm2_compute_normal_albedo_functor_opt::process_cell(unsigned int index, bool  /*is_leaf*/, float  /*side_len*/)
 {
    if (index >= naa_model_data_->data().size()) {
       std::cerr << "ERROR: index = " << index << ", naa_model_data_->data().size = " << naa_model_data_->data().size() << '\n'

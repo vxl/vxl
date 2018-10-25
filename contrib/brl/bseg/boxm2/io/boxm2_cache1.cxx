@@ -17,16 +17,16 @@ boxm2_cache1_sptr boxm2_cache1::instance()
 }
 
 //: Binary write boxm2_cache1  to stream
-void vsl_b_write(vsl_b_ostream& os, boxm2_cache1 const& scene){}
-void vsl_b_write(vsl_b_ostream& os, const boxm2_cache1* &p){}
-void vsl_b_write(vsl_b_ostream& os, boxm2_cache1_sptr& sptr){}
-void vsl_b_write(vsl_b_ostream& os, boxm2_cache1_sptr const& sptr){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_cache1 const&  /*scene*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const boxm2_cache1* & /*p*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_cache1_sptr&  /*sptr*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_cache1_sptr const&  /*sptr*/){}
 
 //: Binary load boxm2_cache1  from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_cache1 &scene){}
-void vsl_b_read(vsl_b_istream& is, boxm2_cache1* p){}
-void vsl_b_read(vsl_b_istream& is, boxm2_cache1_sptr& sptr){}
-void vsl_b_read(vsl_b_istream& is, boxm2_cache1_sptr const& sptr){}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1 & /*scene*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1*  /*p*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1_sptr&  /*sptr*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1_sptr const&  /*sptr*/){}
 
 
 boxm2_cache1_destroyer::boxm2_cache1_destroyer(boxm2_cache1_sptr s)

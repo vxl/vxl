@@ -26,7 +26,7 @@ unsigned volm_desc_ex_2d::locate_idx(double const& target, std::vector<double> c
 volm_desc_ex_2d::volm_desc_ex_2d(std::vector<double> const& radius,
                                  double const& h_width, double const& h_inc,
                                  unsigned const& nlands,
-                                 unsigned char const& initial_mag)
+                                 unsigned char const&  /*initial_mag*/)
 {
   name_ = "existence 2d descriptor";
   // create a histogram based on given parameter
@@ -56,7 +56,7 @@ volm_desc_ex_2d::volm_desc_ex_2d(std::vector<double> const& radius,
   this->initialize_bin(nbins_);
 }
 
-void volm_desc_ex_2d::initialize_bin(unsigned char const& mag)
+void volm_desc_ex_2d::initialize_bin(unsigned char const&  /*mag*/)
 {
   for (unsigned bin_id = 0; bin_id < nbins_; bin_id++)
     h_[bin_id] = (unsigned char)0;

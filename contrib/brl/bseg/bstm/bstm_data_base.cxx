@@ -111,19 +111,19 @@ char * bstm_data_base::cell_buffer(int i, std::size_t cell_size)
 
 
 //: Binary write bstm_data_base to stream
-void vsl_b_write(vsl_b_ostream& os, bstm_data_base const& scene) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_data_base const&  /*scene*/) {}
 //: Binary write bstm_data_base to stream
-void vsl_b_write(vsl_b_ostream& os, const bstm_data_base* &p) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const bstm_data_base* & /*p*/) {}
 //: Binary write bstm_data_base_sptr to stream
-void vsl_b_write(vsl_b_ostream& os, bstm_data_base_sptr& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_data_base_sptr&  /*sptr*/) {}
 //: Binary write bstm_data_base_sptr to stream
-void vsl_b_write(vsl_b_ostream& os, bstm_data_base_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_data_base_sptr const&  /*sptr*/) {}
 
 //: Binary load bstm_data_base from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_data_base &scene) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_data_base & /*scene*/) {}
 //: Binary load bstm_data_base from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_data_base* p) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_data_base*  /*p*/) {}
 //: Binary load bstm_data_base_sptr from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_data_base_sptr& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_data_base_sptr&  /*sptr*/) {}
 //: Binary load bstm_data_base_sptr from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_data_base_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_data_base_sptr const&  /*sptr*/) {}

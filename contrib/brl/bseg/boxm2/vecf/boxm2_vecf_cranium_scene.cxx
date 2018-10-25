@@ -428,7 +428,7 @@ bool boxm2_vecf_cranium_scene::set_params(boxm2_vecf_articulated_params const& p
   }
 }
 
-bool boxm2_vecf_cranium_scene::vfield_params_change_check(const boxm2_vecf_cranium_params & params){
+bool boxm2_vecf_cranium_scene::vfield_params_change_check(const boxm2_vecf_cranium_params &  /*params*/){
   // move to parames class
   return false;//temporary
 }

@@ -227,7 +227,7 @@ bool bocl_mem::write_to_buffer_async(const cl_command_queue& cmd_queue)
 }
 
 //: finish write to buffer using clWaitForEvent
-bool bocl_mem::finish_write_to_buffer(const cl_command_queue& cmd_queue)
+bool bocl_mem::finish_write_to_buffer(const cl_command_queue&  /*cmd_queue*/)
 {
   if (!is_gl_) {
     cl_int status = MEM_FAILURE;

@@ -23,7 +23,7 @@ void print_usage()
 
 template<class imT>
 int load_images(const std::vector<std::string>& names,
-                 imT im_type,
+                 imT  /*im_type*/,
                  double wx, double wy, double wz,
                  const std::string& output_path)
 {

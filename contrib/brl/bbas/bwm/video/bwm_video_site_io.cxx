@@ -88,7 +88,7 @@ bwm_video_site_io ::cdataHandler(std::string name, std::string data)
 }
 
 void
-bwm_video_site_io::handleAtts(const XML_Char** atts)
+bwm_video_site_io::handleAtts(const XML_Char**  /*atts*/)
 {
 }
 

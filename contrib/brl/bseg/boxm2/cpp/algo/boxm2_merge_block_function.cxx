@@ -328,7 +328,7 @@ void boxm2_merge_block( boxm2_scene_sptr scene,
                         boxm2_block* blk,
                         std::vector<boxm2_data_base*> & datas,
                         float prob_thresh,
-                        bool is_random)
+                        bool  /*is_random*/)
 {
   boxm2_merge_block_function merge_block(scene);
   merge_block.init_data(blk, datas, prob_thresh);

@@ -1087,7 +1087,7 @@ void boxm2_vecf_ocl_orbit_scene::apply_eyelid_vector_field_to_target(std::vector
   //  std::cout << "Apply eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
-void boxm2_vecf_ocl_orbit_scene::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+void boxm2_vecf_ocl_orbit_scene::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                                                        std::vector<bool> const& valid){
 
    vul_timer t;
@@ -1127,7 +1127,7 @@ void boxm2_vecf_ocl_orbit_scene::apply_lower_eyelid_vector_field_to_target(std::
   //  std::cout << "Apply lower lower_eyelid vector field in " << t.real()/1000.0 << " sec.\n";
 }
 
-void boxm2_vecf_ocl_orbit_scene::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+void boxm2_vecf_ocl_orbit_scene::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                                                        std::vector<bool> const& valid){
 
    vul_timer t;
@@ -1203,7 +1203,7 @@ bool boxm2_vecf_ocl_orbit_scene::set_params(boxm2_vecf_articulated_params const&
     return false;
   }
 }
-vnl_vector_fixed<unsigned char,8> boxm2_vecf_ocl_orbit_scene::random_color(bool yuv){
+vnl_vector_fixed<unsigned char,8> boxm2_vecf_ocl_orbit_scene::random_color(bool  /*yuv*/){
   unsigned char  R = static_cast<unsigned char>(rand()) % (unsigned char) 255;
   unsigned char  G = static_cast<unsigned char>(rand()) % (unsigned char) 255;
   unsigned char  B = static_cast<unsigned char>(rand()) % (unsigned char) 255;

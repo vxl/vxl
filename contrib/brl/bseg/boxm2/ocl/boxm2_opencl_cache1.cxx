@@ -484,7 +484,7 @@ void boxm2_opencl_cache1::deep_replace_data(boxm2_block_id id, std::string type,
 }
 
 //: deep remove data, removes from ocl cache as well
-void boxm2_opencl_cache1::deep_remove_data(boxm2_block_id id, std::string type, bool write_out)
+void boxm2_opencl_cache1::deep_remove_data(boxm2_block_id id, std::string type, bool  /*write_out*/)
 {
   //find the data in this map
   std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -613,12 +613,12 @@ std::string boxm2_opencl_cache1::to_string()
 }
 
 // === Dummy (empty) instantiations for binary I/O
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache1 const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const boxm2_opencl_cache1* &p) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache1_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_opencl_cache1_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache1 const&  /*scene*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const boxm2_opencl_cache1* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache1_sptr&  /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_opencl_cache1_sptr const&  /*sptr*/) {}
 
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache1 &scene) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache1* p) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache1_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_opencl_cache1_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache1 & /*scene*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache1*  /*p*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache1_sptr&  /*sptr*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_opencl_cache1_sptr const&  /*sptr*/) {}

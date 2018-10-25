@@ -13,7 +13,6 @@
 static bool process(std::string const& site_path,
                     std::string const& cal_matrix_path,
                     double initial_depth,
-                    unsigned corr_win_radius,
                     unsigned search_win_radius,
                     bool use_lmq)
 {
@@ -94,7 +93,6 @@ int main(int argc, char** argv)
   arglist.parse(argc, argv, true);
 
 if (!process(site_path(), cal_matrix_path(), initial_depth(),
-             static_cast<unsigned>(window_radius()),
              static_cast<unsigned>(search_radius()), use_lmq()))
     return -1;
   return 0;

@@ -142,7 +142,7 @@ boxm_utils::project_point3d(vgl_point_3d<double> const& point,
 
 //: corners of the input face: visible?
 bool boxm_utils::is_face_visible(const double * xverts, const double *yverts,
-                                 unsigned id1,unsigned id2,unsigned id3,unsigned id4) // id4 unused?!? - FIXME
+                                 unsigned id1,unsigned id2,unsigned id3,unsigned  /*id4*/) // id4 unused?!? - FIXME
 {
   double normal=(xverts[id2]-xverts[id1])*(yverts[id3]-yverts[id2])-(yverts[id2]-yverts[id1])*(xverts[id3]-xverts[id2]);
   return normal < 0;

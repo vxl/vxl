@@ -12,7 +12,7 @@
 
 void ocl_levenberg_marquardt(vnl_vector<float> x,
                              vnl_vector<float> y,
-                             int m, int n, int max_iter)
+                             int m, int n, int  /*max_iter*/)
 {
   //load BOCL stuff
   bocl_manager_child &mgr = bocl_manager_child::instance();

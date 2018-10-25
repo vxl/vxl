@@ -13,7 +13,7 @@
 boxm2_vecf_eyelid_crease::boxm2_vecf_eyelid_crease(): boxm2_vecf_lid_base(0.0, 1.0){
   el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());
 }
-boxm2_vecf_eyelid_crease::boxm2_vecf_eyelid_crease(double t_min, double t_max, double ct, vgl_vector_3d<double> upper_socket_normal):
+boxm2_vecf_eyelid_crease::boxm2_vecf_eyelid_crease(double t_min, double t_max, double ct, vgl_vector_3d<double>  /*upper_socket_normal*/):
   boxm2_vecf_lid_base(t_min, t_max), ct_(ct){
   el_ = boxm2_vecf_eyelid(boxm2_vecf_orbit_params());
 }

@@ -389,18 +389,18 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 
 float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
                                         bocl_device_sptr device,
-                                        boxm2_opencl_cache1* opencl_cache,
+                                        boxm2_opencl_cache1*  /*opencl_cache*/,
                                         cl_command_queue & queue,
                                         vpgl_camera_double_sptr & cam,
-                                        bocl_mem_sptr & exp_image,
-                                        bocl_mem_sptr & vis_image,
-                                        bocl_mem_sptr & exp_img_dim,
-                                        std::string data_type,
-                                        bocl_kernel* kernel,
-                                        std::size_t * lthreads,
+                                        bocl_mem_sptr &  /*exp_image*/,
+                                        bocl_mem_sptr &  /*vis_image*/,
+                                        bocl_mem_sptr &  /*exp_img_dim*/,
+                                        std::string  /*data_type*/,
+                                        bocl_kernel*  /*kernel*/,
+                                        std::size_t *  /*lthreads*/,
                                         unsigned cl_ni,
                                         unsigned cl_nj,
-                                        int apptypesize )
+                                        int  /*apptypesize*/ )
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;

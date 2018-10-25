@@ -74,7 +74,7 @@ void mfpf_profile_pdf_builder::set_region_size(double wi, double)
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_profile_pdf_builder::clear(unsigned n_egs)
+void mfpf_profile_pdf_builder::clear(unsigned  /*n_egs*/)
 {
   data_.resize(0);
 }

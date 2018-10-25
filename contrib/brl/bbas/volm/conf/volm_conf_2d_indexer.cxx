@@ -90,7 +90,7 @@ bool volm_conf_2d_indexer::get_next()
 }
 
 // function to create index for a location
-bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double const& elev, std::vector<volm_conf_object>& values)
+bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double const&  /*elev*/, std::vector<volm_conf_object>& values)
 {
 #if 0
   std::stringstream kml_file;

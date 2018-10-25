@@ -46,7 +46,7 @@ double mcal_var_basis_cost::cost(const vnl_vector<double>& unit_basis,
 
   //: Compute component of the cost function from given basis vector
   // Cost is log(variance)
-double mcal_var_basis_cost::cost_from_variance(const vnl_vector<double>& unit_basis,
+double mcal_var_basis_cost::cost_from_variance(const vnl_vector<double>&  /*unit_basis*/,
                                                double variance)
 {
   return std::log(1e-8+variance);

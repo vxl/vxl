@@ -39,7 +39,7 @@ bool bstm_block::b_read(char* buff)
 //  just needs to be returned and written to disk. The first few calls
 //  ensure the meta data is lined up correctly.  To use this, just pass in
 //  the bstm_block buffer.
-bool bstm_block::b_write(char* buff)
+bool bstm_block::b_write(char*  /*buff*/)
 {
   return true;
 }
@@ -133,7 +133,7 @@ bool bstm_block::init_empty_block(bstm_block_metadata data)
 
 //: Given number of buffers, number of trees in each buffer, and number of total trees (x*y*z number)
 // \return size of byte stream
-long bstm_block::calc_byte_count(int num_buffers, int trees_per_buffer, int num_trees)
+long bstm_block::calc_byte_count(int  /*num_buffers*/, int  /*trees_per_buffer*/, int num_trees)
 {
   long toReturn = num_trees * sizeof(uchar16) ;
   return toReturn;

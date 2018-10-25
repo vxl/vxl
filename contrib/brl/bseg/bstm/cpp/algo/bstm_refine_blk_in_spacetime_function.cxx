@@ -72,7 +72,7 @@ bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bs
    return true;
 }
 
-bool bstm_refine_blk_in_spacetime_function::refine(std::vector<bstm_data_base*>& datas)
+bool bstm_refine_blk_in_spacetime_function::refine(std::vector<bstm_data_base*>&  /*datas*/)
 {
 
   //1. loop over each tree, refine it in place

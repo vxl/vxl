@@ -51,7 +51,7 @@ mfpf_vec_cost* mfpf_sad_vec_cost_builder::new_cost() const
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_sad_vec_cost_builder::clear(unsigned n_egs)
+void mfpf_sad_vec_cost_builder::clear(unsigned  /*n_egs*/)
 {
   data_.resize(0);
 }

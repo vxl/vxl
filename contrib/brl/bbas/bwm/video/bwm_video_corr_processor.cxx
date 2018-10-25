@@ -681,7 +681,7 @@ bool bwm_video_corr_processor::find_missing_corrs(unsigned frame_index_a,
                                                   unsigned frame_index_x,
                                                   unsigned win_radius,
                                                   unsigned search_radius,
-                                                  bool use_lmq)
+                                                  bool  /*use_lmq*/)
 {
   unsigned n = corrs_.size();
   if (!n) return false;

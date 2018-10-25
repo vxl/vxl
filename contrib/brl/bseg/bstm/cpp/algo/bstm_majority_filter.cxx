@@ -4,7 +4,7 @@
 #include <vcl_compiler.h>
 
 
-bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block* blk, bstm_time_block* blk_t, bstm_data_base* changes)
+bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block* blk, bstm_time_block*  /*blk_t*/, bstm_data_base* changes)
 {
 
   boxm2_array_3d<uchar16>& trees = blk->trees();

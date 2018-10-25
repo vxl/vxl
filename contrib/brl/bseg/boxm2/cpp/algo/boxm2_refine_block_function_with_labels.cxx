@@ -253,7 +253,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
 /////////////////////////////////////////////////////////////////
 template <class T>
 boct_bit_tree boxm2_refine_block_function_with_labels<T>::refine_bit_tree(boct_bit_tree& unrefined_tree,
-                                                           int buff_offset,
+                                                           int  /*buff_offset*/,
                                                            bool is_random)
 {
   //initialize tree to return

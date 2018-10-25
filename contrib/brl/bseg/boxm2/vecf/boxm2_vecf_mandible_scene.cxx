@@ -133,7 +133,7 @@ boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_fi
   this->rebuild();
  }
 
-boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const& geometry_file, std::string const& params_file_name):
+boxm2_vecf_mandible_scene::boxm2_vecf_mandible_scene(std::string const& scene_file, std::string const&  /*geometry_file*/, std::string const& params_file_name):
   boxm2_vecf_articulated_scene(scene_file),left_ramus_(nullptr), left_angle_(nullptr), body_(nullptr), right_angle_(nullptr), right_ramus_(nullptr){
 
   std::ifstream params_file(params_file_name.c_str());
@@ -617,7 +617,7 @@ bool boxm2_vecf_mandible_scene::set_params(boxm2_vecf_articulated_params const& 
   }
 }
 
-bool boxm2_vecf_mandible_scene::vfield_params_change_check(const boxm2_vecf_mandible_params & params){
+bool boxm2_vecf_mandible_scene::vfield_params_change_check(const boxm2_vecf_mandible_params &  /*params*/){
   return false;//temporary
 }
 

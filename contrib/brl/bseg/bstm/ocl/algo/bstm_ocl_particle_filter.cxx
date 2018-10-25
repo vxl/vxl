@@ -409,7 +409,7 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::sample_rot(vgl_rotation_3d<dou
 
 }
 
-void bstm_ocl_particle_filter::resample(unsigned prev_time, unsigned cur_time)
+void bstm_ocl_particle_filter::resample(unsigned  /*prev_time*/, unsigned cur_time)
 {
 
   //resampled vectors to replace current ones
@@ -516,7 +516,7 @@ vgl_box_3d<double> bstm_ocl_particle_filter::w_mean_bb( std::vector<vgl_orient_b
 
 
 
-vgl_vector_3d<double> bstm_ocl_particle_filter::velocity_estimate(unsigned prev2_time, unsigned prev_time)
+vgl_vector_3d<double> bstm_ocl_particle_filter::velocity_estimate(unsigned  /*prev2_time*/, unsigned prev_time)
 {
   if(prev_time == start_t_)
     return vgl_vector_3d<double>(0,0,0);
@@ -574,7 +574,7 @@ vgl_rotation_3d<double> bstm_ocl_particle_filter::angular_velocity_estimate(unsi
   */
 }
 
-std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned prev_time, unsigned cur_time)
+std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned  /*prev_time*/, unsigned cur_time)
 {
   std::size_t local_threads[1]={128};
   std::size_t global_threads[1]={1};

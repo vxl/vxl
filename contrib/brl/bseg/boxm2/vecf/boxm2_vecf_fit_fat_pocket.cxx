@@ -188,7 +188,7 @@ boxm2_vecf_fit_fat_pocket::boxm2_vecf_fit_fat_pocket(std::string const& neutral_
   skin_layer_.set_thresh(surface_dist_thresh);
   defpr_.fit_to_subject_ = true;
 }
-boxm2_vecf_fit_fat_pocket::boxm2_vecf_fit_fat_pocket(std::string const& neutral_face_ptset_path, std::string const& deformed_face_ptset_path,
+boxm2_vecf_fit_fat_pocket::boxm2_vecf_fit_fat_pocket(std::string const&  /*neutral_face_ptset_path*/, std::string const& deformed_face_ptset_path,
                                                      std::string const& skin_ptset_path, std::string const& fat_pocket_geo_path):
   pocket_(boxm2_vecf_middle_fat_pocket(fat_pocket_geo_path)), is_right_(false){
   double surface_dist_thresh = 1.0;
@@ -305,7 +305,7 @@ double boxm2_vecf_fit_fat_pocket::fit_deformed(std::ostream* outstream, bool ver
   return 0.0;
 }
 #endif
-double boxm2_vecf_fit_fat_pocket::fit_deformed(std::ostream* outstream, bool verbose){
+double boxm2_vecf_fit_fat_pocket::fit_deformed(std::ostream*  /*outstream*/, bool  /*verbose*/){
   vgl_point_3d<double> iorg = initial_pr_.origin_;
   deformed_cost_function dcf(pocket_, deformed_face_.const_ptset(), &skin_layer_);
   vnl_vector<double> xm_init(5);

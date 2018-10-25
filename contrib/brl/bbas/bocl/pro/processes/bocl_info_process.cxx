@@ -37,7 +37,7 @@ bool bocl_info_process_cons(bprb_func_process& pro)
 
 
 //:the process
-bool bocl_info_process(bprb_func_process& pro)
+bool bocl_info_process(bprb_func_process&  /*pro*/)
 {
   using namespace bocl_info_process_globals ;
 

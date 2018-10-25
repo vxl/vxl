@@ -421,7 +421,7 @@ bool boxm2_lru_cache::add_scene(boxm2_scene_sptr & scene)
 }
 
 //: remove a scene from the cache
-bool boxm2_lru_cache::remove_scene(boxm2_scene_sptr & scene)
+bool boxm2_lru_cache::remove_scene(boxm2_scene_sptr &  /*scene*/)
 {
   // not allowed / implemented; return false
   return false;

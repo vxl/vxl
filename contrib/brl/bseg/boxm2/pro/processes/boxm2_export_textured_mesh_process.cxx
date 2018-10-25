@@ -433,7 +433,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   }
 }
 
-bool boxm2_export_textured_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>* cam,
+bool boxm2_export_textured_mesh_process_globals::face_is_visible( vpgl_perspective_camera<double>*  /*cam*/,
                                                                   vil_image_view<int>* vis_img,
                                                                   const double* us,
                                                                   const double* vs,

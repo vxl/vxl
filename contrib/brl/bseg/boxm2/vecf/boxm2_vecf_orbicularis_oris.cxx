@@ -628,7 +628,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::circular_deform() const
   return target;
 }
 
-bool boxm2_vecf_orbicularis_oris::inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const
+bool boxm2_vecf_orbicularis_oris::inverse_vector_field(vgl_point_3d<double> const&  /*target_pt*/, vgl_vector_3d<double>&  /*inv_vf*/) const
 {
   return true;
 }

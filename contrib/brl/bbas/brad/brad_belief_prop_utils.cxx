@@ -66,7 +66,7 @@ double brad_belief_prop_utils::p_mog(double intensity, vnl_vector_fixed<unsigned
   return bsta_mog3_grey::prob_density(mog3, static_cast<float>(intensity));
 }
 
-  void brad_belief_prop_utils::print_mog(vnl_vector_fixed<unsigned char, 8> const& mog3, vnl_vector_fixed<float, 4> const& nobs) const{
+  void brad_belief_prop_utils::print_mog(vnl_vector_fixed<unsigned char, 8> const& mog3, vnl_vector_fixed<float, 4> const&  /*nobs*/) const{
     float mu0 = static_cast<float>(mog3[0])/255.0f, mu1 = static_cast<float>(mog3[3])/255.0f, mu2 = static_cast<float>(mog3[6])/255.0f;
     float w0 = static_cast<float>(mog3[2])/255.0f, w1 = static_cast<float>(mog3[5])/255.0f, w2 = 1.0f-(w0+w1);
     float sigma0 = static_cast<float>(mog3[1])/255.0f, sigma1 = static_cast<float>(mog3[4])/255.0f, sigma2 =static_cast<float>(mog3[7])/255.0f;

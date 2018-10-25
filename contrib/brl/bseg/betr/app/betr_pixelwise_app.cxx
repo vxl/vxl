@@ -27,7 +27,7 @@
 #include <vul/vul_file_iterator.h>
 
 
-int main(int argc, char * argv[])
+int main(int  /*argc*/, char *  /*argv*/[])
 {
 
   std::vector<std::string> img_names;

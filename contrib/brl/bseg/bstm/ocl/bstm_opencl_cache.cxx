@@ -617,7 +617,7 @@ bstm_opencl_cache
 //: deep remove data, removes from ocl cache as well
 void
 bstm_opencl_cache
-::deep_remove_data(bstm_block_id id, std::string type, bool write_out)
+::deep_remove_data(bstm_block_id id, std::string type, bool  /*write_out*/)
 {
   //find the data in this map
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -767,12 +767,12 @@ bstm_opencl_cache
 }
 
 // === Dummy (empty) instantiations for binary I/O
-void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const bstm_opencl_cache* &p) {}
-void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, bstm_opencl_cache_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_opencl_cache const&  /*scene*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const bstm_opencl_cache* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_opencl_cache_sptr&  /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_opencl_cache_sptr const&  /*sptr*/) {}
 
-void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache &scene) {}
-void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache* p) {}
-void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, bstm_opencl_cache_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_opencl_cache & /*scene*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_opencl_cache*  /*p*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_opencl_cache_sptr&  /*sptr*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_opencl_cache_sptr const&  /*sptr*/) {}

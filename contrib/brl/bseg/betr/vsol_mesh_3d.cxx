@@ -952,6 +952,6 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
   mesh_->orient_face_normals();
 }
 // implement me!
-bool vsol_mesh_3d::in(vsol_point_3d_sptr const& p) const{
+bool vsol_mesh_3d::in(vsol_point_3d_sptr const&  /*p*/) const{
   return false;
 }

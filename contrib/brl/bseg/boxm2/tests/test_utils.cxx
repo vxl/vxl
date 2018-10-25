@@ -9,13 +9,13 @@
 const int boxm2_test_utils::nums_[] = {64,64,64,0};
 const double boxm2_test_utils::dims_[] = {0.5,0.5,0.5,0};
 
-char* boxm2_test_utils::construct_block_test_stream(int numBuffers,
+char* boxm2_test_utils::construct_block_test_stream(int  /*numBuffers*/,
                                                     int treeLen,
                                                     const int* nums,
-                                                    double* dims,
-                                                    int init_level,
-                                                    int max_level,
-                                                    int max_mb )
+                                                    double*  /*dims*/,
+                                                    int  /*init_level*/,
+                                                    int  /*max_level*/,
+                                                    int  /*max_mb*/ )
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     typedef vnl_vector_fixed<unsigned short, 2> ushort2;

@@ -76,7 +76,7 @@ int brad_sun_dir_index::index(double geo_sun_azimuth,
   return min_i;
 }
 
-int brad_sun_dir_index::index(double x, double y, double z,double & min_angle) const
+int brad_sun_dir_index::index(double x, double y, double z,double &  /*min_angle*/) const
 {
   vnl_double_3 dir(x, y, z);
   double min_ang = std::fabs(angle(cone_axes_[0], dir));

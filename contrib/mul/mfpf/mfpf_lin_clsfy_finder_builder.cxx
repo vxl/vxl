@@ -176,7 +176,7 @@ unsigned mfpf_lin_clsfy_finder_builder::model_dim()
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_lin_clsfy_finder_builder::clear(unsigned n_egs)
+void mfpf_lin_clsfy_finder_builder::clear(unsigned  /*n_egs*/)
 {
   num_examples_=0;
 }

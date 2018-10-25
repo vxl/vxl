@@ -35,7 +35,7 @@ void boxm2_stream_cache_helper::close_file()
 }
 
 //: return the byte buffer that contains ith cell, i is with respect to the global file
-char *boxm2_stream_cache_helper::get_cell(int i, std::size_t cell_size, boxm2_block_id id)
+char *boxm2_stream_cache_helper::get_cell(int i, std::size_t cell_size, boxm2_block_id  /*id*/)
 {
   if (i < index_) { std::cerr << "cannot backtrack in the file!\n"; throw 0; }
   int dif = i-index_;
@@ -124,14 +124,14 @@ boxm2_stream_cache_datatype_helper_sptr boxm2_stream_cache::get_helper(std::stri
 }
 
 //: Binary write boxm2_cache  to stream
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const boxm2_stream_cache* &p) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_cache_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_cache const&  /*scene*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const boxm2_stream_cache* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_cache_sptr&  /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_cache_sptr const&  /*sptr*/) {}
 
 //: Binary load boxm2_cache  from stream.
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache &scene) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache* p) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_cache_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_cache & /*scene*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_cache*  /*p*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_cache_sptr&  /*sptr*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_cache_sptr const&  /*sptr*/) {}
 

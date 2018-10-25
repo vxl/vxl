@@ -25,7 +25,7 @@ bvpl_kernel_factory::create()
 
 //: Returns a kernel along the rotation_axis and rotated around this axis an amount angle
 bvpl_kernel
-bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float angle)
+bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float  /*angle*/)
 {
   this->set_rotation_axis(rotation_axis);
   kernel_type final_float_kernel = rotate(angle_);

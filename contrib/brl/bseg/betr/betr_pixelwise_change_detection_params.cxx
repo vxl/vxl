@@ -3,7 +3,7 @@
 
 
 //--------------------------------------------------------------------------
-bool betr_pixelwise_change_detection_params::sanity_check(std::string& errors) const{
+bool betr_pixelwise_change_detection_params::sanity_check(std::string&  /*errors*/) const{
   return true;
 }
 

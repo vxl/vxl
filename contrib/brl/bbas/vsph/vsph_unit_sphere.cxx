@@ -601,8 +601,8 @@ void vsph_unit_sphere::display_color(std::string const & path,
   os.close();
 }
 
-void vsph_unit_sphere::display_boxes(std::string const & path,
-                                     std::vector<vsph_sph_box_2d> const& boxes)
+void vsph_unit_sphere::display_boxes(std::string const &  /*path*/,
+                                     std::vector<vsph_sph_box_2d> const&  /*boxes*/)
 {
   //need to break each region into smaller planar pieces
 }

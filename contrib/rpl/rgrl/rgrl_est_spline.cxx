@@ -113,7 +113,7 @@ namespace{
       return fx;
     }
 
-    void gradf (vnl_vector< double > const &x, vnl_vector< double > &gradient ) override
+    void gradf (vnl_vector< double > const & /*x*/, vnl_vector< double > &gradient ) override
     {
       gradient.fill( 0.0 );
       vnl_vector< double > gr;

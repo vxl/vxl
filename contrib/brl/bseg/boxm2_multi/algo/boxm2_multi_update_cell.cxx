@@ -163,7 +163,7 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
 
 //runs pre/vis on single block
 float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
-                                                   boxm2_scene_sptr    scene,
+                                                   boxm2_scene_sptr     /*scene*/,
                                                    boxm2_opencl_cache1* opencl_cache,
                                                    cl_command_queue&   queue,
                                                    std::string          data_type,

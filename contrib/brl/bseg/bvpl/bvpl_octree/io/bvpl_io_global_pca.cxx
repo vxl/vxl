@@ -27,13 +27,13 @@ void vsl_print_summary(std::ostream & /*os*/, const bvpl_global_pca_125 & )
   return;
 }
 
-void vsl_b_read(vsl_b_istream& is,bvpl_global_pca_125* p)
+void vsl_b_read(vsl_b_istream&  /*is*/,bvpl_global_pca_125*  /*p*/)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;
 }
 
-void vsl_b_write(vsl_b_ostream& os, const bvpl_global_pca_125* &p)
+void vsl_b_write(vsl_b_ostream&  /*os*/, const bvpl_global_pca_125* & /*p*/)
 {
   std::cerr << "Error: Trying to save but binary io not implemented\n";
   return;

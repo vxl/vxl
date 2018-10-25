@@ -15,10 +15,10 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
                              std::string num_obs_type,
                              vpgl_camera_double_sptr cam ,
                              vil_image_view<float> * input_image,
-                             unsigned int roi_ni,
-                             unsigned int roi_nj,
-                             unsigned int roi_ni0,
-                             unsigned int roi_nj0)
+                             unsigned int  /*roi_ni*/,
+                             unsigned int  /*roi_nj*/,
+                             unsigned int  /*roi_ni0*/,
+                             unsigned int  /*roi_nj0*/)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order;
@@ -152,10 +152,10 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
                         std::string num_obs_type,
                         vpgl_camera_double_sptr cam ,
                         vil_image_view<float> * input_image,
-                        unsigned int roi_ni,
-                        unsigned int roi_nj,
-                        unsigned int roi_ni0,
-                        unsigned int roi_nj0)
+                        unsigned int  /*roi_ni*/,
+                        unsigned int  /*roi_nj*/,
+                        unsigned int  /*roi_ni0*/,
+                        unsigned int  /*roi_nj0*/)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order;
@@ -312,10 +312,10 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
                               float shadow_prior,
                               float shadow_sigma,
                               vil_image_view<float>  * input_image,
-                              unsigned int roi_ni,
-                              unsigned int roi_nj,
-                              unsigned int roi_ni0,
-                              unsigned int roi_nj0)
+                              unsigned int  /*roi_ni*/,
+                              unsigned int  /*roi_nj*/,
+                              unsigned int  /*roi_ni0*/,
+                              unsigned int  /*roi_nj0*/)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
@@ -476,10 +476,10 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
                                 vpgl_camera_double_sptr cam ,
                                 vil_image_view<float>  * input_image,
                                 vil_image_view<float>& quality_img,
-                                unsigned int roi_ni,
-                                unsigned int roi_nj,
-                                unsigned int roi_ni0,
-                                unsigned int roi_nj0)
+                                unsigned int  /*roi_ni*/,
+                                unsigned int  /*roi_nj*/,
+                                unsigned int  /*roi_ni0*/,
+                                unsigned int  /*roi_nj0*/)
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));

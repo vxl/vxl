@@ -275,7 +275,7 @@ void bkml_write::write_location(std::ofstream& ofs, double lat, double lon, doub
       << "</Placemark>\n";
 }
 
-void bkml_write::write_location_as_box(std::ofstream& ofs, double lon, double lat, double elev,
+void bkml_write::write_location_as_box(std::ofstream& ofs, double lon, double lat, double  /*elev*/,
                                        std::string const& name,
                                        std::string const& description,
                                        double const& size,

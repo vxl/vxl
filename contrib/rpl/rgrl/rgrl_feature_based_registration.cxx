@@ -831,7 +831,7 @@ register_multi_feature( rgrl_mask_box            from_image_region,
 void
 rgrl_feature_based_registration::
 initialize_for_next_resolution(  rgrl_mask_box            & from_image_region,
-                                 rgrl_mask_box            & to_image_region,
+                                 rgrl_mask_box            &  /*to_image_region*/,
                                  rgrl_transformation_sptr & xform_estimate,
                                  unsigned                 & current_resol ) const
 {

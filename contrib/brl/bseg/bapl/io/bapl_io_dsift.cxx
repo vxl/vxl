@@ -38,7 +38,7 @@ void vsl_b_write(vsl_b_ostream &os, const bapl_dsift* p)
   }
 }
 
-void vsl_print_summary(std::ostream& os, const bapl_dsift *p)
+void vsl_print_summary(std::ostream& os, const bapl_dsift * /*p*/)
 {
   os << "vsl_print_summary not yet implemented. " << std::flush;
 }
