@@ -68,7 +68,7 @@ class bpgl_camera_estimator_amoeba : public vnl_cost_function
     return best_score;
   }
 
-  double f(const vnl_vector<double>& x)
+  double f(const vnl_vector<double>& x) override
   {
     if (cam_) {
       vgl_point_3d<double> curr_center = (cam_center + (x[0]*vec_x)) + (x[1]*vec_y);

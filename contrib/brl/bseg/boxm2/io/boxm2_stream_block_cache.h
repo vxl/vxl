@@ -33,7 +33,7 @@ class boxm2_stream_block_cache: public vbl_ref_count
 
     bool clear();
 
-    ~boxm2_stream_block_cache();
+    ~boxm2_stream_block_cache() override;
 
     //: map to store various info about each datatype
     std::map<data_type, boxm2_data_base *> data_types_;

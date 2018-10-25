@@ -72,7 +72,7 @@ public:
   space_time_scene(vcl_string filename);
 
   //: destructor
-  ~space_time_scene() {}
+  ~space_time_scene() override {}
 
   //: save scene xml file
   void save_scene();

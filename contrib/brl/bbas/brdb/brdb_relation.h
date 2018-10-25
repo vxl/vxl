@@ -50,7 +50,7 @@ class brdb_relation : public vbl_ref_count
                  const std::vector<std::string>& types = std::vector<std::string>() );
 
   // Destructor
-  virtual ~brdb_relation();
+  ~brdb_relation() override;
 
 
   //========================= Accessors / Modifiers ===========================

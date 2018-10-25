@@ -84,7 +84,7 @@ class bmsh3d_face : public vispt_elm
     i_value_  = 0;
   }
 
-  virtual ~bmsh3d_face() {
+  ~bmsh3d_face() override {
     vertices_.clear();
     //  make sure that all halfedges are deleted before the destructor.
     //  You should use bmsh3d_mesh::delete_face to delete a face.
@@ -228,7 +228,7 @@ class bmsh3d_face : public vispt_elm
 
   //###### Other functions ######
 
-  virtual void getInfo(std::ostringstream& ostrm);
+  void getInfo(std::ostringstream& ostrm) override;
 
   //###### For triangular face only ######
   TRIFACE_TYPE tri_get_topo_type() const;

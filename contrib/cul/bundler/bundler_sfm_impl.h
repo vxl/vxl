@@ -22,7 +22,7 @@ class bundler_sfm_impl_create_initial_recon
   bundler_sfm_impl_create_initial_recon (
       bundler_settings_create_initial_recon s) : settings(s) {}
 
-  bool operator() (bundler_inters_reconstruction &reconstruction);
+  bool operator() (bundler_inters_reconstruction &reconstruction) override;
 };
 
 
@@ -46,7 +46,7 @@ class bundler_sfm_impl_select_next_images
   bool operator() (
       bundler_inters_reconstruction &reconstruction,
 
-      std::vector<bundler_inters_image_sptr> &to_add);
+      std::vector<bundler_inters_image_sptr> &to_add) override;
 };
 
 
@@ -68,7 +68,7 @@ class bundler_sfm_impl_add_next_images
       const std::vector<bundler_inters_image_sptr> &to_add,
 
       bundler_inters_reconstruction &reconstruction,
-      std::vector<bundler_inters_image_sptr> &added_cameras);
+      std::vector<bundler_inters_image_sptr> &added_cameras) override;
 };
 
 
@@ -87,7 +87,7 @@ class bundler_sfm_impl_add_new_points
 
   void operator() (
       bundler_inters_reconstruction &reconstruction,
-      const std::vector<bundler_inters_image_sptr> &added_cameras);
+      const std::vector<bundler_inters_image_sptr> &added_cameras) override;
 };
 
 
@@ -106,7 +106,7 @@ class bundler_sfm_impl_bundle_adjust
 
   //: Adjusts the reconstruction using nonlinear least squares
   void operator() (
-      bundler_inters_reconstruction &reconstruction);
+      bundler_inters_reconstruction &reconstruction) override;
 };
 
 #endif // BUNDLER_SFM_IMPL_H

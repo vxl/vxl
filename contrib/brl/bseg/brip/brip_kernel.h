@@ -29,7 +29,7 @@ class brip_kernel : public vil_image_view<double>
     //fill(0.0);
   }
 
-  ~brip_kernel(){}
+  ~brip_kernel() override{}
 
   //: recompute kernel with given subpixel shifts
   virtual void recompute_kernel(double dx_=0.0, double dy_=0.0, double theta=0.0)=0;

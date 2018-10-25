@@ -36,7 +36,7 @@ class bocl_mem : public vbl_ref_count
 
   //: constructor that takes the context to start with
   bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id);
-  ~bocl_mem();
+  ~bocl_mem() override;
 
   //: creates the memory for buffer (create from command queue as welll)
   bool create_buffer(const cl_mem_flags& flags);

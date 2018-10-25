@@ -21,10 +21,10 @@ class betr_edgel_reference_cd : public betr_algorithm
   // offset and alpha are  sigmoid parameters to convert js_divergence to a change probability
  betr_edgel_reference_cd(betr_edgel_reference_cd_params const& params, double offset, double alpha): betr_algorithm("edgel_reference_cd", offset, alpha), js_div_(0.0){params_ = new betr_edgel_reference_cd_params(params);}
   //: process change
-  virtual bool process();
+  bool process() override;
 
   //: resulting change probability
-  virtual double prob_change() const{return js_div_;} //for now not really a probability
+  double prob_change() const override{return js_div_;} //for now not really a probability
 
  private:
   //:results

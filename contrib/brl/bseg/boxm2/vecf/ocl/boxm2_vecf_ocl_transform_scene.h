@@ -46,7 +46,7 @@ class boxm2_vecf_ocl_transform_scene : public vbl_ref_count
                                  bool do_alpha = true,
                                  bool do_interp = true);
 
-  ~boxm2_vecf_ocl_transform_scene();
+  ~boxm2_vecf_ocl_transform_scene() override;
 
   //: transform a scene of arbitray size, block by block
   // no interpolation

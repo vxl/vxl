@@ -26,7 +26,7 @@ class boxm2_data: public boxm2_data_base
     boxm2_data(char * data_buffer, std::size_t length, boxm2_block_id id);
 
     //: destructor
-    virtual ~boxm2_data();
+    ~boxm2_data() override;
 
     //: data array accessor
     boxm2_array_1d<datatype>& data() { return data_array_; }

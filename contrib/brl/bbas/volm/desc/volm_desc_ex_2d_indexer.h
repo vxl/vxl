@@ -38,17 +38,17 @@ public:
 
   // handles any necessary loading during indexing when it switches processing from one leaf to the next leaf
   //  for the case of this class, find the set of volm_img_info that intersects the current leaf
-  virtual bool get_next();
+  bool get_next() override;
 
-  virtual bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values);
+  bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values) override;
 
   //: each driving indexer should overwrite with the size of the descriptor
-  virtual unsigned layer_size() { return layer_size_; }
+  unsigned layer_size() override { return layer_size_; }
 
-  virtual std::string get_index_type_str() { return volm_desc_ex_2d_indexer::get_name(); }
+  std::string get_index_type_str() override { return volm_desc_ex_2d_indexer::get_name(); }
 
   //: generate parameter files
-  virtual bool write_params_file();
+  bool write_params_file() override;
 
 public:
   std::vector<volm_img_info> classification_maps_;  // unsigned char images with id of the land types, the id in the value of entries in volm_label_table

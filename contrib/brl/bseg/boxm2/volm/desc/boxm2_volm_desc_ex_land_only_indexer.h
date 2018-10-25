@@ -37,22 +37,22 @@ public:
                                  unsigned char const& initial_mag = 0);
 
   //: Desturctor
-  ~volm_desc_ex_land_only_indexer() {}
+  ~volm_desc_ex_land_only_indexer() override {}
 
   //: Load the volm_geo_index for given tile
-  virtual bool get_next();
+  bool get_next() override;
 
   //: extract histogram for a location
-  virtual bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values);
+  bool extract(double lat, double lon, double elev, std::vector<unsigned char>& values) override;
 
   //: get the name of the indexer
-  virtual std::string get_index_type_str() { return volm_desc_ex_land_only_indexer::get_name(); }
+  std::string get_index_type_str() override { return volm_desc_ex_land_only_indexer::get_name(); }
 
   //: generate parameter files
-  virtual bool write_params_file();
+  bool write_params_file() override;
 
   //: return the size of the histogram
-  virtual unsigned layer_size() { return layer_size_; }
+  unsigned layer_size() override { return layer_size_; }
 
 private:
   //: histogram parameters

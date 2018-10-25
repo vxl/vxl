@@ -49,7 +49,7 @@ class sdet_harris_detector : public sdet_harris_detector_params
   //Constructors/destructor
   sdet_harris_detector(sdet_harris_detector_params& rpp);
 
-  ~sdet_harris_detector();
+  ~sdet_harris_detector() override;
   //Accessors
   void set_image(vil1_image const& image);
   void set_image_resource(vil_image_resource_sptr const& image);

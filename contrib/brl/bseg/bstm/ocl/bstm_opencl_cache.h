@@ -35,7 +35,7 @@ class bstm_opencl_cache: public vbl_ref_count
   public:
     bstm_opencl_cache(bstm_scene_sptr scene,
                       bocl_device_sptr device);
-    ~bstm_opencl_cache()
+    ~bstm_opencl_cache() override
       {
       if (cpu_cache_) cpu_cache_ = nullptr;
       this->clear_cache();

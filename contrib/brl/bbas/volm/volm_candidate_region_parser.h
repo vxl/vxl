@@ -61,7 +61,7 @@ class volm_candidate_region_parser : public expatpp
  public:
   volm_candidate_region_parser(void);
   // parser should not delete the site, it is used afterwards
-  ~volm_candidate_region_parser(void) {}
+  ~volm_candidate_region_parser(void) override {}
 
   //: parse all the points that have given name (will return empty vector if kml file does not have points with given name)
   static std::vector<vgl_point_3d<double> > parse_points(std::string const& kml_file, std::string const& name);
@@ -102,9 +102,9 @@ class volm_candidate_region_parser : public expatpp
   std::map<std::string, std::vector<vgl_point_3d<double> > > points_;
 
  private:
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* name);
-  virtual void charData(const XML_Char* s, int len);
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* name) override;
+  void charData(const XML_Char* s, int len) override;
   void handleAtts(const XML_Char** atts);
   void cdataHandler(std::string name, std::string data);
   void init_params();

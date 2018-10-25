@@ -14,23 +14,23 @@ class boxm2_nn_cache : public boxm2_cache1
 
     //: construct with directory and scene dimensions (blocknum), by default use the local filesystem
     boxm2_nn_cache(boxm2_scene* scene, BOXM2_IO_FS_TYPE fs=LOCAL);
-    ~boxm2_nn_cache();
+    ~boxm2_nn_cache() override;
 
     //: returns block pointer to block specified by ID
-    virtual boxm2_block* get_block(boxm2_block_id id);
+    boxm2_block* get_block(boxm2_block_id id) override;
 
     //: returns data_base pointer
     //  (THIS IS NECESSARY BECAUSE TEMPLATED FUNCTIONS CANNOT BE VIRTUAL)
-    virtual boxm2_data_base* get_data_base(boxm2_block_id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    boxm2_data_base* get_data_base(boxm2_block_id, std::string type, std::size_t num_bytes=0, bool read_only = true) override;
 
     //: returns a data_base pointer which is initialized to the default value of the type.
     //  If a block for this type exists on the cache, it is removed and replaced with the new one
     //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-    virtual boxm2_data_base* get_data_base_new(boxm2_block_id id, std::string type,std::size_t num_bytes=0,  bool read_only = true);
+    boxm2_data_base* get_data_base_new(boxm2_block_id id, std::string type,std::size_t num_bytes=0,  bool read_only = true) override;
 
     //: deletes a data item from the cpu cache
-    virtual void remove_data_base(boxm2_block_id, std::string type);
-    virtual void replace_data_base(boxm2_block_id, std::string type, boxm2_data_base* replacement);
+    void remove_data_base(boxm2_block_id, std::string type) override;
+    void replace_data_base(boxm2_block_id, std::string type, boxm2_data_base* replacement) override;
 
     //: returns data pointer to data block specified by ID
     template <boxm2_data_type T>
@@ -41,16 +41,16 @@ class boxm2_nn_cache : public boxm2_cache1
 
     //: dumps writeable data onto disk
     // \todo not yet implemented
-    virtual void write_to_disk() { std::cerr << "Not yet implemented!!!\n"; }
+    void write_to_disk() override { std::cerr << "Not yet implemented!!!\n"; }
 
     //: disable the write process
     // \todo not yet implemented
-    virtual void disable_write() { std::cerr << "Not yet implemented!!!\n"; }
+    void disable_write() override { std::cerr << "Not yet implemented!!!\n"; }
 
      //: delete all the memory
      //  Caution: make sure to call write to disk methods not to loose writable data
     // \todo not yet implemented
-    virtual void clear_cache() { std::cerr << "Not yet implemented!!!\n"; }
+    void clear_cache() override { std::cerr << "Not yet implemented!!!\n"; }
 
   private:
 

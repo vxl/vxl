@@ -39,7 +39,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
     edge_id_counter_ = 0;
   }
 
-  virtual void clear () {
+  void clear () override {
     std::map<int, bmsh3d_edge*>::iterator it =  edgemap_.begin();
     for (; it != edgemap_.end(); it++) {
       _del_edge ((*it).second);
@@ -57,7 +57,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
     bmsh3d_pt_set::clear();
   }
 
-  virtual ~bmsh3d_graph () {
+  ~bmsh3d_graph () override {
     clear ();
   }
 
@@ -81,7 +81,7 @@ class bmsh3d_graph : public bmsh3d_pt_set
 
   //###### Connectivity Modification Functions ######
 
-  virtual void _del_vertex (bmsh3d_vertex* V) {
+  void _del_vertex (bmsh3d_vertex* V) override {
     delete V;
   }
 
@@ -159,14 +159,14 @@ class bmsh3d_graph : public bmsh3d_pt_set
   //###### High-Level Connectivity Modification Functions ######
 
   //: delete vertex from the map and release its memory
-  virtual void remove_vertex (bmsh3d_vertex* V) {
+  void remove_vertex (bmsh3d_vertex* V) override {
     //The vertex can be deleted only when there's no incident edges or faces.
     assert (! V->has_incident_Es());
     vertexmap_.erase (V->id());
     //Delete the vertex using the virtual del function.
     _del_vertex (V);
   }
-  virtual void remove_vertex (int id) {
+  void remove_vertex (int id) override {
     bmsh3d_vertex* V = vertexmap (id);
     remove_vertex (V);
   }

@@ -46,7 +46,7 @@ class sdet_denoise_mrf : public sdet_denoise_mrf_params
   // === Constructors/destructor ===
 
   sdet_denoise_mrf(sdet_denoise_mrf_params& imp);
-  ~sdet_denoise_mrf();
+  ~sdet_denoise_mrf() override;
 
   // === Process methods ===
 

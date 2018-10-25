@@ -43,7 +43,7 @@ class bstm_scene : public vbl_ref_count
     bstm_scene(std::string filename);
 
     //: destructor
-    ~bstm_scene() { }
+    ~bstm_scene() override { }
 
     //: save scene xml file
     void save_scene();

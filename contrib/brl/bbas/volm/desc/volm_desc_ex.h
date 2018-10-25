@@ -76,7 +76,7 @@ public:
     ndists_(ndists), norients_(norients), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
 
   //: destructor
-  ~volm_desc_ex() {}
+  ~volm_desc_ex() override {}
 
   //: number of depth bins
   unsigned ndepths() const { return this->ndists_; }
@@ -123,21 +123,21 @@ public:
   {  this->set_count(ob.dist_, ob.orient_, ob.land_, count);  }
 
   //: screen print
-  void print() const;
+  void print() const override;
 
   //: similarity method -- calculate the intersection of two histogram, normalized by current histogram
-  float similarity(volm_desc_sptr other);
+  float similarity(volm_desc_sptr other) override;
 
   // ===========  binary I/O ================
 
   //: version
-  unsigned version() const { return 1; }
+  unsigned version() const override { return 1; }
 
   //: binary IO write
-  void b_write(vsl_b_ostream& os);
+  void b_write(vsl_b_ostream& os) override;
 
   //: binary IO read
-  void b_read(vsl_b_istream& is);
+  void b_read(vsl_b_istream& is) override;
 
 private:
   //: histogram structure

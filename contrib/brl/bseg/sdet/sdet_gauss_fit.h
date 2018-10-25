@@ -32,11 +32,11 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
                     int n_peaks);
 
   // Destructor
-  virtual ~sdet_adjust_lsqr() {}
+  ~sdet_adjust_lsqr() override {}
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
 #if 0
   //: Called after each LM iteration to print debugging etc.

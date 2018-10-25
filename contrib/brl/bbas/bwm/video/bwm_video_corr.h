@@ -45,7 +45,7 @@ class bwm_video_corr : public vbl_ref_count
   : vbl_ref_count(), world_pt_valid_(c.world_pt_valid()), world_pt_(c.world_pt()) {}
 
   // Destructor
-  ~bwm_video_corr() {}
+  ~bwm_video_corr() override {}
 
   // Accessors-----------------------------------------------------------------
 

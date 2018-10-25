@@ -30,7 +30,7 @@ public:
   bvgl_2d_geo_index_node_base() {}
 
   //: destructor
-  virtual ~bvgl_2d_geo_index_node_base() { children_.clear(); }
+  ~bvgl_2d_geo_index_node_base() override { children_.clear(); }
 
   //: return a name base on the extent boundary
   std::string get_string() const;

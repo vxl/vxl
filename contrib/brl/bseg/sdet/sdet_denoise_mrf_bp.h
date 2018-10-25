@@ -53,7 +53,7 @@ class sdet_denoise_mrf_bp : public sdet_denoise_mrf_bp_params
  public:
   //:Constructors/destructor
   sdet_denoise_mrf_bp(sdet_denoise_mrf_bp_params& imp);
-  ~sdet_denoise_mrf_bp();
+  ~sdet_denoise_mrf_bp() override;
   //: Process methods
 
   void set_image(vil_image_resource_sptr const& resource);

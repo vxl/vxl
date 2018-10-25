@@ -36,7 +36,7 @@ class bgrl2_edge : public vbl_ref_count
   bgrl2_edge(V_sptr v1, V_sptr v2) : vbl_ref_count(), source_(v1), target_(v2) {}
 
   // Destructor
-  virtual ~bgrl2_edge(){}
+  ~bgrl2_edge() override{}
 
   //: Smart pointer to the vertex where this edge originates
   V_sptr source() const { return source_; }

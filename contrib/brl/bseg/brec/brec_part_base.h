@@ -92,11 +92,11 @@ class brec_part_instance : public brec_part_base
   //: this constructor should only be used during parsing
   brec_part_instance() : brec_part_base(0, 0), x_(0), y_(0), strength_(0), kind_(0) {}
 
-  virtual brec_part_gaussian* cast_to_gaussian(void);
-  virtual brec_part_instance* cast_to_instance(void);
+  brec_part_gaussian* cast_to_gaussian(void) override;
+  brec_part_instance* cast_to_instance(void) override;
 
-  virtual bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane);
-  virtual bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane);
+  bool mark_receptive_field(vil_image_view<vxl_byte>& img, unsigned plane) override;
+  bool mark_center(vil_image_view<vxl_byte>& img, unsigned plane) override;
   virtual bool mark_receptive_field(vil_image_view<float>& img, float val);
   virtual bool mark_center(vil_image_view<float>& img, float val);
 
@@ -116,8 +116,8 @@ class brec_part_instance : public brec_part_base
                                            vil_image_view<float>& /*mean_img*/,
                                            vil_image_view<float>& /*std_dev_img*/) { return false; }
 
-  virtual bxml_data_sptr xml_element();
-  virtual bool xml_parse_element(bxml_data_sptr data);
+  bxml_data_sptr xml_element() override;
+  bool xml_parse_element(bxml_data_sptr data) override;
 
   //: return a simple box with diagonal 2*radius centered on this instance
   vgl_box_2d<float> get_probe_box(float radius);

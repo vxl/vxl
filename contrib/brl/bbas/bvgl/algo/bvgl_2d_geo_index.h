@@ -45,7 +45,7 @@ public:
   }
 
   //: destructor
-  ~bvgl_2d_geo_index_node() {}
+  ~bvgl_2d_geo_index_node() override {}
 
   //: data inside current node
   Type contents_;

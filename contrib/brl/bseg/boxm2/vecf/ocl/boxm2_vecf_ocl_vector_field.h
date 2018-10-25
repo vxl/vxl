@@ -28,7 +28,7 @@ class boxm2_vecf_ocl_vector_field : public vbl_ref_count
                                            cl_command_queue &queue) = 0;
 
     //: virtual destructor to ensure proper cleanup when used polymorphically
-    virtual ~boxm2_vecf_ocl_vector_field(){}
+    ~boxm2_vecf_ocl_vector_field() override{}
 
   private:
     //TODO: might want to just make virtual method that returns kernel so we can reuse other ocl boilerplate stuff

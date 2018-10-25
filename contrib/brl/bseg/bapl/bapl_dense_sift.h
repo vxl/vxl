@@ -38,7 +38,7 @@ class bapl_dense_sift:public vbl_ref_count
                   unsigned octave_size = 6,
                   unsigned num_octaves = 1 );
 
-  ~bapl_dense_sift() {}
+  ~bapl_dense_sift() override {}
 
   void create_pyramid(const vil_image_resource_sptr& image, unsigned octave_size = 6, unsigned num_octaves = 1);
 

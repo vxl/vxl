@@ -35,7 +35,7 @@ class boxm2_opencl_cache: public vbl_ref_count
 
   public:
     boxm2_opencl_cache(bocl_device_sptr device);
-    ~boxm2_opencl_cache() { if (cpu_cache_) cpu_cache_ = nullptr;
+    ~boxm2_opencl_cache() override { if (cpu_cache_) cpu_cache_ = nullptr;
                             this->clear_cache();
                           }
 

@@ -31,7 +31,7 @@ class brec_bg_pair_density : public brec_pair_density
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype grey_obs_datatype;
 
  public:
-  virtual ~brec_bg_pair_density() {}
+  ~brec_bg_pair_density() override {}
   brec_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
                        std::string voxel_type, unsigned bin, unsigned scale,
                        unsigned ni, unsigned nj)
@@ -52,10 +52,10 @@ class brec_bg_pair_density : public brec_pair_density
   void set_image_coords(unsigned i, unsigned j) { i_ = i; j_ = j; in_ = i+1, jn_ = j; }  // assumes horizontal pass as default
   void set_image_coords(unsigned i, unsigned j, unsigned in, unsigned jn) { i_ = i; j_ = j; in_ = in; jn_ = jn; }
 
-  virtual double operator()(const double y0, const double y1);
+  double operator()(const double y0, const double y1) override;
   double operator()(const rgb_obs_datatype y0, const rgb_obs_datatype y1);
 
-  virtual vil_image_view<float> prob_density(vil_image_view<grey_obs_datatype>& obs);
+  vil_image_view<float> prob_density(vil_image_view<grey_obs_datatype>& obs) override;
   virtual vil_image_view<float> prob_density_non_pair(vil_image_view<grey_obs_datatype>& obs);
 
   //: generates an appearance likelihood map for a given view as done in brec_detect_changes_process

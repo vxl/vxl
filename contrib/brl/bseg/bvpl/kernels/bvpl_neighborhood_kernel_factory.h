@@ -25,12 +25,12 @@ class bvpl_neighborhood_kernel_factory : public bvpl_kernel_factory
                                    int min_width, int max_width,
                                    int min_thickness, int max_thickness);
 
-  virtual ~bvpl_neighborhood_kernel_factory() {}
+  ~bvpl_neighborhood_kernel_factory() override {}
 
  private:
 
   //:Creates a 2d edge kernel
-  virtual void create_canonical();
+  void create_canonical() override;
 
   int min_length_;
   int max_length_;

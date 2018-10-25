@@ -37,7 +37,7 @@ class boxm2_multi_cache: public vbl_ref_count
   public:
     boxm2_multi_cache( boxm2_scene_sptr               scene,
                  const std::vector<bocl_device_sptr> & devices );
-    ~boxm2_multi_cache();
+    ~boxm2_multi_cache() override;
 
     std::vector<boxm2_opencl_cache1*>& ocl_caches() { return ocl_caches_; }
     std::vector<boxm2_scene_sptr>&    sub_scenes() { return sub_scenes_; }

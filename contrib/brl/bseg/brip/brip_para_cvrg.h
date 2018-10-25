@@ -53,7 +53,7 @@ class brip_para_cvrg : public brip_para_cvrg_params
                  bool verbose = true);
 
   brip_para_cvrg(brip_para_cvrg_params& pdp);
-  ~brip_para_cvrg();
+  ~brip_para_cvrg() override;
   void do_coverage(vil_image_resource_sptr const& image);
 
   // Data Access---------------------------------------------------------------

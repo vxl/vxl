@@ -37,13 +37,13 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
   //: Constructor from a rational camera and a geographic origin
   bpgl_segmented_rolling_shutter_camera(maptype camera_segments);
 
-  virtual ~bpgl_segmented_rolling_shutter_camera() {}
+  ~bpgl_segmented_rolling_shutter_camera() override {}
 
-  virtual std::string type_name() const { return "bpgl_segmented_rolling_shutter_camera"; }
+  std::string type_name() const override { return "bpgl_segmented_rolling_shutter_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern
-  virtual bpgl_segmented_rolling_shutter_camera<T>* clone(void) const;
+  bpgl_segmented_rolling_shutter_camera<T>* clone(void) const override;
 
   // === Mutators/Accessors ===
 
@@ -51,17 +51,17 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
   void project(const T x, const T y, const T z, T& u, T& v);
 
   //: The generic camera interface. u represents image column, v image row.
-  virtual void project(const T x, const T y, const T z, T& u, T& v) const;
+  void project(const T x, const T y, const T z, T& u, T& v) const override;
 
   // === Interface for vnl ===
 
   //: Project a world point onto the image
-  virtual vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const;
+  vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const override;
 
   // === Interface for vgl ===
 
   //: Project a world point onto the image
-  virtual vgl_point_2d<T> project(vgl_point_3d<T> world_point) const;
+  vgl_point_2d<T> project(vgl_point_3d<T> world_point) const override;
 
   //: project function for a point
   bool cam_index(T v, unsigned int & index);
@@ -75,18 +75,18 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
   bool update_camera(unsigned int v, vpgl_perspective_camera<double> cam);
 
   //: print the camera parameters
-  virtual void print(std::ostream& s = std::cout) const;
+  void print(std::ostream& s = std::cout) const override;
 
   //: save to file (the lvcs is after the global rational camera parameters)
-  virtual bool save(std::string cam_path);
+  bool save(std::string cam_path) override;
 
   // === binary IO ===
 
   //: Binary save self to stream.
-  virtual void b_write(vsl_b_ostream &os) const;
+  void b_write(vsl_b_ostream &os) const override;
 
   //: Binary load self from stream.
-  virtual void b_read(vsl_b_istream &is);
+  void b_read(vsl_b_istream &is) override;
 
  protected:
   maptype cam_map_;

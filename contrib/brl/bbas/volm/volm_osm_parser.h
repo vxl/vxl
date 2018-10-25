@@ -42,7 +42,7 @@ public:
   //: default constructor
   volm_osm_parser(void);
   //: destructor
-  ~volm_osm_parser(void) {}
+  ~volm_osm_parser(void) override {}
 
   //: parse meaningful location points from open street map (point with defined keys), return loc points are in x = lon and y = lat
   static void parse_points(std::vector<vgl_point_2d<double> >& points,
@@ -85,9 +85,9 @@ public:
 
 private:
 
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* name) {}
-  virtual void charData(const XML_Char* s, int len) {}
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* name) override {}
+  void charData(const XML_Char* s, int len) override {}
 
   void init_params();
 

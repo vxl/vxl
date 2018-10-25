@@ -33,7 +33,7 @@ class bwm_video_cam_ostream : public vbl_ref_count
                         const unsigned int init_index = 0);
 
   //: Destructor
-   ~bwm_video_cam_ostream() { close(); }
+   ~bwm_video_cam_ostream() override { close(); }
   //: Open the stream
    bool open(const std::string& directory,
              const std::string& name_format = "%05d",

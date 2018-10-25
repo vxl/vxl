@@ -34,7 +34,7 @@ class sdet_region_proc : public sdet_region_proc_params
   //Constructors/destructor
   sdet_region_proc(sdet_region_proc_params& rpp);
 
-  ~sdet_region_proc();
+  ~sdet_region_proc() override;
   //Accessors
   void set_image(vil1_image const& image,
                  vsol_box_2d_sptr const& box = vsol_box_2d_sptr());

@@ -26,11 +26,11 @@ class bprb_process_ext : public bprb_process
   // Constructor
   bprb_process_ext();
   //: Clone the process
-  virtual bprb_process_ext* clone() const = 0;
+  bprb_process_ext* clone() const override = 0;
 
   bool set_input_types(std::vector<std::string> const& types);
-  bool set_input(unsigned i, brdb_value_sptr const& value);
-  bool set_input_data(std::vector<brdb_value_sptr> const& inputs);
+  bool set_input(unsigned i, brdb_value_sptr const& value) override;
+  bool set_input_data(std::vector<brdb_value_sptr> const& inputs) override;
   bool set_output_types(std::vector<std::string> const& types);
   bool set_output(unsigned i, brdb_value_sptr val);
 
@@ -40,7 +40,7 @@ class bprb_process_ext : public bprb_process
   bprb_process_ext(const bprb_process_ext& other);
 #endif // 0
 
-  virtual ~bprb_process_ext() {}
+  ~bprb_process_ext() override {}
 };
 
 #endif // bprb_process_ext_h_

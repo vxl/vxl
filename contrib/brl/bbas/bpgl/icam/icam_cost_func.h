@@ -49,7 +49,7 @@ class icam_cost_func : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   // === debug purposes ===
 
@@ -121,7 +121,7 @@ class icam_scalar_cost_func : public vnl_cost_function
     : vnl_cost_function(3), min_allowed_overlap_(0.01), cost_func_(cost_func) {}
   void set_min_overlap(double min_overlap) { min_allowed_overlap_=min_overlap; }
   //: compute f given the rotation parameters (Rodrigues vector)
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
  protected:
   double min_allowed_overlap_;
   icam_cost_func cost_func_;

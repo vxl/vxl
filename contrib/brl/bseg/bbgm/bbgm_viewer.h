@@ -23,7 +23,7 @@ class bbgm_viewer : public vbl_ref_count
   bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(nullptr))
   {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
   //: Destructor
-  virtual ~bbgm_viewer() {}
+  ~bbgm_viewer() override {}
 
   //: Probe to see if this viewer can handle this image type
   bool probe(const bbgm_image_sptr& dimg) const;
@@ -67,7 +67,7 @@ class bbgm_mean_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual std::string name() const { return "mean"; }
+  std::string name() const override { return "mean"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -81,8 +81,8 @@ class bbgm_mean_viewer : public bbgm_viewer
 
  protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr
-  find_vm(const std::type_info& dist_type) const
+  bbgm_view_maker_sptr
+  find_vm(const std::type_info& dist_type) const override
   {
     return find_view_maker(dist_type);
   }
@@ -99,7 +99,7 @@ class bbgm_variance_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual std::string name() const { return "variance"; }
+  std::string name() const override { return "variance"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -113,8 +113,8 @@ class bbgm_variance_viewer : public bbgm_viewer
 
  protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr
-  find_vm(const std::type_info& dist_type) const
+  bbgm_view_maker_sptr
+  find_vm(const std::type_info& dist_type) const override
   {
     return find_view_maker(dist_type);
   }
@@ -131,7 +131,7 @@ class bbgm_weight_viewer : public bbgm_viewer
 {
  public:
   //: Return the name of this view
-  virtual std::string name() const { return "weight"; }
+  std::string name() const override { return "weight"; }
 
   //: Register a new view_maker
   // \return true if successfully registered or false if invalid or already
@@ -145,8 +145,8 @@ class bbgm_weight_viewer : public bbgm_viewer
 
  protected:
   //: A virtual wrapper around the static find function
-  virtual bbgm_view_maker_sptr
-  find_vm(const std::type_info& dist_type) const
+  bbgm_view_maker_sptr
+  find_vm(const std::type_info& dist_type) const override
   {
     return find_view_maker(dist_type);
   }

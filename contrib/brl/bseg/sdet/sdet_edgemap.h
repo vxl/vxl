@@ -69,7 +69,7 @@ public:
   }
 
   //: destructor
-  ~sdet_edgemap()
+  ~sdet_edgemap() override
   {
     //go over each cell and delete the edgels
     sdet_edgemap_const_iter it = edge_cells.begin();

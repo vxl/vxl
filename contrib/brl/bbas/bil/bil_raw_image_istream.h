@@ -41,7 +41,7 @@ class bil_raw_image_istream : public vbl_ref_count
   bil_raw_image_istream(const std::string& rawFile);
 
   //: Destructor
-  virtual ~bil_raw_image_istream() { close(); }
+  ~bil_raw_image_istream() override { close(); }
 
   //: Open a new stream using a file glob (see vul_file_iterator)
   // \note files are loaded in alphanumeric order by path name

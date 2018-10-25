@@ -102,7 +102,7 @@ class sdet_detector : public sdet_detector_params
                 float junctionFactor = 1.5, int minLength = 6,
                 float maxGap = 2.23606, float minJump=1.0);
 
-  ~sdet_detector();
+  ~sdet_detector() override;
 
   // External interfaces
   //Step contour detection

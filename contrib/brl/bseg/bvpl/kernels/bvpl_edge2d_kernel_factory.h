@@ -31,7 +31,7 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
   // + + 0 - -
   bvpl_edge2d_kernel_factory(unsigned height, unsigned width);
 
-  virtual ~bvpl_edge2d_kernel_factory() {}
+  ~bvpl_edge2d_kernel_factory() override {}
 
   //Height of edge
   unsigned height() const { return height_; }
@@ -42,7 +42,7 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
  private:
 
   //:Creates a 2d edge kernel
-  virtual void create_canonical();
+  void create_canonical() override;
 
   unsigned height_;
   unsigned width_;

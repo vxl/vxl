@@ -36,7 +36,7 @@ class bvxm_world_params : public vbl_ref_count
  public:
 
   bvxm_world_params();
-  ~bvxm_world_params();
+  ~bvxm_world_params() override;
 
   //enum appearance_model_type { apm_unknown, mog_grey, mog_rgb };
 

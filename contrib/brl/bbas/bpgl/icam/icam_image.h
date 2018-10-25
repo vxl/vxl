@@ -29,7 +29,7 @@ class icam_image : public vil_image_view<T>, public icam_transform_2d
     : vil_image_view<T>(view), icam_transform_2d(w2i) {}
 
   //: Destructor
-  ~icam_image() {}
+  ~icam_image() override {}
 };
 
 #endif // icam_image_h_

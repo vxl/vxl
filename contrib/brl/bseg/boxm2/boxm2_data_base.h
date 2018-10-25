@@ -36,7 +36,7 @@ class boxm2_data_base : public vbl_ref_count
     void set_default_value(std::string data_type, boxm2_block_metadata data);
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
-    virtual ~boxm2_data_base() { if (data_buffer_) delete [] data_buffer_; }
+    ~boxm2_data_base() override { if (data_buffer_) delete [] data_buffer_; }
 
     //: accessor for low level byte buffer kept by the data_base
     char *            data_buffer()    { return data_buffer_; }

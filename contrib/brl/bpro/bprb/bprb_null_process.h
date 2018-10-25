@@ -21,22 +21,22 @@ class bprb_null_process : public bprb_process
 
   bprb_null_process();
 
-  virtual ~bprb_null_process() {}
+  ~bprb_null_process() override {}
 
   //: Clone the process
-  virtual bprb_null_process* clone() const { return new bprb_null_process(*this); }
+  bprb_null_process* clone() const override { return new bprb_null_process(*this); }
 
   //: The name of the process
-  virtual std::string name() const { return "NullProcess"; }
+  std::string name() const override { return "NullProcess"; }
 
   //: Perform any initialization required by the process
-  virtual bool init() { return true; }
+  bool init() override { return true; }
 
   //: Execute the process
-  virtual bool execute();
+  bool execute() override;
 
   //: Perform any clean up or final computation
-  virtual bool finish() { return true; }
+  bool finish() override { return true; }
 };
 
 #endif // bprb_null_process_h_

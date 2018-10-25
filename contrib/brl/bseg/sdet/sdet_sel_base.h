@@ -82,7 +82,7 @@ public:
                  sdet_curve_fragment_graph& curve_frag_graph,
                  sdet_curvelet_params cvlet_params=sdet_curvelet_params());  //various parameters
 
-  virtual ~sdet_sel_base();
+  ~sdet_sel_base() override;
 
   // Access parameters
   unsigned nrows() { return nrows_; }

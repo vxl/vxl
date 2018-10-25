@@ -26,7 +26,7 @@ class betr_geo_object_3d : public vbl_ref_count
   betr_geo_object_3d(betr_geo_object_3d const& go){
     *this = go;}//maybe change later
 
-  ~betr_geo_object_3d(){}
+  ~betr_geo_object_3d() override{}
   // Data Access
   int id() const {return id_;}
   vsol_spatial_object_3d_sptr obj()const {return so_;}

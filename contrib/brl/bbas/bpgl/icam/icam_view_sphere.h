@@ -18,7 +18,7 @@ class icam_view_sphere : public vbl_ref_count
   icam_view_sphere(vgl_box_3d<double> bb, double radius);
 
   //: Destructor
-  ~icam_view_sphere(){ delete view_sphere_; }
+  ~icam_view_sphere() override{ delete view_sphere_; }
 
   //: creates uniform view points on the view square and generates expected and depth images at each view point
   void create_view_points(double cap_angle, double view_angle, unsigned ni, unsigned nj);

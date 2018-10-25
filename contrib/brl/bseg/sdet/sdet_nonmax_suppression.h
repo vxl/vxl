@@ -81,7 +81,7 @@ class sdet_nonmax_suppression : public sdet_nonmax_suppression_params
                           vil_image_view<double> &grad_mag,
                           vbl_array_2d<vgl_vector_2d <double> > &directions);
   //: Destructor
-  ~sdet_nonmax_suppression();
+  ~sdet_nonmax_suppression() override;
   //Accessors
   std::vector<vsol_point_2d_sptr>& get_points(){return points_;}
   std::vector<vsol_line_2d_sptr>& get_lines(){return lines_;}

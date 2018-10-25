@@ -56,7 +56,7 @@ class boxm2_block : public vbl_ref_count
   bool init_empty_block(boxm2_block_metadata const& data);
 
   //: default destructor
-  virtual ~boxm2_block() { if (buffer_) delete[] buffer_; }
+  ~boxm2_block() override { if (buffer_) delete[] buffer_; }
 
   //: all IO manipulates char buffers
   bool b_read(char* buffer);

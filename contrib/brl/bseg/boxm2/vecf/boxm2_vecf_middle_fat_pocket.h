@@ -43,7 +43,7 @@ class boxm2_vecf_middle_fat_pocket : public boxm2_vecf_geometry_base{
   double distance(vgl_point_3d<double> const& p) const {return pocket_.distance(p);}
 
   //: the functor operator for surface distance.
-  virtual double operator() (vgl_point_3d<double> const& p) const{ return pocket_.distance(p);}
+  double operator() (vgl_point_3d<double> const& p) const override{ return pocket_.distance(p);}
 
 
   //: returns a deformed fat pocket
@@ -60,7 +60,7 @@ class boxm2_vecf_middle_fat_pocket : public boxm2_vecf_geometry_base{
   //: for an inverse vector field with anisotropic scaling (see previous function comment)
   void apply_scale_params();
 
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& p, vgl_vector_3d<double>& inv_v) const;
+  bool inverse_vector_field(vgl_point_3d<double> const& p, vgl_vector_3d<double>& inv_v) const override;
 
   //: find the forward vector field for the closest point on *this
   bool closest_inverse_vector_field(vgl_point_3d<double> const& p, vgl_vector_3d<double>& vf) const;

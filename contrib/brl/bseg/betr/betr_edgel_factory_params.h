@@ -38,14 +38,14 @@ class betr_edgel_factory_params : public betr_params
     det_params_.noise_multiplier = 0.75;
   }
   //: check values of parameters to flag illegal values
-  virtual bool sanity_check(std::string& errors) const;
-  virtual void serialize( Json::Value& root ) const{
+  bool sanity_check(std::string& errors) const override;
+  void serialize( Json::Value& root ) const override{
     root["gradient_range"] = gradient_range_;
     root["nbins"] = nbins_;
     root["upsample_factor"] = upsample_factor_;
     root["min_region_edge_length"] = min_region_edge_length_;
   }
-  virtual void deserialize( Json::Value& root){
+  void deserialize( Json::Value& root) override{
     gradient_range_ = root.get("gradient_range",gradient_range_).asDouble();
     nbins_ = root.get("nbins", nbins_).asInt();
     upsample_factor_ = root.get("upsample_factor",upsample_factor_).asDouble();

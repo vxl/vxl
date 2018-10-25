@@ -19,9 +19,9 @@ class brec_fg_pair_density : public brec_pair_density
 {
  public:
   brec_fg_pair_density() : brec_pair_density() {}
-  virtual ~brec_fg_pair_density() {}
+  ~brec_fg_pair_density() override {}
 
-  virtual double operator()(const double y0, const double y1);
+  double operator()(const double y0, const double y1) override;
   double negative_log(const double y0, const double y1);
   double gradient_of_log(const double y0, const double y1);
   double gradient_of_negative_log(const double y0, const double y1);

@@ -46,7 +46,7 @@ class ihog_lsqr_cost_func : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: Returns the transformed second image
   vil_image_view<float> last_xformed_image();

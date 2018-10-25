@@ -42,7 +42,7 @@ class bstm_time_block : public vbl_ref_count
   bstm_time_block(bstm_block_metadata data);
 
   //: default destructor
-  virtual ~bstm_time_block() { if (buffer_) delete[] buffer_;}
+  ~bstm_time_block() override { if (buffer_) delete[] buffer_;}
 
   //: returns a cell's the time tree containing the specified local time t.
   uchar8&                   get_cell_tt(int cell_data_offset, double local_t);

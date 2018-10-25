@@ -47,7 +47,7 @@ public:
   }
 
   //: Destructor
-  ~volm_geo_index2_node() { }
+  ~volm_geo_index2_node() override { }
 
 public:
   //: data inside current tile (for non-leaf tile, the data should be empty, i.e. the templated member should contain method that contents_.size() == 0 or contents_.empty() == true)

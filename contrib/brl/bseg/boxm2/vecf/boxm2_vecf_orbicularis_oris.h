@@ -34,7 +34,7 @@ class boxm2_vecf_orbicularis_oris : public bvgl_gen_cylinder, public boxm2_vecf_
   boxm2_vecf_orbicularis_oris(vgl_cubic_spline_3d<double> const& axis, std::vector<bvgl_cross_section> const& cross_sects, double const& cross_section_interval=0.5):
     bvgl_gen_cylinder(axis, cross_sects, cross_section_interval) {}
 
-  ~boxm2_vecf_orbicularis_oris() {}
+  ~boxm2_vecf_orbicularis_oris() override {}
 
   //: set deformation parameters
   void set_params(boxm2_vecf_orbicularis_oris_params const& params) { params_ = params; }
@@ -57,11 +57,11 @@ class boxm2_vecf_orbicularis_oris : public bvgl_gen_cylinder, public boxm2_vecf_
 
   //: the functor operator for surface distance. dist_thresh is the distance a closest point on the normal plane
   // can be away from the closest point in the cross-section pointset.
-  virtual double operator() (vgl_point_3d<double> const& p) const
+  double operator() (vgl_point_3d<double> const& p) const override
   { return bvgl_gen_cylinder::distance(p, params_.planar_surface_dist_thresh_); }
 
   //: compute the inverse vector field for a target point
-  virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
+  bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override;
 
   //: display -- for debug purpose
   void display_axis_spline_ascii(std::ofstream& ostr, unsigned const& r = 0, unsigned const& g = 255, unsigned const& b = 0) const;

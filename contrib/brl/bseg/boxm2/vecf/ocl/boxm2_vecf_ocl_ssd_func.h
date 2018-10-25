@@ -35,7 +35,7 @@ class boxm2_vecf_ocl_ssd_func : public vnl_least_squares_function
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
   vil_image_view<float> diff_img(vnl_vector<double> const& x) ;
   void finish();
  protected:

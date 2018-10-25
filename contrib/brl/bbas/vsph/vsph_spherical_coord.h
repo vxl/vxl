@@ -40,7 +40,7 @@ class vsph_spherical_coord : public vbl_ref_count
     : vbl_ref_count(), radius_(rhs.radius_), origin_(rhs.origin_) {}
 
   // Destructor
-  virtual ~vsph_spherical_coord() {}
+  ~vsph_spherical_coord() override {}
 
   //***************************************************************************
   // Methods

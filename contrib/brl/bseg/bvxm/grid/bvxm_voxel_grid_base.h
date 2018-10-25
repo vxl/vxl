@@ -20,7 +20,7 @@ class bvxm_voxel_grid_base : public vbl_ref_count
 {
  public:
   bvxm_voxel_grid_base() {}
-  virtual ~bvxm_voxel_grid_base() {}
+  ~bvxm_voxel_grid_base() override {}
   bvxm_voxel_grid_base(vgl_vector_3d<unsigned> grid_size) : grid_size_(grid_size) {}
   vgl_vector_3d<unsigned> grid_size() const { return grid_size_; }
 

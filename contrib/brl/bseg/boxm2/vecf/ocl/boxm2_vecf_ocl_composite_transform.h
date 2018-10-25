@@ -17,19 +17,19 @@ class boxm2_vecf_ocl_composite_transform: public boxm2_vecf_ocl_vector_field
 
     //: compute forward transform
     // Note that both pts_source and pts_target are defined for each cell in source scene using data type float4
-    virtual bool compute_forward_transform(boxm2_scene_sptr source,
+    bool compute_forward_transform(boxm2_scene_sptr source,
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_source, // in
                                            bocl_mem* pts_target, // out
-                                           cl_command_queue &queue);
+                                           cl_command_queue &queue) override;
 
     //: compute inverse vector field, writing result to gpu cache
     // Note that both pts_target and pts_source are defined for each cell in target scene using data type float4
-    virtual bool compute_inverse_transform(boxm2_scene_sptr target,
+    bool compute_inverse_transform(boxm2_scene_sptr target,
                                            boxm2_block_id const& blk_id,
                                            bocl_mem* pts_target, // in
                                            bocl_mem* pts_source, // out
-                                           cl_command_queue &queue);
+                                           cl_command_queue &queue) override;
 
   private:
     std::vector<boxm2_vecf_ocl_vector_field_sptr> xforms_;

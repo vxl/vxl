@@ -45,7 +45,7 @@ public:
   volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, int const& tol_in_pixel = 4);
 
   //: destructor
-  ~volm_conf_query() {}
+  ~volm_conf_query() override {}
 
   //: access
   std::vector<vpgl_perspective_camera<double> >& cameras()  { return cameras_; }

@@ -31,11 +31,11 @@ class bvgl_eulerspiral_optimization_function : public vnl_least_squares_function
 {
 public:
   friend class bvgl_eulerspiral;
-  virtual ~bvgl_eulerspiral_optimization_function() {}
+  ~bvgl_eulerspiral_optimization_function() override {}
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override;
 
   //: return pointer to the Euler spiral of this function
   bvgl_eulerspiral* es() const { return this->es_; }

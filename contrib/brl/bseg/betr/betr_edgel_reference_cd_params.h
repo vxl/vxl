@@ -20,8 +20,8 @@ class betr_edgel_reference_cd_params : public betr_params
     edgel_factory_params_ = fparams;
   }
   //: check values of parameters to flag illegal values
-  virtual bool sanity_check(std::string& errors) const;
-  virtual void serialize( Json::Value& root ) const{
+  bool sanity_check(std::string& errors) const override;
+  void serialize( Json::Value& root ) const override{
     root["sigma"] = sigma_;
     root["noise_mul"] = noise_mul_;
     Json::Value factory_params;
@@ -29,7 +29,7 @@ class betr_edgel_reference_cd_params : public betr_params
     efparams->serialize(factory_params);
     root["edgel_factory_params"]=factory_params;
   }
-  virtual void deserialize( Json::Value& root){
+  void deserialize( Json::Value& root) override{
     Json::Value null;
     Json::Value factory_params = root.get("edgel_factory_params",null);
     if(!factory_params.isNull()){

@@ -29,16 +29,16 @@ class breg3d_zero_occupancy_borders_process : public bprb_process
   //: Copy Constructor (no local data)
   breg3d_zero_occupancy_borders_process(const breg3d_zero_occupancy_borders_process& other): bprb_process(*static_cast<const bprb_process*>(&other)){}
 
-  ~breg3d_zero_occupancy_borders_process(){}
+  ~breg3d_zero_occupancy_borders_process() override{}
 
   //: Clone the process
-  virtual breg3d_zero_occupancy_borders_process* clone() const {return new breg3d_zero_occupancy_borders_process(*this);}
+  breg3d_zero_occupancy_borders_process* clone() const override {return new breg3d_zero_occupancy_borders_process(*this);}
 
-  virtual std::string name() const {return "breg3dZeroOccupancyBorders";}
+  std::string name() const override {return "breg3dZeroOccupancyBorders";}
 
-  bool init() { return true; }
-  bool execute();
-  bool finish(){return true;}
+  bool init() override { return true; }
+  bool execute() override;
+  bool finish() override{return true;}
 };
 
 

@@ -25,7 +25,7 @@ class bapl_keypoint : public vbl_ref_count
   //: Constructor
   bapl_keypoint() {}
   //: Destructor
-  ~bapl_keypoint() {}
+  ~bapl_keypoint() override {}
 
   //: Accessor for the descriptor vector
   virtual const vnl_vector_fixed<double,128>& descriptor() const = 0;

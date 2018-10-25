@@ -24,9 +24,9 @@ class sdet_denoise_mrf_params : public gevd_param_mixin, public vbl_ref_count
 
 
   sdet_denoise_mrf_params(const sdet_denoise_mrf_params& old_params);
- ~sdet_denoise_mrf_params() {}
+ ~sdet_denoise_mrf_params() override {}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
  friend
   std::ostream& operator<<(std::ostream& os, const sdet_denoise_mrf_params& imp);
  protected:

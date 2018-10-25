@@ -28,13 +28,13 @@ class bsta_weibull_cost_function : public vnl_cost_function
   bsta_weibull_cost_function(double mean, double std_dev):
     vnl_cost_function(1), mean_(mean), std_dev_(std_dev){}
 
-  virtual ~bsta_weibull_cost_function() {}
+  ~bsta_weibull_cost_function() override {}
 
   //:  The main function.  Given the parameter vector x, compute the value of f(x).
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
 
   //:  Calculate the gradient of f at parameter vector x.
-  virtual void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient);
+  void gradf(vnl_vector<double> const& x, vnl_vector<double>& gradient) override;
   //: sample mean
   double mean() const {return mean_;}
 

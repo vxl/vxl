@@ -44,7 +44,7 @@ class bvpl_bundler_features_2d: public vbl_ref_count
 
     bvpl_bundler_features_2d() {}
 
-    ~bvpl_bundler_features_2d() {}
+    ~bvpl_bundler_features_2d() override {}
 
     void b_write( vsl_b_ostream& os ) const;
 

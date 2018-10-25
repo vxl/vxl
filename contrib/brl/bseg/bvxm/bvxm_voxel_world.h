@@ -122,7 +122,7 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_voxel_world(bvxm_world_params_sptr params) { params_ = params; }
 
   //: destructor
-  ~bvxm_voxel_world();
+  ~bvxm_voxel_world() override;
 
   //: update voxel grid with data from image/camera pair. Based on algorithm published in Pollard + Mundy 06.
   template<bvxm_voxel_type APM_T>

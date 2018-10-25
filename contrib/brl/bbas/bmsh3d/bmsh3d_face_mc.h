@@ -45,7 +45,7 @@ class bmsh3d_face_mc : public bmsh3d_face
   bmsh3d_face_mc (const bmsh3d_face_mc& face);
 #endif
 
-  virtual ~bmsh3d_face_mc () {}
+  ~bmsh3d_face_mc () override {}
 
   bmsh3d_halfedge* face_mc_map(int i);
 

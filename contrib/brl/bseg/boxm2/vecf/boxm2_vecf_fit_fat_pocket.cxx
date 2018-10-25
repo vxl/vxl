@@ -23,7 +23,7 @@ class neutral_residual_function : public vnl_least_squares_function{
     vnl_least_squares_function(6,static_cast<unsigned>(3*(neutral_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(fat_pocket),
     skin_layer_(skin_layer), neutral_ptset_(neutral_ptset){}
 
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx){
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override{
 
     double inv_err = 10.0;
     // extract parameters from x
@@ -67,7 +67,7 @@ class deformed_residual_function : public vnl_least_squares_function{
     vnl_least_squares_function(5,static_cast<unsigned>(3*(deformed_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(fat_pocket),
     skin_layer_(skin_layer), deformed_ptset_(deformed_ptset){defpr_.fit_to_subject_=false;}
 
-  virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx){
+  void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override{
 
     double inv_err = 5.0;
     // extract parameters from x
@@ -114,7 +114,7 @@ class deformed_cost_function : public vnl_cost_function{
     vnl_cost_function(5), pocket_(fat_pocket),
     skin_layer_(skin_layer), deformed_ptset_(deformed_ptset){defpr_.fit_to_subject_=false;}
 
-  virtual double f(vnl_vector<double> const& x){
+  double f(vnl_vector<double> const& x) override{
 
     // extract parameters from x
     defpr_.lambda_           = x[0];

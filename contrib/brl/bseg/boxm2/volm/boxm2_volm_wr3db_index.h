@@ -75,7 +75,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
 
     //: layer_size is the size of index array for each hypothesis, buffer_capacity is the max GBs on RAM for this class to use
     boxm2_volm_wr3db_index(unsigned layer_size, float buffer_capacity);
-    ~boxm2_volm_wr3db_index();
+    ~boxm2_volm_wr3db_index() override;
 
     //: io as chunks of data to a set of files in the specified folder
     bool initialize_read(std::string file_name);

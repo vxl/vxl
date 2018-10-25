@@ -25,7 +25,7 @@ class breg3d_gdbicp_homography_generator : public breg3d_homography_generator
  public:
   breg3d_gdbicp_homography_generator(){}
 
-  virtual ihog_transform_2d compute_homography();
+  ihog_transform_2d compute_homography() override;
 
  private:
   ihog_transform_2d parse_gdbicp_output(std::string filename);

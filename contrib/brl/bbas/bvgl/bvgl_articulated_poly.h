@@ -24,7 +24,7 @@ class bvgl_articulated_poly : public vsol_polyline_2d
   bvgl_articulated_poly(const unsigned n_joints);
   bvgl_articulated_poly(const unsigned n_joints, std::vector<double> const& link_lengths);
   bvgl_articulated_poly(const bvgl_articulated_poly& poly);
-  ~bvgl_articulated_poly() {}
+  ~bvgl_articulated_poly() override {}
 
   vgl_h_matrix_2d<double> joint_transform(unsigned joint) const
     {return joint_transforms_[joint];}

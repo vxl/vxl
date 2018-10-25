@@ -40,7 +40,7 @@ class bvpl_kernel: public vbl_ref_count
     id_=bvpl_kernel::get_next_id();
   }
   //: Destructor
-  ~bvpl_kernel() {}
+  ~bvpl_kernel() override {}
   bvpl_kernel_iterator iterator(){return kernel_;}
   vnl_float_3 axis() const {return axis_;}
   vnl_float_3 aux_axis() const {return aux_axis_;}

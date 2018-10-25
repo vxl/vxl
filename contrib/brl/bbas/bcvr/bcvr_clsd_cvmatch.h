@@ -75,7 +75,7 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
                     double rms = 0.0f,  // fit lines to the input polygon before using
                     int template_size = 3);
 
-  virtual ~bcvr_clsd_cvmatch() {};
+  ~bcvr_clsd_cvmatch() override {};
 
   //access functions
   double finalCost(int index) {return _finalCost[index];};

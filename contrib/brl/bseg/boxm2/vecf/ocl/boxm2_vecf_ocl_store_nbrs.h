@@ -33,7 +33,7 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
   boxm2_vecf_ocl_store_nbrs(boxm2_scene_sptr& source_scene,
                             boxm2_opencl_cache_sptr ocl_cache);
 
-  ~boxm2_vecf_ocl_store_nbrs();
+  ~boxm2_vecf_ocl_store_nbrs() override;
 
   unsigned ni() const{return  cl_ni;}
   unsigned nj() const{return  cl_nj;}

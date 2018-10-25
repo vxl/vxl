@@ -65,9 +65,9 @@ class sdet_symbolic_edge_linker_params : public gevd_param_mixin
                                    unsigned num_link_iters = 7, bool get_final_contours = true);
 
   sdet_symbolic_edge_linker_params(const sdet_symbolic_edge_linker_params& old_params);
-  ~sdet_symbolic_edge_linker_params(){}
+  ~sdet_symbolic_edge_linker_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
 
   friend std::ostream& operator<<(std::ostream&,const sdet_symbolic_edge_linker_params& dp);
 

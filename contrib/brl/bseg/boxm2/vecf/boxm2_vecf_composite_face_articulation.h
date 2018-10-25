@@ -22,13 +22,13 @@ class boxm2_vecf_composite_face_articulation : public boxm2_vecf_scene_articulat
   // for example the global transformation between the source and target scenes
  boxm2_vecf_composite_face_articulation(boxm2_vecf_composite_face_params const& params):skin_is_transparent_(false),
     show_mouth_region_(false){initial_params_ = params; initialize();}
-  ~boxm2_vecf_composite_face_articulation(){
+  ~boxm2_vecf_composite_face_articulation() override{
     params_.clear();
   }
-  virtual bool handle(vgui_event const &e);
+  bool handle(vgui_event const &e) override;
   void set_initial_params(boxm2_vecf_composite_face_params const& params){initial_params_ = params;}
-  unsigned size(){ return static_cast<unsigned>(params_.size()); }
-  bool set_play_sequence(std::string seq_id){
+  unsigned size() override{ return static_cast<unsigned>(params_.size()); }
+  bool set_play_sequence(std::string seq_id) override{
    if(play_sequence_map_.find(seq_id) != play_sequence_map_.end()){
      params_ = play_sequence_map_[seq_id];
      return true;
@@ -38,7 +38,7 @@ class boxm2_vecf_composite_face_articulation : public boxm2_vecf_scene_articulat
      return false;
    }
   }
- boxm2_vecf_articulated_params& operator [] (unsigned i) {
+ boxm2_vecf_articulated_params& operator [] (unsigned i) override {
    return params_[i] ; }
 
  private:

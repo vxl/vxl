@@ -9,11 +9,11 @@ public:
                                  boxm2_block_id const& blk_id,
                                  bocl_mem* pts_source, // in
                                  bocl_mem* pts_target, // out
-                                 cl_command_queue &queue);
+                                 cl_command_queue &queue) override;
   bool compute_inverse_transform(boxm2_scene_sptr target,
                                  boxm2_block_id const& blk_id,
                                  bocl_mem* pts_target, // in
                                  bocl_mem* pts_source, // out
-                                 cl_command_queue &queue);
+                                 cl_command_queue &queue) override;
 
 };

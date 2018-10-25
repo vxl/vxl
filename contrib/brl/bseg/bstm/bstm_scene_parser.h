@@ -35,7 +35,7 @@ class bstm_scene_parser : public expatpp
 {
  public:
   bstm_scene_parser();
-  ~bstm_scene_parser(void) {}
+  ~bstm_scene_parser(void) override {}
 
    // ACCESSORS for parser info
    bool lvcs(vpgl_lvcs& lvcs);
@@ -46,9 +46,9 @@ class bstm_scene_parser : public expatpp
    std::vector<std::string> appearances() const { return appearances_; }
    int version() const { return version_; }
  private:
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* /*name*/) {}
-  virtual void charData(const XML_Char* /*s*/, int /*len*/) {}
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* /*name*/) override {}
+  void charData(const XML_Char* /*s*/, int /*len*/) override {}
 
   void init_params();
 

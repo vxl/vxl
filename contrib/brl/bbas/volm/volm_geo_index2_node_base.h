@@ -31,7 +31,7 @@ public:
   volm_geo_index2_node_base() {}
 
   //: Destructor
-  virtual ~volm_geo_index2_node_base() { children_.clear(); }
+  ~volm_geo_index2_node_base() override { children_.clear(); }
 
   //: retrive the mini tile name based on the bbox
   std::string get_string() const;

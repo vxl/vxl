@@ -33,7 +33,7 @@ struct fg_pair_density_est : public vnl_least_squares_function
     pairs_(pairs)
   { }
 
-  void f(vnl_vector<double> const& x, vnl_vector<double>& y) {
+  void f(vnl_vector<double> const& x, vnl_vector<double>& y) override {
     //double out = 0;
     brec_fg_pair_density fd;
     fd.set_sigma(x[0]);
@@ -47,7 +47,7 @@ struct fg_pair_density_est : public vnl_least_squares_function
     //y[0] = std::abs(out);
     //y[1] = std::abs(0.1-x[0]);
   }
-  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) {
+  void gradf(vnl_vector<double> const& x, vnl_matrix<double> &J) override {
     //J[0][0] = 0.0;
     brec_fg_pair_density fd;
     fd.set_sigma(x[0]);
@@ -65,7 +65,7 @@ class fg_pair_density_est_amoeba : public vnl_cost_function
  public:
   fg_pair_density_est_amoeba(std::vector<std::pair<float, float> > const& /*pairs*/): vnl_cost_function(1) {}
 
-  double f(const vnl_vector<double>& x)
+  double f(const vnl_vector<double>& x) override
   {
     double out = 0;
     brec_fg_pair_density fd;

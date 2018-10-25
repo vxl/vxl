@@ -115,7 +115,7 @@ class bsol_hough_line_index :  public vbl_ref_count
       angle_range_(i.angle_range_), angle_increment_(i.angle_increment_),
       r_dim_(i.r_dim_), th_dim_(i.th_dim_), index_(i.index_) {}
 
-  ~bsol_hough_line_index();
+  ~bsol_hough_line_index() override;
 
   // Data Access---------------------------------------------------------------
 

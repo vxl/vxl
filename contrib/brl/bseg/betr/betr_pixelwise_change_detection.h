@@ -25,14 +25,14 @@ public:
   }
 
   //: process change
-  virtual bool process();
+  bool process() override;
 
   //: resulting change probability
-  virtual double prob_change() const{return avg_prob_;}
+  double prob_change() const override{return avg_prob_;}
 
   //: image of pixel-wise census probabilities
-  virtual vil_image_resource_sptr change_image(
-    unsigned& i_offset, unsigned& j_offset) const{
+  vil_image_resource_sptr change_image(
+    unsigned& i_offset, unsigned& j_offset) const override{
       i_offset = i_offset_; j_offset = j_offset_; return change_img_;}
 
 private:

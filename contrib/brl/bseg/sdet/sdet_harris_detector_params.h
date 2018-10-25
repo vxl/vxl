@@ -26,9 +26,9 @@ class sdet_harris_detector_params : public gevd_param_mixin
                               const bool use_vil_harris=false);
 
   sdet_harris_detector_params(const sdet_harris_detector_params& old_params);
- ~sdet_harris_detector_params(){}
+ ~sdet_harris_detector_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&,const sdet_harris_detector_params& dp);
  protected:

@@ -27,12 +27,12 @@ class bxml_expat_parser : public expatpp
 {
  public:
   bxml_expat_parser(bool online = false) : online_mode_(online) {}
-  virtual void startElement(const XML_Char* name, const XML_Char** atts);
-  virtual void endElement(const XML_Char* name);
-  virtual void charData(const XML_Char*, int len);
-  virtual void xmlDecl( const XML_Char *version,
+  void startElement(const XML_Char* name, const XML_Char** atts) override;
+  void endElement(const XML_Char* name) override;
+  void charData(const XML_Char*, int len) override;
+  void xmlDecl( const XML_Char *version,
                         const XML_Char *encoding,
-                        int            standalone);
+                        int            standalone) override;
 
   bxml_document document() const { return document_; }
 

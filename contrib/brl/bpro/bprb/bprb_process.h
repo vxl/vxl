@@ -129,7 +129,7 @@ class bprb_process : public vbl_ref_count
 
   //: Copy Constructor
   bprb_process(const bprb_process& other);
-  virtual ~bprb_process();
+  ~bprb_process() override;
 
   //: The parameters of this process
   std::vector<brdb_value_sptr> input_data_;

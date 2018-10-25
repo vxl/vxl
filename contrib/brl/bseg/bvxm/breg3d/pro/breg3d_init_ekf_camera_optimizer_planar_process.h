@@ -30,16 +30,16 @@ class breg3d_init_ekf_camera_optimizer_planar_process : public bprb_process
   //: Copy Constructor (no local data)
   breg3d_init_ekf_camera_optimizer_planar_process(const breg3d_init_ekf_camera_optimizer_planar_process& other): bprb_process(*static_cast<const bprb_process*>(&other)){}
 
-  ~breg3d_init_ekf_camera_optimizer_planar_process(){}
+  ~breg3d_init_ekf_camera_optimizer_planar_process() override{}
 
   //: Clone the process
-  virtual breg3d_init_ekf_camera_optimizer_planar_process* clone() const {return new breg3d_init_ekf_camera_optimizer_planar_process(*this);}
+  breg3d_init_ekf_camera_optimizer_planar_process* clone() const override {return new breg3d_init_ekf_camera_optimizer_planar_process(*this);}
 
-  virtual std::string name() const {return "breg3dInitEkfCameraOptimizerPlanar";}
+  std::string name() const override {return "breg3dInitEkfCameraOptimizerPlanar";}
 
-  bool init() { return true; }
-  bool execute();
-  bool finish(){return true;}
+  bool init() override { return true; }
+  bool execute() override;
+  bool finish() override{return true;}
 };
 
 

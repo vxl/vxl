@@ -76,7 +76,7 @@ class boxm_scene :public boxm_scene_base
   boxm_scene_base(scene_base),active_block_(vgl_point_3d<int>(-1,-1,-1)), save_internal_nodes_(false), save_platform_independent_(true) {}
 
   //: Destructor
-  ~boxm_scene();
+  ~boxm_scene() override;
 
   bool discover_block(vgl_point_3d<unsigned> index) { return discover_block(index.x(),index.y(),index.z()); }
 
@@ -145,7 +145,7 @@ class boxm_scene :public boxm_scene_base
     z=(int) blocks_.get_row3_count();
   }
 
-  virtual vgl_vector_3d<unsigned> world_dim() const {
+  vgl_vector_3d<unsigned> world_dim() const override {
     unsigned x=(unsigned) blocks_.get_row1_count();
     unsigned y=(unsigned) blocks_.get_row2_count();
     unsigned z=(unsigned) blocks_.get_row3_count();
@@ -240,7 +240,7 @@ class boxm_scene :public boxm_scene_base
     return cell_iter;
   }
 
-  virtual vgl_box_3d<double> get_world_bbox() const;
+  vgl_box_3d<double> get_world_bbox() const override;
 
   //: Return the dimensions of the scene along each axis - this are equivalent to bbox width, length and depth
   void axes_length(double &x_length,double &y_length, double &z_length) const;

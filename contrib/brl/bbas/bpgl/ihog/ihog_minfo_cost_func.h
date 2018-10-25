@@ -50,7 +50,7 @@ class ihog_minfo_cost_func : public vnl_cost_function
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
   //virtual void f(vnl_vector<double> const& x, vnl_vector<double>& fx);
-  virtual double f(vnl_vector<double> const& x);
+  double f(vnl_vector<double> const& x) override;
 
   //: Returns the transformed second image
   vil_image_view<float> last_xformed_image();

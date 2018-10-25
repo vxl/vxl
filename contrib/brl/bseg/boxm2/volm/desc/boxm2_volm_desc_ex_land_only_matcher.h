@@ -34,18 +34,18 @@ public:
   {}
 
   //: Destructor
-  ~boxm2_volm_desc_ex_land_only_matcher() {}
+  ~boxm2_volm_desc_ex_land_only_matcher() override {}
 
   //: check given threshold is valid or not for generate scaled probability map
-  virtual bool check_threshold(volm_desc_sptr const& query, float& thres_value);
+  bool check_threshold(volm_desc_sptr const& query, float& thres_value) override;
 
   //: Compare two descriptor a and b using the similarity method implemented in descriptor a
-  virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index);
+  float score(volm_desc_sptr const& query, volm_desc_sptr const& index) override;
 
   //: Create a volumetric existence descriptor for the query image
-  virtual volm_desc_sptr create_query_desc();
+  volm_desc_sptr create_query_desc() override;
 
-  virtual std::string get_index_type_str() { return volm_desc_ex_land_only_indexer::get_name(); }
+  std::string get_index_type_str() override { return volm_desc_ex_land_only_indexer::get_name(); }
 
 private:
     //: query depth_map_scene

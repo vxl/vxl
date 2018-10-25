@@ -51,7 +51,7 @@ public:
   }
 
   //: destructor
-  virtual ~sdet_sel<curve_model>(){}
+  ~sdet_sel<curve_model>() override{}
 
   //: form a curve hypothesis of the appropriate model given a pair of edgels
   inline curve_model* form_a_hypothesis(sdet_edgel* ref_e, sdet_edgel* e2, bool &ref_first,
@@ -114,11 +114,11 @@ public:
     return nullptr;
   }
 
-  virtual void form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2);
-  virtual void form_an_edgel_triplet(sdet_curvelet* /*p1*/, sdet_curvelet* /*p2*/){}
-  virtual void form_an_edgel_quad(sdet_curvelet* /*t1*/, sdet_curvelet* /*t2*/){}
-  virtual void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group,
-      bool use_flag=false, bool forward=true,  bool centered=true, bool leading=true);
+  void form_an_edgel_pair(sdet_edgel* ref_e, sdet_edgel* e2) override;
+  void form_an_edgel_triplet(sdet_curvelet* /*p1*/, sdet_curvelet* /*p2*/) override{}
+  void form_an_edgel_quad(sdet_curvelet* /*t1*/, sdet_curvelet* /*t2*/) override{}
+  void build_curvelets_greedy_for_edge(sdet_edgel* eA, unsigned max_size_to_group,
+      bool use_flag=false, bool forward=true,  bool centered=true, bool leading=true) override;
 
   //: check if two curvelets are consistent (is there an intersection in their curve bundles?)
   bool are_curvelets_consistent(sdet_curvelet* cvlet1, sdet_curvelet* cvlet2)
@@ -135,8 +135,8 @@ public:
   }
 
   //: form an edgel grouping from an ordered list of edgemap_->edgels
-  virtual sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain,
-      bool forward=true,  bool centered=true, bool leading=true);
+  sdet_curvelet* form_an_edgel_grouping(sdet_edgel* ref_e, std::deque<sdet_edgel*> &edgel_chain,
+      bool forward=true,  bool centered=true, bool leading=true) override;
 };
 
 // Caio SOUZA - 2014

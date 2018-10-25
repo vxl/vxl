@@ -23,9 +23,9 @@ class bpgl_rolling_shutter_camera : public vpgl_camera<T>
   //: default constructor
   bpgl_rolling_shutter_camera(){}
 
-  virtual ~bpgl_rolling_shutter_camera() {}
+  ~bpgl_rolling_shutter_camera() override {}
 
-  virtual std::string type_name() const { return "bpgl_rolling_shutter_camera"; }
+  std::string type_name() const override { return "bpgl_rolling_shutter_camera"; }
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern

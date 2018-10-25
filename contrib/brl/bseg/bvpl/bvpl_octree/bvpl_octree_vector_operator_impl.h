@@ -20,8 +20,8 @@ template <class T_data>
 class bvpl_max_vector_operator: public bvpl_octree_vector_operator<T_data>
 {
  public:
-  virtual void combine_kernel_responses(boct_tree<short ,bvpl_octree_sample <T_data> >* tree_out, boct_tree<short ,T_data>* tree_curr,
-                                        int id_curr)
+  void combine_kernel_responses(boct_tree<short ,bvpl_octree_sample <T_data> >* tree_out, boct_tree<short ,T_data>* tree_curr,
+                                        int id_curr) override
   {
     this->keep_max_response_tree(tree_out, tree_curr, id_curr);
   }

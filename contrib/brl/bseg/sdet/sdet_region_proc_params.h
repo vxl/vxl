@@ -25,9 +25,9 @@ class sdet_region_proc_params : public gevd_param_mixin
                           int array_scale = 2);
 
   sdet_region_proc_params(const sdet_region_proc_params& old_params);
- ~sdet_region_proc_params(){}
+ ~sdet_region_proc_params() override{}
 
-  bool SanityCheck();
+  bool SanityCheck() override;
   friend
     std::ostream& operator<<(std::ostream&, const sdet_region_proc_params& rpp);
  protected:

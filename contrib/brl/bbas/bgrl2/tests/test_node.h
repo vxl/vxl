@@ -22,13 +22,13 @@ class test_node : public bgrl2_vertex<test_edge>
  public:
   test_node(): bgrl2_vertex<test_edge>(), id_(0) {}
   test_node(int id): bgrl2_vertex<test_edge>(), id_(id) {}
-  virtual ~test_node(){}
+  ~test_node() override{}
 
   int id() const {return id_;}
   void set_id(int id){id_ = id;}
 
   //: Print an ascii summary to the stream
-  virtual void print_summary(std::ostream &os) const
+  void print_summary(std::ostream &os) const override
   {
     os << id_ << ": [" << this->degree() << ']' << std::endl;
   }

@@ -73,7 +73,7 @@ class brec_part_hierarchy_learner : public vbl_ref_count
 
    void initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc, int n);
 
-   ~brec_part_hierarchy_learner() {
+   ~brec_part_hierarchy_learner() override {
      for (unsigned i = 0; i < stats_layer0_.size(); i++) {
        delete stats_layer0_[i].second;
      }

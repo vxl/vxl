@@ -30,7 +30,7 @@ class bprb_process_manager : public vbl_ref_count
  public:
 
   //: Destructor
-  virtual ~bprb_process_manager();
+  ~bprb_process_manager() override;
 
   //: Use this instead of constructor
   static T* instance();
