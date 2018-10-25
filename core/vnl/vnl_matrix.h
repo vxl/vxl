@@ -690,9 +690,6 @@ class VNL_TEMPLATE_EXPORT vnl_matrix
 
   //: Delete data
   void destroy();
-
-  // inline function template instantiation hack for gcc 2.97 -- fsm
-  static void inline_function_tickler();
 };
 
 

@@ -513,14 +513,6 @@ std::istream& operator>>(std::istream& s, vnl_matrix<T>& M)
 }
 
 template <class T>
-void vnl_matrix<T>::inline_function_tickler()
-{
-  vnl_matrix<T> M;
-  // fsm: hack to get 2.96 to instantiate the inline function.
-  M = T(1) + T(3) * M;
-}
-
-template <class T>
 vnl_matrix<T>& vnl_matrix<T>::operator+= (T value)
 {
   for (unsigned int i = 0; i < this->num_rows; i++)
