@@ -60,11 +60,11 @@ extern "C" {
 struct vidl_ffmpeg_ostream::pimpl
 {
   pimpl()
-  : fmt_cxt_( 0 ),
+  : fmt_cxt_( nullptr ),
   file_opened_( false ),
   codec_opened_( false ),
   cur_frame_( 0 ),
-  video_rc_eq_( NULL )
+  video_rc_eq_( nullptr )
   { }
 
   AVFormatContext* fmt_cxt_;
@@ -117,9 +117,9 @@ open()
 
   os_->fmt_cxt_ = avformat_alloc_context();
 
-  AVOutputFormat* file_oformat = 0;
+  AVOutputFormat* file_oformat = nullptr;
   if ( params_.file_format_ == vidl_ffmpeg_ostream_params::GUESS ) {
-    file_oformat = av_guess_format(NULL, filename_.c_str(), NULL);
+    file_oformat = av_guess_format(nullptr, filename_.c_str(), nullptr);
     if (!file_oformat) {
       std::cerr << "ffmpeg: Unable for find a suitable output format for "
                << filename_ << '\n';
@@ -136,7 +136,7 @@ open()
   os_->fmt_cxt_->nb_streams = 0;
 
   // Create stream
-  AVStream* st = avformat_new_stream( os_->fmt_cxt_, 0 );
+  AVStream* st = avformat_new_stream( os_->fmt_cxt_, nullptr );
   if ( !st ) {
     std::cerr << "ffmpeg: could not alloc stream\n";
     close();
@@ -201,7 +201,7 @@ open()
   {
     AVRational const* p = codec->supported_framerates;
     AVRational req = { video_enc->time_base.den, video_enc->time_base.num };
-    AVRational const* best = NULL;
+    AVRational const* best = nullptr;
     AVRational best_error = { INT_MAX, 1 };
     for (; p->den!=0; p++)
     {
@@ -417,7 +417,7 @@ open()
 
   //dump_format( os_->fmt_cxt_, 1, filename_, 1 );
 
-  if ( avcodec_open2( video_enc, codec, NULL ) < 0 )
+  if ( avcodec_open2( video_enc, codec, nullptr ) < 0 )
   {
     std::cerr << "ffmpeg: couldn't open codec\n";
     close();
@@ -425,7 +425,7 @@ open()
   }
   os_->codec_opened_ = true;
 
-  if ( avformat_write_header( os_->fmt_cxt_, NULL ) < 0 )
+  if ( avformat_write_header( os_->fmt_cxt_, nullptr ) < 0 )
   {
     std::cerr << "ffmpeg: couldn't write header\n";
     close();
@@ -454,11 +454,11 @@ close()
     {
       AVPacket pkt;
       av_init_packet(&pkt);
-      pkt.data = NULL;
+      pkt.data = nullptr;
       pkt.size = 0;
       pkt.stream_index = 0;
 
-      int ret = avcodec_encode_video2(codec, &pkt, NULL, &got_packet);
+      int ret = avcodec_encode_video2(codec, &pkt, nullptr, &got_packet);
 
       if (ret < 0)
       {
@@ -501,7 +501,7 @@ close()
     }
 
     av_free( os_->fmt_cxt_ );
-    os_->fmt_cxt_ = 0;
+    os_->fmt_cxt_ = nullptr;
   }
 }
 
@@ -540,7 +540,7 @@ write_frame(const vidl_frame_sptr& frame)
   AVPixelFormat fmt = vidl_pixel_format_to_ffmpeg(frame->pixel_format());
 
   vidl_pixel_format target_fmt = vidl_pixel_format_from_ffmpeg(codec->pix_fmt);
-  static vidl_frame_sptr temp_frame = new vidl_shared_frame(NULL,frame->ni(),frame->nj(),target_fmt);
+  static vidl_frame_sptr temp_frame = new vidl_shared_frame(nullptr,frame->ni(),frame->nj(),target_fmt);
 
   AVFrame* out_frame = av_frame_alloc();
   //avcodec_get_frame_defaults( &out_frame );
@@ -579,7 +579,7 @@ write_frame(const vidl_frame_sptr& frame)
 
   AVPacket pkt;
   av_init_packet( &pkt );
-  pkt.data = NULL;
+  pkt.data = nullptr;
   pkt.size = 0;
   pkt.stream_index = 0;
 

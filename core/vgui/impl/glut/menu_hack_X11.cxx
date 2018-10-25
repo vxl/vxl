@@ -91,11 +91,11 @@ static vgui_glut_menu_hack::per_window_record * get_current_record()
 
   unsigned win = glutGetWindow();
   if (win == 0)
-    return 0;
+    return nullptr;
   while (win >= records.size())
-    records.push_back( (vgui_glut_menu_hack::per_window_record*)0 ); // gcc 2.7 needs this cast
+    records.push_back( nullptr );
 
-  if (records[win] == 0) {
+  if (records[win] == nullptr) {
 #ifdef DEBUG
     std::cerr << __FILE__ " : create record for window " << win << std::endl;
 #endif
