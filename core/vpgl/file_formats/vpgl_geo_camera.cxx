@@ -355,7 +355,7 @@ void vpgl_geo_camera::backproject(const double u, const double v,
     lvcs_->global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, x, y, z);
 }
 
-void vpgl_geo_camera::translate(double tx, double ty, double z)
+void vpgl_geo_camera::translate(double tx, double ty, double  /*z*/)
 {
   // use the scale values
   if (scale_tag_) {
@@ -515,7 +515,7 @@ void vpgl_geo_camera::save_as_tfw(std::string const& tfw_filename)
   ofs.close();
 }
 
-bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double elev, double& e1, double& n1, double& e2, double& n2)
+bool vpgl_geo_camera::img_four_corners_in_utm(const unsigned ni, const unsigned nj, double  /*elev*/, double& e1, double& n1, double& e2, double& n2)
 {
   if (!is_utm) {
     std::cerr << "In vpgl_geo_camera::img_four_corners_in_utm() -- UTM hasn't been set!\n";

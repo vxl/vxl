@@ -1189,7 +1189,7 @@ convert( vpgl_local_rational_camera<double> const& rat_cam,
 bool vpgl_generic_camera_convert::
 convert_bruteforce( vpgl_local_rational_camera<double> const& rat_cam,
          int gni, int gnj, vpgl_generic_camera<double> & gen_cam,
-         double local_z_min, double local_z_max, unsigned level)
+         double local_z_min, double local_z_max, unsigned  /*level*/)
 {
   vgl_plane_3d<double> high(0.0, 0.0, 1.0, -local_z_max);
   vgl_plane_3d<double> low(0.0, 0.0, 1.0, -local_z_min);

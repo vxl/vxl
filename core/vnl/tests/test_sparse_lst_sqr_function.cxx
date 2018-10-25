@@ -40,7 +40,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
   void jac_Bij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
+               vnl_vector<double> const&  /*c*/,
                vnl_matrix<double>& Bij) override
   {
     Bij[0][0] = -ai[1]*bj[2]*bj[2]*bj[2];
@@ -53,8 +53,8 @@ class test_func1 : public vnl_sparse_lst_sqr_function
 
   void jac_Cij(int /*i*/, int /*j*/,
                vnl_vector<double> const& ai,
-               vnl_vector<double> const& bj,
-               vnl_vector<double> const& c,
+               vnl_vector<double> const&  /*bj*/,
+               vnl_vector<double> const&  /*c*/,
                vnl_matrix<double>& Cij) override
   {
     Cij[0][0] = ai[0];
