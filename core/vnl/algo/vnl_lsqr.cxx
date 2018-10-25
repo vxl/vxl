@@ -122,25 +122,18 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   long m = ls_->get_number_of_residuals();
   long n = ls_->get_number_of_unknowns();
   double damp = 0;
-  long leniw = 1;
-  long* iw = VXL_NULLPTR;
-  long lenrw = m;
-#ifdef __GNUC__
-  double rw[m];
-  double v[n];
-  double w[n];
-  double se[n];
-#else
   vcl_vector<double> rw(m);
   vcl_vector<double> v(n);
   vcl_vector<double> w(n);
   vcl_vector<double> se(n);
-#endif
   double atol = 0;
   double btol = 0;
+#ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
   double conlim = 0;
   long nout = -1;
-  double anorm, acond, rnorm, arnorm, xnorm;
+  double acond, rnorm, xnorm;
+#endif
+  double anorm, arnorm;
 
   vnl_vector<double> rhs(m);
   ls_->get_rhs(rhs);
@@ -174,7 +167,7 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   anorm = solver.GetFrobeniusNormEstimateOfAbar();
   arnorm = solver.GetFinalEstimateOfNormOfResiduals();
 
-#if 0
+#ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
   vcl_cerr << "A Fro norm estimate      = " << anorm << vcl_endl
            << "A condition estimate     = " << acond << vcl_endl
            << "Residual norm estimate   = " << rnorm << vcl_endl
