@@ -39,7 +39,7 @@ class VIDL_EXPORT vidl_image_list_istream
   vidl_image_list_istream(const std::vector<std::string>& paths);
 
   //: Destructor
-  virtual ~vidl_image_list_istream() { close(); }
+  ~vidl_image_list_istream() override { close(); }
 
 
   //: Open a new stream using a file glob (see vul_file_iterator)
@@ -51,56 +51,56 @@ class VIDL_EXPORT vidl_image_list_istream
   virtual bool open(const std::vector<std::string>& paths);
 
   //: Close the stream
-  virtual void close();
+  void close() override;
 
 
   //: Return true if the stream is open for reading
-  virtual bool is_open() const { return !image_paths_.empty(); }
+  bool is_open() const override { return !image_paths_.empty(); }
 
   //: Return true if the stream is in a valid state
-  virtual bool is_valid() const { return is_open() &&
+  bool is_valid() const override { return is_open() &&
                                          index_ < image_paths_.size(); }
 
   //: Return true if the stream support seeking
-  virtual bool is_seekable() const { return true; }
+  bool is_seekable() const override { return true; }
 
   //: Return the number of frames if known
   //  returns -1 for non-seekable streams
-  virtual int num_frames() const { return int(image_paths_.size()); }
+  int num_frames() const override { return int(image_paths_.size()); }
 
   //: Return the current frame number
-  virtual unsigned int frame_number() const { return index_; }
+  unsigned int frame_number() const override { return index_; }
 
   //: Return the width of each frame
-  virtual unsigned int width() const { return ni_; }
+  unsigned int width() const override { return ni_; }
 
   //: Return the height of each frame
-  virtual unsigned int height() const { return nj_; }
+  unsigned int height() const override { return nj_; }
 
   //: Return the pixel format
-  virtual vidl_pixel_format format() const { return format_; }
+  vidl_pixel_format format() const override { return format_; }
 
   //: Return the frame rate (0.0 if unspecified)
-  virtual double frame_rate() const { return 0.0; }
+  double frame_rate() const override { return 0.0; }
 
   //: Return the duration in seconds (0.0 if unknown)
-  virtual double duration() const { return 0.0; }
+  double duration() const override { return 0.0; }
 
   //: Advance to the next frame (but do not open the next image)
-  virtual bool advance();
+  bool advance() override;
 
   //: Read the next frame from the stream
-  virtual vidl_frame_sptr read_frame();
+  vidl_frame_sptr read_frame() override;
 
   //: Return the current frame in the stream
-  virtual vidl_frame_sptr current_frame();
+  vidl_frame_sptr current_frame() override;
 
   //: Return the path to the current image in the stream
   std::string current_path() const;
 
   //: Seek to the given frame number (but do not load the image)
   // \returns true if successful
-  virtual bool seek_frame(unsigned int frame_number);
+  bool seek_frame(unsigned int frame_number) override;
 
  private:
   //: The vector of images

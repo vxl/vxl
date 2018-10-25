@@ -30,7 +30,7 @@ class VIDL_EXPORT vidl_image_list_ostream
                           const unsigned int init_index = 0);
 
   //: Destructor
-  virtual ~vidl_image_list_ostream() { close(); }
+  ~vidl_image_list_ostream() override { close(); }
 
   //: Open the stream
   virtual bool open(const std::string& directory,
@@ -39,10 +39,10 @@ class VIDL_EXPORT vidl_image_list_ostream
                     const unsigned int init_index = 0);
 
   //: Close the stream
-  virtual void close();
+  void close() override;
 
   //: Return true if the stream is open for writing
-  virtual bool is_open() const;
+  bool is_open() const override;
 
   //: Return the current index
   unsigned int index() const { return index_; }
@@ -52,7 +52,7 @@ class VIDL_EXPORT vidl_image_list_ostream
 
   //: Write and image to the stream
   // \retval false if the image could not be written
-  virtual bool write_frame(const vidl_frame_sptr& frame);
+  bool write_frame(const vidl_frame_sptr& frame) override;
 
  private:
   //: The current index

@@ -35,53 +35,53 @@ class VIDL_EXPORT vidl_ffmpeg_istream
   vidl_ffmpeg_istream(const std::string& filename);
 
   //: Destructor
-  virtual ~vidl_ffmpeg_istream();
+  ~vidl_ffmpeg_istream() override;
 
   //: Open a new stream using a filename
   virtual bool open(const std::string& filename);
 
   //: Close the stream
-  virtual void close();
+  void close() override;
 
   //: Return true if the stream is open for reading
-  virtual bool is_open() const;
+  bool is_open() const override;
 
   //: Return true if the stream is in a valid state
-  virtual bool is_valid() const;
+  bool is_valid() const override;
 
   //: Return true if the stream support seeking
-  virtual bool is_seekable() const;
+  bool is_seekable() const override;
 
   //: Return the number of frames if known
   //  returns -1 for non-seekable streams
-  virtual int num_frames() const;
+  int num_frames() const override;
 
   //: Return the current frame number
-  virtual unsigned int frame_number() const;
+  unsigned int frame_number() const override;
 
   //: Return the width of each frame
-  virtual unsigned int width() const;
+  unsigned int width() const override;
 
   //: Return the height of each frame
-  virtual unsigned int height() const;
+  unsigned int height() const override;
 
   //: Return the pixel format
-  virtual vidl_pixel_format format() const;
+  vidl_pixel_format format() const override;
 
   //: Return the frame rate (FPS, 0.0 if unspecified)
-  virtual double frame_rate() const;
+  double frame_rate() const override;
 
   //: Return the duration in seconds (0.0 if unknown)
-  virtual double duration() const;
+  double duration() const override;
 
   //: Advance to the next frame (but don't acquire an image)
-  virtual bool advance();
+  bool advance() override;
 
   //: Read the next frame from the stream (advance and acquire)
-  virtual vidl_frame_sptr read_frame();
+  vidl_frame_sptr read_frame() override;
 
   //: Return the current frame in the stream
-  virtual vidl_frame_sptr current_frame();
+  vidl_frame_sptr current_frame() override;
 
   //: Return the current presentation time stamp
   virtual double current_pts() const;
@@ -101,7 +101,7 @@ class VIDL_EXPORT vidl_ffmpeg_istream
 
   //: Seek to the given frame number
   // \returns true if successful
-  virtual bool seek_frame(unsigned int frame_number);
+  bool seek_frame(unsigned int frame_number) override;
 
  private:
   //: The private implementation (PIMPL) details.
