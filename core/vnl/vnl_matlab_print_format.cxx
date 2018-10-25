@@ -14,7 +14,6 @@
 // vnl_matlab_format(vnl_matops::fmt_short) selects 4-digit precision
 
 //: this variable is the current top of the stack.
-// moved here because gcc 2.7 choked
 static vnl_matlab_print_format the_format = vnl_matlab_print_format_short;
 //: the rest of the stack is stored in this vector.
 static std::vector<int> *format_stack = nullptr;

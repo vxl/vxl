@@ -107,8 +107,7 @@ class vgui_section_buffer
   unsigned height() const { return h_; }
 
  private:
-  // fsm: I want these to be GLenums as gcc 2.95 will not implicitly
-  // cast ints to enums. Please don't make them ints.
+  // fsm: I want these to be GLenums. Please don't make them ints.
   GLenum format_;
   GLenum type_;
 
