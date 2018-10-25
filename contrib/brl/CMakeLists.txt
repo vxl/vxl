@@ -5,6 +5,10 @@ project( brl )
 
 doxygen_add_package(contrib/brl "Brown University Libraries")
 
+if (NOT BUILD_CORE_VIDEO)
+  message(FATAL_ERROR "BUILD_CORE_VIDEO:BOOL=ON is required for building BRL")
+endif()
+
 # In contrib/brl there is sometimes an "extra" level in the directory structure
 # (.../contrib/brl/{bbas,bseg,bmvl}/foo/foo.h)
 # Setting BRL_INCLUDE_DIR in this way allows #include <foo/foo.h> without
