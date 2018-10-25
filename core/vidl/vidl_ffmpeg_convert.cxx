@@ -145,7 +145,7 @@ bool vidl_ffmpeg_convert(vidl_frame const& in_frame,
   SwsContext* ctx = sws_getContext(ni, nj, in_fmt,
                                    ni, nj, out_fmt,
                                    SWS_BILINEAR,
-                                   NULL, NULL, NULL);
+                                   nullptr, nullptr, nullptr);
   sws_scale(ctx,
             in_pic.data, in_pic.linesize,
             0, nj,
@@ -197,7 +197,7 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
   SwsContext* ctx = sws_getContext(ni, nj, in_fmt,
                                    ni, nj, out_fmt,
                                    SWS_BILINEAR,
-                                   NULL, NULL, NULL);
+                                   nullptr, nullptr, nullptr);
   sws_scale(ctx,
             in_pic.data, in_pic.linesize,
             0, nj,

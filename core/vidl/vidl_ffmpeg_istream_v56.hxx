@@ -42,20 +42,20 @@ extern "C" {
 struct vidl_ffmpeg_istream::pimpl
 {
   pimpl()
-  : fmt_cxt_( NULL ),
+  : fmt_cxt_( nullptr ),
     vid_index_( -1 ),
     data_index_( -1 ),
-    vid_str_( NULL ),
-    video_enc_( 0 ),
-    frame_( NULL ),
+    vid_str_( nullptr ),
+    video_enc_( nullptr ),
+    frame_( nullptr ),
     num_frames_( -2 ), // sentinel value to indicate not yet computed
-    sws_context_( NULL ),
-    cur_frame_( NULL ),
+    sws_context_( nullptr ),
+    cur_frame_( nullptr ),
     metadata_( 0 ),
     frame_number_offset_( 0 ),
     pts_( 0 )
   {
-    packet_.data = NULL;
+    packet_.data = nullptr;
   }
 
   AVFormatContext* fmt_cxt_;
@@ -164,12 +164,12 @@ open(const std::string& filename)
 
   // Open the file
   int err;
-  if ( ( err = avformat_open_input( &is_->fmt_cxt_, filename.c_str(), NULL, NULL ) ) != 0 ) {
+  if ( ( err = avformat_open_input( &is_->fmt_cxt_, filename.c_str(), nullptr, nullptr ) ) != 0 ) {
     return false;
   }
 
   // Get the stream information by reading a bit of the file
-  if ( avformat_find_stream_info( is_->fmt_cxt_, NULL ) < 0 ) {
+  if ( avformat_find_stream_info( is_->fmt_cxt_, nullptr ) < 0 ) {
     return false;
   }
 
@@ -177,7 +177,7 @@ open(const std::string& filename)
   // Use the first ones we find.
   is_->vid_index_ = -1;
   is_->data_index_ = -1;
-  AVCodecContext* codec_context_origin = NULL;
+  AVCodecContext* codec_context_origin = nullptr;
   for (unsigned i = 0; i < is_->fmt_cxt_->nb_streams; ++i) {
     AVCodecContext *const enc = is_->fmt_cxt_->streams[i]->codec;
     if (enc->codec_type == AVMEDIA_TYPE_VIDEO && is_->vid_index_ < 0) {
@@ -215,7 +215,7 @@ open(const std::string& filename)
     return false;
 
   // Open codec
-  if (avcodec_open2(is_->video_enc_, codec, NULL) < 0)
+  if (avcodec_open2(is_->video_enc_, codec, nullptr) < 0)
     return false;
 
   is_->vid_str_ = is_->fmt_cxt_->streams[ is_->vid_index_ ];
@@ -238,7 +238,7 @@ open(const std::string& filename)
 
   // Not sure if this does anything, but no harm either
   av_init_packet(&is_->packet_);
-  is_->packet_.data = 0;
+  is_->packet_.data = nullptr;
   is_->packet_.size = 0;
 
   return true;
@@ -263,20 +263,20 @@ close()
   }
 
   is_->num_frames_ = -2;
-  is_->contig_memory_ = 0;
+  is_->contig_memory_ = nullptr;
   is_->vid_index_ = -1;
   is_->data_index_ = -1;
   is_->metadata_.clear();
   if (is_->vid_str_) {
     avcodec_close(is_->vid_str_->codec);
-    is_->vid_str_ = 0;
+    is_->vid_str_ = nullptr;
   }
   if ( is_->fmt_cxt_ ) {
     avformat_close_input( &is_->fmt_cxt_ );
-    is_->fmt_cxt_ = 0;
+    is_->fmt_cxt_ = nullptr;
   }
 
-  is_->video_enc_ = 0;
+  is_->video_enc_ = nullptr;
 }
 
 
@@ -294,7 +294,7 @@ bool
 vidl_ffmpeg_istream::
 is_valid() const
 {
-  return is_open() && is_->frame_->data[0] != 0;
+  return is_open() && is_->frame_->data[0] != nullptr;
 }
 
 
@@ -491,7 +491,7 @@ advance()
   // following to have a chance to get the last frame of the video.
   if ( !got_picture ) {
     av_init_packet(&is_->packet_);
-    is_->packet_.data = NULL;
+    is_->packet_.data = nullptr;
     is_->packet_.size = 0;
 
     if (avcodec_decode_video2(is_->video_enc_,
@@ -506,10 +506,10 @@ advance()
   // frame or not.
   if (is_->cur_frame_)
     is_->cur_frame_->invalidate();
-  is_->cur_frame_ = 0;
+  is_->cur_frame_ = nullptr;
 
   if ( ! got_picture ) {
-    is_->frame_->data[0] = NULL;
+    is_->frame_->data[0] = nullptr;
   }
 
   return got_picture != 0;
@@ -522,7 +522,7 @@ vidl_ffmpeg_istream::read_frame()
 {
   if (advance())
     return current_frame();
-  return NULL;
+  return nullptr;
 }
 
 
@@ -532,11 +532,11 @@ vidl_ffmpeg_istream::current_frame()
 {
   // Quick return if the stream isn't valid
   if ( !is_valid() ) {
-    return NULL;
+    return nullptr;
   }
   AVCodecContext* enc = is_->fmt_cxt_->streams[is_->vid_index_]->codec;
   // If we have not already converted this frame, try to convert it
-  if ( !is_->cur_frame_ && is_->frame_->data[0] != 0 )
+  if ( !is_->cur_frame_ && is_->frame_->data[0] != nullptr )
   {
     int width = enc->width;
     int height = enc->height;
@@ -557,9 +557,9 @@ vidl_ffmpeg_istream::current_frame()
         width, height, enc->pix_fmt,
         width, height, AV_PIX_FMT_RGB24,
         SWS_BILINEAR,
-        NULL, NULL, NULL );
+        nullptr, nullptr, nullptr );
 
-      if ( is_->sws_context_ == NULL ) {
+      if ( is_->sws_context_ == nullptr ) {
         std::cerr << "vidl_ffmpeg_istream: couldn't create conversion context\n";
         return vidl_frame_sptr();
       }
