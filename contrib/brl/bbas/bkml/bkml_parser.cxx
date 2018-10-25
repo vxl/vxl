@@ -47,7 +47,7 @@ void bkml_parser::init_params()
 }
 
 void
-bkml_parser ::cdataHandler(std::string name, std::string data)
+bkml_parser ::cdataHandler(std::string  /*name*/, std::string  /*data*/)
 {
 }
 
@@ -58,7 +58,7 @@ bkml_parser::handleAtts(const XML_Char** /*atts*/)
 
 
 void
-bkml_parser::startElement(const char* name, const char** atts)
+bkml_parser::startElement(const char* name, const char**  /*atts*/)
 {
   if (std::strcmp(name, KML_LON_TAG) == 0) {
     last_tag = KML_LON_TAG;
@@ -130,7 +130,7 @@ bkml_parser::startElement(const char* name, const char** atts)
 
 
 void
-bkml_parser::endElement(const char* name)
+bkml_parser::endElement(const char*  /*name*/)
 {
 }
 

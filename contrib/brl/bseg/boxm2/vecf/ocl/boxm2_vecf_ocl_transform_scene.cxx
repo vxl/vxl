@@ -309,23 +309,23 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 }
 // the transform is the inverse, i.e. a map from the target to the source
 // an arbitrary number of blocks are handled, no interpolation
-bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double> rot,
-            vgl_vector_3d<double> trans,
-            vgl_vector_3d<double> scale)
+bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double>  /*rot*/,
+            vgl_vector_3d<double>  /*trans*/,
+            vgl_vector_3d<double>  /*scale*/)
 
 {
   return true;
 }
-bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>  rot,
-           vgl_vector_3d<double> trans,
-           vgl_vector_3d<double> scale,
-           bool finish){
+bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>   /*rot*/,
+           vgl_vector_3d<double>  /*trans*/,
+           vgl_vector_3d<double>  /*scale*/,
+           bool  /*finish*/){
    return true;
 }
 bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<double>  rot,
                                                             vgl_vector_3d<double> trans,
                                                             vgl_vector_3d<double> scale,
-                                                            bool finish){
+                                                            bool  /*finish*/){
   if(!target_scene_){
     std::cout<< "Error: target scene is not set!"<<std::endl;
     return false;
@@ -499,7 +499,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
 
 bool boxm2_vecf_ocl_transform_scene::
 transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
-                              bool finish)
+                              bool  /*finish*/)
 {
   if(!target_scene_){
     std::cout<< "Error: target scene is not set!"<<std::endl;

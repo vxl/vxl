@@ -23,7 +23,7 @@
 #include <brad/brad_multispectral_functions.h>
 #include <brad_worldview3_functions.h>
 
-int main(int argc, char * argv[])
+int main(int  /*argc*/, char *  /*argv*/[])
 {
 
   //---------------------------with SWIR----------------------

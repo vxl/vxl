@@ -320,7 +320,7 @@ bool boxm2_vecf_composite_face_scene::set_params(boxm2_vecf_articulated_params c
   return true;
 }
 
-void boxm2_vecf_composite_face_scene::inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){
+void boxm2_vecf_composite_face_scene::inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const&  /*unrefined_target_pts*/){
 }
 
 int boxm2_vecf_composite_face_scene::prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index){

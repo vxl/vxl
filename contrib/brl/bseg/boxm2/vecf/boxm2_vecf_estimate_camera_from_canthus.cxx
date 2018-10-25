@@ -1,6 +1,6 @@
 #include <boxm2/vecf/boxm2_vecf_estimate_camera_from_canthus.h>
 
-bool boxm2_vecf_estimate_camera_from_canthus::estimate_camera(vgl_vector_2d<double> t){
+bool boxm2_vecf_estimate_camera_from_canthus::estimate_camera(vgl_vector_2d<double>  /*t*/){
   std::map<std::string,vgl_point_2d<double> >::iterator it;
   std::string fields [] =  {"image_shape","left_iris_part_0","left_iris_part_1","right_iris_part_0","right_iris_part_1","nose_ridge_part_0","left_medial_canthus","right_medial_canthus","left_lateral_canthus","right_lateral_canthus"};
   std::vector<std::string> field_array;

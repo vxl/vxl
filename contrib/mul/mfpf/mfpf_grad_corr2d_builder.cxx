@@ -94,7 +94,7 @@ unsigned mfpf_grad_corr2d_builder::model_dim()
 
 //: Initialise building
 // Must be called before any calls to add_example(...)
-void mfpf_grad_corr2d_builder::clear(unsigned n_egs)
+void mfpf_grad_corr2d_builder::clear(unsigned  /*n_egs*/)
 {
   n_added_=0;
 }

@@ -174,9 +174,9 @@ unsigned mfpf_point_finder::model_dim()
 }
 
 //: Get sample of region around specified point in image
-void mfpf_point_finder::get_sample_vector(const vimt_image_2d_of<float>& image,
-                                          const vgl_point_2d<double>& p,
-                                          const vgl_vector_2d<double>& u,
+void mfpf_point_finder::get_sample_vector(const vimt_image_2d_of<float>&  /*image*/,
+                                          const vgl_point_2d<double>&  /*p*/,
+                                          const vgl_vector_2d<double>&  /*u*/,
                                           std::vector<double>& v)
 {
   // Return empty vector
@@ -588,8 +588,8 @@ unsigned mfpf_point_finder::image_level(const mfpf_pose& pose,
 }
 
 //: Return true if modelled regions at pose1 and pose2 overlap
-bool mfpf_point_finder::overlap(const mfpf_pose& pose1,
-                                const mfpf_pose& pose2) const
+bool mfpf_point_finder::overlap(const mfpf_pose&  /*pose1*/,
+                                const mfpf_pose&  /*pose2*/) const
 {
   return false;
 }

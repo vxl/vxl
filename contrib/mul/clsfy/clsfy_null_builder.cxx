@@ -86,7 +86,7 @@ void clsfy_null_builder::b_read(vsl_b_istream& bfs)
 // For many classifiers, you may use nClasses==1 to
 // indicate a binary classifier
 double clsfy_null_builder::build(clsfy_classifier_base& model,
-                                 mbl_data_wrapper<vnl_vector<double> >& inputs,
+                                 mbl_data_wrapper<vnl_vector<double> >&  /*inputs*/,
                                  unsigned /* nClasses */,
                                  const std::vector<unsigned> &outputs) const
 {

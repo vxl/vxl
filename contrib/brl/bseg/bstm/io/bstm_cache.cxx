@@ -17,16 +17,16 @@ bstm_cache_sptr bstm_cache::instance()
 }
 
 //: Binary write bstm_cache  to stream
-void vsl_b_write(vsl_b_ostream& os, bstm_cache const& scene){}
-void vsl_b_write(vsl_b_ostream& os, const bstm_cache* &p){}
-void vsl_b_write(vsl_b_ostream& os, bstm_cache_sptr& sptr){}
-void vsl_b_write(vsl_b_ostream& os, bstm_cache_sptr const& sptr){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_cache const&  /*scene*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const bstm_cache* & /*p*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_cache_sptr&  /*sptr*/){}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bstm_cache_sptr const&  /*sptr*/){}
 
 //: Binary load bstm_cache  from stream.
-void vsl_b_read(vsl_b_istream& is, bstm_cache &scene){}
-void vsl_b_read(vsl_b_istream& is, bstm_cache* p){}
-void vsl_b_read(vsl_b_istream& is, bstm_cache_sptr& sptr){}
-void vsl_b_read(vsl_b_istream& is, bstm_cache_sptr const& sptr){}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache & /*scene*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache*  /*p*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache_sptr&  /*sptr*/){}
+void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache_sptr const&  /*sptr*/){}
 
 
 bstm_cache_destroyer::bstm_cache_destroyer(bstm_cache_sptr s)

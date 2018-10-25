@@ -2798,7 +2798,7 @@ int main(int argc, char*argv[])
 }
 
 #else // VCL_HAS_EXCEPTIONS
-int main(int argc, char*argv[])
+int main(int  /*argc*/, char* /*argv*/[])
 {
   std::cerr << "\nERROR: image3d_math needs exception support to compile properly.\n";
 }

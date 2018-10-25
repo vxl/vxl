@@ -452,7 +452,7 @@ bool clsfy_binary_tree_builder::isNodePure(const std::set<unsigned >& subIndices
 //: Add dummy node to represent a pure node
 // The threshold is set either very low or very high
 void clsfy_binary_tree_builder::add_terminator(
-    const std::vector<vnl_vector<double> >& vin,
+    const std::vector<vnl_vector<double> >&  /*vin*/,
     const std::vector<unsigned>& outputs,
     clsfy_binary_tree_bnode* parent,
     bool left, bool pure) const
@@ -514,7 +514,7 @@ clsfy_classifier_base* clsfy_binary_tree_builder::new_classifier() const
     return new clsfy_binary_tree();
 }
 
-void  clsfy_binary_tree_builder::randomise_parameters(unsigned ndimsUsed,
+void  clsfy_binary_tree_builder::randomise_parameters(unsigned  /*ndimsUsed*/,
                                                       std::vector<unsigned  >& param_indices) const
 {
     // In fact it shuffles all indices (in case the random subset does not produce a split)

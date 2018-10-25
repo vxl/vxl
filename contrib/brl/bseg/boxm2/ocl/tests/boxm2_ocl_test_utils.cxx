@@ -185,13 +185,13 @@ void boxm2_ocl_test_utils::clean_up()
     vul_file::delete_file_glob(s_file_it());
   }
 }
-char* boxm2_ocl_test_utils::construct_block_test_stream(int numBuffers,
+char* boxm2_ocl_test_utils::construct_block_test_stream(int  /*numBuffers*/,
                                                     int treeLen,
                                                     const int* nums,
-                                                    double* dims,
-                                                    int init_level,
-                                                    int max_level,
-                                                    int max_mb )
+                                                    double*  /*dims*/,
+                                                    int  /*init_level*/,
+                                                    int  /*max_level*/,
+                                                    int  /*max_mb*/ )
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     typedef vnl_vector_fixed<unsigned short, 2> ushort2;

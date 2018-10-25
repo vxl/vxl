@@ -40,7 +40,7 @@ void volm_vrml_io::display_spherical_region_layer_by_attrbute(std::ostream& str 
 
 void volm_vrml_io::display_segment_sphere(std::ostream& str ,
                                           vsph_segment_sphere * sph,
-                                          double factor)
+                                          double  /*factor*/)
 {
     std::map<int,  std::vector<int> >::const_iterator rit = sph->regions().begin();
     vsph_unit_sphere usph = sph->unit_sphere();

@@ -147,7 +147,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
 
 
 //: get data by type and id
-boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t  /*num_bytes*/, bool read_only)
 {
   // first thing to do is to load all async requests into the cache
   this->finish_async_data(type);
@@ -184,18 +184,18 @@ boxm2_data_base* boxm2_nn_cache::get_data_base(boxm2_block_id id, std::string ty
 //: returns a data_base pointer which is initialized to the default value of the type.
 //  If a block for this type exists on the cache, it is removed and replaced with the new one.
 //  This method does not check whether a block of this type already exists on the disk nor writes it to the disk
-boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_nn_cache::get_data_base_new(boxm2_block_id  /*id*/, std::string  /*type*/, std::size_t  /*num_bytes*/, bool  /*read_only*/)
 {
   std::cout<<"BOXM2_DUMB_CACHE::get_data_base_new not implemented"<<std::endl;
   return nullptr;
 }
 
-void boxm2_nn_cache::remove_data_base(boxm2_block_id, std::string type)
+void boxm2_nn_cache::remove_data_base(boxm2_block_id, std::string  /*type*/)
 {
   std::cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<std::endl;
 }
 
-void boxm2_nn_cache::replace_data_base(boxm2_block_id id, std::string type, boxm2_data_base* replacement)
+void boxm2_nn_cache::replace_data_base(boxm2_block_id  /*id*/, std::string  /*type*/, boxm2_data_base*  /*replacement*/)
 {
   std::cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<std::endl;
 }

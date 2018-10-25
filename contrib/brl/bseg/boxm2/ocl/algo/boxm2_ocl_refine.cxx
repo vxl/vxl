@@ -300,7 +300,7 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 
 // compile kernels and place in static map
 bocl_kernel *boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device,
-                                                      vcl_string opts) {
+                                                      vcl_string  /*opts*/) {
   // find cached kernel
   vcl_string identifier = device->device_identifier();
   vcl_string tree_identifier = identifier + "tree";

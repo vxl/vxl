@@ -32,7 +32,7 @@ bool bocl_init_manager_process_cons(bprb_func_process& pro)
   return pro.set_output_types(output_types_);
 }
 
-bool bocl_init_manager_process(bprb_func_process& pro)
+bool bocl_init_manager_process(bprb_func_process&  /*pro*/)
 {
   using namespace bocl_init_manager_process_globals;
   // force bocl_manager to be created, if it hasn't been already

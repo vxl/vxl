@@ -294,12 +294,12 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
                                               cl_command_queue& queue,
                                               BlockMemMap&  sizebuffs,
                                               BlockMemMap&  blockCopies,
-                                              BlockMemMap&  newDatas,
+                                              BlockMemMap&   /*newDatas*/,
                                               BlockIntMap&  newDataSizes,
                                               bocl_mem_sptr cl_output,
                                               bocl_mem_sptr lookup,
-                                              std::string data_type,
-                                              int  apptypesize,
+                                              std::string  /*data_type*/,
+                                              int   /*apptypesize*/,
                                               bocl_mem_sptr prob_thresh )
 {
   bocl_device_sptr device = ocl_cache->get_device();

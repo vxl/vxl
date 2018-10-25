@@ -44,7 +44,7 @@ bvgl_labelme_parser::bvgl_labelme_parser(std::string& filename)
 //#define LAND_TAG "land"
 //#define WEIGHT_TAG "weight"
 void
-bvgl_labelme_parser::startElement(const char* name, const char** atts)
+bvgl_labelme_parser::startElement(const char* name, const char**  /*atts*/)
 {
   //set active tag for charData
   active_tag_ = std::string(name);

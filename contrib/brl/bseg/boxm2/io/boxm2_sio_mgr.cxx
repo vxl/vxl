@@ -157,7 +157,7 @@ void boxm2_sio_mgr::save_block_data_base(std::string dir, boxm2_block_id block_i
   return;
 }
 
-char* boxm2_sio_mgr::load_from_hdfs(std::string filepath, unsigned long &numBytes)
+char* boxm2_sio_mgr::load_from_hdfs(std::string  /*filepath*/, unsigned long & /*numBytes*/)
 {
 #if defined(HAS_HDFS) && HAS_HDFS
   if (!bhdfs_manager::exists())

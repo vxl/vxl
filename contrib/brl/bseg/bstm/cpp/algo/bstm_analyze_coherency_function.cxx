@@ -4,7 +4,7 @@
 #include <vgl/vgl_intersection.h>
 
 bstm_analyze_coherency_function::bstm_analyze_coherency_function(bstm_block* blk, bstm_block_metadata blk_data, bstm_time_block* blk_t, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *apps,
-                                       const bstm_data_traits<BSTM_ALPHA>::datatype * alphas, double init_local_time, double end_local_time, vgl_box_3d<double> box, float p_threshold,
+                                       const bstm_data_traits<BSTM_ALPHA>::datatype * alphas, double init_local_time, double end_local_time, vgl_box_3d<double> box, float  /*p_threshold*/,
                                        std::ofstream &output_file)
 
 {

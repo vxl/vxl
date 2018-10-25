@@ -125,14 +125,14 @@ boxm2_stream_scene_cache::~boxm2_stream_scene_cache()
 // in iterative mode, the files need to be closed and re-opened
 
 //: Binary write boxm2_cache  to stream
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_scene_cache const& scene) {}
-void vsl_b_write(vsl_b_ostream& os, const boxm2_stream_scene_cache* &p) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_scene_cache_sptr& sptr) {}
-void vsl_b_write(vsl_b_ostream& os, boxm2_stream_scene_cache_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_scene_cache const&  /*scene*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const boxm2_stream_scene_cache* & /*p*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_scene_cache_sptr&  /*sptr*/) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, boxm2_stream_scene_cache_sptr const&  /*sptr*/) {}
 
 //: Binary load boxm2_cache  from stream
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_scene_cache &scene) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_scene_cache* p) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_scene_cache_sptr& sptr) {}
-void vsl_b_read(vsl_b_istream& is, boxm2_stream_scene_cache_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache & /*scene*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache*  /*p*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache_sptr&  /*sptr*/) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache_sptr const&  /*sptr*/) {}
 

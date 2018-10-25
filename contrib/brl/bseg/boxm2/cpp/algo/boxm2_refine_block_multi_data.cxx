@@ -207,7 +207,7 @@ bool boxm2_refine_block_multi_data::refine_deterministic(std::vector<std::string
 // on the global level, so buffers, offsets are used
 /////////////////////////////////////////////////////////////////
 boct_bit_tree boxm2_refine_block_multi_data::refine_bit_tree(boct_bit_tree& unrefined_tree,
-                                                                      int buff_offset)
+                                                                      int  /*buff_offset*/)
 {
   //initialize tree to return
   boct_bit_tree refined_tree(unrefined_tree.get_bits(), max_level_);

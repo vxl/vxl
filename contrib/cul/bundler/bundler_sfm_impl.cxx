@@ -282,7 +282,7 @@ class image_adder
 void bundler_sfm_impl_add_next_images::operator()(
     const std::vector<bundler_inters_image_sptr> &to_add,
 
-    bundler_inters_reconstruction &reconstruction,
+    bundler_inters_reconstruction & /*reconstruction*/,
     std::vector<bundler_inters_image_sptr> &added_cameras)
 {
     // Create an image adder
@@ -321,7 +321,6 @@ static bool can_be_added(
 
 
 static void add_new_track(
-    bundler_inters_reconstruction &reconstruction,
     bundler_inters_track_sptr &track)
 {
     assert(!track->observed);
@@ -392,7 +391,7 @@ void bundler_sfm_impl_add_new_points::operator()(
                         (*f)->track,
                         settings.min_observing_images,
                         settings.min_ray_angle)) {
-                add_new_track(recon, (*f)->track);
+                add_new_track((*f)->track);
                 num_points_added++;
             }
         }

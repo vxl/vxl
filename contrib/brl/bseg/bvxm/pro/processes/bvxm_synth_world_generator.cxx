@@ -234,7 +234,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
                                         bvxm_voxel_world_sptr world,
                                         bvxm_voxel_grid<float>* intensity_grid,
-                                        bvxm_voxel_grid<float>* ocp_grid, // FIXME - unused parameter
+                                        bvxm_voxel_grid<float>*  /*ocp_grid*/, // FIXME - unused parameter
                                         bvxm_voxel_grid<apm_datatype>* apm_grid,
                                         std::vector<vpgl_camera_double_sptr>& cameras,
                                         std::vector <vil_image_view_base_sptr>& image_set,

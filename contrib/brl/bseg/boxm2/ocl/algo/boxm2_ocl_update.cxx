@@ -588,7 +588,7 @@ bool boxm2_ocl_update::validate_appearances(boxm2_scene_sptr scene,
                                             int& appTypeSize,
                                             std::string& num_obs_type,
                                             std::string& options,
-                                            bool& isRGB)
+                                            bool&  /*isRGB*/)
 {
   std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;

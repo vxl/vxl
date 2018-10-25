@@ -71,9 +71,9 @@ unsigned mfpf_point_finder_builder::model_dim()
 }
 
 //: Get sample of region around specified point in image
-void mfpf_point_finder_builder::get_sample_vector(const vimt_image_2d_of<float>& image,
-                                                  const vgl_point_2d<double>& p,
-                                                  const vgl_vector_2d<double>& u,
+void mfpf_point_finder_builder::get_sample_vector(const vimt_image_2d_of<float>&  /*image*/,
+                                                  const vgl_point_2d<double>&  /*p*/,
+                                                  const vgl_vector_2d<double>&  /*u*/,
                                                   std::vector<double>& v)
 {
   // Return empty vector

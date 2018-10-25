@@ -36,8 +36,8 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
                                                       boxm2_opencl_cache_sptr  opencl_cache,
                                                       vil_image_view_base_sptr ximg,
                                                       vil_image_view_base_sptr yimg,
-                                                      float resnearfactor,
-                                                      float resfarfactor)
+                                                      float  /*resnearfactor*/,
+                                                      float  /*resfarfactor*/)
 {
     enum {
         UPDATE_PRE = 0,
@@ -252,8 +252,8 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
     boxm2_opencl_cache_sptr  opencl_cache,
     vil_image_view_base_sptr ximg,
     vil_image_view_base_sptr yimg,
-    float resnearfactor,
-    float resfarfactor)
+    float  /*resnearfactor*/,
+    float  /*resfarfactor*/)
 {
     enum {
         UPDATE_POST = 0,
@@ -687,8 +687,8 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
                                 vil_image_view_base_sptr ximg,
                                 vil_image_view_base_sptr yimg,
                                 int smoothingradius = 16,
-                                float resnearfactor,
-                                float resfarfactor)
+                                float  /*resnearfactor*/,
+                                float  /*resfarfactor*/)
 {
 
     float transfer_time = 0.0f;

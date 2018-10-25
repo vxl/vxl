@@ -54,7 +54,7 @@ void mbl_progress_time::on_set_estimated_iterations(const std::string& identifie
 // Called when set_progress() is called for a given identifier.
 //========================================================================
 void mbl_progress_time::on_set_progress(const std::string& identifier,
-                                        const int progress)
+                                        const int  /*progress*/)
 {
   double tsec = timer_.real()/1000.0;
   os_ << "Elapsed time for mbl_progress_time \"" << identifier << "\": " << tsec << " s" << std::endl;

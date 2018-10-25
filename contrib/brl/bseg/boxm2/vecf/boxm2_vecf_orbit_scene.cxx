@@ -1222,7 +1222,7 @@ boxm2_vecf_orbit_scene
 
 void
 boxm2_vecf_orbit_scene
-::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+::apply_lower_eyelid_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                             std::vector<bool> const& valid)
 {
 
@@ -1265,7 +1265,7 @@ boxm2_vecf_orbit_scene
 
 void
 boxm2_vecf_orbit_scene
-::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
+::apply_eyelid_crease_vector_field_to_target(std::vector<vgl_vector_3d<double> > const&  /*vf*/,
                                              std::vector<bool> const& valid)
 {
 
@@ -1370,7 +1370,7 @@ boxm2_vecf_orbit_scene
 
 vnl_vector_fixed<unsigned char,8>
 boxm2_vecf_orbit_scene
-::random_color(bool yuv)
+::random_color(bool  /*yuv*/)
 {
   unsigned char  R = static_cast<unsigned char>(rand()) % (unsigned char) 255;
   unsigned char  G = static_cast<unsigned char>(rand()) % (unsigned char) 255;

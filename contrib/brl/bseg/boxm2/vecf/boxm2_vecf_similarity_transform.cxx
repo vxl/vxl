@@ -34,14 +34,14 @@ boxm2_vecf_similarity_transform::boxm2_vecf_similarity_transform(vgl_rotation_3d
 
 //: Create a function object that maps source pts to target pts.
 boxm2_vecf_similarity_transform_mapper
-boxm2_vecf_similarity_transform::make_forward_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id)
+boxm2_vecf_similarity_transform::make_forward_mapper(boxm2_scene_sptr  /*source*/, boxm2_block_id const&  /*blk_id*/)
 {
   return boxm2_vecf_similarity_transform_mapper(rot_, trans_, scale_);
 }
 
 //: Create a function object that maps target pts to source pts.
 boxm2_vecf_similarity_transform_mapper
-boxm2_vecf_similarity_transform::make_inverse_mapper(boxm2_scene_sptr source, boxm2_block_id const& blk_id)
+boxm2_vecf_similarity_transform::make_inverse_mapper(boxm2_scene_sptr  /*source*/, boxm2_block_id const&  /*blk_id*/)
 {
   vgl_rotation_3d<double> inv_rot = rot_.inverse();
   vgl_vector_3d<double> inv_scale( 1.0/scale_.x(), 1.0/scale_.y(), 1.0/scale_.z() );

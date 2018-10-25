@@ -283,7 +283,7 @@ void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
                                   vnl_matrix<double> intensities,
                                   vnl_vector<double> airlight,
                                   unsigned max_iterations,
-                                  double max_fitting_error,
+                                  double  /*max_fitting_error*/,
                                   vnl_vector<double>& scene_irrad,
                                   vnl_matrix<double>& surf_normals,
                                   vnl_vector<double>& reflectances)
@@ -523,7 +523,7 @@ double brad_atmos_prediction(vnl_double_3 const& ill_dir,
 void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
                                   vnl_matrix<double> corr_intens,
                                   unsigned max_iterations,
-                                  double max_fitting_error,
+                                  double  /*max_fitting_error*/,
                                   vnl_matrix<double>& surf_normals,
                                   vnl_vector<double>& reflectances)
 {

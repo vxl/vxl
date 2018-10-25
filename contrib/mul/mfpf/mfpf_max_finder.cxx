@@ -45,7 +45,7 @@ void mfpf_max_finder::get_outline(std::vector<vgl_point_2d<double> >& pts) const
 // Returns -1*edge strength at p along direction u
 double mfpf_max_finder::evaluate(const vimt_image_2d_of<float>& image,
                                  const vgl_point_2d<double>& p,
-                                 const vgl_vector_2d<double>& u)
+                                 const vgl_vector_2d<double>&  /*u*/)
 {
   double v2 = vimt_bilin_interp_safe(image,p);
   return -1.0*v2;

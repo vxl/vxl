@@ -80,7 +80,7 @@ brad_phongs_model_approx::brad_phongs_model_approx(float kd, float ks, float gam
     normal_[2]=std::cos(normal_elev);
 }
 
-float brad_phongs_model_approx::val(float view_elev, float view_azim, float sun_elev, float sun_azim)
+float brad_phongs_model_approx::val(float  /*view_elev*/, float  /*view_azim*/, float sun_elev, float sun_azim)
 {
     vnl_double_3 sun_dir;
     sun_dir[0]=std::sin(sun_elev)*std::cos(sun_azim);

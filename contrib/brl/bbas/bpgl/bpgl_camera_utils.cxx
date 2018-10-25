@@ -180,7 +180,7 @@ horizon(vpgl_perspective_camera<double> const& cam)
   return hor_line;
 }
 
-std::string bpgl_camera_utils::get_string(double ni, double nj, double right_f, double top_f, double alt, double head, double tilt, double roll)
+std::string bpgl_camera_utils::get_string(double  /*ni*/, double  /*nj*/, double  /*right_f*/, double top_f, double  /*alt*/, double head, double tilt, double roll)
 {
   std::stringstream str;
   str << "_h_" << head << "_t_" << tilt << "_r_" << roll << "_top_fov_" << top_f;

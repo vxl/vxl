@@ -107,7 +107,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(std::vector<unsigned char> const&
   }
 }
 
-void volm_desc_ex_land_only::initialize_bin(unsigned char const& mag)
+void volm_desc_ex_land_only::initialize_bin(unsigned char const&  /*mag*/)
 {
   for (unsigned bin_id = 0; bin_id < nbins_; bin_id++)
     h_[bin_id] = (unsigned char)0;

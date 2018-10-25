@@ -94,7 +94,7 @@ void boxm_mog_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOX
 }
 
 void boxm_mog_grey_processor::finalize_appearance(std::vector<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> const& obs,
-                                                  std::vector<float> const& obs_weights, // FIXME - unused
+                                                  std::vector<float> const&  /*obs_weights*/, // FIXME - unused
                                                   boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype &model,
                                                   float min_sigma)
 {

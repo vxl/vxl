@@ -216,8 +216,8 @@ rgrl_est_homography2d::
 estimate_covariance( const std::vector< vnl_vector<double> >& norm_froms,
                      const std::vector< vnl_vector<double> >& norm_tos,
                      const std::vector< double >& wgts,
-                     double from_scale, // FIXME: unused
-                     double to_scale,   // FIXME: unused
+                     double  /*from_scale*/, // FIXME: unused
+                     double  /*to_scale*/,   // FIXME: unused
                      vnl_matrix<double>& covar ) const
 {
   vnl_matrix<double> JTJ(9,9, 0.0);

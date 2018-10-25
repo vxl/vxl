@@ -511,23 +511,23 @@ expatpp::xmlDeclCallback(void *userData, const XML_Char      *version,
 
 void
 expatpp::attlistDecl(
-  const XML_Char *elname,
-  const XML_Char *attname,
-  const XML_Char *att_type,
-  const XML_Char *dflt,
-  int             isrequired)
+  const XML_Char * /*elname*/,
+  const XML_Char * /*attname*/,
+  const XML_Char * /*att_type*/,
+  const XML_Char * /*dflt*/,
+  int              /*isrequired*/)
 {
 }
 
 
 void
-expatpp::comment( const XML_Char *data)
+expatpp::comment( const XML_Char * /*data*/)
 {
 }
 
 
 void
-expatpp::elementDecl( const XML_Char *name, XML_Content *model)
+expatpp::elementDecl( const XML_Char * /*name*/, XML_Content * /*model*/)
 {
 }
 
@@ -546,20 +546,20 @@ expatpp::endDoctypeDecl()
 
 void
 expatpp::entityDecl(
-  const XML_Char *entityName,
-  int is_parameter_entity,
-  const XML_Char *value,
-  int value_length,
-  const XML_Char *base,
-  const XML_Char *systemId,
-  const XML_Char *publicId,
-  const XML_Char *notationName)
+  const XML_Char * /*entityName*/,
+  int  /*is_parameter_entity*/,
+  const XML_Char * /*value*/,
+  int  /*value_length*/,
+  const XML_Char * /*base*/,
+  const XML_Char * /*systemId*/,
+  const XML_Char * /*publicId*/,
+  const XML_Char * /*notationName*/)
 {
 }
 
 
 void
-expatpp::skippedEntity( const XML_Char *entityName, int is_parameter_entity)
+expatpp::skippedEntity( const XML_Char * /*entityName*/, int  /*is_parameter_entity*/)
 {
 }
 
@@ -571,18 +571,18 @@ expatpp::startCdataSection()
 
 
 void
-expatpp::startDoctypeDecl(const XML_Char *doctypeName,
-        const XML_Char *sysid,
-        const XML_Char *pubid,
-        int has_internal_subset)
+expatpp::startDoctypeDecl(const XML_Char * /*doctypeName*/,
+        const XML_Char * /*sysid*/,
+        const XML_Char * /*pubid*/,
+        int  /*has_internal_subset*/)
 {
 }
 
 
 void
-expatpp::xmlDecl( const XML_Char      *version,
-                                    const XML_Char      *encoding,
-                                    int                  standalone)
+expatpp::xmlDecl( const XML_Char      * /*version*/,
+                                    const XML_Char      * /*encoding*/,
+                                    int                   /*standalone*/)
 {
 }
 

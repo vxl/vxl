@@ -28,7 +28,7 @@
 #include "bsta/bsta_histogram.h"
 
 
-int main(int argc, char * argv[])
+int main(int  /*argc*/, char *  /*argv*/[])
 {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   // CHANGE DETECTION

@@ -11,7 +11,7 @@
 #include <vsl/vsl_vector_io.h>
 
 // constructor
-volm_spherical_shell_container::volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle)
+volm_spherical_shell_container::volm_spherical_shell_container(double  /*radius*/, float  /*cap_angle*/, float point_angle, float top_angle, float bottom_angle)
 {
   usph_ = new vsph_unit_sphere(point_angle, top_angle, 180.0-bottom_angle);
 }

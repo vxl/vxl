@@ -35,7 +35,7 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
+  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string  /*opts*/)
   {
     //create normalize image kernel
     std::string source_dir = boxm2_ocl_util::ocl_src_root();

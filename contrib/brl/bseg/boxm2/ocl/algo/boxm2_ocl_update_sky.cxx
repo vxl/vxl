@@ -178,7 +178,7 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -519,7 +519,7 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
 }
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;

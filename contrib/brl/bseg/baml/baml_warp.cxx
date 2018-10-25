@@ -202,16 +202,16 @@ bool baml_warp_via_ground_plane(
 
 //----------------------------------------------------------------------
 bool baml_warp_via_dem(
-  const vil_image_view<vxl_uint_16>& img1,
-  const vpgl_camera<double>& cam1,
-  int img2_width,
-  int img2_height,
-  const vpgl_camera<double>& cam2,
-  const vgl_box_2d<double>& bounding_box_world,
-  const vil_image_view<float>& dem,
-  const vgl_h_matrix_2d<double>& dem_to_world,
-  vil_image_view<vxl_uint_16>& img2,
-  vil_image_view<bool>& valid2 )
+  const vil_image_view<vxl_uint_16>&  /*img1*/,
+  const vpgl_camera<double>&  /*cam1*/,
+  int  /*img2_width*/,
+  int  /*img2_height*/,
+  const vpgl_camera<double>&  /*cam2*/,
+  const vgl_box_2d<double>&  /*bounding_box_world*/,
+  const vil_image_view<float>&  /*dem*/,
+  const vgl_h_matrix_2d<double>&  /*dem_to_world*/,
+  vil_image_view<vxl_uint_16>&  /*img2*/,
+  vil_image_view<bool>&  /*valid2*/ )
 {
   // NOT YET IMPLEMENTED
 

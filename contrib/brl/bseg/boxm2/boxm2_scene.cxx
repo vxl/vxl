@@ -45,7 +45,7 @@ boxm2_scene::boxm2_scene(std::string const& data_path, vgl_point_3d<double> cons
 //create a scene with one block
 boxm2_scene::boxm2_scene(std::string const& scene_dir, std::string const& scene_name, std::string const& data_path, std::vector<std::string> const& prefixes,
             vgl_box_3d<double> const& scene_box, double sub_block_len, int init_level,
-                         int max_level, double max_mb, double p_init, int n_illum_bins, int version){
+                         int max_level, double  /*max_mb*/, double  /*p_init*/, int n_illum_bins, int version){
   num_illumination_bins_ = n_illum_bins;
   version_ = version;
   id_ = boxm2_scene::get_count();
@@ -212,7 +212,7 @@ get_block_metadata_const(boxm2_block_id const& id) const
 
 #include <boxm2/boxm2_blocks_vis_graph.h>
 
-std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam, double dist)
+std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_generic_camera<double>* cam, double  /*dist*/)
 {
   boxm2_block_vis_graph g(blocks_,*cam);
   std::vector<boxm2_block_id> vis_order = g.get_ordered_ids();

@@ -31,7 +31,7 @@ bool brad_compose_16band_wv3_img(
   const brad_image_metadata& mul_meta,
   const vil_image_view<float>& swir_img,
   const vpgl_rational_camera<double>& swir_rpc,
-  const brad_image_metadata& swir_meta,
+  const brad_image_metadata&  /*swir_meta*/,
   vil_image_view<float>& comp_img,
   float scale,
   vgl_box_2d<int> mul_region )
@@ -204,7 +204,7 @@ bool brad_compose_16band_wv3_img(
   vil_image_view<float>& comp_img,
   float scale,
   vgl_box_2d<int> mul_region,
-  bool calibrate_radiometrically )
+  bool  /*calibrate_radiometrically*/ )
 {
   int num_bands = 8;
 

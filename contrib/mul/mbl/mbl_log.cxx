@@ -189,7 +189,7 @@ void mbl_log_output_stream::start()
 
 //: Start a new log entry, with id info.
 // Future calls to terminate_flush will be ignored.
-void mbl_log_output_stream::start_with_manual_termination(int level, const char *srcfile, int srcline)
+void mbl_log_output_stream::start_with_manual_termination(int level, const char * /*srcfile*/, int  /*srcline*/)
 {
   ignore_flush_=true;
   start();
@@ -198,7 +198,7 @@ void mbl_log_output_stream::start_with_manual_termination(int level, const char 
 
 //: Start a new log entry, with id info.
 // Future calls to terminate_flush will be honoured.
-void mbl_log_output_stream::start_with_flush_termination(int level, const char *srcfile, int srcline)
+void mbl_log_output_stream::start_with_flush_termination(int level, const char * /*srcfile*/, int  /*srcline*/)
 {
   ignore_flush_=false;
   start();
@@ -254,7 +254,7 @@ void mbl_log_output_file::start()
 
 //: Start a new log entry, with id info.
 // Future calls to terminate_flush will be ignored.
-void mbl_log_output_file::start_with_manual_termination(int level, const char *srcfile, int srcline)
+void mbl_log_output_file::start_with_manual_termination(int level, const char * /*srcfile*/, int  /*srcline*/)
 {
   ignore_flush_=true;
   start();
@@ -263,7 +263,7 @@ void mbl_log_output_file::start_with_manual_termination(int level, const char *s
 
 //: Start a new log entry, with id info.
 // Future calls to terminate_flush will be honoured.
-void mbl_log_output_file::start_with_flush_termination(int level, const char *srcfile, int srcline)
+void mbl_log_output_file::start_with_flush_termination(int level, const char * /*srcfile*/, int  /*srcline*/)
 {
   ignore_flush_=false;
   start();

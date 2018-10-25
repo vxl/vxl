@@ -37,7 +37,7 @@ void volm_candidate_region_parser::init_params()
   current_name_ = "";
 }
 
-void volm_candidate_region_parser::cdataHandler(std::string name, std::string data)
+void volm_candidate_region_parser::cdataHandler(std::string  /*name*/, std::string  /*data*/)
 {
 }
 
@@ -45,7 +45,7 @@ void volm_candidate_region_parser::handleAtts(const XML_Char** /*atts*/)
 {
 }
 
-void volm_candidate_region_parser::startElement(const XML_Char* name, const XML_Char** atts)
+void volm_candidate_region_parser::startElement(const XML_Char* name, const XML_Char**  /*atts*/)
 {
   if (std::strcmp(name, KML_LON_TAG) == 0)
     last_tag = KML_LON_TAG;
@@ -89,7 +89,7 @@ void volm_candidate_region_parser::startElement(const XML_Char* name, const XML_
     cord_tag_ = KML_POINT_TAG;
 }
 
-void volm_candidate_region_parser::endElement(const XML_Char* name)
+void volm_candidate_region_parser::endElement(const XML_Char*  /*name*/)
 {
 }
 

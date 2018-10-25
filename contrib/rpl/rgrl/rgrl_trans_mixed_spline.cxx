@@ -39,14 +39,14 @@ map_dir( vnl_vector< double > const& from_loc,
 //: Compute jacobian w.r.t. location
 void
 rgrl_trans_mixed_spline::
-jacobian_wrt_loc( vnl_matrix<double>& jac, vnl_vector<double> const& from_loc ) const
+jacobian_wrt_loc( vnl_matrix<double>&  /*jac*/, vnl_vector<double> const&  /*from_loc*/ ) const
 {
   assert( !"rgrl_trans_mixed_spline::jacobian_wrt_loc() is not implemented!" );
 }
 
 rgrl_transformation_sptr
 rgrl_trans_mixed_spline::
-scale_by( double scale ) const
+scale_by( double  /*scale*/ ) const
 {
   assert( !"rgrl_trans_mixed_spline::scale_by() is not implemented!" );
   return nullptr;

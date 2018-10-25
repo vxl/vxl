@@ -24,7 +24,7 @@ static mbl_logger& logger()
 // The transform will be from world co-ordinates in metres to image co-ordinates (or mm if requested).
 void vimt_save_transform(vil_image_resource_sptr &ir,
                          const vimt_transform_2d& trans,
-                         bool use_millimetres /*=false*/)
+                         bool  /*use_millimetres*/ /*=false*/)
 {
   if (dynamic_cast<vimt_vil_v2i_image *>(ir.ptr()))
   {

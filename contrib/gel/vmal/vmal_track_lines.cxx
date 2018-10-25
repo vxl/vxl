@@ -554,7 +554,7 @@ double vmal_track_lines::lines_correlation(vtol_edge_2d_sptr line0,
 
 
 void vmal_track_lines::cost_function(vtol_edge_2d_sptr line0,
-                                     vtol_edge_2d_sptr t_line0,
+                                     vtol_edge_2d_sptr  /*t_line0*/,
                                      vtol_edge_2d_sptr line1,
                                      const vil1_image &image0,
                                      const vil1_image &image1,

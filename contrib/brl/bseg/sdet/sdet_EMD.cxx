@@ -93,7 +93,7 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
 // ---------------------------------------------------------------------------------//
 
 //: Compute Chi^2 distance between two histograms
-double sdet_color_chi_sq_dist(const sdet_color_sig &sig1, const sdet_color_sig &sig2)
+double sdet_color_chi_sq_dist(const sdet_color_sig & /*sig1*/, const sdet_color_sig & /*sig2*/)
 {
   double dist = 0.0;
   //for (int i=0; i<NBINS; i++)
@@ -103,7 +103,7 @@ double sdet_color_chi_sq_dist(const sdet_color_sig &sig1, const sdet_color_sig &
 }
 
 //: Compute Bhattacharya distance between two histograms
-double sdet_color_bhat_dist(const sdet_color_sig &sig1, const sdet_color_sig &sig2)
+double sdet_color_bhat_dist(const sdet_color_sig & /*sig1*/, const sdet_color_sig & /*sig2*/)
 {
   double dist = 0.0;
   //for (int i=0; i<NBINS; i++)
@@ -112,7 +112,7 @@ double sdet_color_bhat_dist(const sdet_color_sig &sig1, const sdet_color_sig &si
   return dist;
 }
 
-double sdet_color_EMD(sdet_color_sig *sig1, sdet_color_sig *sig2, sdet_flow* flow, int* flowsize)
+double sdet_color_EMD(sdet_color_sig * /*sig1*/, sdet_color_sig * /*sig2*/, sdet_flow*  /*flow*/, int*  /*flowsize*/)
 {
   //This seems to be hard
 

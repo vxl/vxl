@@ -671,7 +671,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
                                               vil_image_view_base_sptr  img,
                                               vil_image_view_base_sptr  exp_img,
                                               int                       n,
-                                              std::string                norm_type,
+                                              std::string                 /*norm_type*/,
                                               bool                      pmax )
 {
     float transfer_time=0.0f;

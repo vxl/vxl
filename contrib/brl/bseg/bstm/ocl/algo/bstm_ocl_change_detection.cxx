@@ -46,7 +46,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
                                                 vpgl_camera_double_sptr   cam,
                                                 vil_image_view_base_sptr  img,
                                                 vil_image_view_base_sptr  mask_sptr,
-                                                std::string                norm_type,
+                                                std::string                 /*norm_type*/,
                                                 float                     time)
 {
     float transfer_time=0.0f;

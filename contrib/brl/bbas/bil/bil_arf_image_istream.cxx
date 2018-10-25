@@ -235,21 +235,21 @@ seek_frame(unsigned int frame_nr)
 }
 
 //: Binary write boxm2_data_base to stream
-void vsl_b_write(vsl_b_ostream& os, bil_arf_image_istream const& scene) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bil_arf_image_istream const&  /*scene*/) {}
 //: Binary write boxm2_data_base to stream
-void vsl_b_write(vsl_b_ostream& os, const bil_arf_image_istream* &p) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, const bil_arf_image_istream* & /*p*/) {}
 //: Binary write boxm2_data_base_sptr to stream
-void vsl_b_write(vsl_b_ostream& os, bil_arf_image_istream_sptr& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bil_arf_image_istream_sptr&  /*sptr*/) {}
 //: Binary write boxm2_data_base_sptr to stream
-void vsl_b_write(vsl_b_ostream& os, bil_arf_image_istream_sptr const& sptr) {}
+void vsl_b_write(vsl_b_ostream&  /*os*/, bil_arf_image_istream_sptr const&  /*sptr*/) {}
 
 //: Binary load boxm2_data_base from stream.
-void vsl_b_read(vsl_b_istream& is, bil_arf_image_istream &scene) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bil_arf_image_istream & /*scene*/) {}
 //: Binary load boxm2_data_base from stream.
-void vsl_b_read(vsl_b_istream& is, bil_arf_image_istream* p) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bil_arf_image_istream*  /*p*/) {}
 //: Binary load boxm2_data_base_sptr from stream.
-void vsl_b_read(vsl_b_istream& is, bil_arf_image_istream_sptr& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bil_arf_image_istream_sptr&  /*sptr*/) {}
 //: Binary load boxm2_data_base_sptr from stream.
-void vsl_b_read(vsl_b_istream& is, bil_arf_image_istream_sptr const& sptr) {}
+void vsl_b_read(vsl_b_istream&  /*is*/, bil_arf_image_istream_sptr const&  /*sptr*/) {}
 
 

@@ -167,7 +167,7 @@ bool volm_desc_matcher::create_prob_map(std::string const& geo_hypo_folder,
   return true;
 }
 
-bool volm_desc_matcher::create_empty_prob_map(std::string const& out_folder, unsigned tile_id, volm_tile& tile)
+bool volm_desc_matcher::create_empty_prob_map(std::string const& out_folder, unsigned  /*tile_id*/, volm_tile& tile)
 {
   // initialize the probability map image
   vil_image_view<float> tile_img(3601, 3601);
@@ -215,7 +215,7 @@ bool volm_desc_matcher::create_random_prob_map(vnl_random& rng, std::string cons
 
 bool volm_desc_matcher::create_scaled_prob_map(std::string const& out_folder,
                                                volm_tile tile,
-                                               unsigned const& tile_id,
+                                               unsigned const&  /*tile_id*/,
                                                float const& ku,
                                                float const& kl,
                                                float const& threshold)

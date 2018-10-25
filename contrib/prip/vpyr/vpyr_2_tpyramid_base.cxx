@@ -163,7 +163,7 @@ bool vpyr_2_tpyramid_base_edge::is_adjacent_to (const vpyr_2_tpyramid_base_face 
   return &left_face(level)== &arg || &right_face(level)==&arg ;
 }
 
-const vpyr_2_tpyramid_base_dart & vpyr_2_tpyramid_base_edge::direct_dart(vmap_level_index level) const
+const vpyr_2_tpyramid_base_dart & vpyr_2_tpyramid_base_edge::direct_dart(vmap_level_index  /*level*/) const
 {
   return ( const vpyr_2_tpyramid_base_dart &) *vmap_2_tmap_edge::begin() ;
 }
@@ -246,7 +246,7 @@ const vpyr_2_tpyramid_base_edge* vpyr_2_tpyramid_base_edge::ancestor(vmap_level_
   return d.ancestor(level) ;
 }
 
-vpyr_2_tpyramid_base_edge* vpyr_2_tpyramid_base_edge::ancestor(vmap_level_index level)
+vpyr_2_tpyramid_base_edge* vpyr_2_tpyramid_base_edge::ancestor(vmap_level_index  /*level*/)
 {
   vpyr_2_tpyramid_base_edge* v=this ;
   return v ;

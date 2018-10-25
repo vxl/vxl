@@ -13,7 +13,7 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 
 
-void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2_scene_sptr& scene, boxm2_block_metadata  /*data*/, boxm2_block* blk,
                                                                      boxm2_data_base* alpha, boxm2_data_base* vis, boxm2_data_base* vis_sum, boxm2_data_base* exp,boxm2_data_base* nobs,
                                                                      boxm2_data_base* points, boxm2_data_base* normals,
                                                                      boxm2_data_base* ray_dir_sum, std::ofstream& file,
@@ -66,7 +66,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(const boxm2
   }
 }
 
-void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata  /*data*/, boxm2_block* blk,
                                             boxm2_data_base* alpha, boxm2_data_base* vis,
                                             boxm2_data_base* points, boxm2_data_base* normals,
                                             std::ofstream& file,
@@ -113,7 +113,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
   }
 }
 
-void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2_scene_sptr&  /*scene*/, boxm2_block_metadata  /*data*/, boxm2_block*  /*blk*/,
                                                                      boxm2_data_base* mog, boxm2_data_base* alpha,
                                                                      boxm2_data_base* points, boxm2_data_base* covariances, std::ofstream& file,
                                                                      float prob_t, float LE_t, float CE_t, vgl_box_3d<double> bb, unsigned& num_vertices, std::string datatype)
@@ -193,7 +193,7 @@ void boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(const boxm2
     //}
   }
 }
-void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk,
+void boxm2_export_oriented_point_cloud_function::exportColorPointCloudPLY(const boxm2_scene_sptr&  /*scene*/, boxm2_block_metadata  /*data*/, boxm2_block*  /*blk*/,
                                                                         boxm2_data_base* mog, boxm2_data_base* alpha,std::string datatype ,
                                                                         boxm2_data_base* points,std::ofstream& file,float prob_t,vgl_box_3d<double> bb, unsigned& num_vertices)
 {
@@ -258,7 +258,7 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
                                                                       const vnl_vector_fixed<float, 4>& point,
                                                                       const vnl_vector_fixed<float, 9>& cov,
                                                                       const float& alpha,
-                                                                      float& prob, double& color, vnl_vector_fixed<double, 3>& axes, double& LE, double& CE)
+                                                                      float& prob, double&  /*color*/, vnl_vector_fixed<double, 3>& axes, double& LE, double& CE)
 {
   vgl_point_3d<double> local;
   boxm2_block_id id;

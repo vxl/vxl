@@ -1102,7 +1102,7 @@ void boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(std:
 bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_point_2d<double> const& lower_left, vgl_point_2d<double> const& upper_right,
                                                                           std::vector<vil_image_view_base_sptr>& dem_views,
                                                                           std::vector<vpgl_geo_camera*>& dem_cams,
-                                                                          std::vector<vgl_box_2d<double> >& dem_bbox,
+                                                                          std::vector<vgl_box_2d<double> >&  /*dem_bbox*/,
                                                                           double& min_elev, double& max_elev)
 {
   // find the image of all four corners

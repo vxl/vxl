@@ -24,7 +24,7 @@ constexpr float n_sigma = 2.0;  // on either side of center
 
 vifa_parallel::
 vifa_parallel(iface_list&   faces,
-              bool          contrast_weighted,
+              bool           /*contrast_weighted*/,
               vifa_parallel_params*  params) :
   vifa_parallel_params(params)
 {

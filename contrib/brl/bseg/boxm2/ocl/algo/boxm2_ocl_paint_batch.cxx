@@ -34,7 +34,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
                                          cl_command_queue           &queue,
                                          std::string                 data_type,
                                          boxm2_block_id             id,
-                                         bsta_sigma_normalizer_sptr n_table )
+                                         bsta_sigma_normalizer_sptr  /*n_table*/ )
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;

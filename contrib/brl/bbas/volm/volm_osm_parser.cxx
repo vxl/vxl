@@ -293,7 +293,7 @@ std::vector<unsigned long long> get_line_from_way_id(unsigned long long const& w
   return out;
 }
 
-bool compose_polygon_from_relation(vgl_box_2d<double> const& osm_bbox,
+bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
                                    std::map<unsigned long long, vgl_point_2d<double> >& nodes,
                                    std::vector<std::pair<unsigned long long, std::vector<unsigned long long> > > ways,
                                    std::vector<unsigned long long>& way_ids,

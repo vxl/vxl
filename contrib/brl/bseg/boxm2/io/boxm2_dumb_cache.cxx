@@ -53,7 +53,7 @@ void boxm2_dumb_cache::update_block_cache(boxm2_block* blk)
 }
 
 //: get data by type and id
-boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, std::string type, std::size_t  /*num_bytes*/, bool read_only)
 {
   if ( cached_data_.find(type) != cached_data_.end() )
   {
@@ -75,12 +75,12 @@ boxm2_data_base* boxm2_dumb_cache::get_data_base(boxm2_block_id id, std::string 
   return loaded;
 }
 
-void boxm2_dumb_cache::remove_data_base(boxm2_block_id, std::string type)
+void boxm2_dumb_cache::remove_data_base(boxm2_block_id, std::string  /*type*/)
 {
   std::cout<<"BOXM2_DUMB_CACHE::remove_data_base not implemented"<<std::endl;
 }
 
-void boxm2_dumb_cache::replace_data_base(boxm2_block_id, std::string type, boxm2_data_base* replacement)
+void boxm2_dumb_cache::replace_data_base(boxm2_block_id, std::string  /*type*/, boxm2_data_base*  /*replacement*/)
 {
   std::cout<<"BOXM2_DUMB_CACHE::replace_data_base not implemented"<<std::endl;
 }

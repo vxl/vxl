@@ -67,7 +67,7 @@ bool bstm_merge_tt_function::init_data(bstm_time_block* blk_t, bstm_block* blk, 
 }
 
 
-bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>& datas)
+bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>&  /*datas*/)
 {
   //1. loop over each tree to save spatial depth of each time tree
   boxm2_array_1d<uchar8>&  old_time_trees = blk_t_->time_trees();    //old time trees

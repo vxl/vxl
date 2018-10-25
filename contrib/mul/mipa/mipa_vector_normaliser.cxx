@@ -30,7 +30,7 @@ void vsl_b_write(vsl_b_ostream& bfs, const mipa_vector_normaliser& b)
 // The default implementation is for attribute-less normalisers,
 // and throws if it finds any data in the stream.
 void mipa_vector_normaliser::config_from_stream(
-  std::istream &is, const mbl_read_props_type &extra_props)
+  std::istream &is, const mbl_read_props_type & /*extra_props*/)
 {
   std::string s = mbl_parse_block(is);
   if (s.empty() || s=="{}") return;

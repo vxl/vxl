@@ -359,7 +359,7 @@ bsgm_disparity_estimator::compute_xgrad_data(
 //-------------------------------------------------------------------------
 void
 bsgm_disparity_estimator::run_multi_dp(
-  const std::vector< std::vector<unsigned char*> >& app_cost,
+  const std::vector< std::vector<unsigned char*> >&  /*app_cost*/,
   std::vector< std::vector<unsigned short*> >& total_cost,
   const vil_image_view<bool>& invalid_tar,
   const vil_image_view<float>& grad_x,
