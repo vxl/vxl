@@ -458,9 +458,6 @@ class VNL_TEMPLATE_EXPORT vnl_vector
   void assert_finite_internal() const;
 
   void destroy();
-
-  // inline function template instantiation hack for gcc 2.97 -- fsm
-  static void inline_function_tickler();
 };
 
 

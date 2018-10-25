@@ -862,17 +862,6 @@ std::istream& operator>>(std::istream& s, vnl_vector<T>& M)
   M.read_ascii(s); return s;
 }
 
-template <class T>
-void vnl_vector<T>::inline_function_tickler()
-{
-  vnl_vector<T> v;
-  // fsm: hacks to get 2.96/2.97/3.0 to instantiate the inline functions.
-  v = T(3) + v;
-  v = T(3) - v;
-  v = T(3) * v;
-}
-
-
 //--------------------------------------------------------------------------------
 
 // The instantiation macros are split because some functions (angle, cos_angle)
