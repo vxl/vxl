@@ -58,7 +58,7 @@ vil_sgi_image::vil_sgi_image(vil_stream* is)
     vil_exception_error(vil_exception_image_io("vil_sgi_image::read_header", "SGI", ""));
 }
 
-bool vil_sgi_image::get_property(char const * tag, void * value) const
+bool vil_sgi_image::get_property(char const *  /*tag*/, void *  /*value*/) const
 {
   return true;
 }

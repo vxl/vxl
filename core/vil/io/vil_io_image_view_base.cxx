@@ -177,13 +177,13 @@ void vsl_b_read(vsl_b_istream& is, vil_image_view_base_sptr &view_base)
 }
 
 template <>
-void vsl_b_write(vsl_b_ostream & os, vil_image_resource_sptr const& view)
+void vsl_b_write(vsl_b_ostream &  /*os*/, vil_image_resource_sptr const&  /*view*/)
 {
   std::cerr << "warning: vsl_b_write not implemented for vil_image_resource_sptr\n";
 }
 
 template <>
-void vsl_b_read(vsl_b_istream & is, vil_image_resource_sptr &view)
+void vsl_b_read(vsl_b_istream &  /*is*/, vil_image_resource_sptr & /*view*/)
 {
   std::cerr << "warning: vsl_b_read not implemented for vil_image_resource_sptr\n";
 }

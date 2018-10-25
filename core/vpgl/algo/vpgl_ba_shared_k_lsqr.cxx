@@ -50,8 +50,8 @@ vpgl_ba_shared_k_lsqr(const vpgl_calibration_matrix<double>& K,
 
 
 //: compute the Jacobian Aij
-void vpgl_ba_shared_k_lsqr::jac_Aij(unsigned int i,
-                                    unsigned int j,
+void vpgl_ba_shared_k_lsqr::jac_Aij(unsigned int  /*i*/,
+                                    unsigned int  /*j*/,
                                     vnl_double_3x4 const& Pi,
                                     vnl_vector<double> const& ai,
                                     vnl_vector<double> const& bj,
@@ -78,22 +78,22 @@ void vpgl_ba_shared_k_lsqr::jac_Aij(unsigned int i,
 }
 
 //: compute the Jacobian Bij
-void vpgl_ba_shared_k_lsqr::jac_Bij(unsigned int i,
-                                    unsigned int j,
+void vpgl_ba_shared_k_lsqr::jac_Bij(unsigned int  /*i*/,
+                                    unsigned int  /*j*/,
                                     vnl_double_3x4 const& Pi,
-                                    vnl_vector<double> const& ai,
+                                    vnl_vector<double> const&  /*ai*/,
                                     vnl_vector<double> const& bj,
-                                    vnl_vector<double> const& c,
+                                    vnl_vector<double> const&  /*c*/,
                                     vnl_matrix<double>& Bij)
 {
   jac_inhomg_3d_point(Pi, bj, Bij);
 }
 
 //: compute the Jacobian Cij
-void vpgl_ba_shared_k_lsqr::jac_Cij(unsigned int i,
-                                    unsigned int j,
+void vpgl_ba_shared_k_lsqr::jac_Cij(unsigned int  /*i*/,
+                                    unsigned int  /*j*/,
                                     vnl_double_3x4 const& Pi,
-                                    vnl_vector<double> const& ai,
+                                    vnl_vector<double> const&  /*ai*/,
                                     vnl_vector<double> const& bj,
                                     vnl_vector<double> const& c,
                                     vnl_matrix<double>& Cij)
@@ -109,25 +109,25 @@ void vpgl_ba_shared_k_lsqr::jac_Cij(unsigned int i,
 
 //: construct the \param j-th perspective camera from a pointer to the j-th parameter of \param b and parameters \param c
 vgl_homg_point_3d<double>
-vpgl_ba_shared_k_lsqr::param_to_point(int j,
+vpgl_ba_shared_k_lsqr::param_to_point(int  /*j*/,
                                       const double* bj,
-                                      const vnl_vector<double>& c) const
+                                      const vnl_vector<double>&  /*c*/) const
 {
   return {bj[0], bj[1], bj[2]};
 }
 
 //: construct the \param j-th perspective camera from a pointer to the j-th parameter of \param b and parameters \param c
 vnl_vector_fixed<double,4>
-vpgl_ba_shared_k_lsqr::param_to_pt_vector(int j,
+vpgl_ba_shared_k_lsqr::param_to_pt_vector(int  /*j*/,
                                           const double* bj,
-                                          const vnl_vector<double>& c) const
+                                          const vnl_vector<double>&  /*c*/) const
 {
   return vnl_vector_fixed<double,4>(bj[0], bj[1], bj[2], 1.0);
 }
 
 //: construct the \param i-th perspective camera from a pointer to the i-th parameter of \param a and parameters \param c
 vpgl_perspective_camera<double>
-vpgl_ba_shared_k_lsqr::param_to_cam(int i,
+vpgl_ba_shared_k_lsqr::param_to_cam(int  /*i*/,
                                     const double* ai,
                                     const vnl_vector<double>& c) const
 {
@@ -139,7 +139,7 @@ vpgl_ba_shared_k_lsqr::param_to_cam(int i,
 
 //: compute a 3x4 camera matrix of camera \param i from a pointer to the i-th parameters of \param a and parameters \param c
 vnl_double_3x4
-vpgl_ba_shared_k_lsqr::param_to_cam_matrix(int i,
+vpgl_ba_shared_k_lsqr::param_to_cam_matrix(int  /*i*/,
                                            const double* ai,
                                            const vnl_vector<double>& c) const
 {
