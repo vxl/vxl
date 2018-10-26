@@ -677,7 +677,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
   sum2 *= height;
 
 
-  return vgl_vector_2d<double>(sum1,sum2);
+  return {sum1,sum2};
 }
 
 

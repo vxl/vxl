@@ -454,7 +454,7 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
         case Translation :
             return {x+xt_,y+yt_};
         case ZoomOnly :
-            return vgl_point_2d<double> (x*xx_+xt_,y*yy_+yt_);
+            return {x*xx_+xt_,y*yy_+yt_};
         case RigidBody :
         case Similarity :
         case Reflection :

@@ -605,7 +605,7 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
   }
   max_i++; max_j++; max_k++;
 
-  return vgl_vector_3d<unsigned int>((max_i-min_i),(max_j - min_j),(max_k-min_k));
+  return {(max_i-min_i),(max_j - min_j),(max_k-min_k)};
 }
 
 //: gets the smallest block index

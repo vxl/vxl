@@ -1190,7 +1190,7 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
     return {dx, dt};
   }
 
-  return vgl_point_2d<double>(0,0); //no optimal, just the ref
+  return {0,0}; //no optimal, just the ref
 }
 
 

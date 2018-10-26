@@ -10,7 +10,7 @@ vil_rgb<vxl_byte> color(unsigned char id)
   if (id == (unsigned char)34)  // tall building as blue
     return {0,0,255};
   else if (id == (unsigned char)29)
-    return vil_rgb<vxl_byte>(255, 0, 0);
+    return {255, 0, 0};
   else
     return vil_rgb<vxl_byte>(bvrml_color::heatmap_classic[id][0],
                              bvrml_color::heatmap_classic[id][1],

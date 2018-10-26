@@ -210,7 +210,7 @@ ihog_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<doub
             std::cerr<<"ihog_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
     }
 
-    return vgl_vector_2d<double> (); // To keep over-zealous compilers happy
+    return {}; // To keep over-zealous compilers happy
 }
 
 ihog_transform_2d ihog_transform_2d::inverse() const
@@ -227,7 +227,7 @@ vgl_point_2d<double> ihog_transform_2d::operator()(double x, double y) const
         case Identity :
             return {x,y};
         case Translation :
-            return vgl_point_2d<double> (x+t12_matrix_[0][2],y+t12_matrix_[1][2]);
+            return {x+t12_matrix_[0][2],y+t12_matrix_[1][2]};
         case RigidBody :
         case Affine :
             return vgl_point_2d<double> (x*t12_matrix_[0][0]+y*t12_matrix_[0][1]+t12_matrix_[0][2],
