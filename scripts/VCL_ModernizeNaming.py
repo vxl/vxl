@@ -8,8 +8,8 @@
 
 import os
 import sys
+import re
 from collections import OrderedDict
-
 
 
 ## slight modification from grep command
@@ -690,8 +690,6 @@ for line in info_for_conversion.splitlines():
         vcl_replace_manual[new_pat.replace("std::ios::","std::ios_")] = new_pat
 
 
-
-
 #print(vcl_replace_head_names)
 #print(vcl_replace_functionnames)
 
@@ -715,7 +713,7 @@ for searchval,replaceval in vcl_replace_head_names.items():
 
 
 for searchval,replaceval in vcl_replace_functionnames.items():
-   file_as_string = file_as_string.replace(searchval,replaceval)
+   file_as_string = re.sub( r"\b{0}\b".format(searchval), replaceval,  file_as_string )
 for searchval,replaceval in vcl_replace_manual.items():
    file_as_string = file_as_string.replace(searchval,replaceval)
 with open(cfile,"w") as wfp:
