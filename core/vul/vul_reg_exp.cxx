@@ -957,7 +957,7 @@ bool vul_reg_exp::find (char const* string)
   if (!this->program || UCHARAT(this->program) != MAGIC) {
     //RAISE Error, SYM(vul_reg_exp), SYM(Internal_Error),
     std::cout << "vul_reg_exp::find(): Compiled regular expression corrupted.\n";
-    return 0;
+    return false;
   }
 
   // If there is a "must appear" string, look for it.
@@ -970,7 +970,7 @@ bool vul_reg_exp::find (char const* string)
       s++;
     }
     if (s == nullptr) // Not present.
-      return 0;
+      return false;
   }
 
   // Mark beginning of line for ^ .
@@ -986,18 +986,18 @@ bool vul_reg_exp::find (char const* string)
     // We know what char it must start with.
     while ((s = std::strchr(s, this->regstart)) != nullptr) {
       if (regtry(s, this->startp, this->endp, this->program))
-        return 1;
+        return true;
       s++;
     }
   else
     // We don't - general case.
     do {
       if (regtry(s, this->startp, this->endp, this->program))
-        return 1;
+        return true;
     } while (*s++ != '\0');
 
   // Failure.
-  return 0;
+  return false;
 }
 
 

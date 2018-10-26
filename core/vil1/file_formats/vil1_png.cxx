@@ -404,7 +404,7 @@ bool vil1_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
   // PNG lib wants everything in memory - the first get_rows reads the whole image.
   png_byte** rows = p->get_rows();
-  if (!rows) return 0;
+  if (!rows) return false;
 
   int bytes_per_pixel = png_get_bit_depth(p->png_ptr,p->info_ptr) * p->channels / 8;
   int bytes_per_row_dst = xs*bytes_per_pixel;

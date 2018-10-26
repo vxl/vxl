@@ -218,7 +218,7 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
    default:
     std::cerr << "WARNING: vil_memory_image::put_view()\n"
              << "\t Unexpected pixel type" << view_->pixel_format() << std::endl;
-    return 0;
+    return false;
   }
 }
 

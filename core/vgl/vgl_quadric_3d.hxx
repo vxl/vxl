@@ -622,7 +622,7 @@ void eigen(R m[n][n], R l[n], R vc[n][n]){
       }
     }
   }
-  while(1){
+  while(true){
     R mod = 0; int i=0, j=0;
     {int k=n; while(k--){
         int m=n;

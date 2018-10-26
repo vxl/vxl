@@ -53,7 +53,7 @@ bool vil_nitf2_scalar_field::write(vil_nitf2_ostream& output, int variable_width
 {
   if (!m_definition || !m_definition->formatter) {
     std::cerr << "vil_nitf2_scalar_field::write(): Incomplete field definition!\n";
-    return 0;
+    return false;
   }
   VIL_NITF2_LOG(log_debug) << "Writing tag " << m_definition->tag << ':';
   vil_nitf2_field_formatter* formatter = m_definition->formatter;
