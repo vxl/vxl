@@ -64,7 +64,7 @@ class vidl_exception
 {
  public:
   explicit vidl_exception(const std::string& msg) : msg_(msg) {}
-  virtual ~vidl_exception() {}
+  virtual ~vidl_exception() = default;
 
   virtual const std::string& what() const { return msg_; }
 

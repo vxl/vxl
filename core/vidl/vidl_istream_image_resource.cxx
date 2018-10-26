@@ -74,8 +74,7 @@ vidl_istream_image_resource::
 
 
 vidl_istream_image_resource::~vidl_istream_image_resource()
-{
-}
+= default;
 
 
 unsigned

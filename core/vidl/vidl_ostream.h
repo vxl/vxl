@@ -21,7 +21,7 @@ class vidl_ostream
   //: Constructor
   vidl_ostream() : ref_count_(0) {}
   //: Destructor
-  virtual ~vidl_ostream() {}
+  virtual ~vidl_ostream() = default;
 
   //: Close the stream
   virtual void close() = 0;

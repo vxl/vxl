@@ -47,7 +47,7 @@ class vidl_pixel_iterator_arranged
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged() {}
+  ~vidl_pixel_iterator_arranged() = default;
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<AR,FMT>& next()
@@ -121,7 +121,7 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged() {}
+  ~vidl_pixel_iterator_arranged() = default;
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PLANAR,FMT>& next()
@@ -197,7 +197,7 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PACKED,FMT>
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_arranged() {}
+  ~vidl_pixel_iterator_arranged() = default;
 
   //: Step to the next pixel
   vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PACKED,FMT>& next()
@@ -256,7 +256,7 @@ class vidl_pixel_iterator_of : public vidl_pixel_iterator
   vidl_pixel_iterator_of(const vidl_frame& frame) : itr_(frame) {}
 
   //: Destructor
-  ~vidl_pixel_iterator_of<FMT>() override {}
+  ~vidl_pixel_iterator_of<FMT>() override = default;
 
   //: Return the pixel format
   vidl_pixel_format pixel_format() const override
@@ -305,7 +305,7 @@ class vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>
   }
 
   //: Destructor
-  ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>() override {}
+  ~vidl_pixel_iterator_of<VIDL_PIXEL_FORMAT_MONO_1>() override = default;
 
   //: Return the pixel format
   vidl_pixel_format pixel_format() const override
