@@ -158,7 +158,6 @@ set( vcl_sources
   vcl_locale.h
   vcl_map.h
   vcl_memory.h
-  vcl_new.h
   vcl_numeric.h
   vcl_ostream.h
   vcl_queue.h

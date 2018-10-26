@@ -13,6 +13,18 @@
 // \author fsm
 #include <vxl_config.h>
 #include <vnl/vnl_c_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <new>
+
+// Provide vcl_destroy() and vcl_construct() : ONLY USED IN vnl_matlab
+template <class T>
+inline
+void vcl_destroy(T *p) { p->~T(); }
+
+template <class U, class V>
+inline
+void vcl_construct(U * p, V const & value) { new (p) U(value); }
 
 //--------------------------------------------------------------------------------
 
