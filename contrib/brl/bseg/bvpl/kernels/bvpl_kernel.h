@@ -67,7 +67,7 @@ class bvpl_kernel: public vbl_ref_count
 
     int z=max_point_.z();
 
-    return vgl_vector_3d<int>(x,y,z);
+    return {x,y,z};
   }
 
   void print()
@@ -169,7 +169,7 @@ class bvpl_kernel_vector : public vbl_ref_count
       if (dim.z() > max_z)
         max_z = dim.z();
     }
-    return vgl_vector_3d<int>(max_x, max_y, max_z);
+    return {max_x, max_y, max_z};
   }
 
   vgl_point_3d<int> max(){
@@ -187,7 +187,7 @@ class bvpl_kernel_vector : public vbl_ref_count
       if (max_pt.z() > max_z)
         max_z = max_pt.z();
     }
-    return vgl_point_3d<int>(max_x, max_y, max_z);
+    return {max_x, max_y, max_z};
   }
 
   vgl_point_3d<int> min() {
@@ -205,7 +205,7 @@ class bvpl_kernel_vector : public vbl_ref_count
       if (min_pt.z() < min_z)
         min_z = min_pt.z();
     }
-    return vgl_point_3d<int>(min_x, min_y, min_z);
+    return {min_x, min_y, min_z};
   }
 
   //: vector of kernel

@@ -74,7 +74,7 @@ vgl_point_3d<double> principal_ray_scan::pt_on_unit_sphere(unsigned i) const
   double th = theta_[i], ph = phi_[i];
   double st = std::sin(th), ct = std::cos(th);
   double x = st*std::cos(ph), y = st*std::sin(ph), z = ct;
-  return vgl_point_3d<double>(x, y, z);
+  return {x, y, z};
 }
 
 vgl_rotation_3d<double> principal_ray_scan::rot(unsigned i, double alpha) const

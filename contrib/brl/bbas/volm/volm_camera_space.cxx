@@ -106,7 +106,7 @@ cam_angles volm_camera_space::camera_angles(unsigned cam_index) const
   double top_fov = top_fovs_[fov_index];
   double heading = head_mid_ - head_radius_ + (head_index*head_inc_);
   double tilt = tilt_mid_ - tilt_radius_ + (tilt_index*tilt_inc_);
-  return cam_angles(roll, top_fov, heading, tilt);
+  return {roll, top_fov, heading, tilt};
 }
 
 double cam_angles::dif(cam_angles& b)
@@ -162,7 +162,7 @@ unsigned volm_camera_space::cam_index() const
 
 cam_angles volm_camera_space::camera_angles() const
 {
-  return cam_angles(roll_, top_fovs_[fov_index_], heading_, tilt_);
+  return {roll_, top_fovs_[fov_index_], heading_, tilt_};
 }
 
 //: the iterator at the start of camera space

@@ -137,20 +137,20 @@ int boct_bit_tree::traverse_to_level(const vgl_point_3d<double> p,
 }
 vgl_point_3d<double> boct_bit_tree::cell_center(int bit_index) {
   // Indexes into precomputed cell_center matrix
-  return vgl_point_3d<double>(
-      centerX[bit_index], centerY[bit_index], centerZ[bit_index]);
+  return {
+      centerX[bit_index], centerY[bit_index], centerZ[bit_index]};
 }
 
 //: Cell bounding box given bit_index, tree origin and tree len
 vgl_box_3d<double>
 boct_bit_tree::cell_box(int bit_index, vgl_point_3d<double> orig, double len) {
   double half_len = cell_len(bit_index) / 2.0;
-  return vgl_box_3d<double>(orig.x() + len * (centerX[bit_index] - half_len),
+  return {orig.x() + len * (centerX[bit_index] - half_len),
                             orig.y() + len * (centerY[bit_index] - half_len),
                             orig.z() + len * (centerZ[bit_index] - half_len),
                             orig.x() + len * (centerX[bit_index] + half_len),
                             orig.y() + len * (centerY[bit_index] + half_len),
-                            orig.z() + len * (centerZ[bit_index] + half_len));
+                            orig.z() + len * (centerZ[bit_index] + half_len)};
 }
 
 double boct_bit_tree::cell_len(int bit_index) const {

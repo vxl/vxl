@@ -65,7 +65,7 @@ public:
   virtual bool bundle_is_valid()=0;
 
   //: Compute the best fit curve from the curve bundle
-  virtual vgl_point_2d<double> compute_best_fit(){ return vgl_point_2d<double>(0,0); }
+  virtual vgl_point_2d<double> compute_best_fit(){ return {0,0}; }
 
   //: Compute the best fit curve from the curve bundle given the edgel chain
   virtual vgl_point_2d<double> compute_best_fit(std::deque<sdet_edgel*> &edgel_chain)=0;

@@ -62,7 +62,7 @@ vgl_vector_3d<double> vsph_unit_sphere::cart_coord(vsph_sph_point_2d const& sp)
   double x = std::sin(th)*std::cos(ph);
   double y = std::sin(th)*std::sin(ph);
   double z = std::cos(sp.theta_);
-  return vgl_vector_3d<double>(x, y, z);
+  return {x, y, z};
 }
 
 

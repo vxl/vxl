@@ -343,7 +343,7 @@ vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
     }
   }
   std::cerr << "cannot find id: " << (int)id << " (and thus color) in the land class table, returning invalid color!\n";
-  return vil_rgb<vxl_byte>(255,0,0); // default invalid color
+  return {255,0,0}; // default invalid color
 }
 
 bool volm_io::read_camera(std::string kml_file,

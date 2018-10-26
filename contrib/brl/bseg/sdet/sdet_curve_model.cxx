@@ -133,7 +133,7 @@ vgl_point_2d<double>  sdet_simple_linear_curve_model::compute_best_fit(std::dequ
   else
     theta = (min_theta + max_theta)/2;
 
-  return vgl_point_2d<double>(theta, 0);
+  return {theta, 0};
 }
 
 //: function to check if the curve fit is reasonable
@@ -299,7 +299,7 @@ vgl_point_2d<double>  sdet_linear_curve_model::compute_best_fit(std::deque<sdet_
   pt = vgl_point_2d<double>(ref_pt.x()+dx*std::cos(ref_theta+vnl_math::pi_over_2), ref_pt.y()+dx*std::sin(ref_theta+vnl_math::pi_over_2));
   theta = ref_theta + dt;
 
-  return vgl_point_2d<double>(dx, dt);
+  return {dx, dt};
 }
 
 //: function to check if the curve fit is reasonable
@@ -550,7 +550,7 @@ vgl_point_2d<double>  sdet_CC_curve_model::compute_best_fit(std::deque<sdet_edge
 
   theta = tangent + dt; //compute extrinsic tangent from dt
 
-  return vgl_point_2d<double>(dt, k);
+  return {dt, k};
 }
 
 //: function to check if the curve fit is reasonable
@@ -1152,7 +1152,7 @@ vgl_point_2d<double> sdet_CC_curve_model_new::transport_CC(vgl_point_2d<double>d
     sgn_change = !sgn_change;
   }
 
-  return vgl_point_2d<double>(dx2, dt2);
+  return {dx2, dt2};
 }
 
 //: Compute the best fit curve from the curve bundle
@@ -1187,7 +1187,7 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
     theta = sdet_angle0To2Pi(ref_theta + dt);
     k = sdet_k_classes[best_k_ind];
 
-    return vgl_point_2d<double>(dx, dt);
+    return {dx, dt};
   }
 
   return vgl_point_2d<double>(0,0); //no optimal, just the ref
@@ -1471,7 +1471,7 @@ vgl_point_2d<double>  sdet_CC_curve_model_perturbed::compute_best_fit(std::deque
   pt = pts[ind];
   theta = dts[ind] + tangent;
   k = ks[ind];
-  return vgl_point_2d<double>(dts[ind], ks[ind]);
+  return {dts[ind], ks[ind]};
 }
 
 //: print info
@@ -2036,7 +2036,7 @@ vgl_point_2d<double> sdet_CC_curve_model_3d::transport_CC(vgl_point_2d<double>dx
     sgn_change = !sgn_change;
   }
 
-  return vgl_point_2d<double>(dx2, dt2);
+  return {dx2, dt2};
 }
 
 //: Compute the best fit curve from the curve bundle
@@ -2073,7 +2073,7 @@ vgl_point_2d<double> sdet_CC_curve_model_3d::compute_best_fit()
     return best_fit;
   }
 
-  return vgl_point_2d<double>(0,0); //no optimal, just the ref
+  return {0,0}; //no optimal, just the ref
 }
 
 
@@ -2386,7 +2386,7 @@ vgl_point_2d<double>  sdet_ES_curve_model::compute_best_fit(std::deque<sdet_edge
   k /= cv_bundle.num_vertices();
   gamma /= cv_bundle.num_vertices();
 
-  return vgl_point_2d<double>(k, gamma);
+  return {k, gamma};
 }
 
 
@@ -2683,7 +2683,7 @@ vgl_point_2d<double>  sdet_ES_curve_model_perturbed::compute_best_fit(std::deque
   k = ks[ind];
   gamma = gammas[ind];
 
-  return vgl_point_2d<double>(k, gamma);
+  return {k, gamma};
 }
 
 //: print info

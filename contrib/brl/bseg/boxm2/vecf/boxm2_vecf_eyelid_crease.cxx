@@ -58,7 +58,7 @@ double boxm2_vecf_eyelid_crease::z_socket(double xp) const{
 vgl_plane_3d<double> boxm2_vecf_eyelid_crease::crease_plane(double xp) const{
   double xlat = opr_.lateral_socket_radius(), xmed = -opr_.medial_socket_radius();
   if(xp<=xmed || xp>=xlat)
-    return vgl_plane_3d<double>(0.0, 0.0, 1.0, -z_socket(xp));
+    return {0.0, 0.0, 1.0, -z_socket(xp)};
   double ct = opr_.eyelid_crease_ct_;
   double dx = opr_.eye_radius_*0.01;
   vgl_point_3d<double> p0(xp, gi(xp,ct), z_socket(xp));

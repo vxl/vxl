@@ -1162,7 +1162,7 @@ vgl_point_2d<double> get_2d_proj_pt (vgl_point_3d<double> P, const vgl_point_3d<
 {
   double x = dot_product (P - A, AX);
   double y = dot_product (P - A, AY);
-  return vgl_point_2d<double> (x, y);
+  return {x, y};
 }
 
 //: determine the center point of the patch
@@ -1181,7 +1181,7 @@ vgl_point_3d<double> compute_cen (const std::vector<bmsh3d_vertex*>& vertices)
   y /= vertices.size();
   z /= vertices.size();
 
-  return vgl_point_3d<double>(x,y,z);
+  return {x,y,z};
 }
 
 //: compute the normal of the face

@@ -149,7 +149,7 @@ class boxm_scene :public boxm_scene_base
     unsigned x=(unsigned) blocks_.get_row1_count();
     unsigned y=(unsigned) blocks_.get_row2_count();
     unsigned z=(unsigned) blocks_.get_row3_count();
-    return vgl_vector_3d<unsigned>(x,y,z);
+    return {x,y,z};
   }
 
   std::string path() const { return scene_path_; }

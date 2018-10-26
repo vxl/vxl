@@ -310,9 +310,9 @@ class tri_dist_func
     const imesh_vertex<3>& p0 = verts[tri[0]];
     const imesh_vertex<3>& p1 = verts[tri[1]];
     const imesh_vertex<3>& p2 = verts[tri[2]];
-    return vgl_point_3d<double>(t*p0[0] + u*p1[0] + v*p2[0],
+    return {t*p0[0] + u*p1[0] + v*p2[0],
                                 t*p0[1] + u*p1[1] + v*p2[1],
-                                t*p0[2] + u*p1[2] + v*p2[2]);
+                                t*p0[2] + u*p1[2] + v*p2[2]};
   }
 
   double operator () (const vgl_point_3d<double>& pt, unsigned int i)

@@ -486,10 +486,10 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
             ++count;
         }
     }
-    return vil_rgba<vxl_byte>( (vxl_byte) (mean[0]/count),
+    return { (vxl_byte) (mean[0]/count),
                                (vxl_byte) (mean[1]/count),
                                (vxl_byte) (mean[2]/count),
-                               255 );
+                               255 };
 }
 
 bsta_histogram_sptr

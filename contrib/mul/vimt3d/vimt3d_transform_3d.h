@@ -242,10 +242,10 @@ class vimt3d_transform_3d
      case Translation :
       return {x+xt_,y+yt_,z+zt_};
      case ZoomOnly :
-      return vgl_point_3d<double> (
+      return {
         x*xx_+xt_,
         y*yy_+yt_,
-        z*zz_+zt_);
+        z*zz_+zt_};
 //   case RigidBody, Similarity, Affine :
      default :
       return vgl_point_3d<double> (

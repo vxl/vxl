@@ -69,7 +69,7 @@ class imesh_vertex<2>
   //: convert to a vgl point
   operator vgl_point_2d<double>() const
   {
-    return vgl_point_2d<double>(coords_[0],coords_[1]);
+    return {coords_[0],coords_[1]};
   }
 
   //: Constructor from a vector
@@ -124,7 +124,7 @@ class imesh_vertex<3>
   //: convert to a vgl point
   operator vgl_point_3d<double>() const
   {
-    return vgl_point_3d<double>(coords_[0],coords_[1],coords_[2]);
+    return {coords_[0],coords_[1],coords_[2]};
   }
 
   //: return the dimension of the vertex

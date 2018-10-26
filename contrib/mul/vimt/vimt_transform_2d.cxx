@@ -452,7 +452,7 @@ vgl_point_2d<double>  vimt_transform_2d::operator()(double x, double y) const
         case Identity :
             return {x,y};
         case Translation :
-            return vgl_point_2d<double> (x+xt_,y+yt_);
+            return {x+xt_,y+yt_};
         case ZoomOnly :
             return vgl_point_2d<double> (x*xx_+xt_,y*yy_+yt_);
         case RigidBody :
@@ -485,7 +485,7 @@ vgl_vector_2d<double>  vimt_transform_2d::delta(const vgl_point_2d<double>& p, c
         case Similarity :
         case Reflection :
         case Affine :
-            return vgl_vector_2d<double> (dp.x()*xx_+dp.y()*xy_,dp.x()*yx_+dp.y()*yy_);
+            return {dp.x()*xx_+dp.y()*xy_,dp.x()*yx_+dp.y()*yy_};
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:

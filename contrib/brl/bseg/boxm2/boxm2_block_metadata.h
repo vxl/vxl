@@ -89,12 +89,12 @@ public:
   //: bounding box for this block
   vgl_box_3d<double> bbox() const;
   vgl_box_3d<double> bbox(int x, int y, int z) const {
-    return vgl_box_3d<double>(local_origin_.x() + x * sub_block_dim_.x(),
+    return {local_origin_.x() + x * sub_block_dim_.x(),
                               local_origin_.y() + y * sub_block_dim_.y(),
                               local_origin_.z() + z * sub_block_dim_.z(),
                               local_origin_.x() + (x + 1) * sub_block_dim_.x(),
                               local_origin_.y() + (y + 1) * sub_block_dim_.y(),
-                              local_origin_.z() + (z + 1) * sub_block_dim_.z());
+                              local_origin_.z() + (z + 1) * sub_block_dim_.z()};
   }
 };
 

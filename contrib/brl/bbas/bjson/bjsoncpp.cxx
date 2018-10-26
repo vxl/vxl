@@ -275,7 +275,7 @@ Features::Features()
     : allowComments_(true), strictRoot_(false),
       allowDroppedNullPlaceholders_(false), allowNumericKeys_(false) {}
 
-Features Features::all() { return Features(); }
+Features Features::all() { return {}; }
 
 Features Features::strictMode() {
   Features features;
@@ -1124,7 +1124,7 @@ public:
 // exact copy of Implementation of class Features
 // ////////////////////////////////
 
-OurFeatures OurFeatures::all() { return OurFeatures(); }
+OurFeatures OurFeatures::all() { return {}; }
 
 // Implementation of class Reader
 // ////////////////////////////////
@@ -3862,7 +3862,7 @@ Value::const_iterator Value::begin() const {
   default:
     break;
   }
-  return const_iterator();
+  return {};
 }
 
 Value::const_iterator Value::end() const {
@@ -3875,7 +3875,7 @@ Value::const_iterator Value::end() const {
   default:
     break;
   }
-  return const_iterator();
+  return {};
 }
 
 Value::iterator Value::begin() {

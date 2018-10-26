@@ -563,8 +563,8 @@ vgl_box_3d<double> boxm2_scene::bounding_box() const
   //  The \a x range is given by the 1st and 4th coordinates,
   //  the \a y range is given by the 2nd and 5th coordinates,
   //  the \a z range is given by the 3rd and 6th coordinates.
-  return vgl_box_3d<double>(xmin, ymin, zmin,
-                            xmax, ymax, zmax);
+  return {xmin, ymin, zmin,
+                            xmax, ymax, zmax};
 }
 
 vgl_box_3d<int> boxm2_scene::bounding_box_blk_ids() const
@@ -583,7 +583,7 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
   std::vector<boxm2_block_id> ids = this->get_block_ids();
 
   if (ids.empty())
-    return vgl_vector_3d<unsigned int>(0,0,0);
+    return {0,0,0};
 
   int max_i=ids[0].i(),max_j=ids[0].j(),max_k=ids[0].k();
   int min_i=ids[0].i(),min_j=ids[0].j(),min_k=ids[0].k();
