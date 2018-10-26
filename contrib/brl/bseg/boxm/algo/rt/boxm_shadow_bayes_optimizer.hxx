@@ -1,6 +1,7 @@
 #ifndef boxm_shadow_bayes_optimizer_hxx_
 #define boxm_shadow_bayes_optimizer_hxx_
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -15,10 +16,10 @@
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_bayes_optimizer<T_loc,APM,AUX>::boxm_shadow_bayes_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                                                        std::vector<std::string> const& image_ids, float min_app_sigma,
+                                                                        std::vector<std::string>  image_ids, float min_app_sigma,
                                                                         float shadow_prior, float shadow_mean, float shadow_sigma,
                                                                         bool verbose, vgl_point_3d<double> debug_pt)
-  : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f),
+  : image_ids_(std::move(image_ids)), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f),
     min_app_sigma_(min_app_sigma), shadow_prior_(shadow_prior),
     shadow_mean_(shadow_mean), shadow_sigma_(shadow_sigma),
     verbose_(verbose), debug_pt_(debug_pt)

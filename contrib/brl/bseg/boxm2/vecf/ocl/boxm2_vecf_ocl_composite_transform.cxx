@@ -1,9 +1,11 @@
+#include <utility>
+
 #include "boxm2_vecf_ocl_composite_transform.h"
 
 
 boxm2_vecf_ocl_composite_transform::
 boxm2_vecf_ocl_composite_transform(std::vector<boxm2_vecf_ocl_vector_field_sptr> xforms)
-  : xforms_(xforms)
+  : xforms_(std::move(xforms))
 {
 }
 

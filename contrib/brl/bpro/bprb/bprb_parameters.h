@@ -17,6 +17,7 @@
 #include <string>
 #include <iostream>
 #include <typeinfo>
+#include <utility>
 #include <vector>
 #include <map>
 #include <vcl_compiler.h>
@@ -65,8 +66,8 @@ class bprb_param
 
  protected:
   //: Constructor
-  bprb_param(bool has_bounds, const std::string& name, const std::string& desc)
-   : has_bounds_(has_bounds), name_(name), description_(desc) {}
+  bprb_param(bool has_bounds, std::string  name, std::string  desc)
+   : has_bounds_(has_bounds), name_(std::move(name)), description_(std::move(desc)) {}
 
 
   //: Describes whether or not the parameter has bounds
@@ -88,9 +89,9 @@ class bprb_param_type : public bprb_param
 {
  public:
   // Constructor - with bounds
-  bprb_param_type<T>(const std::string& name, const std::string& desc, const T& dflt, const T& min, const T& max)
+  bprb_param_type<T>(const std::string& name, const std::string& desc, const T& dflt, T  min, T  max)
    : bprb_param(true, name, desc), value_(dflt), default_(dflt), temp_value_(dflt),
-     min_value_(min), max_value_(max) { assert( min_value_ <= value_ && value_ <= max_value_ ); }
+     min_value_(std::move(min)), max_value_(std::move(max)) { assert( min_value_ <= value_ && value_ <= max_value_ ); }
 
   // Constructor - without bounds
   bprb_param_type<T>(const std::string& name, const std::string& desc, const T& dflt)
@@ -344,8 +345,8 @@ class bprb_filepath
 {
  public:
   //: Constructor
-  bprb_filepath(const std::string& p = "", const std::string& e = "*")
-   : path(p), ext(e) {}
+  bprb_filepath(std::string  p = "", std::string  e = "*")
+   : path(std::move(p)), ext(std::move(e)) {}
 
   std::string path;
   std::string ext;

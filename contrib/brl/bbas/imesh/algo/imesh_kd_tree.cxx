@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <limits>
 #include <cmath>
+#include <utility>
 #include "imesh_kd_tree.h"
 #include "imesh_kd_tree.hxx"
 //:
@@ -69,7 +70,7 @@ class less_box_centroid_x
 {
   std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_x(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_x(std::vector<vgl_box_3d<double> >  b) : boxes(std::move(b)) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_x() < boxes[i2].centroid_x();
@@ -81,7 +82,7 @@ class less_box_centroid_y
 {
   std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_y(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_y(std::vector<vgl_box_3d<double> >  b) : boxes(std::move(b)) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_y() < boxes[i2].centroid_y();
@@ -93,7 +94,7 @@ class less_box_centroid_z
 {
   std::vector<vgl_box_3d<double> > boxes;
  public:
-  less_box_centroid_z(const std::vector<vgl_box_3d<double> >& b) : boxes(b) {}
+  less_box_centroid_z(std::vector<vgl_box_3d<double> >  b) : boxes(std::move(b)) {}
   bool operator () (unsigned int i1, unsigned int i2) const
   {
     return boxes[i1].centroid_z() < boxes[i2].centroid_z();

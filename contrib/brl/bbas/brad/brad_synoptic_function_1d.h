@@ -10,6 +10,7 @@
 // \date October 1, 2011
 //
 //----------------------------------------------------------------------------
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -24,11 +25,11 @@ class brad_synoptic_function_1d
     //    max_freq_mean_(0.487648), max_freq_sigma_(0.127436755) {}
     max_freq_mean_(0.487648), max_freq_sigma_(0.2) {}
   //:constructor from batch orbit data
-  brad_synoptic_function_1d(std::vector<double> const& elevation,
-                            std::vector<double> const& azimuth,
-                            std::vector<double> const& vis,
-                            std::vector<double> const& intensity):
-    elev_(elevation),azimuth_(azimuth),vis_(vis),intensity_(intensity),
+  brad_synoptic_function_1d(std::vector<double>  elevation,
+                            std::vector<double>  azimuth,
+                            std::vector<double>  vis,
+                            std::vector<double>  intensity):
+    elev_(std::move(elevation)),azimuth_(std::move(azimuth)),vis_(std::move(vis)),intensity_(std::move(intensity)),
     inherent_sigma_(0.06), tau_s_(0.25), max_freq_mean_(0.487648),
     //    max_freq_sigma_(0.127436755){this->fit_intensity_cubic();}
     max_freq_sigma_(0.2){this->fit_intensity_cubic();}

@@ -14,7 +14,7 @@
 class boxm2_vecf_similarity_transform_mapper
 {
   public:
-  boxm2_vecf_similarity_transform_mapper(vgl_rotation_3d<double> const& rot,
+  boxm2_vecf_similarity_transform_mapper(vgl_rotation_3d<double>  rot,
                                          vgl_vector_3d<double> const& trans,
                                          vgl_vector_3d<double> const& scale);
 
@@ -29,7 +29,7 @@ class boxm2_vecf_similarity_transform_mapper
 class boxm2_vecf_similarity_transform : public boxm2_vecf_vector_field<boxm2_vecf_similarity_transform_mapper>
 {
   public:
-    boxm2_vecf_similarity_transform(vgl_rotation_3d<double> const& rot,
+    boxm2_vecf_similarity_transform(vgl_rotation_3d<double>  rot,
                                     vgl_vector_3d<double> const& trans,
                                     vgl_vector_3d<double> const& scale);
 

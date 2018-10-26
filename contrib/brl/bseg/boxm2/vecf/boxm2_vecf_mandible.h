@@ -11,6 +11,7 @@
 #include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <utility>
 #include <vector>
 #include <string>
 #include <map>
@@ -31,9 +32,9 @@ class boxm2_vecf_mandible : public bvgl_gen_cylinder, public boxm2_vecf_geometry
   }
  boxm2_vecf_mandible(std::string const& geometry_file);
 
- boxm2_vecf_mandible(std::map<std::string, unsigned> const& boundary_knots, vgl_cubic_spline_3d<double> const& axis,
+ boxm2_vecf_mandible(std::map<std::string, unsigned>  boundary_knots, vgl_cubic_spline_3d<double> const& axis,
                      std::vector<bvgl_cross_section> const& cross_sects, double cross_section_interval=0.5):
- bvgl_gen_cylinder(axis, cross_sects, cross_section_interval), boundary_knots_(boundary_knots){
+ bvgl_gen_cylinder(axis, cross_sects, cross_section_interval), boundary_knots_(std::move(boundary_knots)){
    fill_boundary_map(); set_inv_rot();
  }
 

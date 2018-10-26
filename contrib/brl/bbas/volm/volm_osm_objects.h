@@ -14,6 +14,7 @@
 // \endverbatim
 
 #include <iostream>
+#include <utility>
 #include <vector>
 #include "volm_category_io.h"
 #include "volm_osm_parser.h"
@@ -38,10 +39,10 @@ public:
   volm_osm_objects(std::string const& bin_file_name);
 
   //: create volm_osm_objects from multiple volm_locs, lines and regions
-  volm_osm_objects(std::vector<volm_osm_object_point_sptr> const& loc_pts,
-                   std::vector<volm_osm_object_line_sptr> const& loc_lines,
-                   std::vector<volm_osm_object_polygon_sptr> const& loc_polys)
-    : loc_pts_(loc_pts), loc_lines_(loc_lines), loc_polys_(loc_polys) {}
+  volm_osm_objects(std::vector<volm_osm_object_point_sptr>  loc_pts,
+                   std::vector<volm_osm_object_line_sptr>  loc_lines,
+                   std::vector<volm_osm_object_polygon_sptr>  loc_polys)
+    : loc_pts_(std::move(loc_pts)), loc_lines_(std::move(loc_lines)), loc_polys_(std::move(loc_polys)) {}
 
   //: write all volm_osm_object into binary file
   bool write_osm_objects(std::string const& bin_file);
@@ -96,8 +97,8 @@ public:
   volm_osm_object_ids() {pt_ids_.clear(); line_ids_.clear(); region_ids_.clear(); }
 
   //: constuctor
-  volm_osm_object_ids(std::vector<unsigned> const& pt_ids, std::vector<unsigned> const& line_ids, std::vector<unsigned> const& region_ids)
-    : pt_ids_(pt_ids), line_ids_(line_ids), region_ids_(region_ids) {}
+  volm_osm_object_ids(std::vector<unsigned>  pt_ids, std::vector<unsigned>  line_ids, std::vector<unsigned>  region_ids)
+    : pt_ids_(std::move(pt_ids)), line_ids_(std::move(line_ids)), region_ids_(std::move(region_ids)) {}
 
   //: construct by reading from a binary file
   volm_osm_object_ids(std::string const& bin_file);

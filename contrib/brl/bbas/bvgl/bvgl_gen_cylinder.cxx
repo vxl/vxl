@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
+#include <utility>
 #include "bvgl_gen_cylinder.h"
 #include <bvrml/bvrml_write.h>
 #include <vgl/vgl_intersection.h>
@@ -9,11 +10,11 @@
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
 bvgl_gen_cylinder
-::bvgl_gen_cylinder(vgl_cubic_spline_3d<double> const& axis,
+::bvgl_gen_cylinder(vgl_cubic_spline_3d<double>  axis,
                     std::vector<bvgl_cross_section> const& cross_sects,
                     double cross_section_interval):
   cross_section_interval_(cross_section_interval),
-  axis_(axis),
+  axis_(std::move(axis)),
   cross_sections_(cross_sects)
 {
   for(std::vector<bvgl_cross_section>::const_iterator cit = cross_sects.begin();

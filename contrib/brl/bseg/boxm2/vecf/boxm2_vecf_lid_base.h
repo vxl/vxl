@@ -10,6 +10,8 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_sphere_3d.h>
+
+#include <utility>
 #include "boxm2_vecf_orbit_params.h"
 class boxm2_vecf_lid_base{
  public:
@@ -17,7 +19,7 @@ class boxm2_vecf_lid_base{
 
  boxm2_vecf_lid_base(double t_min, double t_max):t_min_(t_min), t_max_(t_max),dphi_rad_(0.0){}
 
- boxm2_vecf_lid_base(boxm2_vecf_orbit_params const& params):t_min_(0.0), t_max_(1.0), opr_(params),dphi_rad_(0.0){}
+ boxm2_vecf_lid_base(boxm2_vecf_orbit_params  params):t_min_(0.0), t_max_(1.0), opr_(std::move(params)),dphi_rad_(0.0){}
 
 
   // limits for upper or lower lid contours

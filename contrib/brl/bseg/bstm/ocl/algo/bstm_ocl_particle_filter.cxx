@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "bstm_ocl_particle_filter.h"
 
 #include <vcl_where_root_dir.h>
@@ -21,7 +22,7 @@ bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm
                         std::string kernel_opt,int nbins, int track_label, double radius ):
                         device_(device), scene_(scene), cache_(cache), opencl_cache_(opencl_cache),num_particles_(num_particles), initial_bb_(initial_bb),
                         t_sigma_(t_sigma), w_sigma_(w_sigma), start_t_(start_t), end_t_(end_t), track_label_(track_label), radius_(radius),
-                        kernel_opt_(kernel_opt), app_nbins_(nbins), app_view_dir_num_(4), surf_nbins_(2), rand_(9667566)
+                        kernel_opt_(std::move(kernel_opt)), app_nbins_(nbins), app_view_dir_num_(4), surf_nbins_(2), rand_(9667566)
 {
   //get blocks that intersect the provided bounding box.
   //std::vector<bstm_block_id> relevant_blocks = scene_->get_block_ids(initial_bb, start_t);

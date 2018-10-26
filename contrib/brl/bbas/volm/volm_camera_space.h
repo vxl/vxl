@@ -54,7 +54,7 @@ class volm_camera_space : public vbl_ref_count
     head_radius_(0.0), head_inc_(0.0),tilt_mid_(0.0), tilt_radius_(0.0),
     tilt_inc_(0.0), roll_mid_(0.0),roll_radius_(0.0), roll_inc_(0.0) {}
   // angle units in degrees
-  volm_camera_space(std::vector<double> const& top_fov, double altitude,
+  volm_camera_space(std::vector<double>  top_fov, double altitude,
                     unsigned ni, unsigned nj,
                     double head_mid=0.0,  double head_radius=180.0, double head_inc=2.0,
                     double tilt_mid=90.0, double tilt_radius=20.0,  double tilt_inc=2.0,

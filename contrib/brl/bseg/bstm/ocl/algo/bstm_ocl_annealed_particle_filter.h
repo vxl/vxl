@@ -1,6 +1,8 @@
 #ifndef bstm_ocl_annealed_particle_filter_h_
 #define bstm_ocl_annealed_particle_filter_h_
 
+#include <utility>
+
 #include "bstm_ocl_particle_filter.h"
 //:
 // \file
@@ -13,7 +15,7 @@ class bstm_ocl_annealed_particle_filter : public bstm_ocl_particle_filter
                            unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma, double w_kappa,
                            std::string kernel_opt, int nbins, int label, std::string pf_output_path, double radius = 0 ) :
                                bstm_ocl_particle_filter( device,  scene, cache, opencl_cache, start_t, end_t, initial_bb, num_particles, t_sigma, w_sigma,
-                                                         kernel_opt, nbins, label,  radius ), pf_output_path_(pf_output_path), original_t_sigma_(t_sigma), original_w_sigma_(w_sigma),original_w_kappa_(w_kappa) { }
+                                                         kernel_opt, nbins, label,  radius ), pf_output_path_(std::move(pf_output_path)), original_t_sigma_(t_sigma), original_w_sigma_(w_sigma),original_w_kappa_(w_kappa) { }
 
   void track() override;
 

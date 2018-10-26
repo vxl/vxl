@@ -22,7 +22,7 @@ class boxm2_vecf_landmark_mapper
 {
   public:
   boxm2_vecf_landmark_mapper(std::vector<vgl_point_3d<double> > const& control_pts_source,
-                             std::vector<vgl_point_3d<double> > const& control_pts_target,
+                             std::vector<vgl_point_3d<double> >  control_pts_target,
                              F weight_function,
                              int n_nearest = 3);
 
@@ -43,8 +43,8 @@ template<class F>
 class boxm2_vecf_landmark_warp : public boxm2_vecf_vector_field<boxm2_vecf_landmark_mapper<F> >
 {
   public:
-    boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> > const& control_pts_source,
-                             std::vector<vgl_point_3d<double> > const& control_pts_target,
+    boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> >  control_pts_source,
+                             std::vector<vgl_point_3d<double> >  control_pts_target,
                              F weight_function);
 
   private:

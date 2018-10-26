@@ -17,6 +17,8 @@
 #include <volm/desc/volm_desc_matcher.h>
 #include <volm/desc/volm_desc_ex.h>
 #include <volm/desc/volm_desc_indexer.h>
+
+#include <utility>
 #include "boxm2_volm_desc_ex_indexer.h"
 
 class boxm2_volm_desc_ex_matcher : public volm_desc_matcher
@@ -27,11 +29,11 @@ class boxm2_volm_desc_ex_matcher : public volm_desc_matcher
 
   //: Constructor
   boxm2_volm_desc_ex_matcher(depth_map_scene_sptr const& dms,
-                             std::vector<double> const& radius,
+                             std::vector<double>  radius,
                              unsigned const& norients = 3,
                              unsigned const& nlands = volm_label_table::compute_number_of_labels(),
                              unsigned char const& initial_mag = 0)
-  : dms_(dms), radius_(radius), norients_(norients), nlands_(nlands), initial_mag_(initial_mag)
+  : dms_(dms), radius_(std::move(radius)), norients_(norients), nlands_(nlands), initial_mag_(initial_mag)
   { }
 
   //: Destructor

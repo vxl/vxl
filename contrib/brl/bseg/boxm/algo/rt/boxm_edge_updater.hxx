@@ -1,6 +1,7 @@
 #ifndef boxm_edge_updater_hxx_
 #define boxm_edge_updater_hxx_
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -16,8 +17,8 @@
 template <class T_loc, class APM, class AUX>
 boxm_edge_updater<T_loc,APM,AUX>::boxm_edge_updater(boxm_scene<boct_tree<T_loc,
                                                     boxm_edge_sample<APM> > > &scene,
-                                                    std::vector<std::string> const& image_ids)
-: image_ids_(image_ids), scene_(scene)
+                                                    std::vector<std::string>  image_ids)
+: image_ids_(std::move(image_ids)), scene_(scene)
 {}
 
 

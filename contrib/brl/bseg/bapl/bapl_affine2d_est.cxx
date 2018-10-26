@@ -1,6 +1,7 @@
 // This is brl/bseg/bapl/bapl_affine2d_est.cxx
 #include <iostream>
 #include <cmath>
+#include <utility>
 #include "bapl_affine2d_est.h"
 //:
 // \file
@@ -30,10 +31,10 @@ bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > &
   }
 }
 
-bapl_affine2d_est::bapl_affine2d_est( const std::vector< vnl_vector<double> > & from_pts,
-                                      const std::vector< vnl_vector<double> > & to_pts )
+bapl_affine2d_est::bapl_affine2d_est( std::vector< vnl_vector<double> >  from_pts,
+                                      std::vector< vnl_vector<double> >  to_pts )
   : rrel_estimation_problem( 6 /*dof*/, 3 /*points to instantiate*/ ),
-    from_pts_( from_pts ), to_pts_( to_pts )
+    from_pts_(std::move( from_pts )), to_pts_(std::move( to_pts ))
 {
   assert( from_pts_.size() == to_pts_.size() );
 }

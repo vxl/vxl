@@ -2,6 +2,7 @@
 #include <set>
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "brdb_relation.h"
 //:
 // \file
@@ -30,9 +31,9 @@ brdb_relation::brdb_relation()
 }
 
 //: Constructor - create an empty relation but define the columns
-brdb_relation::brdb_relation( const std::vector<std::string>& names,
-                              const std::vector<std::string>& types )
- : names_(names), types_(types)
+brdb_relation::brdb_relation( std::vector<std::string>  names,
+                              std::vector<std::string>  types )
+ : names_(std::move(names)), types_(std::move(types))
 {
   assert(this->is_valid());
   // init the time stamp;
@@ -41,9 +42,9 @@ brdb_relation::brdb_relation( const std::vector<std::string>& names,
 
 //: Constructor - create a relation populated with tuples
 brdb_relation::brdb_relation( const std::vector<std::string>& names,
-                              const std::vector<brdb_tuple_sptr>& tuples,
-                              const std::vector<std::string>& types )
- : names_(names), types_(types), tuples_(tuples)
+                              std::vector<brdb_tuple_sptr>  tuples,
+                              std::vector<std::string>  types )
+ : names_(names), types_(std::move(types)), tuples_(std::move(tuples))
 {
   // if no types are specified infer them from the data
   if (types_.empty())

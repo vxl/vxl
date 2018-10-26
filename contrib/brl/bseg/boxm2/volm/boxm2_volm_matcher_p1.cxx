@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
+#include <utility>
 #include "boxm2_volm_matcher_p1.h"
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
@@ -11,23 +12,23 @@
 
 boxm2_volm_matcher_p1::boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
                                              volm_query_sptr const& query,
-                                             std::vector<volm_geo_index_node_sptr> const& leaves,
+                                             std::vector<volm_geo_index_node_sptr>  leaves,
                                              float const& buffer_capacity,
                                              std::string const& geo_index_folder,
                                              unsigned const& tile_id,
-                                             std::vector<float> const& depth_interval,
+                                             std::vector<float>  depth_interval,
                                              vgl_polygon<double> const& cand_poly,
                                              bocl_device_sptr gpu,
                                              bool const& is_candidate,
                                              bool const& is_last_pass,
-                                             std::string const& out_folder,
+                                             std::string  out_folder,
                                              float const& threshold,
                                              unsigned const& max_cam_per_loc,
                                              std::vector<volm_weight> weights)
-: cam_space_(cam_space), query_(query), leaves_(leaves), ind_buffer_(buffer_capacity),
-  weights_(weights),
+: cam_space_(cam_space), query_(query), leaves_(std::move(leaves)), ind_buffer_(buffer_capacity),
+  weights_(std::move(weights)),
   fallback_size_buff_(nullptr), layer_size_buff_(nullptr), is_candidate_(is_candidate), cand_poly_(cand_poly),
-  is_last_pass_(is_last_pass), out_folder_(out_folder), depth_interval_(depth_interval),
+  is_last_pass_(is_last_pass), out_folder_(std::move(out_folder)), depth_interval_(std::move(depth_interval)),
   gpu_(gpu), is_grd_reg_(true), is_sky_reg_(true), is_obj_reg_(true), n_cam_(nullptr), n_obj_(nullptr),
   grd_id_buff_(nullptr), grd_dist_buff_(nullptr), grd_land_buff_(nullptr), grd_land_wgt_buff_(nullptr),
   grd_id_offset_buff_(nullptr), grd_weight_buff_(nullptr), grd_wgt_attri_buff_(nullptr),

@@ -21,6 +21,8 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
+#include <utility>
+
 class brec_bg_pair_density : public brec_pair_density
 {
  protected:
@@ -35,7 +37,7 @@ class brec_bg_pair_density : public brec_pair_density
   brec_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
                        std::string voxel_type, unsigned bin, unsigned scale,
                        unsigned ni, unsigned nj)
-  : brec_pair_density(), verbose(false), world_(w), cam_(cam), voxel_type_(voxel_type),
+  : brec_pair_density(), verbose(false), world_(w), cam_(cam), voxel_type_(std::move(voxel_type)),
     bin_(bin), scale_(scale), ni_(ni), nj_(nj), i_(0), j_(0) {}
 
   //: if an existing density map will be used there is no need to generate mixture of gaussians image, hence no need for world, camera etc.

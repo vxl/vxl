@@ -16,6 +16,7 @@
 // Approved for Public Release, Distribution Unlimited (DISTAR Case 12529)
 //
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include "bsta_distribution.h"
@@ -73,8 +74,8 @@ class bsta_parzen : public bsta_distribution<T,n>
   bsta_parzen() = default;
   virtual ~bsta_parzen() = default;
 
-  bsta_parzen(sample_vector const& samples)
-  : samples_(samples) {}
+  bsta_parzen(sample_vector  samples)
+  : samples_(std::move(samples)) {}
 
   //: Insert a new sample into the distribution
   void insert_sample(const vect_t& sample)

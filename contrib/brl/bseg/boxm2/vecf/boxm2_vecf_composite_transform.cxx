@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stdexcept>
+#include <utility>
 #include "boxm2_vecf_composite_transform.h"
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_block.h>
@@ -11,7 +12,7 @@
 
 boxm2_vecf_composite_transform::
 boxm2_vecf_composite_transform(std::vector<boxm2_vecf_vector_field_base_sptr> xforms)
-  : xforms_(xforms)
+  : xforms_(std::move(xforms))
 {
   if (xforms_.size() == 0) {
     throw std::runtime_error("boxm2_vecf_composite_transform passed an empty vector of transforms");

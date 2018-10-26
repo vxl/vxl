@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <utility>
 #include <vector>
 #include <set>
 #include <vcl_memory.h>
@@ -168,8 +169,8 @@ class imesh_face_array : public imesh_face_array_base
   imesh_face_array(unsigned int size) : faces_(size) {}
 
   //: Constructor (from a vector)
-  imesh_face_array(const std::vector<std::vector<unsigned int> >& faces)
-  : faces_(faces) {}
+  imesh_face_array(std::vector<std::vector<unsigned int> >  faces)
+  : faces_(std::move(faces)) {}
 
   //: Copy Constructor
   imesh_face_array(const imesh_face_array& other)

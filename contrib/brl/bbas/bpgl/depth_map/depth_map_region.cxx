@@ -22,6 +22,8 @@
 #include <vpgl/algo/vpgl_ray.h>
 #include <bpgl/bpgl_camera_utils.h>
 
+#include <utility>
+
 // specified and fixed plane
 vsol_polygon_3d_sptr depth_map_region::
 region_2d_to_3d(vsol_polygon_2d_sptr const& region_2d,
@@ -106,7 +108,7 @@ depth_map_region
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
                                    double const& min_depth, double const& max_depth,
-                                   std::string const& name,
+                                   std::string  name,
                                    depth_map_region::orientation orient,
                                    unsigned const& land_id,
                                    double const& height,
@@ -116,7 +118,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   order_(0),
   land_id_(land_id),
   orient_type_(orient),
-  name_(name),
+  name_(std::move(name)),
   depth_(-1.0),
   min_depth_(min_depth),
   max_depth_(max_depth),
@@ -129,7 +131,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
 
 depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
                                    vgl_plane_3d<double> const& region_plane,
-                                   std::string const& name,
+                                   std::string  name,
                                    depth_map_region::orientation orient,
                                    unsigned const& land_id) :
   active_(true),
@@ -137,7 +139,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   order_(0),
   land_id_(land_id),
   orient_type_(orient),
-  name_(name),
+  name_(std::move(name)),
   depth_(-1.0),
   min_depth_(-1.0),
   max_depth_(-1.0),
@@ -156,7 +158,7 @@ depth_map_region::depth_map_region(vsol_polygon_2d_sptr const& region,
   order_(0),
   land_id_(0),
   orient_type_(INFINT),
-  name_(name),
+  name_(std::move(name)),
   depth_(std::numeric_limits<double>::max()),
   min_depth_(std::numeric_limits<double>::max()),
   max_depth_(std::numeric_limits<double>::max()),

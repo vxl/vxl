@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <limits>
+#include <utility>
 #include "volm_conf_score.h"
 //:
 // \file
@@ -9,8 +10,8 @@
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction
 
-volm_conf_score::volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object> const& landmarks)
- : score_(score), theta_(theta), landmarks_(landmarks)
+volm_conf_score::volm_conf_score(float const& score, float const& theta, std::vector<volm_conf_object>  landmarks)
+ : score_(score), theta_(theta), landmarks_(std::move(landmarks))
 {
   while (theta_ > vnl_math::twopi)
     theta_ -= (float)vnl_math::twopi;

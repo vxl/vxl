@@ -15,6 +15,7 @@
 // \endverbatim
 
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
@@ -67,9 +68,9 @@ class bapl_bbf_node : public vbl_ref_count
   bapl_bbf_node( const bapl_bbf_box& outer_box,
                  const bapl_bbf_box& inner_box,
                  unsigned int depth,
-                 const std::vector<int>& indices )
+                 std::vector<int>  indices )
     : outer_box_(outer_box), inner_box_(inner_box), depth_(depth),
-      point_indices_(indices), left_(nullptr), right_(nullptr) {}
+      point_indices_(std::move(indices)), left_(nullptr), right_(nullptr) {}
 
   //: Outer bounding box
   bapl_bbf_box outer_box_;
@@ -111,7 +112,7 @@ class bapl_bbf_tree
 {
  public:
   //: Constructor
-  bapl_bbf_tree( const std::vector< bapl_keypoint_sptr >& points,
+  bapl_bbf_tree( std::vector< bapl_keypoint_sptr >  points,
                  int points_per_leaf=4 );
 
   //: Return an estimate of the n closest points to the query point

@@ -30,12 +30,12 @@ std::vector<rsdl_point> convert_vgl_to_rsdl(std::vector<vgl_point_3d<double> > c
 template<class F>
 boxm2_vecf_landmark_mapper<F>::
 boxm2_vecf_landmark_mapper(std::vector<vgl_point_3d<double> > const& control_pts_source,
-                           std::vector<vgl_point_3d<double> > const& control_pts_target,
+                           std::vector<vgl_point_3d<double> >  control_pts_target,
                            F weight_function,
                            int n_nearest
                            )
   : control_pts_source_(control_pts_source),
-    control_pts_target_(control_pts_target),
+    control_pts_target_(std::move(control_pts_target)),
     weight_function_(weight_function),
     n_nearest_(n_nearest),
     source_kd_tree_(new rsdl_kd_tree(convert_vgl_to_rsdl(control_pts_source), 0, n_nearest))
@@ -91,11 +91,11 @@ boxm2_vecf_landmark_warp<F>::make_inverse_mapper(boxm2_scene_sptr source, boxm2_
 }
 
 template <class F>
-boxm2_vecf_landmark_warp<F>::boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> > const& control_pts_source,
-                                                      std::vector<vgl_point_3d<double> > const& control_pts_target,
+boxm2_vecf_landmark_warp<F>::boxm2_vecf_landmark_warp(std::vector<vgl_point_3d<double> >  control_pts_source,
+                                                      std::vector<vgl_point_3d<double> >  control_pts_target,
                                                       F weight_function)
-: control_pts_source_(control_pts_source),
-  control_pts_target_(control_pts_target),
+: control_pts_source_(std::move(control_pts_source)),
+  control_pts_target_(std::move(control_pts_target)),
   weight_function_(weight_function)
 {
 }

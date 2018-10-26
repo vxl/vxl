@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
 
 #include <vil/vil_image_view_base.h>
@@ -25,7 +26,7 @@ class bvxm_image_metadata
                       vnl_vector<double> light_arg = vnl_vector<double>(), double timestamp_arg = -1,
                       std::string name_arg = "NONE")
   : img(img_arg), camera(camera_arg), light(light_arg), timestamp(timestamp_arg),
-    name(name_arg) {}
+    name(std::move(name_arg)) {}
 
   vil_image_view_base_sptr img;
   vpgl_camera_double_sptr camera;

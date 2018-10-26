@@ -5,15 +5,17 @@
 
 #include <vil/algo/vil_gauss_filter.h>
 
+#include <utility>
+
 //: Constructor
 ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
                                           const ihog_image<float>& image2,
-                                          const ihog_world_roi& roi,
+                                          ihog_world_roi  roi,
                                           const ihog_transform_2d& init_xform )
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
-   roi_(roi),
+   roi_(std::move(roi)),
    form_(init_xform.form()),
    from_mask_(false),
    to_mask_(false)
@@ -30,12 +32,12 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
 ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,
                                           const ihog_image<float>& image2,
                                           const ihog_image<float>& mask,
-                                          const ihog_world_roi& roi,
+                                          ihog_world_roi  roi,
                                           const ihog_transform_2d& init_xform, bool image1_mask)
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
-   roi_(roi),
+   roi_(std::move(roi)),
    form_(init_xform.form()),
    from_mask_(image1_mask),
    to_mask_(!image1_mask)
@@ -58,14 +60,14 @@ ihog_lsqr_cost_func::ihog_lsqr_cost_func(const ihog_image<float>& image1,
                                          const ihog_image<float>& image2,
                                          const ihog_image<float>& mask1,
                                          const ihog_image<float>& mask2,
-                                         const ihog_world_roi& roi,
+                                         ihog_world_roi  roi,
                                          const ihog_transform_2d& init_xform)
  : vnl_least_squares_function(1,1),
    from_image_(image1),
    to_image_(image2),
    from_mask_image_(mask1),
    to_mask_image_(mask2),
-   roi_(roi),
+   roi_(std::move(roi)),
    form_(init_xform.form()),
    from_mask_(true),
    to_mask_(true)

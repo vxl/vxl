@@ -70,9 +70,9 @@ bapl_bbf_dist_sq( const bapl_keypoint_sptr p, const bapl_bbf_box& b )
 
 
 //: Constructor
-bapl_bbf_tree::bapl_bbf_tree(const std::vector< bapl_keypoint_sptr >& points, int points_per_leaf)
+bapl_bbf_tree::bapl_bbf_tree(std::vector< bapl_keypoint_sptr >  points, int points_per_leaf)
  : leaf_count_(0), leaves_examined_(0), internal_count_(0),
-   internal_examined_(0), points_(points)
+   internal_examined_(0), points_(std::move(points))
 {
   assert(points_per_leaf > 0);
 

@@ -8,6 +8,7 @@
 #include <iostream>
 #include <algorithm>
 #include <stdexcept>
+#include <utility>
 #include "boxm2_ocl_vis_score_renderer.h"
 
 #include <vcl_compiler.h>
@@ -33,7 +34,7 @@ boxm2_ocl_vis_score_renderer
                                std::string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
-  ident_(ident),
+  ident_(std::move(ident)),
   buffers_allocated_(false),
   render_success_(false)
 {

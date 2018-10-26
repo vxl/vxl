@@ -53,6 +53,7 @@
 // \endverbatim
 
 
+#include <utility>
 #include <vector>
 #include <map>
 #include <iostream>
@@ -69,8 +70,8 @@
 
 struct sdet_neighbor
 {
-  sdet_neighbor(std::string const& category, vnl_vector<double> const& k_mean)
-  : cat_(category), k_mean_(k_mean){}
+  sdet_neighbor(std::string  category, vnl_vector<double> const& k_mean)
+  : cat_(std::move(category)), k_mean_(k_mean){}
   std::string cat_;
   vnl_vector<double> k_mean_;
 };

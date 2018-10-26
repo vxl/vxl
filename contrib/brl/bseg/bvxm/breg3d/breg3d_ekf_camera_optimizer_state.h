@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
@@ -30,7 +31,7 @@ class breg3d_ekf_camera_optimizer_state
                                     vgl_rotation_3d<double> base_rot,
                                     double init_translation_var,
                                     double init_rotation_var)
-    : k_(0),xk_(0.0),base_point_(base_point),base_rotation_(base_rot),t_scale_(t_scale)
+    : k_(0),xk_(0.0),base_point_(base_point),base_rotation_(std::move(base_rot)),t_scale_(t_scale)
   {
     set_error_covariance(init_translation_var,init_rotation_var);
   }
@@ -40,7 +41,7 @@ class breg3d_ekf_camera_optimizer_state
                                     vgl_rotation_3d<double> base_rot,
                                     vnl_vector_fixed<double,6> xk,
                                     vnl_matrix_fixed<double,6,6> Pk)
-    : k_(time_index), Pk_(Pk), xk_(xk), base_point_(base_point), base_rotation_(base_rot), t_scale_(t_scale) {}
+    : k_(time_index), Pk_(Pk), xk_(xk), base_point_(base_point), base_rotation_(std::move(base_rot)), t_scale_(t_scale) {}
 
   // default constructor
   breg3d_ekf_camera_optimizer_state()= default;

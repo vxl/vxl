@@ -11,6 +11,7 @@
 //   <None yet>
 // \endverbatim
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <utility>
@@ -34,7 +35,7 @@ class bvpl_kernel_iterator: public vbl_ref_count
 
   bvpl_kernel_iterator() : cur_index_(0) {}
 
-  bvpl_kernel_iterator(std::vector<kernel_pair> kernel_vals):kernel_vals_(kernel_vals), cur_index_(0) {}
+  bvpl_kernel_iterator(std::vector<kernel_pair> kernel_vals):kernel_vals_(std::move(kernel_vals)), cur_index_(0) {}
 
   ~bvpl_kernel_iterator() override= default;
 

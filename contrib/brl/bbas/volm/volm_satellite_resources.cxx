@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <iterator>
 #include <cstdio>
+#include <utility>
 #include "volm_satellite_resources.h"
 
 #include <vil/vil_load.h>
@@ -1036,7 +1037,7 @@ private:
 
     typedef Iterator self_type;
 
-    explicit Iterator(Combinator asg) : asg_(asg) { }
+    explicit Iterator(Combinator asg) : asg_(std::move(asg)) { }
     // implicit copy constructor, copy assignment and destructor
     reference operator*() { return asg_.inds; }
     pointer operator->() { return &*(*this); }
@@ -1053,7 +1054,7 @@ private:
 
     typedef ConstIterator self_type;
 
-    explicit ConstIterator(Combinator asg) : asg_(asg) { }
+    explicit ConstIterator(Combinator asg) : asg_(std::move(asg)) { }
     // implicit copy constructor, copy assignment and destructor
     // a non-const object calling begin() will return an iterator. implicitly
     // convert it if a const_iterator is desired

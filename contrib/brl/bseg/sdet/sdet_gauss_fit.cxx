@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <cmath>
+#include <utility>
 #include "sdet_gauss_fit.h"
 //:
 // \file
@@ -21,12 +22,12 @@
 // -----------------------------------------------------------------
 // constructor
 sdet_adjust_lsqr::
-    sdet_adjust_lsqr( std::vector<vgl_point_3d<double> > const& img_pts,
+    sdet_adjust_lsqr( std::vector<vgl_point_3d<double> >  img_pts,
                       unsigned int num_unknowns, unsigned int num_residuals,
                       int n_peaks)
             : vnl_least_squares_function(num_unknowns, num_residuals,
                                          vnl_least_squares_function::no_gradient)
-            , img_pts_(img_pts)
+            , img_pts_(std::move(img_pts))
             , num_pixels_(img_pts_.size())
             , n_peaks_(n_peaks)
 {

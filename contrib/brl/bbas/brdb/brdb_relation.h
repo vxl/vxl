@@ -39,15 +39,15 @@ class brdb_relation : public vbl_ref_count
   brdb_relation();
 
   //: Constructor - create an empty relation but define the columns
-  brdb_relation( const std::vector<std::string>& names,
-                 const std::vector<std::string>& types );
+  brdb_relation( std::vector<std::string>  names,
+                 std::vector<std::string>  types );
 
   //: Constructor - create a relation populated with tuples
   //  If types are not provided they will be inferred from the tuples.
   //  All tuples must have the same types and arity.
   brdb_relation( const std::vector<std::string>& names,
-                 const std::vector<brdb_tuple_sptr>& tuples,
-                 const std::vector<std::string>& types = std::vector<std::string>() );
+                 std::vector<brdb_tuple_sptr>  tuples,
+                 std::vector<std::string>  types = std::vector<std::string>() );
 
   // Destructor
   ~brdb_relation() override;

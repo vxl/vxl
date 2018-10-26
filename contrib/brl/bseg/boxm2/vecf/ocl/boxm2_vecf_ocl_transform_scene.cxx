@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "boxm2_vecf_ocl_transform_scene.h"
 //:
 // \file
@@ -78,7 +79,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
   : source_scene_(source_scene),
     target_scene_(target_scene),
     opencl_cache_(ocl_cache),
-    grey_app_id_(gray_app_id), color_app_id_(color_app_id),
+    grey_app_id_(std::move(gray_app_id)), color_app_id_(std::move(color_app_id)),
     do_alpha_(do_alpha),do_interp_(do_interp)
 {
   device_=opencl_cache_->get_device();
@@ -102,7 +103,7 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
   :  source_scene_(source_scene),
      target_scene_(nullptr),
      opencl_cache_(ocl_cache),
-     grey_app_id_(gray_app_id), color_app_id_(color_app_id),
+     grey_app_id_(std::move(gray_app_id)), color_app_id_(std::move(color_app_id)),
      do_alpha_(do_alpha),do_interp_(do_interp)
 {
   device_=opencl_cache_->get_device();

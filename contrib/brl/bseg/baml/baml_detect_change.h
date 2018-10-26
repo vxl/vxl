@@ -3,6 +3,7 @@
 #define baml_detect_change_h_
 
 #include <string>
+#include <utility>
 #include <vector>
 #include <set>
 #include <utility>
@@ -125,8 +126,8 @@ class baml_change_detection {
 public:
 
   baml_change_detection(
-    const baml_change_detection_params& params ) :
-      params_( params ){}
+    baml_change_detection_params  params ) :
+      params_(std::move( params )){}
 
   //: Single reference image change detection
   bool detect(

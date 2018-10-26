@@ -5,6 +5,8 @@
 #include "boxm2_volm_wr3db_index.h"
 #include <vul/vul_timer.h>
 
+#include <utility>
+
 struct scorecomp
 {
     bool operator()( std::pair<float,int> const& a, std::pair<float,int> const& b) const
@@ -17,7 +19,7 @@ boxm2_volm_matcher_p0::~boxm2_volm_matcher_p0()
 = default;
 
 boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold)
-: count_(0),cam_space_(cam_space),query_(srq),threshold_(threshold)
+: count_(0),cam_space_(cam_space),query_(std::move(srq)),threshold_(threshold)
 {
     unsigned int count = 0;
     for ( camera_space_iterator iter = cam_space_->begin(); iter != cam_space_->end(); ++iter,++count)

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <iostream>
+#include <utility>
 #include "bvxm_voxel_storage_disk.h"
 //
 #include <vcl_compiler.h>
@@ -20,7 +21,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(std::string storage_filename)
-: bvxm_voxel_storage<T>(), storage_fname_(storage_filename), fio_(nullptr), active_slab_start_(-1)
+: bvxm_voxel_storage<T>(), storage_fname_(std::move(storage_filename)), fio_(nullptr), active_slab_start_(-1)
 {
   // check if file exsist already or not
   if (vul_file::exists(storage_fname_))  {
@@ -61,7 +62,7 @@ bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(std::string storage_filename
 
 template <class T>
 bvxm_voxel_storage_disk<T>::bvxm_voxel_storage_disk(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size)
-: bvxm_voxel_storage<T>(grid_size), storage_fname_(storage_filename), fio_(nullptr), active_slab_start_(-1)
+: bvxm_voxel_storage<T>(grid_size), storage_fname_(std::move(storage_filename)), fio_(nullptr), active_slab_start_(-1)
 {
   // assumes desired slab thickness is 1
   slab_buffer_ = new bvxm_memory_chunk(grid_size.x()*grid_size.y()*sizeof(T));

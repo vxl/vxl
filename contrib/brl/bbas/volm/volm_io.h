@@ -40,7 +40,7 @@ class volm_attributes
 {
  public:
   volm_attributes() : id_(0), name_(""), color_(vil_rgb<vxl_byte>(0,0,0)) {}
-  volm_attributes(unsigned char id, std::string name, vil_rgb<vxl_byte> color): id_(id), name_(name), color_(color) {}
+  volm_attributes(unsigned char id, std::string name, vil_rgb<vxl_byte> color): id_(id), name_(std::move(name)), color_(color) {}
   bool contains(std::string name);
   unsigned char id_;
   std::string name_;
@@ -65,7 +65,7 @@ class volm_category_attribute
 {
  public:
   volm_category_attribute() : lnd_("invalid"), ori_("porous"), is_active_(0) {}
-  volm_category_attribute(std::string lnd, std::string ori, unsigned is_active) : lnd_(lnd), ori_(ori), is_active_(is_active) {}
+  volm_category_attribute(std::string lnd, std::string ori, unsigned is_active) : lnd_(std::move(lnd)), ori_(std::move(ori)), is_active_(is_active) {}
   static void read_category(std::map<std::string, volm_category_attribute> & category_table, std::string fname);
   std::string lnd_;
   std::string ori_;
@@ -219,8 +219,8 @@ class volm_score : public vbl_ref_count
  public:
   volm_score () = default;
   volm_score(unsigned leaf_id, unsigned hypo_id) : leaf_id_(leaf_id), hypo_id_(hypo_id) {}
-  volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, std::vector<unsigned> const& cam_id)
-    : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(cam_id) {}
+  volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, std::vector<unsigned>  cam_id)
+    : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(std::move(cam_id)) {}
   ~volm_score() override = default;
   unsigned leaf_id_;
   unsigned hypo_id_;
@@ -247,8 +247,8 @@ class volm_weight
 {
  public:
   volm_weight () = default;
-  volm_weight (std::string const& w_name, std::string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
-    : w_name_(w_name), w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
+  volm_weight (std::string  w_name, std::string  w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
+    : w_name_(std::move(w_name)), w_typ_(std::move(w_typ)), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
   ~volm_weight() = default;
   //: name of the depth_map_region
   std::string w_name_;

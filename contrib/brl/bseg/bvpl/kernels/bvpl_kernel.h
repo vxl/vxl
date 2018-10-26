@@ -14,6 +14,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
 #include <vnl/vnl_float_3.h>
 #include <vbl/vbl_ref_count.h>
@@ -32,7 +33,7 @@ class bvpl_kernel: public vbl_ref_count
   bvpl_kernel(){id_=bvpl_kernel::get_next_id();}
   //: Constructor
   bvpl_kernel(bvpl_kernel_iterator kernel, vnl_float_3 axis, vnl_float_3 aux_axis, float angle, vgl_vector_3d<int> dim, vgl_point_3d<int> min_pt, vgl_point_3d<int> max_pt, std::string name = "", double voxel_length = 1.0)
-  : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(name),voxel_length_(voxel_length)
+  : kernel_(kernel),axis_(axis),aux_axis_(aux_axis), angle_(angle),dim_(dim),min_point_(min_pt),max_point_(max_pt),name_(std::move(name)),voxel_length_(voxel_length)
   {
 //#ifdef DEBUG
     std::cout << "Creating kernel with axis, angle, dim, max, min = " << axis_ << ' ' << angle_<< ' ' << dim_<< ' ' <<max_point_<< ' ' << min_point_ << '\n';
