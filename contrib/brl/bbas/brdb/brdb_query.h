@@ -21,15 +21,14 @@
 class brdb_query
 {
  protected:
-  //: Destructor - private to prevent allocation on the heap
 #if __cplusplus >= 201103L
   friend vcl_unique_ptr<brdb_query>;
 #else
-  virtual ~brdb_query() {}
   friend class vcl_unique_ptr<brdb_query>;
 #endif
 
  public:
+  virtual ~brdb_query() = default;
   virtual brdb_query_aptr clone() const = 0;
   virtual brdb_query_aptr complement() const = 0;
 
