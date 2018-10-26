@@ -42,8 +42,8 @@ template <class T>
 class sdet_rtree_region_box_2d
 {
   // only static methods
-  sdet_rtree_region_box_2d();
-  ~sdet_rtree_region_box_2d();
+  sdet_rtree_region_box_2d() = delete;
+  ~sdet_rtree_region_box_2d() = delete;
  public:
   typedef sdet_region_sptr v_type;
   typedef vgl_box_2d<T> b_type;

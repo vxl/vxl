@@ -40,8 +40,8 @@ template <class T>
 class rtree_brec_instance_box_2d
 {
   // only static methods
-  rtree_brec_instance_box_2d();
-  ~rtree_brec_instance_box_2d();
+  rtree_brec_instance_box_2d() = delete;
+  ~rtree_brec_instance_box_2d() = delete;
 
  public:
   typedef brec_part_instance_sptr v_type;

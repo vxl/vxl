@@ -102,7 +102,7 @@ class bdgl_curve_algs
     create_digital_curves(std::vector<vgl_point_2d<double> > & curve);
 
  private:
-  bdgl_curve_algs();
+  bdgl_curve_algs() = delete;
 };
 
 #endif

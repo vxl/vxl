@@ -52,7 +52,7 @@ class btol_edge_algs
   static vtol_vertex_2d_sptr closest_vertex(vtol_edge_2d_sptr const& e,
                                             const double x, const double y);
  private:
-  btol_edge_algs();
+  btol_edge_algs() = delete;
 };
 
 #endif

@@ -39,8 +39,8 @@ class bpgl_camera_from_box
 
  private:
   //: constructor private - static methods only
-  bpgl_camera_from_box();
-  ~bpgl_camera_from_box();
+  bpgl_camera_from_box() = delete;
+  ~bpgl_camera_from_box() = delete;
 };
 
 #endif // bpgl_camera_from_box_h_

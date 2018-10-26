@@ -67,7 +67,7 @@ class brad_sun_dir_index
   //: output a vrml display of the major path and the bin axis positions on sun direction sphere
   void print_to_vrml(std::ostream& os);
  private:
-  brad_sun_dir_index();//no default constructor
+  brad_sun_dir_index() = delete;//no default constructor
   //: the histogram of sun directions for the specified location and collection time
   double longitude_deg_;
   double latitude_deg_;

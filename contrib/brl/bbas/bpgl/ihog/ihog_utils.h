@@ -42,8 +42,8 @@ class ihog_utils
                                             unsigned source_nj,
                                             ihog_transform_2d const& t);
  private:
-  ihog_utils();
-  ~ihog_utils();
+  ihog_utils() = delete;
+  ~ihog_utils() = delete;
 };
 
 #endif // ihog_utils_h_

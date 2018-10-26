@@ -26,7 +26,7 @@ class sdet_vrml_display
                                     vil_image_view<float> const & z_of_xy,
                                     float r = 0.0, float g = 1.0, float b = 0.0);
  private:
-  sdet_vrml_display();
+  sdet_vrml_display() = delete;
 
 };
 

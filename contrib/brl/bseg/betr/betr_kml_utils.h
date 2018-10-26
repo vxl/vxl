@@ -17,7 +17,7 @@ class betr_kml_utils
   static void write_mesh(std::ofstream& ostr, betr_geo_object_3d const& geo_obj);
 
  private:
-  betr_kml_utils();
+  betr_kml_utils() = delete;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_kml_utils.

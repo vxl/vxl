@@ -38,7 +38,7 @@ public:
   static std::string volm_src_root();
 
 private:  // only static function in this class: disallow instantiation
-  volm_utils();
+  volm_utils() = delete;
 };
 
 #define VOLM_UTILS_INSTANTIATE(T) extern "Please #include <volm/volm_utils.hxx>"

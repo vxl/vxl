@@ -35,7 +35,7 @@ class bapl_affine_roi
 
  private:
   //: Default Constructor
-  bapl_affine_roi();
+  bapl_affine_roi() = delete;
 
   //: Rectify the image
   void rectify();
