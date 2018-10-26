@@ -248,10 +248,10 @@ class vimt3d_transform_3d
         z*zz_+zt_};
 //   case RigidBody, Similarity, Affine :
      default :
-      return vgl_point_3d<double> (
+      return {
         x*xx_+y*xy_+z*xz_+xt_,
         x*yx_+y*yy_+z*yz_+yt_,
-        x*zx_+y*zy_+z*zz_+zt_);
+        x*zx_+y*zy_+z*zz_+zt_};
     }
   }
 

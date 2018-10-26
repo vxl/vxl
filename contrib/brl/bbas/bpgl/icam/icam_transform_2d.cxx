@@ -150,7 +150,7 @@ icam_transform_2d::delta(vgl_point_2d<double> const& p, vgl_vector_2d<double> co
     return operator()(p+dp)-operator()(p);
    default:
     std::cerr<<"icam_transform_2d::delta() : Unrecognised form: "<<int(form_)<<'\n';
-    return vgl_vector_2d<double>();
+    return {};
   }
 }
 
@@ -166,7 +166,7 @@ vgl_point_2d<double> icam_transform_2d::operator()(double x, double y) const
    case Identity :
     return {x,y};
    case Translation :
-    return vgl_point_2d<double>(x+t12_matrix_[0][2],y+t12_matrix_[1][2]);
+    return {x+t12_matrix_[0][2],y+t12_matrix_[1][2]};
    case RigidBody :
    case Affine :
     return vgl_point_2d<double>(x*t12_matrix_[0][0]+y*t12_matrix_[0][1]+t12_matrix_[0][2],
