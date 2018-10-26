@@ -22,7 +22,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <utility>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
@@ -117,9 +119,9 @@ class bstm_block_metadata:  public vbl_ref_count
   //: bounding box for this block
   vgl_box_3d<double>      bbox() const;
   void   bbox_t(double& min_t, double& max_t) const {min_t = local_origin_t_; max_t = local_origin_t_ + sub_block_num_t_*sub_block_dim_t_; };
-  vcl_pair<double, double> bbox_t() const { vcl_pair<double,double> p; bbox_t(p.first, p.second); return p; }
-  vcl_pair<vgl_vector_3d<double>,double> resolution() const {
-    return vcl_pair<vgl_vector_3d<double>,double>(sub_block_dim_ / 8.0, sub_block_dim_t_ / 32.0);
+  std::pair<double, double> bbox_t() const { std::pair<double,double> p; bbox_t(p.first, p.second); return p; }
+  std::pair<vgl_vector_3d<double>,double> resolution() const {
+    return std::pair<vgl_vector_3d<double>,double>(sub_block_dim_ / 8.0, sub_block_dim_t_ / 32.0);
   }
 
   bool operator==(bstm_block_metadata const& m) const;
@@ -134,7 +136,7 @@ class bstm_block_metadata:  public vbl_ref_count
 //: Smart_Pointer typedef for bstm_block
 typedef vbl_smart_ptr<bstm_block_metadata> bstm_block_metadata_sptr;
 
-vcl_ostream &operator<<(vcl_ostream &s, const bstm_block_metadata &metadata);
+std::ostream &operator<<(std::ostream &s, const bstm_block_metadata &metadata);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream& os, bstm_block_metadata const& scene);

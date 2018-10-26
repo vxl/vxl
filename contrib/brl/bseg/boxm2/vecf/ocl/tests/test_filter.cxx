@@ -3,7 +3,9 @@
 // \author J.L. Mundy
 // \date 10/12/14
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <fstream>
 #include <vector>

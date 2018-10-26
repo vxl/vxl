@@ -370,8 +370,8 @@ main( int argc, char* argv[] )
   //
   rgrl_weighter_sptr wgter;
   {
-    vcl_unique_ptr< rrel_m_est_obj > m_est_obj( new rrel_tukey_obj(4) );
-    wgter = new rgrl_weighter_m_est( vcl_move(m_est_obj), true, true) ;
+    std::unique_ptr< rrel_m_est_obj > m_est_obj( new rrel_tukey_obj(4) );
+    wgter = new rgrl_weighter_m_est( std::move(m_est_obj), true, true) ;
   }
 
   // 5. Scale estimator
@@ -382,8 +382,8 @@ main( int argc, char* argv[] )
   rgrl_scale_estimator_wgted_sptr wgted_scale_est;
   {
     // muse and unwgted_scale_est are not used
-    vcl_unique_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
-    unwgted_scale_est = new rgrl_scale_est_closest( vcl_move(obj) );
+    std::unique_ptr<rrel_objective> obj( new rrel_muset_obj( 1 ) );
+    unwgted_scale_est = new rgrl_scale_est_closest( std::move(obj) );
     wgted_scale_est = new rgrl_scale_est_all_weights( );
   }
 

@@ -154,7 +154,7 @@ static void test_bvxm_rpc_registration_process()
 
     // check if the results are in DB
     brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
-    brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", vcl_move(Q_cam));
+    brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", std::move(Q_cam));
     if (S_cam->size()!=1) {
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     }
@@ -171,7 +171,7 @@ static void test_bvxm_rpc_registration_process()
     vpgl_camera_double_sptr cam = result_cam->value();
 
     brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-    brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img));
+    brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img));
     if (S_img->size()!=1) {
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                 << " no selections\n";

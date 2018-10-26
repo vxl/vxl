@@ -244,9 +244,9 @@ main( int argc, char* argv[] )
 
   rgrl_estimator_sptr affine_estimator = new rgrl_est_affine(dim);
 
-  vcl_unique_ptr<rrel_objective> obj_fun( new rrel_lms_obj(1) );
+  std::unique_ptr<rrel_objective> obj_fun( new rrel_lms_obj(1) );
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
-    new rgrl_scale_est_closest( vcl_move(obj_fun) );
+    new rgrl_scale_est_closest( std::move(obj_fun) );
 
   rgrl_initializer_ran_sam* ran_sam = new rgrl_initializer_ran_sam();
   ran_sam->set_data(pruned_match_set,
@@ -272,10 +272,10 @@ main( int argc, char* argv[] )
   // \code{rgrl\_weighter\_m\_est}. Make sure
   // \code{signature\_precomputed} is allowed.
   //
-  vcl_unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
+  std::unique_ptr<rrel_m_est_obj>  m_est_obj( new rrel_tukey_obj(4) );
   bool use_signature_error = false;
   bool signature_precomputed = true;
-  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(vcl_move(m_est_obj),
+  rgrl_weighter_sptr wgter = new rgrl_weighter_m_est(std::move(m_est_obj),
                                                      use_signature_error,
                                                      signature_precomputed);
 

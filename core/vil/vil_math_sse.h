@@ -33,9 +33,9 @@
 //: Compute absolute difference of two 1D images (imD = |imA-imB|)
 template<class aT, class bT, class dT>
 void vil_math_image_abs_difference_1d_generic(
-  const aT* pxA, vcl_ptrdiff_t isA,
-  const bT* pxB, vcl_ptrdiff_t isB,
-        dT* pxD, vcl_ptrdiff_t isD,
+  const aT* pxA, std::ptrdiff_t isA,
+  const bT* pxB, std::ptrdiff_t isB,
+        dT* pxD, std::ptrdiff_t isD,
   unsigned len);
 
 template<class aT, class bT, class dT>
@@ -45,9 +45,9 @@ void vil_math_image_abs_difference_1d_sse(
 
 template<class aT, class bT, class dT>
 void vil_math_image_abs_difference_1d(
-  const aT* pxA, vcl_ptrdiff_t isA,
-  const bT* pxB, vcl_ptrdiff_t isB,
-        dT* pxD, vcl_ptrdiff_t isD,
+  const aT* pxA, std::ptrdiff_t isA,
+  const bT* pxB, std::ptrdiff_t isB,
+        dT* pxD, std::ptrdiff_t isD,
   unsigned len);
 
 #define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(aT,bT,dT)  \
@@ -57,9 +57,9 @@ void vil_math_image_abs_difference_1d_sse<aT,bT,dT>(              \
   unsigned len);                                                  \
 template<>                                                        \
 void vil_math_image_abs_difference_1d<aT,bT,dT>(                  \
-  const aT* pxA, vcl_ptrdiff_t isA,                               \
-  const bT* pxB, vcl_ptrdiff_t isB,                               \
-        dT* pxD, vcl_ptrdiff_t isD,                               \
+  const aT* pxA, std::ptrdiff_t isA,                               \
+  const bT* pxB, std::ptrdiff_t isB,                               \
+        dT* pxD, std::ptrdiff_t isD,                               \
   unsigned len);
 
 VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(vxl_byte,vxl_byte,vxl_byte)
@@ -70,9 +70,9 @@ VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_DECL(float,float,float)
 #define VIL_MATH_IMAGE_ABS_DIFF_1D_SSE_SPECIALIZE_IMPL(aT,bT,dT)        \
 template<>                                                              \
 inline void vil_math_image_abs_difference_1d<aT,bT,dT>(                 \
-  const aT* pxA, vcl_ptrdiff_t isA,                                     \
-  const bT* pxB, vcl_ptrdiff_t isB,                                     \
-        dT* pxD, vcl_ptrdiff_t isD,                                     \
+  const aT* pxA, std::ptrdiff_t isA,                                     \
+  const bT* pxB, std::ptrdiff_t isB,                                     \
+        dT* pxD, std::ptrdiff_t isD,                                     \
   unsigned len)                                                         \
 {                                                                       \
   if (isA == 1 && isB == 1 && isD == 1)                                 \

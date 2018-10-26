@@ -148,7 +148,7 @@ bool mfpf_profile_pdf_builder::set_from_stream(std::istream &is)
   if (props.find("pdf_builder")!=props.end())
   {
     std::istringstream b_ss(props["pdf_builder"]);
-    vcl_unique_ptr<vpdfl_builder_base> bb =
+    std::unique_ptr<vpdfl_builder_base> bb =
          vpdfl_builder_base::new_pdf_builder_from_stream(b_ss);
     pdf_builder_ = bb->clone();
     props.erase("pdf_builder");

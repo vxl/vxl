@@ -9,7 +9,9 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <map>
 #include <functional> //required for greater<..>
 #include <vector>
@@ -53,8 +55,8 @@ class rtvl_refine_internal
   rtvl_refine<N>* external;
   double scale_multiplier;
   double mask_size;
-  vcl_unique_ptr< rtvl_tokens<N> > level;
-  vcl_unique_ptr< rgtl_octree_objects<N> > objects;
+  std::unique_ptr< rtvl_tokens<N> > level;
+  std::unique_ptr< rgtl_octree_objects<N> > objects;
   rgtl_octree_cell_bounds<N> bounds;
   unsigned int vote_count;
 };
@@ -264,7 +266,7 @@ bool rtvl_refine_internal<N>::build_next_level()
   objects.reset(0);
 
   // Create the representation for the next level.
-  vcl_unique_ptr< rtvl_tokens<N> > next_level(new rtvl_tokens<N>);
+  std::unique_ptr< rtvl_tokens<N> > next_level(new rtvl_tokens<N>);
 
   // Increment the scale for the next level.
   next_level->scale = level->scale * scale_multiplier;
@@ -291,7 +293,7 @@ bool rtvl_refine_internal<N>::build_next_level()
   selection.clear();
 
   // Replace the current level with the next level.
-  level = vcl_move(next_level);
+  level = std::move(next_level);
   this->setup_level();
   this->refine_level();
 
@@ -338,7 +340,7 @@ template <unsigned int N>
 rtvl_refine<N>::rtvl_refine(unsigned int num_points, double* points):
   internal_(0)
 {
-  vcl_unique_ptr<internal_type> internal_p(new internal_type(this));
+  std::unique_ptr<internal_type> internal_p(new internal_type(this));
   internal_p->init(num_points, points);
   this->internal_ = internal_p.release();
 }

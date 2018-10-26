@@ -10,10 +10,12 @@
 // \author Raphael Kargon
 // \date 03 Aug 2017
 
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <iostream>
+#include <map>
+#include <string>
 
 #include <bstm_multi/block_data_base.h>
 #include <bstm_multi/io/block_cache.h>
@@ -31,10 +33,10 @@ public:
   using typename cache_base::block_id_t;
 
   // convenience typedefs for various maps and whatnot
-  typedef vcl_map<block_id_t, Block *> id_block_map_t;
-  typedef vcl_map<scene_sptr, id_block_map_t> scene_block_map_t;
-  typedef vcl_map<block_id_t, block_data_base *> id_data_map_t;
-  typedef vcl_map<scene_sptr, vcl_map<vcl_string, id_data_map_t> >
+  typedef std::map<block_id_t, Block *> id_block_map_t;
+  typedef std::map<scene_sptr, id_block_map_t> scene_block_map_t;
+  typedef std::map<block_id_t, block_data_base *> id_data_map_t;
+  typedef std::map<scene_sptr, std::map<std::string, id_data_map_t> >
       scene_data_map_t;
 
   //: create function used instead of constructor
@@ -47,8 +49,8 @@ public:
   // CANNOT BE VIRTUAL)
   block_data_base *get_data_base(scene_sptr &scene,
                                          block_id_t id,
-                                         vcl_string type,
-                                         vcl_size_t num_bytes = 0,
+                                         std::string type,
+                                         std::size_t num_bytes = 0,
                                          bool read_only = true) override;
 
   //: returns a data_base pointer which is initialized to the default value of
@@ -59,20 +61,20 @@ public:
   //  the disc nor writes it to the disc
   block_data_base *get_data_base_new(scene_sptr &scene,
                                              block_id_t id,
-                                             vcl_string type,
-                                             vcl_size_t num_bytes = 0,
+                                             std::string type,
+                                             std::size_t num_bytes = 0,
                                              bool read_only = true) override;
 
   //: removes data from this cache (may or may not write to disk first)
   void remove_data_base(scene_sptr &scene,
                                 block_id_t id,
-                                vcl_string type,
+                                std::string type,
                                 bool write_out = true) override;
 
   //: replaces a database in the cache, deletes it
   void replace_data_base(scene_sptr &scene,
                                  block_id_t id,
-                                 vcl_string type,
+                                 std::string type,
                                  block_data_base *replacement) override;
 
   //: dumps writeable data to disk
@@ -88,14 +90,14 @@ public:
   bool remove_scene(scene_sptr &scene) override;
 
   //: to string method returns a string describing the cache's current state
-  vcl_string to_string();
+  std::string to_string();
 
   //: delete all the memory, caution: make sure to call write to disc methods
   // not to loose writable data
   void clear_cache() override;
 
   //: return the list of scenes with any data in the cache
-  vcl_vector<scene_sptr> get_scenes() override;
+  std::vector<scene_sptr> get_scenes() override;
 
 private:
   //: hidden constructor (private so it cannot be called -- forces the class to
@@ -115,7 +117,7 @@ private:
   // ---------Helper Methods --------------------------------------------------
 
   //: helper method returns a reference to correct data map (ensures one exists)
-  id_data_map_t &cached_data_map(scene_sptr &scene, vcl_string prefix);
+  id_data_map_t &cached_data_map(scene_sptr &scene, std::string prefix);
 
   //: helper method determines if this block is
   bool is_valid_id(scene_sptr &scene, block_id_t);
@@ -124,7 +126,7 @@ private:
 
 //: shows elements in cache
 template <typename Scene, typename Block>
-vcl_ostream &operator<<(vcl_ostream &s,
+std::ostream &operator<<(std::ostream &s,
                         block_simple_cache<Scene, Block> &scene) {
   return s << scene.to_string();
 }

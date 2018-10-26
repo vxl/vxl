@@ -25,7 +25,7 @@
 //  deletion of the object pointed to, either on destruction of the
 //  vbl_scoped_ptr or via an explicit reset(). vbl_scoped_ptr is a
 //  simple solution for simple needs; use vbl_shared_ptr or
-//  vcl_unique_ptr if your needs are more complex.
+//  std::unique_ptr if your needs are more complex.
 //
 //  To use this to manage pointer member variables using forward
 //  declaration, explicitly define a destructor in your .cxx so that

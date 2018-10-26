@@ -13,7 +13,9 @@
 
 #include <vector>
 #include <string>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vnl/vnl_vector.h>
@@ -88,7 +90,7 @@ class vpdfl_builder_base
 
   //: Create a vpdfl_builder_base object given a config stream
   // \throw mbl_exception if parse error.
-  static vcl_unique_ptr<vpdfl_builder_base> new_builder_from_stream(std::istream &is);
+  static std::unique_ptr<vpdfl_builder_base> new_builder_from_stream(std::istream &is);
 
   //: Read initialisation settings from a stream.
   // \throw mbl_exception_parse_error if the parse fails.
@@ -97,7 +99,7 @@ class vpdfl_builder_base
   //: Create a vpdfl_builder_base object given a config stream (recursive style)
   //  Creates object, then uses config_from_stream(is) to set up internals
   // \throw vcl_runtime_exception if parse error.
-  static vcl_unique_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(std::istream &);
+  static std::unique_ptr<vpdfl_builder_base> new_pdf_builder_from_stream(std::istream &);
 };
 
 //: Allows derived class to be loaded by base-class pointer

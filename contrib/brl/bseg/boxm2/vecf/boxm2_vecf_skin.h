@@ -9,7 +9,9 @@
 //
 #include <vector>
 #include <string>
-#include <vcl_iostream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bvgl/bvgl_grid_index_3d.h>

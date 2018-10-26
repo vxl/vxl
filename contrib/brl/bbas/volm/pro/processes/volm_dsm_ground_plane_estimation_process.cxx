@@ -14,8 +14,10 @@
 #include <vil/vil_math.h>
 #include <bsta/bsta_histogram.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
-//#include <vcl_string.h>
-//#include <vcl_iostream.h>
+//#include <string>
+//#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>
@@ -78,7 +80,7 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
       float min = 1000000.0f;
       for (int ii = s_i; ii < e_i; ii++) {
         for (int jj = s_j; jj < e_j; jj++) {
-          if ( vcl_abs((*in_img)(ii,jj)-invalid_pixel) < 1E-3 )
+          if ( std::abs((*in_img)(ii,jj)-invalid_pixel) < 1E-3 )
             continue;
           if ( (*in_img)(ii,jj) < min )
             min = (*in_img)(ii,jj);
@@ -108,7 +110,7 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
       float min = 1000000.0f;
       for (int ii = s_i; ii < e_i; ii++) {
         for (int jj = s_j; jj < e_j; jj++) {
-          if ( vcl_abs((*in_img)(ii,jj)-invalid_pixel) < 1E-3 )
+          if ( std::abs((*in_img)(ii,jj)-invalid_pixel) < 1E-3 )
             continue;
           if ( (*in_img)(ii,jj) < min )
             min = (*in_img)(ii,jj);
@@ -136,7 +138,7 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
         for (int m = -N; m < N; m++) {
           int uu = i+k;
           int vv = j+m;
-          if ( vcl_abs((*in_img)(uu,vv)-invalid_pixel) < 1E-3 )
+          if ( std::abs((*in_img)(uu,vv)-invalid_pixel) < 1E-3 )
             continue;
           if ( (*in_img)(uu,vv) < min ) {
             min = (*in_img)(uu,vv);
@@ -165,7 +167,7 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
   out->fill(invalid_pixel);
   for (int i = 0; i < ni; i++) {
     for (int j = 0; j < nj; j++) {
-      if (vcl_abs((*in_img)(i,j)-invalid_pixel) < 1E-3 )
+      if (std::abs((*in_img)(i,j)-invalid_pixel) < 1E-3 )
         continue;
       vgl_point_3d<double> p(i,j,(*in_img)(i,j));
       vgl_point_3d<double> new_p = tps(p);

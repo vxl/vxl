@@ -11,7 +11,9 @@
 // (See accompanying file rgtl_license_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
@@ -110,7 +112,7 @@ class rgtl_sqt_objects
  private:
   // Internal implementation details.
   typedef rgtl_sqt_objects_internal<D> internal_type;
-  vcl_unique_ptr<internal_type> internal_;
+  std::unique_ptr<internal_type> internal_;
 
   friend class rgtl_serialize_access;
   template <class Serializer> void serialize(Serializer& sr);

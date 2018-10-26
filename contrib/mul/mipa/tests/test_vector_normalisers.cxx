@@ -65,7 +65,7 @@ static void test_vector_normalisers()
 
     std::istringstream ss(strConfig);
     mbl_read_props_type dummy_extra_props;
-    vcl_unique_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss, dummy_extra_props);
+    std::unique_ptr<mipa_vector_normaliser> norm = mipa_vector_normaliser::new_normaliser_from_stream(ss, dummy_extra_props);
     TEST("Block normaliser created",norm->is_a()=="mipa_block_normaliser",true);
 
     mipa_vector_normaliser* pNorm = norm->clone();
@@ -262,7 +262,7 @@ static void test_vector_normalisers()
 
         std::istringstream ss(strConfig);
         mbl_read_props_type dummy_extra_props;
-        vcl_unique_ptr<mipa_vector_normaliser> msnorm = mipa_vector_normaliser::new_normaliser_from_stream(ss, dummy_extra_props);
+        std::unique_ptr<mipa_vector_normaliser> msnorm = mipa_vector_normaliser::new_normaliser_from_stream(ss, dummy_extra_props);
         TEST("Block normaliser created",msnorm->is_a()=="mipa_ms_block_normaliser",true);
 
         mipa_vector_normaliser* pNorm = msnorm->clone();

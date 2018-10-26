@@ -24,7 +24,7 @@ public:
   //: Constructor - beware that the data_buffer becomes OWNED (and will be
   // deleted) by this class!
   bstm_data_base(char *data_buffer,
-                 vcl_size_t length,
+                 std::size_t length,
                  bstm_block_id id,
                  bool read_only = true)
       : read_only_(read_only)
@@ -34,8 +34,8 @@ public:
 
   //: Constructs a buffer of the appropriate size to hold the given
   // number of elements of the given type.
-  bstm_data_base(vcl_size_t num_elements,
-                 const vcl_string &data_type,
+  bstm_data_base(std::size_t num_elements,
+                 const std::string &data_type,
                  bstm_block_id id,
                  bool read_only = true)
       : read_only_(read_only)
@@ -45,10 +45,10 @@ public:
 
   //: initializes empty data buffer
   bstm_data_base(bstm_block_metadata data,
-                 vcl_string type,
+                 std::string type,
                  bool read_only = true);
 
-  void set_default_value(vcl_string data_type, bstm_block_metadata data);
+  void set_default_value(std::string data_type, bstm_block_metadata data);
 
   //: This destructor is correct - by our design the original data_buffer
   // becomes OWNED by the data_base class
@@ -60,10 +60,10 @@ public:
   //: accessor for low level byte buffer kept by the data_base
   char *data_buffer() { return data_buffer_; }
   const char *data_buffer() const { return data_buffer_; }
-  vcl_size_t buffer_length() const { return buffer_length_; }
+  std::size_t buffer_length() const { return buffer_length_; }
   bstm_block_id &block_id() { return id_; }
   //: accessor to a portion of the byte buffer
-  char *cell_buffer(int i, vcl_size_t cell_size);
+  char *cell_buffer(int i, std::size_t cell_size);
 
   //: setter for swapping out data buffer
 
@@ -78,7 +78,7 @@ protected:
   bstm_block_id id_;
 
   //: byte buffer and its size
-  vcl_size_t buffer_length_;
+  std::size_t buffer_length_;
   char *data_buffer_;
 };
 

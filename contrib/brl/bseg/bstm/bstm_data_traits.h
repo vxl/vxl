@@ -102,8 +102,8 @@ class bstm_data_traits<BSTM_GAUSS_RGB_VIEW>
  public:
   typedef boxm2_mog6_view_processor processor;
   typedef vnl_vector_fixed<int, 16> datatype;
-  static vcl_size_t datasize() { return sizeof(datatype); }
-  static vcl_string prefix(const vcl_string& identifier = "")
+  static std::size_t datasize() { return sizeof(datatype); }
+  static std::string prefix(const std::string& identifier = "")
   { if (!identifier.size()) return "bstm_gauss_rgb_view"; else return "bstm_gauss_rgb_view_"+identifier; }
 };
 

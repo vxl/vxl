@@ -149,12 +149,12 @@ bool mfpf_point_finder_builder::set_from_stream(std::istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-vcl_unique_ptr<mfpf_point_finder_builder> mfpf_point_finder_builder::
+std::unique_ptr<mfpf_point_finder_builder> mfpf_point_finder_builder::
   create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
-  vcl_unique_ptr<mfpf_point_finder_builder> opt;
+  std::unique_ptr<mfpf_point_finder_builder> opt;
   try {
     opt = mbl_cloneables_factory<mfpf_point_finder_builder>::get_clone(name);
   }

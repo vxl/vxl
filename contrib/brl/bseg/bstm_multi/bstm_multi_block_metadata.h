@@ -11,9 +11,11 @@
 //
 
 #include <vbl/vbl_ref_count.h>
-#include <vcl_string.h>
-#include <vcl_utility.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -32,10 +34,10 @@ public:
   bstm_multi_block_metadata() = default;
   bstm_multi_block_metadata(const bstm_block_id &id,
                             const vgl_box_3d<double> &bbox,
-                            vcl_pair<double, double> bbox_t,
+                            std::pair<double, double> bbox_t,
                             double max_mb,
                             double p_init,
-                            vcl_vector<space_time_enum> subdivisions,
+                            std::vector<space_time_enum> subdivisions,
                             int version = 1)
       : id_(id)
       , bbox_(bbox)
@@ -60,7 +62,7 @@ public:
   vgl_box_3d<double> bbox_;
 
   //: time bounds
-  vcl_pair<double, double> bbox_t_;
+  std::pair<double, double> bbox_t_;
 
   // TODO: Should we allow a flat array of sub-blocks at the highest level, or
   // require one root tree for every block?
@@ -82,7 +84,7 @@ public:
 
   //: Describes order of hierarchical subdivisions of block: e.g. time first,
   // then space, etc.
-  vcl_vector<space_time_enum> subdivisions_;
+  std::vector<space_time_enum> subdivisions_;
 
   //: checks if this block contains the given t, if yes, returns local_time
   bool contains_t(double const t, double &local_time) const;
@@ -93,10 +95,10 @@ public:
     min_t = bbox_t_.first;
     max_t = bbox_t_.second;
   }
-  vcl_pair<double, double> bbox_t() const { return bbox_t_; }
+  std::pair<double, double> bbox_t() const { return bbox_t_; }
   // Returns size of smallest space voxel and time step representable by this
   // block.
-  vcl_pair<vgl_vector_3d<double>, double> resolution() const;
+  std::pair<vgl_vector_3d<double>, double> resolution() const;
 
   bool operator==(bstm_multi_block_metadata const &m) const;
 
@@ -115,7 +117,7 @@ public:
 //: Smart_Pointer typedef for bstm_block
 typedef vbl_smart_ptr<bstm_multi_block_metadata> bstm_multi_block_metadata_sptr;
 
-vcl_ostream &operator<<(vcl_ostream &s, bstm_multi_block_metadata &metadata);
+std::ostream &operator<<(std::ostream &s, bstm_multi_block_metadata &metadata);
 
 //: Binary write boxm_update_bit_scene_manager scene to stream
 void vsl_b_write(vsl_b_ostream &os, bstm_multi_block_metadata const &scene);

@@ -53,9 +53,9 @@ time_tree_b *bstm_multi_block::get_time_data(int level, std::nothrow_t) {
   }
 }
 
-vcl_size_t bstm_multi_block::byte_count() const {
-  vcl_size_t total_bytes = 0;
-  for (vcl_vector<vcl_vector<unsigned char> >::const_iterator iter =
+std::size_t bstm_multi_block::byte_count() const {
+  std::size_t total_bytes = 0;
+  for (std::vector<std::vector<unsigned char> >::const_iterator iter =
            buffers_.begin();
        iter != buffers_.end();
        ++iter) {

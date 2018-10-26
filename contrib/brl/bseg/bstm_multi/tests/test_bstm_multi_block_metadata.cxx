@@ -6,8 +6,10 @@
 
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
 
 #include <bstm_multi/bstm_multi_block_metadata.h>
 
@@ -15,30 +17,30 @@ void test_block_metadata_equality() {
   bstm_multi_block_metadata metadata;
   metadata.id_ = bstm_block_id(0, 0, 0, 1);
   metadata.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata.bbox_t_ = vcl_pair<double, double>(0, 4.5);
+  metadata.bbox_t_ = std::pair<double, double>(0, 4.5);
 
   bstm_multi_block_metadata metadata_same;
   metadata_same.id_ = bstm_block_id(0, 0, 0, 1);
   metadata_same.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata_same.bbox_t_ = vcl_pair<double, double>(0, 4.5);
+  metadata_same.bbox_t_ = std::pair<double, double>(0, 4.5);
 
   bstm_multi_block_metadata metadata_different;
   metadata_different.id_ = bstm_block_id(0, 0, 0, 2);
   metadata_different.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata_different.bbox_t_ = vcl_pair<double, double>(0, 4.5);
+  metadata_different.bbox_t_ = std::pair<double, double>(0, 4.5);
 
   bstm_multi_block_metadata metadata_different_bounds;
   metadata_different_bounds.id_ = bstm_block_id(0, 0, 0, 1);
   metadata_different_bounds.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata_different_bounds.bbox_t_ = vcl_pair<double, double>(0, 4.6);
+  metadata_different_bounds.bbox_t_ = std::pair<double, double>(0, 4.6);
 
   bstm_multi_block_metadata metadata_subdivs;
   metadata_subdivs.bbox_ = vgl_box_3d<double>(0, 0, 0, 16, 32, 16);
-  metadata_subdivs.bbox_t_ = vcl_pair<double, double>(0, 32);
+  metadata_subdivs.bbox_t_ = std::pair<double, double>(0, 32);
   metadata_subdivs.subdivisions_.push_back(STE_SPACE);
   metadata_subdivs.subdivisions_.push_back(STE_TIME);
   metadata_subdivs.subdivisions_.push_back(STE_SPACE);
-  vcl_pair<vgl_vector_3d<double>, double> expected_resolution;
+  std::pair<vgl_vector_3d<double>, double> expected_resolution;
   expected_resolution.first = vgl_vector_3d<double>(0.25, 0.5, 0.25);
   expected_resolution.second = 1.0;
 
@@ -65,7 +67,7 @@ void test_block_metadata_contains_t() {
   bstm_multi_block_metadata metadata;
   metadata.id_ = bstm_block_id(0, 0, 0, 1);
   metadata.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata.bbox_t_ = vcl_pair<double, double>(0, 4.5);
+  metadata.bbox_t_ = std::pair<double, double>(0, 4.5);
   double local_time;
   TEST("block time containment (t, min, max)",
        metadata.contains_t(-5, local_time),
@@ -83,8 +85,8 @@ void test_block_metadata_printing() {
   bstm_multi_block_metadata metadata;
   metadata.id_ = bstm_block_id(0, 0, 0, 1);
   metadata.bbox_ = vgl_box_3d<double>(0, 0, 0, 10, 11, 12);
-  metadata.bbox_t_ = vcl_pair<double, double>(0, 4.5);
-  vcl_cout << metadata << vcl_endl;
+  metadata.bbox_t_ = std::pair<double, double>(0, 4.5);
+  std::cout << metadata << std::endl;
 }
 
 void test_bstm_multi_block_metadata() {

@@ -684,7 +684,15 @@ vcl_exception.h,vcl_try,try
 vcl_exception.h,vcl_catch_all,catch(...)
 vcl_exception.h,vcl_catch,catch
 vcl_ios.h,vcl_ios,std::ios
-vcl_new.h,vcl_move,std::move
+vcl_memory.h,vcl_move,std::move
+vcl_memory.h,vcl_bad_weak_ptr,std::bad_weak_ptr
+vcl_memory.h,vcl_shared_ptr,std::shared_ptr
+vcl_memory.h,vcl_static_pointer_cast,std::static_pointer_cast
+vcl_memory.h,vcl_dynamic_pointer_cast,std::dynamic_pointer_cast
+vcl_memory.h,vcl_const_pointer_cast,std::const_pointer_cast
+vcl_memory.h,vcl_get_deleter,std::get_deleter
+vcl_memory.h,vcl_weak_ptr,std::weak_ptr
+vcl_memory.h,vcl_enable_shared_from_this,std::enable_shared_from_this
 """
 
 vcl_replace_head_names = OrderedDict()
@@ -698,7 +706,7 @@ for line in info_for_conversion.splitlines():
         #print("SKIPPING: " + str(linevalues))
         continue
     fname = linevalues[0]
-    new_name = fname.replace("vcl_", "").replace(".h","")
+    new_name = fname.replace("vcl_", "").replace(".h", "")
     vcl_replace_head_names['#include "{0}"'.format(
         fname)] = '#include "{0}"'.format(new_name)
     vcl_replace_head_names['#include <{0}>'.format(

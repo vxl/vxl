@@ -26,9 +26,9 @@ public:
                                                float resnearfactor = 100000.0,
                                                float resfarfactor = 100000.0);
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, std::string opts = "");
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > smooth_heightmap_pdata_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > smooth_heightmap_pdata_kernels_;
 };
 
 class boxm2_ocl_compute_heightmap_pre_post
@@ -63,15 +63,15 @@ private:
         float resfarfactor = 100000.0);
 
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_pre_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_pre_kernels(bocl_device_sptr device, std::string opts = "");
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_post_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_post_kernels(bocl_device_sptr device, std::string opts = "");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > pre_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > pre_kernels_;
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > post_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > post_kernels_;
 
 
 };
@@ -84,9 +84,9 @@ public:
         boxm2_opencl_cache_sptr  opencl_cache,
         bool add);
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_update_heightmap_factor_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_update_heightmap_factor_kernels(bocl_device_sptr device, std::string opts = "");
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > update_heightmap_factor_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > update_heightmap_factor_kernels_;
 };
 
 

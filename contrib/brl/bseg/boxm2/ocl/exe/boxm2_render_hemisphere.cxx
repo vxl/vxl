@@ -134,7 +134,7 @@ int main(int argc,  char** argv)
         return -1;
       }
       brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
-      brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q));
+      brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q));
       if (S->size()!=1) {
         std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                  << " no selections\n";
@@ -252,7 +252,7 @@ int main(int argc,  char** argv)
           return -1;
         }
         brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, img_id);
-        brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q));
+        brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q));
         if (S->size()!=1) {
           std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                    << " no selections\n";

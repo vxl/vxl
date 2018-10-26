@@ -4,7 +4,9 @@
 #include "../bmdl_processes.h"
 
 #include <vcl_compiler.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -22,7 +24,7 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 {
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img) );
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img) );
   if (S_img->size()!=1){
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
@@ -49,7 +51,7 @@ bool get_image(unsigned int id, vil_image_view_base_sptr& image)
 static void test_bmdl_classify_process()
 {
   REG_PROCESS_FUNC(bprb_func_process, bprb_batch_process_manager, bmdl_classify_process, "bmdlClassifyProcess");
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
 
   vil_image_view_base_sptr first_return = vil_load("first_ret.tif");

@@ -7,7 +7,9 @@
 // \brief Base class for normalisation algorithms for image feature vectors
 
 #include <string>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
@@ -48,7 +50,7 @@ class mipa_vector_normaliser
   virtual void b_read(vsl_b_istream& /*bfs*/) = 0;
 
   //: Create a concrete mipa_vector_normaliser-derived object, from a text specification.
-  static vcl_unique_ptr<mipa_vector_normaliser> new_normaliser_from_stream(std::istream &is,
+  static std::unique_ptr<mipa_vector_normaliser> new_normaliser_from_stream(std::istream &is,
                                                                          const mbl_read_props_type &extra_props);
 
   //: Initialise from a text stream.

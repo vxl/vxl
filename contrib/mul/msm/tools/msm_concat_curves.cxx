@@ -42,7 +42,7 @@ int main(int argc, char** argv)
     std::cout<<"Loaded "<<curves.size()<<" curves from "<<path<<std::endl;
 
     unsigned n_pts = 1+curves.max_index();
-    vcl_cout<<"n_points: "<<n_pts<<vcl_endl;
+    std::cout<<"n_points: "<<n_pts<<std::endl;
 
     // Add offset to each curve, allowing for points in previous examples
     for (unsigned j=0;j<curves.size();++j)

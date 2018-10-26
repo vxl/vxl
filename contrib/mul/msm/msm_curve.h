@@ -145,7 +145,7 @@ class msm_curves : public std::vector<msm_curve>
   // If curve_data starts with { then parse using config_from_stream,
   // else assume it is a filename and load.
   // If curves_data="-" then empty curves
-  void parse_or_load(const vcl_string& curves_data);
+  void parse_or_load(const std::string& curves_data);
 
   //: Save to text file
   // Writes in format:

@@ -454,7 +454,7 @@ std::ostream &operator<<(std::ostream &s, bstm_time_tree &t) {
         s << " ";
       }
     }
-    s << vcl_endl;
+    s << std::endl;
   }
 
   return s;

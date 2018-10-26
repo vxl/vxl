@@ -1,7 +1,9 @@
 #pragma once
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <boxm2/vecf/boxm2_vecf_orbit_params.h>
@@ -11,16 +13,16 @@ public:
     H_ = vnl_matrix_fixed<double,3,3>(0.0);
     scale_ = 1.0; psi_ = phi_ = 0.0; z0_ = 0;
   }
-  void add_dlib_part(vgl_point_2d<double> pt,vcl_string label){
+  void add_dlib_part(vgl_point_2d<double> pt,std::string label){
     dlib_part_map_[label] = pt;
   }
 
   bool estimate_camera(vgl_vector_2d<double> t = vgl_vector_2d<double>(0,0));
-  bool parse_files(vcl_string& left_dlib_path,vcl_string& right_dlib_path, vcl_string& alfw_path);
+  bool parse_files(std::string& left_dlib_path,std::string& right_dlib_path, std::string& alfw_path);
   vgl_h_matrix_2d<double> homography() {return H_;}
 private:
 
-  vcl_map<vcl_string,vgl_point_2d<double> > dlib_part_map_;
+  std::map<std::string,vgl_point_2d<double> > dlib_part_map_;
   vgl_h_matrix_2d<double> H_;
   const double canthus_line_length_; //these values are constant across subjects
   const double iris_nominal_ ;

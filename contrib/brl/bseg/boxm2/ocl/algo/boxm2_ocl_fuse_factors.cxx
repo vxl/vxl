@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Nov 24, 2015
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -26,20 +28,20 @@
 
 //: Map of kernels should persist between process executions
 
-vcl_map<vcl_string, vcl_vector<bocl_kernel*> > boxm2_ocl_fuse_factors::fuse_factors_kernels_;
+std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_fuse_factors::fuse_factors_kernels_;
 bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
                                           bocl_device_sptr         device,
                                           boxm2_opencl_cache_sptr  opencl_cache,
-                                          vcl_vector<vcl_string>   factors_ident,
-                                          vcl_vector<float>   weights)
+                                          std::vector<std::string>   factors_ident,
+                                          std::vector<float>   weights)
 {
     float transfer_time = 0.0f;
     float gpu_time = 0.0f;
-    vcl_size_t local_threads[1] = { 64 };
-    vcl_size_t global_threads[1] = { 64 };
+    std::size_t local_threads[1] = { 64 };
+    std::size_t global_threads[1] = { 64 };
     //cache size sanity check
-    vcl_size_t binCache = opencl_cache.ptr()->bytes_in_cache();
-    vcl_cout << "Update MBs in cache: " << binCache / (1024.0*1024.0) << vcl_endl;
+    std::size_t binCache = opencl_cache.ptr()->bytes_in_cache();
+    std::cout << "Update MBs in cache: " << binCache / (1024.0*1024.0) << std::endl;
     // create a command queue.
     int status = 0;
     cl_command_queue queue = clCreateCommandQueue(device->context(),
@@ -48,9 +50,9 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
                                                     &status);
     if (status != 0)
         return false;
-    vcl_vector<boxm2_block_id> blks_order;
+    std::vector<boxm2_block_id> blks_order;
     blks_order = scene->get_block_ids();
-    vcl_vector<boxm2_block_id>::iterator  id;
+    std::vector<boxm2_block_id>::iterator  id;
     // compile the kernel if not already compiled
     //: Initialize Cumulative factor
     bocl_kernel * kern = get_fuse_factors_kernels(device)[0];
@@ -153,8 +155,8 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
         bocl_mem *aux0_cum = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_AUX0>::prefix("cum"), 0, false);
 
         //set workspace
-        vcl_size_t ltr[] = { 4, 4, 4 };
-        vcl_size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
+        std::size_t ltr[] = { 4, 4, 4 };
+        std::size_t gtr[] = { RoundUp(mdata.sub_block_num_.x(), ltr[0]),
                              RoundUp(mdata.sub_block_num_.y(), ltr[1]),
                              RoundUp(mdata.sub_block_num_.z(), ltr[2]) };
         kern->set_arg(blk_info);
@@ -182,17 +184,17 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
 
 
 
-vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl_device_sptr device, vcl_string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl_device_sptr device, std::string opts)
 {
     // compile kernels if not already compiled
-    vcl_string identifier = device->device_identifier() + opts;
+    std::string identifier = device->device_identifier() + opts;
     if (fuse_factors_kernels_.find(identifier) != fuse_factors_kernels_.end())
         return fuse_factors_kernels_[identifier];
 
     //otherwise compile the kernels
-    vcl_cout << "=== boxm2_ocl_update_process::compiling kernels on device " << identifier << "===" << vcl_endl;
-    vcl_vector<vcl_string> src_paths;
-    vcl_string source_dir = boxm2_ocl_util::ocl_src_root();
+    std::cout << "=== boxm2_ocl_update_process::compiling kernels on device " << identifier << "===" << std::endl;
+    std::vector<std::string> src_paths;
+    std::string source_dir = boxm2_ocl_util::ocl_src_root();
     src_paths.push_back(source_dir + "scene_info.cl");
     src_paths.push_back(source_dir + "pixel_conversion.cl");
     src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
@@ -203,24 +205,24 @@ vcl_vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl_
     src_paths.push_back(source_dir + "bit/update_kernels.cl");
     src_paths.push_back(source_dir + "bit/update_bp_kernels.cl");
     //populate vector of kernels
-    vcl_vector<bocl_kernel*> vec_kernels;
+    std::vector<bocl_kernel*> vec_kernels;
 
     //compilation options
-    vcl_string options = "-D INIT_CUM";
+    std::string options = "-D INIT_CUM";
     bocl_kernel* init_cum = new bocl_kernel();
-    vcl_string init_cum_opts = options;
+    std::string init_cum_opts = options;
     init_cum->create_kernel(&device->context(), device->device_id(), src_paths, "init_cum_main", init_cum_opts, "update::init_cum");
     vec_kernels.push_back(init_cum);
 
     options = "-D FUSE_FACTORS";
     bocl_kernel* fusefactors = new bocl_kernel();
-    vcl_string fusefactors_opts = options;
+    std::string fusefactors_opts = options;
     fusefactors->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_factors_main", fusefactors_opts, "update::fuse_factors");
     vec_kernels.push_back(fusefactors);
 
     options = "-D EVALUATE_ALPHA";
     bocl_kernel* evaluate_alpha = new bocl_kernel();
-    vcl_string evaluate_alpha_opts = options;
+    std::string evaluate_alpha_opts = options;
     evaluate_alpha->create_kernel(&device->context(), device->device_id(), src_paths, "evaluate_alpha_main", evaluate_alpha_opts, "update::evaluate_alpha");
     vec_kernels.push_back(evaluate_alpha);
     //store and return

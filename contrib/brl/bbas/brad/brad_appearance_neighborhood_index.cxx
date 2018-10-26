@@ -18,10 +18,10 @@ brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vect
     double sun_sphere_az_rad = vnl_math::pi_over_180*sun_sphere_az;
     double sun_sphere_el_rad = vnl_math::pi_over_180*sun_sphere_el;
     // convert to Cartesian
-    double s = vcl_sin(sun_sphere_el_rad);
-    double x = s*vcl_cos(sun_sphere_az_rad);
-    double y = s*vcl_sin(sun_sphere_az_rad);
-    double z = vcl_cos(sun_sphere_el_rad);
+    double s = std::sin(sun_sphere_el_rad);
+    double x = s*std::cos(sun_sphere_az_rad);
+    double y = s*std::sin(sun_sphere_az_rad);
+    double z = std::cos(sun_sphere_el_rad);
     vgl_vector_3d<double> ill_dir(x, y, z);
     local_illum_dirs.push_back(-ill_dir);
 
@@ -32,10 +32,10 @@ brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vect
     double view_sphere_az_rad = vnl_math::pi_over_180*view_sphere_az;
     double view_sphere_el_rad = vnl_math::pi_over_180*view_sphere_el;
     // convert to Cartesian
-    s = vcl_sin(view_sphere_el_rad);
-    x = s*vcl_cos(view_sphere_az_rad);
-    y = s*vcl_sin(view_sphere_az_rad);
-    z = vcl_cos(view_sphere_el_rad);
+    s = std::sin(view_sphere_el_rad);
+    x = s*std::cos(view_sphere_az_rad);
+    y = s*std::sin(view_sphere_az_rad);
+    z = std::cos(view_sphere_el_rad);
     vgl_vector_3d<double> view_dir(x, y, z);
     local_view_dirs.push_back(-view_dir);
   }

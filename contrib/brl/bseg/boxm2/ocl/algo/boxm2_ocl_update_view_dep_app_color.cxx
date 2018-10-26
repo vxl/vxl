@@ -534,7 +534,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
   bool UV_only = false;
   if (opts ==" -D MOG_VIEW_DEP_UV " ){
           UV_only = true;
-          vcl_cout<<"updating UV only"<<vcl_endl;
+          std::cout<<"updating UV only"<<std::endl;
   }
 
 
@@ -558,7 +558,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  vcl_string options = opts;
+  std::string options = opts;
   if (UV_only){
     options += " -D YUV ";
   }

@@ -211,8 +211,8 @@ bool sdet_image_mesh::compute_mesh()
     imesh_vertex<3> v3(verts[iv][0], verts[iv][1], height);
     verts3->push_back(v3);
   }
-  vcl_unique_ptr<imesh_vertex_array_base> v3(verts3);
-  mesh_one.set_vertices(vcl_move(v3));
+  std::unique_ptr<imesh_vertex_array_base> v3(verts3);
+  mesh_one.set_vertices(std::move(v3));
   //mesh_valid_ = true;
 
   ///////////////////////////////////////////////////////
@@ -240,8 +240,8 @@ bool sdet_image_mesh::compute_mesh()
     imesh_vertex<3> v3(verts2[iv][0], verts2[iv][1], height);
     newVerts->push_back(v3);
   }
-  vcl_unique_ptr<imesh_vertex_array_base> v3_ptr(newVerts);
-  mesh_.set_vertices(vcl_move(v3_ptr));
+  std::unique_ptr<imesh_vertex_array_base> v3_ptr(newVerts);
+  mesh_.set_vertices(std::move(v3_ptr));
   mesh_valid_ = true;
 
   return true;

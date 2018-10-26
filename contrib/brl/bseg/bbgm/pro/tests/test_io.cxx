@@ -4,7 +4,9 @@
 #include <vcl_compiler.h>
 #include <vpl/vpl.h>
 //For backwards compatibility
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bsta/bsta_attributes.h>
@@ -109,7 +111,7 @@ void test_io_function_2(void)
 
 static void test_io()
 {
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string, vcl_string );
   REGISTER_DATATYPE( bbgm_image_sptr );
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_save_image_of_process, "bbgmSaveImageOfProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bbgm_load_image_of_process, "bbgmLoadImageOfProcess");

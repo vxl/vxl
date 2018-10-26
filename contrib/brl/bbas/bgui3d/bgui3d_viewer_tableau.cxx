@@ -224,11 +224,11 @@ bgui3d_viewer_tableau::set_camera(const vpgl_proj_camera<double>& camera)
 
 //: Get the scene camera.
 // Creates a vpgl camera (either perspective or affine) from the active SoCamera
-vcl_unique_ptr<vpgl_proj_camera<double> >
+std::unique_ptr<vpgl_proj_camera<double> >
 bgui3d_viewer_tableau::camera() const
 {
   if (!scene_camera_)
-    return vcl_unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
 
   const SbVec3f& t_vec = scene_camera_->position.getValue();
   vnl_double_3 t(t_vec[0], t_vec[1], t_vec[2]);
@@ -256,7 +256,7 @@ bgui3d_viewer_tableau::camera() const
     vgl_point_2d<double> p(0, 0);
     vpgl_calibration_matrix<double> K(f,p,sx,sy);
     vgl_point_3d<double> c(t[0],t[1],t[2]);
-    return vcl_unique_ptr<vpgl_proj_camera<double> >
+    return std::unique_ptr<vpgl_proj_camera<double> >
            ( new vpgl_perspective_camera<double>(K,c,R) );
     }
    case ORTHOGONAL:
@@ -265,10 +265,10 @@ bgui3d_viewer_tableau::camera() const
     double h = cam->height.getValue();
 #endif // 0
     std::cerr << "WARNING: not implemented yet\n";
-    return vcl_unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
    default:
     std::cerr << "WARNING: no such camera_type_\n";
-    return vcl_unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
   }
 }
 

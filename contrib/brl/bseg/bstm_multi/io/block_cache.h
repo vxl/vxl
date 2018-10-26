@@ -11,10 +11,12 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <bstm/bstm_data_traits.h>
 #include <bstm_multi/block_data.h>
@@ -37,7 +39,7 @@ public:
   //: Use this instead of constructor
   static cache_sptr instance() {
     if (!instance_)
-      vcl_cerr << "warning: block_cache:: instance has not been created\n";
+      std::cerr << "warning: block_cache:: instance has not been created\n";
     return instance_;
   }
 
@@ -50,8 +52,8 @@ public:
   // CANNOT BE VIRTUAL)
   virtual block_data_base *get_data_base(scene_sptr &scene,
                                          block_id_t id,
-                                         vcl_string type,
-                                         vcl_size_t num_bytes = 0,
+                                         std::string type,
+                                         std::size_t num_bytes = 0,
                                          bool read_only = true) = 0;
 
   //: returns a data_base pointer which is initialized to the default
@@ -61,8 +63,8 @@ public:
   // writes it to the disk
   virtual block_data_base *get_data_base_new(scene_sptr &scene,
                                              block_id_t id,
-                                             vcl_string type = nullptr,
-                                             vcl_size_t num_bytes = 0,
+                                             std::string type = nullptr,
+                                             std::size_t num_bytes = 0,
                                              bool read_only = true) = 0;
 
   //: removes data from this cache (may or may not write to disk
@@ -70,12 +72,12 @@ public:
   //  removes it from the cache and puts it in the garbage vector
   virtual void remove_data_base(scene_sptr &scene,
                                 block_id_t id,
-                                vcl_string type,
+                                std::string type,
                                 bool write_out = true) = 0;
 
   virtual void replace_data_base(scene_sptr &scene,
                                  block_id_t id,
-                                 vcl_string type,
+                                 std::string type,
                                  block_data_base *replacement) = 0;
 
   //: returns data pointer to data specified by ID and data_type
@@ -84,7 +86,7 @@ public:
   template <bstm_data_type T>
   block_data<T> *get_data(scene_sptr &scene,
                           block_id_t id,
-                          vcl_size_t num_bytes = 0,
+                          std::size_t num_bytes = 0,
                           bool read_only = true) {
     block_data_base *base = this->get_data_base(
         scene, id, bstm_data_traits<T>::prefix(), num_bytes, read_only);
@@ -109,7 +111,7 @@ public:
   // Caution: make sure to call write to disk methods not to lose writable data
   virtual void clear_cache() = 0;
 
-  virtual vcl_vector<scene_sptr> get_scenes() = 0;
+  virtual std::vector<scene_sptr> get_scenes() = 0;
 
 protected:
   //: hidden constructor
@@ -122,7 +124,7 @@ protected:
   static cache_sptr instance_;
 
   //: bstm_multi_scene needs to be around to initialized uninitialized blocks
-  // vcl_vector<scene_sptr> scenes_;
+  // std::vector<scene_sptr> scenes_;
 
   //: bstm_multi_asio_manager handles asio requests
   block_sio_mgr<Block> io_mgr_;

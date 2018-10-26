@@ -6,7 +6,9 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vimt/vimt_image_2d_of.h>
@@ -143,7 +145,7 @@ class mfpf_point_finder_builder
   virtual void b_read(vsl_b_istream& bfs);
 
   //: Create a concrete object, from a text specification.
-  static vcl_unique_ptr<mfpf_point_finder_builder> create_from_stream(std::istream &is);
+  static std::unique_ptr<mfpf_point_finder_builder> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

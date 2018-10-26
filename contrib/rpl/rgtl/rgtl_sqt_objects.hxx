@@ -6,7 +6,9 @@
 #define rgtl_sqt_objects_hxx
 
 #include <limits>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
@@ -152,7 +154,7 @@ class rgtl_sqt_objects_face_base
   typedef typename internal_type::object_array_type object_array_type;
 
   // Type of pointer to set of objects during construction.
-  typedef vcl_unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
+  typedef std::unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   // Construct with reference to main internal representation.
   rgtl_sqt_objects_face_base(internal_type& intern): internal_(intern) {}
@@ -221,10 +223,10 @@ class rgtl_sqt_objects_face: public rgtl_sqt_objects_face_base<D>
   rgtl_sqt_objects_face(internal_type& intern): derived(intern) {}
 
   // Pointer type for object set base class.
-  typedef vcl_unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
+  typedef std::unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   // Pointer type for object set representation in this face.
-  typedef vcl_unique_ptr< rgtl_sqt_object_set_face<D, Face> >
+  typedef std::unique_ptr< rgtl_sqt_object_set_face<D, Face> >
   sqt_object_set_face_ptr;
 
   // Spatial parameterization for this face.
@@ -366,12 +368,12 @@ class rgtl_sqt_objects_internal
 
   // Type holding SQT-specific representation of object array.
   typedef rgtl_sqt_object_array<D> sqt_object_array_type;
-  typedef vcl_unique_ptr<sqt_object_array_type> sqt_object_array_ptr;
+  typedef std::unique_ptr<sqt_object_array_type> sqt_object_array_ptr;
 
   // Type holding SQT-specific representation of object set during
   // cell construction.
   typedef rgtl_sqt_object_set<D> sqt_object_set_type;
-  typedef vcl_unique_ptr<sqt_object_set_type> sqt_object_set_ptr;
+  typedef std::unique_ptr<sqt_object_set_type> sqt_object_set_ptr;
 
   // Default constructor.
   rgtl_sqt_objects_internal(object_array_type const& original_objs);

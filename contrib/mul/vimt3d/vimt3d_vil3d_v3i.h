@@ -27,7 +27,9 @@
 
 #include <iostream>
 #include <iosfwd>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <vil3d/vil3d_file_format.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vcl_compiler.h>
@@ -88,10 +90,10 @@ class vimt3d_vil3d_v3i_image: public vil3d_image_resource
 
   //: Private constructor, use vil3d_load instead.
   // This object takes ownership of the image.
-  vimt3d_vil3d_v3i_image(vcl_unique_ptr<std::fstream> im);
+  vimt3d_vil3d_v3i_image(std::unique_ptr<std::fstream> im);
   //: Private constructor, use vil3d_save instead.
   // This object takes ownership of the file, for writing.
-  vimt3d_vil3d_v3i_image(vcl_unique_ptr<std::fstream> file, unsigned ni, unsigned nj,
+  vimt3d_vil3d_v3i_image(std::unique_ptr<std::fstream> file, unsigned ni, unsigned nj,
                          unsigned nk, unsigned nplanes, vil_pixel_format format);
 
   //: Storage type for header information when the whole image has not yet been loaded.

@@ -93,7 +93,7 @@ void imesh_render_textured(const imesh_mesh& mesh,
   assert(tex_coords.size() == verts2d.size());
 
   const imesh_face_array_base& faces = mesh.faces();
-  vcl_unique_ptr<imesh_regular_face_array<3> > tri_data;
+  std::unique_ptr<imesh_regular_face_array<3> > tri_data;
   const imesh_regular_face_array<3>* tris;
   if (faces.regularity() != 3) {
     tri_data = imesh_triangulate(faces);

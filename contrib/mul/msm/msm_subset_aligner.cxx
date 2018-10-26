@@ -237,9 +237,9 @@ void msm_subset_aligner::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,index_);
       break;
     default:
-      vcl_cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
-               << "           Unknown version number "<< version << vcl_endl;
-      bfs.is().clear(vcl_ios::badbit); // Set an unrecoverable IO error on stream
+      std::cerr << "I/O ERROR: vsl_b_read(vsl_b_istream&)\n"
+               << "           Unknown version number "<< version << std::endl;
+      bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
       return;
   }
 }
@@ -256,7 +256,7 @@ void msm_subset_aligner::config_from_stream(std::istream &is)
 
   index_.resize(0);
   std::istringstream index_str(props.get_required_property("index"));
-  mbl_parse_int_list(index_str,vcl_back_inserter(index_),unsigned());
+  mbl_parse_int_list(index_str,std::back_inserter(index_),unsigned());
 
   mbl_read_props_look_for_unused_props(
       "msm_subset_aligner::config_from_stream", props, mbl_read_props_type());

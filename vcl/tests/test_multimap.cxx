@@ -1,11 +1,13 @@
 // This is vcl/tests/test_multimap.cxx
-#include <vcl_functional.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <functional>
+#include <iostream>
+#include <map>
 
-typedef vcl_multimap<int, double, vcl_less<int> > mymap;
+typedef std::multimap<int, double, std::less<int> > mymap;
 
-vcl_ostream &operator<<(vcl_ostream &s, mymap::value_type const &x)
+std::ostream &operator<<(std::ostream &s, mymap::value_type const &x)
 {
   return s << '(' << x.first << ',' << x.second << ')';
 }
@@ -21,27 +23,27 @@ int test_multimap_main(int /*argc*/,char* /*argv*/[])
   mymap::iterator b = m.begin();
   mymap::iterator e = m.end();
 
-  vcl_cout << "the whole container:" << vcl_endl;
+  std::cout << "the whole container:" << std::endl;
   for (mymap::iterator p = b; p != e; ++p)
-    vcl_cout << *p << vcl_endl;
+    std::cout << *p << std::endl;
 
-  vcl_cout << "lower_bound() and upper_bound():" << vcl_endl;
+  std::cout << "lower_bound() and upper_bound():" << std::endl;
   for (int k=-1; k<=4; ++k) {
-    vcl_cout << "k=" << k << vcl_endl;
+    std::cout << "k=" << k << std::endl;
 
     mymap::iterator lo = m.lower_bound(k);
-    vcl_cout << "  lo: ";
-    if (lo==b) vcl_cout << "begin";
-    else if (lo==e) vcl_cout << "end";
-    else vcl_cout << *lo;
-    vcl_cout << vcl_endl;
+    std::cout << "  lo: ";
+    if (lo==b) std::cout << "begin";
+    else if (lo==e) std::cout << "end";
+    else std::cout << *lo;
+    std::cout << std::endl;
 
     mymap::iterator hi = m.upper_bound(k);
-    vcl_cout << "  hi: ";
-    if (hi==b) vcl_cout << "begin";
-    else if (hi==e) vcl_cout << "end";
-    else vcl_cout << *hi;
-    vcl_cout << vcl_endl;
+    std::cout << "  hi: ";
+    if (hi==b) std::cout << "begin";
+    else if (hi==e) std::cout << "end";
+    else std::cout << *hi;
+    std::cout << std::endl;
   }
 
   return 0;

@@ -164,11 +164,11 @@ class imesh_imls_surface
  private:
 
   //: recursively compute the area weighted centroids
-  void compute_centroids_rec(const vcl_unique_ptr<imesh_kd_tree_node>& node,
+  void compute_centroids_rec(const std::unique_ptr<imesh_kd_tree_node>& node,
                              const std::set<unsigned int>& no_normal_faces);
 
   //: recursively compute the unweighted integrals
-  void compute_unweighed_rec(const vcl_unique_ptr<imesh_kd_tree_node>& node);
+  void compute_unweighed_rec(const std::unique_ptr<imesh_kd_tree_node>& node);
 
 
   //: compute the iso value such that the mean value at the vertices is zero
@@ -179,9 +179,9 @@ class imesh_imls_surface
   void compute_enclosing_phi();
 
   std::vector<vgl_point_3d<double> > verts_;     // mesh vertices
-  vcl_unique_ptr<imesh_regular_face_array<3> > triangles_; // mesh triangles
+  std::unique_ptr<imesh_regular_face_array<3> > triangles_; // mesh triangles
 
-  vcl_unique_ptr<imesh_kd_tree_node> kd_tree_;    // root node of a kd-tree on triangles
+  std::unique_ptr<imesh_kd_tree_node> kd_tree_;    // root node of a kd-tree on triangles
   std::vector<double> phi_;                      // phi values assigned per vertex
   std::vector<double> area_;                     // surface area per node
   std::vector<double> unweighted_;               // unweighted integrals of phi over the surface per node

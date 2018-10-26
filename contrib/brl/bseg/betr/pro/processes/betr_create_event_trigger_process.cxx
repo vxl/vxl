@@ -50,7 +50,7 @@ bool betr_create_event_trigger_process(bprb_func_process& pro)
   float lon = pro.get_input<float>(i++);
   float lat = pro.get_input<float>(i++);
   float elev = pro.get_input<float>(i++);
-  std::string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
   bool verbose = pro.get_input<bool>(i);
 
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);

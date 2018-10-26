@@ -70,10 +70,10 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_unique_ptr<msm_aligner> aligner;
+  std::unique_ptr<msm_aligner> aligner;
 
   //: Object to apply limits to parameters
-  vcl_unique_ptr<msm_param_limiter> limiter;
+  std::unique_ptr<msm_param_limiter> limiter;
 
   //: Maximum number of shape modes
   unsigned max_modes;

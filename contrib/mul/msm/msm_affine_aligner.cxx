@@ -61,8 +61,8 @@ double msm_affine_aligner::scale(const vnl_vector<double>& t) const
   assert(t.size()==6);
   double a = t[0]+1, b = t[1];
   double c = t[3],   d = t[4]+1;
-  double s2 = vcl_fabs(a*d - b*c);
-  if (s2>0) return vcl_sqrt(s2);
+  double s2 = std::fabs(a*d - b*c);
+  if (s2>0) return std::sqrt(s2);
 
   return 0.0;
 }

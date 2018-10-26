@@ -12,7 +12,9 @@
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #include <vcl_compiler.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>
@@ -158,7 +160,7 @@ static void test_bvxm_normalize_image_process()
   REGISTER_DATATYPE( bvxm_voxel_slab_base_sptr );
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
 
@@ -312,7 +314,7 @@ static void test_bvxm_normalize_image_process()
   TEST("bprb_batch_process_manager commit_output", good, true);
 
   brdb_query_aptr Q_slab = brdb_query_comp_new("id", brdb_query::EQ, id_slab);
-  brdb_selection_sptr S_slab = DATABASE->select("bvxm_voxel_slab_base_sptr_data", vcl_move(Q_slab));
+  brdb_selection_sptr S_slab = DATABASE->select("bvxm_voxel_slab_base_sptr_data", std::move(Q_slab));
   TEST("output slab is in db", S_slab->size(), 1);
 
   brdb_value_sptr value_slab;
@@ -335,7 +337,7 @@ static void test_bvxm_normalize_image_process()
   TEST("bprb_batch_process_manager commit_output", good, true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img));
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img));
   TEST("output image is in db", S_img->size(), 1);
 
   brdb_value_sptr value_img;
@@ -351,7 +353,7 @@ static void test_bvxm_normalize_image_process()
 
   // get a
   brdb_query_aptr Q_a = brdb_query_comp_new("id", brdb_query::EQ, id_a);
-  brdb_selection_sptr S_a = DATABASE->select("float_data", vcl_move(Q_a));
+  brdb_selection_sptr S_a = DATABASE->select("float_data", std::move(Q_a));
   TEST("output a is in db", S_a->size(), 1);
 
   brdb_value_sptr value_a;
@@ -363,7 +365,7 @@ static void test_bvxm_normalize_image_process()
 
   // get b
   brdb_query_aptr Q_b = brdb_query_comp_new("id", brdb_query::EQ, id_b);
-  brdb_selection_sptr S_b = DATABASE->select("float_data", vcl_move(Q_b));
+  brdb_selection_sptr S_b = DATABASE->select("float_data", std::move(Q_b));
   TEST("output b is in db", S_b->size(), 1);
 
   brdb_value_sptr value_b;

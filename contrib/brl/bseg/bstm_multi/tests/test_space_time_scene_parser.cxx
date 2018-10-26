@@ -4,10 +4,12 @@
 // \author Raphael Kargon
 // \date 29-Jul-2017
 
-#include <vcl_cstdio.h>
-#include <vcl_map.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <map>
+#include <string>
+#include <vector>
 #include <vgl/vgl_box_3d.h>
 
 #include <testlib/testlib_root_dir.h>
@@ -19,23 +21,23 @@
 
 // This returns default-initialized parser on failure.
 template <typename Block>
-space_time_scene_parser<Block> load_file(vcl_string filename) {
+space_time_scene_parser<Block> load_file(std::string filename) {
   space_time_scene_parser<Block> parser;
   if (filename.size() > 0) {
-    vcl_FILE *xml_file = vcl_fopen(filename.c_str(), "r");
+    std::FILE *xml_file = std::fopen(filename.c_str(), "r");
     if (!xml_file) {
-      vcl_cerr << filename.c_str() << " error on opening\n";
+      std::cerr << filename.c_str() << " error on opening\n";
       perror("Error!");
       TEST("Error opening file", true, false);
       return parser;
     }
     if (!parser.parseFile(xml_file)) {
-      vcl_cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
+      std::cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "
                << parser.XML_GetCurrentLineNumber() << '\n';
       TEST("Error parsing XML", true, false);
       return parser;
     }
-    vcl_fclose(xml_file);
+    std::fclose(xml_file);
   }
   return parser;
 }
@@ -56,13 +58,13 @@ void test_bbox_equal_approx(const char *s,
 }
 
 void test_space_time_scene_parser() {
-  vcl_string data_dir =
+  std::string data_dir =
       testlib_root_dir() + "/contrib/brl/bseg/bstm_multi/tests/";
-  vcl_string bstm_filename = data_dir + "bstm_scene/scene.xml";
-  vcl_string bstm_multi_filename = data_dir + "bstm_multi_scene/scene.xml";
+  std::string bstm_filename = data_dir + "bstm_scene/scene.xml";
+  std::string bstm_multi_filename = data_dir + "bstm_multi_scene/scene.xml";
 
   vgl_box_3d<double> block_bbox(-1, -4, -0.25, 1.88, -0.16, 2.63);
-  vcl_vector<vcl_string> appearances;
+  std::vector<std::string> appearances;
   appearances.emplace_back("bstm_mog6_view_compact");
   appearances.emplace_back("bstm_num_obs_view_compact");
 
@@ -71,9 +73,9 @@ void test_space_time_scene_parser() {
         load_file<bstm_block>(bstm_filename);
     TEST("bstm appearances", bstm_parser.appearances(), appearances);
     // Compare bounding boxes and time range of each block
-    vcl_map<bstm_block_id, bstm_block_metadata> bstm_blocks =
+    std::map<bstm_block_id, bstm_block_metadata> bstm_blocks =
         bstm_parser.blocks();
-    vcl_map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
+    std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
     for (iter = bstm_blocks.begin(); iter != bstm_blocks.end(); ++iter) {
       test_bbox_equal_approx(
           ("Block ID " + iter->first.to_string() + " has correct bounding box")
@@ -97,9 +99,9 @@ void test_space_time_scene_parser() {
     TEST(
         "bstm_multi appearances", bstm_multi_parser.appearances(), appearances);
     // Compare bounding boxes and time range of each block
-    vcl_map<bstm_block_id, bstm_multi_block_metadata> bstm_multi_blocks =
+    std::map<bstm_block_id, bstm_multi_block_metadata> bstm_multi_blocks =
         bstm_multi_parser.blocks();
-    vcl_map<bstm_block_id, bstm_multi_block_metadata>::const_iterator iter;
+    std::map<bstm_block_id, bstm_multi_block_metadata>::const_iterator iter;
     for (iter = bstm_multi_blocks.begin(); iter != bstm_multi_blocks.end();
          ++iter) {
       test_bbox_equal_approx(
@@ -110,7 +112,7 @@ void test_space_time_scene_parser() {
 
       // Check that block's time origin is equal to block time ID *
       // (frames/block)
-      vcl_pair<double, double> bbox_t = iter->second.bbox_t();
+      std::pair<double, double> bbox_t = iter->second.bbox_t();
       TEST(("Block ID " + iter->first.to_string() + " has correct time origin")
                .c_str(),
            iter->first.t() * (bbox_t.second - bbox_t.first),

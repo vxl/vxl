@@ -45,12 +45,12 @@ bool mfpf_vec_cost_builder::set_from_stream(std::istream &is)
 }
 
 //: Create a concrete object, from a text specification.
-vcl_unique_ptr<mfpf_vec_cost_builder> mfpf_vec_cost_builder::
+std::unique_ptr<mfpf_vec_cost_builder> mfpf_vec_cost_builder::
   create_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
-  vcl_unique_ptr<mfpf_vec_cost_builder> vcb;
+  std::unique_ptr<mfpf_vec_cost_builder> vcb;
   try {
     vcb = mbl_cloneables_factory<mfpf_vec_cost_builder>::get_clone(name);
   }

@@ -5,7 +5,9 @@
 #include <bvxm/bvxm_voxel_world.h>
 
 //For backwards compatibility
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
@@ -28,7 +30,7 @@ static void test_bvxm_roi_init_process()
 {
   DECLARE_FUNC_CONS(bvxm_roi_init_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_roi_init_process, "bvxmRoiInitProcess");
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
@@ -78,7 +80,7 @@ static void test_bvxm_roi_init_process()
 
   // check if the results are in DB
   brdb_query_aptr Q_cam = brdb_query_comp_new("id", brdb_query::EQ, id_cam);
-  brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", vcl_move(Q_cam));
+  brdb_selection_sptr S_cam = DATABASE->select("vpgl_camera_double_sptr_data", std::move(Q_cam));
   if (S_cam->size()!=1){
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
@@ -93,7 +95,7 @@ static void test_bvxm_roi_init_process()
   TEST("camera output non-null", non_null ,true);
 
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img));
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img));
   if (S_img->size()!=1){
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";

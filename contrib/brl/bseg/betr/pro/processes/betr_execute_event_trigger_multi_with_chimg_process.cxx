@@ -6,7 +6,9 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vgl/vgl_point_2d.h>
 #include <vil/vil_image_view.h>
 //:

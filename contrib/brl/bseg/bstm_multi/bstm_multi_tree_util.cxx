@@ -1,13 +1,15 @@
 #include "bstm_multi/bstm_multi_tree_util.h"
 
-#include <vcl_sstream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <vector>
 
 #include <boct/boct_bit_tree.h>
 #include <bstm/bstm_time_tree.h>
 
-vcl_string ste_as_string(space_time_enum ste) {
+std::string ste_as_string(space_time_enum ste) {
   switch (ste) {
   case STE_SPACE:
     return "space";
@@ -16,7 +18,7 @@ vcl_string ste_as_string(space_time_enum ste) {
   }
 }
 
-bool ste_from_string(const vcl_string &s, space_time_enum &ste) {
+bool ste_from_string(const std::string &s, space_time_enum &ste) {
   if (s == "space") {
     ste = STE_SPACE;
   } else if (s == "time") {
@@ -27,13 +29,13 @@ bool ste_from_string(const vcl_string &s, space_time_enum &ste) {
   return true;
 }
 
-vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s) {
-  vcl_vector<space_time_enum> result;
-  vcl_stringstream ss(s);
+std::vector<space_time_enum> parse_subdivisions(const std::string &s) {
+  std::vector<space_time_enum> result;
+  std::stringstream ss(s);
   while (ss.good() > 0) {
-    vcl_string substr;
+    std::string substr;
     space_time_enum ste;
-    vcl_getline(ss, substr, ',');
+    std::getline(ss, substr, ',');
     // skip any invalid subdivisions that are not 'space' or 'time'
     if (ste_from_string(substr, ste)) {
       result.push_back(ste);
@@ -42,9 +44,9 @@ vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s) {
   return result;
 }
 
-vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions) {
-  vcl_string subdivs_str;
-  for (vcl_vector<space_time_enum>::const_iterator iter = subdivisions.begin();
+std::string print_subdivisions(const std::vector<space_time_enum> &subdivisions) {
+  std::string subdivs_str;
+  for (std::vector<space_time_enum>::const_iterator iter = subdivisions.begin();
        iter != subdivisions.end();
        ++iter) {
     if (iter != subdivisions.begin()) {
@@ -55,7 +57,7 @@ vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions) {
   return subdivs_str;
 }
 
-vcl_size_t tree_size(space_time_enum ste) {
+std::size_t tree_size(space_time_enum ste) {
   switch (ste) {
   case STE_SPACE:
     return sizeof(space_tree_b);
@@ -149,7 +151,7 @@ const bstm_time_tree &generic_tree::time_tree(std::nothrow_t) const {
 }
 
 //: \brief returns buffer size
-vcl_size_t generic_tree::tree_size() const { return ::tree_size(type_); }
+std::size_t generic_tree::tree_size() const { return ::tree_size(type_); }
 
 unsigned char *generic_tree::bits() { return GENERIC_TREE_CALL(get_bits()); }
 const unsigned char *generic_tree::bits() const {
@@ -171,7 +173,7 @@ void generic_tree::set_data_ptr(int ptr) {
   GENERIC_TREE_CALL(set_data_ptr(ptr));
 }
 
-vcl_vector<int> generic_tree::get_leaf_bits() const {
+std::vector<int> generic_tree::get_leaf_bits() const {
   return GENERIC_TREE_CALL(get_leaf_bits());
 }
 

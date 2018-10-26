@@ -10,7 +10,9 @@
 // \author Raphael Kargon
 // \date Aug 02 2017
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 #include <bstm_multi/block_data_base.h>
 
@@ -23,25 +25,25 @@ public:
   typedef typename Block::metadata_t block_metadata;
 
   //: loads block from disk
-  static Block *load_block(const vcl_string &dir,
+  static Block *load_block(const std::string &dir,
                            const block_id &block_id,
                            const block_metadata &data);
 
   //: saves block to disk
-  static void save_block(const vcl_string &dir, Block *block);
+  static void save_block(const std::string &dir, Block *block);
 
   //: load data generically
   // loads a generic data_base* from disk (given data_type string prefix)
-  static block_data_base *load_block_data_generic(const vcl_string &dir,
+  static block_data_base *load_block_data_generic(const std::string &dir,
                                                   const block_id &id,
-                                                  const vcl_string &data_type);
+                                                  const std::string &data_type);
 
   //: saves data generically
   // generically saves data_base * to disk (given prefix)
-  static void save_block_data_base(const vcl_string &dir,
+  static void save_block_data_base(const std::string &dir,
                                    const block_id &block_id,
                                    block_data_base *data,
-                                   const vcl_string &prefix);
+                                   const std::string &prefix);
 };
 
 #endif // block_sio_mgr_h_

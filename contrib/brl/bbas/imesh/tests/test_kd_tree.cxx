@@ -11,7 +11,7 @@
 
 void test_closest_point(const imesh_mesh& mesh, const std::vector<vgl_point_3d<double> >& pts)
 {
-  vcl_unique_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(mesh);
+  std::unique_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(mesh);
 
   bool same_tri = true;
   bool same_pt = true;
@@ -56,7 +56,7 @@ static void test_kd_tree()
   test_closest_point(cube,pts);
 
   std::vector<imesh_kd_tree_queue_entry> dists;
-  vcl_unique_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
+  std::unique_ptr<imesh_kd_tree_node> kd_tree = imesh_build_kd_tree(cube);
   vgl_point_3d<double> cp;
   imesh_kd_tree_closest_point(pts[3],cube,kd_tree,cp,&dists);
   unsigned int leaf_count = 0;

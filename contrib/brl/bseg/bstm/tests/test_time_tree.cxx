@@ -199,7 +199,7 @@ void test_time_tree()
     //  test fill cells
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[7] = true;
       frames[8] = true;
       frames[9] = true;
@@ -229,7 +229,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       bstm_time_tree tree;
       tree.fill_cells(frames);
       unsigned char bits[31] = {0};
@@ -242,7 +242,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[0] = true;
       bstm_time_tree tree;
       tree.fill_cells(frames);
@@ -256,7 +256,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[1] = true;
       bstm_time_tree tree;
       tree.fill_cells(frames);
@@ -279,7 +279,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[2] = true;
       bstm_time_tree tree;
       tree.fill_cells(frames);
@@ -302,7 +302,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[8] = true;
       frames[16] = true;
       bstm_time_tree tree;
@@ -326,7 +326,7 @@ void test_time_tree()
     }
     {
       bool frames[32];
-      vcl_memset(frames, false, 32);
+      std::memset(frames, false, 32);
       frames[10] = true;
       frames[21] = true;
       bstm_time_tree tree;

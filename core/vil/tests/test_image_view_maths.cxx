@@ -2,8 +2,10 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>
@@ -15,7 +17,7 @@ static void test_image_abs_diff(unsigned ni, unsigned nj, T min, T max, T tol)
   vil_image_view<vxl_byte> bdiff_A(ni, nj);
   vil_image_view<vxl_byte> bdiff_B(ni, nj);
   vil_image_view<vxl_byte> bdiff_D(ni, nj);
-  T diff = vcl_abs(max-min);
+  T diff = std::abs(max-min);
 
   for (unsigned j = 0; j < nj; ++j)
     for (unsigned i = 0; i < ni; ++i)

@@ -11,7 +11,9 @@
 
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <vcl_cstdio.h> // for vcl_snprintf()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for std::snprintf()
 
 #ifdef _WIN32
 
@@ -43,7 +45,7 @@ static bool vul_debug_core_dump_in_windows_seh(const char * filename,
 {
   static char buffer[2048];
   static int count = 0;
-  vcl_snprintf(buffer, sizeof(buffer), filename, count++);
+  std::snprintf(buffer, sizeof(buffer), filename, count++);
   buffer[sizeof(buffer)-1]=0; // Just in case it is too long
 
   HANDLE hFile = CreateFile( buffer, GENERIC_READ | GENERIC_WRITE,

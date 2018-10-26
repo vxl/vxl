@@ -675,8 +675,8 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
   std::string path_H2 = pro.get_input<std::string>(i++);
 
   double factor = GSD_DEM/GSD_img;
-  int out_ni2 = (int) vcl_floor(((double)out_ni / factor) + 0.5);
-  int out_nj2 = (int) vcl_floor(((double)out_nj / factor) + 0.5);
+  int out_ni2 = (int) std::floor(((double)out_ni / factor) + 0.5);
+  int out_nj2 = (int) std::floor(((double)out_nj / factor) + 0.5);
   std::cout << "ni, nj: " << out_ni << ", " << out_nj << '\n';
   std::cout << "new ni, nj: " << out_ni2 << ", " << out_nj2 << '\n';
 
@@ -732,8 +732,8 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
       // now the disparity equation is u1w-d = u2w --> d = u1w - u2w
       int disp = u1w - u2w;
 
-      int down_u1w = vcl_floor(double(u1w)/factor);
-      int down_v1w = vcl_floor(double(v1w)/factor);
+      int down_u1w = std::floor(double(u1w)/factor);
+      int down_v1w = std::floor(double(v1w)/factor);
       if (down_u1w < 0 || down_v1w < 0 || down_u1w >= out_ni2 || down_v1w >= out_nj2)
         continue;
       out_disparity_map(down_u1w, down_v1w) = (float)disp;

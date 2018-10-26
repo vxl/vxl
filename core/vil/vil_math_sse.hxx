@@ -6,7 +6,9 @@
 #error "This header cannot be included directly, only through vil_math_.h"
 #endif
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 #include <vxl_config.h>
 
 #include <emmintrin.h>
@@ -63,8 +65,8 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
     __m128i* pxLastBxmm = reinterpret_cast<__m128i*>(pxLastB);
     __m128i* pxLastDxmm = reinterpret_cast<__m128i*>(pxLastD);
 
-    vcl_memcpy(pxLastA, pxAxmm, ni_m_16);
-    vcl_memcpy(pxLastB, pxBxmm, ni_m_16);
+    std::memcpy(pxLastA, pxAxmm, ni_m_16);
+    std::memcpy(pxLastB, pxBxmm, ni_m_16);
 #ifdef __SSE3__
     __m128i xmmA = _mm_lddqu_si128(pxLastAxmm);
     __m128i xmmB = _mm_lddqu_si128(pxLastBxmm);
@@ -78,7 +80,7 @@ inline void vil_math_image_abs_difference_1d_sse<vxl_byte,vxl_byte,vxl_byte>(
     __m128i xmmD   = _mm_subs_epu8(xmmMax, xmmMin);
 
     _mm_storeu_si128(pxLastDxmm, xmmD);
-    vcl_memcpy(pxDxmm, pxLastD, ni_m_16);
+    std::memcpy(pxDxmm, pxLastD, ni_m_16);
   }
 }
 
@@ -115,8 +117,8 @@ inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
     float pxLastB[4];
     float pxLastD[4];
 
-    vcl_memcpy(pxLastA, pxA, ni_m_4_bytes);
-    vcl_memcpy(pxLastB, pxB, ni_m_4_bytes);
+    std::memcpy(pxLastA, pxA, ni_m_4_bytes);
+    std::memcpy(pxLastB, pxB, ni_m_4_bytes);
     __m128 xmmA = _mm_loadu_ps(pxLastA);
     __m128 xmmB = _mm_loadu_ps(pxLastB);
 
@@ -126,7 +128,7 @@ inline void vil_math_image_abs_difference_1d_sse<float,float,float>(
 
     _mm_storeu_ps(pxLastD, xmmD);
 
-    vcl_memcpy(pxD, pxLastD, ni_m_4_bytes);
+    std::memcpy(pxD, pxLastD, ni_m_4_bytes);
   }
 }
 

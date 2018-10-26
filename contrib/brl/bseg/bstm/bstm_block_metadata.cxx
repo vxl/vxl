@@ -4,7 +4,9 @@
 //:
 // \file
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 // the local time is [0,sub_block_num_t_)
 bool bstm_block_metadata::contains_t(double const t, double &local_time) const {
@@ -85,7 +87,7 @@ void bstm_block_metadata::to_xml(vsl_basic_xml_element &block) const {
 }
 
 template <typename T> void convert(const char *t, T &d) {
-  vcl_stringstream strm(t);
+  std::stringstream strm(t);
   strm >> d;
 }
 
@@ -99,49 +101,49 @@ bstm_block_metadata bstm_block_metadata::from_xml(const char **atts) {
   // iterate over attributes...
   for (int i = 0; atts[i]; i += 2) {
 
-    if (vcl_strcmp(atts[i], "id_i") == 0)
+    if (std::strcmp(atts[i], "id_i") == 0)
       convert(atts[i + 1], idi);
-    else if (vcl_strcmp(atts[i], "id_j") == 0)
+    else if (std::strcmp(atts[i], "id_j") == 0)
       convert(atts[i + 1], idj);
-    else if (vcl_strcmp(atts[i], "id_k") == 0)
+    else if (std::strcmp(atts[i], "id_k") == 0)
       convert(atts[i + 1], idk);
-    else if (vcl_strcmp(atts[i], "id_t") == 0)
+    else if (std::strcmp(atts[i], "id_t") == 0)
       convert(atts[i + 1], idt);
-    else if (vcl_strcmp(atts[i], "origin_x") == 0)
+    else if (std::strcmp(atts[i], "origin_x") == 0)
       convert(atts[i + 1], ox);
-    else if (vcl_strcmp(atts[i], "origin_y") == 0)
+    else if (std::strcmp(atts[i], "origin_y") == 0)
       convert(atts[i + 1], oy);
-    else if (vcl_strcmp(atts[i], "origin_z") == 0)
+    else if (std::strcmp(atts[i], "origin_z") == 0)
       convert(atts[i + 1], oz);
-    else if (vcl_strcmp(atts[i], "origin_t") == 0)
+    else if (std::strcmp(atts[i], "origin_t") == 0)
       convert(atts[i + 1], ot);
-    else if (vcl_strcmp(atts[i], "dim_x") == 0)
+    else if (std::strcmp(atts[i], "dim_x") == 0)
       convert(atts[i + 1], dim_x);
-    else if (vcl_strcmp(atts[i], "dim_y") == 0)
+    else if (std::strcmp(atts[i], "dim_y") == 0)
       convert(atts[i + 1], dim_y);
-    else if (vcl_strcmp(atts[i], "dim_z") == 0)
+    else if (std::strcmp(atts[i], "dim_z") == 0)
       convert(atts[i + 1], dim_z);
-    else if (vcl_strcmp(atts[i], "dim_t") == 0)
+    else if (std::strcmp(atts[i], "dim_t") == 0)
       convert(atts[i + 1], dim_t);
-    else if (vcl_strcmp(atts[i], "num_x") == 0)
+    else if (std::strcmp(atts[i], "num_x") == 0)
       convert(atts[i + 1], num_x);
-    else if (vcl_strcmp(atts[i], "num_y") == 0)
+    else if (std::strcmp(atts[i], "num_y") == 0)
       convert(atts[i + 1], num_y);
-    else if (vcl_strcmp(atts[i], "num_z") == 0)
+    else if (std::strcmp(atts[i], "num_z") == 0)
       convert(atts[i + 1], num_z);
-    else if (vcl_strcmp(atts[i], "num_t") == 0)
+    else if (std::strcmp(atts[i], "num_t") == 0)
       convert(atts[i + 1], num_t);
-    else if (vcl_strcmp(atts[i], "init_level") == 0)
+    else if (std::strcmp(atts[i], "init_level") == 0)
       convert(atts[i + 1], metadata.init_level_);
-    else if (vcl_strcmp(atts[i], "init_level_t") == 0)
+    else if (std::strcmp(atts[i], "init_level_t") == 0)
       convert(atts[i + 1], metadata.init_level_t_);
-    else if (vcl_strcmp(atts[i], "max_level") == 0)
+    else if (std::strcmp(atts[i], "max_level") == 0)
       convert(atts[i + 1], metadata.max_level_);
-    else if (vcl_strcmp(atts[i], "max_level_t") == 0)
+    else if (std::strcmp(atts[i], "max_level_t") == 0)
       convert(atts[i + 1], metadata.max_level_t_);
-    else if (vcl_strcmp(atts[i], "max_mb") == 0)
+    else if (std::strcmp(atts[i], "max_mb") == 0)
       convert(atts[i + 1], metadata.max_mb_);
-    else if (vcl_strcmp(atts[i], "p_init") == 0)
+    else if (std::strcmp(atts[i], "p_init") == 0)
       convert(atts[i + 1], metadata.p_init_);
   }
   metadata.id_ = bstm_block_id(idi, idj, idk, idt);
@@ -154,7 +156,7 @@ bstm_block_metadata bstm_block_metadata::from_xml(const char **atts) {
   return metadata;
 }
 
-vcl_ostream &operator<<(vcl_ostream &s, const bstm_block_metadata &metadata) {
+std::ostream &operator<<(std::ostream &s, const bstm_block_metadata &metadata) {
   s << metadata.id_ << ' ';
   vgl_point_3d<double> org = metadata.local_origin_;
   s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' '

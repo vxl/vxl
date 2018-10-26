@@ -7,8 +7,10 @@
 // \author Vishal Jain
 // \date Nov 11, 2014
 
-#include <vcl_fstream.h>
-#include <vcl_algorithm.h>
+#include <fstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>
@@ -42,7 +44,7 @@ bool boxm2_ocl_update_image_factor_process_cons(bprb_func_process& pro)
 {
   using namespace boxm2_ocl_update_image_factor_process_globals;
   //process takes 9 inputs (of which the four last ones are optional):
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   unsigned int i = 0;
   input_types_[i++] = "bocl_device_sptr";
   input_types_[i++] = "boxm2_scene_sptr";
@@ -50,7 +52,7 @@ bool boxm2_ocl_update_image_factor_process_cons(bprb_func_process& pro)
   input_types_[i++] = "bool";
   input_types_[i++] = "vcl_string";     //input image
   // process has no outputs
-  vcl_vector<vcl_string>  output_types_(n_outputs_);
+  std::vector<std::string>  output_types_(n_outputs_);
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
   return good;
@@ -61,7 +63,7 @@ bool boxm2_ocl_update_image_factor_process(bprb_func_process& pro)
   using namespace boxm2_ocl_update_image_factor_process_globals;
   //sanity check inputs
   if ( pro.n_inputs() < n_inputs_ ) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_<< vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_<< std::endl;
     return false;
   }
   //get the inputs
@@ -70,12 +72,12 @@ bool boxm2_ocl_update_image_factor_process(bprb_func_process& pro)
   boxm2_scene_sptr         scene        = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   bool  does_add = pro.get_input<bool>(i++);
-  vcl_string view_identifier = pro.get_input<vcl_string>(i++);
+  std::string view_identifier = pro.get_input<std::string>(i++);
 
   vul_timer t;
   t.mark();
   if(!boxm2_ocl_update_image_factor::update_image_factor(scene, device, opencl_cache, does_add, view_identifier))
     return false;
-  vcl_cout<<"Total time taken is "<<t.all()<<vcl_endl;
+  std::cout<<"Total time taken is "<<t.all()<<std::endl;
   return true;
 }

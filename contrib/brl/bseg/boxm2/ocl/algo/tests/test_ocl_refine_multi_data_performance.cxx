@@ -9,9 +9,11 @@
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
-#include <vcl_ctime.h>
+#include <string>
+#include <vector>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <ctime>
 
 #include <bocl/bocl_manager.h>
 #include <boxm2/boxm2_block.h>
@@ -27,9 +29,9 @@ void test_ocl_refine_multi_data_performance() {
   /* TEST OCL REFINE  */
   testlib_test_begin(
       "Testing performance of OCL Refinement and CPP Multi-Data Refinement.");
-  vcl_clock_t start, end;
+  std::clock_t start, end;
 
-  vcl_string data_dir =
+  std::string data_dir =
       testlib_root_dir() + "/contrib/brl/bseg/boxm2/ocl/algo/tests/";
   boxm2_scene_sptr scene_ocl =
       new boxm2_scene(data_dir + "/boxm2_site_ocl_refine/scene.xml");
@@ -42,11 +44,11 @@ void test_ocl_refine_multi_data_performance() {
 
   // Scene's initial probability is 0.01, so this should refine everything
   float prob_thresh = 0.00001f;
-  start = vcl_clock();
+  start = std::clock();
   int num_cells_refined_regular = boxm2_ocl_refine::refine_scene(
       device, scene_ocl, opencl_cache, prob_thresh);
-  end = vcl_clock();
-  vcl_cout << "Elapsed time for OCL refine: " << float(end - start) / CLOCKS_PER_SEC << std::endl;
+  end = std::clock();
+  std::cout << "Elapsed time for OCL refine: " << float(end - start) / CLOCKS_PER_SEC << std::endl;
   testlib_test_assert("boxm2_ocl_refine", num_cells_refined_regular != -1);
 
   /* TEST MULTI-DATA REFINE  */
@@ -62,13 +64,13 @@ void test_ocl_refine_multi_data_performance() {
   // Need to ref this because lru cache internally uses raw pointers and owns its data. We don't want smart pointers to delete the data a second time.
   first_block->ref();
 
-  vcl_vector<vcl_string> appearances = scene_cpp->appearances();
+  std::vector<std::string> appearances = scene_cpp->appearances();
   appearances.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-  start = vcl_clock();
+  start = std::clock();
   boxm2_refine_block_multi_data_function(scene_cpp, first_block, appearances,
                                          prob_thresh);
-  end = vcl_clock();
-  vcl_cout << "Elapsed time for Multi-Data refine: " << float(end - start) / CLOCKS_PER_SEC << std::endl;
+  end = std::clock();
+  std::cout << "Elapsed time for Multi-Data refine: " << float(end - start) / CLOCKS_PER_SEC << std::endl;
 }
 
 TESTMAIN(test_ocl_refine_multi_data_performance);

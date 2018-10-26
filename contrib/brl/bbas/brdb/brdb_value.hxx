@@ -79,13 +79,15 @@ brdb_value_t<T>::b_write_value(vsl_b_ostream& os) const
 //However MSVC rejects the declaration [temp.expl.spec]p6, [temp.expl.spec]p13
 
 
-#define BRDB_VALUE_INSTANTIATE(T,NAME) \
+#define BRDB_VALUE_INSTANTIATE_LONG_FORM(T,FUNCSUFFIX,NAME) \
 template <> const std::string& brdb_value_t<T >::get_type_string()\
 {\
 static std::string type_string = NAME;\
 return type_string;\
 }\
 template class brdb_value_t<T >; \
-const brdb_value::registrar reg_inst_##T(new brdb_value_t<T >)
+const brdb_value::registrar reg_inst_##FUNCSUFFIX(new brdb_value_t<T >)
+
+#define BRDB_VALUE_INSTANTIATE(T,NAME) BRDB_VALUE_INSTANTIATE_LONG_FORM(T,T,NAME)
 
 #endif // brdb_value_hxx_

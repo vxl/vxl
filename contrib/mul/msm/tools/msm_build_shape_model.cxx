@@ -22,7 +22,9 @@
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iterator>
 
 #include <msm/msm_shape_model_builder.h>
 #include <msm/msm_reflect_shape.h>
@@ -94,12 +96,12 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_unique_ptr<msm_aligner> aligner;
+  std::unique_ptr<msm_aligner> aligner;
 
   msm_aligner::ref_pose_source ref_pose_source;
 
   //: Object to apply limits to parameters
-  vcl_unique_ptr<msm_param_limiter> limiter;
+  std::unique_ptr<msm_param_limiter> limiter;
 
   //: Maximum number of shape modes
   unsigned max_modes;
@@ -108,17 +110,17 @@ struct tool_params
   double var_prop;
 
   //: Path to curves file defining parts to be used for individual modes
-  vcl_string parts_for_modes_path;
+  std::string parts_for_modes_path;
 
   //: Define which parts to be used for first modes
   //  Where defined, only the points in the parts will be used
   //  to compute that mode.  Thus some modes will only affect a
   //  subset of points.
-  vcl_vector<vcl_string> mode_part;
+  std::vector<std::string> mode_part;
 
   //: Define renumbering required under reflection
   //  If defined, a reflected version of each shape is included in build
-  vcl_vector<unsigned> reflection_symmetry;
+  std::vector<unsigned> reflection_symmetry;
 
   //: When true, only use reflection. When false, use both reflection and original.
   bool only_reflect;
@@ -190,17 +192,17 @@ void tool_params::read_from_file(const std::string& path)
   }
 
   parts_for_modes_path=props.get_optional_property("parts_for_modes_path","");
-  vcl_string mode_part_str=props.get_optional_property("mode_part","");
+  std::string mode_part_str=props.get_optional_property("mode_part","");
   mode_part.resize(0);
   if (mode_part_str!="")
     mbl_parse_string_list(mode_part_str,mode_part);
 
-  vcl_string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
+  std::string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
   reflection_symmetry.resize(0);
   if (ref_sym_str!="-")
   {
-    vcl_stringstream ss(ref_sym_str);
-    mbl_parse_int_list(ss, vcl_back_inserter(reflection_symmetry),
+    std::stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, std::back_inserter(reflection_symmetry),
                        unsigned());
   }
 
@@ -218,8 +220,8 @@ void tool_params::read_from_file(const std::string& path)
 //  then used[i] computed from parts[j].index()
 //  If modes_parts[i]==all, then all elements used.
 void get_pts_used_for_modes(const msm_curves& parts,
-                        const vcl_vector<vcl_string>& mode_parts,
-                        vcl_vector<vcl_vector<unsigned> >& pts_used)
+                        const std::vector<std::string>& mode_parts,
+                        std::vector<std::vector<unsigned> >& pts_used)
 {
   pts_used.resize(mode_parts.size());
 
@@ -275,15 +277,15 @@ int main(int argc, char** argv)
   {
     if (!parts_for_modes.read_text_file(params.parts_for_modes_path))
     {
-      vcl_cerr<<"Failed to read in parts from "
-              <<params.parts_for_modes_path<<vcl_endl;
+      std::cerr<<"Failed to read in parts from "
+              <<params.parts_for_modes_path<<std::endl;
       return 2;
     }
   }
 
   // === Load in all the shapes ===
   unsigned n=params.points_names.size();
-  vcl_vector<msm_points> shapes(n);
+  std::vector<msm_points> shapes(n);
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
   if (params.reflection_symmetry.size()>0)
@@ -307,7 +309,7 @@ int main(int argc, char** argv)
   builder.set_param_limiter(*params.limiter);
   builder.set_mode_choice(0,params.max_modes,params.var_prop);
 
-  vcl_cout<<"Building shape model from "<<shapes.size()<<" examples."<<vcl_endl;
+  std::cout<<"Building shape model from "<<shapes.size()<<" examples."<<std::endl;
 
   if (params.mode_part.size()==0)
   {
@@ -315,7 +317,7 @@ int main(int argc, char** argv)
   }
   else
   {
-    vcl_vector<vcl_vector<unsigned> > pts_used;
+    std::vector<std::vector<unsigned> > pts_used;
     get_pts_used_for_modes(parts_for_modes,params.mode_part,pts_used);
     builder.build_model(shapes,pts_used,shape_model);
   }

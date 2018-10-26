@@ -2,9 +2,11 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_poly_region_3d.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #define TEST_POLY_REGION 0
@@ -12,9 +14,9 @@
 static void test_poly_region()
 {
 #if TEST_POLY_REGION
-  vcl_string base_path = "d:/VisionSystems/Janus/RelevantPapers/FacialMusclesExpression/fat_pocket/";
-  vcl_string ptset_name = "random_fat_pocket_pts.txt";
-  vcl_string ptset_path = base_path + ptset_name;
+  std::string base_path = "d:/VisionSystems/Janus/RelevantPapers/FacialMusclesExpression/fat_pocket/";
+  std::string ptset_name = "random_fat_pocket_pts.txt";
+  std::string ptset_path = base_path + ptset_name;
   vgl_vector_3d<double> normal(-0.73911, 0.100747, -0.666008);
   vgl_point_3d<double> origin(31.4641,0.0,89.3596);
   double ucf[5] = {2.41, 498.764, -1048.39, 517.0861, 32.544};
@@ -26,7 +28,7 @@ static void test_poly_region()
   bool good = pr.in(p);
   unsigned npts = 10000;
   vgl_pointset_3d<double> ptset = pr.random_pointset(npts);
-  vcl_ofstream ostr(ptset_path.c_str());
+  std::ofstream ostr(ptset_path.c_str());
   ostr << ptset;
   ostr.close();
 #endif

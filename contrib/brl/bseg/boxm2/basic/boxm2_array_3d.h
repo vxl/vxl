@@ -8,8 +8,10 @@
 #include <iosfwd>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <vcl_cstddef.h>
-#include <vcl_cstdlib.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <cstdlib>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)
@@ -117,9 +119,9 @@ class boxm2_array_3d
                          size_type &i1,
                          size_type &i2,
                          size_type &i3) const {
-    ldiv_t div = vcl_ldiv(idx, (row2_count_ * row3_count_));
+    ldiv_t div = std::ldiv(idx, (row2_count_ * row3_count_));
     i1 = div.quot;
-    div = vcl_div(div.rem, row3_count_);
+    div = std::div(div.rem, row3_count_);
     i2 = div.quot;
     i3 = div.rem;
   }

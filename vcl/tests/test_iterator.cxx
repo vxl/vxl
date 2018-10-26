@@ -1,9 +1,11 @@
 /*
   fsm
 */
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iterator>
 
-void f(vcl_iterator<float, int> *) { }
+void f(std::iterator<float, int> *) { }
 
 int test_iterator_main(int /*argc*/,char* /*argv*/[])
 {

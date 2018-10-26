@@ -85,7 +85,7 @@ vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
     file_format = "pnm";
 
   vil_image_resource_sptr outimage = nullptr;
-  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  std::list<vil_file_format*>& l = vil_file_format::all();
   for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
@@ -164,7 +164,7 @@ vil_new_blocked_image_resource(vil_stream* os, unsigned ni, unsigned nj,
     file_format = "pnm";
 
   vil_blocked_image_resource_sptr outimage = nullptr;
-  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  std::list<vil_file_format*>& l = vil_file_format::all();
   for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
@@ -219,7 +219,7 @@ vil_new_pyramid_image_resource(char const* file_or_directory,
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
   vil_pyramid_image_resource_sptr outimage = nullptr;
-  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  std::list<vil_file_format*>& l = vil_file_format::all();
   for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;
@@ -244,7 +244,7 @@ vil_pyramid_image_resource_sptr
   if (!file_format) // avoid segfault in strcmp()
     file_format = "tiff";
   vil_pyramid_image_resource_sptr outimage = nullptr;
-  vcl_list<vil_file_format*>& l = vil_file_format::all();
+  std::list<vil_file_format*>& l = vil_file_format::all();
   for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
   {
     vil_file_format* fmt = *p;

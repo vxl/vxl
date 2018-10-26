@@ -14,10 +14,12 @@
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_algorithm.h>
-#include <vcl_cstring.h>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <string>
 #include <vsl/vsl_binary_io.h>
 
 #include <bstm/bstm_data_traits.h>
@@ -27,18 +29,18 @@ class block_data_base : public vbl_ref_count {
 public:
   //: Constructor - beware that the data_buffer becomes OWNED (and will be
   // deleted) by this class!
-  block_data_base(char *data_buffer, vcl_size_t length, bool read_only = true)
+  block_data_base(char *data_buffer, std::size_t length, bool read_only = true)
       : read_only_(read_only)
       , buffer_length_(length)
       , data_buffer_(data_buffer) {}
 
-  block_data_base(vcl_size_t length, bool read_only = true)
+  block_data_base(std::size_t length, bool read_only = true)
       : read_only_(read_only)
       , buffer_length_(length)
       , data_buffer_(new char[length]()) {}
 
-  block_data_base(vcl_size_t num_elements,
-                  const vcl_string &datatype,
+  block_data_base(std::size_t num_elements,
+                  const std::string &datatype,
                   bool read_only = true)
       : read_only_(read_only)
       , buffer_length_(num_elements * bstm_data_info::datasize(datatype))
@@ -49,7 +51,7 @@ public:
 
   // NOTE unlike in BSTM/BOXM2, block_data_base creates new buffers as
   // empty. Thus there is no need to initialize them.
-  // void set_default_value(vcl_string data_type);
+  // void set_default_value(std::string data_type);
 
   //: This destructor is correct - by our design the original data_buffer
   // becomes OWNED by the data_base class
@@ -61,15 +63,15 @@ public:
   //: accessor for low level byte buffer kept by the data_base
   char *data_buffer() { return data_buffer_; }
   const char *data_buffer() const { return data_buffer_; }
-  vcl_size_t buffer_length() const { return buffer_length_; }
+  std::size_t buffer_length() const { return buffer_length_; }
 
   //: returns copy of portion of buffer corresponding a cell. Returns
   // cell_size bytes starting at index i of data buffer. Returns
   // nullptr if request goes outside of bounds. Caller owns returns data.
-  char *cell_buffer(vcl_size_t i, vcl_size_t cell_size) const {
+  char *cell_buffer(std::size_t i, std::size_t cell_size) const {
     if ((i + cell_size - 1) < buffer_length_) {
       char *out = new char[cell_size];
-      for (vcl_size_t j = 0; j < cell_size; j++) {
+      for (std::size_t j = 0; j < cell_size; j++) {
         out[j] = data_buffer_[i + j];
       }
       return out;
@@ -80,7 +82,7 @@ public:
 
   // Replaces buffer with the given new buffer and length and deletes the old
   // data.
-  void set_data_buffer(char *new_buffer, vcl_size_t new_len) {
+  void set_data_buffer(char *new_buffer, std::size_t new_len) {
     delete[] data_buffer_;
     data_buffer_ = new_buffer;
     buffer_length_ = new_len;
@@ -88,15 +90,15 @@ public:
 
   // Replaces buffer with a newly allocated and zero-initialized buffer of the
   // given length. Deletes old data.
-  void new_data_buffer(vcl_size_t new_len) {
+  void new_data_buffer(std::size_t new_len) {
     delete[] data_buffer_;
     buffer_length_ = new_len;
     data_buffer_ = new char[new_len]();
   }
 
   void swap(block_data_base &other) {
-    vcl_swap(buffer_length_, other.buffer_length_);
-    vcl_swap(data_buffer_, other.data_buffer_);
+    std::swap(buffer_length_, other.buffer_length_);
+    std::swap(data_buffer_, other.data_buffer_);
   }
 
   void swap(block_data_base *other) { this->swap(*other); }
@@ -109,7 +111,7 @@ public:
 
 protected:
   //: byte buffer and its size
-  vcl_size_t buffer_length_;
+  std::size_t buffer_length_;
   char *data_buffer_;
 };
 

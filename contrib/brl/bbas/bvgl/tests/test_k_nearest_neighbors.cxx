@@ -2,9 +2,11 @@
 // \file
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <bnabo/bnabo.h>
@@ -62,12 +64,12 @@ static void test_k_nearest_neighbors()
   vgl_point_3d<double> q(0.5, 0.0, 0.5);
   bool good = knn3d.closest_index(q, index);
   if(good) {
-    vcl_cout << "closest index " << ptset.p(index) << '\n';
+    std::cout << "closest index " << ptset.p(index) << '\n';
   }
   vgl_point_3d<double> cp;
   good = knn3d.closest_point(q, cp);
   if(good) {
-         vcl_cout << "closest point " << cp << '\n';
+         std::cout << "closest point " << cp << '\n';
   }
   double d = (p8-cp).length();
   TEST_NEAR("closest point" , d ,0.0 , 0.001);
@@ -75,7 +77,7 @@ static void test_k_nearest_neighbors()
   unsigned k = 5;
   good = knn3d.knn(q, k, k_neighbors);
   if(good){
-    vcl_cout << "K neighbors\n" << k_neighbors << '\n';
+    std::cout << "K neighbors\n" << k_neighbors << '\n';
     vgl_point_3d<double> nb(1.0, 0.0, 0.0);
     d = (nb-k_neighbors.p(4)).length();
     TEST_NEAR("k neighbors", d, 0.0, 0.001);
@@ -87,7 +89,7 @@ static void test_k_nearest_neighbors()
   vnl_vector<int> k_indices;
   good = knn3d.knn_indices(q, k, k_indices);
   if(good) {
-    vcl_cout << "K neighbor indices\n" << k_indices << '\n';
+    std::cout << "K neighbor indices\n" << k_indices << '\n';
     TEST_EQUAL("k indices", k_indices[4], 4);
   } else {
     TEST("k indices", true, false);

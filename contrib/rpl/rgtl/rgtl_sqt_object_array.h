@@ -12,7 +12,9 @@
 // \date April 2007
 
 #include <iostream>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <vcl_compiler.h>
 
 template <unsigned int D> class rgtl_object_array;
@@ -27,7 +29,7 @@ class rgtl_sqt_object_set
   typedef rgtl_sqt_object_set<D> self_type;
  public:
   //: Pointer to an instance of this class.
-  typedef vcl_unique_ptr<self_type> sqt_object_set_ptr;
+  typedef std::unique_ptr<self_type> sqt_object_set_ptr;
 
   //: Need a virtual destructor.
   virtual ~rgtl_sqt_object_set() {}
@@ -47,7 +49,7 @@ class rgtl_sqt_object_set_face: public rgtl_sqt_object_set<D>
   typedef rgtl_sqt_cell_geometry<D, Face> cell_geometry_type;
 
   //: Pointer to an instance of this class.
-  typedef vcl_unique_ptr<self_type> sqt_object_set_face_ptr;
+  typedef std::unique_ptr<self_type> sqt_object_set_face_ptr;
 
   //: Get the number of objects in this set.
   virtual int number_of_objects() const = 0;
@@ -78,7 +80,7 @@ class rgtl_sqt_object_array
   typedef rgtl_object_array<D> object_array_type;
 
   //: Pointer to a set of objects in once cell during construction.
-  typedef vcl_unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
+  typedef std::unique_ptr< rgtl_sqt_object_set<D> > sqt_object_set_ptr;
 
   //: Get a set of the objects that belong to the given SQT face with respect to the given SQT origin.
   virtual sqt_object_set_ptr new_set(double const origin[D],

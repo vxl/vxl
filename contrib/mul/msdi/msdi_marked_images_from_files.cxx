@@ -7,7 +7,9 @@
 #include <string>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vcl_iterator.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iterator>
 
 #include "msdi_marked_images_from_files.h"
 #include <vil/vil_load.h>
@@ -20,22 +22,22 @@
 
 
 //: Return string (e.g. "Raw") for given state
-vcl_string msdi_string_from_state(msdi_reflection_state s)
+std::string msdi_string_from_state(msdi_reflection_state s)
 {
   switch (s)
   {
-    case Raw: return vcl_string("Raw");
-    case ReflectOnly: return vcl_string("ReflectOnly");
-    case OnlyReflectIm: return vcl_string("OnlyReflectIm");
-    case ReflectSym: return vcl_string("ReflectSym");
-    case ReflectAsymRawPts: return vcl_string("ReflectAsymRawPts");
-    case ReflectAsymRefPts: return vcl_string("ReflectAsymRefPts");
+    case Raw: return std::string("Raw");
+    case ReflectOnly: return std::string("ReflectOnly");
+    case OnlyReflectIm: return std::string("OnlyReflectIm");
+    case ReflectSym: return std::string("ReflectSym");
+    case ReflectAsymRawPts: return std::string("ReflectAsymRawPts");
+    case ReflectAsymRefPts: return std::string("ReflectAsymRefPts");
   }
-  return vcl_string("Invalid");
+  return std::string("Invalid");
 }
 
 //: Convert string to state, returning true if valid string supplied.
-bool msdi_state_from_string(const vcl_string& str, msdi_reflection_state& state)
+bool msdi_state_from_string(const std::string& str, msdi_reflection_state& state)
 {
   if (str=="Raw")          { state=Raw; return true; }
   if (str=="ReflectOnly")  { state=ReflectOnly; return true; }
@@ -345,7 +347,7 @@ void msdi_marked_images_from_files::get_image()
 
 void msdi_marked_images_from_files::get_points()
 {
-  vcl_string ref_prefix;
+  std::string ref_prefix;
 
   // ReflectAsymRawPts state uses separate points files for reflected points:
   if (ref_state_==ReflectAsymRawPts && image_is_reflected_) ref_prefix=ref_prefix_;
@@ -379,7 +381,7 @@ std::string msdi_marked_images_from_files::points_name() const
 {
   if (index_>=(int)points_name_.size())
   {
-    vcl_cerr<<"Attempt to read beyond end of name array."<<vcl_endl;
+    std::cerr<<"Attempt to read beyond end of name array."<<std::endl;
     abort();
   }
 
@@ -401,7 +403,7 @@ void msdi_marked_images_from_files::set_state(msdi_reflection_state s)
 
 //: Define prefix to be used for reflected points.
 // Default is "ref_".  Only used for ReflectAsymRawPts state.
-void msdi_marked_images_from_files::set_ref_prefix(const vcl_string& ref_prefix)
+void msdi_marked_images_from_files::set_ref_prefix(const std::string& ref_prefix)
 {
   ref_prefix_=ref_prefix;
 }
@@ -409,7 +411,7 @@ void msdi_marked_images_from_files::set_ref_prefix(const vcl_string& ref_prefix)
 //: Define point mapping for reflected points
 //  rpi[i] is index in old list of reflected point i
 //  Only used for ReflectSym state.
-void msdi_marked_images_from_files::set_ref_point_index(const vcl_vector<unsigned>& rpi)
+void msdi_marked_images_from_files::set_ref_point_index(const std::vector<unsigned>& rpi)
 {
   ref_point_index_ = rpi;
 }
@@ -418,12 +420,12 @@ void msdi_marked_images_from_files::set_ref_point_index(const vcl_vector<unsigne
 // Expects to find parameters for reflection_symmetry, reflection_state and ref_prefix.
 void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_props_type& props)
 {
-  vcl_string ref_sym_str=props.get_optional_property("reflection_symmetry","");
+  std::string ref_sym_str=props.get_optional_property("reflection_symmetry","");
   ref_point_index_.resize(0);
   if (ref_sym_str!="" && ref_sym_str!="-")
   {
-    vcl_stringstream ss(ref_sym_str);
-    mbl_parse_int_list(ss, vcl_back_inserter(ref_point_index_),
+    std::stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, std::back_inserter(ref_point_index_),
                        unsigned());
   }
 
@@ -433,7 +435,7 @@ void msdi_marked_images_from_files::set_reflection_state_from_props(mbl_read_pro
   ref_prefix_=props.get_optional_property("ref_prefix","ref-");
   if (ref_prefix_=="-") ref_prefix_="";  // Use "-" to mean empty string.
 
-  vcl_string ref_state_str=props.get_optional_property("reflection_state","Undefined");
+  std::string ref_state_str=props.get_optional_property("reflection_state","Undefined");
   if (ref_state_str=="Undefined")
   {
     // For backwards compatability.
@@ -477,12 +479,12 @@ void msdi_marked_images_from_files::set_from_props(mbl_read_props_type& props)
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void msdi_marked_images_from_files::read_from_file(const vcl_string& path)
+void msdi_marked_images_from_files::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 

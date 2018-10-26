@@ -9,7 +9,9 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 
@@ -33,8 +35,8 @@ class imesh_mesh : public vbl_ref_count
 
   //: Constructor from vertex and face arrays
   //  Takes ownership of these arrays
-  imesh_mesh(vcl_unique_ptr<imesh_vertex_array_base> verts, vcl_unique_ptr<imesh_face_array_base> faces)
-  : verts_(vcl_move(verts)), faces_(vcl_move(faces)), tex_coord_status_(TEX_COORD_NONE) {}
+  imesh_mesh(std::unique_ptr<imesh_vertex_array_base> verts, std::unique_ptr<imesh_face_array_base> faces)
+  : verts_(std::move(verts)), faces_(std::move(faces)), tex_coord_status_(TEX_COORD_NONE) {}
 
   //: Copy Constructor
   imesh_mesh(const imesh_mesh& other);
@@ -81,10 +83,10 @@ class imesh_mesh : public vbl_ref_count
   imesh_face_array_base& faces() { return *faces_; }
 
   //: Set the vertices
-  void set_vertices(vcl_unique_ptr<imesh_vertex_array_base> verts) { verts_ = vcl_move(verts); }
+  void set_vertices(std::unique_ptr<imesh_vertex_array_base> verts) { verts_ = std::move(verts); }
 
   //: Set the faces
-  void set_faces(vcl_unique_ptr<imesh_face_array_base> faces) { faces_ = vcl_move(faces); }
+  void set_faces(std::unique_ptr<imesh_face_array_base> faces) { faces_ = std::move(faces); }
 
   //: Returns true if the mesh has computed half edges
   bool has_half_edges() const { return half_edges_.size() > 0; }
@@ -144,8 +146,8 @@ class imesh_mesh : public vbl_ref_count
 
 
  private:
-  vcl_unique_ptr<imesh_vertex_array_base> verts_;
-  vcl_unique_ptr<imesh_face_array_base> faces_;
+  std::unique_ptr<imesh_vertex_array_base> verts_;
+  std::unique_ptr<imesh_face_array_base> faces_;
   imesh_half_edge_set half_edges_;
 
   //: vector of texture coordinates

@@ -30,13 +30,13 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
   constexpr unsigned n_inputs_ = 3;
   constexpr unsigned n_outputs_ = 5;
   std::size_t local_threads[2]={8,8};
-  static vcl_map<vcl_string, std::vector<bocl_kernel*> > kernels_;
-  vcl_vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, vcl_string opts)
+  static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
+  std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts)
   {
-      vcl_string identifier = device->device_identifier() + opts;
+      std::string identifier = device->device_identifier() + opts;
       if (kernels_.find(identifier) != kernels_.end())
           return kernels_[identifier];
-      vcl_vector<bocl_kernel*> vec_kernels;
+      std::vector<bocl_kernel*> vec_kernels;
       //gather all render sources... seems like a lot for rendering...
       std::vector<std::string> src_paths;
       std::string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -51,7 +51,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
       src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
       //set kernel options
-      vcl_string options = "-D RENDER_DEPTH -D DETERMINISTIC -D STEP_CELL=step_cell_render_height(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
+      std::string options = "-D RENDER_DEPTH -D DETERMINISTIC -D STEP_CELL=step_cell_render_height(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
       //create normalize image kernel
       std::vector<std::string> norm_src_paths;
       norm_src_paths.push_back(source_dir + "scene_info.cl");
@@ -154,7 +154,7 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
                                                 CL_QUEUE_PROFILING_ENABLE,&status);
   if (status!=0)return false;
 
-  vcl_vector<bocl_kernel*>& kernels = get_kernels(device, "");
+  std::vector<bocl_kernel*>& kernels = get_kernels(device, "");
 
   float scene_origin[4];
   scene_origin[0]=bbox.min_x();

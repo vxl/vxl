@@ -9,8 +9,10 @@
 
 #include <vgl/vgl_pointset_3d.h>
 #include <bnabo/bnabo.h>
-#include <vcl_iosfwd.h>
-#include <vcl_limits.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iosfwd>
+#include <limits>
 #include <algorithm> // for std::swap
 #include <utility>
 
@@ -138,7 +140,7 @@ bool bvgl_k_nearest_neighbors_3d<Type>::knn_indices(vgl_point_3d<Type> const& p,
     return false;
   }
   search_tree_->knn(q, indices, dists2, k, tolerance_, flags_);
-  if(dists2[k-1] == vcl_numeric_limits<Type>::infinity()||indices[k-1]<0) {
+  if(dists2[k-1] == std::numeric_limits<Type>::infinity()||indices[k-1]<0) {
     return false;
   }
   return true;
@@ -153,7 +155,7 @@ bool bvgl_k_nearest_neighbors_3d<Type>::closest_index(vgl_point_3d<Type> const& 
   if(!search_tree_)
     return false;
   search_tree_->knn(q, indices,dists2, k, tolerance_, flags_);
-  if(dists2[0] == vcl_numeric_limits<Type>::infinity()||indices[0]<0)
+  if(dists2[0] == std::numeric_limits<Type>::infinity()||indices[0]<0)
     return false;
   index = static_cast<unsigned>(indices[0]);
   return true;
@@ -187,7 +189,7 @@ inline bool bvgl_k_nearest_neighbors_3d<Type>::knn_util(vgl_point_3d<Type> const
   search_tree_->knn(q, indices, dists2, k, tolerance_, flags_);
   bool has_normals = ptset_.has_normals();
   for(unsigned i = 0; i<k; ++i){
-    if(dists2[i] == vcl_numeric_limits<Type>::infinity()||indices[i]<0)
+    if(dists2[i] == std::numeric_limits<Type>::infinity()||indices[i]<0)
       return false;
     unsigned indx = static_cast<unsigned>(indices[i]);
     if(has_normals)

@@ -30,8 +30,10 @@
 // \author: Raphael Kargon
 // \date: Aug 01, 2017
 
-#include <vcl_cstddef.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <vector>
 
 #include <vbl/vbl_ref_count.h>
 #include <utility>
@@ -50,7 +52,7 @@ public:
   //: constructs block from given data.
   // TODO this copies the buffers, might not be what we want
   bstm_multi_block(const metadata_t &data,
-                   vcl_vector<vcl_vector<unsigned char> > buffers)
+                   std::vector<std::vector<unsigned char> > buffers)
       : metadata_(data), buffers_(std::move(buffers)), read_only_(false) {}
 
   //: creates empty block from metadata
@@ -59,12 +61,12 @@ public:
   // accessors
   id_t &block_id() { return metadata_.id_; }
   const metadata_t &metadata() const { return metadata_; }
-  vcl_vector<vcl_vector<unsigned char> > &buffers() { return buffers_; }
-  const vcl_vector<vcl_vector<unsigned char> > &buffers() const {
+  std::vector<std::vector<unsigned char> > &buffers() { return buffers_; }
+  const std::vector<std::vector<unsigned char> > &buffers() const {
     return buffers_;
   }
-  vcl_vector<unsigned char> &get_buffer(int level) { return buffers_[level]; }
-  const vcl_vector<unsigned char> &get_buffer(int level) const {
+  std::vector<unsigned char> &get_buffer(int level) { return buffers_[level]; }
+  const std::vector<unsigned char> &get_buffer(int level) const {
     return buffers_[level];
   }
   // Returns underlying buffer data
@@ -83,7 +85,7 @@ public:
   time_tree_b *get_time_data(int level, std::nothrow_t);
 
   //: returns number of bytes taken up by this block
-  vcl_size_t byte_count() const;
+  std::size_t byte_count() const;
 
   space_time_enum level_type(int level) const {
     return metadata_.subdivisions_[level];
@@ -97,13 +99,13 @@ public:
 
   // Sets the buffer for the given level to the contents of new_buffer, and sets
   // new_buffer to own the old buffer contents.
-  void set_buffer(vcl_vector<unsigned char> &new_buffer, int level) {
+  void set_buffer(std::vector<unsigned char> &new_buffer, int level) {
     buffers_[level].swap(new_buffer);
   }
 
   // creates new zero-initialized buffer
-  void new_buffer(vcl_size_t new_size, int level) {
-    vcl_vector<unsigned char> new_vec(new_size, 0);
+  void new_buffer(std::size_t new_size, int level) {
+    std::vector<unsigned char> new_vec(new_size, 0);
     buffers_[level].swap(new_vec);
   }
 
@@ -118,7 +120,7 @@ private:
   //: Buffers for trees of each level. Note that buffers_[0]
   // correspond to the *top* (root) level, while
   // buffers_[buffers_.size()] is the bottom, "leaf" level.
-  vcl_vector<vcl_vector<unsigned char> > buffers_;
+  std::vector<std::vector<unsigned char> > buffers_;
 
   //: Whether this block is read-only
   bool read_only_;

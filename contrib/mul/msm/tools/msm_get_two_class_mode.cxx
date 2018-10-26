@@ -135,11 +135,11 @@ void plot_roc(const std::string& path,
   unsigned n_true_pos=nc2, n_false_pos=nc1;
   double area=0.0;
 
-  vcl_vector<unsigned> index;
+  std::vector<unsigned> index;
   mbl_index_sort(x,index);
   unsigned last_i=0;
   unsigned max_n_pts=100;
-  unsigned step=vcl_max(1u,n/max_n_pts);
+  unsigned step=std::max(1u,n/max_n_pts);
 
 
   std::ofstream ofs(path.c_str());
@@ -154,7 +154,7 @@ void plot_roc(const std::string& path,
       area += double(n_true_pos)/nc2 * (1.0/nc1);
     }
 
-    if (i>0 && vcl_fabs(x[index[i]]-x[index[i-1]])<1e-6) continue;  // Avoid splitting samples with same value
+    if (i>0 && std::fabs(x[index[i]]-x[index[i-1]])<1e-6) continue;  // Avoid splitting samples with same value
 
     double tpr = double(n_true_pos)/nc2;
     double fpr = double(n_false_pos)/nc1;
@@ -184,7 +184,7 @@ void write_value_list(const std::string& path,
   for (unsigned i=0;i<x.size();++i)
     ofs<<names[index[i]]<<" "<<x[index[i]]<<std::endl;
   ofs.close();
-  std::cout<<"Saved ranked list of values and names to "<<path<<vcl_endl;
+  std::cout<<"Saved ranked list of values and names to "<<path<<std::endl;
 }
 
 int main(int argc, char** argv)

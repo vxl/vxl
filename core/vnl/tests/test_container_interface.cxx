@@ -183,10 +183,10 @@ void test_common_interface()
 static
 void test_container_interface()
 {
-  vcl_cout << "Testing vnl_matrix<int>" << std::endl;
+  std::cout << "Testing vnl_matrix<int>" << std::endl;
   test_common_interface< vnl_matrix<int> >();
 
-  vcl_cout << "Testing vnl_matrix_fixed<int, 2, 2>" << std::endl;
+  std::cout << "Testing vnl_matrix_fixed<int, 2, 2>" << std::endl;
   test_common_interface< vnl_matrix_fixed<int, 2, 2> >();
 }
 

@@ -50,13 +50,13 @@ void clsfy_builder_1d::config(std::istream &as)
 // parameters for the builder. This function will construct
 // the appropriate clsfy_builder_1d derivative and return that.
 // \throws if the parse fails.
-vcl_unique_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
+std::unique_ptr<clsfy_builder_1d> clsfy_builder_1d::new_builder(
   std::istream &as)
 {
   std::string name;
   as >> name;
 
-  vcl_unique_ptr<clsfy_builder_1d> ps;
+  std::unique_ptr<clsfy_builder_1d> ps;
   try
   {
     ps = mbl_cloneables_factory<clsfy_builder_1d>::get_clone(name);
