@@ -26,6 +26,7 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
@@ -63,7 +64,7 @@ template <class T> void vidl_exception_warning(T exception)
 class vidl_exception
 {
  public:
-  explicit vidl_exception(const std::string& msg) : msg_(msg) {}
+  explicit vidl_exception(std::string  msg) : msg_(std::move(msg)) {}
   virtual ~vidl_exception() = default;
 
   virtual const std::string& what() const { return msg_; }
