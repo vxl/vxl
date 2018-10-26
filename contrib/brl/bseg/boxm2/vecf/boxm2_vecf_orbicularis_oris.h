@@ -34,7 +34,7 @@ class boxm2_vecf_orbicularis_oris : public bvgl_gen_cylinder, public boxm2_vecf_
   boxm2_vecf_orbicularis_oris(vgl_cubic_spline_3d<double> const& axis, std::vector<bvgl_cross_section> const& cross_sects, double const& cross_section_interval=0.5):
     bvgl_gen_cylinder(axis, cross_sects, cross_section_interval) {}
 
-  ~boxm2_vecf_orbicularis_oris() override {}
+  ~boxm2_vecf_orbicularis_oris() override = default;
 
   //: set deformation parameters
   void set_params(boxm2_vecf_orbicularis_oris_params const& params) { params_ = params; }

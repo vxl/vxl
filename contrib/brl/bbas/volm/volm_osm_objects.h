@@ -29,7 +29,7 @@ class volm_osm_objects
 {
 public:
   //: default constructor
-  volm_osm_objects() {}
+  volm_osm_objects() = default;
 
   //: create volm_osm_objects from open street map file
   volm_osm_objects(std::string const& osm_file, std::string const& osm_to_volm_file);

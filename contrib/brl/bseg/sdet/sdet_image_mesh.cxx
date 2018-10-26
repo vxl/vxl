@@ -70,8 +70,7 @@ sdet_image_mesh::sdet_image_mesh(sdet_image_mesh_params& imp)
 
 // Destructor
 sdet_image_mesh::~sdet_image_mesh()
-{
-}
+= default;
 
 bool sdet_image_mesh::compute_line_segments(vil_image_resource_sptr const& resc,
                                             std::vector<vgl_line_segment_2d<double> > & segs)

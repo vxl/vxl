@@ -15,8 +15,7 @@ bprb_process::bprb_process()
 
 
 bprb_process::~bprb_process()
-{
-}
+= default;
 
 
 //: Copy Constructor

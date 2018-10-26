@@ -29,7 +29,7 @@ class bvpl_corner_search_functor
   bvpl_corner_search_functor(int this_id, std::vector<vnl_float_3> axes, std::vector<float> angles );
 
   //: Destructor
-  ~bvpl_corner_search_functor() {}
+  ~bvpl_corner_search_functor() = default;
 
   //: Apply a given operation to value val, depending on the dispatch character
   void apply(int& id, bvpl_kernel_dispatch& d, vgl_point_3d<int> p1, vgl_point_3d<int> p2);

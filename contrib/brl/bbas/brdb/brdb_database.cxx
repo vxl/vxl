@@ -20,8 +20,7 @@
 
 //: Constructor - create an empty database;
 brdb_database::brdb_database()
-{
-}
+= default;
 
 //: Constructor - create a database populated with relations
 brdb_database::brdb_database(std::vector<brdb_relation_sptr> relations, std::vector<std::string> relation_names)

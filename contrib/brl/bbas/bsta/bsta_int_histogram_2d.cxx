@@ -28,7 +28,7 @@ bsta_int_histogram_2d::bsta_int_histogram_2d(const unsigned int nbins_x, const u
 }
 
 // destructor
-bsta_int_histogram_2d::~bsta_int_histogram_2d() {}
+bsta_int_histogram_2d::~bsta_int_histogram_2d() = default;
 
 // ------------------------------------------------
 // get total counts in entire histogram

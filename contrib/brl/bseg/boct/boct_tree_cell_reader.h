@@ -20,7 +20,7 @@ class boct_tree_cell_reader
 {
  public:
   boct_tree_cell_reader(std::string path): is_(new vsl_b_ifstream(path)) { }
-  ~boct_tree_cell_reader() {}
+  ~boct_tree_cell_reader() = default;
 
 #if 0
   boct_tree_cell_reader(vsl_b_istream* s) : is_(*s) {}

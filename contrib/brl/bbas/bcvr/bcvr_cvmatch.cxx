@@ -56,8 +56,7 @@ bcvr_cvmatch::bcvr_cvmatch (bsol_intrinsic_curve_2d_sptr c1, bsol_intrinsic_curv
 }
 
 bcvr_cvmatch::~bcvr_cvmatch ()
-{
-}
+= default;
 
 void bcvr_cvmatch::setTemplateSize (int temp_size)
 {

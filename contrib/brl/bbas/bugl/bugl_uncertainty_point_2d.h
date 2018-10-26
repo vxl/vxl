@@ -20,7 +20,7 @@ class bugl_uncertainty_point_2d : public vgl_point_2d<T>
   bugl_uncertainty_point_2d() : vgl_point_2d<T>(), exists_(false) {}
   bugl_uncertainty_point_2d(T x, T y) : vgl_point_2d<T>(x,y), exists_(true) {}
   bugl_uncertainty_point_2d(vgl_point_2d<T> const& p) : vgl_point_2d<T>(p), exists_(true) {}
-  virtual ~bugl_uncertainty_point_2d() {}
+  virtual ~bugl_uncertainty_point_2d() = default;
   virtual T prob_at(vgl_point_2d<T> const& p) const = 0;
   bool exists() const { return exists_; }
   //: set as if this point is not initialised (as with default constructor)

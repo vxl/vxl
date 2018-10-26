@@ -68,8 +68,7 @@ brdb_relation::brdb_relation( const std::vector<std::string>& names,
 
 //: Destructor
 brdb_relation::~brdb_relation()
-{
-}
+= default;
 
 
 //: Verify that the data stored in this class make a valid relation

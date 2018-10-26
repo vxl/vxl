@@ -113,10 +113,10 @@ public:
 
 protected:
   //: hidden constructor
-  block_cache() {}
+  block_cache() = default;
   //: hidden destructor (protected so it cannot be called -- forces the class to
   // be singleton)
-  ~block_cache() override {}
+  ~block_cache() override = default;
 
   //: singleton instance of block_cache
   static cache_sptr instance_;

@@ -15,7 +15,7 @@ class boxm2_cone_update_pass0_functor
 {
  public:
   //: "default" constructor
-  boxm2_cone_update_pass0_functor() {}
+  boxm2_cone_update_pass0_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
@@ -87,7 +87,7 @@ class boxm2_cone_update_pass1_functor
 {
  public:
   //: "default" constructor
-  boxm2_cone_update_pass1_functor() {}
+  boxm2_cone_update_pass1_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
@@ -162,7 +162,7 @@ class boxm2_cone_update_pass2_functor
 {
  public:
   //: "default" constructor
-  boxm2_cone_update_pass2_functor() {}
+  boxm2_cone_update_pass2_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,
                  vil_image_view<float> * pre_img,
@@ -251,7 +251,7 @@ class boxm2_cone_update_data_functor
 {
  public:
   //: "default" constructor
-  boxm2_cone_update_data_functor() {}
+  boxm2_cone_update_data_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas, float block_len, int max_levels)
   {

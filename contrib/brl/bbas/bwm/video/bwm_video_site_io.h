@@ -17,7 +17,7 @@ class bwm_video_site_io : public expatpp
 {
  public:
   bwm_video_site_io(void);
-  ~bwm_video_site_io(void) override {}
+  ~bwm_video_site_io(void) override = default;
   bool open(std::string const& xml_path);
   void clear();
   void set_name(std::string name) { name_ = name; }

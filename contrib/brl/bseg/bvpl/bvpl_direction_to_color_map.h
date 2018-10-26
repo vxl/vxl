@@ -40,7 +40,7 @@ class bvpl_direction_to_color_map
 {
  public:
   bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples,std::string type);
-  ~bvpl_direction_to_color_map(){}
+  ~bvpl_direction_to_color_map()= default;
   void make_svg_color_map(std::string outfile);
   float get_color(vgl_point_3d<double> dir){return colors_[dir];}
  private:

@@ -20,8 +20,8 @@
 class bpgl_nitf_camera_coverage
 {
  public:
-   bpgl_nitf_camera_coverage() {}
-  ~bpgl_nitf_camera_coverage() {}
+   bpgl_nitf_camera_coverage() = default;
+  ~bpgl_nitf_camera_coverage() = default;
 
   //: Saves, to an input file, the filenames of the NITF images which contain the specified geographic position.
   //  The inputs to this function are:

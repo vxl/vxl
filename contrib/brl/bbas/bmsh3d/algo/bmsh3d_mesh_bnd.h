@@ -26,8 +26,7 @@ class bmsh3d_bnd_chain
 
  public:
   //=========== Constructor & Destructor ===========
-  bmsh3d_bnd_chain () {
-  }
+  bmsh3d_bnd_chain () = default;
   virtual ~bmsh3d_bnd_chain () {
     HE_list_.clear();
   }

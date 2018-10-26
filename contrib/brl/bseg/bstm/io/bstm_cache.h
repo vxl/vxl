@@ -69,7 +69,7 @@ class bstm_cache: public vbl_ref_count
   bstm_cache(bstm_scene_sptr scene) : scene_(scene) {}
 
   //: hidden destructor (protected so it cannot be called -- forces the class to be singleton)
-  ~bstm_cache() override {}
+  ~bstm_cache() override = default;
 
   //: singleton instance of bstm_cache
   static bstm_cache_sptr instance_;

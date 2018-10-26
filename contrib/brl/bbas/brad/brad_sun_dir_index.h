@@ -42,7 +42,7 @@ class brad_sun_dir_index
     cone_axes_(sun_dir_bin_centers), cone_half_angle_(0.0){
     bin_radius_ = ((int)sun_dir_bin_centers.size()-1)/2;}
 
-  ~brad_sun_dir_index(){}
+  ~brad_sun_dir_index()= default;
 
   //: uses standard definion of sun azimuth and elevation, i.e. elevation zero tangent plane, increasing to nadir and azimuth zero at North and increasing to East, angles in degrees.
   int index(double geo_sun_azimuth, double geo_sun_elevation, double & min_angle) ;

@@ -13,7 +13,7 @@ template <class T>
 class vgl_point_3d_cmp
 {
  public:
-  vgl_point_3d_cmp() {}
+  vgl_point_3d_cmp() = default;
 
   bool operator()(vgl_point_3d<T> const& v0, vgl_point_3d<T> const& v1) const
   {
@@ -33,7 +33,7 @@ class boxm_block_vis_graph_node
   typedef std::map<vgl_point_3d<int>, boxm_block_vis_graph_node<T>, vgl_point_3d_cmp<int> > vis_graph_type;
 
   boxm_block_vis_graph_node() : in_count(0) {}
-  ~boxm_block_vis_graph_node(){}
+  ~boxm_block_vis_graph_node()= default;
 
   int dec_in_count() { return --in_count; }
 

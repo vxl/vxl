@@ -46,7 +46,7 @@ class bocl_buffer_mgr
 
  private:
   static bocl_buffer_mgr* instance_;
-  bocl_buffer_mgr() {}
+  bocl_buffer_mgr() = default;
   std::map<std::string, bocl_buffer*> buffers_;
 };
 

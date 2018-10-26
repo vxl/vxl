@@ -23,7 +23,7 @@ class boxm2_compute_phongs_model_functor
     typedef boxm2_data_traits<BOXM2_AUX3>::datatype aux3_datatype;
 
     //: "default" constructor
-    boxm2_compute_phongs_model_functor() {}
+    boxm2_compute_phongs_model_functor() = default;
 
     bool init_data(float sun_elev,
                    float sun_azim,

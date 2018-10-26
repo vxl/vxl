@@ -18,7 +18,7 @@ class vsph_sph_point_3d
 
   vsph_sph_point_3d(double r, double theta, double phi) : radius_(r), theta_(theta), phi_(phi) {}
 
-  ~vsph_sph_point_3d() {}
+  ~vsph_sph_point_3d() = default;
 
   void set(double r, double theta, double phi) { radius_=r; theta_=theta; phi_=phi; }
 

@@ -97,7 +97,7 @@ class imesh_kd_tree_queue_entry
 {
  public:
   //: Constructor
-  imesh_kd_tree_queue_entry() {}
+  imesh_kd_tree_queue_entry() = default;
   //: Constructor
   imesh_kd_tree_queue_entry( double val, imesh_kd_tree_node* node )
     : val_(val), node_(node) {}

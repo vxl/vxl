@@ -18,7 +18,7 @@ class boxm_block_vis_graph_iterator
   boxm_block_vis_graph_iterator(vpgl_camera_double_sptr cam, boxm_scene<T>* scene,
                                 unsigned img_ni, unsigned img_nj, bool rev_iter=false);
 
-  ~boxm_block_vis_graph_iterator(){}
+  ~boxm_block_vis_graph_iterator()= default;
 
   bool next();
 

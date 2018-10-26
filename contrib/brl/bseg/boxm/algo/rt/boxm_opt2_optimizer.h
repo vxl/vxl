@@ -19,7 +19,7 @@ class boxm_opt2_optimizer
   boxm_opt2_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                       std::vector<std::string> const& image_ids);
 
-  ~boxm_opt2_optimizer(){}
+  ~boxm_opt2_optimizer()= default;
 
   bool update();
 

@@ -28,9 +28,9 @@
 class bvxm_world_param_parser : public expatpp
 {
  public:
-  bvxm_world_param_parser() {}
+  bvxm_world_param_parser() = default;
   bvxm_world_param_parser(std::string& filename);
-  ~bvxm_world_param_parser(void) override {}
+  ~bvxm_world_param_parser(void) override = default;
 
   bvxm_world_params_sptr create_bvxm_world_params();
 

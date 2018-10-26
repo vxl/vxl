@@ -16,7 +16,7 @@ class boxm2_3d_point_hypothesis_functor
 {
  public:
   //: "default" constructor
-  boxm2_3d_point_hypothesis_functor() {}
+  boxm2_3d_point_hypothesis_functor() = default;
 
   bool init_data(boxm2_data_base* alpha_data, boxm2_data_base* pts_data,
                  boxm2_data_base* sums_data,
@@ -146,7 +146,7 @@ class boxm2_3d_point_hypothesis_cov_functor
 {
  public:
   //: "default" constructor
-  boxm2_3d_point_hypothesis_cov_functor() {}
+  boxm2_3d_point_hypothesis_cov_functor() = default;
 
   bool init_data(boxm2_data_base* covs_data,
                  boxm2_data_base* sums_data,

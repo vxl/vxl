@@ -35,7 +35,7 @@ class bstm_scene : public vbl_ref_count
 {
   public:
     //: empty scene, needs to be initialized manually
-    bstm_scene() {}
+    bstm_scene() = default;
 
     bstm_scene(std::string data_path, vgl_point_3d<double> const& origin, int version = 2);
 
@@ -43,7 +43,7 @@ class bstm_scene : public vbl_ref_count
     bstm_scene(std::string filename);
 
     //: destructor
-    ~bstm_scene() override { }
+    ~bstm_scene() override = default;
 
     //: save scene xml file
     void save_scene();

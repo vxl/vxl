@@ -7,7 +7,7 @@
 class IJsonSerializable
 {
 public:
-   virtual ~IJsonSerializable( void ) {};
+   virtual ~IJsonSerializable( void ) = default;;
    virtual void Serialize( Json::Value& root ) =0;
    virtual void Deserialize( Json::Value& root) =0;
 };
@@ -15,8 +15,8 @@ public:
 class TestClassA : public IJsonSerializable
 {
 public:
-        TestClassA( void ){}
-   ~TestClassA( void ) override{}
+        TestClassA( void )= default;
+   ~TestClassA( void ) override= default;
    void Serialize( Json::Value& root ) override{
        // serialize primitives
        root["testintA"] = m_nTestInt;
@@ -77,7 +77,7 @@ public:
     return true;
   }
 private:
-   CJsonSerializer( void ) {};
+   CJsonSerializer( void ) = default;;
 };
 
 static void test_bjson()

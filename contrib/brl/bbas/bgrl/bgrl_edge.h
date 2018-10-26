@@ -34,7 +34,7 @@ class bgrl_edge : public vbl_ref_count
   // Copy constructor
   bgrl_edge(bgrl_edge const& e) : vbl_ref_count(), from_(e.from_), to_(e.to_) {}
   // Destructor
-  ~bgrl_edge() override {}
+  ~bgrl_edge() override = default;
 
   //: Smart pointer to the vertex where this edge originates
   bgrl_vertex_sptr from() const { return bgrl_vertex_sptr(from_); }

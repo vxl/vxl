@@ -56,7 +56,7 @@ class vsph_unit_sphere : public vbl_ref_count
   vsph_unit_sphere(double point_angle, double min_theta, double max_theta);
 
   //: destructor
-  ~vsph_unit_sphere() override {}
+  ~vsph_unit_sphere() override = default;
 
   //: accessors
   double point_angle() const {return point_angle_;}

@@ -79,7 +79,7 @@ public:
       bins[i].wsum=0;
     }
   }
-  ~sdet_signature(){}
+  ~sdet_signature()= default;
 
   //: The EMD dist is the default distance between two signatures
   double operator-(const sdet_signature& sig) const
@@ -112,8 +112,8 @@ public:
   double Features[MAXCLUSTERS]; //fixed number of features for now (this is not strictly required)
   double Weights[MAXCLUSTERS];
 
-  sdet_color_sig(){}
-  ~sdet_color_sig(){}
+  sdet_color_sig()= default;
+  ~sdet_color_sig()= default;
 
   //: The EMD dist is the default distance between two signatures
   double operator-(const sdet_color_sig& /*sig1*/) const

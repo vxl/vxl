@@ -68,7 +68,7 @@ class volm_spherical_region
 class volm_spherical_regions_layer
 {
   public:
-    volm_spherical_regions_layer(){}
+    volm_spherical_regions_layer()= default;
     void add_region(volm_spherical_region region);
     std::vector<volm_spherical_region> & regions(){return regions_;}
     int size(){return regions_.size();}

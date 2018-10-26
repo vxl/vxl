@@ -18,7 +18,7 @@
 class bbgm_image_base : public vbl_ref_count
 {
   public:
-    ~bbgm_image_base() override{}
+    ~bbgm_image_base() override= default;
 
     //: return the type_info for the distribution type
     virtual const std::type_info& dist_typeid() const=0;
@@ -41,7 +41,7 @@ class bbgm_image_of : public bbgm_image_base
 {
  public:
   //: Constructor
-  bbgm_image_of<dist>() {}
+  bbgm_image_of<dist>() = default;
   bbgm_image_of<dist>(unsigned int ni, unsigned int nj,
                       const dist& model) : data_(nj,ni,model) {}
 

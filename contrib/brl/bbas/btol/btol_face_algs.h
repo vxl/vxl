@@ -58,8 +58,8 @@ class btol_face_algs
                                      vnl_matrix_fixed<double, 3, 3> const& T);
  private:
   // Do not instantiate an object of this type, just use the static methods:
-  btol_face_algs() {}
-  ~btol_face_algs() {}
+  btol_face_algs() = default;
+  ~btol_face_algs() = default;
 };
 
 #endif // btol_face_algs_h_

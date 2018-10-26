@@ -31,7 +31,7 @@ class volm_geo_index2_node : public volm_geo_index2_node_base
 {
 public:
   //: Default constructor
-  volm_geo_index2_node() {}
+  volm_geo_index2_node() = default;
 
   //: Constructor
   volm_geo_index2_node(vgl_box_2d<double> const& extent, volm_geo_index2_node_sptr& parent)
@@ -47,7 +47,7 @@ public:
   }
 
   //: Destructor
-  ~volm_geo_index2_node() override { }
+  ~volm_geo_index2_node() override = default;
 
 public:
   //: data inside current tile (for non-leaf tile, the data should be empty, i.e. the templated member should contain method that contents_.size() == 0 or contents_.empty() == true)

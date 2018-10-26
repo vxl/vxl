@@ -231,7 +231,7 @@ bool pair_intersect(bbgm_mask_pair_feature const& mp0,
 class fless
 {
  public:
-  fless() {}
+  fless() = default;
   bool operator ()(bbgm_mask_pair_feature const& fa,
                    bbgm_mask_pair_feature const& fb) {
     unsigned short ica, jca, icb, jcb;
@@ -320,7 +320,7 @@ class bbgm_pair_group_feature
   //: Binary load self from stream.
   virtual void b_read(vsl_b_istream &is);
 
-  virtual ~bbgm_pair_group_feature() {} // virtual destructor, because presence of virtual methods
+  virtual ~bbgm_pair_group_feature() = default; // virtual destructor, because presence of virtual methods
  protected:
   static unsigned uid_; //!< a unique id
   unsigned id_;

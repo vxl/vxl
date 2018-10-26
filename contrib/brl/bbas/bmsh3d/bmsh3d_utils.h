@@ -36,7 +36,7 @@ class vispt_elm
 
  public:
   vispt_elm()  { vis_pointer_ = nullptr; }
-  virtual ~vispt_elm() {}
+  virtual ~vispt_elm() = default;
 
   // ====== Data access functions ======
 

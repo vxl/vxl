@@ -54,7 +54,7 @@ class bkml_parser : public expatpp
  public:
   bkml_parser(void);
   // parser should not delete the site, it is used afterwards
-  ~bkml_parser(void) override {}
+  ~bkml_parser(void) override = default;
 
 
   //: parser to load the points defined in kml file

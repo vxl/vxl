@@ -57,7 +57,7 @@ class boxm2_vecf_fit_margins
     lateral_canthus_ = vgl_point_2d<double>(lateral_canthus.x(),lateral_canthus.y());
     medial_canthus_ = vgl_point_2d<double>(medial_canthus.x(),medial_canthus.y());
   }
-  ~boxm2_vecf_fit_margins() {}
+  ~boxm2_vecf_fit_margins() = default;
 
   // Operations---------------------------------------------------------------
 

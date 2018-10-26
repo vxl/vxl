@@ -30,7 +30,7 @@ class brdb_value : public vbl_ref_count
  public:
 
   //: Destructor
-  ~brdb_value() override {}
+  ~brdb_value() override = default;
 
   //: Return the actual value
   template< class T >
@@ -100,7 +100,7 @@ class brdb_value : public vbl_ref_count
 
  protected:
   //: Constructor
-  brdb_value() {}
+  brdb_value() = default;
   //: Copy Constructor
   brdb_value(const brdb_value&) : vbl_ref_count() {}
 
@@ -162,7 +162,7 @@ class brdb_value_t : public brdb_value
 {
  public:
   //: Default Constructor
-  brdb_value_t<T>() {}
+  brdb_value_t<T>() = default;
 
   //: Constructor
   explicit brdb_value_t<T>(const T& value)

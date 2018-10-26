@@ -10,8 +10,8 @@ typedef std::vector<boxm2_vecf_articulated_params>::iterator iterator;
 class boxm2_vecf_scene_articulation{
 
  public:
-  boxm2_vecf_scene_articulation(){};
-  virtual ~boxm2_vecf_scene_articulation(){};
+  boxm2_vecf_scene_articulation()= default;;
+  virtual ~boxm2_vecf_scene_articulation()= default;;
 
   virtual unsigned size()=0;
   virtual boxm2_vecf_articulated_params& operator[] (unsigned i)=0;

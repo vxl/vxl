@@ -24,7 +24,7 @@ public:
                               float shadow_mean, float shadow_sigma,
                               bool verbose=false);
 
-  ~boxm_shadow_app_initializer(){}
+  ~boxm_shadow_app_initializer()= default;
 
   bool initialize();
 

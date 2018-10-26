@@ -116,7 +116,7 @@ class bvxm_voxel_world: public vbl_ref_count
  public:
 
   //: default constructor
-  bvxm_voxel_world() {}
+  bvxm_voxel_world() = default;
 
   //: construct world with parameters
   bvxm_voxel_world(bvxm_world_params_sptr params) { params_ = params; }

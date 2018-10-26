@@ -28,7 +28,7 @@ class bvgl_2d_geo_index_node : public bvgl_2d_geo_index_node_base
 {
 public:
   //: default constructor
-  bvgl_2d_geo_index_node() {}
+  bvgl_2d_geo_index_node() = default;
 
   //: constructor from a bounding box and a parent node
   bvgl_2d_geo_index_node(vgl_box_2d<double> const& extent, bvgl_2d_geo_index_node_sptr& parent)
@@ -45,7 +45,7 @@ public:
   }
 
   //: destructor
-  ~bvgl_2d_geo_index_node() override {}
+  ~bvgl_2d_geo_index_node() override = default;
 
   //: data inside current node
   Type contents_;

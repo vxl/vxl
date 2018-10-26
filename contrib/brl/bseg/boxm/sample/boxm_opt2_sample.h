@@ -18,7 +18,7 @@ class boxm_opt2_sample
   : obs_(0), pre_(0.0f), vis_(0.0f), PI_(0.0f), seg_len_(0.0f), log_pass_prob_sum_(0.0f), weighted_seg_len_sum_(0.0f)
   {}
 
-  ~boxm_opt2_sample() {}
+  ~boxm_opt2_sample() = default;
   static short version_no() { return 1; }
   void print(std::ostream& os) const;
 

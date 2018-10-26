@@ -20,7 +20,7 @@ class bugl_uncertainty_point_3d : public vgl_point_3d<T>
   bugl_uncertainty_point_3d() : vgl_point_3d<T>(), exists_(false) {}
   bugl_uncertainty_point_3d(T x, T y, T z) : vgl_point_3d<T>(x,y,z), exists_(true) {}
   bugl_uncertainty_point_3d(vgl_point_3d<T> const& p) : vgl_point_3d<T>(p), exists_(true) {}
-  virtual ~bugl_uncertainty_point_3d() {}
+  virtual ~bugl_uncertainty_point_3d() = default;
   virtual T prob_at(vgl_point_3d<T> const& p) const = 0;
   bool exists() const { return exists_; }
   //: set as if this point is not initialised (as with default constructor)

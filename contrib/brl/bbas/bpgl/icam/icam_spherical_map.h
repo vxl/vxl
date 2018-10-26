@@ -39,7 +39,7 @@ class icam_spherical_map : public vbl_ref_count
     origin_(origin), radius_(radius), theta_cap_(theta_cap){}
 
   //: Destructor
-  ~icam_spherical_map() override{}
+  ~icam_spherical_map() override= default;
   //: images must be RGB byte. Cameras projective or perspective
 
   void set_data(std::vector<vil_image_view<vxl_byte> > const& images,

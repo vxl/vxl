@@ -56,14 +56,14 @@ class bvgl_param_curve
 {
  public:
 
-  bvgl_param_curve() {}
+  bvgl_param_curve() = default;
 
   //: copy constructor
   //bvgl_param_curve(const bvgl_param_curve()& that )
   //  : vbl_ref_count()
   //{    }   //suppress copying of reference count between objects
 
-  virtual ~bvgl_param_curve() {}
+  virtual ~bvgl_param_curve() = default;
 
   static const std::type_info& type_id()
   { return typeid(bvgl_param_curve); }
@@ -112,7 +112,7 @@ class bvgl_param_curve
   //: Get curvature of the point at s arclength away from starting point.
   virtual double curvature_at_length(double s) const = 0;
 
-  virtual bvgl_param_curve& operator=( bvgl_param_curve const& ) { return *this; }
+  virtual bvgl_param_curve& operator=( bvgl_param_curve const& ) = default;
 
   // This will be an abstract function...
   virtual bvgl_param_curve *clone() const = 0;// { return 0; }

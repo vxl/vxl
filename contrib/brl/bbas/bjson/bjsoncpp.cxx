@@ -2135,7 +2135,7 @@ CharReaderBuilder::CharReaderBuilder()
   setDefaults(&settings_);
 }
 CharReaderBuilder::~CharReaderBuilder()
-{}
+= default;
 CharReader* CharReaderBuilder::newCharReader() const
 {
   bool collectComments = settings_["collectComments"].asBool();
@@ -2389,7 +2389,7 @@ char const* ValueIteratorBase::memberName(char const** end) const {
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
 
-ValueConstIterator::ValueConstIterator() {}
+ValueConstIterator::ValueConstIterator() = default;
 
 ValueConstIterator::ValueConstIterator(
     const Value::ObjectValues::iterator& current)
@@ -2412,7 +2412,7 @@ operator=(const ValueIteratorBase& other) {
 // //////////////////////////////////////////////////////////////////
 // //////////////////////////////////////////////////////////////////
 
-ValueIterator::ValueIterator() {}
+ValueIterator::ValueIterator() = default;
 
 ValueIterator::ValueIterator(const Value::ObjectValues::iterator& current)
     : ValueIteratorBase(current) {}
@@ -2640,8 +2640,8 @@ namespace Json {
 Exception::Exception(JSONCPP_STRING const& msg)
   : msg_(msg)
 {}
-Exception::~Exception() JSONCPP_NOEXCEPT
-{}
+Exception::~Exception() JSONCPP_NOEXCEPT = default;
+
 char const* Exception::what() const JSONCPP_NOEXCEPT
 {
   return msg_.c_str();
@@ -4380,7 +4380,7 @@ static JSONCPP_STRING valueToQuotedStringN(const char* value, unsigned length) {
 
 // Class Writer
 // //////////////////////////////////////////////////////////////////
-Writer::~Writer() {}
+Writer::~Writer() = default;
 
 // Class FastWriter
 // //////////////////////////////////////////////////////////////////
@@ -5182,16 +5182,15 @@ StreamWriter::StreamWriter()
 {
 }
 StreamWriter::~StreamWriter()
-{
-}
+= default;
 StreamWriter::Factory::~Factory()
-{}
+= default;
 StreamWriterBuilder::StreamWriterBuilder()
 {
   setDefaults(&settings_);
 }
 StreamWriterBuilder::~StreamWriterBuilder()
-{}
+= default;
 StreamWriter* StreamWriterBuilder::newStreamWriter() const
 {
   JSONCPP_STRING indentation = settings_["indentation"].asString();

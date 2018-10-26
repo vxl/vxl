@@ -18,8 +18,7 @@ sdet_denoise_mrf_bp::sdet_denoise_mrf_bp(sdet_denoise_mrf_bp_params& dmp)
 
 // Default Destructor
 sdet_denoise_mrf_bp::~sdet_denoise_mrf_bp()
-{
-}
+= default;
 
 void sdet_denoise_mrf_bp::
 set_image(vil_image_resource_sptr const& resource)

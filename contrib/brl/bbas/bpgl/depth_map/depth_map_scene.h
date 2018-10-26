@@ -176,7 +176,7 @@ class scene_depth_iterator
   scene_depth_iterator(depth_map_scene* scene = nullptr)
   : end_(false), scene_(scene) {}
 
-  ~scene_depth_iterator() {}
+  ~scene_depth_iterator() = default;
 
   //: returns a reference to the scene to enable access to scene methods
   depth_map_scene& operator*() {

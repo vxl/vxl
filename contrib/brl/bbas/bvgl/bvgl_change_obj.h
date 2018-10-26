@@ -24,8 +24,8 @@ class bvgl_change_obj: public vbl_ref_count
   bvgl_change_obj(vgl_polygon<double> const& poly) : class_("unknown"), poly_(poly) {}
   bvgl_change_obj(vgl_polygon<double> const& poly, std::string cls) : class_(cls), poly_(poly) {}
   bvgl_change_obj(const bvgl_change_obj& other);
-  bvgl_change_obj() {}
-  ~bvgl_change_obj() override {}
+  bvgl_change_obj() = default;
+  ~bvgl_change_obj() override = default;
 
   //: binary IO write
   void b_write(vsl_b_ostream& os);

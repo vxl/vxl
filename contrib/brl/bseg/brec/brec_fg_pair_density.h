@@ -19,7 +19,7 @@ class brec_fg_pair_density : public brec_pair_density
 {
  public:
   brec_fg_pair_density() : brec_pair_density() {}
-  ~brec_fg_pair_density() override {}
+  ~brec_fg_pair_density() override = default;
 
   double operator()(const double y0, const double y1) override;
   double negative_log(const double y0, const double y1);

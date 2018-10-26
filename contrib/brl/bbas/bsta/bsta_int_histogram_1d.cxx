@@ -15,7 +15,7 @@ bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??
 }
 
 // destructor
-bsta_int_histogram_1d::~bsta_int_histogram_1d() {}
+bsta_int_histogram_1d::~bsta_int_histogram_1d() = default;
 
 // -----------------------------------------------------------
 

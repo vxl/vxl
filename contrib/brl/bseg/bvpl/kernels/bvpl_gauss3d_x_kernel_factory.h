@@ -38,7 +38,7 @@ class bvpl_gauss3d_x_kernel_factory : public bvpl_kernel_factory
   //  Can also specify the support of the kernel
   bvpl_gauss3d_x_kernel_factory(float s1, float s2, float s3, float supp_1 = 2.0, float supp2 = 1.0, float supp3 = 1.0);
 
-  ~bvpl_gauss3d_x_kernel_factory() override {}
+  ~bvpl_gauss3d_x_kernel_factory() override = default;
 
   static std::string name() {return "gauss_x"; }
 

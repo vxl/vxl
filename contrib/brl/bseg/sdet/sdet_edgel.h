@@ -101,7 +101,7 @@ public:
 
   //: constructor
   sdet_edgel_chain(): edgels(0), temp(false){}
-  ~sdet_edgel_chain(){}
+  ~sdet_edgel_chain()= default;
 
   //: copy constructor
   sdet_edgel_chain(const sdet_edgel_chain& chain):

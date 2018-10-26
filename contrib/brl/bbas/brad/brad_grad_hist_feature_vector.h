@@ -24,12 +24,12 @@
 class brad_grad_hist_feature_vector
 {
  public:
-  brad_grad_hist_feature_vector(){}
+  brad_grad_hist_feature_vector()= default;
 
   brad_grad_hist_feature_vector(float minv, float maxv, unsigned nbins)
     : min_(minv), max_(maxv), nbins_(nbins) {}
 
-  ~brad_grad_hist_feature_vector() {}
+  ~brad_grad_hist_feature_vector() = default;
 
   //: vector of histogram probabilities computed from the input view, plus entropy
   vnl_vector<double> operator() (vil_image_view<float> const& view) const;

@@ -14,7 +14,7 @@ class boxm2_image_density_functor
 {
  public:
   //: "default" constructor
-  boxm2_image_density_functor() {}
+  boxm2_image_density_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * img, vil_image_view<float> * density_img, vil_image_view<float>* vis_img)
   {

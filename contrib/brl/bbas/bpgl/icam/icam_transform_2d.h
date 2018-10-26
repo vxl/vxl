@@ -35,7 +35,7 @@ class icam_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count
     : vgl_h_matrix_2d<double>(xform), form_(form) {}
 
   //: Destructor
-  ~icam_transform_2d() override {}
+  ~icam_transform_2d() override = default;
 
   //: Assignment operator
   icam_transform_2d& operator=(icam_transform_2d const& R) {

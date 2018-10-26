@@ -32,7 +32,7 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
                     int n_peaks);
 
   // Destructor
-  ~sdet_adjust_lsqr() override {}
+  ~sdet_adjust_lsqr() override = default;
 
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
@@ -54,7 +54,7 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
 class sdet_gauss_fit
 {
  public:
-  ~sdet_gauss_fit(){}
+  ~sdet_gauss_fit()= default;
 
   static vnl_vector<double> adjust(std::vector<vgl_point_3d<double> > img_pts,
                                    std::vector<vsol_point_2d_sptr> ps_list,

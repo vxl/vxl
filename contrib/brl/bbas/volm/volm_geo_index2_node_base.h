@@ -28,7 +28,7 @@ class volm_geo_index2_node_base : public vbl_ref_count
 {
 public:
   //: Default constructor
-  volm_geo_index2_node_base() {}
+  volm_geo_index2_node_base() = default;
 
   //: Destructor
   ~volm_geo_index2_node_base() override { children_.clear(); }

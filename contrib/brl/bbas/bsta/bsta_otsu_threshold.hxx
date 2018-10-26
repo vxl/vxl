@@ -17,8 +17,7 @@ bsta_otsu_threshold<T>::bsta_otsu_threshold(std::vector<T> data, T low , T high)
 
 template <class T>
 bsta_otsu_threshold<T>::~bsta_otsu_threshold()
-{
-}
+= default;
 
 template <class T>
 unsigned bsta_otsu_threshold<T>::bin_threshold() const

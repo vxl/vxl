@@ -15,7 +15,7 @@
 #include <vcl_compiler.h>
 //: a structure for holding a 3-d point with associated label
 struct boxm2_vecf_labeled_point{
-  boxm2_vecf_labeled_point(){}
+  boxm2_vecf_labeled_point()= default;
 boxm2_vecf_labeled_point(vgl_point_3d<double> const& p, std::string const& label):
   p3d_(p), label_(label){}
   boxm2_vecf_labeled_point(double x, double y, double z, std::string const& label):

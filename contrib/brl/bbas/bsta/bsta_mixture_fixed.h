@@ -99,8 +99,7 @@ class bsta_mixture_fixed : public bsta_distribution<typename dist_::math_type,
 
   // Destructor
   ~bsta_mixture_fixed<dist_,s>()
-  {
-  }
+  = default;
 
   //: Assignment operator
   bsta_mixture_fixed<dist_,s>& operator= (const bsta_mixture_fixed<dist_,s>& rhs)

@@ -17,7 +17,7 @@ template<class T>
 class bugl_random_transform_set_2d
 {
  public:
-  ~bugl_random_transform_set_2d(){}
+  ~bugl_random_transform_set_2d()= default;
 
   //: generate a set of uniformly distributed equiform transformations
  static void equiform_uniform(const unsigned n_trans,
@@ -43,7 +43,7 @@ class bugl_random_transform_set_2d
                                                const T aspect_min, const T aspect_max);
 
  protected:
- bugl_random_transform_set_2d(){} //static methods only
+ bugl_random_transform_set_2d()= default; //static methods only
 };
 
 #define BUGL_RANDOM_TRANSFORM_SET_2D_INSTANTIATE(T) extern "please include bugl/random_transform_set_2d.txx first"

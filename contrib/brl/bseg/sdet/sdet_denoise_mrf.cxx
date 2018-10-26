@@ -27,8 +27,7 @@ sdet_denoise_mrf::sdet_denoise_mrf(sdet_denoise_mrf_params& dmp)
 
 // Default Destructor
 sdet_denoise_mrf::~sdet_denoise_mrf()
-{
-}
+= default;
 
 double sdet_denoise_mrf::weight(unsigned i0, unsigned j0,
                                 unsigned i1, unsigned j1,

@@ -51,7 +51,7 @@ public:
   }
 
   //: destructor
-  ~sdet_sel<curve_model>() override{}
+  ~sdet_sel<curve_model>() override= default;
 
   //: form a curve hypothesis of the appropriate model given a pair of edgels
   inline curve_model* form_a_hypothesis(sdet_edgel* ref_e, sdet_edgel* e2, bool &ref_first,

@@ -49,7 +49,7 @@ class bsta_weibull : public bsta_distribution<T,1>
   bsta_weibull(vector_ const& lambda, vector_ const& k, vector_ const& mu);
 
   //: destructor
-  ~bsta_weibull(){}
+  ~bsta_weibull()= default;
 
   //: the scale parameter
   vector_ lambda() const {return lambda_;}

@@ -27,7 +27,7 @@ class brip_h0_G_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, G_y; //to minimize computation
 
   brip_h0_G_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_G_kernel() override{}
+  ~brip_h0_G_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -59,7 +59,7 @@ class brip_h0_Gx_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, G_y; //to minimize computation
 
   brip_h0_Gx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gx_kernel() override{}
+  ~brip_h0_Gx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -93,7 +93,7 @@ class brip_h0_Gy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, dG_y; //to minimize computation
 
   brip_h0_Gy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gy_kernel() override{}
+  ~brip_h0_Gy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -127,7 +127,7 @@ class brip_h0_Gxx_kernel : public brip_gaussian_kernel
   std::vector<double> d2G_x, G_y; //to minimize computation
 
   brip_h0_Gxx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gxx_kernel() override{}
+  ~brip_h0_Gxx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -161,7 +161,7 @@ class brip_h0_Gxy_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, dG_y; //to minimize computation
 
   brip_h0_Gxy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gxy_kernel() override{}
+  ~brip_h0_Gxy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -194,7 +194,7 @@ class brip_h0_Gyy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, d2G_y; //to minimize computation
 
   brip_h0_Gyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gyy_kernel() override{}
+  ~brip_h0_Gyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -228,7 +228,7 @@ class brip_h0_Gxxx_kernel : public brip_gaussian_kernel
   std::vector<double> d3G_x, G_y; //to minimize computation
 
   brip_h0_Gxxx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gxxx_kernel() override{}
+  ~brip_h0_Gxxx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -262,7 +262,7 @@ class brip_h0_Gxxy_kernel : public brip_gaussian_kernel
   std::vector<double> d2G_x, dG_y; //to minimize computation
 
   brip_h0_Gxxy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gxxy_kernel() override{}
+  ~brip_h0_Gxxy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -295,7 +295,7 @@ class brip_h0_Gxyy_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, d2G_y; //to minimize computation
 
   brip_h0_Gxyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gxyy_kernel() override{}
+  ~brip_h0_Gxyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -328,7 +328,7 @@ class brip_h0_Gyyy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, d3G_y; //to minimize computation
 
   brip_h0_Gyyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h0_Gyyy_kernel() override{}
+  ~brip_h0_Gyyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -366,7 +366,7 @@ class brip_h1_G_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, G_y; //to minimize computation
 
   brip_h1_G_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_G_kernel() override{}
+  ~brip_h1_G_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -402,7 +402,7 @@ class brip_h1_Gx_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, G_y; //to minimize computation
 
   brip_h1_Gx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gx_kernel() override{}
+  ~brip_h1_Gx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -437,7 +437,7 @@ class brip_h1_Gy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, dG_y; //to minimize computation
 
   brip_h1_Gy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gy_kernel() override{}
+  ~brip_h1_Gy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -472,7 +472,7 @@ class brip_h1_Gxx_kernel : public brip_gaussian_kernel
   std::vector<double> d2G_x, G_y; //to minimize computation
 
   brip_h1_Gxx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gxx_kernel() override{}
+  ~brip_h1_Gxx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -507,7 +507,7 @@ class brip_h1_Gxy_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, dG_y; //to minimize computation
 
   brip_h1_Gxy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gxy_kernel() override{}
+  ~brip_h1_Gxy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -539,7 +539,7 @@ class brip_h1_Gyy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, d2G_y; //to minimize computation
 
   brip_h1_Gyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gyy_kernel() override{}
+  ~brip_h1_Gyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -574,7 +574,7 @@ class brip_h1_Gxxx_kernel : public brip_gaussian_kernel
   std::vector<double> d3G_x, G_y; //to minimize computation
 
   brip_h1_Gxxx_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gxxx_kernel() override{}
+  ~brip_h1_Gxxx_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -609,7 +609,7 @@ class brip_h1_Gxxy_kernel : public brip_gaussian_kernel
   std::vector<double> d2G_x, dG_y; //to minimize computation
 
   brip_h1_Gxxy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gxxy_kernel() override{}
+  ~brip_h1_Gxxy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -643,7 +643,7 @@ class brip_h1_Gxyy_kernel : public brip_gaussian_kernel
   std::vector<double> dG_x, d2G_y; //to minimize computation
 
   brip_h1_Gxyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gxyy_kernel() override{}
+  ~brip_h1_Gxyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()
@@ -677,7 +677,7 @@ class brip_h1_Gyyy_kernel : public brip_gaussian_kernel
   std::vector<double> G_x, d3G_y; //to minimize computation
 
   brip_h1_Gyyy_kernel(double sigma_, double dx_=0.0, double dy_=0.0): brip_gaussian_kernel(sigma_, dx_, dy_){}
-  ~brip_h1_Gyyy_kernel() override{}
+  ~brip_h1_Gyyy_kernel() override= default;
 
   //: compute the kernel
   virtual void compute_kernel()

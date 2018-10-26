@@ -31,7 +31,7 @@ class volm_desc_ex_land_only : public volm_desc
 public:
 
   //: Default constructor
-  volm_desc_ex_land_only() {}
+  volm_desc_ex_land_only() = default;
 
   //: simple constructor that only sets the number of bins
   volm_desc_ex_land_only(unsigned ndists, unsigned nlands, std::vector<double>& radius) :
@@ -53,7 +53,7 @@ public:
                          unsigned char const& initial_mag = 0);
 
   //: Destructor
-  ~volm_desc_ex_land_only() override {}
+  ~volm_desc_ex_land_only() override = default;
 
   //: number of depth bins
   unsigned ndepths() const { return this->ndists_; }

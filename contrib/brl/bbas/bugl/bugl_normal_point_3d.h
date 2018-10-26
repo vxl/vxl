@@ -17,7 +17,7 @@
 class bugl_normal_point_3d : public bugl_gaussian_point_3d<double>, public vbl_ref_count
 {
  public:
-  bugl_normal_point_3d() {}
+  bugl_normal_point_3d() = default;
 
   bugl_normal_point_3d(vgl_point_3d<double> &p, vnl_matrix_fixed<double,3,3> &s)
     : bugl_gaussian_point_3d<double>(p,s), vbl_ref_count() {}
@@ -28,7 +28,7 @@ class bugl_normal_point_3d : public bugl_gaussian_point_3d<double>, public vbl_r
   bugl_normal_point_3d(bugl_normal_point_3d const& p)
     : bugl_gaussian_point_3d<double>(p), vbl_ref_count() {}
 
-  ~bugl_normal_point_3d() override {}
+  ~bugl_normal_point_3d() override = default;
 };
 
 #endif

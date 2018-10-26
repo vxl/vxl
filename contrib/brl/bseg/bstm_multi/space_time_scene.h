@@ -62,7 +62,7 @@ public:
   typedef vbl_smart_ptr<space_time_scene<Block> > sptr;
 
   //: empty scene, needs to be initialized manually
-  space_time_scene() {}
+  space_time_scene() = default;
 
   space_time_scene(vcl_string data_path,
                    vgl_point_3d<double> const &origin,
@@ -72,7 +72,7 @@ public:
   space_time_scene(vcl_string filename);
 
   //: destructor
-  ~space_time_scene() override {}
+  ~space_time_scene() override = default;
 
   //: save scene xml file
   void save_scene();

@@ -24,7 +24,7 @@ class bstm_merge_tt_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  bstm_merge_tt_function() {}
+  bstm_merge_tt_function() = default;
 
   //: initialize generic data base pointers as their data type
   bool init_data(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh);

@@ -10,7 +10,7 @@ class boxm2_vis_probe_functor
 {
  public:
   //: "default" constructor
-  boxm2_vis_probe_functor() {}
+  boxm2_vis_probe_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas, float * vis)
   {

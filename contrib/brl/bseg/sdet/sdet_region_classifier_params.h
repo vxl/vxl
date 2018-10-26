@@ -34,7 +34,7 @@ class sdet_region_classifier_params : public gevd_param_mixin
                                bool debug
                                );
   sdet_region_classifier_params(const sdet_region_classifier_params& old_params);
- ~sdet_region_classifier_params() override{}
+ ~sdet_region_classifier_params() override= default;
 
   bool SanityCheck() override;
   friend

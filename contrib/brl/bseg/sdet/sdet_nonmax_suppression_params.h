@@ -24,7 +24,7 @@ class sdet_nonmax_suppression_params : public gevd_param_mixin
   sdet_nonmax_suppression_params(const double thresh = 50, const int pfit_type = 0);
 
   sdet_nonmax_suppression_params(const sdet_nonmax_suppression_params& old_params);
-  ~sdet_nonmax_suppression_params() override{}
+  ~sdet_nonmax_suppression_params() override= default;
 
   bool SanityCheck() override;
   friend

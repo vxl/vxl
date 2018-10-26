@@ -105,8 +105,7 @@ class bgrl2_hg_edge // : public bgrl2_edge
   }
 
   ~bgrl2_hg_edge ()
-  {
-  }
+  = default;
 };
 
 #endif // bgrl2_hg_edge_h_

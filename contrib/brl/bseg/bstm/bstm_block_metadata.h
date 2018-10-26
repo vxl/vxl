@@ -33,7 +33,7 @@
 class bstm_block_metadata:  public vbl_ref_count
 {
  public:
-  bstm_block_metadata() {}
+  bstm_block_metadata() = default;
   bstm_block_metadata(  bstm_block_id id,
                         vgl_point_3d<double> local_origin,
                         float local_t,

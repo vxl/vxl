@@ -40,7 +40,7 @@ class boxm2_vecf_fit_fat_pocket
 
   boxm2_vecf_fit_fat_pocket(std::string const& neutral_face_ptset_path, std::string const& skin_layer_path, std::string const& fat_pocket_geo_path);
   boxm2_vecf_fit_fat_pocket(std::string const& neutral_face_ptset_path, std::string const& deformed_face_ptset_path, std::string const& skin_ptset_path,  std::string const& fat_pocket_geo_path);
-  ~boxm2_vecf_fit_fat_pocket() {}
+  ~boxm2_vecf_fit_fat_pocket() = default;
 
   // Operations---------------------------------------------------------------
 

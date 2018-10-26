@@ -60,7 +60,7 @@ class bil_nms_params
 
   bil_nms_params(double thresh=1.0, PFIT_TYPE pfit_type=PFIT_3_POINTS, unsigned margin=1, double rel_thresh=2.5, bool adaptive_thresh=false):
     thresh_(thresh), pfit_type_(pfit_type), margin_(margin), rel_thresh_(rel_thresh), use_adaptive_thresh_(adaptive_thresh){}
-  ~bil_nms_params(){}
+  ~bil_nms_params()= default;
 };
 
 class bil_nms
@@ -98,7 +98,7 @@ class bil_nms
           const vil_image_view<float>& grad_mag);
 
   // Destructor
-  ~bil_nms() {}
+  ~bil_nms() = default;
 
   //Accessors
   unsigned width() const { return mag_.ni(); }

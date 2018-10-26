@@ -337,8 +337,7 @@ sdet_grid_finder::sdet_grid_finder(sdet_grid_finder_params& gfp)
 
 //:Default Destructor
 sdet_grid_finder::~sdet_grid_finder()
-{
-}
+= default;
 
 static void group_angle_stats(std::vector<vsol_line_2d_sptr> const & group,
                               const double angle_tol,

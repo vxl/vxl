@@ -40,7 +40,7 @@ class brip_gain_offset_solver
                           vil_image_view<unsigned char> const& model_mask,
                           vil_image_view<unsigned char> const& test_mask);
 
-  ~brip_gain_offset_solver() {}
+  ~brip_gain_offset_solver() = default;
 
   //: set images after default construction
   void set_model_image(vil_image_view<float> const& image) {model_image_ = image;}

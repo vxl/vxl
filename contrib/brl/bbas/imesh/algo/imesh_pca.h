@@ -28,7 +28,7 @@ class imesh_pca_mesh : public imesh_mesh
 {
  public:
   //: Default Constructor
-  imesh_pca_mesh() {}
+  imesh_pca_mesh() = default;
 
   //: Constructor from a vector of meshes with the same topology
   imesh_pca_mesh(const std::vector<imesh_mesh>& meshes);

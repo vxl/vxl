@@ -50,7 +50,7 @@ class icam_depth_trans_pyramid
                            vgl_vector_3d<double> const& trans,
                            unsigned n_levels,
                            bool adjust_to_fl = false);
-  ~icam_depth_trans_pyramid() {}
+  ~icam_depth_trans_pyramid() = default;
   //: determines the number of pyramid levels to reduce the smallest image dimension to greater than or equal to \a min_size
   static unsigned required_levels(unsigned ni,unsigned nj,
                                   unsigned min_size = 127);

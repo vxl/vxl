@@ -21,7 +21,7 @@ class boxm2_bounding_box_parser : public expatpp
 {
  public:
   boxm2_bounding_box_parser();
-  ~boxm2_bounding_box_parser(void) override {}
+  ~boxm2_bounding_box_parser(void) override = default;
 
    // ACCESSORS for parser info
    std::string dataset() const { return dataset_; }

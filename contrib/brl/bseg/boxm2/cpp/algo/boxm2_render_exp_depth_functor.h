@@ -12,7 +12,7 @@ class boxm2_render_exp_depth_functor
 {
  public:
   //: "default" constructor
-  boxm2_render_exp_depth_functor() {}
+  boxm2_render_exp_depth_functor() = default;
 
   bool init_data(boxm2_data_base* data, vil_image_view<float> * expected, vil_image_view<float>* vis_img, vil_image_view<float> * len_img)
   {

@@ -46,8 +46,8 @@
 class coord_compare_2d
 {
  public:
-  coord_compare_2d(){}
-  ~coord_compare_2d(){}
+  coord_compare_2d()= default;
+  ~coord_compare_2d()= default;
 
   bool operator() ( vgl_point_2d<double> const& pa, vgl_point_2d<double> const& pb ) const
   {

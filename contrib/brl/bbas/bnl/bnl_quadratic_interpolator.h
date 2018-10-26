@@ -19,8 +19,8 @@
 class bnl_quadratic_interpolator
 {
  public:
-  bnl_quadratic_interpolator() {}
-  ~bnl_quadratic_interpolator() {}
+  bnl_quadratic_interpolator() = default;
+  ~bnl_quadratic_interpolator() = default;
   //: px and py are the 2-d parameters, v is the data value
   void add_data_point(const double px, const double py, const double v);
   //: reset data array

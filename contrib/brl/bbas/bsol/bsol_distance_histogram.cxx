@@ -74,8 +74,7 @@ bsol_distance_histogram(const int nbins,
 
 //: Destructor
 bsol_distance_histogram::~bsol_distance_histogram()
-{
-}
+= default;
 
 
 //---------------------------------------------------------------------

@@ -19,8 +19,7 @@
 
 //: constructor
 bpgl_construct_cameras::bpgl_construct_cameras()
-{
-}
+= default;
 
 //: constructor with initialization of corresponding points
 bpgl_construct_cameras::bpgl_construct_cameras(
@@ -44,8 +43,7 @@ bpgl_construct_cameras::bpgl_construct_cameras(
 }
 
 bpgl_construct_cameras::~bpgl_construct_cameras()
-{
-}
+= default;
 
 //: To construct the cameras according to the correspondence given
 //

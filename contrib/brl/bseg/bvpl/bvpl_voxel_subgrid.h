@@ -41,7 +41,7 @@ class bvpl_subgrid_base
   bvpl_subgrid_base(vgl_point_3d<int> center)
     : center_(center) {}
 
-  virtual ~bvpl_subgrid_base() {}
+  virtual ~bvpl_subgrid_base() = default;
 
   vgl_point_3d<int> center() const { return center_; }
 
@@ -58,7 +58,7 @@ class bvpl_voxel_subgrid : public bvpl_subgrid_base
                      vgl_point_3d<int> max_point,
                      vgl_point_3d<int> min_point);
 
-  ~bvpl_voxel_subgrid() override {}
+  ~bvpl_voxel_subgrid() override = default;
 
   bool voxel(int x, int y, int z, T& v);
   bool voxel(vgl_point_3d<int> p, T& v) { return voxel(p.x(), p.y(), p.z(), v); }

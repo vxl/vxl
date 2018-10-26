@@ -71,8 +71,7 @@ sdet_sel_base
 //:destructor
 sdet_sel_base
 ::~sdet_sel_base()
-{
-}
+= default;
 
 //********************************************************************//
 // User Friendly functions

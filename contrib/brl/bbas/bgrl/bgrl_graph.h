@@ -48,7 +48,7 @@ class bgrl_graph : public vbl_ref_count
   bgrl_graph(const bgrl_graph& graph);
 
   //: Destructor
-  ~bgrl_graph() override{}
+  ~bgrl_graph() override= default;
 
   //: Adds a new vertex to the graph
   // \retval true if the vertex was added
@@ -111,7 +111,7 @@ class bgrl_graph : public vbl_ref_count
     iterator( bgrl_graph* graph );
 
     //: Destructor
-    virtual ~iterator() {}
+    virtual ~iterator() = default;
 
     bgrl_graph* graph() const { return graph_; }
 

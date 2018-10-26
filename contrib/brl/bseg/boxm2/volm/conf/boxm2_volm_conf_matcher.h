@@ -31,7 +31,7 @@ public:
   // =============== constructor ======================
 
   //: default constructor
-  boxm2_volm_conf_matcher() {}
+  boxm2_volm_conf_matcher() = default;
   boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
                           unsigned const& tile_id,
                           std::vector<volm_geo_index_node_sptr> const& loc_leaves,
@@ -49,7 +49,7 @@ public:
                           float const& buffer_capacity = 2.0,
                           unsigned tol_in_pixel = 25);
 
-  ~boxm2_volm_conf_matcher() {}
+  ~boxm2_volm_conf_matcher() = default;
 
   // =================== access =======================
   volm_conf_query_sptr query()    const { return query_; }

@@ -70,8 +70,8 @@ class bsta_parzen : public bsta_distribution<T,n>
 
  public:
 
-  bsta_parzen() {}
-  virtual ~bsta_parzen() {}
+  bsta_parzen() = default;
+  virtual ~bsta_parzen() = default;
 
   bsta_parzen(sample_vector const& samples)
   : samples_(samples) {}

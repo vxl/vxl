@@ -19,8 +19,8 @@
 class boxm_vgl_point_3d_coord_compare
 {
  public:
-  boxm_vgl_point_3d_coord_compare() {}
-  ~boxm_vgl_point_3d_coord_compare() {}
+  boxm_vgl_point_3d_coord_compare() = default;
+  ~boxm_vgl_point_3d_coord_compare() = default;
 
   bool operator() ( vgl_point_3d<int> const& pa, vgl_point_3d<int> pb ) const
   {

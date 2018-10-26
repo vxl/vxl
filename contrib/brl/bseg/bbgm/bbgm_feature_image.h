@@ -23,7 +23,7 @@
 class bbgm_feature_image_base : public vbl_ref_count
 {
  public:
-  ~bbgm_feature_image_base() override{}
+  ~bbgm_feature_image_base() override= default;
 
   //: Binary save self to stream.
   virtual void b_write(vsl_b_ostream &os) const=0;
@@ -45,7 +45,7 @@ class bbgm_feature_image : public bbgm_feature_image_base
 {
  public:
   //: Constructor
-  bbgm_feature_image<f_type_>() {}
+  bbgm_feature_image<f_type_>() = default;
   bbgm_feature_image<f_type_>(unsigned int ni, unsigned int nj): data_(nj,ni) {}
   bbgm_feature_image<f_type_>(unsigned int ni, unsigned int nj,
                               f_type_ const& feature) : data_(nj,ni,feature) {}

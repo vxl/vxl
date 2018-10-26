@@ -48,7 +48,7 @@ public:
   pin_pt_loc() : loc_(vgl_point_3d<double>(0.0,0.0,0.0)), cam_id_(0) {}
   pin_pt_loc(vgl_point_3d<double> const& loc, unsigned const& cam_id) : loc_(loc), cam_id_(cam_id) {}
   // destructor
-  ~pin_pt_loc() {}
+  ~pin_pt_loc() = default;
 
   vgl_point_3d<double> loc_;
   unsigned cam_id_;

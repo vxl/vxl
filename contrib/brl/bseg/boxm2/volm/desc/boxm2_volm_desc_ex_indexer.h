@@ -36,7 +36,7 @@ public:
                        unsigned char const& initial_mag = 0);
 
   //: Destructor
-  ~volm_desc_ex_indexer() override {}
+  ~volm_desc_ex_indexer() override = default;
 
   //: load the volm_geo_index for given tile
   bool get_next() override;

@@ -14,8 +14,7 @@
 //: Constructor
 template <class T>
 bprb_process_manager<T>::bprb_process_manager()
-{
-}
+= default;
 
 //: Insure only one instance is created
 template <class T>

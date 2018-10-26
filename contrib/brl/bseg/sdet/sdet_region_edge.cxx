@@ -13,8 +13,7 @@ sdet_region_edge::sdet_region_edge(vtol_edge_2d_sptr e)
 }
 
 sdet_region_edge::~sdet_region_edge()
-{
-}
+= default;
 
 bool sdet_region_edge::is_vertex() const
 {

@@ -26,12 +26,12 @@ class icam_view_metadata
  public:
 
    //: default constructor
-   icam_view_metadata() {}
+   icam_view_metadata() = default;
 
    icam_view_metadata(std::string const& exp_img,
                       std::string const& dt_path);
 
-   virtual ~icam_view_metadata() {}
+   virtual ~icam_view_metadata() = default;
 
    virtual void register_image(vil_image_view<float> const& source_img,
                                vpgl_camera_double_sptr camera,

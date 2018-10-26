@@ -86,7 +86,7 @@ class imesh_face_array_base
 {
  public:
   //: Destructor
-  virtual ~imesh_face_array_base() {}
+  virtual ~imesh_face_array_base() = default;
 
   //: returns the number of vertices per face if the same for all faces, zero otherwise
   virtual unsigned int regularity() const = 0;
@@ -162,7 +162,7 @@ class imesh_face_array : public imesh_face_array_base
 
  public:
   //: Default Constructor
-  imesh_face_array() {}
+  imesh_face_array() = default;
 
   //: Constructor
   imesh_face_array(unsigned int size) : faces_(size) {}
@@ -241,7 +241,7 @@ class imesh_regular_face_array : public imesh_face_array_base
 
  public:
   //: Default Constructor
-  imesh_regular_face_array<s>() {}
+  imesh_regular_face_array<s>() = default;
 
   //: Constructor
   imesh_regular_face_array<s>(unsigned int size) : faces_(size) {}

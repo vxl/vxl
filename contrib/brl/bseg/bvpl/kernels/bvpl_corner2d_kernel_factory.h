@@ -33,7 +33,7 @@ class bvpl_corner2d_kernel_factory : public bvpl_kernel_factory
   //: Constructs a kernel form three values, length, width and thickness
   bvpl_corner2d_kernel_factory(unsigned length, unsigned width, unsigned thickness);
 
-  ~bvpl_corner2d_kernel_factory() override {}
+  ~bvpl_corner2d_kernel_factory() override = default;
 
  private:
 

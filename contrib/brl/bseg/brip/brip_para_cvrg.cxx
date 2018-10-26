@@ -74,8 +74,7 @@ brip_para_cvrg::brip_para_cvrg(brip_para_cvrg_params& pdp) :
 //-----------------------------------------------------------------------------
 //: Destructor.
 brip_para_cvrg::~brip_para_cvrg()
-{
-}
+= default;
 
 //-----------------------------------------------------------------------------
 //: Convolves the image with the smoothing kernel.  Private.

@@ -29,7 +29,7 @@ class bvgl_biarc
 public:
   // -------------- BASIC ----------------------------
   //: Constructor - default
-  bvgl_biarc(){};
+  bvgl_biarc()= default;;
 
   //: Constructor - from intrinsic parameters
   bvgl_biarc(vgl_point_2d<double > start, double start_angle, double k1, double len1, double k2, double len2);
@@ -43,7 +43,7 @@ public:
     vgl_point_2d< double > end, vgl_vector_2d<double > end_tangent );
 
   //: Destructor
-  ~bvgl_biarc(){};
+  ~bvgl_biarc()= default;;
 
   //: Return the starting point of the biarc
   vgl_point_2d< double > start() const { return this->start_; }

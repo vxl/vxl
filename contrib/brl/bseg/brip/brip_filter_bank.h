@@ -45,7 +45,7 @@ class brip_filter_bank
                    float lambda1, float theta_interval, float cuttoff_ratio,
                    vil_image_view<float> const& image);
 
-  ~brip_filter_bank() {}
+  ~brip_filter_bank() = default;
   //: set image after construction
   void set_image(vil_image_view<float> const& image);
   //: accessors

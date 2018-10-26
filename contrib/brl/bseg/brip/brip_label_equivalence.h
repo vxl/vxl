@@ -21,7 +21,7 @@ class brip_label_equivalence
 {
  public:
   brip_label_equivalence():max_label_(0){}
-  ~brip_label_equivalence(){}
+  ~brip_label_equivalence()= default;
 
   //:add a label pair equivalence
   void add_label_pair(unsigned la, unsigned lb);

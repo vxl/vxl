@@ -91,7 +91,7 @@ class bapl_bbf_queue_entry
 {
  public:
   //: Constructor
-  bapl_bbf_queue_entry() {}
+  bapl_bbf_queue_entry() = default;
   //: Constructor
   bapl_bbf_queue_entry( double dist, bapl_bbf_node_sptr node )
     : dist_(dist), node_(node) {}

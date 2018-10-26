@@ -18,10 +18,10 @@
 
 class bdgl_region_algs
 {
-  bdgl_region_algs() {} //!< private default constructor: all methods are static
+  bdgl_region_algs() = default; //!< private default constructor: all methods are static
 
  public:
-  ~bdgl_region_algs() {}
+  ~bdgl_region_algs() = default;
 
   //:Computes the Mahalanobis distance between two regions
   // Returns -1 if the distance cannot be reliably calculated.

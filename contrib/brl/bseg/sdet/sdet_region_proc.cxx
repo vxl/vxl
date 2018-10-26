@@ -32,8 +32,7 @@ sdet_region_proc::sdet_region_proc(sdet_region_proc_params& rpp)
 
 //:Default Destructor
 sdet_region_proc::~sdet_region_proc()
-{
-}
+= default;
 
 //-------------------------------------------------------------------------
 //: Set the image to be processed (vil1 type image)

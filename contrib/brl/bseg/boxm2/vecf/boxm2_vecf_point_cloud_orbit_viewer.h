@@ -24,7 +24,7 @@ cpoint(vgl_point_3d<double> pt, int r, int g, int b): pt_(pt), r_(r), g_(g), b_(
 };
 class boxm2_vecf_point_cloud_orbit_viewer{
  public:
-  boxm2_vecf_point_cloud_orbit_viewer() {}
+  boxm2_vecf_point_cloud_orbit_viewer() = default;
 
 
   bool set_point_cloud(std::string const& pc_path);

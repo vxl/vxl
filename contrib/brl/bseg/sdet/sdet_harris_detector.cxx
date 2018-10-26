@@ -17,7 +17,7 @@
 //  Will result in descending order according to strength
 struct sdet_harris_point
 {
-  sdet_harris_point () {}
+  sdet_harris_point () = default;
 
   void set_point(vsol_point_2d_sptr const& p) {p_ = p;}
   void set_strength(const float s) {strength_ = s;}
@@ -56,8 +56,7 @@ sdet_harris_detector::sdet_harris_detector(sdet_harris_detector_params& rpp)
 
 //:Default Destructor
 sdet_harris_detector::~sdet_harris_detector()
-{
-}
+= default;
 
 //-------------------------------------------------------------------------
 //: Set the image to be processed

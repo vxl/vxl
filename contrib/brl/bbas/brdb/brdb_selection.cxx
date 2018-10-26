@@ -49,8 +49,7 @@ brdb_selection::brdb_selection(const brdb_relation_sptr& relation)
 
 //: destructor
 brdb_selection::~brdb_selection()
-{
-}
+= default;
 
 
 //: get the iterator pointing to the beginning of the selection set

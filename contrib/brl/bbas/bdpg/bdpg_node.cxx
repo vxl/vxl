@@ -13,8 +13,7 @@ bdpg_node::bdpg_node() :
 }
 
 bdpg_node::~bdpg_node()
-{
-}
+= default;
 
 void bdpg_node::set_prior_prob(const double p)
 {

@@ -11,7 +11,7 @@ class boxm2_render_cone_functor
 {
  public:
   //: "default" constructor
-  boxm2_render_cone_functor() {}
+  boxm2_render_cone_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {

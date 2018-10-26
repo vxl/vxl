@@ -38,7 +38,7 @@ class brip_roi : public vbl_ref_count
   //: expand (or contract) each region of the roi by delta, creating a new roi
   brip_roi(brip_roi const& roi, const float delta);
 
-  ~brip_roi() override {}
+  ~brip_roi() override = default;
   //: replace existing image bounds
   void set_image_bounds(const int n_image_cols,
                         const int n_image_rows);

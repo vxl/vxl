@@ -31,7 +31,7 @@ class bvxm_opinion
   bvxm_opinion(bvxm_opinion const& o) : u_(o.u()), b_(o.b()) {}
 
   //: destructor
-  ~bvxm_opinion() {}
+  ~bvxm_opinion() = default;
 
   float u() const { return u_; }
 

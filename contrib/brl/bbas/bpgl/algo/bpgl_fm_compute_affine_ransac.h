@@ -71,7 +71,7 @@ class rrel_fm_affine_problem : public rrel_estimation_problem
   rrel_fm_affine_problem( const std::vector< vgl_point_2d<double> > & pr,
                           const std::vector< vgl_point_2d<double> > & pl );
 
-  ~rrel_fm_affine_problem() override {}
+  ~rrel_fm_affine_problem() override = default;
 
   // Total number of correspondences.
   unsigned int num_samples() const override{ return pr_.size(); }

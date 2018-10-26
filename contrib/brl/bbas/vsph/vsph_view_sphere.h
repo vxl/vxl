@@ -48,7 +48,7 @@ class vsph_view_sphere
     : coord_sys_(rhs.coord_sys_), views_(rhs.views_), uid_(rhs.uid_) {}
 
   //: destructor
-  ~vsph_view_sphere() {}
+  ~vsph_view_sphere() = default;
 
   //: returning the id of the newly added view
   unsigned add_view(T view, unsigned ni, unsigned nj);

@@ -22,7 +22,7 @@ class bvxm_expected_edge_functor
   bvxm_expected_edge_functor(const bvxm_voxel_slab<float>* slab, const vgl_box_3d<double>& box,
                              const vgl_vector_3d<float>& vox_dim, const vgl_vector_3d<float>& world_dim)
     : slab_(slab), box_(box), vox_dim_(vox_dim), world_dim_(world_dim) {}
-  ~bvxm_expected_edge_functor(){}
+  ~bvxm_expected_edge_functor()= default;
   bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei);
 
  private:

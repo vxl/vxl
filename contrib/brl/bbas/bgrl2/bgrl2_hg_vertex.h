@@ -87,12 +87,10 @@ class bgrl2_hg_vertex //: public bgrl2_vertex
 
   //: ====== Constructor/Destructor and other functions ======
   bgrl2_hg_vertex () //: bgrl2_vertex ()
-  {
-  }
+  = default;
 
   ~bgrl2_hg_vertex ()
-  {
-  }
+  = default;
 };
 
 #endif // bgrl2_hg_vertex_h_

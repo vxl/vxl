@@ -32,7 +32,7 @@ class bsta_von_mises : public bsta_distribution<T,n>
   enum { data_dimension = n };
   bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) {}
   bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
-  virtual ~bsta_von_mises() {}
+  virtual ~bsta_von_mises() = default;
   //: The mean vector
   const vector_type& mean() const {return mean_;}
   void set_mean(const vector_type& mean) {mean_ = mean;}
@@ -66,7 +66,7 @@ class bsta_von_mises<T,3>
   enum { data_dimension = 3 };
   bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) {mean_[2]=T(1);}
   bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
-  virtual ~bsta_von_mises() {}
+  virtual ~bsta_von_mises() = default;
   //: The mean vector
   const vector_type& mean() const {return mean_;}
   void set_mean(const vector_type& mean) { mean_ = mean; }
@@ -99,7 +99,7 @@ class bsta_von_mises<T,2>
   enum { data_dimension = 2 };
   bsta_von_mises(): mean_(vector_type(T(0))), kappa_(T(1)) { mean_[1]=T(1); }
   bsta_von_mises(vector_type const& mean, T kappa): mean_(mean), kappa_(kappa) {}
-  virtual ~bsta_von_mises() {}
+  virtual ~bsta_von_mises() = default;
   //: The mean vector
   const vector_type& mean() const {return mean_;}
   void set_mean(const vector_type& mean) {mean_ = mean;}

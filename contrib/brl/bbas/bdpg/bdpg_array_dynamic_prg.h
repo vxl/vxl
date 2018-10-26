@@ -33,7 +33,7 @@ class bdpg_array_dynamic_prg
 {
  public:
   bdpg_array_dynamic_prg(const unsigned rows, const unsigned cols);
-  ~bdpg_array_dynamic_prg() {}
+  ~bdpg_array_dynamic_prg() = default;
 
   //: Return number of rows
   unsigned rows() const { return num_rows_; }

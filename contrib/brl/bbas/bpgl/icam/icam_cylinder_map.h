@@ -42,7 +42,7 @@ class icam_cylinder_map : public vbl_ref_count
   n_theta_(n_theta), nz_(nz), origin_(pt), radius_(radius),
     upper_height_(h_upper),lower_height_(h_lower){}
   //: Destructor
-  ~icam_cylinder_map() override{}
+  ~icam_cylinder_map() override= default;
 
   //: images must have RGB byte pixel type
   void set_data(std::vector<vil_image_view<vxl_byte> > const& images,

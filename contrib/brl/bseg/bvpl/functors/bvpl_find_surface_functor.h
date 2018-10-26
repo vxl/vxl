@@ -22,7 +22,7 @@ class bvpl_find_surface_functor
   bvpl_find_surface_functor();
 
   //: Destructor
-  ~bvpl_find_surface_functor() {}
+  ~bvpl_find_surface_functor() = default;
 
   //: Apply a given operation to value val, depending on the dispatch character
   void apply(float& val, bvpl_kernel_dispatch& d);

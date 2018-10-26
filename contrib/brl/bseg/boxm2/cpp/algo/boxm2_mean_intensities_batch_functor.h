@@ -16,7 +16,7 @@ class boxm2_mean_intensities_batch_functor
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype datatype;
 
   //: "default" constructor
-  boxm2_mean_intensities_batch_functor() {}
+  boxm2_mean_intensities_batch_functor() = default;
 
   bool init_data(boxm2_data_base *output_alph, boxm2_stream_cache_sptr str_cache)
   {
@@ -53,7 +53,7 @@ class boxm2_mean_intensities_print_functor
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype datatype;
 
   //: "default" constructor
-  boxm2_mean_intensities_print_functor() {}
+  boxm2_mean_intensities_print_functor() = default;
 
   bool init_data(boxm2_data_base *output_alph, boxm2_stream_cache_sptr str_cache)
   {

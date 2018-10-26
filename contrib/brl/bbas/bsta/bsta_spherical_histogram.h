@@ -58,7 +58,7 @@ class bsta_spherical_histogram
                            angle_bounds az_branch_cut = B_180_180,
                            angle_bounds el_poles = B_90_90);
 
-  ~bsta_spherical_histogram() {}
+  ~bsta_spherical_histogram() = default;
 
   //: angle units e.g. RADIANS, DEG
   ang_units units() const {return units_;}

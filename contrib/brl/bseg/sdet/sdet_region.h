@@ -53,7 +53,7 @@ class sdet_region : public vdgl_digital_region
   sdet_region(int npts, const float* xp, const float* yp,
               const unsigned short *pix);
   sdet_region(vdgl_digital_region const& reg);
-  ~sdet_region() override {}
+  ~sdet_region() override = default;
   //:accessors
   void set_label(const unsigned int label){region_label_ = label;}
   unsigned int label() const {return region_label_;}

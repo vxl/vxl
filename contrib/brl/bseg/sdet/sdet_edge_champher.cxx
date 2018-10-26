@@ -25,8 +25,7 @@ sdet_edge_champher::sdet_edge_champher(vbl_array_2d<vtol_edge_2d_sptr>& edges)
 
 //: Destructor
 sdet_edge_champher::~sdet_edge_champher()
-{
-}
+= default;
 
 
 //-----------------------------------------------------------------------------

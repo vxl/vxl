@@ -38,7 +38,7 @@ class boxm2_volm_matcher_p1
 {
  public:
   //: default constructor
-  boxm2_volm_matcher_p1() {}
+  boxm2_volm_matcher_p1() = default;
   //: constructor
   boxm2_volm_matcher_p1(volm_camera_space_sptr const& cam_space,
                         volm_query_sptr const& query,
@@ -239,12 +239,12 @@ class boxm2_volm_matcher_p1
 class boxm2_volm_score_out
 {
  public:
-  boxm2_volm_score_out() {}
+  boxm2_volm_score_out() = default;
   boxm2_volm_score_out(unsigned const& leaf_id, unsigned const& hypo_id,
                        std::vector<unsigned> const& cam_id,
                        std::vector<float> const& cam_score)
   : l_id_(leaf_id), h_id_(hypo_id), cam_id_(cam_id), cam_score_(cam_score) {}
-  ~boxm2_volm_score_out() {}
+  ~boxm2_volm_score_out() = default;
 
   unsigned l_id_;
   unsigned h_id_;

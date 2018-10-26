@@ -27,7 +27,7 @@ class betr_gridded_geo_polygon_3d : public betr_geo_object_3d
   betr_gridded_geo_polygon_3d(const vpgl_lvcs& lvcs):betr_geo_object_3d(lvcs){}
  betr_gridded_geo_polygon_3d(vsol_spatial_object_3d_sptr so, vpgl_lvcs const& lvcs, double grid_spacing):
  betr_geo_object_3d(so, lvcs),grid_spacing_(grid_spacing){this->construct_grid();}
-  ~betr_gridded_geo_polygon_3d() override{}
+  ~betr_gridded_geo_polygon_3d() override= default;
   //accessors
   void set_grid_spacing(double spacing){grid_spacing_ = spacing; this->construct_grid();}
   double grid_spacing() const {return grid_spacing_;}

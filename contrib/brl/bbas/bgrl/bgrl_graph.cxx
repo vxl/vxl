@@ -11,8 +11,7 @@
 
 //: Constructor
 bgrl_graph::bgrl_graph()
-{
-}
+= default;
 
 //: Copy Constructor
 // \note this provides a deep copy of the graph

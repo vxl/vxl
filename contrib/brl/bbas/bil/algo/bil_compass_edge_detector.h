@@ -75,7 +75,7 @@ class bil_signature
     }
   }
 
-  ~bil_signature() {}
+  ~bil_signature() = default;
 
   //: The EMD dist is the default distance between two signatures
   double operator-(const bil_signature& sig) const

@@ -43,9 +43,9 @@ class breg3d_ekf_camera_optimizer_state
     : k_(time_index), Pk_(Pk), xk_(xk), base_point_(base_point), base_rotation_(base_rot), t_scale_(t_scale) {}
 
   // default constructor
-  breg3d_ekf_camera_optimizer_state(){}
+  breg3d_ekf_camera_optimizer_state()= default;
   // destructor
-  ~breg3d_ekf_camera_optimizer_state(){}
+  ~breg3d_ekf_camera_optimizer_state()= default;
 
   // setters and getters
   unsigned k() const {return k_;}

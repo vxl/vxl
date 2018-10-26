@@ -42,7 +42,7 @@ public:
   //: default constructor
   volm_osm_parser(void);
   //: destructor
-  ~volm_osm_parser(void) override {}
+  ~volm_osm_parser(void) override = default;
 
   //: parse meaningful location points from open street map (point with defined keys), return loc points are in x = lon and y = lat
   static void parse_points(std::vector<vgl_point_2d<double> >& points,

@@ -40,7 +40,7 @@ public:
       width_(width) {}
 
   //: destructor
-  ~volm_land_layer() {}
+  ~volm_land_layer() = default;
 
   //: check the existence of certain land layer
   bool contains(std::string name);

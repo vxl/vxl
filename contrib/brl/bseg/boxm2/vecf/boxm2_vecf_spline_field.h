@@ -12,7 +12,7 @@
 #include <vgl/vgl_cubic_spline_3d.h>
 class boxm2_vecf_spline_field{
  public:
-  boxm2_vecf_spline_field(){}
+  boxm2_vecf_spline_field()= default;
   // number of spline knots must equal the number of field knots
  boxm2_vecf_spline_field(vgl_cubic_spline_3d<double> const& spline, std::vector<vgl_vector_3d<double> > const& field_knots):
   generating_spline_(spline), field_knots_(field_knots){if(static_cast<unsigned>(field_knots_.size()) != spline.n_knots())

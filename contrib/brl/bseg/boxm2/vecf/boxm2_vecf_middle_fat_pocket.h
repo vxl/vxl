@@ -20,7 +20,7 @@
 #include "boxm2_vecf_geometry_base.h"
 class boxm2_vecf_middle_fat_pocket : public boxm2_vecf_geometry_base{
  public:
-  boxm2_vecf_middle_fat_pocket(){}
+  boxm2_vecf_middle_fat_pocket()= default;
   boxm2_vecf_middle_fat_pocket(std::string const& geometry_file);
   boxm2_vecf_middle_fat_pocket(bvgl_scaled_shape_3d<double> const& ss3d, boxm2_vecf_middle_fat_pocket_params const& params);
 

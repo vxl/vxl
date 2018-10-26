@@ -25,7 +25,7 @@
 class bprb_func_process: public bprb_process_ext
 {
  public:
-  bprb_func_process() {}
+  bprb_func_process() = default;
 
   bprb_func_process(bool(*fpt)(bprb_func_process&), const char* name)
   : fpt_(fpt), fpt_cons_(nullptr), fpt_init_(nullptr), fpt_finish_(nullptr), name_(name)
@@ -39,7 +39,7 @@ class bprb_func_process: public bprb_process_ext
     fpt_finish_(finish), name_(name)
   { if (fpt_cons_) fpt_cons_(*this); }
 
-  ~bprb_func_process() override {}
+  ~bprb_func_process() override = default;
 
   bprb_func_process* clone() const override { return new bprb_func_process(fpt_, name_.c_str(),fpt_cons_, fpt_init_, fpt_finish_); }
 

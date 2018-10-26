@@ -63,7 +63,7 @@ class sdet_nms_params
 
   sdet_nms_params(double thresh=1.0, PFIT_TYPE pfit_type=PFIT_3_POINTS, unsigned margin=1, double rel_thresh=2.5, bool adaptive_thresh=false):
     thresh_(thresh), pfit_type_(pfit_type), margin_(margin), rel_thresh_(rel_thresh), use_adaptive_thresh_(adaptive_thresh) {}
-  ~sdet_nms_params() {}
+  ~sdet_nms_params() = default;
 };
 
 class sdet_nms
@@ -102,7 +102,7 @@ class sdet_nms
            const vil_image_view<double>& grad_mag);
 
   //: Destructor
-  ~sdet_nms() {}
+  ~sdet_nms() = default;
 
   //Accessors
   unsigned width() const { return mag_.cols(); }

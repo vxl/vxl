@@ -27,7 +27,7 @@ class boxm_expected_edge_functor
  public:
   boxm_expected_edge_functor(boxm_scene<boct_tree<T_loc, T_data > > &scene)
     : scene_(scene) {}
-  ~boxm_expected_edge_functor() {}
+  ~boxm_expected_edge_functor() = default;
 
   bool apply(const vpgl_camera_double_sptr& cam, vil_image_view<float> *img_eei)
   {

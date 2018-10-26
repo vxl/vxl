@@ -37,7 +37,7 @@ public:
                                  unsigned char const& initial_mag = 0);
 
   //: Desturctor
-  ~volm_desc_ex_land_only_indexer() override {}
+  ~volm_desc_ex_land_only_indexer() override = default;
 
   //: Load the volm_geo_index for given tile
   bool get_next() override;

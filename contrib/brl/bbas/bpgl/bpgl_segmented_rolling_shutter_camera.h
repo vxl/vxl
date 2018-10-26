@@ -37,7 +37,7 @@ class  bpgl_segmented_rolling_shutter_camera : public bpgl_rolling_shutter_camer
   //: Constructor from a rational camera and a geographic origin
   bpgl_segmented_rolling_shutter_camera(maptype camera_segments);
 
-  ~bpgl_segmented_rolling_shutter_camera() override {}
+  ~bpgl_segmented_rolling_shutter_camera() override = default;
 
   std::string type_name() const override { return "bpgl_segmented_rolling_shutter_camera"; }
 

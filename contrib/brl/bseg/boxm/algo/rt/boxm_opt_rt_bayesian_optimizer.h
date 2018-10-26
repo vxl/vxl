@@ -18,7 +18,7 @@ class boxm_opt_rt_bayesian_optimizer
   boxm_opt_rt_bayesian_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                                  std::vector<std::string> const& image_ids);
 
-  ~boxm_opt_rt_bayesian_optimizer(){}
+  ~boxm_opt_rt_bayesian_optimizer()= default;
 
   bool optimize_cells(double damping_factor);
 

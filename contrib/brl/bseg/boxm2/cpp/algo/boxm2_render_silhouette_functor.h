@@ -11,7 +11,7 @@ class boxm2_render_silhouette_functor
 {
  public:
   //: "default" constructor
-  boxm2_render_silhouette_functor() {}
+  boxm2_render_silhouette_functor() = default;
 
   bool init_data(boxm2_data_base* alpha_data, vil_image_view<float> * silhouette, vil_image_view<float>* vis_img)
   {

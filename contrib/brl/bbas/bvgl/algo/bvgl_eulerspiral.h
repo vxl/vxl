@@ -60,7 +60,7 @@ public:
   void init(const vgl_point_2d<double >& start, double start_angle, double k0, double gamma, double len);
 
   //: Destructor
-  ~bvgl_eulerspiral() override{};
+  ~bvgl_eulerspiral() override= default;;
 
   //----------------- TYPE ----------------------------
   static const std::type_info& type_id()

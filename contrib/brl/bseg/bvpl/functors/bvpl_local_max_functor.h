@@ -31,7 +31,7 @@ class bvpl_local_max_functor
   bvpl_local_max_functor();
 
   //: Destructor
-  ~bvpl_local_max_functor() {}
+  ~bvpl_local_max_functor() = default;
 
   //: Apply a given operation to value val, depending on the dispatch character
   void apply(T& val, bvpl_kernel_dispatch& d);

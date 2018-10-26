@@ -34,19 +34,12 @@ bapl_bbf_box::bapl_bbf_box( const vnl_vector_fixed<double,128>& min_point,
 }
 
 //: Copy Constructor
-bapl_bbf_box::bapl_bbf_box( const bapl_bbf_box& old )
-  : min_point_(old.min_point_), max_point_(old.max_point_)
-{
-}
+bapl_bbf_box::bapl_bbf_box( const bapl_bbf_box& old ) = default;
 
 //: Assignment Operator
 bapl_bbf_box &
 bapl_bbf_box::operator= ( const bapl_bbf_box& old )
-{
-  min_point_ = old.min_point_;
-  max_point_ = old.max_point_;
-  return *this;
-}
+= default;
 
 //: Return the minimum square distance between \a p and any point in \a b.
 double

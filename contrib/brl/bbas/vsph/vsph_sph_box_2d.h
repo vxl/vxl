@@ -52,7 +52,7 @@ class vsph_sph_box_2d
   vsph_sph_box_2d(vsph_sph_point_2d const& pa, vsph_sph_point_2d const& pb,
                   vsph_sph_point_2d const& pc);
 
-  ~vsph_sph_box_2d() {}
+  ~vsph_sph_box_2d() = default;
 
   void set(double min_theta, double max_theta, double a_phi, double b_phi,
            double c_phi, bool in_radians = true);

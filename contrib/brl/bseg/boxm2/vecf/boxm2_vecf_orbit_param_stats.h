@@ -16,7 +16,7 @@
 #include <vnl/vnl_matrix.h>
 class boxm2_vecf_orbit_param_stats{
  public:
-  boxm2_vecf_orbit_param_stats(){}
+  boxm2_vecf_orbit_param_stats()= default;
  boxm2_vecf_orbit_param_stats(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > const& param_map):
   param_map_(param_map){}
 

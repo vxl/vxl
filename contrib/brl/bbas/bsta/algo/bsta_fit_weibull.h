@@ -28,7 +28,7 @@ class bsta_weibull_cost_function : public vnl_cost_function
   bsta_weibull_cost_function(double mean, double std_dev):
     vnl_cost_function(1), mean_(mean), std_dev_(std_dev){}
 
-  ~bsta_weibull_cost_function() override {}
+  ~bsta_weibull_cost_function() override = default;
 
   //:  The main function.  Given the parameter vector x, compute the value of f(x).
   double f(vnl_vector<double> const& x) override;

@@ -7,8 +7,7 @@
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vsol/vsol_spatial_object_3d.h>
-betr_site::betr_site(){
-}
+betr_site::betr_site()= default;
 
 bool betr_site::add_geo_object(std::string name, double lon, double lat , double elev, std::string geom_path){
   bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();

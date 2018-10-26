@@ -62,7 +62,7 @@ class bwm_video_corr_cost_function: public vnl_cost_function
   bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
                                unsigned match_radius,
                                std::vector<float> corr_window_ab);
-  ~bwm_video_corr_cost_function() override{}
+  ~bwm_video_corr_cost_function() override= default;
 
   //: The cost function. x is a 2-element vector holding the corr position
   double f(vnl_vector<double> const& x) override;
@@ -88,7 +88,7 @@ class bwm_video_corr_processor
     world_pts_valid_(false){}
 
   //: Destructor
-  ~bwm_video_corr_processor() {}
+  ~bwm_video_corr_processor() = default;
 
   //: Accessors
   void set_site_name(std::string const& site_name) {site_name_=site_name;}

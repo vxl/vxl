@@ -23,7 +23,7 @@
 class bvpl_create_directions_base
 {
  public:
- bvpl_create_directions_base() {}
+ bvpl_create_directions_base() = default;
 
 #if 0
  //:Destructor

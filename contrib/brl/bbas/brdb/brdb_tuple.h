@@ -28,7 +28,7 @@ class brdb_tuple : public vbl_ref_count
   //======================= Constructors / Destructors ========================
  public:
   //: Default Constructor (0-tuple)
-  brdb_tuple() {}
+  brdb_tuple() = default;
 
   //: Constructor for a 1-tuple
   template< class T1 >
@@ -221,10 +221,10 @@ class brdb_tuple_order
   virtual bool operator() (const brdb_tuple_sptr& lhs,
                            const brdb_tuple_sptr& rhs) const = 0;
 
-  virtual ~brdb_tuple_order(){}
+  virtual ~brdb_tuple_order()= default;
 
  protected:
-  brdb_tuple_order() {}
+  brdb_tuple_order() = default;
 };
 
 

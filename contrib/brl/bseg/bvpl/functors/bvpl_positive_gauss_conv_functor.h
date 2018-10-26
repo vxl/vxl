@@ -26,7 +26,7 @@ class bvpl_positive_gauss_conv_functor
   bvpl_positive_gauss_conv_functor();
 
   //: Destructor
-  ~bvpl_positive_gauss_conv_functor() {}
+  ~bvpl_positive_gauss_conv_functor() = default;
 
   //: Multiply the dispatch and the input gaussians together
   void apply(bsta_gauss_sf1& val, bvpl_kernel_dispatch& d);

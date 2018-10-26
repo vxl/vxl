@@ -31,7 +31,7 @@ class bvpl_combined_neighb_operator
 {
  public:
   bvpl_combined_neighb_operator(const OCP_FUNC ocp_functor, const APP_FUNC app_functor): ocp_func_(ocp_functor),app_func_(app_functor){}
-  ~bvpl_combined_neighb_operator() {}
+  ~bvpl_combined_neighb_operator() = default;
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
   void operate(bvxm_voxel_grid<float>* ocp_grid,

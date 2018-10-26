@@ -12,7 +12,7 @@ class boxm2_ray_probe_functor
 {
  public:
   //: "default" constructor
-  boxm2_ray_probe_functor() {}
+  boxm2_ray_probe_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,
                  std::vector<float> & seg_len,
@@ -238,7 +238,7 @@ class boxm2_ray_app_density_functor
 {
  public:
   //: "default" constructor
-  boxm2_ray_app_density_functor() {}
+  boxm2_ray_app_density_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,
                  std::vector<float> & app_density,

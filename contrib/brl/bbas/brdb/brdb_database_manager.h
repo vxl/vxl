@@ -51,7 +51,7 @@ class brdb_database_manager
 
  private:
   //: Constructor
-  brdb_database_manager() {}
+  brdb_database_manager() = default;
 
  private:
   //: A static instance of the database

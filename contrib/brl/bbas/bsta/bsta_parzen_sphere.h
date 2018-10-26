@@ -44,7 +44,7 @@ class bsta_parzen_sphere : public bsta_parzen<T,n>
     bsta_parzen<T,n>(samples), bandwidth_(bandwidth),
     bandwidth_adapted_(false){}
 
-  ~bsta_parzen_sphere() override {}
+  ~bsta_parzen_sphere() override = default;
 
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
@@ -92,7 +92,7 @@ class bsta_parzen_sphere<T,1> : public bsta_parzen<T,1>
                      T bandwidth = T(1)): bsta_parzen<T,1>(samples),
     bandwidth_(bandwidth), bandwidth_adapted_(false){}
 
-  ~bsta_parzen_sphere() override {}
+  ~bsta_parzen_sphere() override = default;
 
   //: kernel bandwidth
   T bandwidth() const {return bandwidth_;}
