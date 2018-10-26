@@ -34,6 +34,7 @@
 #include <vcl_vector.h>
 
 #include <vbl/vbl_ref_count.h>
+#include <utility>
 #include <vbl/vbl_smart_ptr.hxx>
 #include <vnl/vnl_vector_fixed.h>
 
@@ -49,8 +50,8 @@ public:
   //: constructs block from given data.
   // TODO this copies the buffers, might not be what we want
   bstm_multi_block(const metadata_t &data,
-                   const vcl_vector<vcl_vector<unsigned char> > &buffers)
-      : metadata_(data), buffers_(buffers), read_only_(false) {}
+                   vcl_vector<vcl_vector<unsigned char> > buffers)
+      : metadata_(data), buffers_(std::move(buffers)), read_only_(false) {}
 
   //: creates empty block from metadata
   bstm_multi_block(const metadata_t &data);

@@ -10,6 +10,7 @@
 //  each event object has a local vertical coordinate system  as well as the trigger region
 //  it is assumed that the trigger region can be described by a single LVCS
 #include <string>
+#include <utility>
 #include <vector>
 #include <map>
 #include <vcl_compiler.h>
@@ -38,7 +39,7 @@ class betr_event_trigger : public vbl_ref_count{
     local_bbox_(nullptr), verbose_(false){
     register_algorithms();
   }
-  betr_event_trigger(std::string const& name, vpgl_lvcs const& lvcs): name_(name), lvcs_(lvcs), lvcs_valid_(true),
+  betr_event_trigger(std::string  name, vpgl_lvcs const& lvcs): name_(std::move(name)), lvcs_(lvcs), lvcs_valid_(true),
     local_bbox_(nullptr), verbose_(false){
     register_algorithms();
   }

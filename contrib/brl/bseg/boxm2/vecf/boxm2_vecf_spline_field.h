@@ -10,12 +10,14 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
+
+#include <utility>
 class boxm2_vecf_spline_field{
  public:
   boxm2_vecf_spline_field()= default;
   // number of spline knots must equal the number of field knots
- boxm2_vecf_spline_field(vgl_cubic_spline_3d<double> const& spline, std::vector<vgl_vector_3d<double> > const& field_knots):
-  generating_spline_(spline), field_knots_(field_knots){if(static_cast<unsigned>(field_knots_.size()) != spline.n_knots())
+ boxm2_vecf_spline_field(vgl_cubic_spline_3d<double> const& spline, std::vector<vgl_vector_3d<double> >  field_knots):
+  generating_spline_(spline), field_knots_(std::move(field_knots)){if(static_cast<unsigned>(field_knots_.size()) != spline.n_knots())
       std::cout << "FATAL! - field knots must be the same size as spline knots\n";
   }
   //: accessors

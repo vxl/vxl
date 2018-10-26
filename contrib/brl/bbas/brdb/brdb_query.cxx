@@ -12,6 +12,8 @@
 
 #include <vcl_cassert.h>
 
+#include <utility>
+
 //: Return the complement query comparison type
 brdb_query::comp_type operator ~(brdb_query::comp_type type)
 {
@@ -153,10 +155,10 @@ brdb_query_or::complement() const
 
 
 //: make a query on a certain attribute, with a certain type of comparison to a value
-brdb_query_comp::brdb_query_comp(const std::string& attribute_name,
+brdb_query_comp::brdb_query_comp(std::string  attribute_name,
                                  const brdb_query::comp_type& type,
                                  vcl_unique_ptr<brdb_value> value)
-  : attribute_name_(attribute_name),
+  : attribute_name_(std::move(attribute_name)),
     comparison_type_(type),
     value_(vcl_move(value))
 {

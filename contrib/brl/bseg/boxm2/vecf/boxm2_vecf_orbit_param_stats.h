@@ -7,6 +7,7 @@
 // \author J.L. Mundy
 // \date   5 July 2015
 //
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -17,8 +18,8 @@
 class boxm2_vecf_orbit_param_stats{
  public:
   boxm2_vecf_orbit_param_stats()= default;
- boxm2_vecf_orbit_param_stats(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > > const& param_map):
-  param_map_(param_map){}
+ boxm2_vecf_orbit_param_stats(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > >  param_map):
+  param_map_(std::move(param_map)){}
 
   void add_param_pair(std::string patient_id, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params> const& param_pair){
     param_map_[patient_id] = param_pair;

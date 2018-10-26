@@ -24,6 +24,8 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm_multi/bstm_multi_tree_util.h>
 
+#include <utility>
+
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:
   // default constructor does not initialize anything
@@ -33,15 +35,15 @@ public:
                             vcl_pair<double, double> bbox_t,
                             double max_mb,
                             double p_init,
-                            const vcl_vector<space_time_enum> &subdivisions,
+                            vcl_vector<space_time_enum> subdivisions,
                             int version = 1)
       : id_(id)
       , bbox_(bbox)
-      , bbox_t_(bbox_t)
+      , bbox_t_(std::move(bbox_t))
       , max_mb_(max_mb)
       , p_init_(p_init)
       , version_(version)
-      , subdivisions_(subdivisions) {}
+      , subdivisions_(std::move(subdivisions)) {}
 
   bstm_multi_block_metadata(const bstm_multi_block_metadata &that)
       : vbl_ref_count()

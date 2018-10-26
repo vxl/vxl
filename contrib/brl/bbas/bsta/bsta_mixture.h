@@ -13,6 +13,7 @@
 //                                   add probability integration over a box
 // \endverbatim
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <algorithm>
@@ -48,8 +49,8 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
     //: Constructor
     component(): distribution(), weight(T(0)) {}
     //: Constructor
-    component(const dist_& d, const T& w = T(0) )
-      : distribution(d), weight(w) {}
+    component(dist_  d, const T& w = T(0) )
+      : distribution(std::move(d)), weight(w) {}
 
     //: Used to sort by decreasing weight
     bool operator< (const component& rhs) const

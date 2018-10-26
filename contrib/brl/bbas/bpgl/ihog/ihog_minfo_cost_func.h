@@ -26,14 +26,14 @@ class ihog_minfo_cost_func : public vnl_cost_function
   //: Constructor (no masks)
   ihog_minfo_cost_func(const ihog_image<float>& image1,
                        const ihog_image<float>& image2,
-                       const ihog_world_roi& roi,
+                       ihog_world_roi  roi,
                        const ihog_transform_2d& init_xform,
                        unsigned nbins = 16);
   //: Constructor (one mask)
   ihog_minfo_cost_func(const ihog_image<float>& image1,
                        const ihog_image<float>& image2,
                        const ihog_image<float>& mask,
-                       const ihog_world_roi& roi,
+                       ihog_world_roi  roi,
                        const ihog_transform_2d& init_xform, bool image1_mask = false,
                        unsigned nbins = 16);
   //: Constructor (two masks)
@@ -41,7 +41,7 @@ class ihog_minfo_cost_func : public vnl_cost_function
                        const ihog_image<float>& image2,
                        const ihog_image<float>& mask1,
                        const ihog_image<float>& mask2,
-                       const ihog_world_roi& roi,
+                       ihog_world_roi  roi,
                        const ihog_transform_2d& init_xform,
                        unsigned nbins = 16);
 

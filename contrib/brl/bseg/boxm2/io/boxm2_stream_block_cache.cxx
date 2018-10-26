@@ -1,15 +1,16 @@
 #include <new>
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "boxm2_stream_block_cache.h"
 #include <vcl_compiler.h>
 //:
 // \file
 
 boxm2_stream_block_cache::boxm2_stream_block_cache(boxm2_scene_sptr scene,
-                                                   const std::vector<std::string>& data_types,
-                                                   const std::vector<std::string>& identifier_list)
-: scene_(scene), data_types_list_(data_types),identifier_list_(identifier_list)
+                                                   std::vector<std::string>  data_types,
+                                                   std::vector<std::string>  identifier_list)
+: scene_(scene), data_types_list_(std::move(data_types)),identifier_list_(std::move(identifier_list))
 {
 }
 

@@ -20,6 +20,7 @@
 #include <sstream>
 #include <iostream>
 #include <map>
+#include <utility>
 #include <vector>
 #include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
@@ -52,7 +53,7 @@ class bxml_text : public bxml_data
 {
  public:
   //: Constructor
-  bxml_text(const std::string& data) : data_(data) {}
+  bxml_text(std::string  data) : data_(std::move(data)) {}
 
   //: Destructor
   ~bxml_text() override = default;
@@ -82,7 +83,7 @@ class bxml_element : public bxml_data
   bxml_element() = default;
 
   //: Constructor
-  bxml_element(const std::string& name) : name_(name) {}
+  bxml_element(std::string  name) : name_(std::move(name)) {}
 
   //: Destructor
   ~bxml_element() override = default;

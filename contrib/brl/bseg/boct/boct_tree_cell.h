@@ -13,6 +13,7 @@
 // \endverbatim
 
 #include <iostream>
+#include <utility>
 #include "boct_loc_code.h"
 #include <vgl/vgl_box_3d.h>
 #include <vsl/vsl_binary_io.h>
@@ -22,7 +23,7 @@
 
 template <class T_loc,class T_data>
 struct boct_cell_data {
-  boct_cell_data(vgl_point_3d<double> c, T_loc l, T_data d): centroid_(c), level_(l), data_(d){}
+  boct_cell_data(vgl_point_3d<double> c, T_loc l, T_data d): centroid_(c), level_(l), data_(std::move(d)){}
   vgl_point_3d<double> centroid_;
   T_loc level_;
   T_data data_;

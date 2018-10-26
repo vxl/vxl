@@ -3,10 +3,12 @@
 #include <vgl/vgl_box_3d.h>
 #include <vil/vil_load.h>
 
+#include <utility>
 
-icam_view_metadata::icam_view_metadata(std::string const& exp_img,
-                                       std::string const& dt)
-  : exp_img_path_(exp_img),depth_img_path_(dt)
+
+icam_view_metadata::icam_view_metadata(std::string  exp_img,
+                                       std::string  dt)
+  : exp_img_path_(std::move(exp_img)),depth_img_path_(std::move(dt))
 {
 }
 

@@ -3,6 +3,7 @@
 #include <string>
 #include <boxm2/boxm2_scene.h>
 #include <vcl_compiler.h>
+#include <utility>
 #include <vector>
 #include <cstddef>
 #include <boxm2/boxm2_block.h>
@@ -56,7 +57,7 @@ class boxm2_vecf_articulated_scene : public vbl_ref_count{
  boxm2_vecf_articulated_scene(std::string scene_file,std::string color_apm_id = "frontalized"):
   blk_(nullptr), alpha_base_(nullptr), app_base_(nullptr), nobs_base_(nullptr), alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr), target_alpha_base_(nullptr),
     target_app_base_(nullptr),target_nobs_base_(nullptr), target_alpha_data_(nullptr), target_app_data_(nullptr), target_nobs_data_(nullptr), target_blk_(nullptr),
-    is_single_instance_(true), sigma_(0.5f),source_model_exists_(false), has_background_(false), color_apm_id_(color_apm_id),
+    is_single_instance_(true), sigma_(0.5f),source_model_exists_(false), has_background_(false), color_apm_id_(std::move(color_apm_id)),
     target_data_extracted_(false){
     base_model_ = new boxm2_scene(scene_file);
   }

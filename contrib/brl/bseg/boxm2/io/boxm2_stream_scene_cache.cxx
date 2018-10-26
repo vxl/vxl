@@ -1,5 +1,6 @@
 #include <new>
 #include <iostream>
+#include <utility>
 #include "boxm2_stream_scene_cache.h"
 //:
 // \file
@@ -9,7 +10,7 @@
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                                                    std::vector<std::string> data_types,
                                                    std::vector<std::string> identifiers)
-: blk_buffer_(nullptr), scene_(scene), data_types_(data_types), identifiers_(identifiers)
+: blk_buffer_(nullptr), scene_(scene), data_types_(data_types), identifiers_(std::move(identifiers))
 {
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;

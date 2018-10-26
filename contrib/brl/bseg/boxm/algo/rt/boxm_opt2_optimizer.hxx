@@ -1,6 +1,7 @@
 #ifndef boxm_opt2_optimizer_hxx_
 #define boxm_opt2_optimizer_hxx_
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -17,8 +18,8 @@
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_opt2_optimizer<T_loc,APM,AUX>::boxm_opt2_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                                                        std::vector<std::string> const& image_ids)
-                                                        : image_ids_(image_ids), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
+                                                        std::vector<std::string>  image_ids)
+                                                        : image_ids_(std::move(image_ids)), scene_(scene), max_cell_P_(0.995f), min_cell_P_(0.0001f)
 {}
 
 

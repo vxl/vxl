@@ -56,21 +56,21 @@ class icam_depth_transform
   // \p adjust_to_fl determines if the to_focal_length can be varied in a search
   icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K,
                        vil_image_view<double> const& depth,
-                       vgl_rotation_3d<double> const& rot,
+                       vgl_rotation_3d<double>  rot,
                        vgl_vector_3d<double> const& trans,
                        bool adjust_to_fl = false);
   //: Construct with separate from and to calibration matrices
   icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                        vnl_matrix_fixed<double, 3, 3> const& K_to,
                        vil_image_view<double> const& depth,
-                       vgl_rotation_3d<double> const& rot,
+                       vgl_rotation_3d<double>  rot,
                        vgl_vector_3d<double> const& trans,
                        bool adjust_to_fl = false);
   //: Construct with separate from and to calibration matrices
   icam_depth_transform(vnl_matrix_fixed<double, 3, 3> const& K_from,
                        double to_fl, double to_pu, double to_pv,
                        vil_image_view<double> const& depth,
-                       vgl_rotation_3d<double> const& rot,
+                       vgl_rotation_3d<double>  rot,
                        vgl_vector_3d<double> const& trans,
                        bool adjust_to_fl = false);
   ~icam_depth_transform() = default;

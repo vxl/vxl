@@ -9,6 +9,7 @@
 //
 #include <iostream>
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -24,7 +25,7 @@ class boxm2_vecf_cranium : public boxm2_vecf_geometry_base{
   }
   boxm2_vecf_cranium(std::string const& geometry_file, unsigned nbins = 25);
 
- boxm2_vecf_cranium(vgl_pointset_3d<double> const& ptset,unsigned nbins = 25): ptset_(ptset), nbins_(nbins){}
+ boxm2_vecf_cranium(vgl_pointset_3d<double>  ptset,unsigned nbins = 25): ptset_(std::move(ptset)), nbins_(nbins){}
 
  void read_cranium(std::istream& istr);
 

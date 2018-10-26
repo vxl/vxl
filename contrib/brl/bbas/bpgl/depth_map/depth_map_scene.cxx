@@ -1,4 +1,5 @@
 #include <iostream>
+#include <utility>
 #include <vector>
 #include <cmath>
 #include <limits>
@@ -20,12 +21,12 @@
 
 depth_map_scene::
 depth_map_scene(unsigned ni, unsigned nj,
-                std::string const& image_path,
+                std::string  image_path,
                 vpgl_perspective_camera<double> const& cam,
                 depth_map_region_sptr const& ground_plane,
                 depth_map_region_sptr const& sky,
                 std::vector<depth_map_region_sptr> const& scene_regions)
-  : ni_(ni), nj_(nj), image_path_(image_path), cam_(cam)
+  : ni_(ni), nj_(nj), image_path_(std::move(image_path)), cam_(cam)
 {
   ground_plane_.push_back(ground_plane);
   sky_.push_back(sky);

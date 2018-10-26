@@ -7,6 +7,7 @@
 // \date July 4, 2016
 //
 #include <string>
+#include <utility>
 #include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vil/vil_image_resource.h>
@@ -18,9 +19,9 @@ class betr_algorithm : public vbl_ref_count
 {
  public:
   betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
- betr_algorithm(std::string const& name): name_(name),offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
- betr_algorithm(std::string const& name, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(nullptr), multiple_ref_(false) {}
- betr_algorithm(std::string const& name, betr_params_sptr const& params, double offset, double alpha) : name_(name), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
+ betr_algorithm(std::string  name): name_(std::move(name)),offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
+ betr_algorithm(std::string  name, double offset, double alpha) : name_(std::move(name)), offset_(offset), alpha_(alpha), verbose_(false), params_(nullptr), multiple_ref_(false) {}
+ betr_algorithm(std::string  name, betr_params_sptr const& params, double offset, double alpha) : name_(std::move(name)), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
 
   //: sigmoid performance parameters - may be specialized for each algorithm
   void set_offset(double offset){offset_ = offset;}

@@ -17,7 +17,7 @@ class boxm_edge_updater
 {
  public:
   boxm_edge_updater(boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > &scene,
-                    std::vector<std::string> const& image_ids);
+                    std::vector<std::string>  image_ids);
 
   ~boxm_edge_updater()= default;
 

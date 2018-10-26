@@ -15,12 +15,13 @@
 #include <vnl/vnl_cost_function.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <functional>   // std::greater
+#include <utility>
 
 class neutral_residual_function : public vnl_least_squares_function{
  public:
-  neutral_residual_function(boxm2_vecf_middle_fat_pocket const& fat_pocket, const vgl_pointset_3d<double>& neutral_ptset,
+  neutral_residual_function(boxm2_vecf_middle_fat_pocket  fat_pocket, const vgl_pointset_3d<double>& neutral_ptset,
                             bvgl_knn_index_3d<double>* skin_layer) :
-    vnl_least_squares_function(6,static_cast<unsigned>(3*(neutral_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(fat_pocket),
+    vnl_least_squares_function(6,static_cast<unsigned>(3*(neutral_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(std::move(fat_pocket)),
     skin_layer_(skin_layer), neutral_ptset_(neutral_ptset){}
 
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override{
@@ -62,9 +63,9 @@ class neutral_residual_function : public vnl_least_squares_function{
 
 class deformed_residual_function : public vnl_least_squares_function{
  public:
-  deformed_residual_function(boxm2_vecf_middle_fat_pocket const& fat_pocket, const vgl_pointset_3d<double>& deformed_ptset,
+  deformed_residual_function(boxm2_vecf_middle_fat_pocket  fat_pocket, const vgl_pointset_3d<double>& deformed_ptset,
                             bvgl_knn_index_3d<double>* skin_layer) :
-    vnl_least_squares_function(5,static_cast<unsigned>(3*(deformed_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(fat_pocket),
+    vnl_least_squares_function(5,static_cast<unsigned>(3*(deformed_ptset.npts())), vnl_least_squares_function::no_gradient), pocket_(std::move(fat_pocket)),
     skin_layer_(skin_layer), deformed_ptset_(deformed_ptset){defpr_.fit_to_subject_=false;}
 
   void f(vnl_vector<double> const& x, vnl_vector<double>& fx) override{
@@ -109,10 +110,10 @@ class deformed_residual_function : public vnl_least_squares_function{
 
 class deformed_cost_function : public vnl_cost_function{
  public:
-  deformed_cost_function(boxm2_vecf_middle_fat_pocket const& fat_pocket, const vgl_pointset_3d<double>& deformed_ptset,
+  deformed_cost_function(boxm2_vecf_middle_fat_pocket  fat_pocket, vgl_pointset_3d<double>  deformed_ptset,
                          bvgl_knn_index_3d<double>* skin_layer) :
-    vnl_cost_function(5), pocket_(fat_pocket),
-    skin_layer_(skin_layer), deformed_ptset_(deformed_ptset){defpr_.fit_to_subject_=false;}
+    vnl_cost_function(5), pocket_(std::move(fat_pocket)),
+    skin_layer_(skin_layer), deformed_ptset_(std::move(deformed_ptset)){defpr_.fit_to_subject_=false;}
 
   double f(vnl_vector<double> const& x) override{
 

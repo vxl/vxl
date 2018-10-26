@@ -27,7 +27,7 @@ class sdet_adjust_lsqr : public vnl_least_squares_function
 {
  public:
   //: Constructor
-  sdet_adjust_lsqr( std::vector<vgl_point_3d<double> > const& img_pts,
+  sdet_adjust_lsqr( std::vector<vgl_point_3d<double> >  img_pts,
                     unsigned int num_unknowns, unsigned int num_residuals,
                     int n_peaks);
 

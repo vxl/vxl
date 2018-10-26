@@ -6,15 +6,17 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_math.h>
 
+#include <utility>
+
 //: Constructor
 ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
                                 const vil_image_view<float>& image2,
-                                const ihog_world_roi& roi,
+                                ihog_world_roi  roi,
                                 const ihog_transform_2d& init_xform )
  : vnl_cost_function(1),
    from_image_(image1, ihog_transform_2d()),
    to_image_(image2, init_xform),
-   roi_(roi),
+   roi_(std::move(roi)),
    form_(init_xform.form())
 {
   vnl_vector<double> params;
@@ -34,12 +36,12 @@ ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
 ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
                                 const vil_image_view<float>& image2,
                                 const vil_image_view<float>& maskimage,
-                                const ihog_world_roi& roi,
+                                ihog_world_roi  roi,
                                 const ihog_transform_2d& init_xform )
  : vnl_cost_function(1),
    from_image_(image1, ihog_transform_2d()),
    to_image_(image2, init_xform),
-   roi_(roi),
+   roi_(std::move(roi)),
    form_(init_xform.form())
 {
   vnl_vector<double> params;

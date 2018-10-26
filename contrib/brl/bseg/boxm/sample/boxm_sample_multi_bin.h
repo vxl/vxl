@@ -3,6 +3,7 @@
 //:
 // \file
 #include <iostream>
+#include <utility>
 #include <boxm/boxm_apm_traits.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
@@ -21,7 +22,7 @@ class boxm_sample_multi_bin
   //: default constructor
   boxm_sample_multi_bin() : alpha(0.001f) {}
   //: constructor
-  boxm_sample_multi_bin(float alpha_val,std::map<int,apm_datatype> apm_val): alpha(alpha_val), appearance_(apm_val) {}
+  boxm_sample_multi_bin(float alpha_val,std::map<int,apm_datatype> apm_val): alpha(alpha_val), appearance_(std::move(apm_val)) {}
 
   static short version_no() { return 1; }
 

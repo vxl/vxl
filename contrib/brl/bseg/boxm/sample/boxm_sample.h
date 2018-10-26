@@ -3,6 +3,7 @@
 //:
 // \file
 #include <iostream>
+#include <utility>
 #include <boxm/boxm_apm_traits.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
@@ -24,7 +25,7 @@ class boxm_sample
 
   boxm_sample(float alpha_val): alpha(alpha_val), appearance_() {}
   //: constructor
-  boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(apm_val) {}
+  boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(std::move(apm_val)) {}
 
   virtual ~boxm_sample() = default;
 

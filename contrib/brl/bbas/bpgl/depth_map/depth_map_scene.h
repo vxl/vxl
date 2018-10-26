@@ -57,7 +57,7 @@ class depth_map_scene : public vbl_ref_count
   : ni_(ni), nj_(nj),image_path_("") {}
 
   depth_map_scene(unsigned ni, unsigned nj,
-                  std::string const& image_path,
+                  std::string  image_path,
                   vpgl_perspective_camera<double> const& cam,
                   depth_map_region_sptr const& ground_plane,
                   depth_map_region_sptr const& sky,

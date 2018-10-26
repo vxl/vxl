@@ -18,7 +18,7 @@ class boxm_shadow_app_initializer
 public:
 
   boxm_shadow_app_initializer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
-                              std::vector<std::string> const& image_ids,
+                              std::vector<std::string>  image_ids,
                               float min_app_sigma,
                               float shadow_prior,
                               float shadow_mean, float shadow_sigma,

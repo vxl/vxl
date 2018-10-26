@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <limits>
+#include <utility>
 #include <volm/volm_camera_space.h>
 //:
 // \file
@@ -36,7 +37,7 @@ void volm_camera_space::adjust_limits()
 }
 
 volm_camera_space::
-volm_camera_space(std::vector<double> const& top_fovs,double altitude,
+volm_camera_space(std::vector<double>  top_fovs,double altitude,
                   unsigned ni, unsigned nj,
                   double head_mid,  double head_radius, double head_inc,
                   double tilt_mid, double tilt_radius,  double tilt_inc,
@@ -45,7 +46,7 @@ volm_camera_space(std::vector<double> const& top_fovs,double altitude,
   head_mid_(head_mid), head_radius_(head_radius), head_inc_(head_inc),
   tilt_mid_(tilt_mid), tilt_radius_(tilt_radius),tilt_inc_(tilt_inc),
   roll_mid_(roll_mid),roll_radius_(roll_radius),roll_inc_(roll_inc),
-  top_fovs_(top_fovs), freeze_roll_(false),
+  top_fovs_(std::move(top_fovs)), freeze_roll_(false),
   heading_(0.0), tilt_(0.0), roll_(0.0), fov_index_(0)
 {
   this->adjust_limits();

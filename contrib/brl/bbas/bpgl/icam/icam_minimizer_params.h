@@ -4,6 +4,7 @@
 // \file
 #include <string>
 #include <iostream>
+#include <utility>
 #include <vcl_compiler.h>
 
 class icam_minimizer_params
@@ -17,12 +18,12 @@ class icam_minimizer_params
                         double polar_range_multiplier=2.0,
                         double local_min_thresh=0.005,
                         double smooth_sigma=1.0,
-                        std::string const& base_path="")
+                        std::string  base_path="")
                        : nbins_(nbins), min_level_size_(min_level_size),box_reduction_k_(box_reduction_k),
                          local_min_thresh_(local_min_thresh), smooth_sigma_(smooth_sigma),
                          axis_search_cone_multiplier_(axis_search_cone_multiplier),
                          polar_range_multiplier_(polar_range_multiplier),
-                         base_path_(base_path) {}
+                         base_path_(std::move(base_path)) {}
 
   //: copy constructor
   icam_minimizer_params(const icam_minimizer_params& p)

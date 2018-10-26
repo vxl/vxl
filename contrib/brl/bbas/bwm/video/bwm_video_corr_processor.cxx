@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <cstdio>
+#include <utility>
 #include "bwm_video_corr_processor.h"
 //:
 // \file
@@ -61,7 +62,7 @@ bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
                               std::vector<float> corr_window_ab
                              )
   : vnl_least_squares_function(1,1), base_image_(base_image),
-    match_radius_(match_radius), corr_window_ab_(corr_window_ab)
+    match_radius_(match_radius), corr_window_ab_(std::move(corr_window_ab))
 {
   use_gradient_ = false;
   // a mxm image region centered on the projected world pointa
@@ -101,7 +102,7 @@ bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
                              unsigned match_radius,
                              std::vector<float> corr_window_ab)
   : vnl_cost_function(2), base_image_(base_image),
-    match_radius_(match_radius), corr_window_ab_(corr_window_ab)
+    match_radius_(match_radius), corr_window_ab_(std::move(corr_window_ab))
 {}
 
 double bwm_video_corr_cost_function::f(vnl_vector<double> const& x)

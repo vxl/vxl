@@ -28,8 +28,8 @@ class icam_view_metadata
    //: default constructor
    icam_view_metadata() = default;
 
-   icam_view_metadata(std::string const& exp_img,
-                      std::string const& dt_path);
+   icam_view_metadata(std::string  exp_img,
+                      std::string  dt_path);
 
    virtual ~icam_view_metadata() = default;
 

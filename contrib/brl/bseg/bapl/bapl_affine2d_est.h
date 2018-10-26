@@ -32,8 +32,8 @@ class bapl_affine2d_est : public rrel_estimation_problem
   bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches );
 
   //: Constructor from vnl_vectors
-  bapl_affine2d_est( const std::vector< vnl_vector<double> > & from_pts,
-                     const std::vector< vnl_vector<double> > & to_pts );
+  bapl_affine2d_est( std::vector< vnl_vector<double> >  from_pts,
+                     std::vector< vnl_vector<double> >  to_pts );
 
   //: Destructor.
   ~bapl_affine2d_est() override;

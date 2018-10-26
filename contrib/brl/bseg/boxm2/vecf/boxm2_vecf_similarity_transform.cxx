@@ -6,15 +6,17 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 
+#include <utility>
+
 // instantiate the template code in the .txx file
 #include "boxm2_vecf_vector_field.hxx"
 BOXM2_VECF_VECTOR_FIELD_INSTANTIATE(boxm2_vecf_similarity_transform_mapper);
 
 boxm2_vecf_similarity_transform_mapper::
-boxm2_vecf_similarity_transform_mapper(vgl_rotation_3d<double> const& rot,
+boxm2_vecf_similarity_transform_mapper(vgl_rotation_3d<double>  rot,
                                        vgl_vector_3d<double> const& trans,
                                        vgl_vector_3d<double> const& scale)
-  : rot_(rot), trans_(trans), scale_(scale)
+  : rot_(std::move(rot)), trans_(trans), scale_(scale)
 {}
 
 vgl_point_3d<double> boxm2_vecf_similarity_transform_mapper::operator() (vgl_point_3d<double> const& x) const
@@ -25,10 +27,10 @@ vgl_point_3d<double> boxm2_vecf_similarity_transform_mapper::operator() (vgl_poi
 }
 
 
-boxm2_vecf_similarity_transform::boxm2_vecf_similarity_transform(vgl_rotation_3d<double> const& rot,
+boxm2_vecf_similarity_transform::boxm2_vecf_similarity_transform(vgl_rotation_3d<double>  rot,
                                                                  vgl_vector_3d<double> const& trans,
                                                                  vgl_vector_3d<double> const& scale)
-  : rot_(rot), trans_(trans), scale_(scale)
+  : rot_(std::move(rot)), trans_(trans), scale_(scale)
 {
 }
 

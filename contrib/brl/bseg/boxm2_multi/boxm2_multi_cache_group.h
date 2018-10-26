@@ -4,6 +4,7 @@
 // \file
 #include <iostream>
 #include <iosfwd>
+#include <utility>
 #include "boxm2_multi_cache_group.h"
 #include "boxm2_multi_util.h"
 #include <boxm2/basic/boxm2_block_id.h>
@@ -30,7 +31,7 @@ class boxm2_multi_cache_group
 {
   public:
     boxm2_multi_cache_group() = default;
-    boxm2_multi_cache_group(std::vector<boxm2_block_id> ids):ids_(ids) {}
+    boxm2_multi_cache_group(std::vector<boxm2_block_id> ids):ids_(std::move(ids)) {}
 
     //: add a block to the group
     void add_block(boxm2_block_metadata data, boxm2_opencl_cache1* cache) {

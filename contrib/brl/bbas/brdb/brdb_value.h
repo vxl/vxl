@@ -15,6 +15,7 @@
 #include <string>
 #include <map>
 #include <iostream>
+#include <utility>
 #include <brdb/brdb_value_sptr.h>
 #include <vcl_cassert.h>
 #include <vbl/vbl_ref_count.h>
@@ -165,8 +166,8 @@ class brdb_value_t : public brdb_value
   brdb_value_t<T>() = default;
 
   //: Constructor
-  explicit brdb_value_t<T>(const T& value)
-   : value_(value) {}
+  explicit brdb_value_t<T>(T  value)
+   : value_(std::move(value)) {}
 
   //: Return the string identifying this class
   std::string is_a() const override { return get_type_string(); }

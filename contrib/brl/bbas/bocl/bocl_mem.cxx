@@ -3,6 +3,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <sstream>
+#include <utility>
 #include "bocl_mem.h"
 //:
 // \file
@@ -16,7 +17,7 @@ bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, 
   queue_(nullptr),
   num_bytes_(num_bytes),
   context_(context),
-  id_(id),
+  id_(std::move(id)),
   is_gl_(false)
 {}
 

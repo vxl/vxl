@@ -20,6 +20,8 @@
 #include <vgl/vgl_point_3d.h>
 #include <boxm2/boxm2_scene.h>
 
+#include <utility>
+
 //: a set of 3d points in local coordinates of a scene, corresponds to an output tile.
 //  this class knows how to construct an output tile to write probabilities
 //  there can be multiple elevantions for a given lat, lon - just add to the 1d vector, best one is written to the output image
@@ -27,7 +29,7 @@ class boxm2_volm_loc_hypotheses : public vbl_ref_count
 {
  public:
 
-  boxm2_volm_loc_hypotheses(volm_tile tile) : tile_(tile) {}
+  boxm2_volm_loc_hypotheses(volm_tile tile) : tile_(std::move(tile)) {}
 
   //: construct the locs_ and pixels_ vectors by generating a hypothesis according to interval amounts in given the tile.
   //  Intervals are in meters.

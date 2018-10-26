@@ -1,5 +1,6 @@
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include "boxm2_volm_conf_matcher.h"
 //:
 // \file
@@ -13,36 +14,36 @@
 boxm2_volm_conf_matcher
 ::boxm2_volm_conf_matcher(volm_conf_query_sptr const& query,
                           unsigned const& tile_id,
-                          std::vector<volm_geo_index_node_sptr> const& loc_leaves,
-                          std::string const& index_folder,
-                          std::string const& out_folder,
-                          std::string const& cand_folder,
+                          std::vector<volm_geo_index_node_sptr>  loc_leaves,
+                          std::string  index_folder,
+                          std::string  out_folder,
+                          std::string  cand_folder,
                           float const& buffer_capacity) :
   query_(query),
   tile_id_(tile_id),
-  index_folder_(index_folder),
-  loc_leaves_(loc_leaves),
+  index_folder_(std::move(index_folder)),
+  loc_leaves_(std::move(loc_leaves)),
   buffer_capacity_(buffer_capacity),
-  cand_folder_(cand_folder),
-  out_folder_(out_folder)
+  cand_folder_(std::move(cand_folder)),
+  out_folder_(std::move(out_folder))
 {}
 
 boxm2_volm_conf_matcher
 ::boxm2_volm_conf_matcher(volm_camera_space_sptr const& cam_space,
                           depth_map_scene_sptr const& depth_scene,
                           unsigned const& tile_id,
-                          std::vector<volm_geo_index_node_sptr> const& loc_leaves,
-                          std::string const& index_folder,
-                          std::string const& out_folder,
-                          std::string const& cand_folder,
+                          std::vector<volm_geo_index_node_sptr>  loc_leaves,
+                          std::string  index_folder,
+                          std::string  out_folder,
+                          std::string  cand_folder,
                           float const& buffer_capacity,
                           unsigned tol_in_pixel) :
   tile_id_(tile_id),
-  index_folder_(index_folder),
-  loc_leaves_(loc_leaves),
+  index_folder_(std::move(index_folder)),
+  loc_leaves_(std::move(loc_leaves)),
   buffer_capacity_(buffer_capacity),
-  cand_folder_(cand_folder),
-  out_folder_(out_folder)
+  cand_folder_(std::move(cand_folder)),
+  out_folder_(std::move(out_folder))
 {
   query_ = new volm_conf_query(cam_space, depth_scene, tol_in_pixel);
 }

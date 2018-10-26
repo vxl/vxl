@@ -14,6 +14,7 @@
 
 #include <list>
 #include <iostream>
+#include <utility>
 #include <vgl/vgl_box_3d.h>
 
 #include <boxm/boxm_scene.h>
@@ -39,8 +40,8 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
 {
  public:
   //: Constructor from neighborhood bounding boxm, number of samples to be drawn, scene and flag to indicate whether to use evd or svd
-  bvpl_discover_pca_kernels(vgl_box_3d<int> nbbox, unsigned long long nsamples, boxm_scene<boct_tree<short,float> > *scene, const std::string& path_out=".", bool use_evd = true):
-  nbbox_(nbbox), nsamples_(nsamples), path_out_(path_out)
+  bvpl_discover_pca_kernels(vgl_box_3d<int> nbbox, unsigned long long nsamples, boxm_scene<boct_tree<short,float> > *scene, std::string  path_out=".", bool use_evd = true):
+  nbbox_(nbbox), nsamples_(nsamples), path_out_(std::move(path_out))
   {
     scene_path_ = scene->filename();
     std::cout << "Scene path: " << scene->filename()<< std::endl;;

@@ -1,6 +1,7 @@
 #ifndef boxm_edge_tangent_updater_hxx_
 #define boxm_edge_tangent_updater_hxx_
 
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
@@ -28,12 +29,12 @@
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_updater<T_loc,APM,AUX>::boxm_edge_tangent_updater(boxm_scene<boct_tree<T_loc,
                                                                     boxm_inf_line_sample<APM> > > &scene,
-                                                                    std::vector<std::string> const& image_ids,
+                                                                    std::vector<std::string>  image_ids,
                                                                     bool use_ransac,
                                                                     float ransac_ortho_thres,
                                                                     float ransac_volume_ratio,
                                                                     int ransac_concensus_cnt)
-: image_ids_(image_ids), use_ransac_(use_ransac), ransac_ortho_thres_(ransac_ortho_thres), ransac_volume_ratio_(ransac_volume_ratio), ransac_consensus_cnt_(ransac_concensus_cnt), scene_(scene)
+: image_ids_(std::move(image_ids)), use_ransac_(use_ransac), ransac_ortho_thres_(ransac_ortho_thres), ransac_volume_ratio_(ransac_volume_ratio), ransac_consensus_cnt_(ransac_concensus_cnt), scene_(scene)
 {}
 
 
@@ -193,9 +194,9 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
 template <class T_loc, class APM, class AUX>
 boxm_edge_tangent_refine_updates<T_loc,APM,AUX>::boxm_edge_tangent_refine_updates(boxm_scene<boct_tree<T_loc, boxm_inf_line_sample<APM> > > &scene,
                                                                                   int consensus_cnt,
-                                                                                  std::vector<vil_image_view<float> > const& edge_images,
-                                                                                  std::vector<vpgl_camera_double_sptr> const& cameras)
-: edge_images_(edge_images), cameras_(cameras), consensus_cnt_(consensus_cnt), scene_(scene)
+                                                                                  std::vector<vil_image_view<float> >  edge_images,
+                                                                                  std::vector<vpgl_camera_double_sptr>  cameras)
+: edge_images_(std::move(edge_images)), cameras_(std::move(cameras)), consensus_cnt_(consensus_cnt), scene_(scene)
 {}
 
 template <class T_loc, class APM, class AUX>

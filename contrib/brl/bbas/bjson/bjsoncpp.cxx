@@ -2637,8 +2637,8 @@ static inline void releaseStringValue(char* value, unsigned) {
 
 namespace Json {
 
-Exception::Exception(JSONCPP_STRING const& msg)
-  : msg_(msg)
+Exception::Exception(JSONCPP_STRING  msg)
+  : msg_(std::move(msg))
 {}
 Exception::~Exception() JSONCPP_NOEXCEPT = default;
 
@@ -4674,7 +4674,7 @@ bool StyledWriter::hasCommentForValue(const Value& value) {
 // //////////////////////////////////////////////////////////////////
 
 StyledStreamWriter::StyledStreamWriter(JSONCPP_STRING indentation)
-    : document_(nullptr), rightMargin_(74), indentation_(indentation),
+    : document_(nullptr), rightMargin_(74), indentation_(std::move(indentation)),
       addChildValues_() {}
 
 void StyledStreamWriter::write(JSONCPP_OSTREAM& out, const Value& root) {
@@ -4901,11 +4901,11 @@ struct CommentStyle {
 struct BuiltStyledStreamWriter : public StreamWriter
 {
   BuiltStyledStreamWriter(
-      JSONCPP_STRING const& indentation,
+      JSONCPP_STRING  indentation,
       CommentStyle::Enum cs,
-      JSONCPP_STRING const& colonSymbol,
-      JSONCPP_STRING const& nullSymbol,
-      JSONCPP_STRING const& endingLineFeedSymbol,
+      JSONCPP_STRING  colonSymbol,
+      JSONCPP_STRING  nullSymbol,
+      JSONCPP_STRING  endingLineFeedSymbol,
       bool useSpecialFloats,
       unsigned int precision);
   int write(Value const& root, JSONCPP_OSTREAM* sout) JSONCPP_OVERRIDE;
@@ -4938,19 +4938,19 @@ private:
   unsigned int precision_;
 };
 BuiltStyledStreamWriter::BuiltStyledStreamWriter(
-      JSONCPP_STRING const& indentation,
+      JSONCPP_STRING  indentation,
       CommentStyle::Enum cs,
-      JSONCPP_STRING const& colonSymbol,
-      JSONCPP_STRING const& nullSymbol,
-      JSONCPP_STRING const& endingLineFeedSymbol,
+      JSONCPP_STRING  colonSymbol,
+      JSONCPP_STRING  nullSymbol,
+      JSONCPP_STRING  endingLineFeedSymbol,
       bool useSpecialFloats,
       unsigned int precision)
   : rightMargin_(74)
-  , indentation_(indentation)
+  , indentation_(std::move(indentation))
   , cs_(cs)
-  , colonSymbol_(colonSymbol)
-  , nullSymbol_(nullSymbol)
-  , endingLineFeedSymbol_(endingLineFeedSymbol)
+  , colonSymbol_(std::move(colonSymbol))
+  , nullSymbol_(std::move(nullSymbol))
+  , endingLineFeedSymbol_(std::move(endingLineFeedSymbol))
   , addChildValues_(false)
   , indented_(false)
   , useSpecialFloats_(useSpecialFloats)

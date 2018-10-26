@@ -31,11 +31,11 @@ public:
   //: default constructor creates an invalid land category
   volm_land_layer() : id_(0), name_("invalid"), level_(0), color_(vil_rgb<vxl_byte>(0,0,0)), width_(0.0) {}
   //: constructor
-  volm_land_layer(unsigned char const& id, std::string const& name,
+  volm_land_layer(unsigned char const& id, std::string  name,
                   unsigned char const& level, double const& width, vil_rgb<vxl_byte> const& color)
-                  : id_(id), name_(name), level_(level), color_(color), width_(width) {}
-  volm_land_layer(unsigned char const& id, std::string const& name, unsigned char const& level, double const& width)
-    : id_(id), name_(name), level_(level),
+                  : id_(id), name_(std::move(name)), level_(level), color_(color), width_(width) {}
+  volm_land_layer(unsigned char const& id, std::string  name, unsigned char const& level, double const& width)
+    : id_(id), name_(std::move(name)), level_(level),
       color_(bvrml_color::heatmap_classic[id][0], bvrml_color::heatmap_classic[id][1], bvrml_color::heatmap_classic[id][2]),
       width_(width) {}
 

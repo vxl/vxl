@@ -5,6 +5,7 @@
 
 #include <string>
 #include <iostream>
+#include <utility>
 #include "bvxm_voxel_storage_disk_cached.h"
 //
 #include <vcl_compiler.h>
@@ -22,7 +23,7 @@
 
 template <class T>
 bvxm_voxel_storage_disk_cached<T>::bvxm_voxel_storage_disk_cached(std::string storage_filename, vgl_vector_3d<unsigned int> grid_size, vxl_int_64 max_cache_size)
-:  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(storage_filename), fio_(nullptr)
+:  bvxm_voxel_storage<T>(grid_size), first_cache_slice_(-1), last_cache_slice_(-1), storage_fname_(std::move(storage_filename)), fio_(nullptr)
 {
   //set up cache
   vxl_int_64 slice_size = sizeof(T)*grid_size.x()*grid_size.y();

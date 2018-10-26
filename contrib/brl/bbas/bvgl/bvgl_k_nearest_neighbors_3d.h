@@ -12,6 +12,7 @@
 #include <vcl_iosfwd.h>
 #include <vcl_limits.h>
 #include <algorithm> // for std::swap
+#include <utility>
 
 template <class Type>
 class bvgl_k_nearest_neighbors_3d
@@ -20,7 +21,7 @@ class bvgl_k_nearest_neighbors_3d
   //: default constructor
  bvgl_k_nearest_neighbors_3d():tolerance_(Type(0)), search_tree_(nullptr){}
   //: Construct from a vgl_pointset
-  bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance = Type(0));
+  bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type>  const &ptset, Type tolerance = Type(0));
   //: destructor
   ~bvgl_k_nearest_neighbors_3d(){
     if(search_tree_)
@@ -121,7 +122,9 @@ bool bvgl_k_nearest_neighbors_3d<Type>::create(){
 }
 template <class Type>
 bvgl_k_nearest_neighbors_3d<Type>::bvgl_k_nearest_neighbors_3d(vgl_pointset_3d<Type> const& ptset, Type tolerance):
-search_tree_(nullptr), tolerance_(tolerance), ptset_(ptset){
+tolerance_(tolerance),
+search_tree_(nullptr),
+ptset_(std::move(ptset)){
   create();
 }
 
