@@ -229,7 +229,7 @@ class gevd_float_operators
                                      const int coarse, const int fine, // level#
                                      const float cutoff=0, // early cutoff of search
                                      const float overlap=0.75f, // min overlap
-                                     float* matches=0); // trace correlations
+                                     float* matches=nullptr); // trace correlations
 
 #if 0 // commented out
   static gevd_bufferxy* Correlations(const gevd_bufferxy& data, const gevd_bufferxy& pattern,

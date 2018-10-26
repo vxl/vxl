@@ -72,10 +72,10 @@ bool bocl_command_queue_mgr::init_kernel()
   //map standard pointers to pinned memory
   float* pinned_in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE,
                                             CL_MAP_WRITE, 0, memLength_*sizeof(float), 0,
-                                            nullptr, NULL, NULL);
+                                            nullptr, nullptr, nullptr);
   float* pinned_out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE,
                                             CL_MAP_READ, 0, memLength_*sizeof(float), 0,
-                                            nullptr, NULL, NULL);
+                                            nullptr, nullptr, nullptr);
   pinned_in_->set_cpu_buffer(pinned_in);
   pinned_out_->set_cpu_buffer(pinned_out);
 

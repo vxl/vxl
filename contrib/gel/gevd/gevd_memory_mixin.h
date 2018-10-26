@@ -77,7 +77,7 @@ class gevd_memory_mixin : public gevd_status_mixin
   int offset;             // marked position in buffer.
 
  protected:
-  void                    SetMemoryPtr(int s, void* ib = 0);
+  void                    SetMemoryPtr(int s, void* ib = nullptr);
 
   inline unsigned char*   GetBufferPtr()  { return buffer;    }
   const  unsigned char* GetBufferPtr() const { return buffer; }
@@ -88,7 +88,7 @@ class gevd_memory_mixin : public gevd_status_mixin
  public:
   // Constructors and Destructors
   //
-  gevd_memory_mixin(int s = 0, void* ib = 0,
+  gevd_memory_mixin(int s = 0, void* ib = nullptr,
                     unsigned int type = MM_READ|MM_WRITE);
 
   virtual ~gevd_memory_mixin();
