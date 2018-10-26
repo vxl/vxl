@@ -384,7 +384,7 @@ vgl_vector_3d<unsigned int> space_time_scene<Block>::scene_dimensions() const {
   max_k++;
 
   return {
-      (max_i - min_i), (max_j - min_j), (max_k - min_k)};
+      static_cast<unsigned int>((max_i - min_i)), static_cast<unsigned int>((max_j - min_j)), static_cast<unsigned int>((max_k - min_k))};
 }
 
 //: returns true if the scene has specified data type (simple linear search)

@@ -64,7 +64,7 @@ bool vil_shadow_detection_process(bprb_func_process& pro)
       for (unsigned j = 0 ; j < I->nj(); j++)
       {
         if ( (1+H(i,j))/(1+(*I)(i,j)) > threshold )
-          (*out_img)(i,j) = 1;
+          (*out_img)(i,j) = true;
       }
     }
   }

@@ -15,7 +15,7 @@ constexpr int boxm_y_scale = 500;
 constexpr double boxm_focal_length = 1.0;
 constexpr double boxm_camera_dist = 300;
 constexpr unsigned num_train_images = 20;
-constexpr bool verbose = 1;
+constexpr bool verbose = true;
 
 void generate_persp_camera(double focal_length,
                            vgl_point_2d<double>& pp,  //principal point

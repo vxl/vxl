@@ -2860,7 +2860,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
           m4=0;m7=0;
           double dis=0, distance=0;
           //Forming the tree from the edge
-          while (1)
+          while (true)
             {
             sdet_edgel_list_iter eit1=new_chain4->edgels.begin();
             sdet_edgel_list_iter eit2=new_chain4->edgels.begin();
@@ -3108,7 +3108,7 @@ void sdet_sel_base::Construct_Hypothesis_Tree()
                   p9=5;
                   if (p9>static_cast<int>(chain1->edgels.size())) p9=chain1->edgels.size();
                   }
-                while (1)
+                while (true)
                   {
                   double p10=gap_,p11=0.0;
                   sdet_edgel_list_iter eit3=new_chain4->edgels.begin();sdet_edgel_list_iter eit4=new_chain4->edgels.begin();

@@ -148,7 +148,7 @@ namespace Nabo
                 int l(0);
                 int r(count-1);
                 // partition points around cutVal
-                while (1)
+                while (true)
                 {
                   //while (l < count && cloud.coeff(cutDim, *(first+l)) < cutVal)
                   while (l < count && cloud.get(cutDim, *(first+l)) < cutVal)
@@ -164,7 +164,7 @@ namespace Nabo
                 const int br1 = l;        // now: points[0..br1-1] < cutVal <= points[br1..count-1]
                 r = count-1;
                 // partition points[br1..count-1] around cutVal
-                while (1)
+                while (true)
                 {
                   //while (l < count && cloud.coeff(cutDim, *(first+l)) <= cutVal)
                   while (l < count && cloud.get(cutDim, *(first+l)) <= cutVal)

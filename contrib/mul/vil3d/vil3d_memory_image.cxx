@@ -161,7 +161,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
   default:
     std::cerr << "WARNING: vil3d_memory_image::put_view()\n"
                 "\t Unexpected pixel type" << view_->pixel_format() << std::endl;
-    return 0;
+    return false;
   }
 }
 

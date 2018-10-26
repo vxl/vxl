@@ -95,7 +95,7 @@ void test_time_tree()
     good = true;
     for (int i=0; i<31; i++) {
       unsigned char tmp = tree2.bit_at(i);
-      tree2.set_bit_at(i,(tmp) ? 0 : 1);
+      tree2.set_bit_at(i,(tmp) ? false : true);
       good = good && (tree2.bit_at(i) != bits2[i]);
       if (!good)
         std::cout<<i << " " ;

@@ -166,9 +166,9 @@ void gevd_region_proc::extract_regions()
   detector.junctionFactor = 1.0;
   detector.contourFactor = 2.0;
   detector.minLength = 4;
-  detector.junctionp = 1;
+  detector.junctionp = true;
   detector.smooth = 2.0;
-  detector.borderp = 1;
+  detector.borderp = true;
 
   detector.DoContour();
 

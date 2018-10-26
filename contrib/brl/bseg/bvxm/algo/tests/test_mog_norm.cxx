@@ -111,7 +111,7 @@ void test_gauss2mix()
 
   bsta_gauss_sf1 g(6.3333f,39.5556f);
 
-  double dist1 = bvxm_mog_norm<float>::l2_gauss2mix(g,f,0);
+  double dist1 = bvxm_mog_norm<float>::l2_gauss2mix(g,f,false);
   TEST_NEAR("G-F",dist1, 0.2719,0.01);
 }
 

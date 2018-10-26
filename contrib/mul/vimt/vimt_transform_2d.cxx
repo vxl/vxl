@@ -512,7 +512,7 @@ vimt_transform_2d vimt_transform_2d::inverse() const
     inv.tx2_ = tx_; inv.ty2_ = ty_; inv.tt2_ = tt_;
 
     inv.form_ = form_;
-    inv.inv_uptodate_ = 1;
+    inv.inv_uptodate_ = true;
 
     return inv;
 }

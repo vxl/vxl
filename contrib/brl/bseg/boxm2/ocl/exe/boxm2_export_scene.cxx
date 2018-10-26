@@ -103,7 +103,7 @@ int main(int argc,  char** argv)
     std::cout<<"Boxm2 Hemisphere"<<std::endl;
     vul_arg<std::string> scene_file("-scene", "scene filename", "");
     vul_arg<std::string> dir("-dir", "output image directory", "");
-    vul_arg<bool> depth("-depth", "output depth maps", 0);
+    vul_arg<bool> depth("-depth", "output depth maps", false);
     vul_arg<std::string> imgname("-imgname", "name of the image", "scene");
     vul_arg<unsigned> ni("-ni", "Width of image", 640);
     vul_arg<unsigned> nj("-nj", "Height of image", 480);

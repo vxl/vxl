@@ -208,7 +208,7 @@ bool bapl_load_keypoints_process(bprb_func_process& pro)
   std::ifstream ifs(key_path.c_str());
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << key_path.c_str() << std::endl;
-    return 0;
+    return false;
   }
   int n; ifs >> n; int len; ifs >> len;
   std::cout << "Found " << n << " keypoints.\n";

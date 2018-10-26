@@ -75,7 +75,7 @@ class vimt_transform_2d
         xx_(1),xy_(0),xt_(0),
         yx_(0),yy_(1),yt_(0),
         tx_(0),ty_(0),tt_(1),
-        form_(Identity),inv_uptodate_(0) {}
+        form_(Identity),inv_uptodate_(false) {}
 
 
     bool is_identity() const { return form_==Identity; }

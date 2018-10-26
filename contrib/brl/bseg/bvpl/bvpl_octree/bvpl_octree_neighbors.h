@@ -56,7 +56,7 @@ class bvpl_octree_neighbors
         }
         else {
           // make sure that the same cell is not added more than once
-          bool found=0;
+          bool found=false;
           for (unsigned i=0; i<neighb_cells.size(); i++) {
             if (neighb_cells[i] == this_cell)
               found=true;

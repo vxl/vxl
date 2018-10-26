@@ -47,7 +47,7 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
   if (!image)
   {
     std::cout << "NITF image load failed in vil_nitf_date_time_process\n";
-    return 0;
+    return false;
   }
 
   std::string format = image->file_format();
@@ -56,7 +56,7 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
   if (prefix != "nitf")
   {
     std::cout << "source image is not NITF in vil_nitf_date_time_process\n";
-    return 0;
+    return false;
   }
 
     //cast to an nitf2_image

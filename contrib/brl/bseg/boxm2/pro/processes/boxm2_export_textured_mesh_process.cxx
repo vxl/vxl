@@ -178,7 +178,7 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   im.set_image(z_img_res);
   if (!im.compute_mesh()) {
     std::cout<<"mesh could not be computed"<<std::endl;
-    return 0;
+    return false;
   }
   imesh_mesh& mesh = im.get_mesh();
   std::cout << "Number of vertices " << mesh.num_verts()

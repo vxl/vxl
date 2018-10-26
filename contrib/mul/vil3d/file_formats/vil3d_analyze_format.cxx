@@ -663,7 +663,7 @@ bool vil3d_analyze_image::put_view(const vil3d_image_view_base& view,
 
   std::string image_data_path=base_path_+".img";
   vil_smart_ptr<vil_stream> os = new vil_stream_fstream(image_data_path.c_str(),"w");
-  if (!os->ok()) return 0;
+  if (!os->ok()) return false;
 
   switch (pixel_format())
   {
