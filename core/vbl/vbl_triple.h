@@ -10,6 +10,7 @@
 // \author fsm
 
 #include <iosfwd>
+#include <utility>
 #include <vcl_compiler.h>
 
 //: a templated 3-tuple
@@ -25,10 +26,10 @@ struct vbl_triple
   T3 third;
 
   vbl_triple() = default;
-  vbl_triple(T1 const &a, T2 const &b, T3 const &c)
+  vbl_triple(T1 const &a, T2 const &b, T3 c)
     : first (a)
     , second(b)
-    , third (c) { }
+    , third (std::move(c)) { }
 
   template <class U1, class U2, class U3>
   vbl_triple(vbl_triple<U1, U2, U3> const &that)
