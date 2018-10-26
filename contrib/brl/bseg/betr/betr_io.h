@@ -17,7 +17,7 @@ class betr_io
  public:
   static bool read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj);
  private:
-  betr_io();
+  betr_io() = delete;
 };
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_io.

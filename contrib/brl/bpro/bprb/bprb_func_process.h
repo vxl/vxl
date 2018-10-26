@@ -55,11 +55,11 @@ class bprb_func_process: public bprb_process_ext
     if (input_types_.size()>i) {
       if (!input_data_[i]) {
         std::cerr << "ERROR: input_data_[" << i << "] == NULL" << std::endl;
-        return nullptr;
+        return 0;
       }
       if (!(input_data_[i]->is_a()==input_types_[i])) {
         std::cerr << "Input: [" << i << "] has wrong INPUT TYPE! \n" << "Should be: " << input_types_[i] << " is: " <<input_data_[i]->is_a() << "\n";
-        return nullptr;
+        return 0;
       }
     }
     brdb_value_t<T>* input = static_cast<brdb_value_t<T>* >(input_data_[i].ptr());

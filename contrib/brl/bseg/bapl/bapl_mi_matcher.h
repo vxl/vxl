@@ -48,7 +48,7 @@ class bapl_mi_matcher
 
  private:
   //: Default Constructor
-  bapl_mi_matcher();
+  bapl_mi_matcher() = delete;
 
   //: Generate a random transform (close to init_xform_)
   bapl_affine_transform rand_transform();

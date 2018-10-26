@@ -43,8 +43,8 @@ class icam_utils
                                             icam_transform_2d const& t);
  private:
   // Private constructor/destructor: only static methods in this class.
-  icam_utils();
-  ~icam_utils();
+  icam_utils() = delete;
+  ~icam_utils() = delete;
 };
 
 #endif // icam_utils_h_

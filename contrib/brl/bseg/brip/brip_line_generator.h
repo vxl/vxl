@@ -36,7 +36,7 @@ class brip_line_generator
                        float xe, float ye,
                        float& x, float& y);
  private:
-  brip_line_generator();
+  brip_line_generator() = delete;
 };
 
 #endif // brip_line_generator_h

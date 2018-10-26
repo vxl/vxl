@@ -41,7 +41,7 @@ class bsta_gauss
                                vbl_array_3d<double>& out_buf);
  private:
   //only static methods
-  bsta_gauss();
+  bsta_gauss() = delete;
 };
 
 #endif // bsta_gauss_h_

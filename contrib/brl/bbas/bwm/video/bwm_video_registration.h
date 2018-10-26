@@ -69,7 +69,7 @@ bool register_planar_homographies(bwm_video_cam_istream_sptr& cam_istream,
                                   );
  private:
   // only static methods
-  bwm_video_registration();
+  bwm_video_registration() = delete;
 };
 
 #endif

@@ -128,7 +128,7 @@ class bsol_algs
   static void print(vsol_point_3d_sptr const& p);
 
  private:
-  bsol_algs();
+  bsol_algs() = delete;
 };
 
 #endif

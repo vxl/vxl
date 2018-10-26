@@ -106,9 +106,9 @@ class vsph_camera_bounds
 
  private:
   //: constructor private - class contains static methods only
-  vsph_camera_bounds();
+  vsph_camera_bounds() = delete;
   //: destructor private - class contains static methods only
-  ~vsph_camera_bounds();
+  ~vsph_camera_bounds() = delete;
 };
 
 //: scan the principal ray over a cone defined by the half apex angle.

@@ -74,7 +74,7 @@ class vsph_utils
   // a streamlined function for porting to parallel computation
   static double sph_inter_area(vsph_sph_box_2d const& b1, vsph_sph_box_2d const& b2);
  private: // only static functions in this class: disallow instantiation
-  vsph_utils();
+  vsph_utils() = delete;
 };
 
 #endif

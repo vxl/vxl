@@ -329,8 +329,8 @@ class expatppNesting : public expatpp
 
  private:
   // Forbid copy-construction and assignment, to prevent double-deletion of mOwnedChild
-            expatppNesting( const expatppNesting & );
-  expatppNesting &  operator=( const expatppNesting & );
+            expatppNesting( const expatppNesting & ) = delete;
+  expatppNesting &  operator=( const expatppNesting & ) = delete;
 };
 
 
