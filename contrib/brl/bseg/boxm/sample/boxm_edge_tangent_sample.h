@@ -15,8 +15,8 @@ template <class T>
 class boxm_edge_tangent_sample
 {
  public:
-  boxm_edge_tangent_sample() {}
-  ~boxm_edge_tangent_sample() {}
+  boxm_edge_tangent_sample() = default;
+  ~boxm_edge_tangent_sample() = default;
   static short version_no() { return 1; }
   void print(std::ostream& os) const;
 

@@ -30,7 +30,7 @@ class breg3d_ekf_camera_optimize_process : public bprb_process
   //: Copy Constructor (no local data)
   breg3d_ekf_camera_optimize_process(const breg3d_ekf_camera_optimize_process& other): bprb_process(*static_cast<const bprb_process*>(&other)) {}
 
-  ~breg3d_ekf_camera_optimize_process() override {}
+  ~breg3d_ekf_camera_optimize_process() override = default;
 
   //: Clone the process
   breg3d_ekf_camera_optimize_process* clone() const override {return new breg3d_ekf_camera_optimize_process(*this);}

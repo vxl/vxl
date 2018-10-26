@@ -29,7 +29,7 @@ class bvpl_gauss_convolution_functor
   bvpl_gauss_convolution_functor(bvpl_kernel_iterator kernel);
 
   //: Destructor
-  ~bvpl_gauss_convolution_functor() {}
+  ~bvpl_gauss_convolution_functor() = default;
 
   //: Multiply the dispatch and the input gaussians together
   void apply(bsta_gauss_sf1& val, bvpl_kernel_dispatch& d);

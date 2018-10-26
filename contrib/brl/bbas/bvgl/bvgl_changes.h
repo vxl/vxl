@@ -23,9 +23,9 @@
 class bvgl_changes : public vbl_ref_count
 {
  public:
-  bvgl_changes() {}
+  bvgl_changes() = default;
 
-  ~bvgl_changes() override {}
+  ~bvgl_changes() override = default;
 
   unsigned size() const { return objs_.size(); }
 

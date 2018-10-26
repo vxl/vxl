@@ -32,10 +32,10 @@
 class volm_object
 {
 public:
-  volm_object() {}
+  volm_object() = default;
   volm_object(double const& dist, depth_map_region::orientation const& orient, unsigned const& land, double const& height = 0)
     : dist_(dist), height_(height), orient_(orient), land_(land) {}
-  ~volm_object() {}
+  ~volm_object() = default;
 
   void print() const {
     std::cout << "[dist: " << dist_ << " height: " << height_
@@ -54,7 +54,7 @@ class volm_desc_ex : public volm_desc
 {
 public:
   //: Default constructor
-  volm_desc_ex() {}
+  volm_desc_ex() = default;
   //: constructor from depth_map_scene
   volm_desc_ex(depth_map_scene_sptr const& dms,
                std::vector<double> const& radius,
@@ -76,7 +76,7 @@ public:
     ndists_(ndists), norients_(norients), nlands_(nlands), radius_(radius) { nbins_ = ndists_ * nlands_; h_.resize(nbins_); initialize_bin(0); }
 
   //: destructor
-  ~volm_desc_ex() override {}
+  ~volm_desc_ex() override = default;
 
   //: number of depth bins
   unsigned ndepths() const { return this->ndists_; }

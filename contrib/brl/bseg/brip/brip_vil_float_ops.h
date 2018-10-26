@@ -43,7 +43,7 @@
 class brip_vil_float_ops
 {
  public:
-  ~brip_vil_float_ops() {}
+  ~brip_vil_float_ops() = default;
 
   //: convolves with the specified kernel
   static vil_image_view<float>
@@ -781,7 +781,7 @@ class brip_vil_float_ops
   static float elv(float phi, float lamda0, float lambda1, float theta);
 
   //: Default constructor is private
-  brip_vil_float_ops() {}
+  brip_vil_float_ops() = default;
 };
 
 template <class T_inp,class T_out>

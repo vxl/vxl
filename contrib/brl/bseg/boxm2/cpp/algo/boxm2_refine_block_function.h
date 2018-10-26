@@ -22,7 +22,7 @@ class boxm2_refine_block_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  boxm2_refine_block_function() {}
+  boxm2_refine_block_function() = default;
 
   //: initialize generic data base pointers as their data type
   bool init_data(boxm2_scene_sptr scene, boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh);

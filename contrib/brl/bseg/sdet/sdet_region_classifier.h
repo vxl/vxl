@@ -85,10 +85,10 @@ class sdet_region_classifier : public sdet_region_classifier_params
   typedef C_::b_type B_; // the bounding object type
   //Constructors/destructor
   //:use default parameters
-  sdet_region_classifier(){}
+  sdet_region_classifier()= default;
   //:specify different parameters
  sdet_region_classifier(sdet_region_classifier_params& rpp):sdet_region_classifier_params(rpp){}
-  ~sdet_region_classifier() override{};
+  ~sdet_region_classifier() override= default;;
   void set_diverse_regions(const std::map<unsigned, sdet_region_sptr >& regions){diverse_regions_ = regions;}
   const std::map<unsigned, sdet_region_sptr>& diverse_regions(){return diverse_regions_;}
   void set_diverse_hists(const std::map<unsigned, bsta_histogram<float> >& hists){diverse_hists_ = hists;}

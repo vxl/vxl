@@ -40,7 +40,7 @@ class bprb_process_ext : public bprb_process
   bprb_process_ext(const bprb_process_ext& other);
 #endif // 0
 
-  ~bprb_process_ext() override {}
+  ~bprb_process_ext() override = default;
 };
 
 #endif // bprb_process_ext_h_

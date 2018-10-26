@@ -22,7 +22,7 @@ class bvpl_edge2d_functor
   bvpl_edge2d_functor();
 
   //: Destructor
-  ~bvpl_edge2d_functor() {}
+  ~bvpl_edge2d_functor() = default;
 
   //: Apply a given operation to value val, depending on the dispatch character
   void apply(T& val, bvpl_kernel_dispatch& d);

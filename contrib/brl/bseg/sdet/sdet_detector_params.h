@@ -82,7 +82,7 @@ class sdet_detector_params : public gevd_param_mixin
                        int cyc = 2, int ndim = 2);
 
   sdet_detector_params(const sdet_detector_params& old_params);
-  ~sdet_detector_params() override {}
+  ~sdet_detector_params() override = default;
   friend std::ostream& operator<<(std::ostream&, const sdet_detector_params& dp);
   bool SanityCheck() override;
 #if 0

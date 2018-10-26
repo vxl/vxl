@@ -25,7 +25,7 @@ class volm_desc_ex_2d_matcher : public volm_desc_matcher
 {
 public:
   //: Default constructor
-  volm_desc_ex_2d_matcher() {}
+  volm_desc_ex_2d_matcher() = default;
 
   //: Constructor
   volm_desc_ex_2d_matcher(depth_map_scene_sptr const& dms,
@@ -36,7 +36,7 @@ public:
                           : dms_(dms), radius_(radius), nlands_(nlands), initial_mag_(initial_mag), weights_(weights) {}
 
   // Destructor
-  ~volm_desc_ex_2d_matcher() override {}
+  ~volm_desc_ex_2d_matcher() override = default;
 
   //: check given threshold is valid or not for generate scaled probability map
   bool check_threshold(volm_desc_sptr const& query, float& thres_value) override;

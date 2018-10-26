@@ -36,10 +36,10 @@ class volm_desc_matcher : public vbl_ref_count
 {
 public:
   //: Default constructor
-  volm_desc_matcher() {}
+  volm_desc_matcher() = default;
 
   //: Destructor
-  ~volm_desc_matcher() override {}
+  ~volm_desc_matcher() override = default;
 
   //: Comparison method to calculate the similarity of descriptor a and b, return a score from 0 to 1
   virtual float score(volm_desc_sptr const& query, volm_desc_sptr const& index) {return 0;}

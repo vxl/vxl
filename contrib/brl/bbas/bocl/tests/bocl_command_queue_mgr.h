@@ -59,8 +59,8 @@ class bocl_command_queue_mgr: public bocl_manager<bocl_command_queue_mgr>
  private:
     friend class bocl_manager<bocl_command_queue_mgr>;
     // don't allow users to create their own instances (force use of instance())
-    bocl_command_queue_mgr() {}
-    ~bocl_command_queue_mgr() override{}
+    bocl_command_queue_mgr() = default;
+    ~bocl_command_queue_mgr() override= default;
 
 };
 

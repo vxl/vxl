@@ -27,7 +27,7 @@ class bvgl_2d_geo_index_node_base : public vbl_ref_count
 {
 public:
   //: default constrcutor
-  bvgl_2d_geo_index_node_base() {}
+  bvgl_2d_geo_index_node_base() = default;
 
   //: destructor
   ~bvgl_2d_geo_index_node_base() override { children_.clear(); }

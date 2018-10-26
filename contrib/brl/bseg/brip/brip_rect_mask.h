@@ -39,7 +39,7 @@ class brip_rect_mask
   enum ang_id {a0 = 0, a22, a45, a67, a90, a112, a135, a157, a180,a202, a225,
                a247, a270, a292, a315, a337, nangles};
   brip_rect_mask(mask_id mid);
-  ~brip_rect_mask() {}
+  ~brip_rect_mask() = default;
 
   //: initialize static quantities
   static void init();

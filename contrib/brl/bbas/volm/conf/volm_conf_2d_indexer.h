@@ -31,7 +31,7 @@ public:
   //: constructor by giving out_put folder, land map index folder and radius
   volm_conf_2d_indexer(double const& radius, std::string const& out_folder, std::string const& land_map_folder, unsigned const& tile_id);
 
-  ~volm_conf_2d_indexer() override {}
+  ~volm_conf_2d_indexer() override = default;
 
   // ======================= access =========================
   double radius()                                      const { return radius_; }

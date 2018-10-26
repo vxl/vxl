@@ -56,7 +56,7 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
     min_y_(other.min_y_),max_y_(other.max_y_),
     min_z_(other.min_z_),max_z_(other.max_z_) {}
 
-  ~bvpl_edge3d_kernel_factory() override {}
+  ~bvpl_edge3d_kernel_factory() override = default;
 
   static std::string name() {return "edge3d"; }
 

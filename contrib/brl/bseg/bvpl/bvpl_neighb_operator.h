@@ -26,7 +26,7 @@ class bvpl_neighb_operator
 {
  public:
   bvpl_neighb_operator(const F functor): func_(functor) {}
-  ~bvpl_neighb_operator() {}
+  ~bvpl_neighb_operator() = default;
 
   // makes the neighborhood operation and stores the result in the output subgrid, which may be equal to the input
   void operate(bvxm_voxel_grid<T>* grid, bvpl_kernel_sptr kernel, bvxm_voxel_grid<T>* out_grid)

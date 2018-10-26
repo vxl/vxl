@@ -22,7 +22,7 @@ class test_node : public bgrl2_vertex<test_edge>
  public:
   test_node(): bgrl2_vertex<test_edge>(), id_(0) {}
   test_node(int id): bgrl2_vertex<test_edge>(), id_(id) {}
-  ~test_node() override{}
+  ~test_node() override= default;
 
   int id() const {return id_;}
   void set_id(int id){id_ = id;}

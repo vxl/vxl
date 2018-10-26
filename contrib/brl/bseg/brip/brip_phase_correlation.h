@@ -66,7 +66,7 @@ class brip_phase_correlation
   brip_phase_correlation(vil_image_view<float> const&img0, vil_image_view<float> const&img1,
                          float gauss_sigma= 1.0f, int peak_radius = 2, float alpha = 0.5f);
 
-  ~brip_phase_correlation(){}
+  ~brip_phase_correlation()= default;
   bool compute();
   bool translation(float& tu, float& tv, float& confidence) const;
 

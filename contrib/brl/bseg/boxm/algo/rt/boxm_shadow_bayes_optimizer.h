@@ -27,7 +27,7 @@ public:
                               vgl_point_3d<double>(0,0,0)
                               );
 
-  ~boxm_shadow_bayes_optimizer(){}
+  ~boxm_shadow_bayes_optimizer()= default;
 
   bool optimize_cells(double damping_factor);
 

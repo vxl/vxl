@@ -37,7 +37,7 @@ class sdet_texture_classifier_params : public gevd_param_mixin
                                  unsigned block_size,
                                  float weight_offset);
   sdet_texture_classifier_params(const sdet_texture_classifier_params& old_params);
- ~sdet_texture_classifier_params() override {}
+ ~sdet_texture_classifier_params() override = default;
 
   bool SanityCheck() override;
   std::string filter_dir_name();

@@ -31,7 +31,7 @@ class bprb_param
  public:
 
   //: Destructor
-  virtual ~bprb_param() {}
+  virtual ~bprb_param() = default;
 
   //: Clone this parameter
   virtual bprb_param * clone() const = 0;

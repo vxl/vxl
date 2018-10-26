@@ -272,7 +272,7 @@ protected:
     std::vector <float>& hist);
 
   // Disable default/copy constructors
-  baml_change_detection(){}
+  baml_change_detection()= default;
   baml_change_detection( baml_change_detection& ){}
 };
 

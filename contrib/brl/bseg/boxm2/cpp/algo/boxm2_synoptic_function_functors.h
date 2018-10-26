@@ -61,7 +61,7 @@ class boxm2_compute_empty_model_gradient_functor
     typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
 
     //: "default" constructor
-    boxm2_compute_empty_model_gradient_functor() {}
+    boxm2_compute_empty_model_gradient_functor() = default;
 
     bool init_data(boxm2_data_base * entropy_histo_data,
                    boxm2_stream_cache_sptr str_cache)
@@ -142,7 +142,7 @@ class boxm2_synoptic_fucntion_1d_functor
     typedef boxm2_data_traits<BOXM2_AUX3>::datatype aux3_datatype;
 
     //: "default" constructor
-    boxm2_synoptic_fucntion_1d_functor() {}
+    boxm2_synoptic_fucntion_1d_functor() = default;
 
     bool init_data(boxm2_stream_cache_sptr str_cache,
                    boxm2_data_base * alpha_model,
@@ -260,7 +260,7 @@ class boxm2_compute_phongs_and_empty_update_functor
     typedef boxm2_data_traits<BOXM2_AUX3>::datatype aux3_datatype;
 
     //: "default" constructor
-    boxm2_compute_phongs_and_empty_update_functor() {}
+    boxm2_compute_phongs_and_empty_update_functor() = default;
 
     bool init_data(float sun_elev,
                    float sun_azim,
@@ -385,7 +385,7 @@ class boxm2_compute_phongs_and_empty_update_functor
 class boxm2_update_synoptic_probability
 {
   public:
-    boxm2_update_synoptic_probability() {}
+    boxm2_update_synoptic_probability() = default;
 
     bool init_data(boxm2_data_base * alpha_model,
                    boxm2_data_base * cubic_model)

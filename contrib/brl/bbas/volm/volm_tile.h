@@ -36,7 +36,7 @@ class volm_tile
    //: parse the name string and construct tile, for now only parses for 'N' and 'W'
    volm_tile(std::string name, unsigned ni, unsigned nj);
 
-   volm_tile() {}
+   volm_tile() = default;
    std::string get_string();
 
    //: assessors

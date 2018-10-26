@@ -35,7 +35,7 @@ class bstm_scene_parser : public expatpp
 {
  public:
   bstm_scene_parser();
-  ~bstm_scene_parser(void) override {}
+  ~bstm_scene_parser(void) override = default;
 
    // ACCESSORS for parser info
    bool lvcs(vpgl_lvcs& lvcs);

@@ -21,7 +21,7 @@
 class bvpl_scene_neighborhood_operator
 {
  public:
-  bvpl_scene_neighborhood_operator(){}
+  bvpl_scene_neighborhood_operator()= default;
 
   //: Applies the region-based functor on every leaf cell of the scene. The output is stored on a separate scene
   template <class T_data_in, class T_data_out, class F>

@@ -14,8 +14,7 @@ struct scorecomp
 } scorecomp_obj;
 
 boxm2_volm_matcher_p0::~boxm2_volm_matcher_p0()
-{
-}
+= default;
 
 boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold)
 : count_(0),cam_space_(cam_space),query_(srq),threshold_(threshold)

@@ -75,8 +75,7 @@ bsol_point_index_2d(int nrows, int ncols,
 
 //: Destructor
 bsol_point_index_2d::~bsol_point_index_2d()
-{
-}
+= default;
 
 //:offset to origin of bounds and convert to cell integer coordinates
 bool bsol_point_index_2d::trans(const double x, const double y,

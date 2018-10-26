@@ -33,7 +33,7 @@ public:
 
   sdet_edge(vgl_point_2d<double> new_pt, double tan, double edge_strength=10.0):
     pt(new_pt), tangent(tan), strength(edge_strength) {}
-  ~sdet_edge(){}
+  ~sdet_edge()= default;
 };
 
 typedef vbl_array_2d<std::vector<sdet_edgel*> >::iterator sdet_edgemap_iter;

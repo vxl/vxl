@@ -51,7 +51,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   //Default constructor. Initialize constant member variables
   bvpl_kernel_factory(): canonical_rotation_axis_(vnl_float_3(1,0,0)), canonical_parallel_axis_(vnl_float_3(0,1,0)){}
 
-  ~bvpl_kernel_factory() override {}
+  ~bvpl_kernel_factory() override = default;
 
   //: Returns a kernel described by class variables rotation_axis_, \p angle_
   //  The user can modified the axis and angle using set_rotation_axis() and set_angle()

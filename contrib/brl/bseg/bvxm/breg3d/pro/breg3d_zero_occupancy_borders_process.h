@@ -29,7 +29,7 @@ class breg3d_zero_occupancy_borders_process : public bprb_process
   //: Copy Constructor (no local data)
   breg3d_zero_occupancy_borders_process(const breg3d_zero_occupancy_borders_process& other): bprb_process(*static_cast<const bprb_process*>(&other)){}
 
-  ~breg3d_zero_occupancy_borders_process() override{}
+  ~breg3d_zero_occupancy_borders_process() override= default;
 
   //: Clone the process
   breg3d_zero_occupancy_borders_process* clone() const override {return new breg3d_zero_occupancy_borders_process(*this);}

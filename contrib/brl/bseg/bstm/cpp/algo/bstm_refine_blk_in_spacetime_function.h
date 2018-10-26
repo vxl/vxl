@@ -24,7 +24,7 @@ class bstm_refine_blk_in_spacetime_function
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  bstm_refine_blk_in_spacetime_function() {}
+  bstm_refine_blk_in_spacetime_function() = default;
 
   //: initialize generic data base pointers as their data type
   bool init_data(bstm_time_block* t_blk, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh);

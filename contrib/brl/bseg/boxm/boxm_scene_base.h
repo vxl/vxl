@@ -27,7 +27,7 @@ class boxm_scene_base : public vbl_ref_count
   : app_model_(BOXM_APM_UNKNOWN), multi_bin_(false), tree_level_set_(false),
     scene_path_(""), filename_(""), block_pref_(""), max_tree_level_(0), init_tree_level_(0) {}
 
-  ~boxm_scene_base() override {}
+  ~boxm_scene_base() override = default;
 
   bool load_scene(std::string filename, boxm_scene_parser& parser);
 

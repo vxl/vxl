@@ -34,7 +34,7 @@ class bgrl_search_func : public vbl_ref_count
     : vbl_ref_count(), curr_vertex_(f.curr_vertex_) {}
 
   // Destructor
-  ~bgrl_search_func() override {}
+  ~bgrl_search_func() override = default;
 
   bgrl_vertex_sptr curr_vertex() const { return curr_vertex_; }
 
@@ -56,7 +56,7 @@ class bgrl_breadth_search : public bgrl_search_func
     : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor
-  ~bgrl_breadth_search() override{}
+  ~bgrl_breadth_search() override= default;
 
   //: Returns the edge to the next vertex in the search
   bgrl_edge_sptr next_vertex() override;
@@ -79,7 +79,7 @@ class bgrl_depth_search : public bgrl_search_func
     : bgrl_search_func(init_vertex) {visited_.insert(init_vertex);}
 
   //: Destructor
-  ~bgrl_depth_search() override{}
+  ~bgrl_depth_search() override= default;
 
   //: Returns the edge to the next vertex in the search
   bgrl_edge_sptr next_vertex() override;

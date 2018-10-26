@@ -22,7 +22,7 @@ class boxm_rational_camera_utils
 class abs_functor
 {
  public:
-  abs_functor(){}
+  abs_functor()= default;
 
   float operator()(float x) const { return std::fabs(x); }
 };

@@ -15,8 +15,7 @@ const double btol_edge_algs::tol = 1e-6;
 
 // Destructor
 btol_edge_algs::~btol_edge_algs()
-{
-}
+= default;
 
 //-----------------------------------------------------------------------------
 //: Splits e at v and returns the two edges e1, e2, which are incident at v.

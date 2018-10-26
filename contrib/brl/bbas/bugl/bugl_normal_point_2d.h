@@ -28,9 +28,9 @@ class bugl_normal_point_2d: public bugl_gaussian_point_2d<double>, public vbl_re
   bugl_normal_point_2d(bugl_normal_point_2d const& p)
     : bugl_gaussian_point_2d<double>(p), vbl_ref_count() {}
 
-  bugl_normal_point_2d() {}
+  bugl_normal_point_2d() = default;
 
-  ~bugl_normal_point_2d() override {}
+  ~bugl_normal_point_2d() override = default;
 };
 
 #endif // bugl_normal_point_2d_h_

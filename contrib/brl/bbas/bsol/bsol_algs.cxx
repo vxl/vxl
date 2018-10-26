@@ -21,8 +21,7 @@
 
 // Destructor
 bsol_algs::~bsol_algs()
-{
-}
+= default;
 
 //-----------------------------------------------------------------------------
 //: Compute a bounding box for a set of vsol_point_2ds.

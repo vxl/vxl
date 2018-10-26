@@ -41,7 +41,7 @@ class volm_spherical_shell_container : public vbl_ref_count
 {
  public:
   //: Default constructor
-  volm_spherical_shell_container() {}
+  volm_spherical_shell_container() = default;
   //: Legacy Constructor
   volm_spherical_shell_container(double radius, float cap_angle, float point_angle, float top_angle, float bottom_angle);
   //: Minimal constructor (to internally construct vsph_unit_sphere)

@@ -35,7 +35,7 @@ class bsta_sigma_normalizer : public vbl_ref_count
 
  private:
   // do not allow default constructor - under-estimation param is necessary
-  bsta_sigma_normalizer(){}
+  bsta_sigma_normalizer()= default;
 
   unsigned int N_PRECOMPUTED_;
   std::vector<float> unbias_const_;

@@ -40,7 +40,7 @@ class sdet_selective_search : public sdet_selective_search_params
   //:specify different parameters
  sdet_selective_search(sdet_selective_search_params& rpp):sdet_selective_search_params(rpp),  initial_regions_valid_(false), image_area_(0),diverse_max_label_(0){}
 
-  ~sdet_selective_search() override{};
+  ~sdet_selective_search() override= default;;
   //Accessors
   void set_byte_image_view(vil_image_view<vxl_byte> const& view){
     byte_view_ = view;

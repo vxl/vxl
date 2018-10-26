@@ -16,7 +16,7 @@ class bprb_test_process : public bprb_process
  public:
   bprb_test_process();
 
-  ~bprb_test_process() override {}
+  ~bprb_test_process() override = default;
 
   //: Clone the process
   bprb_process* clone() const override { return new bprb_test_process(*this); }

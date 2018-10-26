@@ -246,7 +246,7 @@ class bsgm_disparity_estimator
     vul_timer& timer );
 
   //: Disable default constructor
-  bsgm_disparity_estimator(){}
+  bsgm_disparity_estimator()= default;
 };
 
 

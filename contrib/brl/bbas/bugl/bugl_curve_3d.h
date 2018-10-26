@@ -57,7 +57,7 @@ class bugl_curve_3d
 
   bugl_curve_3d(unsigned int neighbors = 2) : num_neighbors_(neighbors) {}
 
-  ~bugl_curve_3d() {}
+  ~bugl_curve_3d() = default;
 
   //: get the point
   bugl_normal_point_3d_sptr get_point(unsigned int index) const;

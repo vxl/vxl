@@ -33,8 +33,7 @@ class bvpl_feature
   : axis_(axis), angle_(angle), response_(response), id_(id), this_location_(this_location) {}
 
   //: Copy constructor
-  bvpl_feature(bvpl_feature const& f)
-  : axis_(f.axis_), angle_(f.angle_), response_(f.response_), id_(f.id_), this_location_(f.this_location_) {}
+  bvpl_feature(bvpl_feature const& f) = default;
 
   //: Accessors
   vnl_float_3 axis() const { return axis_; }
@@ -64,9 +63,7 @@ class bvpl_pair
   : f1_(f1), f2_(f2), axis_(axis), angle_(angle), response_(response), id_(id), this_location_(this_location) {}
 
   //: Copy constructor
-  bvpl_pair(bvpl_pair const& pair)
-  : f1_(pair.f1_), f2_(pair.f2_), axis_(pair.axis_), angle_(pair.angle_),
-    response_(pair.response_), id_(pair.id_), this_location_(pair.this_location_) {}
+  bvpl_pair(bvpl_pair const& pair) = default;
 
   // === Accessors ===
 
@@ -93,7 +90,7 @@ class bvpl_corner_pairs: public vbl_ref_count
 {
  public:
   //: Default constructor
-  bvpl_corner_pairs() {}
+  bvpl_corner_pairs() = default;
 
   //: Constructor from a vector
   bvpl_corner_pairs(std::vector<std::vector<vgl_line_segment_3d<int> > >& all_lines) { pairs_ = all_lines; }
@@ -121,7 +118,7 @@ class bvpl_corner_pair_finder
 {
  public:
   // Constructor
-  bvpl_corner_pair_finder() {}
+  bvpl_corner_pair_finder() = default;
 
   //: Find pairs that are 90 degrees apart e.g |_ with _|
   static bvpl_corner_pairs_sptr find_pairs(bvxm_voxel_grid<int>* id_grid,

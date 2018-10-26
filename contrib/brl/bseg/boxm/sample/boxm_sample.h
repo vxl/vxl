@@ -26,7 +26,7 @@ class boxm_sample
   //: constructor
   boxm_sample(float alpha_val, apm_datatype apm_val): alpha(alpha_val), appearance_(apm_val) {}
 
-  virtual ~boxm_sample() {}
+  virtual ~boxm_sample() = default;
 
   static short version_no() { return 1; }
 

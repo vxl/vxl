@@ -30,7 +30,7 @@ class  boxm_simple_grey_processor
 
   // all methods are static - no constructor needed
  private:
-  boxm_simple_grey_processor() {}
+  boxm_simple_grey_processor() = default;
 
 #if 0  // one_over_sigma is now a member of apm_datatype
   static const float one_over_sigma_;

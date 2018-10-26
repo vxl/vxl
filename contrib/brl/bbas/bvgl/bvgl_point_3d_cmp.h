@@ -22,7 +22,7 @@ template <class T>
 class bvgl_point_3d_cmp
 {
  public:
-  bvgl_point_3d_cmp() {}
+  bvgl_point_3d_cmp() = default;
 
   bool operator()(vgl_point_3d<T> const& v0, vgl_point_3d<T> const& v1) const
   {

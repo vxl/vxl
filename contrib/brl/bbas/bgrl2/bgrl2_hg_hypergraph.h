@@ -87,7 +87,7 @@ class bgrl2_hg_hypergraph : public bgrl2_hg_graph
   virtual bool topo_remove_hyperedge(bgrl2_hg_hyperedge* hyperedge);
 
   bgrl2_hg_hypergraph() : bgrl2_hg_graph() {}
-  ~bgrl2_hg_hypergraph() override {}
+  ~bgrl2_hg_hypergraph() override = default;
 };
 
 #endif // bgrl2_hypergraph_h_

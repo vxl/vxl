@@ -54,7 +54,7 @@ class imesh_half_edge_set
 {
   public:
     //: Default Constructor
-    imesh_half_edge_set() {}
+    imesh_half_edge_set() = default;
     //: Construct from a face index list
     imesh_half_edge_set(const std::vector<std::vector<unsigned int> >& face_list);
 

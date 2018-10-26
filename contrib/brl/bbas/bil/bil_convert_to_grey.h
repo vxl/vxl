@@ -17,7 +17,7 @@
 #include <vil/vil_new.h>
 class bil_convert_resource_to_grey{
  public:
-  bil_convert_resource_to_grey(){}
+  bil_convert_resource_to_grey()= default;
   void operator ()(vil_image_resource_sptr const& resc, vil_image_resource_sptr& grey_resc, bool apply_mask){
   // handle special tiff RGBA case first (vil prefers to have separate planes not an rgba pixel)
   bool is_tiff = false;

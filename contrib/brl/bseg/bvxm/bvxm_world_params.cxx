@@ -24,8 +24,7 @@ bvxm_world_params::bvxm_world_params()
 
 //---------------------------------------------------
 bvxm_world_params::~bvxm_world_params()
-{
-};
+= default;;
 
 
 //---------------------------------------------------

@@ -201,8 +201,7 @@ sdet_nonmax_suppression::sdet_nonmax_suppression(sdet_nonmax_suppression_params&
 
 //:Default Destructor
 sdet_nonmax_suppression::~sdet_nonmax_suppression()
-{
-}
+= default;
 
 //-------------------------------------------------------------------------
 //: Apply the algorithm

@@ -23,8 +23,8 @@
 class bvpl_vgl_point_3d_coord_compare
 {
   public:
-    bvpl_vgl_point_3d_coord_compare() {}
-    ~bvpl_vgl_point_3d_coord_compare() {}
+    bvpl_vgl_point_3d_coord_compare() = default;
+    ~bvpl_vgl_point_3d_coord_compare() = default;
 
     bool operator() ( vgl_point_3d<double> const& pa, vgl_point_3d<double> pb ) const
     {
@@ -42,9 +42,9 @@ class bvpl_bundler_features_2d: public vbl_ref_count
         std::map<unsigned, vnl_vector<double> >,
         bvpl_vgl_point_3d_coord_compare > point_view_feature_map_type;
 
-    bvpl_bundler_features_2d() {}
+    bvpl_bundler_features_2d() = default;
 
-    ~bvpl_bundler_features_2d() override {}
+    ~bvpl_bundler_features_2d() override = default;
 
     void b_write( vsl_b_ostream& os ) const;
 

@@ -19,7 +19,7 @@
 #include "boxm2_vecf_mouth_params.h"
 class boxm2_vecf_mouth{
  public:
-  boxm2_vecf_mouth(){}
+  boxm2_vecf_mouth()= default;
   boxm2_vecf_mouth(std::string const& geometry_file){};
 
   boxm2_vecf_mouth(std::vector<vgl_point_3d<double> >  const& knots);

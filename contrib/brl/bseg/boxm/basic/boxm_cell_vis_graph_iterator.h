@@ -18,7 +18,7 @@ class boxm_cell_vis_graph_iterator
                                unsigned img_ni,
                                unsigned img_nj);
 
-  ~boxm_cell_vis_graph_iterator() {}
+  ~boxm_cell_vis_graph_iterator() = default;
 
   bool next();
 

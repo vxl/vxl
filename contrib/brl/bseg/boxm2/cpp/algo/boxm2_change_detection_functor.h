@@ -16,7 +16,7 @@ class boxm2_change_detection_functor
 {
  public:
   //: "default" constructor
-  boxm2_change_detection_functor() {}
+  boxm2_change_detection_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas,vil_image_view<float> * in_img, vil_image_view<float> * expected, vil_image_view<float>* vis_img)
   {
@@ -53,7 +53,7 @@ class boxm2_change_detection_functor
 class normalize_foreground_probability_density
 {
  public:
-  normalize_foreground_probability_density() {}
+  normalize_foreground_probability_density() = default;
 
   float operator()(float &pix) const
   {

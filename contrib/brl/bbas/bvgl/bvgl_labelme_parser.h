@@ -75,9 +75,9 @@ filename>andy_eze.jpg</filename>
 class bvgl_labelme_parser : public expatpp
 {
  public:
-  bvgl_labelme_parser() {}
+  bvgl_labelme_parser() = default;
   bvgl_labelme_parser(std::string& filename);
-  ~bvgl_labelme_parser(void) override {}
+  ~bvgl_labelme_parser(void) override = default;
 
   //image filename/path, category, and size
   std::string image_name() const { return image_name_; }

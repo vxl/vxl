@@ -308,5 +308,4 @@ void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofst
 
 volm_spherical_region_index::
 ~volm_spherical_region_index()
-{
-}
+= default;

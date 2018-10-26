@@ -14,7 +14,7 @@ class boxm2_create_mog_image_functor
 {
  public:
   //: "default" constructor
-  boxm2_create_mog_image_functor() {}
+  boxm2_create_mog_image_functor() = default;
 
   bool init_data(std::vector<boxm2_data_base*> & datas, vbl_array_2d<typename boxm2_data_traits<APM_TYPE>::datatype> * mog_img, vil_image_view<float> * vis_img)
   {

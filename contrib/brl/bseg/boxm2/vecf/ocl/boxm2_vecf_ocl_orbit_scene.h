@@ -76,9 +76,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
  }
 
   //: set parameters
-  ~boxm2_vecf_ocl_orbit_scene() override{
-
-  }
+  ~boxm2_vecf_ocl_orbit_scene() override= default;
   bool set_params(boxm2_vecf_articulated_params const& params) override;
 
   //: construct from scene file specification, use exising database unless initialize == true

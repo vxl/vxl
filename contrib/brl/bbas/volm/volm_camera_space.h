@@ -229,7 +229,7 @@ class camera_space_iterator
  camera_space_iterator(volm_camera_space* cam_space = nullptr)
    : end_(false), cam_space_(cam_space) {}
 
-  ~camera_space_iterator() {}
+  ~camera_space_iterator() = default;
 
   //: returns a reference to the scene to enable access to scene methods
   volm_camera_space& operator*() {

@@ -26,7 +26,7 @@ class sdet_image_mesh_params : public gevd_param_mixin, public vbl_ref_count
                          double step_half_width = 5.0);
 
   sdet_image_mesh_params(const sdet_image_mesh_params& old_params);
- ~sdet_image_mesh_params() override {}
+ ~sdet_image_mesh_params() override = default;
 
   bool SanityCheck() override;
  friend

@@ -209,7 +209,7 @@ struct bundler_routines
     bundler_sfm sfm_phase;
 
     // Uses default everything, stages and settings
-    bundler_routines() {}
+    bundler_routines() = default;
 
     // Uses the default stages, but allows the user to specify settings
     // for the thresholds.

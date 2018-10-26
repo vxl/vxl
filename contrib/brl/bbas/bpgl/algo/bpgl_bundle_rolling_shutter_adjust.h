@@ -41,7 +41,7 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
                                        bool use_confidence_weights = true);
 
   // Destructor
-  ~bpgl_bundle_rolling_shutter_adj_lsqr() override {}
+  ~bpgl_bundle_rolling_shutter_adj_lsqr() override = default;
 
   //: Compute all the reprojection errors
   //  Given the parameter vectors a and b, compute the vector of residuals e.

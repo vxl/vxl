@@ -7,8 +7,7 @@
 #define local_workgroup_size 32
 
 bocl_global_memory_bandwidth_manager::~bocl_global_memory_bandwidth_manager()
-{
-}
+= default;
 
 bool bocl_global_memory_bandwidth_manager::setup_array(unsigned len)
 {

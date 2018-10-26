@@ -29,7 +29,7 @@
 class boxm2_multi_cache_group
 {
   public:
-    boxm2_multi_cache_group() {}
+    boxm2_multi_cache_group() = default;
     boxm2_multi_cache_group(std::vector<boxm2_block_id> ids):ids_(ids) {}
 
     //: add a block to the group

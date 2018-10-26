@@ -39,8 +39,7 @@ bapl_affine2d_est::bapl_affine2d_est( const std::vector< vnl_vector<double> > & 
 }
 
 bapl_affine2d_est::~bapl_affine2d_est()
-{
-}
+= default;
 
 
 unsigned int

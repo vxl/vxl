@@ -34,7 +34,7 @@ class sdet_selective_search_params : public gevd_param_mixin
                                bool debug
                                );
   sdet_selective_search_params(const sdet_selective_search_params& old_params);
- ~sdet_selective_search_params() override{}
+ ~sdet_selective_search_params() override= default;
 
   bool SanityCheck() override;
   friend

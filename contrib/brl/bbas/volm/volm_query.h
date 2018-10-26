@@ -43,7 +43,7 @@ class volm_query : public vbl_ref_count
 {
  public:
   //: default consturctor
-  volm_query() {}
+  volm_query() = default;
   //: constructor from files
   volm_query(volm_camera_space_sptr cam_space,
              std::string const& label_xml_file,

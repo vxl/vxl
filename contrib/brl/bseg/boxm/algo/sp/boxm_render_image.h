@@ -24,7 +24,7 @@
 class normalize_expected_functor
 {
  public:
-  normalize_expected_functor() {}
+  normalize_expected_functor() = default;
 
   void operator()(float  norm, float & val) const
   {

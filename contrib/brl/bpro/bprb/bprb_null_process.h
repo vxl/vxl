@@ -21,7 +21,7 @@ class bprb_null_process : public bprb_process
 
   bprb_null_process();
 
-  ~bprb_null_process() override {}
+  ~bprb_null_process() override = default;
 
   //: Clone the process
   bprb_null_process* clone() const override { return new bprb_null_process(*this); }

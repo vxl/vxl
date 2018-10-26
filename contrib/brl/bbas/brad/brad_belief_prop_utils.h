@@ -67,7 +67,7 @@ brad_ray(): dim_(1.0), min_z_(0.0), max_z_(10.0){}
   class brad_belief_prop_utils
 {
  public:
- brad_belief_prop_utils(){}
+ brad_belief_prop_utils()= default;
   void set_metadata(std::vector<brad_image_metadata_sptr> const& metadata){
     app_index_ = brad_appearance_neighborhood_index(metadata);
   }

@@ -121,7 +121,7 @@ class principal_ray_scan
 {
  public:
   principal_ray_scan(double cone_half_angle, unsigned& n_samples);
-  ~principal_ray_scan() {}
+  ~principal_ray_scan() = default;
   //: number of scan states
   unsigned n_states() const {return theta_.size();}
   //: reset the scan state
@@ -147,7 +147,7 @@ class principal_ray_scan
   vgl_point_3d<double> pt_on_unit_sphere(unsigned i) const;
 
  private:
-  principal_ray_scan() {}
+  principal_ray_scan() = default;
   int index_;
   std::vector<double> theta_;
   std::vector<double> phi_;

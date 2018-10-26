@@ -1607,7 +1607,7 @@ private:
  */
 class JSON_API CharReader {
 public:
-  virtual ~CharReader() {}
+  virtual ~CharReader() = default;
   /** \brief Read a Value from a <a HREF="http://www.json.org">JSON</a>
    document.
    * The document must be a UTF-8 encoded string containing the document to read.
@@ -1631,7 +1631,7 @@ public:
 
   class JSON_API Factory {
   public:
-    virtual ~Factory() {}
+    virtual ~Factory() = default;
     /** \brief Allocate a CharReader via operator new().
      * \throw std::exception if something goes wrong (e.g. invalid settings)
      */
@@ -1937,7 +1937,7 @@ class JSON_API FastWriter : public Writer {
 
 public:
   FastWriter();
-  ~FastWriter() JSONCPP_OVERRIDE {}
+  ~FastWriter() JSONCPP_OVERRIDE = default;
 
   void enableYAMLCompatibility();
 
@@ -1989,7 +1989,7 @@ private:
 class JSON_API StyledWriter : public Writer {
 public:
   StyledWriter();
-  ~StyledWriter() JSONCPP_OVERRIDE {}
+  ~StyledWriter() JSONCPP_OVERRIDE = default;
 
 public: // overridden from Writer
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.
@@ -2051,7 +2051,7 @@ private:
 class JSON_API StyledStreamWriter {
 public:
   StyledStreamWriter(JSONCPP_STRING indentation = "\t");
-  ~StyledStreamWriter() {}
+  ~StyledStreamWriter() = default;
 
 public:
   /** \brief Serialize a Value in <a HREF="http://www.json.org">JSON</a> format.

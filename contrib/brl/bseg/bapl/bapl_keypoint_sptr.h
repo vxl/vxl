@@ -16,7 +16,7 @@ class bapl_keypoint_set;
 struct bapl_keypoint_sptr : public vbl_smart_ptr<bapl_keypoint> {
   typedef vbl_smart_ptr<bapl_keypoint> base;
 
-  bapl_keypoint_sptr() {}
+  bapl_keypoint_sptr() = default;
   bapl_keypoint_sptr(bapl_keypoint* p): base(p) {}
   void vertical_cast(bapl_keypoint_sptr const& that) { *this = that; }
   void vertical_cast(bapl_keypoint* t) { *this = t; }

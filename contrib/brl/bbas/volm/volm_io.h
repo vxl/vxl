@@ -217,11 +217,11 @@ bool operator>(const std::pair<float, volm_rationale>& a, const std::pair<float,
 class volm_score : public vbl_ref_count
 {
  public:
-  volm_score () {}
+  volm_score () = default;
   volm_score(unsigned leaf_id, unsigned hypo_id) : leaf_id_(leaf_id), hypo_id_(hypo_id) {}
   volm_score(unsigned const& leaf_id, unsigned const& hypo_id, float const& max_score, unsigned const& max_cam_id, std::vector<unsigned> const& cam_id)
     : leaf_id_(leaf_id), hypo_id_(hypo_id), max_score_(max_score), max_cam_id_(max_cam_id), cam_id_(cam_id) {}
-  ~volm_score() override {}
+  ~volm_score() override = default;
   unsigned leaf_id_;
   unsigned hypo_id_;
   float    max_score_;
@@ -246,10 +246,10 @@ class volm_score : public vbl_ref_count
 class volm_weight
 {
  public:
-  volm_weight () {}
+  volm_weight () = default;
   volm_weight (std::string const& w_name, std::string const& w_typ, float const& w_ori, float const& w_lnd, float const& w_ord, float const& w_dst, float const w_obj)
     : w_name_(w_name), w_typ_(w_typ), w_ori_(w_ori), w_lnd_(w_lnd), w_ord_(w_ord), w_dst_(w_dst), w_obj_(w_obj) {}
-  ~volm_weight() {}
+  ~volm_weight() = default;
   //: name of the depth_map_region
   std::string w_name_;
   //: type of the depth_map_region, i.e.: ground, sky or others

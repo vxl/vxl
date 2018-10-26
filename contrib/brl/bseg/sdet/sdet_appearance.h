@@ -22,13 +22,13 @@ class sdet_appearance
 public:
 
   //: default constructor
-  sdet_appearance(){}
+  sdet_appearance()= default;
 
   //: copy constructor
-  sdet_appearance(const sdet_appearance& /*other*/) {}
+  sdet_appearance(const sdet_appearance& /*other*/) = default;
 
   //: destructor
-  virtual ~sdet_appearance(){}
+  virtual ~sdet_appearance()= default;
 
   //: compute the distance between two appearance values
   virtual double dist(const sdet_appearance& /*other*/)=0;
@@ -61,7 +61,7 @@ public:
   sdet_intensity(const sdet_intensity & other) : sdet_appearance(other) {val = other.val; }
 
   //: destructor
-  ~sdet_intensity() override{}
+  ~sdet_intensity() override= default;
 
   double value() override{ return val; }
 
@@ -100,7 +100,7 @@ public:
   sdet_color(const sdet_color & other) : sdet_appearance(other) {c1 = other.c1; c2 = other.c2; c3 = other.c3;}
 
   //: destructor
-  ~sdet_color() override{}
+  ~sdet_color() override= default;
 
   double value() override{ return c1; } //not meaningful
 
@@ -134,7 +134,7 @@ public:
   sdet_signature sig;      ///< the stored signature
 
   //: default constructor
-  sdet_gray_signature(){}
+  sdet_gray_signature()= default;
 
   //: constructor
   sdet_gray_signature(sdet_signature newsig) : sig(newsig){}
@@ -143,7 +143,7 @@ public:
   sdet_gray_signature(const sdet_gray_signature & other):sdet_appearance(other) {sig = other.sig; }
 
   //: destructor
-  ~sdet_gray_signature() override{}
+  ~sdet_gray_signature() override= default;
 
   double value() override{ return 0.0; }
 
@@ -178,7 +178,7 @@ public:
   sdet_color_sig sig;      ///< the stored signature
 
   //: default constructor
-  sdet_color_signature(){}
+  sdet_color_signature()= default;
 
   //: constructor
   sdet_color_signature(sdet_color_sig newsig) : sig(newsig){}
@@ -187,7 +187,7 @@ public:
   sdet_color_signature(const sdet_color_signature & other) : sdet_appearance(other) {sig = other.sig; }
 
   //: destructor
-  ~sdet_color_signature() override{}
+  ~sdet_color_signature() override= default;
 
   double value() override{ return 0.0; }
 

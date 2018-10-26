@@ -43,8 +43,8 @@ class  bvxm_mog_grey_processor
   typedef float obs_datatype;
   typedef float obs_mathtype;
 
-  bvxm_mog_grey_processor() {}
-  virtual ~bvxm_mog_grey_processor() {}
+  bvxm_mog_grey_processor() = default;
+  virtual ~bvxm_mog_grey_processor() = default;
 
   bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<mix_gauss_type> const& appear,
                                        bvxm_voxel_slab<float> const& obs);

@@ -24,7 +24,7 @@ class sdet_denoise_mrf_params : public gevd_param_mixin, public vbl_ref_count
 
 
   sdet_denoise_mrf_params(const sdet_denoise_mrf_params& old_params);
- ~sdet_denoise_mrf_params() override {}
+ ~sdet_denoise_mrf_params() override = default;
 
   bool SanityCheck() override;
  friend

@@ -43,7 +43,7 @@ class volm_spherical_container : public vbl_ref_count
 {
  public:
   // constructor
-  volm_spherical_container() {}
+  volm_spherical_container() = default;
   volm_spherical_container(float d_solid_ang, float voxel_min, float max_dist);
 
   // accessor

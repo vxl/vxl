@@ -42,7 +42,7 @@ template <unsigned int dim, unsigned int modes> class bvxm_mog_mc_processor
   typedef typename gauss_type::vector_type obs_datatype;
   typedef typename gauss_type::math_type obs_mathtype;
 
-  bvxm_mog_mc_processor(){}
+  bvxm_mog_mc_processor()= default;
 
   bvxm_voxel_slab<float>  prob_density(bvxm_voxel_slab<apm_datatype> const& appear,
                                        bvxm_voxel_slab<obs_datatype> const& obs);

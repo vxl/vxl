@@ -43,7 +43,7 @@ template <class T> class bsta_histogram : public bsta_histogram_base
   bsta_histogram(const T min, const T max, std::vector<T> const& data,
                  const T min_prob = 0.0);
 
-  ~bsta_histogram() override {}
+  ~bsta_histogram() override = default;
 
   // The number of bins in the histogram
   unsigned int nbins() const { return nbins_; }

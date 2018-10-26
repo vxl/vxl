@@ -46,7 +46,7 @@ public bsta_joint_histogram_3d_base
                     const unsigned nbins_c,
                     const T min_prob = 0.0);
 
- ~bsta_joint_histogram_3d() override {}
+ ~bsta_joint_histogram_3d() override = default;
 
  //: legacy use where a, b and c, have the same bin granularity
  unsigned nbins() const {

@@ -21,7 +21,7 @@
 class bsta_gauss
 {
  public:
-  ~bsta_gauss(){}
+  ~bsta_gauss()= default;
   static double bsta_gaussian(const double x, const double sigma);
 
   static void bsta_1d_gaussian_kernel(const double sigma, const double fuzz,

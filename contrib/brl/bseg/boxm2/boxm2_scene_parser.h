@@ -35,7 +35,7 @@ class boxm2_scene_parser : public expatpp
 {
  public:
   boxm2_scene_parser();
-  ~boxm2_scene_parser(void) override {}
+  ~boxm2_scene_parser(void) override = default;
 
    // ACCESSORS for parser info
    bool lvcs(vpgl_lvcs& lvcs);

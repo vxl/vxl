@@ -27,8 +27,7 @@ sdet_fit_conics::sdet_fit_conics(sdet_fit_conics_params& flp)
 
 //:Default Destructor
 sdet_fit_conics::~sdet_fit_conics()
-{
-}
+= default;
 
 //-------------------------------------------------------------------------
 //: Set the edges to be processed

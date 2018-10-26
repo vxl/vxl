@@ -24,8 +24,7 @@ bprb_batch_process_manager::bprb_batch_process_manager() : current_process_(null
 
 //: Destructor
 bprb_batch_process_manager::~bprb_batch_process_manager()
-{
-}
+= default;
 
 bool bprb_batch_process_manager::clear()
 {

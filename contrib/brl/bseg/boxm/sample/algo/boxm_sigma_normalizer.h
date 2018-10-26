@@ -32,7 +32,7 @@ class boxm_sigma_normalizer
 
  private:
   // do not allow default constructor - under-estimation param is necessary
-  boxm_sigma_normalizer(){}
+  boxm_sigma_normalizer()= default;
 
   static const unsigned int N_PRECOMPUTED_ = 40;
   std::vector<float> unbias_const_;

@@ -43,7 +43,7 @@ class bgrl_vertex : public vbl_ref_count
   bgrl_vertex(const bgrl_vertex& vertex);
 
   //: Destructor
-  ~bgrl_vertex() override{}
+  ~bgrl_vertex() override= default;
 
   //: Returns an iterator to the beginning of the set of outgoing edges
   edge_iterator begin();

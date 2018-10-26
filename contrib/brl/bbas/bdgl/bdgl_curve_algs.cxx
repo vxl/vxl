@@ -31,8 +31,7 @@ constexpr double bdgl_curve_algs::synthetic = 0;//Indicates synthetic edgel
 
 //: Destructor
 bdgl_curve_algs::~bdgl_curve_algs()
-{
-}
+= default;
 
 //:
 //--------------------------------------------------------------------------

@@ -15,7 +15,7 @@ class boxm2_vecf_vector_field_base : public vbl_ref_count
 {
   public:
     //: virtual destructor to ensure proper cleanup of base class pointers
-    ~boxm2_vecf_vector_field_base() override{};
+    ~boxm2_vecf_vector_field_base() override= default;;
 
     //: write the locations of the cooresponding target points to source's BOXM2_POINT data
     virtual bool compute_forward_transform(boxm2_scene_sptr source,

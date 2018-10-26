@@ -46,7 +46,7 @@ class bsta_kent // : public bsta_distribution<T,1>
   //: construct from a 3x3 matrix
   bsta_kent(vnl_matrix_fixed<T,3,3> const& m);
 
-  ~bsta_kent() {}
+  ~bsta_kent() = default;
 
   T kappa() const { return kappa_; }
   T beta() const { return beta_; }

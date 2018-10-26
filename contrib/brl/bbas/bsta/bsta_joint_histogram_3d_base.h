@@ -23,7 +23,7 @@ class bsta_joint_histogram_3d_base : public vbl_ref_count
     };
   bsta_joint_histogram_3d_base(): type_(HIST_TYPE_UNKNOWN){}
 
-   ~bsta_joint_histogram_3d_base() override {}
+   ~bsta_joint_histogram_3d_base() override = default;
 
   bsta_joint_hist_3d_type type_;
 };

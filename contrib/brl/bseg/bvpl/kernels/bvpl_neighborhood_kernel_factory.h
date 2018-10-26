@@ -25,7 +25,7 @@ class bvpl_neighborhood_kernel_factory : public bvpl_kernel_factory
                                    int min_width, int max_width,
                                    int min_thickness, int max_thickness);
 
-  ~bvpl_neighborhood_kernel_factory() override {}
+  ~bvpl_neighborhood_kernel_factory() override = default;
 
  private:
 

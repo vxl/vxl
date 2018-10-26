@@ -144,7 +144,7 @@ class imesh_vertex_array_base
 {
  public:
   //: Destructor
-  virtual ~imesh_vertex_array_base() {}
+  virtual ~imesh_vertex_array_base() = default;
 
   //: returns the number of vertices
   virtual unsigned int size() const = 0;
@@ -194,7 +194,7 @@ class imesh_vertex_array : public imesh_vertex_array_base
 
  public:
   //: Default Constructor
-  imesh_vertex_array<d>() {}
+  imesh_vertex_array<d>() = default;
 
   //: Constructor (from size)
   imesh_vertex_array<d>(unsigned int size)

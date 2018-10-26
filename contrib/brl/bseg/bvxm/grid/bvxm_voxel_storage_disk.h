@@ -21,12 +21,12 @@ template<class T>
 class bvxm_voxel_storage_header
 {
  public:
-  bvxm_voxel_storage_header(){}
+  bvxm_voxel_storage_header()= default;
   bvxm_voxel_storage_header(vgl_vector_3d<unsigned> grid_size)
     : nx_(grid_size.x()), ny_(grid_size.y()), nz_(grid_size.z()), nobservations_(0) {}
   bvxm_voxel_storage_header(unsigned nx, unsigned ny, unsigned nz)
     : nx_(nx),ny_(ny),nz_(nz),nobservations_(0) {}
-  ~bvxm_voxel_storage_header() {}
+  ~bvxm_voxel_storage_header() = default;
 
   unsigned nx_;
   unsigned ny_;

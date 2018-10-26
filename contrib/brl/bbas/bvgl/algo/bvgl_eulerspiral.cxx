@@ -31,7 +31,7 @@ class bvgl_eulerspiral_optimization_function : public vnl_least_squares_function
 {
 public:
   friend class bvgl_eulerspiral;
-  ~bvgl_eulerspiral_optimization_function() override {}
+  ~bvgl_eulerspiral_optimization_function() override = default;
   //: The main function.
   //  Given the parameter vector x, compute the vector of residuals fx.
   //  Fx has been sized appropriately before the call.
@@ -721,9 +721,7 @@ bvgl_eulerspiral_lookup_table::bvgl_eulerspiral_lookup_table(){
 }
 
 //: Destructor
-bvgl_eulerspiral_lookup_table::~bvgl_eulerspiral_lookup_table(){
-
-}
+bvgl_eulerspiral_lookup_table::~bvgl_eulerspiral_lookup_table()= default;
 
 //: delta theta values for the table (tells you about the accuracy of the lookup)
 double bvgl_eulerspiral_lookup_table::dt(){

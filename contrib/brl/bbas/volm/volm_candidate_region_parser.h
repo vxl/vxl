@@ -61,7 +61,7 @@ class volm_candidate_region_parser : public expatpp
  public:
   volm_candidate_region_parser(void);
   // parser should not delete the site, it is used afterwards
-  ~volm_candidate_region_parser(void) override {}
+  ~volm_candidate_region_parser(void) override = default;
 
   //: parse all the points that have given name (will return empty vector if kml file does not have points with given name)
   static std::vector<vgl_point_3d<double> > parse_points(std::string const& kml_file, std::string const& name);

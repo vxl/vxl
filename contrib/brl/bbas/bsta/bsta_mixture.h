@@ -88,7 +88,7 @@ class bsta_mixture : public bsta_distribution<typename dist_::math_type,
 
  public:
   // Default Constructor
-  bsta_mixture<dist_>() {}
+  bsta_mixture<dist_>() = default;
 
   // Copy Constructor
   bsta_mixture<dist_>(const bsta_mixture<dist_>& other)

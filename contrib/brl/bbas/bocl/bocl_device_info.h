@@ -38,7 +38,7 @@
 class bocl_device_info
 {
   public:
-    bocl_device_info() {}
+    bocl_device_info() = default;
     bocl_device_info(cl_device_id* device);
     ~bocl_device_info();
 

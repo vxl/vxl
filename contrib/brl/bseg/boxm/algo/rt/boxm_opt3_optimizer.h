@@ -19,7 +19,7 @@ class boxm_opt3_optimizer
   boxm_opt3_optimizer(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > > &scene,
                       std::vector<std::string> const& image_ids);
 
-  ~boxm_opt3_optimizer(){}
+  ~boxm_opt3_optimizer()= default;
 
   bool optimize_cells();
 

@@ -19,7 +19,7 @@ class boxm_edge_updater
   boxm_edge_updater(boxm_scene<boct_tree<T_loc, boxm_edge_sample<APM> > > &scene,
                     std::vector<std::string> const& image_ids);
 
-  ~boxm_edge_updater(){}
+  ~boxm_edge_updater()= default;
 
   bool add_cells();
 

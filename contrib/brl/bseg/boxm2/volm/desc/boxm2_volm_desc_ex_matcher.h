@@ -23,7 +23,7 @@ class boxm2_volm_desc_ex_matcher : public volm_desc_matcher
 {
   public:
   //: Default constructor
-  boxm2_volm_desc_ex_matcher() {}
+  boxm2_volm_desc_ex_matcher() = default;
 
   //: Constructor
   boxm2_volm_desc_ex_matcher(depth_map_scene_sptr const& dms,
@@ -35,7 +35,7 @@ class boxm2_volm_desc_ex_matcher : public volm_desc_matcher
   { }
 
   //: Destructor
-  ~boxm2_volm_desc_ex_matcher() override {}
+  ~boxm2_volm_desc_ex_matcher() override = default;
 
   //: check given threshold is valid or not for generate scaled probability map
   bool check_threshold(volm_desc_sptr const& query, float& thres_value) override;

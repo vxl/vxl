@@ -26,8 +26,7 @@ std::ostream& operator<<(std::ostream& os, const bprb_param& p)
 
 //: Constructor
 bprb_parameters::bprb_parameters()
-{
-}
+= default;
 
 
 //: Destructor

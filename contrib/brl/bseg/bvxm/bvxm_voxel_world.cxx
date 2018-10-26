@@ -44,8 +44,7 @@
 
 //: Destructor
 bvxm_voxel_world::~bvxm_voxel_world()
-{
-}
+= default;
 
 
 //: equality operator

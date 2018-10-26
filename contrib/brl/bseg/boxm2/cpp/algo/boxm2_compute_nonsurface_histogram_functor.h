@@ -18,7 +18,7 @@ class boxm2_compute_nonsurface_histogram_functor
     typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
 
     //: "default" constructor
-    boxm2_compute_nonsurface_histogram_functor() {}
+    boxm2_compute_nonsurface_histogram_functor() = default;
 
     bool init_data(boxm2_data_base * histo_data,
                    boxm2_stream_cache_sptr str_cache)

@@ -42,7 +42,7 @@ class volm_conf_land_map_indexer : public vbl_ref_count
 public:
   // ================ constructor ===================
   //: default constructor
-  volm_conf_land_map_indexer() {}
+  volm_conf_land_map_indexer() = default;
   //: constructor from a given bounding box
   volm_conf_land_map_indexer(vgl_box_2d<double> const& bbox, double const& density);
   volm_conf_land_map_indexer(vgl_box_2d<float>  const& bbox, float  const& density);
@@ -55,7 +55,7 @@ public:
   volm_conf_land_map_indexer(std::string const& bin_file);
 
   //: destructor
-  ~volm_conf_land_map_indexer() override {}
+  ~volm_conf_land_map_indexer() override = default;
 
   // ================ access ===================
   vgl_box_2d<double> bbox() const { return bbox_; }

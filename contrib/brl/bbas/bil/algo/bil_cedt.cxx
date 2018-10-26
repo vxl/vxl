@@ -8,12 +8,10 @@
 #include <vcl_compiler.h>
 
 bil_cedt::bil_cedt()
-{
-}
+= default;
 
 bil_cedt::~bil_cedt()
-{
-}
+= default;
 
 bil_cedt::bil_cedt(vil_image_view<unsigned char> im)
 {

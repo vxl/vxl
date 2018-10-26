@@ -23,7 +23,7 @@ class sdet_fit_lines_params : public gevd_param_mixin, public vbl_ref_count
                         double rms_distance = 0.1);
 
   sdet_fit_lines_params(const sdet_fit_lines_params& old_params);
- ~sdet_fit_lines_params() override {}
+ ~sdet_fit_lines_params() override = default;
 
   bool SanityCheck() override;
  friend

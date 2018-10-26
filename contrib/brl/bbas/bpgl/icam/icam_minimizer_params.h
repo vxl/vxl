@@ -32,18 +32,7 @@ class icam_minimizer_params
       polar_range_multiplier_(p.polar_range_multiplier_),
        base_path_(p.base_path_) {}
 
-  icam_minimizer_params& operator=(const icam_minimizer_params& p)
-  {
-    nbins_=p.nbins_;
-    min_level_size_=p.min_level_size_;
-    box_reduction_k_=p.box_reduction_k_;
-    local_min_thresh_=p.local_min_thresh_;
-    smooth_sigma_=p.smooth_sigma_;
-    axis_search_cone_multiplier_=p.axis_search_cone_multiplier_;
-    polar_range_multiplier_=p.polar_range_multiplier_;
-    base_path_=p.base_path_;
-    return *this;
-  }
+  icam_minimizer_params& operator=(const icam_minimizer_params& p) = default;
 
   void print() {
     std::cout << "====== Minimizer Parameters =======\n"

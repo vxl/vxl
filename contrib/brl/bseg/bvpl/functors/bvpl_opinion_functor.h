@@ -22,7 +22,7 @@ class bvpl_opinion_functor
   bvpl_opinion_functor();
 
   //: Destructor
-  ~bvpl_opinion_functor() {}
+  ~bvpl_opinion_functor() = default;
 
   //: Apply a given operation to value val, depending on the dispatch character
   void apply(bvxm_opinion& val, bvpl_kernel_dispatch& d);

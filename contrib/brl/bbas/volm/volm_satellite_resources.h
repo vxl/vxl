@@ -46,7 +46,7 @@ class volm_satellite_resources : public vbl_ref_count
 {
   public:
     //: default constructor
-    volm_satellite_resources() {}
+    volm_satellite_resources() = default;
 
     //: x is lon and y is lat in the bbox, construct bbox with min point to be lower left and max to be upper right and as axis aligned with North-East
     volm_satellite_resources(vgl_box_2d<double>& bbox, double min_size = 1.0, bool eliminate_same = false);

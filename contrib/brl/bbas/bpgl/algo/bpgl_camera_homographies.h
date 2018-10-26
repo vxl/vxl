@@ -64,7 +64,7 @@ class bpgl_camera_homographies
                             std::vector<vgl_point_3d<double> > const& pts );
  private:
   //: no public constructor - static methods only
-  bpgl_camera_homographies() {}
+  bpgl_camera_homographies() = default;
 };
 
 #endif // bpgl_camera_homographies_h_

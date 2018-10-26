@@ -50,7 +50,7 @@ class  bvxm_von_mises_tangent_processor
   bvxm_von_mises_tangent_processor(T theta_max, T x0_radius, T k) :
     theta_max_(theta_max), x0_radius_(x0_radius), k_(k) {}
 
-  virtual ~bvxm_von_mises_tangent_processor() {}
+  virtual ~bvxm_von_mises_tangent_processor() = default;
 
   bool update( bvxm_voxel_slab<dir_dist_t> & dir_dist,
                bvxm_voxel_slab<pos_dist_t> & pos_dist,

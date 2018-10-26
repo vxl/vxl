@@ -86,12 +86,10 @@ class bgrl2_hg_hyperedge
 
   //: ====== Constructor/Destructor and other functions ======
   bgrl2_hg_hyperedge ()
-  {
-  }
+  = default;
 
   ~bgrl2_hg_hyperedge ()
-  {
-  }
+  = default;
 };
 
 #endif // bgrl2_hg_hyperedge_h_

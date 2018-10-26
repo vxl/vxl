@@ -19,7 +19,7 @@
 #include <bsta/bsta_histogram.h>
 class betr_edgel_factory{
  public:
-  betr_edgel_factory(){}
+  betr_edgel_factory()= default;
   //: set parameters (same for all images and rois)
   void set_params(betr_edgel_factory_params const& params){
     params_ = params;

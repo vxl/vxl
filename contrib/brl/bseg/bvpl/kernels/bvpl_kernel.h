@@ -40,7 +40,7 @@ class bvpl_kernel: public vbl_ref_count
     id_=bvpl_kernel::get_next_id();
   }
   //: Destructor
-  ~bvpl_kernel() override {}
+  ~bvpl_kernel() override = default;
   bvpl_kernel_iterator iterator(){return kernel_;}
   vnl_float_3 axis() const {return axis_;}
   vnl_float_3 aux_axis() const {return aux_axis_;}
@@ -147,7 +147,7 @@ class bvpl_kernel_vector : public vbl_ref_count
  public:
   typedef std::vector< bvpl_kernel_sptr >::iterator iterator;
   //: Default constructor
-  bvpl_kernel_vector() {}
+  bvpl_kernel_vector() = default;
 
   iterator begin() { return kernels_.begin(); }
   iterator end()   { return kernels_.end(); }

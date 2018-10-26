@@ -29,7 +29,7 @@ class volm_desc : public vbl_ref_count
 {
 public:
   // Default constructor
-  volm_desc() {}
+  volm_desc() = default;
 
   //: construct the histogram from a vector
   volm_desc(std::vector<unsigned char> values)
@@ -37,7 +37,7 @@ public:
   { name_ = "descriptor";  nbins_ = (unsigned)values.size(); }
 
   // Destructor
-  ~volm_desc() override {};
+  ~volm_desc() override = default;;
 
   //: return the name of the descriptor
   virtual std::string name() { return "volm_desc base"; }

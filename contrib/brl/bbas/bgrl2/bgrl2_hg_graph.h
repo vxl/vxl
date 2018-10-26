@@ -103,8 +103,7 @@ class bgrl2_hg_graph
   virtual bool topo_remove_edge (int id);
 
   bgrl2_hg_graph ()
-  {
-  }
+  = default;
 
   virtual ~bgrl2_hg_graph()
   {

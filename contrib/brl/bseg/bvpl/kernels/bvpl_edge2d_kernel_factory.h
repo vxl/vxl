@@ -31,7 +31,7 @@ class bvpl_edge2d_kernel_factory : public bvpl_kernel_factory
   // + + 0 - -
   bvpl_edge2d_kernel_factory(unsigned height, unsigned width);
 
-  ~bvpl_edge2d_kernel_factory() override {}
+  ~bvpl_edge2d_kernel_factory() override = default;
 
   //Height of edge
   unsigned height() const { return height_; }

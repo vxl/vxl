@@ -73,7 +73,7 @@ class icam_depth_transform
                        vgl_rotation_3d<double> const& rot,
                        vgl_vector_3d<double> const& trans,
                        bool adjust_to_fl = false);
-  ~icam_depth_transform() {}
+  ~icam_depth_transform() = default;
   void set_scale_factors(vnl_vector<double> const& scales)
   { scale_factors_ = scales; }
   vnl_vector<double>& scale_factors() {return scale_factors_;}

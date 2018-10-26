@@ -10,7 +10,7 @@ class brad_phongs_model
 {
  public:
   brad_phongs_model(float kd, float ks, float gamma, float normal_elev, float normal_azim);
-  ~brad_phongs_model(){}
+  ~brad_phongs_model()= default;
 
   float val(float view_elev, float view_azim, float sun_elev, float sun_azim);
   float val(vnl_double_3 view_dir, float sun_elev, float sun_azim);
@@ -68,7 +68,7 @@ class brad_phongs_model_approx
 {
  public:
   brad_phongs_model_approx(float kd, float ks, float gamma, float normal_elev, float normal_azim);
-  ~brad_phongs_model_approx(){}
+  ~brad_phongs_model_approx()= default;
 
   float val(float view_elev, float view_azim, float sun_elev, float sun_azim);
   float val(vnl_double_3 view_dir, float sun_elev, float sun_azim);

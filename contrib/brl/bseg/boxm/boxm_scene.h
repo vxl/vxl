@@ -433,7 +433,7 @@ class boxm_block_iterator
   //: Copy constructor
   boxm_block_iterator(boxm_block_iterator<T> const& other): i_(other.i_), j_(other.j_), k_(other.k_), scene_(other.scene_) {}
 
-  ~boxm_block_iterator() {}
+  ~boxm_block_iterator() = default;
 
   boxm_block_iterator<T>& begin();
 
@@ -490,7 +490,7 @@ class boxm_cell_iterator
     : block_iterator_(iter), block_loading_func_(block_loading_func), read_only_(read_only), use_internal_cells_(use_internal_cells) { assert(read_only); }
 
   //: Destructor
-  ~boxm_cell_iterator() {}
+  ~boxm_cell_iterator() = default;
 
   //: Iterator begin
   boxm_cell_iterator<T>& begin(bool use_internal_cells=false);

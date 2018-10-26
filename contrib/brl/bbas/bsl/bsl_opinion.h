@@ -36,7 +36,7 @@ class bsl_opinion
   bsl_opinion(bsl_opinion const& o) : u_(o.u()), b_(o.b()), a_(o.a()) {}
 
   //: destructor
-  ~bsl_opinion() {}
+  ~bsl_opinion() = default;
 
   float u() const { return u_; }
 

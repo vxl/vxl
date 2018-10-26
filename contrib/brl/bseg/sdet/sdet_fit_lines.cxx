@@ -30,8 +30,7 @@ sdet_fit_lines::sdet_fit_lines(sdet_fit_lines_params& flp)
 
 // Default Destructor
 sdet_fit_lines::~sdet_fit_lines()
-{
-}
+= default;
 
 //-------------------------------------------------------------------------
 //: Set the edges to be processed

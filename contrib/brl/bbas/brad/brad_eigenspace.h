@@ -52,7 +52,7 @@ class brad_eigenspace : public brad_eigenspace_base
   brad_eigenspace(unsigned nib, unsigned njb, T funct)
   : funct_(funct), nib_(nib), njb_(njb), covar_valid_(false), eigensystem_valid_(false) {}
 
-  ~brad_eigenspace() override {}
+  ~brad_eigenspace() override = default;
 
   std::string feature_vector_type() override {return funct_.type();}
 

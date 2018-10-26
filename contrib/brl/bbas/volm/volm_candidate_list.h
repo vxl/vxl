@@ -31,12 +31,12 @@ class volm_candidate_list
 {
   public:
     //: default constructor
-    volm_candidate_list() {}
+    volm_candidate_list() = default;
     //: constructor
     volm_candidate_list(vil_image_view<vxl_byte> const& image,
                         unsigned threshold);
     //: destructor
-    ~volm_candidate_list() {}
+    ~volm_candidate_list() = default;
 
     //: access
     vgl_polygon<int> cand_poly() { return poly_; }

@@ -19,13 +19,11 @@
 
 //: Constructor
 bil_wshed_2d::bil_wshed_2d()
-{
-}
+= default;
 
 //: Destructor
 bil_wshed_2d::~bil_wshed_2d()
-{
-}
+= default;
 
 //public functions
 

@@ -35,7 +35,7 @@ class boxm_scene_parser : public expatpp
  public:
   boxm_scene_parser();
 
-  ~boxm_scene_parser(void) override {}
+  ~boxm_scene_parser(void) override = default;
 
    bool lvcs(vpgl_lvcs& lvcs);
    vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }

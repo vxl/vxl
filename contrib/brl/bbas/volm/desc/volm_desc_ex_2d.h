@@ -29,7 +29,7 @@ class volm_desc_ex_2d : public volm_desc
 {
 public:
   //: default constructor
-  volm_desc_ex_2d() {}
+  volm_desc_ex_2d() = default;
 
   //: constructor to create an empty descriptor
   volm_desc_ex_2d(std::vector<double> const& radius,
@@ -38,7 +38,7 @@ public:
                   unsigned char const& initial_mag = 0);
 
   //: destructor
-  ~volm_desc_ex_2d() override {}
+  ~volm_desc_ex_2d() override = default;
 
   //: initialize the histogram with given value
   void initialize_bin(unsigned char const& mag);

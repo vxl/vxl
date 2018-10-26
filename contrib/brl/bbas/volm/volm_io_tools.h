@@ -30,7 +30,7 @@
 class volm_img_info
 {
 public:
-  volm_img_info() {}
+  volm_img_info() = default;
   bool intersects(vgl_polygon<double> poly) { return vgl_intersection(bbox, poly); }
   bool intersects(vgl_box_2d<double> other) { return vgl_area(vgl_intersection(bbox, other)) > 0; }
   bool contains(vgl_point_2d<double> point) const { return bbox.contains(point); }

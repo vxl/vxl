@@ -23,7 +23,7 @@ class bbgm_viewer : public vbl_ref_count
   bbgm_viewer() : active_component_(0), view_maker_(bbgm_view_maker_sptr(nullptr))
   {fail_val_[0] = fail_val_[1] = fail_val_[2] = 0.0;}
   //: Destructor
-  ~bbgm_viewer() override {}
+  ~bbgm_viewer() override = default;
 
   //: Probe to see if this viewer can handle this image type
   bool probe(const bbgm_image_sptr& dimg) const;

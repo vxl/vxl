@@ -40,14 +40,14 @@ public:
   curve_type type;
 
   //: default constructor
-  sdet_curve_model(){}
+  sdet_curve_model()= default;
   sdet_curve_model(curve_type t) : type(t) {}
 
   //: copy constructor
   sdet_curve_model(const sdet_curve_model& other) { type = other.type; }
 
   //: destructor
-  virtual ~sdet_curve_model(){}
+  virtual ~sdet_curve_model()= default;
 
   //: construct and return a curve model of the same type by intersecting with another curve bundle
   //
@@ -120,7 +120,7 @@ public:
   { pt = other.pt; theta = other.theta; }
 
   //: destructor
-  ~sdet_linear_curve_model_base() override{}
+  ~sdet_linear_curve_model_base() override= default;
 
   //: print info
   void print_info() override
@@ -140,7 +140,7 @@ public:
   sdet_simple_linear_curve_model(): min_theta(0.0), max_theta(0.0) {}
 
   //: destructor
-  ~sdet_simple_linear_curve_model() override{}
+  ~sdet_simple_linear_curve_model() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_simple_linear_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -191,7 +191,7 @@ public:
   sdet_linear_curve_model(): sdet_linear_curve_model_base(), ref_pt(0.0,0.0), ref_theta(0) { type = LINEAR; }
 
   //: destructor
-  ~sdet_linear_curve_model() override{}
+  ~sdet_linear_curve_model() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_linear_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -247,7 +247,7 @@ public:
   sdet_CC_curve_model(vgl_point_2d<double> new_pt, double new_tangent): pt(new_pt), tangent(new_tangent), theta(0), k(0.0) { type = CC; }
 
   //: destructor
-  ~sdet_CC_curve_model() override{}
+  ~sdet_CC_curve_model() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_CC_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -317,7 +317,7 @@ public:
   sdet_CC_curve_model_new(vgl_point_2d<double> new_pt, double new_tangent): ref_pt(new_pt), ref_theta(new_tangent), pt(new_pt), theta(new_tangent), k(0.0) { type = CC2; }
 
   //: destructor
-  ~sdet_CC_curve_model_new() override{}
+  ~sdet_CC_curve_model_new() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_CC_curve_model_new(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -519,7 +519,7 @@ public:
   sdet_CC_curve_model_perturbed(): sdet_CC_curve_model(){}
 
   //: destructor
-  ~sdet_CC_curve_model_perturbed() override{}
+  ~sdet_CC_curve_model_perturbed() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_CC_curve_model_perturbed(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -664,7 +664,7 @@ public:
     Kmin(1, 1, 0.0f), Kmax(1, 1, 0.0f), ref_pt(new_pt), ref_theta(new_tangent), pt(new_pt), theta(new_tangent), k(0.0) { type = CC3d; }
 
   //: destructor
-  ~sdet_CC_curve_model_3d() override{}
+  ~sdet_CC_curve_model_3d() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_CC_curve_model_3d(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
@@ -799,7 +799,7 @@ public:
   sdet_ES_curve_model(): pt(0.0,0.0), theta(0), k(0.0), gamma(0.0) { type = ES; }
 
   //: destructor
-  ~sdet_ES_curve_model() override{}
+  ~sdet_ES_curve_model() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_ES_curve_model(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);
@@ -886,7 +886,7 @@ public:
   sdet_ES_curve_model_perturbed() : sdet_ES_curve_model(){}
 
   //: destructor
-  ~sdet_ES_curve_model_perturbed() override{}
+  ~sdet_ES_curve_model_perturbed() override= default;
 
   //: Constructor 1: From a pair of edgels
   sdet_ES_curve_model_perturbed(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e, double dpos, double dtheta, double token_len, double max_k, double max_gamma, bool adaptive);

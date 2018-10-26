@@ -24,7 +24,7 @@ class ihog_image
  public:
   //: Default constructor
   //  Creates an empty one-plane image.
-  ihog_image() {}
+  ihog_image() = default;
 
   //: Construct an image of size (ni, nj, np) with optional world_to_image transform.
   ihog_image(unsigned ni, unsigned nj, unsigned np=1,
@@ -37,7 +37,7 @@ class ihog_image
     : image_(view), xform_(w2i) {}
 
   //: Destructor
-  virtual ~ihog_image() {}
+  virtual ~ihog_image() = default;
 
   //: Baseclass view of image
   virtual const vil_image_view_base& image_base() const { return image_; }

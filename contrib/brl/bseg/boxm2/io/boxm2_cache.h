@@ -81,7 +81,7 @@ class boxm2_cache: public vbl_ref_count
   boxm2_cache(BOXM2_IO_FS_TYPE fs=LOCAL) : filesystem_(fs) {}
 
   //: hidden destructor (protected so it cannot be called -- forces the class to be singleton)
-  ~boxm2_cache() override {}
+  ~boxm2_cache() override = default;
 
   //: singleton instance of boxm2_cache
   static boxm2_cache_sptr instance_;

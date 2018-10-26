@@ -22,13 +22,13 @@ class volm_desc_land_matcher : public volm_desc_matcher
 {
 public:
   // Default constructor
-  volm_desc_land_matcher() {}
+  volm_desc_land_matcher() = default;
 
   //: Constructor
   volm_desc_land_matcher(std::string const& NLCD_folder, vgl_point_3d<double>& query_gt_loc);
 
   //: Destrcutor
-  ~volm_desc_land_matcher() override {}
+  ~volm_desc_land_matcher() override = default;
 
   //: Create a volumetric land descriptor for the query image
   volm_desc_sptr create_query_desc() override;

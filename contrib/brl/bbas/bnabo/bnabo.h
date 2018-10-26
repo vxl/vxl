@@ -160,7 +160,7 @@ namespace Nabo
   struct Parameters: public std::map<std::string, T>
     {
       //! Create an empty parameter vector
-      Parameters(){}
+      Parameters()= default;
       //! Create a parameter vector with a single entry
       /** \param key entry key
        * \param value entry value
@@ -351,7 +351,7 @@ namespace Nabo
       }
 
       //! virtual destructor
-      virtual ~NearestNeighbourSearch() {}
+      virtual ~NearestNeighbourSearch() = default;
 
     protected:
       //! constructor

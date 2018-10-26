@@ -43,7 +43,7 @@ class bil_bounded_image_view : public vil_image_view<T>
 
  public:
    //: this constructor should not be used
-  bil_bounded_image_view() {}
+  bil_bounded_image_view() = default;
 
   //: the main constructor
   bil_bounded_image_view(const vil_image_view<T>& bounded_data,
@@ -64,7 +64,7 @@ class bil_bounded_image_view : public vil_image_view<T>
   bil_bounded_image_view(const vil_image_view_base_sptr& rhs)
     { operator=(rhs);}
 
-  ~bil_bounded_image_view() override {}
+  ~bil_bounded_image_view() override = default;
   //:accessors
   unsigned ib0() const {return ib0_;}
   unsigned jb0() const {return jb0_;}

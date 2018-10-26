@@ -31,7 +31,7 @@ class brec_bg_pair_density : public brec_pair_density
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype grey_obs_datatype;
 
  public:
-  ~brec_bg_pair_density() override {}
+  ~brec_bg_pair_density() override = default;
   brec_bg_pair_density(bvxm_voxel_world_sptr w, vpgl_camera_double_sptr cam,
                        std::string voxel_type, unsigned bin, unsigned scale,
                        unsigned ni, unsigned nj)

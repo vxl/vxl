@@ -28,7 +28,7 @@ class sdet_denoise_mrf_bp_params : public gevd_param_mixin, public vbl_ref_count
                              float lambda = 0.05f);
 
   sdet_denoise_mrf_bp_params(const sdet_denoise_mrf_bp_params& old_params);
- ~sdet_denoise_mrf_bp_params() override {}
+ ~sdet_denoise_mrf_bp_params() override = default;
 
   bool SanityCheck() override;
  friend

@@ -26,7 +26,7 @@ class boxm2_block_vis_graph_node : public vbl_ref_count
 class boxm2_block_vis_graph
 {
  public:
-  boxm2_block_vis_graph(){}
+  boxm2_block_vis_graph()= default;
   boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block_metadata> & blkmetadata,  vpgl_generic_camera<double> const& cam );
   std::list<boxm2_block_vis_graph_node_sptr>::iterator find(const boxm2_block_id & id, std::list<boxm2_block_vis_graph_node_sptr> & list_nodes );
   std::vector<boxm2_block_id>  get_ordered_ids(){return ordered_nodes_;}

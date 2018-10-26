@@ -25,7 +25,7 @@ class sdet_region_proc_params : public gevd_param_mixin
                           int array_scale = 2);
 
   sdet_region_proc_params(const sdet_region_proc_params& old_params);
- ~sdet_region_proc_params() override{}
+ ~sdet_region_proc_params() override= default;
 
   bool SanityCheck() override;
   friend

@@ -21,7 +21,7 @@
 class brip_vil_nitf_ops
 {
 public:
-  ~brip_vil_nitf_ops() {}
+  ~brip_vil_nitf_ops() = default;
 
   //: Truncate the 16 bits NITF image to a byte image.
   //  For each pixel, the most significant 5 bits and less significant 3 bits are ignored

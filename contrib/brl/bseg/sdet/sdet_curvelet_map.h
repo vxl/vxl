@@ -71,7 +71,7 @@ public:
     bidirectional_(bidir)
   {}
 
-  ~sdet_curvelet_params(){}
+  ~sdet_curvelet_params()= default;
 };
 
 //: This class stores the map of curvelets formed by the SEL edge linker.

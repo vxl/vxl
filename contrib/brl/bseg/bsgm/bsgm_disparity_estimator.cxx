@@ -43,9 +43,7 @@ bsgm_disparity_estimator::bsgm_disparity_estimator(
 
 //----------------------------------------------------------------------------
 bsgm_disparity_estimator::~bsgm_disparity_estimator()
-{
-
-}
+= default;
 
 
 //----------------------------------------------------------------------------

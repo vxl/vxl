@@ -21,9 +21,9 @@ class bpgl_rolling_shutter_camera : public vpgl_camera<T>
 {
  public:
   //: default constructor
-  bpgl_rolling_shutter_camera(){}
+  bpgl_rolling_shutter_camera()= default;
 
-  ~bpgl_rolling_shutter_camera() override {}
+  ~bpgl_rolling_shutter_camera() override = default;
 
   std::string type_name() const override { return "bpgl_rolling_shutter_camera"; }
 

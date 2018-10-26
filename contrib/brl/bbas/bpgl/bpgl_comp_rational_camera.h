@@ -55,7 +55,7 @@ class bpgl_comp_rational_camera : public vpgl_rational_camera<T>
   //: Constructor, create from a camera file given by cam_path
   bpgl_comp_rational_camera(std::string cam_path);
 
-  virtual ~bpgl_comp_rational_camera() {}
+  virtual ~bpgl_comp_rational_camera() = default;
 
   //: Clone `this': creation of a new object and initialization
   //  See Prototype pattern

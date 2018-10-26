@@ -22,7 +22,7 @@ class boxm_opt3_sample
 
   boxm_opt3_sample()
     : weighted_vis_sum_(0.0f), seg_len_sum_(0.0f), log_pass_prob_sum_(0.0f) { }
-  ~boxm_opt3_sample() {}
+  ~boxm_opt3_sample() = default;
   static short version_no() { return 1; }
   void print(std::ostream& os) const;
 

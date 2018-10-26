@@ -36,8 +36,8 @@ class  bvxm_float_processor
   typedef float obs_datatype;
   typedef float obs_mathtype;
 
-  bvxm_float_processor() {}
-  virtual ~bvxm_float_processor() {}
+  bvxm_float_processor() = default;
+  virtual ~bvxm_float_processor() = default;
 
   bvxm_voxel_slab<obs_datatype> expected_color( bvxm_voxel_slab<obs_mathtype> const& appear)
   {return appear;}

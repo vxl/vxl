@@ -20,7 +20,7 @@ class boxm2_vecf_vector_field : public boxm2_vecf_vector_field_base
   public:
 
     //: destructor
-    ~boxm2_vecf_vector_field() override{};
+    ~boxm2_vecf_vector_field() override= default;;
 
     //: write the locations of the cooresponding target points to source's BOXM2_POINT data
     bool compute_forward_transform(boxm2_scene_sptr source,

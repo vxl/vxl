@@ -33,7 +33,7 @@ class sdet_grid_finder_params : public gevd_param_mixin
                           int debug_state = false);
 
   sdet_grid_finder_params(const sdet_grid_finder_params& old_params);
- ~sdet_grid_finder_params() override{}
+ ~sdet_grid_finder_params() override= default;
 
   bool SanityCheck() override;
   void get_debug_choices(std::vector<std::string>& choices);
