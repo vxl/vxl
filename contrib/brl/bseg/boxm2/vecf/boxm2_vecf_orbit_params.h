@@ -259,7 +259,7 @@ public:
 
   //outward normal to planar brow region
   vgl_vector_3d<double> upper_socket_normal() const
-  {return vgl_vector_3d<double>(0.0,-std::sin(brow_angle_rad_), std::cos(brow_angle_rad_));}
+  {return {0.0,-std::sin(brow_angle_rad_), std::cos(brow_angle_rad_)};}
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app_;
 
   //: vector of  monomials to form the polynomial when multiplied by the coefficients

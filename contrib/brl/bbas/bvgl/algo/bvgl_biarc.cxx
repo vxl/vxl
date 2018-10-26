@@ -201,7 +201,7 @@ tangent_at( double s) const
     angle = this->start_angle() + s * this->k1();
   else //if ( s <= this->len() )
     angle = this->start_angle() + this->len1() * this->k1() + (s - this->len1()) * this->k2();
-  return vgl_vector_2d< double >(std::cos(angle), std::sin(angle));
+  return {std::cos(angle), std::sin(angle)};
 }
 
 //: Return curvature of a point on the biarc with s arclength away from starting point

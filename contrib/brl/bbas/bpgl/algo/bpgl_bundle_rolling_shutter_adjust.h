@@ -81,7 +81,7 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
   vgl_homg_point_3d<double> param_to_point(int j, const vnl_vector<double>& b) const
   {
     const double* d = b.data_block() + index_b(j);
-    return vgl_homg_point_3d<double>(d[0], d[1], d[2]);
+    return {d[0], d[1], d[2]};
   }
 
   //: construct the ith perspective camera from parameter vector a

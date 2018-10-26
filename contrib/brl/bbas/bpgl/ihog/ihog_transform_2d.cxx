@@ -33,7 +33,7 @@ void ihog_transform_2d::b_read(vsl_b_istream& bfs)
 
 vgl_point_2d<double>  ihog_transform_2d::origin() const
 {
-  return vgl_point_2d<double> (t12_matrix_[2][2]==1?t12_matrix_[0][2]:t12_matrix_[0][2]/t12_matrix_[2][2],t12_matrix_[2][2]==1?t12_matrix_[1][2]:t12_matrix_[1][2]/t12_matrix_[2][2]);
+  return {t12_matrix_[2][2]==1?t12_matrix_[0][2]:t12_matrix_[0][2]/t12_matrix_[2][2],t12_matrix_[2][2]==1?t12_matrix_[1][2]:t12_matrix_[1][2]/t12_matrix_[2][2]};
 }
 
 void ihog_transform_2d::set_origin(const vgl_point_2d<double> & p )
@@ -203,7 +203,7 @@ ihog_transform_2d::delta(const vgl_point_2d<double>& p, const vgl_vector_2d<doub
 #endif
         case RigidBody :
         case Affine :
-            return vgl_vector_2d<double> (dp.x()*t12_matrix_[0][0]+dp.y()*t12_matrix_[0][1],dp.x()*t12_matrix_[1][0]+dp.y()*t12_matrix_[1][1]);
+            return {dp.x()*t12_matrix_[0][0]+dp.y()*t12_matrix_[0][1],dp.x()*t12_matrix_[1][0]+dp.y()*t12_matrix_[1][1]};
         case Projective :
             return operator()(p+dp)-operator()(p);
         default:
@@ -225,7 +225,7 @@ vgl_point_2d<double> ihog_transform_2d::operator()(double x, double y) const
     switch (form_)
     {
         case Identity :
-            return vgl_point_2d<double> (x,y);
+            return {x,y};
         case Translation :
             return vgl_point_2d<double> (x+t12_matrix_[0][2],y+t12_matrix_[1][2]);
         case RigidBody :

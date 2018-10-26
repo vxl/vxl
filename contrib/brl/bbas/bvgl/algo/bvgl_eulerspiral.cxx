@@ -121,7 +121,7 @@ vgl_vector_2d< double > bvgl_eulerspiral::
 tangent_at_length( double s) const {
   double angle;
   angle = this->start_angle() + s*(this->k0() + 0.5*this->gamma()*s);
-  return vgl_vector_2d<double >(std::cos(angle), std::sin(angle));
+  return {std::cos(angle), std::sin(angle)};
 }
 
 vgl_vector_2d< double > bvgl_eulerspiral::

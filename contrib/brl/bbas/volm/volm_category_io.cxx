@@ -8,7 +8,7 @@
 vil_rgb<vxl_byte> color(unsigned char id)
 {
   if (id == (unsigned char)34)  // tall building as blue
-    return vil_rgb<vxl_byte>(0,0,255);
+    return {0,0,255};
   else if (id == (unsigned char)29)
     return vil_rgb<vxl_byte>(255, 0, 0);
   else

@@ -58,7 +58,7 @@ class volm_spherical_shell_container : public vbl_ref_count
   double point_angle() const { return usph_->point_angle(); }
   double top_angle() const { return usph_->min_theta(); }
   double bottom_angle() const {return 180.0 - usph_->max_theta(); }
-  vgl_point_3d<double> cent() const { return vgl_point_3d<double>(0.0, 0.0, 0.0); }
+  vgl_point_3d<double> cent() const { return {0.0, 0.0, 0.0}; }
   std::vector<vgl_point_3d<double> > cart_points() const;
 
   std::vector<vsph_sph_point_3d> sph_points() const;

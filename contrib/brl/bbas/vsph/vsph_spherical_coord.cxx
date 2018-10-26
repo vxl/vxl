@@ -37,7 +37,7 @@ vgl_point_3d<double> vsph_spherical_coord::cart_coord(vsph_sph_point_3d const& p
   double y = p.radius_*std::sin(p.theta_)*std::sin(p.phi_);
   double z = p.radius_*std::cos(p.theta_);
   // translate the point based on the origin
-  return vgl_point_3d<double>(x+origin_.x(),y+origin_.y(),z+origin_.z());
+  return {x+origin_.x(),y+origin_.y(),z+origin_.z()};
 }
 
 bool vsph_spherical_coord::move_point(vsph_sph_point_3d& p)

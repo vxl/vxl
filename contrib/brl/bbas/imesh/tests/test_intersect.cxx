@@ -16,12 +16,12 @@ double dot_product(const vgl_point_3d<double>& p, const vgl_vector_3d<double>& v
 
 vgl_point_3d<double> operator * (double s, const vgl_point_3d<double>& p)
 {
-  return vgl_point_3d<double>(s*p.x(),s*p.y(),s*p.z());
+  return {s*p.x(),s*p.y(),s*p.z()};
 }
 
 vgl_point_3d<double> operator + (const vgl_point_3d<double>& p1, const vgl_point_3d<double>& p2)
 {
-  return vgl_point_3d<double>(p1.x()+p2.x(), p1.y()+p2.y(), p1.z()+p2.z());
+  return {p1.x()+p2.x(), p1.y()+p2.y(), p1.z()+p2.z()};
 }
 
 }; // end of namespace

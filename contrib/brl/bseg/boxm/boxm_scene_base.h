@@ -58,8 +58,8 @@ class boxm_scene_base : public vbl_ref_count
   unsigned init_level() const { return init_tree_level_; }
   std::string filename() const { return filename_; }
 
-  virtual vgl_box_3d<double> get_world_bbox() const { return vgl_box_3d<double>(); }
-  virtual vgl_vector_3d<unsigned> world_dim() const { return vgl_vector_3d<unsigned>(); }
+  virtual vgl_box_3d<double> get_world_bbox() const { return {}; }
+  virtual vgl_vector_3d<unsigned> world_dim() const { return {}; }
 
  protected:
   boxm_apm_type app_model_;

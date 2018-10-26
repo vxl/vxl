@@ -587,7 +587,7 @@ boxm2_texture_mesh_process_globals::calc_smooth_norm( vpgl_perspective_camera<do
       }
     }
   }
-  return vgl_vector_3d<double>(nx/numNormals, ny/numNormals, nz/numNormals);
+  return {nx/numNormals, ny/numNormals, nz/numNormals};
 }
 
 

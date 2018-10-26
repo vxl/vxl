@@ -117,7 +117,7 @@ vgl_point_2d<float>
 volm_conf_object
 ::loc() const
 {
-return vgl_point_2d<float>(this->x(), this->y());
+return {this->x(), this->y()};
 }
 
 bool

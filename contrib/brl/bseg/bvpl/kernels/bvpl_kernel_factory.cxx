@@ -226,7 +226,7 @@ vgl_vector_3d<int> bvpl_kernel_factory::dim()
   y = max_point_.y()-min_point_.y() + 1;
   z = max_point_.z()-min_point_.z() + 1;
 
-  return vgl_vector_3d<int>(x,y,z);
+  return {x,y,z};
 }
 
 

@@ -38,9 +38,9 @@ class boxm_scene_parser : public expatpp
   ~boxm_scene_parser(void) override = default;
 
    bool lvcs(vpgl_lvcs& lvcs);
-   vgl_point_3d<double> origin() const { return vgl_point_3d<double>(local_orig_x_,local_orig_y_,local_orig_z_); }
-   vgl_vector_3d<double> block_dim() const { return vgl_vector_3d<double>(block_dim_x_,block_dim_y_,block_dim_z_); }
-   vgl_vector_3d<unsigned> block_nums() const { return vgl_vector_3d<unsigned>(block_num_x_,block_num_y_,block_num_z_); }
+   vgl_point_3d<double> origin() const { return {local_orig_x_,local_orig_y_,local_orig_z_}; }
+   vgl_vector_3d<double> block_dim() const { return {block_dim_x_,block_dim_y_,block_dim_z_}; }
+   vgl_vector_3d<unsigned> block_nums() const { return {block_num_x_,block_num_y_,block_num_z_}; }
    void paths(std::string& scene_path, std::string& block_pref) { scene_path=path_; block_pref=block_pref_; }
    std::string app_model() const { return app_model_; }
    bool multi_bin() const { return multi_bin_; }

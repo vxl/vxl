@@ -634,7 +634,7 @@ imesh_imls_surface::split_triangle_quadrature(const vgl_point_3d<double>& x,
   // early exit if triangle flat
   double height = t4/t1 - t2*t2/(t1*t1);
   if (!(height > 0.0))
-    return vgl_vector_2d<double>(0,0);
+    return {0,0};
   height = std::sqrt(height)/2.0;
 
   double vt1 = vn-vm;
@@ -718,7 +718,7 @@ split_triangle_quadrature_with_deriv(const vgl_point_3d<double>& x,
   // early exit if triangle flat
   double height = t4/t1 - t2*t2/(t1*t1);
   if (!(height > 0.0))
-    return integral_data();
+    return {};
   height = std::sqrt(height)/2.0;
 
   double vt1 = vn-vm;
@@ -881,7 +881,7 @@ vgl_vector_3d<double> dfunc(const vgl_vector_3d<double>& n,
   vnl_double_3 df = (2*v/sqr_len)*ndp;
   df += ddp.transpose() * ( ((-2*v*v/(sqr_len*sqr_len))*ndp) +
                             (2/len*(n_dot_dp/len - 1)*(nn - (n_dot_dp/sqr_len)*ndp)) );
-  return vgl_vector_3d<double>(df[0],df[1],df[2]);
+  return {df[0],df[1],df[2]};
 }
 // end of namespace
 }
