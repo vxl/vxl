@@ -59,7 +59,7 @@ public:
     vnl_vector_ref<double> x_ref(n,x);
     vnl_vector_ref<double> y_ref(m, const_cast<double*>( y ) );
 
-    vnl_vector_ref<double> tmp(n,rw);
+    vnl_vector_ref<double> tmp(n,this->rw);
     this->ls_->transpose_multiply(y_ref, tmp);
     x_ref += tmp;
     }
@@ -122,10 +122,12 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
   long m = ls_->get_number_of_residuals();
   long n = ls_->get_number_of_unknowns();
   double damp = 0;
-  vcl_vector<double> rw(m);
+
+  //NOTE: rw is a scratch space used for both intermediate residual and unknown computations
+  vcl_vector<double> rw(std::max(m,n));
   vcl_vector<double> v(n);
-  vcl_vector<double> w(n);
   vcl_vector<double> se(n);
+
   double atol = 0;
   double btol = 0;
 #ifdef THIS_CODE_IS_DISABLED_BECAUSE_THE_LSQR_CODE_FROM_NETLIB_WAS_COPYRIGHTED_BY_ACM
@@ -142,9 +144,9 @@ int vnl_lsqr::minimize(vnl_vector<double>& result)
 
   solver.SetDamp( damp );
   solver.SetLinearSystem( this->ls_ );
-  solver.SetWorkingSpace( &rw[0] );
+  solver.SetWorkingSpace( rw.data() );
   solver.SetMaximumNumberOfIterations( max_iter_ );
-  solver.SetStandardErrorEstimates( &se[0] );
+  solver.SetStandardErrorEstimates( se.data() );
   solver.SetToleranceA( atol );
   solver.SetToleranceB( btol );
 
