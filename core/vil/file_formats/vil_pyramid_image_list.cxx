@@ -64,9 +64,9 @@ static bool copy_base_resc(vil_image_resource_sptr const& base_image,
     {
       vil_image_view_base_sptr blk = brsc->get_block(i,j);
       if (!blk)
-        return 0;
+        return false;
       if (!out_resc->put_block(i, j, *blk))
-        return 0;
+        return false;
     }
   }//end scope for out resource
   //

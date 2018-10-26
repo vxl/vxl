@@ -18,12 +18,12 @@ static void vbl_test_bit_array_2d()
 
   v.resize(2,3);
 
-  v.put(0,0, 0);
-  v.put(1,0, 1);
-  v.put(0,1, 1);
-  v.put(1,1, 1);
-  v.put(0,2, 0);
-  v.put(1,2, 0);
+  v.put(0,0, false);
+  v.put(1,0, true);
+  v.put(0,1, true);
+  v.put(1,1, true);
+  v.put(0,2, false);
+  v.put(1,2, false);
 
   std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
@@ -42,12 +42,12 @@ static void vbl_test_bit_array_2d()
   TEST("element (1,2) is 0", v(1,2), 0);
 
   bool buf[6];
-  buf[0] = 0;
-  buf[1] = 1;
-  buf[2] = 1;
-  buf[3] = 1;
-  buf[4] = 0;
-  buf[5] = 0;
+  buf[0] = false;
+  buf[1] = true;
+  buf[2] = true;
+  buf[3] = true;
+  buf[4] = false;
+  buf[5] = false;
   vbl_bit_array_2d w(2,3,buf);
 
   TEST("constructor from buffer", w, v);
@@ -71,12 +71,12 @@ static void vbl_test_bit_array_3d()
 
   v.resize(1,2,3);
 
-  v.set(0,0,0, 0);
-  v.set(0,1,0, 1);
-  v.set(0,0,1, 1);
-  v.set(0,1,1, 1);
-  v.set(0,0,2, 0);
-  v.set(0,1,2, 0);
+  v.set(0,0,0, false);
+  v.set(0,1,0, true);
+  v.set(0,0,1, true);
+  v.set(0,1,1, true);
+  v.set(0,0,2, false);
+  v.set(0,1,2, false);
 
   std::cout << "\nv =\n" << v
            << "size " << v.size() << '\n'
@@ -97,12 +97,12 @@ static void vbl_test_bit_array_3d()
   TEST("element (0,1,2) is 0", v(0,1,2), 0);
 
   bool buf[6];
-  buf[0] = 0;
-  buf[1] = 1;
-  buf[2] = 1;
-  buf[3] = 1;
-  buf[4] = 0;
-  buf[5] = 0;
+  buf[0] = false;
+  buf[1] = true;
+  buf[2] = true;
+  buf[3] = true;
+  buf[4] = false;
+  buf[5] = false;
   vbl_bit_array_3d w(1,2,3,buf);
 
   TEST("constructor from buffer", w, v);
