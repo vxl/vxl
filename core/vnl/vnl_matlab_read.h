@@ -22,6 +22,7 @@
 #include <vnl/vnl_matlab_header.h>
 #include "vnl/vnl_export.h"
 
+
 // ------------------------------ easy ------------------------------
 
 template <class T> class vnl_vector;

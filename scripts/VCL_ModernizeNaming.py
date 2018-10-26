@@ -11,9 +11,26 @@ import sys
 import re
 from collections import OrderedDict
 
+if len(sys.argv) != 2:
+    usage = """
+INCORRECT USAGE:
+   {0}
 
-## slight modification from grep command
-info_for_conversion="""
+USAGE:
+  python {1} source_file_to_modernize
+
+Examples:
+  SRC_BASE_DIR=~/MYSRC/Submodule
+  for ext in ".h" ".cxx" ".cpp" ".hxx" ".hpp" ".txx"; do
+    find ${{SRC_BASE_DIR}} -type f -name "*${{ext}}" -exec python Utilities/Maintenance/VCL_ModernizeNaming.py {{}} \;
+  done
+""".format(sys.argv, sys.argv[0])
+    print(usage)
+    sys.exit(-1)
+
+
+# slight modification from grep command
+info_for_conversion = """
 vcl_algorithm.h,vcl_adjacent_find,std::adjacent_find
 vcl_algorithm.h,vcl_and,std::and
 vcl_algorithm.h,vcl_binary,std::binary
@@ -188,7 +205,7 @@ vcl_cstdio.h,vcl_rewind,std::rewind
 vcl_cstdio.h,vcl_scanf,std::scanf
 vcl_cstdio.h,vcl_setbuf,std::setbuf
 vcl_cstdio.h,vcl_setvbuf,std::setvbuf
-vcl_cstdio.h,vcl_snprintf,vcl_snprintf
+vcl_cstdio.h,vcl_snprintf,std::snprintf
 vcl_cstdio.h,vcl_sprintf,std::sprintf
 vcl_cstdio.h,vcl_sscanf,std::sscanf
 vcl_cstdio.h,vcl_tmpfile,std::tmpfile
@@ -582,7 +599,8 @@ vcl_map.h,vcl_map,std::map
 vcl_map.h,vcl_multimap,std::multimap
 vcl_map.h,vcl_swap,std::swap
 vcl_memory.h,vcl_allocator,std::allocator
-vcl_memory.h,vcl_unique_ptr,vcl_unique_ptr
+vcl_memory.h,vcl_unique_ptr,std::unique_ptr
+vcl_memory.h,vcl_auto_ptr,std::auto_ptr
 vcl_memory.h,vcl_get_temporary_buffer,std::get_temporary_buffer
 vcl_memory.h,vcl_raw_storage_iterator,std::raw_storage_iterator
 vcl_memory.h,vcl_return_temporary_buffer,std::return_temporary_buffer
@@ -666,6 +684,7 @@ vcl_exception.h,vcl_try,try
 vcl_exception.h,vcl_catch_all,catch(...)
 vcl_exception.h,vcl_catch,catch
 vcl_ios.h,vcl_ios,std::ios
+vcl_new.h,vcl_move,std::move
 """
 
 vcl_replace_head_names = OrderedDict()
@@ -678,43 +697,49 @@ for line in info_for_conversion.splitlines():
     if len(linevalues) != 3:
         #print("SKIPPING: " + str(linevalues))
         continue
-    fname=linevalues[0]
-    new_name=fname.replace("vcl_","").replace(".h","")
-    vcl_replace_head_names['#include "{0}"'.format(fname)]='#include "{0}"'.format(new_name)
-    vcl_replace_head_names['#include <{0}>'.format(fname)]='#include <{0}>'.format(new_name)
-    vcl_pat=linevalues[1]
-    new_pat=linevalues[2]
-    vcl_replace_functionnames[vcl_pat]=new_pat
+    fname = linevalues[0]
+    new_name = fname.replace("vcl_", "").replace(".h","")
+    vcl_replace_head_names['#include "{0}"'.format(
+        fname)] = '#include "{0}"'.format(new_name)
+    vcl_replace_head_names['#include <{0}>'.format(
+        fname)] = '#include <{0}>'.format(new_name)
+    vcl_pat = linevalues[1]
+    new_pat = linevalues[2]
+    vcl_replace_functionnames[vcl_pat] = new_pat
     # Need to fix the fact that both std::ios is a base and a prefix
     if "std::ios::" in new_pat:
-        vcl_replace_manual[new_pat.replace("std::ios::","std::ios_")] = new_pat
+        vcl_replace_manual[new_pat.replace(
+            "std::ios::", "std::ios_")] = new_pat
+    vcl_replace_manual['"std::string'] = 'vcl_string'
 
+cfile = sys.argv[1]
 
-#print(vcl_replace_head_names)
-#print(vcl_replace_functionnames)
-
-cfile=sys.argv[1]
-
-file_as_string=""
-print("Processing: " + cfile)
-with open(cfile,"r") as rfp:
-    file_as_string=rfp.read()
+file_as_string = ""
+with open(cfile, "r") as rfp:
+    file_as_string = rfp.read()
+orig_file = file_as_string
 
 if file_as_string.find("std::cout") or file_as_string.find("std::cerr") or file_as_string.find("std::cin"):
-    required_header="#include <vcl_compiler.h>\n#include <iostream>\n"
+    required_header = "#include <vcl_compiler.h>\n#include <iostream>\n"
 else:
-    required_header="#include <vcl_compiler.h>\n"
+    required_header = "#include <vcl_compiler.h>\n"
 
-for searchval,replaceval in vcl_replace_head_names.items():
-   file_as_string_new = file_as_string.replace(searchval,required_header+replaceval)
-   if file_as_string_new != file_as_string:
-       required_header=""
-   file_as_string=file_as_string_new
+for searchval, replaceval in vcl_replace_head_names.items():
+    file_as_string_new = file_as_string.replace(
+        searchval, required_header + replaceval)
+    if file_as_string_new != file_as_string:
+        required_header = ""
+    file_as_string = file_as_string_new
 
 
-for searchval,replaceval in vcl_replace_functionnames.items():
-   file_as_string = re.sub( r"\b{0}\b".format(searchval), replaceval,  file_as_string )
-for searchval,replaceval in vcl_replace_manual.items():
-   file_as_string = file_as_string.replace(searchval,replaceval)
-with open(cfile,"w") as wfp:
-   wfp.write(file_as_string)
+for searchval, replaceval in vcl_replace_functionnames.items():
+    file_as_string = re.sub(r"\b{0}\b".format(searchval), replaceval, file_as_string)
+for searchval, replaceval in vcl_replace_manual.items():
+    file_as_string = file_as_string.replace(searchval, replaceval)
+
+if orig_file != file_as_string:
+    print("Processing: " + cfile)
+    with open(cfile, "w") as wfp:
+        wfp.write(file_as_string)
+else:
+    print("NO CHANGES NEEDED: " + cfile)

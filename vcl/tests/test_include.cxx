@@ -48,7 +48,6 @@
 #include <vcl_memory.h>
 #include <vcl_utility.h>
 #include <vcl_exception.h>
-#include <vcl_new.h>
 #include <vcl_stack.h>
 #include <vcl_vector.h>
 #include <vcl_functional.h>
