@@ -885,7 +885,7 @@ bool boxm_scene<T>::parse_xml_string(std::string xml, boxm_scene_parser& parser)
 {
   if (xml.size() == 0) {
     std::cerr << "XML string is empty\n";
-    return 0;
+    return false;
   }
   if (!parser.parseString(xml.data())) {
     std::cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "

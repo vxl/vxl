@@ -25,8 +25,8 @@ void test_signed_distance_transform()
 
   // put single mask in centre
   {
-    mask.fill(0);
-    mask(2,2,2)=1;
+    mask.fill(false);
+    mask(2,2,2)=true;
 
     float li=5.0f;
     float lj=7.0f;
@@ -51,15 +51,15 @@ void test_signed_distance_transform()
 
   // put 2*2*2 block of mask points in corner
   {
-    mask.fill(0);
-    mask(0,0,0)=1;
-    mask(1,0,0)=1;
-    mask(0,1,0)=1;
-    mask(0,0,1)=1;
-    mask(1,1,0)=1;
-    mask(1,0,1)=1;
-    mask(0,1,1)=1;
-    mask(1,1,1)=1;
+    mask.fill(false);
+    mask(0,0,0)=true;
+    mask(1,0,0)=true;
+    mask(0,1,0)=true;
+    mask(0,0,1)=true;
+    mask(1,1,0)=true;
+    mask(1,0,1)=true;
+    mask(0,1,1)=true;
+    mask(1,1,1)=true;
 
     float li=3.0f;
     float lj=4.0f;

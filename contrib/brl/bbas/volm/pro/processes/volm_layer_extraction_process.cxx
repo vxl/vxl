@@ -74,7 +74,7 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
   std::ifstream ifs(land_txt.c_str());
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << land_txt.c_str() << std::endl;
-    return 0;
+    return false;
   }
   int tmp_id;
   while (!ifs.eof()) {
@@ -301,7 +301,7 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
   vcl_ifstream ifs(land_txt.c_str());
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << land_txt.c_str() << std::endl;
-    return 0;
+    return false;
   }
   int tmp_id;
   while (!ifs.eof()) {

@@ -97,7 +97,7 @@ class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelIt
            , shiftin_(shi)
            , scaleout_(so)
            , indexout_(0)
-           , checkrange_(0)
+           , checkrange_(false)
       {
         this->put_is_input_driven(true); // get sections from input
       }

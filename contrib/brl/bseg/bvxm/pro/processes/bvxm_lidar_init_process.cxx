@@ -214,7 +214,7 @@ bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_fir
   vil_image_view<bool>* view = new vil_image_view<bool>(roi_first->ni(), roi_first->nj());
   // if there is no second camera and image, just use one
   if (!roi_second || !cam_second) {
-    view->fill(0);
+    view->fill(false);
     mask = view;
   }
   else {

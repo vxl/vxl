@@ -63,7 +63,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   if (!image)
   {
     std::cout << "NITF image load failed in bvxm_illum_index_process\n";
-    return 0;
+    return false;
   }
 
   std::string format = image->file_format();
@@ -72,7 +72,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   if (prefix != "nitf")
   {
     std::cout << "source image is not NITF in bvxm_illum_index_process\n";
-    return 0;
+    return false;
   }
 
     //cast to an nitf2_image

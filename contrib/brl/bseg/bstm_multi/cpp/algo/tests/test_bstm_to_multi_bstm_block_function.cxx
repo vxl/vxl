@@ -683,9 +683,9 @@ void test_make_unrefined_space_tree() {
     diffs[9 * 512 + 100 + 1] = true;
     unsigned char *current_children_start =
         child_level_buffer + (8 * 512 + 1) * space_tree_size;
-    boct_bit_tree(current_children_start).set_bit_at(0, 1);
+    boct_bit_tree(current_children_start).set_bit_at(0, true);
     boct_bit_tree(current_children_start + space_tree_size * 2)
-        .set_bit_at(0, 1);
+        .set_bit_at(0, true);
 
     // first two cells (in row major order) should be refined, as well as
     // their

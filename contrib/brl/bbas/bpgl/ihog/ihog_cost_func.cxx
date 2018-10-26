@@ -30,7 +30,7 @@ ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,
 
   // make a dummy mask
   mask_image_.set_size(image1.ni(),image1.nj());
-  mask_image_.fill(1);
+  mask_image_.fill(true);
 }
 
 ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,

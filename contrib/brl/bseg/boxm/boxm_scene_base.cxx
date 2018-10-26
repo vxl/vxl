@@ -11,7 +11,7 @@ bool boxm_scene_base::load_scene(std::string filename, boxm_scene_parser& parser
     std::FILE* xmlFile = std::fopen(filename.c_str(), "r");
     if (!xmlFile){
     std::cerr << filename.c_str() << " error on opening" << std::endl;
-    return 0;
+    return false;
     }
     if (!parser.parseFile(xmlFile)) {
       std::cerr << XML_ErrorString(parser.XML_GetErrorCode()) << " at line "

@@ -1129,7 +1129,7 @@ void vimt3d_transform_3d::b_read(vsl_b_istream& bfs)
     std::abort();
   }
 
-  inv_uptodate_ = 0;
+  inv_uptodate_ = false;
 }
 
 //=======================================================================

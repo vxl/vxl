@@ -257,7 +257,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
       HomgPoint2D X1(X[0], X[1]);
       HomgPoint2D X2(X[2], X[3]);
       double EPIDIST = HomgOperator2D::perp_dist_squared(X2, HomgLine2D(F_*X1.get_vector()));
-      if (0 && EPIDIST > 1e-12) {
+      if (false && EPIDIST > 1e-12) {
         // This can happen in reasonable circumstances -- notably when one
         // epipole is at infinity.
         std::cerr << "FManifoldProject: A root has epidist = " << std::sqrt(EPIDIST) << '\n'

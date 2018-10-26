@@ -228,7 +228,7 @@ template < class DataType >
   // next-row if section is at the bottom edge call
   // bogus prototype alert! FIXME
   // This function should really be pure
-  bool incremented_Y=0, incremented_X=0;
+  bool incremented_Y=false, incremented_X=false;
 #if 0 // commented out
   int xi = image_size(vipl_filter_abs::X_Axis()) - in_out.curr_sec_end(vipl_filter_abs::X_Axis());
   int yi = image_size(vipl_filter_abs::Y_Axis()) - in_out.curr_sec_end(vipl_filter_abs::Y_Axis());
@@ -270,7 +270,7 @@ template < class DataType >
   // scalar_image_2d_of<FOO>
   // first increment X if possible
   if (xi > 0) {
-    incremented_X = 1;
+    incremented_X = true;
     // if start != 0 we just increment it by size, else we add overlap
     if (in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] > 0){
       in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()]
@@ -297,7 +297,7 @@ template < class DataType >
       - in_out.i_curr_sec_start()[vipl_filter_abs::X_Axis()];
   }
   else if (yi > 0) {
-    incremented_Y = 1;
+    incremented_Y = true;
     // typewriter "spring"
     in_out.ref_i_curr_sec_start()[vipl_filter_abs::X_Axis()] = 0;
       in_out.ref_i_curr_sec_end()[vipl_filter_abs::X_Axis()]

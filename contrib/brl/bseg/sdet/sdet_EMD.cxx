@@ -42,7 +42,7 @@ double sdet_gray_EMD(const sdet_bin dirt[], const sdet_bin hole[])
   double leftoverdirt = 0.0, leftoverhole = 0.0, work = 0.0;
   double dirt_amt, hole_amt;
 
-  while (1) {
+  while (true) {
 
     // Compute the amount of mass in the lowest numbered bin that hasn't
     // been moved yet from the piles of dirt

@@ -44,7 +44,7 @@ bool bvrml_write_box_process_cons(bprb_func_process& pro)
   bool good = pro.set_input_types(input_types_) &&
               pro.set_output_types(output_types_);
 
-  brdb_value_sptr idxw = new brdb_value_t<bool>(1);
+  brdb_value_sptr idxw = new brdb_value_t<bool>(true);
   pro.set_input(7, idxw);
   brdb_value_sptr idxr = new brdb_value_t<float>(1.0f);
   pro.set_input(8, idxr);

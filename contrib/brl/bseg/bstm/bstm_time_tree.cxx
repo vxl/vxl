@@ -407,7 +407,7 @@ void bstm_time_tree::fill_cells(bool (&frames)[32]) {
         this->bit_at(this->child_index(idx) + 1)) {
       continue;
     }
-    this->set_bit_at(idx, 0);
+    this->set_bit_at(idx, false);
   }
 }
 
