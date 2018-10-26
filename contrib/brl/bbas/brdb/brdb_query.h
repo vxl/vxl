@@ -90,7 +90,7 @@ class brdb_query_and : public brdb_query_branch
   brdb_query_aptr clone() const override;
 
   //: Destructor
-  ~brdb_query_and() = default;
+  ~brdb_query_and() override = default;
 
   brdb_query_aptr complement() const override;
 };
@@ -113,7 +113,7 @@ class brdb_query_or : public brdb_query_branch
   brdb_query_aptr clone() const override;
 
   //: Destructor
-  ~brdb_query_or() = default;
+  ~brdb_query_or() override = default;
 
   brdb_query_aptr complement() const override;
 };
@@ -137,7 +137,7 @@ class brdb_query_comp : public brdb_query
   brdb_query_comp(const brdb_query_comp& other);
 
   //: Destructor
-  ~brdb_query_comp() = default;
+  ~brdb_query_comp() override = default;
 
   //: Assignment operator
   brdb_query_comp& operator = (const brdb_query_comp& rhs);
