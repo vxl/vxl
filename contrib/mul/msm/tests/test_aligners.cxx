@@ -339,12 +339,12 @@ void test_affine_aligner()
   wt_mat[1].set_axes(1,0, 0, 10);   // Constrain along (1,0)
   wt_mat[2].set_axes(0,1, 0, 10);   // Constrain along (0,1)
 
-  vcl_cout<<"Testing calc_transform_wt_mat"<<vcl_endl;
+  std::cout<<"Testing calc_transform_wt_mat"<<std::endl;
   vnl_vector<double> pose1;
   aligner.calc_transform_wt_mat(points0,points1,wt_mat,pose1);
   msm_points points2;
   aligner.apply_transform(points0,pose1,points2);
-  vcl_cout<<points2<<vcl_endl;
+  std::cout<<points2<<std::endl;
 
   TEST_NEAR("Pt0: ",(points2[0]-vgl_point_2d<double>(1,1)).length(),0,1e-6);
   TEST_NEAR("Pt1: ",(points2[1]-vgl_point_2d<double>(3,1)).length(),0,1e-6);

@@ -12,7 +12,9 @@
 // \endverbatim
 
 #include <iostream>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <rsdl/rsdl_bins_2d.h>
 
 #include "rgrl_feature.h"
@@ -86,7 +88,7 @@ class rgrl_feature_set_bins_2d
   rgrl_mask_box bounding_box_;
 
   // Using bins as the data structure
-  vcl_unique_ptr< bin2d_type > bins_2d_;
+  std::unique_ptr< bin2d_type > bins_2d_;
   // bool use_bins_;
 
 };

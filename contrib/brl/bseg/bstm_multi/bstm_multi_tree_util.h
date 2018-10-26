@@ -1,10 +1,12 @@
 #ifndef bstm_multi_tree_util_h_
 #define bstm_multi_tree_util_h_
 
-#include <vcl_new.h>
-#include <vcl_stdexcept.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <new>
+#include <stdexcept>
+#include <string>
+#include <vector>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <boct/boct_bit_tree.h>
@@ -13,38 +15,38 @@
 
 typedef vnl_vector_fixed<unsigned char, 16> space_tree_b;
 typedef vnl_vector_fixed<unsigned char, 8> time_tree_b;
-static const vcl_size_t space_tree_size = sizeof(space_tree_b);
-static const vcl_size_t time_tree_size = sizeof(time_tree_b);
+static const std::size_t space_tree_size = sizeof(space_tree_b);
+static const std::size_t time_tree_size = sizeof(time_tree_b);
 
 //: Used to distinguish between time and space subdivisions in a block.
 enum space_time_enum { STE_SPACE, STE_TIME };
 
 //: Returns "space" or "time"
-vcl_string ste_as_string(space_time_enum ste);
+std::string ste_as_string(space_time_enum ste);
 
 //: Converts a string that is either "space" or "time" to a corresponding enum
 // value.
 // \param s      the string to convert
 // \param ste    stores resulting value
 // \returns      whether or not string is valid
-bool ste_from_string(const vcl_string &s, space_time_enum &ste);
+bool ste_from_string(const std::string &s, space_time_enum &ste);
 
 //: Accepts a list of subdivisions separated by commas, e.g.
 // 'space,time,space,time,space' and returns a vector of corresponding enum
 // values. Note that this skips invalid values.
-vcl_vector<space_time_enum> parse_subdivisions(const vcl_string &s);
+std::vector<space_time_enum> parse_subdivisions(const std::string &s);
 
 //: Prints subdivisions as a comma-separated list of space_time_enum
 // values (i.e. either 'space' or 'time'.)
-vcl_string print_subdivisions(const vcl_vector<space_time_enum> &subdivisions);
+std::string print_subdivisions(const std::vector<space_time_enum> &subdivisions);
 
-vcl_size_t tree_size(space_time_enum ste);
+std::size_t tree_size(space_time_enum ste);
 
 // Thrown by generic_tree when one tries to access a tree of the wrong type.
-class tree_type_exception : vcl_runtime_error {
+class tree_type_exception : std::runtime_error {
 public:
   explicit tree_type_exception(space_time_enum ste)
-      : vcl_runtime_error("Tree does not have type: " + ste_as_string(ste)) {}
+      : std::runtime_error("Tree does not have type: " + ste_as_string(ste)) {}
 };
 
 //: \brief Class that wraps either a BSTM time tree or a BOCT bit
@@ -83,7 +85,7 @@ public:
   const bstm_time_tree &time_tree(std::nothrow_t) const;
 
   //: returns buffer size
-  vcl_size_t tree_size() const;
+  std::size_t tree_size() const;
 
   unsigned char *bits();
   const unsigned char *bits() const;
@@ -95,7 +97,7 @@ public:
   int get_data_ptr() const;
   void set_data_ptr(int ptr);
 
-  vcl_vector<int> get_leaf_bits() const;
+  std::vector<int> get_leaf_bits() const;
 
   //: \brief number of leaf cells (not number of inner nodes).
   //

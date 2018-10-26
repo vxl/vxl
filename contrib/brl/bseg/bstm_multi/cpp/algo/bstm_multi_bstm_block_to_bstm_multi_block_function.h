@@ -1,9 +1,11 @@
 #ifndef bstm_multi_bstm_block_to_bstm_multi_block_function_h_
 #define bstm_multi_bstm_block_to_bstm_multi_block_function_h_
 
-#include <vcl_map.h>
-#include <vcl_stack.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <map>
+#include <stack>
+#include <string>
 
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>
@@ -21,7 +23,7 @@
 // <x,y,z> coordinates and a time length.
 //
 // This is a just product of all the given dimension.
-template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v) {
+template <typename T> T volume(const std::pair<vgl_vector_3d<T>, T> &v) {
   return v.first.x() * v.first.y() * v.first.z() * v.second;
 }
 
@@ -41,10 +43,10 @@ template <typename T> T volume(const vcl_pair<vgl_vector_3d<T>, T> &v) {
 //
 // \param appearance_type - appearance data type as string
 void get_bstm_data_buffers(
-    const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,
+    const std::map<std::string, bstm_data_base *> &bstm_datas,
     bstm_data_base *&alpha,
     bstm_data_base *&appearance,
-    vcl_string &appearance_type);
+    std::string &appearance_type);
 
 //: \brief Imports space and time trees from a BSTM block into a multi-BSTM
 // block.
@@ -90,21 +92,21 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
                               block_data_base *alpha_new,
                               const bstm_data_base *appearance,
                               block_data_base *appearance_new,
-                              const vcl_string &appearance_type);
+                              const std::string &appearance_type);
 
 //: \brief convenience function for choosing a template specialization
 // (based on appearance data type) at run-time using the appearance
 // type string.
 //
 // \returns output of time_differences_from_bstm_trees(...) if data
-// type is valid. If not, returns an empty vcl_vector<bool>.
-vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
+// type is valid. If not, returns an empty std::vector<bool>.
+std::vector<bool> dispatch_time_differences_from_bstm_trees(
     time_tree_b *time_buffer,
     space_tree_b *space_buffer,
-    const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    const std::pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     const block_data_base *alpha,
     const block_data_base *appearance,
-    const vcl_string &appearance_type,
+    const std::string &appearance_type,
     double p_threshold,
     double app_threshold);
 
@@ -143,10 +145,10 @@ vcl_vector<bool> dispatch_time_differences_from_bstm_trees(
 // (x,y,z,t) is true if this region is significantly different from
 // (x,y,z,t-1) and false otherwise.
 template <bstm_data_type APP_TYPE>
-vcl_vector<bool> time_differences_from_bstm_trees(
+std::vector<bool> time_differences_from_bstm_trees(
     time_tree_b *time_buffer,
     space_tree_b *space_buffer,
-    const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    const std::pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     const block_data<BSTM_ALPHA> &alpha,
     const block_data<APP_TYPE> &appearance,
     double p_threshold,
@@ -160,16 +162,16 @@ vcl_vector<bool> time_differences_from_bstm_trees(
                                            num_regions.first.y(),
                                            num_regions.first.z(),
                                            num_regions.second);
-  vcl_vector<bool> time_differences(space_trees_array.size(), false);
-  for (vcl_size_t i = 0; i < space_trees_array.x(); ++i) {
-    for (vcl_size_t j = 0; j < space_trees_array.y(); ++j) {
-      for (vcl_size_t k = 0; k < space_trees_array.z(); ++k) {
+  std::vector<bool> time_differences(space_trees_array.size(), false);
+  for (std::size_t i = 0; i < space_trees_array.x(); ++i) {
+    for (std::size_t j = 0; j < space_trees_array.y(); ++j) {
+      for (std::size_t k = 0; k < space_trees_array.z(); ++k) {
         // arrays are stored in row-major order, so we can directly iterate over
         // time dimension.
-        vcl_size_t first_frame_idx =
+        std::size_t first_frame_idx =
             space_trees_array.index_from_coords(i, j, k, 0);
         boct_bit_tree last_same_tree(space_trees_array[first_frame_idx]);
-        for (vcl_size_t idx = first_frame_idx;
+        for (std::size_t idx = first_frame_idx;
              idx < first_frame_idx + num_regions.second;
              ++idx) {
           boct_bit_tree current_tree(space_trees_array[idx]);
@@ -182,12 +184,12 @@ vcl_vector<bool> time_differences_from_bstm_trees(
           }
 
           // Same as leaf bit indices in last_same_tree
-          vcl_vector<int> leaf_bits = current_tree.get_leaf_bits();
-          for (vcl_vector<int>::const_iterator iter = leaf_bits.begin();
+          std::vector<int> leaf_bits = current_tree.get_leaf_bits();
+          for (std::vector<int>::const_iterator iter = leaf_bits.begin();
                iter != leaf_bits.end();
                ++iter) {
-            vcl_size_t current_tt_idx = current_tree.get_data_index(*iter);
-            vcl_size_t previous_tt_idx = last_same_tree.get_data_index(*iter);
+            std::size_t current_tt_idx = current_tree.get_data_index(*iter);
+            std::size_t previous_tt_idx = last_same_tree.get_data_index(*iter);
             bstm_time_tree current_tt(time_buffer[current_tt_idx]);
             bstm_time_tree previous_tt(time_buffer[previous_tt_idx]);
             // If time trees are refined at all, then they have more than one
@@ -198,8 +200,8 @@ vcl_vector<bool> time_differences_from_bstm_trees(
               break;
             }
             // Now compare actual data values
-            vcl_size_t current_data_idx = current_tt.get_data_index(0);
-            vcl_size_t previous_data_idx = previous_tt.get_data_index(0);
+            std::size_t current_data_idx = current_tt.get_data_index(0);
+            std::size_t previous_data_idx = previous_tt.get_data_index(0);
             const alpha_data_type &current_alpha = alpha[current_data_idx];
             const alpha_data_type &previous_alpha = alpha[previous_data_idx];
             const app_data_type &current_app = appearance[current_data_idx];
@@ -255,11 +257,11 @@ vcl_vector<bool> time_differences_from_bstm_trees(
 // tree.
 bool make_unrefined_space_tree(
     boct_bit_tree &current_tree,
-    const vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    const std::pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
     const index_4d &coords,
     unsigned char *child_level_buffer,
     space_time_enum child_level_type,
-    const vcl_vector<bool> &time_differences_vec);
+    const std::vector<bool> &time_differences_vec);
 
 //: \brief Similar to make_unrefined_space_tree, except coalesces over
 // time. The difference here is that instead of coalescing based on
@@ -275,8 +277,8 @@ bool make_unrefined_space_tree(
 // \param time_differences_vec - whether each region in space-time is
 // similar to the same region in the previous frame.
 void make_unrefined_time_tree(bstm_time_tree &current_tree,
-                              vcl_size_t tree_index,
-                              const vcl_vector<bool> &time_differences_vec);
+                              std::size_t tree_index,
+                              const std::vector<bool> &time_differences_vec);
 
 //: Data structure for representing a node in a bstm_multi_block. This is
 // returned by iterators traversing the block's data.
@@ -307,8 +309,8 @@ struct bstm_multi_block_tree_node {
 // coalesced and resized as this function progresses through each level.
 void compute_trees_structure(
     bstm_multi_block *blk,
-    vcl_pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
-    vcl_vector<bool> &time_differences_vec);
+    std::pair<vgl_vector_3d<unsigned>, unsigned> &num_regions,
+    std::vector<bool> &time_differences_vec);
 
 //: \brief Rearranges trees & data in a multi-BSTM scene so that each
 // tree's children are contiguous in memory and so that elements not
@@ -335,16 +337,16 @@ void compute_trees_structure(
 //
 // \param appearance_type - Appearance data type
 void coalesce_trees(bstm_multi_block *blk,
-                    vcl_map<vcl_string, block_data_base *> &datas,
-                    vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions,
-                    const vcl_string &appearance_type);
+                    std::map<std::string, block_data_base *> &datas,
+                    std::pair<vgl_vector_3d<unsigned>, unsigned> num_regions,
+                    const std::string &appearance_type);
 
 bool bstm_block_to_bstm_multi_block(
     bstm_multi_block *blk,
-    vcl_map<vcl_string, block_data_base *> &datas,
+    std::map<std::string, block_data_base *> &datas,
     bstm_block *bstm_blk,
     bstm_time_block *bstm_blk_t,
-    const vcl_map<vcl_string, bstm_data_base *> &bstm_datas,
+    const std::map<std::string, bstm_data_base *> &bstm_datas,
     double p_threshold,
     double app_threshold);
 

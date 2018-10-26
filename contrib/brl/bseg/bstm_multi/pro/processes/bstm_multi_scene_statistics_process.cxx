@@ -10,9 +10,11 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <vector>
 #include <vgl/vgl_intersection.h>
 
 #include <boct/boct_bit_tree.h>
@@ -30,7 +32,7 @@ constexpr unsigned n_outputs_ = 3;
 }
 
 bool bstm_multi_scene_statistics_process_cons(bprb_func_process &pro) {
-  vcl_vector<vcl_string> input_types_(::n_inputs_);
+  std::vector<std::string> input_types_(::n_inputs_);
   input_types_[0] = "bstm_multi_scene_sptr";
   input_types_[1] = "bstm_multi_cache_sptr";
   input_types_[2] = "float"; // center x
@@ -40,7 +42,7 @@ bool bstm_multi_scene_statistics_process_cons(bprb_func_process &pro) {
   input_types_[6] = "float"; // len y
   input_types_[7] = "float"; // len z
 
-  vcl_vector<vcl_string> output_types(::n_outputs_);
+  std::vector<std::string> output_types(::n_outputs_);
   output_types[0] = "float";
   output_types[1] = "float";
   output_types[2] = "unsigned";
@@ -70,8 +72,8 @@ bool bstm_multi_scene_statistics_process(bprb_func_process &pro) {
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   if (pro.n_inputs() < ::n_inputs_) {
-    vcl_cout << pro.name() << ": The input number should be " << ::n_inputs_
-             << vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << ::n_inputs_
+             << std::endl;
     return false;
   }
   // get the inputs
@@ -99,9 +101,9 @@ bool bstm_multi_scene_statistics_process(bprb_func_process &pro) {
   unsigned num_cells = 0;
 
   // get blocks
-  const vcl_map<bstm_block_id, bstm_multi_block_metadata> &blocks =
+  const std::map<bstm_block_id, bstm_multi_block_metadata> &blocks =
       scene->blocks();
-  vcl_map<bstm_block_id, bstm_multi_block_metadata>::const_iterator
+  std::map<bstm_block_id, bstm_multi_block_metadata>::const_iterator
       bstm_multi_iter = blocks.begin();
   for (; bstm_multi_iter != blocks.end(); ++bstm_multi_iter) {
     bstm_block_id block_id = bstm_multi_iter->first;

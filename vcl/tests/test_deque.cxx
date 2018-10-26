@@ -1,9 +1,11 @@
-#include <vcl_iostream.h>
-#include <vcl_deque.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <deque>
 
 int test_deque_main(int /*argc*/,char* /*argv*/[])
 {
-  typedef vcl_deque<int> mydeque;
+  typedef std::deque<int> mydeque;
   mydeque dq;
 
   dq.push_front(2);
@@ -11,7 +13,7 @@ int test_deque_main(int /*argc*/,char* /*argv*/[])
   dq.push_front(1);
 
   for (mydeque::iterator p = dq.begin(); p != dq.end(); ++p)
-    vcl_cout << *p << vcl_endl;
+    std::cout << *p << std::endl;
 
   return 0;
 }

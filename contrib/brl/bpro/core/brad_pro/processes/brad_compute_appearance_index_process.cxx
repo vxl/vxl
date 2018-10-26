@@ -7,20 +7,22 @@
 //:
 // \file
 
-#include <vcl_fstream.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 
 //: Constructor
 bool brad_compute_appearance_index_process_cons(bprb_func_process& pro)
 {
   //input
   bool ok=false;
-  vcl_vector<vcl_string> input_types;
+  std::vector<std::string> input_types;
   input_types.emplace_back("bbas_1d_array_string_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
-  vcl_vector<vcl_string> output_types;
+  std::vector<std::string> output_types;
   output_types.emplace_back("bbas_1d_array_int_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
@@ -32,7 +34,7 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
 {
   // Sanity check
   if (pro.n_inputs() != 1) {
-    vcl_cout << "brad_compute_appearance_index_process: The input number should be 1" << vcl_endl;
+    std::cout << "brad_compute_appearance_index_process: The input number should be 1" << std::endl;
     return false;
   }
 

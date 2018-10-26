@@ -40,7 +40,9 @@
 #include <vul/vul_file.h>
 
 #include <vcl_compiler.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 //:
 vpgl_rational_camera<double>
@@ -156,7 +158,7 @@ static void test_brec_update_changes_process()
   REGISTER_DATATYPE(bvxm_voxel_world_sptr);
   REGISTER_DATATYPE(vil_image_view_base_sptr);
   REGISTER_DATATYPE(vpgl_camera_double_sptr);
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
 
@@ -180,7 +182,7 @@ static void test_brec_update_changes_process()
   TEST("run bvxmGenSyntheticWorldProcess", good ,true);
 
   brdb_query_aptr Q_w = brdb_query_comp_new("id", brdb_query::EQ, id_world);
-  brdb_selection_sptr S_w = DATABASE->select("bvxm_voxel_world_sptr_data", vcl_move(Q_w));
+  brdb_selection_sptr S_w = DATABASE->select("bvxm_voxel_world_sptr_data", std::move(Q_w));
   TEST("output world is in db", S_w->size(), 1);
 
   brdb_value_sptr value_w;
@@ -230,7 +232,7 @@ static void test_brec_update_changes_process()
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img1);
   TEST("run bvxm detect instance process", good ,true);
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img1);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", vcl_move(Q_img));
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img));
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);

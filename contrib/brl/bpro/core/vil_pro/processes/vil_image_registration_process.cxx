@@ -140,7 +140,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
         values.push_back(dy);
         values.push_back(dz);
         values.push_back(var);
-        rmse_map.insert(std::pair<double, vcl_vector<double> >(rmse,values));
+        rmse_map.insert(std::pair<double, std::vector<double> >(rmse,values));
       } // end of loop over z
     } // end of loop over y
   } // end of loop over x

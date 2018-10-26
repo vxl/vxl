@@ -14,9 +14,11 @@
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_sstream.h>
-#include <vcl_fstream.h>
-#include <vcl_string.h>
+#include <sstream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
+#include <string>
 #include <vsl/vsl_quick_file.h>
 
 #include <msm/msm_aligner.h>
@@ -59,9 +61,9 @@ images: {
 
 void print_usage()
 {
-  vcl_cout << "msm_compare_markups -p param_file\n"
+  std::cout << "msm_compare_markups -p param_file\n"
            << "Analyse differences between points from two annotators.\n"
-           << vcl_endl;
+           << std::endl;
 
   vul_arg_display_usage_and_exit();
 }
@@ -70,7 +72,7 @@ void print_usage()
 struct tool_params
 {
   //: Aligner for shape model
-  vcl_unique_ptr<msm_aligner> aligner;
+  std::unique_ptr<msm_aligner> aligner;
 
   //: Radius of points to display
   double point_radius;
@@ -79,36 +81,36 @@ struct tool_params
   double line_width;
 
   //: Directory containing images
-  vcl_string image_dir;
+  std::string image_dir;
 
   //: Directories containing points
-  vcl_vector<vcl_string> points_dir;
+  std::vector<std::string> points_dir;
 
   //: Colours for points
-  vcl_vector<vcl_string> point_colour;
+  std::vector<std::string> point_colour;
 
   //: File to save shape model to
-  vcl_string shape_model_path;
+  std::string shape_model_path;
 
   //: List of image names
-  vcl_vector<vcl_string> image_names;
+  std::vector<std::string> image_names;
 
   //: List of points file names
-  vcl_vector<vcl_string> points_names;
+  std::vector<std::string> points_names;
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 };
 
 //: Parse named text file to read in data
 //  Throws a mbl_exception_parse_error if fails
-void tool_params::read_from_file(const vcl_string& path)
+void tool_params::read_from_file(const std::string& path)
 {
-  vcl_ifstream ifs(path.c_str());
+  std::ifstream ifs(path.c_str());
   if (!ifs)
   {
-    vcl_string error_msg = "Failed to open file: "+path;
+    std::string error_msg = "Failed to open file: "+path;
     throw (mbl_exception_parse_error(error_msg));
   }
 
@@ -129,9 +131,9 @@ void tool_params::read_from_file(const vcl_string& path)
   line_width=vul_string_atof(props.get_optional_property("line_width","1"));
 
   {
-    vcl_string aligner_str
+    std::string aligner_str
        = props.get_required_property("aligner");
-    vcl_stringstream ss(aligner_str);
+    std::stringstream ss(aligner_str);
     aligner = msm_aligner::create_from_stream(ss);
   }
 
@@ -141,16 +143,16 @@ void tool_params::read_from_file(const vcl_string& path)
   // Don't look for unused props so can use a single common parameter file.
 }
 
-void load_shapes(const vcl_string& points_dir,
-                 const vcl_vector<vcl_string>& filenames,
-                 vcl_vector<msm_points>& shapes)
+void load_shapes(const std::string& points_dir,
+                 const std::vector<std::string>& filenames,
+                 std::vector<msm_points>& shapes)
 {
   unsigned n=filenames.size();
 
   shapes.resize(n);
   for (unsigned i=0;i<n;++i)
   {
-    vcl_string path = points_dir+"/"+filenames[i];
+    std::string path = points_dir+"/"+filenames[i];
     if (!shapes[i].read_text_file(path))
     {
       mbl_exception_parse_error x("Failed to load points from "+path);
@@ -159,14 +161,14 @@ void load_shapes(const vcl_string& points_dir,
 
     if (shapes[i].size()!=shapes[0].size())
     {
-      vcl_cerr<<"WARNING: "<<path<<" has different number of points ("
-              <<shapes[i].size()<<") to first set ("<<shapes[0].size()<<")"<<vcl_endl;
+      std::cerr<<"WARNING: "<<path<<" has different number of points ("
+              <<shapes[i].size()<<") to first set ("<<shapes[0].size()<<")"<<std::endl;
     }
   }
 }
 
 //: Compute mean of points on j-th example
-msm_points mean_shape(const vcl_vector<vcl_vector<msm_points> >& points, unsigned j)
+msm_points mean_shape(const std::vector<std::vector<msm_points> >& points, unsigned j)
 {
   unsigned n_sets = points.size();
   msm_points mean=points[0][j];
@@ -179,7 +181,7 @@ msm_points mean_shape(const vcl_vector<vcl_vector<msm_points> >& points, unsigne
 
 // Draw an axis aligned ellipse centred at c, with radii rx, ry
 // Assumes current scaling is zero - otherwise need sx,sy from the writer
-void draw_axis_ellipse(vcl_ofstream& ofs, double h, vgl_point_2d<double> c, double rx, double ry)
+void draw_axis_ellipse(std::ofstream& ofs, double h, vgl_point_2d<double> c, double rx, double ry)
 {
   ofs<<"gsave\n";
   ofs<<"newpath "<<c.x()<<" "<<h-c.y()<<" translate 1 "<<ry<<" "<<rx<<" div  scale ";
@@ -190,7 +192,7 @@ void draw_axis_ellipse(vcl_ofstream& ofs, double h, vgl_point_2d<double> c, doub
 
 // Draw an ellipse centred at c, with radii rx, ry, rotated by angle A
 // Assumes current scaling is zero - otherwise need sx,sy from the writer
-void draw_ellipse(vcl_ofstream& ofs, double h, vgl_point_2d<double> c, double rx, double ry, double A)
+void draw_ellipse(std::ofstream& ofs, double h, vgl_point_2d<double> c, double rx, double ry, double A)
 {
   // Note: Rotate by -A, because we flip y coordinates
   ofs<<"gsave\n";
@@ -235,21 +237,21 @@ class mbm_covar_stats_2d
   {
     double dac=var11()-var22();
     double v12=var12();
-    double d=0.5*vcl_sqrt(dac*dac+4*v12*v12);
+    double d=0.5*std::sqrt(dac*dac+4*v12*v12);
     double hac = 0.5*(var11()+var22());
     eval1=hac+d;
     eval2=hac-d;
 
-    A = vcl_atan2(eval1-var11(),var12());
+    A = std::atan2(eval1-var11(),var12());
   }
 
 };
 
 int main(int argc, char** argv)
 {
-  vul_arg<vcl_string> param_path("-p","Parameter filename");
-  vul_arg<vcl_string> out_path("-o","Output path for (eps) image","image+pts.eps");
-  vul_arg<vcl_string> d_stats_path("-d","Output path distance statistics","d_stats.txt");
+  vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> out_path("-o","Output path for (eps) image","image+pts.eps");
+  vul_arg<std::string> d_stats_path("-d","Output path distance statistics","d_stats.txt");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -267,14 +269,14 @@ int main(int argc, char** argv)
   }
   catch (mbl_exception_parse_error& e)
   {
-    vcl_cerr<<"Error: "<<e.what()<<'\n';
+    std::cerr<<"Error: "<<e.what()<<'\n';
     return 1;
   }
 
   unsigned n_sets = params.points_dir.size();
 
   // Load in all points
-  vcl_vector<vcl_vector<msm_points> > points(n_sets);
+  std::vector<std::vector<msm_points> > points(n_sets);
   for (unsigned i=0;i<n_sets;++i)
     load_shapes(params.points_dir[i],params.points_names,points[i]);
 
@@ -294,8 +296,8 @@ int main(int argc, char** argv)
   }
 
   unsigned n_pts = points[0][0].size();
-  vcl_vector<vcl_vector<mbm_covar_stats_2d> > pt_stats(n_sets);
-  vcl_vector<vcl_vector<mbl_sample_stats_1d> > d_stats(n_sets);  // Dist. to mean.
+  std::vector<std::vector<mbm_covar_stats_2d> > pt_stats(n_sets);
+  std::vector<std::vector<mbl_sample_stats_1d> > d_stats(n_sets);  // Dist. to mean.
   for (unsigned i=0;i<pt_stats.size();++i)
   {
     pt_stats[i].resize(n_pts);
@@ -313,14 +315,14 @@ int main(int argc, char** argv)
       {
         pt_stats[i][k].obs(dpoints[k]);
         double d2=dpoints[k].x()*dpoints[k].x() + dpoints[k].y()*dpoints[k].y();
-        d_stats[i][k].add_sample(vcl_sqrt(d2));
+        d_stats[i][k].add_sample(std::sqrt(d2));
       }
     }
   }
 
   // Create an image with mean point positions overlayed
   vimt_image_2d_of<vxl_byte> image;
-  vcl_string image_path = params.image_dir+"/"+params.image_names[0];
+  std::string image_path = params.image_dir+"/"+params.image_names[0];
   vimt_load_to_byte(image_path.c_str(), image, 1000.0f);
 
   vimt_transform_2d i2w=image.world2im().inverse();
@@ -363,21 +365,21 @@ int main(int argc, char** argv)
 
       double rx,ry,A;
       pt_stats[i][k].eigen_values(rx,ry,A);
-      draw_ellipse(writer.ofs(),region_height,pt,2*vcl_sqrt(rx),2*vcl_sqrt(ry),A*180/3.14159);
+      draw_ellipse(writer.ofs(),region_height,pt,2*std::sqrt(rx),2*std::sqrt(ry),A*180/3.14159);
     }
   }
 
   writer.close();
-  vcl_cout<<"Graphics saved to "<<out_path()<<vcl_endl;
+  std::cout<<"Graphics saved to "<<out_path()<<std::endl;
 
   if (n_sets==2)
   {
     // Write distance stats to file.
     // Double values, to get distance between points, rather than from points to means.
-    vcl_ofstream ofs(d_stats_path().c_str());
+    std::ofstream ofs(d_stats_path().c_str());
     if (!ofs)
     {
-      vcl_cout<<"Unable to open "<<d_stats_path()<<" for writing."<<vcl_endl;
+      std::cout<<"Unable to open "<<d_stats_path()<<" for writing."<<std::endl;
       return 2;
     }
     for (unsigned k=0;k<n_pts;++k)
@@ -385,18 +387,18 @@ int main(int argc, char** argv)
       ofs<<k<<" "<<2*d_stats[0][k].mean()
          <<" "<<2*d_stats[0][k].sd()
          <<" "<<2*d_stats[0][k].median()
-         <<" "<<2*d_stats[0][k].quantile(0.95)<<vcl_endl;
+         <<" "<<2*d_stats[0][k].quantile(0.95)<<std::endl;
     }
     ofs.close();
-    vcl_cout<<"Saved pt_index, mean, SD, median, 95% to "<<d_stats_path()<<vcl_endl;
+    std::cout<<"Saved pt_index, mean, SD, median, 95% to "<<d_stats_path()<<std::endl;
   }
   else
   {
     // Write distance stats for each example to file.
-    vcl_ofstream ofs(d_stats_path().c_str());
+    std::ofstream ofs(d_stats_path().c_str());
     if (!ofs)
     {
-      vcl_cout<<"Unable to open "<<d_stats_path()<<" for writing."<<vcl_endl;
+      std::cout<<"Unable to open "<<d_stats_path()<<" for writing."<<std::endl;
       return 2;
     }
     for (unsigned i=0;i<n_sets;++i)
@@ -406,11 +408,11 @@ int main(int argc, char** argv)
         ofs<<i<<" "<<k<<" "<<d_stats[0][k].mean()
           <<" "<<d_stats[0][k].sd()
           <<" "<<d_stats[0][k].median()
-          <<" "<<d_stats[0][k].quantile(0.95)<<vcl_endl;
+          <<" "<<d_stats[0][k].quantile(0.95)<<std::endl;
       }
     }
     ofs.close();
-    vcl_cout<<"Saved set_index, pt_index, mean, SD, median, 95% to "<<d_stats_path()<<vcl_endl;
+    std::cout<<"Saved set_index, pt_index, mean, SD, median, 95% to "<<d_stats_path()<<std::endl;
   }
 
   return 0;

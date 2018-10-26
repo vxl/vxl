@@ -109,12 +109,12 @@ void imesh_face_array::append(const imesh_face_array_base& other,
 
 
 //: Merge the two face arrays
-vcl_unique_ptr<imesh_face_array_base>
+std::unique_ptr<imesh_face_array_base>
 imesh_merge(const imesh_face_array_base& f1,
             const imesh_face_array_base& f2,
             unsigned int ind_shift)
 {
-  vcl_unique_ptr<imesh_face_array_base> f;
+  std::unique_ptr<imesh_face_array_base> f;
   // if both face sets are regular with the same number of vertices per face
   if (f1.regularity() == f2.regularity() || f1.regularity() == 0) {
     f.reset(f1.clone());

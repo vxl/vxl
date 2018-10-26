@@ -6,8 +6,10 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <bprb/bprb_func_process.h>
 #include <bstm_multi/bstm_multi_typedefs.h>
@@ -19,11 +21,11 @@ constexpr unsigned n_outputs_ = 1;
 }
 
 bool bstm_multi_load_scene_process_cons(bprb_func_process &pro) {
-  vcl_vector<vcl_string> input_types_(::n_inputs_);
+  std::vector<std::string> input_types_(::n_inputs_);
   input_types_[0] = "vcl_string"; // scene filename
 
   // output[0]: scene sptr
-  vcl_vector<vcl_string> output_types_(::n_outputs_);
+  std::vector<std::string> output_types_(::n_outputs_);
   output_types_[0] = "bstm_multi_scene_sptr"; // scene sptr
 
   return pro.set_input_types(input_types_) &&
@@ -32,13 +34,13 @@ bool bstm_multi_load_scene_process_cons(bprb_func_process &pro) {
 
 bool bstm_multi_load_scene_process(bprb_func_process &pro) {
   if (pro.n_inputs() < ::n_inputs_) {
-    vcl_cout << pro.name() << ": The input number should be " << ::n_inputs_
-             << vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << ::n_inputs_
+             << std::endl;
     return false;
   }
   // get the inputs
   unsigned i = 0;
-  vcl_string scene_file = pro.get_input<vcl_string>(i++);
+  std::string scene_file = pro.get_input<std::string>(i++);
   bstm_multi_scene_sptr scene = new bstm_multi_scene(scene_file);
 
   i = 0;

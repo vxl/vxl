@@ -15,12 +15,12 @@ void msm_equally_space(msm_points& points,
                        double min_bez_sep)
 {
   // Construct a smooth curve through selected points
-  vcl_vector<vgl_point_2d<double> > pts(curve.size());
+  std::vector<vgl_point_2d<double> > pts(curve.size());
   for (unsigned i=0;i<curve.size();++i) pts[i]=points[curve[i]];
   msm_cubic_bezier bezier(pts,!curve.open());
   unsigned n_pts = pts.size();
 
-  vcl_vector<vgl_point_2d<double> > new_pts;
+  std::vector<vgl_point_2d<double> > new_pts;
   int last_index=n_pts-1;
   if (curve.open())
     bezier.equal_space(0,n_pts-1,n_pts,min_bez_sep,new_pts);

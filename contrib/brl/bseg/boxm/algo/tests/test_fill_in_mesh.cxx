@@ -33,8 +33,8 @@ static void test_fill_in_mesh()
 
   //// create a mesh
   unsigned int num_faces=6;
-  vcl_unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(8));
-  vcl_unique_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
+  std::unique_ptr<imesh_vertex_array<3> > verts(new imesh_vertex_array<3>(8));
+  std::unique_ptr<imesh_face_array > faces(new imesh_face_array(num_faces));
   imesh_vertex<3>& vert0 = (*verts)[0]; imesh_vertex<3>& vert4 = (*verts)[4];
   vert0[0]=2;                           vert4[0]=2;
   vert0[1]=2;                           vert4[1]=2;
@@ -70,13 +70,13 @@ static void test_fill_in_mesh()
 
   imesh_mesh mesh;
 #if __cplusplus >= 201103L || (defined(_CPPLIB_VER) && _CPPLIB_VER >= 520)
-  vcl_unique_ptr<imesh_vertex_array_base> tempv(vcl_move(verts));
-  mesh.set_vertices(vcl_move(tempv));
-  vcl_unique_ptr<imesh_face_array_base> tempf(vcl_move(faces));
-  mesh.set_faces(vcl_move(tempf));
+  std::unique_ptr<imesh_vertex_array_base> tempv(std::move(verts));
+  mesh.set_vertices(std::move(tempv));
+  std::unique_ptr<imesh_face_array_base> tempf(std::move(faces));
+  mesh.set_faces(std::move(tempf));
 #else
-  mesh.set_vertices(vcl_unique_ptr<imesh_vertex_array_base>(verts));
-  mesh.set_faces(vcl_unique_ptr<imesh_face_array_base>(faces));
+  mesh.set_vertices(std::unique_ptr<imesh_vertex_array_base>(verts));
+  mesh.set_faces(std::unique_ptr<imesh_face_array_base>(faces));
 #endif
 
   typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;

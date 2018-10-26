@@ -106,7 +106,7 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   if (selec->size()!=1) {
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     return false;
@@ -140,7 +140,7 @@ bool bprb_batch_process_manager::set_input_from_db(unsigned i,
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   if (!selec||selec->size()!=1) {
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) - no selections\n";
     return false;
@@ -220,7 +220,7 @@ bool bprb_batch_process_manager::remove_data(unsigned id)
     // query to get the data
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
 
-    brdb_selection_sptr selec = DATABASE->select(*nit, vcl_move(Q));
+    brdb_selection_sptr selec = DATABASE->select(*nit, std::move(Q));
     if (selec->size()!=1)
       continue;
     selec->delete_tuples();

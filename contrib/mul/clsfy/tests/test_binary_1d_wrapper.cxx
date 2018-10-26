@@ -102,7 +102,7 @@ void test_binary_1d_wrapper()
   clsfy_binary_1d_wrapper_builder b_thresh_builder;
   b_thresh_builder.set_builder_1d(clsfy_binary_threshold_1d_builder());
 
-  vcl_unique_ptr<clsfy_classifier_base> b_thresh_clsfr(
+  std::unique_ptr<clsfy_classifier_base> b_thresh_clsfr(
     b_thresh_builder.new_classifier());
 
   double error1= b_thresh_builder.build(*b_thresh_clsfr,
@@ -166,7 +166,7 @@ void test_binary_1d_wrapper()
 
   std::istringstream ss(
     "clsfy_binary_1d_wrapper_builder { builder_1d: clsfy_binary_threshold_1d_builder }\n" );
-  vcl_unique_ptr<clsfy_builder_base> builder_configged =
+  std::unique_ptr<clsfy_builder_base> builder_configged =
     clsfy_builder_base::new_builder(ss);
 
   std::cout<<"Builder Constructed :\n"

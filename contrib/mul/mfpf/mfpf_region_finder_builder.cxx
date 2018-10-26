@@ -436,7 +436,7 @@ bool mfpf_region_finder_builder::set_from_stream(std::istream &is)
   if (props.find("cost_builder")!=props.end())
   {
     std::istringstream b_ss(props["cost_builder"]);
-    vcl_unique_ptr<mfpf_vec_cost_builder> bb =
+    std::unique_ptr<mfpf_vec_cost_builder> bb =
          mfpf_vec_cost_builder::create_from_stream(b_ss);
     cost_builder_ = bb->clone();
     props.erase("cost_builder");

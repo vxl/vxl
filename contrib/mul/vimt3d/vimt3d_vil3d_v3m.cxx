@@ -35,7 +35,7 @@ unsigned vimt3d_vil3d_v3m_format::magic_number()
 
 vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_input_image(const char *filename) const
 {
-  vcl_unique_ptr<std::fstream> file(new std::fstream(filename, std::ios::in | std::ios::binary ));
+  std::unique_ptr<std::fstream> file(new std::fstream(filename, std::ios::in | std::ios::binary ));
   if (!file.get() || !file->is_open())
     return nullptr;
 
@@ -47,7 +47,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_input_image(const char *
     vsl_b_read(is, magic);
     if (magic != vimt3d_vil3d_v3m_format::magic_number()) return nullptr;
   }
-  return new vimt3d_vil3d_v3m_image(vcl_move(file));
+  return new vimt3d_vil3d_v3m_image(std::move(file));
 }
 
 
@@ -70,7 +70,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_output_image
     return nullptr;
   }
 
-  vcl_unique_ptr<std::fstream> of(
+  std::unique_ptr<std::fstream> of(
     new std::fstream(filename, std::ios::out | std::ios::binary | std::ios::trunc) );
   if (!of.get() || !of->is_open())
   {
@@ -79,7 +79,7 @@ vil3d_image_resource_sptr vimt3d_vil3d_v3m_format::make_output_image
     return nullptr;
   }
 
-  return new vimt3d_vil3d_v3m_image(vcl_move(of), ni, nj, nk, nplanes, format);
+  return new vimt3d_vil3d_v3m_image(std::move(of), ni, nj, nk, nplanes, format);
 }
 
 
@@ -212,7 +212,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 
 //: Private constructor, use vil3d_load instead.
 // This object takes ownership of the file, for reading.
-vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_unique_ptr<std::fstream> file):
+vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(std::unique_ptr<std::fstream> file):
   file_(file.release()), im_(nullptr), dirty_(false)
 {
   file_->seekg(0);
@@ -263,7 +263,7 @@ vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_unique_ptr<std::fstream> file
 
 //: Private constructor, use vil3d_save instead.
 // This object takes ownership of the file, for writing.
-vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(vcl_unique_ptr<std::fstream> file, unsigned ni,
+vimt3d_vil3d_v3m_image::vimt3d_vil3d_v3m_image(std::unique_ptr<std::fstream> file, unsigned ni,
                                                unsigned nj, unsigned nk,
                                                unsigned nplanes,
                                                vil_pixel_format format):

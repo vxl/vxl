@@ -291,7 +291,7 @@ rgtl_sqt_object_set_triangles_3d<Face>
   cell_geometry.get_center_planes(center_normals);
 
   // Allocate an output polygon set for each child.
-  vcl_unique_ptr<rgtl_sqt_object_set_triangles_3d> out[4];
+  std::unique_ptr<rgtl_sqt_object_set_triangles_3d> out[4];
   for (unsigned int i=0; i < 4; ++i)
   {
     // Create this polygon set.

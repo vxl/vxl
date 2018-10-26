@@ -248,7 +248,7 @@ void test_mixture()
           "  max_its: 7\n"
           "}\n");
 
-    vcl_unique_ptr<vpdfl_builder_base>
+    std::unique_ptr<vpdfl_builder_base>
             builder = vpdfl_builder_base::new_pdf_builder_from_stream(ss);
 
     TEST("Correct builder",builder->is_a(),"vpdfl_mixture_builder");

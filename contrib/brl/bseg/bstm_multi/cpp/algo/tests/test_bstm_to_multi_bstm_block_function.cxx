@@ -9,9 +9,11 @@
 
 #include <vbl/vbl_smart_ptr.hxx>
 #include <vbl/vbl_triple.hxx>
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_utility.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <utility>
 #include <vgl/vgl_vector_3d.h>
 
 #include <bstm/bstm_data.h>
@@ -33,7 +35,7 @@
 
 template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
 struct voxel_functor {
-  typedef vcl_pair<typename bstm_data_traits<ALPHA>::datatype,
+  typedef std::pair<typename bstm_data_traits<ALPHA>::datatype,
                    typename bstm_data_traits<APPEARANCE>::datatype> (
       *fptr_type)(const index_4d &);
 };
@@ -41,7 +43,7 @@ struct voxel_functor {
 template <bstm_data_type ALPHA, bstm_data_type APPEARANCE>
 vbl_triple<bstm_block *,
            bstm_time_block *,
-           vcl_map<vcl_string, bstm_data_base *> >
+           std::map<std::string, bstm_data_base *> >
 bstm_scene_from_point_func(
     const bstm_block_metadata &mdata,
     typename voxel_functor<ALPHA, APPEARANCE>::fptr_type f,
@@ -51,13 +53,13 @@ bstm_scene_from_point_func(
   typedef typename bstm_data_traits<APPEARANCE>::datatype appearance_t;
 
   bstm_block *blk = new bstm_block(mdata);
-  vcl_vector<time_tree_b> time_trees;
-  vcl_vector<alpha_t> alpha;
-  vcl_vector<appearance_t> appearance;
+  std::vector<time_tree_b> time_trees;
+  std::vector<alpha_t> alpha;
+  std::vector<appearance_t> appearance;
   boxm2_array_3d<space_tree_b> &space_trees = blk->trees();
   int num_time_intervals = mdata.sub_block_num_t_;
   for (int space_idx = 0; space_idx < space_trees.size(); ++space_idx) {
-    vcl_size_t x, y, z;
+    std::size_t x, y, z;
     space_trees.coords_from_index(space_idx, x, y, z);
     boct_bit_tree current_tree(space_trees(x, y, z));
     current_tree.set_data_ptr(time_trees.size() / num_time_intervals);
@@ -71,7 +73,7 @@ bstm_scene_from_point_func(
               4,
               true);
           for (int t = 0; t < num_time_intervals * 32; ++t) {
-            vcl_pair<alpha_t, appearance_t> voxel_data =
+            std::pair<alpha_t, appearance_t> voxel_data =
                 f(index_4d(x * 8 + st_x, y * 8 + st_y, z * 8 + st_z, t));
             if (voxel_data.first > 0) {
               current_tree.set_bit_and_parents_to_true(
@@ -83,7 +85,7 @@ bstm_scene_from_point_func(
       }
     }
 
-    vcl_vector<int> cells = current_tree.get_cell_bits();
+    std::vector<int> cells = current_tree.get_cell_bits();
     for (int i = 0; i < cells.size(); ++i) {
       int cell_idx = cells[i];
       if (cell_idx >= 73) {
@@ -103,7 +105,7 @@ bstm_scene_from_point_func(
           // get data for each frame
           for (int t = 0; t < 32; ++t) {
             // TODO find clean way to do this w/o calling f twice.
-            vcl_pair<alpha_t, appearance_t> voxel_data = f(index_4d(
+            std::pair<alpha_t, appearance_t> voxel_data = f(index_4d(
                 x * 8 + st_x, y * 8 + st_y, z * 8 + st_z, 32 * tt_idx + t));
             alpha_frames[t] = voxel_data.first;
             appearance_frames[t] = voxel_data.second;
@@ -117,8 +119,8 @@ bstm_scene_from_point_func(
             }
           }
           tt.fill_cells(diffs);
-          vcl_vector<int> tt_leaves = tt.get_leaf_bits();
-          for (vcl_vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
+          std::vector<int> tt_leaves = tt.get_leaf_bits();
+          for (std::vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
                tt_leaf_iter != tt_leaves.end();
                ++tt_leaf_iter) {
             if (*tt_leaf_iter < 31) {
@@ -143,23 +145,23 @@ bstm_scene_from_point_func(
     }
   }
 
-  vcl_size_t time_buff_size = time_trees.size() * time_tree_size;
+  std::size_t time_buff_size = time_trees.size() * time_tree_size;
   char *time_buffer = new char[time_buff_size];
-  vcl_memcpy(time_buffer, &(time_trees[0]), time_buff_size);
+  std::memcpy(time_buffer, &(time_trees[0]), time_buff_size);
   bstm_time_block *blk_t =
       new bstm_time_block(bstm_block_id(), mdata, time_buffer, time_buff_size);
 
-  vcl_size_t alpha_buff_size =
+  std::size_t alpha_buff_size =
       alpha.size() * bstm_data_traits<BSTM_ALPHA>::datasize();
   char *alpha_buffer = new char[alpha_buff_size];
-  vcl_memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
+  std::memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
 
-  vcl_size_t appearance_buff_size =
+  std::size_t appearance_buff_size =
       appearance.size() * bstm_data_traits<BSTM_MOG3_GREY>::datasize();
   char *appearance_buffer = new char[appearance_buff_size];
-  vcl_memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
+  std::memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
 
-  vcl_map<vcl_string, bstm_data_base *> datas;
+  std::map<std::string, bstm_data_base *> datas;
 
   datas["alpha"] =
       new bstm_data_base(alpha_buffer, alpha_buff_size, blk->block_id());
@@ -170,17 +172,17 @@ bstm_scene_from_point_func(
 }
 
 void test_volume() {
-  vcl_pair<vgl_vector_3d<int>, int> region(vgl_vector_3d<int>(2, 3, 4), 5);
+  std::pair<vgl_vector_3d<int>, int> region(vgl_vector_3d<int>(2, 3, 4), 5);
   TEST("test volume int", volume(region), 120);
-  vcl_pair<vgl_vector_3d<double>, double> region2(
+  std::pair<vgl_vector_3d<double>, double> region2(
       vgl_vector_3d<double>(10, 10, 10), 10);
   TEST("test volume double", volume(region2), 1e4);
 }
 
 void test_get_bstm_data_buffers() {
   bstm_data_base *alpha = nullptr, *app = nullptr;
-  vcl_string app_type, alpha_prefix = bstm_data_traits<BSTM_ALPHA>::prefix();
-  vcl_map<vcl_string, bstm_data_base *> map;
+  std::string app_type, alpha_prefix = bstm_data_traits<BSTM_ALPHA>::prefix();
+  std::map<std::string, bstm_data_base *> map;
   get_bstm_data_buffers(map, alpha, app, app_type);
   TEST("get bstm data buffs, empty map", alpha, nullptr);
   TEST("get bstm data buffs, empty map", app, nullptr);
@@ -212,12 +214,12 @@ void test_get_bstm_data_buffers() {
 // been internally rearranged.
 void test_convert_bstm_space_trees() {
   /*  set up Multi-BSTM block  */
-  vcl_vector<space_time_enum> subdivs(2);
+  std::vector<space_time_enum> subdivs(2);
   subdivs[0] = STE_SPACE;
   subdivs[1] = STE_TIME;
   bstm_multi_block_metadata mdata(bstm_block_id(),
                                   vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
-                                  vcl_pair<double, double>(0, 1),
+                                  std::pair<double, double>(0, 1),
                                   9000,
                                   0.01,
                                   subdivs);
@@ -250,12 +252,12 @@ void test_convert_bstm_space_trees() {
       new bstm_time_block(bstm_block_id(), bstm_mdata, num_time_trees);
 
   /* Set up data buffers */
-  vcl_size_t alpha_size = bstm_data_traits<BSTM_ALPHA>::datasize();
-  vcl_size_t app_size = bstm_data_traits<BSTM_MOG3_GREY>::datasize();
+  std::size_t alpha_size = bstm_data_traits<BSTM_ALPHA>::datasize();
+  std::size_t app_size = bstm_data_traits<BSTM_MOG3_GREY>::datasize();
   bstm_data_base_sptr alpha =
       new bstm_data_base(num_data_elements, "alpha", bstm_mdata.id());
   block_data_base_sptr alpha_new = new block_data_base(0);
-  vcl_string appearance_type = bstm_data_traits<BSTM_MOG3_GREY>::prefix();
+  std::string appearance_type = bstm_data_traits<BSTM_MOG3_GREY>::prefix();
   bstm_data_base_sptr appearance =
       new bstm_data_base(num_data_elements, appearance_type, bstm_mdata.id());
   block_data_base_sptr appearance_new = new block_data_base(0);
@@ -270,7 +272,7 @@ void test_convert_bstm_space_trees() {
         boct_bit_tree current_tree(trees(i, j, k));
         current_tree.set_bit_at(0, true);
         current_tree.set_data_ptr(idx * 9);
-        vcl_vector<int> space_cells = current_tree.get_cell_bits();
+        std::vector<int> space_cells = current_tree.get_cell_bits();
         assert(space_cells.size() == 9);
 
         // Iterate over cells of space tree
@@ -291,7 +293,7 @@ void test_convert_bstm_space_trees() {
           assert(time_trees.size() == 10);
           for (int t = 0; t < 10; ++t) {
             child_coords[3] = t * 32;
-            vcl_size_t row_major_index =
+            std::size_t row_major_index =
                 cell_indices_4d.index_from_coords(child_coords);
 
             // two data elements for each time tree
@@ -304,16 +306,16 @@ void test_convert_bstm_space_trees() {
             time_tree.set_data_ptr(tt_idx * 2);
             time_tree.set_bit_at(0, true);
 
-            vcl_vector<int> time_leaves = time_tree.get_leaf_bits();
+            std::vector<int> time_leaves = time_tree.get_leaf_bits();
             assert(time_leaves.size() == 2);
             for (int tl = 0; tl < time_leaves.size(); ++tl) {
               row_major_index += 16 * tl;
-              vcl_size_t tt_data_index =
+              std::size_t tt_data_index =
                   time_tree.get_data_index(time_leaves[tl]);
               reinterpret_cast<bstm_data_traits<BSTM_ALPHA>::datatype &>(
                   alpha->data_buffer()[tt_data_index * alpha_size]) =
                   row_major_index;
-              reinterpret_cast<vcl_size_t &>(
+              reinterpret_cast<std::size_t &>(
                   appearance->data_buffer()[tt_data_index * app_size]) =
                   row_major_index;
             }
@@ -367,13 +369,13 @@ void test_convert_bstm_space_trees() {
       child_coords[3] *= 32;
 
       // data value is the row-major idx of the current voxel
-      vcl_size_t data_value = cell_indices_4d.index_from_coords(child_coords);
+      std::size_t data_value = cell_indices_4d.index_from_coords(child_coords);
       for (int di = 0; di < 2; ++di) {
         data_layout_good &=
             (alpha_new_wrap[current_time_tree.get_data_ptr() + di] ==
              data_value + di * 16);
         data_layout_good &=
-            (reinterpret_cast<vcl_size_t &>(
+            (reinterpret_cast<std::size_t &>(
                  appearance_new_wrap[current_time_tree.get_data_ptr() + di]) ==
              data_value + di * 16);
       }
@@ -390,7 +392,7 @@ void test_convert_bstm_space_trees() {
 }
 
 void test_time_differences_from_bstm_trees() {
-  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+  std::pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
       vgl_vector_3d<unsigned>(3, 3, 3), 3);
   int num_space_trees = volume(num_regions);
 
@@ -400,13 +402,13 @@ void test_time_differences_from_bstm_trees() {
     int num_data_elements = num_time_trees;
     // initialize data buffers
     space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
-    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    std::memset(space_buffer, 0, num_space_trees * space_tree_size);
     time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
-    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
-        block_data_base(num_data_elements, vcl_string("alpha"));
+        block_data_base(num_data_elements, std::string("alpha"));
     block_data<BSTM_ALPHA> alpha_wrap(alpha);
-    vcl_string appearance_type = "bstm_mog3_grey";
+    std::string appearance_type = "bstm_mog3_grey";
     block_data_base appearance =
         block_data_base(num_data_elements, appearance_type);
     block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
@@ -422,7 +424,7 @@ void test_time_differences_from_bstm_trees() {
       time_tree.set_data_ptr(i);
     }
 
-    vcl_vector<bool> diffs =
+    std::vector<bool> diffs =
         dispatch_time_differences_from_bstm_trees(time_buffer,
                                                   space_buffer,
                                                   num_regions,
@@ -451,13 +453,13 @@ void test_time_differences_from_bstm_trees() {
     int num_data_elements = num_time_trees;
     // initialize data buffers
     space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
-    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    std::memset(space_buffer, 0, num_space_trees * space_tree_size);
     time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
-    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
-        block_data_base(num_data_elements, vcl_string("alpha"));
+        block_data_base(num_data_elements, std::string("alpha"));
     block_data<BSTM_ALPHA> alpha_wrap(alpha);
-    vcl_string appearance_type = "bstm_mog3_grey";
+    std::string appearance_type = "bstm_mog3_grey";
     block_data_base appearance =
         block_data_base(num_data_elements, appearance_type);
     block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
@@ -479,7 +481,7 @@ void test_time_differences_from_bstm_trees() {
       time_tree.set_data_ptr(i);
     }
 
-    vcl_vector<bool> diffs =
+    std::vector<bool> diffs =
         dispatch_time_differences_from_bstm_trees(time_buffer,
                                                   space_buffer,
                                                   num_regions,
@@ -510,13 +512,13 @@ void test_time_differences_from_bstm_trees() {
     int num_data_elements = num_time_trees * 2;
     // initialize data buffers
     space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
-    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    std::memset(space_buffer, 0, num_space_trees * space_tree_size);
     time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
-    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
-        block_data_base(num_data_elements, vcl_string("alpha"));
+        block_data_base(num_data_elements, std::string("alpha"));
     block_data<BSTM_ALPHA> alpha_wrap(alpha);
-    vcl_string appearance_type = "bstm_mog3_grey";
+    std::string appearance_type = "bstm_mog3_grey";
     block_data_base appearance =
         block_data_base(num_data_elements, appearance_type);
     block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
@@ -533,7 +535,7 @@ void test_time_differences_from_bstm_trees() {
       time_tree.set_data_ptr(i * 2);
     }
 
-    vcl_vector<bool> diffs =
+    std::vector<bool> diffs =
         dispatch_time_differences_from_bstm_trees(time_buffer,
                                                   space_buffer,
                                                   num_regions,
@@ -558,13 +560,13 @@ void test_time_differences_from_bstm_trees() {
     int num_data_elements = num_time_trees;
     // initialize data buffers
     space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
-    vcl_memset(space_buffer, 0, num_space_trees * space_tree_size);
+    std::memset(space_buffer, 0, num_space_trees * space_tree_size);
     time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
-    vcl_memset(time_buffer, 0, num_time_trees * time_tree_size);
+    std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
-        block_data_base(num_data_elements, vcl_string("alpha"));
+        block_data_base(num_data_elements, std::string("alpha"));
     block_data<BSTM_ALPHA> alpha_wrap(alpha);
-    vcl_string appearance_type = "bstm_mog3_grey";
+    std::string appearance_type = "bstm_mog3_grey";
     block_data_base appearance =
         block_data_base(num_data_elements, appearance_type);
     block_data<BSTM_MOG3_GREY> appearance_wrap(appearance);
@@ -585,11 +587,11 @@ void test_time_differences_from_bstm_trees() {
     // be different
     alpha_wrap[1] = 1.0;
     alpha_wrap[alpha_wrap.size() - 1] = 1.0;
-    vcl_memset(&(appearance_wrap[appearance_wrap.size() - 1]),
+    std::memset(&(appearance_wrap[appearance_wrap.size() - 1]),
                128,
                bstm_data_traits<BSTM_MOG3_GREY>::datasize());
 
-    vcl_vector<bool> diffs =
+    std::vector<bool> diffs =
         dispatch_time_differences_from_bstm_trees(time_buffer,
                                                   space_buffer,
                                                   num_regions,
@@ -622,7 +624,7 @@ void test_make_unrefined_time_tree() {
   // way.
   {
     bstm_time_tree t;
-    vcl_vector<bool> diffs(32, false);
+    std::vector<bool> diffs(32, false);
     make_unrefined_time_tree(t, 0, diffs);
     TEST("make unrefined time tree, all frames the same", t.num_leaves(), 1);
   }
@@ -630,7 +632,7 @@ void test_make_unrefined_time_tree() {
     bstm_time_tree t;
     // three sets of time trees, but 't' corresponds to the middle one,
     // index=1
-    vcl_vector<bool> diffs(32 * 3, false);
+    std::vector<bool> diffs(32 * 3, false);
     diffs[32 + 16] = true;
     make_unrefined_time_tree(t, 1, diffs);
     TEST("make unrefined time tree, two sets of frames split at middle",
@@ -641,8 +643,8 @@ void test_make_unrefined_time_tree() {
     bstm_time_tree t;
     // three sets of time trees, but 't' corresponds to the middle one,
     // index=1
-    vcl_vector<bool> diffs(32 * 3, false);
-    vcl_fill(diffs.begin(), diffs.end(), true);
+    std::vector<bool> diffs(32 * 3, false);
+    std::fill(diffs.begin(), diffs.end(), true);
     make_unrefined_time_tree(t, 1, diffs);
     TEST("make unrefined time tree, all frames different from the last",
          t.num_leaves(),
@@ -653,13 +655,13 @@ void test_make_unrefined_time_tree() {
 void test_make_unrefined_space_tree() {
   {
     boct_bit_tree t;
-    vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+    std::pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
         vgl_vector_3d<unsigned>(2, 2, 2), 2);
     int vol = volume(num_regions);
     index_4d coords(1, 0, 0, 1);
     unsigned char *child_level_buffer =
         new unsigned char[vol * 512 * space_tree_size]();
-    vcl_vector<bool> diffs(vol * 512, false);
+    std::vector<bool> diffs(vol * 512, false);
 
     bool res = make_unrefined_space_tree(
         t, num_regions, coords, child_level_buffer, STE_SPACE, diffs);
@@ -671,13 +673,13 @@ void test_make_unrefined_space_tree() {
 
   {
     boct_bit_tree t = boct_bit_tree();
-    vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+    std::pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
         vgl_vector_3d<unsigned>(2, 2, 2), 2);
     int vol = volume(num_regions);
     index_4d coords(1, 0, 0, 1);
     unsigned char *child_level_buffer =
         new unsigned char[vol * 512 * space_tree_size]();
-    vcl_vector<bool> diffs(vol * 512, false);
+    std::vector<bool> diffs(vol * 512, false);
 
     // set one of the sub-trees to be different
     diffs[9 * 512 + 100 + 1] = true;
@@ -722,25 +724,25 @@ void test_make_unrefined_space_tree() {
 // is
 // the output of convert_bstm_trees.
 void test_compute_and_coalesce_trees() {
-  vcl_vector<space_time_enum> subdivs(4);
+  std::vector<space_time_enum> subdivs(4);
   subdivs[0] = STE_SPACE;
   subdivs[1] = STE_TIME;
   subdivs[2] = STE_SPACE;
   subdivs[3] = STE_TIME;
   bstm_multi_block_metadata mdata(bstm_block_id(),
                                   vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
-                                  vcl_pair<double, double>(0, 1),
+                                  std::pair<double, double>(0, 1),
                                   9000,
                                   0.01,
                                   subdivs);
-  vcl_pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
+  std::pair<vgl_vector_3d<unsigned>, unsigned> num_regions(
       vgl_vector_3d<unsigned>(8, 8, 8), 32);
   bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
 
   // set up BSTM space trees
   int num_bstm_space_trees = 512 * 32;
   blk->new_buffer(num_bstm_space_trees * space_tree_size, 2);
-  vcl_vector<unsigned char> &bstm_space_buffer = blk->get_buffer(2);
+  std::vector<unsigned char> &bstm_space_buffer = blk->get_buffer(2);
   space_tree_b *trees = &reinterpret_cast<space_tree_b &>(bstm_space_buffer[0]);
   // for first 16 time intervals, refine top corner (0,0,0,t) of scene. For
   // rest
@@ -765,10 +767,10 @@ void test_compute_and_coalesce_trees() {
   }
 
   // set up data elements
-  block_data_base alpha(num_bstm_time_trees, vcl_string("alpha"));
-  block_data_base appearance(num_bstm_time_trees, vcl_string("bstm_mog3_grey"));
+  block_data_base alpha(num_bstm_time_trees, std::string("alpha"));
+  block_data_base appearance(num_bstm_time_trees, std::string("bstm_mog3_grey"));
 
-  vcl_vector<bool> diffs =
+  std::vector<bool> diffs =
       dispatch_time_differences_from_bstm_trees(bstm_time_trees,
                                                 trees,
                                                 num_regions,
@@ -803,7 +805,7 @@ void test_compute_and_coalesce_trees() {
       reinterpret_cast<time_tree_b *>(&(blk->get_buffer(1)[0])), 8, 8, 8, 1);
   for (int i = 0; i < time_trees.size(); ++i) {
     bstm_time_tree tt(time_trees[i]);
-    vcl_vector<int> leaves = tt.get_leaf_bits();
+    std::vector<int> leaves = tt.get_leaf_bits();
     if (i == 0) {
       tt_good &= (leaves.size() == 2);
       tt_good &= (leaves[0] == 1 && leaves[1] == 2);
@@ -819,26 +821,26 @@ void test_compute_and_coalesce_trees() {
   /* TEST COALESCE TREES  */
   // now we need actual data buffers
   bstm_time_tree last_bstm_tt(bstm_time_trees[num_bstm_time_trees - 1]);
-  vcl_size_t num_elements =
+  std::size_t num_elements =
       last_bstm_tt.get_data_ptr() + last_bstm_tt.num_leaves();
-  vcl_map<vcl_string, block_data_base *> datas;
-  datas["alpha"] = new block_data_base(num_elements, vcl_string("alpha"));
+  std::map<std::string, block_data_base *> datas;
+  datas["alpha"] = new block_data_base(num_elements, std::string("alpha"));
   datas["bstm_mog3_grey"] =
-      new block_data_base(num_elements, vcl_string("bstm_mog3_grey"));
+      new block_data_base(num_elements, std::string("bstm_mog3_grey"));
   coalesce_trees(blk.ptr(), datas, num_regions, "bstm_mog3_grey");
 
   // test first level - space trees
-  vcl_vector<int> top_time_trees_idxs;
-  vcl_vector<int> bstm_space_trees_idxs;
-  vcl_vector<int> bstm_time_trees_idxs;
+  std::vector<int> top_time_trees_idxs;
+  std::vector<int> bstm_space_trees_idxs;
+  std::vector<int> bstm_time_trees_idxs;
   {
-    vcl_vector<unsigned char> &top_space_buff = blk->get_buffer(0);
+    std::vector<unsigned char> &top_space_buff = blk->get_buffer(0);
     TEST("coalesce -- top space buffer has one tree",
          top_space_buff.size(),
          space_tree_size);
     boct_bit_tree top_space_tree(
         reinterpret_cast<space_tree_b &>(top_space_buff[0]));
-    vcl_vector<int> top_space_leaves = top_space_tree.get_leaf_bits();
+    std::vector<int> top_space_leaves = top_space_tree.get_leaf_bits();
     // test leaf indices
     bool top_space_level_good = true;
     // correct data ptr
@@ -860,7 +862,7 @@ void test_compute_and_coalesce_trees() {
   // test second level - time trees
   {
     bool top_time_level_good = true;
-    vcl_vector<unsigned char> &top_time_buff = blk->get_buffer(1);
+    std::vector<unsigned char> &top_time_buff = blk->get_buffer(1);
     TEST("coalesce -- top time buffer has correct number of trees",
          top_time_buff.size(),
          top_time_trees_idxs.size() * time_tree_size);
@@ -869,7 +871,7 @@ void test_compute_and_coalesce_trees() {
       int tt_ptr = top_time_trees_idxs[tt_idx];
       bstm_time_tree top_time_tree(reinterpret_cast<time_tree_b &>(
           top_time_buff[tt_ptr * time_tree_size]));
-      vcl_vector<int> top_time_leaves = top_time_tree.get_leaf_bits();
+      std::vector<int> top_time_leaves = top_time_tree.get_leaf_bits();
       if (tt_idx == 0) {
         top_time_level_good &= (top_time_leaves.size() == 2);
       } else {
@@ -891,7 +893,7 @@ void test_compute_and_coalesce_trees() {
   // test BSTM space level trees
   {
     bool bstm_space_level_good = true;
-    vcl_vector<unsigned char> &bstm_space_buff = blk->get_buffer(2);
+    std::vector<unsigned char> &bstm_space_buff = blk->get_buffer(2);
     TEST("coalesce -- BSTM space buffer has correct number of trees",
          bstm_space_buff.size(),
          bstm_space_trees_idxs.size() * space_tree_size);
@@ -902,9 +904,9 @@ void test_compute_and_coalesce_trees() {
           bstm_space_buff[st_ptr * space_tree_size]));
       // get leaf indices -- we want to skip leaves that aren't on bottom
       // level
-      vcl_vector<int> bstm_space_leaf_voxels;
+      std::vector<int> bstm_space_leaf_voxels;
       {
-        vcl_vector<int> bstm_space_leaves = bstm_space_tree.get_leaf_bits();
+        std::vector<int> bstm_space_leaves = bstm_space_tree.get_leaf_bits();
         for (int i = 0; i < bstm_space_leaves.size(); ++i) {
           if (bstm_space_leaves[i] >= 73) {
             bstm_space_leaf_voxels.push_back(bstm_space_leaves[i]);
@@ -931,7 +933,7 @@ void test_compute_and_coalesce_trees() {
   // test BSTM time level trees
   {
     bool bstm_time_level_good = true;
-    vcl_vector<unsigned char> &bstm_time_buff = blk->get_buffer(3);
+    std::vector<unsigned char> &bstm_time_buff = blk->get_buffer(3);
     TEST("coalesce -- BSTM timebuffer has correct number of trees",
          bstm_time_buff.size(),
          bstm_time_trees_idxs.size() * time_tree_size);
@@ -941,7 +943,7 @@ void test_compute_and_coalesce_trees() {
       bstm_time_tree bstm_current_tt(reinterpret_cast<time_tree_b &>(
           bstm_time_buff[tt_ptr * time_tree_size]));
       // get leaf
-      vcl_vector<int> bstm_time_leaves = bstm_current_tt.get_leaf_bits();
+      std::vector<int> bstm_time_leaves = bstm_current_tt.get_leaf_bits();
       bstm_time_level_good &= (bstm_time_leaves.size() == 1);
       bstm_time_level_good &= (bstm_current_tt.get_data_ptr() == tt_idx);
     }
@@ -964,31 +966,31 @@ void test_compute_and_coalesce_trees() {
 
   // display scene size
   for (int i = 0; i < blk->buffers().size(); ++i) {
-    vcl_cout << "level " << i << ": " << blk->get_buffer(i).size() << vcl_endl;
+    std::cout << "level " << i << ": " << blk->get_buffer(i).size() << std::endl;
   }
-  vcl_cout << "original number of BSTM space trees: " << num_bstm_space_trees
-           << vcl_endl;
-  vcl_cout << "original number of BSTM time trees: " << num_bstm_time_trees
-           << vcl_endl;
-  vcl_cout << "alpha bytes: "
+  std::cout << "original number of BSTM space trees: " << num_bstm_space_trees
+           << std::endl;
+  std::cout << "original number of BSTM time trees: " << num_bstm_time_trees
+           << std::endl;
+  std::cout << "alpha bytes: "
            << num_bstm_time_trees * bstm_data_info::datasize("alpha")
-           << " became: " << datas["alpha"]->buffer_length() << vcl_endl;
-  vcl_cout << "appearance bytes: "
+           << " became: " << datas["alpha"]->buffer_length() << std::endl;
+  std::cout << "appearance bytes: "
            << num_bstm_time_trees * bstm_data_info::datasize("bstm_mog3_grey")
            << " became: " << datas["bstm_mog3_grey"]->buffer_length()
-           << vcl_endl;
+           << std::endl;
 }
 
 void test_fly_problem() {
   /*  set up Multi-BSTM block  */
-  vcl_vector<space_time_enum> subdivs(4);
+  std::vector<space_time_enum> subdivs(4);
   subdivs[0] = STE_SPACE;
   subdivs[1] = STE_TIME;
   subdivs[2] = STE_SPACE;
   subdivs[3] = STE_TIME;
   bstm_multi_block_metadata mdata(bstm_block_id(),
                                   vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
-                                  vcl_pair<double, double>(0, 1),
+                                  std::pair<double, double>(0, 1),
                                   9000,
                                   0.01,
                                   subdivs);
@@ -1015,9 +1017,9 @@ void test_fly_problem() {
 
   // temporary buffers that we grow as necessary, and then copy into final
   // buffers
-  vcl_vector<time_tree_b> bstm_time_trees;
-  vcl_vector<bstm_data_traits<BSTM_ALPHA>::datatype> alpha;
-  vcl_vector<bstm_data_traits<BSTM_MOG3_GREY>::datatype> appearance;
+  std::vector<time_tree_b> bstm_time_trees;
+  std::vector<bstm_data_traits<BSTM_ALPHA>::datatype> alpha;
+  std::vector<bstm_data_traits<BSTM_MOG3_GREY>::datatype> appearance;
 
   // refine space trees - refine a point diagonally across each space tree
   // over
@@ -1027,7 +1029,7 @@ void test_fly_problem() {
 
   for (int space_idx = 0; space_idx < bstm_space_trees.size(); ++space_idx) {
     // check if tree is along diagonal
-    vcl_size_t x, y, z;
+    std::size_t x, y, z;
     bstm_space_trees.coords_from_index(space_idx, x, y, z);
     boct_bit_tree current_tree(bstm_space_trees(x, y, z));
     current_tree.set_data_ptr(bstm_time_trees.size() / 32);
@@ -1035,7 +1037,7 @@ void test_fly_problem() {
       int i = x;
       // leaf idxs of refined points - these will actually have non-empty time
       // trees
-      vcl_vector<int> refined_idxs;
+      std::vector<int> refined_idxs;
       // as it happens all these indexes are in increasing order.
       for (int j = 0; j < 8; ++j) {
         int idx = current_tree.traverse(
@@ -1046,15 +1048,15 @@ void test_fly_problem() {
       }
 
       // set up time trees
-      vcl_vector<int>::const_iterator idxs_iter = refined_idxs.begin();
-      vcl_vector<int> cell_bits = current_tree.get_cell_bits();
+      std::vector<int>::const_iterator idxs_iter = refined_idxs.begin();
+      std::vector<int> cell_bits = current_tree.get_cell_bits();
       for (int cell_idx = 0; cell_idx < cell_bits.size(); ++cell_idx) {
         int cell = cell_bits[cell_idx];
         bool is_refined_cell = false;
         int cell_pos; // position in space tree of cell, along diagonal, in
                       // [0,8).
         if (idxs_iter != refined_idxs.end() && cell == *idxs_iter) {
-          cell_pos = vcl_distance(static_cast<vcl_vector<int>::const_iterator>(
+          cell_pos = std::distance(static_cast<std::vector<int>::const_iterator>(
                                       refined_idxs.begin()),
                                   idxs_iter);
           ++idxs_iter;
@@ -1074,8 +1076,8 @@ void test_fly_problem() {
           tt.fill_cells(frames);
 
           // now create data elements accordingly
-          vcl_vector<int> tt_leaves = tt.get_leaf_bits();
-          for (vcl_vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
+          std::vector<int> tt_leaves = tt.get_leaf_bits();
+          for (std::vector<int>::const_iterator tt_leaf_iter = tt_leaves.begin();
                tt_leaf_iter != tt_leaves.end();
                ++tt_leaf_iter) {
             int frame = *tt_leaf_iter - 31;
@@ -1102,24 +1104,24 @@ void test_fly_problem() {
   }
 
   // copy time tree and data buffers
-  vcl_size_t time_buff_size = bstm_time_trees.size() * time_tree_size;
+  std::size_t time_buff_size = bstm_time_trees.size() * time_tree_size;
   char *time_buffer = new char[time_buff_size];
-  vcl_memcpy(time_buffer, &(bstm_time_trees[0]), time_buff_size);
+  std::memcpy(time_buffer, &(bstm_time_trees[0]), time_buff_size);
   bstm_time_block_sptr bstm_blk_t = new bstm_time_block(
       bstm_block_id(), bstm_mdata, time_buffer, time_buff_size);
 
-  vcl_size_t alpha_buff_size =
+  std::size_t alpha_buff_size =
       alpha.size() * bstm_data_traits<BSTM_ALPHA>::datasize();
   char *alpha_buffer = new char[alpha_buff_size];
-  vcl_memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
+  std::memcpy(alpha_buffer, &(alpha[0]), alpha_buff_size);
 
-  vcl_size_t appearance_buff_size =
+  std::size_t appearance_buff_size =
       appearance.size() * bstm_data_traits<BSTM_MOG3_GREY>::datasize();
   char *appearance_buffer = new char[appearance_buff_size];
-  vcl_memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
+  std::memcpy(appearance_buffer, &(appearance[0]), appearance_buff_size);
 
-  vcl_map<vcl_string, bstm_data_base *> bstm_datas;
-  vcl_map<vcl_string, block_data_base *> datas;
+  std::map<std::string, bstm_data_base *> bstm_datas;
+  std::map<std::string, block_data_base *> datas;
 
   bstm_datas["alpha"] =
       new bstm_data_base(alpha_buffer, alpha_buff_size, bstm_blk->block_id());
@@ -1128,9 +1130,9 @@ void test_fly_problem() {
   datas["alpha"] = new block_data_base(0);
   datas["bstm_mog3_grey"] = new block_data_base(0);
 
-  vcl_cout << "********** " << bstm_space_trees.size() << ", "
+  std::cout << "********** " << bstm_space_trees.size() << ", "
            << bstm_time_trees.size() << ", " << alpha.size() << ", "
-           << appearance.size() << vcl_endl;
+           << appearance.size() << std::endl;
 
   bstm_block_to_bstm_multi_block(blk.ptr(),
                                  datas,
@@ -1140,44 +1142,44 @@ void test_fly_problem() {
                                  0.01,
                                  0.01);
 
-  vcl_cout << "********** " << vcl_endl;
+  std::cout << "********** " << std::endl;
   for (int i = 0; i < blk->buffers().size(); ++i) {
-    vcl_cout << blk->get_buffer(i).size() /
+    std::cout << blk->get_buffer(i).size() /
                     tree_size(blk->metadata().subdivisions_[i])
-             << vcl_endl;
+             << std::endl;
   }
-  vcl_cout << datas["alpha"]->buffer_length() /
+  std::cout << datas["alpha"]->buffer_length() /
                   bstm_data_traits<BSTM_ALPHA>::datasize()
-           << vcl_endl;
+           << std::endl;
 }
 
-vcl_pair<bstm_data_traits<BSTM_ALPHA>::datatype,
+std::pair<bstm_data_traits<BSTM_ALPHA>::datatype,
          bstm_data_traits<BSTM_MOG3_GREY>::datatype>
 fly_scene_generate(const index_4d &coords) {
   if (coords[0] == coords[1] && coords[1] == coords[2]) {
     if (coords[3] % 16 == 0 && coords[3] / 16 == coords[0]) {
-      vcl_cout << coords << vcl_endl;
-      return vcl_make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(1), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)128));
+      std::cout << coords << std::endl;
+      return std::make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(1), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)128));
     }
   }
-  return vcl_make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(0), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)0));
+  return std::make_pair(bstm_data_traits<BSTM_ALPHA>::datatype(0), bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)0));
 }
 
 void test_fly_problem2() {
   /*  set up Multi-BSTM block  */
-  vcl_vector<space_time_enum> subdivs(4);
+  std::vector<space_time_enum> subdivs(4);
   subdivs[0] = STE_SPACE;
   subdivs[1] = STE_TIME;
   subdivs[2] = STE_SPACE;
   subdivs[3] = STE_TIME;
   bstm_multi_block_metadata mdata(bstm_block_id(),
                                   vgl_box_3d<double>(0, 0, 0, 1, 1, 1),
-                                  vcl_pair<double, double>(0, 1),
+                                  std::pair<double, double>(0, 1),
                                   9000,
                                   0.01,
                                   subdivs);
   bstm_multi_block_sptr blk = new bstm_multi_block(mdata);
-  vcl_map<vcl_string, block_data_base *> datas;
+  std::map<std::string, block_data_base *> datas;
   datas["alpha"] = new block_data_base(0);
   datas["bstm_mog3_grey"] = new block_data_base(0);
 
@@ -1196,13 +1198,13 @@ void test_fly_problem2() {
 
   vbl_triple<bstm_block *,
              bstm_time_block *,
-             vcl_map<vcl_string, bstm_data_base *> >
+             std::map<std::string, bstm_data_base *> >
       bstm_values = bstm_scene_from_point_func<BSTM_ALPHA, BSTM_MOG3_GREY>(
           bstm_mdata, fly_scene_generate);
 
-  vcl_cout << "********** " << bstm_values.first->trees().size() << ", "
+  std::cout << "********** " << bstm_values.first->trees().size() << ", "
            << bstm_values.second->time_trees().size() << ", "
-           << bstm_values.third["alpha"]->buffer_length() << vcl_endl;
+           << bstm_values.third["alpha"]->buffer_length() << std::endl;
 
   bstm_block_to_bstm_multi_block(blk.ptr(),
                                  datas,
@@ -1212,15 +1214,15 @@ void test_fly_problem2() {
                                  0.01,
                                  0.01);
 
-  vcl_cout << "********** " << vcl_endl;
+  std::cout << "********** " << std::endl;
   for (int i = 0; i < blk->buffers().size(); ++i) {
-    vcl_cout << blk->get_buffer(i).size() /
+    std::cout << blk->get_buffer(i).size() /
                     tree_size(blk->metadata().subdivisions_[i])
-             << vcl_endl;
+             << std::endl;
   }
-  vcl_cout << datas["alpha"]->buffer_length() /
+  std::cout << datas["alpha"]->buffer_length() /
                   bstm_data_traits<BSTM_ALPHA>::datasize()
-           << vcl_endl;
+           << std::endl;
 }
 
 void test_bstm_to_multi_bstm_block_function() {

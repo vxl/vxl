@@ -2,7 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <core/bbas_pro/bbas_1d_array_string.h>
@@ -58,9 +60,9 @@ bool betr_set_event_trigger_data_multi_ref_process(bprb_func_process& pro)
   bbas_1d_array_string_sptr ref_img_paths = pro.get_input<bbas_1d_array_string_sptr>(i++);
   // Assumed to be a global rational camera, projecting lon, lat, elv to (u,v)
   bbas_1d_array_string_sptr ref_cam_paths = pro.get_input<bbas_1d_array_string_sptr>(i++);
-  std::string evt_img_path = pro.get_input<vcl_string>(i++);
+  std::string evt_img_path = pro.get_input<std::string>(i++);
   // Assumed to be a global rational camera, projecting lon, lat, elv to (u,v)
-  std::string evt_cam_path = pro.get_input<vcl_string>(i);
+  std::string evt_cam_path = pro.get_input<std::string>(i);
   unsigned nimg = (ref_img_paths->data_array).size();
   unsigned ncam = (ref_cam_paths->data_array).size();
   if(!event_trigger||!nimg || !ncam || evt_img_path=="" || evt_cam_path==""){

@@ -114,6 +114,6 @@ int main(int argc, char** argv)
   if (im_type()=="byte")
     return load_images(names,vxl_byte(),wx(),wy(),wz(),output_path());
 
-  vcl_cout<<"Loading in as float images."<<vcl_endl;
+  std::cout<<"Loading in as float images."<<std::endl;
   return load_images(names,float(),wx(),wy(),wz(),output_path());
 }

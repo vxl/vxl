@@ -1,20 +1,22 @@
-#include <vcl_string.h> // C++ specific includes first
-#include <vcl_iostream.h>
-#include <vcl_sstream.h>
+#include <string> // C++ specific includes first
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <sstream>
 
-#define AssertEq(x,y) {status+=((x)==(y))?0:1;vcl_cout<<"TEST ["<<(x)<<"] == ["<<(y)<<"] : "<<((x)==(y)?"PASSED":"FAILED")<<vcl_endl;}
+#define AssertEq(x,y) {status+=((x)==(y))?0:1;std::cout<<"TEST ["<<(x)<<"] == ["<<(y)<<"] : "<<((x)==(y)?"PASSED":"FAILED")<<std::endl;}
 
 int test_sstream_main(int /*argc*/,char* /*argv*/[])
 {
   int status = 0;
-  vcl_string x = "fred";
-  vcl_istringstream ss(x);
+  std::string x = "fred";
+  std::istringstream ss(x);
 
-  vcl_string fred;
+  std::string fred;
   ss >> fred;
   AssertEq(fred,"fred");
 
-  vcl_istringstream s("wilma");
+  std::istringstream s("wilma");
 
   char w = '?';
   s >> w; AssertEq((int)w,'w');

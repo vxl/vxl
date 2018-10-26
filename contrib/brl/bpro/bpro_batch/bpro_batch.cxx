@@ -17,7 +17,9 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 
 #include <vcl_compiler.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);
@@ -331,7 +333,7 @@ PyObject *get_output_string(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
 
   if (selec->size()!=1) {
     std::cout << "in get_output_string() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -370,7 +372,7 @@ PyObject *get_output_float(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
 
   if (selec->size()!=1) {
     std::cout << "in get_output_float() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -404,7 +406,7 @@ PyObject *get_output_double(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
 
   if (selec->size()!=1) {
     std::cout << "in get_output_double() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -438,7 +440,7 @@ PyObject *get_output_int(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
 
   if (selec->size()!=1) {
     std::cout << "in get_output_int() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -472,7 +474,7 @@ PyObject *get_output_unsigned(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
 
   if (selec->size()!=1) {
     std::cout << "in get_output_unsigned() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -642,7 +644,7 @@ PyObject *get_bbas_1d_array_byte(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_byte() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -684,7 +686,7 @@ PyObject *get_bbas_1d_array_int(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_int() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -727,7 +729,7 @@ PyObject *get_bbas_1d_array_unsigned(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_unsigned() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -770,7 +772,7 @@ PyObject *get_bbas_1d_array_float(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_float() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -813,7 +815,7 @@ PyObject *get_output_double_array(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_double() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -856,7 +858,7 @@ PyObject *get_bbas_1d_array_string(PyObject * /*self*/, PyObject *args)
 
   // query to get the data
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);
-  brdb_selection_sptr selec = DATABASE->select(relation_name, vcl_move(Q));
+  brdb_selection_sptr selec = DATABASE->select(relation_name, std::move(Q));
   PyObject *array_1d=0;
   if (selec->size()!=1) {
     std::cout << "in get_bbas_1d_array_string() - no relation with type" << relation_name << " id: " << id << std::endl;
@@ -911,7 +913,7 @@ void
 register_basic_datatypes()
 {
   REGISTER_DATATYPE(bool);
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(int);
   REGISTER_DATATYPE(unsigned);
   REGISTER_DATATYPE(long);

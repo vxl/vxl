@@ -1,11 +1,13 @@
 #include "block_simple_cache.h"
 
-#include <vcl_cstddef.h>
-#include <vcl_iostream.h>
-#include <vcl_map.h>
-#include <vcl_set.h>
-#include <vcl_sstream.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstddef>
+#include <iostream>
+#include <map>
+#include <set>
+#include <sstream>
+#include <string>
 
 #include <bstm/bstm_data_traits.h>
 #include <bstm_multi/block_data_base.h>
@@ -31,9 +33,9 @@ block_simple_cache<Scene, Block>::block_simple_cache(scene_sptr scene)
 
 //: return list of scenes with data in the cache
 template <typename Scene, typename Block>
-vcl_vector<typename block_simple_cache<Scene, Block>::scene_sptr>
+std::vector<typename block_simple_cache<Scene, Block>::scene_sptr>
 block_simple_cache<Scene, Block>::get_scenes() {
-  vcl_set<scene_sptr> scenes;
+  std::set<scene_sptr> scenes;
 
   for (typename scene_block_map_t::const_iterator it = cached_blocks_.begin();
        it != cached_blocks_.end();
@@ -46,7 +48,7 @@ block_simple_cache<Scene, Block>::get_scenes() {
        ++it) {
     scenes.insert(it->first);
   }
-  return vcl_vector<scene_sptr>(scenes.begin(), scenes.end());
+  return std::vector<scene_sptr>(scenes.begin(), scenes.end());
 }
 
 //: destructor flushes the memory for currently ongoing asynchronous requests
@@ -114,8 +116,8 @@ Block *block_simple_cache<Scene, Block>::get_block(scene_sptr &scene,
 
     // if the block is null then initialize an empty one
     if (!loaded && scene->block_exists(id)) {
-      vcl_cout << "block_simple_cache::initializing empty block " << id
-               << vcl_endl;
+      std::cout << "block_simple_cache::initializing empty block " << id
+               << std::endl;
       loaded = new Block(mdata);
     }
     // update cache before returning the block
@@ -129,12 +131,12 @@ template <typename Scene, typename Block>
 block_data_base *
 block_simple_cache<Scene, Block>::get_data_base(scene_sptr &scene,
                                                 block_id_t id,
-                                                vcl_string type,
-                                                vcl_size_t num_bytes,
+                                                std::string type,
+                                                std::size_t num_bytes,
                                                 bool read_only) {
   // grab a reference to the map of cached_data_
   id_data_map_t &data_map = this->cached_data_map(scene, type);
-  vcl_size_t data_size = bstm_data_info::datasize(type);
+  std::size_t data_size = bstm_data_info::datasize(type);
   if (!scene->block_exists(id)) {
     return nullptr;
   }
@@ -170,19 +172,19 @@ block_simple_cache<Scene, Block>::get_data_base(scene_sptr &scene,
     }
 
     // requesting a specific number of bytes, and not found it on disk
-    vcl_cout << "block_simple_cache::initializing empty data " << id
+    std::cout << "block_simple_cache::initializing empty data " << id
              << " type: " << type << " to size: " << num_bytes << " bytes"
-             << vcl_endl;
+             << std::endl;
     loaded = new block_data_base(new char[num_bytes], num_bytes, id, read_only);
-    vcl_memset(loaded->data_buffer(), 0, num_bytes);
+    std::memset(loaded->data_buffer(), 0, num_bytes);
   } else {
     // otherwise it's a miss, load sync from disk, update cache
     if (!loaded && scene->block_exists(id)) {
-      vcl_cout << "block_simple_cache::initializing empty data " << id
-               << " type: " << type << vcl_endl;
+      std::cout << "block_simple_cache::initializing empty data " << id
+               << " type: " << type << std::endl;
       loaded =
           new block_data_base(new char[num_bytes], num_bytes, id, read_only);
-      vcl_memset(loaded->data_buffer(), 0, num_bytes);
+      std::memset(loaded->data_buffer(), 0, num_bytes);
     }
   }
 
@@ -201,23 +203,23 @@ template <typename Scene, typename Block>
 block_data_base *
 block_simple_cache<Scene, Block>::get_data_base_new(scene_sptr &scene,
                                                     block_id_t id,
-                                                    vcl_string type,
-                                                    vcl_size_t num_bytes,
+                                                    std::string type,
+                                                    std::size_t num_bytes,
                                                     bool read_only) {
   block_data_base *block_data;
   if (num_bytes > 0) {
     block_metadata data = scene->get_block_metadata(id);
     // requesting a specific number of bytes,
-    // vcl_cout<<"block_simple_cache::initializing empty data "<<id
+    // std::cout<<"block_simple_cache::initializing empty data "<<id
     //        <<" type: "<<type
-    //        <<" to size: "<<num_bytes<<" bytes"<<vcl_endl;
+    //        <<" to size: "<<num_bytes<<" bytes"<<std::endl;
     block_data =
         new block_data_base(new char[num_bytes], num_bytes, id, read_only);
-    vcl_memset(block_data->data_buffer(), 0, num_bytes);
+    std::memset(block_data->data_buffer(), 0, num_bytes);
   } else {
     // initialize an empty data
-    // vcl_cout<<"block_simple_cache::initializing empty data "<<id<<" type:
-    // "<<type<<vcl_endl;
+    // std::cout<<"block_simple_cache::initializing empty data "<<id<<" type:
+    // "<<type<<std::endl;
 
     block_metadata data = scene->get_block_metadata(id);
     // the following constructor also sets the default values
@@ -243,7 +245,7 @@ block_simple_cache<Scene, Block>::get_data_base_new(scene_sptr &scene,
 template <typename Scene, typename Block>
 void block_simple_cache<Scene, Block>::remove_data_base(scene_sptr &scene,
                                                         block_id_t id,
-                                                        vcl_string type,
+                                                        std::string type,
                                                         bool write_out) {
   // grab a reference to the map of cached_data_
   id_data_map_t &data_map = this->cached_data_map(scene, type);
@@ -254,16 +256,16 @@ void block_simple_cache<Scene, Block>::remove_data_base(scene_sptr &scene,
     block_data_base *litter = data_map[id];
     // if (!litter->read_only_) {
     // save it
-    // vcl_cout<<"block_simple_cache::remove_data_base "<<scene->xml_path()<<"
+    // std::cout<<"block_simple_cache::remove_data_base "<<scene->xml_path()<<"
     // type
-    // "<<type<<':'<<id<<"; saving to disk"<<vcl_endl;
+    // "<<type<<':'<<id<<"; saving to disk"<<std::endl;
     if (write_out)
       block_sio_mgr<Block>::save_block_data_base(
           scene->data_path(), id, litter, type);
     //}
     // else
-    //  vcl_cout<<"block_simple_cache::remove_data_base "<<type<<':'<<id<<"; not
-    //  saving to disk"<<vcl_endl;
+    //  std::cout<<"block_simple_cache::remove_data_base "<<type<<':'<<id<<"; not
+    //  saving to disk"<<std::endl;
     // now throw it away
     delete litter;
     data_map.erase(rem);
@@ -275,7 +277,7 @@ template <typename Scene, typename Block>
 void block_simple_cache<Scene, Block>::replace_data_base(
     scene_sptr &scene,
     block_id_t id,
-    vcl_string type,
+    std::string type,
     block_data_base *replacement) {
   // grab a reference to the map of cached_data_
   id_data_map_t &data_map = this->cached_data_map(scene, type);
@@ -300,7 +302,7 @@ void block_simple_cache<Scene, Block>::replace_data_base(
 template <typename Scene, typename Block>
 typename block_simple_cache<Scene, Block>::id_data_map_t &
 block_simple_cache<Scene, Block>::cached_data_map(scene_sptr &scene,
-                                                  vcl_string prefix) {
+                                                  std::string prefix) {
   return cached_data_[scene][prefix];
 }
 
@@ -314,9 +316,9 @@ bool block_simple_cache<Scene, Block>::is_valid_id(scene_sptr &scene,
 
 //: Summarizes this cache's data
 template <typename Scene, typename Block>
-vcl_string block_simple_cache<Scene, Block>::to_string() {
+std::string block_simple_cache<Scene, Block>::to_string() {
 
-  vcl_stringstream stream;
+  std::stringstream stream;
   typename scene_block_map_t::iterator scene_block_iter =
       cached_blocks_.begin();
   typename scene_data_map_t::iterator scene_data_iter = cached_data_.begin();
@@ -335,7 +337,7 @@ vcl_string block_simple_cache<Scene, Block>::to_string() {
     typename scene_data_map_t::mapped_type::iterator dat_iter =
         scene_data_iter->second.begin();
     for (; dat_iter != scene_data_iter->second.end(); ++dat_iter) {
-      vcl_string data_type = dat_iter->first;
+      std::string data_type = dat_iter->first;
       stream << "\n  data: " << data_type << ' ';
       id_data_map_t dmap = dat_iter->second;
       typename id_data_map_t::iterator it;
@@ -420,7 +422,7 @@ void block_simple_cache<Scene, Block>::write_to_disk(scene_sptr &scene) {
 template <typename Scene, typename Block>
 bool block_simple_cache<Scene, Block>::add_scene(scene_sptr &scene) {
   if (cached_blocks_.count(scene) || cached_data_.count(scene)) {
-    vcl_cout << "The scene Already exists " << vcl_endl;
+    std::cout << "The scene Already exists " << std::endl;
     return false;
   } else {
     cached_blocks_[scene];

@@ -44,19 +44,22 @@ bprb_batch_process_manager::register_process( bprb_process_sptr( new bprb_func_p
 #define REG_PROCESS_FUNC_CONS_INIT_FIN(proc, T, func, nm) \
  T ::register_process( bprb_process_sptr( new proc(func, nm, func##_cons, func##_init, func##_finish) ) )
 
-#define REGISTER_DATATYPE(T) \
-  std::string s##T = #T; \
-  s##T += "_data"; \
-  if(!DATABASE->exists(s##T)){ \
-  std::vector<std::string> r_##T##_names(2); \
-  std::vector<std::string> r_##T##_types(2); \
-  r_##T##_names[0]="id"; \
-  r_##T##_names[1]="value"; \
-  r_##T##_types[0]=brdb_value_t<unsigned>::type(); \
-  r_##T##_types[1]=brdb_value_t<T>::type(); \
-  brdb_relation_sptr r_##T  = new brdb_relation(r_##T##_names,r_##T##_types); \
-  DATABASE->add_relation(s##T, r_##T); \
+#define REGISTER_DATATYPE_LONG_FORM(T, FUNCSUFFIX) \
+  std::string s##FUNCSUFFIX = #FUNCSUFFIX; \
+  s##FUNCSUFFIX += "_data"; \
+  if(!DATABASE->exists(s##FUNCSUFFIX)){ \
+  std::vector<std::string> r_##FUNCSUFFIX##_names(2); \
+  std::vector<std::string> r_##FUNCSUFFIX##_types(2); \
+  r_##FUNCSUFFIX##_names[0]="id"; \
+  r_##FUNCSUFFIX##_names[1]="value"; \
+  r_##FUNCSUFFIX##_types[0]=brdb_value_t<unsigned>::type(); \
+  r_##FUNCSUFFIX##_types[1]=brdb_value_t<T >::type(); \
+  brdb_relation_sptr r_##FUNCSUFFIX  = new brdb_relation(r_##FUNCSUFFIX##_names,r_##FUNCSUFFIX##_types); \
+  DATABASE->add_relation(s##FUNCSUFFIX, r_##FUNCSUFFIX); \
   }
+
+#define REGISTER_DATATYPE(T) \
+   REGISTER_DATATYPE_LONG_FORM(T,T)
 
 #define DECLARE_FUNC(func) \
 bool func(bprb_func_process& pro)

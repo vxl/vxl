@@ -52,28 +52,28 @@ bool vpdfl_builder_base::is_class(std::string const& s) const
 
 //: Create a vpdfl_builder_base object given a config stream
 // \throw vcl_runtime_exception if parse error.
-vcl_unique_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(std::istream &is)
+std::unique_ptr<vpdfl_builder_base> vpdfl_builder_base::new_builder_from_stream(std::istream &is)
 {
   // This function should really be replaced by a general loader scheme
   // Ask Ian for examples from Manchester's private code base.
 
   //: This will store the constructed builder.
-  vcl_unique_ptr<vpdfl_builder_base> builder;
+  std::unique_ptr<vpdfl_builder_base> builder;
 
   std::string type;
   is >> type;
 
   if (type == "vpdfl_axis_gaussian_builder")
   {
-    builder = vcl_unique_ptr<vpdfl_builder_base>(new vpdfl_axis_gaussian_builder());
+    builder = std::unique_ptr<vpdfl_builder_base>(new vpdfl_axis_gaussian_builder());
   }
   else if (type == "vpdfl_gaussian_kernel_pdf_builder")
   {
-    builder = vcl_unique_ptr<vpdfl_builder_base>(new vpdfl_gaussian_kernel_pdf_builder());
+    builder = std::unique_ptr<vpdfl_builder_base>(new vpdfl_gaussian_kernel_pdf_builder());
   }
   else if (type == "vpdfl_gaussian_builder")
   {
-    builder = vcl_unique_ptr<vpdfl_builder_base>(new vpdfl_gaussian_builder());
+    builder = std::unique_ptr<vpdfl_builder_base>(new vpdfl_gaussian_builder());
   }
   else
     mbl_exception_error(mbl_exception_no_name_in_factory(type,
@@ -141,12 +141,12 @@ std::ostream& operator<<(std::ostream& os,const vpdfl_builder_base* b)
 //=======================================================================
 //: Create a vpdfl_builder_base object given a config stream (recursive style)
 //  Creates object, then uses config_from_stream(is) to set up internals
-vcl_unique_ptr<vpdfl_builder_base> vpdfl_builder_base::
+std::unique_ptr<vpdfl_builder_base> vpdfl_builder_base::
   new_pdf_builder_from_stream(std::istream &is)
 {
   std::string name;
   is >> name;
-  vcl_unique_ptr<vpdfl_builder_base> builder;
+  std::unique_ptr<vpdfl_builder_base> builder;
   try
   {
     builder = mbl_cloneables_factory<vpdfl_builder_base>::get_clone(name);

@@ -26,10 +26,10 @@ public:
 private:
 
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_remove_low_nobs_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_remove_low_nobs_kernels(bocl_device_sptr device, std::string opts = "");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > remove_low_nobs_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > remove_low_nobs_kernels_;
 
 };
 

@@ -20,11 +20,11 @@
 #include <vgl/vgl_point_3d.h>
 
 //: Subdivide mesh faces into triangle
-vcl_unique_ptr<imesh_regular_face_array<3> >
+std::unique_ptr<imesh_regular_face_array<3> >
 imesh_triangulate(const imesh_face_array_base& faces);
 
 //: Subdivide quadrilaterals into triangle
-vcl_unique_ptr<imesh_regular_face_array<3> >
+std::unique_ptr<imesh_regular_face_array<3> >
 imesh_triangulate(const imesh_regular_face_array<4>& faces);
 
 

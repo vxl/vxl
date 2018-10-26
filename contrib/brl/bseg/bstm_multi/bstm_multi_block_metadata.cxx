@@ -1,11 +1,13 @@
 #include "bstm_multi_block_metadata.h"
 
-#include <vcl_cstring.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstring>
 
 #include <bstm_multi/bstm_multi_tree_util.h>
 
 template <typename T> void convert(const char *t, T &d) {
-  vcl_stringstream strm(t);
+  std::stringstream strm(t);
   strm >> d;
 }
 
@@ -29,12 +31,12 @@ bool bstm_multi_block_metadata::contains_t(const double t,
     return false;
 }
 
-vcl_pair<vgl_vector_3d<double>, double>
+std::pair<vgl_vector_3d<double>, double>
 bstm_multi_block_metadata::resolution() const {
   vgl_vector_3d<double> voxel_sizes =
       this->bbox().max_point() - this->bbox().min_point();
   double time_step = bbox_t_.second - bbox_t_.first;
-  for (vcl_vector<space_time_enum>::const_iterator iter = subdivisions_.begin();
+  for (std::vector<space_time_enum>::const_iterator iter = subdivisions_.begin();
        iter != subdivisions_.end();
        ++iter) {
     switch (*iter) {
@@ -46,7 +48,7 @@ bstm_multi_block_metadata::resolution() const {
       break;
     }
   }
-  return vcl_pair<vgl_vector_3d<double>, double>(voxel_sizes, time_step);
+  return std::pair<vgl_vector_3d<double>, double>(voxel_sizes, time_step);
 }
 
 bool bstm_multi_block_metadata::
@@ -91,49 +93,49 @@ bstm_multi_block_metadata::from_xml(const char **atts) {
   bstm_multi_block_metadata metadata;
   int idi, idj, idk, idt;
   double min_x, min_y, min_z, min_t, max_x, max_y, max_z, max_t;
-  vcl_string subdivs;
+  std::string subdivs;
 
   // iterate over attributes...
   for (int i = 0; atts[i]; i += 2) {
-    if (vcl_strcmp(atts[i], "id_i") == 0)
+    if (std::strcmp(atts[i], "id_i") == 0)
       convert(atts[i + 1], idi);
-    else if (vcl_strcmp(atts[i], "id_j") == 0)
+    else if (std::strcmp(atts[i], "id_j") == 0)
       convert(atts[i + 1], idj);
-    else if (vcl_strcmp(atts[i], "id_k") == 0)
+    else if (std::strcmp(atts[i], "id_k") == 0)
       convert(atts[i + 1], idk);
-    else if (vcl_strcmp(atts[i], "id_t") == 0)
+    else if (std::strcmp(atts[i], "id_t") == 0)
       convert(atts[i + 1], idt);
-    else if (vcl_strcmp(atts[i], "min_x") == 0)
+    else if (std::strcmp(atts[i], "min_x") == 0)
       convert(atts[i + 1], min_x);
-    else if (vcl_strcmp(atts[i], "min_y") == 0)
+    else if (std::strcmp(atts[i], "min_y") == 0)
       convert(atts[i + 1], min_y);
-    else if (vcl_strcmp(atts[i], "min_z") == 0)
+    else if (std::strcmp(atts[i], "min_z") == 0)
       convert(atts[i + 1], min_z);
-    else if (vcl_strcmp(atts[i], "min_t") == 0)
+    else if (std::strcmp(atts[i], "min_t") == 0)
       convert(atts[i + 1], min_t);
-    else if (vcl_strcmp(atts[i], "max_x") == 0)
+    else if (std::strcmp(atts[i], "max_x") == 0)
       convert(atts[i + 1], max_x);
-    else if (vcl_strcmp(atts[i], "max_y") == 0)
+    else if (std::strcmp(atts[i], "max_y") == 0)
       convert(atts[i + 1], max_y);
-    else if (vcl_strcmp(atts[i], "max_z") == 0)
+    else if (std::strcmp(atts[i], "max_z") == 0)
       convert(atts[i + 1], max_z);
-    else if (vcl_strcmp(atts[i], "max_t") == 0)
+    else if (std::strcmp(atts[i], "max_t") == 0)
       convert(atts[i + 1], max_t);
-    else if (vcl_strcmp(atts[i], "max_mb") == 0)
+    else if (std::strcmp(atts[i], "max_mb") == 0)
       convert(atts[i + 1], metadata.max_mb_);
-    else if (vcl_strcmp(atts[i], "p_init") == 0)
+    else if (std::strcmp(atts[i], "p_init") == 0)
       convert(atts[i + 1], metadata.p_init_);
-    else if (vcl_strcmp(atts[i], "subdivisions") == 0)
+    else if (std::strcmp(atts[i], "subdivisions") == 0)
       convert(atts[i + 1], subdivs);
   }
   metadata.id_ = bstm_block_id(idi, idj, idk, idt);
   metadata.bbox_ = vgl_box_3d<double>(min_x, min_y, min_z, max_x, max_y, max_z);
-  metadata.bbox_t_ = vcl_pair<double, double>(min_t, max_t);
+  metadata.bbox_t_ = std::pair<double, double>(min_t, max_t);
   metadata.subdivisions_ = parse_subdivisions(subdivs);
   return metadata;
 }
 
-vcl_ostream &operator<<(vcl_ostream &s, bstm_multi_block_metadata &metadata) {
+std::ostream &operator<<(std::ostream &s, bstm_multi_block_metadata &metadata) {
   s << metadata.id_ << ' ';
   s << ", bbox( " << metadata.bbox_ << ") ";
   s << ", bbox_t( " << metadata.bbox_t_.first << ", " << metadata.bbox_t_.second

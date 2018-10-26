@@ -9,7 +9,9 @@
 //  \endverbatim
 
 #include <vul/vul_file.h>
-//#include <vcl_iomanip.h>
+//#include <vcl_compiler.h>
+#include <iostream>
+#include <iomanip>
 #include <iostream>
 #include <cmath>
 #include <cstdio>
@@ -298,7 +300,7 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
   }
 
   std::vector<unsigned char> land_ids;
-  vcl_ifstream ifs(land_txt.c_str());
+  std::ifstream ifs(land_txt.c_str());
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << land_txt.c_str() << std::endl;
     return false;

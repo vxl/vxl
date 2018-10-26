@@ -6,7 +6,9 @@
 // \brief Base for objects which perform some form of linear component analysis.
 
 #include <string>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vsl/vsl_fwd.h>
@@ -80,7 +82,7 @@ class mcal_component_analyzer
   virtual void config_from_stream(std::istream &);
 
   //: Create a concrete mcal_component_analyzer object, from a text specification.
-  static vcl_unique_ptr<mcal_component_analyzer> create_from_stream(std::istream &is);
+  static std::unique_ptr<mcal_component_analyzer> create_from_stream(std::istream &is);
 };
 
 //: Allows derived class to be loaded by base-class pointer

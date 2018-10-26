@@ -137,7 +137,7 @@ void vgl_quadric_3d<T>::set(std::vector<std::vector<T> > const& Q){
 }
 template <class T>
 std::vector<std::vector<T> > vgl_quadric_3d<T>::coef_matrix() const{
-  vcl_vector<std::vector<T> > Q(4,vcl_vector<T>(4,T(0)));
+  std::vector<std::vector<T> > Q(4,std::vector<T>(4,T(0)));
   Q[0][0]=a_;Q[1][1]=b_; Q[2][2]=c_; Q[3][3]=j_;
   Q[0][1]= Q[1][0]=d_/T(2); Q[0][2]= Q[2][0]=e_/T(2);
   Q[0][3]= Q[3][0]=g_/T(2); Q[1][2]= Q[2][1]=f_/T(2);

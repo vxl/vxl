@@ -6,9 +6,11 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_iostream.h>
-#include <vcl_string.h>
-#include <vcl_vector.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
+#include <string>
+#include <vector>
 
 #include <bprb/bprb_func_process.h>
 #include <bstm_multi/bstm_multi_typedefs.h>
@@ -20,10 +22,10 @@ constexpr unsigned n_inputs_ = 1;
 constexpr unsigned n_outputs_ = 0;
 }
 bool bstm_clear_cache_process_cons(bprb_func_process &pro) {
-  vcl_vector<vcl_string> input_types_(n_inputs_);
+  std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "bstm_cache_sptr";
 
-  vcl_vector<vcl_string> output_types_(n_outputs_);
+  std::vector<std::string> output_types_(n_outputs_);
   bool good =
       pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 
@@ -32,8 +34,8 @@ bool bstm_clear_cache_process_cons(bprb_func_process &pro) {
 
 bool bstm_clear_cache_process(bprb_func_process &pro) {
   if (pro.n_inputs() < n_inputs_) {
-    vcl_cout << pro.name() << ": The input number should be " << n_inputs_
-             << vcl_endl;
+    std::cout << pro.name() << ": The input number should be " << n_inputs_
+             << std::endl;
     return false;
   }
   // get the inputs

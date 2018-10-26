@@ -105,7 +105,7 @@ void test_pca()
           "  use_chunks:  true\n"
           "}\n");
 
-    vcl_unique_ptr<mcal_component_analyzer>
+    std::unique_ptr<mcal_component_analyzer>
             ca = mcal_component_analyzer::create_from_stream(ss);
 
     TEST("Correct component analyzer",ca->is_a(),"mcal_pca");

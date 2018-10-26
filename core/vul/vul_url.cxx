@@ -17,7 +17,9 @@
 #include <sstream>
 #include <fstream>
 #include "vul_url.h"
-#include <vcl_cstdio.h> // for vcl_snprintf()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for std::snprintf()
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>
@@ -175,16 +177,16 @@ std::istream * vul_http_open(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_snprintf(buffer, 4090-std::strlen(buffer),
+  std::snprintf(buffer, 4090-std::strlen(buffer),
                "GET %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
                url, host.c_str());
 
   if (auth != "")
-    vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
+    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
                  "Authorization: Basic %s\r\n",
                  vul_url::encode_base64(auth).c_str());
 
-  if (vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
   {
     std::cerr << "ERROR: vul_http_open buffer overflow.";
     std::abort();
@@ -373,15 +375,15 @@ bool vul_http_exists(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_snprintf(buffer, 4090,
+  std::snprintf(buffer, 4090,
                "HEAD %s HTTP/1.1\r\nUser-Agent: vul_url\r\nHost: %s\r\nAccept: */*\r\n",
                url, host.c_str());
   if (auth != "")
-    vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
+    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
                  "Authorization: Basic %s\r\n",
                  vul_url::encode_base64(auth).c_str() );
 
-  if (vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
   {
     std::cerr << "ERROR: vul_http_exists buffer overflow.";
     std::abort();

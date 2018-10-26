@@ -199,7 +199,7 @@ rrel_homography2d_est :: weighted_least_squares_fit( vnl_vector<double>& params,
   }
   else
   {
-    vcl_cerr << "A.is_finite() FAILED." << vcl_endl;
+    std::cerr << "A.is_finite() FAILED." << std::endl;
   }
 
   if ( !weights )

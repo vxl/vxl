@@ -37,14 +37,14 @@ boct_bit_tree::boct_bit_tree(const unsigned char *bits, int num_levels)
 // Copy assignment operator
 boct_bit_tree &boct_bit_tree::operator=(boct_bit_tree that) {
   // swap members so 'that' can be safely destroyed
-  vcl_swap(this->bits_, that.bits_);
-  vcl_swap(this->is_owning_, that.is_owning_);
-  vcl_swap(this->num_levels_, that.num_levels_);
+  std::swap(this->bits_, that.bits_);
+  std::swap(this->is_owning_, that.is_owning_);
+  std::swap(this->num_levels_, that.num_levels_);
 
   // If is_owning, replace `that`s buffer with a copy
   if (this->is_owning_) {
     unsigned char *new_bits = new unsigned char[16];
-    vcl_memcpy(new_bits, this->bits_, 16);
+    std::memcpy(new_bits, this->bits_, 16);
     this->bits_ = new_bits;
   }
   // Don't destroy old buffer in case of "self assignment" (i.e assignment when

@@ -20,15 +20,15 @@ public:
     static bool fuse_factors(boxm2_scene_sptr         scene,
                                        bocl_device_sptr         device,
                                        boxm2_opencl_cache_sptr  opencl_cache,
-                                       vcl_vector<vcl_string> factors_ident,
-                                       vcl_vector<float>   weights);
+                                       std::vector<std::string> factors_ident,
+                                       std::vector<float>   weights);
 private:
 
     //compile kernels and place in static map
-    static vcl_vector<bocl_kernel*>& get_fuse_factors_kernels(bocl_device_sptr device, vcl_string opts = "");
+    static std::vector<bocl_kernel*>& get_fuse_factors_kernels(bocl_device_sptr device, std::string opts = "");
 
     //map of paint kernel by device
-    static vcl_map<vcl_string, vcl_vector<bocl_kernel*> > fuse_factors_kernels_;
+    static std::map<std::string, std::vector<bocl_kernel*> > fuse_factors_kernels_;
 
 };
 

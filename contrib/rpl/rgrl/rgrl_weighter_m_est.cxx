@@ -17,10 +17,10 @@
 #include "rgrl_transformation.h"
 
 rgrl_weighter_m_est::
-rgrl_weighter_m_est( vcl_unique_ptr<rrel_m_est_obj>  m_est,
+rgrl_weighter_m_est( std::unique_ptr<rrel_m_est_obj>  m_est,
                      bool                          use_signature_error,
                      bool                          use_precomputed_signature_wgt )
-  : m_est_( vcl_move(m_est) ),
+  : m_est_( std::move(m_est) ),
     use_signature_error_( use_signature_error ),
     signature_precomputed_( use_precomputed_signature_wgt ),
     weight_more_on_distinct_match_( true )

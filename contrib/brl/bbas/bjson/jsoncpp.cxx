@@ -232,7 +232,9 @@ static inline void fixNumericLocaleInput(char* begin, char* end) {
 #include <cstring>
 #include <istream>
 #include <sstream>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <set>
 #include <limits>
 
@@ -266,7 +268,7 @@ static int       stackDepth_g = 0;  // see readValue()
 
 namespace Json {
 
-typedef vcl_unique_ptr<CharReader>   CharReaderPtr;
+typedef std::unique_ptr<CharReader>   CharReaderPtr;
 
 // Implementation of class Features
 // ////////////////////////////////
@@ -4073,7 +4075,9 @@ Value& Path::make(Value& root) const {
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <iomanip>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <sstream>
 #include <utility>
 #include <set>
@@ -4140,7 +4144,7 @@ Value& Path::make(Value& root) const {
 
 namespace Json {
 
-typedef vcl_unique_ptr<StreamWriter>   StreamWriterPtr;
+typedef std::unique_ptr<StreamWriter>   StreamWriterPtr;
 
 static bool containsControlCharacter(const char* str) {
   while (*str) {

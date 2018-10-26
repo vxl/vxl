@@ -43,13 +43,13 @@ public:
   const block_data_base *operator->() const { return &block_data_base_; }
 
   // typed array access
-  datatype &operator[](vcl_size_t i) { return data_array_[i]; }
-  const datatype &operator[](vcl_size_t i) const { return data_array_[i]; }
+  datatype &operator[](std::size_t i) { return data_array_[i]; }
+  const datatype &operator[](std::size_t i) const { return data_array_[i]; }
 
-  vcl_size_t size() const { return data_array_.size(); }
+  std::size_t size() const { return data_array_.size(); }
 
   // creates new buffer for underlying base, and updates data array.
-  void new_buffer(vcl_size_t length) {
+  void new_buffer(std::size_t length) {
     block_data_base_.new_data_buffer(length);
     update_data_array();
   }

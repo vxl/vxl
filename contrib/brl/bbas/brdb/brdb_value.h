@@ -93,7 +93,7 @@ class brdb_value : public vbl_ref_count
 
   //: binary io write value only
   //  Handles only the value (without version or type info)
-  virtual void b_write_value(vsl_b_ostream&)
+  virtual void b_write_value(vsl_b_ostream&) const
   {
     std::cout << "Warning: calling binary write on parent value class, this value is not being saved" << std::endl;
   }
@@ -209,7 +209,7 @@ class brdb_value_t : public brdb_value
 
   //: binary io write value only
   //  Handles only the value (without version or type info)
-  virtual void b_write_value(vsl_b_ostream& os) const;
+  void b_write_value(vsl_b_ostream& os) const override;
 
  private:
   //: The stored data

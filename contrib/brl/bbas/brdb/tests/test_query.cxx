@@ -21,7 +21,7 @@ static void test_query()
 
   brdb_query_aptr q1 = brdb_query_comp_new("attr", brdb_query::EQ, 1);
   brdb_query_aptr q2 = brdb_query_comp_new("attr", brdb_query::EQ, 3);
-  brdb_query_aptr q1or2 = vcl_move(q1) | vcl_move(q2);
+  brdb_query_aptr q1or2 = std::move(q1) | std::move(q2);
 }
 
 TESTMAIN(test_query);

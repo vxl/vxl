@@ -176,7 +176,7 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
         //shallow remove from ocl cache unnecessary items from ocl cache.
         opencl_cache->shallow_remove_data(scene,id,boxm2_data_traits<BOXM2_FLOAT>::prefix(filter_ident.str()));
       }
-      vcl_cout<<"Filtering: After execute MBs in cache: "<<binCache/(1024.0*1024.0)<<vcl_endl;
+      std::cout<<"Filtering: After execute MBs in cache: "<<binCache/(1024.0*1024.0)<<std::endl;
     }  //end block iter for
 
     delete [] filter_coeff;

@@ -146,7 +146,7 @@ void test_general_ca()
           "  basis_cost: mcal_sparse_basis_cost { alpha: 0.1 }\n"
           "}\n");
 
-    vcl_unique_ptr<mcal_component_analyzer>
+    std::unique_ptr<mcal_component_analyzer>
             ca = mcal_component_analyzer::create_from_stream(ss);
 
     TEST("Correct component analyzer",ca->is_a(),"mcal_general_ca");

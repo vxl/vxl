@@ -11,7 +11,9 @@
 #include <bvxm/bvxm_world_params.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 #include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
@@ -86,7 +88,7 @@ static void test_brec_create_mog_image_process()
 
   //DECLARE_FUNC_CONS(brec_create_mog_image_process);
 
-  REGISTER_DATATYPE(vcl_string);
+  REGISTER_DATATYPE_LONG_FORM(std::string,vcl_string);
   REGISTER_DATATYPE(float);
   REGISTER_DATATYPE(unsigned);
   REGISTER_DATATYPE(bbgm_image_sptr);
@@ -113,7 +115,7 @@ static void test_brec_create_mog_image_process()
   good = good && bprb_batch_process_manager::instance()->commit_output(0, id_img1);
   TEST("run create mog image process", good ,true);
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img1);
-  brdb_selection_sptr S_img = DATABASE->select("bbgm_image_sptr_data", vcl_move(Q_img));
+  brdb_selection_sptr S_img = DATABASE->select("bbgm_image_sptr_data", std::move(Q_img));
   TEST("output image is in db", S_img->size(), 1);
   brdb_value_sptr value_img;
   TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);

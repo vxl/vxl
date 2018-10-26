@@ -73,7 +73,7 @@ void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2
       {
         std::stringstream ss;
         ss << outdir << "/img_" << std::setw(5) << std::setfill('0') << k*maxcells + sk << ".png";
-        //vcl_cout<<"Filename : "<<ss.str()<<vcl_endl;
+        //std::cout<<"Filename : "<<ss.str()<<std::endl;
         vil_image_view_base_sptr img_sptr = vil_load(ss.str().c_str());
         if (vil_image_view<unsigned char> * cimg = dynamic_cast<vil_image_view<unsigned char> *>(img_sptr.ptr()))
         {
@@ -353,7 +353,7 @@ void boxm2_export_stack_images_function::export_color_stack_images(const boxm2_s
 }
 
 
-void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, vcl_string ident, vil3d_image_view<float> & img3d)
+void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, std::string ident, vil3d_image_view<float> & img3d)
 {
     // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
     // perhaps const versions of get_block and friends could be added
@@ -380,8 +380,8 @@ void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_s
     int img_z = (max_index.z() - min_index.z() + 1)*ntrees_z*maxcells;
     img3d.set_size(img_x, img_y, img_z);
 
-    vcl_map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-    vcl_map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
+    std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
+    std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
 
     int index_x = 0, index_y = 0, index_z = 0;
 
@@ -440,6 +440,6 @@ void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_s
             }
         }
     }
-    vcl_cout << "Scene varies from " << min_index << " to " << max_index << '\n'
-        << "Volume Dimensions are " << img_x << ' ' << img_y << ' ' << img_z << vcl_endl;
+    std::cout << "Scene varies from " << min_index << " to " << max_index << '\n'
+        << "Volume Dimensions are " << img_x << ' ' << img_y << ' ' << img_z << std::endl;
 }

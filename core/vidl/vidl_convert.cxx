@@ -15,7 +15,9 @@
 //-----------------------------------------------------------------------------
 
 #include <cstring>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include "vidl_convert.h"
 #include "vidl_frame.h"
 #include "vidl_pixel_format.h"
@@ -32,7 +34,9 @@
 #include <vil/vil_memory_chunk.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 
 //--------------------------------------------------------------------------------
 
@@ -83,10 +87,10 @@ bool convert_generic(vidl_frame const& in_frame,
                      vidl_frame& out_frame)
 {
   // create pixel iterators for each frame
-  vcl_unique_ptr<vidl_pixel_iterator> in_pitr(vidl_make_pixel_iterator(in_frame));
+  std::unique_ptr<vidl_pixel_iterator> in_pitr(vidl_make_pixel_iterator(in_frame));
   if (!in_pitr.get())
     return false;
-  vcl_unique_ptr<vidl_pixel_iterator> out_pitr(vidl_make_pixel_iterator(out_frame));
+  std::unique_ptr<vidl_pixel_iterator> out_pitr(vidl_make_pixel_iterator(out_frame));
   if (!out_pitr.get())
     return false;
 

@@ -1,7 +1,9 @@
-#include <vcl_cstdio.h>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio>
+#include <memory>
 
-#define ASSERT(x,y) if (!(x)) { vcl_printf("FAIL: " y "\n"); status = 1; }
+#define ASSERT(x,y) if (!(x)) { std::printf("FAIL: " y "\n"); status = 1; }
 
 static int instances = 0;
 
@@ -14,14 +16,14 @@ struct A
 
 struct B: public A {};
 
-static int function_call(vcl_unique_ptr<A> a)
+static int function_call(std::unique_ptr<A> a)
 {
   return a.get()? 1:0;
 }
 
 static A* get_A(A& a) { return &a; }
 
-static vcl_unique_ptr<A> generate_auto_ptr () { return vcl_unique_ptr<A>(new A); }
+static std::unique_ptr<A> generate_auto_ptr () { return std::unique_ptr<A>(new A); }
 
 int test_memory_main(int /*argc*/,char* /*argv*/[])
 {
@@ -29,11 +31,11 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
 
   // Keep everything in a subscope so we can detect leaks.
   {
-    vcl_unique_ptr<A> pa0;
-    vcl_unique_ptr<A> pa1(new A());
-    vcl_unique_ptr<B> pb1(new B());
-    vcl_unique_ptr<A> pa2(new B());
-    vcl_unique_ptr<A> pa3(vcl_move(pb1));
+    std::unique_ptr<A> pa0;
+    std::unique_ptr<A> pa1(new A());
+    std::unique_ptr<B> pb1(new B());
+    std::unique_ptr<A> pa2(new B());
+    std::unique_ptr<A> pa3(std::move(pb1));
 
     A* ptr = get_A(*pa1);
     ASSERT(ptr == pa1.get(),
@@ -55,12 +57,12 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
     delete pa0.release();
     ASSERT(!pa0.get(), "auto_ptr holds an object after release()");
 
-    pa1 = vcl_move(pa3);
+    pa1 = std::move(pa3);
     ASSERT(!pa3.get(), "auto_ptr holds an object after assignment to another");
     ASSERT(pa1.get(),
            "auto_ptr does not hold an object after assignment from another");
 
-    int copied = function_call(vcl_move(pa2));
+    int copied = function_call(std::move(pa2));
     ASSERT(copied, "auto_ptr did not receive ownership in called function");
     ASSERT(!pa2.get(), "auto_ptr did not release ownership to called function");
 
@@ -77,12 +79,12 @@ int test_memory_main(int /*argc*/,char* /*argv*/[])
   // reset instance count for shared pointer tests
   instances = 0;
   {
-    vcl_shared_ptr<A> spa0;
-    vcl_shared_ptr<A> spa1(new A());
-    vcl_shared_ptr<B> spb1(new B());
-    vcl_shared_ptr<A> spa2(new B());
-    vcl_shared_ptr<A> spa3(spb1);
-    vcl_weak_ptr<A> wpa1(spa1);
+    std::shared_ptr<A> spa0;
+    std::shared_ptr<A> spa1(new A());
+    std::shared_ptr<B> spb1(new B());
+    std::shared_ptr<A> spa2(new B());
+    std::shared_ptr<A> spa3(spb1);
+    std::weak_ptr<A> wpa1(spa1);
 
     A* ptr = get_A(*spa1);
     ASSERT(ptr == spa1.get(),

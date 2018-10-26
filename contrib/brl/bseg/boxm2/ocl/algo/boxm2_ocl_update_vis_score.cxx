@@ -268,14 +268,14 @@ boxm2_ocl_update_vis_score
       //read info back to host memory
       if( ! optimize_transfers_){
         blk->read_to_buffer(queue);
-        //vcl_cout << "2" << vcl_endl;
-        //vcl_cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << vcl_endl;
-        //vcl_cout << "vis_score nbytes = " << vis_score->num_bytes() << vcl_endl;
+        //std::cout << "2" << std::endl;
+        //std::cout << "vis_score cpu_buffer= " << vis_score->cpu_buffer() << std::endl;
+        //std::cout << "vis_score nbytes = " << vis_score->num_bytes() << std::endl;
         vis_score->read_to_buffer(queue);
-        //vcl_cout << "3" << vcl_endl;
+        //std::cout << "3" << std::endl;
         clFinish(queue);
       }
-      //vcl_cout << "4" << vcl_endl;
+      //std::cout << "4" << std::endl;
       //cache->remove_data_base(scene_,*id,boxm2_data_traits<BOXM2_AUX0>::prefix(prefix_name));
       //std::cout << "5" << std::endl;
   }

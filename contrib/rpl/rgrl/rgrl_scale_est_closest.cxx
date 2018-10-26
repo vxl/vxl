@@ -16,10 +16,10 @@
 #include <vcl_cassert.h>
 
 rgrl_scale_est_closest::
-rgrl_scale_est_closest( vcl_unique_ptr<rrel_objective>  obj,
+rgrl_scale_est_closest( std::unique_ptr<rrel_objective>  obj,
                         bool                          do_signature_scale )
   : do_signature_scale_( do_signature_scale ),
-    obj_( vcl_move(obj) )
+    obj_( std::move(obj) )
 {
   assert( obj_->can_estimate_scale() );
 }

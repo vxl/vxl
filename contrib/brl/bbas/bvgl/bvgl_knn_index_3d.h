@@ -7,12 +7,14 @@
 // \author J.L. Mundy
 // \date   24 February 2016
 //
-#include <vcl_iostream.h>
-#include <vcl_fstream.h>
+#include <iostream>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <fstream>
 #include <vcl_cassert.h>
-#include <vcl_vector.h>
-#include <vcl_string.h>
-#include <vcl_map.h>
+#include <vector>
+#include <string>
+#include <map>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_pointset_3d.h>
@@ -25,7 +27,7 @@ class bvgl_knn_index_3d{
  public:
  bvgl_knn_index_3d():has_scalars_(false),thresh_(Type(1)){}
   bvgl_knn_index_3d(vgl_pointset_3d<Type> ptset, Type thresh = Type(1));
-  bvgl_knn_index_3d(vgl_pointset_3d<Type> ptset, vcl_vector<Type> scalars, Type thresh = Type(1));
+  bvgl_knn_index_3d(vgl_pointset_3d<Type> ptset, std::vector<Type> scalars, Type thresh = Type(1));
 
   //: geometric queries
   //: the point contained in the grid closest to p or optionally to the normal plane passing through the closest point
@@ -45,12 +47,12 @@ class bvgl_knn_index_3d{
   vgl_pointset_3d<Type>& ptset(){return knn_.ptset();}
   void set_pointset(vgl_pointset_3d<Type> const& ptset){knn_.set_pointset(ptset);}
   void set_thresh(Type thresh){thresh_ = thresh;}
-  void set_scalars(vcl_vector<Type> const& scalars){scalars_ = scalars; has_scalars_ = true;}
+  void set_scalars(std::vector<Type> const& scalars){scalars_ = scalars; has_scalars_ = true;}
   bool create(){return knn_.create();}
  protected:
   bool has_scalars_;
   vgl_box_3d<Type> bbox_;
-  vcl_vector<Type> scalars_;
+  std::vector<Type> scalars_;
   bvgl_k_nearest_neighbors_3d<Type> knn_;
   Type thresh_;
 };
@@ -64,7 +66,7 @@ has_scalars_(false), thresh_(thresh){
 }
 
 template <class Type>
-bvgl_knn_index_3d<Type>::bvgl_knn_index_3d(vgl_pointset_3d<Type> ptset, vcl_vector<Type> scalars, Type thresh):
+bvgl_knn_index_3d<Type>::bvgl_knn_index_3d(vgl_pointset_3d<Type> ptset, std::vector<Type> scalars, Type thresh):
 has_scalars_(true), thresh_(thresh), scalars_(scalars){
   bbox_ = vgl_bounding_box(ptset);
   knn_.set_pointset(ptset);
@@ -112,7 +114,7 @@ Type bvgl_knn_index_3d<Type>::distance(vgl_point_3d<Type> const& p, Type& scalar
   vgl_point_3d<Type> pc;
   bool good = this->closest_point(p, pc, scalar);
   if(!good)
-    return vcl_numeric_limits<Type>::max();
+    return std::numeric_limits<Type>::max();
   return (p-pc).length();
 }
 //: the distance from p to the closest point or optionally its normal plane

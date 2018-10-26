@@ -49,16 +49,16 @@ int main(int argc, char** argv)
     if (i<10) ss<<"0";
     ss<<i<<".pts";
 
-    vcl_string pts_path=output_dir()+"/"+ss.str();
+    std::string pts_path=output_dir()+"/"+ss.str();
 
     if (!points.write_text_file(pts_path))
     {
-      vcl_cerr<<"Failed to write points to "<<pts_path<<std::endl;
+      std::cerr<<"Failed to write points to "<<pts_path<<std::endl;
       return 1;
     }
   }
 
-  std::cout<<"Saved points to "<<output_dir()<<"/box_hinge_XX.pts"<<vcl_endl;
+  std::cout<<"Saved points to "<<output_dir()<<"/box_hinge_XX.pts"<<std::endl;
 
 
   return 0;

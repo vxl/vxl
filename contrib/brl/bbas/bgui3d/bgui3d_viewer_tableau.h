@@ -56,7 +56,7 @@ class bgui3d_viewer_tableau : public bgui3d_tableau
 
   //: Get the scene camera
   // Creates a vpgl camera (either perspective or affine) from the active SoCamera
-  virtual vcl_unique_ptr<vpgl_proj_camera<double> > camera() const;
+  virtual std::unique_ptr<vpgl_proj_camera<double> > camera() const;
 
   //: Set the camera viewing the scene
   virtual void set_camera(SoCamera *camera);

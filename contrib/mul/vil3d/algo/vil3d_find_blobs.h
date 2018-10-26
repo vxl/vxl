@@ -31,6 +31,6 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
 //: Convert a label image into a list of chorded regions.
 // A blob label value of n will be returned in dest_regions[n-1].
 void vil3d_blob_labels_to_regions(const vil3d_image_view<unsigned>& src_label,
-                                vcl_vector<vil3d_region>& blob_regions);
+                                std::vector<vil3d_region>& blob_regions);
 
 #endif // vil3d_find_blobs_h_

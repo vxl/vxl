@@ -26,22 +26,22 @@ inline bool is_reflected(const vimt_image_2d& im)
 
 inline void test_n_samples(msdi_marked_images_from_files& data, unsigned n)
 {
-  vcl_cout<<"Testing state: "<<msdi_string_from_state(data.reflection_state())<<vcl_endl;
+  std::cout<<"Testing state: "<<msdi_string_from_state(data.reflection_state())<<std::endl;
   TEST("N.Samples",data.size(),n);
   unsigned count=0;
   data.reset();
   do
   {
     count++;
-    vcl_cout<<"Points: "<<data.points_name();
-    if (vcl_fabs(data.points()[0].x()-1.0)<1e-5) vcl_cout<<" (Raw)";
-    else                        vcl_cout<<" (Ref)";
+    std::cout<<"Points: "<<data.points_name();
+    if (std::fabs(data.points()[0].x()-1.0)<1e-5) std::cout<<" (Raw)";
+    else                        std::cout<<" (Ref)";
 
-//    vcl_cout<<" Image: "<<data.image_name();
-//    if (is_reflected(data.image())) vcl_cout<<" (Ref) ";
-//    else                          vcl_cout<<" (Raw)";
+//    std::cout<<" Image: "<<data.image_name();
+//    if (is_reflected(data.image())) std::cout<<" (Ref) ";
+//    else                          std::cout<<" (Raw)";
 
-     vcl_cout<<vcl_endl;
+     std::cout<<std::endl;
 
   } while (data.next());
   TEST("Iterated N.Samples",count,n);

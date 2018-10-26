@@ -103,7 +103,7 @@ void test_norm_corr1d()
           "  search_ni: 17\n"
           "}\n");
 
-    vcl_unique_ptr<mfpf_point_finder_builder>
+    std::unique_ptr<mfpf_point_finder_builder>
             pf = mfpf_point_finder_builder::create_from_stream(ss);
 
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_norm_corr1d_builder");

@@ -99,7 +99,7 @@ template<class T>
 inline void invert_image(vil_image_view<T>& im_src, T max_val)
 {
   unsigned ni = im_src.ni(), nj = im_src.nj(), np = im_src.nplanes();
-  vcl_ptrdiff_t istep=im_src.istep(), jstep=im_src.jstep(), pstep = im_src.planestep();
+  std::ptrdiff_t istep=im_src.istep(), jstep=im_src.jstep(), pstep = im_src.planestep();
 
   T* plane = im_src.top_left_ptr();
   for (unsigned p=0;p<np;++p,plane += pstep)
@@ -128,7 +128,7 @@ bool vimt_is_image_dicom(vil_stream* is)
            is->seek(0);
            is->seek( DCM_PreambleLen );
            if ( is->read( magic, DCM_MagicLen ) == DCM_MagicLen ) {
-             if ( vcl_strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
+             if ( std::strncmp( magic, DCM_Magic, DCM_MagicLen ) == 0 ) {
                return true;
              }
            }
@@ -157,7 +157,7 @@ bool vimt_is_monochrome1(const std::string& im_path)
       if (strcmp(header.photo_interp_.c_str(), "MONOCHROME1") == 0)
       {
         isMONOCHROME1 = true;
-        vcl_cout<<"DICOM tag PhotometricInterpretation reads MONOCHROME1: image was automatically inverted." <<vcl_endl;
+        std::cout<<"DICOM tag PhotometricInterpretation reads MONOCHROME1: image was automatically inverted." <<std::endl;
       }
 
       delete dicom_image;

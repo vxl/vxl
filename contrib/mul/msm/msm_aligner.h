@@ -7,7 +7,9 @@
 // \brief Base for functions which calculate and apply 2D transformations
 
 #include <string>
-#include <vcl_memory.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <memory>
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
@@ -132,7 +134,7 @@ class msm_aligner
   virtual void b_read(vsl_b_istream& bfs);
 
   //: Create a concrete msm_aligner-derived object, from a text specification.
-  static vcl_unique_ptr<msm_aligner> create_from_stream(std::istream &is);
+  static std::unique_ptr<msm_aligner> create_from_stream(std::istream &is);
 
   //: Initialise from a text stream.
   // The default implementation is for attribute-less normalisers,

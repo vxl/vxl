@@ -27,10 +27,10 @@
 enum msdi_reflection_state { Raw, ReflectOnly, OnlyReflectIm, ReflectSym, ReflectAsymRawPts, ReflectAsymRefPts };
 
 //: Return string (e.g. "Raw", "OnlyReflectIm" etc) for given state
-vcl_string msdi_string_from_state(msdi_reflection_state);
+std::string msdi_string_from_state(msdi_reflection_state);
 
 //: Convert string to state, returning true if valid string supplied.
-bool msdi_state_from_string(const vcl_string& str, msdi_reflection_state& state);
+bool msdi_state_from_string(const std::string& str, msdi_reflection_state& state);
 
 
 //: Iterator for images and points stored in files
@@ -58,12 +58,12 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: Text to be added to beginning of points names to get reflected version
   //  Only significant for ref_state_==ReflectAsymRawPts
-  vcl_string ref_prefix_;
+  std::string ref_prefix_;
 
   //: Define point mapping for reflected points
   //  ref_point_index_[i] is index in old list of reflected point i
   //  Only used for ReflectSym state.
-  vcl_vector<unsigned> ref_point_index_;
+  std::vector<unsigned> ref_point_index_;
 
   //: When true, convert multiplane images to single plane
   bool grey_only_;
@@ -180,12 +180,12 @@ class msdi_marked_images_from_files : public msdi_marked_images
 
   //: Define prefix to be used for reflected points.
   // Default is "ref_".  Only used for ReflectAsymRawPts state.
-  void set_ref_prefix(const vcl_string& ref_prefix);
+  void set_ref_prefix(const std::string& ref_prefix);
 
   //: Define point mapping for reflected points
   //  rpi[i] is index in old list of reflected point i
   //  Only used for ReflectSym state.
-  void set_ref_point_index(const vcl_vector<unsigned>& rpi);
+  void set_ref_point_index(const std::vector<unsigned>& rpi);
 
 
   //: When true, all images converted to greyscale (1 plane) on loading
@@ -276,7 +276,7 @@ class msdi_marked_images_from_files : public msdi_marked_images
   //    image2.pts : image2.jpg
   //  }
   //  \endverbatim
-  void read_from_file(const vcl_string& path);
+  void read_from_file(const std::string& path);
 
 };
 
@@ -285,21 +285,21 @@ class msdi_marked_images_from_files : public msdi_marked_images
 template<class paramT>
 inline void msdi_get_reflection_params_from_props(mbl_read_props_type& props, paramT& params)
 {
-  vcl_string ref_sym_str=props.get_optional_property("reflection_symmetry","");
+  std::string ref_sym_str=props.get_optional_property("reflection_symmetry","");
   params.reflection_symmetry.resize(0);
   if (ref_sym_str!="")
   {
-    vcl_stringstream ss(ref_sym_str);
-    mbl_parse_int_list(ss, vcl_back_inserter(params.reflection_symmetry),
+    std::stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, std::back_inserter(params.reflection_symmetry),
                        unsigned());
   }
 
   // For backwards compatability
   bool only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
 
-  vcl_string ref_prefix=props.get_optional_property("ref_prefix","");
+  std::string ref_prefix=props.get_optional_property("ref_prefix","");
 
-  vcl_string ref_state_str=props.get_optional_property("reflection_state","Undefined");
+  std::string ref_state_str=props.get_optional_property("reflection_state","Undefined");
   if (ref_state_str=="Undefined")
   {
     // For backwards compatability.

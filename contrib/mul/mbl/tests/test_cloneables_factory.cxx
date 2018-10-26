@@ -45,17 +45,17 @@ void test_cloneables_factory()
 
   // Check we can get all objects.
   {
-    vcl_unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_A");
+    std::unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_A");
     TEST("get A == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=nullptr,true);
   }
   {
-    vcl_unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_B");
+    std::unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("mbl_test_cf_B");
     TEST("get B == B",dynamic_cast<mbl_test_cf_B*>(p.get())!=nullptr,true);
     // Check the tests would fail if there was a problem.
     TEST("get B != A",dynamic_cast<mbl_test_cf_A*>(p.get())==nullptr,true);
   }
   {
-    vcl_unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("wibble");
+    std::unique_ptr<mbl_test_cf_base> p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("wibble");
     TEST("get wibble == A",dynamic_cast<mbl_test_cf_A*>(p.get())!=nullptr,true);
   }
 
@@ -63,7 +63,7 @@ void test_cloneables_factory()
 #if VCL_HAS_EXCEPTIONS
   {
     testlib_test_begin("!get foo");
-    vcl_unique_ptr<mbl_test_cf_base> p;
+    std::unique_ptr<mbl_test_cf_base> p;
     bool caught_error = false;
     try { p = mbl_cloneables_factory<mbl_test_cf_base>::get_clone("foo");  }
     catch (const mbl_exception_no_name_in_factory &) { caught_error=true; }

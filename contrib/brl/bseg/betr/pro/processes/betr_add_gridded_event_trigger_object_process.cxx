@@ -2,7 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <bprb/bprb_func_process.h>
-#include <vcl_string.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <string>
 //:
 // \file
 // \brief  A process for adding an event_trigger object to an event_trigger
@@ -48,11 +50,11 @@ bool betr_add_gridded_event_trigger_object_process(bprb_func_process& pro)
   //get the inputs
   unsigned i = 0;
   betr_event_trigger_sptr event_trigger = pro.get_input<betr_event_trigger_sptr>(i++);
-  std::string name = pro.get_input<vcl_string>(i++);
+  std::string name = pro.get_input<std::string>(i++);
   float lon = pro.get_input<float>(i++);
   float lat = pro.get_input<float>(i++);
   float elev = pro.get_input<float>(i++);
-  std::string geom_path = pro.get_input<vcl_string>(i++);
+  std::string geom_path = pro.get_input<std::string>(i++);
   float grid_spacing = pro.get_input<float>(i);
   if(!event_trigger)
     return false;

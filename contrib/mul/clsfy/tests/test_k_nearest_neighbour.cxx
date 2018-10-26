@@ -253,7 +253,7 @@ void test_k_nearest_neighbour()
     knn_build.set_k(5);
 
     std::istringstream ss("clsfy_knn_builder { k: 5 }\n");
-    vcl_unique_ptr<clsfy_builder_base> knn_build_conf =
+    std::unique_ptr<clsfy_builder_base> knn_build_conf =
       clsfy_builder_base::new_builder(ss);
 
     TEST("Builder config knn", mbl_test_summaries_are_equal(knn_build_conf.get(),

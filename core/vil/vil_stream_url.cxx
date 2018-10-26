@@ -17,7 +17,9 @@
 
 #include <vcl_cassert.h>
 #undef sprintf
-#include <vcl_cstdio.h> // for vcl_snprintf()
+#include <vcl_compiler.h>
+#include <iostream>
+#include <cstdio> // for std::snprintf()
 #include <vcl_compiler.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
@@ -234,12 +236,12 @@ vil_stream_url::vil_stream_url(char const *url)
   char buffer[4096];
 
   // send HTTP 1.1 request.
-  vcl_snprintf(buffer, 4090, "GET /%s / HTTP/1.1\r\n", path.c_str());
+  std::snprintf(buffer, 4090, "GET /%s / HTTP/1.1\r\n", path.c_str());
   if (auth != "")
-    vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
+    std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer),
                  "Authorization:  Basic %s\n", encode_base64(auth).c_str());
 
-  if (vcl_snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
+  if (std::snprintf(buffer+std::strlen(buffer), 4090-std::strlen(buffer), "\r\n") < 0)
   {
     std::cerr << "ERROR: vil_stream_url buffer overflow.";
     std::abort();

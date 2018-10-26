@@ -1,13 +1,15 @@
-#include <vcl_string.h> // C++ specific includes first
-#include <vcl_iostream.h>
+#include <string> // C++ specific includes first
+#include <vcl_compiler.h>
+#include <iostream>
+#include <iostream>
 
-#define Assert(x) {vcl_cout << "TEST " #x " : "; vcl_cout << ((x)?"PASSED":"FAILED")}
+#define Assert(x) {std::cout << "TEST " #x " : "; std::cout << ((x)?"PASSED":"FAILED")}
 
-#define AssertEq(x) {vcl_cout<<"TEST ["<<fred<<"] == ["<<(x)<<"] : ";vcl_cout<<(fred==(x)?"PASSED":"FAILED")<<vcl_endl;}
+#define AssertEq(x) {std::cout<<"TEST ["<<fred<<"] == ["<<(x)<<"] : ";std::cout<<(fred==(x)?"PASSED":"FAILED")<<std::endl;}
 
 int test_string_main(int /*argc*/,char* /*argv*/[])
 {
-  vcl_string fred;
+  std::string fred;
   fred = "fred";
 
   AssertEq("fred");

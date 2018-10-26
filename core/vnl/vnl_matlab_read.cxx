@@ -232,7 +232,9 @@ fsm_define_methods(std::complex<double>);
 //--------------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <vcl_new.h>
+#include <vcl_compiler.h>
+#include <iostream>
+#include <new>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

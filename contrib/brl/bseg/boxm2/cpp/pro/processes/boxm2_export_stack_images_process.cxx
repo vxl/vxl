@@ -63,7 +63,7 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(argIdx++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(argIdx++);
     std::string outdir = pro.get_input<std::string>(argIdx++);
-    vcl_string datatype = pro.get_input<vcl_string>(argIdx++);
+    std::string datatype = pro.get_input<std::string>(argIdx++);
     //create the stack directory
     if (outdir != "") {
         if (!vul_file::make_directory_path(outdir.c_str())) {
@@ -81,9 +81,9 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
         for (unsigned k = 0; k < img3d.nk(); k++)
         {
             vil_image_view<float> img = vil3d_slice_ji(img3d, k);
-            vcl_stringstream ss;
-            ss << outdir << "/" << datatype << "_" << vcl_setw(5) << vcl_setfill('0') << k << ".png";
-            vcl_cout << "Filename : " << ss.str() << vcl_endl;
+            std::stringstream ss;
+            ss << outdir << "/" << datatype << "_" << std::setw(5) << std::setfill('0') << k << ".png";
+            std::cout << "Filename : " << ss.str() << std::endl;
             vil_save(img, ss.str().c_str());
         }
     }
@@ -94,9 +94,9 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
         for (unsigned k = 0; k < img3d.nk(); k++)
         {
             vil_image_view<float> img = vil3d_slice_ji(img3d, k);
-            vcl_stringstream ss;
-            ss << outdir << "/" << datatype << "_" << vcl_setw(5) << vcl_setfill('0') << k << ".png";
-            vcl_cout << "Filename : " << ss.str() << vcl_endl;
+            std::stringstream ss;
+            ss << outdir << "/" << datatype << "_" << std::setw(5) << std::setfill('0') << k << ".png";
+            std::cout << "Filename : " << ss.str() << std::endl;
             vil_save(img, ss.str().c_str());
         }
     }
@@ -121,9 +121,9 @@ bool boxm2_export_stack_images_process(bprb_func_process& pro)
         for (unsigned k = 0; k < img3d.nk(); k++)
         {
             vil_image_view<float> img = vil3d_slice_ji(img3d, k);
-            vcl_stringstream ss;
-            ss << outdir << "/" << datatype << "_" << vcl_setw(5) << vcl_setfill('0') << k << ".tif";
-            vcl_cout << "Filename : " << ss.str() << vcl_endl;
+            std::stringstream ss;
+            ss << outdir << "/" << datatype << "_" << std::setw(5) << std::setfill('0') << k << ".tif";
+            std::cout << "Filename : " << ss.str() << std::endl;
             vil_save(img, ss.str().c_str());
         }
     }

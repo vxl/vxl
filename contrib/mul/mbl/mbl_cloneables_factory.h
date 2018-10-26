@@ -17,7 +17,7 @@ void mbl_cloneables_factory<BASE>::add(const BASE & object, const std::string & 
 }
 
 template <class BASE>
-vcl_unique_ptr<BASE > mbl_cloneables_factory<BASE>::get_clone(const std::string & name)
+std::unique_ptr<BASE > mbl_cloneables_factory<BASE>::get_clone(const std::string & name)
 {
   typedef typename MAP::const_iterator IT;
 
@@ -35,9 +35,9 @@ vcl_unique_ptr<BASE > mbl_cloneables_factory<BASE>::get_clone(const std::string 
         ss << ", " << it->first;
     }
     mbl_exception_error(mbl_exception_no_name_in_factory(name, ss.str()));
-    return vcl_unique_ptr<BASE >();
+    return std::unique_ptr<BASE >();
   }
-  return vcl_unique_ptr<BASE >(found->second->clone());
+  return std::unique_ptr<BASE >(found->second->clone());
 }
 
 #endif  // mbl_cloneables_factory_h
