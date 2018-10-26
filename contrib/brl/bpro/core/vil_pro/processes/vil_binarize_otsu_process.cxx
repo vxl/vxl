@@ -15,15 +15,15 @@ bool vil_binarize_otsu_process_cons(bprb_func_process& pro)
 {
   //this process takes one input: the image
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("double");  // range
-  input_types.push_back("int");     // number of bins
-  input_types.push_back("int");     // margin
-  input_types.push_back("double");  // pixel vals that will be ignored
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("double");  // range
+  input_types.emplace_back("int");     // number of bins
+  input_types.emplace_back("int");     // margin
+  input_types.emplace_back("double");  // pixel vals that will be ignored
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // binary RGB image with black and white pixels
-  output_types.push_back("double");  // binary RGB image with black and white pixels
+  output_types.emplace_back("vil_image_view_base_sptr");  // binary RGB image with black and white pixels
+  output_types.emplace_back("double");  // binary RGB image with black and white pixels
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
 }

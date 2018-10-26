@@ -18,12 +18,12 @@ bool vpgl_load_perspective_camera_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

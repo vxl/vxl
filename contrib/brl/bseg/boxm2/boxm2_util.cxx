@@ -598,7 +598,7 @@ std::vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr sce
     vgl_point_3d<double>&    blk_o   = (iter->second).local_origin_;
     double depth = (current_o-blk_o).length();
     if (depth <=  distance)
-      distances.push_back( boxm2_dist_id_pair(depth, iter->first) );
+      distances.emplace_back(depth, iter->first );
   }
 
   //sort distances

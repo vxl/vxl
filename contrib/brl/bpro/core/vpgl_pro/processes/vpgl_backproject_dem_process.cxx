@@ -15,18 +15,18 @@ bool vpgl_backproject_dem_process_cons(bprb_func_process& pro)
   //this process takes 5 inputs: dem_manager, camera, u, v, error tolerance
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_dem_manager_sptr");
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("double");
-  input_types.push_back("double");
-  input_types.push_back("double");
+  input_types.emplace_back("vpgl_dem_manager_sptr");
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("double");  // x
-  output_types.push_back("double");  // y
-  output_types.push_back("double");  // z
+  output_types.emplace_back("double");  // x
+  output_types.emplace_back("double");  // y
+  output_types.emplace_back("double");  // z
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

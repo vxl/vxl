@@ -75,8 +75,8 @@ bool boxm2_ocl_filter_scene_data_process(bprb_func_process& pro)
     std::vector<std::string> valid_types;
     int appTypeSize;
         std::string appType;
-        valid_types.push_back("boxm2_mog3_grey");
-        valid_types.push_back("boxm2_mog6_view_compact");
+        valid_types.emplace_back("boxm2_mog3_grey");
+        valid_types.emplace_back("boxm2_mog6_view_compact");
         if (!boxm2_util::verify_appearance(*scene,valid_types,appType,appTypeSize)){
                 std::cout<<"scene doesn't have the correct appearance type - only mog3_grey and mog6_view compact allowed!!"<<std::endl;
         }

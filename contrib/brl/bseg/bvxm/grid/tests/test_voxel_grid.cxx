@@ -32,11 +32,11 @@ static void test_voxel_grid()
   std::vector<bvxm_voxel_grid<float>* > grids;
   std::vector<std::string> grid_types; // for labeling tests
   grids.push_back(new bvxm_voxel_grid<float>(storage_fname,grid_size)); // disk storage;
-  grid_types.push_back("disk_storage");
+  grid_types.emplace_back("disk_storage");
   grids.push_back(new bvxm_voxel_grid<float>(grid_size)); // memory storage;
-  grid_types.push_back("memory storage");
+  grid_types.emplace_back("memory storage");
   grids.push_back(new bvxm_voxel_grid<float>(storage_cached_fname,grid_size,max_cache_size)); // cached disk storage
-  grid_types.push_back("disk_cached_storage");
+  grid_types.emplace_back("disk_cached_storage");
 
   std::string test_name;
 

@@ -29,10 +29,10 @@ static void test_sph_cover()
   std::vector<cover_el> cels_a, cels_b;
   for (std::vector<vsph_sph_box_2d>::iterator bit = boxes_a.begin();
        bit != boxes_a.end(); ++bit)
-    cels_a.push_back(cover_el(*bit, 1.0));
+    cels_a.emplace_back(*bit, 1.0);
   for (std::vector<vsph_sph_box_2d>::iterator bit = boxes_b.begin();
        bit != boxes_b.end(); ++bit)
-    cels_b.push_back(cover_el(*bit, 1.0));
+    cels_b.emplace_back(*bit, 1.0);
   vsph_sph_cover_2d cov_a, cov_b, cov_int;
   cov_a.set(1.0, area_a, 1.0, cels_a);
   cov_b.set(1.0, area_b, 1.0, cels_b);

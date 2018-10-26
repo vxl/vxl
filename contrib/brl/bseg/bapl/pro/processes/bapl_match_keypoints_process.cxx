@@ -33,15 +33,15 @@ bool bapl_match_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_keypoint_set_sptr");    // first set of keypoints
-  input_types.push_back("bapl_keypoint_set_sptr");    // second set of keypoints
-  input_types.push_back("int");   // id of the first image, left image
-  input_types.push_back("int");   // id of the second image, right image
+  input_types.emplace_back("bapl_keypoint_set_sptr");    // first set of keypoints
+  input_types.emplace_back("bapl_keypoint_set_sptr");    // second set of keypoints
+  input_types.emplace_back("int");   // id of the first image, left image
+  input_types.emplace_back("int");   // id of the second image, right image
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("bapl_keypoint_match_set_sptr");
+  output_types.emplace_back("bapl_keypoint_match_set_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -95,15 +95,15 @@ bool bapl_match_display_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image 1
-  input_types.push_back("vil_image_view_base_sptr"); // input image 2
-  input_types.push_back("bapl_keypoint_match_set_sptr");    // key matches
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image 1
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image 2
+  input_types.emplace_back("bapl_keypoint_match_set_sptr");    // key matches
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // out img1 with keys marked same color
-  output_types.push_back("vil_image_view_base_sptr"); // out img2
+  output_types.emplace_back("vil_image_view_base_sptr"); // out img1 with keys marked same color
+  output_types.emplace_back("vil_image_view_base_sptr"); // out img2
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -206,14 +206,14 @@ bool bapl_refine_match_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_keypoint_match_set_sptr");
-  input_types.push_back("float");  // outlier threshold
-  input_types.push_back("int"); // min number of matches to even try to compute F, if the set contains less matches just remove them all and return an empty match set
+  input_types.emplace_back("bapl_keypoint_match_set_sptr");
+  input_types.emplace_back("float");  // outlier threshold
+  input_types.emplace_back("int"); // min number of matches to even try to compute F, if the set contains less matches just remove them all and return an empty match set
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("bapl_keypoint_match_set_sptr");
+  output_types.emplace_back("bapl_keypoint_match_set_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -267,14 +267,14 @@ bool bapl_load_match_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_keypoint_set_sptr"); // keypoint vector for image 1
-  input_types.push_back("bapl_keypoint_set_sptr"); // keypoint vector for image 2
-  input_types.push_back("vcl_string"); // match file name
+  input_types.emplace_back("bapl_keypoint_set_sptr"); // keypoint vector for image 1
+  input_types.emplace_back("bapl_keypoint_set_sptr"); // keypoint vector for image 2
+  input_types.emplace_back("vcl_string"); // match file name
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("bapl_keypoint_match_set_sptr"); // out img1 with keys marked same color
+  output_types.emplace_back("bapl_keypoint_match_set_sptr"); // out img1 with keys marked same color
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -338,8 +338,8 @@ bool bapl_write_match_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_keypoint_match_set_sptr"); // keypoint vector for image 1
-  input_types.push_back("vcl_string"); // match file name
+  input_types.emplace_back("bapl_keypoint_match_set_sptr"); // keypoint vector for image 1
+  input_types.emplace_back("vcl_string"); // match file name
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

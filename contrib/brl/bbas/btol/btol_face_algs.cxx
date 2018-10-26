@@ -212,8 +212,8 @@ vtol_face_2d_sptr btol_face_algs::box(const double x0, const double y0,
   vtol_vertex_2d* v1 = new vtol_vertex_2d(x0+w, y0-h);
   vtol_vertex_2d* v2 = new vtol_vertex_2d(x0+w, y0+h);
   vtol_vertex_2d* v3 = new vtol_vertex_2d(x0-w, y0+h);
-  verts.push_back(v0); verts.push_back(v1);
-  verts.push_back(v2); verts.push_back(v3);
+  verts.emplace_back(v0); verts.emplace_back(v1);
+  verts.emplace_back(v2); verts.emplace_back(v3);
   vtol_face_2d_sptr f = new vtol_face_2d(verts);
   return f;
 }
@@ -265,7 +265,7 @@ transform(vtol_face_2d_sptr const& face,
         btol_vertex_algs::transform((*vit)->cast_to_vertex_2d(), T);
       if (!new_v)
         return out;
-      trans_outside_verts.push_back(new_v->cast_to_vertex());
+      trans_outside_verts.emplace_back(new_v->cast_to_vertex());
     }
   delete outside_verts;
   // transform the vertices of the interior holes
@@ -285,7 +285,7 @@ transform(vtol_face_2d_sptr const& face,
         btol_vertex_algs::transform(v, T);
       if (!new_v)
         return out;
-      t_hole_verts.push_back(new_v->cast_to_vertex());
+      t_hole_verts.emplace_back(new_v->cast_to_vertex());
     }
     trans_hole_verts.push_back(t_hole_verts);
   }

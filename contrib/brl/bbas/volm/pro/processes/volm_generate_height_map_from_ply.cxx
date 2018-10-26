@@ -27,11 +27,11 @@
 bool volm_generate_height_map_from_ply_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");  // path to ply files
-  input_types.push_back("unsigned");  // ni
-  input_types.push_back("unsigned");  // nj
+  input_types.emplace_back("vcl_string");  // path to ply files
+  input_types.emplace_back("unsigned");  // ni
+  input_types.emplace_back("unsigned");  // nj
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // output height map
+  output_types.emplace_back("vil_image_view_base_sptr"); // output height map
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -104,18 +104,18 @@ bool volm_generate_height_map_from_ply_process(bprb_func_process& pro)
 bool volm_generate_height_map_plot_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // gt height map
-  input_types.push_back("vil_image_view_base_sptr");  // input height map
-  input_types.push_back("float");  // initial height difference
-  input_types.push_back("float");  // final height difference
-  input_types.push_back("float");  // height increments
-  input_types.push_back("float");  // fix the ground truth height
+  input_types.emplace_back("vil_image_view_base_sptr");  // gt height map
+  input_types.emplace_back("vil_image_view_base_sptr");  // input height map
+  input_types.emplace_back("float");  // initial height difference
+  input_types.emplace_back("float");  // final height difference
+  input_types.emplace_back("float");  // height increments
+  input_types.emplace_back("float");  // fix the ground truth height
 
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_float_sptr");  // #correct rate
-  output_types.push_back("bbas_1d_array_float_sptr");  // #height difs
-  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
-  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels as difference in value between gt and input height maps
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // #correct rate
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // #height difs
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with pixels as difference in value between gt and input height maps
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

@@ -35,7 +35,7 @@ void get_block(int i, int j, int bb, std::vector<std::pair<int, int> >& pixels)
 {
   for (int ii = i-bb; ii < i+bb; ii++)
     for (int jj = j-bb; jj < j+bb; jj++) {
-      pixels.push_back(std::pair<int, int>(ii, jj));
+      pixels.emplace_back(ii, jj);
     }
 }
 

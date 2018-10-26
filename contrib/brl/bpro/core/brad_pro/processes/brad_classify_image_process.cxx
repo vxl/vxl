@@ -43,8 +43,8 @@ bool brad_classify_image_process_cons(bprb_func_process& pro)
 
   //no outputs
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
 }

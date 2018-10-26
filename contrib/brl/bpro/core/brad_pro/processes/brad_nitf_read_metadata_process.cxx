@@ -15,9 +15,9 @@
 bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); // image name
-  input_types.push_back("vcl_string"); // meta folder if exists
-  input_types.push_back("bool");       // option to print out extra information
+  input_types.emplace_back("vcl_string"); // image name
+  input_types.emplace_back("vcl_string"); // meta folder if exists
+  input_types.emplace_back("bool");       // option to print out extra information
 
   if (!pro.set_input_types(input_types))
     return false;
@@ -27,7 +27,7 @@ bool brad_nitf_read_metadata_process_cons(bprb_func_process& pro)
   pro.set_input(1, idx);
 
   std::vector<std::string> output_types;
-  output_types.push_back("brad_image_metadata_sptr");
+  output_types.emplace_back("brad_image_metadata_sptr");
   return pro.set_output_types(output_types);
 }
 

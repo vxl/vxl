@@ -43,14 +43,14 @@ bool brec_create_mog_image_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bvxm_voxel_slab_base_sptr");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("bvxm_voxel_slab_base_sptr");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("bbgm_image_sptr");  // output mog image as a bbgm distribution image
+  output_types.emplace_back("bbgm_image_sptr");  // output mog image as a bbgm distribution image
   ok = pro.set_output_types(output_types);
   return ok;
 }

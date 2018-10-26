@@ -15,8 +15,8 @@ bool brad_save_eigenspace_process_cons(bprb_func_process& pro)
   // no inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brad_eigenspace_sptr"); //eigenspace
-  input_types.push_back("vcl_string"); //eigenspace path
+  input_types.emplace_back("brad_eigenspace_sptr"); //eigenspace
+  input_types.emplace_back("vcl_string"); //eigenspace path
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

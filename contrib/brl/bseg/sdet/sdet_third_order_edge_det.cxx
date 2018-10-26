@@ -111,7 +111,7 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
 
   //convert to the original image scale coordinates
   for (unsigned i=0; i<edge_locs.size(); i++)
-    edge_locations.push_back(vgl_point_2d<double>(edge_locs[i].x()/scale, edge_locs[i].y()/scale));
+    edge_locations.emplace_back(edge_locs[i].x()/scale, edge_locs[i].y()/scale);
 
   //for each edge, compute all the gradients to compute the new orientation
   std::vector<double> Ix, Iy, Ixx, Ixy, Iyy, Ixxy, Ixyy, Ixxx, Iyyy;

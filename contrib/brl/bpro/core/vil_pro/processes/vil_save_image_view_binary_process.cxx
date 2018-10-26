@@ -17,8 +17,8 @@ bool vil_save_image_view_binary_process_cons(bprb_func_process& pro)
   // input(0): the vil_image_view_base_sptr
   // input(1): the filename to save to
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vcl_string");
   return pro.set_input_types(input_types);
 
   //this process has no outputs

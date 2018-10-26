@@ -298,7 +298,7 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
     for (int i=0; i<ni; i+=4)
       for (int j=0; j<nj; j+=4)
         if ( std::fabs( tri_depth(i,j)- z_img(i,j) ) > max_z_diff && dt_img(i,j) >= 3.5 )
-          anchor_points_.push_back(vgl_point_2d<double>(i,j));
+          anchor_points_.emplace_back(i,j);
   }
 }
 

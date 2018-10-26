@@ -346,7 +346,7 @@ bool volm_desc_matcher::create_candidate_list(std::string const& prob_map_folder
     std::vector<cam_angles> top_cameras;
     std::vector<double> right_fov;
     for (unsigned idx = 0; idx < top_locs.size(); idx++) {
-      top_cameras.push_back(cam_angles(2.64, 15, 334.0, 91.34));
+      top_cameras.emplace_back(2.64, 15, 334.0, 91.34);
       right_fov.push_back(20.0);
     }
     // calculate the likelihood based on the top scores

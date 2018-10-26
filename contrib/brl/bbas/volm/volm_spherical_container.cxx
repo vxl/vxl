@@ -109,27 +109,27 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   while (xleft < hw) {
     double yleft = 0.0;
     while (yleft < hw) {
-      voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcr,ycr,z)));
-      voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcl,ycr,z)));
-      voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcl,ycl,z)));
-      voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(xcr,ycl,z)));
+      voxels_.emplace_back(v,vgl_point_3d<double>(xcr,ycr,z));
+      voxels_.emplace_back(v,vgl_point_3d<double>(xcl,ycr,z));
+      voxels_.emplace_back(v,vgl_point_3d<double>(xcl,ycl,z));
+      voxels_.emplace_back(v,vgl_point_3d<double>(xcr,ycl,z));
       upper_num += 4;
       blk_num += 4;
-      uppers.push_back(vgl_point_3d<double>(xcr,ycr,z));
-      uppers.push_back(vgl_point_3d<double>(xcl,ycr,z));
-      uppers.push_back(vgl_point_3d<double>(xcl,ycl,z));
-      uppers.push_back(vgl_point_3d<double>(xcr,ycl,z));
+      uppers.emplace_back(xcr,ycr,z);
+      uppers.emplace_back(xcl,ycr,z);
+      uppers.emplace_back(xcl,ycl,z);
+      uppers.emplace_back(xcr,ycl,z);
       if (xcr < bdry) {
-        inners_left.push_back(vgl_point_3d<double>(xcr,ycr,z));
-        inners_left.push_back(vgl_point_3d<double>(xcl,ycr,z));
-        inners_left.push_back(vgl_point_3d<double>(xcl,ycl,z));
-        inners_left.push_back(vgl_point_3d<double>(xcr,ycl,z));
+        inners_left.emplace_back(xcr,ycr,z);
+        inners_left.emplace_back(xcl,ycr,z);
+        inners_left.emplace_back(xcl,ycl,z);
+        inners_left.emplace_back(xcr,ycl,z);
       }
       if (ycr < bdry && xcr < bdry) {
-        inners_back.push_back(vgl_point_3d<double>(xcr,ycr,z));
-        inners_back.push_back(vgl_point_3d<double>(xcl,ycr,z));
-        inners_back.push_back(vgl_point_3d<double>(xcl,ycl,z));
-        inners_back.push_back(vgl_point_3d<double>(xcr,ycl,z));
+        inners_back.emplace_back(xcr,ycr,z);
+        inners_back.emplace_back(xcl,ycr,z);
+        inners_back.emplace_back(xcl,ycl,z);
+        inners_back.emplace_back(xcr,ycl,z);
       }
       ycr += v; ycl -= v;  yleft += v;
     }
@@ -138,7 +138,7 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   }
   // construct lower layer
   for (std::vector<vgl_point_3d<double> >::iterator upit = uppers.begin(); upit != uppers.end(); ++upit) {
-    voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(upit->x(),upit->y(),-1*upit->z())));
+    voxels_.emplace_back(v,vgl_point_3d<double>(upit->x(),upit->y(),-1*upit->z()));
   lower_num++;
   blk_num++;
   }
@@ -159,14 +159,14 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
   x = Q*(X-O);
   xp[0] = x[2];  xp[1] = x[1];  xp[2] = x[0];
   Xp = Q.transpose()*xp + O;
-  voxels_.push_back(volm_voxel(v, vgl_point_3d<double>(Xp[0],Xp[1],Xp[2])));
+  voxels_.emplace_back(v, vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
   left_num++;
   blk_num++;
-  left.push_back(vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
+  left.emplace_back(Xp[0],Xp[1],Xp[2]);
   }
   // construct right layer
   for (std::vector<vgl_point_3d<double> >::iterator it = left.begin(); it != left.end(); ++it) {
-    voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(-1*it->x(),it->y(),it->z())));
+    voxels_.emplace_back(v,vgl_point_3d<double>(-1*it->x(),it->y(),it->z()));
     right_num++;
     blk_num++;
   }
@@ -181,14 +181,14 @@ bool volm_spherical_container::meshcurrentlayer(double d, double v)
     x = Q*(X-O);
     xp[0] = x[0];  xp[1] = x[2];  xp[2] = x[1];
     Xp = Q.transpose()*xp + O;
-    voxels_.push_back(volm_voxel(v, vgl_point_3d<double>(Xp[0],Xp[1],Xp[2])));
+    voxels_.emplace_back(v, vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
     back_num++;
     blk_num++;
-    back.push_back(vgl_point_3d<double>(Xp[0],Xp[1],Xp[2]));
+    back.emplace_back(Xp[0],Xp[1],Xp[2]);
   }
   // use back layer to mirror front layer
   for (std::vector<vgl_point_3d<double> >::iterator it = back.begin(); it != back.end(); ++it) {
-    voxels_.push_back(volm_voxel(v,vgl_point_3d<double>(it->x(),-1*it->y(),it->z())));
+    voxels_.emplace_back(v,vgl_point_3d<double>(it->x(),-1*it->y(),it->z()));
     blk_num++;
   }
   // update current offset

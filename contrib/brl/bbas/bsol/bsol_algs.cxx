@@ -177,8 +177,8 @@ bool bsol_algs::hull_of_poly_set(std::vector<vsol_polygon_2d_sptr> const& polys,
     if (!(*pit))
       return false;
     for (unsigned int i=0; i<(*pit)->size(); ++i)
-      points.push_back(vgl_point_2d<double>((*pit)->vertex(i)->x(),
-                                            (*pit)->vertex(i)->y()));
+      points.emplace_back((*pit)->vertex(i)->x(),
+                                            (*pit)->vertex(i)->y());
   }
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> h = ch.hull();

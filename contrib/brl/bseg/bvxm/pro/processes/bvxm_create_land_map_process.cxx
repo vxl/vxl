@@ -75,7 +75,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   std::vector<volm_osm_objects> osm_objs;
   std::string file_glob = osm_folder + "//*.bin";
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
-    osm_objs.push_back(volm_osm_objects(fn()));
+    osm_objs.emplace_back(fn());
 
   std::cout << pro.name() << ":\n";
   std::cout << geo_infos.size() << " geo cover images are loaded from " << geo_cover_folder << std::endl;
@@ -195,7 +195,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
           double i = lx;
           double j = dimy - ly;
           if (i>=0 && j>= 0 && i<out_img->ni() && j<out_img->nj())
-            line_img.push_back(vgl_point_2d<double>(i,j));
+            line_img.emplace_back(i,j);
         }
         if (line_img.size() < 2)
           continue;

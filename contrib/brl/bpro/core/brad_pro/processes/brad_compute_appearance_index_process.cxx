@@ -15,13 +15,13 @@ bool brad_compute_appearance_index_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   vcl_vector<vcl_string> input_types;
-  input_types.push_back("bbas_1d_array_string_sptr");
+  input_types.emplace_back("bbas_1d_array_string_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   vcl_vector<vcl_string> output_types;
-  output_types.push_back("bbas_1d_array_int_sptr");
+  output_types.emplace_back("bbas_1d_array_int_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

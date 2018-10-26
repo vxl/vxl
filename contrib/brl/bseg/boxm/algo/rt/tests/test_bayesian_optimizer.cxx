@@ -63,9 +63,9 @@ static void test_bayesian_optimizer()
 
   // create the auxiliary scenes for each image
   std::vector<std::string> image_names;
-  image_names.push_back("image1");
-  image_names.push_back("image2");
-  image_names.push_back("image3");
+  image_names.emplace_back("image1");
+  image_names.emplace_back("image2");
+  image_names.emplace_back("image3");
   std::vector<boxm_scene<boct_tree<short,aux_type> >*> aux_scenes(image_names.size());
 
   // create aux scenes

@@ -84,14 +84,14 @@ static void test_bvgl_labelme_parser()
 
   //ground truth
   std::vector<vgl_point_2d<double> > poly0;
-  poly0.push_back(vgl_point_2d<double>(335, 183));
-  poly0.push_back(vgl_point_2d<double>(333, 220));
-  poly0.push_back(vgl_point_2d<double>(332, 234));
+  poly0.emplace_back(335, 183);
+  poly0.emplace_back(333, 220);
+  poly0.emplace_back(332, 234);
 
   std::vector<vgl_point_2d<double> > poly1;
-  poly1.push_back(vgl_point_2d<double>(544, 200));
-  poly1.push_back(vgl_point_2d<double>(501, 211));
-  poly1.push_back(vgl_point_2d<double>(497, 224));
+  poly1.emplace_back(544, 200);
+  poly1.emplace_back(501, 211);
+  poly1.emplace_back(497, 224);
 
   for (unsigned int i=0; i<poly0.size(); ++i) {
     double tx = poly0[i].x();

@@ -19,10 +19,10 @@ bool vpgl_convert_local_to_global_coordinates_process_cons(bprb_func_process& pr
   // 3: (double)  elevation
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_lvcs_sptr");
-  input_types.push_back("double");
-  input_types.push_back("double");
-  input_types.push_back("double");
+  input_types.emplace_back("vpgl_lvcs_sptr");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -31,9 +31,9 @@ bool vpgl_convert_local_to_global_coordinates_process_cons(bprb_func_process& pr
   // 1: (double) y
   // 2: (double) z
   std::vector<std::string> output_types;
-  output_types.push_back("double");
-  output_types.push_back("double");
-  output_types.push_back("double");
+  output_types.emplace_back("double");
+  output_types.emplace_back("double");
+  output_types.emplace_back("double");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

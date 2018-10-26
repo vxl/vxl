@@ -19,14 +19,14 @@ bool ihog_register_translational_process_cons(bprb_func_process& pro)
   //  1) image 1
   //  2) int        radius for an exhaustive search at the beginning, no exhaustive search if passed as 0
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("int");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("int");
 
   std::vector<std::string> output_types;
-  output_types.push_back("double");
-  output_types.push_back("double");
+  output_types.emplace_back("double");
+  output_types.emplace_back("double");
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

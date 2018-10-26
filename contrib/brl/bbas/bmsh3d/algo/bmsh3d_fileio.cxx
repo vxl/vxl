@@ -161,7 +161,7 @@ bool bmsh3d_load_xyz(std::vector<std::pair<int, vgl_point_3d<double> > >& idpts,
     if (ret != EOF) {
       if (ret != 3) return false;
       P.set(x, y, z);
-      idpts.push_back(std::pair<int, vgl_point_3d<double> > (id, P));
+      idpts.emplace_back(id, P);
       ++id;
     }
   }
@@ -223,7 +223,7 @@ bool bmsh3d_load_xyzn1(std::vector<std::pair<vgl_point_3d<double>, vgl_vector_3d
       if (ret != 6) return false;
       P.set(x, y, z);
       N.set(nx, ny, nz);
-      ori_pts.push_back(std::pair<vgl_point_3d<double>, vgl_vector_3d<double> >(P, N));
+      ori_pts.emplace_back(P, N);
     }
   }
   while (ret != EOF);
@@ -291,7 +291,7 @@ bool bmsh3d_load_xyznw(std::vector<std::pair<vgl_point_3d<double>, vgl_vector_3d
       if (ret != 7) return false;
       P.set(x, y, z);
       N.set(nx, ny, nz);
-      ori_pts.push_back(std::pair<vgl_point_3d<double>, vgl_vector_3d<double> >(P, N));
+      ori_pts.emplace_back(P, N);
     }
   }
   while (ret != EOF);
@@ -476,7 +476,7 @@ bool bmsh3d_load_p3d(std::vector<std::pair<int, vgl_point_3d<double> > >& idpts,
     ret = std::fscanf(fp, "%lf %lf %lf\n", &x, &y, &z); if (ret!=3) return false;
     P.set (x, y, z);
 
-    idpts.push_back(std::pair<int, vgl_point_3d<double> > (i, P));
+    idpts.emplace_back(i, P);
   }
 
   std::fclose(fp);
@@ -1102,8 +1102,8 @@ bool bmsh3d_read_list_file(const char* file,
     char f[256] = "", af[256] = "";
     std::sscanf(linestr.c_str(), "%s %s", f, af);
 
-    data_files.push_back(std::string(f));
-    align_files.push_back(std::string(af));
+    data_files.emplace_back(f);
+    align_files.emplace_back(af);
   }
 
   in.close();

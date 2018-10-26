@@ -13,11 +13,11 @@ bool sdet_texture_classifier_kernel_margin_process_cons(bprb_func_process& pro)
 {
   // kernel_margin_process takes 1 input:
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); //texton dictionary path
+  input_types.emplace_back("vcl_string"); //texton dictionary path
   pro.set_input_types(input_types);
   // kernel_margin_process has 1 output:
   std::vector<std::string> output_types;
-  output_types.push_back("int");
+  output_types.emplace_back("int");
   return pro.set_output_types(output_types);
 }
 

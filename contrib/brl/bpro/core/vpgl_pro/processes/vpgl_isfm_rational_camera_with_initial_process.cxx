@@ -147,13 +147,13 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
     ifs >> numfeatures;
     int id; float u, v;
     ifs >> id >> u >> v;  // id is always -1 for uncorrected camera
-    currpts.push_back(vgl_point_2d<double>(u,v));
+    currpts.emplace_back(u,v);
     std::vector<int> ids;
     std::vector<vgl_point_2d<double> > pts;
     for (unsigned int j = 1; j < numfeatures; j++) {
       int id; float u, v;
       ifs >> id >> u >> v;
-      pts.push_back(vgl_point_2d<double>(u, v));
+      pts.emplace_back(u, v);
       ids.push_back(id);
     }
     trackimgids.push_back(ids);
@@ -189,7 +189,7 @@ bool vpgl_isfm_rational_camera_with_initial_process(bprb_func_process& pro)
       std::cerr << pro.name() << ": Given height map " << filename << " is NOT a GeoTiff!\n";
       return false;
     }
-    dem_infos.push_back(std::pair<vil_image_view_base_sptr, vpgl_geo_camera*>(img_r, cam));
+    dem_infos.emplace_back(img_r, cam);
   }
   if (dem_infos.empty()) {
     std::cerr << pro.name() << ": No image in the folder: " << dem_folder << std::endl;
@@ -350,10 +350,10 @@ bool vpgl_isfm_rational_camera_with_initial_process_globals::find_min_max_height
   // find the corner points
   std::vector<std::pair<unsigned, std::pair<int, int> > > corners;
   std::vector<vgl_point_2d<double> > pts;
-  pts.push_back(vgl_point_2d<double>(ll_lon, ur_lat));
-  pts.push_back(vgl_point_2d<double>(ur_lon, ll_lat));
-  pts.push_back(vgl_point_2d<double>(ll_lon, ll_lat));
-  pts.push_back(vgl_point_2d<double>(ur_lon, ur_lat));
+  pts.emplace_back(ll_lon, ur_lat);
+  pts.emplace_back(ur_lon, ll_lat);
+  pts.emplace_back(ll_lon, ll_lat);
+  pts.emplace_back(ur_lon, ur_lat);
   for (unsigned k = 0; k < (unsigned)pts.size(); k++)
   {
     // find the image

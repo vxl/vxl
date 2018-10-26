@@ -81,8 +81,8 @@ bool brad_train_histograms_process_cons(bprb_func_process& pro)
 
   //outputs
   std::vector<std::string> output_types;
-  output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // low atmos hist
-  output_types.push_back("bsta_joint_histogram_3d_base_sptr"); // high atmos hist
+  output_types.emplace_back("bsta_joint_histogram_3d_base_sptr"); // low atmos hist
+  output_types.emplace_back("bsta_joint_histogram_3d_base_sptr"); // high atmos hist
 
   return pro.set_input_types(input_types) &&
          pro.set_output_types(output_types);

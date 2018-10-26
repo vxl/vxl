@@ -132,7 +132,7 @@ brec_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes
         {
           if (x+1 < (int)ni && mask(x+1, y) == 255) {
             jh.upcount(inp_img(x, y), 1.0f, inp_img(x+1, y), 1.0f);
-            pairs.push_back(std::pair<float, float> (inp_img(x, y), inp_img(x+1, y)));
+            pairs.emplace_back(inp_img(x, y), inp_img(x+1, y));
           }
         }
       }

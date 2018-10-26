@@ -57,7 +57,7 @@ void bvpl_corner_search_functor::apply(int& id, bvpl_kernel_dispatch& /*d*/, vgl
 {
   if (axes_[id]==axes_[this_id_]) // same plane; now look for opposite diagonal corners
     if (std::abs(std::abs(angles_[id] - angles_[this_id_]) - vnl_math::pi_over_2) > 1e-7)
-      lines_.push_back(vgl_line_3d_2_points<int>(p1, p2));
+      lines_.emplace_back(p1, p2);
 }
 
 #endif // bvpl_corner_search_kernel_h

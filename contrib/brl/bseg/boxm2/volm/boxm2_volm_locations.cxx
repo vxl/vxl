@@ -56,7 +56,7 @@ bool boxm2_volm_loc_hypotheses::add(boxm2_scene_sptr scene, vgl_box_3d<double>& 
   if (scene_bounding_box.contains(local)) {
     vgl_point_3d<float> ll((float)lx, (float)ly, (float)lz);
     locs_.push_back(ll);
-    pixels_.push_back(std::pair<unsigned, unsigned>(i,j));
+    pixels_.emplace_back(i,j);
     return true;
   }
   return false;
@@ -69,7 +69,7 @@ bool boxm2_volm_loc_hypotheses::add(double lon, double lat, float cent_x, float 
     return false;
   vgl_point_3d<float> ll(cent_x, cent_y, cent_z);
   locs_.push_back(ll);
-  pixels_.push_back(std::pair<unsigned, unsigned>(i,j));
+  pixels_.emplace_back(i,j);
   return true;
 }
 

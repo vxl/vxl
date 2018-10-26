@@ -33,20 +33,20 @@ bool bvxm_create_mog_image_process_cons(bprb_func_process& pro)
   //6: nj
   std::vector<std::string> input_types_;
 
-  input_types_.push_back("bvxm_voxel_world_sptr");
-  input_types_.push_back("vcl_string");
-  input_types_.push_back("unsigned");
-  input_types_.push_back("unsigned");
-  input_types_.push_back("vpgl_camera_double_sptr");
-  input_types_.push_back("unsigned");
-  input_types_.push_back("unsigned");
+  input_types_.emplace_back("bvxm_voxel_world_sptr");
+  input_types_.emplace_back("vcl_string");
+  input_types_.emplace_back("unsigned");
+  input_types_.emplace_back("unsigned");
+  input_types_.emplace_back("vpgl_camera_double_sptr");
+  input_types_.emplace_back("unsigned");
+  input_types_.emplace_back("unsigned");
 
   if (!pro.set_input_types(input_types_))
     return false;
 
   //output
   std::vector<std::string> output_types_;
-  output_types_.push_back("bvxm_voxel_slab_base_sptr");
+  output_types_.emplace_back("bvxm_voxel_slab_base_sptr");
   return pro.set_output_types(output_types_);
 }
 

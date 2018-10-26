@@ -176,7 +176,7 @@ void boxm2_vecf_articulated_scene::prerefine_target(boxm2_scene_sptr target_scen
 
   //fully refine the target trees to the required depth
   std::vector<std::string> prefixes;
-  prefixes.push_back("alpha");  prefixes.push_back("boxm2_mog3_grey"); prefixes.push_back("boxm2_num_obs");
+  prefixes.emplace_back("alpha");  prefixes.emplace_back("boxm2_mog3_grey"); prefixes.emplace_back("boxm2_num_obs");
   boxm2_refine_block_multi_data_function(target_scene, target_blk_, prefixes, depths_to_match);
   std::cout << "prefine in " << t.real() << " msec\n";
 }

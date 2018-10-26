@@ -24,9 +24,9 @@
 bool sdet_extract_filter_bank_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vcl_string"); // input image name
-  input_types.push_back("vcl_string");   // filter bank folder
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.emplace_back("vcl_string"); // input image name
+  input_types.emplace_back("vcl_string");   // filter bank folder
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -62,8 +62,8 @@ bool sdet_extract_filter_bank_process(bprb_func_process& pro)
 bool sdet_extract_filter_bank_img_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -100,12 +100,12 @@ bool sdet_extract_filter_bank_img_process(bprb_func_process& pro)
 bool sdet_add_to_filter_bank_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vcl_string");   // input image name
-  input_types.push_back("unsigned");     // the plane to extract the filters from
-  input_types.push_back("vcl_string");   // filter bank folder
-  input_types.push_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder
-  input_types.push_back("bool");         // option to turn on gauss smoothing on image
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.emplace_back("vcl_string");   // input image name
+  input_types.emplace_back("unsigned");     // the plane to extract the filters from
+  input_types.emplace_back("vcl_string");   // filter bank folder
+  input_types.emplace_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder
+  input_types.emplace_back("bool");         // option to turn on gauss smoothing on image
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -169,9 +169,9 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
 bool sdet_add_to_filter_bank_process2_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vcl_string");   // input image name
-  input_types.push_back("vcl_string");   // filter bank folder
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.emplace_back("vcl_string");   // input image name
+  input_types.emplace_back("vcl_string");   // filter bank folder
   if (!pro.set_input_types(input_types))
     return false;
 
@@ -279,11 +279,11 @@ bool sdet_add_to_filter_bank_process2(bprb_func_process& pro)
 bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); // classifier instance
-  input_types.push_back("vcl_string");   // input image name
-  input_types.push_back("vil_image_view_base_sptr");     // input image
-  input_types.push_back("vcl_string");   // filter bank folder
-  input_types.push_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder  (the id of the filter bank will be appended to this name)
+  input_types.emplace_back("sdet_texture_classifier_sptr"); // classifier instance
+  input_types.emplace_back("vcl_string");   // input image name
+  input_types.emplace_back("vil_image_view_base_sptr");     // input image
+  input_types.emplace_back("vcl_string");   // filter bank folder
+  input_types.emplace_back("vcl_string");   // filter name : unique name to be used to write the response to filter folder  (the id of the filter bank will be appended to this name)
   if (!pro.set_input_types(input_types))
     return false;
 

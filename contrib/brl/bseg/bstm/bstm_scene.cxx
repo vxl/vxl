@@ -160,7 +160,7 @@ std::vector<bstm_block_id> bstm_scene::get_vis_blocks(vpgl_generic_camera<double
                 }
             }
             if (min_depth <1e10)
-                distances.push_back( bstm_dist_id_pair(min_depth, iter->first) );
+                distances.emplace_back(min_depth, iter->first );
 
   }
 
@@ -226,7 +226,7 @@ bstm_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
       vgl_point_3d<double> blk_center = blk_o + length/2.0;
 
       double dist = vgl_distance( blk_center, pt);
-      distances.push_back( bstm_dist_id_pair(dist, iter->first) );
+      distances.emplace_back(dist, iter->first );
 
   }
 

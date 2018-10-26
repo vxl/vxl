@@ -80,7 +80,7 @@ int main(int argc, char ** argv)
 
     std::vector<vnl_vector_fixed<float,4> > feats;
     for (unsigned int i=0; i<r.size(); ++i)
-      feats.push_back( vnl_vector_fixed<float,4>(ints[i],r[i],g[i],b[i]) );
+      feats.emplace_back(ints[i],r[i],g[i],b[i] );
 
     //stack
     push_back(allInts, feats);

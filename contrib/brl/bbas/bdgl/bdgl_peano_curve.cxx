@@ -15,7 +15,7 @@ std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > 
     double x=in[i].x(); double y=in[i].y();
     double xnew=std::cos(angle)*x+std::sin(angle)*y;
     double ynew=-std::sin(angle)*x+std::cos(angle)*y;
-    pnew.push_back(vgl_point_2d<double>(xnew,ynew));
+    pnew.emplace_back(xnew,ynew);
   }
   return pnew;
 }
@@ -29,7 +29,7 @@ std::vector<vgl_point_2d<double> > trans_2d(std::vector<vgl_point_2d<double> > i
     double y=in[i].y();
     double xnew=x+tx;
     double ynew=y+ty;
-    pnew.push_back(vgl_point_2d<double>(xnew,ynew));
+    pnew.emplace_back(xnew,ynew);
   }
   return pnew;
 }
@@ -43,7 +43,7 @@ std::vector<vgl_point_2d<double> > scale_2d(std::vector<vgl_point_2d<double> > i
     double y=in[i].y();
     double xnew=x*s;
     double ynew=y*s;
-    pnew.push_back(vgl_point_2d<double>(xnew,ynew));
+    pnew.emplace_back(xnew,ynew);
   }
   return pnew;
 }
@@ -83,7 +83,7 @@ std::vector<vgl_point_2d<double> >  recurse_peano_curve(unsigned level)
   std::vector<vgl_point_2d<double> >  p;
   if (level==0)
   {
-    p.push_back(vgl_point_2d<double>(0,0));
+    p.emplace_back(0,0);
     return p;
   }
   std::vector<vgl_point_2d<double> >  p1,p2;
@@ -120,27 +120,27 @@ std::vector<vgl_point_3d<double> >  peano_curve_on_cube(unsigned level)
   // high y face
   std::vector<vgl_point_3d<double> > high_y;
   for (unsigned i=0;i<local_peano.size();i++)
-    high_y.push_back(vgl_point_3d<double>(local_peano[i].x(),1,local_peano[i].y()));
+    high_y.emplace_back(local_peano[i].x(),1,local_peano[i].y());
   // high x face
   std::vector<vgl_point_3d<double> > high_x;
   for (unsigned i=0;i<local_peano.size();i++)
-     high_x.push_back(vgl_point_3d<double>(1,-local_peano[i].x(),local_peano[i].y()));
+     high_x.emplace_back(1,-local_peano[i].x(),local_peano[i].y());
   // low z face
   std::vector<vgl_point_3d<double> > low_z;
   for (int i=local_peano.size()-1;i>=0;i--)
-     low_z.push_back(vgl_point_3d<double>(local_peano[i].x(),local_peano[i].y(),-1));
+     low_z.emplace_back(local_peano[i].x(),local_peano[i].y(),-1);
   // low x face
   std::vector<vgl_point_3d<double> > low_x;
   for (int i=local_peano.size()-1;i>=0;i--)
-     low_x.push_back(vgl_point_3d<double>(-1,local_peano[i].y(),-local_peano[i].x()));
+     low_x.emplace_back(-1,local_peano[i].y(),-local_peano[i].x());
   // High z face
   std::vector<vgl_point_3d<double> > high_z;
   for (int i=local_peano.size()-1;i>=0;i--)
-    high_z.push_back(vgl_point_3d<double>(-local_peano[i].x(),local_peano[i].y(),1));
+    high_z.emplace_back(-local_peano[i].x(),local_peano[i].y(),1);
   // Low y face
   std::vector<vgl_point_3d<double> > low_y;
   for (int i=local_peano.size()-1;i>=0;i--)
-    low_y.push_back(vgl_point_3d<double>(local_peano[i].x(),-1,-local_peano[i].y()));
+    low_y.emplace_back(local_peano[i].x(),-1,-local_peano[i].y());
 
   pc.insert(pc.end(),high_y.begin(),high_y.end());
   pc.insert(pc.end(),high_x.begin(),high_x.end());

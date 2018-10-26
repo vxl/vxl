@@ -47,13 +47,13 @@ class boxm2_vecf_fit_margins
    is_right_(is_right),dphi_rad_(0.0),estimate_t_(estimate_t){
     for(std::vector<vgl_point_3d<double> >::const_iterator pit = inferior_margin_pts.begin();
         pit != inferior_margin_pts.end(); ++pit)
-      inferior_margin_pts_.push_back(vgl_point_2d<double>(pit->x(), pit->y()));
+      inferior_margin_pts_.emplace_back(pit->x(), pit->y());
     for(std::vector<vgl_point_3d<double> >::const_iterator pit = superior_margin_pts.begin();
         pit != superior_margin_pts.end(); ++pit)
-      superior_margin_pts_.push_back(vgl_point_2d<double>(pit->x(), pit->y()));
+      superior_margin_pts_.emplace_back(pit->x(), pit->y());
     for(std::vector<vgl_point_3d<double> >::const_iterator pit = superior_crease_pts.begin();
         pit != superior_crease_pts.end(); ++pit)
-      superior_crease_pts_.push_back(vgl_point_2d<double>(pit->x(), pit->y()));
+      superior_crease_pts_.emplace_back(pit->x(), pit->y());
     lateral_canthus_ = vgl_point_2d<double>(lateral_canthus.x(),lateral_canthus.y());
     medial_canthus_ = vgl_point_2d<double>(medial_canthus.x(),medial_canthus.y());
   }

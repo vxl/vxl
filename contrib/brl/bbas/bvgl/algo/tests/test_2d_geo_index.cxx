@@ -81,9 +81,9 @@ static void test_2d_geo_index()
 
   // quickly locate the leaves that intersect with a line
   std::vector<vgl_point_2d<float> > line;
-  line.push_back(vgl_point_2d<float>(0.2f, 0.2f));
-  line.push_back(vgl_point_2d<float>(0.2f, 0.4f));
-  line.push_back(vgl_point_2d<float>(0.4f, 0.6f));
+  line.emplace_back(0.2f, 0.2f);
+  line.emplace_back(0.2f, 0.4f);
+  line.emplace_back(0.4f, 0.6f);
   leaves.clear();
   bvgl_2d_geo_index::get_leaves(root1, leaves, line);
   std::cout << " leaves that intersect with line: ";

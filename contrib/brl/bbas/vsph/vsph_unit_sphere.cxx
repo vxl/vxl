@@ -335,7 +335,7 @@ void vsph_unit_sphere::remove_top_and_bottom()
         ie = equivalent_ids_[(*eit).ve_];
     if (is == -1 || ie == -1)
       continue;
-    new_edges.push_back(vsph_edge(is, ie));
+    new_edges.emplace_back(is, ie);
   }
 #ifdef DEBUG
   std::cout << "finished remap edges in remove top and bottom\n" << std::flush;

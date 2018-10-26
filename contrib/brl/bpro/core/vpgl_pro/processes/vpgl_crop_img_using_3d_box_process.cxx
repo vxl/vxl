@@ -572,7 +572,7 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
       std::cerr << pro.name() << ": Given height map " << filename << " is NOT a GeoTiff!\n";
       return false;
     }
-    infos.push_back(std::pair<vil_image_view_base_sptr, vpgl_geo_camera*>(img_r, cam));
+    infos.emplace_back(img_r, cam);
   }
   if (infos.empty()) {
     std::cerr << pro.name() << ": No image in the folder: " << dem_folder << std::endl;
@@ -642,10 +642,10 @@ bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double 
   // find the corner points
   std::vector<std::pair<unsigned, std::pair<int, int> > > corners;
   std::vector<vgl_point_2d<double> > pts;
-  pts.push_back(vgl_point_2d<double>(ll_lon, ur_lat));
-  pts.push_back(vgl_point_2d<double>(ur_lon, ll_lat));
-  pts.push_back(vgl_point_2d<double>(ll_lon, ll_lat));
-  pts.push_back(vgl_point_2d<double>(ur_lon, ur_lat));
+  pts.emplace_back(ll_lon, ur_lat);
+  pts.emplace_back(ur_lon, ll_lat);
+  pts.emplace_back(ll_lon, ll_lat);
+  pts.emplace_back(ur_lon, ur_lat);
   for (unsigned k = 0; k < (unsigned)pts.size(); k++)
   {
     // find the image

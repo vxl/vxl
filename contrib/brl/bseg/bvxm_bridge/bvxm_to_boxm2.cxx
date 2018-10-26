@@ -160,8 +160,8 @@ int main(int argc, char** argv)
   new_scene.set_lvcs(*(params->lvcs()));
   new_scene.set_xml_path(out_dir()+"/scene.xml");
   std::vector<std::string> apps;
-  apps.push_back("boxm2_mog3_grey");
-  apps.push_back("boxm2_num_obs");
+  apps.emplace_back("boxm2_mog3_grey");
+  apps.emplace_back("boxm2_num_obs");
   new_scene.set_appearances(apps);
 
   int max_level = 1;

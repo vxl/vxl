@@ -54,7 +54,7 @@ namespace boxm2_add_aux_info_to_ply_process_globals
       case 2: // "z" coordinate
         parsed_ply->p[2]= (double)ply_get_argument_value(argument);
         // Insert point
-        parsed_ply->points.push_back(vgl_point_3d<double>(parsed_ply->p));
+        parsed_ply->points.emplace_back(parsed_ply->p);
         break;
       default:
         assert(!"This should not happen: index out of range");

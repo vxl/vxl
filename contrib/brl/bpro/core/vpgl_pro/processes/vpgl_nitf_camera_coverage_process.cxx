@@ -20,9 +20,9 @@ bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
   //    Caution: Don't forget that in geo coordinates. x-coord = longitude, y-coord =latitude
   // 3: the filename for output coverage list
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   return pro.set_input_types(input_types);
 }
 
@@ -35,7 +35,7 @@ void  get_regions(std::string file, std::vector< vgl_point_2d<double> > &region)
   {
     double x, y;
     ifs >> x; ifs >> y;
-    region.push_back( vgl_point_2d<double>( x, y ) );
+    region.emplace_back( x, y );
   }
 }
 

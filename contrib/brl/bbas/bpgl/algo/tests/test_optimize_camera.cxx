@@ -19,12 +19,12 @@ static void test_optimize_camera()
   constexpr double max_p_err = 0.5; // maximum image error to introduce (pixels)
 
   std::vector<vgl_homg_point_3d<double> > world;
-  world.push_back(vgl_homg_point_3d<double>(1.0, 0.0, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(0.0, 1.0, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(0.0, 0.0, 1.0));
-  world.push_back(vgl_homg_point_3d<double>(1.0, 1.0, 0.0));
-  world.push_back(vgl_homg_point_3d<double>(0.0, 1.0, 1.0));
-  world.push_back(vgl_homg_point_3d<double>(1.0, 0.0, 1.0));
+  world.emplace_back(1.0, 0.0, 0.0);
+  world.emplace_back(0.0, 1.0, 0.0);
+  world.emplace_back(0.0, 0.0, 1.0);
+  world.emplace_back(1.0, 1.0, 0.0);
+  world.emplace_back(0.0, 1.0, 1.0);
+  world.emplace_back(1.0, 0.0, 1.0);
 
   vpgl_calibration_matrix<double> K(2000.0,vgl_homg_point_2d<double>(512,384));
   vgl_homg_point_3d<double> c(10.0,10.0,10.0);

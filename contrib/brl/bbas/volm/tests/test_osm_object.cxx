@@ -28,7 +28,7 @@ static void test_osm_object_line()
 {
   std::vector<vgl_point_2d<double> > line;
   for (unsigned i = 0; i < 10; i++)
-    line.push_back(vgl_point_2d<double>(12.31*i, 19.80*i));
+    line.emplace_back(12.31*i, 19.80*i);
   volm_land_layer prop(2, "invalid", 0, 1.0);
   volm_osm_object_line_sptr osm_road = new volm_osm_object_line(prop, line);
   // test binary io
@@ -155,7 +155,7 @@ static void test_osm_object()
   for (unsigned i = 0; i < 5; i++) {
     std::vector<vgl_point_2d<double> > line;
     for (unsigned j = 0; j < 4; j++)
-      line.push_back(vgl_point_2d<double>(1.2*j+i, 3.1+i+j));
+      line.emplace_back(1.2*j+i, 3.1+i+j);
     volm_osm_object_line_sptr loc_line = new volm_osm_object_line(volm_land_layer(i, "temp", 0, 0.0), line);
     loc_lines.push_back(loc_line);
   }

@@ -19,10 +19,10 @@ bool bbas_string_array_process_cons(bprb_func_process& pro)
   using namespace bbas_core_string_array;
   // inputs
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); //input string
+  input_types.emplace_back("vcl_string"); //input string
   //outputs
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_string_sptr"); //string array
+  output_types.emplace_back("bbas_1d_array_string_sptr"); //string array
 
   return pro.set_input_types(input_types) &&
          pro.set_output_types(output_types);

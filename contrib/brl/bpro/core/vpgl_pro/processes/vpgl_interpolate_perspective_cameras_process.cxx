@@ -19,10 +19,10 @@ bool vpgl_interpolate_perspective_cameras_process_cons(bprb_func_process& pro)
   //this process takes 3 inputs and has 0 outputs:
 
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr"); // cam 0
-  input_types.push_back("vpgl_camera_double_sptr"); // cam 1
-  input_types.push_back("unsigned"); // # of cameras
-  input_types.push_back("vcl_string"); // output folder for interpolated cameras
+  input_types.emplace_back("vpgl_camera_double_sptr"); // cam 0
+  input_types.emplace_back("vpgl_camera_double_sptr"); // cam 1
+  input_types.emplace_back("unsigned"); // # of cameras
+  input_types.emplace_back("vcl_string"); // output folder for interpolated cameras
 
 
   bool ok = pro.set_input_types(input_types);

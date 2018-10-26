@@ -979,25 +979,25 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
   double u=0, v=0;
   vgl_point_3d<float> corner_world;
 
-  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,0));
+  voxel_corners_vox.emplace_back(0,0);
   corner_world = this->voxel_index_to_xyz(0,0,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_img.emplace_back(u,v);
 
-  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,0));
+  voxel_corners_vox.emplace_back(grid_size.x()-1,0);
   corner_world = this->voxel_index_to_xyz(grid_size.x()-1,0,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_img.emplace_back(u,v);
 
-  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(grid_size.x()-1,grid_size.y()-1));
+  voxel_corners_vox.emplace_back(grid_size.x()-1,grid_size.y()-1);
   corner_world = this->voxel_index_to_xyz(grid_size.x()-1,grid_size.y()-1,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_img.emplace_back(u,v);
 
-  voxel_corners_vox.push_back(vgl_homg_point_2d<double>(0,(grid_size.y()-1)));
+  voxel_corners_vox.emplace_back(0,(grid_size.y()-1));
   corner_world = this->voxel_index_to_xyz(0,grid_size.y()-1,k_idx,scale_idx);
   cam->project(corner_world.x(),corner_world.y(),corner_world.z(),u,v);
-  voxel_corners_img.push_back(vgl_homg_point_2d<double>(u,v));
+  voxel_corners_img.emplace_back(u,v);
 
 
   vgl_h_matrix_2d_compute_linear comp_4pt;

@@ -485,7 +485,7 @@ get_vdgl_edges(std::vector<vdgl_digital_curve_sptr>& vd_edges )
     if (!dc)
       continue;
 
-    vd_edges.push_back(dc);
+    vd_edges.emplace_back(dc);
   }
   if (!vd_edges.size())
     return false;

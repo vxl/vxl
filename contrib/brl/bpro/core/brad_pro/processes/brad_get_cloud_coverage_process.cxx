@@ -11,9 +11,9 @@
 bool brad_get_cloud_coverage_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brad_image_metadata_sptr"); // image metadata
+  input_types.emplace_back("brad_image_metadata_sptr"); // image metadata
   std::vector<std::string> output_types;
-  output_types.push_back("float");
+  output_types.emplace_back("float");
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 

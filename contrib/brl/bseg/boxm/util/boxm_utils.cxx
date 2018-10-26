@@ -90,13 +90,13 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
   std::vector<vgl_point_3d<double> > corners;
 
   corners.push_back(box.min_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y(), box.max_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.max_z()));
+  corners.emplace_back(box.min_x()+box.width(), box.min_y(), box.min_z());
+  corners.emplace_back(box.min_x()+box.width(), box.min_y()+box.height(), box.min_z());
+  corners.emplace_back(box.min_x(), box.min_y()+box.height(), box.min_z());
+  corners.emplace_back(box.min_x(), box.min_y(), box.max_z());
+  corners.emplace_back(box.min_x()+box.width(), box.min_y(), box.max_z());
   corners.push_back(box.max_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
+  corners.emplace_back(box.min_x(), box.min_y()+box.height(), box.max_z());
   return corners;
 }
 
@@ -158,7 +158,7 @@ bool boxm_utils::is_face_visible(std::vector<vgl_point_3d<double> > &face,
   for (unsigned i=0; i<face.size(); ++i) {
     double u,v;
     camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
-    vs.push_back(vgl_point_2d<double>(u,v));
+    vs.emplace_back(u,v);
   }
 
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
@@ -178,7 +178,7 @@ boxm_utils::project_face(std::vector<vgl_point_3d<double> > &face,
   for (unsigned i=0; i<face.size(); ++i) {
     double u,v;
     camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
-    vs.push_back(vgl_point_2d<double>(u,v));
+    vs.emplace_back(u,v);
   }
 
   return vs;

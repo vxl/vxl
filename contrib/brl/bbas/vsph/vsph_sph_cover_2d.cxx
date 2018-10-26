@@ -31,7 +31,7 @@ vsph_sph_cover_2d(vsph_sph_box_2d const& cover_bb,
   if (area_fraction>=min_area_fraction) {
     return;//no sub-boxes
   }
-  cover_.push_back(cover_el(cover_bb, area_fraction));
+  cover_.emplace_back(cover_bb, area_fraction);
   double c_area = 1.0, in_area = 0.0;
 
   std::vector<cover_el> keep;
@@ -57,7 +57,7 @@ vsph_sph_cover_2d(vsph_sph_box_2d const& cover_bb,
         assert(c_area>0.0);
         in_area = inside_area(*bit, region_rays, ray_area);
         area_fraction = in_area/c_area;
-        temp.push_back(cover_el(*bit, area_fraction));
+        temp.emplace_back(*bit, area_fraction);
       }
     }
     if (sub_divide){
@@ -104,7 +104,7 @@ vsph_sph_cover_2d vsph_sph_cover_2d::transform(double t_theta,
       double fin = cit->frac_inside_;
       vsph_sph_box_2d tbox = (cit->box_).transform(t_theta, t_phi, scale,
                                                    theta_c, phi_c, in_radians);
-      tcov.push_back(cover_el(tbox, fin));
+      tcov.emplace_back(tbox, fin);
     }
   vsph_sph_cover_2d rcov;
   rcov.set(min_area_fraction_, total_area_, actual_area_fraction_, tcov);
@@ -133,7 +133,7 @@ bool intersection(vsph_sph_cover_2d const& c1, vsph_sph_cover_2d const& c2,
         continue;
       for (std::vector<vsph_sph_box_2d>::iterator bit = boxes.begin();
            bit != boxes.end(); ++bit)
-        intersection_cover.push_back(cover_el(*bit, max_fin));
+        intersection_cover.emplace_back(*bit, max_fin);
           any_intersection = true;
     }
   }

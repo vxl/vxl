@@ -271,14 +271,14 @@ void bcvr_cv_cor::b_read(vsl_b_istream &is)
       for (unsigned i = 0; i < cnt; i++) {
         double x, y;
         vsl_b_read(is, x); vsl_b_read(is, y);
-        pts1_.push_back(vgl_point_2d<double> (x, y));
+        pts1_.emplace_back(x, y);
       }
 
       vsl_b_read(is, cnt);
       for (unsigned i = 0; i < cnt; i++) {
         double x, y;
         vsl_b_read(is, x); vsl_b_read(is, y);
-        pts2_.push_back(vgl_point_2d<double> (x, y));
+        pts2_.emplace_back(x, y);
       }
 
       break;

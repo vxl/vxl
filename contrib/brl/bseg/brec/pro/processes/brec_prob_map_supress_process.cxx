@@ -30,15 +30,15 @@ bool brec_prob_map_supress_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");      // input map (density or prob map (i.e. values in [0,1]) to be corrected with respect to suppressor map
-  input_types.push_back("vil_image_view_base_sptr");      // suppressor map (another prob map)
+  input_types.emplace_back("vil_image_view_base_sptr");      // input map (density or prob map (i.e. values in [0,1]) to be corrected with respect to suppressor map
+  input_types.emplace_back("vil_image_view_base_sptr");      // suppressor map (another prob map)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");      // output map as suppressed input map
-  output_types.push_back("vil_image_view_base_sptr");      // output byte image of suppressed map
+  output_types.emplace_back("vil_image_view_base_sptr");      // output map as suppressed input map
+  output_types.emplace_back("vil_image_view_base_sptr");      // output byte image of suppressed map
   ok = pro.set_output_types(output_types);
   return ok;
 }

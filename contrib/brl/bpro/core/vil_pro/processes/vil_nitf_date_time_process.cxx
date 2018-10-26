@@ -15,18 +15,18 @@ bool  vil_nitf_date_time_process_cons(bprb_func_process& pro)
 {
   //input, a path to an nitf image
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); // 0 nitf path
+  input_types.emplace_back("vcl_string"); // 0 nitf path
   if (!pro.set_input_types(input_types))
     return false;
 
   //output, extracts IDATIM property from the NITF image subheader
   std::vector<std::string> output_types;
-  output_types.push_back("int"); // 0 year
-  output_types.push_back("int"); // 1 month
-  output_types.push_back("int"); // 2 day
-  output_types.push_back("int"); // 3 hour
-  output_types.push_back("int"); // 4 min
-  output_types.push_back("int"); // 5 sec
+  output_types.emplace_back("int"); // 0 year
+  output_types.emplace_back("int"); // 1 month
+  output_types.emplace_back("int"); // 2 day
+  output_types.emplace_back("int"); // 3 hour
+  output_types.emplace_back("int"); // 4 min
+  output_types.emplace_back("int"); // 5 sec
   return pro.set_output_types(output_types);
 }
 

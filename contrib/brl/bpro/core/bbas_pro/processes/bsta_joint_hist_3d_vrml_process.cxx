@@ -11,12 +11,12 @@ bool bsta_joint_hist_3d_vrml_process_cons(bprb_func_process& pro)
   // no inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
-  input_types.push_back("vcl_string"); //vrml path
-  input_types.push_back("bool"); //relative probability
-  input_types.push_back("float");// red
-  input_types.push_back("float");// green
-  input_types.push_back("float");// blue
+  input_types.emplace_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
+  input_types.emplace_back("vcl_string"); //vrml path
+  input_types.emplace_back("bool"); //relative probability
+  input_types.emplace_back("float");// red
+  input_types.emplace_back("float");// green
+  input_types.emplace_back("float");// blue
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

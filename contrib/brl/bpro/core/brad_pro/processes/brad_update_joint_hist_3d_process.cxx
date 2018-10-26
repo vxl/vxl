@@ -49,7 +49,7 @@ bool brad_update_joint_hist_3d_process_cons(bprb_func_process& pro)
   input_types[5]="unsigned";//number of rows in a tile
   //one output
   std::vector<std::string> output_types;
-  output_types.push_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
+  output_types.emplace_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
 
   return pro.set_input_types(input_types) &&
          pro.set_output_types(output_types);

@@ -113,21 +113,21 @@ bstm_majority_filter::neighbor_points( vgl_point_3d<double>& cellCenter, double 
   for(int i = 1; i < 3; i++) {
     //neighbors along X
     if ( cellCenter.x() + i*side_len < trees.get_row1_count() )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x()+i*side_len, cellCenter.y(), cellCenter.z()) );
+      toReturn.emplace_back(cellCenter.x()+i*side_len, cellCenter.y(), cellCenter.z() );
     if ( cellCenter.x() - i*side_len >= 0 )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x()-i*side_len, cellCenter.y(), cellCenter.z()) );
+      toReturn.emplace_back(cellCenter.x()-i*side_len, cellCenter.y(), cellCenter.z() );
 
     //neighbors along Y
     if ( cellCenter.y() + i*side_len < trees.get_row2_count() )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y()+i*side_len, cellCenter.z()) );
+      toReturn.emplace_back(cellCenter.x(), cellCenter.y()+i*side_len, cellCenter.z() );
     if ( cellCenter.y() - i*side_len >= 0 )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y()-i*side_len, cellCenter.z()) );
+      toReturn.emplace_back(cellCenter.x(), cellCenter.y()-i*side_len, cellCenter.z() );
 
     //neighbors along Z
     if ( cellCenter.z() + i*side_len < trees.get_row3_count() )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y(), cellCenter.z()+i*side_len) );
+      toReturn.emplace_back(cellCenter.x(), cellCenter.y(), cellCenter.z()+i*side_len );
     if ( cellCenter.z() - i*side_len >= 0 )
-      toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y(), cellCenter.z()-i*side_len) );
+      toReturn.emplace_back(cellCenter.x(), cellCenter.y(), cellCenter.z()-i*side_len );
   }
   return toReturn;
 }

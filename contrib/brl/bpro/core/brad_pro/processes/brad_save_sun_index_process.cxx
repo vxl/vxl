@@ -14,13 +14,13 @@ bool brad_save_sun_index_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); // sun direction bins output path
-  input_types.push_back("float");      // longitude (degrees)
-  input_types.push_back("float");      // latitude (degrees)
-  input_types.push_back("int");        // year, e.g. 2002 (start of interval)
-  input_types.push_back("int");        // observation hour e.g. 10 or 22 (zulu)
-  input_types.push_back("int");        // observation minute
-  input_types.push_back("int");        // bin radius nbins = 2 x radius + 1
+  input_types.emplace_back("vcl_string"); // sun direction bins output path
+  input_types.emplace_back("float");      // longitude (degrees)
+  input_types.emplace_back("float");      // latitude (degrees)
+  input_types.emplace_back("int");        // year, e.g. 2002 (start of interval)
+  input_types.emplace_back("int");        // observation hour e.g. 10 or 22 (zulu)
+  input_types.emplace_back("int");        // observation minute
+  input_types.emplace_back("int");        // bin radius nbins = 2 x radius + 1
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

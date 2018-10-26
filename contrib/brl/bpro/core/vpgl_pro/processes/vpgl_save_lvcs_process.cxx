@@ -15,8 +15,8 @@ bool vpgl_save_lvcs_process_cons(bprb_func_process& pro)
 {
   // this process takes two inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_lvcs_sptr");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vpgl_lvcs_sptr");
+  input_types.emplace_back("vcl_string");
   // this process has no output
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
@@ -62,11 +62,11 @@ bool vpgl_create_and_save_lvcs_process_cons(bprb_func_process& pro)
   // 4: (string) lvcs filename to save
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("float");
+  input_types.emplace_back("float");
+  input_types.emplace_back("float");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

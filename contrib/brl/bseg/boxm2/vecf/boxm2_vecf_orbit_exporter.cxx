@@ -103,7 +103,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
      x = (x+xtr)/mm_per_pix;
      y = (y+ytr)/mm_per_pix;
      y = image_height-y;
-     crease_pts.push_back(vgl_point_3d<double>(x,y,z));
+     crease_pts.emplace_back(x,y,z);
     if (export_points)
       *cre_points<< x << " " << y <<std::endl;
   }
@@ -116,7 +116,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
     x = (x+xtr)/mm_per_pix;
     y = (y+ytr)/mm_per_pix;
     y = image_height-y;
-    inf_pts.push_back(vgl_point_3d<double>(x,y,z));
+    inf_pts.emplace_back(x,y,z);
     if(export_points)
       *inf_points<< x << " " << y <<std::endl;
   }
@@ -128,7 +128,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
     x = (x+ xtr)/mm_per_pix;
     y = (y+ ytr)/mm_per_pix;
     y = image_height-y;
-    sup_pts.push_back(vgl_point_3d<double>(x,y,z));
+    sup_pts.emplace_back(x,y,z);
     if(export_points)
       *sup_points<< x << " " << y <<std::endl;
   }

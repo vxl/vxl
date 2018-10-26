@@ -99,8 +99,8 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
 
   // debug
   std::vector<vpgl_perspective_camera<double> > step_vec;
-  step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),state_og.get_point(),state_og.get_rotation()));
-  step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),step_state.get_point(),step_state.get_rotation()));
+  step_vec.emplace_back(cam_est->get_calibration(),state_og.get_point(),state_og.get_rotation());
+  step_vec.emplace_back(cam_est->get_calibration(),step_state.get_point(),step_state.get_rotation());
 
   std::cout << "Pk =\n" << step_state.get_error_covariance() << std::endl;
 
@@ -141,7 +141,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
       vil_save(step_mask,"C:/research/registration/output/step_expected_mask.tiff");
       substep_state = substep_optimizer.optimize_once(vox_world,step_expected,step_mask,curr_img,substep_state,false);
 
-      step_vec.push_back(vpgl_perspective_camera<double>(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation()));
+      step_vec.emplace_back(cam_est->get_calibration(),substep_state.get_point(),substep_state.get_rotation());
 
       double step_length = substep_state.get_state().magnitude();
       std::cout << " step length = " << step_length << '\n'

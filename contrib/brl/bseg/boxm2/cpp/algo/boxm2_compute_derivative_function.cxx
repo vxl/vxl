@@ -248,7 +248,7 @@ std::vector<std::pair<vgl_point_3d<int>, float> > boxm2_compute_derivative_funct
         ifs >> weight;
         if (ifs.eof())
             break;
-        filter.push_back(std::pair<vgl_point_3d<int>, float>( vgl_point_3d<int>(int(this_loc.x()),int(this_loc.y()),int(this_loc.z())), weight));
+        filter.emplace_back( vgl_point_3d<int>(int(this_loc.x()),int(this_loc.y()),int(this_loc.z())), weight);
 #ifdef DEBUG
         std::cout << this_loc << "  weight: " << weight << std::endl;
 #endif

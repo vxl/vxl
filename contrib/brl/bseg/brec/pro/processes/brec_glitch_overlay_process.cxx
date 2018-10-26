@@ -29,17 +29,17 @@ bool brec_glitch_overlay_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame
-  input_types.push_back("vil_image_view_base_sptr"); //input img
-  input_types.push_back("unsigned"); // size of the inner-square for the glitch mask (e.g. 5 means we're detecting foreground islands of 5x5 on background)
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame
+  input_types.emplace_back("vil_image_view_base_sptr"); //input img
+  input_types.emplace_back("unsigned"); // size of the inner-square for the glitch mask (e.g. 5 means we're detecting foreground islands of 5x5 on background)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output float overlayed glitch map
-  output_types.push_back("vil_image_view_base_sptr");  // output float overlayed glitch map as stretched to byte img
-  output_types.push_back("vil_image_view_base_sptr");  // output the glitch map as overlayed on input img
+  output_types.emplace_back("vil_image_view_base_sptr");  // output float overlayed glitch map
+  output_types.emplace_back("vil_image_view_base_sptr");  // output float overlayed glitch map as stretched to byte img
+  output_types.emplace_back("vil_image_view_base_sptr");  // output the glitch map as overlayed on input img
   ok = pro.set_output_types(output_types);
   return ok;
 }

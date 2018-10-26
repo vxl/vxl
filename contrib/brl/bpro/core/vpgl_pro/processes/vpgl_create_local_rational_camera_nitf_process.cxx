@@ -20,10 +20,10 @@ bool vpgl_create_local_rational_camera_nitf_process_cons(bprb_func_process& pro)
 {
   //this process takes 2 inputs and has 1 output
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }

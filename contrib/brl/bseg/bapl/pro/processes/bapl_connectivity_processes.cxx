@@ -25,11 +25,11 @@ bool bapl_create_conn_table_process_cons(bprb_func_process& pro)
   bool ok=false;
   std::vector<std::string> input_types;
   ok = pro.set_input_types(input_types);
-  input_types.push_back("int");  // number of images
+  input_types.emplace_back("int");  // number of images
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("bapl_conn_table_sptr");
+  output_types.emplace_back("bapl_conn_table_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -56,8 +56,8 @@ bool bapl_add_match_set_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_conn_table_sptr");
-  input_types.push_back("bapl_keypoint_match_set_sptr");
+  input_types.emplace_back("bapl_conn_table_sptr");
+  input_types.emplace_back("bapl_keypoint_match_set_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -93,9 +93,9 @@ bool bapl_add_image_keys_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_conn_table_sptr");
-  input_types.push_back("int");
-  input_types.push_back("bapl_keypoint_set_sptr");
+  input_types.emplace_back("bapl_conn_table_sptr");
+  input_types.emplace_back("int");
+  input_types.emplace_back("bapl_keypoint_set_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -125,8 +125,8 @@ bool bapl_compute_tracks_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bapl_conn_table_sptr");
-  input_types.push_back("vcl_string");  // output file to print correspondences
+  input_types.emplace_back("bapl_conn_table_sptr");
+  input_types.emplace_back("vcl_string");  // output file to print correspondences
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

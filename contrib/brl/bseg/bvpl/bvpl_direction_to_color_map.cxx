@@ -16,12 +16,12 @@
 void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vector<vgl_point_3d<double> > & proj_on_cube)
 {
   std::vector<vgl_vector_3d<double> > normals;
-  normals.push_back(vgl_vector_3d<double>(1,0,0));  // X high
-  normals.push_back(vgl_vector_3d<double>(0,1,0));  // Y high
-  normals.push_back(vgl_vector_3d<double>(0,0,1));  // Z high
-  normals.push_back(vgl_vector_3d<double>(-1,0,0)); // X low
-  normals.push_back(vgl_vector_3d<double>(0,-1,0)); // Y low
-  normals.push_back(vgl_vector_3d<double>(0,0,-1)); // Z low
+  normals.emplace_back(1,0,0);  // X high
+  normals.emplace_back(0,1,0);  // Y high
+  normals.emplace_back(0,0,1);  // Z high
+  normals.emplace_back(-1,0,0); // X low
+  normals.emplace_back(0,-1,0); // Y low
+  normals.emplace_back(0,0,-1); // Z low
 
   // iterate over all the spherical samples
   for (unsigned i=0;i<samples_.size();++i)
@@ -41,28 +41,22 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vecto
     // find intersection with appropriate plane
     switch (jmax) {
       case 0:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (1.0,samples_[i].y()/samples_[i].x(),samples_[i].z()/samples_[i].x()));
+        proj_on_cube.emplace_back(1.0,samples_[i].y()/samples_[i].x(),samples_[i].z()/samples_[i].x());
         break;
       case 1:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (samples_[i].x()/samples_[i].y(),1.0,samples_[i].z()/samples_[i].y()));
+        proj_on_cube.emplace_back(samples_[i].x()/samples_[i].y(),1.0,samples_[i].z()/samples_[i].y());
         break;
       case 2:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (samples_[i].x()/samples_[i].z(),samples_[i].y()/samples_[i].z(),1.0));
+        proj_on_cube.emplace_back(samples_[i].x()/samples_[i].z(),samples_[i].y()/samples_[i].z(),1.0);
         break;
       case 3:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (-1.0,-samples_[i].y()/samples_[i].x(),-samples_[i].z()/samples_[i].x()));
+        proj_on_cube.emplace_back(-1.0,-samples_[i].y()/samples_[i].x(),-samples_[i].z()/samples_[i].x());
         break;
       case 4:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (-samples_[i].x()/samples_[i].y(),-1.0,-samples_[i].z()/samples_[i].y()));
+        proj_on_cube.emplace_back(-samples_[i].x()/samples_[i].y(),-1.0,-samples_[i].z()/samples_[i].y());
         break;
       case 5:
-        proj_on_cube.push_back(vgl_point_3d<double>
-                               (-samples_[i].x()/samples_[i].z(),-samples_[i].y()/samples_[i].z(),-1.0));
+        proj_on_cube.emplace_back(-samples_[i].x()/samples_[i].z(),-samples_[i].y()/samples_[i].z(),-1.0);
         break;
     }
   }
@@ -218,7 +212,7 @@ void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel
 {
   std::vector< bvpl_kernel_sptr >::iterator iter;
   for (iter=kernel_vector->begin();iter!=kernel_vector->end();++iter)
-    samples.push_back(vgl_point_3d<double>((*iter)->axis()[0], (*iter)->axis()[1], (*iter)->axis()[2]));
+    samples.emplace_back((*iter)->axis()[0], (*iter)->axis()[1], (*iter)->axis()[2]);
 }
 
 

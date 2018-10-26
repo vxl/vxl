@@ -97,10 +97,10 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, std::
 
   // find the four corners
   std::vector<std::pair<double, double> > corners;
-  corners.push_back(std::pair<double, double>(lon-largest_rad_seconds_, lat-largest_rad_seconds_));
-  corners.push_back(std::pair<double, double>(lon+largest_rad_seconds_, lat-largest_rad_seconds_));
-  corners.push_back(std::pair<double, double>(lon+largest_rad_seconds_, lat+largest_rad_seconds_));
-  corners.push_back(std::pair<double, double>(lon-largest_rad_seconds_, lat+largest_rad_seconds_));
+  corners.emplace_back(lon-largest_rad_seconds_, lat-largest_rad_seconds_);
+  corners.emplace_back(lon+largest_rad_seconds_, lat-largest_rad_seconds_);
+  corners.emplace_back(lon+largest_rad_seconds_, lat+largest_rad_seconds_);
+  corners.emplace_back(lon-largest_rad_seconds_, lat+largest_rad_seconds_);
 
   // find out which images need to be considered and the corners in pixels in each image
   std::map<unsigned, std::vector<std::pair<int, int> > > imgs_and_corners;
@@ -130,8 +130,8 @@ bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, std::
     }
     if (at_least_one) {
       std::vector<std::pair<int, int> > tmp;
-      tmp.push_back(std::pair<int, int>(min_i, min_j));
-      tmp.push_back(std::pair<int, int>(max_i, max_j));
+      tmp.emplace_back(min_i, min_j);
+      tmp.emplace_back(max_i, max_j);
       imgs_and_corners[current_leaf_maps_[k]] = tmp;
     }
   }

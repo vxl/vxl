@@ -33,7 +33,7 @@ std::vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<do
   std::vector<vgl_point_3d<double> > centers;
   for (unsigned i=0; i<11; i++) {
     double z = boxm_camera_dist*std::sin(alpha);
-    centers.push_back(vgl_point_3d<double> (centroid.x(), centroid.y(), centroid.z()+z));
+    centers.emplace_back(centroid.x(), centroid.y(), centroid.z()+z);
     std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }
@@ -78,7 +78,7 @@ std::vector<vpgl_camera_double_sptr > generate_cameras_yz_multi_bin(vgl_box_3d<d
   for (unsigned i=0; i<num_train_images; i++) {
     double x = boxm_camera_dist*std::cos(alpha);
     double y = boxm_camera_dist*std::sin(alpha);
-    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
+    centers.emplace_back(x+centroid.x(), y+centroid.y(), 450+centroid.z());
   if (verbose)
     std::cout << centers[i] << std::endl;
 

@@ -77,13 +77,13 @@ bool brip_blobwise_mutual_info_process_cons(bprb_func_process& pro)
 {
   //input
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image
-  input_types.push_back("vil_image_view_base_sptr"); // expected image
-  input_types.push_back("vil_image_view_base_sptr"); // weight image
-  input_types.push_back("vil_image_view_base_sptr"); // blob/mask image
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("vil_image_view_base_sptr"); // expected image
+  input_types.emplace_back("vil_image_view_base_sptr"); // weight image
+  input_types.emplace_back("vil_image_view_base_sptr"); // blob/mask image
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // visualize image (mutual information differs by color
+  output_types.emplace_back("vil_image_view_base_sptr");  // visualize image (mutual information differs by color
 
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);

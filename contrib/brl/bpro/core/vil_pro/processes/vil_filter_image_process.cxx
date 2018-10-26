@@ -13,14 +13,14 @@ bool vil_filter_image_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  //: original image
-  input_types.push_back("vil_image_view_base_sptr");  //: filtering mask (will make all pixels with mask=false zero
+  input_types.emplace_back("vil_image_view_base_sptr");  //: original image
+  input_types.emplace_back("vil_image_view_base_sptr");  //: filtering mask (will make all pixels with mask=false zero
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

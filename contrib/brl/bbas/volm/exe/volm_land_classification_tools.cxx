@@ -142,11 +142,11 @@ void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, std::string const& mask_name, std
   for (unsigned i = 0; i < mask.ni(); i++)
     for (unsigned j = 0; j < mask.nj(); j++) {
       if (mask(i,j) == 255) {
-        pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+        pixels.emplace_back(std::pair<unsigned, unsigned>(i,j));
         double lon, lat, lx, ly, lz;
         cam->img_to_global(i, j, lon, lat);
         lvcs->global_to_local(-lon, lat, 0, vpgl_lvcs::wgs84, lx, ly, lz);
-        local_coords.push_back(std::pair<double, double>(lx, ly));
+        local_coords.emplace_back(lx, ly);
       }
     }
 }
@@ -196,7 +196,7 @@ bool collect_img_pixels(vpgl_lvcs_sptr lvcs, int utm_zone, std::string const& ma
     int uu = (int)std::floor(u + 0.5);
     int vv = (int)std::floor(v + 0.5);
     if (uu >= 0 && vv >= 0 && uu < ni && vv < nj && mask(uu,vv) == 255) {
-      img_pixels.push_back(std::pair<int, int>(uu,vv));
+      img_pixels.emplace_back(uu,vv);
     }
   }
   std::cout << " collected: " << img_pixels.size() << " pixels from aerial image!\n";
@@ -238,14 +238,14 @@ bool read_training_img(std::string txt_file, std::vector<std::string>& names, st
     ifs.getline(buffer, 10000);  // lidar name
     std::string iname(buffer);
     //std::cout << iname << std::endl;
-    lidar_imgs.push_back(std::pair<std::string, std::string>(iname, mask));
+    lidar_imgs.emplace_back(iname, mask);
     ifs.getline(buffer, 10000);  // mask name
     std::string imask(buffer);
     //std::cout << imask << std::endl;
     ifs.getline(buffer, 10000);  // name
     std::string iiname(buffer);
     //std::cout << iiname << std::endl;
-    imgs.push_back(std::pair<std::string, std::string>(iiname, imask));
+    imgs.emplace_back(iiname, imask);
   }
   return true;
 }
@@ -255,7 +255,7 @@ void get_block(int i, int j, int bb, std::vector<std::pair<int, int> >& pixels)
 {
   for (int ii = i-bb; ii < i+bb; ii++)
     for (int jj = j-bb; jj < j+bb; jj++) {
-      pixels.push_back(std::pair<int, int>(ii, jj));
+      pixels.emplace_back(ii, jj);
     }
 }
 
@@ -320,7 +320,7 @@ int main(int argc,  char** argv)
         vgl_polygon<double> p(1);
         for (unsigned k = 0; k < poly[j].size(); k++)
           p[0].push_back(poly[j][k]);
-        polys.push_back(std::pair<vgl_polygon<double>, std::string>(p, name));
+        polys.emplace_back(p, name);
       }
     }
     std::cout << " read " << polys.size() << " polys from the folder: " << in_poly() << std::endl;

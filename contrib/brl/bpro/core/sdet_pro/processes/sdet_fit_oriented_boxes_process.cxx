@@ -34,12 +34,12 @@ bool sdet_fit_oriented_boxes_process_cons(bprb_func_process& pro)
 {
   //this process takes 3 inputs
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // randomly colored blob image
+  input_types.emplace_back("vil_image_view_base_sptr");  // randomly colored blob image
 
   std::vector<std::string> output_types;
-  output_types.push_back("unsigned");  // return the number of blobs, N
-  output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*8, four points with (u,v) image coordinates for each corner of each oriented box
-  output_types.push_back("bbas_1d_array_float_sptr");  // an array of size N*2, which output the length and width of the fitting oriented box
+  output_types.emplace_back("unsigned");  // return the number of blobs, N
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // an array of size N*8, four points with (u,v) image coordinates for each corner of each oriented box
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // an array of size N*2, which output the length and width of the fitting oriented box
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -71,10 +71,10 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
         continue;
       std::map<vil_rgb<vxl_byte>, std::vector<vgl_point_2d<float> > >::iterator iter = color_map.find(current);
       if (iter != color_map.end()) {
-        (iter->second).push_back(vgl_point_2d<float>(i,j));
+        (iter->second).emplace_back(i,j);
       } else {
         std::vector<vgl_point_2d<float> > tmp;
-        tmp.push_back(vgl_point_2d<float>(i,j));
+        tmp.emplace_back(i,j);
         color_map[current] = tmp;
       }
     }

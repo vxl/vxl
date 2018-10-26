@@ -22,12 +22,12 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
   //  4) local z maximum
   //  5) level (the pyramid scale)
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("unsigned");// ni
-  input_types.push_back("unsigned");// nj
-  input_types.push_back("float"); // min z
-  input_types.push_back("float"); // max z
-  input_types.push_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("unsigned");// ni
+  input_types.emplace_back("unsigned");// nj
+  input_types.emplace_back("float"); // min z
+  input_types.emplace_back("float"); // max z
+  input_types.emplace_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
   bool ok = pro.set_input_types(input_types);
 
   // in case the 4th input is not set
@@ -37,9 +37,9 @@ bool vpgl_convert_local_rational_to_generic_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
-  output_types.push_back("unsigned");
-  output_types.push_back("unsigned");
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("unsigned");
+  output_types.emplace_back("unsigned");
   return pro.set_output_types(output_types);
 }
 

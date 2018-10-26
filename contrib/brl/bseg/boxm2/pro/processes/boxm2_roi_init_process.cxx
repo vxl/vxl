@@ -248,13 +248,13 @@ std::vector<vgl_point_3d<double> > boxm2_roi_init_process_globals::corners_of_bo
   std::vector<vgl_point_3d<double> > corners;
 
   corners.push_back(box.min_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.min_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y(), box.max_z()));
-  corners.push_back(vgl_point_3d<double> (box.min_x()+box.width(), box.min_y(), box.max_z()));
+  corners.emplace_back(box.min_x()+box.width(), box.min_y(), box.min_z());
+  corners.emplace_back(box.min_x()+box.width(), box.min_y()+box.height(), box.min_z());
+  corners.emplace_back(box.min_x(), box.min_y()+box.height(), box.min_z());
+  corners.emplace_back(box.min_x(), box.min_y(), box.max_z());
+  corners.emplace_back(box.min_x()+box.width(), box.min_y(), box.max_z());
   corners.push_back(box.max_point());
-  corners.push_back(vgl_point_3d<double> (box.min_x(), box.min_y()+box.height(), box.max_z()));
+  corners.emplace_back(box.min_x(), box.min_y()+box.height(), box.max_z());
   return corners;
 }
 

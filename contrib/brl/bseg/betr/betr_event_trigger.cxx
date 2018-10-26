@@ -292,7 +292,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
         cam->project((*vit)->x()+transl.x(),
                      (*vit)->y()+transl.y(),
                      (*vit)->z()+transl.z(), u, v);
-        pts_2d.push_back(vgl_point_2d<double>(u, v));
+        pts_2d.emplace_back(u, v);
       }
       std::vector<vsol_point_2d_sptr> sverts;
       if(mesh_3d->num_faces()>1)

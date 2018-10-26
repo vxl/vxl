@@ -13,18 +13,18 @@ bool sdet_exp_img_classifier_process_cons(bprb_func_process& pro)
 {
   // process takes 5 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //classifier
-  input_types.push_back("vcl_string"); //texton dictionary
-  input_types.push_back("vil_image_view_base_sptr"); //input image path
-  input_types.push_back("vil_image_view_base_sptr"); //exp image path
-  input_types.push_back("unsigned");   //texture block size
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //classifier
+  input_types.emplace_back("vcl_string"); //texton dictionary
+  input_types.emplace_back("vil_image_view_base_sptr"); //input image path
+  input_types.emplace_back("vil_image_view_base_sptr"); //exp image path
+  input_types.emplace_back("unsigned");   //texture block size
   if (!pro.set_input_types(input_types))
     return false;
 
   // process has 1 output:
   // output[0]: output texture color image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   return pro.set_output_types(output_types);
 }
 

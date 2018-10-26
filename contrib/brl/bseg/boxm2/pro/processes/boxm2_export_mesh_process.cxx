@@ -166,7 +166,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
         double x = verts[vertexId][0];
         double y = verts[vertexId][1];
         double z = verts[vertexId][2];
-        points.push_back( vgl_point_3d<double>(x,y,z) );
+        points.emplace_back(x,y,z );
       }
 
       // if any one side of the triangle is too long, cut it

@@ -15,9 +15,9 @@
 bool volm_generate_class_map_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // classification image
+  input_types.emplace_back("vil_image_view_base_sptr");  // classification image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
+  output_types.emplace_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -68,10 +68,10 @@ bool volm_generate_class_map_process(bprb_func_process& pro)
 bool volm_generate_color_class_map_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // classification image
-  input_types.push_back("vcl_string");                // id to color txt
+  input_types.emplace_back("vil_image_view_base_sptr");  // classification image
+  input_types.emplace_back("vcl_string");                // id to color txt
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
+  output_types.emplace_back("vil_image_view_base_sptr"); // output unsigned short image with volm_land_type ids
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -125,8 +125,8 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
 bool volm_update_class_map_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types_;
-  input_types_.push_back("vil_image_view_base_sptr");  // current classification map
-  input_types_.push_back("vil_image_view_base_sptr");  // source classification map used to update the class map
+  input_types_.emplace_back("vil_image_view_base_sptr");  // current classification map
+  input_types_.emplace_back("vil_image_view_base_sptr");  // source classification map used to update the class map
   std::vector<std::string>  output_types_;
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }

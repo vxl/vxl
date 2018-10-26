@@ -450,11 +450,11 @@ bool bmdl_generate_mesh_process(bprb_func_process& pro)
 bool bmdl_generate_mesh_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vcl_string");
-  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vpgl_camera_double_sptr");
   return pro.set_input_types(input_types);
 }

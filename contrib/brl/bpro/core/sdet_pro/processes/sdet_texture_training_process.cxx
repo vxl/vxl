@@ -19,13 +19,13 @@ bool sdet_texture_training_process_cons(bprb_func_process& pro)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 6 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
-  input_types.push_back("bool"); //if true, compute textons for category,
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texture classifier
+  input_types.emplace_back("bool"); //if true, compute textons for category,
   //otherwise append filter responses from the image to the training data
-  input_types.push_back("vil_image_view_base_sptr"); //input image
-  input_types.push_back("vcl_string"); //polygon file
-  input_types.push_back("vcl_string"); // category name
-  input_types.push_back("vcl_string"); // texton dictionary path
+  input_types.emplace_back("vil_image_view_base_sptr"); //input image
+  input_types.emplace_back("vcl_string"); //polygon file
+  input_types.emplace_back("vcl_string"); // category name
+  input_types.emplace_back("vcl_string"); // texton dictionary path
 
   if (!pro.set_input_types(input_types))
     return false;
@@ -33,7 +33,7 @@ bool sdet_texture_training_process_cons(bprb_func_process& pro)
   // process has 1 output:
   // output[0]: the current state of the texture classifier
   std::vector<std::string> output_types;
-  output_types.push_back("sdet_texture_classifier_sptr");
+  output_types.emplace_back("sdet_texture_classifier_sptr");
   return pro.set_output_types(output_types);
 }
 
@@ -129,18 +129,18 @@ bool sdet_texture_training_process2_cons(bprb_func_process& pro)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 5 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texture classifier
-  input_types.push_back("bool"); //if true, compute textons for category,
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texture classifier
+  input_types.emplace_back("bool"); //if true, compute textons for category,
   //otherwise append filter responses from the image to the training data
-  input_types.push_back("vcl_string"); //polygon file
-  input_types.push_back("vcl_string"); // category name
-  input_types.push_back("vcl_string"); // texton dictionary path
+  input_types.emplace_back("vcl_string"); //polygon file
+  input_types.emplace_back("vcl_string"); // category name
+  input_types.emplace_back("vcl_string"); // texton dictionary path
 
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("sdet_texture_classifier_sptr");
+  output_types.emplace_back("sdet_texture_classifier_sptr");
   return pro.set_output_types(output_types);
 }
 
@@ -218,8 +218,8 @@ bool sdet_dump_vsol_binary_data_process_cons(bprb_func_process& pro)
   vsl_add_to_binary_loader(vsol_polygon_2d());
   // process takes 5 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); //polygon file
-  input_types.push_back("vcl_string"); //output file name
+  input_types.emplace_back("vcl_string"); //polygon file
+  input_types.emplace_back("vcl_string"); //output file name
   if (!pro.set_input_types(input_types))
     return false;
 

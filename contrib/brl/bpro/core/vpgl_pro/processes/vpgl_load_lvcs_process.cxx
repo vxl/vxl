@@ -18,9 +18,9 @@ bool vpgl_load_lvcs_process_cons(bprb_func_process& pro)
 {
   //this process take one input and one output
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");  // text file where the lvcs is saved
+  input_types.emplace_back("vcl_string");  // text file where the lvcs is saved
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_lvcs_sptr");
+  output_types.emplace_back("vpgl_lvcs_sptr");
 
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }

@@ -28,16 +28,16 @@ bool brec_prob_map_area_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
-  input_types.push_back("unsigned"); // size of the inner-square to measure area (e.g. 5 means 5x5 area mask)
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame's mask
+  input_types.emplace_back("unsigned"); // size of the inner-square to measure area (e.g. 5 means 5x5 area mask)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }

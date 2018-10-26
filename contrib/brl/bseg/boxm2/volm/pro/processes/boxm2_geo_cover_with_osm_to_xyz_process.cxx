@@ -280,7 +280,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       double i = (lx - scene_bbox.min_x())/vox_length;
       double j = (scene_bbox.max_y() - ly)/vox_length;
       if (i >= 0 && j >= 0 && i < out_img_label->ni() && j < out_img_label->nj())
-        line_img.push_back(vgl_point_2d<double>(i,j));
+        line_img.emplace_back(i,j);
     }
     if (line_img.size() < 2)
       continue;

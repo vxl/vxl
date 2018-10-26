@@ -13,25 +13,25 @@
 bool brad_get_meta_data_info_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brad_image_metadata_sptr"); // image name
+  input_types.emplace_back("brad_image_metadata_sptr"); // image name
 
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("float"); // sun azimuth angle
-  output_types.push_back("float"); // sun elevation
-  output_types.push_back("int"); // year
-  output_types.push_back("int"); // month
-  output_types.push_back("int"); // day
-  output_types.push_back("int"); // hour
-  output_types.push_back("int"); // minute
-  output_types.push_back("int"); // seconds
-  output_types.push_back("float"); // ground sampling distance (GSD)
-  output_types.push_back("vcl_string"); // satellite name
-  output_types.push_back("float"); // sun azimuth angle
-  output_types.push_back("float"); // sun elevation
-  output_types.push_back("vcl_string");  // image band type
+  output_types.emplace_back("float"); // sun azimuth angle
+  output_types.emplace_back("float"); // sun elevation
+  output_types.emplace_back("int"); // year
+  output_types.emplace_back("int"); // month
+  output_types.emplace_back("int"); // day
+  output_types.emplace_back("int"); // hour
+  output_types.emplace_back("int"); // minute
+  output_types.emplace_back("int"); // seconds
+  output_types.emplace_back("float"); // ground sampling distance (GSD)
+  output_types.emplace_back("vcl_string"); // satellite name
+  output_types.emplace_back("float"); // sun azimuth angle
+  output_types.emplace_back("float"); // sun elevation
+  output_types.emplace_back("vcl_string");  // image band type
   return pro.set_output_types(output_types);
 }
 

@@ -36,10 +36,10 @@ bstm_ocl_particle_filter::bstm_ocl_particle_filter(bocl_device_sptr device, bstm
   std::vector< std::map<bstm_block_id, std::vector<bstm_block_id> > > empty_blk_map;
   std::vector< double > initial_mi;
   for(unsigned i = 0; i < num_particles_;i++) {
-    initial_bbs.push_back( vgl_orient_box_3d<double>(initial_bb ) );
+    initial_bbs.emplace_back(initial_bb );
     initial_mi.push_back(1.0f);
-    empty_t.push_back( vgl_vector_3d<double>(0,0,0) );
-    empty_r.push_back( vgl_rotation_3d<double>() );
+    empty_t.emplace_back(0,0,0 );
+    empty_r.emplace_back( );
   }
   bb_.push_back(initial_bbs);
   R_.push_back(empty_r);

@@ -251,7 +251,7 @@ bool bapl_conn_table::compute_tracks(std::vector<bapl_track_data>& tracks, int  
       }
 
       if (features.size() >= 2) {
-        tracks.push_back(bapl_track_data(features));
+        tracks.emplace_back(features);
         pt_idx++;
       }
     }

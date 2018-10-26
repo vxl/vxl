@@ -106,11 +106,11 @@ static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<
         cam0->project(verts[i].x(),verts[i].y(),verts[i].z(), u0, v0);
         vgl_point_2d<double> p2d0(u0, v0);
         verts_2d_0.push_back(p2d0); bb0.add(p2d0);
-        hverts_2d_0.push_back(vgl_homg_point_2d<double>(p2d0));
+        hverts_2d_0.emplace_back(p2d0);
          cam1->project(verts[i].x(),verts[i].y(),verts[i].z(), u1, v1);
          vgl_point_2d<double> p2d1(u1, v1);
         verts_2d_1.push_back(p2d1); bb1.add(p2d1);
-        hverts_2d_1.push_back(vgl_homg_point_2d<double>(p2d1));
+        hverts_2d_1.emplace_back(p2d1);
       }
       vgl_polygon<double> poly0(verts_2d_0), poly1(verts_2d_1);
       size_t ni0 = vnl_math::rnd(bb0.width()), nj0 = vnl_math::rnd(bb0.height());
@@ -175,11 +175,11 @@ static void test_appearance()
     cam0->project(verts(i, 0), verts(i, 1), verts(i, 2), u0, v0);
     vgl_point_2d<double> p2d0(u0, v0);
     verts_2d_0.push_back(p2d0); bb0.add(p2d0);
-    hverts_2d_0.push_back(vgl_homg_point_2d<double>(p2d0));
+    hverts_2d_0.emplace_back(p2d0);
     cam1->project(verts(i, 0), verts(i, 1), verts(i, 2), u1, v1);
     vgl_point_2d<double> p2d1(u1, v1);
     verts_2d_1.push_back(p2d1); bb1.add(p2d1);
-    hverts_2d_1.push_back(vgl_homg_point_2d<double>(p2d1));
+    hverts_2d_1.emplace_back(p2d1);
   }
   vgl_polygon<double> poly0(verts_2d_0), poly1(verts_2d_1);
   size_t ni0 = vnl_math::rnd(bb0.width()), nj0 = vnl_math::rnd(bb0.height());

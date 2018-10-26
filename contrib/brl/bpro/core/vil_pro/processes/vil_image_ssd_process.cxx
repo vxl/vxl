@@ -16,10 +16,10 @@ bool vil_image_ssd_process_cons(bprb_func_process& pro)
 {
   //this process takes two input images and one output value
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
   std::vector<std::string> output_types;
-  output_types.push_back("float");  // ssd
+  output_types.emplace_back("float");  // ssd
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
 }

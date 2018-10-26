@@ -106,7 +106,7 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
     double lon = pt_lon->data_array[i];
     double lat = pt_lat->data_array[i];
     lvcs->global_to_local(lon, lat, 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-    road_in_meter.push_back(vgl_point_2d<double>(lx, ly));
+    road_in_meter.emplace_back(lx, ly);
   }
   // expand the road
   if (road_width < 1.0)

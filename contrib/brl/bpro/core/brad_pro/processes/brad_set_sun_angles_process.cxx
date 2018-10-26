@@ -13,9 +13,9 @@
 bool brad_set_sun_angles_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brad_image_metadata_sptr"); // image name
-  input_types.push_back("float"); // sun azimuth
-  input_types.push_back("float"); // sun elevation
+  input_types.emplace_back("brad_image_metadata_sptr"); // image name
+  input_types.emplace_back("float"); // sun azimuth
+  input_types.emplace_back("float"); // sun elevation
 
   if (!pro.set_input_types(input_types))
     return false;

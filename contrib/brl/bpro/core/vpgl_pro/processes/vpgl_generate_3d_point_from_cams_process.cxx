@@ -84,7 +84,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   std::vector<vgl_point_2d<double> > points;
   vbl_array_1d<int>& pts = imgPoints->data_array;
   for (unsigned int i=0; i<pts.size(); i+=2)
-    points.push_back( vgl_point_2d<double>(pts[i], pts[i+1]) );
+    points.emplace_back(pts[i], pts[i+1] );
 
   //: Calculates the best 3D point corresponding to a set of 2D camera points.
   // Takes in a list of points and cameras, and finds the

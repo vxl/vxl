@@ -34,16 +34,16 @@ bool brec_update_changes_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");      // input change map
-  input_types.push_back("vil_image_view_base_sptr");      // input orig view
-  input_types.push_back("unsigned");      // number of passes
-  input_types.push_back("float");      // sigma for foreground similarity
+  input_types.emplace_back("vil_image_view_base_sptr");      // input change map
+  input_types.emplace_back("vil_image_view_base_sptr");      // input orig view
+  input_types.emplace_back("unsigned");      // number of passes
+  input_types.emplace_back("float");      // sigma for foreground similarity
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");      // output new prob map
-  output_types.push_back("vil_image_view_base_sptr");      // output new prob map as a byte image
+  output_types.emplace_back("vil_image_view_base_sptr");      // output new prob map
+  output_types.emplace_back("vil_image_view_base_sptr");      // output new prob map as a byte image
   ok = pro.set_output_types(output_types);
   return ok;
 }

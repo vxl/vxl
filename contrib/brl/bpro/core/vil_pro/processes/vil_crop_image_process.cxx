@@ -13,16 +13,16 @@ bool vil_crop_image_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("unsigned");
+  input_types.emplace_back("unsigned");
+  input_types.emplace_back("unsigned");
+  input_types.emplace_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

@@ -18,14 +18,14 @@ bool vpgl_convert_local_rational_to_perspective_process_cons(bprb_func_process& 
   //  0) abstract camera
 
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("vpgl_camera_double_sptr");
   bool ok = pro.set_input_types(input_types);
 
 
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
   return pro.set_output_types(output_types);
 }
 

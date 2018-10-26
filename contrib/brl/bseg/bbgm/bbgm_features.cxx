@@ -51,7 +51,7 @@ pixels(unsigned i, unsigned j)
           std::cout << "Write out of bounds in mask(" << pi << ' ' << pj << ")\n";
           continue;
         }
-        pix.push_back(vgl_point_2d<unsigned short>(pi, pj));
+        pix.emplace_back(pi, pj);
       }
     }
   }
@@ -156,7 +156,7 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
         std::cout << "Write out of bounds in mask pair(" << ili << ' ' << ilj << ")\n";
         continue;
       }
-    pixp.push_back(vgl_point_2d<unsigned short>(ili, ilj));
+    pixp.emplace_back(ili, ilj);
   }
   //get the positive elements of masks
   bbgm_mask_feature mf0(mid_, ang0_), mf1(mid_, ang1_);

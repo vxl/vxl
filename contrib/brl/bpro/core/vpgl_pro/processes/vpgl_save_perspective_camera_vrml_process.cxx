@@ -19,9 +19,9 @@ bool vpgl_save_perspective_camera_vrml_process_cons(bprb_func_process& pro)
   //input[1]: the filename
   //input[2]: radius of the sphere that will represent camera center in the output file
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("vcl_string");
-  input_types.push_back("float");
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("float");
   return pro.set_input_types(input_types);
 }
 
@@ -63,9 +63,9 @@ bool vpgl_save_perspective_cameras_vrml_process_cons(bprb_func_process& pro)
   //input[1]: the filename
   //input[2]: radius of the sphere that will represent camera center in the output file
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("float");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("float");
   return pro.set_input_types(input_types);
 }
 

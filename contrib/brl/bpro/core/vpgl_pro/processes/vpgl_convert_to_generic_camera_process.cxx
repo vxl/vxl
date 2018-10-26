@@ -20,10 +20,10 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
   //  2) nj (# image rows)
   //  3) level (the pyramid scale)
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("unsigned"); // ni
-  input_types.push_back("unsigned"); // nj
-  input_types.push_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("unsigned"); // ni
+  input_types.emplace_back("unsigned"); // nj
+  input_types.emplace_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
   bool ok = pro.set_input_types(input_types);
 
   // in case the 4th input is not set
@@ -33,9 +33,9 @@ bool vpgl_convert_to_generic_camera_process_cons(bprb_func_process& pro)
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
-  output_types.push_back("unsigned");
-  output_types.push_back("unsigned");
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("unsigned");
+  output_types.emplace_back("unsigned");
   return pro.set_output_types(output_types);
 }
 
@@ -71,11 +71,11 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
 bool vpgl_convert_to_generic_camera_w_margin_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("unsigned");// ni
-  input_types.push_back("unsigned");// nj
-  input_types.push_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
-  input_types.push_back("int"); // margin, e.g. to create a wider expected image
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("unsigned");// ni
+  input_types.emplace_back("unsigned");// nj
+  input_types.emplace_back("unsigned"); // level, e.g. camera needs to be scaled or not, pass the ni-nj of the original image
+  input_types.emplace_back("int"); // margin, e.g. to create a wider expected image
   bool ok = pro.set_input_types(input_types);
 
   // in case the 5th input is not set
@@ -85,10 +85,10 @@ bool vpgl_convert_to_generic_camera_w_margin_process_cons(bprb_func_process& pro
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
-  output_types.push_back("unsigned");
-  output_types.push_back("unsigned");
-  output_types.push_back("vpgl_camera_double_sptr");
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("unsigned");
+  output_types.emplace_back("unsigned");
+  output_types.emplace_back("vpgl_camera_double_sptr");
   return pro.set_output_types(output_types);
 }
 
@@ -146,9 +146,9 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
 bool vpgl_write_generic_camera_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("vcl_string"); // name of output vrml file
-  input_types.push_back("unsigned"); // name of output vrml file
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("vcl_string"); // name of output vrml file
+  input_types.emplace_back("unsigned"); // name of output vrml file
   bool ok = pro.set_input_types(input_types);
 
   if (!ok) return ok;
@@ -187,20 +187,20 @@ bool vpgl_write_generic_camera_process(bprb_func_process& pro)
 bool vpgl_get_generic_camera_ray_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("unsigned"); // u
-  input_types.push_back("unsigned"); // v
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("unsigned"); // u
+  input_types.emplace_back("unsigned"); // v
   bool ok = pro.set_input_types(input_types);
 
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("double");  // ray origin x
-  output_types.push_back("double");  // ray origin y
-  output_types.push_back("double");  // ray origin z
-  output_types.push_back("double");  // ray direction x
-  output_types.push_back("double");  // ray direction y
-  output_types.push_back("double");  // ray direction z
+  output_types.emplace_back("double");  // ray origin x
+  output_types.emplace_back("double");  // ray origin y
+  output_types.emplace_back("double");  // ray origin z
+  output_types.emplace_back("double");  // ray direction x
+  output_types.emplace_back("double");  // ray direction y
+  output_types.emplace_back("double");  // ray direction z
   return pro.set_output_types(output_types);
 }
 

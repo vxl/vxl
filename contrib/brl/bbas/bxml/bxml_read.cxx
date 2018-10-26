@@ -74,7 +74,7 @@ void bxml_expat_parser::startElement(const XML_Char* name, const XML_Char** atts
       stack_.push_back(data);
     }
     else
-      stack_.push_back(nullptr);
+      stack_.emplace_back(nullptr);
   }
   else{
     if (stack_.back().ptr()) {
@@ -91,7 +91,7 @@ void bxml_expat_parser::endElement(const XML_Char* name)
 {
   if (stack_.back().ptr()) {
     assert(static_cast<bxml_element*>(stack_.back().ptr())->name() == std::string(name));
-    complete_.push_back(std::pair<bxml_data_sptr,unsigned int>(stack_.back(),stack_.size()-1));
+    complete_.emplace_back(stack_.back(),stack_.size()-1);
   }
   stack_.pop_back();
 }

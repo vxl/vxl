@@ -15,11 +15,11 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
   //this process takes one input: the filename
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("double"); // view distance
-  input_types.push_back("double"); // viewing direction (x)
-  input_types.push_back("double"); // viewing direction (y)
-  input_types.push_back("double"); // viewing direction (z)
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("double"); // view distance
+  input_types.emplace_back("double"); // viewing direction (x)
+  input_types.emplace_back("double"); // viewing direction (y)
+  input_types.emplace_back("double"); // viewing direction (z)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -34,7 +34,7 @@ bool vpgl_load_affine_camera_process_cons(bprb_func_process& pro)
   pro.set_input(4, default_view_z);
 
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");  // label image
+  output_types.emplace_back("vpgl_camera_double_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

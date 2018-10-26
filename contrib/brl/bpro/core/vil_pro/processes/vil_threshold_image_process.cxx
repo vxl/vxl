@@ -14,16 +14,16 @@ bool vil_threshold_image_process_cons(bprb_func_process& pro)
     //input
     bool ok=false;
     std::vector<std::string> input_types;
-    input_types.push_back("vil_image_view_base_sptr");
-    input_types.push_back("float");     // threshold
-    input_types.push_back("bool");      // whether to threshold above or below, if true thresholds above, i.e. dest(i,j) = true if src(i,j) >= threshold
-    input_types.push_back("unsigned");  // the desired value of positive pixels in the output image
+    input_types.emplace_back("vil_image_view_base_sptr");
+    input_types.emplace_back("float");     // threshold
+    input_types.emplace_back("bool");      // whether to threshold above or below, if true thresholds above, i.e. dest(i,j) = true if src(i,j) >= threshold
+    input_types.emplace_back("unsigned");  // the desired value of positive pixels in the output image
     ok = pro.set_input_types(input_types);
     if (!ok) return ok;
 
     //output
     std::vector<std::string> output_types;
-    output_types.push_back("vil_image_view_base_sptr");
+    output_types.emplace_back("vil_image_view_base_sptr");
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
     return true;
@@ -87,14 +87,14 @@ bool vil_threshold_max_image_process_cons(bprb_func_process& pro)
     //input
     bool ok=false;
     std::vector<std::string> input_types;
-    input_types.push_back("vil_image_view_base_sptr");
-    input_types.push_back("float");   // fmax or threshold
+    input_types.emplace_back("vil_image_view_base_sptr");
+    input_types.emplace_back("float");   // fmax or threshold
     ok = pro.set_input_types(input_types);
     if (!ok) return ok;
 
     //output
     std::vector<std::string> output_types;
-    output_types.push_back("vil_image_view_base_sptr");
+    output_types.emplace_back("vil_image_view_base_sptr");
     ok = pro.set_output_types(output_types);
     if (!ok) return ok;
     return true;

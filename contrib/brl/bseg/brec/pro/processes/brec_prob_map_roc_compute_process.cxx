@@ -29,17 +29,17 @@ bool brec_prob_map_roc_compute_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
-  input_types.push_back("vil_image_view_base_sptr"); //foreground mask
-  input_types.push_back("vcl_string"); //output file name
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame's mask
+  input_types.emplace_back("vil_image_view_base_sptr"); //foreground mask
+  input_types.emplace_back("vcl_string"); //output file name
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("float");  // return the threshold at the best operating point
-  output_types.push_back("float");  // return a threshold
+  output_types.emplace_back("float");  // return the threshold at the best operating point
+  output_types.emplace_back("float");  // return a threshold
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -167,19 +167,19 @@ bool brec_prob_map_roc_compute2_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame
-  input_types.push_back("vil_image_view_base_sptr"); //input probability frame's mask
-  input_types.push_back("vil_image_view_base_sptr"); //foreground mask
-  input_types.push_back("double");  // threshold value
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame
+  input_types.emplace_back("vil_image_view_base_sptr"); //input probability frame's mask
+  input_types.emplace_back("vil_image_view_base_sptr"); //foreground mask
+  input_types.emplace_back("double");  // threshold value
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("float");  // return TP
-  output_types.push_back("float");  // return FP
-  output_types.push_back("float");  // return number of foreground pixels, nfd, TPR is TP/nfd
-  output_types.push_back("float");  // return number of background pixels, nbd, FPR is FP/nbd
+  output_types.emplace_back("float");  // return TP
+  output_types.emplace_back("float");  // return FP
+  output_types.emplace_back("float");  // return number of foreground pixels, nfd, TPR is TP/nfd
+  output_types.emplace_back("float");  // return number of background pixels, nbd, FPR is FP/nbd
   ok = pro.set_output_types(output_types);
   return ok;
 }

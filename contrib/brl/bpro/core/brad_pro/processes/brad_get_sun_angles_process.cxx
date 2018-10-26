@@ -13,14 +13,14 @@
 bool brad_get_sun_angles_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brad_image_metadata_sptr"); // image name
+  input_types.emplace_back("brad_image_metadata_sptr"); // image name
 
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("float");
-  output_types.push_back("float");
+  output_types.emplace_back("float");
+  output_types.emplace_back("float");
   return pro.set_output_types(output_types);
 }
 

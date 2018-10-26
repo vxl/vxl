@@ -172,8 +172,8 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
   ifs.close();
 
   std::vector<std::string> type_names_mog_update;
-  type_names_mog_update.push_back("boxm2_data_index");
-  type_names_mog_update.push_back("boxm2_num_obs_single_int");
+  type_names_mog_update.emplace_back("boxm2_data_index");
+  type_names_mog_update.emplace_back("boxm2_num_obs_single_int");
 
   // create a command queue.
   int status=0;

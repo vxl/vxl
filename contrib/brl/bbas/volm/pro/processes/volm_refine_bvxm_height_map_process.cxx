@@ -179,16 +179,16 @@ bool volm_extract_building_outlines_process_cons(bprb_func_process& pro)
 {
 
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // height map
-  input_types.push_back("vil_image_view_base_sptr"); // classification map
-  input_types.push_back("vpgl_camera_double_sptr"); // geo camera
-  input_types.push_back("vcl_string"); // output building .csv filename
-  input_types.push_back("vcl_string"); // output building kml filename
+  input_types.emplace_back("vil_image_view_base_sptr"); // height map
+  input_types.emplace_back("vil_image_view_base_sptr"); // classification map
+  input_types.emplace_back("vpgl_camera_double_sptr"); // geo camera
+  input_types.emplace_back("vcl_string"); // output building .csv filename
+  input_types.emplace_back("vcl_string"); // output building kml filename
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // binary map
-  output_types.push_back("vil_image_view_base_sptr"); // binary map
-  output_types.push_back("vil_image_view_base_sptr"); // binary map
+  output_types.emplace_back("vil_image_view_base_sptr"); // binary map
+  output_types.emplace_back("vil_image_view_base_sptr"); // binary map
+  output_types.emplace_back("vil_image_view_base_sptr"); // binary map
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
 }
@@ -252,7 +252,7 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     for (unsigned i = 0; i < bi.size(); i++) {
       double lon, lat;
       geocam->img_to_global(bi[i], bj[i], lon, lat);
-      poly.push_back(vgl_point_3d<double>(lon, lat, height(bi[i], bj[i])));
+      poly.emplace_back(lon, lat, height(bi[i], bj[i]));
     }
     bldgs.push_back(poly);
   }

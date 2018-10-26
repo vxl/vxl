@@ -15,17 +15,17 @@ bool vpgl_create_dem_manager_process_cons(bprb_func_process& pro)
   //this process takes three inputs: the dem image resource pointer, zmin, zmax
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_resource_sptr");
-  input_types.push_back("double");
-  input_types.push_back("double");
+  input_types.emplace_back("vil_image_resource_sptr");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   // the process has one output, the dem_manager
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_dem_manager_sptr");  // the dem manager
-  output_types.push_back("double");  // zmin
-  output_types.push_back("double");  // zmax
+  output_types.emplace_back("vpgl_dem_manager_sptr");  // the dem manager
+  output_types.emplace_back("double");  // zmin
+  output_types.emplace_back("double");  // zmax
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

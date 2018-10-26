@@ -32,7 +32,7 @@ volm_candidate_list::volm_candidate_list(vil_image_view<vxl_byte> const& image,
     vil_find_4con_boundary_above_threshold(bi,bj,image,vxl_byte(thres_),mit->second.x(),mit->second.y());
     for (unsigned i = 0; i < bi.size(); i++) {
       if (!poly_.contains(bi[i],bj[i]))
-        sheet.push_back(vgl_point_2d<int>(bi[i],bj[i]));
+        sheet.emplace_back(bi[i],bj[i]);
     }
     if(sheet.size() == 0) sheet.push_back(mit->second);
     poly_.push_back(sheet);
@@ -48,10 +48,10 @@ bool volm_candidate_list::create_expand_polygon(std::vector<vgl_point_2d<int> > 
   unsigned n_points = (unsigned)sheet.size();
   std::vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_points; i++) {
-    points.push_back(vgl_point_2d<double>(sheet[i].x()+1.0, sheet[i].y()+1.0));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()+1.0));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()-1.0));
-    points.push_back(vgl_point_2d<double>(sheet[i].x()-1.0, sheet[i].y()-1.0));
+    points.emplace_back(sheet[i].x()+1.0, sheet[i].y()+1.0);
+    points.emplace_back(sheet[i].x()-1.0, sheet[i].y()+1.0);
+    points.emplace_back(sheet[i].x()-1.0, sheet[i].y()-1.0);
+    points.emplace_back(sheet[i].x()-1.0, sheet[i].y()-1.0);
   }
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> poly = ch.hull();
@@ -173,7 +173,7 @@ bool volm_candidate_list::top_locations(std::vector<vgl_point_2d<double> >& top_
     if (u > image_.ni() || v > image_.nj() || image_(u,v) < thres_)
       continue;
     tile.img_to_global((unsigned)top_locs_pixel[i].x(), (unsigned)top_locs_pixel[i].y(), lon, lat);
-    top_locs.push_back(vgl_point_2d<double>(lon, lat));
+    top_locs.emplace_back(lon, lat);
   }
   return true;
 }
@@ -190,10 +190,10 @@ bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile,
     double lon, lat;
     tile.img_to_global(poly_[sh_idx][i].x(), poly_[sh_idx][i].y(), lon, lat);
     // expand one pixel location to its 4 corners ( start from top right, arrange counterclock wise
-      points.push_back(vgl_point_2d<double>(lon + deg_per_half_pixel_i, lat + deg_per_half_pixel_j));
-      points.push_back(vgl_point_2d<double>(lon - deg_per_half_pixel_i, lat + deg_per_half_pixel_j));
-      points.push_back(vgl_point_2d<double>(lon - deg_per_half_pixel_i, lat - deg_per_half_pixel_j));
-      points.push_back(vgl_point_2d<double>(lon + deg_per_half_pixel_i, lat - deg_per_half_pixel_j));
+      points.emplace_back(lon + deg_per_half_pixel_i, lat + deg_per_half_pixel_j);
+      points.emplace_back(lon - deg_per_half_pixel_i, lat + deg_per_half_pixel_j);
+      points.emplace_back(lon - deg_per_half_pixel_i, lat - deg_per_half_pixel_j);
+      points.emplace_back(lon + deg_per_half_pixel_i, lat - deg_per_half_pixel_j);
   }
 
   vgl_convex_hull_2d<double> ch(points);
@@ -517,7 +517,7 @@ bool volm_candidate_list::generate_pin_point_circle(vgl_point_2d<double> const& 
     double dy = radius * std::sin(theta);
     double lon, lat, gz;
     lvcs->local_to_global(dx, dy, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-    circle.push_back(vgl_point_2d<double>(lon, lat));
+    circle.emplace_back(lon, lat);
     theta += d_theta;
   }
   return true;
@@ -536,7 +536,7 @@ bool volm_candidate_list::generate_heading_direction(vgl_point_2d<double> const&
   double e_lon, e_lat, e_gz;
   lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, e_lon, e_lat, e_gz);
   heading_line.push_back(center);
-  heading_line.push_back(vgl_point_2d<double>(e_lon, e_lat));
+  heading_line.emplace_back(e_lon, e_lat);
 
   // generate camera viewing volume
   float left_angle  = heading_angle - right_fov;
@@ -550,11 +550,11 @@ bool volm_candidate_list::generate_heading_direction(vgl_point_2d<double> const&
   lx = length * std::cos(left_angle);
   ly = length * std::sin(left_angle);
   lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-  viewing.push_back(vgl_point_2d<double>(lon, lat));
+  viewing.emplace_back(lon, lat);
   lx = length * std::cos(right_angle);
   ly = length * std::sin(right_angle);
   lvcs->local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-  viewing.push_back(vgl_point_2d<double>(lon, lat));
+  viewing.emplace_back(lon, lat);
   viewing.push_back(center);
   return true;
 }

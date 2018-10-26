@@ -15,10 +15,10 @@ bool vil_init_byte_image_process_cons(bprb_func_process& pro)
 {
   // input
   std::vector<std::string> input_types_;
-  input_types_.push_back("unsigned");  // ni
-  input_types_.push_back("unsigned");  // nj
-  input_types_.push_back("unsigned");  // np
-  input_types_.push_back("unsigned");  // initial value
+  input_types_.emplace_back("unsigned");  // ni
+  input_types_.emplace_back("unsigned");  // nj
+  input_types_.emplace_back("unsigned");  // np
+  input_types_.emplace_back("unsigned");  // initial value
 
   if (!pro.set_input_types(input_types_))
     return false;
@@ -31,7 +31,7 @@ bool vil_init_byte_image_process_cons(bprb_func_process& pro)
 
   // output
   std::vector<std::string> output_types_;
-  output_types_.push_back("vil_image_view_base_sptr");
+  output_types_.emplace_back("vil_image_view_base_sptr");
   return pro.set_output_types(output_types_);
 }
 

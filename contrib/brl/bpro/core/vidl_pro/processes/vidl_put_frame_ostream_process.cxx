@@ -15,8 +15,8 @@ bool vidl_put_frame_ostream_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vidl_ostream_sptr"); // the output stream
-  input_types.push_back("vil_image_view_base_sptr");// the frame image view
+  input_types.emplace_back("vidl_ostream_sptr"); // the output stream
+  input_types.emplace_back("vil_image_view_base_sptr");// the frame image view
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

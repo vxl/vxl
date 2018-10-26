@@ -7,10 +7,10 @@ static void test_volm_locations()
 {
   std::vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
   boxm2_volm_loc_hypotheses h(tiles[0]);
-  h.locs_.push_back(vgl_point_3d<float>(1,1,1));
-  h.locs_.push_back(vgl_point_3d<float>(1,2,3));
-  h.pixels_.push_back(std::pair<unsigned, unsigned>(2,2));
-  h.pixels_.push_back(std::pair<unsigned, unsigned>(20,32));
+  h.locs_.emplace_back(1,1,1);
+  h.locs_.emplace_back(1,2,3);
+  h.pixels_.emplace_back(2,2);
+  h.pixels_.emplace_back(20,32);
 
   h.write_hypotheses("test.bin");
   boxm2_volm_loc_hypotheses h2("test.bin");

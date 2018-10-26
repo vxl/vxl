@@ -444,7 +444,7 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
           }
         }
         if (!already_added) {
-          ids.push_back(std::pair<unsigned, unsigned>(ids2[i], ids2[j]));
+          ids.emplace_back(ids2[i], ids2[j]);
           std::cout << "\t\t !!!!!! PUSHED! time dif: " << time_dif << " mins within threshold [1, 5] mins!\n";
         }
       }
@@ -970,7 +970,7 @@ volm_satellite_resources::calculate_convex_hull(vil_image_view<bool> const& mask
   for (unsigned bj=0; bj<nj; ++bj) {
     for (unsigned bi=0; bi<ni; ++bi) {
       if (mask(bi,bj) && !mask_eroded(bi,bj)) {
-        boundary_pts.push_back(vgl_point_2d<double>((double)bi + off_x,(double)bj + off_y));
+        boundary_pts.emplace_back((double)bi + off_x,(double)bj + off_y);
       }
     }
   }
@@ -1194,7 +1194,7 @@ volm_satellite_resources::highly_intersecting_resources(std::vector<unsigned>& o
       // is this a larger area than what we've alread seen
       if(area > max_area) {
         max_area = area;
-        areas.push_back(std::make_pair(inds,area));
+        areas.emplace_back(inds,area);
       }
     }
   }

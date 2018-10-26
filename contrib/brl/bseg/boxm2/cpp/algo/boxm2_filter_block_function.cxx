@@ -141,21 +141,21 @@ boxm2_filter_block_function::neighbors( vgl_point_3d<int>& center, boxm2_array_3
 
   //neighbors along X
   if ( center.x() + 1 < (int)trees.get_row1_count() )
-    toReturn.push_back( vgl_point_3d<int>(center.x()+1, center.y(), center.z()) );
+    toReturn.emplace_back(center.x()+1, center.y(), center.z() );
   if ( center.x() - 1 >= 0 )
-    toReturn.push_back( vgl_point_3d<int>(center.x()-1, center.y(), center.z()) );
+    toReturn.emplace_back(center.x()-1, center.y(), center.z() );
 
   //neighbors along Y
   if ( center.y() + 1 < (int)trees.get_row2_count() )
-    toReturn.push_back( vgl_point_3d<int>(center.x(), center.y()+1, center.z()) );
+    toReturn.emplace_back(center.x(), center.y()+1, center.z() );
   if ( center.y() - 1 >= 0 )
-    toReturn.push_back( vgl_point_3d<int>(center.x(), center.y()-1, center.z()) );
+    toReturn.emplace_back(center.x(), center.y()-1, center.z() );
 
   //neighbors along Z
   if ( center.z() + 1 < (int)trees.get_row3_count() )
-    toReturn.push_back( vgl_point_3d<int>(center.x(), center.y(), center.z()+1) );
+    toReturn.emplace_back(center.x(), center.y(), center.z()+1 );
   if ( center.z() - 1 >= 0 )
-    toReturn.push_back( vgl_point_3d<int>(center.x(), center.y(), center.z()-1) );
+    toReturn.emplace_back(center.x(), center.y(), center.z()-1 );
 
   return toReturn;
 }
@@ -169,21 +169,21 @@ boxm2_filter_block_function::neighbor_points( vgl_point_3d<double>& cellCenter, 
 
   //neighbors along X
   if ( cellCenter.x() + side_len < trees.get_row1_count() )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x()+side_len, cellCenter.y(), cellCenter.z()) );
+    toReturn.emplace_back(cellCenter.x()+side_len, cellCenter.y(), cellCenter.z() );
   if ( cellCenter.x() - side_len >= 0 )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x()-side_len, cellCenter.y(), cellCenter.z()) );
+    toReturn.emplace_back(cellCenter.x()-side_len, cellCenter.y(), cellCenter.z() );
 
   //neighbors along Y
   if ( cellCenter.y() + side_len < trees.get_row2_count() )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y()+side_len, cellCenter.z()) );
+    toReturn.emplace_back(cellCenter.x(), cellCenter.y()+side_len, cellCenter.z() );
   if ( cellCenter.y() - side_len >= 0 )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y()-side_len, cellCenter.z()) );
+    toReturn.emplace_back(cellCenter.x(), cellCenter.y()-side_len, cellCenter.z() );
 
   //neighbors along Z
   if ( cellCenter.z() + side_len < trees.get_row3_count() )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y(), cellCenter.z()+side_len) );
+    toReturn.emplace_back(cellCenter.x(), cellCenter.y(), cellCenter.z()+side_len );
   if ( cellCenter.z() - side_len >= 0 )
-    toReturn.push_back( vgl_point_3d<double>(cellCenter.x(), cellCenter.y(), cellCenter.z()-side_len) );
+    toReturn.emplace_back(cellCenter.x(), cellCenter.y(), cellCenter.z()-side_len );
 
   return toReturn;
 }

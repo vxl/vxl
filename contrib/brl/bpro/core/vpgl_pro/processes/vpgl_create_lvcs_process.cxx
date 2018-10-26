@@ -19,16 +19,16 @@ bool vpgl_create_lvcs_process_cons(bprb_func_process& pro)
   // 3: (string)  lvcs csname (wgs84, nad27n, wgs72, utm)
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("double");
-  input_types.push_back("double");
-  input_types.push_back("double");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   // process has no outputs
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_lvcs_sptr");
+  output_types.emplace_back("vpgl_lvcs_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 
