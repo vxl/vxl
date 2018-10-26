@@ -27,7 +27,7 @@ class VIDL_EXPORT vidl_frame
 {
   public:
     //: Destructor
-    virtual ~vidl_frame() {}
+    virtual ~vidl_frame() = default;
 
     //: Make the buffer invalid (data()==0 and size()==0)
     virtual void invalidate() { ni_=0; nj_=0; format_=VIDL_PIXEL_FORMAT_UNKNOWN; }
@@ -95,7 +95,7 @@ class VIDL_EXPORT vidl_shared_frame : public vidl_frame
       vidl_frame(ni,nj,fmt), buffer_(buffer) {}
 
     //: Destructor
-    ~vidl_shared_frame() override {}
+    ~vidl_shared_frame() override = default;
 
     //: Make the buffer invalid (data()==0 and size()==0)
     void invalidate() override { buffer_ = nullptr; vidl_frame::invalidate(); }
@@ -136,7 +136,7 @@ class VIDL_EXPORT vidl_memory_chunk_frame : public vidl_frame
     inline const vil_memory_chunk_sptr& memory_chunk() const { return memory_; }
 
     //: Destructor
-    ~vidl_memory_chunk_frame() override {}
+    ~vidl_memory_chunk_frame() override = default;
 
     //: Make the buffer invalid (data()==0 and size()==0)
     void invalidate() override { memory_ = nullptr;  vidl_frame::invalidate(); }

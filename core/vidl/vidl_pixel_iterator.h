@@ -31,7 +31,7 @@ class vidl_pixel_iterator
 {
   public:
     //: Destructor
-    virtual ~vidl_pixel_iterator(){}
+    virtual ~vidl_pixel_iterator()= default;
     //: Return the pixel format
     virtual vidl_pixel_format pixel_format() const = 0;
     //: Pre-increment: step to the next pixel

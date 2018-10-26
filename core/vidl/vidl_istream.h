@@ -21,7 +21,7 @@ class vidl_istream
   //: Constructor
   vidl_istream() : ref_count_(0) {}
   //: Destructor
-  virtual ~vidl_istream() {}
+  virtual ~vidl_istream() = default;
 
   //: Return true if the stream is open for reading
   virtual bool is_open() const = 0;
