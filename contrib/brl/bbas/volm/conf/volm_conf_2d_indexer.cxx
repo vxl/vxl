@@ -156,7 +156,7 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
           double dist = std::sqrt(lx*lx+ly*ly);
           double phi  = std::atan2(ly, lx);
           double height = vit->z();
-          values.push_back(volm_conf_object(phi, dist, height, land_id));
+          values.emplace_back(phi, dist, height, land_id);
 #if 0
           bkml_write::write_location(ofs, vgl_point_2d<double>(vgl_point_2d<double>(vit->x(), vit->y())), "loc", "", 0.3);
 #endif

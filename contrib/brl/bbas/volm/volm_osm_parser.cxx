@@ -489,7 +489,7 @@ void volm_osm_parser::parse_polygons(std::vector<vgl_polygon<double> >& polys,
     if (way_missing)
       continue;
     for (unsigned w_idx = 0; w_idx < (unsigned)way_ids.size(); w_idx++) {
-      ways.push_back(std::pair<unsigned long long, std::vector<unsigned long long> >(way_ids[w_idx], parser->ways_[way_ids[w_idx]])) ;
+      ways.emplace_back(way_ids[w_idx], parser->ways_[way_ids[w_idx]]) ;
     }
     /*for (unsigned w_idx = 0; w_idx < (unsigned)way_ids.size(); w_idx++)
       ways.insert(std::pair<unsigned long long, std::vector<unsigned long long> >(way_ids[w_idx], parser->ways_[way_ids[w_idx]]));*/

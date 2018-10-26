@@ -17,12 +17,12 @@ bool vil_binary_image_op_process_cons(bprb_func_process& pro)
 {
   //this process takes three inputs and has one output
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vcl_string");
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // label image
+  output_types.emplace_back("vil_image_view_base_sptr");  // label image
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

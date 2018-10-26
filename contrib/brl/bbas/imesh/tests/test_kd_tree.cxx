@@ -43,10 +43,10 @@ void test_closest_point(const imesh_mesh& mesh, const std::vector<vgl_point_3d<d
 static void test_kd_tree()
 {
   std::vector<vgl_point_3d<double> > pts;
-  pts.push_back(vgl_point_3d<double>(0,0,0));
-  pts.push_back(vgl_point_3d<double>(1.5,0,0.5));
-  pts.push_back(vgl_point_3d<double>(0.1,.2,0));
-  pts.push_back(vgl_point_3d<double>(3,-3,3));
+  pts.emplace_back(0,0,0);
+  pts.emplace_back(1.5,0,0.5);
+  pts.emplace_back(0.1,.2,0);
+  pts.emplace_back(3,-3,3);
   imesh_mesh cube;
   make_cube(cube);
   imesh_transform_inplace(cube, vgl_rotation_3d<double>(0,.1,vnl_math::pi_over_4));

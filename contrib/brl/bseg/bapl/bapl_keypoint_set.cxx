@@ -155,8 +155,8 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, std::vecto
     if (outliers[i])
       continue;
     refined_matches.push_back(matches_[i]);
-    lpoints.push_back(vgl_homg_point_2d<double>(lpts[i]));
-    rpoints.push_back(vgl_homg_point_2d<double>(rpts[i]));
+    lpoints.emplace_back(lpts[i]);
+    rpoints.emplace_back(rpts[i]);
     lpts_refined.push_back(lpts[i]);
     rpts_refined.push_back(rpts[i]);
   }

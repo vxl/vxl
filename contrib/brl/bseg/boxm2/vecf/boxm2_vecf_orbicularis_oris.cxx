@@ -165,7 +165,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::tilt() const
   for (double t = 0.0; t <= mt; t += this->cross_section_interval_) {
     vgl_point_3d<double> p = def_axis(t);
     vgl_plane_3d<double> norm_plane = def_axis.normal_plane(t);
-    cs_ptsets.push_back(vgl_pointset_3d<double>());
+    cs_ptsets.emplace_back();
     cs_planes.push_back(norm_plane);
     tset.push_back(t);
     pset.push_back(p);
@@ -292,7 +292,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::scale() const
   for (double t = 0.0; t <= mt; t += this->cross_section_interval_) {
     vgl_point_3d<double> p = deformed_axis(t);
     vgl_plane_3d<double> norm_plane = deformed_axis.normal_plane(t);
-    cs_ptsets.push_back(vgl_pointset_3d<double>());
+    cs_ptsets.emplace_back();
     cs_planes.push_back(norm_plane);
     tset.push_back(t);
     pset.push_back(p);
@@ -428,7 +428,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::deform() const
   for (double t = 0.0; t <= mt; t += this->cross_section_interval_) {
     vgl_point_3d<double> p = deformed_axis(t);
     vgl_plane_3d<double> norm_plane = deformed_axis.normal_plane(t);
-    cs_ptsets.push_back(vgl_pointset_3d<double>());
+    cs_ptsets.emplace_back();
     cross_planes.push_back(norm_plane);
     tset.push_back(t);
     pset.push_back(p);
@@ -592,7 +592,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::circular_deform() const
   for (double t = 0.0; t <= mt; t += this->cross_section_interval_) {
     vgl_point_3d<double> p = deformed_axis(t);
     vgl_plane_3d<double> norm_plane = deformed_axis.normal_plane(t);
-    cs_ptsets.push_back(vgl_pointset_3d<double>());
+    cs_ptsets.emplace_back();
     cs_planes.push_back(norm_plane);
     tset.push_back(t);
     pset.push_back(p);

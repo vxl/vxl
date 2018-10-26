@@ -18,9 +18,9 @@ static void test_edges()
   boxm_scene<boct_tree<short,data_type> > scene(lvcs, origin, block_dim, world_dim);
   // create the auxiliary scenes for each image
   std::vector<std::string> image_names;
-  image_names.push_back("image1");
-  image_names.push_back("image2");
-  image_names.push_back("image3");
+  image_names.emplace_back("image1");
+  image_names.emplace_back("image2");
+  image_names.emplace_back("image3");
   //boxm_edge_tangent_updater<short, float, aux_type> u(scene,imgs);
 }
 

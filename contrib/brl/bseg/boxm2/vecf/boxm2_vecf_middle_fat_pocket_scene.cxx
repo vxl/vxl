@@ -77,10 +77,10 @@ boxm2_vecf_middle_fat_pocket_scene::boxm2_vecf_middle_fat_pocket_scene(std::stri
   if(initialize){
     this->build_middle_fat_pocket();
     std::vector<std::string> prefixes;
-    prefixes.push_back("alpha");
-    prefixes.push_back("boxm2_mog3_grey");
-    prefixes.push_back("boxm2_num_obs");
-    prefixes.push_back("boxm2_pixel_middle_fat_pocket");
+    prefixes.emplace_back("alpha");
+    prefixes.emplace_back("boxm2_mog3_grey");
+    prefixes.emplace_back("boxm2_num_obs");
+    prefixes.emplace_back("boxm2_pixel_middle_fat_pocket");
     double nrad = params_.neighbor_radius();
     boxm2_surface_distance_refine<boxm2_vecf_middle_fat_pocket>(middle_fat_pocket_geo_, base_model_, prefixes, nrad);
     boxm2_surface_distance_refine<boxm2_vecf_middle_fat_pocket>(middle_fat_pocket_geo_, base_model_, prefixes, nrad);

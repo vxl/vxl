@@ -211,7 +211,7 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
       continue;
     dist_values.insert(dist);
     phi_values.push_back(phi);
-    pixel_values.push_back(std::pair<double, double>(x,y));
+    pixel_values.emplace_back(x,y);
   }
   if (phi_values.empty())  // no vertices projects to ground
     return;
@@ -314,7 +314,7 @@ bool volm_conf_query::visualize_ref_objs(std::string const& in_file, std::string
     h_line_pixels.clear();
     for (unsigned x = 0; x < ni_; x++) {
       double y = (std::floor)(line_coord(h_line, x));
-      h_line_pixels.push_back(vgl_point_2d<double>((double)x, y));
+      h_line_pixels.emplace_back((double)x, y);
     }
     this->plot_line_into_image(img, h_line_pixels, 0, 0, 0, 6);
     // plot the non-ground depth map scenes first

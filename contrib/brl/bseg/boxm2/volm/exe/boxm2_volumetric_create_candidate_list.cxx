@@ -92,7 +92,7 @@ bool get_top_cameras(unsigned const& tile_idx, std::string const& cam_bin,
     double tv_rad = tfov / vnl_math::deg_per_rad;
     double ttr = std::tan(tv_rad);
     double rfov = std::atan( ni * ttr / nj) * vnl_math::deg_per_rad;
-    top_cameras.push_back(cam_angles(roll, tfov, head, tilt));
+    top_cameras.emplace_back(roll, tfov, head, tilt);
     right_fov.push_back(rfov);
   }
 
@@ -568,7 +568,7 @@ int main(int argc,  char** argv)
       }
     } else {
       for (unsigned idx = 0; idx < top_locs.size(); idx++) {
-        top_cameras.push_back(cam_angles(2.64, 15, 334.0, 91.34));
+        top_cameras.emplace_back(2.64, 15, 334.0, 91.34);
         right_fov.push_back(20.0);
       }
     }

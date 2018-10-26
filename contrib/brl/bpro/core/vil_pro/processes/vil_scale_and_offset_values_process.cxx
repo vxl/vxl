@@ -16,9 +16,9 @@ bool vil_scale_and_offset_values_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  //: image
-  input_types.push_back("float");  // scale to apply to image
-  input_types.push_back("float");  // offset to apply to image
+  input_types.emplace_back("vil_image_view_base_sptr");  //: image
+  input_types.emplace_back("float");  // scale to apply to image
+  input_types.emplace_back("float");  // offset to apply to image
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

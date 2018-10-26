@@ -252,7 +252,7 @@ std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_affine_camera<doubl
                              std::abs(iter->first.j_ - closest_j) +
                              std::abs(iter->first.k_ - closest_k);
 
-    manhattan_distances.push_back( boxm2_dist_id_pair(manhattan_distance, iter->first) );
+    manhattan_distances.emplace_back(manhattan_distance, iter->first );
   }
 
     //sort distances
@@ -322,7 +322,7 @@ std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks_opt(vpgl_perspective_cam
         vgl_point_3d<double> blk_center = blk_o + length/2.0;
 
         double dist = vgl_distance( blk_center, cam_center);
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+        distances.emplace_back(dist, iter->first );
 
     }
 
@@ -364,9 +364,9 @@ boxm2_scene::get_vis_order_from_pt(vgl_point_3d<double> const& pt,
       double dist = vgl_distance( blk_center, pt);
 
       if (distance > 0 && dist < distance)
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+        distances.emplace_back(dist, iter->first );
       else
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+        distances.emplace_back(dist, iter->first );
 
   }
 
@@ -429,9 +429,9 @@ boxm2_scene::get_vis_order_from_ray(vgl_point_3d<double> const& origin, vgl_vect
     if (cos > 0) { // an angle in (-pi/2,pi/2)
       double dist = vgl_distance( blk_center, origin);
       if (distance > 0 && dist < distance)
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+        distances.emplace_back(dist, iter->first );
       else
-        distances.push_back( boxm2_dist_id_pair(dist, iter->first) );
+        distances.emplace_back(dist, iter->first );
     }
   }
 

@@ -142,7 +142,7 @@ bool
 brdb_tuple::add_value(const brdb_value& value)
 {
   // add it into the tuple
-  values_.push_back(value.clone());
+  values_.emplace_back(value.clone());
   return true;
 }
 
@@ -153,7 +153,7 @@ brdb_tuple::add_value(brdb_value_sptr const& value)
   if (!value)
     return false;
   // add it into the tuple
-  values_.push_back(value->clone());
+  values_.emplace_back(value->clone());
   return true;
 }
 

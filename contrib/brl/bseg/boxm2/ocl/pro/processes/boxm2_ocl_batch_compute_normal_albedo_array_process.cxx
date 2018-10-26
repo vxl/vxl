@@ -223,10 +223,10 @@ bool boxm2_ocl_batch_compute_normal_albedo_array_process(bprb_func_process& pro)
   num_images_ocl->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   std::vector<std::string> type_names;
-  type_names.push_back("aux0");
-  type_names.push_back("aux1");
-  type_names.push_back("aux2");
-  type_names.push_back("aux3");
+  type_names.emplace_back("aux0");
+  type_names.emplace_back("aux1");
+  type_names.emplace_back("aux2");
+  type_names.emplace_back("aux3");
 
   boxm2_cache_sptr cpu_cache = opencl_cache->get_cpu_cache();
 

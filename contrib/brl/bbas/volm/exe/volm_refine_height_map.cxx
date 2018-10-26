@@ -60,7 +60,7 @@ static bool find_nearest_building(unsigned const& i, unsigned const& j,
     std::vector<std::pair<int, int> > b_pixels;
     unsigned num_pixels = (unsigned)mit->second.second.size();
     for (unsigned p_idx = 0; p_idx < num_pixels; p_idx++)
-      b_pixels.push_back(std::pair<int,int>(mit->second.first[p_idx], mit->second.second[p_idx]));
+      b_pixels.emplace_back(mit->second.first[p_idx], mit->second.second[p_idx]);
 
     for (int r_idx = 1; r_idx < radius; r_idx++)
     {
@@ -592,7 +592,7 @@ static bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
       }
       // add non_building pixels
       if (!is_inside_building)
-        non_buildings.push_back(std::pair<unsigned, unsigned>(i,j));
+        non_buildings.emplace_back(i,j);
     }
   }
   return true;
@@ -674,7 +674,7 @@ static bool refine_building_by_median_divided(vil_image_view<float> const& h_img
     std::vector<std::pair<unsigned, unsigned> > super_pixel;
     unsigned num_pts = (unsigned)mit->second.first.size();
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
-      super_pixel.push_back(std::pair<unsigned, unsigned>(mit->second.first[p_idx], mit->second.second[p_idx]));
+      super_pixel.emplace_back(mit->second.first[p_idx], mit->second.second[p_idx]);
     // form the bbox of super pixels
     vgl_box_2d<unsigned> bbox;
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)

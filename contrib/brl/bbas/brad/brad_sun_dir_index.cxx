@@ -113,7 +113,7 @@ std::vector<vnl_double_3> brad_sun_dir_index::major_path()
     double el = mean_el + dl*major_v[1];
     double x, y, z;
     hist_.convert_to_cartesian(az, el, x, y, z);
-    ret.push_back(vnl_double_3(x, y, z));
+    ret.emplace_back(x, y, z);
   }
   return ret;
 }

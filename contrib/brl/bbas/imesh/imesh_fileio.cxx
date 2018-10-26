@@ -166,7 +166,7 @@ bool imesh_read_uv2(std::istream& is, imesh_mesh& mesh)
    for (unsigned int i=0; i<num_verts; ++i) {
       double u,v;
       is >> u >> v;
-      uv.push_back(vgl_point_2d<double>(u,v));
+      uv.emplace_back(u,v);
    }
    mesh.set_tex_coords(uv);
    return true;
@@ -206,7 +206,7 @@ bool imesh_read_obj(std::istream& is, imesh_mesh& mesh)
             is.ignore();
             double x,y,z;
             is >> x >> y >> z;
-            normals.push_back(vgl_vector_3d<double>(x,y,z));
+            normals.emplace_back(x,y,z);
             break;
           }
           case 't': // read a texture coord
@@ -215,7 +215,7 @@ bool imesh_read_obj(std::istream& is, imesh_mesh& mesh)
             double x,y;
             is >> x >> y;
             is.ignore(256,'\n');
-            tex.push_back(vgl_point_2d<double>(x,y));
+            tex.emplace_back(x,y);
             break;
           }
           default: // read a position

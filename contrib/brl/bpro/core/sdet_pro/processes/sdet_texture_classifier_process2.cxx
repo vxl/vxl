@@ -18,7 +18,7 @@ void get_block(int i, int j, int bb, std::vector<std::pair<int, int> >& pixels)
 {
   for (int ii = i-bb; ii < i+bb; ii++)
     for (int jj = j-bb; jj < j+bb; jj++) {
-      pixels.push_back(std::pair<int, int>(ii, jj));
+      pixels.emplace_back(ii, jj);
     }
 }
 
@@ -27,21 +27,21 @@ bool sdet_texture_classifier_process2_cons(bprb_func_process& pro)
 {
   // process takes 3 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton dictionary
   //input_types.push_back("vil_image_view_base_sptr"); //input image
-  input_types.push_back("unsigned");   //texture block size
-  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
-  input_types.push_back("vcl_string");  // a category name whose probability image will be created
+  input_types.emplace_back("unsigned");   //texture block size
+  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.emplace_back("vcl_string");  // a category name whose probability image will be created
   if (!pro.set_input_types(input_types))
     return false;
 
   // process has 1 output:
   // output[0]: output texture color image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // out prob image
-  output_types.push_back("vil_image_view_base_sptr");  // colored output image
-  output_types.push_back("vil_image_view_base_sptr");  // output id image  (ids are passed in the input text file if available)
-  output_types.push_back("vil_image_view_base_sptr");  // output porb image for given category
+  output_types.emplace_back("vil_image_view_base_sptr");  // out prob image
+  output_types.emplace_back("vil_image_view_base_sptr");  // colored output image
+  output_types.emplace_back("vil_image_view_base_sptr");  // output id image  (ids are passed in the input text file if available)
+  output_types.emplace_back("vil_image_view_base_sptr");  // output porb image for given category
   return pro.set_output_types(output_types);
 }
 

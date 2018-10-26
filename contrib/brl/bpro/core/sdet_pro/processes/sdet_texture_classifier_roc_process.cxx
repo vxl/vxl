@@ -20,25 +20,25 @@
 bool sdet_texture_classifier_roc_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary, category names and colors are in the dictionary
-  input_types.push_back("vil_image_view_base_sptr"); // classification output - prob values for each outputted category
-  input_types.push_back("vil_image_view_base_sptr"); // classification output as a color image - shows which category had the max for each pixel
-  input_types.push_back("vil_image_view_base_sptr"); // input original image, to mark some pixels red
-  input_types.push_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
-  input_types.push_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
-  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton dictionary, category names and colors are in the dictionary
+  input_types.emplace_back("vil_image_view_base_sptr"); // classification output - prob values for each outputted category
+  input_types.emplace_back("vil_image_view_base_sptr"); // classification output as a color image - shows which category had the max for each pixel
+  input_types.emplace_back("vil_image_view_base_sptr"); // input original image, to mark some pixels red
+  input_types.emplace_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
+  input_types.emplace_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
+  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_float_sptr");  // threshold
-  output_types.push_back("bbas_1d_array_float_sptr");  // tp
-  output_types.push_back("bbas_1d_array_float_sptr");  // tn
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
-  output_types.push_back("bbas_1d_array_float_sptr");  // fn
-  output_types.push_back("bbas_1d_array_float_sptr");  // tpr
-  output_types.push_back("bbas_1d_array_float_sptr");  // fpr
-  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // threshold
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tpr
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fpr
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
   return pro.set_output_types(output_types);
 }
 
@@ -127,7 +127,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
-        pos_pixels.push_back(std::pair<int, int>(i,j));
+        pos_pixels.emplace_back(i,j);
       }
     }
   }
@@ -138,7 +138,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
-        neg_pixels.push_back(std::pair<int, int>(i,j));
+        neg_pixels.emplace_back(i,j);
       }
     }
   }
@@ -296,7 +296,7 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
       for (int i = psi.startx(); i <= psi.endx(); ++i) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
-        pos_pixels.push_back(std::pair<int, int>(i, j));
+        pos_pixels.emplace_back(i, j);
       }
     }
   }
@@ -309,7 +309,7 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
           is_neg = false;
       }
       if (is_neg)
-        neg_pixels.push_back(std::pair<int, int>(i,j));
+        neg_pixels.emplace_back(i,j);
     }
   }
   std::cout << '\n';
@@ -445,21 +445,21 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
 bool sdet_texture_classifier_roc_process3_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texton dictionary, category names and colors are in the dictionary
-  input_types.push_back("vil_image_view_base_sptr"); // classification output - prob values for each outputted category
-  input_types.push_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
-  input_types.push_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton dictionary, category names and colors are in the dictionary
+  input_types.emplace_back("vil_image_view_base_sptr"); // classification output - prob values for each outputted category
+  input_types.emplace_back("vcl_string"); // prefix for ground truth binary vsol spatial object files, <prefix>_<category_name>.bin
+  input_types.emplace_back("vcl_string"); // name of the category to use as positive (the rest of the available categories will be used as negatives)
   if (!pro.set_input_types(input_types))
     return false;
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_float_sptr");  // threshold
-  output_types.push_back("bbas_1d_array_float_sptr");  // tp
-  output_types.push_back("bbas_1d_array_float_sptr");  // tn
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
-  output_types.push_back("bbas_1d_array_float_sptr");  // fn
-  output_types.push_back("bbas_1d_array_float_sptr");  // tpr
-  output_types.push_back("bbas_1d_array_float_sptr");  // fpr
-  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // threshold
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tpr
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fpr
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
   return pro.set_output_types(output_types);
 }
 
@@ -509,7 +509,7 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
-        pos_pixels.push_back(std::pair<int, int>(i,j));
+        pos_pixels.emplace_back(i,j);
       }
     }
   }
@@ -520,7 +520,7 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
         if (i < 0 || j < 0 || i >= ni || j >= nj)
           continue;
-        neg_pixels.push_back(std::pair<int, int>(i,j));
+        neg_pixels.emplace_back(i,j);
       }
     }
   }

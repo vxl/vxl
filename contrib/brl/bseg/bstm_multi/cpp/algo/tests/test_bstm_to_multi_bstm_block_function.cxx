@@ -93,7 +93,7 @@ bstm_scene_from_point_func(
         int st_z = p.z() * 8;
         for (int tt_idx = 0; tt_idx < num_time_intervals; ++tt_idx) {
           // initialize time tree
-          time_trees.push_back(time_tree_b());
+          time_trees.emplace_back();
           bstm_time_tree tt(time_trees.back());
           tt.set_data_ptr(alpha.size());
 
@@ -134,7 +134,7 @@ bstm_scene_from_point_func(
       } else {
         // add empty time trees and data elements to this non-leaf cell
         for (int tt_idx = 0; tt_idx < num_time_intervals; ++tt_idx) {
-          time_trees.push_back(time_tree_b((unsigned char)0));
+          time_trees.emplace_back((unsigned char)0);
           bstm_time_tree(time_trees.back()).set_data_ptr(alpha.size());
           alpha.push_back(alpha_t(0));
           appearance.push_back(appearance_t((unsigned char)0));
@@ -1062,7 +1062,7 @@ void test_fly_problem() {
         }
         // create 32 time trees for cell
         for (int tt_idx = 0; tt_idx < 32; ++tt_idx) {
-          bstm_time_trees.push_back(time_tree_b((unsigned char)0));
+          bstm_time_trees.emplace_back((unsigned char)0);
           bstm_time_tree tt(bstm_time_trees.back());
           tt.set_data_ptr(alpha.size());
 
@@ -1084,8 +1084,8 @@ void test_fly_problem() {
             bool is_refined_frame =
                 is_refined_tt && (frame == 0 || frame == 16);
             alpha.push_back(is_refined_frame ? 1.0 : 0.0);
-            appearance.push_back(bstm_data_traits<BSTM_MOG3_GREY>::datatype(
-                (unsigned char)(is_refined_frame ? 128 : 0)));
+            appearance.emplace_back(
+                (unsigned char)(is_refined_frame ? 128 : 0));
           }
         }
       }
@@ -1093,11 +1093,10 @@ void test_fly_problem() {
       // if not along diagonal, make this tree empty and add 32 time trees
       // & data elements.
       for (int t = 0; t < 32; ++t) {
-        bstm_time_trees.push_back(time_tree_b((unsigned char)0));
+        bstm_time_trees.emplace_back((unsigned char)0);
         bstm_time_tree(bstm_time_trees.back()).set_data_ptr(alpha.size());
         alpha.push_back(0.0);
-        appearance.push_back(
-            bstm_data_traits<BSTM_MOG3_GREY>::datatype((unsigned char)0));
+        appearance.emplace_back((unsigned char)0);
       }
     }
   }

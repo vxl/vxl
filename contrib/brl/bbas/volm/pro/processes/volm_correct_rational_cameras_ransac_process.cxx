@@ -60,7 +60,7 @@ vpgl_rational_camera<double>* load_cam_from_nitf(std::string& nitf_image_path) {
 bool volm_correct_rational_cameras_ransac_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
+  input_types.emplace_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
                                     // n  # number of correspondences for each frame,
                                     // full_path_cam_name_1 i_11 j_11 i_12 j_12 ... i_1n j_1n
@@ -68,8 +68,8 @@ bool volm_correct_rational_cameras_ransac_process_cons(bprb_func_process& pro)
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string");  // output folder to write the corrected cams
-  input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
+  input_types.emplace_back("vcl_string");  // output folder to write the corrected cams
+  input_types.emplace_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -322,8 +322,8 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
 bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("volm_satellite_resources_sptr");  // fetch the full path of the satellite image from the resource file
-  input_types.push_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
+  input_types.emplace_back("volm_satellite_resources_sptr");  // fetch the full path of the satellite image from the resource file
+  input_types.emplace_back("vcl_string");  // a file that lists the name to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
                                     // n  # number of correspondences for each frame,
                                     // full_path_cam_name_1 i_11 j_11 i_12 j_12 ... i_1n j_1n
@@ -331,9 +331,9 @@ bool volm_correct_rational_cameras_ransac_process2_cons(bprb_func_process& pro)
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string");  // output folder to write the corrected cams
-  input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
-  input_types.push_back("int");  // option to enforce having 2 existing cameras
+  input_types.emplace_back("vcl_string");  // output folder to write the corrected cams
+  input_types.emplace_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
+  input_types.emplace_back("int");  // option to enforce having 2 existing cameras
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

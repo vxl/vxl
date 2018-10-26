@@ -23,7 +23,7 @@ bool vil_truncate_image_process_cons(bprb_func_process& pro)
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // returns a truncated float image!!
+  output_types.emplace_back("vil_image_view_base_sptr");  // returns a truncated float image!!
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

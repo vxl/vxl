@@ -99,11 +99,11 @@ int main(int argc, char** argv)
   lon_min = bbox.min_x();  lat_min = bbox.min_y();
   lon_max = bbox.max_x();  lat_max = bbox.max_y();
   std::vector<vgl_point_2d<double> > outlines;
-  outlines.push_back(vgl_point_2d<double>(lon_min, lat_min));
-  outlines.push_back(vgl_point_2d<double>(lon_max, lat_min));
-  outlines.push_back(vgl_point_2d<double>(lon_max, lat_max));
-  outlines.push_back(vgl_point_2d<double>(lon_min, lat_max));
-  outlines.push_back(vgl_point_2d<double>(lon_min, lat_min));
+  outlines.emplace_back(lon_min, lat_min);
+  outlines.emplace_back(lon_max, lat_min);
+  outlines.emplace_back(lon_max, lat_max);
+  outlines.emplace_back(lon_min, lat_max);
+  outlines.emplace_back(lon_min, lat_min);
   bkml_write::write_path(ofs, outlines, "outline", "outline", 1.0, 3.0, 1.0, 255, 255, 255);
 
   std::vector<vgl_point_2d<double> > osm_pts;

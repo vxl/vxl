@@ -47,7 +47,7 @@ bool bil_read_CLIF07_data_process(bprb_func_process& pro)
     std::sprintf(filename, "%s/00000%d-%06d.raw",in_dir.c_str(),camera_number,n);
     //std::stringstream ss;
     // ss << in_dir << "/00000"<<camera_number<<'-'<<std::setfill( '0' ) << std::setw(6) << n << ".raw";
-    imgNames.push_back( std::string(filename));
+    imgNames.emplace_back(filename);
   }
 
   vil_image_view<unsigned char> img( numCols, numRows );

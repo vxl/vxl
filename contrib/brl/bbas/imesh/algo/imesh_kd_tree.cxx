@@ -370,25 +370,25 @@ void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
   for (unsigned int i=0; i<to_examine.size(); ++i) {
     imesh_kd_tree_node* current = to_examine[i];
     if (current->is_leaf()) {
-      leaf.push_back(imesh_kd_tree_queue_entry(
+      leaf.emplace_back(
                      imesh_min_sq_dist(query,current->inner_box_),
-                     current) );
+                     current );
       continue;
     }
 
     if (imesh_min_sq_dist(query,current->left_->outer_box_) <=0)
       to_examine.push_back(current->left_.get());
     else
-      internal_node.push_back(imesh_kd_tree_queue_entry(
+      internal_node.emplace_back(
                               imesh_min_sq_dist(query,current->left_->inner_box_),
-                              current->left_.get()));
+                              current->left_.get());
 
     if (imesh_min_sq_dist(query,current->right_->outer_box_) <=0)
       to_examine.push_back(current->right_.get());
     else
-      internal_node.push_back(imesh_kd_tree_queue_entry(
+      internal_node.emplace_back(
                               imesh_min_sq_dist(query,current->right_->inner_box_),
-                              current->right_.get()));
+                              current->right_.get());
   }
 }
 

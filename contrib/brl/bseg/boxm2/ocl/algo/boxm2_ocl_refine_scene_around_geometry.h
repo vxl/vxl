@@ -38,9 +38,9 @@ public:
     device_(device)
   {
   std::vector<std::string> valid_types;
-  valid_types.push_back("boxm2_mog6_view_compact");
-  valid_types.push_back("boxm2_mog3_grey");
-  valid_types.push_back("boxm2_gauss_rgb_view");
+  valid_types.emplace_back("boxm2_mog6_view_compact");
+  valid_types.emplace_back("boxm2_mog3_grey");
+  valid_types.emplace_back("boxm2_gauss_rgb_view");
   if (!boxm2_util::verify_appearance(*scene_,valid_types,app_type_,app_type_size_))
     {
     std::cout << "scene doesn't have the correct appearance type - "

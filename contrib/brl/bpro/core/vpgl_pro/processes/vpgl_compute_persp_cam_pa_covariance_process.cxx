@@ -23,9 +23,9 @@ bool vpgl_compute_persp_cam_pa_covariance_process_cons(bprb_func_process& pro)
   //input[1]: the std dev of theta
   //input[2]: output file name to write 3x3 covariance matrix
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("float");  // passed to the process in degrees, will be converted to radians
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("float");  // passed to the process in degrees, will be converted to radians
+  input_types.emplace_back("vcl_string");
   return pro.set_input_types(input_types);
 }
 

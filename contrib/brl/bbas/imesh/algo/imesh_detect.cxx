@@ -54,7 +54,7 @@ sample_sphere_directions(unsigned int num_dir_samples)
       double phi = j*vnl_math::twopi/num_j_samples;
       double sp = std::sin(phi);
       double cp = std::cos(phi);
-      dirs.push_back(vgl_vector_3d<double>(st*cp,st*sp,ct));
+      dirs.emplace_back(st*cp,st*sp,ct);
     }
   }
   return dirs;

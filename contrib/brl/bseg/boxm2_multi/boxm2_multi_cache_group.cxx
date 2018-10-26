@@ -23,7 +23,7 @@ std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr
   }
   std::vector<boxm2_dist_pair<int> > distances;
   for (unsigned int i=0; i<bboxes_.size(); ++i)
-    distances.push_back(boxm2_dist_pair<int>(vgl_distance(pt, bboxes_[i].centroid()), i));
+    distances.emplace_back(vgl_distance(pt, bboxes_[i].centroid()), i);
   std::sort(distances.begin(), distances.end());
 
   //write and return order

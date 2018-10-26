@@ -69,8 +69,8 @@ bool bstm_cpp_box_roc_process_cons(bprb_func_process& pro)
   // output[0]: scene sptr
   std::vector<std::string> output_types;
 
-  output_types.push_back("bbas_1d_array_float_sptr");  // tpr
-  output_types.push_back("bbas_1d_array_float_sptr");  // fpr
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tpr
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fpr
   bool good = pro.set_input_types(input_types_) && pro.set_output_types(output_types);
   return good;
 }

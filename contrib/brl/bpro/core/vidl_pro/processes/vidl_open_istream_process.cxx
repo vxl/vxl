@@ -19,13 +19,13 @@ bool vidl_open_istream_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vidl_istream_sptr");
+  output_types.emplace_back("vidl_istream_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }

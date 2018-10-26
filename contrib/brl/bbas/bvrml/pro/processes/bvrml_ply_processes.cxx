@@ -104,7 +104,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
     std::cout << "read: " << x << ' ' << y << ' ' << z << '\n';
     vgl_point_3d<float> pt(x,y,z);
     std::vector<bvrml_point_cov> tmp;
-    data.push_back(point_pair(pt, tmp));
+    data.emplace_back(pt, tmp);
   }
   //: now filter the ply points while reading them
   if (!bvrml_load_points_ply(ply_file, dist_thres, data))

@@ -15,11 +15,11 @@ bool vpgl_correct_rational_camera_process_cons(bprb_func_process& pro)
 {
   //this process takes 3 inputs and has 1 output
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("double");  // ofset x
-  input_types.push_back("double");  // ofset y
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("double");  // ofset x
+  input_types.emplace_back("double");  // ofset y
   std::vector<std::string> output_types;
-  output_types.push_back("vpgl_camera_double_sptr");
+  output_types.emplace_back("vpgl_camera_double_sptr");
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -76,10 +76,10 @@ bool vpgl_get_rational_camera_offsets_process_cons(bprb_func_process& pro)
 {
   //this process takes 1 inputs and has 2 output
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("vpgl_camera_double_sptr");
   std::vector<std::string> output_types;
-  output_types.push_back("double");
-  output_types.push_back("double");
+  output_types.emplace_back("double");
+  output_types.emplace_back("double");
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }

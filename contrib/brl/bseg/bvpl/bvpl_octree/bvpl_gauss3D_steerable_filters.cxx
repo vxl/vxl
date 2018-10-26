@@ -11,9 +11,9 @@
 bvpl_gauss3D_steerable_filters::bvpl_gauss3D_steerable_filters()
 {
   axis_.clear();
-  axis_.push_back(vgl_vector_3d<int>(1,0,0));
-  axis_.push_back(vgl_vector_3d<int>(0,1,0));
-  axis_.push_back(vgl_vector_3d<int>(0,0,1));
+  axis_.emplace_back(1,0,0);
+  axis_.emplace_back(0,1,0);
+  axis_.emplace_back(0,0,1);
 
   //Initialize from lists - waiting for VXL to support TR1!
   basis_.clear();
@@ -21,19 +21,19 @@ bvpl_gauss3D_steerable_filters::bvpl_gauss3D_steerable_filters()
 
   //zerth order - that is gaussian functio
   std::string G0a[3] = {"f01", "f02", "f02"};
-  basis_.push_back(std::vector<std::string>(&G0a[0], &G0a[3]));
-  basis_names_.push_back("G0a");
+  basis_.emplace_back(&G0a[0], &G0a[3]);
+  basis_names_.emplace_back("G0a");
 
   //first order derivatives
   std::string G1a[3] = {"f11", "f12", "f12"};
   std::string G1b[3] = {"f12", "f11", "f12"};
   std::string G1c[3] = {"f12", "f12", "f11"};
-  basis_.push_back(std::vector<std::string>(&G1a[0], &G1a[3]));
-  basis_.push_back(std::vector<std::string>(&G1b[0], &G1b[3]));
-  basis_.push_back(std::vector<std::string>(&G1c[0], &G1c[3]));
-  basis_names_.push_back("G1a");
-  basis_names_.push_back("G1b");
-  basis_names_.push_back("G1c");
+  basis_.emplace_back(&G1a[0], &G1a[3]);
+  basis_.emplace_back(&G1b[0], &G1b[3]);
+  basis_.emplace_back(&G1c[0], &G1c[3]);
+  basis_names_.emplace_back("G1a");
+  basis_names_.emplace_back("G1b");
+  basis_names_.emplace_back("G1c");
 
   //second order derivatives
   std::string G2a[3] = {"f21", "f22", "f22"};
@@ -42,18 +42,18 @@ bvpl_gauss3D_steerable_filters::bvpl_gauss3D_steerable_filters()
   std::string G2d[3] = {"f23", "f22", "f24"};
   std::string G2e[3] = {"f22", "f23", "f24"};
   std::string G2f[3] = {"f22", "f22", "f21"};
-  basis_.push_back(std::vector<std::string>(&G2a[0], &G2a[3]));
-  basis_.push_back(std::vector<std::string>(&G2b[0], &G2b[3]));
-  basis_.push_back(std::vector<std::string>(&G2c[0], &G2c[3]));
-  basis_.push_back(std::vector<std::string>(&G2d[0], &G2d[3]));
-  basis_.push_back(std::vector<std::string>(&G2e[0], &G2e[3]));
-  basis_.push_back(std::vector<std::string>(&G2f[0], &G2f[3]));
-  basis_names_.push_back("G2a");
-  basis_names_.push_back("G2b");
-  basis_names_.push_back("G2c");
-  basis_names_.push_back("G2d");
-  basis_names_.push_back("G2e");
-  basis_names_.push_back("G2f");
+  basis_.emplace_back(&G2a[0], &G2a[3]);
+  basis_.emplace_back(&G2b[0], &G2b[3]);
+  basis_.emplace_back(&G2c[0], &G2c[3]);
+  basis_.emplace_back(&G2d[0], &G2d[3]);
+  basis_.emplace_back(&G2e[0], &G2e[3]);
+  basis_.emplace_back(&G2f[0], &G2f[3]);
+  basis_names_.emplace_back("G2a");
+  basis_names_.emplace_back("G2b");
+  basis_names_.emplace_back("G2c");
+  basis_names_.emplace_back("G2d");
+  basis_names_.emplace_back("G2e");
+  basis_names_.emplace_back("G2f");
 }
 
 //: Computes  the responses to separable filter taps.

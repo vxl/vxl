@@ -34,12 +34,12 @@
 bool volm_map_osm_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // ortho image - pass as converted to byte image
-  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
-  input_types.push_back("vcl_string");   // bin file with osm object list
-  input_types.push_back("vcl_string");   // a binary file to store the projected line on image domain
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho image - pass as converted to byte image
+  input_types.emplace_back("vpgl_camera_double_sptr");  // ortho camera
+  input_types.emplace_back("vcl_string");   // bin file with osm object list
+  input_types.emplace_back("vcl_string");   // a binary file to store the projected line on image domain
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
+  output_types.emplace_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -95,7 +95,7 @@ bool volm_map_osm_process(bprb_func_process& pro)
       unsigned vv = (unsigned)std::floor(v + 0.5f);
       if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
         //out_img(uu, vv).r = 255;
-        img_line.push_back(std::pair<int, int>(uu,vv));
+        img_line.emplace_back(uu,vv);
         hit = true;
       }
     }
@@ -111,7 +111,7 @@ bool volm_map_osm_process(bprb_func_process& pro)
       for (unsigned j = 0; j < img_lines.size(); j++)
         vertices.push_back(new vsol_point_2d(img_lines[i][j].first, img_lines[i][j].second));
       vsol_polyline_2d_sptr vsolp = new vsol_polyline_2d(vertices);
-      sos.push_back(vsolp->cast_to_spatial_object());
+      sos.emplace_back(vsolp->cast_to_spatial_object());
       out_img(img_lines[i][0].first, img_lines[i][0].second).r = 255;
       for (unsigned j = 1; j < img_lines[i].size(); j++) {
         double prev_u = img_lines[i][j-1].first;
@@ -166,12 +166,12 @@ bool volm_map_osm_process(bprb_func_process& pro)
 bool volm_map_segments_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // ortho image - pass as color image where each segment has a unique color
-  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
-  input_types.push_back("vcl_string");   // bin file with osm object list
-  input_types.push_back("vil_image_view_base_sptr");  // ortho height image
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho image - pass as color image where each segment has a unique color
+  input_types.emplace_back("vpgl_camera_double_sptr");  // ortho camera
+  input_types.emplace_back("vcl_string");   // bin file with osm object list
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho height image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // a color image with output segments
+  output_types.emplace_back("vil_image_view_base_sptr"); // a color image with output segments
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -209,10 +209,10 @@ bool volm_map_segments_process(bprb_func_process& pro)
       std::pair<unsigned char, std::pair<unsigned char, unsigned char> > seg_color(img(i,j).r, std::pair<unsigned char, unsigned char>(img(i,j).g, img(i,j).b));
       iter = segment_map.find(seg_color);
       if (iter != segment_map.end())
-        iter->second.first.push_back(std::pair<int, int>(i,j));
+        iter->second.first.emplace_back(i,j);
       else {
         std::vector<std::pair<int, int> > tmp;
-        tmp.push_back(std::pair<int, int>(i,j));
+        tmp.emplace_back(i,j);
         std::pair<std::vector<std::pair<int, int> >, vil_rgb<vxl_byte> > p(tmp, vil_rgb<vxl_byte>(255, 255, 255));
         segment_map[seg_color] = p;
       }
@@ -242,7 +242,7 @@ bool volm_map_segments_process(bprb_func_process& pro)
       unsigned uu = std::floor(u + 0.5f);
       unsigned vv = std::floor(v + 0.5f);
       if (uu < img_sptr->ni() && vv < img_sptr->nj()) {
-        img_line.push_back(std::pair<int, int>(uu,vv));
+        img_line.emplace_back(uu,vv);
         hit = true;
       }
     }
@@ -359,18 +359,18 @@ bool volm_map_segments_process(bprb_func_process& pro)
 bool volm_map_osm_onto_image_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // satellite image
-  input_types.push_back("vpgl_camera_double_sptr");   // local rational camera
-  input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
-  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
-  input_types.push_back("vcl_string");   // bin file with osm object list
-  input_types.push_back("vcl_string");   // name of band where the osm data will be put
-  input_types.push_back("bool");         // option to project OSM road
-  input_types.push_back("bool");         // option to project OSM buildings
-  input_types.push_back("vcl_string");   // if passed then also output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
-  input_types.push_back("vcl_string");   // if passed then also output a ortho kml file with all projected OSM objects
+  input_types.emplace_back("vil_image_view_base_sptr");  // satellite image
+  input_types.emplace_back("vpgl_camera_double_sptr");   // local rational camera
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
+  input_types.emplace_back("vpgl_camera_double_sptr");  // ortho camera
+  input_types.emplace_back("vcl_string");   // bin file with osm object list
+  input_types.emplace_back("vcl_string");   // name of band where the osm data will be put
+  input_types.emplace_back("bool");         // option to project OSM road
+  input_types.emplace_back("bool");         // option to project OSM buildings
+  input_types.emplace_back("vcl_string");   // if passed then also output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
+  input_types.emplace_back("vcl_string");   // if passed then also output a ortho kml file with all projected OSM objects
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
+  output_types.emplace_back("vil_image_view_base_sptr"); // a color image with red channel the objects that are overlaid
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -447,7 +447,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
     for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
       unsigned char curr_id = osm_objs.loc_polys()[r_idx]->prop().id_;
       if (curr_id == volm_osm_category_io::volm_land_table_name["building"].id_)
-        loc_regions.push_back(vgl_polygon<double>(osm_objs.loc_polys()[r_idx]->poly()[0]));
+        loc_regions.emplace_back(osm_objs.loc_polys()[r_idx]->poly()[0]);
     }
 
     std::vector<std::vector<vgl_point_2d<double> > > img_polys;
@@ -475,8 +475,8 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           double ivv = iv + 0.5;
           if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
             std::cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << std::endl;
-            img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
-            loc_poly.push_back(vgl_point_2d<double>(pts[j].x(), pts[j].y()));
+            img_poly.emplace_back(iuu,ivv);
+            loc_poly.emplace_back(pts[j].x(), pts[j].y());
             vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
             hit = true;
           }
@@ -488,7 +488,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
         projected_regions.push_back(project_poly);
         if (vsol_pts.size() > 2) {
           vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-          sos.push_back(vsolp->cast_to_spatial_object());
+          sos.emplace_back(vsolp->cast_to_spatial_object());
         }
       }
     }
@@ -500,9 +500,9 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
         for (unsigned k = 0; k < img_polys[i].size(); k++) {
           int iuu = (int)std::floor(img_polys[i][k].x());
           int ivv = (int)std::floor(img_polys[i][k].y());
-          img_line.push_back(std::pair<int, int>(iuu,ivv));
+          img_line.emplace_back(iuu,ivv);
         }
-        img_line.push_back(std::pair<int, int>(std::floor(img_polys[i][0].x()),std::floor(img_polys[i][0].y())));
+        img_line.emplace_back(std::floor(img_polys[i][0].x()),std::floor(img_polys[i][0].y()));
         out_img(img_line[0].first, img_line[0].second).r = 255;
         for (unsigned j = 1; j < img_line.size(); j++) {
           double prev_u = img_line[j-1].first;
@@ -519,7 +519,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
             double uu = prev_u + cnt*1*cos + 0.5f;
             double vv = prev_v + cnt*1*sin + 0.5f;
             if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj()) {
-              line_img.push_back(vgl_point_2d<double>(uu,vv));
+              line_img.emplace_back(uu,vv);
               //if (band_name.compare("r") == 0)      out_img(uu, vv).r = 255;
               //else if(band_name.compare("g") == 0)  out_img(uu, vv).g = 255;
               //else if(band_name.compare("b") == 0)  out_img(uu, vv).b = 255;
@@ -580,7 +580,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
           if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
             std::cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << std::endl;
             loc_line.push_back(pts[j]);
-            img_line.push_back(std::pair<int, int>(iuu,ivv));
+            img_line.emplace_back(iuu,ivv);
             vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
           }
         }
@@ -590,7 +590,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
         // add the line into project line
         projected_roads.push_back(loc_line);
         vsol_polyline_2d_sptr vsoll = new vsol_polyline_2d(vsol_pts);
-        sos.push_back(vsoll->cast_to_spatial_object());
+        sos.emplace_back(vsoll->cast_to_spatial_object());
       }
     }
     std::cout << "number of img lines: " << img_lines.size() << std::endl;
@@ -616,7 +616,7 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
             double uu = prev_u + cnt*1*cos + 0.5f;
             double vv = prev_v + cnt*1*sin + 0.5f;
             if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj())
-              line_img.push_back(vgl_point_2d<double>(uu,vv));
+              line_img.emplace_back(uu,vv);
             cnt++;
             ds -= 1;
           }
@@ -694,16 +694,16 @@ bool volm_map_osm_onto_image_process(bprb_func_process& pro)
 bool volm_map_osm_onto_image_process2_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // satellite image
-  input_types.push_back("vpgl_camera_double_sptr");   // local rational camera
-  input_types.push_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
-  input_types.push_back("vpgl_camera_double_sptr");   // ortho camera
-  input_types.push_back("vcl_string");                // bin file with osm object list // if it exists things are appended to this file!
-  input_types.push_back("vcl_string");                // OSM category name
-  input_types.push_back("vcl_string");                // output a binary file with the mapped objects saved as a vector of vsol_spatial_object_2d_sptr
+  input_types.emplace_back("vil_image_view_base_sptr");  // satellite image
+  input_types.emplace_back("vpgl_camera_double_sptr");   // local rational camera
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho image - float values: absolute heights
+  input_types.emplace_back("vpgl_camera_double_sptr");   // ortho camera
+  input_types.emplace_back("vcl_string");                // bin file with osm object list // if it exists things are appended to this file!
+  input_types.emplace_back("vcl_string");                // OSM category name
+  input_types.emplace_back("vcl_string");                // output a binary file with the mapped objects saved as a vector of vsol_spatial_object_2d_sptr
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // a RBG image patch that labels the OSM category
-  output_types.push_back("vil_image_view_base_sptr"); // a binary mask patch that contains all ables from OSM category
+  output_types.emplace_back("vil_image_view_base_sptr"); // a RBG image patch that labels the OSM category
+  output_types.emplace_back("vil_image_view_base_sptr"); // a binary mask patch that contains all ables from OSM category
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -768,7 +768,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
   for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
     unsigned char curr_id = osm_objs.loc_polys()[r_idx]->prop().id_;
     if (curr_id == osm_id)
-      loc_regions.push_back(vgl_polygon<double>(osm_objs.loc_polys()[r_idx]->poly()[0]));
+      loc_regions.emplace_back(osm_objs.loc_polys()[r_idx]->poly()[0]);
   }
 
   std::vector<std::vector<vgl_point_2d<double> > > img_polys;
@@ -797,7 +797,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         double ivv = iv + 0.5;
         if (iuu >= 0 && ivv >= 0 && iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
           //std::cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << std::endl;
-          img_poly.push_back(vgl_point_2d<double>(iuu,ivv));
+          img_poly.emplace_back(iuu,ivv);
           vsol_pts.push_back(new vsol_point_2d(iuu, ivv));
         }
       }
@@ -806,7 +806,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
       img_polys.push_back(img_poly);
       if (vsol_pts.size() > 2) {
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-        sos.push_back(vsolp->cast_to_spatial_object());
+        sos.emplace_back(vsolp->cast_to_spatial_object());
       }
     }
   }
@@ -841,7 +841,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         unsigned ivv = (unsigned)std::floor(iv + 0.5f);
         if (iuu < sat_img_sptr->ni() && ivv < sat_img_sptr->nj()) {
           //std::cout << "line " << i << ": pt [" << pts[j].x() << ',' << pts[j].y() << ',' << elev << " --> " << iuu << ',' << ivv << std::endl;
-          img_line.push_back(std::pair<int, int>(iuu,ivv));
+          img_line.emplace_back(iuu,ivv);
         }
       }
     }
@@ -865,7 +865,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
           double uu = prev_u + cnt*1*cos + 0.5f;
           double vv = prev_v + cnt*1*sin + 0.5f;
           if (uu >= 0 && vv >= 0 && uu < sat_img_sptr->ni() && vv < sat_img_sptr->nj())
-            line_img.push_back(vgl_point_2d<double>(uu,vv));
+            line_img.emplace_back(uu,vv);
           cnt++;
           ds -= 3;
         }
@@ -879,7 +879,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
         vsol_pts.push_back(new vsol_point_2d(img_poly[0][v_idx].x(), img_poly[0][v_idx].y()));
       if (vsol_pts.size() > 2) {
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-        sos.push_back(vsolp->cast_to_spatial_object());
+        sos.emplace_back(vsolp->cast_to_spatial_object());
       }
     }
   }
@@ -917,7 +917,7 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
           vsol_pts.push_back(new vsol_point_2d(iu+1, iv+1));
           vsol_pts.push_back(new vsol_point_2d(iu+1, iv-1));
           vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-          sos.push_back(vsolp->cast_to_spatial_object());
+          sos.emplace_back(vsolp->cast_to_spatial_object());
         }
       }
     }
@@ -1013,11 +1013,11 @@ bool volm_map_osm_onto_image_process2(bprb_func_process& pro)
 bool volm_map_osm_onto_image_process3_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // ortho image
-  input_types.push_back("vpgl_camera_double_sptr");  // ortho camera
-  input_types.push_back("vcl_string");   // bin file with osm object list // if it exists things are appended to this file!
-  input_types.push_back("vcl_string");         // OSM category name
-  input_types.push_back("vcl_string");   // output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho image
+  input_types.emplace_back("vpgl_camera_double_sptr");  // ortho camera
+  input_types.emplace_back("vcl_string");   // bin file with osm object list // if it exists things are appended to this file!
+  input_types.emplace_back("vcl_string");         // OSM category name
+  input_types.emplace_back("vcl_string");   // output a binary file with the mapped objects in image coordinates saved as a vector of vsol_spatial_object_2d_sptr
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -1070,7 +1070,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
   for (unsigned r_idx = 0; r_idx < num_regions; r_idx++) {
     unsigned char curr_id = osm_objs.loc_polys()[r_idx]->prop().id_;
     if (curr_id == osm_id)
-      loc_regions.push_back(vgl_polygon<double>(osm_objs.loc_polys()[r_idx]->poly()[0]));
+      loc_regions.emplace_back(osm_objs.loc_polys()[r_idx]->poly()[0]);
   }
 
   std::vector<std::vector<vgl_point_2d<double> > > img_polys;
@@ -1087,7 +1087,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       int uu = (int)std::floor(u + 0.5f);
       int vv = (int)std::floor(v + 0.5f);
       if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
-        img_poly.push_back(vgl_point_2d<double>(uu,vv));
+        img_poly.emplace_back(uu,vv);
         vsol_pts.push_back(new vsol_point_2d(uu, vv));
         hit = true;
       }
@@ -1096,7 +1096,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       img_polys.push_back(img_poly);
       if (vsol_pts.size() > 2) {
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-        sos.push_back(vsolp->cast_to_spatial_object());
+        sos.emplace_back(vsolp->cast_to_spatial_object());
       }
     }
   }
@@ -1118,7 +1118,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
       int uu = (int)std::floor(u + 0.5f);
       int vv = (int)std::floor(v + 0.5f);
       if (uu >= 0 && vv >= 0 && uu < img_sptr->ni() && vv < img_sptr->nj()) {
-        img_line.push_back(std::pair<int, int>(uu,vv));
+        img_line.emplace_back(uu,vv);
         vsol_pts.push_back(new vsol_point_2d(uu, vv));
         hit = true;
       }
@@ -1129,7 +1129,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
         vsol_pts.push_back(vsol_pts[i]);
       if (vsol_pts.size() > 2) {
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-        sos.push_back(vsolp->cast_to_spatial_object());
+        sos.emplace_back(vsolp->cast_to_spatial_object());
       }
     }
   }
@@ -1157,7 +1157,7 @@ bool volm_map_osm_onto_image_process3(bprb_func_process& pro)
         vsol_pts.push_back(new vsol_point_2d(uu+1, vv+1));
         vsol_pts.push_back(new vsol_point_2d(uu+1, vv-1));
         vsol_polygon_2d_sptr vsolp = new vsol_polygon_2d(vsol_pts);
-        sos.push_back(vsolp->cast_to_spatial_object());
+        sos.emplace_back(vsolp->cast_to_spatial_object());
       }
     }
   }

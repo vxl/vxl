@@ -48,7 +48,7 @@ unsigned int imesh_face_array_base::make_group(const std::string& name)
     start_idx = groups_.back().second;
 
   if (start_idx < this->size())
-    groups_.push_back(std::pair<std::string,unsigned int>(name,this->size()));
+    groups_.emplace_back(name,this->size());
 
   return this->size() - start_idx;
 }

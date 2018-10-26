@@ -86,7 +86,7 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
     std::cout << " geo_coord = " << parser->linecord_[0][i] << std::endl;
     lvcs->global_to_local(parser->linecord_[0][i].x(),parser->linecord_[0][i].y(), parser->linecord_[0][i].z(),
       vpgl_lvcs::wgs84, local_x, local_y, local_z);
-    vp.push_back(vgl_point_2d<double>(local_x, local_y));
+    vp.emplace_back(local_x, local_y);
   }
 
   // calculate the camera position along the path

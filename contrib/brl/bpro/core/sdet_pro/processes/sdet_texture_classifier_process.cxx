@@ -14,17 +14,17 @@ bool sdet_texture_classifier_process_cons(bprb_func_process& pro)
 {
   // process takes 4 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //classifier
-  input_types.push_back("vcl_string"); //texton dictionary
-  input_types.push_back("vil_image_view_base_sptr"); //input image path
-  input_types.push_back("unsigned");   //texture block size
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //classifier
+  input_types.emplace_back("vcl_string"); //texton dictionary
+  input_types.emplace_back("vil_image_view_base_sptr"); //input image path
+  input_types.emplace_back("unsigned");   //texture block size
   if (!pro.set_input_types(input_types))
     return false;
 
   // process has 1 output:
   // output[0]: output texture color image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   return pro.set_output_types(output_types);
 }
 
@@ -57,7 +57,7 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
   std::vector<std::string> cats;
   // hard code the names of the atomospheric categories - needs more
   // generality - JLM
-  cats.push_back("cld");   cats.push_back("haz");
+  cats.emplace_back("cld");   cats.emplace_back("haz");
   tc.set_atmospheric_categories(cats);
   vil_image_view<float> class_img = tc.classify_image_blocks_qual(fview);
   // return the output image

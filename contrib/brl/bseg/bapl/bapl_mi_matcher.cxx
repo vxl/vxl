@@ -54,7 +54,7 @@ bapl_mi_matcher::generate()
   // if this is the first iteration, initialize with the initial transformation
   if (matches_.empty()) {
     mi = mutual_info(init_xform_);
-    matches_.push_back(bapl_mi_matcher::bapl_match(mi,init_xform_));
+    matches_.emplace_back(mi,init_xform_);
   }
 
   for ( std::vector<bapl_match>::iterator m_itr = matches_.begin();
@@ -65,7 +65,7 @@ bapl_mi_matcher::generate()
     for (unsigned i=0; i<params_.num_samples_; ++i) {
       bapl_affine_transform T = this->rand_transform();
       double mi = mutual_info(T);
-      hypotheses.push_back(bapl_mi_matcher::bapl_match(mi,T));
+      hypotheses.emplace_back(mi,T);
     }
   }
   // sort in order of decreasing mutual info

@@ -125,7 +125,7 @@ std::vector<vpgl_camera_double_sptr> generate_cameras_circular(vgl_box_3d<double
   for (unsigned i=0; i<11; i++) {
     x = boxm_camera_dist*std::cos(alpha);
     y = boxm_camera_dist*std::sin(alpha);
-    centers.push_back(vgl_point_3d<double> (centroid.x()+x, centroid.y()+y, centroid.z()));
+    centers.emplace_back(centroid.x()+x, centroid.y()+y, centroid.z());
     std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }

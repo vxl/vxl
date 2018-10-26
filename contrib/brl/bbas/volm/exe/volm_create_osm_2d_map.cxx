@@ -1152,7 +1152,7 @@ int main(int argc, char** argv)
         return -1;
       }
       vil_image_view<float> img(vit->img_r);
-      lidar_imgs.push_back(std::pair<vil_image_view<float>, vpgl_geo_camera*>(img, vit->cam));
+      lidar_imgs.emplace_back(img, vit->cam);
     }
     std::cout << lidar_imgs.size() << " LIDAR image intersect with the leaf " << l_idx << std::endl;
     // ingest NLCD image and refine the beach/water boundary by LIDAR elevation
@@ -1273,7 +1273,7 @@ int main(int argc, char** argv)
         lvcs->global_to_local(line_geo[pt_idx].x(), line_geo[pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         double i = lx - leaf_bbox.min_x();  double j = leaf_bbox.max_y() - ly;
         if (i>=0 && j>=0 && i<out_img.ni() && j<out_img.nj())
-          line_img.push_back(vgl_point_2d<double>(i,j));
+          line_img.emplace_back(i,j);
       }
       if (line_img.size() < 2)  continue;
       // record current line for later junction calculation
@@ -1437,7 +1437,7 @@ int main(int argc, char** argv)
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)
         if (out_img(i,j) == volm_osm_category_io::volm_land_table_name["piers"].id_) {
-          pier_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+          pier_pixels.emplace_back(i,j);
         }
     std::cout << pier_pixels.size() << " piers exist in leaf " << l_idx << std::endl;
     for (std::vector<std::pair<unsigned, unsigned> >::iterator vit = pier_pixels.begin();  vit != pier_pixels.end(); ++vit) {

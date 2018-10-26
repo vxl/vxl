@@ -160,12 +160,12 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
   }
 
   std::vector<std::string> filenames;
-  filenames.push_back("I0");
-  filenames.push_back("Ix");
-  filenames.push_back("Iy");
-  filenames.push_back("Ixx");
-  filenames.push_back("Iyy");
-  filenames.push_back("Ixy");
+  filenames.emplace_back("I0");
+  filenames.emplace_back("Ix");
+  filenames.emplace_back("Iy");
+  filenames.emplace_back("Ixx");
+  filenames.emplace_back("Iyy");
+  filenames.emplace_back("Ixy");
 
   std::map<std::string, kernel > kernel_map;
 

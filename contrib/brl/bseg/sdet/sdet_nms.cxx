@@ -159,13 +159,13 @@ void sdet_nms::apply(bool collect_tokens,
         if (mag_(y,x)==0.0)
           continue;
 
-        loc.push_back(vgl_point_2d<double>(x_(y,x), y_(y,x)));
+        loc.emplace_back(x_(y,x), y_(y,x));
         orientation.push_back(dir_(y,x));
         mag.push_back(mag_(y,x));
         d2f.push_back(deriv_(y,x));
 
         //also return the pixel location so that they can be used for tracing algorithms
-        pix_loc.push_back(vgl_point_2d<int>(x, y));
+        pix_loc.emplace_back(x, y);
       }
     }
   }

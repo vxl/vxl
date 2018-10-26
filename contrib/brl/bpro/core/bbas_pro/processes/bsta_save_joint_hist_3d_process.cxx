@@ -12,8 +12,8 @@ bool bsta_save_joint_hist_3d_process_cons(bprb_func_process& pro)
   // no inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
-  input_types.push_back("vcl_string"); //joint_hist_3d path
+  input_types.emplace_back("bsta_joint_histogram_3d_base_sptr"); //joint_hist_3d
+  input_types.emplace_back("vcl_string"); //joint_hist_3d path
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

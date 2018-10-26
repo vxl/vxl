@@ -266,7 +266,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
   std::vector<std::string> img_files;
   std::string in_dir = img_folder + "*.tif";
   for (vul_file_iterator fn = in_dir.c_str(); fn; ++fn)
-    img_files.push_back(fn());
+    img_files.emplace_back(fn());
   if (img_files.size() == 0) {
     std::cerr << pro.name() << ": No image at folder: " << img_folder << std::endl;
     return false;

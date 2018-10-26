@@ -56,7 +56,7 @@ bvpl_kernel_factory::interpolate(kernel_type const& kernel)
     int x0 = (int)std::floor((kernel_it->first).x()+0.5f);
     int y0 = (int)std::floor((kernel_it->first).y()+0.5f);
     int z0 = (int)std::floor((kernel_it->first).z()+0.5f);
-    kernel_out.push_back(std::make_pair(vgl_point_3d<int>(x0,y0,z0), (kernel_it->second)));
+    kernel_out.emplace_back(vgl_point_3d<int>(x0,y0,z0), (kernel_it->second));
 
     if ( x0 > max_x) max_x =  x0;
     if ( y0 > max_y) max_y =  y0;
@@ -208,7 +208,7 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
                                                      float((*kernel_it).first.y()),
                                                      float((*kernel_it).first.z()));
 
-    kernel.push_back(std::make_pair(vgl_point_3d<float>(new_coord[0],new_coord[1],new_coord[2]), (kernel_it->second)));
+    kernel.emplace_back(vgl_point_3d<float>(new_coord[0],new_coord[1],new_coord[2]), (kernel_it->second));
 
     // As it is implemented now, if many points round to a single integer, then that integer is used multiple times
     // This may be a good solution, and avoids the problem of getting unequal number of symbols

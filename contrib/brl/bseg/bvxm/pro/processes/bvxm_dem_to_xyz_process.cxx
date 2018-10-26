@@ -215,7 +215,7 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   std::string file_glob = geotiff_folder + "//*.tif";
   std::vector<std::string> geotiff_img_names;
   for (vul_file_iterator fn = file_glob.c_str(); fn; ++fn)
-    geotiff_img_names.push_back(fn());
+    geotiff_img_names.emplace_back(fn());
   if (geotiff_img_names.empty()) {
     std::cout << "ERROR: " << pro.name() << " -- NO dem images in given folder: " << geotiff_folder << std::endl;
     return false;

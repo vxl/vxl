@@ -27,13 +27,13 @@ bool brec_learner_layer0_update_stats_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
-  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
-  input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
+  input_types.emplace_back("brec_part_hierarchy_learner_sptr");      // learner instance
+  input_types.emplace_back("vil_image_view_base_sptr");      // a training image, byte image
+  input_types.emplace_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
                                                      // this is the foreground ground-truth mask if available
-  input_types.push_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
+  input_types.emplace_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
                                                      // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)
-  input_types.push_back("vcl_string");      // output file to save histograms in matlab .m file format
+  input_types.emplace_back("vcl_string");      // output file to save histograms in matlab .m file format
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -109,15 +109,15 @@ bool brec_learner_layer0_update_posterior_stats_process_cons(bprb_func_process& 
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_learner_sptr");  // learner instance, assumes the foreground response distribution's parameters have already been fit
-  input_types.push_back("vil_image_view_base_sptr");      // a training image, byte image
-  input_types.push_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
+  input_types.emplace_back("brec_part_hierarchy_learner_sptr");  // learner instance, assumes the foreground response distribution's parameters have already been fit
+  input_types.emplace_back("vil_image_view_base_sptr");      // a training image, byte image
+  input_types.emplace_back("vil_image_view_base_sptr");      // a foreground probability img for the input training image, float img with values in [0,1] range
                                                      // this is the foreground ground-truth mask if available
-  input_types.push_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
+  input_types.emplace_back("vil_image_view_base_sptr");      // a bool mask img to designate valid regions in the input image, stats will be collected from the pixels with mask == true
                                                      // if this pointer is passed as zero, a mask filled with "true" is used (all image is used)
 
-  input_types.push_back("vil_image_view_base_sptr");      // bg model mean img to construct response models, float img with values in [0,1] range
-  input_types.push_back("vil_image_view_base_sptr");      // bg model std dev img to construct response models, float img with values in [0,1] range
+  input_types.emplace_back("vil_image_view_base_sptr");      // bg model mean img to construct response models, float img with values in [0,1] range
+  input_types.emplace_back("vil_image_view_base_sptr");      // bg model std dev img to construct response models, float img with values in [0,1] range
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -205,11 +205,11 @@ bool brec_learner_layer_n_update_stats_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_learner_sptr");      // learner instance
-  input_types.push_back("brec_part_hierarchy_detector_sptr");      // a detector instance
-  input_types.push_back("unsigned");      // n: layer id
-  input_types.push_back("unsigned");      // k: class id
-  input_types.push_back("vcl_string");      // output file to save histograms in matlab .m file format
+  input_types.emplace_back("brec_part_hierarchy_learner_sptr");      // learner instance
+  input_types.emplace_back("brec_part_hierarchy_detector_sptr");      // a detector instance
+  input_types.emplace_back("unsigned");      // n: layer id
+  input_types.emplace_back("unsigned");      // k: class id
+  input_types.emplace_back("vcl_string");      // output file to save histograms in matlab .m file format
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

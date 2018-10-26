@@ -17,14 +17,14 @@ bool vil_blob_detection_process_cons(bprb_func_process& pro)
 {
   //this process takes 3 inputs
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("unsigned"); // max size of the blob in pixels
-  input_types.push_back("unsigned"); // min size of the blob in pixels
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("unsigned"); // max size of the blob in pixels
+  input_types.emplace_back("unsigned"); // min size of the blob in pixels
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // label image
-  output_types.push_back("vil_image_view_base_sptr");  // randomly colored output image
-  output_types.push_back("unsigned");  // also return the number of blobs
+  output_types.emplace_back("vil_image_view_base_sptr");  // label image
+  output_types.emplace_back("vil_image_view_base_sptr");  // randomly colored output image
+  output_types.emplace_back("unsigned");  // also return the number of blobs
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

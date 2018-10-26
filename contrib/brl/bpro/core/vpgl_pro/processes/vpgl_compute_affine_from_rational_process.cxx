@@ -77,10 +77,10 @@ bool vpgl_compute_affine_from_rat_process(bprb_func_process& pro)
     double x = rng.drand64()*width + min_x;  // sample in local coords
     double y = rng.drand64()*depth + min_y;
     double z = rng.drand64()*height + min_z;
-    world_pts.push_back(vgl_point_3d<double>(x,y,z));
+    world_pts.emplace_back(x,y,z);
     double u, v;
     camera->project(x,y,z,u,v);  // local rational camera has an lvcs, so it handles, local coord to global to image point projection internally
-    image_pts.push_back(vgl_point_2d<double>(u,v));
+    image_pts.emplace_back(u,v);
   }
 
   vpgl_affine_camera<double>* out_camera = vpgl_affine_rectification::compute_affine_cam(image_pts, world_pts);

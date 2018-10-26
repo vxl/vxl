@@ -21,11 +21,11 @@ bool ihog_mutual_information_process_cons(bprb_func_process& pro)
   //  2) mask
 
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
   std::vector<std::string> output_types;
-  output_types.push_back("float");
+  output_types.emplace_back("float");
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }

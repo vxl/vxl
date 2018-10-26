@@ -109,7 +109,7 @@ bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs
   {
     vgl_point_3d<double> p(corrs[i]->world_pt());
     corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
-    xformed_points.push_back(vgl_homg_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
+    xformed_points.emplace_back(p.x()-center.x(),p.y()-center.y(),p.z()-center.z());
   }
   std::vector<vpgl_perspective_camera<double> > new_cams;
   unsigned int up=0;
@@ -124,7 +124,7 @@ bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs
     vgl_vector_3d<double> tr_cami=cams[i].get_translation()+translation_vec;
 
 
-    new_cams.push_back(vpgl_perspective_camera<double>(cams[i].get_calibration(),rot_cami,tr_cami));
+    new_cams.emplace_back(cams[i].get_calibration(),rot_cami,tr_cami);
     if (new_cams[i].get_camera_center().z()>0)
       ++up;
   }

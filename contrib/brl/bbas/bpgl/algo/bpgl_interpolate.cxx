@@ -157,7 +157,7 @@ void bpgl_interpolate::interpolateRt(vnl_double_3x3 R0,
     vnl_double_3x3 ainv = bpgl_interpolate::Ainv(d_log_r);
     vnl_double_3 sadt = ainv*(s*dt);
     vnl_double_3 dlt = a*sadt;
-    tintrp.push_back(t0+dlt);
+    tintrp.emplace_back(t0+dlt);
   }
 }
 

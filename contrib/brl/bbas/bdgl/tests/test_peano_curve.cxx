@@ -7,22 +7,22 @@
 static void test_peano_curve()
 {
   std::vector<vgl_point_2d<double> > gt;
-  gt.push_back(vgl_point_2d<double>(-0.75,-0.75));
-  gt.push_back(vgl_point_2d<double>(-0.25,-0.75));
-  gt.push_back(vgl_point_2d<double>(-0.25,-0.25));
-  gt.push_back(vgl_point_2d<double>(-0.75,-0.25));
-  gt.push_back(vgl_point_2d<double>(-0.75,0.25));
-  gt.push_back(vgl_point_2d<double>(-0.75,0.75));
-  gt.push_back(vgl_point_2d<double>(-0.25,0.75));
-  gt.push_back(vgl_point_2d<double>(-0.25,0.25));
-  gt.push_back(vgl_point_2d<double>(0.25,0.25));
-  gt.push_back(vgl_point_2d<double>(0.25,0.75));
-  gt.push_back(vgl_point_2d<double>(0.75,0.75));
-  gt.push_back(vgl_point_2d<double>(0.75,0.25));
-  gt.push_back(vgl_point_2d<double>(0.75,-0.25));
-  gt.push_back(vgl_point_2d<double>(0.25,-0.25));
-  gt.push_back(vgl_point_2d<double>(0.25,-0.75));
-  gt.push_back(vgl_point_2d<double>(0.75,-0.75));
+  gt.emplace_back(-0.75,-0.75);
+  gt.emplace_back(-0.25,-0.75);
+  gt.emplace_back(-0.25,-0.25);
+  gt.emplace_back(-0.75,-0.25);
+  gt.emplace_back(-0.75,0.25);
+  gt.emplace_back(-0.75,0.75);
+  gt.emplace_back(-0.25,0.75);
+  gt.emplace_back(-0.25,0.25);
+  gt.emplace_back(0.25,0.25);
+  gt.emplace_back(0.25,0.75);
+  gt.emplace_back(0.75,0.75);
+  gt.emplace_back(0.75,0.25);
+  gt.emplace_back(0.75,-0.25);
+  gt.emplace_back(0.25,-0.25);
+  gt.emplace_back(0.25,-0.75);
+  gt.emplace_back(0.75,-0.75);
 
   std::vector<vgl_point_2d<double> > p=recurse_peano_curve(2);
 

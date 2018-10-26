@@ -91,7 +91,7 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
     // construct convex hull
     std::vector<vgl_point_2d<float> > pts;
     for (unsigned idx = 0; idx < single_poly.num_vertices(); idx++)
-      pts.push_back(vgl_point_2d<float>(single_poly[0][idx].x(), single_poly[0][idx].y()));
+      pts.emplace_back(single_poly[0][idx].x(), single_poly[0][idx].y());
     vgl_convex_hull_2d<float> ch(pts);
     vgl_polygon<float> c_poly = ch.hull();
     single_poly.print(std::cerr);

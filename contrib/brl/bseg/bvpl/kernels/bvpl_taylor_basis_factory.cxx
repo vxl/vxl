@@ -45,7 +45,7 @@ void bvpl_taylor_basis_factory::create_canonical()
     float weight;
     ifs >> this_loc;
     ifs >> weight;
-    canonical_kernel_.push_back(std::pair<point_3d,dispatch>(this_loc, dispatch(weight)));
+    canonical_kernel_.emplace_back(this_loc, dispatch(weight));
   }
 
   //set the current kernel
@@ -80,16 +80,16 @@ void bvpl_taylor_basis_loader::files(std::vector<std::string> &filenames)
 {
   if (degree_ == 2)
   {
-    filenames.push_back("I0");
-    filenames.push_back("Ix");
-    filenames.push_back("Iy");
-    filenames.push_back("Iz");
-    filenames.push_back("Ixx");
-    filenames.push_back("Iyy");
-    filenames.push_back("Izz");
-    filenames.push_back("Ixy");
-    filenames.push_back("Ixz");
-    filenames.push_back("Iyz");
+    filenames.emplace_back("I0");
+    filenames.emplace_back("Ix");
+    filenames.emplace_back("Iy");
+    filenames.emplace_back("Iz");
+    filenames.emplace_back("Ixx");
+    filenames.emplace_back("Iyy");
+    filenames.emplace_back("Izz");
+    filenames.emplace_back("Ixy");
+    filenames.emplace_back("Ixz");
+    filenames.emplace_back("Iyz");
   }
 }
 

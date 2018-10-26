@@ -464,7 +464,7 @@ void test_edgel_change_detection()
   //// std::string ref_name = "20160821_063826_0e20.tif";
   //// std::string ref_name = "20160623_050936_0c64.tif";
   std::vector<std::string> ref_name;
-  ref_name.push_back("20160902_094643_0c19.tif");
+  ref_name.emplace_back("20160902_094643_0c19.tif");
   //ref_name.push_back("20160619_064846_0c72.tif");
   //ref_name.push_back("20160623_050936_0c64.tif");
   //ref_name.push_back("20160701_091757_0c64.tif");

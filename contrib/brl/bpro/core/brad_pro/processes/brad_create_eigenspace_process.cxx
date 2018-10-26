@@ -25,7 +25,7 @@ bool brad_create_eigenspace_process_cons(bprb_func_process& pro)
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("brad_eigenspace_sptr"); //eigenspace
+  output_types.emplace_back("brad_eigenspace_sptr"); //eigenspace
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

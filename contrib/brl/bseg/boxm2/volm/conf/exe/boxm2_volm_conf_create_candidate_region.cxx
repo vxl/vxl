@@ -188,7 +188,7 @@ int main(int argc, char** argv)
       volm_io::write_error_log(log_file, log.str());
       return volm_io::EXE_ARGUMENT_ERROR;
     }
-    pin_pt_poly.push_back(vgl_polygon<double>(circle));
+    pin_pt_poly.emplace_back(circle);
     // find the furthest landmarks
     float max_dist = 0.0;
     for (std::vector<volm_conf_object>::iterator vit = mit->second.first.landmarks().begin(); vit != mit->second.first.landmarks().end(); ++vit)
@@ -488,7 +488,7 @@ bool generate_landmarks(vgl_point_2d<double> const& pt, std::vector<volm_conf_ob
     float lx = land_objs[i].x();
     float ly = land_objs[i].y();
     lvcs.local_to_global(lx, ly, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-    landmarks.push_back(vgl_point_2d<double>(lon, lat));
+    landmarks.emplace_back(lon, lat);
   }
   return true;
 }

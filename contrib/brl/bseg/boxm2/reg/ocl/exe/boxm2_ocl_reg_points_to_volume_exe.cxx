@@ -99,7 +99,7 @@ int main(int argc,  char** argv)
           std::istringstream iss(line);
           vnl_vector<double> x;
           iss>>x;
-          pts.push_back(vgl_point_3d<double>(x[0],x[1],x[2]) );
+          pts.emplace_back(x[0],x[1],x[2] );
       }
       ifile.close();
   }

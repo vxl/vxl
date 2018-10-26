@@ -13,20 +13,20 @@
 bool brad_get_sun_angles_date_time_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("float"); // latitude
-  input_types.push_back("float"); // longitude
-  input_types.push_back("int"); // year
-  input_types.push_back("int"); // month
-  input_types.push_back("int"); // day
-  input_types.push_back("int"); // hour
-  input_types.push_back("int"); // minute
+  input_types.emplace_back("float"); // latitude
+  input_types.emplace_back("float"); // longitude
+  input_types.emplace_back("int"); // year
+  input_types.emplace_back("int"); // month
+  input_types.emplace_back("int"); // day
+  input_types.emplace_back("int"); // hour
+  input_types.emplace_back("int"); // minute
 
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("float");
-  output_types.push_back("float");
+  output_types.emplace_back("float");
+  output_types.emplace_back("float");
   return pro.set_output_types(output_types);
 }
 

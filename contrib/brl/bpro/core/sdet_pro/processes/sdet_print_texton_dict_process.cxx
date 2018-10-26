@@ -13,9 +13,9 @@ bool sdet_print_texton_dict_process_cons(bprb_func_process& pro)
 {
   // process takes 3 inputs, no outputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //classifier
-  input_types.push_back("vcl_string"); //texton dictionary
-  input_types.push_back("vcl_string");  // print mode
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //classifier
+  input_types.emplace_back("vcl_string"); //texton dictionary
+  input_types.emplace_back("vcl_string");  // print mode
   // "histograms" , "textons", "inter_probs", "inter_dist"
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)

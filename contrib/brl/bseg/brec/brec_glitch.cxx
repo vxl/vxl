@@ -73,13 +73,13 @@ brec_glitch::square_glitch(int c_size, std::vector<std::pair<int, int> >& neighb
   for (int i = 0; i < c_size_outer; i++)
     for (int j = 0; j < c_size_outer; j++) {
       if (map_img(i,j) == 100)
-        neighborhood_center.push_back(std::pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
+        neighborhood_center.emplace_back(i-(c_size_outer/2), j-(c_size_outer/2));
     }
 
   for (int i = 0; i < (int)c_size_outer; i++)
     for (int j = 0; j < (int)c_size_outer; j++) {
       if (map_img(i,j) == 255)
-        neighborhood_surround.push_back(std::pair<int, int>(i-(c_size_outer/2), j-(c_size_outer/2)));
+        neighborhood_surround.emplace_back(i-(c_size_outer/2), j-(c_size_outer/2));
     }
 }
 

@@ -159,10 +159,10 @@ bool boxm2_vecf_fit_skull::set_trans(){
   vgl_point_3d<double> fint_src = params_.forehead_intersection_;
 
   std::vector<vgl_homg_point_3d<double> > source_pts, target_pts;
-  source_pts.push_back(vgl_homg_point_3d<double>(llc_src)); source_pts.push_back(vgl_homg_point_3d<double>(rlc_src));
-  source_pts.push_back(vgl_homg_point_3d<double>(mjaw_src)); source_pts.push_back(vgl_homg_point_3d<double>(fint_src));
-  target_pts.push_back(vgl_homg_point_3d<double>(llc_tgt)); target_pts.push_back(vgl_homg_point_3d<double>(rlc_tgt));
-  target_pts.push_back(vgl_homg_point_3d<double>(mjaw_tgt)); target_pts.push_back(vgl_homg_point_3d<double>(fint_tgt));
+  source_pts.emplace_back(llc_src); source_pts.emplace_back(rlc_src);
+  source_pts.emplace_back(mjaw_src); source_pts.emplace_back(fint_src);
+  target_pts.emplace_back(llc_tgt); target_pts.emplace_back(rlc_tgt);
+  target_pts.emplace_back(mjaw_tgt); target_pts.emplace_back(fint_tgt);
   vgl_h_matrix_3d_compute_affine hca;
   bool success = hca.compute(source_pts, target_pts, params_.trans_);
   if(!success) return false;

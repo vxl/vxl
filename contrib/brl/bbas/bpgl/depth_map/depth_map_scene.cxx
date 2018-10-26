@@ -546,7 +546,7 @@ bool depth_map_scene::match(vil_image_view<float> const& depth_img, vil_image_vi
       region_imgs.clear();
       return true;
     }
-    region_order.push_back(std::pair<float, int>(region_means[r], this->scene_regions()[r]->order()));
+    region_order.emplace_back(region_means[r], this->scene_regions()[r]->order());
   }
   std::sort(region_order.begin(), region_order.end(), &pair_sort);
 
@@ -629,7 +629,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       region_names.push_back(this->scene_regions()[r]->name());
       region_scores.push_back(0.0f);
       region_means.push_back(0.0f);
-      region_min_depths.push_back(std::pair<float, int>(this->scene_regions()[r]->min_depth(), this->scene_regions()[r]->order()));
+      region_min_depths.emplace_back(this->scene_regions()[r]->min_depth(), this->scene_regions()[r]->order());
 #if 0
       vil_image_view<float> temp2(ni, nj); temp2.fill(-1);
       debug_imgs[this->scene_regions()[r]->name()] = temp2;
@@ -832,7 +832,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
       region_imgs.clear();
       return true;
     }
-    region_order.push_back(std::pair<float, int>(region_means[r], region_min_depths[r].second));
+    region_order.emplace_back(region_means[r], region_min_depths[r].second);
   }
   std::sort(region_order.begin(), region_order.end(), &pair_sort);
 

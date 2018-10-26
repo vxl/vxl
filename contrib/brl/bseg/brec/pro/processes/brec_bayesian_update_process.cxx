@@ -38,14 +38,14 @@ bool brec_bayesian_update_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input prob map p(x in B) (float map with values in [0,1]
-  input_types.push_back("vil_image_view_base_sptr"); // input measurement map
+  input_types.emplace_back("vil_image_view_base_sptr"); // input prob map p(x in B) (float map with values in [0,1]
+  input_types.emplace_back("vil_image_view_base_sptr"); // input measurement map
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output new prob map
-  output_types.push_back("vil_image_view_base_sptr");  // output new prob map as a byte image
+  output_types.emplace_back("vil_image_view_base_sptr");  // output new prob map
+  output_types.emplace_back("vil_image_view_base_sptr");  // output new prob map as a byte image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

@@ -308,8 +308,8 @@ void bapl_dog_peaks( std::vector<vgl_point_3d<float> >& peak_pts,
         float curv_rat = curvature_ratio(&rimage(ri,rj), rimage.istep(), rimage.jstep());
         if ( curv_rat > max_curve || curv_rat < min_curve ) continue;
 
-        peak_pts.push_back(vgl_point_3d<float>((float)(ri+offset(0))*ps, (float)(rj+offset(1))*ps,
-                                                (float)std::pow(2.0,((rindex+offset(2))/oct_size)-1) ));
+        peak_pts.emplace_back((float)(ri+offset(0))*ps, (float)(rj+offset(1))*ps,
+                                                (float)std::pow(2.0,((rindex+offset(2))/oct_size)-1) );
       }
     }
   }

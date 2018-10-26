@@ -124,7 +124,7 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr){
   for(double t = 0.0; t<=mt; t += cross_section_interval_){
     vgl_point_3d<double> p = axis_(t);
     vgl_plane_3d<double> norm_plane = axis_.normal_plane(t);
-    ptsets.push_back(vgl_pointset_3d<double>());
+    ptsets.emplace_back();
     cross_planes.push_back(norm_plane);
     tset.push_back(t);
     pset.push_back(p);

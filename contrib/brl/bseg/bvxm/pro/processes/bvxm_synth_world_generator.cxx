@@ -142,7 +142,7 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
   for (unsigned i=0; i<11; i++) {
     x = camera_dist*std::cos(alpha);
     z = camera_dist*std::sin(alpha);
-    centers.push_back(vgl_point_3d<double> (centroid.x()+x, centroid.y(), centroid.z()+z));
+    centers.emplace_back(centroid.x()+x, centroid.y(), centroid.z()+z);
     std::cout << centers[i] << std::endl;
     alpha += delta_alpha;
   }
@@ -156,7 +156,7 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
     generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
     persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
     vpgl_rational_camera<double>* rat_cam = new vpgl_rational_camera<double>(perspective_to_rational(persp_cam));
-    rat_cameras.push_back(rat_cam);
+    rat_cameras.emplace_back(rat_cam);
 
     std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d(world);
     for (unsigned i=0; i<corners.size(); i++) {
@@ -192,7 +192,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
   for (unsigned i=0; i<num_train_images_; i++) {
     x = camera_dist*std::cos(alpha);
     y = camera_dist*std::sin(alpha);
-    centers.push_back(vgl_point_3d<double> (x+centroid.x(), y+centroid.y(), 450+centroid.z()));
+    centers.emplace_back(x+centroid.x(), y+centroid.y(), 450+centroid.z());
   if (verbose)
     std::cout << centers[i] << std::endl;
 

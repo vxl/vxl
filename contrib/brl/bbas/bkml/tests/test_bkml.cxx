@@ -48,7 +48,7 @@ static void test_polygon_kml_io()
   for (unsigned i = 0; i < n_out; i++) {
     vgl_polygon<double> out_sheet(outer[i]);
     vgl_polygon<double>  in_sheet(inner[i]);
-    poly_all.push_back(std::pair<vgl_polygon<double>, vgl_polygon<double> >(out_sheet, in_sheet));
+    poly_all.emplace_back(out_sheet, in_sheet);
   }
   std::cout << "There are " << poly_all.size() << " regions " << std::endl;
   std::ofstream ofs(out_kml.c_str());

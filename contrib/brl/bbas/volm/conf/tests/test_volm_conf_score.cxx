@@ -15,7 +15,7 @@ static void test_volm_conf_score()
 {
   std::vector<volm_conf_object> landmarks;
   for (unsigned i = 0; i < 5; i++) {
-    landmarks.push_back(volm_conf_object(i*0.1f, i*0.2f, i*0.3f, i));
+    landmarks.emplace_back(i*0.1f, i*0.2f, i*0.3f, i);
   }
   volm_conf_score_sptr score_sptr = new volm_conf_score(0.12, -vnl_math::pi, landmarks);
   score_sptr->print(std::cout);
@@ -57,7 +57,7 @@ static void test_volm_conf_score()
     std::vector<volm_conf_object> landmarks;
     unsigned size = rnd.lrand32(0,10);
     for (unsigned i = 0; i < size; i++)
-      landmarks.push_back(volm_conf_object(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.lrand32(0,255)));
+      landmarks.emplace_back(rnd.drand32(0.0f, vnl_math::twopi), rnd.drand32(0.0f, 200.0f), rnd.drand32(0.0f, 32.f), rnd.lrand32(0,255));
     volm_conf_score value(rnd.drand32(0.0f, 1.0f), rnd.drand32(0, 2*vnl_math::twopi), landmarks);
     scores.push_back(value);
   }

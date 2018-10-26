@@ -676,7 +676,7 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
     vgl_box_2d<double> small_scene_box;
     small_scene_box.add(vgl_point_2d<double>(orig.x() + i*scene_dim, orig.y() + j*scene_dim));
     small_scene_box.add(vgl_point_2d<double>(orig.x() + (i+1)*scene_dim, orig.y() + (j+1)*scene_dim));
-    small_scenes.push_back(std::pair<boxm2_scene_sptr, vgl_box_2d<double> >(small_scene, small_scene_box));
+    small_scenes.emplace_back(small_scene, small_scene_box);
   }
   // add the blocks -- makes sure all the blocks are added to one of the scenes
   unsigned cnt = 0;
@@ -1108,8 +1108,8 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
   // find the image of all four corners
   std::vector<std::pair<unsigned, std::pair<int, int> > > corners;
   std::vector<vgl_point_2d<double> > pts;
-  pts.push_back(vgl_point_2d<double>(lower_left.x(), upper_right.y()));
-  pts.push_back(vgl_point_2d<double>(upper_right.x(), lower_left.y()));
+  pts.emplace_back(lower_left.x(), upper_right.y());
+  pts.emplace_back(upper_right.x(), lower_left.y());
   pts.push_back(lower_left);
   pts.push_back(upper_right);
   unsigned num_dem_imgs = dem_views.size();
@@ -1121,7 +1121,7 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
       int uu = (int)std::floor(u+0.5);  int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)dem_views[j]->ni() || vv >= (int)dem_views[j]->nj())
         continue;
-      corners.push_back(std::pair<unsigned, std::pair<int, int> >(j, std::pair<int,int>(uu,vv)));
+      corners.emplace_back(j, std::pair<int,int>(uu,vv));
       break;
     }
   }

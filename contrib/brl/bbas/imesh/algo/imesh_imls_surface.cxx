@@ -43,14 +43,14 @@ imesh_imls_surface::imesh_imls_surface(const imesh_mesh& mesh, double eps, doubl
     }
     box.expand_about_centroid(1);
     unsigned int base = verts_.size();
-    verts_.push_back(vgl_point_3d<double>(box.min_x(),box.min_y(),box.min_z()));
-    verts_.push_back(vgl_point_3d<double>(box.min_x(),box.min_y(),box.max_z()));
-    verts_.push_back(vgl_point_3d<double>(box.min_x(),box.max_y(),box.min_z()));
-    verts_.push_back(vgl_point_3d<double>(box.min_x(),box.max_y(),box.max_z()));
-    verts_.push_back(vgl_point_3d<double>(box.max_x(),box.min_y(),box.min_z()));
-    verts_.push_back(vgl_point_3d<double>(box.max_x(),box.min_y(),box.max_z()));
-    verts_.push_back(vgl_point_3d<double>(box.max_x(),box.max_y(),box.min_z()));
-    verts_.push_back(vgl_point_3d<double>(box.max_x(),box.max_y(),box.max_z()));
+    verts_.emplace_back(box.min_x(),box.min_y(),box.min_z());
+    verts_.emplace_back(box.min_x(),box.min_y(),box.max_z());
+    verts_.emplace_back(box.min_x(),box.max_y(),box.min_z());
+    verts_.emplace_back(box.min_x(),box.max_y(),box.max_z());
+    verts_.emplace_back(box.max_x(),box.min_y(),box.min_z());
+    verts_.emplace_back(box.max_x(),box.min_y(),box.max_z());
+    verts_.emplace_back(box.max_x(),box.max_y(),box.min_z());
+    verts_.emplace_back(box.max_x(),box.max_y(),box.max_z());
     triangles_->push_back(imesh_tri(base+0,base+1,base+2));
     triangles_->push_back(imesh_tri(base+1,base+3,base+2));
     triangles_->push_back(imesh_tri(base+0,base+6,base+4));
@@ -137,7 +137,7 @@ void imesh_imls_surface::compute_enclosing_phi()
     double val = (*this)(verts_[i]);
     mean += val;
     if (val > 0)
-      outside.push_back(pair_id(i,val));
+      outside.emplace_back(i,val);
   }
   iso_level_ = mean / verts_.size();
 
@@ -153,7 +153,7 @@ void imesh_imls_surface::compute_enclosing_phi()
          i!=outside.end(); ++i) {
       double val = (*this)(verts_[i->first]);
       if (val > std::abs(std::numeric_limits<double>::epsilon()*phi_[i->first])) {
-        next_outside.push_back(pair_id(i->first,val));
+        next_outside.emplace_back(i->first,val);
       }
     }
     outside.swap(next_outside);
@@ -335,14 +335,14 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
     {
       double min = w2(imesh_min_sq_dist(p,current->left_->inner_box_));
       double max = w2(imesh_max_sq_dist(p,current->left_->inner_box_));
-      remain.push_back(imesh_kd_tree_queue_entry((max - min)*area_[current->left_->index_],
-                                                 current->left_.get()));
+      remain.emplace_back((max - min)*area_[current->left_->index_],
+                                                 current->left_.get());
       std::push_heap(remain.begin(), remain.end());
 
       min = w2(imesh_min_sq_dist(p,current->right_->inner_box_));
       max = w2(imesh_max_sq_dist(p,current->right_->inner_box_));
-      remain.push_back(imesh_kd_tree_queue_entry((max - min)*area_[current->right_->index_],
-                                                 current->right_.get()));
+      remain.emplace_back((max - min)*area_[current->right_->index_],
+                                                 current->right_.get());
       std::push_heap(remain.begin(), remain.end());
     }
     if (!remain.empty())
@@ -424,14 +424,14 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
     {
       double min = w2(imesh_min_sq_dist(p,current->left_->inner_box_));
       double max = w2(imesh_max_sq_dist(p,current->left_->inner_box_));
-      remain.push_back(imesh_kd_tree_queue_entry((max - min)*area_[current->left_->index_],
-                                                 current->left_.get()));
+      remain.emplace_back((max - min)*area_[current->left_->index_],
+                                                 current->left_.get());
       std::push_heap(remain.begin(), remain.end());
 
       min = w2(imesh_min_sq_dist(p,current->right_->inner_box_));
       max = w2(imesh_max_sq_dist(p,current->right_->inner_box_));
-      remain.push_back(imesh_kd_tree_queue_entry((max - min)*area_[current->right_->index_],
-                                                 current->right_.get()));
+      remain.emplace_back((max - min)*area_[current->right_->index_],
+                                                 current->right_.get());
       std::push_heap(remain.begin(), remain.end());
     }
     if (!remain.empty())

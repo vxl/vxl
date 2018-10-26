@@ -15,20 +15,20 @@ bool brip_extrema_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image
-  input_types.push_back("float");  // lambda0
-  input_types.push_back("float");  // lambda1
-  input_types.push_back("float");  // theta
-  input_types.push_back("float");  // theta_init
-  input_types.push_back("float");  // theta_end
-  input_types.push_back("bool");   // bright = true, dark = false
-  input_types.push_back("bool");   // use fast algorithm = true
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("float");  // lambda0
+  input_types.emplace_back("float");  // lambda1
+  input_types.emplace_back("float");  // theta
+  input_types.emplace_back("float");  // theta_init
+  input_types.emplace_back("float");  // theta_end
+  input_types.emplace_back("bool");   // bright = true, dark = false
+  input_types.emplace_back("bool");   // use fast algorithm = true
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // point response
-  output_types.push_back("vil_image_view_base_sptr");  // kernel domain response
+  output_types.emplace_back("vil_image_view_base_sptr");  // point response
+  output_types.emplace_back("vil_image_view_base_sptr");  // kernel domain response
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

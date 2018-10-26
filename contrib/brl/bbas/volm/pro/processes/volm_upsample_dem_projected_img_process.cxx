@@ -75,7 +75,7 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
   for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++)
       if ((*in_img)(i,j) > -1000.0f) {
-        pixels.push_back(vnl_vector_fixed<double, 2>((double)i, (double)j));
+        pixels.emplace_back((double)i, (double)j);
         values.push_back((*in_img)(i,j));
       }
 

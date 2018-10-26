@@ -22,7 +22,7 @@ bool vpgl_get_bounding_box_process_cons(bprb_func_process& pro)
 {
   //this process takes one input and has no output:
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");    //directory of perspective cameras
+  input_types.emplace_back("vcl_string");    //directory of perspective cameras
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

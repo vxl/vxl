@@ -105,9 +105,9 @@ bool boxm2_ocl_synoptic_update_alpha_process(bprb_func_process& pro)
   ifs.close();
 
   std::vector<std::string> type_names;
-  type_names.push_back("aux0");
-  type_names.push_back("aux2");
-  type_names.push_back("aux3");
+  type_names.emplace_back("aux0");
+  type_names.emplace_back("aux2");
+  type_names.emplace_back("aux3");
   // create a command queue.
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device->context(),

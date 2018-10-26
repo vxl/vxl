@@ -329,7 +329,7 @@ bool volm_conf_land_map_indexer::add_locations(std::vector<std::vector<vgl_point
         continue;
       double lx, ly, lz;
       lvcs_->global_to_local(line_global[p_idx].x(), line_global[p_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
-      line_local.push_back(vgl_point_2d<double>(lx, ly));
+      line_local.emplace_back(lx, ly);
     }
     if (line_local.size() >= 2) {
       lines_in_local.push_back(line_local);

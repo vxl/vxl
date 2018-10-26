@@ -15,15 +15,15 @@ bool vil_convert_to_n_planes_process_cons(bprb_func_process& pro)
   // input(1): the number of planes in the output image
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("unsigned");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //this process has 1 outputs
   // output(0): the output image with the specified number of planes
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // label image
+  output_types.emplace_back("vil_image_view_base_sptr");  // label image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -58,15 +58,15 @@ bool vil_get_plane_process_cons(bprb_func_process& pro)
   // input(1): the plane id to return
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("unsigned");
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //this process has 1 outputs
   // output(0): the output image with the specified number of planes
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // single plane image
+  output_types.emplace_back("vil_image_view_base_sptr");  // single plane image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -132,12 +132,12 @@ bool vil_get_number_of_planes_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("unsigned");  // return number of planes
+  output_types.emplace_back("unsigned");  // return number of planes
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -160,16 +160,16 @@ bool vil_combine_planes_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // red plane
-  input_types.push_back("vil_image_view_base_sptr");  // green plane
-  input_types.push_back("vil_image_view_base_sptr");  // blue
+  input_types.emplace_back("vil_image_view_base_sptr");  // red plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // green plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // blue
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //this process has 1 outputs
   // output(0): the output image with the specified number of planes
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // RGB image
+  output_types.emplace_back("vil_image_view_base_sptr");  // RGB image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -243,17 +243,17 @@ bool vil_combine_planes_process2_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // blue plane
-  input_types.push_back("vil_image_view_base_sptr");  // green plane
-  input_types.push_back("vil_image_view_base_sptr");  // red
-  input_types.push_back("vil_image_view_base_sptr");  // nir
+  input_types.emplace_back("vil_image_view_base_sptr");  // blue plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // green plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // red
+  input_types.emplace_back("vil_image_view_base_sptr");  // nir
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //this process has 1 outputs
   // output(0): the output image with the specified number of planes
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output 4-band image
+  output_types.emplace_back("vil_image_view_base_sptr");  // output 4-band image
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -333,18 +333,18 @@ bool vil_combine_palnes_8_bands_process_cons(bprb_func_process& pro)
 {
   // this process takes 8 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // coastal plane
-  input_types.push_back("vil_image_view_base_sptr");  // blue plane
-  input_types.push_back("vil_image_view_base_sptr");  // green plane
-  input_types.push_back("vil_image_view_base_sptr");  // yellow plane
-  input_types.push_back("vil_image_view_base_sptr");  // red plane
-  input_types.push_back("vil_image_view_base_sptr");  // red edge plane
-  input_types.push_back("vil_image_view_base_sptr");  // nir1
-  input_types.push_back("vil_image_view_base_sptr");  // nir2
+  input_types.emplace_back("vil_image_view_base_sptr");  // coastal plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // blue plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // green plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // yellow plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // red plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // red edge plane
+  input_types.emplace_back("vil_image_view_base_sptr");  // nir1
+  input_types.emplace_back("vil_image_view_base_sptr");  // nir2
 
   // this process takes 1 outputs
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output image with 8 planes
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with 8 planes
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }
 
@@ -373,10 +373,10 @@ bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
   {
     vil_image_view<float> img_out(img_c->ni(), img_r->nj(), 8);
     std::vector<vil_image_view<float> > imgs_vec;
-    imgs_vec.push_back(vil_image_view<float>(img_c));     imgs_vec.push_back(vil_image_view<float>(img_b));
-    imgs_vec.push_back(vil_image_view<float>(img_g));     imgs_vec.push_back(vil_image_view<float>(img_y));
-    imgs_vec.push_back(vil_image_view<float>(img_r));     imgs_vec.push_back(vil_image_view<float>(img_re));
-    imgs_vec.push_back(vil_image_view<float>(img_nir1));  imgs_vec.push_back(vil_image_view<float>(img_nir2));
+    imgs_vec.emplace_back(img_c);     imgs_vec.emplace_back(img_b);
+    imgs_vec.emplace_back(img_g);     imgs_vec.emplace_back(img_y);
+    imgs_vec.emplace_back(img_r);     imgs_vec.emplace_back(img_re);
+    imgs_vec.emplace_back(img_nir1);  imgs_vec.emplace_back(img_nir2);
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)
         for (unsigned p = 0; p < 8; p++)
@@ -387,10 +387,10 @@ bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
   {
     vil_image_view<vxl_byte> img_out(img_c->ni(), img_r->nj(), 8);
     std::vector<vil_image_view<vxl_byte> > imgs_vec;
-    imgs_vec.push_back(vil_image_view<vxl_byte>(img_c));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_b));
-    imgs_vec.push_back(vil_image_view<vxl_byte>(img_g));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_y));
-    imgs_vec.push_back(vil_image_view<vxl_byte>(img_r));     imgs_vec.push_back(vil_image_view<vxl_byte>(img_re));
-    imgs_vec.push_back(vil_image_view<vxl_byte>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_byte>(img_nir2));
+    imgs_vec.emplace_back(img_c);     imgs_vec.emplace_back(img_b);
+    imgs_vec.emplace_back(img_g);     imgs_vec.emplace_back(img_y);
+    imgs_vec.emplace_back(img_r);     imgs_vec.emplace_back(img_re);
+    imgs_vec.emplace_back(img_nir1);  imgs_vec.emplace_back(img_nir2);
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)
         for (unsigned p = 0; p < 8; p++)
@@ -401,10 +401,10 @@ bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
   {
     vil_image_view<vxl_uint_16> img_out(img_c->ni(), img_r->nj(), 8);
     std::vector<vil_image_view<vxl_uint_16> > imgs_vec;
-    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_c));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_b));
-    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_g));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_y));
-    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_r));     imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_re));
-    imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_uint_16>(img_nir2));
+    imgs_vec.emplace_back(img_c);     imgs_vec.emplace_back(img_b);
+    imgs_vec.emplace_back(img_g);     imgs_vec.emplace_back(img_y);
+    imgs_vec.emplace_back(img_r);     imgs_vec.emplace_back(img_re);
+    imgs_vec.emplace_back(img_nir1);  imgs_vec.emplace_back(img_nir2);
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)
         for (unsigned p = 0; p < 8; p++)
@@ -415,10 +415,10 @@ bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
   {
     vil_image_view<vxl_int_16> img_out(img_c->ni(), img_r->nj(), 8);
     std::vector<vil_image_view<vxl_int_16> > imgs_vec;
-    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_c));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_b));
-    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_g));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_y));
-    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_r));     imgs_vec.push_back(vil_image_view<vxl_int_16>(img_re));
-    imgs_vec.push_back(vil_image_view<vxl_int_16>(img_nir1));  imgs_vec.push_back(vil_image_view<vxl_int_16>(img_nir2));
+    imgs_vec.emplace_back(img_c);     imgs_vec.emplace_back(img_b);
+    imgs_vec.emplace_back(img_g);     imgs_vec.emplace_back(img_y);
+    imgs_vec.emplace_back(img_r);     imgs_vec.emplace_back(img_re);
+    imgs_vec.emplace_back(img_nir1);  imgs_vec.emplace_back(img_nir2);
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)
         for (unsigned p = 0; p < 8; p++)

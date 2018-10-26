@@ -14,13 +14,13 @@ bool brad_create_image_metadata_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("float"); // input 0: absolute calibration parameter
-  input_types.push_back("float"); // input 1: effect band width
-  input_types.push_back("float"); // input 2: view azimuth
-  input_types.push_back("float"); // input 3: view elevation
-  input_types.push_back("float"); // input 4: sun azimuth
-  input_types.push_back("float"); // input 5: sun elevation
-  input_types.push_back("float"); // input 6: sun irradiance
+  input_types.emplace_back("float"); // input 0: absolute calibration parameter
+  input_types.emplace_back("float"); // input 1: effect band width
+  input_types.emplace_back("float"); // input 2: view azimuth
+  input_types.emplace_back("float"); // input 3: view elevation
+  input_types.emplace_back("float"); // input 4: sun azimuth
+  input_types.emplace_back("float"); // input 5: sun elevation
+  input_types.emplace_back("float"); // input 6: sun irradiance
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -29,7 +29,7 @@ bool brad_create_image_metadata_process_cons(bprb_func_process& pro)
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("brad_image_metadata_sptr");
+  output_types.emplace_back("brad_image_metadata_sptr");
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

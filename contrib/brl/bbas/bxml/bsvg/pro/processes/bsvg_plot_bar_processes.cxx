@@ -25,15 +25,15 @@ bool bsvg_bar_plot_initialize_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("float");  // width of the drawing region in the svg file
-  input_types.push_back("float");  // height
-  input_types.push_back("vcl_string");  // title of the plot
+  input_types.emplace_back("float");  // width of the drawing region in the svg file
+  input_types.emplace_back("float");  // height
+  input_types.emplace_back("vcl_string");  // title of the plot
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("bxml_document_sptr");
+  output_types.emplace_back("bxml_document_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -72,10 +72,10 @@ bool bsvg_bar_plot_add_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bxml_document_sptr");
-  input_types.push_back("float");  // height
-  input_types.push_back("vcl_string");  // label
-  input_types.push_back("vcl_string");  // color
+  input_types.emplace_back("bxml_document_sptr");
+  input_types.emplace_back("float");  // height
+  input_types.emplace_back("vcl_string");  // label
+  input_types.emplace_back("vcl_string");  // color
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -110,8 +110,8 @@ bool bsvg_plot_write_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("bxml_document_sptr");
-  input_types.push_back("vcl_string");  // out file
+  input_types.emplace_back("bxml_document_sptr");
+  input_types.emplace_back("vcl_string");  // out file
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
   std::vector<std::string> output_types;

@@ -206,7 +206,7 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
       const imesh_vertex<3>& v = verts[faces(f,i)];
       vnl_vector<double> p3 = vnl_double_3(v[0],v[1],v[2])-mean;
       vnl_vector<double> p2 = P*p3;
-      face_v.push_back(vgl_point_2d<double>(p2[0],p2[1]));
+      face_v.emplace_back(p2[0],p2[1]);
       face_i.push_back(faces(f,i));
     }
     imesh_triangulate_face(face_v, face_i, *tris);

@@ -32,10 +32,10 @@ void create_grid(std::string grid_filename)
   surface_grid.initialize_data(bnonsurf);
 
   std::vector<vgl_point_3d<double> > poly_points;
-  poly_points.push_back(vgl_point_3d<double>(10.0,10.0,10.0));
-  poly_points.push_back(vgl_point_3d<double>(10.0,20.0,10.0));
-  poly_points.push_back(vgl_point_3d<double>(20.0,20.0,10.0));
-  poly_points.push_back(vgl_point_3d<double>(20.0,10.0,10.0));
+  poly_points.emplace_back(10.0,10.0,10.0);
+  poly_points.emplace_back(10.0,20.0,10.0);
+  poly_points.emplace_back(20.0,20.0,10.0);
+  poly_points.emplace_back(20.0,10.0,10.0);
 
   bvxm_opinion bsurf(0.1f,0.9f);
   bvxm_load_polygon_into_grid<bvxm_opinion>(&surface_grid,poly_points,bsurf);

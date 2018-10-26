@@ -16,11 +16,11 @@ bool vil_gradient_angle_process_cons(bprb_func_process& pro)
 {
   //input
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // dI/dx
-  input_types.push_back("vil_image_view_base_sptr"); // dI/dy
+  input_types.emplace_back("vil_image_view_base_sptr"); // dI/dx
+  input_types.emplace_back("vil_image_view_base_sptr"); // dI/dy
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // the angle of vector (dI/dx + dI/dy)
+  output_types.emplace_back("vil_image_view_base_sptr"); // the angle of vector (dI/dx + dI/dy)
   return pro.set_input_types(input_types)
      &&  pro.set_output_types(output_types);
 }

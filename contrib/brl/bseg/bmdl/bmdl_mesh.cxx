@@ -96,7 +96,7 @@ bool bmdl_mesh::trace_boundary(std::vector<vgl_point_2d<double> >& pts,
     }
     unsigned int pi = i+((dir==0||dir==3)?1:0);
     unsigned int pj = j+((dir/2==0)?1:0);
-    pts.push_back(vgl_point_2d<double>(pi-0.5, pj-0.5));
+    pts.emplace_back(pi-0.5, pj-0.5);
     next_trace_point(i,j,dir,p,value,ni1,nj1,istep,jstep);
   }
   while (i!=i0 || j!=j0 || dir!=2);
@@ -283,7 +283,7 @@ unsigned int bmdl_mesh::link_boundary_edges(const vil_image_view<unsigned int>& 
           {
             // start a new edge
             edge_idxs.push_back(edges.size());
-            edges.push_back(bmdl_edge(i+1,l));
+            edges.emplace_back(i+1,l);
             edges.back().pts.push_back(pts[k1]);
             edges.back().joint1 = last_joint;
             edges.back().joint2 = joint_count++;
@@ -408,7 +408,7 @@ void bmdl_mesh::simplify_boundaries( std::vector<vgl_polygon<double> >& boundari
       // shift point to the edge centers (diagonals line up better this way)
       std::vector<vgl_point_2d<double> > new_pts;
       for (unsigned p1=pts.size()-1, p2=0; p2<pts.size(); p1=p2, ++p2) {
-        new_pts.push_back(vgl_point_2d<double>((pts[p1].x()+pts[p2].x())/2, (pts[p1].y()+pts[p2].y())/2));
+        new_pts.emplace_back((pts[p1].x()+pts[p2].x())/2, (pts[p1].y()+pts[p2].y())/2);
       }
       pts.swap(new_pts);
 
@@ -490,8 +490,8 @@ void bmdl_mesh::simplify_edges( std::vector<bmdl_edge>& edges )
     std::vector<vgl_point_2d<double> > new_pts;
     new_pts.push_back(pts.front());
     for (unsigned j=1; j<pts.size(); ++j) {
-      new_pts.push_back(vgl_point_2d<double>((pts[j-1].x()+pts[j].x())/2,
-                                             (pts[j-1].y()+pts[j].y())/2));
+      new_pts.emplace_back((pts[j-1].x()+pts[j].x())/2,
+                                             (pts[j-1].y()+pts[j].y())/2);
     }
     new_pts.push_back(pts.back());
     pts.swap(new_pts);

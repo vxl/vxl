@@ -100,8 +100,8 @@ imesh_closest_index(const vgl_point_3d<double>& query,
     {
       double left_dist2 = imesh_min_sq_dist(query,current->left_->inner_box_);
       if (left_dist2 < closest_dist2) {
-        internal_queue.push_back(imesh_kd_tree_queue_entry(left_dist2,
-                                                           current->left_.get()));
+        internal_queue.emplace_back(left_dist2,
+                                                           current->left_.get());
         std::push_heap(internal_queue.begin(), internal_queue.end());
       }
       else if (dists)
@@ -109,8 +109,8 @@ imesh_closest_index(const vgl_point_3d<double>& query,
 
       double right_dist2 = imesh_min_sq_dist(query,current->right_->inner_box_);
       if (right_dist2 < closest_dist2) {
-        internal_queue.push_back(imesh_kd_tree_queue_entry(right_dist2,
-                                                           current->right_.get()));
+        internal_queue.emplace_back(right_dist2,
+                                                           current->right_.get());
         std::push_heap(internal_queue.begin(), internal_queue.end());
       }
       else if (dists)

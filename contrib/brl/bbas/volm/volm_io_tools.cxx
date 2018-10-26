@@ -538,8 +538,8 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   // find the image of all four corners
   std::vector<std::pair<unsigned, std::pair<int, int> > > corners;
   std::vector<vgl_point_2d<double> > pts;
-  pts.push_back(vgl_point_2d<double>(lower_left.x(), upper_right.y()));
-  pts.push_back(vgl_point_2d<double>(upper_right.x(), lower_left.y()));
+  pts.emplace_back(lower_left.x(), upper_right.y());
+  pts.emplace_back(upper_right.x(), lower_left.y());
   pts.push_back(lower_left);
   pts.push_back(upper_right);
 
@@ -766,7 +766,7 @@ void form_line_segment_from_pts(std::vector<vgl_point_2d<double> > const& road, 
     vgl_point_2d<double> s = road[i];  vgl_point_2d<double> e = road[i+1];
     if (near_eq_pt(s,e))
       continue;
-    road_seg.push_back(vgl_line_segment_2d<double>(s, e));
+    road_seg.emplace_back(s, e);
   }
 #if 0
   // define a 2d line fit
@@ -827,7 +827,7 @@ void find_junctions(vgl_line_segment_2d<double> const& seg,
       else
         continue;
     }
-    cross_pts.push_back(vgl_point_2d<double>(pt.x(), pt.y()));
+    cross_pts.emplace_back(pt.x(), pt.y());
     std::pair<int,int> key(seg_prop.id_, line_prop.id_);
     cross_prop.push_back(volm_osm_category_io::road_junction_table[key]);
   }

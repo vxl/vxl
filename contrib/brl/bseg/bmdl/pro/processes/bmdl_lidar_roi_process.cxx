@@ -254,22 +254,22 @@ bool bmdl_lidar_roi_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("float");
-  input_types.push_back("unsigned");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("float");
+  input_types.emplace_back("float");
+  input_types.emplace_back("float");
+  input_types.emplace_back("float");
+  input_types.emplace_back("unsigned");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // label image
-  output_types.push_back("vil_image_view_base_sptr"); // height image
-  output_types.push_back("vil_image_view_base_sptr"); // ground roi
-  output_types.push_back("vpgl_camera_double_sptr");  // lvcs
+  output_types.emplace_back("vil_image_view_base_sptr"); // label image
+  output_types.emplace_back("vil_image_view_base_sptr"); // height image
+  output_types.emplace_back("vil_image_view_base_sptr"); // ground roi
+  output_types.emplace_back("vpgl_camera_double_sptr");  // lvcs
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
 

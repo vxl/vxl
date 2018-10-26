@@ -15,15 +15,15 @@ bool sdet_texture_unsupervised_classifier_process_cons(bprb_func_process& pro)
 {
   // process takes 3 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //classifier
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //classifier
   if (!pro.set_input_types(input_types))
     return false;
 
   // process has 2 outputs:
   // output[0]: output texture color image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // rgb color image
-  output_types.push_back("vil_image_view_base_sptr");  // id image
+  output_types.emplace_back("vil_image_view_base_sptr");  // rgb color image
+  output_types.emplace_back("vil_image_view_base_sptr");  // id image
   return pro.set_output_types(output_types);
 }
 
@@ -49,7 +49,7 @@ bool sdet_texture_unsupervised_classifier_process(bprb_func_process& pro)
     unsigned char r = rng.lrand32(0,255);
     unsigned char g = rng.lrand32(0,255);
     unsigned char b = rng.lrand32(0,255);
-    colors.push_back(vil_rgb<vxl_byte>(r,g,b));
+    colors.emplace_back(r,g,b);
   }
 
   // assumes the filter bank is computed at the dictionary

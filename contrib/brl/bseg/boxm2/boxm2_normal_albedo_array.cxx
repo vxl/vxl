@@ -13,7 +13,7 @@ constexpr double boxm2_normal_albedo_array_constants::sigma_skylight = 10.0;
 std::vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
 {
   std::vector<vgl_vector_3d<double> > normals;
-  normals.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
+  normals.emplace_back(0.0, 0.0, 1.0);
   unsigned int num_az[] = {8,7};
   for (unsigned int e=0; e<2; ++e) {
     for (unsigned int a=0; a<num_az[e]; ++a) {
@@ -22,7 +22,7 @@ std::vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
       double x = std::sin(azimuth)*std::cos(elevation);
       double y = std::cos(azimuth)*std::cos(elevation);
       double z = std::sin(elevation);
-      normals.push_back(vgl_vector_3d<double>(x,y,z));
+      normals.emplace_back(x,y,z);
     }
   }
   return normals;

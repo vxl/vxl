@@ -37,13 +37,13 @@
 bool vpgl_isfm_rational_camera_process_cons(bprb_func_process& pro)
 {
     std::vector<std::string> input_types;
-    input_types.push_back("vcl_string");  // track file
-    input_types.push_back("vcl_string");  // output folder to write the corrected cams
-    input_types.push_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
+    input_types.emplace_back("vcl_string");  // track file
+    input_types.emplace_back("vcl_string");  // output folder to write the corrected cams
+    input_types.emplace_back("float"); // radius in pixels for the disagreement among inliers, e.g. 2 pixels
     std::vector<std::string> output_types;
-    output_types.push_back("vpgl_camera_double_sptr");
-    output_types.push_back("float"); // projection error
-    output_types.push_back("float"); // % inlier
+    output_types.emplace_back("vpgl_camera_double_sptr");
+    output_types.emplace_back("float"); // projection error
+    output_types.emplace_back("float"); // % inlier
     return pro.set_input_types(input_types)
         && pro.set_output_types(output_types);
 }
@@ -130,14 +130,14 @@ bool vpgl_isfm_rational_camera_process(bprb_func_process& pro)
         ifs >> numfeatures;
         int id; float u, v;
         ifs >> id >> u >> v;
-        currpts.push_back(vgl_point_2d<double>(u, v));
+        currpts.emplace_back(u, v);
         std::vector<int> ids;
         std::vector<vgl_point_2d<double> > pts;
         for (unsigned int j = 1; j < numfeatures; j++)
         {
             int id; float u, v;
             ifs >> id >> u >> v;
-            pts.push_back(vgl_point_2d<double>(u, v));
+            pts.emplace_back(u, v);
             ids.push_back(id);
         }
         trackimgids.push_back(ids);

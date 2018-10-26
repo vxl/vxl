@@ -36,10 +36,10 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
 {
   // this process takes 4 inputs, 2 of which are optional:
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // change image
-  input_types.push_back("vil_image_view_base_sptr");  // ground truth map
-  input_types.push_back("vil_image_view_base_sptr");  // mask image
-  input_types.push_back("bool");                      // if true use pair_sorter, otherwise use pair_sorter2, if want low values in change image to signify true classification use pair_sorter
+  input_types.emplace_back("vil_image_view_base_sptr");  // change image
+  input_types.emplace_back("vil_image_view_base_sptr");  // ground truth map
+  input_types.emplace_back("vil_image_view_base_sptr");  // mask image
+  input_types.emplace_back("bool");                      // if true use pair_sorter, otherwise use pair_sorter2, if want low values in change image to signify true classification use pair_sorter
   if (! pro.set_input_types(input_types))
     return false;
 
@@ -52,13 +52,13 @@ bool vil_pixelwise_roc_process_cons(bprb_func_process& pro)
 
   // this process takes 7 outputs:
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_float_sptr");  // tp
-  output_types.push_back("bbas_1d_array_float_sptr");  // tn
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
-  output_types.push_back("bbas_1d_array_float_sptr");  // tpr
-  output_types.push_back("bbas_1d_array_float_sptr");  // fpr
-  output_types.push_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tpr
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fpr
+  output_types.emplace_back("vil_image_view_base_sptr");  // output image with pixels given by threshold of 0.8 tpr marked red
 
   return pro.set_output_types(output_types);
 }
@@ -403,9 +403,9 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
         if (use_mask && (*mask_map)(i,j) == 0)
           continue;
         if ((*gt_map)(i,j))
-          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+          pos_pixels.emplace_back(i,j);
         if ((*neg_gt_map)(i,j))
-          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+          neg_pixels.emplace_back(i,j);
       }
     }
   }
@@ -416,9 +416,9 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
         if (use_mask && (*mask_map)(i,j) == 0)
           continue;
         if ((*gt_map)(i,j))
-          pos_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+          pos_pixels.emplace_back(i,j);
         else
-          neg_pixels.push_back(std::pair<unsigned, unsigned>(i,j));
+          neg_pixels.emplace_back(i,j);
       }
     }
   }

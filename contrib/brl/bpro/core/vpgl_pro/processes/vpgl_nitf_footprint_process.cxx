@@ -23,11 +23,11 @@ bool vpgl_nitf_footprint_process_cons(bprb_func_process& pro)
   // 3-5: (unsigned) the rgb value used for kml visualization
 
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
-  input_types.push_back("unsigned");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("unsigned");
+  input_types.emplace_back("unsigned");
+  input_types.emplace_back("unsigned");
 
   return pro.set_input_types(input_types);
 }
@@ -100,10 +100,10 @@ bool vpgl_nitf_footprint_process2_cons(bprb_func_process& pro)
   //this process takes 4 inputs:
   // 1: (std::string) the image filename
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
-  input_types.push_back("bool");
-  input_types.push_back("vcl_string"); // metadata folder
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("bool");
+  input_types.emplace_back("vcl_string"); // metadata folder
 
   if(!pro.set_input_types(input_types) )
     return false;
@@ -112,12 +112,12 @@ bool vpgl_nitf_footprint_process2_cons(bprb_func_process& pro)
 
   //this process takes 4 outputs
   std::vector<std::string> output_types;
-  output_types.push_back("double");  // lower left  lon
-  output_types.push_back("double");  // lower left  lat
-  output_types.push_back("double");  // lower left  elev
-  output_types.push_back("double");  // upper right lon
-  output_types.push_back("double");  // upper right lat
-  output_types.push_back("double");  // upper right elev
+  output_types.emplace_back("double");  // lower left  lon
+  output_types.emplace_back("double");  // lower left  lat
+  output_types.emplace_back("double");  // lower left  elev
+  output_types.emplace_back("double");  // upper right lon
+  output_types.emplace_back("double");  // upper right lat
+  output_types.emplace_back("double");  // upper right elev
   pro.set_output_types(output_types);
   return pro.set_input_types(input_types) && pro.set_output_types(output_types);
 }

@@ -78,11 +78,11 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
     for (int j = 0; j < in_img.nj(); j++) {
       if (is_above) {
         if (in_img(i,j) >= threshold)
-          pixels.push_back(vgl_point_2d<int>(i,j));
+          pixels.emplace_back(i,j);
       }
       else {
         if (in_img(i,j) <= threshold)
-          pixels.push_back(vgl_point_2d<int>(i,j));
+          pixels.emplace_back(i,j);
       }
     }
   }

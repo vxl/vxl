@@ -36,9 +36,9 @@ bool boxm2_blob_precision_recall_process_cons(bprb_func_process& pro)
 
   // this process takes 3 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // image
-  input_types.push_back("vil_image_view_base_sptr");  // ground truth map
-  input_types.push_back("vil_image_view_base_sptr");  // mask image
+  input_types.emplace_back("vil_image_view_base_sptr");  // image
+  input_types.emplace_back("vil_image_view_base_sptr");  // ground truth map
+  input_types.emplace_back("vil_image_view_base_sptr");  // mask image
   if (! pro.set_input_types(input_types))
     return false;
 
@@ -48,10 +48,10 @@ bool boxm2_blob_precision_recall_process_cons(bprb_func_process& pro)
 
   // this process takes 4 outputs:
   std::vector<std::string> output_types;
-  output_types.push_back("bbas_1d_array_float_sptr");  // tp
-  output_types.push_back("bbas_1d_array_float_sptr");  // tn
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
-  output_types.push_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // tn
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
+  output_types.emplace_back("bbas_1d_array_float_sptr");  // fp
   return pro.set_output_types(output_types);
 }
 

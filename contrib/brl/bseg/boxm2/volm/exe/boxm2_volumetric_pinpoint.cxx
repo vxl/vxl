@@ -187,7 +187,7 @@ int main(int argc, char** argv)
     // generate a pin-point region for current location
     likelihood.push_back(mit->first);
     cam_ids.push_back(mit->second.cam_id_);
-    top_locs.push_back(vgl_point_2d<double>(mit->second.loc_.x(), mit->second.loc_.y()));
+    top_locs.emplace_back(mit->second.loc_.x(), mit->second.loc_.y());
     std::vector<vgl_point_2d<double> > circle;
     if (!generate_pin_point_circle(mit->second.loc_, radius(), circle))
     {
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
   }
   else {
     for (unsigned i = 0; i < pin_pt_poly.num_sheets(); i++) {
-      top_cameras.push_back(cam_angles(0.0, 1.0, 0.0, 90.0));
+      top_cameras.emplace_back(0.0, 1.0, 0.0, 90.0);
       right_fovs.push_back(1.0);
     }
   }
@@ -268,7 +268,7 @@ bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const&
     double dy = radius * std::sin(theta);
     double lon ,lat, gz;
     lvcs->local_to_global(dx, dy, 0.0, vpgl_lvcs::wgs84, lon, lat, gz);
-    circle.push_back(vgl_point_2d<double>(lon, lat));
+    circle.emplace_back(lon, lat);
     theta += d_theta;
   }
   return true;
@@ -291,7 +291,7 @@ bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni
     double tv_rad = tfov / vnl_math::deg_per_rad;
     double ttr = std::tan(tv_rad);
     double rfov = std::atan( ni * ttr / nj) * vnl_math::deg_per_rad;
-    top_cameras.push_back(cam_angles(roll, tfov, head, tilt));
+    top_cameras.emplace_back(roll, tfov, head, tilt);
     right_fovs.push_back(rfov);
   }
   return true;

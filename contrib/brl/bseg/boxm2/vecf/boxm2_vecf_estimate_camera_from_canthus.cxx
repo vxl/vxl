@@ -106,7 +106,7 @@ bool boxm2_vecf_estimate_camera_from_canthus::parse_files(std::string& left_dlib
     double x,y;
     lfile >> x;
     lfile >> y;
-    pts_l.push_back(vgl_point_2d<double>(x ,y));
+    pts_l.emplace_back(x ,y);
   }
   if (pts_l.size()!= this->n_dlib_orbit_parts_){
     std::cout<< " file has "<<pts_l.size()<<" orbit parts instead of the required "<<this->n_dlib_orbit_parts_<<std::endl;
@@ -123,7 +123,7 @@ bool boxm2_vecf_estimate_camera_from_canthus::parse_files(std::string& left_dlib
     double x,y;
     rfile >> x;
     rfile >> y;
-    pts_r.push_back(vgl_point_2d<double>(x ,y));
+    pts_r.emplace_back(x ,y);
   }
   if (pts_r.size()!= this->n_dlib_orbit_parts_){
     std::cout<< " file has "<<pts_r.size()<<" orbit parts instead of the required "<<this->n_dlib_orbit_parts_<<std::endl;
@@ -139,7 +139,7 @@ bool boxm2_vecf_estimate_camera_from_canthus::parse_files(std::string& left_dlib
     double x,y;
     alfw_file >> x;
     alfw_file >> y;
-    pts_alfw.push_back(vgl_point_2d<double>(x ,y));
+    pts_alfw.emplace_back(x ,y);
   }
   if (pts_alfw.size()!= this->n_dlib_alfw_landmarks_){
     std::cout<< " file has "<<pts_alfw.size()<<" aflw parts instead of the required "<<this->n_dlib_alfw_landmarks_ <<std::endl;

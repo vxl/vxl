@@ -370,8 +370,8 @@ img_to_region_plane(vpgl_perspective_camera<double> const&  /*cam*/,
   // cast to homogeneous points
   std::vector<vgl_homg_point_2d<double> > hpts_2d, hpts_reg_2d;
   for (unsigned i = 0; i<nverts; ++i) {
-    hpts_2d.push_back(vgl_homg_point_2d<double>(verts_2d[i].x(),verts_2d[i].y()) );
-    hpts_reg_2d.push_back(vgl_homg_point_2d<double>(reg_pts_2d[i].x(),reg_pts_2d[i].y()));
+    hpts_2d.emplace_back(verts_2d[i].x(),verts_2d[i].y() );
+    hpts_reg_2d.emplace_back(reg_pts_2d[i].x(),reg_pts_2d[i].y());
   }
   vgl_h_matrix_2d_compute_linear hc;
   bool success = hc.compute(hpts_2d, hpts_reg_2d, H);

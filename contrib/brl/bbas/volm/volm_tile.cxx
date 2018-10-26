@@ -181,24 +181,24 @@ std::vector<volm_tile> volm_tile::generate_p1_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1_tiles.push_back(volm_tile(37, 118, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(37, 119, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(38, 118, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(38, 119, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(30, 82, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(31, 81, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(31, 82, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(32, 80, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(32, 81, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 78, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 79, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 80, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 77, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 78, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 79, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(35, 76, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(35, 77, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(36, 76, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.emplace_back(37, 118, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(37, 119, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(38, 118, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(38, 119, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(30, 82, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(31, 81, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(31, 82, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(32, 80, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(32, 81, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 78, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 79, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 80, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 77, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 78, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 79, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(35, 76, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(35, 77, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(36, 76, 'N', 'W', scale_i, scale_j, ni, nj);
   return p1_tiles;
 }
 
@@ -209,10 +209,10 @@ std::vector<volm_tile> volm_tile::generate_p1_wr1_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1_tiles.push_back(volm_tile(37, 118, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(37, 119, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(38, 118, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(38, 119, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.emplace_back(37, 118, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(37, 119, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(38, 118, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(38, 119, 'N', 'W', scale_i, scale_j, ni, nj);
   return p1_tiles;
 }
 
@@ -223,20 +223,20 @@ std::vector<volm_tile> volm_tile::generate_p1_wr2_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1_tiles.push_back(volm_tile(30, 82, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(31, 81, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(31, 82, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(32, 80, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(32, 81, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 78, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 79, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(33, 80, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 77, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 78, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(34, 79, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(35, 76, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(35, 77, 'N', 'W', scale_i, scale_j, ni, nj));
-  p1_tiles.push_back(volm_tile(36, 76, 'N', 'W', scale_i, scale_j, ni, nj));
+  p1_tiles.emplace_back(30, 82, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(31, 81, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(31, 82, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(32, 80, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(32, 81, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 78, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 79, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(33, 80, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 77, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 78, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(34, 79, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(35, 76, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(35, 77, 'N', 'W', scale_i, scale_j, ni, nj);
+  p1_tiles.emplace_back(36, 76, 'N', 'W', scale_i, scale_j, ni, nj);
   return p1_tiles;
 }
 
@@ -249,10 +249,10 @@ std::vector<volm_tile> volm_tile::generate_p1b_wr1_tiles()
   float scale_j = 1;
   //p1b_tiles.push_back(volm_tile(33, 71, 'S', 'W', scale_i, scale_j, ni, nj));
   //p1b_tiles.push_back(volm_tile(33, 72, 'S', 'W', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(34, 71, 'S', 'W', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(34, 72, 'S', 'W', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(35, 71, 'S', 'W', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(35, 72, 'S', 'W', scale_i, scale_j, ni, nj));
+  p1b_tiles.emplace_back(34, 71, 'S', 'W', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(34, 72, 'S', 'W', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(35, 71, 'S', 'W', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(35, 72, 'S', 'W', scale_i, scale_j, ni, nj);
   return p1b_tiles;
 }
 
@@ -263,10 +263,10 @@ std::vector<volm_tile> volm_tile::generate_p1b_wr2_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1b_tiles.push_back(volm_tile(12, 76, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(12, 77, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(13, 76, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(13, 77, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.emplace_back(12, 76, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(12, 77, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(13, 76, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(13, 77, 'N', 'E', scale_i, scale_j, ni, nj);
   return p1b_tiles;
 }
 
@@ -277,11 +277,11 @@ std::vector<volm_tile> volm_tile::generate_p1b_wr3_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1b_tiles.push_back(volm_tile(30, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(31, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(31, 36, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(32, 35, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(32, 36, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.emplace_back(30, 35, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(31, 35, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(31, 36, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(32, 35, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(32, 36, 'N', 'E', scale_i, scale_j, ni, nj);
   return p1b_tiles;
 }
 
@@ -292,13 +292,13 @@ std::vector<volm_tile> volm_tile::generate_p1b_wr4_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1b_tiles.push_back(volm_tile(5, 124, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(5, 125, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(6, 124, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(6, 125, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(6, 126, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(7, 125, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(7, 126, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.emplace_back(5, 124, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(5, 125, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(6, 124, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(6, 125, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(6, 126, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(7, 125, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(7, 126, 'N', 'E', scale_i, scale_j, ni, nj);
   return p1b_tiles;
 }
 
@@ -309,11 +309,11 @@ std::vector<volm_tile> volm_tile::generate_p1b_wr5_tiles()
   unsigned nj = 3601;
   float scale_i = 1;
   float scale_j = 1;
-  p1b_tiles.push_back(volm_tile(22, 120, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(23, 120, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(24, 120, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(24, 121, 'N', 'E', scale_i, scale_j, ni, nj));
-  p1b_tiles.push_back(volm_tile(25, 121, 'N', 'E', scale_i, scale_j, ni, nj));
+  p1b_tiles.emplace_back(22, 120, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(23, 120, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(24, 120, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(24, 121, 'N', 'E', scale_i, scale_j, ni, nj);
+  p1b_tiles.emplace_back(25, 121, 'N', 'E', scale_i, scale_j, ni, nj);
   return p1b_tiles;
 }
 
@@ -337,44 +337,44 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr8_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(33, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 152, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(33, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 152, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 149, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 
@@ -383,16 +383,16 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr9_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 149, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(35, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 149, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 
@@ -401,16 +401,16 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr10_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 151, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 152, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(35, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 151, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 152, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 
@@ -419,15 +419,15 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr11_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(34, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(33, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(35, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(34, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(33, 147, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 
@@ -436,19 +436,19 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr12_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(38, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 150, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 148, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 149, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 150, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(38, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 150, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 148, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 149, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 150, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 
@@ -457,17 +457,17 @@ std::vector<volm_tile> volm_tile::generate_p2a_wr13_tiles()
   std::vector<volm_tile> tiles;
   unsigned ni = 3601,       nj = 3601;
   float    scale_i = 1.0f,  scale_j = 1.0f;
-  tiles.push_back(volm_tile(38, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(38, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(37, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(36, 147, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 145, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 146, 'S', 'E', scale_i, scale_j, ni, nj));
-  tiles.push_back(volm_tile(35, 147, 'S', 'E', scale_i, scale_j, ni, nj));
+  tiles.emplace_back(38, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(38, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(37, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(36, 147, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 145, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 146, 'S', 'E', scale_i, scale_j, ni, nj);
+  tiles.emplace_back(35, 147, 'S', 'E', scale_i, scale_j, ni, nj);
   return tiles;
 }
 

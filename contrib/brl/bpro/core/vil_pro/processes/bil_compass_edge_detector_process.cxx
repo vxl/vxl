@@ -14,14 +14,14 @@ bool bil_compass_edge_detector_process_cons(bprb_func_process& pro)
   //this process takes four inputs:
 
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("unsigned"); // no of orientations
-  input_types.push_back("double");   // sigma
-  input_types.push_back("double");   // threshold
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("unsigned"); // no of orientations
+  input_types.emplace_back("double");   // sigma
+  input_types.emplace_back("double");   // threshold
 
   //this process has 1 output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // output image
+  output_types.emplace_back("vil_image_view_base_sptr"); // output image
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

@@ -89,7 +89,7 @@ void bvpl_gauss3d_kernel_factory::create_canonical()
       {
         vnl_float_3 pt(x,y,z);
         float val = gauss_kernel.prob_density(pt);
-        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(val)));
+        canonical_kernel_.emplace_back(point_3d(x,y,z), dispatch(val));
         l1_norm +=val;
       }
     }

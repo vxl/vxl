@@ -22,26 +22,26 @@
 bool vpgl_affine_rectify_images_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // image1
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1
-  input_types.push_back("vil_image_view_base_sptr");  // image2
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2
-  input_types.push_back("double");    // min point x (e.g. lower left corner of a scene bbox)
-  input_types.push_back("double");    // min point y
-  input_types.push_back("double");    // min point z
-  input_types.push_back("double");    // max point x (e.g. upper right corner of a scene bbox)
-  input_types.push_back("double");    // max point y
-  input_types.push_back("double");    // max point z
-  input_types.push_back("unsigned");    // n_points -- randomly sample this many points form the voxel volume, e.g. 100
-  input_types.push_back("double");    // local z plane height, supposedly the height of the ground plane, e.g. 5
+  input_types.emplace_back("vil_image_view_base_sptr");  // image1
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1
+  input_types.emplace_back("vil_image_view_base_sptr");  // image2
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2
+  input_types.emplace_back("double");    // min point x (e.g. lower left corner of a scene bbox)
+  input_types.emplace_back("double");    // min point y
+  input_types.emplace_back("double");    // min point z
+  input_types.emplace_back("double");    // max point x (e.g. upper right corner of a scene bbox)
+  input_types.emplace_back("double");    // max point y
+  input_types.emplace_back("double");    // max point z
+  input_types.emplace_back("unsigned");    // n_points -- randomly sample this many points form the voxel volume, e.g. 100
+  input_types.emplace_back("double");    // local z plane height, supposedly the height of the ground plane, e.g. 5
                                       //  when the points are only sampled from this plane, then the output warped images are ground plane stabilized
                                       //     --> i.e. points on the ground plane are at the same location in each image
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // warped image1
-  output_types.push_back("vpgl_camera_double_sptr"); // warped camera1
-  output_types.push_back("vil_image_view_base_sptr"); // warped image2
-  output_types.push_back("vpgl_camera_double_sptr"); // warped camera2
+  output_types.emplace_back("vil_image_view_base_sptr"); // warped image1
+  output_types.emplace_back("vpgl_camera_double_sptr"); // warped camera1
+  output_types.emplace_back("vil_image_view_base_sptr"); // warped image2
+  output_types.emplace_back("vpgl_camera_double_sptr"); // warped camera2
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -49,10 +49,10 @@ bool vpgl_affine_rectify_images_process_cons(bprb_func_process& pro)
 void out_image_size(unsigned ni, unsigned nj, vnl_matrix_fixed<double, 3, 3>& H1, double& min_i, double& min_j, double& max_i, double& max_j)
 {
   std::vector<vnl_vector_fixed<double, 3> > cs;
-  cs.push_back(vnl_vector_fixed<double, 3>(0,0,1));
-  cs.push_back(vnl_vector_fixed<double, 3>(ni,0,1));
-  cs.push_back(vnl_vector_fixed<double, 3>(ni,nj,1));
-  cs.push_back(vnl_vector_fixed<double, 3>(0,nj,1));
+  cs.emplace_back(0,0,1);
+  cs.emplace_back(ni,0,1);
+  cs.emplace_back(ni,nj,1);
+  cs.emplace_back(0,nj,1);
 
   // warp the corners, initialize with first corner
   vnl_vector_fixed<double, 3> oc = H1*cs[0];
@@ -176,9 +176,9 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
     double y = rng.drand64()*depth + min_y;
     double u, v;
     cam1->project(x,y,z,u,v);
-    img_pts1.push_back(vnl_vector_fixed<double, 3>(u,v,1));
+    img_pts1.emplace_back(u,v,1);
     cam2->project(x,y,z,u,v);
-    img_pts2.push_back(vnl_vector_fixed<double, 3>(u,v,1));
+    img_pts2.emplace_back(u,v,1);
   }
 
 
@@ -252,29 +252,29 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
 bool vpgl_affine_rectify_images_process2_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // image1
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1 local rational
-  input_types.push_back("vil_image_view_base_sptr");  // image2
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2 local rational
-  input_types.push_back("double");    // min point x (e.g. lower left corner of a scene bbox)
-  input_types.push_back("double");    // min point y
-  input_types.push_back("double");    // min point z
-  input_types.push_back("double");    // max point x (e.g. upper right corner of a scene bbox)
-  input_types.push_back("double");    // max point y
-  input_types.push_back("double");    // max point z
-  input_types.push_back("unsigned");    // n_points -- randomly sample this many points form the local z plane, e.g. 100
-  input_types.push_back("double");    // local z plane height, supposedly the height of the ground plane, e.g. 5
+  input_types.emplace_back("vil_image_view_base_sptr");  // image1
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1 local rational
+  input_types.emplace_back("vil_image_view_base_sptr");  // image2
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2 local rational
+  input_types.emplace_back("double");    // min point x (e.g. lower left corner of a scene bbox)
+  input_types.emplace_back("double");    // min point y
+  input_types.emplace_back("double");    // min point z
+  input_types.emplace_back("double");    // max point x (e.g. upper right corner of a scene bbox)
+  input_types.emplace_back("double");    // max point y
+  input_types.emplace_back("double");    // max point z
+  input_types.emplace_back("unsigned");    // n_points -- randomly sample this many points form the local z plane, e.g. 100
+  input_types.emplace_back("double");    // local z plane height, supposedly the height of the ground plane, e.g. 5
                                       //  when the points are only sampled from this plane, then the output warped images are ground plane stabilized
                                       //     --> i.e. points on the ground plane are at the same location in each image
-  input_types.push_back("vcl_string"); // output path to write H1
-  input_types.push_back("vcl_string"); // output path to write H2
+  input_types.emplace_back("vcl_string"); // output path to write H1
+  input_types.emplace_back("vcl_string"); // output path to write H2
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // warped image1
-  output_types.push_back("vpgl_camera_double_sptr"); // warped camera1
-  output_types.push_back("vil_image_view_base_sptr"); // warped image2
-  output_types.push_back("vpgl_camera_double_sptr"); // warped camera2
+  output_types.emplace_back("vil_image_view_base_sptr"); // warped image1
+  output_types.emplace_back("vpgl_camera_double_sptr"); // warped camera1
+  output_types.emplace_back("vil_image_view_base_sptr"); // warped image2
+  output_types.emplace_back("vpgl_camera_double_sptr"); // warped camera2
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -341,9 +341,9 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
     double y = rng.drand64()*depth + min_y;
     double u, v;
     cam1_rational->project(x,y,z,u,v);
-    img_pts1.push_back(vnl_vector_fixed<double, 3>(u,v,1));
+    img_pts1.emplace_back(u,v,1);
     cam2_rational->project(x,y,z,u,v);
-    img_pts2.push_back(vnl_vector_fixed<double, 3>(u,v,1));
+    img_pts2.emplace_back(u,v,1);
   }
 
   vpgl_affine_fundamental_matrix<double> FA;
@@ -426,9 +426,9 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
 bool vpgl_affine_f_matrix_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2
-  input_types.push_back("vcl_string"); // output path to write fundamental matrix
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2
+  input_types.emplace_back("vcl_string"); // output path to write fundamental matrix
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
@@ -478,24 +478,24 @@ bool vpgl_affine_f_matrix_process(bprb_func_process& pro)
 bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // image1
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1 local rational
-  input_types.push_back("vcl_string");
-  input_types.push_back("float");
-  input_types.push_back("vil_image_view_base_sptr");  // image2
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2 local rational
-  input_types.push_back("double");    // min point x (e.g. lower left corner of a scene bbox)
-  input_types.push_back("double");    // min point y
-  input_types.push_back("double");    // min point z
-  input_types.push_back("double");    // max point x (e.g. upper right corner of a scene bbox)
-  input_types.push_back("double");    // max point y
-  input_types.push_back("double");    // max point z
-  input_types.push_back("double");    // voxel size (e.g. 1 m for a geo-registered ortho map with GSD 1 meter
-  input_types.push_back("vcl_string"); // input path to read H1
-  input_types.push_back("vcl_string"); // input path to read H2
+  input_types.emplace_back("vil_image_view_base_sptr");  // image1
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1 local rational
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("float");
+  input_types.emplace_back("vil_image_view_base_sptr");  // image2
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2 local rational
+  input_types.emplace_back("double");    // min point x (e.g. lower left corner of a scene bbox)
+  input_types.emplace_back("double");    // min point y
+  input_types.emplace_back("double");    // min point z
+  input_types.emplace_back("double");    // max point x (e.g. upper right corner of a scene bbox)
+  input_types.emplace_back("double");    // max point y
+  input_types.emplace_back("double");    // max point z
+  input_types.emplace_back("double");    // voxel size (e.g. 1 m for a geo-registered ortho map with GSD 1 meter
+  input_types.emplace_back("vcl_string"); // input path to read H1
+  input_types.emplace_back("vcl_string"); // input path to read H2
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // orthographic height map
-  output_types.push_back("vil_image_view_base_sptr");  // disparity map for image1, print the txt input as an image
+  output_types.emplace_back("vil_image_view_base_sptr"); // orthographic height map
+  output_types.emplace_back("vil_image_view_base_sptr");  // disparity map for image1, print the txt input as an image
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }
@@ -626,18 +626,18 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
 bool vpgl_construct_disparity_map_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");  // camera1 local rational
-  input_types.push_back("vpgl_camera_double_sptr");  // camera2 local rational
-  input_types.push_back("vil_image_view_base_sptr");  // ortho height map (should be created for this scene with 3D corner points supplied as input)
-  input_types.push_back("vpgl_camera_double_sptr"); // camera for ortho height map
-  input_types.push_back("unsigned");  // ni for rectified version of image 1
-  input_types.push_back("unsigned");  // nj for rectified version of image 1
-  input_types.push_back("double"); // GSD of DEM
-  input_types.push_back("double"); // rough GSD for rectified version of image 1 , a downsampling factor will be computed from the two GSDs
-  input_types.push_back("vcl_string"); // input path to read H1 : should change these to vectors passed from python instead of read from files
-  input_types.push_back("vcl_string"); // input path to read H2
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera1 local rational
+  input_types.emplace_back("vpgl_camera_double_sptr");  // camera2 local rational
+  input_types.emplace_back("vil_image_view_base_sptr");  // ortho height map (should be created for this scene with 3D corner points supplied as input)
+  input_types.emplace_back("vpgl_camera_double_sptr"); // camera for ortho height map
+  input_types.emplace_back("unsigned");  // ni for rectified version of image 1
+  input_types.emplace_back("unsigned");  // nj for rectified version of image 1
+  input_types.emplace_back("double"); // GSD of DEM
+  input_types.emplace_back("double"); // rough GSD for rectified version of image 1 , a downsampling factor will be computed from the two GSDs
+  input_types.emplace_back("vcl_string"); // input path to read H1 : should change these to vectors passed from python instead of read from files
+  input_types.emplace_back("vcl_string"); // input path to read H2
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // disparity map for image1 at the resolution of DEM, this needs to be resized accordingly
+  output_types.emplace_back("vil_image_view_base_sptr"); // disparity map for image1 at the resolution of DEM, this needs to be resized accordingly
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
 }

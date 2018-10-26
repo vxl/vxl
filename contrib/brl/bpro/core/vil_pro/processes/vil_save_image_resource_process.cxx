@@ -16,8 +16,8 @@ bool vil_save_image_resource_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_resource_sptr");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vil_image_resource_sptr");
+  input_types.emplace_back("vcl_string");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

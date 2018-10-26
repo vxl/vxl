@@ -247,12 +247,12 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
 
     if ( bapl_bbf_dist_sq( query_point, current->left_->outer_box_ ) < 1.0e-5 ) {
       right_box_sq_dist = bapl_bbf_dist_sq( query_point, current->right_->inner_box_ );
-      priority_queue.push_back( bapl_bbf_queue_entry( right_box_sq_dist, current->right_ ) );
+      priority_queue.emplace_back( right_box_sq_dist, current->right_ );
       current = current->left_ ;
     }
     else {
       left_box_sq_dist = bapl_bbf_dist_sq( query_point, current->left_->inner_box_ );
-      priority_queue.push_back( bapl_bbf_queue_entry( left_box_sq_dist, current->left_ ) );
+      priority_queue.emplace_back( left_box_sq_dist, current->left_ );
       current = current->right_ ;
     }
   }
@@ -293,7 +293,7 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
          //std::cout << "left sq distance = " << left_box_sq_dist << std::endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > left_box_sq_dist ) {
            //std::cout << "pushing left onto the heap\n";
-          priority_queue.push_back( bapl_bbf_queue_entry( left_box_sq_dist, current->left_ ) );
+          priority_queue.emplace_back( left_box_sq_dist, current->left_ );
           std::push_heap( priority_queue.begin(), priority_queue.end() );
         };
 
@@ -301,7 +301,7 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
          //std::cout << "right sq distance = " << right_box_sq_dist << std::endl;
         if ( num_found < n || sq_distances[ num_found-1 ] > right_box_sq_dist ) {
            //std::cout << "pushing right onto the heap\n";
-          priority_queue.push_back( bapl_bbf_queue_entry( right_box_sq_dist, current->right_ ) );
+          priority_queue.emplace_back( right_box_sq_dist, current->right_ );
           std::push_heap( priority_queue.begin(), priority_queue.end() );
         }
       }

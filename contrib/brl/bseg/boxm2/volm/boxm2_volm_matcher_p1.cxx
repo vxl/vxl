@@ -531,7 +531,7 @@ bool boxm2_volm_matcher_p1::volm_matcher_p1(int const& num_locs_to_kernel)
       }
       // put score date of location ind_id to score_all
       score_all_.push_back(new volm_score(l_id[ind_id], h_id[ind_id], max_score, max_cam_id, cam_ids));
-      score_cam_.push_back(boxm2_volm_score_out(l_id[ind_id], h_id[ind_id], cam_ids, cam_scores));
+      score_cam_.emplace_back(l_id[ind_id], h_id[ind_id], cam_ids, cam_scores);
     }
 
     // clean cl_mem before next round matcher

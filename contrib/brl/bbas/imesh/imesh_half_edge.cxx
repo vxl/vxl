@@ -48,8 +48,8 @@ imesh_half_edge_set::build_from_ifs(const std::vector<std::vector<unsigned int> 
       if (m == edge_map.end()) {
         curr_e = half_edges_.size();
         edge_map.insert(std::pair<vert_pair,unsigned int>(vp,curr_e));
-        half_edges_.push_back(imesh_half_edge(curr_e,imesh_invalid_idx,v,f));
-        half_edges_.push_back(imesh_half_edge(curr_e+1,imesh_invalid_idx,nv,imesh_invalid_idx));
+        half_edges_.emplace_back(curr_e,imesh_invalid_idx,v,f);
+        half_edges_.emplace_back(curr_e+1,imesh_invalid_idx,nv,imesh_invalid_idx);
       }
       else {
         curr_e = m->second+1;

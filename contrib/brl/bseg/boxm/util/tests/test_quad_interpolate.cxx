@@ -20,10 +20,10 @@
 static void test_quad_interpolate(int argc, char* argv[])
 {
   std::vector<vgl_point_2d<double> > points;
-  points.push_back(vgl_point_2d<double>(10,10));
-  points.push_back(vgl_point_2d<double>(10,12));
-  points.push_back(vgl_point_2d<double>(12,12));
-  points.push_back(vgl_point_2d<double>(12,10));
+  points.emplace_back(10,10);
+  points.emplace_back(10,12);
+  points.emplace_back(12,12);
+  points.emplace_back(12,10);
 
   double xvals[]={10,10,12,12};
   double yvals[]={10,12,12,10};
@@ -58,10 +58,10 @@ static void test_quad_interpolate(int argc, char* argv[])
   TEST("Interpolated image", true, flag);
 
   std::vector<vgl_point_2d<double> > points1;
-  points.push_back(vgl_point_2d<double>(10.25,10.25));
-  points.push_back(vgl_point_2d<double>(10.25,12.25));
-  points.push_back(vgl_point_2d<double>(12.25,12.25));
-  points.push_back(vgl_point_2d<double>(12.25,10.25));
+  points.emplace_back(10.25,10.25);
+  points.emplace_back(10.25,12.25);
+  points.emplace_back(12.25,12.25);
+  points.emplace_back(12.25,10.25);
 
   double xvals1[]={10.3,10.3,11.4,11.4};
   double yvals1[]={10.3,11.4,11.4,10.3};

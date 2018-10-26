@@ -39,7 +39,7 @@ class bvpl_kernel_iterator: public vbl_ref_count
 
   ~bvpl_kernel_iterator() override= default;
 
-  void insert(vgl_point_3d<int> index, bvpl_kernel_dispatch val) {kernel_vals_.push_back(std::pair<vgl_point_3d<int>, bvpl_kernel_dispatch>(index,val)); }
+  void insert(vgl_point_3d<int> index, bvpl_kernel_dispatch val) {kernel_vals_.emplace_back(index,val); }
 
   vgl_point_3d<int> index() const { return kernel_vals_[cur_index_].first; }
 

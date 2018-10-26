@@ -31,10 +31,10 @@
 bool brec_initialize_detector_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
+  input_types.emplace_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   if (pro.set_input_types(input_types)) {
     std::vector<std::string> output_types;
-    output_types.push_back("brec_part_hierarchy_detector_sptr");
+    output_types.emplace_back("brec_part_hierarchy_detector_sptr");
     return pro.set_output_types(output_types);
   }
   else
@@ -60,8 +60,8 @@ bool brec_initialize_detector_process(bprb_func_process& pro)
 bool brec_add_hierarchy_to_detector_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_detector_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
-  input_types.push_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
+  input_types.emplace_back("brec_part_hierarchy_detector_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
+  input_types.emplace_back("brec_part_hierarchy_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
   if (pro.set_input_types(input_types)) {
     std::vector<std::string> output_types;
     return pro.set_output_types(output_types);
@@ -91,24 +91,24 @@ bool brec_detect_hierarchy_process_cons(bprb_func_process& pro)
 {
   //inputs
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");      // input orig view
-  input_types.push_back("vil_image_view_base_sptr");      // input view's "foreground" probability map, float img with values in [0,1] range,
+  input_types.emplace_back("vil_image_view_base_sptr");      // input orig view
+  input_types.emplace_back("vil_image_view_base_sptr");      // input view's "foreground" probability map, float img with values in [0,1] range,
                                                           // CAUTION: Convert it before passing to this process if necessary, e.g. if only the background map is available
-  input_types.push_back("brec_part_hierarchy_detector_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
-  input_types.push_back("unsigned"); // layer_id (the id of the layer to be recognized
-  input_types.push_back("float");      // angle to rotate detector for the type of structure to be recognized
+  input_types.emplace_back("brec_part_hierarchy_detector_sptr"); // detector hierarchy for the type of structure to be recognized (needs to be loaded a priori)
+  input_types.emplace_back("unsigned"); // layer_id (the id of the layer to be recognized
+  input_types.emplace_back("float");      // angle to rotate detector for the type of structure to be recognized
                                   // should be passed zero if the original orientation of the detector will be used
-  input_types.push_back("double");  // detection radius of primitives (doubled as we go up in the hierarchy) - used for denominator calculations of posterior probs
-  input_types.push_back("float");  // class prior
+  input_types.emplace_back("double");  // detection radius of primitives (doubled as we go up in the hierarchy) - used for denominator calculations of posterior probs
+  input_types.emplace_back("float");  // class prior
 
   if (pro.set_input_types(input_types)) {
     //output
     std::vector<std::string> output_types;
-    output_types.push_back("vil_image_view_base_sptr");      // output prob map: class foreground posterior
-    output_types.push_back("vil_image_view_base_sptr");      // output map class foreground posterior overlayed on orig view as a byte image
-    output_types.push_back("vil_image_view_base_sptr");      // output map class background posterior overlayed on orig view as a byte image
-    output_types.push_back("vil_image_view_base_sptr");      // output map non-class foreground posterior overlayed on orig view as a byte image
-    output_types.push_back("vil_image_view_base_sptr");      // output map non-class background posterior overlayed on orig view as a byte image
+    output_types.emplace_back("vil_image_view_base_sptr");      // output prob map: class foreground posterior
+    output_types.emplace_back("vil_image_view_base_sptr");      // output map class foreground posterior overlayed on orig view as a byte image
+    output_types.emplace_back("vil_image_view_base_sptr");      // output map class background posterior overlayed on orig view as a byte image
+    output_types.emplace_back("vil_image_view_base_sptr");      // output map non-class foreground posterior overlayed on orig view as a byte image
+    output_types.emplace_back("vil_image_view_base_sptr");      // output map non-class background posterior overlayed on orig view as a byte image
     return pro.set_output_types(output_types);
   }
   else

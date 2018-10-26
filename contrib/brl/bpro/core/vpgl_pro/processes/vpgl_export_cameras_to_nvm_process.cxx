@@ -16,10 +16,10 @@ bool vpgl_export_cameras_to_nvm_process_cons(bprb_func_process& pro)
   //this process takes 6 inputs and has 3 outputs:
 
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); // folder for cameras
-  input_types.push_back("vcl_string"); // folder for images
+  input_types.emplace_back("vcl_string"); // folder for cameras
+  input_types.emplace_back("vcl_string"); // folder for images
 
-  input_types.push_back("vcl_string");// output nvm file
+  input_types.emplace_back("vcl_string");// output nvm file
   bool ok = pro.set_input_types(input_types);
 
 

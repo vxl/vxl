@@ -69,8 +69,8 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
       cams.push_back( * (ptrcams[i]) );
 
   std::vector<std::string> appearance;
-  appearance.push_back("boxm2_mog3_grey");
-  appearance.push_back("boxm2_num_obs");
+  appearance.emplace_back("boxm2_mog3_grey");
+  appearance.emplace_back("boxm2_num_obs");
 
   std::string scene_dir =modeldir+ "/model";
   if (!vul_file::make_directory_path( scene_dir.c_str()))

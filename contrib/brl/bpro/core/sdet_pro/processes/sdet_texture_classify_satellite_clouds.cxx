@@ -32,25 +32,25 @@ bool sdet_texture_classify_satellite_clouds_process_cons(bprb_func_process& pro)
 {
   // process takes 11 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texton classifier
-  input_types.push_back("vcl_string"); // path to dictionary
-  input_types.push_back("vil_image_resource_sptr"); //input image resouce
-  input_types.push_back("unsigned");   // i
-  input_types.push_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
-  input_types.push_back("unsigned");   // ni
-  input_types.push_back("unsigned");   // nj (ni, nj) is the size of the ROI in terms of pixels
-  input_types.push_back("unsigned");   //texture block size
-  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
-  input_types.push_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
-  input_types.push_back("float"); // scale_factor  (pixel_graylevel*scale_factor should be on the range [0,1])
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton classifier
+  input_types.emplace_back("vcl_string"); // path to dictionary
+  input_types.emplace_back("vil_image_resource_sptr"); //input image resouce
+  input_types.emplace_back("unsigned");   // i
+  input_types.emplace_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
+  input_types.emplace_back("unsigned");   // ni
+  input_types.emplace_back("unsigned");   // nj (ni, nj) is the size of the ROI in terms of pixels
+  input_types.emplace_back("unsigned");   //texture block size
+  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.emplace_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
+  input_types.emplace_back("float"); // scale_factor  (pixel_graylevel*scale_factor should be on the range [0,1])
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
-  output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
-  output_types.push_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
-  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
+  output_types.emplace_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
+  output_types.emplace_back("vil_image_view_base_sptr");  // output id image  - a byte image
+  output_types.emplace_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
+  output_types.emplace_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
   return pro.set_output_types(output_types);
 }
 
@@ -215,24 +215,24 @@ bool sdet_texture_classify_satellite_clouds_process2_cons(bprb_func_process& pro
 {
   // process takes 5 inputs
   std::vector<std::string> input_types;
-  input_types.push_back("sdet_texture_classifier_sptr"); //texton classifier
-  input_types.push_back("vcl_string"); // path to dictionary
-  input_types.push_back("vil_image_resource_sptr"); //input image resouce
-  input_types.push_back("unsigned");   // i
-  input_types.push_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
-  input_types.push_back("unsigned");   // width
-  input_types.push_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
-  input_types.push_back("unsigned");   //texture block size
-  input_types.push_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
-  input_types.push_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
+  input_types.emplace_back("sdet_texture_classifier_sptr"); //texton classifier
+  input_types.emplace_back("vcl_string"); // path to dictionary
+  input_types.emplace_back("vil_image_resource_sptr"); //input image resouce
+  input_types.emplace_back("unsigned");   // i
+  input_types.emplace_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
+  input_types.emplace_back("unsigned");   // width
+  input_types.emplace_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
+  input_types.emplace_back("unsigned");   //texture block size
+  input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
+  input_types.emplace_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
   if (!pro.set_input_types(input_types))
     return false;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
-  output_types.push_back("vil_image_view_base_sptr");  // output id image  - a byte image
-  output_types.push_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
-  output_types.push_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
+  output_types.emplace_back("vil_image_view_base_sptr");  // output cropped image - scaled to [0,1]
+  output_types.emplace_back("vil_image_view_base_sptr");  // output id image  - a byte image
+  output_types.emplace_back("vil_image_view_base_sptr");  // output rgb image - a rgb image associated with class id image
+  output_types.emplace_back("float");  // percentage of pixels among the classified pixels for the category that is listed "first" in the text file
   return pro.set_output_types(output_types);
 }
 

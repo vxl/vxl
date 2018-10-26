@@ -103,8 +103,8 @@ rrel_fm_problem::fit_from_minimal_set(
   std::vector< vgl_homg_point_2d<double> > set_pr, set_pl;
   for ( int i = 0; i < 8; i++ ){
     int index = point_indices[i];
-    set_pr.push_back( vgl_homg_point_2d<double>( pr_[index] ) );
-    set_pl.push_back( vgl_homg_point_2d<double>( pl_[index] ) );
+    set_pr.emplace_back( pr_[index] );
+    set_pl.emplace_back( pl_[index] );
   }
 
   vpgl_fundamental_matrix<double> fm;

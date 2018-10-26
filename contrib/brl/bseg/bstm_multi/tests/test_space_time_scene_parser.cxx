@@ -63,8 +63,8 @@ void test_space_time_scene_parser() {
 
   vgl_box_3d<double> block_bbox(-1, -4, -0.25, 1.88, -0.16, 2.63);
   vcl_vector<vcl_string> appearances;
-  appearances.push_back("bstm_mog6_view_compact");
-  appearances.push_back("bstm_num_obs_view_compact");
+  appearances.emplace_back("bstm_mog6_view_compact");
+  appearances.emplace_back("bstm_num_obs_view_compact");
 
   {
     space_time_scene_parser<bstm_block> bstm_parser =

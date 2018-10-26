@@ -98,7 +98,7 @@ void bvpl_gauss3d_x_kernel_factory::create_canonical()
       {
         vnl_float_3 pt(x,y,z);
         float val = gauss_kernel.gradient(pt)[0];
-        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(x,y,z), dispatch(val)));
+        canonical_kernel_.emplace_back(point_3d(x,y,z), dispatch(val));
         l1_norm += std::abs(val);
       }
     }

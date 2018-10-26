@@ -27,13 +27,13 @@ bool brip_blob_intersection_process_cons(bprb_func_process& pro)
 
   // this process takes 2 inputs:
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");  // modeled blob map
-  input_types.push_back("vil_image_view_base_sptr");  // ground truth map
+  input_types.emplace_back("vil_image_view_base_sptr");  // modeled blob map
+  input_types.emplace_back("vil_image_view_base_sptr");  // ground truth map
   // this process takes 3 outputs:
   std::vector<std::string> output_types;
-  output_types.push_back("int");  // num true positives
-  output_types.push_back("int");  // num false positives
-  output_types.push_back("int");  // num blobs in GT
+  output_types.emplace_back("int");  // num true positives
+  output_types.emplace_back("int");  // num false positives
+  output_types.emplace_back("int");  // num blobs in GT
 
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);

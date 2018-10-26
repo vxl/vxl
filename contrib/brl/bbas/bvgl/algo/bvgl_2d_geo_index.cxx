@@ -345,7 +345,7 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
   std::vector<vgl_point_2d<double> > line_double;
   unsigned num_pts = (unsigned)line.size();
   for (unsigned i = 0; i < num_pts; i++)
-    line_double.push_back(vgl_point_2d<double>((double)line[i].x(), (double)line[i].y()));
+    line_double.emplace_back((double)line[i].x(), (double)line[i].y());
   get_leaves(root, leaves, line_double);
 }
 

@@ -93,10 +93,10 @@ boxm2_vecf_skin_scene::boxm2_vecf_skin_scene(std::string const& scene_file, std:
   if(!skin_geo_.has_appearance())
     this->paint_skin();
   std::vector<std::string> prefixes;
-  prefixes.push_back("alpha");
-  prefixes.push_back("boxm2_mog3_grey");
-  prefixes.push_back("boxm2_num_obs");
-  prefixes.push_back("boxm2_pixel_skin");
+  prefixes.emplace_back("alpha");
+  prefixes.emplace_back("boxm2_mog3_grey");
+  prefixes.emplace_back("boxm2_num_obs");
+  prefixes.emplace_back("boxm2_pixel_skin");
   double nrad = params_.neighbor_radius();
   boxm2_surface_distance_refine<boxm2_vecf_skin>(skin_geo_, base_model_, prefixes, nrad);
   boxm2_surface_distance_refine<boxm2_vecf_skin>(skin_geo_, base_model_, prefixes, nrad);

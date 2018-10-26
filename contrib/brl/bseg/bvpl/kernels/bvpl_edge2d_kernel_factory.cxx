@@ -85,9 +85,9 @@ void bvpl_edge2d_kernel_factory::create_canonical()
     for (int y= min_y; y<= max_y; y++)
     {
       if (y < 0)
-        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(-1)));
+        canonical_kernel_.emplace_back(point_3d(float(x),float(y),float(z)), dispatch(-1));
       else if (y >  0)
-        canonical_kernel_.push_back(std::pair<point_3d,dispatch>(point_3d(float(x),float(y),float(z)), dispatch(1)));
+        canonical_kernel_.emplace_back(point_3d(float(x),float(y),float(z)), dispatch(1));
     }
   }
 

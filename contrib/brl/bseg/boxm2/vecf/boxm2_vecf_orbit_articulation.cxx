@@ -13,15 +13,15 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
     }
     // look left right
     std::vector<vgl_vector_3d<double> > emv;
-    emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
-    emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
-    emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
-    emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
-    emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
+    emv.emplace_back(0.0, 0.0, 1.0);
+    emv.emplace_back(-0.1736, 0.0, 0.9848);
+    emv.emplace_back(-0.26, 0.0, 0.968);
+    emv.emplace_back(-0.1736, 0.0, 0.9848);
+    emv.emplace_back(0.0, 0.0, 1.0);
+    emv.emplace_back(0.1736, 0.0, 0.9848);
+    emv.emplace_back(0.26, 0.0, 0.968);
+    emv.emplace_back(0.1736, 0.0, 0.9848);
+    emv.emplace_back(0.0, 0.0, 1.0);
     for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
         eit != emv.end(); eit++){
       boxm2_vecf_orbit_params params;
@@ -32,9 +32,9 @@ boxm2_vecf_orbit_articulation::boxm2_vecf_orbit_articulation(){
 
     // look up
     std::vector<vgl_vector_3d<double> > emv2;
-    emv2.push_back(vgl_vector_3d<double>(0.0, 0.0, 1.0));
-    emv2.push_back(vgl_vector_3d<double>(0.0, 0.0871, 0.9962));
-    emv2.push_back(vgl_vector_3d<double>(0.0, 0.1736, 0.9848));
+    emv2.emplace_back(0.0, 0.0, 1.0);
+    emv2.emplace_back(0.0, 0.0871, 0.9962);
+    emv2.emplace_back(0.0, 0.1736, 0.9848);
     double ddt2 = 0.75;
     for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
         eit != emv2.end(); eit++){
@@ -105,10 +105,10 @@ std::vector<boxm2_vecf_orbit_params> template_1;
    unsigned   num_frames  = 4;
    std::vector<vgl_vector_3d<double> > emv;
    //4 look directions
-    emv.push_back(vgl_vector_3d<double>(-0.26, 0.0, 0.968));
-    emv.push_back(vgl_vector_3d<double>(-0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(0.1736, 0.0, 0.9848));
-    emv.push_back(vgl_vector_3d<double>(0.26, 0.0, 0.968));
+    emv.emplace_back(-0.26, 0.0, 0.968);
+    emv.emplace_back(-0.1736, 0.0, 0.9848);
+    emv.emplace_back(0.1736, 0.0, 0.9848);
+    emv.emplace_back(0.26, 0.0, 0.968);
 
 
 

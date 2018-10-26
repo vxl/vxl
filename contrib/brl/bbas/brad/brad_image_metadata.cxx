@@ -182,9 +182,9 @@ bool brad_image_metadata::read_band_dependent_gain_offset()
   default_offset["SWIR"] = d_swir_offset;
   std::vector<std::string> sat_names;
   std::vector<std::string> band_types;
-  band_types.push_back("PAN");
-  band_types.push_back("MULTI");
-  band_types.push_back("SWIR");
+  band_types.emplace_back("PAN");
+  band_types.emplace_back("MULTI");
+  band_types.emplace_back("SWIR");
   for (unsigned i = 0; i < num_of_satllite; i++) {
     std::string sat_name, band_name;
     ifs >> sat_name;
@@ -272,9 +272,9 @@ bool brad_image_metadata::read_band_dependent_solar_irradiance()
   std::map<std::string, std::map<std::string, std::vector<double> > > sun_irrad_map;
   std::vector<std::string> sat_names;
   std::vector<std::string> band_types;
-  band_types.push_back("PAN");
-  band_types.push_back("MULTI");
-  band_types.push_back("SWIR");
+  band_types.emplace_back("PAN");
+  band_types.emplace_back("MULTI");
+  band_types.emplace_back("SWIR");
   for (unsigned i = 0; i < num_of_satellite; i++)
   {
     std::string sat_name, band_name;

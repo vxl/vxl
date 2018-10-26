@@ -20,8 +20,8 @@
 bool vil_load_from_ascii_process_cons(bprb_func_process& pro)
 {
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");
-  input_types.push_back("vcl_string");
+  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vcl_string");
   return pro.set_input_types(input_types);
 }
 

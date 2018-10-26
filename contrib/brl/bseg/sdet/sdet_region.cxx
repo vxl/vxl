@@ -50,7 +50,7 @@ bool sdet_region::compute_boundary()
     return false;
   std::vector<vgl_point_2d<double> > region_points;
   for (this->reset(); this->next();)
-    region_points.push_back(vgl_point_2d<double>(this->X(), this->Y()));
+    region_points.emplace_back(this->X(), this->Y());
   vgl_convex_hull_2d<double> ch(region_points);
   vgl_polygon<double> h = ch.hull();
   vsol_polygon_2d_sptr poly = bsol_algs::poly_from_vgl(h);

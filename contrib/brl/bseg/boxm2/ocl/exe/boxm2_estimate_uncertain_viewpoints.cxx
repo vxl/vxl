@@ -237,7 +237,7 @@ int main(int argc,  char** argv)
                 vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
                 vil_math_mean<float,float>(mean, *expimg_view,0);
                 std::cout<<el<<' '<<az<<' '<<mean<<std::endl;
-                distances.push_back(ptdistpair(cart_point,mean));
+                distances.emplace_back(cart_point,mean);
                 saved_imgs[uid] = idstream.str();
                 vil_save(*expimg_view, idstream.str().c_str() );
             }

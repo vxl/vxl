@@ -16,16 +16,16 @@ bool vpgl_project_process_cons(bprb_func_process& pro)
   //this process takes 4 inputs:
   //input[0]: the camera
   std::vector<std::string> input_types;
-  input_types.push_back("vpgl_camera_double_sptr");
-  input_types.push_back("double");
-  input_types.push_back("double");
-  input_types.push_back("double");
+  input_types.emplace_back("vpgl_camera_double_sptr");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
+  input_types.emplace_back("double");
   pro.set_input_types(input_types);
 
   // this process has two outputs:
   std::vector<std::string> output_types;
-  output_types.push_back("double");
-  output_types.push_back("double");
+  output_types.emplace_back("double");
+  output_types.emplace_back("double");
   pro.set_output_types(output_types);
 
   return true;

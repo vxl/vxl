@@ -47,7 +47,7 @@ volm_desc_ex_2d::volm_desc_ex_2d(std::vector<double> const& radius,
   heading_intervals_.clear();
   for (unsigned hidx = 0; hidx < nheadings_; hidx++) {
     double s = hidx * h_inc_;  double e = s + h_width_;
-    heading_intervals_.push_back(std::pair<double, double>(s, e));
+    heading_intervals_.emplace_back(s, e);
   }
 
   // construct the histogram
@@ -181,7 +181,7 @@ void volm_desc_ex_2d::b_read(vsl_b_istream& is)
     heading_intervals_.clear();
     for (unsigned hidx = 0; hidx < nheadings_; hidx++) {
       double s = hidx * h_inc_;  double e = s + h_width_;
-      heading_intervals_.push_back(std::pair<double, double>(s, e));
+      heading_intervals_.emplace_back(s, e);
     }
   }
   else

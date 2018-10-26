@@ -238,7 +238,7 @@ static bool process(std::string const& site_path,
   std::vector<unsigned> world_pt_indices;
   for (unsigned i = 0; i < cp.correspondences().size(); i++) {
     if (cp.correspondences()[i]->world_pt_valid()) {
-      points2.push_back(vgl_homg_point_3d<double>(cp.correspondences()[i]->world_pt()));
+      points2.emplace_back(cp.correspondences()[i]->world_pt());
       world_pt_indices.push_back(i);
     }
   }
@@ -314,7 +314,7 @@ static bool process(std::string const& site_path,
   for (unsigned kk = 0; kk < world_pt_indices.size(); kk++) {
     unsigned i = world_pt_indices[kk];
   //for (unsigned i = 0; i < cp.correspondences().size(); i++) {
-    points1.push_back(vgl_homg_point_3d<double>(cp.correspondences()[i]->world_pt()));
+    points1.emplace_back(cp.correspondences()[i]->world_pt());
   }
   if (points1.size() != points2.size()) {
     std::cout << " Problem in number of world points to compute H!\n";

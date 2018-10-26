@@ -15,7 +15,7 @@ bool bbas_remove_from_db_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("unsigned"); // databse id to be removed
+  input_types.emplace_back("unsigned"); // databse id to be removed
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

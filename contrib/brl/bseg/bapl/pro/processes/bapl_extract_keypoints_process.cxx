@@ -31,14 +31,14 @@ bool bapl_extract_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image
-  input_types.push_back("vcl_string"); // path and name of output keypoint file (a list of keypoint descriptors in a simple txt file)
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("vcl_string"); // path and name of output keypoint file (a list of keypoint descriptors in a simple txt file)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output color image with keypoints marked
-  output_types.push_back("bapl_keypoint_set_sptr");    // output a set of keypoints
+  output_types.emplace_back("vil_image_view_base_sptr");  // output color image with keypoints marked
+  output_types.emplace_back("bapl_keypoint_set_sptr");    // output a set of keypoints
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -119,13 +119,13 @@ bool bapl_draw_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image
-  input_types.push_back("bapl_keypoint_set_sptr");
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("bapl_keypoint_set_sptr");
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");  // output color image with keypoints marked
+  output_types.emplace_back("vil_image_view_base_sptr");  // output color image with keypoints marked
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;
@@ -180,11 +180,11 @@ bool bapl_load_keypoints_process_cons(bprb_func_process& pro)
 {
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string"); // path and name of input keypoint file (a list of keypoint descriptors in a simple txt file)
+  input_types.emplace_back("vcl_string"); // path and name of input keypoint file (a list of keypoint descriptors in a simple txt file)
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
   std::vector<std::string> output_types;
-  output_types.push_back("bapl_keypoint_set_sptr");    // output a set of keypoints
+  output_types.emplace_back("bapl_keypoint_set_sptr");    // output a set of keypoints
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

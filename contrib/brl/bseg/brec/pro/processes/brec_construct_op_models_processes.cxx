@@ -41,10 +41,10 @@ bool brec_construct_bg_op_models_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_sptr"); // h
-  input_types.push_back("vcl_string"); // output directory to save the models
-  input_types.push_back("vil_image_view_base_sptr");      // bg model mean img to construct response models, float img with values in [0,1] range
-  input_types.push_back("vil_image_view_base_sptr");      // bg model std dev img to construct response models, float img with values in [0,1] range
+  input_types.emplace_back("brec_part_hierarchy_sptr"); // h
+  input_types.emplace_back("vcl_string"); // output directory to save the models
+  input_types.emplace_back("vil_image_view_base_sptr");      // bg model mean img to construct response models, float img with values in [0,1] range
+  input_types.emplace_back("vil_image_view_base_sptr");      // bg model std dev img to construct response models, float img with values in [0,1] range
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
@@ -152,11 +152,11 @@ bool brec_construct_class_op_models_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("brec_part_hierarchy_sptr");      // h
-  input_types.push_back("vcl_string");                    // output directory to save the response model parameters for the foreground, will save a file with two parameters k and lambda
-  input_types.push_back("vil_image_view_base_sptr");      // a training image to construct response models,
-  input_types.push_back("vil_image_view_base_sptr");      // a class probability img for the input training image, float img with values in [0,1] range, it could be a byte image, class regions are assumed to be true
-  input_types.push_back("vil_image_view_base_sptr");      // a mask img for the input training image, stats will be collected from the pixels with mask == true
+  input_types.emplace_back("brec_part_hierarchy_sptr");      // h
+  input_types.emplace_back("vcl_string");                    // output directory to save the response model parameters for the foreground, will save a file with two parameters k and lambda
+  input_types.emplace_back("vil_image_view_base_sptr");      // a training image to construct response models,
+  input_types.emplace_back("vil_image_view_base_sptr");      // a class probability img for the input training image, float img with values in [0,1] range, it could be a byte image, class regions are assumed to be true
+  input_types.emplace_back("vil_image_view_base_sptr");      // a mask img for the input training image, stats will be collected from the pixels with mask == true
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 

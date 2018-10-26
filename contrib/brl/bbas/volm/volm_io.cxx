@@ -573,7 +573,7 @@ bool volm_io::read_query_tags(std::string xml_file,
                             depth_map_region::FRONT_PARALLEL, 0,
                             volm_osm_category_io::tag_to_volm_land_table.find(land_type)->second.id_);
     // add the weight
-    weights.push_back(volm_weight(object_names[i], object_names[i], 0.0, 0.0, 0.0, 0.0, object_weight[i]));
+    weights.emplace_back(object_names[i], object_names[i], 0.0, 0.0, 0.0, 0.0, object_weight[i]);
   }
   return true;
 }
@@ -994,8 +994,7 @@ int volm_io::read_gt_file(std::string gt_file, std::vector<std::pair<vgl_point_3
     vgl_point_3d<double> pt(lon, lat, elev);
     std::pair<std::string, int> np(name, img_id);
     std::pair<std::pair<std::string, int>, std::string> p(np, type);
-    samples.push_back(std::pair<vgl_point_3d<double>,
-                      std::pair<std::pair<std::string, int>, std::string> >(pt,  p) );
+    samples.emplace_back(pt,  p );
   }
   ifs.close();
   return cnt;
@@ -1041,7 +1040,7 @@ void volm_weight::read_weight(std::vector<volm_weight>& weights, std::string con
     ifs >> w_dst;
     ifs >> w_ord;
     ifs >> w_obj;
-    weights.push_back(volm_weight(w_name, w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj));
+    weights.emplace_back(w_name, w_typ, w_ori, w_lnd, w_ord, w_dst, w_obj);
     if (ifs.eof()) break;
   }
   ifs.close();
@@ -1061,27 +1060,27 @@ void volm_weight::equal_weight(std::vector<volm_weight>& weights, depth_map_scen
     float w_sky = w_avg * 1.5f;
     float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_sky - w_grd) / dms->scene_regions().size();
-    weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
-    weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    weights.emplace_back("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky);
+    weights.emplace_back("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd);
   }
   else if (!dms->sky().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
     float w_sky = w_avg * 1.5f;
     w_obj = (1.0f - w_sky) / dms->scene_regions().size();
-    weights.push_back(volm_weight("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky));
+    weights.emplace_back("sky", "sky", 0.0f, 0.0f, 0.0f, 1.0f, w_sky);
   }
   else if (!dms->ground_plane().empty()) {
     w_avg = 1.0f / (1 + dms->scene_regions().size());
     float w_grd = w_avg * 1.0f;
     w_obj = (1.0f - w_grd) / dms->scene_regions().size();
-    weights.push_back(volm_weight("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd));
+    weights.emplace_back("ground_plane", "ground_plane", 0.3f, 0.4f, 0.0f, 0.3f, w_grd);
   }
   else {
     w_avg = 1.0f / dms->scene_regions().size();
     w_obj = w_avg;
   }
   for (unsigned i = 0; i < dms->scene_regions().size(); i++) {
-      weights.push_back(volm_weight(dms->scene_regions()[i]->name(), dms->scene_regions()[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj));
+      weights.emplace_back(dms->scene_regions()[i]->name(), dms->scene_regions()[i]->name(), 0.25f, 0.25f, 0.25f, 0.25f, w_obj);
   }
 
 #if 0
@@ -1208,7 +1207,7 @@ bool volm_io::read_building_file(std::string file, std::vector<std::pair<vgl_pol
     for (unsigned i = 1; i < poly[0].size(); i++)
       if (poly[0][i] != poly[0][i-1])
         prune_poly[0].push_back(poly[0][i]);
-    builds.push_back(std::pair<vgl_polygon<double>, vgl_point_2d<double> >(prune_poly, cent_pt));
+    builds.emplace_back(prune_poly, cent_pt);
     heights.push_back(height);
   }
   return true;
@@ -1257,7 +1256,7 @@ bool volm_io::read_sme_file(std::string file, std::vector<std::pair<vgl_point_2d
         label = iter->first;
 #endif
 
-    objects.push_back(std::pair<vgl_point_2d<double>, int>(pt, label));
+    objects.emplace_back(pt, label);
   }
   return true;
 }
@@ -1316,7 +1315,7 @@ bool volm_io::read_dem_peak_file(std::string const& file, std::vector<std::pair<
     std::stringstream theight(tok);  theight >> height;
 
     vgl_point_2d<double> peak_loc(lon, lat);
-    objects.push_back(std::pair<vgl_point_2d<double>, double>(peak_loc, height));
+    objects.emplace_back(peak_loc, height);
   }
   return true;
 }

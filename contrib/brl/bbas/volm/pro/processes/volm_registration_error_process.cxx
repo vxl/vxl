@@ -126,11 +126,11 @@ bool volm_registration_error_process(bprb_func_process& pro)
   std::vector<vsol_polyline_2d_sptr> ori_lines;
   std::vector<vsol_spatial_object_2d_sptr>::iterator vit;
   for (vit = gt_sos_in.begin(); vit != gt_sos_in.end(); ++vit)
-    gt_lines.push_back((*vit)->cast_to_curve()->cast_to_polyline());
+    gt_lines.emplace_back((*vit)->cast_to_curve()->cast_to_polyline());
   for (vit = cor_sos_in.begin(); vit != cor_sos_in.end(); ++vit)
-    cor_lines.push_back((*vit)->cast_to_curve()->cast_to_polyline());
+    cor_lines.emplace_back((*vit)->cast_to_curve()->cast_to_polyline());
   for (vit = ori_sos_in.begin(); vit != ori_sos_in.end(); ++vit)
-    ori_lines.push_back((*vit)->cast_to_curve()->cast_to_polyline());
+    ori_lines.emplace_back((*vit)->cast_to_curve()->cast_to_polyline());
 
   // calculate the distance for each line
   unsigned n_lines = gt_lines.size();

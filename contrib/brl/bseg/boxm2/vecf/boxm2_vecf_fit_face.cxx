@@ -183,15 +183,15 @@ bool boxm2_vecf_fit_face::set_trans(){
   vgl_point_3d<double> chin_src = params_.chin_;
 
   std::vector<vgl_homg_point_3d<double> > source_pts, target_pts;
-  source_pts.push_back(vgl_homg_point_3d<double>(llc_src)); source_pts.push_back(vgl_homg_point_3d<double>(rlc_src));
-  source_pts.push_back(vgl_homg_point_3d<double>(lmc_src)); source_pts.push_back(vgl_homg_point_3d<double>(rmc_src));
-  source_pts.push_back(vgl_homg_point_3d<double>(mjaw_src)); source_pts.push_back(vgl_homg_point_3d<double>(fint_src));
-  source_pts.push_back(vgl_homg_point_3d<double>(nose_src)); source_pts.push_back(vgl_homg_point_3d<double>(chin_src));
+  source_pts.emplace_back(llc_src); source_pts.emplace_back(rlc_src);
+  source_pts.emplace_back(lmc_src); source_pts.emplace_back(rmc_src);
+  source_pts.emplace_back(mjaw_src); source_pts.emplace_back(fint_src);
+  source_pts.emplace_back(nose_src); source_pts.emplace_back(chin_src);
 
-  target_pts.push_back(vgl_homg_point_3d<double>(llc_tgt));  target_pts.push_back(vgl_homg_point_3d<double>(rlc_tgt));
-  target_pts.push_back(vgl_homg_point_3d<double>(lmc_tgt));  target_pts.push_back(vgl_homg_point_3d<double>(rmc_tgt));
-  target_pts.push_back(vgl_homg_point_3d<double>(mjaw_tgt)); target_pts.push_back(vgl_homg_point_3d<double>(fint_tgt));
-  target_pts.push_back(vgl_homg_point_3d<double>(nose_tgt)); target_pts.push_back(vgl_homg_point_3d<double>(chin_tgt));
+  target_pts.emplace_back(llc_tgt);  target_pts.emplace_back(rlc_tgt);
+  target_pts.emplace_back(lmc_tgt);  target_pts.emplace_back(rmc_tgt);
+  target_pts.emplace_back(mjaw_tgt); target_pts.emplace_back(fint_tgt);
+  target_pts.emplace_back(nose_tgt); target_pts.emplace_back(chin_tgt);
 
   vgl_h_matrix_3d_compute_affine hca;
   bool success = hca.compute(source_pts, target_pts, params_.trans_);

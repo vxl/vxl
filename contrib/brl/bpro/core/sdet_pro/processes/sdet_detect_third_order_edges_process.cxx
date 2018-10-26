@@ -23,15 +23,15 @@ bool sdet_detect_third_order_edges_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("vcl_string");  // path to write output edge map, extention: .edg
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("vcl_string");  // path to write output edge map, extention: .edg
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output: [0] output edge image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }
@@ -129,15 +129,15 @@ bool sdet_detect_third_order_edges_dt_process_cons(bprb_func_process& pro)
   //inputs
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr");
-  input_types.push_back("int");  // max distance threshold
+  input_types.emplace_back("vil_image_view_base_sptr");
+  input_types.emplace_back("int");  // max distance threshold
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output: [0] Distance transform (DT) of output edge image as a byte image
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr");
-  output_types.push_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
+  output_types.emplace_back("vil_image_view_base_sptr");
   ok = pro.set_output_types(output_types);
   return ok;
 }

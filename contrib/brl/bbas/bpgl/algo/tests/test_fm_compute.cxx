@@ -39,17 +39,17 @@ static void test_fm_compute()
     if ( i == 7 ) world_point.set(2,-3,-1);
     if ( i == 8 ) world_point.set(-1,0,-2);
     if ( i == 9 ) world_point.set(5,6,-4);
-    lp_aff.push_back( vgl_point_2d<double>( lc_aff.project( world_point ) ) );
-    rp_aff.push_back( vgl_point_2d<double>( rc_aff.project( world_point ) ) );
+    lp_aff.emplace_back( lc_aff.project( world_point ) );
+    rp_aff.emplace_back( rc_aff.project( world_point ) );
   }
-  lp_aff.push_back( vgl_point_2d<double>(4,5) );
-  rp_aff.push_back( vgl_point_2d<double>(1,2) );
-  lp_aff.push_back( vgl_point_2d<double>(2,8) );
-  rp_aff.push_back( vgl_point_2d<double>(2,0) );
-  lp_aff.push_back( vgl_point_2d<double>(-2,4) );
-  rp_aff.push_back( vgl_point_2d<double>(-5,-3) );
-  lp_aff.push_back( vgl_point_2d<double>(4,-5) );
-  rp_aff.push_back( vgl_point_2d<double>(-1,2) );
+  lp_aff.emplace_back(4,5 );
+  rp_aff.emplace_back(1,2 );
+  lp_aff.emplace_back(2,8 );
+  rp_aff.emplace_back(2,0 );
+  lp_aff.emplace_back(-2,4 );
+  rp_aff.emplace_back(-5,-3 );
+  lp_aff.emplace_back(4,-5 );
+  rp_aff.emplace_back(-1,2 );
 
   vpgl_affine_fundamental_matrix<double> fm_aff_est1;
   R.compute( rp_aff, lp_aff, fm_aff_est1 );
@@ -65,42 +65,42 @@ static void test_fm_compute()
   vpgl_fundamental_matrix<double> fm2( C2r, C2l );
 
   std::vector< vgl_homg_point_3d<double> > p2w;
-  p2w.push_back( vgl_homg_point_3d<double>( 2, -1, 5 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 1, 10, 0 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( -5, -7, 1 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 0, 8, 10 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 1, 2, 3 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( -4, -10, 0 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( -2, 3, -1 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( -1, -1, 3 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 4, -8, 2 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 3, 6, 2 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( -2, 8, 6 ) );
-  p2w.push_back( vgl_homg_point_3d<double>( 6, 8, -5 ) );
+  p2w.emplace_back( 2, -1, 5 );
+  p2w.emplace_back( 1, 10, 0 );
+  p2w.emplace_back( -5, -7, 1 );
+  p2w.emplace_back( 0, 8, 10 );
+  p2w.emplace_back( 1, 2, 3 );
+  p2w.emplace_back( -4, -10, 0 );
+  p2w.emplace_back( -2, 3, -1 );
+  p2w.emplace_back( -1, -1, 3 );
+  p2w.emplace_back( 4, -8, 2 );
+  p2w.emplace_back( 3, 6, 2 );
+  p2w.emplace_back( -2, 8, 6 );
+  p2w.emplace_back( 6, 8, -5 );
 
   std::vector< vgl_point_2d<double> > p2r, p2l;
   for ( unsigned i = 0; i < p2w.size(); i++ ) {
-    p2r.push_back( vgl_point_2d<double>( C2r.project( p2w[i] ) ) );
-    p2l.push_back( vgl_point_2d<double>( C2l.project( p2w[i] ) ) );
+    p2r.emplace_back( C2r.project( p2w[i] ) );
+    p2l.emplace_back( C2l.project( p2w[i] ) );
   }
 
   //Outliers
-  p2r.push_back( vgl_point_2d<double>(5,2) );
-  p2l.push_back( vgl_point_2d<double>(-1,4) );
-  p2r.push_back( vgl_point_2d<double>(-2,-2) );
-  p2l.push_back( vgl_point_2d<double>(1,4) );
-  p2r.push_back( vgl_point_2d<double>(1,1) );
-  p2l.push_back( vgl_point_2d<double>(2,-5) );
-  p2r.push_back( vgl_point_2d<double>(8,-3) );
-  p2l.push_back( vgl_point_2d<double>(-1,3) );
-  p2r.push_back( vgl_point_2d<double>(-1,6) );
-  p2l.push_back( vgl_point_2d<double>(-2,8) );
-  p2r.push_back( vgl_point_2d<double>(8,-1) );
-  p2l.push_back( vgl_point_2d<double>(-3,2) );
-  p2r.push_back( vgl_point_2d<double>(5,1) );
-  p2l.push_back( vgl_point_2d<double>(-2,2) );
-  p2r.push_back( vgl_point_2d<double>(-1,3) );
-  p2l.push_back( vgl_point_2d<double>(7,-4) );
+  p2r.emplace_back(5,2 );
+  p2l.emplace_back(-1,4 );
+  p2r.emplace_back(-2,-2 );
+  p2l.emplace_back(1,4 );
+  p2r.emplace_back(1,1 );
+  p2l.emplace_back(2,-5 );
+  p2r.emplace_back(8,-3 );
+  p2l.emplace_back(-1,3 );
+  p2r.emplace_back(-1,6 );
+  p2l.emplace_back(-2,8 );
+  p2r.emplace_back(8,-1 );
+  p2l.emplace_back(-3,2 );
+  p2r.emplace_back(5,1 );
+  p2l.emplace_back(-2,2 );
+  p2r.emplace_back(-1,3 );
+  p2l.emplace_back(7,-4 );
 
   bpgl_fm_compute_ransac fmc2;
   vpgl_fundamental_matrix<double> fm2est;

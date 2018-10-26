@@ -104,7 +104,7 @@ std::vector<vgl_point_3d<double> > bvxm_camera_estimator::convert_3d_box_to_3d_p
   for (int i=0; i<2; i++) {
     for (int j=0; j<2; j++) {
       for (int k=0; k<2; k++) {
-        box_pts_3d.push_back(vgl_point_3d<double>(box_x[i],box_y[j],box_z[k]));
+        box_pts_3d.emplace_back(box_x[i],box_y[j],box_z[k]);
       }
     }
   }

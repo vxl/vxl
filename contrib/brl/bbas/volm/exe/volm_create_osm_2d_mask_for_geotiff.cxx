@@ -132,7 +132,7 @@ int main(int argc, char** argv)
           cam->global_to_img(lon, lat, 0.0, u, v);
 
           if (u >= 0 && u < ni && v >= 0 && v < nj) {
-            line.push_back(vgl_point_2d<double>(u,v));
+            line.emplace_back(u,v);
             cout << u << " " << v << " " << endl;
           }
         }
@@ -163,7 +163,7 @@ int main(int argc, char** argv)
         vgl_polygon<double> img_poly;
         vector<vgl_point_2d<double> > sheet;
         vgl_point_2d<double> s = line[0];
-        sheet.push_back(vgl_point_2d<double>(0, s.y()));
+        sheet.emplace_back(0, s.y());
         //sheet.push_back(vgl_point_2d<double>(s.x(), 0));
         for (int kk = 0; kk < line.size()-1; kk++) {
           vgl_point_2d<double> s, e;
@@ -177,7 +177,7 @@ int main(int argc, char** argv)
           while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
           {
             unsigned u = static_cast<unsigned>(x), v = static_cast<unsigned>(y);
-            sheet.push_back(vgl_point_2d<double>(x,y));
+            sheet.emplace_back(x,y);
             if ( u >= 0 && v >= 0 && u < output_img.ni() && v < output_img.nj()) {
               output_img(u,v) = vil_rgb<vxl_byte>(255,255,255);
             }
@@ -185,11 +185,11 @@ int main(int argc, char** argv)
         }
 
         vgl_point_2d<double> e = line[line.size()-1];
-        sheet.push_back(vgl_point_2d<double>(e.x(),0));
+        sheet.emplace_back(e.x(),0);
         //sheet.push_back(vgl_point_2d<double>(0,e.y()));
-        sheet.push_back(vgl_point_2d<double>(ni-1, nj-1));
+        sheet.emplace_back(ni-1, nj-1);
         //sheet.push_back(vgl_point_2d<double>(0, nj));
-        sheet.push_back(vgl_point_2d<double>(0, nj));
+        sheet.emplace_back(0, nj);
         //sheet.push_back(vgl_point_2d<double>(0, 0));
         img_poly.push_back(sheet);
         vgl_polygon_scan_iterator<double> it(img_poly, false);

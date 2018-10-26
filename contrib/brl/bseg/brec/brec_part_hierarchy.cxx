@@ -566,7 +566,7 @@ bool brec_part_hierarchy::read_xml(std::istream& is)
       {
         brec_part_gaussian_sptr g_p = new brec_part_gaussian();
         g_p->xml_parse_element(*it);
-        dummy_primitive_instances_.push_back(g_p->cast_to_instance());
+        dummy_primitive_instances_.emplace_back(g_p->cast_to_instance());
         break;
       }
       default: {

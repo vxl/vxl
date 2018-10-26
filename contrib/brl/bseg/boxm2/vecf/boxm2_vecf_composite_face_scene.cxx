@@ -365,8 +365,8 @@ construct_target_scene(std::string const& scene_dir,std::string const& scene_nam
   if(target_box_.is_empty())
     return nullptr;
   std::vector<std::string> prefixes;
-  prefixes.push_back("boxm2_mog3_grey");
-  prefixes.push_back("boxm2_num_obs");
+  prefixes.emplace_back("boxm2_mog3_grey");
+  prefixes.emplace_back("boxm2_num_obs");
   boxm2_scene_sptr tscene = new boxm2_scene(scene_dir, scene_name, data_path, prefixes, target_box_, sub_block_len);
   if(save_scene_xml)
     tscene->save_scene();

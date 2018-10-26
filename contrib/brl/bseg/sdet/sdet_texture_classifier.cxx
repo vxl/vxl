@@ -481,7 +481,7 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
   for (psi.reset(); psi.next(); ) {
     int j = psi.scany();
     for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-      pixels.push_back(std::pair<int, int>(i,j));
+      pixels.emplace_back(i,j);
       /*//vnl_vector<double> tx(dim+2);
       vnl_vector<double> tx(dim_total);
       for (unsigned f = 0; f<dim; ++f)
@@ -1168,7 +1168,7 @@ void sdet_texture_classifier::compute_texton_index()
     std::vector<vnl_vector<double> > const & centers = (*it).second;
     for (std::vector<vnl_vector<double> >::const_iterator cit = centers.begin();
          cit != centers.end(); ++cit)
-      texton_index_.push_back(sdet_neighbor(cat, (*cit)));
+      texton_index_.emplace_back(cat, (*cit));
   }
 }
 

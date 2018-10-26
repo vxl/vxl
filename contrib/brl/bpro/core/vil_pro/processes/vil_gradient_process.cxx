@@ -14,15 +14,15 @@ bool vil_gradient_process_cons(bprb_func_process& pro)
   //input
   bool ok=false;
   std::vector<std::string> input_types;
-  input_types.push_back("vil_image_view_base_sptr"); // input image
+  input_types.emplace_back("vil_image_view_base_sptr"); // input image
   ok = pro.set_input_types(input_types);
   if (!ok) return ok;
 
   //output
   std::vector<std::string> output_types;
-  output_types.push_back("vil_image_view_base_sptr"); // dI/dx
-  output_types.push_back("vil_image_view_base_sptr"); // dI/dy
-  output_types.push_back("vil_image_view_base_sptr"); // Sqrt((dI/dx)^2 + (dI/dy)^2)
+  output_types.emplace_back("vil_image_view_base_sptr"); // dI/dx
+  output_types.emplace_back("vil_image_view_base_sptr"); // dI/dy
+  output_types.emplace_back("vil_image_view_base_sptr"); // Sqrt((dI/dx)^2 + (dI/dy)^2)
   ok = pro.set_output_types(output_types);
   if (!ok) return ok;
   return true;

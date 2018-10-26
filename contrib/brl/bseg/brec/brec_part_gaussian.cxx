@@ -79,7 +79,7 @@ bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, flo
       if (strength_map(i,j) > strength_threshold) {
         brec_part_gaussian_sptr dp = new brec_part_gaussian((float)i, (float)j, strength_map(i,j), lambda0, lambda1, theta, bright, type);
         dp->cutoff_percentage_ = cutoff_percentage;
-        parts.push_back(dp->cast_to_instance());
+        parts.emplace_back(dp->cast_to_instance());
       }
     }
 
@@ -675,7 +675,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
       dp->rho_c_b_ = pos_c_b;
       dp->rho_nc_b_ = pos_nc_b;
       dp->cutoff_percentage_ = cutoff_percentage_;
-      instances.push_back(dp->cast_to_instance());
+      instances.emplace_back(dp->cast_to_instance());
 
 #if 0
       if ((i == 375 && j == 204) || (i == 348 && j == 221) || (i == 374 && j == 193) ||
@@ -735,7 +735,7 @@ bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<floa
         dp->rho_nc_b_ = 0.0f;
 
         dp->cutoff_percentage_ = cutoff_percentage_;
-        instances.push_back(dp->cast_to_instance());
+        instances.emplace_back(dp->cast_to_instance());
       }
     }
 

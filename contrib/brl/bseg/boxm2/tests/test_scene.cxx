@@ -60,8 +60,8 @@ void test_scene()
   bb.add(pmin); bb.add(pmax);
   double sub_block_len = 0.2;
   std::vector<std::string> prefixes;
-  prefixes.push_back("boxm2_mog3_grey");
-  prefixes.push_back("boxm2_num_obs");
+  prefixes.emplace_back("boxm2_mog3_grey");
+  prefixes.emplace_back("boxm2_num_obs");
   boxm2_scene scene_one_block(test_dir, "scene_1b", "scene_data", prefixes, bb, sub_block_len);
   TEST("valid one block scene", scene_one_block.local_origin() == pmin, true);
 }

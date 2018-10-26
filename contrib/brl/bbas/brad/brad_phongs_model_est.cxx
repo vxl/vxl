@@ -181,9 +181,9 @@ brad_phongs_model_est::brad_phongs_model_est(double sun_elev,
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
 
-        viewing_dirs_.push_back(vnl_double_3(std::sin(camera_elev_[i])*std::cos(camera_azim_[i]),
+        viewing_dirs_.emplace_back(std::sin(camera_elev_[i])*std::cos(camera_azim_[i]),
                                              std::sin(camera_elev_[i])*std::sin(camera_azim_[i]),
-                                             std::cos(camera_elev_[i])));
+                                             std::cos(camera_elev_[i]));
     }
 }
 
@@ -326,9 +326,9 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
         obs_weights_[i]/=total_weight;
         obs_weights_[i]*=obs_weights_.size();
 
-        viewing_dirs_.push_back(vnl_double_3(std::sin(camera_elev_[i])*std::cos(camera_azim_[i]),
+        viewing_dirs_.emplace_back(std::sin(camera_elev_[i])*std::cos(camera_azim_[i]),
                                              std::sin(camera_elev_[i])*std::sin(camera_azim_[i]),
-                                             std::cos(camera_elev_[i])));
+                                             std::cos(camera_elev_[i]));
     }
 }
 

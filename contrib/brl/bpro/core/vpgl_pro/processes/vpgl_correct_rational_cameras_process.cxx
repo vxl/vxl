@@ -23,14 +23,14 @@ bool vpgl_correct_rational_cameras_process_cons(bprb_func_process& pro)
 {
   //this process takes 2 inputs: the filename, and the path for the output
   std::vector<std::string> input_types;
-  input_types.push_back("vcl_string");  // a file that lists the path to a camera on each line and i and j coordinate of the 3D world point
+  input_types.emplace_back("vcl_string");  // a file that lists the path to a camera on each line and i and j coordinate of the 3D world point
                                     // format of the file:
                                     // full_path_cam_name_1 i_1 j_1
                                     // full_path_cam_name_2 i_2 j_2
                                     // .
                                     // .
                                     // .
-  input_types.push_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
+  input_types.emplace_back("vcl_string"); // output path to save the corrected cams, names will be input_cam_name_corrected.rpb
   std::vector<std::string> output_types;
   return pro.set_input_types(input_types)
       && pro.set_output_types(output_types);
