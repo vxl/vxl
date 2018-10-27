@@ -213,7 +213,9 @@
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) "ERROR: VCL_STATIC_CONST_INIT_FLOAT_DEFN is a noop"
 //# define VCL_SAFE_BOOL_TRUE "ERROR: Use true for VCL_SAFE_BOOL_TRUE"
 //# define VCL_SAFE_BOOL_DEFINE "ERROR: VCL_SAFE_BOOL_DEFINE is a noop in C++11"
-#else
+#endif
+
+#ifdef VNL_CONFIG_LEGACY_METHODS
 #include "vcl_legacy_aliases.h"
 #endif
 

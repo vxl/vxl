@@ -113,45 +113,6 @@ vnl_vector<T>::vnl_vector (size_t len, size_t n, T const values[])
   }
 }
 
-#if VNL_CONFIG_LEGACY_METHODS // these constructors are deprecated and should not be used
-
-template<class T>
-vnl_vector<T>::vnl_vector (size_t len, T const& px, T const& py)
-{
-  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(2, T const& px, T const& py)");
-  assert(len==2);
-  vnl_vector_construct_hack();
-  vnl_vector_alloc_blah(2);
-  this->data[0] = px;
-  this->data[1] = py;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (size_t len, T const& px, T const& py, T const& pz)
-{
-  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(3, T const& px, T const& py, T const& pz)");
-  assert(len==3);
-  vnl_vector_construct_hack();
-  vnl_vector_alloc_blah(3);
-  this->data[0] = px;
-  this->data[1] = py;
-  this->data[2] = pz;
-}
-
-template<class T>
-vnl_vector<T>::vnl_vector (size_t len, T const& px, T const& py, T const& pz, T const& pw)
-{
-  VXL_DEPRECATED_MACRO("vnl_vector<T>::vnl_vector(4, T const& px, T const& py, T const& pz, T const& pt)");
-  assert(len==4);
-  vnl_vector_construct_hack();
-  vnl_vector_alloc_blah(4);
-  this->data[0] = px;
-  this->data[1] = py;
-  this->data[2] = pz;
-  this->data[3] = pw;
-}
-
-#endif // VNL_CONFIG_LEGACY_METHODS
 
 //: Creates a new copy of vector v. O(n).
 template<class T>
