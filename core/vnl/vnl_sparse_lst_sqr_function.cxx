@@ -358,7 +358,7 @@ vnl_sparse_lst_sqr_function::fij(int /*i*/, int /*j*/,
 
 //: Calculate the Jacobian A_ij, given the parameter vectors a_i, b_j, and c.
 void
-vnl_sparse_lst_sqr_function::jac_Aij(int /*i*/, int /*j*/,
+vnl_sparse_lst_sqr_function::jac_Aij(unsigned int /*i*/, unsigned int /*j*/,
                                      vnl_vector<double> const& /*ai*/,
                                      vnl_vector<double> const& /*bj*/,
                                      vnl_vector<double> const& /*c*/,
@@ -369,7 +369,7 @@ vnl_sparse_lst_sqr_function::jac_Aij(int /*i*/, int /*j*/,
 
 //: Calculate the Jacobian B_ij, given the parameter vectors a_i, b_j, and c.
 void
-vnl_sparse_lst_sqr_function::jac_Bij(int /*i*/, int /*j*/,
+vnl_sparse_lst_sqr_function::jac_Bij(unsigned int /*i*/, unsigned int /*j*/,
                                      vnl_vector<double> const& /*ai*/,
                                      vnl_vector<double> const& /*bj*/,
                                      vnl_vector<double> const& /*c*/,
@@ -380,7 +380,7 @@ vnl_sparse_lst_sqr_function::jac_Bij(int /*i*/, int /*j*/,
 
 //: Calculate the Jacobian C_ij, given the parameter vectors a_i, b_j, and c.
 void
-vnl_sparse_lst_sqr_function::jac_Cij(int /*i*/, int /*j*/,
+vnl_sparse_lst_sqr_function::jac_Cij(unsigned int /*i*/, unsigned int /*j*/,
                                      vnl_vector<double> const& /*ai*/,
                                      vnl_vector<double> const& /*bj*/,
                                      vnl_vector<double> const& /*c*/,
