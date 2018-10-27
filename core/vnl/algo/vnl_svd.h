@@ -60,7 +60,7 @@
 //  It extends readily to n-ary operations, such as generalized
 //  eigensystems, which cannot be members of just one matrix.
 
-VCL_TEMPLATE_EXPORT template <class T>
+VCL_EXPORT template <class T>
 class vnl_svd
 {
  public:
@@ -203,7 +203,7 @@ vnl_matrix<T> vnl_svd_inverse(vnl_matrix<T> const& m)
   return vnl_svd<T>(m).inverse();
 }
 
-VCL_TEMPLATE_EXPORT template <class T>
+VCL_EXPORT template <class T>
 std::ostream& operator<<(std::ostream&, vnl_svd<T> const& svd);
 
 #endif // vnl_svd_h_

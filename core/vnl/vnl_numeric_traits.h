@@ -35,7 +35,7 @@
 // only the specializations make sense.
 #if !defined(VCL_VC) || (_MSC_VER >= 1800 )
 template <class T>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits;
+class VNL_EXPORT vnl_numeric_traits;
 #else
 // However, *some* compilers require the template to be defined
 // under some circumstances...
@@ -44,7 +44,7 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits;
 // compiler errors.
 class VNL_EXPORT vnl_numeric_traits_not_a_valid_type { };
 template <class T>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits
+class VNL_EXPORT vnl_numeric_traits
 {
  public:
   //: Additive identity
@@ -69,7 +69,7 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits
 
 #ifndef NO_STD_BOOL
 template <>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool>
+class VNL_EXPORT vnl_numeric_traits<bool>
 {
  public:
   //: Additive identity
@@ -87,11 +87,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool>
 };
 
 template <>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<bool const> : public vnl_numeric_traits<bool> {};
+class VNL_EXPORT vnl_numeric_traits<bool const> : public vnl_numeric_traits<bool> {};
 #endif
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char>
+class VNL_EXPORT vnl_numeric_traits<char>
 {
  public:
   //: Additive identity
@@ -118,10 +118,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
+class VNL_EXPORT vnl_numeric_traits<char const> : public vnl_numeric_traits<char> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
+class VNL_EXPORT vnl_numeric_traits<unsigned char>
 {
  public:
   //: Additive identity
@@ -139,10 +139,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
+class VNL_EXPORT vnl_numeric_traits<unsigned char const> : public vnl_numeric_traits<unsigned char> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
+class VNL_EXPORT vnl_numeric_traits<signed char>
 {
  public:
   //: Additive identity
@@ -160,10 +160,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
+class VNL_EXPORT vnl_numeric_traits<signed char const> : public vnl_numeric_traits<signed char> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
+class VNL_EXPORT vnl_numeric_traits<short>
 {
  public:
   //: Additive identity
@@ -181,10 +181,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<short const> : public vnl_numeric_traits<short> {};
+class VNL_EXPORT vnl_numeric_traits<short const> : public vnl_numeric_traits<short> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
+class VNL_EXPORT vnl_numeric_traits<unsigned short>
 {
  public:
   //: Additive identity
@@ -202,10 +202,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
+class VNL_EXPORT vnl_numeric_traits<unsigned short const> : public vnl_numeric_traits<unsigned short> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
+class VNL_EXPORT vnl_numeric_traits<int>
 {
  public:
   //: Additive identity
@@ -223,10 +223,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<int const> : public vnl_numeric_traits<int> {};
+class VNL_EXPORT vnl_numeric_traits<int const> : public vnl_numeric_traits<int> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
+class VNL_EXPORT vnl_numeric_traits<unsigned int>
 {
  public:
   //: Additive identity
@@ -244,10 +244,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
+class VNL_EXPORT vnl_numeric_traits<unsigned int const> : public vnl_numeric_traits<unsigned int> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
+class VNL_EXPORT vnl_numeric_traits<long>
 {
  public:
   //: Additive identity
@@ -265,10 +265,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long const> : public vnl_numeric_traits<long > {};
+class VNL_EXPORT vnl_numeric_traits<long const> : public vnl_numeric_traits<long > {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
+class VNL_EXPORT vnl_numeric_traits<unsigned long>
 {
  public:
   //: Additive identity
@@ -287,11 +287,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
+class VNL_EXPORT vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
 
 #if defined(_WIN64) && !VCL_HAS_LONG_LONG
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t>
+class VNL_EXPORT vnl_numeric_traits<size_t>
 {
  public:
   //: Additive identity
@@ -309,12 +309,12 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<size_t const> : public vnl_numeric_traits<size_t> {};
+class VNL_EXPORT vnl_numeric_traits<size_t const> : public vnl_numeric_traits<size_t> {};
 #endif
 
 #if VCL_HAS_LONG_LONG
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long>
+class VNL_EXPORT vnl_numeric_traits<long long>
 {
  public:
   //: Additive identity
@@ -332,10 +332,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long long const> : public vnl_numeric_traits<long long> {};
+class VNL_EXPORT vnl_numeric_traits<long long const> : public vnl_numeric_traits<long long> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
+class VNL_EXPORT vnl_numeric_traits<unsigned long long>
 {
  public:
   //: Additive identity
@@ -353,11 +353,11 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<unsigned long long const> : public vnl_numeric_traits<unsigned long long> {};
+class VNL_EXPORT vnl_numeric_traits<unsigned long long const> : public vnl_numeric_traits<unsigned long long> {};
 #endif
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float>
+class VNL_EXPORT vnl_numeric_traits<float>
 {
  public:
   //: Additive identity
@@ -375,10 +375,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
+class VNL_EXPORT vnl_numeric_traits<float const> : public vnl_numeric_traits<float> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
+class VNL_EXPORT vnl_numeric_traits<double>
 {
  public:
   //: Additive identity
@@ -396,10 +396,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
+class VNL_EXPORT vnl_numeric_traits<double const> : public vnl_numeric_traits<double> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
+class VNL_EXPORT vnl_numeric_traits<long double>
 {
  public:
   //: Additive identity
@@ -417,10 +417,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double>
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
+class VNL_EXPORT vnl_numeric_traits<long double const> : public vnl_numeric_traits<long double> {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
+class VNL_EXPORT vnl_numeric_traits< std::complex<float> >
 {
  public:
   //: Additive identity
@@ -439,10 +439,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<float> >
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<float> const> : public vnl_numeric_traits<std::complex<float> > {};
+class VNL_EXPORT vnl_numeric_traits<std::complex<float> const> : public vnl_numeric_traits<std::complex<float> > {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
+class VNL_EXPORT vnl_numeric_traits< std::complex<double> >
 {
  public:
   //: Additive identity
@@ -461,10 +461,10 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<double> >
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<double> const> : public vnl_numeric_traits<std::complex<double> > {};
+class VNL_EXPORT vnl_numeric_traits<std::complex<double> const> : public vnl_numeric_traits<std::complex<double> > {};
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
+class VNL_EXPORT vnl_numeric_traits< std::complex<long double> >
 {
  public:
   //: Additive identity
@@ -483,6 +483,6 @@ class VNL_TEMPLATE_EXPORT vnl_numeric_traits< std::complex<long double> >
 };
 
 template<>
-class VNL_TEMPLATE_EXPORT vnl_numeric_traits<std::complex<long double> const> : public vnl_numeric_traits<std::complex<long double> > {};
+class VNL_EXPORT vnl_numeric_traits<std::complex<long double> const> : public vnl_numeric_traits<std::complex<long double> > {};
 
 #endif // vnl_numeric_traits_h_

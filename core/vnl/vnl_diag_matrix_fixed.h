@@ -29,7 +29,7 @@
 
 // forward declarations
 template <class T, unsigned int N> class vnl_diag_matrix_fixed;
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT vnl_vector_fixed<T,N> operator*(vnl_diag_matrix_fixed<T,N> const&, vnl_vector_fixed<T,N> const&);
+template <class T, unsigned int N> VNL_EXPORT vnl_vector_fixed<T,N> operator*(vnl_diag_matrix_fixed<T,N> const&, vnl_vector_fixed<T,N> const&);
 
 //: stores a diagonal matrix as a single vector.
 //  vnl_diag_matrix_fixed stores a diagonal matrix for time and space efficiency.
@@ -37,9 +37,9 @@ template <class T, unsigned int N> VNL_TEMPLATE_EXPORT vnl_vector_fixed<T,N> ope
 //  operations (currently *, + and -) are overloaded to use more efficient
 //  algorithms.
 
-VCL_TEMPLATE_EXPORT
+VCL_EXPORT
 template <class T, unsigned int N>
-class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
+class VNL_EXPORT vnl_diag_matrix_fixed
 {
   vnl_vector_fixed<T,N> diagonal_;
 
@@ -175,7 +175,7 @@ class VNL_TEMPLATE_EXPORT vnl_diag_matrix_fixed
 
 //:
 // \relatesalso vnl_diag_matrix_fixed
-template <class T, unsigned int N> VNL_TEMPLATE_EXPORT
+template <class T, unsigned int N> VNL_EXPORT
 std::ostream& operator<< (std::ostream&, vnl_diag_matrix_fixed<T,N> const&);
 
 //: Convert a vnl_diag_matrix_fixed to a Matrix.

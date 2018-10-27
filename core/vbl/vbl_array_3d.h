@@ -35,7 +35,7 @@
 
 //: Templated 3-dimensional array
 
-VCL_TEMPLATE_EXPORT template <class T>
+VCL_EXPORT template <class T>
 class vbl_array_3d
 {
  public:
@@ -158,10 +158,10 @@ class vbl_array_3d
 // formatted I/O
 //
 #include <vcl_compiler.h>
-VCL_TEMPLATE_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
+VCL_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
                                                   vbl_array_3d<T >const&);
 
-VCL_TEMPLATE_EXPORT template <class T> std::istream& operator>>(std::istream&,
+VCL_EXPORT template <class T> std::istream& operator>>(std::istream&,
                                                   vbl_array_3d<T >&);
 
 #define VBL_ARRAY_3D_INSTANTIATE \

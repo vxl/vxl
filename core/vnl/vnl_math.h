@@ -81,7 +81,7 @@
 
 
 //: Type-accessible infinities for use in templates.
-template <class T> VNL_TEMPLATE_EXPORT T vnl_huge_val(T);
+template <class T> VNL_EXPORT T vnl_huge_val(T);
 extern VNL_EXPORT long double   vnl_huge_val(long double);
 extern VNL_EXPORT double   vnl_huge_val(double);
 extern VNL_EXPORT float    vnl_huge_val(float);

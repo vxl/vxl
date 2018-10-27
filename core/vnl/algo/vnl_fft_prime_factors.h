@@ -23,7 +23,7 @@
 //   $N = 2^P 3^Q 5^R$
 // split N into its primefactors (2, 3, 5)
 
-VCL_TEMPLATE_EXPORT template <class T>
+VCL_EXPORT template <class T>
 struct vnl_fft_prime_factors
 {
 private:
