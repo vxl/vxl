@@ -30,7 +30,7 @@ class betr_edgel_reference_cd : public betr_algorithm
   //:results
   double js_div_;
   //: parameters
-  double sigma_;
-  double noise_mul_;
+  //UNUSED double sigma_;
+  //UNUSED double noise_mul_;
 };
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_edgel_reference_cd.
