@@ -21,7 +21,10 @@ class betr_geo_object_3d : public vbl_ref_count
  public:
   betr_geo_object_3d()= default;
   betr_geo_object_3d(const vpgl_lvcs& lvcs):lvcs_(lvcs){}
- betr_geo_object_3d(vsol_spatial_object_3d_sptr so, vpgl_lvcs const& lvcs):so_(so), lvcs_(lvcs){}
+  betr_geo_object_3d(vsol_spatial_object_3d_sptr so, vpgl_lvcs const& lvcs)
+   : lvcs_(lvcs)
+   , so_(so)
+  {}
 
   betr_geo_object_3d(betr_geo_object_3d const& go){
     *this = go;}//maybe change later
