@@ -25,7 +25,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     eij[1] = (ai[1]*ai[1]-bj[1]*ai[0])*bj[2]*bj[2]*bj[2] + c[1]*ai[1];
   }
 
-  void jac_Aij(int /*i*/, int /*j*/,
+  void jac_Aij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
@@ -37,7 +37,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     Aij[1][1] = 2.0*ai[1]*bj[2]*bj[2]*bj[2] + c[1];
   }
 
-  void jac_Bij(int /*i*/, int /*j*/,
+  void jac_Bij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const&  /*c*/,
@@ -51,7 +51,7 @@ class test_func1 : public vnl_sparse_lst_sqr_function
     Bij[1][2] = (ai[1]*ai[1]-bj[1]*ai[0])*3.0*bj[2]*bj[2];
   }
 
-  void jac_Cij(int /*i*/, int /*j*/,
+  void jac_Cij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const&  /*bj*/,
                vnl_vector<double> const&  /*c*/,

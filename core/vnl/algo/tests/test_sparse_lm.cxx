@@ -115,7 +115,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
              - data_[residual_indices_(i,j)];
   }
 
-  void jac_Aij(int /*i*/, int /*j*/,
+  void jac_Aij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
@@ -131,7 +131,7 @@ class bundle_2d : public vnl_sparse_lst_sqr_function
     Aij[0][2] = -(ca*bj[0] - sa*bj[1] + ai[1]) / (denom*denom);
   }
 
-  void jac_Bij(int /*i*/, int /*j*/,
+  void jac_Bij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
@@ -347,7 +347,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
              - data_[residual_indices_(i,j)];
   }
 
-  void jac_Aij(int /*i*/, int /*j*/,
+  void jac_Aij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
@@ -362,7 +362,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
     Aij[0][2] = -c[0]*(ca*bj[0] - sa*bj[1] + ai[1]) / (denom*denom);
   }
 
-  void jac_Bij(int /*i*/, int /*j*/,
+  void jac_Bij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& c,
@@ -376,7 +376,7 @@ class bundle_2d_shared : public vnl_sparse_lst_sqr_function
     Bij[0][1] = (-c[0]*sa - ca*numer/denom)/denom;
   }
 
-  void jac_Cij(int /*i*/, int /*j*/,
+  void jac_Cij(unsigned int /*i*/, unsigned int /*j*/,
                vnl_vector<double> const& ai,
                vnl_vector<double> const& bj,
                vnl_vector<double> const& /*c*/,
