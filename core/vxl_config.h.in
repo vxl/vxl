@@ -150,39 +150,6 @@
 #define VXL_UNISTD_HAS_GETPID     @VXL_UNISTD_HAS_GETPID@
 #define VXL_UNISTD_HAS_GETHOSTNAME      @VXL_UNISTD_HAS_GETHOSTNAME@
 
-/* true if <cstdlib> declares qsort() */
-#define VXL_STDLIB_HAS_QSORT      @VXL_STDLIB_HAS_QSORT@
-
-/* true if <cstdlib> declares lrand48() */
-#define VXL_STDLIB_HAS_LRAND48    @VXL_STDLIB_HAS_LRAND48@
-
-/* true if <cstdlib> declares drand48() */
-#define VXL_STDLIB_HAS_DRAND48    @VXL_STDLIB_HAS_DRAND48@
-
-/* true if <cstdlib> declares srand48() */
-#define VXL_STDLIB_HAS_SRAND48    @VXL_STDLIB_HAS_SRAND48@
-
-/* Check for C99 versions of is[finite|inf|nan|normal] in <cmath> */
-#define VXL_HAS_STD_ISFINITE @VXL_HAS_STD_ISFINITE@
-#define VXL_HAS_STD_ISINF    @VXL_HAS_STD_ISINF@
-#define VXL_HAS_STD_ISNAN    @VXL_HAS_STD_ISNAN@
-#define VXL_HAS_STD_ISNORMAL @VXL_HAS_STD_ISNORMAL@
-
-/* true if <ieeefp.h> declares finite() */
-#define VXL_IEEEFP_HAS_FINITE     @VXL_IEEEFP_HAS_FINITE@
-
-/* true if <cmath> declares finitef() */
-#define VXL_C_MATH_HAS_FINITEF     @VXL_C_MATH_HAS_FINITEF@
-
-/* true if <cmath> declares finite() */
-#define VXL_C_MATH_HAS_FINITE     @VXL_C_MATH_HAS_FINITE@
-
-/* true if <cmath> declares finitel() */
-#define VXL_C_MATH_HAS_FINITEL     @VXL_C_MATH_HAS_FINITEL@
-
-/* true if <cmath> declares sqrtf() for the C compiler */
-#define VXL_C_MATH_HAS_SQRTF      @VXL_C_MATH_HAS_SQRTF@
-
 /* true if <cmath> declares lround() */
 #define VXL_C_MATH_HAS_LROUND      @VXL_C_MATH_HAS_LROUND@
 

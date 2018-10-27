@@ -213,6 +213,23 @@
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) "ERROR: VCL_STATIC_CONST_INIT_FLOAT_DEFN is a noop"
 //# define VCL_SAFE_BOOL_TRUE "ERROR: Use true for VCL_SAFE_BOOL_TRUE"
 //# define VCL_SAFE_BOOL_DEFINE "ERROR: VCL_SAFE_BOOL_DEFINE is a noop in C++11"
+
+/* Check for C99 versions of is[finite|inf|nan|normal] in <cmath> */
+#define VXL_HAS_STD_ISFINITE    "ERROR:  Use C++11 cmath"
+#define VXL_HAS_STD_ISINF    "ERROR:  Use C++11 cmath"
+#define VXL_HAS_STD_ISNAN    "ERROR:  Use C++11 cmath"
+#define VXL_HAS_STD_ISNORMAL "ERROR:  Use C++11 cmath"
+#define VXL_IEEEFP_HAS_FINITE   "ERROR:  Use C++11 cmath"
+#define VXL_C_MATH_HAS_FINITEF  "ERROR:  Use C++11 cmath"
+#define VXL_C_MATH_HAS_FINITE   "ERROR:  Use C++11 cmath"
+#define VXL_C_MATH_HAS_FINITEL  "ERROR:  Use C++11 cmath"
+#define VXL_C_MATH_HAS_SQRTF    "ERROR:  Use C++11 cmath"
+#define VXL_STDLIB_HAS_QSORT   "ERROR:  Use C++11 cstdlib"
+
+#define VXL_STDLIB_HAS_LRAND48 "ERROR:  Use C++11 cstdlib"
+#define VXL_STDLIB_HAS_DRAND48 "ERROR:  Use C++11 cstdlib"
+#define VXL_STDLIB_HAS_SRAND48 "ERROR:  Use C++11 cstdlib"
+
 #endif
 
 #ifdef VNL_CONFIG_LEGACY_METHODS
