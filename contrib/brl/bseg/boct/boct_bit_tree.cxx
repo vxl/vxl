@@ -1,11 +1,11 @@
 //:
 // \file
-#include "boct_bit_tree.h"
-#include "boct_tree_cell.h"
 #include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <list>
+#include "boct_bit_tree.h"
+#include "boct_tree_cell.h"
 
 //: copy constructor
 boct_bit_tree::boct_bit_tree(const boct_bit_tree &other)

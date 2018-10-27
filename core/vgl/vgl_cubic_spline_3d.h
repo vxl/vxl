@@ -25,9 +25,9 @@
 
 #include <iostream>
 #include <utility>
+#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

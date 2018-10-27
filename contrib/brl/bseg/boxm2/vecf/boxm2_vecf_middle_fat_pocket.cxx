@@ -1,6 +1,6 @@
-#include "boxm2_vecf_middle_fat_pocket.h"
 #include <cstdlib>
 #include <fstream>
+#include "boxm2_vecf_middle_fat_pocket.h"
 boxm2_vecf_middle_fat_pocket::boxm2_vecf_middle_fat_pocket(std::string const& geometry_file){
 
   std::ifstream istr(geometry_file.c_str());

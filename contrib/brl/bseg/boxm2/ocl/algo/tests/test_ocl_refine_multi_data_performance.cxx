@@ -6,14 +6,14 @@
 // \author Raphael Kargon
 // \date July 17th, 2017
 
+#include <string>
+#include <vector>
+#include <iostream>
+#include <ctime>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
-#include <string>
-#include <vector>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <ctime>
 
 #include <bocl/bocl_manager.h>
 #include <boxm2/boxm2_block.h>

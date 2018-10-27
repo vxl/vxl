@@ -19,11 +19,11 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
+#include <utility>
+#include <vector>
 #include <mvl/FileNameGenerator.h>
 #include <mvl/PMatrix_sptr.h>
-#include <utility>
 #include <vcl_compiler.h>
-#include <vector>
 
 class RawPMatrixStore
 {

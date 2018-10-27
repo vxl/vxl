@@ -1,7 +1,7 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>

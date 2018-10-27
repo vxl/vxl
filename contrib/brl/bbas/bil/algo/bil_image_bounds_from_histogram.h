@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date July 25, 2016
 
+#include <vector>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vgl/vgl_polygon.h>
 class bil_image_bounds_from_histogram{
  public:

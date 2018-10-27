@@ -1,3 +1,4 @@
+#include <utility>
 #include "bstm_ocl_minfo_function.h"
 
 #include <vcl_where_root_dir.h>
@@ -7,7 +8,6 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 #include <vul/vul_timer.h>
 
-#include <utility>
 
 bstm_ocl_minfo_function::bstm_ocl_minfo_function(bocl_device_sptr device, bstm_scene_sptr scene, bstm_opencl_cache_sptr opencl_cache,
                         vgl_box_3d<double> bb,vgl_rotation_3d<double> rot, vgl_vector_3d<double> T, float time1, float time2, std::string kernel_opt,int nbins ):

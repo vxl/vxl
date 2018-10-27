@@ -2,9 +2,9 @@
 #ifndef bvgl_scaled_shape_3d_hxx_
 #define bvgl_scaled_shape_3d_hxx_
 #include <cstdlib>
-#include "bvgl_scaled_shape_3d.h"
 #include <cmath>
 #include <limits>
+#include "bvgl_scaled_shape_3d.h"
 #include <vgl/vgl_distance.h>
 template <class Type>
 Type bvgl_scaled_shape_3d<Type>::linear_scale(Type w) const{

@@ -16,13 +16,13 @@
 //
 // The main work of loading and saving happens in vil3d_meta_image
 
-#include "vil3d_meta_image_format.h"
 #include <algorithm>
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <utility>
+#include "vil3d_meta_image_format.h"
 #include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_copy.h>

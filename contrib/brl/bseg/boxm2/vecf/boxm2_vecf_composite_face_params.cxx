@@ -1,7 +1,7 @@
+#include <string>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_ray_3d.h>
 #include "boxm2_vecf_composite_face_params.h"
-#include <string>
 void boxm2_vecf_composite_face_params::compute_auxillary_pts(){
   // midpoint of line joining the left and right canthus
   vgl_vector_3d<double> r_to_l = left_lateral_canthus_-right_lateral_canthus_;

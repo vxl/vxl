@@ -61,7 +61,6 @@ class sdet_graph_img_seg : public vbl_ref_count
 #include <vil/vil_copy.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vnl/vnl_random.h>
-#include <vector>
 #include "sdet_region.h"
 #include "sdet_region_sptr.h"
 // segment a single plane image using value difference of neighbor pixels, neigh = 4 for 4-neighborhood, or 8

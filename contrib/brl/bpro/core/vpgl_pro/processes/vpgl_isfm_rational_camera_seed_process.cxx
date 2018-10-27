@@ -1,10 +1,10 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes/vpgl_isfm_rational_camera_seed_process.cxx
-#include <vil/vil_config.h>
-#if HAS_GEOTIFF
 #include <iostream>
 #include <sstream>
 #include <fstream>
 #include <iomanip>
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
 #include <bprb/bprb_func_process.h>
 //:
 // \file

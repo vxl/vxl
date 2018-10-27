@@ -1,4 +1,5 @@
 // This is bbas/bpgl/ihog/ihog_cost_func.cxx
+#include <utility>
 #include "ihog_cost_func.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_math.h>
 
-#include <utility>
 
 //: Constructor
 ihog_cost_func::ihog_cost_func( const vil_image_view<float>& image1,

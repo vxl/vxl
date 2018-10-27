@@ -1,4 +1,5 @@
 // This is vpgl/algo/vpgl_ba_fixed_k_lsqr.cxx
+#include <utility>
 #include "vpgl_ba_fixed_k_lsqr.h"
 //:
 // \file
@@ -6,7 +7,6 @@
 #include <vnl/vnl_vector_ref.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <utility>
 
 
 //: Constructor

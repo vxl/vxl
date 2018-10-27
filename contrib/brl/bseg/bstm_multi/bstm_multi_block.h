@@ -30,13 +30,13 @@
 // \author: Raphael Kargon
 // \date: Aug 01, 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <vector>
+#include <utility>
+#include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>
-#include <utility>
 #include <vbl/vbl_smart_ptr.hxx>
 #include <vnl/vnl_vector_fixed.h>
 

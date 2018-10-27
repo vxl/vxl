@@ -1,9 +1,8 @@
 // This is vcl/tests/test_map.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
-#include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 int test_map_main(int /*argc*/,char* /*argv*/[])
 {

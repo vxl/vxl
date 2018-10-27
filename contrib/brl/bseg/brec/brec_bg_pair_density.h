@@ -12,6 +12,7 @@
 //   <none yet>
 // \endverbatim
 
+#include <utility>
 #include "brec_pair_density.h"
 
 #include <bvxm/bvxm_voxel_world.h>
@@ -21,7 +22,6 @@
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gaussian_indep.h>
 
-#include <utility>
 
 class brec_bg_pair_density : public brec_pair_density
 {

@@ -6,13 +6,12 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 #include <bstm_multi/bstm_multi_block.h>
 #include <bstm_multi/bstm_multi_typedefs.h>

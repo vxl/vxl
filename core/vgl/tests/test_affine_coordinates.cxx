@@ -4,6 +4,8 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <vector>
+#include <cmath>
 #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_affine_coordinates.h>
@@ -11,8 +13,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <vector>
-#include <cmath>
 static double rnd(double r){
   double b = (2.0*r*double(rand())/RAND_MAX) - r;
   return b;

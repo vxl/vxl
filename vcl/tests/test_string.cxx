@@ -1,7 +1,6 @@
-#include <string> // C++ specific includes first
+#include <string>
+#include <iostream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 #define Assert(x) {std::cout << "TEST " #x " : "; std::cout << ((x)?"PASSED":"FAILED")}
 

@@ -8,11 +8,10 @@
 
 #include <iostream>
 #include <map>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
 #include <string>
 #include <sstream>
+#include <vcl_compiler.h>
 #include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneable_ptr.h>

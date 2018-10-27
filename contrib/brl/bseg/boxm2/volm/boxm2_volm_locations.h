@@ -13,6 +13,7 @@
 // \endverbatim
 //
 
+#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <volm/volm_tile.h>
@@ -20,7 +21,6 @@
 #include <vgl/vgl_point_3d.h>
 #include <boxm2/boxm2_scene.h>
 
-#include <utility>
 
 //: a set of 3d points in local coordinates of a scene, corresponds to an output tile.
 //  this class knows how to construct an output tile to write probabilities

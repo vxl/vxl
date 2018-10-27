@@ -7,8 +7,8 @@
 // \author J.L. Mundy
 // \date   3 November 2015
 //
-#include "boxm2_vecf_articulated_params.h"
 #include <iostream>
+#include "boxm2_vecf_articulated_params.h"
 #include <vgl/vgl_vector_3d.h>
 class boxm2_vecf_skin_params : public boxm2_vecf_articulated_params{
  public:

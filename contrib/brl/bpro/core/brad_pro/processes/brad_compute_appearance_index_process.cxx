@@ -1,4 +1,6 @@
 // This is brl/bpro/core/brad_pro/processes/brad_compute_appearance_index_process.cxx
+#include <iostream>
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_appearance_neighborhood_index.h>
@@ -8,8 +10,6 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
 
 //: Constructor
 bool brad_compute_appearance_index_process_cons(bprb_func_process& pro)

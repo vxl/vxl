@@ -13,11 +13,10 @@
 
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>

@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cctype>
+#include <vcl_compiler.h>
 
 // Test the functionality, and also cause a link to make sure the
 // function exists.

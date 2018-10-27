@@ -1,8 +1,7 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <functional>
 #include <set>
+#include <vcl_compiler.h>
 
 int test_set_main(int /*argc*/,char* /*argv*/[])
 {

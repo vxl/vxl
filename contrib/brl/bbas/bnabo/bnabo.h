@@ -42,12 +42,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //        #include "Eigen/Array"
 //#endif
 
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
-
 #include <vector>
 #include <map>
 #include <limits>
+#include <vnl/vnl_vector.h>
+#include <vnl/vnl_matrix.h>
+
 
  //remove dependency on boost - JLM
  //#include <boost/any.hpp>

@@ -166,7 +166,17 @@ license you like.
 #ifndef JSON_CONFIG_H_INCLUDED
 #define JSON_CONFIG_H_INCLUDED
 #include <cstddef>
-#include <string> //typedef String
+#include <string>
+#include <vector>
+#include <exception>
+#include <map>
+#include <deque>
+#include <iosfwd>
+#include <stack>
+#include <istream>
+#include <ostream>
+#include <cstdlib>
+#include <sstream>
 #include <cstdint> //typedef int64_t, uint64_t
 
 /// If defined, indicates that json library is embedded in CppTL library.
@@ -489,12 +499,8 @@ public:
 #if !defined(JSON_IS_AMALGAMATION)
 #include "forwards.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <string>
-#include <vector>
-#include <exception>
 
 #ifndef JSON_USE_CPPTL_SMALLMAP
-#include <map>
 #else
 #include <cpptl/smallmap.h>
 #endif
@@ -1371,11 +1377,6 @@ inline void swap(Json::Value& a, Json::Value& b) { a.swap(b); }
 #include "features.h"
 #include "value.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <deque>
-#include <iosfwd>
-#include <stack>
-#include <string>
-#include <istream>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
@@ -1788,9 +1789,6 @@ JSON_API JSONCPP_ISTREAM& operator>>(JSONCPP_ISTREAM&, Value&);
 #if !defined(JSON_IS_AMALGAMATION)
 #include "value.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <vector>
-#include <string>
-#include <ostream>
 
 // Disable warning C4251: <data member>: <type> needs to have dll-interface to
 // be used by...
@@ -2130,8 +2128,6 @@ JSON_API JSONCPP_OSTREAM& operator<<(JSONCPP_OSTREAM&, const Value& root);
 #ifndef CPPTL_JSON_ASSERTIONS_H_INCLUDED
 #define CPPTL_JSON_ASSERTIONS_H_INCLUDED
 
-#include <cstdlib>
-#include <sstream>
 
 #if !defined(JSON_IS_AMALGAMATION)
 #include "config.h"

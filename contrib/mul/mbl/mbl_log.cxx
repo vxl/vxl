@@ -11,13 +11,12 @@
 
 #include <cstddef>
 #include <fstream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <algorithm>
 #include <sstream>
 #include <utility>
+#include <vcl_compiler.h>
 #include "mbl_log.h"
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>

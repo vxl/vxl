@@ -8,8 +8,8 @@
 // \author Yi Dong
 // \date   January, 2016
 //
-#include "boxm2_vecf_articulated_params.h"
 #include <iostream>
+#include "boxm2_vecf_articulated_params.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 class boxm2_vecf_orbicularis_oris_params : public boxm2_vecf_articulated_params

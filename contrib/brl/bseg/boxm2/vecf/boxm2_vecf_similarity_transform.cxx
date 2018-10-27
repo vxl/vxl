@@ -1,3 +1,4 @@
+#include <utility>
 #include "boxm2_vecf_similarity_transform.h"
 #include <boxm2/boxm2_data.h>
 #include <boxm2/boxm2_block.h>
@@ -6,7 +7,6 @@
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <utility>
 
 // instantiate the template code in the .txx file
 #include "boxm2_vecf_vector_field.hxx"

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <limits>
+#include <sstream>
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_mesh.h>
 #include <vnl/vnl_math.h>
@@ -9,7 +10,6 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
-#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>

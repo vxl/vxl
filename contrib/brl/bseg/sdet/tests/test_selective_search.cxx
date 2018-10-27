@@ -1,4 +1,7 @@
 // This is brl/bseg/sdet/tests/test_selective_search.cxx
+#include <string>
+#include <map>
+#include <fstream>
 #include <sdet/sdet_graph_img_seg.h>
 #include <sdet/sdet_selective_search.h>
 #include <sdet/sdet_region.h>
@@ -8,9 +11,6 @@
 #include <vil/vil_convert.h>
 #include <vgl/vgl_area.h>
 #include <testlib/testlib_test.h>
-#include <string>
-#include <map>
-#include <fstream>
 
 static void test_selective_search(int argc, char * argv[])
 {

@@ -21,11 +21,10 @@
 // \date 26 Jul 2017
 //
 
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
-#include <iostream>
+#include <vcl_compiler.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>

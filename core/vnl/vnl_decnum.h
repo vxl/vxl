@@ -74,10 +74,10 @@
 //   16 Aug. 2011 - Peter Vanroose - added Inf & NaN and constructor from double
 // \endverbatim
 
-#include "vnl/vnl_export.h"
 #include <iostream>
 #include <string>
 #include <utility>
+#include "vnl/vnl_export.h"
 #include <vcl_compiler.h>
 
 class VNL_EXPORT vnl_decnum

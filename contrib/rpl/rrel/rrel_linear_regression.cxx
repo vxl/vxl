@@ -1,7 +1,7 @@
-#include "rrel_linear_regression.h"
 #include <iostream>
 #include <utility>
 #include <vector>
+#include "rrel_linear_regression.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>

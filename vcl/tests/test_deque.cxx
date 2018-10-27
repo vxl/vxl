@@ -1,7 +1,6 @@
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <deque>
+#include <vcl_compiler.h>
 
 int test_deque_main(int /*argc*/,char* /*argv*/[])
 {

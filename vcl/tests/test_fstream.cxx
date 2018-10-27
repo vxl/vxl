@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
+#include <vcl_compiler.h>
 
 int test_fstream_main(int /*argc*/,char* /*argv*/[])
 {

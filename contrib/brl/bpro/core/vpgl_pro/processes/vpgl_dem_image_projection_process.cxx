@@ -1,9 +1,9 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_dem_image_projection_process.cxx
 #include <iostream>
+#include <limits>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
-#include <limits>
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_view_base.h>

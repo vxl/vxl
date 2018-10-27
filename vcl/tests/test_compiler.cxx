@@ -1,3 +1,7 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
 #include <vcl_compiler.h>
 
 // ------------------------------------------------
@@ -34,7 +38,6 @@ struct A
 
 // ------------------------------------------------
 
-#include <iostream>
 
 void vcl_test_implicit_instantiation(int n);
 
@@ -60,11 +63,7 @@ int test_compiler_main(int /*argc*/,char* /*argv*/[])
   return result;
 }
 
-#include <vector>
-#include <map>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 
 struct mystery_type
 {

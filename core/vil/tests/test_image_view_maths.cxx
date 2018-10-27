@@ -1,11 +1,9 @@
 // This is core/vil/tests/test_image_view_maths.cxx
 #include <iostream>
+#include <sstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <sstream>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_copy.h>
 #include <vil/vil_math.h>

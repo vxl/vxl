@@ -12,12 +12,12 @@
 //   <none yet>
 // \endverbatim
 
+#include <utility>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <boxm/boxm_scene.h>
 
-#include <utility>
 
 template <unsigned feature_dim>
 class bvpl_global_pca: public vbl_ref_count

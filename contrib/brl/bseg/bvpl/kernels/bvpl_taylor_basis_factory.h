@@ -12,10 +12,10 @@
 //   <none yet>
 // \endverbatim
 
+#include <utility>
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <vgl/vgl_point_3d.h>
 
-#include <utility>
 
 //: This class reads from disk the taylor kernels.
 class bvpl_taylor_basis_factory: public bvpl_kernel_factory

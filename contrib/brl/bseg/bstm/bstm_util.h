@@ -2,9 +2,9 @@
 #define bstm_util_h
 //:
 // \file
+#include <iostream>
 #include <bstm/bstm_scene.h>
 #include <bstm/io/bstm_cache.h>
-#include <iostream>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vil/vil_image_view.h>

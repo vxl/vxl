@@ -2,7 +2,7 @@
 #define vcl_memory_h_
 
 #include <memory>
-#include  <utility>
+#include <utility>
 #include "vcl_compiler.h"
 
 // Needed to provide backwards compatibility between C++11 and older compilers

@@ -1,6 +1,6 @@
-#include "boxm2_vecf_mouth.h"
 #include <cstdlib>
 #include <cmath>
+#include "boxm2_vecf_mouth.h"
 
 boxm2_vecf_mouth::boxm2_vecf_mouth(std::vector<vgl_point_3d<double> > const& knots){
   sup_ = bvgl_spline_region_3d<double>(knots, 1.0);

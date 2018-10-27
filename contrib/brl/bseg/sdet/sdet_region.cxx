@@ -1,3 +1,4 @@
+#include <limits>
 #include "sdet_region.h"
 //:
 // \file
@@ -10,7 +11,6 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <bsol/bsol_algs.h>
 #include <vnl/vnl_float_2.h>
-#include <limits>
 sdet_region::sdet_region()
 {
   boundary_ = nullptr;

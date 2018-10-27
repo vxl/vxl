@@ -1,4 +1,6 @@
 // This is core/vpgl/algo/vpgl_backproject_dem.cxx
+#include <limits>
+#include <algorithm>
 #include "vpgl_backproject.h"
 #include "vpgl_backproject_dem.h"
 #include <vpgl/file_formats/vpgl_geo_camera.h>
@@ -11,8 +13,6 @@
 #include <vil/vil_math.h>
 #include <vnl/vnl_cost_function.h>
 #include <vnl/algo/vnl_brent_minimizer.h>
-#include <limits>
-#include <algorithm>
 class dem_bproj_cost_function : public vnl_cost_function{
 public:
   dem_bproj_cost_function(vil_image_view<float> const& dem_view, vpgl_geo_camera* geo_cam, vgl_ray_3d<double> const& ray, bool verbose=false) :

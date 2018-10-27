@@ -7,9 +7,8 @@
 // \date   25 Nov 2002
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include "rgrl_scale_estimator.h"
 
 #include <vcl_compiler.h>

@@ -1,8 +1,8 @@
 // This is vcl/vcl_deprecated.cxx
+#include <iostream>
+#include <cstdlib>
 #include "vcl_deprecated.h"
 
-#include <iostream> 
-#include <cstdlib>
 
 
 #ifdef VXL_WARN_DEPRECATED_ABORT

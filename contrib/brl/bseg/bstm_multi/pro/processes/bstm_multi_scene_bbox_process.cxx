@@ -6,12 +6,11 @@
 // \author Andrew Miller
 // \date Dec 15, 2011
 
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <bprb/bprb_func_process.h>
+#include <vcl_compiler.h>
 
 #include <bstm/bstm_scene.h>
 #include <vcl_compiler.h>

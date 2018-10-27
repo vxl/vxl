@@ -16,14 +16,14 @@
 // \author Raphael Kargon
 // \date 31 Jul 2017
 
-#include <expatpplib.h>
-
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <string>
 #include <vector>
+#include <expatpplib.h>
+
+#include <vcl_compiler.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 

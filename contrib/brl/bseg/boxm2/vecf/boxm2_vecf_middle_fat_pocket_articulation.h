@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date   24 January 2015
 //
-#include "boxm2_vecf_scene_articulation.h"
-#include "boxm2_vecf_middle_fat_pocket_params.h"
 #include <string>
 #include <vector>
 #include <map>
+#include "boxm2_vecf_scene_articulation.h"
+#include "boxm2_vecf_middle_fat_pocket_params.h"
 class boxm2_vecf_middle_fat_pocket_articulation : public boxm2_vecf_scene_articulation{
  public:
   boxm2_vecf_middle_fat_pocket_articulation();

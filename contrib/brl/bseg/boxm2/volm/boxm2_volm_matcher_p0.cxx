@@ -1,11 +1,11 @@
 // This is brl/bseg/boxm2/volm/boxm2_volm_matcher_p0.cxx
+#include <utility>
 #include "boxm2_volm_matcher_p0.h"
 //:
 // \file
 #include "boxm2_volm_wr3db_index.h"
 #include <vul/vul_timer.h>
 
-#include <utility>
 
 struct scorecomp
 {

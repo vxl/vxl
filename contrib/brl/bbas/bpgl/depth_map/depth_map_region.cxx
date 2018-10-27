@@ -1,3 +1,4 @@
+#include <utility>
 #include "depth_map_region.h"
 #include "depth_map_defs.h"
 //:
@@ -22,7 +23,6 @@
 #include <vpgl/algo/vpgl_ray.h>
 #include <bpgl/bpgl_camera_utils.h>
 
-#include <utility>
 
 // specified and fixed plane
 vsol_polygon_3d_sptr depth_map_region::

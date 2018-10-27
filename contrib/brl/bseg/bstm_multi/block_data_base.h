@@ -12,14 +12,13 @@
 // \date Aug 03, 2017
 //
 
-#include <vbl/vbl_ref_count.h>
-#include <vbl/vbl_smart_ptr.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
 #include <cstring>
-#include <iostream>
 #include <string>
+#include <vbl/vbl_ref_count.h>
+#include <vbl/vbl_smart_ptr.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 
 #include <bstm/bstm_data_traits.h>

@@ -1,8 +1,8 @@
+#include <cmath>
 #include "betr_edgel_change_detection.h"
 #include "betr_edgel_factory.h"
 #include "betr_event_trigger.h"
 #include <bsta/bsta_histogram.h>
-#include <cmath>
 bool betr_edgel_change_detection::process(){
   betr_edgel_factory ef;
   betr_edgel_change_detection_params* params = dynamic_cast<betr_edgel_change_detection_params*>(params_.ptr());

@@ -8,12 +8,12 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "vul_sequence_filename_map.h"
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
 #include <string>
 #include <utility>
+#include "vul_sequence_filename_map.h"
 #include <vcl_compiler.h>
 
 #include <vul/vul_sprintf.h>

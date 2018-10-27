@@ -1,8 +1,8 @@
 //:
 // \file
+#include <cstring>
 #include "vil_viffheader.h"
 #include "vcl_compiler.h"
-#include <cstring>
 
 
 //: Construct an image header

@@ -1,10 +1,10 @@
-#include "block_sio_mgr.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <ios>
 #include <string>
+#include "block_sio_mgr.h"
+
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 template <typename Block>

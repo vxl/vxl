@@ -1,8 +1,8 @@
+#include <cmath>
 #include "betr_edgel_reference_cd.h"
 #include "betr_edgel_factory.h"
 #include "betr_event_trigger.h"
 #include <bsta/bsta_histogram.h>
-#include <cmath>
 bool betr_edgel_reference_cd::process(){
   betr_edgel_factory ef;
   betr_edgel_factory_params& efparams = ef.params();

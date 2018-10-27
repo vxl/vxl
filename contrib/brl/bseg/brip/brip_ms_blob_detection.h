@@ -10,9 +10,9 @@
 #ifndef __BRIP_BLOB_FUNCTIONS_H
 #define __BRIP_BLOB_FUNCTIONS_H
 
+#include <vector>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_polygon.h>
-#include <vector>
 
 // Connected Components Bounding Box
 // Computes bounding boxes for blobs detected by performing

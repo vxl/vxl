@@ -1,6 +1,7 @@
 #ifndef vgl_convex_hull_2d_hxx_
 #define vgl_convex_hull_2d_hxx_
 #include <cstdlib>
+#include <limits>
 #include "vgl_convex_hull_2d.h"
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_area.h>
@@ -8,7 +9,6 @@
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>
-#include <limits>
 
 //:
 // \file

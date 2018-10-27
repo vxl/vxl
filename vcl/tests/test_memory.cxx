@@ -1,7 +1,7 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
 #include <memory>
+#include <vcl_compiler.h>
 
 #define ASSERT(x,y) if (!(x)) { std::printf("FAIL: " y "\n"); status = 1; }
 

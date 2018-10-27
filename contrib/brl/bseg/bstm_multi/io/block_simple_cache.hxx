@@ -1,13 +1,12 @@
-#include "block_simple_cache.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
-#include <iostream>
 #include <map>
 #include <set>
 #include <sstream>
 #include <string>
+#include "block_simple_cache.h"
+
+#include <vcl_compiler.h>
 
 #include <bstm/bstm_data_traits.h>
 #include <bstm_multi/block_data_base.h>

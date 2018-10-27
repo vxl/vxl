@@ -1,12 +1,12 @@
 #ifndef bstm_multi_tree_util_h_
 #define bstm_multi_tree_util_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <new>
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/vnl_vector_fixed.h>
 
 #include <boct/boct_bit_tree.h>

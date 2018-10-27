@@ -10,12 +10,12 @@
 // \date   31 Jul 2017
 //
 
-#include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <utility>
 #include <vector>
+#include <vbl/vbl_ref_count.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
@@ -26,7 +26,6 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm_multi/bstm_multi_tree_util.h>
 
-#include <utility>
 
 class bstm_multi_block_metadata : public vbl_ref_count {
 public:

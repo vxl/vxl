@@ -1,13 +1,12 @@
 // include all the streams headers and <string>, to
 // ensure they are compatible.
 #include <string>
-#include <ios> // for std::ios::fixed etc.
-#include <iomanip> // for std::fixed etc.
-#include <iostream>
-#include <vcl_compiler.h>
+#include <ios>
+#include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <vcl_compiler.h>
 
 // This appears to do nothing, and it doesn't compile on MSVC with some weird error
 //      'flux' : illegal member initialization: 'fstream' is not a base or member

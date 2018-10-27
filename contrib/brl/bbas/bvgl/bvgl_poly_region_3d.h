@@ -7,15 +7,15 @@
 // \author January 10, 2016 J.L. Mundy
 //
 
+#include <vector>
+#include <iosfwd>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
-#include <vector>
 #include <vnl/vnl_vector.h>
-#include <iosfwd>
 
 template <class Type>
 class bvgl_poly_region_3d

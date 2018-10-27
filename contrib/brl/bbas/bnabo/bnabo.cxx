@@ -29,13 +29,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "bnabo.h"
-#include "bnabo_private.h"
-#include "bnabo_index_heap.h"
 #include <limits>
 #include <algorithm>
 #include <stdexcept>
 #include <sstream>
+#include "bnabo.h"
+#include "bnabo_private.h"
+#include "bnabo_index_heap.h"
 //#include <boost/format.hpp>
 
 /*!        \file nabo.cpp

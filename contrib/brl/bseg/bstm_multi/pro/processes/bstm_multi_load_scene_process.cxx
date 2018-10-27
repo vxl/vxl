@@ -6,10 +6,10 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <bprb/bprb_func_process.h>
 #include <bstm_multi/bstm_multi_typedefs.h>

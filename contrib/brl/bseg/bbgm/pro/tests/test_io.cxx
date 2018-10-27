@@ -5,8 +5,6 @@
 #include <vpl/vpl.h>
 //For backwards compatibility
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bsta/bsta_attributes.h>

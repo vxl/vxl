@@ -4,10 +4,10 @@
 
 #include <iostream>
 #include <cmath>
+#include <string>
 #include "vgl_infinite_line_3d.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <string>
 template <class Type>
 vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
                                                  vgl_point_3d<Type> const& p2)

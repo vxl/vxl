@@ -1,4 +1,5 @@
 // This is brl/bseg/boxm2/cpp/pro/processes/boxm2_cpp_query_cell_process.cxx
+#include <fstream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -7,7 +8,6 @@
 // \author Andy Neff
 // \date Oct 15 2015
 
-#include <fstream>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <boxm2/boxm2_scene.h>

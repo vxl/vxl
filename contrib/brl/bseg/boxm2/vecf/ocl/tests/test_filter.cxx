@@ -3,12 +3,11 @@
 // \author J.L. Mundy
 // \date 10/12/14
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <fstream>
 #include <vector>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>

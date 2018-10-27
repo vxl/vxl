@@ -1,11 +1,11 @@
 // This is core/vgl/vgl_quadric_3d.hxx
 #ifndef vgl_quadric_3d_hxx_
 #define vgl_quadric_3d_hxx_
-#include "vgl_quadric_3d.h"
-#include "vgl_tolerance.h"
 #include <iostream>
 #include <algorithm>
 #include <functional>
+#include "vgl_quadric_3d.h"
+#include "vgl_tolerance.h"
 #define RANK_FACTOR 100000
 #define DET_FACTOR 100
 static const char* quadric_class_name[] =

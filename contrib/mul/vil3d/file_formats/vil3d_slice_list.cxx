@@ -1,9 +1,9 @@
-#include "vil3d_slice_list.h"
 #include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <iostream>
 #include <utility>
+#include "vil3d_slice_list.h"
 //:
 // \file
 // \brief Reader/Writer for a volume made up of a list of slices.

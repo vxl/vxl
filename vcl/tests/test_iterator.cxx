@@ -1,9 +1,9 @@
 /*
   fsm
 */
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iterator>
+#include <vcl_compiler.h>
 
 void f(std::iterator<float, int> *) { }
 

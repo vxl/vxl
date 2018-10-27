@@ -8,10 +8,9 @@
 
 #include <string>
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
+#include <vcl_compiler.h>
 #include <vbl/vbl_triple.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>

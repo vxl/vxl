@@ -14,7 +14,6 @@
 #include <utility>
 #include <vector>
 #include <iostream>
-#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_3d.h>

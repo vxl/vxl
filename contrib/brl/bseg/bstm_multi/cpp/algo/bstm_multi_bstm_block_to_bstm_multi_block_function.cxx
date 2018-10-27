@@ -1,11 +1,11 @@
-#include "bstm_multi_bstm_block_to_bstm_multi_block_function.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstring>
 #include <map>
 #include <string>
 #include <utility>
+#include "bstm_multi_bstm_block_to_bstm_multi_block_function.h"
+
+#include <vcl_compiler.h>
 
 #include <vnl_vector_fixed.h>
 

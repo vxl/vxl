@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date   19 May 2015
 //
+#include <utility>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 
-#include <utility>
 #include "boxm2_vecf_orbit_params.h"
 class boxm2_vecf_lid_base{
  public:

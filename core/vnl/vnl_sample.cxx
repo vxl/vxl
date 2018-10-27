@@ -5,13 +5,13 @@
 
 #include <cmath>
 #include <ctime>
+#include <cstdlib>
 #include "vnl_sample.h"
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
 #include <vxl_config.h>
 
-#include <cstdlib> // dont_vxl_filter
 
 #if !VXL_STDLIB_HAS_DRAND48
 // rand() is not always a good random number generator,

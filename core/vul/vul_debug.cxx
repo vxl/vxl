@@ -12,8 +12,6 @@
 #include <vxl_config.h>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::snprintf()
 
 #ifdef _WIN32
 

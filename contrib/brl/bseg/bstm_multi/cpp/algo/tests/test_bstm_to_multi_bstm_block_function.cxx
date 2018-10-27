@@ -4,16 +4,15 @@
 // \author Raphael Kargon
 // \date 21-Aug-2017
 
+#include <iostream>
+#include <string>
+#include <utility>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 
 #include <vbl/vbl_smart_ptr.hxx>
 #include <vbl/vbl_triple.hxx>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
-#include <utility>
 #include <vgl/vgl_vector_3d.h>
 
 #include <bstm/bstm_data.h>

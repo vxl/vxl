@@ -3,12 +3,12 @@
 //:
 // \file
 //
+#include <cstring>
+#include <iostream>
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_data_traits.h>
-#include <cstring>
-#include <iostream>
 #include <vcl_compiler.h>
 
 // smart ptr includes

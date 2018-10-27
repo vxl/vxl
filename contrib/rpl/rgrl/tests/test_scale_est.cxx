@@ -1,9 +1,8 @@
 #include <vector>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>

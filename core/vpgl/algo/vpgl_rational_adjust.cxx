@@ -1,6 +1,6 @@
-#include "vpgl_rational_adjust.h"
 #include <cmath>
 #include <utility>
+#include "vpgl_rational_adjust.h"
 //:
 // \file
 

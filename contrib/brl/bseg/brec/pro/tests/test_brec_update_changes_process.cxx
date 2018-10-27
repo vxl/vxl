@@ -41,8 +41,6 @@
 
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 //:
 vpgl_rational_camera<double>

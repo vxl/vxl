@@ -18,8 +18,6 @@
 
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);

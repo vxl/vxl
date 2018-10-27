@@ -9,9 +9,8 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 

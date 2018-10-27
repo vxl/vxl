@@ -1,3 +1,4 @@
+#include <cmath>
 #include "boxm2_vecf_articulated_scene.h"
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
@@ -6,7 +7,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vul/vul_timer.h>
 #include <vbl/vbl_array_3d.h>
-#include <cmath>
 double boxm2_vecf_articulated_scene::gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));
 }

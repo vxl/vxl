@@ -6,6 +6,7 @@
 // \file
 // \author crossge@crd.ge.com
 
+#include <utility>
 #include "gtrl_triangulation.h"
 #include <vcl_compiler.h>
 
@@ -24,7 +25,6 @@ extern "C" {
 
 #include <triangle.h> // from netlib, for triangulate()
 }
-#include <utility>
 
 
 gtrl_triangulation::gtrl_triangulation( gtrl_polygon poly)

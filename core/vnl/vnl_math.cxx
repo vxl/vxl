@@ -6,6 +6,8 @@
 // \file
 
 #include <limits>
+#include <cfloat>
+#include <cmath>
 #include "vnl_math.h"
 #include <vxl_config.h>
 #include <vcl_compiler.h>
@@ -17,7 +19,6 @@
 
 #if defined(VCL_VC) || defined(__MINGW32__)
 // I don't think we need this, because <ieeefp.h> is available -- fsm
-# include <cfloat> // for 'isnan' and 'finite'
 // # define isnan _isnan
 # define finite _finite
 # define finitef _finite
@@ -26,7 +27,6 @@
 #endif
 
 #elif VXL_HAS_STD_ISFINITE || VXL_HAS_STD_ISNAN ||  VXL_HAS_STD_ISNORMAL
-# include<cmath>
 # if VXL_HAS_STD_ISFINITE
 #    define finite  std::isfinite
 #    define finitef std::isfinite
@@ -44,7 +44,6 @@
 # endif
 
 #elif VXL_C_MATH_HAS_FINITE
-# include <cmath> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # if !VXL_C_MATH_HAS_FINITEF
 #  define finitef finite
 # endif
@@ -53,7 +52,6 @@
 # endif
 
 #elif defined(__hpux)
-# include <cmath> // dont_vxl_filter: this is *not* supposed to be <cmath>
 # define finite _Isfinite
 # define finitef _Isfinitef
 # define finitel _Isfinite

@@ -30,9 +30,8 @@
 
 #include <iostream>
 #include <iosfwd>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_file_format.h>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vcl_compiler.h>

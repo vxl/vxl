@@ -6,11 +6,10 @@
 // \brief Base for objects with apply limits to parameters
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>

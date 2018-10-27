@@ -4,9 +4,9 @@
 // \date 02/25/16
 
 
-#include <testlib/testlib_test.h>
 #include <string>
 #include <fstream>
+#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>

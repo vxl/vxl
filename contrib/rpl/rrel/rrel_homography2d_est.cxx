@@ -1,8 +1,8 @@
 // This is rpl/rrel/rrel_homography2d_est.cxx
-#include "rrel_homography2d_est.h"
 #include <cmath>
 #include <iostream>
 #include <utility>
+#include "rrel_homography2d_est.h"
 
 #include <vgl/vgl_homg_point_2d.h>
 #include <vnl/vnl_vector.h>

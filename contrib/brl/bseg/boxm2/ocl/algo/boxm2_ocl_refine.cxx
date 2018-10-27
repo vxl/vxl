@@ -1,11 +1,11 @@
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_refine.h"
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <vul/vul_timer.h>
 
 // declare bocl_kernel* maps

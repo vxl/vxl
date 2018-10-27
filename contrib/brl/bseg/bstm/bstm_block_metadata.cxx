@@ -1,12 +1,11 @@
-#include "bstm_block_metadata.h"
 #include <cmath>
 #include <iostream>
+#include <cstring>
+#include "bstm_block_metadata.h"
 //:
 // \file
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 // the local time is [0,sub_block_num_t_)
 bool bstm_block_metadata::contains_t(double const t, double &local_time) const {

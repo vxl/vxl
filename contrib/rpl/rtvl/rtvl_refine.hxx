@@ -9,12 +9,11 @@
 #include <iostream>
 #include <algorithm>
 #include <cmath>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
 #include <map>
-#include <functional> //required for greater<..>
+#include <functional>
 #include <vector>
+#include <vcl_compiler.h>
 #include "rtvl_refine.h"
 
 #include "rtvl_tensor.h"

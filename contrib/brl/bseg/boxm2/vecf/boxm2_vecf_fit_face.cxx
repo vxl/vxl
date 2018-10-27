@@ -1,4 +1,7 @@
 #include <fstream>
+#include <algorithm>
+#include <limits>
+#include <iomanip>
 #include "boxm2_vecf_labeled_point.h"
 #include "boxm2_vecf_fit_face.h"
 #include <vgl/vgl_vector_3d.h>
@@ -8,9 +11,6 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <bvrml/bvrml_write.h>
-#include <algorithm>
-#include <limits>
-#include <iomanip>
 #include <vnl/vnl_matrix_fixed.h>
 void boxm2_vecf_fit_face::fill_smid_map(){
   smid_map_["left_lateral_canthus"]=LEFT_LATERAL_CANTHUS;

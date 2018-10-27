@@ -6,12 +6,11 @@
 #define rgtl_sqt_objects_hxx
 
 #include <limits>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
 #include <cstdlib>
-#include <iostream>
 #include <cmath>
+#include <vcl_compiler.h>
 #include "rgtl_sqt_objects.h"
 
 #include "rgtl_config.h"

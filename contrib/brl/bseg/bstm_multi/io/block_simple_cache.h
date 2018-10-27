@@ -10,12 +10,11 @@
 // \author Raphael Kargon
 // \date 03 Aug 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
-#include <iostream>
 #include <map>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <bstm_multi/block_data_base.h>
 #include <bstm_multi/io/block_cache.h>

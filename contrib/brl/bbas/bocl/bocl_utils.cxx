@@ -1,7 +1,7 @@
 #include <iostream>
+#include <sstream>
 #include "bocl_utils.h"
 #include <vcl_compiler.h>
-#include <sstream>
 
 std::size_t RoundUp(int global_size,int group_size)
 {

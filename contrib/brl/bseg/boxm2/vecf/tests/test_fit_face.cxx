@@ -4,9 +4,9 @@
 // \date 02/20/16
 
 
-#include <testlib/testlib_test.h>
 #include <fstream>
 #include <string>
+#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 #include "../boxm2_vecf_composite_face_params.h"
 #include "../boxm2_vecf_fit_face.h"

@@ -8,13 +8,12 @@
 // \date   28 Aug 2015
 //
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <fstream>
 #include <utility>
 #include <vector>
 #include <string>
 #include <map>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
 #include <vgl/vgl_pointset_3d.h>

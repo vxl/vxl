@@ -1,9 +1,8 @@
 // This is vcl/tests/test_multimap.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <functional>
-#include <iostream>
 #include <map>
+#include <vcl_compiler.h>
 
 typedef std::multimap<int, double, std::less<int> > mymap;
 

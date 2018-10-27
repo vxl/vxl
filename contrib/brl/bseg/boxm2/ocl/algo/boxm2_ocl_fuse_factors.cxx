@@ -1,4 +1,7 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_fuse_factors.cxx
+#include <fstream>
+#include <iostream>
+#include <algorithm>
 #include "boxm2_ocl_fuse_factors.h"
 //:
 // \file
@@ -7,10 +10,7 @@
 // \author Vishal Jain
 // \date Nov 24, 2015
 
-#include <fstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

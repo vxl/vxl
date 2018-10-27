@@ -10,9 +10,9 @@
 // \author Raphael Kargon
 // \date Aug 02 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <bstm_multi/block_data_base.h>
 

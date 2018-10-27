@@ -4,9 +4,9 @@
 // Enables testing and demonstration of various effects
 // \author Tim Cootes
 
+#include <sstream>
 #include <msm/msm_points.h>
 #include <vul/vul_arg.h>
-#include <sstream>
 
 void print_usage()
 {

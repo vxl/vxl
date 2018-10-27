@@ -18,8 +18,6 @@
 #include <vcl_cassert.h>
 #undef sprintf
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::snprintf()
 #include <vcl_compiler.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)

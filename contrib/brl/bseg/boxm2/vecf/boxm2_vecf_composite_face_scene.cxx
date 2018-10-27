@@ -1,8 +1,8 @@
-#include "boxm2_vecf_composite_face_scene.h"
 #include <iostream>
 #include <fstream>
 #include <map>
 #include <string>
+#include "boxm2_vecf_composite_face_scene.h"
 #include <vul/vul_file.h>
 #include <vul/vul_timer.h>
 #include <vgl/vgl_point_3d.h>

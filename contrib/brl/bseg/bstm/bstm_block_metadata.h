@@ -18,13 +18,12 @@
 //
 #include <iostream>
 #include <iosfwd>
+#include <utility>
 #include <bstm/basic/bstm_block_id.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <utility>
 
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>

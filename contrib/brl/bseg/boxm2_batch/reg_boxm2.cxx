@@ -1,3 +1,4 @@
+#include <iostream>
 #include "reg_boxm2.h"
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_batch_process_manager.h>
@@ -19,7 +20,6 @@
 #include <boxm2/ocl/pro/boxm2_ocl_register.h>
 #include <boxm2_multi/pro/boxm2_multi_register.h>
 #include <boxm2/vecf/ocl/pro/boxm2_vecf_ocl_register.h>
-#include <iostream>
 #if defined(HAS_GLEW) && HAS_GLEW
 #include <boxm2/view/pro/boxm2_view_register.h>
 #endif

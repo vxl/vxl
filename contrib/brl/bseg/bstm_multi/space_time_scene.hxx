@@ -1,15 +1,14 @@
 #ifndef bstm_multi_space_time_scene_hxx_
 #define bstm_multi_space_time_scene_hxx_
 
-#include "space_time_scene.h"
-
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
-#include <iostream>
 #include <limits>
 #include <map>
 #include <string>
+#include "space_time_scene.h"
+
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>

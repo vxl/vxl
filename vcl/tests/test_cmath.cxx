@@ -5,12 +5,11 @@
 // The purpose of this is to check there are no
 // clashes between std::sqrt() and std::abs().
 #include <complex>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <cstdlib>
+#include <vcl_compiler.h>
 
-#include <iostream>
 
 int test_cmath_main(int /*argc*/,char* /*argv*/[])
 {

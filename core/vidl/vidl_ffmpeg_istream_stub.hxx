@@ -2,8 +2,8 @@
 #ifndef vidl_ffmpeg_istream_stub_hxx_
 #define vidl_ffmpeg_istream_stub_hxx_
 #include <string>
-#include "vidl_ffmpeg_istream.h"
 #include <stdexcept>
+#include "vidl_ffmpeg_istream.h"
 
 //:
 // \file

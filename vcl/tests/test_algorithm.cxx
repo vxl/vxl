@@ -1,9 +1,9 @@
 /*
   fsm
 */
-#include <vcl_compiler.h>
 #include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 int test_algorithm_main(int /*argc*/,char* /*argv*/[])
 {

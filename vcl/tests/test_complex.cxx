@@ -2,9 +2,9 @@
 // and define the doublify() function.
 
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <complex>
+#include <vcl_compiler.h>
 
 
 std::complex<double> doublify(std::complex<float> const &z)
@@ -12,7 +12,6 @@ std::complex<double> doublify(std::complex<float> const &z)
   return std::complex<double>(std::real(z), std::imag(z));
 }
 
-#include <iostream>
 
 int test_complex_main(int /*argc*/,char* /*argv*/[])
 {

@@ -1,7 +1,7 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_convert_geotiff_to_point_cloud_process.cxx
+#include <iostream>
 #include <vil/vil_config.h>
 #if HAS_GEOTIFF
-#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file

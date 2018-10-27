@@ -8,15 +8,15 @@
 //
 // this shape is a form of generalized cylinder and may be folded into the
 // gen_cylinder class at a later stage.
+#include <utility>
+#include <vector>
+#include <iosfwd>
 #include "bvgl_spline_region_3d.h"
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <utility>
-#include <vector>
-#include <iosfwd>
 
 template <class Type>
 class bvgl_scaled_shape_3d

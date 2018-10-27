@@ -1,7 +1,7 @@
-#include "sdet_selective_search.h"
-#include "sdet_graph_img_seg.h"
 #include <functional>
 #include <algorithm>
+#include "sdet_selective_search.h"
+#include "sdet_graph_img_seg.h"
 #include <vul/vul_timer.h>
 static float log_map(float x){return 45.9859044f*std::log(x+1.0f);}
 void sdet_selective_search::initialize_hists(){

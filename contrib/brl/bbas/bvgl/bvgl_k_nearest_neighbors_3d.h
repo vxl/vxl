@@ -7,14 +7,14 @@
 // \author February 22, 2016 J.L. Mundy
 //
 
-#include <vgl/vgl_pointset_3d.h>
-#include <bnabo/bnabo.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <iosfwd>
 #include <limits>
-#include <algorithm> // for std::swap
+#include <algorithm>
 #include <utility>
+#include <vgl/vgl_pointset_3d.h>
+#include <bnabo/bnabo.h>
+#include <vcl_compiler.h>
 
 template <class Type>
 class bvgl_k_nearest_neighbors_3d

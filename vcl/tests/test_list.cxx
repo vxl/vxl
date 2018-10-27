@@ -1,8 +1,7 @@
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <list>
+#include <vcl_compiler.h>
 
 int test_list_main(int /*argc*/,char* /*argv*/[])
 {

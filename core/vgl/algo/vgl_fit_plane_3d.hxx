@@ -4,9 +4,9 @@
 //:
 // \file
 
-#include "vgl_fit_plane_3d.h"
 #include <iostream>
 #include <utility>
+#include "vgl_fit_plane_3d.h"
 #include <vcl_compiler.h>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>

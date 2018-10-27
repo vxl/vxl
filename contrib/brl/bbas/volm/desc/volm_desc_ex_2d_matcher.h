@@ -15,13 +15,13 @@
 // \endverbatim
 //
 
+#include <utility>
 #include "volm_desc_matcher.h"
 #include "volm_desc_ex_land_only.h"
 #include "volm_desc_indexer.h"
 #include "volm_desc_ex_2d_indexer.h"
 #include <volm/volm_category_io.h>
 
-#include <utility>
 
 class volm_desc_ex_2d_matcher : public volm_desc_matcher
 {

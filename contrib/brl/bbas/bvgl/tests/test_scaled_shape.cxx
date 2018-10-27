@@ -1,12 +1,12 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <bvgl/bvgl_spline_region_3d.h>
-#include <bvgl/bvgl_scaled_shape_3d.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <fstream>
+#include <testlib/testlib_test.h>
+#include <bvgl/bvgl_spline_region_3d.h>
+#include <bvgl/bvgl_scaled_shape_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #define TEST_SCALED_SHAPE 0

@@ -29,8 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 */
 
-#include "bnabo_private.h"
-#include "bnabo_index_heap.h"
 #include <iostream>
 #include <stdexcept>
 #include <limits>
@@ -39,6 +37,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <utility>
 #include <sstream>
 #include <cassert>
+#include "bnabo_private.h"
+#include "bnabo_index_heap.h"
 // eliminate dependency on boost
 //#include <boost/numeric/conversion/bounds.hpp>
 //#include <boost/limits.hpp>

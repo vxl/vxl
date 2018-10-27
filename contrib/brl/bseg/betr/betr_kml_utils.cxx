@@ -1,8 +1,8 @@
+#include <iomanip>
 #include "betr_kml_utils.h"
 #include "vsol_mesh_3d.h"
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_3d.h>
-#include <iomanip>
 void betr_kml_utils::write_geo_box(std::ofstream& ostr, betr_geo_box_3d const& box){
   double max_elv = box.max_elv();
   // debug

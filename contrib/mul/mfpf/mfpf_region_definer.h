@@ -6,11 +6,10 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mfpf/mfpf_region_form.h>
 #include <vsl/vsl_binary_io.h>
 

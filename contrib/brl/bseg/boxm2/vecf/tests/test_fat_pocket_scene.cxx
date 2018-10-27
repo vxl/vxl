@@ -4,9 +4,9 @@
 // \date 03/12/15
 
 
-#include <testlib/testlib_test.h>
 #include <fstream>
 #include <string>
+#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 #include "../boxm2_vecf_middle_fat_pocket_params.h"
 #include "../boxm2_vecf_middle_fat_pocket_scene.h"

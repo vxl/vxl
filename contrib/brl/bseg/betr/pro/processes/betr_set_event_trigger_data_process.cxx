@@ -1,10 +1,9 @@
 // This is brl/bseg/betr/pro/processes/betr_set_event_trigger_data_process.cxx
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 //:
 // \file
 // \brief  A process for seting an event_trigger data to an event_trigger

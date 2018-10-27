@@ -1,5 +1,6 @@
 #include <iostream>
 #include <utility>
+#include <fstream>
 #include "bwm_site.h"
 //:
 // \file
@@ -8,7 +9,6 @@
 #include <vcl_cassert.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
-#include <fstream>
 //: destructor
 bwm_site::~bwm_site()
 {

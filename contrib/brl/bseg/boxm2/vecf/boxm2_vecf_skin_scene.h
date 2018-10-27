@@ -9,15 +9,15 @@
 //
 // For the time being, the skin map to target is only global transformations
 //
+#include <string>
+#include <vector>
+#include <map>
+#include <iosfwd>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_params.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
-#include <string>
-#include <vector>
-#include <map>
-#include <iosfwd>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_skin_params.h"
 #include "boxm2_vecf_skin.h"

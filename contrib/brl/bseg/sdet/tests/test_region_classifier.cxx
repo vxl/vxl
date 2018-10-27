@@ -1,4 +1,7 @@
 // This is brl/bseg/sdet/tests/test_region_classifier.cxx
+#include <string>
+#include <map>
+#include <fstream>
 #include <sdet/sdet_graph_img_seg.h>
 #include <sdet/sdet_selective_search.h>
 #include <sdet/sdet_region_classifier.h>
@@ -9,9 +12,6 @@
 #include <vil/vil_convert.h>
 #include <vgl/vgl_area.h>
 #include <testlib/testlib_test.h>
-#include <string>
-#include <map>
-#include <fstream>
 
 static void test_region_classifier(int argc, char * argv[])
 {

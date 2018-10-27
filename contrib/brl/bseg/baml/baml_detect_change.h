@@ -6,7 +6,6 @@
 #include <utility>
 #include <vector>
 #include <set>
-#include <utility>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>

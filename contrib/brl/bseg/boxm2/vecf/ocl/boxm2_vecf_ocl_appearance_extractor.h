@@ -1,12 +1,12 @@
 #pragma once
+#include <iostream>
+#include <algorithm>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_appearance_extractor.h>
 #include <boxm2/vecf/boxm2_vecf_orbit_scene.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_composite_head_model.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <algorithm>
 class boxm2_vecf_ocl_appearance_extractor{
  public:
   boxm2_vecf_ocl_appearance_extractor(boxm2_scene_sptr target_scene, boxm2_vecf_ocl_composite_head_model& source_model):scene_transformer_(target_scene,source_model.opencl_cache_,"",source_model.color_apm_id_,false,true),head_model_(source_model)

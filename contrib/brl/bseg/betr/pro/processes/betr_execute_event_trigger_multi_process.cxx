@@ -1,12 +1,11 @@
 // This is brl/bseg/betr/pro/processes/betr_execute_event_trigger_multi_process.cxx
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 //:
 // \file
 // \brief  A process for executing an event_trigger (process change)

@@ -1,9 +1,9 @@
 // This is contrib/brl/bseg/boxm2/vecf/boxm2_vecf_orbicularis_oris.cxx
+#include <iomanip>
+#include <limits>
 #include "boxm2_vecf_orbicularis_oris.h"
 //
 // \file
-#include <iomanip>
-#include <limits>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_3d_2_points.h>

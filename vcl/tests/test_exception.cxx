@@ -1,8 +1,7 @@
 // This is vcl/tests/test_exception.cxx
-#include <vcl_compiler.h>
 #include <iostream>
 #include <exception>
-#include <iostream>
+#include <vcl_compiler.h>
 
 int test_exception_main(int /*argc*/,char* /*argv*/[])
 {

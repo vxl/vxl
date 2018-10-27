@@ -6,11 +6,10 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 
 #include <bprb/bprb_func_process.h>

@@ -1,11 +1,11 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_find_connected_component_process.cxx
+#include <iostream>
 #include <vil/vil_config.h>
 #if HAS_GEOTIFF
 //:
 // \file
 //    find the connected component of a geotiff image and visualize it in KML
 #include <bprb/bprb_func_process.h>
-#include <iostream>
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_area.h>
 #include <vgl/vgl_polygon_scan_iterator.h>
