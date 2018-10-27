@@ -20,8 +20,8 @@ static void test_volm_conf_score()
   volm_conf_score_sptr score_sptr = new volm_conf_score(0.12, -vnl_math::pi, landmarks);
   score_sptr->print(std::cout);
   std::cout << score_sptr->landmarks().size() << " landmarks in score:" << std::endl;
-  for (unsigned i = 0; i < score_sptr->landmarks().size(); i++)
-    score_sptr->landmarks()[i].print(std::cout);
+  for (auto & i : score_sptr->landmarks())
+    i.print(std::cout);
   std::cout << "direction relative to north: " << score_sptr->theta_to_north() << std::endl;
   TEST_NEAR("Testing score value", score_sptr->score(), 0.12, EPISLON);
   TEST_NEAR("Testing angular value", score_sptr->theta_in_deg(), vnl_math::pi / vnl_math::pi_over_180, EPISLON);

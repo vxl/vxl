@@ -94,9 +94,9 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> edge_image(in_img->ni(), in_img->nj());
   edge_image.fill(0);
 
-  for (std::vector<vtol_edge_2d_sptr>::iterator vit = edges->begin();  vit != edges->end();  ++vit)
+  for (auto & edge : *edges)
   {
-    vdgl_digital_curve_sptr dc = ((*vit)->curve())->cast_to_vdgl_digital_curve();
+    vdgl_digital_curve_sptr dc = (edge->curve())->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
     vdgl_interpolator_sptr intp = dc->get_interpolator();

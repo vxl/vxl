@@ -76,13 +76,13 @@ int main(int argc,  char** argv)
   // find the images that it intersects
   std::vector<volm_img_info> intersection_imgs;
   std::cout << "checking intersection of bbox: " << lidar_info.bbox << std::endl;
-  for (unsigned ii = 0; ii < imgs.size(); ii++) {
+  for (auto & img : imgs) {
     //std::cout << " \t with bbox: " << imgs[ii].bbox << std::endl;
-    if (lidar_info.intersects(imgs[ii].bbox)) {
+    if (lidar_info.intersects(img.bbox)) {
       volm_img_info info;
-      volm_io_tools::load_naip_img(img_folder(), imgs[ii].name, lvcs, info, true);
+      volm_io_tools::load_naip_img(img_folder(), img.name, lvcs, info, true);
       intersection_imgs.push_back(info);
-      std::cout << "intersects: " << imgs[ii].name << std::endl;
+      std::cout << "intersects: " << img.name << std::endl;
     }
   }
   std::cout << " !!!!!! lidar intersects: " << intersection_imgs.size() << " imgs!\n";
@@ -97,10 +97,10 @@ int main(int argc,  char** argv)
 
   std::vector<std::string> cats = tc.get_training_categories();
   std::map<std::string, vil_rgb<vxl_byte> > cat_color_map;
-  for (unsigned kk = 0; kk < cats.size(); kk++) {
-    unsigned char id = volm_label_table::get_id_closest_name(cats[kk]);
-    cat_color_map[cats[kk]] = volm_label_table::land_id[id].color_;
-    std::cout << "\t\t" << cats[kk] << " closest land type: " << volm_label_table::land_id[id].name_ << " color: " << volm_label_table::land_id[id].color_ << '\n';
+  for (const auto & cat : cats) {
+    unsigned char id = volm_label_table::get_id_closest_name(cat);
+    cat_color_map[cat] = volm_label_table::land_id[id].color_;
+    std::cout << "\t\t" << cat << " closest land type: " << volm_label_table::land_id[id].name_ << " color: " << volm_label_table::land_id[id].color_ << '\n';
     std::cout.flush();
   }
 
@@ -113,11 +113,11 @@ int main(int argc,  char** argv)
 
   // compute filters of intersection imgs
   std::vector<sdet_texture_classifier*> intersection_imgs_naip_c;
-  for (unsigned ii = 0; ii < intersection_imgs.size(); ii++) {
+  for (auto & intersection_img : intersection_imgs) {
     // process naip img
     sdet_texture_classifier* naip_c = new sdet_texture_classifier((sdet_texture_classifier_params)tc);
-    if (!naip_c->compute_filter_bank_color_img(filter_folder(), intersection_imgs[ii].img_name)) {
-      std::cerr << " problems in computing filters of: " << intersection_imgs[ii].img_name << std::endl;
+    if (!naip_c->compute_filter_bank_color_img(filter_folder(), intersection_img.img_name)) {
+      std::cerr << " problems in computing filters of: " << intersection_img.img_name << std::endl;
       return 0;
     }
     intersection_imgs_naip_c.push_back(naip_c);

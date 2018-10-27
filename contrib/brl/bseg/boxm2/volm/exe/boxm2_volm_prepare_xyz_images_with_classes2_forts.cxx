@@ -203,13 +203,13 @@ int main(int argc,  char** argv)
       // find pixel in images
       unsigned char label = volm_label_table::INVALID;
       bool nlcd_found = false;
-      for (unsigned k = 0; k < nlcd_imgs.size(); k++) {
+      for (auto & nlcd_img : nlcd_imgs) {
         double u, v;
-        nlcd_imgs[k].second->global_to_img(-lon, lat, gz, u, v);
+        nlcd_img.second->global_to_img(-lon, lat, gz, u, v);
         unsigned uu = (unsigned)std::floor(u + 0.5);
         unsigned vv = (unsigned)std::floor(v + 0.5);
-        if (uu > 0 && vv > 0 && uu < nlcd_imgs[k].first.ni() && vv < nlcd_imgs[k].first.nj()) {
-          label = (nlcd_imgs[k].first)(uu, vv);
+        if (uu > 0 && vv > 0 && uu < nlcd_img.first.ni() && vv < nlcd_img.first.nj()) {
+          label = (nlcd_img.first)(uu, vv);
           break;
         }
       }
@@ -217,13 +217,13 @@ int main(int argc,  char** argv)
       // find elev
       float elev = 0.0f;
       bool found = false;
-      for (unsigned k = 0; k < lidar_imgs.size(); k++) {
+      for (auto & lidar_img : lidar_imgs) {
         double u, v;
-        lidar_imgs[k].second->global_to_img(-lon, lat, gz, u, v);
+        lidar_img.second->global_to_img(-lon, lat, gz, u, v);
         unsigned uu = (unsigned)std::floor(u + 0.5);
         unsigned vv = (unsigned)std::floor(v + 0.5);
-        if (uu > 0 && vv > 0 && uu < lidar_imgs[k].first.ni() && vv < lidar_imgs[k].first.nj()) {
-          elev = (lidar_imgs[k].first)(uu, vv);
+        if (uu > 0 && vv > 0 && uu < lidar_img.first.ni() && vv < lidar_img.first.nj()) {
+          elev = (lidar_img.first)(uu, vv);
           break;
         }
       }
@@ -253,11 +253,11 @@ int main(int argc,  char** argv)
 
   // mark the forts
   double fort_rad = 500.0; // forts have radius about this much around ground truth location
-  for (unsigned kk = 0; kk < objects.size(); kk++) {
-    if (objects[kk].second == volm_label_table::FORT) {
-      if (sbbox.contains(objects[kk].first)) { // the scene contains this bbox
+  for (auto & object : objects) {
+    if (object.second == volm_label_table::FORT) {
+      if (sbbox.contains(object.first)) { // the scene contains this bbox
         double lx, ly, lz;
-        lvcs->global_to_local(objects[kk].first.x(), objects[kk].first.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+        lvcs->global_to_local(object.first.x(), object.first.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         int i = (int)std::floor((lx - scene_bbox.min_x())/vox_length+0.5);
         int j = (int)std::floor((scene_bbox.max_y() - ly)/vox_length+0.f);
 
@@ -383,9 +383,9 @@ int main(int argc,  char** argv)
     //vil_rgb<vxl_byte> pixel_color = vil_rgb<vxl_byte>((unsigned char)(255*rng.drand32()), (unsigned char)(255*rng.drand32()), (unsigned char)(255*rng.drand32()));
 
      // check if this is one of the sme objects
-    for (unsigned kk = 0; kk < objects.size(); kk++) {
-      if (polys[ii].first.contains(objects[kk].first.x(), objects[kk].first.y())) {
-        label = objects[kk].second;
+    for (auto & object : objects) {
+      if (polys[ii].first.contains(object.first.x(), object.first.y())) {
+        label = object.second;
         pixel_id = volm_label_table::land_id[label].id_;
         pixel_color = volm_label_table::land_id[label].color_;
         break;

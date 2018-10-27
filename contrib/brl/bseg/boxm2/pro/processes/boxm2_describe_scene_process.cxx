@@ -73,10 +73,10 @@ bool boxm2_describe_scene_process(bprb_func_process& pro)
   // note that the sub block size is truncated to integer here
   std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
   double res_x = 1E5, res_y = 1E5;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++)
+  for (auto & blk : blks)
   {
     // only use x dimension, assumes cube voxels so it shouldn't matter which dimension to use
-    double voxel_size_x = (iter->second.sub_block_dim_.x()) / (1 << (iter->second.max_level_ - iter->second.init_level_));
+    double voxel_size_x = (blk.second.sub_block_dim_.x()) / (1 << (blk.second.max_level_ - blk.second.init_level_));
     if (res_x > voxel_size_x) res_x = voxel_size_x;
   }
 

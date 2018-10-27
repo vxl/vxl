@@ -122,15 +122,15 @@ bool boxm2_cpp_mean_intensities_print_process(bprb_func_process& pro)
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
   // iterate the scene block by block and write to output
   std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  for (std::vector<boxm2_block_id>::iterator id = blk_ids.begin(); id != blk_ids.end(); ++id)
+  for (auto & blk_id : blk_ids)
   {
     // we're assuming that we have enough RAM to store the whole output block for alpha
-    boxm2_data_base * output_alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
+    boxm2_data_base * output_alph = cache->get_data_base(scene,blk_id,boxm2_data_traits<BOXM2_AUX0>::prefix());
     boxm2_mean_intensities_print_functor data_functor;
     data_functor.init_data(output_alph,str_cache);
     int data_buff_length = (int) (output_alph->buffer_length()/alphaTypeSize);
     boxm2_data_serial_iterator<boxm2_mean_intensities_print_functor>(data_buff_length,data_functor);
-    cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix());
+    cache->remove_data_base(scene,blk_id,boxm2_data_traits<BOXM2_AUX0>::prefix());
   }
 
   return true;

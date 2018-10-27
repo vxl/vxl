@@ -24,8 +24,8 @@ vimt_image_pyramid::vimt_image_pyramid()
 
 void vimt_image_pyramid::deleteImages()
 {
-    for (unsigned int i=0;i<image_.size();++i)
-        delete image_[i];
+    for (auto & i : image_)
+        delete i;
     image_.resize(0);
 }
 

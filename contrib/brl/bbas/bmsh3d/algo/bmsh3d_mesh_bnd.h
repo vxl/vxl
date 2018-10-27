@@ -64,8 +64,8 @@ class bmsh3d_bnd_chain_set
     mesh_ = mesh;
   }
   virtual ~bmsh3d_bnd_chain_set () {
-    for (unsigned int i=0; i<chainset_.size(); i++) {
-      _del_bnd_chain (chainset_[i]);
+    for (auto & i : chainset_) {
+      _del_bnd_chain (i);
     }
   }
 

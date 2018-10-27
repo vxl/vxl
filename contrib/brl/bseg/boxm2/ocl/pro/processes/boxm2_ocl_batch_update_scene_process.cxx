@@ -74,8 +74,8 @@ namespace boxm2_ocl_batch_update_scene_process_globals
   std::map<std::string, char*> helper(boxm2_scene_sptr scene, boxm2_block_id id, boxm2_data_traits<type> data_type, std::vector<std::string> image_ids)
   {
     std::map<std::string, char*> map;
-    for (unsigned j = 0; j < image_ids.size(); j++) {
-      std::string filename = scene->data_path() + data_type.prefix(image_ids[j]) +"_"+ id.to_string() + ".bin";
+    for (auto & image_id : image_ids) {
+      std::string filename = scene->data_path() + data_type.prefix(image_id) +"_"+ id.to_string() + ".bin";
       if (vul_file::exists(filename)) {
         char * buffer = new(std::nothrow) char[vul_file::size(filename)];
         if (buffer == nullptr) std::cout<<"Failed to Allocate Memory"<<std::endl;
@@ -83,10 +83,10 @@ namespace boxm2_ocl_batch_update_scene_process_globals
         ifs.open(filename.c_str(), std::ios::in | std::ios::binary);
         if (!ifs) std::cerr << "Failed to open file " << filename << '\n';
         ifs.read(buffer, vul_file::size(filename));
-        map[image_ids[j]] = buffer;
+        map[image_id] = buffer;
       }
       else {
-        map[image_ids[j]] = nullptr;
+        map[image_id] = nullptr;
       }
     }
     return map;
@@ -139,10 +139,10 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
   std::string data_type,num_obs_type,options;
   std::vector<std::string> apps = scene->appearances();
   int appTypeSize;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());

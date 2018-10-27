@@ -83,10 +83,10 @@ void boxm_replace_constant_app(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_
     boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> >* tree = block->get_tree();
 
     std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >*> leaf_cells=tree->leaf_cells();
-    for (unsigned i=0;i<leaf_cells.size();i++)
+    for (auto & leaf_cell : leaf_cells)
     {
-      boxm_sample<BOXM_APM_MOG_GREY> new_data(leaf_cells[i]->data().alpha,app);
-      leaf_cells[i]->set_data(new_data);
+      boxm_sample<BOXM_APM_MOG_GREY> new_data(leaf_cell->data().alpha,app);
+      leaf_cell->set_data(new_data);
     }
     scene.write_active_block();
   }

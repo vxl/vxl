@@ -58,7 +58,7 @@ class boxm2_compute_nonsurface_histogram_functor
         unsigned nobs = (unsigned)out0.size();
 
         std::vector<float> temp_histogram(8,0.125f);
-        for (unsigned i =0; i<histo.size(); ++i) histo[i] = 1;
+        for (unsigned char & i : histo) i = 1;
 
         std::vector<float> Iobs;
         std::vector<float> vis;

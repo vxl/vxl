@@ -57,10 +57,9 @@ bapl_mi_matcher::generate()
     matches_.emplace_back(mi,init_xform_);
   }
 
-  for ( std::vector<bapl_match>::iterator m_itr = matches_.begin();
-        m_itr != matches_.end(); ++m_itr) {
+  for (auto & matche : matches_) {
     // hypothesize that the transformation remains unchanged
-    hypotheses.push_back(*m_itr);
+    hypotheses.push_back(matche);
     // make other random hypotheses
     for (unsigned i=0; i<params_.num_samples_; ++i) {
       bapl_affine_transform T = this->rand_transform();

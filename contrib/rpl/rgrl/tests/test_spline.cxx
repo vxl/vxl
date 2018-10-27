@@ -266,8 +266,8 @@ test_refine_2d_spline()
   TEST("number of control points is 36", spline.num_of_control_points(), (m[0]+3)*(m[1]+3));
   vnl_vector< double > c( spline.num_of_control_points() );
 
-  for (unsigned i=0; i<c.size(); ++i )
-    c[ i ] = random_.drand32(0,5);
+  for (double & i : c)
+    i = random_.drand32(0,5);
 
   spline.set_control_points( c );
 

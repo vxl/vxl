@@ -331,8 +331,8 @@ void imesh_write_obj(std::ostream& os, const imesh_mesh& mesh)
 
   if (mesh.has_tex_coords()) {
     const std::vector<vgl_point_2d<double> >& tex = mesh.tex_coords();
-    for (unsigned int t=0; t<tex.size(); ++t) {
-      os << "vt " << tex[t].x() << ' ' << tex[t].y() << '\n';
+    for (auto t : tex) {
+      os << "vt " << t.x() << ' ' << t.y() << '\n';
     }
   }
 
@@ -599,13 +599,13 @@ void imesh_write_vrml(std::ostream& os, const imesh_mesh& mesh)
      << "    point [\n";
   if (d == 2) {
     const imesh_vertex_array<2>& verts2= mesh.vertices<2>();
-    for (unsigned i=0;i<verts2.size();++i)
-      os << "    " << verts2[i][0] << ' ' << verts2[i][1] << ' ' << 0.0 << '\n';
+    for (auto i : verts2)
+      os << "    " << i[0] << ' ' << i[1] << ' ' << 0.0 << '\n';
   }
   else {
     const imesh_vertex_array<3>& verts3= mesh.vertices<3>();
-    for (unsigned i=0;i<verts3.size();++i)
-      os << "    " << verts3[i][0] << ' ' << verts3[i][1] << ' ' << verts3[i][2] << '\n';
+    for (const auto & i : verts3)
+      os << "    " << i[0] << ' ' << i[1] << ' ' << i[2] << '\n';
   }
   os << "    ]}\n";
 
@@ -627,8 +627,8 @@ void imesh_write_vrml(std::ostream& os, const imesh_mesh& mesh)
 
     //write tex coordinates (should be same number as vertices above)
     const std::vector<vgl_point_2d<double> >& tc = mesh.tex_coords();
-    for (unsigned int i=0; i<tc.size(); ++i)
-      os << "    " << tc[i].x() << ' ' << tc[i].y() << ",\n";
+    for (auto i : tc)
+      os << "    " << i.x() << ' ' << i.y() << ",\n";
 
     //close texture coordinates
     os << "    ]}\n";

@@ -87,8 +87,8 @@ int main(int argc, char** argv)
   if (leaf_id() >= 0 && leaf_id() < (int)loc_leaves_all.size())
     loc_leaves.push_back(loc_leaves_all[leaf_id()]);
   else
-    for (unsigned i = 0; i < loc_leaves_all.size(); i++)
-      loc_leaves.push_back(loc_leaves_all[i]);
+    for (const auto & i : loc_leaves_all)
+      loc_leaves.push_back(i);
 
   if (!read())        // perform configurational matcher
   {
@@ -217,9 +217,8 @@ int main(int argc, char** argv)
     std::cout << "--------- Reading configuration matcher score on tile " << tile_id() << " ------------ " << std::endl;
     std::stringstream score_file_pre;
     score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
-    for (unsigned i = 0; i < loc_leaves.size(); i++)
+    for (auto leaf : loc_leaves)
     {
-      volm_geo_index_node_sptr leaf = loc_leaves[i];
       std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
       if (!vul_file::exists(score_bin_file))
         continue;  // case where leaf is entirely outside the candidate region

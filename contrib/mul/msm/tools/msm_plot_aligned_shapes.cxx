@@ -219,9 +219,8 @@ int main(int argc, char** argv)
                         d_width,d_height);
 
   writer.set_colour(params.point_colour);
-  for (unsigned i=0;i<shapes.size();++i)
+  for (auto points : shapes)
   {
-    msm_points points = shapes[i];
     points.translate_by(tx,ty);
     points.scale_by(s);
     msm_draw_points_to_eps(writer,points,

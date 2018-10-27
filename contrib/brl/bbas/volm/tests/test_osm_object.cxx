@@ -117,16 +117,16 @@ static void test_osm_object_ids()
   volm_osm_object_ids_sptr obj_sptr = new volm_osm_object_ids("./volm_osm_object_ids.bin");
   std::cout << " number of location points: " << obj_sptr->num_pts() << std::endl;
   std::vector<unsigned> pt_ids_in = obj_sptr->pt_ids();
-  for (unsigned i = 0; i < pt_ids_in.size(); i++)
-    std::cout << ' ' << pt_ids_in[i];
+  for (unsigned int i : pt_ids_in)
+    std::cout << ' ' << i;
   std::cout << std::endl;
   std::vector<unsigned> line_ids_in = obj_sptr->line_ids();
-  for (unsigned i = 0; i < line_ids_in.size(); i++)
-    std::cout << ' ' << line_ids_in[i];
+  for (unsigned int i : line_ids_in)
+    std::cout << ' ' << i;
   std::cout << std::endl;
   std::vector<unsigned> region_ids_in = obj_sptr->region_ids();
-  for (unsigned i = 0; i < region_ids_in.size(); i++)
-    std::cout << ' ' << region_ids_in[i];
+  for (unsigned int i : region_ids_in)
+    std::cout << ' ' << i;
   std::cout << std::endl;
   TEST("volm_osm_object_ids io: ", obj_ids.num_pts(), pt_ids_in.size());
   TEST("volm_osm_object_ids io: ", obj_ids.num_lines(), line_ids_in.size());

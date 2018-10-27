@@ -1106,9 +1106,8 @@ unsigned brip_rect_mask::nplus() const
 {
   unsigned np = 0;
   vnl_matrix<int> const& weights = current_mask_;
-  for (vnl_matrix<int>::const_iterator wit = weights.begin();
-       wit != weights.end(); ++wit)
-    if ((*wit)>0) ++np;
+  for (int weight : weights)
+    if (weight>0) ++np;
   return np;
 }
 
@@ -1116,9 +1115,8 @@ unsigned brip_rect_mask::nminus() const
 {
   unsigned np = 0;
   vnl_matrix<int> const& weights = current_mask_;
-  for (vnl_matrix<int>::const_iterator wit = weights.begin();
-       wit != weights.end(); ++wit)
-    if ((*wit)<0) ++np;
+  for (int weight : weights)
+    if (weight<0) ++np;
   return np;
 }
 

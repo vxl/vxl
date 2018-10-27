@@ -125,9 +125,9 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
 
   std::vector<std::string> cats2;
   std::cout << " output id image will use the following ids for the categories:\n";
-  for (std::map<std::string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++) {
-    std::cout << iter->first << " " << (int)iter->second << std::endl;
-    cats2.push_back(iter->first);
+  for (auto & iter : cat_id_map) {
+    std::cout << iter.first << " " << (int)iter.second << std::endl;
+    cats2.push_back(iter.first);
   }
   tc.set_atmospheric_categories(cats2);
 
@@ -305,9 +305,9 @@ bool sdet_texture_classify_satellite_clouds_process2(bprb_func_process& pro)
 
   std::vector<std::string> cats2;
   std::cout << " output id image will use the following ids for the categories:\n";
-  for (std::map<std::string, unsigned char>::iterator mit = cat_id_map.begin(); mit != cat_id_map.end(); ++mit) {
-    std::cout << mit->first << " " << (int)mit->second << std::endl;
-    cats2.push_back(mit->first);
+  for (auto & mit : cat_id_map) {
+    std::cout << mit.first << " " << (int)mit.second << std::endl;
+    cats2.push_back(mit.first);
   }
   tc.set_atmospheric_categories(cats2);
 

@@ -22,9 +22,9 @@ float volm_desc_ex_2d_matcher::score(volm_desc_sptr const& a, volm_desc_sptr con
 // find the object weight value from object name (return 0 if not found)
 float volm_desc_ex_2d_matcher::find_wgt_value(std::string const& name)
 {
-  for (std::vector<volm_weight>::iterator wit = weights_.begin(); wit != weights_.end(); ++wit)
-    if ( (*wit).w_name_.compare(name) == 0)
-      return (*wit).w_obj_;
+  for (auto & weight : weights_)
+    if ( weight.w_name_.compare(name) == 0)
+      return weight.w_obj_;
   return 0.0f;
 }
 
@@ -48,9 +48,9 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
     extra_wgt += this->find_wgt_value("sky");
   if (!dms_->scene_regions().empty()) {
     std::vector<depth_map_region_sptr> objs = dms_->scene_regions();
-    for (unsigned i = 0; i < objs.size(); i++) {
-      if (objs[i]->min_depth() > largest_rad || !objs[i]->active()) {
-        extra_wgt += this->find_wgt_value(objs[i]->name());
+    for (auto & obj : objs) {
+      if (obj->min_depth() > largest_rad || !obj->active()) {
+        extra_wgt += this->find_wgt_value(obj->name());
         excluded_obj++;
       }
     }
@@ -62,20 +62,20 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
 
   float wgt_inc = extra_wgt / n_label;
   if (!dms_->ground_plane().empty()) {
-    for (std::vector<volm_weight>::iterator wit = weights_.begin(); wit != weights_.end(); ++wit)
-      if ( (*wit).w_typ_.compare("ground_plane") == 0) {
-        (*wit).w_obj_ += wgt_inc;
+    for (auto & weight : weights_)
+      if ( weight.w_typ_.compare("ground_plane") == 0) {
+        weight.w_obj_ += wgt_inc;
         break;
       }
   }
   if (!dms_->scene_regions().empty()) {
     std::vector<depth_map_region_sptr> objs = dms_->scene_regions();
-    for (unsigned i = 0; i < objs.size(); i++) {
-      if (objs[i]->min_depth() > largest_rad)
+    for (auto & obj : objs) {
+      if (obj->min_depth() > largest_rad)
         continue;
-      for (std::vector<volm_weight>::iterator wit = weights_.begin(); wit != weights_.end(); ++wit)
-        if ( (*wit).w_name_.compare(objs[i]->name()) == 0) {
-          (*wit).w_obj_ += wgt_inc;
+      for (auto & weight : weights_)
+        if ( weight.w_name_.compare(obj->name()) == 0) {
+          weight.w_obj_ += wgt_inc;
           break;
         }
     }
@@ -90,20 +90,20 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
   if (!dms_->ground_plane().empty()) {
     std::vector<unsigned> grd_bin_id;
     std::vector<depth_map_region_sptr> grd = dms_->ground_plane();
-    for (unsigned g_idx = 0; g_idx < grd.size(); g_idx++) {
-      if (!grd[g_idx]->active() || grd[g_idx]->min_depth() > largest_rad)
+    for (auto & g_idx : grd) {
+      if (!g_idx->active() || g_idx->min_depth() > largest_rad)
         continue;
-      double min_depth = grd[g_idx]->min_depth();
-      double max_depth = grd[g_idx]->max_depth();
-      unsigned char land_id = grd[g_idx]->land_id();
+      double min_depth = g_idx->min_depth();
+      double max_depth = g_idx->max_depth();
+      unsigned char land_id = g_idx->land_id();
       double dist = min_depth;
       if (dist > max_depth)
         continue;
       grd_bin_id.push_back(desc->bin_index(dist, land_id));
       desc->set_count(dist, land_id, (unsigned char)1);
-      for (unsigned i = 0; i < radius.size(); i++) {
+      for (double radiu : radius) {
         //dist = min_depth + radius[i]+1;
-        dist = radius[i];
+        dist = radiu;
         if (dist < min_depth)
           continue;
         if (dist < max_depth && dist < largest_rad) {
@@ -116,29 +116,29 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
     float w_grd_total, w_grd;
     w_grd_total = this->find_wgt_value("ground_plane");
     w_grd = w_grd_total/n_grd_bin;
-    for (std::vector<unsigned>::iterator vit = grd_bin_id.begin(); vit != grd_bin_id.end(); ++vit)
-      weights_hist_[*vit] += w_grd;
+    for (unsigned int & vit : grd_bin_id)
+      weights_hist_[vit] += w_grd;
   }
 
   // objects
   if (!dms_->scene_regions().empty()) {
     std::vector<depth_map_region_sptr> objs = dms_->scene_regions();
-    for (unsigned o_idx = 0; o_idx < objs.size(); o_idx++) {
-      if ( !objs[o_idx]->active() || objs[o_idx]->min_depth() > largest_rad)
+    for (auto & obj : objs) {
+      if ( !obj->active() || obj->min_depth() > largest_rad)
         continue;
       std::vector<unsigned> obj_bin_id;
-      double min_d = objs[o_idx]->min_depth();
-      double max_d = objs[o_idx]->max_depth();
-      unsigned char land_id = objs[o_idx]->land_id();
-      float wgt_obj = this->find_wgt_value(objs[o_idx]->name());
+      double min_d = obj->min_depth();
+      double max_d = obj->max_depth();
+      unsigned char land_id = obj->land_id();
+      float wgt_obj = this->find_wgt_value(obj->name());
       double dist = min_d;
       if (dist > max_d)
         continue;
       obj_bin_id.push_back(desc->bin_index(dist, land_id));
       desc->set_count(dist, land_id, (unsigned char)1);
-      for (unsigned i = 0; i < radius.size(); i++) {
+      for (double radiu : radius) {
         //dist = min_d + radius[i] + 1;
-        dist = radius[i];
+        dist = radiu;
         if (dist <= min_d)
           continue;
         if (dist < max_d && dist < largest_rad) {
@@ -148,8 +148,8 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
       }
       unsigned n_obj_bin = obj_bin_id.size();
       float w_obj = wgt_obj / n_obj_bin;
-      for (std::vector<unsigned>::iterator vit = obj_bin_id.begin(); vit != obj_bin_id.end(); ++vit)
-        weights_hist_[*vit] += w_obj;
+      for (unsigned int & vit : obj_bin_id)
+        weights_hist_[vit] += w_obj;
     }
   }
   volm_desc_sptr query(desc);

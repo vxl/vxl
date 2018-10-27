@@ -90,10 +90,10 @@ boxm2_convert_bundle::boxm2_convert_bundle(std::string bundle_file, std::string 
   //------------------------------------------------------------------------
   std::vector<vgl_point_3d<double> > pts_3d;
   vgl_box_3d<double> bounding_box;
-  for (unsigned i=0; i<corrs_.size(); ++i)
+  for (auto & corr : corrs_)
   {
-    bounding_box.add(corrs_[i]->world_pt());
-    pts_3d.push_back(corrs_[i]->world_pt());
+    bounding_box.add(corr->world_pt());
+    pts_3d.push_back(corr->world_pt());
   }
 
   // Dimensions of the World

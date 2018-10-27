@@ -55,11 +55,8 @@ time_tree_b *bstm_multi_block::get_time_data(int level, std::nothrow_t) {
 
 std::size_t bstm_multi_block::byte_count() const {
   std::size_t total_bytes = 0;
-  for (std::vector<std::vector<unsigned char> >::const_iterator iter =
-           buffers_.begin();
-       iter != buffers_.end();
-       ++iter) {
-    total_bytes += iter->size();
+  for (const auto & buffer : buffers_) {
+    total_bytes += buffer.size();
   }
   return total_bytes;
 }

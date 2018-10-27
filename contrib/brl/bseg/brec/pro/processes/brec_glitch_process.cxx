@@ -86,9 +86,9 @@ bool brec_glitch_process(bprb_func_process& pro)
         float sum = 0.0f;
         bool all_inside = true;
         float prod_back = 1.0f; float prod_fore = 1.0f;
-        for (unsigned t = 0; t < neighborhood.size(); t++) {
-          int ii = i+neighborhood[t].first;
-          int jj = j+neighborhood[t].second;
+        for (auto & t : neighborhood) {
+          int ii = i+t.first;
+          int jj = j+t.second;
           if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
             if (!input_mask(ii, jj)) {
               all_inside = false;
@@ -132,9 +132,9 @@ bool brec_glitch_process(bprb_func_process& pro)
         float sum = 0.0f;
         bool all_inside = true;
         float prod_back = 1.0f; float prod_fore = 1.0f;
-        for (unsigned t = 0; t < neighborhood_outer.size(); t++) {
-          int ii = i+neighborhood_outer[t].first;
-          int jj = j+neighborhood_outer[t].second;
+        for (auto & t : neighborhood_outer) {
+          int ii = i+t.first;
+          int jj = j+t.second;
           if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
             if (!input_mask(ii, jj)) {
               all_inside = false;

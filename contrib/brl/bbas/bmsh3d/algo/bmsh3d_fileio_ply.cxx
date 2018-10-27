@@ -220,10 +220,9 @@ int bmsh3d_fileio_face_cb_(p_ply_argument argument)
     // INSERT FACE INTO THE MESH
     bmsh3d_face* F = M->_new_face ();
     // get pointers to the vertices of the new face
-    for (unsigned int k=0; k < parsed_mesh->vertex_indices.size(); ++k )
+    for (int ind : parsed_mesh->vertex_indices)
     {
       // get pointer to the vertex from its index
-      int ind = parsed_mesh->vertex_indices[k];
       bmsh3d_vertex* V =
         M->vertexmap(ind);
       assert(V);

@@ -76,8 +76,8 @@ bool volm_find_intersecting_sat_resources_process(bprb_func_process& pro)
     std::cerr << pro.name() << " ERROR: cannot open file: " << out_file << std::endl;
     return false;
   }
-  for (unsigned i = 0; i < intersecting_res.size(); i++)
-    ofs << intersecting_res[i] << '\n';
+  for (const auto & intersecting_re : intersecting_res)
+    ofs << intersecting_re << '\n';
   ofs.close();
 
   return true;

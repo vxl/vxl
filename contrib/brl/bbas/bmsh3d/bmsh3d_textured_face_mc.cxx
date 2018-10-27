@@ -29,8 +29,8 @@ bmsh3d_textured_face_mc::bmsh3d_textured_face_mc(const bmsh3d_face* face, std::s
 
   // copy vertices
   std::vector<bmsh3d_vertex*> old_verts = face->vertices();
-  for (unsigned v = 0; v < old_verts.size(); v++) {
-    bmsh3d_vertex* vert = (bmsh3d_vertex*)old_verts[v];
+  for (auto & old_vert : old_verts) {
+    bmsh3d_vertex* vert = (bmsh3d_vertex*)old_vert;
     _add_vertex(vert);
   }
 }

@@ -93,9 +93,9 @@ bool boxm2_import_point_cloud_process(bprb_func_process& pro)
   readPointsFromXYZ(input_mesh_filename, all_points);
   vgl_point_3d<double> local;
   boxm2_block_id id;
-  for (unsigned  i = 0; i < all_points.size(); i++) {
-    if (!scene->contains(all_points[i], id, local)) {
-      std::cout << "ERROR: point: " << all_points[i] << " isn't in scene. Exiting...." << std::endl;
+  for (const auto & all_point : all_points) {
+    if (!scene->contains(all_point, id, local)) {
+      std::cout << "ERROR: point: " << all_point << " isn't in scene. Exiting...." << std::endl;
       return false;
     }
     else

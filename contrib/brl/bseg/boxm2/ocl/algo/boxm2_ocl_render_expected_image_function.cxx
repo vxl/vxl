@@ -50,7 +50,7 @@ float render_expected_image( boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=opencl_cache->alloc_mem(sizeof(float)*100,output_arr,  "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -164,7 +164,7 @@ float render_expected_image2( boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=opencl_cache->alloc_mem(sizeof(float)*100,output_arr,  "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -304,7 +304,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -417,7 +417,7 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -523,7 +523,7 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -669,7 +669,7 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -814,7 +814,7 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

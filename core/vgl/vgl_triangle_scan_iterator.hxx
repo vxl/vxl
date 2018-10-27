@@ -117,10 +117,10 @@ void vgl_triangle_scan_iterator<T>::reset()
     tmp = -1;
   else
     tmp = +1;
-  for (int i=0; i<3; ++i) {
+  for (auto & i : data) {
     T f = tmp; // / sqrt(data[i][0]*data[i][0] + data[i][1]*data[i][1]);
     for (int j=0; j<3; ++j)
-      data[i][j] *= f;
+      i[j] *= f;
   }
 #if 0
   std::cerr << "data:\n";
@@ -156,9 +156,9 @@ bool vgl_triangle_scan_iterator<T>::next()
 #ifdef DEBUG
   std::cerr << "minx maxx = " << minx << ' ' << maxx << '\n';
 #endif
-  for (int i=0; i<3; ++i) {
-    T a_ = data[i][0];
-    T b_ = data[i][1] * (scany_ - g.y) + data[i][2];
+  for (auto & i : data) {
+    T a_ = i[0];
+    T b_ = i[1] * (scany_ - g.y) + i[2];
     // ax + b >= 0
     if (a_ == 0) {
       // bif bif

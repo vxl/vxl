@@ -482,9 +482,9 @@ bool vpgl_em_compute_5_point_ransac<T>::compute(
 
         get_distinct_indices(5, match_idxs, (int) num_points);
 
-        for (int idx = 0; idx < 5; ++idx) {
-            right_points_to_use.push_back(right_points[match_idxs[idx]]);
-            left_points_to_use.push_back(left_points[match_idxs[idx]]);
+        for (int & match_idx : match_idxs) {
+            right_points_to_use.push_back(right_points[match_idx]);
+            left_points_to_use.push_back(left_points[match_idx]);
         }
         std::vector<vpgl_essential_matrix<T> > ems;
         five_point.compute(

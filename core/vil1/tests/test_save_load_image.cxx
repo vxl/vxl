@@ -244,9 +244,9 @@ static bool create_colour_gif(const char* filename)
   std::ofstream f(filename, std::ios::out | std::ios::binary);
   if (!f) return false;
   f << "GIF87a";
-  for (int i=0; i<7; ++i) f << a[i];
+  for (unsigned char i : a) f << i;
   for (int i=0; i<256; ++i) f << (unsigned char)i << (unsigned char)i << (unsigned char)0;
-  for (int i=0; i<642; ++i) f << b[i];
+  for (unsigned char i : b) f << i;
   f.close();
   return true;
 }
@@ -279,9 +279,9 @@ static bool create_grey_gif(const char* filename)
   std::ofstream f(filename, std::ios::out | std::ios::binary);
   if (!f) return false;
   f << "GIF87a";
-  for (int i=0; i<7; ++i) f << a[i];
+  for (unsigned char i : a) f << i;
   for (int i=0; i<256; ++i) f << (unsigned char)i << (unsigned char)i << (unsigned char)i;
-  for (int i=0; i<336; ++i) f << b[i];
+  for (unsigned char i : b) f << i;
   f.close();
   return true;
 }

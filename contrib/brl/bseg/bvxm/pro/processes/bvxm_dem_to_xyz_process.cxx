@@ -261,9 +261,8 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
   // loop over each dem image in the image folder to create x, y, z image
   std::cout << pro.name() << " -- Start to generate xyz images from " << geotiff_img_names.size() << " dem images" << std::endl;
 
-  for (unsigned img_idx = 0; img_idx < geotiff_img_names.size(); img_idx++)
+  for (auto dem_img_name : geotiff_img_names)
   {
-    std::string dem_img_name = geotiff_img_names[img_idx];
     // load the camera from image header
     vil_image_resource_sptr dem_res = vil_load_image_resource(dem_img_name.c_str());
     vpgl_geo_camera* geocam = nullptr;

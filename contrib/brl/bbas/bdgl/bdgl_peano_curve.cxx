@@ -10,9 +10,9 @@
 std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > in, double angle)
 {
   std::vector< vgl_point_2d<double> >  pnew;
-  for (unsigned i=0;i<in.size();i++)
+  for (auto & i : in)
   {
-    double x=in[i].x(); double y=in[i].y();
+    double x=i.x(); double y=i.y();
     double xnew=std::cos(angle)*x+std::sin(angle)*y;
     double ynew=-std::sin(angle)*x+std::cos(angle)*y;
     pnew.emplace_back(xnew,ynew);
@@ -23,10 +23,10 @@ std::vector<vgl_point_2d<double> > rotate_2d(std::vector<vgl_point_2d<double> > 
 std::vector<vgl_point_2d<double> > trans_2d(std::vector<vgl_point_2d<double> > in, double tx, double ty)
 {
   std::vector< vgl_point_2d<double> >  pnew;
-  for (unsigned i=0;i<in.size();i++)
+  for (auto & i : in)
   {
-    double x=in[i].x();
-    double y=in[i].y();
+    double x=i.x();
+    double y=i.y();
     double xnew=x+tx;
     double ynew=y+ty;
     pnew.emplace_back(xnew,ynew);
@@ -37,10 +37,10 @@ std::vector<vgl_point_2d<double> > trans_2d(std::vector<vgl_point_2d<double> > i
 std::vector<vgl_point_2d<double> > scale_2d(std::vector<vgl_point_2d<double> > in, double s)
 {
   std::vector< vgl_point_2d<double> >  pnew;
-  for (unsigned i=0;i<in.size();i++)
+  for (auto & i : in)
   {
-    double x=in[i].x();
-    double y=in[i].y();
+    double x=i.x();
+    double y=i.y();
     double xnew=x*s;
     double ynew=y*s;
     pnew.emplace_back(xnew,ynew);
@@ -119,12 +119,12 @@ std::vector<vgl_point_3d<double> >  peano_curve_on_cube(unsigned level)
 
   // high y face
   std::vector<vgl_point_3d<double> > high_y;
-  for (unsigned i=0;i<local_peano.size();i++)
-    high_y.emplace_back(local_peano[i].x(),1,local_peano[i].y());
+  for (auto & i : local_peano)
+    high_y.emplace_back(i.x(),1,i.y());
   // high x face
   std::vector<vgl_point_3d<double> > high_x;
-  for (unsigned i=0;i<local_peano.size();i++)
-     high_x.emplace_back(1,-local_peano[i].x(),local_peano[i].y());
+  for (auto & i : local_peano)
+     high_x.emplace_back(1,-i.x(),i.y());
   // low z face
   std::vector<vgl_point_3d<double> > low_z;
   for (int i=local_peano.size()-1;i>=0;i--)

@@ -130,8 +130,8 @@ static void test_optimize_camera()
   // seed with fixed number for repeatable results
   vnl_random rnd(1234);
   // project each point adding uniform noise in a [-max_p_err, max_p_err] pixel window
-  for (unsigned int i=0; i<world.size(); ++i){
-    vgl_homg_point_2d<double> hpt = cam(world[i]);
+  for (const auto & i : world){
+    vgl_homg_point_2d<double> hpt = cam(i);
     vgl_vector_2d<double> err(rnd.drand32()-0.5, rnd.drand32()-0.5);
     err *= max_p_err;
     image.push_back(vgl_point_2d<double>(hpt.x()/hpt.w(), hpt.y()/hpt.w())+err);

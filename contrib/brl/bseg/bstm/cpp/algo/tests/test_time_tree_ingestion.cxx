@@ -111,8 +111,8 @@ void test_time_tree_ingestion()
       ingest(tree, tree_data, (float)i /32, data[i]);
 
   std::vector<int> leaf_bits = tree.get_leaf_bits(0);
-  for (unsigned int i = 0; i < leaf_bits.size(); ++i)
-    std::cout << "Data at leaf " << leaf_bits[i] << " is " << tree_data[tree.get_relative_index(leaf_bits[i])] << std::endl;
+  for (int leaf_bit : leaf_bits)
+    std::cout << "Data at leaf " << leaf_bit << " is " << tree_data[tree.get_relative_index(leaf_bit)] << std::endl;
 
   bool good = tree.bit_at(0)  == 1
            && tree.bit_at(1)  == 1

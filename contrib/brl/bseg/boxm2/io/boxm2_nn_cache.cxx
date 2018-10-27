@@ -100,10 +100,8 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   std::map<boxm2_block_id, boxm2_block*> new_cache;
 
   // find neighbors in the cache already, store 'em
-  for (unsigned int i=0; i<neighbor_list.size(); ++i)
+  for (auto id : neighbor_list)
   {
-    boxm2_block_id id = neighbor_list[i];
-
     // if cached_blocks_ has this neighbor, add it to new cache (delete from old)
     if ( cached_blocks_.find(id) != cached_blocks_.end() )
     {
@@ -219,10 +217,8 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, std::string da
   std::map<boxm2_block_id, boxm2_data_base*> new_cache;
 
   // find neighbors in the cache already, store 'em
-  for (unsigned int i=0; i<neighbor_list.size(); ++i)
+  for (auto id : neighbor_list)
   {
-    boxm2_block_id id = neighbor_list[i];
-
     // if cached_blocks_ has this neighbor, add it to new cache (delete from old)
     if ( data_map.find(id) != data_map.end() )
     {

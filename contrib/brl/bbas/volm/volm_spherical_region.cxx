@@ -100,10 +100,10 @@ std::vector<unsigned int>
 void volm_spherical_regions_layer::update_attribute_map(int id)
 {
     std::vector<spherical_region_attributes> attribute_types = regions_[id].attribute_types();
-    for (unsigned i =0; i < attribute_types.size(); i++)
+    for (auto & attribute_type : attribute_types)
     {
         unsigned char val =255;
-        if (regions_[id].attribute_value(attribute_types[i],val))
-            attributed_regions_[attribute_types[i]][val].push_back(id);
+        if (regions_[id].attribute_value(attribute_type,val))
+            attributed_regions_[attribute_type][val].push_back(id);
     }
 }

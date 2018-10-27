@@ -40,9 +40,8 @@ void vsph_segment_sphere::smooth_data()
         unsigned nn = neighbors.size();
         if (nn == 0) continue;
         double weight_sum = static_cast<double>(nn)*neigh_weight + 1.0;
-        for (std::set<int>::iterator nit = neighbors.begin();
-             nit != neighbors.end(); ++nit)
-            sum += neigh_weight*data_[*nit];
+        for (std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type neighbor : neighbors)
+            sum += neigh_weight*data_[neighbor];
 
         sum /= weight_sum;
         smooth_data_[i]=sum;
@@ -107,8 +106,8 @@ double vsph_segment_sphere::region_mean(int id)
 {
     std::vector<int>  region = regions_[id];
     double sum = 0.0;
-    for (unsigned int i = 0; i<region.size(); ++i)
-        sum += data_[region[i]];
+    for (int i : region)
+        sum += data_[i];
     if (region.size() > 0)
         return sum/region.size();
     else return 0.0;
@@ -119,8 +118,8 @@ double vsph_segment_sphere::region_median(int id)
 {
     std::vector<double> vals;
     std::vector<int>  region = regions_[id];
-    for (unsigned int i = 0; i<region.size(); ++i)
-        vals.push_back( data_[region[i]] );
+    for (int i : region)
+        vals.push_back( data_[i] );
     std::sort(vals.begin(), vals.end());
     if ( vals.size() > 0)
         return vals[vals.size()/2];

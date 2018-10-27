@@ -32,14 +32,14 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
   cameras.emplace_back(K,vgl_homg_point_3d<double>(5.0, 0.0, 0.0),I);
 
   // point all cameras to look at the origin
-  for (unsigned int i=0; i<cameras.size(); ++i)
-    cameras[i].look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
+  for (auto & camera : cameras)
+    camera.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
 
   // project all points in all images
   image_points.clear();
-  for (unsigned int i=0; i<cameras.size(); ++i){
-    for (unsigned int j=0; j<world.size(); ++j){
-      image_points.emplace_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
+  for (auto & camera : cameras){
+    for (const auto & j : world){
+      image_points.emplace_back(camera(vgl_homg_point_3d<double>(j)));
     }
   }
 }
@@ -101,13 +101,13 @@ static void test_ba_fixed_k_lsqr()
 
   vnl_random rnd;
   vnl_vector<double> a2(a),b2(b);
-  for ( unsigned i=0; i<b2.size(); ++i)
+  for (double & i : b2)
   {
-    b2[i] += rnd.normal()/1000;
+    i += rnd.normal()/1000;
   }
-  for ( unsigned i=0; i<a2.size(); ++i)
+  for (double & i : a2)
   {
-    a2[i] += rnd.normal()/1000;
+    i += rnd.normal()/1000;
   }
 
   func.set_residual_scale(10.0);

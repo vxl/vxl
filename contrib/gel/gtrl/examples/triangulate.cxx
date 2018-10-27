@@ -32,12 +32,12 @@ int main()
   std::vector<gtrl_triangle_sptr> t = tri.get_triangles();
 
   std::cout << p.size() << " triangle points:\n";
-  for (unsigned int i=0; i<p.size(); ++i)
-    std::cout << ' ' << *(p[i]) << '\n';
+  for (auto & i : p)
+    std::cout << ' ' << *i << '\n';
 
   std::cout << t.size() << " triangles:\n";
-  for (unsigned int i=0; i<t.size(); ++i)
-    std::cout << ' ' << *(t[i]) << '\n';
+  for (auto & i : t)
+    std::cout << ' ' << *i << '\n';
 
   return 0;
 }

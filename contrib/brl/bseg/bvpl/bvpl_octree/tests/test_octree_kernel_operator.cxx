@@ -35,11 +35,11 @@ void fill_sample_octree(boct_tree<short,float>* tree)
     tree->init_cells(0.1f);
     leaves[1]->set_data(0.5);
     if (debug)
-      for (unsigned i=0; i<leaves.size(); i++) {
-        std::cout<< leaves[i]->get_code().x_loc_ << ','
-                << leaves[i]->get_code().y_loc_ << ','
-                << leaves[i]->get_code().z_loc_ << ','
-                << leaves[i]->data() << std::endl;
+      for (auto & leave : leaves) {
+        std::cout<< leave->get_code().x_loc_ << ','
+                << leave->get_code().y_loc_ << ','
+                << leave->get_code().z_loc_ << ','
+                << leave->data() << std::endl;
       }
 
     leaves[1]->split();

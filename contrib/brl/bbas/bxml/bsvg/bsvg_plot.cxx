@@ -298,8 +298,8 @@ void bsvg_plot::add_bars(const std::vector<float>& heights, const std::vector<fl
   bsvg_group* g = add_bars_helper(heights, color);
   this->add_element(g);
   std::vector<std::string> x_ls;
-  for (unsigned i = 0; i < x_labels.size(); i++) {
-    std::stringstream ss; ss << x_labels[i];
+  for (float x_label : x_labels) {
+    std::stringstream ss; ss << x_label;
     x_ls.push_back(ss.str());
   }
   bsvg_group* tg = add_x_labels_helper(x_ls, color, vertical_labels);

@@ -67,8 +67,8 @@ rgrl_feature_set_bins( feature_vector const& features,
   bins_.reset( new bin_type( min, max, bin_sizes ) );
 
   // Add the data
-  for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
-    bins_->add_point( (*itr)->location(), *itr );
+  for (const auto & feature : features) {
+    bins_->add_point( feature->location(), feature );
   }
 }
 

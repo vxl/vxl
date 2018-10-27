@@ -155,9 +155,9 @@ bool boxm_utils::is_face_visible(std::vector<vgl_point_3d<double> > &face,
   assert(face.size() >= 3);
   std::vector<vgl_point_2d<double> > vs;
 
-  for (unsigned i=0; i<face.size(); ++i) {
+  for (auto & i : face) {
     double u,v;
-    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
+    camera->project(i.x(), i.y(), i.z(), u, v);
     vs.emplace_back(u,v);
   }
 
@@ -175,9 +175,9 @@ boxm_utils::project_face(std::vector<vgl_point_3d<double> > &face,
 {
   std::vector<vgl_point_2d<double> > vs;
 
-  for (unsigned i=0; i<face.size(); ++i) {
+  for (auto & i : face) {
     double u,v;
-    camera->project(face[i].x(), face[i].y(), face[i].z(), u, v);
+    camera->project(i.x(), i.y(), i.z(), u, v);
     vs.emplace_back(u,v);
   }
 
@@ -1458,10 +1458,10 @@ double boxm_utils::max_point_to_box_dist(vgl_box_3d<double> box,vgl_point_3d<dou
   double dist_max=0;
 
   std::vector<vgl_point_3d<double> > corners=corners_of_box_3d(box);
-  for (unsigned i=0;i<corners.size();i++)
+  for (const auto & corner : corners)
   {
-    if (dist_max<(corners[i]-pt).length())
-      dist_max=(corners[i]-pt).length();
+    if (dist_max<(corner-pt).length())
+      dist_max=(corner-pt).length();
   }
   return dist_max;
 }

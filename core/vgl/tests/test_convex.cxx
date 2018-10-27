@@ -18,8 +18,8 @@ static void test_convex()
   pts.emplace_back(2.0, 1.0 );
   pts.emplace_back(0.0, 5.0 );
 
-  for (unsigned i=0; i < pts.size(); ++i)
-    std::cout << '(' << pts[i].x() <<','<<pts[i].y()<<") ";
+  for (auto & pt : pts)
+    std::cout << '(' << pt.x() <<','<<pt.y()<<") ";
   std::cout << std::endl;
 
   vgl_polygon<double> poly=vgl_convex_hull(pts);

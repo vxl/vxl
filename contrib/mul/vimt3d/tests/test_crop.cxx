@@ -24,9 +24,9 @@ static void test_crop()
 
   // create image
   float count=0;
-  for (vil3d_image_view<float>::iterator it=original_image.image().begin();it!=original_image.image().end();++it)
+  for (float & it : original_image.image())
   {
-     *it = count;
+     it = count;
      ++count;
   }
 

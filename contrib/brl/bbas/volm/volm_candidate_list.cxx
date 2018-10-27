@@ -335,8 +335,8 @@ void volm_candidate_list::write_kml_regions(std::ofstream& str,
         << "            <outerBoundaryIs>\n"
         << "              <LinearRing>\n"
         << "                <coordinates>\n";
-    for (std::vector<vgl_point_2d<double> >::iterator vit = region.begin(); vit != region.end(); ++vit)
-      str << "                " << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0\n";
+    for (auto & vit : region)
+      str << "                " << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0\n";
     str << "                " << std::setprecision(12) << region[0].x() << ',' << std::setprecision(12) << region[0].y() << ",0\n";
     str << "                </coordinates>\n"
         << "              </LinearRing>\n"
@@ -431,8 +431,8 @@ void volm_candidate_list::write_kml_regions(std::ofstream& str,
         << "            <outerBoundaryIs>\n"
         << "              <LinearRing>\n"
         << "                <coordinates>\n";
-    for (std::vector<vgl_point_2d<double> >::iterator vit = region.begin(); vit != region.end(); ++vit)
-      str << "                " << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0\n";
+    for (auto & vit : region)
+      str << "                " << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0\n";
     str << "                " << std::setprecision(12) << region[0].x() << ',' << std::setprecision(12) << region[0].y() << ",0\n";
     str << "                </coordinates>\n"
         << "              </LinearRing>\n"
@@ -474,8 +474,8 @@ void volm_candidate_list::write_kml_regions(std::ofstream& str,
         << "            <outerBoundaryIs>\n"
         << "              <LinearRing>\n"
         << "                <coordinates>\n";
-    for (std::vector<vgl_point_2d<double> >::iterator vit = viewing.begin();  vit != viewing.end(); ++vit)
-      str << "              " << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0\n";
+    for (auto & vit : viewing)
+      str << "              " << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0\n";
     str << "                </coordinates>\n"
         << "              </LinearRing>\n"
         << "            </outerBoundaryIs>\n"

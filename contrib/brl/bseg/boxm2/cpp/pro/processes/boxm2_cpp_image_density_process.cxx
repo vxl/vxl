@@ -79,20 +79,20 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
   bool foundDataType = false;
   std::string data_type;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
   }
@@ -224,20 +224,20 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   bool foundDataType = false;
   std::string data_type;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
     }
   }

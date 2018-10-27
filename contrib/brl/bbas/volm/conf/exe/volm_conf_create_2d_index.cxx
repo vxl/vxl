@@ -55,8 +55,8 @@ int main(int argc, char** argv)
   std::cout << "\t create index from leaf " << min_leaf_id() << " to " << max_leaf_id() << std::endl;
 
   unsigned num_locs = 0;
-  for (unsigned i = 0; i < indexer->loc_leaves().size(); i++)
-    num_locs += indexer->loc_leaves()[i]->hyps_->locs_.size();
+  for (auto & i : indexer->loc_leaves())
+    num_locs += i->hyps_->locs_.size();
 
   vul_timer t;
   if (!indexer->index(buffer_capacity(), min_leaf_id(), max_leaf_id()))

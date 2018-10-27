@@ -28,9 +28,9 @@ void bvgl_change_obj::centroid(double &x_cent, double &y_cent) const
   x_cent = 0.0, y_cent = 0.0;
   int tot_size = 0;
   for (unsigned s = 0; s < poly_.num_sheets(); s++) {
-    for (unsigned si = 0; si < poly_[s].size(); si++) {
-      x_cent += poly_[s][si].x();
-      y_cent += poly_[s][si].y();
+    for (auto si : poly_[s]) {
+      x_cent += si.x();
+      y_cent += si.y();
     }
     tot_size += poly_[s].size();
   }

@@ -17,9 +17,8 @@ bvgl_gen_cylinder
   axis_(std::move(axis)),
   cross_sections_(cross_sects)
 {
-  for(std::vector<bvgl_cross_section>::const_iterator cit = cross_sects.begin();
-      cit != cross_sects.end(); ++cit)
-    bbox_.add(cit->bounding_box());
+  for(const auto & cross_sect : cross_sects)
+    bbox_.add(cross_sect.bounding_box());
 }
 #if 0
 void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr, double distance){
@@ -172,9 +171,8 @@ std::vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<dou
      return false;
    double d_close = big;
    vgl_point_3d<double> closest_pt;
-   for(std::vector<unsigned>::iterator cit = crx_indices.begin();
-       cit != crx_indices.end(); ++cit){
-     vgl_point_3d<double> cp = cross_sections_[*cit].closest_point(p, dist_thresh);
+   for(unsigned int & crx_indice : crx_indices){
+     vgl_point_3d<double> cp = cross_sections_[crx_indice].closest_point(p, dist_thresh);
      double d = (p-cp).length();
      if(d<d_close){
        d_close = d;

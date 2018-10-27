@@ -110,9 +110,9 @@ int main(int argc, char * argv[])
   float v_color = 10;
   float min_conf = 100;
   float max_conf = 0;
-  for (int i = 0; i < conf.size(); i++) {
-    if (min_conf > conf[i]) min_conf = conf[i];
-    if (max_conf < conf[i]) max_conf = conf[i];
+  for (float i : conf) {
+    if (min_conf > i) min_conf = i;
+    if (max_conf < i) max_conf = i;
   }
   float color_max = 250;
   float color_min = 100;

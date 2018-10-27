@@ -372,11 +372,11 @@ vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
     delete parser;
     return out;
   }
-  for (unsigned sh_idx = 0; sh_idx < parser->polyouter_.size(); sh_idx++) {
+  for (auto & sh_idx : parser->polyouter_) {
     out.new_sheet();
-    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size();
+    unsigned n_points = (unsigned)sh_idx.size();
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
-      out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
+      out.push_back(sh_idx[pt_idx].x(), sh_idx[pt_idx].y());
     }
   }
   return out;

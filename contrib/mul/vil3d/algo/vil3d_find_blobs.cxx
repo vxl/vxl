@@ -192,8 +192,8 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
   for (unsigned l=0, n=labels.size(); l<n; ++l)
     renum_renum[labels[l]] = l;
 
-  for (ITER it=renumbering.begin(), end=renumbering.end(); it!=end; ++it)
-    *it=renum_renum[*it];
+  for (unsigned int & it : renumbering)
+    it=renum_renum[it];
 
   // Check than no DODGY values got into the renumbering.
   assert(std::find(renumbering.begin(), renumbering.end(), dodgy)

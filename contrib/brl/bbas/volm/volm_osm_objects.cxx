@@ -142,14 +142,14 @@ void volm_osm_objects::b_write(vsl_b_ostream& os)
 {
   vsl_b_write(os, version());
   vsl_b_write(os, loc_pts_.size());
-  for (unsigned i = 0; i < loc_pts_.size(); i++)
-    vsl_b_write(os, loc_pts_[i]);
+  for (const auto & loc_pt : loc_pts_)
+    vsl_b_write(os, loc_pt);
   vsl_b_write(os, loc_lines_.size());
-  for (unsigned i = 0; i < loc_lines_.size(); i++)
-    vsl_b_write(os, loc_lines_[i]);
+  for (const auto & loc_line : loc_lines_)
+    vsl_b_write(os, loc_line);
   vsl_b_write(os, loc_polys_.size());
-  for (unsigned i = 0; i < loc_polys_.size(); i++)
-    vsl_b_write(os, loc_polys_[i]);
+  for (const auto & loc_poly : loc_polys_)
+    vsl_b_write(os, loc_poly);
 }
 
 void volm_osm_objects::b_read(vsl_b_istream& is)
@@ -193,11 +193,11 @@ bool volm_osm_objects::write_pts_to_kml(std::string const& kml_file)
 
   // write the points into kml
   unsigned cnt = 0;
-  for (std::vector<volm_osm_object_point_sptr>::iterator vit = loc_pts_.begin(); vit != loc_pts_.end(); ++vit)
+  for (auto & loc_pt : loc_pts_)
   {
-    std::string name = (*vit)->prop().name_;
+    std::string name = loc_pt->prop().name_;
     std::stringstream str_w;  str_w << "id=" << cnt++;
-    bkml_write::write_location(ofs, (*vit)->loc(), name, str_w.str(), 0.6);
+    bkml_write::write_location(ofs, loc_pt->loc(), name, str_w.str(), 0.6);
   }
   bkml_write::close_document(ofs);
   ofs.close();
@@ -211,13 +211,13 @@ bool volm_osm_objects::write_lines_to_kml(std::string const& kml_file)
 
   // write the roads into kml
   unsigned cnt = 0;
-  for (std::vector<volm_osm_object_line_sptr>::iterator vit = loc_lines_.begin(); vit != loc_lines_.end(); ++vit)
+  for (auto & loc_line : loc_lines_)
   {
-    double width = (*vit)->prop().width_;
-    std::string name = (*vit)->prop().name_;
+    double width = loc_line->prop().width_;
+    std::string name = loc_line->prop().name_;
     std::stringstream str_w;
     str_w << "width=" << width << ", id=" << cnt++;
-    bkml_write::write_path(ofs, (*vit)->line(), name, str_w.str(), 1.0, width);
+    bkml_write::write_path(ofs, loc_line->line(), name, str_w.str(), 1.0, width);
   }
   bkml_write::close_document(ofs);
   ofs.close();
@@ -231,10 +231,10 @@ bool volm_osm_objects::write_polys_to_kml(std::string const& kml_file)
 
   // write the regions into kml
   unsigned cnt = 0;
-  for (std::vector<volm_osm_object_polygon_sptr>::iterator vit = loc_polys_.begin(); vit != loc_polys_.end(); ++vit)
+  for (auto & loc_poly : loc_polys_)
   {
-    unsigned char level = (*vit)->prop().level_;
-    std::string name = (*vit)->prop().name_;
+    unsigned char level = loc_poly->prop().level_;
+    std::string name = loc_poly->prop().name_;
     std::stringstream str_l;
     str_l << "level=" << (int)level << ", id=" << cnt++;
     unsigned char r,g,b;
@@ -244,7 +244,7 @@ bool volm_osm_objects::write_polys_to_kml(std::string const& kml_file)
     else if (level == 3) { r = 170,  g = 170;  b = 255; }
     else if (level == 4) { r = 0;    g = 255;  b = 127; }
     else                 { r = 170;  g = 170;  b = 170; }
-    bkml_write::write_polygon(ofs, (*vit)->poly(), name, str_l.str(), 1.0, 3.0, 0.4, r, g, b);
+    bkml_write::write_polygon(ofs, loc_poly->poly(), name, str_l.str(), 1.0, 3.0, 0.4, r, g, b);
   }
   bkml_write::close_document(ofs);
   ofs.close();
@@ -299,14 +299,14 @@ void volm_osm_object_ids::b_write(vsl_b_ostream& os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, pt_ids_.size());
-  for (unsigned i = 0; i < pt_ids_.size(); i++)
-    vsl_b_write(os, pt_ids_[i]);
+  for (unsigned int pt_id : pt_ids_)
+    vsl_b_write(os, pt_id);
   vsl_b_write(os, line_ids_.size());
-  for (unsigned i = 0; i < line_ids_.size(); i++)
-    vsl_b_write(os, line_ids_[i]);
+  for (unsigned int line_id : line_ids_)
+    vsl_b_write(os, line_id);
   vsl_b_write(os, region_ids_.size());
-  for (unsigned i = 0; i < region_ids_.size(); i++)
-    vsl_b_write(os, region_ids_[i]);
+  for (unsigned int region_id : region_ids_)
+    vsl_b_write(os, region_id);
 }
 
 //: binary load self from stream

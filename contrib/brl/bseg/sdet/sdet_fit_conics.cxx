@@ -54,10 +54,9 @@ bool sdet_fit_conics::fit_conics()
     return false;
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
-       eit != edges_.end(); eit++)
+  for (auto & edge : edges_)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -75,10 +74,9 @@ bool sdet_fit_conics::fit_conics()
 
     fitter_.fit();
     std::vector<vgl_conic_segment_2d<double> >& segs = fitter_.get_conic_segs();
-    for (std::vector<vgl_conic_segment_2d<double> >::iterator sit=segs.begin();
-         sit != segs.end(); sit++)
+    for (auto & seg : segs)
     {
-      vsol_conic_2d_sptr conic = new vsol_conic_2d(*sit);
+      vsol_conic_2d_sptr conic = new vsol_conic_2d(seg);
       //std::cout << "Fitted a conic of type " << conic->real_conic_type() << '\n';
       //adding a condition on aspect ratio
       if (conic->real_type() != vsol_conic_2d::real_ellipse)

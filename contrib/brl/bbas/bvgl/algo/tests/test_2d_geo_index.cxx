@@ -87,8 +87,8 @@ static void test_2d_geo_index()
   leaves.clear();
   bvgl_2d_geo_index::get_leaves(root1, leaves, line);
   std::cout << " leaves that intersect with line: ";
-  for (unsigned i = 0; i < line.size(); i++) {
-    std::cout << line[i] << ' ';
+  for (auto i : line) {
+    std::cout << i << ' ';
   }
   std::cout << '\n';
   for (unsigned i = 0; i < leaves.size(); i++) {
@@ -125,11 +125,11 @@ static void test_2d_geo_index()
   leaves.clear();
   bvgl_2d_geo_index::get_leaves(root1, leaves, region);
   std::cout << " leaves intersecting with region " << region << " have following content:" << std::endl;
-  for (unsigned i = 0; i < leaves.size(); i++) {
-    std::cout << "\t leaf " << leaves[i]->extent_ << " contains: ";
-    bvgl_2d_geo_index_node<std::vector<int> >* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<std::vector<int> >* >(leaves[i].ptr());
-    for (unsigned j = 0; j < leaf_ptr->contents_.size(); j++)
-      std::cout << leaf_ptr->contents_[j] << ' ';
+  for (auto & leave : leaves) {
+    std::cout << "\t leaf " << leave->extent_ << " contains: ";
+    bvgl_2d_geo_index_node<std::vector<int> >* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<std::vector<int> >* >(leave.ptr());
+    for (int content : leaf_ptr->contents_)
+      std::cout << content << ' ';
     std::cout << '\n';
   }
 

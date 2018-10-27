@@ -39,9 +39,9 @@ bool volm_spherical_index_query_matcher::match()
             // match it with index bboxes;
             std::vector<unsigned int> attribute_poly_ids
                 = index_layer.attributed_regions_by_value(ORIENTATION, qval);
-            for (unsigned j = 0; j< attribute_poly_ids.size(); j++)
+            for (unsigned int attribute_poly_id : attribute_poly_ids)
             {
-                volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
+                volm_spherical_region index_region = i_regions[attribute_poly_id];
                 unsigned char ival = 0;
                 if (!index_region.attribute_value(ORIENTATION,ival))
                     continue;
@@ -52,9 +52,9 @@ bool volm_spherical_index_query_matcher::match()
                     std::vector<vsph_sph_box_2d> intersection_box ;
                     if (intersection(qbox_xfomred,index_region.bbox_ref(),intersection_box))
                     {
-                        for (unsigned k = 0 ; k < intersection_box.size();k++)
+                        for (auto & k : intersection_box)
                         {
-                            score+=intersection_box[k].area()/(qbox_xfomred.area());
+                            score+=k.area()/(qbox_xfomred.area());
                         }
                     }
                 }

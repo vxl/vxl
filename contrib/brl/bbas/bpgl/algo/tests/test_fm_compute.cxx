@@ -79,9 +79,9 @@ static void test_fm_compute()
   p2w.emplace_back( 6, 8, -5 );
 
   std::vector< vgl_point_2d<double> > p2r, p2l;
-  for ( unsigned i = 0; i < p2w.size(); i++ ) {
-    p2r.emplace_back( C2r.project( p2w[i] ) );
-    p2l.emplace_back( C2l.project( p2w[i] ) );
+  for (const auto & i : p2w) {
+    p2r.emplace_back( C2r.project( i ) );
+    p2l.emplace_back( C2l.project( i ) );
   }
 
   //Outliers

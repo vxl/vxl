@@ -259,11 +259,11 @@ short mbl_clamped_plate_spline_2d::version_no() const
 void mbl_clamped_plate_spline_2d::print_summary(std::ostream& os) const
 {
   os<<"\nfx:";
-  for (unsigned int i=0;i<Wx_.size();++i)
-    os<<" "<<Wx_[i];
+  for (double i : Wx_)
+    os<<" "<<i;
   os<<"\nfy:";
-  for (unsigned int i=0;i<Wy_.size();++i)
-    os<<" "<<Wy_[i];
+  for (double i : Wy_)
+    os<<" "<<i;
   os<<'\n';
 }
 

@@ -50,10 +50,8 @@ void osl_fit_lines::simple_fit_to_list(std::list<osl_edge *> *myedges,
 {
   int edge_no = 0;
   std::list<osl_edgel_chain*> curves;
-  for (std::list<osl_edge*>::iterator i=myedges->begin(); i!=myedges->end(); ++i)
+  for (auto edge : *myedges)
   {
-    osl_edge *edge = *i;
-
     bool angle_ok = true;
     {
       osl_edgel_chain *dc = edge;//->GetCurve()->CastToDigitalCurve();
@@ -140,9 +138,8 @@ void osl_fit_lines::incremental_fit_to_list(std::list<osl_edge *> *myedges,
   // a number of straight lines to it
 
   outedges->clear();
-  for (std::list<osl_edge*>::iterator iter=myedges->begin(); iter!=myedges->end(); ++iter)
+  for (auto edge : *myedges)
   {
-    osl_edge *edge = *iter;
     ++edge_no;
 
     std::list<osl_edgel_chain*> curves;

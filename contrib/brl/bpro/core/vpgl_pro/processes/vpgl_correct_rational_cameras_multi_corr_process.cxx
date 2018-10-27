@@ -108,8 +108,8 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
   }
 
   if (intersections.size() != n) return false;
-  for (unsigned i = 0; i < intersections.size(); i++)
-    std::cout << "after adjustment 3D intersection point: " << intersections[i] << std::endl;
+  for (const auto & intersection : intersections)
+    std::cout << "after adjustment 3D intersection point: " << intersection << std::endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
     double u_off,v_off;
@@ -211,8 +211,8 @@ bool vpgl_correct_rational_cameras_mult_corr_refine_process(bprb_func_process& p
   }
 
   if (intersections.size() != n) return false;
-  for (unsigned i = 0; i < intersections.size(); i++)
-    std::cout << "after adjustment 3D intersection point: " << intersections[i] << std::endl;
+  for (const auto & intersection : intersections)
+    std::cout << "after adjustment 3D intersection point: " << intersection << std::endl;
 
   for (unsigned i = 0; i < cams.size(); i++) {
     double u_off,v_off;

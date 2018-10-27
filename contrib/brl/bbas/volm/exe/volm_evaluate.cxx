@@ -74,9 +74,9 @@ int main(int argc,  char** argv)
     tiles = volm_tile::generate_p1_wr2_tiles();
   std::cout << " generated " << tiles.size() << " tiles for type: " << samples[id()].second.second << '\n';
 
-  for (unsigned i = 0; i < tiles.size(); i++)
+  for (auto & i : tiles)
   {
-    std::string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    std::string name = out() + "/" + "ProbMap_" + i.get_string() + ".tif";
     if (!vul_file::exists(name))
     {
       std::cerr << " missing:\t " << name << "!\n";
@@ -90,7 +90,7 @@ int main(int argc,  char** argv)
       for (unsigned jj = 0; jj < tile.nj(); jj++)
       {
         double tlat, tlon;
-        tiles[i].img_to_global(ii, jj, tlon, tlat);
+        i.img_to_global(ii, jj, tlon, tlat);
         if (tile(ii, jj) == 0)
           tot_pix_unevaluated++;
         else
@@ -102,7 +102,7 @@ int main(int argc,  char** argv)
       }
 
     unsigned u, v;
-    tiles[i].global_to_img(samples[id()].first.x(),  samples[id()].first.y(), u, v);
+    i.global_to_img(samples[id()].first.x(),  samples[id()].first.y(), u, v);
     if (u < tile.ni() && v < tile.nj())
       std::cout << "\t GT location: " << samples[id()].first.x() << ", " << samples[id()].first.y() << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << std::endl;
   }
@@ -135,15 +135,15 @@ int main(int argc,  char** argv)
     std::vector<volm_score_sptr> scores;
     volm_score::read_scores(scores, score_file_name.str());  // this file may be too large, make sure it fits to memory!!
     tot_hyp_count += scores.size();
-    for (unsigned j = 0; j < scores.size(); j++) {
+    for (auto & score : scores) {
       //std::cout << "leaf id: " << scores[j]->leaf_id_ << " hyp_id: " << scores[j]->hypo_id_ << " max score: " << scores[j]->max_score_ << " # of cams: " << scores[j]->cam_id_.size() << '\n';
-      total_cam_in_file += scores[j]->cam_id_.size();
-      if (scores[j]->max_score_ < cam_threshold()) {
+      total_cam_in_file += score->cam_id_.size();
+      if (score->max_score_ < cam_threshold()) {
         cnt_hyp_below++;
         cnt_cam_below += total_cams;  // all the cams are eliminated for this position then
       }
       else
-        cnt_cam_below += (total_cams - scores[j]->cam_id_.size());
+        cnt_cam_below += (total_cams - score->cam_id_.size());
     }
   }
 

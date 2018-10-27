@@ -220,19 +220,19 @@ void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(
   std::vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
 
   int curr_time_tree_leaf = refined_time_tree.traverse(local_time_ - blk_t_->tree_index(local_time_));
-  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (int & new_leave : new_leaves)
   {
 
     //get new data ptr
-    int newDataPtr = refined_time_tree.get_data_index(*iter);
+    int newDataPtr = refined_time_tree.get_data_index(new_leave);
 
     //find out if this leaf exists in the unrefined tree as well
-    int pj = unrefined_time_tree.parent_index(*iter);           //Bit_index of parent bit
-    bool validCellOld = (*iter==0) || unrefined_time_tree.bit_at(pj);
+    int pj = unrefined_time_tree.parent_index(new_leave);           //Bit_index of parent bit
+    bool validCellOld = (new_leave==0) || unrefined_time_tree.bit_at(pj);
 
     int oldDataPtr;
     if (validCellOld) { //if they both exist
-      oldDataPtr = unrefined_time_tree.get_data_index(*iter);
+      oldDataPtr = unrefined_time_tree.get_data_index(new_leave);
 
       //copy data
       alpha_cpy[newDataPtr]= alpha_[oldDataPtr];
@@ -242,7 +242,7 @@ void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(
     else
     {
       //if the cell contains the current time, initialize with 0. Otherwise, copy from parents
-      if (  curr_time_tree_leaf == *iter )  { //if the current time is the start of a cell in which new data will be placed
+      if (  curr_time_tree_leaf == new_leave )  { //if the current time is the start of a cell in which new data will be placed
         float max_alpha_int = -std::log(1.0f - INIT_PROB);
 
         float side_len = block_len_ / (float) (1 << depth );

@@ -129,8 +129,8 @@ public:
 
   void append(std::vector<sdet_edgel*>& n_chain)
   {
-    for (unsigned i=0; i<n_chain.size(); i++)
-      edgels.push_back(n_chain[i]);
+    for (auto i : n_chain)
+      edgels.push_back(i);
   }
 
   void append(sdet_edgel_list& n_chain)

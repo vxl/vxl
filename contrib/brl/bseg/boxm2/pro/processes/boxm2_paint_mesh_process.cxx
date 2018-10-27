@@ -73,10 +73,10 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
 
   std::string data_type;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-      if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+  for (const auto & app : apps) {
+      if ( app == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
       {
-          data_type = apps[i];
+          data_type = app;
           foundDataType = true;
           // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix());
       }

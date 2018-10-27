@@ -373,8 +373,8 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
   float threshold[] = {0.01f, 0.02f, 0.05f, 0.1f, 0.2f, 0.5f, 0.8f};
   std::ofstream ofs(file.c_str());
   ofs.precision(7);
-  for (unsigned i = 0; i < 7; i++) {
-    ofs << threshold[i] << ' ' << corner_hist.value_with_area_above(threshold[i]) << '\n';
+  for (float i : threshold) {
+    ofs << i << ' ' << corner_hist.value_with_area_above(i) << '\n';
   }
 
   //clean memory

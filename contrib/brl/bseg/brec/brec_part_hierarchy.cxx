@@ -23,8 +23,7 @@ void brec_part_hierarchy::generate_map(std::vector<brec_part_instance_sptr>& ext
   unsigned nj = map.nj();
   map.fill(0.0f);
   type_map.fill(0);
-  for (unsigned i = 0; i < extracted_parts.size(); i++) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     unsigned ii = (unsigned)p->x_;
     unsigned jj = (unsigned)p->y_;
     if (ii > 0 && ii < ni && jj > 0 && jj < nj) {
@@ -42,8 +41,7 @@ void brec_part_hierarchy::generate_map(std::vector<brec_part_instance_sptr>& ext
     for (unsigned j = 0; j < nj; j++)
       map[i][j] = nullptr;
 
-  for (unsigned i = 0; i < extracted_parts.size(); i++) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     unsigned ii = (unsigned)p->x_;
     unsigned jj = (unsigned)p->y_;
     if (ii > 0 && ii < ni && jj > 0 && jj < nj) {
@@ -59,13 +57,12 @@ brec_part_hierarchy::generate_output_map(std::vector<brec_part_instance_sptr>& e
   map.fill(0.0f);
 
   float max = -1e38f; // min float
-  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-    if (extracted_parts[i]->strength_ > max)
-      max = extracted_parts[i]->strength_;
+  for (auto & extracted_part : extracted_parts) {
+    if (extracted_part->strength_ > max)
+      max = extracted_part->strength_;
   }
 
-  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     p->mark_receptive_field(map, p->strength_/max);
   }
 }
@@ -77,29 +74,25 @@ brec_part_hierarchy::generate_output_map_posterior(std::vector<brec_part_instanc
   map.fill(0.0f);
   switch (type) {
     case brec_posterior_types::CLASS_FOREGROUND: {
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_receptive_field(map, float(p->rho_c_f_));
       }
       break;
                                                  }
     case brec_posterior_types::CLASS_BACKGROUND: {
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_receptive_field(map, float(p->rho_c_b_));
       }
       break;
                                                  }
     case brec_posterior_types::NON_CLASS_FOREGROUND: {
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_receptive_field(map, float(p->rho_nc_f_));
       }
       break;
                                                      }
     case brec_posterior_types::NON_CLASS_BACKGROUND: {
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_receptive_field(map, float(p->rho_nc_b_));
       }
       break;
@@ -116,26 +109,22 @@ brec_part_hierarchy::generate_output_map_posterior_centers(std::vector<brec_part
   switch (type)
   {
     case brec_posterior_types::CLASS_FOREGROUND:
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_center(map, float(p->rho_c_f_));
       }
       break;
     case brec_posterior_types::CLASS_BACKGROUND:
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_center(map, float(p->rho_c_b_));
       }
       break;
     case brec_posterior_types::NON_CLASS_FOREGROUND:
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_center(map, float(p->rho_nc_f_));
       }
       break;
     case brec_posterior_types::NON_CLASS_BACKGROUND:
-      for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-        brec_part_instance_sptr p = extracted_parts[i];
+      for (auto p : extracted_parts) {
         p->mark_center(map, float(p->rho_nc_b_));
       }
       break;
@@ -163,8 +152,7 @@ brec_part_hierarchy::generate_output_map3(std::vector<brec_part_instance_sptr>& 
 #endif // 0
   mean = 0.00000005f; // we want to see all the detections, this value is the smallest threshold used to create the ROC
 
-  for (unsigned i = 0; i < extracted_parts.size(); ++i) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     if (p->strength_ > mean)
       p->mark_receptive_field(map, 1.0f);
     else
@@ -206,9 +194,9 @@ brec_part_instance_sptr brec_part_hierarchy::get_node_instance(unsigned layer, u
 {
   if (layer != 0)
     return nullptr;
-  for (unsigned i = 0; i < dummy_primitive_instances_.size(); i++) {
-    if (dummy_primitive_instances_[i]->type_ == type && dummy_primitive_instances_[i]->layer_ == layer) {
-      return dummy_primitive_instances_[i];
+  for (auto & dummy_primitive_instance : dummy_primitive_instances_) {
+    if (dummy_primitive_instance->type_ == type && dummy_primitive_instance->layer_ == layer) {
+      return dummy_primitive_instance;
     }
   }
   return nullptr;
@@ -440,9 +428,8 @@ void brec_part_hierarchy::extract_upper_layer(std::vector<brec_part_instance_spt
   //std::map<std::pair<unsigned, unsigned>, std::vector<brec_part_instance_sptr> > instantiations;
 
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
-  for (unsigned i = 0; i < extracted_parts.size(); i++)
+  for (auto p : extracted_parts)
   {
-    brec_part_instance_sptr p = extracted_parts[i];
     // find this type in the primitive layer of the hierarchy
     brec_part_base_sptr hp = this->get_node(p->layer_, p->type_);
     if (!hp)
@@ -480,8 +467,8 @@ void brec_part_hierarchy::write_xml(std::ostream& os)
   prims->append_text("\n");
   root->append_data(prims);
   root->append_text("\n");
-  for (unsigned i=0; i<dummy_primitive_instances_.size(); ++i) {
-    bxml_data_sptr ins = dummy_primitive_instances_[i]->xml_element();
+  for (auto & dummy_primitive_instance : dummy_primitive_instances_) {
+    bxml_data_sptr ins = dummy_primitive_instance->xml_element();
     prims->append_text("  ");
     prims->append_data(ins);
     prims->append_text("\n");

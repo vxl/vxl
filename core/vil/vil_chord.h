@@ -38,7 +38,7 @@ inline std::ostream& operator<<(std::ostream& os, vil_chord c)
 inline unsigned vil_area(const std::vector<vil_chord>& region)
 {
   unsigned A=0;
-  for (unsigned i=0;i<region.size();++i) A+=region[i].length();
+  for (auto i : region) A+=i.length();
   return A;
 }
 

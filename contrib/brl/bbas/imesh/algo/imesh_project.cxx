@@ -189,8 +189,7 @@ imesh_render_triangles_interp(const imesh_regular_face_array<3>& tris,
                               const std::vector<double>& vals,
                               vil_image_view<double>& image)
 {
-  for (unsigned i=0; i<tris.size(); ++i) {
-    const imesh_regular_face<3>& tri = tris[i];
+  for (auto tri : tris) {
     imesh_render_triangle_interp(img_verts[tri[0]],
                                  img_verts[tri[1]],
                                  img_verts[tri[2]],
@@ -331,8 +330,8 @@ void imesh_projection_bounds(const std::vector<vgl_point_2d<double> >& img_pts,
 
   int i0 = bbox.max_x(), i1 = bbox.min_x(),
       j0 = bbox.max_y(), j1 = bbox.min_y();
-  for (itr_p p = img_pts.begin(); p != img_pts.end(); ++p) {
-    double x = p->x(), y = p->y();
+  for (auto img_pt : img_pts) {
+    double x = img_pt.x(), y = img_pt.y();
     int v = static_cast<int>(std::ceil(x))-1;
     if (v < i0) i0 = v;
     v = static_cast<int>(std::floor(x))+1;

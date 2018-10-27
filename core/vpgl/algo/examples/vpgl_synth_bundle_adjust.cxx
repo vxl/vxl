@@ -51,18 +51,18 @@ int main(int argc, char** argv)
 
   // project all points in all images
   std::vector<vgl_point_2d<double> > image_points;
-  for (unsigned int i=0; i<cameras.size(); ++i) {
-    for (unsigned int j=0; j<world.size(); ++j) {
-      image_points.emplace_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
+  for (auto & camera : cameras) {
+    for (const auto & j : world) {
+      image_points.emplace_back(camera(vgl_homg_point_3d<double>(j)));
     }
   }
 
 
   // project each point adding uniform noise in a [-max_p_err/2, max_p_err/2] pixel window
   std::vector<vgl_point_2d<double> > noisy_image_points(image_points);
-  for (unsigned int i=0; i<noisy_image_points.size(); ++i) {
+  for (auto & noisy_image_point : noisy_image_points) {
     vgl_vector_2d<double> noise(rnd.drand32()-0.5, rnd.drand32()-0.5);
-    noisy_image_points[i] += max_p_err * noise;
+    noisy_image_point += max_p_err * noise;
   }
 
 

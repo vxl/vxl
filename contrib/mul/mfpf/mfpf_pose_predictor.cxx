@@ -277,9 +277,9 @@ void mfpf_pose_predictor::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
-  for (unsigned k=0;k<roi_.size();++k)
-    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i)
-      im(i,roi_[k].y())=1;
+  for (auto k : roi_)
+    for (int i=k.start_x();i<=k.end_x();++i)
+      im(i,k.y())=1;
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned i=0;i<im.ni();++i)

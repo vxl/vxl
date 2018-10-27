@@ -62,9 +62,8 @@ merge_equivalence(std::map<unsigned int, std::set<unsigned int> >& tab,
     equivalence_sets_[cur_label] = std::set<unsigned>();
   }
 
-  for (std::set<unsigned>::iterator lit = labels.begin();
-       lit != labels.end(); ++lit)
-    equivalence_sets_[cur_label].insert(*lit);
+  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type label : labels)
+    equivalence_sets_[cur_label].insert(label);
   return true;
 }
 

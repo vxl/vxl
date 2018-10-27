@@ -856,14 +856,14 @@ bool bmdl_classify<T>::expand_buildings(std::vector<T>& means,
       if (n.empty())
         continue;
 
-      for (std::set<int>::iterator itr=n.begin(); itr!=n.end(); ++itr) {
+      for (std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type itr : n) {
         // test for merge
         if (labels_(i,j) > 1) {
           unsigned int other = labels_(i,j)-2;
-          merge.merge(other,*itr);
+          merge.merge(other,itr);
         }
         else {
-          labels_(i,j) = *itr+2;
+          labels_(i,j) = itr+2;
           changed = true;
         }
       }
@@ -916,12 +916,12 @@ bool bmdl_classify<T>::dilate_buildings(unsigned int num)
         continue;
 
       unsigned int max = 0;
-      for (std::map<int,unsigned>::iterator itr=n.begin(); itr!=n.end(); ++itr)
+      for (auto & itr : n)
       {
-        if (itr->second > max) {
-          max = itr->second;
-          labels_(i,j) = itr->first+2;
-          ++building_area_[itr->first];
+        if (itr.second > max) {
+          max = itr.second;
+          labels_(i,j) = itr.first+2;
+          ++building_area_[itr.first];
           changed = true;
         }
       }
@@ -963,13 +963,12 @@ bool bmdl_classify<T>::greedy_merge()
   }
 
   std::vector<upair> to_merge;
-  for (std::set<upair>::iterator itr=adjacent.begin();
-       itr!=adjacent.end(); ++itr)
+  for (const auto & itr : adjacent)
   {
-    unsigned int idx1 = itr->first;
-    unsigned int idx2 = itr->second;
+    unsigned int idx1 = itr.first;
+    unsigned int idx2 = itr.second;
     if (std::abs(building_mean_hgt_[idx1] - building_mean_hgt_[idx2]) < height_resolution_)
-      to_merge.push_back(*itr);
+      to_merge.push_back(itr);
   }
 
   if (to_merge.empty())
@@ -977,10 +976,10 @@ bool bmdl_classify<T>::greedy_merge()
 
   merge_map merge(this);
 
-  for (unsigned int i=0; i<to_merge.size(); ++i)
+  for (auto & i : to_merge)
   {
-    unsigned int idx1 = merge.translate(to_merge[i].first);
-    unsigned int idx2 = merge.translate(to_merge[i].second);
+    unsigned int idx1 = merge.translate(i.first);
+    unsigned int idx2 = merge.translate(i.second);
     merge.merge(idx1,idx2);
   }
 

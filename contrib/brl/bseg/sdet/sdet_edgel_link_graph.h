@@ -111,9 +111,9 @@ public:
   void clear()
   {
     //delete all the links
-    for (unsigned i=0; i<cLinks.size(); i++){
-      sdet_link_list_iter l_it = cLinks[i].begin();
-      for (;l_it!=cLinks[i].end(); l_it++)
+    for (auto & cLink : cLinks){
+      sdet_link_list_iter l_it = cLink.begin();
+      for (;l_it!=cLink.end(); l_it++)
         delete (*l_it);
     }
 

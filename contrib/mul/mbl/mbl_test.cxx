@@ -22,11 +22,11 @@
 static unsigned replace(char from, char to, std::string &s)
 {
   unsigned c = 0;
-  for (unsigned i=0; i<s.size(); ++i)
-    if (s[i] == from)
+  for (char & i : s)
+    if (i == from)
     {
       c++;
-      s[i] = to;
+      i = to;
     }
     return c;
 }

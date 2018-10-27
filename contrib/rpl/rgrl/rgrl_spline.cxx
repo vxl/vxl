@@ -50,8 +50,8 @@ rgrl_spline::
 set_control_points( vnl_vector<double> const& c )
 {
   unsigned n = 1;
-  for (unsigned i=0; i < m_.size(); ++i)
-    n *= (m_[i]+3);
+  for (unsigned int i : m_)
+    n *= (i+3);
   assert ( c.size() == n );
   c_ = c;
 }

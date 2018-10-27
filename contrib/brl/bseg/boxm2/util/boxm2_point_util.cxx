@@ -43,9 +43,9 @@ bool boxm2_point_util::fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > 
   }
   vgl_fit_plane_3d<double> fit_plane_inliers;
 
-  for (unsigned i=0;i<best_inliers.size();++i)
+  for (int best_inlier : best_inliers)
   {
-    fit_plane_inliers.add_point(points[best_inliers[i]]);
+    fit_plane_inliers.add_point(points[best_inlier]);
   }
   std::cout<<"Inliers "<<best_inliers.size()<<std::endl;
   if (fit_plane_inliers.fit(23.0, &std::cerr))
@@ -61,9 +61,9 @@ bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs
                                         std::vector<vpgl_perspective_camera<double> > & cams)
 {
   std::vector<vgl_homg_point_3d<double> > points;
-  for (unsigned i=0;i<corrs.size();++i)
+  for (auto & corr : corrs)
   {
-    vgl_homg_point_3d<double> homg_world_pt(corrs[i]->world_pt());
+    vgl_homg_point_3d<double> homg_world_pt(corr->world_pt());
     points.push_back(homg_world_pt);
   }
 
@@ -91,24 +91,24 @@ bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs
   vgl_rotation_3d<double> rot_scene(plane.normal(),vgl_vector_3d<double>(0,0,1));
 
   double sumx=0,sumy=0,sumz=0;
-  for (unsigned i=0;i<corrs.size();++i)
+  for (auto & corr : corrs)
   {
-    vgl_homg_point_3d<double> p(corrs[i]->world_pt());
+    vgl_homg_point_3d<double> p(corr->world_pt());
     vgl_homg_point_3d<double> pnew=rot_scene*p;
     if (!pnew.ideal())
     {
       vgl_point_3d<double> pnew_nonhomg(pnew.x()/pnew.w(),pnew.y()/pnew.w(),pnew.z()/pnew.w());
       sumx+=pnew_nonhomg.x();sumy+=pnew_nonhomg.y();sumz+=pnew_nonhomg.z();
-      corrs[i]->set_world_pt(pnew_nonhomg);
+      corr->set_world_pt(pnew_nonhomg);
     }
   }
   vgl_point_3d<double> center(sumx/corrs.size(),sumy/corrs.size(),sumz/corrs.size());
   vnl_vector_fixed<double,3> tr(center.x(),center.y(),center.z());
   std::vector<vgl_homg_point_3d<double> > xformed_points;
-  for (unsigned i=0;i<corrs.size();++i)
+  for (auto & corr : corrs)
   {
-    vgl_point_3d<double> p(corrs[i]->world_pt());
-    corrs[i]->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
+    vgl_point_3d<double> p(corr->world_pt());
+    corr->set_world_pt(vgl_point_3d<double>(p.x()-center.x(),p.y()-center.y(),p.z()-center.z()));
     xformed_points.emplace_back(p.x()-center.x(),p.y()-center.y(),p.z()-center.z());
   }
   std::vector<vpgl_perspective_camera<double> > new_cams;
@@ -133,14 +133,14 @@ bool boxm2_point_util::axis_align_scene(std::vector<bwm_video_corr_sptr> & corrs
   {
     vnl_quaternion<double> q(vnl_math::pi,0,0);
     vgl_rotation_3d<double> rotx_pi(q);
-    for (unsigned i=0;i<corrs.size();++i)
+    for (auto & corr : corrs)
     {
-      vgl_homg_point_3d<double> p(corrs[i]->world_pt());
+      vgl_homg_point_3d<double> p(corr->world_pt());
       vgl_homg_point_3d<double> pnew=rotx_pi*p;
       if (!pnew.ideal())
       {
         vgl_point_3d<double> pnew_nonhomg(pnew.x()/pnew.w(),pnew.y()/pnew.w(),pnew.z()/pnew.w());
-        corrs[i]->set_world_pt(pnew_nonhomg);
+        corr->set_world_pt(pnew_nonhomg);
       }
     }
     for (unsigned i=0;i<cams.size();++i)
@@ -203,9 +203,8 @@ void boxm2_point_util::calc_projection_error(std::vector<vpgl_perspective_camera
 {
   double err=0;
   double cnt=0;
-  for (unsigned i=0;i<corrs.size();++i)
+  for (auto corr : corrs)
   {
-    bwm_video_corr_sptr corr = corrs[i];
     vgl_homg_point_3d<double> wpt(corr->world_pt());
 
     //grab number of views that see this point

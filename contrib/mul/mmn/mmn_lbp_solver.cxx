@@ -55,9 +55,9 @@ void mmn_lbp_solver::set_arcs(unsigned num_nodes,const std::vector<mmn_arc>& arc
     arcs_ = arcs;
     //Verify consistency
     unsigned max_node=0;
-    for (unsigned i=0; i<arcs.size();++i)
+    for (auto arc : arcs)
     {
-        max_node=std::max(max_node,arcs[i].max_v());
+        max_node=std::max(max_node,arc.max_v());
     }
     if (nnodes_ != max_node+1)
     {
@@ -203,9 +203,9 @@ double mmn_lbp_solver::operator()(const std::vector<vnl_vector<double> >& node_c
     for (unsigned inode=0; inode<nnodes_;++inode)
     {
         renormalise_log(belief_[inode]);
-        for (unsigned i=0; i<belief_[inode].size();i++)
+        for (double & i : belief_[inode])
         {
-            belief_[inode][i]=std::exp(belief_[inode][i]);
+            i=std::exp(i);
         }
     }
 

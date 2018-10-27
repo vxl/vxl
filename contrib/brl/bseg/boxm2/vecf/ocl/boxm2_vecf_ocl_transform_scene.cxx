@@ -31,8 +31,8 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 
     std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false;
-    for (unsigned int i=0; i<apps.size(); ++i) {
-      boxm2_data_type app_type = boxm2_data_info::data_type(apps[i]);
+    for (const auto & app : apps) {
+      boxm2_data_type app_type = boxm2_data_info::data_type(app);
         if ( app_type == BOXM2_MOG3_GREY )
         {
             app_type_ = BOXM2_MOG3_GREY;
@@ -52,8 +52,8 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
     }
 
   color_app_type_id_ = "";
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_) )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_) )
     {
       color_app_type_id_ = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_app_id_);
       std::cout<<"found color data type "<<color_app_type_id_<< " in source scene"<<std::endl;

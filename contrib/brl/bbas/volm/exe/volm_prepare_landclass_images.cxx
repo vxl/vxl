@@ -56,16 +56,16 @@ int main(int argc,  char** argv)
   std::vector<std::pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> > nlcd_imgs;
   std::vector<volm_img_info> nlcd_img_infos;
   volm_io_tools::load_nlcd_imgs(nlcd_folder(), nlcd_img_infos);
-  for (unsigned i = 0; i < nlcd_img_infos.size(); i++) {
-    if (vgl_area(vgl_intersection(lidar_img_info.bbox, nlcd_img_infos[i].bbox)) > 0) {
+  for (auto & nlcd_img_info : nlcd_img_infos) {
+    if (vgl_area(vgl_intersection(lidar_img_info.bbox, nlcd_img_info.bbox)) > 0) {
 
-      if (nlcd_img_infos[i].img_r->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
+      if (nlcd_img_info.img_r->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
         std::cout << "NLCD Input image pixel format is not VIL_PIXEL_FORMAT_BYTE!\n";
         return -1;
       }
-      vil_image_view<vxl_byte> img(nlcd_img_infos[i].img_r);
+      vil_image_view<vxl_byte> img(nlcd_img_info.img_r);
 
-      std::pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_infos[i].cam);
+      std::pair<vil_image_view<vxl_byte>, vpgl_geo_camera*> pair(img, nlcd_img_info.cam);
       nlcd_imgs.push_back(pair);
     }
   }
@@ -120,13 +120,13 @@ int main(int argc,  char** argv)
       // find pixel in images
       unsigned char label = volm_label_table::INVALID;
       bool nlcd_found = false;
-      for (unsigned k = 0; k < nlcd_imgs.size(); k++) {
+      for (auto & nlcd_img : nlcd_imgs) {
         double u, v;
-        nlcd_imgs[k].second->global_to_img(lon, lat, 0, u, v);
+        nlcd_img.second->global_to_img(lon, lat, 0, u, v);
         unsigned uu = (unsigned)std::floor(u + 0.5);
         unsigned vv = (unsigned)std::floor(v + 0.5);
-        if (uu > 0 && vv > 0 && uu < nlcd_imgs[k].first.ni() && vv < nlcd_imgs[k].first.nj()) {
-          label = (nlcd_imgs[k].first)(uu, vv);
+        if (uu > 0 && vv > 0 && uu < nlcd_img.first.ni() && vv < nlcd_img.first.nj()) {
+          label = (nlcd_img.first)(uu, vv);
           break;
         }
       }
@@ -158,11 +158,11 @@ int main(int argc,  char** argv)
 
   // mark the forts
   double fort_rad = 500.0; // forts have radius about this much around ground truth location
-  for (unsigned kk = 0; kk < objects.size(); kk++) {
-    if (objects[kk].second == volm_label_table::FORT) {
-      if (lidar_img_info.bbox.contains(objects[kk].first)) { // the scene contains this bbox
+  for (auto & object : objects) {
+    if (object.second == volm_label_table::FORT) {
+      if (lidar_img_info.bbox.contains(object.first)) { // the scene contains this bbox
         double lu, lv;
-        lidar_img_info.cam->global_to_img(-(objects[kk].first.x()), objects[kk].first.y(), 0.0, lu, lv); // WARNING: W is hard coded in vpgl_geo_camera so use -lon !!!!!
+        lidar_img_info.cam->global_to_img(-(object.first.x()), object.first.y(), 0.0, lu, lv); // WARNING: W is hard coded in vpgl_geo_camera so use -lon !!!!!
         int i = (int)std::floor(lu+0.5);
         int j = (int)std::floor(lv+0.5);
         for (int ii = i - fort_rad; ii < i + fort_rad; ii++)
@@ -267,9 +267,9 @@ int main(int argc,  char** argv)
     //vil_rgb<vxl_byte> pixel_color = vil_rgb<vxl_byte>((unsigned char)(255*rng.drand32()), (unsigned char)(255*rng.drand32()), (unsigned char)(255*rng.drand32()));
 
      // check if this is one of the sme objects
-    for (unsigned kk = 0; kk < objects.size(); kk++) {
-      if (polys[ii].first.contains(objects[kk].first.x(), objects[kk].first.y())) {
-        label = objects[kk].second;
+    for (auto & object : objects) {
+      if (polys[ii].first.contains(object.first.x(), object.first.y())) {
+        label = object.second;
         pixel_id = volm_label_table::land_id[label].id_;
         pixel_color = volm_label_table::land_id[label].color_;
         break;

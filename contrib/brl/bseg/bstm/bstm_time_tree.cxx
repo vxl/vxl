@@ -285,8 +285,8 @@ std::vector<int> bstm_time_tree::get_leaf_bits(int rootBit) const {
 int bstm_time_tree::max_depth(int rootBit) const {
   int max_index = 0;
   std::vector<int> leaves = get_leaf_bits(rootBit);
-  for (unsigned int i = 0; i < leaves.size(); ++i)
-    max_index = std::max(max_index, leaves[i]);
+  for (int leave : leaves)
+    max_index = std::max(max_index, leave);
   return depth_at(max_index);
 }
 
@@ -295,9 +295,9 @@ std::vector<int> bstm_time_tree::max_depth_leaves() const {
   int max_depth = this->max_depth(0);
   std::vector<int> leaves = get_leaf_bits(0);
   std::vector<int> selected_leaves;
-  for (unsigned int i = 0; i < leaves.size(); ++i)
-    if (depth_at(leaves[i]) == max_depth)
-      selected_leaves.push_back(leaves[i]);
+  for (int leave : leaves)
+    if (depth_at(leave) == max_depth)
+      selected_leaves.push_back(leave);
   return selected_leaves;
 }
 

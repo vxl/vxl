@@ -49,8 +49,8 @@ std::vector<unsigned> m23d_select_basis_views(const vnl_matrix<double>& P2D,
   std::sort(best_s.begin(),best_s.end());
   std::cout<<"Quality of selected basis: "<<best_v<<std::endl
           <<"Selected basis: [ ";
-  for (unsigned i=0;i<best_s.size();++i)
-    std::cout<<best_s[i]<<' ';
+  for (unsigned int best_ : best_s)
+    std::cout<<best_<<' ';
   std::cout<<']'<<std::endl;
 
   return best_s;

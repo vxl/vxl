@@ -54,18 +54,18 @@ void volm_satellite_resources::add_resource(std::string name)
   if (eliminate_same_) {
     // first check if we already have the exact same image, (unfortunately there are resources with different name but taken at exactly same time, so same image)
     // we define images are same if they have time less than 2 minutes, close enough extent, same name and same band number
-    for (unsigned i = 0; i < resources_.size(); i++) {
-      if (resources_[i].meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
-          resources_[i].meta_->band_.compare(res.meta_->band_) == 0 &&
-          this->same_time(resources_[i], res) &&
-          this->same_view(resources_[i], res) &&
-          this->same_extent(resources_[i], res))
+    for (auto & resource : resources_) {
+      if (resource.meta_->satellite_name_.compare(res.meta_->satellite_name_) == 0 &&
+          resource.meta_->band_.compare(res.meta_->band_) == 0 &&
+          this->same_time(resource, res) &&
+          this->same_view(resource, res) &&
+          this->same_extent(resource, res))
       {
           std::cout << "!!!!!!!!!!!!! cannot add: " << res.name_ << " with time: "; res.meta_->print_time();
           std::cout << " view: " << res.meta_->view_azimuth_ << ", " << res.meta_->view_elevation_;
-          std::cout << "already exists: \n"   << resources_[i].name_ << " with time: "; resources_[i].meta_->print_time();
-          std::cout << " view: " << resources_[i].meta_->view_azimuth_ << ", " << resources_[i].meta_->view_elevation_;
-          std::cout << " band of resources: " <<  resources_[i].meta_->band_ << " band trying to add: " << res.meta_->band_ << std::flush << std::endl;
+          std::cout << "already exists: \n"   << resource.name_ << " with time: "; resource.meta_->print_time();
+          std::cout << " view: " << resource.meta_->view_azimuth_ << ", " << resource.meta_->view_elevation_;
+          std::cout << " band of resources: " <<  resource.meta_->band_ << " band trying to add: " << res.meta_->band_ << std::flush << std::endl;
           return;
       }
     }
@@ -89,8 +89,8 @@ void volm_satellite_resources::add_path(std::string path)
     return;
   std::cout << "found " << directories.size() << " directories!\n";
   unsigned start = resources_.size();
-  for (unsigned i = 0; i < directories.size(); i++) {
-    std::string glob = directories[i] + "/*.NTF";
+  for (const auto & directorie : directories) {
+    std::string glob = directorie + "/*.NTF";
     vul_file_iterator file_it(glob.c_str());
     while (file_it) {
       std::string name(file_it());
@@ -98,7 +98,7 @@ void volm_satellite_resources::add_path(std::string path)
       this->add_resource(name);
       ++file_it;
     }
-    glob = directories[i] + "/*.ntf";
+    glob = directorie + "/*.ntf";
     vul_file_iterator file_it2(glob.c_str());
     while (file_it2) {
       std::string name(file_it2());
@@ -129,8 +129,8 @@ void volm_satellite_resources::add_resources(unsigned start, unsigned end) {
     satellite_footprint.add(vgl_point_2d<double>(resources_[i].meta_->lower_left_.x(), resources_[i].meta_->lower_left_.y()));
     satellite_footprint.add(vgl_point_2d<double>(resources_[i].meta_->upper_right_.x(), resources_[i].meta_->upper_right_.y()));
     volm_geo_index2::get_leaves(root_, leaves, satellite_footprint);
-    for (unsigned j = 0; j < leaves.size(); j++) {
-      volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leaves[j].ptr());
+    for (auto & leave : leaves) {
+      volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(i);  // push this satellite image to this leave that intersects its footprint
     }
   }
@@ -143,11 +143,10 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   std::vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root_, leaves, area);
   std::vector<unsigned> temp_ids_init;
-  for (unsigned i = 0; i < leaves.size(); i++) {
-    volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leaves[i].ptr());
+  for (auto & leave : leaves) {
+    volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
     // check which images overlap with the given bbox
-    for (unsigned k = 0; k < leaf_ptr->contents_.size(); k++) {
-      unsigned res_id = leaf_ptr->contents_[k];
+    for (unsigned int res_id : leaf_ptr->contents_) {
       // CAUTION: x is lat and y is lon in nitf_camera but we want x to be lon and y to be lat, use all the corners of satellite image by inverting x-y to create the bounding box
       vgl_box_2d<double> sat_box;
       sat_box.add(vgl_point_2d<double>(resources_[res_id].meta_->lower_left_.x(), resources_[res_id].meta_->lower_left_.y()));
@@ -159,40 +158,40 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
 
   // eliminate the ones which does not satisfy the GSD (ground sampling distance) threshold
   std::vector<unsigned> temp_ids;
-  for (unsigned i = 0; i < temp_ids_init.size(); i++) {
-    if (resources_[temp_ids_init[i]].meta_->gsd_ <= gsd_thres)
-      temp_ids.push_back(temp_ids_init[i]);
+  for (unsigned int i : temp_ids_init) {
+    if (resources_[i].meta_->gsd_ <= gsd_thres)
+      temp_ids.push_back(i);
   }
 
   // order the resources in the order of GeoEye1, WV2, WV1, QB/others
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("GeoEye-1") == 0)
-      ids.push_back(temp_ids[i]);
+  for (unsigned int temp_id : temp_ids) {
+    if (resources_[temp_id].meta_->satellite_name_.compare("GeoEye-1") == 0)
+      ids.push_back(temp_id);
   }
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WorldView") == 0)
-      ids.push_back(temp_ids[i]);
+  for (unsigned int temp_id : temp_ids) {
+    if (resources_[temp_id].meta_->satellite_name_.compare("WorldView") == 0)
+      ids.push_back(temp_id);
   }
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare("WorldView2") == 0)
-      ids.push_back(temp_ids[i]);
+  for (unsigned int temp_id : temp_ids) {
+    if (resources_[temp_id].meta_->satellite_name_.compare("WorldView2") == 0)
+      ids.push_back(temp_id);
   }
 
   std::vector<unsigned> temp_ids2;
   // find the ones that are not already in ids
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
+  for (unsigned int temp_id : temp_ids) {
     bool contains = false;
-    for (unsigned j = 0; j < ids.size(); j++) {
-      if (temp_ids[i] == ids[j]) {
+    for (unsigned int id : ids) {
+      if (temp_id == id) {
         contains = true;
         break;
       }
     }
     if (!contains)
-      temp_ids2.push_back(temp_ids[i]);
+      temp_ids2.push_back(temp_id);
   }
-  for (unsigned i = 0; i < temp_ids2.size(); i++)
-    ids.push_back(temp_ids2[i]);
+  for (unsigned int i : temp_ids2)
+    ids.push_back(i);
 
 
 }
@@ -223,8 +222,8 @@ bool volm_satellite_resources::query_print_to_file(double lower_left_lon, double
     std::cerr << "In volm_satellite_resources::query_print_to_file() -- cannot open file: " << out_file << std::endl;
     return false;
   }
-  for (unsigned i = 0; i < ids.size(); i++)
-    ofs << resources_[ids[i]].full_path_ << '\n';
+  for (unsigned int id : ids)
+    ofs << resources_[id].full_path_ << '\n';
   ofs.close();
   return true;
 }
@@ -250,13 +249,13 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   possible_seeds["WV01"] = tmp;
   possible_seeds["WV02"] = tmp;
   possible_seeds["other"] = tmp;
-  for (unsigned i = 0; i < ids.size(); i++) {
-    if (resources_[ids[i]].meta_->cloud_coverage_percentage_ < 1) {
-      std::map<std::string, std::vector<unsigned> >::iterator iter = possible_seeds.find(resources_[ids[i]].meta_->satellite_name_);
+  for (unsigned int id : ids) {
+    if (resources_[id].meta_->cloud_coverage_percentage_ < 1) {
+      std::map<std::string, std::vector<unsigned> >::iterator iter = possible_seeds.find(resources_[id].meta_->satellite_name_);
       if (iter != possible_seeds.end())
-        iter->second.push_back(ids[i]);
+        iter->second.push_back(id);
       else
-        possible_seeds["other"].push_back(ids[i]);
+        possible_seeds["other"].push_back(id);
     }
   }
 #if 0
@@ -294,8 +293,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   for (unsigned i = 0; i < possible_seeds["GeoEye-1"].size(); i++) {
     // first check if there is a satellite with the same time
     bool exists = false;
-    for (unsigned k = 0; k < selected_names.size(); k++) {
-      if (resources_[possible_seeds["GeoEye-1"][i]].meta_->same_time(*selected_names[k].ptr())) {
+    for (auto & selected_name : selected_names) {
+      if (resources_[possible_seeds["GeoEye-1"][i]].meta_->same_time(*selected_name.ptr())) {
         exists = true;
         break;
       }
@@ -318,8 +317,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 
      // first check if there is a satellite with the same time
      bool exists = false;
-     for (unsigned k = 0; k < selected_names.size(); k++) {
-       if (resources_[possible_seeds["WV02"][i]].meta_->same_time(*selected_names[k].ptr())) {
+     for (auto & selected_name : selected_names) {
+       if (resources_[possible_seeds["WV02"][i]].meta_->same_time(*selected_name.ptr())) {
          exists = true;
          break;
        }
@@ -342,8 +341,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 
      // first check if there is a satellite with the same time
      bool exists = false;
-     for (unsigned k = 0; k < selected_names.size(); k++) {
-       if (resources_[possible_seeds["WV01"][i]].meta_->same_time(*selected_names[k].ptr())) {
+     for (auto & selected_name : selected_names) {
+       if (resources_[possible_seeds["WV01"][i]].meta_->same_time(*selected_name.ptr())) {
          exists = true;
          break;
        }
@@ -366,8 +365,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
 
      // first check if there is a satellite with the same time
      bool exists = false;
-     for (unsigned k = 0; k < selected_names.size(); k++) {
-       if (resources_[possible_seeds["other"][i]].meta_->same_time(*selected_names[k].ptr())) {
+     for (auto & selected_name : selected_names) {
+       if (resources_[possible_seeds["other"][i]].meta_->same_time(*selected_name.ptr())) {
          exists = true;
          break;
        }
@@ -394,8 +393,8 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
     return false;
   }
 
-  for (unsigned i = 0;i < seed_paths.size(); i++)
-    ofs << seed_paths[i] << '\n';
+  for (const auto & seed_path : seed_paths)
+    ofs << seed_path << '\n';
 
   ofs.close();
   return true;
@@ -412,9 +411,9 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
 
   // prune out the ones from the wrong satellite
   std::vector<unsigned> ids2;
-  for (unsigned i = 0; i < temp_ids.size(); i++) {
-    if (resources_[temp_ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
-      ids2.push_back(temp_ids[i]);
+  for (unsigned int temp_id : temp_ids) {
+    if (resources_[temp_id].meta_->satellite_name_.compare(sat_name) == 0)
+      ids2.push_back(temp_id);
   }
 
   std::cout << "there are " << ids2.size() << " images that intersect the scene from sat: " << sat_name << "!\n";
@@ -436,9 +435,9 @@ unsigned volm_satellite_resources::query_pairs(double lower_left_lon, double low
         //ids.push_back(std::pair<unsigned, unsigned>(ids2[i], ids2[j]));
         // check if one of the images have already been pushed
         bool already_added = false;
-        for (unsigned iii = 0; iii < ids.size(); iii++) {
-          if (resources_[ids2[i]].meta_->same_time(*(resources_[ids[iii].first].meta_)) ||
-              resources_[ids2[i]].meta_->same_time(*(resources_[ids[iii].second].meta_))) {
+        for (auto & id : ids) {
+          if (resources_[ids2[i]].meta_->same_time(*(resources_[id.first].meta_)) ||
+              resources_[ids2[i]].meta_->same_time(*(resources_[id.second].meta_))) {
                 already_added = true;
                 break;
           }
@@ -466,9 +465,9 @@ bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, 
     return false;
   }
 
-  for (unsigned i = 0; i < ids.size(); i++) {
-    ofs << resources_[ids[i].first].full_path_ << '\n';
-    ofs << resources_[ids[i].second].full_path_ << "\n\n";
+  for (auto & id : ids) {
+    ofs << resources_[id.first].full_path_ << '\n';
+    ofs << resources_[id.second].full_path_ << "\n\n";
   }
 
   ofs.close();
@@ -478,9 +477,9 @@ bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, 
 //: return the full path of a satellite image given its name, if not found returns empty string
 std::pair<std::string, std::string> volm_satellite_resources::full_path(std::string name)
 {
-  for (unsigned i = 0; i < resources_.size(); i++) {
-    if (name.compare(resources_[i].name_) == 0) {
-      std::pair<std::string, std::string> p(resources_[i].full_path_, resources_[i].meta_->satellite_name_);
+  for (auto & resource : resources_) {
+    if (name.compare(resource.name_) == 0) {
+      std::pair<std::string, std::string> p(resource.full_path_, resource.meta_->satellite_name_);
       return p;
     }
   }
@@ -489,36 +488,35 @@ std::pair<std::string, std::string> volm_satellite_resources::full_path(std::str
 
 std::string volm_satellite_resources::find_pair(std::string const& name, double const& tol)
 {
-  for (unsigned i = 0; i < resources_.size(); i++) {
-    if (name.compare(resources_[i].name_) == 0) {
-      if (resources_[i].pair_.compare("") == 0) {  // not yet found
+  for (auto & resource : resources_) {
+    if (name.compare(resource.name_) == 0) {
+      if (resource.pair_.compare("") == 0) {  // not yet found
         // find all the resources that overlaps with this one
-        std::string band_str = resources_[i].meta_->band_;
+        std::string band_str = resource.meta_->band_;
         std::string other_band;
         if (band_str.compare("PAN") == 0)
           other_band = "MULTI";
         else
           other_band = "PAN";
         std::vector<unsigned> ids;
-        this->query(resources_[i].meta_->lower_left_.x(),
-                    resources_[i].meta_->lower_left_.y(),
-                    resources_[i].meta_->upper_right_.x(),
-                    resources_[i].meta_->upper_right_.y(), other_band, ids,10.0);  // pass gsd_thres very high, only interested in finding all the images
+        this->query(resource.meta_->lower_left_.x(),
+                    resource.meta_->lower_left_.y(),
+                    resource.meta_->upper_right_.x(),
+                    resource.meta_->upper_right_.y(), other_band, ids,10.0);  // pass gsd_thres very high, only interested in finding all the images
         std::cout << " there are " << ids.size() << " resources that cover the image!\n";
-        for (unsigned iii = 0; iii < ids.size(); iii++) {
-          unsigned ii = ids[iii];
-          if (resources_[i].meta_->satellite_name_.compare(resources_[ii].meta_->satellite_name_) == 0 &&  // same satellite good!
-              this->same_time(resources_[i], resources_[ii]) &&
-              this->same_view(resources_[i], resources_[ii]) &&
-              this->same_extent(resources_[i], resources_[ii], tol) )
+        for (unsigned int ii : ids) {
+          if (resource.meta_->satellite_name_.compare(resources_[ii].meta_->satellite_name_) == 0 &&  // same satellite good!
+              this->same_time(resource, resources_[ii]) &&
+              this->same_view(resource, resources_[ii]) &&
+              this->same_extent(resource, resources_[ii], tol) )
           {
-                  resources_[i].pair_ = resources_[ii].name_;
-                  resources_[ii].pair_ = resources_[i].name_;
+                  resource.pair_ = resources_[ii].name_;
+                  resources_[ii].pair_ = resource.name_;
                 return resources_[ii].name_;
           }
         }
       } else
-        return resources_[i].pair_;
+        return resource.pair_;
      break;
     }
   }
@@ -532,31 +530,26 @@ volm_satellite_resources::convert_to_global_footprints(std::vector<vgl_polygon<d
   footprints = lvcs_footprints;
 
   // rescale by GSD
-  for(std::vector<vgl_polygon<double> >::iterator it=footprints.begin();
-      it!=footprints.end(); ++it) {
-    vgl_polygon<double>& footprint = *it;
-
+  for(auto & footprint : footprints) {
     assert(footprint.num_sheets() == 1);
-    for (unsigned int p=0; p < footprint[0].size(); ++p) {
-      footprint[0][p].x() *= downsample_factor;
-      footprint[0][p].y() *= downsample_factor;
+    for (auto & p : footprint[0]) {
+      p.x() *= downsample_factor;
+      p.y() *= downsample_factor;
     }
   }
 
   // convert to global lon/lat coordinate system
-  for(std::vector<vgl_polygon<double> >::iterator it=footprints.begin(); it!=footprints.end(); ++it) {
-    vgl_polygon<double>& footprint = *it;
-
+  for(auto & footprint : footprints) {
     assert(footprint.num_sheets() == 1);
-    for (unsigned int p=0; p < footprint[0].size(); ++p) {
-      double x = footprint[0][p].x();
-      double y = footprint[0][p].y();
+    for (auto & p : footprint[0]) {
+      double x = p.x();
+      double y = p.y();
       double lon,lat,gz;
       lvcs->local_to_global(x, y, 0,
                             lvcs->get_cs_name(), // this is output global cs
                             lon, lat, gz,
                             lvcs->geo_angle_unit(), lvcs->local_length_unit());
-      footprint[0][p] = vgl_point_2d<double>(lon,lat);
+      p = vgl_point_2d<double>(lon,lat);
     }
   }
 }
@@ -571,13 +564,11 @@ volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, std:
   if(!lvcs) {
     // find the lower-left lat/lon
     double min_lon=181.0, min_lat=91.0;
-    for(std::vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); it!=footprints.end(); ++it) {
-      const vgl_polygon<double>& footprint = *it;
-
+    for(const auto & footprint : footprints) {
       assert(footprint.num_sheets() == 1);
-      for (unsigned int p=0; p < footprint[0].size(); ++p) {
-        min_lon = std::min(footprint[0][p].x(), min_lon);
-        min_lat = std::min(footprint[0][p].y(), min_lat);
+      for (auto p : footprint[0]) {
+        min_lon = std::min(p.x(), min_lon);
+        min_lat = std::min(p.y(), min_lat);
       }
     }
 
@@ -587,14 +578,12 @@ volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, std:
 
   // convert to the lvcs coordinate system
   //std::vector<vgl_polygon<double> > lvcs_footprints;
-  for(std::vector<vgl_polygon<double> >::const_iterator it=footprints.begin(); it!=footprints.end(); ++it) {
-    const vgl_polygon<double>& footprint = *it;
-
+  for(const auto & footprint : footprints) {
     vgl_polygon<double> lvcs_footprint(1);
     assert(footprint.num_sheets() == 1);
-    for (unsigned int p=0; p < footprint[0].size(); ++p) {
-      double lon = footprint[0][p].x();
-      double lat = footprint[0][p].y();
+    for (auto p : footprint[0]) {
+      double lon = p.x();
+      double lat = p.y();
       double x,y,z;
       lvcs->global_to_local(lon, lat, 0, lvcs->get_cs_name(), x, y, z, lvcs->geo_angle_unit(), lvcs->local_length_unit());
       lvcs_footprint.push_back(x,y);
@@ -603,14 +592,11 @@ volm_satellite_resources::convert_to_local_footprints(vpgl_lvcs_sptr& lvcs, std:
   }
 
   // rescale by GSD
-  for(std::vector<vgl_polygon<double> >::iterator it=lvcs_footprints.begin();
-      it!=lvcs_footprints.end(); ++it) {
-    vgl_polygon<double>& footprint = *it;
-
+  for(auto & footprint : lvcs_footprints) {
     assert(footprint.num_sheets() == 1);
-    for (unsigned int p=0; p < footprint[0].size(); ++p) {
-      footprint[0][p].x() /= downsample_factor;
-      footprint[0][p].y() /= downsample_factor;
+    for (auto & p : footprint[0]) {
+      p.x() /= downsample_factor;
+      p.y() /= downsample_factor;
     }
   }
 }
@@ -631,16 +617,13 @@ volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& h
     min_y = max_y = footprint[i][0].y();
   }
 
-  for(std::vector<vgl_polygon<double> >::const_iterator it=footprints.begin();
-      it!=footprints.end(); ++it) {
-    const vgl_polygon<double>& footprint = *it;
-
+  for(const auto & footprint : footprints) {
     assert(footprint.num_sheets() == 1);
-    for (unsigned int p=0; p < footprint[0].size(); ++p) {
-      min_x = std::min(footprint[0][p].x(), min_x);
-      min_y = std::min(footprint[0][p].y(), min_y);
-      max_x = std::max(footprint[0][p].x(), max_x);
-      max_y = std::max(footprint[0][p].y(), max_y);
+    for (auto p : footprint[0]) {
+      min_x = std::min(p.x(), min_x);
+      min_y = std::min(p.y(), min_y);
+      max_x = std::max(p.x(), max_x);
+      max_y = std::max(p.y(), max_y);
     }
   }
   std::cout << "max_x,max_y,max_x,max_y: " << min_x << "," << min_y << "," << max_x << "," << max_y << std::endl;
@@ -655,10 +638,7 @@ volm_satellite_resources::compute_footprints_heatmap(vil_image_view<unsigned>& h
   // define window as image size to prevent out-of-range in case of bad polygons
   image_window = vgl_box_2d<double>(min_x, max_x, min_y, max_y);
   vil_image_view<bool> object_mask;
-  for(std::vector<vgl_polygon<double> >::const_iterator it=footprints.begin();
-      it!=footprints.end(); ++it) {
-    const vgl_polygon<double>& footprint = *it;
-
+  for(const auto & footprint : footprints) {
     rasterize(image_window, footprint, object_mask);
     vil_math_image_sum(heatmap, object_mask, heatmap);
   }
@@ -687,8 +667,8 @@ volm_satellite_resources::query_resources(std::vector<vgl_polygon<double> >& foo
   }
   vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
   vgl_box_2d<double> bbox;
-  for (unsigned i = 0; i < poly[0].size(); i++)
-    bbox.add(poly[0][i]);
+  for (auto i : poly[0])
+    bbox.add(i);
   double lower_left_lon  = bbox.min_x();
   double lower_left_lat  = bbox.min_y();
   double upper_right_lon = bbox.max_x();
@@ -715,8 +695,8 @@ volm_satellite_resources::query_resources(std::vector<vgl_polygon<double> >& foo
   }
 
   // filter footprints
-  for(unsigned res_id=0; res_id < deduped_ids.size(); ++res_id) {
-    footprints.push_back(resources_[deduped_ids[res_id]].meta_->footprint_);
+  for(unsigned int deduped_id : deduped_ids) {
+    footprints.push_back(resources_[deduped_id].meta_->footprint_);
     //std::cout << resources_[deduped_ids[res_id]].name_ << std::endl;
   }
   std::cout << "footprints: " << footprints.size() << std::endl;
@@ -738,8 +718,8 @@ volm_satellite_resources::highly_overlapping_resources(std::vector<std::string>&
   //}
   //std::cout << std::endl;
 
-  for(unsigned res_id=0; res_id < filtered_ids.size(); ++res_id) {
-    overlapping_res.push_back(resources_[resource_ids[filtered_ids[res_id]]].full_path_);
+  for(unsigned int filtered_id : filtered_ids) {
+    overlapping_res.push_back(resources_[resource_ids[filtered_id]].full_path_);
   }
 }
 
@@ -857,9 +837,7 @@ volm_satellite_resources::highly_overlapping_resources(std::vector<unsigned>& ov
   vil_math_sum(best_region_mask_area, best_region_mask, 0);
 
   std::vector<double> covered_areas;
-  for(unsigned i=0; i < lvcs_footprints.size(); ++i) {
-    vgl_polygon<double>& footprint = lvcs_footprints[i];
-
+  for(auto & footprint : lvcs_footprints) {
     vil_image_view<bool> mask;
     rasterize(lvcs_window, footprint, mask);
 
@@ -1113,8 +1091,8 @@ volm_satellite_resources::highly_intersecting_resources(std::vector<std::string>
   //}
   //std::cout << std::endl;
 
-  for(unsigned res_id=0; res_id < filtered_ids.size(); ++res_id) {
-    overlapping_res.push_back(resources_[resource_ids[filtered_ids[res_id]]].full_path_);
+  for(unsigned int filtered_id : filtered_ids) {
+    overlapping_res.push_back(resources_[resource_ids[filtered_id]].full_path_);
   }
 }
 
@@ -1274,8 +1252,8 @@ void volm_satellite_resources::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, bbox_.max_x());
   vsl_b_write(os, bbox_.max_y());
   vsl_b_write(os, resources_.size());
-  for (unsigned i = 0; i < resources_.size(); i++) {
-    resources_[i].b_write(os);
+  for (const auto & resource : resources_) {
+    resource.b_write(os);
   }
 }
 

@@ -76,10 +76,10 @@ bool vil_blob_detection_process(bprb_func_process& pro)
       std::size_t sizecount= vil_area(*it);
       if (sizecount>min_size && sizecount<max_size) {
         vil_rgb<vxl_byte> random_color = vil_rgb<vxl_byte>((char)rng.lrand32(0,255), (char)rng.lrand32(0,255), (char)rng.lrand32(0,255));
-        for (vil_blob_region::const_iterator chords_it=it->begin(), chords_end=it->end(); chords_it!=chords_end; ++chords_it)
-          for (unsigned i=chords_it->ilo; i<=chords_it->ihi; i++) {
-            view_blobs(i,chords_it->j)=true;
-            (*colored_blobs)(i,chords_it->j) = random_color;
+        for (auto chords_it : *it)
+          for (unsigned i=chords_it.ilo; i<=chords_it.ihi; i++) {
+            view_blobs(i,chords_it.j)=true;
+            (*colored_blobs)(i,chords_it.j) = random_color;
           }
         cnt_blobs++;
       }

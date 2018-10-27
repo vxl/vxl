@@ -553,8 +553,7 @@ rsdl_kd_tree::update_closest( const rsdl_point& query_point,
            << std::endl;
 #endif
 
-  for ( unsigned int i=0; i < p->point_indices_.size(); ++i ) {  // check each id
-    int id = p->point_indices_[i];
+  for (int id : p->point_indices_) {  // check each id
     double sq_dist = rsdl_dist_sq( query_point, points_[ id ] );
 #ifdef DEBUG
     std::cout << "  id = " << id << ", point = " << points_[ id ]
@@ -648,8 +647,8 @@ rsdl_kd_tree :: points_in_bounding_box( const rsdl_bounding_box& box,
   points_in_box.clear();
   indices_in_box.clear();
   this -> points_in_bounding_box( root_, box, indices_in_box );
-  for ( unsigned int i=0; i<indices_in_box.size(); ++i )
-    points_in_box.push_back( this -> points_[ indices_in_box[i] ] );
+  for (int i : indices_in_box)
+    points_in_box.push_back( this -> points_[ i ] );
 }
 
 
@@ -706,8 +705,7 @@ rsdl_kd_tree :: points_in_radius( const rsdl_point& query_point,
 
   //  Gather the points from the bounding box that are within the radius.
   double sq_radius = radius*radius;
-  for ( unsigned int i=0; i < indices_in_box.size(); ++i ) {
-    int index = indices_in_box[ i ];
+  for (int index : indices_in_box) {
     if ( rsdl_dist_sq( query_point, this -> points_[ index ] ) < sq_radius ) {
       points_within_radius.push_back( this -> points_[ index ] );
       indices_within_radius.push_back( index );
@@ -721,8 +719,7 @@ rsdl_kd_tree :: points_in_bounding_box( rsdl_kd_node* current,
                                         std::vector< int >& indices_in_box )
 {
   if ( ! current -> left_ ) {
-    for ( unsigned int i=0; i < current -> point_indices_ . size(); ++i ) {
-      int index = current -> point_indices_[ i ];
+    for (int index : current -> point_indices_) {
       if ( rsdl_dist_point_in_box( this -> points_[ index ], box ) )
         indices_in_box.push_back( index );
     }
@@ -748,8 +745,8 @@ rsdl_kd_tree :: report_all_in_subtree( rsdl_kd_node* current,
     this -> report_all_in_subtree( current -> right_, indices );
   }
   else {
-    for ( unsigned int i=0; i < current -> point_indices_ . size(); ++ i ) {
-      indices.push_back( current -> point_indices_[ i ] );
+    for (int point_indice : current -> point_indices_) {
+      indices.push_back( point_indice );
     }
   }
 }

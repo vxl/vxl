@@ -70,8 +70,8 @@ class fg_pair_density_est_amoeba : public vnl_cost_function
     double out = 0;
     brec_fg_pair_density fd;
     fd.set_sigma(x[0]);
-    for (unsigned i = 0; i < pairs_.size(); i++) {
-      out += fd.negative_log(pairs_[i].first, pairs_[i].second);
+    for (auto & pair : pairs_) {
+      out += fd.negative_log(pair.first, pair.second);
     }
 
     return out;

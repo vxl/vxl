@@ -93,8 +93,8 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
 
   //build the two scenes
   std::vector<vpgl_perspective_camera<double> > cs;
-  for (std::map<std::string, vpgl_perspective_camera<double>* >::iterator iter=cams.begin(); iter!=cams.end(); ++iter)
-    cs.push_back(* iter->second);
+  for (auto & cam : cams)
+    cs.push_back(* cam.second);
 
   boxm2_util_cams_and_box_to_scene(cs, box, *uscene);
   uscene->set_xml_path(scene_dir+"/uscene.xml");

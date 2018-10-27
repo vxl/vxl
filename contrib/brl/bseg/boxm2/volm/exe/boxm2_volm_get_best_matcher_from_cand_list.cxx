@@ -211,8 +211,8 @@ int main(int argc, char** argv)
         tile_ids.push_back(t_idx);  zone_ids.push_back(zone_id(t_idx));
       }
     std::cout << " \t region " << r_idx << " intersects with tile: ";
-    for (unsigned ii = 0; ii < tile_ids.size(); ii++)
-      std::cout << tile_ids[ii] << ' ';
+    for (unsigned int tile_id : tile_ids)
+      std::cout << tile_id << ' ';
     std::cout << std::endl;
     // get the best camera and location for current region
     unsigned best_cam_id;

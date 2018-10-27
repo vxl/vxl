@@ -66,22 +66,20 @@ face_list* vifa_coll_lines::get_contributor_faces(void)
 {
   face_list*  ret = new face_list;
 
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    face_list faces; (*e)->faces(faces);
+    face_list faces; contributor->faces(faces);
 
-    for (face_iterator f_it = faces.begin(); f_it != faces.end(); ++f_it)
+    for (auto nbr_face : faces)
     {
-      vtol_face_sptr  nbr_face = *f_it;
       bool      add_me = true;
 
       // Make sure the contributor face is 2-D
       if (nbr_face->cast_to_face_2d())
       {
-        for (face_iterator f = ret->begin(); f != ret->end(); ++f)
+        for (auto & f : *ret)
         {
-          if (**f == *nbr_face)
+          if (*f == *nbr_face)
           {
             add_me = false;
             break;
@@ -152,11 +150,10 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
   double  min_x=0.0, min_y=0.0, min_d;
   double  max_x=0.0, max_y=0.0, max_d= -1.0;
 
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
-    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
+    vsol_point_2d_sptr v1 = contributor->curve()->p0();
+    vsol_point_2d_sptr v2 = contributor->curve()->p1();
 
     for (int i = 0; i < 2; i++)
     {
@@ -182,11 +179,10 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
   //std::cout << "  -> span: p1 is " << max_x << " , " << max_y << " ( " << max_d << " )\n";
 
   min_d = max_d;
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
-    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
+    vsol_point_2d_sptr v1 = contributor->curve()->p0();
+    vsol_point_2d_sptr v2 = contributor->curve()->p1();
 
     for (int i = 0; i < 2; i++)
     {
@@ -225,10 +221,9 @@ double vifa_coll_lines::spanning_length(vgl_point_2d<double>&  p1,
 double vifa_coll_lines::support_length(void)
 {
   double  len = 0.0;
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    len += this->get_projected_length(**e);
+    len += this->get_projected_length(*contributor);
   }
 
   return len;
@@ -236,10 +231,9 @@ double vifa_coll_lines::support_length(void)
 
 bool vifa_coll_lines::contains(const vtol_edge&  edgeref)
 {
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    if (**e == edgeref)
+    if (*contributor == edgeref)
     {
       return true;
     }
@@ -331,11 +325,10 @@ void vifa_coll_lines::fit_line(void)
   double              B;
   double              C;
 
-  for (edge_2d_iterator e = contributors_.begin();
-       e != contributors_.end(); ++e)
+  for (auto & contributor : contributors_)
   {
-    vsol_point_2d_sptr v1 = (*e)->curve()->p0();
-    vsol_point_2d_sptr v2 = (*e)->curve()->p1();
+    vsol_point_2d_sptr v1 = contributor->curve()->p0();
+    vsol_point_2d_sptr v2 = contributor->curve()->p1();
 
     x.push_back(v1->x());
     x.push_back(v2->x());

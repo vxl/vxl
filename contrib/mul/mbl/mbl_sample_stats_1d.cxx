@@ -14,9 +14,9 @@
 mbl_sample_stats_1d::mbl_sample_stats_1d(const std::vector<double> &samples)
 {
   clear();
-  for (unsigned i=0, n=samples.size(); i<n; ++i)
+  for (double sample : samples)
   {
-    add_sample(samples[i]);
+    add_sample(sample);
   }
 }
 
@@ -25,9 +25,9 @@ mbl_sample_stats_1d::mbl_sample_stats_1d(const std::vector<double> &samples)
 mbl_sample_stats_1d::mbl_sample_stats_1d(const vnl_vector<double> &samples)
 {
   clear();
-  for (unsigned i=0, n=samples.size(); i<n; ++i)
+  for (double sample : samples)
   {
-    add_sample(samples[i]);
+    add_sample(sample);
   }
 }
 
@@ -79,8 +79,8 @@ double mbl_sample_stats_1d::mean() const
 double mbl_sample_stats_1d::mean_of_absolutes() const
 {
   double abs_sum = 0;
-  for (unsigned i=0, n=samples_.size(); i<n; ++i)
-    abs_sum+=std::fabs(samples_[i]);
+  for (double sample : samples_)
+    abs_sum+=std::fabs(sample);
   return abs_sum/samples_.size();
 }
 
@@ -250,9 +250,9 @@ double mbl_sample_stats_1d::skewness() const
     double s=sd();
     double m=mean();
 
-    for (unsigned i=0, n=samples_.size(); i<n; ++i)
+    for (double sample : samples_)
     {
-      double tmp=samples_[i]-m;
+      double tmp=sample-m;
       skew += (tmp*tmp*tmp) ;
     }
 
@@ -279,9 +279,9 @@ double mbl_sample_stats_1d::kurtosis() const
     double s=sd();
     double m=mean();
 
-    for (unsigned i=0, n=samples_.size(); i<n; ++i)
+    for (double sample : samples_)
     {
-      double tmp=samples_[i]-m;
+      double tmp=sample-m;
       kurt += (tmp*tmp*tmp*tmp) ;
     }
 
@@ -334,9 +334,9 @@ double mbl_sample_stats_1d::rms() const
 mbl_sample_stats_1d& mbl_sample_stats_1d::operator+=(const mbl_sample_stats_1d& s1)
 {
   // add new samples
-  for (unsigned i=0;i<s1.samples().size();++i)
+  for (double i : s1.samples())
   {
-    add_sample(s1.samples()[i]);
+    add_sample(i);
   }
 
   return *this ;

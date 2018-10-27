@@ -222,9 +222,9 @@ std::vector<T> lv;
   //determine the rank of Q
   T rank_tol = T(RANK_FACTOR)*tol;
   std::vector<T> eig_vals;
-  for(size_t i =0; i<4; ++i){
-    eig_vals.push_back(fabs(l[i]));
-        lv.push_back(l[i]);
+  for(auto & i : l){
+    eig_vals.push_back(fabs(i));
+        lv.push_back(i);
 }
 
   std::sort(eig_vals.begin(), eig_vals.end(), std::greater<T>());
@@ -261,9 +261,9 @@ std::vector<T> lv;
   std::vector<T> lvu;
   eigen<T, 3>( mu, lu, vcu);
   std::vector<T> upper_eig_vals;
-  for(size_t i =0; i<3; ++i){
-   upper_eig_vals.push_back(fabs(lu[i]));
-   lvu.push_back(lu[i]);
+  for(auto & i : lu){
+   upper_eig_vals.push_back(fabs(i));
+   lvu.push_back(i);
  }
   std::sort(upper_eig_vals.begin(), upper_eig_vals.end(), std::greater<T>());
   largest_eig_val = upper_eig_vals[0];
@@ -386,8 +386,8 @@ void vgl_quadric_3d<T>::upper_3x3_eigensystem(std::vector<T>& eigenvalues, std::
       mu[r][c] = Q[r][c];
 
   eigen<T, 3>( mu, lu, vcu);
-  for(size_t i =0; i<3; ++i){
-    eigenvalues.push_back(lu[i]);
+  for(auto & i : lu){
+    eigenvalues.push_back(i);
   }
   eigenvectors.resize(3, std::vector<T>(3, T(0)));
   for(size_t r = 0; r<3; ++r)

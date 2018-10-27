@@ -65,9 +65,9 @@ static void test_pipeline(int argc, char** argv)
 
     std::cout<<"\n\n\n------------------------\n";
 
-    for (unsigned int i = 0; i < cameras.size(); i++) {
+    for (const auto & camera : cameras) {
         std::cout<<"=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n"
-                << cameras[i]
+                << camera
                 <<"\n=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-"<<std::endl;
     }
 }

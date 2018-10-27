@@ -2887,9 +2887,9 @@ chip(std::vector<vil_image_resource_sptr> const& images,
      brip_roi_sptr const& roi,
      std::vector<vil_image_resource_sptr>& chips)
 {
-  for (std::vector<vil_image_resource_sptr>::const_iterator iit = images.begin(); iit != images.end(); ++iit) {
+  for (const auto & image : images) {
     vil_image_resource_sptr chip;
-    if (!brip_vil_float_ops::chip(*iit, roi, chip))
+    if (!brip_vil_float_ops::chip(image, roi, chip))
       return false;
     chips.push_back(chip);
   }

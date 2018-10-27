@@ -170,20 +170,18 @@ compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
   if (!tr2.compute_from_lines(lines2))
     return false;
   std::vector<vgl_homg_point_2d<double> > tlines1, tlines2;
-  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
-       lit = lines1.begin(); lit != lines1.end(); lit++)
+  for (const auto & lit : lines1)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr1(*lit);
+    vgl_homg_line_2d<double> l = tr1(lit);
     // convert the line to a point to use the same linear code
     vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines1.push_back(p);
   }
-  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
-       lit = lines2.begin(); lit != lines2.end(); lit++)
+  for (const auto & lit : lines2)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr2(*lit);
+    vgl_homg_line_2d<double> l = tr2(lit);
     // convert the line to a point to use the same linear code
     vgl_homg_point_2d<double> p(l.a(), l.b(), l.c());
     tlines2.push_back(p);
@@ -357,18 +355,16 @@ compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
   if (!tr2.compute_from_lines(lines2))
     return false;
   std::vector<vgl_homg_line_2d<double> > tlines1, tlines2;
-  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
-       lit = lines1.begin(); lit != lines1.end(); lit++)
+  for (const auto & lit : lines1)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr1(*lit);
+    vgl_homg_line_2d<double> l = tr1(lit);
     tlines1.push_back(l);
   }
-  for (std::vector<vgl_homg_line_2d<double> >::const_iterator
-       lit = lines2.begin(); lit != lines2.end(); lit++)
+  for (const auto & lit : lines2)
   {
     // transform the lines according to the normalizing transform
-    vgl_homg_line_2d<double> l = tr2(*lit);
+    vgl_homg_line_2d<double> l = tr2(lit);
     tlines2.push_back(l);
   }
 

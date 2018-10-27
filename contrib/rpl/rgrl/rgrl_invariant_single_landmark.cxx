@@ -308,9 +308,9 @@ center()
   double xc = location_[0];
   double yc = location_[1];
 
-  for (unsigned int i = 0; i< boundary_points_.size(); i++) {
-    xc += boundary_points_[i][0];
-    yc += boundary_points_[i][1];
+  for (auto & boundary_point : boundary_points_) {
+    xc += boundary_point[0];
+    yc += boundary_point[1];
   }
 
   int size = int(boundary_points_.size() + 1);

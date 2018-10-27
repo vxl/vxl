@@ -35,15 +35,15 @@ namespace test_csp_bits
 using namespace test_csp_bits;
 void test_csp_bits::convert_to_minus_log_probs(std::vector<vnl_vector<double> >& node_cost)
 {
-    for (unsigned i=0; i<node_cost.size();++i)
+    for (auto & i : node_cost)
     {
-        double sum=std::accumulate(node_cost[i].begin(),
-                                  node_cost[i].end(),
+        double sum=std::accumulate(i.begin(),
+                                  i.end(),
                                   0.0);
-        node_cost[i]/=sum;
-        for (unsigned j=0; j<node_cost[i].size();j++)
+        i/=sum;
+        for (unsigned j=0; j<i.size();j++)
         {
-            node_cost[i][j] = -std::log(node_cost[i][j]);
+            i[j] = -std::log(i[j]);
         }
     }
 }
@@ -300,13 +300,13 @@ void test_best_xydp_line()
     //Also test using Markov alg
     std::vector<vnl_matrix<double  > > pair_costs_neg=pair_cost;
 
-    for (unsigned i=0;i<pair_costs_neg.size();++i)
+    for (auto & i : pair_costs_neg)
     {
-        for (unsigned j=0; j<pair_costs_neg[i].rows();j++)
+        for (unsigned j=0; j<i.rows();j++)
         {
-            for (unsigned k=0; k<pair_costs_neg[i].cols();k++)
+            for (unsigned k=0; k<i.cols();k++)
             {
-                pair_costs_neg[i](j,k)= -1.0*pair_costs_neg[i](j,k);
+                i(j,k)= -1.0*i(j,k);
             }
         }
     }
@@ -524,13 +524,13 @@ void test_5x5grid()
 
     std::vector<vnl_matrix<double  > > pair_costs_neg=pair_costs;
 
-    for (unsigned i=0;i<pair_costs_neg.size();++i)
+    for (auto & i : pair_costs_neg)
     {
-        for (unsigned j=0; j<pair_costs_neg[i].rows();j++)
+        for (unsigned j=0; j<i.rows();j++)
         {
-            for (unsigned k=0; k<pair_costs_neg[i].cols();k++)
+            for (unsigned k=0; k<i.cols();k++)
             {
-                pair_costs_neg[i](j,k)= -1.0*pair_costs_neg[i](j,k);
+                i(j,k)= -1.0*i(j,k);
             }
         }
     }

@@ -24,15 +24,15 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vecto
   normals.emplace_back(0,0,-1); // Z low
 
   // iterate over all the spherical samples
-  for (unsigned i=0;i<samples_.size();++i)
+  for (auto & sample : samples_)
   {
     //find the face which has a normal closest to the sample direction.
     double tmax=-10.0;int jmax=-1;
     for (unsigned j=0;j<normals.size();++j)
     {
-      double t=samples_[i].x()*normals[j].x()+
-               samples_[i].y()*normals[j].y()+
-               samples_[i].z()*normals[j].z();
+      double t=sample.x()*normals[j].x()+
+               sample.y()*normals[j].y()+
+               sample.z()*normals[j].z();
       if (t>tmax || j==0)
       {
         tmax=t; jmax=j;
@@ -41,22 +41,22 @@ void bvpl_direction_to_color_map::project_sphereical_samples_to_cubes(std::vecto
     // find intersection with appropriate plane
     switch (jmax) {
       case 0:
-        proj_on_cube.emplace_back(1.0,samples_[i].y()/samples_[i].x(),samples_[i].z()/samples_[i].x());
+        proj_on_cube.emplace_back(1.0,sample.y()/sample.x(),sample.z()/sample.x());
         break;
       case 1:
-        proj_on_cube.emplace_back(samples_[i].x()/samples_[i].y(),1.0,samples_[i].z()/samples_[i].y());
+        proj_on_cube.emplace_back(sample.x()/sample.y(),1.0,sample.z()/sample.y());
         break;
       case 2:
-        proj_on_cube.emplace_back(samples_[i].x()/samples_[i].z(),samples_[i].y()/samples_[i].z(),1.0);
+        proj_on_cube.emplace_back(sample.x()/sample.z(),sample.y()/sample.z(),1.0);
         break;
       case 3:
-        proj_on_cube.emplace_back(-1.0,-samples_[i].y()/samples_[i].x(),-samples_[i].z()/samples_[i].x());
+        proj_on_cube.emplace_back(-1.0,-sample.y()/sample.x(),-sample.z()/sample.x());
         break;
       case 4:
-        proj_on_cube.emplace_back(-samples_[i].x()/samples_[i].y(),-1.0,-samples_[i].z()/samples_[i].y());
+        proj_on_cube.emplace_back(-sample.x()/sample.y(),-1.0,-sample.z()/sample.y());
         break;
       case 5:
-        proj_on_cube.emplace_back(-samples_[i].x()/samples_[i].z(),-samples_[i].y()/samples_[i].z(),-1.0);
+        proj_on_cube.emplace_back(-sample.x()/sample.z(),-sample.y()/sample.z(),-1.0);
         break;
     }
   }
@@ -132,10 +132,10 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(std::v
     }
   }
 
-  for (unsigned j=0;j<indices_of_cube_projs.size();++j)
+  for (float & indices_of_cube_proj : indices_of_cube_projs)
   {
-      std::cout<<indices_of_cube_projs[j]<<' ';
-      indices_of_cube_projs[j]/=index_to_length[index_to_length.size()-1];
+      std::cout<<indices_of_cube_proj<<' ';
+      indices_of_cube_proj/=index_to_length[index_to_length.size()-1];
   }
 
   return indices_of_cube_projs;

@@ -57,20 +57,20 @@ volm_desc_ex::volm_desc_ex(depth_map_scene_sptr const& dms,
   // sky (orient id = 2, land id = 0, distant = 1E6)
   if (!dms->sky().empty()) {
     std::vector<depth_map_region_sptr> sky = dms->sky();
-    for (unsigned s_idx = 0; s_idx < sky.size(); s_idx++)
-      this->set_count(sky[s_idx]->min_depth(), sky[s_idx]->orient_type(), sky[s_idx]->land_id(), (unsigned char)1);
+    for (auto & s_idx : sky)
+      this->set_count(s_idx->min_depth(), s_idx->orient_type(), s_idx->land_id(), (unsigned char)1);
   }
   // ground
   if (!dms->ground_plane().empty()) {
     std::vector<depth_map_region_sptr> grd = dms->ground_plane();
-    for (unsigned g_idx = 0; g_idx < grd.size(); g_idx++)
-      this->set_count(grd[g_idx]->min_depth(), grd[g_idx]->orient_type(), grd[g_idx]->land_id(), (unsigned char)1);
+    for (auto & g_idx : grd)
+      this->set_count(g_idx->min_depth(), g_idx->orient_type(), g_idx->land_id(), (unsigned char)1);
   }
   // other objects
   if (!dms->scene_regions().empty()) {
     std::vector<depth_map_region_sptr> obj = dms->scene_regions();
-    for (unsigned o_idx = 0; o_idx < obj.size(); o_idx++)
-      this->set_count(obj[o_idx]->min_depth(), obj[o_idx]->orient_type(), obj[o_idx]->land_id(), (unsigned char)1);
+    for (auto & o_idx : obj)
+      this->set_count(o_idx->min_depth(), o_idx->orient_type(), o_idx->land_id(), (unsigned char)1);
   }
 }
 
@@ -192,8 +192,8 @@ void volm_desc_ex::print() const
   std::cout << "descriptor name: " << name_ << '\n';
   std::cout << "number of depth bins: " << ndists_ << '\n'
      << "radius interval: ";
-  for (unsigned ridx = 0; ridx < radius_.size(); ridx++)
-    std::cout << radius_[ridx] << ' ';
+  for (double radiu : radius_)
+    std::cout << radiu << ' ';
   std::cout << '\n'
            << "number of orientation bins: " << norients_ << '\n'
            << "number of land bins: " << nlands_ << '\n'

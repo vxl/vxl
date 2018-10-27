@@ -290,8 +290,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
   {
     // re-arrange the correspondence
     std::vector<vgl_point_2d<double> > corrs_i;
-    for (unsigned jj = 0; jj < new_corrs.size(); jj++)
-      corrs_i.push_back(new_corrs[jj][i]);
+    for (auto & new_corr : new_corrs)
+      corrs_i.push_back(new_corr[i]);
     std::vector<vgl_vector_2d<double> > cam_trans_i;
     vgl_point_3d<double> intersection;
     if (!vpgl_rational_adjust_onept::adjust_with_weights(cams, cam_weights, corrs_i, initial_pt, zmin, zmax, cam_trans_i, intersection, relative_diameter))
@@ -299,8 +299,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
       continue;
 #if 1
       std::cout << "correspondence adjustment failed for correspondence: " << std::endl;
-      for (unsigned ii = 0; ii < corrs_i.size(); ii++)
-        std::cout << "[" << corrs_i[ii].x() << "," << corrs_i[ii].y() << "]\t";
+      for (auto & ii : corrs_i)
+        std::cout << "[" << ii.x() << "," << ii.y() << "]\t";
       std::cout << '\n';
 #endif
     }
@@ -324,8 +324,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
   }
 
   std::cout << "out of " << n << " correspondences " << cam_trans.size() << " of them back-projected to 3-d world point successfully:";
-  for (unsigned i = 0; i < corrs_ids.size(); i++)
-    std::cout << ' ' << corrs_ids[i];
+  for (unsigned int corrs_id : corrs_ids)
+    std::cout << ' ' << corrs_id;
   std::cout << '\n';
 
   if (!cam_trans.size()) {
@@ -374,8 +374,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
 
 #if 1
   std::cout << "correspondence that provides inliers: " << std::endl;
-  for (unsigned j = 0; j < inliers[max_i].size(); j++)
-    std::cout << inliers[max_i][j] << ' ';
+  for (unsigned int j : inliers[max_i])
+    std::cout << j << ' ';
   std::cout << '\n';
 #endif
 
@@ -392,10 +392,10 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
 
   // refine the cameras using all the inliers of this correspondence
   std::vector<std::vector<vgl_point_2d<double> > > corrs_inliers;
-  for (unsigned k = 0; k < new_corrs.size(); k++) {
+  for (auto & new_corr : new_corrs) {
     std::vector<vgl_point_2d<double> > vec;
-    for (unsigned j = 0; j < inliers[max_i].size(); j++)
-      vec.push_back(new_corrs[k][inliers[max_i][j]]);
+    for (unsigned int j : inliers[max_i])
+      vec.push_back(new_corr[j]);
     corrs_inliers.push_back(vec);
   }
   std::vector<vgl_vector_2d<double> > cam_trans_inliers;
@@ -555,13 +555,13 @@ bool vpgl_isfm_rational_camera_seed_process_globals::find_min_max_height(double 
   pts.emplace_back(ur_lon, ll_lat);
   pts.emplace_back(ll_lon, ll_lat);
   pts.emplace_back(ur_lon, ur_lat);
-  for (unsigned k = 0; k < (unsigned)pts.size(); k++)
+  for (auto & pt : pts)
   {
     // find the image
     for (unsigned j = 0; j < (unsigned)infos.size(); j++)
     {
       double u, v;
-      infos[j].second->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      infos[j].second->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);
       int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)infos[j].first->ni() || vv >= (int)infos[j].first->nj())

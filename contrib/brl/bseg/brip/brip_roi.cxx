@@ -26,13 +26,12 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
 {
   float tdelta = delta;
   if (tdelta < 0) tdelta *= -1.0f; // to guarantee dxmin <= dxmax.
-  for (std::vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
+  for (auto & region : regions_)
   {
-    double xmin = (*rit)->get_min_x();
-    double ymin = (*rit)->get_min_y();
-    double xmax = (*rit)->get_max_x();
-    double ymax = (*rit)->get_max_y();
+    double xmin = region->get_min_x();
+    double ymin = region->get_min_y();
+    double xmax = region->get_max_x();
+    double ymax = region->get_max_y();
 
     double dxmin = (xmin-tdelta), dymin = (ymin-tdelta),
       dxmax = (xmax+tdelta),  dymax = (ymax+tdelta);
@@ -46,7 +45,7 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
     vsol_box_2d_sptr dbox = new vsol_box_2d();
     dbox->add_point(dxmin, dymin);
     dbox->add_point(dxmax, dymax);
-    (*rit)=dbox;
+    region=dbox;
   }
 }
 
@@ -145,9 +144,8 @@ bool brip_roi::empty() const
 void brip_roi::clip_to_image_bounds()
 {
   std::vector<vsol_box_2d_sptr> temp;
-  for (std::vector<vsol_box_2d_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
-    temp.push_back(this->clip_to_image_bounds(*rit));
+  for (auto & region : regions_)
+    temp.push_back(this->clip_to_image_bounds(region));
   regions_ = temp;
 }
 

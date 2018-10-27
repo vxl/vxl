@@ -68,18 +68,17 @@ void sdet_region_classifier::find_iou_clusters(const std::map<unsigned, sdet_reg
     std::vector<sdet_region_sptr> intersecting_regions;
     tr.get(bb, intersecting_regions);
     std::map<unsigned, float> iou_index;
-    for(std::vector<sdet_region_sptr>::iterator iit = intersecting_regions.begin();
-        iit != intersecting_regions.end(); ++iit){
-      if((*iit)->label() == lab){
+    for(auto & intersecting_region : intersecting_regions){
+      if(intersecting_region->label() == lab){
         iou_index[lab]=1.0f;
         already_clustered.insert(lab);
         continue;
       }
-      unsigned labi = (*iit)->label();
+      unsigned labi = intersecting_region->label();
       ait = already_clustered.find(labi);
       if(ait != already_clustered.end())
         continue;
-      float iou = (*iit)->int_over_min_area(bb); //JLM
+      float iou = intersecting_region->int_over_min_area(bb); //JLM
       if(iou>iou_thresh){
         iou_index[labi]=iou;
         already_clustered.insert(labi);
@@ -123,14 +122,12 @@ void sdet_region_classifier::compute_iou_cluster_similarity(){
       // iterate through the clusters and find the most similar region pair
       float max_s = 0.0f;
       region_sim max_rsim;
-      for(std::map<unsigned, float>::const_iterator iit0 = iou_index0.begin();
-          iit0 != iou_index0.end(); ++iit0){
-        unsigned labi0 = iit0->first;
+      for(auto iit0 : iou_index0){
+        unsigned labi0 = iit0.first;
         const sdet_region_sptr& r0 = diverse_regions_[labi0];
         const bsta_histogram<float> h0 = diverse_hists_[labi0];
-        for(std::map<unsigned, float>::const_iterator iit1 = iou_index1.begin();
-            iit1 != iou_index1.end(); ++iit1){
-          unsigned labi1 = iit1->first;
+        for(auto iit1 : iou_index1){
+          unsigned labi1 = iit1.first;
           const sdet_region_sptr& r1 = diverse_regions_[labi1];
           const bsta_histogram<float>& h1 = diverse_hists_[labi1];
           float s = similarity(r0, h0, r1, h1);
@@ -162,10 +159,9 @@ void sdet_region_classifier::remove_diverse_region(unsigned label){
 }
 
 void sdet_region_classifier::compute_hist_of_nbrs(){
-  for(std::map<unsigned, sdet_region_sptr>::iterator rit = diverse_regions_.begin();
-      rit != diverse_regions_.end(); ++rit){
-    unsigned lab = rit->first;
-    const std::set<unsigned>& nbrs = (*rit).second->nbrs();
+  for(auto & diverse_region : diverse_regions_){
+    unsigned lab = diverse_region.first;
+    const std::set<unsigned>& nbrs = diverse_region.second->nbrs();
     std::set<unsigned>::const_iterator nit = nbrs.begin();
     bsta_histogram<float> hn = diverse_hists_[*nit]; ++nit;
     while(nit != nbrs.end()){
@@ -183,10 +179,9 @@ void sdet_region_classifier::compute_hist_of_nbrs(){
 }
 void sdet_region_classifier::compute_bright_regions(){
 
-  for(std::map<unsigned, bsta_histogram<float> >::iterator hit = diverse_hists_.begin();
-      hit != diverse_hists_.end(); ++hit){
-    unsigned lab = hit->first;
-    bsta_histogram<float>& hr = hit->second;
+  for(auto & diverse_hist : diverse_hists_){
+    unsigned lab = diverse_hist.first;
+    bsta_histogram<float>& hr = diverse_hist.second;
     bsta_histogram<float>& hn = neighbors_hists_[lab];
     float hr_median = hr.value_with_area_above(0.5f);//median
     float hn_median = hn.value_with_area_above(0.5f);
@@ -199,16 +194,14 @@ float sdet_region_classifier::
 compute_partition_quality(std::map< unsigned, std::map<unsigned, region_sim> > const& cluster_sim){
   float nf = static_cast<float>(cluster_sim.size());
   float neu_sum = 0.0f, den_sum = 0.0f;
-  for(std::map< unsigned, std::map<unsigned, region_sim> >::const_iterator sit = cluster_sim.begin();
-      sit != cluster_sim.end(); ++sit){
-    unsigned lab = sit->first;
-    const std::map<unsigned, region_sim>& rsim = sit->second;
-    for(std::map<unsigned, region_sim>::const_iterator rit = rsim.begin();
-        rit != rsim.end(); ++rit)
-      if(rit->first == lab)
-        neu_sum += rit->second.s_;
+  for(const auto & sit : cluster_sim){
+    unsigned lab = sit.first;
+    const std::map<unsigned, region_sim>& rsim = sit.second;
+    for(auto rit : rsim)
+      if(rit.first == lab)
+        neu_sum += rit.second.s_;
       else
-        den_sum += rit->second.s_;
+        den_sum += rit.second.s_;
   }
   float q = (nf-1.0f)*neu_sum/den_sum;
   return q;
@@ -233,55 +226,49 @@ bool sdet_region_classifier::merge_similarity_map(std::map< unsigned, std::map<u
   }
   // find similarities to both labi and labj
   std::map<unsigned, region_sim> simi, simj;
-  for(std::map< unsigned, std::map<unsigned, region_sim> >::const_iterator sit = sim_before.begin();
-          sit != sim_before.end(); ++sit){
-        unsigned lab = sit->first;
-        const std::map<unsigned, region_sim>& rsim = sit->second;
+  for(const auto & sit : sim_before){
+        unsigned lab = sit.first;
+        const std::map<unsigned, region_sim>& rsim = sit.second;
     if(lab == labi){
-      for(std::map<unsigned, region_sim>::const_iterator itr = rsim.begin();
-          itr != rsim.end(); ++itr){
-        unsigned labr = itr->first;
-        simi[labr] = itr->second;
+      for(auto itr : rsim){
+        unsigned labr = itr.first;
+        simi[labr] = itr.second;
         if(labr == labj)
-          simj[labr] = itr->second;
+          simj[labr] = itr.second;
       }
     }else if(lab == labj){
-      for(std::map<unsigned, region_sim>::const_iterator itr = rsim.begin();
-          itr != rsim.end(); ++itr){
-        unsigned labr = itr->first;
-        simj[labr] = itr->second;
+      for(auto itr : rsim){
+        unsigned labr = itr.first;
+        simj[labr] = itr.second;
         if(labr == labi)
-          simi[labr] = itr->second;
+          simi[labr] = itr.second;
       }
     }else{
 
-        for(std::map<unsigned, region_sim>::const_iterator itr = rsim.begin();
-            itr != rsim.end(); ++itr){
-          unsigned labr = itr->first;
+        for(auto itr : rsim){
+          unsigned labr = itr.first;
           if(labr == labi)
-            simi[lab] = itr->second;
+            simi[lab] = itr.second;
           if(labr == labj)
-            simj[lab] = itr->second;
+            simj[lab] = itr.second;
         }
       }
     }
   //fill out the similarity table except for the merged rows and cols
   //assume that the merged label will be at the last row and col
-  for(std::map< unsigned, std::map<unsigned, region_sim> >::const_iterator sit = sim_before.begin();
-      sit != sim_before.end(); ++sit){
-    unsigned lab = sit->first;
+  for(const auto & sit : sim_before){
+    unsigned lab = sit.first;
     std::map<unsigned, region_sim> temp;
-    const std::map<unsigned, region_sim>& rsim = sit->second;
+    const std::map<unsigned, region_sim>& rsim = sit.second;
     // skip the merged rows
     if(lab == labi || lab == labj)
       continue;
-    for(std::map<unsigned, region_sim>::const_iterator rit = rsim.begin();
-        rit != rsim.end(); ++rit){
-      unsigned labr = rit->first;
+    for(auto rit : rsim){
+      unsigned labr = rit.first;
       // skip the merged cols
       if(labr == labi||labr == labj)
         continue;
-      temp[labr] = rit->second;
+      temp[labr] = rit.second;
     }
     sim_after[lab]=temp;
   }

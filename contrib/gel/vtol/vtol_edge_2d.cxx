@@ -120,8 +120,8 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list const& newchains)
 {
   // 1) Link the inferiors.
 
-  for (zero_chain_list::const_iterator i=newchains.begin(); i!=newchains.end(); ++i)
-    link_inferior(*i);
+  for (const auto & newchain : newchains)
+    link_inferior(newchain);
 
   // 2) Set v1_ and v2_;
 

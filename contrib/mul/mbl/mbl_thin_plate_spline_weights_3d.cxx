@@ -460,16 +460,16 @@ void mbl_thin_plate_spline_weights_3d::print_summary(std::ostream& os) const
 {
   os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_
     <<"*y + "<<AxZ_<<"*z   Nonlinear terms:";
-  for (unsigned int i=0;i<Wx_.size();++i)
-    os<<' '<<Wx_[i];
+  for (double i : Wx_)
+    os<<' '<<i;
   os<<"\nfy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_
     <<"*y + "<<AyZ_<<"*z   Nonlinear terms:";
-  for (unsigned int i=0;i<Wy_.size();++i)
-    os<<' '<<Wy_[i];
+  for (double i : Wy_)
+    os<<' '<<i;
   os<<"\nfy: "<<Az0_<<" + "<<AzX_<<"*x + "<<AzY_
     <<"*y + "<<AzZ_<<"*z   Nonlinear terms:";
-  for (unsigned int i=0;i<Wz_.size();++i)
-    os<<' '<<Wz_[i];
+  for (double i : Wz_)
+    os<<' '<<i;
   os<<'\n';
 }
 

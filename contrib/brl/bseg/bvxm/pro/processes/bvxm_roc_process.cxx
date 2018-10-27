@@ -78,24 +78,24 @@ bool bvxm_roc_process(bprb_func_process& pro)
 
 
   //iterate through all threshold for each image
-  for (unsigned n = 0; n< thresh.size(); n++)
+  for (float n : thresh)
   {
     unsigned change_marked_change = 0;
     unsigned change_marked_nonchange = 0;
     unsigned nonchange_marked_nonchange = 0;
     unsigned nonchange_marked_change = 0;
 
-    for (std::vector<std::string>::iterator vit = names.begin(); vit !=names.end(); vit++)
+    for (auto & name : names)
     {
       //Read image containing probabilistic changes
-      std::string prob_image = detected_changes_dir + "\\" + *vit + ".tiff";
+      std::string prob_image = detected_changes_dir + "\\" + name + ".tiff";
       vil_image_view<float> prob_change = vil_load( prob_image.c_str() );
 
       unsigned image_height = prob_change.nj();
       unsigned image_width = prob_change.ni();
 
       //Read image containing true changes
-      std::string true_change_file =  true_changes_dir + "\\" + *vit + ".png";
+      std::string true_change_file =  true_changes_dir + "\\" + name + ".png";
       vil_image_view<vxl_byte> true_change =
         vil_convert_to_grey_using_average( vil_load(true_change_file.c_str()));
 
@@ -104,7 +104,7 @@ bool bvxm_roc_process(bprb_func_process& pro)
       vil_image_view<vxl_byte> detected_change(image_width, image_height);
       for ( unsigned x = 0; x < image_width; x++ ){
         for ( unsigned y = 0; y < image_height; y++ ){
-          if ( prob_change(x,y) < (thresh[n] * 20.0 ))
+          if ( prob_change(x,y) < (n * 20.0 ))
             detected_change(x,y) = 255;
           else
             detected_change(x,y) = 0;
@@ -146,7 +146,7 @@ bool bvxm_roc_process(bprb_func_process& pro)
 
       //save image: for debugging purposes
       std::stringstream img_out_ss;
-      img_out_ss <<"./"<< thresh[n] *20.0 <<".png";
+      img_out_ss <<"./"<< n *20.0 <<".png";
       std::string img_out = img_out_ss.str();
       vil_save( detected_change, img_out.c_str()  );
     }

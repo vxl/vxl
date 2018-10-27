@@ -246,7 +246,7 @@ init(vil_nitf2_image* nitf_image, bool verbose)
 
   double tre_data[90];
   // initialize the array
-  for (int i=0; i<90; i++) tre_data[i] = 0;
+  for (double & i : tre_data) i = 0;
 
 
   bool success =

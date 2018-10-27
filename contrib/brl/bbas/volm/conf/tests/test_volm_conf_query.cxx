@@ -72,22 +72,22 @@ static void test_volm_conf_query_from_tag_file()
   volm_conf_query_sptr query = new volm_conf_query(csp, dms, 25);
   std::cout << "configurational query reference object list: ";
   std::vector<std::string> ref_object_names = query->ref_obj_name();
-  for (std::vector<std::string>::iterator vit = ref_object_names.begin(); vit != ref_object_names.end(); ++vit)
-    std::cout << (*vit) << ", ";
+  for (auto & ref_object_name : ref_object_names)
+    std::cout << ref_object_name << ", ";
   std::cout << std::endl;
 
   std::cout << "configurational query camera list: " << std::endl;
   std::vector<std::string> cam_string = query->camera_strings();
-  for (std::vector<std::string>::iterator vit = cam_string.begin();  vit != cam_string.end();  ++vit)
-    std::cout << "\t" << (*vit) << std::endl;
+  for (auto & vit : cam_string)
+    std::cout << "\t" << vit << std::endl;
   std::cout << query->cameras().size() << " perspective cameras are created." << std::endl;
   TEST("configurational query cameras", query->cameras().size(), query->camera_angles().size());
   TEST("configurational query reference objects", query->ref_obj_name().size(), 1);
 
   std::cout << "configurational query has following reference object: " << std::endl;
   std::vector<std::string> query_ref_obj = query->ref_obj_name();
-  for (std::vector<std::string>::iterator vit = query_ref_obj.begin();  vit != query_ref_obj.end();  ++vit)
-    std::cout << " " << (*vit);
+  for (auto & vit : query_ref_obj)
+    std::cout << " " << vit;
   std::cout << std::endl;
 
   std::cout << "configurational query has following configuration object: " << std::endl;
@@ -184,22 +184,22 @@ static void test_volm_conf_query()
 
   std::cout << "configurational query reference object list: ";
   std::vector<std::string> ref_object_names = query->ref_obj_name();
-  for (std::vector<std::string>::iterator vit = ref_object_names.begin(); vit != ref_object_names.end(); ++vit)
-    std::cout << (*vit) << ", ";
+  for (auto & ref_object_name : ref_object_names)
+    std::cout << ref_object_name << ", ";
   std::cout << std::endl;
 
   std::cout << "configurational query camera list: " << std::endl;
   std::vector<std::string> cam_string = query->camera_strings();
-  for (std::vector<std::string>::iterator vit = cam_string.begin();  vit != cam_string.end();  ++vit)
-    std::cout << "\t" << (*vit) << std::endl;
+  for (auto & vit : cam_string)
+    std::cout << "\t" << vit << std::endl;
   std::cout << query->cameras().size() << " perspective cameras are created." << std::endl;
   TEST("configurational query cameras", query->cameras().size(), query->camera_angles().size());
   TEST("configurational query reference objects", query->ref_obj_name().size(), num_of_ref_objects);
 
   std::cout << "configurational query has following reference object: " << std::endl;
   std::vector<std::string> query_ref_obj = query->ref_obj_name();
-  for (std::vector<std::string>::iterator vit = query_ref_obj.begin();  vit != query_ref_obj.end();  ++vit)
-    std::cout << " " << (*vit);
+  for (auto & vit : query_ref_obj)
+    std::cout << " " << vit;
   std::cout << std::endl;
 
   std::cout << "configurational query has following configuration object: " << std::endl;

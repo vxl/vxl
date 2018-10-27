@@ -144,16 +144,16 @@ std::string& vul_string_reverse(std::string& s)
 // Converts all alphabetical characters in string s to uppercase.
 std::string& vul_string_upcase(std::string& s)
 {
-  for (std::string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = (char)std::toupper(*i);
+  for (char & i : s)
+    i = (char)std::toupper(i);
   return s;
 }
 
 // Converts all alphabetical characters in string s to lowercase.
 std::string& vul_string_downcase(std::string& s)
 {
-  for (std::string::iterator i=s.begin(); i != s.end(); ++i)
-    *i = (char)std::tolower(*i);
+  for (char & i : s)
+    i = (char)std::tolower(i);
   return s;
 }
 
@@ -513,15 +513,15 @@ std::string vul_string_escape_ctrl_chars(const std::string &in)
   const static std::string special("\t\v\b\r\f\a\\");
   const static std::string special_tr("tvbrfa\\");
 
-  for (std::string::const_iterator it=in.begin(), end=in.end(); it!=end; ++it)
+  for (char it : in)
   {
-    if (!std::iscntrl(*it) || *it=='\n')
-      out+=*it;
+    if (!std::iscntrl(it) || it=='\n')
+      out+=it;
     else
     {
-      std::string::size_type i=special.find(*it);
+      std::string::size_type i=special.find(it);
       if (i==std::string::npos)
-        out+=vul_sprintf("\\x%02x",static_cast<int>(*it));
+        out+=vul_sprintf("\\x%02x",static_cast<int>(it));
       else
       {
         out+='\\';

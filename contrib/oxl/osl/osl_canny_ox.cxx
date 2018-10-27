@@ -559,17 +559,17 @@ osl_edge *osl_canny_ox::NO_FollowerOX(osl_edgel_chain *edgels_Hysteresis)
 // returns 0 if none found.
 osl_Vertex *osl_find(std::list<osl_Vertex*> const *l, osl_Vertex const &v)
 {
-  for (std::list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
-    if (v == *(*i))
-      return *i;
+  for (auto i : *l)
+    if (v == *i)
+      return i;
   return nullptr;
 }
 
 osl_Vertex *osl_find(std::list<osl_Vertex*> const *l, float x, float y)
 {
-  for (std::list<osl_Vertex*>::const_iterator i=l->begin(); i!=l->end(); ++i)
-    if ((*i)->x == x && (*i)->y == y)
-      return *i;
+  for (auto i : *l)
+    if (i->x == x && i->y == y)
+      return i;
   return nullptr;
 }
 

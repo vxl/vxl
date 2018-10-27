@@ -134,10 +134,10 @@ bool boxm2_ocl_render_expected_color_process(bprb_func_process& pro)
   std::string data_type,options;
   std::vector<std::string> apps = scene->appearances();
   int apptypesize = 0;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
       apptypesize= boxm2_data_traits<BOXM2_GAUSS_RGB>::datasize();

@@ -22,11 +22,11 @@ static void normalize(
 {
     vnl_matrix_fixed<double, 3, 3> k_inv = vnl_inverse(k.get_matrix());
 
-    for (unsigned int i = 0; i < points.size(); ++i)
+    for (auto point : points)
     {
         vnl_matrix_fixed<double, 3, 1> vec;
-        vec.put(0, 0, points[i].x());
-        vec.put(1, 0, points[i].y());
+        vec.put(0, 0, point.x());
+        vec.put(1, 0, point.y());
         vec.put(2, 0, 1);
 
         vnl_matrix_fixed<double,3,1> normed = k_inv*vec;

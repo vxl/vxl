@@ -61,8 +61,8 @@ mfpf_mr_point_finder_builder::~mfpf_mr_point_finder_builder()
 //: Delete all the builders
 void mfpf_mr_point_finder_builder::delete_all()
 {
-  for (unsigned i=0;i<builders_.size();++i)
-    delete builders_[i];
+  for (auto & builder : builders_)
+    delete builder;
   builders_.resize(0);
 }
 
@@ -326,8 +326,8 @@ void mfpf_mr_point_finder_builder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,builders_.size());
-  for (unsigned i=0;i<builders_.size();++i)
-    vsl_b_write(bfs,builders_[i]);
+  for (auto builder : builders_)
+    vsl_b_write(bfs,builder);
 }
 
 //=======================================================================

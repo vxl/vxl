@@ -290,16 +290,16 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
     leaf_ptr->contents_.clear();
   }
   std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit) {
-    boxm2_block_id curr_blk_id = mit->first;
-    vgl_box_2d<double> curr_blk_bbox_2d(mit->second.bbox().min_x(), mit->second.bbox().max_x(), mit->second.bbox().min_y(), mit->second.bbox().max_y());
+  for (auto & blk : blks) {
+    boxm2_block_id curr_blk_id = blk.first;
+    vgl_box_2d<double> curr_blk_bbox_2d(blk.second.bbox().min_x(), blk.second.bbox().max_x(), blk.second.bbox().min_y(), blk.second.bbox().max_y());
     std::vector<bvgl_2d_geo_index_node_sptr> leaves;
     bvgl_2d_geo_index::get_leaves(blk_2d_tree, leaves, curr_blk_bbox_2d);
     if (leaves.empty())
       continue;
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+    for (auto & leave : leaves) {
       bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* leaf_ptr =
-        dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
+        dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(curr_blk_id);
     }
   }
@@ -309,14 +309,14 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
   if (leaf_id < 0) leaves2 = leaves;
   else leaves2.push_back(leaves[leaf_id]);
   std::cout << " will index " << leaves2.size() << " leaves!\n"; std::cout.flush();
-  for (unsigned li = 0; li < leaves2.size(); li++) {
-    if (!leaves2[li]->hyps_)
+  for (auto & li : leaves2) {
+    if (!li->hyps_)
       continue;
-    std::cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << std::endl; std::cout.flush();
+    std::cout << " will index " << volm_geo_index::hypo_size(li) << " indices in leaf: " << li->get_hyp_name("") << std::endl; std::cout.flush();
 
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    std::string index_file = leaves2[li]->get_index_name(out_file_name_pre.str());
+    std::string index_file = li->get_index_name(out_file_name_pre.str());
     if (!ind->initialize_write(index_file)) {
       std::cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
@@ -324,7 +324,7 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
 
     vgl_point_3d<double> h_pt;
     unsigned indexed_cnt = 0;
-    while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
+    while (li->hyps_->get_next(0, 1, h_pt))
     {
       //std::cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << std::endl;
       if (indexed_cnt%1000 == 0) std::cout << indexed_cnt << "." << std::flush;
@@ -370,10 +370,10 @@ bool boxm2_create_index_process2(bprb_func_process& pro)
         bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* curr_leaf_ptr =
           dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(curr_leaf.ptr());
         bool found_blk = false;
-        for (std::vector<boxm2_block_id>::iterator vit = curr_leaf_ptr->contents_.begin(); vit != curr_leaf_ptr->contents_.end(); ++vit) {
-          vgl_box_3d<double> curr_blk_bbox = scene->blocks()[*vit].bbox();
+        for (auto & content : curr_leaf_ptr->contents_) {
+          vgl_box_3d<double> curr_blk_bbox = scene->blocks()[content].bbox();
           if (curr_blk_bbox.contains(local_h_pt_d)) {
-            curr_block = *vit;
+            curr_block = content;
             found_blk = true;
           }
         }

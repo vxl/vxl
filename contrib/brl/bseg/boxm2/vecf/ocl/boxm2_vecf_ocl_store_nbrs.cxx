@@ -17,16 +17,16 @@ bool boxm2_vecf_ocl_store_nbrs::get_scene_appearance( boxm2_scene_sptr scene,
 {
     std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false;
-    for (unsigned int i=0; i<apps.size(); ++i) {
-        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    for (const auto & app : apps) {
+        if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
         {
-            app_type_ = apps[i];
+            app_type_ = app;
             foundDataType = true;
             options=" -D MOG_TYPE_8 ";
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+        else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
         {
-            app_type_ = apps[i];
+            app_type_ = app;
             foundDataType = true;
             options=" -D MOG_TYPE_16 ";
         }

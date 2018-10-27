@@ -79,8 +79,8 @@ bool bvgl_geo_index_region_resource_process(bprb_func_process& pro)
     return false;
   }
   ofs << leaf_ids.size() << " leaves intersect with region [" << ll_lon << ',' << ll_lat << "] , [" << ur_lon << ',' << ur_lat << "]\n";
-  for (unsigned i = 0; i < leaf_ids.size(); i++)
-    ofs << leaf_ids[i] << '\n';
+  for (unsigned int leaf_id : leaf_ids)
+    ofs << leaf_id << '\n';
   ofs.close();
   pro.set_output_val<unsigned>(0, leaf_ids.size());
   return true;
@@ -151,8 +151,8 @@ bool bvgl_geo_index_region_poly_resource_process(bprb_func_process& pro)
     return false;
   }
   ofs << leaf_ids.size() << " leaves intersect with given polygon!\n";
-  for (unsigned i = 0; i < leaf_ids.size(); i++)
-    ofs << leaf_ids[i] << '\n';
+  for (unsigned int leaf_id : leaf_ids)
+    ofs << leaf_id << '\n';
   ofs.close();
 
   // output

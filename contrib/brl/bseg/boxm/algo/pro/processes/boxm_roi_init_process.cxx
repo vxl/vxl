@@ -184,9 +184,9 @@ vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_doub
 
   vgl_box_2d<double>* roi = new vgl_box_2d<double>();
 
-  for (unsigned i=0; i<box_corners.size(); i++) {
+  for (auto & box_corner : box_corners) {
       double u,v;
-      cam->project(box_corners[i].x(),box_corners[i].y(),box_corners[i].z(),u,v);
+      cam->project(box_corner.x(),box_corner.y(),box_corner.z(),u,v);
       vgl_point_2d<double> p2d(u,v);
       std::cout<<u<<' '<<v<<'\n';
       roi->add(p2d);

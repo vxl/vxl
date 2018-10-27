@@ -134,14 +134,13 @@ void volm_spherical_region_query::construct_spherical_regions()
         vpgl_perspective_camera<double> cam = cam_space_->camera(cam_index);
         // ====  construct object regions =====
         std::vector<depth_map_region_sptr> sky_regions =dm_scene_->sky();
-        for (std::vector<depth_map_region_sptr>::iterator sit = sky_regions.begin();
-             sit != sky_regions.end(); ++sit) {
-            volm_spherical_region sph_reg = this->set_sky_from_depth_map_region(cam, *sit);
+        for (auto & sky_region : sky_regions) {
+            volm_spherical_region sph_reg = this->set_sky_from_depth_map_region(cam, sky_region);
             sph_regions_[roll_idx].add_region(sph_reg);
         }
         std::vector<depth_map_region_sptr> gp_regions = dm_scene_->ground_plane();
-        for (std::vector<depth_map_region_sptr>::iterator git = gp_regions.begin();git != gp_regions.end(); ++git) {
-            volm_spherical_region sph_reg = this->set_ground_from_depth_map_region(cam, *git);
+        for (auto & gp_region : gp_regions) {
+            volm_spherical_region sph_reg = this->set_ground_from_depth_map_region(cam, gp_region);
             sph_regions_[roll_idx].add_region(sph_reg);
         }
         std::vector<depth_map_region_sptr> object_regions =dm_scene_->scene_regions();
@@ -165,8 +164,8 @@ void volm_spherical_region_query::print(std::ostream& os) const
         std::cout << "BoundingBoxes for roll = " << cam_space_->roll(rolit->first)<< " degrees\n";
         volm_spherical_regions_layer  region_layer = rolit->second;
         std::vector<volm_spherical_region> regions = region_layer.regions();
-        for (unsigned i = 0 ; i < regions.size(); i++) {
-            regions[i].print(os);
+        for (auto & region : regions) {
+            region.print(os);
         }
         std::cout << '\n';
     }

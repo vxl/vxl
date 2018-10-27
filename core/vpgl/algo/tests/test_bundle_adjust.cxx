@@ -42,14 +42,14 @@ void setup_scene(const vpgl_calibration_matrix<double>& K,
   cameras.emplace_back(K,vgl_homg_point_3d<double>(5.0, 0.0, 0.0),I);
 
   // point all cameras to look at the origin
-  for (unsigned int i=0; i<cameras.size(); ++i)
-    cameras[i].look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
+  for (auto & camera : cameras)
+    camera.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
 
   // project all points in all images
   image_points.clear();
-  for (unsigned int i=0; i<cameras.size(); ++i) {
-    for (unsigned int j=0; j<world.size(); ++j) {
-      image_points.emplace_back(cameras[i](vgl_homg_point_3d<double>(world[j])));
+  for (auto & camera : cameras) {
+    for (const auto & j : world) {
+      image_points.emplace_back(camera(vgl_homg_point_3d<double>(j)));
     }
   }
 }
@@ -63,9 +63,9 @@ make_noisy_measurements(const std::vector<vgl_point_2d<double> >& image_points,
   vnl_random rnd;
   // project each point adding uniform noise in a [-max_p_err/2, max_p_err/2] pixel window
   std::vector<vgl_point_2d<double> > noisy_image_points(image_points);
-  for (unsigned int i=0; i<noisy_image_points.size(); ++i) {
+  for (auto & noisy_image_point : noisy_image_points) {
     vgl_vector_2d<double> noise(rnd.drand32()-0.5, rnd.drand32()-0.5);
-    noisy_image_points[i] += max_p_err * noise;
+    noisy_image_point += max_p_err * noise;
   }
   return noisy_image_points;
 }
@@ -78,11 +78,11 @@ perturb_points(std::vector<vgl_point_3d<double> >& points,
 {
   vnl_random rnd;
   // add uniform noise in a [-max_p_err/2, max_p_err/2] window
-  for (unsigned int j=0; j<points.size(); ++j) {
+  for (auto & point : points) {
     vgl_vector_3d<double> noise(rnd.drand32()-0.5,
                                 rnd.drand32()-0.5,
                                 rnd.drand32()-0.5);
-    points[j] += max_p_err * noise;
+    point += max_p_err * noise;
   }
 }
 
@@ -93,17 +93,17 @@ perturb_cameras(std::vector<vpgl_perspective_camera<double> >& cameras,
 {
   vnl_random rnd;
   // add uniform noise in a [-max_p_err/2, max_p_err/2] window
-  for (unsigned int i=0; i<cameras.size(); ++i) {
+  for (auto & camera : cameras) {
     vgl_vector_3d<double> tnoise(rnd.drand32()-0.5,
                                  rnd.drand32()-0.5,
                                  rnd.drand32()-0.5);
-    cameras[i].set_camera_center(cameras[i].get_camera_center()+max_t_err * tnoise);
+    camera.set_camera_center(camera.get_camera_center()+max_t_err * tnoise);
     vnl_double_3 rnoise(rnd.drand32()-0.5,
                         rnd.drand32()-0.5,
                         rnd.drand32()-0.5);
     rnoise.normalize();
     rnoise *= rnd.drand32() * max_r_error;
-    cameras[i].set_rotation(cameras[i].get_rotation() *
+    camera.set_rotation(camera.get_rotation() *
                             vgl_rotation_3d<double>(rnoise));
   }
 }
@@ -154,16 +154,14 @@ void similarity_to_truth(const std::vector<vgl_point_3d<double> >& truth_pts,
   const vgl_rotation_3d<double>& R = reg.rotation();
   double s = reg.scale();
   const vgl_vector_3d<double>& t = reg.translation();
-  for (unsigned i=0; i<est_pts.size(); ++i)
+  for (auto & p : est_pts)
   {
-    vgl_point_3d<double>& p = est_pts[i];
     p = R*p;
     p.set(s*p.x(), s*p.y(), s*p.z());
     p += t;
   }
-  for (unsigned i=0; i<est_cameras.size(); ++i)
+  for (auto & P : est_cameras)
   {
-    vpgl_perspective_camera<double>& P = est_cameras[i];
     P.set_rotation(P.get_rotation()*R.inverse());
     vgl_point_3d<double> c = R*P.get_camera_center();
     c.set(s*c.x(), s*c.y(), s*c.z());

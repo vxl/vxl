@@ -401,8 +401,8 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
     //for (int p=0; p<index.size(); ++p)
     //  std::cout<<"index["<<p<<"]= "<<index[p]<<std::endl;
   }
-  for (unsigned i =0; i< classifiers.size(); ++i)
-    delete classifiers[i];
+  for (auto & classifier : classifiers)
+    delete classifier;
 
   // calculating response from classifier so far
   // and using this to calc min_error threshold

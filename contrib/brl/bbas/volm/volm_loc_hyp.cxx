@@ -131,10 +131,10 @@ void volm_loc_hyp::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, locs_.size());
-  for (unsigned i = 0; i < locs_.size(); ++i) {
-    vsl_b_write(os, locs_[i].x());
-    vsl_b_write(os, locs_[i].y());
-    vsl_b_write(os, locs_[i].z());
+  for (const auto & loc : locs_) {
+    vsl_b_write(os, loc.x());
+    vsl_b_write(os, loc.y());
+    vsl_b_write(os, loc.z());
   }
 }
 

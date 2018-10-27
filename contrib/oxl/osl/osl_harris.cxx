@@ -311,18 +311,18 @@ void osl_harris::get_corners(std::vector<std::pair<float, float> > &cor) const
 
 void osl_harris::get_corners(std::vector<float> &corx, std::vector<float> &cory) const
 {
-  for (unsigned i=0; i<cc.size(); ++i)
+  for (const auto & i : cc)
   {
-    corx.push_back(cc[i].first);
-    cory.push_back(cc[i].second);
+    corx.push_back(i.first);
+    cory.push_back(i.second);
   }
 }
 
 //: convenience method
 void osl_harris::save_corners(std::ostream &f) const
 {
-  for (unsigned i=0; i<cc.size(); ++i)
-    f << cc[i].first << ' ' << cc[i].second << std::endl;
+  for (const auto & i : cc)
+    f << i.first << ' ' << i.second << std::endl;
 }
 
 void osl_harris::save_corners(char const *filename) const

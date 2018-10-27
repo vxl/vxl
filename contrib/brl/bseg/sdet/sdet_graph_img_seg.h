@@ -82,14 +82,14 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 
   // set up the edge costs as color differences
   std::vector<vbl_edge>& edges = ss->get_edges();
-  for (unsigned int i = 0; i < edges.size(); ++i)
+  for (auto & edge : edges)
     {
-    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
+    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edge.v0_);
     double c0 = (double)smoothed(pix0.first, pix0.second);
-    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
+    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edge.v1_);
     double c1 = (double)smoothed(pix1.first, pix1.second);
     double dif = c1-c0;
-    edges[i].w_ = (float)std::sqrt(dif*dif);
+    edge.w_ = (float)std::sqrt(dif*dif);
     }
 
   vbl_disjoint_sets ds;
@@ -100,10 +100,10 @@ void sdet_segment_img(vil_image_view<T> const& img, unsigned margin, int neigh, 
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (unsigned int i = 0; i < edges.size(); ++i)
+  for (auto & edge : edges)
     {
-    int v0 = ds.find_set(edges[i].v0_);
-    int v1 = ds.find_set(edges[i].v1_);
+    int v0 = ds.find_set(edge.v0_);
+    int v1 = ds.find_set(edge.v1_);
     if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
       ds.set_union(v0, v1);
     }
@@ -153,19 +153,19 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 
   // set up the edge costs as color differences and with high weights across the edges
   std::vector<vbl_edge>& edges = ss->get_edges();
-  for (unsigned i = 0; i < edges.size(); i++) {
-    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edges[i].v0_);
+  for (auto & edge : edges) {
+    std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edge.v0_);
     double c0 = (double)smoothed(pix0.first, pix0.second);
-    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edges[i].v1_);
+    std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edge.v1_);
     double c1 = (double)smoothed(pix1.first, pix1.second);
     double dif = c1-c0;
-    edges[i].w_ = (float)std::sqrt(dif*dif);
+    edge.w_ = (float)std::sqrt(dif*dif);
 
     double e0 = (double)edge_img(pix0.first, pix0.second);
     double e1 = (double)edge_img(pix1.first, pix1.second);
     //dif = e0-e1;
     //edges[i].w_ += (float)std::sqrt(dif*dif);
-    edges[i].w_ += ( e0 > e1 ? e0 : e1);
+    edge.w_ += ( e0 > e1 ? e0 : e1);
   }
 
   vbl_disjoint_sets ds;
@@ -176,9 +176,9 @@ void sdet_segment_img_using_edges(vil_image_view<T> const& img, vil_image_view<f
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (unsigned int i = 0; i < edges.size(); i++) {
-      int v0 = ds.find_set(edges[i].v0_);
-      int v1 = ds.find_set(edges[i].v1_);
+  for (auto & edge : edges) {
+      int v0 = ds.find_set(edge.v0_);
+      int v1 = ds.find_set(edge.v1_);
       if ((v0 != v1) && ((ds.size(v0) < min_size) || (ds.size(v1) < min_size)))
           ds.set_union(v0, v1);
   }
@@ -228,11 +228,10 @@ void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned marg
       std::cout << "Detection worked but returned no edgels\n";
       return;
     }
-    for (std::vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
-         eit != vd_edges.end(); ++eit)
+    for (auto & vd_edge : vd_edges)
       {
         //get the edgel chain
-        vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+        vdgl_interpolator_sptr itrp = vd_edge->get_interpolator();
         vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
         unsigned int n = ech->size();
         for (unsigned int i=0; i<n;i++)
@@ -261,18 +260,18 @@ void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned marg
 
   // set up the edge costs as color differences and with high weights across the edges
   std::vector<vbl_edge>& edges = ss.get_edges();
-  for (unsigned i = 0; i < edges.size(); i++) {
-    std::pair<unsigned, unsigned> pix0 = ss.get_pixel(edges[i].v0_);
+  for (auto & edge : edges) {
+    std::pair<unsigned, unsigned> pix0 = ss.get_pixel(edge.v0_);
     double c0 = (double)smoothed(pix0.first, pix0.second);
-    std::pair<unsigned, unsigned> pix1 = ss.get_pixel(edges[i].v1_);
+    std::pair<unsigned, unsigned> pix1 = ss.get_pixel(edge.v1_);
     double c1 = (double)smoothed(pix1.first, pix1.second);
     double dif = c1-c0;
-    edges[i].w_ = (float)std::sqrt(dif*dif);
+    edge.w_ = (float)std::sqrt(dif*dif);
 
     bool e0 = edge_map(pix0.first, pix0.second);
     bool e1 = edge_map(pix1.first, pix1.second);
     if(e0 || e1)
-      edges[i].w_ = std::numeric_limits<float>::max();
+      edge.w_ = std::numeric_limits<float>::max();
   }
 
   vbl_disjoint_sets* ds = new vbl_disjoint_sets();
@@ -283,9 +282,9 @@ void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned marg
 
   // combine the segments with number of elements less than min_size
   // post process small components
-  for (unsigned int i = 0; i < edges.size(); i++) {
-      int v0 = ds->find_set(edges[i].v0_);
-      int v1 = ds->find_set(edges[i].v1_);
+  for (auto & edge : edges) {
+      int v0 = ds->find_set(edge.v0_);
+      int v1 = ds->find_set(edge.v1_);
       if ((v0 != v1) && ((ds->size(v0) < min_size) || (ds->size(v1) < min_size)))
           ds->set_union(v0, v1);
   }
@@ -333,9 +332,9 @@ void sdet_segment_img_using_VD_edges(vil_image_view<T> const& img, unsigned marg
     reg->InsertInPixelArrays(u,v,intensity);
   }
   edges = ss.get_edges();
-  for (unsigned i = 0; i < edges.size(); i++) {
-    int v0 = ds->find_set(edges[i].v0_);
-    int v1 = ds->find_set(edges[i].v1_);
+  for (auto & edge : edges) {
+    int v0 = ds->find_set(edge.v0_);
+    int v1 = ds->find_set(edge.v1_);
     if(v0 != v1){
       int comp0 = ds->find_set(v0);
       int comp1 = ds->find_set(v1);

@@ -20,9 +20,8 @@ bgrl_vertex::bgrl_vertex()
 bgrl_vertex::bgrl_vertex(const bgrl_vertex& vertex)
   : vbl_ref_count()
 {
-  for ( std::set<bgrl_edge_sptr>::const_iterator itr = vertex.out_edges_.begin();
-        itr != vertex.out_edges_.end();  ++itr ){
-    bgrl_edge_sptr edge_copy((*itr)->clone());
+  for (const auto & out_edge : vertex.out_edges_){
+    bgrl_edge_sptr edge_copy(out_edge->clone());
     edge_copy->from_ = this;
     out_edges_.insert(edge_copy);
   }
@@ -34,28 +33,26 @@ void
 bgrl_vertex::strip()
 {
   // Iterate over all outgoing edges and remove back links
-  for ( edge_iterator out_itr = out_edges_.begin();
-        out_itr != out_edges_.end(); ++out_itr)
+  for (const auto & out_edge : out_edges_)
   {
-    if ((*out_itr)->to_) {
-      (*out_itr)->to_->in_edges_.erase(*out_itr);
-      (*out_itr)->to_ = nullptr;
+    if (out_edge->to_) {
+      out_edge->to_->in_edges_.erase(out_edge);
+      out_edge->to_ = nullptr;
     }
-    (*out_itr)->from_ = nullptr;
+    out_edge->from_ = nullptr;
   }
 
   // Clear outgoing edges
   out_edges_.clear();
 
   // Iterate over all incoming edges and remove back links
-  for ( edge_iterator in_itr = in_edges_.begin();
-        in_itr != in_edges_.end(); ++in_itr)
+  for (const auto & in_edge : in_edges_)
   {
-    if ((*in_itr)->from_){
-      (*in_itr)->from_->out_edges_.erase(*in_itr);
-      (*in_itr)->from_ = nullptr;
+    if (in_edge->from_){
+      in_edge->from_->out_edges_.erase(in_edge);
+      in_edge->from_ = nullptr;
     }
-    (*in_itr)->to_ = nullptr;
+    in_edge->to_ = nullptr;
   }
 
   // Clear incoming edges
@@ -106,9 +103,8 @@ bgrl_vertex::add_edge_to( const bgrl_vertex_sptr& vertex,
     return bgrl_edge_sptr(nullptr);
 
   // verify that this edge is not already present
-  for ( edge_iterator itr = out_edges_.begin();
-        itr != out_edges_.end(); ++itr )
-    if ((*itr)->to_ == vertex)
+  for (const auto & out_edge : out_edges_)
+    if (out_edge->to_ == vertex)
       return bgrl_edge_sptr(nullptr);
 
   // add the edge
@@ -214,16 +210,14 @@ bgrl_vertex::b_read( vsl_b_istream& is )
     // read the outgoing edges
     out_edges_.clear();
     vsl_b_read(is, out_edges_);
-    for ( edge_iterator itr = out_edges_.begin();
-          itr != out_edges_.end(); ++itr )
-      (*itr)->from_ = this;
+    for (const auto & out_edge : out_edges_)
+      out_edge->from_ = this;
 
     // read the incoming edges
     in_edges_.clear();
     vsl_b_read(is, in_edges_);
-    for ( edge_iterator itr = in_edges_.begin();
-          itr != in_edges_.end(); ++itr )
-      (*itr)->to_ = this;
+    for (const auto & in_edge : in_edges_)
+      in_edge->to_ = this;
 
     break;
 

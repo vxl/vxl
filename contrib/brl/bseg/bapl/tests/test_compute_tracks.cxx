@@ -162,8 +162,8 @@ static void test_compute_tracks(int argc, char* argv[])
   }
   std::cout << "read: " << paths.size() << " lines!\n";
   ifs.close();
-  for (unsigned i = 0; i < paths.size(); i++) {
-    std::stringstream line(paths[i]);
+  for (const auto & path : paths) {
+    std::stringstream line(path);
     int left_id, right_id; line >> left_id; line >> right_id;
     std::vector<bapl_key_match> matches;
     while (!line.eof()) {

@@ -66,8 +66,8 @@ vtol_zero_chain::vtol_zero_chain(const vertex_list &new_vertices)
   // require
   assert(new_vertices.size()>0);
 
-  for (vertex_list::const_iterator i=new_vertices.begin();i!=new_vertices.end();++i)
-    link_inferior(*i);
+  for (const auto & new_vertice : new_vertices)
+    link_inferior(new_vertice);
 }
 
 //---------------------------------------------------------------------------

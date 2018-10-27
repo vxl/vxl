@@ -72,8 +72,8 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   std::vector<boxm2_block_id> blks = scene->get_block_ids();
   // fetch the minimum voxel length
   float vox_length = 1E6;
-  for (unsigned i = 0; i < blks.size(); i++) {
-    boxm2_scene_info* info = scene->get_blk_metadata(blks[i]);
+  for (const auto & blk : blks) {
+    boxm2_scene_info* info = scene->get_blk_metadata(blk);
     float sb_length = info->block_len;
     if (sb_length/8.0f < vox_length)  vox_length = sb_length/8.0f;
   }
@@ -274,9 +274,9 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
     unsigned char curr_id = osm_obj.loc_lines()[r_idx]->prop().id_;
     vil_rgb<vxl_byte> curr_color = osm_obj.loc_lines()[r_idx]->prop().color_;
     double width = osm_obj.loc_lines()[r_idx]->prop().width_;
-    for (unsigned pt_idx = 0; pt_idx < line_geo.size(); pt_idx++) {
+    for (auto & pt_idx : line_geo) {
       double lx, ly, lz;
-      lvcs->global_to_local(line_geo[pt_idx].x(), line_geo[pt_idx].y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
+      lvcs->global_to_local(pt_idx.x(), pt_idx.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
       double i = (lx - scene_bbox.min_x())/vox_length;
       double j = (scene_bbox.max_y() - ly)/vox_length;
       if (i >= 0 && j >= 0 && i < out_img_label->ni() && j < out_img_label->nj())

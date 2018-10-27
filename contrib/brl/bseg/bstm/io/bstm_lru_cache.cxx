@@ -39,10 +39,9 @@ bstm_lru_cache::bstm_lru_cache(bstm_scene_sptr scene) : bstm_cache(scene)
 bstm_lru_cache::~bstm_lru_cache()
 {
   // save the data and delete
-  for (std::map<std::string, std::map<bstm_block_id, bstm_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
       bstm_block_id id = it->first;
 #if 0 // Currently causing some blocks to not save
       if (!it->second->read_only_) {
@@ -52,29 +51,27 @@ bstm_lru_cache::~bstm_lru_cache()
       // now throw it away
       delete it->second;
     }
-    iter->second.clear();
+    iter.second.clear();
   }
 
-  for (std::map<bstm_block_id, bstm_block*>::iterator iter = cached_blocks_.begin();
-       iter != cached_blocks_.end(); iter++)
+  for (auto & cached_block : cached_blocks_)
   {
-    bstm_block_id id = iter->first;
+    bstm_block_id id = cached_block.first;
 #if 0 // Currently causing some blocks to not save
     if (!iter->second->read_only())
       bstm_sio_mgr::save_block(scene_dir_, iter->second);
 #endif
-    delete iter->second;
+    delete cached_block.second;
   }
 
-  for (std::map<bstm_block_id, bstm_time_block*>::iterator iter = cached_time_blocks_.begin();
-       iter != cached_time_blocks_.end(); iter++)
+  for (auto & cached_time_block : cached_time_blocks_)
   {
-    bstm_block_id id = iter->first;
+    bstm_block_id id = cached_time_block.first;
 #if 0 // Currently causing some blocks to not save
     if (!iter->second->read_only())
       bstm_sio_mgr::save_time_block(scene_dir_, iter->second);
 #endif
-    delete iter->second;
+    delete cached_time_block.second;
   }
 }
 
@@ -83,21 +80,20 @@ bstm_lru_cache::~bstm_lru_cache()
 void bstm_lru_cache::clear_cache()
 {
   // delete
-  for (std::map<std::string, std::map<bstm_block_id, bstm_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++)
+    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++)
       delete it->second;
-    iter->second.clear();
+    iter.second.clear();
   }
   cached_data_.clear();
 
-  for (std::map<bstm_block_id, bstm_block*>::iterator iter = cached_blocks_.begin(); iter != cached_blocks_.end(); iter++)
-    delete iter->second;
+  for (auto & cached_block : cached_blocks_)
+    delete cached_block.second;
   cached_blocks_.clear();
 
-  for (std::map<bstm_block_id, bstm_time_block*>::iterator iter = cached_time_blocks_.begin(); iter != cached_time_blocks_.end(); iter++)
-    delete iter->second;
+  for (auto & cached_time_block : cached_time_blocks_)
+    delete cached_time_block.second;
   cached_time_blocks_.clear();
 }
 
@@ -386,29 +382,27 @@ std::string bstm_lru_cache::to_string()
 void bstm_lru_cache::write_to_disk()
 {
    // save the data and delete
-  for (std::map<std::string, std::map<bstm_block_id, bstm_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
       bstm_block_id id = it->first;
       // if (!it->second->read_only_)
-        bstm_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
+        bstm_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter.first);
     }
   }
 
-  for (std::map<bstm_block_id, bstm_block*>::iterator iter = cached_blocks_.begin();
-       iter != cached_blocks_.end(); iter++)
+  for (auto & cached_block : cached_blocks_)
   {
-    bstm_block_id id = iter->first;
+    bstm_block_id id = cached_block.first;
     // if (!iter->second->read_only())
-    bstm_sio_mgr::save_block(scene_dir_, iter->second);
+    bstm_sio_mgr::save_block(scene_dir_, cached_block.second);
   }
 
-  for (std::map<bstm_block_id, bstm_time_block*>::iterator iter = cached_time_blocks_.begin(); iter != cached_time_blocks_.end(); iter++)
+  for (auto & cached_time_block : cached_time_blocks_)
   {
-    bstm_block_id id = iter->first;
+    bstm_block_id id = cached_time_block.first;
     // if (!iter->second->read_only())
-    bstm_sio_mgr::save_time_block(scene_dir_, iter->second);
+    bstm_sio_mgr::save_time_block(scene_dir_, cached_time_block.second);
   }
 }
 

@@ -15,16 +15,16 @@ void test_random_n_from_m()
   std::vector<int> chosen;
   random.choose_n_from_m(chosen,4,7);
   TEST("Four chosen",chosen.size(),4);
-  for (unsigned int i=0;i<chosen.size();++i)
+  for (int i : chosen)
   {
-    TEST("Elements in [0,6]",chosen[i]>=0 && chosen[i]<7,true);
+    TEST("Elements in [0,6]",i>=0 && i<7,true);
   }
   std::vector<int> not_chosen;
   random.choose_n_from_m(chosen,not_chosen,4,7);
   TEST("Three not chosen",not_chosen.size(),3);
-  for (unsigned int i=0;i<not_chosen.size();++i)
+  for (int i : not_chosen)
   {
-    TEST("Elements in [0,6]",not_chosen[i]>=0 && not_chosen[i]<7,true);
+    TEST("Elements in [0,6]",i>=0 && i<7,true);
   }
   random.choose_n_from_m(chosen,not_chosen,7,7);
   TEST("All chosen",not_chosen.size(),0);

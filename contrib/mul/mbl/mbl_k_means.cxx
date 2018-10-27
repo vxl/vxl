@@ -128,10 +128,10 @@ unsigned mbl_k_means(mbl_data_wrapper<vnl_vector<double> > &data, unsigned k,
         sums.erase(sums.begin()+i);
         nNearest.erase(nNearest.begin()+i);
 
-        for (unsigned j=0; j<p_partition->size(); ++j)
+        for (unsigned int & j : *p_partition)
         {
-          assert ((*p_partition)[j] = i);
-          if ((*p_partition)[j] > i) (*p_partition)[j]--;
+          assert (j = i);
+          if (j > i) j--;
         }
 
         changed= true;

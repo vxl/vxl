@@ -32,8 +32,8 @@ rrel_wgted_ran_sam_search::estimate( const rrel_estimation_problem * problem,
 
     // sums up weights
     double sum_wgt = 0.0;
-    for ( unsigned i=0; i<wgts.size(); ++i )
-      sum_wgt += wgts[i];
+    for (double wgt : wgts)
+      sum_wgt += wgt;
 
     // build probability interval
     double current_lower = 0.0;

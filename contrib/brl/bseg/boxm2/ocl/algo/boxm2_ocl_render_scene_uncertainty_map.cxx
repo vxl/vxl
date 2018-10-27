@@ -59,24 +59,24 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     std::vector<std::string> apps = scene->appearances();
 
     int apptypesize = 0;
-    for (unsigned int i=0; i<apps.size(); ++i) {
-        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    for (const auto & app : apps) {
+        if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
         {
-            data_type = apps[i];
+            data_type = app;
             foundDataType = true;
             options=" -D MOG_TYPE_8 ";
             apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+        else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
         {
-            data_type = apps[i];
+            data_type = app;
             foundDataType = true;
             options=" -D MOG_TYPE_16 ";
             apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
         }
-        else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
+        else if ( app == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
         {
-            data_type = apps[i];
+            data_type = app;
             foundDataType = true;
             options=" -D FLOAT8 ";
             apptypesize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
@@ -187,7 +187,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -353,9 +353,9 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
     for (iter = view_uncertainty_map.begin(); iter != view_uncertainty_map.end(); iter++)
         std::cout<<iter->second<<' '<<iter->first<<std::endl;
 #endif // 0
-    for (unsigned i = 0 ; i<cams_used.size();i++)
+    for (const auto & i : cams_used)
     {
-        vpgl_camera_double_sptr  incam = boxm2_util::camera_from_file( cams_used[i] );
+        vpgl_camera_double_sptr  incam = boxm2_util::camera_from_file( i );
         vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>* > (incam.ptr());
         vgl_point_3d<double> cc= pcam->get_camera_center();
         vgl_vector_3d<double> ray = cc - center;

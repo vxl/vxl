@@ -117,8 +117,8 @@ add_multiple_data( std::vector<rgrl_invariant_sptr> const& fixed_set,
 
       // Create matches from the nearest neighbors and push them onto
       // the current vector
-      for (unsigned int nn_ind = 0; nn_ind<near_neighbor_indices.size(); ++nn_ind) {
-        matches_[m_ind].push_back( new rgrl_invariant_match(moving_sets[m_ind][pt], fixed_set[near_neighbor_indices[nn_ind]]) );
+      for (int near_neighbor_indice : near_neighbor_indices) {
+        matches_[m_ind].push_back( new rgrl_invariant_match(moving_sets[m_ind][pt], fixed_set[near_neighbor_indice]) );
       }
     }
     std::sort(matches_[m_ind].begin(), matches_[m_ind].end(), dist_greater);

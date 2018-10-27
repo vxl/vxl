@@ -62,10 +62,9 @@ bool boxm2_vecf_fit_face::read_anchor_file(std::string const& path){
   }
   // now that the file is parsed the labeled points can be added to the
   // internal database, lpts_ (labeled points)
-  for(std::map<std::string, std::vector<vgl_point_3d<double> > >::iterator ait = anchors.begin();
-      ait != anchors.end(); ++ait){
-    std::string lab = ait->first;
-    std::vector<vgl_point_3d<double> >& pts = ait->second;
+  for(auto & anchor : anchors){
+    std::string lab = anchor.first;
+    std::vector<vgl_point_3d<double> >& pts = anchor.second;
     double x = 0.0, y= 0.0, z = 0.0;
     double np = 0.0;
     for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();

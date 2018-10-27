@@ -39,8 +39,8 @@ static void test_camera_compute_setup()
   world_pts.emplace_back( -1, 3, 4 );
   world_pts.emplace_back( 1, 2, -7 );
   std::vector< vgl_point_2d<double> > image_pts;
-  for ( unsigned int i = 0; i < world_pts.size(); ++i )
-    image_pts.emplace_back(C1.project( vgl_homg_point_3d<double>(world_pts[i]) ) );
+  for (const auto & world_pt : world_pts)
+    image_pts.emplace_back(C1.project( vgl_homg_point_3d<double>(world_pt) ) );
 
   vpgl_affine_camera<double> C1e;
   vpgl_affine_camera_compute::compute( image_pts, world_pts, C1e );
@@ -135,11 +135,11 @@ static void test_perspective_compute_direct_linear_transform()
 
   //Do the projection for each of the points
   std::vector< vgl_point_2d<double> > image_pts;
-  for (unsigned int i = 0; i < world_pts.size(); i++) {
+  for (auto & i : world_pts) {
     vnl_vector_fixed<double, 4> world_pt;
-    world_pt[0] = world_pts[i].x();
-    world_pt[1] = world_pts[i].y();
-    world_pt[2] = world_pts[i].z();
+    world_pt[0] = i.x();
+    world_pt[1] = i.y();
+    world_pt[2] = i.z();
     world_pt[3] = 1.0;
 
     vnl_vector_fixed<double, 3> projed_pt = proj * world_pt;
@@ -185,9 +185,9 @@ static void test_perspective_compute_ground()
 
   // project them to the image
   std::vector< vgl_point_2d<double> > image_pts;
-  for ( size_t k = 0; k < ground_pts.size(); ++k )
+  for (auto & ground_pt : ground_pts)
   {
-    vgl_homg_point_3d<double> world_pt(ground_pts[k].x(), ground_pts[k].y(), 0, 1);
+    vgl_homg_point_3d<double> world_pt(ground_pt.x(), ground_pt.y(), 0, 1);
 
     vgl_point_2d<double> img_pt = trueP.project(world_pt);
     assert( img_pt.x() >= 0 );
@@ -225,9 +225,9 @@ static void test_calibration_compute_natural()
 
   // project them to the image
   std::vector< vgl_point_2d<double> > image_pts;
-  for ( size_t k = 0; k < ground_pts.size(); ++k )
+  for (auto & ground_pt : ground_pts)
   {
-    vgl_homg_point_3d<double> world_pt( ground_pts[k].x(), ground_pts[k].y(), 0, 1 );
+    vgl_homg_point_3d<double> world_pt( ground_pt.x(), ground_pt.y(), 0, 1 );
 
     vgl_point_2d<double> img_pt = trueP.project( world_pt );
     assert( img_pt.x() >= 0 );

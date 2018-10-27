@@ -158,8 +158,8 @@ void mvl_multi_view_matches::add_track(std::vector<int> const& views, std::vecto
       }
       if (consistency_okay) {
         // Okay, we're good to merge friend_track[t] into the new track
-        for (Map_iterator tp = friend_track.begin(); tp != friend_track.end(); ++tp)
-          new_track.insert(*tp);
+        for (auto & tp : friend_track)
+          new_track.insert(tp);
       }
     }
     // All friend tracks are now merged into new track, or inconsistency has been found
@@ -227,8 +227,8 @@ std::ostream& mvl_multi_view_matches::print(std::ostream& s) const
 {
   for (unsigned int i=0; i < tracks_.size(); ++i) {
     s << "Track " << i << " : ";
-    for (Map::const_iterator m = tracks_[i].begin(); m != tracks_[i].end(); ++m)
-      s << '(' << views_[(*m).first] << ',' << (*m).second << ") ";
+    for (auto m : tracks_[i])
+      s << '(' << views_[m.first] << ',' << m.second << ") ";
     s << std::endl;
   }
   return s;
@@ -245,8 +245,8 @@ std::istream& mvl_multi_view_matches::read(std::istream& s)
   ++awk;
 
   std::cerr << __FILE__ << " : reading views ( ";
-  for (unsigned int i=0; i < views_.size(); ++i)
-    std::cerr << views_[i] << ' ';
+  for (int view : views_)
+    std::cerr << view << ' ';
   std::cerr << ")\n";
 
   init();

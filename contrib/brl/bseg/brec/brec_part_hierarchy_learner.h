@@ -74,20 +74,20 @@ class brec_part_hierarchy_learner : public vbl_ref_count
    void initialize_layer0_as_gaussians(int ndirs, float lambda_range, float lambda_inc, int n);
 
    ~brec_part_hierarchy_learner() override {
-     for (unsigned i = 0; i < stats_layer0_.size(); i++) {
-       delete stats_layer0_[i].second;
+     for (auto & i : stats_layer0_) {
+       delete i.second;
      }
      stats_layer0_.clear();
 
      layer_n_map::iterator it;
      for (it = stats_layer_n_.begin(); it != stats_layer_n_.end(); it++) {
        class_map* v = it->second;
-       for (class_map::iterator itm = v->begin(); itm != v->end(); itm++)
+       for (auto & itm : *v)
        {
-         delete (itm->second).second.first.first;
-         delete (itm->second).second.first.second;
-         delete (itm->second).second.second;
-         (itm->second).first = nullptr;
+         delete (itm.second).second.first.first;
+         delete (itm.second).second.first.second;
+         delete (itm.second).second.second;
+         (itm.second).first = nullptr;
        }
        v->clear();
        delete v;

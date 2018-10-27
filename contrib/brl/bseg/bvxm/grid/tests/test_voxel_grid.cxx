@@ -115,8 +115,8 @@ static void test_voxel_grid()
   }
 
   // delete grids
-  for (unsigned i=0; i<grids.size(); i++) {
-    delete grids[i];
+  for (auto & grid : grids) {
+    delete grid;
   }
 
   // remove temporary file

@@ -14,9 +14,9 @@ transform_points(const std::vector<vgl_point_3d<double> >& points,
                  vgl_vector_3d<double> t)
 {
   std::vector<vgl_point_3d<double> > t_pts;
-  for (unsigned i=0; i<points.size(); ++i)
+  for (const auto & point : points)
   {
-    vgl_point_3d<double> p = R*points[i] + t;
+    vgl_point_3d<double> p = R*point + t;
     t_pts.push_back(p);
   }
   return t_pts;
@@ -25,10 +25,10 @@ transform_points(const std::vector<vgl_point_3d<double> >& points,
 void add_noise(std::vector<vgl_point_3d<double> >& points, double sigma)
 {
   vnl_random r;
-  for ( unsigned i=0; i<points.size(); ++i )
+  for (auto & point : points)
   {
     vgl_vector_3d<double> e(r.normal(),r.normal(),r.normal());
-    points[i] += e*sigma;
+    point += e*sigma;
   }
 }
 

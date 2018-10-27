@@ -328,10 +328,10 @@ void mfpf_region_pdf::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) cons
   image.image().set_size(roi_ni_,roi_nj_);
   image.image().fill(0);
   unsigned q=0;
-  for (unsigned k=0;k<roi_.size();++k)
+  for (auto k : roi_)
   {
-    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
-      image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+    for (int i=k.start_x();i<=k.end_x();++i,++q)
+      image.image()(i,k.y())=vxl_byte(s*(mean[q]-min1));
   }
   vimt_transform_2d ref2im;
   ref2im.set_zoom_only(1.0/step_size_,ref_x_,ref_y_);
@@ -378,9 +378,9 @@ void mfpf_region_pdf::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
-  for (unsigned k=0;k<roi_.size();++k)
-    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i)
-      im(i,roi_[k].y())=1;
+  for (auto k : roi_)
+    for (int i=k.start_x();i<=k.end_x();++i)
+      im(i,k.y())=1;
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned i=0;i<im.ni();++i)

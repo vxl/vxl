@@ -90,8 +90,8 @@ std::vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigne
     if (heading_value >= heading_intervals_[hidx].first && heading_value < heading_intervals_[hidx].second)
       heading_indice.push_back(hidx);
   std::vector<unsigned> bin_indice;
-  for (std::vector<unsigned>::iterator it = heading_indice.begin(); it != heading_indice.end(); ++it)
-    bin_indice.push_back(this->bin_index(dist_idx, land_type, *it));
+  for (unsigned int & it : heading_indice)
+    bin_indice.push_back(this->bin_index(dist_idx, land_type, it));
   return bin_indice;
 }
 
@@ -110,8 +110,8 @@ void volm_desc_ex_2d::set_count(unsigned const& dist_idx, unsigned const& land_i
 void volm_desc_ex_2d::set_count(double const& distance, unsigned const& land_id, double const& heading, unsigned char const& count)
 {
   std::vector<unsigned> bins = this->bin_index(distance, land_id, heading);
-  for (std::vector<unsigned>::iterator vit = bins.begin();  vit != bins.end();  ++vit)
-    this->set_count(*vit, count);
+  for (unsigned int & bin : bins)
+    this->set_count(bin, count);
 }
 
 float volm_desc_ex_2d::similarity(volm_desc_sptr other)
@@ -131,11 +131,11 @@ void volm_desc_ex_2d::print() const
   std::cout << "descriptor name: " << name_ << '\n';
   std::cout << "number of depth bins: " << ndists_ << '\n'
      << "radius interval: ";
-  for (unsigned ridx = 0; ridx < radius_.size(); ridx++)
-    std::cout << radius_[ridx] << ' ';
+  for (double radiu : radius_)
+    std::cout << radiu << ' ';
   std::cout << "\nnumber of heading bins: " << nheadings_ << ", heading width: " << h_width_ << ", heading incremental: " << h_inc_ << '\n';
-  for (unsigned hidx = 0; hidx < heading_intervals_.size(); hidx++)
-    std::cout << '[' << heading_intervals_[hidx].first << ',' << heading_intervals_[hidx].second << "] ";
+  for (const auto & heading_interval : heading_intervals_)
+    std::cout << '[' << heading_interval.first << ',' << heading_interval.second << "] ";
   std::cout << '\n'
            << "number of land bins: " << nlands_ << '\n';
   std::cout << "number of total bins:" << nbins_ << '\n';

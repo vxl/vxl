@@ -380,9 +380,9 @@ void mfpf_point_finder::multi_search_one_pose(
   vimt_find_image_troughs_3x3(t_pts,r_im);
   vimt_transform_2d im2w = response_im.world2im().inverse();
 
-  for (unsigned i=0;i<t_pts.size();++i)
+  for (auto & t_pt : t_pts)
   {
-    unsigned x =t_pts[i].x(), y=t_pts[i].y();
+    unsigned x =t_pt.x(), y=t_pt.y();
     double f0 = r_im(x,y);  // Value at minima on grid
 
     if (vnl_math::isnan(f0))

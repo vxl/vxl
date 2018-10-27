@@ -93,9 +93,9 @@ GetFaceList()
   }
 
   iface_list* v = new iface_list;
-  for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
+  for (auto & face : faces_)
   {
-    v->push_back(*f);
+    v->push_back(face);
   }
 
   return v;
@@ -233,16 +233,16 @@ compute_closure()
     int      original_nbrhood_size = faces_.size();
     float    area_threshold = (seed_->Npix() * junk_area_percentage_);
     iface_list  keep_faces;
-    for (iface_iterator f = faces_.begin(); f != faces_.end(); ++f)
+    for (auto & face : faces_)
     {
-      original_area += (*f)->Npix();
+      original_area += face->Npix();
 
-      if ((*f)->Npix() >= area_threshold)
-        keep_faces.push_back(*f);
+      if (face->Npix() >= area_threshold)
+        keep_faces.push_back(face);
       else
       {
         junk_count_++;
-        junk_area += (*f)->Npix();
+        junk_area += face->Npix();
       }
     }
 
@@ -278,9 +278,9 @@ Collinearity()
   float    coll = 0.0f;
   edge_list edges; seed_->edges(edges);
 
-  for (edge_iterator  ei = edges.begin(); ei != edges.end(); ei++)
+  for (auto & edge : edges)
   {
-    vtol_edge_2d*  e = (*ei)->cast_to_edge_2d();
+    vtol_edge_2d*  e = edge->cast_to_edge_2d();
 
     if (e)
     {
@@ -334,11 +334,10 @@ add_unique_face(iface_list&               facelist,
                 vtol_intensity_face_sptr  face,
                 int                       size_filter)
 {
-  for (iface_iterator check = facelist.begin();
-       check != facelist.end(); ++check)
+  for (auto & check : facelist)
   {
-    if ((check->ptr()->Xo() == face->Xo()) &&
-        (check->ptr()->Yo() == face->Yo()))
+    if ((check.ptr()->Xo() == face->Xo()) &&
+        (check.ptr()->Yo() == face->Yo()))
       return false;
   }
 
@@ -437,9 +436,9 @@ get_adjacent_faces(vtol_intensity_face_sptr&  known_face)
     edge_list edges; known_face->edges(edges);
     faces = new iface_list;
 
-    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
+    for (auto & edge : edges)
     {
-      vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
+      vtol_edge_2d* e = edge->cast_to_edge_2d();
       if (e)
       {
         vtol_intensity_face_sptr  other_f =

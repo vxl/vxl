@@ -280,9 +280,8 @@ make_pyramid_image_from_base(char const* file,
     {//scope for il resources
       vil_image_list il(temp_dir);
       std::vector<vil_image_resource_sptr> rescs = il.resources();
-      for (std::vector<vil_image_resource_sptr>::iterator rit = rescs.begin();
-           rit != rescs.end(); ++rit)
-        pyr->put_resource(*rit);
+      for (auto & resc : rescs)
+        pyr->put_resource(resc);
     }//close il resources
   }//close pyr
 

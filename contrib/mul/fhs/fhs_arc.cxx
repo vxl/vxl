@@ -93,11 +93,11 @@ bool fhs_order_tree_from_root(const std::vector<fhs_arc>& arc0,
   // Number of nodes is one more than number of arcs for a tree
   unsigned n=arc0.size()+1;
   // Check that all nodes are in range [0,n-1]
-  for (unsigned i=0;i<arc0.size();++i)
-    if (arc0[i].i()>=n || arc0[i].j()>=n)
+  for (const auto & i : arc0)
+    if (i.i()>=n || i.j()>=n)
     {
       std::cerr<<"Arc index outside range [0,"<<n-1<<']'<<'\n'
-              <<"Arc = "<<arc0[i]<<'\n';
+              <<"Arc = "<<i<<'\n';
       return false;
     }
 

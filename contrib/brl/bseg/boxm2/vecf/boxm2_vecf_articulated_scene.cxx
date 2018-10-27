@@ -159,15 +159,14 @@ void boxm2_vecf_articulated_scene::prerefine_target(boxm2_scene_sptr target_scen
   depths_to_match.fill(0);
 
   //iterate through the trees of the target. At this point they are unrefined
-  for(std::vector<unrefined_cell_info>::iterator uit = unrefined_cell_info_.begin();
-      uit != unrefined_cell_info_.end(); ++uit){
-    const vgl_point_3d<double>& pt = uit->pt_;
-    unsigned lindex = uit->linear_index_;
+  for(auto & uit : unrefined_cell_info_){
+    const vgl_point_3d<double>& pt = uit.pt_;
+    unsigned lindex = uit.linear_index_;
     //record the deepest tree found
     int max_depth = this->prerefine_target_sub_block(pt, lindex);
     // if max_depth == -1  then don't change the refinement level
     // since the target didn't map to a valid source position
-    depths_to_match(uit->ix_, uit->iy_, uit->iz_) = max_depth;
+    depths_to_match(uit.ix_, uit.iy_, uit.iz_) = max_depth;
     if(max_depth>deepest_cell_depth){
       deepest_cell_depth = max_depth;
     }

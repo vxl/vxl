@@ -188,13 +188,13 @@ int main(int argc, char** argv)
                << ",\t fallback_category = ";
       volm_fallback_label::print_id(drs[i]->land_id());
       std::cout << " (";
-      for (unsigned jj =0; jj < obj_land[i].size(); jj++)
-        std::cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
+      for (unsigned char jj : obj_land[i])
+        std::cout << volm_label_table::land_string(jj) << ", ";
       std::cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
       std::cout << " (";
-      for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
-        std::cout << obj_land_wgt[i][jj] << ' ';
+      for (float jj : obj_land_wgt[i])
+        std::cout << jj << ' ';
       std::cout << ')' << std::endl;
     }
   }

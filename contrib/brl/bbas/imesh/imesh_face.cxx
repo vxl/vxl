@@ -27,9 +27,9 @@ imesh_face_array_base::group_face_set(const std::string& name) const
 {
   std::set<unsigned int> face_set;
   unsigned int start = 0, end;
-  for (unsigned int g=0; g<groups_.size(); ++g) {
-    end = groups_[g].second;
-    if (groups_[g].first == name) {
+  for (const auto & group : groups_) {
+    end = group.second;
+    if (group.first == name) {
       for (unsigned int i=start; i<end; ++i)
         face_set.insert(i);
     }
@@ -68,8 +68,8 @@ void imesh_face_array_base::append(const imesh_face_array_base& other,
     // group any ungrouped faces in this array
     this->make_group("ungrouped");
     unsigned int offset = this->size();
-    for (unsigned int g=0; g<other.groups_.size(); ++g) {
-      groups_.push_back(other.groups_[g]);
+    for (const auto & group : other.groups_) {
+      groups_.push_back(group);
       groups_.back().second += offset;
     }
   }
@@ -92,8 +92,8 @@ void imesh_face_array::append(const imesh_face_array_base& other,
     if (ind_shift > 0) {
       for (unsigned int i=new_begin; i<faces_.size(); ++i) {
         std::vector<unsigned int>& f = faces_[i];
-        for (unsigned int j=0; j<f.size(); ++j)
-          f[j] += ind_shift;
+        for (unsigned int & j : f)
+          j += ind_shift;
       }
     }
   }

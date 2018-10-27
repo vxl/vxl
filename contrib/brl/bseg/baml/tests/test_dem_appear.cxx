@@ -99,10 +99,9 @@ static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<d
     double imin = std::numeric_limits<double>::max(), jmin = imin;
     double imax = 0.0, jmax = 0.0;
     std::vector<vgl_point_2d<double> > verts;
-    for(std::vector<vgl_point_3d<double> >::iterator cit = corns.begin();
-        cit != corns.end(); ++cit){
+    for(auto & corn : corns){
       double id, jd;
-      cam1->project(cit->x(), cit->y(), cit->z(), id, jd);
+      cam1->project(corn.x(), corn.y(), corn.z(), id, jd);
       verts.emplace_back(id, jd);
       if(id<imin) imin = id;
       if(jd<jmin) jmin = jd;

@@ -487,9 +487,8 @@ void mbl_logger_root::load_log_config(std::istream& is,
 void mbl_logger_root::update_all_loggers()
 {
 #ifndef MBL_LOG_DISABLE_ALL_LOGGING
-  for (std::set<mbl_logger *>::iterator it=all_loggers_.begin(),
-       end=all_loggers_.end(); it!=end; ++it)
-    (*it)->reinitialise();
+  for (auto all_logger : all_loggers_)
+    all_logger->reinitialise();
 #endif
 }
 

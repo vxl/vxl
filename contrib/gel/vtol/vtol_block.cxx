@@ -349,8 +349,8 @@ two_chain_list *vtol_block::hole_cycles() const
   for (ti=inferiors_.begin();ti!=inferiors_.end();++ti)
   {
     two_chain_list *templist=(*ti)->cast_to_two_chain()->inferior_two_chains();
-    for (two_chain_list::iterator ii=templist->begin();ii!=templist->end();++ii)
-      result->push_back(*ii);
+    for (auto & ii : *templist)
+      result->push_back(ii);
     delete templist;
   }
   return result;

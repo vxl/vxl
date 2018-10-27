@@ -107,7 +107,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
                         const std::vector<vil3d_chord>& t)
 {
   vsl_b_write(bfs,unsigned(t.size()));
-  for (unsigned i=0;i<t.size();++i) t[i].b_write(bfs);
+  for (auto i : t) i.b_write(bfs);
 }
 
 //: Load

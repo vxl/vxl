@@ -63,8 +63,8 @@ rgrl_feature_set_bins_2d( feature_vector const& features,
   bins_2d_.reset( new bin2d_type( min, max, bin_sizes ) );
 
   // Add the data
-  for ( feature_vector::const_iterator itr = features.begin(); itr != features.end(); ++itr ) {
-    bins_2d_->add_point( (*itr)->location(), *itr );
+  for (const auto & feature : features) {
+    bins_2d_->add_point( feature->location(), feature );
   }
 }
 

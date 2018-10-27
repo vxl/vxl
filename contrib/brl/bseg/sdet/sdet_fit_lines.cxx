@@ -58,10 +58,9 @@ bool sdet_fit_lines::fit_lines()
   line_segs_.clear();
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges_.begin();
-       eit != edges_.end(); eit++)
+  for (auto & edge : edges_)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -78,9 +77,8 @@ bool sdet_fit_lines::fit_lines()
     fitter_.fit();
 
     std::vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
-    for (std::vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
-         sit != segs.end(); sit++)
-      line_segs_.push_back(*sit);
+    for (auto & seg : segs)
+      line_segs_.push_back(seg);
   }
   segs_valid_ = true;
   return true;
@@ -94,10 +92,9 @@ std::vector<vsol_line_2d_sptr> sdet_fit_lines::get_line_segs()
   std::vector<vsol_line_2d_sptr> ret;
   if(!segs_valid_)
     this->fit_lines();
-  for (std::vector<vgl_line_segment_2d<double> >::iterator sit=line_segs_.begin();
-         sit != line_segs_.end(); sit++)
+  for (auto & line_seg : line_segs_)
     {
-      vsol_line_2d_sptr line = new vsol_line_2d(*sit);
+      vsol_line_2d_sptr line = new vsol_line_2d(line_seg);
       // make sure the start point and end point of line are not the same
       if ( line->length() != 0.0 )
         ret.push_back(line);

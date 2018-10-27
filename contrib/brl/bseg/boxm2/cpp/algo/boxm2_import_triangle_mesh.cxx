@@ -28,10 +28,10 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
 
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
 
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
+  for (auto & block : blocks)
   {
-    boxm2_block_id id = iter->first;
-    boxm2_block_metadata mdata = iter->second;
+    boxm2_block_id id = block.first;
+    boxm2_block_metadata mdata = block.second;
     boxm2_block * blk = cache->get_block(scene,id);
 
     // assume cells are cubes, i.e. subblock_dim_.x() == subblock_dim_.y() == subblock_dim_.z()
@@ -44,9 +44,8 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
     boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),alpha_base->buffer_length(),alpha_base->block_id());
 
     if (zero_model) {
-      for (boxm2_array_1d<float>::iterator alpha_it = alpha_data->data().begin();
-           alpha_it != alpha_data->data().end(); ++alpha_it) {
-        *alpha_it = 0.0f;
+      for (float & alpha_it : alpha_data->data()) {
+        alpha_it = 0.0f;
       }
     }
 
@@ -92,8 +91,7 @@ bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, 
 
             //iterate through leaves of the tree
             std::vector<int> leafBits = bit_tree.get_leaf_bits();
-            for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-              int currBitIndex = (*iter);
+            for (int currBitIndex : leafBits) {
               int data_offset = bit_tree.get_data_index(currBitIndex); //data index
 
               vgl_box_3d<double> cell_box = bit_tree.cell_box(currBitIndex, subblock_origin, subblock_len);

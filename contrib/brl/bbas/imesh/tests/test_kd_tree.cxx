@@ -15,23 +15,23 @@ void test_closest_point(const imesh_mesh& mesh, const std::vector<vgl_point_3d<d
 
   bool same_tri = true;
   bool same_pt = true;
-  for (unsigned int i=0; i<pts.size(); ++i) {
+  for (const auto & pt : pts) {
     vgl_point_3d<double> cp1, cp2;
-    unsigned int ind1 = imesh_kd_tree_closest_point(pts[i],mesh,kd_tree,cp1);
-    unsigned int ind2 = imesh_closest_point(pts[i],mesh,cp2);
+    unsigned int ind1 = imesh_kd_tree_closest_point(pt,mesh,kd_tree,cp1);
+    unsigned int ind2 = imesh_closest_point(pt,mesh,cp2);
     if (ind1 != ind2) {
-      if (std::abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
+      if (std::abs((cp1-pt).length() - (cp2-pt).length()) > 1e-8) {
         same_tri = false;
-        std::cout << "kd tree closest point to "<<pts[i]<<" at index "<< ind1<<std::endl
-                 << "exhaustive closest point to "<<pts[i]<<" at index "<< ind2<<std::endl;
+        std::cout << "kd tree closest point to "<<pt<<" at index "<< ind1<<std::endl
+                 << "exhaustive closest point to "<<pt<<" at index "<< ind2<<std::endl;
       }
     }
     if ((cp1-cp2).length() > 1e-8)
     {
-      if (std::abs((cp1-pts[i]).length() - (cp2-pts[i]).length()) > 1e-8) {
+      if (std::abs((cp1-pt).length() - (cp2-pt).length()) > 1e-8) {
         same_pt = false;
-        std::cout << "kd tree closest point to "<<pts[i]<<" is "<<cp1<<std::endl
-                 << "exhaustive closest point to "<<pts[i]<<" is "<<cp2<<std::endl;
+        std::cout << "kd tree closest point to "<<pt<<" is "<<cp1<<std::endl
+                 << "exhaustive closest point to "<<pt<<" is "<<cp2<<std::endl;
       }
     }
   }
@@ -61,11 +61,11 @@ static void test_kd_tree()
   imesh_kd_tree_closest_point(pts[3],cube,kd_tree,cp,&dists);
   unsigned int leaf_count = 0;
   std::vector<imesh_kd_tree_node*> internals;
-  for (unsigned int i=0; i<dists.size(); ++i) {
-    if (dists[i].node_->is_leaf())
+  for (auto & dist : dists) {
+    if (dist.node_->is_leaf())
       ++leaf_count;
     else
-      internals.push_back(dists[i].node_);
+      internals.push_back(dist.node_);
   }
   for (unsigned int i=0; i<internals.size(); ++i) {
     if (internals[i]->is_leaf())

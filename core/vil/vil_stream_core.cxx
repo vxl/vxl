@@ -20,8 +20,8 @@ vil_stream_core::vil_stream_core(unsigned block_size)
 
 vil_stream_core::~vil_stream_core()
 {
-  for (unsigned i=0; i<block_.size(); ++i)
-    delete [] block_[i];
+  for (auto & i : block_)
+    delete [] i;
   block_.clear();
 }
 

@@ -15,15 +15,15 @@ static std::pair<unsigned,unsigned> mbl_mst_next_pair(
 {
   std::pair<unsigned,unsigned> p;
   double min_sim = 9.9e9;
-  for (unsigned i=0; i<a.size(); ++i)
-    for (unsigned j=0; j<b.size(); ++j)
+  for (unsigned int i : a)
+    for (unsigned int j : b)
     {
-      double s = D(a[i],b[j]);
+      double s = D(i,j);
       if (s<min_sim)
       {
         min_sim=s;
-        p.first=a[i];
-        p.second=b[j];
+        p.first=i;
+        p.second=j;
       }
     }
   return p;

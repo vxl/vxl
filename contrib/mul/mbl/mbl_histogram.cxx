@@ -41,7 +41,7 @@ void mbl_histogram::clear()
   n_obs_ = 0;
   n_below_ = 0;
   n_above_ = 0;
-  for (unsigned int i=0;i<freq_.size();++i) freq_[i]=0;
+  for (int & i : freq_) i=0;
 }
 
 void mbl_histogram::obs(double v)

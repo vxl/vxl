@@ -160,8 +160,7 @@ std::vector<boxm_block<T>*> boxm_block_vis_graph_iterator<T>::frontier_blocks()
   std::vector<boxm_block<T>*> frontier;
 
   std::vector<vgl_point_3d<int> > blocks = to_process_indices_;
-  for (unsigned i=0; i<blocks.size(); i++) {
-    vgl_point_3d<int> index = blocks[i];
+  for (auto index : blocks) {
     frontier.push_back(scene_->get_block(index)); //.x(), index.y(), index.z());
   }
 

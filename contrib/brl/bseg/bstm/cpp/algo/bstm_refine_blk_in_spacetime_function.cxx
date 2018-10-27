@@ -215,18 +215,18 @@ void bstm_refine_blk_in_spacetime_function::move_data(bstm_time_tree& unrefined_
   std::vector<int> new_leaves = refined_time_tree.get_leaf_bits();
   std::vector<int> old_leaves = unrefined_time_tree.get_leaf_bits();
 
-  for (std::vector<int>::iterator iter = new_leaves.begin(); iter != new_leaves.end(); iter++)
+  for (int & new_leave : new_leaves)
   {
     //get new data ptr
-    int newDataPtr = refined_time_tree.get_data_index(*iter);
+    int newDataPtr = refined_time_tree.get_data_index(new_leave);
 
     //find out if this leaf exists in the unrefined tree as well
-    int pj = unrefined_time_tree.parent_index(*iter);           //Bit_index of parent bit
-    bool validCellOld = (*iter==0) || unrefined_time_tree.bit_at(pj);
+    int pj = unrefined_time_tree.parent_index(new_leave);           //Bit_index of parent bit
+    bool validCellOld = (new_leave==0) || unrefined_time_tree.bit_at(pj);
 
     int oldDataPtr;
     if (validCellOld) { //if they both exist
-      oldDataPtr = unrefined_time_tree.get_data_index(*iter);
+      oldDataPtr = unrefined_time_tree.get_data_index(new_leave);
 
       //copy data
       alpha_cpy[newDataPtr]= alpha_[oldDataPtr];
@@ -347,9 +347,9 @@ bool bstm_refine_blk_in_spacetime_function::decide_refinement_in_space(int dataI
 {
   //fetch time tree(s) and see if they contain any cell with prob > prob_t.
   boxm2_array_1d<uchar8>  all_time_trees =  blk_t_->get_cell_all_tt(dataIndex);
-  for (unsigned int t = 0; t < all_time_trees.size(); ++t)
+  for (auto & all_time_tree : all_time_trees)
   {
-    bstm_time_tree time_tree( all_time_trees[t].data_block(), max_level_t_);
+    bstm_time_tree time_tree( all_time_tree.data_block(), max_level_t_);
     //loop over its leaves to see if any cell has prob > prob_t
     std::vector<int> leaves = time_tree.get_leaf_bits();
     for(std::vector<int>::const_iterator iter = leaves.begin(); iter != leaves.end(); iter++)

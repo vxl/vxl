@@ -28,9 +28,8 @@ void boxm2_vecf_mouth::rotate_inf(){
   // rotate the knots of the sup rather than current inf knots
   // thus an invariant starting point before rotation
   std::vector<vgl_point_3d<double> > rot_knots;
-  for(std::vector<vgl_point_3d<double> >::iterator kit = knots.begin();
-      kit != knots.end(); ++kit){
-    vgl_point_3d<double> rp = rot_*(*kit);
+  for(auto & knot : knots){
+    vgl_point_3d<double> rp = rot_*knot;
     rot_knots.push_back(rp);
   }
   inf_ = bvgl_spline_region_3d<double>(rot_knots, 1.0);
@@ -54,12 +53,10 @@ vgl_box_3d<double> boxm2_vecf_mouth::bounding_box() const{
   std::vector<vgl_point_3d<double> > sup_knots = sup_.knots();
   std::vector<vgl_point_3d<double> > inf_knots = inf_.knots();
   vgl_box_3d<double> ret;
-  for(std::vector<vgl_point_3d<double> >::iterator kit = sup_knots.begin();
-      kit != sup_knots.end(); ++kit)
-    ret.add(*kit);
-  for(std::vector<vgl_point_3d<double> >::iterator kit = inf_knots.begin();
-      kit != inf_knots.end(); ++kit)
-    ret.add(*kit);
+  for(auto & sup_knot : sup_knots)
+    ret.add(sup_knot);
+  for(auto & inf_knot : inf_knots)
+    ret.add(inf_knot);
   return ret;
 }
 //

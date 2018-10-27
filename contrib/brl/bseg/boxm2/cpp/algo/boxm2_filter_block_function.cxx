@@ -50,10 +50,9 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
 
           //get each prob and sort it
           std::vector<float> probs;
-          for (unsigned int i=0; i<neighborPoints.size(); ++i)
+          for (auto abCenter : neighborPoints)
           {
             //load neighbor block/tree
-            vgl_point_3d<double> abCenter = neighborPoints[i];
             vgl_point_3d<int>    blkIdx((int) abCenter.x(),
                                         (int) abCenter.y(),
                                         (int) abCenter.z() );

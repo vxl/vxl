@@ -122,10 +122,9 @@ bool sdet_image_mesh::compute_mesh()
   det.SetImage(resc_);
   det.DoContour();
   std::vector<vtol_edge_2d_sptr>* edges = det.GetEdges();
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin();
-       eit != edges->end(); eit++)
+  for (auto & edge : *edges)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -157,13 +156,13 @@ bool sdet_image_mesh::compute_mesh()
  segs_pair.insert(segs_pair.end(),lines.begin(),lines.end());
  line_img.fill(255);
 
- for (unsigned i = 0;i<segs_pair.size();i++)
+ for (auto & i : segs_pair)
  {
    bool init = true;
-   float xs= float(segs_pair[i].point1().x());
-   float ys= float(segs_pair[i].point1().y());
-   float xe= float(segs_pair[i].point2().x());
-   float ye= float(segs_pair[i].point2().y());
+   float xs= float(i.point1().x());
+   float ys= float(i.point1().y());
+   float xe= float(i.point2().x());
+   float ye= float(i.point2().y());
    float x=0.0f;
    float y=0.0f;
    while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))

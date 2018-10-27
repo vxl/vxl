@@ -183,8 +183,7 @@ class bmsh3d_face : public vispt_elm
   void _ifs_track_ordered_vertices();
 
   void _ifs_assign_Vs_vid_by_id() {
-    for (unsigned int i=0; i<vertices_.size(); i++) {
-      bmsh3d_vertex* V = vertices_[i];
+    for (auto V : vertices_) {
       V->set_vid(V->id());
     }
   }

@@ -25,10 +25,9 @@ void boxm2_vecf_skin_scene::create_anatomy_labels(){
   if(!blk_) return;
   vgl_box_3d<double> source_box = blk_->bounding_box_global();
   std::vector<cell_info> source_cell_centers = blk_->cells_in_box(source_box);
-  for(std::vector<cell_info>::iterator cit = source_cell_centers.begin();
-      cit != source_cell_centers.end(); ++cit){
-    int depth = cit->depth_;
-    unsigned data_index = cit->data_index_;
+  for(auto & source_cell_center : source_cell_centers){
+    int depth = source_cell_center.depth_;
+    unsigned data_index = source_cell_center.data_index_;
     float alpha = static_cast<float>(alpha_data_[data_index]);
     if(alpha>alpha_init_){
       skin_data_[data_index] = static_cast<boxm2_data_traits<BOXM2_PIXEL>::datatype>(true);
@@ -44,14 +43,13 @@ void boxm2_vecf_skin_scene::create_anatomy_labels(){
 void boxm2_vecf_skin_scene::cache_cell_centers_from_anatomy_labels(){
   std::vector<cell_info> source_cell_centers = blk_->cells_in_box(source_bb_);
 
-  for(std::vector<cell_info>::iterator cit = source_cell_centers.begin();
-      cit != source_cell_centers.end(); ++cit){
-    unsigned dindx = cit->data_index_;
+  for(auto & source_cell_center : source_cell_centers){
+    unsigned dindx = source_cell_center.data_index_;
     float alpha = alpha_data_[dindx];
     bool skin = skin_data_[dindx]   > pixtype(0);
     if(skin||alpha>alpha_init_){
       unsigned skin_index  = static_cast<unsigned>(skin_cell_centers_.size());
-      const vgl_point_3d<double>& p = cit->cell_center_;
+      const vgl_point_3d<double>& p = source_cell_center.cell_center_;
       skin_cell_centers_.push_back(p);
       skin_cell_data_index_.push_back(dindx);
       data_index_to_cell_index_[dindx] = skin_index;
@@ -123,14 +121,13 @@ void boxm2_vecf_skin_scene::build_skin(){
   vgl_box_3d<double> bb = skin_geo_.bounding_box();
    // cell in a box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double a = 0.0;
     double d = skin_geo_.distance(cell_center, a);
     unsigned char apc = static_cast<unsigned char>(a);
-    double d_thresh = len_coef*cit->side_length_;
+    double d_thresh = len_coef*cc.side_length_;
     if(d < d_thresh){
       if(!is_type_global(cell_center, SKIN)){
         skin_cell_centers_.push_back(cell_center);
@@ -158,8 +155,7 @@ void boxm2_vecf_skin_scene::find_cell_neigborhoods(){
       vgl_point_3d<double>& p = skin_cell_centers_[i];
       unsigned indx_i = skin_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -383,9 +379,8 @@ int boxm2_vecf_skin_scene::prerefine_target_sub_block(vgl_point_3d<double> const
 
   // iterate through each intersecting source tree and find the maximum tree depth
   int max_depth = 0;
-  for(std::vector<vgl_point_3d<int> >::iterator bit = int_sblks.begin();
-      bit != int_sblks.end(); ++bit){
-    const uchar16& tree_bits = trees_(bit->x(), bit->y(), bit->z());
+  for(auto & int_sblk : int_sblks){
+    const uchar16& tree_bits = trees_(int_sblk.x(), int_sblk.y(), int_sblk.z());
     //safely cast since bit_tree is just temporary
     uchar16& uctree_bits = const_cast<uchar16&>(tree_bits);
     boct_bit_tree bit_tree(uctree_bits.data_block(), max_level);
@@ -421,9 +416,8 @@ void boxm2_vecf_skin_scene::inverse_vector_field_unrefined(std::vector<vgl_point
     this->extract_target_block_data(target_scene);
   this->extract_unrefined_cell_info();//on articulated_scene
   std::vector<vgl_point_3d<double> > tgt_pts;
-  for(std::vector<unrefined_cell_info>::iterator cit = unrefined_cell_info_.begin();
-      cit != unrefined_cell_info_.end(); ++cit)
-    tgt_pts.push_back(cit->pt_);
+  for(auto & cit : unrefined_cell_info_)
+    tgt_pts.push_back(cit.pt_);
   // compute inverse vector field for prerefining the target
   this->inverse_vector_field_unrefined(tgt_pts);
   // refine the target to match the source tree refinement

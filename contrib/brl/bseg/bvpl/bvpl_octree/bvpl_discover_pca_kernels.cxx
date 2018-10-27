@@ -720,10 +720,8 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
   vgl_point_3d<int> min_point = nbbox_.min_point();
   vgl_point_3d<int> max_point = nbbox_.max_point();
 
-  for (unsigned i=0; i<data_leaves.size(); ++i)
+  for (auto data_cell : data_leaves)
   {
-    float_cell_type* data_cell = data_leaves[i];
-
     //create a region around the center cell
     vgl_point_3d<double> centroid = data_tree->global_centroid(data_cell);
 

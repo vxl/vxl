@@ -20,13 +20,13 @@ bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > &
 {
   vnl_vector< double > p(2), q(2);
 
-  for ( unsigned int i=0; i<matches.size(); ++i ) {
-    p[0] = matches[i].first->location_i();
-    p[1] = matches[i].first->location_j();
+  for (const auto & matche : matches) {
+    p[0] = matche.first->location_i();
+    p[1] = matche.first->location_j();
     from_pts_.push_back( p );
 
-    q[0] = matches[i].second->location_i();
-    q[1] = matches[i].second->location_j();
+    q[0] = matche.second->location_i();
+    q[1] = matche.second->location_j();
     to_pts_.push_back( q );
   }
 }

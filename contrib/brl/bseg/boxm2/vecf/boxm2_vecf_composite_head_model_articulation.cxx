@@ -20,15 +20,14 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv.emplace_back(0.26, 0.0, 0.968);
     emv.emplace_back(0.1736, 0.0, 0.9848);
     emv.emplace_back(0.0, 0.0, 1.0);
-    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
-        eit != emv.end(); eit++){
+    for(auto & eit : emv){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
-      head_params_local_cpy.look_dir_ = *eit;
+      head_params_local_cpy.look_dir_ = eit;
 
 
-      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = *eit;
-      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = *eit;
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = eit;
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = eit;
 
       head_params_local_cpy.l_orbit_params_.eyelid_dt_ = ddt;
       head_params_local_cpy.r_orbit_params_.eyelid_dt_ = ddt;
@@ -42,15 +41,14 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv2.emplace_back(0.0, 0.0871, 0.9962);
     emv2.emplace_back(0.0, 0.1736, 0.9848);
     double ddt2 = 0.75;
-    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
-        eit != emv2.end(); eit++){
+    for(auto & eit : emv2){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
 
 
-      head_params_local_cpy.look_dir_ = *eit;
+      head_params_local_cpy.look_dir_ = eit;
 
-      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = *eit;
-      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = *eit;
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = eit;
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = eit;
 
       head_params_local_cpy.l_orbit_params_.eyelid_dt_ = ddt2;
       head_params_local_cpy.r_orbit_params_.eyelid_dt_ = ddt2;
@@ -205,15 +203,14 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv2.emplace_back(0.0, 0.1736, 0.9848);
 
     double ddt2 = stop; unsigned pause_duration = 1;
-    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv2.begin();
-        eit != emv2.end(); eit++){
+    for(auto & eit : emv2){
       boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
       for( unsigned j=0;j<pause_duration;j++){
 
-      head_params_local_cpy.look_dir_ = *eit;
+      head_params_local_cpy.look_dir_ = eit;
 
-      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = *eit;
-      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = *eit;
+      head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = eit;
+      head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = eit;
 
       head_params_local_cpy.l_orbit_params_.eyelid_dt_ = ddt2;
       head_params_local_cpy.r_orbit_params_.eyelid_dt_ = ddt2;
@@ -318,13 +315,12 @@ void boxm2_vecf_composite_head_model_articulation::register_play_sequences(boxm2
     emv.emplace_back(0.1736, 0.0, 0.9848);
     emv.emplace_back(0.0, 0.0, 1.0);
     unsigned pause_duration = 7;
-    for(std::vector<vgl_vector_3d<double> >::iterator eit = emv.begin();
-        eit != emv.end(); eit++){
+    for(auto & eit : emv){
       for (unsigned j = 0; j<pause_duration; j++){
         boxm2_vecf_composite_head_parameters head_params_local_cpy(head_params);
-        head_params_local_cpy.look_dir_ = *eit;
-        head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = *eit;
-        head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = *eit;
+        head_params_local_cpy.look_dir_ = eit;
+        head_params_local_cpy.l_orbit_params_.eye_pointing_dir_ = eit;
+        head_params_local_cpy.r_orbit_params_.eye_pointing_dir_ = eit;
         look_dir_articulation.push_back(head_params_local_cpy);
       }
     }

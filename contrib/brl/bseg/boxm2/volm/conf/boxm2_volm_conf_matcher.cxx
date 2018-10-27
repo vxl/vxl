@@ -267,9 +267,9 @@ boxm2_volm_conf_matcher
 {
   // transfer index to a map indexed by land id
   std::map<unsigned char, std::vector<volm_conf_object> > index_map;
-  for (unsigned i = 0; i < values.size(); i++) {
-    unsigned char land_id = values[i].land();
-    index_map[land_id].push_back(values[i]);
+  for (const auto & value : values) {
+    unsigned char land_id = value.land();
+    index_map[land_id].push_back(value);
   }
 
   std::vector<std::string> query_ref_obj_name = query_->ref_obj_name();
@@ -291,39 +291,39 @@ boxm2_volm_conf_matcher
     }
     // obtain reference objects
     std::map<std::string, volm_conf_object_sptr> ref_objs;
-    for (std::vector<std::string>::iterator vit = query_ref_obj_name.begin(); vit != query_ref_obj_name.end(); ++vit)
-      if (query_map.find(*vit) != query_map.end())
-        ref_objs.insert(std::pair<std::string, volm_conf_object_sptr>(*vit, query_map[*vit]));
+    for (auto & vit : query_ref_obj_name)
+      if (query_map.find(vit) != query_map.end())
+        ref_objs.insert(std::pair<std::string, volm_conf_object_sptr>(vit, query_map[vit]));
 
     std::map<std::string, std::pair<float,float> > score_ref_map;
     std::map<std::string, std::vector<volm_conf_object> > object_ref_map;
     // loop over all reference objects
-    for (std::map<std::string, volm_conf_object_sptr>::iterator mit = ref_objs.begin(); mit != ref_objs.end(); ++mit)
+    for (auto & ref_obj : ref_objs)
     {
-      std::string ref_obj_name = mit->first;
+      std::string ref_obj_name = ref_obj.first;
       double min_dist = query_dist_tol[cam_id][ref_obj_name].first;
       double max_dist = query_dist_tol[cam_id][ref_obj_name].second;
       // get the reference object in query
-      volm_conf_object_sptr q_ref = mit->second;
+      volm_conf_object_sptr q_ref = ref_obj.second;
       std::vector<volm_conf_object_sptr> q_objs;
       // get the non-ref object in query
-      for (std::map<std::string, volm_conf_object_sptr>::iterator q_mit = query_map.begin();  q_mit != query_map.end(); ++q_mit)
-        if ( !q_ref->is_same(q_mit->second) )
-          q_objs.push_back(q_mit->second);
+      for (auto & q_mit : query_map)
+        if ( !q_ref->is_same(q_mit.second) )
+          q_objs.push_back(q_mit.second);
 
       // locate all the reference points in index by checking whether its distance value is within the tolerated distance
       unsigned char ref_land_id = q_ref->land();
       //std::vector<volm_conf_object> i_ref_objs = index_map[ref_land_id];
       std::vector<volm_conf_object> i_ref_objs;
-      for (std::vector<volm_conf_object>::iterator vit = index_map[ref_land_id].begin();  vit != index_map[ref_land_id].end(); ++vit) {
+      for (auto & vit : index_map[ref_land_id]) {
         if (use_height) {
-          if (vit->dist() >= min_dist && vit->dist() <= max_dist)
-            if (vit->height() >= q_ref->height()-10.0 && vit->height() <= q_ref->height()+10.0)
-              i_ref_objs.push_back(*vit);
+          if (vit.dist() >= min_dist && vit.dist() <= max_dist)
+            if (vit.height() >= q_ref->height()-10.0 && vit.height() <= q_ref->height()+10.0)
+              i_ref_objs.push_back(vit);
         }
         else {
-          if ( vit->dist() >= min_dist && vit->dist() <= max_dist )
-            i_ref_objs.push_back(*vit);
+          if ( vit.dist() >= min_dist && vit.dist() <= max_dist )
+            i_ref_objs.push_back(vit);
         }
 
       }
@@ -332,13 +332,13 @@ boxm2_volm_conf_matcher
       std::map<float, float, std::greater<float> > score_ref;
       std::map<float, std::vector<volm_conf_object>, std::greater<float> > score_matched_objs;
       //std::map<float, float> score_ref;
-      for (std::vector<volm_conf_object>::iterator vit = i_ref_objs.begin();  vit != i_ref_objs.end(); ++vit) {
+      for (auto & i_ref_obj : i_ref_objs) {
         float score;
         std::vector<volm_conf_object> matched_objs;
-        this->match_to_reference_h(*vit, q_ref, q_objs, index_map, score, matched_objs, use_height);
+        this->match_to_reference_h(i_ref_obj, q_ref, q_objs, index_map, score, matched_objs, use_height);
         // add the reference object into matched objects
-        matched_objs.push_back(*vit);
-        score_ref.insert(std::pair<float, float>(score, vit->theta()));
+        matched_objs.push_back(i_ref_obj);
+        score_ref.insert(std::pair<float, float>(score, i_ref_obj.theta()));
         score_matched_objs.insert(std::pair<float, std::vector<volm_conf_object> >(score, matched_objs));
       }
       // find the best score given current query reference object and put it into camera
@@ -350,17 +350,17 @@ boxm2_volm_conf_matcher
         theta_ref_i = score_ref.begin()->second;
         matched_objs_ref_i = score_matched_objs[score_ref_i];
       }
-      score_ref_map.insert(std::pair<std::string, std::pair<float, float> >(mit->first, std::pair<float, float>(score_ref_i, theta_ref_i)));
-      object_ref_map.insert(std::pair<std::string, std::vector<volm_conf_object> >(mit->first,matched_objs_ref_i));
+      score_ref_map.insert(std::pair<std::string, std::pair<float, float> >(ref_obj.first, std::pair<float, float>(score_ref_i, theta_ref_i)));
+      object_ref_map.insert(std::pair<std::string, std::vector<volm_conf_object> >(ref_obj.first,matched_objs_ref_i));
     }  // end of loop over reference ids
 
     // obtain the maximum score for current camera
     float max_score_cam = 0.0f, max_theta_cam = 0.0f;
     std::vector<volm_conf_object> max_matched_objs;
-    for (std::map<std::string, std::pair<float,float> >::iterator mit = score_ref_map.begin(); mit != score_ref_map.end(); ++mit) {
-      if (mit->second.first > max_score_cam) {
-        max_score_cam = mit->second.first;  max_theta_cam = mit->second.second;
-        max_matched_objs = object_ref_map[mit->first];
+    for (auto & mit : score_ref_map) {
+      if (mit.second.first > max_score_cam) {
+        max_score_cam = mit.second.first;  max_theta_cam = mit.second.second;
+        max_matched_objs = object_ref_map[mit.first];
       }
     }
     score_cam_map.insert(std::pair<unsigned, std::pair<float, float> >(cam_id, std::pair<float, float>(max_score_cam, max_theta_cam)));
@@ -371,11 +371,11 @@ boxm2_volm_conf_matcher
   float max_score = 0.0f;
   float max_theta = 0.0f;
   std::vector<volm_conf_object> best_matched_objs;
-  for (std::map<unsigned, std::pair<float, float> >::iterator mit = score_cam_map.begin(); mit != score_cam_map.end(); ++mit)
+  for (auto & mit : score_cam_map)
   {
-    if (mit->second.first > max_score) {
-      max_score = mit->second.first;  max_theta = mit->second.second;
-      best_matched_objs = ref_obj_cam_map[mit->first];
+    if (mit.second.first > max_score) {
+      max_score = mit.second.first;  max_theta = mit.second.second;
+      best_matched_objs = ref_obj_cam_map[mit.first];
     }
   }
   score.set_score(max_score);
@@ -464,20 +464,20 @@ boxm2_volm_conf_matcher
   float ref_theta_i = ref_i.theta();
   float ref_theta_q = ref_q->theta();
   std::vector<float> obj_score;
-  for (unsigned j = 0; j < obj_q.size(); j++)
+  for (const auto & j : obj_q)
   {
     // get a score for each query object
-    float dist_q = obj_q[j]->dist();  float theta_q = obj_q[j]->theta();  float height_q = obj_q[j]->height();
-    unsigned char land_q = obj_q[j]->land();
+    float dist_q = j->dist();  float theta_q = j->theta();  float height_q = j->height();
+    unsigned char land_q = j->land();
     float ratio_d_q = dist_q / ref_dist_q;
     float delta_t_q = theta_q - ref_theta_q;
     std::vector<volm_conf_object> objs_i = obj_map_i[land_q];
     float max_score = 0.0f;
     volm_conf_object best_objs(0.0f, 0.0f, -1.0f, 0);
     unsigned cnt = 0;
-    for (std::vector<volm_conf_object>::iterator vit = objs_i.begin(); vit != objs_i.end(); ++vit)
+    for (auto & vit : objs_i)
     {
-      float dist_i = vit->dist();  float theta_i = vit->theta();  float height_i = vit->height();
+      float dist_i = vit.dist();  float theta_i = vit.theta();  float height_i = vit.height();
       float ratio_d_i = dist_i / ref_dist_i;
       float delta_t_i = theta_i - ref_theta_i;
       // compute distance score
@@ -509,7 +509,7 @@ boxm2_volm_conf_matcher
         total_score = 0.3f*score_d + 0.3f*score_t + 0.4f*score_h;
       if (total_score > max_score) {
         max_score = total_score;
-        best_objs = *vit;
+        best_objs = vit;
       }
 #if 0
       std::cout << "qobj: " << j << ", ind " << cnt++ << ": " << dist_i << ", " << theta_i << ", " << height_i
@@ -525,8 +525,8 @@ boxm2_volm_conf_matcher
   } // loop over all query object
 
   // obtain the total score for configurational matching based on reference object ref_q and ref_i
-  for (std::vector<float>::iterator vit = obj_score.begin();  vit != obj_score.end(); ++vit)
-    score += *vit;
+  for (float & vit : obj_score)
+    score += vit;
   score /= obj_score.size();
   return;
 }

@@ -49,13 +49,13 @@ bool boxm2_scene_vrml_process(bprb_func_process& pro)
 
   // obtain the largest id along z direction
   int max_z_id = 0;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)
-    if (max_z_id < mit->first.k())
-      max_z_id = mit->first.k();
+  for (auto & blk : blks)
+    if (max_z_id < blk.first.k())
+      max_z_id = blk.first.k();
 
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit) {
-    vgl_box_3d<double> box = mit->second.bbox();
-    boxm2_block_id id = mit->first;
+  for (auto & blk : blks) {
+    vgl_box_3d<double> box = blk.second.bbox();
+    boxm2_block_id id = blk.first;
     float transparency = 0;
     float r = (float)id.k()/(float)max_z_id*255;
     float g = 0;

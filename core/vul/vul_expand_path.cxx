@@ -278,8 +278,8 @@ std::string vul_expand_path_internal(std::string path)
 
     // recompose the path from its bits
     path = "";
-    for (unsigned int i=0; i<bits.size(); ++i)
-      path += bits[i];
+    for (const auto & bit : bits)
+      path += bit;
 #ifdef DEBUG
     std::cerr << "recomposed : " << path << '\n';
 #endif

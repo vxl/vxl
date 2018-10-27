@@ -17,8 +17,8 @@ vpgl_ba_fixed_k_lsqr(std::vector<vpgl_calibration_matrix<double> >  K,
  : vpgl_bundle_adjust_lsqr(6,3,0,image_points,mask),
    K_(std::move(K))
 {
-  for (unsigned int i=0; i<K_.size(); ++i)
-    Km_.push_back(K_[i].get_matrix());
+  for (auto & i : K_)
+    Km_.push_back(i.get_matrix());
 }
 
 
@@ -33,8 +33,8 @@ vpgl_ba_fixed_k_lsqr(std::vector<vpgl_calibration_matrix<double> >  K,
  : vpgl_bundle_adjust_lsqr(6,3,0,image_points,inv_covars,mask),
    K_(std::move(K))
 {
-  for (unsigned int i=0; i<K_.size(); ++i)
-    Km_.push_back(K_[i].get_matrix());
+  for (auto & i : K_)
+    Km_.push_back(i.get_matrix());
 }
 
 

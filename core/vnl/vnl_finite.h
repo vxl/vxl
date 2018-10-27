@@ -122,11 +122,11 @@ class VNL_EXPORT vnl_finite_int
     if (t_ != 0) return t_;
     std::vector<unsigned int> d = decompose();
     t_ = 1; unsigned int p = 1;
-    for (unsigned int i=0; i<d.size(); ++i)
+    for (unsigned int i : d)
     {
-      if (p != d[i]) t_ *= d[i]-1;
-      else           t_ *= d[i];
-      p = d[i];
+      if (p != i) t_ *= i-1;
+      else           t_ *= i;
+      p = i;
     }
     return t_;
   }

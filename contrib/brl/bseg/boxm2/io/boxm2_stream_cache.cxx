@@ -61,21 +61,21 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
   std::cout << "Stream cache will take up " << num_giga << " GB of mem (" << mem_size_ << " bytes)." << std::endl;
 
   //: populate the data type map with sizes
-  for (unsigned i = 0; i < data_types.size(); i++) {
+  for (const auto & data_type : data_types) {
     boxm2_stream_cache_datatype_helper_sptr h = new boxm2_stream_cache_datatype_helper;
-    h->cell_size_ = boxm2_data_info::datasize(data_types[i]);
-    data_types_[data_types[i]] = h;
+    h->cell_size_ = boxm2_data_info::datasize(data_type);
+    data_types_[data_type] = h;
 
     std::vector<boxm2_stream_cache_helper_sptr> tmp;
     for (unsigned j = 0; j < identifier_list.size(); j++) {
       boxm2_stream_cache_helper_sptr hh = new boxm2_stream_cache_helper;  // initializes file stream
       tmp.push_back(hh);
     }
-    data_streams_[data_types[i]] = tmp;
+    data_streams_[data_type] = tmp;
   }
   unsigned long tot_size = 0;
-  for (std::map<std::string, boxm2_stream_cache_datatype_helper_sptr>::iterator it = data_types_.begin(); it != data_types_.end(); it++) {
-    tot_size += (unsigned long)it->second->cell_size_;
+  for (auto & data_type : data_types_) {
+    tot_size += (unsigned long)data_type.second->cell_size_;
   }
   unsigned long k = (unsigned long)std::floor(float(mem_size_)/(identifier_list_.size()*tot_size));
 
@@ -93,9 +93,8 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
 boxm2_stream_cache::~boxm2_stream_cache()
 {
   data_types_.clear();
-  for (std::map<std::string, std::vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin();
-       it != data_streams_.end(); it++) {
-    it->second.clear(); // calls the destructor for each member which closes the streams
+  for (auto & data_stream : data_streams_) {
+    data_stream.second.clear(); // calls the destructor for each member which closes the streams
   }
   data_streams_.clear();
 }
@@ -103,11 +102,10 @@ boxm2_stream_cache::~boxm2_stream_cache()
 //: in iterative mode, the files need to be closed and re-opened
 void boxm2_stream_cache::close_streams()
 {
-  for (std::map<std::string, std::vector<boxm2_stream_cache_helper_sptr> >::iterator it = data_streams_.begin();
-       it != data_streams_.end(); it++) {
-    std::vector<boxm2_stream_cache_helper_sptr>& strs = it->second;
-    for (unsigned i = 0; i < strs.size(); i++) {
-      strs[i]->close_file();
+  for (auto & data_stream : data_streams_) {
+    std::vector<boxm2_stream_cache_helper_sptr>& strs = data_stream.second;
+    for (auto & str : strs) {
+      str->close_file();
     }
   }
 }

@@ -173,13 +173,13 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
 {
   std::vector<int> merged_tree_leaves = merged_tree.get_leaf_bits();
 
-  for (std::vector<int>::iterator iter = merged_tree_leaves.begin(); iter != merged_tree_leaves.end(); iter++)
+  for (int & merged_tree_leave : merged_tree_leaves)
   {
     //get new data ptr
-    int newDataPtr = merged_tree.get_data_index(*iter);
+    int newDataPtr = merged_tree.get_data_index(merged_tree_leave);
 
-    if (old_tree.is_leaf(*iter) ) { //if they both exist
-      int oldDataPtr = old_tree.get_data_index(*iter);
+    if (old_tree.is_leaf(merged_tree_leave) ) { //if they both exist
+      int oldDataPtr = old_tree.get_data_index(merged_tree_leave);
 
       //copy data
       alpha_cpy[newDataPtr]= alpha_[oldDataPtr];
@@ -188,17 +188,17 @@ void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree m
     }
     else
     {
-      if(old_tree.is_leaf(old_tree.child_index(*iter) )==0 || old_tree.is_leaf(old_tree.child_index(*iter) + 1 ) == 0)
+      if(old_tree.is_leaf(old_tree.child_index(merged_tree_leave) )==0 || old_tree.is_leaf(old_tree.child_index(merged_tree_leave) + 1 ) == 0)
       {
-        std::cout << "Bit " << *iter << " and childs: " << old_tree.child_index(*iter) << " and " << old_tree.child_index(*iter) + 1 << std::endl;
-        std::cout << "Valid cells " << old_tree.valid_cell(old_tree.child_index(*iter) ) << " and " << old_tree.valid_cell(old_tree.child_index(*iter) + 1 ) << std::endl;
-        std::cout << "Valid leaves " << old_tree.is_leaf(old_tree.child_index(*iter) ) << " and " << old_tree.is_leaf(old_tree.child_index(*iter) + 1 ) << std::endl;
+        std::cout << "Bit " << merged_tree_leave << " and childs: " << old_tree.child_index(merged_tree_leave) << " and " << old_tree.child_index(merged_tree_leave) + 1 << std::endl;
+        std::cout << "Valid cells " << old_tree.valid_cell(old_tree.child_index(merged_tree_leave) ) << " and " << old_tree.valid_cell(old_tree.child_index(merged_tree_leave) + 1 ) << std::endl;
+        std::cout << "Valid leaves " << old_tree.is_leaf(old_tree.child_index(merged_tree_leave) ) << " and " << old_tree.is_leaf(old_tree.child_index(merged_tree_leave) + 1 ) << std::endl;
         std::cout << "Num leaves in old tree " << old_tree.num_leaves() << " and in the new one: " << merged_tree.num_leaves() << std::endl;
       }
 
       //find children in old tree
-      int oldDataPtr_left_child = old_tree.get_data_index( old_tree.child_index(*iter) );
-      int oldDataPtr_right_child = old_tree.get_data_index( old_tree.child_index(*iter ) + 1 );
+      int oldDataPtr_left_child = old_tree.get_data_index( old_tree.child_index(merged_tree_leave) );
+      int oldDataPtr_right_child = old_tree.get_data_index( old_tree.child_index(merged_tree_leave ) + 1 );
 
       //avg alpha
       float alpha_left_child = alpha_[oldDataPtr_left_child];
@@ -252,14 +252,14 @@ bstm_time_tree bstm_merge_tt_function::merge_tt(const bstm_time_tree& old_tree, 
   std::set<int> parents;
   bstm_time_tree merged_tree(old_tree.get_bits(), max_level_t_);
   //get parents of current leaves
-  for (std::vector<int>::iterator iter = old_leaves.begin(); iter != old_leaves.end(); iter++) {
-    if(*iter > 0)
-      parents.insert(old_tree.parent_index(*iter));
+  for (int & old_leave : old_leaves) {
+    if(old_leave > 0)
+      parents.insert(old_tree.parent_index(old_leave));
   }
 
-  for(std::set<int>::iterator iter = parents.begin(); iter != parents.end(); iter++)
+  for(std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type parent : parents)
   {
-    int bit_index_left_child = old_tree.child_index(*iter);
+    int bit_index_left_child = old_tree.child_index(parent);
     int bit_index_right_child = bit_index_left_child + 1;
     //check if they can be merged
     float side_len = (float)block_len_ / float(1<<curr_depth);
@@ -267,7 +267,7 @@ bstm_time_tree bstm_merge_tt_function::merge_tt(const bstm_time_tree& old_tree, 
     float right_child_p =  1.0f - (float)std::exp(-alpha_[old_tree.get_data_index(bit_index_right_child)] * side_len);
     bool merge = std::abs(left_child_p - right_child_p ) < prob_t_; //merge decision |p_left - p_right| < p_t
     if(merge)
-      merged_tree.set_bit_at(*iter,false);
+      merged_tree.set_bit_at(parent,false);
   }
   return merged_tree;
 }

@@ -267,10 +267,10 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     double avg_height = 0.0;
     unsigned cnt = 0;
     double area = 0.0;
-    for (unsigned k = 0; k < region.size(); k++) {
-      for (unsigned i = region[k].ilo; i < region[k].ihi; i++) {
+    for (auto & k : region) {
+      for (unsigned i = k.ilo; i < k.ihi; i++) {
         double lon, lat;
-        avg_height += height(i, region[k].j);
+        avg_height += height(i, k.j);
         cnt++;
       }
     }
@@ -288,10 +288,10 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
   for (unsigned i = 0; i < bldgs.size(); i++) {
     vgl_polygon<double> poly(1);
     double cent_lon = 0.0, cent_lat = 0.0;
-    for (unsigned j = 0; j < bldgs[i].size(); j++) {
-      poly[0].push_back(vgl_point_2d<double>(bldgs[i][j].x(), bldgs[i][j].y()));
-      cent_lon += bldgs[i][j].x();
-      cent_lat += bldgs[i][j].y();
+    for (auto & j : bldgs[i]) {
+      poly[0].push_back(vgl_point_2d<double>(j.x(), j.y()));
+      cent_lon += j.x();
+      cent_lat += j.y();
     }
     cent_lon /= bldgs[i].size();
     cent_lat /= bldgs[i].size();
@@ -306,8 +306,8 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
 
     // for csv each building is one line:   height, volume (=0.0 for now), area (=0.0 for now), confidence (=0.5 for now), cent_lon, cent_lat, lon_0, lat_0, ..., lon_i, lat_i, ..., lon_n, lat_n;
     ofs_csv << bldg_heights[i] << ",0.0,0.0,0.5," << cent_lon << ',' << cent_lat;
-    for (unsigned j = 0; j < bldgs[i].size(); j++)
-      ofs_csv << ',' << bldgs[i][j].x() << ',' << bldgs[i][j].y();
+    for (auto & j : bldgs[i])
+      ofs_csv << ',' << j.x() << ',' << j.y();
     ofs_csv << '\n';
   }
   bkml_write::close_document(ofs);

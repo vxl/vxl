@@ -29,12 +29,12 @@ gmvl_node_sptr gmvl_database::find_tag( const std::string &string) const
 {
   std::vector<gmvl_node_sptr> tags= nodecache_.get( "gmvl_tag_node");
 
-  for (unsigned int i=0; i< tags.size(); i++)
+  for (auto & tag : tags)
   {
-    gmvl_node *ptr= tags[i].ptr();
+    gmvl_node *ptr= tag.ptr();
 
     if (((gmvl_tag_node*)ptr)->get()== string)
-      return tags[i];
+      return tag;
   }
 
   return gmvl_node_sptr(nullptr);
@@ -55,8 +55,8 @@ void gmvl_database::add_connection( const gmvl_node_sptr node1, const gmvl_node_
 
 void gmvl_database::add_connections( const gmvl_node_sptr node1, std::vector<gmvl_node_sptr> nodes)
 {
-  for (unsigned int i=0; i< nodes.size(); i++)
-    add_connection( node1, nodes[i]);
+  for (const auto & node : nodes)
+    add_connection( node1, node);
 }
 
 // clever accessors
@@ -72,9 +72,9 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_
   std::vector<int> c= connectioncache_.get_connected_nodes( node);
   std::vector<gmvl_node_sptr> l;
 
-  for (unsigned int i=0; i< c.size(); i++)
+  for (int i : c)
   {
-    l.push_back( nodecache_.get( c[i]));
+    l.push_back( nodecache_.get( i));
   }
 
   return l;
@@ -85,10 +85,10 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_
   std::vector<gmvl_node_sptr> l= get_connected_nodes( node);
   std::vector<gmvl_node_sptr> m;
 
-  for (unsigned int i=0; i< l.size(); i++)
+  for (auto & i : l)
   {
-    if (l[i]->type()== type)
-      m.push_back( l[i]);
+    if (i->type()== type)
+      m.push_back( i);
   }
 
   return m;
@@ -101,9 +101,9 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_
   std::vector<int> c= connectioncache_.get_connected_nodes( node1, node2);
   std::vector<gmvl_node_sptr> l;
 
-  for (unsigned int i=0; i< c.size(); i++)
+  for (int i : c)
   {
-    l.push_back( nodecache_.get( c[i]));
+    l.push_back( nodecache_.get( i));
   }
 
   return l;
@@ -117,9 +117,9 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const gmvl_node_
   std::vector<int> c= connectioncache_.get_connected_nodes( node1, node2, node3);
   std::vector<gmvl_node_sptr> l;
 
-  for (unsigned int i=0; i< c.size(); i++)
+  for (int i : c)
   {
-    l.push_back( nodecache_.get( c[i]));
+    l.push_back( nodecache_.get( i));
   }
 
   return l;
@@ -131,9 +131,9 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const std::vecto
   std::vector<int> c= connectioncache_.get_connected_nodes( nodes);
   std::vector<gmvl_node_sptr> l;
 
-  for (unsigned int i=0; i< c.size(); i++)
+  for (int i : c)
   {
-    l.push_back( nodecache_.get( c[i]));
+    l.push_back( nodecache_.get( i));
   }
 
   return l;
@@ -144,17 +144,17 @@ std::vector<gmvl_node_sptr> gmvl_database::get_connected_nodes( const std::vecto
   std::vector<int> c= connectioncache_.get_connected_nodes( nodes);
   std::vector<gmvl_node_sptr> l;
 
-  for (unsigned int i=0; i< c.size(); i++)
+  for (int i : c)
   {
-    l.push_back( nodecache_.get( c[i]));
+    l.push_back( nodecache_.get( i));
   }
 
   std::vector<gmvl_node_sptr> m;
 
-  for (unsigned int i=0; i< l.size(); i++)
+  for (auto & i : l)
   {
-    if (l[i]->type()== type)
-      m.push_back( l[i]);
+    if (i->type()== type)
+      m.push_back( i);
   }
 
   return m;

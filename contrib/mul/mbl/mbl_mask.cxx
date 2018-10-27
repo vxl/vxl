@@ -33,11 +33,9 @@ void mbl_masks_from_index_set(const std::vector<unsigned> & indices,
   for (unsigned i = 0 ; i < n ; ++i)
     used_indices.insert(indices[i]);
 
-  for (std::set<unsigned>::const_iterator it = used_indices.begin(),
-                                         end = used_indices.end();
-                                         it != end; ++it)
+  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type used_indice : used_indices)
   {
-    ordering[*it] = n_masks++;
+    ordering[used_indice] = n_masks++;
     masks.emplace_back(n);
   }
 
@@ -209,9 +207,9 @@ void mbl_indices_to_mask(const std::vector<unsigned>& inds,
                          mbl_mask& mask)
 {
   mask.resize(n, false);
-  for (unsigned i=0, m=inds.size(); i<m; ++i)
+  for (unsigned int ind : inds)
   {
-    mask[inds[i]]=true;
+    mask[ind]=true;
   }
 }
 

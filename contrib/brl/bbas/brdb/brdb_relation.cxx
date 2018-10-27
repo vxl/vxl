@@ -52,11 +52,11 @@ brdb_relation::brdb_relation( const std::vector<std::string>& names,
     types_.resize(names.size(),"");
     for (unsigned int i=0; i<types_.size(); ++i)
     {
-      for (unsigned int j=0; j<tuples_.size(); ++j)
+      for (auto & tuple : tuples_)
       {
-        if (!tuples_[j]->is_null(i))
+        if (!tuple->is_null(i))
         {
-          types_[i] = (*tuples_[j])[i].is_a();
+          types_[i] = (*tuple)[i].is_a();
           break;
         }
       }
@@ -83,13 +83,13 @@ brdb_relation::is_valid() const
     return false;
 
   // check for valid type names
-  for (unsigned int i=0; i<types_.size(); ++i)
-    if (brdb_value::registry().count(types_[i]) <= 0)
+  for (const auto & type : types_)
+    if (brdb_value::registry().count(type) <= 0)
       return false;
 
   // check that each tuple matches the arity and types of the relation
-  for (unsigned int i=0; i<tuples_.size(); ++i){
-    if (!is_valid(tuples_[i]))
+  for (const auto & tuple : tuples_){
+    if (!is_valid(tuple))
       return false;
   }
 
@@ -500,9 +500,9 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     for (unsigned int i=0; i<r1->arity(); i++)
     {
       bool isCommon = false;
-      for (unsigned int j=0; j<r1_common_attribute_index.size(); j++)
+      for (unsigned int j : r1_common_attribute_index)
       {
-        if (i == r1_common_attribute_index[j])
+        if (i == j)
           isCommon = true;
       }
 
@@ -558,9 +558,9 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
           }
 
           // add all non-common values of tuple in r2
-          for (unsigned int m=0; m<r2_non_common_attribute_index.size(); m++)
+          for (unsigned int m : r2_non_common_attribute_index)
           {
-            if (!new_tup->add_value((*(*itr_2))[r2_non_common_attribute_index[m]]))
+            if (!new_tup->add_value((*(*itr_2))[m]))
               return nullptr;
           }
 

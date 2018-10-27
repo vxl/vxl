@@ -20,7 +20,7 @@
 // input output
 std::ostream &operator<<( std::ostream &os, const std::vector<gmvl_node_sptr> &r)
 {
-  for (unsigned int i=0; i< r.size(); ++i) os << *r[i];
+  for (const auto & i : r) os << *i;
   return os;
 }
 

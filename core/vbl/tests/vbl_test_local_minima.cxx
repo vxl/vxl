@@ -16,8 +16,8 @@ static void vbl_test_local_minima_1d()
   v[0]=0.06;   v[n/2]= 0.05;  v[n-1]=0.04;
   vbl_array_1d<double> minima = vbl_local_minima(v, thresh);
   bool success = !minima.empty();
-  for (unsigned i = 0; i<minima.size(); ++i)
-    std::cout << minima[i] << ' ';
+  for (double i : minima)
+    std::cout << i << ' ';
   std::cout << '\n';
   success = success && minima[0]>0 && minima[n/2]>0 && minima[n-1]>0;
   TEST("1d minima double", success, true);
@@ -27,8 +27,8 @@ static void vbl_test_local_minima_1d()
   unsigned tu = 0;
   vbl_array_1d<unsigned> minun = vbl_local_minima(vi, tu);
   success = !minun.empty();
-  for (unsigned i = 0; i<minun.size(); ++i)
-    std::cout << minun[i] << ' ';
+  for (unsigned int i : minun)
+    std::cout << i << ' ';
   std::cout << '\n';
   success = success && minun[0]>0 && minun[n/2]>0 && minun[n-1]>0;
   TEST("1d minima unsigned", success, true);

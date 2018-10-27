@@ -334,9 +334,9 @@ bool vpgl_transform_box_process(bprb_func_process& pro)
   std::vector<vgl_point_3d<double> > vertices = box1.vertices();
 
   // transform 8 corners of the box and add to the new box in the transformed space
-  for (unsigned i = 0; i < vertices.size(); i++) {
+  for (auto & vertice : vertices) {
     vnl_matrix_fixed<double, 4, 1> pt, new_pt;
-    pt[0][0] = vertices[i].x(); pt[1][0] = vertices[i].y(); pt[2][0] = vertices[i].z(); pt[3][0] = 1.0;
+    pt[0][0] = vertice.x(); pt[1][0] = vertice.y(); pt[2][0] = vertice.z(); pt[3][0] = 1.0;
     new_pt = SM*pt;
     box2.add(vgl_point_3d<double>(new_pt[0][0]/new_pt[3][0], new_pt[1][0]/new_pt[3][0], new_pt[2][0]/new_pt[3][0]));
   }

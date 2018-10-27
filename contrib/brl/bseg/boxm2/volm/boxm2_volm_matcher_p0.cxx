@@ -96,19 +96,19 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
             unsigned char qval = 0;
             vsph_sph_box_2d qbox_xfomred = query_xformed_boxes_[iter->cam_index()][i];
             if (qbox_xfomred.area()<=0.0) continue;
-            for (unsigned k = 0; k < sizeof(attributes_to_match)/sizeof(int); ++k)
+            for (auto & k : attributes_to_match)
             {
-                if (!query_region.attribute_value(attributes_to_match[k],qval))
+                if (!query_region.attribute_value(k,qval))
                     continue;
-                std::vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_value(attributes_to_match[k],qval);
-                for (unsigned j = 0; j< attribute_poly_ids.size(); ++j)
+                std::vector<unsigned int> attribute_poly_ids = index_layer.attributed_regions_by_value(k,qval);
+                for (unsigned int attribute_poly_id : attribute_poly_ids)
                 {
-                    volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
+                    volm_spherical_region index_region = i_regions[attribute_poly_id];
                     //: just considering horizontal and vertical
                     double int_area = intersection_area(qbox_xfomred,index_region.bbox_ref())/(qbox_xfomred.area());
-                    if (attributes_to_match[k] == ORIENTATION)
+                    if (k == ORIENTATION)
                         score+= 0.01 * int_area;
-                    else if (attributes_to_match[k] == SKY)
+                    else if (k == SKY)
                         score+= 1.0 * int_area;
                     else
                     {
@@ -118,8 +118,8 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
                 }
             }
         }
-        for (std::map<unsigned char, int>::iterator map_iter = score_nlcd.begin(); map_iter!=score_nlcd.end(); ++map_iter)
-            score+=(float)map_iter->second;
+        for (auto & map_iter : score_nlcd)
+            score+=(float)map_iter.second;
         scores.push_back(std::make_pair<float,int>((float)score,(*iter).cam_index()));
     }
     //std::cout<<"Time taken is "<< t.all()<<std::endl;
@@ -163,11 +163,11 @@ bool boxm2_volm_matcher_p0::match_order(volm_spherical_regions_layer & index_lay
     std::vector<float> depths ;
     std::vector<unsigned char> depth_intervals ;
     std::vector<unsigned int> reduced_attribute_poly_ids;
-    for (unsigned j = 0; j< attribute_poly_ids.size(); ++j)
+    for (unsigned int attribute_poly_id : attribute_poly_ids)
     {
-        volm_spherical_region index_region = i_regions[attribute_poly_ids[j]];
+        volm_spherical_region index_region = i_regions[attribute_poly_id];
         if (intersection_area(imbox_xfomred,index_region.bbox_ref()) > 0.0)
-            reduced_attribute_poly_ids.push_back(attribute_poly_ids[j]);
+            reduced_attribute_poly_ids.push_back(attribute_poly_id);
     }
     for (int i = 0; i< q_regions.size(); ++i)
     {
@@ -183,9 +183,9 @@ bool boxm2_volm_matcher_p0::match_order(volm_spherical_regions_layer & index_lay
 
         float mean_depth = 0.0;
         float sum_weights = 0;
-        for (unsigned j = 0; j< reduced_attribute_poly_ids.size(); ++j)
+        for (unsigned int reduced_attribute_poly_id : reduced_attribute_poly_ids)
         {
-            volm_spherical_region index_region = i_regions[reduced_attribute_poly_ids[j]];
+            volm_spherical_region index_region = i_regions[reduced_attribute_poly_id];
             float area = intersection_area(qbox_xfomred,index_region.bbox_ref());
             unsigned char ival = (unsigned char)0;
             index_region.attribute_value(DEPTH_INTERVAL,ival);

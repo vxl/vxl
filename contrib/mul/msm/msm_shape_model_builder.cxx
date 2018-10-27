@@ -187,13 +187,13 @@ static void msm_count_classes(const std::vector<int>& id,
                               std::vector<unsigned>& n_per_class)
 {
   int max_id = 0;
-  for (unsigned i=0;i<id.size();++i)
-    if (id[i]>max_id) max_id=id[i];
+  for (int i : id)
+    if (i>max_id) max_id=i;
 
   n_per_class.resize(1+max_id,0u);
 
-  for (unsigned i=0;i<id.size();++i)
-    if (id[i]>=0) n_per_class[id[i]]++;
+  for (int i : id)
+    if (i>=0) n_per_class[i]++;
 }
 
 

@@ -230,26 +230,24 @@ set_world_pts(std::vector<vgl_point_3d<double> > const& pts)
 std::vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 {
   std::vector<vgl_point_3d<double> > pts;
-  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
-       cit != corrs_.end(); ++cit)
-    if ((*cit)->world_pt_valid())
-      pts.push_back((*cit)->world_pt());
+  for (auto & corr : corrs_)
+    if (corr->world_pt_valid())
+      pts.push_back(corr->world_pt());
   return pts;
 }
 
 //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
 void bwm_video_corr_processor::convert_world_pts_to_local(vpgl_lvcs_sptr lvcs)
 {
-  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
-       cit != corrs_.end(); ++cit)
+  for (auto & corr : corrs_)
   {
-    if ((*cit)->world_pt_valid()) {
-      vgl_point_3d<double> pt = (*cit)->world_pt();
+    if (corr->world_pt_valid()) {
+      vgl_point_3d<double> pt = corr->world_pt();
       double x,y,z;
       lvcs->global_to_local(pt.x(), pt.y(), pt.z(), lvcs->get_cs_name(), x,y,z);
       vgl_point_3d<double> new_pt(x,y,z);
       std::cout << "world pt: " << pt << " converted to " << new_pt << std::endl;
-      (*cit)->set_world_pt(new_pt);
+      corr->set_world_pt(new_pt);
     }
   }
 }
@@ -372,11 +370,10 @@ void min_max_frame(std::vector<bwm_video_corr_sptr> const& corrs,
 {
   min_frame = vnl_numeric_traits<unsigned>::maxval;
   max_frame = 0;
-  for (std::vector<bwm_video_corr_sptr>::const_iterator cit = corrs.begin();
-       cit != corrs.end(); ++cit)
+  for (const auto & corr : corrs)
     {
-      unsigned minf = (*cit)->min_frame();
-      unsigned maxf = (*cit)->max_frame();
+      unsigned minf = corr->min_frame();
+      unsigned maxf = corr->max_frame();
       if (minf<min_frame)
         min_frame = minf;
       if (maxf>max_frame)
@@ -527,8 +524,8 @@ initialize_world_pts_and_cameras(vpgl_calibration_matrix<double> const& K,
 bool bwm_video_corr_processor::write_cameras_to_stream()
 {
   if (cam_ostr_&&cam_ostr_->is_open()){
-    for (unsigned i = 0; i<cameras_.size(); ++i)
-      cam_ostr_->write_camera(&cameras_[i]);
+    for (auto & camera : cameras_)
+      cam_ostr_->write_camera(&camera);
     return true;
   }
   return false;

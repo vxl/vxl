@@ -131,15 +131,15 @@ void boxm2_volm_loc_hypotheses::b_write(vsl_b_ostream &os) const
   vsl_b_write(os, version());
   tile_.b_write(os);
   vsl_b_write(os, pixels_.size());
-  for (unsigned i = 0; i < pixels_.size(); i++) {
-    vsl_b_write(os, pixels_[i].first);
-    vsl_b_write(os, pixels_[i].second);
+  for (const auto & pixel : pixels_) {
+    vsl_b_write(os, pixel.first);
+    vsl_b_write(os, pixel.second);
   }
   vsl_b_write(os, locs_.size());
-  for (unsigned i = 0; i < locs_.size(); i++) {
-    vsl_b_write(os, locs_[i].x());
-    vsl_b_write(os, locs_[i].y());
-    vsl_b_write(os, locs_[i].z());
+  for (auto loc : locs_) {
+    vsl_b_write(os, loc.x());
+    vsl_b_write(os, loc.y());
+    vsl_b_write(os, loc.z());
   }
 }
 
@@ -156,18 +156,18 @@ void boxm2_volm_loc_hypotheses::b_read(vsl_b_istream &is)
      unsigned s;
      vsl_b_read(is, s);
      pixels_.resize(s, std::pair<unsigned, unsigned>(0,0));
-     for (unsigned i = 0; i < pixels_.size(); i++) {
-       vsl_b_read(is, pixels_[i].first);
-       vsl_b_read(is, pixels_[i].second);
+     for (auto & pixel : pixels_) {
+       vsl_b_read(is, pixel.first);
+       vsl_b_read(is, pixel.second);
      }
      vsl_b_read(is, s);
      locs_.resize(s);
-     for (unsigned i = 0; i < locs_.size(); i++) {
+     for (auto & loc : locs_) {
        float x,y,z;
        vsl_b_read(is, x);
        vsl_b_read(is, y);
        vsl_b_read(is, z);
-       locs_[i] = vgl_point_3d<float>(x,y,z);
+       loc = vgl_point_3d<float>(x,y,z);
      }
      break; }
    default:

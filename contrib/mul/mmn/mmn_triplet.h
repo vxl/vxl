@@ -99,7 +99,7 @@ inline void vsl_b_write(vsl_b_ostream& bfs, const std::vector<mmn_triplet>& a)
   short version_no = 1;
   vsl_b_write(bfs,version_no);
   vsl_b_write(bfs,a.size());
-  for (unsigned i=0;i<a.size();++i) vsl_b_write(bfs,a[i]);
+  for (auto i : a) vsl_b_write(bfs,i);
 }
 
 inline void vsl_b_read(vsl_b_istream& bfs, std::vector<mmn_triplet>& a)

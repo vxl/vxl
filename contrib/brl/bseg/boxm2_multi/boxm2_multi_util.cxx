@@ -9,17 +9,17 @@ bool boxm2_multi_util::get_scene_appearances(boxm2_scene_sptr    scene,
   bool foundDataType = false;
   std::vector<std::string> apps = scene->appearances();
   apptypesize = 0;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();

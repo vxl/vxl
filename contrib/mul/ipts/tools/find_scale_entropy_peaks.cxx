@@ -55,12 +55,12 @@ int main( int argc, char* argv[] )
   ipts_scale_space_peaks_2d(peak_pts,entropy_pyramid,threshold());
   std::cout<<"Found "<<peak_pts.size()<<" peaks.\n";
 
-  for (unsigned i=0;i<peak_pts.size();++i)
+  for (auto & peak_pt : peak_pts)
   {
-    if (peak_pts[i].z()>1.1)
-    ipts_draw_cross(image,int(peak_pts[i].x()+0.5),
-                     int(peak_pts[i].y()+0.5),
-                     int(peak_pts[i].z()+0.5), vxl_byte(255) );
+    if (peak_pt.z()>1.1)
+    ipts_draw_cross(image,int(peak_pt.x()+0.5),
+                     int(peak_pt.y()+0.5),
+                     int(peak_pt.z()+0.5), vxl_byte(255) );
   }
 
   vimt_image_pyramid_flatten(flat_entropy,entropy_pyramid);

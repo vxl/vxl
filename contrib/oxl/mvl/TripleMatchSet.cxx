@@ -247,8 +247,8 @@ void TripleMatchSet::clear_nontriplets()
 {
   //mt_clear_affinity_nontriplets (match12_->get_table(), match23_->get_table());
   std::vector<bool> accept(match23_->size());
-  for (std::vector<bool>::iterator i=accept.begin(); i!=accept.end(); ++i)
-    *i = false;
+  for (auto && i : accept)
+    i = false;
 
   int cleared_count = 0;
   for (int i1 = 0; i1 < match12_->size(); i1++) {

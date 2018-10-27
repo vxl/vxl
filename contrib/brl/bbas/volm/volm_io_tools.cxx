@@ -259,17 +259,17 @@ void volm_io_tools::load_imgs(std::string const& folder, std::vector<volm_img_in
 bool volm_io_tools::get_location_nlcd(std::vector<volm_img_info>& NLCD_imgs, double lat, double lon, double elev, unsigned char& label)
 {
   bool found_it = false;
-  for (unsigned i = 0; i < NLCD_imgs.size(); i++) {
-    if (NLCD_imgs[i].bbox.contains(lon, lat)) {
-      vil_image_view<vxl_byte> img(NLCD_imgs[i].img_r);
+  for (auto & NLCD_img : NLCD_imgs) {
+    if (NLCD_img.bbox.contains(lon, lat)) {
+      vil_image_view<vxl_byte> img(NLCD_img.img_r);
 
       // get the land type of the location
       double u, v;
-      NLCD_imgs[i].cam->global_to_img(lon, lat, elev, u, v);
+      NLCD_img.cam->global_to_img(lon, lat, elev, u, v);
       //NLCD_imgs[i].cam->global_to_img(-lon, lat, elev, u, v);
       unsigned uu = (unsigned)std::floor(u + 0.5);
       unsigned vv = (unsigned)std::floor(v + 0.5);
-      if (uu > 0 && vv > 0 && uu < NLCD_imgs[i].ni && vv < NLCD_imgs[i].nj) {
+      if (uu > 0 && vv > 0 && uu < NLCD_img.ni && vv < NLCD_img.nj) {
         label = img(uu, vv);
         found_it = true;
         break;
@@ -301,8 +301,8 @@ bool volm_io_tools::expend_line(std::vector<vgl_point_2d<double> > line, double 
     }
   }
   // rearrange the point list
-  for (unsigned i = 0; i < pts_u.size(); i++)
-    sheet.push_back(pts_u[i]);
+  for (auto i : pts_u)
+    sheet.push_back(i);
   for (int i = pts_d.size()-1; i >=0; i--)
     sheet.push_back(pts_d[i]);
   poly.push_back(sheet);
@@ -322,11 +322,11 @@ volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(std::string geoi
   std::vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   // load the content for valid leaves
-  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-    std::string bin_file = leaves[l_idx]->get_label_name(geoindex_filename_pre, "osm");
+  for (auto & leave : leaves) {
+    std::string bin_file = leave->get_label_name(geoindex_filename_pre, "osm");
     if (!vul_file::exists(bin_file))
       continue;
-    volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+    volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
     ptr->contents_ = new volm_osm_object_ids(bin_file);
   }
 
@@ -543,11 +543,11 @@ bool volm_io_tools::find_min_max_height(vgl_point_2d<double>& lower_left, vgl_po
   pts.push_back(lower_left);
   pts.push_back(upper_right);
 
-  for (unsigned k = 0; k < (unsigned)pts.size(); k++) {
+  for (auto & pt : pts) {
     // find the image
     for (unsigned j = 0; j < (unsigned)infos.size(); j++) {
       double u, v;
-      infos[j].cam->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      infos[j].cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);
       int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)infos[j].ni || vv >= (int)infos[j].nj)
@@ -685,12 +685,11 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
   std::vector<vgl_point_2d<double> > line_in = vgl_intersection(line, bbox);
   if (line_in.empty())
     return false;
-  for (unsigned i = 0; i < line_in.size(); i++)
-    road.push_back(line_in[i]);
+  for (auto i : line_in)
+    road.push_back(i);
 
   // find the intersection points
-  for (unsigned i = 0; i < line_in.size(); i++) {
-    vgl_point_2d<double> curr_pt = line_in[i];
+  for (auto curr_pt : line_in) {
     std::vector<vgl_point_2d<double> >::const_iterator vit = std::find(line.begin(), line.end(), curr_pt);
     if (vit == line.begin() ) {
       vgl_point_2d<double> next = *(vit+1);
@@ -842,8 +841,8 @@ unsigned count_line_start_from_cross(vgl_point_2d<double> const& cross_pt,
   vgl_point_2d<double> s = *(rd.begin());  vgl_point_2d<double> e = *(rd.end()-1);
   if ( near_eq_pt(cross_pt, s) || near_eq_pt(cross_pt, e))
     cnt++;
-  for (unsigned i = 0; i < net.size(); i++) {
-    s = *(net[i].begin());  e = *(net[i].end()-1);
+  for (const auto & i : net) {
+    s = *(i.begin());  e = *(i.end()-1);
     if ( near_eq_pt(cross_pt, s) || near_eq_pt(cross_pt, e))
       cnt++;
   }

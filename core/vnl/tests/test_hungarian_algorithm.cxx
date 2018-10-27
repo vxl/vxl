@@ -41,7 +41,7 @@ static void test_hungarian_algorithm_1()
   std::vector<unsigned> assignment = HungarianClassTest.GetAssignmentVector();
 
   std::cout<< "assignment vector:\n" << '(';
-  for (unsigned int i=0; i<assignment.size() ;++i) std::cout << ' ' << assignment[i];
+  for (unsigned int i : assignment) std::cout << ' ' << i;
   std::cout << " )\n";
 
   TEST("assignment vector", assignment[0]==0 && assignment[1]==1 && assignment[2]==2 && assignment[3]==3 && assignment[4]==4 && assignment[5]==5, true);
@@ -79,7 +79,7 @@ static void test_hungarian_algorithm_1()
   std::vector<unsigned> assignment2 = HungarianClassTest2.GetAssignmentVector();
 
   std::cout<< "assignment vector:" << std::endl << '(';
-  for (unsigned int i=0; i<assignment2.size() ;++i) std::cout << ' ' << assignment2[i];
+  for (unsigned int i : assignment2) std::cout << ' ' << i;
   std::cout << " )\n";
 
   TEST("assignment vector", assignment2[0]==2 && assignment2[1]==1 && assignment2[2]==0 && assignment2[3]==4 && assignment2[4]==3 && assignment2[5]==5, true);
@@ -213,7 +213,7 @@ static void test_hungarian_algorithm_2()
 
     std::vector<unsigned> assign = vnl_hungarian_algorithm<double>( cost );
     std::cout<< "assignment vector:\n" << '(';
-    for (unsigned int i=0; i<assign.size(); ++i) std::cout << ' ' << assign[i];
+    for (unsigned int i : assign) std::cout << ' ' << i;
     std::cout << " )" << std::endl;
     TEST( "Test 3x3 cost matrix" , assign.size()==3 &&
           assign[0]==2 && assign[1]==1 && assign[2]==0, true);

@@ -60,9 +60,9 @@ std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr
   std::vector<int> c= get_connected_nodes(node1);
   std::vector<int> d;
 
-  for (unsigned int i=0; i< c.size(); ++i)
-    if (cachebool_(node2->ref_,c[i]))
-      d.push_back(c[i]);
+  for (int i : c)
+    if (cachebool_(node2->ref_,i))
+      d.push_back(i);
 
   return d;
 }
@@ -74,10 +74,10 @@ std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr
   std::vector<int> c= get_connected_nodes(node1);
   std::vector<int> d;
 
-  for (unsigned int i=0; i< c.size(); ++i)
-    if (cachebool_(node2->ref_,c[i]) &&
-        cachebool_(node3->ref_,c[i]))
-      d.push_back(c[i]);
+  for (int i : c)
+    if (cachebool_(node2->ref_,i) &&
+        cachebool_(node3->ref_,i))
+      d.push_back(i);
 
   return d;
 }
@@ -87,18 +87,18 @@ std::vector<int> gmvl_connection_cache::get_connected_nodes(const std::vector<gm
   std::vector<int> c= get_connected_nodes(nodes[0]);
   std::vector<int> d;
 
-  for (unsigned int i=0; i< c.size(); ++i)
+  for (int i : c)
   {
     bool ok= true;
 
     for (unsigned int j=1; j< nodes.size() && ok; ++j)
     {
-      if (!cachebool_(nodes[j]->ref_,c[i]))
+      if (!cachebool_(nodes[j]->ref_,i))
         ok= false;
     }
 
     if (ok)
-      d.push_back(c[i]);
+      d.push_back(i);
   }
 
   return d;
@@ -111,10 +111,10 @@ void gmvl_connection_cache::rebuild()
   cache_.clear();
   assert(false);
 
-  for (unsigned int i=0; i< connections_.size(); ++i)
+  for (auto & connection : connections_)
   {
-    gmvl_node_sptr node1= connections_[i]->get_node1();
-    gmvl_node_sptr node2= connections_[i]->get_node2();
+    gmvl_node_sptr node1= connection->get_node1();
+    gmvl_node_sptr node2= connection->get_node2();
 
     assert (node1->ref_>= 0);
     assert (node2->ref_>= 0);

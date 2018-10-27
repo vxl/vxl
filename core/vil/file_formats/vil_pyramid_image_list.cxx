@@ -154,13 +154,12 @@ vil_pyramid_image_list::vil_pyramid_image_list(char const* directory) : director
 
 vil_pyramid_image_list::vil_pyramid_image_list(std::vector<vil_image_resource_sptr> const& images) : directory_("")
 {
-  for (std::vector<vil_image_resource_sptr>::const_iterator rit = images.begin();
-       rit != images.end(); ++rit)
+  for (const auto & image : images)
   {
     //if the resource is blocked use a cached access
-    vil_blocked_image_resource_sptr brsc = blocked_image_resource(*rit);
+    vil_blocked_image_resource_sptr brsc = blocked_image_resource(image);
     if (!brsc)
-      brsc = new vil_blocked_image_facade(*rit);
+      brsc = new vil_blocked_image_facade(image);
     vil_cached_image_resource* cimr = new vil_cached_image_resource(brsc, 100);
     vil_image_resource_sptr ir = (vil_image_resource*)cimr;
     pyramid_level* level = new pyramid_level(ir);

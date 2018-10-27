@@ -11,8 +11,8 @@ int test_deque_main(int /*argc*/,char* /*argv*/[])
   dq.push_back(3);
   dq.push_front(1);
 
-  for (mydeque::iterator p = dq.begin(); p != dq.end(); ++p)
-    std::cout << *p << std::endl;
+  for (int & p : dq)
+    std::cout << p << std::endl;
 
   return 0;
 }

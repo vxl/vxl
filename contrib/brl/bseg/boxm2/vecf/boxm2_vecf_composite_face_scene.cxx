@@ -256,9 +256,8 @@ void boxm2_vecf_composite_face_scene::map_to_target(boxm2_scene_sptr target){
 
   this->extract_unrefined_cell_info();//on articulated_scene
   std::vector<vgl_point_3d<double> > tgt_pts;
-  for(std::vector<unrefined_cell_info>::iterator cit = unrefined_cell_info_.begin();
-      cit != unrefined_cell_info_.end(); ++cit){
-    tgt_pts.push_back(cit->pt_);
+  for(auto & cit : unrefined_cell_info_){
+    tgt_pts.push_back(cit.pt_);
   }
 
   // compute inverse vector field for prerefining the target
@@ -377,10 +376,9 @@ void boxm2_vecf_composite_face_scene::extract_target_cell_centers(){
   vgl_box_3d<double> target_bb = target_blk_->bounding_box_global();
   target_cell_centers_ = target_blk_->cells_in_box(target_bb);
   const vgl_h_matrix_3d<double>& Ainv = params_.trans_.get_inverse();
-  for(std::vector<cell_info>::iterator cit =target_cell_centers_.begin();
-      cit!=target_cell_centers_.end(); ++cit){
-    const vgl_point_3d<double>& c =     cit->cell_center_;
-    cit->cell_center_ = Ainv*c;
+  for(auto & target_cell_center : target_cell_centers_){
+    const vgl_point_3d<double>& c =     target_cell_center.cell_center_;
+    target_cell_center.cell_center_ = Ainv*c;
   }
 }
 

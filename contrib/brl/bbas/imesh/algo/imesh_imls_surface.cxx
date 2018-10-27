@@ -38,8 +38,8 @@ imesh_imls_surface::imesh_imls_surface(const imesh_mesh& mesh, double eps, doubl
   {
     // build enclosure
     vgl_box_3d<double> box;
-    for (unsigned int i=0; i<verts_.size(); ++i) {
-      box.add(verts_[i]);
+    for (const auto & vert : verts_) {
+      box.add(vert);
     }
     box.expand_about_centroid(1);
     unsigned int base = verts_.size();
@@ -117,8 +117,8 @@ imesh_imls_surface::imesh_imls_surface(const imesh_imls_surface& other)
 void imesh_imls_surface::compute_iso_level()
 {
   double mean = 0.0;
-  for (unsigned int i=0; i<verts_.size(); ++i)
-    mean += (*this)(verts_[i]);
+  for (const auto & vert : verts_)
+    mean += (*this)(vert);
   iso_level_ = mean / verts_.size();
 }
 
@@ -242,8 +242,8 @@ void imesh_imls_surface::set_epsilon(double eps)
   iso_level_ = 0.0;
 
   // reset the phi values at each vertex
-  for (unsigned i=0; i<phi_.size(); ++i)
-    phi_[i] = 0.0;
+  for (double & i : phi_)
+    i = 0.0;
 
   compute_unweighed_rec(kd_tree_);
 

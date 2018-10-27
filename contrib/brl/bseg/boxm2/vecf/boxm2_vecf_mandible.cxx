@@ -170,11 +170,10 @@ boxm2_vecf_mandible boxm2_vecf_mandible::apply_vector_field(boxm2_vecf_spline_fi
   // transform self's spline
   vgl_cubic_spline_3d<double> axis_v = field.apply_field();
   std::vector<bvgl_cross_section> csects_v;
-  for(std::vector<bvgl_cross_section>::const_iterator cit =  cross_sections_.begin();
-      cit != cross_sections_.end(); ++cit){
-    double t = cit->t();
+  for(const auto & cross_section : cross_sections_){
+    double t = cross_section.t();
     vgl_vector_3d<double> v = field(t);
-    bvgl_cross_section csv = cit->apply_vector(v);
+    bvgl_cross_section csv = cross_section.apply_vector(v);
     csects_v.push_back(csv);
   }
   return boxm2_vecf_mandible(boundary_knots_, axis_v, csects_v);

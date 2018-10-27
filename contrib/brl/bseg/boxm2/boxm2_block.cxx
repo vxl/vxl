@@ -42,8 +42,8 @@ boxm2_block::boxm2_block(boxm2_block_metadata const& data)
 
 unsigned boxm2_block::recompute_num_cells(){
   unsigned N = 0;
-  for( const boxm2_block::uchar16* it= this->trees().begin();it!=this->trees().end(); it++){
-      boct_bit_tree curr_tree( (unsigned char*) it->data_block(),this->max_level_);
+  for(auto it : this->trees()){
+      boct_bit_tree curr_tree( (unsigned char*) it.data_block(),this->max_level_);
       N += curr_tree.num_cells();
   }
   return N;
@@ -466,8 +466,7 @@ void boxm2_block::leaf_neighbors(vgl_point_3d<double> const& probe, double dista
 
         //iterate through leaves of the tree
         std::vector<int> leafBits = bit_tree.get_leaf_bits();
-        for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-          int currBitIndex = (*iter);
+        for (int currBitIndex : leafBits) {
           int data_indx = bit_tree.get_data_index(currBitIndex); //data index
           vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
           vgl_vector_3d<double> cell_offset(cell_pos.x()*sub_block_dim_.x(), cell_pos.y()*sub_block_dim_.y(), cell_pos.z()*sub_block_dim_.z());

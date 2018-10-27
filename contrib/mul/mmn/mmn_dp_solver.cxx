@@ -39,7 +39,7 @@ void mmn_dp_solver::set_arcs(unsigned num_nodes,
   {
     std::cerr<<"Graph cannot be decomposed - too complex.\n"
             <<"Arc list: ";
-    for (unsigned i=0;i<arcs.size();++i) std::cout<<arcs[i];
+    for (auto arc : arcs) std::cout<<arc;
     std::cerr<<'\n';
     std::abort();
   }
@@ -405,8 +405,8 @@ void mmn_dp_solver::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,unsigned(deps_.size()));
-  for (unsigned i=0;i<deps_.size();++i)
-    vsl_b_write(bfs,deps_[i]);
+  for (const auto & dep : deps_)
+    vsl_b_write(bfs,dep);
 }
 
 //=======================================================================

@@ -96,9 +96,9 @@ faces( data_image_type const& data_img ) const
   // than one face based on containment, etc.
   //
   std::vector< vtol_intensity_face_sptr > faces;
-  for ( unsigned i = 0; i < region_list.size(); ++i ) {
-    if ( ! region_list[i].empty() ) {
-      compute_faces( region_list[i], faces, &data_img );
+  for (auto & i : region_list) {
+    if ( ! i.empty() ) {
+      compute_faces( i, faces, &data_img );
     }
   }
 
@@ -118,9 +118,9 @@ faces( ) const
   // than one face based on containment, etc.
   //
   std::vector< vtol_intensity_face_sptr > faces;
-  for ( unsigned i = 0; i < region_list.size(); ++i ) {
-    if ( ! region_list[i].empty() ) {
-      compute_faces( region_list[i], faces, nullptr );
+  for (auto & i : region_list) {
+    if ( ! i.empty() ) {
+      compute_faces( i, faces, nullptr );
     }
   }
 
@@ -750,8 +750,8 @@ compute_faces( std::vector< region_type_sptr > const& chains,
   // into the appropriate place in the containment hierarchy.
 
   chain_tree_node universe( nullptr );
-  for ( unsigned i = 0; i < chains.size(); ++i ) {
-    universe.add( chains[i] );
+  for (const auto & chain : chains) {
+    universe.add( chain );
   }
 
   // If we have a data image, use it to add digital region information

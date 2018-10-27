@@ -46,15 +46,15 @@ static void test_cycle_processor()
     std::cout << "Found edge == e1 " << eequal << std::endl;
 
     std::cout << "edges before erase\n";
-    for (edge_list::iterator jit = edges.begin(); jit != edges.end(); jit++)
-      std::cout << *jit  << ' ';
+    for (auto & edge : edges)
+      std::cout << edge  << ' ';
     std::cout << std::endl;
 
     edges.erase(eit);
     std::cout << "the erased edge " << *eit << **eit << std::endl
              << "edges after erase:\n";
-    for (edge_list::iterator jit = edges.begin(); jit != edges.end(); jit++)
-      std::cout << ' ' << *jit;
+    for (auto & edge : edges)
+      std::cout << ' ' << edge;
     std::cout << std::endl;
     TEST("edges content", edges.size()==2 && edges[0]==e0 && edges[1]==e2, true);
     //Check angle between edges
@@ -129,14 +129,12 @@ static void test_cycle_processor()
     one_chain_list nested_chains;
     cp.nested_one_cycles(nested_chains, 0.5);
     if (nested_chains.size())
-      for (one_chain_list::iterator cit = nested_chains.begin();
-           cit != nested_chains.end(); cit++)
+      for (auto & nested_chain : nested_chains)
       {
-        edge_list cedges; (*cit)->edges(cedges);
+        edge_list cedges; nested_chain->edges(cedges);
         std::cout << "chain edges\n";
-        for (edge_list::iterator ceit = cedges.begin();
-             ceit != cedges.end(); ceit++)
-          std::cout << (*ceit)->cast_to_edge_2d() << std::endl;
+        for (auto & cedge : cedges)
+          std::cout << cedge->cast_to_edge_2d() << std::endl;
         std::cout << std::endl;
       }
     else
@@ -163,14 +161,12 @@ static void test_cycle_processor()
     vtol_cycle_processor cp2(edges2, true);
     cp2.nested_one_cycles(nested_chains, 0.5);
     if (nested_chains.size())
-      for (one_chain_list::iterator cit = nested_chains.begin();
-           cit != nested_chains.end(); cit++)
+      for (auto & nested_chain : nested_chains)
       {
-        edge_list cedges; (*cit)->edges(cedges);
+        edge_list cedges; nested_chain->edges(cedges);
         std::cout << "chain edges\n";
-        for (edge_list::iterator ceit = cedges.begin();
-             ceit != cedges.end(); ceit++)
-          std::cout << (*ceit)->cast_to_edge_2d() << std::endl;
+        for (auto & cedge : cedges)
+          std::cout << cedge->cast_to_edge_2d() << std::endl;
         std::cout << std::endl;
       }
         TEST("nested_chains", nested_chains.size(), 2);
@@ -203,27 +199,27 @@ static void test_cycle_processor()
     edge_list s1_and_s2;
     vtol_cycle_processor::intersect_edges(s1, s2, s1_and_s2);
     std::cout << "\nvtol_edge_2ds in s1\n";
-    for (edge_list::iterator eit = s1.begin(); eit != s1.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s1)
+      std::cout << ' ' << eit << std::endl;
     std::cout << "\nvtol_edge_2ds in s2\n";
-    for (edge_list::iterator eit = s2.begin(); eit != s2.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s2)
+      std::cout << ' ' << eit << std::endl;
     std::cout << "\nvtol_edge_2ds in s1_and_s2\n";
-    for (edge_list::iterator eit = s1_and_s2.begin(); eit != s1_and_s2.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s1_and_s2)
+      std::cout << ' ' << eit << std::endl;
     TEST("vtol_cycle_processor::intersect_edges()", s1_and_s2[0], e1);
     //Test set difference
     edge_list s1_diff_s2;
     vtol_cycle_processor::difference_edges(s1, s2, s1_diff_s2);
     std::cout<< "\nvtol_edge_2ds in s1\n";
-    for (edge_list::iterator eit = s1.begin(); eit != s1.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s1)
+      std::cout << ' ' << eit << std::endl;
     std::cout<< "\nvtol_edge_2ds in s2\n";
-    for (edge_list::iterator eit = s2.begin(); eit != s2.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s2)
+      std::cout << ' ' << eit << std::endl;
     std::cout<< "\nvtol_edge_2ds in s1_minus_s2\n";
-    for (edge_list::iterator eit = s1_diff_s2.begin(); eit != s1_diff_s2.end(); eit++)
-      std::cout << ' ' << *eit << std::endl;
+    for (auto & eit : s1_diff_s2)
+      std::cout << ' ' << eit << std::endl;
     TEST("vtol_cycle_processor::difference_edges() [0]", s1_diff_s2[0], e2);
     TEST("vtol_cycle_processor::difference_edges() [1]", s1_diff_s2[1], e3);
     std::cout << "Ending set operation tests\n\n";
@@ -272,9 +268,8 @@ static void test_cycle_processor()
     {
       edge_list outer_edges; merged_cycles[0]->edges(outer_edges);
       std::cout<< "edges in merged cycle\n";
-      for (edge_list::iterator eit = outer_edges.begin();
-           eit != outer_edges.end(); eit++)
-        std::cout<< *eit << std::endl;
+      for (auto & outer_edge : outer_edges)
+        std::cout<< outer_edge << std::endl;
       TEST("vtol_cycle_processor::merge_one_cycles()",
            outer_edges[0]==e2 && outer_edges[1]==e3 &&
            outer_edges[2]==e4 && outer_edges[3]==e5, true);

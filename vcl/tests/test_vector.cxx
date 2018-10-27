@@ -30,8 +30,8 @@ int test_vector_main(int /*argc*/,char* /*argv*/[])
     m.push_back(1);
     m.push_back(2);
 
-    for (container::iterator p = m.begin(); p != m.end(); ++p)
-      std::cout << (*p) << std::endl;
+    for (int & p : m)
+      std::cout << p << std::endl;
   }
   {
     std::vector<double> v;

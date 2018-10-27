@@ -110,10 +110,10 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
       vgl_point_3d<double> max_pos(max_lon, max_lat, 30);
       vgl_box_3d<double> world(min_pos, max_pos);
       std::vector<vgl_point_3d<double> > corners = corners_of_box_3d<double>(world);
-      for (unsigned i=0; i<corners.size(); i++) {
-        double x = corners[i].x();
-        double y = corners[i].y();
-        double z = corners[i].z();
+      for (auto & corner : corners) {
+        double x = corner.x();
+        double y = corner.y();
+        double z = corner.z();
         double lx, ly, lz;
         camera->lvcs()->global_to_local(x, y, z,vpgl_lvcs::wgs84, lx, ly, lz);
         double u,v;

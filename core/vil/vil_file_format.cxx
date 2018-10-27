@@ -150,11 +150,11 @@ struct vil_file_format_storage
 
   ~vil_file_format_storage()
   {
-    for(std::list<vil_file_format*>::iterator i = l.begin(); i != l.end(); ++i)
+    for(auto & i : l)
     {
-      if(*i)
+      if(i)
       {
-        delete *i;
+        delete i;
       }
     }
   }

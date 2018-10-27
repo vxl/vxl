@@ -426,9 +426,8 @@ main( int argc, char* argv[] )
 
     for ( unsigned int j=0; j<2&&it!=feature_sets.end(); ++j,++it) {
       // Now copying features with corresponding coordinate scale
-      for (std::vector< rgrl_feature_sptr >::const_iterator jt=it->features_.begin();
-          jt!=it->features_.end(); ++jt ) {
-        from_features.push_back( scale_location_by( *jt, scaling_factor ) );
+      for (const auto & feature : it->features_) {
+        from_features.push_back( scale_location_by( feature, scaling_factor ) );
       }
     }
 

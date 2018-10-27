@@ -66,9 +66,9 @@ bool bbgm_mean_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 
   // replace existing type match
   typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
-  for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
-    if ((*i)->dist_typeid() == vm->dist_typeid()){
-      *i = vm;
+  for (auto & reg_vm : reg_vms)
+    if (reg_vm->dist_typeid() == vm->dist_typeid()){
+      reg_vm = vm;
       return true;
     }
 
@@ -105,9 +105,9 @@ bool bbgm_variance_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 
   // replace existing type match
   typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
-  for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
-    if ((*i)->dist_typeid() == vm->dist_typeid()){
-      *i = vm;
+  for (auto & reg_vm : reg_vms)
+    if (reg_vm->dist_typeid() == vm->dist_typeid()){
+      reg_vm = vm;
       return true;
     }
 
@@ -145,9 +145,9 @@ bool bbgm_weight_viewer::register_view_maker(const bbgm_view_maker_sptr& vm)
 
   // replace existing type match
   typedef std::vector<bbgm_view_maker_sptr>::iterator vm_itr;
-  for (vm_itr i=reg_vms.begin(); i!=reg_vms.end(); ++i)
-    if ((*i)->dist_typeid() == vm->dist_typeid()){
-      *i = vm;
+  for (auto & reg_vm : reg_vms)
+    if (reg_vm->dist_typeid() == vm->dist_typeid()){
+      reg_vm = vm;
       return true;
     }
 

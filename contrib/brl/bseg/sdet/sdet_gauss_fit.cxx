@@ -131,10 +131,10 @@ static bool init(std::vector<vgl_point_3d<double> > img_pts, std::vector<double>
 {
   //find the smallest intensity value in polygon
   plane = 65000.;
-  for (unsigned i=0; i<img_pts.size(); ++i)
+  for (auto & img_pt : img_pts)
   {
-    if ( img_pts[i].z() < plane )
-    plane = img_pts[i].z();
+    if ( img_pt.z() < plane )
+    plane = img_pt.z();
   }
 
   // With multiple peaks, finding the largest is more complex,
@@ -153,16 +153,16 @@ static bool init(std::vector<vgl_point_3d<double> > img_pts, std::vector<double>
     double xf = ps_list[j]->x() - xmin;            // "picked" values of x & y for this peak
     double yf = ps_list[j]->y() - ymin;
 
-    for (unsigned i=0; i<img_pts.size(); ++i)
+    for (auto & img_pt : img_pts)
     {
-      double dx = img_pts[i].x() - xf;
-      double dy = img_pts[i].y() - yf;
+      double dx = img_pt.x() - xf;
+      double dy = img_pt.y() - yf;
       // is this point within 2 pixels of selected peak's "picked" location??
       if (dx >= -2. && dx <= 2. && dy >= -2. && dy <= 2.)
-      if ( img_pts[i].z() > peak[j] )  {
-        peak[j] = img_pts[i].z();
-        ux[j] = img_pts[i].x();                // these are our rough guesses
-        uy[j] = img_pts[i].y();
+      if ( img_pt.z() > peak[j] )  {
+        peak[j] = img_pt.z();
+        ux[j] = img_pt.x();                // these are our rough guesses
+        uy[j] = img_pt.y();
       }
     }
 

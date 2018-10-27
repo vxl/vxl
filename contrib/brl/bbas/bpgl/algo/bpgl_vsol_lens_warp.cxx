@@ -119,9 +119,8 @@ bpgl_vsol_lens_warp(const vsol_line_2d_sptr& ln,
   pts.push_front(p0);
   pts.push_back(p1);
   std::vector<vsol_point_2d_sptr> v_pts;
-  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
-       i != pts.end(); ++i )
-    v_pts.push_back(*i);
+  for (auto & pt : pts)
+    v_pts.push_back(pt);
   return new vsol_polyline_2d(v_pts);
 }
 
@@ -153,9 +152,8 @@ bpgl_vsol_lens_warp(const vsol_polyline_2d_sptr& pln,
     last_dp = dp;
   }
   std::vector<vsol_point_2d_sptr> v_pts;
-  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
-       i != pts.end(); ++i )
-    v_pts.push_back(*i);
+  for (auto & pt : pts)
+    v_pts.push_back(pt);
   return new vsol_polyline_2d(v_pts);
 }
 
@@ -186,9 +184,8 @@ bpgl_vsol_lens_warp(const vsol_digital_curve_2d_sptr& dc,
     last_dp = dp;
   }
   std::vector<vsol_point_2d_sptr> v_pts;
-  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
-       i != pts.end(); ++i )
-    v_pts.push_back(*i);
+  for (auto & pt : pts)
+    v_pts.push_back(pt);
   return new vsol_digital_curve_2d(v_pts);
 }
 
@@ -218,9 +215,8 @@ bpgl_vsol_lens_warp(const vsol_polygon_2d_sptr& pg,
     last_dp = dp;
   }
   std::vector<vsol_point_2d_sptr> v_pts;
-  for (std::list<vsol_point_2d_sptr>::iterator i = pts.begin();
-       i != pts.end(); ++i )
-    v_pts.push_back(*i);
+  for (auto & pt : pts)
+    v_pts.push_back(pt);
   return new vsol_polygon_2d(v_pts);
 }
 

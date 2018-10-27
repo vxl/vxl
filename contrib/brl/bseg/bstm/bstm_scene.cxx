@@ -247,10 +247,9 @@ bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
                           vgl_point_3d<double>& local_coords, double const t, double& local_time) const
 {
     std::vector<bstm_block_id> block_ids = this->get_block_ids();
-    for (std::vector<bstm_block_id>::iterator id = block_ids.begin();
-         id != block_ids.end(); ++id)
+    for (auto & block_id : block_ids)
     {
-      bstm_block_metadata md = this->get_block_metadata_const(*id);
+      bstm_block_metadata md = this->get_block_metadata_const(block_id);
       vgl_vector_3d<double> dims(md.sub_block_dim_.x()*md.sub_block_num_.x(),
                                  md.sub_block_dim_.y()*md.sub_block_num_.y(),
                                  md.sub_block_dim_.z()*md.sub_block_num_.z());
@@ -262,7 +261,7 @@ bool bstm_scene::contains(vgl_point_3d<double> const& p, bstm_block_id& bid,
         //now check for time
         if (md.contains_t(t,local_time))
         {
-          bid = (*id);
+          bid = block_id;
           double local_x=(p.x()-md.local_origin_.x())/md.sub_block_dim_.x();
           double local_y=(p.y()-md.local_origin_.y())/md.sub_block_dim_.y();
           double local_z=(p.z()-md.local_origin_.z())/md.sub_block_dim_.z();
@@ -390,20 +389,20 @@ vgl_vector_3d<unsigned int>  bstm_scene::scene_dimensions() const
   int max_i=ids[0].i(),max_j=ids[0].j(),max_k=ids[0].k();
   int min_i=ids[0].i(),min_j=ids[0].j(),min_k=ids[0].k();
 
-  for (unsigned n=0; n<ids.size(); n++) {
-    if (ids[n].i() > max_i)
-      max_i=ids[n].i();
-    if (ids[n].j() > max_j)
-      max_j=ids[n].j();
-    if (ids[n].k() > max_k)
-      max_k=ids[n].k();
+  for (auto & id : ids) {
+    if (id.i() > max_i)
+      max_i=id.i();
+    if (id.j() > max_j)
+      max_j=id.j();
+    if (id.k() > max_k)
+      max_k=id.k();
 
-    if (ids[n].i() < min_i)
-      min_i=ids[n].i();
-    if (ids[n].j() < min_j)
-      min_j=ids[n].j();
-    if (ids[n].k() < min_k)
-      min_k=ids[n].k();
+    if (id.i() < min_i)
+      min_i=id.i();
+    if (id.j() < min_j)
+      min_j=id.j();
+    if (id.k() < min_k)
+      min_k=id.k();
   }
   max_i++; max_j++; max_k++;
 
@@ -413,8 +412,8 @@ vgl_vector_3d<unsigned int>  bstm_scene::scene_dimensions() const
 //: returns true if the scene has specified data type (simple linear search)
 bool bstm_scene::has_data_type(std::string data_type)
 {
-  for (unsigned int i=0; i<appearances_.size(); ++i)
-    if ( appearances_[i] == data_type )
+  for (const auto & appearance : appearances_)
+    if ( appearance == data_type )
       return true;
   return false;
 }
@@ -447,10 +446,10 @@ void x_write(std::ostream &os, bstm_scene& scene, std::string name)
   //write list of appearance models
 
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i=0; i<apps.size(); ++i)
+  for (const auto & app : apps)
   {
     vsl_basic_xml_element apms(APM_TAG);
-    apms.add_attribute("apm", apps[i]);
+    apms.add_attribute("apm", app);
     apms.x_write(os);
   }
 
@@ -522,8 +521,8 @@ std::ostream& operator <<(std::ostream &s, bstm_scene& scene)
 
   //list appearance models for this scene
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i=0; i<apps.size(); ++i)
-    s << "    " << apps[i] << ", ";
+  for (const auto & app : apps)
+    s << "    " << app << ", ";
   s << '\n';
   vpgl_lvcs lvcs = scene.lvcs();
   s << lvcs << '\n';
@@ -539,14 +538,14 @@ std::ostream& operator <<(std::ostream &s, bstm_scene& scene)
   s << "block array dims(" << dims.x() << ' ' << dims.y() << ' ' << dims.z() << ")\n";
   std::map<bstm_block_id, bstm_block_metadata>& blk = scene.blocks();
   s << " blocks:==>\n";
-  for (std::map<bstm_block_id, bstm_block_metadata>::iterator bit=blk.begin(); bit != blk.end(); ++bit) {
-    s << (*bit).second.id_ << ' ';
-    vgl_point_3d<double> org = (*bit).second.local_origin_;
-    s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' ' << (*bit).second.local_origin_t_  << ") ";
-    vgl_vector_3d<double> dim = (*bit).second.sub_block_dim_;
-    s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ' ' << (*bit).second.sub_block_dim_t_ << ") ";
-    vgl_vector_3d<unsigned> num = (*bit).second.sub_block_num_;
-    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z()  << ' ' << (*bit).second.sub_block_num_t_ << ")\n";
+  for (auto & bit : blk) {
+    s << bit.second.id_ << ' ';
+    vgl_point_3d<double> org = bit.second.local_origin_;
+    s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ' ' << bit.second.local_origin_t_  << ") ";
+    vgl_vector_3d<double> dim = bit.second.sub_block_dim_;
+    s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ' ' << bit.second.sub_block_dim_t_ << ") ";
+    vgl_vector_3d<unsigned> num = bit.second.sub_block_num_;
+    s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z()  << ' ' << bit.second.sub_block_num_t_ << ")\n";
   }
   s << "<=====:end blocks\n";
   return s;

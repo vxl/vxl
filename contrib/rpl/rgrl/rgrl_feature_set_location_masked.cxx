@@ -29,9 +29,9 @@ features_in_region( feature_vector& final_results, rgrl_mask_box const& roi ) co
   fea_set_sptr_->features_in_region( results, roi );
   // check if features are in the valid region
   typedef feature_vector::iterator fvec_itr;
-  for ( fvec_itr fitr = results.begin(); fitr != results.end(); ++fitr )
-    if ( mask_->inside( (*fitr)->location() ) )
-      final_results.push_back( *fitr );
+  for (auto & result : results)
+    if ( mask_->inside( result->location() ) )
+      final_results.push_back( result );
 }
 
 //:  Return the features in a given circle/sphere.
@@ -44,9 +44,9 @@ features_within_radius( feature_vector& final_results, vnl_vector<double> const&
   fea_set_sptr_->features_within_radius( results, center, radius );
   // check if features are in the valid region
   typedef feature_vector::iterator fvec_itr;
-  for ( fvec_itr fitr = results.begin(); fitr != results.end(); ++fitr )
-    if ( mask_->inside( (*fitr)->location() ) )
-      final_results.push_back( *fitr );
+  for (auto & result : results)
+    if ( mask_->inside( result->location() ) )
+      final_results.push_back( result );
 }
 
 //: Nearest feature based on Euclidean distance

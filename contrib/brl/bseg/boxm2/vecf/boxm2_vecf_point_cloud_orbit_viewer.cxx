@@ -46,9 +46,8 @@ bool boxm2_vecf_point_cloud_orbit_viewer::set_point_cloud(std::string const& pc_
 }
 void boxm2_vecf_point_cloud_orbit_viewer::add_sphere(vgl_sphere_3d<double> const& sph, int r, int g, int b){
   std::vector<vgl_point_3d<double> > pts = this->draw_sphere(sph);
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
-    cpoint p(*pit, r, g, b);
+  for(auto & pt : pts){
+    cpoint p(pt, r, g, b);
     pc_.push_back(p);
   }
 }
@@ -92,9 +91,7 @@ bool boxm2_vecf_point_cloud_orbit_viewer::save_point_cloud(std::string const& pc
     std::cout << "invalid point clould path " << pc_path << '\n';
     return false;
   }
-  for(std::vector<cpoint>::const_iterator pit = pc_.begin();
-      pit != pc_.end(); ++pit){
-    const cpoint& p = (*pit);
+  for(const auto & p : pc_){
     ostr << p.pt_.x() <<' '<< p.pt_.y()<<' '<< p.pt_.z()<<' '<< p.r_ <<' '<< p.g_<<' '<< p.b_<< '\n';
   }
   ostr.close();

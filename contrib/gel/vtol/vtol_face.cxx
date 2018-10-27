@@ -378,8 +378,8 @@ void vtol_face::compute_bounding_box() const
 {
   this->empty_bounding_box();
   edge_list edges; this->edges(edges);
-  for (edge_list::iterator eit = edges.begin();eit != edges.end(); ++eit)
-    this->add_to_bounding_box((*eit)->get_bounding_box());
+  for (auto & edge : edges)
+    this->add_to_bounding_box(edge->get_bounding_box());
 }
 
 //: This method determines if a vtol_face is a hole of another vtol_face.
@@ -390,8 +390,8 @@ bool vtol_face::IsHoleP() const
   vtol_edge_sptr e = edges->front();
   delete edges;
   std::list<vtol_topology_object*> const* chains = e->superiors_list();
-  for (std::list<vtol_topology_object*>::const_iterator i=chains->begin(); i!=chains->end(); ++i)
-    if ((*i)->cast_to_one_chain()->numsup() > 0)
+  for (auto chain : *chains)
+    if (chain->cast_to_one_chain()->numsup() > 0)
       return true;
   return false;
 }

@@ -192,7 +192,7 @@ int main(int argc, char** argv)
     std::cout << "Write best fit points to " << params.out_points_dir << std::endl;
 
   vnl_vector<double> sd = shape_model.mode_var();
-  for (unsigned i=0;i<sd.size();++i) sd[i]=std::sqrt(sd[i]);
+  for (double & i : sd) i=std::sqrt(i);
   mbl_stats_1d mahal_stats;
 
   for (unsigned i=0;i<shapes.size();++i)
@@ -205,8 +205,8 @@ int main(int argc, char** argv)
     if (!no_pose())
     {
       // Write pose parameters
-      for (unsigned j=0;j<sm_instance.pose().size();++j)
-        ofs<<sm_instance.pose()[j]<<' ';
+      for (double j : sm_instance.pose())
+        ofs<<j<<' ';
     }
 
     // Write shape parameters

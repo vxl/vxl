@@ -40,7 +40,7 @@ int main(int argc, char** argv)
     std::cout<<"Loaded "<<points.size()<<" points from "<<path<<std::endl;
     // Add points to list all_pts
     points.get_points(pts);
-    for (unsigned j=0;j<pts.size();++j) all_pts.push_back(pts[j]);
+    for (auto pt : pts) all_pts.push_back(pt);
   }
 
   points.set_points(all_pts);

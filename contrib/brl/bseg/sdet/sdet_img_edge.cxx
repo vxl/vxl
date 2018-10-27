@@ -67,9 +67,9 @@ vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> im
   img_edge.fill(0);
 
   // iterate over each connected edge component
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (auto & edge : *edges)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -129,9 +129,9 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
   edge_img.fill(-1.0f);
 
   // iterate over each connected edge component
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (auto & edge : *edges)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -230,9 +230,8 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
   // iterate over each connected edge component
   //for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
-  for (unsigned ii = 0; ii < edges.size(); ii++)
+  for (auto dc : edges)
   {
-    vdgl_digital_curve_sptr dc = edges[ii];
     if (!dc)
       continue;
     vdgl_interpolator_sptr intp = dc->get_interpolator();
@@ -319,8 +318,7 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
   fl.fit_lines();
   std::vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
 
-  for (unsigned i = 0; i < lines.size(); i++) {
-    vsol_line_2d_sptr l = lines[i];
+  for (auto l : lines) {
     int length = (int)std::ceil(l->length());
     double angle = vnl_math::angle_0_to_2pi(vnl_math::pi_over_180*l->tangent_angle());
 #if 0

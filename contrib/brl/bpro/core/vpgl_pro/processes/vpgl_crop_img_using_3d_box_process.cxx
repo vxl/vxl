@@ -333,9 +333,9 @@ bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sp
 
   // projection
   double lon, lat, gz;
-  for (unsigned i = 0; i < cam_corners.size(); i++)
+  for (auto & cam_corner : cam_corners)
   {
-    lvcs_sptr->local_to_global(cam_corners[i].x(), cam_corners[i].y(), cam_corners[i].z(), vpgl_lvcs::wgs84,
+    lvcs_sptr->local_to_global(cam_corner.x(), cam_corner.y(), cam_corner.z(), vpgl_lvcs::wgs84,
                           lon, lat, gz, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     vpgl_rational_camera<double>* new_cam = rat_cam.clone();
     new_cam->set_offset(vpgl_rational_camera<double>::X_INDX, lon);
@@ -343,8 +343,8 @@ bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sp
     new_cam->set_offset(vpgl_rational_camera<double>::Z_INDX, gz);
 
     // project the box to image coords
-    for (unsigned j = 0; j < box_corners.size(); j++) {
-      vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(box_corners[j].x(), box_corners[j].y(), box_corners[j].z()));
+    for (auto & box_corner : box_corners) {
+      vgl_point_2d<double> p2d = new_cam->project(vgl_point_3d<double>(box_corner.x(), box_corner.y(), box_corner.z()));
       roi_box_2d.add(p2d);
     }
     delete new_cam;
@@ -414,9 +414,9 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   vgl_box_2d<double> roi_box_2d;
 
   // project the box to image coords
-  for (unsigned j = 0; j < box_corners.size(); j++) {
+  for (auto & box_corner : box_corners) {
     double u, v;
-    geocam->global_to_img(box_corners[j].x(), box_corners[j].y(), box_corners[j].z(), u, v);
+    geocam->global_to_img(box_corner.x(), box_corner.y(), box_corner.z(), u, v);
     vgl_point_2d<double> p2d(u, v);
     roi_box_2d.add(p2d);
   }
@@ -646,13 +646,13 @@ bool vpgl_crop_img_using_3d_box_dem_process_globals::find_min_max_height(double 
   pts.emplace_back(ur_lon, ll_lat);
   pts.emplace_back(ll_lon, ll_lat);
   pts.emplace_back(ur_lon, ur_lat);
-  for (unsigned k = 0; k < (unsigned)pts.size(); k++)
+  for (auto & pt : pts)
   {
     // find the image
     for (unsigned j = 0; j < (unsigned)infos.size(); j++)
     {
       double u, v;
-      infos[j].second->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      infos[j].second->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);
       int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)infos[j].first->ni() || vv >= (int)infos[j].first->nj())

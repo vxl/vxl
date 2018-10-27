@@ -215,9 +215,9 @@ public:
         std::vector<sdet_curvelet*> CF_list = pit.get_cur_path();
 
         std::cout << ":: ";
-        for (unsigned i=0; i<CF_list.size(); i++){
-          for (unsigned j=0; j<CF_list[i]->edgel_chain.size(); j++)
-            std::cout << CF_list[i]->edgel_chain[j]->id << " ";
+        for (auto & i : CF_list){
+          for (unsigned j=0; j<i->edgel_chain.size(); j++)
+            std::cout << i->edgel_chain[j]->id << " ";
           std::cout << "* ";
         }
 
@@ -239,8 +239,8 @@ public:
       std::cout << ":: ";
       std::list<sdet_curvelet*>::iterator cvit = CF.begin();
       for (; cvit!=CF.end(); cvit++){
-        for (unsigned i=0; i<(*cvit)->edgel_chain.size(); i++)
-          std::cout << (*cvit)->edgel_chain[i]->id << " ";
+        for (auto & i : (*cvit)->edgel_chain)
+          std::cout << i->id << " ";
         std::cout << "* ";
       }
 
@@ -273,8 +273,8 @@ public:
 
   void clear()
   {
-    for (unsigned i=0; i<nodes.size(); i++){
-      nodes[i]->delete_tree();
+    for (auto & node : nodes){
+      node->delete_tree();
     }
     nodes.clear();
     CPL_links.clear();

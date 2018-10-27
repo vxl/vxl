@@ -46,11 +46,11 @@ int main(int argc,  char** argv)
 
   // just generate dummy output
   std::vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
-  for (unsigned i = 0; i < tiles.size(); ++i) {
+  for (auto & tile : tiles) {
     vil_image_view<unsigned int> out(3601, 3601);
     out.fill(volm_io::UNEVALUATED);
 
-    std::string out_name = out_folder() + "/VolM_" + tiles[i].get_string() + "_S1x1.tif";
+    std::string out_name = out_folder() + "/VolM_" + tile.get_string() + "_S1x1.tif";
     if (save_images()) {
       std::cout << "will write image to: " << out_name << std::endl;
       vil_save(out, out_name.c_str());

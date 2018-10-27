@@ -138,10 +138,10 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
 
   // load all height maps
   std::vector<volm_img_info> h_infos;
-  for (unsigned leaf_idx = 0; leaf_idx < leaf_ids.size(); leaf_idx++)
+  for (unsigned int leaf_id : leaf_ids)
   {
     std::stringstream img_file_stream;
-    img_file_stream << h_map_folder << "/scene_" << leaf_ids[leaf_idx] << "_h_stereo.tif";
+    img_file_stream << h_map_folder << "/scene_" << leaf_id << "_h_stereo.tif";
     std::string h_img_file = img_file_stream.str();
     if (!vul_file::exists(h_img_file))
       continue;
@@ -152,10 +152,10 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
 
   // load all ground images
   std::vector<volm_img_info> grd_infos;
-  for (unsigned leaf_idx = 0; leaf_idx < leaf_ids.size(); leaf_idx++)
+  for (unsigned int leaf_id : leaf_ids)
   {
     std::stringstream img_file_stream;
-    img_file_stream << grd_folder << "/scene_" << leaf_ids[leaf_idx] << "_h_stereo_grd.tif";
+    img_file_stream << grd_folder << "/scene_" << leaf_id << "_h_stereo_grd.tif";
     std::string h_img_file = img_file_stream.str();
     if (!vul_file::exists(h_img_file))
       continue;

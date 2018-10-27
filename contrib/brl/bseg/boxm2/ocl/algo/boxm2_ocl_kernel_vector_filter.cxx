@@ -71,10 +71,8 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
 
   //iterate though the filters in the vector
 
-  for (unsigned k= 0; k< filter_vector->kernels_.size(); k++)
+  for (auto filter : filter_vector->kernels_)
   {
-    bvpl_kernel_sptr filter = filter_vector->kernels_[k];
-
     std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     std::cout<<"Computing Filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<std::endl;
     //filter->print();

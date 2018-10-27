@@ -74,8 +74,8 @@ int main( int argc, char* argv[] )
 
   std::vector<vgl_point_2d<unsigned> > peaks;
   vimt_find_image_peaks_3x3(peaks,entropy_im);
-  for (unsigned i=0;i<peaks.size();++i)
-    ipts_draw_cross(grey_im,peaks[i].x()+half_width(),peaks[i].y()+half_width(),half_width(),vxl_byte(255));
+  for (auto & peak : peaks)
+    ipts_draw_cross(grey_im,peak.x()+half_width(),peak.y()+half_width(),half_width(),vxl_byte(255));
 
   if (!vil_save(grey_im, out_path().c_str()))
   {

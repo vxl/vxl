@@ -101,11 +101,11 @@ int test_functions()
   static unsigned long sample_seed = (unsigned long)std::time(nullptr);
 
   double hist1[20];
-  for (int i=0; i<20; i++)
+  for (double & i : hist1)
   {
     sample_seed = (sample_seed*16807)%2147483647L;
     double u = double(sample_seed)/0x7fffffff; // 0x7fffffff == 2147483711L
-    hist1[i] = 10.0+20.0*(u-0.5); // uniform in the interval 0 - 20
+    i = 10.0+20.0*(u-0.5); // uniform in the interval 0 - 20
   }
   double chisq = 0;
   for (int i=0; i<20; i++)

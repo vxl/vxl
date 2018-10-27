@@ -102,8 +102,8 @@ int main(int argc,  char** argv)
   // initialize the Prob_map image if the prob_map doesn't exist
   // if the image exists, load the image instead
   std::vector<vil_image_view<float> > tile_imgs;
-  for (unsigned i = 0 ; i < tiles.size(); i++) {
-    std::string img_name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+  for (auto & tile : tiles) {
+    std::string img_name = out() + "/" + "ProbMap_" + tile.get_string() + ".tif";
     if (vul_file::exists(img_name)) {
       // load the image
       vil_image_view<float> out_img = vil_load(img_name.c_str());
@@ -124,13 +124,13 @@ int main(int argc,  char** argv)
 
   std::string geo_folders[1]={geo_hypo_folder()};
 
-  for (unsigned k = 0 ; k < 1; k++)
+  for (const auto & geo_folder : geo_folders)
   {
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];
       // read in the volm_geo_index for tile i
       std::stringstream file_name_pre;
-      file_name_pre << geo_folders[k] << "geo_index_tile_" << i;
+      file_name_pre << geo_folder << "geo_index_tile_" << i;
       std::cout<<"Geo file "<<file_name_pre.str()<<std::endl;
       // no index for tile i exists, continue
       if (!vul_file::exists(file_name_pre.str() + ".txt")) {
@@ -244,13 +244,13 @@ int main(int argc,  char** argv)
   std::cout<<"Ground truth Score is "<<gt_score<<std::endl;
   int gt_count = 0;
   int tot_count = 0;
-  for (unsigned k = 0 ; k < 1; k++)
+  for (const auto & geo_folder : geo_folders)
   {
     for (unsigned i = 0; i < tiles.size(); i++) {
       volm_tile tile = tiles[i];
       // read in the volm_geo_index for tile i
       std::stringstream file_name_pre;
-      file_name_pre << geo_folders[k] << "geo_index_tile_" << i;
+      file_name_pre << geo_folder << "geo_index_tile_" << i;
       // no index for tile i exists, continue
       if (!vul_file::exists(file_name_pre.str() + ".txt")) {
         continue;

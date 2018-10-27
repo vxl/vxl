@@ -307,9 +307,9 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
   std::cout << oss.str().c_str();
 #endif
 
-  for (unsigned f=0; f<incident_faces1.size(); f++) {
+  for (auto & f : incident_faces1) {
     // add the new edges
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) incident_faces1[f];
+    bmsh3d_face_mc* face = (bmsh3d_face_mc*) f;
     _connect_F_E_end(face, newE1s);
     _connect_F_E_end(face, newE1e);
     face->_sort_HEs_circular();
@@ -320,9 +320,9 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
 #endif
   }
 
-  for (unsigned f=0; f<incident_faces2.size(); f++) {
+  for (auto & f : incident_faces2) {
     // add the new edges
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) incident_faces2[f];
+    bmsh3d_face_mc* face = (bmsh3d_face_mc*) f;
     _connect_F_E_end(face, newE2s);
     _connect_F_E_end(face, newE2e);
     face->_sort_HEs_circular();
@@ -479,13 +479,12 @@ void bmsh3d_mesh_mc::orient_face_normals()
 
     std::vector<bmsh3d_edge*> inc_edges;
     face->get_incident_Es(inc_edges);
-    for (unsigned i=0; i<inc_edges.size(); i++) {
-      bmsh3d_edge* E = inc_edges[i];
+    for (auto E : inc_edges) {
       bmsh3d_halfedge* he = E->get_HE_of_F(face);
       std::vector<bmsh3d_face*> faces;
       E->get_incident_Fs(faces);
-      for (unsigned f=0; f<faces.size(); f++) {
-        bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) faces[f];
+      for (auto & f : faces) {
+        bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) f;
         if ((inc_face != face) && (!inc_face->is_visited(1))) {
           inc_face->_sort_HEs_circular();
           inc_face->_ifs_clear_vertices();

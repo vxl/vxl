@@ -199,7 +199,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=opencl_cache->alloc_mem(sizeof(float)*100, output_arr, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

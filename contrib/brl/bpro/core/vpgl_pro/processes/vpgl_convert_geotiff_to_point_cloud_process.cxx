@@ -83,8 +83,8 @@ bool vpgl_convert_geotiff_to_point_cloud_process(bprb_func_process& pro)
     std::cerr << "Failed to open file " << out_filename.c_str() << std::endl;
     return false;
   }
-  for (unsigned i = 0; i < pts.size(); i++) {
-    ofs << pts[i].x() << ' ' << pts[i].y() << ' ' << pts[i].z() << '\n';
+  for (auto & pt : pts) {
+    ofs << pt.x() << ' ' << pt.y() << ' ' << pt.z() << '\n';
   }
 
   ofs.close();

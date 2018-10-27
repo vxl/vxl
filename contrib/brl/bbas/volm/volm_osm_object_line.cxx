@@ -7,8 +7,8 @@ void volm_osm_object_line::print()
   std::cout << " object property: ";
   prop_.print();
   std::cout << " line: " << std::endl;
-  for (unsigned i = 0; i < line_.size(); i++)
-    std::cout << '(' << line_[i].x() << ',' << line_[i].y() << ") ";
+  for (auto & i : line_)
+    std::cout << '(' << i.x() << ',' << i.y() << ") ";
   std::cout << '\n';
 }
 
@@ -20,9 +20,9 @@ void volm_osm_object_line::b_write(vsl_b_ostream& os)
   vsl_b_write(os, prop_.level_);
   vsl_b_write(os, prop_.width_);
   vsl_b_write(os, line_.size());
-  for (unsigned i = 0; i < line_.size(); i++) {
-    vsl_b_write(os, line_[i].x());
-    vsl_b_write(os, line_[i].y());
+  for (auto & i : line_) {
+    vsl_b_write(os, i.x());
+    vsl_b_write(os, i.y());
   }
 }
 

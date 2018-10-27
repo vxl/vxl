@@ -127,9 +127,9 @@ int main(int argc, char** argv)
 
   ofs<<"images: {"<<std::endl;
 
-  for (unsigned i=0;i<params.image_names.size();++i)
+  for (const auto & image_name : params.image_names)
   {
-    ofs<<params.image_names[i]<<std::endl;
+    ofs<<image_name<<std::endl;
   }
   ofs<<"}"<<std::endl;
   ofs.close();

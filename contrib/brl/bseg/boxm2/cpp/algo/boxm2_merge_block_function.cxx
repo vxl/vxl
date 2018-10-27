@@ -228,8 +228,8 @@ boct_bit_tree boxm2_merge_block_function::merge_bit_tree(boct_bit_tree& unrefine
     if (genCounter >= 8) {
       //calculate if all cells fall below threshold
       bool allBelow = true;
-      for (int i=0; i<8; ++i) {
-        allBelow = allBelow && (probs[i] < prob_thresh);
+      for (float prob : probs) {
+        allBelow = allBelow && (prob < prob_thresh);
       }
 
       //if all are leaves and all below, then reset the parent index to 0 (merge)

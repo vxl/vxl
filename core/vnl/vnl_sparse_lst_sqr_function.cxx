@@ -169,10 +169,10 @@ vnl_sparse_lst_sqr_function::f(vnl_vector<double> const& a,
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j),
                                       const_cast<double*>(b.data_block())+index_b(j));
@@ -207,10 +207,10 @@ vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const& a,
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j),
                                       const_cast<double*>(b.data_block())+index_b(j));
@@ -248,10 +248,10 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a,
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j),
                                       const_cast<double*>(b.data_block())+index_b(j));
@@ -285,10 +285,10 @@ vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const& a,
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j),
                                       const_cast<double*>(b.data_block())+index_b(j));
@@ -313,10 +313,10 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       vnl_vector_ref<double> eij(number_of_residuals(k), e.data_block()+index_e(k));
       apply_weight_ij(i,j,weights[k],eij);
     }
@@ -339,10 +339,10 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       apply_weight_ij(i,j,weights[k],A[k],B[k],C[k]);
     }
   }

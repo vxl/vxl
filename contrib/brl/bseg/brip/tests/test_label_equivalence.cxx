@@ -21,9 +21,8 @@ static void test_label_equivalence()
   {
     std::set<unsigned>& eqs = (*mit).second;
     std::cout << '(' ;
-    for (std::set<unsigned>::iterator sit = eqs.begin();
-         sit != eqs.end(); ++sit)
-      std::cout << *sit << ' ';
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type eq : eqs)
+      std::cout << eq << ' ';
     std::cout << ")\n";
     good = eqs.size() == 7;
   }
@@ -42,9 +41,8 @@ static void test_label_equivalence()
   {
     std::set<unsigned>& eqs = (*mit).second;
     std::cout << '(' ;
-    for (std::set<unsigned>::iterator sit = eqs.begin();
-         sit != eqs.end(); ++sit)
-      std::cout << *sit << ' ';
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type eq : eqs)
+      std::cout << eq << ' ';
     std::cout << ")\n";
     good = good&& eqs.size() == 7;
   }
@@ -62,9 +60,8 @@ static void test_label_equivalence()
     std::set<unsigned>& eqs = (*mit).second;
     n+= eqs.size();
     std::cout << '(' ;
-    for (std::set<unsigned>::iterator sit = eqs.begin();
-         sit != eqs.end(); ++sit)
-      std::cout << *sit << ' ';
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type eq : eqs)
+      std::cout << eq << ' ';
     std::cout << ")\n";
   }
   good = good && n ==7;

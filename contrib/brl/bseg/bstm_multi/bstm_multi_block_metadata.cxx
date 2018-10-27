@@ -36,10 +36,8 @@ bstm_multi_block_metadata::resolution() const {
   vgl_vector_3d<double> voxel_sizes =
       this->bbox().max_point() - this->bbox().min_point();
   double time_step = bbox_t_.second - bbox_t_.first;
-  for (std::vector<space_time_enum>::const_iterator iter = subdivisions_.begin();
-       iter != subdivisions_.end();
-       ++iter) {
-    switch (*iter) {
+  for (auto subdivision : subdivisions_) {
+    switch (subdivision) {
     case STE_SPACE:
       voxel_sizes /= 8.0;
       break;

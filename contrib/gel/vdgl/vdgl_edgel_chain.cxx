@@ -62,8 +62,8 @@ bool vdgl_edgel_chain::add_edgels( const std::vector<vdgl_edgel> &es, int index)
     for (int i=0; i< index; i++)
       temp.push_back( es_[i]);
 
-    for (unsigned int i=0; i< es.size(); i++)
-      temp.push_back( es[i]);
+    for (const auto & e : es)
+      temp.push_back( e);
 
     for (unsigned int i=index; i< es_.size(); i++)
       temp.push_back( es_[i]);
@@ -210,12 +210,12 @@ void vdgl_edgel_chain::b_write(vsl_b_ostream &os) const
 {
   vsl_b_write(os, version());
   vsl_b_write(os, es_.size());
-  for (unsigned int i = 0; i<es_.size(); i++)
+  for (const auto & e : es_)
   {
-    vsl_b_write(os, es_[i].get_x());
-    vsl_b_write(os, es_[i].get_y());
-    vsl_b_write(os, es_[i].get_grad());
-    vsl_b_write(os, es_[i].get_theta());
+    vsl_b_write(os, e.get_x());
+    vsl_b_write(os, e.get_y());
+    vsl_b_write(os, e.get_grad());
+    vsl_b_write(os, e.get_theta());
   }
 }
 //: Binary load self from stream (not typically used)

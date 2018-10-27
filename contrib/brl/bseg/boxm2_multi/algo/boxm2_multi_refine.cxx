@@ -48,9 +48,8 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
   std::vector<bocl_mem_sptr> out_mems, lookups, prob_mems;
   std::size_t maxBlocks = 0;
   std::vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
-  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
+  for (auto ocl_cache : ocl_caches) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -121,8 +120,8 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     }
 
     //finish
-    for (unsigned int i=0; i<queues.size(); ++i)
-      clFinish(queues[i]);
+    for (auto & queue : queues)
+      clFinish(queue);
   }
 
   //------------------------------------------------------------------
@@ -192,8 +191,8 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     }
 
     //finish
-    for (unsigned int i=0; i<queues.size(); ++i)
-      clFinish(queues[i]);
+    for (auto & queue : queues)
+      clFinish(queue);
   }
 
   //STEP FOUR: Clean up
@@ -215,8 +214,8 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     }
   }
 
-  for (unsigned int i=0; i<queues.size(); ++i)
-    clReleaseCommandQueue(queues[i]);
+  for (auto & queue : queues)
+    clReleaseCommandQueue(queue);
   return 0.0f;
 }
 
@@ -314,19 +313,19 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
   //swap data into place
   std::vector<std::string> data_types = scene->appearances();
   data_types.push_back(boxm2_data_traits<BOXM2_ALPHA>::prefix());
-  for (unsigned int i=0; i<data_types.size(); ++i)
+  for (const auto & data_type : data_types)
   {
     //std::cout<<"  Swapping data of type: "<<data_types[i]<<std::endl;
-    std::string options = get_option_string( boxm2_data_info::datasize(data_types[i]) );
+    std::string options = get_option_string( boxm2_data_info::datasize(data_type) );
     bocl_kernel* kern = get_refine_data_kernel(device, options);
 
     //get bocl_mem data independent of CPU pointer
-    bocl_mem* dat = ocl_cache->get_data(id, data_types[i]);
+    bocl_mem* dat = ocl_cache->get_data(id, data_type);
 
     //get a new data pointer (with newSize), will create CPU buffer and GPU buffer
     //std::cout<<"  Data_type "<<data_types[i]<<" new size is: "<<newDataSize<<std::endl;
-    int dataBytes = boxm2_data_info::datasize(data_types[i]) * newDataSize;
-    bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, nullptr, "new data buffer " + data_types[i]);
+    int dataBytes = boxm2_data_info::datasize(data_type) * newDataSize;
+    bocl_mem* new_dat = ocl_cache->alloc_mem(dataBytes, nullptr, "new data buffer " + data_type);
     new_dat->create_buffer(CL_MEM_READ_WRITE, queue);
 
     //grab the block out of the cache as well
@@ -334,15 +333,15 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
     bocl_mem* blk_info = ocl_cache->loaded_block_info();
 
     //is alpha buffer
-    bool is_alpha_buffer[1] = { (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) };
+    bool is_alpha_buffer[1] = { (data_type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) };
     bocl_mem is_alpha(device->context(), is_alpha_buffer, sizeof(cl_bool), "is_alpha buffer");
     is_alpha.create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
     //copy parent behavior.. if true, Data copies its parent
     bool copy_parent_buffer[1];
-    if (data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
-        data_types[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
-        data_types[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+    if (data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ||
+        data_type == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ||
+        data_type == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
       (*copy_parent_buffer) = true;
     else
       (*copy_parent_buffer) = false;
@@ -371,8 +370,8 @@ void boxm2_multi_refine::swap_data_per_block( boxm2_scene_sptr scene,
 
     //debug stuff---------
     clFinish(queue);
-    ocl_cache->deep_replace_data(id, data_types[i], new_dat);
-    if (data_types[i] == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
+    ocl_cache->deep_replace_data(id, data_type, new_dat);
+    if (data_type == boxm2_data_traits<BOXM2_ALPHA>::prefix()) {
       //std::cout<<"  Writing refined trees."<<std::endl;
       blk->read_to_buffer(queue);
     }

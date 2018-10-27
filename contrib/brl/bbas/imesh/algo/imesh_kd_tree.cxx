@@ -243,8 +243,8 @@ imesh_build_kd_tree(const std::vector<vgl_box_3d<double> >& boxes)
 
   // make the inner box
   vgl_box_3d<double> inner_box;
-  for ( unsigned int i=0; i<boxes.size(); ++i ) {
-    inner_box.add(boxes[i]);
+  for (const auto & boxe : boxes) {
+    inner_box.add(boxe);
   }
 
   // call recursive function to do the real work

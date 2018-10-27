@@ -33,14 +33,13 @@ void boxm2_vecf_mandible_scene::extract_block_data(){
 // after loading the block initialize all the cell indices from the block labels, e.g., cell == LEFT_RAMUS, cell == LEFT_ANGLE, etc.
 void boxm2_vecf_mandible_scene::cache_cell_centers_from_anatomy_labels(){
   std::vector<cell_info> source_cell_centers = blk_->cells_in_box(source_bb_);
-  for(std::vector<cell_info>::iterator cit = source_cell_centers.begin();
-      cit != source_cell_centers.end(); ++cit){
-    unsigned dindx = cit->data_index_;
+  for(auto & source_cell_center : source_cell_centers){
+    unsigned dindx = source_cell_center.data_index_;
     float alpha = static_cast<float>(alpha_data_[dindx]);
     bool mandible = mandible_data_[dindx]   > pixtype(0);
     if(mandible||alpha>alpha_init_){
       unsigned mandible_index  = static_cast<unsigned>(mandible_cell_centers_.size());
-      mandible_cell_centers_.push_back(cit->cell_center_);
+      mandible_cell_centers_.push_back(source_cell_center.cell_center_);
       mandible_cell_data_index_.push_back(dindx);
       data_index_to_cell_index_[dindx] = mandible_index;
       // new cell that doesn't have appearance or anatomy data
@@ -189,10 +188,9 @@ void boxm2_vecf_mandible_scene::build_mandible(){
   vgl_box_3d<double> bb = mandible_geo_.bounding_box();
    // cell in a box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = mandible_geo_(cell_center);
     if(d < d_thresh){
       if(!is_type_global(cell_center, MANDIBLE)){
@@ -220,8 +218,7 @@ void boxm2_vecf_mandible_scene::find_cell_neigborhoods(){
       vgl_point_3d<double>& p = mandible_cell_centers_[i];
       unsigned indx_i = mandible_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -361,8 +358,7 @@ void boxm2_vecf_mandible_scene::find_left_ramus_cell_neigborhoods(){
       vgl_point_3d<double>& p = left_ramus_cell_centers_[i];
       unsigned indx_i = left_ramus_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -386,10 +382,9 @@ void boxm2_vecf_mandible_scene::build_left_ramus(){
   vgl_box_3d<double> bb;// = mandible_geo_.left_ramus_bounding_box(margin);
   // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d =0.0;// mandible_geo_.left_ramus_surface_distance(cell_center);
 
     if(d < d_thresh){
@@ -556,9 +551,8 @@ int boxm2_vecf_mandible_scene::prerefine_target_sub_block(vgl_point_3d<double> c
 
   // iterate through each intersecting source tree and find the maximum tree depth
   int max_depth = 0;
-  for(std::vector<vgl_point_3d<int> >::iterator bit = int_sblks.begin();
-      bit != int_sblks.end(); ++bit){
-    const uchar16& tree_bits = trees_(bit->x(), bit->y(), bit->z());
+  for(auto & int_sblk : int_sblks){
+    const uchar16& tree_bits = trees_(int_sblk.x(), int_sblk.y(), int_sblk.z());
     //safely cast since bit_tree is just temporary
     uchar16& uctree_bits = const_cast<uchar16&>(tree_bits);
     boct_bit_tree bit_tree(uctree_bits.data_block(), max_level);
@@ -577,9 +571,8 @@ void boxm2_vecf_mandible_scene::map_to_target(boxm2_scene_sptr target_scene){
     this->extract_target_block_data(target_scene);
   this->extract_unrefined_cell_info();//on articulated_scene
   std::vector<vgl_point_3d<double> > tgt_pts;
-  for(std::vector<unrefined_cell_info>::iterator cit = unrefined_cell_info_.begin();
-      cit != unrefined_cell_info_.end(); ++cit)
-    tgt_pts.push_back(cit->pt_);
+  for(auto & cit : unrefined_cell_info_)
+    tgt_pts.push_back(cit.pt_);
 
   // compute inverse vector field for prerefining the target
   this->inverse_vector_field_unrefined(tgt_pts);

@@ -62,8 +62,8 @@ vsol_polyline_2d::vsol_polyline_2d(vsol_polyline_2d const& other)
 //---------------------------------------------------------------------------
 vsol_polyline_2d::~vsol_polyline_2d()
 {
-  for (unsigned i = 0; i < storage_->size(); i++)
-    (*storage_)[i] = nullptr;
+  for (auto & i : *storage_)
+    i = nullptr;
   p0_ = nullptr;
   p1_ = nullptr;
   delete storage_;

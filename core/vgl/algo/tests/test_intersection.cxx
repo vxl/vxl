@@ -415,9 +415,9 @@ static void test_poly_line_intersection()
     vgl_intersection<double>(poly, line_a);
   TEST("number of intersections, interior case", inters.size(), 4);
   double corrs=0.0;
-  for (unsigned i = 0; i<inters.size(); ++i) {
-    corrs+= inters[i].x();
-    corrs+= inters[i].y();
+  for (auto & inter : inters) {
+    corrs+= inter.x();
+    corrs+= inter.y();
   }
   TEST_NEAR("intersection locations", corrs, 0.0, 0.001);
   //check grazing intersection

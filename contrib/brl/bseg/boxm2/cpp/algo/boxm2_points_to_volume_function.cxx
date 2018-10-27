@@ -72,8 +72,8 @@ void boxm2_points_to_volume::fillVolume()
     //------ Store alphas in cache ----------
     //count data lengths for this blocr
     std::size_t dataLen=0;
-    for (unsigned int i=0; i<datas.size(); ++i)
-      dataLen += datas[i].size();
+    for (auto & data : datas)
+      dataLen += data.size();
     if (dataLen < nTrees)
       std::cout<<"NOT ALL TREES HAVE DATA THATS NO GOOD"<<std::endl;
 
@@ -81,9 +81,9 @@ void boxm2_points_to_volume::fillVolume()
     boxm2_data_base* newA = new boxm2_data_base(new char[dataLen * sizeof(float) ], dataLen * sizeof(float), id);
     float* fullAlphas = reinterpret_cast<float*>(newA->data_buffer());
     std::size_t c=0;
-    for (unsigned int i=0; i<datas.size(); ++i)
-      for (unsigned int j=0; j<datas[i].size(); ++j)
-        fullAlphas[c++] = datas[i][j];
+    for (auto & data : datas)
+      for (unsigned int j=0; j<data.size(); ++j)
+        fullAlphas[c++] = data[j];
 
     //Replace data in the cache
     boxm2_cache_sptr cache = boxm2_cache::instance();

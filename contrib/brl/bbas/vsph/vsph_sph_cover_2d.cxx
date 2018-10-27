@@ -10,9 +10,8 @@ inside_area(vsph_sph_box_2d const& bb,
             double ray_area) const
 {
   double inside_area = 0.0;
-  for (std::vector<vsph_sph_point_2d>::const_iterator rit = region_rays.begin();
-       rit != region_rays.end(); ++rit)
-    if (bb.contains(*rit))
+  for (const auto & region_ray : region_rays)
+    if (bb.contains(region_ray))
       inside_area += ray_area;
   return inside_area;
 }
@@ -39,25 +38,23 @@ vsph_sph_cover_2d(vsph_sph_box_2d const& cover_bb,
   while (sub_divide) {
     sub_divide = false;
     std::vector<cover_el> temp;
-    for (std::vector<cover_el>::iterator cit = cover_.begin();
-         cit != cover_.end(); ++cit)
+    for (auto & cit : cover_)
     {
-      area_fraction = (*cit).frac_inside_;
+      area_fraction = cit.frac_inside_;
       if (area_fraction == 0.0)
         continue;
       if (area_fraction>min_area_fraction){
-        keep.push_back(*cit);
+        keep.push_back(cit);
         continue;
       }
       std::vector<vsph_sph_box_2d> sub_regions;
-      sub_divide = (*cit).box_.sub_divide(sub_regions);
-      for (std::vector<vsph_sph_box_2d>::iterator bit = sub_regions.begin();
-           bit != sub_regions.end(); ++bit) {
-        c_area = (*bit).area();
+      sub_divide = cit.box_.sub_divide(sub_regions);
+      for (auto & sub_region : sub_regions) {
+        c_area = sub_region.area();
         assert(c_area>0.0);
-        in_area = inside_area(*bit, region_rays, ray_area);
+        in_area = inside_area(sub_region, region_rays, ray_area);
         area_fraction = in_area/c_area;
-        temp.emplace_back(*bit, area_fraction);
+        temp.emplace_back(sub_region, area_fraction);
       }
     }
     if (sub_divide){
@@ -66,18 +63,16 @@ vsph_sph_cover_2d(vsph_sph_box_2d const& cover_bb,
     }
   }
   //all done, add the kept boxes to the cover
-  for (std::vector<cover_el>::iterator kit = keep.begin();
-       kit != keep.end(); ++kit)
-    cover_.push_back(*kit);
+  for (auto & kit : keep)
+    cover_.push_back(kit);
   // compute area fraction achieved
   total_area_ = 0.0;
   double total_inside = 0.0;
-  for (std::vector<cover_el>::iterator cit = cover_.begin();
-       cit != cover_.end(); ++cit)
+  for (auto & cit : cover_)
     {
-      double a = ((*cit).box_).area();
+      double a = (cit.box_).area();
       total_area_ += a;
-      total_inside += a*((*cit).frac_inside_);
+      total_inside += a*(cit.frac_inside_);
     }
   assert(total_area_>0.0);
   actual_area_fraction_ = total_inside/total_area_;
@@ -98,11 +93,10 @@ vsph_sph_cover_2d vsph_sph_cover_2d::transform(double t_theta,
                                                double theta_c,double phi_c,
                                                bool in_radians) const{
   std::vector<cover_el> tcov;
-  for (std::vector<cover_el>::const_iterator cit = cover_.begin();
-       cit != cover_.end(); ++cit)
+  for (const auto & cit : cover_)
     {
-      double fin = cit->frac_inside_;
-      vsph_sph_box_2d tbox = (cit->box_).transform(t_theta, t_phi, scale,
+      double fin = cit.frac_inside_;
+      vsph_sph_box_2d tbox = (cit.box_).transform(t_theta, t_phi, scale,
                                                    theta_c, phi_c, in_radians);
       tcov.emplace_back(tbox, fin);
     }
@@ -131,9 +125,8 @@ bool intersection(vsph_sph_cover_2d const& c1, vsph_sph_cover_2d const& c2,
       std::vector<vsph_sph_box_2d> boxes;
       if (!intersection(b1, b2, boxes))
         continue;
-      for (std::vector<vsph_sph_box_2d>::iterator bit = boxes.begin();
-           bit != boxes.end(); ++bit)
-        intersection_cover.emplace_back(*bit, max_fin);
+      for (auto & boxe : boxes)
+        intersection_cover.emplace_back(boxe, max_fin);
           any_intersection = true;
     }
   }
@@ -144,12 +137,11 @@ bool intersection(vsph_sph_cover_2d const& c1, vsph_sph_cover_2d const& c2,
     min_af = c2.min_area_fraction();
   double total_area = 0.0;
   double total_inside = 0.0;
-  for (std::vector<cover_el>::iterator cit = intersection_cover.begin();
-       cit != intersection_cover.end(); ++cit)
+  for (auto & cit : intersection_cover)
     {
-      double a = ((*cit).box_).area();
+      double a = (cit.box_).area();
       total_area += a;
-      total_inside += a*((*cit).frac_inside_);
+      total_inside += a*(cit.frac_inside_);
     }
   if (total_area == 0.0) return false;
   double actual_area_fraction = total_inside/total_area;

@@ -121,8 +121,7 @@ vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
 
   std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
   vgl_box_2d<double> bb;
-  for (unsigned i=0; i<corners.size(); i++) {
-    vgl_point_3d<double> c = corners[i];
+  for (auto c : corners) {
     double u,v, u2, v2;
     persp_cam.project(c.x(), c.y() ,c.z(), u, v);
     rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);

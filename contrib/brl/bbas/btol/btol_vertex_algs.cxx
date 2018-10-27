@@ -26,9 +26,8 @@ bool btol_vertex_algs::merge_superiors(vtol_vertex_sptr& va,
   if (!va||!vb)
     return false;
   std::vector<vtol_edge_sptr> edges; va->edges(edges);
-  for (std::vector<vtol_edge_sptr>::iterator eit = edges.begin();
-       eit != edges.end(); eit++)
-    btol_edge_algs::subst_vertex_on_edge(va, vb, *eit);
+  for (auto & edge : edges)
+    btol_edge_algs::subst_vertex_on_edge(va, vb, edge);
   return true;
 }
 

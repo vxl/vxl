@@ -64,9 +64,9 @@ bool FMatrixCompute7Point::compute (std::vector<vgl_homg_point_2d<double> >& poi
       return false;
 
     // De-condition F
-    for (unsigned int i = 0; i < F.size(); i++) {
-      FMatrix* oldF = F[i];
-      F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
+    for (auto & i : F) {
+      FMatrix* oldF = i;
+      i = new FMatrix(HomgMetric::homg_to_image_F(*i, &conditioned1,
                                                             &conditioned2));
       delete oldF;
     }
@@ -100,9 +100,9 @@ bool FMatrixCompute7Point::compute(std::vector<HomgPoint2D>& points1,
       return false;
 
     // De-condition F
-    for (unsigned int i = 0; i < F.size(); i++) {
-      FMatrix* oldF = F[i];
-      F[i] = new FMatrix(HomgMetric::homg_to_image_F(*F[i], &conditioned1,
+    for (auto & i : F) {
+      FMatrix* oldF = i;
+      i = new FMatrix(HomgMetric::homg_to_image_F(*i, &conditioned1,
                                                             &conditioned2));
       delete oldF;
     }
@@ -148,8 +148,8 @@ bool FMatrixCompute7Point::compute_preconditioned(std::vector<vgl_homg_point_2d<
   }
   // Rank-truncate F
   if (rank2_truncate_) {
-    for (unsigned int h = 0; h < F.size(); ++h) {
-      F[h]->set_rank2_using_svd();
+    for (auto & h : F) {
+      h->set_rank2_using_svd();
     }
   }
   return true;
@@ -189,8 +189,8 @@ bool FMatrixCompute7Point::compute_preconditioned(std::vector<HomgPoint2D>& poin
   }
   // Rank-truncate F
   if (rank2_truncate_) {
-    for (unsigned int h = 0; h < F.size(); ++h) {
-      F[h]->set_rank2_using_svd();
+    for (auto & h : F) {
+      h->set_rank2_using_svd();
     }
   }
   return true;

@@ -29,15 +29,15 @@ brec_param_estimation::estimate_fg_pair_density_initial_sigma(std::vector<std::p
 {
   //: first find the mean dif
   double mean = 0.0;
-  for (unsigned i = 0; i < pairs.size(); i++) {
-    mean += std::abs(pairs[i].first-pairs[i].second);
+  for (auto & pair : pairs) {
+    mean += std::abs(pair.first-pair.second);
   }
   mean /= pairs.size();
   std::cout << " mean: " << mean << std::endl;
 
   double var = 0.0;
-  for (unsigned i = 0; i < pairs.size(); i++) {
-    var += std::pow(double(std::abs(pairs[i].first-pairs[i].second)-mean), 2.0);
+  for (auto & pair : pairs) {
+    var += std::pow(double(std::abs(pair.first-pair.second)-mean), 2.0);
   }
   var /= pairs.size();
 

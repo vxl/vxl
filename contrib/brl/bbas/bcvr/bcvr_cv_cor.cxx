@@ -48,16 +48,16 @@ bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
   // keep the arclengths on each interval in increasing order
   // curve1's arclengths are not necessarily starting from 0 and may be larger than length1_
   // because it might be rotated to match curve2
-  for ( unsigned int i = 0 ; i < map.size() ; i++ ) {
-    vsol_point_2d_sptr pt = c2->vertex(map[i].second);
+  for (auto & i : map) {
+    vsol_point_2d_sptr pt = c2->vertex(i.second);
     pts2_.push_back(pt->get_p());
-    arclengths2_.push_back(c2->arcLength(map[i].second));
+    arclengths2_.push_back(c2->arcLength(i.second));
   }
 
-  for ( unsigned int i = 0 ; i < map.size() ; i++ ) {
-    vsol_point_2d_sptr pt = c1->vertex(map[i].first%n1);
+  for (auto & i : map) {
+    vsol_point_2d_sptr pt = c1->vertex(i.first%n1);
     pts1_.push_back(pt->get_p());
-    arclengths1_.push_back(c1->arcLength(map[i].first)); // may not start from 0
+    arclengths1_.push_back(c1->arcLength(i.first)); // may not start from 0
   }
 
   // find total length of curve 2
@@ -199,23 +199,23 @@ void bcvr_cv_cor::b_write(vsl_b_ostream &os) const
     vsl_b_write(os, false);
 
   vsl_b_write(os, arclengths1_.size());
-  for (unsigned i = 0; i < arclengths1_.size(); i++)
-    vsl_b_write(os, arclengths1_[i]);
+  for (double i : arclengths1_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, arclengths2_.size());
-  for (unsigned i = 0; i < arclengths2_.size(); i++)
-    vsl_b_write(os, arclengths2_[i]);
+  for (double i : arclengths2_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, pts1_.size());
-  for (unsigned i = 0; i < pts1_.size(); i++) {
-    vsl_b_write(os, pts1_[i].x());
-    vsl_b_write(os, pts1_[i].y());
+  for (auto i : pts1_) {
+    vsl_b_write(os, i.x());
+    vsl_b_write(os, i.y());
   }
 
   vsl_b_write(os, pts2_.size());
-  for (unsigned i = 0; i < pts2_.size(); i++) {
-    vsl_b_write(os, pts2_[i].x());
-    vsl_b_write(os, pts2_[i].y());
+  for (auto i : pts2_) {
+    vsl_b_write(os, i.x());
+    vsl_b_write(os, i.y());
   }
 
   return;

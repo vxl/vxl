@@ -137,8 +137,8 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     return false;
   }
   vgl_box_2d<double> bbox_rect;
-  for (unsigned i = 0; i < poly[0].size(); i++)
-    bbox_rect.add(poly[0][i]);
+  for (auto i : poly[0])
+    bbox_rect.add(i);
   double square_size = (bbox_rect.width() >= bbox_rect.height()) ? bbox_rect.width() : bbox_rect.height();
   vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);
 
@@ -174,8 +174,8 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
 
 
   // initialize the urban land ratio
-  for (unsigned i = 0; i < leaves.size(); i++) {
-    bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
+  for (auto & leave : leaves) {
+    bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leave.ptr());
     leaf_ptr->contents_ = -1.0f;
   }
 

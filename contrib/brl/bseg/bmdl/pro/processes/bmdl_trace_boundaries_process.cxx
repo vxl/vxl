@@ -23,8 +23,8 @@ bool trace_boundaries(vil_image_view_base_sptr label_img, std::string fpath)
   unsigned char ver = 1; //version();
   vsl_b_write(os, ver);
   vsl_b_write(os, polygons.size());
-  for (unsigned i = 0; i < polygons.size(); i++) {
-    vsl_b_write(os, polygons[i]);
+  for (const auto & polygon : polygons) {
+    vsl_b_write(os, polygon);
   }
 
   return true;

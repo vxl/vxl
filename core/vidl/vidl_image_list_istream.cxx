@@ -86,9 +86,8 @@ open(const std::string& glob)
 
   if (!can_open) {
     std::cerr << "In vidl_image_list_istream(.) -can't open files as images\n";
-    for (std::vector<std::string>::iterator fit = filenames.begin();
-         fit != filenames.end(); ++fit)
-      std::cerr << *fit << '\n';
+    for (auto & filename : filenames)
+      std::cerr << filename << '\n';
     return false;
   }
   this->image_paths_ = filenames;
@@ -103,9 +102,9 @@ open(const std::vector<std::string>& paths)
 {
   image_paths_.clear();
   // test each file to ensure it exists and is a supported image format
-  for (std::vector<std::string>::const_iterator i = paths.begin(); i!=paths.end(); ++i)
+  for (const auto & path : paths)
   {
-    vil_image_resource_sptr img = vil_load_image_resource(i->c_str());
+    vil_image_resource_sptr img = vil_load_image_resource(path.c_str());
     if (img)
     {
       if (ni_ == 0 || nj_ == 0)
@@ -117,7 +116,7 @@ open(const std::vector<std::string>& paths)
       }
       else if (ni_ != img->ni() || nj_ != img->nj())
         continue;
-      image_paths_.push_back(*i);
+      image_paths_.push_back(path);
     }
   }
   index_ = INIT_INDEX;

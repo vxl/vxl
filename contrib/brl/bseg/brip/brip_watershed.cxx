@@ -22,10 +22,8 @@ brip_watershed::brip_watershed(brip_watershed_params const& bwp)
 
 brip_watershed::~brip_watershed()
 {
-  for (std::map<unsigned int, std::vector<unsigned int>* >::iterator
-       mit = region_adjacency_.begin();
-       mit != region_adjacency_.end(); mit++)
-    delete (*mit).second;
+  for (auto & mit : region_adjacency_)
+    delete mit.second;
 }
 
 //: Print the region label array
@@ -73,17 +71,14 @@ void brip_watershed::print_neighborhood(int col, int row, unsigned int lab)
 
 void brip_watershed::print_adjacency_map()
 {
-  for (std::map<unsigned int, std::vector<unsigned int>* >::iterator
-       mit = region_adjacency_.begin();
-       mit != region_adjacency_.end(); mit++)
+  for (auto & mit : region_adjacency_)
   {
-    unsigned int reg = (*mit).first;
-    std::vector<unsigned int>* adj_regs = (*mit).second;
+    unsigned int reg = mit.first;
+    std::vector<unsigned int>* adj_regs = mit.second;
     std::cout << "R[" << reg << "]:(";
     if (adj_regs)
-      for (std::vector<unsigned int>::iterator rit = adj_regs->begin();
-           rit != adj_regs->end(); rit++)
-        std::cout << (*rit) << ' ';
+      for (unsigned int & adj_reg : *adj_regs)
+        std::cout << adj_reg << ' ';
     std::cout << ")\n";
   }
 }
@@ -272,8 +267,8 @@ bool brip_watershed::add_adjacency(const unsigned int reg,
   {
     std::vector<unsigned int> * vec = region_adjacency_[reg];
 
-    for (unsigned int i =0 ; i < vec->size(); i++)
-      if ((*vec)[i] == adj_reg)
+    for (unsigned int i : *vec)
+      if (i == adj_reg)
         return false; //adjacency relation already known
 
     vec->push_back(adj_reg);

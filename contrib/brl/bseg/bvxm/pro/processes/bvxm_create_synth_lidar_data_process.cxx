@@ -40,8 +40,7 @@ bool gen_lidar_view(int x, int y, int z,
   lv.fill(0);
 
   // Place the heights of boxes on lidar
-  for (unsigned int b=0; b<boxes.size(); b++) {
-    vgl_box_3d<double> box = boxes[b];
+  for (auto box : boxes) {
     double maxz = box.max_z(); // top face of the box
     if (maxz > z) maxz = z;
     for (int i=0; i<x; i++)

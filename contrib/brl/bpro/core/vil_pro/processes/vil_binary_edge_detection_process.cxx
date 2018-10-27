@@ -84,10 +84,10 @@ bool vil_binary_edge_detection_process(bprb_func_process& pro)
 
   // remove the edges that do not satisfy the desired size
   std::vector<unsigned> valid_edge_labels;
-  for (std::vector<vil_blob_pixel_list>::iterator vit = edge_pixel_list.begin(); vit != edge_pixel_list.end(); ++vit) {
-    if ( (*vit).size() > max_size || (*vit).size() < min_size )
+  for (auto & vit : edge_pixel_list) {
+    if ( vit.size() > max_size || vit.size() < min_size )
       continue;
-    unsigned label = edge_labels((*vit).begin()->first, (*vit).begin()->second);
+    unsigned label = edge_labels(vit.begin()->first, vit.begin()->second);
     valid_edge_labels.push_back(label);
   }
 

@@ -208,9 +208,9 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
     std::vector<vgl_point_2d<float> > corners = valid_polys[i][0];
     vgl_polygon<double> single_poly;
     single_poly.new_sheet();
-    for (std::vector<vgl_point_2d<float> >::iterator vit = corners.begin(); vit != corners.end(); ++vit) {
+    for (auto & corner : corners) {
       double lon, lat;
-      cam->img_to_global(vit->x(), vit->y(), lon, lat);
+      cam->img_to_global(corner.x(), corner.y(), lon, lat);
       single_poly.push_back(lon, lat);
     }
     geo_polys.push_back(single_poly);

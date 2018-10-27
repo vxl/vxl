@@ -219,8 +219,8 @@ int main(int argc, char** argv)
 
   // calculate roi based on maximum score
   float max_score_all = 0;
-  for (std::map<unsigned, std::vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    for (std::vector<float>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
+  for (auto & max_score : max_scores) {
+    for (std::vector<float>::iterator vit = max_score.second.begin(); vit != max_score.second.end(); ++vit)
       if (max_score_all < *vit) max_score_all = *vit;
   }
   std::vector<double> thresholds;
@@ -232,10 +232,10 @@ int main(int argc, char** argv)
   //thresholds.push_back(max_score_all);
   //  cnt_map -- key is the thresholds, element --- cnt_below, total pixel count, total pixel uncount
   std::map<float, std::vector<unsigned> > cnt_map;
-  for (std::vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+  for (double & threshold : thresholds) {
       std::vector<unsigned> cnt_vec(3,0);
       std::pair<float, std::vector<unsigned> > cnt_pair;
-      cnt_pair.first = *vit;  cnt_pair.second = cnt_vec;
+      cnt_pair.first = threshold;  cnt_pair.second = cnt_vec;
       cnt_map.insert(cnt_pair);
   }
   for (unsigned i = 0; i < tiles.size(); ++i) {
@@ -243,14 +243,14 @@ int main(int argc, char** argv)
     for (unsigned u = 0; u < tile_img.ni(); u++) {
       for (unsigned v = 0; v < tile_img.nj(); v++) {
         // loop over all threshold
-        for ( std::map<float, std::vector<unsigned> >::iterator mit = cnt_map.begin(); mit != cnt_map.end(); ++mit)
+        for (auto & mit : cnt_map)
         {
           if (tile_img(u, v) < 0)
-            mit->second[2]++;
+            mit.second[2]++;
           else {
-            mit->second[1]++;
-            if (tile_img(u, v) < mit->first)
-              mit->second[0]++;
+            mit.second[1]++;
+            if (tile_img(u, v) < mit.first)
+              mit.second[0]++;
           }
         }
       }
@@ -259,10 +259,9 @@ int main(int argc, char** argv)
 
   std::vector<double> score_roi;
   score_roi.push_back(0.0f);
-  for (std::map<float, std::vector<unsigned> >::iterator mit = cnt_map.begin();
-       mit != cnt_map.end(); ++mit)
+  for (auto & mit : cnt_map)
   {
-    double roi = 1.0 - (double)mit->second[0]/mit->second[1];
+    double roi = 1.0 - (double)mit.second[0]/mit.second[1];
     score_roi.push_back(roi);
   }
   score_roi.push_back((float)cnt_map.begin()->second[1]);
@@ -271,14 +270,14 @@ int main(int argc, char** argv)
   // create png tile images for different thresholds, only generate png tile prob_map with thres smaller than ground truth score
   for (unsigned ti = 0; ti < tiles.size(); ++ti) {
     vil_image_view<float> tile_img = tile_imgs[ti];
-    for (std::vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+    for (double & threshold : thresholds) {
       vil_image_view<vxl_byte> out_png(tile_img.ni(), tile_img.nj());
       out_png.fill(volm_io::UNKNOWN);
       // loop over current tile image to rescale the score to [0, 255]
       for (unsigned ii = 0; ii < tile_img.ni(); ++ii) {
         for (unsigned jj = 0; jj< tile_img.nj(); ++jj) {
           if (tile_img(ii, jj) > 0)
-            out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(kl(), ku(), *vit, tile_img(ii,jj));
+            out_png(ii, jj) = volm_io::scale_score_to_1_255_sig(kl(), ku(), threshold, tile_img(ii,jj));
             //out_png(ii, jj) = volm_io::scale_score_to_1_255(*vit, tile_img(ii,jj));
         }
       }
@@ -295,9 +294,9 @@ int main(int argc, char** argv)
        << "----------------------------------------------------------------------------------------------------------------------------\n"
        << "                                        ";
   fout.setf(std::ios::right);
-  for (std::vector<double>::iterator vit = thresholds.begin(); vit != thresholds.end(); ++vit) {
+  for (double & threshold : thresholds) {
     fout.precision(6); fout.width(13); fout.fill(' ');
-    fout << *vit;
+    fout << threshold;
   }
   fout << '\n';
   std::stringstream out_str;
@@ -337,12 +336,12 @@ int main(int argc, char** argv)
   // combine everything
   // key-score -- pair.first--cam_id, pair.second -- locs
   std::map<float, std::pair<unsigned, vgl_point_3d<double> > > score_map_all;
-  for (std::map<unsigned, std::vector<float> >::iterator mit = max_scores.begin(); mit != max_scores.end(); ++mit) {
-    for (unsigned ii = 0; ii < mit->second.size(); ii++) {
+  for (auto & max_score : max_scores) {
+    for (unsigned ii = 0; ii < max_score.second.size(); ii++) {
       std::pair<float, std::pair<unsigned, vgl_point_3d<double> > > pair_out;
       std::pair<unsigned, vgl_point_3d<double> > pair_in;
-      pair_in.first = max_cameras[mit->first][ii];  pair_in.second = max_locs[mit->first][ii];
-      pair_out.first = mit->second[ii];             pair_out.second = pair_in;
+      pair_in.first = max_cameras[max_score.first][ii];  pair_in.second = max_locs[max_score.first][ii];
+      pair_out.first = max_score.second[ii];             pair_out.second = pair_in;
       score_map_all.insert(pair_out);
     }
   }

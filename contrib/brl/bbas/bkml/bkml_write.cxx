@@ -168,8 +168,8 @@ void bkml_write::write_polygon(std::ofstream& ofs, vgl_polygon<double> const& po
         << "    <outerBoundaryIs>\n"
         << "      <LinearRing>\n"
         << "        <coordinates>\n";
-    for (std::vector<vgl_point_2d<double> >::iterator vit = verts.begin(); vit != verts.end(); ++vit)
-      ofs << "          " << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0\n";
+    for (auto & vert : verts)
+      ofs << "          " << std::setprecision(12) << vert.x() << ',' << std::setprecision(12) << vert.y() << ",0\n";
     ofs << "          " << verts[0].x() << ',' << verts[0].y() << ",0\n";
     ofs << "        </coordinates>\n"
         << "      </LinearRing>\n"
@@ -206,8 +206,8 @@ void bkml_write::write_path(std::ofstream& ofs, std::vector<vgl_point_2d<double>
   ofs << "  <LineString>\n"
       << "    <tessellate>1</tessellate>\n"
       << "      <coordinates>\n        ";
-  for (std::vector<vgl_point_2d<double> >::iterator vit = path.begin(); vit != path.end(); ++vit)
-    ofs << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0 ";
+  for (auto & vit : path)
+    ofs << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0 ";
   ofs << "\n      </coordinates>\n"
       << "  </LineString>\n"
       << "</Placemark>\n";
@@ -357,9 +357,9 @@ void bkml_write::write_polygon(std::ofstream& ofs,
   int alpha_int = (int)(alpha*255);
   std::string poly_color = rgb_color_to_hex_color(alpha_int, (int)r, (int)g, (int)b);
 
-  for (unsigned i = 0; i < polygon.size(); ++i) {
-    vgl_polygon<double> outer = polygon[i].first;
-    vgl_polygon<double> inner = polygon[i].second;
+  for (const auto & i : polygon) {
+    vgl_polygon<double> outer = i.first;
+    vgl_polygon<double> inner = i.second;
     if (outer[0].empty())
       continue;
     ofs << "<Placemark>\n"
@@ -380,8 +380,8 @@ void bkml_write::write_polygon(std::ofstream& ofs,
         << "    <outerBoundaryIs>\n"
         << "      <LinearRing>\n"
         << "        <coordinates>";
-    for (std::vector<vgl_point_2d<double> >::iterator vit = outer[0].begin(); vit != outer[0].end(); ++vit)
-      ofs << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0 ";
+    for (auto & vit : outer[0])
+      ofs << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0 ";
     ofs << std::setprecision(12) << outer[0][0].x() << ',' << std::setprecision(12) << outer[0][0].y() << ",0";
     ofs << "</coordinates>\n"
         << "      </LinearRing>\n"
@@ -391,8 +391,8 @@ void bkml_write::write_polygon(std::ofstream& ofs,
       ofs << "    <innerBoundaryIs>\n"
           << "      <LinearRing>\n"
           << "        <coordinates>";
-      for (std::vector<vgl_point_2d<double> >::iterator vit = inner[in_idx].begin(); vit != inner[in_idx].end(); ++vit)
-        ofs << std::setprecision(12) << vit->x() << ',' << std::setprecision(12) << vit->y() << ",0 ";
+      for (auto & vit : inner[in_idx])
+        ofs << std::setprecision(12) << vit.x() << ',' << std::setprecision(12) << vit.y() << ",0 ";
       ofs << std::setprecision(12) << inner[in_idx][0].x() << ',' << std::setprecision(12) << inner[in_idx][0].y() << ",0";
       ofs << "</coordinates>\n"
           << "      </LinearRing>\n"

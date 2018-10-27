@@ -206,14 +206,12 @@ void bmsh3d_vertex::getInfo(std::ostringstream& ostrm)
   m2_get_ordered_HEs(ordered_halfedges);
 
   ostrm << "\n (2-manifold) " << ordered_halfedges.size() << " ordered incident faces: ";
-  for (unsigned int i=0; i<ordered_halfedges.size(); i++) {
-    const bmsh3d_halfedge* HE = ordered_halfedges[i];
+  for (auto HE : ordered_halfedges) {
     ostrm << ((bmsh3d_face*)HE->face())->id() << ' ';
   }
 
   ostrm << "\n (2-manifold) " << ordered_halfedges.size() << " ordered incident edges: ";
-  for (unsigned int i=0; i<ordered_halfedges.size(); i++) {
-    const bmsh3d_halfedge* HE = ordered_halfedges[i];
+  for (auto HE : ordered_halfedges) {
     ostrm << HE->edge()->id() << ' ';
   }
 
@@ -300,8 +298,7 @@ double bmsh3d_vertex::m2_sum_theta() const
   double sum_theta = 0;
 
   //loop through each adjacent face face_j.
-  for (unsigned int j=0; j<ordered_halfedges.size(); j++) {
-    const bmsh3d_halfedge* he_d = ordered_halfedges[j];
+  for (auto he_d : ordered_halfedges) {
     double theta = he_d->face()->angle_at_V(this);
     sum_theta += theta;
   }

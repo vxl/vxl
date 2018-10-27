@@ -49,8 +49,7 @@ int convert_uncertainty_from_meters_to_pixels(float uncertainty,
   std::vector<vgl_point_3d<double> > box_uncertainty_corners = boxm_utils::corners_of_box_3d(box_uncertainty);
   vgl_box_2d<double> roi_uncertainty;
 
-  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
-    vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
+  for (auto curr_corner : box_uncertainty_corners) {
     vgl_point_3d<double> curr_pt;
     if (camera->type_name()=="vpgl_local_rational_camera") {
       curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());

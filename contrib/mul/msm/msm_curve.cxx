@@ -62,8 +62,8 @@ unsigned msm_curve::max_index() const
 //  Useful when concatenating models
 void msm_curve::add_index_offset(int offset)
 {
-  for (unsigned i=0;i<index_.size();++i)
-    index_[i]=unsigned (index_[i]+offset);
+  for (unsigned int & i : index_)
+    i=unsigned (i+offset);
 }
 
 //: Equality test

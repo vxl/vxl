@@ -36,8 +36,8 @@ int main(int argc, char **argv)
 
   //
   std::list<osl_edge*> broken;
-  for (std::list<osl_edge*>::iterator i=edges.begin(); i!=edges.end(); ++i)
-    osl_break_edge(*i, &broken);
+  for (auto & edge : edges)
+    osl_break_edge(edge, &broken);
   osl_topology_ref(broken);
 
   //

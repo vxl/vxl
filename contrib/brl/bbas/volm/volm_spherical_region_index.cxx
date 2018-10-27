@@ -237,9 +237,9 @@ void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofst
     int num_regions[5];
     num_regions[1] =depth_regions.size();
     unsigned char ival ;
-    for (unsigned i = 0 ; i < depth_regions.size();i++)
+    for (unsigned int depth_region : depth_regions)
     {
-        volm_spherical_region r = regions[depth_regions[i]];
+        volm_spherical_region r = regions[depth_region];
         float vals[6];
         vals[0] = r.bbox_ref().a_phi();
         vals[1] = r.bbox_ref().b_phi();
@@ -254,9 +254,9 @@ void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofst
 
     std::vector<unsigned int> orientation_regions =sph_regions_.attributed_regions_by_type_only(ORIENTATION);
     num_regions[2] =orientation_regions.size();
-    for (unsigned i = 0 ; i < orientation_regions.size();i++)
+    for (unsigned int orientation_region : orientation_regions)
     {
-        volm_spherical_region r = regions[orientation_regions[i]];
+        volm_spherical_region r = regions[orientation_region];
         float vals[6];
         vals[0] = r.bbox_ref().a_phi();
         vals[1] = r.bbox_ref().b_phi();
@@ -270,9 +270,9 @@ void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofst
     }
     std::vector<unsigned int> nlcd_regions =sph_regions_.attributed_regions_by_type_only(NLCD);
     num_regions[3] =nlcd_regions.size();
-    for (unsigned i = 0 ; i < nlcd_regions.size();i++)
+    for (unsigned int nlcd_region : nlcd_regions)
     {
-        volm_spherical_region r = regions[nlcd_regions[i]];
+        volm_spherical_region r = regions[nlcd_region];
         float vals[6];
         vals[0] = r.bbox_ref().a_phi();
         vals[1] = r.bbox_ref().b_phi();
@@ -286,9 +286,9 @@ void volm_spherical_region_index::write_binary(std::ofstream & oconfig,std::ofst
     }
     std::vector<unsigned int> sky_regions =sph_regions_.attributed_regions_by_type_only(SKY);
     num_regions[4] =sky_regions.size();
-    for (unsigned i = 0 ; i < sky_regions.size();i++)
+    for (unsigned int sky_region : sky_regions)
     {
-        volm_spherical_region r = regions[sky_regions[i]];
+        volm_spherical_region r = regions[sky_region];
         float vals[6];
         vals[0] = r.bbox_ref().a_phi();
         vals[1] = r.bbox_ref().b_phi();

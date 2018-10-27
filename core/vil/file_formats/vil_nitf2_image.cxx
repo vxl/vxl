@@ -160,16 +160,16 @@ vil_nitf2_image::vil_nitf2_image(const std::string& filePath, const char* mode)
 
 void vil_nitf2_image::clear_image_headers()
 {
-  for (unsigned int i = 0 ; i < m_image_headers.size() ; i++) {
-    delete m_image_headers[i];
+  for (auto & m_image_header : m_image_headers) {
+    delete m_image_header;
   }
   m_image_headers.clear();
 }
 
 void vil_nitf2_image::clear_des()
 {
-  for (unsigned int i = 0 ; i < m_des.size() ; i++) {
-    delete m_des[i];
+  for (auto & m_de : m_des) {
+    delete m_de;
   }
   m_des.clear();
 }

@@ -208,10 +208,9 @@ brdb_selection::get_sqlview()
   if (size() == 0)
     return sql_view;
 
-  for (selection_t::const_iterator itr = selected_set_.begin();
-       itr != selected_set_.end(); ++itr)
+  for (auto itr : selected_set_)
   {
-    sql_view->add_tuple((*(*itr)));
+    sql_view->add_tuple((*itr));
   }
   return sql_view;
 }
@@ -342,10 +341,9 @@ brdb_selection::print()
     {
       std::cout << "This selection is empty." << std::endl;
     }
-    for (selection_t::const_iterator itr = selected_set_.begin();
-         itr != selected_set_.end(); ++itr)
+    for (auto itr : selected_set_)
     {
-      brdb_tuple_sptr tuple = (*(*itr));
+      brdb_tuple_sptr tuple = (*itr);
       tuple->print();
     }
 }
@@ -397,9 +395,9 @@ brdb_selection::tuple_exist(const brdb_tuple_sptr& tuple)
   if (this->empty())
     return false;
 
-  for (selection_t::const_iterator itr = this->begin(); itr != this->end(); ++ itr)
+  for (auto itr : *this)
   {
-    if ((*(*itr)) == tuple)
+    if ((*itr) == tuple)
       return true;
   }
 
@@ -496,13 +494,13 @@ brdb_selection::refine(const brdb_query_aptr& q, selection_t& s)
     unsigned int attr_index = relation_->index(qc->attribute_name());
     selection_t s_new;
     // go through all the tuples pointed by the selection
-    for (selection_t::const_iterator itr = s.begin(); itr != s.end(); ++itr)
+    for (auto itr : s)
     {
       // get the attribute value
-      if (qc->pass((*(*(*itr)))[attr_index]))
+      if (qc->pass((*(*itr))[attr_index]))
       {
         //add the iterator to this tuple to selection;
-        s_new.insert(*itr);
+        s_new.insert(itr);
       }
     }
     s.swap(s_new);

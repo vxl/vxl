@@ -81,13 +81,13 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
     if (!Computor.compute(seven1, seven2, F_temp))
       std::cerr << "Seven point failure\n";
 
-    for (unsigned int k = 0; k < F_temp.size(); k++) {
+    for (auto & k : F_temp) {
       int temp_count = 0;
       std::vector<bool> list(data_size_);
-      std::vector<double> residuals = calculate_residuals(point1_image, point2_image, F_temp[k]);
+      std::vector<double> residuals = calculate_residuals(point1_image, point2_image, k);
       double term_error = calculate_term(residuals, list, temp_count);
       if (term_error < Ds) {
-        Fs = *F_temp[k];
+        Fs = *k;
         Ds = term_error;
         basis_ = index;
         inlier_list = list;
@@ -96,8 +96,8 @@ bool FMatrixComputeRobust::compute(PairMatchSetCorner& matches, FMatrix *F)
       }
     }
 
-    for (unsigned int k = 0; k < F_temp.size(); k++)
-      delete F_temp[k];
+    for (auto & k : F_temp)
+      delete k;
   }
   std::cerr << "Final Figures...\n"
            << "Ds : " << Ds << '\n';

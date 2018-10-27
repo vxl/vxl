@@ -57,9 +57,9 @@ int main(int argc,  char** argv)
     tiles = volm_tile::generate_p1_wr1_tiles();
   else
     tiles = volm_tile::generate_p1_wr2_tiles();
-  for (unsigned i = 0; i < tiles.size(); i++)
+  for (auto & i : tiles)
   {
-    std::string name = out() + "/" + "ProbMap_" + tiles[i].get_string() + ".tif";
+    std::string name = out() + "/" + "ProbMap_" + i.get_string() + ".tif";
     std::cout << "reading " << name << std::endl;
     if (!vul_file::exists(name))
     {
@@ -72,7 +72,7 @@ int main(int argc,  char** argv)
       for (unsigned jj = 0; jj < tile.nj(); jj++)
       {
         double tlat, tlon;
-        tiles[i].img_to_global(ii, jj, tlon, tlat);
+        i.img_to_global(ii, jj, tlon, tlat);
         if (poly.contains(tlon, tlat))
         {
           within_poly++;
@@ -87,7 +87,7 @@ int main(int argc,  char** argv)
         }
       }
     unsigned u, v;
-    tiles[i].global_to_img(lon, lat, u, v);
+    i.global_to_img(lon, lat, u, v);
     if (u < tile.ni() && v < tile.nj())
       std::cout << "GT location: " << lon << ", " << lat << " is at pixel: " << u << ", " << v << " and has value: " << (int)tile(u, v) << std::endl;
   }

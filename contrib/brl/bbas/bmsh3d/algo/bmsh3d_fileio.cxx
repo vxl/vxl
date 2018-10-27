@@ -635,17 +635,17 @@ bool bmsh3d_save_ply2(const std::vector<vgl_point_3d<double> >& pts,
   std::fprintf(fp, "%lu\n", (long unsigned)pts.size());
   std::fprintf(fp, "%lu\n", (long unsigned)faces.size());
 
-  for (unsigned int i=0; i<pts.size(); ++i) {
-    std::fprintf(fp, "%.16f ", pts[i].x());
-    std::fprintf(fp, "%.16f ", pts[i].y());
-    std::fprintf(fp, "%.16f\n",pts[i].z());
+  for (const auto & pt : pts) {
+    std::fprintf(fp, "%.16f ", pt.x());
+    std::fprintf(fp, "%.16f ", pt.y());
+    std::fprintf(fp, "%.16f\n",pt.z());
   }
 
-  for (unsigned int i=0; i<faces.size(); ++i) {
-    std::fprintf(fp, "%lu", (long unsigned)faces[i].size());
-    assert (faces[i].size() != 0);
-    for (unsigned int j=0; j<faces[i].size(); ++j)
-      std::fprintf(fp, " %d", faces[i][j]);
+  for (const auto & face : faces) {
+    std::fprintf(fp, "%lu", (long unsigned)face.size());
+    assert (face.size() != 0);
+    for (unsigned int j=0; j<face.size(); ++j)
+      std::fprintf(fp, " %d", face[j]);
     std::fprintf(fp, "\n");
   }
 
@@ -904,8 +904,7 @@ void setup_IFS_M_label_Fs_vids(bmsh3d_mesh* M, const int label,
 
     std::vector<bmsh3d_vertex*> fv;
     F->get_ordered_Vs (fv);
-    for (unsigned int i=0; i<fv.size(); ++i) {
-      bmsh3d_vertex* V = fv[i];
+    for (auto V : fv) {
       if (V->vid() >= 0)
         continue; // skip V that already in the IFS set.
       V->set_vid(vid_counter++);
@@ -945,16 +944,14 @@ bool bmsh3d_save_label_faces_ply2(bmsh3d_mesh* M, const int label, const char* f
     std::fprintf(fp, "%.16f\n",V->pt().z());
   }
 
-  for (unsigned int i=0; i<faces.size(); ++i) {
-    bmsh3d_face* F = faces[i];
+  for (auto F : faces) {
     assert (F->is_visited(label));
 
     std::vector<bmsh3d_vertex*> vertices;
     F->get_ordered_Vs (vertices);
 
     std::fprintf(fp, "%lu", (long unsigned)vertices.size());
-    for (unsigned j=0; j<vertices.size(); ++j) {
-      bmsh3d_vertex* V = vertices[j];
+    for (auto V : vertices) {
       std::fprintf(fp, " %d", V->vid());
     }
     std::fprintf(fp, "\n");
@@ -1004,8 +1001,8 @@ bool bmsh3d_load_m(bmsh3d_mesh* M, const char* file)
     else if (std::strcmp(type, "Face")==0) {
       ret = std::fscanf(fp, "%d %d %d %d\n", &id, &tri[0], &tri[1], &tri[2]); if (ret!=4) return false;
       bmsh3d_face* F = M->_new_face();
-      for (int i=0; i<3; ++i) {
-        bmsh3d_vertex* V = M->vertexmap(tri[i]);
+      for (int i : tri) {
+        bmsh3d_vertex* V = M->vertexmap(i);
         F->_ifs_add_vertex(V);
         V->set_meshed(true);
       }

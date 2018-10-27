@@ -103,8 +103,8 @@ static void test_interpolate()
   std::vector<vpgl_perspective_camera<double> > cams;
   bool success = bpgl_interpolate::interpolate(cam0, cam1, 1, cams);
   if (success)
-    for (unsigned i = 0; i<cams.size(); ++i)
-      std::cout << cams[i];
+    for (const auto & cam : cams)
+      std::cout << cam;
   vpgl_perspective_camera<double> cam_interp = cams[0];
   vgl_point_3d<double> ci = cam_interp.get_camera_center();
   vgl_point_3d<double> cact(5,5,-5);

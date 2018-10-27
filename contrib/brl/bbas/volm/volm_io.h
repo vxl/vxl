@@ -84,16 +84,16 @@ class volm_fallback_label
   static void print_id(unsigned char id)
   {
     std::cout << '[';
-    for (std::vector<unsigned char>::iterator vit = volm_fallback_label::fallback_id[id].begin(); vit != volm_fallback_label::fallback_id[id].end(); ++vit)
+    for (unsigned char & vit : volm_fallback_label::fallback_id[id])
       //std::cout << volm_label_table::land_string(*vit) << ", ";
-      std::cout << volm_osm_category_io::volm_land_table[*vit].name_ << ", ";
+      std::cout << volm_osm_category_io::volm_land_table[vit].name_ << ", ";
     std::cout << ']';
   }
   static void print_wgt(unsigned char id)
   {
     std::cout << '[';
-    for (std::vector<float>::iterator vit = volm_fallback_label::fallback_weight[id].begin(); vit != volm_fallback_label::fallback_weight[id].end(); ++vit)
-      std::cout << std::setprecision(3) << *vit << ' ';
+    for (float & vit : volm_fallback_label::fallback_weight[id])
+      std::cout << std::setprecision(3) << vit << ' ';
     std::cout << ']';
   }
   static void print_fallback_table();

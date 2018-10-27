@@ -148,10 +148,10 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
     // backproject the 3D world coordinates on the image
     vgl_box_3d<double> world = params->world_box_local();
     std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
-    for (unsigned i=0; i<corners.size(); i++) {
-      double x = corners[i].x();
-      double y = corners[i].y();
-      double z = corners[i].z();
+    for (auto & corner : corners) {
+      double x = corner.x();
+      double y = corner.y();
+      double z = corner.z();
       double u,v;
       camera->project(x,y,z,u,v);
       vgl_point_2d<double> p(u,v);

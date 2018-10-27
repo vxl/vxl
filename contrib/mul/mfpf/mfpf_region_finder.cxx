@@ -373,27 +373,27 @@ void mfpf_region_finder::get_image_of_model(vimt_image_2d_of<vxl_byte>& image) c
   unsigned q=0;
   if (nplanes==1)
   {
-    for (unsigned k=0;k<roi_.size();++k)
+    for (auto k : roi_)
     {
-      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
-        image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+      for (int i=k.start_x();i<=k.end_x();++i,++q)
+        image.image()(i,k.y())=vxl_byte(s*(mean[q]-min1));
     }
   }
   else if (draw_only_1st_plane_)
   {
-    for (unsigned k=0;k<roi_.size();++k)
+    for (auto k : roi_)
     {
-      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,q+=nplanes)
-        image.image()(i,roi_[k].y())=vxl_byte(s*(mean[q]-min1));
+      for (int i=k.start_x();i<=k.end_x();++i,q+=nplanes)
+        image.image()(i,k.y())=vxl_byte(s*(mean[q]-min1));
     }
   }
   else
   {
       //Compute L2 norm over all planes
-    for (unsigned k=0;k<roi_.size();++k)
+    for (auto k : roi_)
     {
-      for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i,++q)
-        image.image()(i,roi_[k].y())=vxl_byte(s*(meanL2[q]-min1));
+      for (int i=k.start_x();i<=k.end_x();++i,++q)
+        image.image()(i,k.y())=vxl_byte(s*(meanL2[q]-min1));
     }
   }
 
@@ -442,9 +442,9 @@ void mfpf_region_finder::print_shape(std::ostream& os) const
 {
   vil_image_view<vxl_byte> im(roi_ni_,roi_nj_);
   im.fill(0);
-  for (unsigned k=0;k<roi_.size();++k)
-    for (int i=roi_[k].start_x();i<=roi_[k].end_x();++i)
-      im(i,roi_[k].y())=1;
+  for (auto k : roi_)
+    for (int i=k.start_x();i<=k.end_x();++i)
+      im(i,k.y())=1;
   for (unsigned j=0;j<im.nj();++j)
   {
     for (unsigned i=0;i<im.ni();++i)

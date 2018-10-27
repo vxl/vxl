@@ -101,10 +101,9 @@ std::vector<vil_image_resource_sptr> vil_image_list::resources()
 {
   std::vector<vil_image_resource_sptr>  temp;
   std::vector<std::string> fs = this->files();
-  for (std::vector<std::string>::iterator fit = fs.begin();
-       fit != fs.end(); ++fit)
+  for (auto & f : fs)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
+    vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
     if (resc)
       temp.push_back(resc);
   }
@@ -115,10 +114,9 @@ std::vector<vil_image_resource_sptr> vil_image_list::blocked_resources()
 {
   std::vector<vil_image_resource_sptr>  temp;
   std::vector<std::string> fs = this->files();
-  for (std::vector<std::string>::iterator fit = fs.begin();
-       fit != fs.end(); ++fit)
+  for (auto & f : fs)
   {
-    vil_image_resource_sptr resc = vil_load_image_resource((*fit).c_str(), il_verbose);
+    vil_image_resource_sptr resc = vil_load_image_resource(f.c_str(), il_verbose);
     vil_image_resource_sptr bir = blocked_image_resource(resc).ptr();
     if (bir)
       temp.push_back(bir);
@@ -130,11 +128,10 @@ std::vector<vil_image_resource_sptr> vil_image_list::pyramids()
 {
   std::vector<vil_image_resource_sptr>  temp;
   std::vector<std::string> fs = this->files();
-  for (std::vector<std::string>::iterator fit = fs.begin();
-       fit != fs.end(); ++fit)
+  for (auto & f : fs)
   {
     vil_pyramid_image_resource_sptr pyr =
-      vil_load_pyramid_resource((*fit).c_str(), il_verbose);
+      vil_load_pyramid_resource(f.c_str(), il_verbose);
     if (pyr)
       temp.emplace_back(pyr.ptr());
   }
@@ -157,9 +154,8 @@ bool vil_image_list::clean_directory()
   std::vector<std::string> filez = this->files();
   bool good = true;
   std::cout << "starting to remove ..\n";
-  for (std::vector<std::string>::iterator fit = filez.begin();
-       fit != filez.end(); ++fit)
-    if (!this->remove_file(*fit))
+  for (auto & fit : filez)
+    if (!this->remove_file(fit))
       good = false;
   std::cout << "finished remove ..\n";
   return good;

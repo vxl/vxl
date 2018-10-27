@@ -89,10 +89,10 @@ std::vector<vgl_point_3d<double> > bvxm_expected_edge_functor::convert_3d_box_to
   box_z[1] = box_3d.max_z();
 
   std::vector<vgl_point_3d<double> > box_pts_3d;
-  for (int i=0; i<2; i++) {
-    for (int j=0; j<2; j++) {
-      for (int k=0; k<2; k++) {
-        box_pts_3d.emplace_back(box_x[i],box_y[j],box_z[k]);
+  for (double & i : box_x) {
+    for (double & j : box_y) {
+      for (double & k : box_z) {
+        box_pts_3d.emplace_back(i,j,k);
       }
     }
   }
@@ -106,9 +106,9 @@ vgl_polygon<double> bvxm_expected_edge_functor::convert_3d_box_to_2d_polygon(con
   std::vector<vgl_point_3d<double> > box_pts_3d = convert_3d_box_to_3d_points(box_3d);
 
   std::vector<vgl_point_2d<double> > box_pts_2d;
-  for (unsigned i=0; i<box_pts_3d.size(); i++) {
+  for (auto & i : box_pts_3d) {
     double u,v;
-    cam->project(box_pts_3d[i].x(),box_pts_3d[i].y(),box_pts_3d[i].z(),u,v);
+    cam->project(i.x(),i.y(),i.z(),u,v);
     vgl_point_2d<double> curr_pt_2d(u,v);
     box_pts_2d.push_back(curr_pt_2d);
   }

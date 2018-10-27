@@ -55,9 +55,9 @@ static void test_database()
 
   std::set<std::string> all_relation_names = test_db->get_all_relation_names();
   std::cout << " Relation names:  " << std::endl;
-  for (std::set<std::string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (const auto & all_relation_name : all_relation_names)
   {
-    std::cout << "   " << (*itr) << std::endl;
+    std::cout << "   " << all_relation_name << std::endl;
   }
   std::cout << std::endl;
   TEST("get_all_relation_names()", true, true);

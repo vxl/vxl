@@ -31,13 +31,13 @@ vifa_parallel(iface_list&   faces,
   raw_h_ = new vifa_histogram(nbuckets, min_angle, max_angle);
   float  range = max_angle - min_angle;
 
-  for (iface_iterator ifi = faces.begin(); ifi != faces.end(); ++ifi)
+  for (auto & face : faces)
   {
-    edge_list edges; (*ifi)->edges(edges);
+    edge_list edges; face->edges(edges);
 
-    for (edge_iterator ei = edges.begin(); ei != edges.end(); ei++)
+    for (auto & edge : edges)
     {
-      vtol_edge_2d* e = (*ei)->cast_to_edge_2d();
+      vtol_edge_2d* e = edge->cast_to_edge_2d();
 
       if (e)
       {
@@ -110,11 +110,8 @@ vifa_parallel(std::vector<float>&  pixel_orientations,
   raw_h_ = new vifa_histogram(nbuckets, min_angle, max_angle);
   float  range = max_angle - min_angle;
 
-  for (std::vector<float>::iterator p = pixel_orientations.begin();
-       p != pixel_orientations.end(); ++p)
+  for (float theta : pixel_orientations)
   {
-    float  theta = (*p);
-
     while (theta < min_angle)
     {
       theta += range;

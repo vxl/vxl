@@ -285,8 +285,8 @@ vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image(std::unique_ptr<std::fstream> fil
         oss << "\n I/O ERROR: vimt3d_vil3d_v3i_image::vimt3d_vil3d_v3i_image()\n"
             << "class name <" << name << "> not in list of loaders\n"
             << instance.object().size()<<" valid loaders:\n";
-        for (unsigned int j=0; j<instance.object().size(); ++j)
-          std::cerr << instance.object()[j]->is_a() << std::endl;
+        for (auto j : instance.object())
+          std::cerr << j->is_a() << std::endl;
         is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
         vil_exception_warning(vil_exception_corrupt_image_file(
           "vimt3d_vil3d_v3i_image constructor", "vimt3d_vil3d_v3i_image", "", oss.str()));

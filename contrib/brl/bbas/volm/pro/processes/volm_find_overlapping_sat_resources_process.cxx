@@ -75,8 +75,8 @@ bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
     std::cerr << pro.name() << " ERROR: cannot open file: " << out_file << std::endl;
     return false;
   }
-  for (unsigned i = 0; i < overlapping_res.size(); i++)
-    ofs << overlapping_res[i] << '\n';
+  for (const auto & overlapping_re : overlapping_res)
+    ofs << overlapping_re << '\n';
   ofs.close();
 
   return true;

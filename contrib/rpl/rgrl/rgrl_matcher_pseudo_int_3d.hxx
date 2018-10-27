@@ -173,7 +173,7 @@ compute_matches( rgrl_feature_set const&    from_set,
   // reserve space
   matches_sptr->reserve( from.size() );
   // Match each feature...
-   for ( f_iterator_type fitr = from.begin(); fitr != from.end(); ++fitr )
+   for (auto & fitr : from)
    {
      // Match by searching in the tangent space of the
      // transformed from image feature.  The match_weights are to be
@@ -182,7 +182,7 @@ compute_matches( rgrl_feature_set const&    from_set,
      match_weights.clear();
 
      // Map the feature location using the current transformation
-     rgrl_feature_sptr mapped_feature = (*fitr)->transform( current_xform );
+     rgrl_feature_sptr mapped_feature = fitr->transform( current_xform );
 
      // if the location is not inside the valid region
      // set the weight = 0
@@ -193,9 +193,9 @@ compute_matches( rgrl_feature_set const&    from_set,
 
        //  Add the feature and its matches and weights to the match set
        matches_sptr
-         -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+         -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features,
                                              match_weights );
-       DebugMacro(3, " skip match from: " << (*fitr)->location() << ", to: " << mapped_feature->location() << '\n' );
+       DebugMacro(3, " skip match from: " << fitr->location() << ", to: " << mapped_feature->location() << '\n' );
        continue;
      }
 
@@ -226,7 +226,7 @@ compute_matches( rgrl_feature_set const&    from_set,
        }
      );
 
-     this -> map_region_intensities( current_xform, (*fitr), mapped_pixels );
+     this -> map_region_intensities( current_xform, fitr, mapped_pixels );
 
      // if there is no mapped pixels in the valid region, no matcher is created
      if ( mapped_pixels.size() == 0 ) {
@@ -236,9 +236,9 @@ compute_matches( rgrl_feature_set const&    from_set,
 
        //  Add the feature and its matches and weights to the match set
        matches_sptr
-         -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+         -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features,
                                              match_weights );
-       std::cout << " from point : " << (*fitr)->location()
+       std::cout << " from point : " << fitr->location()
                 << " to point : " << mapped_feature->location()
                 << " doesn't have proper matches\n" << std::endl;
        continue;
@@ -252,7 +252,7 @@ compute_matches( rgrl_feature_set const&    from_set,
 
      //  Add the feature and its matches and weights to the match set
      matches_sptr
-       -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features, match_weights );
+       -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features, match_weights );
    }
 
   std::cout << " number of from points : " << matches_sptr->from_size() << std::endl;
@@ -309,9 +309,9 @@ map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
   mapped_pt.pixel_ = vnl_double_3( 0.0, 0.0, 0.0 );   // not used field
   std::vector< mapped_info >  direct_mapped_pts;
   direct_mapped_pts.reserve( pixel_locations.size() );
-  for ( unsigned int i=0; i<pixel_locations.size(); ++i )
+  for (const auto & pixel_location : pixel_locations)
   {
-    current_pixel_loc = pixel_locations[i];
+    current_pixel_loc = pixel_location;
     // Check if the location is inside the valid region
     if ( !rgrl_matcher_pseudo_int_3d_pixel_in_range( from_image_, mask_, current_pixel_loc ) )
       continue;

@@ -35,10 +35,10 @@ brdb_database_manager::clear_all()
   std::set<std::string> all_relation_names = instance()->get_all_relation_names();
 
   // go through all names, if not in relation_names, remove them
-  for (std::set<std::string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (const auto & all_relation_name : all_relation_names)
   {
-      if (instance()->exists((*itr)))
-        instance()->clear_relation((*itr));
+      if (instance()->exists(all_relation_name))
+        instance()->clear_relation(all_relation_name);
   }
 
   return true;
@@ -52,9 +52,9 @@ brdb_database_manager::clear_all_except(const std::set<std::string>& relation_na
   std::set<std::string> all_relation_names = instance()->get_all_relation_names();
 
   // check whether all those relation exist
-  for (std::set<std::string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
+  for (const auto & relation_name : relation_names)
   {
-    if (!instance()->exists((*itr)))
+    if (!instance()->exists(relation_name))
     {
       std::cout << "Database manager warning: clear_all_except() failed, some relation does not exist." << std::endl;
       return false;
@@ -62,11 +62,11 @@ brdb_database_manager::clear_all_except(const std::set<std::string>& relation_na
   }
 
   // go through all names, if not in relation_names, remove them
-  for (std::set<std::string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (const auto & all_relation_name : all_relation_names)
   {
-    if (relation_names.find((*itr)) == relation_names.end())
+    if (relation_names.find(all_relation_name) == relation_names.end())
     {
-      instance()->clear_relation((*itr));
+      instance()->clear_relation(all_relation_name);
     }
   }
 
@@ -80,9 +80,9 @@ brdb_database_manager::remove_all_except(const std::set<std::string>& relation_n
   std::set<std::string> all_relation_names = instance()->get_all_relation_names();
 
   // check whether all those relation exist
-  for (std::set<std::string>::const_iterator itr = relation_names.begin(); itr != relation_names.end(); ++itr)
+  for (const auto & relation_name : relation_names)
   {
-    if (!instance()->exists((*itr)))
+    if (!instance()->exists(relation_name))
     {
       std::cout << "Database manager warning: clear_all_except() failed, some relation does not exist." << std::endl;
       return false;
@@ -90,11 +90,11 @@ brdb_database_manager::remove_all_except(const std::set<std::string>& relation_n
   }
 
   // go through all names, if not in relation_names, remove them
-  for (std::set<std::string>::iterator itr = all_relation_names.begin(); itr != all_relation_names.end(); ++itr)
+  for (const auto & all_relation_name : all_relation_names)
   {
-    if (relation_names.find((*itr)) == relation_names.end())
+    if (relation_names.find(all_relation_name) == relation_names.end())
     {
-      instance()->remove_relation((*itr));
+      instance()->remove_relation(all_relation_name);
     }
   }
 

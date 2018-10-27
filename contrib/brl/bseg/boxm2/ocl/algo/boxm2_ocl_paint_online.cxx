@@ -64,23 +64,23 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
   bool foundDataType = false, foundNumObsType = false;
   std::string data_type, num_obs_type;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(apm_id) )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(apm_id) )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix(apm_id) )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix(apm_id) )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
 
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix(apm_id) )
+    else if ( app == boxm2_data_traits<BOXM2_NUM_OBS>::prefix(apm_id) )
     {
-      num_obs_type = apps[i];
+      num_obs_type = app;
       foundNumObsType = true;
     }
   }
@@ -155,7 +155,7 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
 
   // Output Array
   float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+  for (float & i : output_arr) i = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

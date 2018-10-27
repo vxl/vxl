@@ -260,9 +260,9 @@ void test_gaussian_kernels()
 
   float var[3] ={1.0, 1.5, 2};
 
-  for (unsigned i=0; i<3; i++)
+  for (float i : var)
   {
-    bvpl_gauss3d_xx_kernel_factory factory(var[i], 1.5);
+    bvpl_gauss3d_xx_kernel_factory factory(i, 1.5);
     // get vector of kernel
     bvpl_create_directions_b dir;
     bvpl_kernel_vector_sptr kernel_vec = factory.create_kernel_vector(dir);

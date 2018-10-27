@@ -46,8 +46,7 @@ std::vector<vpgl_camera_double_sptr > generate_cameras_z_multi_bin(vgl_box_3d<do
     rat_cameras.push_back(rat_cam);
 
     std::vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
-    for (unsigned i=0; i<corners.size(); i++) {
-      vgl_point_3d<double> c = corners[i];
+    for (auto c : corners) {
       double u,v, u2, v2;
       vpgl_perspective_camera<double> persp_cam;
       persp_cam.project(c.x(), c.y() ,c.z(), u, v);
@@ -104,8 +103,7 @@ std::vector<vpgl_camera_double_sptr > generate_cameras_yz_multi_bin(vgl_box_3d<d
 
     if (verbose) {
       std::vector<vgl_point_3d<double> > corners = boxm_utils::corners_of_box_3d(world);
-      for (unsigned i=0; i<corners.size(); i++) {
-        vgl_point_3d<double> c = corners[i];
+      for (auto c : corners) {
         double u,v;
         persp_cam.project(c.x(), c.y() ,c.z(), u, v);
         bb.add(vgl_point_2d<double> (u,v));

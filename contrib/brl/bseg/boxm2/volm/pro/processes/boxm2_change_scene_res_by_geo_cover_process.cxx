@@ -114,10 +114,10 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
   std::cout << " number of blocks in the scene " << blks.size() << std::endl;
   std::cout << " refine parameter: " << refine_coefficient << std::endl;
   unsigned cnt = 0;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)
+  for (auto & blk : blks)
   {
-    boxm2_block_id blk_id = mit->first;
-    boxm2_block_metadata md = mit->second;
+    boxm2_block_id blk_id = blk.first;
+    boxm2_block_metadata md = blk.second;
 
     // get the bounding box for current box and transfer it to geo coords
     vgl_box_3d<double> blk_box = md.bbox();

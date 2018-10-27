@@ -79,8 +79,7 @@ void generate_kml(std::string& kml_filename,
 
   imesh_half_edge_set he = mesh.half_edges();
   std::vector<std::set<unsigned int> > cc = imesh_detect_connected_components(he);
-  for (unsigned i=0; i<cc.size(); i++) {
-    std::set<unsigned int> sel_faces = cc[i];
+  for (auto sel_faces : cc) {
     imesh_mesh building = imesh_submesh_from_faces(mesh, sel_faces);
     update_mesh_coord(building, lidar_cam);
     imesh_write_kml(os, building);
@@ -298,12 +297,12 @@ void generate_kml_collada(std::string& kmz_dir,
     double minz = std::numeric_limits<double>::infinity();
     double meanx = 0.0, meany = 0.0;
     const imesh_vertex_array<3>& verts = building.vertices<3>();
-    for (unsigned int v=0; v<verts.size(); ++v) {
-      if (verts[v][2] < minz) {
-        minz = verts[v][2];
+    for (const auto & vert : verts) {
+      if (vert[2] < minz) {
+        minz = vert[2];
       }
-      meanx += verts[v][0];
-      meany += verts[v][1];
+      meanx += vert[0];
+      meany += vert[1];
     }
     meanx /= verts.size();
     meany /= verts.size();

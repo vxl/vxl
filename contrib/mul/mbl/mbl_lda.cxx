@@ -261,9 +261,9 @@ void mbl_lda::build(const vnl_vector<double>* v, const int * label, int n,
   // increasing (signed) eigenvalue, not magnitude. If we ever get negative eigenvalues,
   // then the simple reversal of flip() and fliplr() will not be correct.
   // Not sure whether we could get (significant) negative eigenvalues, but let's check.
-  for (unsigned i=0; i<evals.size(); ++i)
+  for (double eval : evals)
   {
-    if (evals[i]<-1e-12) // tolerance?
+    if (eval<-1e-12) // tolerance?
       throw mbl_exception_abort("mbl_lda::build(): found negative eigenvalue(s)");
   }
   evals.flip();

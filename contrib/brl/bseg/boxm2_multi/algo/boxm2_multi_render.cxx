@@ -55,10 +55,9 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   std::vector<std::vector<boxm2_block_id> > vis_orders;
   std::size_t maxBlocks = 0;
   std::vector<boxm2_opencl_cache1*>& ocl_caches = cache.ocl_caches();
-  for (unsigned int i=0; i<ocl_caches.size(); ++i)
+  for (auto ocl_cache : ocl_caches)
   {
     //grab sub scene and it's cache
-    boxm2_opencl_cache1*     ocl_cache = ocl_caches[i];
     boxm2_scene_sptr        sub_scene = ocl_cache->get_scene();
     bocl_device_sptr        device    = ocl_cache->get_device();
 
@@ -140,12 +139,11 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //run block-wise ray trace for each block/device
   //--------------------------------------------------
   //go through each scene's blocks in vis order
-  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
-    boxm2_multi_cache_group& group = *grp[grpId];
+  for (auto & grpId : grp) {
+    boxm2_multi_cache_group& group = *grpId;
     std::vector<boxm2_block_id>& ids = group.ids();
     std::vector<int> indices = group.order_from_cam(cam);
-    for (unsigned int idx=0; idx<indices.size(); ++idx) {
-      int i = indices[idx];
+    for (int i : indices) {
       boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
       bocl_device_sptr    device    = ocl_cache->get_device();
@@ -162,19 +160,17 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     }
 
     //finish queues before moving on
-    for (unsigned int idx=0; idx<indices.size(); ++idx) {
-      int i = indices[idx];
-
-    //Figure out image location
+    for (int i : indices) {
+      //Figure out image location
 #if 1
       vul_timer cpu_timer; cpu_timer.mark();
       double minU=ni, minV=nj,
              maxU=0, maxV=0;
       vgl_box_3d<double>& blkBox = group.bbox(i);
       std::vector<vgl_point_3d<double> > verts = blkBox.vertices();
-      for (unsigned int vi=0; vi<verts.size(); ++vi) {
+      for (auto & vert : verts) {
         double u, v;
-        cam->project(verts[vi].x(), verts[vi].y(), verts[vi].z(), u, v);
+        cam->project(vert.x(), vert.y(), vert.z(), u, v);
         if (u < minU) minU = u;
         if (u > maxU) maxU = u;
         if (v < minV) minV = v;
@@ -421,7 +417,7 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -591,17 +587,17 @@ bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
   bool foundDataType = false;
   std::vector<std::string> apps = scene->appearances();
   apptypesize = 0;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
       apptypesize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();

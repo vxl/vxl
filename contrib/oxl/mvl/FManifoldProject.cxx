@@ -235,9 +235,7 @@ double FManifoldProject::correct(double   x1, double   y1, double   x2, double  
   vnl_vector<double> realroots = roots.realroots(1e-8);
   int errs = 0;
   bool got_one = false;
-  for (unsigned i = 0; i < realroots.size(); ++i) {
-    double lambda = realroots[i];
-
+  for (double lambda : realroots) {
     // Some roots to the multiplied out poly are not roots to the rational polynomial.
     double RATPOLY_RESIDUAL = (a1/vnl_math::sqr(b1 - lambda) +
                                a2/vnl_math::sqr(b2 - lambda) +

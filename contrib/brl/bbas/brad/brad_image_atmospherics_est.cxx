@@ -66,11 +66,11 @@ bool brad_estimate_airlight(vil_image_view<float> const& radiance,
     vil_image_view<float> avg_img;
     avg_img.set_size(ni, nj);
     avg_img.fill(0.0f);
-    for (std::vector<unsigned>::iterator vit = vis_bands.begin(); vit != vis_bands.end(); ++vit)
+    for (unsigned int & vis_band : vis_bands)
       for (int j = 0; j < nj; j++)
         for (int i = 0; i < ni; i++) {
-          float pixel_val = radiance(i, j, *vit);
-          avg_img(i,j) += radiance(i, j, *vit);
+          float pixel_val = radiance(i, j, vis_band);
+          avg_img(i,j) += radiance(i, j, vis_band);
         }
     float minval, maxval;
     vil_math_value_range(avg_img, minval, maxval);
@@ -237,9 +237,8 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance,
 
   // normalize by average radiance
   double Lsat_horizontal = 0.0;
-  for (std::vector<unsigned>::iterator vit = band_ids.begin(); vit != band_ids.end(); ++vit)
+  for (unsigned int p : band_ids)
   {
-    unsigned p = *vit;
     vil_image_view<float> cur_plane = vil_plane(radiance, p);
     double plane_ave = 0.0;
     for (unsigned j = 0; j < cur_plane.nj(); j++)
@@ -288,9 +287,8 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance,
     std::vector<unsigned> band_ids;
     brad_get_visible_band_id(radiance, mdata, band_ids);
     double Lsat_horizontal = 0.0;
-    for (std::vector<unsigned>::iterator vit = band_ids.begin(); vit != band_ids.end(); ++vit)
+    for (unsigned int p : band_ids)
     {
-      unsigned p = *vit;
       vil_image_view<float> cur_plane = vil_plane(radiance, p);
       double plane_ave = 0.0;
       for (unsigned j = 0; j < cur_plane.nj(); j++)

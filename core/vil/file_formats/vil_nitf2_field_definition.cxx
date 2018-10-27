@@ -87,10 +87,9 @@ vil_nitf2_field_definitions::vil_nitf2_field_definitions(
   const vil_nitf2_field_definitions& that)
   : std::list<vil_nitf2_field_definition_node*>()
 {
-  for (std::list<vil_nitf2_field_definition_node*>::const_iterator it = that.begin();
-       it != that.end(); ++it)
+  for (auto it : that)
   {
-    push_back((*it)->copy());
+    push_back(it->copy());
   }
 }
 
@@ -123,10 +122,9 @@ vil_nitf2_field_definitions::repeat(vil_nitf2_field_functor<int>* repeat_functor
 
 vil_nitf2_field_definitions::~vil_nitf2_field_definitions()
 {
-  for (std::list<vil_nitf2_field_definition_node*>::iterator it = begin();
-       it != end(); ++it)
+  for (auto & it : *this)
   {
-    delete *it;
+    delete it;
   }
 }
 

@@ -13,8 +13,8 @@ int test_map_main(int /*argc*/,char* /*argv*/[])
   m.insert(mymap::value_type(1, 2718));
   m.insert(mymap::value_type(2, 3141));
 
-  for (mymap::iterator p = m.begin(); p != m.end(); ++p)
-    std::cout << (*p).first << " " << (*p).second << std::endl;
+  for (auto & p : m)
+    std::cout << p.first << " " << p.second << std::endl;
 
   mymap::iterator i = m.find(3);
   okay = okay && (i == m.end()); // not found (=OK)

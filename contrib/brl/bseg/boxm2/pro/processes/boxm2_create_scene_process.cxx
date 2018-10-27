@@ -680,14 +680,14 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   }
   // add the blocks -- makes sure all the blocks are added to one of the scenes
   unsigned cnt = 0;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); ++iter)
+  for (auto & blk : blks)
   {
-    boxm2_block_metadata md = iter->second;
-    vgl_point_2d<double> lo(iter->second.local_origin_.x(), iter->second.local_origin_.y());
-    for (unsigned i = 0; i < small_scenes.size(); ++i) {
-      if (small_scenes[i].second.contains(lo)) {
-        std::map<boxm2_block_id, boxm2_block_metadata>& small_scene_blks = small_scenes[i].first->blocks();
-        small_scene_blks[iter->first] = iter->second;
+    boxm2_block_metadata md = blk.second;
+    vgl_point_2d<double> lo(blk.second.local_origin_.x(), blk.second.local_origin_.y());
+    for (auto & small_scene : small_scenes) {
+      if (small_scene.second.contains(lo)) {
+        std::map<boxm2_block_id, boxm2_block_metadata>& small_scene_blks = small_scene.first->blocks();
+        small_scene_blks[blk.first] = blk.second;
         ++cnt;
       }
     }
@@ -723,9 +723,9 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
 
   // elimiate scenes with no blocks
   std::vector<boxm2_scene_sptr> scenes;
-  for (unsigned i = 0; i < small_scenes.size(); ++i) {
-    if (small_scenes[i].first->blocks().size() > 0)
-      scenes.push_back(small_scenes[i].first);
+  for (auto & small_scene : small_scenes) {
+    if (small_scene.first->blocks().size() > 0)
+      scenes.push_back(small_scene.first);
   }
 
   std::cout << output_path + name_prefix + ".xml\n"
@@ -805,13 +805,13 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
   // load the blocks - check the size and only add the ones which have gone through some refinement
   long min_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix())*size;
   std::cout << " size of alpha block with no refinement: " << min_size << std::endl;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); ++iter)
+  for (auto & blk : blks)
   {
-    boxm2_block_id id = iter->first;
+    boxm2_block_id id = blk.first;
     std::cout<<"Block id "<<id<<' ';
     std::stringstream file_name; file_name << scene->data_path() << "alpha_" << id << ".bin";
     long buf_len = vul_file::size(file_name.str());
-    boxm2_block_metadata md = iter->second;
+    boxm2_block_metadata md = blk.second;
 #if 0
     boxm2_data_base *  alph = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),0,false);
     long buf_len = (long)alph->buffer_length();
@@ -952,10 +952,10 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
   double blk_len_z = box.max_z() - box.min_z();
 
   std::cout << "!!! NUMBER OF BLOCKS to be pruned: " << blks.size() << std::endl;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit)
+  for (auto & blk : blks)
   {
-    boxm2_block_id blk_id = mit->first;
-    boxm2_block_metadata md = mit->second;
+    boxm2_block_id blk_id = blk.first;
+    boxm2_block_metadata md = blk.second;
 
     // obtain the min and max elev from dem image using bounding box of current block
     vgl_box_3d<double> blk_box = md.bbox();
@@ -1113,11 +1113,11 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
   pts.push_back(lower_left);
   pts.push_back(upper_right);
   unsigned num_dem_imgs = dem_views.size();
-  for (unsigned k = 0; k < pts.size(); k++) {
+  for (auto & pt : pts) {
     // find the image
     for (unsigned j = 0; j < num_dem_imgs; j++) {
       double u, v;
-      dem_cams[j]->global_to_img(pts[k].x(), pts[k].y(), 0, u, v);
+      dem_cams[j]->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);  int vv = (int)std::floor(v+0.5);
       if (uu < 0 || vv < 0 || uu >= (int)dem_views[j]->ni() || vv >= (int)dem_views[j]->nj())
         continue;
@@ -1127,8 +1127,8 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
   }
   std::cout << " lower_left: " << lower_left << ", upper_right: " << upper_right << std::endl;
   std::cout << " corner: " << std::endl;
-  for (unsigned i = 0; i < corners.size(); i++) {
-    std::cout <<  " dem img id : " << corners[i].first << " pixel: " << corners[i].second.first << "x" << corners[i].second.second << std::endl;
+  for (auto & corner : corners) {
+    std::cout <<  " dem img id : " << corner.first << " pixel: " << corner.second.first << "x" << corner.second.second << std::endl;
   }
   if (corners.size() != 4) {
     std::cerr << "Cannot locate all 4 corners among these DEM tiles!\n";

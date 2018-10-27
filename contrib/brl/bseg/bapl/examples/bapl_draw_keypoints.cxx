@@ -89,9 +89,9 @@ int main( int argc, char* argv[] )
   std::cout << "Drawing Keypoints" << std::endl;
 
   vil_image_view<vxl_byte> color_img(color_image_sptr->get_view());
-  for (unsigned i=0;i<keypoints.size();++i){
+  for (const auto & keypoint : keypoints){
     bapl_lowe_keypoint_sptr kp;
-    kp.vertical_cast(keypoints[i]);
+    kp.vertical_cast(keypoint);
     int ii = int(kp->location_i()+0.5); int jj = int(kp->location_j()+0.5);
     if (ii >= 0 && jj >= 0 && ii < (int)color_img.ni() && jj < (int)color_img.nj())
       if (kp->scale()>1.1)

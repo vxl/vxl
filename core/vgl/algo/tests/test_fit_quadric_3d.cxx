@@ -71,10 +71,9 @@ static void test_linear_fit_taubin_sphere_rand_error()
   vnl_random ran;
   double e = 0.1;
   std::cout << "error " << e << std::endl;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_quadric_3d<double> fit_sph(pts);
   double error = fit_sph.fit_linear_Taubin(&std::cout);
@@ -172,10 +171,9 @@ static void test_linear_fit_Taubin_parabolid_rand_error()
   vnl_random ran;
   double e = 0.5;
   std::cout << "error " << e << std::endl;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_quadric_3d<double> fit_parab(pts);
   double lin_error = fit_parab.fit_linear_Taubin(&std::cout);
@@ -348,10 +346,9 @@ static void test_linear_fit_Allaire_sphere_rand_error()
   vnl_random ran;
   double e = 0.5;
   std::cout << "error " << e << std::endl;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_quadric_3d<double> fit_sph(pts);
   double error = fit_sph.fit_ellipsoid_linear_Allaire(&std::cout);
@@ -395,10 +392,9 @@ static void test_linear_fit_Allaire_thin_ellipsoid_rand_error()
   vnl_random ran;
   double e = 0.0;
   std::cout << "error " << e << std::endl;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_quadric_3d<double> fit_sph(pts);
   double error = fit_sph.fit_ellipsoid_linear_Allaire(&std::cout);
@@ -462,10 +458,9 @@ static void test_linear_fit_Allaire_saddle_shape()
   vnl_random ran;
   double e = 0.0;
   std::cout << "error " << e << std::endl;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_quadric_3d<double> fit_sad(pts);
   double error = fit_sad.fit_saddle_shaped_quadric_linear_Allaire(&std::cout);
