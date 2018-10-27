@@ -38,38 +38,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_STATIC_CONST_INIT_INT_DECL(x) ";
-#ifdef VCL_STATIC_CONST_INIT_INT_DECL
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DECL(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_STATIC_CONST_INIT_INT_DEFN(x) ";
-#ifdef VCL_STATIC_CONST_INIT_INT_DEFN
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_INT_DEFN(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_STATIC_CONST_INIT_FLOAT_DECL(x) ";
-#ifdef VCL_STATIC_CONST_INIT_FLOAT_DECL
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DECL(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) ";
-#ifdef VCL_STATIC_CONST_INIT_FLOAT_DEFN
-  std::cout << "is set to " << quote(VCL_STATIC_CONST_INIT_FLOAT_DEFN(x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_CAN_DO_PARTIAL_SPECIALIZATION ";
 #ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
   std::cout << "is set to " << quote(VCL_CAN_DO_PARTIAL_SPECIALIZATION);

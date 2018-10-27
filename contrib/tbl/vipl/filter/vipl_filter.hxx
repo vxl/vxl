@@ -14,13 +14,13 @@
 #endif
 
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready VCL_STATIC_CONST_INIT_INT_DEFN( 0 );
+constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Not_Ready;
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Ready VCL_STATIC_CONST_INIT_INT_DEFN( 1 );
+constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Ready;
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Unchanged VCL_STATIC_CONST_INIT_INT_DEFN( 2 );
+constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Unchanged;
 template <class ImgIn,class ImgOut,class DataIn,class DataOut,int Arity,class PixelItr>
-constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned VCL_STATIC_CONST_INIT_INT_DEFN( 4 );
+constexpr VIPL_FILTER_STATE vipl_filter<ImgIn,ImgOut,DataIn,DataOut,Arity,PixelItr>::Filter_Owned;
 
 //: A workhorse constructor for this abstract class.
 // If dst_image (by default) the output will be generated automatically when

@@ -152,7 +152,6 @@ namespace vnl_math
 
 namespace vnl_math
 {
-#if VXL_FULLCXX11SUPPORT
   using std::isnan;
   // Ensure proper conversion to bool type.
   // Return a signed integer type has been seen with the following
@@ -175,101 +174,6 @@ namespace vnl_math
     return std::cbrt(std::forward<TArg>(arg));
     }
   using std::hypot;
-#else
- // isnan
- inline bool isnan(char)               { return false; }
- inline bool isnan(short)              { return false; }
- inline bool isnan(int)                { return false; }
- inline bool isnan(long)               { return false; }
- inline bool isnan(signed char)        { return false; }
- inline bool isnan(unsigned char)      { return false; }
- inline bool isnan(unsigned short)     { return false; }
- inline bool isnan(unsigned int)       { return false; }
- inline bool isnan(unsigned long)      { return false; }
-#if VCL_HAS_LONG_LONG
- inline bool isnan(long long)          { return false; }
- inline bool isnan(unsigned long long) { return false; }
-#endif
- VNL_EXPORT bool isnan(float);
- VNL_EXPORT bool isnan(double);
- VNL_EXPORT bool isnan(long double);
-#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> VNL_TEMPLATE_EXPORT bool isnan(T);
-#endif
-
-
- // isinf
- inline bool isinf(char)               { return false; }
- inline bool isinf(short)              { return false; }
- inline bool isinf(int)                { return false; }
- inline bool isinf(long)               { return false; }
- inline bool isinf(signed char)        { return false; }
- inline bool isinf(unsigned char)      { return false; }
- inline bool isinf(unsigned short)     { return false; }
- inline bool isinf(unsigned int)       { return false; }
- inline bool isinf(unsigned long)      { return false; }
-#if VCL_HAS_LONG_LONG
- inline bool isinf(long long)          { return false; }
- inline bool isinf(unsigned long long) { return false; }
-#endif
- VNL_EXPORT bool isinf(float);
- VNL_EXPORT bool isinf(double);
- VNL_EXPORT bool isinf(long double);
-#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> VNL_TEMPLATE_EXPORT bool isinf(T);
-#endif
-
- // isfinite
- inline bool isfinite(char)               { return true; }
- inline bool isfinite(short)              { return true; }
- inline bool isfinite(int)                { return true; }
- inline bool isfinite(long)               { return true; }
- inline bool isfinite(signed char)        { return true; }
- inline bool isfinite(unsigned char)      { return true; }
- inline bool isfinite(unsigned short)     { return true; }
- inline bool isfinite(unsigned int)       { return true; }
- inline bool isfinite(unsigned long)      { return true; }
-#if VCL_HAS_LONG_LONG
- inline bool isfinite(long long)          { return true; }
- inline bool isfinite(unsigned long long) { return true; }
-#endif
- VNL_EXPORT bool isfinite(float);
- VNL_EXPORT bool isfinite(double);
- VNL_EXPORT bool isfinite(long double);
-#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN
- template <class T> VNL_TEMPLATE_EXPORT bool isfinite(T);
-#endif
-
-// If we must use windows.h, we should at least sanitise it first
-#ifndef NOMINMAX
-  #define NOMINMAX
-#endif
-#ifdef max
-  #undef max
-#endif
-
-#ifdef min
-  #undef min
-#endif
-
-// max
-template<class T> VNL_TEMPLATE_EXPORT
-const T& max( const T& x, const T& y) { return std::max(x,y); }
-
-template<class T> VNL_TEMPLATE_EXPORT
-const T& min( const T& x, const T& y) { return std::min(x,y); }
-
-// cuberoot
-inline float  cuberoot(const float  &a) { return float((a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3)); }
-inline double cuberoot(const double &a) { return       (a<0) ? -std::exp(std::log(-a)/3) : std::exp(std::log(a)/3); }
-
-// hypotenuse
-extern VNL_EXPORT int         hypot(int         x, int         y);
-extern VNL_EXPORT float       hypot(float       x, float       y);
-extern VNL_EXPORT double      hypot(double      x, double      y);
-extern VNL_EXPORT long double hypot(long double x, long double y);
-
-#endif //If not C++11 features
 
 #if USE_SSE2_IMPL // Fast sse2 implementation
 
@@ -711,26 +615,4 @@ inline double             remainder_floored(double x, double y)                 
 inline long double        remainder_floored(long double x, long double y)               { return fmod(fmod(x,y)+y,y); }
 
 } // end of namespace vnl_math
-
-#if VNL_CONFIG_LEGACY_METHODS // Legacy definitions, for backward compatibility; deprecated!
-#define vnl_math_isnan vnl_math::isnan
-#define vnl_math_isinf vnl_math::isinf
-#define vnl_math_isfinite vnl_math::isfinite
-#define vnl_math_rnd_halfinttoeven vnl_math::rnd_halfinttoeven
-#define vnl_math_rnd_halfintup vnl_math::rnd_halfintup
-#define vnl_math_rnd vnl_math::rnd
-#define vnl_math_floor vnl_math::floor
-#define vnl_math_ceil vnl_math::ceil
-#define vnl_math_abs vnl_math::abs
-#define vnl_math_max vnl_math::max
-#define vnl_math_min vnl_math::min
-#define vnl_math_sqr vnl_math::sqr
-#define vnl_math_cube vnl_math::cube
-#define vnl_math_sgn vnl_math::sgn
-#define vnl_math_sgn0 vnl_math::sgn0
-#define vnl_math_squared_magnitude vnl_math::squared_magnitude
-#define vnl_math_cuberoot vnl_math::cuberoot
-#define vnl_math_hypot vnl_math::hypot
-#endif // VNL_CONFIG_LEGACY_METHODS
-
 #endif // vnl_math_h_

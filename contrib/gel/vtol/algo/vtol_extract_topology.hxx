@@ -40,8 +40,8 @@ typedef vtol_extract_topology_vertex_node vertex_node;
 
 // ---------------------------------------------------------------------------
 //                                              static variables and constants
-constexpr unsigned vtol_extract_topology_vertex_node::null_index  VCL_STATIC_CONST_INIT_INT_DEFN( unsigned(-2) );
-constexpr unsigned vtol_extract_topology_vertex_node::done_index  VCL_STATIC_CONST_INIT_INT_DEFN( unsigned(-1) );
+constexpr unsigned vtol_extract_topology_vertex_node::null_index;
+constexpr unsigned vtol_extract_topology_vertex_node::done_index;
 
 
 // ---------------------------------------------------------------------------
