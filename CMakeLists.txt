@@ -45,7 +45,10 @@ foreach(p
   endif()
 endforeach()
 
-project(vxl LANGUAGES CXX C)
+project(VXL #Project name must be all caps to have properly generated VXL_VERSION_* variables
+    VERSION 2.0.0.0
+    DESCRIPTION "A multi-platform collection of C++ software libraries for Computer Vision and Image Understanding."
+    LANGUAGES CXX C)
 
 include(CMakeDependentOption)
 
@@ -266,13 +269,13 @@ endif()
 # the UseVXL.cmake from the vxl binary directory, and determine the
 # vxl source directory by loading the cache.
 configure_file( ${VXL_CMAKE_DIR}/UseVXL.cmake
-                ${vxl_BINARY_DIR}/UseVXL.cmake COPYONLY )
+                ${VXL_BINARY_DIR}/UseVXL.cmake COPYONLY )
 # For use in client projects that call UseVXL.cmake
 set(VXL_LIBRARY_PATH ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} CACHE STATIC "Where all the vxl libraries are, for clients to use." )
 
 # Copy CTestCustom.cmake to top of build tree
 configure_file( ${VXL_CMAKE_DIR}/CTestCustom.cmake
-  ${vxl_BINARY_DIR}/CTestCustom.cmake COPYONLY )
+  ${VXL_BINARY_DIR}/CTestCustom.cmake COPYONLY )
 
 # This command must be the last command in this file
 if(NOT VXL_NO_EXPORT)

@@ -213,4 +213,11 @@
 /* true if VXL is built shared */
 #cmakedefine VXL_BUILD_SHARED_LIBS
 
+/* Version numbering. */
+#define VXL_VERSION_MAJOR @VXL_VERSION_MAJOR@
+#define VXL_VERSION_MINOR @VXL_VERSION_MINOR@
+#define VXL_VERSION_PATCH @VXL_VERSION_PATCH@
+#define VXL_VERSION_TWEAK @VXL_VERSION_TWEAK@
+
+
 #endif /* vxl_config_h_ */
