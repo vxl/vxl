@@ -2,12 +2,12 @@
 #define rgrl_trans_mixed_spline_h_
 //:
 // \file
-#include "rgrl_trans_spline.h"
-#include "rgrl_transformation.h"
 #include <iostream>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include "rgrl_trans_spline.h"
+#include "rgrl_transformation.h"
+#include <vcl_compiler.h>
 
 class rgrl_trans_mixed_spline
   : public rgrl_transformation

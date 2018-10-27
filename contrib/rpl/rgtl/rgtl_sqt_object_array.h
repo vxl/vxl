@@ -12,9 +12,8 @@
 // \date April 2007
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <vcl_compiler.h>
 
 template <unsigned int D> class rgtl_object_array;

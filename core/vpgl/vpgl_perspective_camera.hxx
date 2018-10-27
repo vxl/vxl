@@ -4,11 +4,11 @@
 //:
 // \file
 
-#include "vpgl_perspective_camera.h"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <utility>
+#include "vpgl_perspective_camera.h"
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_3d.h>

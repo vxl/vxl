@@ -4,12 +4,11 @@
 // \author Raphael Kargon
 // \date 29-Jul-2017
 
+#include <iostream>
+#include <string>
 #include <testlib/testlib_root_dir.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
-#include <string>
 
 #include <bstm_multi/bstm_multi_block_metadata.h>
 

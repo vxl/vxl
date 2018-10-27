@@ -6,6 +6,7 @@
 #include <string>
 #include <ctime>
 #include <cstdlib>
+#include <cstdio>
 #include "vul_temp_filename.h"
 #include <vcl_compiler.h>
 
@@ -16,7 +17,6 @@
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)
   // Helper functions for Unix
 
-  #include <cstdio>  // for P_tmpdir
   #include <unistd.h> // for unlink
   #include <fcntl.h>  // for O_CREATE,...
 

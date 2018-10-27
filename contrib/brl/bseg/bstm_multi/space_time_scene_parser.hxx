@@ -6,16 +6,15 @@
 // \brief Parses a scene.xml file for a 4D space-time scene that uses the given Block type.
 //
 
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <sstream>
+#include <utility>
 #include "space_time_scene_parser.h"
 
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <iostream>
-#include <sstream>
-#include <utility>
 
 #include <bstm/bstm_scene_parser.h>
 

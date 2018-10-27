@@ -7,8 +7,8 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <mfpf/mfpf_pose.h>
 #include <utility>
+#include <mfpf/mfpf_pose.h>
 #include <vcl_compiler.h>
 
 //: Defines pose and shape (box/ellipse etc) of a region

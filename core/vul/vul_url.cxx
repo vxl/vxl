@@ -16,10 +16,9 @@
 #include <cstdlib>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 #include "vul_url.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::snprintf()
 #include <vcl_compiler.h>
 #include <vcl_cassert.h>
 #include <vul/vul_file.h>

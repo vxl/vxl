@@ -20,10 +20,10 @@
 // Converts points into baycentric coordinates given an affine basis
 // For 2-d, three points are required to form the basis
 // For 3-d, four points are required to form the basis
+#include <vector>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vector>
 
 // Points are all coplanar. The first three points in pts are the basis, pts[0] is the origin
 template <class T>

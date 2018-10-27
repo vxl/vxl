@@ -1,11 +1,11 @@
 #ifndef bstm_multi_bstm_block_to_bstm_multi_block_function_h_
 #define bstm_multi_bstm_block_to_bstm_multi_block_function_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <stack>
 #include <string>
+#include <vcl_compiler.h>
 
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>

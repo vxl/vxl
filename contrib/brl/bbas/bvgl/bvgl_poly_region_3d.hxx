@@ -2,14 +2,14 @@
 #ifndef bvgl_poly_region_3d_hxx_
 #define bvgl_poly_region_3d_hxx_
 #include <cstdlib>
+#include <cmath>
+#include <limits>
+#include <iostream>
 #include "bvgl_poly_region_3d.h"
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <cmath>
-#include <limits>
-#include <iostream>
 // plane fit to head cheek
 //vgl_plane_3d -0.461582 x +0.0522239 y -0.885559 z +94.1097
 //z(x,y) = (-0.461582*x + 0.0522239*y + 94.1)/0.885559

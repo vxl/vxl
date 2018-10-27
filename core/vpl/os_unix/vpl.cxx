@@ -5,12 +5,12 @@
 #undef _XOPEN_SOURCE_EXTENDED
 #define _XOPEN_SOURCE_EXTENDED 1 // usleep is not declared
 extern "C" {
+#include <cstdlib>
+#include <cstring>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 }
-#include <cstdlib>
-#include <cstring>  // for strdup
 #include <vxl_config.h> // for VXL_UNISTD_*
 
 char *

@@ -73,6 +73,22 @@ license you like.
 
 
 
+#include <clocale>
+#include <utility>
+#include <cstdio>
+#include <cassert>
+#include <cstring>
+#include <istream>
+#include <sstream>
+#include <iostream>
+#include <memory>
+#include <set>
+#include <limits>
+#include <cmath>
+#include <cstddef>
+#include <algorithm>
+#include <iomanip>
+#include <cfloat>
 #include "json.h"
 
 #ifndef JSON_IS_AMALGAMATION
@@ -99,7 +115,6 @@ license you like.
 #endif
 
 #ifndef JSONCPP_NO_LOCALE_SUPPORT
-#include <clocale>
 #endif
 
 /* This header provides common string manipulation support, such as UTF-8,
@@ -226,17 +241,7 @@ static inline void fixNumericLocaleInput(char* begin, char* end) {
 #include <json/value.h>
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <utility>
-#include <cstdio>
-#include <cassert>
-#include <cstring>
-#include <istream>
-#include <sstream>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
-#include <set>
-#include <limits>
 
 #if defined(_MSC_VER)
 #if !defined(WINCE) && defined(__STDC_SECURE_LIB__) && _MSC_VER >= 1500 // VC++ 9.0 and above
@@ -2457,16 +2462,9 @@ ValueIterator& ValueIterator::operator=(const SelfType& other) {
 #include <json/value.h>
 #include <json/writer.h>
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <cmath>
-#include <sstream>
-#include <utility>
-#include <cstring>
-#include <cassert>
 #ifdef JSON_USE_CPPTL
 #include <cpptl/conststring.h>
 #endif
-#include <cstddef> // size_t
-#include <algorithm> // min()
 
 #define JSON_ASSERT_UNREACHABLE assert(false)
 
@@ -4074,19 +4072,9 @@ Value& Path::make(Value& root) const {
 #include <json/writer.h>
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
-#include <iomanip>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
-#include <sstream>
-#include <utility>
-#include <set>
-#include <cassert>
-#include <cstring>
-#include <cstdio>
 
 #if defined(_MSC_VER) && _MSC_VER >= 1200 && _MSC_VER < 1800 // Between VC++ 6.0 and VC++ 11.0
-#include <cfloat>
 #define isfinite _finite
 #elif defined(__sun) && defined(__SVR4) //Solaris
 #if !defined(isfinite)
@@ -4095,7 +4083,6 @@ Value& Path::make(Value& root) const {
 #endif
 #elif defined(_AIX)
 #if !defined(isfinite)
-#include <cmath>
 #define isfinite finite
 #endif
 #elif defined(__hpux)
@@ -4104,12 +4091,10 @@ Value& Path::make(Value& root) const {
 #define isfinite(x) ((sizeof(x) == sizeof(float) ? \
                      _Isfinitef(x) : _IsFinite(x)))
 #else
-#include <cmath>
 #define isfinite finite
 #endif
 #endif
 #else
-#include <cmath>
 #if !(defined(__QNXNTO__)) // QNX already defines isfinite
 #define isfinite std::isfinite
 #endif
@@ -4132,7 +4117,6 @@ Value& Path::make(Value& root) const {
 #endif
 
 #if defined(__BORLANDC__)
-#include <cfloat>
 #define isfinite _finite
 #define snprintf _snprintf
 #endif

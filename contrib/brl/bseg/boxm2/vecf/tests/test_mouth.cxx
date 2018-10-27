@@ -4,9 +4,9 @@
 // \date 03/12/15
 
 
-#include <testlib/testlib_test.h>
 #include <string>
 #include <fstream>
+#include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 #include "../boxm2_vecf_mouth.h"
 #include "../boxm2_vecf_mandible_params.h"

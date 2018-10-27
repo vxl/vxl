@@ -8,6 +8,7 @@
 #include <iostream>
 #include <iterator>
 #include <limits>
+#include <climits>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_int_list.h>
@@ -19,7 +20,6 @@
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
-#include <climits>
 
 /*
 Parameter file format:

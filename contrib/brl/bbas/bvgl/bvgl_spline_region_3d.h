@@ -7,6 +7,8 @@
 // \author December 20, 2015 J.L. Mundy
 //
 
+#include <vector>
+#include <iostream>
 #include <vgl/vgl_cubic_spline_3d.h>
 #include <vgl/vgl_cubic_spline_2d.h>
 #include <vgl/vgl_pointset_3d.h>
@@ -15,8 +17,6 @@
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vector>
-#include <iostream>
 
 template <class Type>
 class bvgl_spline_region_3d

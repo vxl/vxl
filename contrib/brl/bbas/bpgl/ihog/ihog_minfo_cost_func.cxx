@@ -1,4 +1,5 @@
 // This is brl/bbas/bpgl/ihog/ihog_minfo_cost_func.cxx
+#include <utility>
 #include "ihog_minfo_cost_func.h"
 //:
 // \file
@@ -7,7 +8,6 @@
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_1d.h>
 
-#include <utility>
 
 //: Constructor
 ihog_minfo_cost_func::ihog_minfo_cost_func( const ihog_image<float>& image1,

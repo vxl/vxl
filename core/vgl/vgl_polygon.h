@@ -17,8 +17,8 @@
 
 #include <iosfwd>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h> // needed for std::vector instantiations
 
 //: Store a polygon.

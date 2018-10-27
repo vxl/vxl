@@ -13,6 +13,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <iterator>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_int_list.h>
@@ -23,8 +24,6 @@
 #include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iterator>
 
 #include <msm/msm_shape_model_builder.h>
 #include <msm/msm_reflect_shape.h>

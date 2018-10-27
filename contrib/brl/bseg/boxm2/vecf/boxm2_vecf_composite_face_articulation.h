@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date   5 November 2015
 //
-#include "boxm2_vecf_scene_articulation.h"
-#include "boxm2_vecf_composite_face_params.h"
 #include <string>
 #include <vector>
 #include <map>
+#include "boxm2_vecf_scene_articulation.h"
+#include "boxm2_vecf_composite_face_params.h"
 class boxm2_vecf_composite_face_articulation : public boxm2_vecf_scene_articulation{
  public:
   //:default constructor, uses default parameter constructor

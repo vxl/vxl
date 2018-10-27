@@ -1,12 +1,12 @@
 // This is brl/bseg/bsgm/pro/processes/bsgm_matching_stereo_process.cxx
-#include <bprb/bprb_func_process.h>
-//:
-// \file
-//      Process to run semi-global matching stereo algorithm for two rectified images
 #include <string>
 #include <vector>
 #include <iostream>
 #include <sstream>
+#include <bprb/bprb_func_process.h>
+//:
+// \file
+//      Process to run semi-global matching stereo algorithm for two rectified images
 
 #include <bprb/bprb_parameters.h>
 #include <vil/vil_convert.h>

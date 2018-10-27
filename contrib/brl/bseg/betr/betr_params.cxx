@@ -1,6 +1,6 @@
+#include <sstream>
 #include "betr_params.h"
 #include <bjson/bjson.h>
-#include <sstream>
 bool write_params_json(std::string& json_str, betr_params_sptr const& params){
   if(!params)
     return false;

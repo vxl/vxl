@@ -1,10 +1,10 @@
 //:
 // \file
-#include "bstm_time_tree.h"
 #include <algorithm>
 #include <cstring>
 #include <iostream>
 #include <list>
+#include "bstm_time_tree.h"
 #include <vcl_compiler.h>
 
 //: default constructor

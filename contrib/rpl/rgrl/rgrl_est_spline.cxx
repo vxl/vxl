@@ -3,13 +3,13 @@
 // \author Lee, Ying-Lin (Bess)
 // \date   Sept 2003
 
+#include <iostream>
+#include <utility>
 #include "rgrl_est_spline.h"
 #include "rgrl_cast.h"
 #include "rgrl_match_set.h"
 #include "rgrl_spline.h"
 #include "rgrl_trans_spline.h"
-#include <iostream>
-#include <utility>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 #include <vnl/algo/vnl_amoeba.h>

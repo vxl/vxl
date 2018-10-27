@@ -1,9 +1,8 @@
 // This is vcl/tests/test_vector.cxx
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <algorithm>
+#include <vcl_compiler.h>
 
 std::ostream &delim(std::ostream &os)
 {

@@ -6,11 +6,10 @@
 // \brief Base for objects which perform some form of linear component analysis.
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

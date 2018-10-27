@@ -1,8 +1,7 @@
-#include <string> // C++ specific includes first
-#include <vcl_compiler.h>
-#include <iostream>
+#include <string>
 #include <iostream>
 #include <sstream>
+#include <vcl_compiler.h>
 
 #define AssertEq(x,y) {status+=((x)==(y))?0:1;std::cout<<"TEST ["<<(x)<<"] == ["<<(y)<<"] : "<<((x)==(y)?"PASSED":"FAILED")<<std::endl;}
 

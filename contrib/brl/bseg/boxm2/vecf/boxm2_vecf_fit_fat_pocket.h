@@ -12,9 +12,9 @@
 //
 #include <vector>
 #include <string>
+#include <iosfwd>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <iosfwd>
 #include "boxm2_vecf_middle_fat_pocket_params.h"
 #include "boxm2_vecf_middle_fat_pocket.h"
 #include <bvgl/bvgl_knn_index_3d.h>

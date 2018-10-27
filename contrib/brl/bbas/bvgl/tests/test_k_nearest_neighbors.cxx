@@ -1,12 +1,11 @@
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <bvgl/bvgl_k_nearest_neighbors_3d.h>
-#include <iostream>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <testlib/testlib_test.h>
+#include <bvgl/bvgl_k_nearest_neighbors_3d.h>
+#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <bnabo/bnabo.h>

@@ -1,4 +1,8 @@
 // This is contrib/brl/bbas/volm/pro/process/volm_layer_extraction_process.cxx
+#include <iostream>
+#include <iomanip>
+#include <cmath>
+#include <cstdio>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -10,11 +14,6 @@
 
 #include <vul/vul_file.h>
 //#include <vcl_compiler.h>
-#include <iostream>
-#include <iomanip>
-#include <iostream>
-#include <cmath>
-#include <cstdio>
 #include <vnl/vnl_gamma.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/vil_image_view.h>

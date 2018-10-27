@@ -1,8 +1,8 @@
-#include "HMatrix1DComputeOptimize1.h"
-#include "HMatrix1DComputeDesign.h"
 #include <iomanip>
 #include <iostream>
 #include <utility>
+#include "HMatrix1DComputeOptimize1.h"
+#include "HMatrix1DComputeDesign.h"
 
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>

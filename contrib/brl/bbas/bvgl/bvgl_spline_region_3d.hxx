@@ -2,13 +2,13 @@
 #ifndef bvgl_spline_region_3d_hxx_
 #define bvgl_spline_region_3d_hxx_
 #include <cstdlib>
+#include <cmath>
+#include <limits>
 #include "bvgl_spline_region_3d.h"
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_2d.h>
-#include <cmath>
-#include <limits>
 template <class Type>
 void bvgl_spline_region_3d<Type>::plane_to_world(Type u, Type v, vgl_point_3d<Type>& p3d) const{
   vgl_vector_3d<Type> plane_vec = u*u_vec_ + v*v_vec_;

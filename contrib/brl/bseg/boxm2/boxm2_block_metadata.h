@@ -16,9 +16,9 @@
 // \author Andrew Miller
 // \date   16 Dec 2010
 //
-#include <boxm2/basic/boxm2_block_id.h>
 #include <iosfwd>
 #include <iostream>
+#include <boxm2/basic/boxm2_block_id.h>
 #include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>

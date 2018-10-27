@@ -1,3 +1,4 @@
+#include <cmath>
 #include <vil_image_view.h>
 #include <vil_save.h>
 #include <vil_convert.h>
@@ -14,7 +15,6 @@
 #include "betr_pixelwise_change_detection_params.h"
 #include "betr_event_trigger.h"
 
-#include <cmath>
 
 
 bool betr_pixelwise_change_detection::process() {

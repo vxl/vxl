@@ -1,10 +1,10 @@
 // This is contrib/brl/bpro/core/vpgl_pro/processes
-#include <vil/vil_config.h>
-#if HAS_GEOTIFF
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <vil/vil_config.h>
+#if HAS_GEOTIFF
 #include <bprb/bprb_func_process.h>
 //:
 // \file

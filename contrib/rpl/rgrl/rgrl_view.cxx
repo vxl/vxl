@@ -1,7 +1,7 @@
-#include "rgrl_view.h"
 #include <cstdlib>
 #include <iostream>
 #include <utility>
+#include "rgrl_view.h"
 //:
 // \file
 // \brief  Represent a "view" of the registration problem.

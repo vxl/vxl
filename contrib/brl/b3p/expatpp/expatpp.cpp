@@ -1,14 +1,13 @@
 // expatpp
 #ifdef UNDER_CE
-  #include <cstring>
+#include <cstring>
+#include <string>
+#include <cassert>
   #include <windows.h>
   #include <dbgapi.h>
   #define assert ASSERT
 #else
-  #include <cstring> // for std::strlen() & strcmp()
-  #include <string>
   using namespace std;
-  #include <cassert>
 #endif
 #include "expatpp.h"
 

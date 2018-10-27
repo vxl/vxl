@@ -6,9 +6,9 @@
 #error "This header cannot be included directly, only through vil_math_.h"
 #endif
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstring>
+#include <vcl_compiler.h>
 #include <vxl_config.h>
 
 #include <emmintrin.h>

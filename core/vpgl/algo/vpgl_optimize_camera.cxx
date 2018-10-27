@@ -1,4 +1,5 @@
 // This is core/vpgl/algo/vpgl_optimize_camera.cxx
+#include <utility>
 #include "vpgl_optimize_camera.h"
 //:
 // \file
@@ -13,7 +14,6 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_cassert.h>
 
-#include <utility>
 
 //: Constructor
 vpgl_orientation_lsqr::

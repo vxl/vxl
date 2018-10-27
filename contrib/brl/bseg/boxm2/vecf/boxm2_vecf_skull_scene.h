@@ -3,8 +3,8 @@
 
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 
 #include <boxm2/boxm2_scene.h>
 #include "boxm2_vecf_mandible_scene.h"

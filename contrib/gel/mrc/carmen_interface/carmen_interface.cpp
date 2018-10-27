@@ -1,13 +1,12 @@
 // This is gel/mrc/carmen_interface/carmen_interface.cpp
+#include <iostream>
+#include <fstream>
 #include "carmen_interface.h"
 //:
 //  \file
 //
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
-#include <iostream>
-#include <fstream>
-#include <iostream>
 //--------------------------------------------
 // Carmen Includes
 #define DEFINED_MAX_MIN

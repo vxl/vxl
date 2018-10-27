@@ -9,14 +9,13 @@
 // \author Raphael Kargon
 // \date 01 Aug 2017
 
+#include <iostream>
+#include <cstddef>
+#include <string>
+#include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstddef>
-#include <iostream>
-#include <string>
-#include <vector>
 
 #include <bstm/bstm_data_traits.h>
 #include <bstm_multi/block_data.h>

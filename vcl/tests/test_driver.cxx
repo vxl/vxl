@@ -5,10 +5,9 @@
 //  Note that all tests' main function should have signature (int,char**).
 // \author awf, mar 2000
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
+#include <vcl_compiler.h>
 
 int test_algorithm_main(int, char*[]);
 int test_cctype_main(int, char*[]);

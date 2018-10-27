@@ -4,12 +4,12 @@
 // \author Raphael Kargon
 // \date 29-Jul-2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
 #include <map>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 
 #include <testlib/testlib_root_dir.h>

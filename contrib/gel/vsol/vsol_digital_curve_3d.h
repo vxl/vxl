@@ -13,8 +13,8 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_curve_3d.h>

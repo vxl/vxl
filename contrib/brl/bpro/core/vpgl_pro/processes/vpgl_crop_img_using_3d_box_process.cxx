@@ -6,10 +6,10 @@
 //
 //
 //
+#include <iostream>
 #include <vil/vil_config.h>
 #if HAS_GEOTIFF
 
-#include <iostream>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <bprb/bprb_func_process.h>

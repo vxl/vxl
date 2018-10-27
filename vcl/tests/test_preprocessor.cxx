@@ -1,9 +1,8 @@
 // Try to check that compiler preprocessor definitions are sane.
 
+#include <iostream>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
 {

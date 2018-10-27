@@ -6,11 +6,10 @@
 // \author Tim Cootes
 
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_fwd.h>
 

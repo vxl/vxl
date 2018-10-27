@@ -13,8 +13,6 @@
 
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

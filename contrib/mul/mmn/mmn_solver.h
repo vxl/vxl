@@ -7,11 +7,10 @@
 
 #include <vector>
 #include <string>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
-#include <iostream>
 #include <iosfwd>
+#include <vcl_compiler.h>
 #include <mmn/mmn_arc.h>
 #include <vnl/vnl_fwd.h>
 

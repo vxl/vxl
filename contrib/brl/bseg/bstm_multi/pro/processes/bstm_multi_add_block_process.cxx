@@ -9,12 +9,12 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 
 #include <bprb/bprb_func_process.h>

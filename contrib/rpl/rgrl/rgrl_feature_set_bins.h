@@ -12,9 +12,8 @@
 // \endverbatim
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <rsdl/rsdl_fwd.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>

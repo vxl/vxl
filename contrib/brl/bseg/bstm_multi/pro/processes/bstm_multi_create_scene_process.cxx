@@ -5,12 +5,11 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <fstream>
-#include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
 #include <bprb/bprb_func_process.h>

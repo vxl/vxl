@@ -1,4 +1,6 @@
 // This is contrib/brl/bbas/volm/pro/process/volm_dsm_ground_plane_estimation_process.cxx
+#include <iostream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -9,15 +11,11 @@
 //    none yet
 // \endverbatim
 
-#include <iostream>
-#include <string>
 #include <vil/vil_math.h>
 #include <bsta/bsta_histogram.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
 //#include <string>
 //#include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>

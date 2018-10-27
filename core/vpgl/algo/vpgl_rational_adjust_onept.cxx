@@ -1,7 +1,7 @@
-#include "vpgl_rational_adjust_onept.h"
 #include <cmath>
 #include <limits>
 #include <utility>
+#include "vpgl_rational_adjust_onept.h"
 //:
 // \file
 #include <vcl_cassert.h>

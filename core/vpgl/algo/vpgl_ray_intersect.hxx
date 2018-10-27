@@ -2,9 +2,9 @@
 #ifndef vpgl_ray_intersect_hxx_
 #define vpgl_ray_intersect_hxx_
 
-#include "vpgl_ray_intersect.h"
 #include <iostream>
 #include <utility>
+#include "vpgl_ray_intersect.h"
 //:
 // \file
 #include <vnl/vnl_least_squares_function.h>

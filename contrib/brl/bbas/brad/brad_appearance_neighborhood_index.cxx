@@ -1,9 +1,9 @@
-#include "brad_appearance_neighborhood_index.h"
-#include <vnl/vnl_math.h>
-#include <cstdlib> // for rand
+#include <cstdlib>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
+#include "brad_appearance_neighborhood_index.h"
+#include <vnl/vnl_math.h>
 
 brad_appearance_neighborhood_index::brad_appearance_neighborhood_index(std::vector<brad_image_metadata_sptr> const& metadata)
 {

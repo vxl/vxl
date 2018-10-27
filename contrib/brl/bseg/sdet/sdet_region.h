@@ -22,6 +22,7 @@
 //
 #include <iostream>
 #include <iosfwd>
+#include <set>
 #include <vcl_compiler.h>
 #include <sdet/sdet_region_sptr.h>
 #include <vsol/vsol_polygon_2d.h>
@@ -29,7 +30,6 @@
 #include <vdgl/vdgl_digital_region.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_oriented_box_2d.h>
-#include <set>
 #include <bsta/bsta_histogram.h>
 //A structure for holding the similarity of neighboring regions
 class region_sim{

@@ -29,6 +29,7 @@
 //
 // to do: develop a least_squares_function for differing capture conditions.
 //
+#include <utility>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_cost_function.h>
@@ -36,7 +37,6 @@
 #include <icam/icam_depth_transform.h>
 #include <vbl/vbl_array_2d.h>
 
-#include <utility>
 
 //: A cost function for registering video frames by minimizing square difference in intensities.
 class icam_cost_func : public vnl_least_squares_function

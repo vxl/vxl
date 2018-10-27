@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
@@ -7,7 +8,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
-#include <string>
 
 static void test_image_bounds_from_histogram()
 {

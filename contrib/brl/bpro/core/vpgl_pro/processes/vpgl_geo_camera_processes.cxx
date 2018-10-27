@@ -1,7 +1,7 @@
 // This is brl/bpro/core/vpgl_pro/processes/vpgl_geo_camera_processes.cxx
+#include <iostream>
 #include <vil/vil_config.h>
 #if HAS_GEOTIFF
-#include <iostream>
 #include <bprb/bprb_func_process.h>
 //:
 // \file

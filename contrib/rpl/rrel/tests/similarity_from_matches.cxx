@@ -1,9 +1,9 @@
-#include "similarity_from_matches.h"
 #include <iostream>
 #include <utility>
+#include <vector>
+#include "similarity_from_matches.h"
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_math.h>

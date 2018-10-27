@@ -1,8 +1,8 @@
 // This is vpgl/algo/vpgl_bundle_adjust_lsqr.cxx
-#include "vpgl_bundle_adjust_lsqr.h"
 #include <algorithm>
 #include <iostream>
 #include <utility>
+#include "vpgl_bundle_adjust_lsqr.h"
 //:
 // \file
 

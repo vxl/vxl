@@ -1,10 +1,10 @@
 #ifndef bstm_multi_basic_array_4d_h_
 #define bstm_multi_basic_array_4d_h_
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
 #include <cstdlib>
+#include <vcl_compiler.h>
 
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_vector_fixed.hxx>

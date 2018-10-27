@@ -1,7 +1,7 @@
 // not used? #include <iostream>
 #include <cmath>
-#include <testlib/testlib_test.h>
 #include <utility>
+#include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
 #include <vnl/algo/vnl_adaptsimpson_integral.h>
 #include <vnl/algo/vnl_simpson_integral.h>

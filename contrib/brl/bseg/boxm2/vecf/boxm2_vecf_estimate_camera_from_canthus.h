@@ -1,9 +1,9 @@
 #pragma once
+#include <iostream>
+#include <map>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <map>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/algo/vgl_h_matrix_2d.h>
 #include <boxm2/vecf/boxm2_vecf_orbit_params.h>

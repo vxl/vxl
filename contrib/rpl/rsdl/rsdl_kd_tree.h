@@ -4,12 +4,12 @@
 // \file
 
 #include <iostream>
+#include <utility>
+#include <vector>
 #include <rsdl/rsdl_bounding_box.h>
 #include <rsdl/rsdl_point.h>
-#include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
-#include <vector>
 
 class rsdl_kd_node
 {

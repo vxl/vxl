@@ -6,8 +6,6 @@
 // \file
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio>
 
 std::string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {

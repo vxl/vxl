@@ -13,9 +13,9 @@
 // \author Raphael Kargon
 // \date Aug 14, 2017
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstddef>
+#include <vcl_compiler.h>
 
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <bstm/bstm_data_base.h>

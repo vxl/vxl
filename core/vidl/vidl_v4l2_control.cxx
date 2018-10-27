@@ -14,8 +14,6 @@
 #include "vidl_v4l2_control.h"
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstdio> // for std::snprintf()
 
 extern "C" {
 #include <sys/ioctl.h>

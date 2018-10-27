@@ -1,7 +1,6 @@
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <limits>
+#include <vcl_compiler.h>
 
 static
 void test_if_bool_defined( bool )

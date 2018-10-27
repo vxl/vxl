@@ -1,7 +1,7 @@
-#include "vgl_h_matrix_1d_compute_optimize.h"
 #include <iomanip>
 #include <iostream>
 #include <utility>
+#include "vgl_h_matrix_1d_compute_optimize.h"
 #include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
 
 #include <vcl_cassert.h>

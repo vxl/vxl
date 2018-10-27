@@ -2,13 +2,13 @@
 // \file
 // \author Andy Miller
 // \date 26-Oct-2010
+#include <string>
+#include <vector>
 #include <boxm2/boxm2_scene.h>
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpl/vpl.h>
-#include <string>
-#include <vector>
 void test_scene()
 {
   //test xml file

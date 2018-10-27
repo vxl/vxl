@@ -47,8 +47,8 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>

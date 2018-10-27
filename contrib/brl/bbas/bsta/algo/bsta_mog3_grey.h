@@ -13,10 +13,10 @@
 //  April 2016
 // \endverbatim
 
-#include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <vector>
+#include <vnl/vnl_vector_fixed.h>
+#include <vcl_compiler.h>
 
 #include <bsta/algo/bsta_sigma_normalizer.h>
 

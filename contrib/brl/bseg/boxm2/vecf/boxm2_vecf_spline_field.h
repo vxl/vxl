@@ -7,11 +7,11 @@
 // \author J.L. Mundy
 // \date   3 Sept. 2015
 //
+#include <utility>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
 
-#include <utility>
 class boxm2_vecf_spline_field{
  public:
   boxm2_vecf_spline_field()= default;

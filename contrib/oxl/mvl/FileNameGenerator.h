@@ -15,9 +15,9 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
-#include <mvl/FileNameGeneratorBase.h>
 #include <string>
 #include <utility>
+#include <mvl/FileNameGeneratorBase.h>
 #include <vcl_compiler.h>
 
 class FileNameGenerator

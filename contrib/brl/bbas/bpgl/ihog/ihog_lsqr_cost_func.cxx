@@ -1,11 +1,11 @@
 // This is bbas/bpgl/ihog/ihog_lsqr_cost_func.cxx
+#include <utility>
 #include "ihog_lsqr_cost_func.h"
 //:
 // \file
 
 #include <vil/algo/vil_gauss_filter.h>
 
-#include <utility>
 
 //: Constructor
 ihog_lsqr_cost_func::ihog_lsqr_cost_func( const ihog_image<float>& image1,

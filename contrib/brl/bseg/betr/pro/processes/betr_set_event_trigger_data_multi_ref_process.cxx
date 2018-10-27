@@ -1,10 +1,9 @@
 // This is brl/bseg/betr/pro/processes/betr_set_event_trigger_data_multi_ref_process.cxx
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <core/bbas_pro/bbas_1d_array_string.h>

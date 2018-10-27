@@ -10,10 +10,10 @@
 //   10 Sep. 2004 Peter Vanroose  Inlined all 1-line methods in class decl
 // \endverbatim
 
-#include <gmvl/gmvl_node.h>
 #include <iostream>
 #include <string>
 #include <utility>
+#include <gmvl/gmvl_node.h>
 #include <vcl_compiler.h>
 
 class gmvl_tag_node : public gmvl_node

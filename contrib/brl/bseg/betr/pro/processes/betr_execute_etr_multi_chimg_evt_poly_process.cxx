@@ -1,14 +1,13 @@
 // This is brl/bseg/betr/pro/processes/betr_execute_etr_multi_chimg_evt_poly_process.cxx
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_int.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <string>
 #include <vgl/vgl_point_2d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vil/vil_image_view.h>

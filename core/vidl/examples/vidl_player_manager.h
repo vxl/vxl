@@ -9,9 +9,9 @@
 //
 //----------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <vcl_compiler.h>
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_image_tableau_sptr.h>

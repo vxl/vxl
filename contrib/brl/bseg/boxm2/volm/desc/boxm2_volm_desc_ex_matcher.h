@@ -14,11 +14,11 @@
 // \endverbatim
 //
 
+#include <utility>
 #include <volm/desc/volm_desc_matcher.h>
 #include <volm/desc/volm_desc_ex.h>
 #include <volm/desc/volm_desc_indexer.h>
 
-#include <utility>
 #include "boxm2_volm_desc_ex_indexer.h"
 
 class boxm2_volm_desc_ex_matcher : public volm_desc_matcher

@@ -12,9 +12,8 @@
 // \endverbatim
 
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <rsdl/rsdl_bins_2d.h>
 
 #include "rgrl_feature.h"

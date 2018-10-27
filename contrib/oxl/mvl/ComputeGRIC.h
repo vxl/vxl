@@ -3,9 +3,8 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_compiler.h>
-#include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>

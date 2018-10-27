@@ -8,14 +8,14 @@
 // \date   23 Jan 2016
 //
 //
+#include <string>
+#include <vector>
+#include <iosfwd>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_scene.h>
 #include <boxm2/vecf/boxm2_vecf_articulated_params.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
-#include <string>
-#include <vector>
-#include <iosfwd>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include "boxm2_vecf_middle_fat_pocket_params.h"
 #include "boxm2_vecf_middle_fat_pocket.h"

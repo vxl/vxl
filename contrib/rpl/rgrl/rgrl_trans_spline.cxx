@@ -3,11 +3,11 @@
 // \author Lee, Ying-Lin (Bess)
 // \date  Sept 2003
 
-#include "rgrl_trans_spline.h"
 #include <iostream>
+#include <utility>
+#include "rgrl_trans_spline.h"
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_util.h>
-#include <utility>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 

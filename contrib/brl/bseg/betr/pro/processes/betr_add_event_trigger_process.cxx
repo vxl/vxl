@@ -1,6 +1,7 @@
 // This is brl/bseg/betr/pro/processes/betr_add_event_trigger_process.cxx
 #include <iostream>
 #include <fstream>
+#include <string>
 #include <bprb/bprb_func_process.h>
 #include <vpgl/vpgl_lvcs.h>
 //:
@@ -9,7 +10,6 @@
 //
 
 
-#include <string>
 #include <vcl_compiler.h>
 #include <betr/betr_event_trigger.h>
 #include <vgl/vgl_point_3d.h>

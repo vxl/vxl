@@ -20,8 +20,8 @@
 // \endverbatim
 
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_algo_export.h>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/vnl_vector.h>

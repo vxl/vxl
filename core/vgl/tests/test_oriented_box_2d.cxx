@@ -2,13 +2,13 @@
 // J.L. Mundy Dec. 2016
 #include <iostream>
 #include <sstream>
+#include <cmath>
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_oriented_box_2d.h>
 #include <vgl/vgl_area.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
 #include <vgl/vgl_fit_oriented_box_2d.h>
-#include <cmath>
 
 static void test_oriented_box_2d()
 {

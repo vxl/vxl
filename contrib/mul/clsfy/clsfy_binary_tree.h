@@ -5,11 +5,11 @@
 // \file
 // \brief Binary tree classifier
 // \author Martin Roberts
-#include <clsfy/clsfy_binary_threshold_1d.h>
-#include <clsfy/clsfy_classifier_base.h>
 #include <iosfwd>
 #include <iostream>
 #include <utility>
+#include <clsfy/clsfy_binary_threshold_1d.h>
+#include <clsfy/clsfy_classifier_base.h>
 #include <vcl_compiler.h>
 
 

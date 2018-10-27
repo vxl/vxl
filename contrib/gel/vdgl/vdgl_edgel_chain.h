@@ -16,14 +16,14 @@
 //   10-Sep-2004 Peter Vanroose Added copy ctor with explicit vbl_ref_count init
 // \endverbatim
 
-#include "vdgl_edgel_chain_sptr.h"
 #include <iosfwd>
 #include <iostream>
 #include <utility>
+#include <vector>
+#include "vdgl_edgel_chain_sptr.h"
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
 #include <vdgl/vdgl_edgel.h>
-#include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vul/vul_timestamp.h>
 

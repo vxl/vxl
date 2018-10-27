@@ -1,5 +1,5 @@
-#include "bil_image_bounds_from_histogram.h"
 #include <cstdlib>
+#include "bil_image_bounds_from_histogram.h"
 #include <vil/vil_new.h>
 #include <vil/vil_property.h>
 #include <vil/vil_blocked_image_resource.h>

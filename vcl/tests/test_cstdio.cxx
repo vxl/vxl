@@ -1,6 +1,6 @@
-#include <vcl_compiler.h>
 #include <iostream>
 #include <cstdio>
+#include <vcl_compiler.h>
 
 int test_cstdio_main(int argc,char* argv[])
 {

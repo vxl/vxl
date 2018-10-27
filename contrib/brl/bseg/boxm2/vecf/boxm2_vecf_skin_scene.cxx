@@ -1,3 +1,4 @@
+#include <cmath>
 #include "boxm2_vecf_skin_scene.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vgl/vgl_distance.h>
@@ -10,7 +11,6 @@
 #include <vul/vul_timer.h>
 #include <boxm2/cpp/algo/boxm2_surface_distance_refine.h>
 #include <boxm2/cpp/algo/boxm2_refine_block_multi_data.h>
-#include <cmath>
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 typedef boxm2_data_traits<BOXM2_PIXEL>::datatype pixtype;
 

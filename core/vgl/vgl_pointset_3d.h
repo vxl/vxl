@@ -18,9 +18,9 @@
 #include <sstream>
 #include <string>
 #include <utility>
+#include <vector>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <vector>
 #include <vgl/vgl_point_3d.h>
 template <class Type>
 class vgl_pointset_3d

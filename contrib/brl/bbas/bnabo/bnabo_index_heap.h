@@ -40,11 +40,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //
 
 //#include "nabo.h"
-#include <vnl/vnl_vector.h>
 #include <vector>
 #include <algorithm>
 #include <limits>
 #include <iostream>
+#include <vnl/vnl_vector.h>
 
 /*!        \file index_heap.h
         \brief implementation of index heaps

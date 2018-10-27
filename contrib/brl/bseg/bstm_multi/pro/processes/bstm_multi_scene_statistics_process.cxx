@@ -10,11 +10,10 @@
 // \author Raphael Kargon
 // \date 04 Aug 2017
 
-#include <vcl_compiler.h>
-#include <iostream>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vgl/vgl_intersection.h>
 
 #include <boct/boct_bit_tree.h>

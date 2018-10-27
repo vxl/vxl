@@ -8,6 +8,9 @@
 
 #include <iostream>
 #include <map>
+#include <string>
+#include <utility>
+#include <vector>
 #include <rgrl/rgrl_estimator.h>
 #include <rgrl/rgrl_estimator_sptr.h>
 #include <rgrl/rgrl_feature_set.h>
@@ -19,9 +22,6 @@
 #include <rgrl/rgrl_scale_estimator_sptr.h>
 #include <rgrl/rgrl_weighter.h>
 #include <rgrl/rgrl_weighter_sptr.h>
-#include <string>
-#include <utility>
-#include <vector>
 
 #include <vcl_compiler.h>
 

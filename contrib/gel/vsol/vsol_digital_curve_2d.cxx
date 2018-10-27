@@ -1,8 +1,8 @@
 // This is gel/vsol/vsol_digital_curve_2d.cxx
-#include "vsol_digital_curve_2d.h"
 #include <cmath>
 #include <iostream>
 #include <utility>
+#include "vsol_digital_curve_2d.h"
 //:
 // \file
 #include <vsol/vsol_point_2d.h>

@@ -8,6 +8,7 @@
 // it will resample the mapped points to integer location and also discretize
 // the shift vector to integer location.
 
+#include <utility>
 #include <rgrl/rgrl_matcher.h>
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_view.h>
@@ -21,12 +22,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_int_3.h>
 
-#include <utility>
 
-#include <utility>
 
 #include "rgrl_evaluator_sptr.h"
-#include <utility>
 
 #if 0 // ITK-specific
 template < class PixelType, int Dimension > class itkImage;

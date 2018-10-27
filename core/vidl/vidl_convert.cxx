@@ -15,9 +15,9 @@
 //-----------------------------------------------------------------------------
 
 #include <cstring>
-#include <vcl_compiler.h>
 #include <iostream>
 #include <memory>
+#include <vcl_compiler.h>
 #include "vidl_convert.h"
 #include "vidl_frame.h"
 #include "vidl_pixel_format.h"
@@ -35,8 +35,6 @@
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <iostream>
-#include <memory>
 
 //--------------------------------------------------------------------------------
 

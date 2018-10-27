@@ -1,3 +1,4 @@
+#include <utility>
 #include "rgrl_feature_landmark.h"
 //:
 // \file
@@ -11,7 +12,6 @@
 #include <vnl/vnl_math.h>
 #include <vcl_cassert.h>
 
-#include <utility>
 
 typedef std::vector< vnl_vector<double> > vec_vec_type;
 

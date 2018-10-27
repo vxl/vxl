@@ -1,8 +1,8 @@
-#include "rgrl_match_set.h"
 #include <algorithm>
 #include <iostream>
 #include <utility>
 #include <vector>
+#include "rgrl_match_set.h"
 //:
 // \file
 // \brief  Represents a set of matches.

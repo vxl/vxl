@@ -1,8 +1,8 @@
+#include <iostream>
+#include <cstring>
 #include "bstm_multi_block_metadata.h"
 
 #include <vcl_compiler.h>
-#include <iostream>
-#include <cstring>
 
 #include <bstm_multi/bstm_multi_tree_util.h>
 

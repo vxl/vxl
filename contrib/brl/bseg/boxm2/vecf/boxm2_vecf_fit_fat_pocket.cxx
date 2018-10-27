@@ -1,21 +1,21 @@
 //:
 // \file
-#include <vcl_cassert.h>
 #include <string>
 #include <limits>
 #include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <functional>
+#include <utility>
+#include <vcl_cassert.h>
 #include "boxm2_vecf_fit_fat_pocket.h"
 #include "boxm2_vecf_middle_fat_pocket.h"
 #include <vnl/vnl_matrix.h>
-#include <iostream>
-#include <fstream>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/vnl_cost_function.h>
 #include <vgl/vgl_pointset_3d.h>
-#include <functional>   // std::greater
-#include <utility>
 
 class neutral_residual_function : public vnl_least_squares_function{
  public:

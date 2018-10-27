@@ -12,6 +12,7 @@
 // \date 21 Feb 2006
 
 #include <string>
+#include <cerrno>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
 
@@ -27,7 +28,6 @@ extern "C" {
 #include <sys/stat.h>
 
 #include <unistd.h> // for reading/writing to the camera
-#include <cerrno> // for errno
 #include <fcntl.h> // this is for the open, and O_RDWR
 #include <pthread.h> // for threaded approach to the asynch capture
 };

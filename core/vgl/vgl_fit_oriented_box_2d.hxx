@@ -1,8 +1,8 @@
+#include <limits>
 #include "vgl_fit_oriented_box_2d.h"
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_area.h>
-#include <limits>
 
 template <class T>
 vgl_fit_oriented_box_2d<T>::vgl_fit_oriented_box_2d(vgl_polygon<T> const& poly, double dtheta):fixed_theta_(false), fit_valid_(false), dtheta_(dtheta){

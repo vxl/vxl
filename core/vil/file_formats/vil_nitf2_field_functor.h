@@ -9,12 +9,12 @@ class vil_nitf2_field;
 class vil_nitf2_enum_values;
 class vil_nitf2_index_vector;
 
-#include "vil_nitf2_field_sequence.h"
 #include <map>
 #include <string>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include "vil_nitf2_field_sequence.h"
+#include <vcl_compiler.h>
 
 //-----------------------------------------------------------------------------
 //:

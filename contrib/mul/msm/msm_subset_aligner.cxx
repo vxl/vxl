@@ -5,13 +5,13 @@
 
 #include <iostream>
 #include <cstddef>
+#include <sstream>
 #include "msm_subset_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_cassert.h>
 #include <vcl_compiler.h>
-#include <sstream>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_int_list.h>

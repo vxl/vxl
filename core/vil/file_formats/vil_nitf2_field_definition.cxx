@@ -2,12 +2,12 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
+#include <utility>
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_formatter.h"
 
 #include <vcl_cassert.h>
 
-#include <utility>
 
 //==============================================================================
 // Class vil_nitf2_field_definition_node

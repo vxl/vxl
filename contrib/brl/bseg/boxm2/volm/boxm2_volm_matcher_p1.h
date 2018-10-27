@@ -16,6 +16,7 @@
 // \endverbatim
 //
 
+#include <utility>
 #include "boxm2_volm_wr3db_index_sptr.h"
 #include "boxm2_volm_wr3db_index.h"
 #include <volm/volm_camera_space.h>
@@ -32,7 +33,6 @@
 #include <bocl/bocl_kernel.h>
 #include <bocl/bocl_mem.h>
 
-#include <utility>
 
 class boxm2_volm_score_out;
 

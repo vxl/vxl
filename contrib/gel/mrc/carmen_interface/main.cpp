@@ -1,8 +1,7 @@
-#include "carmen_interface.h"
 #include <string>
+#include <iostream>
+#include "carmen_interface.h"
 #include <vcl_compiler.h>
-#include <iostream>
-#include <iostream>
 
 int main(int argc, char ** argv)
 {

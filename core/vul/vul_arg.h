@@ -20,8 +20,8 @@
 #include <list>
 #include <string>
 #include <utility>
-#include <vcl_compiler.h>
 #include <vector>
+#include <vcl_compiler.h>
 #include <vul/vul_export.h>
 #include <vxl_config.h>
 

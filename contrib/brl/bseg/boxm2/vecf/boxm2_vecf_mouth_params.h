@@ -7,8 +7,8 @@
 // \author J.L. Mundy
 // \date   30 December 2015
 //
-#include "boxm2_vecf_articulated_params.h"
 #include <iostream>
+#include "boxm2_vecf_articulated_params.h"
 #include <vgl/vgl_vector_3d.h>
 #include <vnl/vnl_vector_fixed.h>
 class boxm2_vecf_mouth_params : public boxm2_vecf_articulated_params{

@@ -1,14 +1,13 @@
+#include <cmath>
+#include <iostream>
+#include <string>
+#include <cassert>
 #include "vgl_oriented_box_2d.h"
 #include "vgl_closest_point.h"
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_line_2d.h>
-#include <cmath>
-#include <cmath>
 #include <vgl/vgl_tolerance.h>
-#include <iostream>
-#include <string>
-#include <cassert>
 template <class T>
 vgl_oriented_box_2d<T>::vgl_oriented_box_2d(T width, T height, vgl_point_2d<T> const& center, T angle_in_rad)
 {

@@ -1,8 +1,8 @@
-#include "rgrl_debug_util.h"
 #include <cstdio>
 #include <fstream>
 #include <iostream>
 #include <utility>
+#include "rgrl_debug_util.h"
 //:
 // \file
 // \brief Utility functions/classes to help debug registration
