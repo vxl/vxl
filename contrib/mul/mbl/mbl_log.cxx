@@ -669,7 +669,6 @@ const mbl_log_categories::cat_spec&
 
 void mbl_log_categories::print(std::ostream& os) const
 {
-  typedef std::map<std::string, cat_spec>::const_iterator iter;
   assert(!cat_list_.empty());
 
   auto it = cat_list_.begin(), end = cat_list_.end();

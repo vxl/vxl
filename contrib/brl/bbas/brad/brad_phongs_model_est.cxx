@@ -118,7 +118,6 @@ float brad_phongs_model_approx::val(vnl_double_3 view_dir, float sun_elev, float
     vnl_identity_3x3 I;
     vnl_double_3x3 normal_outer_product=outer_product<double,3,3>(normal_,normal_);
     normal_outer_product+=normal_outer_product; // multiply by 2
-    vnl_double_3x3 householder_xform= I-normal_outer_product;
 
     vnl_double_3 half_vector = sun_dir + view_dir;
 

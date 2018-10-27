@@ -117,7 +117,6 @@ void vil3d_find_blobs(const vil3d_image_view<bool>& src,
   int neighbourhood_jj[] = { 0, -1, 0, -1, -1, -1,  0,  0, +1, +1, +1, -1, -1};
   int neighbourhood_kk[] = { 0, 0, -1, -1, -1, -1, -1, -1, -1, -1, -1,  0,  0};
 
-  typedef std::vector<unsigned>::iterator ITER;
 
   for (unsigned k=0; k<nk; ++k)
     for (unsigned j=0; j<nj; ++j)

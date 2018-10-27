@@ -19,7 +19,6 @@ template <unsigned DIM>
 bool bvpl_compute_scene_statistics(boxm_scene< boct_tree<short, vnl_vector_fixed<float,DIM> > > *scene, bsta_histogram<float> &response_hist )
 {
   typedef boct_tree<short, vnl_vector_fixed<float,DIM> > tree_type;
-  typedef boct_tree_cell<short,vnl_vector_fixed<float,DIM> > cell_type;
 
   //(1) Traverse the leaves of the scene
   boxm_cell_iterator<tree_type > iterator = scene->cell_iterator(&boxm_scene<tree_type>::load_block, true);

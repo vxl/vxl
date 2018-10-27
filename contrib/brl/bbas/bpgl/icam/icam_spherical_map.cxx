@@ -12,7 +12,7 @@ bool icam_spherical_map::closest_camera(vgl_ray_3d<double> const& sph_ray,
                                         double& u, double& v
                                         ) const{
   cam_index = 0;
-  vgl_point_3d<double> co = sph_ray.origin();
+//UNUSED  vgl_point_3d<double> co = sph_ray.origin();
   vgl_vector_3d<double> dir = sph_ray.direction();//dir is unit vector
   int imin = -1;
   unsigned i = 0;

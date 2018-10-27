@@ -269,7 +269,6 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
                               float& dist, float& phi)
 {
   dist = -1.0; phi = -1.0;
-  vgl_homg_point_3d<double> cam_center = cam.camera_center();
   vgl_line_2d<double> horizon = bpgl_camera_utils::horizon(cam);
   if (pixel_i < 0 || pixel_i >= ni_ || pixel_j < 0 || pixel_j >= nj_)
     return;

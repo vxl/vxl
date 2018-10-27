@@ -195,7 +195,6 @@ char* boxm2_ocl_test_utils::construct_block_test_stream(int  /*numBuffers*/,
 {
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
     typedef vnl_vector_fixed<unsigned short, 2> ushort2;
-    typedef unsigned short                      ushort;
 
     //write size, init_level, max_level, max_mb
     int numTrees = nums[0]*nums[1]*nums[2];

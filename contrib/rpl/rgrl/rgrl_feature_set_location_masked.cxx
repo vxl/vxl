@@ -28,7 +28,6 @@ features_in_region( feature_vector& final_results, rgrl_mask_box const& roi ) co
   feature_vector results;
   fea_set_sptr_->features_in_region( results, roi );
   // check if features are in the valid region
-  typedef feature_vector::iterator fvec_itr;
   for (auto & result : results)
     if ( mask_->inside( result->location() ) )
       final_results.push_back( result );

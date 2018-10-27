@@ -44,7 +44,6 @@ bool boxm_edge_tangent_updater<T_loc,APM,AUX>::add_cells()
   // get auxiliary scenes associated with each input image
 
   typedef boct_tree<T_loc, boxm_inf_line_sample<APM> > tree_type;
-  typedef boct_tree<T_loc, boxm_edge_tangent_sample<AUX> > aux_tree_type;
 
   std::vector<boxm_aux_scene<T_loc,  boxm_inf_line_sample<APM>, boxm_edge_tangent_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {

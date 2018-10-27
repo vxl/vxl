@@ -210,7 +210,6 @@ void osl_canny_base::Cluster_centre_of_gravity(int * const *jx, int * const *jy,
                                                std::list<int> &yc,
                                                int &x0, int &y0)
 {
-  typedef std::list<int>::iterator it;
 
   if ( xc.empty() )
     return;

@@ -26,7 +26,6 @@ bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(std::string filename)
 
 void bvpl_taylor_basis_factory::create_canonical()
 {
-  typedef vgl_point_3d<float> point_3d;
   typedef bvpl_kernel_dispatch dispatch;
 
   std::ifstream ifs(filename_.c_str());

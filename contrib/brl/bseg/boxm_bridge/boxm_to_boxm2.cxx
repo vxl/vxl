@@ -37,7 +37,6 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
   alpha=sample.alpha;
 
   typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::gauss_type_sf1 gauss_type_sf1;
-  typedef boxm_apm_traits<BOXM_APM_MOG_GREY>::mix_gauss_sf1_type mix_gauss_sf1_type;
 
   bsta_num_obs<bsta_mixture_fixed<gauss_type_sf1, 3> > obs = sample.appearance();
   unsigned int nmix = obs.num_observations*100.0;

@@ -48,7 +48,6 @@ std::string mbl_read_props_type::get_optional_property(const std::string &prop,
 
 void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props)
 {
-  typedef std::map<std::string, std::string>::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (auto & prop : props)

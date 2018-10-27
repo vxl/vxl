@@ -94,7 +94,7 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
     {return backproject(vgl_point_2d<T>(u, v));}
 
   //: Finite ray backprojection.
-  vgl_ray_3d<T> backproject_ray( const vgl_point_2d<T>& image_point ) const;
+  vgl_ray_3d<T> backproject_ray( const vgl_point_2d<T>& image_point ) const ;
 
   //: Finite ray backprojection at u v.
   vgl_ray_3d<T> backproject_ray(T u, T v) const

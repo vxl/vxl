@@ -29,7 +29,6 @@ bool boxm_edge_updater<T_loc,APM,AUX>::add_cells()
   //typedef typename boxm_aux_traits<AUX>::sample_datatype AUX;
 
   typedef boct_tree<T_loc, boxm_edge_sample<APM> > tree_type;
-  typedef boct_tree<T_loc, boxm_aux_edge_sample<AUX> > aux_tree_type;
 
   std::vector<boxm_aux_scene<T_loc,  boxm_edge_sample<APM>, boxm_aux_edge_sample<AUX> > > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {

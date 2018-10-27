@@ -96,7 +96,6 @@ void imesh_triangulate_face(const std::vector<vgl_point_2d<double> >& face_v,
     remain.push_back(i3);
   }
 
-  typedef std::list<unsigned int>::iterator ritr;
   unsigned int remain_size = 0;
   while (remain.size() > 2 && remain_size != remain.size()) {
     remain_size = remain.size();

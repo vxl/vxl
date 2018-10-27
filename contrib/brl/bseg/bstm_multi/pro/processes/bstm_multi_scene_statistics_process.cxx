@@ -66,9 +66,7 @@ bool bstm_multi_scene_statistics_process_cons(bprb_func_process &pro) {
 bool bstm_multi_scene_statistics_process(bprb_func_process &pro) {
   typedef unsigned char uchar;
   typedef unsigned short ushort;
-  typedef vnl_vector_fixed<uchar, 16> uchar16;
   typedef vnl_vector_fixed<uchar, 8> uchar8;
-  typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   if (pro.n_inputs() < ::n_inputs_) {
     std::cout << pro.name() << ": The input number should be " << ::n_inputs_

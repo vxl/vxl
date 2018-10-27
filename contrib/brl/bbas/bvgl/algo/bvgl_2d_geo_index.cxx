@@ -11,11 +11,7 @@
 // function to check whether the given box intersect with a line defined by a vector of points
 static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
 {
-  if (box.min_x() == 0.375 && box.min_y() == 0.5)
-  // FIXME: There is a warning here due to the unused variable i.
-  // I is declared to be 1, then shadowed by another which is declared to be 0.
   // Is the loop that follows correct?
-  unsigned i = 1;
   unsigned n_line_segs = line.size()-1;
   for (unsigned i = 0; i < n_line_segs; i++) {
     vgl_point_2d<double> s = line[i];  vgl_point_2d<double> e = line[i+1];

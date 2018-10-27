@@ -1034,7 +1034,6 @@ bool brad_image_metadata::parse_from_txt(std::string const& filename)
   double val;
 
   bool parsed_gain_offset = false, parsed_sun_irradiance = false;
-  bool parsed_abs_cal = false, parsed_effect_band = false;
   bool parsed_coverage_percentage_ = false;
   std::vector<double> gain_vec;
   std::vector<double> offset_vec;
@@ -1355,7 +1354,6 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // Parse from metadata file for further improvement
   // Also set band dependent adjustment factors gain and offset, could either obtained from hardcoded table or specified from
   // user prepared text metadata file
-  double solar_irrad = 1500.0;
   std::vector<double> solar_irrads; // for multi-spectral imagery there are multiple values
   bool parsed_sun_irradiance = false;
   bool parsed_gain_offset = false;

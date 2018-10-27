@@ -225,7 +225,6 @@ static void test_bvxm_normalize_image_process()
   TEST_NEAR("check slab sum", sum, 1.0f, 0.01);
 
   // test img to slab operation
-  typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
   typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;

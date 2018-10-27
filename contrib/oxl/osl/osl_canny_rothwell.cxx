@@ -681,7 +681,6 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
   // For each dangling-end (X,Y), search for more edges at the reduced scale
   int count=0;
   if (verbose) std::cerr << "percentage of endings examined =   0";
-  typedef std::list<int>::iterator it;
   for (auto i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j)
   {
     //xdang_->reset(),ydang_->reset(); xdang_->next(),ydang_->next(); )  {

@@ -131,7 +131,6 @@ static void test_io()
   typedef bsta_num_obs<mix_gauss_type> obs_mix_gauss_type;
 
   typedef bsta_num_obs<bsta_gauss_sf1> sph_gauss_type;
-  typedef bsta_num_obs<bsta_mixture_fixed<sph_gauss_type, 3> > sph_mix_gauss_type_fixed;
 
   bsta_gauss_if3 init_gauss( init_mean, init_covar );
   bsta_mg_window_updater<mix_gauss_type> updater( init_gauss,

@@ -1027,7 +1027,10 @@ int main(int argc,  char** argv)
       std::cout << " leaf_id = " << l << " leaf bbox = " << leaves[l]->extent_ << std::endl;
       unsigned num_hyps = leaves[l]->hyps_->size();
       for (unsigned h = 0; h < num_hyps; h++)
-        vgl_point_3d<double> h_pt = leaves[l]->hyps_->locs_[h];
+      {
+        /*vgl_point_3d<double> h_pt = */
+             leaves[l]->hyps_->locs_[h];
+      }
     }
     return volm_io::SUCCESS;
   }

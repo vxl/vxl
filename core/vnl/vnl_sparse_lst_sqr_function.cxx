@@ -161,7 +161,6 @@ vnl_sparse_lst_sqr_function::f(vnl_vector<double> const& a,
                                vnl_vector<double> const& c,
                                vnl_vector<double>& e)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
@@ -199,7 +198,6 @@ vnl_sparse_lst_sqr_function::jac_blocks(vnl_vector<double> const& a,
                                         std::vector<vnl_matrix<double> >& B,
                                         std::vector<vnl_matrix<double> >& C)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
@@ -240,7 +238,6 @@ vnl_sparse_lst_sqr_function::fd_jac_blocks(vnl_vector<double> const& a,
                                            std::vector<vnl_matrix<double> >& C,
                                            double stepsize)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
@@ -277,7 +274,6 @@ vnl_sparse_lst_sqr_function::compute_weights(vnl_vector<double> const& a,
                                              vnl_vector<double> const& e,
                                              vnl_vector<double>& weights)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // This is semi const incorrect - there is no vnl_vector_ref_const
@@ -309,7 +305,6 @@ void
 vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
                                            vnl_vector<double>& e)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
@@ -335,7 +330,6 @@ vnl_sparse_lst_sqr_function::apply_weights(vnl_vector<double> const& weights,
                                            std::vector<vnl_matrix<double> >& B,
                                            std::vector<vnl_matrix<double> >& C)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);

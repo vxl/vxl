@@ -387,7 +387,6 @@ void test_filter_kernel()
   //----------------------------------------------------------------------------
   //--- BEGIN BOXM2 API EXAMPLE ------------------------------------------------
   //----------------------------------------------------------------------------
-  typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   DECLARE_FUNC_CONS(boxm2_ocl_filter_process);
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm2_ocl_filter_process, "boxm2OclFilterProcess");
 

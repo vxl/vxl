@@ -216,7 +216,6 @@ rgrl_util_estimate_global_region( rgrl_mask_sptr const&        from_image_roi,
   //
 
   typedef std::vector<vnl_vector<double> > pt_vector;
-  typedef pt_vector::iterator pt_iter;
   constexpr double epsilon = 1;
   const double eps_squared = epsilon*epsilon;
 

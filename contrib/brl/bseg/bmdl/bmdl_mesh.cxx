@@ -796,7 +796,6 @@ void bmdl_mesh::mesh_lidar(const std::vector<bmdl_edge>& edges,
         // is this edge attached to the ground?
         bool on_ground = other == 0 || regions[other-1].edge_idxs.empty();
 
-        typedef std::vector<unsigned int>::const_iterator vfitr;
         typedef std::vector<unsigned int>::const_reverse_iterator vritr;
 
         auto i1beg = jvs1.begin(); // first vertex is on ground

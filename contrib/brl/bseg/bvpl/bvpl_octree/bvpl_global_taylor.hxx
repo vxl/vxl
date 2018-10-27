@@ -109,11 +109,9 @@ bvpl_global_taylor<T_data, DIM>::bvpl_global_taylor(const std::string &path, con
 template<class T_data, unsigned DIM>
 void bvpl_global_taylor<T_data, DIM>::compute_taylor_coefficients(int scene_id, int block_i, int block_j, int block_k)
 {
-  typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
 
   typedef boct_tree<short,vnl_vector_fixed<T_data,DIM> > taylor_tree_type;
-  typedef boct_tree_cell<short,vnl_vector_fixed<T_data,DIM> > taylor_cell_type;
 
   boxm_scene_base_sptr data_scene_base =load_scene(scene_id);
   boxm_scene_base_sptr proj_scene_base =load_projection_scene(scene_id);

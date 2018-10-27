@@ -54,7 +54,6 @@ bsta_mix_beta_updater<mix_dist_>::update( mix_dist_& mix, const vector_& sample,
     }
     else {
       // compute probabilites for each match
-      typedef typename std::vector<unsigned int>::iterator m_itr;
       T sum_probs = T(0);
       for (unsigned int i : matched) {
         // obs_dist_& b = mix.distribution(i);

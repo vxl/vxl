@@ -103,8 +103,6 @@ void boxm_render_shadow_image_rt(boxm_scene<boct_tree<T_loc, boxm_sample<APM> > 
 {
   typedef boxm_sample<APM> T_data;
   typedef typename boxm_aux_traits<AUX>::sample_datatype T_aux;
-  typedef boct_tree<T_loc, T_data > tree_type;
-  typedef boct_tree<T_loc, T_aux > aux_tree_type;
   boxm_aux_scene<T_loc, T_data, T_aux> aux_scene(&scene, aux_scene_id, boxm_aux_scene<T_loc, T_data, T_aux>::LOAD);
 
   typedef boxm_render_expected_shadow_image_functor<T_loc, APM, AUX > exp_funct;

@@ -343,7 +343,6 @@ bool brad_spectral_angle_mapper::add_material_per_pixel(const std::string type,
 //---------------------------------------------------------------------------
 void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
 
-  int num_bands = bands_min_.size();
 
   bool good_file;
   for (vul_file_iterator fi(aster_dir); fi; ++fi) {

@@ -23,7 +23,6 @@ bool compute_ray_statistics(boxm_scene<boct_tree<T_loc, T_data > >& scene,
   raytracer.run(num_rays_functor);
 
   typedef boct_tree<T_loc, T_data > tree_type;
-  typedef boct_tree_cell<T_loc,T_data > cell_type;
 
   typedef boct_tree<T_loc, boxm_scalar_sample<sample_datatype> > aux_tree_type;
   typedef boct_tree_cell<T_loc,boxm_scalar_sample<sample_datatype> > aux_cell_type;

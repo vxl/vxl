@@ -109,7 +109,6 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   int neighbourhood_ii[] = { -1,  0, -1, +1};
   int neighbourhood_jj[] = {  0, -1, -1, -1};
 
-  typedef std::vector<unsigned>::iterator ITER;
 
   for (unsigned j=0; j<nj; ++j)
     for (unsigned i=0; i<ni; ++i)

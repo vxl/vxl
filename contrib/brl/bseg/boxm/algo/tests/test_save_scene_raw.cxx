@@ -76,7 +76,6 @@ static int test_save_scene_raw()
   s2_sample.alpha=0.6f;
   s2_sample.set_appearance(s2_simple_obs_mix_gauss_val_sf1);
 
-  typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
 
   float count=0.1f;
   while (!iter.end())
