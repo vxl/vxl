@@ -35,7 +35,6 @@
 //   Amitha Perera - 13 Sep 2002 - make constant initialization standards compliant.
 //   Peter Vanroose -22 Oct 2012 - was a class, now is a namespace
 //                                 also renamed functions vnl_math_isnan etc. to vnl_math::isnan
-//   Peter Vanroose -15 Nov 2012 - the deprecated vnl_math_* #defines are now only available when VNL_CONFIG_LEGACY_METHODS==1
 // \endverbatim
 
 #include <cmath>
@@ -48,9 +47,6 @@
 #include "vnl/vnl_export.h"
 #ifdef VNL_CHECK_FPU_ROUNDING_MODE
 # include <vcl_cassert.h>
-#endif
-#if VNL_CONFIG_LEGACY_METHODS
-# include <vcl_deprecated.h>
 #endif
 
 // Figure out when the fast implementation can be used

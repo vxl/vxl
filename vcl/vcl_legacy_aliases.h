@@ -1,6 +1,8 @@
 #ifndef VCL_LEGACY_ALIASES_H_
 #define VCL_LEGACY_ALIASES_H_
 
+# include <vcl_deprecated.h>
+
 # define VXL_CONSTEXPR_FUNC constexpr  //constexpr in C++11, empty in C++98
 # define VXL_CONSTEXPR_VAR  constexpr  //constexpr in C++11, empty in C++98
 # define VXL_FULLCXX11SUPPORT 1
