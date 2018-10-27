@@ -12,7 +12,7 @@
 // \author Aaron Kotcheff (Manchester)
 // \brief A superior random number generator
 
-VXL_CONSTEXPR_VAR unsigned int vnl_random_array_size = 37;
+constexpr unsigned int vnl_random_array_size = 37;
 
 //: A superior random number generator.
 // Implements a new random number generator that

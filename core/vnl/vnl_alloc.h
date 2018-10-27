@@ -38,9 +38,9 @@
 #include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 
-VXL_CONSTEXPR_VAR int VNL_ALLOC_ALIGN = 8;
-VXL_CONSTEXPR_VAR std::size_t VNL_ALLOC_MAX_BYTES = 256;
-VXL_CONSTEXPR_VAR std::size_t VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
+constexpr int VNL_ALLOC_ALIGN = 8;
+constexpr std::size_t VNL_ALLOC_MAX_BYTES = 256;
+constexpr std::size_t VNL_ALLOC_NFREELISTS = VNL_ALLOC_MAX_BYTES/VNL_ALLOC_ALIGN;
 
 class VNL_EXPORT vnl_alloc
 {

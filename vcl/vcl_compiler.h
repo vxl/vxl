@@ -1,5 +1,6 @@
 #ifndef vcl_compiler_h_
 #define vcl_compiler_h_
+#define VXL_LEGACY_FUTURE_REMOVE
 //:
 // \file
 // \brief Uniform macro definition scheme for finding out about the compiler
@@ -191,6 +192,16 @@
 // Use VCL_STATIC_CONST_INIT_INT_DEFN in some .cxx file to define
 // the constant.
 //
+
+#ifdef VXL_LEGACY_FUTURE_REMOVE
+# define VXL_CONSTEXPR_FUNC constexpr  "ERROR: VXL_CONSTEXPR_FUNC deprecated, use C++11 constexpr"
+# define VXL_CONSTEXPR_VAR  constexpr  "ERROR: VXL_CONSTEXPR_VAR deprecated, use C++11 constexpr"
+#else
+# define VXL_CONSTEXPR_FUNC constexpr  //constexpr in C++11, empty in C++98
+# define VXL_CONSTEXPR_VAR  constexpr  //constexpr in C++11, empty in C++98
+#endif
+
+
 #if VXL_COMPILER_CXX_CONSTEXPR //C++11 compliant
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) = x
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) /* initialized at declaration */
@@ -198,8 +209,8 @@
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
 
-# define VXL_CONSTEXPR_FUNC constexpr  //constexpr in C++11, empty in C++98
-# define VXL_CONSTEXPR_VAR  constexpr  //constexpr in C++11, const in C++98
+# define VXL_CONSTEXPR_FUNC constexpr  "ERROR: VXL_CONSTEXPR_FUNC deprecated, use C++11 constexpr"
+# define VXL_CONSTEXPR_VAR  constexpr  "ERROR: VXL_CONSTEXPR_VAR deprecated, use C++11 constexpr"
 #else
 # define VCL_STATIC_CONST_INIT_INT_DECL(x) /* not allowed */
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) = x
@@ -207,8 +218,6 @@
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) /* not allowed */
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) = x
 
-# define VXL_CONSTEXPR_FUNC           //constexpr in C++11, empty in C++98
-# define VXL_CONSTEXPR_VAR const      //constexpr in C++11, const in C++98
 #endif
 
 #if VXL_COMPILED_CXX_STANDARD_VERSION >= 201103L
@@ -318,7 +327,6 @@
 // NOTE: VXL_LEGACY_FUTURE_REMOVE is an advanced developer
 //       feature that can only be activated by explicitly
 //       using a compiler flag like "-DVXL_LEGACY_FUTURE_REMOVE"
-#define VXL_LEGACY_FUTURE_REMOVE
 #ifndef VXL_LEGACY_FUTURE_REMOVE
 #define vcl_adjacent_find std::adjacent_find
 #define vcl_and std::and
