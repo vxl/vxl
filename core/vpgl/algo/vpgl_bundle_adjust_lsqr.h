@@ -80,6 +80,12 @@ class vpgl_bundle_adjust_lsqr : public vnl_sparse_lst_sqr_function
                           std::vector<vnl_matrix<double> >& B,
                           std::vector<vnl_matrix<double> >& C) override;
 
+
+  /* parent class has different signatures for these functions */
+  using vnl_sparse_lst_sqr_function::jac_Aij;
+  using vnl_sparse_lst_sqr_function::jac_Bij;
+  using vnl_sparse_lst_sqr_function::jac_Cij;
+
   //: compute the Jacobian Aij
   virtual void jac_Aij(unsigned int i,
                        unsigned int j,
