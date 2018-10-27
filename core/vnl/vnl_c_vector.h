@@ -30,15 +30,15 @@
 #include "vnl/vnl_export.h"
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
-template <class T, class S> VNL_TEMPLATE_EXPORT void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
-template <class T, class S> VNL_TEMPLATE_EXPORT void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
-template <class T, class S> VNL_TEMPLATE_EXPORT void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
-template <class T, class S> VNL_TEMPLATE_EXPORT void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
-template <class T, class S> VNL_TEMPLATE_EXPORT void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_two_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_inf_norm(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_two_norm_squared(T const *p, unsigned n, S *out);
+template <class T, class S> VNL_EXPORT void vnl_c_vector_rms_norm(T const *p, unsigned n, S *out);
 
 //: vnl_c_vector interfaces to lowlevel memory-block operations.
-VCL_TEMPLATE_EXPORT template <class T>
-class VNL_TEMPLATE_EXPORT vnl_c_vector
+VCL_EXPORT template <class T>
+class VNL_EXPORT vnl_c_vector
 {
  public:
   typedef typename vnl_numeric_traits<T>::abs_t abs_t;
@@ -151,7 +151,7 @@ class VNL_TEMPLATE_EXPORT vnl_c_vector
 
 //: Input & output
 // \relatesalso vnl_c_vector
-template <class T> VNL_TEMPLATE_EXPORT
+template <class T> VNL_EXPORT
 std::ostream& print_vector(std::ostream&, T const*, unsigned);
 
 #endif // vnl_c_vector_h_

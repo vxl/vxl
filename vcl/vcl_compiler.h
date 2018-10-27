@@ -120,9 +120,9 @@
 // gcc understands it, but ignore it noisily.
 // icc understands it, but ignore it noisily.
 #if !VCL_HAS_EXPORT || defined(VCL_GCC) || defined(VCL_ICC)
-# define VCL_TEMPLATE_EXPORT /* ignore */
+# define VCL_EXPORT /* ignore */
 #else
-# define VCL_TEMPLATE_EXPORT export
+# define VCL_EXPORT export
 #endif
 
 #if VCL_NEEDS_INLINE_INSTANTIATION
