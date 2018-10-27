@@ -93,9 +93,9 @@ void brec_glitch::extend_prob_to_square_region(int c_size, vil_image_view<float>
   for (unsigned i = 0; i < input_map.ni(); i++) {
     for (unsigned j = 0; j < input_map.nj(); j++) {
       if (input_map(i,j) > 0) {
-        for (unsigned k = 0; k < neighborhood.size(); k++) {
-          int ii = i+neighborhood[k].first;
-          int jj = j+neighborhood[k].second;
+        for (auto & k : neighborhood) {
+          int ii = i+k.first;
+          int jj = j+k.second;
           if (ii > 0 && jj > 0 && ii < (int)output_map.ni() && jj < (int)output_map.nj())
             output_map(ii, jj) = input_map(i,j);
         }

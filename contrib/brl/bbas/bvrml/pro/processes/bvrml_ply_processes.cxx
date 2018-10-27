@@ -115,9 +115,9 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
   double avg_CE = 0.0;
   unsigned cnt = 0;
   //: now write the filtered points to vrml
-  for (unsigned i = 0; i < data.size(); ++i) {
-    vgl_point_3d<float> pt = data[i].first;
-    std::vector<bvrml_point_cov> fpts = data[i].second;
+  for (auto & i : data) {
+    vgl_point_3d<float> pt = i.first;
+    std::vector<bvrml_point_cov> fpts = i.second;
     //vgl_sphere_3d<float> sp(pt.x(), pt.y(), pt.z(), 0.5f);
     vgl_sphere_3d<float> sp(pt.x(), pt.y(), pt.z(), 0.1f);
     bvrml_write::write_vrml_sphere(ofs, sp, 1.0, 0.0, 0.0, 0.0f);
@@ -126,8 +126,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
       double dist_min = 10000000.0;
       bvrml_point_cov pc_min;
       vgl_point_3d<float> pt_min;
-      for (unsigned j = 0; j < fpts.size(); ++j) {
-        bvrml_point_cov pc = fpts[j];
+      for (auto pc : fpts) {
         vgl_point_3d<float> pt_f(pc.p_[0], pc.p_[1], pc.p_[2]);
         vgl_vector_3d<float> diff_vec = pt_f-pt;
         double dist = diff_vec.length();
@@ -148,8 +147,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
     }
     else
       fpts_to_write = fpts;
-    for (unsigned j = 0; j < fpts_to_write.size(); ++j) {
-      bvrml_point_cov pc = fpts_to_write[j];
+    for (auto pc : fpts_to_write) {
       vgl_sphere_3d<float> fsp(pc.p_[0], pc.p_[1], pc.p_[2], 0.1f);
       bvrml_write::write_vrml_sphere(ofs, fsp, 0.0, 0.0, 1.0, 0.0f);
       //: also put a LE & CE indicator cylinder
@@ -272,8 +270,8 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
       // now check if this point needs to be collected
       vgl_point_3d<float> read_pt(parsed_ply->p[0], parsed_ply->p[1], parsed_ply->p[2]);
       std::vector<point_pair>& pp = parsed_ply->data;
-      for (unsigned i = 0; i < pp.size(); ++i) {
-        vgl_vector_3d<float> dif = read_pt-pp[i].first;
+      for (auto & i : pp) {
+        vgl_vector_3d<float> dif = read_pt-i.first;
         float dist = (float)dif.length();
         if (dist <= parsed_ply->dist_thres) {
           bvrml_point_cov pc;
@@ -286,7 +284,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
           pc.LE_ = parsed_ply->LE;
           pc.CE_ = parsed_ply->CE;
           pc.prob_ = parsed_ply->prob;
-          pp[i].second.push_back(pc);
+          i.second.push_back(pc);
         }
       }
       break;

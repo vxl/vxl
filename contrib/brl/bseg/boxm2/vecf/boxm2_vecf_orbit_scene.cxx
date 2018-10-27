@@ -343,10 +343,9 @@ boxm2_vecf_orbit_scene
   vgl_sphere_3d<double> sp(0.0, -y0, 0.0, params_.eye_radius_);
    // cell in a box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = vgl_distance(cell_center, sp);
     if(d < d_thresh){
       if(!is_type_global(cell_center, SPHERE)){
@@ -438,8 +437,7 @@ boxm2_vecf_orbit_scene
       vgl_point_3d<double>& p = sphere_cell_centers_[i];
       unsigned indx_i = sphere_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -701,8 +699,7 @@ boxm2_vecf_orbit_scene
       vgl_point_3d<double>& p = eyelid_cell_centers_[i];
       unsigned indx_i = eyelid_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -731,10 +728,9 @@ boxm2_vecf_orbit_scene
   vgl_box_3d<double> bb = eyelid_geo_.bounding_box(margin);
   // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = eyelid_geo_.distance(cell_center);
 
     if(d < d_thresh){
@@ -797,8 +793,7 @@ boxm2_vecf_orbit_scene
       vgl_point_3d<double>& p = lower_eyelid_cell_centers_[i];
       unsigned indx_i = lower_eyelid_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -827,10 +822,9 @@ boxm2_vecf_orbit_scene
   vgl_box_3d<double> bb = lower_eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
         double d = lower_eyelid_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!lower_eyelid_geo_.inside(cell_center))
@@ -895,8 +889,7 @@ boxm2_vecf_orbit_scene
       vgl_point_3d<double>& p = eyelid_crease_cell_centers_[i];
       unsigned indx_i = eyelid_crease_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -925,10 +918,9 @@ boxm2_vecf_orbit_scene
   vgl_box_3d<double> bb = eyelid_crease_geo_.bounding_box();
   // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = eyelid_crease_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!eyelid_crease_geo_.inside(cell_center))

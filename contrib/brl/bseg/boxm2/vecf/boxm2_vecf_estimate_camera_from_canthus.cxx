@@ -6,10 +6,10 @@ bool boxm2_vecf_estimate_camera_from_canthus::estimate_camera(vgl_vector_2d<doub
   std::vector<std::string> field_array;
   field_array.assign(fields,fields + sizeof(fields)/sizeof(fields[0]));
   unsigned count_missing = 0;
-  for (unsigned i = 0 ; i <field_array.size();i++){
-    it = this->dlib_part_map_.find(field_array[i]);
+  for (const auto & i : field_array){
+    it = this->dlib_part_map_.find(i);
     if (it == dlib_part_map_.end()){
-      std::cout<<" Missing dlib part " << field_array[i] << std::endl;
+      std::cout<<" Missing dlib part " << i << std::endl;
       count_missing++;
     }
   }

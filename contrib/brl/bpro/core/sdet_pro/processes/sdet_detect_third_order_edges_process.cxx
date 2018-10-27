@@ -88,9 +88,7 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
   vil_image_view<vxl_byte> edge_img_byte(input_image.ni(),input_image.nj());
   edge_img_byte.fill(0);
 
-  for (unsigned k = 0; k < edgels.size(); k++) {
-    vdgl_edgel edgel = edgels[k];
-
+  for (auto edgel : edgels) {
     double x = edgel.x();
     double y = edgel.y();
 

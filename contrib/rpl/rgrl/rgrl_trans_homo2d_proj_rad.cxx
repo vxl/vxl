@@ -151,9 +151,9 @@ scale_by( double scale ) const
   const double sq_scale = scale*scale;
 
   double base = 1;
-  for ( unsigned int i=0; i<radk.size(); ++i ) {
+  for (double & i : radk) {
     base *= sq_scale;
-    radk[i] /= base;
+    i /= base;
   }
 
   rgrl_transformation_sptr xform
@@ -206,8 +206,8 @@ write(std::ostream& os ) const
 
   // radial terms
   os << rad_k_.size() << "  ";
-  for ( unsigned i=0; i<rad_k_.size(); ++i )
-    os << rad_k_[i] << ' ';
+  for (double i : rad_k_)
+    os << i << ' ';
 
   os << '\n' << from_centre_ << "   " << to_centre_
      << '\n' << image_centre_ << "   " << centre_mag_norm_const_
@@ -277,9 +277,9 @@ radial_params() const
   const double centre_mag_norm = centre_mag_norm_const();
 
   double base = 1;
-  for ( unsigned i=0; i<ori_radk.size(); ++i ) {
+  for (double & i : ori_radk) {
     base *= centre_mag_norm;
-    ori_radk[i] /= base;
+    i /= base;
   }
   return ori_radk;
 }

@@ -546,13 +546,12 @@ std::vector<vpgl_perspective_camera<T> > cameras_from_directory(std::string dir,
   std::sort(cam_files.begin(), cam_files.end());
 
   //take sorted lists and load from file
-  for (std::vector<std::string>::iterator iter = cam_files.begin();
-       iter != cam_files.end(); ++iter)
+  for (auto & cam_file : cam_files)
   {
-    std::ifstream ifs(iter->c_str());
+    std::ifstream ifs(cam_file.c_str());
     vpgl_perspective_camera<T> pcam;
     if (!ifs.is_open()) {
-      std::cerr << "Failed to open file " << *iter << '\n';
+      std::cerr << "Failed to open file " << cam_file << '\n';
     }
     else  {
       ifs >> pcam;

@@ -168,8 +168,8 @@ std::map<boxm2_block_id, boxm2_data<data_type>* > boxm2_asio_mgr::get_loaded_dat
     }
 
     //delete loaded entries from data list after iterating through the list
-    for (unsigned int i=0; i<to_delete.size(); ++i)
-      data_list.erase(to_delete[i]);
+    for (auto i : to_delete)
+      data_list.erase(i);
   }
   return toReturn;
 }

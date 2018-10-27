@@ -51,17 +51,17 @@ int main(int argc,  char** argv)
   //std::vector<volm_tile> tiles = volm_tile::generate_p1_tiles();
   std::vector<volm_tile> tiles = volm_tile::generate_p1_wr1_tiles();
 
-  for (unsigned i = 0; i < tiles.size(); i++) {
-    std::string out_name = out_file() + "_volm_" + tiles[i].get_string() + ".kml";
-    tiles[i].write_kml(out_name, 1000);
+  for (auto & tile : tiles) {
+    std::string out_name = out_file() + "_volm_" + tile.get_string() + ".kml";
+    tile.write_kml(out_name, 1000);
   }
 
-  for (unsigned i = 0; i < tiles.size(); i++) {
+  for (auto & tile : tiles) {
     //boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(lvcs, tiles[i], int_i(), int_j(), alt(), dems, cams);
-    boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(tiles[i]);
+    boxm2_volm_loc_hypotheses_sptr h = new boxm2_volm_loc_hypotheses(tile);
     h->add_dems(scene, int_i(), int_j(), alt(), dems, cams);
-    std::cout << "constructed: " << h->locs_.size() << " hypotheses for tile: " << tiles[i].get_string() << std::endl;
-    std::string out_name = out_file() + "_" + tiles[i].get_string() + ".bin";
+    std::cout << "constructed: " << h->locs_.size() << " hypotheses for tile: " << tile.get_string() << std::endl;
+    std::string out_name = out_file() + "_" + tile.get_string() + ".bin";
     h->write_hypotheses(out_name);
 
 #if 0

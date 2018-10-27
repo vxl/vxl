@@ -23,8 +23,7 @@
 bool bmsh3d_bnd_chain::is_V_incident_via_HE (const bmsh3d_vertex* V)
 {
   //Loop through all halfedges and check if V is on the bnd_chain.
-  for (unsigned int i=0; i<HE_list_.size(); i++) {
-    bmsh3d_halfedge* he = HE_list_[i];
+  for (auto he : HE_list_) {
     if (he->edge()->is_V_incident (V))
       return true;
   }

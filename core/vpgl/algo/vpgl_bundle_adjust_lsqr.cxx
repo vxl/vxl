@@ -52,9 +52,8 @@ vpgl_bundle_adjust_lsqr(unsigned int num_params_per_a,
 {
   assert(image_points.size() == inv_covars.size());
   vnl_matrix<double> U(2,2,0.0);
-  for (unsigned i=0; i<inv_covars.size(); ++i)
+  for (const auto & S : inv_covars)
   {
-    const vnl_matrix<double>& S = inv_covars[i];
     if (S(0,0) > 0.0) {
       U(0,0) = std::sqrt(S(0,0));
       U(0,1) = S(0,1)/U(0,0);
@@ -96,10 +95,10 @@ vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const& a,
     vnl_double_3x4 Pi = param_to_cam_matrix(i,a,c);
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
 
       // Construct the jth point
       vnl_vector_fixed<double,4> Xj = param_to_pt_vector(j,b,c);
@@ -174,10 +173,10 @@ vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const& a,
                                     const_cast<double*>(a.data_block())+index_a(i));
 
     vnl_crs_index::sparse_vector row = residual_indices_.sparse_row(i);
-    for (sv_itr r_itr=row.begin(); r_itr!=row.end(); ++r_itr)
+    for (auto & r_itr : row)
     {
-      unsigned int j = r_itr->second;
-      unsigned int k = r_itr->first;
+      unsigned int j = r_itr.second;
+      unsigned int k = r_itr.first;
       // This is semi const incorrect - there is no vnl_vector_ref_const
       const vnl_vector_ref<double> bj(number_of_params_b(j),
                                       const_cast<double*>(b.data_block())+index_b(j));

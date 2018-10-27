@@ -167,8 +167,8 @@ static void test_geo_index2()
   std::vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   std::cout << " \t leaves for current tree: \n\t";
-  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-    leaves[l_idx]->extent_.print(std::cout);
+  for (auto & leave : leaves) {
+    leave->extent_.print(std::cout);
     std::cout << "\n\t";
   }
   std::cout << std::endl;
@@ -187,15 +187,15 @@ static void test_geo_index2()
   bbox.print(std::cout);
   std::cout << std::endl;
   std::cout << " \t intersect leaves are: \n\t";
-  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-    leaves[l_idx]->extent_.print(std::cout);
+  for (auto & leave : leaves) {
+    leave->extent_.print(std::cout);
     std::cout << "\n\t";
   }
   std::cout << std::endl;
   TEST("get leaves method by 2D bounding box", leaves.size(), 3);
   bool cast_correct = true;
-  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
-    cast_correct = cast_correct && dynamic_cast<volm_geo_index2_node<volm_loc_hyp_sptr>* >(leaves[l_idx].ptr());
+  for (auto & leave : leaves)
+    cast_correct = cast_correct && dynamic_cast<volm_geo_index2_node<volm_loc_hyp_sptr>* >(leave.ptr());
   TEST("type of the contest in each leave", cast_correct, true);
 #endif
 

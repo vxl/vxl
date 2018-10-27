@@ -171,7 +171,7 @@ bool boxm2_ocl_update_view_dep_app::update(boxm2_scene_sptr         scene,
 
   // Output Array
   float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+  for (float & i : output_arr) i = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -539,29 +539,29 @@ bool boxm2_ocl_update_view_dep_app::validate_appearances(boxm2_scene_sptr scene,
 {
   std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false, foundNumObsType = false;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_VIEW_DEP ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_VIEW_DEP_COMPACT ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_NUM_OBS_VIEW>::prefix() )
     {
-      num_obs_type = apps[i];
+      num_obs_type = app;
       foundNumObsType = true;
     }
-    else if( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::prefix())
+    else if( app == boxm2_data_traits<BOXM2_NUM_OBS_VIEW_COMPACT>::prefix())
     {
-      num_obs_type = apps[i];
+      num_obs_type = app;
       options+= " -D NUM_OBS_VIEW_COMPACT ";
       foundNumObsType = true;
     }

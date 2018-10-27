@@ -209,9 +209,9 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
       return false;
     vgl_h_matrix_2d<double> Hsh = compute_homography(H0,t,cam, world_plane);
     std::vector<vil_image_view<float> > out_vs;
-    for (unsigned p = 0; p<float_vs.size(); ++p){
+    for (const auto & float_v : float_vs){
       vil_image_view<float> out_view(out_ni, out_nj);
-      if (!brip_vil_float_ops::homography(float_vs[p], Hsh, out_view, true))
+      if (!brip_vil_float_ops::homography(float_v, Hsh, out_view, true))
         return false;
       out_vs.push_back(out_view);
     }

@@ -57,8 +57,8 @@ bool volm_create_satellite_resources_process(bprb_func_process& pro)
 
   // find the bbox of ROI from its polygon
   vgl_box_2d<double> bbox;
-  for (unsigned i = 0; i < poly[0].size(); i++) {
-    bbox.add(poly[0][i]);
+  for (auto i : poly[0]) {
+    bbox.add(i);
   }
   std::cout << "bbox of ROI: " << bbox << std::endl;
 
@@ -244,8 +244,8 @@ bool volm_query_satellite_resources_kml_process(bprb_func_process& pro)
   }
   vgl_polygon<double> poly = bkml_parser::parse_polygon(kml_file);
   vgl_box_2d<double> bbox;
-  for (unsigned i = 0; i < poly[0].size(); i++)
-    bbox.add(poly[0][i]);
+  for (auto i : poly[0])
+    bbox.add(i);
   double lower_left_lon  = bbox.min_x();
   double lower_left_lat  = bbox.min_y();
   double upper_right_lon = bbox.max_x();
@@ -340,24 +340,24 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
   res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids,10.0); // pass gsd_thres very high, only interested in finding all the images that intersect the box
   double largest_view_angle = -100.0;
   unsigned id = 0;
-  for (unsigned i = 0; i < ids.size(); i++) {
-    if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0) {
-      std::cout << "res: " << res->resources_[ids[i]].name_
-               << " view azimuth: " << res->resources_[ids[i]].meta_->view_azimuth_
-               << " view elev: " << res->resources_[ids[i]].meta_->view_elevation_ << '\n';
+  for (unsigned int i : ids) {
+    if (res->resources_[i].meta_->satellite_name_.compare(sat_name) == 0) {
+      std::cout << "res: " << res->resources_[i].name_
+               << " view azimuth: " << res->resources_[i].meta_->view_azimuth_
+               << " view elev: " << res->resources_[i].meta_->view_elevation_ << '\n';
       // pick the image with largest view angle and least could coverage if possible
-      if (largest_view_angle < res->resources_[ids[i]].meta_->view_elevation_) {
+      if (largest_view_angle < res->resources_[i].meta_->view_elevation_) {
         // check whether this image is non-cloud one or not
         if (non_cloud_folder.compare("") != 0) {
-          std::string non_cloud_img = non_cloud_folder + "/" + res->resources_[ids[i]].name_ + "_cropped.tif";
+          std::string non_cloud_img = non_cloud_folder + "/" + res->resources_[i].name_ + "_cropped.tif";
           if (vul_file::exists(non_cloud_img)) {
-            largest_view_angle = res->resources_[ids[i]].meta_->view_elevation_;
-            id = ids[i];
+            largest_view_angle = res->resources_[i].meta_->view_elevation_;
+            id = i;
           }
         }
         else {  // TO DO -- add edge detection here if non-cloud images folder is not given
-          largest_view_angle = res->resources_[ids[i]].meta_->view_elevation_;
-          id = ids[i];
+          largest_view_angle = res->resources_[i].meta_->view_elevation_;
+          id = i;
         }
       }
     }
@@ -412,9 +412,9 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   res->query(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, band, ids,10.0);
   // map of resources that have given band and sat_name, sorted by the view angle
   std::map<double, unsigned, std::greater<double> > band_res;
-  for (unsigned i = 0; i < ids.size(); i++)
-    if (res->resources_[ids[i]].meta_->satellite_name_.compare(sat_name) == 0)
-      band_res.insert(std::pair<double, unsigned>(res->resources_[ids[i]].meta_->view_elevation_, ids[i]));
+  for (unsigned int & id : ids)
+    if (res->resources_[id].meta_->satellite_name_.compare(sat_name) == 0)
+      band_res.insert(std::pair<double, unsigned>(res->resources_[id].meta_->view_elevation_, id));
 
   // text file where the sorted PAN/MULTI pair will be stored
   std::string out_txt = out_folder + "/pan_multi_pair_list.txt";
@@ -423,48 +423,48 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
 
   // find the PAN/MULTI pair
   std::map<double, std::pair<std::string, std::string>, std::greater<double> > pairs;
-  for (std::map<double, unsigned, std::greater<double> >::iterator mit = band_res.begin(); mit != band_res.end(); ++mit) {
-    std::string img_name = res->resources_[mit->second].name_;
+  for (auto & band_re : band_res) {
+    std::string img_name = res->resources_[band_re.second].name_;
     std::string pair_name = res->find_pair(img_name);
     if (pair_name.compare("") == 0)
       continue;
     if (non_cloud_folder.compare("") != 0)
     {
       std::string non_cloud_img_band = non_cloud_folder + "/" + img_name  + "_cropped.tif";
-      std::cout << " view_angle = " << mit->first << " img_name = " << res->resources_[mit->second].full_path_
+      std::cout << " view_angle = " << band_re.first << " img_name = " << res->resources_[band_re.second].full_path_
              << " pair_name = " << res->full_path(pair_name).first
              << " non_cloud_img = " << non_cloud_img_band
              << std::endl;
       if (vul_file::exists(non_cloud_img_band)) {
         std::pair<std::string, std::string> name_pair;
         if (band == "PAN") {
-          name_pair.first  = res->resources_[mit->second].full_path_;
+          name_pair.first  = res->resources_[band_re.second].full_path_;
           name_pair.second = res->full_path(pair_name).first;
         }
         else if (band == "MULTI") {
           name_pair.first  = res->full_path(pair_name).first;
-          name_pair.second = res->resources_[mit->second].full_path_;
+          name_pair.second = res->resources_[band_re.second].full_path_;
         }
         else {
           std::cout << pro.name() << ": unknown input band " << band << std::endl;
           return false;
         }
-        pairs.insert(std::pair<double, std::pair<std::string, std::string> >(mit->first, name_pair));
+        pairs.insert(std::pair<double, std::pair<std::string, std::string> >(band_re.first, name_pair));
       }
     }
     else {
       std::pair<std::string, std::string> name_pair;
       if (band == "PAN") {
-        name_pair.first = res->resources_[mit->second].full_path_;
+        name_pair.first = res->resources_[band_re.second].full_path_;
         name_pair.second = res->full_path(pair_name).first;
       } else if (band == "MULTI") {
         name_pair.first = res->full_path(pair_name).first;
-        name_pair.second = res->resources_[mit->second].full_path_;
+        name_pair.second = res->resources_[band_re.second].full_path_;
       } else {
         std::cout << pro.name() << ": unknown input band " << band << std::endl;
         return false;
       }
-      pairs.insert(std::pair<double, std::pair<std::string, std::string> >(mit->first, name_pair));
+      pairs.insert(std::pair<double, std::pair<std::string, std::string> >(band_re.first, name_pair));
     }
   }
   // output
@@ -473,8 +473,8 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
     return false;
   }
 
-  for (std::map<double, std::pair<std::string, std::string>, std::greater<double> >::iterator mit = pairs.begin(); mit != pairs.end(); ++mit)
-    ofs << mit->first << " \t " << mit->second.first << " \t " << mit->second.second << std::endl;
+  for (auto & mit : pairs)
+    ofs << mit.first << " \t " << mit.second.first << " \t " << mit.second.second << std::endl;
   ofs.close();
 
   pro.set_output_val<std::string>(0, pairs.begin()->second.first);
@@ -706,8 +706,8 @@ bool volm_find_satellite_pairs_poly_process(bprb_func_process& pro)
 
   // find the bbox of ROI from its polygon
   vgl_box_2d<double> bbox;
-  for (unsigned i = 0; i < poly[0].size(); i++) {
-    bbox.add(poly[0][i]);
+  for (auto i : poly[0]) {
+    bbox.add(i);
   }
   double lower_left_lon  = bbox.min_x();
   double lower_left_lat  = bbox.min_y();

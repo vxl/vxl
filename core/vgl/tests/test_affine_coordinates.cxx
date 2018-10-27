@@ -109,11 +109,11 @@ static void test_all()
   std::vector<std::vector<double> > C2 = C1;
   C2[0][0]=1.5;    C2[0][1]=0.707; C2[0][2] = 4.0;
   C2[1][0]=-0.707; C2[1][1]=0.5;   C2[1][2] = 5.0;
-  for(unsigned i = 0; i<Ppts.size(); ++i){
-    vgl_point_2d<double> p1 = proj_3d(C1, tc, Ppts[i]);
+  for(const auto & Ppt : Ppts){
+    vgl_point_2d<double> p1 = proj_3d(C1, tc, Ppt);
     p1.set(p1.x(), p1.y());
     ppts1.push_back(p1);
-    vgl_point_2d<double> p2 = proj_3d(C2, tc, Ppts[i]);
+    vgl_point_2d<double> p2 = proj_3d(C2, tc, Ppt);
     ppts2.push_back(p2);
   }
   std::vector<vgl_point_3d<double> > recon_affine_pts;
@@ -185,10 +185,10 @@ static void test_all()
   //rotate 15deg about Y
   CC1[0][0] = 0.9659258;//sqrt(2.0)/2.0;
   CC2[0][2] = 0.2588190;//CC1[0][0];
-  for(unsigned i = 0; i<Cpts.size(); ++i){
-    vgl_point_2d<double> p1 = proj_3d(CC1, tcc, Cpts[i]);
+  for(const auto & Cpt : Cpts){
+    vgl_point_2d<double> p1 = proj_3d(CC1, tcc, Cpt);
     cpts1.push_back(p1);
-    vgl_point_2d<double> p2 = proj_3d(CC2, tcc, Cpts[i]);
+    vgl_point_2d<double> p2 = proj_3d(CC2, tcc, Cpt);
     cpts2.push_back(p2);
   }
 

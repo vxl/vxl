@@ -68,8 +68,8 @@ namespace boxm_construct_scene_from_image_process_globals
       }
     //construct leaves
     std::vector<boct_tree_cell<short, T > > leaves;
-    for (unsigned i = 0; i<leaf_codes.size(); ++i) {
-      boct_tree_cell<short, T > leaf(leaf_codes[i]);
+    for (auto & leaf_code : leaf_codes) {
+      boct_tree_cell<short, T > leaf(leaf_code);
       leaves.push_back(leaf);
     }
 

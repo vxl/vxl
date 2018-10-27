@@ -69,8 +69,7 @@ bool bapl_match_keypoints_process(bprb_func_process& pro)
 
   std::vector<bapl_key_match> matches;
 
-  for (unsigned i=0; i<keypoints1.size(); ++i) {  // for each feature in I (first image)
-    bapl_keypoint_sptr query = keypoints1[i];
+  for (auto query : keypoints1) {  // for each feature in I (first image)
     std::vector<bapl_keypoint_sptr> match;
     bbf.n_nearest(query, match, 2, 200);       // find its two nearest neighbors, 200 is parameter value used in bundler package
     if ( vnl_vector_ssd(query->descriptor(),match[0]->descriptor()) <
@@ -166,8 +165,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
   std::vector<bapl_key_match>& matches = match_set->matches_;
 
   vnl_random rng;
-  for (unsigned i=0;i<matches.size();++i) {
-    bapl_key_match m = matches[i];
+  for (auto m : matches) {
     bapl_lowe_keypoint_sptr kp1;
     kp1.vertical_cast(m.first);
     bapl_lowe_keypoint_sptr kp2;
@@ -366,8 +364,8 @@ bool bapl_write_match_process(bprb_func_process& pro)
   std::ofstream ofs(input_match_file.c_str());
   ofs << input_sptr->id_left_ << ' ' << input_sptr->id_right_ << '\n'
       << matches.size() << std::endl;
-  for (unsigned i = 0; i < matches.size(); i++)
-    ofs << matches[i].first->id() << ' ' << matches[i].second->id() << std::endl;
+  for (auto & matche : matches)
+    ofs << matche.first->id() << ' ' << matche.second->id() << std::endl;
   return true;
 }
 

@@ -617,11 +617,11 @@ void msm_cubic_bezier::b_write(vsl_b_ostream& bfs) const
   vsl_b_write(bfs,short(1)); // Version
   vsl_b_write(bfs,closed_);
   vsl_b_write(bfs,unsigned(bnode_.size()));
-  for (unsigned i=0;i<bnode_.size();++i)
+  for (const auto & i : bnode_)
   {
-    vsl_b_write(bfs,bnode_[i].p);
-    vsl_b_write(bfs,bnode_[i].c1);
-    vsl_b_write(bfs,bnode_[i].c2);
+    vsl_b_write(bfs,i.p);
+    vsl_b_write(bfs,i.c1);
+    vsl_b_write(bfs,i.c2);
   }
 }
 
@@ -639,11 +639,11 @@ void msm_cubic_bezier::b_read(vsl_b_istream& bfs)
       vsl_b_read(bfs,closed_);
       vsl_b_read(bfs,n);
       bnode_.resize(n);
-      for (unsigned i=0;i<bnode_.size();++i)
+      for (auto & i : bnode_)
       {
-        vsl_b_read(bfs,bnode_[i].p);
-        vsl_b_read(bfs,bnode_[i].c1);
-        vsl_b_read(bfs,bnode_[i].c2);
+        vsl_b_read(bfs,i.p);
+        vsl_b_read(bfs,i.c1);
+        vsl_b_read(bfs,i.c2);
       }
       break;
     default:

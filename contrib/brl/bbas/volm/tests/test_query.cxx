@@ -149,8 +149,8 @@ static void test_query()
       }
       std::vector<unsigned char> grd_single_ray = grd_land[0][0];
       std::cout << " For a single ray on ground region: land_fallback has size " << grd_single_ray.size() << " = ";
-      for (std::vector<unsigned char>::iterator vit = grd_single_ray.begin(); vit != grd_single_ray.end(); ++vit) {
-        std::cout << volm_label_table::land_string(*vit) << ", ";
+      for (unsigned char & vit : grd_single_ray) {
+        std::cout << volm_label_table::land_string(vit) << ", ";
       }
       std::cout << std::endl;
     }
@@ -188,13 +188,13 @@ static void test_query()
                << ",\t fallback_category = ";
       volm_fallback_label::print_id(drs[i]->land_id());
       std::cout << " (";
-      for (unsigned jj =0; jj < obj_land[i].size(); jj++)
-        std::cout << volm_label_table::land_string(obj_land[i][jj]) << ", ";
+      for (unsigned char jj : obj_land[i])
+        std::cout << volm_label_table::land_string(jj) << ", ";
       std::cout << " ),\t fallback_wgt = ";
       volm_fallback_label::print_wgt(drs[i]->land_id());
       std::cout << " (";
-      for (unsigned jj = 0; jj < obj_land_wgt[i].size(); jj++)
-        std::cout << obj_land_wgt[i][jj] << ' ';
+      for (float jj : obj_land_wgt[i])
+        std::cout << jj << ' ';
       std::cout << ')' << std::endl;
     }
   }

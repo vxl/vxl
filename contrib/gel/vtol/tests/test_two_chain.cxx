@@ -84,8 +84,8 @@ static void test_two_chain()
 
   zero_chain_list *z_list = tc1->outside_boundary_zero_chains();
   TEST("vtol_two_chain::outside_boundary_zero_chains()", z_list->size(), 16);
-  for (unsigned int i=0; i<z_list->size(); ++i)
-    (*z_list)[i]->describe(std::cout,8);
+  for (auto & i : *z_list)
+    i->describe(std::cout,8);
   delete z_list;
 
   edge_list *ed_list = tc1->outside_boundary_edges();

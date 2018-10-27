@@ -41,21 +41,21 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
   }
 
   bapl_lowe_orientation orientor(3.0, 36);
-  for (unsigned i=0;i<peak_pts.size();++i)
+  for (auto & peak_pt : peak_pts)
   {
-    float key_x = peak_pts[i].x();
-    float key_y = peak_pts[i].y();
+    float key_x = peak_pt.x();
+    float key_y = peak_pt.y();
     float actual_scale;
-    const vil_image_view<float> & orient_img = pyramid_set->grad_orient_at( peak_pts[i].z(), &actual_scale);
-    const vil_image_view<float> & mag_img =  pyramid_set->grad_mag_at( peak_pts[i].z() );
+    const vil_image_view<float> & orient_img = pyramid_set->grad_orient_at( peak_pt.z(), &actual_scale);
+    const vil_image_view<float> & mag_img =  pyramid_set->grad_mag_at( peak_pt.z() );
     key_x /= actual_scale;  key_y /= actual_scale;
 
     // Add a keypoint for each possible orientation
     std::vector<float> orientations;
-    orientor.orient_at(key_x, key_y, peak_pts[i].z(), orient_img, mag_img, orientations);
-    for ( std::vector<float>::iterator itr = orientations.begin(); itr != orientations.end(); ++itr) {
-      bapl_lowe_keypoint_sptr kp = bapl_lowe_keypoint_new( pyramid_set, peak_pts[i].x(), peak_pts[i].y(),
-                                                           peak_pts[i].z(), *itr );
+    orientor.orient_at(key_x, key_y, peak_pt.z(), orient_img, mag_img, orientations);
+    for (float & orientation : orientations) {
+      bapl_lowe_keypoint_sptr kp = bapl_lowe_keypoint_new( pyramid_set, peak_pt.x(), peak_pt.y(),
+                                                           peak_pt.z(), orientation );
       keypoints.push_back( kp );
     }
   }
@@ -372,20 +372,20 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
   // find all peaks within 80% of the max peak
   orientations.clear();
   max *= 0.8f;
-  for (unsigned int i=0; i<peaks.size(); ++i) {
-    if (histogram[ peaks[i] ] > max) {
+  for (int peak : peaks) {
+    if (histogram[ peak ] > max) {
       //check for zivide by zero condition
       if (num_bins_ == 0) {
         std::cerr << "ERROR: Division by 0" << std::endl;
         throw 0;
       }
       //parabolic interpolation
-      float ypos = histogram[ (peaks[i]+1)%num_bins_ ];
-      float yneg = histogram[ (peaks[i]-1)%num_bins_ ];
+      float ypos = histogram[ (peak+1)%num_bins_ ];
+      float yneg = histogram[ (peak-1)%num_bins_ ];
       float dy   = (ypos - yneg)/2.0f;
-      float d2y  = 2.0f*histogram[ peaks[i] ] - ypos - yneg;
+      float d2y  = 2.0f*histogram[ peak ] - ypos - yneg;
       float dx = 6.28319f/num_bins_;
-      float angle = (float(peaks[i])+dy/d2y)*dx;
+      float angle = (float(peak)+dy/d2y)*dx;
       orientations.push_back(angle);
     }
   }

@@ -179,8 +179,8 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   for (unsigned l=0, n=labels.size(); l<n; ++l)
     renum_renum[labels[l]] = l;
 
-  for (ITER it=renumbering.begin(), end=renumbering.end(); it!=end; ++it)
-    *it=renum_renum[*it];
+  for (unsigned int & it : renumbering)
+    it=renum_renum[it];
 
   // Check than no DODGY values got into the renumbering.
   assert(std::find(renumbering.begin(), renumbering.end(), dodgy)

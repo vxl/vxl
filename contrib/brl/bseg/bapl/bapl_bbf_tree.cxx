@@ -350,8 +350,7 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
            << " sq_dist = " << rsdl_dist_sq( query_point, p->inner_box_ ) << std::endl;
 #endif
 
-  for ( unsigned int i=0; i < p->point_indices_.size(); ++i ) {  // check each id
-    int id = p->point_indices_[i];
+  for (int id : p->point_indices_) {  // check each id
     double sq_dist = vnl_vector_ssd( query_point->descriptor(), points_[ id ]->descriptor() );
     // std::cout << "  id = " << id << ", point = " << points_[ id ]
     //          << ", sq_dist = " << sq_dist << std::endl;

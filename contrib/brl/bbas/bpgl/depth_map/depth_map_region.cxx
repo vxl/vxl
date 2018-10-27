@@ -324,8 +324,7 @@ set_ground_plane_max_depth(double max_depth,
   // assert didn't happen and no points are above the horizon
   if (needs_split) return false;// don't handle this case yet
   double d_thresh = min_d*proximity_scale_factor;
-  for (unsigned i = 0; i<pts_closer_than_centroid.size(); ++i) {
-    unsigned ip = pts_closer_than_centroid[i];
+  for (unsigned int ip : pts_closer_than_centroid) {
     vgl_point_2d<double> p = region_2d_->vertex(ip)->get_p();
     vgl_vector_2d<double> vp = vector_to_closest_horizon_pt(p, horizon);
     double d = vp.length();

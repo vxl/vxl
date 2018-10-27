@@ -441,10 +441,9 @@ std::ostream& vil_nitf2_tagged_record::output(std::ostream& os) const
 {
   os << "CETAG: " << name() << '\n'
      << "CELEN: " << length() << std::endl;
-  for (vil_nitf2_field_definitions::iterator fieldNode = m_definition->m_field_definitions->begin();
-       fieldNode != m_definition->m_field_definitions->end(); ++fieldNode)
+  for (auto & m_field_definition : *m_definition->m_field_definitions)
   {
-    vil_nitf2_field_definition* field_def = (*fieldNode)->field_definition();
+    vil_nitf2_field_definition* field_def = m_field_definition->field_definition();
     // to do: handle other nodes
     if (!field_def) break;
     vil_nitf2_field* field = get_field(field_def->tag);
@@ -486,10 +485,9 @@ vil_nitf2_tagged_record::~vil_nitf2_tagged_record()
 
 vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(std::string tag)
 {
-  for (vil_nitf2_field_definitions::const_iterator node = m_field_definitions->begin();
-       node != m_field_definitions->end(); ++node)
+  for (auto m_field_definition : *m_field_definitions)
   {
-    vil_nitf2_field_definition* field_def = (*node)->field_definition();
+    vil_nitf2_field_definition* field_def = m_field_definition->field_definition();
     // to do: search other nodes
     if (!field_def) break;
 

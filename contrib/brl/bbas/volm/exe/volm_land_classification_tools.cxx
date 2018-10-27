@@ -154,14 +154,14 @@ void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, std::string const& mask_name, std
 void enlarge_neighborhood(std::vector<std::pair<int, int> >& img_pixels, int ni, int nj, int n_size) {
   std::map<std::pair<int, int>, bool> pixel_map;
   std::map<std::pair<int, int>, bool>::iterator iter;
-  for (unsigned int kk = 0; kk < img_pixels.size(); ++kk) {
+  for (const auto & img_pixel : img_pixels) {
     // make the previously existing pixels false, so the additional pixels can be added to the end of img_pixels
-    pixel_map[img_pixels[kk]] = false;
+    pixel_map[img_pixel] = false;
   }
   // add the neighborhood pixels trying to avoid repeats
-  for (unsigned int kk = 0; kk < img_pixels.size(); ++kk) {
-    int ii = img_pixels[kk].first;
-    int jj = img_pixels[kk].second;
+  for (auto & img_pixel : img_pixels) {
+    int ii = img_pixel.first;
+    int jj = img_pixel.second;
     // now try adding the neighborhood
     for (int i = ii-n_size; i <= ii + n_size; ++i)
       for (int j = jj - n_size; j <= jj + n_size; ++j) {
@@ -191,8 +191,8 @@ bool collect_img_pixels(vpgl_lvcs_sptr lvcs, int utm_zone, std::string const& ma
     return false;
   int ni = mask.ni(); int nj = mask.nj();
   double u,v;
-  for (unsigned kk = 0; kk < local_coords.size(); kk++) {
-    cam->project(local_coords[kk].first, local_coords[kk].second, 0.0, u, v);
+  for (auto & local_coord : local_coords) {
+    cam->project(local_coord.first, local_coord.second, 0.0, u, v);
     int uu = (int)std::floor(u + 0.5);
     int vv = (int)std::floor(v + 0.5);
     if (uu >= 0 && vv >= 0 && uu < ni && vv < nj && mask(uu,vv) == 255) {
@@ -334,15 +334,15 @@ int main(int argc,  char** argv)
       std::vector<img_info> imgs;
       load_naip_imgs(img_folder(), imgs, utm_zone());
       std::cout << " loaded: " << imgs.size() << std::endl;
-      for (unsigned i = 0; i < imgs.size(); i++) {
+      for (auto & img : imgs) {
         for (unsigned j = 0; j < polys.size(); j++) {
-          if (imgs[i].intersects(polys[j].first)) {
-            std::cout << imgs[i].name <<" intersects: " << polys[j].second << " it's bbox: " << imgs[i].bbox << std::endl;
-            std::stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_img_" << imgs[i].name << ".kml";
+          if (img.intersects(polys[j].first)) {
+            std::cout << img.name <<" intersects: " << polys[j].second << " it's bbox: " << img.bbox << std::endl;
+            std::stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_img_" << img.name << ".kml";
             std::cout << " writing: " << file.str() << std::endl;
-            imgs[i].save_box_kml(file.str());
-            img_full[j].push_back(imgs[i].img_name);
-            img_name[j].push_back(imgs[i].name);
+            img.save_box_kml(file.str());
+            img_full[j].push_back(img.img_name);
+            img_name[j].push_back(img.name);
             std::cout << " img full has " << img_full[j].size() << " NAIP img!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n";
           }
         }
@@ -353,14 +353,14 @@ int main(int argc,  char** argv)
       std::vector<img_info> lidar_imgs;
       load_lidar_imgs(lidar_folder(), lidar_imgs);
       std::cout << " loaded: " << lidar_imgs.size() << std::endl;
-      for (unsigned i = 0; i < lidar_imgs.size(); i++) {
+      for (auto & lidar_img : lidar_imgs) {
         for (unsigned j = 0; j < polys.size(); j++) {
-          if (lidar_imgs[i].intersects(polys[j].first)) {
-            std::cout << lidar_imgs[i].name <<" intersects: " << polys[j].second << " it's bbox: " << lidar_imgs[i].bbox << std::endl;
-            std::stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_lidar_img_" << lidar_imgs[i].name << ".kml";
-            lidar_imgs[i].save_box_kml(file.str());
-            lidar_full[j].push_back(lidar_imgs[i].img_name);
-            lidar_name[j].push_back(lidar_imgs[i].name);
+          if (lidar_img.intersects(polys[j].first)) {
+            std::cout << lidar_img.name <<" intersects: " << polys[j].second << " it's bbox: " << lidar_img.bbox << std::endl;
+            std::stringstream file; file << out_folder() << "\\bbox_" << polys[j].second << "_lidar_img_" << lidar_img.name << ".kml";
+            lidar_img.save_box_kml(file.str());
+            lidar_full[j].push_back(lidar_img.img_name);
+            lidar_name[j].push_back(lidar_img.name);
           }
         }
       }

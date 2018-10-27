@@ -129,18 +129,18 @@ int main(int argc, char** argv)
   std::vector<depth_map_region_sptr> drs = query->depth_regions();
   std::cout << " The depth regions map inside query follows on order" << std::endl;
   if (drs.size()) {
-    for (unsigned i = 0; i < drs.size(); i++) {
-      std::cout << "\t " <<  drs[i]->name()  << " region "
-               << ",\t min_depth = " << drs[i]->min_depth()
-               << ",\t max_depth = " << drs[i]->max_depth()
-               << ",\t order = " << drs[i]->order()
-               << ",\t orient = " << drs[i]->orient_type()
-               << ",\t land_id = " << drs[i]->land_id()
-               << ",\t land_name = " << volm_osm_category_io::volm_land_table[drs[i]->land_id()].name_
+    for (auto & dr : drs) {
+      std::cout << "\t " <<  dr->name()  << " region "
+               << ",\t min_depth = " << dr->min_depth()
+               << ",\t max_depth = " << dr->max_depth()
+               << ",\t order = " << dr->order()
+               << ",\t orient = " << dr->orient_type()
+               << ",\t land_id = " << dr->land_id()
+               << ",\t land_name = " << volm_osm_category_io::volm_land_table[dr->land_id()].name_
                << ",\t fallback_category = ";
-      volm_fallback_label::print_id(drs[i]->land_id());
+      volm_fallback_label::print_id(dr->land_id());
       std::cout << ",\t fallback_wgt = ";
-      volm_fallback_label::print_wgt(drs[i]->land_id());
+      volm_fallback_label::print_wgt(dr->land_id());
       std::cout << std::endl;
     }
   }

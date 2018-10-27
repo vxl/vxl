@@ -71,9 +71,8 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   //setup appearances
   std::vector<std::string> boxm2_apps = boxm2Scene->appearances();
   std::vector<std::string> apps;
-  for(std::vector<std::string>::iterator iter = boxm2_apps.begin(); iter != boxm2_apps.end(); iter++)
+  for(auto boxm2_app : boxm2_apps)
   {
-    std::string boxm2_app = *iter;
     boxm2_app.replace(boxm2_app.begin(), boxm2_app.begin() + 5, "bstm");
     apps.push_back(boxm2_app);
   }

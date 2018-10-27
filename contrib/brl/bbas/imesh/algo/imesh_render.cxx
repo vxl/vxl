@@ -103,8 +103,7 @@ void imesh_render_textured(const imesh_mesh& mesh,
     tris = static_cast<const imesh_regular_face_array<3>*>(&faces);
   }
 
-  for (unsigned i=0; i<tris->size(); ++i) {
-    const imesh_regular_face<3>& tri = (*tris)[i];
+  for (auto tri : *tris) {
     const vgl_point_2d<double>& v1 = verts2d[tri[0]];
     const vgl_point_2d<double>& v2 = verts2d[tri[1]];
     const vgl_point_2d<double>& v3 = verts2d[tri[2]];

@@ -99,9 +99,8 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
         std::vector<boct_tree_cell<short,boxm_inf_line_sample<float> >*> cells = tree->leaf_cells();
 
         // iterate over cells
-        for (unsigned i=0; i<cells.size(); ++i)
+        for (auto cell : cells)
         {
-          boct_tree_cell<short,boxm_inf_line_sample<float> >* cell = cells[i];
           boxm_inf_line_sample<float> data = cell->data();
           vgl_infinite_line_3d<float> line = data.line_;
           vgl_vector_2d<double> x0(line.x0().x(), line.x0().y());

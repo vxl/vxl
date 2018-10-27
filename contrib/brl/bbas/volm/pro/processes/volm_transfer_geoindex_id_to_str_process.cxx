@@ -98,8 +98,8 @@ bool volm_transfer_geoindex_id_to_str_process2(bprb_func_process& pro)
   // find the bbox of ROI from the input polygon
   vgl_polygon<double> poly = bkml_parser::parse_polygon(in_poly);
   vgl_box_2d<double> bbox;
-  for (unsigned i = 0; i < poly[0].size(); i++)
-    bbox.add(poly[0][i]);
+  for (auto i : poly[0])
+    bbox.add(i);
   std::cout << "bbox of ROI: " << bbox << std::endl;
 
   // create a geo index and use the leaves as scenes, use template param as volm_loc_hyp_sptr but it won't actually be used

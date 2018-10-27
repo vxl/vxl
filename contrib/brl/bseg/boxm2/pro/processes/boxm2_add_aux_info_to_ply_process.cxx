@@ -173,9 +173,7 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
   vnl_vector_fixed<float,3> intensity;
   vgl_point_3d<double> local;
   boxm2_block_id id;
-  for (unsigned  i = 0; i < points.size(); i++) {
-
-    const vgl_point_3d<double> pt = points[i];
+  for (auto pt : points) {
 
     if (!scene->contains(pt, id, local)) {
       std::cout << "ERROR: point: " << pt << " isn't in scene. Exiting...." << std::endl;

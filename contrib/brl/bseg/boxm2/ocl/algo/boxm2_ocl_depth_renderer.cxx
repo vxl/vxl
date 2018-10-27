@@ -242,12 +242,12 @@ boxm2_ocl_depth_renderer
 
   subblk_dim_ = 0.0f; // in case there are no visible blocks;
 
-  for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id) {
+  for (auto & id : vis_order) {
 
-    boxm2_block_metadata mdata = scene_->get_block_metadata(*id);
+    boxm2_block_metadata mdata = scene_->get_block_metadata(id);
 
-    bocl_mem* blk       = opencl_cache_->get_block(scene_,*id);
-    bocl_mem* alpha     = opencl_cache_->get_data<BOXM2_ALPHA>(scene_,*id);
+    bocl_mem* blk       = opencl_cache_->get_block(scene_,id);
+    bocl_mem* alpha     = opencl_cache_->get_data<BOXM2_ALPHA>(scene_,id);
     bocl_mem* blk_info  = opencl_cache_->loaded_block_info();
     subblk_dim_         = mdata.sub_block_dim_.x(); // assume this is not changing per block
 

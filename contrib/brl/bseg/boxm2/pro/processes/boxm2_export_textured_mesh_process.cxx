@@ -257,12 +257,12 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   std::vector<std::string> imfiles = boxm2_util::images_from_directory(im_dir);
 
   std::vector<vpgl_perspective_camera<double>* > cameras;
-  for (unsigned int i=0; i<camfiles.size(); ++i) {
+  for (auto & camfile : camfiles) {
     //build the camera from file
-    std::ifstream ifs(camfiles[i].c_str());
+    std::ifstream ifs(camfile.c_str());
     vpgl_perspective_camera<double>* icam = new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
-      std::cerr << "Failed to open file " << camfiles[i] << '\n';
+      std::cerr << "Failed to open file " << camfile << '\n';
       return;
     }
     ifs >> *icam;
@@ -476,10 +476,9 @@ void boxm2_export_textured_mesh_process_globals::boxm2_visible_faces( std::vecto
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
   //iterate over each camera, creating a visibility image for each
-  for (unsigned int i=0; i<cameras.size(); ++i)
+  for (auto pcam : cameras)
   {
     //get the principal point of the cam for image size
-    vpgl_perspective_camera<double>* pcam = cameras[i];
     vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
     unsigned ni = (unsigned) (principal_point.x()*2.0);
     unsigned nj = (unsigned) (principal_point.y()*2.0);

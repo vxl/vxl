@@ -72,12 +72,12 @@ void boxm_render_image_splatting_triangle(boxm_scene<boct_tree<T_loc, T_data > >
   while (block_vis_iter.next())
   {
     std::vector<vgl_point_3d<int> > block_indices = block_vis_iter.frontier_indices();
-    for (unsigned i=0; i<block_indices.size(); i++) // code for each block
+    for (auto & block_indice : block_indices) // code for each block
     {
       t.mark();
       //if (block_indices[i].x()!=2 || block_indices[i].z()!=0)
       //  continue;
-      scene.load_block(block_indices[i].x(),block_indices[i].y(),block_indices[i].z());
+      scene.load_block(block_indice.x(),block_indice.y(),block_indice.z());
       std::cout<<"The time taken to read a block is "<<t.all()<<std::endl;
       boxm_block<tree_type> * curr_block=scene.get_active_block();
       t.mark();

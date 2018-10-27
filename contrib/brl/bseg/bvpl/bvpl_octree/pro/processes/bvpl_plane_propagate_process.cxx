@@ -173,8 +173,7 @@ bool bvpl_plane_propagate_process(bprb_func_process& pro)
         oper.neighbors(kernel, cells[i], neighb_cells);
         std::set<boxm_plane_obs<float>,ltstr> planes;
 
-        for (unsigned n=0; n<neighb_cells.size(); n++) {
-          cell_type *neighbor = neighb_cells[n];
+        for (auto neighbor : neighb_cells) {
           boct_loc_code<short> cell_code=cell->code_;
           boct_loc_code<short> n_code = neighbor->code_;
           bool itself = n_code.isequal(&cell_code);

@@ -105,9 +105,9 @@ double vtol_intensity_face::perimeter()
   edge_list edges; this->edges(edges);
   double  p = 0.0;
 
-  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); eit++)
+  for (auto & edge : edges)
   {
-    vsol_curve_2d_sptr  c = (*eit)->cast_to_edge_2d()->curve();
+    vsol_curve_2d_sptr  c = edge->cast_to_edge_2d()->curve();
     if (c)
       p += c->length();
   }

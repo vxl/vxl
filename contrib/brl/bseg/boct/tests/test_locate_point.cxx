@@ -14,10 +14,10 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vecto
 
  boct_tree_cell<short,vgl_point_3d<double> >* point_container=nullptr;
 
- for (unsigned i=0; i<leafcells.size(); ++i)
+ for (auto & leafcell : leafcells)
  {
-   if (leafcells[i]->code_.isequal(&code))
-     point_container=leafcells[i];
+   if (leafcell->code_.isequal(&code))
+     point_container=leafcell;
  }
  return point_container;
 }

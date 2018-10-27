@@ -1984,9 +1984,9 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
   //  and fill space for an empty row.
   //
   float * yline[5];
-  for (int i=0; i<5; i++ ) yline[i] = new float[sizeX];
+  for (auto & i : yline) i = new float[sizeX];
   float * wline[5];
-  for (int i=0; i<5; i++ ) wline[i] = new float[sizeX];
+  for (auto & i : wline) i = new float[sizeX];
   float * y_empty = new float[sizeX];
   float * w_empty = new float[sizeX];
 

@@ -105,13 +105,10 @@ bool bstm_multi_cpp_ingest_boxm2_scene_process(bprb_func_process &pro) {
       scene->blocks();
   const std::map<bstm_block_id, bstm_block_metadata> &bstm_blocks =
       bstm_scene->blocks();
-  for (std::map<bstm_block_id, bstm_multi_block_metadata>::const_iterator
-           bstm_multi_iter = blocks.begin();
-       bstm_multi_iter != blocks.end();
-       ++bstm_multi_iter) {
+  for (const auto & block : blocks) {
 
-    bstm_block_id block_id = bstm_multi_iter->first;
-    bstm_multi_block_metadata bstm_multi_metadata = bstm_multi_iter->second;
+    bstm_block_id block_id = block.first;
+    bstm_multi_block_metadata bstm_multi_metadata = block.second;
 
     // Find BSTM block with same ID
     std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter =

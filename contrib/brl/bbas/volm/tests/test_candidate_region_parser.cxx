@@ -43,9 +43,9 @@ static void test_candidate_region_parser()
 
   // print out the line
   std::cout << "Line:\n\t";
-  for (unsigned i = 0; i < lines.size(); i++) {
-    for (unsigned k = 0; k < lines[i].size(); k++) {
-      std::cout << lines[i][k] << ' ';
+  for (auto & line : lines) {
+    for (unsigned k = 0; k < line.size(); k++) {
+      std::cout << line[k] << ' ';
     }
     std::cout << "\n\t";
   }

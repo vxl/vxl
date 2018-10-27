@@ -781,19 +781,17 @@ int bstm_ingest_boxm2_scene_function<APM_TYPE, BOXM2_APM_TYPE>::move_data(
   std::vector<int> new_leaves = refined_tree.get_leaf_bits();
   std::vector<int> old_leaves = unrefined_tree.get_leaf_bits();
 
-  for (std::vector<int>::iterator iter = new_leaves.begin();
-       iter != new_leaves.end();
-       iter++) {
+  for (int & new_leave : new_leaves) {
     // get new data ptr
-    int newDataPtr = refined_tree.get_data_index(*iter);
+    int newDataPtr = refined_tree.get_data_index(new_leave);
 
     // find out if this leaf exists in the unrefined tree as well
-    int pj = unrefined_tree.parent_index(*iter); // Bit_index of parent bit
-    bool validCellOld = (*iter == 0) || unrefined_tree.bit_at(pj);
+    int pj = unrefined_tree.parent_index(new_leave); // Bit_index of parent bit
+    bool validCellOld = (new_leave == 0) || unrefined_tree.bit_at(pj);
 
     int oldDataPtr;
     if (validCellOld) // if they both exist
-      oldDataPtr = unrefined_tree.get_data_index(*iter);
+      oldDataPtr = unrefined_tree.get_data_index(new_leave);
     else {
       // find parent in old tree
       int valid_parent_bit = pj;

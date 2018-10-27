@@ -39,9 +39,8 @@ vsol_digital_curve_2d::vsol_digital_curve_2d(std::vector<vsol_point_2d_sptr> sam
 vsol_digital_curve_2d::vsol_digital_curve_2d(const vsol_digital_curve_2d &other)
   : vsol_curve_2d(other), samples_()
 {
-  for ( std::vector<vsol_point_2d_sptr>::const_iterator itr=other.samples_.begin();
-        itr != other.samples_.end();  ++itr )
-    this->samples_.push_back(new vsol_point_2d(**itr));
+  for (const auto & sample : other.samples_)
+    this->samples_.push_back(new vsol_point_2d(*sample));
 }
 
 //---------------------------------------------------------------------------

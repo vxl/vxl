@@ -270,35 +270,35 @@ int main(int argc, char ** argv)
   std::list<int> imagenumbers( imagenumbersarg());
 
   // all the pre-computation setup
-  for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+  for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
   {
-    std::cerr << "Loading image : " << *it << std::endl;
+    std::cerr << "Loading image : " << imagenumber << std::endl;
 
     // load all images and pmatrices
-    vil1_image image= vil1_load( vul_sprintf((const char *)imagefilename(), *it));
-    imagestore[*it]= new vil1_memory_image_of<vxl_byte>( image);
-    assert( *imagestore[*it]);
+    vil1_image image= vil1_load( vul_sprintf((const char *)imagefilename(), imagenumber));
+    imagestore[imagenumber]= new vil1_memory_image_of<vxl_byte>( image);
+    assert( *imagestore[imagenumber]);
 
-    std::ifstream pmatrixin( vul_sprintf((const char *)pmatrixfilename(), *it));
+    std::ifstream pmatrixin( vul_sprintf((const char *)pmatrixfilename(), imagenumber));
     assert( pmatrixin.good());
-    pmatrixstore[*it]= new PMatrix;
-    pmatrixstore[*it]->read_ascii( pmatrixin);
+    pmatrixstore[imagenumber]= new PMatrix;
+    pmatrixstore[imagenumber]->read_ascii( pmatrixin);
 
     std::cerr << "Computing borgefors transform ...";
 
     // compute borgefors transform
-    vbl_array_2d<bool> edges( imagestore[*it]->width(),
-                              imagestore[*it]->height());
-    computeedgemap( *imagestore[*it], edges);
-    distancestore[*it]= new vbl_array_2d<short>( imagestore[*it]->width(),
-                                                 imagestore[*it]->height());
+    vbl_array_2d<bool> edges( imagestore[imagenumber]->width(),
+                              imagestore[imagenumber]->height());
+    computeedgemap( *imagestore[imagenumber], edges);
+    distancestore[imagenumber]= new vbl_array_2d<short>( imagestore[imagenumber]->width(),
+                                                 imagestore[imagenumber]->height());
     computeborgefors( edges,
-                      *distancestore[*it]);
+                      *distancestore[imagenumber]);
 
     std::cerr << " done\n";
 
     // setup voxmap projection cache
-    voxmap.SetPMatrix( *pmatrixstore[*it], *it);
+    voxmap.SetPMatrix( *pmatrixstore[imagenumber], imagenumber);
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -323,8 +323,8 @@ int main(int argc, char ** argv)
     {
       (*fout) << "c\n";
 
-      for (unsigned int i=0; i< voxels.size(); i++)
-        (*fout) << 'a' << voxels[i] << std::endl;
+      for (auto voxel : voxels)
+        (*fout) << 'a' << voxel << std::endl;
     }
 
     ///////////////////////////////////////////////////////////////////
@@ -353,20 +353,20 @@ int main(int argc, char ** argv)
 
     std::cerr << "Done.\n";
 
-    for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+    for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
     {
-      std::cerr << *it << ' ';
+      std::cerr << imagenumber << ' ';
 
       if (fout)
       {
         if (colorimagefilename())
         {
-          (*fout) << 'i' << vul_sprintf( (const char*) colorimagefilename(), *it) << "\nu\n";
+          (*fout) << 'i' << vul_sprintf( (const char*) colorimagefilename(), imagenumber) << "\nu\n";
         }
       }
 
-      unsigned int xsize = imagestore[*it]->width();
-      unsigned int ysize = imagestore[*it]->height();
+      unsigned int xsize = imagestore[imagenumber]->width();
+      unsigned int ysize = imagestore[imagenumber]->height();
 
       for (unsigned int i=0; i< voxels.size(); i++)
       {
@@ -376,7 +376,7 @@ int main(int argc, char ** argv)
                                                        voxels[i].y,
                                                        voxels[i].z,
                                                        voxels[i].depth,
-                                                       *it);
+                                                       imagenumber);
 
           // centre is outside the image
           if (centre[0]<0 || centre[1]<0 || centre[0]>=xsize || centre[1]>=ysize)
@@ -386,7 +386,7 @@ int main(int argc, char ** argv)
             // cube does actually look 'close' to the image
             if (disttoim< (radius+(std::sqrt((double)xsize*xsize/4+ysize*ysize/4))))
             {
-              cubetest_t t= DoScan( voxmap, voxels[i], *it);
+              cubetest_t t= DoScan( voxmap, voxels[i], imagenumber);
 
               if (t== outsideimage)
                 insideimage[i]= false;
@@ -407,10 +407,10 @@ int main(int argc, char ** argv)
           else
           {
             // either completely inside or completely outside object
-            if ((*distancestore[*it])(int(centre[0]),int(centre[1])) > 3*radius)
+            if ((*distancestore[imagenumber])(int(centre[0]),int(centre[1])) > 3*radius)
             {
               // if completely outside object
-              if (!(*imagestore[*it])(int(centre[0]),int(centre[1])))
+              if (!(*imagestore[imagenumber])(int(centre[0]),int(centre[1])))
               {
                 if (fout)
                 {
@@ -430,7 +430,7 @@ int main(int argc, char ** argv)
               if (count== int(iterations())-1)
               {
                 // if close to surface
-                cubetest_t t= DoScan( voxmap, voxels[i], *it);
+                cubetest_t t= DoScan( voxmap, voxels[i], imagenumber);
 
                 if (t== outside)
                 {
@@ -499,11 +499,11 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////
   // delete all images and pmatrices
-  for (std::list<int>::iterator it= imagenumbers.begin(); it!= imagenumbers.end(); ++it)
+  for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
   {
-    delete imagestore[*it];
-    delete pmatrixstore[*it];
-    delete distancestore[*it];
+    delete imagestore[imagenumber];
+    delete pmatrixstore[imagenumber];
+    delete distancestore[imagenumber];
   }
 
   ///////////////////////////////////////////////////////////////////
@@ -513,20 +513,20 @@ int main(int argc, char ** argv)
   {
     int size= 1<<(int(iterations())-1);
     vbl_bit_array_3d v( size, size, size, false);
-    for (unsigned int i=0; i< voxels.size(); i++)
-      v.set( voxels[i].x, voxels[i].y, voxels[i].z);
+    for (auto & voxel : voxels)
+      v.set( voxel.x, voxel.y, voxel.z);
 
-    for (unsigned int i=0; i< insidevoxels.size(); i++)
+    for (auto & insidevoxel : insidevoxels)
     {
-      int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
+      int depth= 1<<((int(iterations())-1)-insidevoxel.depth);
 
-      int startx= insidevoxels[i].x*depth;
-      int starty= insidevoxels[i].y*depth;
-      int startz= insidevoxels[i].z*depth;
+      int startx= insidevoxel.x*depth;
+      int starty= insidevoxel.y*depth;
+      int startz= insidevoxel.z*depth;
 
-      int endx= (insidevoxels[i].x+1)*depth;
-      int endy= (insidevoxels[i].y+1)*depth;
-      int endz= (insidevoxels[i].z+1)*depth;
+      int endx= (insidevoxel.x+1)*depth;
+      int endy= (insidevoxel.y+1)*depth;
+      int endz= (insidevoxel.z+1)*depth;
 
       for (int x=startx; x< endx; x++)
         for (int y=starty; y< endy; y++)
@@ -558,32 +558,32 @@ int main(int argc, char ** argv)
   vbl_bit_array_3d voxint( size,   size,   size,   false);
 
   std::cerr << "Surface voxels...\n";
-  for (unsigned int i=0; i< voxels.size(); i++)
+  for (auto & voxel : voxels)
   {
-    voxint.set( voxels[i].x, voxels[i].y, voxels[i].z);
+    voxint.set( voxel.x, voxel.y, voxel.z);
 
-    edges1.flip( voxels[i].x,   voxels[i].y,   voxels[i].z);
-    edges1.flip( voxels[i].x,   voxels[i].y,   voxels[i].z+1);
+    edges1.flip( voxel.x,   voxel.y,   voxel.z);
+    edges1.flip( voxel.x,   voxel.y,   voxel.z+1);
 
-    edges2.flip( voxels[i].x,   voxels[i].y,   voxels[i].z);
-    edges2.flip( voxels[i].x,   voxels[i].y+1, voxels[i].z);
+    edges2.flip( voxel.x,   voxel.y,   voxel.z);
+    edges2.flip( voxel.x,   voxel.y+1, voxel.z);
 
-    edges3.flip( voxels[i].x,   voxels[i].y,   voxels[i].z);
-    edges3.flip( voxels[i].x+1, voxels[i].y,   voxels[i].z);
+    edges3.flip( voxel.x,   voxel.y,   voxel.z);
+    edges3.flip( voxel.x+1, voxel.y,   voxel.z);
   }
 
   std::cerr << "Interior voxels...\n";
-  for (unsigned int i=0; i< insidevoxels.size(); i++)
+  for (auto & insidevoxel : insidevoxels)
   {
-    int depth= 1<<((int(iterations())-1)-insidevoxels[i].depth);
+    int depth= 1<<((int(iterations())-1)-insidevoxel.depth);
 
-    int startx= insidevoxels[i].x*depth;
-    int starty= insidevoxels[i].y*depth;
-    int startz= insidevoxels[i].z*depth;
+    int startx= insidevoxel.x*depth;
+    int starty= insidevoxel.y*depth;
+    int startz= insidevoxel.z*depth;
 
-    int endx= (insidevoxels[i].x+1)*depth;
-    int endy= (insidevoxels[i].y+1)*depth;
-    int endz= (insidevoxels[i].z+1)*depth;
+    int endx= (insidevoxel.x+1)*depth;
+    int endy= (insidevoxel.y+1)*depth;
+    int endz= (insidevoxel.z+1)*depth;
 
     for (int x=startx; x< endx; x++)
       for (int y=starty; y< endy; y++)
@@ -781,20 +781,20 @@ int main(int argc, char ** argv)
 
   vfout << "#VRML V1.0 ascii\n\nSeparator {\nCoordinate3 { point [\n";
 
-  for (unsigned int i=0; i< points.size(); i++)
+  for (auto & point : points)
   {
-    vfout << points[i][0] << ' '
-          << points[i][1] << ' '
-          << points[i][2] << ",\n";
+    vfout << point[0] << ' '
+          << point[1] << ' '
+          << point[2] << ",\n";
   }
 
   vfout << "]}\nIndexedFaceSet { coordIndex [\n";
 
-  for (unsigned int i=0; i< faces.size(); i++)
+  for (auto & face : faces)
   {
-    vfout << faces[i][0] << ", "
-          << faces[i][1] << ", "
-          << faces[i][2] << ", -1,\n";
+    vfout << face[0] << ", "
+          << face[1] << ", "
+          << face[2] << ", -1,\n";
   }
 
   vfout << "]}}\n";

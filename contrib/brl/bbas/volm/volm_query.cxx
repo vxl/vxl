@@ -380,10 +380,10 @@ void volm_query::create_cameras()
 {
   // iterate over valid cameras in the camera space
   std::vector<unsigned int> const& valid_cams = cam_space_->valid_indices();
-  for (unsigned i = 0; i < valid_cams.size(); i++) {
-    vpgl_perspective_camera<double> cam = cam_space_->camera(valid_cams[i]);
+  for (unsigned int valid_cam : valid_cams) {
+    vpgl_perspective_camera<double> cam = cam_space_->camera(valid_cam);
     cameras_.push_back(cam);
-    std::string cam_str = cam_space_->get_string(valid_cams[i]);
+    std::string cam_str = cam_space_->get_string(valid_cam);
     camera_strings_.push_back(cam_str);
   }
 }
@@ -437,8 +437,8 @@ void volm_query::generate_regions()
   // create the order_set for all non-ground region
   // std::set<unsigned>
  if (depth_regions_.size())
-    for (unsigned i = 0; i < depth_regions_.size(); ++i)
-      order_set_.insert(depth_regions_[i]->order());
+    for (auto & depth_region : depth_regions_)
+      order_set_.insert(depth_region->order());
   if (dm_->sky().size())
     order_set_.insert(order_sky_);
 }
@@ -480,7 +480,7 @@ bool volm_query::order_ingest()
 bool volm_query::query_ingest()
 {
   // loop over the set of camera hypotheses
-  for (unsigned i = 0; i < cameras_.size(); ++i)
+  for (auto cam : cameras_)
   {
     // the layers for camera hypothesis i
     // the minimum distance for each ray
@@ -501,7 +501,6 @@ bool volm_query::query_ingest()
     std::vector<unsigned> sky_id_layer;
     // the set of rays for each non-gp, non-sky region
     std::vector<std::vector<unsigned> > dist_id_layer(depth_regions_.size());
-    vpgl_perspective_camera<double> cam = cameras_[i];
     // put current camera into depth_map_scene
     dm_->set_camera(cam);
     // create an depth image for current camera if there is ground plane
@@ -1058,8 +1057,8 @@ std::vector<double> volm_query::get_valid_top_fov() const
     top_fov_set.insert(this->get_top_fov(i));
   }
   std::vector<double> valid_top_fov;
-  for (std::set<double>::iterator it = top_fov_set.begin(); it != top_fov_set.end(); ++it)
-    valid_top_fov.push_back(*it);
+  for (std::__1::__tree_const_iterator<double, std::__1::__tree_node<double, void *> *, long>::value_type it : top_fov_set)
+    valid_top_fov.push_back(it);
   return valid_top_fov;
 }
 
@@ -1114,20 +1113,20 @@ void volm_query::write_data(vsl_b_ostream& os)
   vsl_b_write(os, order_set_);  // store the non-ground order, using set to ensure objects having same order are put together
 
   vsl_b_write(os, (unsigned)(order_index_.size()));
-  for (unsigned i = 0; i < order_index_.size(); i++)
-    vsl_b_write(os, order_index_[i]);
+  for (const auto & i : order_index_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, ground_id_);
   vsl_b_write(os, ground_dist_);
 
   //vsl_b_write(os, ground_land_id_);
   vsl_b_write(os, (unsigned)(ground_land_id_.size()));
-  for (unsigned i = 0; i < ground_land_id_.size(); i++)
-    vsl_b_write(os, ground_land_id_[i]);
+  for (const auto & i : ground_land_id_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, (unsigned)(ground_land_wgt_.size()));
-  for (unsigned i = 0; i < ground_land_wgt_.size(); i++)
-    vsl_b_write(os, ground_land_wgt_[i]);
+  for (const auto & i : ground_land_wgt_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, ground_offset_);
   vsl_b_write(os, ground_orient_);
@@ -1136,8 +1135,8 @@ void volm_query::write_data(vsl_b_ostream& os)
   vsl_b_write(os, sky_orient_);
 
   vsl_b_write(os, (unsigned)(dist_id_.size()));
-  for (unsigned i = 0; i < dist_id_.size(); i++)
-    vsl_b_write(os, dist_id_[i]);
+  for (const auto & i : dist_id_)
+    vsl_b_write(os, i);
 
   vsl_b_write(os, dist_offset_);
   vsl_b_write(os, min_obj_dist_);

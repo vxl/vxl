@@ -63,8 +63,8 @@ vnl_sparse_symmetric_eigensystem::~vnl_sparse_symmetric_eigensystem()
 {
   delete[] vectors; vectors = nullptr;
   delete[] values; values = nullptr;
-  for (unsigned i=0; i<temp_store.size(); ++i)
-    delete temp_store[i];
+  for (auto & i : temp_store)
+    delete i;
   temp_store.clear();
 }
 
@@ -188,8 +188,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(vnl_sparse_matrix<double>&
   }
 
   // Delete temporary space.
-  for (unsigned i=0; i<temp_store.size(); ++i)
-    delete [] temp_store[i];
+  for (auto & i : temp_store)
+    delete [] i;
   temp_store.clear();
 
   return ierr;
@@ -317,8 +317,8 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   // by the solver
   // use FORTRAN indexing again...
   long iPntr[IPARAMSIZE];
-  for (int clrIx = 0; clrIx < IPARAMSIZE; clrIx++)
-    iPntr[clrIx]= 0;
+  for (long & clrIx : iPntr)
+    clrIx= 0;
 
   // Double precision work array of length 3*N.
   double *workd = new double[3 * matSize + 1];
@@ -460,8 +460,8 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
   // Store the contents of q.  Basically this is a fifo.  When a write
   // with base=0 is called, we start another fifo.
   if (base == 0) {
-    for (unsigned i=0; i<temp_store.size(); ++i)
-      delete temp_store[i];
+    for (auto & i : temp_store)
+      delete i;
     temp_store.clear();
   }
 

@@ -41,8 +41,8 @@ static void normalize(vnl_vector<double>& a, vnl_vector<double>& b)
   mean_dist /= num_pts;
 
   // scale points
-  for (unsigned int i=0; i<b.size(); ++i) {
-    b[i] /= mean_dist;
+  for (double & i : b) {
+    i /= mean_dist;
   }
   // scale cameras
   for (unsigned int i=0; i<a.size()/3; ++i) {
@@ -281,8 +281,8 @@ void test_prob1()
    vnl_random rnd;
 
    // add uniform random noise to each measurement
-   for (unsigned int i=0; i<proj2.size(); ++i) {
-     proj2[i] += (rnd.drand32()-0.5)*1e-6;
+   for (double & i : proj2) {
+     i += (rnd.drand32()-0.5)*1e-6;
    }
 
    // test 2D bundle adjustment with missing data and uniform noise
@@ -512,8 +512,8 @@ void test_prob2()
    vnl_random rnd;
 
    // add uniform random noise to each measurement
-   for (unsigned int i=0; i<proj2.size(); ++i) {
-     proj2[i] += (rnd.drand32()-0.5)*1e-6;
+   for (double & i : proj2) {
+     i += (rnd.drand32()-0.5)*1e-6;
    }
 
    // test 2D bundle adjustment with missing data and uniform noise
@@ -638,9 +638,9 @@ void test_prob3()
     init_a[3*i+1] += rnd.normal()*sigma_pos;
     init_a[3*i+2] += rnd.normal()*sigma_pos;
   }
-  for (unsigned i=0; i<init_b.size(); ++i)
+  for (double & i : init_b)
   {
-    init_b[i] += rnd.normal()*sigma_pos;
+    i += rnd.normal()*sigma_pos;
   }
 
   // create a generator function with ideal data and zeros for all projections
@@ -765,8 +765,8 @@ void test_prob3()
   }
 
   // add uniform random noise to each measurement
-  for (unsigned int i=0; i<proj2.size(); ++i) {
-    proj2[i] += (rnd.drand32()-0.5)*1e-6;
+  for (double & i : proj2) {
+    i += (rnd.drand32()-0.5)*1e-6;
   }
 
   // test 2D bundle adjustment with missing data and uniform noise

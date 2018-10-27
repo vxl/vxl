@@ -128,8 +128,8 @@ int main( int /* argc */, char ** /* argv */)
 
   std::cerr << std::endl << std::endl;
 
-  for ( unsigned int i=0; i< nn.size(); i++)
-    std::cerr << *nn[i] << std::endl;
+  for (auto & i : nn)
+    std::cerr << *i << std::endl;
 
   return 0;
 }

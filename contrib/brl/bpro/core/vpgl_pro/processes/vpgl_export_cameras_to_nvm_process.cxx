@@ -56,12 +56,12 @@ bool vpgl_export_cameras_to_nvm_process(bprb_func_process& pro)
   ofile<<"NVM_V3"<<std::endl;
   ofile<<std::endl;
   ofile<<cams.size()<<std::endl;
-  for(unsigned k = 0 ; k <cams.size(); k++)
+  for(auto & cam : cams)
   {
-      double f = cams[k]->get_calibration().focal_length()
-                *cams[k]->get_calibration().x_scale();
-      vnl_quaternion<double> q = cams[k]->get_rotation().as_quaternion();
-      vgl_point_3d<double> cc = cams[k]->get_camera_center();
+      double f = cam->get_calibration().focal_length()
+                *cam->get_calibration().x_scale();
+      vnl_quaternion<double> q = cam->get_rotation().as_quaternion();
+      vgl_point_3d<double> cc = cam->get_camera_center();
 
       ofile<<img_iter()<<" "<<f<<" "<<q.r()<<" "<<q.x()<<" "<<q.y()<<" "<<q.z()<<" "<<cc.x()<<" "<<cc.y()<<" "<<cc.z()<<" "<<0<<" "<<0<<std::endl;
 

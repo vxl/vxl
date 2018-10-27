@@ -65,11 +65,11 @@ class boxm2_3d_point_estimator_batch_functor
 #endif
 
     float w_sum = 0.0f;
-    for (unsigned j = 0; j < im_pts.size(); j++) {
-      float w = im_pts[j][3];
-      pt[0] += im_pts[j][0];
-      pt[1] += im_pts[j][1];
-      pt[2] += im_pts[j][2];
+    for (auto & im_pt : im_pts) {
+      float w = im_pt[3];
+      pt[0] += im_pt[0];
+      pt[1] += im_pt[1];
+      pt[2] += im_pt[2];
       w_sum += w;
     }
     pt[0] /= w_sum;

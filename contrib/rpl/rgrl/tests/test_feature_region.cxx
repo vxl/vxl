@@ -26,8 +26,8 @@ test_feature_region()
 
   bool valid=true;
   vnl_int_2 current;
-  for ( unsigned int i=0; i<pixels.size(); ++i ) {
-    current = pixels[i];
+  for (const auto & pixel : pixels) {
+    current = pixel;
     if ( current[0] < 0 || current[1] < 0  || current[0] >= 30 || current[1] >=30 ) {
       valid = false;
       break;

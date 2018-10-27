@@ -288,9 +288,9 @@ vgl_point_2d<double>  sdet_linear_curve_model::compute_best_fit(std::deque<sdet_
   //assign the rough centroid of this bundle as the best estimate
   double dx = 0.0;
   double dt = 0.0;
-  for (unsigned i=0; i<cv_bundle[0].size(); i++){
-    dx += cv_bundle[0][i].x();
-    dt += cv_bundle[0][i].y();
+  for (auto & i : cv_bundle[0]){
+    dx += i.x();
+    dt += i.y();
   }
   dx /= cv_bundle.num_vertices();
   dt /= cv_bundle.num_vertices();
@@ -315,12 +315,12 @@ void sdet_linear_curve_model::report_accuracy(double *estimates, double *min_est
 {
   double d_min=1000.0, d_max=1000.0, dt_min=1000.0, dt_max=-1000.0;
 
-  for (unsigned i=0; i<cv_bundle[0].size(); i++)
+  for (auto & i : cv_bundle[0])
   {
-    if (cv_bundle[0][i].x()<d_min) d_min = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].x()>d_max) d_max = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].y()<dt_min) dt_min = cv_bundle[0][i].y();
-    if (cv_bundle[0][i].y()>dt_max) dt_max = cv_bundle[0][i].y();
+    if (i.x()<d_min) d_min = i.x();
+    if (i.x()>d_max) d_max = i.x();
+    if (i.y()<dt_min) dt_min = i.y();
+    if (i.y()>dt_max) dt_max = i.y();
   }
 
   //report these numbers
@@ -541,9 +541,9 @@ vgl_point_2d<double>  sdet_CC_curve_model::compute_best_fit(std::deque<sdet_edge
   //assign the rough centroid of this bundle as the best estimate
   double dt = 0.0;
   k = 0.0;
-  for (unsigned i=0; i<cv_bundle[0].size(); i++){
-    dt += cv_bundle[0][i].x();
-    k += cv_bundle[0][i].y();
+  for (auto & i : cv_bundle[0]){
+    dt += i.x();
+    k += i.y();
   }
   dt /= cv_bundle.num_vertices();
   k /= cv_bundle.num_vertices();
@@ -565,12 +565,12 @@ void sdet_CC_curve_model::report_accuracy(double *estimates, double *min_estimat
 {
   double theta_min=1000.0, theta_max=-1000.0, k_min=1000.0, k_max=-1000.0;
 
-  for (unsigned i=0; i<cv_bundle[0].size(); i++)
+  for (auto & i : cv_bundle[0])
   {
-    if (cv_bundle[0][i].x()<theta_min) theta_min = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].x()>theta_max) theta_max = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].y()<k_min) k_min = cv_bundle[0][i].y();
-    if (cv_bundle[0][i].y()>k_max) k_max = cv_bundle[0][i].y();
+    if (i.x()<theta_min) theta_min = i.x();
+    if (i.x()>theta_max) theta_max = i.x();
+    if (i.y()<k_min) k_min = i.y();
+    if (i.y()>k_max) k_max = i.y();
   }
 
   //report these numbers
@@ -741,9 +741,9 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
     //we need to construct new bundles for CB1 which only constrains one of the parameters (dx)
     //determine the bounds on dx
     double dx_min=100, dx_max=-100;
-    for (unsigned p=0; p<cv_bundles[i][0].size(); p++){
-      if (cv_bundles[i][0][p].x()<dx_min) dx_min = cv_bundles[i][0][p].x();
-      if (cv_bundles[i][0][p].x()>dx_max) dx_max = cv_bundles[i][0][p].x();
+    for (auto & p : cv_bundles[i][0]){
+      if (p.x()<dx_min) dx_min = p.x();
+      if (p.x()>dx_max) dx_max = p.x();
     }
     //construct a polygon with these bounds
     vgl_polygon<double> cb1(1); cb1.push_back(dx_min, -0.5);cb1.push_back(dx_max, -0.5);cb1.push_back(dx_max, 0.5);cb1.push_back(dx_min, 0.5);
@@ -771,9 +771,9 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
 
     //construct the constraint box for the best model
     double dx_min=100, dx_max=-100;
-    for (unsigned p=0; p<cv_bundles[trans_k][0].size(); p++){
-      if (cv_bundles[trans_k][0][p].x()<dx_min) dx_min = cv_bundles[trans_k][0][p].x();
-      if (cv_bundles[trans_k][0][p].x()>dx_max) dx_max = cv_bundles[trans_k][0][p].x();
+    for (auto & p : cv_bundles[trans_k][0]){
+      if (p.x()<dx_min) dx_min = p.x();
+      if (p.x()>dx_max) dx_max = p.x();
     }
     //construct a polygon with these bounds
     vgl_polygon<double> cb1(1); cb1.push_back(dx_min, -0.5);cb1.push_back(dx_max, -0.5);cb1.push_back(dx_max, 0.5);cb1.push_back(dx_min, 0.5);
@@ -808,9 +808,9 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
     //for C^0 transition, we need to construct new bundles for CB1 which only constrains one of the parameters (dx)
     //determine the bounds on dx
     double dx_min=100, dx_max=-100;
-    for (unsigned p=0; p<cv_bundles[i][0].size(); p++){
-      if (cv_bundles[i][0][p].x()<dx_min) dx_min = cv_bundles[i][0][p].x();
-      if (cv_bundles[i][0][p].x()>dx_max) dx_max = cv_bundles[i][0][p].x();
+    for (auto & p : cv_bundles[i][0]){
+      if (p.x()<dx_min) dx_min = p.x();
+      if (p.x()>dx_max) dx_max = p.x();
     }
     //construct a polygon with these bounds
     vgl_polygon<double> cb1(1); cb1.push_back(dx_min, -0.5);cb1.push_back(dx_max, -0.5);cb1.push_back(dx_max, 0.5);cb1.push_back(dx_min, 0.5);
@@ -837,13 +837,13 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
 
         if (cb.num_sheets()==1){
           double dt1_min=100, dt1_max=-100, dt2_min=100, dt2_max=-100;
-          for (unsigned p=0; p<cb[0].size(); p++){
-            if (cb[0][p].y()<dt1_min) dt1_min = cb[0][p].y();
-            if (cb[0][p].y()>dt1_max) dt1_max = cb[0][p].y();
+          for (auto & p : cb[0]){
+            if (p.y()<dt1_min) dt1_min = p.y();
+            if (p.y()>dt1_max) dt1_max = p.y();
           }
-          for (unsigned p=0; p<cv_bundles[i][0].size(); p++){
-            if (cv_bundles[i][0][p].y()<dt2_min) dt2_min = cv_bundles[i][0][p].y();
-            if (cv_bundles[i][0][p].y()>dt2_max) dt2_max = cv_bundles[i][0][p].y();
+          for (auto & p : cv_bundles[i][0]){
+            if (p.y()<dt2_min) dt2_min = p.y();
+            if (p.y()>dt2_max) dt2_max = p.y();
           }
           double dtheta = std::min(std::fabs(dt1_min-dt2_max), std::fabs(dt2_min-dt1_max));
 
@@ -880,9 +880,9 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
     else if (trans_type==0){ //C^0
       //construct the constraint box for the best model
       double dx_min=100, dx_max=-100;
-      for (unsigned p=0; p<cv_bundles[trans_k][0].size(); p++){
-        if (cv_bundles[trans_k][0][p].x()<dx_min) dx_min = cv_bundles[trans_k][0][p].x();
-        if (cv_bundles[trans_k][0][p].x()>dx_max) dx_max = cv_bundles[trans_k][0][p].x();
+      for (auto & p : cv_bundles[trans_k][0]){
+        if (p.x()<dx_min) dx_min = p.x();
+        if (p.x()>dx_max) dx_max = p.x();
       }
       //construct a polygon with these bounds
       vgl_polygon<double> cb1(1); cb1.push_back(dx_min, -0.5);cb1.push_back(dx_max, -0.5);cb1.push_back(dx_max, 0.5);cb1.push_back(dx_min, 0.5);
@@ -909,12 +909,12 @@ sdet_curve_model* sdet_CC_curve_model_new::C1_transition(sdet_curve_model* cm)
 
   //first take the union of the curve bundles of the current cvlet
   vgl_polygon<double> cum_cb;
-  for (int i=0; i<NkClasses; i++)
+  for (auto & cv_bundle : cv_bundles)
   {
-    if (cv_bundles[i].num_sheets()!=1) continue; //only legal ones
+    if (cv_bundle.num_sheets()!=1) continue; //only legal ones
 
     //take the union of the cbs
-    cum_cb = vgl_clip(cum_cb, cv_bundles[i], vgl_clip_type_union);
+    cum_cb = vgl_clip(cum_cb, cv_bundle, vgl_clip_type_union);
   }
 
   if (cum_cb.num_sheets()!=1)  //sanity check
@@ -934,24 +934,24 @@ bool sdet_CC_curve_model_new::bundle_is_valid()
 {
   bool valid = false;
 
-  for (int i=0; i<NkClasses; i++){
-    if (cv_bundles[i].num_sheets()>1){
+  for (auto & cv_bundle : cv_bundles){
+    if (cv_bundle.num_sheets()>1){
       //delete all except the largest one (risky business)
       double la = 0;
       vgl_polygon<double>::sheet_t ls;
-      for (unsigned j=0; j<cv_bundles[i].num_sheets(); j++){
-        double a = vgl_area(vgl_polygon<double>(cv_bundles[i][j]));
+      for (unsigned j=0; j<cv_bundle.num_sheets(); j++){
+        double a = vgl_area(vgl_polygon<double>(cv_bundle[j]));
         if (a>la) {
           la = a;
-          ls = cv_bundles[i][j];
+          ls = cv_bundle[j];
         }
       }
 
       //delete all sheets except the largest one
-      cv_bundles[i].clear();
-      cv_bundles[i].push_back(ls);
+      cv_bundle.clear();
+      cv_bundle.push_back(ls);
     }
-    valid = valid || (cv_bundles[i].num_sheets()==1);
+    valid = valid || (cv_bundle.num_sheets()==1);
   }
   return valid;
 }
@@ -1174,9 +1174,9 @@ vgl_point_2d<double> sdet_CC_curve_model_new::compute_best_fit()
     //compute the centroid of this bundle
     double dx = 0.0;
     double dt = 0.0;
-    for (unsigned j=0; j<cv_bundles[best_k_ind][0].size(); j++){
-      dx += cv_bundles[best_k_ind][0][j].x();
-      dt += cv_bundles[best_k_ind][0][j].y();
+    for (auto & j : cv_bundles[best_k_ind][0]){
+      dx += j.x();
+      dt += j.y();
     }
     dx /= cv_bundles[best_k_ind].num_vertices();
     dt /= cv_bundles[best_k_ind].num_vertices();
@@ -1242,9 +1242,9 @@ report_accuracy(double *estimates, double *min_estimates, double *max_estimates)
   }
 
   if (best_k_ind>-1){
-    for (unsigned i=0; i<cv_bundles[best_k_ind][0].size(); i++){
-      if (cv_bundles[best_k_ind][0][i].y()<theta_min) theta_min = cv_bundles[best_k_ind][0][i].y();
-      if (cv_bundles[best_k_ind][0][i].y()>theta_max) theta_max = cv_bundles[best_k_ind][0][i].y();
+    for (auto & i : cv_bundles[best_k_ind][0]){
+      if (i.y()<theta_min) theta_min = i.y();
+      if (i.y()>theta_max) theta_max = i.y();
     }
   }
 
@@ -1273,11 +1273,11 @@ void sdet_CC_curve_model_new::print_info()
 void sdet_CC_curve_model_new::print(std::ostream& os)
 {
   os << "[";
-  for (int i=0; i<NkClasses; i++){
+  for (auto & cv_bundle : cv_bundles){
     os << "<";
-    if (cv_bundles[i].num_sheets()==1){
-      for (unsigned p=0; p<cv_bundles[i][0].size(); p++)
-        os << "(" << cv_bundles[i][0][p].x() << " " << cv_bundles[i][0][p].y() << ")";
+    if (cv_bundle.num_sheets()==1){
+      for (unsigned p=0; p<cv_bundle[0].size(); p++)
+        os << "(" << cv_bundle[0][p].x() << " " << cv_bundle[0][p].y() << ")";
     }
     os << ">";
   }
@@ -1293,7 +1293,7 @@ void sdet_CC_curve_model_new::read(std::istream& is)
   is >> dummy; // "[";
 
   //read the curve bundles
-  for (int i=0; i<NkClasses; i++)
+  for (auto & cv_bundle : cv_bundles)
   {
     vgl_polygon<double> cb;
 
@@ -1310,7 +1310,7 @@ void sdet_CC_curve_model_new::read(std::istream& is)
 
       is >> dummy; //either '>' or '('
     }
-    cv_bundles[i] = cb;
+    cv_bundle = cb;
   }
 
   //make sure that we have reached the end of the block successfully
@@ -1365,8 +1365,8 @@ bool sdet_CC_curve_model_perturbed::bundle_is_valid()
 {
   bool valid = false;
 
-  for (int i=0; i<NperturbPCC; i++)
-    valid = valid || (cv_bundles[i].num_sheets()==1);
+  for (auto & cv_bundle : cv_bundles)
+    valid = valid || (cv_bundle.num_sheets()==1);
 
   return valid;
 }
@@ -2379,9 +2379,9 @@ vgl_point_2d<double>  sdet_ES_curve_model::compute_best_fit(std::deque<sdet_edge
   //assign the rough centroid of this bundle as the best estimate
   k = 0.0;
   gamma = 0.0;
-  for (unsigned i=0; i<cv_bundle[0].size(); i++){
-    k += cv_bundle[0][i].x();
-    gamma += cv_bundle[0][i].y();
+  for (auto & i : cv_bundle[0]){
+    k += i.x();
+    gamma += i.y();
   }
   k /= cv_bundle.num_vertices();
   gamma /= cv_bundle.num_vertices();
@@ -2434,15 +2434,15 @@ double sdet_ES_curve_model::compute_distance(std::deque<sdet_edgel*> &edgel_chai
 
   //compute distance from each of the edgels to the curve
   double dist = 0;
-  for (unsigned i=0; i<edgel_chain.size(); i++){
-    double l = vgl_distance(edgel_chain[i]->pt, pt);
+  for (auto & i : edgel_chain){
+    double l = vgl_distance(i->pt, pt);
 
-    double ref_dir = sdet_vPointPoint(pt, edgel_chain[i]->pt); //reference dir
-    if (sdet_dot(ref_dir, theta)<0 || sdet_dot(ref_dir, edgel_chain[i]->tangent)<0)
+    double ref_dir = sdet_vPointPoint(pt, i->pt); //reference dir
+    if (sdet_dot(ref_dir, theta)<0 || sdet_dot(ref_dir, i->tangent)<0)
       l*= -1; //negative direction
 
     //find the point on the ES around this arclength (assuming s~l)
-    double d = vgl_distance(es_fit.point_at_length(l), edgel_chain[i]->pt);
+    double d = vgl_distance(es_fit.point_at_length(l), i->pt);
 
     dist+=d;
   }
@@ -2458,12 +2458,12 @@ void sdet_ES_curve_model::report_accuracy(double *estimates, double *min_estimat
 {
   double k_min=1000.0, k_max=-1000.0, gamma_min=1000.0, gamma_max=-1000.0;
 
-  for (unsigned i=0; i<cv_bundle[0].size(); i++)
+  for (auto & i : cv_bundle[0])
   {
-    if (cv_bundle[0][i].x()<k_min) k_min = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].x()>k_max) k_max = cv_bundle[0][i].x();
-    if (cv_bundle[0][i].y()<gamma_min) gamma_min = cv_bundle[0][i].y();
-    if (cv_bundle[0][i].y()>gamma_max) gamma_max = cv_bundle[0][i].y();
+    if (i.x()<k_min) k_min = i.x();
+    if (i.x()>k_max) k_max = i.x();
+    if (i.y()<gamma_min) gamma_min = i.y();
+    if (i.y()>gamma_max) gamma_max = i.y();
   }
 
   //report these numbers
@@ -2532,8 +2532,8 @@ bool sdet_ES_curve_model_perturbed::bundle_is_valid()
 {
   bool valid = false;
 
-  for (int i=0; i<Nperturb; i++)
-    valid = valid || (cv_bundles[i].num_sheets()==1);
+  for (auto & cv_bundle : cv_bundles)
+    valid = valid || (cv_bundle.num_sheets()==1);
 
   return valid;
 }

@@ -66,11 +66,11 @@ bool mfpf_searcher::find_near_pose(mfpf_point_finder& pf,
   unsigned n_worse=0;
   double best_fit = fit;
   unsigned best_i = 0;
-  for (unsigned i=0;i<index.size();++i)
+  for (unsigned int i : index)
   {
-    if (fits[index[i]]>fit) { n_worse++;}
-    if (fits[index[i]]<best_fit)
-    { best_i=index[i]; best_fit=fits[index[i]]; }
+    if (fits[i]>fit) { n_worse++;}
+    if (fits[i]<best_fit)
+    { best_i=i; best_fit=fits[i]; }
   }
 
   if (n_worse==0) return true; // New pose no better than any existing

@@ -402,8 +402,8 @@ void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
 
       // count the number of non-dummy edgels
       int count=0;
-      for (std::list<float>::iterator i=grad.begin(); i!=grad.end(); ++i)
-        if ( (*i) != dummy_ )
+      for (std::__1::__list_iterator<float, void *>::value_type & i : grad)
+        if ( i != dummy_ )
           count++;
 
       // If the count is less than two we cannot accept

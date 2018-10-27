@@ -134,8 +134,8 @@ class bxml_element : public bxml_data
   {
     values.clear();
     std::vector<std::string> values_str = attributes(attr_name);
-    for (unsigned vi=0; vi<values_str.size(); vi++) {
-      std::stringstream s(values_str[vi]);
+    for (const auto & vi : values_str) {
+      std::stringstream s(vi);
       if (s.str() == "")
         return false;
       T value_t;

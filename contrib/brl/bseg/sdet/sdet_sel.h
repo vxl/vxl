@@ -193,8 +193,7 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
         continue;
 
       //for all the edgels in its neighborhood
-      for (unsigned k=0; k<edgemap_->cell(xx, yy).size(); k++){
-        sdet_edgel* eB = edgemap_->cell(xx, yy)[k];
+      for (auto eB : edgemap_->cell(xx, yy)){
         if (eB == eA) continue;
 
         // 3) do a better check of circular radius because the bucketing neighborhood is very coarse
@@ -313,8 +312,8 @@ void sdet_sel<curve_model>::build_curvelets_greedy_for_edge(sdet_edgel* eA, unsi
   }
 
   // 15) now delete all the hyps for this edgel, before moving on to a new edgel
-  for (unsigned h1=0; h1<eA_hyps.size(); h1++)
-    delete eA_hyps[h1].cm;
+  for (auto & eA_hyp : eA_hyps)
+    delete eA_hyp.cm;
 
   eA_hyps.clear();
 }
@@ -394,8 +393,8 @@ sdet_sel<curve_model>::form_an_edgel_grouping(sdet_edgel* ref_e,
     new_cvlet = new sdet_curvelet(ref_e, chain_cm, forward);
 
     //add edgels
-    for (unsigned i=0; i<edgel_chain.size(); i++)
-      new_cvlet->push_back(edgel_chain[i]);
+    for (auto & i : edgel_chain)
+      new_cvlet->push_back(i);
 
     //compute curvelet quality
     new_cvlet->compute_properties(rad_, token_len_);

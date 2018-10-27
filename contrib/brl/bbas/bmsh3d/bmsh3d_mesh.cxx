@@ -303,8 +303,8 @@ void bmsh3d_mesh::remove_F_del_isolated_Es (bmsh3d_face* F)
 
   remove_face (F);
 
-  for (unsigned int i=0; i<edges_to_del.size(); i++) {
-    remove_edge (edges_to_del[i]);
+  for (auto & i : edges_to_del) {
+    remove_edge (i);
   }
 }
 

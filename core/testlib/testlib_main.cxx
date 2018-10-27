@@ -53,8 +53,8 @@ void
 list_test_names( std::ostream& ostr )
 {
   ostr << "The registered test names are:\n";
-  for ( unsigned int i = 0; i < testlib_test_name_.size(); ++i )
-    ostr << "   " << testlib_test_name_[i] << '\n';
+  for (const auto & i : testlib_test_name_)
+    ostr << "   " << i << '\n';
   ostr << "\nOmitting a test name, or specifying the name \"all\" will run all the tests.\n";
 }
 

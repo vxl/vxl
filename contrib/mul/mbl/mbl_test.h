@@ -61,9 +61,8 @@ bool mbl_test_summaries_are_equal(const S &a, const S &b, const char **exception
       bool exception_found = false;
 //      for (const char **it = exceptions; *it!=0; ++it)
 //        if (sa.find(*it)!=std::string::npos && sb.find(*it)!=std::string::npos)
-      for (std::vector<vul_reg_exp>::iterator it=exceptions_re.begin(), end=exceptions_re.end();
-        it != end; ++it)
-        if (it->find(sa) && it->find(sb))
+      for (auto & it : exceptions_re)
+        if (it.find(sa) && it.find(sb))
         {
           exception_found = true;
           break;

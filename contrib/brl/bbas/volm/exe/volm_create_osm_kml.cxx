@@ -326,9 +326,9 @@ bool find_key_value_from_tags(std::string const& key, std::string const& value,
 void generate_description(std::vector<std::pair<std::string, std::string> >& tags, std::string& description)
 {
   description.clear();
-  for (std::vector<std::pair<std::string, std::string> >::iterator vit = tags.begin(); vit != tags.end(); ++vit)
+  for (auto & tag : tags)
   {
-    description += vit->first + "=" + vit->second + " ";
+    description += tag.first + "=" + tag.second + " ";
   }
   // replace all unsupported characters in kml to "_"
   std::replace(description.begin(), description.end(), '&', '_');

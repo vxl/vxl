@@ -338,8 +338,8 @@ void mfpf_mr_point_finder::b_write(vsl_b_ostream& bfs) const
 {
   vsl_b_write(bfs,version_no());
   vsl_b_write(bfs,finders_.size());
-  for (unsigned i=0;i<finders_.size();++i)
-    vsl_b_write(bfs,finders_[i]);
+  for (const auto & finder : finders_)
+    vsl_b_write(bfs,finder);
   vsl_b_write(bfs,max_after_pruning_);
 }
 

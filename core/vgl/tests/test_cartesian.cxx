@@ -169,11 +169,11 @@ static void test_vector_3d()
   tr[1] = orthogonal_vectors(n1,0.25);
   tr[2] = orthogonal_vectors(n1,0.5);
   tr[3] = orthogonal_vectors(n1,0.75);
-  for (unsigned i = 0; i<4; ++i)
+  for (const auto & i : tr)
   {
-    double d = dot_product<double>(n1, tr[i]);
+    double d = dot_product<double>(n1, i);
     check += d*d;
-    d = dot_product<double>(tr[i], tr[i])-1.0;
+    d = dot_product<double>(i, i)-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 1", check, 0.0, 1e-8);
@@ -185,11 +185,11 @@ static void test_vector_3d()
   tr[1] = orthogonal_vectors(n2,0.25);
   tr[2] = orthogonal_vectors(n2,0.5);
   tr[3] = orthogonal_vectors(n2,0.75);
-  for (unsigned i = 0; i<4; ++i)
+  for (const auto & i : tr)
   {
-    double d = dot_product<double>(n2, tr[i]);
+    double d = dot_product<double>(n2, i);
     check += d*d;
-    d = dot_product<double>(tr[i], tr[i])-1.0;
+    d = dot_product<double>(i, i)-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 2", check, 0.0, 1e-8);
@@ -201,11 +201,11 @@ static void test_vector_3d()
   tr[1] = orthogonal_vectors(n3,0.25);
   tr[2] = orthogonal_vectors(n3,0.5);
   tr[3] = orthogonal_vectors(n3,0.75);
-  for (unsigned i = 0; i<4; ++i)
+  for (const auto & i : tr)
   {
-    double d = dot_product<double>(n3, tr[i]);
+    double d = dot_product<double>(n3, i);
     check += d*d;
-    d = dot_product<double>(tr[i], tr[i])-1.0;
+    d = dot_product<double>(i, i)-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 3", check, 0.0, 1e-8);
@@ -217,11 +217,11 @@ static void test_vector_3d()
   tr[1] = orthogonal_vectors(n4,0.25);
   tr[2] = orthogonal_vectors(n4,0.5);
   tr[3] = orthogonal_vectors(n4,0.75);
-  for (unsigned i = 0; i<4; ++i)
+  for (const auto & i : tr)
   {
-    double d = dot_product<double>(n4, tr[i]);
+    double d = dot_product<double>(n4, i);
     check += d*d;
-    d = dot_product<double>(tr[i], tr[i])-1.0;
+    d = dot_product<double>(i, i)-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 4", check, 0.0, 1e-8);
@@ -233,11 +233,11 @@ static void test_vector_3d()
   tr[1] = orthogonal_vectors(n5,0.25);
   tr[2] = orthogonal_vectors(n5,0.5);
   tr[3] = orthogonal_vectors(n5,0.75);
-  for (unsigned i = 0; i<4; ++i)
+  for (const auto & i : tr)
   {
-    double d = dot_product<double>(n5, tr[i]);
+    double d = dot_product<double>(n5, i);
     check += d*d;
-    d = dot_product<double>(tr[i], tr[i])-1.0;
+    d = dot_product<double>(i, i)-1.0;
     check += d*d;
   }
   TEST_NEAR("orthogonal vectors case 5", check, 0.0, 1e-8);

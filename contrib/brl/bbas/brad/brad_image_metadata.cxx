@@ -72,13 +72,13 @@ std::ostream&  operator<<(std::ostream& s, brad_image_metadata const& md)
      << "band_type = " << md.band_ << '\n'
      << "band_number = " << md.n_bands_ << '\n'
      << "abscal = ";
-   for (unsigned i = 0; i < md.abscal_.size(); i++) {
-     s << md.abscal_[i] << ", ";
+   for (double i : md.abscal_) {
+     s << i << ", ";
    }
    s << '\n';
    s << "effect_band_width = ";
-   for (unsigned i = 0; i < md.effect_band_width_.size(); i++) {
-     s << md.effect_band_width_[i] << ", ";
+   for (double i : md.effect_band_width_) {
+     s << i << ", ";
    }
    s << '\n';
    s << "number_of_bits = " << md.number_of_bits_ << std::endl;
@@ -1794,9 +1794,8 @@ void brad_image_metadata::print_out_radiometric_parameter()
 void brad_image_metadata::print_out_solar_irradiance()
 {
   std::cout << "Satellite normalized solar irradiance: " << std::endl;
-  for (std::vector<double>::iterator vit = this->normal_sun_irradiance_values_.begin();
-       vit != this->normal_sun_irradiance_values_.end(); ++vit)
-    std::cout << *vit << ' ';
+  for (double & normal_sun_irradiance_value : this->normal_sun_irradiance_values_)
+    std::cout << normal_sun_irradiance_value << ' ';
   std::cout << "]\n";
   return;
 }

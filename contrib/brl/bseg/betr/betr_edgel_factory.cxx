@@ -147,9 +147,8 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   }else
     this->grad_mags(iname, region_name, poly, gmags);
   bsta_histogram<double> h(params_.gradient_range_, params_.nbins_);
-  for( std::vector<double>::iterator git = gmags.begin();
-       git != gmags.end();++git)
-    h.upcount(*git, (1.0 + (*git)));//increase weight to favor high gradient values (small objects)
+  for(double & gmag : gmags)
+    h.upcount(gmag, (1.0 + gmag));//increase weight to favor high gradient values (small objects)
 
   if(h.area()<3.0*params_.nbins_){
     std::cout << "insufficient edges in region " << region_name << " - fatal" << std::endl;
@@ -164,11 +163,10 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, s
     std::cout << "no edgels for the specified region " << iname << ':' << region_name << '\n';
     return false;
   }
-  for (std::vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
-       eit != vd_edges.end(); ++eit)
+  for (auto & vd_edge : vd_edges)
   {
       //get the edgel chain
-    vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+    vdgl_interpolator_sptr itrp = vd_edge->get_interpolator();
     vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
     unsigned int n = ech->size();
     for (unsigned int i=0; i<n;i++)
@@ -196,11 +194,10 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
   }
   double x0 = static_cast<double>(broi->cmin(region_index));
   double y0 = static_cast<double>(broi->rmin(region_index));
-  for (std::vector<vdgl_digital_curve_sptr>::iterator eit = vd_edges.begin();
-       eit != vd_edges.end(); ++eit)
+  for (auto & vd_edge : vd_edges)
   {
       //get the edgel chain
-    vdgl_interpolator_sptr itrp = (*eit)->get_interpolator();
+    vdgl_interpolator_sptr itrp = vd_edge->get_interpolator();
     vdgl_edgel_chain_sptr ech = itrp->get_edgel_chain();
     unsigned int n = ech->size();
     for (unsigned int i=0; i<n;i++)
@@ -222,10 +219,9 @@ bool betr_edgel_factory::save_edgels(std::string const& dir) const {
   std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
   for(; iit != edgels_.end(); ++iit){
           const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
-    for(std::map<std::string, std::vector< vdgl_digital_curve_sptr > >::const_iterator eit = emap.second.begin();
-        eit != emap.second.end(); ++eit){
-      std::string region_name = eit->first;
-      std::vector< vdgl_digital_curve_sptr > edges = eit->second;
+    for(const auto & eit : emap.second){
+      std::string region_name = eit.first;
+      std::vector< vdgl_digital_curve_sptr > edges = eit.second;
       std::vector<vsol_digital_curve_2d_sptr> vsol_edges = sdet_detector::convert_vdgl_to_vsol(edges);
       // convert to spatial object 2d
       std::vector<vsol_spatial_object_2d_sptr> sos;
@@ -251,9 +247,8 @@ bool betr_edgel_factory::save_edgels_in_poly(std::string const& identifier, std:
   for(; iit != edgels_.end(); ++iit){
     const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
     std::string iname = emap.first;
-    for(std::map<std::string, std::vector< vdgl_digital_curve_sptr > >::const_iterator eit = emap.second.begin();
-        eit != emap.second.end(); ++eit){
-      std::string region_name = eit->first;
+    for(const auto & eit : emap.second){
+      std::string region_name = eit.first;
       unsigned index = regions_[iname][region_name];
       vsol_polygon_2d_sptr poly = polys_[iname][index];
       if(!poly){
@@ -261,7 +256,7 @@ bool betr_edgel_factory::save_edgels_in_poly(std::string const& identifier, std:
         return false;
       }
       vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly);
-      std::vector< vdgl_digital_curve_sptr > edges = eit->second;
+      std::vector< vdgl_digital_curve_sptr > edges = eit.second;
       std::vector<vsol_digital_curve_2d_sptr> vsol_edges = sdet_detector::convert_vdgl_to_vsol(edges);
       // convert to spatial object 2d
       std::vector<vsol_spatial_object_2d_sptr> sos;
@@ -315,9 +310,8 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
     return nullptr;
   }
   double grad_scale = 255.0/params_.gradient_range_;
-  for(std::vector< vdgl_digital_curve_sptr >::iterator vit = edges.begin();
-      vit != edges.end(); ++vit){
-    vdgl_edgel_chain_sptr echain = (*vit)->get_interpolator()->get_edgel_chain();
+  for(auto & edge : edges){
+    vdgl_edgel_chain_sptr echain = edge->get_interpolator()->get_edgel_chain();
     if(!echain){
       std::cout << "Null edgel chain " << iname << ':' << region_name << "\n";
       return nullptr;

@@ -456,10 +456,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   // count
   if (positive_sign == "high")
   {
-    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    for (auto & pos_pixel : pos_pixels)
     {
-      unsigned i = pos_pixels[pidx].first;
-      unsigned j = pos_pixels[pidx].second;
+      unsigned i = pos_pixel.first;
+      unsigned j = pos_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) >= thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
@@ -468,10 +468,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
           fn->data_array[tidx] += 1;
       }
     }
-    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    for (auto & neg_pixel : neg_pixels)
     {
-      unsigned i = neg_pixels[nidx].first;
-      unsigned j = neg_pixels[nidx].second;
+      unsigned i = neg_pixel.first;
+      unsigned j = neg_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) >= thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive
@@ -483,10 +483,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   }
   else if (positive_sign == "low")
   {
-    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    for (auto & pos_pixel : pos_pixels)
     {
-      unsigned i = pos_pixels[pidx].first;
-      unsigned j = pos_pixels[pidx].second;
+      unsigned i = pos_pixel.first;
+      unsigned j = pos_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) <= thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
@@ -495,10 +495,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
           fn->data_array[tidx] += 1;
       }
     }
-    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    for (auto & neg_pixel : neg_pixels)
     {
-      unsigned i = neg_pixels[nidx].first;
-      unsigned j = neg_pixels[nidx].second;
+      unsigned i = neg_pixel.first;
+      unsigned j = neg_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) <= thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive
@@ -510,10 +510,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   }
   else if (positive_sign == "equal")
   {
-    for (unsigned pidx = 0; pidx < pos_pixels.size(); pidx++)
+    for (auto & pos_pixel : pos_pixels)
     {
-      unsigned i = pos_pixels[pidx].first;
-      unsigned j = pos_pixels[pidx].second;
+      unsigned i = pos_pixel.first;
+      unsigned j = pos_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) == thresholds[tidx] )  // ground truth is positive, detection is true  --> true positive
@@ -522,10 +522,10 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
           fn->data_array[tidx] += 1;
       }
     }
-    for (unsigned nidx = 0; nidx < neg_pixels.size(); nidx++)
+    for (auto & neg_pixel : neg_pixels)
     {
-      unsigned i = neg_pixels[nidx].first;
-      unsigned j = neg_pixels[nidx].second;
+      unsigned i = neg_pixel.first;
+      unsigned j = neg_pixel.second;
       for (unsigned tidx = 0; tidx < n_thres; tidx++)
       {
         if ( (*detection_map)(i,j) == thresholds[tidx] )  // ground truth is negative, detection is true  --> false positive

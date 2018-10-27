@@ -59,12 +59,11 @@ col_collapse()
   double  collapsed_count = 0;
   double  total_count = 0;
 
-  for (coll_iterator c = collinear_lines_.begin();
-       c != collinear_lines_.end(); ++c)
+  for (auto & collinear_line : collinear_lines_)
   {
     total_count++;
 
-    if ((*c)->get_discard_flag())
+    if (collinear_line->get_discard_flag())
       collapsed_count++;
   }
 
@@ -99,19 +98,18 @@ get_line_along_edge(vtol_edge* edge)
   vtol_vertex_sptr    ev1 = edge->v1();
   vtol_vertex_sptr    ev2 = edge->v2();
 
-  for (coll_iterator c = collinear_lines_.begin();
-       c != collinear_lines_.end(); ++c)
+  for (auto & collinear_line : collinear_lines_)
   {
-    edge_2d_list&  c_edges = (*c)->get_contributors();
+    edge_2d_list&  c_edges = collinear_line->get_contributors();
 
-    for (edge_2d_iterator e = c_edges.begin(); e != c_edges.end(); ++e)
+    for (auto & c_edge : c_edges)
     {
-      vtol_vertex_sptr  v1 = (*e)->v1();
-      vtol_vertex_sptr  v2 = (*e)->v2();
+      vtol_vertex_sptr  v1 = c_edge->v1();
+      vtol_vertex_sptr  v2 = c_edge->v2();
 
       if (((*ev1 == *v1) && (*ev2 == *v2)) ||
           ((*ev1 == *v2) && (*ev2 == *v1)))
-        ret = *c;
+        ret = collinear_line;
     }
   }
 
@@ -199,10 +197,9 @@ fit_lines()
   }
 
   std::vector<vdgl_digital_curve_sptr>  curves_in;
-  for (edge_2d_iterator ei = edges_in_vect.begin();
-       ei != edges_in_vect.end(); ei++)
+  for (auto & ei : edges_in_vect)
   {
-    vsol_curve_2d_sptr c = (*ei)->curve();
+    vsol_curve_2d_sptr c = ei->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -245,15 +242,14 @@ find_collinear_lines()
   // sort fitted edges by length into f_edges
   edge_2d_list  unsorted_edges = this->GetFittedEdges();
   edge_2d_list  f_edges;
-  for (edge_2d_iterator e = unsorted_edges.begin();
-       e != unsorted_edges.end(); ++e)
+  for (auto & unsorted_edge : unsorted_edges)
   {
-    double        len = (*e)->curve()->length();
+    double        len = unsorted_edge->curve()->length();
     edge_2d_iterator  slot = f_edges.begin();
     for (; slot != f_edges.end(); ++slot)
       if ((*slot)->curve()->length() < len)
       {
-        f_edges.insert(slot, *e);
+        f_edges.insert(slot, unsorted_edge);
         break;
       }
   }
@@ -265,28 +261,28 @@ find_collinear_lines()
 #ifdef DEBUG
   std::cout << "Collineating: ";
 #endif
-  for (edge_2d_iterator e = f_edges.begin(); e != f_edges.end(); ++e)
+  for (auto & f_edge : f_edges)
   {
 #ifdef DEBUG
     std::cout << '.';
 #endif
 
-    if ((*e)->curve()->length() == 0)
+    if (f_edge->curve()->length() == 0)
       continue;
 
-    bool  match_flag = find_collinear_match(*e,
+    bool  match_flag = find_collinear_match(f_edge,
                                             unfiltered_lines,
                                             cpp_->midpt_distance(),
                                             match);
 
     if (!match_flag)
     {
-      vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e, cpp_->angle_tolerance()));
+      vifa_coll_lines_sptr  cl(new vifa_coll_lines(f_edge, cpp_->angle_tolerance()));
 
       unfiltered_lines.push_back(cl);
     }
     else
-      (*match)->add_and_update(*e);
+      (*match)->add_and_update(f_edge);
   }
 
 #ifdef DEBUG
@@ -294,26 +290,25 @@ find_collinear_lines()
 #endif
 
   // remove lines whose support is too low
-  for (coll_iterator c = unfiltered_lines.begin();
-       c != unfiltered_lines.end(); ++c)
+  for (auto & unfiltered_line : unfiltered_lines)
   {
-    double  span = (*c)->spanning_length();
-    double  support = (*c)->support_length();
+    double  span = unfiltered_line->spanning_length();
+    double  support = unfiltered_line->support_length();
 
     if ((support/span) >= cpp_->discard_threshold())
     {
-      collinear_lines_.push_back(*c);
+      collinear_lines_.push_back(unfiltered_line);
       col_span_.add_sample(span);
       col_support_.add_sample(support);
-      col_contrib_.add_sample((*c)->get_contributors().size());
+      col_contrib_.add_sample(unfiltered_line->get_contributors().size());
     }
     else
     {
       // Unwind the unsupported line
-      edge_2d_list&  contrib = (*c)->get_contributors();
-      for (edge_2d_iterator e = contrib.begin(); e != contrib.end(); ++e)
+      edge_2d_list&  contrib = unfiltered_line->get_contributors();
+      for (auto & e : contrib)
       {
-        vifa_coll_lines_sptr  cl(new vifa_coll_lines(*e,
+        vifa_coll_lines_sptr  cl(new vifa_coll_lines(e,
                                                      cpp_->angle_tolerance(),
                                                      cpp_->endpt_distance(),
                                                      true));
@@ -384,9 +379,9 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
     float    total_len = 0.f;
     int      nlines = 0;
     imp_line_list    lg_filtered;
-    for (edge_2d_iterator ei = fedges.begin(); ei != fedges.end(); ++ei)
+    for (auto & fedge : fedges)
     {
-      vsol_curve_2d_sptr  cur = (*ei)->curve();
+      vsol_curve_2d_sptr  cur = fedge->curve();
       float        len = float(cur->length());
       total_len += len;
 

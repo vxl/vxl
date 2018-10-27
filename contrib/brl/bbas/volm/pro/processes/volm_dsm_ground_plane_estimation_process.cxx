@@ -797,8 +797,7 @@ bool volm_dsm_ground_filter_mgf_process_globals::ground_linear_regression(vil_im
       std::vector<unsigned> after_grd_pts;
       std::vector<float> after_gre_elev;
       // remove points that have more than three times of the standard deviation of the regression
-      for (unsigned k = 0; k < grd_pts.size(); k++) {
-        unsigned i = grd_pts[k];
+      for (unsigned int i : grd_pts) {
         float elev;
         if (is_horizontal) elev = img(i,j);
         else               elev = img(j,i);

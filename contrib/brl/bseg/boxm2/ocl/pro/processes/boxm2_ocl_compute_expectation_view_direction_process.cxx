@@ -142,7 +142,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     ifile.close();
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -153,26 +153,26 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
     lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
-    for (std::vector<boxm2_block_id>::iterator id = vis_order.begin(); id != vis_order.end(); ++id)
+    for (auto & id : vis_order)
     {
-        boxm2_block_metadata mdata = scene->get_block_metadata(*id);
+        boxm2_block_metadata mdata = scene->get_block_metadata(id);
         //write the image values to the buffer
         vul_timer transfer;
-        bocl_mem* blk = opencl_cache->get_block(scene,*id);
+        bocl_mem* blk = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
-        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
+        bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,false);
         boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
         int auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_x = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_x = opencl_cache->get_data(scene,id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_y = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_y = opencl_cache->get_data(scene,id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_direction_expectation_z = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_direction_expectation_z = opencl_cache->get_data(scene,id, boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),info_buffer->data_buffer_length*auxTypeSize,false);
         auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-        bocl_mem *aux_vis_expectation = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),info_buffer->data_buffer_length*auxTypeSize,false);
+        bocl_mem *aux_vis_expectation = opencl_cache->get_data(scene,id, boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),info_buffer->data_buffer_length*auxTypeSize,false);
 
         bocl_kernel* kern =  kernels[identifier][0];
         //choose correct render kernel
@@ -227,7 +227,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         kern =  kernels[identifier][1];
         {
             auxTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX0>::prefix());
-            bocl_mem *aux_dispersion = opencl_cache->get_data(scene,*id, boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),info_buffer->data_buffer_length*auxTypeSize,false);
+            bocl_mem *aux_dispersion = opencl_cache->get_data(scene,id, boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),info_buffer->data_buffer_length*auxTypeSize,false);
             kern->set_arg( blk_info );
             kern->set_arg( alpha );
             kern->set_arg( aux_direction_expectation_x );
@@ -247,11 +247,11 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
             aux_direction_expectation_z->read_to_buffer(queue);
             aux_vis_expectation->read_to_buffer(queue);
             alpha->read_to_buffer(queue);
-            opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),true);
-            opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),true);
-            opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),true);
-            opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),true);
-            opencl_cache->deep_remove_data(scene,*id,boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),true);
+            opencl_cache->deep_remove_data(scene,id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_x"),true);
+            opencl_cache->deep_remove_data(scene,id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_y"),true);
+            opencl_cache->deep_remove_data(scene,id,boxm2_data_traits<BOXM2_AUX0>::prefix("direction_expectation_z"),true);
+            opencl_cache->deep_remove_data(scene,id,boxm2_data_traits<BOXM2_AUX0>::prefix("visibility_expectation"),true);
+            opencl_cache->deep_remove_data(scene,id,boxm2_data_traits<BOXM2_AUX0>::prefix("dispersion"),true);
             //opencl_cache->deep_remove_data(*id,boxm2_data_traits<BOXM2_ALPHA>::prefix(),true);
             //clear render kernel args so it can reset em on next execution
             kern->clear_args();

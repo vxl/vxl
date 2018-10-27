@@ -762,7 +762,7 @@ void bstm_ocl_particle_filter::init_ocl_minfo()
   lookup_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // output buffer for debugging
-  for(unsigned i = 0; i < 1000;i ++) output_buff[i] = 0;
+  for(float & i : output_buff) i = 0;
   output_ = new bocl_mem(device_->context(), output_buff, sizeof(cl_float)*1000, "output" );
   output_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
 

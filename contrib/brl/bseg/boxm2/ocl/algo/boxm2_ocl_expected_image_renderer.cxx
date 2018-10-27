@@ -49,11 +49,11 @@ boxm2_ocl_expected_image_renderer
 
   int num_valid_appearances_grey = sizeof(valid_appearance_types_grey) / sizeof(valid_appearance_types_grey[0]);
 
-  for (unsigned int i=0; i<apps.size(); ++i) {
+  for (const auto & app : apps) {
     for (unsigned v = 0; v < num_valid_appearances_grey; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_grey[v];
       std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
-      if ( apps[i] == valid_apm_prefix )
+      if ( app == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
         foundDataType = true;
@@ -66,11 +66,11 @@ boxm2_ocl_expected_image_renderer
     }
   }
   int num_valid_appearances_rgb = sizeof(valid_appearance_types_rgb) / sizeof(valid_appearance_types_rgb[0]);
-  for (unsigned int i=0; i<apps.size(); ++i) {
+  for (const auto & app : apps) {
     for (unsigned v = 0; v < num_valid_appearances_rgb; ++v) {
       boxm2_data_type valid_apm_type = valid_appearance_types_rgb[v];
       std::string valid_apm_prefix = boxm2_data_info::prefix(valid_apm_type, ident);
-      if ( apps[i] == valid_apm_prefix )
+      if ( app == valid_apm_prefix )
       {
         data_type_ = valid_apm_prefix;
         foundDataType = true;

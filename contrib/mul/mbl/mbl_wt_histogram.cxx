@@ -41,7 +41,7 @@ void mbl_wt_histogram::clear()
   total_wt_=0.0;
   wt_below_ = 0;
   wt_above_ = 0;
-  for (unsigned int i=0;i<wt_sum_.size();++i) wt_sum_[i]=0;
+  for (double & i : wt_sum_) i=0;
 }
 
 void mbl_wt_histogram::obs(double v, double wt)

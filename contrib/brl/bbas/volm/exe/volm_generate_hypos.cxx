@@ -33,24 +33,24 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, std::vector<volm_img_info> cons
   // find the elevation of the hypotheses
   float z = 0;
   bool found_it = false;
-  for (unsigned mm = 0; mm < infos.size(); mm++) {
-    if (infos[mm].contains(pt)) {
+  for (const auto & info : infos) {
+    if (info.contains(pt)) {
       double u,v;
-      infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v);
+      info.cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);
       int vv = (int)std::floor(v+0.5);
-      if (infos[mm].valid_pixel(uu,vv)) {
+      if (info.valid_pixel(uu,vv)) {
         // check whether this location is building
         bool not_building = true;
-        for (unsigned mc = 0; mc < class_map_infos.size(); mc++)
+        for (const auto & class_map_info : class_map_infos)
         {
-          if (class_map_infos[mc].contains(pt)) {
+          if (class_map_info.contains(pt)) {
             double uc,vc;
-            class_map_infos[mc].cam->global_to_img(pt.x(), pt.y(), 0, uc, vc);
+            class_map_info.cam->global_to_img(pt.x(), pt.y(), 0, uc, vc);
             int uuc = (int)std::floor(uc+0.5);
             int vvc = (int)std::floor(vc+0.5);
-            if (class_map_infos[mc].valid_pixel(uuc,vvc)) {
-              vil_image_view<vxl_byte> imgc(class_map_infos[mc].img_r);
+            if (class_map_info.valid_pixel(uuc,vvc)) {
+              vil_image_view<vxl_byte> imgc(class_map_info.img_r);
               //std::cout << " loc " << std::setprecision(12) << pt << " is " << volm_osm_category_io::volm_land_table[imgc(uuc,vvc)].name_ << " at pixel "
               //         << " (" << uuc << "x" << vvc << ") in image " << class_map_infos[mc].name << std::endl;
               if (imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["building"].id_ || imgc(uuc,vvc)==volm_osm_category_io::volm_land_table_name["tall_building"].id_)
@@ -64,7 +64,7 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, std::vector<volm_img_info> cons
         if (not_building)
         {
           //vil_image_view<vxl_int_16> img(infos[mm].img_r);
-          vil_image_view<float> img(infos[mm].img_r);
+          vil_image_view<float> img(info.img_r);
           z = img(uu,vv);
           found_it = true;
           break;
@@ -94,14 +94,14 @@ bool add_hypo(volm_geo_index_node_sptr hyp_root, std::vector<volm_img_info> cons
 int find_land_type(std::vector<volm_img_info>& geo_infos, vgl_point_2d<double>& pt)
 {
   int type = -1;
-  for (unsigned mm = 0; mm < geo_infos.size(); mm++) {
-     if (geo_infos[mm].contains(pt)) {
+  for (auto & geo_info : geo_infos) {
+     if (geo_info.contains(pt)) {
       double u,v;
-      geo_infos[mm].cam->global_to_img(pt.x(), pt.y(), 0, u, v);
+      geo_info.cam->global_to_img(pt.x(), pt.y(), 0, u, v);
       int uu = (int)std::floor(u+0.5);
       int vv = (int)std::floor(v+0.5);
-      if (geo_infos[mm].valid_pixel(uu,vv)) {
-        vil_image_view<vxl_byte> img(geo_infos[mm].img_r);
+      if (geo_info.valid_pixel(uu,vv)) {
+        vil_image_view<vxl_byte> img(geo_info.img_r);
         type = img(uu,vv);
         break;
       }
@@ -253,9 +253,9 @@ int main(int argc,  char** argv)
       // write the hypos in kml file
       std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-      for (unsigned jj = 0; jj < leaves.size(); jj++) {
-        std::string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
       }
 
       return volm_io::SUCCESS;
@@ -298,8 +298,7 @@ int main(int argc,  char** argv)
 
         // now go over each road in the osm file and insert into the tree of loc hyps
         std::vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
-        for (unsigned k = 0; k < roads.size(); k++) {
-          volm_osm_object_line_sptr r = roads[k];
+        for (auto r : roads) {
           std::string name = r->prop().name_;
           std::vector<vgl_point_2d<double> > points = r->line();
           for (unsigned kk = 1; kk < points.size(); kk++) {
@@ -426,9 +425,9 @@ int main(int argc,  char** argv)
 
       std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-      for (unsigned jj = 0; jj < leaves.size(); jj++) {
-        std::string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad);
       }
 
       return volm_io::SUCCESS;
@@ -465,9 +464,9 @@ int main(int argc,  char** argv)
       std::cout << "URGENT building resources: " << build_polys.size() << " buildings are loaded from " << urgent_folder() << std::endl;
       // obtain the building polygons that intersect with current tile
       std::vector<vgl_polygon<double> > build_in_tile;
-      for (unsigned i = 0; i < build_polys.size(); i++) {
-        if (vgl_intersection(tiles[tile_id()].bbox_double(), build_polys[i].first))
-          build_in_tile.push_back(build_polys[i].first);
+      for (auto & build_poly : build_polys) {
+        if (vgl_intersection(tiles[tile_id()].bbox_double(), build_poly.first))
+          build_in_tile.push_back(build_poly.first);
       }
       std::cout << build_in_tile.size() << " URGENT buildings are inside given tile" << tiles[tile_id()].bbox() << std::endl;
 
@@ -485,8 +484,7 @@ int main(int argc,  char** argv)
       volm_geo_index::write_to_kml(root, depth, file_name3.str());
 
       // loop over each leaf to add locations
-      for (unsigned i = 0; i < infos.size(); i++) {
-        volm_img_info sat_info = infos[i];
+      for (auto sat_info : infos) {
         std::vector<volm_geo_index_node_sptr> leaves;
         volm_geo_index::get_leaves(root, leaves, sat_info.bbox);
         if (leaves.empty())
@@ -494,18 +492,18 @@ int main(int argc,  char** argv)
         // obtain the building polygons that currently intersect with given leaf
         float leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << std::flush << std::endl;
-        for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+        for (auto & leave : leaves) {
           // obtain buildings that are inside leaf
           std::vector<vgl_polygon<double> > build_in_leaf;
           build_in_leaf.clear();
-          for (unsigned b_idx = 0; b_idx < build_in_tile.size(); b_idx++)
-            if (vgl_intersection(leaves[l_idx]->extent_, build_in_tile[b_idx]))
-              build_in_leaf.push_back(build_in_tile[b_idx]);
-          std::cout << build_in_leaf.size() << " are in leaf " << leaves[l_idx]->extent_ << std::flush << std::endl;
-          if (!leaves[l_idx]->hyps_)
-            leaves[l_idx]->hyps_ = new volm_loc_hyp();
-          float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
-          float lower_left_lat = (float)leaves[l_idx]->extent_.min_point().y();
+          for (const auto & b_idx : build_in_tile)
+            if (vgl_intersection(leave->extent_, b_idx))
+              build_in_leaf.push_back(b_idx);
+          std::cout << build_in_leaf.size() << " are in leaf " << leave->extent_ << std::flush << std::endl;
+          if (!leave->hyps_)
+            leave->hyps_ = new volm_loc_hyp();
+          float lower_left_lon = (float)leave->extent_.min_point().x();
+          float lower_left_lat = (float)leave->extent_.min_point().y();
           unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi<nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
@@ -532,8 +530,8 @@ int main(int argc,  char** argv)
                 vil_image_view<float> img(sat_info.img_r);
                 float z = img(ii,jj);
                 unsigned id;
-                if (z>0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
-                  leaves[l_idx]->hyps_->add(lat, lon, z);
+                if (z>0 && !(leave->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                  leave->hyps_->add(lat, lon, z);
               }
             }
           }
@@ -550,9 +548,9 @@ int main(int argc,  char** argv)
       std::stringstream file_name4;  file_name4 << out_pre() << "geo_index_tile_" << t_id;
       std::cout << "\nwriting hypos to: " << file_name4.str() << std::endl;
       volm_geo_index::write_hyps(root, file_name4.str());
-      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-        std::string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, false);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad, false);
       }
       std::cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << std::endl;
 
@@ -594,19 +592,18 @@ int main(int argc,  char** argv)
       std::stringstream file_name3;  file_name3 << out_pre() << "geo_index_tile_" << t_id << "_depth_" << depth << ".kml";
       volm_geo_index::write_to_kml(root, depth, file_name3.str());
       // loop over each leaf to add locations
-      for (unsigned i = 0; i < infos.size(); i++) {
-        volm_img_info sat_info = infos[i];
+      for (auto sat_info : infos) {
         std::vector<volm_geo_index_node_sptr> leaves;
         volm_geo_index::get_leaves(root, leaves, sat_info.bbox);
         if (leaves.empty())
           continue;
         float leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << std::endl;
-        for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-          if (!leaves[l_idx]->hyps_)
-            leaves[l_idx]->hyps_ = new volm_loc_hyp();
-          float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
-          float lower_left_lat = (float)leaves[l_idx]->extent_.min_point().y();
+        for (auto & leave : leaves) {
+          if (!leave->hyps_)
+            leave->hyps_ = new volm_loc_hyp();
+          float lower_left_lon = (float)leave->extent_.min_point().x();
+          float lower_left_lat = (float)leave->extent_.min_point().y();
           unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi<nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
@@ -621,8 +618,8 @@ int main(int argc,  char** argv)
                 vil_image_view<float> img(sat_info.img_r);
                 float z = img(ii,jj);
                 unsigned id;
-                if (z>0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
-                  leaves[l_idx]->hyps_->add(lat, lon, z);
+                if (z>0 && !(leave->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                  leave->hyps_->add(lat, lon, z);
               }
             }
           }
@@ -634,9 +631,9 @@ int main(int argc,  char** argv)
       std::stringstream file_name4;  file_name4 << out_pre() << "geo_index_tile_" << t_id;
       std::cout << "\nwriting hypos to: " << file_name4.str() << std::endl;
       volm_geo_index::write_hyps(root, file_name4.str());
-      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-        std::string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
       }
       std::cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << std::endl;
 
@@ -710,9 +707,9 @@ int main(int argc,  char** argv)
       // write the hypos into kml file for visualization
       std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-        std::string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str()))+".kml";
-        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str()))+".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
       }
       return volm_io::SUCCESS;
     }
@@ -753,8 +750,7 @@ int main(int argc,  char** argv)
       if (land().compare("") == 0) {
         std::cout << "generate locations along the roads with constant density" << std::endl;
         std::vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
-        for (unsigned k = 0; k < roads.size(); k++) {
-          volm_osm_object_line_sptr r = roads[k];
+        for (auto r : roads) {
           if (r->prop().name_ == "water_river" || r->prop().name_ == "water_stream" || r->prop().name_ == "water_large_river"  || r->prop().name_ == "water_canal")
             continue;
           std::vector<vgl_point_2d<double> > points = r->line();
@@ -873,9 +869,9 @@ int main(int argc,  char** argv)
 
       std::vector<volm_geo_index_node_sptr> leaves;
       volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-      for (unsigned jj = 0; jj < leaves.size(); jj++) {
-        std::string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[jj]->hyps_->write_to_kml(out_file, inc_in_sec_rad);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad);
       }
       return volm_io::SUCCESS;
     } // end of road locations generation
@@ -919,19 +915,18 @@ int main(int argc,  char** argv)
       std::cout << class_infos.size() << " 2d class map are successfully loaded!" << std::endl;
 
       // loop over each leaf to add locations
-      for (unsigned i = 0; i < lidar_infos.size(); i++) {
-        volm_img_info lidar_info = lidar_infos[i];
+      for (auto lidar_info : lidar_infos) {
         std::vector<volm_geo_index_node_sptr> leaves;
         volm_geo_index::get_leaves(root, leaves, lidar_info.bbox);
         if (leaves.empty())
           continue;
         float leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with lidar image: " << lidar_info.name << std::endl;
-        for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-          if (!leaves[l_idx]->hyps_)
-            leaves[l_idx]->hyps_ = new volm_loc_hyp();
-          float lower_left_lon = (float)leaves[l_idx]->extent_.min_point().x();
-          float lower_left_lat = (float)leaves[l_idx]->extent_.min_point().y();
+        for (auto & leave : leaves) {
+          if (!leave->hyps_)
+            leave->hyps_ = new volm_loc_hyp();
+          float lower_left_lon = (float)leave->extent_.min_point().x();
+          float lower_left_lat = (float)leave->extent_.min_point().y();
           unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi < nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
@@ -949,8 +944,8 @@ int main(int argc,  char** argv)
                     vil_image_view<float> img(lidar_info.img_r);
                     float z = img(ii,jj);
                     unsigned id;
-                    if (z > 0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
-                      leaves[l_idx]->hyps_->add(lat, lon, z);
+                    if (z > 0 && !(leave->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                      leave->hyps_->add(lat, lon, z);
                   }
                 }
                 else if (region_name() == "all") {  // generate constant post locations everywhere
@@ -962,8 +957,8 @@ int main(int argc,  char** argv)
                     vil_image_view<float> img(lidar_info.img_r);
                     float z = img(ii,jj);
                     unsigned id;
-                    if (z > 0 && !(leaves[l_idx]->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
-                      leaves[l_idx]->hyps_->add(lat, lon, z);
+                    if (z > 0 && !(leave->hyps_->exist(lat, lon, inc_in_sec_rad, id)))
+                      leave->hyps_->add(lat, lon, z);
                   }
                 }
               }
@@ -978,9 +973,9 @@ int main(int argc,  char** argv)
       std::stringstream file_name4; file_name4 << out_pre() << "geo_index_tile_" << t_id;
       std::cout << "\nwriting hypos to: " << file_name4.str() << std::endl;
       volm_geo_index::write_hyps(root, file_name4.str());
-      for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-        std::string out_file = vul_file::strip_extension(leaves[l_idx]->get_hyp_name(file_name4.str())) + ".kml";
-        leaves[l_idx]->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
+      for (auto & leave : leaves) {
+        std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4.str())) + ".kml";
+        leave->hyps_->write_to_kml(out_file, inc_in_sec_rad, true);
       }
       std::cout << volm_geo_index::hypo_size(root) << " locations are generated in tile " << t_id << std::endl;
       return volm_io::SUCCESS;

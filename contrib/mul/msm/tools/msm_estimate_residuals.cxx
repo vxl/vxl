@@ -234,23 +234,23 @@ void test_model(const msm_shape_model& shape_model, int n_modes,
   const msm_aligner& aligner = shape_model.aligner();
   msm_points points_in_ref, dpoints;
 
-  for (unsigned i=0;i<points.size();++i)
+  for (const auto & point : points)
   {
-    sm_inst.fit_to_points(points[i]);
+    sm_inst.fit_to_points(point);
 
     // Currently just compute overall distance
     // Eventually need to project into model frame to compute individual errors
-    calc_point_distances(sm_inst.points(),points[i],d);
+    calc_point_distances(sm_inst.points(),point,d);
     stats.world_d_stats.obs(d.mean());
     if (ref0!=ref1)
     {
-      double ref_d = (points[i][ref0]-points[i][ref1]).length();
+      double ref_d = (point[ref0]-point[ref1]).length();
       stats.rel_d_stats.obs(100*d.mean()/ref_d);
     }
 
     // Evaluate in the reference frame
     inv_pose=aligner.inverse(sm_inst.pose());
-    aligner.apply_transform(points[i],inv_pose,points_in_ref);
+    aligner.apply_transform(point,inv_pose,points_in_ref);
     calc_point_distances(sm_inst.model_points(),points_in_ref,d);
     stats.ref_d_stats.obs(d.mean());
 

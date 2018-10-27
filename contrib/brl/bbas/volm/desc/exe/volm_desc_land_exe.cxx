@@ -159,8 +159,8 @@ int main(int argc,  char** argv)
         tok = std::strtok(nullptr, "_"); // tokenize the remaining string
       }
       std::cout << " will index 2d maps using radii: ";
-      for (unsigned i = 0; i < radii.size(); i++) {
-        std::cout << radii[i] << " ";
+      for (double i : radii) {
+        std::cout << i << " ";
       }
       std::cout << '\n';
 

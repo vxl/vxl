@@ -160,9 +160,9 @@ inline void ipts_scale_space_peaks_2d(std::vector<vgl_point_3d<double> >& peak_p
   dw = im0.world2im().delta(vgl_point_2d<double>(0,0),dx);
   double scale = 1.0/std::sqrt(dw.x()*dw.x()+dw.y()*dw.y());
 
-  for (unsigned i=0;i<peak_pts0.size();++i)
+  for (auto & i : peak_pts0)
   {
-    vgl_point_3d<double> p(peak_pts0[i].x(),peak_pts0[i].y(),scale);
+    vgl_point_3d<double> p(i.x(),i.y(),scale);
     peak_pts.push_back(p);
   }
 }

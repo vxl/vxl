@@ -144,22 +144,22 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   std::string data_type,num_obs_type,options;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
-      num_obs_type = apps[i];
+      num_obs_type = app;
       foundNumObsType = true;
     }
   }
@@ -242,7 +242,7 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
 
   // Output Array
   float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+  for (float & i : output_arr) i = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

@@ -44,8 +44,8 @@ std::vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(std::strin
     return std::vector<vgl_polygon<double> >();
   }
   std::vector<vgl_polygon<double> > vpolys;
-  for (unsigned i = 0; i<sos.size(); ++i) {
-    vsol_polygon_2d* poly = static_cast<vsol_polygon_2d*>(sos[i].ptr());
+  for (auto & so : sos) {
+    vsol_polygon_2d* poly = static_cast<vsol_polygon_2d*>(so.ptr());
     vgl_polygon<double> vpoly; vpoly.new_sheet();
     unsigned nverts = poly->size();
     for (unsigned i = 0; i<nverts; ++i) {
@@ -266,8 +266,8 @@ void sdet_texture_classifier::add_gauss_response(vil_image_view<float>& img_f, s
 {
   // check whether it already exists
   bool found_it = false;
-  for (unsigned i = 0; i < other_responses_names_.size(); i++) {
-    if (other_responses_names_[i].compare(response_name) == 0) {
+  for (auto & other_responses_name : other_responses_names_) {
+    if (other_responses_name.compare(response_name) == 0) {
       found_it = true;
       break;
     }
@@ -631,9 +631,9 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
     std::cout << "training image too small ni or nj <= " << maxr_ << '\n';
     return false;
   }
-  for (unsigned kk = 0; kk < pixels.size(); kk++) {
-    int ii = pixels[kk].first;
-    int jj = pixels[kk].second;
+  for (const auto & pixel : pixels) {
+    int ii = pixel.first;
+    int jj = pixel.second;
     if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
     //vnl_vector<double> tx(dim+2);
     vnl_vector<double> tx(dim_total);
@@ -675,9 +675,9 @@ bool sdet_texture_classifier::compute_data(std::vector<std::pair<int, int> >cons
     return false;
   }
   unsigned dim_total = dim + 2 + other_responses_.size();
-  for (unsigned kk = 0; kk < pixels.size(); kk++) {
-    int ii = pixels[kk].first;
-    int jj = pixels[kk].second;
+  for (const auto & pixel : pixels) {
+    int ii = pixel.first;
+    int jj = pixel.second;
     if (ii < 0 || jj < 0 || ii >= ni || jj >= nj) continue;  // invalid pixels are marked -1, -1 in the input
     //vnl_vector<double> tx(dim+2);
     vnl_vector<double> tx(dim_total);
@@ -735,8 +735,8 @@ bool sdet_texture_classifier::compute_textons(std::string const& category)
 //: compute textons with k_means for all the categories with training data
 void sdet_texture_classifier::compute_textons_all()
 {
-  for (std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = training_data_.begin(); iter != training_data_.end(); iter++)
-    this->compute_textons(iter->first);
+  for (auto & iter : training_data_)
+    this->compute_textons(iter.first);
 }
 
 bool sdet_texture_classifier::
@@ -781,12 +781,10 @@ compute_textons(std::vector<std::string> const& image_paths,
     double ni = imgs[i].ni(), nj = imgs[i].nj();
     vsol_box_2d_sptr box = new vsol_box_2d();
     std::vector<vgl_polygon<double> >& plist = polys[i];
-    for (std::vector<vgl_polygon<double> >::iterator pit = plist.begin();
-         pit != plist.end(); ++pit) {
-      std::vector<vgl_point_2d<double> > sht = (*pit)[0];
-      for (std::vector<vgl_point_2d<double> >::iterator xit = sht.begin();
-           xit != sht.end(); ++xit)
-        box->add_point(xit->x(), xit->y());
+    for (auto & pit : plist) {
+      std::vector<vgl_point_2d<double> > sht = pit[0];
+      for (auto & xit : sht)
+        box->add_point(xit.x(), xit.y());
     }
     //expand box by filter radius
     double margin = this->max_filter_radius();
@@ -801,13 +799,11 @@ compute_textons(std::vector<std::string> const& image_paths,
     vil_image_view<float> cview = vil_crop(imgs[i], i0, cni, j0, cnj);
     // shift polys to cropped coordinate system
     std::vector<vgl_polygon<double> > cplist;
-    for (std::vector<vgl_polygon<double> >::iterator pit = plist.begin();
-         pit != plist.end(); ++pit) {
+    for (auto & pit : plist) {
       vgl_polygon<double> tpoly; tpoly.new_sheet();
-      std::vector<vgl_point_2d<double> > sht = (*pit)[0];
-      for (std::vector<vgl_point_2d<double> >::iterator xit = sht.begin();
-           xit != sht.end(); ++xit) {
-        double xp = xit->x()-xmin, yp = xit->y() - ymin;
+      std::vector<vgl_point_2d<double> > sht = pit[0];
+      for (auto & xit : sht) {
+        double xp = xit.x()-xmin, yp = xit.y() - ymin;
         tpoly.push_back(xp, yp);
       }
       cplist.push_back(tpoly);
@@ -938,15 +934,15 @@ bool sdet_texture_classifier::get_training_data(std::string const& category, std
 std::vector<std::string> sdet_texture_classifier::get_training_categories()
 {
   std::vector<std::string> cats;
-  for (std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = training_data_.begin(); iter != training_data_.end(); iter++)
-    cats.push_back(iter->first);
+  for (auto & iter : training_data_)
+    cats.push_back(iter.first);
   return cats;
 }
 std::vector<std::string> sdet_texture_classifier::get_dictionary_categories()
 {
   std::vector<std::string> cats;
-  for (std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = texton_dictionary_.begin(); iter != texton_dictionary_.end(); iter++)
-    cats.push_back(iter->first);
+  for (auto & iter : texton_dictionary_)
+    cats.push_back(iter.first);
   return cats;
 }
 
@@ -1151,9 +1147,8 @@ void sdet_texture_classifier::print_texton_weights() const
   sdet_texture_classifier* ncthis = const_cast<sdet_texture_classifier*>(this);
   if (!texton_weights_valid_) ncthis->compute_texton_weights();
   std::cout << "Texton weights ===>\n";
-  for (std::vector<float>::const_iterator wit = texton_weights_.begin();
-       wit != texton_weights_.end(); ++wit)
-    std::cout << (*wit) << '\n';
+  for (float texton_weight : texton_weights_)
+    std::cout << texton_weight << '\n';
 }
 
 
@@ -1166,9 +1161,8 @@ void sdet_texture_classifier::compute_texton_index()
   for (; it!= texton_dictionary_.end(); ++it) {
     std::string const& cat = (*it).first;
     std::vector<vnl_vector<double> > const & centers = (*it).second;
-    for (std::vector<vnl_vector<double> >::const_iterator cit = centers.begin();
-         cit != centers.end(); ++cit)
-      texton_index_.emplace_back(cat, (*cit));
+    for (const auto & center : centers)
+      texton_index_.emplace_back(cat, center);
   }
 }
 
@@ -1214,9 +1208,8 @@ void sdet_texture_classifier::compute_category_histograms()
     std::cout << "h[" << cat << "](" << ndata << ") "<< std::flush;
     float weight = 1.0f/static_cast<float>(ndata);
     //insert texton counts into the histogram
-    for (std::vector<vnl_vector<double> >::const_iterator vit = tdata.begin();
-         vit != tdata.end(); ++vit)
-      this->update_hist(*vit, weight, hist);
+    for (const auto & vit : tdata)
+      this->update_hist(vit, weight, hist);
 
     category_histograms_[cat]=hist;
   }
@@ -1233,8 +1226,8 @@ void sdet_texture_classifier::create_samples_and_labels_from_textons(std::vector
   double label_id = 0;
   std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = texton_dictionary_.begin();
   for (; iter != texton_dictionary_.end(); iter++) {
-    for (unsigned i = 0; i < iter->second.size(); i++) {
-      samples.push_back(iter->second[i]);
+    for (const auto & i : iter->second) {
+      samples.push_back(i);
       labels.push_back(label_id);
     }
     std::cout << "category: " << iter->first <<" with id: " << label_id << " has final sample size: " << samples.size() << std::endl;
@@ -1255,8 +1248,8 @@ void sdet_texture_classifier::create_samples_and_labels_from_training_data(std::
     const std::string& cat = (*dit).first;
     const std::vector<vnl_vector<double> >& tdata = (*dit).second;
     //insert texton counts into the histogram
-    for (std::vector<vnl_vector<double> >::const_iterator vit = tdata.begin(); vit != tdata.end(); ++vit) {
-      samples.push_back(*vit);
+    for (const auto & vit : tdata) {
+      samples.push_back(vit);
       labels.push_back(label_id);
     }
     std::cout << "category: " << cat <<" with id: " << label_id << " has final sample size: " << samples.size() << std::endl;
@@ -1275,8 +1268,8 @@ update_hist(vnl_vector<double> const& f, float weight, std::vector<float>& hist)
 //: update the texton histogram with a vector of filter outputs, use the same weight for all the samples
 void sdet_texture_classifier::update_hist(std::vector<vnl_vector<double> > const& f, float weight, std::vector<float>& hist)
 {
-  for (unsigned i = 0; i < f.size(); i++)
-    this->update_hist(f[i], weight, hist);
+  for (const auto & i : f)
+    this->update_hist(i, weight, hist);
 }
 
 std::map<std::string, float>  sdet_texture_classifier::

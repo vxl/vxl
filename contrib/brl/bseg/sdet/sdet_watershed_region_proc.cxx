@@ -63,9 +63,8 @@ sdet_watershed_region_proc::sdet_watershed_region_proc(sdet_watershed_region_pro
 //:Default Destructor
 sdet_watershed_region_proc::~sdet_watershed_region_proc()
 {
-  for (std::map<sdet_region_sptr, std::vector<sdet_region_sptr>* >::iterator
-       rait = region_adjacency_.begin(); rait != region_adjacency_.end(); ++rait)
-    delete (*rait).second;
+  for (auto & rait : region_adjacency_)
+    delete rait.second;
 }
 
 //: if an roi is defined then create a chip image and define the bounds
@@ -163,8 +162,8 @@ bool sdet_watershed_region_proc::add_adjacency(sdet_region_sptr const& reg,
   {
     std::vector<sdet_region_sptr> * vec = region_adjacency_[reg];
 
-    for (unsigned int i =0 ; i < vec->size(); ++i)
-      if ((*vec)[i] == adj_reg)
+    for (auto & i : *vec)
+      if (i == adj_reg)
         return false; //adjacency relation already known
 
     vec->push_back(adj_reg);
@@ -223,10 +222,9 @@ static
 void add_new_adjacent_regs(std::vector<sdet_region_sptr> const& new_adj_regs,
                            std::vector<sdet_region_sptr>& adj_regs)
 {
-  for (std::vector<sdet_region_sptr>::const_iterator rit = new_adj_regs.begin();
-       rit != new_adj_regs.end(); rit++)
-    if (!found_in_regions(*rit, adj_regs))
-      adj_regs.push_back(*rit);
+  for (const auto & new_adj_reg : new_adj_regs)
+    if (!found_in_regions(new_adj_reg, adj_regs))
+      adj_regs.push_back(new_adj_reg);
 }
 
 bool sdet_watershed_region_proc::merge_regions()
@@ -262,10 +260,8 @@ bool sdet_watershed_region_proc::merge_regions()
 
   std::vector<sdet_region_sptr> new_regions;
   std::vector<sdet_region_sptr> merged_regions;
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
+  for (auto & r : regions_)
   {
-    sdet_region_sptr& r = *rit;
     if (found_in_regions(r, merged_regions))
       continue;
     sdet_region_sptr& rm = r; //merged region
@@ -274,10 +270,8 @@ bool sdet_watershed_region_proc::merge_regions()
       continue;
     bool merged = false;
     std::vector<sdet_region_sptr> temp_adj;
-    for (std::vector<sdet_region_sptr>::iterator arit = adj_regs.begin();
-         arit != adj_regs.end(); arit++)
+    for (auto & ar : adj_regs)
     {
-      sdet_region_sptr& ar = *arit;
       if (found_in_regions(ar, merged_regions))
         continue;
       if (r->Npix()<min_area_ || ar->Npix()<min_area_)
@@ -320,9 +314,8 @@ bool sdet_watershed_region_proc::merge_regions()
                << ")(Xo: " << rm->Xo() << " Yo: " << rm ->Yo()
                << " Io: " << rm ->Io() <<')' << std::endl;
 #endif
-      for (std::vector<sdet_region_sptr>::iterator arit = temp_adj.begin();
-           arit != temp_adj.end(); arit++)
-        this->add_adjacency(rm, *arit);
+      for (auto & arit : temp_adj)
+        this->add_adjacency(rm, arit);
     }
   }
   if (verbose_)
@@ -332,14 +325,12 @@ bool sdet_watershed_region_proc::merge_regions()
   }
   //remove merged regions from the region_index
   std::vector<sdet_region_sptr> temp2;
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
-    if (!found_in_regions(*rit, merged_regions))
-      temp2.push_back(*rit);
+  for (auto & region : regions_)
+    if (!found_in_regions(region, merged_regions))
+      temp2.push_back(region);
   //add new regions to region index
-  for (std::vector<sdet_region_sptr>::iterator rit = new_regions.begin();
-       rit != new_regions.end(); rit++)
-    temp2.push_back(*rit);
+  for (auto & new_region : new_regions)
+    temp2.push_back(new_region);
   //replace the index
   regions_ = temp2;
   if (verbose_)
@@ -406,8 +397,8 @@ bool sdet_watershed_region_proc::extract_regions()
     unsigned int ln = min_label_ + n;
     sdet_region_sptr rn = regions_[n];
     if (watershed.adjacent_regions(ln, adj_regs))
-      for (unsigned int i = 0; i<adj_regs.size(); ++i)
-        this->add_adjacency(rn, regions_[adj_regs[i]-min_label_]);
+      for (unsigned int adj_reg : adj_regs)
+        this->add_adjacency(rn, regions_[adj_reg-min_label_]);
   }
 
   //fill the region intensity data
@@ -443,21 +434,19 @@ vil1_image sdet_watershed_region_proc::get_residual_image()
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
   float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
-    for ((*rit)->reset(); (*rit)->next();)
+  for (auto & region : regions_)
+    for (region->reset(); region->next();)
     {
-      float res = (*rit)->Ir();
+      float res = region->Ir();
       if (res<min_res)
         min_res = res;
     }
 
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
-    for ((*rit)->reset(); (*rit)->next();)
+  for (auto & region : regions_)
+    for (region->reset(); region->next();)
     {
-      int x = int((*rit)->X()), y = int((*rit)->Y());
-      float res = (*rit)->Ir();
+      int x = int(region->X()), y = int(region->Y());
+      float res = region->Ir();
       float is = res-min_res;//to ensure non-negative
       if (is>255)
         is = 255;//to ensure within char
@@ -492,14 +481,13 @@ bool sdet_watershed_region_proc::compute_region_image()
   int w = image_.width(), h = image_.height();
   region_image_.resize(w, h);
   region_image_.fill(255);
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
-       rit != regions_.end(); rit++)
-    for ((*rit)->reset(); (*rit)->next();)
+  for (auto & region : regions_)
+    for (region->reset(); region->next();)
     {
-      int c = int((*rit)->X()), r = int((*rit)->Y());
+      int c = int(region->X()), r = int(region->Y());
       if (c<0 || r<0 || c>=w || r>=h)
         continue;
-      unsigned char val = (unsigned char)(*rit)->I();
+      unsigned char val = (unsigned char)region->I();
       region_image_(c,r) = val;
     }
   region_image_valid_ = true;
@@ -517,13 +505,12 @@ vil1_image sdet_watershed_region_proc::region_image()
 
 void sdet_watershed_region_proc::compute_boundaries()
 {
-  for (std::vector<sdet_region_sptr>::iterator rit =  regions_.begin();
-       rit != regions_.end(); rit++)
+  for (auto & region : regions_)
   {
-    if ((*rit)->Npix()<min_area_)
+    if (region->Npix()<min_area_)
       continue;
-    if ((*rit)->boundary())
-      boundaries_.push_back((*rit)->boundary());
+    if (region->boundary())
+      boundaries_.push_back(region->boundary());
   }
   boundaries_valid_ = true;
 }

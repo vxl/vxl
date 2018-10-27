@@ -84,10 +84,10 @@ void bstm_util_cams_and_box_to_scene (std::vector<CamType>& cams,
     unsigned nj = numSubBlocks.y()*numBlocks.y()*nblks;;
     std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
     vil_image_view<vxl_byte> cntimg(ni, nj); cntimg.fill(0);
-    for (unsigned int i=0; i<cams.size(); ++i)
+    for (const auto & i : cams)
     {
         //project the four corners to the ground plane
-        cam = cams[i];
+        cam = i;
         vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
         vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
         vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());

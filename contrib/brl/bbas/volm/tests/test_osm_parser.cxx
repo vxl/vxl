@@ -39,27 +39,27 @@ static void test_osm_parser()
   // write out points of interests
   for (unsigned i = 0; i < loc_pts.size(); i++) {
     std::string name = "location";
-    for (unsigned j = 0; j < pt_keys[i].size(); j++)
-      if (pt_keys[i][j].first.compare("name:en") == 0)
-        name = pt_keys[i][j].second;
+    for (auto & j : pt_keys[i])
+      if (j.first.compare("name:en") == 0)
+        name = j.second;
     bkml_write::write_location(ofs_kml, loc_pts[i], name);
   }
 
   // write out paths
   for (unsigned i = 0; i < lines.size(); i++) {
     std::string name = "path";
-    for (unsigned j = 0; j < line_keys[i].size(); j++)
-      if (line_keys[i][j].first.compare("name:en") == 0)
-        name = line_keys[i][j].second;
+    for (auto & j : line_keys[i])
+      if (j.first.compare("name:en") == 0)
+        name = j.second;
     bkml_write::write_path(ofs_kml, lines[i], name);
   }
 
   // write out polygons
   for (unsigned i = 0; i < polygons.size(); i++) {
     std::string name = "polygon";
-    for (unsigned j = 0; j < poly_keys[i].size(); j++)
-      if (poly_keys[i][j].first.compare("name:en") == 0)
-        name = poly_keys[i][j].second;
+    for (auto & j : poly_keys[i])
+      if (j.first.compare("name:en") == 0)
+        name = j.second;
     bkml_write::write_polygon(ofs_kml, polygons[i], name);
   }
   bkml_write::close_document(ofs_kml);

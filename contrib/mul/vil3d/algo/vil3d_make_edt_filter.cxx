@@ -20,6 +20,6 @@ void vil3d_make_edt_filter(double width_i,
                            std::vector<double>& f)
 {
   vil3d_make_distance_filter(1.0/width_i,1.0/width_j,1.0/width_k,r,se,f);
-  for (unsigned a=0;a<f.size();++a)
-    f[a]=std::exp(std::log(0.5)*f[a]);
+  for (double & a : f)
+    a=std::exp(std::log(0.5)*a);
 }

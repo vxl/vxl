@@ -78,9 +78,9 @@ vil_image_view<vxl_byte> bvxm_edge_util::detect_edges(vil_image_view<vxl_byte> i
   img_edge.fill(0);
 
   // iterate over each connected edge component
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
+  for (auto & edge : *edges)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     vdgl_digital_curve_sptr dc = c->cast_to_vdgl_digital_curve();
     if (!dc)
       continue;
@@ -145,8 +145,7 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
   std::vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
   vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
 
-  for (unsigned i=0; i<box_uncertainty_corners.size(); i++) {
-    vgl_point_3d<double> curr_corner = box_uncertainty_corners[i];
+  for (auto curr_corner : box_uncertainty_corners) {
     vgl_point_3d<double> curr_pt;
     if (camera->type_name()=="vpgl_local_rational_camera") {
       curr_pt.set(curr_corner.x(),curr_corner.y(),curr_corner.z());

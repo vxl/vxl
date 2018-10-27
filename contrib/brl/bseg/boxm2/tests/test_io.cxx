@@ -42,13 +42,13 @@ void test_asio_data()
   {
     //find out the loaded alphas
     alphamap_t lmap = mgr.get_loaded_data<BOXM2_ALPHA>();
-    for (alphamap_t::iterator iter = lmap.begin(); iter != lmap.end(); ++iter)
-      alpha_list.push_back(iter->second);
+    for (auto & iter : lmap)
+      alpha_list.push_back(iter.second);
 
     //find out the loaded mog3s
     mogmap_t mmap = mgr.get_loaded_data<BOXM2_MOG3_GREY>();
-    for (mogmap_t::iterator iter = mmap.begin(); iter != mmap.end(); ++iter)
-      mog_list.push_back(iter->second);
+    for (auto & iter : mmap)
+      mog_list.push_back(iter.second);
 
     //keep track of looping
     flopCount++;
@@ -78,10 +78,10 @@ void test_asio_data()
   // delete blocks loaded
   delete loaded;
   delete mog;
-  for (unsigned int i=0; i<mog_list.size(); ++i)
-    if (mog_list[i]) delete mog_list[i];
-  for (unsigned int i=0; i<alpha_list.size(); ++i)
-    if (alpha_list[i]) delete alpha_list[i];
+  for (auto & i : mog_list)
+    if (i) delete i;
+  for (auto & i : alpha_list)
+    if (i) delete i;
 }
 
 static void test_asio_blocks()
@@ -116,8 +116,8 @@ static void test_asio_blocks()
 
   // report flop count and block ids
   std::cout<<"flop count: "<<flopCount<<std::endl;
-  for (unsigned int i=0; i<block_list.size(); ++i) {
-    std::cout<<block_list[i]->block_id()<<std::endl;
+  for (auto & i : block_list) {
+    std::cout<<i->block_id()<<std::endl;
   }
 
   // test two of the blocks - make sure they're the same
@@ -125,8 +125,8 @@ static void test_asio_blocks()
 
   // delete blocks loaded
   delete loaded;
-  for (unsigned int i=0; i<block_list.size(); ++i)
-    delete block_list[i];
+  for (auto & i : block_list)
+    delete i;
 }
 
 

@@ -72,10 +72,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
                              tnearfarptrs=  helper.tnearfarptrs_;
   std::vector<boxm2_opencl_cache1*>& ocl_caches = helper.vis_caches_;
   std::vector<bocl_mem_sptr> vis_mems, pre_mems, visInfMems, preInfMems;
-  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
+  for (auto ocl_cache : ocl_caches) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
-
     //pre/vis images
     float* vis_buff = new float[cl_ni*cl_nj];
     std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
@@ -98,13 +96,12 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   //----------------------------------------------------------------
   // Call per block/per scene update (to ensure cpu-> gpu cache works
   //---------------------------------------------------------------
-  for (unsigned int grpId=0; grpId<grp.size(); ++grpId)
+  for (auto & grpId : grp)
   {
-    boxm2_multi_cache_group& group = *grp[grpId];
+    boxm2_multi_cache_group& group = *grpId;
     std::vector<boxm2_block_id>& ids = group.ids();
     std::vector<int> indices = group.order_from_cam(cam);
-    for (unsigned int idx=0; idx<indices.size(); ++idx) {
-      int i = indices[idx];
+    for (int i : indices) {
       //grab sub scene and it's cache
       boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
       boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
@@ -126,9 +123,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
     }
 
     //finish queues before moving on
-    for (unsigned int idx=0; idx<indices.size(); ++idx) {
-      int i = indices[idx];
-
+    for (int i : indices) {
+      
 #if 1
 
       vul_timer cpuTimer; cpuTimer.mark();

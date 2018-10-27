@@ -73,10 +73,10 @@ public:
 
   sdet_signature()
   {
-    for (int i=0; i<NBINS; i++){
-      bins[i].value=0;
-      bins[i].weight=0;
-      bins[i].wsum=0;
+    for (auto & bin : bins){
+      bin.value=0;
+      bin.weight=0;
+      bin.wsum=0;
     }
   }
   ~sdet_signature()= default;

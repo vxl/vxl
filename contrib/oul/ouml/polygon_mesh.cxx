@@ -134,8 +134,8 @@ PolygonMesh::Polygon PolygonMesh::get_face(int index)
     return poly;
   }
   Face& face = face_list[index];
-  for (unsigned int i=0; i<face.size(); i++)
-    poly.push_back(vertex_list[face[i]]);
+  for (int i : face)
+    poly.push_back(vertex_list[i]);
   return poly;
 }
 

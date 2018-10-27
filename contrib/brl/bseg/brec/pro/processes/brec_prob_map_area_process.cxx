@@ -83,9 +83,9 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
         float sum = 0.0f;
         bool all_inside = true;
 
-        for (unsigned t = 0; t < neighborhood.size(); t++) {
-          int ii = i+neighborhood[t].first;
-          int jj = j+neighborhood[t].second;
+        for (auto & t : neighborhood) {
+          int ii = i+t.first;
+          int jj = j+t.second;
           if (ii >= 0 && jj >= 0 && ii < (int)ni && jj < (int)nj) {
             if (!input_mask(ii, jj)) {
               all_inside = false;

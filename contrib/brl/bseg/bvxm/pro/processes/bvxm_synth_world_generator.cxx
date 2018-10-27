@@ -149,9 +149,8 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
 
   vgl_box_2d<double> bb;
   std::vector<vpgl_camera_double_sptr> rat_cameras;
-  for (unsigned i=0; i<centers.size(); i++)
+  for (auto camera_center : centers)
   {
-    vgl_point_3d<double> camera_center  = centers[i];
     vpgl_perspective_camera<double> persp_cam;
     generate_persp_camera(focal_length,principal_point, x_scale, y_scale, camera_center, persp_cam);
     persp_cam.look_at(vgl_homg_point_3d<double>(centroid));
@@ -159,8 +158,7 @@ bvxm_synth_world_generator::generate_cameras_z(vgl_box_3d<double>& world)
     rat_cameras.emplace_back(rat_cam);
 
     std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d(world);
-    for (unsigned i=0; i<corners.size(); i++) {
-      vgl_point_3d<double> c = corners[i];
+    for (auto c : corners) {
       double u,v, u2, v2;
       persp_cam.project(c.x(), c.y() ,c.z(), u, v);
       rat_cam->project(c.x(), c.y() ,c.z(), u2, v2);
@@ -218,8 +216,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 
     if (verbose) {
       std::vector<vgl_point_3d<double> > corners = bvxm_util::corners_of_box_3d<double>(world);
-      for (unsigned i=0; i<corners.size(); i++) {
-        vgl_point_3d<double> c = corners[i];
+      for (auto c : corners) {
         double u,v;
         persp_cam.project(c.x(), c.y() ,c.z(), u, v);
         bb.add(vgl_point_2d<double> (u,v));
@@ -504,8 +501,7 @@ bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
   lidar.fill((unsigned char)0);
 
   // Generate the bottom one
-  for (unsigned int b=0; b<boxes_vector.size(); b++) {
-    vgl_box_3d<double> box = boxes_vector[b];
+  for (auto box : boxes_vector) {
     double z = box.max_z();
 
     for (unsigned i=0; i<grid_size.x(); i++)

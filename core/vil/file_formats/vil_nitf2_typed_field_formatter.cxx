@@ -415,10 +415,9 @@ vil_nitf2_field_formatter* vil_nitf2_enum_string_formatter::copy() const
 
 void vil_nitf2_enum_string_formatter::validate_value_map()
 {
-  for (vil_nitf2_enum_values::iterator entry = value_map.begin();
-       entry != value_map.end(); ++entry)
+  for (auto & entry : value_map)
   {
-    std::string token = entry->first;
+    std::string token = entry.first;
 #if 0  // disable the err message
     if (int(token.length()) > field_width) {
       //std::cerr << "vil_nitf2_enum_values: WARNING: Ignoring token "

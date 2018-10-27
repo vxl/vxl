@@ -217,7 +217,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
 
   // Output Array
   float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+  for (float & i : output_arr) i = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -245,9 +245,9 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   // clear the contents
   std::vector<bvgl_2d_geo_index_node_sptr> leaves_all;
   bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves_all);
-  for (unsigned i = 0; i < leaves_all.size(); i++) {
+  for (auto & i : leaves_all) {
     bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* leaf_ptr =
-      dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leaves_all[i].ptr());
+      dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(i.ptr());
     leaf_ptr->contents_.clear();
   }
   std::cout << " 2D geo_index has root bounding box: " << blk_id_tree_2d->extent_
@@ -255,16 +255,16 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
            << std::endl;
   // fill in the contents
   std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator mit = blks.begin(); mit != blks.end(); ++mit) {
-    boxm2_block_id curr_blk_id = mit->first;
-    vgl_box_2d<double> curr_blk_bbox_2d(mit->second.bbox().min_x(), mit->second.bbox().max_x(), mit->second.bbox().min_y(), mit->second.bbox().max_y());
+  for (auto & blk : blks) {
+    boxm2_block_id curr_blk_id = blk.first;
+    vgl_box_2d<double> curr_blk_bbox_2d(blk.second.bbox().min_x(), blk.second.bbox().max_x(), blk.second.bbox().min_y(), blk.second.bbox().max_y());
     std::vector<bvgl_2d_geo_index_node_sptr> leaves;
     bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves, curr_blk_bbox_2d);
     if (leaves.empty())
       continue;
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+    for (auto & leave : leaves) {
       bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* leaf_ptr =
-        dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leaves[l_idx].ptr());
+        dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(curr_blk_id);
     }
   }
@@ -282,10 +282,10 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
     bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* curr_leaf_ptr =
       dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(curr_leaf.ptr());
     bool found_blk = false;
-    for (std::vector<boxm2_block_id>::iterator vit = curr_leaf_ptr->contents_.begin(); vit != curr_leaf_ptr->contents_.end(); ++vit) {
-      vgl_box_3d<double> curr_blk_bbox = scene->blocks()[*vit].bbox();
+    for (auto & content : curr_leaf_ptr->contents_) {
+      vgl_box_3d<double> curr_blk_bbox = scene->blocks()[content].bbox();
       if (curr_blk_bbox.contains(local_h_pt_d)) {
-        curr_block = *vit;
+        curr_block = content;
         found_blk = true;
         break;
       }

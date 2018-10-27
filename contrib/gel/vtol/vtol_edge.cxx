@@ -28,12 +28,12 @@ void vtol_edge::unlink_inferior(vtol_zero_chain_sptr inf)
 vtol_zero_chain_sptr vtol_edge::zero_chain(void) const
 {
   topology_list const& inf = *(inferiors());
-  for (unsigned int i=0; i<inf.size(); ++i)
-    if (inf[i]->cast_to_zero_chain()->v0()) // PVr- avoid returning empty chain
-      return inf[i]->cast_to_zero_chain();
-  for (unsigned int i=0; i<inf.size(); ++i)
-    if (inf[i]->cast_to_zero_chain()) // return empty chain if nothing else present
-      return inf[i]->cast_to_zero_chain();
+  for (const auto & i : inf)
+    if (i->cast_to_zero_chain()->v0()) // PVr- avoid returning empty chain
+      return i->cast_to_zero_chain();
+  for (const auto & i : inf)
+    if (i->cast_to_zero_chain()) // return empty chain if nothing else present
+      return i->cast_to_zero_chain();
   return nullptr;
 }
 

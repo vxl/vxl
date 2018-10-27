@@ -95,8 +95,8 @@ unsigned int
 imesh_half_edge_set::num_verts() const
 {
   unsigned int count = 0;
-  for (unsigned int i=0; i<vert_to_he_.size(); ++i)
-    if (vert_to_he_[i] != imesh_invalid_idx)
+  for (unsigned int i : vert_to_he_)
+    if (i != imesh_invalid_idx)
       ++count;
   return count;
 }
@@ -107,8 +107,8 @@ unsigned int
 imesh_half_edge_set::num_faces() const
 {
   unsigned int count = 0;
-  for (unsigned int i=0; i<face_to_he_.size(); ++i)
-    if (face_to_he_[i] != imesh_invalid_idx)
+  for (unsigned int i : face_to_he_)
+    if (i != imesh_invalid_idx)
       ++count;
   return count;
 }

@@ -293,8 +293,8 @@ vil1_gif_loader_saver::~vil1_gif_loader_saver()
     global_color_map = nullptr;
   }
 
-  for (unsigned int i=0; i<images.size(); ++i) {
-    vil1_gif_image_record *ir = static_cast<vil1_gif_image_record*>(images[i]);
+  for (auto & image : images) {
+    vil1_gif_image_record *ir = static_cast<vil1_gif_image_record*>(image);
     if (ir->color_map)
       delete ir->color_map;
     delete ir;

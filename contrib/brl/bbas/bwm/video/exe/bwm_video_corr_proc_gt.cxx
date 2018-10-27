@@ -148,8 +148,8 @@ static bool process_no_H(std::string const& site_path,
     ifs >> dummy_camera;
     ifs.close();
     std::cout << "using initial camera:\n" << dummy_camera << '\n';
-    for (unsigned i = 0; i < cameras.size(); i++)
-      cameras[i] = dummy_camera;
+    for (auto & camera : cameras)
+      camera = dummy_camera;
   }
   else {
     // initialize the cameras
@@ -173,8 +173,8 @@ static bool process_no_H(std::string const& site_path,
     }
     if (!found)
       camera.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
-    for (unsigned i = 0; i < cameras.size(); i++)
-      cameras[i] = camera;
+    for (auto & i : cameras)
+      i = camera;
   }
 
 
@@ -190,8 +190,8 @@ static bool process_no_H(std::string const& site_path,
   if (vul_file::is_directory(cam_init_dir)) {
     bwm_video_cam_ostream_sptr cam_ostr = new bwm_video_cam_ostream(cam_init_dir);
     if (cam_ostr && cam_ostr->is_open()) {
-      for (unsigned i = 0; i<cameras.size(); ++i)
-        cam_ostr->write_camera(&cameras[i]);
+      for (auto & camera : cameras)
+        cam_ostr->write_camera(&camera);
       cam_ostr->close();
     }
   }
@@ -255,8 +255,8 @@ static bool process(std::string const& site_path,
     ifs >> dummy_camera;
     ifs.close();
     std::cout << "using initial camera:\n" << dummy_camera << '\n';
-    for (unsigned i = 0; i < cameras.size(); i++)
-      cameras[i] = dummy_camera;
+    for (auto & camera : cameras)
+      camera = dummy_camera;
   }
   else {
     // initialize the cameras
@@ -280,8 +280,8 @@ static bool process(std::string const& site_path,
     }
     if (!found)
       camera.look_at(vgl_homg_point_3d<double>(0.0, 0.0, 0.0));
-    for (unsigned i = 0; i < cameras.size(); i++)
-      cameras[i] = camera;
+    for (auto & i : cameras)
+      i = camera;
   }
 
   // write cams as text
@@ -296,8 +296,8 @@ static bool process(std::string const& site_path,
   if (vul_file::is_directory(cam_init_dir)) {
     bwm_video_cam_ostream_sptr cam_ostr = new bwm_video_cam_ostream(cam_init_dir);
     if (cam_ostr && cam_ostr->is_open()) {
-      for (unsigned i = 0; i<cameras.size(); ++i)
-        cam_ostr->write_camera(&cameras[i]);
+      for (auto & camera : cameras)
+        cam_ostr->write_camera(&camera);
       cam_ostr->close();
     }
   }
@@ -311,9 +311,8 @@ static bool process(std::string const& site_path,
 
   // get the output world points
   std::vector<vgl_homg_point_3d<double> > points1;
-  for (unsigned kk = 0; kk < world_pt_indices.size(); kk++) {
-    unsigned i = world_pt_indices[kk];
-  //for (unsigned i = 0; i < cp.correspondences().size(); i++) {
+  for (unsigned int i : world_pt_indices) {
+    //for (unsigned i = 0; i < cp.correspondences().size(); i++) {
     points1.emplace_back(cp.correspondences()[i]->world_pt());
   }
   if (points1.size() != points2.size()) {
@@ -370,8 +369,8 @@ static bool process(std::string const& site_path,
   if (vul_file::is_directory(cam_init_dir)) {
     bwm_video_cam_ostream_sptr cam_ostr = new bwm_video_cam_ostream(cam_init_dir);
     if (cam_ostr && cam_ostr->is_open()) {
-      for (unsigned i = 0; i<cameras_mapped_proj.size(); ++i)
-        cam_ostr->write_camera(&cameras_mapped_proj[i]);
+      for (auto & i : cameras_mapped_proj)
+        cam_ostr->write_camera(&i);
       cam_ostr->close();
     }
   }
@@ -384,8 +383,8 @@ static bool process(std::string const& site_path,
   if (vul_file::is_directory(cam_init_dir)) {
     bwm_video_cam_ostream_sptr cam_ostr = new bwm_video_cam_ostream(cam_init_dir);
     if (cam_ostr && cam_ostr->is_open()) {
-      for (unsigned i = 0; i<cameras_mapped.size(); ++i)
-        cam_ostr->write_camera(&cameras_mapped[i]);
+      for (auto & i : cameras_mapped)
+        cam_ostr->write_camera(&i);
       cam_ostr->close();
     }
   }

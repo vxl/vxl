@@ -42,14 +42,14 @@ int main2(int argc, char*argv[])
 
   if (!zero_index())
   {
-    for (std::vector<unsigned>::iterator it=lines.begin(), end=lines.end(); it!=end; ++it)
+    for (unsigned int & line : lines)
     {
-      if (*it==0)
+      if (line==0)
       {
         std::cerr << "ERROR: Requested line 0, without specifying \"-zero\"\n";
         return 3;
       }
-      (*it)--;
+      line--;
     }
   }
 

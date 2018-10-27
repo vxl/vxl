@@ -48,10 +48,9 @@ static void test_linear_fit_unit_sphere_rand_error()
   // add random error (+-10%) to the points
   vnl_random ran;
   double e = 0.1;
-  for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
-      pit != pts.end(); ++pit){
+  for(auto & pt : pts){
     vgl_vector_3d<double> er(ran.drand32(-e, e), ran.drand32(-e, e), ran.drand32(-e, e));
-    (*pit) = (*pit) + er;
+    pt = pt + er;
   }
   vgl_fit_sphere_3d<double> fit_sph(pts);
   double error = fit_sph.fit_linear(&std::cout);

@@ -122,8 +122,8 @@ void vpdfl_mixture_sampler::sample(vnl_vector<double>& x)
 void vpdfl_mixture_sampler::reseed(unsigned long seed)
 {
   rng_.reseed(seed);
-  for (unsigned int i=0; i<inst_.size(); ++i)
-    inst_[i]->reseed(rng_.lrand32());
+  for (auto & i : inst_)
+    i->reseed(rng_.lrand32());
 }
 
 

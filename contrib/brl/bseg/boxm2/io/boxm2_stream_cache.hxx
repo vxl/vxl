@@ -42,9 +42,9 @@ int boxm2_stream_cache::exists(boxm2_block_id bid)
   int files_exist = 0;
   struct stat buffer;
 
-  for (unsigned i = 0; i < identifier_list_.size(); i++)
+  for (auto & i : identifier_list_)
   {
-    std::string key = boxm2_data_traits<T>::prefix(identifier_list_[i]);
+    std::string key = boxm2_data_traits<T>::prefix(i);
     std::string filename = scene_->data_path() + key + "_" + bid.to_string() + ".bin";
 
     if (stat(filename.c_str(), &buffer) == 0)
@@ -74,8 +74,8 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
   else if (h->current_block_ != id) {  // opening a new block, clear the current streams and open new ones
     h->current_block_ = id;
     h->current_index_ = 0;
-    for (unsigned i = 0; i < streams.size(); i++) {
-      streams[i]->close_file();
+    for (auto & stream : streams) {
+      stream->close_file();
     }
     //: open up all the streams
     if (!open_streams<T>( h)) { std::cout << "2 Error opening streams!\n"; throw 0; }
@@ -85,8 +85,8 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
   std::vector<typename boxm2_data_traits<T>::datatype> output;
   if (!streams.size()) return output;  // return an empty list
   if (h->current_index_ >= h->cell_cnt_) { // we've reached end of file
-    for (unsigned i =0; i < streams.size(); i++) {
-      streams[i]->close_file();
+    for (auto & stream : streams) {
+      stream->close_file();
     }
     h->current_index_ = -1;
     return output;
@@ -98,27 +98,27 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
   }
 
   if (streams[0]->index_ < 0) {  // read the first chunks into the bufs
-    for (unsigned i = 0; i < streams.size(); i++)
+    for (auto & stream : streams)
     {
-      streams[i]->index_ = 0;
+      stream->index_ = 0;
 
-      if(!streams[i]->ifs_.is_open()) continue; //Skip streams that failed to open
+      if(!stream->ifs_.is_open()) continue; //Skip streams that failed to open
 
-      streams[i]->read(h->buf_size_, h->current_block_);
+      stream->read(h->buf_size_, h->current_block_);
     }
   }
 
   //: read the next cell
-  for (unsigned i = 0; i < streams.size(); i++)
+  for (auto & stream : streams)
   {
-    if(!streams[i]->ifs_.is_open()) continue; //Skip streams that failed to open
+    if(!stream->ifs_.is_open()) continue; //Skip streams that failed to open
 
-    char * cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_);
+    char * cell = stream->get_cell(h->current_index_, h->cell_size_, h->current_block_);
     if (!cell) {  // need to read next chunk
-      streams[i]->index_ = streams[i]->index_ + streams[i]->num_cells(h->cell_size_);
-      streams[i]->read(h->buf_size_, h->current_block_);
+      stream->index_ = stream->index_ + stream->num_cells(h->cell_size_);
+      stream->read(h->buf_size_, h->current_block_);
       //: now it should be alright
-      cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_);
+      cell = stream->get_cell(h->current_index_, h->cell_size_, h->current_block_);
       if (!cell) { std::cerr << "problem in reading from files!\n"; throw 0; }
     }
     typename boxm2_data_traits<T>::datatype val = reinterpret_cast<typename boxm2_data_traits<T>::datatype *>(cell)[0];
@@ -130,8 +130,8 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_nex
 
   //: check again as there may not be another call
   if (h->current_index_ >= h->cell_cnt_) { // we've reached end of file
-    for (unsigned i =0; i < streams.size(); i++) {
-      streams[i]->close_file();
+    for (auto & stream : streams) {
+      stream->close_file();
     }
     h->current_index_ = -1;
   }
@@ -149,8 +149,8 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_ran
   std::vector<boxm2_stream_cache_helper_sptr>& streams = data_streams_[data_type];
   h->current_block_ = id;
   h->current_index_ = 0;
-  for (unsigned i = 0; i < streams.size(); i++) {
-      streams[i]->close_file();
+  for (auto & stream : streams) {
+      stream->close_file();
   }
   //: open up all the streams
   if (!open_streams<T>(h)) { std::cout << "Error opening streams!\n"; throw 0; }
@@ -161,11 +161,11 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_ran
     return output;
 
   //: read the next cell
-  for (unsigned i = 0; i < streams.size(); i++) {
-    streams[i]->ifs_.seekg(index*h->cell_size_);
-    streams[i]->read(h->buf_size_, h->current_block_);
+  for (auto & stream : streams) {
+    stream->ifs_.seekg(index*h->cell_size_);
+    stream->read(h->buf_size_, h->current_block_);
     //: now it should be alright
-    char * cell = streams[i]->get_cell(h->current_index_, h->cell_size_, h->current_block_);
+    char * cell = stream->get_cell(h->current_index_, h->cell_size_, h->current_block_);
     if (!cell) { std::cerr << "problem in reading from files!\n"; throw 0; }
     output.push_back(reinterpret_cast<typename boxm2_data_traits<T>::datatype*>(cell)[0]);
 
@@ -173,8 +173,8 @@ std::vector<typename boxm2_data_traits<T>::datatype> boxm2_stream_cache::get_ran
   }
 
   //: check again as there may not be another call
-  for (unsigned i =0; i < streams.size(); i++) {
-    streams[i]->close_file();
+  for (auto & stream : streams) {
+    stream->close_file();
   }
   h->current_index_ = -1;
   return output;

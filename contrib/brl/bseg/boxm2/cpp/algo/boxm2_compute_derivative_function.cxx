@@ -155,10 +155,10 @@ std::vector<std::pair<vgl_point_3d<int>, float> >  boxm2_compute_derivative_func
     double side_len = 1.0 / (double) (1<<curr_depth);
 #endif
 
-    for (unsigned int i=0; i<neighbors.size(); ++i)
+    for (const auto & neighbor : neighbors)
     {
         //load neighbor block/tree
-        vgl_point_3d<double> abCenter = neighbors[i].second;
+        vgl_point_3d<double> abCenter = neighbor.second;
         vgl_point_3d<int>    blkIdx((int) abCenter.x(),
                                     (int) abCenter.y(),
                                     (int) abCenter.z() );
@@ -181,7 +181,7 @@ std::vector<std::pair<vgl_point_3d<int>, float> >  boxm2_compute_derivative_func
             boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = alpha_data[idx];
             float prob = 1.0f - (float)std::exp(-alpha * side_len * data.sub_block_dim_.x());
 
-            std::pair<vgl_point_3d<int>, float> mypair(neighbors[i].first, prob);
+            std::pair<vgl_point_3d<int>, float> mypair(neighbor.first, prob);
             probs.push_back(mypair);
 #else
             //grab alpha
@@ -215,7 +215,7 @@ std::vector<std::pair<vgl_point_3d<int>, float> >  boxm2_compute_derivative_func
 #else
             float prob = totalAlphaL;
 #endif
-            std::pair<vgl_point_3d<int>, float> mypair(neighbors[i].first, prob);
+            std::pair<vgl_point_3d<int>, float> mypair(neighbor.first, prob);
             probs.push_back(mypair);
         }
     }
@@ -260,8 +260,8 @@ std::vector<std::pair<vgl_point_3d<int>, float> > boxm2_compute_derivative_funct
 float boxm2_compute_derivative_function::apply_filter(std::vector<std::pair<vgl_point_3d<int>, float> > neighbors, std::vector<std::pair<vgl_point_3d<int>, float> > filter)
 {
     float sum = 0;
-    for (unsigned  i = 0; i < filter.size(); i++) {
-        vgl_point_3d<int> loc = filter[i].first;
+    for (auto & i : filter) {
+        vgl_point_3d<int> loc = i.first;
         std::vector<std::pair<vgl_point_3d<int>, float> >::const_iterator it = neighbors.begin();
         bool found = false;
         while (!found) {
@@ -271,7 +271,7 @@ float boxm2_compute_derivative_function::apply_filter(std::vector<std::pair<vgl_
         }
         assert(found);
         //add data*filter to sum
-        sum += filter[i].second * (*it).second;
+        sum += i.second * (*it).second;
     }
     return sum;
 }

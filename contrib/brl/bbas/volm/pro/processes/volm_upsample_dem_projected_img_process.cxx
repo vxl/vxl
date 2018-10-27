@@ -94,9 +94,9 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
     bins.add_point(pixels[i], values[i]);
 
   // get point values
-  for (unsigned i = 0; i < pixels.size(); i++) {
+  for (auto pixel : pixels) {
     float stored_value;
-    bins.get_value(pixels[i], stored_value);
+    bins.get_value(pixel, stored_value);
     //std::cout << "pixel [" << pixels[i][0] << ',' << pixels[i][1] << "], value = " << values[i] << " (diff = " << stored_value - values[i] << std::endl;
   }
   std::cout << "Construct rsdl bin with bin size " << bin_sizes[0] << 'x' << bin_sizes[1] << std::endl;

@@ -45,16 +45,16 @@ void draw_tree(vil_image_view<vxl_byte>& image,
                const std::vector<std::pair<int,int> >& pairs)
 {
   // Draw tree into image for display purposes
-  for (unsigned i=0;i<pairs.size();++i)
+  for (const auto & pair : pairs)
     mbl_draw_line(image,
-                  pts[pairs[i].first],
-                  pts[pairs[i].second],vxl_byte(255));
+                  pts[pair.first],
+                  pts[pair.second],vxl_byte(255));
 
   // Write position of selected points into the original image
   // for display purposes.
-  for (unsigned i=0;i<pts.size();++i)
+  for (auto pt : pts)
   {
-    vil_fill_disk(image,pts[i].x(),pts[i].y(),4,vxl_byte(255));
+    vil_fill_disk(image,pt.x(),pt.y(),4,vxl_byte(255));
   }
 }
 
@@ -261,11 +261,11 @@ int main( int argc, char* argv[] )
 
     // For each new point, find the closest point in the levels above
     // Change 0,i1 to i0,i1 to consider only level above
-    for (unsigned i=0;i<L_pts.size();++i)
+    for (auto L_pt : L_pts)
     {
-      pts.push_back(L_pts[i]);
+      pts.push_back(L_pt);
       std::pair<int,int> pair_i(pts.size()-1,
-                               closest_pt_index(pts,0,i1,L_pts[i]));
+                               closest_pt_index(pts,0,i1,L_pt));
       pairs.push_back(pair_i);
       im_level.push_back(L);
     }

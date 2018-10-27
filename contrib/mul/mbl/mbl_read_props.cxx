@@ -51,8 +51,8 @@ void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props)
   typedef std::map<std::string, std::string>::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
-  for (ITER i = props.begin(); i != props.end(); ++i)
-    afs << vsl_indent() << (*i).first << ": " << (*i).second << '\n';
+  for (auto & prop : props)
+    afs << vsl_indent() << prop.first << ": " << prop.second << '\n';
   vsl_indent_dec(afs);
   afs << vsl_indent() << "}\n";
 }
@@ -63,10 +63,10 @@ void mbl_read_props_print(std::ostream &afs, mbl_read_props_type props, unsigned
   typedef std::map<std::string, std::string>::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
-  for (ITER i = props.begin(); i != props.end(); ++i)
+  for (auto & prop : props)
   {
-    afs << vsl_indent() << (*i).first << ": " << (*i).second.substr(0, max_chars) << '\n';
-    if (max_chars < (*i).second.size()) afs << vsl_indent() << "...\n";
+    afs << vsl_indent() << prop.first << ": " << prop.second.substr(0, max_chars) << '\n';
+    if (max_chars < prop.second.size()) afs << vsl_indent() << "...\n";
   }
   vsl_indent_dec(afs);
   afs << vsl_indent() << "}\n";
@@ -475,9 +475,8 @@ void mbl_read_props_look_for_unused_props(
   mbl_read_props_type p2(props);
 
   // Remove ignoreable properties
-  for (mbl_read_props_type::const_iterator it=ignore.begin();
-         it != ignore.end(); ++it)
-    p2.erase(it->first);
+  for (const auto & it : ignore)
+    p2.erase(it.first);
 
   if (!p2.empty())
   {

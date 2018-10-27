@@ -12,24 +12,22 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
 
     std::list<boxm2_block_vis_graph_node_sptr> temp_nodes;
     // create a node for every block in the model
-    for(std::map<boxm2_block_id,boxm2_block_metadata>::iterator iter = blkmetadata.begin();
-        iter!=blkmetadata.end();iter++)
+    for(auto & iter : blkmetadata)
     {
-        vgl_box_3d<double> bbox = iter->second.bbox();
+        vgl_box_3d<double> bbox = iter.second.bbox();
 
         // project bounding box and check for any overlap with the image bounds
         vgl_box_2d<double> projected_bbox;
         const std::vector<vgl_point_3d<double> > block_corners = bbox.vertices();
-        for (std::vector<vgl_point_3d<double> >::const_iterator corner_it = block_corners.begin();
-             corner_it != block_corners.end(); ++corner_it) {
+        for (const auto & block_corner : block_corners) {
           double u,v;
-          cam.project( corner_it->x(), corner_it->y(), corner_it->z(), u, v);
+          cam.project( block_corner.x(), block_corner.y(), block_corner.z(), u, v);
           projected_bbox.add( vgl_point_2d<double>(u,v) );
         }
         vgl_box_2d<double> cropped_projection = vgl_intersection(projected_bbox, image_bounds);
           // no need to consider blocks whose projections have no overlap with the image
         if (!cropped_projection.is_empty() ) {
-          boxm2_block_vis_graph_node_sptr node(new boxm2_block_vis_graph_node(iter->first));
+          boxm2_block_vis_graph_node_sptr node(new boxm2_block_vis_graph_node(iter.first));
           temp_nodes.push_back(node);
         }
     }
@@ -180,13 +178,12 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
       int min_incoming = 7; // maximum possible number of incoming edges + 1
       boxm2_block_vis_graph_node_sptr next_node;
 
-      for(std::list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
-          node_iter != temp_nodes.end();node_iter++)
+      for(auto & temp_node : temp_nodes)
       {
-        int num_incoming = (*node_iter)->num_incoming_edges_;
+        int num_incoming = temp_node->num_incoming_edges_;
         if (num_incoming < min_incoming) {
           min_incoming = num_incoming;
-          next_node = *node_iter;
+          next_node = temp_node;
         }
         if (min_incoming == 0) {
           // dont bother searching for other 0's

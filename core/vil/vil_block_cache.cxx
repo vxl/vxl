@@ -9,10 +9,9 @@ unsigned long bcell::time_ = 0;
 
 vil_block_cache::~vil_block_cache()
 {
-  for(std::vector<bcell*>::iterator bit = blocks_.begin();
-      bit != blocks_.end(); ++bit){
-    delete *bit;
-    *bit = nullptr;
+  for(auto & block : blocks_){
+    delete block;
+    block = nullptr;
   }
   blocks_.clear();//empty the index
 }

@@ -73,10 +73,10 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   unsigned nj = (unsigned) (bbox.height()/res);
   vil_image_view<vxl_byte> cntimg(ni, nj);
   std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
-  for (unsigned int i=0; i<cams.size(); ++i)
+  for (const auto & i : cams)
   {
     //project the four corners to the ground plane
-    cam = cams[i];
+    cam = i;
     vgl_ray_3d<double> ul = cam.backproject(0.0, 0.0);
     vgl_ray_3d<double> ur = cam.backproject(2*pp.x(), 0.0);
     vgl_ray_3d<double> bl = cam.backproject(0.0, 2*pp.y());

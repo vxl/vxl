@@ -53,11 +53,11 @@ static vsol_polygon_3d_sptr move_points_to_plane(std::vector<vsol_point_3d_sptr>
 {
   vgl_fit_plane_3d<double> fitter;
   std::cout << "fitting----------------" << std::endl;
-  for (unsigned i=0; i<points.size(); i++) {
-    fitter.add_point(points[i]->x(),
-                     points[i]->y(),
-                     points[i]->z());
-    std::cout << *(points[i]) << std::endl;
+  for (auto & point : points) {
+    fitter.add_point(point->x(),
+                     point->y(),
+                     point->z());
+    std::cout << *point << std::endl;
   }
 
   vgl_homg_plane_3d<double> plane;
@@ -74,8 +74,8 @@ static vsol_polygon_3d_sptr move_points_to_plane(std::vector<vsol_point_3d_sptr>
 
   // find the closest point on the plane and replace it for each point
   std::vector<vsol_point_3d_sptr> new_points;
-  for (unsigned i=0; i<points.size(); i++) {
-    vgl_homg_point_3d<double> hp(points[i]->x(), points[i]->y(), points[i]->z());
+  for (auto & point : points) {
+    vgl_homg_point_3d<double> hp(point->x(), point->y(), point->z());
     vgl_homg_point_3d<double> p = vgl_closest_point(plane, hp);
     new_points.push_back(new vsol_point_3d(p.x()/p.w(), p.y()/p.w(), p.z()/p.w()));
   }
@@ -445,8 +445,8 @@ vgl_plane_3d<double> vsol_mesh_3d::get_plane(unsigned face_id)
 
   std::vector<vsol_point_3d_sptr> points;
   vgl_fit_plane_3d<double> fitter;
-  for (unsigned i=0; i<vertices.size(); i++) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) vertices[i];
+  for (auto & vertice : vertices) {
+    bmsh3d_vertex* v = (bmsh3d_vertex*) vertice;
     vgl_homg_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
     fitter.add_point(hp);
   }

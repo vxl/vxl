@@ -63,8 +63,8 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   double l1 = std::log(4.0), l2 = std::log(4.0*n), l3 = 2.0;
   double GRICF = 0.0;
   double thresh = l3*(r - df);
-  for (unsigned int i = 0; i < residualsF_.size(); i++) {
-    double t = residualsF_[i] / std_;
+  for (double i : residualsF_) {
+    double t = i / std_;
     if (t < thresh)
       GRICF += t;
     else
@@ -74,8 +74,8 @@ bool ComputeGRIC::compute(PairMatchSetCorner* matches) {
   std::cerr << "GRICF : " << GRICF << std::endl;
   double GRICH = 0.0;
   thresh = l3*(r - dh);
-  for (unsigned int i = 0; i < residualsH_.size(); i++) {
-    double t = residualsH_[i] / std_;
+  for (double i : residualsH_) {
+    double t = i / std_;
     if (t < thresh)
       GRICH += t;
     else

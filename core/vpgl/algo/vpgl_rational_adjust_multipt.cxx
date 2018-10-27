@@ -92,8 +92,8 @@ void re_projection_error(std::vector<vpgl_rational_camera<double> > const& cams,
 
 void print_perm(std::vector<unsigned>& params_indices)
 {
-  for (unsigned int i = 0; i < params_indices.size(); ++i)
-    std::cout << params_indices[i] << ' ';
+  for (unsigned int params_indice : params_indices)
+    std::cout << params_indice << ' ';
   std::cout << std::endl;
 }
 
@@ -155,9 +155,9 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
   }
   // find the best intersections for all the correspondences using the given cameras to compute good initial estimates for z of each correspondence
   std::vector<vgl_point_3d<double> > intersections_initial;
-  for (unsigned int i = 0; i < corrs_reformatted.size(); ++i) {
+  for (const auto & i : corrs_reformatted) {
     vgl_point_3d<double> pt;
-    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], pt))
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, i, pt))
       return false;
     intersections_initial.push_back(pt);
   }
@@ -171,8 +171,8 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
     param_values.push_back(i*increment);
     param_values.push_back(-i*increment);
   }
-  for (unsigned int i = 0; i < param_values.size(); ++i)
-    std::cout << param_values[i] << ' ';
+  for (double param_value : param_values)
+    std::cout << param_value << ' ';
   std::cout << '\n';
 
   // now for each param go through all possible param values
@@ -290,9 +290,9 @@ bool vpgl_rational_adjust_multiple_pts::
   }
   // find the best intersections for all the correspondences using the given cameras to compute good initial estimates for z of each correspondence
   std::vector<vgl_point_3d<double> > intersections_initial;
-  for (unsigned int i = 0; i < corrs_reformatted.size(); ++i) {
+  for (const auto & i : corrs_reformatted) {
     vgl_point_3d<double> pt;
-    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], pt))
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, i, pt))
       return false;
     intersections_initial.push_back(pt);
   }
@@ -303,8 +303,8 @@ bool vpgl_rational_adjust_multiple_pts::
       return false;
     intersections_initial[i] = final;
   }
-  for (unsigned int i = 0; i < intersections_initial.size(); ++i)
-    std::cout << "before adjustment initial 3D intersection point: " << intersections_initial[i] << std::endl;
+  for (const auto & i : intersections_initial)
+    std::cout << "before adjustment initial 3D intersection point: " << i << std::endl;
 
   // search the camera translation space using Lev-Marq
   vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);
@@ -381,9 +381,9 @@ bool vpgl_rational_adjust_multiple_pts::adjust_lev_marq(std::vector<vpgl_rationa
   }
   // find the best 3-d intersections for all the correspondences using the given cameras to compute good initial estimates for z of each correspondence
   std::vector<vgl_point_3d<double> > intersections_initial;
-  for (unsigned i = 0; i < corrs_reformatted.size(); i++) {
+  for (const auto & i : corrs_reformatted) {
     vgl_point_3d<double> pt;
-    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, corrs_reformatted[i], initial_pt, zmin, zmax, pt, relative_diameter))
+    if (!vpgl_rational_adjust_onept::find_intersection_point(cams, cam_weights, i, initial_pt, zmin, zmax, pt, relative_diameter))
       return false;
     intersections_initial.push_back(pt);
   }
@@ -395,8 +395,8 @@ bool vpgl_rational_adjust_multiple_pts::adjust_lev_marq(std::vector<vpgl_rationa
       return false;
     intersections_initial[i] = final;
   }
-  for (unsigned int i = 0; i < intersections_initial.size(); ++i)
-    std::cout << "before adjustment initial 3D intersection point: " << intersections_initial[i] << std::endl;
+  for (const auto & i : intersections_initial)
+    std::cout << "before adjustment initial 3D intersection point: " << i << std::endl;
 
   // search the camera translation space using Lev-Marq
   vpgl_cam_trans_search_lsqr transsf(cams, cam_weights, corrs_reformatted, intersections_initial);

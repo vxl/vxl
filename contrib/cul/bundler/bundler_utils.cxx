@@ -83,12 +83,12 @@ double bundler_utils_get_homography_inlier_percentage(
         std::vector<vgl_homg_point_2d<double> > rhs;
         std::vector<vgl_homg_point_2d<double> > lhs;
 
-        for (int i = 0; i < 4; ++i) {
+        for (int match_idx : match_idxs) {
             lhs.emplace_back(
-                    match.matches[match_idxs[i]].first->point);
+                    match.matches[match_idx].first->point);
 
             rhs.emplace_back(
-                    match.matches[match_idxs[i]].second->point);
+                    match.matches[match_idx].second->point);
         }
 
         // Get the homography for the points

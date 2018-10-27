@@ -71,12 +71,12 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
     vnl_rpoly_roots r(pts);
     vnl_vector<double> roots=r.realroots(0.1);
     bool flag=false;
-    for (unsigned i=0;i<roots.size();i++)
+    for (double & root : roots)
     {
-      if (roots[i]>0)
+      if (root>0)
       {
         flag=true;
-        beta=T(roots[i]);
+        beta=T(root);
       }
     }
     return flag;
@@ -90,12 +90,12 @@ bool bsta_beta<T>::bsta_beta_from_moments(T mean, T var, T& alpha, T& beta)
     vnl_vector<double> roots=r.realroots(0.1);
 
     bool flag=false;
-    for (unsigned i=0;i<roots.size();i++)
+    for (double & root : roots)
     {
-      if (roots[i]>0)
+      if (root>0)
       {
         flag=true;
-        alpha=T(roots[i]);
+        alpha=T(root);
       }
     }
     return flag;

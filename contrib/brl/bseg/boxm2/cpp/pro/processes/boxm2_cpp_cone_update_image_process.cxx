@@ -81,17 +81,17 @@ bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
     std::string data_type;
     std::string num_obs_type;
     std::vector<std::string> apps = scene->appearances();
-    for (unsigned int i=0; i<apps.size(); ++i) {
-      if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) {
-        data_type = apps[i];
+    for (const auto & app : apps) {
+      if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() ) {
+        data_type = app;
         foundDataType = true;
       }
-      else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) {
-        data_type = apps[i];
+      else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() ) {
+        data_type = app;
         foundDataType = true;
       }
-      else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) {
-        num_obs_type = apps[i];
+      else if ( app == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() ) {
+        num_obs_type = app;
       }
     }
     if (!foundDataType) {

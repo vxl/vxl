@@ -171,8 +171,7 @@ void remove_duplicate_points (bmsh3d_pt_set* pt_set)
 
   // perform deletion
   std::cout<< "\n\tDeleting "<< idToBeDeleted.size() <<" duplicates...\n";
-  for (unsigned int i=0; i<idToBeDeleted.size(); i++) {
-    int id = idToBeDeleted[i];
+  for (int id : idToBeDeleted) {
     std::map<int, bmsh3d_vertex*>::iterator it = pt_set->vertexmap().find (id);
     delete (*it).second;
     pt_set->vertexmap().erase (it);

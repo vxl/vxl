@@ -45,15 +45,12 @@ class boxm2_vecf_fit_margins
                         bool is_right=false,
                         bool estimate_t = false):
    is_right_(is_right),dphi_rad_(0.0),estimate_t_(estimate_t){
-    for(std::vector<vgl_point_3d<double> >::const_iterator pit = inferior_margin_pts.begin();
-        pit != inferior_margin_pts.end(); ++pit)
-      inferior_margin_pts_.emplace_back(pit->x(), pit->y());
-    for(std::vector<vgl_point_3d<double> >::const_iterator pit = superior_margin_pts.begin();
-        pit != superior_margin_pts.end(); ++pit)
-      superior_margin_pts_.emplace_back(pit->x(), pit->y());
-    for(std::vector<vgl_point_3d<double> >::const_iterator pit = superior_crease_pts.begin();
-        pit != superior_crease_pts.end(); ++pit)
-      superior_crease_pts_.emplace_back(pit->x(), pit->y());
+    for(const auto & inferior_margin_pt : inferior_margin_pts)
+      inferior_margin_pts_.emplace_back(inferior_margin_pt.x(), inferior_margin_pt.y());
+    for(const auto & superior_margin_pt : superior_margin_pts)
+      superior_margin_pts_.emplace_back(superior_margin_pt.x(), superior_margin_pt.y());
+    for(const auto & superior_crease_pt : superior_crease_pts)
+      superior_crease_pts_.emplace_back(superior_crease_pt.x(), superior_crease_pt.y());
     lateral_canthus_ = vgl_point_2d<double>(lateral_canthus.x(),lateral_canthus.y());
     medial_canthus_ = vgl_point_2d<double>(medial_canthus.x(),medial_canthus.y());
   }

@@ -62,9 +62,9 @@ bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_bloc
   // cache the databases and data buffers before refine
   dbs_.clear();
   old_bufs_.clear();
-  for(std::vector<std::string>::const_iterator pit = prefixes.begin(); pit != prefixes.end(); ++pit){
-    boxm2_data_base* db = boxm2_cache::instance()->get_data_base(scene,id,*pit);
-    if(*pit == "alpha")
+  for(const auto & prefixe : prefixes){
+    boxm2_data_base* db = boxm2_cache::instance()->get_data_base(scene,id,prefixe);
+    if(prefixe == "alpha")
       alpha_   = (float*)   db->data_buffer();
     db->enable_write();
     dbs_.push_back(db);

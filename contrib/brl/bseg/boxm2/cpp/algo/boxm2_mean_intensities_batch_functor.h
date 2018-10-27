@@ -33,8 +33,8 @@ class boxm2_mean_intensities_batch_functor
     std::vector<datatype> out = str_cache_->get_next<BOXM2_AUX0>(id_, index);
 
     alpha = datatype(0.0);
-    for (unsigned j = 0; j < out.size(); j++) {
-      alpha += out[j];
+    for (float j : out) {
+      alpha += j;
     }
     alpha /= datatype(out.size());
     return true;
@@ -70,8 +70,8 @@ class boxm2_mean_intensities_print_functor
 
     if (index%1000000 == 0) {
       std::cout << alpha;
-      for (unsigned j = 0; j < out.size(); ++j) {
-        std::cout << ' ' << out[j];
+      for (float j : out) {
+        std::cout << ' ' << j;
       }
       std::cout << '\n';
     }

@@ -380,9 +380,9 @@ write_sorted( std::ostream& os ) const
   os << from_features_.size() << std::endl;
 
   unsigned index;
-  for( unsigned i=0; i<nodes.size(); ++i ){
+  for(auto & node : nodes){
 
-    index = nodes[i].ind_;
+    index = node.ind_;
 
     // output the index(th) match
     from_features_[index]->write( os );
@@ -393,13 +393,13 @@ write_sorted( std::ostream& os ) const
     os << this_match.size() << std::endl;
 
     typedef std::vector<match_info>::const_iterator MIter;
-    for( MIter ti=this_match.begin(); ti!=this_match.end(); ++ti )  {
-      os << ti->signature_weight << ' '
-         << ti->geometric_weight << ' '
-         << ti->cumulative_weight << std::endl;
+    for(const auto & ti : this_match)  {
+      os << ti.signature_weight << ' '
+         << ti.geometric_weight << ' '
+         << ti.cumulative_weight << std::endl;
 
       // to feature
-      ti->to_feature->write( os );
+      ti.to_feature->write( os );
     }
     os << std::endl;
   }

@@ -130,8 +130,7 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
       // make a new triangular face
       bmsh3d_face* newF = triM->_new_face ();
 
-      for (unsigned int i=0; i<vertices.size(); i++) {
-        bmsh3d_vertex* V = vertices[i];
+      for (auto V : vertices) {
         int id = V->id();
         bmsh3d_vertex* newV = triM->vertexmap (id);
         newF->_ifs_add_vertex (newV);
@@ -145,14 +144,14 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M)
       bmsh3d_triangulate_face (F, tri_faces);
 
       // For each resulting triangle, add a new face.
-      for (unsigned int i=0; i<tri_faces.size(); i++) {
+      for (auto & tri_face : tri_faces) {
         bmsh3d_face* newF = triM->_new_face ();
 
-        bmsh3d_vertex* V0 = triM->vertexmap (tri_faces[i][0]);
+        bmsh3d_vertex* V0 = triM->vertexmap (tri_face[0]);
         newF->_ifs_add_vertex (V0);
-        bmsh3d_vertex* V1 = triM->vertexmap (tri_faces[i][1]);
+        bmsh3d_vertex* V1 = triM->vertexmap (tri_face[1]);
         newF->_ifs_add_vertex (V1);
-        bmsh3d_vertex* V2 = triM->vertexmap (tri_faces[i][2]);
+        bmsh3d_vertex* V2 = triM->vertexmap (tri_face[2]);
         newF->_ifs_add_vertex (V2);
 
         triM->_add_face (newF);

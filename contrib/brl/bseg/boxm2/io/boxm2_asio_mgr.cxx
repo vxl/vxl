@@ -123,8 +123,8 @@ std::map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
     }
   }
 
-  for (unsigned int i=0; i<to_delete.size(); ++i)
-    load_list_.erase(to_delete[i]);
+  for (auto i : to_delete)
+    load_list_.erase(i);
 
   return toReturn;
 }
@@ -163,8 +163,8 @@ std::map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_gener
     }
 
     //delete loaded entries from data list
-    for (unsigned int i=0; i<to_delete.size(); ++i)
-      data_list.erase(to_delete[i]);
+    for (auto i : to_delete)
+      data_list.erase(i);
   }
   return toReturn;
 }

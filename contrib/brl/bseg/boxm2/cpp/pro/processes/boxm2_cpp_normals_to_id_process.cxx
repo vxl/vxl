@@ -64,9 +64,9 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
     std::vector<boxm2_block_id> blocks=scene->get_block_ids();
     boxm2_normals_to_id_functor functor;
-    for (std::vector<boxm2_block_id>::iterator id = blocks.begin(); id != blocks.end(); ++id)
+    for (auto & block : blocks)
     {
-        std::cout<<"Block Id "<<(*id)<<std::endl;
+        std::cout<<"Block Id "<<block<<std::endl;
         std::size_t alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         std::size_t pointTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_POINT>::prefix());
         std::size_t normalTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL>::prefix());
@@ -74,14 +74,14 @@ bool boxm2_cpp_normals_to_id_process(bprb_func_process& pro)
         std::size_t labelshortSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix());
 
 
-        boxm2_data_base * alpha =        cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
+        boxm2_data_base * alpha =        cache->get_data_base(scene,block,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         int data_buff_length = (int) (alpha->buffer_length()/alphaTypeSize);
 
 
-        boxm2_data_base * points = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
-        boxm2_data_base * normals = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
-        boxm2_data_base * vis = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
-        boxm2_data_base * normalids = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
+        boxm2_data_base * points = cache->get_data_base(scene,block,boxm2_data_traits<BOXM2_POINT>::prefix(), data_buff_length * pointTypeSize);
+        boxm2_data_base * normals = cache->get_data_base(scene,block,boxm2_data_traits<BOXM2_NORMAL>::prefix(), data_buff_length * normalTypeSize);
+        boxm2_data_base * vis = cache->get_data_base(scene,block,boxm2_data_traits<BOXM2_VIS_SCORE>::prefix(), data_buff_length * visTypeSize);
+        boxm2_data_base * normalids = cache->get_data_base(scene,block,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("orientation"), data_buff_length * labelshortSize,false);
 
         std::vector<boxm2_data_base*> datas;
         datas.push_back(alpha);

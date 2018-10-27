@@ -30,9 +30,8 @@ depth_map_scene(unsigned ni, unsigned nj,
 {
   ground_plane_.push_back(ground_plane);
   sky_.push_back(sky);
-  for (std::vector<depth_map_region_sptr>::const_iterator rit = scene_regions.begin();
-       rit != scene_regions.end(); ++rit)
-    scene_regions_[(*rit)->name()]=(*rit);
+  for (const auto & scene_region : scene_regions)
+    scene_regions_[scene_region->name()]=scene_region;
 }
 
 void depth_map_scene::set_ground_plane(vsol_polygon_2d_sptr ground_plane)
@@ -138,8 +137,8 @@ set_ground_plane_max_depth(double max_depth,
                            double proximity_scale_factor)
 {
   if (ground_plane_.size()) {
-    for (unsigned i = 0 ; i < ground_plane_.size(); i++) {
-      ground_plane_[i]->set_ground_plane_max_depth(max_depth, cam_,
+    for (auto & i : ground_plane_) {
+      i->set_ground_plane_max_depth(max_depth, cam_,
                                                    proximity_scale_factor);
     }
   }
@@ -603,8 +602,8 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   }
   if (ground_active) {
     // ensure the region_3D exists for all grounds
-    for (unsigned i = 0; i < ground_plane_.size(); i++)
-      ground_plane_[i]->set_region_3d(ground_plane_[i]->max_depth(), this->cam());
+    for (auto & i : ground_plane_)
+      i->set_region_3d(i->max_depth(), this->cam());
   }
   vil_image_view<float> ground_img = this->depth_map("ground_plane", level);
   std::vector<vil_image_view<float> > region_imgs;

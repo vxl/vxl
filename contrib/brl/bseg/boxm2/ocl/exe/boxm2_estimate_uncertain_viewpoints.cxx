@@ -246,8 +246,8 @@ int main(int argc,  char** argv)
     std::ofstream ofile(outfile().c_str());
     std::sort(distances.begin(), distances.end(), compare_second_element);
 
-    for (unsigned int k = 0 ; k < distances.size(); ++k)
-        ofile<<distances[k].first.x()<<' '<<distances[k].first.y()<<' '<<distances[k].first.z()<<' '<<distances[k].second<<std::endl;
+    for (auto & distance : distances)
+        ofile<<distance.first.x()<<' '<<distance.first.y()<<' '<<distance.first.z()<<' '<<distance.second<<std::endl;
     return 0;
 }
 

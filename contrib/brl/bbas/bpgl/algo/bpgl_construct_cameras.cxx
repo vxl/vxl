@@ -54,14 +54,14 @@ bool bpgl_construct_cameras::construct()
 {
     std::vector<vgl_homg_point_2d<double> > p0,p1;
 
-    for (unsigned int i=0;i<points0_.size();i++)
+    for (auto i : points0_)
     {
-      vgl_homg_point_2d<double> p(points0_[i]);
+      vgl_homg_point_2d<double> p(i);
       p0.push_back(p);
     }
-    for (unsigned int i=0;i<points1_.size();i++)
+    for (auto i : points1_)
     {
-      vgl_homg_point_2d<double> p(points1_[i]);
+      vgl_homg_point_2d<double> p(i);
       p1.push_back(p);
     }
 

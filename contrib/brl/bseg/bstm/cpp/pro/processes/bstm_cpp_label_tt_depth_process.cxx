@@ -86,12 +86,12 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
     {
       bstm_time_tree tt ((unsigned char*) (*time_trees_iter).data_block(), bstm_metadata.max_level_t_);
       std::vector<int> leaves = tt.get_leaf_bits();
-      for(int i = 0; i < leaves.size(); i++) {
-        label_data[tt.get_data_index( leaves[i] ) ] = (bstm_data_traits<BSTM_LABEL>::datatype) tt.depth_at( leaves[i] ) + 1;
-        if( tt.depth_at( leaves[i] ) > max_depth)
-          max_depth = tt.depth_at( leaves[i] ) ;
-        if (tt.depth_at( leaves[i] ) < min_depth)
-          min_depth = tt.depth_at( leaves[i] ) ;
+      for(int leave : leaves) {
+        label_data[tt.get_data_index( leave ) ] = (bstm_data_traits<BSTM_LABEL>::datatype) tt.depth_at( leave ) + 1;
+        if( tt.depth_at( leave ) > max_depth)
+          max_depth = tt.depth_at( leave ) ;
+        if (tt.depth_at( leave ) < min_depth)
+          min_depth = tt.depth_at( leave ) ;
       }
     }
   }

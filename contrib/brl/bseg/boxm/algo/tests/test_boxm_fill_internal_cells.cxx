@@ -19,20 +19,20 @@ void build_tree(boct_tree<short,float>* tree)
     std::vector<boct_tree_cell<short,float>*> leaves = tree->leaf_cells();
     leaves[1]->set_data(0.1f);
     leaves[1]->split();
-    for (unsigned i=0; i<leaves.size(); i++)
-      leaves[i]->set_data(0.1f);
+    for (auto & leave : leaves)
+      leave->set_data(0.1f);
   }
 
   if (debug)
   {
     std::cout << "All Levels" << std::endl;
     std::vector<boct_tree_cell<short,float>*> leaves = tree->all_cells();
-    for (unsigned i=0; i<leaves.size(); i++) {
-      std::cout<< leaves[i]->get_code().x_loc_ << ','
-              << leaves[i]->get_code().y_loc_ << ','
-              << leaves[i]->get_code().z_loc_ << ','
-              << leaves[i]->get_code().level << ','
-              << leaves[i]->data() << std::endl;
+    for (auto & leave : leaves) {
+      std::cout<< leave->get_code().x_loc_ << ','
+              << leave->get_code().y_loc_ << ','
+              << leave->get_code().z_loc_ << ','
+              << leave->get_code().level << ','
+              << leave->data() << std::endl;
     }
   }
 }
@@ -79,29 +79,29 @@ static void test_boxm_fill_internal_cells()
   boct_tree<short, float>  *tree_out= block_out->get_tree();
   std::vector<boct_tree_cell<short,float>*> cells = tree_out->all_cells();
   bool result = true;
-  for (unsigned i=0; i<cells.size(); i++)
+  for (auto & cell : cells)
   {
-    if (!cells[i]->is_leaf())
+    if (!cell->is_leaf())
     {
-      boct_tree_cell<short,float>* children = cells[i]->children();
+      boct_tree_cell<short,float>* children = cell->children();
       float avg =0;
       for (unsigned c=0; c<8; c++)
       {
         avg+=children[c].data();
       }
-      result = result && (cells[i]->data()==(avg/8.f));
+      result = result && (cell->data()==(avg/8.f));
     }
   }
   TEST("Valid average cells", result, true);
 
   if (debug) {
     std::cout << "Printing Output Tree" << std::endl;
-    for (unsigned i=0; i<cells.size(); i++) {
-      std::cout<< cells[i]->get_code().x_loc_ << ','
-              << cells[i]->get_code().y_loc_ << ','
-              << cells[i]->get_code().z_loc_ << ','
-              << cells[i]->get_code().level << ','
-              << cells[i]->data() << std::endl;
+    for (auto & cell : cells) {
+      std::cout<< cell->get_code().x_loc_ << ','
+              << cell->get_code().y_loc_ << ','
+              << cell->get_code().z_loc_ << ','
+              << cell->get_code().level << ','
+              << cell->data() << std::endl;
     }
   }
 

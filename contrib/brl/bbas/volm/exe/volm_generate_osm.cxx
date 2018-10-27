@@ -63,11 +63,11 @@ int main(int argc, char** argv)
     // load the content for valid leaves
     std::stringstream file_name_pre;
     file_name_pre << out_pre() << "/geo_index2_wr" << world_id() << "_tile_" << tile_id();
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      std::string bin_file = leaves[l_idx]->get_label_name(file_name_pre.str(), "osm");
+    for (auto & leave : leaves) {
+      std::string bin_file = leave->get_label_name(file_name_pre.str(), "osm");
       if (!vul_file::exists(bin_file))
         continue;
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+      volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       ptr->contents_ = new volm_osm_object_ids(bin_file);
     }
 
@@ -198,8 +198,8 @@ int main(int argc, char** argv)
     volm_geo_index2::get_leaves(root, leaves, loc_lines[line_idx]->line());
     if (leaves.empty())
       continue;
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+    for (auto & leave : leaves) {
+      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       if (!leaf_ptr->contents_)
         leaf_ptr->contents_ = new volm_osm_object_ids();
       leaf_ptr->contents_->add_line(line_idx);
@@ -222,8 +222,8 @@ int main(int argc, char** argv)
     volm_geo_index2::get_leaves(root, leaves, loc_regions[region_idx]->poly()[0]);
     if (leaves.empty())
       continue;
-    for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+    for (auto & leave : leaves) {
+      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       if (!leaf_ptr->contents_)
         leaf_ptr->contents_ = new volm_osm_object_ids();
       leaf_ptr->contents_->add_region(region_idx);

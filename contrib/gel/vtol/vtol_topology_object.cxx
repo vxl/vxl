@@ -406,6 +406,6 @@ void vtol_topology_object::compute_bounding_box() const
 {
   this->empty_bounding_box();
   vertex_list verts; this->vertices(verts);
-  for (vertex_list::iterator vit = verts.begin(); vit != verts.end(); ++vit)
-    this->add_to_bounding_box((*vit)->get_bounding_box());
+  for (auto & vert : verts)
+    this->add_to_bounding_box(vert->get_bounding_box());
 }

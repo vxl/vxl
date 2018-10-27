@@ -240,10 +240,9 @@ void boxm2_vecf_shuttle_scene::evaluate_particles(vil_image_view<vxl_byte> const
     }
   total_mean_ = txsum/n;
   total_var_ = txsqsum/n - (total_mean_*total_mean_);
-  for(std::vector<boxm2_vecf_particle>::iterator pit = particles_.begin();
-      pit != particles_.end(); ++pit){
+  for(auto & particle : particles_){
     double log_p = 0.0;
-    vil_image_view<float> sil = this->silhouette(pit->cam_, ni, nj);
+    vil_image_view<float> sil = this->silhouette(particle.cam_, ni, nj);
     silhouettes_.push_back(sil);
     for(unsigned j = 0; j<nj; ++j)
       for(unsigned i = 0; i<ni; ++i){
@@ -254,8 +253,8 @@ void boxm2_vecf_shuttle_scene::evaluate_particles(vil_image_view<vxl_byte> const
         if(sil_inside != obs_inside)
           log_p -= 100.0;
       }
-    pit->p_ = log_p/(ni*nj);
-    pit->print_txrz();
+    particle.p_ = log_p/(ni*nj);
+    particle.print_txrz();
   }
 }
 

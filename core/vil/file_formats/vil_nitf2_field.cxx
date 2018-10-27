@@ -43,8 +43,8 @@ vil_nitf2_field::field_tree* vil_nitf2_field::get_tree( ) const
 
 vil_nitf2_field::field_tree::~field_tree()
 {
-  for ( unsigned int i = 0 ; i < children.size() ; i++ ) {
-    delete children[i];
+  for (auto & i : children) {
+    delete i;
   }
   children.clear();
 }

@@ -39,9 +39,9 @@ vgl_box_2d<double> bpgl_project::project_bounding_box(vpgl_proj_camera<double>  
 
   //project the vertices and form the 2-d bounds
   vgl_box_2d<double>  box_2d;
-  for (unsigned i =0; i<8; ++i)
+  for (const auto & i : p)
   {
-    vgl_homg_point_2d<double> hp2d = cam.project(p[i]);
+    vgl_homg_point_2d<double> hp2d = cam.project(i);
     box_2d.add(vgl_point_2d<double>(hp2d));
   }
   return box_2d;

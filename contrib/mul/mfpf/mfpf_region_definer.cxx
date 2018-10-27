@@ -182,11 +182,11 @@ bool mfpf_renumber_to_self(
     }
   }
 
-  for (unsigned i=0;i<definer.size();++i)
+  for (auto & i : definer)
   {
-    if (!definer[i]->replace_index(new_index))
+    if (!i->replace_index(new_index))
     {
-      std::cerr<<"Failed to update indices in "<<definer[i]<<std::endl;
+      std::cerr<<"Failed to update indices in "<<i<<std::endl;
       return false;
     }
   }

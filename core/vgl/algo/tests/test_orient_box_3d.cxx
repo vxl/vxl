@@ -24,9 +24,8 @@ static void test_contains()
   std::cout << "oriented box\n " << obox << '\n'
            << "Corners\n";
   std::vector<vgl_point_3d<double> > c = obox.corners();
-  for (std::vector<vgl_point_3d<double> >::iterator pit = c.begin();
-       pit != c.end(); ++pit)
-    std::cout << *pit << '\n';
+  for (auto & pit : c)
+    std::cout << pit << '\n';
   vgl_point_3d<double> tp(0.5, 0.4, -0.1);
   bool inside = obox.contains(tp);
   bool outside = !(obox.contains(1.0, 1.0, 1.0));

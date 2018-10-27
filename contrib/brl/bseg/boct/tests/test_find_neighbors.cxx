@@ -20,10 +20,10 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell
     double cellsize=(double)(1<<cell->level())/(double)(1<<(max_level-1));
 
     vgl_box_3d<double> cellbox(cell->code_.get_point(max_level),cellsize,cellsize,cellsize,vgl_box_3d<double>::min_pos);
-    for (unsigned i=0;i<leaf_nodes.size();i++)
+    for (auto & leaf_node : leaf_nodes)
     {
-        double neighborcellsize=(double)(1<<leaf_nodes[i]->level())/(double)(1<<(max_level-1));
-        vgl_box_3d<double> neighborcellbox(leaf_nodes[i]->code_.get_point(max_level),neighborcellsize,neighborcellsize,neighborcellsize,vgl_box_3d<double>::min_pos);
+        double neighborcellsize=(double)(1<<leaf_node->level())/(double)(1<<(max_level-1));
+        vgl_box_3d<double> neighborcellbox(leaf_node->code_.get_point(max_level),neighborcellsize,neighborcellsize,neighborcellsize,vgl_box_3d<double>::min_pos);
 
         vgl_box_3d<double> intersectionbox=vgl_intersection(cellbox,neighborcellbox);
         if (!intersectionbox.is_empty())
@@ -35,32 +35,32 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell
               case X_LOW:
                 if (intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
                     if (intersectionbox.min_x()==intersectionbox.max_x() && intersectionbox.min_x()==cellbox.min_x())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               case X_HIGH:
                 if (intersectionbox.min_y()!=intersectionbox.max_y() && intersectionbox.min_z()!=intersectionbox.max_z())
                     if (intersectionbox.min_x()==intersectionbox.max_x() && intersectionbox.max_x()==cellbox.max_x())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               case Y_LOW:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
                     if (intersectionbox.min_y()==intersectionbox.max_y() && intersectionbox.min_y()==cellbox.min_y())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               case Y_HIGH:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_z()!=intersectionbox.max_z())
                     if (intersectionbox.min_y()==intersectionbox.max_y() && intersectionbox.max_y()==cellbox.max_y())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               case Z_LOW:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
                     if (intersectionbox.min_z()==intersectionbox.max_z() && intersectionbox.min_z()==cellbox.min_z())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               case Z_HIGH:
                 if (intersectionbox.min_x()!=intersectionbox.max_x() && intersectionbox.min_y()!=intersectionbox.max_y())
                     if (intersectionbox.min_z()==intersectionbox.max_z() && intersectionbox.max_z()==cellbox.max_z())
-                        neighbors.push_back(leaf_nodes[i]);
+                        neighbors.push_back(leaf_node);
                 break;
               default:
                 break;
@@ -120,13 +120,13 @@ static void test_find_neighbors()
   TEST("Returns the correct # of Neighbors",n.size(),n_brute_force.size());
 
   unsigned int cnt=0;
-  for (unsigned i=0;i<n.size();i++)
+  for (auto & i : n)
   {
-    for (unsigned j=0;j<n_brute_force.size();j++)
+    for (auto & j : n_brute_force)
     {
-      if (n[i]->code_.x_loc_==n_brute_force[j]->code_.x_loc_ &&
-          n[i]->code_.y_loc_==n_brute_force[j]->code_.y_loc_ &&
-          n[i]->code_.z_loc_==n_brute_force[j]->code_.z_loc_   )
+      if (i->code_.x_loc_==j->code_.x_loc_ &&
+          i->code_.y_loc_==j->code_.y_loc_ &&
+          i->code_.z_loc_==j->code_.z_loc_   )
       ++cnt;
     }
   }

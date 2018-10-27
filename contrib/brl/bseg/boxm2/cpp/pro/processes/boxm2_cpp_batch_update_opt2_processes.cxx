@@ -99,22 +99,22 @@ bool boxm2_cpp_create_aux_data_opt2_process(bprb_func_process& pro)
     std::string data_type;
     std::string num_obs_type;
     std::vector<std::string> apps = scene->appearances();
-    for (unsigned int i=0; i<apps.size(); ++i) {
-      if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+    for (const auto & app : apps) {
+      if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
       {
-          data_type = apps[i];
+          data_type = app;
           foundDataType = true;
           // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
       }
-      else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+      else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
       {
-          data_type = apps[i];
+          data_type = app;
           foundDataType = true;
           // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
       }
-      else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+      else if ( app == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
       {
-          data_type = apps[i];
+          data_type = app;
           foundDataType = true;
           // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
       }
@@ -301,21 +301,21 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
   std::string data_type;
   bool foundDataType = false;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
       std::cout << "In boxm2_cpp_batch_update_process ERROR: datatype BOXM2_MOG3_GREY_16 not implemented!\n";
       return false;
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAUSS_GREY>::prefix());
     }

@@ -28,8 +28,8 @@ std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr
 
   //write and return order
   std::vector<int> vis_order;
-  for (unsigned int i=0; i<distances.size(); ++i)
-    vis_order.push_back(distances[i].dat_);
+  for (auto & distance : distances)
+    vis_order.push_back(distance.dat_);
   return vis_order;
 }
 

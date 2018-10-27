@@ -77,8 +77,8 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
   }
   std::map<float, vil_rgb<vxl_byte> > color_map = get_color_id(color_text);
 
-  for (std::map<float, vil_rgb<vxl_byte> >::iterator mit = color_map.begin(); mit != color_map.end(); ++mit)
-    std::cout << " id = " << mit->first << " --> color = " << mit->second << std::endl;
+  for (auto & mit : color_map)
+    std::cout << " id = " << mit.first << " --> color = " << mit.second << std::endl;
 
   // load the input image and transfer it to type float
   unsigned ni, nj;

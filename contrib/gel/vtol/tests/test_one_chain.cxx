@@ -62,8 +62,8 @@ static void test_one_chain()
   oc1->describe(std::cout,8);
 
   std::cout<<"outside_boundary_zero_chains()->size() = "<< z_list->size()<<'\n';
-  for (unsigned int i=0; i<z_list->size(); ++i)
-    (*z_list)[i]->describe(std::cout,8);
+  for (auto & i : *z_list)
+    i->describe(std::cout,8);
 
   TEST("vtol_one_chain::outside_boundary_zero_chains()", z_list->size(), 4);
   delete z_list;

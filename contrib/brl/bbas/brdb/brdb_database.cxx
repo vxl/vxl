@@ -187,9 +187,9 @@ brdb_database::get_all_relation_names() const
 {
   std::set<std::string> names;
 
-  for (std::map<std::string, brdb_relation_sptr>::const_iterator itr = relations_.begin(); itr != relations_.end(); ++itr)
+  for (const auto & relation : relations_)
   {
-    names.insert((*itr).first);
+    names.insert(relation.first);
   }
 
   return names;
@@ -269,26 +269,25 @@ brdb_database::merge(const brdb_database_sptr& other)
   r_map new_relations(this->relations_);
 
   // for each relation in the other database
-  for (r_map::iterator oi = other->relations_.begin();
-       oi!=other->relations_.end(); ++oi)
+  for (auto & relation : other->relations_)
   {
     // look for a relation with the same name in this database
-    r_map::iterator ti = new_relations.find(oi->first);
+    r_map::iterator ti = new_relations.find(relation.first);
     // if not found
     if (ti == this->relations_.end())
     {
-      new_relations.insert(*oi);
+      new_relations.insert(relation);
       continue;
     }
 
     // test for compatibility of relations
-    if (!ti->second->is_compatible(oi->second))
+    if (!ti->second->is_compatible(relation.second))
       return false;
 
     // copy the old relation and merge tuples
     // if later merging fails, the original tuple is not modified
     brdb_relation_sptr new_relation = new brdb_relation(*ti->second);
-    if (!new_relation->merge(oi->second))
+    if (!new_relation->merge(relation.second))
       return false;
 
     new_relations[ti->first] = new_relation;

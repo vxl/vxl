@@ -341,10 +341,9 @@ void boxm2_vecf_ocl_orbit_scene::rebuild(){
   vgl_sphere_3d<double> sp(0.0, -y0, 0.0, params_.eye_radius_);
    // cell in a box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = vgl_distance(cell_center, sp);
     if(d < d_thresh){
       if(!is_type_global(cell_center, SPHERE)){
@@ -419,8 +418,7 @@ void boxm2_vecf_ocl_orbit_scene::find_cell_neigborhoods(){
       vgl_point_3d<double>& p = sphere_cell_centers_[i];
       unsigned indx_i = sphere_cell_data_index_[i];
       std::vector<vgl_point_3d<double> > nbrs = blk_->sub_block_neighbors(p, distance);
-      for(unsigned j =0; j<nbrs.size(); ++j){
-        vgl_point_3d<double>& q = nbrs[j];
+      for(auto & q : nbrs){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
@@ -596,10 +594,9 @@ void boxm2_vecf_ocl_orbit_scene::build_eyelid(){
   vgl_box_3d<double> bb = eyelid_geo_.bounding_box(margin);
   // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = eyelid_geo_.distance(cell_center);
 
     if(d < d_thresh){
@@ -652,10 +649,9 @@ void boxm2_vecf_ocl_orbit_scene::build_lower_eyelid(){
   vgl_box_3d<double> bb = lower_eyelid_geo_.bounding_box();
  // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
         double d = lower_eyelid_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!lower_eyelid_geo_.inside(cell_center))
@@ -708,10 +704,9 @@ void boxm2_vecf_ocl_orbit_scene::build_eyelid_crease(){
   vgl_box_3d<double> bb = eyelid_crease_geo_.bounding_box();
   // cells in  box centers are in global coordinates
   std::vector<cell_info> ccs = blk_->cells_in_box(bb);
-  for(std::vector<cell_info>::iterator cit = ccs.begin();
-      cit != ccs.end(); ++cit){
-    const vgl_point_3d<double>& cell_center = cit->cell_center_;
-    unsigned indx = cit->data_index_;
+  for(auto & cc : ccs){
+    const vgl_point_3d<double>& cell_center = cc.cell_center_;
+    unsigned indx = cc.data_index_;
     double d = eyelid_crease_geo_.distance(cell_center);
     if(d < d_thresh){
       if(!eyelid_crease_geo_.inside(cell_center))
@@ -1361,8 +1356,8 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(std::string&      options)
 
     std::vector<std::string> apps = base_model_->appearances();
     bool foundDataType = false;
-    for (unsigned int i=0; i<apps.size(); ++i) {
-      boxm2_data_type app_type = boxm2_data_info::data_type(apps[i]);
+    for (const auto & app : apps) {
+      boxm2_data_type app_type = boxm2_data_info::data_type(app);
         if ( app_type == BOXM2_MOG3_GREY )
         {
             app_type_ = BOXM2_MOG3_GREY;
@@ -1382,8 +1377,8 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(std::string&      options)
     }
 
   color_app_type_id_ = "";
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(this->color_apm_id_) )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(this->color_apm_id_) )
     {
       color_app_type_id_ = boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(this->color_apm_id_);
       std::cout<<"found color data type "<<color_app_type_id_<< " in source base_model"<<std::endl;

@@ -71,9 +71,8 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
     unsigned target_idx = iit->first;
     (index_array->data_array)[midx++] = target_idx;
     const std::vector<unsigned>& illum_neighbors =index[target_idx];
-    for(std::vector<unsigned>::const_iterator iit = illum_neighbors.begin();
-        iit != illum_neighbors.end(); ++iit)
-      (index_array->data_array)[midx++] = *iit;
+    for(unsigned int illum_neighbor : illum_neighbors)
+      (index_array->data_array)[midx++] = illum_neighbor;
     midx++; // leave a -1 marker
   }
   pro.set_output_val<bbas_1d_array_int_sptr>(0,index_array);

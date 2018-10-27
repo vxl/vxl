@@ -38,8 +38,8 @@ void volm_conf_score::b_write(vsl_b_ostream& os) const
   vsl_b_write(os, score_);
   vsl_b_write(os, theta_);
   vsl_b_write(os, landmarks_.size());
-  for (unsigned i = 0; i < landmarks_.size(); i++)
-    vsl_b_write(os, landmarks_[i]);
+  for (const auto & landmark : landmarks_)
+    vsl_b_write(os, landmark);
 }
 
 void volm_conf_score::b_read(vsl_b_istream& is)

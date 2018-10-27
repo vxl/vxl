@@ -67,14 +67,12 @@ static void test_fit_simple_chain()
   vgl_point_2d<double> p1(2*npts+1, npts+1);
   fitter.add_point(p0);fitter.add_point(p1);
   std::vector<vgl_point_2d<double> >& c = fitter.get_points();
-  for (std::vector<vgl_point_2d<double> >::iterator pit = c.begin();
-       pit != c.end(); pit++)
-     std::cout << *pit << '\n';
+  for (auto & pit : c)
+     std::cout << pit << '\n';
   fitter.fit();
   std::vector<vgl_line_segment_2d<double> >& segs = fitter.get_line_segs();
-  for (std::vector<vgl_line_segment_2d<double> >::iterator sit = segs.begin();
-       sit != segs.end(); sit++)
-    std::cout << *sit << '\n';
+  for (auto & seg : segs)
+    std::cout << seg << '\n';
   TEST("no of line segments ", segs.size(), 2);
   TEST("last endpoint x", segs[1].point2().x(), 29);
 }

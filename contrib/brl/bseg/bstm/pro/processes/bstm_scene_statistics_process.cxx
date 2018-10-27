@@ -154,9 +154,9 @@ bool bstm_scene_statistics_process(bprb_func_process& pro)
                  //finally found the cell!
                  int data_offset = bit_tree.get_data_index(currBitIndex); //mdata index
                  boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> >time_treebits = blk_t->get_cell_all_tt(data_offset);
-                 for(vnl_vector_fixed<unsigned char, 8>* time_tree_iter = time_treebits.begin(); time_tree_iter != time_treebits.end(); time_tree_iter++ )
+                 for(auto & time_treebit : time_treebits)
                  {
-                   bstm_time_tree time_tree( time_tree_iter->data_block(),bstm_metadata.max_level_t_);
+                   bstm_time_tree time_tree( time_treebit.data_block(),bstm_metadata.max_level_t_);
                    total_num_time_tree_leaf_cells += time_tree.num_leaves();
                    total_time_tree_dephts += time_tree.max_depth(0);
                    num_time_trees++;

@@ -189,9 +189,9 @@ double brad_nearest_ill_dir(std::vector<vnl_double_3> const& ill_dirs,
                             vnl_double_3 const& dir)
 {
   double min_ang = 1.0e10;
-  for (unsigned i = 0; i<ill_dirs.size(); ++i)
+  for (const auto & ill_dir : ill_dirs)
   {
-    double dot = dot_product(ill_dirs[i],dir);
+    double dot = dot_product(ill_dir,dir);
     double ang = std::acos(dot)*vnl_math::deg_per_rad;
     if (ang<min_ang)
       min_ang = ang;

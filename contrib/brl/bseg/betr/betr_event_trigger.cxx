@@ -40,9 +40,9 @@ void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool ap
 void betr_event_trigger::set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask){
   ref_rescs_.clear();
   bil_convert_resource_to_grey cnv;
-  for(std::vector<vil_image_resource_sptr>::const_iterator rit = ref_rescs.begin(); rit!=ref_rescs.end(); rit++){
+  for(const auto & ref_resc : ref_rescs){
     vil_image_resource_sptr temp;
-    cnv((*rit), temp, apply_mask);
+    cnv(ref_resc, temp, apply_mask);
     ref_rescs_.push_back(temp);
   }
 }
@@ -83,9 +83,8 @@ void betr_event_trigger::set_ref_camera(vpgl_camera_double_sptr const& camera, b
 }
 void betr_event_trigger::set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras){
   ref_cameras_.clear();
-  for(std::vector<vpgl_camera_double_sptr>::const_iterator cit = cameras.begin();
-  cit !=cameras.end(); ++cit){
-    vpgl_camera_double_sptr temp = cast_camera(*cit);
+  for(const auto & camera : cameras){
+    vpgl_camera_double_sptr temp = cast_camera(camera);
     if(temp)
       ref_cameras_.push_back(temp);
     else{
@@ -201,13 +200,12 @@ bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double 
   // add an event geo object for each grid polygon
   const std::vector<vsol_polygon_3d_sptr>& polys = geo_obj.grid_polys();
   unsigned grid_count = 0;
-  for(std::vector<vsol_polygon_3d_sptr>::const_iterator pit = polys.begin();
-      pit != polys.end(); ++pit){
+  for(const auto & poly : polys){
     // create the event object
     std::stringstream ss;
     ss<< name << '_'<< grid_count++;//define a unique name extension
     std::string grid_name = ss.str();
-    vsol_spatial_object_3d_sptr pso = new vsol_polygon_3d(**pit);
+    vsol_spatial_object_3d_sptr pso = new vsol_polygon_3d(*poly);
     betr_geo_object_3d_sptr go = new betr_geo_object_3d(pso, lvcs);
     //
     //added as an event object (not reference)
@@ -286,12 +284,11 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
       std::vector<vsol_point_3d_sptr> verts = mesh_3d->vertices();
 
       std::vector<vgl_point_2d<double> > pts_2d;
-      for(std::vector<vsol_point_3d_sptr>::iterator vit = verts.begin();
-          vit != verts.end(); ++vit){
+      for(auto & vert : verts){
         double u = 0, v = 0;
-        cam->project((*vit)->x()+transl.x(),
-                     (*vit)->y()+transl.y(),
-                     (*vit)->z()+transl.z(), u, v);
+        cam->project(vert->x()+transl.x(),
+                     vert->y()+transl.y(),
+                     vert->z()+transl.z(), u, v);
         pts_2d.emplace_back(u, v);
       }
       std::vector<vsol_point_2d_sptr> sverts;
@@ -300,12 +297,11 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
           vgl_convex_hull_2d<double> conv_hull(pts_2d);
           vgl_polygon<double> h = conv_hull.hull();
           std::vector<vgl_point_2d<double> > hverts = h[0];
-          for(std::vector<vgl_point_2d<double> >::iterator vit = hverts.begin();
-              vit != hverts.end(); ++vit)
-            sverts.push_back(new vsol_point_2d(*vit));
+          for(auto & hvert : hverts)
+            sverts.push_back(new vsol_point_2d(hvert));
         }else
-        for( int vit = 0; vit < pts_2d.size(); vit++ )
-          sverts.push_back(new vsol_point_2d(pts_2d[vit]));
+        for(auto vit : pts_2d)
+          sverts.push_back(new vsol_point_2d(vit));
       poly_2d = new vsol_polygon_2d(sverts);
       return true;
   }
@@ -410,9 +406,8 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
   // project the reference object into both reference and event images
   vsol_polygon_2d_sptr evt_ref_poly, ref_ref_poly;
   std::vector<vsol_polygon_2d_sptr> ref_ref_polys;
-  for(std::vector<vpgl_camera_double_sptr>::iterator cit = ref_cameras_.begin();
-      cit != ref_cameras_.end(); ++cit){
-    if(!this->project_object(*cit, ref_obj_name, ref_ref_poly))
+  for(auto & ref_camera : ref_cameras_){
+    if(!this->project_object(ref_camera, ref_obj_name, ref_ref_poly))
       return false;
       ref_ref_polys.push_back(ref_ref_poly);
     }
@@ -421,8 +416,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       return false;
   }
   // iterate through the event objects and project them onto both reference and event images
-  for(std::map<std::string, betr_geo_object_3d_sptr>::iterator oit = evt_trigger_objects_.begin();
-          oit != evt_trigger_objects_.end(); ++oit){
+  for(auto & evt_trigger_object : evt_trigger_objects_){
     // clear the algorithm data, since only one event region at a time is processed
     alg->clear();
     // reset the image resources
@@ -433,7 +427,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
       alg->set_reference_image(ref_rescs_[0]);
      }
     alg->set_event_image(evt_imgr_);
-    std::string evt_obj_name = oit->first;
+    std::string evt_obj_name = evt_trigger_object.first;
     std::stringstream ss;
     ss<< betr_event_trigger::process_counter_;
     alg->set_identifier(evt_obj_name + "_" + ss.str());
@@ -441,10 +435,9 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     // project the event objects into both reference and event images
     std::vector<vsol_polygon_2d_sptr> ref_evt_polys;
     vsol_polygon_2d_sptr  evt_evt_poly;
-    for(std::vector<vpgl_camera_double_sptr>::iterator cit = ref_cameras_.begin();
-      cit != ref_cameras_.end(); ++cit){
+    for(auto & ref_camera : ref_cameras_){
       vsol_polygon_2d_sptr ref_evt_poly;
-      if(!this->project_object(*cit, evt_obj_name, ref_evt_poly))
+      if(!this->project_object(ref_camera, evt_obj_name, ref_evt_poly))
       return false;
       ref_evt_polys.push_back(ref_evt_poly);
   }
@@ -495,9 +488,8 @@ bool betr_event_trigger::save_projected_polys(std::string const& path, std::vect
   }
   // convert to spatial object 2d
   std::vector<vsol_spatial_object_2d_sptr> sos;
-  for(std::vector<vsol_polygon_2d_sptr>::const_iterator pit = polys.begin();
-      pit!= polys.end(); ++pit){
-    vsol_spatial_object_2d_sptr ply = dynamic_cast<vsol_spatial_object_2d*>(pit->ptr());
+  for(const auto & poly : polys){
+    vsol_spatial_object_2d_sptr ply = dynamic_cast<vsol_spatial_object_2d*>(poly.ptr());
     sos.push_back(ply);
   }
   vsl_b_write(ostr, sos);

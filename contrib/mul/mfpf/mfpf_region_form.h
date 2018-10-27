@@ -105,8 +105,8 @@ inline void vsl_b_write(vsl_b_ostream& bfs,
 {
   vsl_b_write(bfs,short(1));  // Version number
   vsl_b_write(bfs,unsigned(p.size()));
-  for (unsigned i=0;i<p.size();++i)
-    vsl_b_write(bfs,p[i]);
+  for (const auto & i : p)
+    vsl_b_write(bfs,i);
 }
 
 //: Read in vector of feature points from stream

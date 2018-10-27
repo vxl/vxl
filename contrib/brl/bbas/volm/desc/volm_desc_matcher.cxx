@@ -196,10 +196,10 @@ bool volm_desc_matcher::create_random_prob_map(vnl_random& rng, std::string cons
   tile_img.fill(-1.0f);
 
   // generate a random score for only the pixels where there is a hyp
-  for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
+  for (auto & leave : leaves) {
       vgl_point_3d<double> h_pt;
       // loop over all locations in current leaf
-      while (leaves[l_idx]->hyps_->get_next(0,1,h_pt)) {
+      while (leave->hyps_->get_next(0,1,h_pt)) {
         unsigned u, v;
         if (tile.global_to_img(h_pt.x(), h_pt.y(), u, v) && tile_img(u,v) < 0) // this method checks the image boundaries
           tile_img(u,v) = (float)rng.drand32();

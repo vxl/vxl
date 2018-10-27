@@ -147,8 +147,8 @@ rgrl_est_spline( unsigned dof,
       global_xform_( nullptr )
 {
   unsigned num_control = 1;
-  for ( unsigned i=0; i<m.size(); ++i )
-    num_control *= m[i] + 3;
+  for (unsigned int i : m)
+    num_control *= i + 3;
 
   assert( num_control == dof );
 }
@@ -168,8 +168,8 @@ rgrl_est_spline( unsigned dof,
     global_xform_( global_xform )
 {
   unsigned num_control = 1;
-  for ( unsigned i=0; i<m.size(); ++i )
-    num_control *= m[i] + 3;
+  for (unsigned int i : m)
+    num_control *= i + 3;
 
   std::cerr << "rgrl_est_spline.cxx : number of control points: " << num_control << ", dof=" << dof << '\n';
   assert( num_control == dof );

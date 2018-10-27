@@ -37,9 +37,9 @@ static void test_cell_vis_graph()
     while (cell_iterator.next()){
       std::cout<<"Frontier\n";
       std::vector<boct_tree_cell<short,vgl_point_3d<double> > *> vis_cells=cell_iterator.frontier();
-      for (unsigned i=0;i<vis_cells.size();i++)
+      for (auto & vis_cell : vis_cells)
       {
-        vgl_box_3d<double> box=tree->cell_bounding_box(vis_cells[i]);
+        vgl_box_3d<double> box=tree->cell_bounding_box(vis_cell);
         TEST("Returns correct frontier",cnt,box.max_z());
       }
       cnt-=5;

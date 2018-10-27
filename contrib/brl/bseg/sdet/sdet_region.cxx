@@ -140,9 +140,8 @@ vgl_box_2d<float> sdet_region::bbox(){
 }
 void sdet_region::increment_neighbors(unsigned delta){
   std::set<unsigned> new_nbrs;
-  for(std::set<unsigned>::iterator nit = nbrs_.begin();
-      nit != nbrs_.end(); ++nit)
-    new_nbrs.insert((*nit)+delta);
+  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nbr : nbrs_)
+    new_nbrs.insert(nbr+delta);
   nbrs_ = new_nbrs;
 }
 sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
@@ -157,15 +156,13 @@ sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
   const std::set<unsigned>& nbrs2 = r2->nbrs();
   unsigned lab1 = r1->label(), lab2 = r2->label();
   // add set union of neigbors to the merged region
-  for(std::set<unsigned>::const_iterator nit = nbrs1.begin();
-      nit != nbrs1.end(); ++nit){
-    if(*nit != lab1 && *nit != lab2)
-      ret->add_neighbor(*nit);
+  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nit : nbrs1){
+    if(nit != lab1 && nit != lab2)
+      ret->add_neighbor(nit);
   }
-  for(std::set<unsigned>::const_iterator nit = nbrs2.begin();
-      nit != nbrs2.end(); ++nit){
-    if(*nit != lab1 && *nit != lab2)
-      ret->add_neighbor(*nit);
+  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nit : nbrs2){
+    if(nit != lab1 && nit != lab2)
+      ret->add_neighbor(nit);
   }
   ret->set_label(merged_label);
   // note that other regions may still have neighbor pointers to r1 or r2

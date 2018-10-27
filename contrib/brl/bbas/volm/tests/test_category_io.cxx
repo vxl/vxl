@@ -66,40 +66,35 @@ static void test_category_io()
   test_category_io_read_land_category(osm_to_volm_file);
 
   // output the hard coded ncld table
-  for (std::map<int, volm_land_layer>::iterator mit = volm_osm_category_io::nlcd_land_table.begin();
-       mit != volm_osm_category_io::nlcd_land_table.end(); ++mit) {
-    std::cout << " nlcd id = " << mit->first << " ----> ";  mit->second.print();  std::cout << '\n';
+  for (auto & mit : volm_osm_category_io::nlcd_land_table) {
+    std::cout << " nlcd id = " << mit.first << " ----> ";  mit.second.print();  std::cout << '\n';
   }
 
   // output the hard coded geo_cover table
-  for (std::map<int, volm_land_layer>::iterator mit = volm_osm_category_io::geo_land_table.begin();
-       mit != volm_osm_category_io::geo_land_table.end(); ++mit) {
-    std::cout << " geo_cover id = " << mit->first << " ----> ";  mit->second.print();  std::cout << '\n';
+  for (auto & mit : volm_osm_category_io::geo_land_table) {
+    std::cout << " geo_cover id = " << mit.first << " ----> ";  mit.second.print();  std::cout << '\n';
   }
 
   // print out the road junction table
-  for (std::map<std::pair<int,int>, volm_land_layer>::iterator mit = volm_osm_category_io::road_junction_table.begin();
-       mit != volm_osm_category_io::road_junction_table.end(); ++mit) {
-    std::cout << " id1 = " << mit->first.first
-             << " id2 = " << mit->first.second
-             << " ---> id = " << (unsigned)mit->second.id_
-             << " name = " << mit->second.name_
-             << " level = " << mit->second.level_
-             << " width = " << mit->second.width_
-             << " color = " << mit->second.color_
+  for (auto & mit : volm_osm_category_io::road_junction_table) {
+    std::cout << " id1 = " << mit.first.first
+             << " id2 = " << mit.first.second
+             << " ---> id = " << (unsigned)mit.second.id_
+             << " name = " << mit.second.name_
+             << " level = " << mit.second.level_
+             << " width = " << mit.second.width_
+             << " color = " << mit.second.color_
              << std::endl;
   }
 
   // output the volm_land_table
-  for (std::map<unsigned, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table.begin();
-       mit != volm_osm_category_io::volm_land_table.end(); ++mit) {
-    std::cout << " id = " << mit->first << " --> ";  mit->second.print(); std::cout << '\n';
+  for (auto & mit : volm_osm_category_io::volm_land_table) {
+    std::cout << " id = " << mit.first << " --> ";  mit.second.print(); std::cout << '\n';
   }
 
-  for (std::vector<std::string>::iterator vit = volm_osm_category_io::volm_category_name_table.begin();
-       vit != volm_osm_category_io::volm_category_name_table.end(); ++vit) {
-    unsigned id = volm_osm_category_io::volm_land_table_name[*vit].id_;
-    std::cout << " id = " << id << " ---> name = " << *vit << std::endl;
+  for (auto & vit : volm_osm_category_io::volm_category_name_table) {
+    unsigned id = volm_osm_category_io::volm_land_table_name[vit].id_;
+    std::cout << " id = " << id << " ---> name = " << vit << std::endl;
   }
 }
 

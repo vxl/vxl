@@ -29,8 +29,8 @@ void test_sampler_helper(void)
   }
 
   std::cout << "\n selected:\n";
-  for (unsigned i = 0; i < out.size(); i++) {
-    std::cout << out[i] << std::endl;
+  for (unsigned int i : out) {
+    std::cout << i << std::endl;
   }
 }
 
@@ -61,8 +61,8 @@ void test_sampler_helper2(void)
   }
 
   std::cout << "\n selected:\n";
-  for (unsigned i = 0; i < out.size(); i++) {
-    std::cout << out[i] << std::endl;
+  for (unsigned int i : out) {
+    std::cout << i << std::endl;
   }
 }
 

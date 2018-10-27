@@ -18,8 +18,8 @@ vil_nitf2_tagged_record_definition::tagged_record_definition_map&
    public:
     ~tagged_record_definition_map_t()
     {
-      for (iterator it = begin(), last = end(); it != last; it++) {
-        delete it->second;
+      for (auto & it : *this) {
+        delete it.second;
       }
     }
   };

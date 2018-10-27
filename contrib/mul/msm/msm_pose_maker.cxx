@@ -47,8 +47,8 @@ void msm_pose_maker::create_vectors(const msm_points& points,
   if (end0_.size()==0)
   {
     dir.resize(points.size());
-    for (unsigned i=0;i<dir.size();++i)
-      dir[i]=vgl_vector_2d<double>(1,0);
+    for (auto & i : dir)
+      i=vgl_vector_2d<double>(1,0);
     return;
   }
 

@@ -119,9 +119,9 @@ bool brec_construct_bg_op_models_process(bprb_func_process& pro)
 
   // learn a model for each primitive
   std::vector<brec_part_instance_sptr> ins = h->get_dummy_primitive_instances();
-  for (unsigned i = 0; i < ins.size(); i++) {
-    if (ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = ins[i]->cast_to_gaussian();
+  for (auto & in : ins) {
+    if (in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = in->cast_to_gaussian();
       if (!p->construct_bg_response_model_gauss(mean_img, std_dev_img, mu_img, sigma_img)) {
         std::cout << "problems in constructing background model for gaussian primitives!!\n";
         return false;
@@ -229,9 +229,9 @@ bool brec_construct_class_op_models_process(bprb_func_process& pro)
 
   // learn a model for each primitive
   std::vector<brec_part_instance_sptr> ins = h->get_dummy_primitive_instances();
-  for (unsigned i = 0; i < ins.size(); i++) {
-    if (ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = ins[i]->cast_to_gaussian();
+  for (auto & in : ins) {
+    if (in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = in->cast_to_gaussian();
       double lambda, k, lambda_non_class, k_non_class;
       if (!p->construct_class_response_models(img, prob, mask_img, lambda, k, lambda_non_class, k_non_class)) {
         std::cout << "problems in constructing foreground response model parameters for gaussian primitives!!\n";

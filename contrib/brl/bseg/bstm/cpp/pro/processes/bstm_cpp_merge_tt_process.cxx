@@ -69,12 +69,12 @@ bool bstm_cpp_merge_tt_process(bprb_func_process& pro)
   bool foundAppDataType = false, foundNumobsDataType = false;
 
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() )
     {
       foundAppDataType = true;
     }
-    else if ( apps[i] == bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix() )
+    else if ( app == bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::prefix() )
     {
       foundNumobsDataType = true;
     }

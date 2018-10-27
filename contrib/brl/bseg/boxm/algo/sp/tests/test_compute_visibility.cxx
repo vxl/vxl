@@ -49,9 +49,9 @@ static void test_compute_visibility()
       std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();
       s1_sample.alpha=0.6f;
 
-      for (unsigned i=0;i<leaf_cells.size();i++)
+      for (auto & leaf_cell : leaf_cells)
       {
-        leaf_cells[i]->set_data(s1_sample);
+        leaf_cell->set_data(s1_sample);
       }
       block->init_tree(tree);
       scene.write_active_block();
@@ -61,9 +61,9 @@ static void test_compute_visibility()
       std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells= tree->leaf_cells();
       s1_sample.alpha=0.01f;
 
-      for (unsigned i=0;i<leaf_cells.size();i++)
+      for (auto & leaf_cell : leaf_cells)
       {
-        leaf_cells[i]->set_data(s1_sample);
+        leaf_cell->set_data(s1_sample);
       }
       block->init_tree(tree);
       scene.write_active_block();

@@ -189,8 +189,8 @@ imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
     pindx.insert_point(segs[i].point2());
   }
 
-  for (unsigned i = 0; i<points.size(); ++i) {
-      pindx.insert_point(points[i]);
+  for (auto point : points) {
+      pindx.insert_point(point);
   }
   // pindx now contains a single vertex pointer for each pair
   // of coincident line segment endpoints as well as for each
@@ -208,10 +208,10 @@ imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
     in.pointlist[2*pi]=convex_hull[i].x();
     in.pointlist[2*pi+1]=convex_hull[i].y();
   }
-  for (unsigned i = 0; i<points.size(); ++i) {
-    unsigned pi = pindx.vert_index(points[i]);
-    in.pointlist[2*pi]=points[i].x();
-    in.pointlist[2*pi+1]=points[i].y();
+  for (auto point : points) {
+    unsigned pi = pindx.vert_index(point);
+    in.pointlist[2*pi]=point.x();
+    in.pointlist[2*pi+1]=point.y();
   }
 
   // line segments to be inserted into the triangulation

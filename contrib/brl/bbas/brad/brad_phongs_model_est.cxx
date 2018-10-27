@@ -147,12 +147,12 @@ brad_phongs_model_est::brad_phongs_model_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();++i)
-        total_weight += obs_weights_[i];
-    for (unsigned i=0;i<obs_weights_.size();++i)
+    for (double obs_weight : obs_weights_)
+        total_weight += obs_weight;
+    for (double & obs_weight : obs_weights_)
     {
-        obs_weights_[i]/=total_weight;
-        obs_weights_[i]*=obs_weights_.size();
+        obs_weight/=total_weight;
+        obs_weight*=obs_weights_.size();
     }
 }
 
@@ -173,8 +173,8 @@ brad_phongs_model_est::brad_phongs_model_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();++i)
-        total_weight += obs_weights_[i];
+    for (double obs_weight : obs_weights_)
+        total_weight += obs_weight;
 
     for (unsigned i=0;i<obs_weights_.size();++i)
     {
@@ -292,12 +292,12 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();++i)
-        total_weight += obs_weights_[i];
-    for (unsigned i=0;i<obs_weights_.size();++i)
+    for (double obs_weight : obs_weights_)
+        total_weight += obs_weight;
+    for (double & obs_weight : obs_weights_)
     {
-        obs_weights_[i]/=total_weight;
-        obs_weights_[i]*=obs_weights_.size();
+        obs_weight/=total_weight;
+        obs_weight*=obs_weights_.size();
     }
 }
 
@@ -318,8 +318,8 @@ brad_phongs_model_approx_est::brad_phongs_model_approx_est(double sun_elev,
     obs_weights_ = obs_weights;
     double total_weight=0.0;
 
-    for (unsigned i=0;i<obs_weights_.size();++i)
-        total_weight += obs_weights_[i];
+    for (double obs_weight : obs_weights_)
+        total_weight += obs_weight;
 
     for (unsigned i=0;i<obs_weights_.size();++i)
     {

@@ -34,8 +34,8 @@ static void test_volm_conf_buffer()
   TEST("initial current id in the buffer should be zero", index.current_id(), 0);
   TEST("initial global id in the buffer should be zero", index.global_current_id(), 0);
   TEST("initial length vector should be empty", index.length_vec().empty(), true);
-  for (unsigned k = 0; k < values.size(); k++)
-    TEST("add index to buffer", index.add_to_index(values[k]), true);
+  for (const auto & value : values)
+    TEST("add index to buffer", index.add_to_index(value), true);
   TEST("finish adding index into buffer", index.finalize(), true);
 
   // read values from binary file

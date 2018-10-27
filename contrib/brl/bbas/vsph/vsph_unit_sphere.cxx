@@ -329,10 +329,9 @@ void vsph_unit_sphere::remove_top_and_bottom()
   std::cout << "starting to remap " << edges_.size() <<  "edges\n" << std::flush;
 #endif
   std::vector<vsph_edge> new_edges;
-  for (std::vector<vsph_edge>::iterator eit = edges_.begin();
-       eit != edges_.end(); ++eit) {
-    int is = equivalent_ids_[(*eit).vs_],
-        ie = equivalent_ids_[(*eit).ve_];
+  for (auto & edge : edges_) {
+    int is = equivalent_ids_[edge.vs_],
+        ie = equivalent_ids_[edge.ve_];
     if (is == -1 || ie == -1)
       continue;
     new_edges.emplace_back(is, ie);
@@ -379,9 +378,8 @@ find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
 // construct Cartesian vectors from spherical points
 void vsph_unit_sphere::set_cart_points()
 {
-  for (std::vector<vsph_sph_point_2d>::iterator sit = sph_pts_.begin();
-       sit != sph_pts_.end(); ++sit)
-    cart_pts_.push_back(cart_coord(*sit));
+  for (auto & sph_pt : sph_pts_)
+    cart_pts_.push_back(cart_coord(sph_pt));
 }
 
 

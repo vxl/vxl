@@ -64,8 +64,8 @@ public:
   sdet_edgemap(int width, int height, std::vector<sdet_edgel*>& edgels) : edgels(0)
   {
     edge_cells.resize(height, width);
-    for (unsigned i=0; i<edgels.size(); i++)
-      insert(edgels[i]);
+    for (auto & edgel : edgels)
+      insert(edgel);
   }
 
   //: destructor
@@ -74,8 +74,8 @@ public:
     //go over each cell and delete the edgels
     sdet_edgemap_const_iter it = edge_cells.begin();
     for (; it!=edge_cells.end(); it++)
-      for (unsigned j=0; j<(*it).size(); j++)
-        delete (*it)[j];
+      for (auto j : (*it))
+        delete j;
 
     edge_cells.clear();
 

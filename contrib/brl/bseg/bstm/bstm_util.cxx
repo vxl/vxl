@@ -61,9 +61,9 @@ bool bstm_util::query_point_color(bstm_scene_sptr &scene,
   std::vector<std::string> apps = scene->appearances();
   int appTypeSize = 0; // just to avoid compiler warning about using potentially
                        // uninitialised value
-  for (unsigned int i = 0; i < apps.size(); ++i) {
-    if (apps[i] == bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) {
-      data_type = apps[i];
+  for (const auto & app : apps) {
+    if (app == bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) {
+      data_type = app;
       foundDataType = true;
     }
   }
@@ -191,13 +191,13 @@ bool bstm_util::verify_appearance(const std::vector<std::string> &apps,
                                   std::string &data_type,
                                   int &appTypeSize) {
   bool foundDataType = false;
-  for (unsigned int i = 0; i < apps.size(); ++i) {
+  for (const auto & app : apps) {
     // look for valid types
-    for (unsigned int c = 0; c < valid_types.size(); ++c) {
-      if (apps[i] == valid_types[c]) {
+    for (const auto & valid_type : valid_types) {
+      if (app == valid_type) {
         foundDataType = true;
-        data_type = apps[i];
-        appTypeSize = (int)bstm_data_info::datasize(apps[i]);
+        data_type = app;
+        appTypeSize = (int)bstm_data_info::datasize(app);
       }
     }
   }

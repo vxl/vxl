@@ -74,10 +74,9 @@ static void update_hist(vil_image_view<float> const& view01, vil_image_view<floa
 }
 static void read_meshes( std::vector<std::string> const& mesh_paths,
                          std::vector<std::vector<vgl_point_3d<double> > >& region_verts){
-  for(std::vector<std::string>::const_iterator mit = mesh_paths.begin();
-      mit != mesh_paths.end(); ++mit){
+  for(const auto & mesh_path : mesh_paths){
     imesh_mesh mesh;
-    bool good = imesh_read_ply(*mit, mesh);
+    bool good = imesh_read_ply(mesh_path, mesh);
     imesh_vertex_array_base& verts = mesh.vertices();
     size_t nverts = verts.size();
     std::vector<vgl_point_3d<double> > temp;
@@ -94,9 +93,7 @@ static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<
                                       bsta_joint_histogram<float>& h){
     if(!img0||!img1||!cam0||!cam1)
       return;
-    for(std::vector<std::vector<vgl_point_3d<double> > >::const_iterator rit = region_verts.begin();
-        rit != region_verts.end(); ++rit){
-      const std::vector<vgl_point_3d<double> >& verts = *rit;
+    for(const auto & verts : region_verts){
       std::vector<vgl_point_2d<double> > verts_2d_0, verts_2d_1;
       std::vector<vgl_homg_point_2d<double> > hverts_2d_0, hverts_2d_1;
       vgl_box_2d<double> bb0, bb1;

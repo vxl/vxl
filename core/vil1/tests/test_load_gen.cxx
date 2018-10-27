@@ -28,9 +28,8 @@ static void test_rgb(char const *name, int w, int h,
 
   bool result = true;
 
-  for (std::vector<vil1_rgb<vxl_byte> >::iterator
-       it= image_buf.begin(); it!=image_buf.end(); ++it)
-    if (!(*it == vil1_rgb<vxl_byte>(r, g, b)))
+  for (auto & it : image_buf)
+    if (!(it == vil1_rgb<vxl_byte>(r, g, b)))
     {
       result = false; break;
     }
@@ -58,9 +57,8 @@ static void test_gray(char const *name, int w, int h, unsigned v)
 
   bool result = true;
 
-  for (std::vector<vxl_byte>::iterator
-       it= image_buf.begin(); it!=image_buf.end(); ++it)
-    if (*it != v)
+  for (unsigned char & it : image_buf)
+    if (it != v)
     {
       result = false; break;
     }

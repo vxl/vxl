@@ -62,10 +62,9 @@ bool btol_face_algs::vtol_to_vgl(vtol_face_2d_sptr const & face,
   poly.new_sheet();
   std::vector<vtol_vertex_sptr>* outside_verts =
     face->outside_boundary_vertices();
-  for (std::vector<vtol_vertex_sptr>::iterator vit = outside_verts->begin();
-       vit != outside_verts->end(); ++vit)
+  for (auto & outside_vert : *outside_verts)
     {
-      vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
+      vtol_vertex_2d* v = outside_vert->cast_to_vertex_2d();
       if (v)
         poly.push_back(v->x(), v->y());
     }
@@ -73,17 +72,15 @@ bool btol_face_algs::vtol_to_vgl(vtol_face_2d_sptr const & face,
   //add the holes, if any
   std::vector<vtol_one_chain_sptr>* hole_chains = face->get_hole_cycles();
   std::vector<std::vector<vtol_vertex_sptr> > all_hole_verts;
-  for (std::vector<vtol_one_chain_sptr>::iterator cit = hole_chains->begin();
-       cit != hole_chains->end(); cit++)
+  for (auto & hole_chain : *hole_chains)
     {
       std::vector<vtol_vertex_sptr> hole_verts;
-      if (!properly_ordered_verts(*cit, hole_verts))
+      if (!properly_ordered_verts(hole_chain, hole_verts))
        return false;
       poly.new_sheet();
-      for (std::vector<vtol_vertex_sptr>::iterator vit = hole_verts.begin();
-           vit != hole_verts.end(); ++vit)
+      for (auto & hole_vert : hole_verts)
         {
-          vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+          vtol_vertex_2d_sptr v = hole_vert->cast_to_vertex_2d();
           if (v)
             poly.push_back(v->x(), v->y());
         }
@@ -170,11 +167,10 @@ intersecting_edges(vtol_face_2d_sptr const & face,
     return false;
   inter_edges.clear();
   bool empty = true;
-  for (std::vector<vtol_edge_2d_sptr>::const_iterator eit = edges.begin();
-       eit != edges.end(); eit++)
-    if (btol_face_algs::edge_intersects(face, *eit))
+  for (const auto & edge : edges)
+    if (btol_face_algs::edge_intersects(face, edge))
     {
-      inter_edges.push_back(*eit);
+      inter_edges.push_back(edge);
       empty = false;
     }
   return !empty;
@@ -258,11 +254,10 @@ transform(vtol_face_2d_sptr const& face,
     face->outside_boundary_vertices();
 
   std::vector<vtol_vertex_sptr> trans_outside_verts;
-  for (std::vector<vtol_vertex_sptr>::iterator vit = outside_verts->begin();
-       vit != outside_verts->end(); ++vit)
+  for (auto & outside_vert : *outside_verts)
     {
       vtol_vertex_2d_sptr new_v =
-        btol_vertex_algs::transform((*vit)->cast_to_vertex_2d(), T);
+        btol_vertex_algs::transform(outside_vert->cast_to_vertex_2d(), T);
       if (!new_v)
         return out;
       trans_outside_verts.emplace_back(new_v->cast_to_vertex());
@@ -271,16 +266,14 @@ transform(vtol_face_2d_sptr const& face,
   // transform the vertices of the interior holes
   std::vector<vtol_one_chain_sptr>* hole_chains = face->get_hole_cycles();
   std::vector<std::vector<vtol_vertex_sptr> > trans_hole_verts;
-  for (std::vector<vtol_one_chain_sptr>::iterator cit = hole_chains->begin();
-       cit != hole_chains->end(); cit++)
+  for (auto & hole_chain : *hole_chains)
   {
     std::vector<vtol_vertex_sptr> hole_verts, t_hole_verts;
-    if (!properly_ordered_verts(*cit, hole_verts))
+    if (!properly_ordered_verts(hole_chain, hole_verts))
       return out;
-    for (std::vector<vtol_vertex_sptr>::iterator vit = hole_verts.begin();
-         vit != hole_verts.end(); ++vit)
+    for (auto & hole_vert : hole_verts)
     {
-      vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
+      vtol_vertex_2d_sptr v = hole_vert->cast_to_vertex_2d();
       vtol_vertex_2d_sptr new_v =
         btol_vertex_algs::transform(v, T);
       if (!new_v)
@@ -294,9 +287,8 @@ transform(vtol_face_2d_sptr const& face,
   //form the chains
   std::vector<vtol_one_chain_sptr> new_chains;
   new_chains.push_back(btol_face_algs::one_chain(trans_outside_verts));
-  for (std::vector<std::vector<vtol_vertex_sptr> >::iterator vts =
-       trans_hole_verts.begin(); vts != trans_hole_verts.end(); ++vts)
-    new_chains.push_back(btol_face_algs::one_chain(*vts));
+  for (auto & trans_hole_vert : trans_hole_verts)
+    new_chains.push_back(btol_face_algs::one_chain(trans_hole_vert));
 
   //construct the face
   return new vtol_face_2d(new_chains);

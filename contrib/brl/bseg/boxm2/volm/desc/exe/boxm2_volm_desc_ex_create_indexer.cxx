@@ -96,8 +96,8 @@ int main(int argc, char** argv)
   std::cout << " \t Descriptor used: " << ex_indexer->get_index_type_str() << std::endl;
   std::cout << " \t Following parameters are used" << std::endl;
   std::cout << " \t\t radius = ";
-  for (std::vector<double>::iterator vit = radius().begin(); vit != radius().end(); ++vit)
-    std::cout << *vit << ' ';
+  for (double & vit : radius())
+    std::cout << vit << ' ';
   std::cout << '\n';
   if (norients() == 0)
     if (is_land_only())

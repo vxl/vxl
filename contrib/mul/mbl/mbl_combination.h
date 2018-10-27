@@ -46,7 +46,7 @@ inline
 unsigned mbl_n_combinations(const std::vector<unsigned>& n)
 {
   unsigned nc = 1;
-  for (unsigned i=0;i<n.size();++i) if (n[i]>1) nc*=n[i];
+  for (unsigned int i : n) if (i>1) nc*=i;
   return nc;
 }
 

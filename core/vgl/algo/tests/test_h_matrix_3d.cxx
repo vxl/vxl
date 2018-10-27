@@ -179,8 +179,8 @@ static void test_compute_linear_points()
   std::cout << "The gt transform\n" << gt_H << '\n';
 
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++)
-    points2.push_back(gt_H(points1[i]));
+  for (const auto & i : points1)
+    points2.push_back(gt_H(i));
 
   vgl_h_matrix_3d_compute_linear hmcl;
   vgl_h_matrix_3d<double> H = hmcl.compute(points1, points2);
@@ -210,8 +210,8 @@ static void test_compute_linear_points()
 
   points2.clear();
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++)
-    points2.push_back(gt_H2(points1[i]));
+  for (const auto & i : points1)
+    points2.push_back(gt_H2(i));
 
   vgl_h_matrix_3d_compute_linear hmcl2;
   vgl_h_matrix_3d<double> H2o = hmcl2.compute(points1, points2);
@@ -256,8 +256,8 @@ static void test_compute_affine_points()
   std::cout << "The gt transform\n" << gt_H << '\n';
 
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++)
-    points2.push_back(gt_H(points1[i]));
+  for (const auto & i : points1)
+    points2.push_back(gt_H(i));
 
   vgl_h_matrix_3d_compute_affine hmca;
   vgl_h_matrix_3d<double> H = hmca.compute(points1, points2);
@@ -293,8 +293,8 @@ static void test_compute_affine_points()
 
   points2.clear();
   //: transform the points
-  for (unsigned i = 0; i < points1.size(); i++)
-    points2.push_back(gt_H2(points1[i]));
+  for (const auto & i : points1)
+    points2.push_back(gt_H2(i));
 
   vgl_h_matrix_3d_compute_affine hmca2;
   vgl_h_matrix_3d<double> H2a = hmca2.compute(points1, points2);

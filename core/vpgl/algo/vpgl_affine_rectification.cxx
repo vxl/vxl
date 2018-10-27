@@ -18,8 +18,8 @@ vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const 
   vpgl_affine_camera<double> aff_camera;
   vpgl_affine_camera_compute::compute(image_pts, world_pts, aff_camera);
   vgl_box_3d<double> bbox;
-  for (unsigned i = 0; i < world_pts.size(); i++)
-    bbox.add(world_pts[i]);
+  for (const auto & world_pt : world_pts)
+    bbox.add(world_pt);
 
   // use the constructor with matrix to compute the camera direction properly
   vpgl_affine_camera<double>* out_camera = new vpgl_affine_camera<double>(aff_camera.get_matrix());

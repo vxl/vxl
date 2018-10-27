@@ -31,8 +31,8 @@ vsol_polyhedron::vsol_polyhedron(vsol_polyhedron const &other)
   : vsol_volume_3d(other)
 {
   storage_.clear();
-  for (unsigned int i=0;i<other.storage_.size();++i)
-    storage_.push_back(other.storage_[i]); // smart pointers do refcounting
+  for (const auto & i : other.storage_)
+    storage_.push_back(i); // smart pointers do refcounting
 }
 
 //***************************************************************************

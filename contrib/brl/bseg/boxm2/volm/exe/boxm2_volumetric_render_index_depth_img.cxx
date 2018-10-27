@@ -236,11 +236,11 @@ int main(int argc, char** argv)
 
   unsigned h_gt, cam_gt_best;
   float score_gt;
-  for (unsigned i = 0; i < scores.size(); i++) {
-    unsigned li = scores[i]->leaf_id_;
-    unsigned hi = scores[i]->hypo_id_;
+  for (auto & score : scores) {
+    unsigned li = score->leaf_id_;
+    unsigned hi = score->hypo_id_;
     if (leaf_gt->get_string() == leaves[li]->get_string() && hyp_gt == hi) {
-      h_gt = hi; score_gt = scores[i]->max_score_; cam_gt_best = scores[i]->max_cam_id_;
+      h_gt = hi; score_gt = score->max_score_; cam_gt_best = score->max_cam_id_;
     }
   }
   cam_angles gt_cam_ang = cam_space->camera_angles(cam_gt_best);

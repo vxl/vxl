@@ -112,9 +112,7 @@ int LineSegSet::FindNearestLineIndex(double /*x*/, double /*y*/)
 //: Save lines to ASCII file
 bool LineSegSet::save_ascii(std::ostream& f) const
 {
-  for (unsigned i = 0; i < hlines_.size(); ++i) {
-    HomgLineSeg2D const& l = hlines_[i];
-
+  for (const auto & l : hlines_) {
     vnl_double_2 p1 = conditioner_.homg_to_image(l.get_point1());
     vnl_double_2 p2 = conditioner_.homg_to_image(l.get_point2());
 

@@ -17,9 +17,8 @@
 vsol_digital_curve_3d::vsol_digital_curve_3d(const vsol_digital_curve_3d &other)
   : vsol_curve_3d(other), samples_()
 {
-  for (std::vector<vsol_point_3d_sptr>::const_iterator itr=other.samples_.begin();
-       itr != other.samples_.end();  ++itr)
-    this->samples_.push_back(new vsol_point_3d(**itr));
+  for (const auto & sample : other.samples_)
+    this->samples_.push_back(new vsol_point_3d(*sample));
 }
 
 //: Clone `this': creation of a new object and initialization

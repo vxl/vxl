@@ -119,10 +119,10 @@ bool boxm2_load_score_binary_process(bprb_func_process& pro)
   // write to text file
   std::ofstream fout(out_text.c_str());
   fout << "lon      lat      score\n";
-  for (unsigned i = 0; i < loc_scores.size(); i++)
-    fout << std::setprecision(6) << std::fixed << loc_scores[i][0] << ' '
-         << std::setprecision(6) << std::fixed << loc_scores[i][1] << ' '
-         << std::setprecision(6) << std::fixed << loc_scores[i][2] << '\n';
+  for (auto & loc_score : loc_scores)
+    fout << std::setprecision(6) << std::fixed << loc_score[0] << ' '
+         << std::setprecision(6) << std::fixed << loc_score[1] << ' '
+         << std::setprecision(6) << std::fixed << loc_score[2] << '\n';
   fout.close();
   return true;
 }

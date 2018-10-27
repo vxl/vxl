@@ -140,8 +140,8 @@ std::ostream& operator<<(std::ostream& s, const vnl_amoeba_SimplexCorner& simple
 
 std::ostream& operator<<(std::ostream& s, const std::vector<vnl_amoeba_SimplexCorner>& simplex)
 {
-  for (unsigned i = 0; i < simplex.size(); ++i)
-    s << simplex[i].fv << ' ';
+  for (const auto & i : simplex)
+    s << i.fv << ' ';
   return s;
 }
 

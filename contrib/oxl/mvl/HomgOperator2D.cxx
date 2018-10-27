@@ -352,8 +352,8 @@ static vnl_vector<double> most_orthogonal_vector(const std::vector<HomgLine2D>& 
 {
   vnl_scatter_3x3<double> scatter_matrix;
 
-  for (unsigned i = 0; i < inpoints.size(); i++)
-    scatter_matrix.add_outer_product(inpoints[i].get_vector());
+  for (const auto & inpoint : inpoints)
+    scatter_matrix.add_outer_product(inpoint.get_vector());
 
   return scatter_matrix.minimum_eigenvector().as_ref();
 }

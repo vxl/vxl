@@ -37,10 +37,10 @@ static void test_write()
     while ( myfile.good() ) {
       getline (myfile,line);
       line += "\n";
-      for (unsigned int i=0 ; i<line.length(); ++i) {
+      for (char i : line) {
         if (charCount+1 > buffSize)
           break;
-        out_tester[charCount] = line[i];
+        out_tester[charCount] = i;
         ++charCount;
       }
     }

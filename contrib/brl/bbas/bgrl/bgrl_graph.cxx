@@ -21,20 +21,18 @@ bgrl_graph::bgrl_graph(const bgrl_graph& graph)
   std::map<bgrl_vertex_sptr, bgrl_vertex_sptr> old_to_new;
 
   // copy vertices and outgoing edges
-  for ( std::set<bgrl_vertex_sptr>::const_iterator itr = graph.vertices_.begin();
-        itr != graph.vertices_.end();  ++itr )
+  for (const auto & vertice : graph.vertices_)
   {
-    bgrl_vertex_sptr vertex_copy((*itr)->clone());
-    old_to_new[*itr] = vertex_copy;
+    bgrl_vertex_sptr vertex_copy(vertice->clone());
+    old_to_new[vertice] = vertex_copy;
     vertices_.insert(vertex_copy);
   }
 
   // link up new edges to new vertices
-  for ( std::set<bgrl_vertex_sptr>::const_iterator v_itr = vertices_.begin();
-        v_itr != vertices_.end();  ++v_itr )
+  for (const auto & vertice : vertices_)
   {
-    for ( std::set<bgrl_edge_sptr>::const_iterator e_itr = (*v_itr)->out_edges_.begin();
-          e_itr != (*v_itr)->out_edges_.end();  ++e_itr )
+    for ( std::set<bgrl_edge_sptr>::const_iterator e_itr = vertice->out_edges_.begin();
+          e_itr != vertice->out_edges_.end();  ++e_itr )
     {
       std::map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to_);
       if ( find_new != old_to_new.end() ){

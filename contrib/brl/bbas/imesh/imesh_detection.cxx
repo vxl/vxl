@@ -199,9 +199,8 @@ imesh_detect_connected_components(const imesh_half_edge_set& he)
   {
     if (visited[i]) continue;
     components.push_back(imesh_detect_connected_faces(he,i));
-    for (std::set<unsigned int>::const_iterator itr=components.back().begin();
-         itr != components.back().end(); ++itr)
-      visited[*itr] = true;
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type itr : components.back())
+      visited[itr] = true;
   }
   return components;
 }

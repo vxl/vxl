@@ -58,8 +58,8 @@ open(const std::string& directory,
 
   bool valid_file_format = false;
   std::list<vil_file_format*>& l = vil_file_format::all();
-  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
-    if (file_format == (*p)->tag()) {
+  for (auto & p : l) {
+    if (file_format == p->tag()) {
       valid_file_format = true;
       break;
     }
@@ -70,8 +70,8 @@ open(const std::string& directory,
     std::cerr << __FILE__ ": File format \'"<<file_format<<"\' not supported\n"
              << "   valid formats are: ";
     std::list<vil_file_format*>& l = vil_file_format::all();
-    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
-      std::cerr << " \'" << (*p)->tag() << "\' " << std::flush;
+    for (auto & p : l) {
+      std::cerr << " \'" << p->tag() << "\' " << std::flush;
     }
     std::cerr << std::endl;
     return false;

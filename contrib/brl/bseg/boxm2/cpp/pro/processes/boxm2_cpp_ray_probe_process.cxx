@@ -84,11 +84,11 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
 
     std::string data_type;
     std::vector<std::string> apps = scene->appearances();
-    for (unsigned int i=0; i<apps.size(); ++i) {
-        if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-            data_type = apps[i];
-        else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
-            data_type = apps[i];
+    for (const auto & app : apps) {
+        if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+            data_type = app;
+        else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+            data_type = app;
     }
 
     if (identifier.size() > 0) {

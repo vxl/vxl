@@ -13,9 +13,9 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change
   mask->fill(0);
 
   //index through the polygons and create the boolean mask image
-  for (unsigned i=0; i<objs_.size(); i++)
+  for (auto & obj : objs_)
   {
-    vgl_polygon<double> v_poly =  objs_[i]->poly();
+    vgl_polygon<double> v_poly =  obj->poly();
     vgl_polygon_scan_iterator<double> psi(v_poly, false);
     for (psi.reset(); psi.next();){
       int y = psi.scany();
@@ -25,7 +25,7 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change
         unsigned v = static_cast<unsigned>(y);
         if (u >= ni || v >= nj)
           continue;
-        if (objs_[i]->type().compare(change_type)==0)
+        if (obj->type().compare(change_type)==0)
           (*mask)(u,v) = 255;
       }
     }
@@ -41,9 +41,9 @@ bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
   mask->fill(0);
 
   //index through the polygons and create the boolean mask image
-  for (unsigned i=0; i<objs_.size(); i++)
+  for (auto & obj : objs_)
   {
-    vgl_polygon<double> v_poly =  objs_[i]->poly();
+    vgl_polygon<double> v_poly =  obj->poly();
     vgl_polygon_scan_iterator<double> psi(v_poly, false);
     for (psi.reset(); psi.next();){
       int y = psi.scany();
@@ -51,7 +51,7 @@ bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
       {
         unsigned u = static_cast<unsigned>(x);
         unsigned v = static_cast<unsigned>(y);
-        if (objs_[i]->type().compare("dont_care")!=0)
+        if (obj->type().compare("dont_care")!=0)
           (*mask)(u,v) = 255;
         else  // don't care areas
           (*mask)(u,v) = 125;
@@ -107,8 +107,8 @@ void bvgl_changes::b_write(vsl_b_ostream& os)
 
   vsl_b_write(os, img_name_);
   vsl_b_write(os, objs_.size());
-  for (unsigned i = 0; i < objs_.size(); i++) {
-    objs_[i]->b_write(os);
+  for (auto & obj : objs_) {
+    obj->b_write(os);
   }
 }
 

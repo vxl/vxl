@@ -174,9 +174,8 @@ brdb_tuple::print() const
 void
 brdb_tuple::b_read_values(vsl_b_istream &is)
 {
-  for (std::vector<brdb_value_sptr>::iterator i=values_.begin();
-       i!=values_.end(); ++i)
-    (*i)->b_read_value(is);
+  for (auto & value : values_)
+    value->b_read_value(is);
 }
 
 
@@ -185,8 +184,7 @@ brdb_tuple::b_read_values(vsl_b_istream &is)
 void
 brdb_tuple::b_write_values(vsl_b_ostream &os) const
 {
-  for (std::vector<brdb_value_sptr>::const_iterator i=values_.begin();
-       i!=values_.end(); ++i)
-    (*i)->b_write_value(os);
+  for (const auto & value : values_)
+    value->b_write_value(os);
 }
 

@@ -69,11 +69,11 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
 
   std::vector<std::string> apps = scene->appearances();
   std::string data_type = "";
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
-      data_type = apps[i];
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
-      data_type = apps[i];
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix() )
+      data_type = app;
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+      data_type = app;
   }
   if(    data_type=="")
   {

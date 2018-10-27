@@ -76,9 +76,9 @@ static void test_bg_model_speed()
 
     bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
 
-    for (unsigned int t=0; t<images.size(); ++t){
+    for (const auto & image : images){
       vul_timer time;
-      update(model,images[t],updater);
+      update(model,image,updater);
       double up_time = time.real() / 1000.0;
       std::cout << " updated in " << up_time << " sec" <<std::endl;
     }
@@ -97,9 +97,9 @@ static void test_bg_model_speed()
 
     bbgm_image_of<obs_mix_gauss_type> model(ni,nj,obs_mix_gauss_type());
 
-    for (unsigned int t=0; t<images.size(); ++t){
+    for (const auto & image : images){
       vul_timer time;
-      update(model,images[t],updater);
+      update(model,image,updater);
       double up_time = time.real() / 1000.0;
       std::cout << " updated in " << up_time << " sec" <<std::endl;
     }

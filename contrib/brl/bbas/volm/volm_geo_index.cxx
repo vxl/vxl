@@ -142,11 +142,11 @@ bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<doubl
   if (!vgl_intersection(root->extent_, poly))
     return false;
 
-  for (unsigned i = 0; i < root->children_.size(); i++) {
-    if (!root->children_[i])
+  for (auto & i : root->children_) {
+    if (!i)
       continue;
-    if (!prune_tree(root->children_[i], poly)) // the child does not intersect poly
-      root->children_[i] = nullptr;  // sptr deallocates this child
+    if (!prune_tree(i, poly)) // the child does not intersect poly
+      i = nullptr;  // sptr deallocates this child
   }
 
   return true;
@@ -168,11 +168,11 @@ bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_z
   if (zone1 != (int)utm_zone && zone2 != (int)utm_zone)
     return false;
 
-  for (unsigned i = 0; i < root->children_.size(); i++) {
-    if (!root->children_[i])
+  for (auto & i : root->children_) {
+    if (!i)
       continue;
-    if (!prune_by_zone(root->children_[i], utm_zone)) // the child is not in zone
-      root->children_[i] = nullptr;  // sptr deallocates this child
+    if (!prune_by_zone(i, utm_zone)) // the child is not in zone
+      i = nullptr;  // sptr deallocates this child
   }
   return true;
 }
@@ -182,10 +182,10 @@ unsigned volm_geo_index::depth(volm_geo_index_node_sptr node)
   if (!node->children_.size())
     return 0;
   unsigned d = 0;
-  for (unsigned i = 0; i < node->children_.size(); i++) {
-    if (!node->children_[i])
+  for (auto & i : node->children_) {
+    if (!i)
       continue;
-    unsigned dd = depth(node->children_[i]);
+    unsigned dd = depth(i);
     if (dd > d)
       d = dd;
   }
@@ -207,8 +207,8 @@ void volm_geo_index::write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_s
     bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
   }
   else {
-    for (unsigned i = 0; i < n->children_.size(); i++)
-      write_to_kml_node(ofs, n->children_[i], current_depth + 1, depth);
+    for (const auto & i : n->children_)
+      write_to_kml_node(ofs, i, current_depth + 1, depth);
   }
 }
 
@@ -228,14 +228,14 @@ void write_to_text(std::ofstream& ofs, volm_geo_index_node_sptr n)
       << std::setprecision(6) << std::fixed << n->extent_.max_point().x() << ' '
       << std::setprecision(6) << std::fixed << n->extent_.max_point().y() << '\n'
       << n->children_.size() << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (!n->children_[i]) ofs << " 0";
+  for (auto & i : n->children_) {
+    if (!i) ofs << " 0";
     else ofs << " 1";
   }
   ofs << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (n->children_[i])
-      write_to_text(ofs, n->children_[i]);
+  for (auto & i : n->children_) {
+    if (i)
+      write_to_text(ofs, i);
   }
 }
 
@@ -285,11 +285,11 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_
     leaves.push_back(root);
   else {
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])
+    for (auto & i : root->children_) {
+      if (!i)
         continue;
       else {
-        get_leaves(root->children_[i], leaves);
+        get_leaves(i, leaves);
         at_least_one_child = true;
       }
     }
@@ -311,11 +311,11 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_
     leaves.push_back(root);
   else {
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])
+    for (auto & i : root->children_) {
+      if (!i)
         continue;
       else {
-        get_leaves(root->children_[i], leaves, area);
+        get_leaves(i, leaves, area);
         at_least_one_child = true;
       }
     }
@@ -343,8 +343,8 @@ void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, std::string const
     std::string str = root->get_hyp_name(file_name_pre);
     root->hyps_->write_hypotheses(str);
   }
-  for (unsigned i = 0; i < root->children_.size(); i++)
-    write_hyps(root->children_[i], file_name_pre);
+  for (const auto & i : root->children_)
+    write_hyps(i, file_name_pre);
 }
 
 void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre)
@@ -356,8 +356,8 @@ void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, std::string const&
     volm_loc_hyp_sptr hyp = new volm_loc_hyp(str);
     root->hyps_ = hyp;
   }
-  for (unsigned i = 0; i < root->children_.size(); i++)
-    read_hyps(root->children_[i], file_name_pre);
+  for (const auto & i : root->children_)
+    read_hyps(i, file_name_pre);
 }
 
 unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
@@ -367,8 +367,8 @@ unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
   unsigned cnt = 0;
   if (root->hyps_)
     cnt = root->hyps_->size();
-  for (unsigned i = 0; i < root->children_.size(); i++)
-    cnt += hypo_size(root->children_[i]);
+  for (const auto & i : root->children_)
+    cnt += hypo_size(i);
   return cnt;
 }
 
@@ -407,11 +407,11 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, std::ve
     return;
   }
   bool at_least_one_child = false;
-  for (unsigned i = 0; i < root->children_.size(); i++) {
-    if (!root->children_[i])
+  for (auto & i : root->children_) {
+    if (!i)
       continue;
     else {
-      get_leaves_with_hyps(root->children_[i], leaves);
+      get_leaves_with_hyps(i, leaves);
       at_least_one_child = true;
     }
   }

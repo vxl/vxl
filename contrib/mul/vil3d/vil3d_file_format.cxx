@@ -63,8 +63,8 @@ class vil3d_file_formats
   }
   ~vil3d_file_formats()
   {
-    for (unsigned i=0; i<v.size(); ++i)
-      delete v[i];
+    for (auto & i : v)
+      delete i;
 
     v.clear();
   }

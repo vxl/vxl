@@ -60,11 +60,11 @@ bool mfpf_find_near_pose(mfpf_point_finder& pf,
   unsigned n_worse=0;
   double best_fit = fit;
   unsigned best_i = 0;
-  for (unsigned i=0;i<index.size();++i)
+  for (unsigned int i : index)
   {
-    if (fits[index[i]]>fit) { n_worse++;}
-    if (fits[index[i]]<best_fit)
-    { best_i=index[i]; best_fit=fits[index[i]]; }
+    if (fits[i]>fit) { n_worse++;}
+    if (fits[i]<best_fit)
+    { best_i=i; best_fit=fits[i]; }
   }
 
   if (n_worse==0) return true; // New pose no better than any existing
@@ -126,9 +126,9 @@ bool mfpf_any_overlaps(mfpf_point_finder& pf,
                        const std::vector<mfpf_pose>& poses,
                        const mfpf_pose& pose)
 {
-  for (unsigned i=0;i<poses.size();++i)
+  for (const auto & i : poses)
   {
-    if (pf.overlap(poses[i],pose)) return true;
+    if (pf.overlap(i,pose)) return true;
   }
   return false;
 }
@@ -148,12 +148,12 @@ void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
 
   std::vector<int> index;
   mbl_index_sort(fits0,index);
-  for (unsigned i=0;i<index.size();++i)
+  for (int i : index)
   {
-    if (!mfpf_any_overlaps(pf,poses,poses0[index[i]]))
+    if (!mfpf_any_overlaps(pf,poses,poses0[i]))
     {
-      poses.push_back(poses0[index[i]]);
-      fits.push_back(fits0[index[i]]);
+      poses.push_back(poses0[i]);
+      fits.push_back(fits0[i]);
     }
     if (max_n>0 && poses.size()>=max_n) return;
   }

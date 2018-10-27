@@ -72,9 +72,9 @@ void test_corner_pair_finder()
   //bvxm_vrml_voxel_grid::write_vrml_header(os2);
 
   std::cout << all_lines.size() << std::endl;
-  for (unsigned i=0; i<all_lines.size(); ++i){
-      std::cout << all_lines[i].size() << std::endl;
-    for (unsigned j=0; j<all_lines[i].size(); ++j);
+  for (auto & all_line : all_lines){
+      std::cout << all_line.size() << std::endl;
+    for (unsigned j=0; j<all_line.size(); ++j);
        //bvxm_vrml_voxel_grid::write_vrml_line_segment(os2, all_lines[i][j], 0.5f, 0.5f, 0.5f, 0.f);
       }
 }

@@ -46,10 +46,10 @@ vpgl_bundle_adjust::normalize_points(std::vector<vgl_point_2d<double> >& image_p
                                      double& nx, double& ny, double& ns)
 {
   nx = ny = ns = 0.0;
-  for (unsigned int i=0; i<image_points.size(); ++i)
+  for (auto & image_point : image_points)
   {
-    double x = image_points[i].x();
-    double y = image_points[i].y();
+    double x = image_point.x();
+    double y = image_point.y();
     nx += x;
     ny += y;
     ns += x*x + y*y;
@@ -60,12 +60,12 @@ vpgl_bundle_adjust::normalize_points(std::vector<vgl_point_2d<double> >& image_p
   ns -= nx*nx + ny*ny;
   ns /= 2;
   ns = std::sqrt(ns);
-  for (unsigned int i=0; i<image_points.size(); ++i)
+  for (auto & image_point : image_points)
   {
-    image_points[i].x() -= nx;
-    image_points[i].y() -= ny;
-    image_points[i].x() /= ns;
-    image_points[i].y() /= ns;
+    image_point.x() -= nx;
+    image_point.y() -= ny;
+    image_point.x() /= ns;
+    image_point.y() /= ns;
   }
 }
 
@@ -78,9 +78,9 @@ reflect_points(const vgl_plane_3d<double>& plane,
 {
   vgl_h_matrix_3d<double> H;
   H.set_reflection_plane(plane);
-  for (unsigned int i=0; i<points.size(); ++i)
+  for (auto & point : points)
   {
-    points[i] = H * vgl_homg_point_3d<double>(points[i]);
+    point = H * vgl_homg_point_3d<double>(point);
   }
 }
 
@@ -96,9 +96,8 @@ rotate_cameras(const vgl_vector_3d<double>& axis,
   r *= vnl_math::pi;
   vgl_rotation_3d<double> R(r);
   vgl_rotation_3d<double> R2(0.0, 0.0, vnl_math::pi);
-  for (unsigned int j=0; j<cameras.size(); ++j)
+  for (auto & c : cameras)
   {
-    vpgl_perspective_camera<double>& c = cameras[j];
     c.set_camera_center(R*c.get_camera_center());
     c.set_rotation(R2*c.get_rotation()*R);
   }
@@ -117,17 +116,17 @@ depth_reverse(std::vector<vpgl_perspective_camera<double> >& cameras,
 {
   vnl_double_3 pc(0.0,0.0,0.0), cc(0.0,0.0,0.0);
   // compute the mean of the points
-  for (unsigned int i=0; i<points.size(); ++i)
+  for (auto & point : points)
   {
-    pc += vnl_double_3(points[i].x(), points[i].y(), points[i].z());
+    pc += vnl_double_3(point.x(), point.y(), point.z());
   }
   pc /= points.size();
   vgl_point_3d<double> point_center(pc[0],pc[1],pc[2]);
 
   // compute the mean of the camera centers
-  for (unsigned int j=0; j<cameras.size(); ++j)
+  for (auto & camera : cameras)
   {
-    vgl_point_3d<double> c = cameras[j].get_camera_center();
+    vgl_point_3d<double> c = camera.get_camera_center();
     cc += vnl_double_3(c.x(), c.y(), c.z());
   }
   cc /= cameras.size();
@@ -166,8 +165,8 @@ vpgl_bundle_adjust::optimize(std::vector<vpgl_perspective_camera<double> >& came
     b_ = vpgl_ba_shared_k_lsqr::create_param_vector(world_points);
     // Compute the average calibration matrix
     vnl_vector<double> K_vals(5,0.0);
-    for (unsigned int i=0; i<cameras.size(); ++i){
-      const vpgl_calibration_matrix<double>& Ki = cameras[i].get_calibration();
+    for (auto & camera : cameras){
+      const vpgl_calibration_matrix<double>& Ki = camera.get_calibration();
       K_vals[0] += Ki.focal_length()*Ki.x_scale();
       K_vals[1] += Ki.y_scale() / Ki.x_scale();
       K_vals[2] += Ki.principal_point().x();
@@ -188,8 +187,8 @@ vpgl_bundle_adjust::optimize(std::vector<vpgl_perspective_camera<double> >& came
     std::vector<vpgl_calibration_matrix<double> > K;
     a_ = vpgl_ba_fixed_k_lsqr::create_param_vector(cameras);
     b_ = vpgl_ba_fixed_k_lsqr::create_param_vector(world_points);
-    for (unsigned int i=0; i<cameras.size(); ++i){
-      vpgl_calibration_matrix<double> Ktmp = cameras[i].get_calibration();
+    for (auto & camera : cameras){
+      vpgl_calibration_matrix<double> Ktmp = camera.get_calibration();
       if (normalize_data_)
       {
         Ktmp.set_focal_length(Ktmp.focal_length()/ns);
@@ -291,10 +290,10 @@ vpgl_bundle_adjust::write_vrml(const std::string& filename,
      << "      color Color { color [1 0 0] }\n      coord Coordinate{\n"
      << "       point[\n";
 
-  for (unsigned int j=0; j<world_points.size(); ++j){
-    os  << world_points[j].x() << ' '
-        << world_points[j].y() << ' '
-        << world_points[j].z() << '\n';
+  for (const auto & world_point : world_points){
+    os  << world_point.x() << ' '
+        << world_point.y() << ' '
+        << world_point.z() << '\n';
   }
   os << "   ]\n  }\n }\n}\n";
 

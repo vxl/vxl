@@ -80,9 +80,9 @@ boxm2_convert_nvm::boxm2_convert_nvm(std::string nvm_file, std::string img_dir,b
         if (!boxm2_point_util::axis_align_scene(corrs_,cams_))
             return;
         pts_3d_.clear() ;
-        for (unsigned i=0; i<corrs_.size(); ++i)
+        for (auto & corr : corrs_)
         {
-            pts_3d_.push_back(corrs_[i]->world_pt());
+            pts_3d_.push_back(corr->world_pt());
         }
 
     }
@@ -113,10 +113,10 @@ boxm2_convert_nvm::boxm2_convert_nvm(std::string nvm_file, std::string img_dir,b
 
     vgl_box_3d<double> bounding_box;
     pts_3d_.clear() ;
-    for (unsigned i=0; i<corrs_.size(); ++i)
+    for (auto & corr : corrs_)
     {
-        bounding_box.add(corrs_[i]->world_pt());
-        pts_3d_.push_back(corrs_[i]->world_pt());
+        bounding_box.add(corr->world_pt());
+        pts_3d_.push_back(corr->world_pt());
     }
 
     // Dimensions of the World

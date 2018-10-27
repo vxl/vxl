@@ -34,9 +34,9 @@ vimt_transform_2d vimt_load_transform(const vil_image_resource_sptr& im,
     offset[0]=offset[1]=0.0f;
   }
 
-  for(unsigned i=0; i<2;i++)
+  for(float & i : pixSize)
   {
-    pixSize[i]*= unit_scaling;
+    i*= unit_scaling;
   }
 
   vimt_transform_2d tx;
@@ -81,9 +81,9 @@ vimt_transform_2d vimt_load_transform_right_hand(const vil_image_resource_sptr& 
     offset[0] = offset[1] = 0.0f;
   }
 
-  for(unsigned i=0; i<2; i++)
+  for(float & i : pixSize)
   {
-    pixSize[i] *= unit_scaling;
+    i *= unit_scaling;
   }
 
   // Include a reflection through the x-axis.

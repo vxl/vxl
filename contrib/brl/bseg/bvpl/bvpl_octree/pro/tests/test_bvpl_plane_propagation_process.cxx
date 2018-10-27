@@ -128,8 +128,8 @@ static void test_bvpl_plane_propagation_process()
 
     // get the leaf nodes and insert one plane to each
     std::vector<boct_tree_cell<short,data_type >*> nodes=tree->leaf_cells();
-    for (unsigned i=0; i<nodes.size(); i++) {
-      unsigned num=nodes[i]->data().num_obs();
+    for (auto & node : nodes) {
+      unsigned num=node->data().num_obs();
       // each node has 8 neighbors in the 3x3 neighborhood including itself
       if (num != 8)
         obs_num_ok = false;

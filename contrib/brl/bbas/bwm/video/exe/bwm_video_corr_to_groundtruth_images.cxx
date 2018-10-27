@@ -52,10 +52,10 @@ int main(int argc, char** argv)
     vil_image_resource_sptr img_ptr=vil_load_image_resource(img_files[i].c_str());
     vil_image_view<unsigned char> outimg(img_ptr->ni(),img_ptr->nj());
     outimg.fill(0);
-    for (unsigned j=0; j<corrs.size(); ++j)
+    for (auto & corr : corrs)
     {
       vgl_point_2d<double> point2d;
-      if (corrs[j]->match(i,point2d))
+      if (corr->match(i,point2d))
       {
         int u=(int)std::floor(point2d.x());
         int v=(int)std::floor(point2d.y());

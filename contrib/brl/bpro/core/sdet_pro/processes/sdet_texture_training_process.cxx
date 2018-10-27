@@ -252,10 +252,10 @@ bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
   std::vector<vgl_polygon<double> > polys;
   polys = tc_ptr->load_polys(poly_path);
 
-  for (unsigned i = 0; i < polys.size(); i++) {
-    for (unsigned j = 0; j < polys[i].num_sheets(); j++)
-      for (unsigned k = 0; k < polys[i][j].size(); k++)
-        ofs << polys[i][j][k].x() << " " << polys[i][j][k].y() << " ";
+  for (auto & poly : polys) {
+    for (unsigned j = 0; j < poly.num_sheets(); j++)
+      for (unsigned k = 0; k < poly[j].size(); k++)
+        ofs << poly[j][k].x() << " " << poly[j][k].y() << " ";
     ofs << '\n';
   }
   ofs.close();

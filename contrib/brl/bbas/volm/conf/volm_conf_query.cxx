@@ -74,12 +74,12 @@ bool volm_conf_query::create_perspective_cameras(volm_camera_space_sptr cam_spac
   // Note that ground plane construct has been applied on camera space
   cameras_.clear();  camera_strings_.clear();  camera_angles_.clear();
   std::vector<unsigned> const& valid_cams = cam_space->valid_indices();
-  for (unsigned i = 0; i < valid_cams.size(); i++) {
-    vpgl_perspective_camera<double> cam = cam_space->camera(valid_cams[i]);
-    std::string cam_str = cam_space->get_string(valid_cams[i]);
+  for (unsigned int valid_cam : valid_cams) {
+    vpgl_perspective_camera<double> cam = cam_space->camera(valid_cam);
+    std::string cam_str = cam_space->get_string(valid_cam);
     cameras_.push_back(cam);
     camera_strings_.push_back(cam_str);
-    camera_angles_.push_back(cam_space->camera_angles(valid_cams[i]));
+    camera_angles_.push_back(cam_space->camera_angles(valid_cam));
   }
   return true;
 }
@@ -136,11 +136,11 @@ bool volm_conf_query::create_conf_object()
       std::map<std::string, volm_conf_object_sptr> conf_objs = conf_objects_[cam_id];
       std::map<std::string, std::pair<unsigned, unsigned> > conf_pixels = conf_objects_pixels_[cam_id];
       std::map<std::string, std::pair<float, float> > conf_dist_tol;
-      for (std::map<std::string, std::pair<unsigned, unsigned> >::iterator mit = conf_pixels.begin(); mit != conf_pixels.end();  ++mit)
+      for (auto & conf_pixel : conf_pixels)
       {
-        float min_dist = conf_objs[mit->first]->dist()*0.8;
-        float max_dist = conf_objs[mit->first]->dist()*1.2;
-        conf_dist_tol.insert(std::pair<std::string, std::pair<float, float> >(mit->first, std::pair<float, float>(min_dist, max_dist)));
+        float min_dist = conf_objs[conf_pixel.first]->dist()*0.8;
+        float max_dist = conf_objs[conf_pixel.first]->dist()*1.2;
+        conf_dist_tol.insert(std::pair<std::string, std::pair<float, float> >(conf_pixel.first, std::pair<float, float>(min_dist, max_dist)));
       }
       conf_objects_d_tol_.push_back(conf_dist_tol);
     }
@@ -160,10 +160,10 @@ bool volm_conf_query::create_conf_object()
       std::map<std::string, volm_conf_object_sptr> conf_objs = conf_objects_[cam_id];
       std::map<std::string, std::pair<unsigned, unsigned> > conf_pixels = conf_objects_pixels_[cam_id];
       std::map<std::string, std::pair<float, float> > conf_dist_tol;
-      for (std::map<std::string, std::pair<unsigned, unsigned> >::iterator mit = conf_pixels.begin(); mit != conf_pixels.end();  ++mit)
+      for (auto & conf_pixel : conf_pixels)
       {
-        unsigned i = mit->second.first;  unsigned j = mit->second.second;
-        float min_dist = conf_objs[mit->first]->dist();
+        unsigned i = conf_pixel.second.first;  unsigned j = conf_pixel.second.second;
+        float min_dist = conf_objs[conf_pixel.first]->dist();
         float max_dist = min_dist;
         for (unsigned k = 0; k < num_nbrs; k++) {
           int nbr_i = i + nbrs4_delta[k][0];
@@ -176,7 +176,7 @@ bool volm_conf_query::create_conf_object()
           if (dist >= max_dist)  max_dist = dist;
           //std::cout << "\t pixel " << nbr_i << ", " << nbr_j << ", dist: " << dist << ", min_dist: " << min_dist << ", max_dist: " << max_dist << std::endl;
         }
-        conf_dist_tol.insert(std::pair<std::string, std::pair<float, float> >(mit->first, std::pair<float, float>(min_dist, max_dist)));
+        conf_dist_tol.insert(std::pair<std::string, std::pair<float, float> >(conf_pixel.first, std::pair<float, float>(min_dist, max_dist)));
       }
       conf_objects_d_tol_.push_back(conf_dist_tol);
     }
@@ -219,11 +219,11 @@ void volm_conf_query::project(vpgl_perspective_camera<double> const& cam,
   // calculate the average angle
   float phi_value = 0.0f;
   double xi = 0.0, yi = 0.0;
-  for (unsigned pi = 0; pi < phi_values.size(); pi++)
-    phi_value += phi_values[pi];
-  for (unsigned pi = 0; pi < pixel_values.size(); pi++) {
-    xi += pixel_values[pi].first;
-    yi += pixel_values[pi].second;
+  for (float pi : phi_values)
+    phi_value += pi;
+  for (auto & pixel_value : pixel_values) {
+    xi += pixel_value.first;
+    yi += pixel_value.second;
   }
   phi_value /= phi_values.size();
   xi /= pixel_values.size();
@@ -318,18 +318,18 @@ bool volm_conf_query::visualize_ref_objs(std::string const& in_file, std::string
     }
     this->plot_line_into_image(img, h_line_pixels, 0, 0, 0, 6);
     // plot the non-ground depth map scenes first
-    for (unsigned i = 0; i < regions.size(); i++) {
+    for (auto & region : regions) {
       // not plot the object that is not projected based on current camera
-      if (conf_objects_[cam_id].find(regions[i]->name()) == conf_objects_[cam_id].end())
+      if (conf_objects_[cam_id].find(region->name()) == conf_objects_[cam_id].end())
         continue;
-      vgl_polygon<double> poly = bsol_algs::vgl_from_poly(regions[i]->region_2d());
+      vgl_polygon<double> poly = bsol_algs::vgl_from_poly(region->region_2d());
       poly[0].push_back(poly[0][0]);
       unsigned char r,g,b;
       double width;
-      if (std::find(ref_obj_name_.begin(), ref_obj_name_.end(), regions[i]->name()) == ref_obj_name_.end()) {
-        r = volm_osm_category_io::volm_land_table[regions[i]->land_id()].color_.r;
-        g = volm_osm_category_io::volm_land_table[regions[i]->land_id()].color_.g;
-        b = volm_osm_category_io::volm_land_table[regions[i]->land_id()].color_.b;
+      if (std::find(ref_obj_name_.begin(), ref_obj_name_.end(), region->name()) == ref_obj_name_.end()) {
+        r = volm_osm_category_io::volm_land_table[region->land_id()].color_.r;
+        g = volm_osm_category_io::volm_land_table[region->land_id()].color_.g;
+        b = volm_osm_category_io::volm_land_table[region->land_id()].color_.b;
         width = 5.0;
       } else {
         r = 255; g = 0; b = 0; width = 7.0;
@@ -445,9 +445,9 @@ void volm_conf_query::plot_dot_into_image(vil_image_view<vil_rgb<vxl_byte> >& im
   for (unsigned i = 0; i <= 36; i++)
     angles.insert(i*10.0f);
   angles.insert(45.0f);  angles.insert(135.0f);  angles.insert(225.0f);  angles.insert(315.0f);
-  for (std::set<float>::iterator sit = angles.begin();  sit != angles.end();  ++sit) {
-    float x = pt.x() + radius*std::cos(*sit*vnl_math::pi_over_180);
-    float y = pt.y() + radius*std::sin(*sit*vnl_math::pi_over_180);
+  for (std::__1::__tree_const_iterator<float, std::__1::__tree_node<float, void *> *, long>::value_type angle : angles) {
+    float x = pt.x() + radius*std::cos(angle*vnl_math::pi_over_180);
+    float y = pt.y() + radius*std::sin(angle*vnl_math::pi_over_180);
     img_poly.push_back(x, y);
   }
   vgl_polygon_scan_iterator<float> it(img_poly, true);

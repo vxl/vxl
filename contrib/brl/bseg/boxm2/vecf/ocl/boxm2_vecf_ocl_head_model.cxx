@@ -60,12 +60,11 @@ void boxm2_vecf_ocl_head_model::clear_target(boxm2_scene_sptr target_scene)
   // for each block of the target scene
   std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
 
-  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
-       tblk != target_blocks.end(); ++tblk) {
-    bocl_mem* color_app_db =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
-    bocl_mem* nobs_db      =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(color_apm_id_));
-    bocl_mem* alpha_db     =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    bocl_mem* gray_app_db  =  opencl_cache_->get_data(target_scene, *tblk, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
+  for (auto & target_block : target_blocks) {
+    bocl_mem* color_app_db =  opencl_cache_->get_data(target_scene, target_block, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
+    bocl_mem* nobs_db      =  opencl_cache_->get_data(target_scene, target_block, boxm2_data_traits<BOXM2_NUM_OBS_SINGLE>::prefix(color_apm_id_));
+    bocl_mem* alpha_db     =  opencl_cache_->get_data(target_scene, target_block, boxm2_data_traits<BOXM2_ALPHA>::prefix());
+    bocl_mem* gray_app_db  =  opencl_cache_->get_data(target_scene, target_block, boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
 
 
     int status;

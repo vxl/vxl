@@ -129,8 +129,8 @@ bool PairMatchSet::get_match(int c, int* i1, int* i2) const
 //: Empty this match set.
 void PairMatchSet::clear()
 {
-  for (unsigned i = 0; i < matches_.size(); ++i)
-    matches_[i] = MatchSet::NoMatch;
+  for (int & matche : matches_)
+    matche = MatchSet::NoMatch;
   match_count_ = 0;
 }
 
@@ -146,8 +146,8 @@ void PairMatchSet::set_identity()
 int PairMatchSet::compute_match_count()
 {
   match_count_ = 0;
-  for (unsigned i = 0; i < matches_.size(); ++i)
-    if (matches_[i] != MatchSet::NoMatch)
+  for (int matche : matches_)
+    if (matche != MatchSet::NoMatch)
       ++match_count_;
 
   return match_count_;
@@ -242,8 +242,8 @@ std::istream& operator>>(std::istream& s, PairMatchSet& cc)
 void PairMatchSet::print_brief(std::ostream& s) const
 {
   s << "PairMatchSet: ";
-  for (unsigned i = 0; i < matches_.size(); i++)
-    s << matches_[i] << ' ';
+  for (int matche : matches_)
+    s << matche << ' ';
   s << std::endl;
 }
 

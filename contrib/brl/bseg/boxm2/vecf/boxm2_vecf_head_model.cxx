@@ -58,17 +58,16 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
   std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
   std::vector<boxm2_block_id> source_blocks = base_model_->get_block_ids();
 
-  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
-       tblk != target_blocks.end(); ++tblk) {
+  for (auto & target_block : target_blocks) {
 
-    boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, *tblk);
+    boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, target_block);
 
     boxm2_data_base *target_alpha;
     boxm2_data_base *target_app;
     boxm2_data_base *target_nobs;
-    boxm2_data_base *target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
-    if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
-      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << std::endl;
+    boxm2_data_base *target_color = boxm2_cache::instance()->get_data_base(target_scene, target_block, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
+    if (!get_data(target_scene, target_block, &target_alpha, &target_app, &target_nobs)) {
+      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << target_block.to_string() << std::endl;
       return;
     }
     target_alpha->enable_write();
@@ -83,18 +82,17 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
     boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
     boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     // for each block of the base model
-    for (std::vector<boxm2_block_id>::iterator sblk = source_blocks.begin();
-         sblk != source_blocks.end(); ++sblk) {
+    for (auto & source_block : source_blocks) {
 
-      boxm2_block *source_blk = boxm2_cache::instance()->get_block(base_model_, *sblk);
+      boxm2_block *source_blk = boxm2_cache::instance()->get_block(base_model_, source_block);
       const boxm2_array_3d<uchar16>& source_trees = source_blk->trees();
       boxm2_data_base* source_alpha;
       boxm2_data_base* source_app;
       boxm2_data_base* source_nobs;
 
-      boxm2_data_base* source_color = boxm2_cache::instance()->get_data_base(base_model_, *sblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
-      if (!get_data(base_model_, *sblk, &source_alpha, &source_app, &source_nobs)) {
-        std::cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << sblk->to_string() << std::endl;
+      boxm2_data_base* source_color = boxm2_cache::instance()->get_data_base(base_model_, source_block, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
+      if (!get_data(base_model_, source_block, &source_alpha, &source_app, &source_nobs)) {
+        std::cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << source_block.to_string() << std::endl;
         return ;
       }
       boxm2_data_traits<BOXM2_ALPHA>::datatype *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
@@ -235,17 +233,16 @@ void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
   // for each block of the target scene
   std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();
 
-  for (std::vector<boxm2_block_id>::iterator tblk = target_blocks.begin();
-       tblk != target_blocks.end(); ++tblk) {
+  for (auto & target_block : target_blocks) {
 
-    boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, *tblk);
+    boxm2_block *target_blk = boxm2_cache::instance()->get_block(target_scene, target_block);
 
     boxm2_data_base *target_alpha;
     boxm2_data_base *target_app;
     boxm2_data_base *target_nobs;
-    boxm2_data_base * target_color = boxm2_cache::instance()->get_data_base(target_scene, *tblk, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
-    if (!get_data(target_scene, *tblk, &target_alpha, &target_app, &target_nobs)) {
-      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << tblk->to_string() << std::endl;
+    boxm2_data_base * target_color = boxm2_cache::instance()->get_data_base(target_scene, target_block, boxm2_data_traits<BOXM2_GAUSS_RGB>::prefix(color_apm_id_));
+    if (!get_data(target_scene, target_block, &target_alpha, &target_app, &target_nobs)) {
+      std::cerr << "ERROR: boxm2_vecf_head_model::map_to_target(): error getting target block data block=" << target_block.to_string() << std::endl;
       return ;
     }
     target_alpha->enable_write();

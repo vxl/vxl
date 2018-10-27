@@ -95,8 +95,8 @@ bool sdet_texture_classifier_process2(bprb_func_process& pro)
     }
   }
   std::cout << " output id image will use the following ids for the categories:\n";
-  for (std::map<std::string, unsigned char>::iterator iter = cat_id_map.begin(); iter != cat_id_map.end(); iter++) {
-    std::cout << iter->first << " " << (int)iter->second << std::endl;
+  for (auto & iter : cat_id_map) {
+    std::cout << iter.first << " " << (int)iter.second << std::endl;
   }
 
   std::string category_name = pro.get_input<std::string>(3);

@@ -216,8 +216,8 @@ static void golden_test_vbl_io(bool save_file)
     //check every key/data pair, require same order too.
     vbl_sparse_array_1d<double>::const_iterator s = sa_in.begin();
     //N.B. relies on sensible == operator for <T>
-    for (vbl_sparse_array_1d<double>::const_iterator r = sa_out.begin(); r != sa_out.end(); ++r){
-      if (((*s).first != (*r).first) || ((*s).second != (*r).second)) test_result4=false;
+    for (auto r : sa_out){
+      if (((*s).first != r.first) || ((*s).second != r.second)) test_result4=false;
       s++;
     }
   }

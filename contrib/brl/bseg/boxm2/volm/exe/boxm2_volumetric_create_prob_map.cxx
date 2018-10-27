@@ -97,8 +97,8 @@ int main(int argc, char** argv)
   // initialize the Prob_map image if the prob_map doesn't exist
   // if the image exists, load the image instead
   std::vector<vil_image_view<float> > tile_imgs;
-  for (unsigned i = 0 ; i < tiles.size(); i++) {
-    std::string img_name = out() + "/" + "ProbMap_float_" + tiles[i].get_string() + ".tif";
+  for (auto & tile : tiles) {
+    std::string img_name = out() + "/" + "ProbMap_float_" + tile.get_string() + ".tif";
     if (vul_file::exists(img_name)) {
       // load the image
       vil_image_view<float> out_img = vil_load(img_name.c_str());

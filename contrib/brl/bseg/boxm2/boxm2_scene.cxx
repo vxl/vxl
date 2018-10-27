@@ -230,9 +230,8 @@ std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_affine_camera<doubl
   vgl_vector_3d<double> ray_dir(cam_center_ideal.x(), cam_center_ideal.y(), cam_center_ideal.z());
 
   vgl_box_3d<int> idx_bbox;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks_.begin();
-       iter != blocks_.end(); ++iter) {
-    boxm2_block_id const& id = iter->first;
+  for (auto & block : blocks_) {
+    boxm2_block_id const& id = block.first;
     idx_bbox.add(vgl_point_3d<int>(id.i_, id.j_, id.k_));
   }
   int closest_i = ray_dir.x() > 0? idx_bbox.min_x() : idx_bbox.max_x();
@@ -241,18 +240,17 @@ std::vector<boxm2_block_id> boxm2_scene::get_vis_blocks(vpgl_affine_camera<doubl
 
   // visibility ordering is based on manhattan distance of block index from that of closest block.
   std::vector<boxm2_dist_id_pair> manhattan_distances;
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks_.begin();
-       iter != blocks_.end(); ++iter)
+  for (auto & block : blocks_)
   {
     // dec: we would perform a visibility test here if we had ni,nj.
     //if(!this->is_block_visible(iter->second,*cam,ni,nj))
     //  continue;
 
-    int manhattan_distance = std::abs(iter->first.i_ - closest_i) +
-                             std::abs(iter->first.j_ - closest_j) +
-                             std::abs(iter->first.k_ - closest_k);
+    int manhattan_distance = std::abs(block.first.i_ - closest_i) +
+                             std::abs(block.first.j_ - closest_j) +
+                             std::abs(block.first.k_ - closest_k);
 
-    manhattan_distances.emplace_back(manhattan_distance, iter->first );
+    manhattan_distances.emplace_back(manhattan_distance, block.first );
   }
 
     //sort distances
@@ -477,11 +475,10 @@ bool boxm2_scene::contains(vgl_point_3d<double> const& p, boxm2_block_id& bid,
                            vgl_point_3d<double>& local_coords) const
 {
   std::vector<boxm2_block_id> block_ids = this->get_block_ids();
-  for (std::vector<boxm2_block_id>::iterator id = block_ids.begin();
-       id != block_ids.end(); ++id)
+  for (auto & block_id : block_ids)
   {
-    if (this->block_contains(p, *id, local_coords)) {
-      bid = (*id);
+    if (this->block_contains(p, block_id, local_coords)) {
+      bid = block_id;
       return true;
     }
   }
@@ -588,20 +585,20 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
   int max_i=ids[0].i(),max_j=ids[0].j(),max_k=ids[0].k();
   int min_i=ids[0].i(),min_j=ids[0].j(),min_k=ids[0].k();
 
-  for (unsigned n=0; n<ids.size(); n++) {
-    if (ids[n].i() > max_i)
-      max_i=ids[n].i();
-    if (ids[n].j() > max_j)
-      max_j=ids[n].j();
-    if (ids[n].k() > max_k)
-      max_k=ids[n].k();
+  for (auto & id : ids) {
+    if (id.i() > max_i)
+      max_i=id.i();
+    if (id.j() > max_j)
+      max_j=id.j();
+    if (id.k() > max_k)
+      max_k=id.k();
 
-    if (ids[n].i() < min_i)
-      min_i=ids[n].i();
-    if (ids[n].j() < min_j)
-      min_j=ids[n].j();
-    if (ids[n].k() < min_k)
-      min_k=ids[n].k();
+    if (id.i() < min_i)
+      min_i=id.i();
+    if (id.j() < min_j)
+      min_j=id.j();
+    if (id.k() < min_k)
+      min_k=id.k();
   }
   max_i++; max_j++; max_k++;
 
@@ -694,8 +691,8 @@ unsigned& boxm2_scene::get_count()
 //: returns true if the scene has specified data type (simple linear search)
 bool boxm2_scene::has_data_type(std::string const& data_type)
 {
-  for (unsigned int i=0; i<appearances_.size(); ++i)
-    if ( appearances_[i] == data_type )
+  for (const auto & appearance : appearances_)
+    if ( appearance == data_type )
       return true;
   return false;
 }
@@ -705,10 +702,10 @@ bool boxm2_scene::is_block_visible(boxm2_block_metadata & data, vpgl_camera<doub
     vgl_box_3d<double> bbox = data.bbox();
     std::vector<vgl_point_3d<double> > vertices =  bbox.vertices() ;
     vgl_box_2d<double> projectionbox;
-    for(unsigned int i = 0 ; i < vertices.size(); i++)
+    for(auto & vertice : vertices)
     {
         double u,v;
-        cam.project(vertices[i].x(),vertices[i].y(),vertices[i].z(),u,v);
+        cam.project(vertice.x(),vertice.y(),vertice.z(),u,v);
         projectionbox.add(vgl_point_2d<double>(u,v) );
     }
     vgl_box_2d<double> imagebbox(0,ni,0,nj);
@@ -743,10 +740,10 @@ void x_write(std::ostream &os, boxm2_scene& scene, std::string const& name)
   //write list of appearance models
 
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i=0; i<apps.size(); ++i)
+  for (const auto & app : apps)
   {
     vsl_basic_xml_element apms(APM_TAG);
-    apms.add_attribute("apm", apps[i]);
+    apms.add_attribute("apm", app);
     apms.x_write(os);
   }
   if (scene.num_illumination_bins() > 0) {
@@ -818,8 +815,8 @@ std::ostream& operator <<(std::ostream &s, boxm2_scene& scene)
 
   //list appearance models for this scene
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i=0; i<apps.size(); ++i)
-    s << "    " << apps[i] << ", ";
+  for (const auto & app : apps)
+    s << "    " << app << ", ";
   s << '\n';
   vpgl_lvcs lvcs = scene.lvcs();
   s << lvcs << '\n';
@@ -835,14 +832,13 @@ std::ostream& operator <<(std::ostream &s, boxm2_scene& scene)
   s << "block array dims(" << dims.x() << ' ' << dims.y() << ' ' << dims.z() << ")\n";
   std::map<boxm2_block_id, boxm2_block_metadata>& blk = scene.blocks();
   s << " blocks:==>\n";
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator bit=blk.begin();
-       bit != blk.end(); ++bit) {
-    s << (*bit).second.id_ << ' ';
-    vgl_point_3d<double> org = (*bit).second.local_origin_;
+  for (auto & bit : blk) {
+    s << bit.second.id_ << ' ';
+    vgl_point_3d<double> org = bit.second.local_origin_;
     s << ", org( " << org.x() << ' ' << org.y() << ' ' << org.z() << ") ";
-    vgl_vector_3d<double> dim = (*bit).second.sub_block_dim_;
+    vgl_vector_3d<double> dim = bit.second.sub_block_dim_;
     s << ", dim( " << dim.x() << ' ' << dim.y() << ' ' << dim.z() << ") ";
-    vgl_vector_3d<unsigned> num = (*bit).second.sub_block_num_;
+    vgl_vector_3d<unsigned> num = bit.second.sub_block_num_;
     s << ", num( " << num.x() << ' ' << num.y() << ' ' << num.z() << ")\n";
   }
   s << "<=====:end blocks\n";

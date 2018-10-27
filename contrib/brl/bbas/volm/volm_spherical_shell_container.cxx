@@ -72,8 +72,8 @@ void volm_spherical_shell_container::draw_template(std::string vrml_file_name)
   // write the voxel structure
 
   vgl_point_3d<double> orig(0.0,0.0,0.0);
-  for (unsigned i = 0; i < cart_pts.size(); i++) {
-    vgl_vector_3d<double> ray = cart_pts[i]-orig;
+  for (const auto & cart_pt : cart_pts) {
+    vgl_vector_3d<double> ray = cart_pt-orig;
     //bvrml_write::write_vrml_line(ofs, orig, ray, 10.0f, 0.0f, 0.0f, 1.0f);
     bvrml_write::write_vrml_disk(ofs, orig+10*ray, ray, 0.5f, 0.0f, 0.0f, 1.0f);
   }

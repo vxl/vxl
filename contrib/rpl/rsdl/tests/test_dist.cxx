@@ -23,10 +23,10 @@ static void test_dist()
   std::vector<double> q_cart;
   std::vector<double> p_ang;
   std::vector<double> q_ang;
-  for ( unsigned int i=0; i < Nc; ++i )  p_cart.push_back( p_cart_arr[i] );
-  for ( unsigned int i=0; i < Nc; ++i )  q_cart.push_back( q_cart_arr[i] );
-  for ( unsigned int i=0; i < Na; ++i )  p_ang.push_back( p_ang_arr[i] );
-  for ( unsigned int i=0; i < Na; ++i )  q_ang.push_back( q_ang_arr[i] );
+  for (double i : p_cart_arr)  p_cart.push_back( i );
+  for (double i : q_cart_arr)  q_cart.push_back( i );
+  for (double i : p_ang_arr)  p_ang.push_back( i );
+  for (double i : q_ang_arr)  q_ang.push_back( i );
 
   double sq_dist =
     vnl_math::sqr( 3.4 + 1.4 )
@@ -53,8 +53,8 @@ static void test_dist()
   double ang0_arr[] = { 3*vnl_math::pi/16, vnl_math::pi, 8*vnl_math::pi/5 };
   std::vector<double> cart0;
   std::vector<double> ang0;
-  for ( unsigned int i=0; i < Nc; ++i )  cart0.push_back( cart0_arr[i] );
-  for ( unsigned int i=0; i < Na; ++i )  ang0.push_back( ang0_arr[i] );
+  for (double i : cart0_arr)  cart0.push_back( i );
+  for (double i : ang0_arr)  ang0.push_back( i );
 
   rsdl_point test_p( cart0.begin(), cart0.end(), ang0.begin(), ang0.end() );
   TEST_NEAR("point-to-box dist sq - point inside", rsdl_dist_sq( test_p, box), 0, 1e-6);

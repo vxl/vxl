@@ -97,9 +97,9 @@ vnl_matrix<double> calc_covar(const vnl_vector<double>& mean,
 {
   vnl_matrix<double> sum(mean.size(),mean.size());
   sum.fill(0.0);
-  for (unsigned k=0;k<v.size();++k)
+  for (const auto & k : v)
   {
-    vnl_vector<double> dv=v[k]-mean;
+    vnl_vector<double> dv=k-mean;
     for (unsigned j=0;j<mean.size();++j)
       for (unsigned i=0;i<mean.size();++i)
         sum(i,j)+=dv[i]*dv[j];
@@ -115,9 +115,9 @@ void plot_scatter(const std::string& path,
                   const vnl_vector<double>& d2)
 {
   std::ofstream ofs(path.c_str());
-  for (unsigned i=0;i<b.size();++i)
+  for (const auto & i : b)
   {
-    ofs<<dot_product(d1,b[i])<<" "<<dot_product(d2,b[i])<<std::endl;
+    ofs<<dot_product(d1,i)<<" "<<dot_product(d2,i)<<std::endl;
   }
   ofs.close();
   std::cout<<"Saved scatter to "<<path<<std::endl;
@@ -246,8 +246,8 @@ int main(int argc, char** argv)
 
   // Compute variance along this direction
   mbl_stats_1d d_stats;
-  for (unsigned i=0;i<b1.size();++i) d_stats.obs(dot_product(dir,b1[i]));
-  for (unsigned i=0;i<b2.size();++i) d_stats.obs(dot_product(dir,b2[i]));
+  for (const auto & i : b1) d_stats.obs(dot_product(dir,i));
+  for (const auto & i : b2) d_stats.obs(dot_product(dir,i));
 
   // Construct a new shape model with a single mode based on this.
   vnl_vector<double> dir1 = shape_model.modes()*dir;  // Projection into shape space

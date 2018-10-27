@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
       // Initialise/add points to sum_all_pts
       points.get_points(pts);
-      for (unsigned j=0;j<pts.size();++j) { all_pts.push_back(pts[j]); }
+      for (auto pt : pts) { all_pts.push_back(pt); }
     }
     else if (n_pts != points.size())
     {
@@ -66,8 +66,8 @@ int main(int argc, char** argv)
   }
 
   // Update all_pts with the average over all sets
-  for (unsigned j=0;j<all_pts.size();++j)
-    { all_pts[j].set(all_pts[j].x()/n_sets, all_pts[j].y()/n_sets); }
+  for (auto & all_pt : all_pts)
+    { all_pt.set(all_pt.x()/n_sets, all_pt.y()/n_sets); }
 
   points.set_points(all_pts);
 

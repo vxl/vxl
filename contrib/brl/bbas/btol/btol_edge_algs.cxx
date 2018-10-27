@@ -97,10 +97,9 @@ vsol_box_2d btol_edge_algs::bounding_box(std::vector<vtol_edge_2d_sptr>& edges)
 {
   vsol_box_2d b;//default box
 
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-       eit != edges.end(); eit++)
+  for (auto & edge : edges)
   {
-    vsol_curve_2d_sptr c = (*eit)->curve();
+    vsol_curve_2d_sptr c = edge->curve();
     if (!c)
     {
       std::cout << "In btol_edge_algs::bounding_box(..) - null curve\n";

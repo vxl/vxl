@@ -279,9 +279,9 @@ bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni
 {
   top_cameras.clear();
   right_fovs.clear();
-  for (unsigned i = 0; i < cam_ids.size(); i++)
+  for (unsigned int cam_id : cam_ids)
   {
-    cam_angles cam_ang = cam_space->camera_angles(cam_ids[i]);
+    cam_angles cam_ang = cam_space->camera_angles(cam_id);
     double head = (cam_ang.heading_ < 0) ? cam_ang.heading_ + 360.0 : cam_ang.heading_;
     double tilt = (cam_ang.tilt_ < 0) ? cam_ang.tilt_ + 360 : cam_ang.tilt_;
     double roll;

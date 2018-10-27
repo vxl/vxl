@@ -80,9 +80,9 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   std::vector<vgl_point_3d<double> > pts;
   vgl_box_3d<double> box;
-  for (unsigned i=0; i<verts.size(); ++i)
+  for (const auto & vert : verts)
   {
-    pts.push_back(R*vgl_point_3d<double>(verts[i]));
+    pts.push_back(R*vgl_point_3d<double>(vert));
     box.add(pts.back());
   }
   std::cout << box << std::endl;
@@ -195,10 +195,10 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
   std::vector<vgl_vector_3d<double> > dirs =
       sample_sphere_directions(num_dir_samples);
 
-  for (unsigned int i=0; i<dirs.size(); ++i) {
-    std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dirs[i], img_size);
-    for (std::set<unsigned int>::const_iterator itr=vis.begin(); itr!=vis.end(); ++itr)
-      ++face_vote[*itr];
+  for (const auto & dir : dirs) {
+    std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dir, img_size);
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type vi : vis)
+      ++face_vote[vi];
   }
 
   std::set<unsigned int> ext;
@@ -250,18 +250,16 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
   std::vector<vgl_vector_3d<double> > dirs =
       sample_sphere_directions(num_dir_samples);
 
-  for (unsigned int i=0; i<dirs.size(); ++i) {
+  for (const auto & dir : dirs) {
     std::set<unsigned int> back_vis;
-    std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dirs[i],
+    std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dir,
                                                             img_size, &back_vis);
-    for (std::set<unsigned int>::const_iterator itr=vis.begin();
-         itr!=vis.end(); ++itr) {
-      unsigned int face_ind = tri_map.empty() ? *itr : tri_map[*itr];
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type vi : vis) {
+      unsigned int face_ind = tri_map.empty() ? vi : tri_map[vi];
       ++face_vote[face_ind];
      }
-    for (std::set<unsigned int>::const_iterator itr=back_vis.begin();
-         itr!=back_vis.end(); ++itr) {
-      unsigned int face_ind = tri_map.empty() ? *itr : tri_map[*itr];
+    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type back_vi : back_vis) {
+      unsigned int face_ind = tri_map.empty() ? back_vi : tri_map[back_vi];
       ++back_face_vote[face_ind];
     }
   }

@@ -213,17 +213,17 @@ void fhs_searcher::points_from_root(const vgl_point_2d<double>& root_pt,
 
   // Propagate solution through the tree
   // arc_ ordered so that parents always precede leaves
-  for (std::vector<fhs_arc>::const_iterator a=arc_.begin();a!=arc_.end();++a)
+  for (const auto & a : arc_)
   {
     // Compute mean predicted position for leaf point
-    vgl_point_2d<double> p_j0 = pts[a->i()]
-                                 +vgl_vector_2d<double>(a->dx(),a->dy());
+    vgl_point_2d<double> p_j0 = pts[a.i()]
+                                 +vgl_vector_2d<double>(a.dx(),a.dy());
 
     // Look up position allowing for offset (in image coords)
-    double px = vimt_bilin_interp_safe(pos_im_[a->j()],p_j0,0);
-    double py = vimt_bilin_interp_safe(pos_im_[a->j()],p_j0,1);
+    double px = vimt_bilin_interp_safe(pos_im_[a.j()],p_j0,0);
+    double py = vimt_bilin_interp_safe(pos_im_[a.j()],p_j0,1);
     // Project back to world co-ords
-    pts[a->j()] = pos_im_[a->j()].world2im().inverse()(px,py);
+    pts[a.j()] = pos_im_[a.j()].world2im().inverse()(px,py);
   }
 }
 

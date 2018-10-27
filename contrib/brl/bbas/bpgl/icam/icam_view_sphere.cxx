@@ -155,8 +155,7 @@ void icam_view_sphere::find_local_minima(std::vector<vsph_view_point<icam_view_m
     // compare the errors with the neighbors
     bool smallest=true;
     double smallest_diff=1e308;
-    for (unsigned i=0; i<neighbors.size(); i++) {
-      vsph_view_point<icam_view_metadata> vp = neighbors[i];
+    for (auto vp : neighbors) {
       icam_view_metadata* data = vp.metadata();
       if (data) {
         if (data->cost() < cost) {

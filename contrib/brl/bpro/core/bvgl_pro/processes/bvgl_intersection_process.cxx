@@ -61,8 +61,8 @@ bool bvgl_2d_box_intersection_process(bprb_func_process& pro)
   unsigned n_sheet = poly.num_sheets();
   for (unsigned i = 0; i < n_sheet; i++) {
     vgl_box_2d<double> bbox;
-    for (unsigned v_idx = 0; v_idx < poly[i].size(); v_idx++)
-      bbox.add(poly[i][v_idx]);
+    for (auto v_idx : poly[i])
+      bbox.add(v_idx);
     boxes.push_back(bbox);
   }
 

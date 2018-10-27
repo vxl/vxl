@@ -283,10 +283,10 @@ std::map<unsigned char, std::vector<float> > volm_fallback_label::fallback_weigh
 
 void volm_fallback_label::print_fallback_table()
 {
-  for (std::map<unsigned char, std::vector<unsigned char> >::iterator iter = fallback_id.begin(); iter != fallback_id.end(); iter++) {
-    std::cout << volm_label_table::land_string(iter->first) << " (" << (int)iter->first << "):\t";
-    for (unsigned k = 0; k < iter->second.size(); k++) {
-      std::cout << volm_label_table::land_string(iter->second[k]) << '(' << (int)iter->second[k] << ", w: " << fallback_weight[iter->first][k] << ")\t";
+  for (auto & iter : fallback_id) {
+    std::cout << volm_label_table::land_string(iter.first) << " (" << (int)iter.first << "):\t";
+    for (unsigned k = 0; k < iter.second.size(); k++) {
+      std::cout << volm_label_table::land_string(iter.second[k]) << '(' << (int)iter.second[k] << ", w: " << fallback_weight[iter.first][k] << ")\t";
     }
     std::cout << '\n';
   }
@@ -326,9 +326,9 @@ bool volm_attributes::contains(std::string name)
 
 unsigned char volm_label_table::get_id_closest_name(std::string name)
 {
-  for (std::map<int, volm_attributes >::iterator iter = land_id.begin(); iter != land_id.end(); iter++) {
-    if (iter->second.contains(name))
-      return iter->first;
+  for (auto & iter : land_id) {
+    if (iter.second.contains(name))
+      return iter.first;
   }
   return volm_label_table::INVALID;
 }
@@ -1004,8 +1004,8 @@ void volm_score::write_scores(std::vector<volm_score_sptr>& scores, std::string 
 {
   vsl_b_ofstream ofs(file_name);
   vsl_b_write(ofs, (unsigned)(scores.size()));
-  for (unsigned i = 0; i < scores.size(); i++)
-    scores[i]->b_write(ofs);
+  for (auto & score : scores)
+    score->b_write(ofs);
   ofs.close();
 }
 

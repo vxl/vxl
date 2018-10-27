@@ -42,8 +42,8 @@ static bool float_equal(float const& a, float const& b)
 static float average(std::vector<float> const& values)
 {
   float sum = 0.0f;
-  for (unsigned i = 0; i < values.size(); i++)
-    sum += values[i];
+  for (float value : values)
+    sum += value;
   return sum/values.size();
 }
 
@@ -84,8 +84,8 @@ static bool find_nearest_building(unsigned const& i, unsigned const& j,
 static float standard_devation(std::vector<float> const& values, float const& mean)
 {
   float dev_sum = 0.0f;
-  for (unsigned i = 0; i <values.size(); i++)
-    dev_sum += (values[i] - mean) * (values[i] - mean);
+  for (float value : values)
+    dev_sum += (value - mean) * (value - mean);
   return std::sqrt(dev_sum/values.size());
 }
 
@@ -196,12 +196,12 @@ int main(int argc, char** argv)
   double h_upperrght_lon, h_upperrght_lat;
   h_cam->img_to_global(ni-1, 0, h_upperrght_lon, h_upperrght_lat);
   vgl_box_2d<double> h_bbox(h_lowerleft_lon, h_upperrght_lon, h_lowerleft_lat, h_upperrght_lat);
-  for (unsigned r_idx = 0; r_idx < class_roots.size(); r_idx++) {
+  for (const auto & class_root : class_roots) {
     std::vector<volm_geo_index2_node_sptr> leaves;
     leaves.clear();
-    volm_geo_index2::get_leaves(class_roots[r_idx], leaves, h_bbox);
-    for (unsigned li = 0; li < leaves.size(); li++)
-      class_leaves.push_back(leaves[li]);
+    volm_geo_index2::get_leaves(class_root, leaves, h_bbox);
+    for (const auto & leave : leaves)
+      class_leaves.push_back(leave);
   }
 
   if (class_leaves.empty()) {
@@ -355,12 +355,11 @@ int main(int argc, char** argv)
 
       // obtain the ground height from flat region -- using the minimum height for current window
       std::vector<float> flat_heights;
-      for (std::map<unsigned, std::pair<std::vector<unsigned>, std::vector<unsigned> > >::iterator mit = flat_regions.begin();
-           mit != flat_regions.end(); ++mit)
+      for (auto & flat_region : flat_regions)
       {
-        unsigned num_pts = (unsigned)mit->second.first.size();
+        unsigned num_pts = (unsigned)flat_region.second.first.size();
         for (unsigned ri = 0; ri < num_pts; ri++)
-          flat_heights.push_back(h_img(mit->second.first[ri], mit->second.second[ri]));
+          flat_heights.push_back(h_img(flat_region.second.first[ri], flat_region.second.second[ri]));
       }
       if (flat_heights.size() != 0) {
         std::sort(flat_heights.begin(), flat_heights.end());
@@ -405,8 +404,8 @@ int main(int argc, char** argv)
       std::map<std::pair<unsigned,unsigned>, std::vector<std::pair<unsigned, unsigned> > >::iterator r_mit = non_building_regions.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (r_mit != non_building_regions.end()) {
         std::vector<std::pair<unsigned, unsigned> > region_pixels = r_mit ->second;
-        for (unsigned pidx = 0; pidx < region_pixels.size(); pidx++) {
-          refined_h_img(region_pixels[pidx].first,region_pixels[pidx].second) = grd_height;
+        for (auto & region_pixel : region_pixels) {
+          refined_h_img(region_pixel.first,region_pixel.second) = grd_height;
         }
       }
     }
@@ -603,23 +602,22 @@ static bool refine_building_by_median(vil_image_view<float> const& h_img,
                                       vil_image_view<float>& refined_img)
 {
   // refine each building with its median height
-  for (std::map<unsigned, std::pair<std::vector<unsigned>, std::vector<unsigned> > >::const_iterator mit = buildings.begin();
-       mit != buildings.end(); ++mit)
+  for (const auto & building : buildings)
   {
-    if (mit->second.first.size() < 10)
+    if (building.second.first.size() < 10)
       continue;
-    unsigned num_pts = (unsigned)mit->second.first.size();
+    unsigned num_pts = (unsigned)building.second.first.size();
     // find the median
     std::vector<float> height_values;
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
-      height_values.push_back(h_img(mit->second.first[p_idx], mit->second.second[p_idx]));
+      height_values.push_back(h_img(building.second.first[p_idx], building.second.second[p_idx]));
     std::sort(height_values.begin(), height_values.end());
     float median = height_values[height_values.size()/2];
 
     // refine the height using median
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++) {
-      unsigned int img_i = mit->second.first[p_idx];
-      unsigned int img_j = mit->second.second[p_idx];
+      unsigned int img_i = building.second.first[p_idx];
+      unsigned int img_j = building.second.second[p_idx];
       refined_img(img_i, img_j) = median;
     }
 
@@ -666,15 +664,14 @@ static bool refine_building_by_median_divided(vil_image_view<float> const& h_img
                                               vil_image_view<float>& refined_img)
 {
   // loop over each super pixels and divide them with a given window size
-  for (std::map<unsigned, std::pair<std::vector<unsigned>, std::vector<unsigned> > >::const_iterator mit = buildings.begin();
-       mit != buildings.end(); ++mit)
+  for (const auto & building : buildings)
   {
-    if (mit->second.first.size() < 10)  // ignore super pixel with less than 10 pixels
+    if (building.second.first.size() < 10)  // ignore super pixel with less than 10 pixels
       continue;
     std::vector<std::pair<unsigned, unsigned> > super_pixel;
-    unsigned num_pts = (unsigned)mit->second.first.size();
+    unsigned num_pts = (unsigned)building.second.first.size();
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
-      super_pixel.emplace_back(mit->second.first[p_idx], mit->second.second[p_idx]);
+      super_pixel.emplace_back(building.second.first[p_idx], building.second.second[p_idx]);
     // form the bbox of super pixels
     vgl_box_2d<unsigned> bbox;
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
@@ -747,8 +744,8 @@ static float neighbor_height(std::map<std::pair<unsigned, unsigned>, float> cons
     return 0.0f;
 
   float grd_height = 0.0f;
-  for (unsigned i = 0; i < neigh_heights.size(); i++)
-    grd_height += neigh_heights[i];
+  for (float neigh_height : neigh_heights)
+    grd_height += neigh_height;
 
   return grd_height/neigh_heights.size();
 

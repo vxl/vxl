@@ -30,31 +30,31 @@ bool boxm2_ocl_render_expected_image_globals::validate_appearances(
 {
   std::vector<std::string> apps = scene->appearances();
   bool foundDataType = false;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options="-D MOG_TYPE_8 ";
       appTypeSize = boxm2_data_traits<BOXM2_MOG3_GREY>::datasize();
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options="-D MOG_TYPE_16 ";
       appTypeSize = boxm2_data_traits<BOXM2_MOG3_GREY_16>::datasize();
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_FLOAT8>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options="-D FLOAT8 ";
       appTypeSize = boxm2_data_traits<BOXM2_FLOAT8>::datasize();
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options="-D SHORT ";
       appTypeSize = boxm2_data_traits<BOXM2_LABEL_SHORT>::datasize();

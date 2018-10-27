@@ -57,13 +57,12 @@ void boxm2_lru_cache::clear_cache()
   for(;scene_iter!=cached_data_.end(); scene_iter++)
   {
       std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
-      for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = dmap.begin();
-          iter != dmap.end(); iter++)
+      for (auto & iter : dmap)
       {
-          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++)
+          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++)
               delete it->second;
 
-          iter->second.clear();
+          iter.second.clear();
       }
       scene_iter->second.clear();
   }
@@ -72,10 +71,9 @@ void boxm2_lru_cache::clear_cache()
   for(;scene_block_iter!=cached_blocks_.end(); scene_block_iter++)
   {
 
-      for (std::map<boxm2_block_id, boxm2_block*>::iterator iter = scene_block_iter->second.begin();
-          iter != scene_block_iter->second.end(); iter++)
+      for (auto & iter : scene_block_iter->second)
       {
-          delete iter->second;
+          delete iter.second;
       }
       scene_block_iter->second.clear();
   }
@@ -349,12 +347,11 @@ void boxm2_lru_cache::write_to_disk()
   for(;scene_iter!=cached_data_.end(); scene_iter++)
   {
       std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
-      for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = dmap.begin();
-          iter != dmap.end(); iter++)
+      for (auto & iter : dmap)
       {
-          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
               boxm2_block_id id = it->first;
-              boxm2_sio_mgr::save_block_data_base(scene_iter->first->data_path(), it->first, it->second, iter->first);
+              boxm2_sio_mgr::save_block_data_base(scene_iter->first->data_path(), it->first, it->second, iter.first);
           }
       }
   }
@@ -381,12 +378,11 @@ void boxm2_lru_cache::write_to_disk(boxm2_scene_sptr & scene)
     if(scene_iter->first->id() != scene->id())
       continue;
       std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> > &dmap = scene_iter->second;
-      for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = dmap.begin();
-          iter != dmap.end(); iter++)
+      for (auto & iter : dmap)
       {
-          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+          for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
               boxm2_block_id id = it->first;
-              boxm2_sio_mgr::save_block_data_base(scene_iter->first->data_path(), it->first, it->second, iter->first);
+              boxm2_sio_mgr::save_block_data_base(scene_iter->first->data_path(), it->first, it->second, iter.first);
           }
       }
   }

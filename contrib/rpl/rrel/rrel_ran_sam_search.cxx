@@ -295,8 +295,8 @@ void
 rrel_ran_sam_search::trace_sample( const std::vector<int>& indices ) const
 {
   std::cout << "\nNew sample: ";
-  for ( unsigned int i=0; i<indices.size(); ++i)
-    std::cout << ' ' << indices[i];
+  for (int indice : indices)
+    std::cout << ' ' << indice;
   std::cout << std::endl;
 }
 

@@ -140,14 +140,14 @@ int main(int argc, char** argv)
     if (is_land_map())
     {
       std::cout << "\t adding locations from " << map_info.size() << " land maps\n";
-      for (unsigned m_idx = 0; m_idx < map_info.size(); m_idx++) {
-        vil_image_view<vxl_byte>* image = dynamic_cast<vil_image_view<vxl_byte>*>(map_info[m_idx].img_r.ptr());
+      for (auto & m_idx : map_info) {
+        vil_image_view<vxl_byte>* image = dynamic_cast<vil_image_view<vxl_byte>*>(m_idx.img_r.ptr());
         if (!image) {
-          log << "ERROR: load image view failed for land map: " << map_info[m_idx].img_name << '\n';  error(log_file, log.str());
+          log << "ERROR: load image view failed for land map: " << m_idx.img_name << '\n';  error(log_file, log.str());
           return volm_io::EXE_ARGUMENT_ERROR;
         }
-        if (!leaf_ptr->contents_->add_locations(*image, map_info[m_idx].cam)) {
-          log << "ERROR: adding locations from land map: " << map_info[m_idx].img_name << "failed\n";  error(log_file, log.str());
+        if (!leaf_ptr->contents_->add_locations(*image, m_idx.cam)) {
+          log << "ERROR: adding locations from land map: " << m_idx.img_name << "failed\n";  error(log_file, log.str());
           return volm_io::EXE_ARGUMENT_ERROR;
         }
       }
@@ -189,9 +189,9 @@ int main(int argc, char** argv)
 
     // add sme data
     std::cout << "\t adding locations from " << sme_objects.size() << " SME objects...\n";
-    for (unsigned i = 0; i < sme_objects.size(); i++) {
-      vgl_point_3d<double> sme_pt(sme_objects[i].first.x(), sme_objects[i].first.y(), -1.0);
-      leaf_ptr->contents_->add_locations(sme_pt, (unsigned char)sme_objects[i].second);
+    for (auto & sme_object : sme_objects) {
+      vgl_point_3d<double> sme_pt(sme_object.first.x(), sme_object.first.y(), -1.0);
+      leaf_ptr->contents_->add_locations(sme_pt, (unsigned char)sme_object.second);
     }
     std::cout << "\t   " << leaf_ptr->contents_->nlocs() << " locations (" << leaf_ptr->contents_->nland_type() << " land types) are added after loading SME data"
              << std::flush << std::endl;

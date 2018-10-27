@@ -40,13 +40,11 @@ vifa_group_pgram(imp_line_list&                  lg,
 vifa_group_pgram::
 ~vifa_group_pgram()
 {
-  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
-       ilti++)
+  for (auto illp : curves_)
   {
-    imp_line_list*  illp = (*ilti);
-    for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
+    for (auto & ili : *illp)
     {
-      (*ili) = nullptr;
+      ili = nullptr;
     }
 
     delete illp;
@@ -69,8 +67,8 @@ Index(imp_line_sptr il)
 void vifa_group_pgram::
 Index(imp_line_list& lg)
 {
-  for (imp_line_iterator ili = lg.begin(); ili != lg.end(); ili++)
-    Index(*ili);
+  for (auto & ili : lg)
+    Index(ili);
 }
 
 //------------------------------------------------------------
@@ -78,15 +76,14 @@ Index(imp_line_list& lg)
 void vifa_group_pgram::
 Clear()
 {
-  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
-       ilti++)
+  for (auto & curve : curves_)
   {
-    imp_line_list*  illp = (*ilti);
-    for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
-      (*ili) = nullptr;
+    imp_line_list*  illp = curve;
+    for (auto & ili : *illp)
+      ili = nullptr;
 
     delete illp;
-    (*ilti) = new imp_line_list;
+    curve = new imp_line_list;
   }
 
   this->touch();
@@ -152,9 +149,9 @@ GetLineCover(int  angle_bin)
   }
 
   vifa_line_cover_sptr  cov = new vifa_line_cover(il, len);
-  for (imp_line_iterator ili = lg.begin(); ili != lg.end(); ili++)
+  for (auto & ili : lg)
   {
-    cov->InsertLine(*ili);
+    cov->InsertLine(ili);
   }
 
   return cov;
@@ -224,9 +221,9 @@ GetAdjacentPerimeter(int  bin)
   this->CollectAdjacentLines(bin, lg);
 
   double  sum = 0;
-  for (imp_line_iterator ili = lg.begin(); ili != lg.end(); ili++)
+  for (auto & ili : lg)
   {
-    vgl_vector_2d<double>  v = (*ili)->point2() - (*ili)->point1();
+    vgl_vector_2d<double>  v = ili->point2() - ili->point1();
     sum += v.length();
   }
 
@@ -326,13 +323,11 @@ ComputeBoundingBox(void)
   // Reset the bounding box
   bb_->empty();
 
-  for (imp_line_table::iterator ilti = curves_.begin(); ilti != curves_.end();
-       ilti++)
+  for (auto illp : curves_)
   {
-    imp_line_list*  illp = (*ilti);
-    for (imp_line_iterator ili = illp->begin(); ili != illp->end(); ili++)
+    for (auto & ili : *illp)
     {
-      imp_line_sptr  il = (*ili);
+      imp_line_sptr  il = ili;
 
       bb_->add(il->point1());
       bb_->add(il->point2());

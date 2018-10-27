@@ -60,8 +60,8 @@ static void test_io()
     //  std::cout << volm_label_table::land_string(*vit) << ", ";
     std::cout << std::setw(10) << std::setfill(' ') << " ------ ";
     volm_fallback_label::print_wgt(mit->first);
-    for (std::vector<unsigned char>::iterator vit = mit->second.begin(); vit != mit->second.end(); ++vit)
-      std::cout << std::setprecision(3) << (int)*vit << ' ';
+    for (unsigned char & vit : mit->second)
+      std::cout << std::setprecision(3) << (int)vit << ' ';
     std::cout << '\n' << std::endl;
     ++mit_w;
   }

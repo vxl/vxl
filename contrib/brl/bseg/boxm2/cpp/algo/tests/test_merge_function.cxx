@@ -51,8 +51,8 @@ void test_merge_bit_tree()
       float prob = .2f;
       float alph = -std::log(1.0f-prob);
       float alpha[17];
-      for (int i=0; i<17; ++i)
-        alpha[i] = alph/4.0f;
+      for (float & i : alpha)
+        i = alph/4.0f;
 
       boxm2_scene_sptr scene = new boxm2_scene();
 

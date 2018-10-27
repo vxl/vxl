@@ -31,9 +31,9 @@ static void test_fm_compute()
   p1w.emplace_back( -2, 0, -1 );
 
   std::vector< vgl_homg_point_2d<double> > p1r, p1l;
-  for ( unsigned i = 0; i < p1w.size(); i++ ) {
-    p1r.push_back( C1r.project( p1w[i] ) );
-    p1l.push_back( C1l.project( p1w[i] ) );
+  for (const auto & i : p1w) {
+    p1r.push_back( C1r.project( i ) );
+    p1l.push_back( C1l.project( i ) );
   }
 
   vpgl_fm_compute_8_point fmc;

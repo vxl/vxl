@@ -178,7 +178,7 @@ int main(int argc, char** argv)
     }
   }
   unsigned n_moved=0;
-  for (unsigned j=0;j<may_move.size();++j) if (may_move[j]) n_moved++;
+  for (auto && j : may_move) if (j) n_moved++;
 
   std::cout<<"Number of points which may be moved: "<<n_moved<<std::endl;
   std::cout<<"Writing new points to "<<params.out_points_dir<<std::endl;

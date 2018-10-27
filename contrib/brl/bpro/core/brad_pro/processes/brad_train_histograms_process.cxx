@@ -44,9 +44,8 @@ namespace bbas_core_brad_train_hist
     bsta_joint_histogram_3d<float> hist_init;
 
     std::vector<vil_image_resource_sptr> resources = low_resources;
-    for (std::vector<vil_image_resource_sptr>::iterator rit = high_resources.begin();
-         rit != high_resources.end(); ++rit)
-      resources.push_back(*rit);
+    for (auto & high_resource : high_resources)
+      resources.push_back(high_resource);
     if (frac==1.0)
       espace.init_histogram_blocked(resources, nbins, hist_init, nit, njt);
     else

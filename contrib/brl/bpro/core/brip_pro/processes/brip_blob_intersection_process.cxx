@@ -98,10 +98,9 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   int numTP=0;
   bool* trueBlobs = new bool[mp_blobs.size()];
   std::fill(trueBlobs, trueBlobs+mp_blobs.size(), false);
-  for (unsigned int i=0; i<gt_blobs.size(); ++i) {
+  for (auto gt_blob : gt_blobs) {
     bool gt_blob_found = false;
     for (unsigned int j=0; j<mp_blobs.size(); ++j) {
-      blob_t gt_blob = gt_blobs[i];
       blob_t mp_blob = mp_blobs[j];
 
       // determine if gt_blob[i] intersects with mp_blob[j]

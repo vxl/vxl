@@ -78,25 +78,22 @@ static void test_face_2d()
   TEST("vtol_face_2d::f2c ==f2", *f2, *f2c);
 
   vertex_list f2c_all_verts; f2c->vertices(f2c_all_verts);
-  for (vertex_list::iterator vit = f2c_all_verts.begin();
-       vit != f2c_all_verts.end(); vit++)
-    std::cout << "f2c_all_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n" << std::flush;
+  for (auto & f2c_all_vert : f2c_all_verts)
+    std::cout << "f2c_all_v (" << f2c_all_vert->cast_to_vertex_2d()->x() << ' '
+             << f2c_all_vert->cast_to_vertex_2d()->y() << ")\n" << std::flush;
 
   vertex_list* f2c_verts = f2c->outside_boundary_vertices();
-  for (vertex_list::iterator vit = f2c_verts->begin();
-       vit != f2c_verts->end(); vit++)
-    std::cout << "f2c_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n" << std::flush;
+  for (auto & f2c_vert : *f2c_verts)
+    std::cout << "f2c_bound_v (" << f2c_vert->cast_to_vertex_2d()->x() << ' '
+             << f2c_vert->cast_to_vertex_2d()->y() << ")\n" << std::flush;
   TEST("vtol_face_2d::f2c outside_boundary_vertices()", f2c_verts->size(), 4);
   delete f2c_verts;
   holes = f2c->get_hole_cycles();
   TEST("vtol_face_2d::f2c get_hole_cycles()", holes->size(), 1);
   vertex_list f2c_hole_verts; (*holes)[0]->vertices(f2c_hole_verts);
-  for (vertex_list::iterator vit = f2c_hole_verts.begin();
-       vit != f2c_hole_verts.end(); vit++)
-    std::cout << "f2c_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n" << std::flush;
+  for (auto & f2c_hole_vert : f2c_hole_verts)
+    std::cout << "f2c_hole_v (" << f2c_hole_vert->cast_to_vertex_2d()->x() << ' '
+             << f2c_hole_vert->cast_to_vertex_2d()->y() << ")\n" << std::flush;
   TEST("vtol_face_2d::f2c hole_vertices()", f2c_hole_verts.size(), 3);
   delete holes;
 
@@ -107,17 +104,15 @@ static void test_face_2d()
   vtol_face_2d_sptr f2e = new vtol_face_2d(f2e_chains);
 
   vertex_list* f2e_verts = f2e->outside_boundary_vertices();
-  for (vertex_list::iterator vit = f2e_verts->begin();
-       vit != f2e_verts->end(); vit++)
-    std::cout << "f2e_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n" << std::flush;
+  for (auto & f2e_vert : *f2e_verts)
+    std::cout << "f2e_v (" << f2e_vert->cast_to_vertex_2d()->x() << ' '
+             << f2e_vert->cast_to_vertex_2d()->y() << ")\n" << std::flush;
   delete f2e_verts;
   holes = f2e->get_hole_cycles();
   vertex_list f2e_hole_verts; (*holes)[0]->vertices(f2e_hole_verts);
-  for (vertex_list::iterator vit = f2e_hole_verts.begin();
-       vit != f2e_hole_verts.end(); vit++)
-    std::cout << "f2e_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n" << std::flush;
+  for (auto & f2e_hole_vert : f2e_hole_verts)
+    std::cout << "f2e_hole_v (" << f2e_hole_vert->cast_to_vertex_2d()->x() << ' '
+             << f2e_hole_vert->cast_to_vertex_2d()->y() << ")\n" << std::flush;
   delete holes;
 
   one_chain_list f2e_out_chains; f2e->one_chains(f2e_out_chains);
@@ -125,21 +120,20 @@ static void test_face_2d()
   TEST("f2e number of one_chains", ne, 2);
 
   edge_list f2e_edges; f2e->edges(f2e_edges);
-  for (edge_list::iterator eit = f2e_edges.begin(); eit != f2e_edges.end(); eit++)
-    std::cout << "f2e_edge[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-             << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-             << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-             << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n"
+  for (auto & f2e_edge : f2e_edges)
+    std::cout << "f2e_edge[(" << f2e_edge->v1()->cast_to_vertex_2d()->x()
+             << ' ' <<  f2e_edge->v1()->cast_to_vertex_2d()->y()
+             << ")(" << f2e_edge->v2()->cast_to_vertex_2d()->x()
+             << ' ' <<  f2e_edge->v2()->cast_to_vertex_2d()->y() << ")]\n"
              << std::flush;
 
   vtol_face_2d_sptr f2e_copy = new vtol_face_2d(f2e);
   edge_list f2e_copy_edges; f2e->edges(f2e_copy_edges);
-  for (edge_list::iterator eit = f2e_copy_edges.begin();
-       eit != f2e_copy_edges.end(); eit++)
-    std::cout << "f2e_edge_copy[(" << (*eit)->v1()->cast_to_vertex_2d()->x()
-             << ' ' <<  (*eit)->v1()->cast_to_vertex_2d()->y()
-             << ")(" << (*eit)->v2()->cast_to_vertex_2d()->x()
-             << ' ' <<  (*eit)->v2()->cast_to_vertex_2d()->y() << ")]\n"
+  for (auto & f2e_copy_edge : f2e_copy_edges)
+    std::cout << "f2e_edge_copy[(" << f2e_copy_edge->v1()->cast_to_vertex_2d()->x()
+             << ' ' <<  f2e_copy_edge->v1()->cast_to_vertex_2d()->y()
+             << ")(" << f2e_copy_edge->v2()->cast_to_vertex_2d()->x()
+             << ' ' <<  f2e_copy_edge->v2()->cast_to_vertex_2d()->y() << ")]\n"
              << std::flush;
 
 

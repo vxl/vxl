@@ -90,20 +90,20 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
       for (; volume_iter != entity_iter->second.end(); volume_iter++)
       {
         bmsh3d_mesh_mc *  bmesh = new bmsh3d_mesh_mc();
-        for ( unsigned j = 0 ; j <volume_iter->second.size(); j++)
+        for (auto & j : volume_iter->second)
         {
           bmsh3d_vertex* v = bmesh->_new_vertex();
 
-          v->set_pt (vgl_point_3d<double>(volume_iter->second[j].x(),
-                            volume_iter->second[j].y(),
+          v->set_pt (vgl_point_3d<double>(j.x(),
+                            j.y(),
                           -100.0));
           bmesh->_add_vertex (v);
         }
-        for ( unsigned j = 0 ; j <volume_iter->second.size(); j++)
+        for (auto & j : volume_iter->second)
         {
           bmsh3d_vertex* v = bmesh->_new_vertex ();
-          v->set_pt (vgl_point_3d<double>(volume_iter->second[j].x(),
-                          volume_iter->second[j].y(),
+          v->set_pt (vgl_point_3d<double>(j.x(),
+                          j.y(),
                           600.0));
           bmesh->_add_vertex (v);
         }
@@ -189,9 +189,9 @@ bool boxm2_ingest_convex_mesh_process(bprb_func_process& pro)
   std::cout<<"Orienting face normals"<<std::endl;
   std::cout.flush();
 
-  for (unsigned nm = 0 ; nm < meshes.size() ; nm++)
+  for (auto & meshe : meshes)
   {
-    meshes[nm]->orient_face_normals();
+    meshe->orient_face_normals();
   }
   std::map<boxm2_block_id, boxm2_block_metadata> blocks=scene->blocks();
   std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter;

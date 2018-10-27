@@ -74,9 +74,9 @@ GetEdges()
   }
 
   edge_list  fedges; face_->edges(fedges);
-  for (edge_iterator eli = fedges.begin(); eli != fedges.end(); eli++)
+  for (auto & fedge : fedges)
   {
-    vtol_edge_2d_sptr  e = (*eli)->cast_to_edge_2d();
+    vtol_edge_2d_sptr  e = fedge->cast_to_edge_2d();
     if (e)
       edges_.push_back(e);
   }
@@ -190,9 +190,9 @@ WeightedPerimeterLength()
     double p = 0.0;
     double intensity_sum = 1.0;
 
-    for (edge_iterator eit = edges.begin(); eit != edges.end(); eit++)
+    for (auto & edge : edges)
     {
-      vtol_edge_2d_sptr  e = (*eit)->cast_to_edge_2d();
+      vtol_edge_2d_sptr  e = edge->cast_to_edge_2d();
       if (e)
       {
         // Leave at default of 1.0 if no adjacent face

@@ -110,8 +110,8 @@ void sdet_third_order_edge_det::apply(vil_image_view<vxl_byte> const& image)
   t.mark(); //reset timer
 
   //convert to the original image scale coordinates
-  for (unsigned i=0; i<edge_locs.size(); i++)
-    edge_locations.emplace_back(edge_locs[i].x()/scale, edge_locs[i].y()/scale);
+  for (auto & edge_loc : edge_locs)
+    edge_locations.emplace_back(edge_loc.x()/scale, edge_loc.y()/scale);
 
   //for each edge, compute all the gradients to compute the new orientation
   std::vector<double> Ix, Iy, Ixx, Ixy, Iyy, Ixxy, Ixyy, Ixxx, Iyyy;
@@ -393,8 +393,8 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
   t.mark(); //reset timer
 
   //convert to the original image scale coordinates
-  for (unsigned i=0; i<edge_locations.size(); i++)
-    edge_locations[i].set(edge_locations[i].x()/scale, edge_locations[i].y()/scale);
+  for (auto & edge_location : edge_locations)
+    edge_location.set(edge_location.x()/scale, edge_location.y()/scale);
 
   //for each edge, compute all the gradients to compute the new orientation
   std::vector<double> If1x, If1y, If1xx, If1xy, If1yy, If1xxy, If1xyy, If1xxx, If1yyy;
@@ -648,10 +648,10 @@ bool sdet_third_order_edge_det::apply_color(vil_image_view<vxl_byte> const& imag
 void sdet_third_order_edge_det::line_segs(std::vector<vsol_line_2d_sptr>& lines)
 {
   lines.clear();
-  for (unsigned i = 0; i<edgels_.size(); ++i)
+  for (auto & edgel : edgels_)
   {
-    double ang = edgels_[i].get_theta();
-    double x = edgels_[i].x(), y = edgels_[i].y();
+    double ang = edgel.get_theta();
+    double x = edgel.x(), y = edgel.y();
     double vx = std::cos(ang), vy = std::sin(ang);
     vsol_point_2d_sptr line_start = new vsol_point_2d(x-vx*0.25, y-vy*0.25);
     vsol_point_2d_sptr line_end = new vsol_point_2d(x+vx*0.25, y+vy*0.25);
@@ -680,8 +680,7 @@ bool sdet_third_order_edge_det::save_edg_ascii(const std::string& filename, unsi
         << '\n' << std::endl;
 
   //save the edgel tokens
-  for (unsigned k = 0; k < edgels.size(); k++) {
-    vdgl_edgel edgel = edgels[k];
+  for (auto edgel : edgels) {
     double x = edgel.x();
     double y = edgel.y();
 
@@ -705,9 +704,9 @@ sdet_edgemap_sptr sdet_third_order_edge_det::edgemap() {
   sdet_edgemap_sptr edge_map;
   edge_map = new sdet_edgemap(view_i, view_j);
 
-  for (unsigned i=0; i<edgels_.size(); i++)
+  for (auto & edgel : edgels_)
   {
-    sdet_edgel* new_edgel = new sdet_edgel(edgels_[i].get_pt(), edgels_[i].get_theta(), edgels_[i].get_grad());
+    sdet_edgel* new_edgel = new sdet_edgel(edgel.get_pt(), edgel.get_theta(), edgel.get_grad());
     edge_map->insert(new_edgel);
   }
   return edge_map;

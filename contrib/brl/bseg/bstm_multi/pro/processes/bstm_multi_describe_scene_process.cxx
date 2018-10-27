@@ -91,11 +91,7 @@ bool bstm_multi_describe_scene_process(bprb_func_process &pro) {
         blk.bbox().max_point() - blk.bbox().min_point();
     double voxel_time_range = blk.bbox_t().first - blk.bbox_t().second;
 
-    for (std::vector<space_time_enum>::const_iterator iter =
-             blk.subdivisions_.begin();
-         iter != blk.subdivisions_.end();
-         ++iter) {
-      space_time_enum ste = *iter;
+    for (auto ste : blk.subdivisions_) {
       switch (ste) {
       case STE_SPACE:
         voxel_sizes /= 8.0;

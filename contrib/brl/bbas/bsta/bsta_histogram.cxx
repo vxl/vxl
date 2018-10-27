@@ -14,8 +14,8 @@ void bsta_histogram<char>::pretty_print(std::ostream& os) const
   << "min: " << (int)min_ << "\n"
   << "max: " << (int)max_ << "\n"
   << "counts: ";
-  for (unsigned i = 0; i < counts_.size() ; i++)
-    os << (int)counts_[i] << ' ';
+  for (char count : counts_)
+    os << (int)count << ' ';
 
 }
 

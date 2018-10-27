@@ -333,8 +333,7 @@ void coalesce_trees(bstm_multi_block *blk,
       index_4d tree_coords =
           current_level_array.coords_from_index(tree_buffer_idx);
       std::vector<int> leaf_indices = tree.get_leaf_bits();
-      for (int i = 0; i < leaf_indices.size(); ++i) {
-        int leaf_idx = leaf_indices[i];
+      for (int leaf_idx : leaf_indices) {
         // If this is a space tree, only care about leaves that are lowest-level
         // voxels
         if (level_type == STE_SPACE && leaf_idx < 73) {
@@ -380,11 +379,11 @@ void coalesce_trees(bstm_multi_block *blk,
       boct_bit_tree current_space_tree(space_trees[tree_idx]);
       std::vector<int> leaves = current_space_tree.get_leaf_bits();
       int num_leaves = 0;
-      for (int leaf_idx = 0; leaf_idx < leaves.size(); ++leaf_idx) {
-        if (leaves[leaf_idx] < 73) {
+      for (int leave : leaves) {
+        if (leave < 73) {
           continue;
         }
-        int data_idx = current_space_tree.get_data_index(leaves[leaf_idx]);
+        int data_idx = current_space_tree.get_data_index(leave);
         unsigned char *start = old_time_tree_ptr + data_idx * time_tree_size;
         new_time_buffer.insert(
             new_time_buffer.end(), start, start + time_tree_size);

@@ -181,10 +181,10 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
   std::string data_type,num_obs_type,options;
   std::vector<std::string> apps = scene->appearances();
   int appTypeSize;
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D BOXM2_NORMAL_ALBEDO_ARRAY ";
       appTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix());
@@ -314,7 +314,7 @@ bool boxm2_ocl_update_aux_per_view_naa_process(bprb_func_process& pro)
 
   // Output Array
   float output_arr[100];
-  for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+  for (float & i : output_arr) i = 0.0f;
   bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
   cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

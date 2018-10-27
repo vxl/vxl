@@ -62,8 +62,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
   //vector of cams, vector of points
   std::vector<vpgl_perspective_camera<double> > cams;
   vbl_array_1d<unsigned>& cam_ids = cam_ids_ptr->data_array;
-  for (unsigned int i=0; i<cam_ids.size(); ++i) {
-    unsigned cam_id = cam_ids[i];
+  for (unsigned int cam_id : cam_ids) {
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, cam_id);
     brdb_selection_sptr S = DATABASE->select("vpgl_camera_double_sptr_data", std::move(Q));
     if (S->size()!=1) {

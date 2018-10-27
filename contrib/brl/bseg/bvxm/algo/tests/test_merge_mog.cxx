@@ -92,11 +92,10 @@ static void test_merge_mog()
   for (bvxm_voxel_grid<gauss_type>::iterator grid_it = merged_grid->begin();
        grid_it != merged_grid->end(); ++grid_it)
   {
-    for (bvxm_voxel_slab<gauss_type>::iterator slab_it = (*grid_it).begin();
-         slab_it != (*grid_it).end(); ++slab_it)
+    for (auto & slab_it : (*grid_it))
     {
-       TEST_NEAR("mean1",(*slab_it).mean(), 1.8,   0.01);
-       TEST_NEAR("var1", (*slab_it).var(),  12.61, 0.01);
+       TEST_NEAR("mean1",slab_it.mean(), 1.8,   0.01);
+       TEST_NEAR("var1", slab_it.var(),  12.61, 0.01);
     }
   }
 }

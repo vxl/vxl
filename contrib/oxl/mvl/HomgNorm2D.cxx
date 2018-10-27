@@ -77,8 +77,7 @@ void HomgNorm2D::normalize(std::vector<vgl_homg_point_2d<double> > const& points
 
   if (unit_omega_) {
     /* homogeneous scale factor is normally undetermined - set it here though. */
-    for (unsigned i = 0; i < normalized_.size(); ++i) {
-      HomgPoint2D& p = normalized_[i];
+    for (auto & p : normalized_) {
       double x = p.x();
       double y = p.y();
       double w = p.w();
@@ -146,8 +145,7 @@ void HomgNorm2D::normalize(const std::vector<HomgPoint2D>& points)
 
   if (unit_omega_) {
     /* homogeneous scale factor is normally undetermined - set it here though. */
-    for (unsigned i = 0; i < normalized_.size(); ++i) {
-      HomgPoint2D& p = normalized_[i];
+    for (auto & p : normalized_) {
       double x = p.x();
       double y = p.y();
       double w = p.w();
@@ -289,8 +287,7 @@ static double scale_xyroot2(const std::vector<HomgPoint2D>& in,
 {
   double magnitude = 0;
   unsigned numfinite = 0;
-  for (unsigned i = 0; i < in.size(); ++i) {
-    const HomgPoint2D& p = in[i];
+  for (const auto & p : in) {
     double x,y;
     if (p.get_nonhomogeneous(x, y)) {
       magnitude += vnl_math::hypot(x, y);

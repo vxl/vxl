@@ -47,9 +47,9 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
   bkml_write::open_document(ofs);
   std::map<boxm2_block_id, boxm2_block_metadata> blks = scene->blocks();
 
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blks.begin(); iter != blks.end(); iter++) {
+  for (auto & blk : blks) {
 
-    vgl_box_3d<double> box = iter->second.bbox();
+    vgl_box_3d<double> box = blk.second.bbox();
 
     double lon, lat, elev;
     lvcs.local_to_global(box.min_x(), box.min_y(), box.min_z(), vpgl_lvcs::wgs84, lon, lat, elev);
@@ -65,9 +65,9 @@ bool boxm2_scene_kml_process(bprb_func_process& pro)
     vnl_double_2 ul; ul[0] = lat; ul[1] = lon;
 
     std::stringstream box_id;
-    box_id << iter->first.to_string() << ", max_level: " << iter->second.max_level_
+    box_id << blk.first.to_string() << ", max_level: " << blk.second.max_level_
            << ", dim: "
-           << iter->second.sub_block_dim_.x() << "x" <<  iter->second.sub_block_dim_.y() << "x" <<  iter->second.sub_block_dim_.z();
+           << blk.second.sub_block_dim_.x() << "x" <<  blk.second.sub_block_dim_.y() << "x" <<  blk.second.sub_block_dim_.z();
     std::string desc = scene->data_path() + " block footprint";
     bkml_write::write_box(ofs, box_id.str(), desc, ul, ur, ll, lr);
   }

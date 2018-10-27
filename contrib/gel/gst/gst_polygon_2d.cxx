@@ -53,8 +53,8 @@ double gst_polygon_2d::get_centroid_x() const
 {
   double xsum= 0;
 
-  for (unsigned int i=0; i< edges_.size(); ++i)
-    xsum+= edges_[i]->get_start()->get_x();
+  for (const auto & edge : edges_)
+    xsum+= edge->get_start()->get_x();
 
   return xsum/edges_.size();
 }
@@ -63,8 +63,8 @@ double gst_polygon_2d::get_centroid_y() const
 {
   double ysum= 0;
 
-  for (unsigned int i=0; i< edges_.size(); ++i)
-    ysum+= edges_[i]->get_start()->get_y();
+  for (const auto & edge : edges_)
+    ysum+= edge->get_start()->get_y();
 
   return ysum/edges_.size();
 }
@@ -125,8 +125,8 @@ bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
 
 std::ostream &operator<<( std::ostream &os, gst_polygon_2d &p)
 {
-  for (unsigned int i=0; i< p.edges_.size(); i++)
-    os << (*p.edges_[i]) << ' ';
+  for (auto & edge : p.edges_)
+    os << (*edge) << ' ';
 
   return os << std::endl;
 }

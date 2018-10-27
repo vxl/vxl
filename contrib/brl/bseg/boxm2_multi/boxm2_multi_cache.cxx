@@ -20,7 +20,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
 #if  1
   unsigned int blocksAdded = 0;
   //create a sub scene for each device
-  for (unsigned int dev_id=0; dev_id<devices.size(); ++dev_id) {
+  for (const auto & device : devices) {
     //create scene
     boxm2_scene_sptr sub_scene = new boxm2_scene();
     sub_scene->set_local_origin(scene->local_origin());
@@ -29,7 +29,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
     sub_scenes_.push_back(sub_scene);
 
     //create ocl_cache for this scene...
-    boxm2_opencl_cache1* ocl_cache = new boxm2_opencl_cache1(sub_scene, devices[dev_id]);
+    boxm2_opencl_cache1* ocl_cache = new boxm2_opencl_cache1(sub_scene, device);
     ocl_caches_.push_back(ocl_cache);
   }
 
@@ -154,8 +154,8 @@ boxm2_multi_cache::~boxm2_multi_cache()
   for (unsigned int i=0; i<ocl_caches_.size(); ++i)
     delete ocl_caches_[i];
 #endif
-  for (unsigned int i=0; i<groups_.size(); ++i)
-    if (groups_[i]) delete groups_[i];
+  for (auto & group : groups_)
+    if (group) delete group;
 }
 
 std::vector<boxm2_opencl_cache1*> boxm2_multi_cache::get_vis_sub_scenes(vpgl_perspective_camera<double>* cam)
@@ -204,8 +204,7 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
   std::vector<Pair> distances;
 
   //iterate through each block
-  for (unsigned int idx=0; idx<ocl_caches_.size(); ++idx) {
-    boxm2_opencl_cache1*     cache   = ocl_caches_[idx];
+  for (auto cache : ocl_caches_) {
     boxm2_scene_sptr        sscene  = cache->get_scene();
     vgl_box_3d<double>      bbox    = sscene->bounding_box();
     vgl_point_3d<double>    center  = bbox.centroid();
@@ -263,8 +262,7 @@ boxm2_multi_cache::group_order_from_pt(vgl_point_3d<double> const& pt,
   std::vector<Pair> distances;
 
   //iterate through each group
-  for (unsigned int i=0; i<groups_.size(); ++i) {
-    boxm2_multi_cache_group* grp = groups_[i];
+  for (auto grp : groups_) {
     //check if cam bbox intersectsa
     vgl_box_3d<double>& grpBox = grp->groupBox();
     vgl_box_2d<double> grp2d(grpBox.min_x(), grpBox.max_x(),
@@ -302,8 +300,8 @@ std::string boxm2_multi_cache::to_string()
 
 void boxm2_multi_cache::clear()
 {
-  for (unsigned int i=0; i<ocl_caches_.size(); ++i)
-    ocl_caches_[i]->clear_cache();
+  for (auto & ocl_cache : ocl_caches_)
+    ocl_cache->clear_cache();
 }
 
 //----------------------- stream io----------------------------------------//

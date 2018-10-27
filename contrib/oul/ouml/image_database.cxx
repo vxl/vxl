@@ -53,9 +53,9 @@ ImageDatabase::~ImageDatabase()
 //----------------------------------------------------------------------
 void ImageDatabase::clear()
 {
-  for (iterator i=begin(); i!=end(); i++)
+  for (auto & i : *this)
   {
-    delete (*i).second;
+    delete i.second;
   }
   image_db.clear();
 }
@@ -100,14 +100,14 @@ bool ImageDatabase::save(const char *name, const char *imagetype)
   }
 
   int index=0;
-  for (iterator i=begin(); i!=end(); i++)
+  for (auto & i : *this)
   {
     char filename[200];
-    std::sprintf(filename, "%s/%s_%03d.%s", dirname, (*i).first, index++, imagetype);
-    vil1_save(*((*i).second), filename);
+    std::sprintf(filename, "%s/%s_%03d.%s", dirname, i.first, index++, imagetype);
+    vil1_save(*(i.second), filename);
 
-    std::printf("db: %s %s\n", (*i).first, filename);
-    std::fprintf(dbfile, "%s %s\n", (*i).first, filename);
+    std::printf("db: %s %s\n", i.first, filename);
+    std::fprintf(dbfile, "%s %s\n", i.first, filename);
   }
   std::fclose(dbfile);
   return true;

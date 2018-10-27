@@ -196,10 +196,10 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
   vil_save(def, (out_dir + "/empty.png").c_str());
 
   //chop paths to make mesh portable
-  for (unsigned int i=0; i<allims.size(); ++i) {
-    std::string full_path = allims[i];
+  for (auto & allim : allims) {
+    std::string full_path = allim;
     std::string rel_path = vul_file::basename(full_path);
-    allims[i] = rel_path;
+    allim = rel_path;
   }
   std::vector<vpgl_perspective_camera<double>* > allcams = bpgl_camera_utils::cameras_from_directory(cam_dir);
   if (allims.size() != allcams.size()) {
@@ -668,11 +668,9 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_p
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
   // iterate over each camera, creating a visibility image for each
-  for (unsigned int i=0; i<cameras.size(); ++i)
+  for (auto pcam : cameras)
   {
     //// get the principal point of the cam for image size
-    vpgl_perspective_camera<double>* pcam = cameras[i];
-
     //std::cout<<(*pcam);
     //vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
     //unsigned ni = (unsigned) (principal_point.x()*2.0);

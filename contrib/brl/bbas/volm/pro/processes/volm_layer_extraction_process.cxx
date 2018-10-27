@@ -84,8 +84,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
       land_ids.push_back((unsigned char)tmp_id);
   }
   std::cout << "following ids are treated as buildings: ";
-  for (unsigned i = 0; i < land_ids.size(); i++)
-    std::cout << (int)land_ids[i] << ", ";
+  for (unsigned char land_id : land_ids)
+    std::cout << (int)land_id << ", ";
   std::cout << std::endl;
 
   vil_image_view<vxl_byte>* l_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_img_sptr.ptr());
@@ -311,8 +311,8 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
       land_ids.push_back((unsigned char)tmp_id);
   }
   std::cout << "following ids are treated as buildings: ";
-  for (unsigned i = 0; i < land_ids.size(); i++)
-    std::cout << (int)land_ids[i] << ", ";
+  for (unsigned char land_id : land_ids)
+    std::cout << (int)land_id << ", ";
   std::cout << std::endl;
 
   // output image will have same resolution as input land cover images
@@ -446,9 +446,9 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
     std::vector<vgl_point_2d<int> > sheet = img_polys[sidx];
     vgl_polygon<double> single_poly;
     single_poly.new_sheet();
-    for (unsigned vidx = 0; vidx < sheet.size(); vidx++) {
+    for (auto & vidx : sheet) {
       double lon, lat;
-      in_cam->img_to_global(sheet[vidx].x(), sheet[vidx].y(), lon, lat);
+      in_cam->img_to_global(vidx.x(), vidx.y(), lon, lat);
       single_poly.push_back(lon, lat);
     }
     polys.push_back(single_poly);
@@ -460,8 +460,8 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
     return false;
   }
   bkml_write::open_document(ofs);
-  for (unsigned i = 0; i < polys.size(); i++) {
-    bkml_write::write_polygon(ofs, polys[i], "polygon", "", 1.0, 3.0, 0.45, r, g, b);
+  for (const auto & poly : polys) {
+    bkml_write::write_polygon(ofs, poly, "polygon", "", 1.0, 3.0, 0.45, r, g, b);
   }
   bkml_write::close_document(ofs);
   ofs.close();

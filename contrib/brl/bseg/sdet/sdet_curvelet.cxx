@@ -101,8 +101,8 @@ void sdet_curvelet::print(std::ostream& os)
 {
   //first output the edgel chain
   os << "[";
-  for (unsigned i=0; i< edgel_chain.size(); i++){
-    os << edgel_chain[i]->id << " ";
+  for (auto & i : edgel_chain){
+    os << i->id << " ";
   }
   os << "] ";
 
@@ -123,12 +123,12 @@ std::list<sdet_edgel*> sdet_curvelet::child_chain()
 {
     bool flag=false;
     std::list<sdet_edgel*> return_chain;
-    for(unsigned i=0;i<edgel_chain.size();i++)
+    for(auto & i : edgel_chain)
     {
         if(flag)
-            return_chain.push_back(edgel_chain[i]);
+            return_chain.push_back(i);
 
-        if(edgel_chain[i]->id==ref_edgel->id)
+        if(i->id==ref_edgel->id)
             flag=true;
 
     }
@@ -140,13 +140,13 @@ std::list<sdet_edgel*> sdet_curvelet::parent_chain()
 {
     bool flag=true;
     std::list<sdet_edgel*> return_chain;
-    for(unsigned i=0;i<edgel_chain.size();i++)
+    for(auto & i : edgel_chain)
     {
 
-        if(edgel_chain[i]->id==ref_edgel->id)
+        if(i->id==ref_edgel->id)
             flag=false;
         if(flag)
-            return_chain.push_front(edgel_chain[i]);
+            return_chain.push_front(i);
     }
     return return_chain;
 }

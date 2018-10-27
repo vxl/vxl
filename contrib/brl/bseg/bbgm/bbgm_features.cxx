@@ -163,29 +163,26 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
   std::vector<vgl_point_2d<unsigned short> > pixm0 = mf0.pixels(i0_, j0_);
   std::vector<vgl_point_2d<unsigned short> > pixm1 = mf0.pixels(i1_, j1_);
   std::vector<vgl_point_2d<unsigned short> > pix;
-  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixp.begin();
-       pit!= pixp.end(); ++pit)
-    pix.push_back(*pit);
+  for (auto & pit : pixp)
+    pix.push_back(pit);
   //add mask pixels (removing duplicates)
-  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixm0.begin();
-       pit!= pixm0.end(); ++pit) {
+  for (auto & pit : pixm0) {
     bool found = false;
     for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
-      if ((*pot)==(*pit)) {
+      if ((*pot)==pit) {
         found = true;
       }
-    if (!found) pix.push_back(*pit);
+    if (!found) pix.push_back(pit);
   }
-  for (std::vector<vgl_point_2d<unsigned short> >::iterator pit = pixm1.begin();
-       pit!= pixm1.end(); ++pit) {
+  for (auto & pit : pixm1) {
     bool found = false;
     for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
-      if ((*pot)==(*pit)) {
+      if ((*pot)==pit) {
         found = true;
       }
-    if (!found) pix.push_back(*pit);
+    if (!found) pix.push_back(pit);
   }
   return pix;
 }
@@ -346,15 +343,14 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
   {
     bbgm_mask_pair_feature mpf = *pit;
     std::vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
-    for (std::vector<vgl_point_2d<unsigned short> >::iterator pxt = pixp.begin();
-         pxt!= pixp.end(); ++pxt) {
+    for (auto & pxt : pixp) {
       bool found = false;
       for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
-        if ((*pot)==(*pxt)) {
+        if ((*pot)==pxt) {
           found = true;
         }
-      if (!found) pix.push_back(*pxt);
+      if (!found) pix.push_back(pxt);
     }
     //insert the pixels of the star
     unsigned short im, jm;

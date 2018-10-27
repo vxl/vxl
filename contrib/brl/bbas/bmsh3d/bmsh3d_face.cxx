@@ -290,8 +290,8 @@ bool bmsh3d_face::all_Vs_incident (std::vector<bmsh3d_vertex*>& vertices) const
 {
   // Put all input vertices into the VSet.
   std::set<bmsh3d_vertex*> VSet;
-  for (unsigned int i=0; i<vertices.size(); i++)
-    VSet.insert (vertices[i]);
+  for (auto vertice : vertices)
+    VSet.insert (vertice);
   assert (VSet.size() == vertices.size());
 
   // Go through the halfedge loop and remove incident vertices from VSet.
@@ -334,8 +334,8 @@ void bmsh3d_face::_get_ordered_Vs_MHE(std::vector<bmsh3d_vertex*>& vertices) con
 
 void bmsh3d_face::_get_ordered_Vs_IFS(std::vector<bmsh3d_vertex*>& vertices) const
 {
-  for (unsigned int i=0; i<vertices_.size(); i++)
-    vertices.push_back (vertices_[i]);
+  for (auto vertice : vertices_)
+    vertices.push_back (vertice);
 }
 
 void bmsh3d_face::get_ordered_V_ids (std::vector<int>& vids) const
@@ -365,8 +365,8 @@ void bmsh3d_face::_get_ordered_V_ids_MHE(std::vector<int>& vids) const
 
 void bmsh3d_face::_get_ordered_V_ids_IFS(std::vector<int>& vids) const
 {
-  for (unsigned int i=0; i<vertices_.size(); i++)
-    vids.push_back (vertices_[i]->id());
+  for (auto vertice : vertices_)
+    vids.push_back (vertice->id());
 }
 
 //###############################################################
@@ -405,16 +405,14 @@ bool bmsh3d_face::_is_ifs_valid(bmsh3d_mesh* M)
 {
   // Check if there is repeated vertices.
   std::set<bmsh3d_vertex*> Vset;
-  for (unsigned int i=0; i<vertices_.size(); i++) {
-    bmsh3d_vertex* V = vertices_[i];
+  for (auto V : vertices_) {
     Vset.insert (V);
   }
   if (Vset.size() != vertices_.size())
     return false;
 
   // Check if each V is inside M.
-  for (unsigned int i=0; i<vertices_.size(); i++) {
-    const bmsh3d_vertex* V = vertices_[i];
+  for (auto V : vertices_) {
     if (! M->contains_V (V->id()))
       return false;
   }
@@ -423,8 +421,7 @@ bool bmsh3d_face::_is_ifs_valid(bmsh3d_mesh* M)
 
 bool bmsh3d_face::_ifs_inside_box(const vgl_box_3d<double>& box) const
 {
-  for (unsigned int i=0; i<vertices_.size(); i++) {
-    const bmsh3d_vertex* V = vertices_[i];
+  for (auto V : vertices_) {
     if (!box.contains (V->pt()))
       return false;
   }
@@ -433,8 +430,7 @@ bool bmsh3d_face::_ifs_inside_box(const vgl_box_3d<double>& box) const
 
 bool bmsh3d_face::_ifs_outside_box(const vgl_box_3d<double>& box) const
 {
-  for (unsigned int i=0; i<vertices_.size(); i++) {
-    const bmsh3d_vertex* V = vertices_[i];
+  for (auto V : vertices_) {
     if (box.contains (V->pt()))
       return false;
   }
@@ -501,8 +497,7 @@ vgl_vector_3d<double> bmsh3d_face::compute_normal()
   vgl_point_3d<double> centroid = this->compute_center_pt();
   vgl_vector_3d<double> normal(0.0, 0.0, 0.0);
 
-  for (unsigned i=0; i<inc_edges.size(); i++) {
-    bmsh3d_edge* E = inc_edges[i];
+  for (auto E : inc_edges) {
     bmsh3d_halfedge* HE = E->get_HE_of_F (this);
     bmsh3d_vertex* sV = (bmsh3d_vertex*)HE->s_vertex();
     bmsh3d_vertex* eV = (bmsh3d_vertex*)HE->e_vertex();
@@ -1069,8 +1064,7 @@ bmsh3d_halfedge* _find_next_halfedge(bmsh3d_halfedge* input_he,
                                      std::vector<bmsh3d_halfedge*>& incident_HEs)
 {
   // Search for the next halfedge that's not the input_he
-  for (unsigned int i=0; i<incident_HEs.size(); i++) {
-    bmsh3d_halfedge* HE = incident_HEs[i];
+  for (auto HE : incident_HEs) {
     bmsh3d_edge* E = HE->edge();
     // skip if HE is the input_he
     if (HE == input_he)
@@ -1171,10 +1165,10 @@ vgl_point_3d<double> compute_cen (const std::vector<bmsh3d_vertex*>& vertices)
   double x=0.0, y=0.0, z=0.0;
   assert (vertices.size() != 0);
 
-  for (unsigned int i=0; i<vertices.size(); i++) {
-    x += vertices[i]->pt().x();
-    y += vertices[i]->pt().y();
-    z += vertices[i]->pt().z();
+  for (auto vertice : vertices) {
+    x += vertice->pt().x();
+    y += vertice->pt().y();
+    z += vertice->pt().z();
   }
 
   x /= vertices.size();

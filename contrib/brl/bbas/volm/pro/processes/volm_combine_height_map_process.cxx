@@ -65,8 +65,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
   // construct geo index based on polygon
   vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_file);
   vgl_box_2d<double> bbox_rect;
-  for (unsigned i = 0; i < poly[0].size(); i++)
-    bbox_rect.add(poly[0][i]);
+  for (auto i : poly[0])
+    bbox_rect.add(i);
   // truncate the bbox
   int box_min_lon = std::floor(bbox_rect.min_x());
   int box_min_lat = std::floor(bbox_rect.min_y());
@@ -92,10 +92,10 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
   if (!vul_file::exists(kml_filename)) {
     std::ofstream ofs(kml_filename.c_str());
     bkml_write::open_document(ofs);
-    for (unsigned i = 0; i < leaves.size(); i++) {
-      std::stringstream explanation; explanation << "leaf_" << std::setprecision(12) << leaves[i]->extent_.min_x() << "_"
-                                                           << std::setprecision(12) << leaves[i]->extent_.min_y();
-      volm_geo_index2::write_to_kml_node(ofs, leaves[i], 0, 0, explanation.str());
+    for (auto & leave : leaves) {
+      std::stringstream explanation; explanation << "leaf_" << std::setprecision(12) << leave->extent_.min_x() << "_"
+                                                           << std::setprecision(12) << leave->extent_.min_y();
+      volm_geo_index2::write_to_kml_node(ofs, leave, 0, 0, explanation.str());
     }
     bkml_write::close_document(ofs);
   }
@@ -142,16 +142,16 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
 
     // check height maps that intersect with current leaf
     std::vector<volm_img_info> leaf_h_info;
-    for (std::vector<volm_img_info>::iterator vit = h_info.begin();  vit != h_info.end();  ++vit)
+    for (auto & vit : h_info)
     {
-      if (vgl_area(vgl_intersection(vit->bbox, leaf_bbox_wgs)) <= 0.0) {
+      if (vgl_area(vgl_intersection(vit.bbox, leaf_bbox_wgs)) <= 0.0) {
         continue;
       }
-      if (vit->img_r->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
-        std::cerr << pro.name() << ": unsupported height map image pixel: " << vit->img_r->pixel_format() << std::endl;
+      if (vit.img_r->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
+        std::cerr << pro.name() << ": unsupported height map image pixel: " << vit.img_r->pixel_format() << std::endl;
         return false;
       }
-      leaf_h_info.push_back(*vit);
+      leaf_h_info.push_back(vit);
     }
     if (leaf_h_info.empty()) {
       std::cout << "No height map intersects with current leaf, ignore" << std::endl;
@@ -159,8 +159,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     }
     // ingest height map onto the image
     std::cout << leaf_h_info.size() << " height maps intersect with current leaf" << std::endl;
-    for (std::vector<volm_img_info>::iterator vit = leaf_h_info.begin();  vit != leaf_h_info.end();  ++vit)
-      std::cout << "\t\t" << vit->name << " --> " << vit->bbox << std::endl;
+    for (auto & vit : leaf_h_info)
+      std::cout << "\t\t" << vit.name << " --> " << vit.bbox << std::endl;
 
     for (unsigned i = 0; i < ni; i++)
     {
@@ -273,8 +273,8 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
   }
   // load the images
   std::vector<vil_image_view<float> > in_imgs;
-  for (unsigned i = 0; i < img_files.size(); i++) {
-    vil_image_view<float> in_img = vil_load(img_files[i].c_str());
+  for (auto & img_file : img_files) {
+    vil_image_view<float> in_img = vil_load(img_file.c_str());
     in_imgs.push_back(in_img);
   }
   std::cout << in_imgs.size() << " images are loaded" << std::endl;
@@ -296,9 +296,9 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
     for (unsigned j = 0; j < nj; j++)
     {
       std::vector<float> pixel_values;
-      for (unsigned img_idx = 0; img_idx < in_imgs.size(); img_idx++)
-        if ( (in_imgs[img_idx](i,j)-threshold)*(in_imgs[img_idx](i,j)-threshold) > 1E-5 )
-          pixel_values.push_back( (in_imgs[img_idx])(i,j) );
+      for (auto & in_img : in_imgs)
+        if ( (in_img(i,j)-threshold)*(in_img(i,j)-threshold) > 1E-5 )
+          pixel_values.push_back( in_img(i,j) );
       float median_value = median(pixel_values);
       (*out_img)(i,j) = median_value;
     }
@@ -392,10 +392,10 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
   // obtain the overlapped resource
   vgl_box_2d<double> region_box(ll_lon, ur_lon, ll_lat, ur_lat);
   std::vector<volm_img_info> overlap_infos;
-  for (unsigned i = 0; i < h_infos.size(); i++)
+  for (auto & h_info : h_infos)
   {
-    if (vgl_area(vgl_intersection(region_box, h_infos[i].bbox)) > 0)
-      overlap_infos.push_back(h_infos[i]);
+    if (vgl_area(vgl_intersection(region_box, h_info.bbox)) > 0)
+      overlap_infos.push_back(h_info);
   }
   if (overlap_infos.empty()) {
     std::cout << "no image overlaps with given region: " << region_box << ", return an empty image" << std::endl;

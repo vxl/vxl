@@ -354,16 +354,15 @@ static void test_tangent_update()
   vgl_point_3d<double> pline = l3d_int.point();
   dir/=static_cast<double>(dir.length());
   unsigned cnt = 0;
-  for (std::list<vgl_plane_3d<double> >::iterator pit = planes.begin();
-       pit != planes.end(); ++pit)
+  for (auto & plane : planes)
   {
     cnt++;
-    vgl_vector_3d<double> normal = (*pit).normal();
+    vgl_vector_3d<double> normal = plane.normal();
       //the vector in the tangent plane closest to mu
     vgl_vector_3d<double> dirv = normalized(dir -dot_product(normal, dir)*normal);
     vsum += dirv;
     double dp = dot_product(dir, dirv);
-    vgl_point_3d<double> cp = vgl_closest_point((*pit), pline);
+    vgl_point_3d<double> cp = vgl_closest_point(plane, pline);
     vgl_vector_3d<double> dv = cp-pline;
     vgl_vector_3d<double> d0 = dv-dot_product(dir,dv)*dir;
     std::cout << std::acos(dp)*vnl_math::deg_per_rad << ' ' << vsum.length()/cnt

@@ -134,13 +134,13 @@ find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
   double x0=0, y0=0;
   // Get the lower bound on elevation range from the cameras
   double zmax = vnl_numeric_traits<double>::maxval, zmin = -zmax;
-  for (std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin(); cit != cams.end(); ++cit)
+  for (const auto & cam : cams)
   {
-    x0+=(*cit).offset(vpgl_rational_camera<double>::X_INDX);
-    y0+=(*cit).offset(vpgl_rational_camera<double>::Y_INDX);
+    x0+=cam.offset(vpgl_rational_camera<double>::X_INDX);
+    y0+=cam.offset(vpgl_rational_camera<double>::Y_INDX);
 
-    double zoff = (*cit).offset(vpgl_rational_camera<double>::Z_INDX);
-    double zscale = (*cit).scale(vpgl_rational_camera<double>::Z_INDX);
+    double zoff = cam.offset(vpgl_rational_camera<double>::Z_INDX);
+    double zscale = cam.scale(vpgl_rational_camera<double>::Z_INDX);
     double zplus = zoff+zscale;
     double zminus = zoff-zscale;
     if (zminus>zmin) zmin = zminus;

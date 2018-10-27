@@ -790,9 +790,9 @@ bool vnl_rnpoly_solve::compute()
   std::cout << "Total degree: " << totdegree << std::endl
            << "# solutions : " << ans.size() << std::endl;
 #endif
-  for (unsigned int i=0; i<ans.size(); ++i)
+  for (auto & an : ans)
   {
-    assert(ans[i].size()==dim_);
+    assert(an.size()==dim_);
     rp=new vnl_vector<double>(dim_); r_.push_back(rp);
     ip=new vnl_vector<double>(dim_); i_.push_back(ip);
     for (unsigned int j=0; j<dim_; ++j)
@@ -800,7 +800,7 @@ bool vnl_rnpoly_solve::compute()
 #ifdef DEBUG
       std::cout << ans[i][j].R << " + j " << ans[i][j].C << std::endl;
 #endif
-      (*rp)[j]=ans[i][j].R; (*ip)[j]=ans[i][j].C;
+      (*rp)[j]=an[j].R; (*ip)[j]=an[j].C;
     }
 #ifdef DEBUG
     std::cout<< std::endl;

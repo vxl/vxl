@@ -46,8 +46,8 @@ bool volm_buffered_index_params::write_ex_param_file(std::string index_file_name
   ofs << "orientation_type " << norients << std::endl;
   ofs << "land_type " << nlands << std::endl;
   ofs << "radius: ";
-  for (unsigned i = 0; i < radius.size(); i++)
-    ofs << radius[i] << ' ';
+  for (double radiu : radius)
+    ofs << radiu << ' ';
   ofs << std::endl;
   ofs.close();
   return true;

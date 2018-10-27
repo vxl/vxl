@@ -32,22 +32,18 @@ bprb_parameters::bprb_parameters()
 //: Destructor
 bprb_parameters::~bprb_parameters()
 {
-  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    delete *it;
+  for (auto & it : param_list_) {
+    delete it;
   }
 }
 
 //: Deep copy constructor
 bprb_parameters::bprb_parameters(const bprb_parameters_sptr& old_params)
 {
-  for ( std::vector< bprb_param * >::iterator it = old_params->param_list_.begin();
-        it != old_params->param_list_.end();
-        it++ ) {
+  for (auto & it : old_params->param_list_) {
 
     //deep copy this param
-    bprb_param * new_param = (*it)->clone();
+    bprb_param * new_param = it->clone();
 
     param_list_.push_back( new_param );
     name_param_map_.insert( std::pair< std::string , bprb_param* >( new_param->name() , new_param ) );
@@ -151,14 +147,12 @@ void bprb_parameters::print_def_XML(const std::string& root_tag,
   bxml_element* root = new bxml_element(root_tag);
   root->append_text("\n");
   // iterate over each parameter, and get the default ones
-  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    std::string name = (*it)->name();
-    std::string def_value = (*it)->default_str();
+  for (auto & it : param_list_) {
+    std::string name = it->name();
+    std::string def_value = it->default_str();
     bxml_element* param_elem = new bxml_element(name);
-    param_elem->set_attribute("type", (*it)->type_str());
-    param_elem->set_attribute("desc", (*it)->description());
+    param_elem->set_attribute("type", it->type_str());
+    param_elem->set_attribute("desc", it->description());
     param_elem->set_attribute("value", def_value);
     root->append_data(param_elem);
     root->append_text("\n");
@@ -175,14 +169,12 @@ void bprb_parameters::print_current_XML(const std::string& root_tag,
   bxml_element* root = new bxml_element(root_tag);
   root->append_text("\n");
   // iterate over each parameter, and get the default ones
-  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    std::string name = (*it)->name();
-    std::string value = (*it)->value_str();
+  for (auto & it : param_list_) {
+    std::string name = it->name();
+    std::string value = it->value_str();
     bxml_element* param_elem = new bxml_element(name);
-    param_elem->set_attribute("type", (*it)->type_str());
-    param_elem->set_attribute("desc", (*it)->description());
+    param_elem->set_attribute("type", it->type_str());
+    param_elem->set_attribute("desc", it->description());
     param_elem->set_attribute("value", value);
     root->append_data(param_elem);
     root->append_text("\n");
@@ -196,10 +188,8 @@ void bprb_parameters::print_current_XML(const std::string& root_tag,
 bool
 bprb_parameters::reset_all()
 {
-  for ( std::vector< bprb_param * >::iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    (*it)->reset();
+  for (auto & it : param_list_) {
+    it->reset();
   }
   return true;
 }
@@ -244,10 +234,8 @@ bprb_parameters::get_desc( const std::string& name ) const
 void
 bprb_parameters::print_all(std::ostream& os) const
 {
-  for ( std::vector< bprb_param * >::const_iterator it = param_list_.begin();
-        it != param_list_.end();
-        it++ ) {
-    os << *it;
+  for (auto it : param_list_) {
+    os << it;
   }
 }
 

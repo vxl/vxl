@@ -158,8 +158,8 @@ public:
   {
     std::stringstream ss;
     ss << "[" ;
-    for (int i=0; i<NBINS; i++)
-      ss << sig.bins[i].weight << " ,";
+    for (const auto & bin : sig.bins)
+      ss << bin.weight << " ,";
       //ss << "(" << sig.bins[i].value << ", " << sig.bins[i].weight << ") ,";
     ss << "]";
     return ss.str();

@@ -267,11 +267,11 @@ void volm_osm_parser::parse_lines(std::vector<std::vector<vgl_point_2d<double> >
     std::vector<unsigned long long> node_ids = parser->ways_[way_id];
     if (is_line(node_ids) && node_ids.size() > 1) {
       std::vector<vgl_point_2d<double> > line;
-      for (std::vector<unsigned long long>::iterator vit = node_ids.begin(); vit != node_ids.end(); ++vit) {
+      for (unsigned long long & node_id : node_ids) {
 //        assert(parser->bbox_.contains(nodes[*vit]) && "the node in osm in outside bounding box");
-        if (nodes.find(*vit) == nodes.end())
+        if (nodes.find(node_id) == nodes.end())
           continue;
-        line.push_back(nodes[*vit]);
+        line.push_back(nodes[node_id]);
       }
       lines.push_back(line);
       keys.push_back(mit->second);
@@ -324,8 +324,8 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
       continue;
     }
     else {  // search other ways to compose a enclose sheet
-      for (unsigned n_idx = 0; n_idx < curr_line.size(); n_idx++)
-        sheet.push_back(curr_line[n_idx]);
+      for (unsigned long long n_idx : curr_line)
+        sheet.push_back(n_idx);
       // compose the sheet
       unsigned long long p1 = *(curr_line.begin());
       unsigned long long p2 = *(curr_line.end()-1);
@@ -411,11 +411,11 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
     }
     // current sheet is an enclosed line segments, put it into polygon
     poly.new_sheet();
-    for (unsigned n_idx = 0; n_idx < sheet.size(); n_idx++) {
+    for (unsigned long long n_idx : sheet) {
       //assert(osm_bbox.contains(nodes[sheet[n_idx]]) && "the node in osm in outside bounding box");
-      if (nodes.find(sheet[n_idx]) == nodes.end())
+      if (nodes.find(n_idx) == nodes.end())
         return false;
-      poly.push_back(nodes[sheet[n_idx]]);
+      poly.push_back(nodes[n_idx]);
     }
     // update to the next line segment
     ++vit;
@@ -444,12 +444,11 @@ void volm_osm_parser::parse_polygons(std::vector<vgl_polygon<double> >& polys,
   std::map<unsigned long long, std::string > relation_type = parser->relation_types_;
 
   // retrieve polygons from ways that have tags
-  for (std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > >::iterator mit = way_keys.begin();
-       mit != way_keys.end(); ++mit)
+  for (auto & way_key : way_keys)
   {
-    if (mit->second.empty())
+    if (way_key.second.empty())
       continue;
-    unsigned long long way_id = mit->first;
+    unsigned long long way_id = way_key.first;
     std::vector<unsigned long long> node_ids = parser->ways_[way_id];
     // note that the way can either be a line or a enclosed polygon sheet
     if (!is_line(node_ids) && node_ids.size() > 2) {
@@ -463,23 +462,23 @@ void volm_osm_parser::parse_polygons(std::vector<vgl_polygon<double> >& polys,
       }
       if (!outside) {
         polys.push_back(poly);
-        keys.push_back(mit->second);
+        keys.push_back(way_key.second);
       }
     }
   }
 
   // retrieve polygons from relation which have defined types (only multipolygon and boundary are considered)
-  for (std::map<unsigned long long, std::string >::iterator mit = relation_type.begin(); mit != relation_type.end(); ++mit)
+  for (auto & mit : relation_type)
   {
-    if (mit->second != "boundary" && mit->second != "multipolygon")
+    if (mit.second != "boundary" && mit.second != "multipolygon")
       continue;
-    unsigned rel_id = mit->first;
+    unsigned rel_id = mit.first;
     std::vector<unsigned long long> way_ids;
     std::vector<std::pair<std::string, unsigned long long> > rel_mem = parser->relations_[rel_id];
     // ignore the points member in relation
-    for (unsigned m_idx = 0; m_idx < (unsigned)rel_mem.size(); m_idx++)
-      if (rel_mem[m_idx].first == "way")
-        way_ids.push_back(rel_mem[m_idx].second);
+    for (auto & m_idx : rel_mem)
+      if (m_idx.first == "way")
+        way_ids.push_back(m_idx.second);
     // obtain the ways that belong to this relation (note the way may not exist in current osm and if one way misses, the relation is ignored)
     //std::map<unsigned long long, std::vector<unsigned long long> > ways;
     std::vector<std::pair<unsigned long long, std::vector<unsigned long long> > > ways;
@@ -488,8 +487,8 @@ void volm_osm_parser::parse_polygons(std::vector<vgl_polygon<double> >& polys,
       way_missing = parser->ways_.find(way_ids[w_idx]) == parser->ways_.end();
     if (way_missing)
       continue;
-    for (unsigned w_idx = 0; w_idx < (unsigned)way_ids.size(); w_idx++) {
-      ways.emplace_back(way_ids[w_idx], parser->ways_[way_ids[w_idx]]) ;
+    for (unsigned long long & way_id : way_ids) {
+      ways.emplace_back(way_id, parser->ways_[way_id]) ;
     }
     /*for (unsigned w_idx = 0; w_idx < (unsigned)way_ids.size(); w_idx++)
       ways.insert(std::pair<unsigned long long, std::vector<unsigned long long> >(way_ids[w_idx], parser->ways_[way_ids[w_idx]]));*/

@@ -74,9 +74,9 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
 
   vil_image_view<vxl_byte> output_img;
   output_img.deep_copy(input_image);
-  for (unsigned i=0;i<keypoints.size();++i){
+  for (const auto & keypoint : keypoints){
     bapl_lowe_keypoint_sptr kp;
-    kp.vertical_cast(keypoints[i]);
+    kp.vertical_cast(keypoint);
     int ii = int(kp->location_i()+0.5); int jj = int(kp->location_j()+0.5);
     if (ii >= 0 && jj >= 0 && ii < (int)output_img.ni() && jj < (int)output_img.nj())
       //if (kp->scale()>1.1)
@@ -97,9 +97,9 @@ bool bapl_extract_keypoints_process(bprb_func_process& pro)
   }
   ofs << keypoints.size() << " ";
   int len = 128; ofs << len << std::endl;
-  for (unsigned i = 0; i < keypoints.size(); i++) {
+  for (const auto & keypoint : keypoints) {
     bapl_lowe_keypoint_sptr kp;
-    kp.vertical_cast(keypoints[i]);
+    kp.vertical_cast(keypoint);
     ofs << kp->location_j() << " " << kp->location_i() << " "; // i <-> y, j <-> x
     ofs << kp->scale() << " " << kp->orientation() << std::endl;
     vnl_vector_fixed<double, 128> desc = kp->descriptor();
@@ -159,9 +159,9 @@ bool bapl_draw_keypoints_process(bprb_func_process& pro)
     output_img_b.deep_copy(input_image);
   }
 
-  for (unsigned i=0;i<keypoints.size();++i){
+  for (const auto & keypoint : keypoints){
     bapl_lowe_keypoint_sptr kp;
-    kp.vertical_cast(keypoints[i]);
+    kp.vertical_cast(keypoint);
     int ii = int(kp->location_i()+0.5); int jj = int(kp->location_j()+0.5);
     if (ii >= 0 && jj >= 0 && ii < (int)output_img.ni() && jj < (int)output_img.nj())
       //if (kp->scale()>1.1)

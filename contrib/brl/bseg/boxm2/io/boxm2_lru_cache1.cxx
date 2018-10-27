@@ -36,10 +36,9 @@ boxm2_lru_cache1::boxm2_lru_cache1(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_t
 boxm2_lru_cache1::~boxm2_lru_cache1()
 {
   // save the data and delete
-  for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
       boxm2_block_id id = it->first;
 #if 0 // Currently causing some blocks to not save
       if (!it->second->read_only_) {
@@ -49,18 +48,17 @@ boxm2_lru_cache1::~boxm2_lru_cache1()
       // now throw it away
       delete it->second;
     }
-    iter->second.clear();
+    iter.second.clear();
   }
 
-  for (std::map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
-       iter != cached_blocks_.end(); iter++)
+  for (auto & cached_block : cached_blocks_)
   {
-    boxm2_block_id id = iter->first;
+    boxm2_block_id id = cached_block.first;
 #if 0 // Currently causing some blocks to not save
     if (!iter->second->read_only())
       boxm2_sio_mgr::save_block(scene_dir_, iter->second);
 #endif
-    delete iter->second;
+    delete cached_block.second;
   }
 }
 
@@ -69,18 +67,16 @@ boxm2_lru_cache1::~boxm2_lru_cache1()
 void boxm2_lru_cache1::clear_cache()
 {
   // delete
-  for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++)
+    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++)
       delete it->second;
-    iter->second.clear();
+    iter.second.clear();
   }
   cached_data_.clear();
 
-  for (std::map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
-       iter != cached_blocks_.end(); iter++)
-    delete iter->second;
+  for (auto & cached_block : cached_blocks_)
+    delete cached_block.second;
   cached_blocks_.clear();
 }
 
@@ -323,22 +319,20 @@ std::string boxm2_lru_cache1::to_string()
 void boxm2_lru_cache1::write_to_disk()
 {
    // save the data and delete
-  for (std::map<std::string, std::map<boxm2_block_id, boxm2_data_base*> >::iterator iter = cached_data_.begin();
-       iter != cached_data_.end(); iter++)
+  for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter->second.begin(); it != iter->second.end(); it++) {
+    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
       boxm2_block_id id = it->first;
       // if (!it->second->read_only_)
-        boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter->first);
+        boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter.first);
     }
   }
 
-  for (std::map<boxm2_block_id, boxm2_block*>::iterator iter = cached_blocks_.begin();
-       iter != cached_blocks_.end(); iter++)
+  for (auto & cached_block : cached_blocks_)
   {
-    boxm2_block_id id = iter->first;
+    boxm2_block_id id = cached_block.first;
     // if (!iter->second->read_only())
-    boxm2_sio_mgr::save_block(scene_dir_, iter->second);
+    boxm2_sio_mgr::save_block(scene_dir_, cached_block.second);
   }
 }
 

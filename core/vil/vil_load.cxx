@@ -21,12 +21,12 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
                                                     bool verbose)
 {
   std::list<vil_file_format*>& l = vil_file_format::all();
-  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
+  for (auto & p : l) {
 #if 0 // debugging
     std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 #endif
     is->seek(0);
-    vil_image_resource_sptr im = (*p)->make_input_image(is);
+    vil_image_resource_sptr im = p->make_input_image(is);
     if (im)
       return im;
   }
@@ -34,10 +34,10 @@ vil_image_resource_sptr vil_load_image_resource_raw(vil_stream *is,
   // failed.
   if (verbose) {
     std::cerr << __FILE__ ": Unable to load image;\ntried";
-    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
+    for (auto & p : l)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
-      std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+      std::cerr << " \'" << p->tag() << "\'" << std::flush;
     std::cerr << std::endl;
   }
 
@@ -105,7 +105,7 @@ vil_pyramid_image_resource_sptr
 vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
 {
   std::list<vil_file_format*>& l = vil_file_format::all();
-  for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p) {
+  for (auto & p : l) {
 #if 0 // debugging
     std::cerr << __FILE__ " : trying \'" << (*p)->tag() << "\'\n";
 
@@ -113,17 +113,17 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose)
     std::cerr << "make_input_pyramid_image(" << directory_or_file << ")\n";
 #endif
     vil_pyramid_image_resource_sptr pir =
-      (*p)->make_input_pyramid_image(directory_or_file);
+      p->make_input_pyramid_image(directory_or_file);
     if (pir)
       return pir;
   }
   // failed.
   if (verbose) {
     std::cerr << __FILE__ ": Unable to load pyramid image;\ntried";
-    for (vil_file_format::iterator p = l.begin(); p != l.end(); ++p)
+    for (auto & p : l)
       // 'flush' in case of segfault next time through loop. Else, we
       // will not see those printed tags still in the stream buffer.
-      std::cerr << " \'" << (*p)->tag() << "\'" << std::flush;
+      std::cerr << " \'" << p->tag() << "\'" << std::flush;
     std::cerr << std::endl;
   }
   return nullptr;

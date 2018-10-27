@@ -30,8 +30,8 @@ int main ()
   // Test the insert and consistency check operations
   {
     std::vector<int> view_indices;
-    for (int i=0; i < 10; ++i)
-      view_indices.push_back(my_views[i]);
+    for (int my_view : my_views)
+      view_indices.push_back(my_view);
 
     mvl_multi_view_matches mvm(view_indices);
 

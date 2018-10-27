@@ -93,7 +93,7 @@ compute_matches( rgrl_feature_set const&    from_set,
   std::vector<double> match_weights;
 
   // Match each feature...
-  for ( f_iterator_type fitr = from.begin(); fitr != from.end(); ++fitr )
+  for (auto & fitr : from)
   {
     // Match by searching in the tangent space of the
     // transformed from image feature.  The match_weights are to be
@@ -106,21 +106,21 @@ compute_matches( rgrl_feature_set const&    from_set,
     // double y = (*fitr)->location()[1];
 
     // Map the feature location using the current transformation
-    rgrl_feature_sptr mapped_feature = (*fitr)->transform( current_xform );
+    rgrl_feature_sptr mapped_feature = fitr->transform( current_xform );
 
     { // Begin debugging
-      if ( (*fitr)->is_type( rgrl_feature_trace_region::type_id() ) )
-        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() << " normal: "
-                       << rgrl_cast<rgrl_feature_trace_region *> ( *fitr )->normal_subspace().get_column(0)
+      if ( fitr->is_type( rgrl_feature_trace_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << fitr->location() << " normal: "
+                       << rgrl_cast<rgrl_feature_trace_region *> ( fitr )->normal_subspace().get_column(0)
                        << "\nmapped :\n" << mapped_feature->location()
                        << rgrl_cast<rgrl_feature_trace_region *> ( mapped_feature )->normal_subspace().get_column(0) <<'\n' );
-      else if ( (*fitr)->is_type( rgrl_feature_face_region::type_id() ) )
-        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location() << " normal: "
-                       << rgrl_cast<rgrl_feature_face_region *> ( *fitr )->normal()
+      else if ( fitr->is_type( rgrl_feature_face_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << fitr->location() << " normal: "
+                       << rgrl_cast<rgrl_feature_face_region *> ( fitr )->normal()
                        << "\nmapped :\n" << mapped_feature->location() << " normal: "
                        << rgrl_cast<rgrl_feature_face_region *> ( mapped_feature )->normal()<<'\n');
-      else if ( (*fitr)->is_type( rgrl_feature_point_region::type_id() ) )
-        DebugMacro_abv(1, "\n\nfrom :\n" << (*fitr)->location()
+      else if ( fitr->is_type( rgrl_feature_point_region::type_id() ) )
+        DebugMacro_abv(1, "\n\nfrom :\n" << fitr->location()
                        << "\nmapped :\n" << mapped_feature->location()<<'\n');
     } // End debugging
 
@@ -134,10 +134,10 @@ compute_matches( rgrl_feature_set const&    from_set,
 
       //  Add the feature and its matches and weights to the match set
       matches_sptr
-        -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+        -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features,
                                             match_weights );
 
-     DebugMacro_abv(1, " skip match from: " << (*fitr)->location()
+     DebugMacro_abv(1, " skip match from: " << fitr->location()
                     << ", to: " << mapped_feature->location() << '\n' );
 
       continue;
@@ -149,7 +149,7 @@ compute_matches( rgrl_feature_set const&    from_set,
     // associated intensity.
     mapped_pixels.clear();
 
-    this -> map_region_intensities( current_xform, (*fitr), mapped_pixels );
+    this -> map_region_intensities( current_xform, fitr, mapped_pixels );
 
     // if there is no mapped pixels in the valid region, no matcher is created
     if ( mapped_pixels.size() == 0 ) {
@@ -159,9 +159,9 @@ compute_matches( rgrl_feature_set const&    from_set,
 
       //  Add the feature and its matches and weights to the match set
       matches_sptr
-        -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+        -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features,
                                             match_weights );
-      DebugMacro(3, " from point : " << (*fitr)->location()
+      DebugMacro(3, " from point : " << fitr->location()
                  << " to point : " << mapped_feature->location() << " doesn't have proper matches\n");
       continue;
     }
@@ -173,7 +173,7 @@ compute_matches( rgrl_feature_set const&    from_set,
     // std::vector< double > dummy_intensity_weights( match_weights.size(), 1.0 );
 
     //  Add the feature and its matches and weights to the match set
-    matches_sptr -> add_feature_matches_and_weights( *fitr, mapped_feature, matched_to_features,
+    matches_sptr -> add_feature_matches_and_weights( fitr, mapped_feature, matched_to_features,
                                                      match_weights );
   }
 
@@ -251,10 +251,10 @@ map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
   mapped_pixels.reserve( pixel_locations.size() );
 
   double intensity;
-  for ( unsigned int i=0; i<pixel_locations.size(); ++i )
+  for (const auto & pixel_location : pixel_locations)
   {
     //  Copy the int pixel locations to doubles.  Yuck.
-    for ( unsigned int j=0; j<dim; ++j )  pixel_loc_dbl[j] = pixel_locations[i][j];
+    for ( unsigned int j=0; j<dim; ++j )  pixel_loc_dbl[j] = pixel_location[j];
     // Check if the location is inside the valid region
     if ( !in_range( from_image_, from_mask_, pixel_loc_dbl ) )
       continue;
@@ -268,7 +268,7 @@ map_region_intensities( std::vector< vnl_vector<int> > const& pixel_locations,
     // only work for one plane so far
     assert ( from_image_.nplanes() == 1 );
 
-    intensity = from_image_( pixel_locations[i][0], pixel_locations[i][1] );
+    intensity = from_image_( pixel_location[0], pixel_location[1] );
     //PixelType intensity; //  =  SOMETHING from ITK
     mapped_pixel . intensity = intensity; // trans . map_intensity( pixel_loc_dbl, intensity );
     mapped_pixels . push_back( mapped_pixel );

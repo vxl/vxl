@@ -511,13 +511,13 @@ bool boxm2_util::verify_appearance(boxm2_scene& scene, const std::vector<std::st
 {
     bool foundDataType = false;
     std::vector<std::string> apps = scene.appearances();
-    for (unsigned int i=0; i<apps.size(); ++i) {
+    for (const auto & app : apps) {
         //look for valid types
-        for (unsigned int c=0; c<valid_types.size(); ++c) {
-            if (apps[i] == valid_types[c]) {
+        for (const auto & valid_type : valid_types) {
+            if (app == valid_type) {
                 foundDataType = true;
-                data_type = apps[i];
-                appTypeSize = (int) boxm2_data_info::datasize( apps[i] );
+                data_type = app;
+                appTypeSize = (int) boxm2_data_info::datasize( app );
             }
         }
     }

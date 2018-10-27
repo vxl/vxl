@@ -217,11 +217,10 @@ std::ostream& operator << (std::ostream& os, const vil_nitf2_typed_array_field<T
 template<>
 inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
 {
-  for (std::map<vil_nitf2_index_vector, void*>::iterator it = m_value_map.begin();
-       it != m_value_map.end(); ++it)
+  for (auto & it : m_value_map)
   {
     // vector delete corresponds to new char[] for binary data
-    delete[] (char*) it->second;
+    delete[] (char*) it.second;
   }
   m_value_map.clear();
 }
@@ -229,10 +228,9 @@ inline vil_nitf2_typed_array_field<void*>::~vil_nitf2_typed_array_field()
 template<>
 inline vil_nitf2_typed_array_field<vil_nitf2_location*>::~vil_nitf2_typed_array_field()
 {
-  for (std::map<vil_nitf2_index_vector, vil_nitf2_location*>::iterator it = m_value_map.begin();
-       it != m_value_map.end(); ++it)
+  for (auto & it : m_value_map)
   {
-    delete it->second;
+    delete it.second;
   }
   m_value_map.clear();
 }

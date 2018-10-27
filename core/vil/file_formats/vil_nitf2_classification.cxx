@@ -18,10 +18,9 @@ vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_fiel
    public:
     ~type_field_defs_map_t()
     {
-      for (iterator it = begin(), last = end();
-           it != last; it++ )
+      for (auto & it : *this)
       {
-        delete it->second;
+        delete it.second;
       }
     }
   };

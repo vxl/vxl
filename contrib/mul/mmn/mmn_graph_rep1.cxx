@@ -36,8 +36,8 @@ void mmn_graph_rep1::build(unsigned n_nodes,
 int mmn_graph_rep1::arc_index(unsigned v1, unsigned v2) const
 {
   const std::vector<std::pair<unsigned,unsigned> >& nd = node_data_[v1];
-  for (unsigned i=0;i<nd.size();++i)
-    if (nd[i].first==v2) return nd[i].second;
+  for (const auto & i : nd)
+    if (i.first==v2) return i.second;
   return -1;
 }
 

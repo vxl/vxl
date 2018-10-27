@@ -87,12 +87,12 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   vil_blob_labels_to_pixel_lists(*conn_region,dest_pixel_lists);
 
   unsigned count = 1;
-  for ( unsigned int k = 0 ; k < dest_pixel_lists.size(); k++)
+  for (auto & dest_pixel_list : dest_pixel_lists)
   {
-    if (dest_pixel_lists[k].size() > blob_size)
+    if (dest_pixel_list.size() > blob_size)
     {
       vil_blob_pixel_list::iterator iter;
-      for (iter=dest_pixel_lists[k].begin(); iter!=dest_pixel_lists[k].end();iter++)
+      for (iter=dest_pixel_list.begin(); iter!=dest_pixel_list.end();iter++)
         (*conn_thresh_region)(iter->first,iter->second) = count;
       count++;
     }
@@ -110,19 +110,19 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   vil_image_view<float> * shadow_border_dist= new vil_image_view<float>(out_img->ni(),out_img->nj());
   shadow_border_dist->fill(-1.0f);
 
-  for ( unsigned k = 0 ;k  < blob_edge_pixel_lists.size(); k++)
+  for (auto & blob_edge_pixel_list : blob_edge_pixel_lists)
   {
     vil_blob_pixel_list::iterator iter;
-    for (unsigned l = 0 ; l < blob_edge_pixel_lists[k].size(); l++)
+    for (unsigned l = 0 ; l < blob_edge_pixel_list.size(); l++)
     {
       double min = vnl_math::twopi;
       float min_r = 0.0f;
-      for (unsigned m = 0 ; m < blob_edge_pixel_lists[k].size(); m++)
+      for (unsigned m = 0 ; m < blob_edge_pixel_list.size(); m++)
       {
         if (l!=m)
         {
-          float dx = (float)blob_edge_pixel_lists[k][m].first - (float)blob_edge_pixel_lists[k][l].first;
-          float dy = (float)blob_edge_pixel_lists[k][m].second -  (float)blob_edge_pixel_lists[k][l].second;
+          float dx = (float)blob_edge_pixel_list[m].first - (float)blob_edge_pixel_list[l].first;
+          float dy = (float)blob_edge_pixel_list[m].second -  (float)blob_edge_pixel_list[l].second;
           float angle = std::atan2(dy,dx);
 
           float r = dx*dx+dy*dy;
@@ -136,11 +136,11 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
           }
         }
       }
-      (*shadow_border_edge)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = (float)min;
+      (*shadow_border_edge)(blob_edge_pixel_list[l].first,blob_edge_pixel_list[l].second) = (float)min;
       if (min < 0.04)
       {
-        (*shadow_border_edge_thresholded)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = true;
-        (*shadow_border_dist)(blob_edge_pixel_lists[k][l].first,blob_edge_pixel_lists[k][l].second) = std::sqrt(min_r);
+        (*shadow_border_edge_thresholded)(blob_edge_pixel_list[l].first,blob_edge_pixel_list[l].second) = true;
+        (*shadow_border_dist)(blob_edge_pixel_list[l].first,blob_edge_pixel_list[l].second) = std::sqrt(min_r);
       }
     }
   }
@@ -155,12 +155,12 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   std::vector<vil_blob_pixel_list> shadow_edge_dest_pixel_lists;
   vil_blob_labels_to_pixel_lists(*shadow_border_conn_region,shadow_edge_dest_pixel_lists);
   count = 1;
-  for ( unsigned int k = 0 ; k < shadow_edge_dest_pixel_lists.size(); k++)
+  for (auto & shadow_edge_dest_pixel_list : shadow_edge_dest_pixel_lists)
   {
-    if (shadow_edge_dest_pixel_lists[k].size() > 25)
+    if (shadow_edge_dest_pixel_list.size() > 25)
     {
       vil_blob_pixel_list::iterator iter;
-      for (iter=shadow_edge_dest_pixel_lists[k].begin(); iter!=shadow_edge_dest_pixel_lists[k].end();iter++)
+      for (iter=shadow_edge_dest_pixel_list.begin(); iter!=shadow_edge_dest_pixel_list.end();iter++)
       {
         (*shadow_border_conn_thresh_region)(iter->first,iter->second) = count;
         (*shadow_border_dist_thresholded)(iter->first,iter->second) = (*shadow_border_dist)(iter->first,iter->second);

@@ -23,8 +23,8 @@ bool bocl_command_queue_mgr::init_kernel()
                             "test_command_queue",     //kernel name
                             "",                       //options
                             "test command queue b");  //kernel identifier (for error checking)
-  for (int i=0; i<NUM_QUEUES; ++i) {
-    kernels_[i].create_kernel(&this->context(),
+  for (auto & kernel : kernels_) {
+    kernel.create_kernel(&this->context(),
                               &this->devices()[0],
                               src_paths,
                               "test_command_queue",   //kernel name
@@ -49,8 +49,8 @@ bool bocl_command_queue_mgr::init_kernel()
   if (!check_val(status,CL_SUCCESS,"Failed in command queue b creation" + error_to_string(status)))
     return false;
 
-  for (int i=0; i<NUM_QUEUES; i++) {
-    queues_[i] = clCreateCommandQueue(this->context(),
+  for (auto & queue : queues_) {
+    queue = clCreateCommandQueue(this->context(),
                                       this->devices()[0],
                                       CL_QUEUE_PROFILING_ENABLE,
                                       &status);
@@ -180,7 +180,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
       kernels_[k].clear_args();
     }
   }
-  for (int i=0; i<NUM_QUEUES; i++) clFinish(queues_[i]);
+  for (auto & queue : queues_) clFinish(queue);
   std::cout<<"WALL CLOCK TIME: "<<t.all()/numTrials<<" ms\n"
           <<"Test kernel time: "<<kernel_a_.exec_time()<<" ms\n"
           <<"Test write buffer time: "<<pinned_in_->exec_time()<<" ms"<<std::endl;

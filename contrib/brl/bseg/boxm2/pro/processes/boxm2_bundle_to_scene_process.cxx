@@ -205,8 +205,8 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
       ofile << "\nproperty float32 x\nproperty float32 y\nproperty float32 z";
       ofile << "\nend_header\n";
       ofile << std::fixed;
-      for (unsigned k = 0 ; k < pts3d.size(); k++)
-          ofile <<pts3d[k].x() << ' ' << pts3d[k].y() << ' ' << pts3d[k].z()<<std::endl;
+      for (auto & k : pts3d)
+          ofile <<k.x() << ' ' << k.y() << ' ' << k.z()<<std::endl;
 
       ofile.close() ;
   }

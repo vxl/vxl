@@ -280,9 +280,9 @@ bool vsph_camera_bounds::planar_bounding_box(std::vector<vpgl_perspective_camera
                                              double z_plane)
 {
   bool good = true;
-  for (unsigned int i=0; i<cams.size(); ++i) {
+  for (const auto & cam : cams) {
     vgl_box_2d<double> b;
-    if ( planar_bounding_box( cams[i], b, z_plane ) )
+    if ( planar_bounding_box( cam, b, z_plane ) )
       bbox.add(b);
     else
       good = false;

@@ -19,12 +19,12 @@ static void print_edges(std::string const& msg, vtol_face_2d_sptr const& f)
   if (!f)
     return;
   edge_list edges; f->edges(edges);
-  for (edge_list::iterator eit = edges.begin(); eit != edges.end(); eit++)
+  for (auto & edge : edges)
     std::cout << msg << '('
-             << (*eit)->v1()->cast_to_vertex_2d()->x() << ' '
-             << (*eit)->v1()->cast_to_vertex_2d()->y() << "):("
-             << (*eit)->v2()->cast_to_vertex_2d()->x() << ' '
-             << (*eit)->v2()->cast_to_vertex_2d()->y()
+             << edge->v1()->cast_to_vertex_2d()->x() << ' '
+             << edge->v1()->cast_to_vertex_2d()->y() << "):("
+             << edge->v2()->cast_to_vertex_2d()->x() << ' '
+             << edge->v2()->cast_to_vertex_2d()->y()
              << ")\n";
 }
 
@@ -33,9 +33,9 @@ static void print_verts(std::string const& msg, vtol_face_2d_sptr const& f)
   if (!f)
     return;
   vertex_list verts; f->vertices(verts);
-  for (vertex_list::iterator vit = verts.begin(); vit != verts.end(); vit++)
-    std::cout << msg << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n";
+  for (auto & vert : verts)
+    std::cout << msg << vert->cast_to_vertex_2d()->x() << ' '
+             << vert->cast_to_vertex_2d()->y() << ")\n";
 }
 
 static void test_face_algs()
@@ -99,18 +99,16 @@ static void test_face_algs()
   print_edges("multi_f_edge ", multi_f);
   std::cout << "\n\n";
   vertex_list* mf_verts = multi_f->outside_boundary_vertices();
-  for (vertex_list::iterator vit = mf_verts->begin();
-       vit != mf_verts->end(); vit++)
-    std::cout << "mf_bound_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n";
+  for (auto & mf_vert : *mf_verts)
+    std::cout << "mf_bound_v (" << mf_vert->cast_to_vertex_2d()->x() << ' '
+             << mf_vert->cast_to_vertex_2d()->y() << ")\n";
   std::cout << "\n\n";
   delete mf_verts;
   one_chain_list *holes = multi_f->get_hole_cycles();
   vertex_list mf_hole_verts; (*holes)[0]->vertices(mf_hole_verts);
-  for (vertex_list::iterator vit = mf_hole_verts.begin();
-       vit != mf_hole_verts.end(); vit++)
-    std::cout << "mf_hole_v (" << (*vit)->cast_to_vertex_2d()->x() << ' '
-             << (*vit)->cast_to_vertex_2d()->y() << ")\n";
+  for (auto & mf_hole_vert : mf_hole_verts)
+    std::cout << "mf_hole_v (" << mf_hole_vert->cast_to_vertex_2d()->x() << ' '
+             << mf_hole_vert->cast_to_vertex_2d()->y() << ")\n";
   delete holes;
 
   vtol_face_2d_sptr trans_multi_f = btol_face_algs::transform(multi_f, T);
@@ -122,17 +120,16 @@ static void test_face_algs()
   vgl_polygon<double> poly;
   poly.clear();
   poly.new_sheet();
-  for (vertex_list::iterator vit = verts.begin(); vit != verts.end(); ++vit)
+  for (auto & vert : verts)
   {
-    vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
+    vtol_vertex_2d* v = vert->cast_to_vertex_2d();
     if (v)
       poly.push_back(v->x(), v->y());
   }
   poly.new_sheet();
-  for (vertex_list::iterator vit = hole_verts.begin();
-       vit != hole_verts.end(); ++vit)
+  for (auto & hole_vert : hole_verts)
   {
-    vtol_vertex_2d* v = (*vit)->cast_to_vertex_2d();
+    vtol_vertex_2d* v = hole_vert->cast_to_vertex_2d();
     if (v)
       poly.push_back(v->x(), v->y());
   }

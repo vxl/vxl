@@ -967,8 +967,8 @@ bool boxm2_volm_matcher_p1::write_matcher_result(std::string const& tile_fname_b
     // write the txt output
     std::ofstream txt_ofs(tile_fname_txt.c_str(), std::ios::app);
     txt_ofs << std::setprecision(6) << score->leaf_id_ << ' ' << score->hypo_id_ << ' ' << score->max_score_ << ' ' << score->max_cam_id_ << '\n';
-    for (unsigned jj = 0; jj < cam_ids.size(); jj++)
-      txt_ofs << ' ' << cam_ids[jj];
+    for (unsigned int cam_id : cam_ids)
+      txt_ofs << ' ' << cam_id;
     txt_ofs << '\n';
     txt_ofs.close();
   }
@@ -985,11 +985,11 @@ bool boxm2_volm_matcher_p1::write_matcher_result(std::string const& tile_fname_b
 bool boxm2_volm_matcher_p1::write_gt_cam_score(unsigned const& leaf_id, unsigned const& hypo_id, std::string const& out_fname)
 {
   std::ofstream ofs(out_fname.c_str());
-  for (unsigned i = 0; i < score_cam_.size(); i++) {
-    if (score_cam_[i].l_id_ == leaf_id && score_cam_[i].h_id_ == hypo_id) {
-      ofs << score_cam_[i].l_id_ << ' ' << score_cam_[i].h_id_ << '\n';
-      std::vector<unsigned> cam_ids = score_cam_[i].cam_id_;
-      std::vector<float> cam_scores = score_cam_[i].cam_score_;
+  for (auto & i : score_cam_) {
+    if (i.l_id_ == leaf_id && i.h_id_ == hypo_id) {
+      ofs << i.l_id_ << ' ' << i.h_id_ << '\n';
+      std::vector<unsigned> cam_ids = i.cam_id_;
+      std::vector<float> cam_scores = i.cam_score_;
       for (unsigned jj = 0; jj < cam_ids.size(); jj++) {
         ofs << std::setprecision(6) << cam_ids[jj] << ' ' << cam_scores[jj] << ' ' << query_->get_cam_string(cam_ids[jj]) << '\n';
       }
@@ -1485,13 +1485,13 @@ bool boxm2_volm_matcher_p1::transfer_weight()
   }
   else if (is_sky_reg_)
   {
-    for (std::vector<volm_weight>::iterator vit = this->weights_.begin(); vit != this->weights_.end(); ++vit)
-      std::cerr << ' ' << vit->w_typ_
-               << ' ' << vit->w_ori_
-               << ' ' << vit->w_lnd_
-               << ' ' << vit->w_dst_
-               << ' ' << vit->w_ord_
-               << ' ' << vit->w_obj_ << '\n';
+    for (auto & weight : this->weights_)
+      std::cerr << ' ' << weight.w_typ_
+               << ' ' << weight.w_ori_
+               << ' ' << weight.w_lnd_
+               << ' ' << weight.w_dst_
+               << ' ' << weight.w_ord_
+               << ' ' << weight.w_obj_ << '\n';
 
     if (this->weights_.size() != (1+(*n_obj_)) ) {
       std::cerr << "\n ERROR: inconsistency between volm_query and volm_weight\n";

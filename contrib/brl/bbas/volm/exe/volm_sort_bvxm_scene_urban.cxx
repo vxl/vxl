@@ -74,8 +74,8 @@ int main(int argc, char** argv)
 
     // find the bbox of ROI from its polygon
     vgl_box_2d<double> bbox_rect;
-    for (unsigned i = 0; i < poly[0].size(); i++) {
-      bbox_rect.add(poly[0][i]);
+    for (auto i : poly[0]) {
+      bbox_rect.add(i);
     }
     double square_size = (bbox_rect.width() >= bbox_rect.height()) ? bbox_rect.width() : bbox_rect.height();
     vgl_box_2d<double> bbox(bbox_rect.min_point(), square_size, square_size, vgl_box_2d<double>::min_pos);

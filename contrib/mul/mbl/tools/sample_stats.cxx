@@ -119,7 +119,7 @@ int main2(int argc, char *argv[])
 
   if (absolute())
   {
-    for (unsigned i=0;i<data_vec.size();++i) data_vec[i]=std::abs(data_vec[i]);
+    for (double & i : data_vec) i=std::abs(i);
   }
 
   // Clean up if input was from a file

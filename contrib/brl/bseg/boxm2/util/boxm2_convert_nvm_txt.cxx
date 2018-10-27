@@ -115,7 +115,7 @@ bool boxm2_convert_nvm_txt::read_cameras(std::ifstream& in)
     std::getline(in, token);
     for (int j = 0; j < 4; ++j) in >> q[j]; //quaternion rot
     std::getline(in, token);
-    for (int j = 0; j < 9; ++j) in >> q[j]; //rot matrix
+    for (double & j : q) in >> j; //rot matrix
     std::getline(in, token);
     std::getline(in, token);
 

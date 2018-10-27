@@ -86,8 +86,8 @@ void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_
     bkml_write::write_box(ofs, name, explanation, ul, ur, ll, lr);
   }
   else {
-    for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
-      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, explanation, name);
+    for (const auto & c_idx : n->children_)
+      write_to_kml_node(ofs, c_idx, current_depth+1, depth, explanation, name);
   }
 }
 
@@ -117,8 +117,8 @@ void bvgl_2d_geo_index::write_to_kml_node(std::ofstream& ofs, bvgl_2d_geo_index_
     bkml_write::write_box(ofs, name, explanation, ul, ur, ll, lr);
   }
   else {
-    for (unsigned c_idx = 0; c_idx < n->children_.size(); c_idx++)
-      write_to_kml_node(ofs, n->children_[c_idx], current_depth+1, depth, lvcs, explanation, name);
+    for (const auto & c_idx : n->children_)
+      write_to_kml_node(ofs, c_idx, current_depth+1, depth, lvcs, explanation, name);
   }
 }
 
@@ -136,10 +136,10 @@ unsigned bvgl_2d_geo_index::depth(bvgl_2d_geo_index_node_sptr node)
   if (node->children_.empty())  // already at leaf level
     return 0;
   unsigned d = 0;
-  for (unsigned i = 0; i < node->children_.size(); i++) {
-    if (!node->children_[i])
+  for (auto & i : node->children_) {
+    if (!i)
       continue;
-    unsigned dd = depth(node->children_[i]);
+    unsigned dd = depth(i);
     if (dd > d)
       d = dd;
   }
@@ -154,14 +154,14 @@ void write_to_text(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n)
       << std::setprecision(8) << std::fixed << n->extent_.max_point().x() << ' '
       << std::setprecision(8) << std::fixed << n->extent_.max_point().y() << '\n'
       << n->children_.size() << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (!n->children_[i]) ofs << " 0";
+  for (auto & i : n->children_) {
+    if (!i) ofs << " 0";
     else ofs << " 1";
   }
   ofs << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (n->children_[i])
-      write_to_text(ofs, n->children_[i]);
+  for (auto & i : n->children_) {
+    if (i)
+      write_to_text(ofs, i);
   }
 }
 
@@ -184,14 +184,14 @@ void write_to_text(std::ofstream& ofs, bvgl_2d_geo_index_node_sptr n, vpgl_lvcs_
       << std::setprecision(6) << std::fixed << max_lon << ' '
       << std::setprecision(6) << std::fixed << max_lat << ' '
       << n->children_.size() << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (!n->children_[i]) ofs << " 0";
+  for (auto & i : n->children_) {
+    if (!i) ofs << " 0";
     else ofs << " 1";
   }
   ofs << '\n';
-  for (unsigned i = 0; i < n->children_.size(); i++) {
-    if (n->children_[i])
-      write_to_text(ofs, n->children_[i], lvcs);
+  for (auto & i : n->children_) {
+    if (i)
+      write_to_text(ofs, i, lvcs);
   }
 }
 
@@ -211,11 +211,11 @@ bool bvgl_2d_geo_index::prune_tree(bvgl_2d_geo_index_node_sptr root, vgl_polygon
   if (!vgl_intersection(root->extent_, poly))
     return false;
 
-  for (unsigned i = 0; i < root->children_.size(); i++) {
-    if (!root->children_[i])
+  for (auto & i : root->children_) {
+    if (!i)
       continue;
-    if (!prune_tree(root->children_[i], poly))  // the child does not intersect with the polygon
-      root->children_[i] = nullptr; // sptr de-allocates this child
+    if (!prune_tree(i, poly))  // the child does not intersect with the polygon
+      i = nullptr; // sptr de-allocates this child
   }
   return true;
 }
@@ -236,11 +236,11 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
     leaves.push_back(root);
   else {
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])
+    for (auto & i : root->children_) {
+      if (!i)
         continue;
       else {
-        get_leaves(root->children_[i], leaves);
+        get_leaves(i, leaves);
         at_least_one_child = true;
       }
     }
@@ -261,11 +261,11 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
     leaves.push_back(root);
   else {
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])
+    for (auto & i : root->children_) {
+      if (!i)
         continue;
       else {
-        get_leaves(root->children_[i], leaves, area);
+        get_leaves(i, leaves, area);
         at_least_one_child = true;
       }
     }
@@ -295,11 +295,11 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
   }
   else {                          // the node has children, go inside to its children
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])    // the node has children but child i is empty
+    for (auto & i : root->children_) {
+      if (!i)    // the node has children but child i is empty
         continue;
       else {
-        get_leaves(root->children_[i], leaves, poly);    // check the intersection of child i and its following children with poly
+        get_leaves(i, leaves, poly);    // check the intersection of child i and its following children with poly
         at_least_one_child = true;
       }
     }
@@ -327,11 +327,11 @@ void bvgl_2d_geo_index::get_leaves(bvgl_2d_geo_index_node_sptr root, std::vector
   }
   else {                          // the node has children and check the intersection recursively
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])   // the node has children but child i is empty
+    for (auto & i : root->children_) {
+      if (!i)   // the node has children but child i is empty
         continue;
       else {
-        get_leaves(root->children_[i], leaves, line);  // check the intersection of child i and its following children
+        get_leaves(i, leaves, line);  // check the intersection of child i and its following children
         at_least_one_child = true;
       }
     }
@@ -360,11 +360,11 @@ void bvgl_2d_geo_index::get_leaf(bvgl_2d_geo_index_node_sptr root, bvgl_2d_geo_i
   }
   else {
     bool at_least_one_child = false;
-    for (unsigned i = 0; i < root->children_.size(); i++) {
-      if (!root->children_[i])
+    for (auto & i : root->children_) {
+      if (!i)
         continue;
       else {
-        get_leaf(root->children_[i], leaf, point);
+        get_leaf(i, leaf, point);
         at_least_one_child = true;
       }
     }

@@ -220,10 +220,8 @@ bool space_time_scene<Block>::contains(vgl_point_3d<double> const &p,
                                        double const t,
                                        double &local_time) const {
   std::vector<bstm_block_id> block_ids = this->get_block_ids();
-  for (std::vector<bstm_block_id>::iterator id = block_ids.begin();
-       id != block_ids.end();
-       ++id) {
-    block_metadata md = this->get_block_metadata_const(*id);
+  for (auto & block_id : block_ids) {
+    block_metadata md = this->get_block_metadata_const(block_id);
     vgl_vector_3d<double> dims(md.sub_block_dim_.x() * md.sub_block_num_.x(),
                                md.sub_block_dim_.y() * md.sub_block_num_.y(),
                                md.sub_block_dim_.z() * md.sub_block_num_.z());
@@ -234,7 +232,7 @@ bool space_time_scene<Block>::contains(vgl_point_3d<double> const &p,
 
       // now check for time
       if (md.contains_t(t, local_time)) {
-        bid = (*id);
+        bid = block_id;
         double local_x = (p.x() - md.local_origin_.x()) / md.sub_block_dim_.x();
         double local_y = (p.y() - md.local_origin_.y()) / md.sub_block_dim_.y();
         double local_z = (p.z() - md.local_origin_.z()) / md.sub_block_dim_.z();
@@ -365,20 +363,20 @@ vgl_vector_3d<unsigned int> space_time_scene<Block>::scene_dimensions() const {
   int max_i = ids[0].i(), max_j = ids[0].j(), max_k = ids[0].k();
   int min_i = ids[0].i(), min_j = ids[0].j(), min_k = ids[0].k();
 
-  for (unsigned n = 0; n < ids.size(); n++) {
-    if (ids[n].i() > max_i)
-      max_i = ids[n].i();
-    if (ids[n].j() > max_j)
-      max_j = ids[n].j();
-    if (ids[n].k() > max_k)
-      max_k = ids[n].k();
+  for (auto & id : ids) {
+    if (id.i() > max_i)
+      max_i = id.i();
+    if (id.j() > max_j)
+      max_j = id.j();
+    if (id.k() > max_k)
+      max_k = id.k();
 
-    if (ids[n].i() < min_i)
-      min_i = ids[n].i();
-    if (ids[n].j() < min_j)
-      min_j = ids[n].j();
-    if (ids[n].k() < min_k)
-      min_k = ids[n].k();
+    if (id.i() < min_i)
+      min_i = id.i();
+    if (id.j() < min_j)
+      min_j = id.j();
+    if (id.k() < min_k)
+      min_k = id.k();
   }
   max_i++;
   max_j++;
@@ -428,9 +426,9 @@ void x_write(std::ostream &os, space_time_scene<Block> &scene, std::string name)
   // write list of appearance models
 
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i = 0; i < apps.size(); ++i) {
+  for (const auto & app : apps) {
     vsl_basic_xml_element apms(APM_TAG);
-    apms.add_attribute("apm", apps[i]);
+    apms.add_attribute("apm", app);
     apms.x_write(os);
   }
 
@@ -462,8 +460,8 @@ std::ostream &operator<<(std::ostream &s, space_time_scene<Block> &scene) {
 
   // list appearance models for this scene
   std::vector<std::string> apps = scene.appearances();
-  for (unsigned int i = 0; i < apps.size(); ++i)
-    s << "    " << apps[i] << ", ";
+  for (const auto & app : apps)
+    s << "    " << app << ", ";
   s << '\n';
   vpgl_lvcs lvcs = scene.lvcs();
   s << lvcs << '\n';

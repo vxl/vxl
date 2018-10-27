@@ -123,9 +123,8 @@ void brad_sun_dir_index::print_to_vrml(std::ostream& os)
   //output the sun dir histogram, also encodes the vrml header
   hist_.print_to_vrml(os, 0.25);
   std::vector<vnl_double_3> path = this->major_path();
-  for (std::vector<vnl_double_3>::iterator vit = path.begin();
-       vit != path.end(); ++vit) {
-    double x = (*vit)[0], y = (*vit)[1], z = (*vit)[2];
+  for (auto & vit : path) {
+    double x = vit[0], y = vit[1], z = vit[2];
     os<< "Transform {\n"
       << "translation " << x << ' ' << y << ' '
       << ' ' << z << '\n'

@@ -67,8 +67,8 @@ static void test_vector()
   TEST_NEAR("dot_product() does not conjugate", dot_product(a,i*b), i*dot_product(a,b), 1e-12);
 
   double norma=0;
-  for (unsigned n=0; n<a.size(); ++n)
-    norma += std::real(a[n])*std::real(a[n]) + std::imag(a[n])*std::imag(a[n]);
+  for (auto n : a)
+    norma += std::real(n)*std::real(n) + std::imag(n)*std::imag(n);
   norma = std::sqrt(norma);
   TEST_NEAR("correct magnitude", norma, a.magnitude(), 1e-12);
 }

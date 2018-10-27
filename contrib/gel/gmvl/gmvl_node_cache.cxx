@@ -48,12 +48,12 @@ void gmvl_node_cache::remove( const gmvl_node_sptr node)
 {
   std::vector<gmvl_node_sptr> newnodes;
 
-  for (unsigned int i=0; i< nodes_.size(); ++i)
+  for (auto & i : nodes_)
   {
-    if (nodes_[i].ptr()!= node.ptr())
+    if (i.ptr()!= node.ptr())
     {
-      nodes_[i]->ref_= newnodes.size();
-      newnodes.push_back( nodes_[i]);
+      i->ref_= newnodes.size();
+      newnodes.push_back( i);
     }
   }
 
@@ -73,11 +73,11 @@ std::vector<gmvl_node_sptr> gmvl_node_cache::get( const std::string type) const
 {
   std::vector<gmvl_node_sptr> empty;
 
-  for (unsigned int i=0; i< typecache_.size(); ++i)
+  for (const auto & i : typecache_)
   {
-    if (typecache_[i].first== type)
+    if (i.first== type)
     {
-      return typecache_[i].second;
+      return i.second;
     }
   }
 
@@ -88,15 +88,15 @@ void gmvl_node_cache::rebuild()
 {
   typecache_.clear();
 
-  for (unsigned int i=0; i< nodes_.size(); ++i)
+  for (auto & node : nodes_)
   {
     bool found= false;
 
     for (unsigned int j=0; j< typecache_.size() && !found; ++j)
     {
-      if (typecache_[j].first== nodes_[i]->type_)
+      if (typecache_[j].first== node->type_)
       {
-        typecache_[j].second.push_back( nodes_[i]);
+        typecache_[j].second.push_back( node);
         found= true;
       }
     }
@@ -105,8 +105,8 @@ void gmvl_node_cache::rebuild()
     {
       std::pair<std::string,std::vector<gmvl_node_sptr> > pair;
 
-      pair.first= nodes_[i]->type_;
-      pair.second.push_back( nodes_[i]);
+      pair.first= node->type_;
+      pair.second.push_back( node);
 
       typecache_.push_back( pair);
     }
@@ -116,8 +116,8 @@ void gmvl_node_cache::rebuild()
 // input and output
 std::ostream &operator<<( std::ostream &os, const gmvl_node_cache &c)
 {
-  for (unsigned int i=0; i< c.nodes_.size(); ++i)
-    os << *c.nodes_[i] << ' ';
+  for (const auto & node : c.nodes_)
+    os << *node << ' ';
 
   return os;
 }

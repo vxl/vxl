@@ -17,10 +17,10 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
                                    double distance_thresh, bool zero_model, float occupied_prob){
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   // iterate over the scene blocks
-  for (std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin(); iter!= blocks.end(); iter ++)
+  for (auto & block : blocks)
     {
-      boxm2_block_id id = iter->first;
-      boxm2_block_metadata mdata = iter->second;
+      boxm2_block_id id = block.first;
+      boxm2_block_metadata mdata = block.second;
       boxm2_block_sptr blk = boxm2_cache::instance()->get_block(scene,id);
       // multiply by 0.99 since split is triggered by alpha > max_alpha, not >=
       boxm2_refine_block_multi_data_function(scene, blk, prefixes, static_cast<float>(0.99*occupied_prob));
@@ -31,9 +31,8 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
             boxm2_data<BOXM2_ALPHA> *alpha_data=new boxm2_data<BOXM2_ALPHA>(alpha_base->data_buffer(),num_cells *sizeof(float),alpha_base->block_id());
       //set alphas to zero for the next round
       if (zero_model) {
-        for (boxm2_array_1d<float>::iterator alpha_it = alpha_data->data().begin();
-             alpha_it != alpha_data->data().end(); ++alpha_it) {
-          *alpha_it = 0.0f;
+        for (float & alpha_it : alpha_data->data()) {
+          alpha_it = 0.0f;
         }
       }
       // iterate over the trees in each block
@@ -53,8 +52,7 @@ void boxm2_surface_distance_refine(D const& dist_functor, boxm2_scene_sptr scene
             boct_bit_tree bit_tree((unsigned char*) tree.data_block(), mdata.max_level_);
             //iterate through leaves of the tree
             std::vector<int> leafBits = bit_tree.get_leaf_bits();
-            for (std::vector<int>::iterator iter = leafBits.begin(); iter != leafBits.end(); ++iter) {
-              int currBitIndex = (*iter);
+            for (int currBitIndex : leafBits) {
               int data_offset = bit_tree.get_data_index(currBitIndex); //data index
               vgl_point_3d<double> cell_pos = bit_tree.cell_center(currBitIndex);
               vgl_vector_3d<double> cell_offset(cell_pos.x()*dims.x(), cell_pos.y()*dims.y(), cell_pos.z()*dims.z());

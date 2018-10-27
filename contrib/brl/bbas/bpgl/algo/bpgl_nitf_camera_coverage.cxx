@@ -52,10 +52,10 @@ bool bpgl_nitf_camera_coverage::coverage_list(std::vector<vgl_point_2d<double> >
 
     bool contain = true;
 
-    for ( unsigned i = 0; i<geo_pts.size(); i++)
+    for (auto & geo_pt : geo_pts)
     {
       contain = contain && poly_region.contains( vgl_point_2d<double>(
-        geo_pts[i].x(), geo_pts[i].y() ) );
+        geo_pt.x(), geo_pt.y() ) );
     }
 
     //If all the points aren't contained within the image region, continue to next image

@@ -96,8 +96,8 @@ void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<
   bsta_fit_gaussian(obs,vis,pre,model_bsta,min_var_EM);
   // compute expected number of observations
   float expected_nobs = 0.0f;
-  for (unsigned int i=0; i<vis.size(); ++i) {
-    expected_nobs += vis[i];
+  for (float vi : vis) {
+    expected_nobs += vi;
   }
   // normalize sigma
   static const boxm_sigma_normalizer sigma_norm(0.20f);

@@ -164,8 +164,8 @@ write( std::ostream& os ) const
   os << delta_ << std::endl;
   // output the spline
   assert( splines_.size() == dim );
-  for (unsigned int i=0; i<splines_.size(); ++i)
-    os << *splines_[i] << std::endl;
+  for (const auto & spline : splines_)
+    os << *spline << std::endl;
 
   // parent
   rgrl_transformation::write( os );

@@ -130,24 +130,24 @@ bool boxm2_ocl_adaptive_cone_update_process(bprb_func_process& pro)
   bool foundDataType = false, foundNumObsType = false;
   std::string data_type,num_obs_type,options;
   std::vector<std::string> apps = scene->appearances();
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_8 ";
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       foundDataType = true;
       options=" -D MOG_TYPE_16 ";
       // boxm2_data_info::datasize(boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix());
     }
-    else if ( apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
+    else if ( app == boxm2_data_traits<BOXM2_NUM_OBS>::prefix() )
     {
-      num_obs_type = apps[i];
+      num_obs_type = app;
       foundNumObsType = true;
     }
   }

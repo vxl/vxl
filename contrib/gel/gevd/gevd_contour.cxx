@@ -180,11 +180,11 @@ gevd_contour::FindNetwork(gevd_bufferxy& edgels,
                       *edges2, vertices2); // distinct chains
 
   // 5. Copy back results into global lists
-  for (unsigned int i= 0; i< edges2->size(); i++)
-    edges->push_back( (*edges2)[i]);
+  for (const auto & i : *edges2)
+    edges->push_back( i);
 
-  for (unsigned int i=0; i< vertices2.size(); i++)
-    vertices->push_back( vertices2[i]);
+  for (const auto & i : vertices2)
+    vertices->push_back( i);
 
   return true;
 }
@@ -823,10 +823,10 @@ NumConnectedRays(vtol_vertex_2d& v)
 {
   int nray = 0;
   std::vector<vtol_edge_sptr> segs; v.edges(segs);
-  for (unsigned int i=0; i< segs.size(); i++)
+  for (auto & seg : segs)
   {
-    if (segs[i]->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
-    if (segs[i]->v2()->cast_to_vertex_2d() == &v) nray++; // 2 for 1-cycle
+    if (seg->v1()->cast_to_vertex_2d() == &v) nray++; // 1 for 1-chain
+    if (seg->v2()->cast_to_vertex_2d() == &v) nray++; // 2 for 1-cycle
   }
   return nray;
 }
@@ -1032,9 +1032,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // 1. Create end points or junctions, for all 1-chains.
   constexpr float connect_fuzz = 2;
 
-  for (unsigned int i=0; i< edges.size(); i++)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
 
@@ -1081,9 +1080,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
   // touches another contour or itself at an interior point.
   int jcycle = 0, jchain = 0;   // number of junctions with cycle/chain
 
-  for (unsigned int i=0; i< vertices.size(); i++)
+  for (auto end : vertices)
   {
-    vtol_vertex_2d_sptr  end = vertices[i];
     vtol_edge_2d_sptr weaker = nullptr, stronger = nullptr; // weaker touches stronger
     int index;                  // location on stronger contour
     if (DetectJunction(*end, index,
@@ -1198,9 +1196,8 @@ gevd_contour::FindJunctions(gevd_bufferxy& edgels,
 
   // 4. Insert virtual junction for isolated 1-cycles
   int ncycle = 0;
-  for (unsigned int i=0; i< edges.size(); ++i)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     if (!edge->v1()) {  // vertices not created from 1.
       vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
       vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
@@ -1242,18 +1239,16 @@ gevd_contour::SubPixelAccuracy(std::vector<vtol_edge_2d_sptr>& edges,
     std::cout << "Insert subpixel accuracy into edges/vertices";
 
   // 1. Subpixel accuracy for end points
-  for (unsigned int i=0; i< vertices.size(); ++i)
+  for (auto vert : vertices)
   {
-    vtol_vertex_2d_sptr  vert = vertices[i];
     int x = int(vert->x()), y = int(vert->y());
     vert->set_x(x + floatPixel(locationx, x, y));
     vert->set_y(y + floatPixel(locationy, x, y));
   }
 
   // 2. Subpixel accuracy for chain pixels
-  for (unsigned int i=0; i< edges.size(); ++i)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
 
@@ -1664,9 +1659,8 @@ gevd_contour::EqualizeSpacing(std::vector<vtol_edge_2d_sptr>& chains)
   if (talkative)
     std::cout << "Equalize the spacing between pixels in chains";
 
-  for (unsigned int i= 0; i< chains.size(); i++)
+  for (auto e : chains)
   {
-    vtol_edge_2d_sptr e = chains[i];
     vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     const int len = dc->get_interpolator()->get_edgel_chain()->size();
     if (len > 2*MINLENGTH)
@@ -1716,13 +1710,11 @@ gevd_contour::Translate(std::vector<vtol_edge_2d_sptr>& edges, // translate loc 
 #endif
   if (talkative)
     std::cout << "Translate edges/vertices";
-  for (unsigned int i=0; i< vertices.size(); i++) {
-    vtol_vertex_2d_sptr  vert = vertices[i];
+  for (auto vert : vertices) {
     vert->set_x(vert->x() + tx);
     vert->set_y(vert->y() + ty);
   }
-  for (unsigned int i=0; i< edges.size(); i++) {
-    vtol_edge_2d_sptr edge = edges[i];
+  for (auto edge : edges) {
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
 
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
@@ -1809,9 +1801,8 @@ gevd_contour::MaskEdgels(const gevd_bufferxy& mask,
 void
 gevd_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, std::vector<vtol_edge_2d_sptr>& edges)
 {
-  for (unsigned int i=0; i< edges.size(); i++)
+  for (auto e : edges)
   {
-    vtol_edge_2d_sptr e = edges[i];
     vdgl_digital_curve_sptr dc= e->curve()->cast_to_vdgl_digital_curve();
 
     if (dc)
@@ -1869,8 +1860,8 @@ gevd_contour::CreateLookupTable(std::vector<vtol_edge_2d_sptr>& set)
 {
   std::vector<vtol_edge_2d_sptr>* set2 =
     new std::vector<vtol_edge_2d_sptr>(2*set.size()); // preallocate space
-  for (unsigned int i=0; i< set.size(); i++)
-    gevd_contour::LookupTableInsert(*set2, set[i]);
+  for (const auto & i : set)
+    gevd_contour::LookupTableInsert(*set2, i);
   return set2;
 }
 
@@ -1880,8 +1871,8 @@ gevd_contour::CreateLookupTable(std::vector<vtol_vertex_2d_sptr >& set)
 {
   std::vector<vtol_vertex_2d_sptr >* set2 =
     new std::vector<vtol_vertex_2d_sptr >(2*set.size()); // preallocate space
-  for (unsigned int i=0; i< set.size(); i++)
-    gevd_contour::LookupTableInsert(*set2, set[i]);
+  for (const auto & i : set)
+    gevd_contour::LookupTableInsert(*set2, i);
   return set2;
 }
 
@@ -2019,12 +2010,11 @@ gevd_contour::CheckInvariants(std::vector<vtol_edge_2d_sptr>& edges,
 
   // 0. Check that vertices of all edges have been listed
   const int unmark = -1;
-  for (unsigned int i=0; i< edges.size(); i++)
-    edges[i]->set_id(unmark);
-  for (unsigned int i=0; i< vertices.size(); i++)
-    vertices[i]->set_id(unmark);
-  for (unsigned int i=0; i< edges.size(); i++) {
-    vtol_edge_2d_sptr e = edges[i];
+  for (auto & edge : edges)
+    edge->set_id(unmark);
+  for (auto & vertice : vertices)
+    vertice->set_id(unmark);
+  for (auto e : edges) {
     vtol_vertex_sptr v1 = e->v1();
     if (v1->get_id() != unmark) {
       std::cout << *v1 << ": v1 is not in vertex list\n";
@@ -2036,11 +2026,11 @@ gevd_contour::CheckInvariants(std::vector<vtol_edge_2d_sptr>& edges,
       nerror++;
     }
   }
-  for (unsigned int i=0; i< vertices.size(); i++) {
-    std::vector<vtol_edge_sptr> es; vertices[i]->edges(es);
-    for (unsigned int j=0; j< es.size(); j++)
-      if (es[j]->get_id() != unmark) {
-        std::cout << es[j] << ": e is not in edge list\n";
+  for (auto & vertice : vertices) {
+    std::vector<vtol_edge_sptr> es; vertice->edges(es);
+    for (auto & e : es)
+      if (e->get_id() != unmark) {
+        std::cout << e << ": e is not in edge list\n";
         nerror++;
       }
   }

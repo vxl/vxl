@@ -102,9 +102,9 @@ static void test_fundamental_matrix()
   p3w.emplace_back( 1, 10, 3 );
   p3w.emplace_back( -5, 3, -4 );
   p3w.emplace_back( 3, -8, 1 );
-  for ( unsigned int i = 0; i < p3w.size(); ++i )
+  for (const auto & i : p3w)
     p3i.emplace_back(
-      C2l.project( vgl_homg_point_3d<double>(p3w[i]) ) );
+      C2l.project( vgl_homg_point_3d<double>(i) ) );
   vpgl_proj_camera<double> C2l_est2 =
     F3.extract_left_camera( p3w, p3i );
   std::cerr << "\nTrue camera matrix: " << C2l.get_matrix() << '\n'

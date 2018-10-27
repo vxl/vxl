@@ -145,8 +145,8 @@ write( std::ostream& os ) const
   os << location_ << '\n'
      << error_proj_ << '\n'
      << outgoing_directions_.size() << '\n';
-  for ( unsigned i=0; i<outgoing_directions_.size(); ++i )
-    os << outgoing_directions_[i] << '\n';
+  for (const auto & outgoing_direction : outgoing_directions_)
+    os << outgoing_direction << '\n';
   os << std::endl;
 }
 

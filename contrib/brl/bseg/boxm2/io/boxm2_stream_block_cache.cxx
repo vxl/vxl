@@ -19,11 +19,11 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
     clear();
     current_block_id_ = id;
     // First go through each data-type and allocate a big buffer;
-    for (unsigned i = 0; i < data_types_list_.size(); i++) {
+    for (const auto & i : data_types_list_) {
         unsigned long total_bytes_per_data_type = 0 ;
         unsigned long bytes_per_data_type = 0 ;
-        for (unsigned j = 0; j < identifier_list_.size(); j++) {
-            std::string filename = scene_->data_path() + data_types_list_[i] + "_"+ identifier_list_[j] +"_"+ current_block_id_.to_string() + ".bin";
+        for (const auto & j : identifier_list_) {
+            std::string filename = scene_->data_path() + i + "_"+ j +"_"+ current_block_id_.to_string() + ".bin";
             if (vul_file::exists(filename))
                 bytes_per_data_type= vul_file::size(filename);
         }
@@ -36,8 +36,8 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
         unsigned long global_index = 0;
 
         unsigned long num_bytes = 0;
-        for (unsigned j = 0; j < identifier_list_.size(); j++) {
-            std::string filename = scene_->data_path() + data_types_list_[i] + "_" + identifier_list_[j]+"_"+current_block_id_.to_string() + ".bin";
+        for (const auto & j : identifier_list_) {
+            std::string filename = scene_->data_path() + i + "_" + j+"_"+current_block_id_.to_string() + ".bin";
             if (vul_file::exists(filename))
             {
                 unsigned long filesize= vul_file::size(filename);
@@ -54,13 +54,13 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
                 //init with zero
                 std::memset (&(buffer[global_index]), 0, bytes_per_data_type);
                 global_index+=bytes_per_data_type;
-                std::cerr << "For " << id << ", data type: " << data_types_list_[i] + "_" + identifier_list_[j] << " does not exist!\n";
+                std::cerr << "For " << id << ", data type: " << i + "_" + j << " does not exist!\n";
             }
         }
 
         boxm2_data_base * data_buffer             = new boxm2_data_base(buffer,total_bytes_per_data_type,current_block_id_, true);
-        data_types_[data_types_list_[i]]          = data_buffer;
-        block_size_in_bytes_[data_types_list_[i]] = num_bytes;
+        data_types_[i]          = data_buffer;
+        block_size_in_bytes_[i] = num_bytes;
     }
     return true;
 }

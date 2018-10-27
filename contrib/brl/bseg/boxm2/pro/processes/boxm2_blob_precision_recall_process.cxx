@@ -181,10 +181,9 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
     vil_save(blbImage, fname.str().c_str());
 
     //cross check each ground truth blob against change blobs for coverage
-    for (unsigned g=0; g<gt_blobs.size(); ++g) {
-      boxm2_change_blob& gt_blob = gt_blobs[g];
-      for (unsigned c=0; c<blobs.size(); ++c) {
-        if ( gt_blob.percent_overlap( blobs[c] ) > .25f )
+    for (auto & gt_blob : gt_blobs) {
+      for (auto & blob : blobs) {
+        if ( gt_blob.percent_overlap( blob ) > .25f )
           true_positives++;
       }
     }

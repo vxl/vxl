@@ -479,11 +479,11 @@ short mbl_thin_plate_spline_2d::version_no() const
 void mbl_thin_plate_spline_2d::print_summary(std::ostream& os) const
 {
   os<<"\nfx: "<<Ax0_<<" + "<<AxX_<<"*x + "<<AxY_<<"*y   Nonlinear terms:";
-  for (unsigned int i=0;i<Wx_.size();++i)
-    os<<" "<<Wx_[i];
+  for (double i : Wx_)
+    os<<" "<<i;
   os<<"\nfy: "<<Ay0_<<" + "<<AyX_<<"*x + "<<AyY_<<"*y   Nonlinear terms:";
-  for (unsigned int i=0;i<Wy_.size();++i)
-    os<<" "<<Wy_[i];
+  for (double i : Wy_)
+    os<<" "<<i;
   os<<'\n';
 }
 

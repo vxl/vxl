@@ -239,13 +239,13 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels, bool junctionp,
 
     this->FindJunctions(edgels, // break/merge at junctions of
                         *edges2, vertices2); // distinct chains
-    for (unsigned int i=0; i< vertices2.size(); i++)
-      vertices->push_back( vertices2[i]);
+    for (const auto & i : vertices2)
+      vertices->push_back( i);
   }
 
   // 5. Copy back results into global lists
-  for (unsigned int i= 0; i< edges2->size(); i++)
-    edges->push_back( (*edges2)[i]);
+  for (const auto & i : *edges2)
+    edges->push_back( i);
 
   //eliminate memory leaks
   edges2->clear();
@@ -974,9 +974,8 @@ vtol_vertex_2d_sptr get_vertex_at_index(vtol_edge_2d_sptr& e, int index)
 bool find_vertex(vtol_vertex_2d_sptr& v,
                  std::vector<vtol_vertex_2d_sptr>& vertices)
 {
-  for (std::vector<vtol_vertex_2d_sptr>::iterator vit = vertices.begin();
-       vit != vertices.end(); vit++)
-    if ((*vit)==v)
+  for (auto & vertice : vertices)
+    if (vertice==v)
       return true;
   return false;
 }
@@ -984,9 +983,8 @@ bool find_vertex(vtol_vertex_2d_sptr& v,
 bool find_edge(vtol_edge_2d_sptr& e,
                std::vector<vtol_edge_2d_sptr>& edges)
 {
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
-       eit != edges.end(); eit++)
-    if ((*eit)==e)
+  for (auto & edge : edges)
+    if (edge==e)
       return true;
   return false;
 }
@@ -1750,9 +1748,8 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
   // 1. Create vertices at the end of edges (digital_curve geometry)
   constexpr float connect_fuzz = 2;
 
-  for (unsigned int i=0; i< edges.size(); i++)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
     //the index of the last edgel in the curve
@@ -1818,10 +1815,9 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
   // then the digital_curve "weaker" must also be updated
   //
   int jcycle = 0, jchain = 0;   // number of junctions with cycle/chain
-  for (unsigned int i=0; i< vertices.size(); i++)
+  for (auto endv : vertices)
   {
     //continue; //JLM no junctions
-    vtol_vertex_2d_sptr  endv = vertices[i];
     vtol_edge_2d_sptr weaker = nullptr, stronger = nullptr;
     int index; // location on stronger contour
     if (DetectJunction(endv, index, weaker, stronger, maxSpiral, edgels))
@@ -1982,10 +1978,9 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
   // 4. Insert virtual junction for isolated 1-cycles
   int ncycle = 0;
-  for (unsigned int i=0; i< edges.size(); i++)
+  for (auto edge : edges)
   {
     //continue; //JLM no virtual junctions
-    vtol_edge_2d_sptr edge = edges[i];
     if (!edge->v1())    // vertices not created from 1.
     {
       vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
@@ -2029,18 +2024,16 @@ sdet_contour::SubPixelAccuracy(std::vector<vtol_edge_2d_sptr>& edges,
     std::cout << "Insert subpixel accuracy into edges/vertices";
 
   // 1. Subpixel accuracy for end points
-  for (unsigned int i=0; i< vertices.size(); i++)
+  for (auto vert : vertices)
   {
-    vtol_vertex_2d_sptr  vert = vertices[i];
     int x = int(vert->x()), y = int(vert->y());
     vert->set_x(x + floatPixel(locationx, x, y));
     vert->set_y(y + floatPixel(locationy, x, y));
   }
 
   // 2. Subpixel accuracy for chain pixels
-  for (unsigned int i=0; i< edges.size(); i++)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     if (!edge) continue;
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     if (!dc) continue;
@@ -2441,9 +2434,8 @@ sdet_contour::EqualizeSpacing(std::vector<vtol_edge_2d_sptr>& chains)
   if (talkative_)
     std::cout << "Equalize the spacing between pixels in chains\n";
 
-  for (unsigned int i= 0; i< chains.size(); ++i)
+  for (auto e : chains)
   {
-    vtol_edge_2d_sptr e = chains[i];
     vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     const int len = dc->get_interpolator()->get_edgel_chain()->size();
     if (len > 2*MINLENGTH)
@@ -2491,15 +2483,13 @@ sdet_contour::Translate(std::vector<vtol_edge_2d_sptr>& edges, // translate loc 
   if (talkative_)
     std::cout << "Translate edges/vertices\n";
 
-  for (unsigned int i=0; i< vertices.size(); ++i)
+  for (auto vert : vertices)
   {
-    vtol_vertex_2d_sptr  vert = vertices[i];
     vert->set_x(vert->x() + tx);
     vert->set_y(vert->y() + ty);
   }
-  for (unsigned int i=0; i< edges.size(); ++i)
+  for (auto edge : edges)
   {
-    vtol_edge_2d_sptr edge = edges[i];
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
 
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
@@ -2540,9 +2530,8 @@ sdet_contour::ClearNetwork(std::vector<vtol_edge_2d_sptr>*& edges,
 void
 sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, std::vector<vtol_edge_2d_sptr>& edges)
 {
-  for (unsigned int i=0; i< edges.size(); ++i)
+  for (auto e : edges)
   {
-    vtol_edge_2d_sptr e = edges[i];
     vdgl_digital_curve_sptr dc= e->curve()->cast_to_vdgl_digital_curve();
 
     if (dc)
@@ -2654,10 +2643,9 @@ sdet_contour::LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set)
 {
   std::vector<vtol_edge_2d_sptr> temp;
   //eliminate null edges
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = set.begin();
-       eit != set.end(); eit++)
-    if (*eit)
-      temp.push_back(*eit);
+  for (auto & eit : set)
+    if (eit)
+      temp.push_back(eit);
   int i = 0;
   set.clear();
   for (std::vector<vtol_edge_2d_sptr>::iterator eit = temp.begin();
@@ -2674,10 +2662,9 @@ sdet_contour::LookupTableCompress(std::vector<vtol_vertex_2d_sptr>& set)
 {
   std::vector<vtol_vertex_2d_sptr> temp;
   //eliminate null edges
-  for (std::vector<vtol_vertex_2d_sptr>::iterator vit = set.begin();
-       vit != set.end(); vit++)
-    if (*vit)
-      temp.push_back(*vit);
+  for (auto & vit : set)
+    if (vit)
+      temp.push_back(vit);
   int i = 0;
   set.clear();
   for (std::vector<vtol_vertex_2d_sptr>::iterator vit = temp.begin();

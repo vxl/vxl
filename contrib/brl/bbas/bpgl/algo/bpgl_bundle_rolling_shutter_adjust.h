@@ -149,7 +149,7 @@ class bpgl_bundle_rolling_shutter_adj_lsqr : public vnl_sparse_lst_sqr_function
     create_param_vector(const std::vector<vgl_point_3d<double> >& world_points);
 
 
-  void reset() { iteration_count_ = 0; for (unsigned int i=0; i<weights_.size(); ++i) weights_[i] = 1.0; }
+  void reset() { iteration_count_ = 0; for (double & weight : weights_) weight = 1.0; }
 
   //: return the current weights
   std::vector<double> weights() const { return weights_; }

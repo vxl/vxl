@@ -20,8 +20,8 @@
 std::vector<rsdl_point> convert_vgl_to_rsdl(std::vector<vgl_point_3d<double> > const& pts)
 {
   std::vector<rsdl_point> pts_out;
-  for (std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin(); pit != pts.end(); ++pit) {
-    rsdl_point point(vnl_vector_fixed<double,3>(pit->x(), pit->y(), pit->z()), vnl_vector<double>());
+  for (const auto & pt : pts) {
+    rsdl_point point(vnl_vector_fixed<double,3>(pt.x(), pt.y(), pt.z()), vnl_vector<double>());
     pts_out.push_back(point);
   }
   return pts_out;

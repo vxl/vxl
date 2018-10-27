@@ -39,9 +39,8 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   std::vector<std::vector<boxm2_block_id> > vis_orders; //visibility order for each dev
   std::size_t maxBlocks = 0;
   std::vector<boxm2_opencl_cache1*> ocl_caches = cache.ocl_caches();
-  for (unsigned int i=0; i<ocl_caches.size(); ++i) {
+  for (auto ocl_cache : ocl_caches) {
     //grab sub scene and it's cache
-    boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
     boxm2_scene_sptr    sub_scene = ocl_cache->get_scene();
     bocl_device_sptr    device    = ocl_cache->get_device();
 
@@ -100,13 +99,13 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
 
   //initialize per group images (vis/pre
   std::vector<boxm2_multi_cache_group*> grp = cache.get_vis_groups(cam);
-  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
-    std::vector<boxm2_block_id> ids = grp[grpId]->ids();
+  for (auto & grpId : grp) {
+    std::vector<boxm2_block_id> ids = grpId->ids();
     for (unsigned int i=0; i<ids.size(); ++i) {
       float* visImg = new float[cl_ni*cl_nj]; std::fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
       float* preImg = new float[cl_ni*cl_nj]; std::fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
-      grp[grpId]->set_vis(i, visImg);
-      grp[grpId]->set_pre(i, preImg);
+      grpId->set_vis(i, visImg);
+      grpId->set_pre(i, preImg);
     }
   }
 
@@ -137,11 +136,11 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //-------------------------------------
   //clean up
   //-------------------------------------
-  for (unsigned int grpId=0; grpId<grp.size(); ++grpId) {
-    std::vector<boxm2_block_id> ids = grp[grpId]->ids();
+  for (auto & grpId : grp) {
+    std::vector<boxm2_block_id> ids = grpId->ids();
     for (unsigned int i=0; i<ids.size(); ++i) {
-      delete[] grp[grpId]->get_vis(i);
-      delete[] grp[grpId]->get_pre(i);
+      delete[] grpId->get_vis(i);
+      delete[] grpId->get_pre(i);
     }
   }
 

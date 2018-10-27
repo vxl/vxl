@@ -23,18 +23,16 @@ void brad_belief_prop_utils::project_intensities(vgl_point_3d<double> const& p){
   intensity_.clear();
   nbr_intensities_.clear();
   const std::map<unsigned, std::vector<unsigned> >& index = app_index_.const_index();
-  for(std::map<unsigned, std::vector<unsigned> >::const_iterator iit = index.begin();
-      iit != index.end(); ++iit){
-    unsigned img_index = iit->first;
-    const std::vector<unsigned>& nbrs = iit->second;
+  for(const auto & iit : index){
+    unsigned img_index = iit.first;
+    const std::vector<unsigned>& nbrs = iit.second;
     float Itarg = 0.0f;
     if(!pixel_intensity(imgs_[img_index], cams_[img_index], p, Itarg))
       continue;
     intensity_[img_index]=Itarg;
-    for(std::vector<unsigned>::const_iterator nit = nbrs.begin();
-        nit != nbrs.end(); ++nit){
+    for(unsigned int nbr : nbrs){
       float Inbr = 0.0f;
-      if(!pixel_intensity(imgs_[*nit], cams_[*nit], p, Inbr))
+      if(!pixel_intensity(imgs_[nbr], cams_[nbr], p, Inbr))
         continue;
       nbr_intensities_[img_index].push_back(Inbr);
     }
@@ -48,16 +46,15 @@ void brad_belief_prop_utils::print_intensities() const{
     double tint = inti->second;
     const std::vector<double>& nbr_intens = ninti->second;
     std::cout << "t["<< inti->first <<  "]: " << tint << " n:( ";
-    for(std::vector<double>::const_iterator nit = nbr_intens.begin();
-        nit != nbr_intens.end(); ++nit)
-      std::cout << *nit << ' ';
+    for(double nbr_inten : nbr_intens)
+      std::cout << nbr_inten << ' ';
     std::cout << ")\n";
   }
 }
 void brad_belief_prop_utils::update_mog(std::vector<double> const& intens, vnl_vector_fixed<unsigned char, 8> & mog3,
                                         vnl_vector_fixed<float, 4>& nobs, bool fixed_sigma) const{
-  for(unsigned i = 0; i<static_cast<unsigned>(intens.size()); ++i)
-      bsta_mog3_grey::update_gauss_mixture_3(mog3, nobs, static_cast<float>(intens[i]), 1.0f, BRAD_INIT_SIGMA, BRAD_MIN_SIGMA);
+  for(double inten : intens)
+      bsta_mog3_grey::update_gauss_mixture_3(mog3, nobs, static_cast<float>(inten), 1.0f, BRAD_INIT_SIGMA, BRAD_MIN_SIGMA);
   if(fixed_sigma)
     bsta_mog3_grey::force_mog3_sigmas_to_value(mog3, BRAD_FIXED_SIGMA);
 }
@@ -104,10 +101,9 @@ std::vector<unsigned> brad_belief_prop_utils::index(unsigned indx) const{
 
 std::vector<double> brad_belief_prop_utils::ref_intensities(std::vector<unsigned> const& ref_indices, vgl_point_3d<double> const& p) const{
   std::vector<double> ret;
-  for(std::vector<unsigned>::const_iterator rit = ref_indices.begin();
-      rit != ref_indices.end(); ++rit){
+  for(unsigned int ref_indice : ref_indices){
     float I = 0.0f;
-    if(!pixel_intensity(imgs_[*rit], cams_[*rit], p, I))
+    if(!pixel_intensity(imgs_[ref_indice], cams_[ref_indice], p, I))
       continue;
     ret.push_back(I);
   }

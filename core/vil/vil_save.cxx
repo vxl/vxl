@@ -91,8 +91,8 @@ char const *vil_save_guess_file_format(char const* filename)
   }
   else {
     std::string ext_lower_case(dot);  // make a copy to convert the extension to lower case
-    for (unsigned int i=0; i<ext_lower_case.size(); ++i)
-      ext_lower_case[i] = (char)std::tolower(ext_lower_case[i]);
+    for (char & i : ext_lower_case)
+      i = (char)std::tolower(i);
     // translate common extensions into known file formats.
     if (false) { }
 #define macro(ext, fmt) else if ( ext_lower_case == "." #ext ) file_format = #fmt

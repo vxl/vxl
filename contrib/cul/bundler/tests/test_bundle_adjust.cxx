@@ -53,9 +53,9 @@ static void test_bundle_adjust()
     bundler_inters_reconstruction recon;
 
     // Creates all the images
-    for (int i = 0; i < NUM_CAMERAS; i++) {
+    for (const auto & i : CAMERAS) {
         bundler_inters_image_sptr img(new bundler_inters_image());
-        img->camera = CAMERAS[i];
+        img->camera = i;
         img->in_recon = true;
 
         recon.feature_sets.push_back(img);
@@ -63,9 +63,9 @@ static void test_bundle_adjust()
 
 
     // Creates all the world points
-    for (int i = 0; i < NUM_WORLD_POINTS; i++) {
+    for (const auto & i : WORLD_POINTS) {
         bundler_inters_track_sptr track(new bundler_inters_track());
-        track->world_point = WORLD_POINTS[i];
+        track->world_point = i;
         track->observed = true;
 
         for (int j = 0; j < NUM_CAMERAS; j++) {
@@ -76,9 +76,9 @@ static void test_bundle_adjust()
             int index = recon.feature_sets[j]->features.size();
 
             CAMERAS[j].project(
-                WORLD_POINTS[i].x() + TOL,
-                WORLD_POINTS[i].y() - TOL,
-                WORLD_POINTS[i].z() + TOL/2.0f,
+                i.x() + TOL,
+                i.y() - TOL,
+                i.z() + TOL/2.0f,
                 row, col);
 
             if ((row == 0 && col == 0) || row < 0 || col < 0) {

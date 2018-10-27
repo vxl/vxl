@@ -39,9 +39,9 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   std::vector<brec_part_instance_sptr> parts_prims;
-  for (unsigned i = 0; i < dumm_ins.size(); i++) {
-    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
+  for (auto & dumm_in : dumm_ins) {
+    if (dumm_in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = dumm_in->cast_to_gaussian();
       if (!extract_gaussian_primitives(img, p->lambda0_, p->lambda1_, p->theta_, p->bright_, p->cutoff_percentage_, p->detection_threshold_, p->type_, parts_prims)) {
         std::cout << "problems in extracting gaussian primitives!!\n";
         return false;
@@ -54,8 +54,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
   // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
-  for (unsigned i = 0; i < parts_prims.size(); i++) {
-    tr->add(parts_prims[i]);
+  for (const auto & parts_prim : parts_prims) {
+    tr->add(parts_prim);
   }
 
   unsigned highest = h_->highest_layer_id();
@@ -72,8 +72,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
     Rtree_type *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
-    for (unsigned i = 0; i < parts_current.size(); i++) {
-      rtree_current->add(parts_current[i]);
+    for (const auto & i : parts_current) {
+      rtree_current->add(i);
     }
 
     parts_upper_most.clear();
@@ -93,9 +93,9 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   std::vector<brec_part_instance_sptr> parts_prims;
-  for (unsigned i = 0; i < dumm_ins.size(); i++) {
-    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
+  for (auto & dumm_in : dumm_ins) {
+    if (dumm_in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = dumm_in->cast_to_gaussian();
       if (!extract_gaussian_primitives(img, p->lambda0_, p->lambda1_, p->theta_+angle, p->bright_, p->cutoff_percentage_, p->detection_threshold_, p->type_, parts_prims)) {
         std::cout << "problems in extracting gaussian primitives!!\n";
         return false;
@@ -107,8 +107,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
   // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
-  for (unsigned i = 0; i < parts_prims.size(); i++) {
-    tr->add(parts_prims[i]);
+  for (const auto & parts_prim : parts_prims) {
+    tr->add(parts_prim);
   }
 
   unsigned highest = h_->highest_layer_id();
@@ -125,8 +125,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
     Rtree_type *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
-    for (unsigned i = 0; i < parts_current.size(); i++) {
-      rtree_current->add(parts_current[i]);
+    for (const auto & i : parts_current) {
+      rtree_current->add(i);
     }
 
     parts_upper_most.clear();
@@ -145,9 +145,9 @@ bool brec_part_hierarchy_detector::detect_primitives_using_trained_response_mode
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   std::vector<brec_part_instance_sptr> parts_prims;
-  for (unsigned i = 0; i < dumm_ins.size(); i++) {
-    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
+  for (auto & dumm_in : dumm_ins) {
+    if (dumm_in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = dumm_in->cast_to_gaussian();
       if (!p->extract(img, fg_prob_img, angle, h_->model_dir(), parts_prims, prior_class)) {
         std::cout << "problems in extracting gaussian primitives!!\n";
         return false;
@@ -160,8 +160,8 @@ bool brec_part_hierarchy_detector::detect_primitives_using_trained_response_mode
   // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
-  for (unsigned i = 0; i < parts_prims.size(); i++) {
-    tr->add(parts_prims[i]);
+  for (const auto & parts_prim : parts_prims) {
+    tr->add(parts_prim);
   }
 
   return true;
@@ -174,9 +174,9 @@ bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
   std::vector<brec_part_instance_sptr> parts_prims;
-  for (unsigned i = 0; i < dumm_ins.size(); i++) {
-    if (dumm_ins[i]->kind_ == brec_part_instance_kind::GAUSSIAN) {
-      brec_part_gaussian_sptr p = dumm_ins[i]->cast_to_gaussian();
+  for (auto & dumm_in : dumm_ins) {
+    if (dumm_in->kind_ == brec_part_instance_kind::GAUSSIAN) {
+      brec_part_gaussian_sptr p = dumm_in->cast_to_gaussian();
       if (!p->extract(inp, fg_prob_img, angle, parts_prims)) {
         std::cout << "problems in extracting gaussian primitives!!\n";
         return false;
@@ -189,8 +189,8 @@ bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view
   // create an rtree
   Rtree_type *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
-  for (unsigned i = 0; i < parts_prims.size(); i++) {
-    tr->add(parts_prims[i]);
+  for (const auto & parts_prim : parts_prims) {
+    tr->add(parts_prim);
   }
 
   return true;
@@ -232,8 +232,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
     Rtree_type *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
-    for (unsigned i = 0; i < parts_current.size(); i++) {
-      rtree_current->add(parts_current[i]);
+    for (const auto & i : parts_current) {
+      rtree_current->add(i);
     }
 
     parts_upper_most.clear();
@@ -278,10 +278,10 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     double best_fit = 0.0;
     double best_fit_str = 1.0;
     brec_part_instance_sptr best_part;
-    for (unsigned i = 0; i < found.size(); i++) {
-      if (found[i]->strength_ > det_threshold && found[i]->type_ == (*eit)->target()->type_)
+    for (auto & i : found) {
+      if (i->strength_ > det_threshold && i->type_ == (*eit)->target()->type_)
       {
-        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+        vnl_vector_fixed<float, 2> v(i->x_-cx, i->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
         double str = (*eit)->prob_density(dist, angle);
@@ -290,8 +290,8 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
           continue;
         if (best_fit < str) {
           best_fit = str;
-          best_fit_str = found[i]->strength_;
-          best_part = found[i];
+          best_fit_str = i->strength_;
+          best_part = i;
         }
       }
     }
@@ -342,16 +342,16 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
     double best_fit = 0.0;
     double best_fit_str = 1.0;
     brec_part_instance_sptr best_part;
-    for (unsigned i = 0; i < found.size(); i++) {
-      if (found[i]->type_ == (*eit)->target()->type_) {
-        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+    for (auto & i : found) {
+      if (i->type_ == (*eit)->target()->type_) {
+        vnl_vector_fixed<float, 2> v(i->x_-cx, i->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
         double str = (*eit)->prob_density(dist, angle);
         if (best_fit < str) {
           best_fit = str;
-          best_fit_str = found[i]->strength_;
-          best_part = found[i];
+          best_fit_str = i->strength_;
+          best_part = i;
         }
       }
     }
@@ -377,8 +377,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
                                                        std::vector<brec_part_instance_sptr>& extracted_upper_parts)
 {
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
-  for (unsigned i = 0; i < extracted_parts.size(); i++) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     // find this type in the primitive layer of the hierarchy
     brec_part_base_sptr hp = h_->get_node(p->layer_, p->type_);
     if (!hp)
@@ -430,15 +429,15 @@ brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
 
     double best_fit = -100000.0;
     brec_part_instance_sptr best_part;
-    for (unsigned i = 0; i < found.size(); i++) {
-      if (found[i]->type_ == (*eit)->target()->type_) {
-        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+    for (auto & i : found) {
+      if (i->type_ == (*eit)->target()->type_) {
+        vnl_vector_fixed<float, 2> v(i->x_-cx, i->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
-        double rho = (*eit)->prob_density(dist, angle)*found[i]->rho_c_f_;
+        double rho = (*eit)->prob_density(dist, angle)*i->rho_c_f_;
         if (best_fit < rho) {
           best_fit = rho;
-          best_part = found[i];
+          best_part = i;
         }
       }
     }
@@ -499,25 +498,25 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
     double best_score = -100000.0;
     brec_part_instance_sptr best_part;
     brec_hierarchy_edge_sptr best_edge;
-    for (unsigned i = 0; i < found.size(); i++) {
-      if (found[i] == central_p)  // skip itself
+    for (auto & i : found) {
+      if (i == central_p)  // skip itself
         continue;
-      if (found[i]->type_ == (*eit)->target()->type_) {
-        vnl_vector_fixed<float, 2> v(found[i]->x_-cx, found[i]->y_-cy);
+      if (i->type_ == (*eit)->target()->type_) {
+        vnl_vector_fixed<float, 2> v(i->x_-cx, i->y_-cy);
         float dist, angle;
         (*eit)->calculate_dist_angle(central_p, v, dist, angle);
         double dens = (*eit)->prob_density(dist, angle);
-        double rho_c_f_i = dens*found[i]->rho_c_f_*rho_c_f;
-        double rho_c_b_i = dens*found[i]->rho_c_b_*rho_c_b;
-        double rho_nc_f_i = uniform*found[i]->rho_nc_f_*rho_nc_f;
-        double rho_nc_b_i = uniform*found[i]->rho_nc_b_*rho_nc_b;
+        double rho_c_f_i = dens*i->rho_c_f_*rho_c_f;
+        double rho_c_b_i = dens*i->rho_c_b_*rho_c_b;
+        double rho_nc_f_i = uniform*i->rho_nc_f_*rho_nc_f;
+        double rho_nc_b_i = uniform*i->rho_nc_b_*rho_nc_b;
 
         double s = std::min(rho_c_f_i/rho_c_b_i,rho_c_f_i/rho_nc_f_i);
         s = std::min(s, rho_c_f_i/rho_nc_b_i);
 
         if (best_score < s) {
           best_score = s;
-          best_part = found[i];
+          best_part = i;
           best_edge = (*eit);
         }
       }
@@ -580,8 +579,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
                                                        std::vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method, double radius)
 {
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
-  for (unsigned i = 0; i < extracted_parts.size(); i++) {
-    brec_part_instance_sptr p = extracted_parts[i];
+  for (auto p : extracted_parts) {
     // find this type
     brec_part_base_sptr hp = h_->get_node(p->layer_, p->type_);
     if (!hp)

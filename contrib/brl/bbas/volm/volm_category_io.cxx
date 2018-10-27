@@ -201,19 +201,17 @@ std::map<unsigned, volm_land_layer> create_volm_land_table()
   std::string osm_to_volm_txt = volm_utils::volm_src_root() + "osm_to_volm_labels.txt";
   volm_osm_category_io::load_category_table(osm_to_volm_txt, osm_land_table);
 
-  for (std::map<int, volm_land_layer>::iterator mit = nlcd_table.begin(); mit != nlcd_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+  for (auto & mit : nlcd_table)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit.second.id_, mit.second));
 
-  for (std::map<int, volm_land_layer>::iterator mit = geo_table.begin(); mit != geo_table.end(); mit++)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+  for (auto & mit : geo_table)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit.second.id_, mit.second));
 
-  for (std::map<std::pair<std::string, std::string>, volm_land_layer>::iterator mit = osm_land_table.begin();
-       mit != osm_land_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+  for (auto & mit : osm_land_table)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit.second.id_, mit.second));
 
-  for (std::map<std::pair<int, int>, volm_land_layer>::iterator mit = road_junction_table.begin();
-       mit != road_junction_table.end(); ++mit)
-    m.insert(std::pair<unsigned, volm_land_layer>(mit->second.id_, mit->second));
+  for (auto & mit : road_junction_table)
+    m.insert(std::pair<unsigned, volm_land_layer>(mit.second.id_, mit.second));
   return m;
 }
 
@@ -232,8 +230,8 @@ std::vector<std::string> create_volm_land_layer_name_table()
 {
   std::vector<std::string> out;
   std::map<unsigned, volm_land_layer> m = create_volm_land_table();
-  for (std::map<unsigned, volm_land_layer>::iterator mit = m.begin(); mit != m.end(); ++mit)
-    out.push_back(mit->second.name_);
+  for (auto & mit : m)
+    out.push_back(mit.second.name_);
   return out;
 }
 

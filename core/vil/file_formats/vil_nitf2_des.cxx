@@ -16,10 +16,9 @@ vil_nitf2_des::field_definition_map&
    public:
     ~field_definition_map_t()
     {
-      for (iterator it = begin(), last = end();
-           it != last; it++ )
+      for (auto & it : *this)
       {
-        delete it->second;
+        delete it.second;
       }
     }
   };

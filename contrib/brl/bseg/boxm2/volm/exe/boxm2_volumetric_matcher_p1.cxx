@@ -273,15 +273,15 @@ int main(int argc, char** argv)
   std::vector<depth_map_region_sptr> dmr = query->depth_regions();
   if (dmr.size()) {
     std::cout << " -------------- DEPTH REGIONS --------------" << std::endl;
-    for (unsigned i = 0; i < dmr.size(); i++) {
-      std::cout << "\t\t " <<  dmr[i]->name()  << " region "
-               << ",\t\t min_depth = " << dmr[i]->min_depth()
-               << " ---> interval = " << (int)sph->get_depth_interval(dmr[i]->min_depth())
-               << ",\t\t max_depth = " << dmr[i]->max_depth()
-               << ",\t\t order = " << dmr[i]->order()
-               << ",\t\t orient = " << dmr[i]->orient_type()
-               << ",\t\t NLCD_id = " << dmr[i]->land_id()
-               << ",\t\t land_name = " << volm_osm_category_io::volm_land_table[dmr[i]->land_id()].name_
+    for (auto & i : dmr) {
+      std::cout << "\t\t " <<  i->name()  << " region "
+               << ",\t\t min_depth = " << i->min_depth()
+               << " ---> interval = " << (int)sph->get_depth_interval(i->min_depth())
+               << ",\t\t max_depth = " << i->max_depth()
+               << ",\t\t order = " << i->order()
+               << ",\t\t orient = " << i->orient_type()
+               << ",\t\t NLCD_id = " << i->land_id()
+               << ",\t\t land_name = " << volm_osm_category_io::volm_land_table[i->land_id()].name_
                << std::endl;
     }
   }
@@ -304,13 +304,13 @@ int main(int argc, char** argv)
 
   std::cout << "\n==================================================================================================\n"
            << "\t\t  2. Weight parameters used are as following\n";
-  for (std::vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
-    std::cout << ' ' << vit->w_typ_
-             << ' ' << vit->w_ori_
-             << ' ' << vit->w_lnd_
-             << ' ' << vit->w_dst_
-             << ' ' << vit->w_ord_
-             << ' ' << vit->w_obj_ << std::endl;
+  for (auto & weight : weights)
+    std::cout << ' ' << weight.w_typ_
+             << ' ' << weight.w_ori_
+             << ' ' << weight.w_lnd_
+             << ' ' << weight.w_dst_
+             << ' ' << weight.w_ord_
+             << ' ' << weight.w_obj_ << std::endl;
   std::cout << "==================================================================================================\n\n";
 
 

@@ -1003,10 +1003,10 @@ void bvxm_voxel_world::compute_plane_image_H(vpgl_camera_double_sptr const& cam,
   vgl_h_matrix_2d_compute_linear comp_4pt;
   if (!comp_4pt.compute(voxel_corners_img,voxel_corners_vox, H_image_to_plane)) {
     std::cerr << "ERROR computing homography from image to voxel slice.\n";
-    for (unsigned i = 0; i < voxel_corners_img.size(); i++)
-      std::cerr << voxel_corners_img[i] << std::endl;
-    for (unsigned i = 0; i < voxel_corners_vox.size(); i++)
-      std::cerr << voxel_corners_vox[i] << std::endl;
+    for (const auto & i : voxel_corners_img)
+      std::cerr << i << std::endl;
+    for (const auto & i : voxel_corners_vox)
+      std::cerr << i << std::endl;
   }
   if (!comp_4pt.compute(voxel_corners_vox,voxel_corners_img, H_plane_to_image)) {
     std::cerr << "ERROR computing homography from voxel slice to image.\n";

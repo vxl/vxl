@@ -305,14 +305,14 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   if (leaf_id < 0) leaves2 = leaves;
   else leaves2.push_back(leaves[leaf_id]);
   std::cout << " will index " << leaves2.size() << " leaves!\n"; std::cout.flush();
-  for (unsigned li = 0; li < leaves2.size(); li++) {
-    if (!leaves2[li]->hyps_)
+  for (auto & li : leaves2) {
+    if (!li->hyps_)
       continue;
-    std::cout << " will index " << volm_geo_index::hypo_size(leaves2[li]) << " indices in leaf: " << leaves2[li]->get_hyp_name("") << std::endl; std::cout.flush();
+    std::cout << " will index " << volm_geo_index::hypo_size(li) << " indices in leaf: " << li->get_hyp_name("") << std::endl; std::cout.flush();
 
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    std::string index_file = leaves2[li]->get_label_index_name(out_file_name_pre.str(), ident);
+    std::string index_file = li->get_label_index_name(out_file_name_pre.str(), ident);
     if (!ind->initialize_write(index_file)) {
       std::cerr << "Cannot initialize " << index_file << " for write!\n";
       return false;
@@ -320,7 +320,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 
     // for depth
     boxm2_volm_wr3db_index_sptr ind2 = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    std::string index_file2 = leaves2[li]->get_index_name(out_file_name_pre.str());
+    std::string index_file2 = li->get_index_name(out_file_name_pre.str());
     if (!ind2->initialize_write(index_file2)) {
       std::cerr << "Cannot initialize " << index_file2 << " for write!\n";
       return false;
@@ -329,7 +329,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
     unsigned indexed_cnt = 0;
 
     vgl_point_3d<double> h_pt;
-    while (leaves2[li]->hyps_->get_next(0, 1, h_pt))
+    while (li->hyps_->get_next(0, 1, h_pt))
     {
 #ifdef DEBUG
       std::cout << "Processing hypothesis lon: " << h_pt.x() << " lat: " << h_pt.y() << " z: " << h_pt.z() << std::endl;

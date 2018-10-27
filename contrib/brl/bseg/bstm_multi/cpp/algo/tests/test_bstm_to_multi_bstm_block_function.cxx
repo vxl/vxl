@@ -85,8 +85,7 @@ bstm_scene_from_point_func(
     }
 
     std::vector<int> cells = current_tree.get_cell_bits();
-    for (int i = 0; i < cells.size(); ++i) {
-      int cell_idx = cells[i];
+    for (int cell_idx : cells) {
       if (cell_idx >= 73) {
         vgl_point_3d<double> p = current_tree.cell_box(cell_idx).min_point();
         int st_x = p.x() * 8;
@@ -434,8 +433,8 @@ void test_time_differences_from_bstm_trees() {
                                                   0.01);
     TEST("time differences result length", diffs.size(), num_space_trees);
     bool time_diff_any = false;
-    for (int i = 0; i < diffs.size(); ++i) {
-      time_diff_any |= diffs[i];
+    for (auto && diff : diffs) {
+      time_diff_any |= diff;
     }
     TEST("time differences - empty scene with unrefined time trees",
          time_diff_any,
@@ -544,8 +543,8 @@ void test_time_differences_from_bstm_trees() {
                                                   0.01,
                                                   0.01);
     bool time_diff_all = true;
-    for (int i = 0; i < diffs.size(); ++i) {
-      time_diff_all &= diffs[i];
+    for (auto && diff : diffs) {
+      time_diff_all &= diff;
     }
     TEST("time differences - all time trees refined", time_diff_all, true);
 
@@ -845,12 +844,12 @@ void test_compute_and_coalesce_trees() {
     // correct data ptr
     top_space_level_good &= (top_space_tree.get_data_ptr() == 0);
     // only first 8 leaf voxels refined
-    for (int i = 0; i < top_space_leaves.size(); ++i) {
-      if (top_space_leaves[i] < 73) {
+    for (int top_space_leave : top_space_leaves) {
+      if (top_space_leave < 73) {
         continue;
       } else {
-        top_space_level_good &= (top_space_leaves[i] < 73 + 8);
-        top_time_trees_idxs.push_back(top_space_leaves[i] - 73);
+        top_space_level_good &= (top_space_leave < 73 + 8);
+        top_time_trees_idxs.push_back(top_space_leave - 73);
       }
     }
     TEST("coalesce - top space buffer tree is correct",
@@ -879,9 +878,9 @@ void test_compute_and_coalesce_trees() {
       top_time_level_good &= (child_ptr == top_time_tree.get_data_ptr());
       child_ptr += top_time_leaves.size();
       // add data ptr's of children (correspond to BSTM Space Trees)
-      for (int i = 0; i < top_time_leaves.size(); ++i) {
+      for (int top_time_leave : top_time_leaves) {
         bstm_space_trees_idxs.push_back(
-            top_time_tree.get_data_index(top_time_leaves[i]));
+            top_time_tree.get_data_index(top_time_leave));
       }
     }
     TEST("coalesce -- top time buffer trees are correct",
@@ -906,9 +905,9 @@ void test_compute_and_coalesce_trees() {
       std::vector<int> bstm_space_leaf_voxels;
       {
         std::vector<int> bstm_space_leaves = bstm_space_tree.get_leaf_bits();
-        for (int i = 0; i < bstm_space_leaves.size(); ++i) {
-          if (bstm_space_leaves[i] >= 73) {
-            bstm_space_leaf_voxels.push_back(bstm_space_leaves[i]);
+        for (int bstm_space_leave : bstm_space_leaves) {
+          if (bstm_space_leave >= 73) {
+            bstm_space_leaf_voxels.push_back(bstm_space_leave);
           }
         }
       }
@@ -1049,8 +1048,7 @@ void test_fly_problem() {
       // set up time trees
       std::vector<int>::const_iterator idxs_iter = refined_idxs.begin();
       std::vector<int> cell_bits = current_tree.get_cell_bits();
-      for (int cell_idx = 0; cell_idx < cell_bits.size(); ++cell_idx) {
-        int cell = cell_bits[cell_idx];
+      for (int cell : cell_bits) {
         bool is_refined_cell = false;
         int cell_pos; // position in space tree of cell, along diagonal, in
                       // [0,8).

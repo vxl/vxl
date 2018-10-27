@@ -126,10 +126,10 @@ bool boxm2_ocl_render_expected_albedo_normal_process(bprb_func_process& pro)
   std::string data_type,options;
   std::vector<std::string> apps = scene->appearances();
 
-  for (unsigned int i=0; i<apps.size(); ++i) {
-    if ( apps[i] == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
+  for (const auto & app : apps) {
+    if ( app == boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::prefix() )
     {
-      data_type = apps[i];
+      data_type = app;
       found_appearance = true;
       // boxm2_data_traits<BOXM2_NORMAL_ALBEDO_ARRAY>::datasize();
     }

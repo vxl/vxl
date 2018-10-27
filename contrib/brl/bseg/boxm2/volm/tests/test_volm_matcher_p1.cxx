@@ -127,9 +127,9 @@ static void test_volm_matcher_p1()
   volm_geo_index::write_hyps(hyp_root, file_name4);
   std::vector<volm_geo_index_node_sptr> leaves;
   volm_geo_index::get_leaves_with_hyps(hyp_root, leaves);
-  for (unsigned jj = 0; jj < leaves.size(); jj++) {
-    std::string out_file = vul_file::strip_extension(leaves[jj]->get_hyp_name(file_name4)) + ".kml";
-    leaves[jj]->hyps_->write_to_kml(out_file, 0.0, true);
+  for (auto & leave : leaves) {
+    std::string out_file = vul_file::strip_extension(leave->get_hyp_name(file_name4)) + ".kml";
+    leave->hyps_->write_to_kml(out_file, 0.0, true);
   }
   // create index
   unsigned layer_size = (unsigned)sph_shell->get_container_size();
@@ -143,28 +143,28 @@ static void test_volm_matcher_p1()
 
   std::stringstream out_file_name_pre;
   out_file_name_pre << "./geo_index_tile_0";
-  for (unsigned li = 0; li < leaves.size(); li++) {
+  for (auto & leave : leaves) {
     // create a binary index file for each hypo set in a leaf
     boxm2_volm_wr3db_index_sptr ind_dst = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
     boxm2_volm_wr3db_index_sptr ind_ori = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
     boxm2_volm_wr3db_index_sptr ind_lnd = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
-    std::string ind_dst_file = leaves[li]->get_index_name(out_file_name_pre.str());
-    std::string ind_ori_file = leaves[li]->get_label_index_name(out_file_name_pre.str(), "orientation");
-    std::string ind_lnd_file = leaves[li]->get_label_index_name(out_file_name_pre.str(), "land");
+    std::string ind_dst_file = leave->get_index_name(out_file_name_pre.str());
+    std::string ind_ori_file = leave->get_label_index_name(out_file_name_pre.str(), "orientation");
+    std::string ind_lnd_file = leave->get_label_index_name(out_file_name_pre.str(), "land");
     ind_dst->initialize_write(ind_dst_file);
     ind_ori->initialize_write(ind_ori_file);
     ind_lnd->initialize_write(ind_lnd_file);
     unsigned indexed_cnt = 0;
-    for (unsigned h_id = 0; h_id < leaves[li]->hyps_->locs_.size(); h_id++) {
+    for (unsigned h_id = 0; h_id < leave->hyps_->locs_.size(); h_id++) {
       std::vector<unsigned char> values(layer_size, 0);
-      for (unsigned i = 0; i < values.size(); i++)
-        values[i] = (unsigned char)(rng.drand32(1.0, (double)(sph->get_depth_offset_map().size()-1)));
+      for (unsigned char & value : values)
+        value = (unsigned char)(rng.drand32(1.0, (double)(sph->get_depth_offset_map().size()-1)));
       ind_dst->add_to_index(values);
-      for (unsigned i = 0; i < values.size(); i++)
-        values[i] = (unsigned char)(rng.drand32(1.0, (double)(10.0)));
+      for (unsigned char & value : values)
+        value = (unsigned char)(rng.drand32(1.0, (double)(10.0)));
       ind_ori->add_to_index(values);
-      for (unsigned i = 0; i < values.size(); i++)
-        values[i] = (unsigned char)(rng.drand32(1.0, (double)(volm_osm_category_io::volm_land_table.size())));
+      for (unsigned char & value : values)
+        value = (unsigned char)(rng.drand32(1.0, (double)(volm_osm_category_io::volm_land_table.size())));
       ind_lnd->add_to_index(values);
       ++indexed_cnt;
     }
@@ -172,13 +172,13 @@ static void test_volm_matcher_p1()
     boxm2_volm_wr3db_index_params::write_size_file(ind_dst_file, indexed_cnt);
   }
 
-  for (std::vector<volm_weight>::iterator vit = weights.begin(); vit != weights.end(); ++vit)
-    std::cout << ' ' << vit->w_typ_
-             << ' ' << vit->w_ori_
-             << ' ' << vit->w_lnd_
-             << ' ' << vit->w_dst_
-             << ' ' << vit->w_ord_
-             << ' ' << vit->w_obj_ << std::endl;
+  for (auto & weight : weights)
+    std::cout << ' ' << weight.w_typ_
+             << ' ' << weight.w_ori_
+             << ' ' << weight.w_lnd_
+             << ' ' << weight.w_dst_
+             << ' ' << weight.w_ord_
+             << ' ' << weight.w_obj_ << std::endl;
 
   // find the device that will be used
   bocl_manager_child &mgr = bocl_manager_child::instance();

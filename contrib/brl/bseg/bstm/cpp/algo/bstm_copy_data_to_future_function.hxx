@@ -59,16 +59,16 @@ void bstm_copy_data_to_future_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data
   int num_cells = 0;
   int curr_leaf_bit = time_tree.traverse(local_time_);
   int oldDataPtr = time_tree.get_data_index(curr_leaf_bit);
-  for (std::vector<int>::iterator iter = leaves.begin(); iter != leaves.end(); iter++)
+  for (int & leave : leaves)
   {
 
     float cell_min;
     float cell_max;
-    time_tree.cell_range(*iter, cell_min, cell_max);
+    time_tree.cell_range(leave, cell_min, cell_max);
 
     if(cell_min > local_time_ && cell_max >= local_time_)
     {
-      int newDataPtr = time_tree.get_data_index(*iter);
+      int newDataPtr = time_tree.get_data_index(leave);
 
 //      //copy data
       alpha_[newDataPtr]= alpha_[oldDataPtr];

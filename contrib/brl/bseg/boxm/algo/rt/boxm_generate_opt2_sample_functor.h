@@ -158,8 +158,8 @@ void boxm_generate_opt2_samples(boxm_scene<boct_tree<T_loc, T_data > > &scene,
 
   // compute model prior
   float model_prior = 1.0f;
-  for (unsigned int a=0; a<alt_appearance_priors.size(); ++a) {
-    model_prior -= alt_appearance_priors[a];
+  for (float alt_appearance_prior : alt_appearance_priors) {
+    model_prior -= alt_appearance_prior;
   }
   // sanity check
   if (model_prior <= 0.0f) {

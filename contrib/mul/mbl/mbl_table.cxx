@@ -434,15 +434,15 @@ bool mbl_table::subtable(mbl_table &new_table,  const std::vector<std::string> &
 
 
     // Write column headers row
-    for (unsigned c=0; c<headers.size(); ++c)
+    for (const auto & header : headers)
     {
         // get the column for the header if available
         std::map<std::string, unsigned>::const_iterator iter =
-            header_to_column_index_.find(headers[c]);
+            header_to_column_index_.find(header);
 
         if (iter != header_to_column_index_.end())
         {
-            new_table.append_column(headers[c],columns_[iter->second]);
+            new_table.append_column(header,columns_[iter->second]);
         }
         else
         {

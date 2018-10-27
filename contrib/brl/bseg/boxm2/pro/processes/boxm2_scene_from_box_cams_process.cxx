@@ -65,8 +65,8 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
                          vgl_point_3d<double>(xmin+width,ymin+height,zmin+depth));
   std::vector<vpgl_perspective_camera<double>* > ptrcams = bpgl_camera_utils::cameras_from_directory(camdir);
   std::vector<vpgl_perspective_camera<double> > cams;
-  for(unsigned int i = 0 ; i < ptrcams.size(); i++)
-      cams.push_back( * (ptrcams[i]) );
+  for(auto & ptrcam : ptrcams)
+      cams.push_back( * ptrcam );
 
   std::vector<std::string> appearance;
   appearance.emplace_back("boxm2_mog3_grey");

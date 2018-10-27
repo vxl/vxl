@@ -51,16 +51,16 @@ template <class T_loc, class T_data>
 bool are_meshes_in_block(std::vector<imesh_mesh>  meshes, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {
   bool flag=false;
-  for (unsigned k=0;k<meshes.size();k++)
+  for (auto & meshe : meshes)
   {
-    meshes[k].compute_face_normals(true);
-    imesh_face_array_base& fs = meshes[k].faces();
+    meshe.compute_face_normals(true);
+    imesh_face_array_base& fs = meshe.faces();
     std::list<vgl_point_3d<double> > v_list;
     vgl_box_3d<double> bb_global;
 
     for (unsigned i=0; i < fs.size(); ++i)
     {
-      imesh_vertex_array<3>& vertices = meshes[k].vertices<3>();
+      imesh_vertex_array<3>& vertices = meshe.vertices<3>();
       for (unsigned j=0; j<fs.num_verts(i); ++j) {
         unsigned int v_id = fs(i,j);
         vgl_point_3d<double> v;
@@ -91,14 +91,14 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
   typedef boct_tree<T_loc, T_data> tree_type;
   tree_type* tree = block->get_tree();
   vgl_box_3d<double> block_bb = block->bounding_box();
-  for (unsigned k=0;k<meshes.size();k++)
+  for (auto & meshe : meshes)
   {
-    imesh_face_array_base& fs = meshes[k].faces();
+    imesh_face_array_base& fs = meshe.faces();
     std::list<vgl_point_3d<double> > v_list;
     vgl_box_3d<double> bb_scale, bb_global;
     for (unsigned i=0; i < fs.size(); ++i)
     {
-      imesh_vertex_array<3>& vertices = meshes[k].vertices<3>();
+      imesh_vertex_array<3>& vertices = meshe.vertices<3>();
       for (unsigned j=0; j<fs.num_verts(i); ++j) {
         unsigned int v_id = fs(i,j);
         vgl_point_3d<double> v;
@@ -137,7 +137,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,
       for (unsigned i=0; i<children.size(); i++) {
         boct_tree_cell<T_loc,T_data>* cell=children[i];
         vgl_box_3d<double> cell_bb=tree->cell_bounding_box_local(cell);
-        if (contains_point(meshes[k],cell_bb.centroid())) {
+        if (contains_point(meshe,cell_bb.centroid())) {
           cell->set_data(val);
         }
       }
@@ -154,17 +154,17 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
   tree_type* tree = block->get_tree();
   vgl_box_3d<double> block_bb = block->bounding_box();
-  for (unsigned k=0;k<meshes.size();k++)
+  for (auto & meshe : meshes)
   {
-    if (is_mesh_in_block(meshes[k], block_bb,lvcs, use_lvcs))
+    if (is_mesh_in_block(meshe, block_bb,lvcs, use_lvcs))
     {
-      imesh_face_array_base& fs = meshes[k].faces();
+      imesh_face_array_base& fs = meshe.faces();
       std::list<vgl_point_3d<double> > v_list;
       vgl_box_3d<double> bb_scale, bb_global;
 
       for (unsigned i=0; i < fs.size(); ++i)
       {
-        imesh_vertex_array<3>& vertices = meshes[k].vertices<3>();
+        imesh_vertex_array<3>& vertices = meshe.vertices<3>();
         for (unsigned j=0; j<fs.num_verts(i); ++j) {
           unsigned int v_id = fs(i,j);
           vgl_point_3d<double> v;
@@ -192,7 +192,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
       if (inters.is_empty())
         continue;
 
-      meshes[k].compute_face_normals();
+      meshe.compute_face_normals();
 
       // locate the polygon bounding box in tree
       boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* region=tree->locate_region(inters);
@@ -204,11 +204,10 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
           region->leaf_children(children);
         else // insert the node itself, if no children
           children.push_back(region);
-        for (unsigned i=0; i<children.size(); i++) {
-          boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell=children[i];
+        for (auto cell : children) {
           vgl_box_3d<double> cell_bb=tree->cell_bounding_box(cell);
 
-          if (contains_point(meshes[k],cell_bb.centroid())) {
+          if (contains_point(meshe,cell_bb.centroid())) {
             boxm_sample<BOXM_APM_MOG_GREY> tempdata=cell->data();
             tempdata.set_appearance(val.appearance());
             tempdata.alpha*=val.alpha;
@@ -228,17 +227,17 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
   typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
   tree_type* tree = block->get_tree();
   vgl_box_3d<double> block_bb = block->bounding_box();
-  for (unsigned k=0;k<meshes.size();k++)
+  for (auto & meshe : meshes)
   {
-    if (is_mesh_in_block(meshes[k], block_bb,lvcs, use_lvcs))
+    if (is_mesh_in_block(meshe, block_bb,lvcs, use_lvcs))
     {
-      imesh_face_array_base& fs = meshes[k].faces();
+      imesh_face_array_base& fs = meshe.faces();
       std::list<vgl_point_3d<double> > v_list;
       vgl_box_3d<double> bb_scale, bb_global;
 
       for (unsigned i=0; i < fs.size(); ++i)
       {
-        imesh_vertex_array<3>& vertices = meshes[k].vertices<3>();
+        imesh_vertex_array<3>& vertices = meshe.vertices<3>();
         for (unsigned j=0; j<fs.num_verts(i); ++j) {
           unsigned int v_id = fs(i,j);
           vgl_point_3d<double> v;
@@ -266,7 +265,7 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
       if (inters.is_empty())
         continue;
 
-      meshes[k].compute_face_normals();
+      meshe.compute_face_normals();
 
       // locate the polygon bounding box in tree
       boct_tree_cell<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >* region=tree->locate_region(inters);
@@ -278,11 +277,10 @@ void boxm_fill_in_mesh_into_block(boxm_block<boct_tree<short, boxm_sample<BOXM_A
           region->leaf_children(children);
         else // insert the node itself, if no children
           children.push_back(region);
-        for (unsigned i=0; i<children.size(); i++) {
-          boct_tree_cell<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >* cell=children[i];
+        for (auto cell : children) {
           vgl_box_3d<double> cell_bb=tree->cell_bounding_box(cell);
 
-          if (contains_point(meshes[k],cell_bb.centroid())) {
+          if (contains_point(meshe,cell_bb.centroid())) {
             boxm_sample<BOXM_APM_SIMPLE_GREY> tempdata=cell->data();
             tempdata.set_appearance(val.appearance());
             tempdata.alpha*=val.alpha;

@@ -47,20 +47,20 @@ bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr
 {
     std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false, foundNumObsType = false;
-    for (unsigned int i=0; i<apps.size(); ++i) {
-        if (apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix())
+    for (const auto & app : apps) {
+        if (app == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix())
         {
             data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundDataType = true;
             options=" -D MOG_TYPE_8 ";
         }
-        else if (apps[i] == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
+        else if (app == boxm2_data_traits<BOXM2_MOG3_GREY_16>::prefix())
         {
             data_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundDataType = true;
             options=" -D MOG_TYPE_16 ";
         }
-        else if (apps[i] == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
+        else if (app == boxm2_data_traits<BOXM2_NUM_OBS>::prefix())
         {
             num_obs_type = boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(identifier);
             foundNumObsType = true;
@@ -202,7 +202,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 
     // Output Array
     float output_arr[100];
-    for (int i=0; i<100; ++i) output_arr[i] = 0.0f;
+    for (float & i : output_arr) i = 0.0f;
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
@@ -807,12 +807,10 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     }
 
     //iterate over offsets i, offsets j
-    for (unsigned int offi=0; offi<ois.size(); ++offi)
+    for (int oi : ois)
     {
-        for (unsigned int offj=0; offj<ojs.size(); ++offj)
+        for (int oj : ojs)
         {
-            int oi = ois[offi];
-            int oj = ojs[offj];
             std::cout<<"CHANGE OFFSET ("<<oi<<','<<oj<<')'<<std::endl;
             bocl_mem_sptr oi_mem = new bocl_mem(device->context(), &oi, sizeof(int),"offset i buffer");
             bocl_mem_sptr oj_mem = new bocl_mem(device->context(), &oj, sizeof(int),"offset j buffer");

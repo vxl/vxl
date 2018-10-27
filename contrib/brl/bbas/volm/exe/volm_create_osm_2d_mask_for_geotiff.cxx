@@ -126,8 +126,8 @@ int main(int argc, char** argv)
       bool found = find_key_value_from_tags(key(), value(), curr_keys, name);
       if (found) { // mark these pixels in the image
         vector<vgl_point_2d<double> > line;
-        for (vector<vgl_point_2d<double> >::iterator vit = osm_lines[i].begin(); vit != osm_lines[i].end(); ++vit) {
-          double lon = vit->x(); double lat = vit->y();
+        for (auto & vit : osm_lines[i]) {
+          double lon = vit.x(); double lat = vit.y();
           double u,v;
           cam->global_to_img(lon, lat, 0.0, u, v);
 

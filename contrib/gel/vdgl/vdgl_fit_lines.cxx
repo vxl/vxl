@@ -27,10 +27,9 @@ bool vdgl_fit_lines::fit_lines()
     return false;
   fitter_.set_min_fit_length(min_fit_length_);
   fitter_.set_rms_error_tol(rms_distance_);
-  for (std::vector<vdgl_digital_curve_sptr>::iterator eit = curves_.begin();
-       eit != curves_.end(); eit++)
+  for (auto & curve : curves_)
   {
-    vdgl_digital_curve_sptr dc = (*eit);
+    vdgl_digital_curve_sptr dc = curve;
     vdgl_interpolator_sptr intp = dc->get_interpolator();
     vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
     fitter_.clear();
@@ -43,10 +42,9 @@ bool vdgl_fit_lines::fit_lines()
 
     fitter_.fit();
     std::vector<vgl_line_segment_2d<double> >& segs = fitter_.get_line_segs();
-    for (std::vector<vgl_line_segment_2d<double> >::iterator sit=segs.begin();
-         sit != segs.end(); sit++)
+    for (auto & seg : segs)
     {
-      vsol_line_2d_sptr line = new vsol_line_2d(*sit);
+      vsol_line_2d_sptr line = new vsol_line_2d(seg);
       line_segs_.push_back(line);
     }
   }
