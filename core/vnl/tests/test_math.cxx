@@ -3,7 +3,6 @@
 #include <string>
 #include <limits>
 #include <vcl_compiler.h>
-#include <vxl_config.h> // for VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h> // for vnl_math::abs(std::complex)
 #include <testlib/testlib_test.h>
@@ -28,11 +27,8 @@ std::string print_hex(const T p)
   return str.str();
   }
 
-#if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
 static
-void check_pointer( const void * )
-{
-}
+void check_pointer( const void * ) { }
 
 static
 void test_static_const_definition()
@@ -60,7 +56,6 @@ void test_static_const_definition()
   check_pointer( &vnl_math::eps );
   check_pointer( &vnl_math::sqrteps );
 }
-#endif
 
 // Test that the vnl_math constants don't have weird values
 static void test_math_constants()
@@ -108,10 +103,8 @@ static void test_math_constants()
 
 static void test_math()
 {
-#if !VCL_STATIC_CONST_INIT_FLOAT_NO_DEFN
   // Call it to avoid compiler warnings
   test_static_const_definition();
-#endif
   test_math_constants();
 
   int n = -11;
