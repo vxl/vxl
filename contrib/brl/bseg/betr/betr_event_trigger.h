@@ -104,7 +104,6 @@ class betr_event_trigger : public vbl_ref_count{
                                     vgl_vector_3d<double> const& transl);
   void register_algorithms();
   vpgl_camera_double_sptr cast_camera(vpgl_camera_double_sptr const& camera);
-  bool verbose_;
   std::string name_;
   vpgl_lvcs lvcs_;
   bool lvcs_valid_;
@@ -121,6 +120,7 @@ class betr_event_trigger : public vbl_ref_count{
   std::map<std::string, betr_geo_object_3d_sptr> ref_trigger_objects_;
   std::map<std::string, vgl_vector_3d<double> > local_trans_;//translation to each object
   std::map<std::string, betr_algorithm_sptr> algorithms_;//available change algorithms
+  bool verbose_;
 };
 #endif //guard
 //: Binary write boxm2_scene scene to stream

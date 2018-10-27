@@ -18,10 +18,36 @@
 class betr_algorithm : public vbl_ref_count
 {
  public:
-  betr_algorithm():name_("no_name"), identifier_("null"), offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
- betr_algorithm(std::string  name): name_(std::move(name)),offset_(0.0), alpha_(1.0), verbose_(false), params_(nullptr){}
- betr_algorithm(std::string  name, double offset, double alpha) : name_(std::move(name)), offset_(offset), alpha_(alpha), verbose_(false), params_(nullptr), multiple_ref_(false) {}
- betr_algorithm(std::string  name, betr_params_sptr const& params, double offset, double alpha) : name_(std::move(name)), offset_(offset), alpha_(alpha), verbose_(false), params_(params), multiple_ref_(false) {}
+  betr_algorithm()
+    : name_("no_name")
+    , identifier_("null")
+    , offset_(0.0)
+    , alpha_(1.0)
+    , verbose_(false)
+    , params_(nullptr){}
+ betr_algorithm(std::string  name)
+    : name_(std::move(name))
+    , offset_(0.0)
+    , alpha_(1.0)
+    , verbose_(false)
+    , params_(nullptr)
+   {}
+ betr_algorithm(std::string  name, double offset, double alpha)
+    : name_(std::move(name))
+    , offset_(offset)
+    , alpha_(alpha)
+    , verbose_(false)
+    , multiple_ref_(false)
+    , params_(nullptr)
+   {}
+ betr_algorithm(std::string  name, betr_params_sptr const& params, double offset, double alpha)
+    : name_(std::move(name))
+    , offset_(offset)
+    , alpha_(alpha)
+    , verbose_(false)
+    , multiple_ref_(false)
+    , params_(params)
+   {}
 
   //: sigmoid performance parameters - may be specialized for each algorithm
   void set_offset(double offset){offset_ = offset;}
