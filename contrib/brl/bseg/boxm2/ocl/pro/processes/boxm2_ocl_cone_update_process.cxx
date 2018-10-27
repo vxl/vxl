@@ -58,7 +58,7 @@ namespace boxm2_ocl_cone_update_process_globals
       std::string options = opts;
 
       //proc norm pass computes the proc_norm image, mean_obs for each cell
-      bocl_kernel* pass_one = new bocl_kernel();
+      auto* pass_one = new bocl_kernel();
       std::string one_opts = options + " -D PASSONE ";
       one_opts += " -D STEP_CELL=step_cell_one(aux_args,data_ptr,intersect_volume) ";
       one_opts += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
@@ -66,7 +66,7 @@ namespace boxm2_ocl_cone_update_process_globals
       vec_kernels.push_back(pass_one);
 
       //computes bayes ratio for each cell
-      bocl_kernel* bayes_main = new bocl_kernel();
+      auto* bayes_main = new bocl_kernel();
       std::string bayes_opt = options + " -D BAYES ";
       bayes_opt += " -D STEP_CELL=step_cell(aux_args,data_ptr,intersect_volume)  ";
       bayes_opt += " -D COMPUTE_BALL_PROPERTIES=compute_ball_properties(aux_args)  ";
@@ -75,7 +75,7 @@ namespace boxm2_ocl_cone_update_process_globals
       vec_kernels.push_back(bayes_main);
 
       //may need
-      bocl_kernel* update = new bocl_kernel();
+      auto* update = new bocl_kernel();
       update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_cone_data", options, "cone_update::update_data");
       vec_kernels.push_back(update);
 

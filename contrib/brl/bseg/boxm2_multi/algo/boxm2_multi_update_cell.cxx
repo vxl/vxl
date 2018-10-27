@@ -186,10 +186,10 @@ float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
   bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
 
   //num data in this block
-  std::size_t dataLen = (std::size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
+  auto dataLen = (std::size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
 
   //calc data buffer length
-  boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+  auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
   info_buffer->data_buffer_length = (int) dataLen;
   blk_info->write_to_buffer(queue);
 
@@ -291,7 +291,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
       /*bocl_mem* blk= */  ocl_cache->get_block(id);
       bocl_mem* blk_info  = ocl_cache->loaded_block_info();
       bocl_mem* alpha     = ocl_cache->get_data<BOXM2_ALPHA>(id,0,false);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       // check for invalid parameters
@@ -387,7 +387,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
         throw 0;
       }
 
-      std::size_t dataLen = (std::size_t) (alpha->num_bytes()/alphaTypeSize);
+      auto dataLen = (std::size_t) (alpha->num_bytes()/alphaTypeSize);
       bocl_mem* mog       = ocl_cache->get_data(id,data_type,dataLen*apptypesize,false);
       //numobs
       std::string num_obs_type = boxm2_data_traits<BOXM2_NUM_OBS>::prefix();
@@ -440,12 +440,12 @@ std::vector<bocl_kernel*>& boxm2_multi_update_cell::get_kernels(bocl_device_sptr
   std::string options = opts + "";
 
   //push back cast_ray_bit
-  bocl_kernel* bayes_main = new bocl_kernel();
+  auto* bayes_main = new bocl_kernel();
   std::string bayes_opt = options + " -D BAYES -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d) ";
   bayes_main->create_kernel(&device->context(),device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
-  bocl_kernel* update = new bocl_kernel();
+  auto* update = new bocl_kernel();
   std::string main_opts = options + " -D UPDATE_BIT_SCENE_MAIN ";
   update->create_kernel(&device->context(),device->device_id(), non_ray_src, "update_bit_scene_main", main_opts, "update::update_main");
 

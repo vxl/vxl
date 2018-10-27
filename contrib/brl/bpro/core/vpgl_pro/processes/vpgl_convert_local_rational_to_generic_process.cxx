@@ -56,19 +56,19 @@ bool vpgl_convert_local_rational_to_generic_process(bprb_func_process& pro)
     std::cerr << "Null camera input\n\n";
     return false;
   }
-  vpgl_local_rational_camera<double> *lrat_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
+  auto *lrat_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
   if (!lrat_cam) {
     std::cerr << "Error: camera is not a vpgl_local_rational_camera\n";
     return false;
   }
 
-  unsigned ni = pro.get_input<unsigned>(1);
-  unsigned nj = pro.get_input<unsigned>(2);
+  auto ni = pro.get_input<unsigned>(1);
+  auto nj = pro.get_input<unsigned>(2);
 
   double min_z = pro.get_input<float>(3);
   double max_z = pro.get_input<float>(4);
 
-  unsigned level = pro.get_input<unsigned>(5);
+  auto level = pro.get_input<unsigned>(5);
   vpgl_generic_camera<double> gcam;
 
   if (!vpgl_generic_camera_convert::convert(*lrat_cam, (int)ni, (int)nj, gcam, min_z, max_z, level)) {

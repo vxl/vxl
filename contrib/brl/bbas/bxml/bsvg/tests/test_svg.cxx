@@ -24,19 +24,19 @@ bsvg_document make_simple_doc()
 
   doc.add_element(t);
 
-  bsvg_group* g = new bsvg_group();
+  auto* g = new bsvg_group();
   g->set_fill_color("red");
   g->set_stroke_color("black");
   //g->set_rotation(90);
 
-  bsvg_ellipse* e1 = new bsvg_ellipse(25, 10);
+  auto* e1 = new bsvg_ellipse(25, 10);
   e1->set_location(50, 20);
   e1->set_rotation(45);
-  bsvg_ellipse* e2 = new bsvg_ellipse(25, 10);
+  auto* e2 = new bsvg_ellipse(25, 10);
   e2->set_location(100, 20);
   e2->set_rotation(90);
 
-  bsvg_ellipse* e3 = new bsvg_ellipse(25, 25);
+  auto* e3 = new bsvg_ellipse(25, 25);
   e3->set_location(150, 20);
 
   g->add_element(e1);
@@ -45,13 +45,13 @@ bsvg_document make_simple_doc()
 
   doc.add_element(g);
 
-  bsvg_line* l = new bsvg_line(90, 115, 125, 115);
+  auto* l = new bsvg_line(90, 115, 125, 115);
   l->set_stroke_color("black");
   l->set_stroke_width(10);
 
   doc.add_element(l);
 
-  bsvg_rectangle* r = new bsvg_rectangle(100, 100, 15, 30);
+  auto* r = new bsvg_rectangle(100, 100, 15, 30);
   r->set_fill_color("blue");
   r->set_stroke_color("black");
   r->set_fill_opacity(0.5f);

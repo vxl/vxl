@@ -50,7 +50,7 @@ void pdf1d_exponential::set_lambda(double lambda)
 
 pdf1d_sampler* pdf1d_exponential::new_sampler() const
 {
-  pdf1d_exponential_sampler *i = new pdf1d_exponential_sampler;
+  auto *i = new pdf1d_exponential_sampler;
   i->set_model(*this);
   return i;
 }

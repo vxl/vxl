@@ -43,7 +43,7 @@ static void test_compute_visibility()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
+    auto * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
     if (iter.index().z()==1)
     {
       std::vector<boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> > * > leaf_cells=tree->leaf_cells();

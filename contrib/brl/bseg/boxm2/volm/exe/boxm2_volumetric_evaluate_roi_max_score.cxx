@@ -173,7 +173,7 @@ int main(int argc, char** argv)
   fout << out_str.str();
   fout.precision(4); fout.width(13); fout.fill(' ');
   fout << test_img_roi[0] << ' ';
-  unsigned tot_loc = (unsigned int)test_img_roi[test_img_roi.size()-1];
+  auto tot_loc = (unsigned int)test_img_roi[test_img_roi.size()-1];
   fout.width(13); fout.fill(' ');
   fout << tot_loc << "        ";
   for (unsigned i = 1; i < thresholds.size()+1; i++) {

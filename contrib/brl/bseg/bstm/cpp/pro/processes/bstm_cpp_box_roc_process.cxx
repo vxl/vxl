@@ -88,19 +88,19 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
-  float change_region_center_x = pro.get_input<float>(i++);
-  float change_region_center_y = pro.get_input<float>(i++);
-  float change_region_center_z = pro.get_input<float>(i++);
-  float change_region_len_x = pro.get_input<float>(i++);
-  float change_region_len_y = pro.get_input<float>(i++);
-  float change_region_len_z = pro.get_input<float>(i++);
+  auto change_region_center_x = pro.get_input<float>(i++);
+  auto change_region_center_y = pro.get_input<float>(i++);
+  auto change_region_center_z = pro.get_input<float>(i++);
+  auto change_region_len_x = pro.get_input<float>(i++);
+  auto change_region_len_y = pro.get_input<float>(i++);
+  auto change_region_len_z = pro.get_input<float>(i++);
 
-  float center_x = pro.get_input<float>(i++);
-  float center_y = pro.get_input<float>(i++);
-  float center_z = pro.get_input<float>(i++);
-  float len_x = pro.get_input<float>(i++);
-  float len_y = pro.get_input<float>(i++);
-  float len_z = pro.get_input<float>(i++);
+  auto center_x = pro.get_input<float>(i++);
+  auto center_y = pro.get_input<float>(i++);
+  auto center_z = pro.get_input<float>(i++);
+  auto len_x = pro.get_input<float>(i++);
+  auto len_y = pro.get_input<float>(i++);
+  auto len_z = pro.get_input<float>(i++);
   //create vgl box,
   const vgl_point_3d<double> change_region_center(change_region_center_x,change_region_center_y,change_region_center_z);
   vgl_box_3d<double> change_box(change_region_center,change_region_len_x,change_region_len_y,change_region_len_z, vgl_box_3d<double>::centre);
@@ -114,10 +114,10 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
 
   //init roc
   unsigned const numPoints = 1000; //num points on ROC
-  bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(numPoints);
+  auto * tp=new bbas_1d_array_float(numPoints);
+  auto * tn=new bbas_1d_array_float(numPoints);
+  auto * fp=new bbas_1d_array_float(numPoints);
+  auto * fn=new bbas_1d_array_float(numPoints);
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
     tp->data_array[pnt]=0.0f;
     fp->data_array[pnt]=0.0f;
@@ -139,7 +139,7 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
     bstm_time_block* blk_t = cache->get_time_block(bstm_metadata.id_);
 
     bstm_data_base *change_buffer = cache->get_data_base(bstm_metadata.id_,bstm_data_traits<BSTM_CHANGE>::prefix()  );
-    bstm_data_traits<BSTM_CHANGE>::datatype* change_array = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();
+    auto* change_array = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_buffer->data_buffer();
 
     //iterate through each tree
     boxm2_array_3d<uchar16>&  trees = blk->trees();
@@ -203,8 +203,8 @@ bool bstm_cpp_box_roc_process(bprb_func_process& pro)
   }
 
 
-  bbas_1d_array_float * tpr=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fpr=new bbas_1d_array_float(numPoints);
+  auto * tpr=new bbas_1d_array_float(numPoints);
+  auto * fpr=new bbas_1d_array_float(numPoints);
 
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
     tpr->data_array[pnt]= tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);

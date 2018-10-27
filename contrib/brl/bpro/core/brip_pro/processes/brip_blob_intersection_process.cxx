@@ -61,12 +61,12 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   }
 
   // cast to usable image views
-  vil_image_view<vxl_byte> * gt_uchar = dynamic_cast<vil_image_view<vxl_byte> *>(gt_sptr.ptr());
+  auto * gt_uchar = dynamic_cast<vil_image_view<vxl_byte> *>(gt_sptr.ptr());
   if ( !gt_uchar ) {
     std::cout<<"brip_blob_intersection_process:: gt map is not an unsigned char map"<<std::endl;
     return false;
   }
-  vil_image_view<unsigned char> * blob_uchar =dynamic_cast<vil_image_view<unsigned char> *>(blob_sptr.ptr());
+  auto * blob_uchar =dynamic_cast<vil_image_view<unsigned char> *>(blob_sptr.ptr());
   if (!blob_uchar) {
     std::cout<<"brip_blob_intersection_process:: blob map is not an unsigned char map"<<std::endl;
     return false;

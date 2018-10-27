@@ -78,9 +78,9 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   }
 
   //cast camera and image so they are useful
-  vil_image_view<float>* z_img = (vil_image_view<float>*) img.ptr();
-  vil_image_view<float>* x_img = (vil_image_view<float>*) ximg.ptr();
-  vil_image_view<float>* y_img = (vil_image_view<float>*) yimg.ptr();
+  auto* z_img = (vil_image_view<float>*) img.ptr();
+  auto* x_img = (vil_image_view<float>*) ximg.ptr();
+  auto* y_img = (vil_image_view<float>*) yimg.ptr();
 
   //determine size of depth image
   unsigned ni = z_img->ni();
@@ -135,8 +135,8 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   for (unsigned iv = 0; iv<nverts; ++iv)
   {
     //get coordinates so you can index into the height map
-    unsigned i = static_cast<unsigned>(verts[iv][0]);
-    unsigned j = static_cast<unsigned>(verts[iv][1]);
+    auto i = static_cast<unsigned>(verts[iv][0]);
+    auto j = static_cast<unsigned>(verts[iv][1]);
     if (i<ni && j<nj)
     {
       verts[iv][0] = (*x_img)(i,j);
@@ -153,7 +153,7 @@ bool boxm2_export_mesh_process(bprb_func_process& pro)
   {
     std::set<unsigned int> sel_faces;
     double maxLen = (maxz-minz) / 3.0;
-    imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
+    auto& faces = (imesh_regular_face_array<3>&) mesh.faces();
     imesh_vertex_array<3>&       verts = mesh.vertices<3>();
 
     unsigned nfaces = mesh.num_faces();

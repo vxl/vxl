@@ -101,7 +101,7 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
 {
   const unsigned n = outputs.size();
   assert(model.is_class("clsfy_random_classifier"));
-  clsfy_random_classifier &randclass = (clsfy_random_classifier&) model;
+  auto &randclass = (clsfy_random_classifier&) model;
 
   if (nClasses==1) nClasses=2;
 
@@ -114,7 +114,7 @@ double clsfy_random_builder::build(clsfy_classifier_base& model,
     freqs[outputs[i]] ++;
   }
 
-  double sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses));
+  auto sum = (double)(vnl_c_vector<unsigned>::sum(&freqs.front(), nClasses));
   std::vector<double> probs(nClasses);
   for (unsigned i=0; i < nClasses; ++i)
     probs[i] = freqs[i] / sum;

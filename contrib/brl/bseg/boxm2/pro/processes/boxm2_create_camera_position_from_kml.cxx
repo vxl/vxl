@@ -56,11 +56,11 @@ bool boxm2_create_camera_from_kml_path_process(bprb_func_process& pro)
   unsigned i = 0;
   std::string cam_path = pro.get_input<std::string>(i++);
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(i++);
-     unsigned cam_num = pro.get_input<unsigned>(i++);
+     auto cam_num = pro.get_input<unsigned>(i++);
   std::string out_path = pro.get_input<std::string>(i++);
 
   // read the path from kml file
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   std::FILE* kmlFile = std::fopen(cam_path.c_str(), "r");
   if(!kmlFile){
     std::cerr << cam_path.c_str() << " error on opening the input kml file\n";

@@ -55,7 +55,7 @@ bprb_parameters::bprb_parameters(const bprb_parameters_sptr& old_params)
 bool
 bprb_parameters::valid_parameter( const std::string& name ) const
 {
-  std::map< std::string , bprb_param * >::const_iterator itr = name_param_map_.find( name );
+  auto itr = name_param_map_.find( name );
   return itr != name_param_map_.end();
 }
 
@@ -104,11 +104,11 @@ bool bprb_parameters::parse_XML(const std::string& xml_path,
   }
 
   // iterate over he elements and find out their types
-  bxml_element* h_elm = static_cast<bxml_element*>(root.ptr());
-  for (bxml_element::const_data_iterator i = h_elm->data_begin(); i != h_elm->data_end();  ++i) {
+  auto* h_elm = static_cast<bxml_element*>(root.ptr());
+  for (auto i = h_elm->data_begin(); i != h_elm->data_end();  ++i) {
     bxml_data_sptr elm = *i;
     if (elm->type() == bxml_data::ELEMENT) {
-      bxml_element* param = static_cast<bxml_element*> (elm.as_pointer());
+      auto* param = static_cast<bxml_element*> (elm.as_pointer());
       if (param) {
         std::string value = param->attribute("value");
         std::string type = param->attribute("type");
@@ -199,7 +199,7 @@ bprb_parameters::reset_all()
 bool
 bprb_parameters::reset( const std::string& name )
 {
-  std::map< std::string , bprb_param * >::iterator it = name_param_map_.find( name );
+  auto it = name_param_map_.find( name );
   if ( it == name_param_map_.end() ) {
     return false;
   }
@@ -222,7 +222,7 @@ bprb_parameters::get_param_list() const
 std::string
 bprb_parameters::get_desc( const std::string& name ) const
 {
-  std::map< std::string , bprb_param * >::const_iterator it = name_param_map_.find( name );
+  auto it = name_param_map_.find( name );
   if ( it == name_param_map_.end() ) {
     return "";
   }

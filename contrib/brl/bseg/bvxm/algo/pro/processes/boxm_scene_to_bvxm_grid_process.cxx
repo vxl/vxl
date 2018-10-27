@@ -80,19 +80,19 @@ bool boxm_scene_to_bvxm_grid_process(bprb_func_process& pro)
     return false;
   }
 
-  if ( boxm_scene< boct_tree<short, float> > *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_base.as_pointer()))
+  if ( auto *scene= dynamic_cast<boxm_scene< boct_tree<short, float > > * >(scene_base.as_pointer()))
   {
     bvxm_voxel_grid<float> *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level,enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if ( boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > > *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > > * >(scene_base.as_pointer()))
+  else if ( auto *scene= dynamic_cast<boxm_scene< boct_tree<short, bsta_num_obs<bsta_gauss_sf1> > > * >(scene_base.as_pointer()))
   {
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid);
     return true;
   }
-  else if ( boxm_scene< boct_tree<short, mix_gauss_sf1_type > > *scene =
+  else if ( auto *scene =
             dynamic_cast<boxm_scene< boct_tree<short, mix_gauss_sf1_type > > * >(scene_base.as_pointer()))
   {
     bvxm_voxel_grid<mix_gauss_sf1_type > *grid = boxm_scene_to_bvxm_grid(*scene, filepath, resolution_level, enforce_level);

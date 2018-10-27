@@ -229,7 +229,7 @@ namespace {
         rgrl_transformation_sptr trans = est->estimate( ms, null3d_trans );
         TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
@@ -244,7 +244,7 @@ namespace {
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null3d_trans );
         TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
@@ -266,7 +266,7 @@ namespace {
         TEST("Minimal set of correspondences", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -303,7 +303,7 @@ namespace {
         TEST("Many correspondences (zero error)", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -330,7 +330,7 @@ namespace {
         TEST("With zero wgted outliers (zero error)", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -392,7 +392,7 @@ namespace {
 
       if ( trans ) {
         TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+        auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST("Result is affine (dynamic_cast)", !aff_trans, false);
         std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
                  << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<std::endl;
@@ -560,7 +560,7 @@ namespace {
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
         TEST("Underconstrained (not enough correspondences)", !trans, true);
         if ( trans ) {
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
@@ -575,7 +575,7 @@ namespace {
         rgrl_transformation_sptr trans = rgrl_est_affine().estimate( ms, null2d_trans );
         TEST("Underconstrained (samples not independent)", !trans, true);
         if ( trans ) {
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           std::cout << "Estimated (shouldn't have):\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<'\n';
         }
       }
@@ -594,7 +594,7 @@ namespace {
         TEST("Minimal set of correspondences", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -622,7 +622,7 @@ namespace {
         TEST("Many correspondences (zero normal error)", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()) , true);
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -649,7 +649,7 @@ namespace {
         TEST("With zero wgted outliers (zero normal error)", !trans, false);
         if ( trans ) {
           TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
-          rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+          auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
           TEST("Result is affine (dynamic_cast)", !aff_trans, false);
           std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()
                    << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -728,7 +728,7 @@ namespace {
 
       if ( trans ) {
         TEST("Result is affine (is_type())", trans->is_type(rgrl_trans_affine::type_id()), true );
-        rgrl_trans_affine* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+        auto* aff_trans = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
         TEST("Result is affine (dynamic_cast)", !aff_trans, false);
         std::cout << "Estimated:\nA=\n"<<aff_trans->A()<<"\nt="<<aff_trans->t()<<"\ncovar="<<aff_trans->covar()
                  << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<"\ncovar="<<covar<<std::endl;
@@ -1219,7 +1219,7 @@ namespace {
       TEST("Estimate Quadratic", !trans, false);
       if ( trans ) {
         TEST("Result is quadratic (is_type())", trans->is_type(rgrl_trans_quadratic::type_id()), true );
-        rgrl_trans_quadratic* q_trans = dynamic_cast<rgrl_trans_quadratic*>(trans.as_pointer());
+        auto* q_trans = dynamic_cast<rgrl_trans_quadratic*>(trans.as_pointer());
         TEST("Result is quadratic (dynamic_cast)", !q_trans, false );
         std::cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
                  << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -1271,7 +1271,7 @@ namespace {
       TEST("Estimate Similarity", !trans, false);
       if ( trans ) {
         TEST("Result is similarity (is_type())", trans->is_type(rgrl_trans_similarity::type_id()), true );
-        rgrl_trans_similarity* s_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
+        auto* s_trans = dynamic_cast<rgrl_trans_similarity*>(trans.as_pointer());
         TEST("Result is similarity (dynamic_cast)", !s_trans, false );
         std::cout << "Estimated:\nA=\n"<<s_trans->A()<<"\nt="<<s_trans->t()
                  << "\n\nTrue:\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -1356,7 +1356,7 @@ namespace {
       TEST("Estimate Reduced Quadratic", !trans, false);
       if ( trans ) {
         TEST("Result is quadratic (is_type())", trans->is_type(rgrl_trans_reduced_quad::type_id()), true );
-        rgrl_trans_reduced_quad* q_trans = dynamic_cast<rgrl_trans_reduced_quad*>(trans.as_pointer());
+        auto* q_trans = dynamic_cast<rgrl_trans_reduced_quad*>(trans.as_pointer());
         TEST("Result is quadratic (dynamic_cast)", !q_trans, false);
         std::cout << "Estimated:\nQ=\n"<<q_trans->Q()<<"\nA=\n"<<q_trans->A()<<"\nt="<<q_trans->t()
                  << "\n\nTrue:\nQ=\n"<<Q<<"\nA=\n"<<A<<"\nt="<<t<<std::endl;
@@ -1458,7 +1458,7 @@ namespace {
       if ( trans )
       {
         TEST("Result is rigid (is_type())", trans->is_type(rgrl_trans_rigid::type_id()), true );
-        rgrl_trans_rigid* s_trans = dynamic_cast<rgrl_trans_rigid*>(trans.as_pointer());
+        auto* s_trans = dynamic_cast<rgrl_trans_rigid*>(trans.as_pointer());
         TEST("Result is rigid (dynamic_cast)", !s_trans, false);
         std::cout << "Estimated:\nR=\n"<<s_trans->R()<<"\nt="<<s_trans->t()
                  << "\n\nTrue:\nR=\n"<<A<<"\nt="<<t<<std::endl;
@@ -2173,7 +2173,7 @@ static void test_estimator()
     vnl_double_2 camera_centre( 0.0, 0.0 );
     std::cout << "using camera centre " << camera_centre << std::endl;
 
-    rgrl_est_homo2d_proj_rad* homo2d_rad_est
+    auto* homo2d_rad_est
       = new rgrl_est_homo2d_proj_rad( 1, camera_centre );
     homo2d_rad_est->set_rel_thres( 1e-6 );
     homo2d_rad_est->set_max_num_iter( 5000 );
@@ -2188,7 +2188,7 @@ static void test_estimator()
     vnl_double_2 camera_centre( 5.0, 10.0 );
     std::cout << "using camera centre " << camera_centre << std::endl;
 
-    rgrl_est_homo2d_proj_rad* homo2d_rad_est
+    auto* homo2d_rad_est
       = new rgrl_est_homo2d_proj_rad( 1, camera_centre );
     homo2d_rad_est->set_rel_thres( 1e-6 );
     homo2d_rad_est->set_max_num_iter( 5000 );

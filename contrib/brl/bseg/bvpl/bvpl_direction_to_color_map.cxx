@@ -146,14 +146,14 @@ void bvpl_direction_to_color_map::make_svg_color_map(std::string outfile)
 {
   bsvg_document doc(400, 400);
 
-  std::map<vgl_point_3d<double>,float,point_3d_cmp>::iterator iter=colors_.begin();
+  auto iter=colors_.begin();
   std::map<float,vgl_point_3d<double> > colors_ordered_by_index;
   for (;iter!=colors_.end();iter++)
   {
     colors_ordered_by_index[iter->second]=iter->first;
   }
   int i=0;  float r,g,b;
-  std::map<float,vgl_point_3d<double> >::iterator iter1=colors_ordered_by_index.begin();
+  auto iter1=colors_ordered_by_index.begin();
   for (;iter1!=colors_ordered_by_index.end();iter1++,i++)
   {
     float col=iter1->first*360;
@@ -171,7 +171,7 @@ void bvpl_direction_to_color_map::make_svg_color_map(std::string outfile)
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*float(i+1));
 
-    bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
+    auto* e1 = new bsvg_ellipse(25, 7);
     e1->set_location(250.0f, 15.0f*float(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);
@@ -373,7 +373,7 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, std::vector
 {
   bsvg_document doc(600.f, float(hue_vector.size())*20.f);
 
-  std::vector<float>::iterator iter = hue_vector.begin();
+  auto iter = hue_vector.begin();
 
   int i=0;  float r,g,b;
   for (;iter!=hue_vector.end();iter++,i++)
@@ -393,7 +393,7 @@ void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, std::vector
     t->set_font_size(15);
     t->set_location(10.0f, 15.0f*float(i+1));
 
-    bsvg_ellipse* e1 = new bsvg_ellipse(25, 7);
+    auto* e1 = new bsvg_ellipse(25, 7);
     e1->set_location(400.0f, 15.0f*float(i+1));
     e1->set_fill_color(os.str());
     doc.add_element(e1);

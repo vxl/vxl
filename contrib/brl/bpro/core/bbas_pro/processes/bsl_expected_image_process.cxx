@@ -43,12 +43,12 @@ bool bsl_expected_image_process(bprb_func_process& pro)
 
   //get the inputs
   vil_image_view_base_sptr inp = pro.get_input<vil_image_view_base_sptr>(0);
-  float atomicity = pro.get_input<float>(1);
+  auto atomicity = pro.get_input<float>(1);
 
   vil_image_view<float> inp_img(inp);
   unsigned ni = inp_img.ni();
   unsigned nj = inp_img.nj();
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj);
+  auto* out_img = new vil_image_view<float>(ni, nj);
   if (inp_img.nplanes() == 2) {  // only b and u planes, plane 0: belief, plane 1: uncertainty
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++) {

@@ -46,9 +46,9 @@ bool vpgl_backproject_dem_process(bprb_func_process& pro)
   unsigned i = 0;
   vpgl_dem_manager_sptr dem_mgr = pro.get_input<vpgl_dem_manager_sptr>(i++);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  double u = pro.get_input<double>(i++);
-  double v = pro.get_input<double>(i++);
-  double err_tol = pro.get_input<double>(i);
+  auto u = pro.get_input<double>(i++);
+  auto v = pro.get_input<double>(i++);
+  auto err_tol = pro.get_input<double>(i);
   if(!dem_mgr || !cam){
    std::cout << "vpgl_backproject_dem_process: Null input dem_mgr or camera" << std::endl;
     return false;

@@ -225,8 +225,8 @@ void clsfy_binary_tree::b_write(vsl_b_ostream& bfs) const
     unsigned N=outlist.size();
     vsl_b_write(bfs,N);
 
-    std::deque<clsfy_binary_tree_node*>::iterator outIter=outlist.begin();
-    std::deque<clsfy_binary_tree_node*>::iterator outIterEnd=outlist.end();
+    auto outIter=outlist.begin();
+    auto outIterEnd=outlist.end();
     while (outIter != outIterEnd)
     {
         clsfy_binary_tree_node* pNode=*outIter;
@@ -240,8 +240,8 @@ void clsfy_binary_tree::b_write(vsl_b_ostream& bfs) const
     N=arcs.size();
     vsl_b_write(bfs,N);
 
-    std::vector<graph_rep>::iterator arcIter=arcs.begin();
-    std::vector<graph_rep>::iterator arcIterEnd=arcs.end();
+    auto arcIter=arcs.begin();
+    auto arcIterEnd=arcs.end();
 
     while (arcIter != arcIterEnd)
     {
@@ -339,8 +339,8 @@ void clsfy_binary_tree::b_read(vsl_b_istream& bfs)
 
             //Validate the tree
             assert(root_);
-            std::map<int,clsfy_binary_tree_node*>::iterator nodeIter =workmap.begin();
-            std::map<int,clsfy_binary_tree_node*>::iterator nodeIterEnd =workmap.end();
+            auto nodeIter =workmap.begin();
+            auto nodeIterEnd =workmap.end();
             while (nodeIter != nodeIterEnd)
             {
                 clsfy_binary_tree_node* pNode=nodeIter->second;

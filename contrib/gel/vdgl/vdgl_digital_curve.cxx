@@ -35,7 +35,7 @@ vdgl_digital_curve::vdgl_digital_curve(vsol_point_2d_sptr const& p0,
     interpolator_ = new vdgl_interpolator_linear(ec);
     return;
   }
-  vdgl_edgel_chain* ec = new vdgl_edgel_chain(p0->x(), p0->y(),
+  auto* ec = new vdgl_edgel_chain(p0->x(), p0->y(),
                                               p1->x(), p1->y());
   interpolator_ = new vdgl_interpolator_linear(ec);
 }

@@ -66,7 +66,7 @@ void pdf1d_gaussian::set_mean(double mean)
 
 pdf1d_sampler* pdf1d_gaussian::new_sampler() const
 {
-  pdf1d_gaussian_sampler *i = new pdf1d_gaussian_sampler;
+  auto *i = new pdf1d_gaussian_sampler;
   i->set_model(*this);
   return i;
 }

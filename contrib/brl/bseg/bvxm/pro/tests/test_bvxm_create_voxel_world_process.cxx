@@ -58,7 +58,7 @@ static void test_bvxm_create_voxel_world_process()
   bool non_null = (value != nullptr);
   TEST("bvxm_voxel_world_sptr non-null", non_null ,true);
 
-  brdb_value_t<bvxm_voxel_world_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(value.ptr());
 
   // compare the values with the params given

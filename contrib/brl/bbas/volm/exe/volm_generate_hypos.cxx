@@ -490,7 +490,7 @@ int main(int argc,  char** argv)
         if (leaves.empty())
           continue;
         // obtain the building polygons that currently intersect with given leaf
-        float leaf_size = (float)leaves[0]->extent_.width();
+        auto leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << std::flush << std::endl;
         for (auto & leave : leaves) {
           // obtain buildings that are inside leaf
@@ -504,7 +504,7 @@ int main(int argc,  char** argv)
             leave->hyps_ = new volm_loc_hyp();
           float lower_left_lon = (float)leave->extent_.min_point().x();
           float lower_left_lat = (float)leave->extent_.min_point().y();
-          unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
+          auto nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi<nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
             for (unsigned hj=0; hj<nhi; hj++) {
@@ -597,14 +597,14 @@ int main(int argc,  char** argv)
         volm_geo_index::get_leaves(root, leaves, sat_info.bbox);
         if (leaves.empty())
           continue;
-        float leaf_size = (float)leaves[0]->extent_.width();
+        auto leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with the height map: " << sat_info.name << std::endl;
         for (auto & leave : leaves) {
           if (!leave->hyps_)
             leave->hyps_ = new volm_loc_hyp();
           float lower_left_lon = (float)leave->extent_.min_point().x();
           float lower_left_lat = (float)leave->extent_.min_point().y();
-          unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
+          auto nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi<nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
             for (unsigned hj=0; hj<nhi; hj++) {
@@ -920,14 +920,14 @@ int main(int argc,  char** argv)
         volm_geo_index::get_leaves(root, leaves, lidar_info.bbox);
         if (leaves.empty())
           continue;
-        float leaf_size = (float)leaves[0]->extent_.width();
+        auto leaf_size = (float)leaves[0]->extent_.width();
         std::cout << leaves.size() << " leaves (" << leaf_size << " deg) intersects with lidar image: " << lidar_info.name << std::endl;
         for (auto & leave : leaves) {
           if (!leave->hyps_)
             leave->hyps_ = new volm_loc_hyp();
           float lower_left_lon = (float)leave->extent_.min_point().x();
           float lower_left_lat = (float)leave->extent_.min_point().y();
-          unsigned nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
+          auto nhi = (unsigned)std::ceil(leaf_size/inc_in_sec);
           for (unsigned hi=0; hi < nhi; hi++) {
             double lon = lower_left_lon + hi*inc_in_sec;
             for (unsigned hj = 0; hj < nhi; hj++) {

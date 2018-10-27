@@ -11,11 +11,11 @@ std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr
 {
   vgl_point_3d<double> pt;
   if ( cam->type_name() == "vpgl_generic_camera" ) {
-    vpgl_generic_camera<double>* gcam = (vpgl_generic_camera<double>*) cam.ptr();
+    auto* gcam = (vpgl_generic_camera<double>*) cam.ptr();
     pt = gcam->max_ray_origin();
   }
   else if ( cam->type_name() == "vpgl_perspective_camera" ) {
-    vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+    auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
     pt = pcam->camera_center();
   }
   else {

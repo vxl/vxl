@@ -75,8 +75,8 @@ static void test_point_box()
   unsigned ni = 1000;
   for (unsigned i = 0; i<ni; ++i)
   {
-    float x = static_cast<float>(r.drand32(0.0,1.0));
-    float y = static_cast<float>(r.drand32(0.0,1.0));
+    auto x = static_cast<float>(r.drand32(0.0,1.0));
+    auto y = static_cast<float>(r.drand32(0.0,1.0));
     vgl_point_2d<float> p(x,y);
     tr_big.add(p);
   }

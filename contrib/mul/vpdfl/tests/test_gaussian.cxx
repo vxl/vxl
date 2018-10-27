@@ -123,7 +123,7 @@ void test_gaussian()
   std::cout<<"\n\nPDF sampler: "; vsl_print_summary(std::cout, p_sampler);
   std::cout<<'\n';
 
-  vpdfl_gaussian& g_pdf1 = static_cast<vpdfl_gaussian&>(*p_pdf_built);
+  auto& g_pdf1 = static_cast<vpdfl_gaussian&>(*p_pdf_built);
   vpdfl_gaussian g_pdf2;
   vnl_vector<double> var2(4);
   for (unsigned i=0;i<4;++i) var2[i]=1+i;
@@ -262,7 +262,7 @@ void test_gaussian()
     TEST("Correct builder",builder->is_a(),"vpdfl_gaussian_builder");
     if (builder->is_a()=="vpdfl_axis_gaussian_builder")
     {
-      vpdfl_gaussian_builder &a_builder = static_cast<vpdfl_gaussian_builder&>(*builder);
+      auto &a_builder = static_cast<vpdfl_gaussian_builder&>(*builder);
       std::cout<<a_builder<<std::endl;
       TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }

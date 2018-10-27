@@ -48,7 +48,7 @@ bool volm_create_satellite_resources_process(bprb_func_process& pro)
 
   //get the inputs
   std::string poly_file = pro.get_input<std::string>(0);
-  float leaf_size = pro.get_input<float>(1);
+  auto leaf_size = pro.get_input<float>(1);
   bool eliminate_same = pro.get_input<bool>(2);
 
   // find the bbox of the polygon
@@ -177,15 +177,15 @@ bool volm_query_satellite_resources_process(bprb_func_process& pro)
 
   //get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  double lower_left_lon = pro.get_input<double>(1);
-  double lower_left_lat = pro.get_input<double>(2);
-  double upper_right_lon = pro.get_input<double>(3);
-  double upper_right_lat = pro.get_input<double>(4);
+  auto lower_left_lon = pro.get_input<double>(1);
+  auto lower_left_lat = pro.get_input<double>(2);
+  auto upper_right_lon = pro.get_input<double>(3);
+  auto upper_right_lat = pro.get_input<double>(4);
   std::string out_file = pro.get_input<std::string>(5);
   std::string band = pro.get_input<std::string>(6);
   bool pick_seed = pro.get_input<bool>(7);
   int n_seeds = pro.get_input<int>(8);
-  double gsd_thres = pro.get_input<double>(9);
+  auto gsd_thres = pro.get_input<double>(9);
 
   unsigned cnt; bool out = false;
   if (!pick_seed) {
@@ -235,7 +235,7 @@ bool volm_query_satellite_resources_kml_process(bprb_func_process& pro)
   std::string band = pro.get_input<std::string>(3);
   bool pick_seed = pro.get_input<bool>(4);
   int n_seeds = pro.get_input<int>(5);
-  double gsd_thres = pro.get_input<double>(6);
+  auto gsd_thres = pro.get_input<double>(6);
 
   // parse the polygon and construct its bounding box
   if (!vul_file::exists(kml_file)) {
@@ -328,10 +328,10 @@ bool volm_pick_nadir_resource_process(bprb_func_process& pro)
 
   //get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  double lower_left_lon = pro.get_input<double>(1);
-  double lower_left_lat = pro.get_input<double>(2);
-  double upper_right_lon = pro.get_input<double>(3);
-  double upper_right_lat = pro.get_input<double>(4);
+  auto lower_left_lon = pro.get_input<double>(1);
+  auto lower_left_lat = pro.get_input<double>(2);
+  auto upper_right_lon = pro.get_input<double>(3);
+  auto upper_right_lat = pro.get_input<double>(4);
   std::string band = pro.get_input<std::string>(5);
   std::string sat_name = pro.get_input<std::string>(6);
   std::string non_cloud_folder = pro.get_input<std::string>(7);
@@ -399,10 +399,10 @@ bool volm_pick_nadir_resource_pair_process(bprb_func_process& pro)
   }
   // get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  double lower_left_lon = pro.get_input<double>(1);
-  double lower_left_lat = pro.get_input<double>(2);
-  double upper_right_lon = pro.get_input<double>(3);
-  double upper_right_lat = pro.get_input<double>(4);
+  auto lower_left_lon = pro.get_input<double>(1);
+  auto lower_left_lat = pro.get_input<double>(2);
+  auto upper_right_lon = pro.get_input<double>(3);
+  auto upper_right_lat = pro.get_input<double>(4);
   std::string band = pro.get_input<std::string>(5);
   std::string sat_name = pro.get_input<std::string>(6);
   std::string non_cloud_folder = pro.get_input<std::string>(7);
@@ -602,7 +602,7 @@ bool volm_find_res_pair_process(bprb_func_process& pro)
   //get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
   std::string name = pro.get_input<std::string>(1);
-  double tol = pro.get_input<double>(2);
+  auto tol = pro.get_input<double>(2);
   std::pair<std::string, std::string> full = res->full_path(name);
   std::string pair_name = res->find_pair(name, tol);
   std::cout << "pair_name = " << pair_name << std::endl;
@@ -652,13 +652,13 @@ bool volm_find_satellite_pairs_process(bprb_func_process& pro)
 
   //get the inputs
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
-  double lower_left_lon = pro.get_input<double>(1);
-  double lower_left_lat = pro.get_input<double>(2);
-  double upper_right_lon = pro.get_input<double>(3);
-  double upper_right_lat = pro.get_input<double>(4);
+  auto lower_left_lon = pro.get_input<double>(1);
+  auto lower_left_lat = pro.get_input<double>(2);
+  auto upper_right_lon = pro.get_input<double>(3);
+  auto upper_right_lat = pro.get_input<double>(4);
   std::string out_file = pro.get_input<std::string>(5);
   std::string sat_name = pro.get_input<std::string>(6);
-  float GSD_thres = pro.get_input<float>(7);
+  auto GSD_thres = pro.get_input<float>(7);
 
   unsigned cnt = 0; bool out = false;
   out = res->query_pairs_print_to_file(lower_left_lon, lower_left_lat, upper_right_lon, upper_right_lat, GSD_thres, cnt, out_file, sat_name);
@@ -698,7 +698,7 @@ bool volm_find_satellite_pairs_poly_process(bprb_func_process& pro)
   std::string poly_file = pro.get_input<std::string>(1);
   std::string out_file = pro.get_input<std::string>(2);
   std::string sat_name = pro.get_input<std::string>(3);
-  float GSD_thres = pro.get_input<float>(4);
+  auto GSD_thres = pro.get_input<float>(4);
 
   // find the bbox of the polygon
   vgl_polygon<double> poly = bkml_parser::parse_polygon(poly_file);

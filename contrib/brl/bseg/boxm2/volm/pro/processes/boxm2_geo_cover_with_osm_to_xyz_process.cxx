@@ -108,7 +108,7 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   }
   vil_image_view_base_sptr img_sptr = vil_load(img_fname.c_str());
   unsigned nii, nji;
-  if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
+  if (auto* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
 
@@ -126,12 +126,12 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   std::cout << " image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << std::endl;
 
   // create x y z images
-  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
-  vil_image_view<vil_rgb<vxl_byte> >* out_class_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj, 1);
-  vil_image_view<vxl_byte>* level_img = new vil_image_view<vxl_byte>(ni, nj, 1);
+  auto* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  auto* out_class_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj, 1);
+  auto* level_img = new vil_image_view<vxl_byte>(ni, nj, 1);
   // initialize the image
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
   // for z image, give a height below the scene to avoid rays that is outside of current geo_cover image
@@ -143,8 +143,8 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
   // iterator over the image an d fore each pixel, calculate, xyz in location coordinate system, ingest the geo cover label to the label image
   for (int i = 0; i < ni; i++) {
     for (int j = 0; j < nj; j++) {
-      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      auto local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      auto local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       (*out_img_x)(i,j) = local_x;
       (*out_img_y)(i,j) = local_y;
       // transfer from scene local to geo coords
@@ -156,10 +156,10 @@ bool boxm2_geo_cover_with_osm_to_xyz_process(bprb_func_process& pro)
       if (lon < 0)  lon = -lon;
       if (lat < 0)  lat = -lat;
       cam->global_to_img(lon, lat, gz, u, v);
-      unsigned uu = (unsigned)std::floor(u + 0.5);
-      unsigned vv = (unsigned)std::floor(v + 0.5);
+      auto uu = (unsigned)std::floor(u + 0.5);
+      auto vv = (unsigned)std::floor(v + 0.5);
       if (uu > 0 && vv > 0 && uu < nii && vv < nji) {
-        if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
+        if (auto* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
           (*out_img_z)(i,j) = (float)(scene_bbox.max_z()+100.0f);  // make the ray origin above all surface if the pixel is valid
           (*out_class_img)(i,j) = volm_osm_category_io::geo_land_table[(*img)(uu,vv)].color_;
           (*out_img_label)(i,j) = volm_osm_category_io::geo_land_table[(*img)(uu,vv)].id_;

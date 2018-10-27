@@ -35,9 +35,9 @@ bool vil_invert_float_image_process(bprb_func_process& pro)
     // get the inputs
     unsigned i = 0;
     vil_image_view_base_sptr img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-    if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*> (img_ptr.ptr()))
+    if (auto* img = dynamic_cast<vil_image_view<float>*> (img_ptr.ptr()))
     {
-        vil_image_view<float>* oimg = new vil_image_view<float>(img->ni(),img->nj());
+        auto* oimg = new vil_image_view<float>(img->ni(),img->nj());
         for (unsigned int i = 0; i < img->ni(); i++)
             for (unsigned int j = 0; j < img->nj(); j++)
                 (*oimg)(i, j) = (*img)(i, j) < 1.0 ? 1 - (*img)(i, j) : 0.0;

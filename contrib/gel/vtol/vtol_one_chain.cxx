@@ -86,15 +86,15 @@ vtol_one_chain::vtol_one_chain(vtol_one_chain_sptr const& other)
   topology_list newverts(verts.size());
 
   int i=0;
-  for (vertex_list::iterator v=verts.begin();v!=verts.end();++v,++i)
+  for (auto v=verts.begin();v!=verts.end();++v,++i)
   {
     vtol_vertex_sptr ve=*v;
     newverts[i]=ve->clone()->cast_to_topology_object();
     ve->set_id(i);
   }
 
-  std::vector<signed char>::iterator dir=other->directions_.begin();
-  topology_list::iterator inf=other->inferiors()->begin();
+  auto dir=other->directions_.begin();
+  auto inf=other->inferiors()->begin();
   for (; dir!=other->directions_.end(); ++dir,++inf)
   {
     vtol_edge_sptr e=(*inf)->cast_to_edge();
@@ -132,10 +132,10 @@ vtol_one_chain *
 vtol_one_chain::copy_with_arrays(topology_list &verts,
                                  topology_list &edges) const
 {
-  vtol_one_chain *result=new vtol_one_chain();
+  auto *result=new vtol_one_chain();
 
-  std::vector<signed char>::const_iterator di=directions_.begin();
-  topology_list::const_iterator ti=inferiors()->begin();
+  auto di=directions_.begin();
+  auto ti=inferiors()->begin();
   for (; ti!=inferiors()->end(); ++ti,++di)
   {
     vtol_edge *e=(*ti)->cast_to_edge();
@@ -178,7 +178,7 @@ vtol_one_chain::copy_with_arrays(topology_list &verts,
 //: Get the direction of the edge "e" in the onechain.
 signed char vtol_one_chain::direction(vtol_edge const &e) const
 {
-  std::vector<signed char>::const_iterator dit=directions_.begin();
+  auto dit=directions_.begin();
   topology_list::const_iterator toit;
   for (toit=inferiors()->begin();toit!=inferiors()->end();++toit)
   {
@@ -196,10 +196,10 @@ signed char vtol_one_chain::direction(vtol_edge const &e) const
 std::vector<vtol_vertex*> *
 vtol_one_chain::outside_boundary_compute_vertices()
 {
-  std::vector<vtol_vertex*> *result=new std::vector<vtol_vertex*>;
+  auto *result=new std::vector<vtol_vertex*>;
 
-  topology_list::iterator inf=inferiors()->begin();
-  std::vector<signed char>::iterator dir=directions_.begin();
+  auto inf=inferiors()->begin();
+  auto dir=directions_.begin();
   for (; inf!=inferiors()->end(); ++inf,++dir)
   {
     vtol_edge_sptr e=(*inf)->cast_to_edge();
@@ -223,7 +223,7 @@ vtol_one_chain::outside_boundary_compute_vertices()
 vertex_list *vtol_one_chain::outside_boundary_vertices()
 {
   std::vector<vtol_vertex*> *tmp_list=outside_boundary_compute_vertices();
-  vertex_list *result=new vertex_list;
+  auto *result=new vertex_list;
   result->reserve(tmp_list->size());
   std::vector<vtol_vertex*>::iterator i;
   for (i=tmp_list->begin();i!=tmp_list->end();++i)
@@ -263,7 +263,7 @@ vtol_one_chain::outside_boundary_compute_zero_chains()
 //---------------------------------------------------------------------------
 zero_chain_list *vtol_one_chain::outside_boundary_zero_chains()
 {
-  zero_chain_list *result=new zero_chain_list;
+  auto *result=new zero_chain_list;
   std::vector<vtol_zero_chain *> *ptr_list=outside_boundary_compute_zero_chains();
 
   // copy the lists
@@ -304,7 +304,7 @@ std::vector<vtol_edge*> *vtol_one_chain::outside_boundary_compute_edges()
 //---------------------------------------------------------------------------
 edge_list *vtol_one_chain::outside_boundary_edges()
 {
-  edge_list *new_ref_list = new edge_list;
+  auto *new_ref_list = new edge_list;
   std::vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
   // copy the lists
 
@@ -359,7 +359,7 @@ std::vector<vtol_one_chain*> *vtol_one_chain::compute_one_chains()
 //---------------------------------------------------------------------------
 one_chain_list *vtol_one_chain::inferior_one_chains()
 {
-  one_chain_list *result=new one_chain_list;
+  auto *result=new one_chain_list;
 
   for (auto & chain_inferior : chain_inferiors_)
     result->push_back(chain_inferior->clone()->cast_to_topology_object()->cast_to_one_chain());
@@ -372,7 +372,7 @@ one_chain_list *vtol_one_chain::inferior_one_chains()
 //---------------------------------------------------------------------------
 one_chain_list *vtol_one_chain::superior_one_chains()
 {
-  one_chain_list *result=new one_chain_list;
+  auto *result=new one_chain_list;
 
   std::list<vtol_chain*>::iterator i;
   for (i=chain_superiors_.begin();i!=chain_superiors_.end();++i)
@@ -387,7 +387,7 @@ one_chain_list *vtol_one_chain::superior_one_chains()
 one_chain_list *vtol_one_chain::outside_boundary_one_chains()
 {
   std::vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
-  one_chain_list *ref_list= new one_chain_list;
+  auto *ref_list= new one_chain_list;
 
   std::vector<vtol_one_chain*>::iterator i;
   for (i=ptr_list->begin();i!=ptr_list->end();++i)
@@ -414,7 +414,7 @@ std::vector<vtol_face*> *vtol_one_chain::compute_faces()
 {
   if (is_sub_chain())
   {
-    std::vector<vtol_face*> *result=new std::vector<vtol_face*>();
+    auto *result=new std::vector<vtol_face*>();
     one_chain_list *onech=superior_one_chains();
 
     for (auto & i : *onech)
@@ -441,7 +441,7 @@ std::vector<vtol_two_chain*> *vtol_one_chain::compute_two_chains()
 {
   if (is_sub_chain())
   {
-    std::vector<vtol_two_chain*> *result=new std::vector<vtol_two_chain*>;
+    auto *result=new std::vector<vtol_two_chain*>;
     one_chain_list *onech=superior_one_chains();
 
     for (auto & i : *onech)
@@ -468,7 +468,7 @@ std::vector<vtol_block*> *vtol_one_chain::compute_blocks()
 {
   if (is_sub_chain())
   {
-    std::vector<vtol_block*> *result=new std::vector<vtol_block*>;
+    auto *result=new std::vector<vtol_block*>;
     one_chain_list *onech=superior_one_chains();
     for (auto & i : *onech)
     {
@@ -533,7 +533,7 @@ void vtol_one_chain::determine_edge_directions()
     // Determining the cycle direction
     // with reference to the first edge.
 
-    topology_list::iterator i=inferiors()->begin();
+    auto i=inferiors()->begin();
     first_edge=(*i)->cast_to_edge();
     ++i;
 
@@ -641,7 +641,7 @@ void vtol_one_chain::remove_edge(vtol_edge_sptr const& doomed_edge,
 
   if (index>=0 && i!= inferiors()->end())
   {
-    std::vector<signed char>::iterator j = directions_.begin() + index;
+    auto j = directions_.begin() + index;
     directions_.erase(j);// get rid of the direction associated with the edge
     touch();
     unlink_inferior(doomed_edge);
@@ -660,7 +660,7 @@ void vtol_one_chain::remove_edge(vtol_edge_2d_sptr const& doomed_edge,
 
   if (index>=0 && i!= inferiors()->end())
   {
-    std::vector<signed char>::iterator j = directions_.begin() + index;
+    auto j = directions_.begin() + index;
     directions_.erase(j);// get rid of the direction associated with the edge
     touch();
     unlink_inferior(doomed_edge->cast_to_edge());
@@ -680,7 +680,7 @@ void vtol_one_chain::remove_edge(vtol_edge &doomed_edge,
 
   if (index>=0 && i!= inferiors()->end())
   {
-    std::vector<signed char>::iterator j = directions_.begin() + index;
+    auto j = directions_.begin() + index;
     directions_.erase(j);// get rid of the direction associated with the edge
     touch();
     unlink_inferior(&doomed_edge);

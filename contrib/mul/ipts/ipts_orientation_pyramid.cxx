@@ -27,9 +27,9 @@ void ipts_orientation_pyramid(const vimt_image_pyramid& smooth_pyramid,
   orient_pyramid.resize(n_levels,vimt_image_2d_of<vxl_byte>());
   for (int i=0;i<n_levels;++i)
   {
-    const vimt_image_2d_of<float>& smooth_im
+    const auto& smooth_im
             = static_cast<const vimt_image_2d_of<float>&>(smooth_pyramid(i));
-    vimt_image_2d_of<vxl_byte>& orient_im
+    auto& orient_im
             = static_cast<vimt_image_2d_of<vxl_byte>&>(orient_pyramid(i));
 
     vil_image_view<float> grad_i,grad_j,grad_mag;

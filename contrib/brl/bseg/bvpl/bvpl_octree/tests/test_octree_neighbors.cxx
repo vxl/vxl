@@ -61,7 +61,7 @@ void fill_octree(boct_tree<short,float>* tree)
 
 static void test_octree_neighbors()
 {
-  boct_tree<short,float>* tree = new boct_tree<short,float>(4,3);
+  auto* tree = new boct_tree<short,float>(4,3);
   fill_octree(tree);
   bvpl_kernel_iterator iter;
   vgl_point_3d<int> min_pt(-1,-1,-1);

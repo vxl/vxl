@@ -22,7 +22,7 @@ bool test_atom_cmpxchg(unsigned len, float & bandwidth)
   // cl_int* result_flag = mgr->result_flag(); // unused
   bandwidth=(float)4/* image reads float4 */ *(len*4)/mgr.time_taken()/(1024*1024);
 
-  cl_int * result_array=(cl_int*)mgr.result_array();
+  auto * result_array=(cl_int*)mgr.result_array();
   for (unsigned i=0;i<len;++i)
     std::cout<<result_array[i]<<' ';
 

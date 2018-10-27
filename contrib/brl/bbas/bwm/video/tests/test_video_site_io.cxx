@@ -33,7 +33,7 @@ static void test_video_site_io()
   good = good && sio.camera_path() == "my_camera";
   std::vector<bwm_video_corr_sptr> restored_corrs = sio.corrs();
   unsigned i = 0;
-  for (std::vector<bwm_video_corr_sptr>::iterator cit = restored_corrs.begin();
+  for (auto cit = restored_corrs.begin();
        cit != restored_corrs.end(); ++cit, ++i)
   {
     vgl_point_2d<double> pt;

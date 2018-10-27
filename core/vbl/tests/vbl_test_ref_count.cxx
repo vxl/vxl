@@ -21,7 +21,7 @@ static void vbl_test_ref_count()
 
   // Class with compiler generated copy constructor
   {
-    myclass_test1* obj1 = new myclass_test1();
+    auto* obj1 = new myclass_test1();
     // Get three references to the object, like creating three smart pointers would do.
     obj1->ref();
     obj1->ref();
@@ -30,7 +30,7 @@ static void vbl_test_ref_count()
     TEST( "Original has 3 references", obj1->get_references(), 3 );
 
     // obj2 is a new object. Nothing holds references to it yet.
-    myclass_test1* obj2 = new myclass_test1( *obj1 );
+    auto* obj2 = new myclass_test1( *obj1 );
 
     TEST( "Copy has 0 references", obj2->get_references(), 0 );
 
@@ -40,7 +40,7 @@ static void vbl_test_ref_count()
 
   // Class with user-defined copy constructor
   {
-    myclass_test2* obj1 = new myclass_test2();
+    auto* obj1 = new myclass_test2();
     // Get three references to the object, like creating three smart pointers would do.
     obj1->ref();
     obj1->ref();
@@ -49,7 +49,7 @@ static void vbl_test_ref_count()
     TEST( "Original has 3 references", obj1->get_references(), 3 );
 
     // obj2 is a new object. Nothing holds references to it yet.
-    myclass_test2* obj2 = new myclass_test2( *obj1 );
+    auto* obj2 = new myclass_test2( *obj1 );
 
     TEST( "Copy has 0 references", obj2->get_references(), 0 );
 

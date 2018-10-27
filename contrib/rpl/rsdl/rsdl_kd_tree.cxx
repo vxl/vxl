@@ -163,7 +163,7 @@ rsdl_kd_tree::build_kd_tree( int points_per_leaf,
   for ( i=0; i<=med_loc; ++i ) left_indices[i] = values[i].second;
   for ( ; i<indices.size(); ++i ) right_indices[i-med_loc-1] = values[i].second;
 
-  rsdl_kd_node * node = new rsdl_kd_node( outer_box, inner_box, depth );
+  auto * node = new rsdl_kd_node( outer_box, inner_box, depth );
   internal_count_ ++ ;
   node->left_ = this->build_kd_tree( points_per_leaf, left_outer_box, depth+1, left_indices );
   node->right_ = this->build_kd_tree( points_per_leaf, right_outer_box, depth+1, right_indices );

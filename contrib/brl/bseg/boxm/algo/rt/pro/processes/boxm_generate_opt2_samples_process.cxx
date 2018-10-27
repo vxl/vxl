@@ -70,8 +70,8 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(1);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(2);
   std::string img_name =  pro.get_input<std::string>(3); // TODO - unused!!
-  float shadow_prior = pro.get_input<float>(4);
-  float shadow_sigma = pro.get_input<float>(5);
+  auto shadow_prior = pro.get_input<float>(4);
+  auto shadow_sigma = pro.get_input<float>(5);
   bool use_black_background =  pro.get_input<bool>(6);
 
   // check the input validity
@@ -84,7 +84,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
   {
    case BOXM_APM_SIMPLE_GREY:
     {
-      vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+      auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
       vil_image_view<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       // create alternate appearance models
@@ -97,7 +97,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
       }
       if (!scene->multi_bin()) {
         typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-        boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+        auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
         boxm_generate_opt2_samples<short, boxm_sample<BOXM_APM_SIMPLE_GREY>, BOXM_AUX_OPT2_GREY >(*s, camera, img, img_name, alt_appearance_priors, alt_appearance_models, use_black_background);
       }
       else {
@@ -107,7 +107,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
     }
    case BOXM_APM_MOG_GREY:
     {
-      vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
+      auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
       vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
       vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       // create alternate appearance models
@@ -123,7 +123,7 @@ bool boxm_generate_opt2_samples_process(bprb_func_process& pro)
       }
       if (!scene->multi_bin()) {
         typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-        boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+        auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
         boxm_generate_opt2_samples<short, boxm_sample<BOXM_APM_MOG_GREY>, BOXM_AUX_OPT2_GREY >(*s, camera, img, img_name, alt_appearance_priors, alt_appearance_models, use_black_background);
       }
       else {

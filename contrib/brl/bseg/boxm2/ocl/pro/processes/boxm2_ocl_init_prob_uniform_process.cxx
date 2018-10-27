@@ -49,7 +49,7 @@ namespace boxm2_ocl_init_prob_uniform_process_globals
         //set kernel options
         std::string options = "-D INIT_UNIFORM_PROB -D STEP_CELL=step_cell_init_prob(aux_args,data_ptr,tfar-tblockfixed,d)";
         //have kernel construct itself using the context and device
-        bocl_kernel * ray_trace_kernel = new bocl_kernel();
+        auto * ray_trace_kernel = new bocl_kernel();
         ray_trace_kernel->create_kernel(&device->context(),
                                          device->device_id(),
                                          src_paths,
@@ -103,8 +103,8 @@ bool boxm2_ocl_init_prob_uniform_process(bprb_func_process& pro)
         xint = mdata.sub_block_dim_.x() / num_octree_cells;
         yint = mdata.sub_block_dim_.y() / num_octree_cells;
     }
-    unsigned int ni = (unsigned int)std::ceil(bbox.width() / xint);
-    unsigned int nj = (unsigned int)std::ceil(bbox.height() / yint);
+    auto ni = (unsigned int)std::ceil(bbox.width() / xint);
+    auto nj = (unsigned int)std::ceil(bbox.height() / yint);
     std::cout << "Size of the image " << ni << ',' << nj << std::endl;
     float z = bbox.max_z();
     std::string identifier = device->device_identifier();
@@ -123,8 +123,8 @@ bool boxm2_ocl_init_prob_uniform_process(bprb_func_process& pro)
     scene_origin[3] = 1.0;
     unsigned cl_ni = RoundUp(ni, local_threads[0]);
     unsigned cl_nj = RoundUp(nj, local_threads[1]);
-    cl_float* ray_origins = new cl_float[4 * cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4 * cl_ni*cl_nj];
     float ray_dx = 0, ray_dy = 0, ray_dz = -1;
     // initialize ray origin buffer, first and last return buffers
     int count = 0;

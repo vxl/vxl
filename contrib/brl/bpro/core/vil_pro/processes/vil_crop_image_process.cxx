@@ -44,10 +44,10 @@ bool vil_crop_image_process(bprb_func_process& pro)
   vil_image_resource_sptr image_ptr = vil_new_image_resource_of_view(*image);
 
   //Retrieve limits
-  unsigned i0= pro.get_input<unsigned>(i++);
-  unsigned j0= pro.get_input<unsigned>(i++);
-  unsigned ni= pro.get_input<unsigned>(i++);
-  unsigned nj= pro.get_input<unsigned>(i++);
+  auto i0= pro.get_input<unsigned>(i++);
+  auto j0= pro.get_input<unsigned>(i++);
+  auto ni= pro.get_input<unsigned>(i++);
+  auto nj= pro.get_input<unsigned>(i++);
 
   vil_image_resource_sptr out_img = vil_crop(image_ptr, i0, ni, j0, nj);
   vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view()));
@@ -91,10 +91,10 @@ bool vil_crop_image_res_process(bprb_func_process& pro)
   // get the inputs
   unsigned i = 0;
   vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);
-  unsigned i0 = pro.get_input<unsigned>(i++);
-  unsigned j0 = pro.get_input<unsigned>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto i0 = pro.get_input<unsigned>(i++);
+  auto j0 = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
   vil_image_resource_sptr out_img = vil_crop(img_res_sptr, i0, ni, j0, nj);
   vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(out_img->get_view()));

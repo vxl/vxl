@@ -141,7 +141,7 @@ void test_binary_hyperplane()
 
   clsfy_binary_hyperplane_ls_builder builder;
 
-  clsfy_binary_hyperplane *pClassifier =
+  auto *pClassifier =
     (clsfy_binary_hyperplane*) builder.new_classifier();
   std::cout << "Finding Least Squares Separator using least squares\n";
   mbl_data_array_wrapper<vnl_vector<double> > training_set(trainingVectors);
@@ -324,7 +324,7 @@ void test_clsfy_geman_mcclure_build()
     //First do an ordinary least squares build for comparison
     clsfy_binary_hyperplane_ls_builder builder;
 
-    clsfy_binary_hyperplane *pClassifier =
+    auto *pClassifier =
         (clsfy_binary_hyperplane*) builder.new_classifier();
     std::cout << "Finding Least Squares Separator using least squares\n";
     mbl_data_array_wrapper<vnl_vector<double> > training_set(trainingVectors);

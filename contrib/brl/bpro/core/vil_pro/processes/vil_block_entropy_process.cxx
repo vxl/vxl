@@ -39,8 +39,8 @@ bool vil_block_entropy_process(bprb_func_process& pro)
 
   unsigned i=0;
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned size = pro.get_input<unsigned>(i++);
-  unsigned bins = pro.get_input<unsigned>(i++);
+  auto size = pro.get_input<unsigned>(i++);
+  auto bins = pro.get_input<unsigned>(i++);
 
   //int medfilt_halfsize = 1;
   vil_image_resource_sptr image_res = vil_new_image_resource_of_view(*image);

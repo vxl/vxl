@@ -39,7 +39,7 @@ STATIC
 void
 vil_jpeg_init_destination (j_compress_ptr cinfo)
 {
-  vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
   // Allocate the output buffer --- it will be released when done with image
   dest->buffer = (JOCTET *)
@@ -75,7 +75,7 @@ vil_jpeg_init_destination (j_compress_ptr cinfo)
 jpeg_boolean
 vil_jpeg_empty_output_buffer (j_compress_ptr cinfo)
 {
-  vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
 
   if (dest->stream->write(dest->buffer, vil_jpeg_OUTPUT_BUF_SIZE) != (std::size_t) vil_jpeg_OUTPUT_BUF_SIZE)
     ERREXIT(cinfo, JERR_FILE_WRITE);
@@ -95,7 +95,7 @@ vil_jpeg_empty_output_buffer (j_compress_ptr cinfo)
 void
 vil_jpeg_term_destination (j_compress_ptr cinfo)
 {
-  vil_jpeg_dstptr dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
+  auto dest = (vil_jpeg_dstptr) cinfo->dest; // cast to derived class
   std::size_t datacount = vil_jpeg_OUTPUT_BUF_SIZE - dest->base.free_in_buffer;
 
   // Write any data remaining in the buffer
@@ -121,7 +121,7 @@ vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs)
   assert(! cinfo->dest); // call this routine only once.
 
   // allocate
-  vil_jpeg_dstptr dest = (vil_jpeg_dstptr)
+  auto dest = (vil_jpeg_dstptr)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil_jpeg_stream_destination_mgr));
@@ -138,7 +138,7 @@ vil_jpeg_stream_dst_set (j_compress_ptr cinfo, vil_stream *vs)
 void
 vil_jpeg_stream_dst_rewind(j_compress_ptr cinfo, vil_stream *vs)
 {
-  vil_jpeg_dstptr dst = ( vil_jpeg_dstptr )( cinfo->dest );
+  auto dst = ( vil_jpeg_dstptr )( cinfo->dest );
   { // verify
     assert(dst != nullptr);
     assert(dst->stream == vs);

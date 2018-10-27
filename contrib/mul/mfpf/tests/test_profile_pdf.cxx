@@ -117,7 +117,7 @@ void test_profile_pdf()
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_profile_pdf_builder");
     if (pf->is_a()=="mfpf_profile_pdf_builder")
     {
-      mfpf_profile_pdf_builder &a_pf = static_cast<mfpf_profile_pdf_builder&>(*pf);
+      auto &a_pf = static_cast<mfpf_profile_pdf_builder&>(*pf);
       std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("ilo configured",a_pf.ilo(),-3);

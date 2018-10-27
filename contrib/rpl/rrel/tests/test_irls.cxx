@@ -134,12 +134,12 @@ static void test_irls()
   double sigma = 0.25;
   std::vector< vnl_vector<double> > pts;
   regression_points( true_params.as_vector(), sigma, pts );
-  rrel_linear_regression * lr = new rrel_linear_regression( pts, use_intercept );
+  auto * lr = new rrel_linear_regression( pts, use_intercept );
   int dof = lr->param_dof();
   rrel_wls_obj * m_est = new rrel_tukey_obj( dof );
   int max_iterations = 50;
   testlib_test_begin( "ctor" );
-  rrel_irls * irls = new rrel_irls( max_iterations );
+  auto * irls = new rrel_irls( max_iterations );
   testlib_test_perform( irls != nullptr );
 
   //  Setting max iteration parameters.

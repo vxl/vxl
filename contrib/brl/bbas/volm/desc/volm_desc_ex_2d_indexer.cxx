@@ -60,7 +60,7 @@ bool volm_desc_ex_2d_indexer::get_next()
         classification_maps_[i].ni = classification_maps_[i].img_r->ni(); classification_maps_[i].nj = classification_maps_[i].img_r->nj();
       }
       // compute the lon and lat images (if not already computed!)
-      std::map<unsigned, vil_image_view_base_sptr >::iterator lon_it = lon_imgs.find(i);
+      auto lon_it = lon_imgs.find(i);
       if (lon_it == lon_imgs.end()) {
         vil_image_view<double> lon_img(classification_maps_[i].ni, classification_maps_[i].nj);
         vil_image_view<double> lat_img(classification_maps_[i].ni, classification_maps_[i].nj);
@@ -90,7 +90,7 @@ bool volm_desc_ex_2d_indexer::get_next()
 
 bool volm_desc_ex_2d_indexer::extract(double lat, double lon, double elev, std::vector<unsigned char>& values)
 {
-  volm_desc_ex_land_only* desc = new volm_desc_ex_land_only(ndists_, nlands_, radius_);
+  auto* desc = new volm_desc_ex_land_only(ndists_, nlands_, radius_);
 
   // use location to create a local vertical coordinate system, to get distances in meters
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);

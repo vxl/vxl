@@ -124,7 +124,7 @@ bool bocl_mem::init_gpu_buffer(void const* init_val, std::size_t value_size, cl_
     std::cerr << "ERROR: bocl_mem::init_gpu_buffer(): value_size does not divide evenly into buffer size.\n";
     return MEM_FAILURE;
   }
-  unsigned char* init_buff = new unsigned char[this->num_bytes_];
+  auto* init_buff = new unsigned char[this->num_bytes_];
   unsigned int num_values = this->num_bytes_ / value_size;
   std::cout << "value_size = " << value_size << std::endl
            << "num_values = " << num_values << std::endl;
@@ -301,7 +301,7 @@ bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, s
        "}";
 
   //compilation options - default opts should be " -D TYPE float "
-  bocl_kernel* setKernel = new bocl_kernel();
+  auto* setKernel = new bocl_kernel();
   setKernel->create_kernel(context, &dev_id, oclSrc, "set", opts, "set "+type+" kernel");
 
   //cache in map

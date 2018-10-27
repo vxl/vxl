@@ -10,7 +10,7 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
 {
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
-  boxm_scene<float_tree_type> * scene = dynamic_cast<boxm_scene<float_tree_type>* > (scene_base.as_pointer());
+  auto * scene = dynamic_cast<boxm_scene<float_tree_type>* > (scene_base.as_pointer());
 
   scene->load_block(block_i, block_j, block_k);
 
@@ -47,7 +47,7 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
 {
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
-  boxm_scene<float_tree_type> * scene = dynamic_cast<boxm_scene<float_tree_type>* > (scene_base.as_pointer());
+  auto * scene = dynamic_cast<boxm_scene<float_tree_type>* > (scene_base.as_pointer());
   if (!scene) {
     std::cerr << "Error in bvpl_average_value: Error scene is of incorrect type\n";
     return false;

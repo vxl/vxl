@@ -86,7 +86,7 @@ bool bvrml_filtered_ply_process(bprb_func_process& pro)
   std::string fname = pro.get_input<std::string>(0);
   std::string ply_file = pro.get_input<std::string>(1);
   std::string point_file = pro.get_input<std::string>(2);
-  float dist_thres = pro.get_input<float>(3);
+  auto dist_thres = pro.get_input<float>(3);
   bool nearest = pro.get_input<bool>(4);
 
   std::ofstream ofs(fname.c_str(), std::ios::app);
@@ -236,7 +236,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
   void* temp;
   ply_get_argument_user_data(argument, &temp, &index);
 
-  bvrml_filter_fileio_parsed_ply* parsed_ply =  (bvrml_filter_fileio_parsed_ply*) temp;
+  auto* parsed_ply =  (bvrml_filter_fileio_parsed_ply*) temp;
 
   switch (index)
   {
@@ -272,7 +272,7 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
       std::vector<point_pair>& pp = parsed_ply->data;
       for (auto & i : pp) {
         vgl_vector_3d<float> dif = read_pt-i.first;
-        float dist = (float)dif.length();
+        auto dist = (float)dif.length();
         if (dist <= parsed_ply->dist_thres) {
           bvrml_point_cov pc;
           pc.p_[0] = parsed_ply->p[0];

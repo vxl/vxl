@@ -57,14 +57,14 @@ namespace boxm2_ocl_batch_update_scene_process_globals
 
 
     //compilation options
-    bocl_kernel* compute_alpha = new bocl_kernel();
+    auto* compute_alpha = new bocl_kernel();
     std::string opts = " -D COMPUTE_ALPHA " + opts_app;
 
     compute_alpha->create_kernel(&device->context(), device->device_id(), src_paths, "batch_update_alpha", opts, "batch_update_alpha");
     vec_kernels.push_back(compute_alpha);
 
     //compilation options
-    bocl_kernel* compute_mog = new bocl_kernel();
+    auto* compute_mog = new bocl_kernel();
     std::string opts_mog = " -D COMPUTE_MOG_CPU  -D MEM_EFFICIENT_EM " + opts_app;
     compute_mog->create_kernel(&device->context(), device->device_id(), src_paths, "batch_update_mog", opts_mog, "batch_update_mog");
     vec_kernels.push_back(compute_mog);
@@ -132,7 +132,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
   bocl_device_sptr device = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  unsigned int num_imgs = pro.get_input<unsigned>(i++);
+  auto num_imgs = pro.get_input<unsigned>(i++);
   std::string identifier_filename = pro.get_input<std::string>(i++);
 
   bool foundDataType = false;
@@ -203,7 +203,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       bocl_mem* blk = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info = opencl_cache->loaded_block_info();
       bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -219,11 +219,11 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
       //get data indices from str cache
       boxm2_data_base * data_type0 = str_blk_cache.data_types_["boxm2_data_index"];
-      unsigned int* indices = static_cast<unsigned int *> ((void*)data_type0->data_buffer() );
+      auto* indices = static_cast<unsigned int *> ((void*)data_type0->data_buffer() );
 
       //get nobs from str cache
       boxm2_data_base * data_type1 = str_blk_cache.data_types_["boxm2_num_obs_single_int"];
-      unsigned int* nobs = static_cast<unsigned int *> ((void*)data_type1->data_buffer() );
+      auto* nobs = static_cast<unsigned int *> ((void*)data_type1->data_buffer() );
 
       //read exp, obs from files
       boxm2_data_traits<BOXM2_EXPECTATION> exp_type;
@@ -240,12 +240,12 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
       std::vector<float> exp_all;
       std::vector<float> seglen_all;
 
-      cl_float* weighted_pre_exp_sum = new cl_float[datasize];
-      cl_float* pre_exp_sum = new cl_float[datasize];
-      cl_float* exp_sum = new cl_float[datasize];
-      cl_float* seglen_sum = new cl_float[datasize];
+      auto* weighted_pre_exp_sum = new cl_float[datasize];
+      auto* pre_exp_sum = new cl_float[datasize];
+      auto* exp_sum = new cl_float[datasize];
+      auto* seglen_sum = new cl_float[datasize];
 
-      cl_uint* sampleIndex = new cl_uint[datasize];
+      auto* sampleIndex = new cl_uint[datasize];
       cl_uint  currIdx = 0;
 
       //snap over each voxel
@@ -267,10 +267,10 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
           if (obs_num == 0)
             continue;
 
-          boxm2_data_traits<BOXM2_EXPECTATION>::datatype* exp_imgK = (boxm2_data_traits<BOXM2_EXPECTATION>::datatype*) (expectations[image_ids[k]]);
-          boxm2_data_traits<BOXM2_PIXEL>::datatype* obs_imgK = (boxm2_data_traits<BOXM2_PIXEL>::datatype*) (pixels[image_ids[k]]);
-          boxm2_data_traits<BOXM2_AUX2>::datatype* pre_exp_imgK = (boxm2_data_traits<BOXM2_AUX2>::datatype*) (pre_expectations[image_ids[k]]);
-          boxm2_data_traits<BOXM2_AUX3>::datatype* seglen_imgK = (boxm2_data_traits<BOXM2_AUX3>::datatype*) (seglens[image_ids[k]]);
+          auto* exp_imgK = (boxm2_data_traits<BOXM2_EXPECTATION>::datatype*) (expectations[image_ids[k]]);
+          auto* obs_imgK = (boxm2_data_traits<BOXM2_PIXEL>::datatype*) (pixels[image_ids[k]]);
+          auto* pre_exp_imgK = (boxm2_data_traits<BOXM2_AUX2>::datatype*) (pre_expectations[image_ids[k]]);
+          auto* seglen_imgK = (boxm2_data_traits<BOXM2_AUX3>::datatype*) (seglens[image_ids[k]]);
 
           if (exp_imgK == nullptr || obs_imgK == nullptr) {
             std::cerr << "ERROR!!!! exp/obs arrays empty..." << '\n';
@@ -317,7 +317,7 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
 
       //create data size related buffers...
-      unsigned int num_samp = (unsigned int) obs_all.size();
+      auto num_samp = (unsigned int) obs_all.size();
       std::cout << "Total num samples: " << num_samp << std::endl;
       bocl_mem_sptr num_samples = new bocl_mem(device->context(), &num_samp, sizeof(cl_uint), "total number of samples buffer");
       num_samples->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

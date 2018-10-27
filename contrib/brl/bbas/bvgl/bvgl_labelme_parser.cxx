@@ -207,8 +207,8 @@ void bvgl_labelme_parser::trim_string(std::string& s)
     trimmed = false;
     for (char trim : trims) {
       std::string current = t;
-      unsigned int i = (unsigned int)current.find_first_not_of(trim);
-      unsigned int j = (unsigned int)current.find_last_not_of(trim);
+      auto i = (unsigned int)current.find_first_not_of(trim);
+      auto j = (unsigned int)current.find_last_not_of(trim);
       if (i > j || j >= current.size()) {
         t = ""; break;
       }

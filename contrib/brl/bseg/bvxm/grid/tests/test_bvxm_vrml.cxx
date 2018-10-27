@@ -12,7 +12,7 @@ bool grid_to_vrml()
 {
   //Fill in the grid
   vgl_vector_3d<unsigned> grid_size(4, 4, 4);
-  bvxm_voxel_grid<float> *grid = new bvxm_voxel_grid<float>(grid_size);
+  auto *grid = new bvxm_voxel_grid<float>(grid_size);
   grid->initialize_data(0.5f);
 
   bvxm_voxel_grid<float>::iterator grid_it = grid->begin();
@@ -38,7 +38,7 @@ bool color_grid_to_vrml()
 {
   //Fill in the grid
   vgl_vector_3d<unsigned> grid_size(8, 8, 8);
-  bvxm_voxel_grid<vnl_float_4> *grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
+  auto *grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
   grid->initialize_data(vnl_float_4(255.0f, 255.0f, 252.0f, 225.0f));
 
   bvxm_voxel_grid<vnl_float_4>::iterator grid_it = grid->begin();

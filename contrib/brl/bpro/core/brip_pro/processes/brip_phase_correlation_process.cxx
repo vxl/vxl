@@ -55,9 +55,9 @@ bool brip_phase_correlation_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr img_ptr_b = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  float gauss_sigma = pro.get_input<float>(in_i++);
-  float peak_radius = pro.get_input<float>(in_i++);
-  float alpha = pro.get_input<float>(in_i++);
+  auto gauss_sigma = pro.get_input<float>(in_i++);
+  auto peak_radius = pro.get_input<float>(in_i++);
+  auto alpha = pro.get_input<float>(in_i++);
 
   // cast to float images
   vil_image_view<float> image_a = *(vil_convert_cast(float(), img_ptr_a));

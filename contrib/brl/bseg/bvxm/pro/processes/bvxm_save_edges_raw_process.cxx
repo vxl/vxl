@@ -50,7 +50,7 @@ bool bvxm_save_edges_raw_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_edge_ray_processor edge_proc(world);
   std::string filename = pro.get_input<std::string>(i++);
-  unsigned scale = pro.get_input<unsigned>(i++);
+  auto scale = pro.get_input<unsigned>(i++);
 
   float n_normal = world->get_params()->edges_n_normal();
 

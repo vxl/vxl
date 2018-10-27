@@ -9,7 +9,7 @@ void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace_sptr& es_ptr)
 {
   if (es_ptr->feature_vector_type() == "brad_hist_prob_feature_vector"){
     std::string t = "brad_hist_prob_feature_vector";
-    brad_eigenspace<brad_hist_prob_feature_vector>* hp =
+    auto* hp =
       dynamic_cast<brad_eigenspace<brad_hist_prob_feature_vector>* >(es_ptr.ptr());
     vsl_b_write(os, t);
     vsl_b_write(os, *hp);
@@ -17,7 +17,7 @@ void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace_sptr& es_ptr)
   }
   else if (es_ptr->feature_vector_type() == "brad_grad_hist_feature_vector"){
     std::string t = "brad_grad_hist_feature_vector";
-    brad_eigenspace<brad_grad_hist_feature_vector>* hp =
+    auto* hp =
       dynamic_cast<brad_eigenspace<brad_grad_hist_feature_vector>* >(es_ptr.ptr());
     vsl_b_write(os, t);
     vsl_b_write(os, *hp);
@@ -25,7 +25,7 @@ void vsl_b_write(vsl_b_ostream &os, const brad_eigenspace_sptr& es_ptr)
   }
   else if (es_ptr->feature_vector_type() == "brad_grad_int_feature_vector"){
     std::string t = "brad_grad_int_feature_vector";
-    brad_eigenspace<brad_grad_int_feature_vector>* hp =
+    auto* hp =
       dynamic_cast<brad_eigenspace<brad_grad_int_feature_vector>* >(es_ptr.ptr());
     vsl_b_write(os, t);
     vsl_b_write(os, *hp);

@@ -53,7 +53,7 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
   //get the inputs
   vil_image_view_base_sptr radiance_img_base = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
-  float mean_reflectance = pro.get_input<float>(2);
+  auto mean_reflectance = pro.get_input<float>(2);
   bool constrain_atmospheric_params = pro.get_input<bool>(3);
   bool average_airlight = pro.get_input<bool>(4);
 
@@ -67,7 +67,7 @@ bool brad_estimate_atmospheric_parameters_process(bprb_func_process& pro)
      std::cerr << "ERROR: brad_estimate_atmospheric_parameters: expecting floating point image\n";
      return false;
   }
-  vil_image_view<float>* radiance_img = dynamic_cast<vil_image_view<float>*>(radiance_img_base.ptr());
+  auto* radiance_img = dynamic_cast<vil_image_view<float>*>(radiance_img_base.ptr());
   if (!radiance_img) {
      std::cerr << "ERROR: brad_estimate_atmospheric_parameters: error casting to float image\n";
      return false;

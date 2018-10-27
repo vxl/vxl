@@ -36,8 +36,8 @@ namespace volm_refine_bvxm_height_map_process_globals
     for (unsigned k = 0; k < ri.size(); k++) {
       unsigned i = ri[k];  unsigned j = rj[k];
       for (unsigned c = 0; c < num_nbrs; c++) {
-        unsigned nbr_i = (unsigned)( (signed)i + nbrs8_delta[c][0] );
-        unsigned nbr_j = (unsigned)( (signed)j + nbrs8_delta[c][1] );
+        auto nbr_i = (unsigned)( (signed)i + nbrs8_delta[c][0] );
+        auto nbr_j = (unsigned)( (signed)j + nbrs8_delta[c][1] );
         if (nbr_i < in_img.ni() && nbr_j < in_img.nj())
           if ( in_img(nbr_i, nbr_j) < min_h )
             min_h = in_img(nbr_i, nbr_j);
@@ -75,10 +75,10 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
   // get input
   unsigned i = 0;
   vil_image_view_base_sptr i_img_res = pro.get_input<vil_image_view_base_sptr>(i++);
-  float sky_h = pro.get_input<float>(i++);
-  float grd_h = pro.get_input<float>(i++);
+  auto sky_h = pro.get_input<float>(i++);
+  auto grd_h = pro.get_input<float>(i++);
 
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
   if (!in_img) {
     std::cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << std::endl;
     return false;
@@ -103,7 +103,7 @@ bool volm_refine_bvxm_height_map_process(bprb_func_process& pro)
         grd_mask(i,j) = 1;
 
   // create an output image
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj);
+  auto* out_img = new vil_image_view<float>(ni, nj);
   out_img->deep_copy(*in_img);
 
 #if 0
@@ -205,7 +205,7 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
   vil_image_view_base_sptr height_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr class_img_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   std::string csv_filename = pro.get_input<std::string>(i++);
   std::string kml_filename = pro.get_input<std::string>(i++);
 
@@ -348,8 +348,8 @@ bool volm_stereo_height_fix_process(bprb_func_process& pro)
   // get inputs
   unsigned i = 0;
   vil_image_view_base_sptr i_img_res = pro.get_input<vil_image_view_base_sptr>(i++);
-  float h_fix = pro.get_input<float>(i++);
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
+  auto h_fix = pro.get_input<float>(i++);
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(i_img_res.ptr());
   if (!in_img) {
     std::cout << pro.name() << ": The image pixel format: " << i_img_res->pixel_format() << " is not supported" << std::endl;
     return false;

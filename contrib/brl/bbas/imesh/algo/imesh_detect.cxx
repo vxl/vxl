@@ -48,7 +48,7 @@ sample_sphere_directions(unsigned int num_dir_samples)
     double theta = i*vnl_math::twopi/num_dir_samples;
     double st = std::sin(theta);
     double ct = std::cos(theta);
-    unsigned int num_j_samples = static_cast<unsigned int>(st*num_dir_samples+0.5);
+    auto num_j_samples = static_cast<unsigned int>(st*num_dir_samples+0.5);
     if (num_j_samples == 0) num_j_samples = 1;
     for (unsigned j=0; j<num_j_samples; ++j) {
       double phi = j*vnl_math::twopi/num_j_samples;
@@ -112,7 +112,7 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
   vil_image_view<unsigned int> labels(ni,nj);
   labels.fill(imesh_invalid_idx);
 
-  const imesh_regular_face_array<3>& tris =
+  const auto& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
 
   std::vector<bool> is_backfacing(tris.size(),false);
@@ -197,7 +197,7 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
 
   for (const auto & dir : dirs) {
     std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dir, img_size);
-    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type vi : vis)
+    for (const auto & vi : vis)
       ++face_vote[vi];
   }
 
@@ -254,11 +254,11 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
     std::set<unsigned int> back_vis;
     std::set<unsigned int> vis = imesh_detect_exterior_faces(*mesh_ptr, dir,
                                                             img_size, &back_vis);
-    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type vi : vis) {
+    for (const auto & vi : vis) {
       unsigned int face_ind = tri_map.empty() ? vi : tri_map[vi];
       ++face_vote[face_ind];
      }
-    for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type back_vi : back_vis) {
+    for (const auto & back_vi : back_vis) {
       unsigned int face_ind = tri_map.empty() ? back_vi : tri_map[back_vi];
       ++back_face_vote[face_ind];
     }

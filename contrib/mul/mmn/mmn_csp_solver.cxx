@@ -91,8 +91,8 @@ void  mmn_csp_solver::initialise_arc_labels_linked(const std::vector<mmn_csp_sol
         arc_labels_subset_t1& labels_linked1=arc_labels_linked1_[iarc];
         arc_labels_subset_t2& labels_linked2=arc_labels_linked2_[iarc];
 
-        arc_labels_subset_t::const_iterator linkIter=links_subset[iarc].begin();
-        arc_labels_subset_t::const_iterator linkIterEnd=links_subset[iarc].end();
+        auto linkIter=links_subset[iarc].begin();
+        auto linkIterEnd=links_subset[iarc].end();
         while (linkIter != linkIterEnd)
         {
             labels_linked1.insert(*linkIter);
@@ -107,15 +107,15 @@ bool mmn_csp_solver::check_for_node_deletions()
     bool deleted=false;
     for (unsigned inode=0;inode<nnodes_;++inode)
     {
-        std::set<unsigned>::iterator labelIter=node_labels_present_[inode].begin();
-        std::set<unsigned>::iterator labelIterEnd=node_labels_present_[inode].end();
+        auto labelIter=node_labels_present_[inode].begin();
+        auto labelIterEnd=node_labels_present_[inode].end();
         const std::vector<std::pair<unsigned,unsigned> >& neighbourhood = graph_.node_data()[inode];
         while (labelIter != labelIterEnd)
         {
             unsigned label = *labelIter; //this label value
             //Now loop over all arcs in the node's neighbourhood
-            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbourhood.begin();
-            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbourhood.end();
+            auto neighIter=neighbourhood.begin();
+            auto neighIterEnd=neighbourhood.end();
             bool found=true;
             while (neighIter != neighIterEnd)
             {
@@ -124,7 +124,7 @@ bool mmn_csp_solver::check_for_node_deletions()
                 if (inode<neighIter->first)
                 {
                     std::pair<unsigned ,unsigned > sought(label,0);
-                    arc_labels_subset_t1::const_iterator linkIter=arc_labels_linked1_[arcId].lower_bound(sought);
+                    auto linkIter=arc_labels_linked1_[arcId].lower_bound(sought);
                     if (linkIter != arc_labels_linked1_[arcId].end())
                     {
                         if (linkIter->first==label)
@@ -136,7 +136,7 @@ bool mmn_csp_solver::check_for_node_deletions()
                 else
                 {
                     std::pair<unsigned ,unsigned > sought(0,label);
-                    arc_labels_subset_t2::const_iterator linkIter=arc_labels_linked2_[arcId].lower_bound(sought);
+                    auto linkIter=arc_labels_linked2_[arcId].lower_bound(sought);
                     if (linkIter != arc_labels_linked2_[arcId].end())
                     {
                         if (linkIter->second==label)
@@ -161,7 +161,7 @@ bool mmn_csp_solver::check_for_node_deletions()
             {
                 //Found no links from this label to anywhere
                 //So delete it
-                std::set<unsigned>::iterator labelIterNext=labelIter;
+                auto labelIterNext=labelIter;
                 ++labelIterNext;
                 if (verbose_)
                 {
@@ -187,8 +187,8 @@ bool mmn_csp_solver::check_for_arc_deletions()
     {
         arc_labels_subset_t1& labels_linked1=arc_labels_linked1_[iarc];
         arc_labels_subset_t2& labels_linked2=arc_labels_linked2_[iarc];
-        arc_labels_subset_t1::iterator linkIter=labels_linked1.begin();
-        arc_labels_subset_t1::iterator linkIterEnd=labels_linked1.end();
+        auto linkIter=labels_linked1.begin();
+        auto linkIterEnd=labels_linked1.end();
         while (linkIter != linkIterEnd)
         {
             unsigned label1=linkIter->first;
@@ -214,7 +214,7 @@ bool mmn_csp_solver::check_for_arc_deletions()
                 //Find all possible instances in multiset 2 for removal
                 std::pair<arc_labels_subset_t2::iterator,arc_labels_subset_t2::iterator> range=
                     labels_linked2.equal_range(pair2);
-                arc_labels_subset_t2::iterator killer=range.first;
+                auto killer=range.first;
 
                 while (killer != range.second)
                 {

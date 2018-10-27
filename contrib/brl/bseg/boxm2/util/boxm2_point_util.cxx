@@ -230,7 +230,7 @@ void boxm2_point_util::calc_projection_error(std::vector<vpgl_perspective_camera
         err+=rms;++cnt;
 
         //store view error and counts in a map
-        std::map<unsigned,double>::iterator ve_itr = view_error_map.find(view_number);
+        auto ve_itr = view_error_map.find(view_number);
         if (ve_itr == view_error_map.end())
         {
           view_error_map[view_number]=rms;
@@ -254,7 +254,7 @@ void boxm2_point_util::report_error(std::map<unsigned,double>&   view_error_map,
   std::cout<<"Projection error per camera:"<<std::endl;
   float error  = 0.0;
   float counts = 0.0;
-  std::map<unsigned,double>::iterator ve_itr = view_error_map.begin(),
+  auto ve_itr = view_error_map.begin(),
                                      ve_end = view_error_map.end();
   for (;ve_itr!=ve_end;++ve_itr) {
 //#ifdef DEBUG

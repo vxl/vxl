@@ -45,13 +45,13 @@ bool brad_create_image_metadata_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  float abscal = pro.get_input<float>(0);
-  float effect_band_width = pro.get_input<float>(1);
-  float view_azimuth = pro.get_input<float>(2);
-  float view_elevation = pro.get_input<float>(3);
-  float sun_azimuth = pro.get_input<float>(4);
-  float sun_elevation = pro.get_input<float>(5);
-  float sun_irradiance = pro.get_input<float>(6);
+  auto abscal = pro.get_input<float>(0);
+  auto effect_band_width = pro.get_input<float>(1);
+  auto view_azimuth = pro.get_input<float>(2);
+  auto view_elevation = pro.get_input<float>(3);
+  auto sun_azimuth = pro.get_input<float>(4);
+  auto sun_elevation = pro.get_input<float>(5);
+  auto sun_irradiance = pro.get_input<float>(6);
 
   brad_image_metadata_sptr metadata = new brad_image_metadata();
   metadata->n_bands_ = 1;

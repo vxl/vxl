@@ -55,11 +55,11 @@ bool bvpl_compute_sf_raw_response_process(bprb_func_process& pro)
   typedef boct_tree<short, bool > valid_tree_type;
 
 
-  if (boxm_scene<response_tree_type> *scene_in = dynamic_cast<boxm_scene< response_tree_type >* >(scene_base.as_pointer()))
+  if (auto *scene_in = dynamic_cast<boxm_scene< response_tree_type >* >(scene_base.as_pointer()))
   {
     double cell_length = scene_in->finest_cell_length();
 
-    if (boxm_scene<valid_tree_type> *valid_scene = dynamic_cast<boxm_scene< valid_tree_type >* >(valid_scene_base.as_pointer()))
+    if (auto *valid_scene = dynamic_cast<boxm_scene< valid_tree_type >* >(valid_scene_base.as_pointer()))
     {
       bvpl_gauss3D_steerable_filters sf;
       sf.basis_response_at_leaves(scene_in,valid_scene, cell_length);

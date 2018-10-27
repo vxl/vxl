@@ -101,7 +101,7 @@ void mfpf_norm_corr1d_builder::add_example(const vimt_image_2d_of<float>& image,
 void mfpf_norm_corr1d_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_norm_corr1d");
-  mfpf_norm_corr1d& nc = static_cast<mfpf_norm_corr1d&>(pf);
+  auto& nc = static_cast<mfpf_norm_corr1d&>(pf);
   vnl_vector<double> mean=sum_/n_added_;
   mean.normalize();
   nc.set(ilo_,ihi_,mean);

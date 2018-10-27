@@ -56,8 +56,8 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   std::cout << "scene = " << scene.ptr() << std::endl;
-  float elevation = pro.get_input<float>(1);
-  float azimuthal = pro.get_input<float>(2);
+  auto elevation = pro.get_input<float>(1);
+  auto azimuthal = pro.get_input<float>(2);
   bool astro_coords = pro.get_input<bool>(3);
 
   vgl_vector_3d<double> sun_dir_downwards;
@@ -76,14 +76,14 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   }
   std::cout << "Sun ray direction = " << sun_dir_downwards << std::endl;
   std::map<boxm2_block_id, boxm2_block_metadata> blk_info=scene->blocks();
-  std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blk_info.begin();
+  auto iter = blk_info.begin();
 
   if(iter==blk_info.end()) return false;
 
   vgl_box_3d<double> box=scene->bounding_box();
   boxm2_block_metadata mdata = iter->second;
-  unsigned int dimx = (unsigned int) std::floor(box.width()/(mdata.sub_block_dim_.x()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
-  unsigned int dimy = (unsigned int) std::floor(box.height()/(mdata.sub_block_dim_.y()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
+  auto dimx = (unsigned int) std::floor(box.width()/(mdata.sub_block_dim_.x()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
+  auto dimy = (unsigned int) std::floor(box.height()/(mdata.sub_block_dim_.y()/std::pow(2.0,(double)mdata.max_level_-1))+ 0.5);
 
   vpgl_affine_camera<double> affine_camera = bpgl_camera_from_box::affine_camera_from_box(box,
                                                        sun_dir_downwards,
@@ -96,7 +96,7 @@ bool boxm2_compute_sun_affine_camera_process(bprb_func_process& pro)
   affine_camera.project(box.max_x(),box.max_y(),box.max_z(),u,v);
   std::cout<<"Max "<<u<<","<<v<<std::endl;
 
-  vpgl_generic_camera<double> * gen_cam =new vpgl_generic_camera<double>();
+  auto * gen_cam =new vpgl_generic_camera<double>();
   vpgl_generic_camera_convert::convert(affine_camera,dimx,dimy,*gen_cam);
   gen_cam->project(box.min_x(),box.min_y(),box.min_z(),u,v);
   std::cout<<"GMin "<<u<<","<<v<<" ";

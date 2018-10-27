@@ -45,7 +45,7 @@ bool vil_image_sum_process( bprb_func_process& pro )
     unsigned i = 0;
     vil_image_view_base_sptr imgBaseSptr =
         pro.get_input<vil_image_view_base_sptr>(i++);
-    unsigned p = pro.get_input<unsigned>(i++);
+    auto p = pro.get_input<unsigned>(i++);
 
     // convert to float image
     vil_image_view<float> fimage;

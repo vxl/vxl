@@ -6,7 +6,7 @@
 static void test_create_tree()
 {
   short nlevels=5;
-  boct_tree<short,vgl_point_3d<double> > * tree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto * tree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   TEST("No of Max levels of tree",nlevels, tree->number_levels());
 
   tree->split();
@@ -14,7 +14,7 @@ static void test_create_tree()
   std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree->leaf_cells();
   TEST("No of Leaf Cells", 8, leaves.size());
 
-  boct_tree<short,vgl_point_3d<double> > *init_tree = new boct_tree<short,vgl_point_3d<double> >(5, 3);
+  auto *init_tree = new boct_tree<short,vgl_point_3d<double> >(5, 3);
   tree->init_cells(vgl_point_3d<double>(1,2,3));
   std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves2 = init_tree->leaf_cells();
   TEST("No of Leaf Cells after 3 levels", 8*8, leaves2.size());
@@ -47,7 +47,7 @@ static void test_create_tree()
   tree->init_cells(vgl_point_3d<double>(0,0,0));
 
   //create the tree to be inserted
-  boct_tree<short,vgl_point_3d<double> > * subtree=new boct_tree<short,vgl_point_3d<double> >(3, 3);
+  auto * subtree=new boct_tree<short,vgl_point_3d<double> >(3, 3);
   subtree->init_cells(vgl_point_3d<double> (10,10,10) );
   boct_tree_cell<short,vgl_point_3d<double> > *node = tree->leaf_cells()[3];
   boct_tree_cell<short,vgl_point_3d<double> > *sub_root = subtree->root();

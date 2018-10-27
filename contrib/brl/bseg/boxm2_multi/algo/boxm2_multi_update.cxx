@@ -55,7 +55,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
       std::cout<<"boxm2_multi_store_aux::store_aux unable to create command queue"<<std::endl;
       return 0.0f;
     }
-    float * tnearfar= new float[2];
+    auto * tnearfar= new float[2];
     tnearfar[0] = 0.0;
     tnearfar[1] = 100000.0 ;
     bocl_mem_sptr tnearfar_mem_ptr = new bocl_mem(device->context(),tnearfar,sizeof(float)*2,  "tnearfar  buffer");
@@ -69,15 +69,15 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
 
 
     // Output Array
-    float* output_arr = new float[cl_ni*cl_nj];
+    auto* output_arr = new float[cl_ni*cl_nj];
     std::fill(output_arr, output_arr+cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*cl_ni*cl_nj, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     outputs.push_back(cl_output);
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -102,8 +102,8 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   for (auto & grpId : grp) {
     std::vector<boxm2_block_id> ids = grpId->ids();
     for (unsigned int i=0; i<ids.size(); ++i) {
-      float* visImg = new float[cl_ni*cl_nj]; std::fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
-      float* preImg = new float[cl_ni*cl_nj]; std::fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
+      auto* visImg = new float[cl_ni*cl_nj]; std::fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
+      auto* preImg = new float[cl_ni*cl_nj]; std::fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
       grpId->set_vis(i, visImg);
       grpId->set_pre(i, preImg);
     }
@@ -119,7 +119,7 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   gpu_time += aux_time;
 
   //calcl pre/vis inf, and store pre/vis images along the way
-  float* norm_img = new float[cl_ni * cl_nj];
+  auto* norm_img = new float[cl_ni * cl_nj];
   std::map<bocl_device*, float*> pre_map, vis_map;
   stepTimer.mark();
   float pre_vis_time = boxm2_multi_pre_vis_inf::pre_vis_inf(cache, img, cam, norm_img, helper);
@@ -148,18 +148,18 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
     boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
 
     //release generic cam
-    float* rayO = (float*) ray_os[i]->cpu_buffer();
-    float* rayD = (float*) ray_ds[i]->cpu_buffer();
+    auto* rayO = (float*) ray_os[i]->cpu_buffer();
+    auto* rayD = (float*) ray_ds[i]->cpu_buffer();
     delete[] rayO;
     delete[] rayD;
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
-    float* tnf = (float*) tnearfarptrs[i]->cpu_buffer();
+    auto* tnf = (float*) tnearfarptrs[i]->cpu_buffer();
     delete[] tnf;
     ocl_cache->unref_mem(tnearfarptrs[i].ptr() );
     //release output
-    float* output = (float*) outputs[i]->cpu_buffer();
+    auto* output = (float*) outputs[i]->cpu_buffer();
     delete[] output;
     ocl_cache->unref_mem(outputs[i].ptr());
 

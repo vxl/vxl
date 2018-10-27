@@ -79,7 +79,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
   float step = 1.0f;
   int half_n_steps = radius;
   int n_steps = 2*half_n_steps + 1;
-  vil_image_view<float> *cost_map = new vil_image_view<float>(n_steps,n_steps);
+  auto *cost_map = new vil_image_view<float>(n_steps,n_steps);
   vil_image_view_base_sptr cost_map_sptr(cost_map);
 
   for (int i=0; i<n_steps; ++i) {
@@ -92,7 +92,7 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
       vnl_vector<double> x;
       xform.params(x);
       //std::cout << "x = " << x << std::endl;
-      float minfo = float(cost_fun.f(x));
+      auto minfo = float(cost_fun.f(x));
       (*cost_map)(i,j) = minfo;
       std::cout << "minfo(" << offset_x << ", " << offset_y << ") = " << minfo << " (" << i << ", " << j << ')' << std::endl;
     }

@@ -153,7 +153,7 @@ bool bocl_kernel::execute(const cl_command_queue& cmd_queue,
 
   //set local args
   for (unsigned int i=0; i<local_args_.size(); ++i) {
-    cl_int status = (cl_int)clSetKernelArg(kernel_,args_.size() + i, local_args_[i], nullptr);
+    auto status = (cl_int)clSetKernelArg(kernel_,args_.size() + i, local_args_[i], nullptr);
     if ( !check_val(status,CL_SUCCESS,"clSetLocal Arg Failed") ) {
       std::cout<<"Local argument "<<i<<" failed"<<std::endl;
       return false;
@@ -196,7 +196,7 @@ float bocl_kernel::exec_time()
     return false;
 
   //store execution time
-  unsigned long diff = (unsigned long)(tend - tstart);
+  auto diff = (unsigned long)(tend - tstart);
   return 1.0e-6f*float(diff);
 }
 
@@ -251,14 +251,14 @@ std::string bocl_kernel::program_binaries()
     return "";
 
   //get binary sizes for each device
-  std::size_t* sizes = new std::size_t[numDevices];
+  auto* sizes = new std::size_t[numDevices];
   status = clGetProgramInfo( program_, CL_PROGRAM_BINARY_SIZES, numDevices*sizeof(std::size_t), (void*) sizes, nullptr);
   if ( !check_val(status,CL_SUCCESS,"bocl_kernel::program_binaries() binary_sizes failed (" + id_ + ") " +error_to_string(status)) )
     return "";
 
   //get binary for each device
   std::size_t numBytes = 0;
-  unsigned char** binaries = new unsigned char*[numDevices];
+  auto** binaries = new unsigned char*[numDevices];
   for (unsigned int i=0; i<numDevices; ++i) {
     numBytes += sizes[i];
     binaries[i] = new unsigned char[sizes[i]];

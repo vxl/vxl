@@ -91,7 +91,7 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
 
   if (ocp_type == "float") {
     bvxm_voxel_grid<float> *grid_out= new bvxm_voxel_grid<float>(out_grid_path, input_grid->grid_size());
-    if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
+    if (auto * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
     {
       if (functor_name == "edge2d") {
         bvpl_edge2d_functor<float> func;
@@ -123,7 +123,7 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
     return false;
   }
   else if (ocp_type == "opinion") {
-    if (bvxm_voxel_grid<bvxm_opinion> * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+    if (auto * bvxm_opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
     {
       bvxm_voxel_grid<bvxm_opinion> * grid_out= new bvxm_voxel_grid<bvxm_opinion>(out_grid_path, bvxm_opinion_input_grid->grid_size());
       grid_out->initialize_data(bvxm_opinion(0.005f));
@@ -139,7 +139,7 @@ bool bvpl_neighborhood_operator_process(bprb_func_process& pro)
   else if (ocp_type == "bsta_gauss_f1") {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     bvxm_voxel_grid<gauss_type> *grid_out= new bvxm_voxel_grid<gauss_type>(out_grid_path, input_grid->grid_size());
-    if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
+    if (auto * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr())){
       if (functor_name == "gauss_convolution") {
         bvpl_gauss_convolution_functor func;
         bvpl_neighb_operator<gauss_type, bvpl_gauss_convolution_functor> oper(func);

@@ -36,7 +36,7 @@ static void test_category_io_read_land_category(std::string filename)
 {
   std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
   TEST("land_category_io", volm_osm_category_io::load_category_table(filename, osm_land_table), true);
-  std::map<std::pair<std::string, std::string>, volm_land_layer>::iterator mit = osm_land_table.begin();
+  auto mit = osm_land_table.begin();
   for (; mit != osm_land_table.end(); ++mit) {
     std::cout << " tag = " << mit->first.first << ", value = " << mit->first.second << ", ---> id = ";
     mit->second.print();
@@ -48,7 +48,7 @@ static void test_category_io_load_road_width(std::string const& filename)
 {
   std::map<std::pair<std::string, std::string>, float> volm_road_width;
   TEST("road_width_io", volm_osm_category_io::load_road_width_table(filename, volm_road_width), true);
-  std::map<std::pair<std::string, std::string>, float>::iterator mit = volm_road_width.begin();
+  auto mit = volm_road_width.begin();
   for (; mit != volm_road_width.end(); ++mit)
     std::cout << " tag = " << mit->first.first << ", value = " << mit->first.second << " ---> width = "
              << volm_road_width[std::pair<std::string, std::string>(mit->first.first, mit->first.second)] << std::endl;

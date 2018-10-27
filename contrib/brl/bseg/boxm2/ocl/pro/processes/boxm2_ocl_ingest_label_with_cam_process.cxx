@@ -51,7 +51,7 @@ namespace boxm2_ocl_ingest_label_with_cam_process_globals
     options += " -D STEP_CELL=step_cell_ingest_label_map(aux_args,data_ptr)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
 
     ray_trace_kernel->create_kernel( &device->context(),
@@ -116,19 +116,19 @@ bool boxm2_ocl_ingest_label_with_cam_process(bprb_func_process& pro)
   }
   std::cout << "ingesting label img..\n"; std::cout.flush();
 
-  vil_image_view<vxl_byte> * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
+  auto * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
 
   // form the ray buffer
   //cl_float* ray_origins = new float[4*cl_ni*cl_nj];
 
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);  // ocl_update_process does not have this line!
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  cl_uchar* labels = new unsigned char[cl_ni*cl_nj];
+  auto* labels = new unsigned char[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {

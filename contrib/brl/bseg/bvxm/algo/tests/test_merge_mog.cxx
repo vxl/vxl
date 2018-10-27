@@ -79,14 +79,14 @@ static void test_merge_mog()
 
   vgl_vector_3d<unsigned> grid_size(2,2,2);
 
-  bvxm_voxel_grid<mix_gauss_type> *apm_grid= new bvxm_voxel_grid<mix_gauss_type>(grid_size);
+  auto *apm_grid= new bvxm_voxel_grid<mix_gauss_type>(grid_size);
   apm_grid->initialize_data(g);
 
   bvxm_voxel_grid_base_sptr merged_base= new bvxm_voxel_grid<gauss_type>(grid_size);
 
   bvxm_merge_mog::kl_merge_grid(apm_grid, merged_base);
 
-  bvxm_voxel_grid<gauss_type>* merged_grid = static_cast<bvxm_voxel_grid<gauss_type>* >(merged_base.ptr());
+  auto* merged_grid = static_cast<bvxm_voxel_grid<gauss_type>* >(merged_base.ptr());
 
   //check that the distances are as expected
   for (bvxm_voxel_grid<gauss_type>::iterator grid_it = merged_grid->begin();

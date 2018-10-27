@@ -25,7 +25,7 @@ void test_site()
   std::vector<vsol_point_3d_sptr> verts;
   verts.push_back(p0);   verts.push_back(p1);   verts.push_back(p2);
   verts.push_back(p3);
-  vsol_polygon_3d* poly = new vsol_polygon_3d(verts);
+  auto* poly = new vsol_polygon_3d(verts);
   vsol_spatial_object_3d_sptr so = dynamic_cast<vsol_spatial_object_3d*>(poly);
   vpgl_lvcs lvcs(lat0, lon0, elv0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
   betr_geo_object_3d gobj(so,  lvcs);
@@ -54,8 +54,8 @@ void test_site()
   std::vector<vsol_point_3d_sptr> mverts;
   mverts.push_back(mp0);   mverts.push_back(mp1);   mverts.push_back(mp2);
   mverts.push_back(mp3); mverts.push_back(mp4);
-  vsol_polygon_3d* mpoly = new vsol_polygon_3d(mverts);
-  vsol_mesh_3d* pmesh = new vsol_mesh_3d();
+  auto* mpoly = new vsol_polygon_3d(mverts);
+  auto* pmesh = new vsol_mesh_3d();
   pmesh->set_mesh(mpoly, 200.0);
   vsol_spatial_object_3d_sptr extr_mesh = pmesh;
   gobj.set_spatial_obj(extr_mesh);

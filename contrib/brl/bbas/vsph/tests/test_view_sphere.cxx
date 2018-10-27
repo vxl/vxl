@@ -14,7 +14,7 @@
 
 vsph_view_point<double> create_view_point(vsph_spherical_coord_sptr coord, double theta, double phi, double* data)
 {
-  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+  auto* cam = new vpgl_perspective_camera<double>();
   vsph_sph_point_3d view_point(coord->radius(), theta, phi);
   vgl_point_3d<double> camera_center = coord->cart_coord(view_point);
   cam->set_camera_center(camera_center);
@@ -35,19 +35,19 @@ static void test_view_sphere()
 
   double theta=vnl_math::pi/4.0;
   double phi=vnl_math::pi/4.0;
-  double* val0 = new double(0.0);
+  auto* val0 = new double(0.0);
   vsph_view_point<double> vp0=create_view_point(coord,theta,phi,val0);
   vs.add_view(vp0, 0,0);
 
   theta=0;
   phi=0;
-  double* val1 = new double(1.0);
+  auto* val1 = new double(1.0);
   vsph_view_point<double> vp1=create_view_point(coord,theta,phi,val1);
   vs.add_view(vp1, 0,0);
 
   theta=vnl_math::pi/2.0;
   phi=0;
-  double* val2 = new double(2.0);
+  auto* val2 = new double(2.0);
   vsph_view_point<double> vp2=create_view_point(coord,theta,phi,val2);
   vs.add_view(vp2, 0,0);
 

@@ -58,13 +58,13 @@ namespace boxm2_create_index_process_globals
     std::string options = " -D COMPINDEX -D DETERMINISTIC";
     options += " -D RENDER_VISIBILITY ";
     options += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
-    bocl_kernel* compute_index = new bocl_kernel();
+    auto* compute_index = new bocl_kernel();
 
     compute_index->create_kernel(&device->context(),device->device_id(), src_paths, "compute_loc_index", options, "compute_loc_index");
     vec_kernels.push_back(compute_index);
 
     //create normalize image kernel
-    bocl_kernel * norm_kernel=new bocl_kernel();
+    auto * norm_kernel=new bocl_kernel();
     if (!norm_kernel) {
       std::cout << " cannot allocate kernel object!" << std::endl; }
     else
@@ -139,14 +139,14 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   boxm2_volm_wr3db_index_params params;
   params.start = pro.get_input<unsigned>(i++);
   params.skip = pro.get_input<unsigned>(i++);
-  float elev_dif = pro.get_input<float>(i++);
+  auto elev_dif = pro.get_input<float>(i++);
   params.vmin = pro.get_input<float>(i++);
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
   std::string ray_file = pro.get_input<std::string>(i++);
   std::string index_file = pro.get_input<std::string>(i++);
-  float vis_thres = pro.get_input<float>(i++);
-  float buffer_capacity = pro.get_input<float>(i++);
+  auto vis_thres = pro.get_input<float>(i++);
+  auto buffer_capacity = pro.get_input<float>(i++);
 
   volm_spherical_container_sptr sph2 = new volm_spherical_container(params.solid_angle,params.vmin,params.dmax);
   std::cout << "number of depth intervals in container: " << sph2->get_depth_offset_map().size()
@@ -219,7 +219,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // create directions buffer
-  cl_float* ray_dirs = new cl_float[4*layer_size];
+  auto* ray_dirs = new cl_float[4*layer_size];
   std::vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
   for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
@@ -243,7 +243,7 @@ bool boxm2_create_index_process(bprb_func_process& pro)
   std::cout.flush();
   //: get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
-  float subblk_dim = (float)mdata.sub_block_dim_.x();
+  auto subblk_dim = (float)mdata.sub_block_dim_.x();
   std::cout << "subblk_dim: " << subblk_dim << std::endl;
   bocl_mem*  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -277,13 +277,13 @@ bool boxm2_create_index_process(bprb_func_process& pro)
     hypo_location->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
     // Output Arrays
-    float* buff = new float[layer_size];
+    auto* buff = new float[layer_size];
     for (int i=0;i<layer_size;++i) buff[i]=0.0f;
-    float* vis_buff = new float[layer_size];
+    auto* vis_buff = new float[layer_size];
     for (int i=0;i<layer_size;++i) vis_buff[i]=1.0f;
-    float* prob_buff = new float[layer_size];
+    auto* prob_buff = new float[layer_size];
     for (int i=0;i<layer_size;++i) prob_buff[i]=0.0f;
-    float* t_infinity_buff = new float[layer_size];
+    auto* t_infinity_buff = new float[layer_size];
     for (int i=0;i<layer_size;++i) t_infinity_buff[i]=0.0f;
 
     bocl_mem* exp_depth=new bocl_mem(device->context(),buff,layer_size*sizeof(float),"exp depth buffer");
@@ -326,11 +326,11 @@ bool boxm2_create_index_process(bprb_func_process& pro)
       }
     }
 
-    std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
+    auto ord_iter = order_cache.find(curr_block);
     if (!(ord_iter != order_cache.end())) {
       order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
       if (order_cache.size() > 100) {// kick the first one
-        std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
+        auto to_kick = order_cache.begin();
         if (to_kick->first != curr_block)
           order_cache.erase(to_kick);
         else { ++to_kick; order_cache.erase(to_kick); }
@@ -518,9 +518,9 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   }
   unsigned i = 0;
   std::string index_file = pro.get_input<std::string>(i++);
-  float buffer_capacity = pro.get_input<float>(i++);
-  unsigned si = pro.get_input<unsigned>(i++);
-  unsigned ei = pro.get_input<unsigned>(i++);
+  auto buffer_capacity = pro.get_input<float>(i++);
+  auto si = pro.get_input<unsigned>(i++);
+  auto ei = pro.get_input<unsigned>(i++);
   std::string prefix = pro.get_input<std::string>(i++);
   std::string ray_file = pro.get_input<std::string>(i++);
 
@@ -544,7 +544,7 @@ bool boxm2_visualize_index_process(bprb_func_process& pro)
   sph_shell->b_read(ifs);
   ifs.close();
 
-  unsigned layer_size = (unsigned)sph_shell->get_container_size();
+  auto layer_size = (unsigned)sph_shell->get_container_size();
   boxm2_volm_wr3db_index_sptr ind = new boxm2_volm_wr3db_index(layer_size, buffer_capacity);
   if (!ind->initialize_read(index_file)) {
     std::cerr << "Cannot initialize index from file: " << index_file << '\n';
@@ -612,9 +612,9 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
   std::string geo_index_hyp_folder = pro.get_input<std::string>(i++);
   std::string visibility_index_folder = pro.get_input<std::string>(i++);
   std::string ray_file = pro.get_input<std::string>(i++);
-  unsigned tile_id = pro.get_input<unsigned>(i++);
-  float lat = pro.get_input<float>(i++);
-  float lon = pro.get_input<float>(i++);
+  auto tile_id = pro.get_input<unsigned>(i++);
+  auto lat = pro.get_input<float>(i++);
+  auto lon = pro.get_input<float>(i++);
   int data_type = pro.get_input<int>(i++);
 
   std::stringstream file_name_pre; file_name_pre << geo_index_hyp_folder << "geo_index_tile_" << tile_id;

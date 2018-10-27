@@ -202,7 +202,7 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
   //
   std::vector<match_info> blank;
   matches_and_weights_.push_back( blank );
-  std::vector< std::vector< match_info > >::reverse_iterator back_it
+  auto back_it
     = matches_and_weights_.rbegin();
 
   const unsigned size = matching_to.size();

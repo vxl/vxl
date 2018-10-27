@@ -29,7 +29,7 @@ namespace
                                                           const vgl_point_3d<double>& p3)
   {
     vgl_plane_3d<double> plane;
-    double *a = reinterpret_cast<double *>(&plane);
+    auto *a = reinterpret_cast<double *>(&plane);
 
     a[0] = p2.y()*p3.z() - p2.z()*p3.y()
          + p3.y()*p1.z() - p3.z()*p1.y()

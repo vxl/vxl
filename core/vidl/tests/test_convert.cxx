@@ -65,7 +65,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == img8.ni() && frame->nj() == img8.nj();
-      const vxl_byte * data8 = static_cast<const vxl_byte*>(frame->data());
+      const auto * data8 = static_cast<const vxl_byte*>(frame->data());
       // test that the image is wrapped into a frame
       valid = valid && data8 == img8.top_left_ptr();
       valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_24P;
@@ -78,7 +78,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == img8nc.ni() && frame->nj() == img8nc.nj();
-      const vxl_byte * data8 = static_cast<const vxl_byte*>(frame->data());
+      const auto * data8 = static_cast<const vxl_byte*>(frame->data());
       // test that the image is copied (not wrapped) into a frame
       valid = valid && data8 != img8nc.top_left_ptr();
       valid = valid && data8[0] == img8nc(0,0);
@@ -93,7 +93,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == img16.ni() && frame->nj() == img16.nj();
-      const vxl_uint_16 * data16 = static_cast<const vxl_uint_16*>(frame->data());
+      const auto * data16 = static_cast<const vxl_uint_16*>(frame->data());
       // test that the image is wrapped into a frame
       valid = valid && data16 == img16.top_left_ptr();
       valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_MONO_16;
@@ -106,7 +106,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == img16nc.ni() && frame->nj() == img16nc.nj();
-      const vxl_uint_16 * data16 = static_cast<const vxl_uint_16*>(frame->data());
+      const auto * data16 = static_cast<const vxl_uint_16*>(frame->data());
       // test that the image is copied (not wrapped) into a frame
       valid = valid && data16 != img16nc.top_left_ptr();
       valid = valid && data16[0] == img16nc(0,0);
@@ -121,7 +121,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == imgf.ni() && frame->nj() == imgf.nj();
-      const vil_rgb<vxl_ieee_32> * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
+      const auto * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
       // test that the image is wrapped into a frame
       valid = valid && dataf == imgf.top_left_ptr();
       valid = valid && frame->pixel_format() == VIDL_PIXEL_FORMAT_RGB_F32;
@@ -134,7 +134,7 @@ static void test_convert()
     if(valid)
     {
       valid = valid && frame->ni() == imgfnc.ni() && frame->nj() == imgfnc.nj();
-      const vil_rgb<vxl_ieee_32> * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
+      const auto * dataf = static_cast<const vil_rgb<vxl_ieee_32>*>(frame->data());
       // test that the image is copied (not wrapped) into a frame
       valid = valid && dataf != imgfnc.top_left_ptr();
       valid = valid && dataf[0] == imgfnc(0,0);

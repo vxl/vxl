@@ -42,14 +42,14 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(in_img);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   std::size_t global_threads[2] = {cl_ni, cl_nj};
 
   //set generic cam and get visible block order
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -64,7 +64,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
       //calculate ray and ray angles at pixel ij
       vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
       double cone_half_angle, solid_angle;
-      vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+      auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
       vsph_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
       ray_directions[4*cnt+3] = (cl_float) cone_half_angle;
       cnt++;
@@ -80,10 +80,10 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
   ////////////////////////////////////////////////////////////////////////////////
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* pre_buff = new float[cl_ni*cl_nj];
-  float* norm_buff = new float[cl_ni*cl_nj];
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* pre_buff = new float[cl_ni*cl_nj];
+  auto* norm_buff = new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
     vis_buff[i]=1.0f;
@@ -149,7 +149,7 @@ float boxm2_ocl_adaptive_cone_update( boxm2_scene_sptr & scene,
         bocl_mem* blk       = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(scene, *id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
@@ -381,14 +381,14 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(in_img);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   std::size_t global_threads[2] = {cl_ni, cl_nj};
 
   //set generic cam and get visible block order
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -402,7 +402,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
       //calculate ray and ray angles at pixel ij
       vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
       double cone_half_angle, solid_angle;
-      vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+      auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
       vsph_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
       ray_directions[4*cnt+3] = (cl_float) cone_half_angle;
       cnt++;
@@ -417,10 +417,10 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
   ////////////////////////////////////////////////////////////////////////////////
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* pre_buff = new float[cl_ni*cl_nj];
-  float* norm_buff = new float[cl_ni*cl_nj];
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* pre_buff = new float[cl_ni*cl_nj];
+  auto* norm_buff = new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
     vis_buff[i]=1.0f;
@@ -486,7 +486,7 @@ float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
       bocl_mem* blk       = opencl_cache->get_block(scene, *id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_GAMMA>(scene, *id,0,false);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_GAMMA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));

@@ -38,7 +38,7 @@ boxm2_lru_cache1::~boxm2_lru_cache1()
   // save the data and delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++) {
       boxm2_block_id id = it->first;
 #if 0 // Currently causing some blocks to not save
       if (!it->second->read_only_) {
@@ -69,7 +69,7 @@ void boxm2_lru_cache1::clear_cache()
   // delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++)
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++)
       delete it->second;
     iter.second.clear();
   }
@@ -120,7 +120,7 @@ boxm2_data_base* boxm2_lru_cache1::get_data_base(boxm2_block_id id, std::string 
     this->cached_data_map(type);
 
   // then look for the block you're requesting
-  std::map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() )
   {
     // congrats you've found the data block in cache, update cache and return block
@@ -196,7 +196,7 @@ boxm2_data_base* boxm2_lru_cache1::get_data_base_new(boxm2_block_id id, std::str
   std::map<boxm2_block_id, boxm2_data_base*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
-  std::map<boxm2_block_id, boxm2_data_base*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() )
   {
     // congrats you've found the data block in cache, now throw it away
@@ -216,7 +216,7 @@ void boxm2_lru_cache1::remove_data_base(boxm2_block_id id, std::string type)
   std::map<boxm2_block_id, boxm2_data_base*>& data_map =
     this->cached_data_map(type);
   // then look for the block you're requesting
-  std::map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
+  auto rem = data_map.find(id);
   if ( rem != data_map.end() )
   {
     // found the block,
@@ -243,7 +243,7 @@ void boxm2_lru_cache1::replace_data_base(boxm2_block_id id, std::string type, bo
     this->cached_data_map(type);
 
   // find old data base and copy it's read_only/write status
-  std::map<boxm2_block_id, boxm2_data_base*>::iterator rem = data_map.find(id);
+  auto rem = data_map.find(id);
   if ( rem != data_map.end() )
   {
     // found the block,
@@ -321,7 +321,7 @@ void boxm2_lru_cache1::write_to_disk()
    // save the data and delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<boxm2_block_id, boxm2_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++) {
       boxm2_block_id id = it->first;
       // if (!it->second->read_only_)
         boxm2_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter.first);

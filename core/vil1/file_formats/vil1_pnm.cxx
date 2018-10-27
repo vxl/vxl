@@ -158,7 +158,7 @@ static int ReadInteger(vil1_stream* vs, char& temp)
 // Convert the buffer of 16 bit words from MSB to host order
 static void ConvertMSBToHost( void* buf, int num_words )
 {
-  unsigned char* ptr = (unsigned char*)buf;
+  auto* ptr = (unsigned char*)buf;
   for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
     *ptr = *(ptr+1);
@@ -170,7 +170,7 @@ static void ConvertMSBToHost( void* buf, int num_words )
 // Convert the buffer of 16 bit words from host order to MSB
 static void ConvertHostToMSB( void* buf, int num_words )
 {
-  unsigned char* ptr = (unsigned char*)buf;
+  auto* ptr = (unsigned char*)buf;
   for ( int i=0; i < num_words; ++i ) {
     unsigned char t = *ptr;
     *ptr = *(ptr+1);
@@ -297,9 +297,9 @@ bool operator>>(vil1_stream& vs, unsigned int& a)
 
 bool vil1_pnm_generic_image::get_section(void* buf, int x0, int y0, int xs, int ys) const
 {
-  unsigned char* ib = (unsigned char*) buf;
-  unsigned short* jb = (unsigned short*) buf;
-  unsigned int* kb = (unsigned int*) buf;
+  auto* ib = (unsigned char*) buf;
+  auto* jb = (unsigned short*) buf;
+  auto* kb = (unsigned int*) buf;
   //
   if (magic_ > 4) // pgm or ppm raw image
   {
@@ -383,9 +383,9 @@ void operator<<(vil1_stream& vs, int a)
 
 bool vil1_pnm_generic_image::put_section(void const* buf, int x0, int y0, int xs, int ys)
 {
-  unsigned char const* ob = (unsigned char const*) buf;
-  unsigned short const* pb = (unsigned short const*) buf;
-  unsigned int const* qb = (unsigned int const*) buf;
+  auto const* ob = (unsigned char const*) buf;
+  auto const* pb = (unsigned short const*) buf;
+  auto const* qb = (unsigned int const*) buf;
 
   if (magic_ > 4) // pgm or ppm raw image
   {

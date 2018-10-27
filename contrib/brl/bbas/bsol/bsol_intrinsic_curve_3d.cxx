@@ -177,7 +177,7 @@ void bsol_intrinsic_curve_3d::computeProperties()
     double theta = std::acos(cur_dx/dLxy);
     theta_.push_back(theta);
 
-    vgl_vector_3d<double>* tangent = new vgl_vector_3d<double>(cur_dx, cur_dy, cur_dz);
+    auto* tangent = new vgl_vector_3d<double>(cur_dx, cur_dy, cur_dz);
     normalize(*tangent); //normalize the tangent vector.
     Tangent_.push_back(tangent);
 
@@ -214,11 +214,11 @@ void bsol_intrinsic_curve_3d::computeProperties()
     double normaly = cos_phi * sin_theta * phis -
                 sin_phi * cos_theta * thetas;
     double normalz = - std::sin(phi_[i]) * phis;
-    vgl_vector_3d<double>* normal = new vgl_vector_3d<double>(normalx, normaly, normalz);
+    auto* normal = new vgl_vector_3d<double>(normalx, normaly, normalz);
     normalize(*normal); //normalize the normal vector.
     Normal_.push_back(normal);
 
-    vgl_vector_3d<double>* binormal = new vgl_vector_3d<double>;
+    auto* binormal = new vgl_vector_3d<double>;
     *binormal = cross_product(*(Tangent_[i]), *normal);
     normalize(*binormal); //normalize the binormal vector.
     Binormal_.push_back(binormal);

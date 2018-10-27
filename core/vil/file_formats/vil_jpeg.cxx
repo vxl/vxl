@@ -197,7 +197,7 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     return false;
   }
 
-  const vil_image_view<vxl_byte>& view2 =
+  const auto& view2 =
     static_cast<const vil_image_view<vxl_byte>&>(view);
 
   // "compression makes no sense unless the section covers the whole image."
@@ -218,7 +218,7 @@ bool vil_jpeg_image::put_view(const vil_image_view_base &view,
     assert(view2.istep() > 0);
     assert(view2.istep() == jc->jobj.input_components); // bytes per pixel in the section
     for (unsigned int j=0; j<view2.nj(); ++j) {
-      JSAMPLE const *scanline = (JSAMPLE const*)
+      auto const *scanline = (JSAMPLE const*)
         &view2(0,j);
       if (!jc->write_scanline(y0+j, scanline))
         return false;

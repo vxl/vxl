@@ -72,7 +72,7 @@ brec_hierarchy_edge::update_angle_model(const float angle)
 {
   to_central_ = false;
   //float min_stad_dev = float(vnl_math::pi_over_180)*10.0f;  // min stad_dev = 10 degrees
-  float min_stad_dev = float(vnl_math::pi_over_180*min_stad_dev_angle_);  // min stad_dev = 10 degrees
+  auto min_stad_dev = float(vnl_math::pi_over_180*min_stad_dev_angle_);  // min stad_dev = 10 degrees
   bsta_update_gaussian(angle_model_, 1.0f, angle, min_stad_dev*min_stad_dev);
 }
 
@@ -132,7 +132,7 @@ brec_hierarchy_edge::get_probe_box(brec_part_instance_sptr central_p)
 
   float mx = cx + out_dist[0];
   float my = cy + out_dist[1];
-  float rad = (float)std::ceil(std::sqrt(var_dist())+3);
+  auto rad = (float)std::ceil(std::sqrt(var_dist())+3);
   float si = mx - rad;
   float upper_i = mx + rad;
   float sj = my - rad;

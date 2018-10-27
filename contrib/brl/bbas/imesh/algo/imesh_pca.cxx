@@ -201,7 +201,7 @@ vnl_vector<double>
 imesh_pca_mesh::project(const imesh_vertex_array_base& vertices) const
 {
   assert(dynamic_cast<const imesh_vertex_array<3>*>(&vertices));
-  const imesh_vertex_array<3>& verts =
+  const auto& verts =
       static_cast<const imesh_vertex_array<3>&>(vertices);
 
   const imesh_vertex_array<3>& mverts = this->mean_vertices<3>();

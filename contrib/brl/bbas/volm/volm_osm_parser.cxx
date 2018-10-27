@@ -181,7 +181,7 @@ void volm_osm_parser::startElement(const XML_Char* name, const XML_Char** atts)
 
 vgl_box_2d<double> volm_osm_parser::parse_bbox(std::string const& osm_file)
 {
-  volm_osm_parser* parser = new volm_osm_parser();
+  auto* parser = new volm_osm_parser();
   std::FILE* xmlFile = std::fopen(osm_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << " can not find osm file to parse: " << osm_file << '\n';
@@ -198,7 +198,7 @@ void volm_osm_parser::parse_points(std::vector<vgl_point_2d<double> >& points,
                                    std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
                                    std::string const& osm_file)
 {
-  volm_osm_parser* parser = new volm_osm_parser();
+  auto* parser = new volm_osm_parser();
   std::FILE* xmlFile = std::fopen(osm_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << " can not find osm file to parse: " << osm_file << '\n';
@@ -209,7 +209,7 @@ void volm_osm_parser::parse_points(std::vector<vgl_point_2d<double> >& points,
     delete parser;
   }
   // fetch points that have tags
-  std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > >::iterator mit = parser->node_keys_.begin();
+  auto mit = parser->node_keys_.begin();
   for (; mit != parser->node_keys_.end(); ++mit) {
     if ( mit->second.empty())
       continue;
@@ -224,7 +224,7 @@ void volm_osm_parser::parse_points(std::vector<vgl_point_2d<double> >& points,
 void volm_osm_parser::parse_points_3d(std::vector<vgl_point_3d<double> >& points,
                                       std::string const& osm_file)
 {
-  volm_osm_parser* parser = new volm_osm_parser();
+  auto* parser = new volm_osm_parser();
   std::FILE* xmlFile = std::fopen(osm_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << " can not find osm file to parse: " << osm_file << '\n';
@@ -235,7 +235,7 @@ void volm_osm_parser::parse_points_3d(std::vector<vgl_point_3d<double> >& points
     delete parser;
   }
   // parse all points
-  std::map<unsigned long long, vgl_point_3d<double> >::iterator mit = parser->nodes_3d_.begin();
+  auto mit = parser->nodes_3d_.begin();
   for (; mit != parser->nodes_3d_.end(); ++mit) {
     points.push_back(mit->second);
   }
@@ -245,7 +245,7 @@ void volm_osm_parser::parse_lines(std::vector<std::vector<vgl_point_2d<double> >
                                   std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
                                   std::string const& osm_file)
 {
-  volm_osm_parser* parser = new volm_osm_parser();
+  auto* parser = new volm_osm_parser();
   std::FILE* xmlFile = std::fopen(osm_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << " can not find osm file to parse: " << osm_file << '\n';
@@ -257,7 +257,7 @@ void volm_osm_parser::parse_lines(std::vector<std::vector<vgl_point_2d<double> >
   }
 
   std::map<unsigned long long, vgl_point_2d<double> > nodes = parser->nodes_;
-  std::map<unsigned long long, std::vector<std::pair<std::string, std::string> > >::iterator mit = parser->way_keys_.begin();
+  auto mit = parser->way_keys_.begin();
 
   // retrieve ways that have tags
   for (; mit != parser->way_keys_.end(); ++mit) {
@@ -285,7 +285,7 @@ std::vector<unsigned long long> get_line_from_way_id(unsigned long long const& w
 {
   std::vector<unsigned long long> out;
   out.clear();
-  std::vector<std::pair<unsigned long long, std::vector<unsigned long long> > >::iterator vit = ways.begin();
+  auto vit = ways.begin();
   for (; vit != ways.end(); ++vit) {
     if ( vit->first == way_id )
       return vit->second;
@@ -299,7 +299,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
                                    std::vector<unsigned long long>& way_ids,
                                    vgl_polygon<double>& poly)
 {
-  std::vector<unsigned long long>::iterator vit = way_ids.begin();
+  auto vit = way_ids.begin();
 
   // check whether the ways are enclosed when there is only one way
   if (way_ids.size() == 1) {
@@ -350,7 +350,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
           else {
             start = p4;
             for (unsigned n_idx = 1; n_idx < next_line.size(); n_idx++) {
-              std::vector<unsigned long long>::iterator vit = sheet.begin();
+              auto vit = sheet.begin();
               sheet.insert(vit, next_line[n_idx]);
             }
           }
@@ -364,7 +364,7 @@ bool compose_polygon_from_relation(vgl_box_2d<double> const&  /*osm_bbox*/,
           else {
             start = p3;
             for (int n_idx = next_line.size()-1; n_idx >= 0; n_idx--) {
-              std::vector<unsigned long long>::iterator vit = sheet.begin();
+              auto vit = sheet.begin();
               sheet.insert(vit, next_line[n_idx]);
             }
           }
@@ -427,7 +427,7 @@ void volm_osm_parser::parse_polygons(std::vector<vgl_polygon<double> >& polys,
                                      std::vector<std::vector<std::pair<std::string, std::string> > >& keys,
                                      std::string const& osm_file)
 {
-  volm_osm_parser* parser = new volm_osm_parser();
+  auto* parser = new volm_osm_parser();
   std::FILE* xmlFile = std::fopen(osm_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << " can not find osm file to parse: " << osm_file << '\n';

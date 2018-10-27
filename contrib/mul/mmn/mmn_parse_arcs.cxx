@@ -21,8 +21,8 @@ void  mmn_parse_arcs(std::istream& is,
 {
     //First convert node_names to numbers
     std::map<std::string,unsigned> nodeMap;
-    std::vector<std::string>::const_iterator nodeIter=node_names.begin();
-    std::vector<std::string>::const_iterator nodeIterEnd=node_names.end();
+    auto nodeIter=node_names.begin();
+    auto nodeIterEnd=node_names.end();
     unsigned id=0;
     while(nodeIter != nodeIterEnd)
     {

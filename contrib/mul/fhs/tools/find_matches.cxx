@@ -100,8 +100,8 @@ int main( int argc, char* argv[] )
   pyr_builder.build(image_pyr1,image1);
   pyr_builder.build(image_pyr2,image2);
 
-  const vimt_image_2d_of<vxl_byte>& image1_L = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr1(level()));
-  const vimt_image_2d_of<vxl_byte>& image2_L = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr2(level()));
+  const auto& image1_L = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr1(level()));
+  const auto& image2_L = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr2(level()));
 
   // ====================================================
   // Apply corner operator to image1_L and select corners

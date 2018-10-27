@@ -8,12 +8,12 @@
 
 static void test_binary_io()
 {
-  boct_tree<short,vgl_point_3d<double> > *tree_in=new boct_tree<short,vgl_point_3d<double> >(6,3);
+  auto *tree_in=new boct_tree<short,vgl_point_3d<double> >(6,3);
   tree_in->split();
   std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves = tree_in->leaf_cells();
   unsigned int num_leaves = 0;
   for (unsigned i=0; i<leaves.size(); ++i) {
-    boct_tree_cell<short,vgl_point_3d<double> >* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
+    auto* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
     if (leaf) { ++num_leaves; leaf->set_data(vgl_point_3d<double>(i,i,i)); }
   }
 
@@ -23,7 +23,7 @@ static void test_binary_io()
   tree_in->b_write(os, save_internal_nodes);
   os.close();
 
-  boct_tree<short,vgl_point_3d<double> > *tree_out=new boct_tree<short,vgl_point_3d<double> >();
+  auto *tree_out=new boct_tree<short,vgl_point_3d<double> >();
   vsl_b_ifstream is("tree.bin", std::ios::binary);
   tree_out->b_read(is);
   TEST("Returns the correct level", tree_out->number_levels(), tree_in->number_levels());
@@ -34,7 +34,7 @@ static void test_binary_io()
 
   bool same=true;
   for (unsigned i=0; i<leaves.size(); i++) {
-    boct_tree_cell<short,vgl_point_3d<double> >* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
+    auto* leaf = static_cast<boct_tree_cell<short,vgl_point_3d<double> >*>(leaves[i]);
     vgl_point_3d<double> data = leaf->data();
     if (data != vgl_point_3d<double>(i,i,i))
       same=false;

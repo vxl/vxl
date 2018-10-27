@@ -59,15 +59,15 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
     vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(skyimg, true);
-    vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-    unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-    unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+    auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+    auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+    auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
     global_threads[0]=cl_ni;
     global_threads[1]=cl_nj;
 
     //set generic cam
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -76,7 +76,7 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
     bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
     tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    float* input_buff=new float[cl_ni*cl_nj];
+    auto* input_buff=new float[cl_ni*cl_nj];
     //copy input vals into image
     int count=0;
     for (unsigned int j=0;j<cl_nj;++j) {
@@ -129,7 +129,7 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
         bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -211,7 +211,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr de
     std::vector<bocl_kernel*> vec_kernels;
 
     //seg len pass
-    bocl_kernel* update_sky_kernel = new bocl_kernel();
+    auto* update_sky_kernel = new bocl_kernel();
     std::string seg_opts = options + " -D UPDATE_SKY  -D STEP_CELL=step_cell_update_sky(aux_args,data_ptr,llid,d)";
     update_sky_kernel->create_kernel(&device->context(), device->device_id(), src_paths, "update_sky_main", seg_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_kernel);
@@ -255,15 +255,15 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
     vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(skyimg, true);
-    vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-    unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-    unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+    auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+    auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+    auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
     global_threads[0]=cl_ni;
     global_threads[1]=cl_nj;
 
     //set generic cam
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -282,8 +282,8 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-    float* input_buff=new float[cl_ni*cl_nj];
-    float* vis_buff=new float[cl_ni*cl_nj];
+    auto* input_buff=new float[cl_ni*cl_nj];
+    auto* vis_buff=new float[cl_ni*cl_nj];
     //copy input vals into image
     int count=0;
     for (unsigned int j=0;j<cl_nj;++j) {
@@ -340,7 +340,7 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
         bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -471,7 +471,7 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
         bocl_mem* blk       = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         // check for invalid parameters
         if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
@@ -552,19 +552,19 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr d
     std::vector<bocl_kernel*> vec_kernels;
 
     //seg len pass
-    bocl_kernel* update_sky_accum_ray_kernel = new bocl_kernel();
+    auto* update_sky_accum_ray_kernel = new bocl_kernel();
     std::string accum_opts = options + " -D UPDATE_SKY2  -D STEP_CELL=step_cell_accumulate_evidence_per_ray(aux_args,data_ptr,llid,d)";
     update_sky_accum_ray_kernel->create_kernel(&device->context(), device->device_id(), src_paths, "accumulate_evidence_sky_ray_main", accum_opts, "accumulate_evidence_sky_ray_main");
     vec_kernels.push_back(update_sky_accum_ray_kernel);
 
     //: average per cell
-    bocl_kernel* update_sky_accum_cell_kernel = new bocl_kernel();
+    auto* update_sky_accum_cell_kernel = new bocl_kernel();
     std::string cell_accum_opts = options + " -D UPDATE_SKY2_MAIN";
     update_sky_accum_cell_kernel->create_kernel(&device->context(), device->device_id(), non_ray_src, "accumulate_evidence_sky_cell_main", cell_accum_opts, "accumulate_evidence_sky_cell_main");
     vec_kernels.push_back(update_sky_accum_cell_kernel);
 
 
-    bocl_kernel* update_sky_main_kernel = new bocl_kernel();
+    auto* update_sky_main_kernel = new bocl_kernel();
     std::string update_opts = options + " -D UPDATE_SKY2_MAIN  ";
     update_sky_main_kernel->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_sky_main", update_opts, "update_sky_main");
     vec_kernels.push_back(update_sky_main_kernel);

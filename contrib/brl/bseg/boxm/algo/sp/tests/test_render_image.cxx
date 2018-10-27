@@ -76,7 +76,7 @@ static void test_render_image()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
+    auto * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(3,2);
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
     cel11->set_data(s2_sample);
     boct_tree_cell<short,boxm_sample<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));

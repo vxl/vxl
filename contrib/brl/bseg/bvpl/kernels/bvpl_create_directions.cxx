@@ -153,8 +153,8 @@ bvpl_create_directions_c::bvpl_create_directions_c()
 void bvpl_create_directions_base::save_directions_map(std::string outfile)
 {
   bsvg_document doc(400, 800);
-  std::vector<vnl_float_3>::iterator iter1 = axes_.begin();
-  std::vector<float>::iterator iter2 = angles_.begin();
+  auto iter1 = axes_.begin();
+  auto iter2 = angles_.begin();
   int i=0;
   for (;iter1!=axes_.end(); ++iter1, ++iter2, i++)
   {

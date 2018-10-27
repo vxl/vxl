@@ -39,7 +39,7 @@ bool test_fill_kernel()
   TEST("bocl_mem zero gpu buffer returned all zero values", true, true);
 
   //test float val
-  float* c = new float[length];
+  auto* c = new float[length];
   for(int i=0; i<length; ++i)
     c[i] = (float) i / 2.0f;
   bocl_mem c_mem(mgr.context(), c, length * sizeof(float), "test float buffer");

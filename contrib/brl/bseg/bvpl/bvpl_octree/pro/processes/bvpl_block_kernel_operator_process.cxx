@@ -77,7 +77,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
   int block_k = pro.get_input<int>(i++);
   std::string functor_name = pro.get_input<std::string>(i++);
   std::string output_path = pro.get_input<std::string>(i++);
-  double cell_length = pro.get_input<double>(i++);
+  auto cell_length = pro.get_input<double>(i++);
   //short level = 0;
 
   //print inputs
@@ -105,7 +105,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
     {
       typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
       typedef boct_tree<short, gauss_type > tree_type;
-      boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+      auto *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
 
 
       //parameters of the output scene are the same as those of the input scene
@@ -154,7 +154,7 @@ bool bvpl_block_kernel_operator_process(bprb_func_process& pro)
     case BOXM_FLOAT:
     {
       typedef boct_tree<short, float > tree_type;
-      boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+      auto *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
 
       //parameters of the output scene are the same as those of the input scene
       boxm_scene<tree_type> *scene_out =

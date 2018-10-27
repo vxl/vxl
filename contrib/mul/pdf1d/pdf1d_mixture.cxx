@@ -76,7 +76,7 @@ pdf1d_mixture::~pdf1d_mixture()
 //: Return instance of this PDF
 pdf1d_sampler* pdf1d_mixture::new_sampler() const
 {
-  pdf1d_mixture_sampler* i = new pdf1d_mixture_sampler;
+  auto* i = new pdf1d_mixture_sampler;
   i->set_model(*this);
 
   return i;

@@ -65,17 +65,17 @@ void test_l2_mog_norm()
   //Create grids
   vgl_vector_3d<unsigned> grid_size(2,2,2);
 
-  bvxm_voxel_grid<mix_gauss_type> *apm_grid= new bvxm_voxel_grid<mix_gauss_type>(grid_size);
+  auto *apm_grid= new bvxm_voxel_grid<mix_gauss_type>(grid_size);
   apm_grid->initialize_data(g);
 
-  bvxm_voxel_grid<bool> *mask_grid = new bvxm_voxel_grid<bool>(grid_size);
+  auto *mask_grid = new bvxm_voxel_grid<bool>(grid_size);
   mask_grid->initialize_data(true);
 
   bvxm_voxel_grid_base_sptr dist_base  = new bvxm_voxel_grid<float>(grid_size);
 
   bvxm_mog_norm<float>::mog_l2_grid(apm_grid,mask_grid,dist_base,true,f);
 
-  bvxm_voxel_grid<float>* dist_grid = static_cast<bvxm_voxel_grid< float>* >(dist_base.ptr());
+  auto* dist_grid = static_cast<bvxm_voxel_grid< float>* >(dist_base.ptr());
   //check that the distances are as expected
   bvxm_voxel_grid<float>::iterator dist_grid_it = dist_grid->begin();
 

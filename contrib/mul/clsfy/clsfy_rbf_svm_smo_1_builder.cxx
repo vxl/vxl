@@ -42,7 +42,7 @@ double clsfy_rbf_svm_smo_1_builder::build(clsfy_classifier_base& classifier,
   assert(*std::max_element(outputs.begin(), outputs.end()) <= 1);
 
   assert(classifier.is_class("clsfy_rbf_svm"));
-  clsfy_rbf_svm &svm = static_cast<clsfy_rbf_svm &>(classifier);
+  auto &svm = static_cast<clsfy_rbf_svm &>(classifier);
 
   clsfy_smo_1_rbf svAPI;
   std::vector<int> targets(nSamples);

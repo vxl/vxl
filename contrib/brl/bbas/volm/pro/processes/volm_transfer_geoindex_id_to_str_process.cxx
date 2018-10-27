@@ -87,7 +87,7 @@ bool volm_transfer_geoindex_id_to_str_process2(bprb_func_process& pro)
   }
   // get the input
   unsigned i = 0;
-  float min_size = pro.get_input<float>(i++);
+  auto min_size = pro.get_input<float>(i++);
   std::string in_poly = pro.get_input<std::string>(i++);
   std::string out_txt = pro.get_input<std::string>(i++);
   // create the tree

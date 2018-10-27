@@ -44,7 +44,7 @@ static bool write_homographies(std::string const& filename,
     return false;
   }
   unsigned frame = 0;
-  for (std::vector<vnl_double_3x3 >::const_iterator hit = homographies.begin();
+  for (auto hit = homographies.begin();
        hit != homographies.end(); ++hit, ++frame)
   {
     ofile <<"Frame No " << frame << '\n' << *hit;

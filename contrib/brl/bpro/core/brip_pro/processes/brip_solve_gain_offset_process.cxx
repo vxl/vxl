@@ -123,7 +123,7 @@ bool brip_solve_gain_offset_constraints_process(bprb_func_process& pro)
     vil_image_view_base_sptr test_image_ptr =
         pro.get_input<vil_image_view_base_sptr>(1);
     vil_image_view<float> test_image = *test_image_ptr;
-    double lambda = pro.get_input<double>(2);
+    auto lambda = pro.get_input<double>(2);
     vil_image_view_base_sptr model_mask_ptr =
         pro.get_input<vil_image_view_base_sptr>(3);
     vil_image_view<unsigned char> model_mask;

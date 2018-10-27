@@ -29,12 +29,12 @@ namespace brip_blobwise_mutual_info_process_globals
       std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 
       //load image from file and format it into grey
-      vil_image_view<vxl_byte>* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
+      auto* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
       vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
       vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
       //stretch it into 0-1 range
-      vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
+      auto*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
       vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
       return floatimg;
     }
@@ -46,17 +46,17 @@ namespace brip_blobwise_mutual_info_process_globals
 
       //preapre floatimg for stretched img
       vil_image_view<float>* floatimg;
-      if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+      if (auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
       {
         floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       }
-      else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+      else if (auto *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
       {
         floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
       }
-      else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+      else if (auto *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
       {
         return img_float;
       }
@@ -114,7 +114,7 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
 
   //mask image should be a byte image...
   unsigned ni=blob_img_ptr->ni(), nj=blob_img_ptr->nj();
-  vil_image_view<vxl_byte>* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
+  auto* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
   vil_image_view<bool> mask_img(ni, nj);
   for (unsigned int i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j)
@@ -129,7 +129,7 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
   vil_binary_dilate(mask_dest1, mask_dest, selem);
 
   //calculate per blob mutual information
-  vil_image_view<float>* mi_image = new vil_image_view<float>(in_img->ni(), in_img->nj()) ;
+  auto* mi_image = new vil_image_view<float>(in_img->ni(), in_img->nj()) ;
   mi_image->fill(0.0f);
 #if 0
   vil_image_view<float>*  weight_img = prepare_input_image(weight_ptr);
@@ -144,7 +144,7 @@ bool brip_blobwise_mutual_info_process(bprb_func_process& pro)
 
   //create new blob info (threshold the mi image by some value)
   float thresh = .1f * max_value;
-  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
+  auto* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
   for (unsigned int i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j) {
       if ( mask_img(i,j) && (*mi_image)(i,j) > thresh)

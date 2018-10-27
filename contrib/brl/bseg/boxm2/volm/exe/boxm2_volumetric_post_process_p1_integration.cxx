@@ -152,7 +152,7 @@ int main(int argc, char** argv)
       }
     }
     std::vector<float> max_score;
-    std::set<float>::iterator sit = score_set.end();
+    auto sit = score_set.end();
     --sit;  max_score.push_back(*sit);
     --sit;  max_score.push_back(*sit);
     --sit;  max_score.push_back(*sit);
@@ -220,7 +220,7 @@ int main(int argc, char** argv)
   // calculate roi based on maximum score
   float max_score_all = 0;
   for (auto & max_score : max_scores) {
-    for (std::vector<float>::iterator vit = max_score.second.begin(); vit != max_score.second.end(); ++vit)
+    for (auto vit = max_score.second.begin(); vit != max_score.second.end(); ++vit)
       if (max_score_all < *vit) max_score_all = *vit;
   }
   std::vector<double> thresholds;
@@ -304,7 +304,7 @@ int main(int argc, char** argv)
   fout << out_str.str();
   fout.precision(4); fout.width(13); fout.fill(' ');
   fout << score_roi[0] << ' ';
-  unsigned tot_loc = (unsigned)score_roi[score_roi.size()-1];
+  auto tot_loc = (unsigned)score_roi[score_roi.size()-1];
   fout.width(13); fout.fill(' ');
   fout << tot_loc << "        ";
   for (unsigned i = 1; i < thresholds.size()+1; i++) {
@@ -349,7 +349,7 @@ int main(int argc, char** argv)
   std::string log_fname = rational_folder.str() + "/matchimg.log";
   std::ofstream ofs_log(log_fname.c_str());
   unsigned cnt = 30;
-  std::map<float, std::pair<unsigned, vgl_point_3d<double> > >::iterator mit_all = score_map_all.end();
+  auto mit_all = score_map_all.end();
   while (cnt) {
     --mit_all; --cnt;
 

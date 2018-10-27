@@ -171,7 +171,7 @@ static void test_vector_3d()
   tr[3] = orthogonal_vectors(n1,0.75);
   for (const auto & i : tr)
   {
-    double d = dot_product<double>(n1, i);
+    auto d = dot_product<double>(n1, i);
     check += d*d;
     d = dot_product<double>(i, i)-1.0;
     check += d*d;
@@ -187,7 +187,7 @@ static void test_vector_3d()
   tr[3] = orthogonal_vectors(n2,0.75);
   for (const auto & i : tr)
   {
-    double d = dot_product<double>(n2, i);
+    auto d = dot_product<double>(n2, i);
     check += d*d;
     d = dot_product<double>(i, i)-1.0;
     check += d*d;
@@ -203,7 +203,7 @@ static void test_vector_3d()
   tr[3] = orthogonal_vectors(n3,0.75);
   for (const auto & i : tr)
   {
-    double d = dot_product<double>(n3, i);
+    auto d = dot_product<double>(n3, i);
     check += d*d;
     d = dot_product<double>(i, i)-1.0;
     check += d*d;
@@ -219,7 +219,7 @@ static void test_vector_3d()
   tr[3] = orthogonal_vectors(n4,0.75);
   for (const auto & i : tr)
   {
-    double d = dot_product<double>(n4, i);
+    auto d = dot_product<double>(n4, i);
     check += d*d;
     d = dot_product<double>(i, i)-1.0;
     check += d*d;
@@ -235,7 +235,7 @@ static void test_vector_3d()
   tr[3] = orthogonal_vectors(n5,0.75);
   for (const auto & i : tr)
   {
-    double d = dot_product<double>(n5, i);
+    auto d = dot_product<double>(n5, i);
     check += d*d;
     d = dot_product<double>(i, i)-1.0;
     check += d*d;

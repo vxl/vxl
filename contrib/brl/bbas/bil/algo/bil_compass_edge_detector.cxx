@@ -44,7 +44,7 @@ double* MakeQtrMask(double r, int n_wedges)
   int R = (int) std::ceil(r);
 
   // allocate the array to hold the mask
-  double* mask = new double[R*R*n_wedges];
+  auto* mask = new double[R*R*n_wedges];
 
   // initialize
   for (int i=0; i<R*R*n_wedges; ++i)
@@ -281,7 +281,7 @@ double CreateMask(double sigma, int n_wedges, int masksz, int weight_type, doubl
 {
   // Create a normalized Gaussian mask in Quadrant I
   // Note: this mask is in column order
-  double* gauss = new double[masksz*masksz];
+  auto* gauss = new double[masksz*masksz];
   for (int i = 0; i < masksz; ++i) {
     for (int j = 0; j < masksz; ++j)
     {
@@ -587,14 +587,14 @@ vil_image_view<float> bil_detect_compass_edges(vil_image_view<vxl_byte>& image,
   hist_grad.fill(0.0);
 
   // loop over all the pixels in the image to compute NMS over orientations
-  double* dist = new double[n_orient];
+  auto* dist = new double[n_orient];
 
   // create the wedge masks
   double *mask, *masksum;
   double wedge_wt = CreateMask(sigma, n_wedges, masksz, 0, &mask, &masksum);
 
   // allocate space for the histograms
-  bil_bin* wHist = new bil_bin[4*n_wedges*NBINS];       // All wedge histograms
+  auto* wHist = new bil_bin[4*n_wedges*NBINS];       // All wedge histograms
   bil_signature hist1, hist2;         // Semi-circle histograms
   bil_signature hist1norm, hist2norm; // normalized histograms
 

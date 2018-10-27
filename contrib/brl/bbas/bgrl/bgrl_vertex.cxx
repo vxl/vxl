@@ -66,10 +66,10 @@ bgrl_vertex::purge()
 {
   bool retval = false;
 
-  for ( edge_iterator itr = out_edges_.begin();
+  for ( auto itr = out_edges_.begin();
         itr != out_edges_.end(); )
   {
-    edge_iterator next_itr = itr;
+    auto next_itr = itr;
     ++next_itr;
     if (!(*itr)->to_) {
       out_edges_.erase(itr);
@@ -78,10 +78,10 @@ bgrl_vertex::purge()
     itr = next_itr;
   }
 
-  for ( edge_iterator itr = in_edges_.begin();
+  for ( auto itr = in_edges_.begin();
         itr != in_edges_.end(); )
   {
-    edge_iterator next_itr = itr;
+    auto next_itr = itr;
     ++next_itr;
     if (!(*itr)->from_) {
       in_edges_.erase(itr);
@@ -133,7 +133,7 @@ bgrl_vertex::remove_edge_to( const bgrl_vertex_sptr& vertex )
   if (!vertex || vertex.ptr() == this)
     return false;
 
-  for ( edge_iterator itr = out_edges_.begin();
+  for ( auto itr = out_edges_.begin();
         itr != out_edges_.end(); ++itr )
   {
     if ((*itr)->to_ == vertex) {

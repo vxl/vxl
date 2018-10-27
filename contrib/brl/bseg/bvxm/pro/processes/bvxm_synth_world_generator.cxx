@@ -243,7 +243,7 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
   bvxm_voxel_grid<apm_datatype>::iterator apm_slab_it;
   bvxm_voxel_grid<float>::iterator obs_it = intensity_grid->begin();
   //slab thickness is 1
-  bvxm_voxel_slab<float>* weight = new bvxm_voxel_slab<float>(grid_size.x(),grid_size.y(),1);
+  auto* weight = new bvxm_voxel_slab<float>(grid_size.x(),grid_size.y(),1);
   weight->fill(1);
 
   for (apm_slab_it = apm_grid->begin(); apm_slab_it != apm_grid->end(); ++apm_slab_it,++obs_it) {
@@ -256,7 +256,7 @@ bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
   if (gen_images_) {
     for (unsigned i=0; i<cameras.size(); i++) {
       vil_image_view_base_sptr img_arg;
-      vil_image_view<float>* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
+      auto* mask = new vil_image_view<float>(IMAGE_U, IMAGE_V);
       vil_image_view_base_sptr expected = new vil_image_view<unsigned char>(IMAGE_U, IMAGE_V);
       bvxm_image_metadata camera(img_arg, cameras[i]);
 
@@ -550,7 +550,7 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
 
   bvxm_voxel_grid_base_sptr apm_grid_base = world->get_grid<APM_MOG_GREY>(bin,scale);
 
-  bvxm_voxel_grid<apm_datatype> *apm_grid = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
+  auto *apm_grid = static_cast<bvxm_voxel_grid<apm_datatype>*>(apm_grid_base.ptr());
 
   bvxm_voxel_grid<float>* intensity_grid = new bvxm_voxel_grid<float>
       (world_dir_ + "/intensity.vox",grid_size);

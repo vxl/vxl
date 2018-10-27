@@ -14,7 +14,7 @@
   double zmin = sbox->get_min_z(), zmax = sbox->get_max_z();
   double width = sbox->width(), height = sbox->height(), depth = sbox->depth();
   double xc = xmin + 0.5*width, yc = ymin+0.5*height, zc = zmin+0.5*depth;
-  betr_geo_object_3d* gobj_nconst = const_cast<betr_geo_object_3d*>(this);
+  auto* gobj_nconst = const_cast<betr_geo_object_3d*>(this);
   // convert to geographic coordinates using the lvcs
   double lon = 0.0, lat = 0.0, elev = 0.0;
   (gobj_nconst->lvcs_).local_to_global(xmin, ymin, zmin, vpgl_lvcs::wgs84,

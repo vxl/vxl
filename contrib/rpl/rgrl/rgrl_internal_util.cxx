@@ -41,12 +41,12 @@ rgrl_internal_util_upgrade_to_homography2D( vnl_matrix_fixed<double, 3, 3>& init
 
   if ( cur_transform.is_type( rgrl_trans_homography2d::type_id() ) )
   {
-    rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_homography2d const&>( cur_transform );
     init_H = trans.H();
     return true;
   }
   else if ( cur_transform.is_type( rgrl_trans_affine::type_id() ) ) {
-    rgrl_trans_affine const& trans = static_cast<rgrl_trans_affine const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_affine const&>( cur_transform );
     if ( trans.t().size() != 2 )
       return false;
     copy_matrix_at( init_H, 0, 0, trans.A() );
@@ -54,7 +54,7 @@ rgrl_internal_util_upgrade_to_homography2D( vnl_matrix_fixed<double, 3, 3>& init
     return true;
   }
   else if ( cur_transform.is_type( rgrl_trans_similarity::type_id() ) ) {
-    rgrl_trans_similarity const& trans = static_cast<rgrl_trans_similarity const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_similarity const&>( cur_transform );
     if ( trans.t().size() != 2 )
       return false;
     copy_matrix_at( init_H, 0, 0, trans.A() );
@@ -62,7 +62,7 @@ rgrl_internal_util_upgrade_to_homography2D( vnl_matrix_fixed<double, 3, 3>& init
     return true;
   }
   else if ( cur_transform.is_type( rgrl_trans_rigid::type_id() ) ) {
-    rgrl_trans_rigid const& trans = static_cast<rgrl_trans_rigid const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_rigid const&>( cur_transform );
     if ( trans.t().size() != 2 )
       return false;
     copy_matrix_at( init_H, 0, 0, trans.R() );
@@ -70,7 +70,7 @@ rgrl_internal_util_upgrade_to_homography2D( vnl_matrix_fixed<double, 3, 3>& init
     return true;
   }
   else if ( cur_transform.is_type( rgrl_trans_translation::type_id() ) ) {
-    rgrl_trans_translation const& trans = static_cast<rgrl_trans_translation const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_translation const&>( cur_transform );
     if ( trans.t().size() != 2 )
       return false;
     copy_column_vector_at( init_H, 0, 2, trans.t() );

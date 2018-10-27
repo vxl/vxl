@@ -71,14 +71,14 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   bbas_1d_array_float_sptr pt_lon = pro.get_input<bbas_1d_array_float_sptr>(in_i++);
   bbas_1d_array_float_sptr pt_lat = pro.get_input<bbas_1d_array_float_sptr>(in_i++);
-  float road_width = pro.get_input<float>(in_i++);
+  auto road_width = pro.get_input<float>(in_i++);
 
   // load the image
   if (img_sptr->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     std::cerr << pro.name() << ": Unsupported pixel format: " << img_sptr->pixel_format() << ", only byte is allowed!\n";
     return false;
   }
-  vpgl_geo_camera *geocam = dynamic_cast<vpgl_geo_camera*>(cam_sptr.ptr());
+  auto *geocam = dynamic_cast<vpgl_geo_camera*>(cam_sptr.ptr());
   if (!geocam) {
     std::cerr << pro.name() << ": cannot cast the input cam to a vpgl_geo_camera!\n";
     return false;

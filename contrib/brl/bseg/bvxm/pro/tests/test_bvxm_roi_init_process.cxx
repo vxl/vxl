@@ -39,7 +39,7 @@ static void test_bvxm_roi_init_process()
 
   // extract the camera
   vil_image_resource_sptr img = vil_load_image_resource(image_path.c_str());
-  vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
+  auto* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
   vpgl_camera_double_sptr camera = new vpgl_nitf_rational_camera(nitf, true);
   brdb_value_sptr v1 = new brdb_value_t<vpgl_camera_double_sptr>(camera);
 
@@ -107,7 +107,7 @@ static void test_bvxm_roi_init_process()
   non_null = (value_img != nullptr);
   TEST("camera output non-null", non_null ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr nitf_roi = result->value();
   bool saved = vil_save(*nitf_roi, "./roi.tif");

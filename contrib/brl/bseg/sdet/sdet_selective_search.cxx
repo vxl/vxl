@@ -15,7 +15,7 @@ void sdet_selective_search::initialize_hists(){
     region.second->ComputeIntensityStdev();
     bsta_histogram<float> h(255.0f, nbins_);
     for(region.second->reset(); region.second->next();){
-      float v = static_cast<float>(region.second->I());
+      auto v = static_cast<float>(region.second->I());
       v = log_map(v);
       h.upcount(v, 1.0f);
     }
@@ -54,9 +54,9 @@ void sdet_selective_search::compute_initial_similarity(){
     bsta_histogram<float>& histi = hists[labi];
     //float npix_i = static_cast<float>(ri->Npix());
     const std::set<unsigned>& nbrs = ri->nbrs();
-    for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nbr : nbrs){
+    for(const auto & nbr : nbrs){
       std::pair<unsigned, unsigned> p(labi,nbr);
-      std::set< std::pair<unsigned, unsigned> >::iterator pit = sim_pair_computed.find(p);
+      auto pit = sim_pair_computed.find(p);
       if(pit != sim_pair_computed.end())
         continue; // pair already computed
       sdet_region_sptr& rnbr = regions_[nbr];
@@ -81,15 +81,15 @@ void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<
   const std::set<unsigned>& nbrs = newr->nbrs();
   //float npix_n = static_cast<float>(newr->Npix());
   bsta_histogram<float>& hr = hists_[lab];
-  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nbr : nbrs){
+  for(const auto & nbr : nbrs){
     //check if neighbor is already removed
-    std::set<unsigned>::iterator rit = removed_labels.find(nbr);
+    auto rit = removed_labels.find(nbr);
     if(rit != removed_labels.end())
       continue;
     sdet_region_sptr& rnbr = regions_[nbr];
     if(!rnbr) continue;//null region - shouldn't happen
     //float npix_nb = static_cast<float>(rnbr->Npix());
-    std::map<unsigned, bsta_histogram<float> >::iterator hitn = hists_.find(nbr);
+    auto hitn = hists_.find(nbr);
     if(hitn == hists_.end())
       continue;//hist not found
     bsta_histogram<float>& hn = hitn->second;
@@ -111,7 +111,7 @@ void sdet_selective_search::merge_regions(){
   while(!sim_.empty()){
     region_sim sim = sim_.top();
     //check if similarity is irrelevant since is with respect to already removed labels
-    std::set<unsigned>::iterator rlit = removed_labels.find(sim.ri_);
+    auto rlit = removed_labels.find(sim.ri_);
     if(rlit != removed_labels.end()){//found the label ri
       sim_.pop();
       continue;
@@ -144,14 +144,14 @@ void sdet_selective_search::merge_regions(){
     // undefined when an element is erased.
     std::vector<unsigned> dead_nbrs;
     const std::set<unsigned>& nbrs = rij->nbrs();
-    for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nbr : nbrs){
-      std::set<unsigned>::iterator rit = removed_labels.find(nbr);
+    for(const auto &nbr : nbrs){
+      auto rit = removed_labels.find(nbr);
       if(rit != removed_labels.end())
         dead_nbrs.push_back(nbr);
     }
     for(unsigned int & dead_nbr : dead_nbrs){
       rij->remove_neighbor(dead_nbr);
-      std::map<unsigned, unsigned>::iterator eit = equivalent_labels.find(dead_nbr);
+      auto eit = equivalent_labels.find(dead_nbr);
       if(eit !=equivalent_labels.end())
         rij->add_neighbor(eit->second);
     }
@@ -170,7 +170,7 @@ void sdet_selective_search::update_region_labels(){
       sdet_region_sptr& r = region.second;
       unsigned lab = r->label();
       diverse_regions_[lab]=r;
-      std::map<unsigned, bsta_histogram<float> >::iterator hit = hists_.find(lab);
+      auto hit = hists_.find(lab);
       if(hit != hists_.end()){
         bsta_histogram<float>& h = hit->second;
         diverse_hists_[lab] = h;
@@ -184,7 +184,7 @@ void sdet_selective_search::update_region_labels(){
     r->increment_neighbors(delta);
     r->set_label(new_lab);
     diverse_regions_[new_lab]=r;
-    std::map<unsigned, bsta_histogram<float> >::iterator hit = hists_.find(lab);
+    auto hit = hists_.find(lab);
     if(hit != hists_.end()){
       bsta_histogram<float>& h = hit->second;
       diverse_hists_[new_lab] = h;
@@ -200,7 +200,7 @@ void sdet_selective_search::create_color_region_view(unsigned min_region_area,
   vil_rgb<vxl_byte> black((vxl_byte)0, (vxl_byte)0, (vxl_byte)0);
   color_view.fill(black);
   unsigned k = 0;
-  for(std::map<unsigned, sdet_region_sptr>::iterator rit = regions_.begin();
+  for(auto rit = regions_.begin();
       rit != regions_.end(); ++rit, ++k){
     sdet_region_sptr& ri = (*rit).second;
     if(ri->Npix()<min_region_area || ri->Npix()>max_region_area)
@@ -208,7 +208,7 @@ void sdet_selective_search::create_color_region_view(unsigned min_region_area,
     vil_rgb<vxl_byte> c = colors[k];
         std::cout << "label " << ri->label() << " " << c << std::endl;
     for(ri->reset(); ri->next();){
-      unsigned u = static_cast<unsigned>(ri->X()), v = static_cast<unsigned>(ri->Y());
+      auto u = static_cast<unsigned>(ri->X()), v = static_cast<unsigned>(ri->Y());
       color_view(u, v) = c;
     }
   }

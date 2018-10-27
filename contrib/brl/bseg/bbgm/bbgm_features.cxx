@@ -45,8 +45,8 @@ pixels(unsigned i, unsigned j)
   for (int jj = -rj; jj<=rj; ++jj) {
     for (int ii = -ri; ii<=ri; ++ii) {
       if (m(ii, jj)>0) {
-        unsigned short pi = static_cast<unsigned short>(ii+i);
-        unsigned short pj = static_cast<unsigned short>(jj+j);
+        auto pi = static_cast<unsigned short>(ii+i);
+        auto pj = static_cast<unsigned short>(jj+j);
         if (pi>=320||pj>=180) {
           std::cout << "Write out of bounds in mask(" << pi << ' ' << pj << ")\n";
           continue;
@@ -141,9 +141,9 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
 {
   std::vector<vgl_point_2d<unsigned short> > pixp;
   //start of path
-  float isf = static_cast<float>(i0_), jsf = static_cast<float>(j0_);
+  auto isf = static_cast<float>(i0_), jsf = static_cast<float>(j0_);
   // end point of path
-  float ief = static_cast<float>(i1_), jef = static_cast<float>(j1_);
+  auto ief = static_cast<float>(i1_), jef = static_cast<float>(j1_);
   float lif = 0, ljf = 0; //current point
   bool init = true;
   while (brip_line_generator::generate(init, isf, jsf, ief, jef,
@@ -168,7 +168,7 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
   //add mask pixels (removing duplicates)
   for (auto & pit : pixm0) {
     bool found = false;
-    for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+    for (auto pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
       if ((*pot)==pit) {
         found = true;
@@ -177,7 +177,7 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
   }
   for (auto & pit : pixm1) {
     bool found = false;
-    for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+    for (auto pot = pix.begin();
          pot != pix.end()&&!found; ++pot)
       if ((*pot)==pit) {
         found = true;
@@ -338,14 +338,14 @@ vgl_polygon<double> bbgm_pair_group_feature::convex_hull() const
 std::vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
 {
   std::vector<vgl_point_2d<unsigned short> > pix;
-  std::set<bbgm_mask_pair_feature, fless >::iterator pit = pairs_.begin();
+  auto pit = pairs_.begin();
   for (; pit!=pairs_.end(); ++pit)
   {
     bbgm_mask_pair_feature mpf = *pit;
     std::vector<vgl_point_2d<unsigned short> > pixp = mpf.pixels();
     for (auto & pxt : pixp) {
       bool found = false;
-      for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+      for (auto pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
         if ((*pot)==pxt) {
           found = true;
@@ -356,16 +356,16 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
     unsigned short im, jm;
     mpf.center(im, jm);
     //start of path
-    float isf = static_cast<float>(ci_), jsf = static_cast<float>(cj_);
+    auto isf = static_cast<float>(ci_), jsf = static_cast<float>(cj_);
     // end point of path
-    float ief = static_cast<float>(im), jef = static_cast<float>(jm);
+    auto ief = static_cast<float>(im), jef = static_cast<float>(jm);
     float lif = 0, ljf = 0; //current point
     bool init = true;
     while (brip_line_generator::generate(init, isf, jsf, ief, jef,
                                          lif, ljf))
     {
       //cast the line pixel location to unsigned short
-      unsigned short ili = static_cast<unsigned short>(lif),
+      auto ili = static_cast<unsigned short>(lif),
         ilj = static_cast<unsigned short>(ljf);
       vgl_point_2d<unsigned short> pt(ili, ilj);
       if (ili>=320||ilj>=180) {
@@ -373,7 +373,7 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_pair_group_feature::pixels()
         continue;
       }
       bool found = false;
-      for (std::vector<vgl_point_2d<unsigned short> >::iterator pot = pix.begin();
+      for (auto pot = pix.begin();
            pot != pix.end()&&!found; ++pot)
         if ((*pot)==pt) {
           found = true;

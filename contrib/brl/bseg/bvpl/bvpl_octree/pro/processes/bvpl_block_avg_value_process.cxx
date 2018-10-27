@@ -48,7 +48,7 @@ bool bvpl_block_avg_value_process(bprb_func_process& pro)
   //get inputs
   unsigned i =0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  double fraction_nsamples = pro.get_input<double>(i++);
+  auto fraction_nsamples = pro.get_input<double>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
@@ -57,19 +57,19 @@ bool bvpl_block_avg_value_process(bprb_func_process& pro)
     std::cerr << "Error in bvpl_block_avg_value_process: Null error scene\n";
     return false;
   }
-  boxm_scene<boct_tree<short, float> >* scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (scene_base.as_pointer());
+  auto* scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (scene_base.as_pointer());
   if (!scene){
     std::cerr << "Error in bvpl_block_avg_value_process: Error scene is of incorrect type\n";
     return false;
   }
   //sum errors within block
-  double scene_ncells = (double)scene->size();
+  auto scene_ncells = (double)scene->size();
   scene->load_block(block_i,block_j,block_k);
-  double tree_ncells = (double)scene->get_block(block_i,block_j,block_k)->get_tree()->size();
+  auto tree_ncells = (double)scene->get_block(block_i,block_j,block_k)->get_tree()->size();
   double nsamples = scene_ncells * fraction_nsamples;
 
   //number of samples - 10% of total number of leaf-cells
-  unsigned long tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
+  auto tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
   std::cout << "Number of samples in  the scene " << scene_ncells << '\n'
            << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << std::endl;
   double avg_value = bvpl_average_value(scene,block_i, block_j, block_k, tree_nsamples);

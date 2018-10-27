@@ -83,7 +83,7 @@ bool bvxm_orthorectify_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = params->lvcs();
   double lat, lon, elev;
   lvcs->get_origin(lat, lon, elev);
-  float base_elev = (float)elev;
+  auto base_elev = (float)elev;
 
   std::cout << "Using scene height: " << h << " and scene floor absolute height: " << base_elev << " to convert the absolute heights to heights from scene ceiling!\n";
   vil_image_view<float> ortho_depth_img(ni, nj, 1);

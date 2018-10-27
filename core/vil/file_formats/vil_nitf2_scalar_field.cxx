@@ -69,7 +69,7 @@ vil_nitf2_field::field_tree* vil_nitf2_scalar_field::get_tree() const
   //put the normal stuff in there
   field_tree* tr = vil_nitf2_field::get_tree();
   //now grab my value and put that in there
-  vil_stream_core* str = new vil_stream_core;
+  auto* str = new vil_stream_core;
   write( *str );
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );

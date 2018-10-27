@@ -41,7 +41,7 @@ bool bvpl_load_global_pca_125_process(bprb_func_process& pro)
 
   // get inputs
   std::string pca_file = pro.get_input<std::string>(0);
-  bvpl_global_pca<125> *global_pca = new bvpl_global_pca<125>(pca_file);
+  auto *global_pca = new bvpl_global_pca<125>(pca_file);
 
   // store output
   pro.set_output_val<bvpl_global_pca_125_sptr>(0, global_pca);

@@ -173,8 +173,8 @@ bool vil_blocked_image_resource::trim_border_blocks(unsigned int i0, unsigned in
   for (unsigned int bi = 0 ; bi < blocks.size() ; bi++) {
     for (unsigned int bj = 0 ; bj < blocks[bi].size() ; bj++) {
       if (!blocks[bi][bj]) continue;
-      unsigned int last_col_index = (unsigned int)(blocks.size()-1);
-      unsigned int last_row_index = (unsigned int)(blocks[bi].size()-1);
+      auto last_col_index = (unsigned int)(blocks.size()-1);
+      auto last_row_index = (unsigned int)(blocks[bi].size()-1);
       //booleans that tell me whether this box is some sort of border box
       bool first_block_in_row = bi == 0;
       bool first_block_in_col = bj == 0;

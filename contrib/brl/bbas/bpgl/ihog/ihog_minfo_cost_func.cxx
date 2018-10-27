@@ -161,7 +161,7 @@ double ihog_minfo_cost_func::entropy_diff(vnl_vector<double>& mask_samples, vnl_
   for (unsigned i = 0; i<to_samples.size(); ++i)
     if (mask_samples[i]>0.0) {
       //match the gpu implementation, which does a floor operation
-      unsigned id = static_cast<unsigned>(std::floor(from_samples[i]*scl)),
+      auto id = static_cast<unsigned>(std::floor(from_samples[i]*scl)),
                is = static_cast<unsigned>(std::floor(to_samples[i]*scl));
 
       if (id+1>(unsigned)nbins || is+1>(unsigned)nbins)
@@ -174,7 +174,7 @@ double ihog_minfo_cost_func::entropy_diff(vnl_vector<double>& mask_samples, vnl_
     for (int c = 0; c<nbins; ++c)
       h[r][c] /= total_weight;
 
-  unsigned nr = (unsigned)h.rows(), nc = (unsigned)h.cols();
+  auto nr = (unsigned)h.rows(), nc = (unsigned)h.cols();
   //marginal distribution for mapped dest intensities
   vbl_array_1d<double> pmr(nc,0.0);
   for (unsigned r = 0; r<nr; ++r)

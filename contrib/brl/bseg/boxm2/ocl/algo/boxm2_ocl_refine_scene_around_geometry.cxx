@@ -21,7 +21,7 @@ boxm2_ocl_refine_scene_around_geometry
           std::cout<<"probability threshold is negative -- refining all cells"<<std::endl;
   }
 
-  bocl_kernel * label_k = new bocl_kernel();
+  auto * label_k = new bocl_kernel();
   label_k->create_kernel(&device_->context(),device_->device_id(), src_paths, "label_cells_to_refine", opts, "refinement kernel");
   kerns_.push_back(label_k);//5
 
@@ -69,7 +69,7 @@ boxm2_ocl_refine_scene_around_geometry
                 boxm2_data_base * mog     = cache_->get_cpu_cache()->get_data_base(scene_,id,app_type_);
                 boxm2_data_base * labels  = cache_->get_cpu_cache()->get_data_base(scene_,id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("refine"));
                 int data_size = alph->buffer_length()/4;
-                short* label_buf = (short *) labels->data_buffer();
+                auto* label_buf = (short *) labels->data_buffer();
 
 
                 std::vector<boxm2_data_base*> datas;
@@ -156,9 +156,9 @@ boxm2_ocl_refine_scene_around_geometry
                 //set up the filter, filter buffer and other related filter variables
 
 
-                std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+                auto kit = filter->float_kernel_.begin();
                 unsigned ci=0;
-                cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
+                auto* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
                 for (; kit!= filter->float_kernel_.end(); kit++, ci++)
                 {
                         vgl_point_3d<float> loc = kit->first;
@@ -207,7 +207,7 @@ boxm2_ocl_refine_scene_around_geometry
 
                         bocl_mem * to_refine = cache_->get_data_new(scene_,id,boxm2_data_traits<BOXM2_LABEL_SHORT>::prefix("refine"), data_size * labelTypeSize,false);
 
-                        float * output_buff = new float[data_size];
+                        auto * output_buff = new float[data_size];
                         bocl_mem_sptr output_f = cache_->alloc_mem(data_size *sizeof(float), output_buff, "output" );
                         output_f->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
@@ -260,7 +260,7 @@ boxm2_ocl_refine_scene_around_geometry
                         to_refine->read_to_buffer(queue);
                         output_f->read_to_buffer(queue);
 
-                        short * refine_buf = (short*)to_refine->cpu_buffer();
+                        auto * refine_buf = (short*)to_refine->cpu_buffer();
                         /*for (unsigned i=0;i<data_size;i++)
                                 if(refine_buf[i]!=0)
                                 std::cout<<refine_buf[i];

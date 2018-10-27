@@ -278,7 +278,7 @@ bool vil1_iris_generic_image::get_section_verbatim(void* ib, int x0, int y0, int
 {
   int row_len = xs * bytes_per_component_;
 
-  unsigned char* dp = (unsigned char*)ib;
+  auto* dp = (unsigned char*)ib;
 
   for (int channel=0; channel<planes_; ++channel)
   {
@@ -307,8 +307,8 @@ bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, 
 {
   int row_len = xs * bytes_per_component_;
 
-  unsigned char* dp = (unsigned char*)ib;
-  unsigned char* exrow = new unsigned char[width_];
+  auto* dp = (unsigned char*)ib;
+  auto* exrow = new unsigned char[width_];
 
   // for each channel
   for (int channel=0; channel<planes_; ++channel)
@@ -325,7 +325,7 @@ bool vil1_iris_generic_image::get_section_rle(void* ib, int x0, int y0, int xs, 
       unsigned long rlelength = lengthtab_[rowno+channel*height_];
 
       // read rle row into array
-      unsigned char* rlerow = new unsigned char[rlelength];
+      auto* rlerow = new unsigned char[rlelength];
       is_->seek(rleoffset);
       is_->read((void*)rlerow, rlelength);
 

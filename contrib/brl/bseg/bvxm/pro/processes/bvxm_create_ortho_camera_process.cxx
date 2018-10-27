@@ -95,8 +95,8 @@ bool bvxm_create_ortho_camera_process(bprb_func_process& pro)
     return true;
   }
   else {
-    unsigned ni = (unsigned)std::ceil(box.width() / voxel_length);
-    unsigned nj = (unsigned)std::ceil(box.height()/ voxel_length);
+    auto ni = (unsigned)std::ceil(box.width() / voxel_length);
+    auto nj = (unsigned)std::ceil(box.height()/ voxel_length);
     //trans_matrix[0][0] = (lower_right_lon-lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lat)/nj;
     // lvcs origin is not necessarily one of the corners of the scene
     trans_matrix[0][0] = (lower_right_lon-upper_left_lon)/ni; trans_matrix[1][1] = -(upper_left_lat-lower_right_lat)/nj;

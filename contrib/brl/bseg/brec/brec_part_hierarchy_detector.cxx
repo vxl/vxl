@@ -19,14 +19,14 @@
 
 brec_part_hierarchy_detector::~brec_part_hierarchy_detector()
 {
-  std::map<unsigned, Rtree_type*>::iterator it = map_rtree_.begin();
+  auto it = map_rtree_.begin();
   for ( ; it != map_rtree_.end(); it++) {
     delete (*it).second;
   }
 
   map_rtree_.clear();
 
-  std::map<unsigned, std::vector<brec_part_instance_sptr> >::iterator it2 = map_instance_.begin();
+  auto it2 = map_instance_.begin();
   for ( ; it2 != map_instance_.end(); it2++) {
     ((*it2).second).clear();
   }
@@ -52,7 +52,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
   map_instance_[0] = parts_prims;
 
   // create an rtree
-  Rtree_type *tr = new Rtree_type();
+  auto *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
   for (const auto & parts_prim : parts_prims) {
     tr->add(parts_prim);
@@ -69,7 +69,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
 
     map_instance_[l] = parts_current;
 
-    Rtree_type *rtree_current = new Rtree_type();
+    auto *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
     for (const auto & i : parts_current) {
@@ -105,7 +105,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
   map_instance_[0] = parts_prims;
   std::cout << "extracted " << parts_prims.size() << " parts of layer 0\n";
   // create an rtree
-  Rtree_type *tr = new Rtree_type();
+  auto *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
   for (const auto & parts_prim : parts_prims) {
     tr->add(parts_prim);
@@ -122,7 +122,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float ang
 
     map_instance_[l] = parts_current;
 
-    Rtree_type *rtree_current = new Rtree_type();
+    auto *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
     for (const auto & i : parts_current) {
@@ -158,7 +158,7 @@ bool brec_part_hierarchy_detector::detect_primitives_using_trained_response_mode
   map_instance_[0] = parts_prims;
 
   // create an rtree
-  Rtree_type *tr = new Rtree_type();
+  auto *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
   for (const auto & parts_prim : parts_prims) {
     tr->add(parts_prim);
@@ -187,7 +187,7 @@ bool brec_part_hierarchy_detector::detect_primitives_for_training(vil_image_view
   std::cout << "extracted " << parts_prims.size() << " primitives\n";
 
   // create an rtree
-  Rtree_type *tr = new Rtree_type();
+  auto *tr = new Rtree_type();
   map_rtree_.insert(std::pair<unsigned, Rtree_type*> (0, tr));
   for (const auto & parts_prim : parts_prims) {
     tr->add(parts_prim);
@@ -229,7 +229,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
 
     map_instance_[l] = parts_current;
 
-    Rtree_type *rtree_current = new Rtree_type();
+    auto *rtree_current = new Rtree_type();
     map_rtree_.insert(std::pair<unsigned, Rtree_type*> (l, rtree_current));
 
     for (const auto & i : parts_current) {
@@ -266,7 +266,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
 
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
-  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  auto eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
   double strength = 1.0;
 
@@ -331,7 +331,7 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
 
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
-  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  auto eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
   double strength = 1.0;
   for ( ; eit != upper_p->out_edges_end(); eit++) {
@@ -385,7 +385,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
 
     // find the all the upper layer parts that use hp as a central part
     // check the incoming edges of hp
-    for (brec_part_hierarchy::edge_iterator eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
+    for (auto eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
       if (hp == (*eit)->source()->central_part()) {
         brec_part_base_sptr hp_upper = (*eit)->source();
 
@@ -419,7 +419,7 @@ brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
 
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
-  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  auto eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
   double rho = 1.0;
   for ( ; eit != upper_p->out_edges_end(); eit++) {
@@ -480,7 +480,7 @@ brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper
   // now for each other part of upper_p, check whether they exist in the map
   float cx = central_p->x_; float cy = central_p->y_;
 
-  brec_part_hierarchy::edge_iterator eit = upper_p->out_edges_begin();
+  auto eit = upper_p->out_edges_begin();
   eit++;  // skip the central part
 
   float prior_non_c_b = 1.0f - (prior_c_f_ + prior_non_c_f_ + prior_c_b_);
@@ -591,7 +591,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
 
     // find the all the upper layer parts that use hp as a central part
     // check the incoming edges of hp
-    for (brec_part_hierarchy::edge_iterator eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
+    for (auto eit = hp->in_edges_begin(); eit != hp->in_edges_end(); eit++) {
       if ((*eit)->to_central() && hp == (*eit)->source()->central_part()) {
         brec_part_base_sptr hp_upper = (*eit)->source();
 

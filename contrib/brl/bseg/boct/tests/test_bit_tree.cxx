@@ -126,8 +126,8 @@ static void test_bit_tree()
     {
       {
         // both non-owning
-        unsigned char *bits1 = new unsigned char[16]();
-        unsigned char *bits2 = new unsigned char[16]();
+        auto *bits1 = new unsigned char[16]();
+        auto *bits2 = new unsigned char[16]();
         boct_bit_tree t1(bits1, false, 4);
         boct_bit_tree t2(bits2, false, 4);
         t1.set_bit_at(4, true);
@@ -149,8 +149,8 @@ static void test_bit_tree()
       }
       {
         // both owning
-        unsigned char *bits1 = new unsigned char[16]();
-        unsigned char *bits2 = new unsigned char[16]();
+        auto *bits1 = new unsigned char[16]();
+        auto *bits2 = new unsigned char[16]();
         boct_bit_tree t1(bits1, true, 4);
         boct_bit_tree t2(bits2, true, 4);
         t1.set_bit_at(4, true);
@@ -168,8 +168,8 @@ static void test_bit_tree()
 
       {
         // only t1 is owning
-        unsigned char *bits1 = new unsigned char[16]();
-        unsigned char *bits2 = new unsigned char[16]();
+        auto *bits1 = new unsigned char[16]();
+        auto *bits2 = new unsigned char[16]();
         boct_bit_tree t1(bits1, true, 4);
         boct_bit_tree t2(bits2, false, 4);
         t1.set_bit_at(4, true);
@@ -192,8 +192,8 @@ static void test_bit_tree()
 
       {
         // only t2 is owning
-        unsigned char *bits1 = new unsigned char[16]();
-        unsigned char *bits2 = new unsigned char[16]();
+        auto *bits1 = new unsigned char[16]();
+        auto *bits2 = new unsigned char[16]();
         boct_bit_tree t1(bits1, false, 4);
         boct_bit_tree t2(bits2, true, 4);
         t1.set_bit_at(4, true);
@@ -211,7 +211,7 @@ static void test_bit_tree()
       }
       {
         // self assignment, owning
-        unsigned char *bits1 = new unsigned char[16]();
+        auto *bits1 = new unsigned char[16]();
         boct_bit_tree t1(bits1, true, 4);
         boct_bit_tree t2(bits1, false, 4);
         t1.set_bit_at(4, true);

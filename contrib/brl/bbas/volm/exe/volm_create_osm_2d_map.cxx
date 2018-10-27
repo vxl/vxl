@@ -1090,7 +1090,7 @@ int main(int argc, char** argv)
 
   // start to create 2d map
   volm_img_info nlcd_info = nlcd_infos[t_id];
-  vil_image_view<vxl_byte>* nlcd_img = dynamic_cast<vil_image_view<vxl_byte>*>(nlcd_info.img_r.ptr());
+  auto* nlcd_img = dynamic_cast<vil_image_view<vxl_byte>*>(nlcd_info.img_r.ptr());
   if (!nlcd_img) {
     log << "ERROR: unsupported NLCD image pixel format: " << nlcd_info.img_r->pixel_format() << '\n';  error(log_file, log.str());
     return -1;
@@ -1116,8 +1116,8 @@ int main(int argc, char** argv)
     vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat_min, lon_min, 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     double box_lx, box_ly, box_lz;
     lvcs->global_to_local(lon_max, lat_max, 0, vpgl_lvcs::wgs84, box_lx, box_ly, box_lz);
-    unsigned ni = (unsigned)std::ceil(box_lx);
-    unsigned nj = (unsigned)std::ceil(box_ly);
+    auto ni = (unsigned)std::ceil(box_lx);
+    auto nj = (unsigned)std::ceil(box_ly);
     vgl_box_2d<double> leaf_bbox_geo = leaf->extent_;
     vgl_box_2d<double> leaf_bbox(0.0, box_lx, 0.0, box_ly);
     // create geo camera for output image
@@ -1160,13 +1160,13 @@ int main(int argc, char** argv)
       for (unsigned j = 0; j < nj; j++) {
         // obtain global lon/lat
         double lon, lat, gz;
-        float local_x = (float)(i+0.5);  float local_y = (float)(box_ly-j+0.5);
+        auto local_x = (float)(i+0.5);  auto local_y = (float)(box_ly-j+0.5);
         lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
         // find NLCD pixel
         unsigned char label = volm_osm_category_io::volm_land_table_name["invalid"].id_;
         double u, v;
         nlcd_info.cam->global_to_img(lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);  unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);  auto vv = (unsigned)std::floor(v+0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_img->ni() && vv < nlcd_img->nj()) {
           label = (*nlcd_img)(uu, vv);
           unsigned char land_label = volm_osm_category_io::nlcd_land_table[label].id_;
@@ -1224,14 +1224,14 @@ int main(int argc, char** argv)
       for (unsigned j = 0; j < nj; j++) {
         // obtain global lon/lat
         double lon, lat, gz;
-        float local_x = (float)(i+0.5);  float local_y = (float)(box_ly-j+0.5);
+        auto local_x = (float)(i+0.5);  auto local_y = (float)(box_ly-j+0.5);
         lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
         float elev = 100.0f;
         bool found = false;
         for (auto & lidar_img : lidar_imgs) {
           double u, v;
           lidar_img.second->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)std::floor(u+0.5);  unsigned vv = (unsigned)std::floor(v+0.5);
+          auto uu = (unsigned)std::floor(u+0.5);  auto vv = (unsigned)std::floor(v+0.5);
           if (uu > 0 && vv > 0 && uu < lidar_img.first.ni() && vv < lidar_img.first.nj()) {
             elev = lidar_img.first(uu, vv);  found = true;
             break;

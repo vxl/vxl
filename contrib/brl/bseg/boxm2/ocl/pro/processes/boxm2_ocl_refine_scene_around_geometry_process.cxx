@@ -66,7 +66,7 @@ bool boxm2_ocl_refine_scene_around_geometry_process(bprb_func_process& pro)
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
   bvpl_kernel_vector_sptr filter_vector = pro.get_input<bvpl_kernel_vector_sptr>(i++);
   int  num_times = pro.get_input<int>(i++);
-  float p_thresh = pro.get_input<float>(i++);
+  auto p_thresh = pro.get_input<float>(i++);
   bool refine_gpu = pro.get_input<bool>(i++);
 
   bool foundDataType = false;

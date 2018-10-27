@@ -329,7 +329,7 @@ void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
 
   //Save the matrix in a pgn image
   max_disparity-=min_disparity;
-  unsigned char* buf=new unsigned char[w*h];
+  auto* buf=new unsigned char[w*h];
   for (int i=0; i<h; i++)
   {
     for (int j=0; j<w; j++)

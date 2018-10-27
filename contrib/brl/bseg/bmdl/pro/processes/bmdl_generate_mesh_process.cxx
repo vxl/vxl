@@ -45,9 +45,9 @@ void update_mesh_coord(imesh_mesh& imesh, vpgl_geo_camera* cam)
 {
   imesh_vertex_array<3>& vertices = imesh.vertices<3>();
   for (unsigned v=0; v<vertices.size(); v++) {
-    unsigned int x = (unsigned int)vertices(v,0); // explicit cast from double
-    unsigned int y = (unsigned int)vertices(v,1);
-    unsigned int z = (unsigned int)vertices(v,2);
+    auto x = (unsigned int)vertices(v,0); // explicit cast from double
+    auto y = (unsigned int)vertices(v,1);
+    auto z = (unsigned int)vertices(v,2);
     vpgl_lvcs_sptr lvcs = cam->lvcs();
     double lon, lat, elev;
     cam->img_to_wgs(x, y, z, lon, lat, elev);
@@ -441,7 +441,7 @@ bool bmdl_generate_mesh_process(bprb_func_process& pro)
     return false;
   }
 
-  vpgl_geo_camera* lidar_cam = static_cast<vpgl_geo_camera*>(camera.ptr());
+  auto* lidar_cam = static_cast<vpgl_geo_camera*>(camera.ptr());
   unsigned num_of_buildings=0;
   return generate_mesh(file_poly, label_img, height_img, ground_img, file_mesh, lidar_cam, num_of_buildings);
 }

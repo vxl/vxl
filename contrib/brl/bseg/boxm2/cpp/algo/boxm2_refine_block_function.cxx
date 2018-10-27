@@ -77,7 +77,7 @@ bool boxm2_refine_block_function::refine_deterministic(std::vector<boxm2_data_ba
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
   boxm2_array_3d<uchar16> trees = blk_->trees_copy();  //trees to refine
-  uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
+  auto* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
   int dataSize = 0;                                 //running sum of data size
@@ -107,9 +107,9 @@ bool boxm2_refine_block_function::refine_deterministic(std::vector<boxm2_data_ba
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
   boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * sizeof(uchar8)], dataSize * sizeof(uchar8), id);
   boxm2_data_base* newN = new boxm2_data_base(new char[dataSize * sizeof(ushort4)], dataSize * sizeof(ushort4), id);
-  float*   alpha_cpy = (float*) newA->data_buffer();
-  uchar8*  mog_cpy   = (uchar8*) newM->data_buffer();
-  ushort4* num_obs_cpy = (ushort4*) newN->data_buffer();
+  auto*   alpha_cpy = (float*) newA->data_buffer();
+  auto*  mog_cpy   = (uchar8*) newM->data_buffer();
+  auto* num_obs_cpy = (ushort4*) newN->data_buffer();
 
   //3. loop through tree again, putting the data in the right place
   std::cout<<"Swapping data into new blocks..."<<std::endl;

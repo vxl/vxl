@@ -102,7 +102,7 @@ int main(int argc,  char** argv)
             <<"Update with frame: "<<frame<<", num "<<i<<" of "<<numUpdates<<std::endl;
     vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(imgs[frame], true);
     vpgl_camera_double_sptr  inCam = boxm2_util::camera_from_file( cams[frame] );
-    vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr());
+    auto* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr());
 
     vul_timer t; t.mark();
     float gpu_time = boxm2_multi_update::update(mcache, *inImgPtr, inCam);

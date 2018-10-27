@@ -1221,7 +1221,7 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   }
 
   //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
 
   vpgl_nitf_rational_camera nitf_cam(nitf_image, false);
 
@@ -1488,7 +1488,7 @@ bool brad_image_metadata::parse(std::string const& nitf_filename, std::string co
   // normalize the soalr irradiance by earth-sun distance
   double d = brad_sun_distance(year, month, day, hour, min);
   double d_sqr = d*d;
-  std::vector<double>::iterator vit = this->normal_sun_irradiance_values_.begin();
+  auto vit = this->normal_sun_irradiance_values_.begin();
   for (; vit != this->normal_sun_irradiance_values_.end(); ++vit)
     *vit /= d_sqr;
 
@@ -1599,7 +1599,7 @@ bool brad_image_metadata::parse_from_meta_file(std::string const& meta_file)
   // normalize the soalr irradiance by earth-sun distance
   double d = brad_sun_distance(this->t_.year, this->t_.month, this->t_.day, this->t_.hour, this->t_.min);
   double d_sqr = d*d;
-  std::vector<double>::iterator vit = this->normal_sun_irradiance_values_.begin();
+  auto vit = this->normal_sun_irradiance_values_.begin();
   for (; vit != this->normal_sun_irradiance_values_.end(); ++vit)
     *vit /= d_sqr;
 
@@ -1777,7 +1777,7 @@ void brad_image_metadata::print_out_radiometric_parameter()
   }
   std::cout << "]" << std::endl;
   std::cout << "Band dependent relative adjustment factors -- GAIN: (" << this->band_ << "): " << std::endl;
-  std::vector<double>::iterator vit = this->gains_.begin();
+  auto vit = this->gains_.begin();
   for (; vit != this->gains_.end(); ++vit)
     std::cout << *vit << ' ';
   std::cout << "]\n";

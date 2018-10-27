@@ -132,7 +132,7 @@ bool generate_random_circle(vil_image_view<unsigned char> &im,int seed)
 
   for (int i=0;i<imniunsigned;i++)
   {
-    float discriminant= (float)(radius*radius-(i-x0)*(i-x0));
+    auto discriminant= (float)(radius*radius-(i-x0)*(i-x0));
     if (discriminant>0)
     {
       int j1=x0+(int)std::sqrt(discriminant);

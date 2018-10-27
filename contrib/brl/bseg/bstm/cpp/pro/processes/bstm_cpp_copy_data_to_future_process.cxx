@@ -61,7 +61,7 @@ bool bstm_cpp_copy_data_to_future_process(bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
-  float time =pro.get_input<float>(i++);
+  auto time =pro.get_input<float>(i++);
 
 
   //bstm app query

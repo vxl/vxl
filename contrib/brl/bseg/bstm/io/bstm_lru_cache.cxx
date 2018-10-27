@@ -41,7 +41,7 @@ bstm_lru_cache::~bstm_lru_cache()
   // save the data and delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++) {
       bstm_block_id id = it->first;
 #if 0 // Currently causing some blocks to not save
       if (!it->second->read_only_) {
@@ -82,7 +82,7 @@ void bstm_lru_cache::clear_cache()
   // delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++)
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++)
       delete it->second;
     iter.second.clear();
   }
@@ -154,7 +154,7 @@ bstm_data_base* bstm_lru_cache::get_data_base(bstm_block_id id, std::string type
   std::map<bstm_block_id, bstm_data_base*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
-  std::map<bstm_block_id, bstm_data_base*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() )
   {
     if (!read_only)  // write-enable is enforced
@@ -234,7 +234,7 @@ bstm_data_base* bstm_lru_cache::get_data_base_new(bstm_block_id id, std::string 
   std::map<bstm_block_id, bstm_data_base*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
-  std::map<bstm_block_id, bstm_data_base*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() )
   {
     // congrats you've found the data block in cache, now throw it away
@@ -254,7 +254,7 @@ void bstm_lru_cache::remove_data_base(bstm_block_id id, std::string type)
   std::map<bstm_block_id, bstm_data_base*>& data_map =
     this->cached_data_map(type);
   // then look for the block you're requesting
-  std::map<bstm_block_id, bstm_data_base*>::iterator rem = data_map.find(id);
+  auto rem = data_map.find(id);
   if ( rem != data_map.end() )
   {
     // found the block,
@@ -280,7 +280,7 @@ void bstm_lru_cache::replace_data_base(bstm_block_id id, std::string type, bstm_
   std::map<bstm_block_id, bstm_data_base*>& data_map = this->cached_data_map(type);
 
   // find old data base and copy it's read_only/write status
-  std::map<bstm_block_id, bstm_data_base*>::iterator rem = data_map.find(id);
+  auto rem = data_map.find(id);
   if ( rem != data_map.end() )
   {
     // found the block,
@@ -303,7 +303,7 @@ void bstm_lru_cache::replace_time_block(bstm_block_id id, bstm_time_block* repla
   bstm_block_metadata data = scene_->get_block_metadata(id);
 
   // look for the block you're requesting
-  std::map<bstm_block_id, bstm_time_block*>::iterator rem = cached_time_blocks_.find(id);
+  auto rem = cached_time_blocks_.find(id);
   if (rem != cached_time_blocks_.end() )
   {
     //found time block, now delete it
@@ -384,7 +384,7 @@ void bstm_lru_cache::write_to_disk()
    // save the data and delete
   for (auto & iter : cached_data_)
   {
-    for (std::map<bstm_block_id, bstm_data_base*>::iterator it = iter.second.begin(); it != iter.second.end(); it++) {
+    for (auto it = iter.second.begin(); it != iter.second.end(); it++) {
       bstm_block_id id = it->first;
       // if (!it->second->read_only_)
         bstm_sio_mgr::save_block_data_base(scene_dir_, it->first, it->second, iter.first);

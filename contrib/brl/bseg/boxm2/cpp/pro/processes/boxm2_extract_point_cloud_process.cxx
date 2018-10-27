@@ -57,8 +57,8 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  float prob_t = pro.get_input<float>(i++);
-  unsigned int depth = pro.get_input<unsigned>(i++);
+  auto prob_t = pro.get_input<float>(i++);
+  auto depth = pro.get_input<unsigned>(i++);
 
   return boxm2_extract_point_cloud::extract_point_cloud(scene, cache, prob_t, depth);
 

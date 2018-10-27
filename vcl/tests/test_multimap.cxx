@@ -19,25 +19,25 @@ int test_multimap_main(int /*argc*/,char* /*argv*/[])
   m.insert(mymap::value_type(2, 1.414213562373095)); // sqrt(2)
   m.insert(mymap::value_type(3, 1.61803398874989)); // golden number
 
-  mymap::iterator b = m.begin();
-  mymap::iterator e = m.end();
+  auto b = m.begin();
+  auto e = m.end();
 
   std::cout << "the whole container:" << std::endl;
-  for (mymap::iterator p = b; p != e; ++p)
+  for (auto p = b; p != e; ++p)
     std::cout << *p << std::endl;
 
   std::cout << "lower_bound() and upper_bound():" << std::endl;
   for (int k=-1; k<=4; ++k) {
     std::cout << "k=" << k << std::endl;
 
-    mymap::iterator lo = m.lower_bound(k);
+    auto lo = m.lower_bound(k);
     std::cout << "  lo: ";
     if (lo==b) std::cout << "begin";
     else if (lo==e) std::cout << "end";
     else std::cout << *lo;
     std::cout << std::endl;
 
-    mymap::iterator hi = m.upper_bound(k);
+    auto hi = m.upper_bound(k);
     std::cout << "  hi: ";
     if (hi==b) std::cout << "begin";
     else if (hi==e) std::cout << "end";

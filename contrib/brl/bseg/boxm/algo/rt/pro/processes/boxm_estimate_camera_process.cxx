@@ -87,7 +87,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
 
   // camera
   vpgl_camera_double_sptr cam_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vpgl_perspective_camera<double> *cam_init = dynamic_cast<vpgl_perspective_camera<double>*>(cam_inp.ptr());
+  auto *cam_init = dynamic_cast<vpgl_perspective_camera<double>*>(cam_inp.ptr());
 
   // image
   vil_image_view_base_sptr img_e_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -129,14 +129,14 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
   // change the parameters into radians
   theta_range *= deg2rad; theta_step *= deg2rad; phi_range *= deg2rad; phi_step *= deg2rad; rot_range *= deg2rad; rot_step *= deg2rad;
 
-  vil_image_view<float> *img_eei = new vil_image_view<float>(ni,nj,1);
+  auto *img_eei = new vil_image_view<float>(ni,nj,1);
   img_eei->fill(0.0f);
 
   if (scene_ptr->appearence_model() == BOXM_EDGE_LINE) {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
         std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
@@ -150,7 +150,7 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
 
       func.apply(cam_inp,img_eei);
 
-      vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
+      auto *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
       bpgl_camera_estimator_amoeba<func_type> cost_ftn(cam_estimator,img_e,cam_inp);
@@ -161,13 +161,13 @@ bool boxm_estimate_camera_process(bprb_func_process& pro)
       amoeba.set_relative_diameter(3.0);
       amoeba.set_max_iterations(max_iter_cam_center);
       amoeba.minimize(x);
-      vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
+      auto *cam_est = new vpgl_perspective_camera<double>(*cam_init);
       cost_ftn.get_result(x,cam_est);
 
       vpgl_camera_double_sptr cam_ptr = new vpgl_perspective_camera<double>(*cam_est);
       func.apply(cam_ptr,img_eei);
 
-      vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
+      auto *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
       brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
 
       delete cam_est;

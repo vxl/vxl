@@ -24,7 +24,7 @@ void test_load_neighboring_blocks()
       std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int> > active_blocks = scene->active_blocks();
 
       //iterate through the active blocks and check that their trees are in memory
-      std::set<vgl_point_3d<int>, bvgl_point_3d_cmp<int>  >::iterator it = active_blocks.begin();
+      auto it = active_blocks.begin();
 
       for (; it!=active_blocks.end(); it++){
         boxm_block<boct_tree<short, float> > *block = scene->get_block(*it);

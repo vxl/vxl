@@ -183,7 +183,7 @@ static void test_update_multi_bin()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >  > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(4,3);
+    auto * tree=new boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(4,3);
     boct_tree_cell<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >* cel11=tree->locate_point(vgl_point_3d<double>(0.01,0.01,0.01));
     cel11->set_data(s2_sample);
     boct_tree_cell<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >* cell2=tree->locate_point(vgl_point_3d<double>(0.51,0.51,0.01));

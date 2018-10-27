@@ -96,7 +96,7 @@ void bvpl_gauss3d_kernel_factory::create_canonical()
   }
 
   //normalize to L1 norm
-  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator k_it = canonical_kernel_.begin();
+  auto k_it = canonical_kernel_.begin();
   float norm = 0.0;
   for(; k_it != canonical_kernel_.end(); k_it++)
   {

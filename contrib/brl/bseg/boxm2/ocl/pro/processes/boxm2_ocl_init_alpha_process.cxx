@@ -84,8 +84,8 @@ bool boxm2_ocl_init_alpha_process(bprb_func_process& pro)
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
 
-    float pinit = pro.get_input<float>(i++);
-    float thresh = pro.get_input<float>(i++);
+    auto pinit = pro.get_input<float>(i++);
+    auto thresh = pro.get_input<float>(i++);
 
     std::string identifier=device->device_identifier();
     // create a command queue.
@@ -102,7 +102,7 @@ bool boxm2_ocl_init_alpha_process(bprb_func_process& pro)
     if (kernels.find(identifier)==kernels.end())
     {
         std::cout<<"===========Compiling kernels==========="<<std::endl;
-        bocl_kernel * kernel=new bocl_kernel();
+        auto * kernel=new bocl_kernel();
         compile_kernel(device,kernel);
         kernels[identifier]=kernel;
     }

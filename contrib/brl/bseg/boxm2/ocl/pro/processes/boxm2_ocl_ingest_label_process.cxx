@@ -49,7 +49,7 @@ namespace boxm2_ocl_ingest_label_process_globals
     options += " -D STEP_CELL=step_cell_ingest_label_map(aux_args,data_ptr)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
 
     ray_trace_kernel->create_kernel( &device->context(),
@@ -112,20 +112,20 @@ bool boxm2_ocl_ingest_label_process(bprb_func_process& pro)
   unsigned int cl_nj = RoundUp(z_img->nj(),8);
   std::cout << "casting images of size: " << z_img->ni() << " x " << z_img->nj() << " rounded up size: " << cl_ni << " x " << cl_nj << std::endl;
 
-  vil_image_view<float> * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
-  vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
-  vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
+  auto * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
+  auto * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
+  auto * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_BYTE) {
     std::cerr << " format of label image is not vxl_byte!!\n";
     return false;
   }
   std::cout << "ingesting label img..\n"; std::cout.flush();
 
-  vil_image_view<vxl_byte> * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
+  auto * label_img_byte = dynamic_cast<vil_image_view<vxl_byte> * > (label_img.ptr());
 
   // form the ray buffer
-  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
-  cl_uchar* labels = new unsigned char[cl_ni*cl_nj];
+  auto* ray_origins = new float[4*cl_ni*cl_nj];
+  auto* labels = new unsigned char[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {

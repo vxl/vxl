@@ -65,7 +65,7 @@ double vpdfl_gaussian_kernel_pdf::log_p(const vnl_vector<double>& x) const
 
 vpdfl_sampler_base* vpdfl_gaussian_kernel_pdf::new_sampler() const
 {
-  vpdfl_gaussian_kernel_pdf_sampler *i = new vpdfl_gaussian_kernel_pdf_sampler;
+  auto *i = new vpdfl_gaussian_kernel_pdf_sampler;
   i->set_model(*this);
   return i;
 }

@@ -39,7 +39,7 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
   // get inputs
   sdet_texture_classifier_sptr tc_ptr =
     pro.get_input<sdet_texture_classifier_sptr>(0);
-  sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
+  auto* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
   std::string texton_dict_path = pro.get_input<std::string>(1);
 
@@ -64,7 +64,7 @@ bool sdet_exp_img_classifier_process(bprb_func_process& pro)
   }
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fexp(exp_ptr);
-  unsigned block_size = pro.get_input<unsigned>(4); // unused!!!
+  auto block_size = pro.get_input<unsigned>(4); // unused!!!
   tc.load_dictionary(texton_dict_path);
 
   vil_image_view<float> class_img =

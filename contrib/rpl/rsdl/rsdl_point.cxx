@@ -121,7 +121,7 @@ void
 rsdl_point::resize( unsigned int Nc, unsigned int Na )
 {
   if ( Nc_ != Nc || Na_ != Na ) {
-    double* buf = new double[ Nc + Na ];
+    auto* buf = new double[ Nc + Na ];
     unsigned int min_c = ( Nc < Nc_ ? Nc : Nc_ );
     unsigned int min_a = ( Na < Na_ ? Na : Na_ );
     for ( unsigned int i=0; i < min_c; ++i )  buf[i] = data_[i];

@@ -148,7 +148,7 @@ static void test_convert_stretch_range_limited()
 #endif // DEBUG
 
   float f55 = f_image(5,5);
-  vxl_byte b55 = vxl_byte(dlo + (f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
+  auto b55 = vxl_byte(dlo + (f55-slo)*(dhi-dlo)/(shi-slo) + 0.5);
 #if 0
   std::cout << "f55= " << f55 << '\n'
            << "b55= " << (int)b55 << '\n'

@@ -98,11 +98,11 @@ double mbl_sample_stats_1d::median() const
 
       std::vector<double> tmp=samples_;
 
-      std::vector<double>::iterator index_it0 = tmp.begin() + index;
+      auto index_it0 = tmp.begin() + index;
       std::nth_element(tmp.begin(),index_it0,tmp.end(),std::less<double>());
       double v0 = *index_it0;
 
-      std::vector<double>::iterator index_it1 = tmp.begin() + index + 1;
+      auto index_it1 = tmp.begin() + index + 1;
       std::nth_element(tmp.begin(),index_it1,tmp.end(),std::less<double>());
       double v1 = *index_it1;
       ret = v0 + v1;
@@ -114,7 +114,7 @@ double mbl_sample_stats_1d::median() const
 
       std::vector<double> tmp=samples_;
 
-      std::vector<double>::iterator index_it = tmp.begin() + index;
+      auto index_it = tmp.begin() + index;
       std::nth_element(tmp.begin(),index_it,tmp.end(),std::less<double>());
 
       ret = *index_it;
@@ -143,21 +143,21 @@ double mbl_sample_stats_1d::quantile(double q) const
   // Get the integer index immediately below (and enforce the bounds)
   double f0 = std::floor(float_index);
   f0 = f0<0.0 ? 0.0 : f0>n-1.0 ? n-1.0 : f0;
-  unsigned i0 = static_cast<unsigned>(f0);
+  auto i0 = static_cast<unsigned>(f0);
 
   // Get the integer index immediately above (and enforce the bounds)
   double f1 = std::ceil(float_index);
   f1 = f1<0.0 ? 0.0 : f1>n-1.0 ? n-1.0 : f1;
-  unsigned i1 = static_cast<unsigned>(f1);
+  auto i1 = static_cast<unsigned>(f1);
 
   // Get the 2 values bracketing the specified quantile position
   std::vector<double> tmp = samples_;
 
-  std::vector<double>::iterator index_it0 = tmp.begin() + i0;
+  auto index_it0 = tmp.begin() + i0;
   std::nth_element(tmp.begin(), index_it0, tmp.end(), std::less<double>());
   double v0 = *index_it0;
 
-  std::vector<double>::iterator index_it1 = tmp.begin() + i1;
+  auto index_it1 = tmp.begin() + i1;
   std::nth_element(tmp.begin(), index_it1, tmp.end(), std::less<double>());
   double v1 = *index_it1;
 
@@ -178,7 +178,7 @@ double mbl_sample_stats_1d::nth_percentile(int n) const
   int index=int(fact*(samples_.size()-1));
   std::vector<double> tmp=samples_;
 
-  std::vector<double>::iterator index_it = tmp.begin() + index;
+  auto index_it = tmp.begin() + index;
   std::nth_element(tmp.begin(),index_it,tmp.end(),std::less<double>());
   double ret = *index_it;
   return ret;

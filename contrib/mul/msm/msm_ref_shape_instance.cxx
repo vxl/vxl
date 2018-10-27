@@ -165,7 +165,7 @@ void msm_calc_WP(const vnl_matrix<double>& P,
 
   double const*const* PData = P.data_array();
   double ** WPData = WP.data_array();
-  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  auto w=wt_mat.begin();
 
   for (unsigned i=0;i<nr;i+=2,++w)
   {

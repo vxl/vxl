@@ -45,13 +45,13 @@ bool bgrl2_hg_hypergraph::_internal_del_hyperedge(bgrl2_hg_hyperedge* hyperedge)
 //: ===== High-level Graph operation (handling connectivity) =====
 bool bgrl2_hg_hypergraph::remove_vertex(bgrl2_hg_vertex* vertex)
 {
-  std::vector<bgrl2_hg_edge*>::iterator E_it = vertex->connecting_edges().begin();
+  auto E_it = vertex->connecting_edges().begin();
   while (E_it != vertex->connecting_edges().end()) {
     bgrl2_hg_edge* edge = (*E_it);
     _internal_disconnect_edge_vertex(edge, vertex);
   }
 
-  std::vector<bgrl2_hg_hyperedge*>::iterator H_it = vertex->connecting_hyperedges().begin();
+  auto H_it = vertex->connecting_hyperedges().begin();
   while (H_it != vertex->connecting_hyperedges().end()) {
     bgrl2_hg_hyperedge* hyperedge = (*H_it);
     _internal_disconnect_hyperedge_vertex(hyperedge, vertex);
@@ -80,13 +80,13 @@ bool bgrl2_hg_hypergraph::remove_edge(bgrl2_hg_edge* edge)
 
 bool bgrl2_hg_hypergraph::remove_hyperedge(bgrl2_hg_hyperedge* hyperedge)
 {
-  std::vector<bgrl2_hg_edge*>::iterator E_it = hyperedge->connecting_edges().begin();
+  auto E_it = hyperedge->connecting_edges().begin();
   while (E_it != hyperedge->connecting_edges().end()) {
     bgrl2_hg_edge* edge = (*E_it);
     _internal_disconnect_hyperedge_edge(hyperedge, edge);
   }
 
-  std::vector<bgrl2_hg_vertex*>::iterator V_it = hyperedge->connecting_vertices().begin();
+  auto V_it = hyperedge->connecting_vertices().begin();
   while (V_it != hyperedge->connecting_vertices().end()) {
     bgrl2_hg_vertex* vertex = (*V_it);
     _internal_disconnect_hyperedge_vertex(hyperedge, vertex);

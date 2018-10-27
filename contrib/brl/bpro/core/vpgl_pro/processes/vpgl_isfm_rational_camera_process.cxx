@@ -58,7 +58,7 @@ bool vpgl_isfm_rational_camera_process(bprb_func_process& pro)
     // get the inputs
     std::string trackfile = pro.get_input<std::string>(0);
     std::string nonseedcamdir = pro.get_input<std::string>(1);
-    float pix_rad = pro.get_input<float>(2);
+    auto pix_rad = pro.get_input<float>(2);
 #if 0
     //: load seed cams
     vul_file_iterator iter(seedcamdir + "/*corrected*rpb");

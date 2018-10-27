@@ -61,14 +61,14 @@ bool bvxm_compare_rpc_process(bprb_func_process& pro)
   }
 
   //get the rational cameras
-  vpgl_rational_camera<double>* rat_cam0 =
+  auto* rat_cam0 =
     dynamic_cast<vpgl_rational_camera<double>*> (cam0.as_pointer());
   if (!rat_cam0) {
     std::cerr << "The camera input 0 is not a rational camera\n";
     return false;
   }
 
-  vpgl_rational_camera<double>* rat_cam1 =
+  auto* rat_cam1 =
     dynamic_cast<vpgl_rational_camera<double>*> (cam1.as_pointer());
   if (!rat_cam1) {
     std::cerr << "The camera input 1 is not a rational camera\n";

@@ -112,7 +112,7 @@ bool bvxm_detect_edge_tangent_process(bprb_func_process& pro)
   //else convert to line format
   if (out_type == "line_2d") {
     unsigned ni = edge_image.ni(), nj = edge_image.nj();
-    vil_image_view<float>* line_image = new vil_image_view<float>(ni, nj, 3);
+    auto* line_image = new vil_image_view<float>(ni, nj, 3);
     line_image->fill(-2.0f);
     for (unsigned j = 0; j<nj; ++j)
       for (unsigned i = 0; i<ni; ++i) {

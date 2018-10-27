@@ -104,7 +104,7 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
   if (identifier.size() > 0) {
     data_type += "_" + identifier;
   }
-  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  if (auto * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
     std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
@@ -114,8 +114,8 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
     }
 
     // function call
-    vil_image_view<float> * density_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
-    vil_image_view<float> * vis_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
+    auto * density_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
+    auto * vis_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
     density_img->fill(0.0f);
     vis_img->fill(1.0f);
 
@@ -129,7 +129,7 @@ bool boxm2_cpp_image_density_process(bprb_func_process& pro)
       std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);
-      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+      auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
       if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
@@ -216,9 +216,9 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(img);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  float shadow_prior = pro.get_input<float>(i++);
-  float shadow_sigma = pro.get_input<float>(i++);
-  float shadow_thres = pro.get_input<float>(i++);
+  auto shadow_prior = pro.get_input<float>(i++);
+  auto shadow_sigma = pro.get_input<float>(i++);
+  auto shadow_thres = pro.get_input<float>(i++);
   std::string identifier = pro.get_input<std::string>(i);
 
   bool foundDataType = false;
@@ -249,7 +249,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
   if (identifier.size() > 0) {
     data_type += "_" + identifier;
   }
-  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  if (auto * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
     std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
@@ -259,8 +259,8 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
     }
 
     // function call
-    vil_image_view<float> * density_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
-    vil_image_view<float> * vis_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
+    auto * density_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
+    auto * vis_img=new vil_image_view<float>(input_image->ni(),input_image->nj());
     density_img->fill(0.0f);
     vis_img->fill(1.0f);
 
@@ -274,7 +274,7 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
       std::vector<boxm2_data_base*> datas;
       datas.push_back(alph);
       datas.push_back(mog);
-      boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+      auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
       scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
       if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )

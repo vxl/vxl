@@ -57,7 +57,7 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
   unsigned i =0;
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
   std::string pca_dir = pro.get_input<std::string>(i++);
-  double frac = pro.get_input<double>(i++);
+  auto frac = pro.get_input<double>(i++);
   int min_x = pro.get_input<int>(i++);
   int min_y = pro.get_input<int>(i++);
   int min_z = pro.get_input<int>(i++);
@@ -76,7 +76,7 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
   vgl_box_3d<int> neighborhood(vgl_point_3d<int>(min_x,min_y, min_z), vgl_point_3d<int>(max_x, max_y, max_z));
 
   //cast scene
-  boxm_scene<boct_tree<short, float > > *scene= dynamic_cast<boxm_scene<boct_tree<short, float > >* > (scene_base.as_pointer());
+  auto *scene= dynamic_cast<boxm_scene<boct_tree<short, float > >* > (scene_base.as_pointer());
   if (!scene) {
     std::cout <<  " :-- Input Scene is not of supported type\n";
     return false;
@@ -85,7 +85,7 @@ bool bvpl_discover_pca_features_process(bprb_func_process& pro)
 
 
   //number of samples - 10% of total number of leaf-cells
-  unsigned long nsamples = (unsigned long)((double)scene->size() * frac);
+  auto nsamples = (unsigned long)((double)scene->size() * frac);
   std::cout << "Number of samples: " << nsamples << std::endl;
 
   //bvpl_discover_pca_kernels pca_extractor(neighborhood, nsamples, scene);

@@ -57,7 +57,7 @@ bool boxm2_cpp_merge_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   std::cout<<"Getting thresh input"<<std::endl;
-  float thresh = pro.get_input<float>(i++);
+  auto thresh = pro.get_input<float>(i++);
 
   //check datatype
   bool foundDataType = false;

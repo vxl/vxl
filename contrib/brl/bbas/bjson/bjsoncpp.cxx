@@ -801,7 +801,7 @@ bool Reader::decodeNumber(Token& token, Value& decoded) {
     Char c = *current++;
     if (c < '0' || c > '9')
       return decodeDouble(token, decoded);
-    Value::UInt digit(static_cast<Value::UInt>(c - '0'));
+    auto digit(static_cast<Value::UInt>(c - '0'));
     if (value >= threshold) {
       // We've hit or exceeded the max value divided by 10 (rounded down). If
       // a) we've only just touched the limit, b) this is the last digit, and
@@ -1778,7 +1778,7 @@ bool OurReader::decodeNumber(Token& token, Value& decoded) {
     Char c = *current++;
     if (c < '0' || c > '9')
       return decodeDouble(token, decoded);
-    Value::UInt digit(static_cast<Value::UInt>(c - '0'));
+    auto digit(static_cast<Value::UInt>(c - '0'));
     if (value >= threshold) {
       // We've hit or exceeded the max value divided by 10 (rounded down). If
       // a) we've only just touched the limit, b) this is the last digit, and
@@ -1820,7 +1820,7 @@ bool OurReader::decodeDouble(Token& token, Value& decoded) {
   if (length < 0) {
     return addError("Unable to parse token length", token);
   }
-  size_t const ulength = static_cast<size_t>(length);
+  auto const ulength = static_cast<size_t>(length);
 
   // Avoid using a string constant for the format control string given to
   // sscanf, as this can cause hard to debug crashes on OS X. See here for more
@@ -3416,7 +3416,7 @@ Value& Value::operator[](ArrayIndex index) {
   if (type_ == nullValue)
     *this = Value(arrayValue);
   CZString key(index);
-  ObjectValues::iterator it = value_.map_->lower_bound(key);
+  auto it = value_.map_->lower_bound(key);
   if (it != value_.map_->end() && (*it).first == key)
     return (*it).second;
 
@@ -3471,7 +3471,7 @@ Value& Value::resolveReference(const char* key) {
     *this = Value(objectValue);
   CZString actualKey(
       key, static_cast<unsigned>(strlen(key)), CZString::noDuplication); // NOTE!
-  ObjectValues::iterator it = value_.map_->lower_bound(actualKey);
+  auto it = value_.map_->lower_bound(actualKey);
   if (it != value_.map_->end() && (*it).first == actualKey)
     return (*it).second;
 
@@ -3491,7 +3491,7 @@ Value& Value::resolveReference(char const* key, char const* cend)
     *this = Value(objectValue);
   CZString actualKey(
       key, static_cast<unsigned>(cend-key), CZString::duplicateOnCopy);
-  ObjectValues::iterator it = value_.map_->lower_bound(actualKey);
+  auto it = value_.map_->lower_bound(actualKey);
   if (it != value_.map_->end() && (*it).first == actualKey)
     return (*it).second;
 
@@ -3579,7 +3579,7 @@ bool Value::removeMember(const char* key, const char* cend, Value* removed)
     return false;
   }
   CZString actualKey(key, static_cast<unsigned>(cend-key), CZString::noDuplication);
-  ObjectValues::iterator it = value_.map_->find(actualKey);
+  auto it = value_.map_->find(actualKey);
   if (it == value_.map_->end())
     return false;
   *removed = it->second;
@@ -3615,7 +3615,7 @@ bool Value::removeIndex(ArrayIndex index, Value* removed) {
     return false;
   }
   CZString key(index);
-  ObjectValues::iterator it = value_.map_->find(key);
+  auto it = value_.map_->find(key);
   if (it == value_.map_->end()) {
     return false;
   }
@@ -3628,7 +3628,7 @@ bool Value::removeIndex(ArrayIndex index, Value* removed) {
   }
   // erase the last one ("leftover")
   CZString keyLast(oldSize - 1);
-  ObjectValues::iterator itLast = value_.map_->find(keyLast);
+  auto itLast = value_.map_->find(keyLast);
   value_.map_->erase(itLast);
   return true;
 }
@@ -3927,7 +3927,7 @@ Path::Path(const JSONCPP_STRING& path,
 void Path::makePath(const JSONCPP_STRING& path, const InArgs& in) {
   const char* current = path.c_str();
   const char* end = current + path.length();
-  InArgs::const_iterator itInArg = in.begin();
+  auto itInArg = in.begin();
   while (current != end) {
     if (*current == '[') {
       ++current;
@@ -4416,7 +4416,7 @@ void FastWriter::writeValue(const Value& value) {
   case objectValue: {
     Value::Members members(value.getMemberNames());
     document_ += '{';
-    for (Value::Members::iterator it = members.begin(); it != members.end();
+    for (auto it = members.begin(); it != members.end();
          ++it) {
       const JSONCPP_STRING& name = *it;
       if (it != members.begin())
@@ -4484,7 +4484,7 @@ void StyledWriter::writeValue(const Value& value) {
     else {
       writeWithIndent("{");
       indent();
-      Value::Members::iterator it = members.begin();
+      auto it = members.begin();
       for (;;) {
         const JSONCPP_STRING& name = *it;
         const Value& childValue = value[name];
@@ -4701,7 +4701,7 @@ void StyledStreamWriter::writeValue(const Value& value) {
     else {
       writeWithIndent("{");
       indent();
-      Value::Members::iterator it = members.begin();
+      auto it = members.begin();
       for (;;) {
         const JSONCPP_STRING& name = *it;
         const Value& childValue = value[name];
@@ -4982,7 +4982,7 @@ void BuiltStyledStreamWriter::writeValue(Value const& value) {
     else {
       writeWithIndent("{");
       indent();
-      Value::Members::iterator it = members.begin();
+      auto it = members.begin();
       for (;;) {
         JSONCPP_STRING const& name = *it;
         Value const& childValue = value[name];

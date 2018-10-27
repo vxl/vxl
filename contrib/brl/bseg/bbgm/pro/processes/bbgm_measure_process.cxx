@@ -82,7 +82,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
   std::string attr = pro.get_input<std::string>(2);
 
   //Retrieve measure tolerance
-  float tolerance = pro.get_input<float>(3);
+  auto tolerance = pro.get_input<float>(3);
 
   vil_image_view<float> result;
   if (np ==1) {
@@ -90,7 +90,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
     typedef bsta_num_obs<bsta_gauss1_t> gauss_type1;
     typedef bsta_mixture<gauss_type1> mix_gauss_type1;
     typedef bsta_num_obs<mix_gauss_type1> obs_mix_gauss_type1;
-    bbgm_image_of<obs_mix_gauss_type1> *model =
+    auto *model =
       static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(bgm.ptr());
 
     if (attr=="probability") {
@@ -122,7 +122,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
 #endif
     if (attr=="probability") {
       if (!parzen) {
-        bbgm_image_of<obs_mix_gauss_type3> *model =
+        auto *model =
           static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
         bsta_probability_functor<mix_gauss_type3> functor_;
         measure(*model, image, result, functor_, tolerance);
@@ -131,7 +131,7 @@ bool bbgm_measure_process(bprb_func_process& pro)
 #ifdef MEASURE_BKGROUND
     else if (attr=="prob_background") {
       if (!parzen) {
-        bbgm_image_of<obs_mix_gauss_type3> *model =
+        auto *model =
           static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
         bsta_prob_density_functor<mix_gauss_type3> functor_;
         measure_bkground(*model, image, result, functor_, tolerance);

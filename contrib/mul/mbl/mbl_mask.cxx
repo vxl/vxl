@@ -33,7 +33,7 @@ void mbl_masks_from_index_set(const std::vector<unsigned> & indices,
   for (unsigned i = 0 ; i < n ; ++i)
     used_indices.insert(indices[i]);
 
-  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type used_indice : used_indices)
+  for (const auto & used_indice : used_indices)
   {
     ordering[used_indice] = n_masks++;
     masks.emplace_back(n);
@@ -122,7 +122,7 @@ void mbl_mask_logic(const mbl_mask & A, mbl_mask & B, const std::string & operat
     //: Save to file
 void mbl_save_mask(const mbl_mask & mask, std::ostream & stream)
 {
-  std::vector<bool>::const_iterator it = mask.begin();
+  auto it = mask.begin();
   const std::vector<bool>::const_iterator & end = mask.end();
   for (; it != end; ++it)
     stream << *it << std::endl;

@@ -149,8 +149,8 @@ bool boxm2_vecf_ocl_transform_scene::init_target_scene_buffers(boxm2_scene_sptr 
     std::cerr << "Error: boxm2_vecf_ocl_transform_scene: number of blocks > 1" << std::endl;
     return false;
   }
-  std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-  std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+  auto iter_blk_target = blocks_target.begin();
+  auto iter_blk_source = blocks_source.begin();
   blk_target_       = opencl_cache_->get_block(target_scene, *iter_blk_target);
   boxm2_block* tblock = opencl_cache_->get_cpu_cache()->get_block(target_scene, *iter_blk_target);
     octree_depth_buff_ = 3;
@@ -390,8 +390,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<doub
      std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
      if(blocks_target.size()!=1||blocks_source.size()!=1)
        return false;
-     std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-     std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+     auto iter_blk_target = blocks_target.begin();
+     auto iter_blk_source = blocks_source.begin();
 
      vgl_box_3d<float> box_target(info_buffer_->scene_origin[0],info_buffer_->scene_origin[1],info_buffer_->scene_origin[2],
       info_buffer_->scene_origin[0]+info_buffer_->scene_dims[0]*info_buffer_->block_len,
@@ -517,8 +517,8 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   if(blocks_target.size()!=1||blocks_source.size()!=1) {
     throw std::runtime_error("transform_1_block_interl_trilin() only implemented for single block");
   }
-  std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-  std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+  auto iter_blk_target = blocks_target.begin();
+  auto iter_blk_source = blocks_source.begin();
 
   bocl_mem* target_pts = opencl_cache_->get_data<BOXM2_POINT>(target_scene_, *iter_blk_target, 0, false, "target");
 
@@ -687,8 +687,8 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
 
      std::vector<boxm2_block_id> blocks_target = target_scene_->get_block_ids();
      std::vector<boxm2_block_id> blocks_source = source_scene_->get_block_ids();
-     std::vector<boxm2_block_id>::iterator iter_blk_target = blocks_target.begin();
-     std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+     auto iter_blk_target = blocks_target.begin();
+     auto iter_blk_source = blocks_source.begin();
 
      if(blocks_target.size()!=1||blocks_source.size()!=1)
        return false;
@@ -736,7 +736,7 @@ bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_s
    }
 
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
-   std::size_t data_size_target = static_cast<std::size_t>(info_buffer_->data_buffer_length);
+   auto data_size_target = static_cast<std::size_t>(info_buffer_->data_buffer_length);
 
    bocl_mem_sptr blk_info_source_l  = new bocl_mem(device_->context(), info_buffer_source, sizeof(boxm2_scene_info), " Scene Info Source" );
    blk_info_source_l->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);

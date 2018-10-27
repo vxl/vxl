@@ -60,10 +60,10 @@ bool ihog_mutual_information_process(bprb_func_process& pro)
   }
 
   vil_image_view<float> mask(ni,nj);
-  if (vil_image_view<vxl_byte>* mask_byte = dynamic_cast<vil_image_view<vxl_byte>*>(mask_in.ptr())) {
+  if (auto* mask_byte = dynamic_cast<vil_image_view<vxl_byte>*>(mask_in.ptr())) {
     vil_convert_stretch_range_limited(*mask_byte, mask, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
   }
-  else if (vil_image_view<bool>* mask_bool = dynamic_cast<vil_image_view<bool>*>(mask_in.ptr())) {
+  else if (auto* mask_bool = dynamic_cast<vil_image_view<bool>*>(mask_in.ptr())) {
     vil_convert_cast(*mask_bool, mask);
   }
   else {

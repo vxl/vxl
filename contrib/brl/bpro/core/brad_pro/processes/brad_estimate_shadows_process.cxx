@@ -60,13 +60,13 @@ bool brad_estimate_shadows_process(bprb_func_process& pro)
    brad_atmospheric_parameters_sptr atm_params = pro.get_input<brad_atmospheric_parameters_sptr>(2);
    bool output_density = pro.get_input<bool>(3);
 
-   vil_image_view<float> *radiance_img = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
+   auto *radiance_img = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
    if (!radiance_img) {
       std::cerr << "ERROR: brad_estimate_shadows_process: input image is not a vil_image_view<float>" << std::endl;
       return false;
    }
    // create new image
-   vil_image_view<float> *shadow_probs = new vil_image_view<float>(radiance_img->ni(), radiance_img->nj());
+   auto *shadow_probs = new vil_image_view<float>(radiance_img->ni(), radiance_img->nj());
 
    bool result = false;
    if (output_density) {

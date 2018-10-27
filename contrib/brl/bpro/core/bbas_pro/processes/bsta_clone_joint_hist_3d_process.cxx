@@ -40,9 +40,9 @@ bool bsta_clone_joint_hist_3d_process(bprb_func_process& pro)
     std::cout << "in clone_joint_hist_3d_process, null input hist ptr\n";
     return false;
   }
-  bsta_joint_histogram_3d<float>* h = dynamic_cast<bsta_joint_histogram_3d<float>*>(in_hist_ptr.ptr());
+  auto* h = dynamic_cast<bsta_joint_histogram_3d<float>*>(in_hist_ptr.ptr());
 
-  bsta_joint_histogram_3d<float>* h_clone  =
+  auto* h_clone  =
     new bsta_joint_histogram_3d<float>(*h);
   h_clone->clear();
 

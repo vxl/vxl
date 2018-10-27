@@ -338,7 +338,7 @@ bool volm_conf_query::visualize_ref_objs(std::string const& in_file, std::string
       this->plot_line_into_image(img, poly[0],r,g,b,width);
     }
     // plot the configurational object
-    for (std::map<std::string, std::pair<unsigned, unsigned> >::iterator mit = conf_objects_pixels_[cam_id].begin(); mit != conf_objects_pixels_[cam_id].end(); ++mit ) {
+    for (auto mit = conf_objects_pixels_[cam_id].begin(); mit != conf_objects_pixels_[cam_id].end(); ++mit ) {
       unsigned char land_id = conf_objects_[cam_id][mit->first]->land();
       unsigned char r,g,b;
       double width;
@@ -445,7 +445,7 @@ void volm_conf_query::plot_dot_into_image(vil_image_view<vil_rgb<vxl_byte> >& im
   for (unsigned i = 0; i <= 36; i++)
     angles.insert(i*10.0f);
   angles.insert(45.0f);  angles.insert(135.0f);  angles.insert(225.0f);  angles.insert(315.0f);
-  for (std::__1::__tree_const_iterator<float, std::__1::__tree_node<float, void *> *, long>::value_type angle : angles) {
+  for (const auto & angle : angles) {
     float x = pt.x() + radius*std::cos(angle*vnl_math::pi_over_180);
     float y = pt.y() + radius*std::sin(angle*vnl_math::pi_over_180);
     img_poly.push_back(x, y);

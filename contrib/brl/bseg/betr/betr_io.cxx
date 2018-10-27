@@ -3,7 +3,7 @@
 #include <vsol/vsol_polygon_3d.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 bool betr_io::read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj){
-  bmsh3d_mesh_mc* mesh = new bmsh3d_mesh_mc();
+  auto* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, ply_path.c_str());
   if(!good){
     std::cout << "Failed to load mesh_3d from ply file - fatal!\n";
@@ -28,7 +28,7 @@ bool betr_io::read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj
     obj = new vsol_polygon_3d(v_list);
     return true;
   }
-  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
+  auto* vmesh = new vsol_mesh_3d();
   vmesh->set_mesh(mesh);
   obj = vmesh;
   return true;

@@ -225,9 +225,9 @@ int main2(int argc, char*argv[])
     j0 = static_cast<unsigned>(std::floor((ir->nj()-1)*fy0));
     k0 = static_cast<unsigned>(std::floor((ir->nk()-1)*fz0));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(std::ceil((ir->ni()-1)*fx1));
-    unsigned j1 = static_cast<unsigned>(std::ceil((ir->nj()-1)*fy1));
-    unsigned k1 = static_cast<unsigned>(std::ceil((ir->nk()-1)*fz1));
+    auto i1 = static_cast<unsigned>(std::ceil((ir->ni()-1)*fx1));
+    auto j1 = static_cast<unsigned>(std::ceil((ir->nj()-1)*fy1));
+    auto k1 = static_cast<unsigned>(std::ceil((ir->nk()-1)*fz1));
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
     nk = k1 - k0 + 1;
@@ -252,9 +252,9 @@ int main2(int argc, char*argv[])
     j0 = static_cast<unsigned>(std::floor(imlo.y()));
     k0 = static_cast<unsigned>(std::floor(imlo.z()));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(std::ceil(imhi.x()));
-    unsigned j1 = static_cast<unsigned>(std::ceil(imhi.y()));
-    unsigned k1 = static_cast<unsigned>(std::ceil(imhi.z()));
+    auto i1 = static_cast<unsigned>(std::ceil(imhi.x()));
+    auto j1 = static_cast<unsigned>(std::ceil(imhi.y()));
+    auto k1 = static_cast<unsigned>(std::ceil(imhi.z()));
 
 
     ni = i1 - i0 + 1;
@@ -291,9 +291,9 @@ int main2(int argc, char*argv[])
     j0 = static_cast<unsigned>(std::max(0.0,std::floor(imlo.y())));
     k0 = static_cast<unsigned>(std::max(0.0,std::floor(imlo.z())));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(std::ceil(imhi.x()));
-    unsigned j1 = static_cast<unsigned>(std::ceil(imhi.y()));
-    unsigned k1 = static_cast<unsigned>(std::ceil(imhi.z()));
+    auto i1 = static_cast<unsigned>(std::ceil(imhi.x()));
+    auto j1 = static_cast<unsigned>(std::ceil(imhi.y()));
+    auto k1 = static_cast<unsigned>(std::ceil(imhi.z()));
 
 
     ni = i1 - i0;

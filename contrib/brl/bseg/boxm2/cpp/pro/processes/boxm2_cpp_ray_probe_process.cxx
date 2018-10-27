@@ -77,8 +77,8 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(k++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(k++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(k++);
-    unsigned pi=pro.get_input<unsigned>(k++);
-    unsigned pj=pro.get_input<unsigned>(k++);
+    auto pi=pro.get_input<unsigned>(k++);
+    auto pj=pro.get_input<unsigned>(k++);
     std::string prefix = pro.get_input<std::string>(k++);
     std::string identifier = pro.get_input<std::string>(k++);
 
@@ -129,7 +129,7 @@ bool boxm2_cpp_ray_probe_process(bprb_func_process& pro)
         }
         boxm2_ray_probe_functor ray_probe_functor;
         ray_probe_functor.init_data(datas,seg_lengths,abs_depth,alphas,data_to_return, prefix, nelems);
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
         cast_ray_per_block<boxm2_ray_probe_functor>(ray_probe_functor,scene_info_wrapper->info,blk,cam,pi+1,pj+1,pi,pj);

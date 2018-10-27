@@ -515,7 +515,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 
   // get edges probability grid
   bvxm_voxel_grid_base_sptr edges_grid_base = this->get_grid<EDGES>(0,scale);
-  bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
+  auto *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_slab_it = edges_grid->begin();
 
@@ -611,7 +611,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  auto *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
@@ -650,7 +650,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
   vil_image_view_base_sptr conf_img_sptr = new vil_image_view<float>(conf_map);
   bvxm_util::slab_to_img(max_prob_image,conf_img_sptr);
 
-  vil_image_view<float>* heightmap_rough_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
+  auto* heightmap_rough_img = new vil_image_view<float>(heightmap.ni(),heightmap.nj());
   vil_image_view_base_sptr heightmap_rough_img_sptr = heightmap_rough_img;
   bvxm_util::slab_to_img(heightmap_rough,heightmap_rough_img_sptr);
   /*
@@ -791,7 +791,7 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  auto *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
@@ -914,7 +914,7 @@ bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_i
 
   // get occupancy probability grid
   bvxm_voxel_grid_base_sptr ocp_grid_base = this->get_grid<OCCUPANCY>(0,scale_idx);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  auto *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 

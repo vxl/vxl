@@ -54,9 +54,9 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr voxel_world1 = pro.get_input<bvxm_voxel_world_sptr>(i++);
   //voxel_world2
   bvxm_voxel_world_sptr voxel_world2 = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
+  auto n = pro.get_input<unsigned>(i++);
   //scale
-  unsigned scale =pro.get_input<unsigned>(i++);
+  auto scale =pro.get_input<unsigned>(i++);
 
    //check inputs validity
   if (!voxel_world1) {
@@ -113,11 +113,11 @@ double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
 
   // get occupancy probability grids
   bvxm_voxel_grid_base_sptr ocp_grid_base1 = w1->get_grid<OCCUPANCY>(0,scale);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid1  = static_cast<bvxm_voxel_grid<lidar_datatype>*>(ocp_grid_base1.ptr());
+  auto *ocp_grid1  = static_cast<bvxm_voxel_grid<lidar_datatype>*>(ocp_grid_base1.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it1 = ocp_grid1->begin();
 
   bvxm_voxel_grid_base_sptr ocp_grid_base2 = w2->get_grid<OCCUPANCY>(0,scale);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid2  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base2.ptr());
+  auto *ocp_grid2  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base2.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it2 = ocp_grid2->begin();
 
   vgl_vector_3d<unsigned int> grid_size = w1->get_params()->num_voxels(scale);

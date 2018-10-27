@@ -38,8 +38,8 @@ namespace boxm_construct_scene_from_image_process_globals
     tree = nullptr;
     unsigned ni = image.ni(), nj = image.nj();
     // find a square arrangement consistent with area unit
-    double gsize = static_cast<double>(area_unit);
-    unsigned gwidth = static_cast<unsigned>(std::sqrt(gsize));
+    auto gsize = static_cast<double>(area_unit);
+    auto gwidth = static_cast<unsigned>(std::sqrt(gsize));
     unsigned gheight = area_unit/gwidth;
     if (gwidth*gheight!=gsize)
       return;//maybe fixup later to handle all situations
@@ -48,7 +48,7 @@ namespace boxm_construct_scene_from_image_process_globals
     if (mnj<min_dim)
       min_dim = mnj;
     double dlev = std::log(min_dim)/std::log(2.0);
-    unsigned n_levels = static_cast<unsigned>(dlev+1.0);
+    auto n_levels = static_cast<unsigned>(dlev+1.0);
 
     //note that tree is being constructed in local coordinates
     float rni = 1.0f/static_cast<float>(mni), rnj =1.0f/static_cast<float>(mnj);
@@ -74,7 +74,7 @@ namespace boxm_construct_scene_from_image_process_globals
     }
 
     //construct tree from leaves
-    boct_tree<short, T > *init_tree =
+    auto *init_tree =
       new boct_tree<short, T >(n_levels, 0);
     boct_tree_cell<short, T > *root =
       init_tree->construct_tree(leaves, init_tree->number_levels());
@@ -93,7 +93,7 @@ namespace boxm_construct_scene_from_image_process_globals
     std::vector<boct_tree_cell<short, T >* > tleaves;
     tleaves = tree->leaf_cells();
     std::size_t i = 0;
-    typename std::vector<boct_tree_cell<short, T >* >::iterator lit =
+    auto lit =
       tleaves.begin();
     for (; lit!= tleaves.end(); ++lit, ++i)
     {
@@ -105,7 +105,7 @@ namespace boxm_construct_scene_from_image_process_globals
           found = true;
           found_k = k;
         }
-      if (boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > * cell_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
+      if (auto * cell_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >* >(*lit))
       {
         if (found) {
           boxm_sample<BOXM_APM_SIMPLE_GREY> data(1.0f,boxm_sample<BOXM_APM_SIMPLE_GREY>::apm_datatype(image_int[found_k],0.0008f));
@@ -116,7 +116,7 @@ namespace boxm_construct_scene_from_image_process_globals
           cell_grey_ptr->set_data(data);
         }
       }
-      else if (boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> > * cell_mog_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
+      else if (auto * cell_mog_grey_ptr = reinterpret_cast<boct_tree_cell<short, boxm_sample<BOXM_APM_MOG_GREY> >* >(*lit))
       {
         if (found) {
           boxm_sample<BOXM_APM_MOG_GREY> data(1.0f);
@@ -129,7 +129,7 @@ namespace boxm_construct_scene_from_image_process_globals
           cell_mog_grey_ptr->set_data(data);
         }
       }
-      else if (boct_tree_cell<short, float > * cell_float_ptr
+      else if (auto * cell_float_ptr
                =reinterpret_cast<boct_tree_cell<short, float >* >(*lit))
       {
         if (found) {
@@ -203,7 +203,7 @@ bool boxm_construct_scene_from_image_process(bprb_func_process& pro)
     vgl_point_3d<double> origin(0,0,0);
     vgl_vector_3d<double> block_dim(bb.width(),bb.height(),bb.depth());
     vgl_vector_3d<unsigned> world_dim(1,1,1);
-    boxm_scene<boct_tree<short, data_type> >* scene
+    auto* scene
  = new boxm_scene<boct_tree<short, data_type> >(origin, block_dim, world_dim);
     scene->set_appearance_model(BOXM_APM_SIMPLE_GREY);
     scene->set_block(vgl_point_3d<int>(0,0,0), blk);

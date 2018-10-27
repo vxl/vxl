@@ -70,7 +70,7 @@ bool bvpl_extract_top_response_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
   bvxm_voxel_grid_base_sptr id_grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(i++);
-  unsigned target_index = pro.get_input<unsigned>(i++);
+  auto target_index = pro.get_input<unsigned>(i++);
   std::string out_resp_path = pro.get_input<std::string>(i++);
   std::string out_id_path = pro.get_input<std::string>(i++);
 
@@ -82,8 +82,8 @@ bool bvpl_extract_top_response_process(bprb_func_process& pro)
     return false;
   }
 
-  if (bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >* > (grid_base.ptr())){
-    bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid=dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<int,3>  >* >(id_grid_base.ptr());
+  if (auto *grid = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >* > (grid_base.ptr())){
+    auto *id_grid=dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<int,3>  >* >(id_grid_base.ptr());
     bvxm_voxel_grid<float> *out_grid = new bvxm_voxel_grid<float>(out_resp_path, id_grid->grid_size());
     bvxm_voxel_grid<int> *out_id_grid = new bvxm_voxel_grid<int>(out_id_path, id_grid->grid_size());
     out_grid-> initialize_data(0.0f);

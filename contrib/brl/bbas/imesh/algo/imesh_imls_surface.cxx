@@ -297,7 +297,7 @@ double imesh_imls_surface::operator() (const vgl_point_3d<double>& p) const
 
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
-  std::vector<imesh_kd_tree_queue_entry>::iterator itr = remain.begin();
+  auto itr = remain.begin();
   for (; itr != remain.end(); ++itr) {
     double min = w2(itr->val_);
     double max = w2(imesh_max_sq_dist(p,itr->node_->inner_box_));
@@ -378,7 +378,7 @@ double imesh_imls_surface::deriv(const vgl_point_3d<double>& p,
 
   // compute the (negative) maximum error of integration
   // stored negative so that the max error is first when sorted by <
-  std::vector<imesh_kd_tree_queue_entry>::iterator itr = remain.begin();
+  auto itr = remain.begin();
   for (; itr != remain.end(); ++itr) {
     double min = w2(itr->val_);
     double max = w2(imesh_max_sq_dist(p,itr->node_->inner_box_));

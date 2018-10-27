@@ -62,7 +62,7 @@ void bvpl_taylor_basis_loader::create_basis(std::map<std::string, bvpl_kernel_sp
   std::vector<std::string> filenames;
   files(filenames);
 
-  std::vector<std::string>::iterator file_it =filenames.begin();
+  auto file_it =filenames.begin();
 
   for (; file_it != filenames.end(); file_it++)
   {

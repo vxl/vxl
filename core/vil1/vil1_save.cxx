@@ -118,7 +118,7 @@ static inline
 void vil1_save_rgb_template(T const* p, int w, int h, std::string const& fn)
 {
   vil1_memory_image_of<vil1_rgb<unsigned char> > out(w,h);
-  unsigned char* o = (unsigned char*)out.get_buffer();
+  auto* o = (unsigned char*)out.get_buffer();
   T const* p_end = p + w*h*3;
   while (p != p_end)
     // possible loss of data! (e.g. clipping)

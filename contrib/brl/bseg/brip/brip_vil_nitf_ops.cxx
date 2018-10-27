@@ -26,7 +26,7 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in
         vxl_uint_16 curr_pixel_val = in_img(i,j,p);
         // the most significant 5 bits and less significant 3 bits are ignored
         if (bigendian) {  // big endian
-          unsigned char* arr = (unsigned char*) &curr_pixel_val;
+          auto* arr = (unsigned char*) &curr_pixel_val;
           unsigned char big = *arr;
           unsigned char small = *(++arr);
           big >>=3;                      // [defgh3][5abc] --> [000defgh][5abc]
@@ -37,7 +37,7 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in
           curr_pixel_val <<= 5;  // [5abcdefgh3] --> [abcdefgh35]
           curr_pixel_val >>= 8;  // [abcdefgh35] --> [abcdefgh]
         }
-        unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
+        auto pixel_val = static_cast<unsigned char> (curr_pixel_val);
         output(i,j,p) = pixel_val;
       }
     }
@@ -66,7 +66,7 @@ bool brip_vil_nitf_ops::truncate_nitf_bits(vil_image_view<vxl_uint_16> const& in
         vxl_uint_16 curr_pixel_val = in_img(i,j,p);
         // the most significant 5 bits are ignored and all other 11 bits are kept
         if (bigendian) {  // big endian
-          unsigned char* arr = (unsigned char*) &curr_pixel_val;
+          auto* arr = (unsigned char*) &curr_pixel_val;
           unsigned char big = *arr;
           unsigned char small = *(++arr);
           small <<= 5;                   // [defgh3][5abc] ---> [defgh3][abc00000]
@@ -102,7 +102,7 @@ bool brip_vil_nitf_ops::scale_nitf_bits(vil_image_view<vxl_uint_16> const& in_im
         vxl_uint_16 curr_pixel_val = in_img(i,j,p);
         // the most significant 5 bits are ignored and all other 11 bits are kept
         if (bigendian) {  // big endian
-            unsigned char* arr = (unsigned char*) &curr_pixel_val;
+            auto* arr = (unsigned char*) &curr_pixel_val;
             unsigned char big = *arr;
             unsigned char small = *(++arr);
             small <<= 5;                   // [defgh3][5abc] ---> [defgh3][abc00000]

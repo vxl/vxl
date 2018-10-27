@@ -79,7 +79,7 @@ void boxm2_points_to_volume::fillVolume()
 
     //initialize block data
     boxm2_data_base* newA = new boxm2_data_base(new char[dataLen * sizeof(float) ], dataLen * sizeof(float), id);
-    float* fullAlphas = reinterpret_cast<float*>(newA->data_buffer());
+    auto* fullAlphas = reinterpret_cast<float*>(newA->data_buffer());
     std::size_t c=0;
     for (auto & data : datas)
       for (unsigned int j=0; j<data.size(); ++j)
@@ -267,8 +267,8 @@ boxm2_points_to_volume::tris_in_box(const vgl_box_3d<double>& bbox,
   }
 
   //use AABBs for faster collision detection
-  std::vector<bvgl_triangle_3d<double> >::const_iterator tri = tris.begin();
-  std::vector<vgl_box_3d<double> >::const_iterator box = bboxes.begin();
+  auto tri = tris.begin();
+  auto box = bboxes.begin();
   for ( ; tri != tris.end(); ++tri, ++box) {
     if (!bbox_intersect(*box, bbox))
       continue;

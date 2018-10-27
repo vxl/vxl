@@ -85,8 +85,8 @@ bool boxm2_cpp_compute_derivative_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-  float prob_threshold = pro.get_input<float>(i++);
-  float normal_threshold = pro.get_input<float>(i++);
+  auto prob_threshold = pro.get_input<float>(i++);
+  auto normal_threshold = pro.get_input<float>(i++);
   std::string kernel_x_file_name =  pro.get_input< std::string>(i++);
   std::string kernel_y_file_name =  pro.get_input< std::string>(i++);
   std::string kernel_z_file_name =  pro.get_input< std::string>(i++);

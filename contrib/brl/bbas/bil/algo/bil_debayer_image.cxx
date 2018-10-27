@@ -24,7 +24,7 @@ void
 bil_debayer_image::bil_debayer_GRBG(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * debayer_img)
 {
   vil_image_view<vil_rgb<vxl_byte> >out_img(in_img->ni(),in_img->nj());
-  if (vil_image_view<vxl_byte>* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
+  if (auto* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
   {
     vxl_byte r, g, b;
     for (unsigned k = 0 ; k < in_img_byte->ni(); k++)
@@ -157,7 +157,7 @@ void
 bil_debayer_image::bil_debayer_BGGR(vil_image_view_base_sptr& in_img,  vil_image_view<vil_rgb<vxl_byte> > * debayer_img)
 {
   vil_image_view<vil_rgb<vxl_byte> >out_img(in_img->ni(),in_img->nj());
-  if (vil_image_view<vxl_byte>* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
+  if (auto* in_img_byte= dynamic_cast<vil_image_view<vxl_byte>* > (in_img.ptr()))
   {
     vxl_byte r, g, b;
     for (unsigned k = 0 ; k < in_img_byte->ni(); k++)

@@ -120,7 +120,7 @@ void test_random_forest()
     clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
     TEST("Type is binary tree",
          pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
-    clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
+    auto* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
     TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
     builder.build(*pClassifier,
@@ -187,8 +187,8 @@ void test_random_forest()
                 ++fnr;
         }
     }
-    double dtp=double(tp);
-    double dtn=double(NPOINTS-tp);
+    auto dtp=double(tp);
+    auto dtn=double(NPOINTS-tp);
     double testTPR=double(tpr)/dtp;
     double testFPR=double(fpr)/dtn;
     double testTNR=double(tnr)/dtn;
@@ -228,7 +228,7 @@ void test_random_forest()
 
     TEST("Type is random forest",
          pBaseClassifierIn->is_a()==std::string("clsfy_random_forest"), true);
-    clsfy_random_forest* pClassifierIn=dynamic_cast<clsfy_random_forest*>(pBaseClassifierIn);
+    auto* pClassifierIn=dynamic_cast<clsfy_random_forest*>(pBaseClassifierIn);
     TEST("Can cast to random forest",pClassifierIn != nullptr,true);
 
     {
@@ -255,8 +255,8 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        double dtp=double(tp);
-        double dtn=double(NPOINTS-tp);
+        auto dtp=double(tp);
+        auto dtn=double(NPOINTS-tp);
 
         std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
@@ -287,7 +287,7 @@ void test_random_forest()
     }
     // Train again with +ve and -ve data swapped round + see if get same error
     clsfy_classifier_base* pBaseClassifier2=builder.new_classifier();
-    clsfy_random_forest* pClassifier2=dynamic_cast<clsfy_random_forest*>(pBaseClassifier2);
+    auto* pClassifier2=dynamic_cast<clsfy_random_forest*>(pBaseClassifier2);
 
     builder.build(*pClassifier2,
                   training_set_inputs,
@@ -319,8 +319,8 @@ void test_random_forest()
                     ++fnr;
             }
         }
-        double dtp=double(tp);
-        double dtn=double(NPOINTS-tp);
+        auto dtp=double(tp);
+        auto dtn=double(NPOINTS-tp);
         std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
@@ -421,7 +421,7 @@ void test_random_forest()
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
         TEST("Type is random forest",
              pBaseClassifier->is_a()==std::string("clsfy_random_forest"), true);
-        clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
+        auto* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
         TEST("Can cast to random forest",pClassifier != nullptr,true);
 
         builder.build(*pClassifier,
@@ -491,8 +491,8 @@ void test_random_forest()
             }
         }
         std::cout<<"tp "<<tp<<" tn"<<std::endl;
-        double dtp=double(tp);
-        double dtn=double(NPOINTS-tp);
+        auto dtp=double(tp);
+        auto dtn=double(NPOINTS-tp);
         double testTPR=double(tpr)/dtp;
         double testFPR=double(fpr)/dtn;
         double testTNR=double(tnr)/dtn;
@@ -566,7 +566,7 @@ void test_random_forest()
         clsfy_random_forest_builder builder;
         builder.set_ntrees(500);
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
-        clsfy_random_forest* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
+        auto* pClassifier=dynamic_cast<clsfy_random_forest*>(pBaseClassifier);
 
         std::vector<std::vector<unsigned> > oobIndices;
         builder.set_oob_indices(&oobIndices);
@@ -650,8 +650,8 @@ void test_random_forest()
                         ++fnr;
                 }
             }
-            double dtp=double(tp);
-            double dtn=double(NPOINTS-tp);
+            auto dtp=double(tp);
+            auto dtn=double(NPOINTS-tp);
             double testTPR=double(tpr)/dtp;
             double testFPR=double(fpr)/dtn;
             double testTNR=double(tnr)/dtn;
@@ -693,8 +693,8 @@ void test_random_forest()
                         ++fnr;
                 }
             }
-            double dtp=double(tp);
-            double dtn=double(NPOINTS-tp);
+            auto dtp=double(tp);
+            auto dtn=double(NPOINTS-tp);
             double testTPR=double(tpr)/dtp;
             double testFPR=double(fpr)/dtn;
             double testTNR=double(tnr)/dtn;

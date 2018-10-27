@@ -92,7 +92,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
   //insert grids
   if (grid_type=="float")
   {
-      if (bvxm_voxel_grid<float>* g = dynamic_cast<bvxm_voxel_grid<float>*>(grid.as_pointer()))
+      if (auto* g = dynamic_cast<bvxm_voxel_grid<float>*>(grid.as_pointer()))
       {
           //g->initialize_data(std::numeric_limits<float>::max());
           g->initialize_data(0.0f);
@@ -111,7 +111,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
               if (use_lvcs)
                 covert_global_mesh_to_local(mesh,lvcs);
               float val=1.0f;
-              bvxm_voxel_grid<float>* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
+              auto* g = static_cast<bvxm_voxel_grid<float>*>(grid.as_pointer());
               bvxm_load_mesh_into_grid<float>(g,mesh,val);
           }
 
@@ -126,7 +126,7 @@ bool bvxm_fill_mesh_grid_process(bprb_func_process& pro)
   }
   else if (grid_type=="opinion")
   {
-      if (bvxm_voxel_grid<bvxm_opinion>* g = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>*>(grid.as_pointer()))
+      if (auto* g = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>*>(grid.as_pointer()))
       {
           //g->initialize_data(std::numeric_limits<float>::max());
           g->initialize_data(bvxm_opinion(0.0f));

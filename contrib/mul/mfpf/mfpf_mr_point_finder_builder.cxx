@@ -228,7 +228,7 @@ void mfpf_mr_point_finder_builder::get_sample_vector(
   }
 
   assert(image_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-  const vimt_image_2d_of<float>& image
+  const auto& image
     = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
 
   builder(L).get_sample_vector(image,p,u,v);
@@ -259,7 +259,7 @@ void mfpf_mr_point_finder_builder::add_example(
     }
 
     assert(image_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-    const vimt_image_2d_of<float>& image
+    const auto& image
       = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
 
     builder(L).add_example(image,p,u);

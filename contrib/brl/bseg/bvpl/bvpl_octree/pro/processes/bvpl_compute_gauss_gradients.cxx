@@ -61,7 +61,7 @@ bool bvpl_compute_gauss_gradients(bprb_func_process& pro)
   typedef boct_tree<short, float> float_tree_type;
   typedef boct_tree<short, vnl_vector_fixed< float,3 > > grad_tree_type;
 
-  if (boxm_scene<float_tree_type> *scene_in = dynamic_cast<boxm_scene< float_tree_type >* >(scene_base.as_pointer()))
+  if (auto *scene_in = dynamic_cast<boxm_scene< float_tree_type >* >(scene_base.as_pointer()))
   {
     boxm_scene<grad_tree_type> *scene_out =
     new boxm_scene<grad_tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());

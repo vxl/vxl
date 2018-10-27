@@ -68,8 +68,8 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
   std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
   std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
-  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  auto iter_blks_A = blocks_A.begin();
+  auto iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -174,7 +174,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_dev
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* fuse = new bocl_kernel();
+  auto* fuse = new bocl_kernel();
   std::string update_opts = options + " -D VISIBILITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_visibility", update_opts, "fusion::fuse_blockwise_based_visibility");
   vec_kernels.push_back(fuse);
@@ -227,8 +227,8 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
   std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
   std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
-  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  auto iter_blks_A = blocks_A.begin();
+  auto iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -337,7 +337,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_de
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* fuse = new bocl_kernel();
+  auto* fuse = new bocl_kernel();
   std::string update_opts = options + " -D ORIENTATION_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_orientation", update_opts, "fusion::fuse_blockwise_based_orientation");
   vec_kernels.push_back(fuse);
@@ -392,8 +392,8 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
   std::vector<boxm2_block_id> blocks_A = sceneA->get_block_ids();
   std::vector<boxm2_block_id> blocks_B = sceneB->get_block_ids();
   std::cout<<sceneA->data_path()<<" "<<sceneB->data_path()<<std::endl;
-  std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-  std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+  auto iter_blks_A = blocks_A.begin();
+  auto iter_blks_B = blocks_B.begin();
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
@@ -502,7 +502,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_devi
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* fuse = new bocl_kernel();
+  auto* fuse = new bocl_kernel();
   std::string update_opts = options + " -D SURFACE_DENSITY_BASED";
   fuse->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_blockwise_based_surface_density", update_opts, "fusion::fuse_blockwise_based_surface_density");
   vec_kernels.push_back(fuse);

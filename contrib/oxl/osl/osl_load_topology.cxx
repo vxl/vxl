@@ -87,7 +87,7 @@ void osl_load_topology(std::istream &f, std::list<osl_edge*> &es, std::list<osl_
     int id; // edge id
     f >> std::ws >> id;
 
-    osl_edge *e = new osl_edge(2/*dummy*/, vert[stashid1], vert[stashid2]);
+    auto *e = new osl_edge(2/*dummy*/, vert[stashid1], vert[stashid2]);
     e->SetId(id);
 
     e->read_ascii(f);

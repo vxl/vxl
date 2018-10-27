@@ -461,7 +461,7 @@ void vmal_track_lines::sort_lines(vmal_multi_view_data_edge_sptr matches,
   {
     sorted_matches->new_track();
     std::map<int,vtol_edge_2d_sptr,std::less<int> >::iterator iter1;
-    std::map<int,vtol_edge_2d_sptr,std::less<int> >::iterator iter2=track.begin();
+    auto iter2=track.begin();
     iter2++;
     for (iter1=track.begin(); iter2!=track.end(); ++iter1)
     {

@@ -352,7 +352,7 @@ vpgl_nitf_rational_camera(std::string const& nitf_image_path,
     return;
   }
   //cast to an nitf2_image
-  vil_nitf2_image* nitf_image = (vil_nitf2_image*)image.ptr();
+  auto* nitf_image = (vil_nitf2_image*)image.ptr();
   //Get and set the information
   if (!this->init(nitf_image, verbose))
     return;

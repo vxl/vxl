@@ -30,7 +30,7 @@ bool use_integration_for_gaussian=true;
 pdf1d_compare_to_pdf_bhat::pdf1d_compare_to_pdf_bhat()
   : n_per_point_(3)
 {
-  pdf1d_gaussian_kernel_pdf_builder *gk_builder = new pdf1d_gaussian_kernel_pdf_builder;
+  auto *gk_builder = new pdf1d_gaussian_kernel_pdf_builder;
   gk_builder->set_use_width_from_separation();
   builder_ = gk_builder;
 }

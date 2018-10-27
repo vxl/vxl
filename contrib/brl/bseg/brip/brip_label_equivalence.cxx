@@ -23,7 +23,7 @@ void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)
 std::set<unsigned> brip_label_equivalence::labels() const
 {
   std::set<unsigned> labs;
-  std::map<unsigned, std::set<unsigned> >::const_iterator mit =
+  auto mit =
     forward_pairs_.begin();
   for (; mit != forward_pairs_.end(); ++mit) {
     labs.insert((*mit).first);
@@ -62,7 +62,7 @@ merge_equivalence(std::map<unsigned int, std::set<unsigned int> >& tab,
     equivalence_sets_[cur_label] = std::set<unsigned>();
   }
 
-  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type label : labels)
+  for (const auto & label : labels)
     equivalence_sets_[cur_label].insert(label);
   return true;
 }
@@ -88,7 +88,7 @@ bool brip_label_equivalence::get_next_label(std::set<unsigned> const& labels,
   //set.
   for (unsigned int i = tmp; i<=max_label_; i++)
   {
-    std::set<unsigned>::const_iterator sit=labels.find(i);
+    auto sit=labels.find(i);
     if (sit==labels.end()){
       label = i;
       return true;
@@ -171,7 +171,7 @@ void brip_label_equivalence::transitive_closure()
       }
       //Get the next larger label from cur_set
       //so that we can insert its equivalent labels
-      for (std::set<unsigned>::iterator cit = cur_set.begin();
+      for (auto cit = cur_set.begin();
            cit != cur_set.end() && !merging; ++cit)
         if (*cit>i)
         {

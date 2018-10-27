@@ -204,7 +204,7 @@ bool vil_sgi_image::put_view(const vil_image_view_base& view,
     vil_exception_warning(vil_exception_pixel_formats_incompatible(VIL_PIXEL_FORMAT_BYTE, view.pixel_format(), "vil_sgi_image::put_view"));
     return false;
   }
-  const vil_image_view<vxl_byte> & view2 = static_cast<const vil_image_view<vxl_byte> &>(view);
+  const auto & view2 = static_cast<const vil_image_view<vxl_byte> &>(view);
 
   for(int i = 0; i < view2.nj(); i++)
   {

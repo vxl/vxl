@@ -113,7 +113,7 @@ void test_binary_tree()
     clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
     TEST("Type is binary tree",
          pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
-    clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
+    auto* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
     TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
     builder.build(*pClassifier,
@@ -180,8 +180,8 @@ void test_binary_tree()
                 ++fnr;
         }
     }
-    double dtp=double (tp);
-    double dtn=double (NPOINTS-tp);
+    auto dtp=double (tp);
+    auto dtn=double (NPOINTS-tp);
     double testTPR=double (tpr)/dtp;
     double testFPR=double (fpr)/dtn;
     double testTNR=double (tnr)/dtn;
@@ -218,7 +218,7 @@ void test_binary_tree()
 
     TEST("Type is binary tree",
          pBaseClassifierIn->is_a()==std::string("clsfy_binary_tree"), true);
-    clsfy_binary_tree* pClassifierIn=dynamic_cast<clsfy_binary_tree*>(pBaseClassifierIn);
+    auto* pClassifierIn=dynamic_cast<clsfy_binary_tree*>(pBaseClassifierIn);
     TEST("Can cast to binary tree",pClassifierIn != nullptr,true);
 
     {
@@ -245,8 +245,8 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
+        auto dtp=double (tp);
+        auto dtn=double (NPOINTS-tp);
         std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
@@ -288,8 +288,8 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
+        auto dtp=double (tp);
+        auto dtn=double (NPOINTS-tp);
         std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
@@ -321,7 +321,7 @@ void test_binary_tree()
     }
     // Train again with +ve and -ve data swapped round + see if get same error
     clsfy_classifier_base* pBaseClassifier2=builder.new_classifier();
-    clsfy_binary_tree* pClassifier2=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier2);
+    auto* pClassifier2=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier2);
 
     builder.build(*pClassifier2,
                   training_set_inputs,
@@ -353,8 +353,8 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
+        auto dtp=double (tp);
+        auto dtn=double (NPOINTS-tp);
         std::cout<<"True Positive Rate " <<double(tpr)/dtp<<'\n'
                 <<"False Positive Rate "<<double(fpr)/dtn<<'\n'
                 <<"True Negative Rate " <<double(tnr)/dtn<<'\n'
@@ -428,7 +428,7 @@ void test_binary_tree()
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
         TEST("Type is binary tree",
              pBaseClassifier->is_a()==std::string("clsfy_binary_tree"), true);
-        clsfy_binary_tree* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
+        auto* pClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
         TEST("Can cast to binary tree",pClassifier != nullptr,true);
 
         builder.build(*pClassifier,
@@ -498,8 +498,8 @@ void test_binary_tree()
                     ++fnr;
             }
         }
-        double dtp=double (tp);
-        double dtn=double (NPOINTS-tp);
+        auto dtp=double (tp);
+        auto dtn=double (NPOINTS-tp);
         double testTPR=double (tpr)/dtp;
         double testFPR=double (fpr)/dtn;
         double testTNR=double (tnr)/dtn;

@@ -28,7 +28,7 @@ void test_sample_set(T epsilon, const std::string& type_name)
   float w0 = 0.0f;
   for (unsigned i = 0; i < n1; i++) {
     T s = g1.sample(rng);
-    float w = float(rng.drand32());
+    auto w = float(rng.drand32());
     if (i == 0)
       w0 = w;
     ss.insert_sample(s, w);
@@ -258,9 +258,9 @@ void test_mean_shift_algo(T epsilon, const std::string& type_name)
   bsta_gaussian_indep<T,n> g2(meanv2, sd2);
   bsta_gaussian_indep<T,n> g3(meanv3, sd3);
 
-  unsigned n1 = (unsigned)(rng.drand32()*100);
-  unsigned n2 = (unsigned)(rng.drand32()*100);
-  unsigned n3 = (unsigned)(rng.drand32()*100);
+  auto n1 = (unsigned)(rng.drand32()*100);
+  auto n2 = (unsigned)(rng.drand32()*100);
+  auto n3 = (unsigned)(rng.drand32()*100);
 
   T bandwidth = T(0.2);
   //T bandwidth = T(1.0);

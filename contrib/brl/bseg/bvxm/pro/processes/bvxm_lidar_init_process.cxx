@@ -137,7 +137,7 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
   }
 
 #if HAS_GEOTIFF
-  vil_tiff_image* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
+  auto* tiff_img = static_cast<vil_tiff_image*> (lidar.as_pointer());
 
   if (vpgl_geo_camera::init_geo_camera(tiff_img, params->lvcs(), camera))
   {
@@ -211,7 +211,7 @@ bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_fir
     return false;
   }
 
-  vil_image_view<bool>* view = new vil_image_view<bool>(roi_first->ni(), roi_first->nj());
+  auto* view = new vil_image_view<bool>(roi_first->ni(), roi_first->nj());
   // if there is no second camera and image, just use one
   if (!roi_second || !cam_second) {
     view->fill(false);
@@ -222,8 +222,8 @@ bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_fir
     assert(roi_first->nj() == roi_second->nj());
 
     if (roi_first->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-      vil_image_view<float>* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
-      vil_image_view<float>* view2 = static_cast<vil_image_view<float>*> (roi_second.as_pointer());
+      auto* view1 = static_cast<vil_image_view<float>*> (roi_first.as_pointer());
+      auto* view2 = static_cast<vil_image_view<float>*> (roi_second.as_pointer());
       // compare the cameras, they should be the same
       for (unsigned i=0; i<roi_first->ni(); i++)
         for (unsigned j=0; j<roi_first->nj(); j++) {

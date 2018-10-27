@@ -35,7 +35,7 @@ namespace
   inline
   void swap_endian( vxl_uint_32& word )
   {
-    vxl_uint_8* bytes = reinterpret_cast<vxl_uint_8*>( &word );
+    auto* bytes = reinterpret_cast<vxl_uint_8*>( &word );
     vxl_uint_8 t = bytes[0];
     bytes[0] = bytes[3];
     bytes[3] = t;
@@ -369,7 +369,7 @@ get_copy_view( unsigned i0, unsigned ni,
   vil_pixel_format fmt = pixel_format();
   vil_memory_chunk_sptr buf = new vil_memory_chunk(ni * nj * buff_bytes_per_pixel, fmt );
 
-  vxl_uint_8* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
+  auto* ib = reinterpret_cast<vxl_uint_8*>( buf->data() );
 
   if ( !col_map_ )
   {
@@ -428,7 +428,7 @@ get_copy_view( unsigned i0, unsigned ni,
       *(ib+is+1)=s[0];
     }
 #endif
-    vxl_uint_16* sib = reinterpret_cast<vxl_uint_16*>(ib);
+    auto* sib = reinterpret_cast<vxl_uint_16*>(ib);
     return new vil_image_view<vxl_uint_16>( buf, sib,
                                             ni, nj, components_,
                                             components_, components_*ni, 1 );

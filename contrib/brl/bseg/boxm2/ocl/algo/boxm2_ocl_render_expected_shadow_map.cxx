@@ -36,7 +36,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
 
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
-  float* buff = new float[cl_ni*cl_nj];
+  auto* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
 
   bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff,"exp image buffer");
@@ -49,7 +49,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -115,7 +115,7 @@ void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr devic
   options += " -D STEP_CELL=step_cell_render_sun_vis(aux_args.auxsun,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device
-  bocl_kernel * ray_trace_kernel=new bocl_kernel();
+  auto * ray_trace_kernel=new bocl_kernel();
 
   ray_trace_kernel->create_kernel( &device->context(),
                                    device->device_id(),

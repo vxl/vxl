@@ -34,7 +34,7 @@ void vnl_conjugate_gradient::init(vnl_cost_function &f)
 
 double vnl_conjugate_gradient::valuecomputer_(double *x, void* userdata)
 {
-  vnl_conjugate_gradient* self =
+  auto* self =
     static_cast<vnl_conjugate_gradient*>(userdata);
   vnl_cost_function* f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
@@ -46,7 +46,7 @@ double vnl_conjugate_gradient::valuecomputer_(double *x, void* userdata)
 
 void vnl_conjugate_gradient::gradientcomputer_(double *g, double *x, void* userdata)
 {
-  vnl_conjugate_gradient* self =
+  auto* self =
     static_cast<vnl_conjugate_gradient*>(userdata);
   vnl_cost_function* f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
@@ -57,7 +57,7 @@ void vnl_conjugate_gradient::gradientcomputer_(double *g, double *x, void* userd
 
 void vnl_conjugate_gradient::valueandgradientcomputer_(double *v, double *g, double *x, void* userdata)
 {
-  vnl_conjugate_gradient* self =
+  auto* self =
     static_cast<vnl_conjugate_gradient*>(userdata);
   vnl_cost_function* f = self->f_;
   vnl_vector_ref<double> ref_x(f->get_number_of_unknowns(), x);
@@ -71,7 +71,7 @@ void vnl_conjugate_gradient::preconditioner_( double *out, double *in, void* use
   // FIXME - there should be some way to set a preconditioner if you have one
   // e.g. P = inv(diag(A'A)) for linear least squares systems.
 
-  vnl_conjugate_gradient* self =
+  auto* self =
     static_cast<vnl_conjugate_gradient*>(userdata);
   vnl_cost_function* f = self->f_;
 

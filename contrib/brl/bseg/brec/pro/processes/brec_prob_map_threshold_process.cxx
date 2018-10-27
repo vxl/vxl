@@ -67,7 +67,7 @@ bool brec_prob_map_threshold_process(bprb_func_process& pro)
   temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<vxl_byte> input_img(temp);
 
-  float thres = pro.get_input<float>(i++);
+  auto thres = pro.get_input<float>(i++);
 
   vil_image_view<vxl_byte> out(ni, nj, 3);
   out.fill(0);

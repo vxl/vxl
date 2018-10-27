@@ -236,13 +236,13 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 
   // the image can be float or short
   unsigned nii, nji;
-  if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr())) {
+  if (auto* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
-  else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
+  else if (auto* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
-  else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
+  else if (auto* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr())) {
     nii = img->ni();  nji = img->nj();
   }
   std::cout << " image size: "<< nii << " x " << nji << std::endl;
@@ -272,9 +272,9 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   std::cout <<"image size needs ni: " << ni << " nj: " << nj << " to support voxel res: " << vox_length << std::endl;
 
   // create x y z images
-  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_z = new vil_image_view<float>(ni, nj, 1);
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
   //out_img_z->fill((float)(scene_bbox.min_z()-10.0));  // local coord system min z
   out_img_z->fill((float)(-1.0));  // local coord system min z
@@ -282,8 +282,8 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
   // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++) {
-      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      auto local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      auto local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       (*out_img_x)(i,j) = local_x;
       (*out_img_y)(i,j) = local_y;
 
@@ -296,16 +296,16 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
       if (lon < 0)  lon = -lon;
       if (lat < 0)  lat = -lat;
       cam->global_to_img(lon, lat, gz, u, v);
-      unsigned uu = (unsigned)std::floor(u + 0.5);
-      unsigned vv = (unsigned)std::floor(v + 0.5);
+      auto uu = (unsigned)std::floor(u + 0.5);
+      auto vv = (unsigned)std::floor(v + 0.5);
       if (uu > 0 && vv > 0 && uu < nii && vv < nji)
       {
         // dynamically cast the image and obtain the pixel value
-        if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr()))
+        if (auto* img = dynamic_cast<vil_image_view<float> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
-        else if (vil_image_view<short>* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr()))
+        else if (auto* img = dynamic_cast<vil_image_view<short> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
-        else if (vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * > (img_sptr.ptr()))
+        else if (auto* img = dynamic_cast<vil_image_view<vxl_byte> * > (img_sptr.ptr()))
           (*out_img_z)(i,j) = (*img)(uu,vv)-(float)orig_elev;
       }
     }
@@ -417,10 +417,10 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   int nj = (int)std::ceil((scene_bbox.max_y()-scene_bbox.min_y())/vox_length);
 
   // create x y z image
-  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  auto* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
   out_img_z->fill((float)(scene_bbox.max_z()+100.0));  // local coord system min z, initialize to constant
   out_img_label->fill((vxl_byte)0);
@@ -428,8 +428,8 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
   // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++) {
-      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      auto local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      auto local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       (*out_img_x)(i,j) = local_x;
       (*out_img_y)(i,j) = local_y;
 
@@ -438,8 +438,8 @@ bool boxm2_label_to_xyz_process(bprb_func_process& pro)
       // find pixel in image
       double u, v;
       geocam->global_to_img(lon, lat, gz, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if (uu < img.ni() && vv < img.nj())
         (*out_img_label)(i,j) = img(uu, vv);
     }
@@ -647,10 +647,10 @@ bool boxm2_label_to_xyz_process2(bprb_func_process& pro)
            <<"ni: " << ni << " nj: " << nj << std::endl;
 
   // create x y z images
-  vil_image_view<float>* out_img_x = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_y = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float>* out_img_z = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<vxl_byte>* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
+  auto* out_img_x = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_y = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_z = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img_label = new vil_image_view<vxl_byte>(ni, nj, 1);
   out_img_x->fill(0.0f); out_img_y->fill(0.0f);
   out_img_z->fill((float)(scene_bbox.max_z()+100.0));  // local coordinate system min z, initialize to constant
   out_img_label->fill((vxl_byte)0);

@@ -128,7 +128,7 @@ class command_iteration_update: public rgrl_command
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ ) override
   {
-    const rgrl_feature_based_registration* reg_engine =
+    const auto* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     rgrl_transformation_sptr trans = reg_engine->current_transformation();
 
@@ -248,7 +248,7 @@ main( int argc, char* argv[] )
   rgrl_scale_estimator_unwgted_sptr unwgted_scale_est =
     new rgrl_scale_est_closest( std::move(obj_fun) );
 
-  rgrl_initializer_ran_sam* ran_sam = new rgrl_initializer_ran_sam();
+  auto* ran_sam = new rgrl_initializer_ran_sam();
   ran_sam->set_data(pruned_match_set,
                     unwgted_scale_est,
                     moving_image_region,

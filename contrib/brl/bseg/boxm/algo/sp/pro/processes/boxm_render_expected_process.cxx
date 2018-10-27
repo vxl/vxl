@@ -71,8 +71,8 @@ bool boxm_render_expected_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
@@ -84,22 +84,22 @@ bool boxm_render_expected_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_image_splatting_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,-1,true);
     }
     else
     {
-      unsigned bin = pro.get_input<unsigned>(i++);
+      auto bin = pro.get_input<unsigned>(i++);
       std::cout<<"Multi Bin"<<std::endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_image_splatting_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask,bin,true);
     }
 
     //img = new vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype>(expected);
     img_mask = new vil_image_view<float>(mask);
 
-    vil_image_view<unsigned char> *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
+    auto *expected_byte = new vil_image_view<unsigned char>(expected.ni(),expected.nj(),expected.nplanes());
     vil_convert_stretch_range_limited(expected,*expected_byte, 0.0f, 1.0f);
     img = expected_byte;
   }

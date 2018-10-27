@@ -74,11 +74,11 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
-  float n_normal = pro.get_input<float>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
+  auto n_normal = pro.get_input<float>(i++);
   // number of updates
-  unsigned num_updates = pro.get_input<unsigned>(i++);
+  auto num_updates = pro.get_input<unsigned>(i++);
   //float threshold = pro.get_input<float>(i++); // FIXME: unused; see line 138
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
@@ -90,7 +90,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_edge_sample<float> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
         std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
@@ -104,7 +104,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     }
     img_mask = new vil_image_view<float>(mask);
 
-    vil_image_view<vxl_byte> *expected_byte = new vil_image_view<vxl_byte>(ni,nj,expected.nplanes());
+    auto *expected_byte = new vil_image_view<vxl_byte>(ni,nj,expected.nplanes());
     for (unsigned i=0; i<ni; i++) {
       for (unsigned j=0; j<nj; j++) {
         (*expected_byte)(i,j) = static_cast<unsigned char>(255.0*(expected(i,j)));
@@ -113,7 +113,7 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     img = expected_byte;
         img_mask = new vil_image_view<float>(mask);
 
-    vil_image_view<float> *ex = new vil_image_view<float>(ni,nj,expected.nplanes());
+    auto *ex = new vil_image_view<float>(ni,nj,expected.nplanes());
     for (unsigned i=0; i<ni; i++) {
       for (unsigned j=0; j<nj; j++) {
         (*ex)(i,j) = expected(i,j);//static_cast<unsigned char>(255.0*(expected(i,j)));
@@ -132,14 +132,14 @@ bool boxm_render_expected_edge_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
         std::cerr << "boxm_render_expected_edge_process: the scene is not of expected type\n";
         return false;
       }
       boxm_render_edge_tangent_image_rt<short, boxm_inf_line_sample<float> >(*scene, camera, expected);//, n_normal,num_updates, threshold);
 
-      vil_image_view<float > *edge_image=new  vil_image_view<float >(ni,nj,1);
+      auto *edge_image=new  vil_image_view<float >(ni,nj,1);
       *edge_image=expected;
 
       unsigned j = 0;

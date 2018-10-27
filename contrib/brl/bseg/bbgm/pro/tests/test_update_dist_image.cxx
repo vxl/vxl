@@ -33,7 +33,7 @@ static void test_update_dist_image()
   REG_PROCESS_FUNC_CONS_INIT(bprb_func_process, bprb_batch_process_manager, bbgm_update_dist_image_process, "bbgmUpdateDistImageProcess");
 
   const unsigned int ni = 640, nj = 480;
-  vil_image_view<float>* ip = new vil_image_view<float>(ni,nj,3);
+  auto* ip = new vil_image_view<float>(ni,nj,3);
   init_random_image(*ip);
 
   brdb_value_sptr image_view_value =

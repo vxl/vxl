@@ -69,7 +69,7 @@ double clsfy_binary_1d_wrapper_builder::build(
   assert(* std::max_element(outputs.begin(), outputs.end()) <= 1);
   assert(classifier.is_class("clsfy_binary_1d_wrapper"));
 
-  clsfy_binary_1d_wrapper &c_wrap = (clsfy_binary_1d_wrapper &) classifier;
+  auto &c_wrap = (clsfy_binary_1d_wrapper &) classifier;
 
   std::unique_ptr<clsfy_classifier_1d> c_1d(builder_1d_->new_classifier());
 

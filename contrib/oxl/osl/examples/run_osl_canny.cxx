@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   vul_arg<std::string> out  ("-out", "output file (default is stdout)", "");
   vul_arg_parse(argc, argv);
 
-  std::string* in_file = new std::string(in());
+  auto* in_file = new std::string(in());
   if (*in_file == "") {
     std::cout << "input image file: ";
     char tmp[1024];

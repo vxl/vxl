@@ -53,16 +53,16 @@ bool volm_dsm_ground_plane_estimation_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_res = pro.get_input<vil_image_view_base_sptr>(in_i++);
   int N = pro.get_input<int>(in_i++);
   int window_size = pro.get_input<int>(in_i++);
-  float invalid_pixel = pro.get_input<float>(in_i++);
+  auto invalid_pixel = pro.get_input<float>(in_i++);
 
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(img_res.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(img_res.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported image pixel format -- " << img_res->pixel_format() << ", only float is supported!\n";
     return false;
   }
   int ni = static_cast<int>(in_img->ni());
   int nj = static_cast<int>(in_img->nj());
-  vil_image_view<float>* out = new vil_image_view<float>(ni, nj);
+  auto* out = new vil_image_view<float>(ni, nj);
 
   std::vector<vgl_point_3d<double> > src_pts, dst_pts;
 
@@ -213,14 +213,14 @@ bool volm_dsm_ground_plane_estimation_edge_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_res = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr edge_img_res = pro.get_input<vil_image_view_base_sptr>(in_i++);
   int N = pro.get_input<int>(in_i++);
-  float invalid_pixel = pro.get_input<float>(in_i++);
+  auto invalid_pixel = pro.get_input<float>(in_i++);
 
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(img_res.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(img_res.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported image pixel format -- " << img_res->pixel_format() << ", only float is supported!\n";
     return false;
   }
-  vil_image_view<vxl_byte>* edge_img = dynamic_cast<vil_image_view<vxl_byte>*>(edge_img_res.ptr());
+  auto* edge_img = dynamic_cast<vil_image_view<vxl_byte>*>(edge_img_res.ptr());
   if (!edge_img) {
     std::cerr << pro.name() << ": Unsupported edge image pixel format -- " << edge_img_res->pixel_format() << ", only byte is supported!\n";
     return false;
@@ -231,7 +231,7 @@ bool volm_dsm_ground_plane_estimation_edge_process(bprb_func_process& pro)
     std::cerr << pro.name() << ": height image and edge image size do not match!\n";
     return false;
   }
-  vil_image_view<float>* out = new vil_image_view<float>(ni, nj);
+  auto* out = new vil_image_view<float>(ni, nj);
   int search_range = ni;
   if (search_range > nj)
     search_range = nj;
@@ -372,15 +372,15 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
   // get the inputs
   unsigned in_i = 0;
   vil_image_view_base_sptr dsm_img_res = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  float window_size = pro.get_input<float>(in_i++);
-  float elev_thres = pro.get_input<float>(in_i++);
-  float slop_thres_deg = pro.get_input<float>(in_i++);
-  float pixel_res = pro.get_input<float>(in_i++);
+  auto window_size = pro.get_input<float>(in_i++);
+  auto elev_thres = pro.get_input<float>(in_i++);
+  auto slop_thres_deg = pro.get_input<float>(in_i++);
+  auto pixel_res = pro.get_input<float>(in_i++);
 
   // compute slope threshold
   float slop_thres = std::tan(slop_thres_deg / vnl_math::deg_per_rad) * pixel_res;
   // load the image
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(dsm_img_res.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(dsm_img_res.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported image pixel format -- " << dsm_img_res->pixel_format() << ", only float is supported!\n";
     return false;
@@ -423,12 +423,12 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
     bt_img(i, 0) = (*in_img)(i,0) - (*in_img)(i,1);
   }
 
-  vil_image_view<vxl_byte>* grd_mask = new vil_image_view<vxl_byte>(ni, nj);
+  auto* grd_mask = new vil_image_view<vxl_byte>(ni, nj);
   grd_mask->fill(0);
 
   // generate initial ground mask
-  unsigned nw_i = (unsigned)std::floor(ni/window_size + 0.5f);
-  unsigned nw_j = (unsigned)std::floor(nj/window_size + 0.5f);
+  auto nw_i = (unsigned)std::floor(ni/window_size + 0.5f);
+  auto nw_j = (unsigned)std::floor(nj/window_size + 0.5f);
 
   // find minimum as ground pixel for each window
   std::map<std::pair<unsigned, unsigned>, float> local_grd_elev;
@@ -691,7 +691,7 @@ bool volm_dsm_ground_filter_mgf_process(bprb_func_process& pro)
   tps.build(src_pts, dst_pts);
 
   // apply to other points
-  vil_image_view<float>* grd_img = new vil_image_view<float>(ni, nj);
+  auto* grd_img = new vil_image_view<float>(ni, nj);
   grd_img->fill(-1.0f);
   for (unsigned i = 0; i < ni; i++) {
     for (unsigned j = 0; j < nj; j++) {

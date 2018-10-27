@@ -191,7 +191,7 @@ bool sdet_image_mesh::compute_mesh()
 
   //lift vertices to 3-d
   const imesh_vertex_array<2>& verts = mesh_one.vertices<2>();
-  imesh_vertex_array<3>* verts3 = new imesh_vertex_array<3>();
+  auto* verts3 = new imesh_vertex_array<3>();
 
   // convert image to float
   vil_image_view<float> view = brip_vil_float_ops::convert_to_float(resc_);
@@ -201,8 +201,8 @@ bool sdet_image_mesh::compute_mesh()
   unsigned nverts = mesh_one.num_verts();
   for (unsigned iv = 0; iv<nverts; ++iv)
   {
-    unsigned i = static_cast<unsigned>(verts[iv][0]);
-    unsigned j = static_cast<unsigned>(verts[iv][1]);
+    auto i = static_cast<unsigned>(verts[iv][0]);
+    auto j = static_cast<unsigned>(verts[iv][1]);
     double height =maxv;
     if (i<ni && j<nj)
       height = static_cast<double>(view(i,j));
@@ -222,7 +222,7 @@ bool sdet_image_mesh::compute_mesh()
   std::cout<<"Number of anchor points: "<<anchor_points_.size()<<std::endl;
   imesh_generate_mesh_2d_2(cvexh, segs_pair, anchor_points_, mesh_);
   const imesh_vertex_array<2>& verts2 = mesh_.vertices<2>();
-  imesh_vertex_array<3>* newVerts = new imesh_vertex_array<3>();
+  auto* newVerts = new imesh_vertex_array<3>();
 
   // convert image to float
   ni = view.ni(), nj = view.nj();
@@ -230,8 +230,8 @@ bool sdet_image_mesh::compute_mesh()
   nverts = mesh_.num_verts();
   for (unsigned iv = 0; iv<nverts; ++iv)
   {
-    unsigned i = static_cast<unsigned>(verts2[iv][0]);
-    unsigned j = static_cast<unsigned>(verts2[iv][1]);
+    auto i = static_cast<unsigned>(verts2[iv][0]);
+    auto j = static_cast<unsigned>(verts2[iv][1]);
     double height =maxv;
     if (i<ni && j<nj)
       height = static_cast<double>(view(i,j));
@@ -255,7 +255,7 @@ void sdet_image_mesh::set_anchor_points(imesh_mesh& mesh, vil_image_view<float> 
   vil_image_view<float> tri_depth(ni, nj);
 
   //find the range of triangles in the Z direction
-  imesh_regular_face_array<3>& faces = (imesh_regular_face_array<3>&) mesh.faces();
+  auto& faces = (imesh_regular_face_array<3>&) mesh.faces();
   imesh_vertex_array<3>& verts = mesh.vertices<3>();
   unsigned nfaces = mesh.num_faces();
   for (unsigned iface = 0; iface<nfaces; ++iface)
@@ -314,8 +314,8 @@ void sdet_image_mesh::set_image(vil_image_resource_sptr const& resource)
 
     //makvil_image_view_base_sptr byte_img = vil_convert_cast<vxl_byte>(0, stretched*255.0f);
     vil_image_view_base_sptr dest_sptr = new vil_image_view<float>(stretched->ni(), stretched->nj());
-    vil_image_view<float>* dest = (vil_image_view<float>*) dest_sptr.ptr();
-    vil_image_view<float>* stf  = (vil_image_view<float>*) stretched.ptr();
+    auto* dest = (vil_image_view<float>*) dest_sptr.ptr();
+    auto* stf  = (vil_image_view<float>*) stretched.ptr();
     vil_convert_stretch_range<float>( *stf, *dest, 0.0f, 255.0f);
 
     //now turn em into bytes

@@ -69,8 +69,8 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   std::string identifier = pro.get_input<std::string>(i);
 
   bool foundDataType = false;
@@ -103,12 +103,12 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
   }
 
   // function call
-  vil_image_view<float> * exp_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
+  auto * exp_img=new vil_image_view<float>(ni,nj);
+  auto * vis_img=new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
   std::vector<boxm2_block_id> vis_order;
-  if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+  if (auto* pcam = // assignment, not comparison
       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
     vis_order=scene->get_vis_blocks(pcam);
@@ -128,7 +128,7 @@ bool boxm2_cpp_render_expected_image_process(bprb_func_process& pro)
     datas.push_back(alph);
     datas.push_back(mog);
 
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
     //scene_info_wrapper->info->tree_buffer_length = blk->tree_buff_length();
     //scene_info_wrapper->info->data_buffer_length = 65536;

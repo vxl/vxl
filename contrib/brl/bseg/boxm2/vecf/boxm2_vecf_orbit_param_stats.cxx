@@ -166,7 +166,7 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(std::ofstream& os, unsign
   // write inferior margins
   for(auto & pit : merged_inf_margin_){
      std::vector<vgl_point_3d<double> > inf_pts = pit.second;
-     unsigned n = static_cast<unsigned>(inf_pts.size());
+     auto n = static_cast<unsigned>(inf_pts.size());
      for(unsigned i = 0; i<n; i+=sample_skip){
        vgl_point_3d<double> pd = inf_pts[i];
        vgl_point_3d<float> pf(static_cast<float>(pd.x()),
@@ -179,7 +179,7 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(std::ofstream& os, unsign
   // write superior margins
   for(auto & pit : merged_sup_margin_){
     std::vector<vgl_point_3d<double> > sup_pts = pit.second;
-    unsigned n = static_cast<unsigned>(sup_pts.size());
+    auto n = static_cast<unsigned>(sup_pts.size());
     for(unsigned i = 0; i<n; i+=sample_skip){
       vgl_point_3d<double> pd = sup_pts[i];
       vgl_point_3d<float> pf(static_cast<float>(pd.x()),
@@ -192,7 +192,7 @@ bool boxm2_vecf_orbit_param_stats::plot_merged_margins(std::ofstream& os, unsign
   // write creases
   for(auto & pit : merged_crease_){
     std::vector<vgl_point_3d<double> > crease_pts = pit.second;
-    unsigned n = static_cast<unsigned>(crease_pts.size());
+    auto n = static_cast<unsigned>(crease_pts.size());
     for(unsigned i = 0; i<n; i+=sample_skip){
       vgl_point_3d<double> pd = crease_pts[i];
       vgl_point_3d<float> pf(static_cast<float>(pd.x()),
@@ -268,7 +268,7 @@ void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
   // compute mean vector
   mean_ = vnl_matrix<double>(dim, 1, 0.0);
   double nv = 0.0;
-  for(std::map<std::string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+  for(auto fit = feature_vectors_.begin();
       fit != feature_vectors_.end(); ++fit, nv+=1.0)
     mean_ += fit->second;
   mean_/=nv;
@@ -277,11 +277,11 @@ void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
     std::cout << std::setprecision(2) << mean_[i][0] << ' ';
   std::cout << '\n';
   cov_ = vnl_matrix<double>(dim, dim, 0.0);
-  unsigned m = static_cast<unsigned>(feature_vectors_.size());
+  auto m = static_cast<unsigned>(feature_vectors_.size());
   // the data matrix - rows denote the elements of the feature vector, columns each sample
   vnl_matrix<double> X(dim, m);
   unsigned k = 0;
-  for(std::map<std::string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+  for(auto fit = feature_vectors_.begin();
       fit != feature_vectors_.end(); ++fit, ++k){
     vnl_matrix<double> x = (fit->second - mean_);
     for(unsigned r = 0; r<static_cast<unsigned>(x.rows()); ++r)
@@ -308,7 +308,7 @@ void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
   // to produce a diagonal covariance matrix
   vnl_matrix<double> Xw = Ut*X;
   k = 0;
-  for(std::map<std::string, vnl_matrix<double> >::iterator fit = feature_vectors_.begin();
+  for(auto fit = feature_vectors_.begin();
       fit != feature_vectors_.end(); ++fit, ++k){
     std::string pid = fit->first;
     std::cout << pid << ' ' << Xw[0][k] << ' ' << Xw[1][k] << '\n';
@@ -317,7 +317,7 @@ void boxm2_vecf_orbit_param_stats::compute_covariance_matrix(){
 void boxm2_vecf_orbit_param_stats::separation_stats(){
   double avg_ratio = 0.0;
   double ns = 0.0;
-  for(std::map<std::string, std::pair<boxm2_vecf_orbit_params, boxm2_vecf_orbit_params > >::iterator pit =  param_map_.begin();
+  for(auto pit =  param_map_.begin();
       pit!=param_map_.end(); ++pit, ns += 1.0){
     const std::string& pid = pit->first;
     boxm2_vecf_orbit_params& left_params = (pit->second).first;

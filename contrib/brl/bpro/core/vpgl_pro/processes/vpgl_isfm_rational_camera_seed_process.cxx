@@ -117,12 +117,12 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
   std::string input_txt  = pro.get_input<std::string>(in_i++);
   std::string out_folder = pro.get_input<std::string>(in_i++);
   std::string dem_folder = pro.get_input<std::string>(in_i++);
-  float lower_left_lon  = pro.get_input<float>(in_i++);
-  float lower_left_lat  = pro.get_input<float>(in_i++);
-  float upper_right_lon = pro.get_input<float>(in_i++);
-  float upper_right_lat = pro.get_input<float>(in_i++);
-  double height_diff    = pro.get_input<double>(in_i++);
-  float pixel_radius    = pro.get_input<float>(in_i++);
+  auto lower_left_lon  = pro.get_input<float>(in_i++);
+  auto lower_left_lat  = pro.get_input<float>(in_i++);
+  auto upper_right_lon = pro.get_input<float>(in_i++);
+  auto upper_right_lat = pro.get_input<float>(in_i++);
+  auto height_diff    = pro.get_input<double>(in_i++);
+  auto pixel_radius    = pro.get_input<float>(in_i++);
   bool enforce_existing = pro.get_input<bool>(in_i++);
 
   if (enforce_existing)
@@ -654,7 +654,7 @@ void vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(std::
                                                                            unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
                                                                            double& min, double& max)
 {
-  if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].first.ptr()))
+  if (auto* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].first.ptr()))
   {
     vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++) {
@@ -664,7 +664,7 @@ void vpgl_isfm_rational_camera_seed_process_globals::crop_and_find_min_max(std::
       }
     }
   }
-  else if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].first.ptr()))
+  else if (auto* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].first.ptr()))
   {
     vil_image_view<float> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++) {

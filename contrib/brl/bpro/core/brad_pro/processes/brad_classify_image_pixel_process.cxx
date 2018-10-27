@@ -50,7 +50,7 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
   bsta_joint_histogram_3d_base_sptr hno_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(1);
 
-  bsta_joint_histogram_3d<float>* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
+  auto* hist_no = dynamic_cast<bsta_joint_histogram_3d<float>*>(hno_ptr.ptr());
 
   if (!hist_no) {
     std::cout << "in classify_image_pixel_process, hist can't be cast\n";
@@ -60,7 +60,7 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
   bsta_joint_histogram_3d_base_sptr h_atmos_ptr =
     pro.get_input<bsta_joint_histogram_3d_base_sptr>(2);
 
-  bsta_joint_histogram_3d<float>* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
+  auto* hist_atmos = dynamic_cast<bsta_joint_histogram_3d<float>*>(h_atmos_ptr.ptr());
 
   if (!hist_atmos) {
     std::cout << "in classify_image_pixel_process, hist can't be cast\n";
@@ -72,7 +72,7 @@ bool brad_classify_image_pixel_process(bprb_func_process& pro)
     return false;
   }
   vil_image_view<float> fimage = *vil_convert_cast(float(), image);
-  float prob_ratio = pro.get_input<float>(4);
+  auto prob_ratio = pro.get_input<float>(4);
 
   vil_image_view<float> class_image;
   CAST_CALL_EIGENSPACE(es_ptr, ep->classify_image_pixel(fimage, *hist_no, *hist_atmos, prob_ratio, class_image), "in classify_image_pixel_process - classify function failed\n")

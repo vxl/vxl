@@ -47,7 +47,7 @@ bool vpgl_load_perspective_camera_process(bprb_func_process& pro)
     std::cerr << "Failed to open file " << camera_filename << '\n';
     return false;
   }
-  vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+  auto* pcam =new vpgl_perspective_camera<double>;
   std::string ext = vul_file_extension(camera_filename);
   if (ext == ".vsl") // binary form
   {
@@ -97,11 +97,11 @@ bool vpgl_load_perspective_camera_from_kml_file_process(bprb_func_process& pro)
     return false;
   }
   // get the inputs
-  unsigned ni = pro.get_input<unsigned>(0);
-  unsigned nj = pro.get_input<unsigned>(1);
+  auto ni = pro.get_input<unsigned>(0);
+  auto nj = pro.get_input<unsigned>(1);
   std::string name = pro.get_input<std::string>(2);
 
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   std::FILE* xmlFile = std::fopen(name.c_str(), "r");
   if (!xmlFile) {
     std::cerr << name.c_str() << " error on opening\n";
@@ -118,7 +118,7 @@ bool vpgl_load_perspective_camera_from_kml_file_process(bprb_func_process& pro)
   vpgl_perspective_camera<double> out_cam =
     bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, parser->right_fov_, parser->top_fov_, parser->altitude_, parser->heading_, parser->tilt_, parser->roll_);
 
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  auto* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
   pro.set_output_val<double>(1, parser->longitude_);
   pro.set_output_val<double>(2, parser->latitude_);

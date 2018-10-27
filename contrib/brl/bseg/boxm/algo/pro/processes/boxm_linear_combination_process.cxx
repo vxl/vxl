@@ -50,8 +50,8 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_base1 = pro.get_input<boxm_scene_base_sptr>(i++);
   boxm_scene_base_sptr scene_base2 = pro.get_input<boxm_scene_base_sptr>(i++);
-  float s1 = pro.get_input<float>(i++);
-  float s2 = pro.get_input<float>(i++);
+  auto s1 = pro.get_input<float>(i++);
+  auto s2 = pro.get_input<float>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
@@ -71,8 +71,8 @@ bool boxm_linear_combination_process(bprb_func_process& pro)
         std::cerr << "In boxm_linear_combination_process, datatype not supported\n";
         return false;
       }
-      boxm_scene<boct_tree<short, float> > *scene1 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base1.as_pointer());
-      boxm_scene<boct_tree<short, float> > *scene2 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base2.as_pointer());
+      auto *scene1 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base1.as_pointer());
+      auto *scene2 = static_cast<boxm_scene<boct_tree<short, float> >*> (scene_base2.as_pointer());
 
       scene1->load_block(block_i,block_j,block_k);
       scene2->load_block(block_i,block_j,block_k);

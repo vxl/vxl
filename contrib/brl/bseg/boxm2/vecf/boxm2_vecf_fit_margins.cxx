@@ -49,11 +49,11 @@ margin_residual_function(std::vector<vgl_point_2d<double> >  const& inf_pts,
     boxm2_vecf_eyelid_crease lid_cre(opr_);
     vgl_vector_2d<double> v(opr_.x_trans(), opr_.y_trans());
     vgl_vector_3d<double> v3(opr_.x_trans(), opr_.y_trans(), opr_.z_trans());
-    unsigned ninf = static_cast<unsigned>(inf_pts_.size()), nsup = static_cast<unsigned>(sup_pts_.size());
-        unsigned ncre = static_cast<unsigned>(crease_pts_.size());
+    auto ninf = static_cast<unsigned>(inf_pts_.size()), nsup = static_cast<unsigned>(sup_pts_.size());
+        auto ncre = static_cast<unsigned>(crease_pts_.size());
     unsigned ncanth = (ninf + nsup)/2;
     // penalize large angles
-    double ang_weight = static_cast<double>(ninf + nsup);
+    auto ang_weight = static_cast<double>(ninf + nsup);
     for(unsigned i = 0; i<ninf; ++i){
       vgl_point_2d<double> p = inf_pts_[i]-v;
       double yinf = 0.0;
@@ -186,8 +186,8 @@ bool boxm2_vecf_fit_margins::plot_orbit(std::ostream& ostr) const{
   boxm2_vecf_eyelid_crease lid_cre(opr_);
   vgl_vector_2d<double> v(opr_.x_trans(), opr_.y_trans());
   double tinf = opr_.lower_eyelid_tmin_, tsup = opr_.eyelid_tmin_, ct = opr_.eyelid_crease_ct_;
-  unsigned ninf = static_cast<unsigned>(inferior_margin_pts_.size()), nsup = static_cast<unsigned>(superior_margin_pts_.size());
-  unsigned ncre = static_cast<unsigned>(superior_crease_pts_.size());
+  auto ninf = static_cast<unsigned>(inferior_margin_pts_.size()), nsup = static_cast<unsigned>(superior_margin_pts_.size());
+  auto ncre = static_cast<unsigned>(superior_crease_pts_.size());
     for(unsigned i = 0; i<ninf; ++i){
       vgl_point_2d<double> p = inferior_margin_pts_[i]-v;
       double yinf = 0.0;

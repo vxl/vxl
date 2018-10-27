@@ -55,7 +55,7 @@ void mbl_wt_histogram::obs(double v, double wt)
   }
 
   // v-xlo_ >= 0
-  unsigned int i = (unsigned int)((v-xlo_)/dx_);
+  auto i = (unsigned int)((v-xlo_)/dx_);
 
   if (i<wt_sum_.size()) wt_sum_[i]+=wt;
   else                  wt_above_+=wt;

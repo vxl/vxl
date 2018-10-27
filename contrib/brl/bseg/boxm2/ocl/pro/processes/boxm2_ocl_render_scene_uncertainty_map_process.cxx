@@ -73,13 +73,13 @@ bool boxm2_ocl_render_scene_uncertainty_map_process(bprb_func_process& pro)
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
   std::string cam_dir_1 = pro.get_input<std::string>(i++);
   std::string cam_dir_2 = pro.get_input<std::string>(i++);
-  vil_image_view<float> * exp_img_out = new vil_image_view<float>(ni,nj);
-  vil_image_view<unsigned char> * radial_img_out = new vil_image_view<unsigned char>(ni,ni,3);
+  auto * exp_img_out = new vil_image_view<float>(ni,nj);
+  auto * radial_img_out = new vil_image_view<unsigned char>(ni,ni,3);
   //: render scene uncertainty
   boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map(scene,device,opencl_cache,ni,nj,ident,exp_img_out,radial_img_out,cam_dir_1,cam_dir_2);
   i=0;

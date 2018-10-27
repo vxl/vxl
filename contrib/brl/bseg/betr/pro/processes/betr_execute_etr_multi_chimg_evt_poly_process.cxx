@@ -108,7 +108,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   }
   // store the array of change scores
   unsigned j = 0;
-  for(std::vector<double>::iterator pit = prob_change.begin();
+  for(auto pit = prob_change.begin();
       pit != prob_change.end(); ++pit, ++j)
     change_probs->data_array[j]=*pit;
 
@@ -119,7 +119,7 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   for(unsigned j = 0; j<n; ++j){
     std::string enam = event_region_names[j];
     //look up the geo object by name
-    std::map<std::string, betr_geo_object_3d_sptr>::const_iterator oit = evt_objs.find(enam);
+    auto oit = evt_objs.find(enam);
     if(oit == evt_objs.end()){
       std::cout << "In betr_execute_multi_chimg_evt_poly_process - event object " << enam << " not found" << std::endl;
       return false;
@@ -145,11 +145,11 @@ bool betr_execute_etr_multi_chimg_evt_poly_process(bprb_func_process& pro)
   bbas_1d_array_int_sptr poly_nverts = new bbas_1d_array_int(nverts.size());
   bbas_1d_array_double_sptr poly_verts = new bbas_1d_array_double(verts.size());
   unsigned nv = 0;
-  for(std::vector<unsigned>::iterator nit =  nverts.begin();
+  for(auto nit =  nverts.begin();
       nit != nverts.end(); ++nit, ++nv)
     poly_nverts->data_array[nv]=*nit;
   unsigned iv = 0;
-  for(std::vector<double>::iterator vit =  verts.begin();
+  for(auto vit =  verts.begin();
       vit != verts.end(); ++vit, ++iv)
     poly_verts->data_array[iv]=*vit;
   //save outputs and exit

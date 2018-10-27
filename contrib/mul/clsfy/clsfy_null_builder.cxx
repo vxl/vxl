@@ -90,7 +90,7 @@ double clsfy_null_builder::build(clsfy_classifier_base& model,
                                  unsigned /* nClasses */,
                                  const std::vector<unsigned> &outputs) const
 {
-  clsfy_null_classifier &classifier = dynamic_cast<clsfy_null_classifier&>(model);
+  auto &classifier = dynamic_cast<clsfy_null_classifier&>(model);
 
   classifier.set_default_class(default_class_);
 

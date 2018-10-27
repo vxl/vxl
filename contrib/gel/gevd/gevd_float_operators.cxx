@@ -212,7 +212,7 @@ gevd_float_operators::Read2dKernel(const char* filename)
   infile >> width;
   infile >> height;
   if (width < 1 || height < 1) return nullptr;
-  gevd_bufferxy* kernel = new gevd_bufferxy(width, height, bits_per_float);
+  auto* kernel = new gevd_bufferxy(width, height, bits_per_float);
   for (int y = 0; y < height; y++)
     for (int x = 0; x < width; x++)
       infile >> floatPixel(*kernel, x, y);
@@ -247,7 +247,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const int kborder = 2*yradius;
 
   // 1. Setup the pipeline of 4*yradius+1 lines, convolved along x-axis
-  float** cache = new float*[4*yradius+1];
+  auto** cache = new float*[4*yradius+1];
   float** pipeline = cache+yradius;
   float* row;
   for (int p = 0; p <= kborder; ++p) {
@@ -383,7 +383,7 @@ gevd_float_operators::Convolve(const gevd_bufferxy& from, gevd_bufferxy*& to,
                                const int yradius,
                                const bool xwrap, const bool ywrap)
 {
-  float* ykernel = new float[2*yradius+1];
+  auto* ykernel = new float[2*yradius+1];
   const bool yevenp = true;
   for (int i = 0; i < 2*yradius+1; i++)
     ykernel[i] = 1;
@@ -1216,7 +1216,7 @@ LocalMaximum(const gevd_bufferxy& magnitude,
              float& contour, unsigned char& dir, // response & direction
              float& locx, float& locy)  // subpixel location
 {
-  const float tan_pi_8 = (float)std::tan(vnl_math::pi_over_4/2);
+  const auto tan_pi_8 = (float)std::tan(vnl_math::pi_over_4/2);
   float strength = floatPixel(magnitude, i, j);
   if (strength > threshold) { // eliminate noisy responses
     float dx = floatPixel(directionx, i, j);
@@ -1852,11 +1852,11 @@ gevd_float_operators::ShrinkBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const float kc = (0.5f - burt_ka) / 2;
 
   int p = 0;                            // pipeline of 5 lines
-  float* yline0 = new float[sizeX];     // shrink_by_2 along x
-  float* yline1 = new float[sizeX];
-  float* yline2 = new float[sizeX];
-  float* yline3 = new float[sizeX];
-  float* yline4 = new float[sizeX];
+  auto* yline0 = new float[sizeX];     // shrink_by_2 along x
+  auto* yline1 = new float[sizeX];
+  auto* yline2 = new float[sizeX];
+  auto* yline3 = new float[sizeX];
+  auto* yline4 = new float[sizeX];
   gevd_float_operators::ShrinkBy2AlongX(from, p++, yline0, sizeX, ka, kb, kc);
   gevd_float_operators::ShrinkBy2AlongX(from, p++, yline1, sizeX, ka, kb, kc);
   gevd_float_operators::ShrinkBy2AlongX(from, p++, yline2, sizeX, ka, kb, kc);
@@ -1987,8 +1987,8 @@ gevd_float_operators::ShrinkBy2_D(const gevd_bufferxy& from,
   for (auto & i : yline) i = new float[sizeX];
   float * wline[5];
   for (auto & i : wline) i = new float[sizeX];
-  float * y_empty = new float[sizeX];
-  float * w_empty = new float[sizeX];
+  auto * y_empty = new float[sizeX];
+  auto * w_empty = new float[sizeX];
 
   //  Set the values for the empty rows.  These are used for the top
   //  and bottom of the image.
@@ -2170,9 +2170,9 @@ gevd_float_operators::ExpandBy2(const gevd_bufferxy& from, gevd_bufferxy*& to,
   const float kb = 0.5f;
   const float kc = 0.5f - burt_ka;
   int p = 0;                            // pipeline of 3 lines
-  float* yline0 = new float[sizeX];     // to cache ExpandBy2AlongX
-  float* yline1 = new float[sizeX];
-  float* yline2 = new float[sizeX];
+  auto* yline0 = new float[sizeX];     // to cache ExpandBy2AlongX
+  auto* yline1 = new float[sizeX];
+  auto* yline2 = new float[sizeX];
   gevd_float_operators::ExpandBy2AlongX(from, p++, yline1, sizeX, ka, kb, kc);
   gevd_float_operators::ExpandBy2AlongX(from, p++, yline2, sizeX, ka, kb, kc);
   std::memcpy(yline0, yline2, sizeX*sizeof(float));// first line is wrapped
@@ -2614,7 +2614,7 @@ gevd_float_operators::WaveletTransform(float* array, const int n,
     std::cout << std::endl;
 #endif
 
-    float* wksp = new float[n];
+    auto* wksp = new float[n];
     if (forwardp) {                             // forward transform
       for (int nn = n; nn >= 4 && nlevels > 0; nn /= 2, nlevels--)
         WaveletTransformStep(array, nn, forwardp,
@@ -2705,8 +2705,8 @@ gevd_float_operators::WaveletTransformByIndex(float* array,
   int ncof = 0;
   if (!FindWavelet(waveletno, lo_filter, hi_filter, ncof)) // look up wavelets
     return false;
-  float* buffer = new float[maxn];              // working buffers for
-  float* wksp = new float[maxn];                // 1d wavelet transformation
+  auto* buffer = new float[maxn];              // working buffers for
+  auto* wksp = new float[maxn];                // 1d wavelet transformation
   const int sz = int(std::log(double(maxn))/std::log(2.0));
   int* sizes = new int[sz];                     // cache sizes in pyramid
 
@@ -2904,9 +2904,9 @@ gevd_float_operators::WaveletTransformByBlock(float* array,
       level_dims[nlevels-1-l] = swap;
     }
   }
-  float* sub_array = new float[ntot];           // sub-block of low frequency
-  float* buffer = new float[maxn];              // working buffers for
-  float* wksp = new float[maxn];                // 1d wavelet transformation
+  auto* sub_array = new float[ntot];           // sub-block of low frequency
+  auto* buffer = new float[maxn];              // working buffers for
+  auto* wksp = new float[maxn];                // 1d wavelet transformation
   {for (int l = 0; l < nlevels; l++) {
     int* sub_dims = level_dims[l];
     int n = sub_dims[ndim];
@@ -2996,7 +2996,7 @@ gevd_float_operators::TestWavelets()
         ntot *= s;
       }
       dims[ndim] = ntot;
-      float* data = new float[ntot];
+      auto* data = new float[ntot];
       for (int k = 2; k <= 12; k+=2)
       {
         for (int i = 0; i < ntot; i++) data[i] = float(i);
@@ -3005,7 +3005,7 @@ gevd_float_operators::TestWavelets()
         WaveletTransformByBlock(data, dims, ndim, false, nlevels, k);
         float max_err = 0;
         for (int i = 0; i < ntot; i++) {
-          float err = (float)std::fabs(data[i] - i);
+          auto err = (float)std::fabs(data[i] - i);
           if (err > max_err)
             max_err = err;
         }
@@ -3037,8 +3037,8 @@ gevd_float_operators::WaveletTransformByIndex(const gevd_bufferxy& from, gevd_bu
   dims[0] = to->GetSizeY();
   dims[1] = to->GetSizeX();
   dims[2] = dims[0] * dims[1];
-  const float* from_array = (const float*) from.GetBuffer(); // copy the image
-  float* to_array = (float*) to->GetBuffer();
+  const auto* from_array = (const float*) from.GetBuffer(); // copy the image
+  auto* to_array = (float*) to->GetBuffer();
   for (int i = 0; i < dims[2]; i++)
     to_array[i] = from_array[i];
   return gevd_float_operators::WaveletTransformByIndex(to_array, // transform in place
@@ -3064,8 +3064,8 @@ gevd_float_operators::WaveletTransformByBlock(const gevd_bufferxy& from, gevd_bu
   dims[0] = to->GetSizeY();
   dims[1] = to->GetSizeX();
   dims[2] = dims[0] * dims[1];
-  const float* from_array = (const float*) from.GetBuffer(); // copy the image
-  float* to_array = (float*) to->GetBuffer();
+  const auto* from_array = (const float*) from.GetBuffer(); // copy the image
+  auto* to_array = (float*) to->GetBuffer();
   for (int i = 0; i < dims[2]; i++)
     to_array[i] = from_array[i];
   return gevd_float_operators::WaveletTransformByBlock(to_array, // transform in place
@@ -3339,7 +3339,7 @@ gevd_float_operators::Correlations(const float* data, const int length,
                                    const int index, const int search)
 {
   int ns = 2*search + 1;
-  float* result = new float[ns];
+  auto* result = new float[ns];
   result[search] = gevd_float_operators::Correlation(data, length,
                                                      pattern, radius,
                                                      index);
@@ -3510,7 +3510,7 @@ void
 gevd_float_operators::Apply(gevd_bufferxy& buf, float (*func)(float))
 {
   int size = buf.GetSizeX() * buf.GetSizeY();
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   for (int i = 1; i < size; i++)
     data[i] = func(data[i]);
 }
@@ -3760,7 +3760,7 @@ void
 gevd_float_operators::Normalize(gevd_bufferxy& buf, const float lo, const float hi)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   float flo, fhi, f;
   flo = fhi = data[0];
   for (int i = 1; i < size; i++) {
@@ -3786,7 +3786,7 @@ gevd_float_operators::ShiftToPositive(gevd_bufferxy& buf)
 {
   const float zero = 30000, lo = 0, hi = 60000;
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   for (int i = 0; i < size; i++) {
     float f = data[i] + zero;
     if (f < lo)
@@ -3804,7 +3804,7 @@ float
 gevd_float_operators::TruncateToPositive(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   float diff = 0, d;
   for (int i = 0; i < size; i++) {
     d = data[i];
@@ -3824,7 +3824,7 @@ gevd_float_operators::Scale(gevd_bufferxy& buf, float factor)
 {
   if (factor != 0) {
     int size = (buf.GetSizeX() * buf.GetSizeY());
-    float* data = (float*) buf.GetBuffer();
+    auto* data = (float*) buf.GetBuffer();
     for (int i = 0; i < size; i++)
       data[i] *= factor;
   }
@@ -3836,7 +3836,7 @@ void
 gevd_float_operators::Absolute(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   for (int i = 0; i < size; i++)
     if (data[i] < 0)
       data[i] = - data[i];
@@ -3848,7 +3848,7 @@ void
 gevd_float_operators::Negate(gevd_bufferxy& buf)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   for (int i = 0; i < size; i++)
     data[i] = - data[i];
 }
@@ -3858,7 +3858,7 @@ float
 gevd_float_operators::TruncateToCeiling(gevd_bufferxy& buf, float ceilng)
 {
   int size = (buf.GetSizeX() * buf.GetSizeY());
-  float* data = (float*) buf.GetBuffer();
+  auto* data = (float*) buf.GetBuffer();
   float diff = 0, d;
   for (int i = 0; i < size; i++) {
     d = data[i];
@@ -3887,30 +3887,30 @@ gevd_float_operators::BufferToFloat(const gevd_bufferxy& from, gevd_bufferxy& to
   switch (from.GetBytesPixel())
   {
    case sizeof(unsigned char): {
-    const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
-    float* tobuf = (float*) to.GetBuffer();
+    const auto* frombuf = (const unsigned char*) from.GetBuffer();
+    auto* tobuf = (float*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = (float) frombuf[i];
     break;
    }
    case sizeof(short): {
-    const short* frombuf = (const short*) from.GetBuffer();
-    float* tobuf = (float*) to.GetBuffer();
+    const auto* frombuf = (const short*) from.GetBuffer();
+    auto* tobuf = (float*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = (float) frombuf[i];
     break;
    }
    case 3*sizeof(unsigned char): { // assume RGB, and take luminance
     std::cerr << "gevd_float_operators::BufferToFloat: taking luminance of RGB buffer\n";
-    const unsigned char* frombuf = (const unsigned char*) from.GetBuffer();
-    float* tobuf = (float*) to.GetBuffer();
+    const auto* frombuf = (const unsigned char*) from.GetBuffer();
+    auto* tobuf = (float*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = 0.299f*frombuf[3*i]+0.587f*frombuf[3*i+1]+0.114f*frombuf[3*i+2];
     break;
    }
    case sizeof(int): {
-    const unsigned int* frombuf = (const unsigned int*) from.GetBuffer();
-    float* tobuf = (float*) to.GetBuffer();
+    const auto* frombuf = (const unsigned int*) from.GetBuffer();
+    auto* tobuf = (float*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = (float)frombuf[i];
     break;
@@ -3932,22 +3932,22 @@ gevd_float_operators::FloatToBuffer (const gevd_bufferxy& from, gevd_bufferxy& t
   switch (to.GetBytesPixel())
   {
    case sizeof(unsigned char): {
-    const float* frombuf = (const float*) from.GetBuffer();
-    unsigned char* tobuf = (unsigned char*) to.GetBuffer();
+    const auto* frombuf = (const float*) from.GetBuffer();
+    auto* tobuf = (unsigned char*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = (unsigned char) int(frombuf[i]);
     return true;
    }
    case sizeof(short): {
-    const float* frombuf = (const float*) from.GetBuffer();
-    short* tobuf = (short*) to.GetBuffer();
+    const auto* frombuf = (const float*) from.GetBuffer();
+    auto* tobuf = (short*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[i] = (short) int(frombuf[i]);
     return true;
    }
    case 3*sizeof(unsigned char): { // assume RGB ==> restore luminance
-    const float* frombuf = (const float*) from.GetBuffer();
-    unsigned char* tobuf = (unsigned char*) to.GetBuffer();
+    const auto* frombuf = (const float*) from.GetBuffer();
+    auto* tobuf = (unsigned char*) to.GetBuffer();
     for (int i = 0; i < size; i++)
       tobuf[3*i] = tobuf[3*i+1] = tobuf[3*i+2] = (unsigned char) int(frombuf[i]);
     return true;

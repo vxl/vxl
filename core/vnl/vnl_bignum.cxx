@@ -791,7 +791,7 @@ int vnl_bignum::dtoBigNum(const char *s)
 void vnl_bignum::exptoBigNum(const char *s)
 {
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  Counter pos = Counter(this->dtoBigNum(s) + 1); // Convert the base, skip [eE]
+  auto pos = Counter(this->dtoBigNum(s) + 1); // Convert the base, skip [eE]
   long pow = std::atol(s + pos);         // Convert the exponent to long
   while (pow-- > 0)                     // Raise vnl_bignum to the given
     *this = (*this) * 10L;              // power
@@ -816,7 +816,7 @@ void vnl_bignum::xtoBigNum(const char *s)
 {
   this->resize(0); sign = 1;            // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  Counter size = Counter(std::strlen(s));
+  auto size = Counter(std::strlen(s));
   Counter len = 2;                      // skip leading "0x"
   while (len < size) {                  // While there are more chars
     (*this) = ((*this) * 16L) +         // Shift vnl_bignum left one hex
@@ -830,7 +830,7 @@ void vnl_bignum::otoBigNum(const char *s)
 {
   this->resize(0); sign = 1;           // Reset number to 0.
   while (*s == ' ' || *s == '\t' || *s == '\n' || *s == '\r') ++s; // skip whitespace
-  Counter size = Counter(std::strlen(s));
+  auto size = Counter(std::strlen(s));
   Counter len = 0;                      // No chars converted yet
   while (len < size) {                  // While there are more chars
     (*this) = ((*this) * 8L) +          // Shift vnl_bignum left 1 oct dig.
@@ -1253,7 +1253,7 @@ vnl_bignum left_shift(const vnl_bignum& b1, int l)
   // many zeros as we need.
   vnl_bignum rslt;                      // result of shift
   rslt.sign = b1.sign;                  // result follows sign of input
-  Counter growth = Counter(l / 16);     // # of words rslt will grow by
+  auto growth = Counter(l / 16);     // # of words rslt will grow by
   Data shift = Data(l % 16);            // amount to actually shift
   Data rshift = Data(16 - shift);       // amount to shift next word by
   Data carry = Data(                    // value that will be shifted
@@ -1286,7 +1286,7 @@ vnl_bignum left_shift(const vnl_bignum& b1, int l)
 vnl_bignum right_shift(const vnl_bignum& b1, int l)
 {
   vnl_bignum rslt;                              // result of shift
-  Counter shrinkage = Counter(l / 16);          // # of words rslt will shrink
+  auto shrinkage = Counter(l / 16);          // # of words rslt will shrink
   Data shift = Data(l % 16);                    // amount to actually shift
   Data dregs = Data(b1.data[b1.count-1] >> shift);// high end data to save
   if (shrinkage + (dregs == 0) < b1.count) {    // if not all data shifted out

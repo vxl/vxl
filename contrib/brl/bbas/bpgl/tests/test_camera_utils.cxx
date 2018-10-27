@@ -9,7 +9,7 @@ static void test_camera_utils()
 {
   // =============  test kml camera constructor========================
   unsigned ni = 1280, nj = 720;
-  double nid = static_cast<double>(ni), njd = static_cast<double>(nj);
+  auto nid = static_cast<double>(ni), njd = static_cast<double>(nj);
   double right_fov = 29.605;
   double top_fov = 17.725;
   double altitude = 1.6;

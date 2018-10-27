@@ -65,7 +65,7 @@ bool vil_image_pair_process(bprb_func_process& pro)
 
       vil_image_view<vxl_byte> bimage1 = vil_convert_cast(vxl_byte(), image1);
 
-      vil_image_view<vxl_byte>* comb = new vil_image_view<vxl_byte>(nip, nj);
+      auto* comb = new vil_image_view<vxl_byte>(nip, nj);
 
       for (unsigned j=0; j<nj; ++j) {
         for (unsigned i=0; i<ni; ++i) {
@@ -86,7 +86,7 @@ bool vil_image_pair_process(bprb_func_process& pro)
       vil_image_view<vil_rgb<vxl_byte> > cimage1 =
         vil_convert_cast(vil_rgb<vxl_byte>(), image1);
 
-      vil_image_view<vil_rgb<vxl_byte> >* comb =
+      auto* comb =
         new vil_image_view<vil_rgb<vxl_byte> >(nip, nj);
 
       for (unsigned j=0; j<nj; ++j) {

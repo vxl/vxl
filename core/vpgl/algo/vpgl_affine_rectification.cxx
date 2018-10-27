@@ -22,7 +22,7 @@ vpgl_affine_camera<double>* vpgl_affine_rectification::compute_affine_cam(const 
     bbox.add(world_pt);
 
   // use the constructor with matrix to compute the camera direction properly
-  vpgl_affine_camera<double>* out_camera = new vpgl_affine_camera<double>(aff_camera.get_matrix());
+  auto* out_camera = new vpgl_affine_camera<double>(aff_camera.get_matrix());
   out_camera->set_viewing_distance(10.0*bbox.height());
   return out_camera;
 }
@@ -93,7 +93,7 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
   H2[0][0] = e2[0]/e2l; H2[0][1] = e2[1]/e2l;
   H2[1][0] = -e2[1]/e2l; H2[1][1] = e2[0]/e2l;
 
-  unsigned m = static_cast<unsigned int>(img_p1.size());
+  auto m = static_cast<unsigned int>(img_p1.size());
   if (m != img_p2.size()) {
     std::cerr << " In vpgl_affine_rectification::compute_rectification() -- img_p1 and img_p2 do not have equal size!\n";
     return false;

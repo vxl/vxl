@@ -64,7 +64,7 @@ edge_2d_list& vifa_coll_lines::get_contributors(void)
 
 face_list* vifa_coll_lines::get_contributor_faces(void)
 {
-  face_list*  ret = new face_list;
+  auto*  ret = new face_list;
 
   for (auto & contributor : contributors_)
   {
@@ -109,8 +109,8 @@ void vifa_coll_lines::lms_fit(const std::vector<double>&  x,
   double  sum_y = 0.0;
   double  n = 0.0;
 
-  std::vector<double>::const_iterator  xi = x.begin();
-  std::vector<double>::const_iterator  yi = y.begin();
+  auto  xi = x.begin();
+  auto  yi = y.begin();
   for (; xi != x.end(); ++xi, ++yi)
   {
     sum_x_sq += (*xi * (*xi));

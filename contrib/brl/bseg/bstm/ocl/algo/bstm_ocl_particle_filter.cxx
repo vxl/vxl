@@ -599,7 +599,7 @@ std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned  /*prev_time*/, u
 
     //load blk info and write appropriate info to several buffers
     bocl_mem* blk_info = opencl_cache_->loaded_block_info();
-    bstm_scene_info* info_buffer = (bstm_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (bstm_scene_info*) blk_info->cpu_buffer();
     info_buffer->data_buffer_length = (int) (target_blk_t->num_bytes()/8);
     int target_time_tree_len = info_buffer->data_buffer_length;
 
@@ -642,7 +642,7 @@ std::vector<double> bstm_ocl_particle_filter::eval_mi(unsigned  /*prev_time*/, u
     {
       //first check if the particle needs this blk pair
       std::vector<bstm_block_id> particle_target_blks = blk_map_[cur_time  - start_t_][particle_no][relevant_blk_id] ;
-      std::vector<bstm_block_id>::iterator found = std::find(particle_target_blks.begin(), particle_target_blks.end(), target_blk_id);
+      auto found = std::find(particle_target_blks.begin(), particle_target_blks.end(), target_blk_id);
       if(found != particle_target_blks.end())  //particle needs this blk mapping!
       {
         kern_->set_arg(blk_info);
@@ -921,8 +921,8 @@ void bstm_ocl_particle_filter::label(unsigned t)
         bstm_data_base * label_data_base = cache_->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_LABEL>::prefix(),
                                         alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize() * bstm_data_traits<BSTM_LABEL>::datasize() );
 
-        bstm_data_traits<BSTM_ALPHA>::datatype * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alph->data_buffer();
-        bstm_data_traits<BSTM_LABEL>::datatype * label_data = (bstm_data_traits<BSTM_LABEL>::datatype*) label_data_base->data_buffer();
+        auto * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alph->data_buffer();
+        auto * label_data = (bstm_data_traits<BSTM_LABEL>::datatype*) label_data_base->data_buffer();
 
         //if(radius_ > 0) { //if labeling a ball
         //  vgl_sphere_3d<double> sphere(aabb.centroid(), radius_);

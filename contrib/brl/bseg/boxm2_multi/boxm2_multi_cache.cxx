@@ -67,7 +67,7 @@ boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
   for (int startX=min_ids.x(); startX<max_ids.x()+1; startX+=groupSizeX) {
     for (int startY=min_ids.y(); startY<max_ids.y()+1; startY+=groupSizeY) {
       //create a block group
-      boxm2_multi_cache_group* grp = new boxm2_multi_cache_group;
+      auto* grp = new boxm2_multi_cache_group;
       //add the vertical row of blocks to scene with dev_id
       int dev_id = 0;
       for (int i=0; i<groupSizeX; ++i) {
@@ -232,11 +232,11 @@ boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
   vgl_point_3d<double> center;
   vgl_box_2d<double> camBox;
   if ( cam->type_name() == "vpgl_generic_camera" ) {
-    vpgl_generic_camera<double>* gcam = (vpgl_generic_camera<double>*) cam.ptr();
+    auto* gcam = (vpgl_generic_camera<double>*) cam.ptr();
     center = gcam->max_ray_origin();
   }
   else if ( cam->type_name() == "vpgl_perspective_camera" ) {
-    vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+    auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
     center = pcam->camera_center();
     //find intersection box
     vgl_box_3d<double> sceneBB = scene_->bounding_box();

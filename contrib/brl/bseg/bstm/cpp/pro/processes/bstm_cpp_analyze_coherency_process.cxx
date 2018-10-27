@@ -71,15 +71,15 @@ bool bstm_cpp_analyze_coherency_process(bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
-  float center_x = pro.get_input<float>(i++);
-  float center_y = pro.get_input<float>(i++);
-  float center_z = pro.get_input<float>(i++);
-  float len_x = pro.get_input<float>(i++);
-  float len_y = pro.get_input<float>(i++);
-  float len_z = pro.get_input<float>(i++);
-  float init_time = pro.get_input<float>(i++);
-  float end_time = pro.get_input<float>(i++);
-  float p_threshold = pro.get_input<float>(i++);
+  auto center_x = pro.get_input<float>(i++);
+  auto center_y = pro.get_input<float>(i++);
+  auto center_z = pro.get_input<float>(i++);
+  auto len_x = pro.get_input<float>(i++);
+  auto len_y = pro.get_input<float>(i++);
+  auto len_z = pro.get_input<float>(i++);
+  auto init_time = pro.get_input<float>(i++);
+  auto end_time = pro.get_input<float>(i++);
+  auto p_threshold = pro.get_input<float>(i++);
   std::string output_filename = pro.get_input<std::string>(i++);
 
   //create output file
@@ -108,8 +108,8 @@ bool bstm_cpp_analyze_coherency_process(bprb_func_process& pro)
         bstm_data_base * alph = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_ALPHA>::prefix());
         bstm_data_base * app = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::prefix() );
 
-        bstm_data_traits<BSTM_ALPHA>::datatype * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alph->data_buffer();
-        bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype * app_data = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype*) app->data_buffer();
+        auto * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alph->data_buffer();
+        auto * app_data = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype*) app->data_buffer();
 
         bstm_analyze_coherency_function coherency(blk, bstm_metadata, blk_t, app_data, alpha_data, init_local_time,end_local_time, box, p_threshold, output_file);
       }

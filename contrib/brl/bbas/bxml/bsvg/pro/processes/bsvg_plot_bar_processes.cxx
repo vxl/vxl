@@ -48,11 +48,11 @@ bool bsvg_bar_plot_initialize_process(bprb_func_process& pro)
 
   // get input
   unsigned i = 0;
-  float w = pro.get_input<float>(i++);
-  float h = pro.get_input<float>(i++);
+  auto w = pro.get_input<float>(i++);
+  auto h = pro.get_input<float>(i++);
   std::string title = pro.get_input<std::string>(i++);
 
-  bsvg_plot* p = new bsvg_plot(w, h);
+  auto* p = new bsvg_plot(w, h);
   bxml_document_sptr pd = p;
   p->set_margin(40);
   p->set_font_size(15);
@@ -96,11 +96,11 @@ bool bsvg_bar_plot_add_process(bprb_func_process& pro)
   // get input
   unsigned i = 0;
   bxml_document_sptr doc = pro.get_input<bxml_document_sptr>(i++);
-  float h = pro.get_input<float>(i++);
+  auto h = pro.get_input<float>(i++);
   std::string label = pro.get_input<std::string>(i++);
   std::string color = pro.get_input<std::string>(i++);
 
-  bsvg_plot* p = dynamic_cast<bsvg_plot*>(doc.ptr());
+  auto* p = dynamic_cast<bsvg_plot*>(doc.ptr());
   p->add_bar(h, label, true, color);
   return true;
 }

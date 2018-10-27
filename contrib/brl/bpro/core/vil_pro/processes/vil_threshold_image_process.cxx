@@ -42,15 +42,15 @@ bool vil_threshold_image_process(bprb_func_process& pro)
     //Retrieve image from input
     vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
 
-    float thres = pro.get_input<float>(i++);
+    auto thres = pro.get_input<float>(i++);
     bool thres_above = pro.get_input<bool>(i++);
-    unsigned positive_id = pro.get_input<unsigned>(i++);  // if passed as zero, return the bool image!
+    auto positive_id = pro.get_input<unsigned>(i++);  // if passed as zero, return the bool image!
 
     // retrieve float image
     vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
     vil_image_view<float> fimg = *fimage;
 
-    vil_image_view<bool>* temp = new vil_image_view<bool>;
+    auto* temp = new vil_image_view<bool>;
     if (thres_above) {
         //: Apply threshold such that dest(i,j,p)=true if src(i,j,p)>=t
         vil_threshold_above(fimg, *temp, thres);
@@ -63,7 +63,7 @@ bool vil_threshold_image_process(bprb_func_process& pro)
         pro.set_output_val<vil_image_view_base_sptr>(0, temp);
         return true;
     }
-    vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
+    auto* out = new vil_image_view<unsigned char>(temp->ni(),temp->nj());
     for (unsigned k = 0 ; k < out->ni(); k++)
     {
         for (unsigned l = 0 ; l < out->nj(); l++)
@@ -112,7 +112,7 @@ bool vil_threshold_max_image_process(bprb_func_process& pro)
     unsigned i=0;
     //Retrieve image from input
     vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
-    float thres = pro.get_input<float>(i++);
+    auto thres = pro.get_input<float>(i++);
 
     // retrieve float image
     vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
@@ -124,7 +124,7 @@ bool vil_threshold_max_image_process(bprb_func_process& pro)
 
     vil_math_value_range<float>(fimg, fmin,fmax);
 
-    vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(fimage->ni(),fimage->nj());
+    auto* out = new vil_image_view<unsigned char>(fimage->ni(),fimage->nj());
     out->fill(255);
 
     if(fmax > fmin)
@@ -173,15 +173,15 @@ bool vil_threshold_image_region_process(bprb_func_process& pro)
     // get input
     unsigned i = 0;
     vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(i++);
-    float min_thres = pro.get_input<float>(i++);
-    float max_thres = pro.get_input<float>(i++);
+    auto min_thres = pro.get_input<float>(i++);
+    auto max_thres = pro.get_input<float>(i++);
     bool thres_inside = pro.get_input<bool>(i++);
 
     // retrieve float image
     vil_image_view_base_sptr fimage = vil_convert_cast(float(), image);
     vil_image_view<float> fimg = *fimage;
 
-    vil_image_view<bool>* temp = new vil_image_view<bool>;
+    auto* temp = new vil_image_view<bool>;
     if (thres_inside) {
       // apply thresholds such that dest(i,j,p)=true if t0<=src(i,j,p)<=t1
       vil_threshold_inside(fimg, *temp, min_thres, max_thres);
@@ -191,7 +191,7 @@ bool vil_threshold_image_region_process(bprb_func_process& pro)
       vil_threshold_outside(fimg, *temp, min_thres, max_thres);
     }
 
-    vil_image_view<unsigned char>* out = new vil_image_view<unsigned char>(temp->ni(), temp->nj());
+    auto* out = new vil_image_view<unsigned char>(temp->ni(), temp->nj());
     for (unsigned k = 0 ; k < out->ni(); k++)
     {
         for (unsigned l = 0 ; l < out->nj(); l++)

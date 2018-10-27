@@ -205,7 +205,7 @@ bool vil1_mit_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
 
   int skip = bytes_per_pixel() * (width_ - xs);
 
-  unsigned char *point = (unsigned char*)buf;
+  auto *point = (unsigned char*)buf;
 
   is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
 
@@ -230,7 +230,7 @@ bool vil1_mit_generic_image::put_section(void const* buf, int x0, int y0, int xs
   vil1_streampos offset = 8;
   is_->seek(offset + (width_*y0*bytes_per_pixel()) + (x0*bytes_per_pixel()));
 
-  const unsigned char* point = (const unsigned char*)buf;
+  const auto* point = (const unsigned char*)buf;
 
   // FIXME: store as BGR
   for (int tely = 0; tely < ys; tely++)

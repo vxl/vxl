@@ -56,7 +56,7 @@ bool bvxm_update_lidar_process(bprb_func_process& pro)
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  unsigned scale_idx = pro.get_input<unsigned>(i++);
+  auto scale_idx = pro.get_input<unsigned>(i++);
   bool use_opinion = pro.get_input<bool>(i++);
 
   if ( !img ) {

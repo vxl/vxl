@@ -19,7 +19,7 @@ test_gevd_noise()
 {
   constexpr int size = 100000;
   vnl_sample_reseed();
-  float* data = new float[size];
+  auto* data = new float[size];
   for (int i=0; i<size; ++i) data[i]=(float)vnl_sample_normal(.5,.1);
   gevd_noise noise_estim(data,size); // default # bins (200)
   delete[] data; // "data" should not be needed after constructor is called!

@@ -35,7 +35,7 @@ bool vil_rgbi_to_grey_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<unsigned char> *out_img=new vil_image_view<unsigned char>(img->ni(),img->nj());
+  auto *out_img=new vil_image_view<unsigned char>(img->ni(),img->nj());
 
   vil_convert_planes_to_grey<unsigned char,unsigned char>(*(img.as_pointer()),*out_img);
   vil_image_view_base_sptr out_img_ptr=out_img;

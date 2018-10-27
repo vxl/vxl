@@ -48,12 +48,12 @@ bool brip_extrema_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr image_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  float lambda0 = pro.get_input<float>(i++);
-  float lambda1 = pro.get_input<float>(i++);
+  auto lambda0 = pro.get_input<float>(i++);
+  auto lambda1 = pro.get_input<float>(i++);
   //float theta = pro.get_input<float>(i++);
-  float theta_interval = pro.get_input<float>(i++);
-  float theta_init = pro.get_input<float>(i++);
-  float theta_end = pro.get_input<float>(i++);
+  auto theta_interval = pro.get_input<float>(i++);
+  auto theta_init = pro.get_input<float>(i++);
+  auto theta_end = pro.get_input<float>(i++);
   bool bright = pro.get_input<bool>(i++);   //bright vs. dark
   bool fast = pro.get_input<bool>(i++);     //fast or composed
 
@@ -98,8 +98,8 @@ bool brip_extrema_process(bprb_func_process& pro)
     //                                  theta, bright, true);
     out = brip_vil_float_ops::extrema_rotational(gimage, lambda0, lambda1, theta_interval, bright,
                                                  mag_only, signed_response, scale_invariant, non_max_suppress, cutoff);
-  vil_image_view<float>* point = new vil_image_view<float>(ni, nj);
-  vil_image_view<float>* mask = new vil_image_view<float>(ni, nj);
+  auto* point = new vil_image_view<float>(ni, nj);
+  auto* mask = new vil_image_view<float>(ni, nj);
 
   for (unsigned j = 0; j<nj; ++j) {
     for (unsigned i = 0; i<ni; ++i)

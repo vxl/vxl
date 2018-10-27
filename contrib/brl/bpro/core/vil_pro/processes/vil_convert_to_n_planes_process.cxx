@@ -43,7 +43,7 @@ bool vil_convert_to_n_planes_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned nplanes = pro.get_input<unsigned>(i++);
+  auto nplanes = pro.get_input<unsigned>(i++);
 
   vil_image_view_base_sptr out_img_ptr = vil_convert_to_n_planes(nplanes, img);
 
@@ -86,7 +86,7 @@ bool vil_get_plane_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned plane_id = pro.get_input<unsigned>(i++);
+  auto plane_id = pro.get_input<unsigned>(i++);
 
   if (plane_id >= img->nplanes()) {
     std::cerr << "In vil_get_plane_process() - input image does not have a plane with id: " << plane_id << '\n';

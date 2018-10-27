@@ -68,7 +68,7 @@ vgl_h_matrix_2d<double> bpgl_camera_homographies::
 homography_to_camera(vpgl_perspective_camera<double> const& cam,
                      vgl_plane_3d<double> const& plane)
 {
-  vpgl_proj_camera<double> const& pcam =
+  auto const& pcam =
     static_cast<vpgl_proj_camera<double> const&>(cam);
   return bpgl_camera_homographies::homography_to_camera(pcam, plane);
 }

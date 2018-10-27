@@ -211,7 +211,7 @@ boxm2_volm_conf_matcher
 {
   // loop over each leaf to match
   unsigned matched_locs = 0;
-  unsigned n_leaves = (unsigned)loc_leaves_.size();
+  auto n_leaves = (unsigned)loc_leaves_.size();
   for (unsigned l_idx = 0; l_idx < n_leaves; l_idx++)
   {
     volm_geo_index_node_sptr leaf = loc_leaves_[l_idx];

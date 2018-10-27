@@ -78,7 +78,7 @@ unsigned mbl_table::num_rows() const
 bool mbl_table::column_exists(const std::string& header) const
 {
     // Does the map contain this header?
-    std::map<std::string, unsigned>::const_iterator iter =
+    auto iter =
         header_to_column_index_.find(header);
 
     return  iter != header_to_column_index_.end();
@@ -94,7 +94,7 @@ bool mbl_table::get_column(const std::string& header,
   column.clear();
 
   // Does the map contain this header?
-  std::map<std::string, unsigned>::const_iterator iter =
+  auto iter =
     header_to_column_index_.find(header);
 
   if (iter != header_to_column_index_.end())
@@ -202,7 +202,7 @@ double mbl_table::get_element(const std::string& header,
     *success = false;
 
   // Does the map contain this column header?
-  std::map<std::string, unsigned>::const_iterator iter =
+  auto iter =
     header_to_column_index_.find(header);
 
   if (iter != header_to_column_index_.end())
@@ -437,7 +437,7 @@ bool mbl_table::subtable(mbl_table &new_table,  const std::vector<std::string> &
     for (const auto & header : headers)
     {
         // get the column for the header if available
-        std::map<std::string, unsigned>::const_iterator iter =
+        auto iter =
             header_to_column_index_.find(header);
 
         if (iter != header_to_column_index_.end())

@@ -55,7 +55,7 @@ namespace boxm2_ocl_render_expected_depth_region_process_globals
     options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
     //options += "  -D STEP_CELL=step_cell_render_depth2(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -71,7 +71,7 @@ namespace boxm2_ocl_render_expected_depth_region_process_globals
 
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -131,12 +131,12 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  double   lat = pro.get_input<double>(i++);
-  double   lon = pro.get_input<double>(i++);
-  double   elev = pro.get_input<double>(i++);
-  double radius = pro.get_input<double>(i++);
-  unsigned   ni = pro.get_input<unsigned>(i++);
-  unsigned   nj = pro.get_input<unsigned>(i++);
+  auto   lat = pro.get_input<double>(i++);
+  auto   lon = pro.get_input<double>(i++);
+  auto   elev = pro.get_input<double>(i++);
+  auto radius = pro.get_input<double>(i++);
+  auto   ni = pro.get_input<unsigned>(i++);
+  auto   nj = pro.get_input<unsigned>(i++);
 
   std::string identifier=device->device_identifier();
 
@@ -173,15 +173,15 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
-  float* buff = new float[cl_ni*cl_nj];
+  auto* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
-  float* var_buff = new float[cl_ni*cl_nj];
+  auto* var_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) var_buff[i]=0.0f;
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
-  float* prob_buff = new float[cl_ni*cl_nj];
+  auto* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
-  float* t_infinity_buff = new float[cl_ni*cl_nj];
+  auto* t_infinity_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) t_infinity_buff[i]=0.0f;
 
   bocl_mem_sptr exp_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
@@ -200,8 +200,8 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -246,7 +246,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   std::vector<bvgl_2d_geo_index_node_sptr> leaves_all;
   bvgl_2d_geo_index::get_leaves(blk_id_tree_2d, leaves_all);
   for (auto & i : leaves_all) {
-    bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* leaf_ptr =
+    auto* leaf_ptr =
       dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(i.ptr());
     leaf_ptr->contents_.clear();
   }
@@ -263,7 +263,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
     if (leaves.empty())
       continue;
     for (auto & leave : leaves) {
-      bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* leaf_ptr =
+      auto* leaf_ptr =
         dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(curr_blk_id);
     }
@@ -279,7 +279,7 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   bvgl_2d_geo_index::get_leaf(blk_id_tree_2d, curr_leaf, vgl_point_2d<double>(local_h_pt_d.x(), local_h_pt_d.y()));
   if (curr_leaf) {
     std::cout << " leaf " << curr_leaf->extent_ << " contains location: " << lon << " lat: " << lat << " elev: " << elev << " ( " << local_h_pt_d << std::endl;
-    bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* curr_leaf_ptr =
+    auto* curr_leaf_ptr =
       dynamic_cast<bvgl_2d_geo_index_node<std::vector<boxm2_block_id> >* >(curr_leaf.ptr());
     bool found_blk = false;
     for (auto & content : curr_leaf_ptr->contents_) {
@@ -293,9 +293,9 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
     if (!found_blk) {
       std::cout << pro.name() << ": Scene does not contain location -- lon: " << lon << " lat: " << lat << " elev: " << elev
                << " ( " << local_h_pt_d << "), writing empty array for it!\n";
-      vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-      vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
-      vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
+      auto* exp_img_out=new vil_image_view<float>(ni,nj);
+      auto* exp_var_out=new vil_image_view<float>(ni,nj);
+      auto* vis_out=new vil_image_view<float>(ni,nj);
 
       exp_img_out->fill(0.5);
       exp_var_out->fill(0.5);
@@ -306,9 +306,9 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   else {
     std::cout << pro.name() << ": Scene does not contain location -- lon: " << lon << " lat: " << lat << " elev: " << elev
                << " ( " << local_h_pt_d << "), writing empty array for it!\n";
-    vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-    vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
-    vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
+    auto* exp_img_out=new vil_image_view<float>(ni,nj);
+    auto* exp_var_out=new vil_image_view<float>(ni,nj);
+    auto* vis_out=new vil_image_view<float>(ni,nj);
     exp_img_out->fill(0.5);
     exp_var_out->fill(0.5);
     vis_out->fill(0.5);
@@ -413,9 +413,9 @@ bool boxm2_ocl_render_expected_depth_region_process(bprb_func_process& pro)
   clReleaseCommandQueue(queue);
   i=0;
 
-  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* vis_out=new vil_image_view<float>(ni,nj);
+  auto* exp_img_out=new vil_image_view<float>(ni,nj);
+  auto* exp_var_out=new vil_image_view<float>(ni,nj);
+  auto* vis_out=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)

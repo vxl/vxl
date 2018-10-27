@@ -14,7 +14,7 @@
 void
 test_gevd_param_mixin()
 {
-  gevd_param_mixin * pgm = new gevd_param_mixin();
+  auto * pgm = new gevd_param_mixin();
 
   TEST("SanityCheck",pgm->SanityCheck(),true);
 

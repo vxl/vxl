@@ -137,7 +137,7 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   int dataSize = 8+9;
-  float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
+  auto* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
   boxm2_array_3d<uchar16> trees=blk->trees_copy();
   //set up fake trees
   int count = 0;
@@ -185,7 +185,7 @@ void test_inner_cluster(boxm2_scene_sptr scene,
   bocl_mem* alpha_buffer = new bocl_mem(device->context(), alphas, dataSize*sizeof(float), "old alpha buffer");
   alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
-  float* new_alpha_buffer = new float[ dataSize ];
+  auto* new_alpha_buffer = new float[ dataSize ];
   std::fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
   bocl_mem* new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
@@ -273,7 +273,7 @@ void test_outer_cluster(boxm2_scene_sptr scene,
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
   int dataSize = 8*(1+8+64) + 1;
-  float* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
+  auto* alphas = new float[dataSize]; //8 single cell trees, one 8 leaf + node tree
 
   //set up fake trees
   int count = 0;
@@ -320,7 +320,7 @@ void test_outer_cluster(boxm2_scene_sptr scene,
   bocl_mem_sptr alpha_buffer = new bocl_mem(device->context(), alphas, dataSize*sizeof(float), "old alpha buffer");
   alpha_buffer->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
 
-  float* new_alpha_buffer = new float[ dataSize ];
+  auto* new_alpha_buffer = new float[ dataSize ];
   std::fill(new_alpha_buffer, new_alpha_buffer + dataSize, 100.0f);
   bocl_mem_sptr new_alphas = new bocl_mem(device->context(), new_alpha_buffer,  dataSize*sizeof(float), "filtered alpha buffer ");
   new_alphas->create_buffer(CL_MEM_READ_WRITE|CL_MEM_COPY_HOST_PTR);
@@ -400,7 +400,7 @@ void test_filter_kernel()
     return;
 
   bocl_device_sptr device = mgr.gpus_[0];
-  bocl_kernel* kern = new bocl_kernel();
+  auto* kern = new bocl_kernel();
   boxm2_ocl_filter_process_globals::compile_filter_kernel(device,kern);
 
   // create a command queue.

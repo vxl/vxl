@@ -74,17 +74,17 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
   }
   // get the input
   unsigned in_i = 0;
-  double                    ll_lon = pro.get_input<double>(in_i++);
-  double                    ll_lat = pro.get_input<double>(in_i++);
-  double                    ur_lon = pro.get_input<double>(in_i++);
-  double                    ur_lat = pro.get_input<double>(in_i++);
-  unsigned                    o_ni = pro.get_input<unsigned>(in_i++);
-  unsigned                    o_nj = pro.get_input<unsigned>(in_i++);
+  auto                    ll_lon = pro.get_input<double>(in_i++);
+  auto                    ll_lat = pro.get_input<double>(in_i++);
+  auto                    ur_lon = pro.get_input<double>(in_i++);
+  auto                    ur_lat = pro.get_input<double>(in_i++);
+  auto                    o_ni = pro.get_input<unsigned>(in_i++);
+  auto                    o_nj = pro.get_input<unsigned>(in_i++);
   std::string        geo_index_txt = pro.get_input<std::string>(in_i++);
   std::string         h_map_folder = pro.get_input<std::string>(in_i++);
   std::string           grd_folder = pro.get_input<std::string>(in_i++);
-  unsigned             window_size = pro.get_input<unsigned>(in_i++);
-  float                h_max_limit = pro.get_input<float>(in_i++);
+  auto             window_size = pro.get_input<unsigned>(in_i++);
+  auto                h_max_limit = pro.get_input<float>(in_i++);
 
   if (!vul_file::exists(geo_index_txt)) {
     std::cerr << pro.name() << ": can not find geo index file " << geo_index_txt << "!\n";
@@ -104,9 +104,9 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
   out_cam->set_scale_format(true);
   std::cerr << "land map region -- lower_left: " << ll_lon << ',' << ll_lat << ", upper_right: " << ur_lon << ',' << ur_lat << std::endl;
   std::cout << "output image size is ni: " << o_ni << ", nj: " << o_nj << std::endl;
-  vil_image_view<float>* out_dsm = new vil_image_view<float>(o_ni, o_nj);
-  vil_image_view<vxl_byte>* out_ndsm = new vil_image_view<vxl_byte>(o_ni, o_nj);
-  vil_image_view<float>* grd_img = new vil_image_view<float>(o_ni, o_nj);
+  auto* out_dsm = new vil_image_view<float>(o_ni, o_nj);
+  auto* out_ndsm = new vil_image_view<vxl_byte>(o_ni, o_nj);
+  auto* grd_img = new vil_image_view<float>(o_ni, o_nj);
   out_dsm->fill(-1.0);
   out_ndsm->fill(255);
   grd_img->fill(-1.0f);
@@ -175,15 +175,15 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
       double lon, lat;
       out_cam->img_to_global(i, j, lon, lat);
       bool found = false;
-      for (std::vector<volm_img_info>::iterator vit = h_infos.begin(); (vit != h_infos.end() && !found); ++vit) {
+      for (auto vit = h_infos.begin(); (vit != h_infos.end() && !found); ++vit) {
         vgl_box_2d<double> bbox = vit->bbox;
         bbox.expand_about_centroid(2E-5);
         if (!bbox.contains(lon, lat))
           continue;
         double u, v;
         vit->cam->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);
+        auto vv = (unsigned)std::floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj) {
           found = true;
           vil_image_view<float> h_img(vit->img_r);
@@ -204,15 +204,15 @@ bool volm_ndsm_generation_process(bprb_func_process& pro)
       double lon, lat;
       out_cam->img_to_global(i, j, lon, lat);
       bool found = false;
-      for (std::vector<volm_img_info>::iterator vit = grd_infos.begin(); (vit != grd_infos.end() && !found); ++vit) {
+      for (auto vit = grd_infos.begin(); (vit != grd_infos.end() && !found); ++vit) {
         vgl_box_2d<double> bbox = vit->bbox;
         bbox.expand_about_centroid(2E-5);
         if (!bbox.contains(lon, lat))
           continue;
         double u, v;
         vit->cam->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);
+        auto vv = (unsigned)std::floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj) {
           found = true;
           vil_image_view<float> g_img(vit->img_r);

@@ -82,13 +82,13 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   // compile the kernel if not already compiled
   std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
-  unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
+  auto cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
   //set generic cam
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
 
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
@@ -96,7 +96,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   if(cam->type_name() == "vpgl_geo_camera" )
   {
       vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-      vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+      auto* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
 
       // crop relevant image data into a view
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
@@ -165,7 +165,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
     vis_buff[i]=1.0f;
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
@@ -237,7 +237,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
       bocl_mem* blk       = opencl_cache->get_block(scene,id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,true);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -290,7 +290,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
         bocl_mem* blk       = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -368,13 +368,13 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_spt
   std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + " -D VIS_SEGLEN  -D STEP_CELL=step_cell_vis_seglen(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "vis_seg_len_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* update = new bocl_kernel();
+  auto* update = new bocl_kernel();
   std::string update_opts = options + " -D UPDATE_MAX_VIS_SCORE";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_max_vis_score", update_opts, "fusion::update_max_vis_score");
   vec_kernels.push_back(update);
@@ -438,13 +438,13 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   // compile the kernel if not already compiled
   std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
-  unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
+  auto cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
   //set generic cam
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
 
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
@@ -452,7 +452,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   if(cam->type_name() == "vpgl_geo_camera" )
   {
       vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-      vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+      auto* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
 
       // crop relevant image data into a view
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
@@ -525,7 +525,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
     vis_buff[i]=1.0f;
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "vis image buffer");
@@ -592,7 +592,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
       bocl_mem* blk       = opencl_cache->get_block(scene,id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,true);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -660,7 +660,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
         bocl_mem* blk       = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -740,13 +740,13 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_devic
   std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + " -D VIEW_NORMAL_DOT  -D STEP_CELL=step_cell_view_normal_dot(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "view_normal_dot_main", seg_opts, "fusion::vis_seg_len_main");
   vec_kernels.push_back(seg_len);
 
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* update = new bocl_kernel();
+  auto* update = new bocl_kernel();
   std::string update_opts = options + " -D UPDATE_AVG_VIEW_NORMAL_DOT";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_view_normal_dot", update_opts, "fusion::update_avg_view_normal_dot");
   vec_kernels.push_back(update);
@@ -797,13 +797,13 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   // compile the kernel if not already compiled
   std::vector<bocl_kernel*>& kernels = get_kernels(device, options);
 
-  unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
+  auto cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
   //set generic cam
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
 
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
@@ -811,7 +811,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   if(cam->type_name() == "vpgl_geo_camera" )
   {
       vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-      vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+      auto* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
       // crop relevant image data into a view
       vgl_box_3d<double> scene_bbox = scene->bounding_box();
       vgl_box_2d<double> proj_bbox;
@@ -875,9 +875,9 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* exp_depth_buf = new float[cl_ni*cl_nj];
-  float* std_depth_buf = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* exp_depth_buf = new float[cl_ni*cl_nj];
+  auto* std_depth_buf = new float[cl_ni*cl_nj];
   int count  = 0;
   for (unsigned int j=0;j<cl_nj;++j)
       for (unsigned int i=0;i<cl_ni;++i)
@@ -937,7 +937,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
       bocl_mem* blk       = opencl_cache->get_block(scene,id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,true);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -1001,7 +1001,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
         bocl_mem* blk       = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info  = opencl_cache->loaded_block_info();
         bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -1085,13 +1085,13 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_de
   std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + " -D ACCUMULATE_SURFACE_DENSITY  -D STEP_CELL=step_cell_surface_density(tblock,aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "accumulate_surface_density_main", seg_opts, "fusion::accumulate_surface_density_main");
   vec_kernels.push_back(seg_len);
 
   //may need DIFF LIST OF SOURCES FOR
-  bocl_kernel* update = new bocl_kernel();
+  auto* update = new bocl_kernel();
   std::string update_opts = options + " -D UPDATE_AVG_SURFACE_DENSITY";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_avg_surface_density", update_opts, "fusion::update_avg_surface_density");
   vec_kernels.push_back(update);

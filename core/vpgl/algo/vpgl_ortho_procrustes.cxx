@@ -57,8 +57,8 @@ void vpgl_ortho_procrustes::compute()
     smy += Sy.squared_magnitude();
   }
 
-  double neu = vnl_trace<double, 3, 3>(Xm*(Xm.transpose()));
-  double den = vnl_trace<double, 3, 3>(Ym*(Ym.transpose()));
+  auto neu = vnl_trace<double, 3, 3>(Xm*(Xm.transpose()));
+  auto den = vnl_trace<double, 3, 3>(Ym*(Ym.transpose()));
   if (den!=0)
     s_ = std::sqrt(neu/den);
 

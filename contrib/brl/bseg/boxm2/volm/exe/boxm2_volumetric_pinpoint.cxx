@@ -154,7 +154,7 @@ int main(int argc, char** argv)
     volm_score::read_scores(scores, score_bin.str());
     // sort all the score data
     std::cout << scores.size() << " scores is loaded from " << score_bin.str() << std::endl;
-    unsigned total_ind = (unsigned)scores.size();
+    auto total_ind = (unsigned)scores.size();
     for (unsigned i = 0; i < total_ind; i++) {
       vgl_point_3d<double> h_pt = leaves[scores[i]->leaf_id_]->hyps_->locs_[scores[i]->hypo_id_];
       std::pair<float, pin_pt_loc> tmp_pair(scores[i]->max_score_, pin_pt_loc(h_pt, scores[i]->max_cam_id_));
@@ -175,7 +175,7 @@ int main(int argc, char** argv)
   std::vector<vgl_point_2d<double> > top_locs;
   std::vector<float> likelihood;
   std::vector<unsigned> cam_ids;
-  std::multimap<float, pin_pt_loc, std::greater<float> >::iterator mit = score_map.begin();
+  auto mit = score_map.begin();
   while (pin_pt_poly.num_sheets() < num_top_locs() && mit != score_map.end())
   {
     // check whether the location has been in the pin-pointed region

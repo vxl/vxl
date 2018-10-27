@@ -52,7 +52,7 @@ sdet_curvelet_map
   for (unsigned i=0; i<map_.size(); i++)
   {
     //delete all the curvelets formed by this edgel
-    sdet_curvelet_list_iter p_it = map_[i].begin();
+    auto p_it = map_[i].begin();
     for (; p_it != map_[i].end(); p_it++) {
       if (deleted.find(*p_it) == deleted.end()) {
         delete (*p_it);
@@ -61,7 +61,7 @@ sdet_curvelet_map
     }
 
     //delete all the curvelets formed by this edgel
-    sdet_curvelet_list_iter p_it2 = map2_[i].begin();
+    auto p_it2 = map2_[i].begin();
     for (; p_it2 != map2_[i].end(); p_it2++) {
       if (deleted.find(*p_it2) == deleted.end()) {
         delete (*p_it2);
@@ -91,7 +91,7 @@ sdet_curvelet_map
 ::remove_curvelet(sdet_curvelet* curvelet)
 {
   //go over the list of curvelets of the ref edgel
-  sdet_curvelet_list_iter c_it = map_[curvelet->ref_edgel->id].begin();
+  auto c_it = map_[curvelet->ref_edgel->id].begin();
   for (; c_it != map_[curvelet->ref_edgel->id].end(); c_it++){
     if (curvelet == (*c_it)){
       map_[curvelet->ref_edgel->id].erase(c_it);
@@ -100,7 +100,7 @@ sdet_curvelet_map
   }
 
   //also search the other map if the curvelet has not been found
-  sdet_curvelet_list_iter c_it2 = map2_[curvelet->ref_edgel->id].begin();
+  auto c_it2 = map2_[curvelet->ref_edgel->id].begin();
   for (; c_it2 != map2_[curvelet->ref_edgel->id].end(); c_it2++){
     if (curvelet == (*c_it2)){
       map2_[curvelet->ref_edgel->id].erase(c_it2);
@@ -114,12 +114,12 @@ void
 sdet_curvelet_map
 ::delete_all_curvelets(sdet_edgel* e)
 {
-  sdet_curvelet_list_iter p_it = map_[e->id].begin();
+  auto p_it = map_[e->id].begin();
   for (; p_it != map_[e->id].end(); p_it++)
     delete (*p_it);
 
   //delete all the curvelets formed by this edgel
-  sdet_curvelet_list_iter p_it2 = map2_[e->id].begin();
+  auto p_it2 = map2_[e->id].begin();
   for (; p_it2 != map2_[e->id].end(); p_it2++)
     delete (*p_it2);
 
@@ -133,7 +133,7 @@ sdet_curvelet_map
 ::does_curvelet_exist(sdet_edgel* e, std::deque<sdet_edgel*> & chain)
 {
   //go over all the curvelets of the current size formed by the current edgel
-  sdet_curvelet_list_iter cv_it = map_[e->id].begin();
+  auto cv_it = map_[e->id].begin();
   for (; cv_it != map_[e->id].end(); cv_it++){
     sdet_curvelet* cvlet = (*cv_it);
 
@@ -158,7 +158,7 @@ sdet_curvelet_map
 ::find_pair(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB)
 {
   //go over all the pairs formed by this edgel
-  sdet_curvelet_list_iter p_it = map_[ref->id].begin();
+  auto p_it = map_[ref->id].begin();
   for (; p_it != map_[ref->id].end(); p_it++){
     sdet_curvelet* p1 = (*p_it);
     if (p1->edgel_chain.size()==2 &&
@@ -174,7 +174,7 @@ sdet_curvelet_map
 ::find_triplet(sdet_edgel* ref, sdet_edgel* eA, sdet_edgel* eB, sdet_edgel* eC)
 {
   //go over all the triplets formed by this edgel
-  sdet_curvelet_list_iter t_it = map_[ref->id].begin();
+  auto t_it = map_[ref->id].begin();
   for (; t_it != map_[ref->id].end(); t_it++){
     sdet_curvelet* t1 = (*t_it);
     if (t1->edgel_chain.size()==3 &&
@@ -192,7 +192,7 @@ sdet_curvelet_map
   unsigned largest_size = 0;
   sdet_curvelet* largest_cvlet = nullptr;
 
-  sdet_curvelet_list_iter cv_it = map_[e->id].begin();
+  auto cv_it = map_[e->id].begin();
   for ( ; cv_it!=map_[e->id].end(); cv_it++)
   {
     sdet_curvelet* cvlet = (*cv_it);

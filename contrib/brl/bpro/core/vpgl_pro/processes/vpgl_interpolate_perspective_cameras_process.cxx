@@ -52,8 +52,8 @@ bool vpgl_interpolate_perspective_cameras_process(bprb_func_process& pro)
       std::cout<<"Incorrect arguments "<<std::endl;
       return false;
   }
-  vpgl_perspective_camera<double> * pcam0 = dynamic_cast<vpgl_perspective_camera<double> *>(cam0.ptr()) ;
-  vpgl_perspective_camera<double> * pcam1 = dynamic_cast<vpgl_perspective_camera<double> *>(cam1.ptr()) ;
+  auto * pcam0 = dynamic_cast<vpgl_perspective_camera<double> *>(cam0.ptr()) ;
+  auto * pcam1 = dynamic_cast<vpgl_perspective_camera<double> *>(cam1.ptr()) ;
    if( pcam0 && pcam1)
   {
       std::vector<vpgl_perspective_camera<double> >  cams;

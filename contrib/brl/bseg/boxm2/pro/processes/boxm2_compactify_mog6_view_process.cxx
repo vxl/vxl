@@ -64,10 +64,10 @@ bool boxm2_compactify_mog6_view_process(bprb_func_process& pro)
     if(data_type == boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix())
     {
       boxm2_data_base* app = cache->get_data_base(scene, iter->first, boxm2_data_traits<BOXM2_MOG6_VIEW>::prefix(),0);
-      vnl_vector_fixed<float, 16>* app_buf = ( vnl_vector_fixed<float, 16>*)app->data_buffer();
+      auto* app_buf = ( vnl_vector_fixed<float, 16>*)app->data_buffer();
       unsigned num_el = app->buffer_length() / boxm2_data_traits<BOXM2_MOG6_VIEW>::datasize();
       boxm2_data_base* app_compact = cache->get_data_base(scene,iter->first, boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::prefix(), num_el * boxm2_data_traits<BOXM2_MOG6_VIEW_COMPACT>::datasize());
-      vnl_vector_fixed<unsigned char, 16>* app_compact_buf = ( vnl_vector_fixed<unsigned char, 16>*)app_compact->data_buffer();
+      auto* app_compact_buf = ( vnl_vector_fixed<unsigned char, 16>*)app_compact->data_buffer();
       for(unsigned  i = 0; i < num_el;i++)
       {
         vnl_vector_fixed<float, 16> tmp = app_buf[i];
@@ -80,10 +80,10 @@ bool boxm2_compactify_mog6_view_process(bprb_func_process& pro)
     else if(data_type == boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix())
     {
       boxm2_data_base* app = cache->get_data_base(scene,iter->first, boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::prefix(),0);
-      vnl_vector_fixed<int, 16>* app_buf = ( vnl_vector_fixed<int, 16>*)app->data_buffer();
+      auto* app_buf = ( vnl_vector_fixed<int, 16>*)app->data_buffer();
       unsigned num_el = app->buffer_length() / boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW>::datasize();
       boxm2_data_base* app_compact = cache->get_data_base(scene,iter->first, boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::prefix(), num_el * boxm2_data_traits<BOXM2_GAUSS_RGB_VIEW_COMPACT>::datasize());
-      vnl_vector_fixed<int, 8>* app_compact_buf = ( vnl_vector_fixed<int, 8>*)app_compact->data_buffer();
+      auto* app_compact_buf = ( vnl_vector_fixed<int, 8>*)app_compact->data_buffer();
       for(unsigned  i = 0; i < num_el;i++)
       {
         vnl_vector_fixed<int, 16> tmp = app_buf[i];

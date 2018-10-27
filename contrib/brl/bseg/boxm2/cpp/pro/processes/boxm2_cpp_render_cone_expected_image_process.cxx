@@ -69,8 +69,8 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
 
   //make sure the scene corresponds to this datatype
   std::string data_type, num_obs_type, options;
@@ -84,8 +84,8 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
   }
 
   // function call
-  vil_image_view<float> * exp_img = new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * vis_img = new vil_image_view<float>(ni,nj);
+  auto * exp_img = new vil_image_view<float>(ni,nj);
+  auto * vis_img = new vil_image_view<float>(ni,nj);
   exp_img->fill(0.0f);
   vis_img->fill(1.0f);
   std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_perspective_camera<double>*>(cam.ptr()));
@@ -100,7 +100,7 @@ bool boxm2_cpp_render_cone_expected_image_process(bprb_func_process& pro)
     datas.push_back(alph);
     datas.push_back(mog);
 
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
     boxm2_render_cone_exp_image(scene_info_wrapper->info,

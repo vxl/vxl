@@ -76,7 +76,7 @@ static void test_bvxm_illum_index_process()
       TEST("bin index output non-null", non_null ,true);
 
       // check that for zero regions choice, the index is zero
-      brdb_value_t<unsigned>* result =
+      auto* result =
         static_cast<brdb_value_t<unsigned>* >(value.ptr());
       unsigned idx = result->value();
 

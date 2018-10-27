@@ -119,7 +119,7 @@ double clsfy_binary_tree_builder::build(clsfy_classifier_base& classifier,
     assert(nClasses=1);
 
 
-    clsfy_binary_tree &binary_tree = static_cast<clsfy_binary_tree&>(classifier);
+    auto &binary_tree = static_cast<clsfy_binary_tree&>(classifier);
     unsigned npoints=inputs.size();
     std::vector<vnl_vector<double> > vin(npoints);
 
@@ -138,7 +138,7 @@ double clsfy_binary_tree_builder::build(clsfy_classifier_base& classifier,
     mbl_stl_increments(base_indices_.begin(),base_indices_.end(),0);
 
     clsfy_binary_tree_op rootOp;
-    clsfy_binary_tree_bnode* root=new clsfy_binary_tree_bnode(nullptr,rootOp);
+    auto* root=new clsfy_binary_tree_bnode(nullptr,rootOp);
 
     // Start with all indices
     std::set<unsigned> indices;
@@ -227,7 +227,7 @@ void clsfy_binary_tree_builder::build_children(
     parent->add_child(dummyOp,left);
 
 
-    clsfy_binary_tree_bnode* pChild=dynamic_cast< clsfy_binary_tree_bnode*>(left ? parent->left_child_ : parent->right_child_);
+    auto* pChild=dynamic_cast< clsfy_binary_tree_bnode*>(left ? parent->left_child_ : parent->right_child_);
     build_a_node(vin,outputs,subIndices,pChild);
 
     // Check that this actually managed to produce a split (in case we have homogeneous data)
@@ -385,8 +385,8 @@ void clsfy_binary_tree_builder::build_a_node(
         for (unsigned idim=istart;idim<nmax;++idim)
         {
             pBranchClassifiers[idim] = tbuilder.new_classifier();
-            std::set<unsigned >::const_iterator indIter=subIndices.begin();
-            std::set<unsigned >::const_iterator indIterEnd=subIndices.end();
+            auto indIter=subIndices.begin();
+            auto indIterEnd=subIndices.end();
             unsigned ipt=0;
             while (indIter != indIterEnd)
             {
@@ -412,8 +412,8 @@ void clsfy_binary_tree_builder::build_a_node(
         pNode->op_=op;
 
         // Now reapply to all relevant data to construct the subset split
-        std::set<unsigned >::const_iterator indIter=subIndices.begin();
-        std::set<unsigned >::const_iterator indIterEnd=subIndices.end();
+        auto indIter=subIndices.begin();
+        auto indIterEnd=subIndices.end();
         std::set<unsigned >& subIndicesL=pNode->subIndicesL;
         std::set<unsigned >& subIndicesR=pNode->subIndicesR;
         while (indIter != indIterEnd)
@@ -436,8 +436,8 @@ bool clsfy_binary_tree_builder::isNodePure(const std::set<unsigned >& subIndices
                                            const std::vector<unsigned>& outputs) const
 {
     if (subIndices.empty()) return true;
-    std::set<unsigned >::const_iterator indIter=subIndices.begin();
-    std::set<unsigned >::const_iterator indIterEnd=subIndices.end();
+    auto indIter=subIndices.begin();
+    auto indIterEnd=subIndices.end();
 
     unsigned class0=outputs[*indIter];
     while (indIter != indIterEnd)
@@ -483,8 +483,8 @@ void clsfy_binary_tree_builder::add_terminator(
     else // Mixed node - assess ratio of classes
     {
         std::set<unsigned >& indices=(left ? parent->subIndicesL : parent->subIndicesR);
-        std::set<unsigned >::iterator indexIter=indices.begin();
-        std::set<unsigned >::iterator indexIterEnd=indices.end();
+        auto indexIter=indices.begin();
+        auto indexIterEnd=indices.end();
         unsigned n1=0;
         while (indexIter != indexIterEnd)
         {

@@ -48,7 +48,7 @@ static void test_volm_wr3db_ind()
   // the one below should trigger a write to disc
   vals[0] = 'b';  vals[layer_size-1] = 'd';
   TEST("add to index", ind->add_to_index(vals), true);
-  unsigned char *vals_buf = new unsigned char[layer_size];
+  auto *vals_buf = new unsigned char[layer_size];
   vals_buf[0] = 'e';  vals_buf[layer_size-1] = 'f';
   TEST("add to index", ind->add_to_index(vals_buf), true);
   std::cout << "global id: " << ind->current_global_id() << " current active cache id: " << ind->current_id() << std::endl;

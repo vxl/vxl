@@ -98,10 +98,10 @@ bool bvpl_operate_ocp_and_app_process(bprb_func_process& pro)
     return false;
   }
 
-  if (bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>* > (ocp_grid_base.ptr()))
+  if (auto *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>* > (ocp_grid_base.ptr()))
   {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-    if (bvxm_voxel_grid<gauss_type>* app_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(app_grid_base.ptr()))
+    if (auto* app_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(app_grid_base.ptr()))
     {
       bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid_out=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(out_grid_path, ocp_grid->grid_size());
       bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid=new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(id_grid_path, ocp_grid->grid_size());

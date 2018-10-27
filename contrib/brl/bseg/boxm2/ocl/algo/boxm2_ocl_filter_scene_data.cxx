@@ -28,7 +28,7 @@ void boxm2_ocl_filter_scene_data::compile_kernels()
 
         std::cout<<"compiling downsampling and filler kernel with options "<<opts<<std::endl;
 
-        bocl_kernel * smooth_kernel= new bocl_kernel();
+        auto * smooth_kernel= new bocl_kernel();
         smooth_kernel->create_kernel( &device_->context(),
                                      device_->device_id(),
                                      src_paths,
@@ -57,9 +57,9 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
     //filter->print();
 
     //set up the filter, filter buffer and other related filter variables
-    std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+    auto kit = filter->float_kernel_.begin();
     unsigned ci=0;
-    cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
+    auto* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
     for (; kit!= filter->float_kernel_.end(); kit++, ci++)
     {
       vgl_point_3d<float> loc = kit->first;
@@ -116,7 +116,7 @@ bool boxm2_ocl_filter_scene_data::apply_filter(int index)
                 bocl_mem * mog       = opencl_cache_->get_data(scene_,id,appType_,data_size * appTypeSize_,false);
         bocl_mem * alpha_new =opencl_cache_->get_data_new(scene_,id,boxm2_data_traits<BOXM2_ALPHA>::prefix("new"),data_size * alphaTypeSize,false);
         bocl_mem * mog_new  = opencl_cache_->get_data_new(scene_,id, appType_+"_new", data_size * appTypeSize_, false);
-        float* output_arr = new float[data_size];
+        auto* output_arr = new float[data_size];
         bocl_mem_sptr cl_output = opencl_cache_->alloc_mem(sizeof(float)*data_size, output_arr, "output buffer");
         cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 

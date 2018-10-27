@@ -68,7 +68,7 @@ double clsfy_adaboost_sorted_builder::build(clsfy_classifier_base& model,
   // N.B. ignore nClasses=1, i.e. always binary classifier
 
   assert( model.is_class("clsfy_simple_adaboost") );
-  clsfy_simple_adaboost &strong_classifier = (clsfy_simple_adaboost&) model;
+  auto &strong_classifier = (clsfy_simple_adaboost&) model;
 
 
   // check parameters are OK

@@ -161,8 +161,8 @@ bool mbl_stepwise_regression::add_variable(bool forceAdd)
     double FratioMax=-1.0;
 
     int  knew= -1;
-    std::set<unsigned>::const_iterator candIter=basis_complement_.begin();
-    std::set<unsigned>::const_iterator candIterEnd=basis_complement_.end();
+    auto candIter=basis_complement_.begin();
+    auto candIterEnd=basis_complement_.end();
     double rssNew=rss_;
     while (candIter != candIterEnd)
     {
@@ -205,8 +205,8 @@ bool mbl_stepwise_regression::remove_variable()
     double min_Fratio=1.0E30;
     double rssBest=rss_;
     int knew=-1;
-    std::set<unsigned>::const_iterator candIter=basis_.begin();
-    std::set<unsigned>::const_iterator candIterEnd=basis_.end();
+    auto candIter=basis_.begin();
+    auto candIterEnd=basis_.end();
     while (candIter != candIterEnd)
     {
         unsigned k = *candIter++;
@@ -260,15 +260,15 @@ double mbl_stepwise_regression_helpers::lsfit_this_basis::operator()()
     //Create working copies of mtrices containing just the subset of variables in the basis
     vnl_matrix<double> XtX(1+ndims,1+ndims);
 
-    std::set<unsigned>::iterator basisVarIter=basis_.begin();
-    std::set<unsigned>::iterator basisVarIterEnd=basis_.end();
+    auto basisVarIter=basis_.begin();
+    auto basisVarIterEnd=basis_.end();
     unsigned i = 0;
     vnl_vector<double> XtY(ndims+1, 0.0);
 
     while (basisVarIter != basisVarIterEnd)
     {
         unsigned k1=*basisVarIter++;
-        std::set<unsigned>::iterator basisVarInnerIter=basis_.begin();
+        auto basisVarInnerIter=basis_.begin();
         unsigned j = 0;
         //Set half of off-diagonals
         while (*basisVarInnerIter < k1) //NB set is ordered

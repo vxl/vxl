@@ -94,12 +94,12 @@ std::string boxm2_ocl_util::ocl_src_root()
 // fills a float buffer (should be 16*3 floats) with a perspective cam to be sent
 void boxm2_ocl_util::set_ocl_camera(vpgl_camera_double_sptr& cam, cl_float* ocl_cam)
 {
-  if (vpgl_perspective_camera<double>* pcam =
+  if (auto* pcam =
       dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
   {
     set_persp_camera(pcam, ocl_cam);
   }
-  else if (vpgl_proj_camera<double>* pcam =
+  else if (auto* pcam =
            dynamic_cast<vpgl_proj_camera<double>* >(cam.ptr()))
   {
     set_proj_camera(pcam, ocl_cam);
@@ -196,7 +196,7 @@ void boxm2_ocl_util::set_proj_camera(vpgl_proj_camera<double> * pcam, cl_float* 
 
 void boxm2_ocl_util::set_generic_camera(vpgl_camera_double_sptr& cam, cl_float* ray_origins, cl_float* ray_directions, unsigned cl_ni, unsigned cl_nj, unsigned starti, unsigned startj)
 {
-  if (vpgl_generic_camera<double>* gcam =
+  if (auto* gcam =
       dynamic_cast<vpgl_generic_camera<double>* >(cam.ptr()))
   {
     // iterate through each ray and record origin/direction
@@ -282,7 +282,7 @@ void boxm2_ocl_util::get_render_transfer_function(std::vector<std::string> imgfi
   for (unsigned i=0;i<imgfilenames.size();i+=interval)
   {
     vil_image_view_base_sptr img_ptr=boxm2_util::prepare_input_image(imgfilenames[i]);
-    if (vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
+    if (auto * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
     {
       float mini, maxi;
       vil_math_value_range<float>(*imgf, mini,maxi);
@@ -297,7 +297,7 @@ void boxm2_ocl_util::get_render_transfer_function(std::vector<std::string> imgfi
   for (unsigned i=0;i<imgfilenames.size();i+=interval)
   {
     vil_image_view_base_sptr img_ptr=boxm2_util::prepare_input_image(imgfilenames[i]);
-    if ( vil_image_view<float> * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
+    if ( auto * imgf=dynamic_cast<vil_image_view<float>*>(img_ptr.ptr()))
       for (iter=imgf->begin();iter!=imgf->end();++iter)
         hist.upcount(*iter,1);
   }

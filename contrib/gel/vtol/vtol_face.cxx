@@ -38,7 +38,7 @@ vtol_face::~vtol_face()
 
 vertex_list *vtol_face::outside_boundary_vertices(void)
 {
-  vertex_list *new_ref_list = new vertex_list;
+  auto *new_ref_list = new vertex_list;
   std::vector<vtol_vertex*>* ptr_list = this->outside_boundary_compute_vertices();
 
   // copy the lists
@@ -81,7 +81,7 @@ std::vector<vtol_zero_chain*> *vtol_face::outside_boundary_compute_zero_chains(v
 
 zero_chain_list *vtol_face::outside_boundary_zero_chains(void)
 {
-  zero_chain_list *new_ref_list = new zero_chain_list;
+  auto *new_ref_list = new zero_chain_list;
   std::vector<vtol_zero_chain*>* ptr_list = this->outside_boundary_compute_zero_chains();
 
   // copy the lists
@@ -115,7 +115,7 @@ std::vector<vtol_edge*> *vtol_face::outside_boundary_compute_edges(void)
 //---------------------------------------------------------------------------
 edge_list *vtol_face::outside_boundary_edges(void)
 {
-  edge_list *new_ref_list = new edge_list;
+  auto *new_ref_list = new edge_list;
   std::vector<vtol_edge*>* ptr_list = this->outside_boundary_compute_edges();
 
   // copy the lists
@@ -138,7 +138,7 @@ std::vector<vtol_edge*> *vtol_face::compute_edges(void)
 one_chain_list *vtol_face::outside_boundary_one_chains(void)
 {
   std::vector<vtol_one_chain*>* ptr_list= outside_boundary_compute_one_chains();
-  one_chain_list *ref_list= new one_chain_list;
+  auto *ref_list= new one_chain_list;
 
   for (std::vector<vtol_one_chain*>::const_iterator i=ptr_list->begin();
        i!=ptr_list->end(); ++i)
@@ -298,7 +298,7 @@ bool vtol_face::add_hole_cycle(vtol_one_chain_sptr new_hole)
 
 one_chain_list *vtol_face::get_hole_cycles(void)
 {
-  one_chain_list * result=new one_chain_list;
+  auto * result=new one_chain_list;
 
   topology_list::const_iterator ii;
   for (ii=inferiors()->begin();ii!=inferiors()->end();++ii)

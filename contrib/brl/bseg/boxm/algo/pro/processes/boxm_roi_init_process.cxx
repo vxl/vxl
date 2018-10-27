@@ -101,10 +101,10 @@ bool boxm_roi_init_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
 
   vil_image_view_base_sptr img_ptr=vil_load(image_path.c_str());
-  vil_image_view<unsigned char> *temp=new vil_image_view<unsigned char>();
+  auto *temp=new vil_image_view<unsigned char>();
   if (img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    if (vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
+    if (auto *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
     {
         vgl_box_2d<double>* roi_box = project_box(camera, scene->get_world_bbox());
         brip_roi broi(img->ni(), img->nj());
@@ -147,7 +147,7 @@ bool boxm_roi_init_process_globals::roi_init(std::string  img_path,
   vil_image_view_base_sptr img_ptr=vil_load(img_path.c_str());
   if (img_ptr->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    if (vil_image_view<unsigned char> *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
+    if (auto *img=dynamic_cast<vil_image_view<unsigned char> * > (img_ptr.ptr()))
     {
         vgl_box_2d<double>* roi_box = project_box(camera, box);
         brip_roi broi(img->ni(), img->nj());
@@ -182,7 +182,7 @@ vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_doub
   // create a box with uncertainty
   std::vector<vgl_point_3d<double> > box_corners = boxm_utils::corners_of_box_3d(box);
 
-  vgl_box_2d<double>* roi = new vgl_box_2d<double>();
+  auto* roi = new vgl_box_2d<double>();
 
   for (auto & box_corner : box_corners) {
       double u,v;

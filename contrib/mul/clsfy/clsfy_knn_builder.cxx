@@ -108,7 +108,7 @@ double clsfy_knn_builder::build(clsfy_classifier_base& model,
   assert(model.is_class("clsfy_k_nearest_neighbour")); // equiv to dynamic_cast<> != 0
   assert(inputs.size()==outputs.size());
 
-  clsfy_k_nearest_neighbour &knn = (clsfy_k_nearest_neighbour&) model;
+  auto &knn = (clsfy_k_nearest_neighbour&) model;
 
   std::vector<vnl_vector<double> > vin(inputs.size());
 

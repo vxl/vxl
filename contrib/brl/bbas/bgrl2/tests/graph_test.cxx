@@ -89,7 +89,7 @@ static void graph_test()
 
   //testing iterators
   int num_edges=0;
-  for (test_graph::edge_iterator  e_itr = the_graph->edges_begin();
+  for (auto  e_itr = the_graph->edges_begin();
        e_itr != the_graph->edges_end(); ++e_itr)
   {
     num_edges++;
@@ -101,7 +101,7 @@ static void graph_test()
        true);
 
   int num_vertices=0;
-  for (test_graph::vertex_iterator  v_itr = the_graph->vertices_begin();
+  for (auto  v_itr = the_graph->vertices_begin();
        v_itr != the_graph->vertices_end(); ++v_itr)
   {
     num_vertices++;

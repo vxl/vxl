@@ -28,7 +28,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
 {
   double value=0;
   double pi,p0,zi;
-  vect_const_iter begin0 = begin;
+  auto begin0 = begin;
   unsigned long num_residual = end - begin;
   double mult1 = vnl_math::one_over_sqrt2pi;
 
@@ -71,7 +71,7 @@ rrel_mlesac_obj::fcn( vect_const_iter begin, vect_const_iter end,
 {
   double value=0;
   double pi,p0,zi;
-  vect_const_iter begin0 = begin;
+  auto begin0 = begin;
   unsigned long num_residual = end - begin;
 
   double inlier_frac = 1.0;

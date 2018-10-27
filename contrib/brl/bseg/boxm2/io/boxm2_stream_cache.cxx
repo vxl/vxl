@@ -77,7 +77,7 @@ boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
   for (auto & data_type : data_types_) {
     tot_size += (unsigned long)data_type.second->cell_size_;
   }
-  unsigned long k = (unsigned long)std::floor(float(mem_size_)/(identifier_list_.size()*tot_size));
+  auto k = (unsigned long)std::floor(float(mem_size_)/(identifier_list_.size()*tot_size));
 
   //: set buffer size in bytes for each data type
   std::map<std::string, boxm2_stream_cache_datatype_helper_sptr>::iterator it;
@@ -113,7 +113,7 @@ void boxm2_stream_cache::close_streams()
 
 boxm2_stream_cache_datatype_helper_sptr boxm2_stream_cache::get_helper(std::string& data_type)
 {
-  std::map<std::string, boxm2_stream_cache_datatype_helper_sptr >::iterator it = data_types_.find(data_type);
+  auto it = data_types_.find(data_type);
   if (it == data_types_.end()) {
     std::cerr << "boxm2_stream_cache::get_next cannot locate datatype: "<<data_type<<'\n';
     throw 0;

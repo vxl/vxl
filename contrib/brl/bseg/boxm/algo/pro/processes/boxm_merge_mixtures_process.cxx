@@ -67,7 +67,7 @@ bool boxm_merge_mixtures_process(bprb_func_process& pro)
   typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
   typedef boct_tree<short, gauss_type> gauss_tree_type;
 
-  boxm_scene<mog_tree_type> *mog_scene = dynamic_cast<boxm_scene<mog_tree_type>* > (scene_base.as_pointer());
+  auto *mog_scene = dynamic_cast<boxm_scene<mog_tree_type>* > (scene_base.as_pointer());
 
   //check input's validity
   if (!mog_scene) {

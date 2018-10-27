@@ -44,7 +44,7 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   // the output path
   std::string path = pro.get_input<std::string>(i++);
   // scale
-  unsigned scale = pro.get_input<unsigned>(i++);
+  auto scale = pro.get_input<unsigned>(i++);
 
   compute(voxel_world,scale, path);
 
@@ -58,7 +58,7 @@ bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
 
   // get occupancy probability grids
   bvxm_voxel_grid_base_sptr ocp_grid_base = w->get_grid<OCCUPANCY>(0, scale);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  auto *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
   bvxm_voxel_grid<ocp_datatype>::const_iterator ocp_slab_it = ocp_grid->begin();
 
   vgl_vector_3d<unsigned int> grid_size = w->get_params()->num_voxels(scale);

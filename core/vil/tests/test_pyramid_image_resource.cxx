@@ -75,7 +75,7 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   std::cout << "Made pyramid directory "<< d << '\n';
   vul_file::make_directory(d.c_str());
   //Test pyramid_image_list::put_resource(..)
-  vil_pyramid_image_list* pir = new vil_pyramid_image_list(d.c_str());
+  auto* pir = new vil_pyramid_image_list(d.c_str());
   if (!pir)
     TEST("Make a directory-based pyramid resource", true, false);
   else
@@ -261,7 +261,7 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
     }
     TEST("multiimage tiff pyramid read", rv(1,1)==19, true);
     vil_image_resource_sptr rlev_0= rpi->get_resource(0);
-    vil_tiff_image* tlev_0 = (vil_tiff_image*)rlev_0.ptr();
+    auto* tlev_0 = (vil_tiff_image*)rlev_0.ptr();
     unsigned nimgs = tlev_0->nimages();
     vil_image_view<unsigned short> vl0 = rlev_0->get_view(1,1,1,1);
     std::cout << "view0(0,0) " << vl0(0,0)<<'\n';
@@ -399,9 +399,9 @@ static void test_pyramid_image_resource( int argc, char* argv[] )
   vil_image_resource_sptr resc_open_jpeg2 = vil_load_image_resource(filepath_open_jpg2.c_str());
   if (resc_open_jpeg2)
   {
-    vil_openjpeg_image* j2k = static_cast<vil_openjpeg_image*>(resc_open_jpeg2.ptr());
+    auto* j2k = static_cast<vil_openjpeg_image*>(resc_open_jpeg2.ptr());
     good = j2k && j2k->is_valid();
-    vil_openjpeg_pyramid_image_resource* j2k_pyr =
+    auto* j2k_pyr =
       new vil_openjpeg_pyramid_image_resource(resc_open_jpeg2);
     unsigned n_i = j2k_pyr->ni(), n_j = j2k_pyr->nj();
     unsigned nlevels = j2k_pyr->nlevels();

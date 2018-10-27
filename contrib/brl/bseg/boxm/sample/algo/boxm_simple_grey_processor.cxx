@@ -14,7 +14,7 @@ const static bool USE_UNIFORM_COMPONENT = false;
 //: Return probability density of observing pixel values
 float boxm_simple_grey_processor::prob_density(apm_datatype const& appear, obs_datatype const& obs)
 {
-  const float norm =  float(appear.one_over_sigma() * vnl_math::one_over_sqrt2pi);
+  const auto norm =  float(appear.one_over_sigma() * vnl_math::one_over_sqrt2pi);
   const float diff = obs - appear.color();
   const float p = norm * std::exp(-(diff*diff)*appear.one_over_sigma()*appear.one_over_sigma()*0.5f);
   // normalize by area of distribution between 0 and 1
@@ -31,10 +31,10 @@ float boxm_simple_grey_processor::prob_range(apm_datatype const& appear, obs_dat
 
   const float diff_low = obs_min_n - appear.color();
   const float diff_high = obs_max_n - appear.color();
-  const float norm = float(appear.one_over_sigma()*vnl_math::sqrt1_2);
+  const auto norm = float(appear.one_over_sigma()*vnl_math::sqrt1_2);
 
-  const float double_cdf_low_minus_1 = (float)vnl_erf(diff_low*norm);
-  const float double_cdf_high_minus_1 = (float)vnl_erf(diff_high*norm);
+  const auto double_cdf_low_minus_1 = (float)vnl_erf(diff_low*norm);
+  const auto double_cdf_high_minus_1 = (float)vnl_erf(diff_high*norm);
   const float P = (0.5f * (double_cdf_high_minus_1 - double_cdf_low_minus_1));
   //return P / total_prob(appear);
   return P * appear.gauss_weight() + (1.0f - appear.gauss_weight())*(obs_max - obs_min);
@@ -45,9 +45,9 @@ float boxm_simple_grey_processor::total_prob(apm_datatype const& appear)
 {
   const float diff_low =  -appear.color();
   const float diff_high = 1.0f - appear.color();
-  const float norm = float(appear.one_over_sigma()*vnl_math::sqrt1_2);
-  const float double_cdf_low_minus_1 = (float)vnl_erf(diff_low*norm);
-  const float double_cdf_high_minus_1 = (float)vnl_erf(diff_high*norm);
+  const auto norm = float(appear.one_over_sigma()*vnl_math::sqrt1_2);
+  const auto double_cdf_low_minus_1 = (float)vnl_erf(diff_low*norm);
+  const auto double_cdf_high_minus_1 = (float)vnl_erf(diff_high*norm);
   return 0.5f * (double_cdf_high_minus_1 - double_cdf_low_minus_1);
 }
 
@@ -75,8 +75,8 @@ boxm_simple_grey_processor::obs_datatype boxm_simple_grey_processor::most_probab
 void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& pre, std::vector<float> const& vis, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
   bsta_gauss_sf1 model_bsta(model.color(),model.sigma()*model.sigma());
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
-  unsigned int nobs = (unsigned int)obs.size();
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  auto nobs = (unsigned int)obs.size();
   // check for some simple cases first
   if (nobs == 0) {
     // zero observations. nothing to do here.
@@ -123,9 +123,9 @@ void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<
 
 void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
-  const unsigned int nobs = (unsigned int)obs.size();
+  const auto nobs = (unsigned int)obs.size();
   if (nobs == 0) {
     // zero observations. nothing to do here.
     model = boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype(0.5f, 1.0f, 0.0f);
@@ -181,9 +181,9 @@ void boxm_simple_grey_processor::compute_appearance(std::vector<boxm_apm_traits<
 
 void boxm_simple_grey_processor::update_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> const& obs, std::vector<float> const& weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model, float min_sigma)
 {
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
-  const unsigned int nobs = (unsigned int)obs.size();
+  const auto nobs = (unsigned int)obs.size();
   if (nobs == 0) {
     // zero observations. nothing to do here.
     return;
@@ -220,7 +220,7 @@ void boxm_simple_grey_processor::update_appearance(std::vector<boxm_apm_traits<B
       expected_nobs = weight_sum;
     }
     else {
-      std::vector<float>::const_iterator wit = weights.begin();
+      auto wit = weights.begin();
       for (; wit != weights.end(); ++wit) {
         expected_nobs += *wit;
       }
@@ -252,12 +252,12 @@ void boxm_simple_grey_processor::finalize_appearance(std::vector<boxm_apm_traits
                                                      std::vector<float> const& weights,
                                                      boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::apm_datatype &model)
 {
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
   float expected_nobs = 0.0f;
-    const unsigned int nobs = (unsigned int)obs.size();
+    const auto nobs = (unsigned int)obs.size();
 
-  std::vector<float>::const_iterator wit = weights.begin();
+  auto wit = weights.begin();
   for (; wit != weights.end(); ++wit) {
     expected_nobs += *wit;
   }
@@ -275,7 +275,7 @@ void boxm_simple_grey_processor::finalize_appearance(std::vector<boxm_apm_traits
 
 void boxm_simple_grey_processor::compute_gaussian_params(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype> obs, std::vector<float> weights, boxm_apm_traits<BOXM_APM_SIMPLE_GREY>::obs_datatype &mean, float &sigma)
 {
-  const unsigned int nobs = (unsigned int)obs.size();
+  const auto nobs = (unsigned int)obs.size();
   double w_sum = 0.0;
   double w2_sum = 0.0;
   double obs_sum = 0.0;
@@ -376,7 +376,7 @@ boxm_compute_shadow_appearance(std::vector<boxm_apm_traits<BOXM_APM_SIMPLE_GREY>
   double initial_sigma = model.sigma();
 
   // use EM to refine estimate until convergence.
-  unsigned int nobs = (unsigned int)obs.size();
+  auto nobs = (unsigned int)obs.size();
   if (nobs == 0) {
     // nothing to do.
     return;

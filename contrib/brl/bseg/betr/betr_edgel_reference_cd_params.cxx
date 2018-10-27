@@ -10,7 +10,7 @@ std::ostream&  operator<<(std::ostream& s, betr_edgel_reference_cd_params const&
   return s;
 }
 std::istream&  operator>>(std::istream& s, betr_edgel_reference_cd_params& ercdp){
-  betr_edgel_reference_cd_params* cd_params = new betr_edgel_reference_cd_params();
+  auto* cd_params = new betr_edgel_reference_cd_params();
   betr_params_sptr params_ptr = cd_params;
   bool good = read_params_json(s, params_ptr);
   if(good)

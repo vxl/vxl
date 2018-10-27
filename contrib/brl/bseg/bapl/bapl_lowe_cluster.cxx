@@ -155,7 +155,7 @@ bapl_lowe_clusterer::estimate_affine( bapl_affine_transform& transform,
     else {
       transform = bapl_affine_transform(p[0], p[1], p[2], p[3], p[4], p[5]);
 
-      for ( std::vector< bapl_keypoint_match >::iterator itr = matches.begin();
+      for ( auto itr = matches.begin();
             itr != matches.end();  ++itr ) {
         if ( !this->is_inlier(transform, *itr) ){
           matches.erase(itr);

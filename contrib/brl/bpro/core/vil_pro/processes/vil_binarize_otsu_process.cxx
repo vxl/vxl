@@ -40,10 +40,10 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   // get the input
   unsigned i=0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(i++);
-  double range = pro.get_input<double>(i++);
+  auto range = pro.get_input<double>(i++);
   int bins = pro.get_input<int>(i++);
   int margin = pro.get_input<int>(i++);
-  double invalid_pix = pro.get_input<double>(i++);
+  auto invalid_pix = pro.get_input<double>(i++);
 
   //double range = 0.1;
   //int bins = 10000;
@@ -74,7 +74,7 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   double dt = ot.threshold();
   std::cout << "Otsu Threshold " << dt << '\n';
 
-  vil_image_view<vil_rgb<vxl_byte> >* out_bin_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj);
+  auto* out_bin_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj);
   out_bin_img->fill(vil_rgb<vxl_byte>(0,0,0));
   for (unsigned j = 0; j < nj; ++j) {
     for (unsigned i = 0; i < ni; ++i) {

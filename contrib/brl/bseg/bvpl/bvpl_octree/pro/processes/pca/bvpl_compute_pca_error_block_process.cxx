@@ -53,7 +53,7 @@ bool bvpl_compute_pca_error_block_process(bprb_func_process& pro)
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
-  unsigned num_components = pro.get_input<unsigned>(i++);
+  auto num_components = pro.get_input<unsigned>(i++);
 
   if (!pca_extractor)
     return false;

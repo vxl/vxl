@@ -65,8 +65,8 @@ bool boxm2_cpp_batch_compute_phong_model_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_stream_cache_sptr str_cache = pro.get_input<boxm2_stream_cache_sptr>(i++);
-  float  sun_elev = pro.get_input<float>(i++);
-  float  sun_azim = pro.get_input<float>(i++);
+  auto  sun_elev = pro.get_input<float>(i++);
+  auto  sun_azim = pro.get_input<float>(i++);
   bsta_sigma_normalizer_sptr n_table = pro.get_input<bsta_sigma_normalizer_sptr>(i++);
 
   // iterate the scene block by block and write to output

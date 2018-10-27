@@ -60,7 +60,7 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
   }
 
     //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
 
     //get NITF information
   std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();

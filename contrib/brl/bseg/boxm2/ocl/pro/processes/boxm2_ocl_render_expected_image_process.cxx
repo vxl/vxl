@@ -83,11 +83,11 @@ bool boxm2_ocl_render_expected_image_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
-  float   nearfactor = pro.get_input<float>(i++);
-  float   farfactor = pro.get_input<float>(i++);
+  auto   nearfactor = pro.get_input<float>(i++);
+  auto   farfactor = pro.get_input<float>(i++);
 
 
   vil_image_view<float> exp_img(ni, nj, 1);

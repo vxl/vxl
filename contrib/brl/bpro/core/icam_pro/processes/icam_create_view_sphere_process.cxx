@@ -88,11 +88,11 @@ bool icam_create_view_sphere_process(bprb_func_process& pro)
     return false;
   }
 
-  std::map<unsigned, vpgl_camera_double_sptr>::iterator it=cameras.begin();
+  auto it=cameras.begin();
   while (it != cameras.end()) {
     unsigned uid=it->first;
     vpgl_camera_double_sptr cam = it->second;
-    vpgl_perspective_camera<double>* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
+    auto* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
 
     std::stringstream cam_path;
     cam_path << "camera" << uid << ".txt";

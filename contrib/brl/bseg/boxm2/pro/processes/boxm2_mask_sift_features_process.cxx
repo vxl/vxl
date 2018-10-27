@@ -50,7 +50,7 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
     std::string out_filename = pro.get_input<std::string>(i++);
 
     std::ifstream ifile(in_filename.c_str());
-    if (vil_image_view<unsigned char> * mask_image=dynamic_cast<vil_image_view<unsigned char> * > (mask_img.ptr()))
+    if (auto * mask_image=dynamic_cast<vil_image_view<unsigned char> * > (mask_img.ptr()))
     {
         if (!ifile)
         {
@@ -75,8 +75,8 @@ bool boxm2_mask_sift_features_process(bprb_func_process& pro)
         for (unsigned k=0;k<num_features;++k)
         {
             ifile>>v>>u>>s>>o;
-            unsigned int pi=(unsigned int)std::floor(u);
-            unsigned int pj=(unsigned int)std::floor(v);
+            auto pi=(unsigned int)std::floor(u);
+            auto pj=(unsigned int)std::floor(v);
             if ((*mask_image)(pi,pj)>0)
             {
                 for (unsigned j=0;j<length_features;++j)

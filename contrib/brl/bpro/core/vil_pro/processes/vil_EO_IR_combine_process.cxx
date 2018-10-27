@@ -48,10 +48,10 @@ bool vil_EO_IR_combine_process(bprb_func_process& pro)
   }
   vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, img_eo);
   vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
-  vil_image_view<vil_rgba<vxl_byte> >* eo_rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+  auto* eo_rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
 
-  vil_image_view<vxl_byte>* ir_view    = dynamic_cast<vil_image_view<vxl_byte>* >(img_ir.ptr());
-  vil_image_view<vil_rgb<vxl_byte> > *out_img=new vil_image_view<vil_rgb<vxl_byte> >(img_ir->ni(),img_ir->nj());
+  auto* ir_view    = dynamic_cast<vil_image_view<vxl_byte>* >(img_ir.ptr());
+  auto *out_img=new vil_image_view<vil_rgb<vxl_byte> >(img_ir->ni(),img_ir->nj());
 
 
     //make sure all alpha values are set to 255 (1)

@@ -77,14 +77,14 @@ bool bstm_ocl_update_change_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr mask_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                   time = pro.get_input<float>(i++);
+  auto                   time = pro.get_input<float>(i++);
 
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    vis_img = new vil_image_view<float>(ni, nj);
+  auto*    vis_img = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

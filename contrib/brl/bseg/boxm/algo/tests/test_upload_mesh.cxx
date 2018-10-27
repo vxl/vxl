@@ -85,7 +85,7 @@ static void test_upload_mesh()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(6,5);
+    auto * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(6,5);
     boxm_sample<BOXM_APM_MOG_GREY> s;
     s.alpha=std::numeric_limits<float>::max();
     tree->init_cells(s);

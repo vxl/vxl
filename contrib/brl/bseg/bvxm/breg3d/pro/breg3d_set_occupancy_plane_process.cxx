@@ -36,22 +36,22 @@ bool breg3d_set_occupancy_plane_process::execute()
   if (!this->verify_inputs())
     return false;
 
-  brdb_value_t<double>* input0 =
+  auto* input0 =
     static_cast<brdb_value_t<double>* >(input_data_[0].ptr());
 
-  brdb_value_t<double>* input1 =
+  auto* input1 =
     static_cast<brdb_value_t<double>* >(input_data_[1].ptr());
 
-  brdb_value_t<double>* input2 =
+  auto* input2 =
     static_cast<brdb_value_t<double>* >(input_data_[2].ptr());
 
-  brdb_value_t<double>* input3 =
+  auto* input3 =
     static_cast<brdb_value_t<double>* >(input_data_[3].ptr());
 
-  brdb_value_t<double>* input4 =
+  auto* input4 =
     static_cast<brdb_value_t<double>* >(input_data_[4].ptr());
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input5 =
+  auto* input5 =
     static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[5].ptr());
 
 
@@ -95,7 +95,7 @@ bool breg3d_set_occupancy_plane_process::execute()
 
         double dist = world_pt.x() * plane_a + world_pt.y() * plane_b + world_pt.z() * plane_c + plane_d;
 
-        ocp_datatype vox_prob =
+        auto vox_prob =
           (ocp_datatype)( vnl_math::sqrt1_2 * vnl_math::two_over_sqrtpi * (0.5/plane_std) * std::exp(-(dist*dist)/(2*plane_std*plane_std)) );
         if (vox_prob < min_prob)
           vox_prob = min_prob;

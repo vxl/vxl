@@ -55,18 +55,18 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
   }
   // get the input
   vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cout << pro.name() << ": The input image pixel format, " << in_img_sptr->pixel_format() << " is not supported!" << std::endl;
     return false;
   }
-  unsigned num_neighbors = pro.get_input<unsigned>(1);
-  unsigned bin_size_0 = pro.get_input<unsigned>(2);
-  unsigned bin_size_1 = pro.get_input<unsigned>(3);
+  auto num_neighbors = pro.get_input<unsigned>(1);
+  auto bin_size_0 = pro.get_input<unsigned>(2);
+  auto bin_size_1 = pro.get_input<unsigned>(3);
 
   unsigned ni = in_img->ni();
   unsigned nj = in_img->nj();
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj, 1);
+  auto* out_img = new vil_image_view<float>(ni, nj, 1);
   out_img->deep_copy(*in_img);
 
   // look for the valid pixels (note that in order to calculate distance between pixels, double precision is considered for img coords)
@@ -127,7 +127,7 @@ bool volm_upsample_dem_projected_img_process(bprb_func_process& pro)
       //vnl_float_4 dist(0,0,0,0);
       float value_all = 0.0f, dist_all = 0.0f;
       for (unsigned n_idx = 0; n_idx < 4; n_idx++) {
-        float dist = (float)std::sqrt( (neigh_points[n_idx][0]-i)*(neigh_points[n_idx][0]-i) + (neigh_points[n_idx][1]-j)*(neigh_points[n_idx][1]-j) );
+        auto dist = (float)std::sqrt( (neigh_points[n_idx][0]-i)*(neigh_points[n_idx][0]-i) + (neigh_points[n_idx][1]-j)*(neigh_points[n_idx][1]-j) );
         dist_all  += dist;
         value_all += neigh_values[n_idx]*dist;
       }

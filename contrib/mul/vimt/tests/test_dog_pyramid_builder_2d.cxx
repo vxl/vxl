@@ -32,21 +32,21 @@ static void test_dog_pyramid_builder_2d_build(vimt_dog_pyramid_builder_2d<float>
   builder.build_dog(dog_pyr,smooth_pyr,image0,true);
 
   TEST("Found correct number of levels", dog_pyr.n_levels(), 6);
-  const vimt_image_2d_of<float>& v_image0 =
+  const auto& v_image0 =
                  static_cast<const vimt_image_2d_of<float>&>(dog_pyr(0));
   TEST("Base width",v_image0.image().ni(),ni);
   TEST("Base height",v_image0.image().nj(),nj);
 
   for (int L=0;L<smooth_pyr.n_levels();++L)
   {
-    const vimt_image_2d_of<float>& imageL =
+    const auto& imageL =
              static_cast<const vimt_image_2d_of<float>&>(smooth_pyr(L));
 
     vgl_point_2d<double> p = vimt_find_max(imageL);
 
     std::cout<<"Level "<<L<<" smoothed peak point is at "<<p<<std::endl;
 
-    const vimt_image_2d_of<float>& dogL =
+    const auto& dogL =
              static_cast<const vimt_image_2d_of<float>&>(dog_pyr(L));
 
     vgl_point_2d<double> q = vimt_find_max(dogL);

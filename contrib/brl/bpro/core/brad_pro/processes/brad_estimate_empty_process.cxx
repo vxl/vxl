@@ -80,7 +80,7 @@ bool brad_estimate_empty_process(bprb_func_process& pro)
         unsigned index = i + 1;
         if (i == Iobs.size()-1)
             index =0;
-        float gradI = (float)std::fabs(Iobs[i]-Iobs[index]);
+        auto gradI = (float)std::fabs(Iobs[i]-Iobs[index]);
 
         int bin_index = (int) std::floor(gradI*8);
         bin_index = bin_index>7 ? 7:bin_index;

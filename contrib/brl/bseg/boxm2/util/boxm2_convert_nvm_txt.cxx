@@ -51,7 +51,7 @@ boxm2_convert_nvm_txt::boxm2_convert_nvm_txt(std::string nvm_file, std::string i
   for (unsigned i = 0; i < cams_.size(); ++i) {
     std::string old_file_name = vul_file::strip_directory(old_names_[i]) ;
     std::cout << "Old file name " <<  old_file_name << std::endl;
-    CamType* cam = new CamType(cams_[i]);
+    auto* cam = new CamType(cams_[i]);
     final_cams_[old_file_name] = cam;
     img_name_map_[old_file_name] = names_[i];
   }

@@ -66,7 +66,7 @@ bool bvpl_compute_taylor_error_process(bprb_func_process& pro)
 
   //compute the error block
   boxm_scene<boct_tree<short, float> >* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (taylor_scenes->get_scene("error").as_pointer());
-  boxm_scene<boct_tree<short, float> >* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
+  auto* data_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (data_scene_base.as_pointer());
   double cell_length = data_scene->finest_cell_length();
   bvpl_taylor_basis::compute_approximation_error(data_scene, taylor_scenes->get_scene("basis"),
                                                  error_scene,taylor_scenes->loader(),

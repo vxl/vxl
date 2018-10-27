@@ -62,12 +62,12 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr  change_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr  in_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                     thresh = pro.get_input<float>(i++);                 //nxn
+  auto                     thresh = pro.get_input<float>(i++);                 //nxn
   bool                      low_is_change = pro.get_input<bool>(i++);
 
   //prep in image, cast to grey float
   vil_image_view_base_sptr  f_in = boxm2_util::prepare_input_image(in_sptr, true); //true for force gray scale
-  vil_image_view<float>*    in_img = dynamic_cast<vil_image_view<float>* >(f_in.ptr());
+  auto*    in_img = dynamic_cast<vil_image_view<float>* >(f_in.ptr());
   unsigned ni=in_img->ni();
   unsigned nj=in_img->nj();
 
@@ -77,7 +77,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   mask.fill(false);
 
   //try byte image (passed in mask)
-  vil_image_view<vxl_byte>* change_b = dynamic_cast<vil_image_view<vxl_byte>* >(change_sptr.ptr());
+  auto* change_b = dynamic_cast<vil_image_view<vxl_byte>* >(change_sptr.ptr());
   if (change_b)
   {
     if (low_is_change) {
@@ -91,7 +91,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
           mask(i,j) = (*change_b)(i,j)==0 ? false : true;
     }
   }
-  else if (vil_image_view<float>* change_f = dynamic_cast<vil_image_view<float>* >(change_sptr.ptr()))
+  else if (auto* change_f = dynamic_cast<vil_image_view<float>* >(change_sptr.ptr()))
   {
     if (low_is_change) {
       for (unsigned int i=0; i<ni; ++i)
@@ -106,7 +106,7 @@ bool boxm2_ocl_visualize_change_process(bprb_func_process& pro)
   }
 
   //prepare output RGB image
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,3);
+  auto* out_img = new vil_image_view<vxl_byte>(ni,nj,3);
   for (unsigned int i=0; i<ni; ++i) {
     for (unsigned int j=0; j<nj; ++j) {
       //if it's change, mark it as change

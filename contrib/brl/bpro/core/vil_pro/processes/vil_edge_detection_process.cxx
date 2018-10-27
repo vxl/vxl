@@ -55,14 +55,14 @@ bool vil_edge_detection_process(bprb_func_process& pro)
   // get the inputs
   unsigned in_i = 0;
   vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  float noise_multiplier = pro.get_input<float>(in_i++);
-  float smooth = pro.get_input<float>(in_i++);
+  auto noise_multiplier = pro.get_input<float>(in_i++);
+  auto smooth = pro.get_input<float>(in_i++);
   bool automatic_threshold = pro.get_input<bool>(in_i++);
   bool junctionp = pro.get_input<bool>(in_i++);
   bool aggressive_junction_closure = pro.get_input<bool>(in_i++);
 
   // input image validity
-  vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cout << pro.name() << ": Unsupported input image format " << in_img_sptr->pixel_format() << std::endl;
     return false;

@@ -46,12 +46,12 @@ bool vpgl_persp_cam_distance_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam1_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr cam2_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
 
-  vpgl_perspective_camera<double>* cam1 = dynamic_cast<vpgl_perspective_camera<double>*>(cam1_ptr.ptr());
+  auto* cam1 = dynamic_cast<vpgl_perspective_camera<double>*>(cam1_ptr.ptr());
   if (!cam1) {
     std::cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
     return false;
   }
-  vpgl_perspective_camera<double>* cam2 = dynamic_cast<vpgl_perspective_camera<double>*>(cam2_ptr.ptr());
+  auto* cam2 = dynamic_cast<vpgl_perspective_camera<double>*>(cam2_ptr.ptr());
   if (!cam2) {
     std::cerr << "vpgl_persp_cam_distance_process: couldn't cast camera\n";
     return false;

@@ -79,9 +79,9 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
     yint += mdata.sub_block_dim_.y()/num_octree_cells;
     zint += mdata.sub_block_dim_.z()/num_octree_cells;
   }
-  unsigned int ni = (unsigned int)(bbox.width() /xint -1);
-  unsigned int nj = (unsigned int)(bbox.height()/yint -1);
-  unsigned int nz = (unsigned int)(bbox.depth() /zint -1);
+  auto ni = (unsigned int)(bbox.width() /xint -1);
+  auto nj = (unsigned int)(bbox.height()/yint -1);
+  auto nz = (unsigned int)(bbox.depth() /zint -1);
 
   for (unsigned k = 0;k<nz;++k)
   {
@@ -113,7 +113,7 @@ bool  boxm2_cpp_render_z_images_process(bprb_func_process& pro)
         int index=tree.get_data_index(bit_index,false);
 
         boxm2_data_base     *  float_base = cache->get_data_base(scene,id,data_identifier);
-        float * buffer = reinterpret_cast<float*>(float_base->data_buffer());
+        auto * buffer = reinterpret_cast<float*>(float_base->data_buffer());
         img(i,j) = buffer[index];
       }
     }

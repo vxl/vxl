@@ -165,7 +165,7 @@ TIFF* TIFFClientOpen(const char* filename, const char* mode, thandle_t clientdat
 
 static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
+  auto* p = (vil1_tiff_structures*)h;
   if (n > p->filesize) p->filesize= n;
   tsize_t ret = p->vs->read(buf, n);
   trace << "readproc, n = " << n << ", ret = " << ret << '\n';
@@ -174,7 +174,7 @@ static tsize_t vil1_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 
 static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
+  auto* p = (vil1_tiff_structures*)h;
   tsize_t ret = p->vs->write(buf, n);
   vil1_streampos s = p->vs->tell();
   if (s > p->filesize)
@@ -186,7 +186,7 @@ static tsize_t vil1_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 static toff_t vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
   trace << "seek " << offset << " w = " << whence << std::endl;
-  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
+  auto* p = (vil1_tiff_structures*)h;
   if (whence == SEEK_SET) {
     p->vs->seek(offset);
   } else if (whence == SEEK_CUR) {
@@ -203,7 +203,7 @@ static toff_t vil1_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 static int vil1_tiff_closeproc(thandle_t h)
 {
   trace << "vil1_tiff_closeproc\n";
-  vil1_tiff_structures* p = (vil1_tiff_structures*)h;
+  auto* p = (vil1_tiff_structures*)h;
   //delete p->vs;
   if (p->vs) {
     p->vs->unref();

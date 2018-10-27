@@ -33,7 +33,7 @@ static void test_rotate_image()
     TEST("rotate 720 degrees: content", b, true);
   }
 
-  unsigned int wd = (unsigned int)((ni+nj)/1.4142135623730950488);
+  auto wd = (unsigned int)((ni+nj)/1.4142135623730950488);
 
   // Rotate 45 degrees:
   {

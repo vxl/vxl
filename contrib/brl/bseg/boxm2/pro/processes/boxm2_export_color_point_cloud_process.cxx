@@ -59,7 +59,7 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   std::string output_filename = pro.get_input<std::string>(i++);
-  float prob_t = pro.get_input<float>(i++);
+  auto prob_t = pro.get_input<float>(i++);
   std::string identifier = pro.get_input<std::string>(i++);
 
   std::vector<std::string> apps = scene->appearances();

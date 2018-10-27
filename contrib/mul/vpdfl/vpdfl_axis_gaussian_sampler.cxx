@@ -77,7 +77,7 @@ void vpdfl_axis_gaussian_sampler::set_model(const vpdfl_pdf_base& model)
 
 void vpdfl_axis_gaussian_sampler::sample(vnl_vector<double>& x)
 {
-  const vpdfl_axis_gaussian & gauss = static_cast<const vpdfl_axis_gaussian &>( model());
+  const auto & gauss = static_cast<const vpdfl_axis_gaussian &>( model());
   const double *s = gauss.sd().data_block();
   const double *m = gauss.mean().data_block();
   int n = gauss.n_dims();

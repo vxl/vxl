@@ -45,7 +45,7 @@ volm_candidate_list::volm_candidate_list(vil_image_view<vxl_byte> const& image,
 
 bool volm_candidate_list::create_expand_polygon(std::vector<vgl_point_2d<int> > const& sheet)
 {
-  unsigned n_points = (unsigned)sheet.size();
+  auto n_points = (unsigned)sheet.size();
   std::vector<vgl_point_2d<double> > points;
   for (unsigned i = 0; i < n_points; i++) {
     points.emplace_back(sheet[i].x()+1.0, sheet[i].y()+1.0);
@@ -72,7 +72,7 @@ bool volm_candidate_list::top_locations(std::vector<std::vector<vgl_point_2d<int
   }
   // create a bounding box to fetch the maximum
   for (unsigned sh_idx = 0; sh_idx < n_sheet_; sh_idx++) {
-    unsigned n_verts = (unsigned)poly_[sh_idx].size();
+    auto n_verts = (unsigned)poly_[sh_idx].size();
     vgl_box_2d<int> bbox;
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       bbox.add(poly_[sh_idx][v_idx]);
@@ -107,7 +107,7 @@ bool volm_candidate_list::top_locations(std::vector<std::vector<vgl_point_2d<int
     top_loc_scores[i].assign(size, 127);
   }
   for (unsigned sh_idx = 0; sh_idx < n_sheet_; sh_idx++) {
-    unsigned n_verts = (unsigned)poly_[sh_idx].size();
+    auto n_verts = (unsigned)poly_[sh_idx].size();
     vgl_box_2d<int> bbox;
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       bbox.add(poly_[sh_idx][v_idx]);
@@ -128,7 +128,7 @@ bool volm_candidate_list::top_locations(std::vector<std::vector<vgl_point_2d<int
       std::cout << "\t score = " << mit->first << ", points = " << mit->second << std::endl;
 #endif
     // fill the top number of points from map
-    mymap::iterator mit = points.begin();
+    auto mit = points.begin();
     if (points.size() < size) {
       unsigned cnt = 0;
       for (; mit != points.end(); ++mit) {
@@ -168,8 +168,8 @@ bool volm_candidate_list::top_locations(std::vector<vgl_point_2d<double> >& top_
     return false;
   for (unsigned i = 0; i < size; i++) {
     double lon, lat;
-    unsigned u = (unsigned)top_locs_pixel[i].x();
-    unsigned v = (unsigned)top_locs_pixel[i].y();
+    auto u = (unsigned)top_locs_pixel[i].x();
+    auto v = (unsigned)top_locs_pixel[i].y();
     if (u > image_.ni() || v > image_.nj() || image_(u,v) < thres_)
       continue;
     tile.img_to_global((unsigned)top_locs_pixel[i].x(), (unsigned)top_locs_pixel[i].y(), lon, lat);
@@ -182,7 +182,7 @@ bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile,
 {
   if (sh_idx > n_sheet_)
     return false;
-  unsigned n_point = (unsigned)poly_[sh_idx].size();
+  auto n_point = (unsigned)poly_[sh_idx].size();
   double deg_per_half_pixel_i = 1.0 * tile.scale_i()/(tile.ni() - 1);
   double deg_per_half_pixel_j = 1.0 * tile.scale_j()/(tile.nj() - 1);
   std::vector<vgl_point_2d<double> > points;
@@ -198,7 +198,7 @@ bool volm_candidate_list::img_to_golbal(unsigned const& sh_idx, volm_tile& tile,
 
   vgl_convex_hull_2d<double> ch(points);
   vgl_polygon<double> poly = ch.hull();
-  std::vector<vgl_point_2d<double> >::iterator vit = poly[0].begin();
+  auto vit = poly[0].begin();
   for (; vit != poly[0].end(); ++vit)
     region_global.push_back(*vit);
   return true;
@@ -247,7 +247,7 @@ bool volm_candidate_list::candidate_list_image(vil_image_view<vxl_byte>& image)
     image.set_size(image_.ni(), image_.nj());
   image.fill((vxl_byte)127);
   for (unsigned sh_idx = 0; sh_idx < n_sheet_; sh_idx++) {
-    unsigned n_verts = (unsigned)poly_[sh_idx].size();
+    auto n_verts = (unsigned)poly_[sh_idx].size();
     for (unsigned v_idx = 0; v_idx < n_verts; v_idx++)
       image(poly_[sh_idx][v_idx].x(), poly_[sh_idx][v_idx].y()) = (vxl_byte)255;
   }

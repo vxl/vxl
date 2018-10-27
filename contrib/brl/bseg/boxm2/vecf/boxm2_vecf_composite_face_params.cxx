@@ -23,7 +23,7 @@ std::ostream&  operator << (std::ostream& s, boxm2_vecf_composite_face_params co
     return s;
   }
   // bad practice --- but easy
-  boxm2_vecf_composite_face_params & pr = const_cast<boxm2_vecf_composite_face_params &>(prc);
+  auto & pr = const_cast<boxm2_vecf_composite_face_params &>(prc);
   s << "affine_transform: " << pr.trans_ << '\n';
   return s;
 }

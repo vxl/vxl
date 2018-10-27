@@ -174,7 +174,7 @@ static volm_satellite_resources_sptr create_test_sat_res()
     satellite_footprint.add(vgl_point_2d<double>(res_sptr->resources_[i].meta_->upper_right_.x(), res_sptr->resources_[i].meta_->upper_right_.y()));
     volm_geo_index2::get_leaves(res_sptr->root_, leaves, satellite_footprint);
     for (auto & leave : leaves) {
-      volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
+      auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(i);  // push this satellite image to this leave that intersects its footprint
     }
   }

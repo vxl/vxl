@@ -44,7 +44,7 @@ bool vil_debayer_BGGR_to_RGB_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr in_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  vil_image_view<vil_rgb<vxl_byte> > * debayer_img = new vil_image_view<vil_rgb<vxl_byte> >(in_img->ni(),in_img->nj());
+  auto * debayer_img = new vil_image_view<vil_rgb<vxl_byte> >(in_img->ni(),in_img->nj());
   bil_debayer_image::bil_debayer_BGGR(in_img,debayer_img);
   //bil_debayer_image::bil_debayer_GRBG(in_img,debayer_img);
   pro.set_output_val<vil_image_view_base_sptr>(0, debayer_img);

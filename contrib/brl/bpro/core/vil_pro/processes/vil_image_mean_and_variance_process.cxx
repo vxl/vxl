@@ -47,7 +47,7 @@ bool vil_image_mean_and_variance_process(bprb_func_process& pro)
     vil_image_view_base_sptr baseSptr =
         pro.get_input<vil_image_view_base_sptr>(0);
 
-    unsigned targetPlane = pro.get_input<unsigned>(1);
+    auto targetPlane = pro.get_input<unsigned>(1);
 
     if( targetPlane > baseSptr->nplanes() )
     {
@@ -107,14 +107,14 @@ bool vil_mean_and_variance_image_process(bprb_func_process& pro)
     }
 
     vil_image_view_base_sptr baseSptr = pro.get_input<vil_image_view_base_sptr>(0);
-    unsigned n = pro.get_input<unsigned>(1);
+    auto n = pro.get_input<unsigned>(1);
     int n_half = int((double)n/2.0);
     std::cout << "using n_half: " << n_half << std::endl;
 
     //assume can convert to float
     vil_image_view<float> fview = *vil_convert_cast(float(), baseSptr);
-    vil_image_view<float>* mean_view = new vil_image_view<float>(fview.ni(), fview.nj());
-    vil_image_view<float>* var_view = new vil_image_view<float>(fview.ni(), fview.nj());
+    auto* mean_view = new vil_image_view<float>(fview.ni(), fview.nj());
+    auto* var_view = new vil_image_view<float>(fview.ni(), fview.nj());
     mean_view->fill(0.0f);
     var_view->fill(0.0f);
 

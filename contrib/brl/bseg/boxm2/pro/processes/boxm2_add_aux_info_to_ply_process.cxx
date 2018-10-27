@@ -41,7 +41,7 @@ namespace boxm2_add_aux_info_to_ply_process_globals
     void* temp;
     ply_get_argument_user_data(argument, &temp, &index);
 
-    ply_points_reader* parsed_ply =  (ply_points_reader*) temp;
+    auto* parsed_ply =  (ply_points_reader*) temp;
 
     switch (index)
     {
@@ -207,17 +207,17 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
     boxm2_data_base * mog = cache->get_data_base(scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix(), data_buff_length * mogSize);
 
     //get the actual data
-    boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha_base->data_buffer();
+    auto * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha_base->data_buffer();
 //  boxm2_data_traits<BOXM2_POINT>::datatype * points_data = (boxm2_data_traits<BOXM2_POINT>::datatype*) points->data_buffer(); // UNUSED!! -- fixme
-    boxm2_data_traits<BOXM2_NORMAL>::datatype * normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
-    boxm2_data_traits<BOXM2_VIS_SCORE>::datatype * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
-    boxm2_data_traits<BOXM2_MOG3_GREY>::datatype * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
+    auto * normals_data = (boxm2_data_traits<BOXM2_NORMAL>::datatype*) normals->data_buffer();
+    auto * vis_data = (boxm2_data_traits<BOXM2_VIS_SCORE>::datatype*) vis->data_buffer();
+    auto * mog_data = (boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*) mog->data_buffer();
 
     float alpha=alpha_data[data_offset];
     double side_len = 1.0 / (double) (1 << depth);
     //store cell probability
     prob = 1.0f - (float)std::exp(-alpha * side_len * mdata.sub_block_dim_.x());
-    unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(mog_data[data_offset])*255.0f);
+    auto intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(mog_data[data_offset])*255.0f);
 
     ply_write(oply, pt.x());
     ply_write(oply, pt.y());

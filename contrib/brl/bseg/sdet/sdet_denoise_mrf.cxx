@@ -42,14 +42,14 @@ double sdet_denoise_mrf::weight(unsigned i0, unsigned j0,
   if (d>(vnl_math::sqrt2*radius_)) return 0.0;
   //compute the minimum variance along the path between pix0 and pix1
   bool init = true;
-  float xs = static_cast<float>(i0), ys = static_cast<float>(j0);
-  float xe = static_cast<float>(i1), ye = static_cast<float>(j1);
+  auto xs = static_cast<float>(i0), ys = static_cast<float>(j0);
+  auto xe = static_cast<float>(i1), ye = static_cast<float>(j1);
   float x=xs, y=ys;
   double min_var = vnl_numeric_traits<double>::maxval;
   //generate the path between two pixels
   while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
   {
-    unsigned i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
+    auto i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
     double v = varv(i, j);
     if (v<min_var)
       min_var = v;

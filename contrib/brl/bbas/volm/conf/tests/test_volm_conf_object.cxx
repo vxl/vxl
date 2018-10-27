@@ -17,7 +17,7 @@ static void test_volm_conf_object()
 
   float theta = (std::atan2(pt.y(), pt.x())<0) ? (float)std::atan2(pt.y(), pt.x()) + vnl_math::twopi : (float)std::atan2(pt.y(), pt.x());
   float theta_in_deg = theta / vnl_math::pi_over_180;
-  float dist = (float)std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
+  auto dist = (float)std::sqrt(pt.x()*pt.x() + pt.y()*pt.y());
 
   volm_conf_object_sptr obj_sptr = new volm_conf_object(pt, height, land_id);
   std::cout << "given location point: (" << pt.x() << ',' << pt.y() << ") with land id: " << (int)land_id << std::endl;

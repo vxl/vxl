@@ -48,18 +48,18 @@ bool bvxm_compare_3d_voxels_process(bprb_func_process& pro)
   unsigned i =0;
   bvxm_voxel_world_sptr main_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   bvxm_voxel_world_sptr multi_scale_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  unsigned input_scale = pro.get_input<unsigned>(i++);
+  auto input_scale = pro.get_input<unsigned>(i++);
   std::string filename = pro.get_input<std::string>(i++);
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   // get occupancy probability grids
   bvxm_voxel_grid_base_sptr gt_ocp_grid_base = main_world->get_grid<OCCUPANCY>(0,0);
-  bvxm_voxel_grid<ocp_datatype> *gt_ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(gt_ocp_grid_base.ptr());
+  auto *gt_ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(gt_ocp_grid_base.ptr());
   //bvxm_voxel_grid<ocp_datatype>::const_iterator l_ocp_slab_it = lidar_ocp_grid->begin();
 
   bvxm_voxel_grid_base_sptr multi_ocp_grid_base = multi_scale_world->get_grid<OCCUPANCY>(0,input_scale);
-  bvxm_voxel_grid<ocp_datatype> *multi_ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(multi_ocp_grid_base.ptr());
+  auto *multi_ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(multi_ocp_grid_base.ptr());
 
   vgl_vector_3d<unsigned int> grid_size = multi_scale_world->get_params()->num_voxels(input_scale);
   bsta_histogram<double> hist(0.0, 1.0, 20, 0.0);

@@ -396,7 +396,7 @@ void volm_query::generate_regions()
   // generate the map of the depth_map_region based on their order
   // a vector of regions not including sky or ground plane
   depth_regions_ = dm_->scene_regions();
-  unsigned size = (unsigned)depth_regions_.size();
+  auto size = (unsigned)depth_regions_.size();
   // sort the regions on depth order
   std::sort(depth_regions_.begin(), depth_regions_.end(), compare_order());
   // obtain the min and max dist for different non-ground, non-sky objects
@@ -407,7 +407,7 @@ void volm_query::generate_regions()
     order_obj_.push_back((unsigned char)depth_regions_[i]->order());
     obj_orient_.push_back((unsigned char)depth_regions_[i]->orient_type());
 
-    unsigned char land_id = (unsigned char)depth_regions_[i]->land_id();
+    auto land_id = (unsigned char)depth_regions_[i]->land_id();
     std::vector<unsigned char> land_fallback_id = volm_fallback_label::fallback_id[land_id];
     obj_land_id_.push_back(land_fallback_id);
     std::vector<float> land_fallback_wgt = volm_fallback_label::fallback_weight[land_id];
@@ -446,12 +446,11 @@ void volm_query::generate_regions()
 bool volm_query::order_ingest()
 {
   // loop over camera hypotheses
-  unsigned cam_num = (unsigned)cameras_.size();
+  auto cam_num = (unsigned)cameras_.size();
   for (unsigned cam_id = 0; cam_id < cam_num; ++cam_id) {
     // create a vector to store all objects and fetch the order for current layer
     std::vector<std::vector<unsigned> > order_cam(order_set_.size());
     std::vector<unsigned char> order_layer = order_[cam_id];
-    std::set<unsigned>::iterator iter = this->order_set_.begin();
 #if 0
     std::cout << " --------------------- camera " << cam_id << " --------------------" << std::endl;
 #endif
@@ -459,7 +458,7 @@ bool volm_query::order_ingest()
     for (unsigned idx = 0; idx < query_size_; ++idx) {
       unsigned count = 0;
       //std::cout << " cam " << cam_id << ", order_layer[" << idx << "] = " << (int)order_layer[idx] << std::endl;
-      std::set<unsigned>::iterator iter = this->order_set_.begin();
+      auto iter = this->order_set_.begin();
       for ( ; iter != order_set_.end(); ++iter) {
         if ( (int)order_layer[idx] == *iter) {
           order_cam[count].push_back(idx);
@@ -581,7 +580,7 @@ bool volm_query::query_ingest()
 // u, v
 bool volm_query::offset_ingest()
 {
-  unsigned n_cam = (unsigned)cameras_.size();
+  auto n_cam = (unsigned)cameras_.size();
   // create ground offset
   unsigned count = 0;
   ground_offset_.push_back(count);
@@ -600,7 +599,7 @@ bool volm_query::offset_ingest()
 
   // create object offset
   count = 0;
-  unsigned n_obj = (unsigned)depth_regions_.size();
+  auto n_obj = (unsigned)depth_regions_.size();
   dist_offset_.push_back(count);
   for (unsigned cam_id = 0; cam_id < n_cam; ++cam_id)
     for (unsigned obj_id = 0; obj_id < n_obj; ++obj_id) {
@@ -808,8 +807,8 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
       double b = s.y() - k * s.x();
       if (std::sqrt(k*k) < 1) {// loop x
         if (s.x() <= e.x()) {
-          for (unsigned xi = (unsigned)s.x(); xi <= (unsigned)e.x(); ++xi) {
-            unsigned xj = (unsigned)(k*xi+b);
+          for (auto xi = (unsigned)s.x(); xi <= (unsigned)e.x(); ++xi) {
+            auto xj = (unsigned)(k*xi+b);
             if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -818,8 +817,8 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
           }
         }
         else {
-          for (unsigned xi = (unsigned)e.x(); xi <= (unsigned)s.x(); ++xi) {
-            unsigned xj = (unsigned)(k*xi+b);
+          for (auto xi = (unsigned)e.x(); xi <= (unsigned)s.x(); ++xi) {
+            auto xj = (unsigned)(k*xi+b);
             if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -830,8 +829,8 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
       }
       else {
         if (s.y() <= e.y()) {
-          for (unsigned xj = (unsigned)s.y(); xj <= (unsigned)e.y(); ++xj) {
-            unsigned xi = (unsigned)((xj-b)/k);
+          for (auto xj = (unsigned)s.y(); xj <= (unsigned)e.y(); ++xj) {
+            auto xi = (unsigned)((xj-b)/k);
             if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -840,8 +839,8 @@ void volm_query::draw_polygon(vil_image_view<vil_rgb<vxl_byte> >& img, vgl_polyg
           }
         }
         else {
-          for (unsigned xj = (unsigned)e.y(); xj <= (unsigned)s.y(); ++xj) {
-            unsigned xi = (unsigned)((xj-b)/k);
+          for (auto xj = (unsigned)e.y(); xj <= (unsigned)s.y(); ++xj) {
+            auto xi = (unsigned)((xj-b)/k);
             if (xi < img.ni() && xj < img.nj()) {
               img(xi,xj).r = bvrml_color::heatmap_classic[(int)depth][0];
               img(xi,xj).g = bvrml_color::heatmap_classic[(int)depth][1];
@@ -1027,7 +1026,7 @@ unsigned volm_query::get_num_top_fov(double const& top_fov) const
   unsigned count = 0;
   for (unsigned i = 0; i < this->get_cam_num(); ++i) {
     std::string cam_string = this->get_cam_string(i);
-    unsigned sindx = (unsigned)cam_string.find("top_fov");
+    auto sindx = (unsigned)cam_string.find("top_fov");
     sindx += 8;
     std::stringstream ss( cam_string.substr(sindx, cam_string.size()-1) );
     double top;
@@ -1042,7 +1041,7 @@ unsigned volm_query::get_num_top_fov(double const& top_fov) const
 double volm_query::get_top_fov(unsigned const& id) const
 {
   std::string cam_string = this->get_cam_string(id);
-  unsigned sindx = (unsigned)cam_string.find("top_fov");
+  auto sindx = (unsigned)cam_string.find("top_fov");
   sindx += 8;
   std::stringstream ss( cam_string.substr(sindx, cam_string.size()-1) );
   double top;
@@ -1057,7 +1056,7 @@ std::vector<double> volm_query::get_valid_top_fov() const
     top_fov_set.insert(this->get_top_fov(i));
   }
   std::vector<double> valid_top_fov;
-  for (std::__1::__tree_const_iterator<double, std::__1::__tree_node<double, void *> *, long>::value_type it : top_fov_set)
+  for (const auto & it : top_fov_set)
     valid_top_fov.push_back(it);
   return valid_top_fov;
 }

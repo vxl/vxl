@@ -214,7 +214,7 @@ void vpdfl_pc_gaussian::set(const vnl_vector<double>& mean,  const vnl_matrix<do
 //: Return instance of this PDF
 vpdfl_sampler_base* vpdfl_pc_gaussian::sampler() const
 {
-  vpdfl_gaussian_sampler *i = new vpdfl_gaussian_sampler;
+  auto *i = new vpdfl_gaussian_sampler;
   i->set_model(*this);
   return i;
 }

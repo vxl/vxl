@@ -856,7 +856,7 @@ bool bmdl_classify<T>::expand_buildings(std::vector<T>& means,
       if (n.empty())
         continue;
 
-      for (std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type itr : n) {
+      for ( const auto & itr : n) {
         // test for merge
         if (labels_(i,j) > 1) {
           unsigned int other = labels_(i,j)-2;

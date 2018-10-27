@@ -59,7 +59,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
         opts += " -D STEP_CELL=step_cell_compute_probability_of_intensity(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.prob_image,aux_args.intensity) ";
 
         //have kernel construct itself using the context and device
-        bocl_kernel * ray_trace_kernel=new bocl_kernel();
+        auto * ray_trace_kernel=new bocl_kernel();
 
         ray_trace_kernel->create_kernel( &device->context(),
                                          device->device_id(),
@@ -72,7 +72,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
         std::vector<std::string> norm_src_paths;
         norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
         norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-        bocl_kernel * normalize_render_kernel=new bocl_kernel();
+        auto * normalize_render_kernel=new bocl_kernel();
 
         normalize_render_kernel->create_kernel( &device->context(),
                                                 device->device_id(),
@@ -86,7 +86,7 @@ namespace boxm2_ocl_probability_of_image_gl_process_globals
         std::vector<std::string> convert_src_paths;
         convert_src_paths.push_back(source_dir + "pixel_conversion.cl");
         convert_src_paths.push_back(source_dir + "bit/pixel_conversion_kernels.cl");
-        bocl_kernel * convert_kernel=new bocl_kernel();
+        auto * convert_kernel=new bocl_kernel();
 
         convert_kernel->create_kernel( &device->context(),
                                        device->device_id(),
@@ -195,16 +195,16 @@ bool boxm2_ocl_probability_of_image_gl_process(bprb_func_process& pro)
   persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
   unsigned cl_ni=RoundUp(img_view->ni(),local_threads[0]);
   unsigned cl_nj=RoundUp(img_view->nj(),local_threads[1]);
 
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* prob_image_buff = new float[cl_ni*cl_nj];
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* prob_image_buff = new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
       vis_buff[i]=1.0f;

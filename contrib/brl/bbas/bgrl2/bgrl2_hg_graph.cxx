@@ -44,7 +44,7 @@ bool bgrl2_hg_graph::_internal_del_edge (bgrl2_hg_edge* edge)
 
 bool bgrl2_hg_graph::remove_vertex (bgrl2_hg_vertex* vertex)
 {
-  std::vector<bgrl2_hg_edge*>::iterator it = vertex->connecting_edges().begin();
+  auto it = vertex->connecting_edges().begin();
   while (it != vertex->connecting_edges().end()) {
     bgrl2_hg_edge* edge = (*it);
     _internal_disconnect_edge_vertex (edge, vertex);
@@ -96,7 +96,7 @@ bool bgrl2_hg_graph::topo_remove_vertex (bgrl2_hg_vertex* vertex)
 
 bool bgrl2_hg_graph::topo_remove_vertex (int id)
 {
-  bgrl2_hg_vertex* vertex = (bgrl2_hg_vertex*) vertices (id);
+  auto* vertex = (bgrl2_hg_vertex*) vertices (id);
   if (vertex)
     return topo_remove_vertex (vertex);
   else

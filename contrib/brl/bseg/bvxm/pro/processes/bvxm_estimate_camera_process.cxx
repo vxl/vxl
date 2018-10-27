@@ -81,7 +81,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
 
   // camera
   vpgl_camera_double_sptr cam_inp = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vpgl_perspective_camera<double> *cam_init = dynamic_cast<vpgl_perspective_camera<double>*>(cam_inp.ptr());
+  auto *cam_init = dynamic_cast<vpgl_perspective_camera<double>*>(cam_inp.ptr());
 
   // image
   vil_image_view_base_sptr img_e_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
@@ -94,7 +94,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   unsigned nj = img_e.nj();
 
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(i++);
+  auto scale = pro.get_input<unsigned>(i++);
 
   double deg2rad = vnl_math::pi_over_180;
 
@@ -127,12 +127,12 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   int num_obs = vox_world->num_observations<EDGES>(0,scale);
   std::cout << "Number of observations in the voxel world: " << num_obs << '\n';
 
-  vil_image_view<float> *img_eei = new vil_image_view<float>(ni,nj,1);
+  auto *img_eei = new vil_image_view<float>(ni,nj,1);
   img_eei->fill(0.0f);
 
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
   bvxm_voxel_grid_base_sptr edges_grid_base = vox_world->get_grid<EDGES>(0,scale);
-  bvxm_voxel_grid<edges_datatype> *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
+  auto *edges_grid  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_grid_base.ptr());
 
   int nx = (int)edges_grid->grid_size().x();
   int ny = (int)edges_grid->grid_size().y();
@@ -161,7 +161,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
     }
   }
 
-  vpgl_perspective_camera<double> *cam_est = new vpgl_perspective_camera<double>(*cam_init);
+  auto *cam_est = new vpgl_perspective_camera<double>(*cam_init);
   vgl_vector_3d<float> vox_dim(dx,dy,dz);
   vgl_vector_3d<float> world_dim((float)nx,(float)ny,(float)nz);
   vgl_box_3d<double> box(sx,sy,sz+double(nz)*dz,sx+double(nx)*dx,sy+double(ny)*dy,sz);
@@ -174,7 +174,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
 
   func.apply(cam_inp,img_eei);
 
-  vil_image_view<vxl_byte> *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
+  auto *img_eei_before_correction = new vil_image_view<vxl_byte>(ni,nj,1);
   brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_before_correction,0.0f,255.0f);
 
   //std::cout << "Estimating correct camera parameters\n";
@@ -189,7 +189,7 @@ bool bvxm_estimate_camera_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam_ptr = new vpgl_perspective_camera<double>(*cam_est);
   func.apply(cam_ptr,img_eei);
 
-  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
+  auto *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
   brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei,*img_eei_vb,0.0f,255.0f);
 
   // output

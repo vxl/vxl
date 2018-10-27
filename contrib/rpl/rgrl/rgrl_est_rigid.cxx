@@ -33,13 +33,13 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
           rgrl_transformation const& cur_trans_in ) const
 {
   // Get the current rgrl_trans_rigid instance.
-  const rgrl_trans_rigid* cur_trans =
+  const auto* cur_trans =
     dynamic_cast<const rgrl_trans_rigid*>(&cur_trans_in);
   assert(cur_trans);
 
   // so we want to have some sort of state, but we don't really want to un-const-ize this method,
   // so we implement a quick hack by using const_cast to change the value of stats
-  std::vector<std::vector<double> >* pp =
+  auto* pp =
     const_cast<std::vector<std::vector<double> >* >(&stats);
 
   // reset the stats before this new run
@@ -183,7 +183,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
     R = svdR.recompose();
 
     // The new estimate is incremental over the old one.
-    rgrl_trans_rigid* old_sim = dynamic_cast<rgrl_trans_rigid* >( current_trans.as_pointer() );
+    auto* old_sim = dynamic_cast<rgrl_trans_rigid* >( current_trans.as_pointer() );
     double fro_norm2 = trans.magnitude();
     trans += R * old_sim->t();
 
@@ -244,7 +244,7 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
   // first, we have to extract the angles from our linearized rotation matrix
   double alpha,theta,phi;
 
-  rgrl_trans_rigid* tttt = dynamic_cast<rgrl_trans_rigid*>(current_trans.ptr());
+  auto* tttt = dynamic_cast<rgrl_trans_rigid*>(current_trans.ptr());
 
   assert(tttt);
   tttt->determine_angles(phi,alpha,theta);
@@ -414,7 +414,7 @@ void rgrl_est_rigid::determine_covariance( rgrl_set_of<rgrl_match_set_sptr> cons
   //svd.zero_out_absolute(10e-8);
   vnl_matrix<double> covar = svd.inverse();
 
-  rgrl_trans_rigid* rigid = dynamic_cast<rgrl_trans_rigid*>(current_trans.ptr());
+  auto* rigid = dynamic_cast<rgrl_trans_rigid*>(current_trans.ptr());
 
   current_trans = new rgrl_trans_rigid(rigid->R(),rigid->t(),covar);
 }

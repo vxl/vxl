@@ -74,9 +74,9 @@ bool bstm_cpp_ingest_boxm2_scene_process(bprb_func_process& pro)
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
   boxm2_scene_sptr boxm2_scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr boxm2_cache= pro.get_input<boxm2_cache_sptr>(i++);
-  double time =pro.get_input<double>(i++);
-  double p_threshold =pro.get_input<double>(i++);
-  double app_threshold =pro.get_input<double>(i++);
+  auto time =pro.get_input<double>(i++);
+  auto p_threshold =pro.get_input<double>(i++);
+  auto app_threshold =pro.get_input<double>(i++);
 
   //bstm app query
   std::string data_type;

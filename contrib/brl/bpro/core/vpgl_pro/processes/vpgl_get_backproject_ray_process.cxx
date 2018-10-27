@@ -49,11 +49,11 @@ bool vpgl_get_backproject_ray_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float u = pro.get_input<float>(i++);
-  float v = pro.get_input<float>(i++);
+  auto u = pro.get_input<float>(i++);
+  auto v = pro.get_input<float>(i++);
 
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_backproject_ray_process: couldn't cast camera\n";
     return false;
@@ -110,15 +110,15 @@ bool vpgl_get_rpc_backproject_ray_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  double u = pro.get_input<double>(i++);
-  double v = pro.get_input<double>(i++);
-  double altitude = pro.get_input<double>(i++);
-  double x0 = pro.get_input<double>(i++);
-  double y0 = pro.get_input<double>(i++);
-  double z0 = pro.get_input<double>(i++);
+  auto u = pro.get_input<double>(i++);
+  auto v = pro.get_input<double>(i++);
+  auto altitude = pro.get_input<double>(i++);
+  auto x0 = pro.get_input<double>(i++);
+  auto y0 = pro.get_input<double>(i++);
+  auto z0 = pro.get_input<double>(i++);
 
 
-  vpgl_rational_camera<double>* cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_rpc_backproject_ray_process: couldn't cast camera\n";
     return false;

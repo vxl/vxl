@@ -67,7 +67,7 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
     return false;
   vil_image_view<vxl_byte> input_img(img);
 
-  unsigned c_size = pro.get_input<unsigned>(i++);  // center size
+  auto c_size = pro.get_input<unsigned>(i++);  // center size
 
   vil_image_view<float> out(ni, nj, 1);
   brec_glitch::extend_prob_to_square_region(c_size, map, out);

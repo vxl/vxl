@@ -76,12 +76,12 @@ bool boxm2_cpp_update_with_shadow_process(bprb_func_process& pro)
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr in_img=pro.get_input<vil_image_view_base_sptr>(i++);
-  float shadow_prior = pro.get_input<float>(i++);
-  float shadow_sigma = pro.get_input<float>(i++);
+  auto shadow_prior = pro.get_input<float>(i++);
+  auto shadow_sigma = pro.get_input<float>(i++);
   std::string identifier = pro.get_input<std::string>(i);
 
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  if (auto * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
     bool foundDataType = false;
     bool foundNumObsType = false;

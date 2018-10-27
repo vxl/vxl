@@ -34,7 +34,7 @@ bool vpgl_convert_to_local_rational_camera_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(1);
 
-  vpgl_rational_camera<double> *rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+  auto *rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
   if ( !rat_cam ) {
     std::cerr << "Error: camera is not a vpgl_rational_camera\n";
     return false;

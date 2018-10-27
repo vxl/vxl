@@ -38,7 +38,7 @@ bool vnl_generalized_schur(vnl_matrix<double> *A,
 
   long sdim = 0;
   long lwork = 1000 + (8*n + 16);
-  double *work = new double[lwork];
+  auto *work = new double[lwork];
   long info = 0;
   A->inplace_transpose();
   B->inplace_transpose();

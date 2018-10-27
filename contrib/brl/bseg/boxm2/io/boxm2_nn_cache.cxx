@@ -112,7 +112,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
     {
       std::cout<<"boxm2_nn_cache::initializing empty block "<<id<<std::endl;
       boxm2_block_metadata data = scene_->get_block_metadata(id);
-      boxm2_block* loaded = new boxm2_block(data);
+      auto* loaded = new boxm2_block(data);
       new_cache[id] = loaded;
     }
     else { // send an async request for this block (if it's on disk)

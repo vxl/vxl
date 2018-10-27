@@ -77,7 +77,7 @@ bool bstm_cpp_label_tt_depth_process(bprb_func_process& pro)
     bstm_data_base * label_data_base = cache->get_data_base(bstm_metadata.id_, bstm_data_traits<BSTM_LABEL>::prefix(),
                                     alph->buffer_length() / bstm_data_traits<BSTM_ALPHA>::datasize() * bstm_data_traits<BSTM_LABEL>::datasize() );
 
-    bstm_data_traits<BSTM_LABEL>::datatype * label_data = (bstm_data_traits<BSTM_LABEL>::datatype*) label_data_base->data_buffer();
+    auto * label_data = (bstm_data_traits<BSTM_LABEL>::datatype*) label_data_base->data_buffer();
 
     boxm2_array_1d<vnl_vector_fixed<unsigned char, 8> > &  time_trees = blk_t->time_trees();
 

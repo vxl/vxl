@@ -123,8 +123,8 @@ int main(int argc,  char** argv)
       for (auto & nlcd_img : nlcd_imgs) {
         double u, v;
         nlcd_img.second->global_to_img(lon, lat, 0, u, v);
-        unsigned uu = (unsigned)std::floor(u + 0.5);
-        unsigned vv = (unsigned)std::floor(v + 0.5);
+        auto uu = (unsigned)std::floor(u + 0.5);
+        auto vv = (unsigned)std::floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_img.first.ni() && vv < nlcd_img.first.nj()) {
           label = (nlcd_img.first)(uu, vv);
           break;

@@ -45,7 +45,7 @@ bool bsl_fusion_process(bprb_func_process& pro)
   //get the inputs
   vil_image_view_base_sptr inp1 = pro.get_input<vil_image_view_base_sptr>(0);
   vil_image_view_base_sptr inp2 = pro.get_input<vil_image_view_base_sptr>(1);
-  float atomicity = pro.get_input<float>(2);
+  auto atomicity = pro.get_input<float>(2);
 
   vil_image_view<float> inp_img1(inp1);
   vil_image_view<float> inp_img2(inp2);
@@ -57,7 +57,7 @@ bool bsl_fusion_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj, np);
+  auto* out_img = new vil_image_view<float>(ni, nj, np);
   if (np == 2) {  // only b and u planes, plane 0: belief, plane 1: uncertainty
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++) {

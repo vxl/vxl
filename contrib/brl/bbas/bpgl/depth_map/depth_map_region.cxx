@@ -438,7 +438,7 @@ void vsl_b_write(vsl_b_ostream& os, const depth_map_region* dm_ptr)
   }
   else
     vsl_b_write(os, true);
-  depth_map_region* dm_non_const = const_cast<depth_map_region*>(dm_ptr);
+  auto* dm_non_const = const_cast<depth_map_region*>(dm_ptr);
   dm_non_const->b_write(os);
 }
 
@@ -475,7 +475,7 @@ void depth_map_region::b_write(vsl_b_ostream& os)
   vsl_b_write(os, active_);
   vsl_b_write(os, is_ref_);
   vsl_b_write(os, order_);
-  unsigned temp = static_cast<unsigned>(orient_type_);
+  auto temp = static_cast<unsigned>(orient_type_);
   vsl_b_write(os, temp);
   vsl_b_write(os, name_);
   vsl_b_write(os, depth_);

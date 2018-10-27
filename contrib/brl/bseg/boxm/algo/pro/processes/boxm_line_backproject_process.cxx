@@ -126,7 +126,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
     float col, row, theta;
 
     if (camera->type_name() == "vpgl_proj_camera") {
-      vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr());
+      auto* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr());
 
       for (unsigned i=0; i<ni; i++) {
         for (unsigned j=0; j<nj; j++) {
@@ -160,7 +160,7 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
       }
     }
     else if (camera->type_name() == "vpgl_local_rational_camera") {
-      vpgl_local_rational_camera<double>* cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
+      auto* cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
       for (unsigned i=0; i<ni; i++) {
         for (unsigned j=0; j<nj; j++) {
           col =edge_image(i,j,0); // sub-pixel column
@@ -201,8 +201,8 @@ bool boxm_line_backproject_process(bprb_func_process& pro)
       }
     }
     else if (camera->type_name() == "vpgl_perspective_camera") {
-      vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
-      vpgl_proj_camera<double>* proj_cam = static_cast<vpgl_proj_camera<double>*>(cam);
+      auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+      auto* proj_cam = static_cast<vpgl_proj_camera<double>*>(cam);
       for (unsigned i=0; i<ni; i++) {
         for (unsigned j=0; j<nj; j++) {
           col =edge_image(i,j,0); // sub-pixel column

@@ -123,7 +123,7 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
   // get inputs
   sdet_texture_classifier_sptr tc_ptr = pro.get_input<sdet_texture_classifier_sptr>(0);
   std::string name = pro.get_input<std::string>(1);
-  unsigned n = pro.get_input<unsigned>(2);
+  auto n = pro.get_input<unsigned>(2);
   std::string folder = pro.get_input<std::string>(3);
   std::string res_name = pro.get_input<std::string>(4);
   bool is_smooth = pro.get_input<bool>(5);
@@ -131,12 +131,12 @@ bool sdet_add_to_filter_bank_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_sptr = vil_load(name.c_str());
 
   vil_image_view<float> img_f;
-  if (vil_image_view<vxl_byte>* img_ptr = dynamic_cast<vil_image_view<vxl_byte>*>(img_sptr.ptr())) {
+  if (auto* img_ptr = dynamic_cast<vil_image_view<vxl_byte>*>(img_sptr.ptr())) {
     std::cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
              << " with pixel format: " << img_ptr->pixel_format() << std::endl;
     vil_image_view<vxl_byte> img_band = vil_plane(*img_ptr, n);
     vil_convert_stretch_range_limited(img_band, img_f, (vxl_byte)0, (vxl_byte)255, 0.0f, 1.0f);
-  }else if (vil_image_view<float>* img_ptr = dynamic_cast<vil_image_view<float>*>(img_sptr.ptr())) {
+  }else if (auto* img_ptr = dynamic_cast<vil_image_view<float>*>(img_sptr.ptr())) {
     std::cout << " loaded image, ni: " << img_ptr->ni() << " " << img_ptr->nj() << " nplanes: " << img_ptr->nplanes()
              << " with pixel format: " << img_ptr->pixel_format() << std::endl;
     img_f = vil_plane(*img_ptr, n);

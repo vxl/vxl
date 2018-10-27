@@ -72,12 +72,12 @@ write_intensity_regions_3d(std::ofstream& str,
     for (unsigned i = 0; i<nedges; ++i)
     {
       vtol_edge_sptr e = och->edge(i);
-      vtol_edge_2d* e2d = (vtol_edge_2d*)(e.ptr());
+      auto* e2d = (vtol_edge_2d*)(e.ptr());
       vsol_curve_2d_sptr c = e2d->curve();
       vdgl_digital_curve* dc = c->cast_to_vdgl_digital_curve();
       if (!dc) continue;
       write_index_preamble(str);
-      unsigned n = static_cast<unsigned>(dc->n_pts());
+      auto n = static_cast<unsigned>(dc->n_pts());
       if (n<2) continue;
       double ds = 1.0/(n-1);
       for (unsigned j = 0; j<n; ++j){

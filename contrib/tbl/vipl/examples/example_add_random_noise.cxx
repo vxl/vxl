@@ -41,7 +41,7 @@ main(int argc, char** argv)
 
   // The noise `width':
   double sigma = (argc < 4) ? 5.0 : std::atof(argv[3]);
-  vxl_byte s = (vxl_byte)(sigma+0.5); // round to integer
+  auto s = (vxl_byte)(sigma+0.5); // round to integer
 
   // The filter:
   vipl_add_random_noise<vil_image_view<vxl_byte>,vil_image_view<vxl_byte>,vxl_byte,vxl_byte> op(GAUSSIAN_NOISE,s);

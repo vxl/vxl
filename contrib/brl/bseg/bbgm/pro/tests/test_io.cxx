@@ -97,7 +97,7 @@ void test_io_function_2(void)
   if (!iv) good = false;
   std::string test;
   if (good){
-    brdb_value_t<bbgm_image_sptr>* vp =
+    auto* vp =
     static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
     test = vp->value()->is_a();
   }
@@ -160,7 +160,7 @@ static void test_io()
   if (!iv) good = false;
   std::string test;
   if (good){
-    brdb_value_t<bbgm_image_sptr>* vp =
+    auto* vp =
     static_cast<brdb_value_t<bbgm_image_sptr>*>(iv.ptr());
     test = vp->value()->is_a();
   }

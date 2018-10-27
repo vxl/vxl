@@ -178,7 +178,7 @@ int main(int argc, char** argv)
   // construct depth_interval table for pass 1 matcher
   std::map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
   std::vector<float> depth_interval;
-  std::map<double, unsigned char>::iterator iter = depth_interval_map.begin();
+  auto iter = depth_interval_map.begin();
   for (; iter != depth_interval_map.end(); ++iter)
     depth_interval.push_back((float)iter->first);
 

@@ -100,7 +100,7 @@ static void test_io(int argc, char* argv[])
           fail = true;
           break;
         }
-        bxml_element* el = static_cast<bxml_element*>(data.ptr());
+        auto* el = static_cast<bxml_element*>(data.ptr());
         if (el->name() != "frame") {
           fail = true;
           break;

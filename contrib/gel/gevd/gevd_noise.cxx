@@ -109,7 +109,7 @@ gevd_noise::EdgelsInCenteredROI(const gevd_bufferxy& magnitude,
   float k = 1.0;
 #endif
   const int sx = int(k*magnitude.GetSizeX()), sy = int(k*magnitude.GetSizeY());
-  float* edgels = new float [sx*sy];
+  auto* edgels = new float [sx*sy];
   const int xmin = (magnitude.GetSizeX() - sx) / 2;
   const int xmax = xmin + sx;
   const int ymin = (magnitude.GetSizeY() - sy) / 2;
@@ -176,7 +176,7 @@ bool
 gevd_noise::EstimateSensorTexture(float& sensor, float& texture) const
 {
   // 1. Compute derivative of histogram, dh(x)
-  float* dhist = new float[nbin];
+  auto* dhist = new float[nbin];
 #ifdef DEBUG
   float mag =
 #endif
@@ -298,7 +298,7 @@ gevd_noise::RealZeroCrossing(const float* dhist, const int nbin,
   index = (float)i3;
   if (dh3 > 0) {                // interpolate zero-crossing
     int i4 = i3+1;
-    float dh4 = (float)std::fabs(dhist[i4]);
+    auto dh4 = (float)std::fabs(dhist[i4]);
     index = (i3*dh4 + i4*dh3) / (dh3 + dh4);
   }
 #ifdef DEBUG

@@ -80,8 +80,8 @@ bool boxm2_ocl_compute_pre_post_process(bprb_func_process& pro)
     vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
     vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
     std::string view_identifier = pro.get_input<std::string>(i++);
-    float                    nearfactor = pro.get_input<float>(i++);
-    float                    farfactor = pro.get_input<float>(i++);
+    auto                    nearfactor = pro.get_input<float>(i++);
+    auto                    farfactor = pro.get_input<float>(i++);
     vul_timer t;
     t.mark();
     boxm2_ocl_compute_pre_post::compute_pre_post(scene, device, opencl_cache, cam, img, view_identifier, nearfactor, farfactor);

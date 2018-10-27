@@ -228,7 +228,7 @@ vil_nitf2_classification::file_version vil_nitf2_header::file_version() const
 
 vil_nitf2_field::field_tree* vil_nitf2_header::get_tree() const
 {
-  vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
+  auto* t = new vil_nitf2_field::field_tree;
   t->columns.emplace_back("File Header" );
   m_field_sequence1.get_tree( t );
   if ( m_field_sequence_classification ) m_field_sequence_classification->get_tree( t );

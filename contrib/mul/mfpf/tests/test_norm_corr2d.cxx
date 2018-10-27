@@ -169,7 +169,7 @@ void test_norm_corr2d()
     TEST("Correct Point Finder Builder", pf->is_a(),"mfpf_norm_corr2d_builder");
     if (pf->is_a()=="mfpf_norm_corr2d_builder")
     {
-      mfpf_norm_corr2d_builder &a_pf = static_cast<mfpf_norm_corr2d_builder&>(*pf);
+      auto &a_pf = static_cast<mfpf_norm_corr2d_builder&>(*pf);
       std::cout<<a_pf<<std::endl;
       TEST("search_ni configured",a_pf.search_ni(),17);
       TEST("search_nj configured",a_pf.search_nj(),15);

@@ -58,11 +58,11 @@ bool bvxm_pmap_hist_process_globals::compute(std::string pmap,  std::string path
   for ( unsigned int ni = 0; ni < img->ni(); ++ni ){
     for ( unsigned int nj = 0; nj < img->nj(); ++nj ){
       if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-        if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(img.ptr()))
+        if (auto *img_view = dynamic_cast<vil_image_view<unsigned char>*>(img.ptr()))
           p = (*img_view)(ni, nj);
       }
       else if (img->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) {
-        if (vil_image_view<float> *img_view = dynamic_cast<vil_image_view<float>*>(img.ptr()))
+        if (auto *img_view = dynamic_cast<vil_image_view<float>*>(img.ptr()))
           p = (*img_view)(ni, nj);
       }
 

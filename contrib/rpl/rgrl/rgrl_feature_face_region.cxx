@@ -47,7 +47,7 @@ rgrl_feature_sptr
 rgrl_feature_face_region::
 transform( rgrl_transformation const& xform ) const
 {
-  rgrl_feature_face_region* face_ptr = new rgrl_feature_face_region();
+  auto* face_ptr = new rgrl_feature_face_region();
 
   // Capture the allocation into a smart pointer for exception safety.
   rgrl_feature_sptr result_sptr = face_ptr;

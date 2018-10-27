@@ -29,13 +29,13 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
 
   // transfer osm objects to volm_osm_objects (ignore the osm objects whose properties is not defined in osm_to_volm table)
   std::map<std::pair<std::string, std::string>, volm_land_layer>::iterator mit;
-  unsigned num_pts = (unsigned)osm_pts.size();
+  auto num_pts = (unsigned)osm_pts.size();
   for (unsigned i = 0; i < num_pts; i++)
   {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_pt_keys[i];
     // find pier first as first priority
     bool pier_found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
       if (vit->first == "man_made" && vit->second == "pier") {
         mit = osm_land_table.find(*vit);
         if (mit != osm_land_table.end()) {
@@ -47,7 +47,7 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
     if (pier_found)
       continue;
     bool found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);
       if (mit != osm_land_table.end()) { // the key is in the table
         found = true;
@@ -58,13 +58,13 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
     }
   }
 
-  unsigned num_lines = (unsigned)osm_lines.size();
+  auto num_lines = (unsigned)osm_lines.size();
   for (unsigned i = 0; i < num_lines; i++)
   {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_line_keys[i];
     // find pier first as first priority
     bool pier_found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
       if (vit->first == "man_made" && vit->second == "pier") {
         mit = osm_land_table.find(*vit);
         if (mit != osm_land_table.end()) {
@@ -76,7 +76,7 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
     if (pier_found)
       continue;
     bool found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);
       if (mit != osm_land_table.end()) {
         found = true;
@@ -86,13 +86,13 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
     }
   }
 
-  unsigned num_polys = (unsigned)osm_polys.size();
+  auto num_polys = (unsigned)osm_polys.size();
   for (unsigned i = 0; i < num_polys; i++)
   {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_poly_keys[i];
     // find pier first
     bool pier_found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !pier_found); ++vit) {
       if (vit->first == "man_made" && vit->second == "pier") {
         mit = osm_land_table.find(*vit);
         if (mit != osm_land_table.end()) {
@@ -103,7 +103,7 @@ volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string cons
     }
 
     bool found = false;
-    for (std::vector<std::pair<std::string, std::string> >::iterator vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
+    for (auto vit = curr_keys.begin(); (vit != curr_keys.end() && !found); ++vit) {
       mit = osm_land_table.find(*vit);
       if (mit != osm_land_table.end()) {
         found = true;
@@ -264,21 +264,21 @@ volm_osm_object_ids::volm_osm_object_ids(std::string const& bin_file)
 
 void volm_osm_object_ids::add_pt(unsigned const& pt_id)
 {
-  std::vector<unsigned>::iterator vit = std::find(pt_ids_.begin(), pt_ids_.end(), pt_id);
+  auto vit = std::find(pt_ids_.begin(), pt_ids_.end(), pt_id);
   if (vit == pt_ids_.end())
     pt_ids_.push_back(pt_id);
 }
 
 void volm_osm_object_ids::add_line(unsigned const& line_id)
 {
-  std::vector<unsigned>::iterator vit = std::find(line_ids_.begin(), line_ids_.end(), line_id);
+  auto vit = std::find(line_ids_.begin(), line_ids_.end(), line_id);
   if (vit == line_ids_.end())
     line_ids_.push_back(line_id);
 }
 
 void volm_osm_object_ids::add_region(unsigned const& region_id)
 {
-  std::vector<unsigned>::iterator vit = std::find(region_ids_.begin(), region_ids_.end(), region_id);
+  auto vit = std::find(region_ids_.begin(), region_ids_.end(), region_id);
   if (vit == region_ids_.end())
     region_ids_.push_back(region_id);
 }

@@ -80,35 +80,35 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     img_dims.push_back(exp_img_dim);
 
     //create exp image (TODO, make these patches to save mem)
-    float* exp_buff = new float[cl_ni*cl_nj];
+    auto* exp_buff = new float[cl_ni*cl_nj];
     std::fill(exp_buff, exp_buff+cl_ni*cl_nj, 0.0f);
     bocl_mem * exp_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_buff, "exp image buffer");
     exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     exp_mems.push_back(exp_image);
 
     // visibility image
-    float* vis_buff = new float[cl_ni*cl_nj];
+    auto* vis_buff = new float[cl_ni*cl_nj];
     std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
     bocl_mem * vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff, "exp image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
     // Output Array
-    float* output_arr = new float[cl_ni*cl_nj];
+    auto* output_arr = new float[cl_ni*cl_nj];
     std::fill(output_arr, output_arr+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr  cl_output = ocl_cache->alloc_mem(sizeof(float)*cl_ni*cl_nj, output_arr, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     outputs.push_back(cl_output);
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = ocl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = ocl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
     ray_os.push_back(ray_o_buff);
     ray_ds.push_back(ray_d_buff);
 
-    float* max_omega_buff = new float[cl_ni*cl_nj];
+    auto* max_omega_buff = new float[cl_ni*cl_nj];
     std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr max_omega_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"max omega buffer");
     max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -192,8 +192,8 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
       vis_mems[i]->read_to_buffer(queues[i]);
 
       //set the vis and exp images
-      float* v = (float*) vis_mems[i]->cpu_buffer();
-      float* e = (float*) exp_mems[i]->cpu_buffer();
+      auto* v = (float*) vis_mems[i]->cpu_buffer();
+      auto* e = (float*) exp_mems[i]->cpu_buffer();
       float* imgbuff = img.top_left_ptr();
       float* visbuff = vis_out.top_left_ptr();
       for (int jj=minV; jj<maxV; ++jj)
@@ -231,27 +231,27 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
     clReleaseCommandQueue(queues[i]);
 
     //clear exp images
-    float* v = (float*) vis_mems[i]->cpu_buffer();
-    float* e = (float*) exp_mems[i]->cpu_buffer();
+    auto* v = (float*) vis_mems[i]->cpu_buffer();
+    auto* e = (float*) exp_mems[i]->cpu_buffer();
     delete[] v;
     delete[] e;
     ocl_cache->unref_mem(exp_mems[i]);
     ocl_cache->unref_mem(vis_mems[i]);
 
     //clear ray mems
-    float* ro = (float*) ray_os[i]->cpu_buffer();
-    float* rd = (float*) ray_ds[i]->cpu_buffer();
+    auto* ro = (float*) ray_os[i]->cpu_buffer();
+    auto* rd = (float*) ray_ds[i]->cpu_buffer();
     delete[] ro;
     delete[] rd;
     ocl_cache->unref_mem(ray_os[i].ptr());
     ocl_cache->unref_mem(ray_ds[i].ptr());
 
-    float* max_omega_buff_float = (float*) max_omegas[i]->cpu_buffer();
+    auto* max_omega_buff_float = (float*) max_omegas[i]->cpu_buffer();
     delete[] max_omega_buff_float;
     ocl_cache->unref_mem( max_omegas[i].ptr());
 
     //clear output
-    float* out = (float*) outputs[i]->cpu_buffer();
+    auto* out = (float*) outputs[i]->cpu_buffer();
     delete[] out;
     ocl_cache->unref_mem(outputs[i].ptr());
 
@@ -261,7 +261,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
   //--------------------------------
   //report times
   //--------------------------------
-  float wall_time = (float) rtime.all();
+  auto wall_time = (float) rtime.all();
   std::cout<<"\nMulti Render Time: "<< wall_time <<" ms\n"
           <<"  cpu_time: "<<wall_time-gpu_time<<" ms\n"
           <<"  gpu_time: "<<gpu_time<<" ms"<<std::endl;
@@ -409,8 +409,8 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -483,7 +483,7 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
     }
 
     bocl_mem* mog       = opencl_cache->get_data(id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
-    float transfer_time = (float) transfer.all();
+    auto transfer_time = (float) transfer.all();
 
     ////3. SET args
     kern->set_arg( blk_info );
@@ -548,7 +548,7 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, std::string opts)
   options += " -D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
   //have kernel construct itself using the context and device
-  bocl_kernel * ray_trace_kernel=new bocl_kernel();
+  auto * ray_trace_kernel=new bocl_kernel();
   ray_trace_kernel->create_kernel( &device->context(),
                                    device->device_id(),
                                    src_paths,
@@ -560,7 +560,7 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, std::string opts)
   std::vector<std::string> norm_src_paths;
   norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
   norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-  bocl_kernel * normalize_render_kernel=new bocl_kernel();
+  auto * normalize_render_kernel=new bocl_kernel();
   normalize_render_kernel->create_kernel( &device->context(),
                                           device->device_id(),
                                           norm_src_paths,

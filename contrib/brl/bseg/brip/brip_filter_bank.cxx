@@ -84,7 +84,7 @@ void brip_filter_bank::set_image(vil_image_view<float> const& image)
 void brip_filter_bank::construct_scale_pyramid()
 {
   //smooth with Gaussian sigma given by the scale ratio and downsample
-  unsigned radius =
+  auto radius =
     static_cast<unsigned>(gauss_radius(static_cast<float>(scale_ratio_), cutoff_ratio_));
   unsigned int n_samples = 2*radius +1;
   std::cout << " \t in brip_filter_bank level: 0 (original) size of img: " << ni_ << " " << nj_ << '\n';
@@ -102,10 +102,10 @@ void brip_filter_bank::construct_scale_pyramid()
     // image dimensions for next level
     dni /= scale_ratio_;     dnj /= scale_ratio_;
     double scale = scale_m1 / scale_ratio_;
-    unsigned sni = static_cast<unsigned>(dni+0.5);
-    unsigned snj = static_cast<unsigned>(dnj+0.5);
+    auto sni = static_cast<unsigned>(dni+0.5);
+    auto snj = static_cast<unsigned>(dnj+0.5);
     std::cout << " \t in brip_filter_bank level: " << level << " size of img: " << sni << " " << snj << '\n';
-    vil_image_view<float>* lview = new vil_image_view<float>();
+    auto* lview = new vil_image_view<float>();
     vil_image_view_base_sptr lview_ptr = lview;
     vil_resample_bicub(smooth, *lview, sni, snj);
     scale_pyramid_.add_view(lview_ptr, scale);

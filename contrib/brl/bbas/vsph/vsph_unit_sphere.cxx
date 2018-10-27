@@ -85,7 +85,7 @@ void vsph_unit_sphere::add_uniform_views()
   double cap_angle_rad = vnl_math::pi; //historical reasons (fix me)
 
   // create a octahedron on the sphere, define 6 points for the vertices of the triangles
-  std::vector<vgl_vector_3d<double> >* verts = new std::vector<vgl_vector_3d<double> >();
+  auto* verts = new std::vector<vgl_vector_3d<double> >();
   vgl_vector_3d<double> v1(0.0,0.0, 1.0); (*verts).push_back(v1);
   vgl_vector_3d<double> v2(0.0,0.0,-1.0); (*verts).push_back(v2);
   vgl_vector_3d<double> v3( 1.0,0.0,0.0); (*verts).push_back(v3);
@@ -310,7 +310,7 @@ void vsph_unit_sphere::remove_top_and_bottom()
   double max_theta_rad = max_theta_/vnl_math::deg_per_rad;
   std::vector<vgl_vector_3d<double> > cart_pts_new;
   std::vector<vsph_sph_point_2d> sph_pts_new;
-  std::vector<vsph_sph_point_2d>::iterator pit = sph_pts_.begin();
+  auto pit = sph_pts_.begin();
   int indx = 0;
   for (; pit!=sph_pts_.end();++pit, ++indx) {
     vsph_sph_point_2d& sp = (*pit);
@@ -361,7 +361,7 @@ void vsph_unit_sphere::find_neighbors()
 bool vsph_unit_sphere::
 find_near_equal(vgl_vector_3d<double>const& p, int& id, double tol)
 {
-  std::vector<vgl_vector_3d<double> >::iterator it = cart_pts_.begin();
+  auto it = cart_pts_.begin();
   id = 0;
   for (;it != cart_pts_.end(); it++, ++id) {
     vgl_vector_3d<double>& cp = *it;
@@ -387,7 +387,7 @@ void vsph_unit_sphere::print(std::ostream& os) const
 {
   os << "vsph_unit_sphere: " << size() << std::endl;
   unsigned idx = 0;
-  for (std::vector<vsph_sph_point_2d>::const_iterator sit = sph_pts_.begin();
+  for (auto sit = sph_pts_.begin();
        sit != sph_pts_.end(); ++sit, ++idx)
     os << '(' << idx << ") " << *sit << std::endl;
   os << std::endl;
@@ -437,7 +437,7 @@ void vsph_unit_sphere::display_vertices(std::string const & path) const
      << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (auto cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -467,7 +467,7 @@ void vsph_unit_sphere::display_edges(std::string const & path) const
      << "      point [\n";
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (auto cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -480,7 +480,7 @@ void vsph_unit_sphere::display_edges(std::string const & path) const
 
   cnt = 0;
   int ne = edges_.size()-1;
-  for (std::vector<vsph_edge>::const_iterator eit = edges_.begin();
+  for (auto eit = edges_.begin();
        eit != edges_.end(); ++eit, ++cnt) {
     const vsph_edge& e = *eit;
     os << e.vs_ << ',' << e.ve_;
@@ -531,13 +531,13 @@ void vsph_unit_sphere::display_data(std::string const & path,
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad );
+  auto disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad );
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vsph_sph_point_2d sp = sph_pts_[i];
     if (!mask.is_empty()&&mask.defined()&&!mask.contains(sp)) continue;
     vgl_vector_3d<double> ray = cart_pts_[i];
-    float val = static_cast<float>((data[i]-minv)/dif);
+    auto val = static_cast<float>((data[i]-minv)/dif);
     bvrml_write::write_vrml_disk(os, orig+10*ray, ray, disc_radius,
                                  val, val, 0.0f);
   }
@@ -545,7 +545,7 @@ void vsph_unit_sphere::display_data(std::string const & path,
 
   int cnt = 0;
   int np = cart_pts_.size()-1;
-  for (std::vector<vgl_vector_3d<double> >::const_iterator cit = cart_pts_.begin();
+  for (auto cit = cart_pts_.begin();
        cit != cart_pts_.end(); ++cit, ++cnt) {
     const vgl_vector_3d<double>& cp = *cit;
     os << cp.x() << ' ' << cp.y() << ' ' << cp.z();
@@ -584,7 +584,7 @@ void vsph_unit_sphere::display_color(std::string const & path,
   bvrml_write::write_vrml_sphere(os, sp2, 0.0f, 0.0f, 1.0f, 0.0f);
 
   // write the voxel structure
-  float disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad/6);
+  auto disc_radius = static_cast<float>(point_angle_/vnl_math::deg_per_rad/6);
   vgl_point_3d<double> orig(0.0,0.0,0.0);
   for (unsigned i = 0; i < cart_pts_.size(); i++) {
     vgl_vector_3d<double> ray = cart_pts_[i];

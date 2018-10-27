@@ -280,7 +280,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, std::v
     std::string options = "-D RENDER_VIEW_DEP -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -325,7 +325,7 @@ bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, std::v
     std::string options = "-D RENDER -D STEP_CELL=step_cell_render_nobs(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,

@@ -201,9 +201,9 @@ std::vector<int> NViewMatches::get_matches(const NViewMatch& match)
 int NViewMatches::incorporate(const NViewMatch& newtrack)
 {
   int nmatches = 0;
-  iterator merged = end();
+  auto merged = end();
   std::abort(); // This routine is untested.....
-  for (iterator i = begin(); i != end(); ++i) {
+  for (auto i = begin(); i != end(); ++i) {
     if ((*i).matches(newtrack,min_overlap_)) {
       if (nmatches == 0) {
         // This is the first consistent match found for newtrack

@@ -13,10 +13,10 @@ compute_forward_transform(boxm2_scene_sptr source,
                           cl_command_queue &queue)
 {
   // cast to approprate type
-  boxm2_data_traits<BOXM2_POINT>::datatype *pts_source_host =
+  auto *pts_source_host =
     reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(pts_source->cpu_buffer());
 
-  boxm2_data_traits<BOXM2_POINT>::datatype *pts_target_host =
+  auto *pts_target_host =
     reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(pts_target->cpu_buffer());
 
   // read input from gpu to host
@@ -53,10 +53,10 @@ compute_inverse_transform(boxm2_scene_sptr target,
                           cl_command_queue &queue)
 {
   // cast to approprate type
-  boxm2_data_traits<BOXM2_POINT>::datatype *pts_source_host =
+  auto *pts_source_host =
     reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(pts_source->cpu_buffer());
 
-  boxm2_data_traits<BOXM2_POINT>::datatype *pts_target_host =
+  auto *pts_target_host =
     reinterpret_cast<boxm2_data_traits<BOXM2_POINT>::datatype*>(pts_target->cpu_buffer());
 
   // read input from gpu to host

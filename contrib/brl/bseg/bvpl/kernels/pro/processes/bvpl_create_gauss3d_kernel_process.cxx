@@ -48,13 +48,13 @@ bool bvpl_create_gauss3d_kernel_process(bprb_func_process& pro)
 
   //get inputs
   unsigned i = 0;
-  float sigma1 = pro.get_input<float>(i++); //sigma1 - x-axis width
-  float sigma2 = pro.get_input<float>(i++); //sigma2 - y-axis width
-  float sigma3 = pro.get_input<float>(i++); //sigma3 - z-axis width
-  float axis_x = pro.get_input<float>(i++);
-  float axis_y = pro.get_input<float>(i++);
-  float axis_z = pro.get_input<float>(i++);
-  float angle =  pro.get_input<float>(i++);
+  auto sigma1 = pro.get_input<float>(i++); //sigma1 - x-axis width
+  auto sigma2 = pro.get_input<float>(i++); //sigma2 - y-axis width
+  auto sigma3 = pro.get_input<float>(i++); //sigma3 - z-axis width
+  auto axis_x = pro.get_input<float>(i++);
+  auto axis_y = pro.get_input<float>(i++);
+  auto axis_z = pro.get_input<float>(i++);
+  auto angle =  pro.get_input<float>(i++);
 
   vnl_float_3 axis(axis_x, axis_y, axis_z);
 

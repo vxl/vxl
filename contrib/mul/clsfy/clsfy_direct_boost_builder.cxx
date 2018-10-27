@@ -152,7 +152,7 @@ double clsfy_direct_boost_builder::build(clsfy_classifier_base& model,
   // nb  ignore nClasses=1, ie always binary classifier
 
   assert( model.is_class("clsfy_direct_boost") );
-  clsfy_direct_boost &strong_classifier = (clsfy_direct_boost&) model;
+  auto &strong_classifier = (clsfy_direct_boost&) model;
 
 
   // check parameters are OK

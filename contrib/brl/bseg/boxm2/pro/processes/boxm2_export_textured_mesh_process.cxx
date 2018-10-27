@@ -100,8 +100,8 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
 
   if (img->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
-    vil_image_view<vxl_byte>* inim = (vil_image_view<vxl_byte>*) img.ptr();
-    vil_image_view<float>* fimg = new vil_image_view<float>(img->ni(), img->nj());
+    auto* inim = (vil_image_view<vxl_byte>*) img.ptr();
+    auto* fimg = new vil_image_view<float>(img->ni(), img->nj());
     for (unsigned int i=0; i<img->ni(); ++i)
       for (unsigned int j=0; j<img->nj(); ++j)
         (*fimg)(i,j) = (float) (*inim)(i,j) / 255.0f;
@@ -115,16 +115,16 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   }
 
   //cast camera and image so they are useful
-  vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
-  vil_image_view<float>* depth = (vil_image_view<float>*) img.ptr();
+  auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+  auto* depth = (vil_image_view<float>*) img.ptr();
 
   //determine size of depth image
   unsigned ni = img->ni();
   unsigned nj = img->nj();
 
   //calculate XYZ image image that corresponds to depth image
-  vil_image_view<vil_rgba<float> >* xyz_img = new vil_image_view<vil_rgba<float> >(ni, nj);
-  vil_image_view<float>* z_img = new vil_image_view<float>(ni,nj);
+  auto* xyz_img = new vil_image_view<vil_rgba<float> >(ni, nj);
+  auto* z_img = new vil_image_view<float>(ni,nj);
   for (unsigned int i=0; i<ni; ++i) {
     for (unsigned int j=0; j<nj; ++j) {
       //grab the ray from the camera
@@ -199,8 +199,8 @@ bool boxm2_export_textured_mesh_process(bprb_func_process& pro)
   for (unsigned iv = 0; iv<nverts; ++iv)
   {
     //get coordinates so you can index into the height map
-    unsigned i = static_cast<unsigned>(verts[iv][0]);
-    unsigned j = static_cast<unsigned>(verts[iv][1]);
+    auto i = static_cast<unsigned>(verts[iv][0]);
+    auto j = static_cast<unsigned>(verts[iv][1]);
     double scene_x=0, scene_y=0,scene_z = 0.0;
     if (i<ni && j<nj) {
       scene_x = (*xyz_img)(i,j).R();
@@ -260,7 +260,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   for (auto & camfile : camfiles) {
     //build the camera from file
     std::ifstream ifs(camfile.c_str());
-    vpgl_perspective_camera<double>* icam = new vpgl_perspective_camera<double>;
+    auto* icam = new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
       std::cerr << "Failed to open file " << camfile << '\n';
       return;
@@ -274,7 +274,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   // Grab input mesh vertices and input mesh faces
   ////////////////////////////////////////////////////////////////////////////////
   in_mesh.compute_vertex_normals_from_faces();
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  auto& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
@@ -326,7 +326,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
     }
 
     //grab appropriate face list (create it if it's not there)
-    std::map<std::string, std::vector<unsigned> >::iterator iter = app_faces.find(im_name);
+    auto iter = app_faces.find(im_name);
     if ( iter == app_faces.end() ) {
       std::cout<<"Adding image: "<<im_name<<" to texture list"<<std::endl;
       std::vector<unsigned> faceList;
@@ -355,10 +355,10 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   {
     //for each appearance, we're creating a whole new mesh
     // first create the face list
-    imesh_regular_face_array<3>* flist = new imesh_regular_face_array<3>();
+    auto* flist = new imesh_regular_face_array<3>();
 
     //now create the vertex list
-    imesh_vertex_array<3>* verts3 = new imesh_vertex_array<3>();
+    auto* verts3 = new imesh_vertex_array<3>();
 
     //get faces list corresponding to this texture
     std::vector<unsigned>& face_list = apps->second;
@@ -395,7 +395,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   //////////////////////////////////////////////////////////////////////////////
   std::cout<<"Mapping sub meshes for each texture"<<std::endl;
   std::map<std::string, imesh_mesh>::iterator subMesh;
-  std::map<std::string, vpgl_perspective_camera<double>* >::iterator txCam = texture_cams.begin();
+  auto txCam = texture_cams.begin();
   for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh, ++txCam)
   {
     imesh_mesh& mesh = subMesh->second;
@@ -471,7 +471,7 @@ void boxm2_export_textured_mesh_process_globals::boxm2_visible_faces( std::vecto
                                                                       std::vector<vil_image_view<int >* >& vis_images,
                                                                       imesh_mesh& in_mesh)
 {
-  imesh_regular_face_array<3>& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
+  auto& in_faces = (imesh_regular_face_array<3>&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
@@ -480,12 +480,12 @@ void boxm2_export_textured_mesh_process_globals::boxm2_visible_faces( std::vecto
   {
     //get the principal point of the cam for image size
     vgl_point_2d<double> principal_point = pcam->get_calibration().principal_point();
-    unsigned ni = (unsigned) (principal_point.x()*2.0);
-    unsigned nj = (unsigned) (principal_point.y()*2.0);
+    auto ni = (unsigned) (principal_point.x()*2.0);
+    auto nj = (unsigned) (principal_point.y()*2.0);
 
     // render the face_id/distance image
     vil_image_view<double> depth_im(ni, nj);
-    vil_image_view<int>*   face_im = new vil_image_view<int>(ni, nj);
+    auto*   face_im = new vil_image_view<int>(ni, nj);
     depth_im.fill(10e100);  //Initial depth is huge,
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)

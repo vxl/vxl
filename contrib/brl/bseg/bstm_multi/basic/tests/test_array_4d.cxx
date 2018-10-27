@@ -15,7 +15,7 @@ void test_array_4d() {
   TEST("index_4d inequality", (c != d), true);
   TEST("index_4d inequality", (c != a), true);
 
-  double *buffer = new double[2 * 3 * 4 * 5];
+  auto *buffer = new double[2 * 3 * 4 * 5];
   array_4d<double> arr(buffer, 2, 3, 4, 5);
   TEST("test coords to index", arr.index_from_coords(0, 0, 0, 3), 3);
   TEST("test coords to index", arr.index_from_coords(0, 0, 2, 3), 3 + 2 * 5);

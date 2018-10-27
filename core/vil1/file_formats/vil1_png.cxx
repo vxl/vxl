@@ -72,13 +72,13 @@ char const* vil1_png_file_format::tag() const
 
 static void user_read_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
+  auto* f = (vil1_stream*)png_get_io_ptr(png_ptr);
   f->read(data, (vil1_streampos)length);
 }
 
 static void user_write_data(png_structp png_ptr, png_bytep data, png_size_t length)
 {
-  vil1_stream* f = (vil1_stream*)png_get_io_ptr(png_ptr);
+  auto* f = (vil1_stream*)png_get_io_ptr(png_ptr);
   f->write(data, (vil1_streampos)length);
 }
 
@@ -130,7 +130,7 @@ static void pngtopnm_error_handler (png_structp png_ptr, png_const_charp msg)
     return;
   }
 
-  vil1_jmpbuf_wrapper  *jmpbuf_ptr = (vil1_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
+  auto  *jmpbuf_ptr = (vil1_jmpbuf_wrapper*) png_get_error_ptr(png_ptr);
   if (jmpbuf_ptr == nullptr) {         // we are completely hosed now
     std::cerr << "pnmtopng:  EXTREMELY fatal error: jmpbuf unrecoverable; terminating.\n";
     std::exit(99);
@@ -413,7 +413,7 @@ bool vil1_png_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     std::memcpy(buf, rows[y0], ys * bytes_per_row_dst);
   }
   else {
-    png_byte* dst = (png_byte*)buf;
+    auto* dst = (png_byte*)buf;
     for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
       std::memcpy(dst, &rows[y0+y][x0*bytes_per_pixel], xs*bytes_per_pixel);
   }
@@ -438,7 +438,7 @@ bool vil1_png_generic_image::put_section(void const* buf, int x0, int y0, int xs
     std::memcpy(rows[y0], buf, ys * bytes_per_row_dst);
   }
   else {
-    const png_byte* dst = (const png_byte*)buf;
+    const auto* dst = (const png_byte*)buf;
     for (int y = 0; y < ys; ++y, dst += bytes_per_row_dst)
       std::memcpy(&rows[y0+y][x0*bytes_per_pixel], dst, xs*bytes_per_pixel);
   }

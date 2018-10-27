@@ -74,7 +74,7 @@ void pdf1d_flat_sampler::set_model(const pdf1d_pdf& model)
 
 double pdf1d_flat_sampler::sample()
 {
-  const pdf1d_flat & flat = static_cast<const pdf1d_flat &>(model());
+  const auto & flat = static_cast<const pdf1d_flat &>(model());
   return  rng_.drand64(flat.lo(),flat.hi());
 }
 
@@ -83,7 +83,7 @@ double pdf1d_flat_sampler::sample()
 void pdf1d_flat_sampler::regular_samples(vnl_vector<double>& x)
 {
   int n = x.size();
-  const pdf1d_flat & flat = static_cast<const pdf1d_flat &>(model());
+  const auto & flat = static_cast<const pdf1d_flat &>(model());
   double lo = flat.lo();
   double w = flat.hi()-lo;
 

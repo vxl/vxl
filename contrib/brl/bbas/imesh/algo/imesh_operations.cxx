@@ -24,7 +24,7 @@ imesh_mesh dual_mesh_with_normals(const imesh_mesh& mesh,
 {
   assert(mesh.has_half_edges());
   const imesh_half_edge_set& half_edges = mesh.half_edges();
-  const imesh_vertex_array<3>& init_verts =
+  const auto& init_verts =
       static_cast<const imesh_vertex_array<3>&>(old_verts);
   const unsigned int num_verts = mesh.num_verts();
   const unsigned int num_faces = mesh.num_faces();
@@ -100,16 +100,16 @@ void imesh_triangulate_face(const std::vector<vgl_point_2d<double> >& face_v,
   unsigned int remain_size = 0;
   while (remain.size() > 2 && remain_size != remain.size()) {
     remain_size = remain.size();
-    ritr curr = remain.end(), prev = --curr;
+    auto curr = remain.end(), prev = --curr;
     --prev;
-    for (ritr next=remain.begin(); next!=remain.end(); prev=curr, curr=next++)
+    for (auto next=remain.begin(); next!=remain.end(); prev=curr, curr=next++)
     {
       if (concave_vert[*curr])
         continue;
 
       // test for an ear (a triangle completely contained in the polygon)
       bool inside = false;
-      for (ritr itr=remain.begin(); itr!=remain.end(); ++itr)
+      for (auto itr=remain.begin(); itr!=remain.end(); ++itr)
       {
         if (!concave_vert[*itr] || itr==curr || itr==prev || itr==next)
           continue;
@@ -130,11 +130,11 @@ void imesh_triangulate_face(const std::vector<vgl_point_2d<double> >& face_v,
         break;
 
       // get the indices before previous and after next
-      ritr pprev = prev;
+      auto pprev = prev;
       if (pprev == remain.begin())
         pprev = remain.end();
       --pprev;
-      ritr nnext = next;
+      auto nnext = next;
       ++nnext;
       if (nnext == remain.end())
         nnext = remain.begin();
@@ -165,7 +165,7 @@ imesh_triangulate_nonconvex(imesh_mesh& mesh)
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
 
   std::unique_ptr<imesh_face_array_base> tris_base(new imesh_regular_face_array<3>);
-  imesh_regular_face_array<3>* tris =
+  auto* tris =
       static_cast<imesh_regular_face_array<3>*> (tris_base.get());
   int group = -1;
   if (faces.has_groups())

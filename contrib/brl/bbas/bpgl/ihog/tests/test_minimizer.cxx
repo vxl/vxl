@@ -39,7 +39,7 @@ static void test_minimizer()
     TEST("FAILED TO LOAD TEST IMAGE",false,true);
     return;
   }
-  vil_image_view<vxl_byte> *img0_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img0_base.ptr());
+  auto *img0_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img0_base.ptr());
   unsigned ni = img0_byte->ni(), nj = img0_byte->nj();
   vil_image_view<float> img0(ni,nj);
   vil_convert_cast(*img0_byte,img0);

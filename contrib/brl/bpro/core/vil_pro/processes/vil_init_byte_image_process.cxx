@@ -47,12 +47,12 @@ bool vil_init_byte_image_process(bprb_func_process& pro)
   // get the input
   // get the inputs
   unsigned i = 0;
-  unsigned int ni = pro.get_input<unsigned>(i++);
-  unsigned int nj = pro.get_input<unsigned>(i++);
-  unsigned int np = pro.get_input<unsigned>(i++);
-  unsigned init_val_in = pro.get_input<unsigned>(i++);
-  vxl_byte init_val = (unsigned char)init_val_in;
-  vil_image_view<vxl_byte>* img = new vil_image_view<vxl_byte>(ni, nj, np);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
+  auto np = pro.get_input<unsigned>(i++);
+  auto init_val_in = pro.get_input<unsigned>(i++);
+  auto init_val = (unsigned char)init_val_in;
+  auto* img = new vil_image_view<vxl_byte>(ni, nj, np);
   img->fill(init_val);
 
   pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(img));

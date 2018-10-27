@@ -133,7 +133,7 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
     assert(nClasses=1);
 
 
-    clsfy_random_forest &random_forest = static_cast<clsfy_random_forest&>(classifier);
+    auto &random_forest = static_cast<clsfy_random_forest&>(classifier);
     unsigned npoints=inputs.size();
     std::vector<vnl_vector<double> > vin(npoints);
 
@@ -176,7 +176,7 @@ double clsfy_random_forest_builder::build(clsfy_classifier_base& classifier,
         builder.set_calc_test_error(false);
 
         clsfy_classifier_base* pBaseClassifier=builder.new_classifier();
-        clsfy_binary_tree* pTreeClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
+        auto* pTreeClassifier=dynamic_cast<clsfy_binary_tree*>(pBaseClassifier);
         assert(pTreeClassifier);
         builder.set_nbranch_params(nbranch_params);
 
@@ -264,6 +264,6 @@ unsigned long clsfy_random_forest_builder::get_tree_builder_seed() const
         seedAsBytes[ib]=static_cast<vxl_byte>(random_sampler_(N));
     }
 
-    unsigned long* pSeed=reinterpret_cast<unsigned long*>(&seedAsBytes[0]);
+    auto* pSeed=reinterpret_cast<unsigned long*>(&seedAsBytes[0]);
     return *pSeed;
 }

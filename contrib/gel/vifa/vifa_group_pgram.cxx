@@ -29,7 +29,7 @@ vifa_group_pgram(imp_line_list&                  lg,
 
   for (int i = 0; i < th_dim_; i++)
   {
-    imp_line_list*  illp = new imp_line_list;
+    auto*  illp = new imp_line_list;
     curves_.push_back(illp);
   }
   this->Index(lg);
@@ -244,7 +244,7 @@ norm_parallel_line_length(void)
 
   double max_cover = 0.0;
   int    max_dir = 0;
-  std::vector<int>::iterator  iit = dominant_dirs_.begin();
+  auto  iit = dominant_dirs_.begin();
   for (; iit != dominant_dirs_.end(); iit++)
   {
     int            dir = (*iit);

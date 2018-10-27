@@ -15,7 +15,7 @@ spline_1d_value(double u, vnl_vector<double> c)
 {
   if (u < 0 || u+3 > c.size())
     return 0.0;
-  unsigned int f = (unsigned int)std::floor( u );
+  auto f = (unsigned int)std::floor( u );
 
   u -= f; // u is now between 0 and 1
   if (u==0)  // this avoids access to nonexisting c[f+3] when u+3 == c.size()

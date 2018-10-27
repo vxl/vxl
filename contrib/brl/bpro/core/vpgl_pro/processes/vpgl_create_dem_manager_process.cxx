@@ -43,8 +43,8 @@ bool vpgl_create_dem_manager_process(bprb_func_process& pro)
 
   // get the inputs
   vil_image_resource_sptr resc = pro.get_input<vil_image_resource_sptr>(0);
-  double zmin = pro.get_input<double>(1);
-  double zmax = pro.get_input<double>(2);
+  auto zmin = pro.get_input<double>(1);
+  auto zmax = pro.get_input<double>(2);
   if(!resc){
     std::cout << "vpgl_create_dem_manager_process: Null input image resource" << std::endl;
     return false;

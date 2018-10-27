@@ -41,7 +41,7 @@ bool bbgm_load_image_of_process(bprb_func_process& pro)
   //the registration will only be done once since new instances of
   //the process are cloned  - maybe later make a separate registration step
   bbgm_loader::register_loaders();
-  vsl_b_istream& bis = static_cast<vsl_b_istream&>(istr);
+  auto& bis = static_cast<vsl_b_istream&>(istr);
   bbgm_image_sptr image;
   vsl_b_read(bis, image);
 

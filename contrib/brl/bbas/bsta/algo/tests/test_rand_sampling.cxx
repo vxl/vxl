@@ -23,19 +23,19 @@ MAIN( test_rand_sampling)
   float vis = 0.75f;
   float f = 0.2f;
   const unsigned int n_samples = 24, n_trials = 40000;
-  unsigned ns = static_cast<unsigned>(f*n_samples + 0.5);
+  auto ns = static_cast<unsigned>(f*n_samples + 0.5);
   bsta_histogram<float> hc(0.0f,static_cast<float>(n_samples),2*n_samples);
   for (unsigned j = 0; j<n_trials; ++j) {
   // generate samples
   std::vector<float> samples;
   for (unsigned int n=0; n<ns; ++n) {
-    float sample = (float)rand_gen.drand32(0.35, 0.6);
+    auto sample = (float)rand_gen.drand32(0.35, 0.6);
     samples.push_back(sample);
    h.upcount(sample, vis);
    ho.upcount(sample, vis);
   }
   for ( unsigned n = 0; n<(n_samples-ns); ++n) {
-    float sample = (float)rand_gen.drand32(0.0, 1.0);
+    auto sample = (float)rand_gen.drand32(0.0, 1.0);
     samples.push_back(sample);
     h.upcount(sample, 1.0f-vis);
     ho.upcount(sample,1.0f-vis);

@@ -103,9 +103,9 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   }
   // check if chip needs to be upsampled
   if(params_.upsample_factor_ != 1.0){
-    double dni = static_cast<double>(clip_resc->ni()), dnj = static_cast<double>(clip_resc->nj());
+    auto dni = static_cast<double>(clip_resc->ni()), dnj = static_cast<double>(clip_resc->nj());
     dni *= params_.upsample_factor_; dnj *= params_.upsample_factor_;
-    unsigned ni = static_cast<unsigned>(dni), nj = static_cast<unsigned>(dnj);
+    auto ni = static_cast<unsigned>(dni), nj = static_cast<unsigned>(dnj);
     if(clip_resc->pixel_format()==VIL_PIXEL_FORMAT_UINT_16){
       vil_image_view<unsigned short> temp = clip_resc->get_view(), uptemp;
       vil_resample_bicub(temp, uptemp, ni, nj);
@@ -192,8 +192,8 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
     std::cout << "no edgels for the specified region " << iname << ':' << region_name << '\n';
     return false;
   }
-  double x0 = static_cast<double>(broi->cmin(region_index));
-  double y0 = static_cast<double>(broi->rmin(region_index));
+  auto x0 = static_cast<double>(broi->cmin(region_index));
+  auto y0 = static_cast<double>(broi->rmin(region_index));
   for (auto & vd_edge : vd_edges)
   {
       //get the edgel chain
@@ -216,7 +216,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, v
   return true;
 }
 bool betr_edgel_factory::save_edgels(std::string const& dir) const {
-  std::map<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >::const_iterator iit = edgels_.begin();
+  auto iit = edgels_.begin();
   for(; iit != edgels_.end(); ++iit){
           const std::pair<std::string, std::map<std::string, std::vector< vdgl_digital_curve_sptr > > >& emap = *iit;
     for(const auto & eit : emap.second){
@@ -324,7 +324,7 @@ edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsi
       x/= params_.upsample_factor_; y/=params_.upsample_factor_;
       if(!vpoly.contains(x+i_offset, y+j_offset))
         continue;
-      unsigned i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
+      auto i = static_cast<unsigned>(x), j = static_cast<unsigned>(y);
           // clean away border hash due to convolving and upsampling
       if(i < bdr || j < bdr  || i > (ni-bdr-1) || j > (nj-bdr-1))
         continue;

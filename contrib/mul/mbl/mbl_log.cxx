@@ -559,7 +559,7 @@ inline mbl_log_categories::cat_spec parse_cat_spec(const std::string &str,
     std::string s = props["stream_output"];
     spec.output = mbl_log_categories::cat_spec::NAMED_STREAM;
     spec.name = s;
-    stream_names_t::const_iterator it = stream_names.find(s);
+    auto it = stream_names.find(s);
 
     if (s == "cout" || s == "std::cout" || s == "std::cout")
       spec.stream = &std::cout;
@@ -598,7 +598,7 @@ void mbl_log_categories::config(std::istream&s, const stream_names_t& stream_nam
   mbl_read_props_type props = mbl_read_props_ws(s);
 
   //Deal with "root" special case.
-  mbl_read_props_type::iterator it1=props.find("root");
+  auto it1=props.find("root");
   if (it1 == props.end())
     it1 = props.find("ROOT");
   if (it1 != props.end())
@@ -657,7 +657,7 @@ const mbl_log_categories::cat_spec&
 {
   typedef std::map<std::string, cat_spec>::const_reverse_iterator iter;
 
-  iter it = std::find_if(cat_list_.rbegin(), cat_list_.rend(),
+  auto it = std::find_if(cat_list_.rbegin(), cat_list_.rend(),
                         mbl_log_prefix_comp(category));
   // The search shouldn't get past the first (root) entry.
   assert(it != cat_list_.rend());
@@ -672,7 +672,7 @@ void mbl_log_categories::print(std::ostream& os) const
   typedef std::map<std::string, cat_spec>::const_iterator iter;
   assert(!cat_list_.empty());
 
-  iter it = cat_list_.begin(), end = cat_list_.end();
+  auto it = cat_list_.begin(), end = cat_list_.end();
   assert(it->first.empty());
 
   os << "root:\n  " << it->second << '\n';

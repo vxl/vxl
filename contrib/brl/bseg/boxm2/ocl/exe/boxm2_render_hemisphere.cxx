@@ -95,7 +95,7 @@ int main(int argc,  char** argv)
 
       vsph_view_point<std::string>& view = iter->second;
       vpgl_camera_double_sptr cam_sptr = view.camera();
-      vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
+      auto* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
       brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
       vpgl_calibration_matrix<double> mat = cam->get_calibration();
       mat.set_focal_length(mat.focal_length()/2);
@@ -148,8 +148,8 @@ int main(int argc,  char** argv)
 
       vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
 
-      vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-      vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+      auto* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+      auto* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
       for (unsigned int i=0; i<ni(); ++i)
         for (unsigned int j=0; j<nj(); ++j)
           (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
@@ -159,7 +159,7 @@ int main(int argc,  char** argv)
       stream<<img()<<"/pimg_"<<img_index<<".png";
       tfstream<<img()<<"/timg_"<<img_index<<".tiff";
       jpgstream<<img()<<"/jimg_"<<img_index<<".jpeg";
-      std::string* filepath = new std::string();
+      auto* filepath = new std::string();
       (*filepath) = stream.str();
       view.set_metadata(filepath);
       vil_save( *byte_img, stream.str().c_str() );
@@ -213,7 +213,7 @@ int main(int argc,  char** argv)
         brdb_value_sptr brdb_cam = new brdb_value_t<vpgl_camera_double_sptr>(cam_sptr);
 
         //set focal length and image size for camera
-        vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
+        auto* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
         vpgl_calibration_matrix<double> mat = cam->get_calibration();
         mat.set_focal_length(mat.focal_length());
         cam->set_calibration(mat);
@@ -266,8 +266,8 @@ int main(int argc,  char** argv)
 
         vil_image_view_base_sptr outimg=value->val<vil_image_view_base_sptr>();
 
-        vil_image_view<float>* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
-        vil_image_view<vxl_byte>* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
+        auto* expimg_view = static_cast<vil_image_view<float>* >(outimg.ptr());
+        auto* byte_img = new vil_image_view<vxl_byte>(ni(), nj());
         for (unsigned int i=0; i<ni(); ++i)
           for (unsigned int j=0; j<nj(); ++j)
             (*byte_img)(i,j) =  (unsigned char)((*expimg_view)(i,j) *255.0f);   //just grab the first byte (all foura r the same)
@@ -289,7 +289,7 @@ int main(int argc,  char** argv)
     //if stitch is specified, also save a big image
     if (stitch()) {
       //construct a humungous image
-      vil_image_view<vxl_byte>* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
+      auto* stitched = new vil_image_view<vxl_byte>(ni() * num_az(), nj() * num_in());
       for (unsigned int row = 0; row < num_in(); ++row) {
         for (unsigned int col = 0; col < num_az(); ++col) {
           //lil image to copy into big image

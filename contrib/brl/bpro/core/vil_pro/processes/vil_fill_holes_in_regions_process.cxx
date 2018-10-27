@@ -43,7 +43,7 @@ bool vil_fill_holes_in_regions_process(bprb_func_process& pro)
   unsigned i=0;
   vil_image_view_base_sptr in_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
 
-  if (vil_image_view<unsigned char> *view=dynamic_cast<vil_image_view<unsigned char>* > (in_img_ptr.ptr()))
+  if (auto *view=dynamic_cast<vil_image_view<unsigned char>* > (in_img_ptr.ptr()))
   {
     unsigned int ni = view->ni();
     unsigned int nj = view->nj();

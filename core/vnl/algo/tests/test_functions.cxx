@@ -75,7 +75,7 @@ int test_functions()
   {
     for (unsigned int chisq_int = 0; chisq_int < 200; chisq_int += 20)
     {
-      const double chisq = static_cast<double>(chisq_int);
+      const auto chisq = static_cast<double>(chisq_int);
       const double cdf = vnl_chi_squared_cumulative(chisq,n);
       const double err = std::fabs(cdf - cdf_baseline[idx++]);
       std::cout << "vnl_chi_squared_cumulative(" << chisq << ',' << n << ')';
@@ -98,7 +98,7 @@ int test_functions()
 
   // rand() is not always a good random number generator,
   // so use the following congruential random number generator - PVr
-  static unsigned long sample_seed = (unsigned long)std::time(nullptr);
+  static auto sample_seed = (unsigned long)std::time(nullptr);
 
   double hist1[20];
   for (double & i : hist1)

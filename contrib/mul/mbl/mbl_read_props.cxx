@@ -20,7 +20,7 @@
 // \throws mbl_exception_missing_property if prop doesn't exist
 std::string mbl_read_props_type::get_required_property(const std::string &prop)
 {
-  mbl_read_props_type::iterator it = this->find(prop);
+  auto it = this->find(prop);
   if (it==this->end())
     mbl_exception_error(mbl_exception_missing_property(prop));
   std::string result = it->second;
@@ -36,7 +36,7 @@ std::string mbl_read_props_type::get_optional_property(const std::string &prop,
                                                       const std::string &def_value /*=""*/)
 {
   std::string result(def_value);
-  mbl_read_props_type::iterator it = this->find(prop);
+  auto it = this->find(prop);
   if (it!=this->end())
   {
     result = it->second;
@@ -166,7 +166,7 @@ mbl_read_props_type mbl_read_props(std::istream &afs)
 
         strip_trailing_ws(str1);
 
-        mbl_read_props_type::iterator it = props.lower_bound(label);
+        auto it = props.lower_bound(label);
 
         if (it != props.end() && it->first == label)
         {
@@ -346,7 +346,7 @@ mbl_read_props_type mbl_read_props_ws(std::istream &afs)
 
         strip_trailing_ws(str1);
 
-        mbl_read_props_type::iterator it = props.lower_bound(label);
+        auto it = props.lower_bound(label);
 
         if (it != props.end() && it->first == label)
         {
@@ -439,8 +439,8 @@ mbl_read_props_type mbl_read_props_merge(const mbl_read_props_type& a,
 {
   mbl_read_props_type output;
 
-  mbl_read_props_type::const_iterator a_it = a.begin();
-  mbl_read_props_type::const_iterator b_it = b.begin();
+  auto a_it = a.begin();
+  auto b_it = b.begin();
 
 
   while (a_it != a.end() || b_it != b.end())

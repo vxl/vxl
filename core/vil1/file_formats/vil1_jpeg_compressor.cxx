@@ -69,7 +69,7 @@ bool vil1_jpeg_compressor::write_scanline(unsigned line, JSAMPLE const *scanline
   }
 
   // write the scanline
-  { JSAMPLE *tmp = const_cast<JSAMPLE*>(scanline);
+  { auto *tmp = const_cast<JSAMPLE*>(scanline);
   jpeg_write_scanlines(&jobj, &tmp, 1); }
 
   // finish if the last scanline is written

@@ -86,7 +86,7 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
     if (kernels.find(identifier)==kernels.end())
     {
         std::cout<<"===========Compiling kernels==========="<<std::endl;
-        bocl_kernel* filter_kernel = new bocl_kernel();
+        auto* filter_kernel = new bocl_kernel();
         compile_filter_kernel(device,filter_kernel);
         kernels[identifier]=filter_kernel;
     }

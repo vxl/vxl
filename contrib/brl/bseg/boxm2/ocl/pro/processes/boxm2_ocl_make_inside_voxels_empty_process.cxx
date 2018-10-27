@@ -53,12 +53,12 @@ namespace boxm2_ocl_make_inside_voxels_empty_process_globals
     //compilation options
     std::string options = opts+ "-D INTENSITY ";
 
-    bocl_kernel* compute_vis = new bocl_kernel();
+    auto* compute_vis = new bocl_kernel();
     std::string seg_opts = options + "-D COMPVIS -D STEP_CELL=step_cell_computevis(aux_args,data_ptr,llid,d)";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "compute_vis", seg_opts, "compute_vis");
     vec_kernels.push_back(compute_vis);
 
-    bocl_kernel* decide_inside_cell = new bocl_kernel();
+    auto* decide_inside_cell = new bocl_kernel();
     decide_inside_cell->create_kernel(&device->context(),device->device_id(), src_paths, "decide_inside_cell", seg_opts, "decide_inside_cell");
     vec_kernels.push_back(decide_inside_cell);
     return ;
@@ -213,7 +213,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
               bocl_mem* blk = opencl_cache->get_block(scene,blk_iter_inner->first);
               bocl_mem* blk_info = opencl_cache->loaded_block_info();
               bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,blk_iter_inner->first,0,false);
-              boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+              auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
               int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
               info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
               blk_info->write_to_buffer((queue));
@@ -269,7 +269,7 @@ bool boxm2_ocl_make_inside_voxels_empty_process(bprb_func_process& pro)
           vul_timer transfer;
           /* bocl_mem* blk = */ opencl_cache->get_block(scene,blk_iter->first);
           bocl_mem* blk_info = opencl_cache->loaded_block_info();
-          boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+          auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
           info_buffer->data_buffer_length = (int) (normals->num_bytes()/normalsTypeSize);
           blk_info->write_to_buffer((queue));
           bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,blk_iter->first,0,false);

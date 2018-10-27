@@ -61,7 +61,7 @@ bool boxm2_cpp_refine_process2(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-  float  thresh=pro.get_input<float>(i++);
+  auto  thresh=pro.get_input<float>(i++);
   std::string identifier = pro.get_input<std::string>(i++);
 
   bool foundDataType = false;

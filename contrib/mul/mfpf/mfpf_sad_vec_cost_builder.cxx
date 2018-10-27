@@ -76,7 +76,7 @@ inline void abs_diff(const vnl_vector<double>& v1,
 void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
 {
   assert(pf.is_a()=="mfpf_sad_vec_cost");
-  mfpf_sad_vec_cost& nc = static_cast<mfpf_sad_vec_cost&>(pf);
+  auto& nc = static_cast<mfpf_sad_vec_cost&>(pf);
 
   unsigned n = data_.size();
 
@@ -103,7 +103,7 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
   }
 
   vnl_vector<double> wts(mean.size());
-  double dn=double(n);
+  auto dn=double(n);
   if (impose_robust_min_mad_)
   {
       //May impose stricter min_mad as per typical robust kernel fitting (see /isbe_apm/rpca)
@@ -118,7 +118,7 @@ void mfpf_sad_vec_cost_builder::build(mfpf_vec_cost& pf)
       {
           mads.push_back(dv_sum[i]/dn);
       }
-      std::vector<double>::iterator medIter=mads.begin()+mads.size()/2;
+      auto medIter=mads.begin()+mads.size()/2;
       std::nth_element(mads.begin(),medIter,mads.end());
       constexpr double kMADtoSD = 1.4826;
       min_mad_ = std::max(min_mad_,(*medIter/kMADtoSD));

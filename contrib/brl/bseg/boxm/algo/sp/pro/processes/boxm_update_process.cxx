@@ -66,7 +66,7 @@ bool boxm_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  unsigned bin_index =  pro.get_input<unsigned>(i++);
+  auto bin_index =  pro.get_input<unsigned>(i++);
   bool use_black_background =  pro.get_input<bool>(i++);
 
   // check the input validity
@@ -76,14 +76,14 @@ bool boxm_update_process(bprb_func_process& pro)
   }
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
-    vil_image_view<vxl_byte> *img_byte
+    auto *img_byte
  = dynamic_cast<vil_image_view<vxl_byte>*>(input_image.ptr());
     vil_image_view<boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype> img(img_byte->ni(), img_byte->nj(), 1);
     vil_convert_stretch_range_limited(*img_byte ,img, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
     if (!scene->multi_bin())
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       //boxm_update<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, false);
       boxm_update_triangle<short, boxm_sample<BOXM_APM_MOG_GREY> >(*s, img, camera, use_black_background);
     }
@@ -91,7 +91,7 @@ bool boxm_update_process(bprb_func_process& pro)
     {
       std::cout<<"Multi Bin Update"<<std::endl;
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_update_triangle<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(*s, img, camera, bin_index,use_black_background);
     }
     //vil_image_view<float> image = *vil_convert_cast(float(), input_image);

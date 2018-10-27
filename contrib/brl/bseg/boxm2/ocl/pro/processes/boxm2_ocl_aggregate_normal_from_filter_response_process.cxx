@@ -44,7 +44,7 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
     //compilation options
     std::string options = opts;
 
-    bocl_kernel* compute_vis = new bocl_kernel();
+    auto* compute_vis = new bocl_kernel();
     std::string seg_opts = options + " -D DODECAHEDRON";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "aggregate", seg_opts, "aggregate");
     vec_kernels.push_back(compute_vis);
@@ -84,7 +84,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
   bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
   boxm2_scene_sptr         scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-  unsigned num_kernels = pro.get_input<unsigned>(i++);
+  auto num_kernels = pro.get_input<unsigned>(i++);
 
   //cache size sanity check
   long binCache = opencl_cache.ptr()->bytes_in_cache();
@@ -146,7 +146,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_process(bprb_func_process& pro)
     /* bocl_mem* blk = */ opencl_cache->get_block(scene,blk_iter->first);
     bocl_mem* blk_info = opencl_cache->loaded_block_info();
     bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,blk_iter->first,0,true);
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));

@@ -36,8 +36,8 @@ bool vpgl_save_perspective_camera_vrml_process(bprb_func_process& pro)
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   std::string vrml_filename = pro.get_input<std::string>(1);
-  float radius = pro.get_input<float>(2);
-  vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
+  auto radius = pro.get_input<float>(2);
+  auto *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
     std::cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
@@ -85,7 +85,7 @@ bool vpgl_save_perspective_cameras_vrml_process(bprb_func_process& pro)
   std::vector<vpgl_perspective_camera<double> > cams = cameras_from_directory(cam_dir, 0.0);
 
     std::string vrml_filename = pro.get_input<std::string>(1);
-  float radius = pro.get_input<float>(2);
+  auto radius = pro.get_input<float>(2);
 
 
   std::ofstream os(vrml_filename.c_str());

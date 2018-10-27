@@ -42,7 +42,7 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/pixel_conversion_kernels.cl");
-    bocl_kernel * convert_float_to_rgba=new bocl_kernel();
+    auto * convert_float_to_rgba=new bocl_kernel();
 
     convert_float_to_rgba->create_kernel( &device->context(),
                                           device->device_id(),
@@ -51,7 +51,7 @@ namespace boxm2_ocl_convert_float_image_to_rgba_process_globals
                                           "convert float to rgba"); //kernel identifier (for error checking)
 
     vec_kernels.push_back(convert_float_to_rgba);
-    bocl_kernel * convert_float4_to_rgba=new bocl_kernel();
+    auto * convert_float4_to_rgba=new bocl_kernel();
 
     convert_float4_to_rgba->create_kernel( &device->context(),
                                            device->device_id(),
@@ -97,8 +97,8 @@ bool boxm2_ocl_convert_float_image_to_rgba_process(bprb_func_process& pro)
   bocl_mem_sptr in_image =pro.get_input<bocl_mem_sptr>(i++);
   bocl_mem_sptr in_img_dim =pro.get_input<bocl_mem_sptr>(i++);
   bocl_mem_sptr gl_img =pro.get_input<bocl_mem_sptr>(i++);
-  unsigned ni =pro.get_input<unsigned>(i++);
-  unsigned nj =pro.get_input<unsigned>(i++);
+  auto ni =pro.get_input<unsigned>(i++);
+  auto nj =pro.get_input<unsigned>(i++);
 
   bool foundDataType = false;
   std::string data_type="";

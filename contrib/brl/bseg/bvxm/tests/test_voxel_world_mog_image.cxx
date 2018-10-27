@@ -39,7 +39,7 @@ static void test_voxel_world_mog_image()
   bvxm_voxel_world_sptr vox_world = new bvxm_voxel_world(params);
 
   bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,scale);
-  bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
+  auto *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
   // fill in grid with zeros to start
   ocp_grid->initialize_data(0.0f);
   // now make a ground plane
@@ -88,7 +88,7 @@ static void test_voxel_world_mog_image()
   // iterate through layers of apm grid and update each level with the same synthetic image
   // if you want different levels to look different youll have to create a different image for each level
   bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0,scale);
-  bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
+  auto *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
 
@@ -124,7 +124,7 @@ static void test_voxel_world_mog_image()
   TEST("testing mixture of gaussian image creation", vox_world->mixture_of_gaussians_image<APM_MOG_GREY>(meta2, mog_image, 0), true);
   TEST("testing mixture of gaussian image creation", !mog_image, false);
 
-  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
+  auto* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
   TEST("testing mixture of gaussian image creation", !mog_image_ptr, false);
 
   bvxm_voxel_slab<float> prob = apm_processor.expected_color(*mog_image_ptr);

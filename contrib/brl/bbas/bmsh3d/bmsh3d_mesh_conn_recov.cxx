@@ -27,7 +27,7 @@ void bmsh3d_mesh::IFS_to_MHE()
 {
   // Loop through all face F and put F into its V's incident face list.
   // This V-F incidence will be cleared after MHE is built.
-  std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+  auto fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     for (unsigned int j=0; j<F->vertices().size(); j++) {
@@ -50,7 +50,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
   // For each V, try to locate the other V sharing an edge via F.
   std::cerr << "    Constructing mesh edges: ";
   int prev_per = 0;
-  std::map<int, bmsh3d_vertex*>::iterator nit = vertexmap_.begin();
+  auto nit = vertexmap_.begin();
   for (int count=0; nit != vertexmap_.end(); nit++, count++) {
     bmsh3d_vertex* V = (*nit).second;
     float percentage = count * 100.0f / vertexmap_.size();
@@ -60,7 +60,7 @@ void bmsh3d_mesh::IFS_to_MHE_build_edges(const bool skip_v0)
     prev_per = per;
 
     for (bmsh3d_ptr_node* cur = V->F_list(); cur != nullptr; cur = cur->next()) {
-      const bmsh3d_face* F = (const bmsh3d_face*) cur->ptr();
+      const auto* F = (const bmsh3d_face*) cur->ptr();
 
       // 1) The prev node
       bmsh3d_vertex* prevV = F->_ifs_prev_V(V);
@@ -106,7 +106,7 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
   // For each V, try to locate the other V sharing an edge via F.
   std::cerr << "    Constructing mesh edges: ";
   int prev_per = 0;
-  std::map<int, bmsh3d_vertex*>::iterator nit = vertexmap_.begin();
+  auto nit = vertexmap_.begin();
   for (int count=0; nit != vertexmap_.end(); nit++, count++) {
     bmsh3d_vertex* V = (*nit).second;
     float percentage = count * 100.0f / vertexmap_.size();
@@ -119,7 +119,7 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
     std::set<void*> V_incident_Fs;
     V_incident_Fs.clear();
 
-    std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+    auto fit = facemap_.begin();
     for (; fit != facemap_.end(); fit++) {
       bmsh3d_face* F = (*fit).second;
       for (unsigned int i=0; i<F->vertices().size(); i++) {
@@ -128,9 +128,9 @@ void bmsh3d_mesh::IFS_to_MHE_bf(const bool skip_v0)
       }
     }
 
-    std::set<void*>::iterator it = V_incident_Fs.begin();
+    auto it = V_incident_Fs.begin();
     for (; it != V_incident_Fs.end(); it++) {
-      bmsh3d_face* F = (bmsh3d_face*)(*it);
+      auto* F = (bmsh3d_face*)(*it);
 
       // 1) The prev node
       bmsh3d_vertex* prevV = F->_ifs_prev_V(V);
@@ -177,7 +177,7 @@ void bmsh3d_mesh::sort_halfedges_for_all_faces()
   assert (is_MHE());
 
   // Go through each face, re-sort the list of halfedges in a circular way
-  std::map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
+  auto pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
     F->_sort_HEs_circular();
@@ -190,7 +190,7 @@ void bmsh3d_mesh::build_face_IFS()
   std::cerr << "bmsh3d_mesh::build_face_IFS()\n";
   assert (is_MHE());
 
-  std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+  auto fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     F->_ifs_track_ordered_vertices();
@@ -206,7 +206,7 @@ void bmsh3d_mesh::build_IFS_mesh()
 {
   assert (is_MHE());
 
-  std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+  auto fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     F->_ifs_track_ordered_vertices();
@@ -224,7 +224,7 @@ void bmsh3d_mesh::clean_IFS_mesh()
   assert (is_MHE());
 
   // Go through each face and clear the F.vertices[]
-  std::map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
+  auto pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
     F->vertices().clear();
@@ -239,14 +239,14 @@ void bmsh3d_mesh::MHE_to_IFS()
   // Delete all mesh edges and halfedges.
 
   // Go through all mesh faces and
-  std::map<int, bmsh3d_face*>::iterator pit = facemap_.begin();
+  auto pit = facemap_.begin();
   for (; pit != facemap_.end(); pit++) {
     bmsh3d_face* F = (*pit).second;
     _delete_HE_chain(F->halfedge());
   }
 
   // Delete all mesh edges.
-  std::map<int, bmsh3d_edge*>::iterator eit = edgemap_.begin();
+  auto eit = edgemap_.begin();
   while (eit != edgemap_.end()) {
     bmsh3d_edge* E = (*eit).second;
     remove_edge(E);
@@ -254,7 +254,7 @@ void bmsh3d_mesh::MHE_to_IFS()
   }
 
   // Delete all mesh vertex's pointer to edges.
-  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  auto vit = vertexmap_.begin();
   for (; vit != vertexmap_.end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
     V->clear_incident_E_list();
@@ -269,15 +269,15 @@ bool edges_id_less(const bmsh3d_edge* E1, const bmsh3d_edge* E2)
 
 void bmsh3d_mesh::sort_V_incident_Es()
 {
-  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  auto vit = vertexmap_.begin();
   for (; vit != vertexmap_.end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
 
     std::vector<const bmsh3d_edge*> edges;
     unsigned int count = 0;
-    bmsh3d_ptr_node* cur = (bmsh3d_ptr_node*) V->E_list();
+    auto* cur = (bmsh3d_ptr_node*) V->E_list();
     for (; cur != nullptr; cur = cur->next()) {
-      const bmsh3d_edge* E = (const bmsh3d_edge*) cur->ptr();
+      const auto* E = (const bmsh3d_edge*) cur->ptr();
       edges.push_back(E);
       count++;
     }

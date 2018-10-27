@@ -74,7 +74,7 @@ bool boxm2_cpp_cone_update_image_process(bprb_func_process& pro)
   int illumination_bin_index = pro.get_input<int>(i);
 
   vil_image_view_base_sptr float_image=boxm2_util::prepare_input_image(in_img);
-  if (vil_image_view<float> * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
+  if (auto * input_image=dynamic_cast<vil_image_view<float> * > (float_image.ptr()))
   {
     bool foundDataType = false;
 

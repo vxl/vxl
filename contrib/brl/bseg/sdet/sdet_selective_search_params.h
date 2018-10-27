@@ -18,9 +18,11 @@
 class sdet_selective_search_params : public gevd_param_mixin
 {
  public:
- sdet_selective_search_params():sigma_(1.0f), vd_noise_mul_(1.25f),
+ sdet_selective_search_params():
+    use_vd_edges_(true),
+    sigma_(1.0f), vd_noise_mul_(1.25f),
     four_or_eight_conn_(4), margin_(10), weight_thresh_(50), min_region_size_(10), nbins_(16),
-    verbose_(true), debug_(false), use_vd_edges_(true){}
+    debug_(false),verbose_(true) {}
 
   sdet_selective_search_params(bool use_vd_edges,
                                float sigma,

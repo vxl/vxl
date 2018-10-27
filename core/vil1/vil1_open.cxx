@@ -49,7 +49,7 @@ vil1_stream *vil1_open(char const* what, char const* how)
     if (l > 4 && std::strncmp(what, "gen:", 4) == 0) {
       if (std::strcmp(how, "r") == 0) {
         // Make an in-core stream...
-        vil1_stream_core *cis = new vil1_stream_core();
+        auto *cis = new vil1_stream_core();
         cis->write(what, l+1);
         is = cis;
       }

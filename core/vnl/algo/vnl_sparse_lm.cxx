@@ -568,7 +568,7 @@ void vnl_sparse_lm::compute_Z_Sa(vnl_matrix<double>& Sa)
 
       // iterate through both sparse rows finding matching columns
       bool row_done = false;
-      for (sv_itr ri = row_i.begin(), rh = row_h.begin();
+      for (auto ri = row_i.begin(), rh = row_h.begin();
            ri != row_i.end() && rh != row_h.end();  ++ri, ++rh)
       {
         while (!row_done && ri->second != rh->second)
@@ -744,7 +744,7 @@ void vnl_sparse_lm::compute_Sa_sea(vnl_matrix<double>& Sa,
 
       // iterate through both sparse rows finding matching columns
       bool row_done = false;
-      for (sv_itr ri = row_i.begin(), rh = row_h.begin();
+      for (auto ri = row_i.begin(), rh = row_h.begin();
            ri != row_i.end() && rh != row_h.end();  ++ri, ++rh)
       {
         while (!row_done && ri->second != rh->second)

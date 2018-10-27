@@ -19,7 +19,7 @@
 bool boxm2_vecf_ocl_composite_head_model::set_params(boxm2_vecf_articulated_params const& params)
 {
   try{
-    boxm2_vecf_composite_head_parameters const& params_ref = dynamic_cast<boxm2_vecf_composite_head_parameters const &>(params);
+    auto const& params_ref = dynamic_cast<boxm2_vecf_composite_head_parameters const &>(params);
     params_ =boxm2_vecf_composite_head_parameters(params_ref);
   }catch(std::exception e){
     std::cout<<" Can't downcast to composite head parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;

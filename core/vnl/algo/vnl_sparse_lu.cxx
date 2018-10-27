@@ -79,7 +79,7 @@ void vnl_sparse_lu::solve(vnl_vector<double> const& b, vnl_vector<double>* x)
   }
   unsigned n = b.size();
   assert(n == A_.columns());
-  spREAL* rhs = new spREAL[n+1];
+  auto* rhs = new spREAL[n+1];
   for (unsigned i = 0; i<n; ++i)
     rhs[i+1]=b[i];
   if (mode_==verbose || mode_==estimate_condition_verbose)
@@ -138,7 +138,7 @@ void vnl_sparse_lu::solve_transpose(vnl_vector<double> const& b, vnl_vector<doub
   }
   unsigned n = b.size();
   assert(n == A_.columns());
-  spREAL* rhs = new spREAL[n+1];
+  auto* rhs = new spREAL[n+1];
   for (unsigned i = 0; i<n; ++i)
     rhs[i+1]=b[i];
   int error = 0;

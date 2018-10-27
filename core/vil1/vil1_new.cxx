@@ -81,7 +81,7 @@ vil1_image vil1_new(char const* filename,
                     vil1_image const& prototype,
                     char const* file_format)
 {
-  vil1_stream_fstream* os = new vil1_stream_fstream(filename, "w");
+  auto* os = new vil1_stream_fstream(filename, "w");
   return vil1_new(os,
                   prototype.planes(),
                   width,

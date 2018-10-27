@@ -43,7 +43,7 @@ imesh_half_edge_set::build_from_ifs(const std::vector<std::vector<unsigned int> 
 
       vert_pair vp(v,nv);
       if (v > nv) vp = vert_pair(nv,v);
-      std::map<vert_pair, unsigned int>::iterator m = edge_map.find(vp);
+      auto m = edge_map.find(vp);
       unsigned int curr_e;
       if (m == edge_map.end()) {
         curr_e = half_edges_.size();

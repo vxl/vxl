@@ -345,7 +345,7 @@ imesh_kd_tree_closest_point(const vgl_point_3d<double>& query,
                             std::vector<imesh_kd_tree_queue_entry>* dists)
 {
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
-  const imesh_regular_face_array<3>& faces = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
+  const auto& faces = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   tri_dist_func dist(verts,faces);
   unsigned int ind = imesh_closest_index<tri_dist_func&>(query,root,dist,dists);
   cp = dist.closest_point();

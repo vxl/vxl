@@ -103,7 +103,7 @@ bool btol_face_algs::vgl_to_vtol(vgl_polygon<double>const & poly,
     vgl_point_2d<double> p0 = s[0];
     vtol_vertex_2d_sptr vs = new vtol_vertex_2d(p0.x(), p0.y()), v0 = vs, vi;
     vtol_edge_2d_sptr e;
-    for (std::vector<vgl_point_2d<double> >::iterator pit = s.begin()+1;
+    for (auto pit = s.begin()+1;
          pit != s.end(); ++pit)
       {
         vgl_point_2d<double> pi = *pit;
@@ -185,7 +185,7 @@ vsol_point_2d_sptr btol_face_algs::centroid(vtol_face_2d_sptr const & face)
   face->vertices(verts);
   int n = 0;
   double x0=0, y0=0;
-  for (std::vector<vtol_vertex_sptr>::iterator vit = verts.begin();
+  for (auto vit = verts.begin();
        vit != verts.end(); vit++, n++)
   {
     vtol_vertex_2d_sptr v = (*vit)->cast_to_vertex_2d();
@@ -204,10 +204,10 @@ vtol_face_2d_sptr btol_face_algs::box(const double x0, const double y0,
 {
   double w = width/2, h = height/2;
   std::vector<vtol_vertex_sptr> verts;
-  vtol_vertex_2d* v0 = new vtol_vertex_2d(x0-w, y0-h);
-  vtol_vertex_2d* v1 = new vtol_vertex_2d(x0+w, y0-h);
-  vtol_vertex_2d* v2 = new vtol_vertex_2d(x0+w, y0+h);
-  vtol_vertex_2d* v3 = new vtol_vertex_2d(x0-w, y0+h);
+  auto* v0 = new vtol_vertex_2d(x0-w, y0-h);
+  auto* v1 = new vtol_vertex_2d(x0+w, y0-h);
+  auto* v2 = new vtol_vertex_2d(x0+w, y0+h);
+  auto* v3 = new vtol_vertex_2d(x0-w, y0+h);
   verts.emplace_back(v0); verts.emplace_back(v1);
   verts.emplace_back(v2); verts.emplace_back(v3);
   vtol_face_2d_sptr f = new vtol_face_2d(verts);

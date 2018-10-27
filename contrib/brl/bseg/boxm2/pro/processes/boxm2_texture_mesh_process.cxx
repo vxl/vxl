@@ -189,7 +189,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
 
   //create blank texturemap image
   vil_image_view_base_sptr first_im = boxm2_util::prepare_input_image(allims[0]);
-  vil_image_view<vil_rgba<vxl_byte> >* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr();
+  auto* imptr = (vil_image_view<vil_rgba<vxl_byte> >*) first_im.ptr();
   vil_rgba<vxl_byte> mean = boxm2_util::mean_pixel(*imptr);
   vil_image_view<vil_rgba<vxl_byte> > def(4,4);
   def.fill( mean );
@@ -262,7 +262,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
   //   - create a face list
   //   - create a sub mesh that is textured
   ////////////////////////////////////////////////////////////////////////////////
-  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
+  auto& in_faces = (imesh_face_array&) in_mesh.faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
   //for each appearance (texture image), create an imesh_mesh (subMesh);
   std::cout<<"Creating Sub Meshes for each texture"<<std::endl;
@@ -271,10 +271,10 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
   {
     //for each appearance, we're creating a whole new mesh
     // first create the face list
-    imesh_face_array* flist = new imesh_face_array();
+    auto* flist = new imesh_face_array();
 
     //now create the vertex list
-    imesh_vertex_array<3>* verts3 = new imesh_vertex_array<3>();
+    auto* verts3 = new imesh_vertex_array<3>();
 
     //get faces list corresponding to this texture
     std::vector<unsigned>& face_list = apps->second;
@@ -311,7 +311,7 @@ void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::strin
   //////////////////////////////////////////////////////////////////////////////
   std::cout<<"Mapping sub meshes for each texture"<<std::endl;
   std::map<std::string, imesh_mesh>::iterator subMesh;
-  std::map<std::string, vpgl_perspective_camera<double>* >::iterator txCam = texture_cams.begin();
+  auto txCam = texture_cams.begin();
   for (subMesh = meshes.begin(); subMesh != meshes.end(); ++subMesh, ++txCam)
   {
     imesh_mesh& mesh = subMesh->second;
@@ -366,7 +366,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(std::vector<vpgl_p
                                                               std::map<std::string, vpgl_perspective_camera<double>* >& texture_cams)
 {
   //grab faces and vertices from the mesh
-  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
+  auto& in_faces = (imesh_face_array&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
 
@@ -417,7 +417,7 @@ void boxm2_texture_mesh_process_globals::boxm2_match_textures(std::vector<vpgl_p
     }
 
     //grab appropriate face list (create it if it's not there)
-    std::map<std::string, std::vector<unsigned> >::iterator iter = app_faces.find(im_name);
+    auto iter = app_faces.find(im_name);
     if ( iter == app_faces.end() ) {
       std::cout<<"boxm2_match_textures:: Adding image "<<im_name<<" to texture list"<<std::endl;
       std::vector<unsigned> faceList;
@@ -662,7 +662,7 @@ bool boxm2_texture_mesh_process_globals::face_is_visible( vpgl_perspective_camer
 void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_perspective_camera<double>* >& cameras,
                                                               imesh_mesh& in_mesh, unsigned int ni=1024, unsigned int nj=768)
 {
-  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
+  auto& in_faces = (imesh_face_array&) in_mesh.faces();
 
   unsigned nfaces = in_mesh.num_faces();
   imesh_vertex_array<3>& in_verts = in_mesh.vertices<3>();
@@ -678,7 +678,7 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_p
 
     // render the face_id/distance image
     vil_image_view<double> depth_im(ni, nj);
-    vil_image_view<int>*   face_im = new vil_image_view<int>(ni, nj);
+    auto*   face_im = new vil_image_view<int>(ni, nj);
     depth_im.fill(10e100);  //Initial depth is huge,
     face_im->fill(-1); //initial face id is -1
     for (unsigned iface = 0; iface<nfaces; ++iface)
@@ -715,7 +715,7 @@ void boxm2_texture_mesh_process_globals::boxm2_visible_faces( std::vector<vpgl_p
 void boxm2_texture_mesh_process_globals::compute_norm_images( std::vector<vpgl_perspective_camera<double>* >& cameras,
                                                               imesh_mesh& in_mesh,unsigned int ni, unsigned int nj)
 {
-  imesh_face_array& in_faces = (imesh_face_array&) in_mesh.faces();
+  auto& in_faces = (imesh_face_array&) in_mesh.faces();
   unsigned nfaces = in_mesh.num_faces();
 
   for (unsigned int i=0; i<vis_images_.size(); ++i) {
@@ -728,9 +728,9 @@ void boxm2_texture_mesh_process_globals::compute_norm_images( std::vector<vpgl_p
 #endif // 0
     // create a norm x,y, and z image for each visibility image
     vil_image_view<int>* vis = vis_images_[i];
-    vil_image_view<float>* nx = new vil_image_view<float>(ni, nj);
-    vil_image_view<float>* ny = new vil_image_view<float>(ni, nj);
-    vil_image_view<float>* nz = new vil_image_view<float>(ni, nj);
+    auto* nx = new vil_image_view<float>(ni, nj);
+    auto* ny = new vil_image_view<float>(ni, nj);
+    auto* nz = new vil_image_view<float>(ni, nj);
     vgl_vector_3d<double> paxis = cameras[i]->principal_axis();
     nx->fill( (float) paxis.x());
     ny->fill( (float) paxis.y());
@@ -817,7 +817,7 @@ void boxm2_texture_mesh_process_globals::smooth_norm_images(double sigma)
   vil_gauss_filter_5tap_params params(sigma); //set SIGMA
   for (unsigned int i=0; i<normx_.size(); ++i) {
     vil_image_view<float>* currX = normx_[i];
-    vil_image_view<float>* newX = new vil_image_view<float>(currX->ni(), currX->nj());
+    auto* newX = new vil_image_view<float>(currX->ni(), currX->nj());
     vil_gauss_filter_5tap(*currX, *newX, params);
     //store the filtered image
     delete currX;
@@ -825,14 +825,14 @@ void boxm2_texture_mesh_process_globals::smooth_norm_images(double sigma)
 
     //repeat for y
     vil_image_view<float>* currY = normy_[i];
-    vil_image_view<float>* newY = new vil_image_view<float>(currY->ni(), currY->nj());
+    auto* newY = new vil_image_view<float>(currY->ni(), currY->nj());
     vil_gauss_filter_5tap(*currY, *newY, params);
     delete currY;
     normy_[i] = newY;
 
     //z
     vil_image_view<float>* currZ = normz_[i];
-    vil_image_view<float>* newZ = new vil_image_view<float>(currZ->ni(), currZ->nj());
+    auto* newZ = new vil_image_view<float>(currZ->ni(), currZ->nj());
     vil_gauss_filter_5tap(*currZ, *newZ, params);
     delete currZ;
     normz_[i] = newZ;

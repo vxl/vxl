@@ -69,8 +69,8 @@ bool boxm2_create_scene_mask_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
   bool only_ground_plane = pro.get_input<bool>(i++);
 
   vgl_box_3d<double> bbox = scene->bounding_box();
@@ -78,7 +78,7 @@ bool boxm2_create_scene_mask_process(bprb_func_process& pro)
   double w = bbox.width(); double h = bbox.height(); double d = bbox.depth();
 
   vgl_polygon<double> poly(1); double u,v;
-  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
+  auto* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(vxl_byte(0));
 
   // put the ground plane first

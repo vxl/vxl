@@ -309,7 +309,7 @@ bool vil1_viff_generic_image::get_section(void* buf, int x0, int y0, int xs, int
   assert((x0+xs)<=width_);
   assert((y0+ys)<=height_);
   if (!buf) return false; // no storage location given
-  unsigned char* ib = (unsigned char*) buf;
+  auto* ib = (unsigned char*) buf;
   if ((x0*bits_per_component_)%8 != 0)
     std::cerr << "vil1_viff_generic_image::get_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
@@ -339,7 +339,7 @@ bool vil1_viff_generic_image::put_section(void const* buf, int x0, int y0, int x
   assert((x0+xs)<=width_);
   assert((y0+ys)<=height_);
   if (!buf) return false; // no storage location given
-  unsigned char const* ob = (unsigned char const*) buf;
+  auto const* ob = (unsigned char const*) buf;
   if ((x0*bits_per_component_)%8 != 0)
     std::cerr << "vil1_viff_generic_image::put_section(): Warning: x0 should be a multiple of 8 for this type of image\n";
 
@@ -354,7 +354,7 @@ bool vil1_viff_generic_image::put_section(void const* buf, int x0, int y0, int x
         ob += rowsize;
       }
   else {
-    unsigned char* tempbuf = new unsigned char[rowsize];
+    auto* tempbuf = new unsigned char[rowsize];
     for (int p = 0; p<planes_; ++p)
       for (int y = y0; y < y0+ys; ++y) {
         std::memcpy(tempbuf, ob, rowsize);
@@ -419,7 +419,7 @@ void vil1_viff_generic_image::set_ispare1(vxl_uint_32 ispare1)
 {
   header_.ispare1 = ispare1;
   int longsize = sizeof(vxl_uint_32);
-  unsigned char* bytes = new unsigned char[longsize];
+  auto* bytes = new unsigned char[longsize];
   std::memcpy(bytes,&ispare1,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
@@ -433,7 +433,7 @@ void vil1_viff_generic_image::set_ispare2(vxl_uint_32 ispare2)
 {
   header_.ispare2 = ispare2;
   int longsize = sizeof(vxl_uint_32);
-  unsigned char* bytes = new unsigned char[longsize];
+  auto* bytes = new unsigned char[longsize];
   std::memcpy(bytes,&ispare2,longsize);
   if (!endian_consistent_)
     swap(bytes,longsize);
@@ -447,7 +447,7 @@ void vil1_viff_generic_image::set_fspare1(float fspare1)
 {
   header_.fspare1 = fspare1;
   int floatsize = sizeof(float);
-  unsigned char* bytes = new unsigned char[floatsize];
+  auto* bytes = new unsigned char[floatsize];
   std::memcpy(bytes,&fspare1,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);
@@ -462,7 +462,7 @@ void vil1_viff_generic_image::set_fspare2(float fspare2)
 {
   header_.fspare2 = fspare2;
   int floatsize = sizeof(float);
-  unsigned char* bytes = new unsigned char[floatsize];
+  auto* bytes = new unsigned char[floatsize];
   std::memcpy(bytes,&fspare2,floatsize);
   if (!endian_consistent_)
     swap(bytes,floatsize);

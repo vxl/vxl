@@ -58,7 +58,7 @@ bool vil1_skip_image_impl::get_section(void * buf, int x0, int y0, int w, int h)
   std::vector<unsigned char> buffer(buffer_size);
 
   // destination, as a unsigned char*
-  unsigned char *dst = static_cast<unsigned char*>(buf);
+  auto *dst = static_cast<unsigned char*>(buf);
 
   // for each raster
   for (int j=0; j<h; ++j) {

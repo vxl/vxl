@@ -51,8 +51,8 @@ bool bvxm_create_normalized_image_process(bprb_func_process& pro)
   //get inputs:
   unsigned i=0;
   vil_image_view_base_sptr input_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  float a = pro.get_input<float>(i++);
-  float b = pro.get_input<float>(i++);
+  auto a = pro.get_input<float>(i++);
+  auto b = pro.get_input<float>(i++);
 
   //check input's validity
   if (!input_img) {

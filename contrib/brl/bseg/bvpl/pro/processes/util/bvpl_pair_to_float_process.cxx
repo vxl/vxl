@@ -51,7 +51,7 @@ bool bvpl_pair_to_float_process(bprb_func_process& pro)
   std::string volume_path = pro.get_input<std::string>(1);
 
   // create the grid from in memory file and save
-   if (bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(grid_base.ptr()))
+   if (auto *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(grid_base.ptr()))
    {
      bvxm_voxel_grid<float> *float_grid = new bvxm_voxel_grid<float>(volume_path, pair_grid->grid_size());
      float_grid->initialize_data(0.0f);

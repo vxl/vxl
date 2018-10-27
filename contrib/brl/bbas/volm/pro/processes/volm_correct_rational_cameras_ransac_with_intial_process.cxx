@@ -100,7 +100,7 @@ bool volm_correct_rational_cameras_ransac_with_intial_process(bprb_func_process&
   std::string input_txt   = pro.get_input<std::string>(in_i++);
   std::string dem_folder  = pro.get_input<std::string>(in_i++);
   std::string output_path = pro.get_input<std::string>(in_i++);
-  float pix_rad          = pro.get_input<float>(in_i++);
+  auto pix_rad          = pro.get_input<float>(in_i++);
   bool enforce_existing  = pro.get_input<bool>(in_i++);
 
   if (enforce_existing)
@@ -389,8 +389,8 @@ vpgl_rational_camera<double>* volm_correct_rational_cameras_ransac_with_initial_
     return nullptr;
   }
   // cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  vpgl_nitf_rational_camera *nitf_cam = new vpgl_nitf_rational_camera(nitf_image, true);
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_cam = new vpgl_nitf_rational_camera(nitf_image, true);
   return dynamic_cast<vpgl_rational_camera<double>*>(nitf_cam);
 }
 
@@ -401,7 +401,7 @@ bool volm_correct_rational_cameras_ransac_with_initial_process_globals::obtain_r
   relative_diameter = 1.0;
   // obtain the overlap region
   std::vector<vgl_box_2d<double> > img_footprints;
-  std::vector<std::string>::const_iterator cit = camera_names.begin();
+  auto cit = camera_names.begin();
   for (; cit != camera_names.end(); ++cit)
   {
     std::pair<std::string, std::string> img_path = sat_res->full_path(*cit);
@@ -442,7 +442,7 @@ bool volm_correct_rational_cameras_ransac_with_initial_process_globals::initial_
   }
   // obtain the overlap region
   std::vector<vgl_box_2d<double> > img_footprints;
-  std::vector<std::string>::const_iterator cit = camera_names.begin();
+  auto cit = camera_names.begin();
   for (; cit != camera_names.end(); ++cit)
   {
     std::pair<std::string, std::string> img_path = sat_res->full_path(*cit);

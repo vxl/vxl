@@ -43,7 +43,7 @@ bool bvpl_load_global_taylor_process(bprb_func_process& pro)
   // get inputs
   std::string taylor_file = pro.get_input<std::string>(0);
   const std::string kernel_names[10] = {"I0", "Ix", "Iy", "Iz", "Ixx", "Iyy", "Izz", "Ixy", "Ixz", "Iyz" };
-  bvpl_global_taylor<double, 10> *global_taylor = new bvpl_global_taylor<double, 10>(taylor_file, kernel_names);
+  auto *global_taylor = new bvpl_global_taylor<double, 10>(taylor_file, kernel_names);
 
   // store output
   pro.set_output_val<bvpl_global_taylor_sptr>(0, global_taylor);

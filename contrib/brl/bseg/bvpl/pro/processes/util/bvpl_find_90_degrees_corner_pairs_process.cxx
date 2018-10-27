@@ -75,8 +75,8 @@ bool bvpl_find_corner_pairs_process(bprb_func_process& pro)
     return false;
   }
   //cast grid
-  bvxm_voxel_grid<int> *id_grid = dynamic_cast<bvxm_voxel_grid<int>* > (id_grid_base.ptr());
-  bvxm_voxel_grid<float> *response_grid = dynamic_cast<bvxm_voxel_grid<float>* > (response_grid_base.ptr());
+  auto *id_grid = dynamic_cast<bvxm_voxel_grid<int>* > (id_grid_base.ptr());
+  auto *response_grid = dynamic_cast<bvxm_voxel_grid<float>* > (response_grid_base.ptr());
   bvxm_voxel_grid<bvpl_pair> * out_grid= new bvxm_voxel_grid<bvpl_pair >(out_path, id_grid->grid_size());
   out_grid->initialize_data(bvpl_pair());
 

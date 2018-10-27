@@ -74,21 +74,21 @@ bool boxm_clean_scene_process(bprb_func_process& pro)
    case BOXM_APM_MOG_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }
    case BOXM_APM_SIMPLE_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }
    case BOXM_APM_MOB_GREY:
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       s->clean_scene();
       break;
     }

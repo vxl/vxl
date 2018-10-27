@@ -95,11 +95,11 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
   }
 
   vil_image_view_base_sptr in_float_img=boxm2_util::prepare_input_image(input_img);
-  if (vil_image_view<float> * in_img=dynamic_cast<vil_image_view<float> *> ( in_float_img.ptr()))
-      if (vil_image_view<float> * exp_img=dynamic_cast<vil_image_view<float> *> ( exp_in_img.ptr()))
+  if (auto * in_img=dynamic_cast<vil_image_view<float> *> ( in_float_img.ptr()))
+      if (auto * exp_img=dynamic_cast<vil_image_view<float> *> ( exp_in_img.ptr()))
       {
           // function call
-          vil_image_view<float> * vis_img=new vil_image_view<float>(in_img->ni(),in_img->nj());
+          auto * vis_img=new vil_image_view<float>(in_img->ni(),in_img->nj());
           vis_img->fill(1.0f);
           std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
           if (vis_order.empty())
@@ -119,7 +119,7 @@ bool boxm2_cpp_change_detection_process2(bprb_func_process& pro)
               datas.push_back(alph);
               datas.push_back(mog);
 
-              boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+              auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
               scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
               cd_wu_functor.set_data(datas,in_img,exp_img);

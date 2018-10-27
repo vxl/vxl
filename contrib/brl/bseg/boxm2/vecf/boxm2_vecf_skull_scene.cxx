@@ -13,7 +13,7 @@ boxm2_vecf_skull_scene::boxm2_vecf_skull_scene( std::string const& base_scene_pa
 bool boxm2_vecf_skull_scene::set_params(boxm2_vecf_articulated_params const& params)
 {
   try{
-    boxm2_vecf_skull_params const& params_ref = dynamic_cast<boxm2_vecf_skull_params const &>(params);
+    auto const& params_ref = dynamic_cast<boxm2_vecf_skull_params const &>(params);
     params_ =boxm2_vecf_skull_params(params_ref);
   }catch(std::exception e){
     std::cout<<" Can't downcast to skull parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;

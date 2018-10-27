@@ -84,12 +84,12 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
   unsigned ni, nj;
   ni = img->ni();  nj = img->nj();
 
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>* >(img.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>* >(img.ptr());
   if (!in_img) {
     vil_image_view<float> temp(img->ni(), img->nj(), 1);
-    vil_image_view<vxl_int_16>* img_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(img.ptr());
+    auto* img_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(img.ptr());
     if (!img_view_int) {
-      vil_image_view<vxl_byte>* img_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img.ptr());
+      auto* img_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img.ptr());
       if (!img_view_byte) {
         std::cerr << pro.name() << ": The image pixel format: " << img->pixel_format() << " is not supported!\n";
         return false;
@@ -103,7 +103,7 @@ bool vil_grey_to_rgb_process(bprb_func_process& pro)
   }
 
   // generate a color rgb image
-  vil_image_view<vil_rgb<vxl_byte> >* out_img = new vil_image_view<vil_rgb<vxl_byte> >(ni,nj);
+  auto* out_img = new vil_image_view<vil_rgb<vxl_byte> >(ni,nj);
   out_img->fill(vil_rgb<vxl_byte>(0,0,0));
   for (unsigned i = 0; i < ni; i++)
     for (unsigned j = 0; j < nj; j++) {

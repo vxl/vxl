@@ -52,7 +52,7 @@ void boxm2_ocl_camera_converter::compute_ray_image( bocl_device_sptr & device,
     }
   }
   else if (cam->type_name() == "vpgl_affine_camera") {
-    vpgl_generic_camera<double> * gen_cam = new vpgl_generic_camera<double> ();
+    auto * gen_cam = new vpgl_generic_camera<double> ();
     vpgl_camera_double_sptr gcam = gen_cam;
     vpgl_affine_camera<double> & aff_cam = (*  (vpgl_affine_camera<double>*) cam.ptr());
     vpgl_generic_camera_convert::convert(aff_cam,cl_ni, cl_nj, *gen_cam);
@@ -107,7 +107,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
     //std::cout<<"Converting perspective camera"<<std::endl;
 
     // set persp cam buffer
-    cl_float *cam_buffer= new cl_float[48];
+    auto *cam_buffer= new cl_float[48];
     boxm2_ocl_util::set_persp_camera(pcam, cam_buffer);
     bocl_mem *  persp_cam=new bocl_mem(device->context(), cam_buffer, 3*sizeof(cl_float16), "persp cam buffer");
     persp_cam->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
@@ -162,7 +162,7 @@ bocl_kernel* boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_de
   std::string options = "";
 
   //have kernel construct itself using the context and device
-  bocl_kernel* kern = new bocl_kernel();
+  auto* kern = new bocl_kernel();
   kern->create_kernel( &device->context(),
                        device->device_id(),
                        src_paths,

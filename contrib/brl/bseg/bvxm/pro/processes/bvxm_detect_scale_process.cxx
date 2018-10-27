@@ -66,8 +66,8 @@ bool bvxm_detect_scale_process(bprb_func_process& pro)
   }
 
 
-  double ni = static_cast<double>(input_img->ni());
-  double nj = static_cast<double>(input_img->nj());
+  auto ni = static_cast<double>(input_img->ni());
+  auto nj = static_cast<double>(input_img->nj());
 
   double image_diag = std::sqrt(ni*ni + nj*nj);
   if (image_diag == 0)

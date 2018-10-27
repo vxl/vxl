@@ -63,7 +63,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   //vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   std::string path = pro.get_input<std::string>(i++);
-  float threshold = pro.get_input<float>(i++);
+  auto threshold = pro.get_input<float>(i++);
   int s = pro.get_input<int>(i++); // FIXME - unused!
 
   std::ofstream stream(path.c_str());
@@ -73,7 +73,7 @@ bool boxm_render_expected_edge_vrml_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_inf_line_sample<float> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       if (!scene) {
         std::cout << "boxm_render_expected_edge_process: the scene is not of expected type" << std::endl;
         return false;

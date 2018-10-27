@@ -251,7 +251,7 @@ void mfpf_region_finder_builder::add_example(const vimt_image_2d_of<float>& imag
 void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_region_finder");
-  mfpf_region_finder& rp = static_cast<mfpf_region_finder&>(pf);
+  auto& rp = static_cast<mfpf_region_finder&>(pf);
 
   mfpf_vec_cost *cost = cost_builder().new_cost();
 
@@ -265,7 +265,7 @@ void mfpf_region_finder_builder::build(mfpf_point_finder& pf)
   {
     //Assume applied var_min is r* min in training set, where r->1 as n->infinity
     //Set r=0.98 for n around 50
-    double dn=double(num_examples_);
+    auto dn=double(num_examples_);
     if (dn>0.0)
     {
       double r=0.925; //so r attains 0.98 around n=50

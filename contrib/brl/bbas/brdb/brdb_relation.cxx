@@ -167,7 +167,7 @@ brdb_relation::name(unsigned int index) const
 unsigned int
 brdb_relation::index(const std::string& name) const
 {
-  std::vector<std::string>::const_iterator itr = std::find(names_.begin(), names_.end(), name);
+  auto itr = std::find(names_.begin(), names_.end(), name);
   return itr - names_.begin();
 }
 
@@ -529,10 +529,10 @@ brdb_join(const brdb_relation_sptr& r1, const brdb_relation_sptr& r2)
     unsigned int arity2 = r2->arity();
 
     // go through all tuples in r1
-    for (std::vector<brdb_tuple_sptr>::iterator itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
+    for (auto itr_1 = r1->begin(); itr_1<r1->end(); ++itr_1)
     {
       // go through all tuples in r2
-      for (std::vector<brdb_tuple_sptr>::iterator itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
+      for (auto itr_2 = r2->begin(); itr_2<r2->end(); ++itr_2)
       {
         bool isMatched = true;
         for (unsigned int k=0; k<common_attribute_count; k++)

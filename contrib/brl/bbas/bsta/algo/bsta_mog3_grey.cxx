@@ -384,7 +384,7 @@ void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3
 {
   constexpr unsigned int nmodes = 3;
   const float min_var = min_sigma*min_sigma;
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   const float big_var = big_sigma * big_sigma;
 
   unsigned int nobs = (int)obs.size();

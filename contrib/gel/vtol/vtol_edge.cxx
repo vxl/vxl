@@ -267,7 +267,7 @@ std::vector<vtol_block *> *vtol_edge::compute_blocks(void)
 // These vertices are v1_ and v2_ in that order.
 vertex_list *vtol_edge::endpoints(void)
 {
-  vertex_list *newl=new vertex_list;
+  auto *newl=new vertex_list;
   if (v1_)
     newl->push_back(v1_);
   if (v2_)

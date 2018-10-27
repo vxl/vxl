@@ -72,7 +72,7 @@ void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_polygon* rptr)
   }
   else
     vsl_b_write(os, true);
-  volm_osm_object_polygon* ptr = const_cast<volm_osm_object_polygon*>(rptr);
+  auto* ptr = const_cast<volm_osm_object_polygon*>(rptr);
   ptr->b_write(os);
 }
 

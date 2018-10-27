@@ -40,9 +40,9 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
   unsigned i=0;
   //Retrieve image from input
   vil_image_view_base_sptr img = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned n_orient = pro.get_input<unsigned>(i++);
-  double sigma = pro.get_input<double>(i++);
-  double threshold = pro.get_input<double>(i++);
+  auto n_orient = pro.get_input<unsigned>(i++);
+  auto sigma = pro.get_input<double>(i++);
+  auto threshold = pro.get_input<double>(i++);
 
   if (img->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
@@ -50,7 +50,7 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
       vil_image_view<vxl_byte> inimage = vil_convert_cast(vxl_byte(), img);
       vil_image_view<float> hist_grad(inimage.ni(),inimage.nj());
       vil_image_view<float> edgeimage=bil_detect_compass_edges(inimage, n_orient/2, sigma ,threshold, hist_grad);
-      vil_image_view<vxl_byte> * outimage=new vil_image_view<vxl_byte>(edgeimage.ni(),edgeimage.nj());
+      auto * outimage=new vil_image_view<vxl_byte>(edgeimage.ni(),edgeimage.nj());
       outimage->fill(0);
       for (unsigned i=0;i<edgeimage.ni();i++){
           for (unsigned j=0;j<edgeimage.nj();j++){

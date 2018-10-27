@@ -202,7 +202,7 @@ void test_axis_gaussian()
     TEST("Correct builder",builder->is_a(),"vpdfl_axis_gaussian_builder");
     if (builder->is_a()=="vpdfl_axis_gaussian_builder")
     {
-      vpdfl_axis_gaussian_builder &a_builder = static_cast<vpdfl_axis_gaussian_builder&>(*builder);
+      auto &a_builder = static_cast<vpdfl_axis_gaussian_builder&>(*builder);
       std::cout<<a_builder<<std::endl;
       TEST_NEAR("Min var configured", a_builder.min_var(), 0.1234e-5, 1e-8);
     }

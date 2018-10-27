@@ -46,7 +46,7 @@ std::vector<space_time_enum> parse_subdivisions(const std::string &s) {
 
 std::string print_subdivisions(const std::vector<space_time_enum> &subdivisions) {
   std::string subdivs_str;
-  for (std::vector<space_time_enum>::const_iterator iter = subdivisions.begin();
+  for (auto iter = subdivisions.begin();
        iter != subdivisions.end();
        ++iter) {
     if (iter != subdivisions.begin()) {

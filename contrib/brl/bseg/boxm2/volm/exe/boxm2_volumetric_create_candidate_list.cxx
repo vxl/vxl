@@ -71,7 +71,7 @@ bool get_top_cameras(unsigned const& tile_idx, std::string const& cam_bin,
     volm_geo_index_node_sptr leaf_node = volm_geo_index::get_closest(root, top_locs[i].y(), top_locs[i].x(), hypo_id);
     unsigned cam_id;
     bool found_loc = false;
-    std::vector<volm_score_sptr>::iterator vit = scores.begin();
+    auto vit = scores.begin();
     while (!found_loc) {
       unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
       if (leaf_node->get_string() == leaves[li]->get_string() && hypo_id == hi) {
@@ -114,7 +114,7 @@ bool create_camera_kml(unsigned const& top_id, double const& lon, double const& 
   // obtain top camera for location (lon, lat)
   unsigned cam_id;
   double longitude, latitude;
-  std::vector<volm_score_sptr>::iterator vit = scores.begin();
+  auto vit = scores.begin();
   bool found = false;
   while (!found && vit != scores.end()) {
     unsigned li = (*vit)->leaf_id_, hi = (*vit)->hypo_id_;
@@ -543,7 +543,7 @@ int main(int argc,  char** argv)
   std::cerr << log.str();
   volm_io::write_post_processing_log(log_file, log.str());
   volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),thres_value);
-  std::multimap<unsigned, std::pair<unsigned, unsigned>, std::greater<unsigned> >::iterator mit = cand_map.begin();
+  auto mit = cand_map.begin();
   unsigned rank = 0;
   for (; mit != cand_map.end(); ++mit) {
     unsigned tile_idx = mit->second.first;

@@ -49,16 +49,16 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
   }
   //get the inputs
   std::string camdir = pro.get_input<std::string>(0);
-  float xmin = pro.get_input<float>(1);
-  float ymin = pro.get_input<float>(2);
-  float zmin = pro.get_input<float>(3);
-  float width = pro.get_input<float>(4);
-  float height = pro.get_input<float>(5);
-  float depth = pro.get_input<float>(6);
+  auto xmin = pro.get_input<float>(1);
+  auto ymin = pro.get_input<float>(2);
+  auto zmin = pro.get_input<float>(3);
+  auto width = pro.get_input<float>(4);
+  auto height = pro.get_input<float>(5);
+  auto depth = pro.get_input<float>(6);
   std::string modeldir= pro.get_input<std::string>(7);
-  double lvcs_origin_lat = pro.get_input<double>(8);
-  double lvcs_origin_lon = pro.get_input<double>(9);
-  double lvcs_origin_elev = pro.get_input<double>(10);
+  auto lvcs_origin_lat = pro.get_input<double>(8);
+  auto lvcs_origin_lon = pro.get_input<double>(9);
+  auto lvcs_origin_elev = pro.get_input<double>(10);
 
   // get the scene bounding box
   vgl_box_3d<double> box(vgl_point_3d<double>(xmin,ymin,zmin),

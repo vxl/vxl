@@ -22,7 +22,7 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
            << "************************************************************\n";
 
   constexpr double scale_step = 1.2;
-  const unsigned int nx_scaled = (unsigned int)(nx/scale_step+0.5), // round
+  const auto nx_scaled = (unsigned int)(nx/scale_step+0.5), // round
                      ny_scaled = (unsigned int)(ny/scale_step+0.5);
 
   vimt_image_2d_of<vxl_byte> image0;
@@ -50,7 +50,7 @@ static void test_scale_pyramid_builder_2d(unsigned int nx, unsigned int ny)
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const vimt_image_2d_of<vxl_byte>& image1 =
+  const auto& image1 =
     static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1));
   TEST("Level 1 size x",image1.image().ni(),nx_scaled);
   TEST("Level 1 size y",image1.image().nj(),ny_scaled);

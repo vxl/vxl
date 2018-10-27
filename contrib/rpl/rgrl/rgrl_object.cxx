@@ -54,7 +54,7 @@ rgrl_command_sptr
 rgrl_object::
 get_command(unsigned int tag)
 {
-  observer_map::iterator i =  observers_.find( tag );
+  auto i =  observers_.find( tag );
 
   if ( i == observers_.end() )
     return nullptr;
@@ -67,7 +67,7 @@ rgrl_object::
 invoke_event( const rgrl_event & event)
 {
   typedef observer_map::iterator obs_itr;
-  obs_itr i = observers_.begin();
+  auto i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     rgrl_event_sptr e =  i->second.event_;
     if (e->is_same_type(event)) {
@@ -81,7 +81,7 @@ rgrl_object::
 invoke_event( const rgrl_event & event) const
 {
   typedef observer_map::const_iterator const_obs_itr;
-  const_obs_itr i = observers_.begin();
+  auto i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e =  i->second.event_;
     if (e->is_same_type(event)) {
@@ -94,7 +94,7 @@ void
 rgrl_object::
 remove_observer(unsigned int tag)
 {
-  observer_map::iterator i =  observers_.find( tag );
+  auto i =  observers_.find( tag );
 
   if ( i == observers_.end() ) return;
   observers_.erase(tag);
@@ -105,7 +105,7 @@ rgrl_object::
 has_observer( const rgrl_event & event ) const
 {
   typedef observer_map::const_iterator const_obs_itr;
-  const_obs_itr i = observers_.begin();
+  auto i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e = i->second.event_;
     if ( e->is_same_type(event) ) {

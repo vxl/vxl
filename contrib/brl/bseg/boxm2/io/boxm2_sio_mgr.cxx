@@ -87,7 +87,7 @@ boxm2_block* boxm2_sio_mgr::load_block(std::string dir, boxm2_block_id block_id,
     return nullptr;
   }
   //instantiate new block
-  boxm2_block * returnboxm2_block = new boxm2_block(block_id,data, bytes);
+  auto * returnboxm2_block = new boxm2_block(block_id,data, bytes);
   return returnboxm2_block;
 }
 

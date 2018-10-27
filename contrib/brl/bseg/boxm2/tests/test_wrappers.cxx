@@ -37,10 +37,10 @@ static void test_two_d()
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
-  unsigned char* buff = new unsigned char[200 * 16];
+  auto* buff = new unsigned char[200 * 16];
   for(int i=0; i<200*16; i++) buff[i] = 0;
   for(int i=0; i<200; i++) buff[16*i] = (unsigned char) i;
-  uchar16* cbuff = (uchar16*) (buff);
+  auto* cbuff = (uchar16*) (buff);
   boxm2_array_2d<uchar16> intArr(20, 10, cbuff);
 
   boxm2_array_2d<uchar16>::iterator iter = intArr.begin();
@@ -64,9 +64,9 @@ static void test_three_d()
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   //make 192x192x64 uchar16 block
-  unsigned char* buff  = new unsigned char[192 * 192 * 64 * 16];
+  auto* buff  = new unsigned char[192 * 192 * 64 * 16];
   for(int i=0; i<192 * 192 * 64 * 16; i++) buff[i] = 0;
-  uchar16*       cbuff = (uchar16*) buff;
+  auto*       cbuff = (uchar16*) buff;
   for(int i=0; i<192; i++) {
     for(int j=0; j<192; j++) {
       for(int k=0; k<64; k++) {

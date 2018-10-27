@@ -41,7 +41,7 @@ static void test_boxm_fill_internal_cells()
 {
   //Create a dummy scene
   typedef boct_tree<short,float > tree_type;
-  boct_tree<short,float> *tree = new boct_tree<short,float>(3);
+  auto *tree = new boct_tree<short,float>(3);
   build_tree(tree);
 
   vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
@@ -53,7 +53,7 @@ static void test_boxm_fill_internal_cells()
   //number of blocks in a scene
   vgl_vector_3d<unsigned> world_dim(1,1,1);
 
-  boxm_scene<tree_type> *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
+  auto *scene= new boxm_scene<tree_type>(lvcs, origin, block_dim, world_dim,true);
   std::string scene_path=".";
   scene->set_paths(scene_path, "in_block");
   scene->set_appearance_model(BOXM_FLOAT);

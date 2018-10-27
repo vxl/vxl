@@ -48,18 +48,18 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   unsigned in_i = 0;
   std::string  scene_xml = pro.get_input<std::string>(in_i++);
   std::string  world_dir = pro.get_input<std::string>(in_i++);
-  float       corner_x  = pro.get_input<float>(in_i++);
-  float       corner_y  = pro.get_input<float>(in_i++);
-  float       corner_z  = pro.get_input<float>(in_i++);
-  unsigned       dim_x  = pro.get_input<unsigned>(in_i++);
-  unsigned       dim_y  = pro.get_input<unsigned>(in_i++);
-  unsigned       dim_z  = pro.get_input<unsigned>(in_i++);
-  float     voxel_size  = pro.get_input<float>(in_i++);
+  auto       corner_x  = pro.get_input<float>(in_i++);
+  auto       corner_y  = pro.get_input<float>(in_i++);
+  auto       corner_z  = pro.get_input<float>(in_i++);
+  auto       dim_x  = pro.get_input<unsigned>(in_i++);
+  auto       dim_y  = pro.get_input<unsigned>(in_i++);
+  auto       dim_z  = pro.get_input<unsigned>(in_i++);
+  auto     voxel_size  = pro.get_input<float>(in_i++);
   vpgl_lvcs_sptr  lvcs  = pro.get_input<vpgl_lvcs_sptr>(in_i++);
   std::string lvcs_file  = pro.get_input<std::string>(in_i++);
-  float   min_ocp_prob  = pro.get_input<float>(in_i++);
-  float   max_ocp_prob  = pro.get_input<float>(in_i++);
-  unsigned   max_scale  = pro.get_input<unsigned>(in_i++);
+  auto   min_ocp_prob  = pro.get_input<float>(in_i++);
+  auto   max_ocp_prob  = pro.get_input<float>(in_i++);
+  auto   max_scale  = pro.get_input<unsigned>(in_i++);
 
   if (!lvcs) {
     std::cerr << pro.name() << ": input scene lvcs is empty!!\n";
@@ -125,10 +125,10 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::string world_dir   = pro.get_input<std::string>(in_i++);
   std::string dem_folder  = pro.get_input<std::string>(in_i++);
   std::string land_folder = pro.get_input<std::string>(in_i++);
-  float world_size_in = pro.get_input<float>(in_i++);
-  float voxel_size    = pro.get_input<float>(in_i++);
-  float height        = pro.get_input<float>(in_i++);
-  float height_sub    = pro.get_input<float>(in_i++);
+  auto world_size_in = pro.get_input<float>(in_i++);
+  auto voxel_size    = pro.get_input<float>(in_i++);
+  auto height        = pro.get_input<float>(in_i++);
+  auto height_sub    = pro.get_input<float>(in_i++);
 
   // find the bounding box from the given region
   vgl_polygon<double> poly = bkml_parser::parse_polygon(roi_kml);
@@ -175,7 +175,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
 
   // initialize the urban land ratio
   for (auto & leave : leaves) {
-    bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leave.ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leave.ptr());
     leaf_ptr->contents_ = -1.0f;
   }
 
@@ -234,9 +234,9 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
     vgl_point_3d<float> corner(0.0f, 0.0f, 0.0f);
     double lx, ly, lz;
     lvcs->global_to_local(upper_right.x(), upper_right.y(), max+height, vpgl_lvcs::wgs84, lx, ly, lz);
-    unsigned dim_x = (unsigned)std::ceil(lx / voxel_size);
-    unsigned dim_y = (unsigned)std::ceil(ly / voxel_size);
-    unsigned dim_z = (unsigned)std::ceil(lz / voxel_size);
+    auto dim_x = (unsigned)std::ceil(lx / voxel_size);
+    auto dim_y = (unsigned)std::ceil(ly / voxel_size);
+    auto dim_z = (unsigned)std::ceil(lz / voxel_size);
     vgl_vector_3d<unsigned> num_voxels(dim_x, dim_y, dim_z);
     std::stringstream scene_world;
     scene_world << world_dir << "/scene_" << i;
@@ -270,7 +270,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
         }
       }
       volm_img_info land_cover = land_infos[land_id];
-      vil_image_view<vxl_byte>* land_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_cover.img_r.ptr());
+      auto* land_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_cover.img_r.ptr());
 
       unsigned ni = dim_x;
       unsigned nj = dim_y;
@@ -278,13 +278,13 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
       for (unsigned ii = 0; ii < ni; ii++) {
         for (unsigned jj = 0; jj < nj; jj++) {
           double lon, lat, gz;
-          float local_x = (float)(ii+0.5f);
-          float local_y = (float)(nj-jj+0.5);
+          auto local_x = (float)(ii+0.5f);
+          auto local_y = (float)(nj-jj+0.5);
           lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
           double u, v;
           land_cover.cam->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)std::floor(u+0.5);
-          unsigned vv = (unsigned)std::floor(v+0.5);
+          auto uu = (unsigned)std::floor(u+0.5);
+          auto vv = (unsigned)std::floor(v+0.5);
           if (uu > 0 && vv > 0 && uu < land_cover.ni && vv < land_cover.nj) {
             if ((*land_img)(uu,vv) == volm_osm_category_io::GEO_URBAN) {
               urban_pixels++;
@@ -294,7 +294,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
       }
 
       double urban_ratio = (double)urban_pixels / (double)(ni*nj);
-      bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
+      auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
       leaf_ptr->contents_ = urban_ratio;
     }
   } // end of the leaf loop
@@ -304,7 +304,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::ofstream ofs_urban(urban_txt.c_str());
   ofs_urban << "scene_id   urban_ratio\n";
   for (unsigned i = 0; i < leaves.size(); i++) {
-    bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
     ofs_urban << i << ' ' << leaf_ptr->contents_ << '\n';
   }
   ofs_urban.close();
@@ -314,7 +314,7 @@ bool bvxm_create_scene_xml_large_scale_process(bprb_func_process& pro)
   std::ofstream ofs(kml_file.c_str());
   bkml_write::open_document(ofs);
   for (unsigned i = 0; i < leaves.size(); i++) {
-    bvgl_2d_geo_index_node<float>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<float>*>(leaves[i].ptr());
     std::stringstream name;  name << "scene_" << i;
     std::stringstream description; description << "scene_" << i << "_urban_" << leaf_ptr->contents_;
     bvgl_2d_geo_index::write_to_kml_node(ofs, leaves[i], 0, 0, description.str(), name.str());

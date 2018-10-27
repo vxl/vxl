@@ -61,8 +61,8 @@ bool vpgl_load_rational_camera_nitf_process(bprb_func_process& pro)
   }
 
   //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  vpgl_nitf_rational_camera *nitf_cam=new vpgl_nitf_rational_camera(nitf_image, false);
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_cam=new vpgl_nitf_rational_camera(nitf_image, false);
 
   vpgl_camera_double_sptr ratcam ( dynamic_cast<vpgl_rational_camera<double>* >(nitf_cam));
 

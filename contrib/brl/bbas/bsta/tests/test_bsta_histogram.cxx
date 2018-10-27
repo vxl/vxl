@@ -161,8 +161,8 @@ void test_bsta_histogram()
 
   //Test smart pointer
   bsta_histogram_sptr hptr = new bsta_histogram<double>(10.0, 10);
-  bsta_histogram<double>* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
-  bsta_histogram<float>* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
+  auto* dcast = dynamic_cast<bsta_histogram<double>*>(hptr.ptr());
+  auto* fcast = dynamic_cast<bsta_histogram<float>*>(hptr.ptr());
   TEST("dynamic cast histogram", dcast&&!fcast, true);
 
   //Test Mutual Information

@@ -95,7 +95,7 @@ static void test_volm_conf_query_from_tag_file()
   std::vector<std::map<std::string, std::pair<float, float> > > d_tol = query->conf_objects_d_tol();
   for (unsigned i = 0; i < conf_objs.size(); i++) {
     std::cout << "\t camera: " << cam_string[i] << std::endl;
-    for (std::map<std::string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
+    for (auto mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
       std::cout << "\t\t obj name: " << mit->first << "\t\t" ;  mit->second->print(std::cout);
       std::cout << "\t\t  distance tolerance: " << d_tol[i][mit->first].first << " to " << d_tol[i][mit->first].second << std::endl;
     }
@@ -207,7 +207,7 @@ static void test_volm_conf_query()
   std::vector<std::map<std::string, std::pair<float, float> > > d_tol = query->conf_objects_d_tol();
   for (unsigned i = 0; i < conf_objs.size(); i++) {
     std::cout << "\t camera: " << cam_string[i] << std::endl;
-    for (std::map<std::string, volm_conf_object_sptr>::iterator mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
+    for (auto mit = conf_objs[i].begin();  mit != conf_objs[i].end(); ++mit) {
       std::cout << "\t\t obj name: " << mit->first << "\t\t" ;  mit->second->print(std::cout);
       std::cout << "\t\t  distance tolerance: " << d_tol[i][mit->first].first << " to " << d_tol[i][mit->first].second << std::endl;
     }

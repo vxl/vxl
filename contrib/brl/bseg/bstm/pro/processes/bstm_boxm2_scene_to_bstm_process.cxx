@@ -58,7 +58,7 @@ bool bstm_boxm2_scene_to_bstm_process(bprb_func_process& pro)
   unsigned i = 0;
   std::string boxm2_filename = pro.get_input<std::string>(i++);
   std::string bstm_scene_dir = pro.get_input<std::string>(i++);
-  unsigned time_steps = pro.get_input<unsigned>(i++);
+  auto time_steps = pro.get_input<unsigned>(i++);
 
 
   if (!vul_file::make_directory_path( bstm_scene_dir.c_str()))

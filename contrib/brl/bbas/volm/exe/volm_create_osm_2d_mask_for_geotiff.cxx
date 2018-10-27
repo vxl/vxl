@@ -42,7 +42,7 @@ bool find_key_value_from_tags(std::string const& key, std::string const& value,
     name = "all=all";
     return true;
   }
-  for (std::vector<std::pair<std::string, std::string> >::iterator vit = tags.begin(); ( vit != tags.end() && !found); ++vit)
+  for (auto vit = tags.begin(); ( vit != tags.end() && !found); ++vit)
   {
     if (key.compare("all") == 0 && value.compare(vit->second) == 0)
     {  found = true;  name = vit->first + "=" + vit->second; }
@@ -119,7 +119,7 @@ int main(int argc, char** argv)
     volm_osm_parser::parse_polygons(osm_polys, osm_poly_keys, osm_file());
     std::cout << osm_polys.size() << " regions are parsed from osm file" << std::flush << std::endl;
 
-    unsigned num_lines = (unsigned)osm_lines.size();
+    auto num_lines = (unsigned)osm_lines.size();
     for (unsigned i = 0; i < num_lines; i++) {
       vector<pair<string, string> > curr_keys = osm_line_keys[i];
       string name, description;
@@ -170,13 +170,13 @@ int main(int argc, char** argv)
           s = line[kk];  e = line[kk+1];
 
           bool init = true;
-          float xs = static_cast<float>(s.x()), ys = static_cast<float>(s.y());
-          float xe = static_cast<float>(e.x()), ye = static_cast<float>(e.y());
+          auto xs = static_cast<float>(s.x()), ys = static_cast<float>(s.y());
+          auto xe = static_cast<float>(e.x()), ye = static_cast<float>(e.y());
           float x=xs, y=ys;
           //generate the path between two pixels
           while (brip_line_generator::generate(init, xs, ys, xe, ye, x, y))
           {
-            unsigned u = static_cast<unsigned>(x), v = static_cast<unsigned>(y);
+            auto u = static_cast<unsigned>(x), v = static_cast<unsigned>(y);
             sheet.emplace_back(x,y);
             if ( u >= 0 && v >= 0 && u < output_img.ni() && v < output_img.nj()) {
               output_img(u,v) = vil_rgb<vxl_byte>(255,255,255);

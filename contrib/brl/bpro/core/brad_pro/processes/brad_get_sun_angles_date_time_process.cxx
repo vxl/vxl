@@ -39,8 +39,8 @@ bool brad_get_sun_angles_date_time_process(bprb_func_process& pro)
   }
 
   //get the inputs
-  float lat = pro.get_input<float>(0);
-  float lon = pro.get_input<float>(1);
+  auto lat = pro.get_input<float>(0);
+  auto lon = pro.get_input<float>(1);
   int year = pro.get_input<int>(2);
   int month = pro.get_input<int>(3);
   int day = pro.get_input<int>(4);

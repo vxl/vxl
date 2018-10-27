@@ -67,7 +67,7 @@ static void test_int_face_attr(int argc, char* argv[])
     std::cout << region_list.size() << " intensity faces found:\n";
 
     // For each intensity face...
-    iface_iterator  ifi = region_list.begin();
+    auto  ifi = region_list.begin();
     int  i = 1;
     for (; ifi != region_list.end(); ifi++, i++)
     {
@@ -91,8 +91,8 @@ static void test_int_face_attr(int argc, char* argv[])
                  << attr_names.size() << " attribute names:\n";
 
         // Dump the attribute vector
-        std::vector<float>::iterator      ai = attrs.begin();
-        std::vector<std::string>::iterator  ani = attr_names.begin();
+        auto      ai = attrs.begin();
+        auto  ani = attr_names.begin();
         for (; (ai != attrs.end()) && (ani != attr_names.end()); ai++, ani++)
           std::cout << (*ani) << ": " << (*ai) << std::endl;
       }

@@ -346,7 +346,7 @@ std::string vul_expand_path(std::string path)
   static map_t the_map;
 
   // look for the given path in the map.
-  map_t::iterator i = the_map.find(path);
+  auto i = the_map.find(path);
 
   if (i == the_map.end()) {
     // not in the map, so compute it :

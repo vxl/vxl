@@ -28,7 +28,7 @@ void test_event_trigger()
   std::vector<vsol_point_3d_sptr> verts_ref;
   verts_ref.push_back(p0);   verts_ref.push_back(p1);   verts_ref.push_back(p2);
   verts_ref.push_back(p3);   verts_ref.push_back(p4);
-  vsol_polygon_3d* poly_3d_ref = new vsol_polygon_3d(verts_ref);
+  auto* poly_3d_ref = new vsol_polygon_3d(verts_ref);
   vsol_spatial_object_3d_sptr so_3d_ref = poly_3d_ref;
   vsol_point_3d_sptr pe0 = new vsol_point_3d(146.1171943827043800, 429.1333838455852300, 3.8836995690295124);
   vsol_point_3d_sptr pe1 = new vsol_point_3d(139.2825252680649700, 449.8591446870622100, 3.8836995690295124);
@@ -39,7 +39,7 @@ void test_event_trigger()
   std::vector<vsol_point_3d_sptr> verts_evt;
   verts_evt.push_back(pe0);   verts_evt.push_back(pe1);   verts_evt.push_back(pe2);
   verts_evt.push_back(pe3);   verts_evt.push_back(pe4);
-  vsol_polygon_3d* poly_3d_evt = new vsol_polygon_3d(verts_evt);
+  auto* poly_3d_evt = new vsol_polygon_3d(verts_evt);
   vsol_spatial_object_3d_sptr so_3d_evt = poly_3d_evt;
   std::string img_dir = "D:/tests/chiletest/crop_dir/";
   std::string image_name = "09DEC06145803-P1BS-052869858050_01_P002_bin_2";

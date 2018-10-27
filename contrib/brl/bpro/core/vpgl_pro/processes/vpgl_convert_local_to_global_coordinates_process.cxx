@@ -51,9 +51,9 @@ bool vpgl_convert_local_to_global_coordinates_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(0);
-  double x = pro.get_input<double>(1);
-  double y = pro.get_input<double>(2);
-  double z = pro.get_input<double>(3);
+  auto x = pro.get_input<double>(1);
+  auto y = pro.get_input<double>(2);
+  auto z = pro.get_input<double>(3);
 
 
   double lat,lon,el;

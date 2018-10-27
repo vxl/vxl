@@ -591,8 +591,8 @@ void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cut
   assert(lambda_i == lambda_j);
   brip_vil_float_ops::gaussian_kernel_square_mask(lambda_i, kernel, mask, cutoff);
 #endif
-  unsigned nrows = (unsigned)mask.rows();
-  unsigned ncols = (unsigned)mask.cols();
+  auto nrows = (unsigned)mask.rows();
+  auto ncols = (unsigned)mask.cols();
   float kernel_max = kernel[nrows/2][ncols/2];
   // normalize kernel
   for (unsigned i = 0; i < ncols; ++i)
@@ -603,8 +603,8 @@ void volm_tile::get_uncertainty_region(float lambda_i, float lambda_j, float cut
 // mark the uncertainty region around a given location using a gaussian mask, the center has the designated score, the rest diminishes with respect to a cutoff degree
 void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<unsigned int>& img)
 {
-  unsigned nrows = (unsigned)mask.rows();
-  unsigned ncols = (unsigned)mask.cols();
+  auto nrows = (unsigned)mask.rows();
+  auto ncols = (unsigned)mask.cols();
 
   int js = (int)std::floor(j - (float)nrows/2.0f + 0.5f);
   int is = (int)std::floor(i - (float)ncols/2.0f + 0.5f);
@@ -633,8 +633,8 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
 // just overwrite whatever was in the image, cause it assumes that current value of the pixel is compared to this score before this function is called
 void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<bool>& mask, vbl_array_2d<float>& kernel, vil_image_view<vxl_byte>& img)
 {
-  unsigned nrows = (unsigned)mask.rows();
-  unsigned ncols = (unsigned)mask.cols();
+  auto nrows = (unsigned)mask.rows();
+  auto ncols = (unsigned)mask.cols();
 
   int js = (int)std::floor(j - (float)nrows/2.0f + 0.5f);
   int is = (int)std::floor(i - (float)ncols/2.0f + 0.5f);

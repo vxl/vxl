@@ -60,7 +60,7 @@ vsol_spatial_object_2d_sptr vsol_group_2d::object(unsigned int i) const
   // require
   assert(i<size());
 
-  std::vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  auto j = storage_->begin();
   for (unsigned int k=0;k<i;++k)
     ++j;
   return *j;
@@ -88,7 +88,7 @@ void vsol_group_2d::compute_bounding_box(void) const
   // require
   assert(size()>0);
 
-  std::vector<vsol_spatial_object_2d_sptr>::iterator i = storage_->begin();
+  auto i = storage_->begin();
   set_bounding_box(   (*i)->get_min_x(), (*i)->get_min_y());
   add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y());
   for (++i; i!=storage_->end(); ++i)
@@ -145,7 +145,7 @@ void vsol_group_2d::remove_object(unsigned int i)
   // require
   assert(i<size());
 
-  std::vector<vsol_spatial_object_2d_sptr>::iterator j = storage_->begin();
+  auto j = storage_->begin();
   for (unsigned int k=0;k<i;++k)
     ++j;
   storage_->erase(j);

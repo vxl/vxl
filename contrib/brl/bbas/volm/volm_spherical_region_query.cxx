@@ -43,8 +43,8 @@ volm_spherical_region_query::set_from_depth_map_region(vpgl_perspective_camera<d
     depth_map_region::orientation otype = dm_region->orient_type();
     double min_depth = dm_region->min_depth();
     double max_depth = dm_region->max_depth();
-    unsigned char order =  static_cast<unsigned char>(dm_region->order());
-    unsigned char nlcd_id = static_cast<unsigned char>(dm_region->land_id());
+    auto order =  static_cast<unsigned char>(dm_region->order());
+    auto nlcd_id = static_cast<unsigned char>(dm_region->land_id());
     std::string nam = dm_region->name();
     if (otype == depth_map_region::GROUND_PLANE) {
 
@@ -56,7 +56,7 @@ volm_spherical_region_query::set_from_depth_map_region(vpgl_perspective_camera<d
     }
     else {
         r.set_attribute(NLCD, nlcd_id);
-        unsigned char qval = static_cast<unsigned char>(otype);
+        auto qval = static_cast<unsigned char>(otype);
         if (qval >=1 && qval <=3)
             r.set_attribute(ORIENTATION, (unsigned char) 2);
         else if (qval == 0)
@@ -88,7 +88,7 @@ volm_spherical_region_query::set_ground_from_depth_map_region(vpgl_perspective_c
         }
     }
     volm_spherical_region r(bbox);
-    unsigned char nlcd_id = static_cast<unsigned char>(dm_region->land_id());
+    auto nlcd_id = static_cast<unsigned char>(dm_region->land_id());
 
     r.set_attribute(ORIENTATION, static_cast<unsigned char>(depth_map_region::HORIZONTAL));
     r.set_attribute(NLCD, nlcd_id);
@@ -159,7 +159,7 @@ volm_spherical_regions_layer volm_spherical_region_query::query_regions(unsigned
 
 void volm_spherical_region_query::print(std::ostream& os) const
 {
-    std::map< unsigned, volm_spherical_regions_layer >::const_iterator rolit =  sph_regions_.begin();
+    auto rolit =  sph_regions_.begin();
     for (; rolit != sph_regions_.end(); ++rolit) {
         std::cout << "BoundingBoxes for roll = " << cam_space_->roll(rolit->first)<< " degrees\n";
         volm_spherical_regions_layer  region_layer = rolit->second;

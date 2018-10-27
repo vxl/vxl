@@ -97,7 +97,7 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
      std::cerr << "ERROR: brad_estimate_radiance_values: expecting floating point image\n";
      return false;
   }
-  vil_image_view<float>* image = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
+  auto* image = dynamic_cast<vil_image_view<float>*>(input_img.ptr());
   if (!image) {
      std::cerr << "ERROR: brad_estimate_radiance_values: error casting to float image\n";
      return false;

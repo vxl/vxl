@@ -39,7 +39,7 @@ volm_desc_sptr volm_desc_ex_2d_matcher::create_query_desc()
   double largest_rad = radius_[radius_.size()-1];  // this is in meters
 
   // create the ex_land_only descriptor
-  volm_desc_ex_land_only* desc = new volm_desc_ex_land_only(ndists, nlands_, radius_);
+  auto* desc = new volm_desc_ex_land_only(ndists, nlands_, radius_);
 
   // re-define the weight parameter to satisfy current radius setting (note this destroy previous weight ratio...)
   float extra_wgt = 0.0f;

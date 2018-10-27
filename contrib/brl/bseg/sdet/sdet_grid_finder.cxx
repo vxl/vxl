@@ -223,7 +223,7 @@ bool grid_profile_matcher::insert_lines(std::vector<vsol_line_2d_sptr> const& li
     line_index_[i]= new std::vector<vsol_line_2d_sptr>;
 
   int line = 0;
-  for (std::vector<double>::iterator dit = distances_.begin();
+  for (auto dit = distances_.begin();
        dit != distances_.end(); dit++, line++)
   {
     int id = (int)((*dit)-dmin_);
@@ -362,7 +362,7 @@ static void group_angle_stats(std::vector<vsol_line_2d_sptr> const & group,
   if (on_cut)
     std::cout << "On cut [" << min_angle << ' ' << max_angle << "] >"
              << cut_thresh << '\n';
-  for (std::vector<vsol_line_2d_sptr>::const_iterator lit = group.begin();
+  for (auto lit = group.begin();
        lit != group.end(); lit++, n_lines++)
   {
     double ang = (*lit)->tangent_angle();

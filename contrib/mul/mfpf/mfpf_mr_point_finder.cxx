@@ -105,7 +105,7 @@ void mfpf_mr_point_finder::get_sample_vector(
   }
 
   assert(image_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-  const vimt_image_2d_of<float>& image
+  const auto& image
     = static_cast<const vimt_image_2d_of<float>&>(image_pyr(im_L));
 
   finders_[L]->get_sample_vector(image,p,u,v);
@@ -127,7 +127,7 @@ double mfpf_mr_point_finder::search(const vimt_image_pyramid& im_pyr,
   {
     unsigned im_L = image_level(L,pose0,im_pyr);
     assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-    const vimt_image_2d_of<float>& image
+    const auto& image
       = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
     fit = finder(L).search_with_opt(image,pose.p(),pose.u(),
                            best_pose.p(),best_pose.u());
@@ -155,7 +155,7 @@ double mfpf_mr_point_finder::mr_search(
   {
     unsigned im_L = image_level(L,pose0,im_pyr);
     assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-    const vimt_image_2d_of<float>& image
+    const auto& image
       = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
     fit = finder(L).search_with_opt(image,pose0.p(),pose0.u(),
                                     pose.p(),pose.u());
@@ -174,7 +174,7 @@ void mfpf_mr_point_finder::refine_match(
 {
   unsigned im_L = image_level(L,pose,im_pyr);
   assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-  const vimt_image_2d_of<float>& image
+  const auto& image
     = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
   finder(L).refine_match(image,pose.p(),pose.u(),fit);
 }
@@ -198,7 +198,7 @@ void mfpf_mr_point_finder::multi_search(
   int L=size()-1;
   unsigned im_L = image_level(L,pose0,im_pyr);
   assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-  const vimt_image_2d_of<float>& image
+  const auto& image
     = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
   finder(L).multi_search(image,pose0.p(),pose0.u(),poses,fits);
 
@@ -239,7 +239,7 @@ void mfpf_mr_point_finder::multi_search_and_prune(
   int L0=size()-1;
   unsigned im_L = image_level(L0,pose0,im_pyr);
   assert(im_pyr(im_L).is_a()=="vimt_image_2d_of<float>");
-  const vimt_image_2d_of<float>& image
+  const auto& image
     = static_cast<const vimt_image_2d_of<float>&>(im_pyr(im_L));
   finder(L0).multi_search(image,pose0.p(),pose0.u(),poses,fits);
 

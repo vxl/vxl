@@ -25,7 +25,7 @@ bool vpgl_backproject::bproj_plane(const vpgl_camera<double>* cam,
     vgl_ray_3d<double> ray;
     vgl_point_3d<double> ipt;
     vgl_plane_3d<double> gplane(plane[0], plane[1], plane[2], plane[3]);
-    const vpgl_generic_camera<double>* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
+    const auto* gcam = dynamic_cast<const vpgl_generic_camera<double>*>(cam);
     ray = gcam->ray(image_point[0], image_point[1]);
     if (!vgl_intersection<double>(ray, gplane, ipt))
       return false;
@@ -91,7 +91,7 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
                                    double error_tol,
                                    double relative_diameter)
 {
-  const vpgl_camera<double>*  cam = static_cast<const vpgl_camera<double>* >(&rcam);
+  const auto*  cam = static_cast<const vpgl_camera<double>* >(&rcam);
   return bproj_plane(cam, image_point, plane, initial_guess, world_point, error_tol, relative_diameter);
 }
 
@@ -104,7 +104,7 @@ bool vpgl_backproject::bproj_plane(vpgl_rational_camera<double> const& rcam,
                                    double error_tol,
                                    double relative_diameter)
 {
-  const vpgl_camera<double>* const cam = static_cast<const vpgl_camera<double>* >(&rcam);
+  const auto* const cam = static_cast<const vpgl_camera<double>* >(&rcam);
   return bproj_plane(cam, image_point, plane, initial_guess, world_point, error_tol, relative_diameter);
 }
 

@@ -13,7 +13,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_3> const& slab,
   // take care of pixel format issues. might want to specialize this function for rgb, etc
   if (image->pixel_format()== VIL_PIXEL_FORMAT_RGB_BYTE)
   {
-      if (vil_image_view<vil_rgb<unsigned char> > *img_view = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr()))
+      if (auto *img_view = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr()))
       {
           vil_image_view<vil_rgb<unsigned char> >::iterator img_it = img_view->begin();
           bvxm_voxel_slab<vnl_float_3>::const_iterator slab_it = slab.begin();
@@ -45,7 +45,7 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_4> const& slab,
     // take care of pixel format issues. might want to specialize this function for rgb, etc
     if (image->pixel_format()== VIL_PIXEL_FORMAT_RGBA_BYTE)
     {
-        if (vil_image_view<vil_rgba<unsigned char> > *img_view = dynamic_cast<vil_image_view<vil_rgba<unsigned char> >*>(image.ptr()))
+        if (auto *img_view = dynamic_cast<vil_image_view<vil_rgba<unsigned char> >*>(image.ptr()))
         {
             vil_image_view<vil_rgba<unsigned char> >::iterator img_it = img_view->begin();
             bvxm_voxel_slab<vnl_float_4>::const_iterator slab_it = slab.begin();

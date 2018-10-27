@@ -40,7 +40,7 @@ bvpl_kernel_factory::create(vnl_float_3 rotation_axis, float  /*angle*/)
 bvpl_kernel_iterator
 bvpl_kernel_factory::interpolate(kernel_type const& kernel)
 {
-  kernel_type::const_iterator kernel_it = kernel.begin();
+  auto kernel_it = kernel.begin();
   std::vector<std::pair<vgl_point_3d<int>, bvpl_kernel_dispatch> >  kernel_out;
 
     //Kernels shouldn't get any bigger than this, so this initial values work
@@ -194,7 +194,7 @@ bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
            << R.as_matrix() << std::endl;
 #endif
 
-  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kernel_it =this->kernel_.begin();
+  auto kernel_it =this->kernel_.begin();
   std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> > kernel;
 
   //for efficiency and accuracy, get the rotation matrix of R and use the matrix for multiplicatiom

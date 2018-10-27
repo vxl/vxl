@@ -129,7 +129,7 @@ joint_probability(vnl_vector<double> const& samples, vnl_vector<double> const& m
         is = static_cast<unsigned>(samples[i]*scl + 0.5);
 #endif
       //match the gpu implementation, which does a floor operation
-      unsigned id = static_cast<unsigned>(std::floor(dest_samples_[i]*scl)),
+      auto id = static_cast<unsigned>(std::floor(dest_samples_[i]*scl)),
         is = static_cast<unsigned>(std::floor(samples[i]*scl));
 
       if (id>nbins_-1 || is> nbins_-1)

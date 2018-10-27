@@ -66,8 +66,8 @@ bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
   vil_image_view_base_sptr img;
   vil_image_view_base_sptr img_mask;
 
@@ -78,7 +78,7 @@ bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)
       vil_image_view<float> expected(ni,nj,1);
 
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_depth_rt<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, camera, expected, mask);
       img_mask = new vil_image_view<float>(mask);
       img = new vil_image_view<float>(expected);
@@ -87,7 +87,7 @@ bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)
       vil_image_view<float> expected(ni,nj,1);
 
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_depth_rt<short, boxm_sample<BOXM_APM_MOB_GREY> >(*scene, camera, expected, mask);
       img_mask = new vil_image_view<float>(mask);
       img = new vil_image_view<float>(expected);
@@ -96,7 +96,7 @@ bool boxm_render_expected_depth_rt_process(bprb_func_process& pro)
       vil_image_view<float> expected(ni,nj,1);
 
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       boxm_render_depth_rt<short, boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, camera, expected, mask);
       img_mask = new vil_image_view<float>(mask);
       img = new vil_image_view<float>(expected);

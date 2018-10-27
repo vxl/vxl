@@ -369,7 +369,7 @@ map_x(float  raw_x)
 vifa_histogram* vifa_parallel::
 normalize_histogram(vifa_histogram* h)
 {
-  vifa_histogram*  norm = new vifa_histogram(nbuckets, min_angle, max_angle);
+  auto*  norm = new vifa_histogram(nbuckets, min_angle, max_angle);
   int        nbuckets = h->GetRes();
   float      area = h->ComputeArea();
   float*      x_vals = h->GetVals();

@@ -16,7 +16,7 @@
 static void bmsh3d_test_face_geom()
 {
   //Create the test mesh.
-  bmsh3d_mesh* M = new bmsh3d_mesh;
+  auto* M = new bmsh3d_mesh;
 
   bmsh3d_vertex* v[3];
 

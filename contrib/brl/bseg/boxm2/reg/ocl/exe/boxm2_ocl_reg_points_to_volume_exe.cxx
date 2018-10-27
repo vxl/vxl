@@ -108,7 +108,7 @@ int main(int argc,  char** argv)
       return 0;
   }
   std::cout<<"Points Loaded "<<pts.size()<<std::endl;
-  float * vpts = new float[pts.size()*3];
+  auto * vpts = new float[pts.size()*3];
   for(unsigned i= 0;i < pts.size(); i++)
   {
       vpts[i*3+0] = pts[i].x(); vpts[i*3+1] = pts[i].y(); vpts[i*3+2] = pts[i].z();

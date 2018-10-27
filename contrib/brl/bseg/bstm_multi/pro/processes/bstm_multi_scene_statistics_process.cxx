@@ -79,12 +79,12 @@ bool bstm_multi_scene_statistics_process(bprb_func_process &pro) {
   unsigned i = 0;
   bstm_multi_scene_sptr scene = pro.get_input<bstm_multi_scene_sptr>(i++);
   bstm_multi_cache_sptr cache = pro.get_input<bstm_multi_cache_sptr>(i++);
-  float center_x = pro.get_input<float>(i++);
-  float center_y = pro.get_input<float>(i++);
-  float center_z = pro.get_input<float>(i++);
-  float len_x = pro.get_input<float>(i++);
-  float len_y = pro.get_input<float>(i++);
-  float len_z = pro.get_input<float>(i++);
+  auto center_x = pro.get_input<float>(i++);
+  auto center_y = pro.get_input<float>(i++);
+  auto center_z = pro.get_input<float>(i++);
+  auto len_x = pro.get_input<float>(i++);
+  auto len_y = pro.get_input<float>(i++);
+  auto len_z = pro.get_input<float>(i++);
 
   // create vgl box
   const vgl_point_3d<double> center(center_x, center_y, center_z);
@@ -102,7 +102,7 @@ bool bstm_multi_scene_statistics_process(bprb_func_process &pro) {
   // get blocks
   const std::map<bstm_block_id, bstm_multi_block_metadata> &blocks =
       scene->blocks();
-  std::map<bstm_block_id, bstm_multi_block_metadata>::const_iterator
+  auto
       bstm_multi_iter = blocks.begin();
   for (; bstm_multi_iter != blocks.end(); ++bstm_multi_iter) {
     bstm_block_id block_id = bstm_multi_iter->first;

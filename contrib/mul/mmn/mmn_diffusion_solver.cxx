@@ -106,8 +106,8 @@ std::pair<bool,double> mmn_diffusion_solver::operator()(const std::vector<vnl_ve
     for (unsigned inode=0; inode<neighbourhoods.size();++inode)
     {
         const std::vector<std::pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        auto neighIter=neighbours.begin();
+        auto neighIterEnd=neighbours.end();
         while (neighIter != neighIterEnd) //do all neighbours of this node
         {
             unsigned arcId=neighIter->second;
@@ -200,8 +200,8 @@ void mmn_diffusion_solver::transform_costs(unsigned inode)
     {
         const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
 
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        auto neighIter=neighbours.begin();
+        auto neighIterEnd=neighbours.end();
         double phiTot=0.0; //total added to node cost
         while (neighIter != neighIterEnd) //Loop over all my neighbours
         {
@@ -261,8 +261,8 @@ void mmn_diffusion_solver::update_potentials_to_neighbours(unsigned inode,
     const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
     for (unsigned xlabel=0; xlabel<nStates;++xlabel) //loop over my labels (i.e. each pencil)
     {
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        auto neighIter=neighbours.begin();
+        auto neighIterEnd=neighbours.end();
         double du=node_cost[xlabel];
         while (neighIter != neighIterEnd) //Loop over all my neighbours
         {
@@ -345,8 +345,8 @@ bool mmn_diffusion_solver::arc_consistent_solution(std::vector<unsigned>& x)
                         std::back_inserter(maxRows),
                         mbl_stl_pred_create_index_adapter(uToNeigh,
                                                           mbl_stl_pred_is_near(umax,epsilon_cost)));
-        std::vector<unsigned>::iterator rowIter=maxRows.begin();
-        std::vector<unsigned>::iterator rowIterEnd=maxRows.end();
+        auto rowIter=maxRows.begin();
+        auto rowIterEnd=maxRows.end();
         while (rowIter != rowIterEnd)
         {
             //And for each such pencil locate the index of the maximising label to which it connects

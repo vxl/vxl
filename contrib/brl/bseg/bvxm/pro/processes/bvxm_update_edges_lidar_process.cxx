@@ -51,7 +51,7 @@ bool bvxm_update_edges_lidar_process(bprb_func_process& pro)
   vil_image_view_base_sptr lidar_edges_prob = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
-  unsigned scale_idx = pro.get_input<unsigned>(i++);
+  auto scale_idx = pro.get_input<unsigned>(i++);
 
   if ( !lidar_height ){
     std::cout << pro.name() << " :--  Input 0  is not valid!\n";

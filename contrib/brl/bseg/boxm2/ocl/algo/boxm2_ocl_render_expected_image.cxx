@@ -126,7 +126,7 @@ bool boxm2_ocl_render_expected_image::render(
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
   // expected image
-  float* exp_buff = new float[cl_ni*cl_nj];
+  auto* exp_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) exp_buff[i]=0.0f;
   bocl_mem_sptr exp_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), exp_buff,"exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -138,12 +138,12 @@ bool boxm2_ocl_render_expected_image::render(
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* max_omega_buff = new float[cl_ni*cl_nj];
+  auto* max_omega_buff = new float[cl_ni*cl_nj];
   std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -250,7 +250,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
 
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -267,7 +267,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -280,7 +280,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),

@@ -57,7 +57,7 @@ namespace boxm2_ocl_create_norm_intensities_process_globals
 
 
     second_pass_src.push_back(source_dir + "bit/batch_update_kernels.cl");
-    bocl_kernel* convert_nobs_int_short = new bocl_kernel();
+    auto* convert_nobs_int_short = new bocl_kernel();
     convert_nobs_int_short->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_nobs_int_short", opts+" -D CONVERT_NOBS_INT_SHORT", "batch_update::convert_nobs_int_to_short");
 
     second_pass_src.push_back(source_dir + "batch_update_functors.cl");
@@ -68,7 +68,7 @@ namespace boxm2_ocl_create_norm_intensities_process_globals
     options += " -D DETERMINISTIC ";
 
     //push back cast_ray_bit
-    bocl_kernel* seg_len = new bocl_kernel();
+    auto* seg_len = new bocl_kernel();
     std::string bayes_opt = options + " -D SEGLENNOBS -D STEP_CELL=step_cell_seglen_nobs(aux_args,data_ptr,llid,d) ";
     seg_len->create_kernel(&device->context(),device->device_id(), second_pass_src, "seg_len_nobs_main", bayes_opt, "batch_update::seg_len_nobs_main");
     vec_kernels.push_back(seg_len);
@@ -191,21 +191,21 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img,true);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j)
     for (unsigned int i=0;i<cl_ni;++i)
@@ -255,7 +255,7 @@ bool boxm2_ocl_create_norm_intensities_process(bprb_func_process& pro)
       bocl_mem* blk = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info = opencl_cache->loaded_block_info();
       bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));

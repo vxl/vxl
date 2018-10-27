@@ -111,10 +111,10 @@ void boxm2_test_utils::save_test_scene_to_disk()
   // save the same random data block 8 times
   typedef vnl_vector_fixed<unsigned char, 8> uchar8;
   const unsigned int array_size = 5*1024*1024; //roughly 20 megs for alpha
-  float * farray = new float[array_size];
-  uchar8* carray = new uchar8[array_size];
+  auto * farray = new float[array_size];
+  auto* carray = new uchar8[array_size];
   for (unsigned c=0; c<array_size; ++c) {
-    float rnd = (float) rand.drand32(0,100);
+    auto rnd = (float) rand.drand32(0,100);
     farray[c] = rnd;
     carray[c] = uchar8((unsigned char) rnd);
   }
@@ -253,10 +253,10 @@ std::string boxm2_test_utils::save_test_simple_scene(std::string filename )
   // save the same random data block 8 times
   typedef vnl_vector_fixed<unsigned char, 8> uchar8;
   constexpr unsigned int array_size = 4; //roughly 20 megs for alpha
-  float * farray = new float[array_size];
-  uchar8* carray = new uchar8[array_size];
+  auto * farray = new float[array_size];
+  auto* carray = new uchar8[array_size];
   for (unsigned c=0; c<array_size; ++c) {
-    float rnd = (float) rand.drand32(0,100);
+    auto rnd = (float) rand.drand32(0,100);
     farray[c] = rnd;
     carray[c] = uchar8((unsigned char) rnd);
   }

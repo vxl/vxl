@@ -171,9 +171,9 @@ bool bapl_match_display_process(bprb_func_process& pro)
     bapl_lowe_keypoint_sptr kp2;
     kp2.vertical_cast(m.second);
 
-    vxl_byte color_r = (vxl_byte)rng.lrand32(0,255);
-    vxl_byte color_g = (vxl_byte)rng.lrand32(0,255);
-    vxl_byte color_b = (vxl_byte)rng.lrand32(0,255);
+    auto color_r = (vxl_byte)rng.lrand32(0,255);
+    auto color_g = (vxl_byte)rng.lrand32(0,255);
+    auto color_b = (vxl_byte)rng.lrand32(0,255);
     int ii = int(kp1->location_i()+0.5); int jj = int(kp1->location_j()+0.5);
     if (ii >= 0 && jj >= 0 && ii < (int)input_image1.ni() && jj < (int)input_image1.nj()) {
       //ipts_draw_cross(output_img1, ii,jj,int(kp1->scale()+0.5), vxl_byte(255) );
@@ -229,7 +229,7 @@ bool bapl_refine_match_process(bprb_func_process& pro)
   unsigned i=0;
   bapl_keypoint_match_set_sptr match_set = pro.get_input<bapl_keypoint_match_set_sptr>(i++);
   std::vector<bapl_key_match> matches = match_set->matches_;
-  float outlier_threshold = pro.get_input<float>(i++);
+  auto outlier_threshold = pro.get_input<float>(i++);
   int min_number_of_matches = pro.get_input<int>(i++);
   min_number_of_matches = min_number_of_matches < 9 ? 9 : min_number_of_matches;  // F computation requires at least 8 matches
 

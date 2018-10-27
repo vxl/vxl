@@ -58,7 +58,7 @@ namespace boxm2_ocl_compute_visibility_process_globals
         options += " -D STEP_CELL=step_cell_vis(aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis)";
 
         //have kernel construct itself using the context and device
-        bocl_kernel * ray_trace_kernel=new bocl_kernel();
+        auto * ray_trace_kernel=new bocl_kernel();
 
         ray_trace_kernel->create_kernel( &device->context(),
                                          device->device_id(),
@@ -111,9 +111,9 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
     std::string camsfile= pro.get_input<std::string>(i++);
     std::string indir= pro.get_input<std::string>(i++);
-    float x = pro.get_input<float>(i++);
-    float y = pro.get_input<float>(i++);
-    float z = pro.get_input<float>(i++);
+    auto x = pro.get_input<float>(i++);
+    auto y = pro.get_input<float>(i++);
+    auto z = pro.get_input<float>(i++);
     std::string outdir= pro.get_input<std::string>(i++);
     int scale = pro.get_input<int>(i++);
 
@@ -163,8 +163,8 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
         cl_ni=RoundUp(tfinals[count]->ni(),lthreads[0]);
         cl_nj=RoundUp(tfinals[count]->nj(),lthreads[1]);
 
-        float* rayd_buff = new float[cl_ni*cl_nj*4];
-        float* vis_buff = new float[cl_ni*cl_nj];
+        auto* rayd_buff = new float[cl_ni*cl_nj*4];
+        auto* vis_buff = new float[cl_ni*cl_nj];
         int num=0;
         for (unsigned int j=0;j<cl_nj;++j)
             for (unsigned int i=0;i<cl_ni;++i)
@@ -279,7 +279,7 @@ bool boxm2_ocl_compute_visibility_process(bprb_func_process& pro)
     std::cout<<"Writing Vis Images"<<std::endl;
     for (unsigned int count = 0 ; count < tfinals.size(); count ++)
     {
-        float * vis_buf = (float*)vis_buffs[count];
+        auto * vis_buf = (float*)vis_buffs[count];
         vil_image_view<bool> visbool(tfinals[count]->ni(),tfinals[count]->nj());
         visbool.fill(false);
         for (unsigned c=0;c<tfinals[count]->nj();c++)

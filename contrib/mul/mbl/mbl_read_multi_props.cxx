@@ -109,7 +109,7 @@ mbl_read_multi_props_type mbl_read_multi_props_ws(std::istream &afs)
 
   typedef mbl_read_multi_props_type::iterator ITER;
   std::string last_label( label );
-  ITER last_label_iter = props.end();
+  auto last_label_iter = props.end();
 
   do
   {
@@ -217,8 +217,8 @@ mbl_read_multi_props_type mbl_read_multi_props_merge(const mbl_read_multi_props_
 {
   mbl_read_multi_props_type output;
 
-  mbl_read_multi_props_type::const_iterator a_it = a.begin();
-  mbl_read_multi_props_type::const_iterator b_it = b.begin();
+  auto a_it = a.begin();
+  auto b_it = b.begin();
 
 
   while (a_it != a.end() || b_it != b.end())
@@ -315,11 +315,11 @@ void mbl_read_multi_props_type::get_required_properties(
 {
   values.clear();
 
-  mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
-  mbl_read_multi_props_type::iterator fin = this->upper_bound(label);
+  auto beg = this->lower_bound(label);
+  auto fin = this->upper_bound(label);
   if (beg==fin)
     mbl_exception_error(mbl_exception_missing_property(label));
-  for (mbl_read_multi_props_type::iterator it=beg; it!=fin; ++it)
+  for (auto it=beg; it!=fin; ++it)
   {
     values.push_back(it->second);
   }
@@ -349,10 +349,10 @@ void mbl_read_multi_props_type::get_optional_properties(
 {
   values.clear();
 
-  mbl_read_multi_props_type::iterator beg = this->lower_bound(label);
-  mbl_read_multi_props_type::iterator fin = this->upper_bound(label);
+  auto beg = this->lower_bound(label);
+  auto fin = this->upper_bound(label);
 
-  for (mbl_read_multi_props_type::iterator it=beg; it!=fin; ++it)
+  for (auto it=beg; it!=fin; ++it)
   {
     values.push_back(it->second);
   }

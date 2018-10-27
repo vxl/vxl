@@ -74,7 +74,7 @@ void pdf1d_gaussian_sampler::set_model(const pdf1d_pdf& model)
 
 double pdf1d_gaussian_sampler::sample()
 {
-  const pdf1d_gaussian & gauss = static_cast<const pdf1d_gaussian &>(model());
+  const auto & gauss = static_cast<const pdf1d_gaussian &>(model());
   return  gauss.mean() + gauss.sd()*rng_.normal();
 }
 
@@ -91,7 +91,7 @@ void pdf1d_gaussian_sampler::regular_samples(vnl_vector<double>& x)
 
   // Strictly should select samples so that CDF(x) is equally spread in [0,1]
 
-  const pdf1d_gaussian & gauss = static_cast<const pdf1d_gaussian &>( model());
+  const auto & gauss = static_cast<const pdf1d_gaussian &>( model());
   double lim = gauss.sd()*(n-1)/2.0;
   double mean = gauss.mean();
 

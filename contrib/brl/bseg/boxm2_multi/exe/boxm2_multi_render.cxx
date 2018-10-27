@@ -164,7 +164,7 @@ int main(int argc,  char** argv)
     vil_image_view<float> out(ni(),nj());
     vul_timer rtimer; rtimer.mark();
     float gpu_time = renderer.render(mcache, out, cams[i]);
-    float rtime = (float) rtimer.all();
+    auto rtime = (float) rtimer.all();
     std::cout<<"Render "<<i<<" time: "<<rtime<<std::endl;
     std::stringstream s; s<<"e:/data/3dModeling/apt/out_"<<i<<".tiff";
     vil_save(out, s.str().c_str());

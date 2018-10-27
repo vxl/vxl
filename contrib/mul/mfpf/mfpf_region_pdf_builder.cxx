@@ -234,7 +234,7 @@ void mfpf_region_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
 void mfpf_region_pdf_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_region_pdf");
-  mfpf_region_pdf& rp = static_cast<mfpf_region_pdf&>(pf);
+  auto& rp = static_cast<mfpf_region_pdf&>(pf);
 
   vpdfl_pdf_base *pdf = pdf_builder().new_model();
 

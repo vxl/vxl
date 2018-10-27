@@ -265,7 +265,7 @@ vil_image_view_base_sptr vil_mit_image::get_copy_view(unsigned int x0, unsigned 
 
   vxl_uint_32 rowsize = (pix_size*xs+7)/8;
   vil_memory_chunk_sptr buf = new vil_memory_chunk(rowsize*ys,format_);
-  vxl_byte* ib = reinterpret_cast<vxl_byte*>(buf->data());
+  auto* ib = reinterpret_cast<vxl_byte*>(buf->data());
   for (unsigned int y = y0; y < y0+ys; ++y)
   {
     is_->seek(8L + y*((ni_*pix_size+7)/8) + x0*pix_size/8);
@@ -307,7 +307,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
           <<ni<<'x'<<nj<<'x'<< buf.nplanes()<<'p'
           <<" at ("<<x0<<','<<y0<<")\n";
 #endif
-  vil_image_view<vxl_byte> const& ibuf = reinterpret_cast<vil_image_view<vxl_byte> const&>(buf);
+  auto const& ibuf = reinterpret_cast<vil_image_view<vxl_byte> const&>(buf);
   bool buf_is_planar = false;
   if (ibuf.istep() == int(components_) && ibuf.jstep() == int(components_*ni) &&
       (ibuf.planestep() == 1 || components_ == 1))
@@ -373,7 +373,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
     if (buf_is_planar && components_ > 1) // have to interleave pixels
     {
       unsigned int sz = bytes_per_pixel();
-      vxl_byte* tempbuf = new vxl_byte[components_*sz];
+      auto* tempbuf = new vxl_byte[components_*sz];
       for (unsigned int y = y0; y < y0+nj; ++y)
         for (unsigned int x = x0; x < x0+ni; ++x)
         {
@@ -395,7 +395,7 @@ bool vil_mit_image::put_view(vil_image_view_base const& buf, unsigned int x0, un
     }
     else
     {
-      vxl_byte* tempbuf = new vxl_byte[rowsize];
+      auto* tempbuf = new vxl_byte[rowsize];
       for (unsigned int y = y0; y < y0+nj; ++y)
       {
         std::memcpy(tempbuf, ob, rowsize);

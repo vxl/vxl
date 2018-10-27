@@ -79,7 +79,7 @@ boxm2_convert_bundle::boxm2_convert_bundle(std::string bundle_file, std::string 
     if ( !bad_cams_.count(i) ) {
       imgstream.seek_frame(i);
       std::string path = imgstream.current_path();
-      CamType* cam = new CamType(cams_[i]);
+      auto* cam = new CamType(cams_[i]);
       final_cams_[path] = cam;
       //std::cout<<"Final cam: "<<path<<std::endl;
     }

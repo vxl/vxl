@@ -49,7 +49,7 @@ bool volm_generate_class_map_process(bprb_func_process& pro)
   for (unsigned i = 0; i < img.ni(); i++)
     for (unsigned j = 0; j < img.nj(); j++) {
       std::pair<vxl_byte, std::pair<vxl_byte, vxl_byte> > pp(img(i,j).r, std::pair<vxl_byte, vxl_byte>(img(i,j).g, img(i,j).b));
-      std::map<std::pair<vxl_byte, std::pair<vxl_byte, vxl_byte> >, unsigned short>::iterator iter = sdet_color_map.find(pp);
+      auto iter = sdet_color_map.find(pp);
       if (iter != sdet_color_map.end())
         out_img(i, j) = iter->second;
       else
@@ -109,7 +109,7 @@ bool volm_generate_color_class_map_process(bprb_func_process& pro)
 
   for (unsigned i = 0; i < img.ni(); i++)
     for (unsigned j = 0; j < img.nj(); j++) {
-      std::map<unsigned char, vil_rgb<vxl_byte> >::iterator mit = sdet_color_map.find(img(i,j));
+      auto mit = sdet_color_map.find(img(i,j));
       if (mit != sdet_color_map.end())
         out_img(i,j) = mit->second;
     }
@@ -142,8 +142,8 @@ bool volm_update_class_map_process(bprb_func_process& pro)
   vil_image_view_base_sptr curr_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   vil_image_view_base_sptr srce_img_sptr = pro.get_input<vil_image_view_base_sptr>(1);
 
-  vil_image_view<unsigned char>* curr_img = dynamic_cast<vil_image_view<unsigned char>* >(curr_img_sptr.ptr());
-  vil_image_view<unsigned char>* srce_img = dynamic_cast<vil_image_view<unsigned char>* >(srce_img_sptr.ptr());
+  auto* curr_img = dynamic_cast<vil_image_view<unsigned char>* >(curr_img_sptr.ptr());
+  auto* srce_img = dynamic_cast<vil_image_view<unsigned char>* >(srce_img_sptr.ptr());
   unsigned ni = curr_img->ni();
   unsigned nj = curr_img->nj();
   if (srce_img->ni() != ni || srce_img->nj() != nj) {

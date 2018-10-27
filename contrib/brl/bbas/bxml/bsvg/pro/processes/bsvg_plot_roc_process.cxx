@@ -221,7 +221,7 @@ bool bsvg_plot_initialize_process(bprb_func_process& pro)
   int m = pro.get_input<int>(i++);
   int fs = pro.get_input<int>(i++);
 
-  bsvg_plot* p = new bsvg_plot((float)w, (float)h);
+  auto* p = new bsvg_plot((float)w, (float)h);
   p->set_margin((float)m);
   p->set_font_size(fs);
   p->add_axes(0, 1, 0, 1);
@@ -276,7 +276,7 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
     xs.push_back(*iter2);
     ys.push_back(*iter);
   }
-  bsvg_plot* p = dynamic_cast<bsvg_plot*>(doc.ptr());
+  auto* p = dynamic_cast<bsvg_plot*>(doc.ptr());
   p->add_line(xs, ys, color);
   return true;
 }

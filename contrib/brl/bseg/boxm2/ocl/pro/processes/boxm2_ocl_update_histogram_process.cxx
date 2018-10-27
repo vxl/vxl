@@ -48,13 +48,13 @@ namespace boxm2_ocl_update_histogram_process_globals
     std::string options = " -D INTENSITY ";
     options += " -D MOG_TYPE_8 ";
     //create all passes
-    bocl_kernel* seg_len = new bocl_kernel();
+    auto* seg_len = new bocl_kernel();
     std::string seg_opts = options + "-D DETERMINISTIC -D CUMLEN -D STEP_CELL=step_cell_cumlen(aux_args,data_ptr,llid,d) ";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "cum_len_main", seg_opts, "update::seg_len");
     vec_kernels.push_back(seg_len);
 
 
-    bocl_kernel* update_hist = new bocl_kernel();
+    auto* update_hist = new bocl_kernel();
     std::string hist_opts = options + "-D DETERMINISTIC -D UPDATE_HIST -D STEP_CELL=step_cell_update_hist(aux_args,data_ptr,llid,d) ";
     update_hist->create_kernel(&device->context(), device->device_id(), src_paths, "update_hist_main", hist_opts, "update::hist");
     vec_kernels.push_back(update_hist);
@@ -63,7 +63,7 @@ namespace boxm2_ocl_update_histogram_process_globals
     clean_seg_kernels_src.push_back(source_dir + "scene_info.cl");
     clean_seg_kernels_src.push_back(source_dir + "bit/batchkernels.cl");
 
-    bocl_kernel* clean_seg_len = new bocl_kernel();
+    auto* clean_seg_len = new bocl_kernel();
     std::string clean_seg_len_opts = options + " -D CLEAN_SEG_LEN ";
     clean_seg_len->create_kernel(&device->context(), device->device_id(), clean_seg_kernels_src, "clean_seg_len_main", clean_seg_len_opts, "clean::seg_len");
     vec_kernels.push_back(clean_seg_len);
@@ -139,8 +139,8 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
 
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
-  float* buff = new float[cl_ni*cl_nj];
-  if (vil_image_view<float> * in_img_float=dynamic_cast<vil_image_view<float> *>(in_img.ptr()))
+  auto* buff = new float[cl_ni*cl_nj];
+  if (auto * in_img_float=dynamic_cast<vil_image_view<float> *>(in_img.ptr()))
   {
     int count=0;
     for (unsigned j=0;j<cl_nj;j++)
@@ -153,7 +153,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
   }
   else
     return false;
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
 
   bocl_mem_sptr in_image=new bocl_mem(device->context(),buff,cl_ni*cl_nj*sizeof(float),"exp image buffer");
@@ -264,7 +264,7 @@ bool boxm2_ocl_update_histogram_process(bprb_func_process& pro)
         bocl_mem * blk_info = opencl_cache->loaded_block_info();
         bocl_mem * aux = opencl_cache->get_data<BOXM2_AUX>(scene,*id);
 
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int aux_type_size = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_AUX>::prefix());
         info_buffer->data_buffer_length = (int) (aux->num_bytes()/aux_type_size);
         blk_info->write_to_buffer(queue);

@@ -23,7 +23,7 @@ reset()
 vifa_int_face_attr_sptr test_ifa_factory::
 obtain_int_face_attr(vtol_intensity_face_sptr  face)
 {
-  std::vector<ifp>::iterator  ifpi = table_->begin();
+  auto  ifpi = table_->begin();
 
   for (; ifpi != table_->end(); ifpi++)
   {
@@ -46,7 +46,7 @@ obtain_int_face_attr(vtol_intensity_face_sptr  face,
                      vifa_group_pgram_params*  gpp_w,
                      vifa_norm_params*         np)
 {
-  std::vector<ifp>::iterator  ifpi = table_->begin();
+  auto  ifpi = table_->begin();
   for (; ifpi != table_->end(); ifpi++)
   {
     // Lookup the face in the cache

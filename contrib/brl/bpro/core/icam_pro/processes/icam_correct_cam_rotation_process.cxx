@@ -71,19 +71,19 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr source_img_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   double cone_half_angle = double(pro.get_input<float>(i++))*vnl_math::pi_over_180; //double cone_half_angle = 0.15;
-  unsigned n_axis_steps = pro.get_input<unsigned>(i++);
+  auto n_axis_steps = pro.get_input<unsigned>(i++);
   bool refine = pro.get_input<bool>(i++);
 
   vil_image_view<float> dest_img(dest_img_sptr->ni(), dest_img_sptr->nj());
   if (dest_img_sptr->nplanes() == 3) {
-    vil_image_view<vxl_byte>* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(dest_img_sptr.ptr());
+    auto* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(dest_img_sptr.ptr());
     vil_convert_planes_to_grey<vxl_byte, float>(*inimg, dest_img);
   } else {
     dest_img = vil_convert_cast(float(), dest_img_sptr);
   }
   vil_image_view<float> source_img(source_img_sptr->ni(), source_img_sptr->nj());
   if (source_img_sptr->nplanes() == 3) {
-    vil_image_view<vxl_byte>* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(source_img_sptr.ptr());
+    auto* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(source_img_sptr.ptr());
     vil_convert_planes_to_grey<vxl_byte, float>(*inimg, source_img);
   } else {
     source_img = vil_convert_cast(float(), source_img_sptr);
@@ -93,7 +93,7 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
     return false;
 
   //also to get the calibration matrix, K
-  vpgl_perspective_camera<double>* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.ptr());
+  auto* pers_cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam.ptr());
   if (!pers_cam)
     return false;
   vnl_double_3x3 K = pers_cam->get_calibration().get_matrix();
@@ -117,8 +117,8 @@ bool icam_correct_cam_rotation_process(bprb_func_process& pro)
 
   vgl_rotation_3d<double> Rp = pers_cam->get_rotation();
   vgl_rotation_3d<double> Rrp = min_rot.inverse()*Rp;
-  vpgl_perspective_camera<double>* out_cam1 = new vpgl_perspective_camera<double>();
-  vpgl_perspective_camera<double>* out_cam = new vpgl_perspective_camera<double>();
+  auto* out_cam1 = new vpgl_perspective_camera<double>();
+  auto* out_cam = new vpgl_perspective_camera<double>();
   out_cam1->set_calibration(pers_cam->get_calibration());
   out_cam1->set_rotation(Rrp);
   out_cam1->set_camera_center(pers_cam->get_camera_center());

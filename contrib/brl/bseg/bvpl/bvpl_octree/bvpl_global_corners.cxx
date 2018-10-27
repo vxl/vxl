@@ -56,7 +56,7 @@ bvpl_global_corners::bvpl_global_corners(const std::string &path)
 
   for (unsigned si = 0; si < nscenes; si++)
   {
-    bxml_element* scenes_elm = dynamic_cast<bxml_element*>(scenes_data[si].ptr());
+    auto* scenes_elm = dynamic_cast<bxml_element*>(scenes_data[si].ptr());
     int id = -1;
     scenes_elm->get_attribute("id", id);
     scenes_elm->get_attribute("aux_dir", aux_dirs_[id]);
@@ -72,7 +72,7 @@ bvpl_global_corners::bvpl_global_corners(const std::string &path)
   bxml_data_sptr params_data = bxml_find_by_name(root, params_query);
   if (params_data)
   {
-    bxml_element* params_elm = dynamic_cast<bxml_element*>(params_data.ptr());
+    auto* params_elm = dynamic_cast<bxml_element*>(params_data.ptr());
 
     params_elm->get_attribute("harris_k", harris_k_);
     std::cout << "Harris_k is " << harris_k_ << '\n';
@@ -93,8 +93,8 @@ void bvpl_global_corners::compute_laptev_corners(bvpl_global_taylor_sptr global_
   boxm_scene_base_sptr proj_scene_base =global_taylor->load_projection_scene(scene_id);
   boxm_scene_base_sptr valid_scene_base = global_taylor->load_valid_scene(scene_id);
 
-  boxm_scene<taylor_tree_type>* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
-  boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
+  auto* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
+  auto* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
   boxm_scene<boct_tree<short, float> >* corner_scene =
   new boxm_scene<boct_tree<short, float> >(valid_scene->lvcs(), valid_scene->origin(), valid_scene->block_dim(), valid_scene->world_dim(), valid_scene->max_level(), valid_scene->init_level());
   corner_scene->set_appearance_model(BOXM_FLOAT);
@@ -140,8 +140,8 @@ void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global
   boxm_scene_base_sptr proj_scene_base =global_taylor->load_projection_scene(scene_id);
   boxm_scene_base_sptr valid_scene_base = global_taylor->load_valid_scene(scene_id);
 
-  boxm_scene<taylor_tree_type>* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
-  boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
+  auto* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
+  auto* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
   boxm_scene<boct_tree<short, float> >* corner_scene =
   new boxm_scene<boct_tree<short, float> >(valid_scene->lvcs(), valid_scene->origin(), valid_scene->block_dim(), valid_scene->world_dim(), valid_scene->max_level(), valid_scene->init_level());
   corner_scene->set_appearance_model(BOXM_FLOAT);
@@ -182,11 +182,11 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
   boxm_scene_base_sptr corner_scene_base = this->load_corner_scene(scene_id);
   boxm_scene_base_sptr proj_scene_base =global_taylor->load_projection_scene(scene_id);
 
-  boxm_scene<taylor_tree_type>* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
+  auto* proj_scene = dynamic_cast<boxm_scene<taylor_tree_type>*>(proj_scene_base.as_pointer());
 
-  boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
+  auto* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
 
-  boxm_scene<boct_tree<short, float> >* corner_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (corner_scene_base.as_pointer());
+  auto* corner_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (corner_scene_base.as_pointer());
 
   if (!(vul_file::exists(output_path) && vul_file::is_directory(output_path)))
     vul_file::make_directory(output_path);
@@ -281,9 +281,9 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
   boxm_scene_base_sptr valid_scene_base = global_taylor->load_valid_scene(scene_id);
   boxm_scene_base_sptr corner_scene_base = this->load_corner_scene(scene_id);
 
-  boxm_scene<boct_tree<short, bool> >* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
+  auto* valid_scene = dynamic_cast<boxm_scene<boct_tree<short, bool> >*> (valid_scene_base.as_pointer());
 
-  boxm_scene<boct_tree<short, float> >* corner_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (corner_scene_base.as_pointer());
+  auto* corner_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (corner_scene_base.as_pointer());
 
   if (!( valid_scene && corner_scene))
   {
@@ -305,7 +305,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
   corners_it.begin();
 
   float cell_count = 0;
-  float max = (float)(*corners_it)->data();
+  auto max = (float)(*corners_it)->data();
   float min = max;
   float this_val = max;
   while ( !(valid_it.end() || corners_it.end()) )
@@ -338,7 +338,7 @@ void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr glob
     ++corners_it;
   }
 
-  unsigned int nbins = (unsigned int)std::floor(std::sqrt(cell_count));
+  auto nbins = (unsigned int)std::floor(std::sqrt(cell_count));
   bsta_histogram<float>  corner_hist(min, max, nbins);
   valid_it.begin();
   corners_it.begin();
@@ -399,7 +399,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_corner_scene(int scene_id)
   scene_base->load_scene(aux_scene_ss.str(), scene_parser);
 
   //cast scene
-  boxm_scene<boct_tree<short, float > > *scene= new boxm_scene<boct_tree<short, float > >();
+  auto *scene= new boxm_scene<boct_tree<short, float > >();
   if (scene_base->appearence_model() == BOXM_FLOAT){
     scene->load_scene(scene_parser);
     scene_base = scene;
@@ -428,7 +428,7 @@ boxm_scene_base_sptr bvpl_global_corners::load_valid_scene (int scene_id)
   aux_scene_base->load_scene(aux_scene_ss.str(), aux_parser);
 
   //cast scene
-  boxm_scene<boct_tree<short, bool > > *aux_scene= new boxm_scene<boct_tree<short, bool > >();
+  auto *aux_scene= new boxm_scene<boct_tree<short, bool > >();
   if (aux_scene_base->appearence_model() == BOXM_BOOL){
     aux_scene->load_scene(aux_parser);
     aux_scene_base = aux_scene;

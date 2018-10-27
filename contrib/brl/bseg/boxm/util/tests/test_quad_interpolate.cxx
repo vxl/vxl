@@ -89,7 +89,7 @@ static void test_quad_interpolate(int argc, char* argv[])
     TEST("Opening camera file", true, false);
     return;
   }
-  vpgl_perspective_camera<double>* cam = new vpgl_perspective_camera<double>();
+  auto* cam = new vpgl_perspective_camera<double>();
   ifs >> *cam;
   double xverts[8];
   double yverts[8];

@@ -91,9 +91,9 @@ bool boxm2_bundle_to_scene_process(bprb_func_process& pro)
   std::string out_dir = pro.get_input<std::string>(i++); //output dir for imgs/files
   std::string ply_file = pro.get_input<std::string>(i++); //output dir for imgs/files
 
-  float x = pro.get_input<float>(i++);
-  float y = pro.get_input<float>(i++);
-  float z = pro.get_input<float>(i++);
+  auto x = pro.get_input<float>(i++);
+  auto y = pro.get_input<float>(i++);
+  auto z = pro.get_input<float>(i++);
 
   vpgl_lvcs lvcs(x,y,z);
   //----------------------------------------------------------------------------

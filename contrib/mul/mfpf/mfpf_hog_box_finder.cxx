@@ -88,7 +88,7 @@ void mfpf_hog_box_finder::set(unsigned nA_bins, bool full360,
 
   //: Block normalisers (and their derivatives) typically need their regions copying from this
   mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
-  mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
+  auto* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
   if (pBlockNormaliser)
   {
       pBlockNormaliser->set_region(2*ni_,2*nj_);

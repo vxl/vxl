@@ -81,7 +81,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
                                                                         std::string apm_type, unsigned bin_idx)
 {
   breg3d_ekf_camera_optimizer_state state_og = prev_state;
-  vpgl_perspective_camera<double>* cam_est =
+  auto* cam_est =
     dynamic_cast<vpgl_perspective_camera<double>*>(curr_img.camera.ptr());
 
   if (!cam_est) {
@@ -340,12 +340,12 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
   switch (base_img_viewb->pixel_format())
   {
    case VIL_PIXEL_FORMAT_RGB_BYTE: {
-    vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(base_img_viewb.ptr());
+    auto *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(base_img_viewb.ptr());
     vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
     break;
    }
    case VIL_PIXEL_FORMAT_BYTE: {
-    vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(base_img_viewb.ptr());
+    auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(base_img_viewb.ptr());
     vil_convert_stretch_range_limited(*img_byte,base_img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
     break;
    }
@@ -356,12 +356,12 @@ vnl_vector<double> breg3d_ekf_camera_optimizer::img_homography(vil_image_view_ba
   switch (img_viewb->pixel_format())
   {
    case VIL_PIXEL_FORMAT_RGB_BYTE: {
-    vil_image_view<vil_rgb<vxl_byte> > *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(img_viewb.ptr());
+    auto *img_rgb_byte = dynamic_cast<vil_image_view<vil_rgb<vxl_byte> >*>(img_viewb.ptr());
     vil_convert_rgb_to_grey(*img_rgb_byte,base_img_view);
     break;
    }
    case VIL_PIXEL_FORMAT_BYTE: {
-    vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img_viewb.ptr());
+    auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(img_viewb.ptr());
     vil_convert_stretch_range_limited(*img_byte,img_view,(vxl_byte)0,(vxl_byte)255,0.0f,1.0f);
     break;
    }

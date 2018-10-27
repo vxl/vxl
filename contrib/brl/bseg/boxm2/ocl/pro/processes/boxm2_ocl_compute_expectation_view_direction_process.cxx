@@ -49,12 +49,12 @@ namespace boxm2_ocl_compute_expectation_view_direction_process_globals
         std::string options = opts;
         //create all passes
         std::string accumulate_opts = options + " -D ACCUMULATE_DIRECTION_VECTORS";
-        bocl_kernel* accumulate_direction_kernel = new bocl_kernel();
+        auto* accumulate_direction_kernel = new bocl_kernel();
         accumulate_direction_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "accumulate_direction_vectors", accumulate_opts, "accumulate_direction_vectors");
         vec_kernels.push_back(accumulate_direction_kernel);
 
         std::string dispersion_opts = options + " -D COMPUTE_DISPERSION";
-        bocl_kernel* compute_dispersion = new bocl_kernel();
+        auto* compute_dispersion = new bocl_kernel();
         compute_dispersion->create_kernel(&device->context(),device->device_id(), src_paths, "compute_dispersion",dispersion_opts, "compute_dispersion");
         vec_kernels.push_back(compute_dispersion);
         return ;
@@ -161,7 +161,7 @@ bool boxm2_ocl_compute_expectation_view_direction_process(bprb_func_process& pro
         bocl_mem* blk = opencl_cache->get_block(scene,id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));

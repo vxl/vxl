@@ -110,7 +110,7 @@ void test_edge_finder()
     TEST("Correct Builder",pfb->is_a(),"mfpf_edge_finder_builder");
     if (pfb->is_a()=="mfpf_edge_finder_builder")
     {
-      mfpf_edge_finder_builder &a_pfb = static_cast<mfpf_edge_finder_builder&>(*pfb);
+      auto &a_pfb = static_cast<mfpf_edge_finder_builder&>(*pfb);
       std::cout<<a_pfb<<std::endl;
       TEST("search_ni configured",a_pfb.search_ni(),17);
     }

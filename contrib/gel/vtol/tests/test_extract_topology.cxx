@@ -337,7 +337,7 @@ has_vertex( vtol_intensity_face_sptr face, double x, double y )
   static const double tol = 1e-5;
 
   vertex_list* verts = face->outside_boundary_vertices();
-  for (vertex_list::iterator itr = verts->begin();
+  for (auto itr = verts->begin();
        itr != verts->end(); ++itr )
   {
     vtol_vertex_2d* v2d = (*itr)->cast_to_vertex_2d();

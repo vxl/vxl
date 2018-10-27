@@ -92,8 +92,8 @@ bool sdet_detect_third_order_edges_process(bprb_func_process& pro)
     double x = edgel.x();
     double y = edgel.y();
 
-    unsigned ix = (unsigned)x;
-    unsigned iy = (unsigned)y;
+    auto ix = (unsigned)x;
+    auto iy = (unsigned)y;
     double idir = vnl_math::angle_0_to_2pi(edgel.get_theta());
 
     edge_img(ix, iy, 0) = static_cast<float>(x);
@@ -192,8 +192,8 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
     double x = edgel.x();
     double y = edgel.y();
 
-    unsigned ix = (unsigned)x;
-    unsigned iy = (unsigned)y;
+    auto ix = (unsigned)x;
+    auto iy = (unsigned)y;
 
     vtol_edge_2d_sptr vtol_edg = new vtol_edge_2d(*(line_segs[k]->cast_to_curve()));
     vtol_edges[ix][iy] = vtol_edg;

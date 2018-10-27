@@ -88,7 +88,7 @@ bool bvxm_normalize_image_process(bprb_func_process& pro)
     return true;
   }
 
-  vil_image_view<float>*  input_img_float_stretched = new vil_image_view<float>( ni_, nj_, nplanes_ );
+  auto*  input_img_float_stretched = new vil_image_view<float>( ni_, nj_, nplanes_ );
   //calculate a, b parameters
   float a = 1.0;
   float b = 0.0;
@@ -143,7 +143,7 @@ template <bvxm_voxel_type APM_T>
     return false;
   }
 
-  vil_image_view<vxl_byte>* input_img_ptr = new vil_image_view<vxl_byte>(input_img);
+  auto* input_img_ptr = new vil_image_view<vxl_byte>(input_img);
   vil_convert_stretch_range_limited<vxl_byte>(*input_img_ptr, *input_img_float_stretched, 0, 255, 0.f, 1.f);
 
   // use the weight slab below to calculate total probability
@@ -162,7 +162,7 @@ template <bvxm_voxel_type APM_T>
     return false;
   }
 
-  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image.ptr());
+  auto* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image.ptr());
 
   typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;
   if (verbose_) {
@@ -189,7 +189,7 @@ template <bvxm_voxel_type APM_T>
             tried_zero = true;
         }
 
-        vil_image_view<float>* nimg = new vil_image_view<float>( ni_, nj_, nplanes_ );
+        auto* nimg = new vil_image_view<float>( ni_, nj_, nplanes_ );
         bvxm_normalization_util::normalize_image(*input_img_float_stretched, *nimg, sa, sb, 1.f);
         vil_image_view_base_sptr nimg_sptr = nimg;
 

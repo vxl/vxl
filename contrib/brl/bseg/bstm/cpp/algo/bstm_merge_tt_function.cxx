@@ -97,7 +97,7 @@ bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>&  /*datas*/)
 
   //2. loop over time trees to merge them
   boxm2_array_1d<uchar8>::iterator old_time_trees_iter;
-  uchar8* trees_copy = new uchar8[old_time_trees.size()];  //copy of time trees
+  auto* trees_copy = new uchar8[old_time_trees.size()];  //copy of time trees
   int* dataIndex = new int[old_time_trees.size()]; //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
   int dataSize = 0;                                 //running sum of data size
@@ -125,9 +125,9 @@ bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>&  /*datas*/)
                                                       dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() , id);
   bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() ],
                                                       dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize(), id);
-  bstm_data_traits<BSTM_ALPHA>::datatype *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
+  auto *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
+  auto *  mog_cpy = (bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
+  auto *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
 
 
 
@@ -257,7 +257,7 @@ bstm_time_tree bstm_merge_tt_function::merge_tt(const bstm_time_tree& old_tree, 
       parents.insert(old_tree.parent_index(old_leave));
   }
 
-  for(std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type parent : parents)
+  for(const auto & parent : parents)
   {
     int bit_index_left_child = old_tree.child_index(parent);
     int bit_index_right_child = bit_index_left_child + 1;

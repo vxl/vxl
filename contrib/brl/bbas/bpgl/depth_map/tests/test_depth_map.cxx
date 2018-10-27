@@ -22,7 +22,7 @@ static void test_depth_map()
   // construct the camera looking along Y with 1.6m height off the ground
   // focal length = 1126.
   unsigned ni = 1280, nj = 720;
-  double nid = static_cast<double>(ni), njd = static_cast<double>(nj);
+  auto nid = static_cast<double>(ni), njd = static_cast<double>(nj);
   double right_fov = 29.605;
   double top_fov = 17.725;
   double altitude = 1.6;

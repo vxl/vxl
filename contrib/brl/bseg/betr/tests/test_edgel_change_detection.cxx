@@ -506,7 +506,7 @@ void test_edgel_change_detection()
   etr.add_geo_object("tarmac_ref", 65.6900995012, 31.6148879491, elev, ref_obj_path, true);
   // etr.add_geo_object("tarmac_plane_evt", lon+0.001, lat+0.002, elev+10.0, evt_obj_path, false);
   etr.add_geo_object("tarmac_plane_evt", lon, lat, elev, evt_obj_path, false);
-  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
+  auto* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
   vpgl_camera_double_sptr camera = dynamic_cast<vpgl_camera<double>*>(lcam);
   etr.set_evt_camera(camera);
   etr.set_evt_image(imgr);
@@ -525,7 +525,7 @@ void test_edgel_change_detection()
     vpgl_rational_camera<double>* ref_rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
     if (!ref_rpccam)
       return;
-    vpgl_local_rational_camera<double>* ref_lcam = new vpgl_local_rational_camera<double>(lvcs, *ref_rpccam);
+    auto* ref_lcam = new vpgl_local_rational_camera<double>(lvcs, *ref_rpccam);
     ref_camera[i] = ref_lcam;
     if (!ref_camera[i])
       return;
@@ -549,7 +549,7 @@ void test_edgel_change_detection()
   //etr.process("edgel_change_detection", pchange, rescs, offsets,cd_json);
   etr.process("pixelwise_change_detection", pchange, rescs, offsets, cd_json);
   int i = 0;
-  for (std::vector<double>::iterator pit = pchange.begin();
+  for (auto pit = pchange.begin();
     pit != pchange.end(); ++pit, i++) {
     std::cout << "pchange[" << i << "] = " << *pit << '\n';
     std::cout << "Offset " << offsets[i] << " (" << rescs[i]->ni() << ' ' << rescs[i]->nj() << ")\n";

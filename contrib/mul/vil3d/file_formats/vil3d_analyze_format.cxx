@@ -625,7 +625,7 @@ bool vil3d_analyze_image::get_property(char const *key, void * value) const
 {
   if (std::strcmp(vil3d_property_voxel_size, key)==0)
   {
-    float* array = static_cast<float*>(value);
+    auto* array = static_cast<float*>(value);
     // analyze stores data in mm
     array[0] = header_.voxel_width_i() / 1000.0f;
     array[1] = header_.voxel_width_j() / 1000.0f;
@@ -636,7 +636,7 @@ bool vil3d_analyze_image::get_property(char const *key, void * value) const
   if (std::strcmp(vil3d_property_origin_offset, key)==0)
   {
     // Don't know how to get origin offset from header yet!
-    float* array = static_cast<float*>(value);
+    auto* array = static_cast<float*>(value);
     array[0] = (float)(0);
     array[1] = (float)(0);
     array[2] = (float)(0);

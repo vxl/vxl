@@ -44,7 +44,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   if ( cur_transform.is_type( rgrl_trans_homo2d_proj_rad::type_id() ) )
   {
-    rgrl_trans_homo2d_proj_rad const& trans = static_cast<rgrl_trans_homo2d_proj_rad const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_homo2d_proj_rad const&>( cur_transform );
     init_H = trans.H();
     const std::vector<double> k = trans.normalized_radial_params();
     for ( unsigned int i=0; i<k.size()&&i<camera_dof_; ++i )
@@ -52,7 +52,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   }
   else if ( cur_transform.is_type( rgrl_trans_rad_dis_homo2d::type_id() ) )
   {
-    rgrl_trans_rad_dis_homo2d const& trans = static_cast<rgrl_trans_rad_dis_homo2d const&>( cur_transform );
+    auto const& trans = static_cast<rgrl_trans_rad_dis_homo2d const&>( cur_transform );
     init_H = trans.uncenter_H_matrix();
     const double k1_to   = trans.k1_to();
     radk[0] = k1_to;
@@ -67,7 +67,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
       rgrl_transformation_sptr tmp_trans= est_homo.estimate( matches, cur_transform );
       if ( !tmp_trans )
         return nullptr;
-      rgrl_trans_homography2d const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
+      auto const& trans = static_cast<rgrl_trans_homography2d const&>( *tmp_trans );
       init_H = trans.uncenter_H_matrix();
     }
   }

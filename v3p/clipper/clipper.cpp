@@ -193,7 +193,7 @@ int PolyNode::ChildCount() const
 
 void PolyNode::AddChild(PolyNode& child)
 {
-  unsigned cnt = (unsigned)Childs.size();
+  auto cnt = (unsigned)Childs.size();
   Childs.push_back(&child);
   child.Parent = this;
   child.Index = cnt;
@@ -358,11 +358,11 @@ Int128 Int128Mul (long64 lhs, long64 rhs)
 
   if (lhs < 0) lhs = -lhs;
   ulong64 int1Hi = ulong64(lhs) >> 32;
-  ulong64 int1Lo = ulong64(lhs & 0xFFFFFFFF);
+  auto int1Lo = ulong64(lhs & 0xFFFFFFFF);
 
   if (rhs < 0) rhs = -rhs;
   ulong64 int2Hi = ulong64(rhs) >> 32;
-  ulong64 int2Lo = ulong64(rhs & 0xFFFFFFFF);
+  auto int2Lo = ulong64(rhs & 0xFFFFFFFF);
 
   //nb: see comments in clipper.pas
   ulong64 a = int1Hi * int2Hi;
@@ -1059,7 +1059,7 @@ bool ClipperBase::AddPath(const Path &pg, PolyType PolyTyp, bool Closed)
   if ((Closed && highI < 2) || (!Closed && highI < 1)) return false;
 
   //create a new edge array ...
-  TEdge *edges = new TEdge [highI +1];
+  auto *edges = new TEdge [highI +1];
 
   bool IsFlat = true;
   //1. Basic (first) edge initialization ...
@@ -1295,7 +1295,7 @@ bool ClipperBase::PopLocalMinima(cInt Y, const LocalMinimum *&locMin)
 IntRect ClipperBase::GetBounds()
 {
   IntRect result;
-  MinimaList::iterator lm = m_MinimaList.begin();
+  auto lm = m_MinimaList.begin();
   if (lm == m_MinimaList.end())
   {
     result.left = result.top = result.right = result.bottom = 0;
@@ -1379,7 +1379,7 @@ void ClipperBase::DeleteFromAEL(TEdge *e)
 
 OutRec* ClipperBase::CreateOutRec()
 {
-  OutRec* result = new OutRec;
+  auto* result = new OutRec;
   result->IsHole = false;
   result->IsOpen = false;
   result->FirstLeft = nullptr;
@@ -2463,7 +2463,7 @@ OutPt* Clipper::AddOutPt(TEdge *e, const IntPoint &pt)
   {
     OutRec *outRec = CreateOutRec();
     outRec->IsOpen = (e->WindDelta == 0);
-    OutPt* newOp = new OutPt;
+    auto* newOp = new OutPt;
     outRec->Pts = newOp;
     newOp->Idx = outRec->Idx;
     newOp->Pt = pt;
@@ -2483,7 +2483,7 @@ OutPt* Clipper::AddOutPt(TEdge *e, const IntPoint &pt)
 	if (ToFront && (pt == op->Pt)) return op;
     else if (!ToFront && (pt == op->Prev->Pt)) return op->Prev;
 
-    OutPt* newOp = new OutPt;
+    auto* newOp = new OutPt;
     newOp->Idx = outRec->Idx;
     newOp->Pt = pt;
     newOp->Next = op;
@@ -2879,7 +2879,7 @@ void Clipper::BuildIntersectList(const cInt topY)
       {
         IntersectPoint(*e, *eNext, Pt);
         if (Pt.Y < topY) Pt = IntPoint(TopX(*e, topY), topY);
-        IntersectNode * newNode = new IntersectNode;
+        auto * newNode = new IntersectNode;
         newNode->Edge1 = e;
         newNode->Edge2 = eNext;
         newNode->Pt = Pt;
@@ -3223,7 +3223,7 @@ void Clipper::BuildResult2(PolyTree& polytree)
         int cnt = PointCount(outRec->Pts);
         if ((outRec->IsOpen && cnt < 2) || (!outRec->IsOpen && cnt < 3)) continue;
         FixHoleLinkage(*outRec);
-        PolyNode* pn = new PolyNode();
+        auto* pn = new PolyNode();
         //nb: polytree takes ownership of all the PolyNodes
         polytree.AllNodes.push_back(pn);
         outRec->PolyNd = pn;
@@ -3341,7 +3341,7 @@ void Clipper::InsertEdgeIntoAEL(TEdge *edge, TEdge* startEdge)
 
 OutPt* DupOutPt(OutPt* outPt, bool InsertAfter)
 {
-  OutPt* result = new OutPt;
+  auto* result = new OutPt;
   result->Pt = outPt->Pt;
   result->Idx = outPt->Idx;
   if (InsertAfter)
@@ -3759,8 +3759,8 @@ DoublePoint GetUnitNormal(const IntPoint &pt1, const IntPoint &pt2)
   if(pt2.X == pt1.X && pt2.Y == pt1.Y)
     return {0, 0};
 
-  double Dx = (double)(pt2.X - pt1.X);
-  double dy = (double)(pt2.Y - pt1.Y);
+  auto Dx = (double)(pt2.X - pt1.X);
+  auto dy = (double)(pt2.Y - pt1.Y);
   double f = 1 *1.0/ std::sqrt( Dx*Dx + dy*dy );
   Dx *= f;
   dy *= f;
@@ -3798,7 +3798,7 @@ void ClipperOffset::AddPath(const Path& path, JoinType joinType, EndType endType
 {
   int highI = (int)path.size() - 1;
   if (highI < 0) return;
-  PolyNode* newNode = new PolyNode();
+  auto* newNode = new PolyNode();
   newNode->m_jointype = joinType;
   newNode->m_endtype = endType;
 
@@ -4322,8 +4322,8 @@ double DistanceFromLineSqrd(
   //A = (y¹ - y²); B = (x² - x¹); C = (y² - y¹)x¹ - (x² - x¹)y¹
   //perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
   //see http://en.wikipedia.org/wiki/Perpendicular_distance
-  double A = double(ln1.Y - ln2.Y);
-  double B = double(ln2.X - ln1.X);
+  auto A = double(ln1.Y - ln2.Y);
+  auto B = double(ln2.X - ln1.X);
   double C = A * ln1.X  + B * ln1.Y;
   C = A * pt.X + B * pt.Y - C;
   return (C * C) / (A * A + B * B);
@@ -4388,7 +4388,7 @@ void CleanPolygon(const Path& in_poly, Path& out_poly, double distance)
     return;
   }
 
-  OutPt* outPts = new OutPt[size];
+  auto* outPts = new OutPt[size];
   for (size_t i = 0; i < size; ++i)
   {
     outPts[i].Pt = in_poly[i];

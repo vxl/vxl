@@ -88,7 +88,7 @@ vil_image_resource_sptr vimt_vil_v2i_format::make_input_image(vil_stream* vs)
   if (v_i != 2 && v_i != 3) return nullptr; // can only handle version 2.
   vsl_b_read(vslstream, v_i);  //  chunk.pixel_format
 
-  vil_pixel_format f = static_cast<vil_pixel_format>(v_i);
+  auto f = static_cast<vil_pixel_format>(v_i);
   vs->seek(start);
   switch (f)
   {
@@ -229,7 +229,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
     vgl_vector_2d<double> p11 = tr.inverse()(1.0, 1.0) - tr.inverse().origin();
     //Assume no rotation or shearing.
 
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float) p11.x();
     array[1] = (float) p11.y();
     return true;
@@ -238,7 +238,7 @@ bool vimt_vil_v2i_image::get_property(char const * key, void * value) const
   if (std::strcmp(vil_property_offset, key)==0)
   {
     vgl_point_2d<double> origin = tr.origin();
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float)(origin.x());
     array[1] = (float)(origin.y());
     return true;

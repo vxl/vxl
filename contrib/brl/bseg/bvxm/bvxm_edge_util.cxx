@@ -143,7 +143,7 @@ int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty,
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
   std::vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
-  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
+  auto* roi_uncertainty = new vgl_box_2d<double>();
 
   for (auto curr_corner : box_uncertainty_corners) {
     vgl_point_3d<double> curr_pt;

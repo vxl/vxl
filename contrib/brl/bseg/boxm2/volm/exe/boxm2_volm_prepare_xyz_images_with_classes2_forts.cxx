@@ -192,8 +192,8 @@ int main(int argc,  char** argv)
   // iterate over the image and for each pixel, calculate, xyz in the local coordinate system
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++) {
-      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      auto local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      auto local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
       out_img_x(i,j) = local_x;
       out_img_y(i,j) = local_y;
 
@@ -206,8 +206,8 @@ int main(int argc,  char** argv)
       for (auto & nlcd_img : nlcd_imgs) {
         double u, v;
         nlcd_img.second->global_to_img(-lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u + 0.5);
-        unsigned vv = (unsigned)std::floor(v + 0.5);
+        auto uu = (unsigned)std::floor(u + 0.5);
+        auto vv = (unsigned)std::floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < nlcd_img.first.ni() && vv < nlcd_img.first.nj()) {
           label = (nlcd_img.first)(uu, vv);
           break;
@@ -220,8 +220,8 @@ int main(int argc,  char** argv)
       for (auto & lidar_img : lidar_imgs) {
         double u, v;
         lidar_img.second->global_to_img(-lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u + 0.5);
-        unsigned vv = (unsigned)std::floor(v + 0.5);
+        auto uu = (unsigned)std::floor(u + 0.5);
+        auto vv = (unsigned)std::floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < lidar_img.first.ni() && vv < lidar_img.first.nj()) {
           elev = (lidar_img.first)(uu, vv);
           break;
@@ -280,8 +280,8 @@ int main(int argc,  char** argv)
       vil_rgb<vxl_byte> pixel_color = out_class_img(i,j);
       if (pixel_id != water_id && pixel_id != sand_id)
         continue;
-      float local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
-      float local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
+      auto local_x = (float)(i*vox_length+scene_bbox.min_x()+vox_length/2.0);
+      auto local_y = (float)(scene_bbox.max_y()-j*vox_length+vox_length/2.0);
 
       double lon, lat, gz;
       lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
@@ -295,8 +295,8 @@ int main(int argc,  char** argv)
       for (unsigned k = 0; k < lidar_imgs.size(); k++) {
         double u, v;
         lidar_imgs[k].second->global_to_img(-lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u + 0.5);
-        unsigned vv = (unsigned)std::floor(v + 0.5);
+        auto uu = (unsigned)std::floor(u + 0.5);
+        auto vv = (unsigned)std::floor(v + 0.5);
         if (uu > 0 && vv > 0 && uu < lidar_imgs[k].first.ni() && vv < lidar_imgs[k].first.nj()) {
           elev = (lidar_imgs[k].first)(uu, vv);
           class_color = lidar_class_imgs[k](uu,vv);

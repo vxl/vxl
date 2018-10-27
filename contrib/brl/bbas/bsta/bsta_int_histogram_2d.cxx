@@ -70,7 +70,7 @@ void bsta_int_histogram_2d::parzen(const float sigma)
 {
   if (sigma<=0)
     return;
-  double sd = (double)sigma;
+  auto sd = (double)sigma;
   double val = 0.0;
   int nx = nbins_x_;  // arguments to create vbl_array_2d are ints
   int ny = nbins_y_;
@@ -113,8 +113,8 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
   // find intercepts of slopes and calculate box that must be examined
   float dxintcpt = std::sqrt(1 + (slope*slope));
   float dyintcpt = std::sqrt(1 + (inverse_slope*inverse_slope));
-  unsigned int xbox = static_cast<unsigned int>(std::ceil(dxintcpt));
-  unsigned int ybox = static_cast<unsigned int>(std::ceil(dyintcpt));
+  auto xbox = static_cast<unsigned int>(std::ceil(dxintcpt));
+  auto ybox = static_cast<unsigned int>(std::ceil(dyintcpt));
 
   // For each bucket in the diagonal histogram, search normal to the diagonal
   //   in the 2D histogram for a "max" value.
@@ -183,14 +183,14 @@ void bsta_int_histogram_2d::profile_histogram( bsta_int_histogram_1d &phist,
 
   long int peak_height = counts_[peak_y][peak_x];        // the highest peak of the 2D histogram
   if (peak_height == 0) return success;                // exit if peak is zero
-  long int limit = static_cast<long int>(peak_height * edge_pct);    // Value to reach to determine edge
+  auto limit = static_cast<long int>(peak_height * edge_pct);    // Value to reach to determine edge
 
   float diag_lgth = std::sqrt(1.0f + (newslope*newslope));
   float delta_x = 1.0f / diag_lgth;
   float delta_y = newslope / diag_lgth;
 
-  float x_point = static_cast<float>(peak_x);
-  float y_point = static_cast<float>(peak_y);
+  auto x_point = static_cast<float>(peak_x);
+  auto y_point = static_cast<float>(peak_y);
 
   // Test to make sure we are checking within range of 2D histogram
   while (x_point >= 0 && x_point < nbins_x_ && y_point >=0 && y_point < nbins_y_ )

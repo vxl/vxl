@@ -42,14 +42,14 @@ void volm_vrml_io::display_segment_sphere(std::ostream& str ,
                                           vsph_segment_sphere * sph,
                                           double  /*factor*/)
 {
-    std::map<int,  std::vector<int> >::const_iterator rit = sph->regions().begin();
+    auto rit = sph->regions().begin();
     vsph_unit_sphere usph = sph->unit_sphere();
     std::vector<vgl_vector_3d<double> > unit_vectors = usph.cart_vectors();
     std::vector<vgl_vector_3d<double> > points;
     std::vector<vgl_point_3d<double> > colors;
     for (; rit != sph->regions().end(); ++rit) {
         const std::vector<int>& pt_ids = rit->second;
-        unsigned char val =(unsigned char) std::floor(sph->region_median(rit->first));
+        auto val =(unsigned char) std::floor(sph->region_median(rit->first));
 
         vgl_point_3d<double> pc((double) volm_vrml_io_data::color_codes[(val)%8][0], (double) volm_vrml_io_data::color_codes[(val)%8][1], (double) volm_vrml_io_data::color_codes[(val)%8][2]);
         if(val > 100)

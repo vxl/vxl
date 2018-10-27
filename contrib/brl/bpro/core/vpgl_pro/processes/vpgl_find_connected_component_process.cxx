@@ -49,7 +49,7 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  float threshold = pro.get_input<float>(in_i++);
+  auto threshold = pro.get_input<float>(in_i++);
   std::string out_kml = pro.get_input<std::string>(in_i++);
   bool is_above = pro.get_input<bool>(in_i++);
 
@@ -88,12 +88,12 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   }
 
   std::vector<vgl_polygon<double> > poly_region;
-  unsigned num_pixels = (unsigned)pixels.size();
+  auto num_pixels = (unsigned)pixels.size();
   for (unsigned id = 0; id < num_pixels; id++)
   {
     bool is_contain = false;
-    double u = (double)pixels[id].x();
-    double v = (double)pixels[id].y();
+    auto u = (double)pixels[id].x();
+    auto v = (double)pixels[id].y();
     for (unsigned sh_idx = 0; (!is_contain && sh_idx < poly_region.size()); sh_idx++)
       is_contain = poly_region[sh_idx].contains(u, v);
     if (is_contain)
@@ -118,7 +118,7 @@ bool vpgl_find_connected_component_process(bprb_func_process& pro)
   }
 
   // generate the output image
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(in_img.ni(), in_img.nj());
+  auto* out_img = new vil_image_view<vxl_byte>(in_img.ni(), in_img.nj());
   out_img->fill(0);
   unsigned num_poly = poly_region.size();
   std::vector<unsigned> poly_num_pixels;

@@ -35,7 +35,7 @@ bool bbas_remove_from_db_process(bprb_func_process& pro)
     return false;
   }
   // get the inputs
-  unsigned db_id = pro.get_input<unsigned>(0);
+  auto db_id = pro.get_input<unsigned>(0);
   bprb_batch_process_manager::instance()->remove_data(db_id);
   return true;
 }

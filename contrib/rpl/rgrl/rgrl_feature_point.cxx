@@ -94,7 +94,7 @@ rgrl_feature_sptr
 rgrl_feature_point::
 transform( rgrl_transformation const& xform ) const
 {
-  rgrl_feature_point* result = new rgrl_feature_point( location_.size() );
+  auto* result = new rgrl_feature_point( location_.size() );
 
   // capture the allocation into a smart pointer for exception safety.
   rgrl_feature_sptr result_sptr = result;

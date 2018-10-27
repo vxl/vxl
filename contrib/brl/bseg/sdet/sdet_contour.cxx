@@ -203,7 +203,7 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels, bool junctionp,
   // 2. Collect 4/8-connected pixels into chains
   int n; // = std::max(10*njunction, // preallocated size from junctions or
   //       edgels.GetSizeX()*edgels.GetSizeY()/100); // image size
-  std::vector<vtol_edge_2d_sptr> *edges2 = new std::vector<vtol_edge_2d_sptr>;
+  auto *edges2 = new std::vector<vtol_edge_2d_sptr>;
   n = this->FindChains(edgels, // link pixels into chains
                        njunction, // also use junction pixels
                        junctionx, junctiony,
@@ -214,9 +214,9 @@ sdet_contour::FindNetwork(gevd_bufferxy& edgels, bool junctionp,
     // 3. Sort chains longest first.
     if (edges2->size() < 10000)     // don't sort if too many edges
     {
-      sdet_contour_edge* edge_array = new sdet_contour_edge[edges2->size()];
+      auto* edge_array = new sdet_contour_edge[edges2->size()];
       int i =0;
-      for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges2->begin();
+      for (auto eit = edges2->begin();
            eit != edges2->end(); eit++,i++)
       {
         edge_array[i].set_edge(*eit);
@@ -291,8 +291,8 @@ RecordPixel(int i, int j, gevd_bufferxy& edgels,
 void
 ErasePixel(std::vector<int>& xloc, std::vector<int>& yloc)
 {
-  std::vector<int>::iterator xit = xloc.end();
-  std::vector<int>::iterator yit = yloc.end();
+  auto xit = xloc.end();
+  auto yit = yloc.end();
   xloc.erase(xit-1);
   yloc.erase(yit-1);
 }
@@ -604,7 +604,7 @@ bool sdet_contour:: DetectJunction(vtol_vertex_2d_sptr const& endv, int& index,
   //to the last rfuzz edgels in the weaker edge.  It looks like "labels"
   //caches the old edge pointers
   const int rfuzz = std::min(len, 3*MINLENGTH);
-  vtol_edge_2d_sptr* labels = new vtol_edge_2d_sptr[rfuzz];
+  auto* labels = new vtol_edge_2d_sptr[rfuzz];
   //make sure the "end" of the edge corresponds to the correct end of the
   //edgel chain, i.e. "endv" might be either v1 or v2 -- the first or last
   //point on the edgel chain.
@@ -881,7 +881,7 @@ void sdet_contour::BreakCycle(vtol_vertex_2d_sptr const& junction,
   split = new vtol_edge_2d();
 
   //  The new curve
-  vdgl_edgel_chain* es = new vdgl_edgel_chain;
+  auto* es = new vdgl_edgel_chain;
   vdgl_interpolator* it =
     new vdgl_interpolator_linear(vdgl_edgel_chain_sptr(es));
   vdgl_digital_curve *ds =
@@ -992,7 +992,7 @@ bool find_edge(vtol_edge_2d_sptr& e,
 void print_edge_lookup_table(std::vector<vtol_edge_2d_sptr>& edges)
 {
   int ei=0;
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  for (auto eit = edges.begin();
        eit != edges.end(); eit++, ei++)
   {
     if (!*eit)
@@ -1029,7 +1029,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
 
   // 2. Create first subchain up to and including junction pixel.
   vtol_edge_2d_sptr edge1 = new vtol_edge_2d();
-  vdgl_edgel_chain *ec= new vdgl_edgel_chain;
+  auto *ec= new vdgl_edgel_chain;
   vdgl_interpolator *it= new vdgl_interpolator_linear( ec);
   vdgl_digital_curve *dc1 = new vdgl_digital_curve( it);
   edge1->set_curve(*dc1);
@@ -1067,7 +1067,7 @@ void sdet_contour::BreakChain(vtol_vertex_2d_sptr const& junction,
 
   // 3. Create second subchain from and including junction pixel.
   vtol_edge_2d_sptr edge2 = new vtol_edge_2d();    // create second subchain
-  vdgl_edgel_chain *ec2= new vdgl_edgel_chain;
+  auto *ec2= new vdgl_edgel_chain;
   vdgl_interpolator *it2= new vdgl_interpolator_linear( ec2);
   vdgl_digital_curve *dc2= new vdgl_digital_curve( it2);
   edge2->set_curve(*dc2);
@@ -1146,7 +1146,7 @@ sdet_contour::LoopChain(vtol_vertex_2d_sptr const& junction, int& index,
   //    curled
   if (junction == chain->v1()->cast_to_vertex_2d())
   {
-    vdgl_edgel_chain *ec= new vdgl_edgel_chain;
+    auto *ec= new vdgl_edgel_chain;
     vdgl_interpolator *it= new vdgl_interpolator_linear( ec);
     vdgl_digital_curve *c= new vdgl_digital_curve( it);
     curled->set_curve(*c);
@@ -1212,7 +1212,7 @@ sdet_contour::LoopChain(vtol_vertex_2d_sptr const& junction, int& index,
     //      gap     |        |
     //               --------
     //                 curled
-    vdgl_edgel_chain *ec= new vdgl_edgel_chain;
+    auto *ec= new vdgl_edgel_chain;
     vdgl_interpolator *it= new vdgl_interpolator_linear( ec);
     vdgl_digital_curve *c= new vdgl_digital_curve( it);
     straight->set_curve(*c);
@@ -1457,7 +1457,7 @@ sdet_contour::MergeEndPtTouchingEndPt(vtol_vertex_2d_sptr const& end1,
 
   //The new edge
   merge = new vtol_edge_2d();
-  vdgl_edgel_chain *ec = new vdgl_edgel_chain;
+  auto *ec = new vdgl_edgel_chain;
   vdgl_interpolator *it = new vdgl_interpolator_linear( ec);
   vdgl_digital_curve *dc = new vdgl_digital_curve(it);
 
@@ -1612,7 +1612,7 @@ MergeEndPtTouchingJunction(vtol_vertex_2d_sptr const& endpt,
   int N = old_cxy->size();
 
   new_edge = new vtol_edge_2d();
-  vdgl_edgel_chain *cxy = new vdgl_edgel_chain;
+  auto *cxy = new vdgl_edgel_chain;
   vdgl_interpolator *it = new vdgl_interpolator_linear(cxy);
   vdgl_digital_curve *dc = new vdgl_digital_curve(it);
   new_edge->set_curve(*dc);
@@ -2177,7 +2177,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
         vv = v->cast_to_vertex();
       btol_vertex_algs::merge_superiors(pv, vv);
 
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= verts->begin();
+      for (auto it= verts->begin();
            it!= verts->end(); ++it)
       {
         if (*it == v)
@@ -2186,7 +2186,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
           break;
         }
       }
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= vertices.begin();
+      for (auto it= vertices.begin();
            it!= vertices.end(); ++it)
       {
         if (*it == v)
@@ -2207,7 +2207,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
         vv = v->cast_to_vertex();
       btol_vertex_algs::merge_superiors(pv, vv);
 
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= verts->begin();
+      for (auto it= verts->begin();
            it!= verts->end(); ++it)
       {
         if (*it == pre_v)
@@ -2216,7 +2216,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
           break;
         }
       }
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= vertices.begin();
+      for (auto it= vertices.begin();
            it!= vertices.end(); ++it)
       {
         if (*it == pre_v)
@@ -2247,7 +2247,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
       vtol_vertex_sptr pv = pre_v->cast_to_vertex(),
         vv = v->cast_to_vertex();
       btol_vertex_algs::merge_superiors(pv, vv);
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= verts->begin();
+      for (auto it= verts->begin();
            it!= verts->end(); ++it)
       {
         if (*it == v)
@@ -2256,7 +2256,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
           break;
         }
       }
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= vertices.begin();
+      for (auto it= vertices.begin();
            it!= vertices.end(); ++it)
       {
         if (*it == v)
@@ -2276,7 +2276,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
       vtol_vertex_sptr pv = pre_v->cast_to_vertex(),
         vv = v->cast_to_vertex();
       btol_vertex_algs::merge_superiors(pv, vv);
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= verts->begin();
+      for (auto it= verts->begin();
            it!= verts->end(); ++it)
       {
         if (*it == pre_v)
@@ -2285,7 +2285,7 @@ sdet_contour::InsertBorder(std::vector<vtol_edge_2d_sptr>& edges,
           break;
         }
       }
-      for (std::vector<vtol_vertex_2d_sptr >::iterator it= vertices.begin();
+      for (auto it= vertices.begin();
            it!= vertices.end(); ++it)
       {
         if (*it == pre_v)
@@ -2648,7 +2648,7 @@ sdet_contour::LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set)
       temp.push_back(eit);
   int i = 0;
   set.clear();
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = temp.begin();
+  for (auto eit = temp.begin();
        eit != temp.end(); eit++, i++)
   {
     (*eit)->set_id(i);
@@ -2667,7 +2667,7 @@ sdet_contour::LookupTableCompress(std::vector<vtol_vertex_2d_sptr>& set)
       temp.push_back(vit);
   int i = 0;
   set.clear();
-  for (std::vector<vtol_vertex_2d_sptr>::iterator vit = temp.begin();
+  for (auto vit = temp.begin();
        vit != temp.end(); vit++, i++)
   {
     (*vit)->set_id(i);

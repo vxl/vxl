@@ -66,7 +66,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
   bbas_1d_array_double_sptr change_probs = new bbas_1d_array_double(n);
   bbas_1d_array_int_sptr dims_offset = new bbas_1d_array_int(4*n);
   unsigned j = 0;
-  for(std::map<std::string, betr_geo_object_3d_sptr>::const_iterator oit = evt_objs.begin();
+  for(auto oit = evt_objs.begin();
       oit != evt_objs.end(); ++oit, ++j)
     evt_names->data_array[j]=oit->first;
   std::vector<double> prob_change;
@@ -103,7 +103,7 @@ bool betr_execute_event_trigger_multi_with_chimg_process(bprb_func_process& pro)
         pix->data_array[byte_index++]= view(i,j);
   }
   j = 0;
-  for(std::vector<double>::iterator pit = prob_change.begin();
+  for(auto pit = prob_change.begin();
       pit != prob_change.end(); ++pit, ++j)
     change_probs->data_array[j]=*pit;
   pro.set_output_val<bbas_1d_array_double_sptr>(0, change_probs);

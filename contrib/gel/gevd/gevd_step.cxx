@@ -309,7 +309,7 @@ BestStepExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float pix_m = floatPixel(smooth, ni-di, nj-dj);
       float pix_p = floatPixel(smooth, ni+di, nj+dj);
-      float slope = (float)std::fabs(pix_p - pix_m);
+      auto slope = (float)std::fabs(pix_p - pix_m);
       float max_s = (dir%HALFPI)? best_s*(float)std::sqrt(2.0): best_s;
       if (slope > max_s) {      // find best strength
         int di2 = 2*di;
@@ -327,8 +327,8 @@ BestStepExtension(const gevd_bufferxy& smooth,
   if (best_s > threshold) {     // interpolate with parabola
     float pix = floatPixel(smooth, best_i, best_j);
     int di2 = 2 * DIS[best_d], dj2 = 2 * DJS[best_d];
-    float s_m = (float)std::fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
-    float s_p = (float)std::fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
+    auto s_m = (float)std::fabs(pix - floatPixel(smooth, best_i-di2, best_j-dj2));
+    auto s_p = (float)std::fabs(pix - floatPixel(smooth, best_i+di2, best_j+dj2));
     if (best_d%HALFPI) {
       s_m /= (float)std::sqrt(2.0);
       s_p /= (float)std::sqrt(2.0);

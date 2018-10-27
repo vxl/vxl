@@ -38,10 +38,10 @@ bpgl_fm_compute_affine_ransac::compute(
   }
 
   // The following block is hacked from similar code in rrel_homography2d_est.
-  rrel_fm_affine_problem* estimator = new rrel_fm_affine_problem( pr, pl );
-  rrel_muset_obj* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
+  auto* estimator = new rrel_fm_affine_problem( pr, pl );
+  auto* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
-  rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+  auto* ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(params_->trace_level);
   ransam->set_sampling_params( params_->max_outlier_frac,
                                params_->desired_prob_good,

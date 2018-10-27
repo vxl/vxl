@@ -55,17 +55,17 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
         //compilation options
         std::string options = opts;
         //create all passes
-        bocl_kernel* aux_direction_kernel = new bocl_kernel();
+        auto* aux_direction_kernel = new bocl_kernel();
         std::string seg_opts = options + " -D UPDATE_AUX_DIRECTION -D STEP_CELL=step_cell_directions(aux_args,data_ptr,d) ";
         aux_direction_kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_directions_main", seg_opts, "batch_update::viewing directions");
         vec_kernels.push_back(aux_direction_kernel);
 
-        bocl_kernel* convert_aux_int_float = new bocl_kernel();
+        auto* convert_aux_int_float = new bocl_kernel();
         convert_aux_int_float->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_aux_int_to_float"," -D CONVERT_AUX", "batch_update::convert_aux_int_to_float");
         vec_kernels.push_back(convert_aux_int_float);
 
 
-        bocl_kernel* convert_aux_xyz_to_thetaphi = new bocl_kernel();
+        auto* convert_aux_xyz_to_thetaphi = new bocl_kernel();
         convert_aux_xyz_to_thetaphi->create_kernel(&device->context(),device->device_id(), second_pass_src, "convert_aux_xyz_to_thetaphi"," -D CONVERT_AUX_XYZ_THETAPHI ", "batch_update::convert_aux_xyz_to_thetaphi");
         vec_kernels.push_back(convert_aux_xyz_to_thetaphi);
 
@@ -125,8 +125,8 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
     vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-    unsigned int ni = pro.get_input<unsigned>(i++);
-    unsigned int nj = pro.get_input<unsigned>(i++);
+    auto ni = pro.get_input<unsigned>(i++);
+    auto nj = pro.get_input<unsigned>(i++);
     std::string suffix = pro.get_input<std::string>(i++);
     std::string coordinate_type = pro.get_input<std::string>(i++);
 
@@ -153,19 +153,19 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
     }
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-    unsigned cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
-    unsigned cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
+    auto cl_ni=(unsigned)RoundUp(ni,(int)local_threads[0]);
+    auto cl_nj=(unsigned)RoundUp(nj,(int)local_threads[1]);
     global_threads[0]=cl_ni;
     global_threads[1]=cl_nj;
     //set generic cam
-    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
     if(cam->type_name() == "vpgl_geo_camera" )
     {
         vpgl_lvcs_sptr lvcs = new vpgl_lvcs(scene->lvcs());
-        vpgl_geo_camera* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
+        auto* geocam = static_cast<vpgl_geo_camera*>(cam.ptr());
         // crop relevant image data into a view
         vgl_box_3d<double> scene_bbox = scene->bounding_box();
         vgl_box_2d<double> proj_bbox;
@@ -256,7 +256,7 @@ bool boxm2_ocl_aux_update_view_direction_process(bprb_func_process& pro)
         bocl_mem* blk = opencl_cache->get_block(scene,*id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
         blk_info->write_to_buffer((queue));

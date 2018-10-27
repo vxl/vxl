@@ -41,7 +41,7 @@ bool bvpl_init_global_pca_process(bprb_func_process& pro)
 
   //get inputs
   std::string pca_dir = pro.get_input<std::string>(0);
-  unsigned scene_id = pro.get_input<unsigned>(1);
+  auto scene_id = pro.get_input<unsigned>(1);
 
   bvpl_global_pca<125> global_pca(pca_dir);
   global_pca.init(scene_id);

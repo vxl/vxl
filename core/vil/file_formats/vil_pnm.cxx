@@ -178,7 +178,7 @@ static int ReadInteger(vil_stream* vs, char& temp)
 // Convert the buffer of 16 bit words from MSB to host order
 static void ConvertMSBToHost( void* buf, int num_words )
 {
-  unsigned char* ptr = static_cast<unsigned char*>(buf);
+  auto* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
     unsigned char t = *ptr;
@@ -191,7 +191,7 @@ static void ConvertMSBToHost( void* buf, int num_words )
 // Convert the buffer of 16 bit words from host order to MSB
 static void ConvertHostToMSB( void* buf, int num_words )
 {
-  unsigned char* ptr = static_cast<unsigned char*>(buf);
+  auto* ptr = static_cast<unsigned char*>(buf);
   for ( int i=0; i < num_words; ++i )
   {
     unsigned char t = *ptr;

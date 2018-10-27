@@ -149,7 +149,7 @@ bool volm_desc_matcher::create_prob_map(std::string const& geo_hypo_folder,
   std::vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file.str());
   // refill the image
-  unsigned total_ind = (unsigned)scores.size();
+  auto total_ind = (unsigned)scores.size();
   for (unsigned ii = 0; ii < total_ind; ii++) {
     vgl_point_3d<double> h_pt = leaves[scores[ii]->leaf_id_]->hyps_->locs_[scores[ii]->hypo_id_];
     if (gt_closest == h_pt)
@@ -265,7 +265,7 @@ bool volm_desc_matcher::create_candidate_list(std::string const& prob_map_folder
   else {
     return false;
   }
-  unsigned n_tile = (unsigned)tiles.size();
+  auto n_tile = (unsigned)tiles.size();
 
   float thres_scale = thres_ratio;
   double thres_value = volm_io::scale_score_to_0_1_sig(kl, ku, (float)thres_scale, threshold);
@@ -325,7 +325,7 @@ bool volm_desc_matcher::create_candidate_list(std::string const& prob_map_folder
   std::cout << " there are " << cand_map.size() << " candidate regions given threshold = " << threshold << " (likelihood = " << thres_value << ")\n";
   volm_candidate_list::open_kml_document(ofs_kml,kml_name.str(),(float)thres_value);
 
-  std::multimap<unsigned, std::pair<unsigned, unsigned>, std::greater<unsigned> >::iterator mit = cand_map.begin();
+  auto mit = cand_map.begin();
   unsigned rank = 0;
   for (; mit != cand_map.end(); ++mit) {
     unsigned tile_idx = mit->second.first;

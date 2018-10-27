@@ -77,7 +77,7 @@ static void test_bvxm_create_local_rpc_process()
   bool non_null = (value != nullptr);
   TEST("vpgl_camera_double_sptr non-null", non_null ,true);
 
-  brdb_value_t<vpgl_camera_double_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value.ptr());
   vpgl_camera_double_sptr cam = result->value();
 }

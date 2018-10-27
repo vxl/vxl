@@ -112,7 +112,7 @@ add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
 std::vector<depth_map_region_sptr> depth_map_scene::scene_regions() const
 {
   std::vector<depth_map_region_sptr> ret;
-  std::map<std::string, depth_map_region_sptr>::const_iterator rit = scene_regions_.begin();
+  auto rit = scene_regions_.begin();
   for (; rit != scene_regions_.end(); ++rit)
     ret.push_back((*rit).second);
   return ret;
@@ -152,7 +152,7 @@ depth_map(unsigned log2_downsample_ratio)
     dnj = static_cast<double>(nj_)/ratio;
   if (dni<2.0) dni = 2.0;
   if (dnj<2.0) dnj = 2.0;
-  unsigned sni = static_cast<unsigned>(dni), snj = static_cast<unsigned>(dnj);
+  auto sni = static_cast<unsigned>(dni), snj = static_cast<unsigned>(dnj);
   vil_image_view<float> depth(sni, snj);
   depth.fill(-1.0f); // depth is undefined
 
@@ -180,7 +180,7 @@ depth_map(unsigned log2_downsample_ratio)
   assert(good);
   // All the other objects
   std::vector<depth_map_region_sptr> regions;
-  std::map<std::string, depth_map_region_sptr>::iterator rit =
+  auto rit =
     scene_regions_.begin();
   for (; rit != scene_regions_.end(); ++rit)
     if (rit->second->active())
@@ -204,7 +204,7 @@ depth_map(std::string region_name, unsigned log2_downsample_ratio, double gp_dis
     dnj = static_cast<double>(nj_)/ratio;
   if (dni<2.0) dni = 2.0;
   if (dnj<2.0) dnj = 2.0;
-  unsigned sni = static_cast<unsigned>(dni), snj = static_cast<unsigned>(dnj);
+  auto sni = static_cast<unsigned>(dni), snj = static_cast<unsigned>(dnj);
   vil_image_view<float> depth(sni, snj);
   depth.fill(-1.0f); // depth is undefined
 
@@ -231,7 +231,7 @@ depth_map(std::string region_name, unsigned log2_downsample_ratio, double gp_dis
     assert(good);
   }
   else {
-    std::map<std::string, depth_map_region_sptr>::iterator rit = scene_regions_.begin();
+    auto rit = scene_regions_.begin();
     for (; rit != scene_regions_.end(); ++rit)
       if (rit->first.compare(region_name) == 0 && rit->second) {
         rit->second->update_depth_image(depth, cam_, ratio);
@@ -289,7 +289,7 @@ bool depth_map_scene::next_depth()
 void depth_map_scene::init_depths()
 {
   depth_states_.clear();
-  std::map<std::string, depth_map_region_sptr>::iterator rit =
+  auto rit =
     scene_regions_.begin();
   for (; rit !=     scene_regions_.end(); ++rit)
     if (rit->second->active())
@@ -388,7 +388,7 @@ void vsl_b_write(vsl_b_ostream& os, const depth_map_scene* ds_ptr)
     vsl_b_write(os, false);
   else
     vsl_b_write(os, true);
-  depth_map_scene* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
+  auto* ds_non_const = const_cast<depth_map_scene*>(ds_ptr);
   ds_non_const->b_write(os);
 }
 
@@ -581,7 +581,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   bool sky_active = false;
   if (sky_.size()) {
     sky_active = true;
-    unsigned ns = (unsigned)sky_.size();
+    auto ns = (unsigned)sky_.size();
     for (unsigned i = 0 ; i < ns; i++)
       sky_active = sky_active && sky_[i]->active();
   }
@@ -596,7 +596,7 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   bool ground_active = false;
   if (ground_plane_.size()) {
     ground_active = true;
-    unsigned ng = (unsigned)ground_plane_.size();
+    auto ng = (unsigned)ground_plane_.size();
     for (unsigned i = 0; i < ng; i++)
       ground_active = ground_active && ground_plane_[i]->active();
   }

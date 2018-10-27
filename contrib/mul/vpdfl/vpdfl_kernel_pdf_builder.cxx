@@ -154,7 +154,7 @@ void vpdfl_kernel_pdf_builder::build(vpdfl_pdf_base& model, mbl_data_wrapper<vnl
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
   {
-    mbl_data_array_wrapper<vnl_vector<double> >& data_array =
+    auto& data_array =
                    static_cast<mbl_data_array_wrapper<vnl_vector<double> >&>( data);
     build_from_array(model,data_array.data(),n);
     return;

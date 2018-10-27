@@ -17,7 +17,7 @@
 void
 test_gevd_memory_mixin()
 {
-  gevd_memory_mixin * gmm = new gevd_memory_mixin(8);
+  auto * gmm = new gevd_memory_mixin(8);
 
   int off = gmm->GetOffset();
   TEST("GetOffset.",off,0);

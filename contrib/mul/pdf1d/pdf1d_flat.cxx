@@ -54,7 +54,7 @@ void pdf1d_flat::set(double lo, double hi)
 
 pdf1d_sampler* pdf1d_flat::new_sampler() const
 {
-  pdf1d_flat_sampler *i = new pdf1d_flat_sampler;
+  auto *i = new pdf1d_flat_sampler;
   i->set_model(*this);
   return i;
 }

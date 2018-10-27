@@ -56,13 +56,13 @@ bool bvxm_create_mog_image_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string voxel_type = pro.get_input<std::string>(i++);
-  unsigned bin_index = pro.get_input<unsigned>(i++);;
-  unsigned scale_index = pro.get_input<unsigned>(i++);
+  auto bin_index = pro.get_input<unsigned>(i++);;
+  auto scale_index = pro.get_input<unsigned>(i++);
 
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
 
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
   if (!camera) {
     std::cout << pro.name() <<" :--  Input 1  is not valid!\n";

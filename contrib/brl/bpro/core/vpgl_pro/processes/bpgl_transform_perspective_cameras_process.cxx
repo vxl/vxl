@@ -213,7 +213,7 @@ bool vpgl_transform_space_process(bprb_func_process& pro)
   std::cout << pts0_xs->data_array;
 
   vnl_matrix<double> pts0, pts1;
-  unsigned n = (unsigned)(pts0_xs->data_array.size());
+  auto n = (unsigned)(pts0_xs->data_array.size());
 
   pts0.set_size(3,n);
   pts1.set_size(3,n);

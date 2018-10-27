@@ -267,7 +267,7 @@ void bwm_video_site_io::x_write(std::string const& xml_path)
 //write the correspondences
 vsl_basic_xml_element corrs(CORRESPONDENCES_TAG);
 corrs.x_write_open(os);
-std::vector<bwm_video_corr_sptr >::iterator cit = corrs_.begin();
+auto cit = corrs_.begin();
 for (; cit != corrs_.end(); ++cit)
   (*cit)->x_write(os);
 corrs.x_write_close(os);

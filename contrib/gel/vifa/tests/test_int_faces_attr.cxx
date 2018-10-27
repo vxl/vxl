@@ -89,8 +89,8 @@ static void test_int_faces_attr(int argc, char* argv[])
                << attr_names.size() << " attribute names:\n";
 
       // Dump the attribute vector
-      std::vector<std::string>::iterator  ani = attr_names.begin();
-      std::vector<float>::iterator      ai = attrs.begin();
+      auto  ani = attr_names.begin();
+      auto      ai = attrs.begin();
       for (; (ai != attrs.end()) && (ani != attr_names.end()); ai++, ani++)
         std::cout << (*ani) << ": " << (*ai) << std::endl;
     }

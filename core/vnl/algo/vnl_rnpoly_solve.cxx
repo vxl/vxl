@@ -63,7 +63,7 @@ std::vector<vnl_vector<double>*> vnl_rnpoly_solve::realroots(double tol)
 {
   tol *= tol; // squared tolerance
   std::vector<vnl_vector<double>*> rr;
-  std::vector<vnl_vector<double>*>::iterator rp = r_.begin(), ip = i_.begin();
+  auto rp = r_.begin(), ip = i_.begin();
   for (; rp != r_.end() && ip != i_.end(); ++rp, ++ip)
     if ((*ip)->squared_magnitude() < tol)
       rr.push_back(*rp);

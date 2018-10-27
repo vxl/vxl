@@ -194,7 +194,7 @@ int main(int argc, char** argv)
   //vgl_point_3d<double> origin = scene2->local_origin();
   vgl_box_3d<double> world = scene2->bounding_box();
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene2->blocks();
-  std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = blocks.begin();
+  auto iter = blocks.begin();
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
   vgl_vector_3d<unsigned int> block_nums = scene2->scene_dimensions();
@@ -242,7 +242,7 @@ int main(int argc, char** argv)
     p[1] = metadata.local_origin_.y();
     p[2] = metadata.local_origin_.z();
     vgl_box_3d<double> block_bb(p, subdim.x()*dim.x(), subdim.y()*dim.y(), subdim.z()*dim.z(), vgl_box_3d<double>::min_pos);
-    tree_type* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
+    auto* block_tree=new tree_type(x_dim+4, x_dim+1); // FIX take max of 3 dims instead
     block_tree->set_bbox(block_bb);
     block_tree->init_cells(0);
 

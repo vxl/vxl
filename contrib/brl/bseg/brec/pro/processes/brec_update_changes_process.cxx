@@ -63,8 +63,8 @@ bool brec_update_changes_process(bprb_func_process& pro)
   vil_image_view<float> change_map_f(change_map);
 
   vil_image_view_base_sptr orig_view = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
-  float sigma = pro.get_input<float>(i++);
+  auto n = pro.get_input<unsigned>(i++);
+  auto sigma = pro.get_input<float>(i++);
 
   vul_timer t2;
   t2.mark();

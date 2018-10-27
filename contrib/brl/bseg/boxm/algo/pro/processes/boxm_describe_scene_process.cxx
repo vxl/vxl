@@ -78,7 +78,7 @@ bool boxm_describe_scene_process(bprb_func_process& pro)
   {
     if (!scene_ptr->multi_bin()) {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
 
       bsta_histogram<float> omega_hist, sigma_hist, level_hist;
       if (!compute_scene_statistics(*scene, omega_hist, sigma_hist,

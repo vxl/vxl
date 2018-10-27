@@ -65,9 +65,9 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
 
   //get  and create the grids
 
-  bvxm_voxel_grid<vnl_float_3> *grid1 =dynamic_cast<bvxm_voxel_grid<vnl_float_3>* > (grid1_base.ptr());
+  auto *grid1 =dynamic_cast<bvxm_voxel_grid<vnl_float_3>* > (grid1_base.ptr());
 
-  if (bvxm_voxel_grid<float> *grid2 =dynamic_cast<bvxm_voxel_grid<float >* > (grid2_base.ptr()))
+  if (auto *grid2 =dynamic_cast<bvxm_voxel_grid<float >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
       std::cerr << "Input grids must be of same size\n";
@@ -96,7 +96,7 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else if (bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> > *grid2 =dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* > (grid2_base.ptr()))
+  else if (auto *grid2 =dynamic_cast<bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >* > (grid2_base.ptr()))
   {
     if (grid1->grid_size()!=grid2->grid_size()) {
       std::cerr << "Input grids must be of same size\n";

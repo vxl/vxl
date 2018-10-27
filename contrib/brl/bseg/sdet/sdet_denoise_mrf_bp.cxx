@@ -57,7 +57,7 @@ bool sdet_denoise_mrf_bp::denoise()
            << t.real()/1000.0 << " seconds\n";
 
   for (--lev ; lev>=0; --lev) {
-    unsigned pre_lev = static_cast<unsigned>(lev+1);
+    auto pre_lev = static_cast<unsigned>(lev+1);
     mrf_ = pyramid_upsample(mrf_, pre_lev);
     t.mark();
     for (unsigned it = 0; it<n_iter_; ++it) {

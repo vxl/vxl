@@ -4,7 +4,7 @@
 
 void make_cube(imesh_mesh& cube)
 {
-  imesh_vertex_array<3>* verts = new imesh_vertex_array<3>();
+  auto* verts = new imesh_vertex_array<3>();
   verts->push_back(imesh_vertex<3>( 1, 1, 1));
   verts->push_back(imesh_vertex<3>(-1, 1, 1));
   verts->push_back(imesh_vertex<3>(-1,-1, 1));
@@ -16,7 +16,7 @@ void make_cube(imesh_mesh& cube)
   std::unique_ptr<imesh_vertex_array_base> v(verts);
   cube.set_vertices(std::move(v));
 
-  imesh_regular_face_array<4>* faces = new imesh_regular_face_array<4>();
+  auto* faces = new imesh_regular_face_array<4>();
   faces->push_back(imesh_quad(0,1,2,3));
   faces->push_back(imesh_quad(0,4,5,1));
   faces->push_back(imesh_quad(1,5,6,2));

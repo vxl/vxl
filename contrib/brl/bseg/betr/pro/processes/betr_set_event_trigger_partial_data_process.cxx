@@ -69,7 +69,7 @@ bool betr_set_event_trigger_partial_data_process(bprb_func_process& pro)
   }
 
   // convert the camera to local rational cameras using the origin of the event trigger
-  vpgl_rational_camera<double>* rcam = dynamic_cast<vpgl_rational_camera<double>*>(cam.ptr());
+  auto* rcam = dynamic_cast<vpgl_rational_camera<double>*>(cam.ptr());
   if(!rcam)
     return false;
   vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(event_trigger->lvcs(),*rcam);

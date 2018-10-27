@@ -190,7 +190,7 @@ bool vil1_jpeg_generic_image::put_section(void const *buf, int x0, int y0, int w
 
   // write each scanline
   for (int i=0; i<h; ++i) {
-    JSAMPLE const *scanline = (JSAMPLE const*) ((char const*)buf + i*w*bpp);
+    auto const *scanline = (JSAMPLE const*) ((char const*)buf + i*w*bpp);
     if (!jc->write_scanline(y0+i, scanline))
       return false;
   }

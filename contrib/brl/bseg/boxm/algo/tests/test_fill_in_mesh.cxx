@@ -85,7 +85,7 @@ static void test_fill_in_mesh()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > > * block=scene.get_active_block();
-    boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(7,6);
+    auto * tree=new boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> >(7,6);
     boxm_sample<BOXM_APM_MOG_GREY> s;
     s.alpha=std::numeric_limits<float>::max();
     tree->init_cells(s);

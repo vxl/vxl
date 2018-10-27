@@ -40,22 +40,22 @@ bool vil_scale_and_offset_values_process(bprb_func_process& pro)
 
   //Retrieve image from input
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(0);
-  float scale = pro.get_input<float>(1);
-  float offset = pro.get_input<float>(2);
+  auto scale = pro.get_input<float>(1);
+  auto offset = pro.get_input<float>(2);
 
   // cast to float
-  if (vil_image_view<float> *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr()))
+  if (auto *image_float = dynamic_cast<vil_image_view<float>*>(image.ptr()))
     vil_math_scale_and_offset_values(*image_float, scale, offset);
-  else if (vil_image_view<vxl_int_16>* image_int = dynamic_cast<vil_image_view<vxl_int_16>*>(image.ptr()))
+  else if (auto* image_int = dynamic_cast<vil_image_view<vxl_int_16>*>(image.ptr()))
     vil_math_scale_and_offset_values(*image_int,   scale, offset);
-  else if (vil_image_view<vxl_byte>* image_byte = dynamic_cast<vil_image_view<vxl_byte>*>(image.ptr())) {
+  else if (auto* image_byte = dynamic_cast<vil_image_view<vxl_byte>*>(image.ptr())) {
     if (scale < 0) {
       std::cerr << pro.name() << ": negative scale factor " << scale << " can not operate on byte image!\n";
       return false;
     }
     vil_math_scale_and_offset_values(*image_byte,  scale, offset);
   }
-  else if (vil_image_view<vxl_uint_16>* image_uint = dynamic_cast<vil_image_view<vxl_uint_16>*>(image.ptr())) {
+  else if (auto* image_uint = dynamic_cast<vil_image_view<vxl_uint_16>*>(image.ptr())) {
     if (scale < 0) {
       std::cerr << pro.name() << ": negative scale factor: " << scale << " can not operate on unsigned short image!\n";
       return false;

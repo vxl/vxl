@@ -520,7 +520,7 @@ vsol_conic_2d::intersection(vsol_line_2d const& l) const
   std::list<vgl_homg_point_2d<double> > vv =
     vgl_homg_operators_2d<double>::intersection(*this,line);
   std::list<vsol_point_2d_sptr> v;
-  std::list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  auto it = vv.begin();
   for (; !(it == vv.end()); ++it) {
     if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
   }
@@ -536,7 +536,7 @@ vsol_conic_2d::intersection(vsol_conic_2d const& c) const
   std::list<vgl_homg_point_2d<double> > vv =
     vgl_homg_operators_2d<double>::intersection(*this,c);
   std::list<vsol_point_2d_sptr> v;
-  std::list<vgl_homg_point_2d<double> >::iterator it = vv.begin();
+  auto it = vv.begin();
   for (; !(it == vv.end()); ++it) {
     if ((*it).w() != 0)  v.push_back(new vsol_point_2d((*it)));
   }
@@ -574,7 +574,7 @@ vsol_conic_2d::closest_point_on_curve(vsol_point_2d_sptr const& pt) const
   // And find the intersection point closest to the given location:
   vsol_point_2d_sptr p = nullptr;
   double dist = 1e31; // infinity
-  std::list<vsol_point_2d_sptr>::iterator it = candidates.begin();
+  auto it = candidates.begin();
   for (; it != candidates.end(); ++it) {
     double d = (*it)->distance(pt);
     if (d < dist) { p = (*it); dist = d; }

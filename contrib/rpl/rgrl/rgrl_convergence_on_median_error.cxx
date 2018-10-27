@@ -53,7 +53,7 @@ compute_status( rgrl_converge_status_sptr               prev_status,
   //        of the transformed data points
   //
   assert ( errors.size() > 0 );
-  std::vector<double>::iterator middle = errors.begin() + errors.size()/2;
+  auto middle = errors.begin() + errors.size()/2;
   std::nth_element( errors.begin(), middle, errors.end() );
 
   double scaling = 1;

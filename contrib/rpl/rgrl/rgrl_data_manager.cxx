@@ -143,8 +143,8 @@ get_data_at_stage( unsigned stage,
 
   if ( data_.has( stage ) ) {
     typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
-    iter_type itr = data_[stage].begin();
-    iter_type end = data_[stage].end();
+    auto itr = data_[stage].begin();
+    auto end = data_[stage].end();
     for ( ; itr != end; ++itr ) {
       from_sets.push_back( itr->from_set );
       to_sets.push_back( itr->to_set );
@@ -281,8 +281,8 @@ get_label( unsigned stage,
 
   if ( data_.has( stage ) ) {
     typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
-    iter_type itr = data_[stage].begin();
-    iter_type end = data_[stage].end();
+    auto itr = data_[stage].begin();
+    auto end = data_[stage].end();
     for ( ; itr != end; ++itr ) {
       labels.push_back( itr->label );
     }

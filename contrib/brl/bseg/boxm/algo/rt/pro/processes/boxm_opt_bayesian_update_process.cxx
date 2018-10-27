@@ -82,7 +82,7 @@ bool boxm_opt_bayesian_update_process(bprb_func_process& pro)
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
   boxm_apm_type apm_type = scene_base->appearence_model();
 
-  float damping_factor = pro.get_input<float>(1);
+  auto damping_factor = pro.get_input<float>(1);
 
   std::string image_list_fname = pro.get_input<std::string>(2);
 
@@ -107,7 +107,7 @@ bool boxm_opt_bayesian_update_process(bprb_func_process& pro)
     case BOXM_APM_SIMPLE_GREY:
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+      auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
       if (!scene) {
         std::cerr << "error casting scene_base to scene\n";
         return false;

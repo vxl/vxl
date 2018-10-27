@@ -41,7 +41,7 @@ static void test_bil_scale_image()
 
   int octaves = 5;
   int levels = 3;
-  float k = (float)std::pow(2.0,1.0/double(levels));
+  auto k = (float)std::pow(2.0,1.0/double(levels));
   bil_scale_image<float> gauss_scale(levels, octaves);
 
   bil_scale_image<float> dog_scale;

@@ -77,7 +77,7 @@ void vnl_levenberg_marquardt::lmdif_lsqfun(long* n,     // I   Number of residua
                                            long* iflag, // IO  0 ==> print, -1 ==> terminate
                                            void* userdata)
 {
-  vnl_levenberg_marquardt* self =
+  auto* self =
     static_cast<vnl_levenberg_marquardt*>(userdata);
   vnl_least_squares_function* f = self->f_;
   assert(*p == (int)f->get_number_of_unknowns());
@@ -212,7 +212,7 @@ void vnl_levenberg_marquardt::lmder_lsqfun(long* n,     // I   Number of residua
                                            long* iflag, // I   1 -> calc fx, 2 -> calc fjac
                                            void* userdata)
 {
-  vnl_levenberg_marquardt* self =
+  auto* self =
     static_cast<vnl_levenberg_marquardt*>(userdata);
   vnl_least_squares_function* f = self->f_;
   assert(*p == (int)f->get_number_of_unknowns());

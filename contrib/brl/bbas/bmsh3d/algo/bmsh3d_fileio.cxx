@@ -76,7 +76,7 @@ bool bmsh3d_save_xyz(bmsh3d_pt_set* pointset, const char* file)
   std::cerr << "  saving " << file << " : "
            << pointset->vertexmap().size() << " points ...\n";
 
-  std::map<int, bmsh3d_vertex*>::iterator it = pointset->vertexmap().begin();
+  auto it = pointset->vertexmap().begin();
   for (; it != pointset->vertexmap().end(); ++it) {
     bmsh3d_vertex* v = (*it).second;
     std::fprintf(fp, "%.16f %.16f %.16f\n", v->pt().x(), v->pt().y(), v->pt().z());
@@ -129,7 +129,7 @@ bool bmsh3d_save_xyz(std::vector<vgl_point_3d<double> >& pts, const char* file)
   }
   std::cerr << "  saving " << file << " : " << pts.size() << " points ...\n";
 
-  std::vector<vgl_point_3d<double> >::iterator it = pts.begin();
+  auto it = pts.begin();
   for (; it != pts.end(); ++it) {
     vgl_point_3d<double> P = (*it);
     std::fprintf(fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
@@ -184,7 +184,7 @@ bool bmsh3d_save_xyz(std::vector<std::pair<int, vgl_point_3d<double> > >& idpts,
   }
   std::cerr << "  saving " << file << " : " << idpts.size() << " points ...\n";
 
-  std::vector<std::pair<int, vgl_point_3d<double> > >::iterator it = idpts.begin();
+  auto it = idpts.begin();
   for (; it != idpts.end(); ++it) {
     vgl_point_3d<double> P = (*it).second;
     std::fprintf(fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
@@ -253,7 +253,7 @@ bool bmsh3d_save_xyzn1(std::vector<std::pair<vgl_point_3d<double>, vgl_vector_3d
   // # of points.
   std::fprintf(fp, "%ld\n", (long)ori_pts.size());
 
-  std::vector<std::pair<vgl_point_3d<double>, vgl_vector_3d<double> > >::iterator it = ori_pts.begin();
+  auto it = ori_pts.begin();
   for (; it != ori_pts.end(); ++it) {
     vgl_point_3d<double> P = (*it).first;
     vgl_vector_3d<double> N = (*it).second;
@@ -316,7 +316,7 @@ bool bmsh3d_save_xyznw_vector(std::vector<std::pair<vgl_point_3d<double>, vgl_ve
   std::cerr << "  saving " << file << " : "
            << oriented_points.size() << " oriented points ...\n";
 
-  std::vector<std::pair<vgl_point_3d<double>, vgl_vector_3d<double> > >::iterator it = oriented_points.begin();
+  auto it = oriented_points.begin();
   for (; it != oriented_points.end(); ++it) {
     vgl_point_3d<double> P = (*it).first;
     vgl_vector_3d<double> N = (*it).second;
@@ -380,7 +380,7 @@ bool bmsh3d_save_p3d(bmsh3d_pt_set* pointset, const char* file)
 
   std::fprintf(fp, "3\n%lu\n", (long unsigned)pointset->vertexmap().size());
 
-  std::map<int, bmsh3d_vertex*>::iterator it = pointset->vertexmap().begin();
+  auto it = pointset->vertexmap().begin();
   for (; it != pointset->vertexmap().end(); ++it) {
     bmsh3d_vertex* v = (*it).second;
     std::fprintf(fp, "%.16f %.16f %.16f\n", v->pt().x(), v->pt().y(), v->pt().z());
@@ -437,7 +437,7 @@ bool bmsh3d_save_p3d(std::vector<vgl_point_3d<double> >& pts, const char* file)
 
   std::fprintf(fp, "3\n%lu\n", (long unsigned)pts.size());
 
-  std::vector<vgl_point_3d<double> >::iterator it = pts.begin();
+  auto it = pts.begin();
   for (; it != pts.end(); ++it) {
     vgl_point_3d<double> P = (*it);
     std::fprintf(fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
@@ -497,7 +497,7 @@ bool bmsh3d_save_p3d(std::vector<std::pair<int, vgl_point_3d<double> > >& idpts,
 
   std::fprintf(fp, "3\n%lu\n", (long unsigned)idpts.size());
 
-  std::vector<std::pair<int, vgl_point_3d<double> > >::iterator it = idpts.begin();
+  auto it = idpts.begin();
   for (; it != idpts.end(); ++it) {
     vgl_point_3d<double> P = (*it).second;
     std::fprintf(fp, "%.16f %.16f %.16f\n", P.x(), P.y(), P.z());
@@ -595,7 +595,7 @@ bool save_unmeshed_p3d(bmsh3d_mesh* M, const char* file)
   std::cerr << "  saving unmeshed " << num << " points to " << file << "...\n";
   std::fprintf(fp, "3\n%u\n", num);
 
-  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  auto it = M->vertexmap().begin();
   unsigned int count=0;
   for (; it != M->vertexmap().end(); ++it) {
     bmsh3d_vertex* v = (*it).second;
@@ -705,7 +705,7 @@ bool bmsh3d_save_ply2(bmsh3d_mesh* M, const char* file)
 
   // Use v->vid() to re-index vertices, starting with id 0.
   int vidcounter = 0;
-  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  auto it = M->vertexmap().begin();
   for (; it != M->vertexmap().end(); ++it) {
     bmsh3d_vertex* V = (*it).second;
     V->set_vid(vidcounter++);
@@ -715,7 +715,7 @@ bool bmsh3d_save_ply2(bmsh3d_mesh* M, const char* file)
     std::fprintf(fp, "%.16f\n",V->pt().z());
   }
 
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); ++fit) {
     bmsh3d_face* F = (*fit).second;
     F->_ifs_track_ordered_vertices();
@@ -887,14 +887,14 @@ void setup_IFS_M_label_Fs_vids(bmsh3d_mesh* M, const int label,
   int vid_counter = 0;
 
   // Go through all vertices and set vid to -1.
-  std::map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
+  auto vit = M->vertexmap().begin();
   for (; vit != M->vertexmap().end(); ++vit) {
     bmsh3d_vertex* V = (*vit).second;
     V->set_vid(-1);
   }
 
   // Go through all labelled faces and set vid for each incident vertex.
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); ++fit) {
     bmsh3d_face* F = (*fit).second;
     if (! F->is_visited(label))
@@ -1032,7 +1032,7 @@ bool bmsh3d_save_m(bmsh3d_mesh* M, const char* file)
   std::fprintf(fp, "%lu\n", (long unsigned)M->vertexmap().size());
   std::fprintf(fp, "%lu\n", (long unsigned)M->facemap().size());
 
-  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  auto it = M->vertexmap().begin();
   for (; it != M->vertexmap().end(); ++it) {
     bmsh3d_vertex* v = (*it).second;
 
@@ -1041,7 +1041,7 @@ bool bmsh3d_save_m(bmsh3d_mesh* M, const char* file)
     std::fprintf(fp, "%.16f\n",v->pt().z());
   }
 
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); ++fit) {
     bmsh3d_face* F = (*fit).second;
 
@@ -1170,7 +1170,7 @@ bool bmsh3d_save_xml(bmsh3d_mesh* mesh, const char* file)
   std::fprintf(fp, "<gml:description>BuildingPart Description</gml:description>");
   std::fprintf(fp, "<gml:name>BuildingPart Name</gml:name>");
 
-  std::map<int, bmsh3d_face*>::iterator fit = mesh->facemap().begin();
+  auto fit = mesh->facemap().begin();
   for (; fit != mesh->facemap().end(); ++fit)
   {
     bmsh3d_face* face = (*fit).second;

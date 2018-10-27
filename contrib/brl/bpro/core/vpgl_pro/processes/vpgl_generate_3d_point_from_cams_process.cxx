@@ -75,7 +75,7 @@ bool vpgl_generate_3d_point_from_cams_process(bprb_func_process& pro)
       return false;
     }
     vpgl_camera_double_sptr          cam_sptr = value->val<vpgl_camera_double_sptr>();
-    vpgl_perspective_camera<double>* cam_ptr = (vpgl_perspective_camera<double>*) cam_sptr.ptr();
+    auto* cam_ptr = (vpgl_perspective_camera<double>*) cam_sptr.ptr();
     cams.push_back(*cam_ptr);
   }
 

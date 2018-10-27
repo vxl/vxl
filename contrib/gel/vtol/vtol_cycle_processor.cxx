@@ -37,7 +37,7 @@ vtol_cycle_processor::vtol_cycle_processor(std::vector<vtol_edge_2d_sptr>& edges
 static void edge_2d_erase(std::vector<vtol_edge_2d_sptr>& edges,
                           vtol_edge_2d_sptr& e)
 {
-  std::vector<vtol_edge_2d_sptr>::iterator eit =
+  auto eit =
     std::find(edges.begin(), edges.end(), e);
   if (eit == edges.end())
     return;
@@ -644,7 +644,7 @@ bool vtol_cycle_processor::classify_path(std::vector<vtol_edge_2d_sptr>& path_ed
       return true;
     }
   //the typical case, three or more edges
-  for (std::vector<vtol_edge_2d_sptr>::iterator eit = path_edges.begin()+1;
+  for (auto eit = path_edges.begin()+1;
        eit != path_edges.end(); ++eit)
   {
     classify_adjacent_edges(e0, *eit, all_bridge, angle);
@@ -1160,7 +1160,7 @@ bool vtol_cycle_processor::connect_paths(std::vector<vtol_edge_2d_sptr>& edges,
     //find edges attached to each bad vert
     std::vector<vtol_edge_sptr> vedges; bad_vert->edges(vedges);
     //scan through vedges to find a connecting edge
-    for (std::vector<vtol_edge_sptr>::iterator eit = vedges.begin();
+    for (auto eit = vedges.begin();
          eit != vedges.end()&&!found_edge; ++eit)
     {
       vtol_edge_2d_sptr e = (*eit)->cast_to_edge_2d();

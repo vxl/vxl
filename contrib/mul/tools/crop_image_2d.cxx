@@ -182,8 +182,8 @@ int main2(int argc, char*argv[])
     i0 = static_cast<unsigned>(std::floor((ir->ni()-1)*fx0));
     j0 = static_cast<unsigned>(std::floor((ir->nj()-1)*fy0));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(std::ceil((ir->ni()-1)*fx1));
-    unsigned j1 = static_cast<unsigned>(std::ceil((ir->nj()-1)*fy1));
+    auto i1 = static_cast<unsigned>(std::ceil((ir->ni()-1)*fx1));
+    auto j1 = static_cast<unsigned>(std::ceil((ir->nj()-1)*fy1));
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
   }
@@ -196,8 +196,8 @@ int main2(int argc, char*argv[])
     i0 = static_cast<unsigned>(std::floor(imlo.x()));
     j0 = static_cast<unsigned>(std::floor(imlo.y()));
     // Round upper bounds up
-    unsigned i1 = static_cast<unsigned>(std::ceil(imhi.x()));
-    unsigned j1 = static_cast<unsigned>(std::ceil(imhi.y()));
+    auto i1 = static_cast<unsigned>(std::ceil(imhi.x()));
+    auto j1 = static_cast<unsigned>(std::ceil(imhi.y()));
     ni = i1 - i0 + 1;
     nj = j1 - j0 + 1;
   }

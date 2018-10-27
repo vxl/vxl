@@ -211,7 +211,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
 
   std::vector< rgrl_spline_sptr > splines( dim );
   if ( cur_transform.is_type( rgrl_trans_spline::type_id() ) ) {
-    rgrl_trans_spline const& cur_trans_spline = dynamic_cast< rgrl_trans_spline const& >(cur_transform);
+    auto const& cur_trans_spline = dynamic_cast< rgrl_trans_spline const& >(cur_transform);
     std::cerr << "delta_: " << delta_ << '\n'
              << "current transformation's delta_: " << cur_trans_spline.get_delta() << '\n';
     if ( ( delta_ - cur_trans_spline.get_delta()/2 ).two_norm() < 1e-5 ) {

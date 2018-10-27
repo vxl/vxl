@@ -89,7 +89,7 @@ static void test_volm_desc_ex()
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle, vmin, dmax);
   std::map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
   std::vector<double> depth_interval;
-  std::map<double, unsigned char>::iterator iter = depth_interval_map.begin();
+  auto iter = depth_interval_map.begin();
   for (; iter != depth_interval_map.end(); ++iter)
     depth_interval.push_back(iter->first);
   vnl_random rand(9667566);

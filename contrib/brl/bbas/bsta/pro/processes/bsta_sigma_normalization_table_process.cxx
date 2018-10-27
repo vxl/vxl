@@ -52,7 +52,7 @@ bool bsta_sigma_normalization_table_process(bprb_func_process& pro)
   }
 
   //get the inputs
-  float under_estimation_probability = pro.get_input<float>(0);
+  auto under_estimation_probability = pro.get_input<float>(0);
   unsigned n_precomputed = pro.get_input<int>(1);
 
   pro.set_output_val<bsta_sigma_normalizer_sptr>(0, new bsta_sigma_normalizer(under_estimation_probability, n_precomputed));

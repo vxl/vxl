@@ -71,7 +71,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
     prob_mems.push_back(prob_thresh);
 
     // Output Array
-    float* output_arr = new float[100];
+    auto* output_arr = new float[100];
     std::fill(output_arr, output_arr+100, 0.0f);
     bocl_mem_sptr  cl_output=new bocl_mem(device->context(), output_arr, sizeof(float)*100, "output buffer");
     cl_output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -154,7 +154,7 @@ float boxm2_multi_refine::refine(boxm2_multi_cache& cache, float thresh)
 
       //calculate old size vs new size
       bocl_mem* alpha = ocl_cache->get_data<BOXM2_ALPHA>(id);
-      std::size_t dataLen = (std::size_t) (alpha->num_bytes() / sizeof(float));
+      auto dataLen = (std::size_t) (alpha->num_bytes() / sizeof(float));
       //std::cout<<"  New data size: "<<newDataSize<<", old data: "<<dataLen<<'\n'
       //        <<"  num refined: "<<(newDataSize-dataLen)/8<<std::endl;
       num_refined += (unsigned) ( (newDataSize-dataLen)/8 );
@@ -400,7 +400,7 @@ bocl_kernel* boxm2_multi_refine::get_refine_tree_kernel(bocl_device_sptr device,
 
   //create refine trees kernel (refine trees deterministic.  MOG type is necessary
   // to define, but not used by the kernel - using default value here
-  bocl_kernel* refine_tree_kernel = new bocl_kernel();
+  auto* refine_tree_kernel = new bocl_kernel();
   refine_tree_kernel->create_kernel( &device->context(), device->device_id(), src_paths,
                                      "refine_trees", " -D MOG_TYPE_8 ",
                                      "boxm2 opencl refine trees (pass one)"); //kernel identifier (for error checking)
@@ -418,7 +418,7 @@ bocl_kernel* boxm2_multi_refine::get_refine_data_kernel(bocl_device_sptr device,
     return refine_data_kernels_[identifier];
 
   std::vector<std::string> src_paths;
-  bocl_kernel* refine_data_kernel = new bocl_kernel();
+  auto* refine_data_kernel = new bocl_kernel();
   std::string source_dir = boxm2_ocl_util::ocl_src_root();
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "basic/linked_list.cl");

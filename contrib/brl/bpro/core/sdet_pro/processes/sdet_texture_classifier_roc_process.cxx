@@ -159,12 +159,12 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     std::cout << thresholds[i] << ' ';
   std::cout << std::flush << std::endl;
 
-  bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tpr=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fpr=new bbas_1d_array_float(num_thresholds);
+  auto * tp=new bbas_1d_array_float(num_thresholds);
+  auto * tn=new bbas_1d_array_float(num_thresholds);
+  auto * fp=new bbas_1d_array_float(num_thresholds);
+  auto * fn=new bbas_1d_array_float(num_thresholds);
+  auto * tpr=new bbas_1d_array_float(num_thresholds);
+  auto * fpr=new bbas_1d_array_float(num_thresholds);
 
   for (unsigned k = 0; k < num_thresholds; k++) {
     tp->data_array[k] = 0;
@@ -212,7 +212,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     fpr->data_array[pnt]= fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
 
-  bbas_1d_array_float * thres_out=new bbas_1d_array_float(num_thresholds);
+  auto * thres_out=new bbas_1d_array_float(num_thresholds);
   for (unsigned k = 0; k < num_thresholds; k++) {
     thres_out->data_array[k] = thresholds[k];
   }
@@ -272,7 +272,7 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
   }
   std::vector<vgl_polygon<double> > positives = sdet_texture_classifier::load_polys(gt_pos_file);
 
-  vil_image_view<float>* in_img = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<float>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": unsupported image pixel format: " << in_img_sptr->pixel_format() << ", only float allowed!\n";
     return false;
@@ -333,12 +333,12 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
   std::cout << std::flush << std::endl;
 
 
-  bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tpr=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fpr=new bbas_1d_array_float(num_thresholds);
+  auto * tp=new bbas_1d_array_float(num_thresholds);
+  auto * tn=new bbas_1d_array_float(num_thresholds);
+  auto * fp=new bbas_1d_array_float(num_thresholds);
+  auto * fn=new bbas_1d_array_float(num_thresholds);
+  auto * tpr=new bbas_1d_array_float(num_thresholds);
+  auto * fpr=new bbas_1d_array_float(num_thresholds);
   // initialize
   for (unsigned k = 0; k < num_thresholds; k++) {
     tp->data_array[k]  = 0;  tn->data_array[k]  = 0;
@@ -422,7 +422,7 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
     fpr->data_array[pnt] = fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
 
-  bbas_1d_array_float * thres_out=new bbas_1d_array_float(num_thresholds);
+  auto * thres_out=new bbas_1d_array_float(num_thresholds);
   for (unsigned k = 0; k < num_thresholds; k++) {
     thres_out->data_array[k] = thresholds[k];
   }
@@ -538,12 +538,12 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
   std::cout << "image min: " << min_val << ", max: " << max_val << ", number of thresholds used: " << num_thresholds << std::endl;
   std::cout << "number of positive pixels: " << pos_pixels.size() << std::endl;
   std::cout << "number of negative pixels: " << neg_pixels.size() << std::endl;
-  bbas_1d_array_float * tp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * tpr=new bbas_1d_array_float(num_thresholds);
-  bbas_1d_array_float * fpr=new bbas_1d_array_float(num_thresholds);
+  auto * tp=new bbas_1d_array_float(num_thresholds);
+  auto * tn=new bbas_1d_array_float(num_thresholds);
+  auto * fp=new bbas_1d_array_float(num_thresholds);
+  auto * fn=new bbas_1d_array_float(num_thresholds);
+  auto * tpr=new bbas_1d_array_float(num_thresholds);
+  auto * fpr=new bbas_1d_array_float(num_thresholds);
 
   // initialize
   for (unsigned k = 0; k < num_thresholds; k++) {
@@ -581,7 +581,7 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
     tpr->data_array[pnt] = tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);
     fpr->data_array[pnt] = fp->data_array[pnt] / (fp->data_array[pnt] + tn->data_array[pnt]);
   }
-  bbas_1d_array_float * thres_out=new bbas_1d_array_float(num_thresholds);
+  auto * thres_out=new bbas_1d_array_float(num_thresholds);
   for (unsigned k = 0; k < num_thresholds; k++) {
     thres_out->data_array[k] = thresholds[k];
   }

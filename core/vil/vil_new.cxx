@@ -110,7 +110,7 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
 #else //VIL_USE_FSTREAM64
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  auto* os = new vil_stream_fstream(filename, "w");
 #endif //VIL_USE_FSTREAM64
   return vil_new_image_resource(os,
                                 ni, nj,
@@ -130,7 +130,7 @@ vil_image_resource_sptr vil_new_image_resource(char const* filename,
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
 #else //VIL_USE_FSTREAM64
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  auto* os = new vil_stream_fstream(filename, "w");
 #endif //VIL_USE_FSTREAM64
 
   if (!file_format || !*file_format)
@@ -188,7 +188,7 @@ vil_new_blocked_image_resource(char const* filename, unsigned ni, unsigned nj,
 #ifdef VIL_USE_FSTREAM64
   vil_stream_fstream64* os = new vil_stream_fstream64(filename, "w");
 #else //VIL_USE_FSTREAM64
-  vil_stream_fstream* os = new vil_stream_fstream(filename, "w");
+  auto* os = new vil_stream_fstream(filename, "w");
 #endif //VIL_USE_FSTREAM64
   return vil_new_blocked_image_resource(os, ni, nj, nplanes, format,
                                         size_block_i, size_block_j,

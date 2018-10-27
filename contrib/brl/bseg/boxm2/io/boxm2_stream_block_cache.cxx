@@ -67,7 +67,7 @@ bool boxm2_stream_block_cache::init(boxm2_block_id id)
 
 bool boxm2_stream_block_cache::clear()
 {
-   std::map<data_type, boxm2_data_base *>::iterator mit = data_types_.begin();
+   auto mit = data_types_.begin();
    for (; mit != data_types_.end(); ++mit) {
       boxm2_data_base* ptr = mit->second;
       delete ptr;

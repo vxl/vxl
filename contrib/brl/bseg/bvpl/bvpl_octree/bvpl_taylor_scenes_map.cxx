@@ -30,7 +30,7 @@ bvpl_taylor_scenes_map::bvpl_taylor_scenes_map(bvpl_taylor_basis_loader loader)
       std::cerr << " bvpl_taylor_scenes, scenes must be of type float\n";
     }
 
-    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+    auto* scene = new boxm_scene<tree_type>();
     scene->load_scene(parser);
     scene_ptr = scene;
 
@@ -38,7 +38,7 @@ bvpl_taylor_scenes_map::bvpl_taylor_scenes_map(bvpl_taylor_basis_loader loader)
   }
 
   // Create a scene to later save the taylor reconstruction (parameters of the  scene are the same as those of the input scene)
-  boxm_scene<tree_type>* scene_in = static_cast<boxm_scene<tree_type>* > (scenes_[kernel_names[0]].as_pointer());
+  auto* scene_in = static_cast<boxm_scene<tree_type>* > (scenes_[kernel_names[0]].as_pointer());
   {
     boxm_scene<tree_type> *scene_out =
     new boxm_scene<tree_type>(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(), scene_in->world_dim(), scene_in->max_level(), scene_in->init_level());

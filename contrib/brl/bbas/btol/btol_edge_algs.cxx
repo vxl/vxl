@@ -118,7 +118,7 @@ vsol_box_2d btol_edge_algs::bounding_box(std::vector<vtol_edge_2d_sptr>& edges)
 void btol_edge_algs::edge_2d_erase(std::vector<vtol_edge_2d_sptr>& edges,
                                    vtol_edge_2d_sptr const& e)
 {
-  std::vector<vtol_edge_2d_sptr>::iterator eit =
+  auto eit =
     std::find(edges.begin(), edges.end(), e);
   if (eit != edges.end())
     edges.erase(eit);

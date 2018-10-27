@@ -42,10 +42,10 @@ bool vil_blob_detection_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr img_ptr_a = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned int min_size  = pro.get_input<unsigned>(i++);
-  unsigned int max_size  = pro.get_input<unsigned>(i++);
+  auto min_size  = pro.get_input<unsigned>(i++);
+  auto max_size  = pro.get_input<unsigned>(i++);
 
-  if (vil_image_view<bool> *view=dynamic_cast<vil_image_view<bool>* > (img_ptr_a.ptr()))
+  if (auto *view=dynamic_cast<vil_image_view<bool>* > (img_ptr_a.ptr()))
   {
     // Closing the holes or gaps
     vil_structuring_element selem;
@@ -64,7 +64,7 @@ bool vil_blob_detection_process(bprb_func_process& pro)
 
     view_blobs.fill(false);
 
-    vil_image_view<vil_rgb<vxl_byte> >* colored_blobs = new vil_image_view<vil_rgb<vxl_byte> >(view_blobs.ni(),view_blobs.nj());
+    auto* colored_blobs = new vil_image_view<vil_rgb<vxl_byte> >(view_blobs.ni(),view_blobs.nj());
     colored_blobs->fill(vil_rgb<vxl_byte>(0,0,0));
     vnl_random rng;
     unsigned cnt_blobs = 0;

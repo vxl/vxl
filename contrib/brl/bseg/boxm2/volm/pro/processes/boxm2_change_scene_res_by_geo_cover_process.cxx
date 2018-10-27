@@ -89,7 +89,7 @@ bool boxm2_change_scene_res_by_geo_cover_process(bprb_func_process& pro)
     return false;
   }
   vil_image_view_base_sptr img_sptr = vil_load(fname.c_str());
-  vil_image_view<vxl_byte>* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr());
+  auto* img = dynamic_cast<vil_image_view<vxl_byte> * >(img_sptr.ptr());
 
   // find the image bounding box
   // geo camera inside tile will be used for translation between geo coords and img pixels

@@ -15,8 +15,8 @@
 void test_data_sio()
 {
     constexpr unsigned int array_size = 1024;
-    float * farray      = new float[array_size];
-    float * farray_bkup = new float[array_size];
+    auto * farray      = new float[array_size];
+    auto * farray_bkup = new float[array_size];
     vnl_random rand;
     for (unsigned i =0;i<array_size;++i)
     {

@@ -42,7 +42,7 @@ std::vector<std::string> mvl2_video_reader::load_configs(std::string filename)
   config_strings_.push_back(config_string);
   config_filenames_.push_back(config_filename);
 
-  std::ifstream* config_file=new std::ifstream(filename.c_str());
+  auto* config_file=new std::ifstream(filename.c_str());
   if (!(*config_file))
   {
     const char* val;

@@ -96,7 +96,7 @@ bool boxm2_ocl_update_view_dep_app_process(bprb_func_process& pro)
   std::string               ident        = pro.get_input<std::string>(i++);
   vil_image_view_base_sptr mask_sptr    = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
-  float                    mog_var      = pro.get_input<float>(i++);
+  auto                    mog_var      = pro.get_input<float>(i++);
 
 
   return boxm2_ocl_update_view_dep_app::update(scene, device, opencl_cache, cam, img, ident, mask_sptr, update_alpha, mog_var);

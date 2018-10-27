@@ -103,7 +103,7 @@ void pdf1d_gaussian_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>& d
   if (data.is_class("mbl_data_array_wrapper<T>"))
   {
     // Use more efficient build_from_array algorithm
-    mbl_data_array_wrapper<double>& data_array =
+    auto& data_array =
                      static_cast<mbl_data_array_wrapper<double>&>(data);
     build_from_array(model,data_array.data(),n_samples);
     return;

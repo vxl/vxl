@@ -27,7 +27,7 @@ static
 rgrl_match_set_sptr
 generate_match_set(rgrl_transformation_sptr trans)
 {
-  rgrl_trans_affine* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+  auto* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
   vnl_matrix<double> A = xform->A();
   vnl_vector<double> t = xform->t();
 
@@ -169,7 +169,7 @@ rgrl_match_set_sptr
 generate_ambiguous_match_set(rgrl_transformation_sptr trans)
 {
   //generate 15 correct matches, with 5 having incorrect 2nd match
-  rgrl_trans_affine* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
+  auto* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
   vnl_matrix<double> A = xform->A();
   vnl_vector<double> t = xform->t();
 
@@ -332,7 +332,7 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
   std::unique_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );
   rgrl_scale_estimator_unwgted_sptr scale_est = new rgrl_scale_est_closest( std::move(obj) );
 
-  rgrl_initializer_ran_sam* init = new rgrl_initializer_ran_sam();
+  auto* init = new rgrl_initializer_ran_sam();
   init->set_sampling_params();
   init->set_data(matches, scale_est, view);
   //rgrl_initializer_sptr init(init_ran_sam);
@@ -347,7 +347,7 @@ test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, uns
   TEST("Total number of samples for not gen_all", init->samples_tested(), total_samples);
 
   rgrl_trans_affine* estimated_aff = dynamic_cast<rgrl_trans_affine*>(v->xform_estimate().as_pointer());
-  rgrl_trans_affine* org_aff = dynamic_cast<rgrl_trans_affine*>(xform.as_pointer());
+  auto* org_aff = dynamic_cast<rgrl_trans_affine*>(xform.as_pointer());
   TEST("Transformation for not gen_all",
        estimated_aff &&
        close( org_aff->A(), estimated_aff->A() ) &&

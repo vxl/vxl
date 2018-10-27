@@ -67,12 +67,12 @@ bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
   unsigned np = img.nplanes();
 
   //Retrieve bandwidth
-  float bandwidth = pro.get_input<float>(2);
+  auto bandwidth = pro.get_input<float>(2);
 
   //Retrieve maximum number of samples
-  unsigned max_samples = pro.get_input<unsigned>(3);
+  auto max_samples = pro.get_input<unsigned>(3);
 
-  float tol = pro.get_input<float>(4);
+  auto tol = pro.get_input<float>(4);
 
   if(np!=3)
     {
@@ -90,7 +90,7 @@ bool bbgm_update_parzen_dist_image_process(bprb_func_process& pro)
     model_sptr = new bbgm_image_of<parzen_f3_t>(ni,nj,par);
   }
   else model_sptr = bgm;
-  bbgm_image_of<parzen_f3_t> *model =
+  auto *model =
     static_cast<bbgm_image_of<parzen_f3_t>*>(model_sptr.ptr());
 
   float frac_back = 0.5f;

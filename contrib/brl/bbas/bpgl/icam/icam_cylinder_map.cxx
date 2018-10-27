@@ -23,7 +23,7 @@ bool icam_cylinder_map::closest_camera(vgl_ray_3d<double> const& cyl_ray,
     if(!cams_[i]->is_class("vpgl_perspective_camera")&&
        !cams_[i]->is_class("vpgl_proj_camera"))
       return false;
-    vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(cams_[i].ptr());
+    auto* cam = dynamic_cast<vpgl_proj_camera<double>*>(cams_[i].ptr());
     if(!cam) return false;
     // be sure the camera projects inside the corresponding image
     double ni = images_[i].ni(), nj = images_[i].nj();
@@ -101,7 +101,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
   //requires perspective camera with calibration matrix
   if(!cam->is_class("vpgl_perspective_camera"))
     return false;
-  vpgl_perspective_camera<double>* pcam = dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr());
+  auto* pcam = dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr());
   if(!pcam) return false;
   //get the principal ray of the camera
   vgl_vector_3d<double> pvec = pcam->principal_axis();
@@ -110,7 +110,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
   vpgl_calibration_matrix<double> K = pcam->get_calibration();
   vgl_point_2d<double> pp = K.principal_point();
   double pu = pp.x(), pv =pp.y();
-  unsigned ni = static_cast<unsigned>(2.0*pu*scale),
+  auto ni = static_cast<unsigned>(2.0*pu*scale),
     nj = static_cast<unsigned>(2.0*pv*scale);
   img.set_size(ni, nj, 3);
   bool use_backgnd = backgnd.ni()>0;
@@ -160,7 +160,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
       ud += pu*scale; vd += pv*scale;
       if (ud<0.0||vd<0.0||ud>=ni||vd>=nj)
         continue;
-      unsigned u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
+      auto u = static_cast<unsigned>(ud+0.5), v = static_cast<unsigned>(vd+0.5);
       // interpolate in a 2x2 neighborhood
       for(unsigned int p = 0; p<3; ++p)
         {

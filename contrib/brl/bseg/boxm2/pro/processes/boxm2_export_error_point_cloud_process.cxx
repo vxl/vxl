@@ -56,9 +56,9 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   std::string output_filename = pro.get_input<std::string>(i++);
-  float prob_t = pro.get_input<float>(i++);
-  float LE_t = pro.get_input<float>(i++);
-  float CE_t = pro.get_input<float>(i++);
+  auto prob_t = pro.get_input<float>(i++);
+  auto LE_t = pro.get_input<float>(i++);
+  auto CE_t = pro.get_input<float>(i++);
   // if LE_t or CE_t are passed as -1.0 then they are invalid so replace them with max value so that any LE, CE is less than that
   if (LE_t == -1.0)
     LE_t = std::numeric_limits<float>::max();

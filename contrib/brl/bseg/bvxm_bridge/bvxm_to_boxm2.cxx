@@ -58,7 +58,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
   bvxm_voxel_grid_base_sptr ocp_grid_base = world->get_grid<OCCUPANCY>(0,0);
-  bvxm_voxel_grid<ocp_datatype> *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
+  auto *ocp_grid  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(ocp_grid_base.ptr());
 
   // iterate over each subblock (tree) and create alpha values according to surface occupancy probabilities read from corresponding voxels in bvxm world
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
@@ -81,7 +81,7 @@ void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr
     //3d array of trees
     const boxm2_array_3d<uchar16> trees = cache->get_block(new_scene, id)->trees();
 
-    boxm2_data_traits<BOXM2_ALPHA>::datatype * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
+    auto * alpha_data = (boxm2_data_traits<BOXM2_ALPHA>::datatype*) alpha->data_buffer();
     // check for invalid parameters
     if( alphaTypeSize == 0 ) //This should never happen, it will result in division by zero later
     {

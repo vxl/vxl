@@ -62,7 +62,7 @@ rrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
   // 3. Sort the squared residuals so that all the smallest residuals
   // are in positions less than index.
-  std::vector<double>::iterator loc = sq_res.begin() + index;
+  auto loc = sq_res.begin() + index;
   std::nth_element( sq_res.begin(), loc, sq_res.end() );
 
   // 4. Sum them up.

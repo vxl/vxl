@@ -9,7 +9,7 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)
   if (!os) return;
   unsigned version = 1;
   vsl_b_write(os, version);
-  unsigned csn = static_cast<unsigned>(lvcs.get_cs_name());
+  auto csn = static_cast<unsigned>(lvcs.get_cs_name());
   vsl_b_write(os, csn);
   double lat, lon, elev;
   lvcs.get_origin(lat, lon, elev);
@@ -20,9 +20,9 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs const& lvcs)
   lvcs.get_scale(lat_scale, lon_scale);
   vsl_b_write(os, lat_scale);
   vsl_b_write(os, lon_scale);
-  unsigned gaunit = static_cast<unsigned>(lvcs.geo_angle_unit());
+  auto gaunit = static_cast<unsigned>(lvcs.geo_angle_unit());
   vsl_b_write(os, gaunit);
-  unsigned xyzunit = static_cast<unsigned>(lvcs.local_length_unit());
+  auto xyzunit = static_cast<unsigned>(lvcs.local_length_unit());
   vsl_b_write(os, xyzunit);
   double lox, loy, theta;
   lvcs.get_transform(lox, loy, theta);
@@ -43,7 +43,7 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
     {
       unsigned cs_name;
       vsl_b_read(is, cs_name);
-      vpgl_lvcs::cs_names name = static_cast<vpgl_lvcs::cs_names>(cs_name);
+      auto name = static_cast<vpgl_lvcs::cs_names>(cs_name);
       double lat, lon, elev, lat_scale, lon_scale;
       vsl_b_read(is, lat);
       vsl_b_read(is, lon);
@@ -52,10 +52,10 @@ void vsl_b_read(vsl_b_istream & is, vpgl_lvcs &lvcs)
       vsl_b_read(is, lon_scale);
       unsigned gaunit;
       vsl_b_read(is, gaunit);
-      vpgl_lvcs::AngUnits geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
+      auto geo_angle_unit = static_cast<vpgl_lvcs::AngUnits>(gaunit);
       unsigned lunit;
       vsl_b_read(is, lunit);
-      vpgl_lvcs::LenUnits localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
+      auto localXYZUnit = static_cast<vpgl_lvcs::LenUnits>(lunit);
       double lox, loy, theta;
       vsl_b_read(is, lox);
       vsl_b_read(is, loy);

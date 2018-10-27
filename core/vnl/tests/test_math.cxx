@@ -21,7 +21,7 @@ std::string print_hex(const T p)
   for (int i=(sizeof(p) -1 ); i>=0; --i)
     {
     str<<std::setfill('0')<<std::setw(2);
-    const short curr_value = static_cast<short>( (reinterpret_cast<unsigned char const *>(&p))[i] );
+    const auto curr_value = static_cast<short>( (reinterpret_cast<unsigned char const *>(&p))[i] );
     str<<curr_value;
     }
   str<<std::dec;

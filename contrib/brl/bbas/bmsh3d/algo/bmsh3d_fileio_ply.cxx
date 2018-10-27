@@ -132,12 +132,12 @@ bool bmsh3d_load_ply_v (bmsh3d_mesh* M, const char* file)
 bool bmsh3d_load_ply_f (bmsh3d_mesh* M, const char* file)
 {
   //Temp solution: load to a tmpM and copy faces to M.
-  bmsh3d_mesh* tmpM = new bmsh3d_mesh;
+  auto* tmpM = new bmsh3d_mesh;
   if (! bmsh3d_load_ply(tmpM, file))
     return false;
 
   //Copy faces from tmpM to M.
-  std::map <int, bmsh3d_face*>::iterator it = tmpM->facemap().begin();
+  auto it = tmpM->facemap().begin();
   for (; it != tmpM->facemap().end(); it++) {
     int id = (*it).first;
     bmsh3d_face* tmpF = (*it).second;
@@ -166,7 +166,7 @@ int bmsh3d_fileio_vertex_cb_(p_ply_argument argument)
   void* temp;
   ply_get_argument_user_data(argument, &temp, &index);
 
-  bmsh3d_fileio_parsed_mesh_* parsed_mesh =
+  auto* parsed_mesh =
     (bmsh3d_fileio_parsed_mesh_*) temp;
 
   switch (index)
@@ -197,7 +197,7 @@ int bmsh3d_fileio_face_cb_(p_ply_argument argument)
 {
   void* temp;
   ply_get_argument_user_data(argument, &temp, nullptr);
-  bmsh3d_fileio_parsed_mesh_* parsed_mesh =
+  auto* parsed_mesh =
     (bmsh3d_fileio_parsed_mesh_*) temp;
 
   long length, value_index, value;
@@ -279,7 +279,7 @@ bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, std::st
   M->assign_IFS_vertex_vid_by_vertex_order();
 
   // traverse thru all vertices and write to ply file
-  std::map<int, bmsh3d_vertex*>::iterator it = M->vertexmap().begin();
+  auto it = M->vertexmap().begin();
   for (; it != M->vertexmap().end(); it++)
   {
     bmsh3d_vertex* v = (*it).second;
@@ -291,7 +291,7 @@ bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, std::st
   }
 
   // faces
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++)
   {
     bmsh3d_face* f = (*fit).second;

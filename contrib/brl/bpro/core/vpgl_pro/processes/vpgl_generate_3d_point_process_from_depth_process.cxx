@@ -49,15 +49,15 @@ bool vpgl_generate_3d_point_from_depth_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float u = pro.get_input<float>(i++);
-  float v = pro.get_input<float>(i++);
-  float t = pro.get_input<float>(i++);
+  auto u = pro.get_input<float>(i++);
+  auto v = pro.get_input<float>(i++);
+  auto t = pro.get_input<float>(i++);
 
   vgl_ray_3d<double> ray;
-  if(vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr())) {
+  if(auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr())) {
     ray=cam->backproject_ray(vgl_point_2d<double>(u,v));
   }
-  else if(vpgl_generic_camera<double>* cam = dynamic_cast<vpgl_generic_camera<double>*>(cam_ptr.ptr())) {
+  else if(auto* cam = dynamic_cast<vpgl_generic_camera<double>*>(cam_ptr.ptr())) {
     ray = cam->ray(u,v);
   }
   else {

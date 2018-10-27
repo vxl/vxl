@@ -35,7 +35,7 @@ void boxm2_vecf_fit_orbit::fill_smid_map(){
   smid_map_["right_iris_radius"]=RIGHT_IRIS_RADIUS;
 }
 bool boxm2_vecf_fit_orbit::add_labeled_point(boxm2_vecf_labeled_point lp){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(lp.label_);
+  auto iit = smid_map_.find(lp.label_);
   if(iit == smid_map_.end() ){
     std::cout << "Measurement label " << lp.label_ << " doesn't exist\n";
     return false;
@@ -81,7 +81,7 @@ bool boxm2_vecf_fit_orbit::read_anchor_file(std::string const& path){
     std::vector<vgl_point_3d<double> >& pts = anchor.second;
     double x = 0.0, y= 0.0, z = 0.0;
     double np = 0.0;
-    for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
+    for(auto pit = pts.begin();
         pit != pts.end(); ++pit, np+=1.0){
       x += pit->x(); y += pit->y(); z += pit->z();
     }
@@ -169,7 +169,7 @@ bool boxm2_vecf_fit_orbit::add_dlib_anchor_part(std::map<std::string, std::vecto
 bool boxm2_vecf_fit_orbit::add_dlib_orbit_data(std::map<std::string, std::vector<vgl_point_2d<double> > > const& parts,
                                                std::string const& dlabel, std::string const& olabel)
 {
-  std::map<std::string, mids>::iterator sit = smid_map_.find(olabel);
+  auto sit = smid_map_.find(olabel);
   if(sit == smid_map_.end() ){
     std::cout << "data label " << olabel << " doesn't exist\n";
     return false;
@@ -400,7 +400,7 @@ bool boxm2_vecf_fit_orbit::left_eye_inferior_lid_thickness(std::string const& da
     dr = left_params_.inferior_lid_radius_offset_;
     return true;
   }
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -481,7 +481,7 @@ bool boxm2_vecf_fit_orbit::left_trans_z_from_sclera(std::string const& data_desc
     return true;
   }
 
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -493,7 +493,7 @@ bool boxm2_vecf_fit_orbit::left_trans_z_from_sclera(std::string const& data_desc
   }
   double x0 = left_params_.x_trans(), y0 = left_params_.y_trans(), r = left_params_.eye_radius_;
   double sum_z0 = 0.0, nz = 0.0, rsq = r*r;
-  for(std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+  for(auto pit = pts.begin();
       pit != pts.end(); ++pit, nz+=1.0){
     double xi = pit->x(), yi = pit->y(), zi = pit->z();
     double sq = rsq - (xi-x0)*(xi-x0) - (yi-y0)*(yi-y0);
@@ -726,7 +726,7 @@ bool boxm2_vecf_fit_orbit::set_left_z_values(){
 
 // find the largest sclera data z value, used to set the z origin of the eye sphere, given the radius
 bool boxm2_vecf_fit_orbit::max_sclera_z(std::string const& data_desc, double r, double& max_z){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -752,7 +752,7 @@ bool boxm2_vecf_fit_orbit::max_sclera_z(std::string const& data_desc, double r, 
 // of the RIH scanner on the eye surface
 //
 bool boxm2_vecf_fit_orbit::fit_sclera(std::string const& data_desc){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -901,7 +901,7 @@ bool boxm2_vecf_fit_orbit::right_eye_inferior_lid_thickness(std::string const& d
     dr = right_params_.inferior_lid_radius_offset_;
     return true;
   }
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -984,7 +984,7 @@ bool boxm2_vecf_fit_orbit::right_trans_z_from_sclera(std::string const& data_des
     tr_z = 0.0;
     return true;
   }
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -996,7 +996,7 @@ bool boxm2_vecf_fit_orbit::right_trans_z_from_sclera(std::string const& data_des
   }
   double x0 = right_params_.x_trans(), y0 = right_params_.y_trans(), r = right_params_.eye_radius_;
   double sum_z0 = 0.0, nz = 0.0, rsq = r*r;
-  for(std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
+  for(auto pit = pts.begin();
       pit != pts.end(); ++pit, nz+=1.0){
     double xi = pit->x(), yi = pit->y(), zi = pit->z();
     double sq = rsq - (xi-x0)*(xi-x0) - (yi-y0)*(yi-y0);
@@ -1448,7 +1448,7 @@ void boxm2_vecf_fit_orbit::set_right_params(boxm2_vecf_orbit_params const& param
   right_params_.init_sphere();
 }
 bool boxm2_vecf_fit_orbit::load_orbit_data(std::string const& data_desc, std::string const& path, bool error_msg){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     if(error_msg)
       std::cout << "data label " << data_desc << " doesn't exist\n";
@@ -1482,7 +1482,7 @@ return true;
 // plot the picked point data
 //
 bool boxm2_vecf_fit_orbit::plot_orbit_data(std::string const& data_desc, std::vector<vgl_point_3d<double> > & data){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "data label " << data_desc << " doesn't exist\n";
     return false;
@@ -1647,15 +1647,15 @@ bool boxm2_vecf_fit_orbit::display_orbit_vrml(std::ofstream& ostr, bool is_right
   vgl_sphere_3d<double>& sphere = params.sph_;
   vgl_vector_3d<double> v(params.x_trans(), params.y_trans(), params.z_trans());
   vgl_point_3d<double> c = sphere.centre()-v;
-  float cx = static_cast<float>(c.x());
-  float cy = static_cast<float>(c.y());
-  float cz = static_cast<float>(c.z());
-  float r = static_cast<float>(sphere.radius());
+  auto cx = static_cast<float>(c.x());
+  auto cy = static_cast<float>(c.y());
+  auto cz = static_cast<float>(c.z());
+  auto r = static_cast<float>(sphere.radius());
   vgl_sphere_3d<float> fsphere(cx, cy, cz, r);
   bvrml_write::write_vrml_sphere(ostr, fsphere, 1.0f, 1.0f, 1.0f, 0.2f);
   // write the iris
-  float irad = static_cast<float>(params.iris_radius_);
-  float prad = static_cast<float>(params.pupil_radius_);
+  auto irad = static_cast<float>(params.iris_radius_);
+  auto prad = static_cast<float>(params.pupil_radius_);
   bvrml_write::write_vrml_cylinder(ostr, vgl_point_3d<double>(0.0, cy, r-0.3),  vgl_vector_3d<double>(0.0, 0.0, 1.0), irad, 0.5f, 0.0f, 0.5f, 0.75f);
   bvrml_write::write_vrml_cylinder(ostr, vgl_point_3d<double>(0.0, cy, r+0.25), vgl_vector_3d<double>(0.0, 0.0, 1.0), prad, 0.1f, 0.0f, 0.0f, 0.0f);
 
@@ -1839,7 +1839,7 @@ bool boxm2_vecf_fit_orbit::display_left_right_orbit_model_vrml(std::ofstream& os
 // the corresponding model values
 //
 bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(data_desc);
+  auto iit = smid_map_.find(data_desc);
   if(iit == smid_map_.end() ){
     std::cout << "Measurement label " << data_desc << " doesn't exist\n";
     return false;
@@ -1854,7 +1854,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   switch(iit->second){
   case LEFT_EYE_INFERIOR_MARGIN:{
     pts = orbit_data_[LEFT_EYE_INFERIOR_MARGIN];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no inferior margin points\n";
       return false;
@@ -1873,7 +1873,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   }
   case LEFT_EYE_SUPERIOR_MARGIN:{
     pts = orbit_data_[LEFT_EYE_SUPERIOR_MARGIN];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no superior margin points\n";
       return false;
@@ -1892,7 +1892,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   }
   case LEFT_EYE_SUPERIOR_CREASE:{
     pts = orbit_data_[LEFT_EYE_SUPERIOR_CREASE];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no superior crease points\n";
       return false;
@@ -1911,7 +1911,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   }
   case RIGHT_EYE_INFERIOR_MARGIN:{
     pts = orbit_data_[RIGHT_EYE_INFERIOR_MARGIN];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no inferior margin points\n";
       return false;
@@ -1932,7 +1932,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   }
   case RIGHT_EYE_SUPERIOR_MARGIN:{
     pts = orbit_data_[RIGHT_EYE_SUPERIOR_MARGIN];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no superior margin points\n";
       return false;
@@ -1955,7 +1955,7 @@ bool boxm2_vecf_fit_orbit::fitting_error(std::string const& data_desc){
   }
   case RIGHT_EYE_SUPERIOR_CREASE:{
     pts = orbit_data_[RIGHT_EYE_SUPERIOR_CREASE];
-    unsigned n = static_cast<unsigned>(pts.size());
+    auto n = static_cast<unsigned>(pts.size());
     if(n==0){
       std::cout << "no superior crease points\n";
       return false;

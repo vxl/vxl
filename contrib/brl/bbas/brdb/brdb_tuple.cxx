@@ -34,7 +34,7 @@ brdb_tuple::make_prototype(const std::vector<std::string>& types)
 
   std::vector<brdb_value* > values(types.size(),nullptr);
   for (unsigned int i=0; i<types.size(); ++i){
-    reg_t::const_iterator f = reg.find(types[i]);
+    auto f = reg.find(types[i]);
     if (f != reg.end())
       values[i] = f->second->clone();
     else{

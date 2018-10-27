@@ -152,11 +152,11 @@ bsvg_arrow_head::bsvg_arrow_head(float x, float y, float l) : bsvg_group()
 {
   this->set_location(x,y);
 
-  bsvg_line* l1 = new bsvg_line(0, 0, 0, l);
+  auto* l1 = new bsvg_line(0, 0, 0, l);
   l1->set_rotation(135);
   this->add_element(l1);
 
-  bsvg_line* l2 = new bsvg_line(0, 0, 0, l);
+  auto* l2 = new bsvg_line(0, 0, 0, l);
   l2->set_rotation(45);
   this->add_element(l2);
 }

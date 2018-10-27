@@ -66,13 +66,13 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
   int window_size = pro.get_input<int>(3);
 
   //Retrieve initial_variance
-  float initial_variance = pro.get_input<float>(4);
+  auto initial_variance = pro.get_input<float>(4);
 
   //Retrieve g_thresh
-  float g_thresh = pro.get_input<float>(5);
+  auto g_thresh = pro.get_input<float>(5);
 
   //Retrieve min_stdev
-  float min_stdev = pro.get_input<float>(6);
+  auto min_stdev = pro.get_input<float>(6);
 
 
   vil_image_view<float> img = *vil_convert_cast(float(), update_image);
@@ -94,7 +94,7 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
       model_sptr = new bbgm_image_of<obs_mix_gauss_type1>(ni,nj, obs_mix_gauss_type1());
     }
     else model_sptr = bgm;
-    bbgm_image_of<obs_mix_gauss_type1> *model =
+    auto *model =
       static_cast<bbgm_image_of<obs_mix_gauss_type1>*>(model_sptr.ptr());
 
     bsta_gauss1_t init_gauss(0, initial_variance);
@@ -124,7 +124,7 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
       model_sptr = new bbgm_image_of<obs_mix_gauss_type3>(ni,nj, obs_mix_gauss_type3());
     }
     else model_sptr = bgm;
-    bbgm_image_of<obs_mix_gauss_type3> *model =
+    auto *model =
       static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(model_sptr.ptr());
 
     vector3_ mean, var;

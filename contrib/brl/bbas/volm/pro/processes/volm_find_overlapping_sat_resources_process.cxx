@@ -59,7 +59,7 @@ bool volm_find_overlapping_sat_resources_process(bprb_func_process& pro)
   unsigned in_i = 0;
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
   std::string kml_file = pro.get_input<std::string>(1);
-  float downsample_factor = pro.get_input<float>(2);
+  auto downsample_factor = pro.get_input<float>(2);
   std::string out_file = pro.get_input<std::string>(3);
 
   std::vector<std::string> overlapping_res;

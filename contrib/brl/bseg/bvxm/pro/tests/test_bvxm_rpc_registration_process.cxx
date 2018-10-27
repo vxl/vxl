@@ -166,7 +166,7 @@ static void test_bvxm_rpc_registration_process()
     }
     TEST("vpgl_camera_double_sptr non-null", value_cam != nullptr, true);
 
-    brdb_value_t<vpgl_camera_double_sptr>* result_cam =
+    auto* result_cam =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value_cam.ptr());
     vpgl_camera_double_sptr cam = result_cam->value();
 
@@ -184,7 +184,7 @@ static void test_bvxm_rpc_registration_process()
     }
     TEST("image output non-null", value_img != nullptr, true);
 
-    brdb_value_t<vil_image_view_base_sptr>* result_img =
+    auto* result_img =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
     vil_image_view_base_sptr expected_edge_img_out = result_img->value();
     std::string out_img = "./rpc_test/expected_edge_image.tif";

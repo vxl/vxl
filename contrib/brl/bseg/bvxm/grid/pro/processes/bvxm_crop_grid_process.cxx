@@ -89,7 +89,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     vul_file::delete_file_glob(output_path);
 
   vgl_vector_3d<unsigned int> out_grid_dim(dimx, dimy, dimz);
-  if (bvxm_voxel_grid<float> * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
+  if (auto * float_input_grid=dynamic_cast<bvxm_voxel_grid<float> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<float> * grid_out=new bvxm_voxel_grid<float>(output_path, out_grid_dim);
 
@@ -108,7 +108,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else  if (bvxm_voxel_grid<unsigned> * float_input_grid=dynamic_cast<bvxm_voxel_grid<unsigned> *>(input_grid.ptr()))
+  else  if (auto * float_input_grid=dynamic_cast<bvxm_voxel_grid<unsigned> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<unsigned> * grid_out=new bvxm_voxel_grid<unsigned>(output_path, out_grid_dim);
 
@@ -127,7 +127,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else if (bvxm_voxel_grid<bvxm_opinion> * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
+  else if (auto * opinion_input_grid=dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<bvxm_opinion> * grid_out=new bvxm_voxel_grid<bvxm_opinion>(output_path, out_grid_dim);
 
@@ -146,7 +146,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else if (bvxm_voxel_grid<gauss_type> * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr()))
+  else if (auto * gauss_input_grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<gauss_type> * grid_out=new bvxm_voxel_grid<gauss_type>(output_path, out_grid_dim);
 
@@ -165,7 +165,7 @@ bool bvxm_crop_grid_process(bprb_func_process& pro)
     pro.set_output_val<bvxm_voxel_grid_base_sptr>(0, grid_out);
     return true;
   }
-  else if (bvxm_voxel_grid<vnl_float_4> * four_input_grid=dynamic_cast<bvxm_voxel_grid<vnl_float_4> *>(input_grid.ptr()))
+  else if (auto * four_input_grid=dynamic_cast<bvxm_voxel_grid<vnl_float_4> *>(input_grid.ptr()))
   {
     bvxm_voxel_grid<vnl_float_4> * grid_out=new bvxm_voxel_grid<vnl_float_4>(output_path, out_grid_dim);
     unsigned slab_idx = corner_z;

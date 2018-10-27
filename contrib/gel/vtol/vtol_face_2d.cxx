@@ -24,14 +24,14 @@ vtol_face_2d::vtol_face_2d(vtol_face_2d_sptr const& other)
   topology_list newverts(verts.size());
 
   int i=0;
-  for (vertex_list::iterator vi=verts.begin();vi!=verts.end();++vi,++i)
+  for (auto vi=verts.begin();vi!=verts.end();++vi,++i)
   {
     vtol_vertex_sptr v=(*vi);
     newverts[i]=v->clone()->cast_to_topology_object();
     v->set_id(i);
   }
   int j=0;
-  for (edge_list::iterator ei=edgs.begin();ei!= edgs.end();++ei,++j)
+  for (auto ei=edgs.begin();ei!= edgs.end();++ei,++j)
   {
     vtol_edge_sptr e=(*ei);
 
@@ -80,7 +80,7 @@ vtol_face *
 vtol_face_2d::copy_with_arrays(topology_list &verts,
                                topology_list &edges) const
 {
-  vtol_face_2d *newface=new vtol_face_2d();
+  auto *newface=new vtol_face_2d();
   topology_list::const_iterator i;
   for (i=newface->inferiors()->begin();i!= newface->inferiors()->end();++i )
     newface->unlink_inferior((*i)->cast_to_one_chain());
@@ -132,7 +132,7 @@ vtol_face_2d::vtol_face_2d(vertex_list const& verts)
 
   //generate a list of edges for edge loop
   bool done=false;
-  vertex_list::const_iterator vi=verts.begin();
+  auto vi=verts.begin();
   vtol_vertex_sptr v01=(*vi);
   edge_list elist;
   std::vector<signed char> directions;

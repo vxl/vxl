@@ -9,7 +9,7 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vecto
                                                                       int max_level)
 {
   short root_level = max_level-1;
-  double max_val = (double)(1<<root_level);
+  auto max_val = (double)(1<<root_level);
  boct_loc_code<short> code(p,root_level, max_val);
 
  boct_tree_cell<short,vgl_point_3d<double> >* point_container=nullptr;
@@ -26,12 +26,12 @@ boct_tree_cell<short,vgl_point_3d<double> >* brute_force_locate_point(std::vecto
 static void test_locate_point()
 {
   short nlevels=10;
-  boct_tree<short,vgl_point_3d<double> > * simpleblock=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto * simpleblock=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   vgl_point_3d<double> p1(0.1,0.1,0.1);
   boct_tree_cell<short,vgl_point_3d<double> >* cell=simpleblock->locate_point(p1);
   TEST("Returns the correct level", nlevels, cell->level()+1);
 
-  boct_tree<short,vgl_point_3d<double> > * twolevelblock=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto * twolevelblock=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   twolevelblock->split();
 
   vgl_point_3d<double> p2(0.1,0.1,0.1);
@@ -39,7 +39,7 @@ static void test_locate_point()
   TEST("Returns the correct level", nlevels, cell->level()+2);
 
   // Testing on randomly created trees.
-  boct_tree<short,vgl_point_3d<double> > * rtree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto * rtree=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   create_random_configuration_tree<short,vgl_point_3d<double> >(rtree);
 
   std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaves=rtree->leaf_cells();

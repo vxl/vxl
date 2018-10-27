@@ -39,7 +39,7 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
   // get inputs
   sdet_texture_classifier_sptr tc_ptr =
     pro.get_input<sdet_texture_classifier_sptr>(0);
-  sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
+  auto* tcp = static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
   std::string texton_dict_path = pro.get_input<std::string>(1);
   vil_image_view_base_sptr view_ptr =
@@ -52,7 +52,7 @@ bool sdet_texture_classifier_process(bprb_func_process& pro)
   //assumes a float image on the range [0, 1];
   vil_image_view<float> fview(view_ptr);
 
-  unsigned block_size = pro.get_input<unsigned>(3); // FIXME -- unused!!
+  auto block_size = pro.get_input<unsigned>(3); // FIXME -- unused!!
   tc.load_dictionary(texton_dict_path);
   std::vector<std::string> cats;
   // hard code the names of the atomospheric categories - needs more

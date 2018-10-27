@@ -109,7 +109,7 @@ double clsfy_parzen_builder::build(clsfy_classifier_base& model,
   assert(model.is_class("clsfy_rbf_parzen")); // equiv to dynamic_cast<> != 0
   assert(inputs.size()==outputs.size());
 
-  clsfy_rbf_parzen &parzen = (clsfy_rbf_parzen&) model;
+  auto &parzen = (clsfy_rbf_parzen&) model;
 
   std::vector<vnl_vector<double> > vin(inputs.size());
 

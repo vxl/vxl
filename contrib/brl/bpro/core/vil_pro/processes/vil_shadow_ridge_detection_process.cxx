@@ -60,8 +60,8 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vil_image_view_base_sptr out_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned int blob_size = pro.get_input<unsigned int>(i++);
-  float sun_angle = pro.get_input<float>(i++);
+  auto blob_size = pro.get_input<unsigned int>(i++);
+  auto sun_angle = pro.get_input<float>(i++);
 
   if (out_img->nplanes() != 1)
   {
@@ -77,10 +77,10 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   s.set_to_disk(3.0);
   vil_binary_dilate(open_img,close_img,s);
 
-  vil_image_view<unsigned> * conn_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
-  vil_image_view<unsigned> * conn_thresh_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
+  auto * conn_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
+  auto * conn_thresh_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
   conn_thresh_region->fill(0);
-  vil_image_view<unsigned> * conn_edge = new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
+  auto * conn_edge = new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
   vil_blob_labels(close_img,vil_blob_8_conn,*conn_region);
 
   std::vector<vil_blob_pixel_list> dest_pixel_lists;
@@ -104,10 +104,10 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   std::vector<vil_blob_pixel_list> blob_edge_pixel_lists;
   vil_blob_labels_to_pixel_lists(*conn_edge,blob_edge_pixel_lists);
 
-  vil_image_view<float> * shadow_border_edge = new vil_image_view<float>(out_img->ni(),out_img->nj());
+  auto * shadow_border_edge = new vil_image_view<float>(out_img->ni(),out_img->nj());
   shadow_border_edge->fill(10.0);
-  vil_image_view<bool> * shadow_border_edge_thresholded = new vil_image_view<bool>(out_img->ni(),out_img->nj());
-  vil_image_view<float> * shadow_border_dist= new vil_image_view<float>(out_img->ni(),out_img->nj());
+  auto * shadow_border_edge_thresholded = new vil_image_view<bool>(out_img->ni(),out_img->nj());
+  auto * shadow_border_dist= new vil_image_view<float>(out_img->ni(),out_img->nj());
   shadow_border_dist->fill(-1.0f);
 
   for (auto & blob_edge_pixel_list : blob_edge_pixel_lists)
@@ -145,9 +145,9 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
     }
   }
 
-  vil_image_view<unsigned> * shadow_border_conn_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
-  vil_image_view<unsigned char> * shadow_border_conn_thresh_region= new vil_image_view<unsigned char>(out_img->ni(),out_img->nj());
-  vil_image_view<float> * shadow_border_dist_thresholded= new vil_image_view<float>(out_img->ni(),out_img->nj());
+  auto * shadow_border_conn_region= new vil_image_view<unsigned>(out_img->ni(),out_img->nj());
+  auto * shadow_border_conn_thresh_region= new vil_image_view<unsigned char>(out_img->ni(),out_img->nj());
+  auto * shadow_border_dist_thresholded= new vil_image_view<float>(out_img->ni(),out_img->nj());
   shadow_border_dist_thresholded->fill(-1.0f);
   shadow_border_conn_thresh_region->fill(0);
 

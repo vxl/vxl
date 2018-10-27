@@ -128,14 +128,14 @@ void vtol_topology_object::unlink_inferior(vtol_topology_object_sptr inferior)
   assert(is_inferior(inferior));
   assert(inferior->is_superior(this));
 
-  std::list<vtol_topology_object*>::iterator i=inferior->superiors_.begin();
+  auto i=inferior->superiors_.begin();
   while ( i!=inferior->superiors_.end() && *i!=this ) ++i;
   // check presence in "superiors_" list of inferior:
   assert(*i==this);
 
   inferior->superiors_.erase(i); // unlink this from superiors_ list of inferior
   inferior->touch();
-  topology_list::iterator j=inferiors_.begin();
+  auto j=inferiors_.begin();
   while ( j!=inferiors_.end() && (*j)!=inferior) ++j;
   // check presence in "inferiors_" list:
   assert((*j)==inferior);
@@ -168,7 +168,7 @@ void vtol_topology_object::unlink(void)
 
 vertex_list* vtol_topology_object::vertices(void) const
 {
-  vertex_list* new_list=new vertex_list;
+  auto* new_list=new vertex_list;
   inf_sup_cache_->vertices(*new_list);
   return new_list;
 }
@@ -183,7 +183,7 @@ void vtol_topology_object::vertices(vertex_list& verts) const
 //: get list of zero_chains
 zero_chain_list* vtol_topology_object::zero_chains(void) const
 {
-  zero_chain_list* new_list=new zero_chain_list;
+  auto* new_list=new zero_chain_list;
   inf_sup_cache_->zero_chains(*new_list);
   return new_list;
 }
@@ -198,7 +198,7 @@ void vtol_topology_object::zero_chains(zero_chain_list &zerochains) const
 
 edge_list* vtol_topology_object::edges(void) const
 {
-  edge_list* new_list=new edge_list;
+  auto* new_list=new edge_list;
   inf_sup_cache_->edges(*new_list);
   return new_list;
 }
@@ -214,7 +214,7 @@ void vtol_topology_object::edges(edge_list &edges) const
 
 one_chain_list* vtol_topology_object::one_chains(void) const
 {
-  one_chain_list* new_list=new one_chain_list;
+  auto* new_list=new one_chain_list;
   inf_sup_cache_->one_chains(*new_list);
   return new_list;
 }
@@ -230,7 +230,7 @@ void vtol_topology_object::one_chains(one_chain_list &onechains) const
 
 face_list *vtol_topology_object::faces(void) const
 {
-  face_list *new_list=new face_list;
+  auto *new_list=new face_list;
   inf_sup_cache_->faces(*new_list);
   return new_list;
 }
@@ -246,7 +246,7 @@ void vtol_topology_object::faces(face_list &face_list) const
 
 two_chain_list *vtol_topology_object::two_chains(void) const
 {
-  two_chain_list *new_list=new two_chain_list;
+  auto *new_list=new two_chain_list;
   inf_sup_cache_->two_chains(*new_list);
   return new_list;
 }
@@ -262,7 +262,7 @@ void vtol_topology_object::two_chains(two_chain_list &new_list) const
 
 block_list *vtol_topology_object::blocks(void) const
 {
-  block_list *new_list=new block_list;
+  auto *new_list=new block_list;
   inf_sup_cache_->blocks(*new_list);
   return new_list;
 }

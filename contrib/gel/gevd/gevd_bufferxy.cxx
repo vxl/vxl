@@ -119,7 +119,7 @@ gevd_bufferxy::gevd_bufferxy(vil_image_resource_sptr const& image_s) :
                                                          0, n_rows);
     unsigned short imin=0, imax=0;
     vil_math_value_range<unsigned short>(view, imin, imax);
-    float fmin = static_cast<float>(imin), fmax = static_cast<float>(imax);
+    auto fmin = static_cast<float>(imin), fmax = static_cast<float>(imax);
     float scale = fmax-fmin;
     if (scale != 0.f)
       scale = 255.f/scale;
@@ -160,7 +160,7 @@ void gevd_bufferxy::dump(const char* filename)
 #else
     << " LITTLEENDIAN DATA\n";
 #endif
-  iostream_char const* buf = (iostream_char const*)GetBuffer();
+  auto const* buf = (iostream_char const*)GetBuffer();
   f.write(buf, gevd_memory_mixin::GetSize());
 }
 
@@ -195,7 +195,7 @@ gevd_bufferxy::gevd_bufferxy(const char* filename) : gevd_memory_mixin(read_from
     std::sscanf(l, "BUFFERXYDUMP %d %d %d", &x, &y, &b);
     f.get(l[0]); // read end-of-line
     Init(x, y, b);
-    iostream_char* buf = (iostream_char*)GetBuffer();
+    auto* buf = (iostream_char*)GetBuffer();
     f.read(buf, gevd_memory_mixin::GetSize());
   }
   else

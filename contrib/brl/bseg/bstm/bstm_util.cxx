@@ -37,7 +37,7 @@ bool bstm_util::query_point_color(bstm_scene_sptr &scene,
   int bit_index = tree.traverse(local);
   int depth = tree.depth_at(bit_index);
   int data_offset = tree.get_data_index(bit_index, false);
-  float side_len =
+  auto side_len =
       static_cast<float>(blk_data.sub_block_dim_.x() / ((float)(1 << depth)));
 
   // do the query with data_offset....
@@ -130,7 +130,7 @@ bool bstm_util::query_point(bstm_scene_sptr &scene,
   boct_bit_tree tree(treebits.data_block(), blk_data.max_level_);
   int bit_index = tree.traverse(local);
   int depth = tree.depth_at(bit_index);
-  float side_len =
+  auto side_len =
       static_cast<float>(blk_data.sub_block_dim_.x() / ((float)(1 << depth)));
   int data_offset = tree.get_data_index(bit_index, false);
 
@@ -171,7 +171,7 @@ bool bstm_util::query_point(bstm_scene_sptr &scene,
   bstm_data_base *alpha_base =
       cache->get_data_base(id, bstm_data_traits<BSTM_ALPHA>::prefix());
 
-  float *alphas = (float *)(alpha_base->data_buffer());
+  auto *alphas = (float *)(alpha_base->data_buffer());
   float alpha = alphas[data_offset_t];
 
   // store cell probability
@@ -225,7 +225,7 @@ bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
           vil_convert_to_n_planes(4, loaded_image);
       vil_image_view_base_sptr comp_image =
           vil_convert_to_component_order(n_planes);
-      vil_image_view<vil_rgba<vxl_byte> > *rgba_view =
+      auto *rgba_view =
           new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
 
       // make sure all alpha values are set to 255 (1)
@@ -237,13 +237,13 @@ bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
       return toReturn;
     } else {
       // load image from file and format it into grey
-      vil_image_view<vxl_byte> *inimg =
+      auto *inimg =
           dynamic_cast<vil_image_view<vxl_byte> *>(loaded_image.ptr());
       vil_image_view<float> gimg(loaded_image->ni(), loaded_image->nj());
       vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
       // stretch it into 0-1 range
-      vil_image_view<float> *floatimg =
+      auto *floatimg =
           new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
       vil_convert_stretch_range_limited(
           gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
@@ -256,13 +256,13 @@ bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
   if (loaded_image->nplanes() == 1) {
     // prepare floatimg for stretched img
     vil_image_view<float> *floatimg;
-    if (vil_image_view<vxl_byte> *img_byte =
+    if (auto *img_byte =
             dynamic_cast<vil_image_view<vxl_byte> *>(loaded_image.ptr())) {
       floatimg =
           new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
       vil_convert_stretch_range_limited(
           *img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
-    } else if (vil_image_view<float> *img_float =
+    } else if (auto *img_float =
                    dynamic_cast<vil_image_view<float> *>(loaded_image.ptr())) {
       return vil_image_view_base_sptr(img_float);
     } else {
