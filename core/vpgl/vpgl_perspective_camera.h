@@ -93,6 +93,13 @@ class vpgl_perspective_camera : public vpgl_proj_camera<T>
   vgl_line_3d_2_points<T> backproject(T u, T v) const
     {return backproject(vgl_point_2d<T>(u, v));}
 
+  /* suppress
+   * warning: 'vpgl_perspective_camera<double>::backproject_ray' hides overloaded virtual function [-Woverloaded-virtual]
+   * by explicitly acknowledging the parent class virtual function of the same name with different parameters.
+   * that is not overrriden here
+   */
+  using vpgl_proj_camera<T>::backproject_ray;
+
   //: Finite ray backprojection.
   vgl_ray_3d<T> backproject_ray( const vgl_point_2d<T>& image_point ) const ;
 
