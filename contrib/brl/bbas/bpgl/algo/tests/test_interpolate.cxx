@@ -85,7 +85,7 @@ static void test_interpolate()
 
   vnl_double_3x3 at = bpgl_interpolate::A(lR45);
   vnl_double_3x3 atinv = bpgl_interpolate::Ainv(lR45);
-  vnl_double_3x3 id1 = at*atinv, id2 = atinv*at;
+//UNUSED  vnl_double_3x3 id1 = at*atinv, id2 = atinv*at;
   //=========== test camera interpolation ==============
   //set up the cameras
   vnl_double_3x3 M;

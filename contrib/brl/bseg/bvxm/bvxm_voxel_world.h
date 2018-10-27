@@ -1734,7 +1734,6 @@ bool bvxm_voxel_world::mog_most_probable_image(bvxm_image_metadata const& observ
   // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype apm_datatype; // datatype for current appearance model
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;   // datatype of the pixels that the processor operates on.
-  typedef typename bvxm_voxel_traits<APM_T>::obs_mathtype obs_mathtype;
   typedef typename bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
   typename bvxm_voxel_traits<APM_T>::appearance_processor apm_processor;

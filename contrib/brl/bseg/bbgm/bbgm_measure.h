@@ -205,7 +205,6 @@ void measure(bbgm_image_of<dist_>& dimg,
              typename dist_::vector_type min_value,
              typename dist_::vector_type max_value)
 {
-  typedef typename dist_::vector_type vector_;
   typedef typename dist_::math_type T;
 
   const unsigned ni = dimg.ni();

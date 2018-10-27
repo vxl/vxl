@@ -476,7 +476,6 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
                                           vpgl_camera_double_sptr& camera,
                                           unsigned scale)
 {
-  typedef bvxm_voxel_traits<LIDAR>::voxel_datatype obs_datatype;
   typedef bvxm_voxel_traits<EDGES>::voxel_datatype edges_datatype;
 
   //typedef bvxm_voxel_traits<LIDAR>::lidar_processor lidar_processor;

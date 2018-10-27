@@ -136,7 +136,6 @@ bpgl_bundle_rolling_shutter_adj_lsqr::f(vnl_vector<double> const& a,
                                         vnl_vector<double> const& b,
                                         vnl_vector<double>& e)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // Construct the ith camera
@@ -255,7 +254,6 @@ bpgl_bundle_rolling_shutter_adj_lsqr::jac_blocks(vnl_vector<double> const& a, vn
                                                  std::vector<vnl_matrix<double> >& A,
                                                  std::vector<vnl_matrix<double> >& B)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     // Construct the ith camera

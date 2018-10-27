@@ -80,7 +80,6 @@ void
 rgrl_object::
 invoke_event( const rgrl_event & event) const
 {
-  typedef observer_map::const_iterator const_obs_itr;
   auto i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e =  i->second.event_;
@@ -104,7 +103,6 @@ bool
 rgrl_object::
 has_observer( const rgrl_event & event ) const
 {
-  typedef observer_map::const_iterator const_obs_itr;
   auto i = observers_.begin();
   for ( ; i != observers_.end(); ++i) {
     const rgrl_event_sptr e = i->second.event_;

@@ -9,7 +9,6 @@
 static void test_edges()
 {
   typedef boxm_inf_line_sample<float> data_type;
-  typedef boxm_rt_sample<float> aux_type;
   // create the main scene
   vpgl_lvcs lvcs(33.33,44.44,10.0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
   vgl_point_3d<double> origin(10,10,20);

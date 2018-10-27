@@ -146,7 +146,6 @@ void brad_belief_prop_utils::zray_post(){
 }
 void brad_belief_prop_utils::update_PinS(){
 auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
-  double post = 0.0;
   // reverse scan for post
   for(unsigned i=1; i<=n; i++){
     double pins = zray_.ray_data_[i-1].PinS_;

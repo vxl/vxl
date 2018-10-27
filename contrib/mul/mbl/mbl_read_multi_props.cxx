@@ -17,7 +17,6 @@
 
 void mbl_read_multi_props_print(std::ostream &afs, mbl_read_multi_props_type props)
 {
-  typedef mbl_read_multi_props_type::iterator ITER;
   afs << vsl_indent() << "{\n";
   vsl_indent_inc(afs);
   for (auto & prop : props)

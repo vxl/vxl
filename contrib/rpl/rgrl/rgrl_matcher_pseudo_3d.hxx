@@ -134,7 +134,6 @@ compute_matches( rgrl_feature_set const&    from_set,
   std::cerr << "compute_matches()\n";
 
   typedef std::vector<rgrl_feature_sptr> f_vector_type;
-  typedef f_vector_type::iterator f_iterator_type;
 
   //  Build an empty match set
   rgrl_match_set_sptr matches_sptr

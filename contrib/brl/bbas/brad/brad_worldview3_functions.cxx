@@ -206,8 +206,6 @@ bool brad_compose_16band_wv3_img(
   vgl_box_2d<int> mul_region,
   bool  /*calibrate_radiometrically*/ )
 {
-  int num_bands = 8;
-
   // Load metadata
   brad_image_metadata mul_meta(vul_file::strip_extension(mul_file) + ".IMD");
   brad_image_metadata swir_meta(vul_file::strip_extension(swir_file) + ".IMD");

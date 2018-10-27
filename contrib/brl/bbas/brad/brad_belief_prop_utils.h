@@ -20,8 +20,14 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include "brad_appearance_neighborhood_index.h"
 struct brad_cell_data{
-brad_cell_data(): vis_(1.0), mog3_(vnl_vector_fixed<unsigned char, 8>(static_cast<unsigned char>(0))),
-    nobs_(vnl_vector_fixed<float, 4>(0.0f)), pre_(0.0), post_(0.0), init_ratio_(1.0){}
+brad_cell_data()
+    : vis_(1.0)
+    , pre_(0.0)
+    , post_(0.0)
+    , init_ratio_(1.0)
+    , mog3_(vnl_vector_fixed<unsigned char , 8>(static_cast<unsigned char>(0)))
+    , nobs_(vnl_vector_fixed<float , 4>(0.0f))
+  {}
   double cell_z_;
   double vis_;
   double PinS_;

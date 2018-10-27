@@ -47,7 +47,6 @@ float  bsta_mog3_grey::gauss_prob_density(float x, float mu, float sigma)
 float  bsta_mog3_grey::prob_density(const vnl_vector_fixed<unsigned char, 8> & mog3, float x)
 {
   float sum = 0.0f;
-  float sum_weights=0.0f;
   float mu0=((float)mog3[0]/255.0f);float sigma0=((float)mog3[1]/255.0f);float w0=((float)mog3[2]/255.0f);
   float mu1=((float)mog3[3]/255.0f);float sigma1=((float)mog3[4]/255.0f);float w1=((float)mog3[5]/255.0f);
   float mu2=((float)mog3[6]/255.0f);float sigma2=((float)mog3[7]/255.0f);float w2=0.0f;

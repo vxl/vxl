@@ -69,8 +69,8 @@ bool brad_estimate_airlight(vil_image_view<float> const& radiance,
     for (unsigned int & vis_band : vis_bands)
       for (int j = 0; j < nj; j++)
         for (int i = 0; i < ni; i++) {
-          float pixel_val = radiance(i, j, vis_band);
-          avg_img(i,j) += radiance(i, j, vis_band);
+          const float pixel_val = radiance(i, j, vis_band);
+          avg_img(i,j) += pixel_val;
         }
     float minval, maxval;
     vil_math_value_range(avg_img, minval, maxval);
@@ -145,8 +145,6 @@ bool brad_estimate_atmospheric_parameters(vil_image_view<float> const& radiance,
                                           bool constrain_atmospheric_params,
                                           bool average_airlight)
 {
-  unsigned ni = radiance.ni();
-  unsigned nj = radiance.nj();
   unsigned np = radiance.nplanes();
   // get sun irradiance values
   std::string band_type = mdata.band_;

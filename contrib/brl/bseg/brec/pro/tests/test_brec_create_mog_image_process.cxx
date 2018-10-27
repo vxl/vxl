@@ -45,7 +45,6 @@
 static void test_brec_create_mog_image_process()
 {
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
-  typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
   typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;

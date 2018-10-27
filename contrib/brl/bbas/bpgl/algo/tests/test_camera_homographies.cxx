@@ -65,9 +65,9 @@ static void test_camera_homographies()
   vgl_rotation_3d<double> R(q);
   vgl_point_3d<double> cen( 35.2729,11.2042,-321.021);
   vpgl_perspective_camera<double> pact(K, cen, R);
-  vgl_point_2d<double> proj_w0 = pact.project(w0);
-  vgl_point_2d<double> proj_w1 = pact.project(w1);
-  vgl_point_2d<double> proj_w2 = pact.project(w2);
+//UNUSED  vgl_point_2d<double> proj_w0 = pact.project(w0);
+//UNUSED  vgl_point_2d<double> proj_w1 = pact.project(w1);
+//UNUSED  vgl_point_2d<double> proj_w2 = pact.project(w2);
 
   vgl_h_matrix_2d<double> Hact =
     bpgl_camera_homographies::homography_from_camera(pact, world_plane);
@@ -88,9 +88,9 @@ static void test_camera_homographies()
   vgl_point_3d<double> cen45(1.28374, 2.36223,-321.679);
   vpgl_perspective_camera<double> pact_45(K, cen45, R45);
 
-  vgl_point_2d<double> proj_w0_45 = pact_45.project(w0);
-  vgl_point_2d<double> proj_w1_45 = pact_45.project(w1);
-  vgl_point_2d<double> proj_w2_45 = pact_45.project(w2);
+//UNUSED  vgl_point_2d<double> proj_w0_45 = pact_45.project(w0);
+//UNUSED  vgl_point_2d<double> proj_w1_45 = pact_45.project(w1);
+//UNUSED  vgl_point_2d<double> proj_w2_45 = pact_45.project(w2);
 
   vgl_h_matrix_2d<double> Hact_45 =
     bpgl_camera_homographies::homography_from_camera(pact_45, world_plane);
@@ -108,9 +108,9 @@ static void test_camera_homographies()
   vgl_point_3d<double> cen23(18.8361,6.97435,-321.786);
 
   vpgl_perspective_camera<double> pact_23(K, cen23, R23);
-  vgl_point_2d<double> proj_w0_23 = pact_23.project(w0);
-  vgl_point_2d<double> proj_w1_23 = pact_23.project(w1);
-  vgl_point_2d<double> proj_w2_23 = pact_23.project(w2);
+//UNUSED  vgl_point_2d<double> proj_w0_23 = pact_23.project(w0);
+//UNUSED  vgl_point_2d<double> proj_w1_23 = pact_23.project(w1);
+//UNUSED  vgl_point_2d<double> proj_w2_23 = pact_23.project(w2);
 
   vgl_h_matrix_2d<double> Hact_23 =
     bpgl_camera_homographies::homography_from_camera(pact_23, world_plane);

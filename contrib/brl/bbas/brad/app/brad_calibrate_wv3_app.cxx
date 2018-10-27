@@ -39,7 +39,7 @@ int main(int argc, char * argv[])
 
   // Load cameras
   std::ifstream mul_ifs((vul_file::strip_extension(mul_file) + ".RPB").c_str());
-  vpgl_rational_camera<double>* mul_rpc =
+//UNUSED  vpgl_rational_camera<double>* mul_rpc =
     read_rational_camera<double>(mul_ifs);
 
   // Load the image, calibrate

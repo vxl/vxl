@@ -176,7 +176,6 @@ void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global
 void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, float harris_thresh, std::string output_path)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
-  typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
 
   boxm_scene_base_sptr valid_scene_base = global_taylor->load_valid_scene(scene_id);
   boxm_scene_base_sptr corner_scene_base = this->load_corner_scene(scene_id);
@@ -276,7 +275,6 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
 void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr global_taylor,int scene_id)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
-  typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
 
   boxm_scene_base_sptr valid_scene_base = global_taylor->load_valid_scene(scene_id);
   boxm_scene_base_sptr corner_scene_base = this->load_corner_scene(scene_id);

@@ -36,7 +36,10 @@ bool bsta_display_vrml(std::ostream& os, bsta_gaussian_full<T, 3> const& dist,
   //: Find the eigen system
   vnl_matrix<T> V; //eigenvectors
   vnl_vector<T> D; //eigenvalues
-  bool good = vnl_symmetric_eigensystem_compute<T>(covar, V, D);
+#ifdef VRML_DEBUG
+  bool good =
+#endif
+ vnl_symmetric_eigensystem_compute<T>(covar, V, D);
 #ifdef VRML_DEBUG
   assert(good);
   std::cout << "V \n" << V << '\n';

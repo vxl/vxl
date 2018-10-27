@@ -88,7 +88,6 @@ vpgl_bundle_adjust_lsqr::f(vnl_vector<double> const& a,
                            vnl_vector<double> const& c,
                            vnl_vector<double>& e)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     //: Construct the ith camera
@@ -162,7 +161,6 @@ vpgl_bundle_adjust_lsqr::jac_blocks(vnl_vector<double> const& a,
                                     std::vector<vnl_matrix<double> >& B,
                                     std::vector<vnl_matrix<double> >& C)
 {
-  typedef vnl_crs_index::sparse_vector::iterator sv_itr;
   for (unsigned int i=0; i<number_of_a(); ++i)
   {
     //: Construct the ith camera

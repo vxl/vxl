@@ -37,9 +37,9 @@ class brad_image_metadata : public vbl_ref_count
 
   //: Default constructor
   brad_image_metadata() :
-    verbose_(false),
     n_bands_(0),
-    gsd_(-1.0)
+    gsd_(-1.0),
+    verbose_(false)
   {}
 
   // position of sun relative to imaged location

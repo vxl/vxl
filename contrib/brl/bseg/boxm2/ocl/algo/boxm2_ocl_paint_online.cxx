@@ -50,7 +50,6 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
                                                       std::string const& apm_id)
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
-  typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
   typedef boxm2_data_traits<BOXM2_AUX2>::datatype aux2_datatype;
 
   float transfer_time=0.0f;

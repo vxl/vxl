@@ -38,14 +38,27 @@ class brad_appearance_neighborhood_index
   //: the inputs are are a set of illumination and view dirs on the same index domain as the
   //  image set. That is, illumination_dir[i] corresponds to the direction for image[i]
  brad_appearance_neighborhood_index(std::vector<vgl_vector_3d<double > >  illumination_dirs,
-                                    std::vector<vgl_vector_3d<double > >  view_dirs): illumination_dirs_(std::move(illumination_dirs)),
-    view_dirs_(std::move(view_dirs)),min_view_dir_thresh_(BRAD_VTHR_LOW), max_view_dir_thresh_(BRAD_VTHR_HIGH), illum_dir_thresh_(BRAD_ITHR), min_overlap_thresh_(0.5), num_illum_neighbors_thresh_(2)
+                                    std::vector<vgl_vector_3d<double > >  view_dirs)
+    : min_view_dir_thresh_(BRAD_VTHR_LOW)
+    , max_view_dir_thresh_(BRAD_VTHR_HIGH)
+    , illum_dir_thresh_(BRAD_ITHR)
+    , min_overlap_thresh_(0.5)
+    , num_illum_neighbors_thresh_(2)
+    , illumination_dirs_(std::move(illumination_dirs))
+    , view_dirs_(std::move(view_dirs))
     {this->compute_index();}
 
  brad_appearance_neighborhood_index(std::vector<vgl_vector_3d<double > >  illumination_dirs,
                                     std::vector<vgl_vector_3d<double > >  view_dirs,
-                                    std::map<unsigned, std::map<unsigned, double> >  overlap): illumination_dirs_(std::move(illumination_dirs)),
-    view_dirs_(std::move(view_dirs)), view_overlap_(std::move(overlap)), min_view_dir_thresh_(BRAD_VTHR_LOW), max_view_dir_thresh_(BRAD_VTHR_HIGH), illum_dir_thresh_(BRAD_ITHR), min_overlap_thresh_(0.5), num_illum_neighbors_thresh_(2)
+                                    std::map<unsigned, std::map<unsigned, double> >  overlap)
+    : min_view_dir_thresh_(BRAD_VTHR_LOW)
+    , max_view_dir_thresh_(BRAD_VTHR_HIGH)
+    , illum_dir_thresh_(BRAD_ITHR)
+    , min_overlap_thresh_(0.5)
+    , num_illum_neighbors_thresh_(2)
+    , illumination_dirs_(std::move(illumination_dirs))
+    , view_dirs_(std::move(view_dirs))
+    , view_overlap_(std::move(overlap))
     {this->compute_index();}
 
   //: the input is a set of metadata from which the illumination and view directions can be extracted

@@ -139,10 +139,8 @@ static void test_brec_update_changes_process()
   unsigned ni = 200, nj = 200;
 
   typedef bvxm_voxel_traits<APM_MOG_RGB>::voxel_datatype mog_type_rgb;
-  typedef bvxm_voxel_traits<APM_MOG_RGB>::obs_datatype obs_datatype_rgb;
 
   typedef bvxm_voxel_traits<APM_MOG_GREY>::voxel_datatype mog_type;
-  typedef bvxm_voxel_traits<APM_MOG_GREY>::obs_datatype obs_datatype;
 
   //DECLARE_FUNC_CONS(bvxm_gen_synthetic_world_process);
   //DECLARE_FUNC_CONS(brec_update_changes_process);

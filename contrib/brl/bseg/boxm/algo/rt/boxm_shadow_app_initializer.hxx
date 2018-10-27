@@ -34,7 +34,6 @@ bool boxm_shadow_app_initializer<T_loc,APM,AUX>::initialize()
   typedef typename boxm_aux_traits<AUX>::sample_datatype aux_type;
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
-  typedef boct_tree<T_loc, aux_type > aux_tree_type;
 
   std::vector<boxm_aux_scene<T_loc,  boxm_sample<APM>, aux_type> > aux_scenes;
   for (unsigned int i=0; i<image_ids_.size(); ++i) {

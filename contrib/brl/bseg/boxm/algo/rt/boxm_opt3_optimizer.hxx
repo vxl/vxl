@@ -34,7 +34,6 @@ bool boxm_opt3_optimizer<T_loc,APM,AUX_APM>::optimize_cells()
   typedef boxm_opt3_sample<AUX_APM> aux_type;
 
   typedef boct_tree<T_loc, boxm_sample<APM> > tree_type;
-  typedef boct_tree<T_loc, aux_type > aux_tree_type;
 
   typedef typename boxm_apm_traits<APM>::obs_datatype obs_t;
 

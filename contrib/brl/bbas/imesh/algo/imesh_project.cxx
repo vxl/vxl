@@ -274,7 +274,6 @@ void imesh_project(const imesh_mesh& mesh,
   if (c.w() < 0.0)
     c.rescale_w(-c.w());
 
-  typedef std::vector<vgl_vector_3d<double> >::const_iterator itr_n;
   auto n = normals.begin();
   for (unsigned int i=0; i<tris.size(); ++i, ++n) {
     const vgl_point_3d<double>& v1 = verts3d[tris(i,0)];
@@ -326,7 +325,6 @@ void imesh_projection_bounds(const std::vector<vgl_point_2d<double> >& img_pts,
                              vgl_box_2d<unsigned int>& bbox)
 {
   assert(!img_pts.empty());
-  typedef std::vector<vgl_point_2d<double> >::const_iterator itr_p;
 
   int i0 = bbox.max_x(), i1 = bbox.min_x(),
       j0 = bbox.max_y(), j1 = bbox.min_y();
@@ -374,8 +372,6 @@ int imesh_project_onto_mesh(const imesh_mesh& mesh,
   assert(mesh.vertices().dim() == 3);
   const imesh_vertex_array<3>& verts3d = mesh.vertices<3>();
 
-  typedef imesh_regular_face_array<3>::const_iterator itr_t;
-  typedef std::vector<vgl_vector_3d<double> >::const_iterator itr_n;
   auto n = normals.begin();
   double depth = std::numeric_limits<double>::infinity();
   int i = 0;
@@ -548,7 +544,6 @@ int imesh_project_texture_to_barycentric(const imesh_mesh& mesh,
   assert(mesh.faces().regularity() == 3);
   const auto& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
-  typedef imesh_regular_face_array<3>::const_iterator itr_t;
 
   if (!mesh.has_tex_coords())
     return imesh_invalid_idx;

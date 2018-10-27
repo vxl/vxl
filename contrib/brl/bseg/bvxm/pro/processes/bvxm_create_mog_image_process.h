@@ -37,7 +37,6 @@ bool mix_gaussian(bvxm_voxel_world_sptr world,
                   bvxm_image_metadata observation,
                   bvxm_voxel_slab_base_sptr& mog_image)
 {
-  typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   typedef typename bvxm_voxel_traits<APM_T>::obs_datatype obs_datatype;
 
   bool done = false;

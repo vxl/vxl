@@ -392,7 +392,6 @@ write_sorted( std::ostream& os ) const
     // to size
     os << this_match.size() << std::endl;
 
-    typedef std::vector<match_info>::const_iterator MIter;
     for(const auto & ti : this_match)  {
       os << ti.signature_weight << ' '
          << ti.geometric_weight << ' '

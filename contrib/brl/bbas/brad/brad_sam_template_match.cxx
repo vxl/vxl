@@ -76,7 +76,6 @@ bool brad_sam_template_match(
       }
     }
 
-    float temp = 0;
     // calculate number of valid pixels in mask
     int num_valid = 0;
     for (int dy = 0; dy < chip_height; dy++) {

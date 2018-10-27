@@ -142,7 +142,6 @@ get_data_at_stage( unsigned stage,
   estimators.clear();
 
   if ( data_.has( stage ) ) {
-    typedef rgrl_data_manager_data_storage::data_vector::const_iterator iter_type;
     auto itr = data_[stage].begin();
     auto end = data_[stage].end();
     for ( ; itr != end; ++itr ) {

@@ -112,7 +112,6 @@ bool bbgm_measure_process(bprb_func_process& pro)
   if (np ==3)
   {
     typedef bsta_gauss_if3 bsta_gauss3_t;
-    typedef bsta_gauss3_t::vector_type vector3_;
     typedef bsta_num_obs<bsta_gauss3_t> gauss_type3;
     typedef bsta_mixture<gauss_type3> mix_gauss_type3;
     typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;

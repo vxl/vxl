@@ -64,7 +64,6 @@ class bbgm_view_maker
                      const double* fail_val,
                      int component_idx = -1) const override
   {
-    typedef typename dist_type::component_type d_test;
     typedef bbgm_image_of<dist_type> dist_image;
     const dist_image* d = dynamic_cast<const dist_image*>(dimg.ptr());
     if (!d)
