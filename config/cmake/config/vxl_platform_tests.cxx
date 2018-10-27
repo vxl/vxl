@@ -740,18 +740,6 @@ int main() { int x = usleep(0); return x*0; }
 
 //-------------------------------------
 
-#ifdef VXL_STDLIB_HAS_QSORT
-
-// This is not a C++ header, strictly speaking.
-// Actually, it is normative but deprecated, strictly speaking :)
-#include <cstdlib>
-int f(const void *a,const void *b) { return 1; }
-
-int main() { int a[5]; qsort(a, 5, sizeof(int), f); return 0; }
-#endif // VXL_STDLIB_HAS_QSORT
-
-//-------------------------------------
-
 #ifdef VCL_COMPLEX_POW_WORKS
 // It appears several programmers have (independently)
 // not realised their lack of knowledge of complex numbers.

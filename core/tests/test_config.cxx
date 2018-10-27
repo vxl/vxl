@@ -806,54 +806,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VXL_STDLIB_HAS_QSORT ";
-#ifdef VXL_STDLIB_HAS_QSORT
-  std::cout << "is set to " << quote(VXL_STDLIB_HAS_QSORT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_STDLIB_HAS_LRAND48 ";
-#ifdef VXL_STDLIB_HAS_LRAND48
-  std::cout << "is set to " << quote(VXL_STDLIB_HAS_LRAND48);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_STDLIB_HAS_DRAND48 ";
-#ifdef VXL_STDLIB_HAS_DRAND48
-  std::cout << "is set to " << quote(VXL_STDLIB_HAS_DRAND48);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_IEEEFP_HAS_FINITE ";
-#ifdef VXL_IEEEFP_HAS_FINITE
-  std::cout << "is set to " << quote(VXL_IEEEFP_HAS_FINITE);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_C_MATH_HAS_FINITE ";
-#ifdef VXL_C_MATH_HAS_FINITE
-  std::cout << "is set to " << quote(VXL_C_MATH_HAS_FINITE);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_C_MATH_HAS_SQRTF ";
-#ifdef VXL_C_MATH_HAS_SQRTF
-  std::cout << "is set to " << quote(VXL_C_MATH_HAS_SQRTF);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_C_MATH_HAS_LROUND ";
 #ifdef VXL_C_MATH_HAS_LROUND
   std::cout << "is set to " << quote(VXL_C_MATH_HAS_LROUND);
