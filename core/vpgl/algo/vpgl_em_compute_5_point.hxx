@@ -409,7 +409,7 @@ void vpgl_em_compute_5_point<T>::compute_e_matrices(
 
 
 //=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
-static void get_distinct_indices(
+static inline void get_distinct_indices(
     int n, int *idxs, int number_entries)
 {
     for (int i = 0; i < n; ++i) {
