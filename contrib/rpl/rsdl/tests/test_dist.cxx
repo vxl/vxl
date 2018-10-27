@@ -11,9 +11,6 @@
 
 static void test_dist()
 {
-  constexpr unsigned int Nc = 2;
-  constexpr unsigned int Na = 3;
-
   double p_cart_arr[] = { 3.4, 4.5 };
   double q_cart_arr[] = { -1.4, 7.6 };
   double p_ang_arr[] = { vnl_math::pi/4,  vnl_math::pi/8, -vnl_math::pi };

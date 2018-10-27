@@ -6,8 +6,6 @@
   #include <windows.h>
   #include <dbgapi.h>
   #define assert ASSERT
-#else
-  using namespace std;
 #endif
 #include "expatpp.h"
 
