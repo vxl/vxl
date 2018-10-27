@@ -45,9 +45,9 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(0);
 
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
-    if (vil_image_view<unsigned char> *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr())) {
+    if (auto *img_view = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr())) {
       if (img_view->nplanes() > 1) {
-        vil_image_view<vxl_byte> *img_view_grey = new vil_image_view<vxl_byte>(img_view->ni(),img_view->nj(),1);
+        auto *img_view_grey = new vil_image_view<vxl_byte>(img_view->ni(),img_view->nj(),1);
         vil_convert_planes_to_grey(*img_view,*img_view_grey);
         pro.set_output_val<vil_image_view_base_sptr>(0,img_view_grey);
         return true;
@@ -55,8 +55,8 @@ bool vil_rgb_to_grey_process(bprb_func_process& pro)
     }
   }
   else if (image->pixel_format() == VIL_PIXEL_FORMAT_RGB_BYTE) {
-    if (vil_image_view<vil_rgb<unsigned char> > *img_view_rgb = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr())) {
-      vil_image_view<vxl_byte> *img_view_grey= new vil_image_view<vxl_byte>(img_view_rgb->ni(),img_view_rgb->nj(),1);
+    if (auto *img_view_rgb = dynamic_cast<vil_image_view<vil_rgb<unsigned char> >*>(image.ptr())) {
+      auto *img_view_grey= new vil_image_view<vxl_byte>(img_view_rgb->ni(),img_view_rgb->nj(),1);
       if (img_view_rgb->nplanes() == 1) {
         vil_image_view<vxl_byte> img_view_plane = vil_view_as_planes(*img_view_rgb);
         vil_convert_planes_to_grey(img_view_plane,*img_view_grey);

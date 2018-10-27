@@ -74,7 +74,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
       }
       unsigned nobs_size = static_cast<unsigned>(boxm2_data_info::datasize(boxm2_data_traits<BOXM2_NUM_OBS>::prefix()));
       unsigned n = static_cast<unsigned>(nobs->num_bytes())/nobs_size;
-      cl_short4* nobs_ptr = (cl_short4*) nobs->cpu_buffer();
+      auto* nobs_ptr = (cl_short4*) nobs->cpu_buffer();
       //upcount the matched histogram bins
       for(unsigned i = 0; i<n; ++i){
         // number of observations for each mog component
@@ -132,7 +132,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
         bocl_mem* nobs  = opencl_cache->get_data<BOXM2_NUM_OBS>(scene, *id);
 
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -189,7 +189,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_remove_low_nobs::get_remove_low_nobs_kernel
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
     std::string options = "-D REMOVE_LOW_NOBS";
-    bocl_kernel* remove_low_nobs = new bocl_kernel();
+    auto* remove_low_nobs = new bocl_kernel();
     std::string remove_low_nobs_opts = options;
     remove_low_nobs->create_kernel(&device->context(), device->device_id(), src_paths, "remove_low_nobs_main", remove_low_nobs_opts, "update::remove_low_nobs");
     vec_kernels.push_back(remove_low_nobs);

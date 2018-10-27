@@ -139,7 +139,7 @@ bool ImageDatabase::load(const char *name)
   {
     vil1_image im = vil1_load(filename);
     if (!im) return false;
-    vil1_memory_image *image = new vil1_memory_image(im);
+    auto *image = new vil1_memory_image(im);
     insert(label, image);
   }
   std::fclose(db);

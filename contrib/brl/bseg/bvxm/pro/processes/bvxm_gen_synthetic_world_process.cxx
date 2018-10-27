@@ -23,7 +23,7 @@ bool bvxm_gen_synthetic_world_process_cons(bprb_func_process& pro)
 //:generates a synthetic world
 bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
 {
-  bvxm_synth_world_generator *world_gen = new bvxm_synth_world_generator();
+  auto *world_gen = new bvxm_synth_world_generator();
   bvxm_voxel_world_sptr world = world_gen->generate_world();
 
   //store output

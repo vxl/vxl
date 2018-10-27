@@ -61,7 +61,7 @@ void mfpf_edge_finder_builder::add_example(const vimt_image_2d_of<float>& /*imag
 void mfpf_edge_finder_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_edge_finder");
-  mfpf_edge_finder& ef = static_cast<mfpf_edge_finder&>(pf);
+  auto& ef = static_cast<mfpf_edge_finder&>(pf);
   set_base_parameters(ef);
 }
 

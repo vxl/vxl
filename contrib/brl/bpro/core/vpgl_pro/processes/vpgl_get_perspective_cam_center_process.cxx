@@ -41,7 +41,7 @@ bool vpgl_get_perspective_cam_center_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;

@@ -112,7 +112,7 @@ void test_vsol_io()
   std::cout << "Read the point vector ";
   int k = 0;
   bool good = true;
-  for (std::vector<vsol_point_2d_sptr>::iterator pit = points_in.begin();
+  for (auto pit = points_in.begin();
        pit != points_in.end(); pit++, k++)
   {
     if (! *pit)
@@ -181,7 +181,7 @@ void test_vsol_io()
   blv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_line_2d_sptr>::iterator lit = lines_in.begin();
+  for (auto lit = lines_in.begin();
        lit != lines_in.end(); lit++, k++)
   {
     if (! *lit)
@@ -237,7 +237,7 @@ void test_vsol_io()
   blv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_polyline_2d_sptr>::iterator plit = plines_in.begin();
+  for (auto plit = plines_in.begin();
        plit != plines_in.end(); plit++, k++)
   {
     if (! *plit)
@@ -288,7 +288,7 @@ void test_vsol_io()
   bdcv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_digital_curve_2d_sptr>::iterator dcit = dcs_in.begin();
+  for (auto dcit = dcs_in.begin();
        dcit != dcs_in.end(); dcit++, k++)
   {
     if (! *dcit)
@@ -341,7 +341,7 @@ void test_vsol_io()
   blv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_polygon_2d_sptr>::iterator plit = plygns_in.begin();
+  for (auto plit = plygns_in.begin();
        plit != plygns_in.end(); plit++, k++)
   {
     if (! *plit)
@@ -395,7 +395,7 @@ void test_vsol_io()
   bboxv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_box_2d_sptr>::iterator bit = boxes_in.begin();
+  for (auto bit = boxes_in.begin();
        bit != boxes_in.end(); bit++, k++)
   {
     if (! *bit)
@@ -455,7 +455,7 @@ void test_vsol_io()
   ccv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_conic_2d_sptr>::iterator cit = conics_in.begin();
+  for (auto cit = conics_in.begin();
        cit != conics_in.end(); cit++, k++)
   {
     if (! *cit)
@@ -517,7 +517,7 @@ void test_vsol_io()
   triv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_triangle_2d_sptr>::iterator trit = triangles_in.begin();
+  for (auto trit = triangles_in.begin();
        trit != triangles_in.end(); trit++, k++)
   {
     if (! *trit)
@@ -575,7 +575,7 @@ void test_vsol_io()
   rectv_in.close();
   good = true;
   k = 0;
-  for (std::vector<vsol_rectangle_2d_sptr>::iterator rectt = rectangles_in.begin();
+  for (auto rectt = rectangles_in.begin();
        rectt != rectangles_in.end(); rectt++, k++)
   {
     if (! *rectt)

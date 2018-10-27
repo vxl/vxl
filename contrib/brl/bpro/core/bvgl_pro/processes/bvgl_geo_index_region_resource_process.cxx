@@ -47,10 +47,10 @@ bool bvgl_geo_index_region_resource_process(bprb_func_process& pro)
   // get inputs
   unsigned i = 0;
   std::string geo_index_txt = pro.get_input<std::string>(i++);
-  double ll_lon = pro.get_input<double>(i++);
-  double ll_lat = pro.get_input<double>(i++);
-  double ur_lon = pro.get_input<double>(i++);
-  double ur_lat = pro.get_input<double>(i++);
+  auto ll_lon = pro.get_input<double>(i++);
+  auto ll_lat = pro.get_input<double>(i++);
+  auto ur_lon = pro.get_input<double>(i++);
+  auto ur_lat = pro.get_input<double>(i++);
   std::string out_txt = pro.get_input<std::string>(i++);
   // read the tree
   // since we are interested only for the structure, type of the tree doesn't matter here

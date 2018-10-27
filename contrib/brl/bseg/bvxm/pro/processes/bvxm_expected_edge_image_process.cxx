@@ -68,11 +68,11 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   //unsigned ni = edge_image_sptr->ni();
   //unsigned nj = edge_image_sptr->nj();
   //vil_image_view<vxl_byte> edge_image(edge_image_sptr);
-  unsigned ni = pro.get_input<unsigned>(2);
-  unsigned nj = pro.get_input<unsigned>(3);
+  auto ni = pro.get_input<unsigned>(2);
+  auto nj = pro.get_input<unsigned>(3);
 
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(4);
+  auto scale = pro.get_input<unsigned>(4);
 
   int num_observations = vox_world->num_observations<EDGES>(0,scale);
   std::cout << "Number of observations in curren edge world: " << num_observations << '\n';
@@ -83,12 +83,12 @@ bool bvxm_expected_edge_image_process(bprb_func_process& pro)
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera_inp);
-  vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
+  auto *img_eei_f = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
 
   edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
-  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
+  auto *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
   brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei_f,*img_eei_vb,0.0f,255.0f);
 
 

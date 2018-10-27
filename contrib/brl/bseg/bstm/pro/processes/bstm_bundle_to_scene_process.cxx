@@ -67,7 +67,7 @@ bool bstm_bundle_to_scene_process(bprb_func_process& pro)
   appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
   appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
   bool axis_align = pro.get_input<bool>(i++);
-  unsigned time_steps = pro.get_input<unsigned>(i++);
+  auto time_steps = pro.get_input<unsigned>(i++);
   std::string out_dir = pro.get_input<std::string>(i++); //output dir for imgs/files
 
 

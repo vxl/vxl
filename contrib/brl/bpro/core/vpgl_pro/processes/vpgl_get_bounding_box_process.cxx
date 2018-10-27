@@ -69,8 +69,8 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
   double res = 2*(cc-zc).length()*cone_half_angle;
 
   //create an image with this res, and count each pixel
-  unsigned ni = (unsigned) (bbox.width()/res);
-  unsigned nj = (unsigned) (bbox.height()/res);
+  auto ni = (unsigned) (bbox.width()/res);
+  auto nj = (unsigned) (bbox.height()/res);
   vil_image_view<vxl_byte> cntimg(ni, nj);
   std::cout<<"Created Box size: "<<ni<<','<<nj<<std::endl;
   for (const auto & i : cams)

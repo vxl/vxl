@@ -63,7 +63,7 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(1);
   std::string geotiff_fname = pro.get_input<std::string>(2);
-  unsigned int level = pro.get_input<unsigned>(3);
+  auto level = pro.get_input<unsigned>(3);
 
   vil_image_resource_sptr img_res = vil_load_image_resource(geotiff_fname.c_str());
   vpgl_geo_camera* geocam = nullptr;
@@ -140,21 +140,21 @@ bool boxm2_roi_init_geotiff_process(bprb_func_process& pro)
   vpgl_camera_double_sptr out = new vpgl_generic_camera<double>(gcam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, out);
 
-  vil_image_view<vxl_byte>* crop_view = dynamic_cast<vil_image_view<vxl_byte>*>(crop_base.ptr());
+  auto* crop_view = dynamic_cast<vil_image_view<vxl_byte>*>(crop_base.ptr());
   if (!crop_view) {
-    vil_image_view<float>* crop_view_f = dynamic_cast<vil_image_view<float>*>(crop_base.ptr());
+    auto* crop_view_f = dynamic_cast<vil_image_view<float>*>(crop_base.ptr());
     if (!crop_view_f) {
       std::cerr << "Error: boxm2_roi_init_geotiff_process: could not cast first return image to a vil_image_view<float>\n";
       return false;
     }
-    vil_image_view<float>* out_img = new vil_image_view<float>(crop_ni, crop_nj, crop_view_f->nplanes());
+    auto* out_img = new vil_image_view<float>(crop_ni, crop_nj, crop_view_f->nplanes());
     vil_resample_bilin(*crop_view_f, *out_img, crop_ni, crop_nj);
     pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<float>(*out_img));
     return true;
   }
 
   //: downsample the image based on the level
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(crop_ni, crop_nj, crop_view->nplanes());
+  auto* out_img = new vil_image_view<vxl_byte>(crop_ni, crop_nj, crop_view->nplanes());
   vil_resample_bilin(*crop_view, *out_img, crop_ni, crop_nj);
   pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<vxl_byte>(*out_img));
 

@@ -58,7 +58,7 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   // find the elevation of the point where the ray tracing stops which is one slab below the lowest world slab
   vgl_point_3d<float> ray_trace_end = world->voxel_index_to_xyz(0, 0, params->num_voxels().z()+1, 0);
   lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, elev);
-  float base_elev = (float)elev;
+  auto base_elev = (float)elev;
 
   // determine the upper left corner to use a vpgl_geo_cam, WARNING: assumes that the world is compass-alinged
   double upper_left_lon, upper_left_lat, upper_left_elev;
@@ -80,15 +80,15 @@ bool bvxm_heightmap_ortho_process(bprb_func_process& pro)
   cam->set_scale_format(true);
   vpgl_camera_double_sptr camera = new vpgl_geo_camera(*cam);
 
-  vil_image_view<unsigned> *dmap = new vil_image_view<unsigned>(ni, nj, 1);
-  vil_image_view<float> *conf_map = new vil_image_view<float>(ni, nj, 1);
+  auto *dmap = new vil_image_view<unsigned>(ni, nj, 1);
+  auto *conf_map = new vil_image_view<float>(ni, nj, 1);
   world->heightmap(camera,*dmap, *conf_map);  // this method actually generates a depth not a height map
 
   // subtract from the scene height to get the height from scene floor
   float h = box.depth();
 
   std::cout << "Using scene height: " << h << " to negate the depth map!\n";
-  vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
+  auto *hmap = new vil_image_view<float>(ni, nj, 1);
   hmap->fill(0.0f);
   for (int i = 0; i < ni; i++)
     for (int j = 0; j < nj; j++)
@@ -142,8 +142,8 @@ bool bvxm_heightmap_exp_process(bprb_func_process& pro)
     return false;
   }
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
    // generate vpgl_geo_camera for the scene
   bvxm_world_params_sptr params = world->get_params();
@@ -152,11 +152,11 @@ bool bvxm_heightmap_exp_process(bprb_func_process& pro)
   double lat, lon, elev;
   vgl_point_3d<float> ray_trace_end = world->voxel_index_to_xyz(0, 0, params->num_voxels().z()+1, 0);
   lvcs->local_to_global(ray_trace_end.x(), ray_trace_end.y(), ray_trace_end.z(), vpgl_lvcs::wgs84, lon, lat, elev);
-  float base_elev = (float)elev;
+  auto base_elev = (float)elev;
   std::cout << "!!!!!!!!!!!!!! base_elev: " << base_elev << std::endl;
 
-  vil_image_view<float> *hmap = new vil_image_view<float>(ni, nj, 1);
-  vil_image_view<float> *var_map = new vil_image_view<float>(ni, nj, 1);
+  auto *hmap = new vil_image_view<float>(ni, nj, 1);
+  auto *var_map = new vil_image_view<float>(ni, nj, 1);
   float max_depth;
   world->heightmap_exp(cam,*hmap, *var_map, max_depth);
 
@@ -220,10 +220,10 @@ bool bvxm_uncertainty_process(bprb_func_process& pro)
     return false;
   }
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
-  vil_image_view<float> *dmap = new vil_image_view<float>(ni, nj, 1);
+  auto *dmap = new vil_image_view<float>(ni, nj, 1);
   world->uncertainty(cam,*dmap);
 
   //store output

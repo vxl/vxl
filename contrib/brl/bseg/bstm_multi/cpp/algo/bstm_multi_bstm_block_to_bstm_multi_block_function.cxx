@@ -44,7 +44,7 @@ void get_bstm_data_buffers(
       bstm_data_traits<BSTM_GAUSS_RGB_VIEW_COMPACT>::prefix());
 
   // get alpha, which is always BSTM_ALPHA
-  std::map<std::string, bstm_data_base *>::const_iterator iter =
+  auto iter =
       bstm_datas.find(bstm_data_traits<BSTM_ALPHA>::prefix());
   if (iter != bstm_datas.end()) {
     alpha = iter->second;
@@ -92,7 +92,7 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
 
   // Wrap new space block in 4D array so we can iterate over trees in row-major
   // order.
-  space_tree_b *space_buffer_ptr =
+  auto *space_buffer_ptr =
       reinterpret_cast<space_tree_b *>(new_space_buffer);
   index_4d space_block_dims(bstm_blk->sub_block_num().x(),
                             bstm_blk->sub_block_num().y(),
@@ -102,7 +102,7 @@ void convert_bstm_space_trees(bstm_multi_block *blk,
   boxm2_array_3d<space_tree_b>::iterator tree_iter = trees.begin();
   array_4d<space_tree_b> new_trees(space_buffer_ptr, space_block_dims);
   array_4d<space_tree_b>::iterator new_tree_iter = new_trees.begin();
-  time_tree_b *time_buffer_ptr =
+  auto *time_buffer_ptr =
       reinterpret_cast<time_tree_b *>(new_time_buffer);
 
   // Offset pointing to start of time trees (in new time buffer) for current
@@ -367,7 +367,7 @@ void coalesce_trees(bstm_multi_block *blk,
     std::vector<unsigned char> &space_buffer = blk->get_buffer(num_levels - 2);
     std::vector<unsigned char> &time_buffer = blk->get_buffer(num_levels - 1);
     std::vector<unsigned char> new_time_buffer;
-    space_tree_b *space_trees =
+    auto *space_trees =
         reinterpret_cast<space_tree_b *>(&space_buffer[0]);
     unsigned char *old_time_tree_ptr = &time_buffer[0];
     std::size_t num_trees = space_buffer.size() / space_tree_size;
@@ -403,7 +403,7 @@ void coalesce_trees(bstm_multi_block *blk,
   {
     // first, calculate size of data buffers
     std::vector<unsigned char> &bottom_buffer = blk->get_buffer(num_levels - 1);
-    time_tree_b *time_trees =
+    auto *time_trees =
         reinterpret_cast<time_tree_b *>(&bottom_buffer[0]);
     std::size_t num_trees = bottom_buffer.size() / time_tree_size;
     std::size_t num_data_elements = 0;
@@ -460,7 +460,7 @@ void compute_trees_structure(
       num_regions.first /= 8;
       std::size_t num_trees = volume(num_regions);
       blk->new_buffer(num_trees * space_tree_size, current_level);
-      space_tree_b *current_buffer =
+      auto *current_buffer =
           reinterpret_cast<space_tree_b *>(blk->get_data(current_level));
       std::memset(current_buffer, 0, num_trees * space_tree_size);
       array_4d<space_tree_b> trees(current_buffer,
@@ -488,7 +488,7 @@ void compute_trees_structure(
       num_regions.second /= 32;
       std::size_t num_trees = volume(num_regions);
       blk->new_buffer(num_trees * time_tree_size, current_level);
-      time_tree_b *current_buffer =
+      auto *current_buffer =
           reinterpret_cast<time_tree_b *>(blk->get_data(current_level));
       std::memset(current_buffer, 0, num_trees * time_tree_size);
       array_4d<time_tree_b> trees(current_buffer,

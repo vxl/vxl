@@ -472,8 +472,8 @@ baml_change_detection::detect_bt(
     return false;
 
   // Compute min and max observed intensities in target image
-  vxl_uint_16 min_int = (vxl_uint_16)(pow(2, 16) - 1);
-  vxl_uint_16 max_int = (vxl_uint_16)0;
+  auto min_int = (vxl_uint_16)(pow(2, 16) - 1);
+  auto max_int = (vxl_uint_16)0;
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
@@ -586,8 +586,8 @@ bool baml_change_detection::detect_difference(
     return false;
 
   // Compute min and max observed intensities in target image fore foreground distribution
-  vxl_uint_16 min_int = (vxl_uint_16)(pow(2, 16) - 1);
-  vxl_uint_16 max_int = (vxl_uint_16)0;
+  auto min_int = (vxl_uint_16)(pow(2, 16) - 1);
+  auto max_int = (vxl_uint_16)0;
   for (int y = 0; y < height; y++) {
     for (int x = 0; x < width; x++) {
       if (valid_ref(x, y) == false) continue;
@@ -839,8 +839,8 @@ baml_change_detection::detect_histcmp(
 
   // Compute min and max observed intensities in either image and in just
   // target image
-  vxl_uint_16 min_int_tar = (vxl_uint_16)(pow(2, 16) - 1);
-  vxl_uint_16 max_int_tar = (vxl_uint_16)0;
+  auto min_int_tar = (vxl_uint_16)(pow(2, 16) - 1);
+  auto max_int_tar = (vxl_uint_16)0;
   float max_int = 0;
   float min_int = (pow(2, 16) - 1);
 

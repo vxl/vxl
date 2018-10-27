@@ -49,7 +49,7 @@ bool bvpl_threshold_corners_process(bprb_func_process& pro)
   bvpl_global_taylor_sptr global_taylor = pro.get_input<bvpl_global_taylor_sptr>(i++);
   bvpl_global_corners_sptr global_corners = pro.get_input<bvpl_global_corners_sptr>(i++);
   int scene_id = pro.get_input<int>(i++);
-  float corner_thresh = pro.get_input<float>(i++);
+  auto corner_thresh = pro.get_input<float>(i++);
   std::string output_path = pro.get_input<std::string>(i++);
 
   if (!(global_taylor && global_corners))

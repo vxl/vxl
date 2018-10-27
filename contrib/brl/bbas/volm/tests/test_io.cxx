@@ -50,8 +50,8 @@ static void test_load_conf_tag_file(std::string xml_file)
 static void test_io()
 {
   // test the volm_fallback_category
-  std::map<unsigned char, std::vector<unsigned char> >::iterator mit = volm_fallback_label::fallback_id.begin();
-  std::map<unsigned char, std::vector<float> >::iterator mit_w = volm_fallback_label::fallback_weight.begin();
+  auto mit = volm_fallback_label::fallback_id.begin();
+  auto mit_w = volm_fallback_label::fallback_weight.begin();
 
   for (; mit != volm_fallback_label::fallback_id.end(); ++mit) {
     std::cout << (int)mit->first << '(' << volm_osm_category_io::volm_land_table[mit->first].name_ << ") ---> ";

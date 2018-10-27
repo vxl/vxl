@@ -365,7 +365,7 @@ bool boxm2_vecf_fit_fat_pocket::plot_middle_fat_pocket_fit(std::ostream& ostr) {
       errors.push_back(1000.0);
     }
   }
-  unsigned n = static_cast<unsigned>(pts.size());
+  auto n = static_cast<unsigned>(pts.size());
   for(unsigned i=0; i<n; ++i){
     vgl_point_3d<double>& p = pts[i];
     double& e = errors[i];

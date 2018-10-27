@@ -166,7 +166,7 @@ int main(int argc, char** argv)
             iconfig.read(reinterpret_cast<char*> (&num_regions[0]),sizeof(int)*5);
             std::cout<<"Vals "<<num_regions[0]<<" "<<num_regions[1]<<" "<<num_regions[2]<<" "<<num_regions[3]<<std::endl;
             int numelements = num_regions[0]*6;
-            float * boxes = new float[numelements];
+            auto * boxes = new float[numelements];
             idata.read(reinterpret_cast<char*> (&boxes[0]),sizeof(float)*numelements);
 
             {

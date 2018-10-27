@@ -93,7 +93,7 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
                                                    bsta_sigma_normalizer_sptr  /*n_table*/,
                                                    float min_sigma)
 {
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
 
   const unsigned int nobs = obs.size();
   if (nobs == 0) {
@@ -148,7 +148,7 @@ void boxm2_gauss_grey_processor::compute_app_model(vnl_vector_fixed<unsigned cha
 
   // initialize from scratch in every iteration
   //bsta_gauss_sf1 model_bsta(0.5f,(0.3f)*(0.3f));
-  const float big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
+  const auto big_sigma = (float)vnl_math::sqrt1_2; // maximum possible std. dev for set of samples drawn from [0 1]
   unsigned int nobs = obs.size();
   // check for some simple cases first
   if (nobs == 0) {

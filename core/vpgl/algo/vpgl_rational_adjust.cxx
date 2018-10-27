@@ -78,7 +78,7 @@ static bool initial_offsets(vpgl_rational_camera<double> const& initial_rcam,
                             double& yoff,
                             double& zoff)
 {
-  unsigned npts = static_cast<unsigned>( img_pts.size() );
+  auto npts = static_cast<unsigned>( img_pts.size() );
   // get the average elevation
   zoff = 0;
   for (unsigned i = 0; i<npts; ++i)
@@ -121,7 +121,7 @@ adjust(vpgl_rational_camera<double> const& initial_rcam,
   double xoff=0, yoff=0, zoff=0;
   if (!initial_offsets(initial_rcam, img_pts, geo_pts, xoff, yoff, zoff))
     return false;
-  unsigned num_corrs = static_cast<unsigned>( img_pts.size() );
+  auto num_corrs = static_cast<unsigned>( img_pts.size() );
   unsigned num_unknowns = 3;
   unsigned num_residuals = num_corrs*2;
   // Initialize the least squares function

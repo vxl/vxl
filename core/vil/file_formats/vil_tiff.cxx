@@ -51,7 +51,7 @@ bool vil_tiff_file_format_probe(vil_stream* is)
   // of the writing host. The header is always 4 bytes.
 
   char hdr[4];
-  unsigned read = (unsigned)is->read(hdr, sizeof hdr);
+  auto read = (unsigned)is->read(hdr, sizeof hdr);
   if (read < sizeof hdr)
     return false;
 
@@ -99,20 +99,20 @@ struct tif_stream_structures
 
 static tsize_t vil_tiff_readproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  tif_stream_structures* p = (tif_stream_structures*)h;
+  auto* p = (tif_stream_structures*)h;
   if (n > p->filesize) p->filesize= n;
   //there should be no problem with this case because n
   //is also of type tsize_t
-  tsize_t ret = (tsize_t)p->vs->read(buf, n);
+  auto ret = (tsize_t)p->vs->read(buf, n);
   return ret;
 }
 
 static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 {
-  tif_stream_structures* p = (tif_stream_structures*)h;
+  auto* p = (tif_stream_structures*)h;
   //there should be no problem with this case because n
   //is also of type tsize_t
-  tsize_t ret = (tsize_t)p->vs->write(buf, n);
+  auto ret = (tsize_t)p->vs->write(buf, n);
   vil_streampos s = p->vs->tell();
   if (s > p->filesize)
     p->filesize = s;
@@ -121,7 +121,7 @@ static tsize_t vil_tiff_writeproc(thandle_t h, tdata_t buf, tsize_t n)
 
 static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 {
-  tif_stream_structures* p = (tif_stream_structures*)h;
+  auto* p = (tif_stream_structures*)h;
   if      (whence == SEEK_SET) p->vs->seek(offset);
   else if (whence == SEEK_CUR) p->vs->seek(p->vs->tell() + offset);
   else if (whence == SEEK_END) p->vs->seek(p->filesize + offset);
@@ -133,7 +133,7 @@ static toff_t vil_tiff_seekproc(thandle_t h, toff_t offset, int whence)
 
 static int vil_tiff_closeproc(thandle_t h)
 {
-  tif_stream_structures* p = (tif_stream_structures*)h;
+  auto* p = (tif_stream_structures*)h;
   p->vs->unref();
   p->vs = nullptr;
   delete p;
@@ -194,13 +194,13 @@ vil_image_resource_sptr vil_tiff_file_format::make_input_image(vil_stream* is)
 {
   if (!vil_tiff_file_format_probe(is))
     return nullptr;
-  tif_stream_structures* tss = new tif_stream_structures(is);
+  auto* tss = new tif_stream_structures(is);
 
   tss->tif = open_tiff(tss, "rC");
 
   if (!tss->tif)
     return nullptr;
-  vil_tiff_header* h = new vil_tiff_header(tss->tif);
+  auto* h = new vil_tiff_header(tss->tif);
 
   if (!h->format_supported)
   {
@@ -311,7 +311,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
     return nullptr;
   }
 
-  tif_stream_structures* tss = new tif_stream_structures(vs);
+  auto* tss = new tif_stream_structures(vs);
   tss->filesize = 0;
   std::string mode("w");
   vxl_uint_64 size_needed = vxl_uint_64(nx) * vxl_uint_64(ny) * vxl_uint_64(nplanes) * vil_pixel_format_sizeof_components(format) * vil_pixel_format_num_components(format);
@@ -325,7 +325,7 @@ vil_tiff_file_format::make_blocked_output_image(vil_stream* vs,
   //size_block_i==0 && size_block_j==0 specifies strips of one scanline
   //this constructor for h defines that the resource is to
   //be setup for writing
-  vil_tiff_header* h = new vil_tiff_header(tss->tif, nx, ny, nplanes,
+  auto* h = new vil_tiff_header(tss->tif, nx, ny, nplanes,
                                            format, size_block_i, size_block_j);
   if (!h->format_supported)
   {
@@ -436,7 +436,7 @@ bool vil_tiff_image::set_compression_quality(int quality)
 #if HAS_GEOTIFF
 vil_geotiff_header* vil_tiff_image::get_geotiff_header()
 {
-  vil_geotiff_header* gtif = new vil_geotiff_header(t_.tif());
+  auto* gtif = new vil_geotiff_header(t_.tif());
   if (gtif->gtif_number_of_keys() == 0) {
     delete gtif;
     return nullptr;
@@ -608,8 +608,8 @@ unsigned vil_tiff_image::size_block_j() const
   if (h_->tile_length.valid)
     return static_cast<unsigned>(h_->tile_length.val);
 
-  unsigned bps = static_cast<unsigned>(h_->bytes_per_strip());
-  unsigned bpl = static_cast<unsigned>(h_->bytes_per_line());
+  auto bps = static_cast<unsigned>(h_->bytes_per_strip());
+  auto bpl = static_cast<unsigned>(h_->bytes_per_line());
   unsigned size = bps/bpl;
   return size;
   return 0;
@@ -654,7 +654,7 @@ void vil_tiff_image::copy_byte_block(vxl_byte* data, const vxl_uint_32 nbytes, v
 {
   if (nbytes==0)
     return;
-  vxl_byte* c_data = reinterpret_cast<vxl_byte*>(cnk->data());
+  auto* c_data = reinterpret_cast<vxl_byte*>(cnk->data());
   std::memcpy(c_data, data, nbytes);
 }
 
@@ -719,9 +719,9 @@ vil_tiff_image::get_block( unsigned block_index_i,
   {
     if (TIFFSetDirectory(t_.tif(), index_)<=0)
       return nullptr;
-    vil_tiff_header* h = new vil_tiff_header(t_.tif());
+    auto* h = new vil_tiff_header(t_.tif());
     //Cast away const
-    vil_tiff_image* ti = (vil_tiff_image*)this;
+    auto* ti = (vil_tiff_image*)this;
     delete h_;
     ti->h_=h;
   }
@@ -748,7 +748,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   if (h_->is_tiled())
   {
-	vxl_byte* data = new vxl_byte[encoded_block_size];
+	auto* data = new vxl_byte[encoded_block_size];
     if (TIFFReadEncodedTile(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
@@ -765,7 +765,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
 
   if (h_->is_striped()&&h_->planar_config.val ==1)
   {
-	vxl_byte* data = new vxl_byte[encoded_block_size];
+	auto* data = new vxl_byte[encoded_block_size];
     if (TIFFReadEncodedStrip(t_.tif(), blk_indx, data, (tsize_t) -1)<=0)
     {
       delete [] data;
@@ -820,7 +820,7 @@ vil_tiff_image::get_block( unsigned block_index_i,
           }
       }
       //the start of block buffer to be filled from the cached strips
-      vxl_byte* buf_adr = reinterpret_cast<vxl_byte*>(buf->data());
+      auto* buf_adr = reinterpret_cast<vxl_byte*>(buf->data());
 
       // iterate over rows of the band strips and interleave bands as:
       //      |b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1||b0|b1|..b_np-1|
@@ -897,21 +897,21 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
   unsigned expanded_bytes_per_strip = tl*bytes_expanded_line;
 
   //pointer into the input packed strip buffer
-  vxl_byte* buf_ptr = reinterpret_cast<vxl_byte*>(buf->data());
+  auto* buf_ptr = reinterpret_cast<vxl_byte*>(buf->data());
 
   //buffer for each scan line
   vil_memory_chunk_sptr line_buf = new vil_memory_chunk(bpl, fmt);
 
   //a buffer of zeros for filling partial strips to tile size
   vil_memory_chunk_sptr zero_buf = new vil_memory_chunk(bytes_expanded_line, fmt);
-  vxl_byte* zero_ptr = reinterpret_cast<vxl_byte*>(zero_buf->data());
+  auto* zero_ptr = reinterpret_cast<vxl_byte*>(zero_buf->data());
   for (unsigned i = 0; i<bytes_expanded_line; ++i)
     zero_ptr[i]=0;
 
   //buffer for the final unpacked output block
   vil_memory_chunk_sptr block_buf =
     new vil_memory_chunk(expanded_bytes_per_strip, fmt);
-  vxl_byte* block_ptr = reinterpret_cast<vxl_byte*>(block_buf->data());
+  auto* block_ptr = reinterpret_cast<vxl_byte*>(block_buf->data());
   //read scan lines from the strip and paste into the block
   for (unsigned j = 0; j<tl; ++j, buf_ptr+=bpl,
        block_ptr+=bytes_expanded_line)
@@ -950,7 +950,7 @@ vil_image_view_base_sptr vil_tiff_image::fill_block_from_strip(vil_memory_chunk_
       }
       //now we have the unpacked scan line in out_buf so copy to the view
       //buffer.
-      vxl_byte* out_line_buf_ptr =
+      auto* out_line_buf_ptr =
         reinterpret_cast<vxl_byte*>(out_line_buf->data());
 
       std::memcpy(block_ptr, out_line_buf_ptr, bytes_expanded_line);
@@ -1078,7 +1078,7 @@ void vil_tiff_image::fill_block_from_view(unsigned bi, unsigned bj,
   if (this->pixel_format() == VIL_PIXEL_FORMAT_BOOL)
   {
     unsigned outsize = (bytes_per_block+7*sizeof(bool))/(8*sizeof(bool));
-    vxl_byte* outbuf = new vxl_byte[outsize];
+    auto* outbuf = new vxl_byte[outsize];
     this->bitpack_block(bytes_per_block, block_buf, outbuf);
     delete [] block_buf;
     block_buf = outbuf; // bytes_per_block=outsize;
@@ -1106,7 +1106,7 @@ void vil_tiff_image::bitpack_block(unsigned bytes_per_block,
                                    vxl_byte* out_block_buf)
 {
   unsigned bytes_per_bool = sizeof(bool);
-  vxl_byte* bl = new vxl_byte[bytes_per_bool];
+  auto* bl = new vxl_byte[bytes_per_bool];
   unsigned bitctr = 0;
   unsigned outctr = 0;
   vxl_byte packed_byte=0;
@@ -1186,7 +1186,7 @@ bool vil_tiff_image::put_block(unsigned bi, unsigned bj, unsigned i0,
 
 
   //the data buffer for the block
-  vxl_byte* block_buf = new vxl_byte[bytes_per_block];
+  auto* block_buf = new vxl_byte[bytes_per_block];
 
   this->pad_block_with_zeros(ioff, joff, iclip, jclip,
                              bytes_per_pixel, block_buf);
@@ -1235,7 +1235,7 @@ bool vil_tiff_image::put_block( unsigned  block_index_i,
   unsigned bytes_per_block = bytes_per_pixel*sbi*sbj;
 
   //the data buffer for the block
-  vxl_byte* block_buf = new vxl_byte[bytes_per_block];
+  auto* block_buf = new vxl_byte[bytes_per_block];
 
   this->fill_block_from_view(0, 0, 0, 0, 0, 0,sbi, sbj, blk, block_buf);
 
@@ -1261,7 +1261,7 @@ void vil_tiff_pyramid_resource::normalize_scales()
   levels_[0]->scale_ = 1.0f;
   if (nlevels==1)
     return;
-  float ni0 = static_cast<float>(levels_[0]->ni_);
+  auto ni0 = static_cast<float>(levels_[0]->ni_);
   for (unsigned i = 1; i<nlevels; ++i)
     levels_[i]->scale_ = static_cast<float>(levels_[i]->ni_)/ni0;
 }
@@ -1311,7 +1311,7 @@ vil_tiff_pyramid_resource(tif_smart_ptr const& t, bool read)
       std::cerr << "In vil_tiff_pyramid_resource constructor"
                << " constructed header\n"
                << "n-levels = " << this->nlevels() << '\n';
-    tiff_pyramid_level* pl = new tiff_pyramid_level(this->nlevels(),
+    auto* pl = new tiff_pyramid_level(this->nlevels(),
                                                     h.image_width.val,
                                                     h.image_length.val,
                                                     h.nplanes,
@@ -1357,11 +1357,11 @@ vil_tiff_pyramid_resource::get_copy_view(unsigned i0, unsigned n_i,
   float scale = levels_[level]->scale_;
   float fi0 = std::floor(scale*i0), fj0 = std::floor(scale*j0);
   float fni = std::floor(scale*n_i), fnj = std::floor(scale*n_j);
-  unsigned si0 = static_cast<unsigned>(fi0);
-  unsigned sj0 = static_cast<unsigned>(fj0);
-  unsigned sni = static_cast<unsigned>(fni);
+  auto si0 = static_cast<unsigned>(fi0);
+  auto sj0 = static_cast<unsigned>(fj0);
+  auto sni = static_cast<unsigned>(fni);
   if (sni == 0) sni = 1;//can't have less than one pixel
-  unsigned snj = static_cast<unsigned>(fnj);
+  auto snj = static_cast<unsigned>(fnj);
   if (snj == 0) snj = 1;//can't have less than one pixel
   vil_image_view_base_sptr view = resc->get_copy_view(si0, sni, sj0, snj);
 #if 0 //DON'T NEED CLEAR?
@@ -1400,21 +1400,21 @@ bool vil_tiff_pyramid_resource::put_resource(vil_image_resource_sptr const& ir)
   unsigned sbi = 0, sbj = 0;
   if (bir) { sbi = bir->size_block_i(); sbj = bir->size_block_j(); }
   // setup the image header for the level
-  vil_tiff_header* h = new vil_tiff_header(t_.tif(), ni, nj, nplanes,
+  auto* h = new vil_tiff_header(t_.tif(), ni, nj, nplanes,
                                            fmt, sbi, sbj);
 
   /* We are writing single page of the multipage file */
   TIFFSetField(t_.tif(), TIFFTAG_SUBFILETYPE, FILETYPE_PAGE);
   /* Set the page number */
   TIFFSetField(t_.tif(), TIFFTAG_PAGENUMBER,level, 3);
-  vil_tiff_image* ti = new vil_tiff_image(t_, h, level);
+  auto* ti = new vil_tiff_image(t_, h, level);
   vil_image_resource_sptr resc = ti;
   if (!vil_copy_deep(ir, resc))
     return false;
 #if 0 //DON'T NEED CLEAR?
   ti->clear_TIFF();
 #endif
-  tiff_pyramid_level* pl = new tiff_pyramid_level((unsigned int)(levels_.size()), ni, nj, nplanes, fmt);
+  auto* pl = new tiff_pyramid_level((unsigned int)(levels_.size()), ni, nj, nplanes, fmt);
   levels_.push_back(pl);
   int status = TIFFWriteDirectory(t_.tif());
   return status == 1 ;
@@ -1430,8 +1430,8 @@ vil_image_resource_sptr vil_tiff_pyramid_resource::get_resource(const unsigned l
   // The status value should be checked here
   if (TIFFSetDirectory(t_.tif(), header_index)<=0)
     return nullptr;
-  vil_tiff_header* h = new vil_tiff_header(t_.tif());
-  vil_tiff_image* i = new vil_tiff_image(t_, h, nl);
+  auto* h = new vil_tiff_header(t_.tif());
+  auto* i = new vil_tiff_image(t_, h, nl);
   i->set_index(header_index);
   return i;
 }

@@ -44,7 +44,7 @@ bool breg3d_init_ekf_camera_optimizer_process::execute()
   if (!this->verify_inputs())
     return false;
 
-  brdb_value_t<vpgl_camera_double_sptr>* input0 =
+  auto* input0 =
     static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(input_data_[0].ptr());
 
   vpgl_perspective_camera<double> *cam0;

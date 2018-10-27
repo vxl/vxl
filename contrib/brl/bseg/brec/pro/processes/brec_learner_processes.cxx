@@ -50,8 +50,8 @@ bool brec_learner_layer0_init_process(bprb_func_process& pro)
   //: get input
   unsigned i = 0;
   int ndirs = pro.get_input<int>(i++);
-  float lambda_range = pro.get_input<float>(i++);
-  float lambda_inc = pro.get_input<float>(i++);
+  auto lambda_range = pro.get_input<float>(i++);
+  auto lambda_inc = pro.get_input<float>(i++);
   int n = pro.get_input<int>(i++);
 
   brec_part_hierarchy_learner_sptr hl = new brec_part_hierarchy_learner();
@@ -171,9 +171,9 @@ bool brec_learner_layer_n_init_process(bprb_func_process& pro)
   //: get input
   unsigned i = 0;
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
-  unsigned k = pro.get_input<unsigned>(i++);
-  float rad = pro.get_input<float>(i++);
+  auto n = pro.get_input<unsigned>(i++);
+  auto k = pro.get_input<unsigned>(i++);
+  auto rad = pro.get_input<float>(i++);
 
   brec_part_hierarchy_learner_sptr hl = new brec_part_hierarchy_learner();
   hl->initialize_layer_n_as_pairs(h, n, k, rad);
@@ -216,10 +216,10 @@ bool brec_learner_layer_n_fit_process(bprb_func_process& pro)
   // get input
   unsigned i = 0;
   brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
-  unsigned class_id = pro.get_input<unsigned>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
+  auto class_id = pro.get_input<unsigned>(i++);
+  auto n = pro.get_input<unsigned>(i++);
   std::string output_name = pro.get_input<std::string>(i++);
-  unsigned M = pro.get_input<unsigned>(i++);
+  auto M = pro.get_input<unsigned>(i++);
 
   hl->layer_n_fit_distributions(class_id, n, M);
   hl->print_to_m_file_layer_n(output_name, class_id, true);

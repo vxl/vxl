@@ -219,7 +219,7 @@ std::map<std::string, volm_land_layer> create_volm_land_table_name()
 {
   std::map<std::string, volm_land_layer> m;
   std::map<unsigned, volm_land_layer> id_table = create_volm_land_table();
-  std::map<unsigned, volm_land_layer>::iterator mit = id_table.begin();
+  auto mit = id_table.begin();
   for (; mit != id_table.end(); ++mit)
     m.insert(std::pair<std::string, volm_land_layer>(mit->second.name_, mit->second));
   return m;

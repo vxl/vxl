@@ -66,7 +66,7 @@ void icam_depth_transform::invert_depth(vil_image_view<double> const& depth)
   inv_depth_.set_size(ni, nj);
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i) {
-      float z = static_cast<float>(depth(i,j));
+      auto z = static_cast<float>(depth(i,j));
       if (z<1.0e-6f) {
         inv_depth_(i,j) = mval;
         continue;

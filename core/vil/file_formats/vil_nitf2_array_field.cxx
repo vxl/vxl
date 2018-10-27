@@ -20,7 +20,7 @@ int vil_nitf2_array_field::num_dimensions() const
 int vil_nitf2_array_field::
 next_dimension(const vil_nitf2_index_vector& index) const
 {
-  std::map<vil_nitf2_index_vector,int>::const_iterator dimension_bounds_entry = m_dimensions_map.find(index);
+  auto dimension_bounds_entry = m_dimensions_map.find(index);
   if (dimension_bounds_entry != m_dimensions_map.end()) {
     return dimension_bounds_entry->second;
   } else {
@@ -86,7 +86,7 @@ std::string index_string( const vil_nitf2_index_vector& indices )
 
 std::string vil_nitf2_array_field::get_value_string(const vil_nitf2_index_vector& in_indices) const
 {
-  vil_stream_core* str = new vil_stream_core;
+  auto* str = new vil_stream_core;
   write_vector_element( *str, in_indices, -1 );
   vil_streampos num_to_read = str->tell();
   str->seek( 0 );
@@ -107,7 +107,7 @@ void vil_nitf2_array_field::do_dimension( const vil_nitf2_index_vector& in_indic
     vil_nitf2_index_vector curr_indices = in_indices;
     curr_indices.push_back( i );
     //create our tree node and add it to inTree's child list
-    vil_nitf2_field::field_tree* tr = new vil_nitf2_field::field_tree;
+    auto* tr = new vil_nitf2_field::field_tree;
     std::string tag_str = tag();
     std::string index_str = index_string( curr_indices );
     std::string p_name;

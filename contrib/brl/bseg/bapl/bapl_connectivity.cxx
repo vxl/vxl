@@ -28,7 +28,7 @@ bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
     return false;
 
   bapl_conn& conn = conns_[set->id_left_];
-  bapl_conn::iterator p = lower_bound(conn.begin(), conn.end(), set, second_less);
+  auto p = lower_bound(conn.begin(), conn.end(), set, second_less);
   conn.insert(p, set);
 
   //: reverse the match set
@@ -53,7 +53,7 @@ bool bapl_conn_table::add(bapl_keypoint_match_set_sptr set)
     return false;
 
   bapl_conn& conn = conns_[set->id_left_];
-  bapl_conn::iterator p = lower_bound(conn.begin(), conn.end(), set, second_less);
+  auto p = lower_bound(conn.begin(), conn.end(), set, second_less);
   conn.insert(p, set);
   return true;
 }

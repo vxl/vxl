@@ -17,7 +17,7 @@ void  local_vsl_b_write(vsl_b_ostream& os, const TYPE n)
 {
   const size_t MAX_INT_BUFFER_LENGTH = VSL_MAX_ARBITRARY_INT_BUFFER_LENGTH(sizeof(TYPE));
   unsigned char buf[ MAX_INT_BUFFER_LENGTH ] = {0};
-  const std::size_t nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
+  const auto nbytes = (std::size_t)vsl_convert_to_arbitrary_length(&n, buf);
   os.os().write((char*)buf, nbytes );
 }
 
@@ -257,7 +257,7 @@ unsigned long vsl_b_ostream::add_serialisation_record
 // Returns 0 if there is no record of the object.
 unsigned long vsl_b_ostream::get_serial_number(void *pointer) const
 {
-  serialisation_records_type::const_iterator entry =
+  auto entry =
     serialisation_records_.find(pointer);
   if (entry == serialisation_records_.end())
   {
@@ -275,7 +275,7 @@ unsigned long vsl_b_ostream::get_serial_number(void *pointer) const
 // unrecorded.
 int vsl_b_ostream::get_serialisation_other_data(void *pointer) const
 {
-  serialisation_records_type::const_iterator entry =
+  auto entry =
     serialisation_records_.find(pointer);
   if (entry == serialisation_records_.end())
   {
@@ -292,7 +292,7 @@ int vsl_b_ostream::get_serialisation_other_data(void *pointer) const
 int vsl_b_ostream::set_serialisation_other_data
     (void *pointer, int /*other_data*/)
 {
-  serialisation_records_type::iterator entry =
+  auto entry =
     serialisation_records_.find(pointer);
   if (entry == serialisation_records_.end())
   {
@@ -401,7 +401,7 @@ void vsl_b_istream::add_serialisation_record(unsigned long serial_number,
 // Returns 0 if no record has been added.
 void* vsl_b_istream::get_serialisation_pointer(unsigned long serial_number) const
 {
-  serialisation_records_type::const_iterator entry =
+  auto entry =
         serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {
@@ -418,7 +418,7 @@ void* vsl_b_istream::get_serialisation_pointer(unsigned long serial_number) cons
 int vsl_b_istream::get_serialisation_other_data
     (unsigned long serial_number) const
 {
-  serialisation_records_type::const_iterator entry =
+  auto entry =
     serialisation_records_.find(serial_number);
   if (entry == serialisation_records_.end())
   {

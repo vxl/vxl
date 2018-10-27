@@ -50,10 +50,10 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
 
   // npixels x
-  unsigned npixels_x = pro.get_input<unsigned>(i++);
+  auto npixels_x = pro.get_input<unsigned>(i++);
 
   // npixels y
-  unsigned npixels_y = pro.get_input<unsigned>(i++);
+  auto npixels_y = pro.get_input<unsigned>(i++);
 
   //voxel_world
   bvxm_voxel_world_sptr voxel_world =  pro.get_input<bvxm_voxel_world_sptr>(i++);
@@ -72,8 +72,8 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<unsigned> *hmap = new vil_image_view<unsigned>(npixels_x, npixels_y, 1);
-  vil_image_view<float> *conf_map = new vil_image_view<float>(npixels_x, npixels_y, 1);
+  auto *hmap = new vil_image_view<unsigned>(npixels_x, npixels_y, 1);
+  auto *conf_map = new vil_image_view<float>(npixels_x, npixels_y, 1);
 
   voxel_world->heightmap(camera, *hmap, *conf_map);
 
@@ -92,7 +92,7 @@ bool bvxm_heightmap_process(bprb_func_process& pro)
     unsigned ni = hmap->ni();
     unsigned nj = hmap->nj();
     unsigned np = hmap->nplanes();
-    vil_image_view<float>* negated_hmap = new vil_image_view<float>(ni, nj, np);
+    auto* negated_hmap = new vil_image_view<float>(ni, nj, np);
     negated_hmap->fill(0.0f);
     for (unsigned i = 0; i < ni; i++)
       for (unsigned j = 0; j < nj; j++)

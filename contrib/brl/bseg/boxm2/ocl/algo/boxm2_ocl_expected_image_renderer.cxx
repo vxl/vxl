@@ -300,7 +300,7 @@ boxm2_ocl_expected_image_renderer
     options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -313,7 +313,7 @@ boxm2_ocl_expected_image_renderer
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -345,7 +345,7 @@ boxm2_ocl_expected_image_renderer
 
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -373,7 +373,7 @@ boxm2_ocl_expected_image_renderer
     options += " -D YUV -D STEP_CELL=step_cell_render(aux_args,data_ptr,llid,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
                                      src_paths,
@@ -386,7 +386,7 @@ boxm2_ocl_expected_image_renderer
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -415,7 +415,7 @@ boxm2_ocl_expected_image_renderer
       options += " -D RENDER_VIEW_DEP ";
       options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,d*linfo->block_len)";
 
-      bocl_kernel * ray_trace_kernel=new bocl_kernel();
+      auto * ray_trace_kernel=new bocl_kernel();
       ray_trace_kernel->create_kernel( &device->context(),
                                        device->device_id(),
                                        src_paths,
@@ -428,7 +428,7 @@ boxm2_ocl_expected_image_renderer
       std::vector<std::string> norm_src_paths;
       norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
       norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-      bocl_kernel * normalize_render_kernel=new bocl_kernel();
+      auto * normalize_render_kernel=new bocl_kernel();
 
       std::string normalize_options = options_basic;
       normalize_options += " -D RENDER -D YUV";

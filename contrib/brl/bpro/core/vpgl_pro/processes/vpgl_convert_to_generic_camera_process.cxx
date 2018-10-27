@@ -52,8 +52,8 @@ bool vpgl_convert_to_generic_camera_process(bprb_func_process& pro)
     std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
-  unsigned ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
-  unsigned level = pro.get_input<unsigned>(3);
+  auto ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
+  auto level = pro.get_input<unsigned>(3);
   vpgl_generic_camera<double> gcam;
 
   if (!vpgl_generic_camera_convert::convert(camera, (int)ni, (int)nj, gcam, level)) {
@@ -105,12 +105,12 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
     std::cout<<"Null camera input\n"<<std::endl;
     return false;
   }
-  unsigned ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
-  unsigned level = pro.get_input<unsigned>(3);
+  auto ni = pro.get_input<unsigned>(1), nj = pro.get_input<unsigned>(2);
+  auto level = pro.get_input<unsigned>(3);
   int margin = pro.get_input<int>(4);
   vpgl_generic_camera<double> gcam;
 
-  vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
+  auto *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
   if (!cam) {
     std::cout<<"Input camera is not perspective, not implemented for other camera types!\n";
     return false;
@@ -121,7 +121,7 @@ bool vpgl_convert_to_generic_camera_w_margin_process(bprb_func_process& pro)
     return false;
   }
   //: adjust the calibration matrix
-  vpgl_perspective_camera<double>* ncam =
+  auto* ncam =
     new vpgl_perspective_camera<double>(*cam);
 
   vnl_matrix_fixed<double, 3, 3> T(0.0);
@@ -171,9 +171,9 @@ bool vpgl_write_generic_camera_process(bprb_func_process& pro)
     return false;
   }
   std::string out_name = pro.get_input<std::string>(1);
-  unsigned level = pro.get_input<unsigned>(2);
+  auto level = pro.get_input<unsigned>(2);
 
-  vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
+  auto* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
 
   std::ofstream ofs(out_name.c_str());
   ofs << "#VRML V2.0 utf8\n";
@@ -218,10 +218,10 @@ bool vpgl_get_generic_camera_ray_process(bprb_func_process& pro)
     return false;
   }
 
-  unsigned u = pro.get_input<unsigned>(1);
-  unsigned v = pro.get_input<unsigned>(2);
+  auto u = pro.get_input<unsigned>(1);
+  auto v = pro.get_input<unsigned>(2);
 
-  vpgl_generic_camera<double>* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
+  auto* gcam = dynamic_cast<vpgl_generic_camera<double>* >(camera.ptr());
   vgl_ray_3d<double> ray = gcam->ray(u, v);
 
   pro.set_output_val<double>(0, ray.origin().x());

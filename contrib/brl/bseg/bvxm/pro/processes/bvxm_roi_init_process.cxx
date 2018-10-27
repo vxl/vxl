@@ -80,7 +80,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
   bvxm_world_params_sptr world_params = voxel_world->get_params();
 
 
-  vpgl_rational_camera<double>* rat_camera =
+  auto* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
     std::cerr << "The camera input is not a rational camera\n";
@@ -90,7 +90,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
   vpgl_local_rational_camera<double> local_camera;
 
   if (!is_all_bits) {  // throw the less important 3 bits in the nitf image and output an byte image
-    vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
+    auto* img_ptr = new vil_image_view<unsigned char>();
     if (!roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera)) {
       std::cerr << "The process has failed!\n";
       return false;
@@ -109,7 +109,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
     return true;
   }
   else {                // keep all 11 bits in the nitf image and output an short image
-    vil_image_view<vxl_uint_16>* img_ptr = new vil_image_view<vxl_uint_16>();
+    auto* img_ptr = new vil_image_view<vxl_uint_16>();
     if (!roi_init(image_path, rat_camera, world_params, uncertainty, img_ptr, local_camera)) {
       std::cerr << pro.name() << ": The process has failed!\n";  return false;
     }
@@ -146,7 +146,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
     return false;
   }
 
-  vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
+  auto* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
 
   vgl_vector_3d<unsigned int> dims = world_params->num_voxels();
   int dimx = dims.x();
@@ -210,7 +210,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
 
           if (bigendian) {
-            unsigned char* arr = (unsigned char*) &curr_pixel_val;
+            auto* arr = (unsigned char*) &curr_pixel_val;
             // [defgh3][5abc]
             // --> [abcdefgh]
             unsigned char big = *arr;
@@ -228,7 +228,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
             curr_pixel_val >>= 8;
           }
 
-          unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
+          auto pixel_val = static_cast<unsigned char> (curr_pixel_val);
 
 #if 0
           //This is how Thom use to get the region
@@ -281,7 +281,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
     return false;
   }
 
-  vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
+  auto* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
 
   vgl_vector_3d<unsigned int> dims = world_params->num_voxels();
   int dimx = dims.x();
@@ -344,7 +344,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
           // we will ignore the most significant 5 bits but keep all other 11 bits for nitf image
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
           if (bigendian) {
-            unsigned char* arr = (unsigned char*) &curr_pixel_val;
+            auto* arr = (unsigned char*) &curr_pixel_val;
             // [defgh3][5abc]
             // --> [abcdefgh3]
             unsigned char big = *arr;
@@ -416,7 +416,7 @@ vgl_box_2d<double>* bvxm_roi_init_process_globals::project_box( vpgl_rational_ca
   vgl_box_3d<double> cam_box(center, 2*r, 2*r, 2*r, vgl_box_3d<double>::centre);
   std::vector<vgl_point_3d<double> > cam_corners = bvxm_util::corners_of_box_3d<double>(cam_box);
   std::vector<vgl_point_3d<double> > box_corners = bvxm_util::corners_of_box_3d<double>(box);
-  vgl_box_2d<double>* roi = new vgl_box_2d<double>();
+  auto* roi = new vgl_box_2d<double>();
 
   double lon, lat, gz;
   for (auto cam_corner : cam_corners) {

@@ -67,7 +67,7 @@ int main(int argc, char** argv)
       std::string bin_file = leave->get_label_name(file_name_pre.str(), "osm");
       if (!vul_file::exists(bin_file))
         continue;
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
+      auto* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       ptr->contents_ = new volm_osm_object_ids(bin_file);
     }
 
@@ -89,7 +89,7 @@ int main(int argc, char** argv)
     // start
     for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++)
     {
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+      auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
       if (leaf_ptr->contents_->is_empty())
         continue;
 #if 1
@@ -185,7 +185,7 @@ int main(int argc, char** argv)
     volm_geo_index2::get_leaf(root, leaf, loc_pt);
     if (!leaf)
       continue;
-    volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaf.ptr());
+    auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaf.ptr());
     if (!leaf_ptr->contents_)
       leaf_ptr->contents_ = new volm_osm_object_ids();
     leaf_ptr->contents_->add_pt(p_idx);
@@ -199,7 +199,7 @@ int main(int argc, char** argv)
     if (leaves.empty())
       continue;
     for (auto & leave : leaves) {
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
+      auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       if (!leaf_ptr->contents_)
         leaf_ptr->contents_ = new volm_osm_object_ids();
       leaf_ptr->contents_->add_line(line_idx);
@@ -223,7 +223,7 @@ int main(int argc, char** argv)
     if (leaves.empty())
       continue;
     for (auto & leave : leaves) {
-      volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
+      auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
       if (!leaf_ptr->contents_)
         leaf_ptr->contents_ = new volm_osm_object_ids();
       leaf_ptr->contents_->add_region(region_idx);
@@ -237,7 +237,7 @@ int main(int argc, char** argv)
   std::vector<volm_geo_index2_node_sptr> leaves;
   volm_geo_index2::get_leaves(root, leaves);
   for (unsigned l_idx = 0; l_idx < leaves.size(); l_idx++) {
-    volm_geo_index2_node<volm_osm_object_ids_sptr>* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
+    auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leaves[l_idx].ptr());
     if (leaf_ptr->contents_->is_empty())
       continue;
 #if 1

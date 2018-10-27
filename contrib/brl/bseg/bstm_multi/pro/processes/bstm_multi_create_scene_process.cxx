@@ -53,9 +53,9 @@ bool bstm_multi_create_scene_process(bprb_func_process &pro) {
   std::string datapath = pro.get_input<std::string>(i++);
   appearance[0] = pro.get_input<std::string>(i++); // Appearance Model String
   std::string opt_app = pro.get_input<std::string>(i++); // Occupancy Model String
-  float origin_x = pro.get_input<float>(i++);
-  float origin_y = pro.get_input<float>(i++);
-  float origin_z = pro.get_input<float>(i++);
+  auto origin_x = pro.get_input<float>(i++);
+  auto origin_y = pro.get_input<float>(i++);
+  auto origin_z = pro.get_input<float>(i++);
 
   if (!vul_file::make_directory_path(datapath.c_str()))
     return false;

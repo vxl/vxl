@@ -106,7 +106,7 @@ bool msdi_reflected_marked_images::next()
 void msdi_reflected_marked_images::get_image()
 {
   assert(marked_images_.image().is_a()=="vimt_image_2d_of<vxl_byte>");
-  const vimt_image_2d_of<vxl_byte>& b_im
+  const auto& b_im
     = static_cast<const vimt_image_2d_of<vxl_byte>&>(marked_images_.image());
 
   if (!first_pass_)

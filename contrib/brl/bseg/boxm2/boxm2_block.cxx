@@ -78,7 +78,7 @@ bool boxm2_block::b_read(char* buff)
     sub_block_num_ = vgl_vector_3d<unsigned>(nums[0], nums[1], nums[2]);
 
     //4. setup big arrays (3d block of trees)
-    uchar16* treesBuff = reinterpret_cast<uchar16*>(buff+bytes_read);
+    auto* treesBuff = reinterpret_cast<uchar16*>(buff+bytes_read);
     trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                           sub_block_num_.y(),
                                           sub_block_num_.z(),
@@ -87,7 +87,7 @@ bool boxm2_block::b_read(char* buff)
   }
   else if (version_ == 2)
   {
-    uchar16* treesBuff = reinterpret_cast<uchar16*>(buff);
+    auto* treesBuff = reinterpret_cast<uchar16*>(buff);
     byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
     trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                           sub_block_num_.y(),
@@ -187,7 +187,7 @@ bool boxm2_block::init_empty_block(boxm2_block_metadata const& data)
   sub_block_num_ = data.sub_block_num_;
 
   //4. setup big arrays (3d block of trees)
-  uchar16* treesBuff = reinterpret_cast<uchar16*>(buffer_+bytes_read);
+  auto* treesBuff = reinterpret_cast<uchar16*>(buffer_+bytes_read);
   trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                         sub_block_num_.y(),
                                         sub_block_num_.z(),

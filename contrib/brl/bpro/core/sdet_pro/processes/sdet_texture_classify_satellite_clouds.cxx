@@ -64,7 +64,7 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
   }
   // get inputs
   sdet_texture_classifier_sptr tcptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tcptr.ptr());
+  auto* tcp = static_cast<sdet_texture_classifier_params*>(tcptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
   std::string texton_dict_path = pro.get_input<std::string>(1);
   tc.load_dictionary(texton_dict_path);
@@ -80,17 +80,17 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
 
   //std::string img_name = pro.get_input<std::string>(2);
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
-  unsigned i = pro.get_input<unsigned>(3);
-  unsigned j = pro.get_input<unsigned>(4);
-  unsigned ni = pro.get_input<unsigned>(5);
-  unsigned nj = pro.get_input<unsigned>(6);
+  auto i = pro.get_input<unsigned>(3);
+  auto j = pro.get_input<unsigned>(4);
+  auto ni = pro.get_input<unsigned>(5);
+  auto nj = pro.get_input<unsigned>(6);
 
   tc.block_size_ = pro.get_input<unsigned>(7);
   std::string cat_ids_file = pro.get_input<std::string>(8);
   std::string first_category = pro.get_input<std::string>(9);
 
   // input maximum graylevel
-  float scale_factor  = pro.get_input<float>(10);
+  auto scale_factor  = pro.get_input<float>(10);
   std::cout << "Scale Factor = " << scale_factor << std::endl;
 
   int invalid = tc.max_filter_radius();
@@ -246,7 +246,7 @@ bool sdet_texture_classify_satellite_clouds_process2(bprb_func_process& pro)
   }
   // get inputs
   sdet_texture_classifier_sptr tcptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  sdet_texture_classifier_params* tcp = static_cast<sdet_texture_classifier_params*>(tcptr.ptr());
+  auto* tcp = static_cast<sdet_texture_classifier_params*>(tcptr.ptr());
   sdet_atmospheric_image_classifier tc(*tcp);
   std::string texton_dict_path = pro.get_input<std::string>(1);
   tc.load_dictionary(texton_dict_path);
@@ -261,10 +261,10 @@ bool sdet_texture_classify_satellite_clouds_process2(bprb_func_process& pro)
   }
 
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
-  unsigned i = pro.get_input<unsigned>(3);
-  unsigned j = pro.get_input<unsigned>(4);
-  unsigned width = pro.get_input<unsigned>(5);
-  unsigned height = pro.get_input<unsigned>(6);
+  auto i = pro.get_input<unsigned>(3);
+  auto j = pro.get_input<unsigned>(4);
+  auto width = pro.get_input<unsigned>(5);
+  auto height = pro.get_input<unsigned>(6);
   tc.block_size_ = pro.get_input<unsigned>(7);
   std::string cat_ids_file = pro.get_input<std::string>(8);
   std::string first_category = pro.get_input<std::string>(9);
@@ -311,7 +311,7 @@ bool sdet_texture_classify_satellite_clouds_process2(bprb_func_process& pro)
   }
   tc.set_atmospheric_categories(cats2);
 
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
   std::cout << " image size: ni: " << image->ni() << ", nj: " << image->nj() << std::endl;
 
   std::vector<vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();

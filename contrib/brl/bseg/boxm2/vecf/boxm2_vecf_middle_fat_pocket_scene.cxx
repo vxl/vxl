@@ -29,7 +29,7 @@ void boxm2_vecf_middle_fat_pocket_scene::create_anatomy_labels(){
   for(auto & source_cell_center : source_cell_centers){
     int depth = source_cell_center.depth_;
     unsigned data_index = source_cell_center.data_index_;
-    float alpha = static_cast<float>(alpha_data_[data_index]);
+    auto alpha = static_cast<float>(alpha_data_[data_index]);
     if(alpha>alpha_init_){
       middle_fat_pocket_data_[data_index] = static_cast<boxm2_data_traits<BOXM2_PIXEL>::datatype>(true);
     }
@@ -48,7 +48,7 @@ void boxm2_vecf_middle_fat_pocket_scene::cache_cell_centers_from_anatomy_labels(
     float alpha = alpha_data_[dindx];
     bool middle_fat_pocket = middle_fat_pocket_data_[dindx]   > pixtype(0);
     if(middle_fat_pocket||alpha>alpha_init_){
-      unsigned middle_fat_pocket_index  = static_cast<unsigned>(middle_fat_pocket_cell_centers_.size());
+      auto middle_fat_pocket_index  = static_cast<unsigned>(middle_fat_pocket_cell_centers_.size());
       const vgl_point_3d<double>& p = source_cell_center.cell_center_;
       middle_fat_pocket_cell_centers_.push_back(p);
       middle_fat_pocket_cell_data_index_.push_back(dindx);
@@ -135,7 +135,7 @@ void boxm2_vecf_middle_fat_pocket_scene::find_cell_neigborhoods(){
         unsigned indx_n;
         if(!blk_->data_index(q, indx_n))
           continue;
-        std::map<unsigned, unsigned >::iterator iit= data_index_to_cell_index_.find(indx_n);
+        auto iit= data_index_to_cell_index_.find(indx_n);
         if(iit == data_index_to_cell_index_.end())
           continue;
         if(iit->second==i)
@@ -152,7 +152,7 @@ void boxm2_vecf_middle_fat_pocket_scene::paint_middle_fat_pocket(){
   params_.app_[0]=params_.middle_fat_pocket_intensity_;
   boxm2_data_traits<BOXM2_NUM_OBS>::datatype nobs;
   nobs.fill(0);
-  unsigned ns = static_cast<unsigned>(middle_fat_pocket_cell_centers_.size());
+  auto ns = static_cast<unsigned>(middle_fat_pocket_cell_centers_.size());
   for(unsigned i = 0; i<ns; ++i){
     unsigned indx = middle_fat_pocket_cell_data_index_[i];
     if(indx%3 == 0)
@@ -167,7 +167,7 @@ void boxm2_vecf_middle_fat_pocket_scene::paint_middle_fat_pocket(){
 bool boxm2_vecf_middle_fat_pocket_scene::is_type_data_index(unsigned data_index, boxm2_vecf_middle_fat_pocket_scene::anat_type type) const{
 
    if(type == MIDDLE_FAT_POCKET){
-     unsigned char middle_fat_pocket = static_cast<unsigned char>(middle_fat_pocket_data_[data_index]);
+     auto middle_fat_pocket = static_cast<unsigned char>(middle_fat_pocket_data_[data_index]);
      return middle_fat_pocket > static_cast<unsigned char>(0);
    }
    return false;
@@ -211,7 +211,7 @@ bool boxm2_vecf_middle_fat_pocket_scene::inverse_vector_field(vgl_point_3d<doubl
 void boxm2_vecf_middle_fat_pocket_scene::inverse_vector_field(std::vector<vgl_vector_3d<double> >& vf,
                                                       std::vector<bool>& valid) const{
   vul_timer t;
-  unsigned nt = static_cast<unsigned>(box_cell_centers_.size());
+  auto nt = static_cast<unsigned>(box_cell_centers_.size());
   vf.resize(nt);// initialized to 0
   valid.resize(nt, false);
   unsigned cnt = 0;
@@ -270,7 +270,7 @@ void boxm2_vecf_middle_fat_pocket_scene::interpolate_vector_field(vgl_point_3d<d
   sumalpha /= sumw;
   sumcolor/=sumw;
   color_app[0] = (unsigned char) (sumcolor[0] * 255); color_app[2] = (unsigned char)(sumcolor[2]*255); color_app[4]= (unsigned char) (sumcolor[4] * 255);
-  boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = static_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype>(sumalpha);
+  auto alpha = static_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype>(sumalpha);
   target_app_data_[tindx] = app;
   target_alpha_data_[tindx] = alpha;
 }
@@ -297,7 +297,7 @@ bool boxm2_vecf_middle_fat_pocket_scene::apply_vector_field(cell_info const& tar
 
 void boxm2_vecf_middle_fat_pocket_scene::apply_vector_field_to_target(std::vector<vgl_vector_3d<double> > const& vf,
                                                               std::vector<bool> const& valid){
-  unsigned n = static_cast<unsigned>(box_cell_centers_.size());
+  auto n = static_cast<unsigned>(box_cell_centers_.size());
   //clear target
   int valid_count = 0;
   if(n==0)
@@ -346,7 +346,7 @@ int boxm2_vecf_middle_fat_pocket_scene::prerefine_target_sub_block(vgl_point_3d<
   for(auto & int_sblk : int_sblks){
     const uchar16& tree_bits = trees_(int_sblk.x(), int_sblk.y(), int_sblk.z());
     //safely cast since bit_tree is just temporary
-    uchar16& uctree_bits = const_cast<uchar16&>(tree_bits);
+    auto& uctree_bits = const_cast<uchar16&>(tree_bits);
     boct_bit_tree bit_tree(uctree_bits.data_block(), max_level);
     int dpth = bit_tree.depth();
     if(dpth>max_depth){
@@ -358,7 +358,7 @@ int boxm2_vecf_middle_fat_pocket_scene::prerefine_target_sub_block(vgl_point_3d<
 
 // == the full inverse vector field  p_source = p_target + vf ===
 void boxm2_vecf_middle_fat_pocket_scene::inverse_vector_field_unrefined(std::vector<vgl_point_3d<double> > const& unrefined_target_pts){
-  unsigned n = static_cast<unsigned>(unrefined_target_pts.size());
+  auto n = static_cast<unsigned>(unrefined_target_pts.size());
   vfield_unrefined_.resize(n, vgl_vector_3d<double>(0.0, 0.0, 0.0));
   valid_unrefined_.resize(n, false);
   for(unsigned vf_index = 0; vf_index<n; ++vf_index){
@@ -405,7 +405,7 @@ void boxm2_vecf_middle_fat_pocket_scene::map_to_target(boxm2_scene_sptr target_s
 
 bool boxm2_vecf_middle_fat_pocket_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
-    boxm2_vecf_middle_fat_pocket_params const& params_ref = dynamic_cast<boxm2_vecf_middle_fat_pocket_params const &>(params);
+    auto const& params_ref = dynamic_cast<boxm2_vecf_middle_fat_pocket_params const &>(params);
     params_ = boxm2_vecf_middle_fat_pocket_params(params_ref);
     middle_fat_pocket_geo_.set_params(params_);
     return true;

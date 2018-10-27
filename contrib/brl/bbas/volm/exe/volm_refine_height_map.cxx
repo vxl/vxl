@@ -54,11 +54,11 @@ static bool find_nearest_building(unsigned const& i, unsigned const& j,
 {
   unsigned num_nbrs = 8;
 
-  std::map<unsigned, std::pair<std::vector<unsigned>, std::vector<unsigned> > >::const_iterator mit = buildings.begin();
+  auto mit = buildings.begin();
   for( ; mit != buildings.end(); ++mit)
   {
     std::vector<std::pair<int, int> > b_pixels;
-    unsigned num_pixels = (unsigned)mit->second.second.size();
+    auto num_pixels = (unsigned)mit->second.second.size();
     for (unsigned p_idx = 0; p_idx < num_pixels; p_idx++)
       b_pixels.emplace_back(mit->second.first[p_idx], mit->second.second[p_idx]);
 
@@ -250,7 +250,7 @@ int main(int argc, char** argv)
     volm_img_info info;
     volm_io_tools::load_lidar_img(img_name.str(), info, true, false, true, cam_name.str());
     //volm_io_tools::load_geotiff_image(img_name.str(), info, true);
-    vil_image_view<vxl_byte>* img_src = dynamic_cast<vil_image_view<vxl_byte>*>(info.img_r.ptr());
+    auto* img_src = dynamic_cast<vil_image_view<vxl_byte>*>(info.img_r.ptr());
     class_img_map.insert(std::pair<std::string, vil_image_view<vxl_byte> >(leaf->get_string(), *img_src));
     class_cam_map.insert(std::pair<std::string, vpgl_geo_camera*>(leaf->get_string(), info.cam));
   }
@@ -267,8 +267,8 @@ int main(int argc, char** argv)
         //  continue;
         double u, v;
         class_cam_map[class_leaves[l_idx]->get_string()]->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);
+        auto vv = (unsigned)std::floor(v+0.5);
         if (uu > 0 && vv > 0 && uu < class_img_map[class_leaves[l_idx]->get_string()].ni() && vv < class_img_map[class_leaves[l_idx]->get_string()].nj())
           c_img(i,j) = (class_img_map[class_leaves[l_idx]->get_string()])(uu,vv);
       }
@@ -357,7 +357,7 @@ int main(int argc, char** argv)
       std::vector<float> flat_heights;
       for (auto & flat_region : flat_regions)
       {
-        unsigned num_pts = (unsigned)flat_region.second.first.size();
+        auto num_pts = (unsigned)flat_region.second.first.size();
         for (unsigned ri = 0; ri < num_pts; ri++)
           flat_heights.push_back(h_img(flat_region.second.first[ri], flat_region.second.second[ri]));
       }
@@ -394,14 +394,14 @@ int main(int argc, char** argv)
 
       // obtain the window height
       float grd_height = 0.0f;
-      std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
+      auto mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (mit == window_min_height.end())
         // search neighbors to obtain height
         grd_height = neighbor_height(window_min_height, w_idx_i, w_idx_j, window_size);
       else
         grd_height = mit->second;
       // refine the ground height
-      std::map<std::pair<unsigned,unsigned>, std::vector<std::pair<unsigned, unsigned> > >::iterator r_mit = non_building_regions.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
+      auto r_mit = non_building_regions.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (r_mit != non_building_regions.end()) {
         std::vector<std::pair<unsigned, unsigned> > region_pixels = r_mit ->second;
         for (auto & region_pixel : region_pixels) {
@@ -447,7 +447,7 @@ int main(int argc, char** argv)
       start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
       // obtain the ground height for current window
       float grd_height = 0.0f;
-      std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
+      auto mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (mit == window_min_height.end())
         // search neighbors to obtain height
         grd_height = neighbor_height(window_min_height, w_idx_i, w_idx_j, window_size);
@@ -484,7 +484,7 @@ int main(int argc, char** argv)
       start_nj = w_idx_j*dy(); end_nj = (w_idx_j+1)*dy();
       // obtain the ground height for current window
       float grd_height = 0.0f;
-      std::map<std::pair<unsigned, unsigned>, float>::iterator mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
+      auto mit = window_min_height.find(std::pair<unsigned,unsigned>(w_idx_i, w_idx_j));
       if (mit == window_min_height.end())
         // search neighbors to obtain height
         grd_height = neighbor_height(window_min_height, w_idx_i, w_idx_j, window_size);
@@ -580,7 +580,7 @@ static bool obtain_buildings(vil_image_view<vxl_byte> const& c_img,
         continue;
       // check whether pixel (i,j) is inside any building
       bool is_inside_building = false;
-      for (std::map<unsigned, std::pair<std::vector<unsigned>, std::vector<unsigned> > >::iterator mit = buildings.begin();
+      for (auto mit = buildings.begin();
           (mit != buildings.end() && !is_inside_building); ++mit) {
         if (mit->second.first.size() != mit->second.second.size())
           return false;
@@ -606,7 +606,7 @@ static bool refine_building_by_median(vil_image_view<float> const& h_img,
   {
     if (building.second.first.size() < 10)
       continue;
-    unsigned num_pts = (unsigned)building.second.first.size();
+    auto num_pts = (unsigned)building.second.first.size();
     // find the median
     std::vector<float> height_values;
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
@@ -669,7 +669,7 @@ static bool refine_building_by_median_divided(vil_image_view<float> const& h_img
     if (building.second.first.size() < 10)  // ignore super pixel with less than 10 pixels
       continue;
     std::vector<std::pair<unsigned, unsigned> > super_pixel;
-    unsigned num_pts = (unsigned)building.second.first.size();
+    auto num_pts = (unsigned)building.second.first.size();
     for (unsigned p_idx = 0; p_idx < num_pts; p_idx++)
       super_pixel.emplace_back(building.second.first[p_idx], building.second.second[p_idx]);
     // form the bbox of super pixels
@@ -731,7 +731,7 @@ static float neighbor_height(std::map<std::pair<unsigned, unsigned>, float> cons
     {
       int nbr_i = (int)w_idx_i + nbrs8_delta[c][0];
       int nbr_j = (int)w_idx_j + nbrs8_delta[c][1];
-      std::map<std::pair<unsigned, unsigned>, float>::const_iterator mit = window_height.find(std::pair<int,int>(nbr_i, nbr_j));
+      auto mit = window_height.find(std::pair<int,int>(nbr_i, nbr_j));
       if (mit != window_height.end()) {
         neigh_heights.push_back(mit->second);
       }
@@ -812,7 +812,7 @@ static bool refine_building(float const& ratio,
           std::map<unsigned, float> occ_h_map;
           for (unsigned r_idx = 0; r_idx < repeat.size(); r_idx++)
             occ_h_map.insert(std::pair<unsigned, float>(occurance[r_idx], repeat[r_idx]));
-          std::map<unsigned, float>::iterator mit = occ_h_map.end();
+          auto mit = occ_h_map.end();
           mit--;
           curr_height = mit->second;
           curr_ratio  = (float)mit->first / (float)(num_nbrs);

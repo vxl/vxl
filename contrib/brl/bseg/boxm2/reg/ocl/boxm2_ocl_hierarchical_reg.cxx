@@ -41,7 +41,7 @@ bool boxm2_ocl_hierarchical_reg::exhaustive()
         std::cout<<"Level #"<<level<<std::endl;
         mis.clear();
         samples_.clear();
-        std::map<double,vnl_vector<double> >::reverse_iterator iter = samples_sorted.rbegin();
+        auto iter = samples_sorted.rbegin();
         for(unsigned int j = 0 ; j < numbestparticales[level] && iter!=samples_sorted.rend(); j++,iter++)
         {
             std::cout.flush();

@@ -55,7 +55,7 @@ void vsl_b_write(vsl_b_ostream& os, const volm_osm_object_point* rptr)
   }
   else
     vsl_b_write(os, true);
-  volm_osm_object_point* ptr = const_cast<volm_osm_object_point*>(rptr);
+  auto* ptr = const_cast<volm_osm_object_point*>(rptr);
   ptr->b_write(os);
 }
 

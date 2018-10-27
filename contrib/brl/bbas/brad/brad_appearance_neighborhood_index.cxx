@@ -152,7 +152,7 @@ void brad_appearance_neighborhood_index::compute_index(){
   unsigned ptr = 0;
   while(ptr<n){
     unsigned img_idx = img_index[ptr];
-    unsigned nillum = static_cast<unsigned>(near_illum_dir_map_[img_idx].size());
+    auto nillum = static_cast<unsigned>(near_illum_dir_map_[img_idx].size());
     if(nillum < num_illum_neighbors_thresh_){
       ptr++;
       continue;
@@ -186,7 +186,7 @@ void brad_appearance_neighborhood_index::compute_index(){
         ptr++;
   }
   // the set of targets is determined
-  unsigned ntarg = static_cast<unsigned>(targets.size());
+  auto ntarg = static_cast<unsigned>(targets.size());
   if(!ntarg)
     return;
 
@@ -200,7 +200,7 @@ bool brad_appearance_neighborhood_index::force_single_index(unsigned img_idx){
   index_.clear();
   this->fill_view_dir_maps();
   this->fill_near_illum_dir_map();
-  unsigned nillum = static_cast<unsigned>(near_illum_dir_map_[img_idx].size());
+  auto nillum = static_cast<unsigned>(near_illum_dir_map_[img_idx].size());
   if(nillum < num_illum_neighbors_thresh_)
     return false;
   index_[img_idx]=near_illum_dir_map_[img_idx];
@@ -216,7 +216,7 @@ std::vector<unsigned> brad_appearance_neighborhood_index::index(unsigned indx) c
   return iit->second;
 }
 unsigned brad_appearance_neighborhood_index::most_nadir_view() const{
-  unsigned n = static_cast<unsigned>(view_dirs_.size());
+  auto n = static_cast<unsigned>(view_dirs_.size());
   vgl_vector_3d<double> down_z_dir(0.0, 0.0, -1.0);
   double max_dot = 0.0;
   unsigned ret = 0;
@@ -231,7 +231,7 @@ unsigned brad_appearance_neighborhood_index::most_nadir_view() const{
 }
 //predicate functor operator for sorting
 bool brad_appearance_neighborhood_index::operator () (unsigned va, unsigned vb) const{
-  unsigned n = static_cast<unsigned>(view_dirs_.size());
+  auto n = static_cast<unsigned>(view_dirs_.size());
   vgl_vector_3d<double> down_z_dir(0.0, 0.0, -1.0);
   if(va>=n || vb>=n)
     return false;
@@ -240,7 +240,7 @@ bool brad_appearance_neighborhood_index::operator () (unsigned va, unsigned vb) 
   return dpa>dpb;
 }
 std::vector<unsigned> brad_appearance_neighborhood_index::views_in_nadir_order() const{
-  unsigned n = static_cast<unsigned>(view_dirs_.size());
+  auto n = static_cast<unsigned>(view_dirs_.size());
   std::vector<unsigned> views(n);
   for(unsigned i = 0; i<n; ++i)
     views[i]=i;
@@ -258,7 +258,7 @@ void brad_appearance_neighborhood_index::print_index() const{
   }
 }
 void brad_appearance_neighborhood_index::print_index_angles() const{
-  for(std::map<unsigned, std::vector<unsigned> >::const_iterator iit = index_.begin();
+  for(auto iit = index_.begin();
       iit != index_.end(); ++iit){
     unsigned i_idx = iit->first;
     vgl_vector_3d<double> view_dir_i = view_dirs_[i_idx];

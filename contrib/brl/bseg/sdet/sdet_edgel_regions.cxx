@@ -888,7 +888,7 @@ bool sdet_edgel_regions::add_to_forward(unsigned int key, unsigned int value)
   }
   else
   {
-    std::vector<unsigned int>* larray = new std::vector<unsigned int>;
+    auto* larray = new std::vector<unsigned int>;
     larray->push_back(value);
     region_pairs_forward_[key]=larray;
   }
@@ -921,7 +921,7 @@ bool sdet_edgel_regions::add_to_reverse(unsigned int key, unsigned int value)
   }
   else
   {
-    std::vector<unsigned int>* larray = new std::vector<unsigned int>;
+    auto* larray = new std::vector<unsigned int>;
     larray->push_back(value);
     region_pairs_reverse_[key]=larray;
   }
@@ -1245,7 +1245,7 @@ bool sdet_edgel_regions::remove_hairs(std::vector<vtol_edge_2d_sptr>& edges)
   std::vector<vtol_edge_2d_sptr> hairs;
   std::vector<vtol_edge_2d_sptr> temp;
   // Initialize Markers
-  std::vector<vtol_edge_2d_sptr>::iterator eit = edges.begin();
+  auto eit = edges.begin();
   for (;eit != edges.end(); eit++)
   {
     vtol_vertex_sptr v1 = (*eit)->v1();
@@ -1473,7 +1473,7 @@ bool sdet_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
 //  or nr is larger than the number of adjacent regions.
 unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr) const
 {
-  std::map<int,sdet_region_edge_sptr >::const_iterator reit = region_edges_.find(e->get_id());
+  auto reit = region_edges_.find(e->get_id());
   if ( reit == region_edges_.end())
     return UNLABELED;
   return reit->second->GetLabel(nr, max_region_label_);
@@ -1485,10 +1485,10 @@ void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
 {
   if (!e) return;
   //  e->Protect();
-  std::map<unsigned int,std::vector<vtol_edge_2d_sptr> *>::iterator reit =region_edge_adjacency_.find(r);
+  auto reit =region_edge_adjacency_.find(r);
   if (reit == region_edge_adjacency_.end())
   {
-    std::vector<vtol_edge_2d_sptr>* array = new std::vector<vtol_edge_2d_sptr>;
+    auto* array = new std::vector<vtol_edge_2d_sptr>;
     array->push_back(e);
     region_edge_adjacency_[r] = array;
   }
@@ -1586,7 +1586,7 @@ void sdet_edgel_regions::CollectFaceEdges()
         std::cout << "Edge(" << *(e->v1()) <<  ' ' << *(e->v2()) << std::endl;
       EdgeSet.push_back ( e );
     }
-    std::vector<vtol_edge_2d_sptr>* edge_list = new std::vector<vtol_edge_2d_sptr>;
+    auto* edge_list = new std::vector<vtol_edge_2d_sptr>;
     for (auto & esit : EdgeSet)
       edge_list->push_back (esit );
     face_edge_index_[i] = edge_list;

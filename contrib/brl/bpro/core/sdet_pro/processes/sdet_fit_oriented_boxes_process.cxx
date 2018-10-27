@@ -69,7 +69,7 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
       vil_rgb<vxl_byte> current = color_img(i,j);
       if (current == bg_color)
         continue;
-      std::map<vil_rgb<vxl_byte>, std::vector<vgl_point_2d<float> > >::iterator iter = color_map.find(current);
+      auto iter = color_map.find(current);
       if (iter != color_map.end()) {
         (iter->second).emplace_back(i,j);
       } else {
@@ -79,21 +79,21 @@ bool sdet_fit_oriented_boxes_process(bprb_func_process& pro)
       }
     }
 
-  std::map<vil_rgb<vxl_byte>, std::vector<vgl_point_2d<float> > >::iterator iter = color_map.begin();
+  auto iter = color_map.begin();
   int cnt = 0;
   for ( ; iter != color_map.end(); iter++)
     cnt++;
 
   std::cout << "Found " << cnt << " blobs!" << std::endl;
-  bbas_1d_array_float * corners = new bbas_1d_array_float(cnt*8);
-  bbas_1d_array_float * box_dim = new bbas_1d_array_float(cnt*2);
+  auto * corners = new bbas_1d_array_float(cnt*8);
+  auto * box_dim = new bbas_1d_array_float(cnt*2);
   iter = color_map.begin();
   cnt = 0;
   for ( ; iter != color_map.end(); iter++) {
     std::vector<vgl_point_2d<float> > v = iter->second;
-    float* xp = new float[v.size()];
-    float* yp = new float[v.size()];
-    unsigned short* Ip = new unsigned short[v.size()];  // supposed to be grey values for the blob but here we don't care so just fill with same color
+    auto* xp = new float[v.size()];
+    auto* yp = new float[v.size()];
+    auto* Ip = new unsigned short[v.size()];  // supposed to be grey values for the blob but here we don't care so just fill with same color
 
     for (unsigned i = 0; i < v.size(); i++) {
       xp[i] = v[i].x();

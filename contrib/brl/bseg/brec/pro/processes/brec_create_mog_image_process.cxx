@@ -24,11 +24,11 @@ bbgm_image_sptr create_bbgm_image(bvxm_voxel_slab_base_sptr mog_image_)
 {
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   bbgm_image_sptr out_model_img_ = new bbgm_image_of<mog_type>();
-  bbgm_image_of<mog_type>* out_model_img_ptr = dynamic_cast<bbgm_image_of<mog_type>* >(out_model_img_.ptr());
+  auto* out_model_img_ptr = dynamic_cast<bbgm_image_of<mog_type>* >(out_model_img_.ptr());
   out_model_img_ptr->set_size(mog_image_->nx(), mog_image_->ny());
   typename bbgm_image_of<mog_type>::iterator model_it = out_model_img_ptr->begin();
 
-  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image_.ptr());
+  auto* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>* >(mog_image_.ptr());
   typename bvxm_voxel_slab<mog_type>::const_iterator iter = mog_image_ptr->begin();
 
   for ( ; iter != mog_image_ptr->end(); iter++, ++model_it)

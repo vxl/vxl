@@ -30,7 +30,7 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_
     // write data
     // iterate through slabs and fill in memory array
     typedef  bvxm_dristhi_traits<bsta_num_obs<bsta_gauss_sf1> >::datatype DataType;
-    DataType *data_array = new DataType[nx*ny*nz];
+    auto *data_array = new DataType[nx*ny*nz];
 
     //get the range
     bvxm_voxel_grid<bsta_num_obs<bsta_gauss_sf1> >::iterator grid_it = grid->begin();

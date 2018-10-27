@@ -72,26 +72,26 @@ bool bstm_add_block_process(bprb_func_process& pro)
   int index_j          =pro.get_input<int>        (i++);
   int index_k          =pro.get_input<int>        (i++);
   int index_t          =pro.get_input<int>        (i++);
-  unsigned num_x            =pro.get_input<unsigned>        (i++);
-  unsigned num_y            =pro.get_input<unsigned>        (i++);
-  unsigned num_z            =pro.get_input<unsigned>        (i++);
-  unsigned num_t            =pro.get_input<unsigned>        (i++);
-  unsigned max_num_lvls     =pro.get_input<unsigned>        (i++);
-  unsigned max_num_lvls_t   =pro.get_input<unsigned>        (i++);
+  auto num_x            =pro.get_input<unsigned>        (i++);
+  auto num_y            =pro.get_input<unsigned>        (i++);
+  auto num_z            =pro.get_input<unsigned>        (i++);
+  auto num_t            =pro.get_input<unsigned>        (i++);
+  auto max_num_lvls     =pro.get_input<unsigned>        (i++);
+  auto max_num_lvls_t   =pro.get_input<unsigned>        (i++);
 
-  float    local_x          =pro.get_input<float>           (i++);
-  float    local_y          =pro.get_input<float>           (i++);
-  float    local_z          =pro.get_input<float>           (i++);
-  float    local_t          =pro.get_input<float>           (i++);
+  auto    local_x          =pro.get_input<float>           (i++);
+  auto    local_y          =pro.get_input<float>           (i++);
+  auto    local_z          =pro.get_input<float>           (i++);
+  auto    local_t          =pro.get_input<float>           (i++);
 
-  float    blk_dims         =pro.get_input<float>           (i++);
-  float    blk_dim_t        =pro.get_input<float>           (i++);
+  auto    blk_dims         =pro.get_input<float>           (i++);
+  auto    blk_dim_t        =pro.get_input<float>           (i++);
 
-  float    max_data_size    =pro.get_input<float>           (i++);
-  float    p_init           =pro.get_input<float>           (i++);
+  auto    max_data_size    =pro.get_input<float>           (i++);
+  auto    p_init           =pro.get_input<float>           (i++);
 
-  unsigned init_level     =pro.get_input<unsigned>        (i++);
-  unsigned init_level_t   =pro.get_input<unsigned>        (i++);
+  auto init_level     =pro.get_input<unsigned>        (i++);
+  auto init_level_t   =pro.get_input<unsigned>        (i++);
 
   bstm_block_id id(index_i,index_j,index_k, index_t);
   std::map<bstm_block_id, bstm_block_metadata> blks=scene->blocks();

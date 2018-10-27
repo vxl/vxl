@@ -399,9 +399,9 @@ void test_time_differences_from_bstm_trees() {
     int num_time_trees = num_space_trees * 9;
     int num_data_elements = num_time_trees;
     // initialize data buffers
-    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    auto *space_buffer = new space_tree_b[num_space_trees]();
     std::memset(space_buffer, 0, num_space_trees * space_tree_size);
-    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    auto *time_buffer = new time_tree_b[num_time_trees]();
     std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
         block_data_base(num_data_elements, std::string("alpha"));
@@ -450,9 +450,9 @@ void test_time_differences_from_bstm_trees() {
                          9 * 3; // First two space trees have 8 extra time trees
     int num_data_elements = num_time_trees;
     // initialize data buffers
-    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    auto *space_buffer = new space_tree_b[num_space_trees]();
     std::memset(space_buffer, 0, num_space_trees * space_tree_size);
-    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    auto *time_buffer = new time_tree_b[num_time_trees]();
     std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
         block_data_base(num_data_elements, std::string("alpha"));
@@ -509,9 +509,9 @@ void test_time_differences_from_bstm_trees() {
     int num_time_trees = num_space_trees * 9;
     int num_data_elements = num_time_trees * 2;
     // initialize data buffers
-    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    auto *space_buffer = new space_tree_b[num_space_trees]();
     std::memset(space_buffer, 0, num_space_trees * space_tree_size);
-    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    auto *time_buffer = new time_tree_b[num_time_trees]();
     std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
         block_data_base(num_data_elements, std::string("alpha"));
@@ -557,9 +557,9 @@ void test_time_differences_from_bstm_trees() {
     int num_time_trees = num_space_trees * 9; // 8 leaf nodes and 1 inner node
     int num_data_elements = num_time_trees;
     // initialize data buffers
-    space_tree_b *space_buffer = new space_tree_b[num_space_trees]();
+    auto *space_buffer = new space_tree_b[num_space_trees]();
     std::memset(space_buffer, 0, num_space_trees * space_tree_size);
-    time_tree_b *time_buffer = new time_tree_b[num_time_trees]();
+    auto *time_buffer = new time_tree_b[num_time_trees]();
     std::memset(time_buffer, 0, num_time_trees * time_tree_size);
     block_data_base alpha =
         block_data_base(num_data_elements, std::string("alpha"));
@@ -657,7 +657,7 @@ void test_make_unrefined_space_tree() {
         vgl_vector_3d<unsigned>(2, 2, 2), 2);
     int vol = volume(num_regions);
     index_4d coords(1, 0, 0, 1);
-    unsigned char *child_level_buffer =
+    auto *child_level_buffer =
         new unsigned char[vol * 512 * space_tree_size]();
     std::vector<bool> diffs(vol * 512, false);
 
@@ -675,7 +675,7 @@ void test_make_unrefined_space_tree() {
         vgl_vector_3d<unsigned>(2, 2, 2), 2);
     int vol = volume(num_regions);
     index_4d coords(1, 0, 0, 1);
-    unsigned char *child_level_buffer =
+    auto *child_level_buffer =
         new unsigned char[vol * 512 * space_tree_size]();
     std::vector<bool> diffs(vol * 512, false);
 

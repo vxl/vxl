@@ -116,7 +116,7 @@ bool vidl_ffmpeg_convert(vidl_frame const& in_frame,
 
   unsigned ni = in_frame.ni();
   unsigned nj = in_frame.nj();
-  unsigned out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
+  auto out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
 
   if (out_frame.size() != out_size ||
       out_frame.ni() != ni ||
@@ -173,7 +173,7 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
 
   unsigned ni = in_frame->ni();
   unsigned nj = in_frame->nj();
-  unsigned out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
+  auto out_size = (unsigned)avpicture_get_size(out_fmt, ni, nj);
 
   if (out_frame->size() != out_size ||
       out_frame->ni() != ni ||

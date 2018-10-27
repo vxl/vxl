@@ -39,18 +39,18 @@ static void test_spherical_container()
   std::map<double, unsigned char>& depth_interval_map = sph.get_depth_interval_map();
   std::cout << " interval map size: " << depth_interval_map.size();
   TEST("number of depth intervals.. ", depth_interval_map.size(), 240);
-  std::map<double, unsigned char>::iterator iter = depth_interval_map.end();
+  auto iter = depth_interval_map.end();
   iter--;
   std::cout << " last interval: " << (unsigned)iter->second;
   TEST("last interval.. ", iter->second, (unsigned char)239);
   int cnt = 0;
-  for (std::map<double, unsigned char>::iterator iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
+  for (auto iter = depth_interval_map.begin(); iter != depth_interval_map.end(); iter++, cnt++) {
     std::cout << "depth: " << iter->first << " interval: " << iter->second << std::endl;
     if (cnt > 5)
       break;
   }
   cnt=0;
-  for (std::map<double, unsigned char>::iterator iter = depth_interval_map.end(); cnt < 5; cnt++) {
+  for (auto iter = depth_interval_map.end(); cnt < 5; cnt++) {
     iter--;
     std::cout << "depth: " << iter->first << " interval: " << (int)iter->second << std::endl;
   }

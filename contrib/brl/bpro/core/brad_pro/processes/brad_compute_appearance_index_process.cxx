@@ -40,7 +40,7 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
 
   // get the input
   bbas_1d_array_string_sptr filenames = pro.get_input<bbas_1d_array_string_sptr>(0);
-  unsigned n = static_cast<unsigned>((filenames->data_array).size());
+  auto n = static_cast<unsigned>((filenames->data_array).size());
   std::vector<vbl_smart_ptr<brad_image_metadata> > metadata;
   for(unsigned i = 0; i<n; ++i){
     vbl_smart_ptr<brad_image_metadata> meta_ptr = new brad_image_metadata();

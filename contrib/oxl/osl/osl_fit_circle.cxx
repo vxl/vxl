@@ -51,7 +51,7 @@ void osl_fit_circle::calculate(const std::list<vgl_point_2d<double> > &points)
     vnl_vector<double> col3(rows);
     vnl_vector<double> col4(rows);
 
-    std::list<vgl_point_2d<double> >::const_iterator it = points.begin();
+    auto it = points.begin();
     for (int i = 0; it != points.end(); ++it, ++i)
     {
         col2.put(i, (*it).y());

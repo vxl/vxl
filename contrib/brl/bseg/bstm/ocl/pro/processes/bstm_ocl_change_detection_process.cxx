@@ -84,14 +84,14 @@ bool bstm_ocl_change_detection_process(bprb_func_process& pro)
   vil_image_view_base_sptr mask_img = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string               norm_type = pro.get_input<std::string>(i++);
   bool                     pmax = pro.get_input<bool>(i++);
-  float                    time = pro.get_input<float>(i++);
+  auto                    time = pro.get_input<float>(i++);
 
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img = new vil_image_view<float>(ni, nj);
+  auto*    change_img = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

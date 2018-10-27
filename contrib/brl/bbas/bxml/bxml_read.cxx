@@ -78,7 +78,7 @@ void bxml_expat_parser::startElement(const XML_Char* name, const XML_Char** atts
   }
   else{
     if (stack_.back().ptr()) {
-      bxml_element* parent = static_cast<bxml_element*>(stack_.back().ptr());
+      auto* parent = static_cast<bxml_element*>(stack_.back().ptr());
       parent->append_data(data);
     }
     stack_.push_back(data);
@@ -102,7 +102,7 @@ void bxml_expat_parser::charData(const XML_Char* text, int len)
 {
   assert(!stack_.empty());
   if (stack_.back().ptr()) {
-    bxml_element* parent = static_cast<bxml_element*>(stack_.back().ptr());
+    auto* parent = static_cast<bxml_element*>(stack_.back().ptr());
     parent->append_text(std::string(text,len));
   }
 }

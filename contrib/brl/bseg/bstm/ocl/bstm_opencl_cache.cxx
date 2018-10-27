@@ -65,14 +65,14 @@ bstm_opencl_cache
 {
   // delete stored block info
   if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+    auto* buff = (bstm_scene_info*) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
     block_info_=nullptr;
   }
 
   if (block_info_t_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+    auto* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
     delete buff;
     delete block_info_t_;
     block_info_t_=nullptr;
@@ -214,7 +214,7 @@ bstm_opencl_cache
     // load block info
     bstm_block* loaded = cpu_cache_->get_block(id);
     if (block_info_) {
-       bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+       auto* buff = (bstm_scene_info*) block_info_->cpu_buffer();
        delete buff;
        delete block_info_;
     }
@@ -267,7 +267,7 @@ bstm_opencl_cache
   //////////////////////////////////////////////////////
   // load block info
   if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+    auto* buff = (bstm_scene_info*) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
   }
@@ -295,7 +295,7 @@ bstm_opencl_cache
     // load block info
     bstm_time_block* loaded = cpu_cache_->get_time_block(id);
     if (block_info_t_) {
-       bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+       auto* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
        delete buff;
        delete block_info_t_;
     }
@@ -337,7 +337,7 @@ bstm_opencl_cache
   //////////////////////////////////////////////////////
   // load block info
   if (block_info_t_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
+    auto* buff = (bstm_scene_info*) block_info_t_->cpu_buffer();
     delete buff;
     delete block_info_t_;
   }
@@ -358,7 +358,7 @@ bstm_opencl_cache
 {
   // clean up
   if (block_info_) {
-    bstm_scene_info* buff = (bstm_scene_info*) block_info_->cpu_buffer();
+    auto* buff = (bstm_scene_info*) block_info_->cpu_buffer();
     delete buff;
     delete block_info_;
   }
@@ -386,7 +386,7 @@ bstm_opencl_cache
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting
-  std::map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     if(num_bytes == 0 || iter->second->num_bytes() == num_bytes) // congrats you've found the data block in cache, update cache and return block
       return iter->second;
@@ -466,7 +466,7 @@ bstm_opencl_cache
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
 
   // then look for the block you're requesting, if found, delete it.
-  std::map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     delete iter->second;
     data_map.erase(iter);
@@ -564,7 +564,7 @@ void
 bstm_opencl_cache
 ::unref_mem(bocl_mem* mem)
 {
-  std::map<bocl_mem*,std::size_t>::iterator iter = mem_pool_.find(mem);
+  auto iter = mem_pool_.find(mem);
   if (iter != mem_pool_.end()){
     mem_pool_.erase(iter);
   }
@@ -604,7 +604,7 @@ bstm_opencl_cache
 
   // now replace the mem in the GPU cache.. first delete existing
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  std::map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
     bocl_mem* toDelete = iter->second;
@@ -621,7 +621,7 @@ bstm_opencl_cache
 {
   //find the data in this map
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  std::map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
     bocl_mem* toDelete = iter->second;
@@ -646,7 +646,7 @@ bstm_opencl_cache
 {
   //find the data in this map
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
-  std::map<bstm_block_id, bocl_mem*>::iterator iter = data_map.find(id);
+  auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
     bocl_mem* toDelete = iter->second;
@@ -704,7 +704,7 @@ bstm_opencl_cache
   lru_order_.pop_back();
 
   // then look for the block to delete
-  std::map<bstm_block_id, bocl_mem*>::iterator blk = cached_blocks_.find(lru_id);
+  auto blk = cached_blocks_.find(lru_id);
   if ( blk != cached_blocks_.end() ) {
     bocl_mem* toDelete = blk->second;
     //toDelete->read_to_buffer( *queue_ );
@@ -736,7 +736,7 @@ bstm_opencl_cache
   {
     std::string data_type = datas->first;
     std::map<bstm_block_id, bocl_mem*>& data_map = datas->second;
-    std::map<bstm_block_id, bocl_mem*>::iterator dat = data_map.find(lru_id);
+    auto dat = data_map.find(lru_id);
     if ( dat != data_map.end() ) {
       bocl_mem* toDelete = dat->second;
       //toDelete->read_to_buffer( *queue_ );

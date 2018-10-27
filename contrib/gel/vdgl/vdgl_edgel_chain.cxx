@@ -177,7 +177,7 @@ bool vdgl_edgel_chain::line_gen(double xs, double ys, double xe, double ye,
     //Check if we have advanced by more than .5 pixels
     x = (xi/pix_edge);
     y = (yi/pix_edge);
-    double dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
+    auto dx1 = (double)(int(x)-xp), dy1 = (double)(int(y)-yp);
     if (std::abs(dx1)>(.5*pix_edge)||std::abs(dy1)>(.5*pix_edge))
       return true;
   }

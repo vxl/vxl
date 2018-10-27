@@ -69,8 +69,8 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera_virtual = pro.get_input< vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input< bvxm_voxel_world_sptr>(i++);
   std::string voxel_type = pro.get_input<std::string>(i++);
-  unsigned bin_index = pro.get_input<unsigned>(i++);
-  unsigned scale_index =  pro.get_input<unsigned>(i++);
+  auto bin_index = pro.get_input<unsigned>(i++);
+  auto scale_index =  pro.get_input<unsigned>(i++);
 
     //check input validity
   if (!img_og) {
@@ -113,7 +113,7 @@ bool bvxm_render_virtual_view_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<float> *vis_prob_view = static_cast<vil_image_view<float>*>(vis_prob.ptr());
+  auto *vis_prob_view = static_cast<vil_image_view<float>*>(vis_prob.ptr());
 
   bool result = true;
 

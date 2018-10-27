@@ -331,7 +331,7 @@ void bkml_parser::trim_string(std::string& s)
 
 std::vector<vgl_point_3d<double> > bkml_parser::parse_points(std::string kml_file)
 {
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   std::vector<vgl_point_3d<double> > out;
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
@@ -352,7 +352,7 @@ std::vector<vgl_point_3d<double> > bkml_parser::parse_points(std::string kml_fil
 //: the returned polygon only contains outer boundary
 vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
 {
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   vgl_polygon<double> out;
   std::FILE* xmlFile = std::fopen(poly_kml_file.c_str(), "r");
   if (!xmlFile) {
@@ -374,7 +374,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
   }
   for (auto & sh_idx : parser->polyouter_) {
     out.new_sheet();
-    unsigned n_points = (unsigned)sh_idx.size();
+    auto n_points = (unsigned)sh_idx.size();
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(sh_idx[pt_idx].x(), sh_idx[pt_idx].y());
     }
@@ -385,7 +385,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
 vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inner,
                                                           unsigned& n_out, unsigned& n_in)
 {
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   vgl_polygon<double> out;
   out.clear();
   outer.clear();
@@ -409,7 +409,7 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_f
   for (unsigned sh_idx = 0; sh_idx < n_out; sh_idx++) {
     out.new_sheet();
     outer.new_sheet();
-    unsigned n_points = (unsigned)parser->polyouter_[sh_idx].size();
+    auto n_points = (unsigned)parser->polyouter_[sh_idx].size();
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
       outer.push_back(parser->polyouter_[sh_idx][pt_idx].x(), parser->polyouter_[sh_idx][pt_idx].y());
@@ -419,7 +419,7 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_f
   for (unsigned sh_idx = 0; sh_idx < n_in; sh_idx++) {
     out.new_sheet();
     inner.new_sheet();
-    unsigned n_points = (unsigned)parser->polyinner_[sh_idx].size();
+    auto n_points = (unsigned)parser->polyinner_[sh_idx].size();
     for (unsigned pt_idx = 0; pt_idx < n_points; pt_idx++) {
       out.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
       inner.push_back(parser->polyinner_[sh_idx][pt_idx].x(), parser->polyinner_[sh_idx][pt_idx].y());
@@ -430,7 +430,7 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_f
 
 bool bkml_parser::parse_location_from_kml(std::string kml_file, double& lat, double& lon)
 {
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if(!xmlFile) {
     std::cerr << kml_file.c_str() << " error on opening the input kml file\n";

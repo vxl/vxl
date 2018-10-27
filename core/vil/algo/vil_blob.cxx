@@ -134,10 +134,10 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
       {
         // See how many unique labels neighbouring labels we have
         std::sort(neighbouring_labels.begin(), neighbouring_labels.end());
-        ITER end = std::unique(neighbouring_labels.begin(), neighbouring_labels.end());
+        auto end = std::unique(neighbouring_labels.begin(), neighbouring_labels.end());
         // don't bother erasing unique's suffix, just keeping the end iterator
         // will be enough.
-        ITER it=neighbouring_labels.begin();
+        auto it=neighbouring_labels.begin();
         unsigned label = *it++;
         dest_label(i,j) = label;
 
@@ -173,7 +173,7 @@ void vil_blob_labels(const vil_image_view<bool>& src_binary,
   std::vector<unsigned> labels(renumbering.begin(), renumbering.end());
   std::sort(labels.begin(), labels.end());
   labels.erase(std::unique(labels.begin(), labels.end()), labels.end());
-  const unsigned dodgy = static_cast<unsigned>(-1);
+  const auto dodgy = static_cast<unsigned>(-1);
   std::vector<unsigned> renum_renum(renumbering.size(), dodgy);
   renum_renum[0]=0;
   for (unsigned l=0, n=labels.size(); l<n; ++l)

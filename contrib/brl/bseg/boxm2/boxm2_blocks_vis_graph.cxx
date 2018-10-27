@@ -36,7 +36,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
     // loop over each vis graph node and create necessary edges
     // each edge A->B represents the constraint that block A must be processed before
     // block B, i.e. block A is "in front of" block B from the perspective of cam
-    for(std::list<boxm2_block_vis_graph_node_sptr>::iterator node_iter = temp_nodes.begin();
+    for(auto node_iter = temp_nodes.begin();
         node_iter != temp_nodes.end();node_iter++)
     {
       boxm2_block_id this_block_id = (*node_iter)->id_;
@@ -76,7 +76,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
               ++other_block_id.i_;
             }
             // check for other block in list of nodes
-            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            auto other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -118,7 +118,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
               ++other_block_id.j_;
             }
             // check for other block in list of nodes
-            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            auto other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -160,7 +160,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
               ++other_block_id.k_;
             }
             // check for other block in list of nodes
-            std::list<boxm2_block_vis_graph_node_sptr>::iterator other =
+            auto other =
               this->find(other_block_id, temp_nodes) ;
             if ( other != temp_nodes.end() )
             {
@@ -201,7 +201,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
       ordered_nodes_.push_back(next_node->id_);
 
       // decrement incoming edge count of all blocks behind this one
-      for (std::set<boxm2_block_vis_graph_node_sptr>::iterator sink_node_it =
+      for (auto sink_node_it =
            next_node->out_edges.begin(); sink_node_it != next_node->out_edges.end(); ++sink_node_it) {
         --(*sink_node_it)->num_incoming_edges_;
       }
@@ -215,7 +215,7 @@ boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block
 std::list<boxm2_block_vis_graph_node_sptr>::iterator
     boxm2_block_vis_graph::find(const boxm2_block_id & id, std::list<boxm2_block_vis_graph_node_sptr> & list_nodes )
 {
-    std::list<boxm2_block_vis_graph_node_sptr>::iterator iter = list_nodes.begin();
+    auto iter = list_nodes.begin();
     for (; iter!= list_nodes.end(); iter++)
     {
         if(id == (*iter)->id_ )

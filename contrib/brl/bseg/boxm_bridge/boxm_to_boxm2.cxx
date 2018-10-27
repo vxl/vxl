@@ -45,10 +45,10 @@ void deconstruct_sample(boxm_sample<BOXM_APM_MOG_GREY> sample,
 
   for (unsigned i=0; i<obs.num_components(); i++) {
     gauss_type_sf1  mf=obs.distribution(i);
-    unsigned char w = (unsigned char)std::floor(obs.weight(i)*255.0);
+    auto w = (unsigned char)std::floor(obs.weight(i)*255.0);
     unsigned int  n = (unsigned char)mf.num_observations;
-    unsigned char m = (unsigned char)std::floor(mf.mean()*255.0);
-    unsigned char v = (unsigned char)std::floor(mf.var()*255.0);
+    auto m = (unsigned char)std::floor(mf.mean()*255.0);
+    auto v = (unsigned char)std::floor(mf.var()*255.0);
     num_obs[i]=n;
     data[i*3]=m;
     data[i*3+1]=v;
@@ -195,9 +195,9 @@ int main(int argc, char** argv)
       }
 
       // allocate data array
-      boxm2_data_traits<BOXM2_MOG3_GREY>::datatype* data_arr=new  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype[data_size];
-      boxm2_data_traits<BOXM2_NUM_OBS>::datatype* num_obs_arr=new  boxm2_data_traits<BOXM2_NUM_OBS>::datatype[data_size];
-      float* alpha_arr = new float[data_size];
+      auto* data_arr=new  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype[data_size];
+      auto* num_obs_arr=new  boxm2_data_traits<BOXM2_NUM_OBS>::datatype[data_size];
+      auto* alpha_arr = new float[data_size];
 
       // divide the blocks
       int data_idx=0;

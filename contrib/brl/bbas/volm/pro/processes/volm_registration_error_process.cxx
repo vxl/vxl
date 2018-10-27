@@ -78,7 +78,7 @@ bool volm_registration_error_process(bprb_func_process& pro)
   std::string gt_file = pro.get_input<std::string>(in_i++);
   std::string cor_file = pro.get_input<std::string>(in_i++);
   std::string ori_file = pro.get_input<std::string>(in_i++);
-  double res = pro.get_input<double>(in_i++);
+  auto res = pro.get_input<double>(in_i++);
   std::string cor_out_file = pro.get_input<std::string>(in_i++);
   std::string ori_out_file = pro.get_input<std::string>(in_i++);
 
@@ -318,7 +318,7 @@ double volm_registration_error_process_globals::closest_distance(std::vector<vso
   if (p_set1.size() != p_set2.size()) {
     return average_dist;
   }
-  unsigned n_pts = (unsigned)p_set1.size();
+  auto n_pts = (unsigned)p_set1.size();
   for (unsigned i = 0; i < n_pts; i++) {
     double dx = p_set1[i]->x() - p_set2[i]->x();
     double dy = p_set1[i]->y() - p_set2[i]->y();

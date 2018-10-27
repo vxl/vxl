@@ -67,9 +67,9 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
   vil_image_view_base_sptr height_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  height_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   std::string land_txt = pro.get_input<std::string>(in_i++);
-  float min_h = pro.get_input<float>(in_i++);
-  float max_h = pro.get_input<float>(in_i++);
-  double beta = pro.get_input<double>(in_i++);
+  auto min_h = pro.get_input<float>(in_i++);
+  auto max_h = pro.get_input<float>(in_i++);
+  auto beta = pro.get_input<double>(in_i++);
 
   std::vector<unsigned char> land_ids;
   std::ifstream ifs(land_txt.c_str());
@@ -88,17 +88,17 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
     std::cout << (int)land_id << ", ";
   std::cout << std::endl;
 
-  vil_image_view<vxl_byte>* l_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_img_sptr.ptr());
+  auto* l_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_img_sptr.ptr());
   if (!l_img) {
     std::cerr << pro.name() << ": Unsupported land cover image pixel format -- " << land_img_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
   // load the images and cameras
-  vil_image_view<float>* h_img = dynamic_cast<vil_image_view<float>*>(height_img_sptr.ptr());
+  auto* h_img = dynamic_cast<vil_image_view<float>*>(height_img_sptr.ptr());
   vil_image_view_base_sptr h_img_float;
   if (!h_img) {
     vil_image_view<float> temp(height_img_sptr->ni(), height_img_sptr->nj(), 1);
-    vil_image_view<vxl_byte>* h_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(height_img_sptr.ptr());
+    auto* h_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(height_img_sptr.ptr());
     if (!h_img_byte) {
       std::cerr << pro.name() << ": Unsupported height image pixel format -- " << height_img_sptr->pixel_format() << ", only float and byte are supported!\n";
       return false;
@@ -110,12 +110,12 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
     h_img = dynamic_cast<vil_image_view<float>*>(h_img_float.ptr());
   }
 
-  vpgl_geo_camera* l_cam = dynamic_cast<vpgl_geo_camera*>(land_cam_sptr.ptr());
+  auto* l_cam = dynamic_cast<vpgl_geo_camera*>(land_cam_sptr.ptr());
   if (!l_cam) {
     std::cerr << pro.name() << ": can not load land cover image camera!\n";
     return false;
   }
-  vpgl_geo_camera* h_cam = dynamic_cast<vpgl_geo_camera*>(height_cam_sptr.ptr());
+  auto* h_cam = dynamic_cast<vpgl_geo_camera*>(height_cam_sptr.ptr());
   if (!h_cam) {
     std::cerr << pro.name() << ": can not load height image camera!\n";
     return false;
@@ -125,11 +125,11 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
   l_ni = l_img->ni();  l_nj = l_img->nj();
   h_ni = h_img->ni();  h_nj = h_img->nj();
 
-  vil_image_view<float>* out_prob_img = new vil_image_view<float>(l_ni, l_nj);
+  auto* out_prob_img = new vil_image_view<float>(l_ni, l_nj);
   out_prob_img->fill(0);
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
+  auto* out_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
   out_img->fill(0);
-  vil_image_view<vxl_byte>* mask_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
+  auto* mask_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
   mask_img->fill(0);
 
   // compute GGD function parameters
@@ -156,8 +156,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
       l_cam->img_to_global(i, j, lon, lat);
       double u, v;
       h_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if ( uu > h_ni || vv > h_nj )
         continue;
       // retrieve height value from height image
@@ -182,8 +182,8 @@ bool volm_layer_extraction_process(bprb_func_process& pro)
       l_cam->img_to_global(i, j, lon, lat);
       double u, v;
       h_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if ( uu > h_ni || vv > h_nj )
         continue;
       if ((*h_img)(uu,vv) < 255) {
@@ -262,20 +262,20 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
   vil_image_view_base_sptr height_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  height_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   std::string land_txt = pro.get_input<std::string>(in_i++);
-  float min_h = pro.get_input<float>(in_i++);
-  float max_h = pro.get_input<float>(in_i++);
+  auto min_h = pro.get_input<float>(in_i++);
+  auto max_h = pro.get_input<float>(in_i++);
 
-  vil_image_view<vxl_byte>* l_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_img_sptr.ptr());
+  auto* l_img = dynamic_cast<vil_image_view<vxl_byte>*>(land_img_sptr.ptr());
   if (!l_img) {
     std::cerr << pro.name() << ": Unsupported land cover image pixel format -- " << land_img_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
 
-  vil_image_view<float>* h_img = dynamic_cast<vil_image_view<float>*>(height_img_sptr.ptr());
+  auto* h_img = dynamic_cast<vil_image_view<float>*>(height_img_sptr.ptr());
   vil_image_view_base_sptr h_img_float;
   if (!h_img) {
     vil_image_view<float> temp(height_img_sptr->ni(), height_img_sptr->nj(), 1);
-    vil_image_view<vxl_byte>* h_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(height_img_sptr.ptr());
+    auto* h_img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(height_img_sptr.ptr());
     if (!h_img_byte) {
       std::cerr << pro.name() << ": Unsupported height image pixel format -- " << height_img_sptr->pixel_format() << ", only float and byte are supported!\n";
       return false;
@@ -287,12 +287,12 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
     h_img = dynamic_cast<vil_image_view<float>*>(h_img_float.ptr());
   }
 
-  vpgl_geo_camera* l_cam = dynamic_cast<vpgl_geo_camera*>(land_cam_sptr.ptr());
+  auto* l_cam = dynamic_cast<vpgl_geo_camera*>(land_cam_sptr.ptr());
   if (!l_cam) {
     std::cerr << pro.name() << ": can not load land cover image camera!\n";
     return false;
   }
-  vpgl_geo_camera* h_cam = dynamic_cast<vpgl_geo_camera*>(height_cam_sptr.ptr());
+  auto* h_cam = dynamic_cast<vpgl_geo_camera*>(height_cam_sptr.ptr());
   if (!h_cam) {
     std::cerr << pro.name() << ": can not load height image camera!\n";
     return false;
@@ -320,9 +320,9 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
   l_ni = l_img->ni();  l_nj = l_img->nj();
   h_ni = h_img->ni();  h_nj = h_img->nj();
 
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
+  auto* out_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
   out_img->fill(0);
-  vil_image_view<vxl_byte>* mask_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
+  auto* mask_img = new vil_image_view<vxl_byte>(l_ni, l_nj);
   mask_img->fill(0);
   std::cout << "start to generate building layer with height from " << min_h << " to " << max_h << "..." << std::flush << std::endl;
   for (unsigned i = 0; i < l_ni; i++)
@@ -338,8 +338,8 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
       l_cam->img_to_global(i, j, lon, lat);
       double u, v;
       h_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if ( uu > h_ni || vv > h_nj )
         continue;
       // retrieve height value from height image
@@ -362,8 +362,8 @@ bool volm_building_layer_extraction_process(bprb_func_process& pro)
       l_cam->img_to_global(i, j, lon, lat);
       double u, v;
       h_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if ( uu > h_ni || vv > h_nj )
         continue;
       if ((*h_img)(uu,vv) < 255) {
@@ -419,18 +419,18 @@ bool volm_generate_kml_from_binary_image_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  unsigned  threshold = pro.get_input<unsigned>(in_i++);
+  auto  threshold = pro.get_input<unsigned>(in_i++);
   std::string out_file = pro.get_input<std::string>(in_i++);
-  unsigned r = pro.get_input<unsigned>(in_i++);
-  unsigned g = pro.get_input<unsigned>(in_i++);
-  unsigned b = pro.get_input<unsigned>(in_i++);
+  auto r = pro.get_input<unsigned>(in_i++);
+  auto g = pro.get_input<unsigned>(in_i++);
+  auto b = pro.get_input<unsigned>(in_i++);
 
-  vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported land cover image pixel format -- " << in_img_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
-  vpgl_geo_camera* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
+  auto* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
   if (!in_cam) {
     std::cerr << pro.name() << ": can not load land cover image camera!\n";
     return false;
@@ -509,33 +509,33 @@ bool volm_downsample_binary_layer_process(bprb_func_process& pro)
   vil_image_view_base_sptr out_mask_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  out_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
 
-  vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported land cover image pixel format -- " << in_img_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
-  vil_image_view<vxl_byte>* in_mask = dynamic_cast<vil_image_view<vxl_byte>*>(in_mask_sptr.ptr());
+  auto* in_mask = dynamic_cast<vil_image_view<vxl_byte>*>(in_mask_sptr.ptr());
   if (!in_mask) {
     std::cerr << pro.name() << ": Unsupported land cover mask image pixel format -- " << in_mask_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
-  vpgl_geo_camera* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
+  auto* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
   if (!in_cam) {
     std::cerr << pro.name() << ": can not load land cover image camera!\n";
     return false;
   }
 
-  vil_image_view<vxl_byte>* out_img = dynamic_cast<vil_image_view<vxl_byte>*>(out_img_sptr.ptr());
+  auto* out_img = dynamic_cast<vil_image_view<vxl_byte>*>(out_img_sptr.ptr());
   if (!out_img) {
     std::cerr << pro.name() << ": Unsupported down sample image pixel format -- " << out_img_sptr->pixel_format() << ", only byte is supported!\n";
     return false;
   }
-  vil_image_view<vxl_byte>* out_mask = dynamic_cast<vil_image_view<vxl_byte>*>(out_mask_sptr.ptr());
+  auto* out_mask = dynamic_cast<vil_image_view<vxl_byte>*>(out_mask_sptr.ptr());
   if (!out_mask) {
     std::cerr << pro.name() << ": Unsupported down sample mask image pixel format -- " << out_mask_sptr->pixel_format() << ", only byte is supported!\n";
     return false;
   }
-  vpgl_geo_camera* out_cam = dynamic_cast<vpgl_geo_camera*>(out_cam_sptr.ptr());
+  auto* out_cam = dynamic_cast<vpgl_geo_camera*>(out_cam_sptr.ptr());
   if (!out_cam) {
     std::cerr << pro.name() << ": can not load down sample image camera!\n";
     return false;
@@ -555,8 +555,8 @@ bool volm_downsample_binary_layer_process(bprb_func_process& pro)
       in_cam->img_to_global(i, j, lon, lat);
       double u, v;
       out_cam->global_to_img(lon, lat, 0.0, u, v);
-      unsigned uu = (unsigned)std::floor(u+0.5);
-      unsigned vv = (unsigned)std::floor(v+0.5);
+      auto uu = (unsigned)std::floor(u+0.5);
+      auto vv = (unsigned)std::floor(v+0.5);
       if ( uu >= o_ni || vv >= o_nj)
         continue;
       (*out_img)(uu,vv) =  (*in_img)(i,j);
@@ -610,7 +610,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
   std::string              neg_poly_kml = pro.get_input<std::string>(in_i++);
 
   // get camera
-  vpgl_geo_camera* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
+  auto* in_cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
   if (!in_cam) {
     std::cerr << pro.name() << ": can not load land cover image camera!\n";
     return false;
@@ -628,7 +628,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
 
   // convert image to [0,1] float
   vil_image_view<float>* detection_map;
-  if (vil_image_view<unsigned char>* detection_map_unchar = dynamic_cast<vil_image_view<unsigned char>*>(in_img_sptr.ptr())) {
+  if (auto* detection_map_unchar = dynamic_cast<vil_image_view<unsigned char>*>(in_img_sptr.ptr())) {
     detection_map = new vil_image_view<float>(detection_map_unchar->ni(), detection_map_unchar->nj());
     vil_convert_stretch_range_limited<unsigned char>(*detection_map_unchar, *detection_map, 0, 255, 0.0f, 1.0f);
   }
@@ -641,8 +641,8 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
   }
 
   std::cout << "There are " << pos_poly.num_sheets() << " positive regions and " << neg_poly.num_sheets() << " negative regions." << std::endl;
-  unsigned n_pos_condition = static_cast<unsigned>(pos_poly.num_sheets());
-  unsigned n_neg_condition = static_cast<unsigned>(neg_poly.num_sheets());
+  auto n_pos_condition = static_cast<unsigned>(pos_poly.num_sheets());
+  auto n_neg_condition = static_cast<unsigned>(neg_poly.num_sheets());
 
   // convert polygon from world domain to image domain
   std::vector<vgl_polygon<double> > pos_img_poly;
@@ -653,7 +653,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
     vgl_polygon<double> pos_single_sheet;
     pos_single_sheet.new_sheet();
     vgl_box_2d<int> bbox;
-    unsigned n_verts = static_cast<unsigned>(pos_poly[i].size());
+    auto n_verts = static_cast<unsigned>(pos_poly[i].size());
     for (unsigned pidx = 0; pidx < n_verts; pidx++) {
       vgl_point_2d<double> wp = pos_poly[i][pidx];
       double u, v;
@@ -669,7 +669,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
     vgl_polygon<double> neg_single_sheet;
     neg_single_sheet.new_sheet();
     vgl_box_2d<int> bbox;
-    unsigned n_verts = static_cast<unsigned>(neg_poly[i].size());
+    auto n_verts = static_cast<unsigned>(neg_poly[i].size());
     for (unsigned pidx = 0; pidx < n_verts; pidx++) {
       vgl_point_2d<double> wp = neg_poly[i][pidx];
       double u, v;
@@ -694,12 +694,12 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
   const unsigned n_thres = thresholds.size();
   std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
 
-  bbas_1d_array_float* tp = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tn = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fp = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fn = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
+  auto* tp = new bbas_1d_array_float(n_thres);
+  auto* tn = new bbas_1d_array_float(n_thres);
+  auto* fp = new bbas_1d_array_float(n_thres);
+  auto* fn = new bbas_1d_array_float(n_thres);
+  auto* tpr = new bbas_1d_array_float(n_thres);
+  auto* fpr = new bbas_1d_array_float(n_thres);
   // initialize
   for (unsigned i = 0; i < n_thres; i++) {
     tp->data_array[i] = 0.0f;
@@ -765,7 +765,7 @@ bool volm_detection_rate_roc_process(bprb_func_process& pro)
     tpr->data_array[tidx] = tp->data_array[tidx] / (tp->data_array[tidx] + fn->data_array[tidx]);
     fpr->data_array[tidx] = fp->data_array[tidx] / (fp->data_array[tidx] + tn->data_array[tidx]);
   }
-  bbas_1d_array_float * thres_out=new bbas_1d_array_float(n_thres);
+  auto * thres_out=new bbas_1d_array_float(n_thres);
   for (unsigned k = 0; k < n_thres; k++) {
     thres_out->data_array[k] = thresholds[k];
   }

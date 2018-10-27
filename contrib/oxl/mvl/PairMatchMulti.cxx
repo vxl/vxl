@@ -78,7 +78,7 @@ void PairMatchMulti::set_score(int i1, int i2, double score)
 
 bool PairMatchMulti::contains(int i1, int i2) const
 {
-  for (vcl_multimap_uint_uint::const_iterator p = matches12_.lower_bound(i1); p != matches12_.upper_bound(i1); ++p)
+  for (auto p = matches12_.lower_bound(i1); p != matches12_.upper_bound(i1); ++p)
     if ((*p).second == (unsigned)i2)
       return true;
   return false;

@@ -107,7 +107,7 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
                                       float& r, float& theta)
 {
   //Compute angle index
-  float angle = (float)line->tangent_angle();
+  auto angle = (float)line->tangent_angle();
   if (angle >= 180.0f)
     angle -= 180.0f;
 
@@ -123,8 +123,8 @@ void bsol_hough_line_index::array_loc(vsol_line_2d_sptr const& line,
 
   //Compute distance indices
   vsol_point_2d_sptr mid = line->middle();
-  float midx = float(mid->x()-xo_);
-  float midy = float(mid->y()-yo_);
+  auto midx = float(mid->x()-xo_);
+  auto midy = float(mid->y()-yo_);
   float xs2 = xsize_/2.0f;
   float ys2 = ysize_/2.0f;
 
@@ -257,7 +257,7 @@ bool bsol_hough_line_index::remove(vsol_line_2d_sptr const& line)
     return false;
   std::vector<vsol_line_2d_sptr>* lines = index_[r][theta];
 
-  std::vector<vsol_line_2d_sptr>::iterator lit =
+  auto lit =
     std::find(lines->begin(), lines->end(), line);
   if (lit == lines->end())
     return false;
@@ -427,7 +427,7 @@ bsol_hough_line_index::parallel_lines(const float angle,
       for (auto line : temp)
       {
         //Test angular error
-        float line_angle = (float)line->tangent_angle();
+        auto line_angle = (float)line->tangent_angle();
         if (line_angle >= 180.0f)
           line_angle -= 180.0f;
         float ang_error = std::fabs(ang - line_angle);
@@ -512,7 +512,7 @@ bsol_hough_line_index::parallel_lines(vsol_line_2d_sptr const &l,
     std::cout << "In bsol_hough_line_index::parallel_lines(..) NULL line\n";
     return;
   }
-  float angle = (float)l->tangent_angle();
+  auto angle = (float)l->tangent_angle();
   this->parallel_lines(angle, angle_dist, lines);
 }
 

@@ -65,16 +65,16 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(k++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(k++);
 
-    float x0 = pro.get_input<float>(k++);
-    float y0 = pro.get_input<float>(k++);
-    float z0 = pro.get_input<float>(k++);
+    auto x0 = pro.get_input<float>(k++);
+    auto y0 = pro.get_input<float>(k++);
+    auto z0 = pro.get_input<float>(k++);
 
-    float x1 = pro.get_input<float>(k++);
-    float y1 = pro.get_input<float>(k++);
-    float z1 = pro.get_input<float>(k++);
+    auto x1 = pro.get_input<float>(k++);
+    auto y1 = pro.get_input<float>(k++);
+    auto z1 = pro.get_input<float>(k++);
 
 
-    float t = pro.get_input<float>(k++);
+    auto t = pro.get_input<float>(k++);
 
     vgl_point_3d<double> p0(x0,y0,z0);
     vgl_point_3d<double> p1(x1,y1,z1);
@@ -101,7 +101,7 @@ bool boxm2_cpp_los_visibility_process(bprb_func_process& pro)
         boxm2_vis_probe_functor vis_probe_functor;
         vis_probe_functor.init_data(datas, &vis);
 
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
         boxm2_cast_ray_function<boxm2_vis_probe_functor>(ray_01,
                                                          scene_info_wrapper->info,

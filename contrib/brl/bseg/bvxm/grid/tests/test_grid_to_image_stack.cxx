@@ -26,7 +26,7 @@ void save_grid()
 {
   std::string dir = "test_grid_to_stack";
   vgl_vector_3d<unsigned> grid_size(2, 2, 2);
-  bvxm_voxel_grid<T> *grid = new bvxm_voxel_grid<T>(grid_size);
+  auto *grid = new bvxm_voxel_grid<T>(grid_size);
   grid->initialize_data(T(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
 
@@ -37,7 +37,7 @@ void save_grid()
   {
     std::stringstream grid_glob;
     vil_image_view_base_sptr img_base = vil_load(file_it());
-    vil_image_view<T> *img_view = dynamic_cast<vil_image_view<T>*>(img_base.ptr());
+    auto *img_view = dynamic_cast<vil_image_view<T>*>(img_base.ptr());
     typename vil_image_view<T>::iterator img_it = img_view->begin();
     for (; img_it != img_view->end(); ++img_it) {
       bool result = (*img_it == test_value<T>());
@@ -57,7 +57,7 @@ void save_grid()
 {
   std::string dir = "test_grid_to_stack";
   vgl_vector_3d<unsigned> grid_size(2, 2, 2);
-  bvxm_voxel_grid<vnl_vector_fixed<T,N> > *grid = new  bvxm_voxel_grid<vnl_vector_fixed<T,N> >(grid_size);
+  auto *grid = new  bvxm_voxel_grid<vnl_vector_fixed<T,N> >(grid_size);
   grid->initialize_data(vnl_vector_fixed<T,N>(test_value<T>()));
   bvxm_grid_to_image_stack::write_grid_to_image_stack(grid, dir);
 

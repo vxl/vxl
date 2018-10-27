@@ -153,7 +153,7 @@ std::string sdet_texture_classifier_params::filter_dir_name()
 void vsl_b_write(vsl_b_ostream &os,
                  const sdet_texture_classifier_params & tcp)
 {
-  sdet_texture_classifier_params& tcpnc =
+  auto& tcpnc =
     const_cast<sdet_texture_classifier_params&>(tcp);
   vsl_b_write(os,tcpnc.n_scales_);
   vsl_b_write(os,tcpnc.scale_interval_);

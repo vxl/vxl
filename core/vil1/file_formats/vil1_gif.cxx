@@ -198,7 +198,7 @@ vil1_gif_loader_saver::vil1_gif_loader_saver(vil1_stream *s_)
       assert(!"expected GIF separator here");
     }
 
-    vil1_gif_image_record *ir = new vil1_gif_image_record;
+    auto *ir = new vil1_gif_image_record;
     ir->offset = offset;
 
     ir->x0 = vil1_16bit_read_little_endian(s);
@@ -294,7 +294,7 @@ vil1_gif_loader_saver::~vil1_gif_loader_saver()
   }
 
   for (auto & image : images) {
-    vil1_gif_image_record *ir = static_cast<vil1_gif_image_record*>(image);
+    auto *ir = static_cast<vil1_gif_image_record*>(image);
     if (ir->color_map)
       delete ir->color_map;
     delete ir;

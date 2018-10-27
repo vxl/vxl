@@ -285,7 +285,7 @@ vil_image_resource_sptr sdet_mrf_bp::belief_image()
     for (unsigned i = 0; i<ni_; ++i) {
       sdet_mrf_site_bp_sptr sp = sites_[j][i];
       if (!sp) continue;
-      float label = static_cast<float>(sp->believed_label());
+      auto label = static_cast<float>(sp->believed_label());
       view(i,j) = scale*label + min_;
     }
   ret = vil_new_image_resource_of_view(view);

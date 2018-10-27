@@ -57,7 +57,7 @@ namespace boxm2_ocl_render_gl_expected_depth_process_globals
     options += " -D STEP_CELL=step_cell_render_depth2(tblock,linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -73,7 +73,7 @@ namespace boxm2_ocl_render_gl_expected_depth_process_globals
 
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -130,13 +130,13 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   bocl_mem_sptr exp_image =pro.get_input<bocl_mem_sptr>(i++);
   bocl_mem_sptr exp_img_dim =pro.get_input<bocl_mem_sptr>(i++);
 
-  float depth_scale = pro.get_input<float>(i++);
-  float depth_offset = pro.get_input<float>(i++);
+  auto depth_scale = pro.get_input<float>(i++);
+  auto depth_offset = pro.get_input<float>(i++);
 
   //: create a command queue.
   int status=0;
@@ -158,7 +158,7 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
   // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),vis_buff,  "vis image (single float) buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -167,13 +167,13 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* buff = new float[cl_ni*cl_nj];
+  auto* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
-  float* var_buff = new float[cl_ni*cl_nj];
+  auto* var_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) var_buff[i]=0.0f;
-  float* prob_buff = new float[cl_ni*cl_nj];
+  auto* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
-  float* t_infinity_buff = new float[cl_ni*cl_nj];
+  auto* t_infinity_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) t_infinity_buff[i]=0.0f;
 
   bocl_mem_sptr var_image=opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float),var_buff,"var image buffer");
@@ -186,8 +186,8 @@ bool boxm2_ocl_render_gl_expected_depth_process(bprb_func_process& pro)
   t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);

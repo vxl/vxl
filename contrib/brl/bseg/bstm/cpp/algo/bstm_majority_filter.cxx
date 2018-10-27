@@ -11,8 +11,8 @@ bstm_majority_filter::bstm_majority_filter(bstm_block_metadata data, bstm_block*
 
   std::size_t data_size = changes->buffer_length();
   bstm_data_base* new_change = new bstm_data_base(new char[data_size], data_size, data.id_);
-  bstm_data_traits<BSTM_CHANGE>::datatype*  new_change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) new_change->data_buffer();
-  bstm_data_traits<BSTM_CHANGE>::datatype * change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) changes->data_buffer();
+  auto*  new_change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) new_change->data_buffer();
+  auto * change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) changes->data_buffer();
 
   //iterate through each tree
   for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {

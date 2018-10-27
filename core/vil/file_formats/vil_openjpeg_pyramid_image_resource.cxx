@@ -111,7 +111,7 @@ vil_openjpeg_pyramid_image_resource::get_copy_view(unsigned i0, unsigned ni,
     return this->get_copy_view(i0, ni, j0, nj, 0);
   }
   float f_lev = -std::log(scale) / std::log(2.0f);
-  unsigned level = static_cast<unsigned>(f_lev);
+  auto level = static_cast<unsigned>(f_lev);
   if (level >= this->nlevels())
     level = this->nlevels()-1;
   actual_scale = scale_at_level(level);

@@ -80,7 +80,7 @@ void average_verts_2(imesh_vertex_array_base& verts,
                      const std::vector<std::vector<unsigned int> >& idx)
 {
   assert(dynamic_cast<imesh_vertex_array<2>*>(&verts));
-  imesh_vertex_array<2>& verts2 = static_cast<imesh_vertex_array<2>&>(verts);
+  auto& verts2 = static_cast<imesh_vertex_array<2>&>(verts);
 
   for (const auto & new_idx : idx) {
     imesh_vertex<2> new_v;
@@ -100,7 +100,7 @@ void average_verts_3(imesh_vertex_array_base& verts,
                      const std::vector<std::vector<unsigned int> >& idx)
 {
   assert(dynamic_cast<imesh_vertex_array<3>*>(&verts));
-  imesh_vertex_array<3>& verts3 = static_cast<imesh_vertex_array<3>&>(verts);
+  auto& verts3 = static_cast<imesh_vertex_array<3>&>(verts);
 
   for (const auto & new_idx : idx) {
     imesh_vertex<3> new_v;
@@ -254,7 +254,7 @@ imesh_quad_subdivide(imesh_mesh& mesh, const std::set<unsigned int>& sel_faces)
     }
   }
   // face indices
-  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type sel_face : sel_faces) {
+  for (const auto & sel_face : sel_faces) {
     std::vector<unsigned int> new_f_vert;
     for (unsigned int i=0; i<faces.num_verts(sel_face); ++i) {
       new_f_vert.push_back(faces(sel_face,i));
@@ -363,7 +363,7 @@ imesh_submesh_from_faces(const imesh_mesh& mesh, const std::set<unsigned int>& s
   std::vector<vgl_point_2d<double> > tex_coords;
   const std::vector<std::pair<std::string,unsigned int> >& groups = mesh.faces().groups();
   unsigned int group_idx = 0;
-  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type sel_face : sel_faces)
+  for (const auto & sel_face : sel_faces)
   {
     const unsigned int num_v = mesh.faces().num_verts(sel_face);
     std::vector<unsigned int> new_face;
@@ -421,7 +421,7 @@ void imesh_flip_faces( imesh_mesh& mesh )
 //: Flip the orientation of the selected faces
 void imesh_flip_faces( imesh_mesh& mesh, const std::set<unsigned int>& sel_faces)
 {
-  for (std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type sel_face : sel_faces)
+  for ( const auto & sel_face : sel_faces)
   {
     mesh.faces().flip_orientation(sel_face);
   }
@@ -496,7 +496,7 @@ bool contains_point(const imesh_mesh& mesh,vgl_point_3d<double> p)
   for (;iter!=new_verts->end();iter++,i++)
   {
     vgl_point_3d<double> new_vert((*iter)[0],(*iter)[1],(*iter)[2]);
-    double dotprod=dot_product<double>(new_vert-p,normals[i]);
+    auto dotprod=dot_product<double>(new_vert-p,normals[i]);
     if (dotprod<0)
       return false;
   }

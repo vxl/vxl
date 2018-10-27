@@ -213,8 +213,8 @@ double Sampsons_MLE(HomgPoint2D x1, HomgPoint2D x2, FMatrix *F)
   GRADr = vnl_math::sqr(rX*rX + rY*rY + rX_dash*rX_dash + rY_dash*rY_dash);
   std::cerr << "1 :  " << GRADr << '\n';
   // This is an annoying interface
-  HomgPoint2D *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
-  HomgPoint2D *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
+  auto *x1p = new HomgPoint2D(x1.x(), x1.y(), 1.0);
+  auto *x2p = new HomgPoint2D(x2.x(), x2.y(), 1.0);
   std::cerr << "2\n";
   r = F->image1_epipolar_distance_squared(x1p, x2p);
   std::cerr << "r " << r << '\n';

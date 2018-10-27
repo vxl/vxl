@@ -103,7 +103,7 @@ void boxm2_vecf_appearance_extractor::extract_head_appearance(){
                 unsigned target_data_idx;
                 target_blk->data_index( fwd_scaled_cell_center, target_data_idx);
                 float alpha = target_alpha_data[target_data_idx];
-                float src_prob = static_cast<float>(1.0 - std::exp( - source_alpha_data[data_idx] * source_side_len));
+                auto src_prob = static_cast<float>(1.0 - std::exp( - source_alpha_data[data_idx] * source_side_len));
                 //double prob = static_cast<float>(1.0 - std::exp(-alpha*side_len));
                 constexpr double prob_thresh = 0.0;
 
@@ -218,7 +218,7 @@ void boxm2_vecf_appearance_extractor::extract_iris_appearance(bool is_right,bool
   boxm2_scene_sptr source_model = orbit.scene();
   std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
-  unsigned n_source_cells = static_cast<unsigned>(orbit.iris_cell_centers_.size());
+  auto n_source_cells = static_cast<unsigned>(orbit.iris_cell_centers_.size());
   std::cout<<"iris cell centers: "<<n_source_cells<<std::endl;
   for (auto & source_block : source_blocks) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
@@ -311,7 +311,7 @@ void boxm2_vecf_appearance_extractor::extract_pupil_appearance(bool is_right, bo
   std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
 
-  unsigned n_source_cells = static_cast<unsigned>(orbit.pupil_cell_centers_.size());
+  auto n_source_cells = static_cast<unsigned>(orbit.pupil_cell_centers_.size());
   std::cout<<"pupil cell centers: "<<n_source_cells<<std::endl;
   for (auto & source_block : source_blocks) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
@@ -405,7 +405,7 @@ void boxm2_vecf_appearance_extractor::extract_eye_appearance(bool is_right, bool
   boxm2_scene_sptr source_model = orbit.scene();
 
   std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
-  unsigned n_source_cells = static_cast<unsigned>(orbit.sphere_cell_centers_.size());
+  auto n_source_cells = static_cast<unsigned>(orbit.sphere_cell_centers_.size());
   std::cout<<"sphere cell centers: "<<n_source_cells<<std::endl;
   for (auto & source_block : source_blocks) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
@@ -482,7 +482,7 @@ void boxm2_vecf_appearance_extractor::extract_eyelid_crease_appearance(bool is_r
   color_APM& curr_eyelid_crease = is_right ? right_eyelid_crease_app_ : left_eyelid_crease_app_ ;
   float8 weighted_sum; weighted_sum.fill(0);
   std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
-  unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_crease_cell_centers_.size());
+  auto n_source_cells = static_cast<unsigned>(orbit.eyelid_crease_cell_centers_.size());
   std::cout<<"eyelid crease cell centers "<<n_source_cells<<std::endl;
 
   for (auto & source_block : source_blocks) {
@@ -559,7 +559,7 @@ void boxm2_vecf_appearance_extractor::extract_lower_lid_appearance(bool is_right
   float8 weighted_sum; weighted_sum.fill(0); float sum_vis =0.0f;
   std::vector<boxm2_block_id> source_blocks = source_model->get_block_ids();
 
-  unsigned n_source_cells = static_cast<unsigned>(orbit.lower_eyelid_cell_centers_.size());
+  auto n_source_cells = static_cast<unsigned>(orbit.lower_eyelid_cell_centers_.size());
   std::cout<<"lower lid cell centers "<<n_source_cells<<std::endl;
   for (auto & source_block : source_blocks) {
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
@@ -650,7 +650,7 @@ void boxm2_vecf_appearance_extractor::extract_upper_lid_appearance(bool is_right
 
   for (auto & source_block : source_blocks) {
     boxm2_block *source_blk = boxm2_cache::instance()->get_block(source_model, source_block);
-    unsigned n_source_cells = static_cast<unsigned>(orbit.eyelid_cell_centers_.size());
+    auto n_source_cells = static_cast<unsigned>(orbit.eyelid_cell_centers_.size());
     color_APM   * source_color_data; gray_APM* source_app_data; float* source_alpha_data;
     if(!this->extract_data(source_model,source_block,source_alpha_data,source_app_data,source_color_data)){
       std::cout<<"Data extraction failed for scene "<< source_model << " in block "<<source_block<<std::endl;

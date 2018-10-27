@@ -131,7 +131,7 @@ int main(int argc, char** argv)
       if (l_idx != leaf_idx())
         continue;
 
-    bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[l_idx].ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leaves[l_idx].ptr());
     leaf_ptr->contents_ = new volm_conf_land_map_indexer(leaf_ptr->extent_, density());
     std::cout << "--------------------------------------------------------------------------\n";
     std::cout << "\t adding locations into region: " << leaf_ptr->extent_ << " (leaf id: " << l_idx << ")...\n";
@@ -141,7 +141,7 @@ int main(int argc, char** argv)
     {
       std::cout << "\t adding locations from " << map_info.size() << " land maps\n";
       for (auto & m_idx : map_info) {
-        vil_image_view<vxl_byte>* image = dynamic_cast<vil_image_view<vxl_byte>*>(m_idx.img_r.ptr());
+        auto* image = dynamic_cast<vil_image_view<vxl_byte>*>(m_idx.img_r.ptr());
         if (!image) {
           log << "ERROR: load image view failed for land map: " << m_idx.img_name << '\n';  error(log_file, log.str());
           return volm_io::EXE_ARGUMENT_ERROR;

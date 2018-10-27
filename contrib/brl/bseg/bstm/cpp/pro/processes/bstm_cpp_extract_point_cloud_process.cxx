@@ -60,8 +60,8 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene = pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache = pro.get_input<bstm_cache_sptr>(i++);
-  float prob_t = pro.get_input<float>(i++);
-  float time = pro.get_input<float>(i++);
+  auto prob_t = pro.get_input<float>(i++);
+  auto time = pro.get_input<float>(i++);
 
 
   //zip through each block
@@ -83,8 +83,8 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
 
     //3d array of trees
     boxm2_array_3d<uchar16>& trees = cache->get_block(id)->trees();
-    bstm_data_traits<BSTM_ALPHA>::datatype * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alpha->data_buffer();
-    bstm_data_traits<BSTM_POINT>::datatype * points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
+    auto * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alpha->data_buffer();
+    auto * points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
 
     for ( unsigned i = 0 ; i < num_time_trees; ++i)
     {

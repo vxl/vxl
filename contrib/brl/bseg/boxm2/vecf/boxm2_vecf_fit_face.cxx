@@ -26,7 +26,7 @@ void boxm2_vecf_fit_face::fill_smid_map(){
   smid_map_["chin"]=CHIN;
 }
 bool boxm2_vecf_fit_face::add_labeled_point(boxm2_vecf_labeled_point lp){
-  std::map<std::string, mids>::iterator iit = smid_map_.find(lp.label_);
+  auto iit = smid_map_.find(lp.label_);
   if(iit == smid_map_.end() ){
     std::cout << "Measurement label " << lp.label_ << " doesn't exist\n";
     return false;
@@ -67,7 +67,7 @@ bool boxm2_vecf_fit_face::read_anchor_file(std::string const& path){
     std::vector<vgl_point_3d<double> >& pts = anchor.second;
     double x = 0.0, y= 0.0, z = 0.0;
     double np = 0.0;
-    for(std::vector<vgl_point_3d<double> >::iterator pit = pts.begin();
+    for(auto pit = pts.begin();
         pit != pts.end(); ++pit, np+=1.0){
       x += pit->x(); y += pit->y(); z += pit->z();
     }
@@ -202,7 +202,7 @@ bool boxm2_vecf_fit_face::set_trans(){
   std::cout << "Rotation part\n " << R << '\n'<< std::flush;
   std::cout << "Symmetric part\n " << S << '\n'<< std::flush;
 
-  unsigned n = static_cast<unsigned>(source_pts.size());
+  auto n = static_cast<unsigned>(source_pts.size());
   for(unsigned i = 0; i<n; ++i){
     vgl_homg_point_3d<double> hts = params_.trans_(source_pts[i]);
     vgl_point_3d<double> ts(hts), t(target_pts[i]);

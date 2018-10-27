@@ -54,7 +54,7 @@ bool boxm2_load_score_binary_process(bprb_func_process& pro)
   std::string candidate_list = pro.get_input<std::string>(in_i++);
   std::string score_file = pro.get_input<std::string>(in_i++);
   std::string out_text = pro.get_input<std::string>(in_i++);
-  unsigned tile_id = pro.get_input<unsigned>(in_i++);
+  auto tile_id = pro.get_input<unsigned>(in_i++);
 
   // load the candidate list if exists
   bool is_candidate = false;

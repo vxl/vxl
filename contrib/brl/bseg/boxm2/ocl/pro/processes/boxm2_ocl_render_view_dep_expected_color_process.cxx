@@ -62,7 +62,7 @@ namespace boxm2_ocl_render_view_dep_expected_color_process_globals
       options += " -D STEP_CELL=step_cell_render(aux_args,data_ptr,d*linfo->block_len)";
       // options += "-D STEP_CELL=step_cell_render(aux_args.mog,aux_args.alpha,data_ptr,aux_args.app_model_weights,d*linfo->block_len,vis,aux_args.expint)";
       //have kernel construct itself using the context and device
-      bocl_kernel * ray_trace_kernel=new bocl_kernel();
+      auto * ray_trace_kernel=new bocl_kernel();
       ray_trace_kernel->create_kernel( &device->context(),
                                        device->device_id(),
                                        src_paths,
@@ -75,7 +75,7 @@ namespace boxm2_ocl_render_view_dep_expected_color_process_globals
       std::vector<std::string> norm_src_paths;
       norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
       norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-      bocl_kernel * normalize_render_kernel=new bocl_kernel();
+      auto * normalize_render_kernel=new bocl_kernel();
 
       std::string normalize_options = opts;
       normalize_options += "-D RENDER ";
@@ -134,8 +134,8 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
 
   std::string data_type;
@@ -171,7 +171,7 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
-  float* buff = new float[4*cl_ni*cl_nj];
+  auto* buff = new float[4*cl_ni*cl_nj];
   std::fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4),buff,  "exp color image (float4) buffer");
 
@@ -191,11 +191,11 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
-   float* max_omega_buff = new float[cl_ni*cl_nj];
+   auto* max_omega_buff = new float[cl_ni*cl_nj];
   std::fill(max_omega_buff, max_omega_buff + cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr max_omega_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), max_omega_buff,"vis image buffer");
   max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -234,7 +234,7 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
   //   for (unsigned r=0;r<ni;r++)
   //     (*exp_img_out)(r,c)=buff[c*cl_ni+r];
 
-  vil_image_view<vil_rgba<vxl_byte> >* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(cl_ni,cl_nj);
+  auto* exp_img_out = new vil_image_view<vil_rgba<vxl_byte> >(cl_ni,cl_nj);
   int numFloats = 4;
   int count = 0;
   for (unsigned c=0;c<cl_nj;++c) {
@@ -246,7 +246,7 @@ bool boxm2_ocl_render_view_dep_expected_color_process(bprb_func_process& pro)
                            (vxl_byte) 255 );
     }
   }
-  vil_image_view<float>* vis_img_out=new vil_image_view<float>(cl_ni,cl_nj);
+  auto* vis_img_out=new vil_image_view<float>(cl_ni,cl_nj);
   for (unsigned c=0;c<cl_nj;c++)
     for (unsigned r=0;r<cl_ni;r++)
       (*vis_img_out)(r,c)=vis_buff[c*cl_ni+r];

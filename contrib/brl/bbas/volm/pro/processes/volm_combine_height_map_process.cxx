@@ -54,7 +54,7 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
   std::string dem_folder = pro.get_input<std::string>(in_i++);
   std::string poly_file = pro.get_input<std::string>(in_i++);
   std::string out_folder = pro.get_input<std::string>(in_i++);
-  float min_size = pro.get_input<float>(in_i++);
+  auto min_size = pro.get_input<float>(in_i++);
   int   leaf_id = pro.get_input<int>(in_i++);
 
   // get the images
@@ -116,8 +116,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
     vpgl_lvcs_sptr lvcs = new vpgl_lvcs(lat_min, lon_min, 0, vpgl_lvcs::wgs84, vpgl_lvcs::DEG, vpgl_lvcs::METERS);
     double box_lx, box_ly, box_lz;
     lvcs->global_to_local(lon_max, lat_max, 0, vpgl_lvcs::wgs84, box_lx, box_ly, box_lz);
-    unsigned ni = (unsigned)std::ceil(box_lx);
-    unsigned nj = (unsigned)std::ceil(box_ly);
+    auto ni = (unsigned)std::ceil(box_lx);
+    auto nj = (unsigned)std::ceil(box_ly);
     vgl_box_2d<double> leaf_bbox_wgs = leaf->extent_;
     vgl_box_2d<double> leaf_bbox(0.0, box_lx, 0.0, box_ly);
     // create a filename
@@ -177,8 +177,8 @@ bool volm_combine_height_map_process(bprb_func_process& pro)
             continue;
           double u, v;
           leaf_h_info[h_idx].cam->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)std::floor(u+0.5);
-          unsigned vv = (unsigned)std::floor(v+0.5);
+          auto uu = (unsigned)std::floor(u+0.5);
+          auto vv = (unsigned)std::floor(v+0.5);
           if (uu < leaf_h_info[h_idx].ni && vv < leaf_h_info[h_idx].nj) {
             is_pixel_found = true;
             vil_image_view<float> imgc(leaf_h_info[h_idx].img_r);
@@ -261,7 +261,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
   // get the input
   unsigned in_i = 0;
   std::string img_folder = pro.get_input<std::string>(in_i++);
-  float threshold = pro.get_input<float>(in_i++);
+  auto threshold = pro.get_input<float>(in_i++);
   // get all images from the folder
   std::vector<std::string> img_files;
   std::string in_dir = img_folder + "*.tif";
@@ -289,7 +289,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
     }
 
   // obtain the median
-  vil_image_view<float>* out_img = new vil_image_view<float>(ni, nj);
+  auto* out_img = new vil_image_view<float>(ni, nj);
   out_img->fill(-1.0f);
   for (unsigned i = 0; i < ni; i++)
   {
@@ -356,11 +356,11 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
   // get the inputs
   unsigned in_i = 0;
   std::string in_img_folder = pro.get_input<std::string>(in_i++);
-  double            ll_lon = pro.get_input<double>(in_i++);
-  double            ll_lat = pro.get_input<double>(in_i++);
-  double            ur_lon = pro.get_input<double>(in_i++);
-  double            ur_lat = pro.get_input<double>(in_i++);
-  float         init_value = pro.get_input<float>(in_i++);
+  auto            ll_lon = pro.get_input<double>(in_i++);
+  auto            ll_lat = pro.get_input<double>(in_i++);
+  auto            ur_lon = pro.get_input<double>(in_i++);
+  auto            ur_lat = pro.get_input<double>(in_i++);
+  auto         init_value = pro.get_input<float>(in_i++);
 
   // load all images in the height map folder
   std::vector<volm_img_info> h_infos;
@@ -386,7 +386,7 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
   out_cam->global_to_img(ur_lon, ll_lat, 0, o_u, o_v);
   unsigned o_ni = std::ceil(o_u);
   unsigned o_nj = std::ceil(o_v);
-  vil_image_view<float>* out_img = new vil_image_view<float>(o_ni, o_nj);
+  auto* out_img = new vil_image_view<float>(o_ni, o_nj);
   out_img->fill(init_value);
 
   // obtain the overlapped resource
@@ -412,7 +412,7 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
       double lon, lat;
       out_cam->img_to_global(i, j, lon, lat);
       bool found = false;
-      for (std::vector<volm_img_info>::iterator vit = overlap_infos.begin(); (vit != overlap_infos.end() && !found); ++vit) {
+      for (auto vit = overlap_infos.begin(); (vit != overlap_infos.end() && !found); ++vit) {
         vgl_box_2d<double> bbox = vit->bbox;
         bbox.expand_about_centroid(2E-5);
         if (!bbox.contains(lon, lat))
@@ -421,8 +421,8 @@ bool volm_combine_height_map_process3(bprb_func_process& pro)
         out_cam->img_to_global(i, j, lon, lat);
         double u, v;
         vit->cam->global_to_img(lon, lat, 0.0, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);
+        auto vv = (unsigned)std::floor(v+0.5);
         if (uu < vit->ni && vv < vit->nj) {
           found = true;
           vil_image_view<float> h_img(vit->img_r);

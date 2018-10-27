@@ -210,7 +210,7 @@ double icam_minimizer::polar_inc(unsigned level, unsigned& nsteps,
 {
   vpgl_perspective_camera<double> dcam = this->source_cam(level);
   double polar_inc = vsph_camera_bounds::rotation_angle_interval(dcam);
-  unsigned nangle_steps = static_cast<unsigned>(2.0*polar_range/polar_inc );
+  auto nangle_steps = static_cast<unsigned>(2.0*polar_range/polar_inc );
   // nangle_steps must be even to include ang = 0.0
   if (nangle_steps%2) nangle_steps++;
   // need to include zero polar rotation in the scan so revise polar inc
@@ -453,9 +453,9 @@ set_origin_step_delta(vgl_box_3d<double> const& trans_box,
   double xspan = trans_box.max_x() - trans_box.min_x();
   double yspan = trans_box.max_y() - trans_box.min_y();
   double zspan = trans_box.max_z() - trans_box.min_z();
-  unsigned nx = static_cast<unsigned>(xspan/trans_steps.x());
-  unsigned ny = static_cast<unsigned>(yspan/trans_steps.y());
-  unsigned nz = static_cast<unsigned>(zspan/trans_steps.z());
+  auto nx = static_cast<unsigned>(xspan/trans_steps.x());
+  auto ny = static_cast<unsigned>(yspan/trans_steps.y());
+  auto nz = static_cast<unsigned>(zspan/trans_steps.z());
   //need to include (0 0 0);
   if (nx%2) ++nx;  if (ny%2) ++ny;  if (nz%2) ++nz;
   double dx = xspan/nx, dy = yspan/ny, dz = zspan/nz;
@@ -1122,7 +1122,7 @@ vil_image_view<double> icam_minimizer::inv_depth(unsigned level)
   float mval = vnl_numeric_traits<float>::maxval;
   for (unsigned j = 0; j<nj; ++j)
     for (unsigned i = 0; i<ni; ++i) {
-      float z = static_cast<float>(depth(i,j));
+      auto z = static_cast<float>(depth(i,j));
       if (z<1.0e-6f) {
         inv_depth(i,j) = mval;
         continue;

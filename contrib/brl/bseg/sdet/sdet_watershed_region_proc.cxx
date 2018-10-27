@@ -125,7 +125,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
         continue;
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
-      unsigned short v =  (unsigned short) image_(imgc, imgr);
+      auto v =  (unsigned short) image_(imgc, imgr);
       regions_[index]->IncrementMeans(float(imgc), float(imgr), v);
     }
   //fill the region data
@@ -146,7 +146,7 @@ void sdet_watershed_region_proc::scan_region_data(vbl_array_2d<unsigned int> con
         continue;
       int index = lab-min_label_;
       //dangerous, might not be scaled properly (FIXME)
-      unsigned short v = (unsigned short) image_(imgc, imgr);
+      auto v = (unsigned short) image_(imgc, imgr);
       regions_[index]->InsertInPixelArrays(float(imgc), float(imgr), v);
       regions_[index]->ComputeIntensityStdev();
     }
@@ -170,7 +170,7 @@ bool sdet_watershed_region_proc::add_adjacency(sdet_region_sptr const& reg,
   }
   else//make a new adjacent region array
   {
-    std::vector<sdet_region_sptr>* adj_array = new std::vector<sdet_region_sptr>;
+    auto* adj_array = new std::vector<sdet_region_sptr>;
     adj_array->push_back(adj_reg);
     region_adjacency_[reg]=adj_array;
   }
@@ -211,7 +211,7 @@ static bool found_in_regions(sdet_region_sptr const &r,
                              std::vector<sdet_region_sptr> const & regions)
 {
   bool found = false;
-  for (std::vector<sdet_region_sptr>::const_iterator rit = regions.begin();
+  for (auto rit = regions.begin();
        rit != regions.end() && !found; rit++)
     if ((*rit).ptr() == r.ptr())
       found = true;
@@ -433,7 +433,7 @@ vil1_image sdet_watershed_region_proc::get_residual_image()
   int xsize = image_.width(), ysize = image_.height();
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
-  float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
+  auto min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
   for (auto & region : regions_)
     for (region->reset(); region->next();)
     {
@@ -450,7 +450,7 @@ vil1_image sdet_watershed_region_proc::get_residual_image()
       float is = res-min_res;//to ensure non-negative
       if (is>255)
         is = 255;//to ensure within char
-      unsigned char pix = (unsigned char)is;
+      auto pix = (unsigned char)is;
       res_image(x, y)=pix;
     }
   return res_image;
@@ -461,7 +461,7 @@ void sdet_watershed_region_proc::print_region_info()
   if (!regions_valid_)
     return;
   int index = 0;
-  for (std::vector<sdet_region_sptr>::iterator rit = regions_.begin();
+  for (auto rit = regions_.begin();
        rit != regions_.end(); rit++, index++)
   {
     unsigned int npix = (*rit)->Npix();
@@ -487,7 +487,7 @@ bool sdet_watershed_region_proc::compute_region_image()
       int c = int(region->X()), r = int(region->Y());
       if (c<0 || r<0 || c>=w || r>=h)
         continue;
-      unsigned char val = (unsigned char)region->I();
+      auto val = (unsigned char)region->I();
       region_image_(c,r) = val;
     }
   region_image_valid_ = true;

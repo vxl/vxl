@@ -76,12 +76,12 @@ bool boxm2_ocl_render_expected_shadow_map_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
   std::string ident = pro.get_input<std::string>(i++);
 
 
-  vil_image_view<float> *exp_img = new vil_image_view<float>();
+  auto *exp_img = new vil_image_view<float>();
   vil_image_view_base_sptr exp_img_out = exp_img;
 
   boxm2_ocl_render_expected_shadow_map::render(device, scene, opencl_cache, cam, ni, nj, ident, *exp_img);

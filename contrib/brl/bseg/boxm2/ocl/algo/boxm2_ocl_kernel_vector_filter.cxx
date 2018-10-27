@@ -78,9 +78,9 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
     //filter->print();
 
     //set up the filter, filter buffer and other related filter variables
-    std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+    auto kit = filter->float_kernel_.begin();
     unsigned ci=0;
-    cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
+    auto* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
     for (; kit!= filter->float_kernel_.end(); kit++, ci++)
     {
       vgl_point_3d<float> loc = kit->first;

@@ -107,9 +107,9 @@ bool brad_train_histograms_process(bprb_func_process& pro)
   bbas_1d_array_string_sptr high_paths =
     pro.get_input<bbas_1d_array_string_sptr>(2);
 
-  double frac = pro.get_input<double>(3);
-  unsigned nit = pro.get_input<unsigned>(4);
-  unsigned njt = pro.get_input<unsigned>(5);
+  auto frac = pro.get_input<double>(3);
+  auto nit = pro.get_input<unsigned>(4);
+  auto njt = pro.get_input<unsigned>(5);
 
   bsta_joint_histogram_3d<float> low_hist;
   bsta_joint_histogram_3d<float> high_hist;

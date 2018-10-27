@@ -82,7 +82,7 @@ static void test_vdgl_io()
 
   bool good = true;
   int k = 0;
-  for (std::vector<vdgl_digital_curve_sptr>::iterator dcit = dcrvs_in.begin();
+  for (auto dcit = dcrvs_in.begin();
        dcit != dcrvs_in.end(); dcit++, k++)
   {
     if (!(*dcit))

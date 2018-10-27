@@ -57,7 +57,7 @@ bool best_match(vgl_polygon<double> const& poly, std::vector<volm_geo_index_node
   // load the score
   std::vector<volm_score_sptr> scores;
   volm_score::read_scores(scores, score_file);
-  std::vector<volm_score_sptr>::iterator vit = scores.begin();
+  auto vit = scores.begin();
   for (; vit != scores.end(); ++vit) {
     unsigned li = (*vit)->leaf_id_;
     if (std::find(leaf_ids.begin(), leaf_ids.end(), li) == leaf_ids.end())

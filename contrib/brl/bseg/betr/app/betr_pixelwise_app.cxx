@@ -307,7 +307,7 @@ int main(int  /*argc*/, char *  /*argv*/[])
   std::string ref_cam_path = dir + ref_name + "_RPC.txt";
   vil_image_resource_sptr imgr = vil_load_image_resource(ref_img_path.c_str());
   vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(ref_cam_path);
-  vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
+  auto* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
   vpgl_camera_double_sptr camera = dynamic_cast<vpgl_camera<double>*>(lcam);
   etr.set_ref_camera(camera);
   etr.set_ref_image(imgr);
@@ -344,7 +344,7 @@ int main(int  /*argc*/, char *  /*argv*/[])
     //std::string evt_cam_path = dir + evt_name + ".tif_RPC.txt";
     evt_imgr = vil_load_image_resource(evt_img_path.c_str());
     vpgl_rational_camera<double>* rpccam = read_rational_camera_from_txt<double>(evt_cam_path);
-    vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
+    auto* lcam = new vpgl_local_rational_camera<double>(lvcs, *rpccam);
     evt_camera = dynamic_cast<vpgl_camera<double>*>(lcam);
     evt_imgr = vil_load_image_resource(evt_img_path.c_str());
     etr.set_evt_camera(evt_camera);

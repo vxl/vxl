@@ -64,7 +64,7 @@ fetch_depth(double const& u, double const& v,
   // e.g.,  for overlap region of a building and ground, building is on the ground and it is must closer than the ground
   // find if (u, v) is contained in non-ground, non-sky region
   double min_res = sph_vol_->min_voxel_res();
-  unsigned depth_reg_size = (unsigned)depth_regions.size();
+  auto depth_reg_size = (unsigned)depth_regions.size();
   if (depth_reg_size) {
     for (unsigned i = 0; i < depth_reg_size; ++i) {
       vgl_polygon<double> poly =
@@ -88,7 +88,7 @@ fetch_depth(double const& u, double const& v,
     }
   }
   // no object regions, check if ground plane exists
-  unsigned gp_size = (unsigned)ground_plane.size();
+  auto gp_size = (unsigned)ground_plane.size();
   if (gp_size) {
     for (unsigned i = 0; i < gp_size; ++i) {
       vgl_polygon<double> vgl_ground =
@@ -126,7 +126,7 @@ fetch_depth(double const& u, double const& v,
   }
   // check if (u, v) is contained in sky
   // considered last since all objects should be closer than sky
-  unsigned sky_size = (unsigned)sky.size();
+  auto sky_size = (unsigned)sky.size();
   if (sky_size) {
     for (unsigned i = 0; i < sky_size; ++i) {
       vgl_polygon<double> vgl_sky =
@@ -156,7 +156,7 @@ bool volm_spherical_layers::compute_layers()
   std::vector<depth_map_region_sptr> gp_regs = dm_scene_->ground_plane();
   std::vector<depth_map_region_sptr> sky_regs = dm_scene_->sky();
   std::vector<vgl_point_3d<double> > rays = sph_shell_->cart_points();
-  unsigned n_rays = (unsigned)rays.size();
+  auto n_rays = (unsigned)rays.size();
   vil_image_view<float> gp_depth_img = dm_scene_->depth_map("ground_plane", log_downsample_ratio_, d_threshold_);
   unsigned count = 0;
   for (unsigned ray_idx = 0; ray_idx < n_rays; ++ray_idx)

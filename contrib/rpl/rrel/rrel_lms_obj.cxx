@@ -62,7 +62,7 @@ rrel_lms_obj::fcn( vect_const_iter begin, vect_const_iter end,
   if ( index >= num_residuals ) index = num_residuals-1;
 
   // 3. Sort the squared residuals and extract the "median".
-  std::vector<double>::iterator loc = sq_res.begin() + index;
+  auto loc = sq_res.begin() + index;
   std::nth_element( sq_res.begin(), loc, sq_res.end() );
 
   return *loc;

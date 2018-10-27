@@ -69,7 +69,7 @@ static void test_vector_normalisers()
     TEST("Block normaliser created",norm->is_a()=="mipa_block_normaliser",true);
 
     mipa_vector_normaliser* pNorm = norm->clone();
-    mipa_block_normaliser* pBlockNormaliser=dynamic_cast<mipa_block_normaliser* >(pNorm);
+    auto* pBlockNormaliser=dynamic_cast<mipa_block_normaliser* >(pNorm);
     TEST("Clone is dynamic castable to Block normaliser",pBlockNormaliser != nullptr,true);
     if (pBlockNormaliser)
     {

@@ -65,7 +65,7 @@ static void test_bvxm_create_synth_lidar_data_process()
   non_null = (value_img != nullptr);
   TEST("image output non-null", non_null, true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr img = result->value();
 

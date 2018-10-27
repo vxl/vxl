@@ -105,12 +105,12 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
     float pix_in_x = pix_in_homg[0][n] / pix_in_homg[2][n];
     float pix_in_y = pix_in_homg[1][n] / pix_in_homg[2][n];
     // calculate weights and pixel values
-    unsigned x0 = (unsigned)std::floor(pix_in_x);
-    unsigned x1 = (unsigned)std::ceil(pix_in_x);
+    auto x0 = (unsigned)std::floor(pix_in_x);
+    auto x1 = (unsigned)std::ceil(pix_in_x);
     float x0_weight = (float)x1 - pix_in_x;
     float x1_weight = 1.0f - (float)x0_weight;
-    unsigned y0 = (unsigned)std::floor(pix_in_y);
-    unsigned y1 = (unsigned)std::ceil(pix_in_y);
+    auto y0 = (unsigned)std::floor(pix_in_y);
+    auto y1 = (unsigned)std::ceil(pix_in_y);
     float y0_weight = (float)y1 - pix_in_y;
     float y1_weight = 1.0f - (float)y0_weight;
     xvals.set_column(n,vnl_vector_fixed<unsigned,4>(x0,x0,x1,x1).as_ref());
@@ -125,11 +125,11 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
 
 vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_sptr image)
 {
-  vil_image_view<float>*img_view_float = new vil_image_view<float>(image->ni(),image->nj(),image->nplanes());
+  auto*img_view_float = new vil_image_view<float>(image->ni(),image->nj(),image->nplanes());
 
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE)
   {
-    vil_image_view<unsigned char> *img_view_char = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr());
+    auto *img_view_char = dynamic_cast<vil_image_view<unsigned char>*>(image.ptr());
     vil_convert_cast<unsigned char,float>(*img_view_char,*img_view_float);
   }
   else if (image->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)
@@ -150,7 +150,7 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
 #endif // 0
 
   vil_resample_bilin<float,float>(*img_view_float,output,output.ni(),output.nj());
-  vil_image_view<unsigned char>* img_view_out = new vil_image_view<unsigned char>(output.ni(),output.nj(),output.nplanes());
+  auto* img_view_out = new vil_image_view<unsigned char>(output.ni(),output.nj(),output.nplanes());
   img_view_out->fill(0);
 
   for (unsigned p=0; p<output.nplanes(); p++)
@@ -174,9 +174,9 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
 
 vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale)
 {
-  if ( vpgl_local_rational_camera<double>* rat_camera = dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer()))
+  if ( auto* rat_camera = dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer()))
   {
-    vpgl_local_rational_camera<double>* new_rat_camera=new vpgl_local_rational_camera<double>(*rat_camera);
+    auto* new_rat_camera=new vpgl_local_rational_camera<double>(*rat_camera);
     double u_s,v_s;
     float factor=  1.0f / float(1 << scale);
     rat_camera->image_scale(u_s,v_s);
@@ -196,9 +196,9 @@ vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr cam
 
 vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale)
 {
-  if ( vpgl_perspective_camera<double>* persp_camera =    dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer()))
+  if ( auto* persp_camera =    dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer()))
   {
-    vpgl_perspective_camera<double>* new_persp_camera=new vpgl_perspective_camera<double>(*persp_camera);
+    auto* new_persp_camera=new vpgl_perspective_camera<double>(*persp_camera);
     vnl_matrix_fixed<double,3,4> camera_matrix = persp_camera->get_matrix();
     vnl_matrix_fixed<double,3,3> scale_matrix;
     scale_matrix.fill(0.0);
@@ -242,7 +242,7 @@ int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);
   std::vector<vgl_point_3d<double> > box_uncertainty_corners = bvxm_util::corners_of_box_3d<double>(box_uncertainty);
-  vgl_box_2d<double>* roi_uncertainty = new vgl_box_2d<double>();
+  auto* roi_uncertainty = new vgl_box_2d<double>();
 
   for (auto curr_corner : box_uncertainty_corners) {
     vgl_point_3d<double> curr_pt;

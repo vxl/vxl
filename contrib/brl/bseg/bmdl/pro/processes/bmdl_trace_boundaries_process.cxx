@@ -14,7 +14,7 @@ bool trace_boundaries(vil_image_view_base_sptr label_img, std::string fpath)
     return false;
   }
 
-  vil_image_view<unsigned int>* img = static_cast<vil_image_view<unsigned int>* > (label_img.as_pointer());
+  auto* img = static_cast<vil_image_view<unsigned int>* > (label_img.as_pointer());
   std::vector<vgl_polygon<double> > polygons =
     bmdl_mesh::trace_boundaries(*img);
 

@@ -331,7 +331,7 @@ bool vil3d_gipl_image::get_property(char const *key, void * value) const
 {
   if (std::strcmp(vil3d_property_voxel_size, key)==0)
   {
-    float* array = static_cast<float*>(value);
+    auto* array = static_cast<float*>(value);
     // gipl stores data in mm
     array[0] = vox_width1_ / 1000.0f;
     array[1] = vox_width2_ / 1000.0f;

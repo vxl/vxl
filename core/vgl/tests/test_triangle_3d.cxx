@@ -336,7 +336,7 @@ inline void test_intersecting_degenerate_triangles1()
       test_desc += ")";
 
       vgl_line_segment_3d<double> i_line;
-      unsigned point1_edge = (unsigned) -1, point2_edge = (unsigned) -2;
+      auto point1_edge = (unsigned) -1, point2_edge = (unsigned) -2;
       vgl_triangle_3d_intersection_t ret =
         vgl_triangle_3d_triangle_intersection(
           valid_p1,

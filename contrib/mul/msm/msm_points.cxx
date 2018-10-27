@@ -49,7 +49,7 @@ void msm_points::set_points(const std::vector<vgl_point_2d<double> >& pts)
   unsigned n=pts.size();
   v_.set_size(2*n);
   double* v=v_.data_block();
-  std::vector<vgl_point_2d<double> >::const_iterator p = pts.begin();
+  auto p = pts.begin();
   for (;p!=pts.end();v+=2,++p)
   {
     v[0] = p->x();
@@ -62,7 +62,7 @@ void msm_points::get_points(std::vector<vgl_point_2d<double> >& pts) const
 {
   pts.resize(size());
   const double* v=v_.data_block();
-  std::vector<vgl_point_2d<double> >::iterator p = pts.begin();
+  auto p = pts.begin();
   for (;p!=pts.end();v+=2,++p)
   {
     p->x()=v[0];

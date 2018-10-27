@@ -675,7 +675,7 @@ int bdgl_curve_algs::add_straight_edgels(vdgl_edgel_chain_sptr const& ec,
   assert (ec->size() > 0);
   int Npix = 0, last = ec->size()-1;
 
-  float xs = float((*ec)[last].x()), ys = float((*ec)[last].y());
+  auto xs = float((*ec)[last].x()), ys = float((*ec)[last].y());
   bool first = true, init = true, done = false;
   float x, y;
   while (bdgl_curve_algs::line_gen(xs, ys, float(xe), float(ye), init, done, x, y))

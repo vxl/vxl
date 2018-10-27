@@ -79,20 +79,20 @@ bool bstm_ocl_minfo_process(bprb_func_process& pro)
   bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_opencl_cache_sptr opencl_cache= pro.get_input<bstm_opencl_cache_sptr>(i++);
-  float center_x = pro.get_input<float>(i++);
-  float center_y = pro.get_input<float>(i++);
-  float center_z = pro.get_input<float>(i++);
-  float len_x = pro.get_input<float>(i++);
-  float len_y = pro.get_input<float>(i++);
-  float len_z = pro.get_input<float>(i++);
-  float R_x = pro.get_input<float>(i++);
-  float R_y = pro.get_input<float>(i++);
-  float R_z = pro.get_input<float>(i++);
-  float T_x = pro.get_input<float>(i++);
-  float T_y = pro.get_input<float>(i++);
-  float T_z = pro.get_input<float>(i++);
-  float time_1 = pro.get_input<float>(i++);
-  float time_2 = pro.get_input<float>(i++);
+  auto center_x = pro.get_input<float>(i++);
+  auto center_y = pro.get_input<float>(i++);
+  auto center_z = pro.get_input<float>(i++);
+  auto len_x = pro.get_input<float>(i++);
+  auto len_y = pro.get_input<float>(i++);
+  auto len_z = pro.get_input<float>(i++);
+  auto R_x = pro.get_input<float>(i++);
+  auto R_y = pro.get_input<float>(i++);
+  auto R_z = pro.get_input<float>(i++);
+  auto T_x = pro.get_input<float>(i++);
+  auto T_y = pro.get_input<float>(i++);
+  auto T_z = pro.get_input<float>(i++);
+  auto time_1 = pro.get_input<float>(i++);
+  auto time_2 = pro.get_input<float>(i++);
   int nbins = pro.get_input<int>(i++);
 
   //get scene data type and appTypeSize

@@ -140,7 +140,7 @@ bool vil_geotiff_header::PCS_WGS84_UTM_zone(int &zone, GTIF_HEMISPH &hemisph) //
       return false;
     }
 
-    short *val = static_cast<short*> (value);
+    auto *val = static_cast<short*> (value);
     if ((*val < PCS_WGS84_UTM_zone_1N ) || ((*val > PCS_WGS84_UTM_zone_60S ))) {
       return false;
     }
@@ -181,7 +181,7 @@ bool vil_geotiff_header::GCS_WGS84_MET_DEG()
       std::cerr << "Expected a single value with type int16 (short)!\n";
       return false;
     }
-    short *val = static_cast<short*> (value);
+    auto *val = static_cast<short*> (value);
 
     if (*val != Linear_Meter) {
       std::cerr << "Linear units are not in Meters!\n";
@@ -229,7 +229,7 @@ bool vil_geotiff_header::PCS_NAD83_UTM_zone(int &zone, GTIF_HEMISPH &hemisph)
       return false;
     }
 
-    short *val = static_cast<short*> (value);
+    auto *val = static_cast<short*> (value);
     if ((*val < PCS_NAD83_UTM_zone_3N ) || ((*val > PCS_NAD83_Missouri_West ))) {
       std::cerr << "NOT in RANGE PCS_NAD83_UTM_zone_3N and PCS_NAD83_Missouri_West!\n";
       return false;

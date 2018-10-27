@@ -76,7 +76,7 @@ vil_image_resource_sptr vil_crop(const vil_image_resource_sptr &src, unsigned i0
   {
     vclip_ = nullptr;
 
-    unsigned i0 = (unsigned)box->get_min_x(), j0 = (unsigned)box->get_min_y();
+    auto i0 = (unsigned)box->get_min_x(), j0 = (unsigned)box->get_min_y();
     unsigned n_i = ((unsigned)box->get_max_x())-i0;
     unsigned n_j = ((unsigned)box->get_max_y())-j0;
     vclip_ = vil_crop(image, i0, n_i, j0, n_j);
@@ -195,7 +195,7 @@ vil1_image sdet_region_proc::get_residual_image()
   int xsize = image_.width(), ysize = image_.height();
   vil1_memory_image_of<unsigned char> res_image(xsize, ysize);
   res_image.fill(0);
-  float min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
+  auto min_res = (float)vnl_numeric_traits<unsigned short>::maxval;
   for (auto & region : regions_)
     for (region->reset(); region->next();)
     {
@@ -212,7 +212,7 @@ vil1_image sdet_region_proc::get_residual_image()
       float is = res-min_res;//to ensure non-negative
       if (is>255)
         is = 255;//to ensure within char
-      unsigned char pix = (unsigned char)is;
+      auto pix = (unsigned char)is;
       res_image(x, y)=pix;
     }
   return res_image;

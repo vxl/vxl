@@ -109,7 +109,7 @@ namespace boxm2_ocl_ingest_buckeye_dem_process_globals
     options += " -D STEP_CELL=step_cell_ingest_buckeye_dem(aux_args,data_ptr,(t_vox_exit-d)*linfo->block_len,t_vox_exit*linfo->block_len)";
     std::cout << "Kernel Options = [" << options << ']' << std::endl;
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -213,12 +213,12 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   vil_image_view_base_sptr a1_view_base = a1_res->get_view((unsigned int)min_i, ni, (unsigned int)min_j, nj);
   vil_image_view_base_sptr a2_view_base = a2_res->get_view((unsigned int)min_i, ni, (unsigned int)min_j, nj);
 
-  vil_image_view<float>* a1_view = dynamic_cast<vil_image_view<float>*>(a1_view_base.ptr());
+  auto* a1_view = dynamic_cast<vil_image_view<float>*>(a1_view_base.ptr());
   if (!a1_view) {
       std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast first return image to a vil_image_view<float>\n";
       return false;
   }
-  vil_image_view<float>* a2_view = dynamic_cast<vil_image_view<float>*>(a2_view_base.ptr());
+  auto* a2_view = dynamic_cast<vil_image_view<float>*>(a2_view_base.ptr());
   if (!a2_view) {
       std::cerr << "Error: boxm2_ocl_ingest_buckeye_dem_process: could not cast last return image to a vil_image_view<float>\n";
       return false;
@@ -228,9 +228,9 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
   unsigned int cl_nj = RoundUp(nj,8);
 
   // form the ray buffer
-  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
-  cl_float* a1_img = new float[cl_ni*cl_nj];
-  cl_float* a2_img = new float[cl_ni*cl_nj];
+  auto* ray_origins = new float[4*cl_ni*cl_nj];
+  auto* a1_img = new float[cl_ni*cl_nj];
+  auto* a2_img = new float[cl_ni*cl_nj];
   //cl_float* outimg = new float[cl_ni*cl_nj];
 
   // initialize ray origin buffer, first and last return buffers
@@ -336,7 +336,7 @@ bool boxm2_ocl_ingest_buckeye_dem_process(bprb_func_process& pro)
     bocl_mem * blk = opencl_cache->get_block(scene, *id);
     bocl_mem * blk_info = opencl_cache->loaded_block_info();
     bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id,0,false);
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
 

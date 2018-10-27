@@ -261,7 +261,7 @@ std::vector<vgl_point_3d<double> > volm_candidate_region_parser::parse_points(st
 {
   std::vector<vgl_point_3d<double> > out;
   out.clear();
-  volm_candidate_region_parser* parser = new volm_candidate_region_parser();
+  auto* parser = new volm_candidate_region_parser();
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << "volm_candidate_region_parser: can not open kml file " << kml_file << '\n';
@@ -290,7 +290,7 @@ std::vector<std::vector<vgl_point_3d<double> > > volm_candidate_region_parser::p
 {
   std::vector<std::vector<vgl_point_3d<double> > > out_lines;
   out_lines.clear();
-  volm_candidate_region_parser* parser = new volm_candidate_region_parser();
+  auto* parser = new volm_candidate_region_parser();
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << "volm_candidate_region_parser: can not open kml file " << kml_file <<'\n';
@@ -319,7 +319,7 @@ vgl_polygon<double> volm_candidate_region_parser::parse_polygon(std::string cons
 {
   vgl_polygon<double> out;
   out.clear();
-  volm_candidate_region_parser* parser = new volm_candidate_region_parser;
+  auto* parser = new volm_candidate_region_parser;
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << "volm_candidate_region_parser: can not open kml file " << kml_file << '\n';
@@ -359,7 +359,7 @@ vgl_polygon<double> volm_candidate_region_parser::parse_polygon_with_inner(std::
 {
   vgl_polygon<double> poly;
   poly.clear();
-  volm_candidate_region_parser* parser = new volm_candidate_region_parser;
+  auto* parser = new volm_candidate_region_parser;
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << "volm_candidate_region_parser: can not open kml file " << kml_file << '\n';

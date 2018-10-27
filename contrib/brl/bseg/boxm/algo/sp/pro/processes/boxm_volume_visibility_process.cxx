@@ -72,16 +72,16 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(i++);
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
 
-  float min_x=pro.get_input<float>(i++);
-  float min_y=pro.get_input<float>(i++);
-  float min_z=pro.get_input<float>(i++);
+  auto min_x=pro.get_input<float>(i++);
+  auto min_y=pro.get_input<float>(i++);
+  auto min_z=pro.get_input<float>(i++);
 
-  float max_x=pro.get_input<float>(i++);
-  float max_y=pro.get_input<float>(i++);
-  float max_z=pro.get_input<float>(i++);
+  auto max_x=pro.get_input<float>(i++);
+  auto max_y=pro.get_input<float>(i++);
+  auto max_z=pro.get_input<float>(i++);
 
   vgl_box_3d<double> query(min_x,min_y,min_z,
                            max_x,max_y,max_z);
@@ -99,18 +99,18 @@ bool boxm_volume_visibility_process(bprb_func_process& pro)
 
     if (!scene_ptr->multi_bin()){
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       val=boxm_compute_volume_visibility<short, boxm_sample<BOXM_APM_MOG_GREY> >(query,*scene, camera);
     }
     else
     {
       typedef boct_tree<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > type;
-      boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<type>*> (scene_ptr.as_pointer());
       val=boxm_compute_volume_visibility<short, boxm_sample_multi_bin<BOXM_APM_MOG_GREY> >(query,*scene, camera);
     }
     vil_image_view<float> img_vol(ni,nj);img_vol.fill(0.0);
     boxm_utils::project_cube_fill_val(face_id,img_vol,val,xverts,yverts);
-    vil_image_view<unsigned char> *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
+    auto *vol_vis = new vil_image_view<unsigned char>(img_vol.ni(),img_vol.nj(),img_vol.nplanes());
     vil_convert_stretch_range_limited(img_vol,*vol_vis, 0.0f, 1.0f);
     img = vol_vis;
 

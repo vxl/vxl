@@ -57,7 +57,7 @@ namespace bstm_ocl_render_expected_change_process_globals
     options += "-D RENDER_LAMBERT -D RENDER_CHANGE -D STEP_CELL=step_cell_render_change(aux_args,data_ptr,data_ptr_tt,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     std::cout << "Compiling with options: " << options << std::endl;
     ray_trace_kernel->create_kernel( &device->context(),
@@ -108,9 +108,9 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_opencl_cache_sptr opencl_cache= pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  float time = pro.get_input<float>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
+  auto time = pro.get_input<float>(i++);
 
   //get scene data type and appTypeSize
   std::string data_type,label_data_type;
@@ -140,7 +140,7 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,lthreads[0]);
   unsigned cl_nj=RoundUp(nj,lthreads[1]);
 
-  float* buff = new float[4*cl_ni*cl_nj];
+  auto* buff = new float[4*cl_ni*cl_nj];
   std::fill(buff, buff + 4*cl_ni*cl_nj, 0.0f);
   bocl_mem_sptr exp_image = new bocl_mem(device->context(), buff ,  4*cl_ni*cl_nj*sizeof(float), "exp image buffer");
   exp_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -152,7 +152,7 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   // visibility image
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff + cl_ni*cl_nj, 1.0f);
   bocl_mem_sptr vis_image = new bocl_mem(device->context(), vis_buff, cl_ni*cl_nj*sizeof(float), "vis image buffer");
   vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -165,8 +165,8 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
    }
 
    // create all buffers
-   cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-   cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+   auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+   auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
    bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
    bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
    boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -223,7 +223,7 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
        bocl_mem* blk_info = opencl_cache->loaded_block_info();
        bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
 
-       bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
+       auto* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
 
 
        bocl_mem* alpha = opencl_cache->get_data<BSTM_ALPHA>(*id);
@@ -275,7 +275,7 @@ bool bstm_ocl_render_expected_change_process(bprb_func_process& pro)
 
 
   exp_image->read_to_buffer(queue);
-  vil_image_view< float >* exp_img_out = new vil_image_view< float >(ni,nj);
+  auto* exp_img_out = new vil_image_view< float >(ni,nj);
   int numFloats = 4;
   int count = 0;
   for (unsigned c=0;c<nj;++c) {

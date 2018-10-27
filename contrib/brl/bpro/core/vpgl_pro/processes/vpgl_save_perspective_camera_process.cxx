@@ -37,7 +37,7 @@ bool vpgl_save_perspective_camera_process(bprb_func_process& pro)
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   std::string camera_filename = pro.get_input<std::string>(1);
-  vpgl_perspective_camera<double> *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
+  auto *cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
     std::cerr << "error: could not convert camera input to a vpgl_perspective_camera\n";
@@ -87,7 +87,7 @@ bool vpgl_save_projective_camera_process(bprb_func_process& pro)
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
   std::string camera_filename = pro.get_input<std::string>(1);
-  vpgl_proj_camera<double> *cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.as_pointer());
+  auto *cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.as_pointer());
 
   if (!cam) {
     std::cerr << "error: could not convert camera input to a vpgl_proj_camera\n";

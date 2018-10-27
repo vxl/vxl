@@ -105,7 +105,7 @@ void bapl_keypoint_match_set::prune_spurious_matches(std::vector<bapl_key_match>
   std::set<int> helper;
   int cnt = (int)matches.size();
   for (int ii = 0; ii < cnt; ii++) {
-    std::set<int>::iterator it = helper.find(matches[ii].second->id());
+    auto it = helper.find(matches[ii].second->id());
     if (it == helper.end()) {
       helper.insert(matches[ii].second->id());
     }

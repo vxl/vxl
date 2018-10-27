@@ -67,9 +67,9 @@ bool bvxm_update_process(bprb_func_process& pro)
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i++);
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string voxel_type = pro.get_input<std::string>(i++);
-  unsigned bin_index = pro.get_input<unsigned>(i++);
-  unsigned curr_scale = pro.get_input<unsigned>(i++);
-  unsigned use_memory = pro.get_input<unsigned>(i++);
+  auto bin_index = pro.get_input<unsigned>(i++);
+  auto curr_scale = pro.get_input<unsigned>(i++);
+  auto use_memory = pro.get_input<unsigned>(i++);
 
   //check input's validity
   i = 0;

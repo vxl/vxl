@@ -25,7 +25,7 @@ namespace {
 #if VXL_LITTLE_ENDIAN
   inline void swap_endian( vxl_uint_32& word )
   {
-    vxl_uint_8* bytes = (vxl_uint_8*)&word;
+    auto* bytes = (vxl_uint_8*)&word;
     vxl_uint_8 t = bytes[0];
     bytes[0] = bytes[3];
     bytes[3] = t;
@@ -296,7 +296,7 @@ bool vil1_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
   int file_byte_start = start_of_data_ + y0 * file_byte_width + x0 * file_bytes_per_pixel;
   int buff_byte_width = xs * buff_bytes_per_pixel;
 
-  vxl_uint_8* ib = (vxl_uint_8*) buf;
+  auto* ib = (vxl_uint_8*) buf;
 
   if ( !col_map_ ) {
     // No colourmap, so just read in the bytes. This could be RGB or
@@ -310,7 +310,7 @@ bool vil1_ras_generic_image::get_section(void* buf, int x0, int y0, int xs, int 
     assert( file_bytes_per_pixel == 1 && buff_bytes_per_pixel == 3 );
     int col_len = map_length_ / 3;
     // Read a line, and map every index into an RGB triple
-    vxl_uint_8* line = new vxl_uint_8[ xs ];
+    auto* line = new vxl_uint_8[ xs ];
     for (int y = 0; y < ys; ++y) {
       vs_->seek( file_byte_start + y * file_byte_width );
       vs_->read( line, xs );
@@ -362,7 +362,7 @@ bool vil1_ras_generic_image::put_section(void const* buf, int x0, int y0, int xs
   bool need_pad = ( file_byte_width == buff_byte_width+1 );
   vxl_uint_8 zero = 0;
 
-  vxl_uint_8 const* ob = (vxl_uint_8 const*) buf;
+  auto const* ob = (vxl_uint_8 const*) buf;
 
   for (int y = 0; y < ys; ++y) {
     vs_->seek( file_byte_start + y * file_byte_width );

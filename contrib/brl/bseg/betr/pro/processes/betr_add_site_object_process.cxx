@@ -49,9 +49,9 @@ bool betr_add_site_object_process(bprb_func_process& pro)
   unsigned i = 0;
   betr_site_sptr site = pro.get_input<betr_site_sptr>(i++);
   std::string name = pro.get_input<std::string>(i++);
-  float lon = pro.get_input<float>(i++);
-  float lat = pro.get_input<float>(i++);
-  float elev = pro.get_input<float>(i++);
+  auto lon = pro.get_input<float>(i++);
+  auto lat = pro.get_input<float>(i++);
+  auto elev = pro.get_input<float>(i++);
   std::string geom_path = pro.get_input<std::string>(i++);
   if(!site)
     return false;

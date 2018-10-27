@@ -145,15 +145,15 @@ imesh_generate_mesh_2d(std::vector<vgl_point_2d<double> > const& convex_hull,
 
   // construct the imesh data structure
   //construct vertices
-  imesh_vertex_array<2>* verts = new imesh_vertex_array<2>();
+  auto* verts = new imesh_vertex_array<2>();
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
   std::unique_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(std::move(v));
   //construct triangular faces
-  unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
-  imesh_regular_face_array<3>* faces = new imesh_regular_face_array<3>();
+  auto ntri = static_cast<unsigned>(out.numberoftriangles);
+  auto* faces = new imesh_regular_face_array<3>();
   for (unsigned t = 0; t<ntri; ++t)
   {
     imesh_tri tri(out.trianglelist[t*3],
@@ -258,15 +258,15 @@ imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
 
   // construct the imesh data structure
   //construct vertices
-  imesh_vertex_array<2>* verts = new imesh_vertex_array<2>();
+  auto* verts = new imesh_vertex_array<2>();
   unsigned k = 0;
   for (unsigned i = 0; i<npts; ++i, k+=2)
     verts->push_back(imesh_vertex<2>(out.pointlist[k], out.pointlist[k+1]));
   std::unique_ptr<imesh_vertex_array_base> v(verts);
   mesh.set_vertices(std::move(v));
   //construct triangular faces
-  unsigned ntri = static_cast<unsigned>(out.numberoftriangles);
-  imesh_regular_face_array<3>* faces = new imesh_regular_face_array<3>();
+  auto ntri = static_cast<unsigned>(out.numberoftriangles);
+  auto* faces = new imesh_regular_face_array<3>();
   for (unsigned t = 0; t<ntri; ++t)
   {
     imesh_tri tri(out.trianglelist[t*3],

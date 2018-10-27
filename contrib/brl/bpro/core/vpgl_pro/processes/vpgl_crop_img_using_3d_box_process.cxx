@@ -104,19 +104,19 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   // get the input
   unsigned i = 0;
   //vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);  // image resource
-  unsigned img_res_ni = pro.get_input<unsigned>(i++);
-  unsigned img_res_nj = pro.get_input<unsigned>(i++);
+  auto img_res_ni = pro.get_input<unsigned>(i++);
+  auto img_res_nj = pro.get_input<unsigned>(i++);
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++);      // rational camera
-  double lower_left_lon = pro.get_input<double>(i++);
-  double lower_left_lat = pro.get_input<double>(i++);
-  double lower_left_elev = pro.get_input<double>(i++);
-  double upper_right_lon = pro.get_input<double>(i++);
-  double upper_right_lat = pro.get_input<double>(i++);
-  double upper_right_elev = pro.get_input<double>(i++);
-  double uncertainty = pro.get_input<double>(i++);
+  auto lower_left_lon = pro.get_input<double>(i++);
+  auto lower_left_lat = pro.get_input<double>(i++);
+  auto lower_left_elev = pro.get_input<double>(i++);
+  auto upper_right_lon = pro.get_input<double>(i++);
+  auto upper_right_lat = pro.get_input<double>(i++);
+  auto upper_right_elev = pro.get_input<double>(i++);
+  auto uncertainty = pro.get_input<double>(i++);
   vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
 
-  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  auto* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
   if (!rat_cam) {
     std::cout << pro.name() << ": the input camera is not a rational camera" << std::endl;
     return false;
@@ -148,10 +148,10 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   bb = broi.clip_to_image_bounds(bb);
 
   // store output
-  unsigned i0 = (unsigned)bb->get_min_x();
-  unsigned j0 = (unsigned)bb->get_min_y();
-  unsigned ni = (unsigned)bb->width();
-  unsigned nj = (unsigned)bb->height();
+  auto i0 = (unsigned)bb->get_min_x();
+  auto j0 = (unsigned)bb->get_min_y();
+  auto ni = (unsigned)bb->width();
+  auto nj = (unsigned)bb->height();
 
   if (ni <= 0 || nj <= 0)
   {
@@ -226,16 +226,16 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   // get the input
   unsigned i = 0;
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(i++); // rational camera
-  double lower_left_lon = pro.get_input<double>(i++);
-  double lower_left_lat = pro.get_input<double>(i++);
-  double lower_left_elev = pro.get_input<double>(i++);
-  double upper_right_lon = pro.get_input<double>(i++);
-  double upper_right_lat = pro.get_input<double>(i++);
-  double upper_right_elev = pro.get_input<double>(i++);
-  double uncertainty = pro.get_input<double>(i++);
+  auto lower_left_lon = pro.get_input<double>(i++);
+  auto lower_left_lat = pro.get_input<double>(i++);
+  auto lower_left_elev = pro.get_input<double>(i++);
+  auto upper_right_lon = pro.get_input<double>(i++);
+  auto upper_right_lat = pro.get_input<double>(i++);
+  auto upper_right_elev = pro.get_input<double>(i++);
+  auto uncertainty = pro.get_input<double>(i++);
   vpgl_lvcs_sptr lvcs_sptr= pro.get_input<vpgl_lvcs_sptr>(i++);
 
-  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  auto* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
   if (!rat_cam) {
     std::cout << pro.name() << ": the input camera is not a rational camera" << std::endl;
     return false;
@@ -263,14 +263,14 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
 
   // store output
   int i0 = bb->get_min_x();
-  unsigned ni = (unsigned)bb->width();
+  auto ni = (unsigned)bb->width();
   if(i0 < 0) {
     ni += i0;
     i0 = 0;
   }
 
   int j0 = bb->get_min_y();
-  unsigned nj = (unsigned)bb->height();
+  auto nj = (unsigned)bb->height();
   if(j0 < 0) {
     nj += j0;
     j0 = 0;
@@ -397,14 +397,14 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(i++);  // image resource
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
 
-  double lower_left_lon = pro.get_input<double>(i++);
-  double lower_left_lat = pro.get_input<double>(i++);
-  double lower_left_elev = pro.get_input<double>(i++);
-  double upper_right_lon = pro.get_input<double>(i++);
-  double upper_right_lat = pro.get_input<double>(i++);
-  double upper_right_elev = pro.get_input<double>(i++);
+  auto lower_left_lon = pro.get_input<double>(i++);
+  auto lower_left_lat = pro.get_input<double>(i++);
+  auto lower_left_elev = pro.get_input<double>(i++);
+  auto upper_right_lon = pro.get_input<double>(i++);
+  auto upper_right_lat = pro.get_input<double>(i++);
+  auto upper_right_elev = pro.get_input<double>(i++);
 
   // create the 3D box given input coordinates (in geo-coordinates)
   vgl_box_3d<double> bbox(lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev);
@@ -430,10 +430,10 @@ bool vpgl_crop_ortho_using_3d_box_process(bprb_func_process& pro)
   bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
   bb = broi.clip_to_image_bounds(bb);
 
-  unsigned i0 = (unsigned)bb->get_min_x();
-  unsigned j0 = (unsigned)bb->get_min_y();
-  unsigned ni = (unsigned)bb->width();
-  unsigned nj = (unsigned)bb->height();
+  auto i0 = (unsigned)bb->get_min_x();
+  auto j0 = (unsigned)bb->get_min_y();
+  auto ni = (unsigned)bb->width();
+  auto nj = (unsigned)bb->height();
 
   if (ni <= 0 || nj <= 0)
   {
@@ -543,16 +543,16 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_resource_sptr img_res_sptr = pro.get_input<vil_image_resource_sptr>(in_i++);  // image resource
   vpgl_camera_double_sptr cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);      // rational camera
-  double lower_left_lon = pro.get_input<double>(in_i++);
-  double lower_left_lat = pro.get_input<double>(in_i++);
-  double upper_right_lon = pro.get_input<double>(in_i++);
-  double upper_right_lat = pro.get_input<double>(in_i++);
+  auto lower_left_lon = pro.get_input<double>(in_i++);
+  auto lower_left_lat = pro.get_input<double>(in_i++);
+  auto upper_right_lon = pro.get_input<double>(in_i++);
+  auto upper_right_lat = pro.get_input<double>(in_i++);
   std::string dem_folder = pro.get_input<std::string>(in_i++);
-  double box_height = pro.get_input<double>(in_i++);
-  double uncertainty = pro.get_input<double>(in_i++);
+  auto box_height = pro.get_input<double>(in_i++);
+  auto uncertainty = pro.get_input<double>(in_i++);
   vpgl_lvcs_sptr lvcs_sptr = pro.get_input<vpgl_lvcs_sptr>(in_i++);
 
-  vpgl_rational_camera<double>* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
+  auto* rat_cam = dynamic_cast<vpgl_rational_camera<double>*>(cam_sptr.as_pointer());
   if (!rat_cam) {
     std::cerr << pro.name() << ": the input camera is not a rational camera!\n";
     return false;
@@ -611,10 +611,10 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
   bb->add_point(roi_box_2d.max_x(), roi_box_2d.max_y());
   bb = broi.clip_to_image_bounds(bb);
   // store output
-  unsigned i0 = (unsigned)bb->get_min_x();
-  unsigned j0 = (unsigned)bb->get_min_y();
-  unsigned ni = (unsigned)bb->width();
-  unsigned nj = (unsigned)bb->height();
+  auto i0 = (unsigned)bb->get_min_x();
+  auto j0 = (unsigned)bb->get_min_y();
+  auto ni = (unsigned)bb->width();
+  auto nj = (unsigned)bb->height();
 
   if (ni <= 0 || nj <= 0)
   {
@@ -745,7 +745,7 @@ void vpgl_crop_img_using_3d_box_dem_process_globals::crop_and_find_min_max(std::
                                                                            unsigned const& img_id, int const& i0, int const& j0, int const& crop_ni, int const& crop_nj,
                                                                            double& min, double& max)
 {
-  if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].first.ptr()))
+  if (auto* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].first.ptr()))
   {
     vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++) {
@@ -755,7 +755,7 @@ void vpgl_crop_img_using_3d_box_dem_process_globals::crop_and_find_min_max(std::
       }
     }
   }
-  else if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].first.ptr()))
+  else if (auto* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].first.ptr()))
   {
     vil_image_view<float> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++) {

@@ -70,7 +70,7 @@ double clsfy_binary_hyperplane_logit_builder::build(clsfy_classifier_base& class
   }
 
   assert(classifier.is_a()=="clsfy_binary_hyperplane");
-  clsfy_binary_hyperplane& plane = static_cast<clsfy_binary_hyperplane&>(classifier);
+  auto& plane = static_cast<clsfy_binary_hyperplane&>(classifier);
 
   // Set initial weights using initial LS hyperplane
   unsigned n_dim = plane.n_dims();

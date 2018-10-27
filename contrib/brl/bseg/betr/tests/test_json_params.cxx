@@ -10,8 +10,8 @@
 #include "../betr_edgel_factory_params.h"
 void test_json_params()
 {
-  betr_edgel_change_detection_params* cd_params = new betr_edgel_change_detection_params();
-  betr_edgel_change_detection_params* cd_params_read = new betr_edgel_change_detection_params();
+  auto* cd_params = new betr_edgel_change_detection_params();
+  auto* cd_params_read = new betr_edgel_change_detection_params();
   betr_params_sptr params_ptr = cd_params;
   betr_params_sptr read_params_ptr = cd_params_read;
   std::ostringstream ostr;
@@ -25,22 +25,22 @@ void test_json_params()
   std::ifstream ifs(path.c_str());
   good = good && read_params_json(ifs, read_params_ptr);
   ifs.close();
-  betr_edgel_change_detection_params* read_cd = dynamic_cast<betr_edgel_change_detection_params*>(read_params_ptr.ptr());
+  auto* read_cd = dynamic_cast<betr_edgel_change_detection_params*>(read_params_ptr.ptr());
   good = good && read_cd && read_cd->sigma_ == 2.0;
   TEST("JSON read write params", good, true);
   std::string empty_json = "{}";
-  betr_edgel_change_detection_params* empty_cd = new betr_edgel_change_detection_params();
+  auto* empty_cd = new betr_edgel_change_detection_params();
    betr_params_sptr empty_ptr = empty_cd;
    good = read_params_json(empty_json, empty_ptr);
-   betr_edgel_change_detection_params* read_empty_cd = dynamic_cast<betr_edgel_change_detection_params*>(empty_ptr.ptr());
+   auto* read_empty_cd = dynamic_cast<betr_edgel_change_detection_params*>(empty_ptr.ptr());
    //edgel factory params tests
-   betr_edgel_factory_params* fparams = new betr_edgel_factory_params();
+   auto* fparams = new betr_edgel_factory_params();
    betr_params_sptr fp_optr = fparams;
    std::ofstream ofsf(path.c_str());
    good = write_params_json(ofsf, fp_optr);
    ofsf.close();
    std::string test_ef = "{\"gradient_range\" : 60.0,\"min_region_edge_length\" : 10.0,\"nbins\" : 20,\"upsample_factor\" : 2.0}";
-   betr_edgel_factory_params* ifparams = new betr_edgel_factory_params();
+   auto* ifparams = new betr_edgel_factory_params();
    betr_params_sptr fp_ptr = ifparams;
    good = good && read_params_json(test_ef, fp_ptr);
 

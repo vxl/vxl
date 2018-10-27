@@ -19,7 +19,7 @@ double RoundUp2Vmin(double x, double vmin)
   if (x < 2*vmin)
     return vmin;
   else {
-    unsigned int k = (unsigned int)std::floor(x/vmin);
+    auto k = (unsigned int)std::floor(x/vmin);
     unsigned int count = 0;
     while (k != 1) {
       k /= 2;
@@ -55,7 +55,7 @@ volm_spherical_container::volm_spherical_container(float d_solid_ang, float voxe
   //this->meshcurrentlayer(d, vc);
   // update and check current layer has even number of voxel along half
   d = d + vc;
-  unsigned int N = (unsigned int)(d/vc);
+  auto N = (unsigned int)(d/vc);
   is_even = !(N%2);
   } // end of while
 
@@ -76,7 +76,7 @@ unsigned char volm_spherical_container::get_depth_interval(double value)
 {
   if (value < 0)
     return (unsigned char)1;
-  std::map<double, unsigned char>::iterator iter = depth_interval_map_.upper_bound(value);
+  auto iter = depth_interval_map_.upper_bound(value);
   if (iter == depth_interval_map_.end()) {
     iter--;
     return iter->second + 1;
@@ -229,7 +229,7 @@ void volm_spherical_container::draw_helper(std::ofstream& ofs, double dmin)
 {
   // write a world center and world axis
   double rad = 0.5*vmin_;
-  std::vector<volm_voxel>::iterator it = voxels_.end();
+  auto it = voxels_.end();
   --it;
   double axis_len = (dmax_ + it->resolution_)*1.2;
   vgl_point_3d<float> cent(0.0,0.0,0.0);
@@ -366,7 +366,7 @@ void volm_spherical_container::first_res(double res, unsigned int& offset, unsig
   // number of depth layers in the container:
   offset = 0;
   depth = 0.0;
-  for (std::map<double, unsigned int>::iterator iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
+  for (auto iter = depth_offset_map_.begin(); iter != depth_offset_map_.end(); iter++) {
     if (voxels_[iter->second].resolution_ < res)
       continue;
     offset = iter->second;
@@ -382,7 +382,7 @@ void volm_spherical_container::first_res(double res, unsigned int& offset, unsig
 
 void volm_spherical_container::get_depth_intervals(std::vector<float>& ints)
 {
-  std::map<double, unsigned char>::iterator iter = depth_interval_map_.begin();
+  auto iter = depth_interval_map_.begin();
   for (; iter != depth_interval_map_.end(); ++iter)
     ints.push_back((float)iter->first);
 }

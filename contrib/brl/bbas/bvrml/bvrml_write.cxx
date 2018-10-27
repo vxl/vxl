@@ -341,7 +341,7 @@ void bvrml_write::write_vrml_cylinder(std::ofstream& str,
     axis_x=-float(dir.y()/denom);
     axis_y=float(dir.x()/denom);
   }
-  float phi=float(std::acos(dir.z()));
+  auto phi=float(std::acos(dir.z()));
 
   str << "Transform {\n"
       << "translation " << pt.x() << ' ' << pt.y() << ' '

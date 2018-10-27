@@ -147,13 +147,13 @@ brip_vil_float_ops::half_resolution(vil_image_view<float> const& input,
   output.set_size(half_w, half_h);
   // Generate input/output arrays
   int n = 0;
-  float* in0 = new float[w];  float* in1 = new float[w];
-  float* in2 = new float[w];  float* in3 = new float[w];
-  float* in4 = new float[w];
+  auto* in0 = new float[w];  auto* in1 = new float[w];
+  auto* in2 = new float[w];  auto* in3 = new float[w];
+  auto* in4 = new float[w];
 
-  float* out0 = new float[half_w];  float* out1 = new float[half_w];
-  float* out2 = new float[half_w];  float* out3 = new float[half_w];
-  float* out4 = new float[half_w];
+  auto* out0 = new float[half_w];  auto* out1 = new float[half_w];
+  auto* out2 = new float[half_w];  auto* out3 = new float[half_w];
+  auto* out4 = new float[half_w];
   // Initialize arrays
   fill_1d_array(input, n++, in0);   fill_1d_array(input, n++, in1);
   fill_1d_array(input, n++, in2);   fill_1d_array(input, n++, in3);
@@ -230,12 +230,12 @@ brip_vil_float_ops::double_resolution(vil_image_view<float> const& input,
   unsigned ni_out = 2*ni_in;
   unsigned nj_out = 2*nj_in;
   vil_image_view<float> out(ni_out, nj_out);
-  float* input_1d = new float[ni_in];
+  auto* input_1d = new float[ni_in];
 
   // An interpolation neighborhood of three lines
-  float* output0 = new float[ni_out];
-  float* output1 = new float[ni_out];
-  float* output2 = new float[ni_out];
+  auto* output0 = new float[ni_out];
+  auto* output1 = new float[ni_out];
+  auto* output2 = new float[ni_out];
 
   // The filter coefficients
   float k0 = filter_coef*2.0f;
@@ -946,7 +946,7 @@ max_scale_trace(vil_image_view<float> input,
   for (float s = min_scale; s<=max_scale; s+=scale_inc)
   {
     vil_image_view<float> smooth = brip_vil_float_ops::gaussian(input, s);
-    unsigned N = static_cast<unsigned>(2.0f*s);
+    auto N = static_cast<unsigned>(2.0f*s);
     vil_image_view<float> tr =
       brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
     for (unsigned r = 0; r<nj; ++r)
@@ -977,7 +977,7 @@ max_scale_trace_value(vil_image_view<float> input,
   for (float s = min_scale; s<=max_scale; s+=scale_inc)
   {
     vil_image_view<float> smooth = brip_vil_float_ops::gaussian(input, s);
-    unsigned N = static_cast<unsigned>(2.0f*s);
+    auto N = static_cast<unsigned>(2.0f*s);
     vil_image_view<float> tr =
       brip_vil_float_ops::trace_grad_matrix_NxN(smooth, N);
     for (unsigned r = 0; r<nj; ++r)
@@ -992,7 +992,7 @@ max_scale_trace_value(vil_image_view<float> input,
       }
   }
   // mask the region where integration region extends outside the image borders
-  unsigned N = static_cast<unsigned>(5.0f*max_scale);
+  auto N = static_cast<unsigned>(5.0f*max_scale);
   unsigned njmax = nj-N;
   unsigned nimax = ni-N;
   for (unsigned r = 0; r<nj; ++r)
@@ -1138,7 +1138,7 @@ brip_vil_float_ops::Lucas_KanadeMotion(vil_image_view<float> & current_frame,
         }
       //Divide by the number of pixels in the neighborhood
       IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
-      float det = float(IxIx*IyIy-IxIy*IxIy);
+      auto det = float(IxIx*IyIy-IxIy*IxIy);
       //Eliminate small motion factors
       float dif = diff(x,y);
       float motion_factor = std::fabs(det*dif);
@@ -1195,7 +1195,7 @@ lucas_kanade_motion_on_view(vil_image_view<float> const& curr_frame,
     }
   // Divide by the number of pixels in the neighborhood
   IxIx/=(float)N;  IxIy/=(float)N; IyIy/=(float)N; IxIt/=(float)N; IyIt/=(float)N; dsum/=(float)N;
-  float det = float(IxIx*IyIy-IxIy*IxIy);
+  auto det = float(IxIx*IyIy-IxIy*IxIy);
   // Eliminate small motion factors
   float dif = std::sqrt(dsum);
   float motion_factor = std::fabs(det*dif);
@@ -1226,9 +1226,9 @@ velocity_by_correlation(vil_image_view<float> const& curr_image,
 {
   unsigned ni = prev_region.ni(), nj = prev_region.nj();
   float corr_max = -10.0f;
-  float vx0 = static_cast<float>(zero_i);
-  float vy0 = static_cast<float>(zero_j);
-  float area = static_cast<float>(ni*nj);
+  auto vx0 = static_cast<float>(zero_i);
+  auto vy0 = static_cast<float>(zero_j);
+  auto area = static_cast<float>(ni*nj);
   vx = 0; vy = 0;
   unsigned max_i = start_i, max_j = start_j;
   for (unsigned j = start_j; j<=end_j; ++j)
@@ -1518,7 +1518,7 @@ convert_to_byte(vil_image_view<vxl_uint_16> const& image,
   unsigned ni = image.ni(), nj = image.nj();
   vil_image_view<vxl_byte> output;
   output.set_size(ni, nj);
-  float range = static_cast<float>(max_val-min_val);
+  auto range = static_cast<float>(max_val-min_val);
   if (!range)
     range = 1.f;
   else
@@ -1767,7 +1767,7 @@ void brip_vil_float_ops::rgb_to_ihs_tsai(vil_rgb<vxl_byte> const& rgb, float& i,
   V1 = (2.0f*b-r-g)/sq6;
   V2 = (r-2.0f*g)/sq6;
   s = std::sqrt(V1*V1 + V2*V2);
-  float two_pi = static_cast<float>(vnl_math::twopi);
+  auto two_pi = static_cast<float>(vnl_math::twopi);
   float a = std::atan2(V2, V1)/two_pi;
   if (a<0.0f) a += 1.0f; // range [0..1)
   h = a*256.0f; // range [0..256)
@@ -1917,7 +1917,7 @@ display_IHS_as_RGB(vil_image_view<float> const& I,
   unsigned w = I.ni(), h = I.nj();
   image.set_size(w,h);
 
-  const float deg_to_rad = float(vnl_math::pi_over_180);
+  const auto deg_to_rad = float(vnl_math::pi_over_180);
   for (unsigned r = 0; r < h; r++)
     for (unsigned c = 0; c < w; c++)
     {
@@ -2445,7 +2445,7 @@ fourier_transform(vil_image_view<float> const& input,
   for (unsigned r = 0; r<h; r++)
     for (unsigned c = 0; c<w; c++)
     {
-      float re = (float)fourier_matrix[r][c].real(),
+      auto re = (float)fourier_matrix[r][c].real(),
         im = (float)fourier_matrix[r][c].imag();
       mag(c,r) = std::sqrt(re*re + im*im);
       phase(c,r) = std::atan2(im, re);
@@ -2623,7 +2623,7 @@ bilinear_interpolation(vil_image_view<float> const& input, double x, double y)
   double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
   double int0 = int00 + fy * (int01 - int00);
   double int1 = int10 + fy * (int11 - int10);
-  float val = (float) (int0 + fx * (int1 - int0));
+  auto val = (float) (int0 + fx * (int1 - int0));
   return val;
 }
 
@@ -3241,7 +3241,7 @@ float brip_vil_float_ops::entropy_g(const unsigned i, const unsigned j,
                                     const float range, const unsigned bins)
 {
   bsta_histogram<float> hg(range, bins);
-  static const float deg_rad = (float)(vnl_math::deg_per_rad);
+  static const auto deg_rad = (float)(vnl_math::deg_per_rad);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
@@ -3376,7 +3376,7 @@ float brip_vil_float_ops::minfo_g(const unsigned i0, const unsigned j0,
   bsta_histogram<float> hg0(range, bins);
   bsta_histogram<float> hg1(range, bins);
   bsta_joint_histogram<float> hjg(range, bins);
-  static const float deg_rad = (float)(vnl_math::deg_per_rad);
+  static const auto deg_rad = (float)(vnl_math::deg_per_rad);
   int ir = static_cast<int>(i_radius), jr = static_cast<int>(j_radius);
   for (int dj = -jr; dj<=jr; ++dj)
     for (int di = -ir; di<=ir; ++di)
@@ -3536,9 +3536,9 @@ float brip_vil_float_ops::
 average_in_box(vil_image_view<float> const& v, vgl_box_2d<double> const&  box)
 {
   vgl_point_2d<double> p0 = box.min_point();
-  unsigned i0 = static_cast<unsigned>(p0.x()), j0 = static_cast<unsigned>(p0.y());
+  auto i0 = static_cast<unsigned>(p0.x()), j0 = static_cast<unsigned>(p0.y());
   vgl_point_2d<double> p1 = box.max_point();
-  unsigned i1 = static_cast<unsigned>(p1.x()), j1 = static_cast<unsigned>(p1.y());
+  auto i1 = static_cast<unsigned>(p1.x()), j1 = static_cast<unsigned>(p1.y());
   float n = 0.0f;
   float sum = 0.0f;
   for (unsigned i = i0; i<=i1; ++i)
@@ -3610,12 +3610,12 @@ std::vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
     {
       for (si.reset(); si.next();)
       {
-        unsigned j = static_cast<unsigned>(si.scany());
+        auto j = static_cast<unsigned>(si.scany());
         for (int x = si.startx(); x<=si.endx(); ++x)
         {
-          unsigned i = static_cast<unsigned>(x);
+          auto i = static_cast<unsigned>(x);
           vil_image_view<unsigned char> v = img->get_view(i, 1,j, 1);
-          float fv = static_cast<float>(v(0,0));
+          auto fv = static_cast<float>(v(0,0));
           if (fv<min) min = fv;
           if (fv>max) max = fv;
           pixels.push_back(fv);
@@ -3627,10 +3627,10 @@ std::vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
     {
       for (si.reset(); si.next();)
       {
-        unsigned j = static_cast<unsigned>(si.scany());
+        auto j = static_cast<unsigned>(si.scany());
         for (int x = si.startx(); x<=si.endx(); ++x)
         {
-          unsigned i = static_cast<unsigned>(x);
+          auto i = static_cast<unsigned>(x);
           vil_image_view<unsigned char> v = img->get_view(i, 1,j, 1);
           float fv = 0;
           for (unsigned p = 0; p<np; ++p)
@@ -3650,12 +3650,12 @@ std::vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
     {
       for (si.reset(); si.next();)
       {
-        unsigned j = static_cast<unsigned>(si.scany());
+        auto j = static_cast<unsigned>(si.scany());
         for (int x = si.startx(); x<=si.endx(); ++x)
         {
-          unsigned i = static_cast<unsigned>(x);
+          auto i = static_cast<unsigned>(x);
           vil_image_view<unsigned short> v = img->get_view(i, 1,j, 1);
-          float fv = static_cast<float>(v(0,0));
+          auto fv = static_cast<float>(v(0,0));
           if (fv<min) min = fv;
           if (fv>max) max = fv;
           pixels.push_back(fv);
@@ -3667,10 +3667,10 @@ std::vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
     {
       for (si.reset(); si.next();)
       {
-        unsigned j = static_cast<unsigned>(si.scany());
+        auto j = static_cast<unsigned>(si.scany());
         for (int x = si.startx(); x<=si.endx(); ++x)
         {
-          unsigned i = static_cast<unsigned>(x);
+          auto i = static_cast<unsigned>(x);
           vil_image_view<unsigned short> v = img->get_view(i, 1,j, 1);
           float fv = 0;
           for (unsigned p = 0; p<np; ++p)
@@ -3743,7 +3743,7 @@ color_order(vil_image_view<float> const& color_image, float eq_tol)
       else if (g<b)
         gb = gb_lt;
       else gb = gb_gt;
-      vxl_byte v = static_cast<vxl_byte>(rg|rb|gb); // bitwise or
+      auto v = static_cast<vxl_byte>(rg|rb|gb); // bitwise or
       temp(i,j) = v;
     }
   return temp;
@@ -4291,7 +4291,7 @@ max_inscribed_rect(float lambda0, float lambda1, float theta,
 {
   float sign = -1.0f;
   if (theta<0) sign = 1.0f;
-  float th_rad = static_cast<float>(theta*vnl_math::pi_over_180);
+  auto th_rad = static_cast<float>(theta*vnl_math::pi_over_180);
   float maxa = 0.0f, max_phi = 0.0f;
   for (float phi = -float(vnl_math::pi); phi<=float(vnl_math::pi); phi+=0.01f)
   {

@@ -27,12 +27,12 @@ namespace brip_blobwise_kl_div_process_globals
       std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 
       //load image from file and format it into grey
-      vil_image_view<vxl_byte>* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
+      auto* inimg = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
       vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
       vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
       //stretch it into 0-1 range
-      vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
+      auto*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
       vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
       return floatimg;
     }
@@ -44,17 +44,17 @@ namespace brip_blobwise_kl_div_process_globals
 
       //preapre floatimg for stretched img
       vil_image_view<float>* floatimg;
-      if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+      if (auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
       {
         floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
       }
-      else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+      else if (auto *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
       {
         floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
         vil_convert_stretch_range_limited(*img_byte, *floatimg,(unsigned short)30500,(unsigned short)32500,  0.0f, 1.0f); // hardcoded to be fixed.
       }
-      else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+      else if (auto *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
       {
         return img_float;
       }
@@ -112,7 +112,7 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
   vil_image_view_base_sptr in_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr exp_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr blob_img_ptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                    thresh = pro.get_input<float>(i++);
+  auto                    thresh = pro.get_input<float>(i++);
 
   //prepare input images
   vil_image_view<float>*  in_img = prepare_input_image(in_img_ptr);
@@ -122,7 +122,7 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
 
   //----------------------------------
   //pre process mask image
-  vil_image_view<vxl_byte>* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
+  auto* blob_img = static_cast<vil_image_view<vxl_byte>* >(blob_img_ptr.ptr());
   vil_image_view<bool> mask_img(ni, nj), mask_dest(ni,nj), mask_dest1(ni,nj);
   for (unsigned int i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j)
@@ -137,7 +137,7 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
 
   //-----------------------------------------
   //calculate per blob KL Divergence
-  vil_image_view<float>* kl_img = new vil_image_view<float>(ni, nj);
+  auto* kl_img = new vil_image_view<float>(ni, nj);
   kl_img->fill(0.0f);
   brip_blobwise_kl_div(*in_img, *exp_img, mask_dest, *kl_img);
 
@@ -150,7 +150,7 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
   //create new blob info (threshold the KL image by some value)
   // USE old, unchanged mask image to keep blobs small
   thresh *= max_value;
-  vil_image_view<vxl_byte>* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
+  auto* new_blobs = new vil_image_view<vxl_byte>(ni,nj);
   for (unsigned int i=0; i<ni; ++i)
     for (unsigned int j=0; j<nj; ++j) {
       if ( mask_img(i,j) && (*kl_img)(i,j) > thresh)

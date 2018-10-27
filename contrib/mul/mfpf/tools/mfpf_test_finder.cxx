@@ -186,7 +186,7 @@ int main(int argc, char** argv)
     assert(int(params.res_level)<=image_pyr.hi());
 
     // Select relevant level from pyramid
-    const vimt_image_2d_of<float>& imageL
+    const auto& imageL
       = static_cast<const vimt_image_2d_of<float>&>(image_pyr(params.res_level));
 
     // Load in points

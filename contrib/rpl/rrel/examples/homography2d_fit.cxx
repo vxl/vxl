@@ -61,7 +61,7 @@ main()
     int num_dep_res = hg->num_samples_to_instantiate();
     rrel_objective* lms = new rrel_lms_obj( num_dep_res );
 
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
@@ -81,10 +81,10 @@ main()
   //  RANSAC
   //
   {
-    rrel_ransac_obj* ransac = new rrel_ransac_obj();
+    auto* ransac = new rrel_ransac_obj();
     hg->set_prior_scale( 1.0 );
 
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
@@ -105,8 +105,8 @@ main()
   //  MSAC
   //
   {
-    rrel_trunc_quad_obj* msac = new rrel_trunc_quad_obj();
-    rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
+    auto* msac = new rrel_trunc_quad_obj();
+    auto * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
@@ -127,11 +127,11 @@ main()
   //
   {
     int residual_dof = hg->residual_dof();
-    rrel_mlesac_obj* mlesac = new rrel_mlesac_obj( residual_dof );
+    auto* mlesac = new rrel_mlesac_obj( residual_dof );
 
     hg->set_prior_scale(1.0);
 
-    rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
+    auto * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
 
@@ -153,8 +153,8 @@ main()
   {
     hg->set_no_prior_scale();
 
-    rrel_muset_obj* muset = new rrel_muset_obj( from_pts.size()+1 );
-    rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
+    auto* muset = new rrel_muset_obj( from_pts.size()+1 );
+    auto * ransam = new rrel_ran_sam_search;
     ransam->set_trace_level(trace_level);
     ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                  desired_prob_good,

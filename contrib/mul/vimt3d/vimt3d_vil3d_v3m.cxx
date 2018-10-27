@@ -164,7 +164,7 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
        case  VIL_PIXEL_FORMAT_INT_32 :
         {
-          vxl_int_32* origin_ptr=static_cast<vxl_int_32*>(chunk_ptr->data());
+          auto* origin_ptr=static_cast<vxl_int_32*>(chunk_ptr->data());
           std::ptrdiff_t istep=0, jstep=0, kstep=0, pstep=0;
           if (size)
           {
@@ -425,7 +425,7 @@ bool vimt3d_vil3d_v3m_image::get_property(char const *key, void * value) const
   {
     vimt3d_transform_3d i2w=header_.w2i.inverse();
 
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float) (i2w(1,0,0)-i2w(0,0,0)).length();
     array[1] = (float) (i2w(0,1,0)-i2w(0,0,0)).length();
     array[2] = (float) (i2w(0,0,1)-i2w(0,0,0)).length();
@@ -435,7 +435,7 @@ bool vimt3d_vil3d_v3m_image::get_property(char const *key, void * value) const
   if (std::strcmp(vil3d_property_origin_offset, key)==0)
   {
     vgl_point_3d<double> origin = header_.w2i.origin();
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float)(origin.x());
     array[1] = (float)(origin.y());
     array[2] = (float)(origin.z());
@@ -559,7 +559,7 @@ macro(VIL_PIXEL_FORMAT_FLOAT , float )
 macro(VIL_PIXEL_FORMAT_DOUBLE , double )
 #undef macro
    case VIL_PIXEL_FORMAT_INT_32 : {
-    const vil3d_image_view< vxl_int_32 > &v =
+    const auto &v =
       static_cast<const vil3d_image_view< vxl_int_32 > &>(view);
     return new vil3d_image_view< vxl_int_32 >(v.memory_chunk(), v.size()?&v(i0,j0,k0):nullptr,
                                               ni, nj, nk, v.nplanes(),

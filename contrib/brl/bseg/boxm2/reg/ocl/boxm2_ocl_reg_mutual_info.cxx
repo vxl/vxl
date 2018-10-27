@@ -130,8 +130,8 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
 
     std::vector<boxm2_block_id> blocks_A = sceneA_->get_block_ids();
     std::vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
-    std::vector<boxm2_block_id>::iterator iter_blks_A = blocks_A.begin();
-    std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+    auto iter_blks_A = blocks_A.begin();
+    auto iter_blks_B = blocks_B.begin();
     std::size_t local_threads[1]={64};
     std::size_t global_threads[1]={1};
     int status=0;    float gpu_time = 0.0;
@@ -236,10 +236,10 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(vgl_rotation_3d<double>
     }
     joint_histogram->read_to_buffer(queue);
     clFinish(queue);
-    float * joint_histogram_float = reinterpret_cast<float * > (joint_histogram_buff);
+    auto * joint_histogram_float = reinterpret_cast<float * > (joint_histogram_buff);
 
-    float * histA = new float[nbins];
-    float * histB = new float[nbins];
+    auto * histA = new float[nbins];
+    auto * histB = new float[nbins];
     for (int k = 0; k<nbins; k++)
     {
         histA[k] = 0.0;

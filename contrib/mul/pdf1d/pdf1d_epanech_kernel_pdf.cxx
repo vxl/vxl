@@ -38,7 +38,7 @@ pdf1d_epanech_kernel_pdf::~pdf1d_epanech_kernel_pdf() = default;
 
 pdf1d_sampler* pdf1d_epanech_kernel_pdf::new_sampler() const
 {
-  pdf1d_epanech_kernel_pdf_sampler *i = new pdf1d_epanech_kernel_pdf_sampler;
+  auto *i = new pdf1d_epanech_kernel_pdf_sampler;
   i->set_model(*this);
   return i;
 }

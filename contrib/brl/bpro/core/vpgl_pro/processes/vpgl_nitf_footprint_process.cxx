@@ -43,9 +43,9 @@ bool vpgl_nitf_footprint_process(bprb_func_process& pro)
   // get the inputs
   std::string in_img_list = pro.get_input<std::string>(0);
   std::string footprint_filename = pro.get_input<std::string>(1);
-  unsigned r = pro.get_input<unsigned>(2);
-  unsigned g = pro.get_input<unsigned>(3);
-  unsigned b = pro.get_input<unsigned>(4);
+  auto r = pro.get_input<unsigned>(2);
+  auto g = pro.get_input<unsigned>(3);
+  auto b = pro.get_input<unsigned>(4);
 
   std::ofstream ofs(footprint_filename.c_str());
   if (!ofs.good()) {

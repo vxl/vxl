@@ -58,7 +58,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
 
       norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
       norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-      bocl_kernel * normalize_render_kernel = new bocl_kernel();
+      auto * normalize_render_kernel = new bocl_kernel();
 
       normalize_render_kernel->create_kernel(&device->context(),
           device->device_id(),
@@ -67,7 +67,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
           options,              //options
           "normalize render depth kernel"); //kernel identifier (for error checking)
       //have kernel construct itself using the context and device
-      bocl_kernel * ray_trace_kernel = new bocl_kernel();
+      auto * ray_trace_kernel = new bocl_kernel();
 
       ray_trace_kernel->create_kernel(&device->context(),
                                        device->device_id(),
@@ -142,8 +142,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
     xint=mdata.sub_block_dim_.x()/num_octree_cells;
     yint=mdata.sub_block_dim_.y()/num_octree_cells;
   }
-  unsigned int ni=(unsigned int)std::ceil(bbox.width()/xint);
-  unsigned int nj=(unsigned int)std::ceil(bbox.height()/yint);
+  auto ni=(unsigned int)std::ceil(bbox.width()/xint);
+  auto nj=(unsigned int)std::ceil(bbox.height()/yint);
   std::cout<<"Size of the image "<<ni<<','<<nj<<std::endl;
   float z= bbox.max_z();
   std::string identifier=device->device_identifier();
@@ -164,8 +164,8 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
-  cl_float* ray_origins = new cl_float[4 * cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4 * cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4 * cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4 * cl_ni*cl_nj];
 
   float ray_dx = 0, ray_dy = 0, ray_dz = -1;
   // initialize ray origin buffer, first and last return buffers
@@ -193,15 +193,15 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   ray_o_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   ray_d_buff->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  float* buff = new float[cl_ni*cl_nj];
+  auto* buff = new float[cl_ni*cl_nj];
   for (unsigned i = 0; i<cl_ni*cl_nj; i++) buff[i] = 0.0f;
-  float* var_buff = new float[cl_ni*cl_nj];
+  auto* var_buff = new float[cl_ni*cl_nj];
   for (unsigned i = 0; i<cl_ni*cl_nj; i++) var_buff[i] = 0.0f;
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i = 0; i<cl_ni*cl_nj; i++) vis_buff[i] = 1.0f;
-  float* prob_buff = new float[cl_ni*cl_nj];
+  auto* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i = 0; i<cl_ni*cl_nj; i++) prob_buff[i] = 0.0f;
-  float* t_infinity_buff = new float[cl_ni*cl_nj];
+  auto* t_infinity_buff = new float[cl_ni*cl_nj];
   for (unsigned i = 0; i<cl_ni*cl_nj; i++) t_infinity_buff[i] = 0.0f;
 
   bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff, "exp image buffer");
@@ -308,11 +308,11 @@ bool boxm2_ocl_render_expected_height_map_process(bprb_func_process& pro)
   clReleaseCommandQueue(queue);
 
   i=0;
-  vil_image_view<float>* exp_img_out=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* exp_var_out=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* xcoord_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* ycoord_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float>* prob_img=new vil_image_view<float>(ni,nj);
+  auto* exp_img_out=new vil_image_view<float>(ni,nj);
+  auto* exp_var_out=new vil_image_view<float>(ni,nj);
+  auto* xcoord_img=new vil_image_view<float>(ni,nj);
+  auto* ycoord_img=new vil_image_view<float>(ni,nj);
+  auto* prob_img=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;++c)
     for (unsigned r=0;r<ni;++r)

@@ -169,7 +169,7 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
   vnl_vector_fixed<double,128> histograms(0.0);
 
   float actual_scale, ref_scale;
-  float key_scale = float(keypoint->scale());
+  auto key_scale = float(keypoint->scale());
   const vil_image_view<float> & grad_orient = grad_orient_at(key_scale, &actual_scale, &ref_scale);
   const vil_image_view<float> & grad_mag =  grad_mag_at(key_scale);
 
@@ -194,7 +194,7 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
               float interp_y = 1.0f - std::fabs( key_y + float(y-yc) );
               float weight = grad_mag(xc,yc) * interp_x * interp_y
                            * gaussian((xc-key_x)/ref_scale, (yc-key_y)/ref_scale);
-              float orient = float(vnl_math::angle_0_to_2pi(grad_orient(xc,yc)-key_orient+vnl_math::pi));
+              auto orient = float(vnl_math::angle_0_to_2pi(grad_orient(xc,yc)-key_orient+vnl_math::pi));
               int bin = ((int(orient*15/float(vnl_math::twopi))+1)/2)%8;
               histograms[hi*32+hj*8+bin] += weight;
             }

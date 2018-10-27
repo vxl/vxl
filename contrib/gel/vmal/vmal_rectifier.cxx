@@ -85,8 +85,8 @@ vmal_rectifier::vmal_rectifier(std::vector< vnl_vector<double> >* pts0,
   // put the points in the proper buffers...
   points0_ = new vnl_double_3[numpoints_];
   points1_ = new vnl_double_3[numpoints_];
-  std::vector< vnl_vector<double> >::iterator vit0 = pts0->begin();
-  std::vector< vnl_vector<double> >::iterator vit1 = pts1->begin();
+  auto vit0 = pts0->begin();
+  auto vit1 = pts1->begin();
   for (int i=0; i<numpoints_; ++i,++vit0,++vit1)
   {
     points0_[i][0] = (*vit0)[0]; // [1]

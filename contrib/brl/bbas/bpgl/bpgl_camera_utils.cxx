@@ -153,7 +153,7 @@ std::vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_d
     {
         //load camera from file
         std::ifstream ifs(iter->c_str());
-        vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+        auto* pcam =new vpgl_perspective_camera<double>;
         if (!ifs.is_open()) {
             std::cerr << "Failed to open file " << *iter << '\n';
             return toReturn;

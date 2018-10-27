@@ -62,7 +62,7 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   unsigned ni, nj;
   ni = num_voxels.x();
   nj = num_voxels.y();
-  vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni, nj, 1);
+  auto* out_img = new vil_image_view<vxl_byte>(ni, nj, 1);
   out_img->fill(0);
 
   // load geo cover data
@@ -87,16 +87,16 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   {
     if (vgl_intersection(scene_bbox, geo_info.bbox).is_empty())
       continue;
-    vil_image_view<vxl_byte>* geo_img = dynamic_cast<vil_image_view<vxl_byte>*>(geo_info.img_r.ptr());
+    auto* geo_img = dynamic_cast<vil_image_view<vxl_byte>*>(geo_info.img_r.ptr());
     for (unsigned i = 0; i < ni; i++) {
       for (unsigned j = 0; j < nj; j++) {
         double lon, lat, gz;
-        float local_x = (float)(i+0.5);
-        float local_y = (float)(dimy - j + 0.5);
+        auto local_x = (float)(i+0.5);
+        auto local_y = (float)(dimy - j + 0.5);
         lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
         double u, v;
         geo_info.cam->global_to_img(lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5), vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5), vv = (unsigned)std::floor(v+0.5);
         if (uu < geo_info.ni && vv < geo_info.nj)
         {
           if (is_convert)
@@ -119,13 +119,13 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
     for (unsigned i = 0; i < ni; i++) {
       for (unsigned j = 0; j < nj; j++) {
         double lon, lat, gz;
-        float local_x = (float)(i+0+0.5);
-          float local_y = (float)(dimy-j+0.5);
+        auto local_x = (float)(i+0+0.5);
+          auto local_y = (float)(dimy-j+0.5);
           lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
           double u, v;
           urban_info.cam->global_to_img(lon, lat, gz, u, v);
-          unsigned uu = (unsigned)std::floor(u+0.5);
-          unsigned vv = (unsigned)std::floor(v+0.5);
+          auto uu = (unsigned)std::floor(u+0.5);
+          auto vv = (unsigned)std::floor(v+0.5);
           if (uu < urban_info.ni && vv < urban_info.nj)
             (*out_img)(i,j) = volm_osm_category_io::geo_land_table[volm_osm_category_io::GEO_URBAN].id_;
       }
@@ -228,8 +228,8 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
         lvcs->global_to_local(pt.x(), pt.y(), 0.0, vpgl_lvcs::wgs84, lx, ly, lz);
         double i = lx;
         double j = dimy - ly;
-        unsigned x = (unsigned)std::floor(i+0.5);
-        unsigned y = (unsigned)std::floor(j+0.5);
+        auto x = (unsigned)std::floor(i+0.5);
+        auto y = (unsigned)std::floor(j+0.5);
         if (x < out_img->ni() && y < out_img->nj())
           (*out_img)(x,y) = loc_pts[p_idx]->prop().id_;
       }

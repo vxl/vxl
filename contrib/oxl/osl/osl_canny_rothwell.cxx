@@ -198,7 +198,7 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edg
 void osl_canny_rothwell::Non_maximal_suppression()
 {
   float h1=0,h2=0;
-  float k = float(vnl_math::deg_per_rad);
+  auto k = float(vnl_math::deg_per_rad);
 
   // Add 1 to get rid of border effects
   for (unsigned int x=w0_; x+2+w0_<xsize_; ++x)  {
@@ -402,7 +402,7 @@ void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
 
       // count the number of non-dummy edgels
       int count=0;
-      for (std::__1::__list_iterator<float, void *>::value_type & i : grad)
+      for (const auto & i : grad)
         if ( i != dummy_ )
           count++;
 
@@ -413,7 +413,7 @@ void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
         continue;
 
       // Create an osl_edgel_chain
-      osl_edgel_chain *dc = new osl_edgel_chain(count);
+      auto *dc = new osl_edgel_chain(count);
       px = dc->GetX();     py = dc->GetY();
       pg = dc->GetGrad();  pt = dc->GetTheta();
 
@@ -437,7 +437,7 @@ void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
             *(pg++) = 0.0f;   // Mark the gradient as zero at a junction
           }
           if (theta_[tmpx][tmpy] == DUMMYTHETA) {
-            const float k = float(vnl_math::deg_per_rad);
+            const auto k = float(vnl_math::deg_per_rad);
             float *dx = dx_[tmpx];
             float *dy = dy_[tmpx];
 
@@ -463,8 +463,8 @@ void osl_canny_rothwell::Final_hysteresis(std::list<osl_edge*> *edges)
       else if ( dc->size() > 1 ) {
         // Create an edge for the image topology
 
-        osl_Vertex *v1 = new osl_Vertex(dc->GetX(0), dc->GetY(0));
-        osl_Vertex *v2 = new osl_Vertex(dc->GetX(dc->size()-1), dc->GetY(dc->size()-1));
+        auto *v1 = new osl_Vertex(dc->GetX(0), dc->GetY(0));
+        auto *v2 = new osl_Vertex(dc->GetX(dc->size()-1), dc->GetY(dc->size()-1));
 
         // Check whether each vertex is a junction
         osl_Vertex *V1=osl_find(vlist_, *v1);
@@ -682,7 +682,7 @@ void osl_canny_rothwell::Adaptive_Canny(vil1_image const &image)
   int count=0;
   if (verbose) std::cerr << "percentage of endings examined =   0";
   typedef std::list<int>::iterator it;
-  for (it i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j)
+  for (auto i=xdang_->begin(), j=ydang_->begin(); i!=xdang_->end() && j!=ydang_->end(); ++i, ++j)
   {
     //xdang_->reset(),ydang_->reset(); xdang_->next(),ydang_->next(); )  {
 
@@ -883,12 +883,12 @@ void osl_canny_rothwell::Find_junction_clusters()
 
   // Construct the list of junction cluster centres
   vlist_->clear();
-  for (std::list<int>::iterator i=xvertices.begin(), j=yvertices.begin();
+  for (auto i=xvertices.begin(), j=yvertices.begin();
        i!=xvertices.end() && j!=yvertices.end();
        ++i, ++j) {
     //for (xvertices.reset(),yvertices.reset(); xvertices.next(),yvertices.next(); )  {
 
-    osl_Vertex *v = new osl_Vertex( float((*i)/*xvertices.value()*/+xstart_),
+    auto *v = new osl_Vertex( float((*i)/*xvertices.value()*/+xstart_),
                                     float((*j)/*yvertices.value()*/+ystart_));
     vlist_->push_front(v);
     junction_[(*i)/*xvertices.value()*/][(*j)/*yvertices.value()*/] = 2;

@@ -99,7 +99,7 @@ void octree_kernel()
   bvpl_edge_geometric_mean_functor<float> functor;
 
   //Create the octree
-  boct_tree<short,float> *tree = new boct_tree<short,float>(3);
+  auto *tree = new boct_tree<short,float>(3);
   fill_sample_octree(tree);
 
   //operate kernel on octree
@@ -135,7 +135,7 @@ void scene_kernel_operator()
 
   //Create tree
   typedef boct_tree<short,float > tree_type;
-  boct_tree<short,float> *tree = new boct_tree<short,float>(3);
+  auto *tree = new boct_tree<short,float>(3);
 
   fill_sample_octree(tree);
 
@@ -224,7 +224,7 @@ void octree_vector_operator()
   bvpl_edge_geometric_mean_functor<float> functor;
 
   //Create tree. this tree is initialized with 4 leves as a regular grid
-  boct_tree<short,float> *tree = new boct_tree<short,float>(4);
+  auto *tree = new boct_tree<short,float>(4);
 
   fill_edge3d_tree(tree);
 
@@ -265,7 +265,7 @@ void scene_vector_operator()
   /***********Part1 operate on tree*******************/
 
   //Create tree. this tree is initialized with 4 leves as a regular grid
-  boct_tree<short,float> *tree = new boct_tree<short,float>(4);
+  auto *tree = new boct_tree<short,float>(4);
   fill_edge3d_tree(tree);
 
   //Create output trees

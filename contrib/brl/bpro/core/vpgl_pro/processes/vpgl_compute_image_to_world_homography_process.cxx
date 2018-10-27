@@ -38,7 +38,7 @@ bool vpgl_compute_image_to_world_homography_process(bprb_func_process& pro)
   vgl_plane_3d<double> plane(plane_params[0],plane_params[1],plane_params[2],plane_params[3]);
 
   vgl_h_matrix_2d<double> H;
-  if(vpgl_perspective_camera<double> * pcam
+  if(auto * pcam
        = dynamic_cast<vpgl_perspective_camera<double>* > (camera.ptr() ))
   {
       if(!inverse)

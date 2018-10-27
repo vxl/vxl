@@ -59,8 +59,8 @@ bool bocl_command_queue_mgr::init_kernel()
   }
 
   //set up pinned memory
-  float* in = new float[memLength_];
-  float* out = new float[memLength_];
+  auto* in = new float[memLength_];
+  auto* out = new float[memLength_];
   for (int i=0; i<memLength_; i++)
     in[i] = (float) i;
 
@@ -70,10 +70,10 @@ bool bocl_command_queue_mgr::init_kernel()
   pinned_out_->create_buffer(CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR);
 
   //map standard pointers to pinned memory
-  float* pinned_in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE,
+  auto* pinned_in = (float*) clEnqueueMapBuffer(queue_a_, pinned_in_->buffer(), CL_TRUE,
                                             CL_MAP_WRITE, 0, memLength_*sizeof(float), 0,
                                             nullptr, nullptr, nullptr);
-  float* pinned_out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE,
+  auto* pinned_out = (float*) clEnqueueMapBuffer(queue_a_, pinned_out_->buffer(), CL_TRUE,
                                             CL_MAP_READ, 0, memLength_*sizeof(float), 0,
                                             nullptr, nullptr, nullptr);
   pinned_in_->set_cpu_buffer(pinned_in);
@@ -105,7 +105,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   clFinish(queue_a_);
 
   bool good = true;
-  float* pout = (float*) pinned_out_->cpu_buffer();
+  auto* pout = (float*) pinned_out_->cpu_buffer();
   for (int i=0; i<100; i++) {
     if (i*i != pout[i]) {
       good = false;
@@ -136,8 +136,8 @@ bool bocl_command_queue_mgr::test_async_command_queue()
   clFinish(queue_a_);
 
   //store result to verify
-  float* control = new float[memLength_];
-  float* out = (float*) pinned_out_->cpu_buffer();
+  auto* control = new float[memLength_];
+  auto* out = (float*) pinned_out_->cpu_buffer();
   for (int i=0; i<memLength_; i++)
     control[i] = out[i];
 
@@ -173,7 +173,7 @@ bool bocl_command_queue_mgr::test_async_command_queue()
 
       // non blocking write of buffer B (on Queue B)
       int off = next * incr * sizeof(float);
-      float* buff = (float*) pinned_in_->cpu_buffer();
+      auto* buff = (float*) pinned_in_->cpu_buffer();
       clEnqueueWriteBuffer( queues_[next], pinned_in_->buffer(),
                             CL_FALSE, off, incr*sizeof(float),
                             (void*) &buff[memHalf_], 0, nullptr, nullptr);

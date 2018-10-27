@@ -503,7 +503,7 @@ float vdgl_digital_region::Ir() const
     this->DoPlaneFit();
     pix_index_ = initial_pix_index;//Restore the pix_index_ state
   }
-  float val = float(this->I());
+  auto val = float(this->I());
   float io = this->Io(),
         ix = float(this->Ix()), x = this->X(), xo = this->Xo(),
         iy = float(this->Iy()), y = this->Y(), yo = this->Yo();
@@ -611,7 +611,7 @@ void merge(vdgl_digital_region* r1, vdgl_digital_region* r2, vdgl_digital_region
 }
 
 vdgl_digital_region_sptr merge(vdgl_digital_region_sptr const& r1, vdgl_digital_region_sptr const& r2){
-  vdgl_digital_region* r12 = new vdgl_digital_region();
+  auto* r12 = new vdgl_digital_region();
   merge(r1.ptr(), r2.ptr(), r12);
   return r12;
 }

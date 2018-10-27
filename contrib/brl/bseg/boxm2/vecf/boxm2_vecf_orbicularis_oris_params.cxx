@@ -8,7 +8,7 @@ std::ostream& operator << (std::ostream& os, boxm2_vecf_orbicularis_oris_params 
     std::cout << "FATAL! Bad parameter file stream\n";
     return os;
   }
-  boxm2_vecf_orbicularis_oris_params& pr = const_cast<boxm2_vecf_orbicularis_oris_params &>(orbicularis_oris_pr);
+  auto& pr = const_cast<boxm2_vecf_orbicularis_oris_params &>(orbicularis_oris_pr);
   os << "principal_eigenvector_L1: " << pr.principal_eigenvector_1_.x() << ' ' << pr.principal_eigenvector_1_.y() << ' ' << pr.principal_eigenvector_1_.z() << "\n";
   os << "principal_eigenvector_L2: " << pr.principal_eigenvector_2_.x() << ' ' << pr.principal_eigenvector_2_.y() << ' ' << pr.principal_eigenvector_2_.z() << "\n";
   os << "lambda: " << pr.lambda_ << '\n';

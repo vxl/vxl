@@ -28,9 +28,9 @@ void mipa_ms_block_normaliser::normalise(vnl_vector<double>& v) const
     unsigned ni_region_low=ni_region_;
     unsigned nj_region_low=nj_region_;
     unsigned nc_per_block_low=nc_per_block_;
-    unsigned& ni_region=const_cast<unsigned&>(this->ni_region_);
-    unsigned& nj_region=const_cast<unsigned&>(this->nj_region_);
-    unsigned& nc_per_block=const_cast<unsigned&>(this->nc_per_block_);
+    auto& ni_region=const_cast<unsigned&>(this->ni_region_);
+    auto& nj_region=const_cast<unsigned&>(this->nj_region_);
+    auto& nc_per_block=const_cast<unsigned&>(this->nc_per_block_);
     for (unsigned iscale=0;iscale<nscales_;++iscale)
     {
         //Do each scale

@@ -20,12 +20,12 @@ principal_ray_scan::principal_ray_scan(double cone_half_angle,
   double cone_solid_angle = vnl_math::twopi*(1.0-std::cos(cone_half_angle));
   double fraction_of_sphere = cone_solid_angle/(4.0*vnl_math::pi);
   //number of points that would cover the entire sphere
-  unsigned limit = static_cast<unsigned>(n_samples/fraction_of_sphere);
+  auto limit = static_cast<unsigned>(n_samples/fraction_of_sphere);
   //the following algorithm assumes that the entire sphere is uniformly
   //sampled
   // ======   sphere sampling with the spiral algorithm =======
   double p = 0.5;
-  double ns = static_cast<double>(limit);
+  auto ns = static_cast<double>(limit);
   double a = 1.0 - 2.0*p/(limit-3);
   double b = p*(limit+1)/(limit-3);
   double rkm1 = 0;
@@ -128,7 +128,7 @@ pixel_solid_angle(vpgl_perspective_camera<double> const& cam,
                   double& solid_angle)
 {
   vgl_point_2d<double> pp = cam.get_calibration().principal_point();
-  unsigned u = static_cast<unsigned>(pp.x()),
+  auto u = static_cast<unsigned>(pp.x()),
            v = static_cast<unsigned>(pp.y());
   vgl_ray_3d<double> ray;
   vsph_camera_bounds::pixel_solid_angle(cam, u, v, ray, cone_half_angle,

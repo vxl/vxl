@@ -77,17 +77,17 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni = pro.get_input<unsigned>(i++);
-  unsigned nj = pro.get_input<unsigned>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
   std::string identifier = pro.get_input<std::string>(i);
 
   bool foundDataType = false;
   bool foundNumObsType = false;
 
   vnl_vector_fixed<unsigned char, 8> mog3((unsigned char)0);
-  vbl_array_2d<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype>* mog3_img = new vbl_array_2d<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype>(ni, nj, mog3);
+  auto* mog3_img = new vbl_array_2d<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype>(ni, nj, mog3);
   vnl_vector_fixed<unsigned char, 2> mog((unsigned char)0);
-  vbl_array_2d<boxm2_data_traits<BOXM2_GAUSS_GREY>::datatype>* mog_img = new vbl_array_2d<boxm2_data_traits<BOXM2_GAUSS_GREY>::datatype>(ni, nj, mog);
+  auto* mog_img = new vbl_array_2d<boxm2_data_traits<BOXM2_GAUSS_GREY>::datatype>(ni, nj, mog);
 
   std::string data_type, num_obs_type;
   std::vector<std::string> apps = scene->appearances();
@@ -133,7 +133,7 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
   }
 
   // function call
-  vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
+  auto * vis_img=new vil_image_view<float>(ni,nj);
   vis_img->fill(1.0f);
 
   int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
@@ -151,7 +151,7 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
     datas.push_back(alph);
     datas.push_back(mog);
     datas.push_back(nobs);
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
     if ( data_type.find(boxm2_data_traits<BOXM2_MOG3_GREY>::prefix()) != std::string::npos )
     {

@@ -75,7 +75,7 @@ inline void abs_diff(const vnl_vector<double>& v1,
 void mfpf_ssd_vec_cost_builder::build(mfpf_vec_cost& pf)
 {
   assert(pf.is_a()=="mfpf_ssd_vec_cost");
-  mfpf_ssd_vec_cost& nc = static_cast<mfpf_ssd_vec_cost&>(pf);
+  auto& nc = static_cast<mfpf_ssd_vec_cost&>(pf);
 
   unsigned n = data_.size();
 

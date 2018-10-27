@@ -92,7 +92,7 @@ bool boxm2_ocl_paint_batch_process(bprb_func_process& pro)
   // iterate the scene block by block and write to output
   vul_timer totalTime;
   std::vector<boxm2_block_id> blk_ids = scene->get_block_ids();
-  std::vector<boxm2_block_id>::iterator id = blk_ids.begin();
+  auto id = blk_ids.begin();
   for (; id != blk_ids.end(); ++id) {
     boxm2_block_id bid = *id;
     std::cout<<" block "<<bid<<std::endl;

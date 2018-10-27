@@ -214,7 +214,7 @@ void mfpf_norm_corr2d_builder::build(mfpf_point_finder& pf)
 {
   assert(n_added_>0);
   assert(pf.is_a()=="mfpf_norm_corr2d");
-  mfpf_norm_corr2d& nc = static_cast<mfpf_norm_corr2d&>(pf);
+  auto& nc = static_cast<mfpf_norm_corr2d&>(pf);
   vil_image_view<double> mean;
   mean.deep_copy(sum_);
   vil_math_scale_values(mean,1.0/n_added_);

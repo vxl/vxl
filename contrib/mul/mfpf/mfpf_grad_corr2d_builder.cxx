@@ -261,7 +261,7 @@ void mfpf_grad_corr2d_builder::build(mfpf_point_finder& pf)
 {
   assert(n_added_>0);
   assert(pf.is_a()=="mfpf_grad_corr2d");
-  mfpf_grad_corr2d& nc = static_cast<mfpf_grad_corr2d&>(pf);
+  auto& nc = static_cast<mfpf_grad_corr2d&>(pf);
 
   vil_image_view<double> mean_x;
   mean_x.deep_copy(sum_x_);

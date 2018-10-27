@@ -130,7 +130,7 @@ bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_scor
     //: selecting the top 200 cameras and the best camera location
     std::sort(scores.begin(),scores.end(),scorecomp_obj);
     int cnt = 0;
-    for (std::vector<std::pair<float,int> >::iterator iter = scores.begin(); iter!=scores.end() && cnt < 1000; ++iter, ++cnt)
+    for (auto iter = scores.begin(); iter!=scores.end() && cnt < 1000; ++iter, ++cnt)
     {
         if (iter->first > max_score )
         {
@@ -187,7 +187,7 @@ bool boxm2_volm_matcher_p0::match_order(volm_spherical_regions_layer & index_lay
         {
             volm_spherical_region index_region = i_regions[reduced_attribute_poly_id];
             float area = intersection_area(qbox_xfomred,index_region.bbox_ref());
-            unsigned char ival = (unsigned char)0;
+            auto ival = (unsigned char)0;
             index_region.attribute_value(DEPTH_INTERVAL,ival);
             mean_depth+=area*std::pow(1.01f,(float)ival);
             sum_weights+=area;

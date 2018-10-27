@@ -40,8 +40,8 @@ void brad_belief_prop_utils::project_intensities(vgl_point_3d<double> const& p){
 }
 
 void brad_belief_prop_utils::print_intensities() const{
-  std::map<unsigned, double>::const_iterator inti = intensity_.begin();
-  std::map<unsigned, std::vector<double> >::const_iterator ninti = nbr_intensities_.begin();
+  auto inti = intensity_.begin();
+  auto ninti = nbr_intensities_.begin();
   for(; inti!=intensity_.end(); ++inti, ++ninti){
     double tint = inti->second;
     const std::vector<double>& nbr_intens = ninti->second;
@@ -73,14 +73,14 @@ double brad_belief_prop_utils::p_mog(double intensity, vnl_vector_fixed<unsigned
 
 void brad_belief_prop_utils::test_appearance_update(){
   // must have called ::print_intensities first!
-  std::map<unsigned, double>::iterator inti = intensity_.begin();
-  std::map<unsigned, std::vector<double> >::iterator ninti = nbr_intensities_.begin();
+  auto inti = intensity_.begin();
+  auto ninti = nbr_intensities_.begin();
   for(; inti!=intensity_.end(); ++inti, ++ninti){
-    float tint = static_cast<float>(inti->second);
+    auto tint = static_cast<float>(inti->second);
     vnl_vector_fixed<unsigned char, 8> mog3(static_cast<unsigned char>(0));
     vnl_vector_fixed<float, 4> nobs(0.0f);
     std::vector<double>& nbr_intens = ninti->second;
-    unsigned n_nbr = static_cast<unsigned>(nbr_intens.size());
+    auto n_nbr = static_cast<unsigned>(nbr_intens.size());
     for(unsigned i = 0; i<n_nbr; ++i)
       bsta_mog3_grey::update_gauss_mixture_3(mog3, nobs, static_cast<float>(nbr_intens[i]), 1.0f, BRAD_INIT_SIGMA, BRAD_MIN_SIGMA);
 
@@ -115,7 +115,7 @@ void brad_belief_prop_utils::init_zray(double Iray, std::vector<unsigned> const&
   zray_.min_z_ = p.z()+dzmin;
   zray_.max_z_ = p.z()+(100.0+dzmin);
   zray_.init_ray();
-  unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+  auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   for(unsigned i=n; i>=1; i--){
     double z = zray_.ray_data_[i-1].cell_z_;
     vgl_point_3d<double> pray(p.x(), p.y(), z);
@@ -126,7 +126,7 @@ void brad_belief_prop_utils::init_zray(double Iray, std::vector<unsigned> const&
 }
 
 void brad_belief_prop_utils::zray_pre(){
-  unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+  auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   double pre = 0.0;
   for(unsigned i=n; i>=1; i--){
     zray_.ray_data_[i-1].pre_ = pre;
@@ -135,7 +135,7 @@ void brad_belief_prop_utils::zray_pre(){
 }
 
 void brad_belief_prop_utils::zray_post(){
-  unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+  auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   double post = 0.0;
   // reverse scan for post
   for(unsigned i=1; i<=n; i++){
@@ -145,7 +145,7 @@ void brad_belief_prop_utils::zray_post(){
   }
 }
 void brad_belief_prop_utils::update_PinS(){
-unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   double post = 0.0;
   // reverse scan for post
   for(unsigned i=1; i<=n; i++){
@@ -161,7 +161,7 @@ unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
 }
 void brad_belief_prop_utils::update_vis(){
   double vis = 1.0;
-  unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+  auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   for(unsigned i=n; i>=1; i--){
     zray_.ray_data_[i-1].vis_=vis;
     vis *= (1.0-zray_.ray_data_[i-1].PinS_);
@@ -172,7 +172,7 @@ void brad_belief_prop_utils::print_zray(unsigned ni) const{
 }
 
 double brad_belief_prop_utils::expected_depth() const{
-  unsigned n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
+  auto n = static_cast<unsigned>((zray_.max_z_-zray_.min_z_)/zray_.dim_);
   double sum = 0.0;
   double sump = 0.0;
   for(unsigned i=n; i>=1; i--){
@@ -193,7 +193,7 @@ void brad_belief_prop_utils::compute_depth_map(vgl_box_2d<double>const& region, 
   std::vector<unsigned> ref_views =this->index(mnv);
   double min_x = region.min_x(), max_x = region.max_x();
   double min_y = region.min_y(), max_y = region.max_y();
-  unsigned ni = static_cast<unsigned>((max_x-min_x)/cell_len), nj = static_cast<unsigned>((max_y-min_y)/cell_len);
+  auto ni = static_cast<unsigned>((max_x-min_x)/cell_len), nj = static_cast<unsigned>((max_y-min_y)/cell_len);
   depth_.set_size(ni, nj);
   depth_.fill(0.0f);
   double y = min_y;
@@ -208,7 +208,7 @@ void brad_belief_prop_utils::compute_depth_map(vgl_box_2d<double>const& region, 
       this->zray_post();
       this->update_PinS();
       this->update_vis();
-      float ed = static_cast<float>(this->expected_depth());
+      auto ed = static_cast<float>(this->expected_depth());
       depth_(i,j) = ed;
       x += cell_len;
     }

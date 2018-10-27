@@ -135,7 +135,7 @@ class example_face_3d : public vtol_face
     std::vector<signed char> dirs;
     edge_list elist;
     bool done=false;
-    vertex_list::iterator vi=vl.begin();
+    auto vi=vl.begin();
     for (vtol_vertex_sptr v02,v01=(*vi); !done; v01=v02) {
       if (++vi==vl.end()) { vi=vl.begin(); done=true; }
       v02=(*vi);

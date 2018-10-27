@@ -105,7 +105,7 @@ gevd_fold::DetectEdgels(const gevd_bufferxy& image,
   {
     mag = gevd_float_operators::SimilarBuffer(image);
     angle = gevd_float_operators::SimilarBuffer(image);
-    const float kdeg = float(vnl_math::deg_per_rad);
+    const auto kdeg = float(vnl_math::deg_per_rad);
     for (int j = 0; j < image.GetSizeY(); j++)
       for (int i = 0; i < image.GetSizeX(); i++)
         if ((floatPixel(*mag, i, j) = floatPixel(*curvature, i, j)))
@@ -232,7 +232,7 @@ BestFoldExtension(const gevd_bufferxy& smooth,
       int dj = DJS[dir];
       float pix_m = floatPixel(smooth, ni-di, nj-dj);
       float pix_p = floatPixel(smooth, ni+di, nj+dj);
-      float curvature = (float)std::fabs(pix_p + pix_m - 2*pix);
+      auto curvature = (float)std::fabs(pix_p + pix_m - 2*pix);
       float max_s = (dir%HALFPI)? best_s*2: best_s;
       if (curvature > max_s) {      // find best strength
         int di2 = 2*di;
@@ -253,9 +253,9 @@ BestFoldExtension(const gevd_bufferxy& smooth,
     float pix = floatPixel(smooth, best_i, best_j);
     int di = DIS[best_d], dj = DJS[best_d];
     int di2 = 2*di, dj2 = 2*dj;
-    float s_m = (float)std::fabs(pix + floatPixel(smooth, best_i-di2, best_j-dj2)
+    auto s_m = (float)std::fabs(pix + floatPixel(smooth, best_i-di2, best_j-dj2)
                                 - 2*floatPixel(smooth, best_i-di, best_j-dj));
-    float s_p = (float)std::fabs(pix + floatPixel(smooth, best_i+di2, best_j+dj2)
+    auto s_p = (float)std::fabs(pix + floatPixel(smooth, best_i+di2, best_j+dj2)
                                 - 2*floatPixel(smooth, best_i+di, best_j+dj));
     if (best_d%HALFPI) {
       s_m /= (float)2.0;

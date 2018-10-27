@@ -112,13 +112,13 @@ void gevd_clean_edgels::detect_similar_edges(std::vector<vtol_edge_2d_sptr >& co
                                              std::vector<vtol_edge_2d_sptr >& deleted_edges)
 {
   std::vector<vtol_edge_2d_sptr > temp;
-  for (std::vector<vtol_edge_2d_sptr >::iterator e1it = common_edges.begin();
+  for (auto e1it = common_edges.begin();
        e1it != common_edges.end(); ++e1it)
   {
     vtol_edge_2d_sptr e1 = (*e1it);
     vdgl_digital_curve_sptr dc1 = e1->curve()->cast_to_vdgl_digital_curve();
     if (!dc1) continue;
-    std::vector<vtol_edge_2d_sptr >::iterator e2it = e1it;
+    auto e2it = e1it;
     for (e2it++; e2it != common_edges.end(); ++e2it)
     {
       vtol_edge_2d_sptr e2 = (*e2it);
@@ -294,7 +294,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
 
   // Create second subchain from and including junction pixel.
   vtol_edge_2d_sptr edge2 = new vtol_edge_2d();    // create second subchain
-  vdgl_edgel_chain *ec2= new vdgl_edgel_chain;
+  auto *ec2= new vdgl_edgel_chain;
   vdgl_interpolator *it2= new vdgl_interpolator_linear( ec2);
   vdgl_digital_curve_sptr dc2= new vdgl_digital_curve( it2);
   edge2->set_curve(*dc2);
@@ -407,7 +407,7 @@ void gevd_clean_edgels::JumpGaps()
       if (verbose) std::cout << "Adding a gap jumping edgel from " << *v << " to " << *new_v << std::endl;
       vtol_edge_2d_sptr new_edge = new vtol_edge_2d(v, new_v);
       // vdgl_digital_curve_sptr dc = new vdgl_digital_curve(v->point(),new_v->point());
-      vdgl_edgel_chain* new_chain = new vdgl_edgel_chain();
+      auto* new_chain = new vdgl_edgel_chain();
       new_chain->add_edgel(vdgl_edgel(v->point()->x(), v->point()->y()));
       new_chain->add_edgel(vdgl_edgel(new_v->point()->x(), new_v->point()->y()));
       vdgl_digital_curve_sptr dc = new vdgl_digital_curve(new vdgl_interpolator_linear(new_chain));
@@ -434,7 +434,7 @@ void gevd_clean_edgels::DeleteShortEdges()
   int N_total=0, N_close=0;
   std::vector<vtol_edge_2d_sptr > deleted_edges;
   int edgelcount = 0;
-  for (std::vector<vtol_edge_2d_sptr >::iterator egit = out_edgels_->begin();
+  for (auto egit = out_edgels_->begin();
        egit != out_edgels_->end(); egit++, ++N_total)
   {
     if ( (edgelcount % 100) == 0 )
@@ -689,7 +689,7 @@ void gevd_clean_edgels::RemoveLoops()
 
   for (auto & removed_edge : removed_edges)
   {
-    std::vector<vtol_edge_2d_sptr>::iterator f = std::find(out_edgels_->begin(), out_edgels_->end(), removed_edge);
+    auto f = std::find(out_edgels_->begin(), out_edgels_->end(), removed_edge);
     if (f != out_edgels_->end())
       out_edgels_->erase(f);
   }

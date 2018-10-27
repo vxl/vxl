@@ -107,7 +107,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
   //loop over each tree, refine it in place (keep a vector of locations for
   // posterities sake
   boxm2_array_3d<uchar16>  trees = blk_->trees_copy();  //trees to refine
-  uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
+  auto* trees_copy = new uchar16[trees.size()];  //copy of those trees
 
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
@@ -140,7 +140,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
   char* buf = new char[dataSize * app_type_size_];
   std::cout << "data size is "<<app_type_size_<<" , "<<sizeof(T)<<" and id is "<<app_type_<<std::endl;
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize * sizeof(float) ], dataSize * sizeof(float), id);
-  boxm2_data_base* newM = new boxm2_data_base(new char[dataSize * app_type_size_], dataSize * app_type_size_, id);
+  auto* newM = new boxm2_data_base(new char[dataSize * app_type_size_], dataSize * app_type_size_, id);
   boxm2_data_base* newF = nullptr;
   boxm2_data_base* newF_res = nullptr;
   boxm2_data_base* newA_sav = nullptr;
@@ -168,7 +168,7 @@ bool boxm2_refine_block_function_with_labels<T>::refine_deterministic(std::vecto
           std::cout<<"saved buffers will be moved"<<std::endl;
   }
 
-  float*   alpha_cpy = (float*) newA->data_buffer();
+  auto*   alpha_cpy = (float*) newA->data_buffer();
   T* mog_cpy   = (T*) newM->data_buffer();
   float4*   flow_cpy = nullptr;
   float4*  flow_res_cpy =nullptr;
@@ -313,7 +313,7 @@ void boxm2_refine_block_function_with_labels<T>::recursive_refine(boct_bit_tree 
         std::vector<int> leafs= tree.get_leaf_bits(i);
         int count =0;
 
-        for (std::vector<int>::iterator it= leafs.begin();it!=leafs.end();it++,count++){
+        for (auto it= leafs.begin();it!=leafs.end();it++,count++){
                 if (tree.depth_at(*it)>=2)
                         return;
                 tree.set_bit_at(*it,true);

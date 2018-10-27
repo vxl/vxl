@@ -52,7 +52,7 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint,
       //into a 2d coordinate system, a (scale,octave).
       //We maximize over the linear scale_index then use this value
       //to retrieve the appropriate ancillary images.
-      float current_scale = (float)std::pow(
+      auto current_scale = (float)std::pow(
         2.0f,float(scale_index)/this->octave_size()-1);
 
       //the first level in the pyramid is an 2x upsampled version
@@ -60,8 +60,8 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint,
       //is reduced by half. Therefore we need to divide the
       //image coordinates by the correct power of two of the resolution.
       float resolution = 1.0f / current_scale;
-      unsigned int ri = (unsigned int)(i*resolution);
-      unsigned int rj = (unsigned int)(j*resolution);
+      auto ri = (unsigned int)(i*resolution);
+      auto rj = (unsigned int)(j*resolution);
 
       std::cout << "current_dog size = "
                << current_dog.ni() << ", "
@@ -72,7 +72,7 @@ bool bapl_dense_sift::make_keypoint(bapl_lowe_keypoint_sptr& keypoint,
 
     //map stores pairs from lowest to highest key.
     //The maximal scale/index pair should be the last element of the map
-    std::map<float,float>::reverse_iterator maximal_scale_map_itr =
+    auto maximal_scale_map_itr =
       scale_index_map.rbegin();
 
     //actual scale is the closest image to the maximal scale available in the pyramid.

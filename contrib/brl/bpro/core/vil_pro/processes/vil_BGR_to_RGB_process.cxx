@@ -46,7 +46,7 @@ bool vil_BGR_to_RGB_process(bprb_func_process& pro)
     vil_image_view_base_sptr in_img = pro.get_input<vil_image_view_base_sptr>(i++);
     //vil_image_view<vil_rgb<vxl_byte> > * bgr_img = new vil_image_view<vil_rgb<vxl_byte> >(in_img->ni(),in_img->nj());
     std::cout<<"format : "<<in_img->pixel_format()<<" "<<in_img->nplanes()<<std::endl;
-    if(vil_image_view<vil_rgb<vxl_byte> > * bgr_img= dynamic_cast<vil_image_view<vil_rgb<vxl_byte> > *>(in_img.ptr()))
+    if(auto * bgr_img= dynamic_cast<vil_image_view<vil_rgb<vxl_byte> > *>(in_img.ptr()))
     {
         for(unsigned k = 0; k <bgr_img->ni(); k++)
         {
@@ -62,8 +62,8 @@ bool vil_BGR_to_RGB_process(bprb_func_process& pro)
     }
     else if (in_img->nplanes() == 4)
     {
-        vil_image_view<vxl_byte> * rgb_img= new vil_image_view<vxl_byte>(in_img->ni(), in_img->nj(),3);
-        if (vil_image_view<vxl_byte> * bgr_img= dynamic_cast<vil_image_view<vxl_byte>  *>(in_img.ptr()))
+        auto * rgb_img= new vil_image_view<vxl_byte>(in_img->ni(), in_img->nj(),3);
+        if (auto * bgr_img= dynamic_cast<vil_image_view<vxl_byte>  *>(in_img.ptr()))
         {
 
             for(unsigned k = 0; k <bgr_img->ni(); k++)

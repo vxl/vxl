@@ -67,21 +67,21 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
   vil_image_view_base_sptr var_img_sptr=pro.get_input<vil_image_view_base_sptr>(i++);
   std::string identifier = pro.get_input<std::string>(i++);
 
-  vil_image_view<float> * depth_img=dynamic_cast<vil_image_view<float> * > (depth_img_sptr.ptr());
-  vil_image_view<float> * var_img=dynamic_cast<vil_image_view<float> * > (var_img_sptr.ptr());
+  auto * depth_img=dynamic_cast<vil_image_view<float> * > (depth_img_sptr.ptr());
+  auto * var_img=dynamic_cast<vil_image_view<float> * > (var_img_sptr.ptr());
 
-  vpgl_generic_camera<double>* gcam = reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr());
+  auto* gcam = reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr());
   std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(gcam);
   if (vis_order.empty())
   {
     std::cout<<" None of the blocks are visible from this viewpoint"<<std::endl;
     return true;
   }
-  vpgl_perspective_camera<double>* pcam = reinterpret_cast<vpgl_perspective_camera<double>*>(perspective_cam.ptr());
+  auto* pcam = reinterpret_cast<vpgl_perspective_camera<double>*>(perspective_cam.ptr());
 
   //: compute R_s --> the rotation that rotates v to v_s for each pixel
   vnl_matrix_fixed<double, 3, 3> R(0.0);
-  vbl_array_2d<vnl_matrix_fixed<double, 3, 3> >* Rss = new vbl_array_2d<vnl_matrix_fixed<double, 3, 3> >(depth_img->ni(), depth_img->nj(), R);
+  auto* Rss = new vbl_array_2d<vnl_matrix_fixed<double, 3, 3> >(depth_img->ni(), depth_img->nj(), R);
   vgl_vector_3d<double> v = pcam->principal_axis();
   for (unsigned i = 0; i < depth_img->ni(); i++)
     for (unsigned j = 0; j < depth_img->nj(); j++) {
@@ -141,7 +141,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process(bprb_func_process& pro)
     boxm2_data_base *  pts = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_POINT>::prefix(identifier),buf_len/alphaTypeSize*pointTypeSize,false);
     boxm2_data_base *  sums = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_FLOAT16>::prefix(identifier),buf_len/alphaTypeSize*auxTypeSize,false);
 
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
     pass.init_data(alph, pts, sums, depth_img, var_img, pcam, gcam, Rss, &vis_img, bid, data_index);
@@ -222,7 +222,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
   ifs.close();
 
 
-  vpgl_generic_camera<double>* gcam = reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr());
+  auto* gcam = reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr());
   std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(gcam);
   if (vis_order.empty())
   {
@@ -271,7 +271,7 @@ bool boxm2_cpp_cast_3d_point_hypothesis_process2(bprb_func_process& pro)
     //: now retrieve it with get_data_base_new method so that even if it exists on disc, a fresh one will be created
     boxm2_data_base *  covs = cache->get_data_base_new(scene,*id,boxm2_data_traits<BOXM2_COVARIANCE>::prefix(identifier),buf_len/alphaTypeSize*covTypeSize,false);
 
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
     pass2.init_data(covs, aux, cov_C, cov_v, bid, data_index);
 

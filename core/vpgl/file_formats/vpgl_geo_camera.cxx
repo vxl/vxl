@@ -41,7 +41,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
                                       vpgl_geo_camera*& camera)
 {
   // check if the image is tiff
-  vil_tiff_image* geotiff_tiff = dynamic_cast<vil_tiff_image*> (geotiff_img.ptr());
+  auto* geotiff_tiff = dynamic_cast<vil_tiff_image*> (geotiff_img.ptr());
   if (!geotiff_tiff) {
       std::cerr << "vpgl_geo_camera::init_geo_camera : Error casting vil_image_resource to a tiff image.\n";
       return false;

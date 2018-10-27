@@ -522,7 +522,7 @@ bool vimt3d_vil3d_v3i_image::get_property(char const *key, void * value) const
   {
     vimt3d_transform_3d i2w=header_.w2i.inverse();
 
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float) (i2w(1,0,0)-i2w(0,0,0)).length();
     array[1] = (float) (i2w(0,1,0)-i2w(0,0,0)).length();
     array[2] = (float) (i2w(0,0,1)-i2w(0,0,0)).length();
@@ -532,7 +532,7 @@ bool vimt3d_vil3d_v3i_image::get_property(char const *key, void * value) const
   if (std::strcmp(vil3d_property_origin_offset, key)==0)
   {
     vgl_point_3d<double> origin = header_.w2i.origin();
-    float* array =  static_cast<float*>(value);
+    auto* array =  static_cast<float*>(value);
     array[0] = (float)(origin.x());
     array[1] = (float)(origin.y());
     array[2] = (float)(origin.z());

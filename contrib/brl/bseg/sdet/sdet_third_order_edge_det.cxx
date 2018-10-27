@@ -684,8 +684,8 @@ bool sdet_third_order_edge_det::save_edg_ascii(const std::string& filename, unsi
     double x = edgel.x();
     double y = edgel.y();
 
-    unsigned ix = (unsigned)x;
-    unsigned iy = (unsigned)y;
+    auto ix = (unsigned)x;
+    auto iy = (unsigned)y;
     double idir = edgel.get_theta();
     double iconf = edgel.get_grad();
     double dir = idir, conf = iconf, uncer = 0.0;

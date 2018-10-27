@@ -44,7 +44,7 @@ bmsh3d_textured_mesh_mc::bmsh3d_textured_mesh_mc(bmsh3d_mesh_mc* mesh): bmsh3d_m
   std::map<int, bmsh3d_face* >::iterator face_it;
   for (face_it = fmap.begin(); face_it != fmap.end(); face_it++) {
 
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
+    auto* face = (bmsh3d_face_mc*) face_it->second;
     face->_sort_HEs_circular();
     face->_ifs_clear_vertices ();
 
@@ -58,7 +58,7 @@ bmsh3d_textured_mesh_mc::bmsh3d_textured_mesh_mc(bmsh3d_mesh_mc* mesh): bmsh3d_m
 #ifdef DEBUG
       std::cout << edge->id() << std::endl;
 #endif
-      bmsh3d_halfedge* new_he = new bmsh3d_halfedge(this->edgemap(edge->id()), f);
+      auto* new_he = new bmsh3d_halfedge(this->edgemap(edge->id()), f);
       f->connect_E_to_end(new_he->edge());
       HE = HE->next();
     }while (HE != he);
@@ -67,7 +67,7 @@ bmsh3d_textured_mesh_mc::bmsh3d_textured_mesh_mc(bmsh3d_mesh_mc* mesh): bmsh3d_m
     // clone the inner faces
     if (face->size() > 0) {
       std::map<int, bmsh3d_halfedge*> inner_faces = face->get_mc_halfedges();
-      std::map<int, bmsh3d_halfedge*>::iterator it = inner_faces.begin();
+      auto it = inner_faces.begin();
       while (it != inner_faces.end()) {
         std::vector<bmsh3d_edge*> incident_edges;
         face->get_mc_incident_edges(it->second, incident_edges);
@@ -82,14 +82,14 @@ bmsh3d_textured_mesh_mc::bmsh3d_textured_mesh_mc(bmsh3d_mesh_mc* mesh): bmsh3d_m
 
 bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
 {
-  bmsh3d_textured_mesh_mc* mesh = new bmsh3d_textured_mesh_mc();
+  auto* mesh = new bmsh3d_textured_mesh_mc();
 
   // deep copy the vertices
   std::map<int, bmsh3d_vertex* > vertices = this->vertexmap_;
-  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  auto v_it = vertices.begin();
   while (v_it != vertices.end()) {
-    bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
-    bmsh3d_vertex* v = (bmsh3d_vertex*) mesh->_new_vertex();
+    auto* vertex = (bmsh3d_vertex*) v_it->second;
+    auto* v = (bmsh3d_vertex*) mesh->_new_vertex();
     v->set_pt(vertex->get_pt());
     mesh->_add_vertex(v);
     v_it++;
@@ -97,14 +97,14 @@ bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
 
  // deep copy the edgemap
   std::map<int, bmsh3d_edge* > edgemap = this->edgemap_;
-  std::map<int, bmsh3d_edge* >::iterator edge_it = edgemap.begin();
+  auto edge_it = edgemap.begin();
   while (edge_it != edgemap.end()) {
     // create new edges
     bmsh3d_edge* edge = edge_it->second;
 #ifdef DEBUG
     std::cout << "old edge id=" << edge->id() << std::endl;
 #endif
-    bmsh3d_edge* new_edge = // mesh->_new_edge
+    auto* new_edge = // mesh->_new_edge
       new bmsh3d_edge((bmsh3d_vertex*) mesh->vertexmap(edge->sV()->id()),
                       (bmsh3d_vertex*) mesh->vertexmap(edge->eV()->id()),
                       edge_it->first);
@@ -120,9 +120,9 @@ bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
 
   // deep copy the faces
   std::map<int, bmsh3d_face* > fmap = this->facemap_;
-  std::map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
+  auto face_it = fmap.begin();
   while (face_it != fmap.end()) {
-    bmsh3d_textured_face_mc* face = (bmsh3d_textured_face_mc*) face_it->second;
+    auto* face = (bmsh3d_textured_face_mc*) face_it->second;
 #ifdef DEBUG
     std::cout << "old face id=" << face->id() << std::endl;
 #endif
@@ -142,7 +142,7 @@ bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
 #ifdef DEBUG
       std::cout << edge->id() << std::endl;
 #endif
-      bmsh3d_halfedge* new_he = new bmsh3d_halfedge(mesh->edgemap(edge->id()), f);
+      auto* new_he = new bmsh3d_halfedge(mesh->edgemap(edge->id()), f);
       f->connect_E_to_end(new_he->edge());
       HE = HE->next();
     }while (HE != he);
@@ -151,7 +151,7 @@ bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
     // clone the inner faces
     if (face->size() > 0) {
       std::map<int, bmsh3d_halfedge*> inner_faces = face->get_mc_halfedges();
-      std::map<int, bmsh3d_halfedge*>::iterator it = inner_faces.begin();
+      auto it = inner_faces.begin();
       while (it != inner_faces.end()) {
         std::vector<bmsh3d_edge*> incident_edges;
         face->get_mc_incident_edges(it->second, incident_edges);

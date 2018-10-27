@@ -24,7 +24,7 @@ indent_data_type* indent_data(std::ostream& os)
   // which may be mercifully brief
   static maps2i_type indent_data_map;
 
-  maps2i_type::iterator entry = indent_data_map.find(&os);
+  auto entry = indent_data_map.find(&os);
   if (entry==indent_data_map.end())
   {
     // Create a new entry

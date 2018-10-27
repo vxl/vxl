@@ -42,8 +42,8 @@ float render_expected_image( boxm2_scene_sptr & scene,
     }
 
     // create all buffers
-    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ);
@@ -156,8 +156,8 @@ float render_expected_image2( boxm2_scene_sptr & scene,
     }
 
     // create all buffers
-    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -270,8 +270,8 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -286,7 +286,7 @@ float render_cone_expected_image( boxm2_scene_sptr & scene,
         //calculate ray and ray angles at pixel ij
         vgl_ray_3d<double> ray_ij; //= cam->ray(i,j);
         double cone_half_angle, solid_angle;
-        vpgl_perspective_camera<double>* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
+        auto* pcam = (vpgl_perspective_camera<double>*) cam.ptr();
         vsph_camera_bounds::pixel_solid_angle(*pcam, i, j, ray_ij, cone_half_angle, solid_angle);
         ray_directions[4*cnt+3] = (cl_float) cone_half_angle;
         cnt++;
@@ -409,8 +409,8 @@ float render_expected_shadow_map(boxm2_scene_sptr & scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins,"ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions,"ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -515,8 +515,8 @@ float render_expected_phongs_image( boxm2_scene_sptr & scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins   ,  cl_ni*cl_nj * sizeof(cl_float4), "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -618,8 +618,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4),ray_origins   , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4),ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -641,8 +641,8 @@ float render_expected_image_naa(  boxm2_scene_sptr & scene,
                                  std::sin(sun_el));
 
    // buffers for holding radiance scales and offsets per normal
-   float* radiance_scales_buff = new float[num_normals];
-   float* radiance_offsets_buff = new float[num_normals];
+   auto* radiance_scales_buff = new float[num_normals];
+   auto* radiance_offsets_buff = new float[num_normals];
 
    // compute offsets and scale for linear radiance model
    for (unsigned n=0; n < num_normals; ++n) {
@@ -778,8 +778,8 @@ float render_expected_albedo_normal( boxm2_scene_sptr & scene,
     }
 
     //set generic cam and get visible block order
-    cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
     bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4),ray_origins   , "ray_origins buffer");
     bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj * sizeof(cl_float4),ray_directions, "ray_directions buffer");
     boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);

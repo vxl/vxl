@@ -98,14 +98,14 @@ bool boxm2_multi_update_process(bprb_func_process& pro)
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string               ident        = pro.get_input<std::string>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
-  float                    mog_var      = pro.get_input<float>(i++);
+  auto                    mog_var      = pro.get_input<float>(i++);
   bool                     update_app   = pro.get_input<bool>(i++);
-  float                    nearfactor   = pro.get_input<float>(i++);
-  float                    farfactor    = pro.get_input<float>(i++);
+  auto                    nearfactor   = pro.get_input<float>(i++);
+  auto                    farfactor    = pro.get_input<float>(i++);
   vul_timer t; t.mark();
 
   vil_image_view_base_sptr inImg = boxm2_util::prepare_input_image(img, true);
-  vil_image_view<float>* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr());
+  auto* inImgPtr = dynamic_cast<vil_image_view<float>* >(inImg.ptr());
 
   float gpu_time = boxm2_multi_update::update(*(multi_cache.ptr()), *inImgPtr, cam);
   float total = t.all();

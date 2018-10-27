@@ -59,7 +59,7 @@ bool boxm_remove_level0_process(bprb_func_process& pro)
     return false;
   }
 
-  if (boxm_scene<boct_tree<short, float> > *scene_in = dynamic_cast<boxm_scene<boct_tree<short, float> >* > (scene_base.as_pointer()))
+  if (auto *scene_in = dynamic_cast<boxm_scene<boct_tree<short, float> >* > (scene_base.as_pointer()))
   {
     //clone the input scene
     boxm_scene<boct_tree<short, float> > *scene_out = new boxm_scene<boct_tree<short, float> >(scene_in->lvcs(), scene_in->origin(), scene_in->block_dim(),

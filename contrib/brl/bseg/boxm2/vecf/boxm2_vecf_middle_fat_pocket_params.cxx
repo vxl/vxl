@@ -5,7 +5,7 @@ std::ostream&  operator << (std::ostream& s, boxm2_vecf_middle_fat_pocket_params
     return s;
   }
   // bad practice --- but easy
-  boxm2_vecf_middle_fat_pocket_params & pr = const_cast<boxm2_vecf_middle_fat_pocket_params &>(middle_fat_pr);
+  auto & pr = const_cast<boxm2_vecf_middle_fat_pocket_params &>(middle_fat_pr);
   s << "origin: " << pr.origin_.x() << ' ' << pr.origin_.y() << ' ' << pr.origin_.z() << '\n';
   s << "normal: " << pr.normal_.x() << ' ' << pr.normal_.y() << ' ' << pr.normal_.z() << '\n';
   s << "principal_eigenvector: " << pr.principal_eigenvector_.x() << ' '

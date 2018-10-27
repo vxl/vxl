@@ -74,7 +74,7 @@ bool boxm_init_scene_process(bprb_func_process& pro)
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene->multi_bin()) {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_init_scene<BOXM_APM_MOG_GREY>(*s);
     }
   }
@@ -85,7 +85,7 @@ bool boxm_init_scene_process(bprb_func_process& pro)
     }
     else {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_init_scene<BOXM_APM_SIMPLE_GREY>(*s);
     }
   }
@@ -96,7 +96,7 @@ bool boxm_init_scene_process(bprb_func_process& pro)
     }
     else {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
-      boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+      auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
       boxm_init_scene<BOXM_APM_MOB_GREY >(*s);
     }
   }

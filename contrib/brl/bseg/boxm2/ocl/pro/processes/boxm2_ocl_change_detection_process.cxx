@@ -98,8 +98,8 @@ bool boxm2_ocl_change_detection_process(bprb_func_process& pro)
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img = new vil_image_view<float>(ni, nj);
-  vil_image_view<vxl_byte>* rgb_change_img = new vil_image_view<vxl_byte>(ni,nj,4);
+  auto*    change_img = new vil_image_view<float>(ni, nj);
+  auto* rgb_change_img = new vil_image_view<vxl_byte>(ni,nj,4);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

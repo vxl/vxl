@@ -35,7 +35,7 @@ MAIN( test_fit_gaussian)
     std::vector<float> weights;
     for (unsigned int n=0; n<n_samples; ++n) {
       float sample = mean + sigma*(float)rand_gen.normal();
-      float weight = (float)rand_gen.drand32(0.0, 1.0);
+      auto weight = (float)rand_gen.drand32(0.0, 1.0);
       weights.push_back(weight);
       samples.push_back(sample);
     }
@@ -65,7 +65,7 @@ MAIN( test_fit_gaussian)
       for (unsigned int d=0; d<3; ++d) {
         sample[d] = mean[d] + sigma*(float)rand_gen.normal();
       }
-      float weight = (float)rand_gen.drand32(0.0, 1.0);
+      auto weight = (float)rand_gen.drand32(0.0, 1.0);
       weights.push_back(weight);
       samples.push_back(sample);
     }
@@ -97,7 +97,7 @@ MAIN( test_fit_gaussian)
       for (unsigned int d=0; d<3; ++d) {
         sample[d] = mean[d] + sigmas[d]*(float)rand_gen.normal();
       }
-      float weight = (float)rand_gen.drand32(0.0, 1.0);
+      auto weight = (float)rand_gen.drand32(0.0, 1.0);
       weights.push_back(weight);
       samples.push_back(sample);
     }
@@ -131,7 +131,7 @@ MAIN( test_fit_gaussian)
         unit_rand[d] = (float)rand_gen.normal();
       }
       sample = mean + A * unit_rand;
-      float weight = (float)rand_gen.drand32(0.0, 1.0);
+      auto weight = (float)rand_gen.drand32(0.0, 1.0);
       weights.push_back(weight);
       samples.push_back(sample);
     }

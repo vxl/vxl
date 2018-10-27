@@ -88,10 +88,10 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
 
   // true positive, true negative, false positive, false negative
   constexpr unsigned int numPoints = 10000;
-  bbas_1d_array_float * tp=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * tn=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fp=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fn=new bbas_1d_array_float(numPoints);
+  auto * tp=new bbas_1d_array_float(numPoints);
+  auto * tn=new bbas_1d_array_float(numPoints);
+  auto * fp=new bbas_1d_array_float(numPoints);
+  auto * fn=new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;
 
   // check bounds to make sure they match
@@ -109,7 +109,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   // convert detection map to [0,1] float
-  if (vil_image_view<unsigned char> * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr()))
+  if (auto * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr()))
   {
     detection_map =new vil_image_view<float>(detection_map_uchar->ni(),detection_map_uchar->nj());
     vil_convert_stretch_range_limited<unsigned char>(*detection_map_uchar,*detection_map,0,255,0.0f,1.0f);
@@ -126,13 +126,13 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   }
 
   // cast to usable image views
-  vil_image_view<unsigned char> * ground_truth_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
+  auto * ground_truth_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
   if ( !ground_truth_map )
   {
     std::cout<<"vil_pixelwise_roc_process:: gt map is not an unsigned char map"<<std::endl;
     return false;
   }
-  vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
+  auto * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map)
   {
     std::cout<<"vil_pixelwise_roc_process:: mask map is not an unsigned char map"<<std::endl;
@@ -213,8 +213,8 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
     }
   }
 
-  bbas_1d_array_float * tpr=new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * fpr=new bbas_1d_array_float(numPoints);
+  auto * tpr=new bbas_1d_array_float(numPoints);
+  auto * fpr=new bbas_1d_array_float(numPoints);
 
   for (unsigned int pnt=0; pnt<numPoints; ++pnt) {
     tpr->data_array[pnt]= tp->data_array[pnt] / (tp->data_array[pnt] + fn->data_array[pnt]);
@@ -230,7 +230,7 @@ bool vil_pixelwise_roc_process(bprb_func_process& pro)
   //  }
   //}
 
-  vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>(detection_map->ni(), detection_map->nj(), 3);
+  auto* temp = new vil_image_view<vxl_byte>(detection_map->ni(), detection_map->nj(), 3);
   temp->fill(0);
 
   //for (unsigned k = 0; k < totPix; ++k) {
@@ -355,7 +355,7 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
 
   // convert detection map to [0,1] float
   vil_image_view<float> * detection_map;
-  if (vil_image_view<unsigned char> * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr()))
+  if (auto * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr()))
   {
     detection_map =new vil_image_view<float>(detection_map_uchar->ni(),detection_map_uchar->nj());
     vil_convert_stretch_range_limited<unsigned char>(*detection_map_uchar,*detection_map,0,255,0.0f,1.0f);
@@ -372,19 +372,19 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   }
 
   // cast to usable image views
-  vil_image_view<unsigned char> * gt_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
+  auto * gt_map = dynamic_cast<vil_image_view<unsigned char> *>(ground_truth_map_sptr.ptr());
   if ( !gt_map )
   {
     std::cerr << pro.name() << ": gt map is not an unsigned char map" << std::endl;
     return false;
   }
-  vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
+  auto * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map)
   {
     std::cerr << pro.name() << ": mask map is not an unsigned char map" << std::endl;
     return false;
   }
-  vil_image_view<unsigned char> * neg_gt_map = dynamic_cast<vil_image_view<unsigned char>*>(neg_gt_map_sptr.ptr());
+  auto * neg_gt_map = dynamic_cast<vil_image_view<unsigned char>*>(neg_gt_map_sptr.ptr());
   if (!neg_gt_map) {
     std::cerr << pro.name() << ": negative ground truth map is not an unsigned char map" << std::endl;
     return false;
@@ -438,12 +438,12 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
   const unsigned n_thres = thresholds.size();
   std::cout << "Start ROC count using " << n_thres << " thresholds, ranging from " << min_val << " to " << max_val << "..." << std::endl;
 
-  bbas_1d_array_float* tp = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tn = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fp = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fn = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* tpr = new bbas_1d_array_float(n_thres);
-  bbas_1d_array_float* fpr = new bbas_1d_array_float(n_thres);
+  auto* tp = new bbas_1d_array_float(n_thres);
+  auto* tn = new bbas_1d_array_float(n_thres);
+  auto* fp = new bbas_1d_array_float(n_thres);
+  auto* fn = new bbas_1d_array_float(n_thres);
+  auto* tpr = new bbas_1d_array_float(n_thres);
+  auto* fpr = new bbas_1d_array_float(n_thres);
 
   // initialize
   for (unsigned i = 0; i < n_thres; i++) {
@@ -546,7 +546,7 @@ bool vil_pixelwise_roc_process2(bprb_func_process& pro)
     fpr->data_array[tidx] = fp->data_array[tidx] / (fp->data_array[tidx] + tn->data_array[tidx]);
   }
 
-  bbas_1d_array_float * thres_out=new bbas_1d_array_float(n_thres);
+  auto * thres_out=new bbas_1d_array_float(n_thres);
   for (unsigned k = 0; k < n_thres; k++) {
     thres_out->data_array[k] = thresholds[k];
   }

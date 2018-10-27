@@ -41,7 +41,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
   vil_image_view_base_sptr img_1 = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr img_2 = pro.get_input<vil_image_view_base_sptr>(i++);
   bool comp = pro.get_input<bool>(2);
-  float scale = pro.get_input<float>(3);
+  auto scale = pro.get_input<float>(3);
 
   // convert input images to float
   vil_image_view<float> fimage1 = *vil_convert_cast(float(), img_1);
@@ -62,7 +62,7 @@ bool vil_two_planes_composite_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<float> *out_img=new vil_image_view<float>(img_1->ni(),img_1->nj(),3);
+  auto *out_img=new vil_image_view<float>(img_1->ni(),img_1->nj(),3);
   unsigned nplanes1 = img_1->nplanes(), nplanes2 = img_2->nplanes();
   if ((nplanes1!=1 && nplanes1!=3) ||
       (nplanes2!=1 && nplanes2!=3))

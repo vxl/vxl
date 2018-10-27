@@ -13,7 +13,7 @@ bool bvxm_expected_edge_functor::apply(const vpgl_camera_double_sptr& camera,
 
   // check the camera type
   if (camera->type_name() == "vpgl_perspective_camera") {
-    vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+    auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     if (!cam)
       return false;
 

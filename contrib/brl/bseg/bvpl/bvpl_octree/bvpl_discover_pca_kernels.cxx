@@ -30,7 +30,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
   //Parse neighborhood bounding box - units are number of voxels
   bxml_element nbbox_query("neighborhood");
   bxml_data_sptr nbbox_data = bxml_find_by_name(root, nbbox_query);
-  bxml_element* nbbox_elm = dynamic_cast<bxml_element*>(nbbox_data.ptr());
+  auto* nbbox_elm = dynamic_cast<bxml_element*>(nbbox_data.ptr());
   int min_x=0, min_y=0, min_z=0, max_x=0, max_y=0, max_z =0;
   nbbox_elm->get_attribute("min_x", min_x);
   nbbox_elm->get_attribute("min_y", min_y);
@@ -45,21 +45,21 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
   //Parse Number of samples
   bxml_element nsamples_query("samples");
   bxml_data_sptr nsamples_data = bxml_find_by_name(root, nsamples_query);
-  bxml_element* nsamples_elm = dynamic_cast<bxml_element*>(nsamples_data.ptr());
+  auto* nsamples_elm = dynamic_cast<bxml_element*>(nsamples_data.ptr());
   nsamples_elm->get_attribute("nsamples", nsamples_);
   std::cout << "Number of samples: " << nsamples_ << std::endl;
 
   //Parse dimension
   bxml_element dim_query("dimension");
   bxml_data_sptr dim_data = bxml_find_by_name(root, dim_query);
-  bxml_element* dim_elm = dynamic_cast<bxml_element*>(dim_data.ptr());
+  auto* dim_elm = dynamic_cast<bxml_element*>(dim_data.ptr());
   dim_elm->get_attribute("feature_dim", feature_dim_);
   std::cout << "Feature dimension: " << feature_dim_ << std::endl;
 
   //Parse paths and set matrices
   bxml_element paths_query("paths");
   bxml_data_sptr paths_data = bxml_find_by_name(root, paths_query);
-  bxml_element* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
+  auto* path_elm = dynamic_cast<bxml_element*>(paths_data.ptr());
 
   int valid = 0;
   std::string ifs_path;
@@ -111,7 +111,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
   data_scene_base_->load_scene(scene_path_, parser);
 
   //cast scene
-  boxm_scene<boct_tree<short, float > > *scene= new boxm_scene<boct_tree<short, float > >();
+  auto *scene= new boxm_scene<boct_tree<short, float > >();
   if (data_scene_base_->appearence_model() == BOXM_FLOAT){
     scene->load_scene(parser);
     data_scene_base_ = scene;
@@ -134,7 +134,7 @@ bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
   //Parse dimension
   bxml_element cell_length_query("finest_cell_length");
   bxml_data_sptr cell_length_data = bxml_find_by_name(root, cell_length_query);
-  bxml_element* cell_length_elm = dynamic_cast<bxml_element*>(cell_length_data.ptr());
+  auto* cell_length_elm = dynamic_cast<bxml_element*>(cell_length_data.ptr());
   bool has_length = cell_length_elm->get_attribute("length", finest_cell_length_);
   if (!has_length || finest_cell_length_ < 0.0){
      std::cout << "Error: Finest cell length read from file: " << finest_cell_length_ << " has length " << has_length << std::endl;
@@ -228,7 +228,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_scatter_matrix( boxm_scene
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
+    auto tree_nsamples = (unsigned long)((float)tree_ncells/scene_ncells*nsamples_);
 #ifdef DEBUG
     std::cout <<"Tree nsamples is: " << tree_nsamples << '\n'
              <<" nsamples is: " << nsamples_ <<std::endl;
@@ -337,7 +337,7 @@ vnl_matrix<double> bvpl_discover_pca_kernels::compute_deviation_matrix( boxm_sce
     //2. Sample cells from this tree. The number of samples from this tree depends on the portion of scene cells that live in this tree
     std::vector<boct_tree_cell<short, float> *> leaf_cells = tree->leaf_cells();
     int tree_ncells = leaf_cells.size();
-    unsigned long tree_nsamples = (unsigned long)(tree_ncells*nsamples_/scene_ncells); // possible overflow ...
+    auto tree_nsamples = (unsigned long)(tree_ncells*nsamples_/scene_ncells); // possible overflow ...
 
     for (unsigned int i=0; i<tree_nsamples; ++i)
     {
@@ -489,7 +489,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
   proj_error.fill(0.0);
 
   //cast scene
-  boxm_scene<boct_tree<short, float > > *scene= dynamic_cast<boxm_scene<boct_tree<short, float > > *> (data_scene_base_.as_pointer());
+  auto *scene= dynamic_cast<boxm_scene<boct_tree<short, float > > *> (data_scene_base_.as_pointer());
 
   compute_mean_feature(scene);
 
@@ -579,8 +579,8 @@ void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error
   typedef boct_tree_cell<short,float> float_cell_type;
 
   //cast the scenes
-  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
-  boxm_scene<float_tree_type> * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
+  auto* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
+  auto * error_scene = dynamic_cast<boxm_scene<float_tree_type>* > (error_scene_base.as_pointer());
 
   if (!(data_scene &&error_scene)){
     std::cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";
@@ -682,7 +682,7 @@ void bvpl_discover_pca_kernels::compute_testing_error_thread_safe(boxm_scene<boc
   typedef boct_tree_cell<short,float> float_cell_type;
 
   //cast the scenes
-  boxm_scene<float_tree_type>* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
+  auto* data_scene = dynamic_cast<boxm_scene<float_tree_type>* > (data_scene_base_.as_pointer());
 
   if (!(data_scene &&error_scene)){
     std::cerr << "Error in bvpl_discover_pca_kernels::compute_testing_error: Faild to cast scene\n";

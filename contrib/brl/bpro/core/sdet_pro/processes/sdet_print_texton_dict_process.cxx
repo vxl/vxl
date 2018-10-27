@@ -33,7 +33,7 @@ bool sdet_print_texton_dict_process(bprb_func_process& pro)
   // get inputs
   sdet_texture_classifier_sptr tc_ptr =
     pro.get_input<sdet_texture_classifier_sptr>(0);
-  sdet_texture_classifier_params* tcp =
+  auto* tcp =
     static_cast<sdet_texture_classifier_params*>(tc_ptr.ptr());
   sdet_texture_classifier tc(*tcp);
 

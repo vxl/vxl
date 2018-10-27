@@ -365,8 +365,8 @@ convert( vpgl_rational_camera<double> const& rat_cam,
     rat_cam.scl_off(vpgl_rational_camera<double>::Y_INDX);
   vpgl_scale_offset<double> soz =
     rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
-  unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
-  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows
+  auto ni = static_cast<unsigned>(2*sou.scale());//# image columns
+  auto nj = static_cast<unsigned>(2*sov.scale());//# image rows
   norm_trans.set_identity();
   norm_trans.set(0,0,1/sox.scale()); norm_trans.set(1,1,1/soy.scale());
   norm_trans.set(2,2,1/soz.scale());
@@ -403,7 +403,7 @@ convert( vpgl_rational_camera<double> const& rat_cam,
   //Normalize world and image points to the range [-1,1]
   std::vector<vgl_point_3d<double> > norm_world_pts;
   std::vector<vgl_point_2d<double> > image_pts, norm_image_pts;
-  unsigned N = static_cast<unsigned int>(world_pts.size());
+  auto N = static_cast<unsigned int>(world_pts.size());
   for (unsigned i = 0; i<N; ++i)
   {
     vgl_point_3d<double> wp = world_pts[i];
@@ -532,8 +532,8 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
   vpgl_scale_offset<double> soz =
     rat_cam.scl_off(vpgl_rational_camera<double>::Z_INDX);
 #endif
-  unsigned ni = static_cast<unsigned>(2*sou.scale());//# image columns
-  unsigned nj = static_cast<unsigned>(2*sov.scale());//# image rows
+  auto ni = static_cast<unsigned>(2*sou.scale());//# image columns
+  auto nj = static_cast<unsigned>(2*sov.scale());//# image rows
 
   vgl_point_3d<double> minp = approximation_volume.min_point();
   vgl_point_3d<double> maxp = approximation_volume.max_point();
@@ -565,7 +565,7 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
   //Normalize world and image points to the range [-1,1]
   std::vector<vgl_point_3d<double> > norm_world_pts;
   std::vector<vgl_point_2d<double> > image_pts, norm_image_pts;
-  unsigned N = static_cast<unsigned int>(world_pts.size());
+  auto N = static_cast<unsigned int>(world_pts.size());
   for (unsigned i = 0; i<N; ++i)
   {
     vgl_point_3d<double> wp = world_pts[i];
@@ -648,7 +648,7 @@ convert_local( vpgl_rational_camera<double> const& rat_cam,
 static bool interp_ray(std::vector<vgl_ray_3d<double> > const& ray_nbrs,
                        vgl_ray_3d<double> & intrp_ray)
 {
-  unsigned nrays = static_cast<unsigned int>(ray_nbrs.size());
+  auto nrays = static_cast<unsigned int>(ray_nbrs.size());
   if (nrays!=4) return false;
   vgl_ray_3d<double> r0 = ray_nbrs[0], r1 = ray_nbrs[1];
   vgl_ray_3d<double> r2 = ray_nbrs[2], r3 = ray_nbrs[3];
@@ -721,7 +721,7 @@ upsample_rays(std::vector<vgl_ray_3d<double> > const& ray_nbrs,
               vgl_ray_3d<double> const& ray,
               std::vector<vgl_ray_3d<double> >& interp_rays)
 {
-  unsigned nrays = static_cast<unsigned int>(ray_nbrs.size());
+  auto nrays = static_cast<unsigned int>(ray_nbrs.size());
   if (nrays!=4) return false;
   vgl_ray_3d<double> r00 = ray_nbrs[0],
                      r01 = ray_nbrs[1];
@@ -1327,20 +1327,20 @@ bool vpgl_generic_camera_convert::
 convert( vpgl_camera_double_sptr const& camera, int ni, int nj,
          vpgl_generic_camera<double> & gen_cam, unsigned level)
 {
-  if (vpgl_local_rational_camera<double>* cam =
+  if (auto* cam =
       dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr()))
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
-  if (vpgl_perspective_camera<double>* cam =
+  if (auto* cam =
       dynamic_cast<vpgl_perspective_camera<double>*>(camera.ptr())) {
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }
 
-  if (vpgl_affine_camera<double>* cam =
+  if (auto* cam =
       dynamic_cast<vpgl_affine_camera<double>*>(camera.ptr()))
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
 
-  if (vpgl_proj_camera<double>* cam =
+  if (auto* cam =
       dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr())) {
     return vpgl_generic_camera_convert::convert(*cam, ni, nj, gen_cam, level);
   }

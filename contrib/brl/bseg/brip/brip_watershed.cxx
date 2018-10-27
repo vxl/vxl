@@ -275,7 +275,7 @@ bool brip_watershed::add_adjacency(const unsigned int reg,
   }
   else//make a new adjacent region array
   {
-    std::vector<unsigned int>* adj_array = new std::vector<unsigned int>;
+    auto* adj_array = new std::vector<unsigned int>;
     adj_array->push_back(adj_reg);
     region_adjacency_[reg]=adj_array;
   }

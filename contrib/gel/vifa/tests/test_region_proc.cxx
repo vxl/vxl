@@ -50,7 +50,7 @@ static void test_region_proc(int argc, char* argv[])
 
     // Dump the intensity regions
     std::cout << region_list.size() << " intensity faces found:\n";
-    iface_iterator  ifi = region_list.begin();
+    auto  ifi = region_list.begin();
     for (int i=1; ifi != region_list.end(); ifi++, i++)
     {
       vtol_intensity_face_sptr  face = *ifi;
@@ -64,7 +64,7 @@ static void test_region_proc(int argc, char* argv[])
 #endif
       one_chain_list ocl; face->one_chains(ocl);
 
-      one_chain_list::iterator  ocli = ocl.begin();
+      auto  ocli = ocl.begin();
       double perim1 = 0.0;
       double perim2 = 0.0;
       for (int j=1; ocli != ocl.end(); ++ocli, ++j)

@@ -123,7 +123,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
     bocl_device_sptr device= pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float thresh  =pro.get_input<float>(i++);
+    auto thresh  =pro.get_input<float>(i++);
 
     std::string identifier=device->device_identifier();
     // create a command queue.
@@ -141,7 +141,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
     if (kernels.find(tree_identifier)==kernels.end())
     {
         std::cout<<"===========Compiling kernels==========="<<std::endl;
-        bocl_kernel * tree_kernel=new bocl_kernel();
+        auto * tree_kernel=new bocl_kernel();
         compile_merge_tree_kernel(device,tree_kernel);
         kernels[tree_identifier]=tree_kernel;
     }
@@ -155,7 +155,7 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
         std::string data_identifier= identifier+options;
         if (kernels.find(data_identifier)==kernels.end())
         {
-            bocl_kernel * data_kernel=new bocl_kernel();
+            auto * data_kernel=new bocl_kernel();
             compile_merge_data_kernel(device,data_kernel,options);
             kernels[data_identifier]=data_kernel;
         }

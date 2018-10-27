@@ -99,7 +99,7 @@ boxm2_convert_nvm::boxm2_convert_nvm(std::string nvm_file, std::string img_dir,b
         if ( !bad_cams_.count(i) ) {
             std::string path = img_dir + "/" + names_[i]; // was: +vul_file::strip_extension(names_[i])+".png";
             // was: imgstream.seek_frame(i); std::string path = imgstream.current_path();
-            CamType* cam = new CamType(cams_[i]);
+            auto* cam = new CamType(cams_[i]);
             final_cams_[path] = cam;
 #ifdef DEBUG
             std::cout<<"Final cam: "<<path<<std::endl;

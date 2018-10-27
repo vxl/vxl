@@ -42,13 +42,13 @@ bool boxm_explore_cells_at_level_process(bprb_func_process& pro)
 
   //get inputs
   boxm_scene_base_sptr scene_in_base = pro.get_input<boxm_scene_base_sptr>(0);
-  unsigned level = pro.get_input<unsigned>(1);
+  auto level = pro.get_input<unsigned>(1);
 
   if (scene_in_base->appearence_model() == BOXM_FLOAT)
   {
     typedef boct_tree<short, float > type;
 
-    boxm_scene<type>* scene = dynamic_cast<boxm_scene<type>*>(scene_in_base.as_pointer());
+    auto* scene = dynamic_cast<boxm_scene<type>*>(scene_in_base.as_pointer());
 
     if (!scene)
       return false;

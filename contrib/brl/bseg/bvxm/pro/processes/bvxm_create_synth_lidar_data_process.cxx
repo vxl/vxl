@@ -58,7 +58,7 @@ bool gen_lidar_view(int x, int y, int z,
 
   // generate the camera, which is a one to one mapping between
   // lidar image and voxel slabs
-  vpgl_geo_camera* geo_cam = new vpgl_geo_camera();
+  auto* geo_cam = new vpgl_geo_camera();
   geo_cam->set_lvcs(lvcs);
   cam = geo_cam;
   return true;

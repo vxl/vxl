@@ -89,7 +89,7 @@ bool boxm2_transform_model_process(bprb_func_process& pro)
   scene->set_lvcs(lvcs);
 #else
   std::map<boxm2_block_id, boxm2_block_metadata>& blocks = scene->blocks();
-  std::map<boxm2_block_id, boxm2_block_metadata>::iterator bit = blocks.begin();
+  auto bit = blocks.begin();
   for (; bit != blocks.end(); ++bit) {
     vgl_point_3d<double> old_origin = bit->second.local_origin_;
     bit->second.local_origin_ = old_origin + trans_vec;

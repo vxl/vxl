@@ -140,27 +140,27 @@ vgl_box_2d<float> sdet_region::bbox(){
 }
 void sdet_region::increment_neighbors(unsigned delta){
   std::set<unsigned> new_nbrs;
-  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nbr : nbrs_)
+  for(const auto & nbr : nbrs_)
     new_nbrs.insert(nbr+delta);
   nbrs_ = new_nbrs;
 }
 sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
                        unsigned merged_label){
-  vdgl_digital_region* r1_ptr = dynamic_cast<vdgl_digital_region*>(r1.ptr());
-  vdgl_digital_region* r2_ptr = dynamic_cast<vdgl_digital_region*>(r2.ptr());
+  auto* r1_ptr = dynamic_cast<vdgl_digital_region*>(r1.ptr());
+  auto* r2_ptr = dynamic_cast<vdgl_digital_region*>(r2.ptr());
   sdet_region_sptr ret = new sdet_region();
-  vdgl_digital_region* r12_ptr = dynamic_cast<vdgl_digital_region*>(ret.ptr());
+  auto* r12_ptr = dynamic_cast<vdgl_digital_region*>(ret.ptr());
   merge(r1_ptr, r2_ptr, r12_ptr);
   r12_ptr->ComputeIntensityStdev();
   const std::set<unsigned>& nbrs1 = r1->nbrs();
   const std::set<unsigned>& nbrs2 = r2->nbrs();
   unsigned lab1 = r1->label(), lab2 = r2->label();
   // add set union of neigbors to the merged region
-  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nit : nbrs1){
+  for(const auto & nit : nbrs1){
     if(nit != lab1 && nit != lab2)
       ret->add_neighbor(nit);
   }
-  for(std::__1::__tree_const_iterator<unsigned int, std::__1::__tree_node<unsigned int, void *> *, long>::value_type nit : nbrs2){
+  for(const auto & nit : nbrs2){
     if(nit != lab1 && nit != lab2)
       ret->add_neighbor(nit);
   }
@@ -175,7 +175,7 @@ sdet_region_sptr merge(sdet_region_sptr const& r1,sdet_region_sptr const& r2,
 float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
                  sdet_region_sptr const& r2, bsta_histogram<float> const& h2){
    float sim_intensity = hist_intersect(h1, h2);//min probability
-  float n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
+  auto n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
   if(n1 == 0.0f || n2 == 0.0f)
     return std::numeric_limits<float>::max();
   float sim_size = n1/n2;
@@ -190,7 +190,7 @@ float similarity(sdet_region_sptr const& r1, bsta_histogram<float> const& h1,
                  sdet_region_sptr const& r2, bsta_histogram<float> const& h2,
                  float image_area){
   float sim_intensity = hist_intersect(h1, h2);//min probability
-  float n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
+  auto n1 = static_cast<float>(r1->Npix()), n2 = static_cast<float>(r2->Npix());
   if(n1 == 0.0f || n2 == 0.0f)
     return std::numeric_limits<float>::max();
   float sim_size = 1.0f - ((n1 + n2)/image_area);

@@ -58,7 +58,7 @@ namespace boxm2_ocl_render_expected_z_image_process_globals
     options += " -D STEP_CELL=step_cell_render_z(cell_minz*linfo->block_len,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.exp_z,aux_args.exp_z_sqr,aux_args.probsum)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel = new bocl_kernel();
+    auto * ray_trace_kernel = new bocl_kernel();
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -111,8 +111,8 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
 
   boxm2_opencl_cache_sptr opencl_cache= pro.get_input<boxm2_opencl_cache_sptr>(2);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(3);
-  unsigned ni=pro.get_input<unsigned>(4);
-  unsigned nj=pro.get_input<unsigned>(5);
+  auto ni=pro.get_input<unsigned>(4);
+  auto nj=pro.get_input<unsigned>(5);
   bool normalize_z_values = pro.get_input<bool>(6);
 
   std::string identifier=device->device_identifier();
@@ -147,13 +147,13 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   unsigned cl_ni=RoundUp(ni,local_threads[0]);
   unsigned cl_nj=RoundUp(nj,local_threads[1]);
 
-  float* buff = new float[cl_ni*cl_nj];
+  auto* buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) buff[i]=0.0f;
-  float* var_buff = new float[cl_ni*cl_nj];
+  auto* var_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) var_buff[i]=0.0f;
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) vis_buff[i]=1.0f;
-  float* prob_buff = new float[cl_ni*cl_nj];
+  auto* prob_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++) prob_buff[i]=0.0f;
 
   bocl_mem_sptr exp_image = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), buff, "exp z image buffer");
@@ -169,8 +169,8 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   prob_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
   //set generic cam
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -280,8 +280,8 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
   clReleaseCommandQueue(queue);
 
 
-  vil_image_view<float>* z_image = new vil_image_view<float>(ni,nj);
-  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni,nj);
+  auto* z_image = new vil_image_view<float>(ni,nj);
+  auto* mask = new vil_image_view<vxl_byte>(ni,nj);
   vil_image_view<float> vis_vil_image(ni,nj);
 
   float max_z = -vnl_numeric_traits<float>::maxval;
@@ -316,7 +316,7 @@ bool boxm2_ocl_render_expected_z_image_process(bprb_func_process& pro)
     double scale = 255.0 / (max_z - min_z);
     double offset = -scale * min_z;
 
-    vil_image_view<vxl_byte>* z_image_byte = new vil_image_view<vxl_byte>(ni,nj);
+    auto* z_image_byte = new vil_image_view<vxl_byte>(ni,nj);
     for (unsigned int c=0; c<nj; ++c) {
       for (unsigned int r=0; r<ni; ++r) {
         if ((*mask)(r,c)) {

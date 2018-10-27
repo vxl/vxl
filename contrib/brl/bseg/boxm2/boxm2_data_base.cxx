@@ -68,13 +68,13 @@ void boxm2_data_base::set_default_value(std::string data_type, boxm2_block_metad
 
   //initialize the data to the correct value
   if (data_type.find(boxm2_data_traits<BOXM2_ALPHA>::prefix()) != std::string::npos) {
-    const float ALPHA_INIT = float(-std::log(1.0f - data.p_init_) / side_len);
-    float* alphas = (float*) data_buffer_;
+    const auto ALPHA_INIT = float(-std::log(1.0f - data.p_init_) / side_len);
+    auto* alphas = (float*) data_buffer_;
     std::fill(alphas, alphas+num_cells, ALPHA_INIT);
   }
   else if (data_type.find(boxm2_data_traits<BOXM2_GAMMA>::prefix()) != std::string::npos) {
-    const float GAMMA_INIT = float(-std::log(1.0f - data.p_init_) / (side_len*side_len*side_len));
-    float* alphas = (float*) data_buffer_;
+    const auto GAMMA_INIT = float(-std::log(1.0f - data.p_init_) / (side_len*side_len*side_len));
+    auto* alphas = (float*) data_buffer_;
     int buffer_length = (int)(buffer_length_/sizeof(float));
     for (int i=0; i<buffer_length; ++i) alphas[i] = GAMMA_INIT;
   }
@@ -86,17 +86,17 @@ void boxm2_data_base::set_default_value(std::string data_type, boxm2_block_metad
     std::memset(data_buffer_, (vxl_byte) 128, buffer_length_);
   }
   else if ( data_type.find(boxm2_data_traits<BOXM2_FLOAT8>::prefix()) != std::string::npos ) {
-      float* floats = (float*) data_buffer_;
+      auto* floats = (float*) data_buffer_;
       int buffer_length = (int)(buffer_length_/sizeof(float));
       for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
   }
   else if ( data_type.find(boxm2_data_traits<BOXM2_FLOAT16>::prefix()) != std::string::npos ) {
-      float* floats = (float*) data_buffer_;
+      auto* floats = (float*) data_buffer_;
       int buffer_length = (int)(buffer_length_/sizeof(float));
       for (int i=0; i<buffer_length; ++i) floats[i] = 0.0;
   }
   else if (data_type.find(boxm2_data_traits<BOXM2_VIS_SPHERE>::prefix()) != std::string::npos ) {
-        float* floats = (float*) data_buffer_;
+        auto* floats = (float*) data_buffer_;
         int buffer_length = (int)(buffer_length_/sizeof(float));
         for (int i=0; i<buffer_length; ++i) floats[i] = 1.0f;
     }

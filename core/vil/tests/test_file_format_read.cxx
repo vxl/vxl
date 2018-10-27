@@ -97,12 +97,12 @@ struct CompareRGBNear
     {
       if ( p == 0 && pixel.size() == 3 ) {
         // Find difference in two values whilst avoiding unsigned underflow
-        PixelType diff_A = static_cast<PixelType>
+        auto diff_A = static_cast<PixelType>
                            ( pixel[0]*pixel[0] + img(i,j).r * img(i,j).r +
                              pixel[1]*pixel[1] + img(i,j).g * img(i,j).g +
                              pixel[2]*pixel[2] + img(i,j).b * img(i,j).b );
 
-        PixelType diff_B = static_cast<PixelType>
+        auto diff_B = static_cast<PixelType>
                            ( 2 * pixel[0] * img(i,j).r + tol_sq_ +
                              2 * pixel[1] * img(i,j).g + tol_sq_ +
                              2 * pixel[2] * img(i,j).b + tol_sq_ );
@@ -172,8 +172,8 @@ struct CompareGreyNear
     {
       if ( p==0 && pixel.size() == 1 ) {
         // Find difference in two values whilst avoiding unsigned underflow
-        PixelType diff_A = static_cast<PixelType>(pixel[0] * pixel[0] + img(i,j) * img(i,j));
-        PixelType diff_B = static_cast<PixelType>(2 * pixel[0] * img(i,j) + tol_sq_);
+        auto diff_A = static_cast<PixelType>(pixel[0] * pixel[0] + img(i,j) * img(i,j));
+        auto diff_B = static_cast<PixelType>(2 * pixel[0] * img(i,j) + tol_sq_);
         return diff_A <= diff_B;
       }
       else {
@@ -474,9 +474,9 @@ image_equals( const std::string &test_file, const std::string &ref_file)
     return false;
   }
 
-  vil_image_view<T_PIXEL> *view_test =
+  auto *view_test =
     dynamic_cast<vil_image_view<T_PIXEL>*>(view_test_ptr.as_pointer());
-  vil_image_view<T_PIXEL> *view_ref =
+  auto *view_ref =
     dynamic_cast<vil_image_view<T_PIXEL>*>(view_ref_ptr.as_pointer());
 
   return vil_image_view_deep_equality(*view_test, *view_ref);

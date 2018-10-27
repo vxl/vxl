@@ -26,10 +26,10 @@ bprb_test_process::bprb_test_process()
 bool bprb_test_process::execute()
 {
   // the process is simple, just add the two values
-  brdb_value_t<float>* i0 =
+  auto* i0 =
     static_cast<brdb_value_t<float>* >(input_data_[0].ptr());
 
-  brdb_value_t<float>* i1 =
+  auto* i1 =
     static_cast<brdb_value_t<float>* >(input_data_[1].ptr());
 
   float sum = i0->value() + i1->value();

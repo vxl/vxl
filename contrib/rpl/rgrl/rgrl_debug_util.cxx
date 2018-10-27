@@ -25,7 +25,7 @@ void
 rgrl_debug_feature_iteration_print::
 execute(const rgrl_object* caller, const rgrl_event & event )
 {
-  const rgrl_feature_based_registration* reg_engine =
+  const auto* reg_engine =
     dynamic_cast<const rgrl_feature_based_registration*>(caller);
   if ( !reg_engine ) {
     std::cerr << "WARNING: " << __FILE__ << "(line " << __LINE__ << ")\n"
@@ -66,7 +66,7 @@ rgrl_debug_feature_iteration_save_matches::
 execute(const rgrl_object* caller, const rgrl_event & event )
 {
   static char stage_buffer[31], iter_buffer[31];
-  const rgrl_feature_based_registration* reg_engine =
+  const auto* reg_engine =
     dynamic_cast<const rgrl_feature_based_registration*>(caller);
   if ( !reg_engine ) {
     std::cerr << "WARNING: " << __FILE__ << "(line " << __LINE__ << ")\n"

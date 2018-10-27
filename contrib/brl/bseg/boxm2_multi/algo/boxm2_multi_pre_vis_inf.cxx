@@ -55,8 +55,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   std::size_t gThreads[] = {cl_ni,cl_nj};
 
   //vis inf and pre inf buffers
-  float* visImg = new float[cl_ni*cl_nj];
-  float* preImg = new float[cl_ni*cl_nj];
+  auto* visImg = new float[cl_ni*cl_nj];
+  auto* preImg = new float[cl_ni*cl_nj];
   std::fill(visImg, visImg+cl_ni*cl_nj, 1.0f);
   std::fill(preImg, preImg+cl_ni*cl_nj, 0.0f);
 
@@ -75,13 +75,13 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
   for (auto ocl_cache : ocl_caches) {
     //grab sub scene and it's cache
     //pre/vis images
-    float* vis_buff = new float[cl_ni*cl_nj];
+    auto* vis_buff = new float[cl_ni*cl_nj];
     std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
     bocl_mem_sptr vis_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
     vis_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     vis_mems.push_back(vis_image);
 
-    float* pre_buff = new float[cl_ni*cl_nj];
+    auto* pre_buff = new float[cl_ni*cl_nj];
     std::fill(pre_buff, pre_buff+cl_ni*cl_nj, 0.0f);
     bocl_mem_sptr pre_image = ocl_cache->alloc_mem(cl_ni*cl_nj*sizeof(float), pre_buff,"pre image buffer");
     pre_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
@@ -136,8 +136,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
       vis_mems[i]->read_to_buffer(queues[i]);
       pre_mems[i]->read_to_buffer(queues[i]);
-      float* v = (float*) vis_mems[i]->cpu_buffer();
-      float* p = (float*) pre_mems[i]->cpu_buffer();
+      auto* v = (float*) vis_mems[i]->cpu_buffer();
+      auto* p = (float*) pre_mems[i]->cpu_buffer();
       for (int jj=(int)0; jj<(int)cl_nj; ++jj)
         for (int ii=(int)0; ii<(int)cl_ni; ++ii) {
           int index = jj*cl_ni + ii;
@@ -213,8 +213,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
   for (unsigned int i=0; i<queues.size(); ++i) {
     boxm2_opencl_cache1* ocl_cache = ocl_caches[i];
-    float* v = (float*) vis_mems[i]->cpu_buffer();
-    float* p = (float*) pre_mems[i]->cpu_buffer();
+    auto* v = (float*) vis_mems[i]->cpu_buffer();
+    auto* p = (float*) pre_mems[i]->cpu_buffer();
     delete[] v;
     delete[] p;
 
@@ -254,8 +254,8 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
   bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
 
   //calc data buffer length (write it in blk_info)
-  std::size_t dataLen = (std::size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
-  boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+  auto dataLen = (std::size_t) (alpha->num_bytes()/boxm2_data_traits<BOXM2_ALPHA>::datasize());
+  auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
   info_buffer->data_buffer_length = (int) dataLen;
   blk_info->write_to_buffer(queue);
 
@@ -334,16 +334,16 @@ std::vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr
   //compilation options
   std::string options = opts+"";
   //create all passes
-  bocl_kernel* pre_inf = new bocl_kernel();
+  auto* pre_inf = new bocl_kernel();
   std::string pre_opts = options + " -D PREINF -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d) ";
   pre_inf->create_kernel(&device->context(),device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
-  bocl_kernel* proc_img = new bocl_kernel();
+  auto* proc_img = new bocl_kernel();
   std::string proc_opts = options + " -D PROC_NORM ";
   proc_img->create_kernel(&device->context(),device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
 
-  bocl_kernel* combine_pre_vis = new bocl_kernel();
+  auto* combine_pre_vis = new bocl_kernel();
   std::string comb_opts = options + " -D COMBINE_PRE_VIS ";
   combine_pre_vis->create_kernel(&device->context(), device->device_id(), non_ray_src, "combine_pre_vis", comb_opts, "update::combine_pre_vis");
 

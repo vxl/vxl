@@ -17,8 +17,8 @@
 double compute_projection_error(std::vector<vpgl_rational_camera<double> > const& cams,
                                 std::vector<vgl_point_2d<double> > const& corrs, vgl_point_3d<double>& intersection)
 {
-  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
   double error = 0.0;
   for (; cit!=cams.end() && rit!=corrs.end(); ++cit, ++rit)
   {
@@ -140,7 +140,7 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
     return false;
   if (!corrs[0].size())
     return false;
-  unsigned int cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
+  auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned int i = 1; i < corrs.size(); ++i)
     if (corrs[i].size() != cnt_corrs_for_each_cam)  // there needs to be same number of corrs for each cam
       return false;
@@ -275,7 +275,7 @@ bool vpgl_rational_adjust_multiple_pts::
     return false;
   if (!corrs[0].size())
     return false;
-  unsigned int cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
+  auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned int i = 1; i < corrs.size(); ++i)
     if (corrs[i].size() != cnt_corrs_for_each_cam)  // there needs to be same number of corrs for each cam
       return false;
@@ -366,7 +366,7 @@ bool vpgl_rational_adjust_multiple_pts::adjust_lev_marq(std::vector<vpgl_rationa
     return false;
   if (!corrs[0].size())
     return false;
-  unsigned int cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
+  auto cnt_corrs_for_each_cam = (unsigned)corrs[0].size();
   for (unsigned i = 1; i < corrs.size(); ++i)
     if (corrs[i].size() != cnt_corrs_for_each_cam)
       return false;

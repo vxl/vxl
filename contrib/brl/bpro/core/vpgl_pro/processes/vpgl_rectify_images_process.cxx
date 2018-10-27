@@ -91,12 +91,12 @@ void warp_bilinear(vil_image_view<float>& img, vnl_matrix_fixed<double, 3, 3>& H
       float pix_in_x = wv[0] / wv[2];
       float pix_in_y = wv[1] / wv[2];
       // calculate weights and pixel values
-      unsigned x0 = (unsigned)std::floor(pix_in_x);
-      unsigned x1 = (unsigned)std::ceil(pix_in_x);
+      auto x0 = (unsigned)std::floor(pix_in_x);
+      auto x1 = (unsigned)std::ceil(pix_in_x);
       float x0_weight = (float)x1 - pix_in_x;
       float x1_weight = 1.0f - (float)x0_weight;
-      unsigned y0 = (unsigned)std::floor(pix_in_y);
-      unsigned y1 = (unsigned)std::ceil(pix_in_y);
+      auto y0 = (unsigned)std::floor(pix_in_y);
+      auto y1 = (unsigned)std::ceil(pix_in_y);
       float y0_weight = (float)y1 - pix_in_y;
       float y1_weight = 1.0f - (float)y0_weight;
       vnl_vector_fixed<unsigned,4>xvals(x0,x0,x1,x1);
@@ -134,24 +134,24 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam1 = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam2 = pro.get_input<vpgl_camera_double_sptr>(i++);
-  double min_x = pro.get_input<double>(i++);
-  double min_y = pro.get_input<double>(i++);
-  double min_z = pro.get_input<double>(i++);
-  double max_x = pro.get_input<double>(i++);
-  double max_y = pro.get_input<double>(i++);
-  double max_z = pro.get_input<double>(i++);
-  unsigned n_points = pro.get_input<unsigned>(i++);
-  double z = pro.get_input<double>(i++);
+  auto min_x = pro.get_input<double>(i++);
+  auto min_y = pro.get_input<double>(i++);
+  auto min_z = pro.get_input<double>(i++);
+  auto max_x = pro.get_input<double>(i++);
+  auto max_y = pro.get_input<double>(i++);
+  auto max_z = pro.get_input<double>(i++);
+  auto n_points = pro.get_input<unsigned>(i++);
+  auto z = pro.get_input<double>(i++);
   if (n_points <= 3) {
     n_points = 10;   // make it minimum 10 points
   }
 
-  vpgl_affine_camera<double>* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
+  auto* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
   if (!aff_camera1) {
     std::cout << pro.name() <<" :--  Input camera 1 is not an affine camera!\n";
     return false;
   }
-  vpgl_affine_camera<double>* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
+  auto* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
   if (!aff_camera2) {
     std::cout << pro.name() <<" :--  Input camera 2 is not an affine camera!\n";
     return false;
@@ -296,26 +296,26 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
   vil_image_view_base_sptr img2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam2 = pro.get_input<vpgl_camera_double_sptr>(i++);
   vpgl_camera_double_sptr cam2_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
-  double min_x = pro.get_input<double>(i++);
-  double min_y = pro.get_input<double>(i++);
-  double min_z = pro.get_input<double>(i++);
-  double max_x = pro.get_input<double>(i++);
-  double max_y = pro.get_input<double>(i++);
-  double max_z = pro.get_input<double>(i++);
-  unsigned n_points = pro.get_input<unsigned>(i++);
-  double z = pro.get_input<double>(i++);
+  auto min_x = pro.get_input<double>(i++);
+  auto min_y = pro.get_input<double>(i++);
+  auto min_z = pro.get_input<double>(i++);
+  auto max_x = pro.get_input<double>(i++);
+  auto max_y = pro.get_input<double>(i++);
+  auto max_z = pro.get_input<double>(i++);
+  auto n_points = pro.get_input<unsigned>(i++);
+  auto z = pro.get_input<double>(i++);
   std::string output_path_H1 = pro.get_input<std::string>(i++);
   std::string output_path_H2 = pro.get_input<std::string>(i++);
   if (n_points <= 3) {
     n_points = 10;   // make it minimum 10 points
   }
 
-  vpgl_affine_camera<double>* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
+  auto* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
   if (!aff_camera1) {
     std::cout << pro.name() <<" :--  Input camera 1 is not an affine camera!\n";
     return false;
   }
-  vpgl_affine_camera<double>* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
+  auto* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
   if (!aff_camera2) {
     std::cout << pro.name() <<" :--  Input camera 2 is not an affine camera!\n";
     return false;
@@ -449,12 +449,12 @@ bool vpgl_affine_f_matrix_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam2 = pro.get_input<vpgl_camera_double_sptr>(i++);
   std::string output_path = pro.get_input<std::string>(i++);
 
-  vpgl_affine_camera<double>* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
+  auto* aff_camera1 = dynamic_cast<vpgl_affine_camera<double>*> (cam1.as_pointer());
   if (!aff_camera1) {
     std::cout << pro.name() <<" :--  Input camera 1 is not an affine camera!\n";
     return false;
   }
-  vpgl_affine_camera<double>* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
+  auto* aff_camera2 = dynamic_cast<vpgl_affine_camera<double>*> (cam2.as_pointer());
   if (!aff_camera2) {
     std::cout << pro.name() <<" :--  Input camera 2 is not an affine camera!\n";
     return false;
@@ -517,16 +517,16 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam1_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
   //vil_image_view_base_sptr img1_disp_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string disp_name = pro.get_input<std::string>(i++);
-  float min_disparity = pro.get_input<float>(i++);
+  auto min_disparity = pro.get_input<float>(i++);
   vil_image_view_base_sptr img2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam2_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
-  double min_x = pro.get_input<double>(i++);
-  double min_y = pro.get_input<double>(i++);
-  double min_z = pro.get_input<double>(i++);
-  double max_x = pro.get_input<double>(i++);
-  double max_y = pro.get_input<double>(i++);
-  double max_z = pro.get_input<double>(i++);
-  double voxel_size = pro.get_input<double>(i++);
+  auto min_x = pro.get_input<double>(i++);
+  auto min_y = pro.get_input<double>(i++);
+  auto min_z = pro.get_input<double>(i++);
+  auto max_x = pro.get_input<double>(i++);
+  auto max_y = pro.get_input<double>(i++);
+  auto max_z = pro.get_input<double>(i++);
+  auto voxel_size = pro.get_input<double>(i++);
   std::string path_H1 = pro.get_input<std::string>(i++);
   std::string path_H2 = pro.get_input<std::string>(i++);
 
@@ -562,8 +562,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   double width = max_x-min_x;
   double depth = max_y-min_y;
   double height = max_z - min_z;
-  unsigned img_size_x = (unsigned)std::ceil(width/voxel_size);
-  unsigned img_size_y = (unsigned)std::ceil(depth/voxel_size);
+  auto img_size_x = (unsigned)std::ceil(width/voxel_size);
+  auto img_size_y = (unsigned)std::ceil(depth/voxel_size);
   vil_image_view<float> out_map(img_size_x, img_size_y);
   out_map.fill((float)min_z);
 
@@ -583,8 +583,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
         // warp this point with H1, H2
         vnl_vector_fixed<double,3> p1(u1, v1, 1);
         vnl_vector_fixed<double,3> p1w = H1*p1;
-        unsigned u1w = (unsigned)std::floor((p1w[0]/p1w[2])+0.5);
-        unsigned v1w = (unsigned)std::floor((p1w[1]/p1w[2])+0.5);
+        auto u1w = (unsigned)std::floor((p1w[0]/p1w[2])+0.5);
+        auto v1w = (unsigned)std::floor((p1w[1]/p1w[2])+0.5);
 
         if (u1w >= img1_disp.ni() || v1w >= img1_disp.nj())
           continue;
@@ -605,8 +605,8 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
           best_z = z;
         }
       }
-      unsigned xx = (unsigned)std::floor(x/voxel_size+0.5);
-      unsigned yy = (unsigned)std::floor(y/voxel_size+0.5);
+      auto xx = (unsigned)std::floor(x/voxel_size+0.5);
+      auto yy = (unsigned)std::floor(y/voxel_size+0.5);
       if (xx < img_size_x && yy < img_size_y)
         out_map(xx,yy) = (float)best_z;
     }
@@ -658,19 +658,19 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
   vil_image_view_base_sptr coarse_DEM_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
 
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(i++);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
-  vpgl_local_rational_camera<double> *cam1 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam1_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
+  auto* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  auto *cam1 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam1_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
                                                                                                                  //  and directly work in global (lat, lon) coordinate system
-  vpgl_local_rational_camera<double> *cam2 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam2_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
+  auto *cam2 = dynamic_cast<vpgl_local_rational_camera<double>*>(cam2_rational.as_pointer());  // these are actually local rational cameras but we want to bypass lvcs
                                                                                                                  //  and directly work in global (lat, lon) coordinate system
   // somehow casting to vpgl_rational_camera doesn't work, try creating new rational_camera objects
   vpgl_rational_camera<double> cam1_global(*cam1);
   vpgl_rational_camera<double> cam2_global(*cam2);
 
-  unsigned int out_ni = pro.get_input<unsigned>(i++);
-  unsigned int out_nj = pro.get_input<unsigned>(i++);
-  double GSD_DEM = pro.get_input<double>(i++);
-  double GSD_img = pro.get_input<double>(i++);
+  auto out_ni = pro.get_input<unsigned>(i++);
+  auto out_nj = pro.get_input<unsigned>(i++);
+  auto GSD_DEM = pro.get_input<double>(i++);
+  auto GSD_img = pro.get_input<double>(i++);
   std::string path_H1 = pro.get_input<std::string>(i++);
   std::string path_H2 = pro.get_input<std::string>(i++);
 

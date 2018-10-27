@@ -43,8 +43,8 @@ bool vil_gaussian_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image = pro.get_input<vil_image_view_base_sptr>(i++);
 
   //Gaussian standard deviation
-  float sigma = pro.get_input<float>(i++);
-  unsigned half_width = static_cast<unsigned>(3.0f*sigma);
+  auto sigma = pro.get_input<float>(i++);
+  auto half_width = static_cast<unsigned>(3.0f*sigma);
 
   // convert input image to float
   vil_image_view<float> fimage = *vil_convert_cast(float(), input_image);

@@ -230,7 +230,7 @@ void extract_normalised_patches(const vimt_image& image,
                                 std::vector<vil_image_view<float> >& patch,
                                 std::vector<vgl_point_2d<double> >& ref_pts)
 {
-  const vimt_image_2d_of<vxl_byte>& byte_im =
+  const auto& byte_im =
                static_cast<const vimt_image_2d_of<vxl_byte>&>(image);
   int ni = byte_im.image().ni();
   int nj = byte_im.image().nj();
@@ -407,7 +407,7 @@ int main( int argc, char* argv[] )
   std::vector<vimt_image_2d_of<float> > feature_response(ref_pts.size());
   for (unsigned i=0;i<ref_pts.size();++i)
   {
-    const vimt_image_2d_of<vxl_byte>& byte_im =
+    const auto& byte_im =
        static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr2(im_level[i]));
 
     // Compute region over which to search (20% of image, centered on point)

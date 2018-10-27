@@ -485,7 +485,7 @@ bool brec_part_gaussian::construct_class_response_models(vil_image_view<float>& 
 //: for gaussian operators we use weibull distribution as the parametric model
 bool brec_part_gaussian::fit_distribution_to_response_hist(bsta_histogram<float>& fg_h)
 {
-  float mean = fg_h.mean(); float std_dev = (float)std::sqrt(fg_h.variance());
+  float mean = fg_h.mean(); auto std_dev = (float)std::sqrt(fg_h.variance());
   bsta_weibull_cost_function wcf(mean, std_dev);
   bsta_fit_weibull<float> fw(&wcf);
   k_ = 1.0f;

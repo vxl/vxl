@@ -48,7 +48,7 @@ bool vpgl_correct_rational_cameras_mult_corr_process(bprb_func_process& pro)
   // get the inputs
   std::string input_cams = pro.get_input<std::string>(0);
   std::string output_path  = pro.get_input<std::string>(1);
-  float radius  = pro.get_input<float>(2);
+  auto radius  = pro.get_input<float>(2);
   int interval_n  = pro.get_input<int>(3);
 
   std::ifstream ifs(input_cams.c_str());

@@ -201,7 +201,7 @@ vmap_level_index vpyr_2_tpyramid_base_edge::last_level() const
 
 const vpyr_2_tpyramid_base_vertex* vpyr_2_tpyramid_base_vertex::ancestor(vmap_level_index level) const
 {
-  vpyr_2_tpyramid_base_vertex& d=const_cast<vpyr_2_tpyramid_base_vertex&> (*this);
+  auto& d=const_cast<vpyr_2_tpyramid_base_vertex&> (*this);
   return d.ancestor(level) ;
 }
 
@@ -242,7 +242,7 @@ int vpyr_2_tpyramid_base_vertex::degree(vmap_level_index l) const
 
 const vpyr_2_tpyramid_base_edge* vpyr_2_tpyramid_base_edge::ancestor(vmap_level_index level) const
 {
-  vpyr_2_tpyramid_base_edge& d=const_cast<vpyr_2_tpyramid_base_edge&> (*this);
+  auto& d=const_cast<vpyr_2_tpyramid_base_edge&> (*this);
   return d.ancestor(level) ;
 }
 
@@ -254,7 +254,7 @@ vpyr_2_tpyramid_base_edge* vpyr_2_tpyramid_base_edge::ancestor(vmap_level_index 
 
 const vpyr_2_tpyramid_base_face* vpyr_2_tpyramid_base_face::ancestor(vmap_level_index level) const
 {
-  vpyr_2_tpyramid_base_face& d=const_cast<vpyr_2_tpyramid_base_face&> (*this);
+  auto& d=const_cast<vpyr_2_tpyramid_base_face&> (*this);
   return d.ancestor(level) ;
 }
 

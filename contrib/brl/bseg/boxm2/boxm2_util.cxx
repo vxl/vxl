@@ -63,7 +63,7 @@ vpgl_camera_double_sptr boxm2_util::camera_from_file(std::string camfile)
 {
     //load camera from file
     std::ifstream ifs(camfile.c_str());
-    vpgl_perspective_camera<double>* pcam =new vpgl_perspective_camera<double>;
+    auto* pcam =new vpgl_perspective_camera<double>;
     if (!ifs.is_open()) {
         std::cerr << "Failed to open file " << camfile << '\n';
         return vpgl_camera_double_sptr(pcam);
@@ -146,8 +146,8 @@ vpgl_perspective_camera<double>*
                                   vgl_box_3d<double> bb,
                                   bool fit_bb)
 {
-    double dni = static_cast<double>(ni);
-    double dnj = static_cast<double>(nj);
+    auto dni = static_cast<double>(ni);
+    auto dnj = static_cast<double>(nj);
 
     //
     //find a camera that will project the scene bounding box
@@ -171,7 +171,7 @@ vpgl_perspective_camera<double>*
     // 3) start with a unit focal length and position the camera
     vpgl_calibration_matrix<double> K(1.0, vgl_point_2d<double>(ni/2, nj/2));
     vgl_rotation_3d<double> R;
-    vpgl_perspective_camera<double>* cam =
+    auto* cam =
         new vpgl_perspective_camera<double>(K, cent, R);
 
     //stare at the center of the scene
@@ -379,7 +379,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_rgb_image(vil_image_view_base
   //load image from file and format it into RGBA
   vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
   vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
-  vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+  auto* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
 
   //make sure all alpha values are set to 255 (1)
   vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
@@ -405,7 +405,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
             //load image from file and format it into RGBA
             vil_image_view_base_sptr n_planes = vil_convert_to_n_planes(4, loaded_image);
             vil_image_view_base_sptr comp_image = vil_convert_to_component_order(n_planes);
-            vil_image_view<vil_rgba<vxl_byte> >* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
+            auto* rgba_view = new vil_image_view<vil_rgba<vxl_byte> >(comp_image);
 
             //make sure all alpha values are set to 255 (1)
             vil_image_view<vil_rgba<vxl_byte> >::iterator iter;
@@ -421,12 +421,12 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
             std::cout<<"preparing rgb as input to grey scale float image"<<std::endl;
 #endif
             //load image from file and format it into grey
-            vil_image_view<vxl_byte>* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
+            auto* inimg    = dynamic_cast<vil_image_view<vxl_byte>* >(loaded_image.ptr());
             vil_image_view<float>     gimg(loaded_image->ni(), loaded_image->nj());
             vil_convert_planes_to_grey<vxl_byte, float>(*inimg, gimg);
 
             //stretch it into 0-1 range
-            vil_image_view<float>*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
+            auto*    floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj());
             vil_convert_stretch_range_limited(gimg, *floatimg, 0.0f, 255.0f, 0.0f, 1.0f);
             vil_image_view_base_sptr toReturn(floatimg);
             return toReturn;
@@ -441,13 +441,13 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
 #endif
         //prepare floatimg for stretched img
         vil_image_view<float>* floatimg;
-        if (vil_image_view<vxl_byte> *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
+        if (auto *img_byte = dynamic_cast<vil_image_view<vxl_byte>*>(loaded_image.ptr()))
         {
             floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
             vil_convert_stretch_range_limited(*img_byte, *floatimg, vxl_byte(0), vxl_byte(255), 0.0f, 1.0f);
         }
         //: try unsigned short which is vxl_uint_16
-        else if (vil_image_view<unsigned short> *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
+        else if (auto *img_byte = dynamic_cast<vil_image_view<unsigned short>*>(loaded_image.ptr()))
         {
             floatimg = new vil_image_view<float>(loaded_image->ni(), loaded_image->nj(), 1);
             unsigned short max = std::numeric_limits<unsigned short>::max();
@@ -456,7 +456,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_spt
             return vil_image_view_base_sptr(floatimg);
             //vil_save(*floatimg, "floatimg.tiff");
         }
-        else if (vil_image_view<float> *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
+        else if (auto *img_float = dynamic_cast<vil_image_view<float>*>(loaded_image.ptr()))
         {
             return vil_image_view_base_sptr(img_float);
         }
@@ -495,8 +495,8 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
 bsta_histogram_sptr
     boxm2_util::generate_image_histogram(vil_image_view_base_sptr  img, unsigned int numbins)
 {
-    bsta_histogram<float> * hist= new bsta_histogram<float>(0.0,1.0,numbins);
-    if (vil_image_view<float> * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
+    auto * hist= new bsta_histogram<float>(0.0,1.0,numbins);
+    if (auto * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
     {
         for (unsigned i =0;i<float_img->ni();i++)
             for (unsigned j =0;j<float_img->nj();j++)
@@ -586,7 +586,7 @@ std::vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr sce
   std::vector<boxm2_dist_id_pair> distances;
 
   std::map<boxm2_block_id, boxm2_block_metadata>& blk_map = scene->blocks();
-  std::map<boxm2_block_id, boxm2_block_metadata>::iterator it = blk_map.find(curr_block);
+  auto it = blk_map.find(curr_block);
   if (it == blk_map.end()) {
     std::cerr << " Cannot locate " << curr_block << " in the blocks of the scene to compute vis order around it!!\n";
     return vis_order;
@@ -688,7 +688,7 @@ bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, std::string kml_fi
     color_hex << 255 << "0000";
     color_hex.width(2); color_hex.fill('0');
     color_hex << redness;
-    std::map<boxm2_block_id, boxm2_block_metadata>::iterator iter = all_blks.find(blks[i]);
+    auto iter = all_blks.find(blks[i]);
     vgl_box_3d<double> box = iter->second.bbox();
 
     double lon, lat, elev;
@@ -754,15 +754,15 @@ bool boxm2_util::get_raydirs_tfinal(std::string depthdir, std::string camsfile,
         std::sprintf(filename,"depth_%d.jpg",uid);
         std::string depthfilename = depthdir +"/" +filename ;
         vil_image_view_base_sptr im = vil_load(depthfilename.c_str());
-        if (vil_image_view<unsigned char> * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
+        if (auto * depthimg = dynamic_cast<vil_image_view<unsigned char> *> (im.ptr()))
         {
             int scaled_ni = depthimg->ni() /scale;
             int scaled_nj = depthimg->nj() / scale;
-            vil_image_view<unsigned char> * scaled_depthimg = new  vil_image_view<unsigned char>(scaled_ni,scaled_nj);
+            auto * scaled_depthimg = new  vil_image_view<unsigned char>(scaled_ni,scaled_nj);
             vil_resample_nearest<unsigned char,unsigned char>(*depthimg, *scaled_depthimg, scaled_ni, scaled_nj);
 
-            vil_image_view<float> * tdirimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 3);
-            vil_image_view<float> * tfinalimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 1);
+            auto * tdirimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 3);
+            auto * tfinalimg= new vil_image_view<float>(scaled_depthimg->ni(),scaled_depthimg->nj(), 1);
             for (unsigned int i = 0 ; i < scaled_depthimg->ni(); i++)
             {
                 for (unsigned int j = 0 ; j < scaled_depthimg->nj(); j++)

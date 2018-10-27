@@ -49,7 +49,7 @@ main( )
   // use_intercept=true.
   //
   bool use_intercept=true;
-  rrel_linear_regression * lr = new rrel_linear_regression( pts, use_intercept );
+  auto * lr = new rrel_linear_regression( pts, use_intercept );
 
   // This controls the verbosity of the search techniques.
   int trace_level = 0;
@@ -96,7 +96,7 @@ main( )
   {
     int num_sam_inst = lr->num_samples_to_instantiate();
     rrel_objective* lms = new rrel_lms_obj( num_sam_inst );
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
 
@@ -116,8 +116,8 @@ main( )
   //  RANSAC
   //
   {
-    rrel_ransac_obj* ransac = new rrel_ransac_obj( );
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransac = new rrel_ransac_obj( );
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
     lr->set_prior_scale(1.0);
@@ -138,8 +138,8 @@ main( )
   //  MSAC
   //
   {
-    rrel_trunc_quad_obj* msac = new rrel_trunc_quad_obj( );
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* msac = new rrel_trunc_quad_obj( );
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
     lr->set_prior_scale(1.0);
@@ -160,12 +160,12 @@ main( )
   //  MUSE
   //
   {
-    rrel_muset_obj* muset = new rrel_muset_obj( pts.size()+1 );
+    auto* muset = new rrel_muset_obj( pts.size()+1 );
     muset -> set_min_inlier_fraction( 0.25 );
 
     lr->set_no_prior_scale();
 
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                  desired_prob_good,
                                  max_pops);
@@ -210,7 +210,7 @@ main( )
     int iterations_for_scale = 2;
     double conv_tolerance = 1e-4;
 
-    rrel_irls* irls = new rrel_irls( max_iterations );
+    auto* irls = new rrel_irls( max_iterations );
     irls->set_est_scale( iterations_for_scale );
     irls->set_convergence_test( conv_tolerance );
     irls->set_trace_level(trace_level);
@@ -231,7 +231,7 @@ main( )
 
     lr->set_no_prior_scale();
 
-    rrel_ran_sam_search* ransam = new rrel_ran_sam_search;
+    auto* ransam = new rrel_ran_sam_search;
     ransam->set_sampling_params( max_outlier_frac, desired_prob_good, max_pops);
     ransam->set_trace_level(trace_level);
 

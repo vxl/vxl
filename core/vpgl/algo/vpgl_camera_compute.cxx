@@ -55,7 +55,7 @@ vpgl_proj_camera_compute::compute(
                                   const std::vector< vgl_homg_point_3d<double> >& world_pts,
                                   vpgl_proj_camera<double>& camera )
 {
-  unsigned int num_correspondences = static_cast<unsigned int>(image_pts.size());
+  auto num_correspondences = static_cast<unsigned int>(image_pts.size());
   if ( world_pts.size() < num_correspondences ) num_correspondences = static_cast<unsigned int>(world_pts.size());
   assert( num_correspondences >= 6 );
 
@@ -138,7 +138,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
          const vpgl_calibration_matrix<double>& K,
          vpgl_perspective_camera<double>& camera )
 {
-  unsigned N = static_cast<unsigned int>(world_pts.size());
+  auto N = static_cast<unsigned int>(world_pts.size());
   if (image_pts.size()!=N)
   {
     std::cout << "Unequal points sets in"
@@ -222,7 +222,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
 
   //Check if depths are all approximately the same (near affine projection)
   double average_depth = 0;
-  unsigned nd = static_cast<unsigned int>(depth.size());
+  auto nd = static_cast<unsigned int>(depth.size());
   for (unsigned i = 0; i<nd; ++i)
     average_depth += depth[i];
   average_depth /= nd;
@@ -419,7 +419,7 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
          const std::vector< vgl_point_2d<double> >& ground_pts,
          vpgl_perspective_camera<double>& camera )
 {
-  unsigned num_pts = static_cast<unsigned int>(ground_pts.size());
+  auto num_pts = static_cast<unsigned int>(ground_pts.size());
   if (image_pts.size()!=num_pts)
   {
     std::cout << "Unequal points sets in"

@@ -20,7 +20,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   axes_orig_x_ = 2*margin_;
   axes_orig_y_ = 2*margin_+h2_y;
 
-  bsvg_line* line_y = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_, axes_orig_y_-h2_y-margin_);
+  auto* line_y = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_, axes_orig_y_-h2_y-margin_);
   line_y->set_stroke_color("black");
   line_y->set_stroke_width(stroke_width);
 
@@ -28,7 +28,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   // find origin so that height of the plot is scaled wrt to the svg document width and height
   h2_x = height_x*scale_factor_;
 
-  bsvg_line* line_x = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_+h2_x+margin_, axes_orig_y_);
+  auto* line_x = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_+h2_x+margin_, axes_orig_y_);
   line_x->set_stroke_color("black");
   line_x->set_stroke_width(stroke_width);
 
@@ -57,7 +57,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   this->add_element(txm);
 
   // add a short line to denote x_max
-  bsvg_line* line_xm = new bsvg_line(axes_orig_x_ + h2_x, axes_orig_y_, axes_orig_x_ + h2_x, axes_orig_y_+(margin_/4.0f));
+  auto* line_xm = new bsvg_line(axes_orig_x_ + h2_x, axes_orig_y_, axes_orig_x_ + h2_x, axes_orig_y_+(margin_/4.0f));
   line_xm->set_stroke_color("black");
   line_xm->set_stroke_width(stroke_width);
   this->add_element(line_xm);
@@ -70,19 +70,19 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, flo
   this->add_element(tym);
 
   // add a short line to denote y_max
-  bsvg_line* line_ym = new bsvg_line(axes_orig_x_-(margin_/4.0f), axes_orig_y_-h2_y, axes_orig_x_, axes_orig_y_-h2_y);
+  auto* line_ym = new bsvg_line(axes_orig_x_-(margin_/4.0f), axes_orig_y_-h2_y, axes_orig_x_, axes_orig_y_-h2_y);
   line_ym->set_stroke_color("black");
   line_ym->set_stroke_width(stroke_width);
   this->add_element(line_ym);
 
   // put an arrow head at the end of x axis
-  bsvg_arrow_head* a1 = new bsvg_arrow_head(axes_orig_x_+h2_x+margin_, axes_orig_y_, 10.0f);
+  auto* a1 = new bsvg_arrow_head(axes_orig_x_+h2_x+margin_, axes_orig_y_, 10.0f);
   a1->set_stroke_width(stroke_width);
   a1->set_stroke_color("black");
   this->add_element(a1);
 
   // put an arrow head at the end of y axis
-  bsvg_arrow_head* a2 = new bsvg_arrow_head(axes_orig_x_, axes_orig_y_-h2_y-margin_, 10.0f);
+  auto* a2 = new bsvg_arrow_head(axes_orig_x_, axes_orig_y_-h2_y-margin_, 10.0f);
   a2->set_stroke_width(stroke_width);
   a2->set_rotation(-90);
   a2->set_stroke_color("black");
@@ -102,7 +102,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     axes_orig_x_ = 2*margin_;
     axes_orig_y_ = 2*margin_+h2_y;
 
-    bsvg_line* line_y = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_, axes_orig_y_-h2_y-margin_);
+    auto* line_y = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_, axes_orig_y_-h2_y-margin_);
     line_y->set_stroke_color("black");
     line_y->set_stroke_width(stroke_width);
 
@@ -110,7 +110,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     // find origin so that height of the plot is scaled wrt to the svg document width and height
     h2_x = height_x;
 
-    bsvg_line* line_x = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_+h2_x+margin_, axes_orig_y_);
+    auto* line_x = new bsvg_line(axes_orig_x_, axes_orig_y_, axes_orig_x_+h2_x+margin_, axes_orig_y_);
     line_x->set_stroke_color("black");
     line_x->set_stroke_width(stroke_width);
 
@@ -139,7 +139,7 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     this->add_element(txm);
 
     // add a short line to denote x_max
-    bsvg_line* line_xm = new bsvg_line(axes_orig_x_ + h2_x, axes_orig_y_, axes_orig_x_ + h2_x, axes_orig_y_+(margin_/4.0f));
+    auto* line_xm = new bsvg_line(axes_orig_x_ + h2_x, axes_orig_y_, axes_orig_x_ + h2_x, axes_orig_y_+(margin_/4.0f));
     line_xm->set_stroke_color("black");
     line_xm->set_stroke_width(stroke_width);
     this->add_element(line_xm);
@@ -152,19 +152,19 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
     this->add_element(tym);
 
     // add a short line to denote y_max
-    bsvg_line* line_ym = new bsvg_line(axes_orig_x_-(margin_/4.0f), axes_orig_y_-h2_y, axes_orig_x_, axes_orig_y_-h2_y);
+    auto* line_ym = new bsvg_line(axes_orig_x_-(margin_/4.0f), axes_orig_y_-h2_y, axes_orig_x_, axes_orig_y_-h2_y);
     line_ym->set_stroke_color("black");
     line_ym->set_stroke_width(stroke_width);
     this->add_element(line_ym);
 
     // put an arrow head at the end of x axis
-    bsvg_arrow_head* a1 = new bsvg_arrow_head(axes_orig_x_+h2_x+margin_, axes_orig_y_, 10.0f);
+    auto* a1 = new bsvg_arrow_head(axes_orig_x_+h2_x+margin_, axes_orig_y_, 10.0f);
     a1->set_stroke_width(stroke_width);
     a1->set_stroke_color("black");
     this->add_element(a1);
 
     // put an arrow head at the end of y axis
-    bsvg_arrow_head* a2 = new bsvg_arrow_head(axes_orig_x_, axes_orig_y_-h2_y-margin_, 10.0f);
+    auto* a2 = new bsvg_arrow_head(axes_orig_x_, axes_orig_y_-h2_y-margin_, 10.0f);
     a2->set_stroke_width(stroke_width);
     a2->set_rotation(-90);
     a2->set_stroke_color("black");
@@ -175,8 +175,8 @@ void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, boo
 
 void bsvg_plot::add_title(const std::string& t)
 {
-  bsvg_text* title = new bsvg_text(t);
-  float w = float(font_size_*t.size());
+  auto* title = new bsvg_text(t);
+  auto w = float(font_size_*t.size());
   title->set_location((this->w_-margin_)/2.0f - w/2, margin_);
   //title->set_location((h2_x+3*margin_-w)/2, margin_);
   title->set_font_size(font_size_);
@@ -187,14 +187,14 @@ void bsvg_plot::add_title(const std::string& t)
 void bsvg_plot::add_x_increments(float x_inc, float stroke_width)
 {
   float x_inc_scaled = scale_factor_*x_inc;
-  bsvg_group* g = new bsvg_group();
+  auto* g = new bsvg_group();
   g->set_stroke_color("black");
   g->set_stroke_width(stroke_width);
   g->set_stroke_opacity(0.5);
 
   float end = axes_orig_x_ + h2_x;
   for (float x = axes_orig_x_ + x_inc_scaled; x <= end; x += x_inc_scaled) {
-    bsvg_line* line_x = new bsvg_line(x, axes_orig_y_, x, axes_orig_y_-h2_y);
+    auto* line_x = new bsvg_line(x, axes_orig_y_, x, axes_orig_y_-h2_y);
     g->add_element(line_x);
   }
   this->add_element(g);
@@ -204,14 +204,14 @@ void bsvg_plot::add_x_increments(float x_inc, float stroke_width)
 void bsvg_plot::add_y_increments(float y_inc, float stroke_width)
 {
   float y_inc_scaled = scale_factor_*y_inc;
-  bsvg_group* g = new bsvg_group();
+  auto* g = new bsvg_group();
   g->set_stroke_color("black");
   g->set_stroke_width(stroke_width);
   g->set_stroke_opacity(0.5);
 
   float end = axes_orig_y_ - h2_y;
   for (float y = axes_orig_y_ - y_inc_scaled; y >= end; y -= y_inc_scaled) {
-    bsvg_line* line_y = new bsvg_line(axes_orig_x_, y, axes_orig_x_+h2_x, y);
+    auto* line_y = new bsvg_line(axes_orig_x_, y, axes_orig_x_+h2_x, y);
     g->add_element(line_y);
   }
   this->add_element(g);
@@ -231,7 +231,7 @@ void bsvg_plot::add_line(const std::vector<float>& xs, const std::vector<float>&
     ys_copy[i] = axes_orig_y_ - ys_copy[i]*scale_factor_;
   }
 
-  bsvg_polyline *pl = new bsvg_polyline(xs_copy, ys_copy);
+  auto *pl = new bsvg_polyline(xs_copy, ys_copy);
   pl->set_stroke_color(color);
   pl->set_fill_color("none");
   pl->set_stroke_width(stroke_width);
@@ -241,7 +241,7 @@ void bsvg_plot::add_line(const std::vector<float>& xs, const std::vector<float>&
 
 bsvg_group* bsvg_plot::add_bars_helper(const std::vector<float>& heights, const std::string& color)
 {
-  bsvg_group* g = new bsvg_group();
+  auto* g = new bsvg_group();
   g->set_fill_color(color);
 
   int n = heights.size();
@@ -250,7 +250,7 @@ bsvg_group* bsvg_plot::add_bars_helper(const std::vector<float>& heights, const 
   float x = axes_orig_x_ + bar_w/3.0f; // left-point of first bar
   for (int i = 0; i < n; i++) {
     float h = heights[i]*scale_factor_;
-    bsvg_rectangle *r = new bsvg_rectangle(x, axes_orig_y_-h, bar_w, h);
+    auto *r = new bsvg_rectangle(x, axes_orig_y_-h, bar_w, h);
     g->add_element(r);
     x += bar_w/3 + bar_w;  // left-point of next bar, margin + bar width
   }
@@ -259,7 +259,7 @@ bsvg_group* bsvg_plot::add_bars_helper(const std::vector<float>& heights, const 
 
 bsvg_group* bsvg_plot::add_x_labels_helper(const std::vector<std::string>& x_labels, const std::string& color, bool vertical_labels)
 {
-  bsvg_group* g = new bsvg_group();
+  auto* g = new bsvg_group();
   g->set_fill_color(color);
 
   int n = x_labels.size();
@@ -267,7 +267,7 @@ bsvg_group* bsvg_plot::add_x_labels_helper(const std::vector<std::string>& x_lab
   float bar_w = h2_x / float(n + float(n + 1)/3.0f);
   float x = axes_orig_x_ + bar_w/2.0f + bar_w/3.0f; // mid-point of first bar
   for (int i = 0; i < n; i++) {
-    bsvg_text *t = new bsvg_text(x_labels[i]);
+    auto *t = new bsvg_text(x_labels[i]);
     t->set_font_size(font_size_);
     t->set_location(x, axes_orig_y_+margin_);
     if (vertical_labels)
@@ -309,15 +309,15 @@ void bsvg_plot::add_bars(const std::vector<float>& heights, const std::vector<fl
 //: recursive helper to find number of bars
 int number_of_bars_helper(bxml_data_sptr d)
 {
-  bxml_element* r_elm = dynamic_cast<bxml_element*>(d.ptr());
+  auto* r_elm = dynamic_cast<bxml_element*>(d.ptr());
   if (!r_elm)
     return 0;
 
   int cnt = 0;
-  for (bxml_element::const_data_iterator it = r_elm->data_begin(); it != r_elm->data_end(); it++) {
+  for (auto it = r_elm->data_begin(); it != r_elm->data_end(); it++) {
     if ((*it)->type() != bxml_element::ELEMENT)
       continue;
-    bxml_element* it_elm = dynamic_cast<bxml_element*>((*it).ptr());
+    auto* it_elm = dynamic_cast<bxml_element*>((*it).ptr());
     if (it_elm->name() == "rect")
       cnt++;
     else if (it_elm->name() == "g") {
@@ -351,7 +351,7 @@ int bsvg_plot::add_bar(const float height, const std::string& color)
   float x = axes_orig_x_ + margin_/3.0f; // left-point of first bar
   x += cnt*(margin_/3.0f + margin_);  // left-point of next bar, margin + bar width
   float h = height*scale_factor_;
-  bsvg_rectangle *r = new bsvg_rectangle(x, axes_orig_y_-h, margin_, h);
+  auto *r = new bsvg_rectangle(x, axes_orig_y_-h, margin_, h);
   r->set_fill_color(color);
   this->add_element(r);
   return cnt;
@@ -366,7 +366,7 @@ int bsvg_plot::add_bar(const float height, const std::string& label, bool vertic
   }
   float x = axes_orig_x_ + margin_/2.0f + margin_/3.0f; // mid-point of first text
   x += cnt*(margin_/3.0f + margin_);
-  bsvg_text *t = new bsvg_text(label);
+  auto *t = new bsvg_text(label);
   t->set_font_size(font_size_);
   t->set_location(x, axes_orig_y_+margin_);
   if (vertical_label)
@@ -384,7 +384,7 @@ int bsvg_plot::add_bar(const float height, const float x_label, bool vertical_la
 //: add splices for a pie chart
 void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, const std::string& color)
 {
-  bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
+  auto* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
   splice_g->set_fill_color(color);
   splice_g->set_stroke_color("black");
   this->add_element(splice_g);
@@ -392,7 +392,7 @@ void bsvg_plot::add_splice(float center_x, float center_y, float radius, float s
 
 void bsvg_plot::add_splice(float center_x, float center_y, float radius, float start_angle, float end_angle, unsigned red, unsigned green, unsigned blue)
 {
-  bsvg_splice* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
+  auto* splice_g = new bsvg_splice(center_x, center_y, radius, start_angle, end_angle);
   splice_g->set_fill_color(red, green, blue);
   splice_g->set_stroke_color("black");
   this->add_element(splice_g);

@@ -124,14 +124,14 @@ void brec_part_hierarchy_learner::initialize_layer0_as_gaussians(int ndirs, floa
         masks.push_back(p->mask_);
 
         // create histogram for foreground stats
-        bsta_histogram<float>* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32)
+        auto* h = new bsta_histogram<float>(0.0f, 2.0f, 100); // was (-7.0f, 1.0f, 32)
         std::pair<brec_part_instance_sptr, bsta_histogram<float>* > pa(p->cast_to_instance(), h);
         stats_layer0_.push_back(pa);
         type_cnt++;
 
         // initialize the dark operator as well
         brec_part_gaussian_sptr pd = new brec_part_gaussian(0.0f, 0.0f, 0.0f, lambda0, lambda1, adjusted_theta, false, type_cnt);
-        bsta_histogram<float>* hd = new bsta_histogram<float>(0.0f, 2.0f, 100);
+        auto* hd = new bsta_histogram<float>(0.0f, 2.0f, 100);
         std::pair<brec_part_instance_sptr, bsta_histogram<float>* > pad(pd->cast_to_instance(), hd);
         stats_layer0_.push_back(pad);
         type_cnt++;
@@ -251,13 +251,13 @@ bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarch
 
   type_cnt_ = 0;
   for (unsigned c = 0; c < nclasses; c++) {
-    class_map* map = new class_map();
+    auto* map = new class_map();
 
-    for (brec_part_hierarchy::vertex_iterator it = h->vertices_begin(); it != h->vertices_end(); it++) {
+    for (auto it = h->vertices_begin(); it != h->vertices_end(); it++) {
       if ((*it)->layer_ == layer_id-1) {
         brec_part_base_sptr p1 = (*it);
 
-        for (brec_part_hierarchy::vertex_iterator it2 = h->vertices_begin(); it2 != h->vertices_end(); it2++) {
+        for (auto it2 = h->vertices_begin(); it2 != h->vertices_end(); it2++) {
           if ((*it2)->layer_ == layer_id-1) {
             brec_part_base_sptr p2 = (*it2);
 
@@ -269,12 +269,12 @@ bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarch
             brec_hierarchy_edge_sptr e2 = new brec_hierarchy_edge(p_n->cast_to_base(), p2, false);
             p_n->add_outgoing_edge(e2);
 
-            hist_ptr d_hist = new hist(radius_, 16);
-            hist_ptr a_hist = new hist(-vnl_math::pi, vnl_math::pi, 16);
+            auto d_hist = new hist(radius_, 16);
+            auto a_hist = new hist(-vnl_math::pi, vnl_math::pi, 16);
 
             //sample_set_ptr d_mss = new sample_set(radius_/8.0f); //set mean shift bandwidth to the size of 2 bins
             //sample_set_ptr a_mss = new sample_set(float(2.0f*vnl_math::pi/8.0f)); //set mean shift bandwidth to the size of 2 bins
-            sample_set_ptr mss = new sample_set();  // bandwidth is unimportant - because mean-shift will be applied on 1D marginalized version of this 2D data
+            auto mss = new sample_set();  // bandwidth is unimportant - because mean-shift will be applied on 1D marginalized version of this 2D data
             d_bandwidth_ = radius_/8.0f;  //set mean shift bandwidth to the size of 2 bins
             a_bandwidth_ = float(2.0f*vnl_math::pi/8.0f);  //set mean shift bandwidth to the size of 2 bins
 
@@ -307,7 +307,7 @@ bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarch
       std::pair<unsigned, unsigned> id_p = (*m_it).first;
       std::pair<brec_part_instance_sptr, std::pair<hist_ptr_pair, sample_set_ptr> > pa = (*m_it).second;
       std::cout << '(' << id_p.first << ", " << id_p.second << ") ";
-      for (brec_part_hierarchy::edge_iterator eit = pa.first->out_edges_begin(); eit != pa.first->out_edges_end(); eit++) {
+      for (auto eit = pa.first->out_edges_begin(); eit != pa.first->out_edges_end(); eit++) {
         std::cout << '(' << (*eit)->target()->layer_ << ", " << (*eit)->target()->type_ << ") ";
       }
       std::cout << std::endl;
@@ -411,8 +411,8 @@ bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_dete
 
             //brec_part_instance_sptr layer_n_part = (qit->second).first;
 
-            float w1 = (float)part->cast_to_instance()->rho_c_f_;
-            float w2 = (float)kk->cast_to_instance()->rho_c_f_;
+            auto w1 = (float)part->cast_to_instance()->rho_c_f_;
+            auto w2 = (float)kk->cast_to_instance()->rho_c_f_;
 
             for (unsigned mmm = 0; mmm < as.size(); mmm++) {
               d_hist->upcount(ds[mmm], w1*w2);
@@ -445,7 +445,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
 
   // get the class hierarchy
   brec_part_hierarchy_sptr class_h;
-  std::map<unsigned, brec_part_hierarchy_sptr>::iterator h_it = h_map_.find(class_id);
+  auto h_it = h_map_.find(class_id);
   if (h_it != h_map_.end()) {
     class_h = (*h_it).second;
   }
@@ -455,10 +455,10 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
     for (unsigned i = 0; i < h_->get_dummy_primitive_instances().size(); i++)
       class_h->add_dummy_primitive_instance(h_->get_dummy_primitive_instances()[i]);
     // add layer 0 from h_
-    for (brec_part_hierarchy::vertex_iterator v_it = h_->vertices_begin(); v_it != h_->vertices_end(); v_it++) {
+    for (auto v_it = h_->vertices_begin(); v_it != h_->vertices_end(); v_it++) {
       class_h->add_vertex(*v_it);
     }
-    for (brec_part_hierarchy::edge_iterator e_it = h_->edges_begin(); e_it != h_->edges_end(); e_it++) {
+    for (auto e_it = h_->edges_begin(); e_it != h_->edges_end(); e_it++) {
       class_h->add_edge_no_check(*e_it);
     }
 
@@ -535,7 +535,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
 
     // run mean_shift on angle sample set
     unsigned a_nbins = a_hist->nbins();
-    float a_delta = float(vnl_math::twopi/a_nbins);
+    auto a_delta = float(vnl_math::twopi/a_nbins);
 
     bsta_mean_shift<double,1> a_ms;
     a_ms.find_modes(a_set, 0.01f);
@@ -583,12 +583,12 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
           if (stats_layer_n_.size() > 1) {
           // find the likelihood for each class's sample sets
           double best_class_ll = -std::numeric_limits<double>::infinity();
-          for (layer_n_map::iterator class_it = stats_layer_n_.begin(); class_it != stats_layer_n_.end(); class_it++) {
+          for (auto class_it = stats_layer_n_.begin(); class_it != stats_layer_n_.end(); class_it++) {
             if (it == class_it)
               continue;
 
             std::pair<unsigned, unsigned> op_pair(qit->first.first, qit->first.second);
-            class_map::iterator class_pair_it = (*class_it).second->find(op_pair);
+            auto class_pair_it = (*class_it).second->find(op_pair);
             if (class_pair_it == (*class_it).second->end()) {
               std::cout << "Error: One of the classes was not initialized for the pair: " << qit->first.first << ' ' << qit->first.second << '\n';
               return false;
@@ -641,7 +641,7 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
             // traverse all layer_n nodes and replace the one with worst ll
             double min = 1e6;
             brec_part_hierarchy::vertex_iterator v_min_it;
-            for (brec_part_hierarchy::vertex_iterator v_it = class_h->vertices_begin(); v_it != class_h->vertices_end(); v_it++) {
+            for (auto v_it = class_h->vertices_begin(); v_it != class_h->vertices_end(); v_it++) {
               if ((*v_it)->layer_ != layer_id)
                 continue;
 
@@ -664,12 +664,12 @@ bool brec_part_hierarchy_learner::layer_n_fit_distributions(unsigned class_id, u
   }
 
   // now fix the hierarchy with the added nodes
-  for (brec_part_hierarchy::vertex_iterator v_it = class_h->vertices_begin(); v_it != class_h->vertices_end(); v_it++) {
+  for (auto v_it = class_h->vertices_begin(); v_it != class_h->vertices_end(); v_it++) {
     if ((*v_it)->layer_ != layer_id)
       continue;
     brec_part_base_sptr p = (*v_it);
     // add the edges of this part to the hierarchy
-    for (brec_part_hierarchy::edge_iterator e_it = p->out_edges_begin(); e_it != p->out_edges_end(); e_it++) {
+    for (auto e_it = p->out_edges_begin(); e_it != p->out_edges_end(); e_it++) {
       class_h->add_edge_no_check((*e_it));
       (*e_it)->target()->add_incoming_edge((*e_it));
     }
@@ -731,7 +731,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(std::string file_name,
   std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
 
-  layer_n_map::iterator it = stats_layer_n_.find(class_id);
+  auto it = stats_layer_n_.find(class_id);
   if (it == stats_layer_n_.end()) {
     std::cout << "Error: Cannot find stats for class: " << class_id << '\n';
     ofs.close();

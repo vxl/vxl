@@ -102,7 +102,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
    case BOXM_APM_SIMPLE_GREY:
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+      auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
       if (!scene) {
         std::cerr << "error casting scene_base to scene\n";
         return false;
@@ -115,7 +115,7 @@ bool boxm_opt2_update_process(bprb_func_process& pro)
    case BOXM_APM_MOG_GREY:
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+      auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
       if (!scene) {
         std::cerr << "error casting scene_base to scene\n";
         return false;

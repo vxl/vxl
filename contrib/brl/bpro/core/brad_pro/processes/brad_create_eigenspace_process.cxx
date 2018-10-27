@@ -43,11 +43,11 @@ bool brad_create_eigenspace_process(bprb_func_process& pro)
 #endif
   int i = 0;
   std::string feature_vector_type = pro.get_input<std::string>(i++);
-  float max_int = pro.get_input<float>(i++);
-  float max_grad = pro.get_input<float>(i++);
-  unsigned nbins = pro.get_input<unsigned>(i++);
-  unsigned nib = pro.get_input<unsigned>(i++);
-  unsigned njb = pro.get_input<unsigned>(i++);
+  auto max_int = pro.get_input<float>(i++);
+  auto max_grad = pro.get_input<float>(i++);
+  auto nbins = pro.get_input<unsigned>(i++);
+  auto nib = pro.get_input<unsigned>(i++);
+  auto njb = pro.get_input<unsigned>(i++);
 
   brad_eigenspace_sptr eptr = nullptr;
   CAST_CREATE_EIGENSPACE(feature_vector_type, nbins, max_int, max_grad)

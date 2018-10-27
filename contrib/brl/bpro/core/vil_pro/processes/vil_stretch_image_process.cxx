@@ -44,8 +44,8 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr image = pro.get_input<vil_image_view_base_sptr>(0);
 
   //Retrieve limits
-  float min_limit = pro.get_input<float>(1);
-  float max_limit = pro.get_input<float>(2);
+  auto min_limit = pro.get_input<float>(1);
+  auto max_limit = pro.get_input<float>(2);
   if(min_limit>=max_limit){
     std::cerr << "vil_stretch_image_process: invalid stretch limits\n";
       return false;
@@ -59,7 +59,7 @@ bool vil_stretch_image_process(bprb_func_process& pro)
   if( vil_pixel_format_component_format(image->pixel_format()) ==
       VIL_PIXEL_FORMAT_FLOAT) {
     fimage = new vil_image_view<float>;
-    vil_image_view<float> & fimage_ref =
+    auto & fimage_ref =
         static_cast<vil_image_view<float> &>(*fimage);
     fimage_ref.deep_copy(image);
   }

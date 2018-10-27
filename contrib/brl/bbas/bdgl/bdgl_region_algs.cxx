@@ -76,9 +76,9 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
   int n = n1 + n2;
   if (!n)
     return false;
-  float* Xm = new float[n];
-  float* Ym = new float[n];
-  unsigned short* Im = new unsigned short[n];
+  auto* Xm = new float[n];
+  auto* Ym = new float[n];
+  auto* Im = new unsigned short[n];
 
   float const* X1 = r1->Xj();
   float const* Y1 = r1->Yj();
@@ -110,8 +110,8 @@ bool bdgl_region_algs::merge(vdgl_digital_region_sptr const& r1,
 
 static int increasing_compare(const void *x1, const void *x2)
 {
-  const unsigned short* f1 = (const unsigned short*)x1;
-  const unsigned short* f2 = (const unsigned short*)x2;
+  const auto* f1 = (const unsigned short*)x1;
+  const auto* f2 = (const unsigned short*)x2;
   if (*f1<*f2)
     return -1;
   else if (*f1==*f2)
@@ -122,8 +122,8 @@ static int increasing_compare(const void *x1, const void *x2)
 
 static int decreasing_compare(const void *x1, const void *x2)
 {
-  const unsigned short* f1 = (const unsigned short*)x1;
-  const unsigned short* f2 = (const unsigned short*)x2;
+  const auto* f1 = (const unsigned short*)x1;
+  const auto* f2 = (const unsigned short*)x2;
   if (*f1>*f2)
     return -1;
   else if (*f1==*f2)
@@ -143,7 +143,7 @@ bdgl_region_algs::earth_mover_distance(vdgl_digital_region_sptr const& r1,
   const unsigned int n1 = r1->Npix(), n2 = r2->Npix();
   if (n1<min_npts || n2<min_npts)
     return -1.f;
-  unsigned short *I1 = new unsigned short[n1],
+  auto *I1 = new unsigned short[n1],
                  *I2 = new unsigned short[n2];
   std::memcpy(I1, r1->Ij(), n1*sizeof(unsigned short));
   std::memcpy(I2, r2->Ij(), n2*sizeof(unsigned short));

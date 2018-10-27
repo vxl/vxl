@@ -97,8 +97,8 @@ bool boxm_edge_update_process(bprb_func_process& pro)
   std::string image_list_fname = pro.get_input<std::string>(1);
   bool use_ransac=pro.get_input<bool>(2);
   int consensus_cnt = pro.get_input<int>(3);
-  float ortho_thres = pro.get_input<float>(4);
-  float vol_ratio = pro.get_input<float>(5);
+  auto ortho_thres = pro.get_input<float>(4);
+  auto vol_ratio = pro.get_input<float>(5);
 
   // extract list of image_ids from file
   std::ifstream ifs(image_list_fname.c_str());
@@ -123,7 +123,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
   if (scene_base->appearence_model() == BOXM_EDGE_FLOAT) {
     std::cout << "appearance model EDGE_FLOAT\n";
     typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
-    boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+    auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
     if (!scene) {
        std::cerr << "error casting scene_base to scene\n";
         return false;
@@ -134,7 +134,7 @@ bool boxm_edge_update_process(bprb_func_process& pro)
   if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
     std::cout << "appearance model EDGE_LINE\n";
     typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
-    boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+    auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
     if (!scene) {
        std::cerr << "error casting scene_base to scene\n";
         return false;
@@ -264,7 +264,7 @@ bool boxm_edge_refine_updates_process(bprb_func_process& pro)
   if (scene_base->appearence_model() == BOXM_EDGE_LINE) {
     std::cout << "appearance model EDGE_LINE\n";
     typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
-    boxm_scene<tree_type> *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
+    auto *scene = dynamic_cast<boxm_scene<tree_type>*>(scene_base.ptr());
     if (!scene) {
        std::cerr << "error casting scene_base to scene\n";
         return false;

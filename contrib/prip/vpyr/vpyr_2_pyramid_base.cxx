@@ -101,6 +101,6 @@ void vpyr_2_pyramid_base_dart::set_last_level(vmap_level_index arg)
 
 const vpyr_2_pyramid_base_dart* vpyr_2_pyramid_base_dart::ancestor(vmap_level_index level) const
 {
-  vpyr_2_pyramid_base_dart& d=const_cast<vpyr_2_pyramid_base_dart&> (*this);
+  auto& d=const_cast<vpyr_2_pyramid_base_dart&> (*this);
   return d.ancestor(level) ;
 }

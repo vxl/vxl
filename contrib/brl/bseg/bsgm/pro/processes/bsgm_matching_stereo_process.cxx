@@ -66,15 +66,15 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   int error_check_mode = pro.get_input<int>(in_i++);
   int multi_scale_mode = pro.get_input<int>(in_i++);
   std::string out_disparity_txt = pro.get_input<std::string>(in_i++);
-  unsigned shadow_thresh = pro.get_input<unsigned>(in_i++);
+  auto shadow_thresh = pro.get_input<unsigned>(in_i++);
 
   // load image
-  vil_image_view<vxl_byte>* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
+  auto* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
   if (!img_ref) {
     std::cerr << pro.name() << ": The input reference image pixel format: " << img_ref_sptr->pixel_format() << " is not supported!" << std::endl;
     return false;
   }
-  vil_image_view<vxl_byte>* img_tgr = dynamic_cast<vil_image_view<vxl_byte>*>(img_tgr_sptr.ptr());
+  auto* img_tgr = dynamic_cast<vil_image_view<vxl_byte>*>(img_tgr_sptr.ptr());
   if (!img_tgr) {
     std::cerr << pro.name() << ": The input reference image pixel format: " << img_tgr_sptr->pixel_format() << " is not supported!" << std::endl;
     return false;

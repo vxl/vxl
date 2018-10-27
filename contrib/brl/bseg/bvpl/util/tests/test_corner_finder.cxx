@@ -19,7 +19,7 @@ void test_corner_pair_finder()
 {
   //create a grid
   vgl_vector_3d<unsigned> grid_size(20,20,20);
-  bvxm_voxel_grid<int> *id_grid = new bvxm_voxel_grid<int>(grid_size);
+  auto *id_grid = new bvxm_voxel_grid<int>(grid_size);
 
   int idx = 0;
   bvxm_voxel_slab_iterator<int> slab_iterator = id_grid->slab_iterator(idx, grid_size.z());
@@ -50,9 +50,9 @@ void test_corner_pair_finder()
   std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines= bvpl_corner_pair_finder::find_pairs(id_grid, vec_kernel, vec_kernel)->pairs_;
 
   //visualize
-  bvxm_voxel_grid<float> *response_grid= new bvxm_voxel_grid<float>(grid_size);
+  auto *response_grid= new bvxm_voxel_grid<float>(grid_size);
   response_grid->initialize_data(1.0f);
-  bvxm_voxel_grid<vnl_float_4> *out_grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
+  auto *out_grid = new bvxm_voxel_grid<vnl_float_4>(grid_size);
    std::vector<float> colors;
   float hue = 0.0f;
   for ( int i = 0; i < vec_kernel->size(); ++i) {

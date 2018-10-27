@@ -11,7 +11,7 @@ static void test_block_iter()
 {
   clean_up();
   short nlevels=5;
-  tree_type * block = new tree_type(nlevels);
+  auto * block = new tree_type(nlevels);
   TEST("No of Max levels of tree",nlevels, block->number_levels());
 
   block->split();

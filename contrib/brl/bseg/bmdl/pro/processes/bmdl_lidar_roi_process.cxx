@@ -48,7 +48,7 @@ bool compute_ground(vil_image_resource_sptr ground,
   {
     if ((first_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT) &&
         (last_roi->pixel_format() == VIL_PIXEL_FORMAT_FLOAT)) {
-      vil_image_view<float>* ground_view = new vil_image_view<float>();
+      auto* ground_view = new vil_image_view<float>();
       vil_image_view<float> first_view(first_roi);
       vil_image_view<float> last_view(last_roi);
       bmdl_classify<float> classifier;
@@ -59,7 +59,7 @@ bool compute_ground(vil_image_resource_sptr ground,
     }
     else if ((first_roi->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE) &&
              (last_roi->pixel_format() == VIL_PIXEL_FORMAT_DOUBLE)) {
-      vil_image_view<double>* ground_view = new vil_image_view<double>();
+      auto* ground_view = new vil_image_view<double>();
       vil_image_view<double> first_view(first_roi);
       vil_image_view<double> last_view(last_roi);
       bmdl_classify<double> classifier;
@@ -96,8 +96,8 @@ bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
   }
 
 #if HAS_GEOTIFF
-  vil_tiff_image* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
-  vil_tiff_image* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
+  auto* tiff_first = static_cast<vil_tiff_image*> (lidar_first.ptr());
+  auto* tiff_last  = static_cast<vil_tiff_image*> (lidar_last.ptr());
 
   if (vpgl_geo_camera::init_geo_camera(tiff_first, nullptr, camera))
   {
@@ -200,11 +200,11 @@ bool bmdl_lidar_roi_process(bprb_func_process& pro)
   std::string first = pro.get_input<std::string>(i++);
   std::string last = pro.get_input<std::string>(i++);
   std::string ground = pro.get_input<std::string>(i++);
-  float min_lat = pro.get_input<float>(i++);
-  float min_lon = pro.get_input<float>(i++);
-  float max_lat = pro.get_input<float>(i++);
-  float max_lon = pro.get_input<float>(i++);
-  unsigned type = pro.get_input<unsigned>(i++);
+  auto min_lat = pro.get_input<float>(i++);
+  auto min_lon = pro.get_input<float>(i++);
+  auto max_lat = pro.get_input<float>(i++);
+  auto max_lon = pro.get_input<float>(i++);
+  auto type = pro.get_input<unsigned>(i++);
 
   // check first return's validity
   vil_image_resource_sptr first_ret = vil_load_image_resource(first.c_str());

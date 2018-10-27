@@ -103,7 +103,7 @@ void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned char>& blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
-  unsigned int np = (unsigned int)(fblk.size());
+  auto np = (unsigned int)(fblk.size());
   for (unsigned int p = 0; p<np; ++p)
     for (unsigned int j = 0; j<nj; ++j)
       for (unsigned int i= 0; i<ni; ++i)
@@ -115,7 +115,7 @@ void convert_multi_plane_from_float(std::vector<vil_image_view<float> >& fblk,
                                     vil_image_view<unsigned short>& blk)
 {
   unsigned int ni = fblk[0].ni(), nj = fblk[0].nj();
-  unsigned int np = (unsigned int)(fblk.size());
+  auto np = (unsigned int)(fblk.size());
   for (unsigned int p = 0; p<np; ++p)
     for (unsigned int j = 0; j<nj; ++j)
       for (unsigned int i= 0; i<ni; ++i)

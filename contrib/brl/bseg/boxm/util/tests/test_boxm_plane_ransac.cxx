@@ -34,9 +34,9 @@ static void test_boxm_plane_ransac()
   // get two points from the line, and create a random 3rd point to define a plane
 
   for (unsigned i=0; i<test_num; ++i) {
-    float x=float(rand.drand32()*100);
-    float y=float(rand.drand32()*100);
-    float z=float(rand.drand32()*100);
+    auto x=float(rand.drand32()*100);
+    auto y=float(rand.drand32()*100);
+    auto z=float(rand.drand32()*100);
     vgl_point_3d<float> p3(x,y,z);
     vgl_plane_3d<float> plane(p1,p2,p3);
     boxm_plane_obs<float> obs(plane,1);
@@ -47,10 +47,10 @@ static void test_boxm_plane_ransac()
 
   // add the random planes
   for (unsigned i=0; i<test_set; ++i) {
-    float a=float(rand.drand32()*100);
-    float b=float(rand.drand32()*100);
-    float c=float(rand.drand32()*100);
-    float d=float(rand.drand32()*100);
+    auto a=float(rand.drand32()*100);
+    auto b=float(rand.drand32()*100);
+    auto c=float(rand.drand32()*100);
+    auto d=float(rand.drand32()*100);
     vgl_plane_3d<float> plane(a,b,c,d);
     boxm_plane_obs<float> obs(plane,1);
     boxm_edge_tangent_sample<float> sample;

@@ -167,14 +167,14 @@ int main(int argc, char** argv)
       }
     }
     volm_img_info geo_cover = geo_info[geo_cover_id];
-    vil_image_view<vxl_byte>* geo_img = dynamic_cast<vil_image_view<vxl_byte> * >(geo_cover.img_r.ptr());
+    auto* geo_img = dynamic_cast<vil_image_view<vxl_byte> * >(geo_cover.img_r.ptr());
 
     // create the image associated with current scene
     double box_lx, box_ly, box_lz;
     lvcs->global_to_local(lon_max, lat_max, 0, vpgl_lvcs::wgs84, box_lx, box_ly, box_lz);
 
-    unsigned ni = (unsigned)std::ceil(box_lx);
-    unsigned nj = (unsigned)std::ceil(box_ly);
+    auto ni = (unsigned)std::ceil(box_lx);
+    auto nj = (unsigned)std::ceil(box_ly);
 #if 0
     vil_image_view<vxl_byte> out_img(ni, nj, 1);
     out_img.fill(0);
@@ -186,13 +186,13 @@ int main(int argc, char** argv)
       for (unsigned j = 0; j < nj; j++) {
         // transfer coords to get geo cover pixel
         double lon, lat, gz;
-        float local_x = (float)(i+0+0.5);
-        float local_y = (float)(box_ly-j+0.5);
+        auto local_x = (float)(i+0+0.5);
+        auto local_y = (float)(box_ly-j+0.5);
         lvcs->local_to_global(local_x, local_y, 0, vpgl_lvcs::wgs84, lon, lat, gz);
         double u, v;
         geo_cover.cam->global_to_img(lon, lat, gz, u, v);
-        unsigned uu = (unsigned)std::floor(u+0.5);
-        unsigned vv = (unsigned)std::floor(v+0.5);
+        auto uu = (unsigned)std::floor(u+0.5);
+        auto vv = (unsigned)std::floor(v+0.5);
         if (uu > 0 && vv > 0 && uu < geo_cover.ni && vv < geo_cover.nj)
           if ((*geo_img)(uu,vv) == volm_osm_category_io::GEO_URBAN) {
             //out_img(i,j) = 255;
@@ -226,7 +226,7 @@ int main(int argc, char** argv)
   std::ofstream ofs(out_txt.c_str());
   ofs << "urban_ratio \t\t scene_xml\n";
 
-  std::multimap<double, std::string>::iterator mit = scene_order.end();
+  auto mit = scene_order.end();
   --mit;
   for (; mit != scene_order.begin(); --mit) {\
     ofs.precision(7);  ofs.width(14);

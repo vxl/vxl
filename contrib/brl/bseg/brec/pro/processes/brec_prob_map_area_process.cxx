@@ -62,7 +62,7 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
   temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<bool> input_mask = *vil_convert_cast(bool(), temp);
 
-  unsigned c_size = pro.get_input<unsigned>(i++);
+  auto c_size = pro.get_input<unsigned>(i++);
 
   vil_image_view<float> out(ni, nj, 1);
   out.fill(0);

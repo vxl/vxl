@@ -16,7 +16,7 @@ static void test_quadtree()
   qnb->set_child(0, 0, qnb);
   brip_quadtree_node_base_sptr child00 = qnb->child(0,0);
   brip_quadtree_node_base_sptr child01 = qnb->child(0,1);
-  brip_quadtree_node<float>* qcast =
+  auto* qcast =
     dynamic_cast<brip_quadtree_node<float>*>(child00.ptr());
   bool good = qcast && qcast->data()==1.1f;
   TEST("quadtree node", good, true);

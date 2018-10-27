@@ -424,7 +424,7 @@ void imesh_write_kml_collada(std::ostream& os, const imesh_mesh& mesh)
     std::cerr << "ERROR! only triangle meshes are supported.\n";
     return;
   }
-  const imesh_regular_face_array<3>& tris =
+  const auto& tris =
       static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
   const unsigned int nverts = verts.size();
@@ -568,7 +568,7 @@ void imesh_write_vrml(std::ostream& os, const imesh_mesh& mesh)
     std::cerr << "ERROR! only triangle meshes are supported.\n";
     return;
   }
-  const imesh_regular_face_array<3>& tris =
+  const auto& tris =
     static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
   const imesh_vertex_array_base& vertsb = mesh.vertices();
   unsigned d = vertsb.dim();

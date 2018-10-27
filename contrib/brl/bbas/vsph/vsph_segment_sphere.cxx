@@ -40,7 +40,7 @@ void vsph_segment_sphere::smooth_data()
         unsigned nn = neighbors.size();
         if (nn == 0) continue;
         double weight_sum = static_cast<double>(nn)*neigh_weight + 1.0;
-        for (std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type neighbor : neighbors)
+        for (const auto & neighbor : neighbors)
             sum += neigh_weight*data_[neighbor];
 
         sum /= weight_sum;
@@ -131,11 +131,11 @@ std::vector<double> vsph_segment_sphere::region_data() const
 {
     if (!seg_valid_) return std::vector<double>();
     std::vector<double> rdata(data_.size());
-    std::map<int,  std::vector<int> >::const_iterator rit = regions_.begin();
+    auto rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
         const std::vector<int>& pt_ids = rit->second;
         int n = pt_ids.size();
-        double dn = static_cast<double>(n);
+        auto dn = static_cast<double>(n);
         if (dn == 0.0) dn = 1.0;
         double sum = 0.0;
         for (int i = 0; i<n; ++i)
@@ -151,7 +151,7 @@ std::vector<std::vector<float> > vsph_segment_sphere::region_color() const
 {
     if (!seg_valid_) return std::vector<std::vector<float> >();
     std::vector<std::vector<float> > cdata(data_.size());
-    std::map<int,  std::vector<int> >::const_iterator rit = regions_.begin();
+    auto rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
         const std::vector<int>& pt_ids = rit->second;
         float r, g, b;
@@ -171,7 +171,7 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
     if (!usph_.neighbors_valid())
         usph_.find_neighbors();
     const std::vector<vsph_sph_point_2d>& spts = usph_.sph_points_ref();
-    std::map<int,  std::vector<int> >::iterator rit = regions_.begin();
+    auto rit = regions_.begin();
     for (; rit != regions_.end(); ++rit) {
         int reg_set_id = rit->first;
         std::vector<int>& rays = rit->second;
@@ -181,7 +181,7 @@ bool vsph_segment_sphere::extract_region_bounding_boxes()
         for (int i = 0; i<n&&!done; ++i) {
             int ray = rays[i];
             std::set<int> neigh = usph_.neighbors(ray);
-            for (std::set<int>::iterator nit = neigh.begin();
+            for (auto nit = neigh.begin();
                  nit != neigh.end()&&!done; ++nit) {
                 int nid = *nit;
                 int nbr_set_id = ds_.find_set(nid);

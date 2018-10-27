@@ -77,7 +77,7 @@ bool bstm_refine_blk_in_spacetime_function::refine(std::vector<bstm_data_base*>&
 
   //1. loop over each tree, refine it in place
   boxm2_array_3d<uchar16>&  trees = blk_->trees();  //trees to refine
-  uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
+  auto* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
   int dataSize = 0;                                 //running sum of data size
@@ -169,9 +169,9 @@ bool bstm_refine_blk_in_spacetime_function::refine(std::vector<bstm_data_base*>&
                                                       dataSize * bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datasize() , id);
   bstm_data_base* newN = new bstm_data_base(new char[dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize() ],
                                                       dataSize * bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datasize(), id);
-  bstm_data_traits<BSTM_ALPHA>::datatype *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
-  bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *  mog_cpy = ( bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
-  bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
+  auto *   alpha_cpy = (bstm_data_traits<BSTM_ALPHA>::datatype *) newA->data_buffer();
+  auto *  mog_cpy = ( bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype *) newM->data_buffer();
+  auto *  numobs_cpy = (bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype *) newN->data_buffer();
 
 
   //5. move data from old data buffers to new data buffers
@@ -277,7 +277,7 @@ int bstm_refine_blk_in_spacetime_function::move_time_trees(boct_bit_tree& unrefi
 
       if (!refined_tree.is_leaf(j)) //if the time trees being copied belong to an inner cell, erase their time trees
       {
-        vnl_vector_fixed<unsigned char, 8> * erased_old_time_trees = new vnl_vector_fixed<unsigned char, 8>[sub_block_num_t_];
+        auto * erased_old_time_trees = new vnl_vector_fixed<unsigned char, 8>[sub_block_num_t_];
         for (unsigned int t_idx = 0;t_idx < sub_block_num_t_; ++t_idx) {
           bstm_time_tree tmp_tree(old_time_trees[t_idx].data_block() );   //create tree by copying the tree data
           tmp_tree.erase_cells();                                         //erase all cells except for root.

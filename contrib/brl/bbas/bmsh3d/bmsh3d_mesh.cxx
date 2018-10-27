@@ -42,7 +42,7 @@ double bmsh3d_ifs_mesh::get_avg_edge_len_from_F ()
   assert (facemap_.size() != 0);
 
   //Loop through each mesh face and count bnd edge len.
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     int sz = F->vertices().size();
@@ -104,7 +104,7 @@ b_watertight_(mesh.b_watertight_)
 bmsh3d_halfedge* _connect_F_E_end (bmsh3d_face* F, bmsh3d_edge* E)
 {
   //The halfedge will be deleted when the face disconnect from the F.
-  bmsh3d_halfedge* halfedge = new bmsh3d_halfedge (E, F);
+  auto* halfedge = new bmsh3d_halfedge (E, F);
   //Handle the both-way connectivity of halfedge-face.
   F->_connect_HE_to_end (halfedge);
   //Handle the both-way connectivity of halfedge-edge.
@@ -119,7 +119,7 @@ bmsh3d_halfedge* _connect_F_E_end (bmsh3d_face* F, bmsh3d_edge* E)
 unsigned int bmsh3d_ifs_mesh::_count_faces_indices_ifs()
 {
   unsigned int totalVertices = 0;
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     assert (F->vertices().size() != 0);
@@ -135,7 +135,7 @@ unsigned int bmsh3d_ifs_mesh::_count_faces_indices_ifs()
 unsigned int bmsh3d_ifs_mesh::_count_visited_faces_indices_ifs()
 {
   unsigned int totalVertices = 0;
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     if (! F->b_visited())
@@ -153,7 +153,7 @@ unsigned int bmsh3d_ifs_mesh::_count_visited_faces_indices_ifs()
 //  where the indices of the vertices is known.
 void bmsh3d_ifs_mesh::ifs_assign_Vs_vid_by_id ()
 {
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     F->_ifs_assign_Vs_vid_by_id ();
@@ -178,14 +178,14 @@ void bmsh3d_ifs_mesh::assign_IFS_vertex_vid_by_vertex_order()
 void bmsh3d_ifs_mesh::mark_unmeshed_pts ()
 {
   //Reset the unmeshed flag of each point.
-  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  auto vit = vertexmap_.begin();
   for (; vit != vertexmap_.end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
     V->set_meshed (false);
   }
 
   //Go through all mesh faces and mark incident points.
-  std::map<int, bmsh3d_face*>::iterator fit = facemap_.begin();
+  auto fit = facemap_.begin();
   for (; fit != facemap_.end(); fit++) {
     bmsh3d_face* F = (*fit).second;
 
@@ -201,7 +201,7 @@ void bmsh3d_ifs_mesh::delete_unmeshed_pts ()
   mark_unmeshed_pts ();
 
   //Go through each point and delete unmeshed ones.
-  std::map<int, bmsh3d_vertex*>::iterator vit = vertexmap_.begin();
+  auto vit = vertexmap_.begin();
   while (vit != vertexmap_.end()) {
     bmsh3d_vertex* V = (*vit).second;
     if (! V->b_meshed()) {
@@ -225,7 +225,7 @@ double bmsh3d_mesh::get_avg_edge_len_from_F ()
   assert (facemap_.size() != 0);
 
   //Loop through each mesh face and count bnd edge len.
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     assert (F->halfedge());
@@ -257,7 +257,7 @@ unsigned int bmsh3d_mesh::count_faces_indices()
 unsigned int bmsh3d_mesh::_count_faces_indices_mhe()
 {
   unsigned int totalVertices = 0;
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     std::vector<bmsh3d_vertex*> vertices;
@@ -272,7 +272,7 @@ unsigned int bmsh3d_mesh::_count_faces_indices_mhe()
 //: Add all faces' incident edges and vertices into the map.
 void bmsh3d_mesh::_update_incident_Es_Vs ()
 {
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
 
@@ -317,14 +317,14 @@ bmsh3d_face* bmsh3d_mesh::add_new_face (const std::vector<bmsh3d_edge*>& ordered
 
   //Create the first halfedge of incidence relationship
   assert (ordered_edges.size() > 2);
-  bmsh3d_halfedge* HE = new bmsh3d_halfedge (ordered_edges[0], F);
+  auto* HE = new bmsh3d_halfedge (ordered_edges[0], F);
   F->set_halfedge (HE);
   ordered_edges[0]->_connect_HE_to_end (HE); //add the HE to the edge's pair_ structure.
 
   //for each next_edge, create a halfedge and add the incidence connectivity.
   for (unsigned int i=1; i<ordered_edges.size(); i++) {
     bmsh3d_edge* e = ordered_edges[i];
-    bmsh3d_halfedge* nextHE = new bmsh3d_halfedge (e, F);
+    auto* nextHE = new bmsh3d_halfedge (e, F);
 
     //add the nextHE to the edge's pair_ structure.
     e->_connect_HE_to_end (nextHE);
@@ -380,11 +380,11 @@ void bmsh3d_mesh::print_topo_summary (void)
 bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
 {
   //Assume M is in data structure mode of IFS, no isolated edge.
-  bmsh3d_mesh* newM = new bmsh3d_mesh ();
+  auto* newM = new bmsh3d_mesh ();
 
   //Clone all vertices of M.
   //Note: use _new_vertex() to create a new vertex.
-  std::map<int, bmsh3d_vertex*>::iterator vit = M->vertexmap().begin();
+  auto vit = M->vertexmap().begin();
   for (; vit != M->vertexmap().end(); vit++) {
     bmsh3d_vertex* V = (*vit).second;
     bmsh3d_vertex* newV = newM->_new_vertex (V->id());
@@ -395,7 +395,7 @@ bmsh3d_mesh* clone_mesh_ifs_3d (bmsh3d_mesh* M)
   newM->set_free_objects_in_destructor (M->b_free_objects_in_destructor());
 
   //Clone all faces of M.
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     bmsh3d_face* newF = newM->_new_face (F->id());
@@ -497,7 +497,7 @@ bmsh3d_face* add_F_to_M_check_topo (std::vector<int>& vids, bmsh3d_mesh* M)
 
 void add_M_faces_to_IFSset (bmsh3d_mesh* M, std::vector<std::vector<int> >& faces)
 {
-  std::map<int, bmsh3d_face*>::iterator fit = M->facemap().begin();
+  auto fit = M->facemap().begin();
   for (; fit != M->facemap().end(); fit++) {
     bmsh3d_face* F = (*fit).second;
     std::vector<int> vids;
@@ -538,7 +538,7 @@ void bmsh3d_mesh_print_object_size ()
 
 bool bmsh3d_mesh::is_2_manifold ()
 {
-  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  auto it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
     if (edge->n_incident_Fs() > 2)
@@ -550,7 +550,7 @@ bool bmsh3d_mesh::is_2_manifold ()
 unsigned int bmsh3d_mesh::count_max_polygon_sides ()
 {
   unsigned int max_sides = 0;
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
 
@@ -567,7 +567,7 @@ unsigned int bmsh3d_mesh::count_max_polygon_sides ()
 unsigned int bmsh3d_mesh::count_ifs_dup_edges ()
 {
   unsigned int count = 0;
-  std::map<int, bmsh3d_face*>::iterator it = facemap_.begin();
+  auto it = facemap_.begin();
   for (; it != facemap_.end(); it++) {
     bmsh3d_face* F = (*it).second;
     count += F->vertices().size();
@@ -582,7 +582,7 @@ unsigned int bmsh3d_mesh::count_bnd_edges (bool& b_2_manifold)
   b_2_manifold = true;
   unsigned int bnd_edges = 0;
 
-  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  auto it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
 
@@ -602,7 +602,7 @@ double bmsh3d_mesh::get_avg_edge_len ()
   double        sum_length = 0;
 
   assert (edgemap_.size() != 0);
-  std::map<int, bmsh3d_edge*>::iterator it = edgemap_.begin();
+  auto it = edgemap_.begin();
   for (; it != edgemap_.end(); it++) {
     bmsh3d_edge* edge = (*it).second;
 

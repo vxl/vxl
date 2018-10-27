@@ -77,8 +77,8 @@ bwm_video_corr_lsqr_cost_func(vil_image_view<float> const& base_image,
 void bwm_video_corr_lsqr_cost_func::f(vnl_vector<double> const& x,
                                       vnl_vector<double>& fx)
 {
-  float u = static_cast<float>(x[0]);
-  float v = static_cast<float>(x[1]);
+  auto u = static_cast<float>(x[0]);
+  auto v = static_cast<float>(x[1]);
   std::vector<float> pixels;
   extract_window(u, v, match_radius_, base_image_, pixels);
   unsigned msq = pixels.size();
@@ -107,8 +107,8 @@ bwm_video_corr_cost_function(vil_image_view<float> const& base_image,
 
 double bwm_video_corr_cost_function::f(vnl_vector<double> const& x)
 {
-  float u = static_cast<float>(x[0]);
-  float v = static_cast<float>(x[1]);
+  auto u = static_cast<float>(x[0]);
+  auto v = static_cast<float>(x[1]);
   double r = 0;
   std::vector<float> pixels;
   extract_window(u, v, match_radius_, base_image_, pixels);
@@ -221,8 +221,8 @@ bool bwm_video_corr_processor::open_video_site(std::string const& site_path,
 void bwm_video_corr_processor::
 set_world_pts(std::vector<vgl_point_3d<double> > const& pts)
 {
-  std::vector<vgl_point_3d<double> >::const_iterator pit = pts.begin();
-  for (std::vector<bwm_video_corr_sptr>::iterator cit = corrs_.begin();
+  auto pit = pts.begin();
+  for (auto cit = corrs_.begin();
        cit != corrs_.end()&&pit!=pts.end(); ++cit, ++pit)
     (*cit)->set_world_pt(*pit);
 }
@@ -593,12 +593,12 @@ compute_ab_corr_windows(unsigned match_radius,
     vgl_point_2d<double> ipta = corrs_a[i], iptb = corrs_b[i];
     if (ipta.x()<0||ipta.y()<0||iptb.x()<0||iptb.y()<0)
       continue;
-    float ua = static_cast<float>(ipta.x());
-    float va = static_cast<float>(ipta.y());
+    auto ua = static_cast<float>(ipta.x());
+    auto va = static_cast<float>(ipta.y());
     std::vector<float> pixels_a;
     extract_window(ua, va, match_radius, image_a_, pixels_a);
-    float ub = static_cast<float>(iptb.x());
-    float vb = static_cast<float>(iptb.y());
+    auto ub = static_cast<float>(iptb.x());
+    auto vb = static_cast<float>(iptb.y());
     std::vector<float> pixels_b;
     extract_window(ub, vb, match_radius, image_b_, pixels_b);
     corr_windows_a_.push_back(pixels_a);
@@ -621,13 +621,13 @@ exhaustive_init(vnl_vector<double>& position,
                 double& start_error,
                 double& end_error)
 {
-  float u0 = static_cast<float>(position[0]);
-  float v0 = static_cast<float>(position[1]);
+  auto u0 = static_cast<float>(position[0]);
+  auto v0 = static_cast<float>(position[1]);
   float uf = 0, vf = 0;
   float umin = u0-search_radius, umax = u0+search_radius;
   float vmin = v0-search_radius, vmax = v0+search_radius;
   if (umin < 0) umin = 0;
-  float ni = static_cast<float>(base.ni()), nj = static_cast<float>(base.nj());
+  auto ni = static_cast<float>(base.ni()), nj = static_cast<float>(base.nj());
   if (umax>=ni) umax = ni-1;
   if (vmin < 0) vmin = 0;
   if (vmax>=nj) vmax = nj-1;

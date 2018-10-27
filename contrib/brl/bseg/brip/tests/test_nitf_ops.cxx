@@ -26,7 +26,7 @@ static void test_nitf_ops( int argc, char* argv[] )
   }
 
   vil_image_resource_sptr ir = vil_load_image_resource(image_file.c_str());
-  vil_nitf2_image* nitf = static_cast<vil_nitf2_image*>(ir.ptr());
+  auto* nitf = static_cast<vil_nitf2_image*>(ir.ptr());
 
   unsigned ni = nitf->ni();
   unsigned nj = nitf->nj();

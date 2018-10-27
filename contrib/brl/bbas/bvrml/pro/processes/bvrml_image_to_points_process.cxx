@@ -57,8 +57,8 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
   vil_image_view_base_sptr xy_img_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   vil_image_view_base_sptr z_img_sptr = pro.get_input<vil_image_view_base_sptr>(1);
   std::string fname = pro.get_input<std::string>(2);
-  float thres = pro.get_input<float>(3);
-  float max_height = pro.get_input<float>(4);
+  auto thres = pro.get_input<float>(3);
+  auto max_height = pro.get_input<float>(4);
 
   std::ofstream ofs(fname.c_str());
 

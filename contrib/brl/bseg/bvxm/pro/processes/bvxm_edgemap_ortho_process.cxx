@@ -45,7 +45,7 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   }
 
   // scale of image
-  unsigned scale = pro.get_input<unsigned>(1);
+  auto scale = pro.get_input<unsigned>(1);
 
   // generate vpgl_geo_camera for the scene
   bvxm_world_params_sptr params = world->get_params();
@@ -87,17 +87,17 @@ bool bvxm_edgemap_ortho_process(bprb_func_process& pro)
   // render the expected edge image
   vil_image_view_base_sptr dummy_img;
   bvxm_image_metadata camera_metadata_inp(dummy_img,camera);
-  vil_image_view<float> *img_eei_f = new vil_image_view<float>(ni,nj,1);
+  auto *img_eei_f = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_eei_f_sptr = img_eei_f;
 
   bvxm_edge_ray_processor edge_proc(world);
   //edge_proc.expected_edge_image(camera_metadata_inp,img_eei_f_sptr,n_normal,scale);
 
-  vil_image_view<float> *img_height = new vil_image_view<float>(ni,nj,1);
+  auto *img_height = new vil_image_view<float>(ni,nj,1);
   vil_image_view_base_sptr img_height_sptr = img_height;
   edge_proc.expected_edge_image_and_heights(camera_metadata_inp,img_eei_f_sptr,img_height_sptr,n_normal,scale);
 
-  vil_image_view<vxl_byte> *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
+  auto *img_eei_vb = new vil_image_view<vxl_byte>(ni,nj,1);
   brip_vil_float_ops::normalize_to_interval<float,vxl_byte>(*img_eei_f,*img_eei_vb,0.0f,255.0f);
 
   pro.set_output_val<vil_image_view_base_sptr>(0, img_eei_f);

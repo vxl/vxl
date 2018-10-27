@@ -320,7 +320,7 @@ bocl_kernel *boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device,
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
   // refine trees kernel
-  bocl_kernel *refine_tree_kernel = new bocl_kernel();
+  auto *refine_tree_kernel = new bocl_kernel();
   refine_tree_kernel->create_kernel(
       &device->context(), device->device_id(), src_paths, "refine_trees",
       " -D MOG_TYPE_8",
@@ -348,7 +348,7 @@ bocl_kernel *boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device,
   src_paths.push_back(source_dir + "bit/bit_tree_library_functions.cl");
   src_paths.push_back(source_dir + "bit/refine_bit_scene.cl");
 
-  bocl_kernel *refine_data_kernel = new bocl_kernel();
+  auto *refine_data_kernel = new bocl_kernel();
   refine_data_kernel->create_kernel(
       &device->context(), device->device_id(), src_paths, "refine_data",
       options, "boxm2 opencl refine data size 2 (pass three)");

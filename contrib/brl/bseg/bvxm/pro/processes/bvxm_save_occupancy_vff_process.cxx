@@ -40,7 +40,7 @@ bool bvxm_save_occupancy_vff_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string filename = pro.get_input<std::string>(i++);
-  unsigned scale_idx = pro.get_input<unsigned>(i++);
+  auto scale_idx = pro.get_input<unsigned>(i++);
 
   if ( !world ){
     std::cout << pro.name() <<" :--  Input 0  is not valid!\n";

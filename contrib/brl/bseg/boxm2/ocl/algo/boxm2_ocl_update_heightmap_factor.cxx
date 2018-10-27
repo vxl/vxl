@@ -63,16 +63,16 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
         return false;
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
-    vil_image_view<float>* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
-    vil_image_view<float>* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
+    auto* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
+    auto* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
 
-    unsigned cl_ni = (unsigned)RoundUp(ximg->ni(), (int)local_threads[0]);
-    unsigned cl_nj = (unsigned)RoundUp(ximg->nj(), (int)local_threads[1]);
+    auto cl_ni = (unsigned)RoundUp(ximg->ni(), (int)local_threads[0]);
+    auto cl_nj = (unsigned)RoundUp(ximg->nj(), (int)local_threads[1]);
     global_threads[0] = cl_ni;
     global_threads[1] = cl_nj;
     //set generic cam
-    cl_float* ray_origins = new cl_float[4 * cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4 * cl_ni*cl_nj];
     vgl_box_3d<double> bbox = scene->bounding_box();
     float z = bbox.max_z();
     int count = 0;
@@ -102,8 +102,8 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
     bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2 * sizeof(float), tnearfar, "tnearfar  buffer");
     tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //Visibility, Preinf, Norm, and input image buffers
-    float* vis_buff = new float[cl_ni*cl_nj];
-    float* pre_buff = new float[cl_ni*cl_nj];
+    auto* vis_buff = new float[cl_ni*cl_nj];
+    auto* pre_buff = new float[cl_ni*cl_nj];
 
     for (unsigned i = 0; i < cl_ni*cl_nj; i++)
     {
@@ -158,7 +158,7 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
             bocl_mem* blk = opencl_cache->get_block(scene, *id);
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
             bocl_mem* alpha = opencl_cache->get_data(scene, *id, boxm2_data_traits<BOXM2_ALPHA>::prefix());
-            boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+            auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
             int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
             info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
             //grab an appropriately sized AUX data buffer
@@ -282,15 +282,15 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
     if (status != 0)
         return false;
 
-    vil_image_view<float>* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
-    vil_image_view<float>* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
-    unsigned cl_ni = (unsigned)RoundUp(ximg->ni(), (int)local_threads[0]);
-    unsigned cl_nj = (unsigned)RoundUp(ximg->nj(), (int)local_threads[1]);
+    auto* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
+    auto* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
+    auto cl_ni = (unsigned)RoundUp(ximg->ni(), (int)local_threads[0]);
+    auto cl_nj = (unsigned)RoundUp(ximg->nj(), (int)local_threads[1]);
     global_threads[0] = cl_ni;
     global_threads[1] = cl_nj;
     //set generic cam
-    cl_float* ray_origins = new cl_float[4 * cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4 * cl_ni*cl_nj];
     vgl_box_3d<double> bbox = scene->bounding_box();
     float z = bbox.max_z();
     int count = 0;
@@ -318,8 +318,8 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
     bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2 * sizeof(float), tnearfar, "tnearfar  buffer");
     tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //Visibility, Preinf, Norm, and input image buffers
-    float* vis_buff = new float[cl_ni*cl_nj];
-    float* post_buff = new float[cl_ni*cl_nj];
+    auto* vis_buff = new float[cl_ni*cl_nj];
+    auto* post_buff = new float[cl_ni*cl_nj];
 
     for (unsigned i = 0; i < cl_ni*cl_nj; i++)
     {
@@ -373,7 +373,7 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
             bocl_mem* blk = opencl_cache->get_block(scene, *id);
             bocl_mem* blk_info = opencl_cache->loaded_block_info();
             bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id, 0, false);
-            boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+            auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
             int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
             info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
             // data type string may contain an identifier so determine the buffer size
@@ -520,7 +520,7 @@ bool boxm2_ocl_update_heightmap_factor::update_heightmap_factor(boxm2_scene_sptr
         bocl_mem* blk = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id, 0, false);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -590,11 +590,11 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_pre_kernels
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
 
-    bocl_kernel* pre = new bocl_kernel();
+    auto* pre = new bocl_kernel();
     std::string pre_opts = options + " -D PRE_HMAP_CELL  -D STEP_CELL=step_cell_pre_hmap(aux_args,data_ptr,llid,d)";
     pre->create_kernel(&device->context(), device->device_id(), src_paths, "pre_hmap_main", pre_opts, "update::pre_hmap_main");
     vec_kernels.push_back(pre);
-    bocl_kernel* normalize_pre = new bocl_kernel();
+    auto* normalize_pre = new bocl_kernel();
     std::string normalize_pre_opts = options + " -D PRE_HMAP_CELL ";
     normalize_pre->create_kernel(&device->context(), device->device_id(), src_paths, "normalize_prehmap_main", pre_opts, "update::normalize_prehmap_main");
     vec_kernels.push_back(normalize_pre);
@@ -631,12 +631,12 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_post_kernel
     std::vector<bocl_kernel*> vec_kernels;
     //seg len pass
 
-    bocl_kernel* post = new bocl_kernel();
+    auto* post = new bocl_kernel();
     std::string post_opts = options + " -D POST_HMAP_CELL  -D STEP_CELL=step_cell_post_hmap(aux_args,data_ptr,llid,d)";
     post->create_kernel(&device->context(), device->device_id(), src_paths, "post_hmap_main", post_opts, "update::post_Cell");
     vec_kernels.push_back(post);
 
-    bocl_kernel* normalize_post = new bocl_kernel();
+    auto* normalize_post = new bocl_kernel();
     std::string normalize_post_opts = options + " -D NORMALIZE_POST_CELL ";
     normalize_post->create_kernel(&device->context(), device->device_id(), non_ray_src, "normalize_post_cell", normalize_post_opts, "update::normalize_post_cell");
     vec_kernels.push_back(normalize_post);
@@ -669,7 +669,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightm
     std::string options = "-D ATOMIC_FLOAT -D ADD_SUBTRACT_FACTOR";
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
-    bocl_kernel* computez = new bocl_kernel();
+    auto* computez = new bocl_kernel();
     std::string computez_opts = options;
     computez->create_kernel(&device->context(), device->device_id(), src_paths, "add_subtract_factor_main", computez_opts, "update::add_subtract_factor_main");
     vec_kernels.push_back(computez);
@@ -716,18 +716,18 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
 
     //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
 
-    vil_image_view<float>* hmap_mean_view = static_cast<vil_image_view<float>*>(hmap_mean.ptr());
-    vil_image_view<float>* hmap_var_view = static_cast<vil_image_view<float>*>(hmap_var.ptr());
-    vil_image_view<float>* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
-    vil_image_view<float>* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
+    auto* hmap_mean_view = static_cast<vil_image_view<float>*>(hmap_mean.ptr());
+    auto* hmap_var_view = static_cast<vil_image_view<float>*>(hmap_var.ptr());
+    auto* ximg_view = static_cast<vil_image_view<float>*>(ximg.ptr());
+    auto* yimg_view = static_cast<vil_image_view<float>*>(yimg.ptr());
 
-    unsigned cl_ni = (unsigned)RoundUp(hmap_mean_view->ni(), (int)local_threads[0]);
-    unsigned cl_nj = (unsigned)RoundUp(hmap_mean_view->nj(), (int)local_threads[1]);
+    auto cl_ni = (unsigned)RoundUp(hmap_mean_view->ni(), (int)local_threads[0]);
+    auto cl_nj = (unsigned)RoundUp(hmap_mean_view->nj(), (int)local_threads[1]);
     global_threads[0] = cl_ni;
     global_threads[1] = cl_nj;
     //set generic cam
-    cl_float* ray_origins = new cl_float[4 * cl_ni*cl_nj];
-    cl_float* ray_directions = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_origins = new cl_float[4 * cl_ni*cl_nj];
+    auto* ray_directions = new cl_float[4 * cl_ni*cl_nj];
     vgl_box_3d<double> bbox = scene->bounding_box();
     float z = bbox.max_z();
     int count = 0;
@@ -755,8 +755,8 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2 * sizeof(float), tnearfar, "tnearfar  buffer");
     tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
     //Visibility, Preinf, Norm, and input image buffers
-    float* hmean_buff = new float[cl_ni*cl_nj];
-    float* hvar_buff = new float[cl_ni*cl_nj];
+    auto* hmean_buff = new float[cl_ni*cl_nj];
+    auto* hvar_buff = new float[cl_ni*cl_nj];
 
     //copy input vals into image
     count = 0;
@@ -801,7 +801,7 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     vnl_random rand;
     int numsamples = 16;
     int rad = smoothingradius;
-    float * weights = new float[numsamples];
+    auto * weights = new float[numsamples];
     int * pts = new int[2 * numsamples];
     for (int i = 0; i < numsamples;)
     {
@@ -868,9 +868,9 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
         boxm2_data_base * aux1_ph_smooth_b = opencl_cache->get_cpu_cache()->get_data_base(scene, *id, boxm2_data_traits<BOXM2_AUX1>::prefix("pheight_smooth"), 0, false);
         //3d array of trees
         const boxm2_array_3d<uchar16>& trees = cblk->trees();
-        boxm2_data_traits<BOXM2_AUX0>::datatype * aux0_len = (boxm2_data_traits<BOXM2_AUX0>::datatype*) aux0_len_b->data_buffer();
-        boxm2_data_traits<BOXM2_AUX1>::datatype * aux1_ph = (boxm2_data_traits<BOXM2_AUX1>::datatype*) aux1_ph_b->data_buffer();
-        boxm2_data_traits<BOXM2_AUX1>::datatype * aux1_ph_smooth = (boxm2_data_traits<BOXM2_AUX1>::datatype*) aux1_ph_smooth_b->data_buffer();
+        auto * aux0_len = (boxm2_data_traits<BOXM2_AUX0>::datatype*) aux0_len_b->data_buffer();
+        auto * aux1_ph = (boxm2_data_traits<BOXM2_AUX1>::datatype*) aux1_ph_b->data_buffer();
+        auto * aux1_ph_smooth = (boxm2_data_traits<BOXM2_AUX1>::datatype*) aux1_ph_smooth_b->data_buffer();
 
         //iterate through each tree
         for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
@@ -965,7 +965,7 @@ get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, std::string opts)
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
     //seg len pass
-    bocl_kernel* seg_len = new bocl_kernel();
+    auto* seg_len = new bocl_kernel();
     std::string seg_opts = options + " -D HMAP_DENSITY_CELL  -D STEP_CELL=step_cell_hmap_density(aux_args,data_ptr,llid,d,tblock)";
     seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "compute_hmap_density_main", seg_opts, "update::hmap_density_main");
     vec_kernels.push_back(seg_len);

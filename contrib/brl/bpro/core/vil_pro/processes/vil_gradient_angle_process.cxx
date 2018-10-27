@@ -48,7 +48,7 @@ bool vil_gradient_angle_process(bprb_func_process& pro)
 
   //calc angle
   vgl_vector_2d<float> horiz(1.0f, 0.0f);
-  vil_image_view<float>* theta = new vil_image_view<float>(dx.ni(), dx.nj());
+  auto* theta = new vil_image_view<float>(dx.ni(), dx.nj());
   for (unsigned i=0; i<dx.ni(); ++i) {
     for (unsigned j=0; j<dx.nj(); ++j) {
       //vgl_vector_2d<float> pvec(dx(i,j), dy(i,j));

@@ -86,7 +86,7 @@ fill_histogram(vil_image_view_base_sptr  image,
     case VIL_PIXEL_FORMAT_SBYTE:
     {
       // Cast the abstract image view to a compatible concrete type
-      vil_image_view<vxl_byte>*  img =
+      auto*  img =
                 (vil_image_view<vxl_byte>*)(image.ptr());
 
       // Are all the pixels in contiguous memory?
@@ -120,7 +120,7 @@ fill_histogram(vil_image_view_base_sptr  image,
     case VIL_PIXEL_FORMAT_INT_16:
     {
       // Cast the abstract image view to a compatible concrete type
-      vil_image_view<vxl_int_16>*  img =
+      auto*  img =
                 (vil_image_view<vxl_int_16>*)(image.ptr());
 
       // Are all the pixels in contiguous memory?

@@ -77,8 +77,8 @@ void bstm_data_base::set_default_value(std::string data_type, bstm_block_metadat
 
   //initialize the data to the correct value
   if (data_type.find(bstm_data_traits<BSTM_ALPHA>::prefix()) != std::string::npos) {
-    const float ALPHA_INIT = float(-std::log(1.0f - data.p_init_) / side_len);
-    float* alphas = (float*) data_buffer_;
+    const auto ALPHA_INIT = float(-std::log(1.0f - data.p_init_) / side_len);
+    auto* alphas = (float*) data_buffer_;
     std::fill(alphas, alphas+num_cells, ALPHA_INIT);
   }
 //  else if (data_type.find(bstm_data_traits<BSTM_GAUSS_RGB>::prefix()) != std::string::npos) {
@@ -86,7 +86,7 @@ void bstm_data_base::set_default_value(std::string data_type, bstm_block_metadat
 //  }
   else if (data_type.find(bstm_data_traits<BSTM_CHANGE>::prefix()) != std::string::npos) {
     const float CHANGE_P_INIT = data.p_init_;
-    float* change_p = (float*) data_buffer_;
+    auto* change_p = (float*) data_buffer_;
 
     int buffer_length = (int)(buffer_length_/ bstm_data_traits<BSTM_CHANGE>::datasize() );
     for (int i=0; i<buffer_length; ++i) change_p[i] = CHANGE_P_INIT;

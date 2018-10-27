@@ -60,7 +60,7 @@ void clsfy_binary_threshold_1d::set_params(const vnl_vector<double>& p)
 bool clsfy_binary_threshold_1d::operator==(const clsfy_classifier_1d& x) const
 {
   assert( x.is_class("clsfy_binary_threshold_1d"));
-  clsfy_binary_threshold_1d& x2= (clsfy_binary_threshold_1d&) x;
+  auto& x2= (clsfy_binary_threshold_1d&) x;
   return x2.s_ == s_ &&
          x2.threshold_ == threshold_;
 }

@@ -50,7 +50,7 @@ bool boxm_compute_expected_color_scene_process(bprb_func_process& pro)
 
   //get inputs:
   boxm_scene_base_sptr scene_base = pro.get_input<boxm_scene_base_sptr>(0);
-  float grey_offset = pro.get_input<float>(1);
+  auto grey_offset = pro.get_input<float>(1);
 
   //check input's validity
   if (!scene_base.ptr()) {
@@ -62,7 +62,7 @@ bool boxm_compute_expected_color_scene_process(bprb_func_process& pro)
 
   typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > scene_tree_type;
 
-  boxm_scene<scene_tree_type> *scene = dynamic_cast<boxm_scene<scene_tree_type>* > (scene_base.as_pointer());
+  auto *scene = dynamic_cast<boxm_scene<scene_tree_type>* > (scene_base.as_pointer());
 
   //check input's validity
   if (!scene) {

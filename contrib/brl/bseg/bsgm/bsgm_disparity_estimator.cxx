@@ -396,10 +396,10 @@ bsgm_disparity_estimator::run_multi_dp(
   //vil_save( vis, "D:/results/a.png" );
 
   // These will be default P1, P2 costs if no gradient-weighted smoothing
-  unsigned short p1 = (unsigned short)( p1_base_*cost_unit_*params_.p1_scale );
+  auto p1 = (unsigned short)( p1_base_*cost_unit_*params_.p1_scale );
   float p2_max = p2_max_base_*cost_unit_*params_.p2_scale;
   float p2_min = p2_min_base_*cost_unit_*params_.p2_scale;
-  unsigned short p2 = (unsigned short)( p2_max );
+  auto p2 = (unsigned short)( p2_max );
 
   // Initialize total cost
   for( int y = 0; y < h_; y++ )
@@ -724,9 +724,9 @@ bsgm_disparity_estimator::compute_best_disparity_img(
         // disparity, fit a quadratic, and solve for the min
         else {
 
-          float c1 = (float)total_cost[y][x][min_cost_idx-1];
-          float c2 = (float)total_cost[y][x][min_cost_idx];
-          float c3 = (float)total_cost[y][x][min_cost_idx+1];
+          auto c1 = (float)total_cost[y][x][min_cost_idx-1];
+          auto c2 = (float)total_cost[y][x][min_cost_idx];
+          auto c3 = (float)total_cost[y][x][min_cost_idx+1];
 
           // This finds the min of the quadratic without explicitly computing
           // the whole quadratic.  Note the min will necessarily be within
@@ -936,7 +936,7 @@ bsgm_disparity_estimator::interpolate_errors(
 
   // Iterpolate any invalid pixels by taking the median (or specified
   // percentile) of accumulated sample set.
-  std::vector<float>::iterator sample_itr = sample_vol.begin();
+  auto sample_itr = sample_vol.begin();
   for( int y = 0; y < h_; y++ ){
     for( int x = 0; x < w_; x++, sample_itr += num_sample_dirs ){
       if( sample_count(x,y) == 0 ) continue;

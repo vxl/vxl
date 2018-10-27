@@ -112,8 +112,8 @@ double mmn_lbp_solver::operator()(const std::vector<vnl_vector<double> >& node_c
         belief_[inode].fill(priorb);
 
         const std::vector<std::pair<unsigned,unsigned> >& neighbours=neighbourhoods[inode];
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-        std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+        auto neighIter=neighbours.begin();
+        auto neighIterEnd=neighbours.end();
         while (neighIter != neighIterEnd)
         {
             unsigned arcId=neighIter->second;
@@ -143,7 +143,7 @@ double mmn_lbp_solver::operator()(const std::vector<vnl_vector<double> >& node_c
             }
             linkCosts*= -1.0; //convert to maximising log prob (not min -log prob)
             unsigned nstates=linkCosts.cols();
-            double dnstates=double(nstates);
+            auto dnstates=double(nstates);
             messages_[inode][neighIter->first].set_size(nstates);
             messages_[inode][neighIter->first].fill(std::log(1.0/dnstates)); //set all initial messages to uniform prob
 
@@ -244,8 +244,8 @@ void mmn_lbp_solver::calculate_beliefs(std::vector<unsigned>& x)
             double b=node_costs_[inode][istate];
             //Now loop over neighbourhood
             const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
-            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-            std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+            auto neighIter=neighbours.begin();
+            auto neighIterEnd=neighbours.end();
             while (neighIter != neighIterEnd)
             {
                 vnl_vector<double>& msgsFromNeigh = messages_[neighIter->first][inode];
@@ -299,9 +299,9 @@ double mmn_lbp_solver::best_solution_cost_in_history(std::vector<unsigned>& x)
 {
     double zbest=solution_cost(x);
     std::vector<double> solution_vals(soln_history_.size());
-    std::deque<std::vector<unsigned> >::iterator xIter=soln_history_.begin();
-    std::deque<std::vector<unsigned> >::iterator xIterEnd=soln_history_.end();
-    std::deque<std::vector<unsigned> >::iterator xIterBest=soln_history_.end()-1;
+    auto xIter=soln_history_.begin();
+    auto xIterEnd=soln_history_.end();
+    auto xIterBest=soln_history_.end()-1;
     while (xIter != xIterEnd)
     {
         double z = solution_cost(*xIter);
@@ -323,8 +323,8 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
 
     const std::vector<std::pair<unsigned,unsigned> >& neighbours=graph_.node_data()[inode];
 
-    std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIter=neighbours.begin();
-    std::vector<std::pair<unsigned,unsigned> >::const_iterator neighIterEnd=neighbours.end();
+    auto neighIter=neighbours.begin();
+    auto neighIterEnd=neighbours.end();
     while (neighIter != neighIterEnd) //Loop over all my neighbours
     {
         vnl_vector<double>& msgsToNeigh = messages_[inode][neighIter->first];
@@ -346,8 +346,8 @@ void mmn_lbp_solver::update_messages_to_neighbours(unsigned inode,
             {
                 double logProdIncoming=0.0;
                 //Compute product of all incoming messages to this node i from elsewhere (excluding target node j)
-                std::vector<std::pair<unsigned,unsigned> >::const_iterator tomeIter=neighbours.begin();
-                std::vector<std::pair<unsigned,unsigned> >::const_iterator tomeIterEnd=neighbours.end();
+                auto tomeIter=neighbours.begin();
+                auto tomeIterEnd=neighbours.end();
                 while (tomeIter != tomeIterEnd)
                 {
                     if (tomeIter != neighIter)
@@ -444,7 +444,7 @@ bool mmn_lbp_solver::continue_propagation(std::vector<unsigned>& x)
     {
         isCycling_=false;
         //Check for cycling condition
-        std::deque<std::vector<unsigned  > >::iterator finder=std::find(soln_history_.begin(),soln_history_.end(),x);
+        auto finder=std::find(soln_history_.begin(),soln_history_.end(),x);
         if (finder != soln_history_.end())
         {
             ++nrevisits_;

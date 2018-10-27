@@ -71,9 +71,9 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-    unsigned pi=pro.get_input<unsigned>(i++);
-    unsigned pj=pro.get_input<unsigned>(i++);
-    float intensity=pro.get_input<float>(i++);
+    auto pi=pro.get_input<unsigned>(i++);
+    auto pj=pro.get_input<unsigned>(i++);
+    auto intensity=pro.get_input<float>(i++);
     std::string identifier = pro.get_input<std::string>(i);
 
     bool foundDataType = false;
@@ -112,7 +112,7 @@ bool boxm2_cpp_ray_app_density_process(bprb_func_process& pro)
         std::vector<boxm2_data_base*> datas;
         datas.push_back(mog);
 
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
         boxm2_ray_app_density_functor ray_app_density_functor;
         ray_app_density_functor.init_data(datas,app_density,intensity);

@@ -46,8 +46,8 @@ bool vil_mask_image_using_ids_process(bprb_func_process& pro)
   unsigned i=0;
   vil_image_view_base_sptr image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr mask_image_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  unsigned idi = pro.get_input<unsigned>(i++);
-  unsigned char id = (unsigned char)idi;
+  auto idi = pro.get_input<unsigned>(i++);
+  auto id = (unsigned char)idi;
 
   unsigned ni = image_sptr->ni();
   unsigned nj = image_sptr->nj();

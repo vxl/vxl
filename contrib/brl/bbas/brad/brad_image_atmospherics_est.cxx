@@ -248,7 +248,7 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance,
     Lsat_horizontal += (plane_ave - airlight[p]);
   }
   Lsat_horizontal /= band_ids.size();
-  float norm_factor = (float)(mean_reflectance / Lsat_horizontal);
+  auto norm_factor = (float)(mean_reflectance / Lsat_horizontal);
 
   // apply normalization
   for (unsigned p = 0; p < np; p++) {
@@ -298,7 +298,7 @@ bool brad_undo_reflectance_estimate(vil_image_view<float> const& reflectance,
       Lsat_horizontal += (plane_ave - airlight[p]);
     }
     Lsat_horizontal /= band_ids.size();
-    float norm_factor = (float)(Lsat_horizontal / mean_reflectance);
+    auto norm_factor = (float)(Lsat_horizontal / mean_reflectance);
     // apply inverse
     for (unsigned p = 0; p < np; p++) {
       for (unsigned j = 0; j < nj; j++) {
@@ -411,7 +411,7 @@ bool brad_estimate_reflectance_image_multi(
   }
   Lsat_horizontal /= (max_norm_band - min_norm_band + 1);
 
-  float norm_factor = (float)(mean_reflectance / Lsat_horizontal);
+  auto norm_factor = (float)(mean_reflectance / Lsat_horizontal);
 
   cal_img.set_size(ni, nj, np);
   cal_img.fill(0.0);

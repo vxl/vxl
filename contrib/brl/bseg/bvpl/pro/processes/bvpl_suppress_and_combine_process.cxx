@@ -135,7 +135,7 @@ bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
 //  }
    if (datatype == "bsta_gauss_f1") {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
-    if (bvxm_voxel_grid<gauss_type>* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
+    if (auto* grid=dynamic_cast<bvxm_voxel_grid<gauss_type> *>(grid_base.ptr())) {
       bvxm_voxel_grid<vnl_vector_fixed<float,3> > *grid_out=new bvxm_voxel_grid<vnl_vector_fixed<float,3> >(out_grid_path, grid->grid_size());
       bvxm_voxel_grid<vnl_vector_fixed<int,3> > *id_grid=new bvxm_voxel_grid<vnl_vector_fixed<int,3> >(id_grid_path, grid->grid_size());
       if (functor_name == "gauss_convolution") {

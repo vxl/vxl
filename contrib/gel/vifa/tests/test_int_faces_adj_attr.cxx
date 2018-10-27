@@ -70,7 +70,7 @@ static void test_int_faces_adj_attr(int argc, char* argv[])
 
     // Get the group attributes in turn, with each face as a seed
     test_ifa_factory  tif;
-    iface_iterator    ifi = region_list.begin();
+    auto    ifi = region_list.begin();
     int  i = 1;
     for (; ifi != region_list.end(); ifi++, i++)
     {
@@ -103,8 +103,8 @@ static void test_int_faces_adj_attr(int argc, char* argv[])
                  << attr_names.size() << " attribute names:\n";
 
         // Dump the attribute vector
-        std::vector<std::string>::iterator  ani = attr_names.begin();
-        std::vector<float>::iterator      ai = attrs.begin();
+        auto  ani = attr_names.begin();
+        auto      ai = attrs.begin();
         for (; (ai != attrs.end()) && (ani != attr_names.end()); ai++, ani++)
           std::cout << "  " << (*ani) << ": " << (*ai) << std::endl;
       }

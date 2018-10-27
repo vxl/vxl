@@ -129,7 +129,7 @@ double vifa_line_cover::
 GetDenseCoverage()
 {
   double  cov = this->GetCoverage();
-  double  cover_extent = double(this->get_index_max() - this->get_index_min());
+  auto  cover_extent = double(this->get_index_max() - this->get_index_min());
   if (cover_extent <= 0)
     return 0.0;
   else

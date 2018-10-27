@@ -53,7 +53,7 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   if (kernels.find(identifier)==kernels.end())
   {
     std::cout<<"===========Compiling kernels==========="<<std::endl;
-    bocl_kernel* filter_kernel = new bocl_kernel();
+    auto* filter_kernel = new bocl_kernel();
     if (!compile_filter_kernel(device,filter_kernel, ""))
       return false;
     kernels[identifier]=filter_kernel;
@@ -74,9 +74,9 @@ bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, b
   centerZ->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   //set up the filter and filter buffer
-  std::vector<std::pair<vgl_point_3d<float>, bvpl_kernel_dispatch> >::iterator kit = filter->float_kernel_.begin();
+  auto kit = filter->float_kernel_.begin();
   unsigned ci=0;
-  cl_float4* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
+  auto* filter_coeff = new cl_float4 [filter->float_kernel_.size()];
   for (; kit!= filter->float_kernel_.end(); kit++, ci++)
   {
     vgl_point_3d<float> loc = kit->first;

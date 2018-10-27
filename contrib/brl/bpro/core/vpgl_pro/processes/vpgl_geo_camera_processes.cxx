@@ -47,12 +47,12 @@ bool vpgl_create_geo_camera_process(bprb_func_process& pro)
   }
   // get the inputs
   unsigned in_i = 0;
-  double ll_lon = pro.get_input<double>(in_i++);
-  double ll_lat = pro.get_input<double>(in_i++);
-  double ur_lon = pro.get_input<double>(in_i++);
-  double ur_lat = pro.get_input<double>(in_i++);
-  unsigned ni = pro.get_input<unsigned>(in_i++);
-  unsigned nj = pro.get_input<unsigned>(in_i++);
+  auto ll_lon = pro.get_input<double>(in_i++);
+  auto ll_lat = pro.get_input<double>(in_i++);
+  auto ur_lon = pro.get_input<double>(in_i++);
+  auto ur_lat = pro.get_input<double>(in_i++);
+  auto ni = pro.get_input<unsigned>(in_i++);
+  auto nj = pro.get_input<unsigned>(in_i++);
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(in_i++);
   if (ni == 0 || nj == 0) {
     std::cerr << pro.name() << ": image size can not be zero -- ni: " << ni << ", nj: " << nj << "!\n";
@@ -107,7 +107,7 @@ bool vpgl_load_geo_camera_process(bprb_func_process& pro)
   std::string tfw_filename = pro.get_input<std::string>(0);
   vpgl_lvcs_sptr lvcs = pro.get_input<vpgl_lvcs_sptr>(1);
   int utm_zone = pro.get_input<int>(2);
-  unsigned northing = pro.get_input<unsigned>(3);
+  auto northing = pro.get_input<unsigned>(3);
 
   std::ifstream ifs(tfw_filename.c_str());
   if(!ifs)
@@ -161,10 +161,10 @@ bool vpgl_translate_geo_camera_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
-  double tx = pro.get_input<double>(1);
-  double ty = pro.get_input<double>(2);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
-  vpgl_geo_camera* outcam = new vpgl_geo_camera(*geocam);
+  auto tx = pro.get_input<double>(1);
+  auto ty = pro.get_input<double>(2);
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* outcam = new vpgl_geo_camera(*geocam);
   outcam->translate(tx, ty, 0.0);
   pro.set_output_val<vpgl_camera_double_sptr>(0, outcam);
   return true;
@@ -198,9 +198,9 @@ bool vpgl_convert_geo_camera_to_generic_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
   int ni = pro.get_input<int>(1);
   int nj = pro.get_input<int>(2);
-  double scene_height = pro.get_input<double>(3);
+  auto scene_height = pro.get_input<double>(3);
   int level = pro.get_input<int>(4);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   vpgl_generic_camera<double> gcam;
   vpgl_generic_camera_convert::convert(*geocam, ni, nj, scene_height, gcam, level);
 
@@ -242,14 +242,14 @@ bool vpgl_convert_non_nadir_geo_camera_to_generic_process(bprb_func_process& pro
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
   int ni = pro.get_input<int>(1);
   int nj = pro.get_input<int>(2);
-  double scene_height = pro.get_input<double>(3);
+  auto scene_height = pro.get_input<double>(3);
   int level = pro.get_input<int>(4);
-  double dir_x = pro.get_input<double>(5);
-  double dir_y = pro.get_input<double>(6);
-  double dir_z = pro.get_input<double>(7);
+  auto dir_x = pro.get_input<double>(5);
+  auto dir_y = pro.get_input<double>(6);
+  auto dir_z = pro.get_input<double>(7);
   vgl_vector_3d<double> dir(dir_x, dir_y, dir_z);
 
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   vpgl_generic_camera<double> gcam;
   vpgl_generic_camera_convert::convert(*geocam, ni, nj, scene_height, dir, gcam, level);
 
@@ -296,7 +296,7 @@ bool vpgl_geo_footprint_process(bprb_func_process& pro)
   if (init_finish)
     bkml_write::open_document(ofs);
 
-  vpgl_geo_camera* geocam=dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto* geocam=dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   if (!geocam) {
     std::cerr << "In vpgl_geo_footprint_process() - input camera is not valid!\n";
     return false;
@@ -363,7 +363,7 @@ bool vpgl_geo_footprint_process2(bprb_func_process& pro)
   unsigned nj = img_res->nj();
 
   // get the geo camera of the input image
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geocam) {
     std::cerr << pro.name() << ": input camera is not valid!\n";
     return false;
@@ -433,9 +433,9 @@ bool vpgl_geo_cam_global_to_img_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
-  double lon = pro.get_input<double>(1);
-  double lat = pro.get_input<double>(2);
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
+  auto lon = pro.get_input<double>(1);
+  auto lat = pro.get_input<double>(2);
+  auto* geocam = dynamic_cast<vpgl_geo_camera*> (cam.ptr());
   double u,v;
   geocam->global_to_img(lon, lat, 0.0, u, v);
   pro.set_output_val<int>(0, (int)u);
@@ -466,10 +466,10 @@ bool vpgl_geo_cam_img_to_global_process(bprb_func_process& pro)
   // get inputs
   unsigned in_i = 0;
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  unsigned i = pro.get_input<unsigned>(in_i++);
-  unsigned j = pro.get_input<unsigned>(in_i++);
+  auto i = pro.get_input<unsigned>(in_i++);
+  auto j = pro.get_input<unsigned>(in_i++);
   // convert
-  vpgl_geo_camera* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  auto* geocam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geocam) {
     std::cerr << pro.name() << ": Can not convert input camera into a geo camera!\n";
     return false;
@@ -506,8 +506,8 @@ bool vpgl_load_geo_camera_process2(bprb_func_process& pro)
 
   // get the inputs
   std::string filename = pro.get_input<std::string>(0);
-  unsigned ni = pro.get_input<unsigned>(1);
-  unsigned nj = pro.get_input<unsigned>(2);
+  auto ni = pro.get_input<unsigned>(1);
+  auto nj = pro.get_input<unsigned>(2);
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs;
 
   vpgl_geo_camera *cam;
@@ -581,7 +581,7 @@ bool vpgl_save_geo_camera_tfw_process(bprb_func_process& pro)
   vpgl_camera_double_sptr cam = pro.get_input<vpgl_camera_double_sptr>(0);
   std::string filename = pro.get_input<std::string>(1);
 
-  vpgl_geo_camera *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
+  auto *geo_cam = dynamic_cast<vpgl_geo_camera*>(cam.ptr());
   if (!geo_cam) {
     std::cerr << "vpgl_save_geo_camera_tfw_process: Cannot cast camera to a geo cam! Exiting!\n";
     return false;

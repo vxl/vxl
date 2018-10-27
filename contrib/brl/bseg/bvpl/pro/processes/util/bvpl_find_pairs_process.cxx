@@ -72,7 +72,7 @@ bool bvpl_find_pairs_process_process(bprb_func_process& pro)
     return false;
   }
   //cast grid
-  bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast<bvxm_voxel_grid<bvpl_pair>* > (pair_grid_base.ptr());
+  auto *pair_grid = dynamic_cast<bvxm_voxel_grid<bvpl_pair>* > (pair_grid_base.ptr());
   bvxm_voxel_grid<bvpl_pair> * out_grid= new bvxm_voxel_grid<bvpl_pair >(out_path, pair_grid->grid_size());
   out_grid->initialize_data(bvpl_pair());
 

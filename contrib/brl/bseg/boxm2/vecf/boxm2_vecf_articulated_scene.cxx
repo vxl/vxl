@@ -59,7 +59,7 @@ void boxm2_vecf_articulated_scene::clear_target(boxm2_scene_sptr target_scene){
 void boxm2_vecf_articulated_scene::extract_source_block_data(){
 
   std::vector<boxm2_block_id> blocks = base_model_->get_block_ids();
-  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  auto iter_blk = blocks.begin();
   blk_id_ = *iter_blk;
   blk_ = boxm2_cache::instance()->get_block(base_model_, blk_id_);
   if(!blk_){
@@ -96,7 +96,7 @@ void boxm2_vecf_articulated_scene::extract_source_block_data(){
 
 void boxm2_vecf_articulated_scene::extract_target_block_data(boxm2_scene_sptr target_scene){
   std::vector<boxm2_block_id> blocks = target_scene->get_block_ids();
-  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  auto iter_blk = blocks.begin();
   target_blk_ = boxm2_cache::instance()->get_block(target_scene, *iter_blk);
   targ_n_= target_blk_->sub_block_num();
   targ_dims_= target_blk_->sub_block_dim();
@@ -135,7 +135,7 @@ void boxm2_vecf_articulated_scene::extract_unrefined_cell_info(){
         double x = targ_origin_.x() + ix*targ_dims_.x();
         double y = targ_origin_.y() + iy*targ_dims_.y();
         double z = targ_origin_.z() + iz*targ_dims_.z();
-        unsigned lindex = static_cast<unsigned>(target_linear_index(ix, iy, iz));
+        auto lindex = static_cast<unsigned>(target_linear_index(ix, iy, iz));
         unrefined_cell_info cinf;
         cinf.linear_index_ = lindex;
         cinf.ix_ = ix; cinf.iy_ = iy; cinf.iz_ = iz;

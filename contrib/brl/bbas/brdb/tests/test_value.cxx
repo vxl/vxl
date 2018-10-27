@@ -12,7 +12,7 @@ static void test_value()
   brdb_value_t<int> int_value(-10);
 
   std::cout << "Registered Database Value Types:" << std::endl;
-  std::map<std::string, const brdb_value*>::const_iterator itr = brdb_value::registry().begin();
+  auto itr = brdb_value::registry().begin();
   bool registration_test = true;
   for (; itr != brdb_value::registry().end(); ++itr){
     std::cout << "   " << itr->first << std::endl;

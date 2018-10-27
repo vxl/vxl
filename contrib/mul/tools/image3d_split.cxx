@@ -49,7 +49,7 @@ int main2(int argc, char*argv[])
 //  vul_arg<bool> ("-t", "Try to keep all images roughly same size - Default keeps all bu last ones identically sized.");
   vul_arg_parse(argc, argv);
 
-  unsigned long max_voxels = (unsigned long) vul_string_atof_withsuffix(max_voxels_arg());
+  auto max_voxels = (unsigned long) vul_string_atof_withsuffix(max_voxels_arg());
   if (max_voxels==0) vul_arg_base::display_usage_and_exit("Bad maximum number of voxels");
 
 
@@ -191,7 +191,7 @@ int main2(int argc, char*argv[])
         trans.set_translation(-double(i0), -double(j0), -double(k0));
         vimt3d_save_transform(ir2, trans*w2i, use_millimeters);
 
-        vimt3d_vil3d_v3i_image* v3i_ir2 = dynamic_cast<vimt3d_vil3d_v3i_image *>(ir2.as_pointer());
+        auto* v3i_ir2 = dynamic_cast<vimt3d_vil3d_v3i_image *>(ir2.as_pointer());
         if (v3i_ir2)
           v3i_ir2->set_world2im(trans*w2i);
         else

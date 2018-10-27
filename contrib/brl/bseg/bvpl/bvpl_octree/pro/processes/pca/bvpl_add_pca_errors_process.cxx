@@ -51,8 +51,8 @@ bool bvpl_add_pca_errors_process(bprb_func_process& pro)
   //get inputs
   unsigned i =0;
   bvpl_pca_error_scenes_sptr error_scenes = pro.get_input<bvpl_pca_error_scenes_sptr>(i++);
-  unsigned dim = pro.get_input<unsigned>(i++);
-  double fraction_nsamples = pro.get_input<double>(i++);
+  auto dim = pro.get_input<unsigned>(i++);
+  auto fraction_nsamples = pro.get_input<double>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
@@ -70,12 +70,12 @@ bool bvpl_add_pca_errors_process(bprb_func_process& pro)
   double error = 0;
   if (fraction_nsamples < 0.95)
   {
-    double scene_ncells = (double)error_scene->size();
+    auto scene_ncells = (double)error_scene->size();
     error_scene->load_block(block_i,block_j,block_k);
-    double tree_ncells = (double)error_scene->get_block(block_i,block_j,block_k)->get_tree()->size();
+    auto tree_ncells = (double)error_scene->get_block(block_i,block_j,block_k)->get_tree()->size();
     double nsamples = scene_ncells * fraction_nsamples;
 
-    unsigned long tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
+    auto tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
     std::cout << "Number of samples in  the scene " << scene_ncells << '\n'
              << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << '\n';
     error = bvpl_average_value(error_scene,block_i, block_j, block_k, tree_nsamples);

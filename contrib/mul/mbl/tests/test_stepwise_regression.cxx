@@ -117,10 +117,10 @@ void test_stepwise_regression()
     TEST("basis set contains all it should",basis.size() >= signifIndices.size(),true);
     TEST("basis set contains at most one spurious variable",basis.size() <= signifIndices.size()+1,true);
 
-    std::set<unsigned>::iterator failedIter=basis.end();
-    std::set<unsigned>::iterator seeker=basis.begin();
-    std::vector<unsigned >::iterator signifIter=signifIndices.begin();
-    std::vector<unsigned >::iterator signifIterEnd=signifIndices.end();
+    auto failedIter=basis.end();
+    auto seeker=basis.begin();
+    auto signifIter=signifIndices.begin();
+    auto signifIterEnd=signifIndices.end();
     while (signifIter !=  signifIterEnd)
     {
         seeker=basis.find(*signifIter);
@@ -131,12 +131,12 @@ void test_stepwise_regression()
 
     //Now check that the returned weights are the correlation coefficients
     vnl_vector<double > delta(basis.size(),0.0);
-    std::set<unsigned >::iterator basisIter=basis.begin();
+    auto basisIter=basis.begin();
     for (unsigned k=0;k<delta.size();++k,++basisIter)
     {
         //Note the ordering can be different if there is a spurious variable somewhere in the basis
         //So find the position of the basis variable in the coefficient vector
-        std::vector<unsigned >::iterator seekIter=std::find(signifIndices.begin(),signifIndices.end(),*basisIter);
+        auto seekIter=std::find(signifIndices.begin(),signifIndices.end(),*basisIter);
         if (seekIter != signifIndices.end())
         {
             //If the basis variable is significant

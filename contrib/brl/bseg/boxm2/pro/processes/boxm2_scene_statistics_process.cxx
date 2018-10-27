@@ -80,12 +80,12 @@ bool boxm2_scene_statistics_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
-  float center_x = pro.get_input<float>(i++);
-  float center_y = pro.get_input<float>(i++);
-  float center_z = pro.get_input<float>(i++);
-  float len_x = pro.get_input<float>(i++);
-  float len_y = pro.get_input<float>(i++);
-  float len_z = pro.get_input<float>(i++);
+  auto center_x = pro.get_input<float>(i++);
+  auto center_y = pro.get_input<float>(i++);
+  auto center_z = pro.get_input<float>(i++);
+  auto len_x = pro.get_input<float>(i++);
+  auto len_y = pro.get_input<float>(i++);
+  auto len_z = pro.get_input<float>(i++);
 
   //create vgl box
   const vgl_point_3d<double> center(center_x,center_y,center_z);

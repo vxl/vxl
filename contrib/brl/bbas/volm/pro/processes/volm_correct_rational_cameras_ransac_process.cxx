@@ -47,8 +47,8 @@ vpgl_rational_camera<double>* load_cam_from_nitf(std::string& nitf_image_path) {
   }
 
   //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
-  vpgl_nitf_rational_camera *nitf_cam=new vpgl_nitf_rational_camera(nitf_image, true);
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_cam=new vpgl_nitf_rational_camera(nitf_image, true);
 
   return dynamic_cast<vpgl_rational_camera<double>* >(nitf_cam);
 }
@@ -86,7 +86,7 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     // get the inputs
     std::string input_cams = pro.get_input<std::string>(0);
     std::string output_path = pro.get_input<std::string>(1);
-    float pix_rad = pro.get_input<float>(2);
+    auto pix_rad = pro.get_input<float>(2);
 
 
     std::ifstream ifs(input_cams.c_str());
@@ -351,7 +351,7 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
   std::string input_cams = pro.get_input<std::string>(1);
   std::string output_path  = pro.get_input<std::string>(2);
-  float pix_rad = pro.get_input<float>(3);
+  auto pix_rad = pro.get_input<float>(3);
   bool enforce_existing = pro.get_input<int>(4) == 1 ? true : false;
   if (enforce_existing)
     std::cout << "!!!!!!! enforce to have at least 2 existing images!!\n";

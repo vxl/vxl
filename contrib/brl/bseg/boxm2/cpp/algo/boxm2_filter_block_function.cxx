@@ -13,11 +13,11 @@ boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene,
   boxm2_block_id id = blk->block_id();
   std::size_t dataSize = alphas->buffer_length();
   boxm2_data_base* newA = new boxm2_data_base(new char[dataSize], dataSize, id);
-  float*   alpha_cpy = (float*) newA->data_buffer();
+  auto*   alpha_cpy = (float*) newA->data_buffer();
 
   //3d array of trees
   const boxm2_array_3d<uchar16>& trees = blk->trees();
-  float*   alpha_data = (float*) alphas->data_buffer();
+  auto*   alpha_data = (float*) alphas->data_buffer();
 
   //iterate through each block, filtering the root level first
   std::cout<<"Filtering scene: "<<std::flush;

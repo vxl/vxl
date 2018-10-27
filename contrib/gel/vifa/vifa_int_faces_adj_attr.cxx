@@ -92,7 +92,7 @@ GetFaceList()
     this->compute_closure();
   }
 
-  iface_list* v = new iface_list;
+  auto* v = new iface_list;
   for (auto & face : faces_)
   {
     v->push_back(face);
@@ -380,7 +380,7 @@ compute_closure_step(int                       current_depth,
   if (adj_faces)
   {
     // For each adjacent face...
-    iface_iterator fi = adj_faces->begin();
+    auto fi = adj_faces->begin();
     for (; fi != adj_faces->end(); fi++)
     {
       vtol_intensity_face_sptr  adj_face_sptr = (*fi);

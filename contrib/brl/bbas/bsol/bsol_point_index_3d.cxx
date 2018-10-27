@@ -47,7 +47,7 @@ bsol_point_index_3d::bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
     {
-      std::vector<std::vector<vsol_point_3d_sptr> >* v =
+      auto* v =
         new std::vector<std::vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
     //  v->clear();
@@ -77,7 +77,7 @@ bsol_point_index_3d(int nrows, int ncols, int nslabs,
   for (int r = 0; r<nrows; r++)
     for (int c = 0; c<ncols; c++)
     {
-      std::vector<std::vector<vsol_point_3d_sptr> >* v =
+      auto* v =
         new std::vector<std::vector<vsol_point_3d_sptr> >(nslabs);
       point_array_[r][c] = v;
       //  v->clear();

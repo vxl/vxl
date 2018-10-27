@@ -16,7 +16,7 @@ int test_map_main(int /*argc*/,char* /*argv*/[])
   for (auto & p : m)
     std::cout << p.first << " " << p.second << std::endl;
 
-  mymap::iterator i = m.find(3);
+  auto i = m.find(3);
   okay = okay && (i == m.end()); // not found (=OK)
   i = m.find(2);
   okay = okay && (i != m.end()) && ((*i).second == 3141);

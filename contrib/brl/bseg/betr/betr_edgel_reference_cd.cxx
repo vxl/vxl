@@ -6,7 +6,7 @@
 bool betr_edgel_reference_cd::process(){
   betr_edgel_factory ef;
   betr_edgel_factory_params& efparams = ef.params();
-  betr_edgel_reference_cd_params* params = dynamic_cast<betr_edgel_reference_cd_params*>(params_.ptr());
+  auto* params = dynamic_cast<betr_edgel_reference_cd_params*>(params_.ptr());
   efparams.det_params_.smooth = params->sigma_;
   efparams.det_params_.noise_multiplier = params->noise_mul_;
   ef.add_image("evt_image", evt_imgr_);

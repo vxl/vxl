@@ -20,7 +20,7 @@ void icam_view_sphere::create_view_points(double cap_angle, double view_angle, u
 //: returns the cameras of the view points, associated with the view point id
 void icam_view_sphere::cameras(std::map<unsigned, vpgl_camera_double_sptr> &cameras)
 {
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  auto it=view_sphere_->begin();
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     unsigned id = it->first;
@@ -31,12 +31,12 @@ void icam_view_sphere::cameras(std::map<unsigned, vpgl_camera_double_sptr> &came
 
 void icam_view_sphere::set_cameras(std::map<unsigned, vpgl_camera_double_sptr> const &cameras)
 {
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
-  std::map<unsigned, vpgl_camera_double_sptr>::const_iterator cam_it=cameras.begin();
+  auto it=view_sphere_->begin();
+  auto cam_it=cameras.begin();
   while (it != view_sphere_->end() && cam_it != cameras.end()) {
     vpgl_camera_double_sptr cam = cam_it->second;
     it->second.set_camera(cam);
-    vpgl_perspective_camera<double>* pers_cam = static_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
+    auto* pers_cam = static_cast<vpgl_perspective_camera<double>*>(cam.as_pointer());
     vgl_homg_point_3d<double> center = pers_cam->camera_center();
     vsph_spherical_coord coord;
     vsph_sph_point_3d sp;
@@ -51,7 +51,7 @@ void icam_view_sphere::set_cameras(std::map<unsigned, vpgl_camera_double_sptr> c
 void icam_view_sphere::set_images(std::map<unsigned, std::string>& images,
                                   std::map<unsigned, std::string>& depth_images)
 {
-  std::map<unsigned, std::string>::iterator it_imgs=images.begin();
+  auto it_imgs=images.begin();
   while (it_imgs != images.end()) {
     unsigned uid = it_imgs->first;
     if (images[uid].size()>0) {
@@ -61,7 +61,7 @@ void icam_view_sphere::set_images(std::map<unsigned, std::string>& images,
         if (view_sphere_->view_point(uid, vp)) {
           // get the camera
           vpgl_camera_double_sptr camera=vp->camera();
-          vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
+          auto* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
           if (cam) {
             icam_view_metadata* data = new icam_view_metadata(images[uid],depth_images[uid]);
             vp->set_metadata(data);
@@ -80,7 +80,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
 {
   // try to find the best camera at each view point and at the end we will
   // have errors to compare on the view sphere
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  auto it=view_sphere_->begin();
   unsigned index = 0;
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
@@ -116,7 +116,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
   double cam_cost=1e99; // will become min cost, so initialise with high value
   for (unsigned i=0; i<local_min.size(); i++) {
     std::cout << "Local MINIMA " << i << "--" << local_min[i].view_point() << std::endl;
-    vpgl_perspective_camera<double>* gt_cam =
+    auto* gt_cam =
       dynamic_cast<vpgl_perspective_camera<double>* >(ground_truth_cam_.as_pointer());
     if (gt_cam) {
       vpgl_perspective_camera<double>* cam = (vpgl_perspective_camera<double>*)local_min[i].camera().as_pointer();
@@ -139,7 +139,7 @@ void icam_view_sphere::register_image(vil_image_view<float> const& dest_img,
 void icam_view_sphere::find_local_minima(std::vector<vsph_view_point<icam_view_metadata> >& local_minima)
 {
   // go through all the viewpoints to see if it is a local maxima
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  auto it=view_sphere_->begin();
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     unsigned vp_uid = it->first;
@@ -179,7 +179,7 @@ void icam_view_sphere::find_local_minima(std::vector<vsph_view_point<icam_view_m
 
 void icam_view_sphere::camera_transf(vpgl_perspective_camera<double> const& cam)
 {
-  vsph_view_sphere<vsph_view_point<icam_view_metadata> >::iterator it=view_sphere_->begin();
+  auto it=view_sphere_->begin();
   while (it != view_sphere_->end()) {
     vsph_view_point<icam_view_metadata> vp = it->second;
     if (!vp.metadata()) {

@@ -105,7 +105,7 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
     return nullptr;
   }
 
-  bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
+  auto* gp_root = dynamic_cast<bxml_element*>(root.ptr());
 
   //get the variables
   int min_x, max_x, min_y, max_y, min_z, max_z;

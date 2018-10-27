@@ -138,8 +138,8 @@ bool boxm2_vecf_ocl_filter::filter(std::vector<float> const& weights, unsigned n
    std::vector<boxm2_block_id> blocks_temp = temp_scene_->get_block_ids();
    if(blocks_temp.size()!=1||blocks_source.size()!=1)
      return false;
-   std::vector<boxm2_block_id>::iterator iter_blk_temp = blocks_temp.begin();
-   std::vector<boxm2_block_id>::iterator iter_blk_source = blocks_source.begin();
+   auto iter_blk_temp = blocks_temp.begin();
+   auto iter_blk_source = blocks_source.begin();
      //Gather information about the temp and setup temp data buffers
    blk_temp       = opencl_cache_->get_block(temp_scene_, *iter_blk_temp);
    alpha_temp     = opencl_cache_->get_data<BOXM2_ALPHA>(temp_scene_, *iter_blk_temp,0,true);
@@ -165,7 +165,7 @@ bool boxm2_vecf_ocl_filter::filter(std::vector<float> const& weights, unsigned n
    alpha_source     = opencl_cache_->get_data<BOXM2_ALPHA>(source_scene_, *iter_blk_source,0,false);
    info_buffer_source->data_buffer_length = (int) (alpha_source->num_bytes()/alphaTypeSize);
    int data_size = info_buffer_source->data_buffer_length;
-   float* output_buff= new float[data_size];
+   auto* output_buff= new float[data_size];
    output = new bocl_mem(device_->context(), output_buff, sizeof(float)*info_buffer_source->data_buffer_length, "output" );
    output->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR );
    output->zero_gpu_buffer(queue);

@@ -99,7 +99,7 @@ void mfpf_profile_pdf_builder::add_example(const vimt_image_2d_of<float>& image,
 void mfpf_profile_pdf_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_profile_pdf");
-  mfpf_profile_pdf& nc = static_cast<mfpf_profile_pdf&>(pf);
+  auto& nc = static_cast<mfpf_profile_pdf&>(pf);
   nc.set_search_area(search_ni_,0);
 
   std::cout<<"Building from "<<data_.size()<<" examples."<<std::endl;

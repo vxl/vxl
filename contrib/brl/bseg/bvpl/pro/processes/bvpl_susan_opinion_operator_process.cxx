@@ -77,9 +77,9 @@ bool bvpl_susan_opinion_operator_process(bprb_func_process& pro)
   bvpl_kernel_vector_sptr kernel = pro.get_input<bvpl_kernel_vector_sptr>(i++);
 
 
-  bvxm_voxel_grid<int > * in_dir_grid
+  auto * in_dir_grid
       =dynamic_cast<bvxm_voxel_grid<int> *>(in_dir_grid_base.ptr());
-  bvxm_voxel_grid<bvxm_opinion> * in_opn_grid
+  auto * in_opn_grid
       =dynamic_cast<bvxm_voxel_grid<bvxm_opinion> *>(in_opn_grid_base.ptr());
 
   if(in_opn_grid)

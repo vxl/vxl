@@ -101,13 +101,13 @@ brip_vil1_float_ops::half_resolution(vil1_memory_image_of<float> const & input,
   output.resize(half_w, half_h);
   //Generate input/output arrays
   int n = 0;
-  float* in0 = new float[w];  float* in1 = new float[w];
-  float* in2 = new float[w];  float* in3 = new float[w];
-  float* in4 = new float[w];
+  auto* in0 = new float[w];  auto* in1 = new float[w];
+  auto* in2 = new float[w];  auto* in3 = new float[w];
+  auto* in4 = new float[w];
 
-  float* out0 = new float[half_w];  float* out1 = new float[half_w];
-  float* out2 = new float[half_w];  float* out3 = new float[half_w];
-  float* out4 = new float[half_w];
+  auto* out0 = new float[half_w];  auto* out1 = new float[half_w];
+  auto* out2 = new float[half_w];  auto* out3 = new float[half_w];
+  auto* out4 = new float[half_w];
   //Initialize arrays
   fill_1d_array(input, n++, in0);   fill_1d_array(input, n++, in1);
   fill_1d_array(input, n++, in2);   fill_1d_array(input, n++, in3);
@@ -642,7 +642,7 @@ brip_vil1_float_ops::Lucas_KanadeMotion(vil1_memory_image_of<float> & current_fr
         }
       //Divide by the number of pixels in the neighborhood
       IxIx/=N;  IxIy/=N; IyIy/=N; IxIt/=N; IyIt/=N;
-      float det = float(IxIx*IyIy-IxIy*IxIy);
+      auto det = float(IxIx*IyIy-IxIy*IxIy);
       //Eliminate small motion factors
       float dif = diff(x,y);
       float motion_factor = std::fabs(det*dif);
@@ -966,7 +966,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
   const int w = I.width(), h = I.height();
   image.resize(w,h);
 
-  const float deg_to_rad = float(vnl_math::pi_over_180);
+  const auto deg_to_rad = float(vnl_math::pi_over_180);
   for (int r = 0; r < h; r++)
     for (int c = 0; c < w; c++)
     {
@@ -990,7 +990,7 @@ display_IHS_as_RGB(vil1_memory_image_of<float> const& I,
         red = 0;
         blue = sat*(-cs);
       }
-      unsigned char rc = (unsigned char)red,
+      auto rc = (unsigned char)red,
         gc = (unsigned char)green, bc = (unsigned char)blue;
       image(c,r)= vil1_rgb<unsigned char>(rc, gc, bc);
     }
@@ -1381,7 +1381,7 @@ fourier_transform(vil1_memory_image_of<float> const & input,
   for (int r = 0; r<h; r++)
     for (int c = 0; c<w; c++)
     {
-      float re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
+      auto re = (float)fourier_matrix[r][c].real(), im = (float)fourier_matrix[r][c].imag();
       mag(c,r) = std::sqrt(re*re + im*im);
       phase(c,r) = std::atan2(im, re);
     }
@@ -1558,7 +1558,7 @@ bilinear_interpolation(vil1_memory_image_of<float> const & input,
   double int01 = input(xr, yr+1), int11 = input(xr+1,yr+1);
   double int0 = int00 + fy * (int01 - int00);
   double int1 = int10 + fy * (int11 - int10);
-  float val = (float) (int0 + fx * (int1 - int0));
+  auto val = (float) (int0 + fx * (int1 - int0));
   return val;
 }
 

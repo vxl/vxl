@@ -44,9 +44,9 @@ bool vpgl_create_lvcs_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  double lat = pro.get_input<double>(0);
-  double lon = pro.get_input<double>(1);
-  double el = pro.get_input<double>(2);
+  auto lat = pro.get_input<double>(0);
+  auto lon = pro.get_input<double>(1);
+  auto el = pro.get_input<double>(2);
   std::string lvcs_name = pro.get_input<std::string>(3);
 
   // create lvcs

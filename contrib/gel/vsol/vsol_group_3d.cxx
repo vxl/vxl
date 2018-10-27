@@ -85,7 +85,7 @@ void vsol_group_3d::compute_bounding_box(void) const
   // require
   assert(size()>0);
 
-  std::vector<vsol_spatial_object_3d_sptr>::iterator i = storage_->begin();
+  auto i = storage_->begin();
   set_bounding_box(   (*i)->get_min_x(), (*i)->get_min_y(), (*i)->get_min_z());
   add_to_bounding_box((*i)->get_max_x(), (*i)->get_max_y(), (*i)->get_max_z());
   for (++i; i!=storage_->end(); ++i)
@@ -142,7 +142,7 @@ void vsol_group_3d::remove_object(unsigned int i)
   // require
   assert(i<size());
 
-  std::vector<vsol_spatial_object_3d_sptr>::iterator j = storage_->begin() + i;
+  auto j = storage_->begin() + i;
   storage_->erase(j);
 }
 

@@ -130,7 +130,7 @@ void volm_satellite_resources::add_resources(unsigned start, unsigned end) {
     satellite_footprint.add(vgl_point_2d<double>(resources_[i].meta_->upper_right_.x(), resources_[i].meta_->upper_right_.y()));
     volm_geo_index2::get_leaves(root_, leaves, satellite_footprint);
     for (auto & leave : leaves) {
-      volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
+      auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
       leaf_ptr->contents_.push_back(i);  // push this satellite image to this leave that intersects its footprint
     }
   }
@@ -144,7 +144,7 @@ void volm_satellite_resources::query(double lower_left_lon, double lower_left_la
   volm_geo_index2::get_leaves(root_, leaves, area);
   std::vector<unsigned> temp_ids_init;
   for (auto & leave : leaves) {
-    volm_geo_index2_node<std::vector<unsigned> >* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
+    auto* leaf_ptr = dynamic_cast<volm_geo_index2_node<std::vector<unsigned> >* >(leave.ptr());
     // check which images overlap with the given bbox
     for (unsigned int res_id : leaf_ptr->contents_) {
       // CAUTION: x is lat and y is lon in nitf_camera but we want x to be lon and y to be lat, use all the corners of satellite image by inverting x-y to create the bounding box
@@ -251,7 +251,7 @@ bool volm_satellite_resources::query_seeds_print_to_file(double lower_left_lon, 
   possible_seeds["other"] = tmp;
   for (unsigned int id : ids) {
     if (resources_[id].meta_->cloud_coverage_percentage_ < 1) {
-      std::map<std::string, std::vector<unsigned> >::iterator iter = possible_seeds.find(resources_[id].meta_->satellite_name_);
+      auto iter = possible_seeds.find(resources_[id].meta_->satellite_name_);
       if (iter != possible_seeds.end())
         iter->second.push_back(id);
       else
@@ -1197,7 +1197,7 @@ bool volm_satellite_resources::same_time(volm_satellite_resource const& res_a, v
     return false;
   // calculate the time difference in seconds
   unsigned time_min_diff = res_a.meta_->time_minute_dif(*res_b.meta_);
-  unsigned second_diff = (unsigned)std::abs(res_a.meta_->t_.sec - res_b.meta_->t_.sec);
+  auto second_diff = (unsigned)std::abs(res_a.meta_->t_.sec - res_b.meta_->t_.sec);
   float time_second_diff = second_diff + 60.0 * time_min_diff;
   if (time_second_diff < diff_in_sec) {
     return true;

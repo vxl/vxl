@@ -85,7 +85,7 @@ volm_desc_ex_land_only::volm_desc_ex_land_only(std::vector<unsigned char> const&
   this->initialize_bin(initial_mag);
 
   // ingest index to histogram
-  unsigned nrays = (unsigned)index_dst.size();
+  auto nrays = (unsigned)index_dst.size();
   assert( nrays == index_combined.size() && " in volm_desx_ex, dist/land/orient indice has different number of rays");
   for (unsigned r_idx = 0; r_idx < nrays; r_idx++) {
     if (index_dst[r_idx] == 253 || index_combined[r_idx] == 253)         // invalid

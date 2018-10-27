@@ -61,7 +61,7 @@ std::string vil_nitf2_tagged_record::pretty_name() const
 
 vil_nitf2_tagged_record* vil_nitf2_tagged_record::create(vil_nitf2_istream& input)
 {
-  vil_nitf2_tagged_record* record = new vil_nitf2_tagged_record();
+  auto* record = new vil_nitf2_tagged_record();
   if (record->read(input)) {
     return record;
   }
@@ -335,10 +335,10 @@ bool vil_nitf2_tagged_record::test()
   test_stream << testFieldsStr; // rest of fields
   std::string read_string = test_stream.str();
   // Write the test input std::string to a vil_stream
-  vil_stream_core* vs = new vil_stream_core();
+  auto* vs = new vil_stream_core();
   vs->write(read_string.c_str(), read_string.length());
   vs->seek(0);
-  vil_stream_section* vss = new vil_stream_section(vs, 0, int(read_string.length()));
+  auto* vss = new vil_stream_section(vs, 0, int(read_string.length()));
   // Record from the vil_stream
   vil_nitf2_tagged_record* record = vil_nitf2_tagged_record::create(*vss);
   if (record)
@@ -347,7 +347,7 @@ bool vil_nitf2_tagged_record::test()
     // Now write the record, and compare the output to the test input
     std::cerr << "\nOriginal string:\n" << read_string
              << "\nWrite() output:\n";
-    vil_stream_core* vs2 = new vil_stream_core();
+    auto* vs2 = new vil_stream_core();
     record->write(*(vil_stream*)vs2);
     vil_streampos bufsize = vs2->file_size();
     char* buf = new char[(unsigned int)bufsize + 1];
@@ -510,7 +510,7 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   }
   else {
     tr = new vil_nitf2_field::field_tree;
-    vil_nitf2_field::field_tree* skipped_node = new vil_nitf2_field::field_tree;
+    auto* skipped_node = new vil_nitf2_field::field_tree;
     skipped_node->columns.emplace_back("CEDATA" );
     skipped_node->columns.emplace_back("<skipped unknown TRE>" );
     tr->children.push_back( skipped_node );
@@ -520,7 +520,7 @@ vil_nitf2_field::field_tree* vil_nitf2_tagged_record::get_tree() const
   tr->columns.push_back( name() );
   tr->columns.push_back( pretty_name() );
   //add the CEL (length) field to the front
-  vil_nitf2_field::field_tree* first_child = new vil_nitf2_field::field_tree;
+  auto* first_child = new vil_nitf2_field::field_tree;
   first_child->columns.emplace_back("CEL" );
   first_child->columns.emplace_back("Extension Length" );
   std::stringstream len_stream;

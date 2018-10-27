@@ -61,7 +61,7 @@ namespace boxm2_ocl_probability_of_image_wcubic_process_globals
   opts += " -D STEP_CELL=step_cell_cubic_compute_probability_of_intensity(aux_args,data_ptr,d*linfo->block_len,vis,aux_args.prob_image) ";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     ray_trace_kernel->create_kernel( &device->context(),
                                      device->device_id(),
@@ -74,7 +74,7 @@ namespace boxm2_ocl_probability_of_image_wcubic_process_globals
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
-    bocl_kernel * normalize_render_kernel=new bocl_kernel();
+    auto * normalize_render_kernel=new bocl_kernel();
 
     normalize_render_kernel->create_kernel( &device->context(),
                                             device->device_id(),
@@ -172,21 +172,21 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
   //set generic cam
 
   vil_image_view_base_sptr float_img=boxm2_util::prepare_input_image(img);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
   unsigned cl_ni=RoundUp(img_view->ni(),local_threads[0]);
   unsigned cl_nj=RoundUp(img_view->nj(),local_threads[1]);
 
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = new bocl_mem(device->context(), ray_origins, cl_ni*cl_nj * sizeof(cl_float4) , "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = new bocl_mem(device->context(), ray_directions,  cl_ni*cl_nj * sizeof(cl_float4), "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* prob_image_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* prob_image_buff = new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
     vis_buff[i]=1.0f;
@@ -234,7 +234,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
     bocl_mem* blk_info = opencl_cache->loaded_block_info();
     bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id);
     int mogTypeSize = (int) boxm2_data_info::datasize(data_type);
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
@@ -295,7 +295,7 @@ bool boxm2_ocl_probability_of_image_wcubic_process(bprb_func_process& pro)
   prob_image->read_to_buffer(queue);
   vis_image->read_to_buffer(queue);
    clFinish(queue);
-  vil_image_view<float>* prob_img_out=new vil_image_view<float>(ni,nj);
+  auto* prob_img_out=new vil_image_view<float>(ni,nj);
 
   for (unsigned c=0;c<nj;c++)
     for (unsigned r=0;r<ni;r++)

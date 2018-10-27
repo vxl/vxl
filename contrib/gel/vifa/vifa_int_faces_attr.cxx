@@ -417,7 +417,7 @@ GetMeanAttr(int attr_index)
       // Create list of attr vals and attr histogram
       std::vector<float>  vals(attr_map_.size());
       int          index = 0;
-      for (attr_iterator ai = attr_map_.begin();
+      for (auto ai = attr_map_.begin();
            ai != attr_map_.end(); ++ai, ++index)
       {
         vifa_int_face_attr_sptr  attr_ptr = *ai;
@@ -525,7 +525,7 @@ AspectRatio()
 edge_list* vifa_int_faces_attr::
 GetPerimeterEdges()
 {
-  edge_list*  p_edges = new edge_list;
+  auto*  p_edges = new edge_list;
 
   if (faces_.empty())
   {

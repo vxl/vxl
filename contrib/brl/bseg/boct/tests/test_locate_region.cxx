@@ -7,7 +7,7 @@
 static void test_locate_region()
 {
   short nlevels=10;
-  boct_tree<short,vgl_point_3d<double> >* block=new boct_tree<short,vgl_point_3d<double> >(nlevels,5);
+  auto* block=new boct_tree<short,vgl_point_3d<double> >(nlevels,5);
   vgl_box_3d<double> box(vgl_point_3d<double>(0.1,0.1,0.1),vgl_point_3d<double>(0.9,0.9,0.9));
   boct_tree_cell<short,vgl_point_3d<double> >* cell=block->locate_region(box);
   TEST("Returns the correct level",9, cell->level());

@@ -270,7 +270,7 @@ int main(int argc, char ** argv)
   std::list<int> imagenumbers( imagenumbersarg());
 
   // all the pre-computation setup
-  for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
+  for (const auto & imagenumber : imagenumbers)
   {
     std::cerr << "Loading image : " << imagenumber << std::endl;
 
@@ -353,7 +353,7 @@ int main(int argc, char ** argv)
 
     std::cerr << "Done.\n";
 
-    for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
+    for (const auto & imagenumber : imagenumbers)
     {
       std::cerr << imagenumber << ' ';
 
@@ -499,7 +499,7 @@ int main(int argc, char ** argv)
 
   ///////////////////////////////////////////////////////////////////
   // delete all images and pmatrices
-  for (std::__1::__list_iterator<int, void *>::value_type & imagenumber : imagenumbers)
+  for (const auto & imagenumber : imagenumbers)
   {
     delete imagestore[imagenumber];
     delete pmatrixstore[imagenumber];

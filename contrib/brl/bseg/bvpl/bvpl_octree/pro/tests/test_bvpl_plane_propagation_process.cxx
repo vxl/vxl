@@ -112,11 +112,11 @@ static void test_bvpl_plane_propagation_process()
   bool non_null = (value != nullptr);
   TEST("the output scene non-null", non_null, true);
 
-  brdb_value_t<boxm_scene_base_sptr>* result=static_cast<brdb_value_t<boxm_scene_base_sptr>* >(value.ptr());
+  auto* result=static_cast<brdb_value_t<boxm_scene_base_sptr>* >(value.ptr());
   boxm_scene_base_sptr scene_sptr = result->value();
 
   // get the new scene with updated cells
-  scene_type *scene2 = static_cast<scene_type *>(scene_sptr.as_pointer());
+  auto *scene2 = static_cast<scene_type *>(scene_sptr.as_pointer());
   boxm_block_iterator<boct_tree<short,data_type > > iter2(scene2);
 
   bool obs_num_ok=true;

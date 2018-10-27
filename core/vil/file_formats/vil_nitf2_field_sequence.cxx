@@ -361,7 +361,7 @@ vil_nitf2_field_sequence::~vil_nitf2_field_sequence()
 
 vil_nitf2_field* vil_nitf2_field_sequence::get_field(std::string tag) const
 {
-  std::map<std::string, vil_nitf2_field*>::const_iterator field_map_entry = fields.find(tag);
+  auto field_map_entry = fields.find(tag);
   if (field_map_entry == fields.end())
     return nullptr;
   return field_map_entry->second;

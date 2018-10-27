@@ -59,8 +59,8 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   bbas_1d_array_float_sptr visibilities = pro.get_input<bbas_1d_array_float_sptr>(i++);
   bbas_1d_array_float_sptr camera_elev_array = pro.get_input<bbas_1d_array_float_sptr>(i++);
   bbas_1d_array_float_sptr camera_azim_array = pro.get_input<bbas_1d_array_float_sptr>(i++);
-  float sun_elev = pro.get_input<float>(i++);
-  float sun_azim = pro.get_input<float>(i++);
+  auto sun_elev = pro.get_input<float>(i++);
+  auto sun_azim = pro.get_input<float>(i++);
 
   unsigned num_samples=intensities->data_array.size();
   vnl_vector<double> samples(num_samples);

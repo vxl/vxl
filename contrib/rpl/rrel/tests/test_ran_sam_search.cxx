@@ -135,7 +135,7 @@ static void test_ran_sam_search()
   rrel_estimation_problem * lr = new rrel_linear_regression( pts, use_intercept );
   int dof = lr->num_samples_to_instantiate();
   rrel_objective* lms = new rrel_lms_obj( dof );
-  rrel_ran_sam_search * ransam = new rrel_ran_sam_search();
+  auto * ransam = new rrel_ran_sam_search();
   TEST("ctor", !ransam, false);
 #if 0
   //  Test sampling by generating all parameters

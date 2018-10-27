@@ -78,7 +78,7 @@ bool vil_resample_process(bprb_func_process& pro)
   //resample image
   ////////////////////////////////////////////////////////////////////
   unsigned nplanes = fimage.nplanes();
-  vil_image_view<float>* out_img = new vil_image_view<float>(tni, tnj, nplanes);
+  auto* out_img = new vil_image_view<float>(tni, tnj, nplanes);
   vil_resample_bilin(fimage, *out_img, tni, tnj);
 
   ////////////////////////////////////////////////////////////////////
@@ -90,7 +90,7 @@ bool vil_resample_process(bprb_func_process& pro)
   }
   else if (out_type=="byte") {
       vil_math_scale_values( *out_img, 255.0 );
-      vil_image_view<vxl_byte>* bimage = new vil_image_view<vxl_byte>(tni, tnj, nplanes);
+      auto* bimage = new vil_image_view<vxl_byte>(tni, tnj, nplanes);
       vil_convert_cast(*out_img, *bimage);
       pro.set_output_val<vil_image_view_base_sptr>(0, bimage);
       delete out_img;
@@ -98,7 +98,7 @@ bool vil_resample_process(bprb_func_process& pro)
   }
   else if (out_type=="uint16") {
       vil_math_scale_values( *out_img, 65535.0 );
-      vil_image_view<vxl_uint_16>* bimage = new vil_image_view<vxl_uint_16>(tni, tnj, nplanes);
+      auto* bimage = new vil_image_view<vxl_uint_16>(tni, tnj, nplanes);
       vil_convert_cast(*out_img, *bimage);
       pro.set_output_val<vil_image_view_base_sptr>(0, bimage);
       delete out_img;
@@ -106,7 +106,7 @@ bool vil_resample_process(bprb_func_process& pro)
   }
   else if (out_type=="rgba") {
       vil_math_scale_values(*out_img, 255.0);
-      vil_image_view<vxl_byte>* bimage = new vil_image_view<vxl_byte>(tni, tnj, nplanes);
+      auto* bimage = new vil_image_view<vxl_byte>(tni, tnj, nplanes);
       vil_convert_cast(*out_img, *bimage);
       pro.set_output_val<vil_image_view_base_sptr>(0, vil_convert_to_component_order(bimage));
       delete out_img;

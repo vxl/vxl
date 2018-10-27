@@ -47,9 +47,9 @@ bool bbas_estimate_irradiance_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_img =
     pro.get_input<vil_image_view_base_sptr>(0);
 
-  float sz = pro.get_input<float>(1);
+  auto sz = pro.get_input<float>(1);
 
-  float mean_albedo = pro.get_input<float>(2);
+  auto mean_albedo = pro.get_input<float>(2);
 
   //check inputs validity
   if (!input_img) {

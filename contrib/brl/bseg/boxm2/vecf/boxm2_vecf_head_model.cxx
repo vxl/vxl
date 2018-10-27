@@ -77,10 +77,10 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
     //3d array of trees
     typedef boxm2_block::uchar16 uchar16;
     const boxm2_array_3d<uchar16>& trees = target_blk->trees();
-    boxm2_data_traits<BOXM2_ALPHA>::datatype *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
-    boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
-    boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
-    boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
+    auto *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
+    auto *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
+    auto *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
+    auto *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     // for each block of the base model
     for (auto & source_block : source_blocks) {
 
@@ -95,10 +95,10 @@ void boxm2_vecf_head_model::map_to_target(boxm2_scene_sptr target_scene)
         std::cerr << "ERROR: boxm2_vecf_head_model::map_to_source(): error getting source block data block=" << source_block.to_string() << std::endl;
         return ;
       }
-      boxm2_data_traits<BOXM2_ALPHA>::datatype *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
-      boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *source_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(source_app->data_buffer());
-      boxm2_data_traits<BOXM2_NUM_OBS>::datatype *source_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(source_nobs->data_buffer());
-      boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *source_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(source_color->data_buffer());
+      auto *source_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(source_alpha->data_buffer());
+      auto *source_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(source_app->data_buffer());
+      auto *source_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(source_nobs->data_buffer());
+      auto *source_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(source_color->data_buffer());
 
       //iterate through each block, filtering the root level first
       for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
@@ -252,10 +252,10 @@ void boxm2_vecf_head_model::clear_target(boxm2_scene_sptr target_scene)
     //3d array of trees
     typedef boxm2_block::uchar16 uchar16;
     const boxm2_array_3d<uchar16>& trees = target_blk->trees();
-    boxm2_data_traits<BOXM2_ALPHA>::datatype *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
-    boxm2_data_traits<BOXM2_MOG3_GREY>::datatype *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
-    boxm2_data_traits<BOXM2_NUM_OBS>::datatype *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
-    boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
+    auto *target_alpha_data = reinterpret_cast<boxm2_data_traits<BOXM2_ALPHA>::datatype*>(target_alpha->data_buffer());
+    auto *target_app_data = reinterpret_cast<boxm2_data_traits<BOXM2_MOG3_GREY>::datatype*>(target_app->data_buffer());
+    auto *target_nobs_data = reinterpret_cast<boxm2_data_traits<BOXM2_NUM_OBS>::datatype*>(target_nobs->data_buffer());
+    auto *target_color_data = reinterpret_cast<boxm2_data_traits<BOXM2_GAUSS_RGB>::datatype*>(target_color->data_buffer());
     //iterate through each block, filtering the root level first
     for (unsigned int x = 0; x < trees.get_row1_count(); ++x) {
       for (unsigned int y = 0; y < trees.get_row2_count(); ++y) {

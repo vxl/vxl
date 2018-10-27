@@ -34,8 +34,8 @@ bool brad_set_sun_angles_process(bprb_func_process& pro)
 
   //get the inputs
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(0);
-  float sun_az = pro.get_input<float>(1);
-  float sun_el = pro.get_input<float>(2);
+  auto sun_az = pro.get_input<float>(1);
+  auto sun_el = pro.get_input<float>(2);
 
   // set the sun angles
   mdata->sun_azimuth_ = sun_az;

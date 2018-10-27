@@ -68,7 +68,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
         bocl_mem* blk = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -102,7 +102,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
         bocl_mem* blk = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -147,7 +147,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
         bocl_mem* blk = opencl_cache->get_block(scene, *id);
         bocl_mem* blk_info = opencl_cache->loaded_block_info();
         bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(scene, *id);
-        boxm2_scene_info* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
+        auto* info_buffer = (boxm2_scene_info*)blk_info->cpu_buffer();
         int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
         info_buffer->data_buffer_length = (int)(alpha->num_bytes() / alphaTypeSize);
         blk_info->write_to_buffer((queue));
@@ -209,19 +209,19 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl
 
     //compilation options
     std::string options = "-D INIT_CUM";
-    bocl_kernel* init_cum = new bocl_kernel();
+    auto* init_cum = new bocl_kernel();
     std::string init_cum_opts = options;
     init_cum->create_kernel(&device->context(), device->device_id(), src_paths, "init_cum_main", init_cum_opts, "update::init_cum");
     vec_kernels.push_back(init_cum);
 
     options = "-D FUSE_FACTORS";
-    bocl_kernel* fusefactors = new bocl_kernel();
+    auto* fusefactors = new bocl_kernel();
     std::string fusefactors_opts = options;
     fusefactors->create_kernel(&device->context(), device->device_id(), src_paths, "fuse_factors_main", fusefactors_opts, "update::fuse_factors");
     vec_kernels.push_back(fusefactors);
 
     options = "-D EVALUATE_ALPHA";
-    bocl_kernel* evaluate_alpha = new bocl_kernel();
+    auto* evaluate_alpha = new bocl_kernel();
     std::string evaluate_alpha_opts = options;
     evaluate_alpha->create_kernel(&device->context(), device->device_id(), src_paths, "evaluate_alpha_main", evaluate_alpha_opts, "update::evaluate_alpha");
     vec_kernels.push_back(evaluate_alpha);

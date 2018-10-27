@@ -10,7 +10,7 @@ int test_set_main(int /*argc*/,char* /*argv*/[])
 
   s.insert(1);
 
-  for (std::__1::__tree_const_iterator<int, std::__1::__tree_node<int, void *> *, long>::value_type p : s)
+  for (const myset::value_type p : s)
     std::cout << p << std::endl;
   return 0;
 }

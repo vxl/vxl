@@ -41,7 +41,7 @@ pdf1d_weighted_epanech_kernel_pdf::~pdf1d_weighted_epanech_kernel_pdf() = defaul
 
 pdf1d_sampler* pdf1d_weighted_epanech_kernel_pdf::new_sampler() const
 {
-  pdf1d_weighted_epanech_kernel_sampler *i = new pdf1d_weighted_epanech_kernel_sampler;
+  auto *i = new pdf1d_weighted_epanech_kernel_sampler;
   i->set_model(*this);
   return i;
 }

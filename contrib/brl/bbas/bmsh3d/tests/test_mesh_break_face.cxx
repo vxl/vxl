@@ -13,7 +13,7 @@
 static void test_mesh_break_face()
 {
   //Create the test mesh.
-  bmsh3d_mesh_mc* M = new bmsh3d_mesh_mc;
+  auto* M = new bmsh3d_mesh_mc;
 
   bmsh3d_vertex* v0 = M->_new_vertex();
   v0->get_pt().set(0, 0, 0);

@@ -152,7 +152,7 @@ void vpdfl_axis_gaussian::gradient_logp(vnl_vector<double>& g,
 
 vpdfl_sampler_base* vpdfl_axis_gaussian::new_sampler() const
 {
-  vpdfl_axis_gaussian_sampler *i = new vpdfl_axis_gaussian_sampler;
+  auto *i = new vpdfl_axis_gaussian_sampler;
   i->set_model(*this);
   return i;
 }

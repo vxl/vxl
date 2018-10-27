@@ -139,7 +139,7 @@ void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
 
   // first create the vertices
   for (unsigned i=0; i<n; i++) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
+    auto* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
                                      polygon->vertex(i)->y(), polygon->vertex(i)->z()));
     mesh_->_add_vertex (v);
@@ -148,7 +148,7 @@ void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
 
   // create the extruded vertices
   for (unsigned i=0; i<n; i++) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
+    auto* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->set_pt (vgl_point_3d<double> (polygon->vertex(i)->x(),
                                      polygon->vertex(i)->y(),
                                      polygon->vertex(i)->z()+ dist));
@@ -176,7 +176,7 @@ void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
   }
 
   // re-attach the inner faces
-  std::map<int, vsol_polygon_3d_sptr>::iterator iter = inner_faces.begin();
+  auto iter = inner_faces.begin();
   while (iter != inner_faces.end()) {
     attach_inner_face(f0->id(), iter->second);
     iter++;
@@ -231,9 +231,9 @@ std::vector<vsol_point_3d_sptr> vsol_mesh_3d::vertices() const{
 void vsol_mesh_3d::attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly)
 {
   bmsh3d_face* inner_face = create_inner_face(poly);
-  bmsh3d_face_mc* outer_face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
+  auto* outer_face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
   if (outer_face != nullptr) {
-    bmsh3d_halfedge* he = (bmsh3d_halfedge*) inner_face->halfedge();
+    auto* he = (bmsh3d_halfedge*) inner_face->halfedge();
     outer_face->add_mc_halfedge(he);
   }
   else {
@@ -348,9 +348,9 @@ bmsh3d_face_mc* vsol_mesh_3d::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F)
 #endif // 0
   std::vector<bmsh3d_vertex*> v_list;
   std::vector<bmsh3d_edge*> e_vert_list;
-  bmsh3d_halfedge* he = (bmsh3d_halfedge*) cur_face->halfedge();
+  auto* he = (bmsh3d_halfedge*) cur_face->halfedge();
   bmsh3d_vertex* s = he->s_vertex();
-  bmsh3d_vertex* v0 = (bmsh3d_vertex*) M->_new_vertex ();
+  auto* v0 = (bmsh3d_vertex*) M->_new_vertex ();
   vgl_point_3d<double> p1 = s->get_pt();
   v0->get_pt().set(p1.x(), p1.y(), p1.z());
   M->_add_vertex (v0);
@@ -366,7 +366,7 @@ bmsh3d_face_mc* vsol_mesh_3d::extrude_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F)
   bmsh3d_halfedge* next = he->next();
   while (next != he) {
     bmsh3d_vertex* v = next->s_vertex();
-    bmsh3d_vertex* v1 = (bmsh3d_vertex*) M->_new_vertex ();
+    auto* v1 = (bmsh3d_vertex*) M->_new_vertex ();
     vgl_point_3d<double> p2 = v->get_pt();
     v1->get_pt().set(p2.x(), p2.y(), p2.z());
     v_list.push_back(v1);
@@ -446,7 +446,7 @@ vgl_plane_3d<double> vsol_mesh_3d::get_plane(unsigned face_id)
   std::vector<vsol_point_3d_sptr> points;
   vgl_fit_plane_3d<double> fitter;
   for (auto & vertice : vertices) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) vertice;
+    auto* v = (bmsh3d_vertex*) vertice;
     vgl_homg_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
     fitter.add_point(hp);
   }
@@ -469,10 +469,10 @@ vgl_plane_3d<double> vsol_mesh_3d::get_plane(unsigned face_id)
 void vsol_mesh_3d::print_faces()
 {
   std::ostringstream oss;
-  std::map<int, bmsh3d_face*>::iterator it = mesh_->facemap().begin();
+  auto it = mesh_->facemap().begin();
 
   for (; it != mesh_->facemap().end(); it++) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
+    auto* face = (bmsh3d_face_mc*) (*it).second;
     //face->_sort_halfedges_circular();
     face->getInfo(oss);
   }
@@ -489,7 +489,7 @@ void vsol_mesh_3d::move_points_to_plane(bmsh3d_face_mc* face)
   // find the closest point on the plane and replace it for each point
   std::vector<vsol_point_3d_sptr> points;
   for (unsigned i=0; i<face->vertices().size(); i++) {
-    bmsh3d_vertex* v = (bmsh3d_vertex*) face->vertices(i);
+    auto* v = (bmsh3d_vertex*) face->vertices(i);
     vgl_point_3d<double> hp(v->get_pt().x(), v->get_pt().y(), v->get_pt().z());
     vgl_point_3d<double> p = vgl_closest_point(plane, hp);
     v->set_pt (vgl_point_3d<double> (p.x(), p.y(), p.z()));
@@ -502,9 +502,9 @@ void vsol_mesh_3d::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
 
   std::map<int, bmsh3d_vertex* > vertices = mesh->vertexmap();
   std::vector<vgl_point_3d<double> > new_vertices;
-  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  auto v_it = vertices.begin();
   while (v_it != vertices.end()) {
-    bmsh3d_vertex* vertex = (bmsh3d_vertex*) v_it->second;
+    auto* vertex = (bmsh3d_vertex*) v_it->second;
     vgl_point_3d<double> p(vertex->get_pt());
     std::cout << "old vertex->" << p << std::endl;
     // find the faces incident to this vertex
@@ -514,10 +514,10 @@ void vsol_mesh_3d::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
       std::cerr << "The number of planes < 3!!!!!!!!!!!\n";
     }
 
-    std::set<bmsh3d_face*>::iterator it = inc_faces.begin();
+    auto it = inc_faces.begin();
 
     while (it != inc_faces.end()) {
-      bmsh3d_face_mc* face1 = (bmsh3d_face_mc*) *it;
+      auto* face1 = (bmsh3d_face_mc*) *it;
       vgl_vector_3d<double> n1 = face1->compute_normal();
       n1 /= n1.length();
       it++;
@@ -545,7 +545,7 @@ void vsol_mesh_3d::shrink_mesh(bmsh3d_mesh_mc* mesh, double r)
   v_it = vertices.begin();
   unsigned i=0;
   while (v_it != vertices.end()) {
-    bmsh3d_vertex* v1 = (bmsh3d_vertex*) v_it->second;
+    auto* v1 = (bmsh3d_vertex*) v_it->second;
     v1->set_pt(new_vertices[i++]);
     v_it++;
   }
@@ -563,9 +563,9 @@ bool vsol_mesh_3d::single_face_with_vertices(unsigned face_id,
                                              vsol_polygon_3d_sptr& poly,
                                              std::vector<bmsh3d_vertex*>& verts)
 {
-  bmsh3d_face_mc* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
+  auto* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
   if (face && (mesh_->facemap().size() == 1)) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
+    auto* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
     poly = this->extract_face(face, verts);
     return true;
   }
@@ -614,7 +614,7 @@ bmsh3d_face_mc* vsol_mesh_3d::create_face(vsol_polygon_3d_sptr polygon)
     double x = polygon->vertex(i)->x();
     double y = polygon->vertex(i)->y();
     double z = polygon->vertex(i)->z();
-    bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
+    auto* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->get_pt().set(x, y, z);
     mesh_->_add_vertex(v);
     if (prev_v != nullptr)
@@ -641,10 +641,10 @@ vsol_polygon_3d_sptr vsol_mesh_3d::extract_face(bmsh3d_face_mc* face,
                                                 std::vector<bmsh3d_vertex*> &vertices)
 {
   std::vector<vsol_point_3d_sptr> v_list;
-  bmsh3d_halfedge* cur_he = (bmsh3d_halfedge*) face->halfedge();
+  auto* cur_he = (bmsh3d_halfedge*) face->halfedge();
   do {
-    bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) cur_he->next();
-    bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (cur_he->edge(), next_he->edge());
+    auto* next_he = (bmsh3d_halfedge*) cur_he->next();
+    auto* vertex = (bmsh3d_vertex*) Es_sharing_V  (cur_he->edge(), next_he->edge());
 
     vertices.push_back(vertex);
     //std::cout << "vertex " << vertex->id() << " between "
@@ -666,7 +666,7 @@ vsol_mesh_3d::extract_inner_faces(bmsh3d_face_mc* face)
   // now, add the inner polygons
   std::map<int, bmsh3d_halfedge*> set_he = face->get_mc_halfedges();
   std::map<int, vsol_polygon_3d_sptr> polygons;
-  std::map<int, bmsh3d_halfedge*>::iterator it = set_he.begin();
+  auto it = set_he.begin();
   while (it != set_he.end())
   {
     bmsh3d_halfedge* he = it->second;
@@ -674,8 +674,8 @@ vsol_mesh_3d::extract_inner_faces(bmsh3d_face_mc* face)
     std::vector<vsol_point_3d_sptr> v_list;
 
     do {
-      bmsh3d_halfedge* next_he = (bmsh3d_halfedge*) HE->next();
-      bmsh3d_vertex* vertex = (bmsh3d_vertex*) Es_sharing_V  (HE->edge(), next_he->edge());
+      auto* next_he = (bmsh3d_halfedge*) HE->next();
+      auto* vertex = (bmsh3d_vertex*) Es_sharing_V  (HE->edge(), next_he->edge());
       //vertices.push_back(vertex);
       vgl_point_3d<double> p = vertex->get_pt();
       v_list.push_back(new vsol_point_3d (p.x(), p.y(), p.z()));
@@ -694,7 +694,7 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
 {
   polygon = move_poly_points_to_plane(polygon);
   unsigned n = polygon->size();
-  bmsh3d_face* inner_face = new bmsh3d_face();
+  auto* inner_face = new bmsh3d_face();
   // create vertices
   bmsh3d_vertex* prev_v = nullptr;
   bmsh3d_vertex* v_first;
@@ -702,12 +702,12 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
     double x = polygon->vertex(i)->x();
     double y = polygon->vertex(i)->y();
     double z = polygon->vertex(i)->z();
-    bmsh3d_vertex* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
+    auto* v = (bmsh3d_vertex*) mesh_->_new_vertex ();
     v->get_pt().set(x, y, z);
     mesh_->_add_vertex(v); //??? do we add this vertex to the mesh
     if (prev_v != nullptr) {
-      bmsh3d_edge* edge = new  bmsh3d_edge(prev_v, v, 100);
-      bmsh3d_halfedge *he = new bmsh3d_halfedge (edge, inner_face);
+      auto* edge = new  bmsh3d_edge(prev_v, v, 100);
+      auto *he = new bmsh3d_halfedge (edge, inner_face);
       inner_face->_connect_HE_to_end(he);
     }
     else {
@@ -716,8 +716,8 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
     prev_v = v;
   }
   // add an edge between vertices (0, n-1)
-  bmsh3d_edge* edge = new  bmsh3d_edge(v_first, prev_v, 100);
-  bmsh3d_halfedge *he = new bmsh3d_halfedge (edge, inner_face);
+  auto* edge = new  bmsh3d_edge(v_first, prev_v, 100);
+  auto *he = new bmsh3d_halfedge (edge, inner_face);
   inner_face->_connect_HE_to_end(he);
 
   return inner_face;
@@ -726,7 +726,7 @@ bmsh3d_face* vsol_mesh_3d::create_inner_face(vsol_polygon_3d_sptr polygon)
 std::map<int, vsol_polygon_3d_sptr>
 vsol_mesh_3d::extract_inner_faces(int face_id)
 {
-  bmsh3d_face_mc* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
+  auto* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
   std::map<int, vsol_polygon_3d_sptr> polys;
   if (face) {
     polys = extract_inner_faces(face);
@@ -736,7 +736,7 @@ vsol_mesh_3d::extract_inner_faces(int face_id)
 
 vsol_polygon_3d_sptr vsol_mesh_3d::extract_face(unsigned i)
 {
-  bmsh3d_face_mc* face = (bmsh3d_face_mc*) mesh_->facemap(i);
+  auto* face = (bmsh3d_face_mc*) mesh_->facemap(i);
   std::vector<bmsh3d_vertex*> vertices;
   vsol_polygon_3d_sptr poly = extract_face(face, vertices);
   return poly;
@@ -744,12 +744,12 @@ vsol_polygon_3d_sptr vsol_mesh_3d::extract_face(unsigned i)
 
 vsol_polygon_3d_sptr vsol_mesh_3d::extract_bottom_face()
 {
-  std::map<int, bmsh3d_face*>::iterator it = mesh_->facemap().begin();
+  auto it = mesh_->facemap().begin();
   std::map<int, vsol_polygon_3d_sptr> faces;
   double min_z=1e6;
   vsol_polygon_3d_sptr bottom;
   for (; it != mesh_->facemap().end(); it++) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
+    auto* face = (bmsh3d_face_mc*) (*it).second;
     std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
     vsol_box_3d_sptr bb = poly->get_bounding_box();
@@ -763,12 +763,12 @@ vsol_polygon_3d_sptr vsol_mesh_3d::extract_bottom_face()
 }
 vsol_polygon_3d_sptr vsol_mesh_3d::extract_top_face()
 {
-  std::map<int, bmsh3d_face*>::iterator it = mesh_->facemap().begin();
+  auto it = mesh_->facemap().begin();
   std::map<int, vsol_polygon_3d_sptr> faces;
   double max_z=-1.0e6;
   vsol_polygon_3d_sptr top;
   for (; it != mesh_->facemap().end(); it++) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
+    auto* face = (bmsh3d_face_mc*) (*it).second;
     std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
     vsol_box_3d_sptr bb = poly->get_bounding_box();
@@ -782,11 +782,11 @@ vsol_polygon_3d_sptr vsol_mesh_3d::extract_top_face()
 }
 std::map<int, vsol_polygon_3d_sptr> vsol_mesh_3d::extract_faces()
 {
-  std::map<int, bmsh3d_face*>::iterator it = mesh_->facemap().begin();
+  auto it = mesh_->facemap().begin();
   std::map<int, vsol_polygon_3d_sptr> faces;
 
   for (; it != mesh_->facemap().end(); it++) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) (*it).second;
+    auto* face = (bmsh3d_face_mc*) (*it).second;
     //std::cout << "face " << face->id() << std::endl;
     std::vector<bmsh3d_vertex*> vertices;
     vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
@@ -797,11 +797,11 @@ std::map<int, vsol_polygon_3d_sptr> vsol_mesh_3d::extract_faces()
 
 std::map<int, vsol_line_3d_sptr> vsol_mesh_3d::extract_edges()
 {
-  std::map<int, bmsh3d_edge*>::iterator it = mesh_->edgemap().begin();
+  auto it = mesh_->edgemap().begin();
   std::map<int, vsol_line_3d_sptr> edges;
 
   for (; it != mesh_->edgemap().end(); it++) {
-    bmsh3d_edge* edge = (bmsh3d_edge*) (*it).second;
+    auto* edge = (bmsh3d_edge*) (*it).second;
     bmsh3d_vertex* V0 = edge->vertices(0);
     bmsh3d_vertex* V1 = edge->vertices(1);
     vsol_point_3d_sptr v0 = new vsol_point_3d(V0->pt().x(),V0->pt().y(),V0->pt().z());
@@ -816,9 +816,9 @@ std::vector<vsol_point_3d_sptr> vsol_mesh_3d::extract_vertices()
 {
   std::vector<vsol_point_3d_sptr> vertices;
   if (mesh_) {
-    std::map<int, bmsh3d_vertex*>::iterator it = mesh_->vertexmap().begin();
+    auto it = mesh_->vertexmap().begin();
     for (; it != mesh_->vertexmap().end(); it++) {
-      bmsh3d_vertex* V = (bmsh3d_vertex*) it->second;
+      auto* V = (bmsh3d_vertex*) it->second;
       vsol_point_3d_sptr pt = new vsol_point_3d(V->pt().x(),V->pt().y(),V->pt().z());
       vertices.push_back(pt);
     }
@@ -840,10 +840,10 @@ void vsol_mesh_3d::create_interior()
 void vsol_mesh_3d::extrude(int face_id, double dist)
 {
   if (mesh_ != nullptr) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
+    auto* face = (bmsh3d_face_mc*)mesh_->facemap(face_id);
     if (face) {
       if (mesh_->facemap().size() == 1) {
-        bmsh3d_face_mc* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
+        auto* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
         std::vector<bmsh3d_vertex*> vertices;
         vsol_polygon_3d_sptr poly = this->extract_face(face, vertices);
         std::map<int, vsol_polygon_3d_sptr> inner_faces = this->extract_inner_faces(face);
@@ -867,7 +867,7 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
                                       vgl_point_3d<double> l3, vgl_point_3d<double> l4,
                                       vgl_point_3d<double> p2)
 {
-  bmsh3d_face_mc* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
+  auto* face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
   std::vector<bmsh3d_halfedge *> halfedges;
   if (face == nullptr) {
     print_faces();
@@ -877,11 +877,11 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
   std::vector<bmsh3d_vertex *> vertices;
   extract_face(face, vertices);
   // create 2 new vertices
-  bmsh3d_vertex* v1 = (bmsh3d_vertex*) mesh_->_new_vertex ();
+  auto* v1 = (bmsh3d_vertex*) mesh_->_new_vertex ();
   v1->get_pt().set(p1.x(), p1.y(), p1.z());
   mesh_->_add_vertex(v1);
 
-  bmsh3d_vertex* v2 = (bmsh3d_vertex*) mesh_->_new_vertex ();
+  auto* v2 = (bmsh3d_vertex*) mesh_->_new_vertex ();
   v2->get_pt().set(p2.x(), p2.y(), p2.z());
   mesh_->_add_vertex(v2);
 
@@ -899,10 +899,10 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
   double min_d1=1e23, min_d2=1e23;
   unsigned min_index1=0, min_index2=0;
   for (unsigned i=0; i<halfedges.size(); i++) {
-    bmsh3d_halfedge* he = (bmsh3d_halfedge*) halfedges[i];
+    auto* he = (bmsh3d_halfedge*) halfedges[i];
     bmsh3d_edge* edge = he->edge();
-    bmsh3d_vertex* s = (bmsh3d_vertex*) edge->sV();
-    bmsh3d_vertex* e = (bmsh3d_vertex*) edge->eV();
+    auto* s = (bmsh3d_vertex*) edge->sV();
+    auto* e = (bmsh3d_vertex*) edge->eV();
     vgl_point_3d<double> sp(s->get_pt());
     vgl_point_3d<double> ep(e->get_pt());
 
@@ -935,10 +935,10 @@ void vsol_mesh_3d::divide_face(unsigned face_id,
       edge2 = edge;
 #endif // 0
   }
-  bmsh3d_halfedge* he1 = (bmsh3d_halfedge*) halfedges[min_index1];
+  auto* he1 = (bmsh3d_halfedge*) halfedges[min_index1];
   edge1 = he1->edge();
 
-  bmsh3d_halfedge* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
+  auto* he2 = (bmsh3d_halfedge*) halfedges[min_index2];
   edge2 = he2->edge();
 
   if (edge1 == nullptr || edge2 == nullptr) {

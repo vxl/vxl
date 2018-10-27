@@ -42,7 +42,7 @@ bool vpgl_projective_to_rational_camera_process(bprb_func_process& pro)
 
   // get the inputs
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(0);
-  if (vpgl_proj_camera<double>* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
+  if (auto* cam = dynamic_cast<vpgl_proj_camera<double>*>(camera.ptr()))
   {
     vpgl_rational_camera<double> rat_cam=projective_to_rational(*cam);
 

@@ -48,7 +48,7 @@ int bsgm_compute_median_of_image(
   if( hist_count == 0 ) return 0;
 
   // Find the median of the histogram
-  long int med_count = (long int)( hist_count*0.5 );
+  auto med_count = (long int)( hist_count*0.5 );
   hist_count = 0;
   for( int s = 0; s < num_img_vals; s++ ){
     hist_count += hist[s];

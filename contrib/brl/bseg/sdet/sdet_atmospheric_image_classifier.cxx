@@ -30,7 +30,7 @@ category_quality_color_mix(std::map<std::string, float>& probs,
                            vnl_vector_fixed<float, 3>& color_mix)
 {
   //start with max prob color
-  std::map<std::string, std::vector<float> >::iterator hit = category_histograms_.begin();
+  auto hit = category_histograms_.begin();
   // accumulate p_atmos, p_no_atmos, and p_haze
   float atmos_sum = 0.0f;
   float no_atmos_sum = 0.0f;

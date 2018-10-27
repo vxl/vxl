@@ -15,7 +15,7 @@
 
 void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, std::string outdir)
 {
-  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
+  auto& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
 
@@ -75,7 +75,7 @@ void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2
         ss << outdir << "/img_" << std::setw(5) << std::setfill('0') << k*maxcells + sk << ".png";
         //std::cout<<"Filename : "<<ss.str()<<std::endl;
         vil_image_view_base_sptr img_sptr = vil_load(ss.str().c_str());
-        if (vil_image_view<unsigned char> * cimg = dynamic_cast<vil_image_view<unsigned char> *>(img_sptr.ptr()))
+        if (auto * cimg = dynamic_cast<vil_image_view<unsigned char> *>(img_sptr.ptr()))
         {
           index_x = (blk_iter->first.i() - min_index.x()) * ntrees_x;
           for (unsigned i = 0; i < ni; ++i, ++index_x)
@@ -132,7 +132,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
 {
   // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
   // perhaps const versions of get_block and friends could be added
-  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
+  auto& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
 
@@ -208,7 +208,7 @@ void boxm2_export_stack_images_function  ::export_greyscale_stack_images(const b
               float prob =alpha_data->data()[index];
               prob =  1.0f - (float)std::exp(-prob* side_len *sub_blk_dims.x());
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
-              unsigned char intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) * 255);
+              auto intensity = (unsigned char)(boxm2_mog3_grey_processor::expected_color(int_data->data()[index]) * 255);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
@@ -242,7 +242,7 @@ void boxm2_export_stack_images_function::export_color_stack_images(const boxm2_s
 {
   // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
   // perhaps const versions of get_block and friends could be added
-  boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
+  auto& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
 
   vgl_point_3d<int> min_index;
   vgl_point_3d<int> max_index;
@@ -321,9 +321,9 @@ void boxm2_export_stack_images_function::export_color_stack_images(const boxm2_s
               int factor = 1<<(blk_iter->second.max_level_-depth-1);
 
               vnl_vector_fixed<float,3> color = boxm2_gauss_rgb_processor::expected_color(int_data->data()[index]);
-              unsigned char r = (unsigned char)(color[0]*255);
-              unsigned char g = (unsigned char)(color[1]*255);
-              unsigned char b = (unsigned char)(color[2]*255);
+              auto r = (unsigned char)(color[0]*255);
+              auto g = (unsigned char)(color[1]*255);
+              auto b = (unsigned char)(color[2]*255);
 
               for (int subi = 0; subi < factor; ++subi)
                 for (int subj = 0; subj < factor; ++subj)
@@ -357,7 +357,7 @@ void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_s
 {
     // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
     // perhaps const versions of get_block and friends could be added
-    boxm2_scene_sptr& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
+    auto& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
     vgl_point_3d<int> min_index, max_index;
     vgl_point_3d<double> min_local_origin, max_local_origin;
 
@@ -390,7 +390,7 @@ void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_s
         boxm2_block  * blk = cache->get_block(nc_scene, blk_iter->first);
         boxm2_data_type dtype = boxm2_data_info::data_type(ident);
         boxm2_data_base *  float_base = cache->get_data_base(nc_scene, blk_iter->first, ident);
-        float * data = (float*)float_base->data_buffer();
+        auto * data = (float*)float_base->data_buffer();
 
         typedef vnl_vector_fixed<unsigned char, 16> uchar16;
         const boxm2_array_3d<uchar16>&  trees = blk->trees();  //trees

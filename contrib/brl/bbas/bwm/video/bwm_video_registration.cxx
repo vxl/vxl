@@ -191,8 +191,8 @@ register_image_stream_planar(vidl_istream_sptr& in_stream,
   // ground sample distance
   double w = bounds->width(), h = bounds->height();
   w/=world_sample_distance;    h/=world_sample_distance;
-  unsigned out_ni = static_cast<unsigned>(w);
-  unsigned out_nj = static_cast<unsigned>(h);
+  auto out_ni = static_cast<unsigned>(w);
+  auto out_nj = static_cast<unsigned>(h);
 
   vnl_matrix_fixed<double,3, 3> t;
   t[0][0]=1;  t[0][1]=0; t[0][2]=-bounds->get_min_x();

@@ -57,7 +57,7 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
     return false;
   }
 
-  vil_image_view<vxl_uint_16>* in_img = static_cast<vil_image_view<vxl_uint_16>*>(in_img_ptr.as_pointer());
+  auto* in_img = static_cast<vil_image_view<vxl_uint_16>*>(in_img_ptr.as_pointer());
   unsigned ni = in_img->ni();
   unsigned nj = in_img->nj();
   unsigned np = in_img->nplanes();
@@ -65,7 +65,7 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
   if (is_byte) {
     std::cout << "truncate to byte image" << std::endl;
     // truncate the input 16 bits image to a byte image by ignoring the most significant 5 bits and less significant 3 bits
-    vil_image_view<vxl_byte>* out_img = new vil_image_view<vxl_byte>(ni,nj,np);
+    auto* out_img = new vil_image_view<vxl_byte>(ni,nj,np);
     if (is_scale) {
       if (!brip_vil_nitf_ops::scale_nitf_bits(*in_img, *out_img)) {
         std::cout << pro.name() << ": scale nitf image from " << in_img_ptr->pixel_format() << " to " << out_img->pixel_format() << " failed!" << std::endl;
@@ -84,7 +84,7 @@ bool brip_truncate_nitf_bit_process(bprb_func_process& pro)
   else {
     std::cout << "truncate to short image" << std::endl;
     // truncate the input image by ignoring the most significant 5 bits
-    vil_image_view<vxl_uint_16>* out_img = new vil_image_view<vxl_uint_16>(ni, nj, np);
+    auto* out_img = new vil_image_view<vxl_uint_16>(ni, nj, np);
     if (!brip_vil_nitf_ops::truncate_nitf_bits(*in_img, *out_img)) {
       std::cout << pro.name() << ": truncating image from " << in_img->pixel_format() << " to " << out_img->pixel_format() << " failed!" << std::endl;
       return false;

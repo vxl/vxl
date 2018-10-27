@@ -35,7 +35,7 @@ bool bpgl_nitf_camera_coverage::coverage_list(std::vector<vgl_point_2d<double> >
     std::string img_file = awk.line();
 
     //load rational camera from image file
-    vpgl_nitf_rational_camera *nitf_cam = new vpgl_nitf_rational_camera(img_file);
+    auto *nitf_cam = new vpgl_nitf_rational_camera(img_file);
 
     if (!nitf_cam)
     {

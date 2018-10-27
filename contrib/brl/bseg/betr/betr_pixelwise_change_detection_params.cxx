@@ -24,7 +24,7 @@ std::ostream&  operator<<(
 std::istream&  operator>>(
   std::istream& s, betr_pixelwise_change_detection_params& ecdp)
 {
-  betr_pixelwise_change_detection_params* cd_params = new betr_pixelwise_change_detection_params();
+  auto* cd_params = new betr_pixelwise_change_detection_params();
   betr_params_sptr params_ptr = cd_params;
   bool good = read_params_json(s, params_ptr);
   if(good)

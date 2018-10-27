@@ -118,7 +118,7 @@ void test_direct_boost()
 
   // build clsfy_direct_boost
   std::cout<<"*************normal classifier************\n";
-  clsfy_direct_boost *pClassifier = new clsfy_direct_boost;
+  auto *pClassifier = new clsfy_direct_boost;
   clsfy_direct_boost_builder builder;
   int n_rounds=5;
   builder.set_max_n_clfrs(n_rounds);

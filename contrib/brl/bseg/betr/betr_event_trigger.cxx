@@ -60,12 +60,12 @@ vpgl_camera_double_sptr betr_event_trigger::cast_camera(vpgl_camera_double_sptr 
   if(camera->type_name() == "vpgl_local_rational_camera"){
     return camera;
   }else  if(camera->type_name() == "vpgl_rational_camera"){
-    vpgl_rational_camera<double>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+    auto* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
     if(!rat_cam_ptr){
       std::cout << "Fatal - can't convert camera to rational_camera" << std::endl;
       return ret_cam;
     }
-    vpgl_local_rational_camera<double>* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
+    auto* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
     ret_cam  = lcam_ptr;
   }else{
     std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
@@ -105,13 +105,13 @@ void betr_event_trigger::set_evt_camera(vpgl_camera_double_sptr const& camera){
     return;
   }else  if(camera->type_name() == "vpgl_rational_camera"){
     std::cout << " converting to local camera " << std::endl;
-    vpgl_rational_camera<double>* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
+    auto* rat_cam_ptr = dynamic_cast<vpgl_rational_camera<double>*>(camera.ptr());
     if(!rat_cam_ptr){
       std::cout << "Fatal - can't convert camera to rational_camera" << std::endl;
       return;
     }
     std::cout << "LVCS " << lvcs_ << std::endl;
-    vpgl_local_rational_camera<double>* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
+    auto* lcam_ptr = new vpgl_local_rational_camera<double>(lvcs_, *rat_cam_ptr);
     evt_camera_  = lcam_ptr;
   }else{
       std::cout << "Fatal - camera not global or local rational_camera" << std::endl;
@@ -159,8 +159,8 @@ bool betr_event_trigger::add_geo_object(std::string const& name, double lon, dou
     return false;
   }
   //convert to a vsol_spatial_object_3d
-  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
-  bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
+  auto* vmesh = new vsol_mesh_3d();
+  auto* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
   vmesh->set_mesh(mesh_mc);
   vsol_spatial_object_3d_sptr so = vmesh;
   //define the global origin and store in the map
@@ -180,8 +180,8 @@ bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double 
     return false;
   }
   //convert to a vsol_mesh_3d
-  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
-  bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
+  auto* vmesh = new vsol_mesh_3d();
+  auto* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
   vmesh->set_mesh(mesh_mc);
   if(vmesh->num_faces() != 1){
    std::cout << "Mesh is not a single polygon - can't be gridded" << geom_path << std::endl;
@@ -189,7 +189,7 @@ bool betr_event_trigger::add_gridded_event_poly(std::string const& name, double 
   }
   // convert mesh to a vsol_polygon_3d
   std::vector<vsol_point_3d_sptr> verts = vmesh->vertices();
-  vsol_polygon_3d* poly = new vsol_polygon_3d(verts);
+  auto* poly = new vsol_polygon_3d(verts);
   vsol_spatial_object_3d_sptr so = poly;
   // define global origin
   vpgl_lvcs lvcs(lat, lon, elev, vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
@@ -401,7 +401,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
     std::cout << "Event Image: " << evt_path_ << std::endl;
   }
   prob_change.clear();
-  std::map<std::string, betr_geo_object_3d_sptr>::iterator rit = ref_trigger_objects_.begin();
+  auto rit = ref_trigger_objects_.begin();
   std::string ref_obj_name = rit->first;
   // project the reference object into both reference and event images
   vsol_polygon_2d_sptr evt_ref_poly, ref_ref_poly;
@@ -474,7 +474,7 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
 
 std::vector<std::string> betr_event_trigger::algorithms() const{
   std::vector<std::string> ret;
-  std::map<std::string, betr_algorithm_sptr>::const_iterator ait = algorithms_.begin();
+  auto ait = algorithms_.begin();
   for(;ait!=algorithms_.end(); ++ait)
     ret.push_back(ait->first);
   return ret;

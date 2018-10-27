@@ -76,14 +76,14 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
     boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
 
-    unsigned ni = pro.get_input<unsigned>(i++);
-    unsigned nj = pro.get_input<unsigned>(i++);
+    auto ni = pro.get_input<unsigned>(i++);
+    auto nj = pro.get_input<unsigned>(i++);
 
     std::string dir_identifier = pro.get_input<std::string>(i++);
     std::string img_identifier = pro.get_input<std::string>(i++);
 
-    float sun_elev=pro.get_input<float>(i++);
-    float sun_azim=pro.get_input<float>(i++);
+    auto sun_elev=pro.get_input<float>(i++);
+    auto sun_azim=pro.get_input<float>(i++);
 
     std::vector<boxm2_block_id> vis_order=scene->get_vis_blocks(reinterpret_cast<vpgl_generic_camera<double>*>(cam.ptr()));
     if (vis_order.empty())
@@ -122,7 +122,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         datas.push_back(aux3_view);
         datas.push_back(alph);
         datas.push_back(float8_phongs);
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
         boxm2_batch_update_phongs_pass1_functor pass1;
@@ -142,7 +142,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         cache->remove_data_base(scene,*id,boxm2_data_traits<BOXM2_AUX3>::prefix(dir_identifier));
     }
     // compute beta denominator
-    vil_image_view<float> *  norm_img= new vil_image_view<float>(ni,nj);
+    auto *  norm_img= new vil_image_view<float>(ni,nj);
     // pre_inf + vis * 1 // assume PI = 1 for all the colors (uniform distribution)
     vil_math_image_sum<float,float,float>(pre_inf_img,vis_inf_img,*norm_img);
 
@@ -180,7 +180,7 @@ bool boxm2_cpp_pre_infinity_opt2_phongs_process(bprb_func_process& pro)
         datas.push_back(alph);
         datas.push_back(phongs_model_base);
         datas.push_back(aux);
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
         boxm2_batch_update_opt2_phongs_pass2_functor pass2;
@@ -252,8 +252,8 @@ bool boxm2_cpp_batch_update_opt2_phongs_process(bprb_func_process& pro)
     boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
     boxm2_stream_cache_sptr str_cache1 = pro.get_input<boxm2_stream_cache_sptr>(i++);  //: this is for aux1,aux2,aux3.
     boxm2_stream_cache_sptr str_cache2 = pro.get_input<boxm2_stream_cache_sptr>(i++); // this is for aux
-    float  sun_elev = pro.get_input<float>(i++); // this is for aux
-    float  sun_azim = pro.get_input<float>(i++); // this is for aux
+    auto  sun_elev = pro.get_input<float>(i++); // this is for aux
+    auto  sun_azim = pro.get_input<float>(i++); // this is for aux
 
     // assumes that the data of each image has been created in the data models previously
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());

@@ -67,14 +67,14 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
   // assign tree type
   boxm_scene_base_sptr scene_ptr = pro.get_input<boxm_scene_base_sptr>(0);
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(1);
-  unsigned ni = pro.get_input<unsigned>(2);
-  unsigned nj = pro.get_input<unsigned>(3);
+  auto ni = pro.get_input<unsigned>(2);
+  auto nj = pro.get_input<unsigned>(3);
 
   if (scene_ptr->appearence_model() == BOXM_APM_MOG_GREY) {
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
 
       bsta_histogram<float> num_rays_hist;
       if (!compute_ray_statistics<short, boxm_sample<BOXM_APM_MOG_GREY> >(*scene, cam_ptr,num_rays_hist,ni,nj))
@@ -90,7 +90,7 @@ bool boxm_ray_statistics_process(bprb_func_process& pro)
   {
     if (!scene_ptr->multi_bin()) {
       typedef boct_tree<short, boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
+      auto* scene = dynamic_cast<boxm_scene<tree_type> *> (scene_ptr.as_pointer());
 
       bsta_histogram<float> num_rays_hist;
       if (!compute_ray_statistics<short,boxm_sample<BOXM_APM_SIMPLE_GREY> >(*scene, cam_ptr,num_rays_hist,ni,nj))

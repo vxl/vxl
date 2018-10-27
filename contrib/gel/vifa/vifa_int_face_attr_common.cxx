@@ -222,7 +222,7 @@ fit_lines()
 #endif
 
   // Convert fitter output to edges & update statistics
-  std::vector<vsol_line_2d_sptr>::iterator  segi = segs.begin();
+  auto  segi = segs.begin();
   for (; segi != segs.end(); segi++)
   {
     vsol_line_2d_sptr  seg = *segi;
@@ -245,7 +245,7 @@ find_collinear_lines()
   for (auto & unsorted_edge : unsorted_edges)
   {
     double        len = unsorted_edge->curve()->length();
-    edge_2d_iterator  slot = f_edges.begin();
+    auto  slot = f_edges.begin();
     for (; slot != f_edges.end(); ++slot)
       if ((*slot)->curve()->length() < len)
       {
@@ -339,8 +339,8 @@ find_collinear_match(vtol_edge_2d_sptr edge,
                      coll_iterator&    result)
 {
   double      min_dist = dist_threshold;
-  coll_iterator  match = lines.end();
-  for (coll_iterator c = lines.begin(); c != lines.end(); ++c)
+  auto  match = lines.end();
+  for (auto c = lines.begin(); c != lines.end(); ++c)
   {
     double  dist = (*c)->get_measure(edge);
     if ((dist < dist_threshold) && (dist < min_dist))
@@ -382,7 +382,7 @@ compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
     for (auto & fedge : fedges)
     {
       vsol_curve_2d_sptr  cur = fedge->curve();
-      float        len = float(cur->length());
+      auto        len = float(cur->length());
       total_len += len;
 
       if (len >= fitter_params_->min_fit_length_)

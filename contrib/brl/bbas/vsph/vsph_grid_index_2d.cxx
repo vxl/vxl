@@ -212,9 +212,9 @@ bool vsph_grid_index_2d::find(vsph_sph_point_2d const& sp, unsigned& th_idx,
 
 void vsph_grid_index_2d::clear()
 {
-  std::vector<std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > > >::iterator iit = index_.begin();
+  auto iit = index_.begin();
   for (; iit!=index_.end(); iit++) {
-    std::vector<std::vector<std::pair<vsph_sph_point_2d, int> > >::iterator jit =
+    auto jit =
       (*iit).begin();
     for (; jit != (*iit).end(); ++jit)
       (*jit).clear();

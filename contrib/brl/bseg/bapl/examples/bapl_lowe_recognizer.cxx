@@ -107,7 +107,7 @@ int main( int argc, char* argv[] )
 #endif
 
   // Construct the estimation problem
-  bapl_affine2d_est * est = new bapl_affine2d_est( clusters[0] );
+  auto * est = new bapl_affine2d_est( clusters[0] );
 
   //double max_outlier_frac = 0.5;
   double desired_prob_good = 0.99;
@@ -116,8 +116,8 @@ int main( int argc, char* argv[] )
 
   est->set_no_prior_scale();
 
-  rrel_muset_obj* muset = new rrel_muset_obj( clusters[0].size()+1 );
-  rrel_ran_sam_search * ransam = new rrel_ran_sam_search;
+  auto* muset = new rrel_muset_obj( clusters[0].size()+1 );
+  auto * ransam = new rrel_ran_sam_search;
   ransam->set_trace_level(trace_level);
   ransam->set_sampling_params( 1 - muset->min_inlier_fraction(),
                                desired_prob_good,

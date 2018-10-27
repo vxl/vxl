@@ -88,7 +88,7 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
   // interpret RGBA as a four band image
   vil_pixel_format type = vil_pixel_format_component_format(view->pixel_format());
   unsigned ni = view->ni(), nj = view->nj();
-  float area_frac = static_cast<float>(ni*nj*fraction);
+  auto area_frac = static_cast<float>(ni*nj*fraction);
   unsigned np = view->nplanes();
   switch (type )
   {
@@ -99,9 +99,9 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
-        double val = static_cast<double>(v(i,j,p));
+        auto i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        auto j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
+        auto val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
     }
@@ -114,9 +114,9 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
-        double val = static_cast<double>(v(i,j,p));
+        auto i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        auto j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
+        auto val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
     }
@@ -129,9 +129,9 @@ bool bil_image_bounds_from_histogram::set_data_from_view(vil_image_view_base_spt
       float cnt = 0.0f;
       while (cnt++<area_frac)
       {
-        unsigned i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
-        unsigned j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
-        double val = static_cast<double>(v(i,j,p));
+        auto i = static_cast<unsigned>((ni-1)*(rand()/(RAND_MAX+1.0)));
+        auto j = static_cast<unsigned>((nj-1)*(rand()/(RAND_MAX+1.0)));
+        auto val = static_cast<double>(v(i,j,p));
         data_[p].push_back(val);
       }
     }
@@ -151,8 +151,8 @@ set_data_by_random_blocks(const unsigned total_num_blocks,
   unsigned nbi = bir->n_block_i(), nbj = bir->n_block_j();
   for (unsigned ib = 0; ib<total_num_blocks; ++ib)
   {
-    unsigned bi = static_cast<unsigned>((nbi-1)*(rand()/(RAND_MAX+1.0)));
-    unsigned bj = static_cast<unsigned>((nbj-1)*(rand()/(RAND_MAX+1.0)));
+    auto bi = static_cast<unsigned>((nbi-1)*(rand()/(RAND_MAX+1.0)));
+    auto bj = static_cast<unsigned>((nbj-1)*(rand()/(RAND_MAX+1.0)));
     if (!this->set_data_from_view(bir->get_block(bi, bj), fraction))
       return false;
   }
@@ -205,7 +205,7 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
    case  VIL_PIXEL_FORMAT_BYTE:
     for (unsigned p = 0; p<np_; ++p) {
       hists_[p] = bsta_histogram<double>(min_val, max_val, 255);
-      for (std::vector<double>::iterator dit = data_[p].begin();
+      for (auto dit = data_[p].begin();
            dit != data_[p].end(); dit++)
         hists_[p].upcount(*dit, 1.0);
     }
@@ -217,14 +217,14 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
     // determine the min and max range of image values
     std::vector<double> minr(np_, max_val), maxr(np_,min_val);
     for (unsigned p = 0; p<np_; ++p) {
-      for (std::vector<double>::iterator dit = data_[p].begin();
+      for (auto dit = data_[p].begin();
            dit != data_[p].end(); dit++)
       {
         if ((*dit)<minr[p]) minr[p] = *dit;
         if ((*dit)>maxr[p]) maxr[p] = *dit;
       }
-      unsigned short smin = static_cast<unsigned short>(minr[p]);
-      unsigned short smax = static_cast<unsigned short>(maxr[p]);
+      auto smin = static_cast<unsigned short>(minr[p]);
+      auto smax = static_cast<unsigned short>(maxr[p]);
           // handle case where data is all the same
           if(smin == smax){
                   if(smin == 0)
@@ -234,7 +234,7 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
                   else
                           smin = 0;
           }
-      unsigned short nbins = static_cast<unsigned short>(smax-smin);
+      auto nbins = static_cast<unsigned short>(smax-smin);
           if(nbins == 0)
                   nbins = 1;
            // determine if the number of bins exceeds the limit
@@ -242,7 +242,7 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
         nbins = bin_limit_;
         // increase max value to make bin delta an integer
         double range = smax-smin;
-        unsigned short del = static_cast<unsigned short>(std::ceil(range/nbins));
+        auto del = static_cast<unsigned short>(std::ceil(range/nbins));
                 unsigned idel = del;
                 idel*=nbins;
                 if(idel>max_val)
@@ -252,7 +252,7 @@ bool bil_image_bounds_from_histogram::init_histogram_from_data()
       }
       hists_[p] = bsta_histogram<double>(static_cast<double>(smin),
                                         static_cast<double>(smax), nbins);
-      for (std::vector<double>::iterator dit = data_[p].begin();
+      for (auto dit = data_[p].begin();
            dit != data_[p].end(); ++dit)
         hists_[p].upcount(*dit, 1.0);
     }

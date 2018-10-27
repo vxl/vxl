@@ -18,7 +18,7 @@ bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_bas
   for (unsigned i =0; i<dim+1; i++)
     scenes_.push_back(new boxm_scene_base());
 
-  boxm_scene<tree_type>* data_scene= dynamic_cast<boxm_scene<tree_type>* > (data_scene_base.as_pointer());
+  auto* data_scene= dynamic_cast<boxm_scene<tree_type>* > (data_scene_base.as_pointer());
   if (!data_scene)
     std::cerr << "In bvpl_pca_error_scenes: Null Scene\n";
 

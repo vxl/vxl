@@ -59,7 +59,7 @@ bsta_sigma_normalizer::bsta_sigma_normalizer(float under_estimation_probability,
     if (end_error > 1e-3) {
       std::cerr << "error: boxm_sigma_normalizer: levenberg_marquardt final error = " << end_error << '\n';
     }
-    float unbias_constant = (float)std::sqrt((float)(n-1) / x[0]);
+    auto unbias_constant = (float)std::sqrt((float)(n-1) / x[0]);
 
     unbias_const_[n] = unbias_constant;
   }

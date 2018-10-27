@@ -237,7 +237,7 @@ void pnmscaleT<T, longT>::go()
   else
     tempxelrow = new T[cols];
 
-  longT* gs = new longT[cols];
+  auto* gs = new longT[cols];
   int rowsread = 0;
   fracrowleft = syscale;
   needtoreadrow = 1;

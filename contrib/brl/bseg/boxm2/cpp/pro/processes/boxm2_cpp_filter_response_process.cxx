@@ -78,10 +78,10 @@ bool boxm2_cpp_filter_response_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
-  float prob_threshold = pro.get_input<float>(i++);
+  auto prob_threshold = pro.get_input<float>(i++);
   std::string kernel_base_file_name =  pro.get_input< std::string>(i++);
-  unsigned id_kernel = pro.get_input<unsigned>(i++);
-  unsigned octree_lvl = pro.get_input<unsigned>(i++);
+  auto id_kernel = pro.get_input<unsigned>(i++);
+  auto octree_lvl = pro.get_input<unsigned>(i++);
 
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   std::cout << "Running boxm2_cpp_filter_response_process ..." << std::endl;

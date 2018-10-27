@@ -114,11 +114,11 @@ namespace Nabo
         {
                 const int count(static_cast<int>(last - first));
                 assert(count >= 1);
-                const unsigned pos(static_cast<unsigned>(nodes.size()));
+                const auto pos(static_cast<unsigned>(nodes.size()));
                 //cerr << count << endl;
                 if (count <= int(bucketSize))
                 {
-                        const uint32_t initBucketsSize(static_cast<uint32_t>(buckets.size()));
+                        const auto initBucketsSize(static_cast<uint32_t>(buckets.size()));
                         //cerr << "creating bucket with " << count << " values" << endl;
                         for (int i = 0; i < count; ++i)
                         {
@@ -133,7 +133,7 @@ namespace Nabo
                         return pos;
                 }
                 // find the largest dimension of the box
-                const unsigned cutDim = static_cast<unsigned>(argMax<T, CloudType>(maxValues - minValues));
+                const auto cutDim = static_cast<unsigned>(argMax<T, CloudType>(maxValues - minValues));
                 const T idealCutVal((maxValues(cutDim) + minValues(cutDim))/2);
                 // get bounds from actual points
                 const pair<T,T> minMaxVals(getBounds(first, last, cutDim));
@@ -383,7 +383,7 @@ namespace Nabo
                                 //cerr << "  " << bucket-> pt << endl;
                                 //const T dist(dist2<T>(query, cloud.col(index)));
                                 //const T dist((query - cloud.col(index)).squaredNorm()); (commented out in original nabo, for speed? JLM)
-                                unsigned ncols = static_cast<unsigned>(cloud.cols());
+                                auto ncols = static_cast<unsigned>(cloud.cols());
                                 T dist(0);
                                 const T* qPtr(query);
                                 const T* dPtr(bucket->pt);

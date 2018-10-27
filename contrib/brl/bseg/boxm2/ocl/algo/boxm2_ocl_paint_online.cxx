@@ -104,24 +104,24 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
 
 
   std::size_t local_threads[2]={8,8};
   std::size_t global_threads[2]={8,8};
-  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+  auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
 
   //set generic cam
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_origins,    "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem( cl_ni*cl_nj * sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
     vis_buff[i]=1.0f;
 
@@ -188,7 +188,7 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
     bocl_mem* blk       = opencl_cache->get_block(scene, *id);
     bocl_mem* blk_info  = opencl_cache->loaded_block_info();
     bocl_mem* alpha     = opencl_cache->get_data(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
     int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
     info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
     blk_info->write_to_buffer((queue));
@@ -318,7 +318,7 @@ std::vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  bocl_kernel* kernel = new bocl_kernel();
+  auto* kernel = new bocl_kernel();
 
   std::string updt_opts = opts +  " -D AUX_LEN_INT_VIS -D STEP_CELL=step_cell_aux_len_int_vis(aux_args,data_ptr,llid,d) ";
   kernel->create_kernel(&device->context(),device->device_id(), src_paths, "aux_len_int_vis_main", updt_opts, "online_paint::aux_len_int_vis_main");
@@ -331,7 +331,7 @@ std::vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device
   second_src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   second_src_paths.push_back(source_dir + "bit/update_kernels.cl");
 
-  bocl_kernel* kernel1 = new bocl_kernel();
+  auto* kernel1 = new bocl_kernel();
   std::string app_opts = opts +  " -D UPDATE_APP_GREY";
   kernel1->create_kernel(&device->context(),device->device_id(), second_src_paths, "update_mog3_main", app_opts, "online_paint::update_mog3_main");
   kernels.push_back(kernel1);

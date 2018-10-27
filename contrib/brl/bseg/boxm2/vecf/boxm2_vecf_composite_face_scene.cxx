@@ -205,7 +205,7 @@ void  boxm2_vecf_composite_face_scene::inverse_vector_field(std::vector<vgl_vect
   vul_timer t;
 
   //the target cell centers. the vector field could potentially be defined at all target points
-  unsigned nt = static_cast<unsigned>(target_cell_centers_.size());
+  auto nt = static_cast<unsigned>(target_cell_centers_.size());
   vfield.resize(nt, vgl_vector_3d<double>(0.0, 0.0, 0.0));// initialized to 0
   type.resize(nt, "invalid");
   unsigned mandible_cnt = 0, skin_cnt = 0, cranium_cnt = 0;
@@ -237,7 +237,7 @@ void boxm2_vecf_composite_face_scene::extract_unrefined_cell_info(){
         double y = targ_origin_.y() + iy*targ_dims_.y();
         double z = targ_origin_.z() + iz*targ_dims_.z();
         vgl_point_3d<double> p(x, y, z);
-        unsigned lindex = static_cast<unsigned>(target_linear_index(ix, iy, iz));
+        auto lindex = static_cast<unsigned>(target_linear_index(ix, iy, iz));
         unrefined_cell_info cinf;
         cinf.linear_index_ = lindex;
         cinf.ix_ = ix; cinf.iy_ = iy; cinf.iz_ = iz;
@@ -300,7 +300,7 @@ void boxm2_vecf_composite_face_scene::map_to_target(boxm2_scene_sptr target){
 
 bool boxm2_vecf_composite_face_scene::set_params(boxm2_vecf_articulated_params const& params){
   try{
-    boxm2_vecf_composite_face_params const& params_ref = dynamic_cast<boxm2_vecf_composite_face_params const &>(params);
+    auto const& params_ref = dynamic_cast<boxm2_vecf_composite_face_params const &>(params);
     params_ =boxm2_vecf_composite_face_params(params_ref);
   }catch(std::exception e){
     std::cout<<" Can't downcast to composite_face parameters! PARAMATER ASSIGNMENT PHAILED!"<<std::endl;
@@ -387,7 +387,7 @@ void boxm2_vecf_composite_face_scene::apply_vector_field_to_target(std::vector<v
   boxm2_data_traits<BOXM2_ALPHA>::datatype alpha = 0.0f;
   boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   unsigned n_valid = 0;
-  unsigned n = static_cast<unsigned>(vf.size());
+  auto n = static_cast<unsigned>(vf.size());
   bool show_mouth = params_.mouth_params_.show_mouth_region_;
   for(unsigned j = 0; j<n; ++j){
     const std::string& t = type[j];

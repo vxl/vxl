@@ -23,7 +23,7 @@ bool vil_block_cache::add_block(const unsigned& block_index_i,
 {
   //create a cell
 
-  bcell* cell = new bcell(block_index_i, block_index_j, blk);
+  auto* cell = new bcell(block_index_i, block_index_j, blk);
   if (blocks_.size()>=nblocks_)
     if (!this->remove_block())
       return false;
@@ -37,7 +37,7 @@ bool vil_block_cache::get_block(const unsigned& block_index_i,
                                 vil_image_view_base_sptr& blk) const
 {
   bool found = false;
-  for (std::vector<bcell*>::const_iterator bit=blocks_.begin(); bit!= blocks_.end()&&!found; ++bit)
+  for (auto bit=blocks_.begin(); bit!= blocks_.end()&&!found; ++bit)
   {
     if ((*bit)->bindex_i_!=block_index_i||(*bit)->bindex_j_!=block_index_j)
       continue;
@@ -60,7 +60,7 @@ bool vil_block_cache::remove_block()
   }
   // queue should already be sorted
   // remove oldest
-  std::vector<bcell*>::iterator bit = blocks_.begin();
+  auto bit = blocks_.begin();
   blocks_.erase(bit);
   return true;
 }

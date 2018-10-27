@@ -143,7 +143,7 @@ void boxm2_multi_store_aux::read_aux(boxm2_block_id const& id,
   //calc data buffer length
   bocl_mem* alpha = opencl_cache->get_data<BOXM2_ALPHA>(id,0,false);
   std::size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
-  std::size_t dataLen = (std::size_t) (alpha->num_bytes() / alphaTypeSize);
+  auto dataLen = (std::size_t) (alpha->num_bytes() / alphaTypeSize);
 
   //grab an appropriately sized AUX data buffer
   bocl_mem *aux0 = opencl_cache->get_data<BOXM2_AUX0>(id, dataLen*boxm2_data_traits<BOXM2_AUX0>::datasize());
@@ -181,10 +181,10 @@ void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
 
   //calc data buffer length
   std::size_t alphaTypeSize = boxm2_data_traits<BOXM2_ALPHA>::datasize();
-  std::size_t dataLen = (std::size_t) (alpha->num_bytes() / alphaTypeSize);
+  auto dataLen = (std::size_t) (alpha->num_bytes() / alphaTypeSize);
 
   //store len in info buffer
-  boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+  auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
   info_buffer->data_buffer_length = dataLen;
   blk_info->write_to_buffer(queue);
 
@@ -261,7 +261,7 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, std::st
   std::string options = opts + "";
 
   //create all passes
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + "-D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
 
@@ -301,12 +301,12 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels_color(bocl_device_sptr device, s
   options += opts;
 
   //seg len pass
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update_color::seg_len");
 
   //create  compress rgb pass
-  bocl_kernel* comp = new bocl_kernel();
+  auto* comp = new bocl_kernel();
   std::string comp_opts = options + " -D COMPRESS_RGB ";
   comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update_color::compress_rgb");
 

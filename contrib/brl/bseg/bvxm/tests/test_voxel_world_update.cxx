@@ -56,7 +56,7 @@ static void test_voxel_world_update()
   camera_matrix.put(2,2,1);
   camera_matrix.put(2,3,1);
 
-  vpgl_proj_camera<double>* camera = new vpgl_proj_camera<double>(camera_matrix);
+  auto* camera = new vpgl_proj_camera<double>(camera_matrix);
 
 
   //create a synthetic image

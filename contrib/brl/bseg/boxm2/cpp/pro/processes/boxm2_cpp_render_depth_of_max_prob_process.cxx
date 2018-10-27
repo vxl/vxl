@@ -66,13 +66,13 @@ bool boxm2_cpp_render_depth_of_max_prob_process(bprb_func_process& pro)
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
 
   // function call
-  vil_image_view<float> * exp_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * vis_img=new vil_image_view<float>(ni,nj);
-  vil_image_view<float> * prob_img=new vil_image_view<float>(ni,nj);
+  auto * exp_img=new vil_image_view<float>(ni,nj);
+  auto * vis_img=new vil_image_view<float>(ni,nj);
+  auto * prob_img=new vil_image_view<float>(ni,nj);
   exp_img->fill(scene->bounding_box().min_z());
   vis_img->fill(1.0f);
   prob_img->fill(0.0f);
@@ -84,7 +84,7 @@ bool boxm2_cpp_render_depth_of_max_prob_process(bprb_func_process& pro)
     boxm2_block *     blk = cache->get_block(scene, *id);
     boxm2_data_base *  alph = cache->get_data_base(scene, *id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
 
-    boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+    auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
     scene_info_wrapper->info=scene->get_blk_metadata(*id);
 
     boxm2_render_depth_of_max_prob(scene_info_wrapper->info,

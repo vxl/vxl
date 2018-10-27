@@ -67,7 +67,7 @@ volm_conf_object
   height_((float)height),
   land_(land)
 {
-  float theta = (float)std::atan2(pt.y(), pt.x());
+  auto theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
@@ -78,7 +78,7 @@ volm_conf_object
   land_(land),
   height_(pt.z())
 {
-  float theta = (float)std::atan2(pt.y(), pt.x());
+  auto theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 
@@ -89,7 +89,7 @@ volm_conf_object
   height_((float)pt.z()),
   land_(land)
 {
-  float theta = (float)std::atan2(pt.y(), pt.x());
+  auto theta = (float)std::atan2(pt.y(), pt.x());
   theta_ = (theta < 0) ? theta + (float)vnl_math::twopi : theta;
 }
 

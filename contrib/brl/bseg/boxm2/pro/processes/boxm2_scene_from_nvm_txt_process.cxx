@@ -61,12 +61,12 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
   //get the inputs
   std::string nvm_filename = pro.get_input<std::string>(0);
   std::string input_img_folder = pro.get_input<std::string>(1);
-  float x_center = pro.get_input<float>(2);
-  float y_center = pro.get_input<float>(3);
-  float z_center = pro.get_input<float>(4);
-  float width = pro.get_input<float>(5);
-  float height = pro.get_input<float>(6);
-  float depth = pro.get_input<float>(7);
+  auto x_center = pro.get_input<float>(2);
+  auto y_center = pro.get_input<float>(3);
+  auto z_center = pro.get_input<float>(4);
+  auto width = pro.get_input<float>(5);
+  auto height = pro.get_input<float>(6);
+  auto depth = pro.get_input<float>(7);
   std::string modeldir= pro.get_input<std::string>(8);
 
   // get the scene bounding box

@@ -91,13 +91,13 @@ bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
   int window_size = pro.get_input<int>(3);
 
   //Retrieve initial_variance
-  float initial_variance = pro.get_input<float>(4);
+  auto initial_variance = pro.get_input<float>(4);
 
   //Retrieve g_thresh
-  float g_thresh = pro.get_input<float>(5);
+  auto g_thresh = pro.get_input<float>(5);
 
   //Retrieve min_stdev
-  float min_stdev = pro.get_input<float>(6);
+  auto min_stdev = pro.get_input<float>(6);
 
   //Retrieve start frame number
   int start_frame = pro.get_input<int>(7);
@@ -121,7 +121,7 @@ bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
     std::cout.flush();
   }
   else model_sptr = bgm;
-  bbgm_image_of<obs_mix_gauss_type> *model =
+  auto *model =
     static_cast<bbgm_image_of<obs_mix_gauss_type>*>(model_sptr.ptr());
 
   bsta_gauss_t init_gauss(vector_(0.0f), vector_(initial_variance) );

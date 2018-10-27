@@ -469,7 +469,7 @@ static void test_image_view_assignment_operator()
 
   // Assign one to the other use a temporary (which has a reference
   // count of zero).
-  byte_view& im2 = static_cast< byte_view& >( *im2p );
+  auto& im2 = static_cast< byte_view& >( *im2p );
   im2 = byte_view( im1p );
 
   // If we get here, then all is well. We should check that the

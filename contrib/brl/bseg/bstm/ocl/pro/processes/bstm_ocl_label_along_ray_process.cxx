@@ -50,7 +50,7 @@ namespace bstm_ocl_label_along_ray_process_globals
     //compilation options
     std::string options = opts+ "-D LABELING ";
 
-    bocl_kernel* compute_vis = new bocl_kernel();
+    auto* compute_vis = new bocl_kernel();
     std::string seg_opts = options + " -D STEP_CELL=step_cell_label(aux_args,data_ptr,data_ptr_tt,d)";
     compute_vis->create_kernel(&device->context(),device->device_id(), src_paths, "label_scene", seg_opts, "label_scene");
     return compute_vis;
@@ -97,8 +97,8 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
   bstm_opencl_cache_sptr   opencl_cache = pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr change_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  float                   change_p = pro.get_input<float>(i++);
-  float                   time = pro.get_input<float>(i++);
+  auto                   change_p = pro.get_input<float>(i++);
+  auto                   time = pro.get_input<float>(i++);
   unsigned char          label = pro.get_input<int>(i++);
 
   ///////////////////////
@@ -126,7 +126,7 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
   //----- PREP INPUT BUFFERS -------------
   //prepare input images
-  vil_image_view<float>*   img_view = static_cast<vil_image_view<float>* >(change_img.ptr());
+  auto*   img_view = static_cast<vil_image_view<float>* >(change_img.ptr());
 
   //prepare workspace size
   unsigned cl_ni = RoundUp(img_view->ni(),local_threads[0]);
@@ -135,15 +135,15 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
   global_threads[1] = cl_nj;
 
   // create all buffers
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //prepare image buffers (cpu)
-  float* input_buff = new float[cl_ni*cl_nj];
-  float* vis_buff = new float[cl_ni*cl_nj];
+  auto* input_buff = new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -214,7 +214,7 @@ bool bstm_ocl_label_along_ray_process(bprb_func_process& pro)
 
 
      bocl_mem* blk_t_info= opencl_cache->loaded_time_block_info();
-     bstm_scene_info* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
+     auto* info_buffer_t = (bstm_scene_info*) blk_t_info->cpu_buffer();
      int num_time_trees = info_buffer_t->tree_buffer_length;
 
      int auxTypeSize = (int) bstm_data_info::datasize(bstm_data_traits<BSTM_LABEL>::prefix());

@@ -70,7 +70,7 @@ bool bvpl_convert_direction_to_hue_process(bprb_func_process& pro)
     std::cerr << "In bvpl_convert_direction_to_hue_process -- input grid is not valid!\n";
     return false;
   }
-  bvxm_voxel_grid<vnl_float_4 > *grid
+  auto *grid
  = dynamic_cast< bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr());
   if (grid)
   {

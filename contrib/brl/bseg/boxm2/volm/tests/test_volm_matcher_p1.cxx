@@ -91,7 +91,7 @@ static void test_volm_matcher_p1()
   volm_spherical_container_sptr sph = new volm_spherical_container(solid_angle, vmin, dmax);
   std::map<double, unsigned char>& depth_interval_map = sph->get_depth_interval_map();
   std::vector<float> depth_interval;
-  std::map<double, unsigned char>::iterator iter = depth_interval_map.begin();
+  auto iter = depth_interval_map.begin();
   for (; iter != depth_interval_map.end(); ++iter)
     depth_interval.push_back((float)iter->first);
 
@@ -132,7 +132,7 @@ static void test_volm_matcher_p1()
     leave->hyps_->write_to_kml(out_file, 0.0, true);
   }
   // create index
-  unsigned layer_size = (unsigned)sph_shell->get_container_size();
+  auto layer_size = (unsigned)sph_shell->get_container_size();
   float buffer_capacity = 1.0f;
   boxm2_volm_wr3db_index_params params;
   params.start = 0;    params.skip = 1;
@@ -182,7 +182,7 @@ static void test_volm_matcher_p1()
 
   // find the device that will be used
   bocl_manager_child &mgr = bocl_manager_child::instance();
-  unsigned num_device = (unsigned)mgr.numGPUs();
+  auto num_device = (unsigned)mgr.numGPUs();
   if (num_device == 0) {
     std::cout << "Matcher requires GPU hardware, test terminates" << std::endl;
     return;

@@ -87,7 +87,7 @@ bool bvxm_fill_mesh_normals_grid_process(bprb_func_process& pro)
   glob << input_path << "/*.ply*";
 
   //insert grids
-  if (bvxm_voxel_grid<vnl_vector_fixed<float,3> >* g = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >*>(grid.as_pointer()))
+  if (auto* g = dynamic_cast<bvxm_voxel_grid<vnl_vector_fixed<float,3> >*>(grid.as_pointer()))
   {
       g->initialize_data(vnl_vector_fixed<float,3>(0.0f,0.0f,0.0f));
       for (vul_file_iterator file_it = glob.str().c_str(); file_it; ++file_it)

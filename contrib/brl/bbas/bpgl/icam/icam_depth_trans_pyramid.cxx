@@ -12,7 +12,7 @@ required_levels(unsigned ni,unsigned nj,unsigned min_size)
   if (nj<ni) m = nj;
   //required levels
   double nlevls = 1.0+ std::log(mns/m)/std::log(0.5);
-  unsigned ncheck = static_cast<unsigned>(nlevls);
+  auto ncheck = static_cast<unsigned>(nlevls);
   double temp = static_cast<unsigned>(std::pow(0.5, double(ncheck-1))*m);
   if (temp<mns&&ncheck>=2)
     return ncheck-1;

@@ -696,7 +696,7 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
   if (cm->type!=CC2)
     return nullptr; //type mismatch
 
-  sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
+  auto* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
   //now determine which transition is most likely
   bundle_size = 0;
@@ -723,7 +723,7 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
 
   if (trans_k>=0){ //if any legal ones
     //construct a curve model from the best transition
-    sdet_CC_curve_model_new* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
+    auto* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
 
     for (int j=0; j<NkClasses; j++)
       new_cm->cv_bundles[j] = vgl_clip(cv_bundles[trans_k], next_cm->cv_bundles[j], vgl_clip_type_intersect);
@@ -767,7 +767,7 @@ sdet_curve_model* sdet_CC_curve_model_new::transition(sdet_curve_model* cm, int&
 
   if (trans_k>=0){ //if any legal ones
     //construct a curve model from the best transition
-    sdet_CC_curve_model_new* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
+    auto* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
 
     //construct the constraint box for the best model
     double dx_min=100, dx_max=-100;
@@ -794,7 +794,7 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
   if (cm->type!=CC2)
     return nullptr; //type mismatch
 
-  sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
+  auto* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
   //now determine which transition is most likely
   gc_cost = 1000.0; //compatibility cost
@@ -863,7 +863,7 @@ sdet_curve_model* sdet_CC_curve_model_new::consistent_transition(sdet_curve_mode
 
   // if any of the combinations were legal, construct a curve model from the best transition
   if (trans_k>=0){
-    sdet_CC_curve_model_new* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
+    auto* new_cm = new sdet_CC_curve_model_new(ref_pt, ref_theta);
 
     if (trans_type==2){//C^2
       for (int i=0; i<NkClasses; i++)
@@ -905,7 +905,7 @@ sdet_curve_model* sdet_CC_curve_model_new::C1_transition(sdet_curve_model* cm)
   if (cm->type!=CC2)
     return nullptr; //type mismatch
 
-  sdet_CC_curve_model_new* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
+  auto* next_cm = (sdet_CC_curve_model_new*)cm; //typecast for easy handling
 
   //first take the union of the curve bundles of the current cvlet
   vgl_polygon<double> cum_cb;
@@ -921,7 +921,7 @@ sdet_curve_model* sdet_CC_curve_model_new::C1_transition(sdet_curve_model* cm)
     return nullptr;
 
   //intersect the cumulative cb with all the curve bundles of cvlet2
-  sdet_CC_curve_model_new* new_cm = new sdet_CC_curve_model_new(next_cm->ref_pt, next_cm->ref_theta);
+  auto* new_cm = new sdet_CC_curve_model_new(next_cm->ref_pt, next_cm->ref_theta);
 
   for (int j=0; j<NkClasses; j++)
     new_cm->cv_bundles[j] = vgl_clip(cum_cb, next_cm->cv_bundles[j], vgl_clip_type_intersect);
@@ -1804,12 +1804,12 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
         const double sin_T0mdt_times_DY = DY*mysin(T0_m_dt);
         const double cos_T0mdt_times_DX = DX*mycos(T0_m_dt);
 
-        const float k_dt_min = static_cast<float>(sin_t2_p_dt2_m_t0_m_dt/(-sin_t2_p_dt2_m_t0_m_dt*dx2 + cos_T0mdt_times_DX + sin_T0mdt_times_DY));
+        const auto k_dt_min = static_cast<float>(sin_t2_p_dt2_m_t0_m_dt/(-sin_t2_p_dt2_m_t0_m_dt*dx2 + cos_T0mdt_times_DX + sin_T0mdt_times_DY));
         //compute the intersection of all the surfaces to compute the final bundle
         if (Kmin(i,j) < k_dt_min)
           Kmin(i,j) = k_dt_min;
 
-        const float k_dt_max = static_cast<float>(sin_t2_p_dt2_m_t0_p_dt/(-sin_t2_p_dt2_m_t0_p_dt*dx2 + cos_T0pdt_times_DX + sin_T0pdt_times_DY));
+        const auto k_dt_max = static_cast<float>(sin_t2_p_dt2_m_t0_p_dt/(-sin_t2_p_dt2_m_t0_p_dt*dx2 + cos_T0pdt_times_DX + sin_T0pdt_times_DY));
         //compute the intersection of all the surfaces to compute the final bundle
         if (Kmax(i,j) > k_dt_max)
           Kmax(i,j) = k_dt_max;
@@ -1844,12 +1844,12 @@ compute_curve_bundle(sdet_edgel* e1, sdet_edgel* e2, sdet_edgel* ref_e,
         const double sin_T0mdt_times_DY = DY*mysin(T0_m_dt);
         const double cos_T0mdt_times_DX = DX*mycos(T0_m_dt);
 
-        const float k_dt_max = static_cast<float>(sin_t2_p_dt2_m_t0_m_dt/(-sin_t2_p_dt2_m_t0_m_dt*dx2 + cos_T0mdt_times_DX + sin_T0mdt_times_DY));
+        const auto k_dt_max = static_cast<float>(sin_t2_p_dt2_m_t0_m_dt/(-sin_t2_p_dt2_m_t0_m_dt*dx2 + cos_T0mdt_times_DX + sin_T0mdt_times_DY));
         //compute the intersection of all the surfaces to compute the final bundle
         if (Kmax(i,j) > k_dt_max)
           Kmax(i,j) = k_dt_max;
 
-        const float k_dt_min = static_cast<float>(sin_t2_p_dt2_m_t0_p_dt/(-sin_t2_p_dt2_m_t0_p_dt*dx2 + cos_T0pdt_times_DX + sin_T0pdt_times_DY));
+        const auto k_dt_min = static_cast<float>(sin_t2_p_dt2_m_t0_p_dt/(-sin_t2_p_dt2_m_t0_p_dt*dx2 + cos_T0pdt_times_DX + sin_T0pdt_times_DY));
         //compute the intersection of all the surfaces to compute the final bundle
         if (Kmin(i,j) < k_dt_min)
           Kmin(i,j) = k_dt_min;
@@ -2110,7 +2110,7 @@ curve_fit_is_reasonable(std::deque<sdet_edgel*> & edgel_chain, sdet_edgel* /*ref
 //: are these two curve bundles C^2?
 bool sdet_CC_curve_model_3d::is_C2_with(sdet_curve_model* cm)
 {
-  sdet_CC_curve_model_3d* cm2 = (sdet_CC_curve_model_3d*)cm;
+  auto* cm2 = (sdet_CC_curve_model_3d*)cm;
 
   bool valid = false;
   for (unsigned i=0; i<Kmax.rows(); i++)
@@ -2123,7 +2123,7 @@ bool sdet_CC_curve_model_3d::is_C2_with(sdet_curve_model* cm)
 //: are these two curve bundles C^1?
 bool sdet_CC_curve_model_3d::is_C1_with(sdet_curve_model* cm)
 {
-  sdet_CC_curve_model_3d* cm2 = (sdet_CC_curve_model_3d*)cm;
+  auto* cm2 = (sdet_CC_curve_model_3d*)cm;
 
   bool valid = false;
   for (unsigned i=0; i<Kmax.rows(); i++)

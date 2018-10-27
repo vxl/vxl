@@ -162,7 +162,7 @@ void pdf1d_mixture_builder::weighted_build(pdf1d_pdf& base_model,
             const std::vector<double>& wts) const
 {
   assert(base_model.is_class("pdf1d_mixture"));
-  pdf1d_mixture& model = static_cast<pdf1d_mixture&>(base_model);
+  auto& model = static_cast<pdf1d_mixture&>(base_model);
 
   unsigned int n = builder_.size();
 

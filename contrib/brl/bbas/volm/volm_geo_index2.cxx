@@ -252,7 +252,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
 {
   // transfer double to float since our tree bounding box is float
   std::vector<vgl_point_2d<double> > line_double;
-  unsigned num_pts = (unsigned)line.size();
+  auto num_pts = (unsigned)line.size();
   for (unsigned i = 0; i < num_pts; i++)
     line_double.emplace_back((double)line[i].x(), (double)line[i].y());
   get_leaves(root, leaves, line_double);

@@ -38,7 +38,7 @@ void test_random_transform_set_2d()
   TEST_NEAR("test Y bounds " , max_y - min_y , 4.0, 0.2);
   //==== test rotation
   std::cout << "\n\n====================Testing random set of rotations ============================\n";
-  float dtheta = float(vnl_math::pi/2);
+  auto dtheta = float(vnl_math::pi/2);
   n = 1000;
   std::vector<vgl_h_matrix_2d<float> > rtrans_set;
   bugl_random_transform_set_2d<float>::equiform_uniform(n, rtrans_set, 0, 0,

@@ -50,7 +50,7 @@ bool brec_create_hierarchy_process(bprb_func_process& pro)
   // get input
   unsigned i = 0;
   bool create_empty = pro.get_input<bool>(i++);
-  unsigned d_id = pro.get_input<unsigned>(i++);
+  auto d_id = pro.get_input<unsigned>(i++);
   std::string name = pro.get_input<std::string>(i++);
 
   brec_part_hierarchy_sptr h;
@@ -179,7 +179,7 @@ bool brec_draw_hierarchy_process(bprb_func_process& pro)
   unsigned i = 0;
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
   std::string name = pro.get_input<std::string>(i++);
-  float drawing_radius = pro.get_input<float>(i++);
+  auto drawing_radius = pro.get_input<float>(i++);
   int N = pro.get_input<int>(i++);
 
   h->draw_to_ps(N, name, drawing_radius);

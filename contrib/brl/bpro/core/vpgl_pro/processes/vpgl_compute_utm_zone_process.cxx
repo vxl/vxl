@@ -48,8 +48,8 @@ bool vpgl_compute_utm_zone_process(bprb_func_process& pro)
   }
   // get input
   unsigned i = 0;
-  double lon = pro.get_input<double>(i++);
-  double lat = pro.get_input<double>(i++);
+  auto lon = pro.get_input<double>(i++);
+  auto lat = pro.get_input<double>(i++);
 
   vpgl_utm utm;
   double x, y;

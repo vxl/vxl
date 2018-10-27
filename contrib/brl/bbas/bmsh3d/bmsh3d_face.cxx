@@ -499,8 +499,8 @@ vgl_vector_3d<double> bmsh3d_face::compute_normal()
 
   for (auto E : inc_edges) {
     bmsh3d_halfedge* HE = E->get_HE_of_F (this);
-    bmsh3d_vertex* sV = (bmsh3d_vertex*)HE->s_vertex();
-    bmsh3d_vertex* eV = (bmsh3d_vertex*)HE->e_vertex();
+    auto* sV = (bmsh3d_vertex*)HE->s_vertex();
+    auto* eV = (bmsh3d_vertex*)HE->e_vertex();
     vgl_point_3d<double> p0 = sV->pt();
     vgl_point_3d<double> p1 = eV->pt();
     vgl_vector_3d<double> v0 = p0 - centroid;
@@ -574,7 +574,7 @@ bool bmsh3d_face::_remove_HE(bmsh3d_halfedge* inputHE)
 void bmsh3d_face::connect_E_to_end (bmsh3d_edge* E)
 {
   // The halfedge will be deleted when the sheet disconnect from the sheet.
-  bmsh3d_halfedge* HE = new bmsh3d_halfedge (E, this);
+  auto* HE = new bmsh3d_halfedge (E, this);
   // Handle the both-way connectivity of halfedge-face.
   _connect_HE_to_end(HE);
   // Handle the both-way connectivity of halfedge-edge.
@@ -998,7 +998,7 @@ bmsh3d_vertex* bmsh3d_face::t_vertex_against_edge (const bmsh3d_edge* E) const
 
 bmsh3d_halfedge* _find_prev_in_HE_chain (const bmsh3d_halfedge* inputHE)
 {
-  bmsh3d_halfedge* HE = (bmsh3d_halfedge*) inputHE; // casting away const !!!
+  auto* HE = (bmsh3d_halfedge*) inputHE; // casting away const !!!
   while (HE->next() != inputHE)
     HE = HE->next();
   return HE;

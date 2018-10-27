@@ -49,12 +49,12 @@ bool vil_init_float_image_process(bprb_func_process& pro)
 
   // get the inputs
   unsigned i = 0;
-  unsigned int ni = pro.get_input<unsigned>(i++);
-  unsigned int nj = pro.get_input<unsigned>(i++);
-  unsigned int np = pro.get_input<unsigned>(i++);
-  float init_val = pro.get_input<float>(i++);
+  auto ni = pro.get_input<unsigned>(i++);
+  auto nj = pro.get_input<unsigned>(i++);
+  auto np = pro.get_input<unsigned>(i++);
+  auto init_val = pro.get_input<float>(i++);
 
-  vil_image_view<float> *img = new vil_image_view<float>(ni,nj,np);
+  auto *img = new vil_image_view<float>(ni,nj,np);
   img->fill(init_val);
 
   pro.set_output_val<vil_image_view_base_sptr>(0, vil_image_view_base_sptr(img));

@@ -37,7 +37,7 @@ void vil1_copy(vil1_image const& in, vil1_image& out)
   // Simple implementation copies the whole buffer at once
   // This is only valid if planes and components are identical,
   // not just their product.  Hence the assert above.
-  unsigned char* buf = new unsigned char[in.get_size_bytes()];
+  auto* buf = new unsigned char[in.get_size_bytes()];
 #ifdef DEBUG
   std::cerr << "...vil1_copy() doing get_section()\n";
 #endif

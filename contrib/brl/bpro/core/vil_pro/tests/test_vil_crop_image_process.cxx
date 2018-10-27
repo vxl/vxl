@@ -53,7 +53,7 @@ vil_image_view_base_sptr test_process(vil_image_view_base_sptr const &ref_img, u
   TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != nullptr) ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr out_img_base = result->value();
 

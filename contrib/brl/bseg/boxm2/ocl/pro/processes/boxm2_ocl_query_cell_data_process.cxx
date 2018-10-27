@@ -63,9 +63,9 @@ bool boxm2_ocl_query_cell_data_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_cache_sptr cache= pro.get_input<boxm2_cache_sptr>(i++);
   boxm2_scene_sptr scene =pro.get_input<boxm2_scene_sptr>(i++);
-  float x =pro.get_input<float>(i++);
-  float y =pro.get_input<float>(i++);
-  float z =pro.get_input<float>(i++);
+  auto x =pro.get_input<float>(i++);
+  auto y =pro.get_input<float>(i++);
+  auto z =pro.get_input<float>(i++);
   float p=0.0f;
   float intensity=0.0f;
   // set arguments

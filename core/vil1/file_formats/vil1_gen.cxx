@@ -172,10 +172,10 @@ bool vil1_gen_generic_image::get_section(void* buf, int /*x0*/, int /*y0*/, int 
   }
   else if (type_ == vil1_gen_rgb) {
     int n = xs*ys;
-    unsigned char* p = (unsigned char*)buf;
-    unsigned char r = (unsigned char)(params_[0]);
-    unsigned char g = (unsigned char)(params_[1]);
-    unsigned char b = (unsigned char)(params_[2]);
+    auto* p = (unsigned char*)buf;
+    auto r = (unsigned char)(params_[0]);
+    auto g = (unsigned char)(params_[1]);
+    auto b = (unsigned char)(params_[2]);
     while (n--) {
       *p++ = r;
       *p++ = g;

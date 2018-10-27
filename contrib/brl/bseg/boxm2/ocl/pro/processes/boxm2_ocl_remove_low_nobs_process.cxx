@@ -71,7 +71,7 @@ bool boxm2_ocl_remove_low_nobs_process(bprb_func_process& pro)
     bocl_device_sptr         device = pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr         scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float                    num_obs_thresh_multiplier = pro.get_input<float>(i);
+    auto                    num_obs_thresh_multiplier = pro.get_input<float>(i);
 
     vul_timer t;
     t.mark();

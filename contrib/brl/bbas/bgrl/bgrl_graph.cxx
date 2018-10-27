@@ -31,10 +31,10 @@ bgrl_graph::bgrl_graph(const bgrl_graph& graph)
   // link up new edges to new vertices
   for (const auto & vertice : vertices_)
   {
-    for ( std::set<bgrl_edge_sptr>::const_iterator e_itr = vertice->out_edges_.begin();
+    for ( auto e_itr = vertice->out_edges_.begin();
           e_itr != vertice->out_edges_.end();  ++e_itr )
     {
-      std::map<bgrl_vertex_sptr, bgrl_vertex_sptr>::iterator find_new = old_to_new.find((*e_itr)->to_);
+      auto find_new = old_to_new.find((*e_itr)->to_);
       if ( find_new != old_to_new.end() ){
         (*e_itr)->to_ = find_new->second.ptr();
         find_new->second->in_edges_.insert(*e_itr);
@@ -102,14 +102,14 @@ bgrl_graph::purge()
 {
   bool retval = false;
 
-  for ( vertex_iterator v_itr = vertices_.begin();
+  for ( auto v_itr = vertices_.begin();
         v_itr != vertices_.end(); ++v_itr )
   {
     bgrl_vertex_sptr curr_vertex = *v_itr;
     // remove the NULL edges
     retval = curr_vertex->purge() || retval;
     // remove edges to vertices not in this graph
-    for ( edge_iterator e_itr = curr_vertex->out_edges_.begin();
+    for ( auto e_itr = curr_vertex->out_edges_.begin();
           e_itr != curr_vertex->out_edges_.end(); ++e_itr )
     {
       if (vertices_.find((*e_itr)->to_) == vertices_.end()) {
@@ -118,7 +118,7 @@ bgrl_graph::purge()
       }
     }
     // remove edges from vertices not in this graph
-    for ( edge_iterator e_itr = curr_vertex->in_edges_.begin();
+    for ( auto e_itr = curr_vertex->in_edges_.begin();
           e_itr != curr_vertex->in_edges_.end(); ++e_itr )
     {
       if (vertices_.find((*e_itr)->from_) == vertices_.end()) {

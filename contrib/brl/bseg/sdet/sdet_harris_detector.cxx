@@ -174,7 +174,7 @@ void sdet_harris_detector::extract_corners()
     return;
   }
   //Sort the corners according to strength
-  sdet_harris_point* point_array = new sdet_harris_point[n_corners];
+  auto* point_array = new sdet_harris_point[n_corners];
   for (int i = 0; i<n_corners; i++)
   {
     vsol_point_2d_sptr p = new vsol_point_2d(x_pos[i], y_pos[i]);

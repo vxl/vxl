@@ -19,7 +19,7 @@ bool bxml_matches(const bxml_element& elm, const bxml_element& query)
   if (elm.num_attributes() < query.num_attributes())
     return false;
 
-  for (bxml_element::const_attr_iterator a = query.attr_begin();
+  for (auto a = query.attr_begin();
        a != query.attr_end();  ++a)
   {
     if (elm.attribute(a->first) != a->second)
@@ -35,12 +35,12 @@ bxml_data_sptr bxml_find(const bxml_data_sptr& head,
 {
   if (head->type() != bxml_data::ELEMENT)
     return nullptr;
-  bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
+  auto* h_elm = static_cast<bxml_element*>(head.ptr());
   if ( bxml_matches(*h_elm, query) )
     return head;
   else {
     // recursively check nested elements
-    for (bxml_element::const_data_iterator i = h_elm->data_begin();
+    for (auto i = h_elm->data_begin();
          i != h_elm->data_end();  ++i)
     {
       bxml_data_sptr result = bxml_find(*i, query);
@@ -67,12 +67,12 @@ bxml_data_sptr bxml_find_by_name(const bxml_data_sptr& head,
 {
   if (head->type() != bxml_data::ELEMENT)
     return nullptr;
-  bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
+  auto* h_elm = static_cast<bxml_element*>(head.ptr());
   if ( bxml_matches_by_name(*h_elm, query) )
     return head;
   else{
     // recursively check nested elements
-    for (bxml_element::const_data_iterator i = h_elm->data_begin();
+    for (auto i = h_elm->data_begin();
          i != h_elm->data_end();  ++i)
     {
       bxml_data_sptr result = bxml_find_by_name(*i, query);
@@ -91,12 +91,12 @@ std::vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
 
   if (head->type() != bxml_data::ELEMENT)
     return all_results;
-  bxml_element* h_elm = static_cast<bxml_element*>(head.ptr());
+  auto* h_elm = static_cast<bxml_element*>(head.ptr());
   if ( bxml_matches_by_name(*h_elm, query) )
     return all_results;
   else{
     // recursively check nested elements
-    for (bxml_element::const_data_iterator i = h_elm->data_begin();
+    for (auto i = h_elm->data_begin();
          i != h_elm->data_end();  ++i)
     {
       bxml_data_sptr result = bxml_find_by_name(*i, query);

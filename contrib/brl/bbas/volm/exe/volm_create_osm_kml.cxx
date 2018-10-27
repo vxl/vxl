@@ -161,7 +161,7 @@ void write_pts_to_kml(std::ofstream& ofs, std::string const& key, std::string co
 {
 
   std::map<std::pair<std::string, std::string>, volm_land_layer>::const_iterator mit;
-  unsigned num_pts = (unsigned)osm_pts.size();
+  auto num_pts = (unsigned)osm_pts.size();
   for (unsigned i = 0; i < num_pts; i++) {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_pt_keys[i];
     std::string name, description;
@@ -208,7 +208,7 @@ void write_lines_to_kml(std::ofstream& ofs, std::string const& key, std::string 
                         unsigned char const& r, unsigned char const& g, unsigned char const& b)
 {
   std::map<std::pair<std::string, std::string>, volm_land_layer>::const_iterator mit;
-  unsigned num_lines = (unsigned)osm_lines.size();
+  auto num_lines = (unsigned)osm_lines.size();
   for (unsigned i = 0; i < num_lines; i++) {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_line_keys[i];
     std::string name, description;
@@ -254,7 +254,7 @@ void write_polys_to_kml(std::ofstream& ofs, std::string const& key, std::string 
                         unsigned char const& r, unsigned char const& g, unsigned char const& b)
 {
   std::map<std::pair<std::string, std::string>, volm_land_layer>::const_iterator mit;
-  unsigned num_polys = (unsigned)osm_polys.size();
+  auto num_polys = (unsigned)osm_polys.size();
   for (unsigned i = 0; i < num_polys; i++) {
     std::vector<std::pair<std::string, std::string> > curr_keys = osm_poly_keys[i];
     std::string name, description;
@@ -311,7 +311,7 @@ bool find_key_value_from_tags(std::string const& key, std::string const& value,
     name = "all=all";
     return true;
   }
-  for (std::vector<std::pair<std::string, std::string> >::iterator vit = tags.begin(); ( vit != tags.end() && !found); ++vit)
+  for (auto vit = tags.begin(); ( vit != tags.end() && !found); ++vit)
   {
     if (key.compare("all") == 0 && value.compare(vit->second) == 0)
     {  found = true;  name = vit->first + "=" + vit->second; }

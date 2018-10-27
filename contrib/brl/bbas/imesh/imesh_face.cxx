@@ -86,7 +86,7 @@ void imesh_face_array::append(const imesh_face_array_base& other,
   const unsigned int new_begin = faces_.size();
 
   if (other.regularity() == 0) {
-    const imesh_face_array& fs = static_cast<const imesh_face_array&>(other);
+    const auto& fs = static_cast<const imesh_face_array&>(other);
     faces_.insert(faces_.end(), fs.faces_.begin(), fs.faces_.end());
 
     if (ind_shift > 0) {

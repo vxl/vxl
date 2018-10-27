@@ -135,7 +135,7 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(vgl_ro
     ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
 
     std::vector<boxm2_block_id> blocks_B = sceneB_->get_block_ids();
-    std::vector<boxm2_block_id>::iterator iter_blks_B = blocks_B.begin();
+    auto iter_blks_B = blocks_B.begin();
     std::size_t local_threads[1]={64};
     std::size_t global_threads[1]={1};
     int status=0;    float gpu_time = 0.0;

@@ -106,7 +106,7 @@ bool boxm2_vecf_ocl_store_nbrs::augment_1_blk(){
   ocl_depth = new bocl_mem(device_->context(), &(depth), sizeof(int), "  depth of octree " );
   ocl_depth->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   std::vector<boxm2_block_id> blocks = source_scene_->get_block_ids();
-  std::vector<boxm2_block_id>::iterator iter_blk = blocks.begin();
+  auto iter_blk = blocks.begin();
   blk_source = opencl_cache_->get_block(source_scene_, *iter_blk);
   info_buffer = source_scene_->get_blk_metadata(*iter_blk);
   blk_info_source  = new bocl_mem(device_->context(), info_buffer, sizeof(boxm2_scene_info), " Scene Info" );

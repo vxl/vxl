@@ -232,7 +232,7 @@ void msm_similarity_aligner::calc_transform_wt_mat(
   const double* p1 = pts1.vector().begin();
   const double* p2 = pts2.vector().begin();
   const double* p1_end = pts1.vector().end();
-  std::vector<msm_wt_mat_2d>::const_iterator w=wt_mat.begin();
+  auto w=wt_mat.begin();
 
   for (;p1!=p1_end;p1+=2,p2+=2,++w)
   {

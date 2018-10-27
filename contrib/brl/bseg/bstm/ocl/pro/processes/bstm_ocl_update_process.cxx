@@ -91,8 +91,8 @@ bool bstm_ocl_update_process(bprb_func_process& pro)
   bstm_opencl_cache_sptr  opencl_cache  = pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr  cam          = pro.get_input<vpgl_camera_double_sptr>(i++);
   vil_image_view_base_sptr img          = pro.get_input<vil_image_view_base_sptr>(i++);
-  float time                           = pro.get_input<float>(i++);
-  float mog_var                        = pro.get_input<float>(i++);
+  auto time                           = pro.get_input<float>(i++);
+  auto mog_var                        = pro.get_input<float>(i++);
   vil_image_view_base_sptr mask_img     = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
   bool                     update_changes_ony = pro.get_input<bool>(i++);

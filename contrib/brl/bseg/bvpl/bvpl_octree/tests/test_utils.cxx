@@ -37,7 +37,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
 
   vgl_vector_3d<unsigned> world_dim(world_dimx,world_dimy,world_dimz); //number of blocks in a scene
 
-  boxm_scene<boct_tree<short, float> > *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim, max_tree_level, init_level );
+  auto *scene = new boxm_scene<boct_tree<short, float> >(lvcs, origin, block_dim, world_dim, max_tree_level, init_level );
   std::string scene_path(vul_file::get_cwd());
   scene->set_paths(scene_path, scene_prefix);
   scene->set_appearance_model(BOXM_FLOAT);
@@ -50,7 +50,7 @@ boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned 
     scene->load_block(iter.index());
     boxm_block<boct_tree<short, float> > *block = scene->get_active_block();
     // Construct an empty tree with 3 maximum levels 1 levele initialized to 0.0
-    boct_tree<short,float> *tree = new boct_tree<short,float>(init_val, 3, 1);
+    auto *tree = new boct_tree<short,float>(init_val, 3, 1);
     //tree->print();
     if (uniform)
       init_tree(tree, cell_index, init_val);

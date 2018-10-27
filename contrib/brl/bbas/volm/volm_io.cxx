@@ -294,7 +294,7 @@ void volm_fallback_label::print_fallback_table()
 
 std::string volm_label_table::land_string(unsigned char id)
 {
-  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  auto mit = volm_label_table::land_id.begin();
   for (; mit != volm_label_table::land_id.end(); ++mit) {
     if ( mit->second.id_ == id ) {
       return mit->second.name_;
@@ -336,7 +336,7 @@ unsigned char volm_label_table::get_id_closest_name(std::string name)
 //: pass the id of the class labeled in the query (volm_attribute.id_)
 vil_rgb<vxl_byte> volm_label_table::get_color(unsigned char id)
 {
-  std::map<int, volm_attributes >::iterator mit = volm_label_table::land_id.begin();
+  auto mit = volm_label_table::land_id.begin();
   for (; mit != volm_label_table::land_id.end(); ++mit) {
     if ( mit->second.id_ == id ) {
       return mit->second.color_;
@@ -359,7 +359,7 @@ bool volm_io::read_camera(std::string kml_file,
   roll_dev = 0;
   top_fov_dev = 0;
   heading = 0;
-  bkml_parser* parser = new bkml_parser();
+  auto* parser = new bkml_parser();
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");
   if (!xmlFile) {
     std::cerr << kml_file.c_str() << " ERROR in camera kml: can not open the given camera kml file.\n";
@@ -1246,7 +1246,7 @@ bool volm_io::read_sme_file(std::string file, std::vector<std::pair<vgl_point_2d
 
     // find its label code
     int label = 0;
-    std::map<std::string, volm_land_layer>::iterator mit = volm_osm_category_io::volm_land_table_name.find(type);
+    auto mit = volm_osm_category_io::volm_land_table_name.find(type);
     if (mit != volm_osm_category_io::volm_land_table_name.end())
       label = mit->second.id_;
 #if 0

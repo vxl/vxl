@@ -242,7 +242,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   long  numberLanczosVecsL = numberLanczosVecs;    // number of vectors to calc
   long  nEVL = nEV;    // long number of EVs to calc
 
-  double *resid = new double[matSize];
+  auto *resid = new double[matSize];
   std::memset((void*) resid, 0, sizeof(double)*matSize);
 
   if (maxIterations <= 0)
@@ -251,7 +251,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   if (numberLanczosVecsL <= 0)
     numberLanczosVecsL = 2 * nEVL + 1;
   numberLanczosVecsL = (numberLanczosVecsL > matSize ? matSize : numberLanczosVecsL);
-  double *V = new double[matSize * numberLanczosVecsL + 1];
+  auto *V = new double[matSize * numberLanczosVecsL + 1];
 
 #define DONE 99
   constexpr int genEigProblemLength = 1;
@@ -321,13 +321,13 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
     clrIx= 0;
 
   // Double precision work array of length 3*N.
-  double *workd = new double[3 * matSize + 1];
+  auto *workd = new double[3 * matSize + 1];
 
   // Double precision work array of length 3*N.
   long lworkl = numberLanczosVecsL * (numberLanczosVecsL+9);
 
   // Double precision work array of length at least NCV**2 + 8*NCV
-  double *workl = new double[lworkl + 1];
+  auto *workl = new double[lworkl + 1];
 
   vnl_vector<double> workVector;
 
@@ -413,7 +413,7 @@ int vnl_sparse_symmetric_eigensystem::CalculateNPairs(
   vectors = new vnl_vector<double>[nvalues];
 
   // hold the eigenvectors
-  double *Z = new double[nvalues * matSize];
+  auto *Z = new double[nvalues * matSize];
 
   v3p_netlib_dseupd_(&rvec, &howMny, select.data_block(), values, Z, &matSize, &sigma, &genEigProblem,
                      &matSize, which, &nEVL, &tolerance, resid, &numberLanczosVecsL, &V[1], &matSize, &iParam[1],
@@ -465,7 +465,7 @@ int vnl_sparse_symmetric_eigensystem::SaveVectors(int n, int m,
     temp_store.clear();
   }
 
-  double* temp = new double[n*m];
+  auto* temp = new double[n*m];
   std::memcpy(temp,q,n*m*sizeof(double));
 #ifdef DEBUG
     std::cout << "Save vectors " << base << ' ' << temp << '\n';

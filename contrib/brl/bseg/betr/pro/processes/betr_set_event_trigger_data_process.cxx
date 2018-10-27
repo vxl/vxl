@@ -60,14 +60,14 @@ bool betr_set_event_trigger_data_process(bprb_func_process& pro)
   if(!event_trigger||!ref_imgr || !ref_cam || !evt_imgr || !evt_cam)
     return false;
   // convert the cameras to local rational cameras using the origin of the event trigger
-  vpgl_rational_camera<double>* ref_rcam = dynamic_cast<vpgl_rational_camera<double>*>(ref_cam.ptr());
+  auto* ref_rcam = dynamic_cast<vpgl_rational_camera<double>*>(ref_cam.ptr());
   if(!ref_rcam)
     return false;
   vpgl_local_rational_camera<double>* lcam = new vpgl_local_rational_camera<double>(event_trigger->lvcs(),*ref_rcam);
   vpgl_camera_double_sptr ref_lcam = dynamic_cast<vpgl_camera<double>*>(lcam);
   if(!ref_lcam)
     return false;
-  vpgl_rational_camera<double>* evt_rcam = dynamic_cast<vpgl_rational_camera<double>*>(evt_cam.ptr());
+  auto* evt_rcam = dynamic_cast<vpgl_rational_camera<double>*>(evt_cam.ptr());
   if(!evt_rcam)
     return false;
   vpgl_local_rational_camera<double>* elcam = new vpgl_local_rational_camera<double>(event_trigger->lvcs(),*evt_rcam);

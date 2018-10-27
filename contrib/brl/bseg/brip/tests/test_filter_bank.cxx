@@ -41,10 +41,10 @@ static void test_filter_bank()
   vil_image_view<unsigned char> out(ni, nj, 3);
   for(unsigned j = 0; j<nj; ++j)
     for(unsigned i = 0; i<ni; ++i){
-      float r = static_cast<float>(rgb(i,j,0));
-      float g = static_cast<float>(rgb(i,j,1));
-      float b = static_cast<float>(rgb(i,j,2));
-      float ir = static_cast<float>(ir_img(i,j,0));
+      auto r = static_cast<float>(rgb(i,j,0));
+      auto g = static_cast<float>(rgb(i,j,1));
+      auto b = static_cast<float>(rgb(i,j,2));
+      auto ir = static_cast<float>(ir_img(i,j,0));
       float NDVI = (ir-r)/(ir+r);
       float theta = static_cast<float>(vnl_math::pi/2.0) + std::atan(NDVI);
       float clr = 81.169f*theta;

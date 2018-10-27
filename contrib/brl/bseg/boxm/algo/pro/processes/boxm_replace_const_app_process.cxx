@@ -52,7 +52,7 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
   //get inputs:
   unsigned i = 0;
   boxm_scene_base_sptr scene = pro.get_input<boxm_scene_base_sptr>(i++);
-  float meanval = pro.get_input<float>(i++);
+  auto meanval = pro.get_input<float>(i++);
 
   // check the input validity
   if (scene == nullptr) {
@@ -62,7 +62,7 @@ bool boxm_replace_const_app_process(bprb_func_process& pro)
 
   if (scene->appearence_model() == BOXM_APM_MOG_GREY) {
     typedef boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-    boxm_scene<tree_type> *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
+    auto *s = static_cast<boxm_scene<tree_type>*> (scene.as_pointer());
     boxm_replace_constant_app(*s,meanval );
   }
   else {

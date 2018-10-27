@@ -43,9 +43,9 @@ bool vpgl_project_process(bprb_func_process& pro)
   int i=0;
   vpgl_camera_double_sptr camera = pro.get_input<vpgl_camera_double_sptr>(i);
 
-  double x=pro.get_input<double>(++i);
-  double y=pro.get_input<double>(++i);
-  double z=pro.get_input<double>(++i);
+  auto x=pro.get_input<double>(++i);
+  auto y=pro.get_input<double>(++i);
+  auto z=pro.get_input<double>(++i);
 
   double u,v;
   camera->project(x,y,z,u,v);

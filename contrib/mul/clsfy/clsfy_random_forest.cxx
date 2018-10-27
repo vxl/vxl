@@ -59,8 +59,8 @@ void clsfy_random_forest::class_probabilities(std::vector<double>& outputs,
 {
     outputs.resize(1);
 
-    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
-    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
+    auto treeIter=trees_.begin();
+    auto treeIterEnd=trees_.end();
 
     std::vector<double > classProbs(1,0.0);
     std::vector<double > meanProbs(1,0.0);
@@ -105,12 +105,12 @@ void clsfy_random_forest::class_probabilities_oob(std::vector<double> &outputs,
 {
     outputs.resize(1);
 
-    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIter=trees_.begin();
-    std::vector<mbl_cloneable_ptr<clsfy_classifier_base> >::const_iterator treeIterEnd=trees_.end();
+    auto treeIter=trees_.begin();
+    auto treeIterEnd=trees_.end();
 
     std::vector<double > classProbs(1,0.0);
     std::vector<double > meanProbs(1,0.0);
-    std::vector<std::vector<unsigned > >::const_iterator oobIndexIter=oobIndices.begin() ;
+    auto oobIndexIter=oobIndices.begin() ;
     unsigned noob=0;
     while (treeIter != treeIterEnd)
     {
@@ -260,8 +260,8 @@ clsfy_random_forest& clsfy_random_forest::operator+=(const clsfy_random_forest& 
 void merge_sub_forests(const std::vector<std::string>& filenames,
                        clsfy_random_forest& large_forest)
 {
-    std::vector<std::string>::const_iterator fileIter=filenames.begin();
-    std::vector<std::string>::const_iterator fileIterEnd=filenames.end();
+    auto fileIter=filenames.begin();
+    auto fileIterEnd=filenames.end();
     while (fileIter != fileIterEnd)
     {
         vsl_b_ifstream bfs_in(*fileIter);
@@ -279,8 +279,8 @@ void merge_sub_forests(const std::vector<std::string>& filenames,
 void merge_sub_forests(const std::vector< clsfy_random_forest*>& sub_forests,
                        clsfy_random_forest& large_forest)
 {
-    std::vector<clsfy_random_forest*>::const_iterator subForestIter=sub_forests.begin();
-    std::vector<clsfy_random_forest*>::const_iterator subForestIterEnd=sub_forests.end();
+    auto subForestIter=sub_forests.begin();
+    auto subForestIterEnd=sub_forests.end();
     while (subForestIter != subForestIterEnd)
     {
         const clsfy_random_forest& subForest=**subForestIter;

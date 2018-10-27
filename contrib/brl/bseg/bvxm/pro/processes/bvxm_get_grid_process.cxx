@@ -47,8 +47,8 @@ bool bvxm_get_grid_process(bprb_func_process& pro)
   unsigned i=0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string voxeltype =  pro.get_input<std::string>(i++);
-  unsigned index =  pro.get_input<unsigned>(i++);
-  unsigned scale =  pro.get_input<unsigned>(i++);
+  auto index =  pro.get_input<unsigned>(i++);
+  auto scale =  pro.get_input<unsigned>(i++);
 
   //check inputs validity
   i = 0;

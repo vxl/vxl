@@ -48,11 +48,11 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float x = pro.get_input<float>(i++);
-  float y = pro.get_input<float>(i++);
-  float z = pro.get_input<float>(i++);
+  auto x = pro.get_input<float>(i++);
+  auto y = pro.get_input<float>(i++);
+  auto z = pro.get_input<float>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
@@ -62,8 +62,8 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
   vgl_vector_3d<double> view_direction = vgl_point_3d<double>(x,y,z)-camcenter;
   normalize(view_direction);
 
-  float theta = (float)std::acos(view_direction.z());
-  float phi = (float)std::atan2(view_direction.y(),view_direction.x());
+  auto theta = (float)std::acos(view_direction.z());
+  auto phi = (float)std::atan2(view_direction.y(),view_direction.x());
   pro.set_output_val<float>(0, theta);
   pro.set_output_val<float>(1, phi);
   return true;

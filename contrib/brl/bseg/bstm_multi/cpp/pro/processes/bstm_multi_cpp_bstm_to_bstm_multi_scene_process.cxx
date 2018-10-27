@@ -81,8 +81,8 @@ bool bstm_multi_cpp_ingest_boxm2_scene_process(bprb_func_process &pro) {
   bstm_multi_cache_sptr cache = pro.get_input<bstm_multi_cache_sptr>(i++);
   bstm_scene_sptr bstm_scene = pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr bstm_cache = pro.get_input<bstm_cache_sptr>(i++);
-  double p_threshold = pro.get_input<double>(i++);
-  double app_threshold = pro.get_input<double>(i++);
+  auto p_threshold = pro.get_input<double>(i++);
+  auto app_threshold = pro.get_input<double>(i++);
 
   std::string data_type;
   int app_type_size;
@@ -111,7 +111,7 @@ bool bstm_multi_cpp_ingest_boxm2_scene_process(bprb_func_process &pro) {
     bstm_multi_block_metadata bstm_multi_metadata = block.second;
 
     // Find BSTM block with same ID
-    std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter =
+    auto iter =
         bstm_blocks.find(block_id);
     if (iter == bstm_blocks.end()) {
       continue;

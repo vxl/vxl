@@ -43,7 +43,7 @@ gevd_bufferxy* gevd_region_proc::get_image_buffer(vil1_image& image)
   int wd = image.width();
   int ht = image.height();
   int sz = image.components() * image.bits_per_component(); // bits per pixel
-  gevd_bufferxy* buf = new gevd_bufferxy(wd, ht, sz);
+  auto* buf = new gevd_bufferxy(wd, ht, sz);
   image.get_section(buf->GetBuffer(), 0, 0, wd, ht);
   return buf;
 }
@@ -55,7 +55,7 @@ gevd_bufferxy*  gevd_region_proc::get_float_buffer(gevd_bufferxy* buf)
 {
   if (!buf)
     return nullptr;
-  gevd_bufferxy* fbuf =  new gevd_bufferxy(buf->GetSizeX(),
+  auto* fbuf =  new gevd_bufferxy(buf->GetSizeX(),
                                            buf->GetSizeY(),
                                            8*sizeof(float));
   gevd_float_operators::BufferToFloat(*buf, *fbuf);
@@ -71,7 +71,7 @@ gevd_bufferxy* gevd_region_proc::put_float_buffer(gevd_bufferxy* fbuf)
   if (!fbuf)
     return nullptr;
 
-  gevd_bufferxy* pbuf = new gevd_bufferxy(fbuf->GetSizeX(), fbuf->GetSizeY(), 16);
+  auto* pbuf = new gevd_bufferxy(fbuf->GetSizeX(), fbuf->GetSizeY(), 16);
   gevd_float_operators::FloatToBuffer(*fbuf, *pbuf);
   return pbuf;
 }

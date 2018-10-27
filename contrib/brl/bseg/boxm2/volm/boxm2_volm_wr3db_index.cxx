@@ -271,7 +271,7 @@ bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(std::vector<uchar>& valu
   cont->first_res(cont->min_voxel_res()*2, offset, end_offset, depth);
 
   std::map<double, unsigned int>& depth_offset_map = cont->get_depth_offset_map();
-  std::map<double, unsigned int>::iterator iter = depth_offset_map.begin();
+  auto iter = depth_offset_map.begin();
   vgl_point_3d<double> origin(0,0,0);
   unsigned char current_depth_interval = 0; // to count the depth intervals
 

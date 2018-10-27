@@ -192,8 +192,8 @@ bool bvpl_bundler_features_2d_compute_process( bprb_func_process& pro )
     kernel_file >> min_pt;
     kernel_file >> max_pt;
 
-    unsigned int nx = (unsigned int)(max_pt.x() - min_pt.y() + 1);
-    unsigned int ny = (unsigned int)(max_pt.y() - min_pt.y() + 1);
+    auto nx = (unsigned int)(max_pt.x() - min_pt.y() + 1);
+    auto ny = (unsigned int)(max_pt.y() - min_pt.y() + 1);
 
     vnl_vector<double> w(nx*ny);
 

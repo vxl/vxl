@@ -58,7 +58,7 @@ bool volm_conf_2d_indexer::get_next()
   bvgl_2d_geo_index::get_leaves(land_map_root_, leaves, bbox);
   // load the content
   for (auto & leave : leaves) {
-    bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leave.ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leave.ptr());
     std::stringstream content_bin_file;
     content_bin_file << land_map_folder_ << leave->get_label_name("land_map_index","all");
     if (!vul_file::exists(content_bin_file.str()))
@@ -116,7 +116,7 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
   std::vector<bvgl_2d_geo_index_node_sptr> valid_leaves;
   std::vector<double> min_dist_vec;
   for (auto & leave : leaves) {
-    bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leave.ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(leave.ptr());
     if (!leaf_ptr->contents_)
       continue;
     // calculate the minimum distance from location point to the leaf box
@@ -129,10 +129,10 @@ bool volm_conf_2d_indexer::extract(double const& lon, double const& lat, double 
 
   // loop over each leaf to construct the index
   // note the index takes hypo location as origin, east as x axis and north as y axis (the angular value ranges from 0 to 2pi)
-  unsigned n_leaves = (unsigned)valid_leaves.size();
+  auto n_leaves = (unsigned)valid_leaves.size();
   for (unsigned i = 0; i < n_leaves; i++)
   {
-    bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(valid_leaves[i].ptr());
+    auto* leaf_ptr = dynamic_cast<bvgl_2d_geo_index_node<volm_conf_land_map_indexer_sptr>*>(valid_leaves[i].ptr());
     if (!leaf_ptr->contents_)
       continue;
 #if 0

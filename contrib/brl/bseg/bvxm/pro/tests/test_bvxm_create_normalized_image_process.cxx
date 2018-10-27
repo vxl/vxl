@@ -91,7 +91,7 @@ static void test_bvxm_create_normalized_image_process()
   TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != nullptr) ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr normed_img = result->value();
   vil_image_view<vxl_byte> normed_img_v(normed_img);

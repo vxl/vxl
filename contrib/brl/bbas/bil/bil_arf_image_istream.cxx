@@ -190,7 +190,7 @@ bil_arf_image_istream::current_frame()
       }
       else if (pixel_size_==16) {
         raw_.read( (char*) mem_chunk->data(), imgSize );
-        vil_image_view<unsigned short> * current_frame = new vil_image_view<unsigned short>(mem_chunk, (unsigned short*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
+        auto * current_frame = new vil_image_view<unsigned short>(mem_chunk, (unsigned short*) mem_chunk->data(), ni_, nj_, 1, 1, ni_, ni_*nj_);
 
         for (unsigned i = 0 ; i < current_frame->ni(); i++)
         {

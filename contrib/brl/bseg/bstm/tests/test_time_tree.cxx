@@ -20,7 +20,7 @@ void test_time_tree()
 {
     //-------------------------------------------------------------
     std::cout << "Initializing empty tree... " << std::endl;
-    unsigned char* array = new unsigned char[8];
+    auto* array = new unsigned char[8];
     for(int i = 0; i < 8; i++)
       array[i] = 0;
     bstm_time_tree empty_tree(array,6);

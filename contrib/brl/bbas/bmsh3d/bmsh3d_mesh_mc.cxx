@@ -34,7 +34,7 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
   std::map<int, bmsh3d_vertex* >::iterator v_it;
   for (v_it = vertices.begin(); v_it != vertices.end(); v_it++) {
     bmsh3d_vertex* vertex = v_it->second;
-    bmsh3d_vertex* new_vertex = new bmsh3d_vertex(vertex->get_pt().x(),vertex->get_pt().y(),vertex->get_pt().z(),vertex->id());
+    auto* new_vertex = new bmsh3d_vertex(vertex->get_pt().x(),vertex->get_pt().y(),vertex->get_pt().z(),vertex->id());
     this->_add_vertex(new_vertex);
   }
 
@@ -46,7 +46,7 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
     bmsh3d_edge* E = edge_it->second;
     bmsh3d_vertex* sV = this->vertexmap(E->sV()->id());
     bmsh3d_vertex* eV = this->vertexmap(E->eV()->id());
-    bmsh3d_edge* new_edge = new bmsh3d_edge(sV,eV,E->id());
+    auto* new_edge = new bmsh3d_edge(sV,eV,E->id());
     this->add_edge_incidence(new_edge);
   }
 
@@ -55,7 +55,7 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
   std::map<int, bmsh3d_face* >::iterator face_it;
   for (face_it = fmap_old.begin(); face_it != fmap_old.end(); face_it++)
   {
-    bmsh3d_face* old_face = (bmsh3d_face*) face_it->second;
+    auto* old_face = (bmsh3d_face*) face_it->second;
     old_face->_sort_HEs_circular();
     old_face->_ifs_clear_vertices();
 
@@ -70,7 +70,7 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
       std::cout << E->id() << std::endl;
 #endif
       bmsh3d_edge* new_edge = this->edgemap(E->id());
-      bmsh3d_halfedge* new_he = new bmsh3d_halfedge(new_edge, new_face);
+      auto* new_he = new bmsh3d_halfedge(new_edge, new_face);
       new_face->connect_E_to_end(new_he->edge());
       HE = HE->next();
     } while (HE != he);
@@ -81,7 +81,7 @@ bmsh3d_mesh_mc::bmsh3d_mesh_mc(bmsh3d_mesh* mesh) : bmsh3d_mesh()
 
 bmsh3d_mesh_mc::~bmsh3d_mesh_mc()
 {
-  std::map<int, bmsh3d_face_mc*>::iterator it = set_face_.begin();
+  auto it = set_face_.begin();
   while (it != set_face_.end()) {
     delete it->second;
   }
@@ -89,11 +89,11 @@ bmsh3d_mesh_mc::~bmsh3d_mesh_mc()
 
 bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
 {
-  bmsh3d_mesh_mc* mesh = new bmsh3d_mesh_mc();
+  auto* mesh = new bmsh3d_mesh_mc();
 
   // deep copy the vertices
   std::map<int, bmsh3d_vertex* > vertices = this->vertexmap_;
-  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  auto v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = v_it->second;
     bmsh3d_vertex* v = mesh->_new_vertex();
@@ -104,14 +104,14 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
 
  // deep copy the edgemap
   std::map<int, bmsh3d_edge* > edgemap = this->edgemap_;
-  std::map<int, bmsh3d_edge* >::iterator edge_it = edgemap.begin();
+  auto edge_it = edgemap.begin();
   while (edge_it != edgemap.end()) {
     // create new edges
     bmsh3d_edge* E = edge_it->second;
 #ifdef DEBUG
     std::cout << "old E id=" << E->id() << std::endl;
 #endif
-    bmsh3d_edge* new_edge = /*mesh->_new_edge*/new bmsh3d_edge(mesh->vertexmap(E->sV()->id()),
+    auto* new_edge = /*mesh->_new_edge*/new bmsh3d_edge(mesh->vertexmap(E->sV()->id()),
                                     mesh->vertexmap(E->eV()->id()), edge_it->first);
 #ifdef DEBUG
     std::cout << "  new edge id=" << new_edge->id() << std::endl
@@ -125,9 +125,9 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
 
   // deep copy the faces
   std::map<int, bmsh3d_face* > fmap = this->facemap_;
-  std::map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
+  auto face_it = fmap.begin();
   while (face_it != fmap.end()) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
+    auto* face = (bmsh3d_face_mc*) face_it->second;
 #ifdef DEBUG
     std::cout << "old face id=" << face->id() << std::endl;
 #endif
@@ -143,7 +143,7 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
 #ifdef DEBUG
       std::cout << E->id() << std::endl;
 #endif
-      bmsh3d_halfedge* new_he = new bmsh3d_halfedge(mesh->edgemap(E->id()), f);
+      auto* new_he = new bmsh3d_halfedge(mesh->edgemap(E->id()), f);
       f->connect_E_to_end(new_he->edge());
       HE = HE->next();
     } while (HE != he);
@@ -152,7 +152,7 @@ bmsh3d_mesh_mc* bmsh3d_mesh_mc::clone() const
     // clone the inner faces
     if (face->size() > 0) {
       std::map<int, bmsh3d_halfedge*> inner_faces = face->get_mc_halfedges();
-      std::map<int, bmsh3d_halfedge*>::iterator it = inner_faces.begin();
+      auto it = inner_faces.begin();
       while (it != inner_faces.end()) {
         std::vector<bmsh3d_edge*> incident_edges;
         face->get_mc_incident_edges(it->second, incident_edges);
@@ -309,7 +309,7 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
 
   for (auto & f : incident_faces1) {
     // add the new edges
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) f;
+    auto* face = (bmsh3d_face_mc*) f;
     _connect_F_E_end(face, newE1s);
     _connect_F_E_end(face, newE1e);
     face->_sort_HEs_circular();
@@ -322,7 +322,7 @@ void mesh_break_face(bmsh3d_mesh_mc* M, bmsh3d_face_mc* F,
 
   for (auto & f : incident_faces2) {
     // add the new edges
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) f;
+    auto* face = (bmsh3d_face_mc*) f;
     _connect_F_E_end(face, newE2s);
     _connect_F_E_end(face, newE2e);
     face->_sort_HEs_circular();
@@ -341,10 +341,10 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 
   // merge the vertices
   std::map<int, bmsh3d_vertex* > vertices = M2->vertexmap();
-  std::map<int, bmsh3d_vertex* >::iterator v_it = vertices.begin();
+  auto v_it = vertices.begin();
   while (v_it != vertices.end()) {
     bmsh3d_vertex* vertex = v_it->second;
-    bmsh3d_vertex* v = new bmsh3d_vertex(vertex->id() + v_num);//M1->_new_vertex();
+    auto* v = new bmsh3d_vertex(vertex->id() + v_num);//M1->_new_vertex();
     v->set_pt(vertex->get_pt());
     M1->_add_vertex(v);
     v_it++;
@@ -352,11 +352,11 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 
   // merge the edges
   std::map<int, bmsh3d_edge* > edgemap = M2->edgemap();
-  std::map<int, bmsh3d_edge* >::iterator edge_it = edgemap.begin();
+  auto edge_it = edgemap.begin();
   while (edge_it != edgemap.end()) {
     // create new edges
     bmsh3d_edge* edge = edge_it->second;
-    bmsh3d_edge* e = new bmsh3d_edge(M1->vertexmap(edge->sV()->id() + v_num),
+    auto* e = new bmsh3d_edge(M1->vertexmap(edge->sV()->id() + v_num),
       M1->vertexmap(edge->eV()->id() + v_num),
       edge->id() + e_num);
     M1->add_edge_incidence(e);
@@ -365,15 +365,15 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 
   // merge the faces
   std::map<int, bmsh3d_face* > fmap = M2->facemap();
-  std::map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
+  auto face_it = fmap.begin();
   while (face_it != fmap.end()) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
+    auto* face = (bmsh3d_face_mc*) face_it->second;
     bmsh3d_face_mc* f = M1->_new_mc_face();
     bmsh3d_halfedge* he = face->halfedge();
     bmsh3d_halfedge* HE = he;
     do {
       bmsh3d_edge* edge = HE->edge();
-      bmsh3d_halfedge* new_he = new bmsh3d_halfedge(M1->edgemap(edge->id()+e_num), f);
+      auto* new_he = new bmsh3d_halfedge(M1->edgemap(edge->id()+e_num), f);
       f->connect_E_to_end(new_he->edge());
       HE = HE->next();
     } while (HE != he);
@@ -382,7 +382,7 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 
     if (face->size() > 0) {
       std::map<int, bmsh3d_halfedge*> inner_faces = face->get_mc_halfedges();
-      std::map<int, bmsh3d_halfedge*>::iterator it = inner_faces.begin();
+      auto it = inner_faces.begin();
       while (it != inner_faces.end()) {
         //bmsh3d_face* inner_face = new bmsh3d_face();
         std::vector<bmsh3d_edge*> incident_edges;
@@ -402,7 +402,7 @@ void merge_mesh(bmsh3d_mesh_mc* M1, bmsh3d_mesh_mc* M2)
 bmsh3d_face* copy_inner_face(std::vector<bmsh3d_edge*> incident_edges,
                              bmsh3d_mesh_mc* mesh)
 {
-  bmsh3d_face* inner_face = new bmsh3d_face();
+  auto* inner_face = new bmsh3d_face();
 
   bmsh3d_vertex *prev_v = nullptr, *v_first = nullptr, *v;
   for (unsigned i=0; i<incident_edges.size()-1; i++) {
@@ -422,8 +422,8 @@ bmsh3d_face* copy_inner_face(std::vector<bmsh3d_edge*> incident_edges,
 #ifdef DEBUG
      std::cout << prev_v << " to " << v << std::endl;
 #endif
-     bmsh3d_edge* new_edge = new  bmsh3d_edge(prev_v, v, 100);
-     bmsh3d_halfedge *he = new bmsh3d_halfedge(new_edge, inner_face);
+     auto* new_edge = new  bmsh3d_edge(prev_v, v, 100);
+     auto *he = new bmsh3d_halfedge(new_edge, inner_face);
      prev_v = v;
      inner_face->_connect_HE_to_end(he);
    }
@@ -432,8 +432,8 @@ bmsh3d_face* copy_inner_face(std::vector<bmsh3d_edge*> incident_edges,
 #ifdef DEBUG
   std::cout << prev_v << " to " << v_first << std::endl;
 #endif
-  bmsh3d_edge* new_edge = new  bmsh3d_edge(prev_v, v_first, 100);
-  bmsh3d_halfedge *he = new bmsh3d_halfedge(new_edge, inner_face);
+  auto* new_edge = new  bmsh3d_edge(prev_v, v_first, 100);
+  auto *he = new bmsh3d_halfedge(new_edge, inner_face);
   inner_face->_connect_HE_to_end(he);
   return inner_face;
 }
@@ -442,11 +442,11 @@ void bmsh3d_mesh_mc::orient_face_normals()
 {
   // find the face (topmost) with the biggest z value
   std::map<int, bmsh3d_face* > fmap = facemap();
-  std::map<int, bmsh3d_face* >::iterator face_it = fmap.begin();
+  auto face_it = fmap.begin();
   double maxz=-1e26;
   int maxz_face_id=0;
   while (face_it != fmap.end()) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
+    auto* face = (bmsh3d_face_mc*) face_it->second;
     vgl_point_3d<double> center = face->compute_center_pt();
     if (center.z() > maxz) {
       maxz = center.z();
@@ -456,7 +456,7 @@ void bmsh3d_mesh_mc::orient_face_normals()
   }
 
   // force the plane to point towards the positive z axis
-  bmsh3d_face_mc* face = (bmsh3d_face_mc*) this->facemap(maxz_face_id);
+  auto* face = (bmsh3d_face_mc*) this->facemap(maxz_face_id);
   face->_sort_HEs_circular();
   face->_ifs_clear_vertices();
   vgl_vector_3d<double> normal = face->compute_normal();
@@ -484,7 +484,7 @@ void bmsh3d_mesh_mc::orient_face_normals()
       std::vector<bmsh3d_face*> faces;
       E->get_incident_Fs(faces);
       for (auto & f : faces) {
-        bmsh3d_face_mc* inc_face = (bmsh3d_face_mc*) f;
+        auto* inc_face = (bmsh3d_face_mc*) f;
         if ((inc_face != face) && (!inc_face->is_visited(1))) {
           inc_face->_sort_HEs_circular();
           inc_face->_ifs_clear_vertices();
@@ -514,7 +514,7 @@ void bmsh3d_mesh_mc::orient_face_normals()
   // print out the normals;
   face_it = fmap.begin();
   while (face_it != fmap.end()) {
-    bmsh3d_face_mc* face = (bmsh3d_face_mc*) face_it->second;
+    auto* face = (bmsh3d_face_mc*) face_it->second;
     vgl_vector_3d<double> normal = face->compute_normal();
     normal /= normal.length();
 #ifdef DEBUG

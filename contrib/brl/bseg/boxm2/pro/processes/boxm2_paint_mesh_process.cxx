@@ -67,7 +67,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
   std::string input_mesh_filename = pro.get_input<std::string>(i++);
   std::string output_mesh_filename = pro.get_input<std::string>(i++);
-  float prob_t = pro.get_input<float>(i++);
+  auto prob_t = pro.get_input<float>(i++);
 
   bool foundDataType = false;
 
@@ -173,7 +173,7 @@ bool boxm2_paint_mesh_process(bprb_func_process& pro)
   std::cout << "Done iterating over pts..." << std::endl;
 
   // faces
-  std::map<int, bmsh3d_face*>::iterator fit = input_mesh.facemap().begin();
+  auto fit = input_mesh.facemap().begin();
   for (; fit != input_mesh.facemap().end(); fit++)
   {
     bmsh3d_face* f = (*fit).second;

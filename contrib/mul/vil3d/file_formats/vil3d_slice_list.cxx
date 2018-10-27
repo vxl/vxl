@@ -61,7 +61,7 @@ void parse_globbed_filenames(const std::string & input,
 
   // Now discard non-contiguously numbered files.
   long count = std::atol(filenames.front().substr(start, end-start).c_str());
-  std::vector<std::string>::iterator it=filenames.begin()+1;
+  auto it=filenames.begin()+1;
   while (it != filenames.end())
   {
     if (std::atol(it->substr(start, end-start).c_str()) != ++count)

@@ -143,7 +143,7 @@ int imesh_intersect_min_dist(const vgl_point_3d<double>& p,
   double ut, vt; // temporary u and v
 
   assert(mesh.faces().regularity() == 3);
-  const imesh_regular_face_array<3>& faces
+  const auto& faces
       = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
 
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();
@@ -322,7 +322,7 @@ int imesh_closest_point(const vgl_point_3d<double>& p,
                         double* u, double* v)
 {
   assert(mesh.faces().regularity() == 3);
-  const imesh_regular_face_array<3>& faces
+  const auto& faces
       = static_cast<const imesh_regular_face_array<3>&>(mesh.faces());
 
   const imesh_vertex_array<3>& verts = mesh.vertices<3>();

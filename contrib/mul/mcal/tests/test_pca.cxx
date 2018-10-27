@@ -111,7 +111,7 @@ void test_pca()
     TEST("Correct component analyzer",ca->is_a(),"mcal_pca");
     if (ca->is_a()=="mcal_pca")
     {
-      mcal_pca &a_ca = static_cast<mcal_pca&>(*ca);
+      auto &a_ca = static_cast<mcal_pca&>(*ca);
       std::cout<<a_ca<<std::endl;
       TEST("min_modes configured",a_ca.min_modes(),1);
       TEST("max_modes configured",a_ca.max_modes(),7);

@@ -88,7 +88,7 @@ rgrl_feature_sptr
 rgrl_feature_face_pt ::
 transform( rgrl_transformation const& xform ) const
 {
-  rgrl_feature_face_pt* face_ptr = new rgrl_feature_face_pt();
+  auto* face_ptr = new rgrl_feature_face_pt();
 
   // Capture the allocation into a smart pointer for exception safety.
   rgrl_feature_sptr result_sptr = face_ptr;
@@ -196,7 +196,7 @@ signature_error_vector( rgrl_feature const& other ) const
     return vnl_vector<double>();
 
   // cast it to face point type
-  rgrl_feature_face_pt const& other_face_pt = static_cast<rgrl_feature_face_pt const&>(other);
+  auto const& other_face_pt = static_cast<rgrl_feature_face_pt const&>(other);
 
   // compute cos between normals
   const double dot = dot_product( this->normal_, other_face_pt.normal_ );

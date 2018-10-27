@@ -51,9 +51,9 @@ void mog_samples(float* samps)
 void test_weighted_em()
 {
   //create the observations and their weights
-  float* obs = new float[50];
+  auto* obs = new float[50];
   mog_samples(obs);
-  float* vis = new float[50];
+  auto* vis = new float[50];
   for (int i=0; i<50; ++i)
     vis[i] = (float) 1.0f;
 

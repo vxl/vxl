@@ -16,7 +16,7 @@ test_feature_region()
   vnl_vector<double> loc(2, 10.0);
   rgrl_feature_sptr fea= new rgrl_feature_point_region( loc, 3 );
 
-  rgrl_feature_region* region_ptr = dynamic_cast<rgrl_feature_region*>( fea.as_pointer() );
+  auto* region_ptr = dynamic_cast<rgrl_feature_region*>( fea.as_pointer() );
   TEST("Valid pointer", (!region_ptr), 0 );
 
   const std::vector< vnl_vector<int> >& pixels = region_ptr->pixel_coordinates();

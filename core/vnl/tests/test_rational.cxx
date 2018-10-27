@@ -188,7 +188,7 @@ static void test_approx()
   d = vnl_rational(-1.23456);
   TEST("construct from double", d, vnl_rational(-123456,100000));
   vnl_rational pi = vnl_rational(vnl_math::pi);
-  double pi_a = double(pi);
+  auto pi_a = double(pi);
   TEST("pi", pi_a-vnl_math::pi < 1e-18 && vnl_math::pi-pi_a < 1e-18, true);
   std::cout << "Best rational approximation of pi: " << pi << " = "
            << pi_a << '\n'

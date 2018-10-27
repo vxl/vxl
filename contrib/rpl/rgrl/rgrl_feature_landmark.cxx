@@ -59,7 +59,7 @@ rgrl_feature_sptr
 rgrl_feature_landmark::
 transform( rgrl_transformation const& xform ) const
 {
-  rgrl_feature_landmark* result = new rgrl_feature_landmark( *this );
+  auto* result = new rgrl_feature_landmark( *this );
 
   // Transform the location
   //
@@ -67,9 +67,9 @@ transform( rgrl_transformation const& xform ) const
 
   // Transform each of the direction vectors
   //
-  vec_vec_type::const_iterator fitr = this->outgoing_directions_.begin();
-  vec_vec_type::const_iterator fend = this->outgoing_directions_.end();
-  vec_vec_type::iterator titr = result->outgoing_directions_.begin();
+  auto fitr = this->outgoing_directions_.begin();
+  auto fend = this->outgoing_directions_.end();
+  auto titr = result->outgoing_directions_.begin();
   for ( ; fitr != fend; ++fitr, ++titr ) {
     xform.map_direction( this->location_, *fitr, *titr );
   }

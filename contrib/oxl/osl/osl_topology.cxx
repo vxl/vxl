@@ -36,7 +36,7 @@ void  osl_topology_base::stash_add(char const *name,
                                    void const *data,
                                    void (*dtor)(void *))
 {
-  osl_stash_link *l = new osl_stash_link(name, data, dtor, stash_head);
+  auto *l = new osl_stash_link(name, data, dtor, stash_head);
   stash_head = l;
 }
 

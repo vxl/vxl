@@ -53,18 +53,18 @@ bool bvxm_save_rgba_grid_vrml_process(bprb_func_process& pro)
     return false;
   }
   bvxm_voxel_grid_base_sptr grid_base = pro.get_input<bvxm_voxel_grid_base_sptr>(0);
-  float threshold = pro.get_input<float>(1);
+  auto threshold = pro.get_input<float>(1);
   std::string volume_path = pro.get_input<std::string>(2);
   std::ofstream os(volume_path.c_str());
 
   // create the grid from in memory file and save
-  if ( bvxm_voxel_grid<vnl_float_4 > *grid = dynamic_cast<bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr())) {
+  if ( auto *grid = dynamic_cast<bvxm_voxel_grid<vnl_float_4 >* >(grid_base.ptr())) {
     bvrml_write::write_vrml_header(os);
     //bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os,grid,threshold);
     bvxm_vrml_voxel_grid::write_vrml_grid_as_pointers(os,grid,threshold);
     return true;
   }
-  else if (bvxm_voxel_grid<float> *grid = dynamic_cast<bvxm_voxel_grid<float>* >(grid_base.ptr()))
+  else if (auto *grid = dynamic_cast<bvxm_voxel_grid<float>* >(grid_base.ptr()))
   {
     bvrml_write::write_vrml_header(os);
     bvxm_vrml_voxel_grid::write_vrml_grid_as_spheres(os,grid,threshold);

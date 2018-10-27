@@ -17,7 +17,7 @@
   // always use floor in case inc does not evenly divide
 void volm_camera_space::adjust_limits()
 {
-  unsigned n_inc = static_cast<unsigned>(head_radius_/head_inc_);
+  auto n_inc = static_cast<unsigned>(head_radius_/head_inc_);
   head_radius_ = n_inc * head_inc_;
   n_head_ = 2*n_inc +1;
 
@@ -273,7 +273,7 @@ void vsl_b_write(vsl_b_ostream& os, const volm_camera_space* csp_ptr)
   }
   else
     vsl_b_write(os, true);
-  volm_camera_space* dm_non_const = const_cast<volm_camera_space*>(csp_ptr);
+  auto* dm_non_const = const_cast<volm_camera_space*>(csp_ptr);
   dm_non_const->b_write(os);
 }
 

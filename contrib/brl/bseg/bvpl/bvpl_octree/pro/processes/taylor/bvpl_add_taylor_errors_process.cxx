@@ -50,7 +50,7 @@ bool bvpl_add_taylor_errors_process(bprb_func_process& pro)
   //get inputs
   unsigned i =0;
   boxm_scene_base_sptr error_scene_base = pro.get_input<boxm_scene_base_sptr>(i++);
-  double fraction_nsamples = pro.get_input<double>(i++);
+  auto fraction_nsamples = pro.get_input<double>(i++);
   int block_i = pro.get_input<int>(i++);
   int block_j = pro.get_input<int>(i++);
   int block_k = pro.get_input<int>(i++);
@@ -59,21 +59,21 @@ bool bvpl_add_taylor_errors_process(bprb_func_process& pro)
     std::cerr << "Error in bvpl_add_taylor_errors_process: Null error scene\n";
     return false;
   }
-  boxm_scene<boct_tree<short, float> >* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (error_scene_base.as_pointer());
+  auto* error_scene = dynamic_cast<boxm_scene<boct_tree<short, float> >*> (error_scene_base.as_pointer());
   if (!error_scene) {
     std::cerr << "Error in bvpl_add_taylor_errors_process: Error scene is of incorrect type\n";
     return false;
   }
   //sum errors within block
-  double scene_ncells = (double)error_scene->size();
+  auto scene_ncells = (double)error_scene->size();
   error_scene->load_block(block_i,block_j,block_k);
-  double tree_ncells = (double)error_scene->get_block(block_i,block_j,block_k)->get_tree()->size();
+  auto tree_ncells = (double)error_scene->get_block(block_i,block_j,block_k)->get_tree()->size();
   double nsamples = scene_ncells * fraction_nsamples;
 
   //number of samples - 10% of total number of leaf-cells
   double error = 0.0;
   if (fraction_nsamples < 0.95) {
-    unsigned long tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
+    auto tree_nsamples = (unsigned long)((tree_ncells/scene_ncells)*nsamples);
     std::cout << "Number of samples in  the scene " << scene_ncells << '\n'
              << "Adding errors from " << tree_nsamples << " samples in block: " << block_i << ',' << block_j << ',' << block_k << std::endl;
     error = bvpl_taylor_basis::sum_errors(error_scene,block_i, block_j, block_k, tree_nsamples);

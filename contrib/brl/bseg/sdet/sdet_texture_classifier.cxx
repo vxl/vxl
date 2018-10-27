@@ -45,7 +45,7 @@ std::vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(std::strin
   }
   std::vector<vgl_polygon<double> > vpolys;
   for (auto & so : sos) {
-    vsol_polygon_2d* poly = static_cast<vsol_polygon_2d*>(so.ptr());
+    auto* poly = static_cast<vsol_polygon_2d*>(so.ptr());
     vgl_polygon<double> vpoly; vpoly.new_sheet();
     unsigned nverts = poly->size();
     for (unsigned i = 0; i<nverts; ++i) {
@@ -102,7 +102,7 @@ void sdet_texture_classifier::print_color_map() const
 {
   if (!color_map_valid_) return;
   std::cout << "Category Color Map\n";
-  std::map< std::string, vnl_vector_fixed<float, 3> >::const_iterator it= color_map_.begin();
+  auto it= color_map_.begin();
   for (; it!= color_map_.end(); ++it) {
     vnl_vector_fixed<float,3> const & colors = (*it).second;
     std::cout << (*it).first <<":(" << colors[0] << ' '
@@ -337,7 +337,7 @@ random_centers(std::vector<vnl_vector<double> > const& training_data,
   double n = training_data.size();
   std::vector<vnl_vector<double> > rand_centers(k);
   for (unsigned i = 0; i<k; ++i) {
-    unsigned index = static_cast<unsigned>((n-1)*(std::rand()/(RAND_MAX+1.0)));
+    auto index = static_cast<unsigned>((n-1)*(std::rand()/(RAND_MAX+1.0)));
     rand_centers[i] = training_data[index];
   }
   return rand_centers;
@@ -382,7 +382,7 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category)
   unsigned ns = training_data.size();
   if (ns>n_samples_) {
     for (unsigned i = 0; i<n_samples_; ++i) {
-      unsigned s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
+      auto s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
       sampled_data.push_back(training_data[s]);
     }
     training_data.clear();
@@ -556,7 +556,7 @@ compute_training_data(std::string const& category,
   }
   unsigned dim_total = dim + 2 + other_responses_.size();
   std::cout << " texton dimension: " << dim_total << " dim: " << dim << " other_responses_ size: " << other_responses_.size() << '\n' << std::flush;
-  std::vector<vgl_polygon<double> >::const_iterator pit = texture_regions.begin();
+  auto pit = texture_regions.begin();
   for (; pit != texture_regions.end(); ++pit) {
     vgl_polygon_scan_iterator<double> psi(*pit, false);
     for (psi.reset(); psi.next(); ) {
@@ -580,7 +580,7 @@ compute_training_data(std::string const& category,
   unsigned ns = training_data.size();
   if (ns>n_samples_) {
     for (unsigned i = 0; i<n_samples_; ++i) {
-      unsigned s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
+      auto s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
       sampled_data.push_back(training_data[s]);
     }
     training_data.clear();
@@ -650,7 +650,7 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category,
   unsigned ns = training_data.size();
   if (ns>n_samples_) {
     for (unsigned i = 0; i<n_samples_; ++i) {
-      unsigned s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
+      auto s = static_cast<unsigned>((n_samples_-1)*(std::rand()/(RAND_MAX+1.0)));
       sampled_data.push_back(training_data[s]);
     }
     training_data.clear();
@@ -752,7 +752,7 @@ compute_textons(std::vector<std::string> const& image_paths,
   std::vector<vil_image_view<float> > imgs;
   std::vector<std::vector< vgl_polygon<double> > >polys;
   unsigned i = 0;
-  for (std::vector<std::string>::const_iterator pit = image_paths.begin();
+  for (auto pit = image_paths.begin();
        pit!=image_paths.end(); ++pit, ++i) {
     vil_image_resource_sptr resc = vil_load_image_resource((*pit).c_str());
     vil_image_view<float> view = scale_image(resc);
@@ -792,9 +792,9 @@ compute_textons(std::vector<std::string> const& image_paths,
     if (xmin<0) xmin = 0.0;  if (xmax>=ni) xmax = ni-1.0;
     double ymin = box->get_min_y()-margin, ymax = box->get_max_y()+margin;
     if (ymin<0) ymin = 0.0;  if (ymax>=nj) ymax = nj-1.0;
-    unsigned i0=static_cast<unsigned>(xmin), j0 = static_cast<unsigned>(ymin);
-    unsigned cni = static_cast<unsigned>(xmax-xmin+1.0);
-    unsigned cnj = static_cast<unsigned>(ymax-ymin+1.0);
+    auto i0=static_cast<unsigned>(xmin), j0 = static_cast<unsigned>(ymin);
+    auto cni = static_cast<unsigned>(xmax-xmin+1.0);
+    auto cnj = static_cast<unsigned>(ymax-ymin+1.0);
     //crop image
     vil_image_view<float> cview = vil_crop(imgs[i], i0, cni, j0, cnj);
     // shift polys to cropped coordinate system
@@ -824,7 +824,7 @@ bool sdet_texture_classifier::save_dictionary(std::string const& path) const
     return false;
   }
   std::cout << "Save dictionary to " << path << '\n';
-  sdet_texture_classifier_params const * tcp_ptr =
+  auto const * tcp_ptr =
     dynamic_cast<sdet_texture_classifier_params const*>(this);
   vsl_b_write(os, *tcp_ptr);
   vsl_b_write(os, texton_dictionary_);
@@ -844,7 +844,7 @@ bool sdet_texture_classifier::load_dictionary(std::string const& path)
   texton_dictionary_.clear();
   texton_index_.clear();
   category_histograms_.clear();
-  sdet_texture_classifier_params* tcp_ptr
+  auto* tcp_ptr
     = dynamic_cast<sdet_texture_classifier_params*>(this);
   vsl_b_read(is, *tcp_ptr);
   vsl_b_read(is, texton_dictionary_);
@@ -866,7 +866,7 @@ bool sdet_texture_classifier::save_data(std::string const& path) const
     return false;
   }
   std::cout << "Save training data to " << path << '\n';
-  sdet_texture_classifier_params const * tcp_ptr =
+  auto const * tcp_ptr =
     dynamic_cast<sdet_texture_classifier_params const*>(this);
   vsl_b_write(os, *tcp_ptr);
   vsl_b_write(os, training_data_);
@@ -876,7 +876,7 @@ bool sdet_texture_classifier::save_data(std::string const& path) const
 
 int sdet_texture_classifier::data_size(std::string const& cat)
 {
-  std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = training_data_.find(cat);
+  auto iter = training_data_.find(cat);
   if (iter == training_data_.end())
     return -1;
   else
@@ -893,7 +893,7 @@ bool sdet_texture_classifier::load_data(std::string const& path)
   }
   std::cout << "Loading training data in: " << path << '\n' << std::flush;
   training_data_.clear();
-  sdet_texture_classifier_params* tcp_ptr
+  auto* tcp_ptr
     = dynamic_cast<sdet_texture_classifier_params*>(this);
   vsl_b_read(is, *tcp_ptr);
   vsl_b_read(is, training_data_);
@@ -949,7 +949,7 @@ std::vector<std::string> sdet_texture_classifier::get_dictionary_categories()
 
 void sdet_texture_classifier::print_dictionary() const
 {
-  std::map< std::string, std::vector<vnl_vector<double> > >::const_iterator it= texton_dictionary_.begin();
+  auto it= texton_dictionary_.begin();
   for (; it!= texton_dictionary_.end(); ++it) {
     std::cout << " ===Category: " << (*it).first << "===\n";
     for (unsigned i = 0; i<(*it).second.size(); ++i) {
@@ -1058,7 +1058,7 @@ void sdet_texture_classifier::compute_texton_weights()
   for (unsigned i = 0; i<n; ++i)
     cross_category_probs[i] = std::vector<float>(m, 0.0f);
 
-  std::map<std::string, std::vector<float> >::iterator hit = category_histograms_.begin();
+  auto hit = category_histograms_.begin();
   unsigned c = 0;//category index
   for (; hit!=category_histograms_.end(); ++hit, ++c) {
     std::vector<float> const& h = (*hit).second;
@@ -1089,14 +1089,14 @@ void sdet_texture_classifier::print_distances() const
 {
   //don't really care if distance map is changed, since derived
   //from primary members that are const
-  sdet_texture_classifier* tc = const_cast<sdet_texture_classifier*>(this);
+  auto* tc = const_cast<sdet_texture_classifier*>(this);
   if (!distances_valid_) tc->compute_distances();
 
   std::cout << "Category distance matrix\n";
-  std::map< std::string, std::map< std::string, double> >::const_iterator jt = dist_.begin();
+  auto jt = dist_.begin();
   for (; jt != dist_.end(); ++jt) {
     std::cout << (*jt).first << " :\n";
-    std::map< std::string, double>::const_iterator it = (*jt).second.begin();
+    auto it = (*jt).second.begin();
     for (; it != (*jt).second.end(); ++it)
       std::cout << (*it).first << ":(" << (*it).second << ") ";
     std::cout << '\n';
@@ -1109,7 +1109,7 @@ void sdet_texture_classifier::print_category_histograms() const
   unsigned nh = category_histograms_.size();
   std::vector<std::string> cat_names(nh);
   std::vector<std::vector<float> > hists(nt, std::vector<float>(nh));
-  std::map<std::string, std::vector<float> >::const_iterator hit = category_histograms_.begin();
+  auto hit = category_histograms_.begin();
   unsigned j = 0;
   for (; hit != category_histograms_.end(); ++hit, ++j) {
     cat_names[j]=(*hit).first;
@@ -1129,13 +1129,13 @@ void sdet_texture_classifier::print_category_histograms() const
 
 void sdet_texture_classifier::print_interclass_probs() const
 {
-  sdet_texture_classifier* ncthis = const_cast<sdet_texture_classifier*>(this);
+  auto* ncthis = const_cast<sdet_texture_classifier*>(this);
   if (!inter_prob_valid_) ncthis->compute_interclass_probs();
   std::cout << "Interclass probabilities\n";
-  std::map< std::string, std::map< std::string, double> >::const_iterator jt = inter_prob_.begin();
+  auto jt = inter_prob_.begin();
   for (; jt != inter_prob_.end(); ++jt) {
     std::cout << (*jt).first << " :\n";
-    std::map< std::string, double>::const_iterator it = (*jt).second.begin();
+    auto it = (*jt).second.begin();
     for (; it != (*jt).second.end(); ++it)
       std::cout << (*it).first << ":(" << (*it).second << ") ";
     std::cout << '\n';
@@ -1144,7 +1144,7 @@ void sdet_texture_classifier::print_interclass_probs() const
 
 void sdet_texture_classifier::print_texton_weights() const
 {
-  sdet_texture_classifier* ncthis = const_cast<sdet_texture_classifier*>(this);
+  auto* ncthis = const_cast<sdet_texture_classifier*>(this);
   if (!texton_weights_valid_) ncthis->compute_texton_weights();
   std::cout << "Texton weights ===>\n";
   for (float texton_weight : texton_weights_)
@@ -1198,7 +1198,7 @@ void sdet_texture_classifier::compute_category_histograms()
   }
   else
     std::cout << "computing category histograms with " << n << " textons\n";
-  std::map< std::string, std::vector<vnl_vector<double> > >::iterator dit = training_data_.begin();
+  auto dit = training_data_.begin();
   for (; dit != training_data_.end(); ++dit) {
     //histogram for the given category
     std::vector<float> hist(n, 0.0f);
@@ -1224,7 +1224,7 @@ void sdet_texture_classifier::create_samples_and_labels_from_textons(std::vector
   labels.clear();
 
   double label_id = 0;
-  std::map< std::string, std::vector<vnl_vector<double> > >::iterator iter = texton_dictionary_.begin();
+  auto iter = texton_dictionary_.begin();
   for (; iter != texton_dictionary_.end(); iter++) {
     for (const auto & i : iter->second) {
       samples.push_back(i);
@@ -1242,7 +1242,7 @@ void sdet_texture_classifier::create_samples_and_labels_from_training_data(std::
   labels.clear();
 
   double label_id = 0;
-  std::map< std::string, std::vector<vnl_vector<double> > >::iterator dit = training_data_.begin();
+  auto dit = training_data_.begin();
   for (; dit != training_data_.end(); ++dit) {
     //histogram for the given category
     const std::string& cat = (*dit).first;
@@ -1277,7 +1277,7 @@ texture_probabilities(std::vector<float> const& hist)
 {
   unsigned nt = texton_index_.size();
   std::map<std::string, float> probs;
-  std::map<std::string, std::vector<float> >::iterator hit = category_histograms_.begin();
+  auto hit = category_histograms_.begin();
 
   for (; hit != category_histograms_.end(); ++hit) {
     const std::string& cat = (*hit).first;
@@ -1314,8 +1314,8 @@ float sdet_texture_classifier::prob_hist_intersection(std::vector<float> const& 
 std::pair<std::string, float> sdet_texture_classifier::highest_prob_class(std::vector<float> const& hist)
 {
   std::map<std::string, float> class_map = this->texture_probabilities(hist);
-  std::map<std::string, float>::iterator iter_max = class_map.begin();
-  for (std::map<std::string, float>::iterator iter = class_map.begin(); iter != class_map.end(); iter++) {
+  auto iter_max = class_map.begin();
+  for (auto iter = class_map.begin(); iter != class_map.end(); iter++) {
     if (iter->second > iter_max->second)
       iter_max = iter;
   }
@@ -1328,7 +1328,7 @@ std::pair<std::string, float> sdet_texture_classifier::highest_prob_class(std::v
 float sdet_texture_classifier::get_class_prob(std::vector<float> const& hist, std::string const& class_name)
 {
   std::map<std::string, float> class_map = this->texture_probabilities(hist);
-  std::map<std::string, float>::iterator iter = class_map.find(class_name);
+  auto iter = class_map.find(class_name);
   if (iter != class_map.end())
     return iter->second;
   else
@@ -1339,7 +1339,7 @@ void sdet_texture_classifier::
 category_color_mix(std::map<std::string, float>  & probs,
                    vnl_vector_fixed<float, 3>& color_mix) {
   //start with max prob color
-  std::map<std::string, std::vector<float> >::iterator hit = category_histograms_.begin();
+  auto hit = category_histograms_.begin();
   float prob_sum = 0.0f;
   vnl_vector_fixed<float, 3> mix(0.0f);
   std::string max_cat;

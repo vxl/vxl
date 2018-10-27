@@ -110,15 +110,15 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
 
   //grab input image, establish cl_ni, cl_nj (so global size is divisible by local size)
   vil_image_view_base_sptr float_img = boxm2_util::prepare_input_image(img, true);
-  vil_image_view<float>* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
-  unsigned cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
-  unsigned cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
+  auto* img_view = static_cast<vil_image_view<float>* >(float_img.ptr());
+  auto cl_ni=(unsigned)RoundUp(img_view->ni(),(int)local_threads[0]);
+  auto cl_nj=(unsigned)RoundUp(img_view->nj(),(int)local_threads[1]);
   global_threads[0]=cl_ni;
   global_threads[1]=cl_nj;
 
   //set generic cam
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff, startI, startJ);
@@ -137,10 +137,10 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
   bocl_mem_sptr tnearfar_mem_ptr = opencl_cache->alloc_mem(2*sizeof(float), tnearfar, "tnearfar  buffer");
   tnearfar_mem_ptr->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
   //Visibility, Preinf, Norm, and input image buffers
-  float* vis_buff = new float[cl_ni*cl_nj];
-  float* pre_buff = new float[cl_ni*cl_nj];
-  float* norm_buff = new float[cl_ni*cl_nj];
-  float* input_buff=new float[cl_ni*cl_nj];
+  auto* vis_buff = new float[cl_ni*cl_nj];
+  auto* pre_buff = new float[cl_ni*cl_nj];
+  auto* norm_buff = new float[cl_ni*cl_nj];
+  auto* input_buff=new float[cl_ni*cl_nj];
   for (unsigned i=0;i<cl_ni*cl_nj;i++)
   {
     vis_buff[i]=1.0f;
@@ -277,7 +277,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
       bocl_mem* blk       = opencl_cache->get_block(scene,*id);
       bocl_mem* blk_info  = opencl_cache->loaded_block_info();
       bocl_mem* alpha     = opencl_cache->get_data<BOXM2_ALPHA>(scene,*id,0,false);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = (int)boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -537,14 +537,14 @@ std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device
   std::vector<bocl_kernel*> vec_kernels;
 
   //seg len pass
-  bocl_kernel* seg_len = new bocl_kernel();
+  auto* seg_len = new bocl_kernel();
   std::string seg_opts = options + " -D SEGLEN  -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d)";
   seg_len->create_kernel(&device->context(), device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");
   vec_kernels.push_back(seg_len);
 
   //create  compress rgb pass
   if (isRGB) {
-    bocl_kernel* comp = new bocl_kernel();
+    auto* comp = new bocl_kernel();
     std::string comp_opts = options + " -D COMPRESS_RGB";
     comp->create_kernel(&device->context(), device->device_id(), non_ray_src, "compress_rgb", comp_opts, "update::compress_rgb");
     vec_kernels.push_back(comp);
@@ -553,25 +553,25 @@ std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device
     //vec_kernels.push_back(NULL);
   }
 
-  bocl_kernel* pre_inf = new bocl_kernel();
+  auto* pre_inf = new bocl_kernel();
   std::string pre_opts = options + " -D PREINF  -D STEP_CELL=step_cell_preinf(aux_args,data_ptr,llid,d)";
   pre_inf->create_kernel(&device->context(), device->device_id(), src_paths, "pre_inf_main", pre_opts, "update::pre_inf");
   vec_kernels.push_back(pre_inf);
 
   //may need DIFF LIST OF SOURCES FOR THIS GUY
-  bocl_kernel* proc_img = new bocl_kernel();
+  auto* proc_img = new bocl_kernel();
   std::string proc_opts = options + " -D PROC_NORM ";
   proc_img->create_kernel(&device->context(), device->device_id(), non_ray_src, "proc_norm_image", proc_opts, "update::proc_norm_image");
   vec_kernels.push_back(proc_img);
 
   //push back cast_ray_bit
-  bocl_kernel* bayes_main = new bocl_kernel();
+  auto* bayes_main = new bocl_kernel();
   std::string bayes_opt = options + " -D BAYES  -D STEP_CELL=step_cell_bayes(aux_args,data_ptr,llid,d)";
   bayes_main->create_kernel(&device->context(), device->device_id(), src_paths, "bayes_main", bayes_opt, "update::bayes_main");
   vec_kernels.push_back(bayes_main);
 
   //may need DIFF LIST OF SOURCES FOR THSI GUY TOO
-  bocl_kernel* update = new bocl_kernel();
+  auto* update = new bocl_kernel();
   std::string update_opts = options + " -D UPDATE_BIT_SCENE_MAIN";
   update->create_kernel(&device->context(), device->device_id(), non_ray_src, "update_bit_scene_main", update_opts, "update::update_main");
   vec_kernels.push_back(update);

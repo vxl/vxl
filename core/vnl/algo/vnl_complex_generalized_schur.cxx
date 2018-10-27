@@ -37,9 +37,9 @@ bool vnl_generalized_schur(vnl_matrix<std::complex<double> > *A,
 
   long sdim = 0;
   long lwork = 1000 + (8*n + 16);
-  std::complex<double> *work = new std::complex<double>[lwork];
-  double *rwork = new double[2*n + 1];
-  v3p_netlib_logical *bwork = new v3p_netlib_logical[n + 1];
+  auto *work = new std::complex<double>[lwork];
+  auto *rwork = new double[2*n + 1];
+  auto *bwork = new v3p_netlib_logical[n + 1];
   long info = 0;
   A->inplace_transpose();
   B->inplace_transpose();

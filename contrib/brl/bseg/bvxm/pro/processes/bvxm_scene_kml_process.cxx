@@ -37,10 +37,10 @@ bool bvxm_scene_kml_process(bprb_func_process& pro)
   bvxm_voxel_world_sptr voxel_world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string kml_file = pro.get_input<std::string>(i++);
   bool is_overwrite = pro.get_input<bool>(i++);
-  unsigned r = pro.get_input<unsigned>(i++);
-  unsigned g = pro.get_input<unsigned>(i++);
-  unsigned b = pro.get_input<unsigned>(i++);
-  unsigned a = pro.get_input<unsigned>(i++);
+  auto r = pro.get_input<unsigned>(i++);
+  auto g = pro.get_input<unsigned>(i++);
+  auto b = pro.get_input<unsigned>(i++);
+  auto a = pro.get_input<unsigned>(i++);
   std::string name = pro.get_input<std::string>(i++);
 
   // obtain the bounding box for the scene region

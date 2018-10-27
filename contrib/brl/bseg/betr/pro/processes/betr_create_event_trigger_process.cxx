@@ -47,9 +47,9 @@ bool betr_create_event_trigger_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  float lon = pro.get_input<float>(i++);
-  float lat = pro.get_input<float>(i++);
-  float elev = pro.get_input<float>(i++);
+  auto lon = pro.get_input<float>(i++);
+  auto lat = pro.get_input<float>(i++);
+  auto elev = pro.get_input<float>(i++);
   std::string name = pro.get_input<std::string>(i++);
   bool verbose = pro.get_input<bool>(i);
 

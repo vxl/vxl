@@ -72,7 +72,7 @@ bool bvpl_convert_pair_to_hue_process(bprb_func_process& pro)
     std::cerr << "In bvpl_convert_pair_to_hue_process -- input grid is not valid!\n";
     return false;
   }
-  if (bvxm_voxel_grid<bvpl_pair> *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(pair_base.ptr()))
+  if (auto *pair_grid = dynamic_cast< bvxm_voxel_grid<bvpl_pair >* >(pair_base.ptr()))
   {
     //assign hue values evenly dristributed on the color wheel
     //the wheel starts and ends on red, so we don't want to get back to the end

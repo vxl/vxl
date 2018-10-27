@@ -50,7 +50,7 @@ double clsfy_binary_hyperplane_ls_builder::build(
   assert(* std::max_element(outputs.begin(), outputs.end()) <= 1);
   assert(classifier.is_class("clsfy_binary_hyperplane"));
 
-  clsfy_binary_hyperplane &hyperplane = (clsfy_binary_hyperplane &) classifier;
+  auto &hyperplane = (clsfy_binary_hyperplane &) classifier;
 
   inputs.reset();
   const unsigned k = inputs.current().size();

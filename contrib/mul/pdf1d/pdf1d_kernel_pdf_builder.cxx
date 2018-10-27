@@ -137,7 +137,7 @@ void pdf1d_kernel_pdf_builder::build(pdf1d_pdf& model, mbl_data_wrapper<double>&
 
   if (data.is_class("mbl_data_array_wrapper<T>"))
   {
-    mbl_data_array_wrapper<double>& data_array =
+    auto& data_array =
                    static_cast<mbl_data_array_wrapper<double>&>(data);
     build_from_array(model,data_array.data(),n);
     return;

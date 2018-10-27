@@ -25,7 +25,7 @@ bstm_block::bstm_block(bstm_block_metadata data)
 
 bool bstm_block::b_read(char* buff)
 {
-  uchar16* treesBuff = (uchar16*) (buff);
+  auto* treesBuff = (uchar16*) (buff);
   byte_count_ = sizeof(uchar16)* sub_block_num_.x()*sub_block_num_.y()*sub_block_num_.z();
   trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                         sub_block_num_.y(),
@@ -78,7 +78,7 @@ bool bstm_block::init_empty_block(bstm_block_metadata data)
   sub_block_num_ = data.sub_block_num_;
 
   //4. setup big arrays (3d block of trees)
-  uchar16* treesBuff = (uchar16*) (buffer_+bytes_read);
+  auto* treesBuff = (uchar16*) (buffer_+bytes_read);
   trees_     = boxm2_array_3d<uchar16>( sub_block_num_.x(),
                                         sub_block_num_.y(),
                                         sub_block_num_.z(),

@@ -51,7 +51,7 @@ bool boxm2_create_stream_cache_process(bprb_func_process& pro)
   boxm2_scene_sptr scene= pro.get_input<boxm2_scene_sptr>(i++);
   std::string data_type_fname = pro.get_input<std::string>(i++);   // open data streams of this type with each identifier
   std::string identifier_fname= pro.get_input<std::string>(i++);
-  float num_giga = pro.get_input<float>(i++);
+  auto num_giga = pro.get_input<float>(i++);
 
   // extract list of image_ids from file
   std::ifstream ifs(identifier_fname.c_str());

@@ -63,9 +63,9 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
   //get the inputs
   vil_image_view_base_sptr reflectance_img_base = pro.get_input<vil_image_view_base_sptr>(0);
   brad_image_metadata_sptr mdata = pro.get_input<brad_image_metadata_sptr>(1);
-  float mean_reflectance = pro.get_input<float>(2);
+  auto mean_reflectance = pro.get_input<float>(2);
   bool do_normalization = pro.get_input<bool>(3);
-  unsigned int max_digital_count = pro.get_input<unsigned>(4);
+  auto max_digital_count = pro.get_input<unsigned>(4);
   bool average_airlight = pro.get_input<bool>(5);
 
   //check inputs validity
@@ -78,7 +78,7 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
      std::cerr << "ERROR: brad_convert_reflectance_to_digital_count: expecting floating point image\n";
      return false;
   }
-  vil_image_view<float>* reflectance_img = dynamic_cast<vil_image_view<float>*>(reflectance_img_base.ptr());
+  auto* reflectance_img = dynamic_cast<vil_image_view<float>*>(reflectance_img_base.ptr());
   if (!reflectance_img) {
      std::cerr << "ERROR: brad_convert_reflectance_to_digital_count: error casting to float image\n";
      return false;
@@ -139,12 +139,12 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr output_img = nullptr;
   if (do_normalization) {
-    vil_image_view<float> *output_img_float = new vil_image_view<float>(ni,nj);
+    auto *output_img_float = new vil_image_view<float>(ni,nj);
     vil_convert_stretch_range_limited(toa_radiance_img,*output_img_float,0.0f,(float)max_digital_count,0.0f,1.0f);
     output_img = output_img_float;
   }
   else {
-    vil_image_view<vxl_uint_16> *output_img_uint16 = new vil_image_view<vxl_uint_16>(ni,nj);
+    auto *output_img_uint16 = new vil_image_view<vxl_uint_16>(ni,nj);
     vil_convert_stretch_range_limited(toa_radiance_img,*output_img_uint16, 0.0f, (float)max_digital_count,(vxl_uint_16)0, (vxl_uint_16)max_digital_count);
     output_img = output_img_uint16;
   }

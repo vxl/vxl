@@ -40,7 +40,7 @@ static void test_cycle_processor()
     std::cout << "Found e2 " << found << std::endl;
 
     edges.push_back(e2);
-    edge_list::iterator eit = std::find(edges.begin(), edges.end(), e1);
+    auto eit = std::find(edges.begin(), edges.end(), e1);
     std::cout << "Edge found looking for e1 = " << *eit << std::endl;
     bool eequal = (*eit)==e1;
     std::cout << "Found edge == e1 " << eequal << std::endl;

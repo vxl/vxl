@@ -105,9 +105,9 @@ void test_cone_ray_trace()
 
   //create image
   unsigned ni=8, nj=8;
-  vil_image_view<float>* expected = new vil_image_view<float>(ni,nj);
+  auto* expected = new vil_image_view<float>(ni,nj);
   expected->fill(0.0f);
-  vil_image_view<float>* vis = new vil_image_view<float>(ni,nj);
+  auto* vis = new vil_image_view<float>(ni,nj);
   vis->fill(1.0f);
 
   //run render process
@@ -115,9 +115,9 @@ void test_cone_ray_trace()
   vil_save( *expected, "cone_expected.tiff" );
 
   //create noncone
-  vil_image_view<float>* ray_expected = new vil_image_view<float>(ni,nj);
+  auto* ray_expected = new vil_image_view<float>(ni,nj);
   ray_expected->fill(0.0f);
-  vil_image_view<float>* ray_vis = new vil_image_view<float>(ni,nj);
+  auto* ray_vis = new vil_image_view<float>(ni,nj);
   ray_vis->fill(1.0f);
   boxm2_render_expected_image( info, blk, datas, cam, ray_expected, ray_vis, ni, nj) ;
   vil_save( *ray_expected, "ray_expected.tiff" );

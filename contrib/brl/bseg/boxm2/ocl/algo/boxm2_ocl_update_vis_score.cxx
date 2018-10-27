@@ -86,14 +86,14 @@ boxm2_ocl_update_vis_score
   std::size_t global_threads[2]={cl_ni, cl_nj};
 
   // create all buffers
-  cl_float* ray_origins    = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins    = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = ocl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins,"ray_origins buffer");
   bocl_mem_sptr ray_d_buff = ocl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions,"ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device_, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
 
   //create vis, pre, norm and input image buffers
-  float* vis_buff  = new float[cl_ni*cl_nj];
+  auto* vis_buff  = new float[cl_ni*cl_nj];
   std::fill(vis_buff, vis_buff+cl_ni*cl_nj, 1.0f);
 
   bocl_mem_sptr vis_image = ocl_cache_->alloc_mem(cl_ni*cl_nj*sizeof(float), vis_buff,"vis image buffer");
@@ -141,7 +141,7 @@ boxm2_ocl_update_vis_score
       bocl_mem* blk_info  = ocl_cache_->loaded_block_info();
 
       //make sure the scene info data size reflects the real data size
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));
@@ -225,7 +225,7 @@ boxm2_ocl_update_vis_score
       bocl_mem * blk_info  = ocl_cache_->loaded_block_info();
 
       bocl_mem* alpha     = ocl_cache_->get_data<BOXM2_ALPHA>(scene_,*id);
-      boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
       int alphaTypeSize = boxm2_data_info::datasize(boxm2_data_traits<BOXM2_ALPHA>::prefix());
       info_buffer->data_buffer_length = (int) (alpha->num_bytes()/alphaTypeSize);
       blk_info->write_to_buffer((queue));

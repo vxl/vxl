@@ -42,7 +42,7 @@ bool vpgl_convert_local_rational_to_perspective_process(bprb_func_process& pro)
     std::cerr << "Null camera input\n\n";
     return false;
   }
-  vpgl_local_rational_camera<double> *lrat_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
+  auto *lrat_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(camera.ptr());
   if (!lrat_cam) {
     std::cerr << "Error: camera is not a vpgl_local_rational_camera\n";
     return false;

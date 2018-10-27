@@ -75,22 +75,22 @@ bool bstm_add_block_process(bprb_func_process &pro) {
   int index_t = pro.get_input<int>(i++);
 
   // Scene bounds
-  double min_x = pro.get_input<double>(i++);
-  double min_y = pro.get_input<double>(i++);
-  double min_z = pro.get_input<double>(i++);
-  double min_t = pro.get_input<double>(i++);
+  auto min_x = pro.get_input<double>(i++);
+  auto min_y = pro.get_input<double>(i++);
+  auto min_z = pro.get_input<double>(i++);
+  auto min_t = pro.get_input<double>(i++);
 
-  double max_x = pro.get_input<double>(i++);
-  double max_y = pro.get_input<double>(i++);
-  double max_z = pro.get_input<double>(i++);
-  double max_t = pro.get_input<double>(i++);
+  auto max_x = pro.get_input<double>(i++);
+  auto max_y = pro.get_input<double>(i++);
+  auto max_z = pro.get_input<double>(i++);
+  auto max_t = pro.get_input<double>(i++);
 
   std::string subdivisions_str = pro.get_input<std::string>(i++);
   std::vector<space_time_enum> subdivisions =
       parse_subdivisions(subdivisions_str);
 
-  float max_data_size = pro.get_input<float>(i++);
-  float p_init = pro.get_input<float>(i++);
+  auto max_data_size = pro.get_input<float>(i++);
+  auto p_init = pro.get_input<float>(i++);
 
   bstm_block_id id(index_i, index_j, index_k, index_t);
   std::map<bstm_block_id, bstm_multi_block_metadata> &blks = scene->blocks();

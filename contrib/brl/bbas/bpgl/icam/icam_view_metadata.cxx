@@ -19,7 +19,7 @@ void icam_view_metadata::create_minimizer(vil_image_view<float>*& exp_img, vil_i
   vil_image_view_base_sptr exp=vil_load(exp_img_path_.c_str());
   vil_image_view_base_sptr depth=vil_load(depth_img_path_.c_str());
   if (load_image<float>(exp, exp_img) && load_image(depth, depth_img))  {
-    vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
+    auto* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
     if (cam) {
       vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
       vgl_rotation_3d<double> rot=cam->get_rotation();

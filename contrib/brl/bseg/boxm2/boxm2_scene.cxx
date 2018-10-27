@@ -54,9 +54,9 @@ boxm2_scene::boxm2_scene(std::string const& scene_dir, std::string const& scene_
   boxm2_block_metadata md;
   md.id_ = bid;
   vgl_point_3d<double> origin = scene_box.min_point();
-  unsigned dim_x = static_cast<unsigned>(std::ceil(scene_box.width()/sub_block_len));
-  unsigned dim_y = static_cast<unsigned>(std::ceil(scene_box.height()/sub_block_len));
-  unsigned dim_z = static_cast<unsigned>(std::ceil(scene_box.depth()/sub_block_len));
+  auto dim_x = static_cast<unsigned>(std::ceil(scene_box.width()/sub_block_len));
+  auto dim_y = static_cast<unsigned>(std::ceil(scene_box.height()/sub_block_len));
+  auto dim_z = static_cast<unsigned>(std::ceil(scene_box.depth()/sub_block_len));
   md.local_origin_ = origin;
   md.sub_block_dim_ = vgl_vector_3d<double>(sub_block_len, sub_block_len, sub_block_len);
   md.sub_block_num_ = vgl_vector_3d<unsigned>(dim_x, dim_y, dim_z);
@@ -157,7 +157,7 @@ boxm2_scene::boxm2_scene(boxm2_scene const& other_scene){
   rpc_origin_ = other_scene.rpc_origin();
   data_path_ = other_scene.data_path();
   xml_path_ = other_scene.xml_path();
-  boxm2_scene& non_const_scene = const_cast<boxm2_scene&>(other_scene);
+  auto& non_const_scene = const_cast<boxm2_scene&>(other_scene);
   blocks_ = non_const_scene.blocks();
   appearances_ = other_scene.appearances();
   num_illumination_bins_ = other_scene.num_illumination_bins();
@@ -167,7 +167,7 @@ boxm2_scene::boxm2_scene(boxm2_scene const& other_scene){
 }
 
 boxm2_scene_sptr boxm2_scene::clone_no_disk(){
-  boxm2_scene* clone = new boxm2_scene();
+  auto* clone = new boxm2_scene();
   clone->set_lvcs(this->lvcs_);
   clone->set_local_origin(this->local_origin_);
   clone->set_rpc_origin(this->rpc_origin_);
@@ -504,7 +504,7 @@ boxm2_scene_info* boxm2_scene::get_blk_metadata(boxm2_block_id const& id)
   }
 
   boxm2_block_metadata data = blocks_[id];
-  boxm2_scene_info* info = new boxm2_scene_info();
+  auto* info = new boxm2_scene_info();
 
   info->scene_origin[0] = (float) data.local_origin_.x();
   info->scene_origin[1] = (float) data.local_origin_.y();
@@ -609,7 +609,7 @@ vgl_vector_3d<unsigned int>  boxm2_scene::scene_dimensions() const
 void boxm2_scene::min_block_index (vgl_point_3d<int> &idx,
                                    vgl_point_3d<double> &local_origin) const
 {
-  std::map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter= blocks_.begin();
+  auto iter= blocks_.begin();
 
   boxm2_block_id id = iter->first;
   boxm2_block_metadata data = iter->second;
@@ -652,7 +652,7 @@ float boxm2_scene::finest_resolution()
 void boxm2_scene::max_block_index (vgl_point_3d<int> &idx,
                                    vgl_point_3d<double> &local_origin) const
 {
-  std::map<boxm2_block_id, boxm2_block_metadata>::const_iterator iter= blocks_.begin();
+  auto iter= blocks_.begin();
 
   boxm2_block_id id = iter->first;
   boxm2_block_metadata data = iter->second;

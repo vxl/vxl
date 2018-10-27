@@ -35,7 +35,7 @@ void mbl_progress::set_progress(const std::string& identifier,
 #endif
   }
 
-  std::map<std::string, int>::iterator it = identifier2progress_.find(identifier);
+  auto it = identifier2progress_.find(identifier);
   if (it != identifier2progress_.end())
   {
     it->second = progress;
@@ -69,7 +69,7 @@ void mbl_progress::end_progress(const std::string& identifier)
 int mbl_progress::progress(const std::string& identifier) const
 {
   int p = -1;
-  std::map<std::string, int>::const_iterator it =
+  auto it =
     identifier2progress_.find(identifier);
   if (it != identifier2progress_.end())
   {
@@ -83,7 +83,7 @@ int mbl_progress::progress(const std::string& identifier) const
 std::string mbl_progress::display_text(const std::string& identifier) const
 {
   std::string dt;
-  std::map<std::string, std::string>::const_iterator it =
+  auto it =
     identifier2displaytext_.find(identifier);
   if (it != identifier2displaytext_.end())
   {
@@ -97,7 +97,7 @@ std::string mbl_progress::display_text(const std::string& identifier) const
 int mbl_progress::estimated_iterations(const std::string& identifier) const
 {
   int n = -1;
-  std::map<std::string, int>::const_iterator it =
+  auto it =
     identifier2estimatediterations_.find(identifier);
   if (it != identifier2estimatediterations_.end())
   {
@@ -114,7 +114,7 @@ int mbl_progress::estimated_iterations(const std::string& identifier) const
 void mbl_progress::set_cancelled(const std::string& identifier,
                                  const bool cancel)
 {
-  std::map<std::string, bool>::iterator it = identifier2cancel_.find(identifier);
+  auto it = identifier2cancel_.find(identifier);
   if (it != identifier2cancel_.end())
   {
     it->second = cancel;
@@ -130,7 +130,7 @@ void mbl_progress::set_cancelled(const std::string& identifier,
 bool mbl_progress::is_cancelled(const std::string &identifier) const
 {
   bool retval = false;
-  std::map<std::string, bool>::const_iterator it = identifier2cancel_.find(identifier);
+  auto it = identifier2cancel_.find(identifier);
   if (it != identifier2cancel_.end())
   {
     retval = it->second;

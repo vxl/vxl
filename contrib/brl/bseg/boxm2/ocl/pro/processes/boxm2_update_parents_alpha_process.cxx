@@ -96,7 +96,7 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
     if (kernels.find(identifier)==kernels.end())
     {
         std::cout<<"===========Compiling kernels==========="<<std::endl;
-        bocl_kernel * kernel=new bocl_kernel();
+        auto * kernel=new bocl_kernel();
         compile_kernel(device,kernel);
         kernels[identifier]=kernel;
     }

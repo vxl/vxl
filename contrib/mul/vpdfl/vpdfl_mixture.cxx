@@ -76,7 +76,7 @@ vpdfl_mixture::~vpdfl_mixture()
 //: Return instance of this PDF
 vpdfl_sampler_base* vpdfl_mixture::new_sampler() const
 {
-  vpdfl_mixture_sampler* i = new vpdfl_mixture_sampler;
+  auto* i = new vpdfl_mixture_sampler;
   i->set_model(*this);
 
   return i;

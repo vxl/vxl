@@ -43,7 +43,7 @@ boct_bit_tree &boct_bit_tree::operator=(boct_bit_tree that) {
 
   // If is_owning, replace `that`s buffer with a copy
   if (this->is_owning_) {
-    unsigned char *new_bits = new unsigned char[16];
+    auto *new_bits = new unsigned char[16];
     std::memcpy(new_bits, this->bits_, 16);
     this->bits_ = new_bits;
   }
@@ -455,7 +455,7 @@ int boct_bit_tree::get_data_ptr(bool is_random) {
   if (is_random) {
     unsigned char hi = this->bits_[10];
     unsigned char lo = this->bits_[11];
-    unsigned short value = (unsigned short)((hi << 8) | lo);
+    auto value = (unsigned short)((hi << 8) | lo);
     return int(value);
   } else {
     return int((bits_[13] << 24) | (bits_[12] << 16) | (bits_[11] << 8) |
@@ -465,8 +465,8 @@ int boct_bit_tree::get_data_ptr(bool is_random) {
 
 void boct_bit_tree::set_data_ptr(int ptr, bool is_random) {
   if (is_random) {
-    unsigned char hi = (unsigned char)(ptr >> 8);
-    unsigned char lo = (unsigned char)(ptr & 255);
+    auto hi = (unsigned char)(ptr >> 8);
+    auto lo = (unsigned char)(ptr & 255);
     this->bits_[10] = hi;
     this->bits_[11] = lo;
   } else {

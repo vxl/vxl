@@ -207,7 +207,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
   temp = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view<bool> fore_mask = *vil_convert_cast(bool(), temp);
 
-  double threshold = pro.get_input<double>(i++);
+  auto threshold = pro.get_input<double>(i++);
 
   std::vector<float> forepix, backpix;
   for (unsigned j = 0; j<nj; ++j)
@@ -223,7 +223,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
   unsigned nf = forepix.size(), nb = backpix.size();
   if (!nf||!nb)
     return false;
-  float nfd = (float)nf, nbd = (float)nb;
+  auto nfd = (float)nf, nbd = (float)nb;
 
   double p = threshold;
   unsigned nfore = 0, nback = 0;
@@ -232,7 +232,7 @@ bool brec_prob_map_roc_compute2_process(bprb_func_process& pro)
   for (unsigned kb =0; kb<nb; ++kb)
     if (backpix[kb]>p) nback++;
 
-  float nfored = (float)nfore, nbackd = (float)nback;
+  auto nfored = (float)nfore, nbackd = (float)nback;
   //double fore_true_pos_frac = nfored/nfd;
   //double fore_false_pos_frac = (nbd-nbackd)/nbd;
 

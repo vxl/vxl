@@ -33,7 +33,7 @@ void osl_break_edge(osl_edge const *in,
 
   // make new edges and push them onto the given list.
   for (unsigned int i=0; i+1<where.size(); ++i) {
-    osl_edge *fragment = new osl_edge(where[i+1]-where[i] + 1, verts[i], verts[i+1]);
+    auto *fragment = new osl_edge(where[i+1]-where[i] + 1, verts[i], verts[i+1]);
     for (unsigned int j=0; j<fragment->size(); ++j) {
       fragment->SetX(x[j + where[i]], j);
       fragment->SetY(y[j + where[i]], j);

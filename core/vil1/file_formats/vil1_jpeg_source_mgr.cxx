@@ -35,7 +35,7 @@ STATIC
 void
 vil1_jpeg_init_source (j_decompress_ptr cinfo)
 {
-  vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
+  auto src = ( vil1_jpeg_srcptr )( cinfo->src );
 
 #ifdef DEBUG
   std::cerr << "vil1_jpeg_init_source() " << src << '\n';
@@ -81,7 +81,7 @@ STATIC
 jpeg_boolean
 vil1_jpeg_fill_input_buffer (j_decompress_ptr cinfo)
 {
-  vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
+  auto src = ( vil1_jpeg_srcptr )( cinfo->src );
 
   int nbytes = src->stream->read(src->buffer, vil1_jpeg_INPUT_BUF_SIZE);
 
@@ -114,7 +114,7 @@ STATIC
 void
 vil1_jpeg_skip_input_data (j_decompress_ptr cinfo, long num_bytes)
 {
-  vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
+  auto src = ( vil1_jpeg_srcptr )( cinfo->src );
 
   // Just a dumb implementation for now.  Could use fseek() except
   // it doesn't work on pipes.  Not clear that being smart is worth
@@ -162,7 +162,7 @@ vil1_jpeg_stream_src_set (j_decompress_ptr cinfo, vil1_stream *vs)
   std::cerr << "vil1_jpeg_stream_src() : creating new data source\n";
 #endif
 
-  vil1_jpeg_srcptr src = (vil1_jpeg_srcptr) // allocate
+  auto src = (vil1_jpeg_srcptr) // allocate
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo,
                                 JPOOL_PERMANENT,
                                 SIZEOF(vil1_jpeg_stream_source_mgr));
@@ -192,7 +192,7 @@ void
 vil1_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil1_stream *vs)
 {
   { // verify
-    vil1_jpeg_srcptr src = ( vil1_jpeg_srcptr )( cinfo->src );
+    auto src = ( vil1_jpeg_srcptr )( cinfo->src );
     assert(src != nullptr);
     assert(src->stream == vs);
     if (!src) return;

@@ -69,13 +69,13 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
     else {
       typedef boct_tree<short,boxm_sample_multi_bin<BOXM_APM_MOG_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       std::cout<<"Multi Bin set"<<std::endl;
       scene_ptr = scene;
@@ -85,7 +85,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_MOB_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -97,7 +97,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_sample<BOXM_APM_SIMPLE_GREY> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -115,7 +115,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
       if (!scene_ptr->multi_bin())
       {
         typedef boct_tree<short,float> tree_type;
-        boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+        auto* scene = new boxm_scene<tree_type>();
         scene->load_scene(fname);
         scene_ptr = scene;
         std::cout << "Scene path: " << scene->filename()<< std::endl;
@@ -125,7 +125,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,vnl_vector_fixed<float, 3> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
       std::cout << "Loading scene of type vnl_float_3" << '\n'
@@ -136,7 +136,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,vnl_vector_fixed<float, 10> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
       std::cout << "Loading scene of type vnl_float_10" << '\n'
@@ -147,7 +147,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,bool> tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(fname);
       scene_ptr = scene;
       std::cout << "Scene path: " << scene->filename()<< std::endl;
@@ -157,7 +157,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_apm_traits<BOXM_APM_MOG_GREY>::apm_datatype > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -166,7 +166,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,bsta_num_obs<bsta_gauss_sf1> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -175,7 +175,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_edge_sample<float> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -184,7 +184,7 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_inf_line_sample<float> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
@@ -193,14 +193,14 @@ bool boxm_create_scene_process(bprb_func_process& pro)
     if (!scene_ptr->multi_bin())
     {
       typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree_type;
-      boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+      auto* scene = new boxm_scene<tree_type>();
       scene->load_scene(parser);
       scene_ptr = scene;
     }
   }
   else if (scene_ptr->appearence_model() == BOXM_SCALAR_FLOAT) {
     typedef boct_tree<short, boxm_scalar_sample<float> > tree_type;
-    boxm_scene<tree_type>* scene = new boxm_scene<tree_type>();
+    auto* scene = new boxm_scene<tree_type>();
     scene->load_scene(parser);
     scene_ptr = scene;
   }

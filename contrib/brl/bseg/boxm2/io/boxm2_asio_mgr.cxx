@@ -113,7 +113,7 @@ std::map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
       aio->close_file();
 
       // instantiate new block
-      boxm2_block*  blk = new boxm2_block(id, load_metadata_list_[id],aio->buffer());
+      auto*  blk = new boxm2_block(id, load_metadata_list_[id],aio->buffer());
       toReturn[id] = blk;
 
       // remove iter from the load list/delete aio

@@ -143,63 +143,63 @@ vil3d_image_view_base_sptr vil3d_gen_synthetic_image::get_copy_view(
   {
     case VIL_PIXEL_FORMAT_BOOL:
     {
-      vil3d_image_view<bool> *p =
+      auto *p =
         new vil3d_image_view<bool>(ni, nj, nk, nplanes());
       p->fill(value_.bool_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_SBYTE:
     {
-      vil3d_image_view<vxl_sbyte> *p =
+      auto *p =
         new vil3d_image_view<vxl_sbyte>(ni, nj, nk, nplanes());
       p->fill(value_.sbyte_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_BYTE:
     {
-      vil3d_image_view<vxl_byte> *p =
+      auto *p =
         new vil3d_image_view<vxl_byte>(ni, nj, nk, nplanes());
       p->fill(value_.byte_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_INT_16:
     {
-      vil3d_image_view<vxl_int_16> *p =
+      auto *p =
         new vil3d_image_view<vxl_int_16>(ni, nj, nk, nplanes());
       p->fill(value_.int_16_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_UINT_16:
     {
-      vil3d_image_view<vxl_uint_16> *p =
+      auto *p =
         new vil3d_image_view<vxl_uint_16>(ni, nj, nk, nplanes());
       p->fill(value_.uint_16_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_INT_32:
     {
-      vil3d_image_view<vxl_int_32> *p =
+      auto *p =
         new vil3d_image_view<vxl_int_32>(ni, nj, nk, nplanes());
       p->fill(value_.int_32_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_UINT_32:
     {
-      vil3d_image_view<vxl_uint_32> *p =
+      auto *p =
         new vil3d_image_view<vxl_uint_32>(ni, nj, nk, nplanes());
       p->fill(value_.uint_32_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_FLOAT:
     {
-      vil3d_image_view<float> *p =
+      auto *p =
         new vil3d_image_view<float>(ni, nj, nk, nplanes());
       p->fill(value_.float_value);
       return p;
     }
     case VIL_PIXEL_FORMAT_DOUBLE:
     {
-      vil3d_image_view<double> *p =
+      auto *p =
         new vil3d_image_view<double>(ni, nj, nk, nplanes());
       p->fill(value_.double_value);
       return p;

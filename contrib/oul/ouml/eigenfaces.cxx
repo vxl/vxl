@@ -206,7 +206,7 @@ bool EigenFace::calculate_eigenfaces()
   std::cout << "Eigenvectors\n";
   for (unsigned int i=0; i<training_images.size(); i++)
   {
-    vnl_vector<double> *new_vec = new vnl_vector<double>(image_size);
+    auto *new_vec = new vnl_vector<double>(image_size);
     *new_vec = A*eigen.get_eigenvector(i);
     //new_vec->normalize();
     eigenvectors.push_back(new_vec);
@@ -254,7 +254,7 @@ vnl_vector<double> *EigenFace::convert_image_to_vector(Image *im)
 {
   assert(im!=nullptr);
   int index=0;
-  vnl_vector<double> *new_vec = new vnl_vector<double>(im->width()*im->height());
+  auto *new_vec = new vnl_vector<double>(im->width()*im->height());
   for (int j=0; j<im->height(); j++)
     for (int i=0; i<im->width(); i++)
       (*new_vec)[index++] = (double)(*im)(i,j);
@@ -371,7 +371,7 @@ vnl_vector<double>* EigenFace::encode(Image *im)
   }
   vnl_vector<double> *im_vec = convert_image_to_vector(im);
   *im_vec -= *average_training_image;
-  vnl_vector<double> *wts = new vnl_vector<double>(eigenvectors.size());
+  auto *wts = new vnl_vector<double>(eigenvectors.size());
   for (unsigned int i=0; i<eigenvectors.size(); i++)
     (*wts)[i] = dot_product(*im_vec, *(eigenvectors[i]));
   delete im_vec;
@@ -384,9 +384,9 @@ vnl_vector<double>* EigenFace::encode(vnl_vector<double> *t_vec)
   {
     return nullptr;
   }
-  vnl_vector<double> *im_vec = new vnl_vector<double>(*t_vec);
+  auto *im_vec = new vnl_vector<double>(*t_vec);
   *im_vec -= *average_training_image;
-  vnl_vector<double> *wts = new vnl_vector<double>(eigenvectors.size());
+  auto *wts = new vnl_vector<double>(eigenvectors.size());
   for (unsigned int i=0; i<eigenvectors.size(); i++)
     (*wts)[i] = dot_product(*im_vec, *(eigenvectors[i]));
   delete im_vec;

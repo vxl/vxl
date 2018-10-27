@@ -231,8 +231,8 @@ bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
   unsigned i = 0;
   brec_part_hierarchy_learner_sptr hl = pro.get_input<brec_part_hierarchy_learner_sptr>(i++);
   brec_part_hierarchy_detector_sptr hd = pro.get_input<brec_part_hierarchy_detector_sptr>(i++);
-  unsigned n = pro.get_input<unsigned>(i++);
-  unsigned k = pro.get_input<unsigned>(i++);
+  auto n = pro.get_input<unsigned>(i++);
+  auto k = pro.get_input<unsigned>(i++);
   std::string output_file = pro.get_input<std::string>(i++);
 
   hl->layer_n_collect_stats(hd, n, k);

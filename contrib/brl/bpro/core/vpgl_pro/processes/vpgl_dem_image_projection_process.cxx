@@ -46,11 +46,11 @@ bool vpgl_dem_image_projection_process(bprb_func_process& pro)
   vpgl_camera_double_sptr  ref_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
   vpgl_dem_manager_sptr    dem_mgr = pro.get_input<vpgl_dem_manager_sptr>(in_i++);
   vpgl_camera_double_sptr  tgr_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  unsigned i0     = pro.get_input<unsigned>(in_i++);
-  unsigned j0     = pro.get_input<unsigned>(in_i++);
-  unsigned out_ni = pro.get_input<unsigned>(in_i++);
-  unsigned out_nj = pro.get_input<unsigned>(in_i++);
-  double err_tol  = pro.get_input<double>(in_i++);
+  auto i0     = pro.get_input<unsigned>(in_i++);
+  auto j0     = pro.get_input<unsigned>(in_i++);
+  auto out_ni = pro.get_input<unsigned>(in_i++);
+  auto out_nj = pro.get_input<unsigned>(in_i++);
+  auto err_tol  = pro.get_input<double>(in_i++);
   // convert all input images/cameras
   if (ref_img_sptr->pixel_format() != VIL_PIXEL_FORMAT_FLOAT) {
     std::cerr << pro.name() << " -- unsupported input image pixel format: " << ref_img_sptr->pixel_format()
@@ -58,7 +58,7 @@ bool vpgl_dem_image_projection_process(bprb_func_process& pro)
     return false;
   }
   vil_image_view<float> ref_img(ref_img_sptr);
-  vpgl_rational_camera<double>* ref_cam = dynamic_cast<vpgl_rational_camera<double>*>(ref_cam_sptr.as_pointer());
+  auto* ref_cam = dynamic_cast<vpgl_rational_camera<double>*>(ref_cam_sptr.as_pointer());
   if (!ref_cam) {
     std::cerr << pro.name() << " -- failed to load satellite rational camera!!\n";
     return false;
@@ -96,7 +96,7 @@ bool vpgl_dem_image_projection_process(bprb_func_process& pro)
       // project WGS84 (lon, lat, elev) to reference image (u, v)
       double uu, vv;
       if (ref_cam->type_name() == "vpgl_local_rational_camera") {
-        vpgl_local_rational_camera<double>* local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(ref_cam);
+        auto* local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(ref_cam);
         double loc_x, loc_y, loc_z;
         local_cam->lvcs().global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
         local_cam->project(loc_x, loc_y, loc_z, uu, vv);

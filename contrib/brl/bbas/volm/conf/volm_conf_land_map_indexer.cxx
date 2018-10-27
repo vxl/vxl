@@ -177,7 +177,7 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
   vil_image_resource_sptr image_ptr = vil_new_image_resource_of_view(image);
   vil_image_resource_sptr crop_res = vil_crop(image_ptr, ci, cni, cj, cnj);
   vil_image_view_base_sptr out_sptr = vil_new_image_view_base_sptr(*(crop_res->get_view()));
-  vil_image_view<vxl_byte>* crop_img = dynamic_cast<vil_image_view<vxl_byte>*>(out_sptr.ptr());
+  auto* crop_img = dynamic_cast<vil_image_view<vxl_byte>*>(out_sptr.ptr());
   // obtain the edge map for each land category
   std::set<unsigned char> land_types;
   for (unsigned i = 0; i < crop_img->ni(); i++) {
@@ -186,11 +186,11 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
     }
   }
   std::cout << land_types.size() << " land types are in " << img_type << " image: ";
-  for (std::__1::__tree_const_iterator<unsigned char, std::__1::__tree_node<unsigned char, void *> *, long>::value_type land_type : land_types)
+  for (const auto & land_type : land_types)
     std::cout << (int)land_type << ", ";
   std::cout << std::endl;
   // loop over each land type to add locations
-  for (std::__1::__tree_const_iterator<unsigned char, std::__1::__tree_node<unsigned char, void *> *, long>::value_type land_type : land_types)
+  for (const auto & land_type : land_types)
   {
     // define the land type
     unsigned char land_id;
@@ -263,7 +263,7 @@ bool volm_conf_land_map_indexer::add_locations(vil_image_view<vxl_byte> const& i
     }
     // put the valid locations into database
     for (auto & sampled_edge_loc : sampled_edge_locs)
-      for (std::vector<vsol_point_2d_sptr>::iterator vit = sampled_edge_loc.begin();  vit != sampled_edge_loc.end(); ++vit)
+      for (auto vit = sampled_edge_loc.begin();  vit != sampled_edge_loc.end(); ++vit)
         this->add_locations(vgl_point_3d<double>((*vit)->x(), (*vit)->y(), height_value), land_id);
   } // end of loop over all possible land id of input image
   return true;

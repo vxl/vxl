@@ -66,7 +66,7 @@ bool bvpl_kernel_id_to_axis_process(bprb_func_process& pro)
     std::cerr << "In bvpl_kernel_id_to_axis_process -- input grid is not valid!\n";
     return false;
   }
-  bvxm_voxel_grid<int > *grid
+  auto *grid
  = dynamic_cast< bvxm_voxel_grid<int>* >(grid_base.ptr());
   if (grid)
   {

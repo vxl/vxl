@@ -187,7 +187,7 @@ find_intersection_point(std::vector<vpgl_rational_camera<double> > const& cams,
                         vgl_point_3d<double> & p_3d,
                         double const& relative_diameter)
 {
-  unsigned int n = static_cast<unsigned int>(cams.size());
+  auto n = static_cast<unsigned int>(cams.size());
   if (!n || n != corrs.size())
     return false;
   // define the iteration layer along z
@@ -276,8 +276,8 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
 
   if (!refine_intersection_pt(cams, cam_weights, corrs,intersection, final))
     return false;
-  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
   for (; cit!=cams.end() && rit!=corrs.end(); ++cit, ++rit)
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
@@ -307,8 +307,8 @@ adjust(std::vector<vpgl_rational_camera<double> > const& cams,
   if (!refine_intersection_pt(cams, cam_weights, corrs, intersection, final))
     return false;
 
-  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
   for (; cit != cams.end() && rit != corrs.end(); ++cit, ++rit)
   {
     vgl_point_2d<double> uvp = (*cit).project(final);
@@ -333,8 +333,8 @@ bool vpgl_rational_adjust_onept::
     return false;
   if (!refine_intersection_pt(cams, weights, corrs,intersection, final))
     return false;
-  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
   std::vector<float>::const_iterator wit = weights.begin();
   for (; cit!=cams.end() && rit!=corrs.end(); ++cit, ++rit, ++wit)
   {
@@ -368,9 +368,9 @@ adjust_with_weights(std::vector<vpgl_rational_camera<double> > const& cams, std:
     return false;
   if (!refine_intersection_pt(cams, weights, corrs, intersection, final))
     return false;
-  std::vector<vpgl_rational_camera<double> >::const_iterator cit = cams.begin();
-  std::vector<vgl_point_2d<double> >::const_iterator rit = corrs.begin();
-  std::vector<float>::const_iterator wit = weights.begin();
+  auto cit = cams.begin();
+  auto rit = corrs.begin();
+  auto wit = weights.begin();
   for (; cit != cams.end() && rit != corrs.end(); ++cit, ++rit, ++wit)
   {
     // if weight is 1, it's a special case, do not change it at all (the projection still yields a tiny translation so just ignore that)

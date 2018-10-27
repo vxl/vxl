@@ -597,7 +597,7 @@ VDS int parse(vul_arg<vxl_int_64>* argmt, char ** argv)
   }
 
   // Ensure only digits are present allowing for the special case of an l or L suffix
-  unsigned long len = (unsigned long)std::strlen(argv[0]);
+  auto len = (unsigned long)std::strlen(argv[0]);
   for (unsigned long i=0; i<len; ++i)
   {
     char tmp = argv[0][i];
@@ -773,7 +773,7 @@ VDS void settype(vul_arg<std::list<int> > &argmt) { argmt.type_ = "integer list"
 
 VDS void print_value(std::ostream &s, vul_arg<std::list<int> > const &argmt)
 {
-  for (std::__1::__list_const_iterator<int, void *>::value_type i : argmt())
+  for (const auto i : argmt())
     s << ' ' << i;
 }
 
@@ -799,7 +799,7 @@ VDS int parse(vul_arg<std::vector<int> >* argmt, char ** argv)
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (std::__1::__list_iterator<int, void *>::value_type & i : tmp)
+  for (const auto & i : tmp)
     argmt->value_.push_back( i );
   return retval;
 }
@@ -821,7 +821,7 @@ VDS int parse(vul_arg<std::vector<unsigned> >* argmt, char ** argv)
   int retval = list_parse(tmp,argv);
   // Defaults should be cleared when the user supplies a value
   argmt->value_.clear();
-  for (std::__1::__list_iterator<int, void *>::value_type & i : tmp)
+  for (const auto & i : tmp)
     argmt->value_.push_back( unsigned(i) );
   return retval;
 }

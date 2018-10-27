@@ -207,7 +207,7 @@ void mfpf_hog_box_finder_builder::add_example(const vimt_image_2d_of<float>& ima
 void mfpf_hog_box_finder_builder::build(mfpf_point_finder& pf)
 {
   assert(pf.is_a()=="mfpf_hog_box_finder");
-  mfpf_hog_box_finder& rp = static_cast<mfpf_hog_box_finder&>(pf);
+  auto& rp = static_cast<mfpf_hog_box_finder&>(pf);
 
   mfpf_vec_cost *cost = cost_builder().new_cost();
 
@@ -316,13 +316,13 @@ bool mfpf_hog_box_finder_builder::set_from_stream(std::istream &is)
 void mfpf_hog_box_finder_builder::reconfigure_normaliser()
 {
     mipa_vector_normaliser* pNormaliser=normaliser_.ptr();
-    mipa_block_normaliser* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
+    auto* pBlockNormaliser= dynamic_cast<mipa_block_normaliser*>(pNormaliser);
     if (pBlockNormaliser)
     {
       pBlockNormaliser->set_region(2*ni_,2*nj_);
       pBlockNormaliser->set_nbins(nA_bins_);
       //Also this builder always uses 2 SIFT scales and a final overall histogram
-      mipa_ms_block_normaliser* pMSBlockNormaliser= dynamic_cast<mipa_ms_block_normaliser*>(pNormaliser);
+      auto* pMSBlockNormaliser= dynamic_cast<mipa_ms_block_normaliser*>(pNormaliser);
       if (pMSBlockNormaliser)
       {
         pMSBlockNormaliser->set_nscales(2);

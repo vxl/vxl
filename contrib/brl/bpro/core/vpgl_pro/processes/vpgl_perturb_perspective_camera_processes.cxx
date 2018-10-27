@@ -84,10 +84,10 @@ bool vpgl_perturb_persp_cam_orient_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float kappa = pro.get_input<float>(i++);
+  auto kappa = pro.get_input<float>(i++);
   bsta_random_wrapper_sptr rngw = pro.get_input<bsta_random_wrapper_sptr>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
@@ -186,7 +186,7 @@ bool vpgl_rotate_persp_cam_process(bprb_func_process& pro)
   ap.theta = pro.get_input<float>(i++);
   ap.phi = pro.get_input<float>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
@@ -247,10 +247,10 @@ bool vpgl_perturb_persp_loc_cam_orient_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float var = pro.get_input<float>(i++);
+  auto var = pro.get_input<float>(i++);
   bsta_random_wrapper_sptr rngw = pro.get_input<bsta_random_wrapper_sptr>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;
@@ -310,10 +310,10 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
   // get the inputs
   unsigned i=0;
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(i++);
-  float kappa = pro.get_input<float>(i++);
+  auto kappa = pro.get_input<float>(i++);
   bsta_random_wrapper_sptr rngw = pro.get_input<bsta_random_wrapper_sptr>(i++);
 
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_get_view_direction_at_point_process: couldn't cast camera\n";
     return false;

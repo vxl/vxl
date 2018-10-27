@@ -70,12 +70,12 @@ bool boxm2_create_scene_process(bprb_func_process& pro)
   std::string datapath = pro.get_input<std::string>(i++);
   appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
   appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
-  float origin_x = pro.get_input<float>(i++);
-  float origin_y = pro.get_input<float>(i++);
-  float origin_z = pro.get_input<float>(i++);
-  float lon = pro.get_input<float>(i++);
-  float lat = pro.get_input<float>(i++);
-  float elev = pro.get_input<float>(i++);
+  auto origin_x = pro.get_input<float>(i++);
+  auto origin_y = pro.get_input<float>(i++);
+  auto origin_z = pro.get_input<float>(i++);
+  auto lon = pro.get_input<float>(i++);
+  auto lat = pro.get_input<float>(i++);
+  auto elev = pro.get_input<float>(i++);
   int num_bins = pro.get_input<int>(i++);
 
   if (!vul_file::make_directory_path(datapath.c_str()))
@@ -152,18 +152,18 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   std::string datapath = pro.get_input<std::string>(i++);
   appearance[0] = pro.get_input<std::string>(i++); //Appearance Model String
   appearance[1] = pro.get_input<std::string>(i++); //Occupancy Model String
-  float lon1 = pro.get_input<float>(i++);
-  float lat1 = pro.get_input<float>(i++);
-  float elev1 = pro.get_input<float>(i++);
-  float lon2 = pro.get_input<float>(i++);
-  float lat2 = pro.get_input<float>(i++);
-  float elev2 = pro.get_input<float>(i++);
-  float origin_lon = pro.get_input<float>(i++);
-  float origin_lat = pro.get_input<float>(i++);
-  float origin_elev = pro.get_input<float>(i++);
-  float voxel_size = pro.get_input<float>(i++);
-  float block_len = pro.get_input<float>(i++);  // blocks have equal length on x and y direction
-  float block_lenz = pro.get_input<float>(i++);
+  auto lon1 = pro.get_input<float>(i++);
+  auto lat1 = pro.get_input<float>(i++);
+  auto elev1 = pro.get_input<float>(i++);
+  auto lon2 = pro.get_input<float>(i++);
+  auto lat2 = pro.get_input<float>(i++);
+  auto elev2 = pro.get_input<float>(i++);
+  auto origin_lon = pro.get_input<float>(i++);
+  auto origin_lat = pro.get_input<float>(i++);
+  auto origin_elev = pro.get_input<float>(i++);
+  auto voxel_size = pro.get_input<float>(i++);
+  auto block_len = pro.get_input<float>(i++);  // blocks have equal length on x and y direction
+  auto block_lenz = pro.get_input<float>(i++);
   int num_bins = pro.get_input<int>(i++);
   std::string cs_name = pro.get_input<std::string>(i++);
 
@@ -230,7 +230,7 @@ bool boxm2_create_scene_and_blocks_process(bprb_func_process& pro)
   int n_subb = num_xy*num_xy*num_z;
   int n_cells_subb = 1+8+64+512;
   int n_bytes_subb = 36*n_cells_subb;  // alpha:4, mog3/gauss:8, num_obs:8,aux:16
-  float bytes = (float)(n_subb*n_bytes_subb);
+  auto bytes = (float)(n_subb*n_bytes_subb);
   std::cout << "memory requirements for a block at finest resolution:\n"
            << n_subb << "=n_subblocks, " << n_bytes_subb << " bytes per sub-block, " << bytes/1000000.0 << " MB per block\n"
            << " including bit tree: " << (bytes + n_subb*16)/1000000 << " MB\n"
@@ -319,19 +319,19 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   appearance[0] = pro.get_input<std::string>(i++);
   appearance[1] = pro.get_input<std::string>(i++);
   std::string poly_kml_name = pro.get_input<std::string>(i++);
-  float origin_lon = pro.get_input<float>(i++);
-  float origin_lat = pro.get_input<float>(i++);
-  float origin_elev = pro.get_input<float>(i++);
-  float scene_height = pro.get_input<float>(i++);
-  float voxel_size = pro.get_input<float>(i++);
-  float block_len = pro.get_input<float>(i++);
-  float block_lenz = pro.get_input<float>(i++);
+  auto origin_lon = pro.get_input<float>(i++);
+  auto origin_lat = pro.get_input<float>(i++);
+  auto origin_elev = pro.get_input<float>(i++);
+  auto scene_height = pro.get_input<float>(i++);
+  auto voxel_size = pro.get_input<float>(i++);
+  auto block_len = pro.get_input<float>(i++);
+  auto block_lenz = pro.get_input<float>(i++);
   int   num_bins = pro.get_input<int>(i++);
   std::string cs_name = pro.get_input<std::string>(i++);
   unsigned init_level = 1;
   unsigned max_level = 4;
   float max_data_mb = 4000.0;
-  float p_init = (float)0.001;
+  auto p_init = (float)0.001;
   // check the parameters has been successfully passed
   std::cout << "input kml file = " << poly_kml_name << '\n'
            << "origin = [" << origin_lon << ',' << origin_lat << ',' << origin_elev << "]\n"
@@ -367,7 +367,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   vgl_polygon<double> poly;
   for (unsigned sh_idx = 0; sh_idx < n_sheets; sh_idx++) {
     poly.new_sheet();
-    unsigned n_verts = (unsigned)poly_deg[sh_idx].size();
+    auto n_verts = (unsigned)poly_deg[sh_idx].size();
     for (unsigned vt_idx = 0; vt_idx < n_verts; vt_idx++) {
       int zone;
       utm.transform(poly_deg[sh_idx][vt_idx].y(), poly_deg[sh_idx][vt_idx].x(), x, y, zone);
@@ -390,7 +390,7 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   double left = poly[0][0].x();
   double right = poly[0][0].x();
   for (unsigned sh_idx = 0 ; sh_idx < poly.num_sheets(); sh_idx++) {
-    unsigned n_verts = (unsigned)poly[sh_idx].size();
+    auto n_verts = (unsigned)poly[sh_idx].size();
     for (unsigned vt_idx = 0; vt_idx < n_verts; vt_idx++) {
       if (lower > poly[sh_idx][vt_idx].y())  lower = poly[sh_idx][vt_idx].y();
       if (upper < poly[sh_idx][vt_idx].y())  upper = poly[sh_idx][vt_idx].y();
@@ -519,9 +519,9 @@ bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
   unsigned int num_z = (int)std::ceil(block_lenz/sb_length);
   double bxy = num_xy * sb_length;
   double bz = num_z * sb_length;
-  unsigned int n_x = (unsigned int)std::ceil(lx / bxy);
-  unsigned int n_y = (unsigned int)std::ceil(ly / bxy);
-  unsigned int n_z = (unsigned int)std::ceil(lz / bz);
+  auto n_x = (unsigned int)std::ceil(lx / bxy);
+  auto n_y = (unsigned int)std::ceil(ly / bxy);
+  auto n_z = (unsigned int)std::ceil(lz / bz);
   std::cout << "sb_length: " << sb_length << " block_len_xy: " << block_len << " num_xy: " << num_xy << '\n'
            << "block_len z: " << block_lenz << " num_z: " << num_z << '\n'
            << "num of blocks in x: " << n_x << " y: " << n_y << " n_z: " << n_z << '\n'
@@ -646,7 +646,7 @@ bool boxm2_distribute_scene_blocks_process(bprb_func_process& pro)
   unsigned i = 0;
 
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
-  double scene_dim = pro.get_input<double>(i++);
+  auto scene_dim = pro.get_input<double>(i++);
   std::string output_path = pro.get_input<std::string>(i++);
   std::string name_prefix = pro.get_input<std::string>(i++);
 
@@ -894,7 +894,7 @@ bool boxm2_prune_scene_blocks_by_dem_process(bprb_func_process& pro)
   unsigned i = 0;
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
   std::string dem_root = pro.get_input<std::string>(i++);
-  float elev_cut_off = pro.get_input<float>(i++);
+  auto elev_cut_off = pro.get_input<float>(i++);
 
   vpgl_lvcs lv = scene->lvcs();
   vpgl_lvcs_sptr lvcs_sptr = new vpgl_lvcs(scene->lvcs());
@@ -1076,12 +1076,12 @@ void boxm2_prune_scene_blocks_by_dem_process_globals::crop_and_find_min_max(std:
   std::cout << " dem img size: ni = " << (dem_views[img_id])->ni() << " nj = " << (dem_views[img_id])->nj() << std::endl;*/
 
   // load the actual dem image view
-  vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_views[img_id].ptr());
+  auto* dem_view = dynamic_cast<vil_image_view<float>*>(dem_views[img_id].ptr());
   if (!dem_view) {
     vil_image_view<float> temp(dem_views[img_id]->ni(), dem_views[img_id]->nj(), 1);
-    vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_views[img_id].ptr());
+    auto* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_views[img_id].ptr());
     if (!dem_view_int) {
-      vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_views[img_id].ptr());
+      auto* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_views[img_id].ptr());
       vil_convert_cast(*dem_view_byte, temp);
     }
     else

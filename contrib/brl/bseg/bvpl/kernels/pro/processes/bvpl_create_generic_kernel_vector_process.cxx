@@ -137,7 +137,7 @@ bool bvpl_write_generic_kernel_vector_process(bprb_func_process& pro)
   bvpl_kernel_vector_sptr kernels = pro.get_input<bvpl_kernel_vector_sptr>(0);
   std::string output_prefix =pro.get_input<std::string>(1);
 
-  std::vector< bvpl_kernel_sptr >::iterator iter = kernels->begin();
+  auto iter = kernels->begin();
   unsigned id = 1;
   for ( ; iter != kernels->end(); iter++, id++) {
     bvpl_kernel_sptr k = *iter;

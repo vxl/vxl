@@ -64,7 +64,7 @@ void test_reflected_marked_images()
   {
     TEST_NEAR("Point 0 reflected",ref_data1.points()[0].x(),19-i,1e-6);
     TEST_NEAR("Point 1 reflected",ref_data1.points()[1].x(),19,1e-6);
-    const vimt_image_2d_of<vxl_byte>& image
+    const auto& image
        = static_cast<const vimt_image_2d_of<vxl_byte>&>(ref_data1.image());
     TEST("Image value",image.image()(0,0),i);
   }
@@ -82,7 +82,7 @@ void test_reflected_marked_images()
   {
     TEST_NEAR("Point 0 reflected",ref_data2.points()[0].x(),19-i,1e-6);
     TEST_NEAR("Point 1 reflected",ref_data2.points()[1].x(),19,1e-6);
-    const vimt_image_2d_of<vxl_byte>& image
+    const auto& image
        = static_cast<const vimt_image_2d_of<vxl_byte>&>(ref_data2.image());
     TEST("Image value",image.image()(0,0),i);
   }

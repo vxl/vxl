@@ -63,16 +63,16 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr in_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vpgl_camera_double_sptr  in_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  unsigned pixel_thres = pro.get_input<unsigned>(in_i++);
+  auto pixel_thres = pro.get_input<unsigned>(in_i++);
   std::string out_kml = pro.get_input<std::string>(in_i++);
 
   // check inputs
-  vil_image_view<vxl_byte>* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
+  auto* in_img = dynamic_cast<vil_image_view<vxl_byte>*>(in_img_sptr.ptr());
   if (!in_img) {
     std::cerr << pro.name() << ": Unsupported input image pixel type: " << in_img_sptr->pixel_format() << ", only Byte is supported!\n";
     return false;
   }
-  vpgl_geo_camera* cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
+  auto* cam = dynamic_cast<vpgl_geo_camera*>(in_cam_sptr.ptr());
   if (!cam) {
     std::cerr << pro.name() << ": failed to load input geo-camera!\n";
     return false;

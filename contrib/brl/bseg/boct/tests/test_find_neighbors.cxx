@@ -72,7 +72,7 @@ void brute_force_test_neighbor(boct_tree_cell<short,vgl_point_3d<double> >* cell
 static void test_find_neighbors()
 {
   short nlevels=10;
-  boct_tree<short,vgl_point_3d<double> > * block=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto * block=new boct_tree<short,vgl_point_3d<double> >(nlevels);
 
   // two layer tree;
   block->split();
@@ -103,7 +103,7 @@ static void test_find_neighbors()
   TEST("Returns the correct  Neighbor for X_LOW",gt_code_x_low.x_loc_,n[0]->get_code().x_loc_);
 
   // neighbors on a random tree
-  boct_tree<short,vgl_point_3d<double> >* tree3=new boct_tree<short,vgl_point_3d<double> >(nlevels);
+  auto* tree3=new boct_tree<short,vgl_point_3d<double> >(nlevels);
   create_random_configuration_tree(tree3);
   //tree3->print();
   std::vector<boct_tree_cell<short,vgl_point_3d<double> >*> leaf_nodes=tree3->leaf_cells();

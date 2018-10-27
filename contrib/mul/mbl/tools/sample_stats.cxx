@@ -124,7 +124,7 @@ int main2(int argc, char *argv[])
 
   // Clean up if input was from a file
   {
-    std::ifstream* ifs = dynamic_cast<std::ifstream*>(is);
+    auto* ifs = dynamic_cast<std::ifstream*>(is);
     if (ifs)
     {
       ifs->close();
@@ -229,7 +229,7 @@ int main2(int argc, char *argv[])
 
   // Clean up if output was to a file
   {
-    std::ofstream* ofs = dynamic_cast<std::ofstream*>(os);
+    auto* ofs = dynamic_cast<std::ofstream*>(os);
     if (ofs)
     {
       ofs->close();

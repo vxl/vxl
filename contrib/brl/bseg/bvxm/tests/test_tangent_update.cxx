@@ -114,9 +114,9 @@ static void test_tangent_update()
   temp[1][1]=5.0; temp[1][2]=5.0;
   temp[2][2]=1.0;
   vpgl_calibration_matrix<double> K(temp);
-  vpgl_perspective_camera<double>* c0 = new vpgl_perspective_camera<double>();
-  vpgl_perspective_camera<double>* c1 = new vpgl_perspective_camera<double>();
-  vpgl_perspective_camera<double>* c2 = new vpgl_perspective_camera<double>();
+  auto* c0 = new vpgl_perspective_camera<double>();
+  auto* c1 = new vpgl_perspective_camera<double>();
+  auto* c2 = new vpgl_perspective_camera<double>();
   c0->set_calibration(K);  c1->set_calibration(K);   c2->set_calibration(K);
   c0->set_camera_center(vgl_point_3d<double>(2.5, 2.5, 5.0));
   c1->set_camera_center(vgl_point_3d<double>(0.0, 2.5, 5.0));
@@ -139,9 +139,9 @@ static void test_tangent_update()
   vil_image_view_base_sptr view_1 = new vil_image_view<float>(10,10,3);
   vil_image_view_base_sptr view_2 = new vil_image_view<float>(10,10,3);
   // fill images
-  vil_image_view<float>* v0 = static_cast<vil_image_view<float>*>(view_0.ptr());
-  vil_image_view<float>* v1 = static_cast<vil_image_view<float>*>(view_1.ptr());
-  vil_image_view<float>* v2 = static_cast<vil_image_view<float>*>(view_2.ptr());
+  auto* v0 = static_cast<vil_image_view<float>*>(view_0.ptr());
+  auto* v1 = static_cast<vil_image_view<float>*>(view_1.ptr());
+  auto* v2 = static_cast<vil_image_view<float>*>(view_2.ptr());
   tangent_image(c0, l3d, 0.0, v0);
   tangent_image(c1, l3d, 0.0, v1);
   tangent_image(c2, l3d, 0.0, v2);
@@ -202,12 +202,12 @@ static void test_tangent_update()
   typedef bvxm_voxel_traits<TANGENT_DIR>::obs_type udir_t;
   bvxm_voxel_grid_base_sptr tangent_pos_base =
     world->get_grid<TANGENT_POS>(0,0);
-  bvxm_voxel_grid<upos_dist_t> *up_pos_dist_grid  =
+  auto *up_pos_dist_grid  =
     static_cast<bvxm_voxel_grid<upos_dist_t>*>(tangent_pos_base.ptr());
   //3-d tangent direction grid distributions
   bvxm_voxel_grid_base_sptr tangent_dir_base =
     world->get_grid<TANGENT_DIR>(0, 0);
-  bvxm_voxel_grid<udir_dist_t> *up_dir_dist_grid  =
+  auto *up_dir_dist_grid  =
     static_cast<bvxm_voxel_grid<udir_dist_t>*>(tangent_dir_base.ptr());
 
   bvxm_voxel_grid<upos_dist_t>::iterator up_pos_dist_it = up_pos_dist_grid->begin();

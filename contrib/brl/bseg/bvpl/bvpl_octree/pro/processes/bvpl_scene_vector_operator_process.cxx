@@ -97,7 +97,7 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   if (datatype == "float")
   {
     typedef boct_tree<short, float > tree_type;
-    boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+    auto *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
 
     //parameters of the output scene are the same as thos of the input scene
     boxm_scene<boct_tree<short, bvpl_octree_sample<float> > > *scene_out =
@@ -123,7 +123,7 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   {
     typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
     typedef boct_tree<short, gauss_type > tree_type;
-    boxm_scene<tree_type> *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
+    auto *scene_in = static_cast<boxm_scene<tree_type>* > (scene_base.as_pointer());
 
     //parameters of the output scene are the same as thos of the input scene
     boxm_scene<boct_tree<short, bvpl_octree_sample<gauss_type> > > *scene_out =

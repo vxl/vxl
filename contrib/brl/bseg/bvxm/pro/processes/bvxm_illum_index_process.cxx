@@ -53,8 +53,8 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   unsigned i = 0;
   std::string map_type = pro.get_input<std::string>(i++);
   std::string nitf_image_path = pro.get_input<std::string>(i++);
-  unsigned num_lat = pro.get_input<unsigned>(i++);
-  unsigned num_long = pro.get_input<unsigned>(i++);
+  auto num_lat = pro.get_input<unsigned>(i++);
+  auto num_long = pro.get_input<unsigned>(i++);
 
   //read and parse NITF image
 
@@ -76,7 +76,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
   }
 
     //cast to an nitf2_image
-  vil_nitf2_image *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
+  auto *nitf_image = static_cast<vil_nitf2_image*>(image.ptr());
 
     //get NITF information
   std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();

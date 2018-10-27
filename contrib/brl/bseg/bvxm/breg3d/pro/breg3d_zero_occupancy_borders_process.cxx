@@ -28,10 +28,10 @@ bool breg3d_zero_occupancy_borders_process::execute()
   if (!this->verify_inputs())
     return false;
 
-  brdb_value_t<unsigned>* input0 =
+  auto* input0 =
       static_cast<brdb_value_t<unsigned>* >(input_data_[0].ptr());
 
-  brdb_value_t<bvxm_voxel_world_sptr>* input1 =
+  auto* input1 =
       static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(input_data_[1].ptr());
 
   // get the plane z level

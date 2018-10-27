@@ -85,12 +85,12 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
   vil_image_view_base_sptr sat_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   std::string dem_file = pro.get_input<std::string>(in_i++);
   vpgl_camera_double_sptr  dem_cam_sptr = pro.get_input<vpgl_camera_double_sptr>(in_i++);
-  double lower_left_lon = pro.get_input<double>(in_i++);
-  double lower_left_lat = pro.get_input<double>(in_i++);
-  double upper_right_lon = pro.get_input<double>(in_i++);
-  double upper_right_lat = pro.get_input<double>(in_i++);
+  auto lower_left_lon = pro.get_input<double>(in_i++);
+  auto lower_left_lat = pro.get_input<double>(in_i++);
+  auto upper_right_lon = pro.get_input<double>(in_i++);
+  auto upper_right_lat = pro.get_input<double>(in_i++);
 
-  vil_image_view<float>* sat_img = dynamic_cast<vil_image_view<float>*>(sat_img_sptr.ptr());
+  auto* sat_img = dynamic_cast<vil_image_view<float>*>(sat_img_sptr.ptr());
   if (!sat_img) {
     std::cout << pro.name() << ": The image pixel format, " << sat_img_sptr->pixel_format() << " is not supported!" << std::endl;
     return false;
@@ -143,12 +143,12 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
 
   // load the dem image view
   vil_image_view_base_sptr dem_view_base = dem_res->get_view(0, dem_ni, 0, dem_nj);
-  vil_image_view<float>* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
+  auto* dem_view = dynamic_cast<vil_image_view<float>*>(dem_view_base.ptr());
   if (!dem_view) {
     vil_image_view<float> temp(dem_view_base->ni(), dem_view_base->nj(), 1);
-    vil_image_view<vxl_int_16>* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_view_base.ptr());
+    auto* dem_view_int = dynamic_cast<vil_image_view<vxl_int_16>*>(dem_view_base.ptr());
     if (!dem_view_int) {
-      vil_image_view<vxl_byte>* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
+      auto* dem_view_byte = dynamic_cast<vil_image_view<vxl_byte>*>(dem_view_base.ptr());
       if (!dem_view_byte) {
         std::cout << pro.name() << ": The dem image pixel format, " << dem_view_base->pixel_format() << " is not supported!" << std::endl;
         return false;
@@ -163,7 +163,7 @@ bool volm_project_dem_to_sat_img_process(bprb_func_process& pro)
 
   // note the sat_cam can either be rational_camera or local_rational_camera
   bool rational_cam = true;
-  vpgl_rational_camera<double>* sat_cam = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam_sptr.as_pointer());
+  auto* sat_cam = dynamic_cast<vpgl_rational_camera<double>*>(sat_cam_sptr.as_pointer());
   vpgl_geo_camera* geo_cam;
   if (!sat_cam) {
     std::cout << pro.name() << ": the input camera is not a rational camera" << std::endl;
@@ -220,7 +220,7 @@ bool volm_project_dem_to_sat_img_process_globals::project_dem_to_sat(vpgl_geo_ca
   dem_cam.img_to_global(dem_i, dem_j, lon, lat);
   // project global coords to satellite image
   if (sat_cam->type_name() == "vpgl_local_rational_camera") {
-    vpgl_local_rational_camera<double>* local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(sat_cam);
+    auto* local_cam = dynamic_cast<vpgl_local_rational_camera<double>*>(sat_cam);
     double loc_x, loc_y, loc_z;
     local_cam->lvcs().global_to_local(lon, lat, dem_height, vpgl_lvcs::wgs84, loc_x, loc_y, loc_z);
     local_cam->project(loc_x, loc_y, loc_z, iu, iv);

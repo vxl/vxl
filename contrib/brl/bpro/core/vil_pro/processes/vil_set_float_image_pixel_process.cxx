@@ -40,8 +40,8 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
     unsigned i = 0;
     vil_image_view_base_sptr
         base_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-    unsigned x    = pro.get_input<unsigned>(i++);
-    unsigned y    = pro.get_input<unsigned>(i++);
+    auto x    = pro.get_input<unsigned>(i++);
+    auto y    = pro.get_input<unsigned>(i++);
     bbas_1d_array_float_sptr
         pixel_array_sptr = pro.get_input<bbas_1d_array_float_sptr>(i++);
 
@@ -61,7 +61,7 @@ bool vil_set_float_image_pixel_process( bprb_func_process& pro )
         return false;
     }
 
-    vil_image_view<float>* img_ptr =
+    auto* img_ptr =
         dynamic_cast<vil_image_view<float>*>(base_sptr.as_pointer());
 
     if ( !img_ptr )

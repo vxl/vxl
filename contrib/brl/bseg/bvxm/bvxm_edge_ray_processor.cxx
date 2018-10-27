@@ -42,7 +42,7 @@ bool bvxm_edge_ray_processor::init_edges(unsigned scale)
 
   // get edge probability grid
   bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
-  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+  auto *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   // Pass 1: to build the marginal
   std::cout << "Initializing the voxel world:" << std::endl;
@@ -101,7 +101,7 @@ bool bvxm_edge_ray_processor::update_edges(bvxm_image_metadata const& metadata, 
 
   // get edge probability grid
   bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
-  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+  auto *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   // Pass 1: to build the marginal
   std::cout << "Pass 1 of 1:" << std::endl;
@@ -165,10 +165,10 @@ bool bvxm_edge_ray_processor::update_edges_with_Lidar_surface(bvxm_image_metadat
 
   // get edge probability grid
   bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
-  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+  auto *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
   //: get lidar surface grid
   bvxm_voxel_grid_base_sptr voxel_base = world_->get_grid<OCCUPANCY>(0, scale);
-  bvxm_voxel_grid<ocp_datatype> *surface_voxel  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(voxel_base.ptr());
+  auto *surface_voxel  = static_cast<bvxm_voxel_grid<ocp_datatype>*>(voxel_base.ptr());
 
   // Pass 1: to build the marginal
   std::cout << "Pass 1 of 1:" << std::endl;
@@ -227,7 +227,7 @@ bool bvxm_edge_ray_processor::expected_edge_image(bvxm_image_metadata const& cam
 
   // get edges probability grid
   bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
-  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+  auto *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it(edges_voxel->begin());
 
@@ -301,7 +301,7 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
 
   // get edges probability grid
   bvxm_voxel_grid_base_sptr edges_voxel_base = world_->get_grid<EDGES>(0, scale);
-  bvxm_voxel_grid<edges_datatype> *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
+  auto *edges_voxel  = static_cast<bvxm_voxel_grid<edges_datatype>*>(edges_voxel_base.ptr());
 
   bvxm_voxel_grid<edges_datatype>::iterator edges_voxel_it(edges_voxel->begin());
 
@@ -478,18 +478,18 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
   // grid size
   bvxm_world_params_sptr params = world_->get_params();
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
-  unsigned nx = static_cast<unsigned>(grid_size.x()),
+  auto nx = static_cast<unsigned>(grid_size.x()),
     ny = static_cast<unsigned>(grid_size.y()), nz = static_cast<unsigned>(grid_size.z());
   double radius = 0.866*params->voxel_length()*initial_sd_ratio;
   if (edge_debug)
     std::cout << "Initializing a world " << nx << 'x'
              << ny << 'x' << nz << '\n';
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
+  auto *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
   // 3-d tangent direction grid distributions
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
+  auto *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
   if (world_->num_observations<TANGENT_POS>(0,scale)!=0) {
@@ -520,9 +520,9 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
     world_->zero_observations<TANGENT_DIR>(0,scale);
   }
   // extract the tangent-point images
-  vil_image_view<float>* tan_image0 =
+  auto* tan_image0 =
     static_cast<vil_image_view<float>*>(metadata0.img.ptr());
-  vil_image_view<float>* tan_image1 =
+  auto* tan_image1 =
     static_cast<vil_image_view<float>*>(metadata1.img.ptr());
 
   // ray processor for update and utilities
@@ -544,9 +544,9 @@ init_von_mises_edge_tangents(bvxm_image_metadata const& metadata0,
     }
   }
   // get projective cameras (warning! needs to be upgraded for RPC -- later)
-  vpgl_proj_camera<double>* cam0 =
+  auto* cam0 =
     static_cast<vpgl_proj_camera<double>*>(metadata0.camera.ptr());
-  vpgl_proj_camera<double>* cam1 =
+  auto* cam1 =
     static_cast<vpgl_proj_camera<double>*>(metadata1.camera.ptr());
 
   // extract slabs from tangent-point images
@@ -754,7 +754,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
                                unsigned scale)
 {
   // extract the tangent-point images
-  vil_image_view<float>* tan_image =
+  auto* tan_image =
     static_cast<vil_image_view<float>*>(metadata.img.ptr());
 
   // grid size
@@ -781,7 +781,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
     }
   }
   // get projective cameras (warning! needs to be upgraded for RPC -- later)
-  vpgl_proj_camera<double>* cam =
+  auto* cam =
     static_cast<vpgl_proj_camera<double>*>(metadata.camera.ptr());
 
   // datatype for current disributions
@@ -803,7 +803,7 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
       image_c_slab(i,j)=(*tan_image)(i,j,2);
     }
 
-  unsigned nx = static_cast<unsigned>(grid_size.x()),
+  auto nx = static_cast<unsigned>(grid_size.x()),
            ny = static_cast<unsigned>(grid_size.y());
 
   // slabs for later backprojection
@@ -819,11 +819,11 @@ update_von_mises_edge_tangents(bvxm_image_metadata const& metadata,
 
   // 3-d tangent position grid distributions
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
+  auto *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
   // 3-d tangent direction grid distributions
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
+  auto *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
   if (edge_debug)
@@ -991,19 +991,19 @@ display_edge_tangent_world_vrml(std::string const& vrml_path)
   unsigned scale = 0;
   // 3-d tangent position distribution grid
   bvxm_voxel_grid_base_sptr tangent_pos_base = world_->get_grid<TANGENT_POS>(0, scale);
-  bvxm_voxel_grid<pos_dist_t> *pos_dist_grid  =
+  auto *pos_dist_grid  =
     static_cast<bvxm_voxel_grid<pos_dist_t>*>(tangent_pos_base.ptr());
   // 3-d tangent direction distribution grid
   bvxm_voxel_grid_base_sptr tangent_dir_base = world_->get_grid<TANGENT_DIR>(0, scale);
-  bvxm_voxel_grid<dir_dist_t> *dir_dist_grid  =
+  auto *dir_dist_grid  =
     static_cast<bvxm_voxel_grid<dir_dist_t>*>(tangent_dir_base.ptr());
 
   // extract grid dimensions
   bvxm_world_params_sptr params = world_->get_params();
   vgl_vector_3d<unsigned int> grid_size = params->num_voxels(scale);
   double radius = params->voxel_length()*0.1;
-  math_t len = static_cast<math_t>(params->voxel_length());
-  unsigned nx = static_cast<unsigned>(grid_size.x()),
+  auto len = static_cast<math_t>(params->voxel_length());
+  auto nx = static_cast<unsigned>(grid_size.x()),
                                       ny = static_cast<unsigned>(grid_size.y()),
                                       nz = static_cast<unsigned>(grid_size.z());
   double ssd = 0.0, skap = 0;

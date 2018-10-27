@@ -277,8 +277,8 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_verbatim(unsigned i
   unsigned int row_len = xs * pix_size;
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len*ys*nplanes_,format_);
-  vxl_byte* ib = reinterpret_cast<vxl_byte*>(buf->data());
-  vxl_uint_16* ob = reinterpret_cast<vxl_uint_16*>(buf->data());
+  auto* ib = reinterpret_cast<vxl_byte*>(buf->data());
+  auto* ob = reinterpret_cast<vxl_uint_16*>(buf->data());
   vxl_byte* cbi = ib;
 
   // for each channel
@@ -312,10 +312,10 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_rle(unsigned int x0
   unsigned int row_len = xs * pix_size;
 
   vil_memory_chunk_sptr buf = new vil_memory_chunk(row_len*ys*nplanes_,format_);
-  vxl_byte* ib = reinterpret_cast<vxl_byte*>(buf->data());
-  vxl_uint_16* ob = reinterpret_cast<vxl_uint_16*>(buf->data());
+  auto* ib = reinterpret_cast<vxl_byte*>(buf->data());
+  auto* ob = reinterpret_cast<vxl_uint_16*>(buf->data());
   vxl_byte* cbi = ib;
-  unsigned char* exrow = new unsigned char[ni_];
+  auto* exrow = new unsigned char[ni_];
 
   // for each channel
   for (unsigned int channel=0; channel<nplanes_; ++channel)
@@ -328,7 +328,7 @@ vil_image_view_base_sptr vil_iris_generic_image::get_section_rle(unsigned int x0
       unsigned long rlelength = lengthtab_[rowno+channel*nj_];
 
       // read rle row into array
-      unsigned char* rlerow = new unsigned char[rlelength];
+      auto* rlerow = new unsigned char[rlelength];
       is_->seek(rleoffset);
       is_->read((void*)rlerow, rlelength);
 
@@ -363,7 +363,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
            << buf.ni()<<'x'<<buf.nj()<<'x'<< buf.nplanes()<<'p'
            << " at ("<<x0<<','<<y0<<")\n";
 #endif
-  const vil_image_view<unsigned char>& buff = static_cast<vil_image_view<unsigned char> const&>(buf);
+  const auto& buff = static_cast<vil_image_view<unsigned char> const&>(buf);
   const unsigned char* ob = buff.top_left_ptr();
   unsigned int pix_size = vil_pixel_format_sizeof_components(format_);
 
@@ -374,7 +374,7 @@ bool vil_iris_generic_image::put_view( vil_image_view_base const& buf, unsigned 
   if (VXL_LITTLE_ENDIAN && pix_size > 1) // IRIS image data is big-endian
   {
     // buffer for swapping bytes
-    vxl_byte* tempbuf = new vxl_byte[rowsize];
+    auto* tempbuf = new vxl_byte[rowsize];
     // for each channel
     for (unsigned int channel = 0; channel<nplanes_; ++channel) {
       ob += rowskip*buff.nj();
@@ -455,7 +455,7 @@ vxl_sint_16 get_short(vil_stream* file, int location)
   file->read(buff, 2L);
 
   // Decode from two's complement to machine format
-  vxl_uint_16 bits = static_cast<vxl_uint_16>(( buff[0] << 8 ) + buff[1]);
+  auto bits = static_cast<vxl_uint_16>(( buff[0] << 8 ) + buff[1]);
 
   if ( ( bits & 0x8000 ) != 0 )
     return static_cast<vxl_sint_16>(-( ~bits + 1 ));

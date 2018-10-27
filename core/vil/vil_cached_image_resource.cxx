@@ -21,7 +21,7 @@ vil_cached_image_resource::get_block( unsigned  block_index_i,
   if (!blk)
     return blk; // get block failed
   // put the block in the cache (cast away const since we are just caching)
-  vil_cached_image_resource* non_const = (vil_cached_image_resource*)this;
+  auto* non_const = (vil_cached_image_resource*)this;
   non_const->cache_.add_block(block_index_i, block_index_j, blk);
   return blk;
 }

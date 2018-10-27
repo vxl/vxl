@@ -22,7 +22,7 @@ bool betr_pixelwise_change_detection::process() {
   float change_prior = 0.01f;
 
   // Get params
-  betr_pixelwise_change_detection_params* cd_params =
+  auto* cd_params =
     dynamic_cast<betr_pixelwise_change_detection_params*>(params_.ptr());
   // Get a bounding box for the event polygon
   vsol_box_2d_sptr evt_bb = evt_evt_poly_->get_bounding_box();

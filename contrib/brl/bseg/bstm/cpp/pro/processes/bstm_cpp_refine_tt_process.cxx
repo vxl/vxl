@@ -62,8 +62,8 @@ bool bstm_cpp_refine_tt_process(bprb_func_process& pro)
   unsigned i = 0;
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_cache_sptr cache= pro.get_input<bstm_cache_sptr>(i++);
-  float change_prob_t =pro.get_input<float>(i++);
-  float time =pro.get_input<float>(i++);
+  auto change_prob_t =pro.get_input<float>(i++);
+  auto time =pro.get_input<float>(i++);
 
 
   //bstm app query

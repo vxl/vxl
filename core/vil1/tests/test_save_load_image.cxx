@@ -350,7 +350,7 @@ vil1_image CreateTest1bitImage(int wd, int ht)
 {
   vil1_memory_image image(1, wd, ht, 1, 1, VIL1_COMPONENT_FORMAT_UNSIGNED_INT);
   for (int y = 0; y < ht; ++y) {
-    unsigned char* data = new unsigned char[(wd+7)/8];
+    auto* data = new unsigned char[(wd+7)/8];
     for (int x = 0; x < (wd+7)/8; x++)
       data[x] = ((8*x-wd/2)*(y-ht/2)/16) & 0xff;
     // zero the last few bits, if wd is not a multiple of 8:

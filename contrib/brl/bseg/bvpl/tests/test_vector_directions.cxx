@@ -15,8 +15,8 @@ bool test_directions(FUNC dir)
 
   std::vector<vnl_float_3> axes1= dir.get_axes();
 
-  std::vector<vnl_float_3>::iterator iter1 = axes1.begin();
-  bvpl_kernel_vector::iterator iter2 = kernel_vec->begin();
+  auto iter1 = axes1.begin();
+  auto iter2 = kernel_vec->begin();
   bool result = true;
   for (; iter1!=axes1.end(); ++iter1, ++iter2)
   {

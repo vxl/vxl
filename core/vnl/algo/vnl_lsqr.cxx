@@ -92,7 +92,7 @@ int vnl_lsqr::aprod_(const long* mode, const long* m, const long* n, double* x, 
   // THE FUNCTIONALITY HAS BEEN MOVED TO THE lsqrVNL class above.
   // THE FUNCTIONS IS CONSERVED HERE ONLY FOR BACKWARD COMPATIBILITY.
   //
-  vnl_lsqr* self = static_cast<vnl_lsqr*>(userdata);
+  auto* self = static_cast<vnl_lsqr*>(userdata);
 
   //  If MODE = 1, compute  y = y + A*x.
   //  If MODE = 2, compute  x = x + A(transpose)*y.

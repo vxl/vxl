@@ -38,9 +38,9 @@ bool brad_create_atmospheric_parameters_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  float airlight = pro.get_input<float>(0);
-  float skylight = pro.get_input<float>(1);
-  float optical_depth = pro.get_input<float>(2);
+  auto airlight = pro.get_input<float>(0);
+  auto skylight = pro.get_input<float>(1);
+  auto optical_depth = pro.get_input<float>(2);
 
   brad_atmospheric_parameters_sptr metadata = new brad_atmospheric_parameters();
   metadata->airlight_ = airlight;

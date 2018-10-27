@@ -186,7 +186,7 @@ vnl_matrix<double> vpdfl_gaussian::covariance() const
 
 vpdfl_sampler_base* vpdfl_gaussian::new_sampler() const
 {
-  vpdfl_gaussian_sampler *i = new vpdfl_gaussian_sampler;
+  auto *i = new vpdfl_gaussian_sampler;
   i->set_model(*this);
   return i;
 }

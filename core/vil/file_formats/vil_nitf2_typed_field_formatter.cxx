@@ -290,7 +290,7 @@ bool vil_nitf2_exponential_formatter::write_vcl_stream(std::ostream& output,
          << std::internal << std::setfill('0') << std::setprecision(mantissa_width)
          << value;
   std::string buffer_string = buffer.str();
-  unsigned int length = (unsigned int)(buffer_string.length());
+  auto length = (unsigned int)(buffer_string.length());
   // Write everything up to the exponent sign
   output << buffer_string.substr(0,length-3);
   // Write exponent digits, padding or unpadding them to desired width

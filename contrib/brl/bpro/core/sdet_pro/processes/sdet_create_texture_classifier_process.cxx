@@ -46,15 +46,15 @@ bool sdet_create_texture_classifier_process(bprb_func_process& pro)
   }
 
   // get inputs
-  float    lambda0        = pro.get_input<float>(0);
-  float    lambda1        = pro.get_input<float>(1);
-  unsigned n_scales       = pro.get_input<unsigned>(2);
-  float    scale_interval = pro.get_input<float>(3);
-  float    angle_interval = pro.get_input<float>(4);
-  float    laplace_radius = pro.get_input<float>(5);
-  float    gauss_radius   = pro.get_input<float>(6);
-  unsigned k              = pro.get_input<unsigned>(7);
-  unsigned n_samples      = pro.get_input<unsigned>(8);
+  auto    lambda0        = pro.get_input<float>(0);
+  auto    lambda1        = pro.get_input<float>(1);
+  auto n_scales       = pro.get_input<unsigned>(2);
+  auto    scale_interval = pro.get_input<float>(3);
+  auto    angle_interval = pro.get_input<float>(4);
+  auto    laplace_radius = pro.get_input<float>(5);
+  auto    gauss_radius   = pro.get_input<float>(6);
+  auto k              = pro.get_input<unsigned>(7);
+  auto n_samples      = pro.get_input<unsigned>(8);
 
   //set texture classifier params
   sdet_texture_classifier_params tcp;

@@ -81,8 +81,8 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 
   // true positive, true negative, false positive, false negative
   constexpr unsigned int numPoints = 100;
-  bbas_1d_array_float * precision = new bbas_1d_array_float(numPoints);
-  bbas_1d_array_float * recall = new bbas_1d_array_float(numPoints);
+  auto * precision = new bbas_1d_array_float(numPoints);
+  auto * recall = new bbas_1d_array_float(numPoints);
   vil_image_view<float> * detection_map;
 
   // check bounds to make sure they match
@@ -100,7 +100,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   }
 
   // convert detection map to [0,1] float
-  if (vil_image_view<unsigned char> * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr())) {
+  if (auto * detection_map_uchar=dynamic_cast<vil_image_view<unsigned char> *>(detection_map_sptr.ptr())) {
     detection_map =new vil_image_view<float>(detection_map_uchar->ni(),detection_map_uchar->nj());
     vil_convert_stretch_range_limited<unsigned char>(*detection_map_uchar,*detection_map,0,255,0.0f,1.0f);
   }
@@ -113,12 +113,12 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   }
 
   // cast to usable image views
-  vil_image_view<vxl_byte> * gt_uchar = dynamic_cast<vil_image_view<vxl_byte> *>(ground_truth_map_sptr.ptr());
+  auto * gt_uchar = dynamic_cast<vil_image_view<vxl_byte> *>(ground_truth_map_sptr.ptr());
   if ( !gt_uchar ) {
     std::cout<<"boxm2_blob_precision_recall_process:: gt map is not an unsigned char map"<<std::endl;
     return false;
   }
-  vil_image_view<unsigned char> * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
+  auto * mask_map=dynamic_cast<vil_image_view<unsigned char> *>(mask_map_sptr.ptr());
   if (!mask_map) {
     std::cout<<"boxm2_blob_precision_recall_process:: mask map is not an unsigned char map"<<std::endl;
     return false;
@@ -148,7 +148,7 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
 #endif // 0
 
   //grab thresholds by evenly dispersing them through examples
-  float* thresholds = new float[numPoints];
+  auto* thresholds = new float[numPoints];
   float  incr = 1.0f/(float)numPoints; // = totPix / numPoints;
   for (unsigned int i=0; i<numPoints; ++i) {
     thresholds[i] = i*incr + .01f; //pairs[i*incr].change;

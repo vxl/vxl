@@ -120,7 +120,7 @@ bool boxm2_refine_block_multi_data::refine_deterministic(std::vector<std::string
   // get a copy of the blocks's trees
   //loop over each tree, refine it in place
   boxm2_array_3d<uchar16> trees = blk_->trees_copy();  //trees to refine
-  uchar16* trees_copy = new uchar16[trees.size()];  //copy of those trees
+  auto* trees_copy = new uchar16[trees.size()];  //copy of those trees
   int* dataIndex = new int[trees.size()];           //data index for each new tree
   int currIndex = 0;                                //curr tree being looked at
   int dataSize = 0;                                 //running sum of data size
@@ -151,8 +151,8 @@ bool boxm2_refine_block_multi_data::refine_deterministic(std::vector<std::string
   std::vector<std::size_t> type_sizes;
   // get data buffers for old and new databases
   std::vector<char*> new_bufs;
-  std::vector<std::string>::const_iterator pit = prefixes.begin();
-  std::vector<boxm2_data_base *>::iterator dit = dbs_.begin();
+  auto pit = prefixes.begin();
+  auto dit = dbs_.begin();
   for(; dit!=dbs_.end(); ++dit, ++pit){
     std::size_t type_size = boxm2_data_info::datasize(*pit);
     type_sizes.push_back(type_size);
@@ -294,8 +294,8 @@ bool boxm2_refine_block_multi_data::match_refine(std::vector<std::string> const&
   std::vector<std::size_t> type_sizes;
   // get data buffers for old and new databases
   std::vector<char*> new_bufs;
-  std::vector<std::string>::const_iterator pit = prefixes.begin();
-  std::vector<boxm2_data_base *>::iterator dit = dbs_.begin();
+  auto pit = prefixes.begin();
+  auto dit = dbs_.begin();
   for(; dit!=dbs_.end(); ++dit, ++pit){
     std::size_t type_size = boxm2_data_info::datasize(*pit);
     type_sizes.push_back(type_size);
@@ -389,7 +389,7 @@ int boxm2_refine_block_multi_data::move_data(boct_bit_tree& unrefined_tree,
       int parentLevel = unrefined_tree.depth_at(pj);
       double side_len = block_len_ / double(1<<parentLevel);
       int dataIndex = unrefined_tree.get_data_index(pj, false);
-      float nalpha = static_cast<float>(max_alpha_int_ / side_len);
+      auto nalpha = static_cast<float>(max_alpha_int_ / side_len);
       char* new_alpha = reinterpret_cast<char*>(&nalpha);
 #if COPY_PARENT_DATA
       for(int i = 0; i<static_cast<int>(n); ++i){

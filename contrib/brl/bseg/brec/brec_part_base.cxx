@@ -29,7 +29,7 @@ brec_hierarchy_edge_sptr
 brec_part_base::edge_to_second_part()
 {
   if (out_edges().size() < 2) return nullptr;
-  edge_iterator eit = out_edges_begin();
+  auto eit = out_edges_begin();
   eit++;
   return *eit;
 }
@@ -108,7 +108,7 @@ bool brec_part_instance::mark_receptive_field(vil_image_view<vxl_byte>& img, uns
   if (this->out_degree() == 0)
     return false;
 
-  for (edge_iterator eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
+  for (auto eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
     brec_part_instance_sptr pi = (*eit)->target()->cast_to_instance();
     pi->mark_receptive_field(img, plane);
   }
@@ -120,7 +120,7 @@ bool brec_part_instance::mark_receptive_field(vil_image_view<float>& img, float 
   if (this->out_degree() == 0)
     return false;
 
-  for (edge_iterator eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
+  for (auto eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
     brec_part_instance_sptr pi = (*eit)->target()->cast_to_instance();
     pi->mark_receptive_field(img, val);
   }
@@ -132,7 +132,7 @@ bool brec_part_instance::mark_center(vil_image_view<float>& img, float val)
   if (this->out_degree() == 0)
     return false;
 
-  for (edge_iterator eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
+  for (auto eit = this->out_edges_begin(); eit != this->out_edges_end(); eit++) {
     brec_part_instance_sptr pi = (*eit)->target()->cast_to_instance();
     pi->mark_center(img, val);
   }

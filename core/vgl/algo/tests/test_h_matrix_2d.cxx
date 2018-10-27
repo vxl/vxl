@@ -178,7 +178,7 @@ static void test_norm_trans()
            << "Normalized Points\n";
   unsigned n = 0;
   double Sxx = 0, Sxy = 0, Syy=0;
-  for (std::vector<vgl_homg_point_2d<double> >::iterator pit = points1.begin();
+  for (auto pit = points1.begin();
        pit != points1.end(); ++pit,++n)
   {
     vgl_homg_point_2d<double> p = nt(*pit);

@@ -41,7 +41,7 @@ bool bvpl_load_global_corners_process(bprb_func_process& pro)
 
   // get inputs
   std::string corners_file = pro.get_input<std::string>(0);
-  bvpl_global_corners *global_corners = new bvpl_global_corners(corners_file);
+  auto *global_corners = new bvpl_global_corners(corners_file);
 
   // store output
   pro.set_output_val<bvpl_global_corners_sptr>(0, global_corners);

@@ -56,7 +56,7 @@ void test_array_dynamic_prg()
   std::vector<unsigned> assign = dp.assignment();
   unsigned i = 0;
   bool good_assign = true;
-  for (std::vector<unsigned>::iterator ait = assign.begin();
+  for (auto ait = assign.begin();
        ait !=assign.end(); ++ait, ++i)
   {
     std::cout << " c["<< i << "]=" << *ait;

@@ -267,8 +267,8 @@ bool volm_io_tools::get_location_nlcd(std::vector<volm_img_info>& NLCD_imgs, dou
       double u, v;
       NLCD_img.cam->global_to_img(lon, lat, elev, u, v);
       //NLCD_imgs[i].cam->global_to_img(-lon, lat, elev, u, v);
-      unsigned uu = (unsigned)std::floor(u + 0.5);
-      unsigned vv = (unsigned)std::floor(v + 0.5);
+      auto uu = (unsigned)std::floor(u + 0.5);
+      auto vv = (unsigned)std::floor(v + 0.5);
       if (uu > 0 && vv > 0 && uu < NLCD_img.ni && vv < NLCD_img.nj) {
         label = img(uu, vv);
         found_it = true;
@@ -326,7 +326,7 @@ volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(std::string geoi
     std::string bin_file = leave->get_label_name(geoindex_filename_pre, "osm");
     if (!vul_file::exists(bin_file))
       continue;
-    volm_geo_index2_node<volm_osm_object_ids_sptr>* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
+    auto* ptr = dynamic_cast<volm_geo_index2_node<volm_osm_object_ids_sptr>* >(leave.ptr());
     ptr->contents_ = new volm_osm_object_ids(bin_file);
   }
 
@@ -513,7 +513,7 @@ void crop_and_find_min_max(std::vector<volm_img_info>& infos, unsigned img_id, i
       if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
     }
 #endif
-  if (vil_image_view<vxl_int_16>* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].img_r.ptr())) {
+  if (auto* img = dynamic_cast<vil_image_view<vxl_int_16>*>(infos[img_id].img_r.ptr())) {
     vil_image_view<vxl_int_16> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++)
       for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
@@ -521,7 +521,7 @@ void crop_and_find_min_max(std::vector<volm_img_info>& infos, unsigned img_id, i
         if (max < img_crop(ii, jj)) max = img_crop(ii, jj);
       }
   }
-  else if (vil_image_view<float>* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].img_r.ptr()) ) {
+  else if (auto* img = dynamic_cast<vil_image_view<float>*>(infos[img_id].img_r.ptr()) ) {
     vil_image_view<float> img_crop = vil_crop(*img, i0, crop_ni, j0, crop_nj);
     for (unsigned ii = 0; ii < img_crop.ni(); ii++)
       for (unsigned jj = 0; jj < img_crop.nj(); jj++) {
@@ -690,7 +690,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
 
   // find the intersection points
   for (auto curr_pt : line_in) {
-    std::vector<vgl_point_2d<double> >::const_iterator vit = std::find(line.begin(), line.end(), curr_pt);
+    auto vit = std::find(line.begin(), line.end(), curr_pt);
     if (vit == line.begin() ) {
       vgl_point_2d<double> next = *(vit+1);
       if (bbox.contains(next))
@@ -700,7 +700,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
         if (!find_intersect(bbox, curr_pt, next, intersect_pt))
           return false;
         // insert the intersect after current point
-        std::vector<vgl_point_2d<double> >::iterator it = std::find(road.begin(), road.end(), curr_pt);
+        auto it = std::find(road.begin(), road.end(), curr_pt);
         road.insert(it+1, intersect_pt);
       }
     }
@@ -713,7 +713,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
         if (!find_intersect(bbox, prev, curr_pt,intersect_pt))
           return false;
         // insert the intersect point before current point
-        std::vector<vgl_point_2d<double> >::iterator it = std::find(road.begin(), road.end(), curr_pt);
+        auto it = std::find(road.begin(), road.end(), curr_pt);
         road.insert(it, intersect_pt);
       }
     }
@@ -726,7 +726,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
         vgl_point_2d<double> intersect_pt;
         if (!find_intersect(bbox, prev, curr_pt, intersect_pt))
           return false;
-        std::vector<vgl_point_2d<double> >::iterator it = std::find(road.begin(), road.end(), curr_pt);
+        auto it = std::find(road.begin(), road.end(), curr_pt);
         road.insert(it, intersect_pt);
       }
       else if (bbox.contains(prev)) {
@@ -734,7 +734,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
         if (!find_intersect(bbox, curr_pt, next, intersect_pt))
           return false;
         // insert the intersect after current point
-        std::vector<vgl_point_2d<double> >::iterator it = std::find(road.begin(), road.end(), curr_pt);
+        auto it = std::find(road.begin(), road.end(), curr_pt);
         road.insert(it+1, intersect_pt);
       }
       else {
@@ -742,7 +742,7 @@ bool volm_io_tools::line_inside_the_box(vgl_box_2d<double> const& bbox, std::vec
         if (!find_intersect(bbox, curr_pt, next, intersect_pt))
           return false;
         // find and insert the intersection after current point
-        std::vector<vgl_point_2d<double> >::iterator it = std::find(road.begin(), road.end(), curr_pt);
+        auto it = std::find(road.begin(), road.end(), curr_pt);
         road.insert(it+1, intersect_pt);
         // find and insert the intersection before current point
         if (!find_intersect(bbox, prev, curr_pt,intersect_pt))

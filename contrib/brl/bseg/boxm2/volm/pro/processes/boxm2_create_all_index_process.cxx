@@ -63,12 +63,12 @@ namespace boxm2_create_all_index_process_globals
     std::string options = " -D COMPINDEX_LABEL -D RENDER_VISIBILITY2 -D DETERMINISTIC -D SHORT ";
     options += " -D STEP_CELL=step_cell_label_max(aux_args.mog,aux_args.alpha,data_ptr,d*linfo->block_len,vis,aux_args.expint,aux_args.maxomega)";
 
-    bocl_kernel* compute_index = new bocl_kernel();
+    auto* compute_index = new bocl_kernel();
     compute_index->create_kernel(&device->context(),device->device_id(), src_paths, "compute_index_label", options, "compute_index_label");
     vec_kernels.push_back(compute_index);
 
     //create normalize image kernel
-    bocl_kernel* norm_kernel=new bocl_kernel();
+    auto* norm_kernel=new bocl_kernel();
     options += " -D RENDER ";
     norm_kernel->create_kernel(&device->context(),device->device_id(), norm_src_paths, "normalize_render_kernel", options, "normalize render kernel");
     vec_kernels.push_back(norm_kernel);
@@ -90,13 +90,13 @@ namespace boxm2_create_all_index_process_globals
     std::string options2 = " -D COMPINDEX -D DETERMINISTIC";
     options2 += " -D RENDER_VISIBILITY ";
     options2 += " -D STEP_CELL=step_cell_compute_index(tblock,aux_args.alpha,data_ptr,d*linfo->block_len,aux_args.vis,aux_args.expdepth,aux_args.expdepthsqr,aux_args.probsum,aux_args.t)";
-    bocl_kernel* compute_index_depth = new bocl_kernel();
+    auto* compute_index_depth = new bocl_kernel();
 
     compute_index_depth->create_kernel(&device->context(),device->device_id(), src_paths2, "compute_loc_index", options2, "compute_loc_index");
     vec_kernels.push_back(compute_index_depth);
 
     //create normalize image kernel
-    bocl_kernel * norm_kernel_depth=new bocl_kernel();
+    auto * norm_kernel_depth=new bocl_kernel();
     norm_kernel_depth->create_kernel(&device->context(),device->device_id(), src_paths2,
                                      "normalize_index_depth_kernel", options2,
                                      "normalize_index_depth_kernel"); //kernel identifier (for error checking)
@@ -163,18 +163,18 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   vpgl_lvcs lvcs = scene->lvcs();
   boxm2_opencl_cache_sptr  opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
   std::string geo_index_folder = pro.get_input<std::string>(i++);
-  unsigned tile_id = pro.get_input<unsigned>(i++);
+  auto tile_id = pro.get_input<unsigned>(i++);
   boxm2_volm_wr3db_index_params params;
   params.start = 0;
   params.skip = 1;
-  float elev_dif = pro.get_input<float>(i++);
+  auto elev_dif = pro.get_input<float>(i++);
   params.vmin = pro.get_input<float>(i++);
   params.dmax = pro.get_input<float>(i++);
   params.solid_angle = pro.get_input<float>(i++);
   std::string ray_file = pro.get_input<std::string>(i++);
   std::string out_index_folder = pro.get_input<std::string>(i++);
-  float vis_thres = pro.get_input<float>(i++);
-  float buffer_capacity = pro.get_input<float>(i++);
+  auto vis_thres = pro.get_input<float>(i++);
+  auto buffer_capacity = pro.get_input<float>(i++);
   int leaf_id = pro.get_input<int>(i++);
   std::string ident = pro.get_input<std::string>(i++);
 
@@ -264,7 +264,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   lookup->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
   // create directions buffer
-  cl_float* ray_dirs = new cl_float[4*layer_size];
+  auto* ray_dirs = new cl_float[4*layer_size];
   std::vector<vgl_point_3d<double> > cart_points = sph_shell->cart_points();
   for (int i = 0; i < layer_size; ++i) {
     ray_dirs[4*i  ] = (cl_float)cart_points[i].x();
@@ -288,7 +288,7 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
   std::cout.flush();
   // get subblk dimension
   boxm2_block_metadata mdata = scene->get_block_metadata(blocks.begin()->first);
-  float subblk_dim = (float)mdata.sub_block_dim_.x();
+  auto subblk_dim = (float)mdata.sub_block_dim_.x();
   std::cout << "subblk_dim: " << subblk_dim << std::endl;
   bocl_mem*  subblk_dim_mem=new bocl_mem(device->context(), &(subblk_dim), sizeof(float), "sub block dim buffer");
   subblk_dim_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
@@ -297,8 +297,8 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
 
   boxm2_block_id curr_block;
 
-  unsigned char sky_val = (unsigned char)254;
-  unsigned char invalid_val = (unsigned char)253;
+  auto sky_val = (unsigned char)254;
+  auto invalid_val = (unsigned char)253;
 
   //zip through each location hypothesis
   std::vector<volm_geo_index_node_sptr> leaves2;
@@ -367,11 +367,11 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       hypo_location->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
       // Output Arrays
-      float* buff = new float[layer_size];
+      auto* buff = new float[layer_size];
       for (int i=0;i<layer_size;++i) buff[i]=0.0f;
-      float* vis_buff = new float[layer_size];
+      auto* vis_buff = new float[layer_size];
       for (int i=0;i<layer_size;++i) vis_buff[i]=1.0f;
-      float* max_omega_buff = new float[layer_size];
+      auto* max_omega_buff = new float[layer_size];
       std::fill(max_omega_buff, max_omega_buff + layer_size, 0.0f);
 
       bocl_mem* exp_image=new bocl_mem(device->context(),buff,layer_size*sizeof(float),"exp image buffer");
@@ -384,13 +384,13 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       max_omega_image->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
       // create depth interval Output Arrays
-      float* buff2 = new float[layer_size];
+      auto* buff2 = new float[layer_size];
       for (int i=0;i<layer_size;++i) buff2[i]=0.0f;
-      float* vis_buff2 = new float[layer_size];
+      auto* vis_buff2 = new float[layer_size];
       for (int i=0;i<layer_size;++i) vis_buff2[i]=1.0f;
-      float* prob_buff = new float[layer_size];
+      auto* prob_buff = new float[layer_size];
       for (int i=0;i<layer_size;++i) prob_buff[i]=0.0f;
-      float* t_infinity_buff = new float[layer_size];
+      auto* t_infinity_buff = new float[layer_size];
       for (int i=0;i<layer_size;++i) t_infinity_buff[i]=0.0f;
 
       bocl_mem* exp_depth=new bocl_mem(device->context(),buff2,layer_size*sizeof(float),"exp depth buffer");
@@ -406,11 +406,11 @@ bool boxm2_create_all_index_process(bprb_func_process& pro)
       t_infinity->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
 
-      std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator ord_iter = order_cache.find(curr_block);
+      auto ord_iter = order_cache.find(curr_block);
       if (!(ord_iter != order_cache.end())) {
         order_cache[curr_block] =  boxm2_util::order_about_a_block(scene, curr_block, dmax);
         if (order_cache.size() > 100) {// kick the first one
-          std::map<boxm2_block_id, std::vector<boxm2_block_id> >::iterator to_kick = order_cache.begin();
+          auto to_kick = order_cache.begin();
           if (to_kick->first != curr_block)
             order_cache.erase(to_kick);
           else { ++to_kick; order_cache.erase(to_kick); }

@@ -64,8 +64,8 @@ bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)
     return false;
   }
 
-  bvxm_voxel_grid<float> *dt_grid = dynamic_cast<bvxm_voxel_grid<float>* > (dt_grid_base.ptr());
-  bvxm_voxel_grid<bvxm_opinion> *est_grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (est_grid_base.ptr());
+  auto *dt_grid = dynamic_cast<bvxm_voxel_grid<float>* > (dt_grid_base.ptr());
+  auto *est_grid = dynamic_cast<bvxm_voxel_grid<bvxm_opinion>* > (est_grid_base.ptr());
 
   bvxm_voxel_grid<float> * gridout=new bvxm_voxel_grid<float>(filename,dt_grid->grid_size());
   bvxm_voxel_grid_compare(dt_grid,est_grid,gridout);

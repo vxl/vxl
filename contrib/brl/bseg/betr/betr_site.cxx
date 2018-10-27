@@ -16,8 +16,8 @@ bool betr_site::add_geo_object(std::string name, double lon, double lat , double
     std::cout << "invalid bmesh3d ply file - " << geom_path << '\n';
     return false;
   }
-  vsol_mesh_3d* vmesh = new vsol_mesh_3d();
-  bmsh3d_mesh_mc* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
+  auto* vmesh = new vsol_mesh_3d();
+  auto* mesh_mc = dynamic_cast< bmsh3d_mesh_mc*>(mesh);
   vmesh->set_mesh(mesh_mc);
   vsol_spatial_object_3d_sptr so = vmesh;
   vgl_point_3d<double> geo_loc(lon, lat, elev);
@@ -44,7 +44,7 @@ bool betr_site::add_event_trigger(betr_event_trigger_sptr etr){
   event_triggers_[etr->name()] = etr;
   const std::map<std::string, betr_geo_object_3d_sptr>& ref_objs = etr->ref_objects();
   const std::map<std::string, betr_geo_object_3d_sptr>& evt_objs = etr->evt_objects();;
-  std::map<std::string, betr_geo_object_3d_sptr>::const_iterator roit  = ref_objs.begin();
+  auto roit  = ref_objs.begin();
   for(; roit != ref_objs.end(); ++roit){
     site_objects_[roit->first] =  roit->second;
     betr_geo_box_3d obox = (roit->second)->bounding_box();
@@ -53,7 +53,7 @@ bool betr_site::add_event_trigger(betr_event_trigger_sptr etr){
     vgl_point_3d<double> aux_pt = obox.aux_point();
     bbox_.add(min_pt);   bbox_.add(max_pt);   bbox_.add(aux_pt);
   }
-  std::map<std::string, betr_geo_object_3d_sptr>::const_iterator eoit  = evt_objs.begin();
+  auto eoit  = evt_objs.begin();
   for(; eoit != ref_objs.end(); ++eoit){
     site_objects_[eoit->first] =  eoit->second;
     betr_geo_box_3d obox = (eoit->second)->bounding_box();

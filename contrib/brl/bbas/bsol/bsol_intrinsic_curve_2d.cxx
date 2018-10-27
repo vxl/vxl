@@ -231,7 +231,7 @@ void bsol_intrinsic_curve_2d::insert_vertex(const int i, double x, double y, boo
 {
   assert (valid_index(i));
   vsol_point_2d_sptr pt = new vsol_point_2d(x,y);
-  std::vector<vsol_point_2d_sptr>::iterator it = storage_->begin();
+  auto it = storage_->begin();
   it += i;
   storage_->insert(it, pt);
   if (bRecomputeProperties) computeProperties();

@@ -56,7 +56,7 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
   bstm_cache_sptr cache = pro.get_input<bstm_cache_sptr>(i++);
   std::string output_filename = pro.get_input<std::string>(i++);
   bool output_aux = pro.get_input<bool>(i++);
-  float time = pro.get_input<float>(i++);
+  auto time = pro.get_input<float>(i++);
 
   std::ofstream file;
   file.open(output_filename.c_str());
@@ -81,8 +81,8 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
 //    bstm_data_base * change_prob_pos =  cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix("pos"));
 //    bstm_data_base * change_prob_neg =  cache->get_data_base(id,bstm_data_traits<BSTM_CHANGE>::prefix("neg"));
 
-    bstm_data_traits<BSTM_POINT>::datatype *     points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
-    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob->data_buffer();
+    auto *     points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
+    auto *    change_data = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob->data_buffer();
 
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_prob = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_pos->data_buffer();
 //    bstm_data_traits<BSTM_CHANGE>::datatype *    change_data_neg = (bstm_data_traits<BSTM_CHANGE>::datatype*) change_prob_neg->data_buffer();

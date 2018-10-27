@@ -51,10 +51,10 @@ bool vpgl_load_affine_camera_process(bprb_func_process& pro)
   }
   // get the inputs
   std::string camera_filename = pro.get_input<std::string>(0);
-  double dist = pro.get_input<double>(1);
-  double look_x = pro.get_input<double>(2);
-  double look_y = pro.get_input<double>(3);
-  double look_z = pro.get_input<double>(4);
+  auto dist = pro.get_input<double>(1);
+  auto look_x = pro.get_input<double>(2);
+  auto look_y = pro.get_input<double>(3);
+  auto look_z = pro.get_input<double>(4);
   std::ifstream ifs(camera_filename.c_str());
   if (!ifs.is_open()) {
     std::cerr << "Failed to open file " << camera_filename << '\n';
@@ -64,7 +64,7 @@ bool vpgl_load_affine_camera_process(bprb_func_process& pro)
   ifs >> affine_matrix;
   ifs.close();
   //vpgl_camera_double_sptr procam = new vpgl_affine_camera<double>(affine_matrix);
-  vpgl_affine_camera<double>* procam = new vpgl_affine_camera<double>(affine_matrix);
+  auto* procam = new vpgl_affine_camera<double>(affine_matrix);
   procam->set_viewing_distance(dist);
   procam->orient_ray_direction(vgl_vector_3d<double>(look_x, look_y, look_z));
   pro.set_output_val<vpgl_camera_double_sptr>(0, procam);

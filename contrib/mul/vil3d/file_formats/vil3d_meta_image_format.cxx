@@ -923,7 +923,7 @@ bool vil3d_meta_image::get_property(const char *label, void *property_value) con
 {
   if (std::strcmp(vil3d_property_voxel_size, label)==0)
   {
-    float* array = static_cast<float*>(property_value);
+    auto* array = static_cast<float*>(property_value);
     // meta image stores data in mm
     array[0] = static_cast<float>(header_.vox_size_i() / 1000.0);
     array[1] = static_cast<float>(header_.vox_size_j() / 1000.0);
@@ -933,7 +933,7 @@ bool vil3d_meta_image::get_property(const char *label, void *property_value) con
 
   if (std::strcmp(vil3d_property_origin_offset, label)==0)
   {
-    float* array = static_cast<float*>(property_value);
+    auto* array = static_cast<float*>(property_value);
     array[0] = static_cast<float>((-header_.offset_i())/header_.vox_size_i());
     array[1] = static_cast<float>((-header_.offset_j())/header_.vox_size_j());
     array[2] = static_cast<float>((-header_.offset_k())/header_.vox_size_k());

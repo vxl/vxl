@@ -67,7 +67,7 @@ bool bvpl_kernel::save_raw(std::string filename)
   // write data
   // iterate through slabs and fill in memory array
   unsigned size = nx*ny*nz;
-  float *data_array = new float[size];
+  auto *data_array = new float[size];
 
   kernel_.begin();
   if (!kernel_.isDone())
@@ -156,7 +156,7 @@ bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
   if (!root || root->type() != bxml_data::ELEMENT) {
     return nullptr;
   }
-  bxml_element* gp_root = dynamic_cast<bxml_element*>(root.ptr());
+  auto* gp_root = dynamic_cast<bxml_element*>(root.ptr());
 
   //get the variables
   double voxel_length =0.0f;

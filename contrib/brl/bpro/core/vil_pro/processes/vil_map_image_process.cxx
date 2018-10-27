@@ -75,7 +75,7 @@ bool vil_map_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr map_image;
   if (image->pixel_format()==VIL_PIXEL_FORMAT_BYTE)
   {
-    vil_image_view<vxl_byte>* temp = new vil_image_view<vxl_byte>;
+    auto* temp = new vil_image_view<vxl_byte>;
     vil_convert_stretch_range(fimg, *temp);
     map_image = temp;
   }

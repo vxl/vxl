@@ -70,7 +70,7 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
   typedef bsta_mixture<gauss_type3> mix_gauss_type3;
   typedef bsta_num_obs<mix_gauss_type3> obs_mix_gauss_type3;
 
-  bbgm_image_of<obs_mix_gauss_type3> *model =
+  auto *model =
     static_cast<bbgm_image_of<obs_mix_gauss_type3>*>(bgm.ptr());
 
   //Retrieve input frame
@@ -100,11 +100,11 @@ bool bbgm_local_frame_trans_process(bprb_func_process& pro)
 
   // copy the frame into the output translated frame
   // pixels are modified only if translation computation is valid
-  vil_image_view<float>* trans_frame = new vil_image_view<float>(frame);
+  auto* trans_frame = new vil_image_view<float>(frame);
 
-  double min_eigenvalue =  pro.get_input<double>(5);
-  double max_condition_number =  pro.get_input<double>(6);
-  double max_translation =  pro.get_input<double>(7);
+  auto min_eigenvalue =  pro.get_input<double>(5);
+  auto max_condition_number =  pro.get_input<double>(6);
+  auto max_translation =  pro.get_input<double>(7);
 
   float total = 0;
   float n_translate = 0;

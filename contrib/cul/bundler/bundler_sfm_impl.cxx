@@ -435,7 +435,7 @@ static bool find_point_in_image(
     // Try and find the world_point in img.
     track_membership_tester pred(world_point);
 
-    std::vector<bundler_inters_feature_sptr>::iterator found =
+    auto found =
         std::find_if (img->features.begin(), img->features.end(), pred);
 
 

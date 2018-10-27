@@ -64,7 +64,7 @@ class command_iteration_update: public rgrl_command
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ ) override
   {
-    const rgrl_feature_based_registration* reg_engine =
+    const auto* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
     std::cout <<"Current stage = " << reg_engine->current_stage() << std::endl;
     rgrl_transformation_sptr trans = reg_engine->current_transformation();

@@ -107,7 +107,7 @@ bool vsol_digital_curve_3d::operator==(vsol_spatial_object_3d const& obj) const
 double vsol_digital_curve_3d::length(void) const
 {
   double curve_length = 0.0;
-  for ( std::vector<vsol_point_3d_sptr>::const_iterator itr=samples_.begin();
+  for ( auto itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
   {
     curve_length += ((*(itr+1))->get_p() - (*itr)->get_p()).length();

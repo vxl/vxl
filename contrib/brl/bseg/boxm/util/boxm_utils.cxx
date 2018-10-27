@@ -24,7 +24,7 @@ bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
 {
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
     // make a test for vertices for behind-front case
-    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+    auto* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     if (do_front_test) {
       if (cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.min_z()))&&
           cam->is_behind_camera(vgl_homg_point_3d<double>(bbox.min_x(),bbox.min_y(),bbox.max_z()))&&
@@ -116,7 +116,7 @@ boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
                             float* vertdist)
 {
     if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-        vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+        auto* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
         vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
         for (unsigned i=0; i<corners.size(); ++i)
         {
@@ -133,7 +133,7 @@ boxm_utils::project_point3d(vgl_point_3d<double> const& point,
                             double & vertdist)
 {
     if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-        vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+        auto* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
         vgl_point_3d<double> cam_center = vgl_point_3d<double>(cam->camera_center());
         cam->project(point.x(), point.y(), point.z(), xvert,yvert);
         vertdist=(float)(cam_center-point).length();
@@ -163,7 +163,7 @@ bool boxm_utils::is_face_visible(std::vector<vgl_point_3d<double> > &face,
 
   vgl_vector_2d<double> v0 = vs[1] - vs[0];
   vgl_vector_2d<double> v1 = vs[2] - vs[1];
-  double normal = cross_product<double>(v0,v1);
+  auto normal = cross_product<double>(v0,v1);
   //if (normal>-1e-4 && normal<0.0)
   //    std::cout<<"+";
   return normal < -1e-5;
@@ -358,7 +358,7 @@ boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_doubl
 {
   boct_face_idx face_idx = NONE;
   if (camera->type_name().compare("vpgl_perspective_camera")==0) {
-    vpgl_perspective_camera<double>* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
+    auto* cam = static_cast<vpgl_perspective_camera<double>*>(camera.ptr());
     vgl_point_3d<double> const& cam_center = cam->camera_center();
 
     if (cam_center.x() > bbox.max_x()) {
@@ -531,7 +531,7 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -544,7 +544,7 @@ void boxm_utils::quad_interpolate(boxm_quad_scan_iterator &poly_it,
     unsigned int endx = (unsigned int)std::min((int)img.ni(),poly_it.endx());
 
     for (unsigned int x = startx; x < endx; ++x) {
-      float interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
+      auto interp_val = (float)(s0*x*y + s1*x + s2*y+s3);
       img(x,yu,img_plane_num) += (poly_it.pix_coverage(x)*interp_val);
     }
   }
@@ -597,7 +597,7 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -637,7 +637,7 @@ void boxm_utils::quad_fill(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -669,7 +669,7 @@ void boxm_utils::quad_mean(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -701,7 +701,7 @@ void boxm_utils::quad_weighted_mean(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -733,7 +733,7 @@ void boxm_utils::quad_sum(boxm_quad_scan_iterator &poly_it,
       // not inside of image bounds yet. go to next scanline.
       continue;
     }
-    unsigned int yu = (unsigned int)y;
+    auto yu = (unsigned int)y;
     if (yu >= img.nj() ) {
       // we have left the image bounds. no need to continue.
       break;
@@ -758,7 +758,7 @@ bool boxm_utils::project_cube_xyz( std::map<boct_face_idx,std::vector< vgl_point
                                    vil_image_view<float> &back_xyz,
                                    vpgl_camera_double_sptr cam)
 {
-  std::map<boct_face_idx, std::vector<vgl_point_3d<double> > >::iterator face_it=faces.begin();
+  auto face_it=faces.begin();
   for (; face_it!=faces.end(); ++face_it)
   {
     std::vector<vgl_point_3d<double> > face_corners=face_it->second;

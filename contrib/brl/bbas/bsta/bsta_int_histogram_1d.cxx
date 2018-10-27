@@ -79,8 +79,8 @@ unsigned long int bsta_int_histogram_1d::get_max_val(unsigned int &imax)
 void bsta_int_histogram_1d::trim(float low_fract, float high_fract)
 {
   long int total = this->get_area();    // total counts_ in histogram
-  long int low_count = static_cast<long int>(((float)total * low_fract) + 0.5);        // # of counts_ to trim
-  long int high_count = static_cast<long int>(((float)total * high_fract) + 0.5);
+  auto low_count = static_cast<long int>(((float)total * low_fract) + 0.5);        // # of counts_ to trim
+  auto high_count = static_cast<long int>(((float)total * high_fract) + 0.5);
 
   // trim low end
   int i = 0;
@@ -139,7 +139,7 @@ void bsta_int_histogram_1d::parzen(const float sigma)
 {
   if (sigma<=0)
     return;
-  double sd = (double)sigma;
+  auto sd = (double)sigma;
   std::vector<double> in(nbins_), out(nbins_);
   for (unsigned int i=0; i<nbins_; i++)
     in[i] = counts_[i];
@@ -156,7 +156,7 @@ bool bsta_int_histogram_1d::find_peaks( float perct, int &n_peaks, std::vector<u
 
   unsigned int peak_index = 0;
   long int ymax = get_max_val(peak_index);      // get highest peak & index
-  long int hysteresis = static_cast<long int>(ymax*perct);  // thresh for setting peaks
+  auto hysteresis = static_cast<long int>(ymax*perct);  // thresh for setting peaks
   n_peaks = 0;
 
   // The assumption is that 1st "peak" is a valley.  If it isn't, MAJOR ERROR!!

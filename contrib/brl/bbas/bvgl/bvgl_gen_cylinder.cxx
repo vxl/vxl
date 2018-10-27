@@ -156,7 +156,7 @@ void bvgl_gen_cylinder::load_cross_section_pointsets(std::ifstream& istr){
 }
 std::vector<unsigned> bvgl_gen_cylinder::cross_section_contains(vgl_point_3d<double> const& p) const{
   std::vector<unsigned> ret;
-  unsigned nc = static_cast<unsigned>(cross_sections_.size());
+  auto nc = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<nc; ++i)
     if(cross_sections_[i].contains(p))
       ret.push_back(i);
@@ -191,7 +191,7 @@ double bvgl_gen_cylinder::distance(vgl_point_3d<double> const& p, double dist_th
 }
 
 vgl_pointset_3d<double> bvgl_gen_cylinder::aggregate_pointset() const{
-  unsigned n = static_cast<unsigned>(cross_sections_.size());
+  auto n = static_cast<unsigned>(cross_sections_.size());
   vgl_pointset_3d<double> aggregate_ptset;
   for(unsigned i = 0; i<n; i++){
     vgl_pointset_3d<double> ps = cross_sections_[i].pts();
@@ -206,8 +206,8 @@ void bvgl_gen_cylinder::display_axis_spline(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
   // display the knots
   std::vector<vgl_point_3d<double> > knots = axis_.knots();
-  unsigned n = static_cast<unsigned>(knots.size());
-  double nd = static_cast<double>(n-1);
+  auto n = static_cast<unsigned>(knots.size());
+  auto nd = static_cast<double>(n-1);
   float r = 1.0f;
   for(unsigned i =0; i<n; ++i){
     vgl_point_3d<double> p = knots[i];
@@ -226,7 +226,7 @@ void bvgl_gen_cylinder::display_axis_spline(std::ofstream& ostr) const{
 }
 void bvgl_gen_cylinder::display_cross_section_planes(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
-  unsigned n = static_cast<unsigned>(cross_sections_.size());
+  auto n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)
     cross_sections_[i].display_cross_section_plane(ostr);
   ostr.close();
@@ -234,7 +234,7 @@ void bvgl_gen_cylinder::display_cross_section_planes(std::ofstream& ostr) const{
 
 void bvgl_gen_cylinder::display_cross_section_pointsets(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
-  unsigned n = static_cast<unsigned>(cross_sections_.size());
+  auto n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)
     cross_sections_[i].display_cross_section_pts(ostr);
   ostr.close();
@@ -242,7 +242,7 @@ void bvgl_gen_cylinder::display_cross_section_pointsets(std::ofstream& ostr) con
 
 void bvgl_gen_cylinder::display_surface_disks(std::ofstream& ostr) const{
   bvrml_write::write_vrml_header(ostr);
-  unsigned n = static_cast<unsigned>(cross_sections_.size());
+  auto n = static_cast<unsigned>(cross_sections_.size());
   for(unsigned i = 0; i<n; i++)
     cross_sections_[i].display_cross_section_normal_disks(ostr);
   ostr.close();

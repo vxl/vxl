@@ -73,7 +73,7 @@ vtol_block::vtol_block(vtol_block_sptr const& other)
   topology_list newverts(verts.size());
 
   int i=0;
-  for (vertex_list::iterator vi=verts.begin();vi!=verts.end();++vi,++i)
+  for (auto vi=verts.begin();vi!=verts.end();++vi,++i)
   {
     vtol_vertex_sptr v= *vi;
     newverts[i]=v->clone()->cast_to_topology_object();
@@ -81,7 +81,7 @@ vtol_block::vtol_block(vtol_block_sptr const& other)
   }
 
   int j=0;
-  for (edge_list::iterator ei=edgs.begin();ei!=edgs.end();++ei,++j)
+  for (auto ei=edgs.begin();ei!=edgs.end();++ei,++j)
   {
     vtol_edge_sptr e = *ei;
 
@@ -123,7 +123,7 @@ vsol_spatial_object_2d* vtol_block::clone() const
 
 vertex_list *vtol_block::outside_boundary_vertices()
 {
-  vertex_list *result=new vertex_list();
+  auto *result=new vertex_list();
   std::vector<vtol_vertex *> *ptr_list=outside_boundary_compute_vertices();
 
   // copy the lists
@@ -151,7 +151,7 @@ std::vector<vtol_vertex *> *vtol_block::compute_vertices()
 
 zero_chain_list *vtol_block::outside_boundary_zero_chains()
 {
-  zero_chain_list *result=new zero_chain_list();
+  auto *result=new zero_chain_list();
   std::vector<vtol_zero_chain *> *ptr_list=outside_boundary_compute_zero_chains();
 
   // copy the lists
@@ -181,7 +181,7 @@ std::vector<vtol_zero_chain *> *vtol_block::compute_zero_chains()
 
 edge_list *vtol_block::outside_boundary_edges()
 {
-  edge_list *result=new edge_list();
+  auto *result=new edge_list();
   std::vector<vtol_edge *> *ptr_list=outside_boundary_compute_edges();
 
   // copy the lists
@@ -210,7 +210,7 @@ std::vector<vtol_edge *> *vtol_block::compute_edges()
 
 one_chain_list *vtol_block::outside_boundary_one_chains()
 {
-  one_chain_list *result=new one_chain_list;
+  auto *result=new one_chain_list;
   std::vector<vtol_one_chain *> *ptr_list=outside_boundary_compute_one_chains();
 
   std::vector<vtol_one_chain*>::iterator i;
@@ -239,7 +239,7 @@ std::vector<vtol_one_chain *> *vtol_block::compute_one_chains()
 
 face_list *vtol_block::outside_boundary_faces()
 {
-  face_list *result=new face_list();
+  auto *result=new face_list();
   std::vector<vtol_face *> *ptr_list=outside_boundary_compute_faces();
 
   std::vector<vtol_face*>::iterator i;
@@ -267,7 +267,7 @@ std::vector<vtol_face *> *vtol_block::compute_faces()
 
 two_chain_list *vtol_block::outside_boundary_two_chains()
 {
-  two_chain_list *result=new two_chain_list();
+  auto *result=new two_chain_list();
   std::vector<vtol_two_chain *> *ptr_list=outside_boundary_compute_two_chains();
 
   std::vector<vtol_two_chain*>::iterator i;
@@ -316,8 +316,8 @@ bool vtol_block::operator==(const vtol_block &other) const
   if (numinf()!=other.numinf())
     return false;
 
-  topology_list::const_iterator bi1=inferiors()->begin();
-  topology_list::const_iterator bi2=other.inferiors()->begin();
+  auto bi1=inferiors()->begin();
+  auto bi2=other.inferiors()->begin();
   for (; bi1!=inferiors()->end(); ++bi1,++bi2)
   {
     vtol_two_chain_sptr twoch1=(*bi1)->cast_to_two_chain();
@@ -343,7 +343,7 @@ bool vtol_block::operator==(const vsol_spatial_object_2d& obj) const
 //: get a hole cycle
 two_chain_list *vtol_block::hole_cycles() const
 {
-  two_chain_list *result=new two_chain_list;
+  auto *result=new two_chain_list;
 
   topology_list::const_iterator ti;
   for (ti=inferiors_.begin();ti!=inferiors_.end();++ti)

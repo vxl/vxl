@@ -11,7 +11,7 @@
 static void test_utils()
 {
   unsigned ni = 1280, nj = 720;
-  double nid = static_cast<double>(ni), njd = static_cast<double>(nj);
+  auto nid = static_cast<double>(ni), njd = static_cast<double>(nj);
   double heading = 180.0, tilt = 90.0, roll =0.0, altitude = 1.0;
   double top_fov = 10.0;
   double right_fov = 17.47;

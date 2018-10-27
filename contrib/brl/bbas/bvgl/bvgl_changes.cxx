@@ -9,7 +9,7 @@
 vil_image_view_base_sptr
 bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change_type)
 {
-  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
+  auto* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(0);
 
   //index through the polygons and create the boolean mask image
@@ -21,8 +21,8 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change
       int y = psi.scany();
       for (int x = psi.startx(); x<=psi.endx(); ++x)
       {
-        unsigned u = static_cast<unsigned>(x);
-        unsigned v = static_cast<unsigned>(y);
+        auto u = static_cast<unsigned>(x);
+        auto v = static_cast<unsigned>(y);
         if (u >= ni || v >= nj)
           continue;
         if (obj->type().compare(change_type)==0)
@@ -37,7 +37,7 @@ bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change
 vil_image_view_base_sptr
 bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
 {
-  vil_image_view<vxl_byte>* mask = new vil_image_view<vxl_byte>(ni, nj);
+  auto* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(0);
 
   //index through the polygons and create the boolean mask image
@@ -49,8 +49,8 @@ bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
       int y = psi.scany();
       for (int x = psi.startx(); x<=psi.endx(); ++x)
       {
-        unsigned u = static_cast<unsigned>(x);
-        unsigned v = static_cast<unsigned>(y);
+        auto u = static_cast<unsigned>(x);
+        auto v = static_cast<unsigned>(y);
         if (obj->type().compare("dont_care")!=0)
           (*mask)(u,v) = 255;
         else  // don't care areas
@@ -69,7 +69,7 @@ void bvgl_changes::add_obj(bvgl_change_obj_sptr obj)
 
 void bvgl_changes::remove_obj(bvgl_change_obj_sptr obj)
 {
-  std::vector<bvgl_change_obj_sptr>::iterator iter = objs_.begin();
+  auto iter = objs_.begin();
   while (iter!=objs_.end()) {
     if (*iter == obj) {
       objs_.erase(iter);

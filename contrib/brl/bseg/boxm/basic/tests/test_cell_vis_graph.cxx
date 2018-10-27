@@ -30,7 +30,7 @@ static void test_cell_vis_graph()
   {
     scene.load_block(iter.index().x(),iter.index().y(),iter.index().z());
     boxm_block<boct_tree<short,vgl_point_3d<double> > > * block=scene.get_active_block();
-    boct_tree<short,vgl_point_3d<double> > * tree=new boct_tree<short,vgl_point_3d<double> >(3,2);
+    auto * tree=new boct_tree<short,vgl_point_3d<double> >(3,2);
     block->init_tree(tree);
     boxm_cell_vis_graph_iterator<short,vgl_point_3d<double> > cell_iterator(camera,tree,IMAGE_U, IMAGE_V);
     double cnt=30;

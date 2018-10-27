@@ -165,7 +165,7 @@ bool vsol_digital_curve_2d::operator==(const vsol_spatial_object_2d& obj) const
 double vsol_digital_curve_2d::length(void) const
 {
   double curve_length = 0.0;
-  for ( std::vector<vsol_point_2d_sptr>::const_iterator itr=samples_.begin();
+  for ( auto itr=samples_.begin();
         itr+1 != samples_.end();  ++itr )
   {
     curve_length += ((*(itr+1))->get_p() - (*itr)->get_p()).length();
@@ -307,7 +307,7 @@ double closest_index(const vgl_point_2d<double>& pt,
                      const vsol_digital_curve_2d_sptr& curve)
 {
   const unsigned int n = curve->size();
-  double *px = new double[n], *py = new double[n];
+  auto *px = new double[n], *py = new double[n];
   for (unsigned int i=0; i<n; ++i)
     px[i]=curve->point(i)->x(), py[i]=curve->point(i)->y();
   double x, y;

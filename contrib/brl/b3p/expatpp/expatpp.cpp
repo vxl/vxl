@@ -141,7 +141,7 @@ XML_Status
 expatpp::XML_Parse(const char *s, int len, int isFinal)
 {
   mHaveParsed = true;
-  const XML_Status retStatus = (const XML_Status) ::XML_Parse(mParser, s, len, isFinal);
+  const auto retStatus = (const XML_Status) ::XML_Parse(mParser, s, len, isFinal);
   if (isFinal)
     CheckFinalStatus(retStatus);
   return retStatus;
@@ -734,7 +734,7 @@ void
 expatppNesting::nestedStartElementCallback(void *userData, const XML_Char* name, const XML_Char** atts)
 {
   assert(userData);
-  expatppNesting* nestedParser = (expatppNesting*)userData;
+  auto* nestedParser = (expatppNesting*)userData;
   nestedParser->mDepth++;
   nestedParser->startElement(name, atts);  // probably user override
 }
@@ -751,7 +751,7 @@ expatppNesting::nestedEndElementCallback(void *userData, const XML_Char* name)
   if (!userData)
     return;  //  end tag for root
 
-  expatppNesting* nestedParser = (expatppNesting*)userData;
+  auto* nestedParser = (expatppNesting*)userData;
 // we don't know until we hit a closing tag 'outside' us that our run is done
   if (nestedParser->mDepth==0) {
     expatppNesting* parentParser = nestedParser->returnToParent();

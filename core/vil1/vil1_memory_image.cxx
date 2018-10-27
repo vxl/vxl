@@ -122,7 +122,7 @@ vil1_memory_image& vil1_memory_image::operator= (vil1_memory_image const& that)
 void vil1_memory_image::resize(int width, int height)
 {
   assert(ptr!=nullptr);
-  vil1_memory_image_impl* mi = (vil1_memory_image_impl*)ptr;
+  auto* mi = (vil1_memory_image_impl*)ptr;
   mi->resize(1, width, height);
   cache_from_impl;
 }
@@ -130,7 +130,7 @@ void vil1_memory_image::resize(int width, int height)
 void vil1_memory_image::resize(int planes, int width, int height)
 {
   assert(ptr!=nullptr);
-  vil1_memory_image_impl* mi = (vil1_memory_image_impl*)ptr;
+  auto* mi = (vil1_memory_image_impl*)ptr;
   mi->resize(planes, width, height);
   cache_from_impl;
 }

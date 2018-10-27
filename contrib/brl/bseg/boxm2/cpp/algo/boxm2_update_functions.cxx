@@ -22,7 +22,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order;
-    if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+    if (auto* pcam = // assignment, not comparison
         dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
     {
         vis_order=scene->get_vis_blocks(pcam);
@@ -75,7 +75,7 @@ bool boxm2_update_cone_image(boxm2_scene_sptr & scene,
             datas.push_back(alph);
             datas.push_back(mog);
             datas.push_back(nobs);
-            boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+            auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
 #if 0
             // pass 0
@@ -159,7 +159,7 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
 {
     boxm2_cache_sptr cache=boxm2_cache::instance();
     std::vector<boxm2_block_id> vis_order;
-    if (vpgl_perspective_camera<double>* pcam = // assignment, not comparison
+    if (auto* pcam = // assignment, not comparison
         dynamic_cast<vpgl_perspective_camera<double>* >(cam.ptr()))
     {
         vis_order=scene->get_vis_blocks(pcam);
@@ -206,7 +206,7 @@ bool boxm2_update_image(boxm2_scene_sptr & scene,
             datas.push_back(alph);
             datas.push_back(mog);
             datas.push_back(nobs);
-            boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+            auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
             // pass 0
             if (pass_no==0)
@@ -372,7 +372,7 @@ bool boxm2_update_with_shadow(boxm2_scene_sptr & scene,
             datas.push_back(alph);
             datas.push_back(mog);
             datas.push_back(nobs);
-            boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+            auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
             // pass 0
             if (pass_no==0)
@@ -520,7 +520,7 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
             datas.push_back(alph);
             datas.push_back(mog);
             datas.push_back(nobs);
-            boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+            auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
             scene_info_wrapper->info=scene->get_blk_metadata(*id);
             // pass 0
             if (pass_no==0)

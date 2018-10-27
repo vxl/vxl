@@ -62,7 +62,7 @@ static void test_gaussian_pyramid_builder_2d_general()
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
 
-  const vimt_image_2d_of<vxl_byte>& image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1));
+  const auto& image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(1));
   TEST("Level 1 size x",image1.image().ni(),(unsigned)(ni/1.2+0.5));
   TEST("Level 1 size y",image1.image().nj(),(unsigned)(nj/1.2+0.5));
   TEST("Pixel (0,0)",image1.image()(0,0),1);

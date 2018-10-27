@@ -118,7 +118,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::tilt() const
   vgl_cubic_spline_3d<double> def_axis(def_knots);
 
   // deform the points
-  unsigned n_cs = static_cast<unsigned>(this->cross_sections_.size());
+  auto n_cs = static_cast<unsigned>(this->cross_sections_.size());
   vgl_pointset_3d<double> def_ptsets;
   for (unsigned c_idx = 0; c_idx < n_cs; c_idx++)
   {
@@ -171,7 +171,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::tilt() const
     pset.push_back(p);
   }
   // scan through the deformed pointset and assign each point to a cross section
-  unsigned nc = static_cast<unsigned>(cs_ptsets.size());
+  auto nc = static_cast<unsigned>(cs_ptsets.size());
   unsigned npts = this->aggregate_pointset().npts();
   for (unsigned i = 0; i < npts; i++)
   {
@@ -298,7 +298,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::scale() const
     pset.push_back(p);
   }
   // scan through the deformed pointset and assign each point to a cross section
-  unsigned nc = static_cast<unsigned>(cs_ptsets.size());
+  auto nc = static_cast<unsigned>(cs_ptsets.size());
   for (unsigned i = 0; i < npts; i++)
   {
     vgl_point_3d<double>  pi = def_ptset_all.p(i);
@@ -368,7 +368,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::deform() const
   // apply deformation on axis
   std::vector<vgl_point_3d<double> > ori_pts = axis.knots();
   std::vector<vgl_point_3d<double> > deformed_knots;
-  unsigned n_knots = static_cast<unsigned>(ori_pts.size());
+  auto n_knots = static_cast<unsigned>(ori_pts.size());
   for (unsigned i = 0; i < n_knots; i++) {
     vgl_vector_3d<double> ori_lp = ori_pts[i] - c_3d;
     vgl_vector_3d<double> rot_lp = ori_lp;
@@ -435,7 +435,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::deform() const
   }
 
   // scan through the deformed pointset and assign each point to a cross section
-  unsigned nc = static_cast<unsigned>(cs_ptsets.size());
+  auto nc = static_cast<unsigned>(cs_ptsets.size());
   for (unsigned i = 0; i < n_pts; i++)
   {
     vgl_point_3d<double>  pi = ptsets_deform.p(i);
@@ -598,7 +598,7 @@ boxm2_vecf_orbicularis_oris boxm2_vecf_orbicularis_oris::circular_deform() const
     pset.push_back(p);
   }
   // scan through the deformed pointset and assign each point to a cross section
-  unsigned nc = static_cast<unsigned>(cs_ptsets.size());
+  auto nc = static_cast<unsigned>(cs_ptsets.size());
   for (unsigned i = 0; i < npts; i++)
   {
     vgl_point_3d<double>  pi = def_ptset_all.p(i);

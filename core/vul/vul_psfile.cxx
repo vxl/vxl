@@ -300,8 +300,8 @@ void vul_psfile::print_greyscale_image(const unsigned char* buffer, int sizex, i
       if (in_range(index))
       {
         char pixel[3];
-        unsigned char low4 = (unsigned char)  (index & 0x000f);
-        unsigned char high4 = (unsigned char) ((index & 0x00f0) >> 4);
+        auto low4 = (unsigned char)  (index & 0x000f);
+        auto high4 = (unsigned char) ((index & 0x00f0) >> 4);
         pixel[0] = Hex4bit(high4);
         pixel[1] = Hex4bit(low4);
         pixel[2] = '\0';
@@ -461,8 +461,8 @@ void vul_psfile::print_color_image(const unsigned char* data, int sizex, int siz
         if (in_range(index))
         {
           char pixel[3];
-          unsigned char low4 = (unsigned char)  (index & 0x000f);
-          unsigned char high4 = (unsigned char) ((index & 0x00f0) >> 4);
+          auto low4 = (unsigned char)  (index & 0x000f);
+          auto high4 = (unsigned char) ((index & 0x00f0) >> 4);
           pixel[0] = Hex4bit(high4);
           pixel[1] = Hex4bit(low4);
           pixel[2] = '\0';

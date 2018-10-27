@@ -36,7 +36,7 @@ bool bil_cedt::compute_cedt()
                 level(j,i)=1;
         }
     }
-    bil_cedt_heap * heap=new bil_cedt_heap(nj_,ni_);
+    auto * heap=new bil_cedt_heap(nj_,ni_);
 
     // initialize the heap for positive values
     find_dist_trans(level, heap);

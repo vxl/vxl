@@ -143,7 +143,7 @@ double clsfy_binary_hyperplane_gmrho_builder::build(clsfy_classifier_base& class
     weights_.set_size(num_vars_+1);
 
     //Initialise the weights using the standard least squares fit of my base class
-    clsfy_binary_hyperplane& hyperplane = dynamic_cast<clsfy_binary_hyperplane &>(classifier);
+    auto& hyperplane = dynamic_cast<clsfy_binary_hyperplane &>(classifier);
 
     weights_.update(hyperplane.weights(),0);
     weights_[num_vars_] = hyperplane.bias();
@@ -244,14 +244,14 @@ double clsfy_binary_hyperplane_gmrho_builder::estimate_sigma(const vnl_matrix<do
     double delta0=0.0;
     if (!falsePosScores.empty())
     {
-        std::vector<double >::iterator medianIter=falsePosScores.begin() + falsePosScores.size()/2;
+        auto medianIter=falsePosScores.begin() + falsePosScores.size()/2;
         std::nth_element(falsePosScores.begin(),medianIter,falsePosScores.end());
         delta0 = (*medianIter);
     }
     double delta1=0.0;
     if (!falseNegScores.empty())
     {
-        std::vector<double >::iterator medianIter=falseNegScores.begin() + falseNegScores.size()/2;
+        auto medianIter=falseNegScores.begin() + falseNegScores.size()/2;
         std::nth_element(falseNegScores.begin(),medianIter,falseNegScores.end());
         delta1 = (*medianIter);
     }

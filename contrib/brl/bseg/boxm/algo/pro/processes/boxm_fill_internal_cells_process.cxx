@@ -60,7 +60,7 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
     return false;
   }
 
-  if (boxm_scene<boct_tree<short, float> > *scene_in = dynamic_cast<boxm_scene<boct_tree<short, float> >* > (scene_base.as_pointer()))
+  if (auto *scene_in = dynamic_cast<boxm_scene<boct_tree<short, float> >* > (scene_base.as_pointer()))
   {
     boxm_fill_internal_cells<float> filler;
     pro.set_output_val<boxm_scene_base_sptr>(0, filler.traverse_and_fill(scene_in));

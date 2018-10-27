@@ -80,7 +80,7 @@ static void test_bvxm_update_lidar_process()
     bool non_null = (value_img != nullptr);
     TEST("display output non-null", non_null ,true);
 
-    brdb_value_t<vil_image_view_base_sptr>* result =
+    auto* result =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
     vil_image_view_base_sptr lidar_img = result->value();
 
@@ -110,7 +110,7 @@ static void test_bvxm_update_lidar_process()
     non_null = (value_cam != nullptr);
     TEST("display output non-null", non_null ,true);
 
-    brdb_value_t<vpgl_camera_double_sptr>* result2 =
+    auto* result2 =
       static_cast<brdb_value_t<vpgl_camera_double_sptr>* >(value_cam.ptr());
     vpgl_camera_double_sptr lidar_cam = result2->value();
 
@@ -202,7 +202,7 @@ static void test_bvxm_update_lidar_process()
     bool non_null = (value_world != nullptr);
     TEST("display output non-null", non_null ,true);
 
-    brdb_value_t<bvxm_voxel_world_sptr>* result =
+    auto* result =
       static_cast<brdb_value_t<bvxm_voxel_world_sptr>* >(value_world.ptr());
     bvxm_voxel_world_sptr world = result->value();
 
@@ -286,7 +286,7 @@ static void test_bvxm_update_lidar_process()
     bool non_null = (value_img != nullptr);
     TEST("display output non-null", non_null ,true);
 
-    brdb_value_t<vil_image_view_base_sptr>* result =
+    auto* result =
       static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
     vil_image_view_base_sptr prob_map = result->value();
 

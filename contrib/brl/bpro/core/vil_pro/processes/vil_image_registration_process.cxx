@@ -61,11 +61,11 @@ bool vil_image_registration_process(bprb_func_process& pro)
   unsigned in_i = 0;
   vil_image_view_base_sptr src_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   vil_image_view_base_sptr tgr_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
-  unsigned sx = pro.get_input<unsigned>(in_i++);
-  unsigned sy = pro.get_input<unsigned>(in_i++);
-  double   sz = pro.get_input<double>(in_i++);
-  double pixel_res = pro.get_input<double>(in_i++);
-  float invalid_pixel = pro.get_input<float>(in_i++);
+  auto sx = pro.get_input<unsigned>(in_i++);
+  auto sy = pro.get_input<unsigned>(in_i++);
+  auto   sz = pro.get_input<double>(in_i++);
+  auto pixel_res = pro.get_input<double>(in_i++);
+  auto invalid_pixel = pro.get_input<float>(in_i++);
   vil_image_view_base_sptr mask_img_sptr = pro.get_input<vil_image_view_base_sptr>(in_i++);
   // convert the image to float type
   unsigned s_ni = src_img_sptr->ni(), s_nj = src_img_sptr->nj();
@@ -91,7 +91,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
       return false;
     }
   }
-  vil_image_view<unsigned char> * mask_img=dynamic_cast<vil_image_view<unsigned char> *>(mask_img_sptr.ptr());
+  auto * mask_img=dynamic_cast<vil_image_view<unsigned char> *>(mask_img_sptr.ptr());
   if (!mask_img)
   {
     std::cerr << pro.name() <<": mask image is not an unsigned char map"<< std::endl;
@@ -145,7 +145,7 @@ bool vil_image_registration_process(bprb_func_process& pro)
     } // end of loop over y
   } // end of loop over x
 
-  std::map<double, std::vector<double> >::iterator mit = rmse_map.begin();
+  auto mit = rmse_map.begin();
   double rmse_z  = mit->first;
   double trans_x = pixel_res * mit->second[0];
   double trans_y = pixel_res * mit->second[1];

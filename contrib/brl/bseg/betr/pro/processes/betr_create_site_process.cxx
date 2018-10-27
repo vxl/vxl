@@ -44,9 +44,9 @@ bool betr_create_site_process(bprb_func_process& pro)
   }
   //get the inputs
   unsigned i = 0;
-  float org_x = pro.get_input<float>(i++);
-  float org_y = pro.get_input<float>(i++);
-  float org_z = pro.get_input<float>(i);
+  auto org_x = pro.get_input<float>(i++);
+  auto org_y = pro.get_input<float>(i++);
+  auto org_z = pro.get_input<float>(i);
   vgl_point_3d<double> origin(org_x, org_y, org_z);
   betr_site_sptr site = new betr_site(origin);
   pro.set_output_val<betr_site_sptr>(0, site);

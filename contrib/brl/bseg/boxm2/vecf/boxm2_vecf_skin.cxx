@@ -118,7 +118,7 @@ void boxm2_vecf_skin::display_vrml(std::ofstream& ostr) const{
       bvrml_write::write_vrml_cylinder(ostr, p, n, r, h, 0.0f, 1.0f, 0.3f, 1);
     else{
       double a = appearance_[i];
-      float grey = static_cast<float>(a/255.0);
+      auto grey = static_cast<float>(a/255.0);
       bvrml_write::write_vrml_cylinder(ostr, p, n, r, h, grey, grey, grey, 1);
   }
   }

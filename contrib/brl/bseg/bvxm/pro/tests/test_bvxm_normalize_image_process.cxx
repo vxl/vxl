@@ -99,7 +99,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(std::string mode
   vox_world = new bvxm_voxel_world(params);
 
   bvxm_voxel_grid_base_sptr ocp_grid_ptr = vox_world->get_grid<OCCUPANCY>(0,scale);
-  bvxm_voxel_grid<float> *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
+  auto *ocp_grid = dynamic_cast<bvxm_voxel_grid<float>*>(ocp_grid_ptr.ptr());
   // fill in grid with zeros to start
   ocp_grid->initialize_data(0.0f);
   // now make a ground plane
@@ -123,7 +123,7 @@ bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(std::string mode
   // iterate through layers of apm grid and update each level with the same synthetic image
   // if you want different levels to look different youll have to create a different image for each level
   bvxm_voxel_grid_base_sptr apm_base = vox_world->get_grid<APM_MOG_GREY>(0,scale);
-  bvxm_voxel_grid<mog_type> *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
+  auto *apm_grid = dynamic_cast<bvxm_voxel_grid<mog_type>*>(apm_base.ptr());
   // initialize the appearance model data to get rid of any previous data on disk
   apm_grid->initialize_data(bvxm_voxel_traits<APM_MOG_GREY>::initial_val());
 
@@ -184,15 +184,15 @@ static void test_bvxm_normalize_image_process()
 
   vil_image_view<float> input_img_rgb_float = vil_convert_cast( float(), input_img_rgb_sptr );
   TEST("check float conversion", input_img_rgb_float.nplanes(), 3);
-  vil_image_view<float>* input_img_float_stretched_ptr = new vil_image_view<float>( ni, nj, 1 );
+  auto* input_img_float_stretched_ptr = new vil_image_view<float>( ni, nj, 1 );
   vil_image_view_base_sptr input_img_float_stretched_sptr = input_img_float_stretched_ptr;
   vil_convert_stretch_range_limited(input_img_float, *input_img_float_stretched_ptr, 0.0f, 255.0f, 0.0f, 1.0f);
   TEST_NEAR("check float stretch conversion", (*input_img_float_stretched_ptr)(0,0), 200.0f/255.0f, 0.01);
 
-  vil_image_view<float>* input_img_rgb_float_stretched_ptr = new vil_image_view<float>( ni, nj, 3 );
+  auto* input_img_rgb_float_stretched_ptr = new vil_image_view<float>( ni, nj, 3 );
   vil_image_view_base_sptr input_img_rgb_float_stretched_sptr = input_img_rgb_float_stretched_ptr;
   vil_convert_stretch_range_limited(input_img_rgb_float, *input_img_rgb_float_stretched_ptr, 0.0f, 255.0f, 0.0f, 1.0f);
-  vil_image_view<float>* input_img_float_stretched_ptr2 = new vil_image_view<float>( ni, nj, 1 );
+  auto* input_img_float_stretched_ptr2 = new vil_image_view<float>( ni, nj, 1 );
   vil_image_view_base_sptr input_img_float_stretched_sptr2 = input_img_float_stretched_ptr2;
   vil_convert_stretch_range_limited<vxl_byte>(input_img, *input_img_float_stretched_ptr2, 0, 255, 0.0f, 1.0f);
 
@@ -257,7 +257,7 @@ static void test_bvxm_normalize_image_process()
   bvxm_voxel_slab_base_sptr mog_image = create_mog_image_using_grey_processor(model_dir.c_str(), vox_world, expected_image);
   TEST("testing world creation", vox_world->get_params()->num_voxels().z(), 4);
   TEST("testing mixture of gaussian image creation", !mog_image, false);
-  bvxm_voxel_slab<mog_type>* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
+  auto* mog_image_ptr = dynamic_cast<bvxm_voxel_slab<mog_type>*>(mog_image.ptr());
   TEST("testing mixture of gaussian image creation", !mog_image_ptr, false);
   vil_image_view<unsigned char> expected_i(*expected_image);
   vil_save(expected_i, "./expected.png");
@@ -342,7 +342,7 @@ static void test_bvxm_normalize_image_process()
   TEST("output image is in db", S_img->get_value(std::string("value"), value_img), true);
   TEST("output image is non-null", (value_img != nullptr) ,true);
 
-  brdb_value_t<vil_image_view_base_sptr>* result =
+  auto* result =
     static_cast<brdb_value_t<vil_image_view_base_sptr>* >(value_img.ptr());
   vil_image_view_base_sptr denormed_img = result->value();
   vil_image_view<vxl_byte> denormed_img_v(denormed_img);
@@ -358,7 +358,7 @@ static void test_bvxm_normalize_image_process()
   TEST("output a is in db", S_a->get_value(std::string("value"), value_a), true);
   TEST("output a is non-null", (value_a != nullptr) ,true);
 
-  brdb_value_t<float>* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
+  auto* resulta = static_cast<brdb_value_t<float>* >(value_a.ptr());
   float result_a = resulta->value();
 
   // get b
@@ -370,7 +370,7 @@ static void test_bvxm_normalize_image_process()
   TEST("output b is in db", S_b->get_value(std::string("value"), value_b), true);
   TEST("output b is non-null", (value_b != nullptr) ,true);
 
-  brdb_value_t<float>* resultb = static_cast<brdb_value_t<float>* >(value_b.ptr());
+  auto* resultb = static_cast<brdb_value_t<float>* >(value_b.ptr());
   float result_b = resultb->value();
 
   TEST_NEAR("testing a", result_a, 1.0f/aa, 0.1);

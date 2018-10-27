@@ -63,12 +63,12 @@ bmsh3d_edge* bmsh3d_edge::clone()
   bmsh3d_vertex* s = vertices_[0];
   bmsh3d_vertex* e = vertices_[1];
 
-  bmsh3d_vertex* new_s = new bmsh3d_vertex(s->get_pt().x(), s->get_pt().y(),
+  auto* new_s = new bmsh3d_vertex(s->get_pt().x(), s->get_pt().y(),
                                            s->get_pt().z(), -1);
-  bmsh3d_vertex* new_e = new bmsh3d_vertex(e->get_pt().x(), e->get_pt().y(),
+  auto* new_e = new bmsh3d_vertex(e->get_pt().x(), e->get_pt().y(),
                                            e->get_pt().z(), -1);
 
-  bmsh3d_edge* new_edge = new bmsh3d_edge(new_s, new_e, -1);
+  auto* new_edge = new bmsh3d_edge(new_s, new_e, -1);
   return new_edge;
 }
 
@@ -349,7 +349,7 @@ void bmsh3d_edge::_disconnect_HE(bmsh3d_halfedge* inputHE)
     halfedge_ = nullptr;
     return;
   }
-  bmsh3d_halfedge* prev_pair = (bmsh3d_halfedge*)inputHE->get_prev(); // casting away const!
+  auto* prev_pair = (bmsh3d_halfedge*)inputHE->get_prev(); // casting away const!
   bmsh3d_halfedge* next_pair = inputHE->pair();
 
   //if the one to be disconnected is the one the edge pointing to,

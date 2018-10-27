@@ -203,7 +203,7 @@ float bstm_ocl_minfo_function::evaluate()
 
       //load blk info and write appropriate info to several buffers
       bocl_mem* blk_info = opencl_cache_->loaded_block_info();
-      bstm_scene_info* info_buffer = (bstm_scene_info*) blk_info->cpu_buffer();
+      auto* info_buffer = (bstm_scene_info*) blk_info->cpu_buffer();
 
       //load scene origin
       target_blk_origin_buff[0] = info_buffer->scene_origin[0];
@@ -320,8 +320,8 @@ float bstm_ocl_minfo_function::evaluate()
     surf_joint_histogram_buff[i] /= sum_surf_joint_hist;
 
 
-  float * surf_histA = new float[surf_nbins_];
-  float * surf_histB = new float[surf_nbins_];
+  auto * surf_histA = new float[surf_nbins_];
+  auto * surf_histB = new float[surf_nbins_];
 
   for (unsigned int k = 0; k<surf_nbins_; ++k)
     {
@@ -378,9 +378,9 @@ float bstm_ocl_minfo_function::evaluate()
 
   float mi_app = 0.0f;
 
-  float * app_hist = new float[app_nbins_* app_nbins_*app_view_dir_num_];
-  float * app_histA = new float[app_nbins_];
-  float * app_histB = new float[app_nbins_];
+  auto * app_hist = new float[app_nbins_* app_nbins_*app_view_dir_num_];
+  auto * app_histA = new float[app_nbins_];
+  auto * app_histB = new float[app_nbins_];
 
   for (unsigned int view_dir_num = 0; view_dir_num < app_view_dir_num_; ++view_dir_num)
     {

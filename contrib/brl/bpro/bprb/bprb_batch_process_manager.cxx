@@ -215,7 +215,7 @@ bool bprb_batch_process_manager::remove_data(unsigned id)
 {
   bool removed = false;
   std::set<std::string> names = DATABASE->get_all_relation_names();
-  for (std::set<std::string>::iterator nit = names.begin();
+  for (auto nit = names.begin();
        nit != names.end()&&!removed; ++nit) {
     // query to get the data
     brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, id);

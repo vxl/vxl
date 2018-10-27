@@ -389,7 +389,7 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
 
   // Construct a new histogram
 
-  vifa_histogram* scaled_his = new vifa_histogram(this, delta);
+  auto* scaled_his = new vifa_histogram(this, delta);
   float* new_counts = scaled_his->GetCounts();
   for (int i = 0; i < num; i++)  // Initialize
     new_counts[i] = 0.0f;
@@ -414,7 +414,7 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
     }
 
     float fraction = (trans_x - vals[index])/delta;
-    float abs_fraction = (float)std::fabs(fraction);
+    auto abs_fraction = (float)std::fabs(fraction);
     int x_index = GetIndex(x);
     if (x_index < 0)
     {
@@ -461,7 +461,7 @@ vifa_histogram* vifa_histogram::Scale(float scale_factor)
 //            {x | x <= (xi + .5*delta)}
 vifa_histogram* vifa_histogram::Cumulative()
 {
-  vifa_histogram* cum_his = new vifa_histogram(*this);
+  auto* cum_his = new vifa_histogram(*this);
   float* density_counts = this->GetCounts();
   int res = this->GetRes();
 
@@ -640,7 +640,7 @@ vifa_histogram* vifa_histogram::NonMaximumSupress(int radius, bool cyclic)
     return nullptr;
   }
   // Get the counts array of "this"
-  vifa_histogram* h_new = new vifa_histogram(*this);
+  auto* h_new = new vifa_histogram(*this);
   int n_buckets = h_new->GetRes();
   float* counts_old = this->GetCounts();
 
@@ -1109,8 +1109,8 @@ int vifa_histogram::WritePlot(const char *fname)
 
   int stat_res = this->GetRes();
 
-  float * x = new float[2*stat_res];
-  float * y = new float[2*stat_res];
+  auto * x = new float[2*stat_res];
+  auto * y = new float[2*stat_res];
 
   float * temp_x = this->GetVals();
   float * temp_y = this->GetCounts();

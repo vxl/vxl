@@ -48,7 +48,7 @@ namespace boxm2_ocl_ingest_dem_process_globals
     options += " -D STEP_CELL=step_cell_ingest_height_map(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
 
     ray_trace_kernel->create_kernel( &device->context(),
@@ -110,13 +110,13 @@ bool boxm2_ocl_ingest_dem_process(bprb_func_process& pro)
   unsigned int cl_ni = RoundUp(z_img->ni(),8);
   unsigned int cl_nj = RoundUp(z_img->nj(),8);
 
-  vil_image_view<float> * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
-  vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
-  vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
+  auto * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
+  auto * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
+  auto * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
 
   // form the ray buffer
-  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
-  cl_float* outimg = new float[cl_ni*cl_nj];
+  auto* ray_origins = new float[4*cl_ni*cl_nj];
+  auto* outimg = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {
@@ -277,7 +277,7 @@ namespace boxm2_ocl_ingest_dem_space_process_globals
     options += " -D STEP_CELL=step_cell_ingest_height_space_map(aux_args,data_ptr,d*linfo->block_len)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
 
     ray_trace_kernel->create_kernel( &device->context(),
@@ -331,7 +331,7 @@ bool boxm2_ocl_ingest_dem_space_process(bprb_func_process& pro)
 
   vil_image_view_base_sptr x_img = pro.get_input<vil_image_view_base_sptr>(i++);
   vil_image_view_base_sptr y_img = pro.get_input<vil_image_view_base_sptr>(i++);
-  double thickness = pro.get_input<double>(i++);
+  auto thickness = pro.get_input<double>(i++);
 
   unsigned int ni = z_img->ni();
   unsigned int nj = z_img->nj();
@@ -339,13 +339,13 @@ bool boxm2_ocl_ingest_dem_space_process(bprb_func_process& pro)
   unsigned int cl_ni = RoundUp(z_img->ni(),8);
   unsigned int cl_nj = RoundUp(z_img->nj(),8);
 
-  vil_image_view<float> * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
-  vil_image_view<float> * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
-  vil_image_view<float> * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
+  auto * z_img_float = dynamic_cast<vil_image_view<float> * > (z_img.ptr());
+  auto * x_img_float = dynamic_cast<vil_image_view<float> * > (x_img.ptr());
+  auto * y_img_float = dynamic_cast<vil_image_view<float> * > (y_img.ptr());
 
   // form the ray buffer
-  cl_float* ray_origins = new float[4*cl_ni*cl_nj];
-  cl_float* outimg = new float[cl_ni*cl_nj];
+  auto* ray_origins = new float[4*cl_ni*cl_nj];
+  auto* outimg = new float[cl_ni*cl_nj];
 
   int count=0;
   for (unsigned int j=0;j<cl_nj;++j) {

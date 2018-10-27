@@ -37,7 +37,7 @@ bool bvxm_save_occupancy_raw_process(bprb_func_process& pro)
   unsigned i = 0;
   bvxm_voxel_world_sptr world = pro.get_input<bvxm_voxel_world_sptr>(i++);
   std::string filename = pro.get_input<std::string>(i++);
-  unsigned scale = pro.get_input<unsigned>(i++);
+  auto scale = pro.get_input<unsigned>(i++);
   std::string apm = pro.get_input<std::string>(i++);
 
   if ( !world ){

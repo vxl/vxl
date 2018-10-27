@@ -34,7 +34,7 @@ vil_nitf2_des::define(std::string desId )
   if (all_definitions().find(desId) != all_definitions().end()) {
     throw("des with that name already defined.");
   }
-  vil_nitf2_field_definitions* definition = new vil_nitf2_field_definitions();
+  auto* definition = new vil_nitf2_field_definitions();
   all_definitions().insert( std::make_pair(desId, definition) );
   return *definition;
 }
@@ -55,7 +55,7 @@ bool vil_nitf2_des::read(vil_stream* stream)
       return true;
     }
     else {
-      field_definition_map::iterator it = all_definitions().find( desId );
+      auto it = all_definitions().find( desId );
       if ( it != all_definitions().end() ) {
         if ( m_field_sequence2 ) delete m_field_sequence2;
         m_field_sequence2 = new vil_nitf2_field_sequence( *((*it).second) );
@@ -68,7 +68,7 @@ bool vil_nitf2_des::read(vil_stream* stream)
 
 vil_nitf2_field_definitions* vil_nitf2_des::create_field_definitions( vil_nitf2_classification::file_version ver, int data_width )
 {
-  vil_nitf2_field_definitions* field_definitions = new vil_nitf2_field_definitions();
+  auto* field_definitions = new vil_nitf2_field_definitions();
   add_shared_field_defs_1(field_definitions);
   vil_nitf2_classification::add_field_defs(field_definitions, ver, "I", "Image");
   add_shared_field_defs_2(field_definitions, data_width);
@@ -107,7 +107,7 @@ void vil_nitf2_des::add_shared_field_defs_2( vil_nitf2_field_definitions* defs, 
 
 vil_nitf2_field::field_tree* vil_nitf2_des::get_tree( int i ) const
 {
-  vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
+  auto* t = new vil_nitf2_field::field_tree;
   std::stringstream name_stream;
   name_stream << "Data Extension Segment";
   if ( i > 0 ) name_stream << " #" << i;

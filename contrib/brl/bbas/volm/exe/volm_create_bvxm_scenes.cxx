@@ -145,9 +145,9 @@ int main(int argc, char** argv)
     vgl_point_3d<float> corner(0.0f, 0.0f, 0.0f);
     double lx, ly, lz;
     lvcs->global_to_local(upper_right.x(), upper_right.y(), height()+max, vpgl_lvcs::wgs84, lx, ly, lz);
-    unsigned dim_x = (unsigned)std::ceil(lx/voxel_size());
-    unsigned dim_y = (unsigned)std::ceil(ly/voxel_size());
-    unsigned dim_z = (unsigned)std::ceil(height()+dif);
+    auto dim_x = (unsigned)std::ceil(lx/voxel_size());
+    auto dim_y = (unsigned)std::ceil(ly/voxel_size());
+    auto dim_z = (unsigned)std::ceil(height()+dif);
     vgl_vector_3d<unsigned> num_voxels(dim_x, dim_y, dim_z);
     bvxm_world_params params;
     std::stringstream world_dir;

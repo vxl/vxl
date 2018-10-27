@@ -69,7 +69,7 @@ void test_mixture()
       var[j](i) = i;
     }
 
-    vpdfl_axis_gaussian& gauss_j = static_cast<vpdfl_axis_gaussian&>(*(pdf.components()[j]));
+    auto& gauss_j = static_cast<vpdfl_axis_gaussian&>(*(pdf.components()[j]));
     gauss_j.set(mean[j],var[j]);
   }
 
@@ -108,7 +108,7 @@ void test_mixture()
           <<"Mean: " << p_pdf_MI->mean()<<std::endl
           <<"Var:  " << p_pdf_MI->variance()<<std::endl;
 
-  vpdfl_mixture & gmm =  static_cast<vpdfl_mixture &>(*p_pdf);
+  auto & gmm =  static_cast<vpdfl_mixture &>(*p_pdf);
 
   std::vector<double> test_wts(n_comp, 1.0/n_comp);
   TEST_NEAR("Weights are about correct",
@@ -131,7 +131,7 @@ void test_mixture()
          true);
   }
 
-  vpdfl_mixture & gmm_MI =  static_cast<vpdfl_mixture &>(*p_pdf);
+  auto & gmm_MI =  static_cast<vpdfl_mixture &>(*p_pdf);
 
   TEST_NEAR("Weights are about correct",
             vnl_c_vector<double>:: euclid_dist_sq(&gmm_MI.weights()[0], &test_wts[0], n_comp),
@@ -254,7 +254,7 @@ void test_mixture()
     TEST("Correct builder",builder->is_a(),"vpdfl_mixture_builder");
     if (builder->is_a()=="vpdfl_mixture_builder")
     {
-      vpdfl_mixture_builder &a_builder = static_cast<vpdfl_mixture_builder&>(*builder);
+      auto &a_builder = static_cast<vpdfl_mixture_builder&>(*builder);
       std::cout<<a_builder<<std::endl;
       TEST_NEAR("Min var configured",
                 a_builder.min_var(),0.1234e-5,1e-8);

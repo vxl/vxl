@@ -87,9 +87,9 @@ bool vpgl_create_and_save_lvcs_process(bprb_func_process& pro)
   }
 
   // get the inputs
-  float lat = pro.get_input<float>(0);
-  float lon = pro.get_input<float>(1);
-  float el  = pro.get_input<float>(2);
+  auto lat = pro.get_input<float>(0);
+  auto lon = pro.get_input<float>(1);
+  auto el  = pro.get_input<float>(2);
   std::string cs_name = pro.get_input<std::string>(3);
   std::string lvcs_filename = pro.get_input<std::string>(4);
 

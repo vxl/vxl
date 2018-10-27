@@ -103,7 +103,7 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
     return;
   }
 
-  sdet_graph_img_seg* ss = new sdet_graph_img_seg(img1.ni(), img1.nj(), margin, neigh);
+  auto* ss = new sdet_graph_img_seg(img1.ni(), img1.nj(), margin, neigh);
 
   // smooth the image
   vil_image_view<float> smoothed1, smoothed2;
@@ -129,13 +129,13 @@ void sdet_segment_img2(vil_image_view<float> const& img1, vil_image_view<float> 
   std::vector<vbl_edge>& edges = ss->get_edges();
   for (auto & edge : edges) {
     std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edge.v0_);
-    double c0 = (double)smoothed1(pix0.first, pix0.second);
+    auto c0 = (double)smoothed1(pix0.first, pix0.second);
     std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edge.v1_);
-    double c1 = (double)smoothed1(pix1.first, pix1.second);
+    auto c1 = (double)smoothed1(pix1.first, pix1.second);
     double dif = std::abs(c1-c0);
 
-    double h0 = (double)smoothed2(pix0.first, pix0.second);
-    double h1 = (double)smoothed2(pix1.first, pix1.second);
+    auto h0 = (double)smoothed2(pix0.first, pix0.second);
+    auto h1 = (double)smoothed2(pix1.first, pix1.second);
     double dif2 = std::abs(h0-h1);
 
     edge.w_ = (float)std::sqrt(dif*dif + dif2*dif2);
@@ -188,7 +188,7 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
     return;
   }
 
-  sdet_graph_img_seg* ss = new sdet_graph_img_seg(img1.ni(), img1.nj(), margin, neigh);
+  auto* ss = new sdet_graph_img_seg(img1.ni(), img1.nj(), margin, neigh);
 
   // smooth the image
   vil_image_view<float> smoothed1, smoothed2;
@@ -213,19 +213,19 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
   std::vector<vbl_edge>& edges = ss->get_edges();
   for (auto & edge : edges) {
     std::pair<unsigned, unsigned> pix0 = ss->get_pixel(edge.v0_);
-    double c0 = (double)smoothed1(pix0.first, pix0.second);
+    auto c0 = (double)smoothed1(pix0.first, pix0.second);
     std::pair<unsigned, unsigned> pix1 = ss->get_pixel(edge.v1_);
-    double c1 = (double)smoothed1(pix1.first, pix1.second);
+    auto c1 = (double)smoothed1(pix1.first, pix1.second);
     double dif = c1-c0;
 
-    double h0 = (double)smoothed2(pix0.first, pix0.second);
-    double h1 = (double)smoothed2(pix1.first, pix1.second);
+    auto h0 = (double)smoothed2(pix0.first, pix0.second);
+    auto h1 = (double)smoothed2(pix1.first, pix1.second);
     double dif2 = h0-h1;
 
     edge.w_ = (float)std::sqrt(dif*dif + dif2*dif2);
 
-    double e0 = (double)edge_img(pix0.first, pix0.second);
-    double e1 = (double)edge_img(pix1.first, pix1.second);
+    auto e0 = (double)edge_img(pix0.first, pix0.second);
+    auto e1 = (double)edge_img(pix1.first, pix1.second);
     edge.w_ += ( e0 > e1 ? e0 : e1);
     //edges[i].w_ = (float)std::sqrt(dif*dif + dif2*dif2 + 100*(e0-e1)*(e0-e1));
   }

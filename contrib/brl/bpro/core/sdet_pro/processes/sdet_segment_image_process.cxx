@@ -45,8 +45,8 @@ bool sdet_segment_image_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_image_sptr = pro.get_input<vil_image_view_base_sptr>(0);
   int margin = pro.get_input<int>(1);
   int neigh = pro.get_input<int>(2);
-  float thres = pro.get_input<float>(3);
-  float sigma = pro.get_input<float>(4);
+  auto thres = pro.get_input<float>(3);
+  auto sigma = pro.get_input<float>(4);
   int min_size = pro.get_input<int>(5);
 
   //check input validity
@@ -112,8 +112,8 @@ bool sdet_segment_image_using_edge_map_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(1);
   int margin = pro.get_input<int>(2);
   int neigh = pro.get_input<int>(3);
-  float thres = pro.get_input<float>(4);
-  float sigma = pro.get_input<float>(5);
+  auto thres = pro.get_input<float>(4);
+  auto sigma = pro.get_input<float>(5);
   int min_size = pro.get_input<int>(6);
 
   //check input validity
@@ -182,8 +182,8 @@ bool sdet_segment_image_using_height_map_process(bprb_func_process& pro)
   vil_image_view_base_sptr input_height_image_sptr = pro.get_input<vil_image_view_base_sptr>(1);
   int margin = pro.get_input<int>(2);
   int neigh = pro.get_input<int>(3);
-  float thres = pro.get_input<float>(4);
-  float sigma = pro.get_input<float>(5);
+  auto thres = pro.get_input<float>(4);
+  auto sigma = pro.get_input<float>(5);
   int min_size = pro.get_input<int>(6);
 
   //check input validity
@@ -253,8 +253,8 @@ bool sdet_segment_image_using_height_map_process2(bprb_func_process& pro)
   vil_image_view_base_sptr input_edge_image_sptr = pro.get_input<vil_image_view_base_sptr>(2);
   int margin = pro.get_input<int>(3);
   int neigh = pro.get_input<int>(4);
-  float thres = pro.get_input<float>(5);
-  float sigma = pro.get_input<float>(6);
+  auto thres = pro.get_input<float>(5);
+  auto sigma = pro.get_input<float>(6);
   int min_size = pro.get_input<int>(7);
 
   //check input validity

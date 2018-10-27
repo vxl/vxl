@@ -66,7 +66,7 @@ class command_iteration_update: public rgrl_command
 
   void execute(const rgrl_object* caller, const rgrl_event & /*event*/ ) override
   {
-    const rgrl_feature_based_registration* reg_engine =
+    const auto* reg_engine =
       dynamic_cast<const rgrl_feature_based_registration*>(caller);
 
     // set precision
@@ -503,7 +503,7 @@ main( int argc, char* argv[] )
     prior_scale->set_geometric_scale( geometric_scale );
 
     // set mask_box to image size
-    rgrl_mask_box* box_ptr = new rgrl_mask_box(2);
+    auto* box_ptr = new rgrl_mask_box(2);
     box_ptr->set_x0( vnl_double_2(0, 0).as_ref() );
     const unsigned ni = from_images[num_stages].ni();
     const unsigned nj = from_images[num_stages].nj();

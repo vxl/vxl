@@ -70,9 +70,9 @@ bool boxm2_cpp_vis_of_point_process(bprb_func_process& pro)
     boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_cache_sptr cache = pro.get_input<boxm2_cache_sptr>(i++);
     vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-    float px=pro.get_input<float>(i++);
-    float py=pro.get_input<float>(i++);
-    float pz=pro.get_input<float>(i++);
+    auto px=pro.get_input<float>(i++);
+    auto py=pro.get_input<float>(i++);
+    auto pz=pro.get_input<float>(i++);
 
     bool foundDataType = false;
     std::string data_type;
@@ -98,7 +98,7 @@ bool boxm2_cpp_vis_of_point_process(bprb_func_process& pro)
     std::vector<boxm2_block_id> vis_order=scene->get_vis_order_from_pt(vgl_point_3d<double>(px,py,pz));
 
     vgl_ray_3d<double> ray;
-    if(vpgl_perspective_camera<double> * pcam=dynamic_cast<vpgl_perspective_camera<double> * > (cam.ptr()))
+    if(auto * pcam=dynamic_cast<vpgl_perspective_camera<double> * > (cam.ptr()))
     {
         vgl_point_3d<double>  qpoint(px,py,pz);
         vgl_point_3d<double>  cam_center=pcam->camera_center();
@@ -115,7 +115,7 @@ bool boxm2_cpp_vis_of_point_process(bprb_func_process& pro)
         boxm2_data_base *  alph = cache->get_data_base(scene,*id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
         std::vector<boxm2_data_base*> datas;
         datas.push_back(alph);
-        boxm2_scene_info_wrapper *scene_info_wrapper=new boxm2_scene_info_wrapper();
+        auto *scene_info_wrapper=new boxm2_scene_info_wrapper();
         scene_info_wrapper->info=scene->get_blk_metadata(*id);
         boxm2_render_vis_image_functor point_vis_functor;
         point_vis_functor.init_data(datas,&vis_img);

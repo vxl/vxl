@@ -91,7 +91,7 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     //compute the pixel interval (stride) for sampling the fraction
     double area = ni*nj;
     double stride_area = area/min_samples_;
-    unsigned stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
+    auto stride_interval = static_cast<unsigned>(std::sqrt(stride_area));
 
     // sample elevations
     std::vector<double> z_samples;
@@ -106,8 +106,8 @@ vpgl_backproject_dem::vpgl_backproject_dem( vil_image_resource_sptr const& dem, 
     // sort the samples to remove tails due to DEM errors
     std::sort(z_samples.begin(), z_samples.end());
     // remove the tails and compute min max elevations
-    double ns = static_cast<double>(z_samples.size());
-    unsigned band_size = static_cast<unsigned>(ns*tail_fract_);
+    auto ns = static_cast<double>(z_samples.size());
+    auto band_size = static_cast<unsigned>(ns*tail_fract_);
     for(unsigned k = band_size; k<(ns-band_size); ++k){
       double z = z_samples[k];
       if(z<zmin_calc) zmin_calc = static_cast<float>(z);
@@ -199,13 +199,13 @@ bool vpgl_backproject_dem::bproj_dem(const vpgl_camera<double>* cam, vnl_double_
 bool vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const& rcam, vnl_double_2 const& image_point, double max_z, double min_z,
                                      vnl_double_3 const& initial_guess, vnl_double_3& world_point, double error_tol){
 
-  const vpgl_camera<double>* cam = dynamic_cast<const vpgl_camera<double>* >(&rcam);
+  const auto* cam = dynamic_cast<const vpgl_camera<double>* >(&rcam);
   return this->bproj_dem(cam, image_point, max_z, min_z, initial_guess, world_point, error_tol);
 }
 
 bool vpgl_backproject_dem::bproj_dem(vpgl_rational_camera<double> const& rcam, vgl_point_2d<double> const& image_point, double max_z, double min_z,
                                      vgl_point_3d<double> const& initial_guess, vgl_point_3d<double>& world_point, double error_tol){
 
-  const vpgl_camera<double>* cam = dynamic_cast<const vpgl_camera<double>* >(&rcam);
+  const auto* cam = dynamic_cast<const vpgl_camera<double>* >(&rcam);
   return this->bproj_dem(cam, image_point, max_z, min_z, initial_guess, world_point, error_tol);
 }

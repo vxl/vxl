@@ -53,8 +53,8 @@ bool vpgl_create_perspective_camera_process(bprb_func_process& pro)
   }
   // get the inputs
 
-  double k00 = pro.get_input<double>(0), k02 = pro.get_input<double>(1);
-  double k11 = pro.get_input<double>(2), k12 = pro.get_input<double>(3);
+  auto k00 = pro.get_input<double>(0), k02 = pro.get_input<double>(1);
+  auto k11 = pro.get_input<double>(2), k12 = pro.get_input<double>(3);
   vnl_matrix_fixed<double ,3,3> m(0.0);
   m[0][0]=k00;   m[0][2]=k02;   m[1][1]=k11;   m[1][2]=k12; m[2][2]=1.0;
   vpgl_calibration_matrix<double> K(m);
@@ -66,7 +66,7 @@ bool vpgl_create_perspective_camera_process(bprb_func_process& pro)
   vgl_homg_point_3d<double> look(pro.get_input<double>(7), pro.get_input<double>(8), pro.get_input<double>(9));
   camera.look_at(look);
 
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(camera);
+  auto* ncam = new vpgl_perspective_camera<double>(camera);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
 
   return true;
@@ -102,7 +102,7 @@ bool vpgl_create_perspective_camera_process2(bprb_func_process& pro)
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
@@ -114,7 +114,7 @@ bool vpgl_create_perspective_camera_process2(bprb_func_process& pro)
   vgl_point_3d<double> cent(pro.get_input<float>(1), pro.get_input<float>(2), pro.get_input<float>(3));
   out_cam.set_camera_center(cent);
 
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  auto* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
 
   return true;
@@ -152,7 +152,7 @@ bool vpgl_create_perspective_camera_process3(bprb_func_process& pro)
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
@@ -179,7 +179,7 @@ bool vpgl_create_perspective_camera_process3(bprb_func_process& pro)
   vgl_point_3d<double> cent(pro.get_input<float>(3), pro.get_input<float>(4), pro.get_input<float>(5));
   out_cam.set_camera_center(cent);
 
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  auto* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
 
   return true;
@@ -219,18 +219,18 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   }
   // get the inputs
   vpgl_camera_double_sptr cam_ptr = pro.get_input<vpgl_camera_double_sptr>(0);
-  vpgl_perspective_camera<double>* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
+  auto* cam = dynamic_cast<vpgl_perspective_camera<double>*>(cam_ptr.ptr());
   if (!cam) {
     std::cerr << "vpgl_create_perspective_camera_process2: couldn't cast camera\n";
     return false;
   }
-  float cent_x = pro.get_input<float>(1);
-  float cent_y = pro.get_input<float>(2);
-  float cent_z = pro.get_input<float>(3);
+  auto cent_x = pro.get_input<float>(1);
+  auto cent_y = pro.get_input<float>(2);
+  auto cent_z = pro.get_input<float>(3);
 
-  float cent2_x = pro.get_input<float>(4);
-  float cent2_y = pro.get_input<float>(5);
-  float cent2_z = pro.get_input<float>(6);
+  auto cent2_x = pro.get_input<float>(4);
+  auto cent2_y = pro.get_input<float>(5);
+  auto cent2_z = pro.get_input<float>(6);
 
   //: assumes that the camera has it's up vector along x axis in the standard coordinates
   vgl_vector_3d<double> up_vec(0.0, 1.0, 0.0);
@@ -267,7 +267,7 @@ bool vpgl_create_perspective_camera_process4(bprb_func_process& pro)
   out_cam.set_rotation(composed_from_q*cam->get_rotation());
   out_cam.set_camera_center(pt2);
 
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  auto* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
 
   return true;
@@ -308,20 +308,20 @@ bool vpgl_create_perspective_camera_from_kml_process(bprb_func_process& pro)
     return false;
   }
   // get the inputs
-  unsigned ni = pro.get_input<unsigned>(0);
-  unsigned nj = pro.get_input<unsigned>(1);
-  double right_fov = pro.get_input<double>(2);
-  double top_fov = pro.get_input<double>(3);
-  double alt = pro.get_input<double>(4);
-  double heading = pro.get_input<double>(5);
-  double tilt = pro.get_input<double>(6);
-  double roll = pro.get_input<double>(7);
-  double cent_x = pro.get_input<double>(8);
-  double cent_y = pro.get_input<double>(9);
+  auto ni = pro.get_input<unsigned>(0);
+  auto nj = pro.get_input<unsigned>(1);
+  auto right_fov = pro.get_input<double>(2);
+  auto top_fov = pro.get_input<double>(3);
+  auto alt = pro.get_input<double>(4);
+  auto heading = pro.get_input<double>(5);
+  auto tilt = pro.get_input<double>(6);
+  auto roll = pro.get_input<double>(7);
+  auto cent_x = pro.get_input<double>(8);
+  auto cent_y = pro.get_input<double>(9);
 
   vpgl_perspective_camera<double> out_cam = bpgl_camera_utils::camera_from_kml((double)ni, (double)nj, right_fov, top_fov, 1.6, heading, tilt, roll);
   out_cam.set_camera_center(vgl_point_3d<double>(cent_x, cent_y, alt));
-  vpgl_perspective_camera<double>* ncam = new vpgl_perspective_camera<double>(out_cam);
+  auto* ncam = new vpgl_perspective_camera<double>(out_cam);
   pro.set_output_val<vpgl_camera_double_sptr>(0, ncam);
   return true;
 }
@@ -384,7 +384,7 @@ bool vpgl_create_perspective_camera_process5(bprb_func_process& pro)
   vgl_rotation_3d<double>R(R_temp);
   vgl_vector_3d<double>t(t_temp[0], t_temp[1], t_temp[2]);
 
-  vpgl_perspective_camera<double>* camera = new vpgl_perspective_camera<double>(K, R, t);
+  auto* camera = new vpgl_perspective_camera<double>(K, R, t);
 
   pro.set_output_val<vpgl_camera_double_sptr>(0, camera);
 

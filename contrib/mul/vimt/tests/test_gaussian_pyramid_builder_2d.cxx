@@ -36,13 +36,13 @@ static void test_gaussian_pyramid_builder_2d_build(vimt_gaussian_pyramid_builder
   image_pyr.print_all(std::cout);
 
   TEST("Found correct number of levels", image_pyr.n_levels(), 2);
-  const vimt_image_2d_of<vxl_byte>& v_image0 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(0));
+  const auto& v_image0 = static_cast<const vimt_image_2d_of<vxl_byte>&>(image_pyr(0));
   TEST("Base width",v_image0.image().ni(),ni);
   TEST("Base height",v_image0.image().nj(),nj);
 
   unsigned ni2 = (ni+1)/2;
   unsigned nj2 = (nj+1)/2;
-  const vimt_image_2d_of<vxl_byte>& v_image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(1));
+  const auto& v_image1 = static_cast<const vimt_image_2d_of<vxl_byte>&>( image_pyr(1));
   const vil_image_view<vxl_byte>& image1 = v_image1.image();
   TEST("Level 1 size x",image1.ni(),(ni+1)/2);
   TEST("Level 1 size y",image1.nj(),(nj+1)/2);

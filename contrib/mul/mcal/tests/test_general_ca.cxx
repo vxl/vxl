@@ -152,7 +152,7 @@ void test_general_ca()
     TEST("Correct component analyzer",ca->is_a(),"mcal_general_ca");
     if (ca->is_a()=="mcal_general_ca")
     {
-      mcal_general_ca &a_ca = static_cast<mcal_general_ca&>(*ca);
+      auto &a_ca = static_cast<mcal_general_ca&>(*ca);
       std::cout<<a_ca<<std::endl;
       TEST("initial_ca",a_ca.initial_ca().is_a(),"mcal_trivial_ca");
       TEST("basis_cost",a_ca.basis_cost().is_a(),"mcal_sparse_basis_cost");

@@ -14,10 +14,10 @@ static unsigned long rand_next;
 
 void test_at_file_size(const std::size_t n)
 {
-  vil_stream_core *fs_core_p = new vil_stream_core();
+  auto *fs_core_p = new vil_stream_core();
   vil_stream_sptr fs_core = fs_core_p;
 
-  unsigned char * data = new unsigned char[n];
+  auto * data = new unsigned char[n];
   // Use dodgy ANSI-C suggested rand() for repeatability.
   for (unsigned i=0;i<n;++i)
   {

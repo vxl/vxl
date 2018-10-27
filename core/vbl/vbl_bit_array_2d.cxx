@@ -65,7 +65,7 @@ void vbl_bit_array_2d::enlarge( unsigned int num_rows, unsigned int num_cols)
       index( i, 0, byteindex, bitindex);
 
       // find start of old column
-      unsigned long oldbyteindex= (unsigned long)(double(i*tempn)/CHAR_BIT);
+      auto oldbyteindex= (unsigned long)(double(i*tempn)/CHAR_BIT);
 
       // copy i-th column
       std::memcpy(data_+byteindex, tempdata+oldbyteindex, (tempn+CHAR_BIT-1)/CHAR_BIT);
@@ -117,7 +117,7 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j) const
   unsigned int bitindex;
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (unsigned char)(1<<bitindex);
+  auto mask= (unsigned char)(1<<bitindex);
 
   return (data_[byteindex] & mask) != 0;
 }
@@ -128,7 +128,7 @@ bool vbl_bit_array_2d::operator() (unsigned int i, unsigned int j)
   unsigned int bitindex;
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (unsigned char)(1<<bitindex);
+  auto mask= (unsigned char)(1<<bitindex);
 
   return (data_[byteindex] & mask) != 0;
 }
@@ -140,8 +140,8 @@ void vbl_bit_array_2d::put(unsigned int i, unsigned int j, bool const &x)
 
   index( i, j, byteindex, bitindex);
 
-  unsigned char mask= (unsigned char)(x?(1<<bitindex):0);
-  unsigned char nmask= (unsigned char)(~(1<<bitindex));
+  auto mask= (unsigned char)(x?(1<<bitindex):0);
+  auto nmask= (unsigned char)(~(1<<bitindex));
 
   data_[byteindex]= mask|(nmask & data_[byteindex]);
 }

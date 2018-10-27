@@ -64,7 +64,7 @@ int main(int argc, char ** argv)
           <<"  num ir: "<<irImgs.size()<<std::endl;
 
   //set the number of samples K to take from each image
-  std::size_t K = std::size_t(sparse() ? 10000 : 0x7fffffff);
+  auto K = std::size_t(sparse() ? 10000 : 0x7fffffff);
 
   //boxm2_class_generate_samples sampler(;a
   std::vector<vnl_vector_fixed<float,4> > allInts;

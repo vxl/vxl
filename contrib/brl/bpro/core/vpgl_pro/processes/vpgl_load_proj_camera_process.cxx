@@ -40,7 +40,7 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
 
   std::string ext = vul_file::extension(camera_filename);
   if (ext == ".vsl") { // load binary
-    vpgl_proj_camera<double>* procamp = new vpgl_proj_camera<double>();
+    auto* procamp = new vpgl_proj_camera<double>();
     vsl_b_ifstream ins(camera_filename.c_str());
     vsl_b_read(ins, *procamp);
     ins.close();

@@ -102,7 +102,7 @@ bool boxm2_roi_init_process_globals::roi_init( std::string const& image_path,
     return false;
   }
 
-  vil_nitf2_image* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
+  auto* nitf =  static_cast<vil_nitf2_image*> (img.ptr());
 
   vgl_box_3d<double> box = scene->bounding_box();
 
@@ -174,7 +174,7 @@ bool boxm2_roi_init_process_globals::roi_init( std::string const& image_path,
     vil_image_view<vxl_uint_16> nitf_image_vxl_uint_16(roi);
 
     //*nitf_image_unsigned_char = vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
-    vil_image_view<unsigned char>* nitf_image_unsigned_char = new vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
+    auto* nitf_image_unsigned_char = new vil_image_view<unsigned char> (roi->ni(),roi->nj(),roi->nplanes());
 
 
     int bigendian = 0;
@@ -189,7 +189,7 @@ bool boxm2_roi_init_process_globals::roi_init( std::string const& image_path,
           vxl_uint_16 curr_pixel_val = nitf_image_vxl_uint_16(m,n,p);
 
           if (bigendian) {
-            unsigned char* arr = (unsigned char*) &curr_pixel_val;
+            auto* arr = (unsigned char*) &curr_pixel_val;
             // [defgh3][5abc]
             // --> [abcdefgh]
             unsigned char big = *arr;
@@ -207,7 +207,7 @@ bool boxm2_roi_init_process_globals::roi_init( std::string const& image_path,
             curr_pixel_val >>= 8;
           }
 
-          unsigned char pixel_val = static_cast<unsigned char> (curr_pixel_val);
+          auto pixel_val = static_cast<unsigned char> (curr_pixel_val);
 
 #if 0
           //This is how Thom use to get the region
@@ -391,7 +391,7 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
 
   //vil_image_view<unsigned char>* img_ptr = new vil_image_view<unsigned char>();
   vil_image_view_base_sptr img_ptr;
-  vpgl_rational_camera<double>* rat_camera =
+  auto* rat_camera =
     dynamic_cast<vpgl_rational_camera<double>*> (camera.as_pointer());
   if (!rat_camera) {
     std::cerr << "The camera input is not a rational camera\n";

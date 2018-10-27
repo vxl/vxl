@@ -84,13 +84,13 @@ bool boxm_rpc_registration_process(bprb_func_process& pro)
   bool rpc_shift_3d_flag = pro.get_input<bool>(i++);
 
   // uncertainty in meters
-  float uncertainty = pro.get_input<float>(i++);
+  auto uncertainty = pro.get_input<float>(i++);
 
   // n_normal
-  float n_normal = pro.get_input<float>(i++);
+  auto n_normal = pro.get_input<float>(i++);
 
   // number of observations
-  unsigned num_observation = pro.get_input<unsigned>(i++);
+  auto num_observation = pro.get_input<unsigned>(i++);
 
   std::string edge_type="subpixel";//pro.get_input<std::string>(i++);
 

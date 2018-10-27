@@ -41,7 +41,7 @@ namespace boxm2_ocl_batch_probability_process_globals
 
     //compilation options
 
-    bocl_kernel* update_prob = new bocl_kernel();
+    auto* update_prob = new bocl_kernel();
     std::string prob_opts = " -D UPDATE_PROB ";
 
     update_prob->create_kernel(&device->context(), device->device_id(), src_paths, "update_prob_main", prob_opts, "update::update_prob");
@@ -146,7 +146,7 @@ bool boxm2_ocl_batch_probability_process(bprb_func_process& pro)
     kern->set_local_arg( lThreads[0]*lThreads[1]*10*sizeof(cl_uchar) );
 
     // TOFIX:::note that this for fixed grid.
-    boxm2_scene_info* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
+    auto* info_buffer = (boxm2_scene_info*) blk_info->cpu_buffer();
 
     std::size_t numtrees = info_buffer->scene_dims[0]*
                           info_buffer->scene_dims[1]*

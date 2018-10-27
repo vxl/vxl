@@ -44,11 +44,11 @@ bool boxm2_persp_cam_from_scene_process(bprb_func_process& pro)
   }
   //get the inputs
   boxm2_scene_sptr scene = pro.get_input<boxm2_scene_sptr>(0);
-  float xc = pro.get_input<float>(1);
-  float yc = pro.get_input<float>(2);
-  float zc = pro.get_input<float>(3);
-  unsigned ni = pro.get_input<unsigned>(4);
-  unsigned nj = pro.get_input<unsigned>(5);
+  auto xc = pro.get_input<float>(1);
+  auto yc = pro.get_input<float>(2);
+  auto zc = pro.get_input<float>(3);
+  auto ni = pro.get_input<unsigned>(4);
+  auto nj = pro.get_input<unsigned>(5);
   // get the scene bounding box
   vgl_box_3d<double> box = scene->bounding_box();
   vgl_point_3d<double> cam_center(xc, yc, zc);

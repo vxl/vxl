@@ -85,16 +85,16 @@ bool boxm2_ocl_change_detection_process2(bprb_func_process& pro)
   vil_image_view_base_sptr  img = pro.get_input<vil_image_view_base_sptr>(i++);
   std::string identifier = pro.get_input<std::string>(i++);
    bool  max_density = pro.get_input<bool>(i++);
-  float                    nearfactor = pro.get_input<float>(i++);
-  float                    farfactor = pro.get_input<float>(i++);
+  auto                    nearfactor = pro.get_input<float>(i++);
+  auto                    farfactor = pro.get_input<float>(i++);
 
   // img dims
   unsigned ni=img->ni();
   unsigned nj=img->nj();
 
   // allocate two output images
-  vil_image_view<float>*    change_img = new vil_image_view<float>(ni, nj);
-  vil_image_view<float>*    vis_img = new vil_image_view<float>(ni, nj);
+  auto*    change_img = new vil_image_view<float>(ni, nj);
+  auto*    vis_img = new vil_image_view<float>(ni, nj);
 
   // check to see which type of change detection to do, either two pass, or regular
   vul_timer t;

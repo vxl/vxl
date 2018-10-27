@@ -37,7 +37,7 @@ char const* vil_nitf2_file_format::tag() const
 
 vil_image_resource_sptr  vil_nitf2_file_format::make_input_image(vil_stream *vs)
 {
-  vil_nitf2_image* im = new vil_nitf2_image( vs );
+  auto* im = new vil_nitf2_image( vs );
   if ( !im->parse_headers() ) {
     delete im;
     im = nullptr;
@@ -73,7 +73,7 @@ vil_streampos vil_nitf2_image::get_offset_to( vil_nitf2_header::section_type sec
     p = 0;
   }
   else {
-    vil_nitf2_header::section_type preceding_section = (vil_nitf2_header::section_type)(sec-1);
+    auto preceding_section = (vil_nitf2_header::section_type)(sec-1);
     p = get_offset_to( preceding_section, vil_nitf2_header::enum_subheader, 0 ) +
         size_to( preceding_section, vil_nitf2_header::enum_subheader, -1 ) +
         size_to( sec, por, index );
@@ -629,7 +629,7 @@ vil_image_view_base_sptr get_block_vcl_internal(vil_pixel_format pix_format, vil
     image_memory = maybe_byte_align_data(image_memory, num_samples, bits_per_pixel_per_band, dummy);
   }
 
-  vil_image_view< T >* result =
+  auto* result =
     new vil_image_view< T > (image_memory, reinterpret_cast<T*>(image_memory->data()),
                               pixels_per_block_x, pixels_per_block_y, nplanes, i_step, j_step, plane_step);
 
@@ -850,7 +850,7 @@ bool vil_nitf2_image::get_property (char const *tag, void *property_value) const
 
 vil_nitf2_field::field_tree* vil_nitf2_image::get_tree( ) const
 {
-  vil_nitf2_field::field_tree* t = new vil_nitf2_field::field_tree;
+  auto* t = new vil_nitf2_field::field_tree;
   t->columns.emplace_back("NITF File" );
   t->children.push_back( get_header().get_tree() );
   unsigned int i;

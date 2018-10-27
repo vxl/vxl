@@ -162,10 +162,10 @@ bool brec_detect_hierarchy_process(bprb_func_process& pro)
   }
 
   brec_part_hierarchy_detector_sptr d = pro.get_input<brec_part_hierarchy_detector_sptr>(i++);
-  unsigned layer_id = pro.get_input<unsigned>(i++);
-  float angle = pro.get_input<float>(i++);
-  double detection_radius = pro.get_input<double>(i++);
-  float class_prior = pro.get_input<float>(i++);
+  auto layer_id = pro.get_input<unsigned>(i++);
+  auto angle = pro.get_input<float>(i++);
+  auto detection_radius = pro.get_input<double>(i++);
+  auto class_prior = pro.get_input<float>(i++);
 
   vul_timer t2;
   t2.mark();

@@ -35,7 +35,7 @@ std::string vil_nitf2_field::description() const
 
 vil_nitf2_field::field_tree* vil_nitf2_field::get_tree( ) const
 {
-  field_tree* tr = new field_tree;
+  auto* tr = new field_tree;
   tr->columns.push_back( tag() );
   tr->columns.push_back( pretty_name() );
   return tr;

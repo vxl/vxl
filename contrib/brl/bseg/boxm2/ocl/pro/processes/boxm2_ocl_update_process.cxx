@@ -100,10 +100,10 @@ bool boxm2_ocl_update_process(bprb_func_process& pro)
   std::string               ident = pro.get_input<std::string>(i++);
   vil_image_view_base_sptr mask_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   bool                     update_alpha = pro.get_input<bool>(i++);
-  float                    mog_var = pro.get_input<float>(i++);
+  auto                    mog_var = pro.get_input<float>(i++);
   bool                     update_app = pro.get_input<bool>(i++);
-  float                    nearfactor = pro.get_input<float>(i++);
-  float                    farfactor = pro.get_input<float>(i++);
+  auto                    nearfactor = pro.get_input<float>(i++);
+  auto                    farfactor = pro.get_input<float>(i++);
 
   vul_timer t;
   t.mark();

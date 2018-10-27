@@ -200,7 +200,7 @@ unsigned int bmdl_mesh::link_boundary_edges(const vil_image_view<unsigned int>& 
   edge_labels.fill(0);
 
   unsigned int joint_count = 0;
-  unsigned int last_joint = static_cast<unsigned int>(-1);
+  auto last_joint = static_cast<unsigned int>(-1);
 
   regions.resize(polygons.size());
   for (unsigned int i=0; i<polygons.size(); ++i)
@@ -523,8 +523,8 @@ void bmdl_mesh::mesh_lidar(const std::vector<vgl_polygon<double> >& boundaries,
     }
   }
 
-  imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
-  imesh_face_array *faces = new imesh_face_array;
+  auto *verts = new imesh_vertex_array<3>;
+  auto *faces = new imesh_face_array;
 
   // create the buildings
   for (unsigned int b=0; b<boundaries.size(); ++b) {
@@ -566,7 +566,7 @@ namespace{
                                 const imesh_vertex<3>& v)
   {
     bool found = false;
-    std::vector<unsigned int>::iterator i=vert_stack.begin();
+    auto i=vert_stack.begin();
     for (; i!=vert_stack.end() && verts[*i][2] <= v[2]; ++i)
     {
       if (verts[*i][2] == v[2])
@@ -590,7 +590,7 @@ namespace{
                  const imesh_vertex_array<3>& verts,
                  double height)
   {
-    for (std::vector<unsigned int>::const_iterator i=idxs.begin(); i!=idxs.end(); ++i)
+    for (auto i=idxs.begin(); i!=idxs.end(); ++i)
       if (verts[*i][2] == height)
         return i;
     return idxs.end();
@@ -651,8 +651,8 @@ void bmdl_mesh::mesh_lidar(const std::vector<bmdl_edge>& edges,
   std::vector<std::vector<unsigned int> > edge_to_mesh(edges.size());
   std::vector<std::vector<unsigned int> > joint_vert_stack(num_joints);
 
-  imesh_vertex_array<3> *verts = new imesh_vertex_array<3>;
-  imesh_face_array *faces = new imesh_face_array;
+  auto *verts = new imesh_vertex_array<3>;
+  auto *faces = new imesh_face_array;
 
   // precompute a mesh vertices located at joints
   for (const auto & edge : edges)
@@ -799,10 +799,10 @@ void bmdl_mesh::mesh_lidar(const std::vector<bmdl_edge>& edges,
         typedef std::vector<unsigned int>::const_iterator vfitr;
         typedef std::vector<unsigned int>::const_reverse_iterator vritr;
 
-        vfitr i1beg = jvs1.begin(); // first vertex is on ground
-        vfitr i1end = find_by_height(jvs1, *verts, bld_heights[b]);
-        vfitr i2beg = jvs2.begin(); // first vertex is on ground
-        vfitr i2end = find_by_height(jvs2, *verts, bld_heights[b]);
+        auto i1beg = jvs1.begin(); // first vertex is on ground
+        auto i1end = find_by_height(jvs1, *verts, bld_heights[b]);
+        auto i2beg = jvs2.begin(); // first vertex is on ground
+        auto i2end = find_by_height(jvs2, *verts, bld_heights[b]);
         assert(i1end != jvs1.end());
         assert(i2end != jvs2.end());
         if (!on_ground)

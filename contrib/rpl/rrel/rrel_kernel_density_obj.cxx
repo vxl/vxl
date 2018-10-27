@@ -130,7 +130,7 @@ rrel_kernel_density_obj::bandwidth(vect_const_iter res_begin, vect_const_iter re
     //because it assumes residuals are zero-based and have a Gaussian distribution.
 
     std::vector<double> residuals(res_begin, res_end);
-    std::vector<double>::iterator loc = residuals.begin() + n / 2;
+    auto loc = residuals.begin() + n / 2;
     std::nth_element( residuals.begin(), loc, residuals.end() );
 
     double res_median = *loc;

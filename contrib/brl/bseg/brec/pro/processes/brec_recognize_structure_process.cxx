@@ -70,8 +70,8 @@ bool brec_recognize_structure_process(bprb_func_process& pro)
   vul_timer t2;
   t2.mark();
 
-  unsigned d_id = pro.get_input<unsigned>(i++);
-  float angle = pro.get_input<float>(i++);
+  auto d_id = pro.get_input<unsigned>(i++);
+  auto angle = pro.get_input<float>(i++);
 
   brec_part_hierarchy_sptr h;
   switch (d_id) {
@@ -194,9 +194,9 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
   }
 
   brec_part_hierarchy_sptr h = pro.get_input<brec_part_hierarchy_sptr>(i++);
-  float angle = pro.get_input<float>(i++);
+  auto angle = pro.get_input<float>(i++);
   bool training = pro.get_input<bool>(i++);
-  double detection_radius = pro.get_input<double>(i++);
+  auto detection_radius = pro.get_input<double>(i++);
 
   vul_timer t2;
   t2.mark();

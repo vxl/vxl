@@ -63,7 +63,7 @@ namespace bstm_ocl_get_surface_pt_process_globals
     options += " -D STEP_CELL=step_cell_surface_pt(aux_args,data_ptr_tt,d*linfo->block_len,posx*linfo->block_len+linfo->origin.x,posy*linfo->block_len+linfo->origin.y,posz*linfo->block_len+linfo->origin.z)";
 
     //have kernel construct itself using the context and device
-    bocl_kernel * ray_trace_kernel=new bocl_kernel();
+    auto * ray_trace_kernel=new bocl_kernel();
 
     std::cout << "Compiling with options: " << options << std::endl;
     ray_trace_kernel->create_kernel( &device->context(),
@@ -117,12 +117,12 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   bstm_scene_sptr scene =pro.get_input<bstm_scene_sptr>(i++);
   bstm_opencl_cache_sptr opencl_cache= pro.get_input<bstm_opencl_cache_sptr>(i++);
   vpgl_camera_double_sptr cam= pro.get_input<vpgl_camera_double_sptr>(i++);
-  unsigned ni=pro.get_input<unsigned>(i++);
-  unsigned nj=pro.get_input<unsigned>(i++);
-  unsigned pixel_x=pro.get_input<unsigned>(i++);
-  unsigned pixel_y=pro.get_input<unsigned>(i++);
-  float time = pro.get_input<float>(i++);
-  float prob_t = pro.get_input<float>(i++);
+  auto ni=pro.get_input<unsigned>(i++);
+  auto nj=pro.get_input<unsigned>(i++);
+  auto pixel_x=pro.get_input<unsigned>(i++);
+  auto pixel_y=pro.get_input<unsigned>(i++);
+  auto time = pro.get_input<float>(i++);
+  auto prob_t = pro.get_input<float>(i++);
 
 
   //: create a command queue.
@@ -154,8 +154,8 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   // create all buffers
   unsigned cl_ni=RoundUp(ni,8);
   unsigned cl_nj=RoundUp(nj,8);
-  cl_float* ray_origins = new cl_float[4*cl_ni*cl_nj];
-  cl_float* ray_directions = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_origins = new cl_float[4*cl_ni*cl_nj];
+  auto* ray_directions = new cl_float[4*cl_ni*cl_nj];
   bocl_mem_sptr ray_o_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_origins, "ray_origins buffer");
   bocl_mem_sptr ray_d_buff = opencl_cache->alloc_mem(cl_ni*cl_nj*sizeof(cl_float4), ray_directions, "ray_directions buffer");
   boxm2_ocl_camera_converter::compute_ray_image( device, queue, cam, cl_ni, cl_nj, ray_o_buff, ray_d_buff);
@@ -178,7 +178,7 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
   bocl_mem_sptr exp_img_dim=new bocl_mem(device->context(), img_dim_buff, sizeof(int)*4, "image dims");
   exp_img_dim->create_buffer(CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR);
 
-  cl_float cl_prob_t = (cl_float)prob_t;
+  auto cl_prob_t = (cl_float)prob_t;
   bocl_mem_sptr prob_t_mem =new bocl_mem(device->context(), &cl_prob_t, sizeof(cl_float), "prob t buffer");
   prob_t_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 
@@ -198,7 +198,7 @@ bool bstm_ocl_get_surface_pt_process(bprb_func_process& pro)
       if(!mdata.contains_t(time,local_time))
         continue;
 
-      cl_float cl_time = (cl_float)local_time;
+      auto cl_time = (cl_float)local_time;
       bocl_mem_sptr time_mem =new bocl_mem(device->context(), &cl_time, sizeof(cl_float), "time instance buffer");
       time_mem->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR);
 

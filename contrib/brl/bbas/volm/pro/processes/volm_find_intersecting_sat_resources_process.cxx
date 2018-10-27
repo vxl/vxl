@@ -60,7 +60,7 @@ bool volm_find_intersecting_sat_resources_process(bprb_func_process& pro)
   unsigned in_i = 0;
   volm_satellite_resources_sptr res = pro.get_input<volm_satellite_resources_sptr>(0);
   std::string kml_file = pro.get_input<std::string>(1);
-  float max_intersecting_resources = pro.get_input<float>(2);
+  auto max_intersecting_resources = pro.get_input<float>(2);
   std::string out_file = pro.get_input<std::string>(3);
 
   std::vector<std::string> intersecting_res;

@@ -50,7 +50,7 @@ bool boxm2_ocl_refine_process(bprb_func_process& pro)
     bocl_device_sptr        device = pro.get_input<bocl_device_sptr>(i++);
     boxm2_scene_sptr        scene = pro.get_input<boxm2_scene_sptr>(i++);
     boxm2_opencl_cache_sptr opencl_cache = pro.get_input<boxm2_opencl_cache_sptr>(i++);
-    float                   thresh = pro.get_input<float>(i++);
+    auto                   thresh = pro.get_input<float>(i++);
 
     unsigned num_cells = boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh);
     std::cout<<"boxm2_ocl_refine_process num split: "<<num_cells<<std::endl;

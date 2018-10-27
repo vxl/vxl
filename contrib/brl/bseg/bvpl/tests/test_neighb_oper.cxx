@@ -54,7 +54,7 @@ bool save_occupancy_raw(std::string filename, bvxm_voxel_grid<float>* grid)
 
   // write data
   // iterate through slabs and fill in memory array
-  float *ocp_array = new float[nx*ny*nz];
+  auto *ocp_array = new float[nx*ny*nz];
 
   bvxm_voxel_grid<float>::iterator ocp_it = grid->begin();
   for (unsigned k=0; ocp_it != grid->end(); ++ocp_it, ++k) {
