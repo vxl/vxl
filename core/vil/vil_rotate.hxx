@@ -16,7 +16,7 @@
 #include <vcl_compiler.h>
 
 //: Calculate theta in range 0 to x
-static double calc_theta_mod(double theta, double x)
+static inline double calc_theta_mod(double theta, double x)
 {
   if (x<0) x=-x;
   double theta_x = std::fmod(theta,x);

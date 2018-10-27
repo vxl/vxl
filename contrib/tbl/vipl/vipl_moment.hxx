@@ -12,7 +12,7 @@
 // depend on vnl just for this alone.)
 
 // template code cannot see file statics.
-static double power(double x, int y)
+static inline double power(double x, int y)
 {
   if (y == 0)
     return 1.0;
