@@ -9,9 +9,8 @@
 
 
 #include <iostream>
+#include <cassert>
 #include "vnl_sparse_lst_sqr_function.h"
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_vector_ref.h>
 
 void vnl_sparse_lst_sqr_function::dim_warning(unsigned int nr_of_unknowns,

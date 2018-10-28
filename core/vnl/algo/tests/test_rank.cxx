@@ -2,8 +2,6 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_rank.h>
 
-#include <testlib/testlib_test.h>
-
 inline int svd_rank(vnl_matrix<double> const& M) { return vnl_svd<double>(M, 1e-8).rank(); }
 
 void test_rank()

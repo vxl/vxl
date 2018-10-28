@@ -6,11 +6,8 @@
 // \file
 
 #include <limits>
-#include <cfloat>
 #include <cmath>
 #include "vnl_math.h"
-#include <vxl_config.h>
-#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 //: Type-accessible infinities for use in templates.

@@ -1,17 +1,16 @@
 #include <iostream>
 #include <iomanip>
 #include <complex>
-#include <vcl_compiler.h>
 #include <vnl/vnl_rational.h>
-#include <vnl/vnl_rational_traits.h>
+
 #ifdef NEED_COMPLEX_RATIONAL
 # include <vnl/vnl_complex.h>
 #endif
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_rational_traits.h>
 #include <vnl/vnl_det.h>
-#include <vxl_config.h> // for VXL_INT_64_IS_LONG
 
 inline vnl_rational vnl_sqrt(vnl_rational x) { return vnl_rational(std::sqrt(double(x))); }
 

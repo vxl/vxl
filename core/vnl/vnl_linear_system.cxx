@@ -8,7 +8,7 @@
 // \date   July 2000
 
 #include "vnl_linear_system.h"
-#include <vcl_cassert.h>
+#include <cassert>
 
 vnl_linear_system::~vnl_linear_system() = default;
 

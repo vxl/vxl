@@ -3,12 +3,9 @@
 #pragma implementation
 #endif
 
+#include <cassert>
 #include "vnl_brent.h"
-
-#include <vcl_cassert.h>
-
 #include <vnl/algo/vnl_bracket_minimum.h>
-
 
 vnl_brent::vnl_brent(vnl_cost_function* functor)
   : vnl_brent_minimizer( *functor )

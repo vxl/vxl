@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_cost_function.h"
-#include <vcl_cassert.h>
+#include <cassert>
 
 static bool f_calling_compute;
 

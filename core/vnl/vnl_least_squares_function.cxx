@@ -8,9 +8,8 @@
 // \date   31 Aug 96
 
 #include <iostream>
+#include <cassert>
 #include "vnl_least_squares_function.h"
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 
 void vnl_least_squares_function::dim_warning(unsigned int number_of_unknowns,
                                              unsigned int number_of_residuals)

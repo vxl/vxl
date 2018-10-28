@@ -15,7 +15,6 @@
 #include <complex>
 #include "vnl_rpoly_roots.h"
 
-#include <vcl_compiler.h>
 #include <vnl/algo/vnl_netlib.h> // rpoly_()
 #include <vnl/vnl_real_polynomial.h>
 

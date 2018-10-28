@@ -3,21 +3,9 @@
 #include <complex>
 #include <testlib/testlib_test.h>
 
-#include <vcl_compiler.h>
 #include <vnl/vnl_complexify.h>
 #include <vnl/vnl_real.h>
 #include <vnl/vnl_imag.h>
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_vector_fixed.h>
-
-#include <vnl/vnl_matrix.h>
-#include <vnl/vnl_matrix_fixed.h>
-
-#include <vnl/vnl_diag_matrix.h>
-#include <vnl/vnl_diag_matrix_fixed.h>
-
-#include <vnl/vnl_sym_matrix.h>
 
 template <typename ValueType>
 static

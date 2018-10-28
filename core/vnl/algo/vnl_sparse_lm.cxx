@@ -11,13 +11,7 @@
 
 #include <iostream>
 #include <iomanip>
-#include <algorithm>
 #include "vnl_sparse_lm.h"
-
-#include <vcl_compiler.h>
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_crs_index.h>

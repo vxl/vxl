@@ -5,13 +5,11 @@
 //:
 // \file
 #include <cmath>
+#include <cassert>
 #include <iostream>
-#include <fstream>
-#include "vnl_rnpoly_solve.h"
+#include <vnl/algo/vnl_rnpoly_solve.h>
+#include <vnl/vnl_math.h>
 
-#include <vnl/vnl_math.h> // for vnl_math::twopi
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #ifdef DEBUG
 #endif
 

@@ -3,8 +3,6 @@
 #include <iostream>
 #include <vnl/vnl_numeric_traits.h>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <vxl_config.h> // for VXL_BIG_ENDIAN
 
 static
 void check_pointer( const void* )

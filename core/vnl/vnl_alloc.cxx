@@ -8,8 +8,6 @@
 #include <iostream>
 #include "vnl_alloc.h"
 
-#include <vcl_compiler.h>
-
 char*
 vnl_alloc::chunk_alloc(std::size_t size, int& nobjs)
 {

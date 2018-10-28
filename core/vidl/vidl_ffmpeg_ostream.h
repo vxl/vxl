@@ -35,8 +35,8 @@ class VIDL_EXPORT vidl_ffmpeg_ostream
   vidl_ffmpeg_ostream();
 
   //: Constructor - opens a stream
-  vidl_ffmpeg_ostream(std::string  filenam,
-                      vidl_ffmpeg_ostream_params  parms);
+  vidl_ffmpeg_ostream(const std::string  & filenam,
+                      const vidl_ffmpeg_ostream_params  & parms);
 
   //: Destructor
   ~vidl_ffmpeg_ostream() override;

@@ -6,7 +6,6 @@
 #include <vnl/vnl_polynomial.h>
 #include <vnl/vnl_decnum.h>
 #include <vnl/vnl_rational.h>
-#include <vcl_compiler.h>
 
 void test_polynomial_double()
 {

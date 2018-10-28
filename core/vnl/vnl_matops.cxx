@@ -10,7 +10,7 @@
 //-----------------------------------------------------------------------------
 
 #include "vnl_matops.h"
-#include <vcl_cassert.h>
+#include <cassert>
 
 vnl_matrix<double> vnl_matops::cat(vnl_matrix<double> const &A, vnl_matrix<double> const &B)
 {

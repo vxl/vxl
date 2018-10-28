@@ -1,13 +1,10 @@
 #include <iostream>
-#include <limits>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_quaternion.h>
-#include <vnl/vnl_vector_fixed.h>
-#include <vnl/vnl_matrix_fixed.h>
+
 #include <vnl/vnl_rotation_matrix.h>
-#include <vcl_compiler.h>
 
 // Tolerance between doubles. This was inferred by trial and error.
 // Could be derived mathematically?

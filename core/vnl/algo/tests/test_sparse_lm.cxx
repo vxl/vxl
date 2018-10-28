@@ -1,11 +1,9 @@
 #include <iostream>
+#include <cassert>
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vnl/algo/vnl_sparse_lm.h>
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_random.h>
-#include <vnl/vnl_math.h>
 
 
 // translate, scale, and rotate all cameras and points into a

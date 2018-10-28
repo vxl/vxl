@@ -11,8 +11,6 @@
 
 #include <complex>
 #include "vnl_numeric_traits.h"
-#include <vcl_compiler.h>
-#include <vxl_config.h>
 
 constexpr bool vnl_numeric_traits<bool>::zero;
 constexpr char vnl_numeric_traits<char>::zero;

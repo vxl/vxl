@@ -20,7 +20,7 @@
 #include <rgrl/rgrl_view_sptr.h>
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_fwd.h>
-#include <vcl_stlfwd.h>
+#include <vector>
 
 //: Represents a "view" of the registration problem.
 //

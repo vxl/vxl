@@ -9,7 +9,6 @@
 #include <iostream>
 #include <iomanip>
 #include "vnl_nonlinear_minimizer.h"
-#include <vcl_compiler.h>
 
 //: Default ctor sets verbosity etc.
 vnl_nonlinear_minimizer::vnl_nonlinear_minimizer()

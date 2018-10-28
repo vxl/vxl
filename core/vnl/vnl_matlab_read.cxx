@@ -4,17 +4,14 @@
 #endif
 #include <ios>
 #include <iostream>
-#include <cstring>
 #include <complex>
-#include <cstdlib>
-#include <new>
+#include <cstring>
 #include "vnl_matlab_read.h"
+
+#include <vnl/vnl_c_vector.h>
 //:
 // \file
 // \author fsm
-#include <vxl_config.h>
-#include <vnl/vnl_c_vector.h>
-#include <vcl_compiler.h>
 
 // Provide vcl_destroy() and vcl_construct() : ONLY USED IN vnl_matlab
 template <class T>
@@ -230,8 +227,6 @@ fsm_define_methods(std::complex<double>);
 
 //--------------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 

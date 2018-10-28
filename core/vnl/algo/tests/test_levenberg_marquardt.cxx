@@ -1,10 +1,9 @@
 // @author fsm
 #include <cmath>
 #include <iostream>
+#include <cassert>
 #include <vnl/vnl_double_2.h>
-#include <vcl_compiler.h>
 
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 

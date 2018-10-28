@@ -12,10 +12,8 @@
 #endif
 
 #include <vnl/vnl_index_sort.h>
-#include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
-#include <vcl_compiler.h>
 
 // The following defaults can be overridden with options -n and -m of the standalone version
 // And these are the effectivly used values:

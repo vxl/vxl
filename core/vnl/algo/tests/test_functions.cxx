@@ -2,7 +2,6 @@
 #include <iostream>
 #include <iomanip>
 #include <cmath>
-#include <ctime>
 #include <testlib/testlib_test.h>
 //:
 // \file
@@ -19,10 +18,6 @@
 //
 // For readability reasons, the rows are split in 2x 5 rows, with an extra
 // indentation for the second half of each row.
-
-#include <vcl_compiler.h>
-
-#include <vnl/algo/vnl_chi_squared.h>
 
 double cdf_baseline[] =
 {

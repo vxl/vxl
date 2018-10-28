@@ -13,7 +13,6 @@
 #include <cstring>
 #include <iostream>
 #include "vnl_lbfgsb.h"
-#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_netlib.h> // setulb_()
 

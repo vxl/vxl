@@ -12,9 +12,7 @@
 
 #include <iostream>
 #include <complex>
-#include <cmath>
 #include "vnl_real_polynomial.h"
-#include <vcl_compiler.h>
 
 // This is replacing a member template...
 template <class T>

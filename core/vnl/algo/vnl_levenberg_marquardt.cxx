@@ -10,15 +10,9 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
+#include <cassert>
 #include "vnl_levenberg_marquardt.h"
-
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_fastops.h>
-#include <vnl/vnl_vector_ref.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_least_squares_function.h>
 #include <vnl/algo/vnl_netlib.h> // lmdif_()

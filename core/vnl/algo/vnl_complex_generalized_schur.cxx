@@ -7,12 +7,8 @@
 // \author fsm
 
 #include <iostream>
+#include <cassert>
 #include "vnl_complex_generalized_schur.h"
-
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
-
-#include <vnl/vnl_vector.h>
 
 #include <vnl/algo/vnl_netlib.h> // zgges_()
 

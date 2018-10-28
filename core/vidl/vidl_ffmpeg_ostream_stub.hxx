@@ -3,6 +3,7 @@
 #define vidl_ffmpeg_ostream_stub_hxx_
 #include <iostream>
 #include <stdexcept>
+#include <string>
 #include "vidl_ffmpeg_ostream.h"
 
 //:

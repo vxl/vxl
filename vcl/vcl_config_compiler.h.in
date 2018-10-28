@@ -178,7 +178,6 @@
 // \code
 //     VCL_DO_NOT_INSTANTIATE(int T::bad_method(), some_return_value)
 // \endcode
-// if the function is void, use VCL_VOID_RETURN as the return value
 
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) text { return ret; }
 //#define VCL_DO_NOT_INSTANTIATE(text, ret) template <> text { return ret; }

@@ -3,12 +3,8 @@
 #include <cstddef>
 #include <cmath>
 #include <iostream>
-#include <exception>
-#include <cstdio>
-#include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix_fixed.hxx>
-#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_2x2.h>

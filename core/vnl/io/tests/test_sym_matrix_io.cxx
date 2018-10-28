@@ -1,10 +1,7 @@
 // This is core/vnl/io/tests/test_sym_matrix_io.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>
-#include <testlib/testlib_test.h>
-#include <vpl/vpl.h>
 
 void test_sym_matrix_double_io()
 {

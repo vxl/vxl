@@ -4,15 +4,12 @@
 // \author Ian Scott
 
 #include <vector>
-#include <iostream>
-#include <fstream>
 #include <ctime>
+#include <iostream>
 #include <algorithm>
-#include <string>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
-#include <vcl_compiler.h>
 
 constexpr unsigned nstests = 10;
 

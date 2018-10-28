@@ -2,16 +2,14 @@
 #include <cstdlib>
 #include <cstring>
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 #include <vector>
 #include <iostream>
-#include <limits>
 #include "vnl_bignum.h"
 //:
 // \file
 
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #include <vnl/vnl_math.h> // for vnl_math::isfinite(double)
 
 typedef unsigned short Counter;

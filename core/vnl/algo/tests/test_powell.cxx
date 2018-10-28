@@ -5,15 +5,11 @@
 
 #include <iostream>
 #include <cmath>
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
+#include <cassert>
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_powell.h>
-#include <vnl/vnl_cost_function.h>
-
-#include <testlib/testlib_test.h>
 
 
 //-------------------------------------------------------------------------

@@ -5,9 +5,9 @@
 //:
 // \file
 #include <iostream>
+#include <cassert>
 #include "vnl_powell.h"
 
-#include <vcl_cassert.h>
 #include <vnl/vnl_math.h>
 #undef VNL_USE_OLD_BRENT_MINIMIZER // #define VNL_USE_OLD_BRENT_MINIMIZER
 // This version was deprecated, and the refactoring to the new minimizer was not done correctly with respect to initialisation.

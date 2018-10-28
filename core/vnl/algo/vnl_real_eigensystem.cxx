@@ -11,9 +11,8 @@
 //-----------------------------------------------------------------------------
 
 #include <iostream>
+#include <cassert>
 #include "vnl_real_eigensystem.h"
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 #include <vnl/vnl_fortran_copy.h>
 #include <vnl/algo/vnl_netlib.h> // rg_()
 

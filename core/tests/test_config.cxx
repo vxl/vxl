@@ -838,14 +838,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_ICC ";
-#ifdef VCL_ICC
-  std::cout << "is set to " << quote(VCL_ICC);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_WIN32 ";
 #ifdef VCL_WIN32
   std::cout << "is set to " << quote(VCL_WIN32);

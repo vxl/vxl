@@ -3,8 +3,8 @@
 #pragma implementation
 #endif
 
+#include <cassert>
 #include "vnl_sparse_matrix_linear_system.h"
-#include <vcl_cassert.h>
 #include <vnl/vnl_copy.h>
 
 template <>

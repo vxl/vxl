@@ -1,8 +1,8 @@
 // expatpp
-#ifdef UNDER_CE
 #include <cstring>
 #include <string>
 #include <cassert>
+#ifdef UNDER_CE
   #include <windows.h>
   #include <dbgapi.h>
   #define assert ASSERT
@@ -183,7 +183,7 @@ XML_Status
 expatpp::parseString(const char* inString)
 {
 //  ResetParser();
-  const int inLen = strlen(inString);
+  const int inLen = std::strlen(inString);
   return XML_Parse(inString, inLen, 1);
 }
 
