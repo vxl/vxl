@@ -21,7 +21,7 @@
 
 //: Simple 3d wrapper over a 1D buffer
 //
-VCL_EXPORT template <class T>
+template <class T>
 class boxm2_array_3d
 {
  public:
@@ -150,10 +150,10 @@ class boxm2_array_3d
 //
 // formatted I/O
 //
-VCL_EXPORT template <class T> std::ostream& operator<<(std::ostream&,
+template <class T> std::ostream& operator<<(std::ostream&,
                                                   boxm2_array_3d<T >const&);
 
-VCL_EXPORT template <class T> std::istream& operator>>(std::istream&,
+template <class T> std::istream& operator>>(std::istream&,
                                                   boxm2_array_3d<T >&);
 
 #define BOXM2_ARRAY_3D_INSTANTIATE \

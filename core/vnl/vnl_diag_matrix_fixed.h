@@ -37,7 +37,6 @@ template <class T, unsigned int N> VNL_EXPORT vnl_vector_fixed<T,N> operator*(vn
 //  operations (currently *, + and -) are overloaded to use more efficient
 //  algorithms.
 
-VCL_EXPORT
 template <class T, unsigned int N>
 class VNL_EXPORT vnl_diag_matrix_fixed
 {

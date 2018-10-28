@@ -31,7 +31,7 @@ template <class T, class S> VNL_EXPORT void vnl_c_na_vector_two_norm(T const *p,
 template <class T, class S> VNL_EXPORT void vnl_c_na_vector_two_norm_squared(T const *p, unsigned n, S *out);
 
 //: vnl_c_na_vector interfaces to NA-aware lowlevel memory-block operations.
-VCL_EXPORT template <class T>
+template <class T>
 class VNL_EXPORT vnl_c_na_vector
 {
  public:

@@ -23,7 +23,7 @@
 //: vnl_vector using user-supplied storage
 //   vnl_vector for which the data space has
 //   been supplied externally.
-VCL_EXPORT template <class T>
+template <class T>
 class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
 {
  public:
