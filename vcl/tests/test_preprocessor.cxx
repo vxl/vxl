@@ -18,10 +18,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   ++compiler_count;
 #endif
 
-#ifdef VCL_ICC
-  ++compiler_count;
-#endif
-
   int result = 0;
 
   std::cout << "Compiler brand uniquely identified: ";
