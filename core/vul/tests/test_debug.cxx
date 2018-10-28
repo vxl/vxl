@@ -39,8 +39,6 @@ static void test_debug()
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
 
-#ifdef VCL_HAS_EXCEPTIONS
-
 #if defined(_WIN32) && THOROUGH_TESTING
   {
     std::cout << "Test Structured exception coredump\n";
@@ -94,7 +92,6 @@ static void test_debug()
     TEST("Core dump file exists", vul_file_exists(base_filename) || vul_file_exists(long_filename), true);
     TEST("Core dump file is sensible size", vul_file_size(base_filename)+vul_file_size(long_filename) > 100, true);
   }
-#endif // VCL_HAS_EXCEPTIONS
 }
 
 TEST_MAIN(test_debug);

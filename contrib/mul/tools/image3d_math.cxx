@@ -20,7 +20,6 @@
 #include <iomanip>
 #include <cstdlib>
 
-#if VCL_HAS_EXCEPTIONS
 #include <vcl_compiler.h>
 #include <cassert>
 #include <vsl/vsl_deque_io.hxx>
@@ -2796,10 +2795,3 @@ int main(int argc, char*argv[])
     return 3;
   }
 }
-
-#else // VCL_HAS_EXCEPTIONS
-int main(int  /*argc*/, char* /*argv*/[])
-{
-  std::cerr << "\nERROR: image3d_math needs exception support to compile properly.\n";
-}
-#endif // VCL_HAS_EXCEPTIONS

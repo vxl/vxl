@@ -6,8 +6,6 @@
 #include "testlib_register.h"
 
 #include <vcl_compiler.h>
-#if VCL_HAS_EXCEPTIONS
-#endif
 
 #if defined(VCL_VC)
 #  include <crtdbg.h>
@@ -88,7 +86,6 @@ testlib_enter_stealth_mode()
 
 int testlib_run_test_unit(std::vector<std::string>::size_type i, int argc, char *argv[])
 {
-#if VCL_HAS_EXCEPTIONS
   char * env_var1 = std::getenv("DART_TEST_FROM_DART");
   char * env_var2 = std::getenv("DASHBOARD_TEST_FROM_CTEST");  // DART Client built in CMake
   if ( env_var1 || env_var2 ) {
@@ -102,9 +99,6 @@ int testlib_run_test_unit(std::vector<std::string>::size_type i, int argc, char 
       return 1;
     }
   }
-// Leave MS structured exceptions to the SE handler.
-  else
-#endif
   return testlib_test_func_[i]( argc, argv );
 }
 

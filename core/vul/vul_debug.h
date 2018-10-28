@@ -35,7 +35,6 @@ bool vul_debug_core_dump_in_windows_se(const char * filename,
 #include <exception>
 #include <vcl_config_compiler.h>
 
-#if VCL_HAS_EXCEPTIONS
 //: A translated structured exception.
 class vul_debug_windows_structured_exception : public std::exception
 {
@@ -49,9 +48,6 @@ class vul_debug_windows_structured_exception : public std::exception
   vul_debug_windows_structured_exception(void * ex_ptr) : ex_ptr_(ex_ptr) {}
   ~vul_debug_windows_structured_exception() throw() override = default;
 };
-#else
-class vul_debug_windows_structured_exception {};
-#endif //  VCL_HAS_EXCEPTIONS
 
 //: Setup the system to core dump and throw a C++ exception on detection of a Structured Exception
 // The system will throw vul_debug_windows_structured_exception.

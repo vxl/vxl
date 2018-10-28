@@ -65,29 +65,14 @@ static std::string LotsOfInfo()
 
 #endif // 0, should be VCL_VC
 
-#if !VCL_HAS_EXCEPTIONS
-
-mbl_exception_abort::mbl_exception_abort(const std::string& comment):
-  msg_(comment + LotsOfInfo()) {}
-
-#else
-
 mbl_exception_abort::mbl_exception_abort(const std::string& comment):
   std::logic_error(comment + LotsOfInfo()) {}
 
-#endif
-
 mbl_exception_os_error::mbl_exception_os_error(int errnum, const std::string &file_name,
                                                const std::string &comment/*=""*/):
-#if !VCL_HAS_EXCEPTIONS
-  msg_(file_name + " " + std::strerror(errnum) + "\n" + comment),
-    errno(errnum), error_message(std::strerror(errnum)), filename(file_name),
-    additional_comment(comment) {}
-#else
   std::runtime_error(std::string("\"") + file_name + "\" " + std::strerror(errnum) + "\n" + comment),
     err_no(errnum), error_message(std::strerror(errnum)), filename(file_name),
     additional_comment(comment) {}
-#endif
 
 void mbl_exception_throw_os_error(const std::string& filename,
                                   const std::string& additional_comment /*=""*/)

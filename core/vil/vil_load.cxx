@@ -51,7 +51,6 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
   vil_image_resource_sptr isp = nullptr;
   if (is)
   {
-#ifdef VCL_HAS_EXCEPTIONS
     try
     {
       isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
@@ -60,9 +59,6 @@ vil_image_resource_sptr vil_load_image_resource_raw(char const* filename,
     {
       throw vil_exception_corrupt_image_file(e.function_name, e.file_type, filename, e.details);
     }
-#else
-    isp = vil_load_image_resource_raw(is.as_pointer(), verbose);
-#endif
   }
 
   if (!isp && verbose)

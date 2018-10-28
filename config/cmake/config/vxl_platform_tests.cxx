@@ -1,14 +1,5 @@
 //-------------------------------------
 
-#ifdef VCL_HAS_BOOL
-
-void function(int i, void *ptr, bool v) {}
-
-int main() { return 0; }
-#endif // VCL_HAS_BOOL
-
-//-------------------------------------
-
 #ifdef VCL_HAS_LONG_LONG
 
 void function(int i, void *ptr, long long v) {}
@@ -18,115 +9,12 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_HAS_TYPENAME
-
-template <typename T>
-class bingo { public: void bongo(T **); };
-
-int main() { return 0; }
-#endif // VCL_HAS_TYPENAME
-
-//-------------------------------------
-
-#ifdef VCL_HAS_EXPORT
-
-export
-template <class T, int N>
-struct plither
-{
-  plither(){}
-  ~plither(){}
-  void f(T *, int){}
-};
-
-void g()
-{
-  double x;
-  int y;
-  plither<double, 3> obj;
-  obj.f(&x, y);
-}
-
-int main() { return 0; }
-#endif // VCL_HAS_EXPORT
-
-//-------------------------------------
-
-#ifdef VCL_HAS_MUTABLE
-
-class X {
- public:
-  mutable int const *p;
-};
-
-int main() { return 0; }
-#endif // VCL_HAS_MUTABLE
-
-//-------------------------------------
-
 #ifdef VCL_HAS_EXPLICIT
 
 class X { public: explicit X(int) {} };
 
 int main() { return 0; }
 #endif // VCL_HAS_EXPLICIT
-
-//-------------------------------------
-
-#ifdef VCL_HAS_DYNAMIC_CAST
-
-struct foo { foo(){} virtual ~foo(){} virtual void f()=0; };
-struct boo : public foo { void f() { *(int*)0 = 1; } };
-boo *try_dynamic_cast() { boo *b = 0; foo *f = b; return dynamic_cast<boo*>(f); }
-
-int main() { return 0; }
-#endif // VCL_HAS_DYNAMIC_CAST
-
-//-------------------------------------
-
-#ifdef VCL_HAS_RTTI
-
-#include <typeinfo>
-class A { public: virtual ~A() {} virtual void f() {} };
-class B : public A { public: void f() {} };
-bool try_rtti() { B*b=0; A*a1=b,*a2=b; return typeid(a1)==typeid(a2); }
-
-int main() { return 0; }
-#endif // VCL_HAS_RTTI
-
-//-------------------------------------
-
-#ifdef VCL_DEFAULT_VALUE
-// VCL_DEFAULT_VALUE(x) will be set to "= x" if this test fails, to "" otherwise
-
-// declaration
-char function(int x, const char *ptr = "foo");
-
-// definition
-char function(int x, const char *ptr) { return ptr[x]; }
-
-int main() { return 0; }
-#endif // VCL_DEFAULT_VALUE
-
-//-------------------------------------
-
-#ifdef VCL_HAS_MEMBER_TEMPLATES
-
-template <class S>
-class blip {
- public:
-  S *ptr;
-  template <class T> void klor(T *p) { *ptr = *p; }
-};
-void function()
-{
-  blip<double> b;
-  int s;
-  b.klor(&s);
-}
-
-int main() { return 0; }
-#endif // VCL_HAS_MEMBER_TEMPLATES
 
 //-------------------------------------
 
@@ -217,35 +105,6 @@ int function()
 
 int main() { return 0; }
 #endif // VCL_NEEDS_INLINE_INSTANTIATION
-
-//-------------------------------------
-
-#ifdef VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-
-template <class T> struct A { A() {} static char *fmt; };
-template <class T> char *A<T>::fmt = 0;
-
-int main() { return 0; }
-#endif // VCL_CAN_DO_STATIC_TEMPLATE_MEMBER
-
-//-------------------------------------
-
-#ifdef VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
-
-template <class T, int n> struct splek { T data[n]; };
-
-template <class T, int n>
-void splok_that_splek(splek<T, n> &s)
-{
-  for (int i=0; i<n; ++i)
-    s.data[i] = T(27);
-}
-
-template struct splek<double, 3>;
-template void splok_that_splek(splek<double, 3> &);
-
-int main() { return 0; }
-#endif // VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER
 
 //-------------------------------------
 
@@ -578,121 +437,6 @@ template class spoof < double >;
 
 int main() { return 0; }
 #endif // VCL_SUNPRO_CLASS_SCOPE_HACK
-
-//-------------------------------------
-
-#ifdef VCL_HAS_EXCEPTIONS
-
-struct bizop {};
-
-int functionella(char const *a, char const *b)
-{
-  if (!a &&  b)
-    throw "a is no good";
-  if ( a && !b)
-    throw "b is no better";
-  if (!a && !b)
-    throw bizop();
-
-  return *a - *b;
-}
-
-void monkeylette()
-{
-  try {
-    functionella(  0,   0);
-    functionella("a",   0);
-    functionella(  0, "b");
-    functionella("a", "b");
-  }
-  catch (char const *s) {
-    // oops.
-  }
-  catch (bizop b) {
-    // outch
-  }
-  catch (...) {
-    // phew
-  }
-}
-
-int main() { return 0; }
-#endif // VCL_HAS_EXCEPTIONS
-
-//-------------------------------------
-
-#ifdef VCL_HAS_NAMESPACES
-
-namespace foo {
-  int hello() { return 10; }
-};
-
-// 7.3.1
-namespace Outer {
-  int i;
-  namespace Inner {
-    void f() { i++; } // Outer::i
-    int i;
-    void g() { i++; } // Inner::i
-  }
-}
-
-// 7.3.1.1
-namespace { int i; } // unique::i
-void f() { i++; }    // unique::i  (gcc 2.7.2 fails here).
-
-namespace A {
-  namespace {
-    int i;           // A::unique::i
-    int j;           // A::unique::j
-  }
-  void g() { i++; }  // A::unique::i
-}
-
-using namespace A;
-void h() {
-  //i++;               // error: unique::i or A::unique::i
-  A::i++;              // A::unique::i
-  j++;                 // A::unique::j
-}
-
-extern "C" double vxl_sqrt(double){return 0;}
-
-namespace foo {
-  template <class T> struct complex { T re, im; };
-  template <class T> T abs(complex<T> const &z) { return T(::vxl_sqrt(double(z.re*z.re + z.im+z.im))); }
-}
-
-namespace bar {
-  int abs(int){return 0;}
-  long abs(long){return 0;}
-  float abs(float){return 0;}
-  double abs(double){return 0;}
-}
-
-namespace diced {
-  using foo::complex; // <-- I'm told vc60 fails here.
-  using foo::abs;
-  using bar::abs;
-}
-
-extern "C" int printf(char const *, ...);
-
-void flegg() {
-  int a = -1;
-  long b = -2;
-  float c = -3;
-  double d = -4;
-  diced::complex<double> e = { 3, 4 };
-  printf("%d\n",  diced::abs(a)); // 1
-  printf("%ld\n", diced::abs(b)); // 2
-  printf("%f\n",  diced::abs(c)); // 3
-  printf("%lf\n", diced::abs(d)); // 4
-  printf("%lf\n", diced::abs(e)); // 5
-}
-
-int main() { return 0; }
-#endif // VCL_HAS_NAMESPACES
 
 //-------------------------------------
 

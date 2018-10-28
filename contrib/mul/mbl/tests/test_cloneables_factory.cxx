@@ -60,7 +60,6 @@ void test_cloneables_factory()
   }
 
 // Test the error reporting mechanism
-#if VCL_HAS_EXCEPTIONS
   {
     testlib_test_begin("!get foo");
     std::unique_ptr<mbl_test_cf_base> p;
@@ -69,7 +68,6 @@ void test_cloneables_factory()
     catch (const mbl_exception_no_name_in_factory &) { caught_error=true; }
     testlib_test_perform(caught_error);
   }
-#endif
 }
 
 TESTMAIN(test_cloneables_factory);
