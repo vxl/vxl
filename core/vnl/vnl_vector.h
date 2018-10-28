@@ -34,8 +34,8 @@
 # undef ERROR_CHECKING
 #endif
 
-VCL_EXPORT template <class T> class vnl_vector;
-VCL_EXPORT template <class T> class vnl_matrix;
+template <class T> class vnl_vector;
+template <class T> class vnl_matrix;
 
 //----------------------------------------------------------------------
 
@@ -496,9 +496,9 @@ inline T vnl_vector_ssd(vnl_vector<T> const& v1, vnl_vector<T> const& v2)
 
 //: Write vector to a std::ostream
 // \relatesalso vnl_vector
-VCL_EXPORT template <class T> VNL_EXPORT std::ostream& operator<<(std::ostream &, vnl_vector<T> const&);
+template <class T> VNL_EXPORT std::ostream& operator<<(std::ostream &, vnl_vector<T> const&);
 //: Read vector from a std::istream
 // \relatesalso vnl_vector
-VCL_EXPORT template <class T> VNL_EXPORT std::istream& operator>>(std::istream &, vnl_vector<T>      &);
+template <class T> VNL_EXPORT std::istream& operator>>(std::istream &, vnl_vector<T>      &);
 
 #endif // vnl_vector_h_

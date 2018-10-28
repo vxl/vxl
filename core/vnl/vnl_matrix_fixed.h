@@ -39,7 +39,7 @@
 #include <vnl/vnl_config.h> // for VNL_CONFIG_CHECK_BOUNDS
 #include "vnl/vnl_export.h"
 
-VCL_EXPORT template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
+template <class T, unsigned int num_rows, unsigned int num_cols> class vnl_matrix_fixed;
 
 // This mess is for a MSVC6 workaround.
 //

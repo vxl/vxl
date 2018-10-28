@@ -18,7 +18,7 @@
 #include <vnl/vnl_c_vector.h>
 #include "vnl/vnl_export.h"
 
-VCL_EXPORT template <class T> class vnl_sym_matrix;
+template <class T> class vnl_sym_matrix;
 
 //: stores a symmetric matrix as just the diagonal and lower triangular part
 //  vnl_sym_matrix stores a symmetric matrix for time and space efficiency.

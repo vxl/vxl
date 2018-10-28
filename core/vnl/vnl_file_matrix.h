@@ -21,7 +21,7 @@
 #include "vnl/vnl_export.h"
 
 //: Class to load a matrix from a file.
-VCL_EXPORT template <class T>
+template <class T>
 class VNL_EXPORT vnl_file_matrix : public vnl_matrix<T>
 {
  private:

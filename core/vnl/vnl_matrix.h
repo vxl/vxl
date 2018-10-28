@@ -53,8 +53,8 @@
 #endif
 #include "vnl/vnl_export.h"
 
-VCL_EXPORT template <class T> class vnl_vector;
-VCL_EXPORT template <class T> class vnl_matrix;
+template <class T> class vnl_vector;
+template <class T> class vnl_matrix;
 
 //--------------------------------------------------------------------------------
 

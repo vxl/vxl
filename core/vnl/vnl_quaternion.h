@@ -60,7 +60,7 @@
 // return by value in arithmetic expressions like: q1 * q2 * q3 *...
 //
 
-VCL_EXPORT template <class T>
+template <class T>
 class VNL_EXPORT vnl_quaternion : public vnl_vector_fixed<T, 4>
 {
  private:
