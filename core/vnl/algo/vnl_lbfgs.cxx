@@ -14,7 +14,6 @@
 #include <iostream>
 #include <iomanip>
 #include "vnl_lbfgs.h"
-#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_netlib.h> // lbfgs_()
 

@@ -6,8 +6,6 @@
 // \file
 // \author fsm
 
-#include "vnl_fft.h"
-
 #include <vnl/algo/vnl_netlib.h> // dgpfa_()
 
 void vnl_fft_setgpfa(float *triggs, long size, long pqr[3], long *info)

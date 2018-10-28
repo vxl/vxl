@@ -10,10 +10,6 @@
 #include <complex>
 #include "vnl_matlab_filewrite.h"
 
-#include <vcl_compiler.h>
-
-#include <vnl/vnl_vector.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matlab_write.h>
 
 vnl_matlab_filewrite::vnl_matlab_filewrite(char const *file_name,

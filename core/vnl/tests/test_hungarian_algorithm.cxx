@@ -1,11 +1,8 @@
 #include <iostream>
 #include <limits>
-#include <algorithm>
 #include <vnl/vnl_hungarian_algorithm.h>
 #include <testlib/testlib_test.h>
 
-#include <vcl_compiler.h>
-#include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
 
 static void test_hungarian_algorithm_1()

@@ -2,8 +2,6 @@
 #include <iostream>
 #include <complex>
 #include "test_util.h"
-#include <vcl_compiler.h>
-#include <testlib/testlib_test.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matlab_print.h>

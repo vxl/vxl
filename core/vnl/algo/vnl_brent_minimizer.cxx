@@ -5,14 +5,9 @@
 //:
 // \file
 #include <cmath>
+#include <cassert>
 #include <iostream>
-#include <algorithm>
-#include "vnl_brent_minimizer.h"
-
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
-
-#include <vnl/vnl_vector.h>
+#include <vnl/algo/vnl_brent_minimizer.h>
 #include <vnl/algo/vnl_bracket_minimum.h>
 
 //static const double GOLDEN_RATIO = 1.618033988749894848; // = 0.5*(std::sqrt(5)-1);

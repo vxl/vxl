@@ -11,10 +11,9 @@
 //-----------------------------------------------------------------------------
 
 #include <cmath>
+#include <cassert>
 #include <iostream>
 #include "vnl_ldl_cholesky.h"
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 #include <vnl/algo/vnl_netlib.h> // dpofa_(), dposl_(), dpoco_(), dpodi_()
 
 //: Cholesky decomposition.

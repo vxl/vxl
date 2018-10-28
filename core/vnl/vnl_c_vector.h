@@ -27,7 +27,7 @@
 #include <cmath>
 #include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
-#include "vnl/vnl_export.h"
+#include <vnl/vnl_export.h>
 
 // avoid messing about with aux_* functions for gcc 2.7 -- fsm
 template <class T, class S> VNL_EXPORT void vnl_c_vector_one_norm(T const *p, unsigned n, S *out);

@@ -5,8 +5,6 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
-
 //: Choose precision in printouts.
 //
 // vnl_matlab_format(vnl_matops::fmt_long) selects 16-digit precision

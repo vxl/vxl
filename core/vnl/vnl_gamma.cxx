@@ -1,13 +1,11 @@
 // This is core/vnl/vnl_gamma.cxx
 #include <iostream>
+#include <cassert>
 #include "vnl_gamma.h"
 //:
 // \file
 // \brief Complete and incomplete gamma function approximations
 // \author Tim Cootes
-
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
 
 #if defined(__INTEL_COMPILER)
 # pragma warning (disable:279) /* controlling expression is constant */

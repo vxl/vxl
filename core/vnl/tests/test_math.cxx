@@ -1,8 +1,5 @@
 #include <iostream>
 #include <iomanip>
-#include <string>
-#include <limits>
-#include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h> // for vnl_math::abs(std::complex)
 #include <testlib/testlib_test.h>

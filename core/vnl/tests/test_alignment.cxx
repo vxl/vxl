@@ -2,15 +2,12 @@
 #include <limits>
 #include <typeinfo>
 #include <iostream>
-#include <algorithm>
-#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix_ref.h>
 #include <vnl/vnl_vector_ref.h>
-#include <vnl/vnl_c_vector.h>
-#include <vnl/vnl_math.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_sse.h>
 #include <testlib/testlib_test.h>
 

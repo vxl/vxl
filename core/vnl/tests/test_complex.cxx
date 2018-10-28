@@ -6,8 +6,6 @@
 //:
 // \file
 
-#include <vcl_compiler.h>
-
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>

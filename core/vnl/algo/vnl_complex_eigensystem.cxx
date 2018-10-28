@@ -1,10 +1,8 @@
 // This is core/vnl/algo/vnl_complex_eigensystem.cxx
 #include <iostream>
+#include <cassert>
 #include "vnl_complex_eigensystem.h"
 // \author fsm
-
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_complexify.h>

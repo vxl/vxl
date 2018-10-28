@@ -11,9 +11,8 @@
 
 #include <iostream>
 #include <sstream>
+#include <cassert>
 #include "vnl_real_npolynomial.h"
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 
 //: Constructor
 // \verbatim

@@ -5,9 +5,8 @@
 //:
 // \file
 #include <iostream>
+#include <cassert>
 #include "vnl_sparse_lu.h"
-#include <vcl_cassert.h>
-#include <vcl_compiler.h>
 
 #include <sparse/spMatrix.h>
 

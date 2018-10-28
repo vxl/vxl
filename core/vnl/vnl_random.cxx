@@ -8,8 +8,7 @@
 #include <ctime>
 #include <cmath>
 #include "vnl_random.h"
-#include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 unsigned long vnl_random::linear_congruential_lrand32()
 {

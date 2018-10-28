@@ -4,7 +4,6 @@
 #include <iostream>
 #include <complex>
 #include <vector>
-#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for 1D FFT routines.
@@ -22,7 +21,6 @@
 // \endverbatim
 
 //-----------------------------------------------------------------------------
-#include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_fft_1d.h>
 

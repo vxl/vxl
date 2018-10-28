@@ -4,9 +4,6 @@
 #include "test_util.h"
 //:
 // \file
-#include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <vcl_cfloat.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>

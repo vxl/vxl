@@ -1,10 +1,7 @@
 #include <iostream>
-#include <cstdlib>
 #include <vnl/vnl_sparse_matrix.h>
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/vnl_random.h>
-
-#include <vcl_compiler.h>
 
 int main()
 {
