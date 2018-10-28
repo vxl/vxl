@@ -27,12 +27,10 @@ void mbl_progress::set_progress(const std::string& identifier,
   if (is_cancelled(identifier))
   {
     end_progress(identifier);
-#if VCL_HAS_EXCEPTIONS
     if (throw_exception_on_cancel_)
     {
       throw mbl_progress_cancel_exception();
     }
-#endif
   }
 
   auto it = identifier2progress_.find(identifier);

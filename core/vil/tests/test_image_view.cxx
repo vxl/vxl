@@ -28,7 +28,7 @@ void test_image_view_rgba(vil_image_view<vxl_byte> &image2, vil_image_view<float
 {
   image2.set_size(10,10,2);
   vil_image_view<vil_rgba<vxl_byte> > image6;
-#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING
   bool caught_exception = false;
   try
   {
@@ -74,7 +74,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
   image2.set_size(10,10,2);
   vil_image_view<vil_rgba<float> > image6;
 
-#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING
   bool caught_exception = false;
   try
   {
@@ -480,7 +480,7 @@ static void test_image_view_assignment_operator()
 
   // Test error reporting on dodgy type assignment.
 
-#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING
   bool caught_exception = false;
   try
   {

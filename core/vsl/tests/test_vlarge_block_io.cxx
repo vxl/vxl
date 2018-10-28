@@ -29,12 +29,8 @@ void test_vlarge_block(void * block, std::size_t s, T scale)
 
   vsl_b_ofstream bfs_out("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Created vsl_vlarge_block_io_test.bvl.tmp for writing", (!bfs_out), false);
-#if VCL_HAS_EXCEPTIONS
   try { vsl_block_binary_write(bfs_out, numbers, n); }
   catch(...) { TEST ("vsl_block_binary_write didn't throw exception", true, false); }
-#else
-  vsl_block_binary_write(bfs_out, numbers, n);
-#endif
   vsl_b_write(bfs_out, 0xdeadbeefu);
   TEST("Stream still ok", (!bfs_out), false);
   bfs_out.close();
@@ -44,12 +40,8 @@ void test_vlarge_block(void * block, std::size_t s, T scale)
   vsl_b_ifstream bfs_in("vsl_vlarge_block_io_test.bvl.tmp");
   TEST("Opened vsl_vlarge_block_io_test.bvl.tmp for reading", (!bfs_in), false);
   unsigned sentinel;
-#if VCL_HAS_EXCEPTIONS
   try { vsl_block_binary_read(bfs_in, numbers, n); }
   catch(...) { TEST ("vsl_block_binary_read didn't throw exception", true, false); }
-#else
-  vsl_block_binary_read(bfs_in, numbers, n);
-#endif
   vsl_b_read(bfs_in, sentinel);
   TEST("sentinel matched", sentinel, 0xdeadbeefu);
   TEST("Stream still ok", (!bfs_in), false);

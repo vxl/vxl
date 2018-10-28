@@ -199,7 +199,7 @@ static void test_convert_to_n_planes()
   vil_math_value_range(image_16_3_stretched,minp,maxp);
   TEST("implicit vil_convert_stretch_range float to 16bit with rounding", minp==0 && maxp==65535, true);
 
-#if !defined VXL_LEGACY_ERROR_REPORTING && VCL_HAS_EXCEPTIONS
+#if !defined VXL_LEGACY_ERROR_REPORTING
   bool caught_exception = false;
   try
   {

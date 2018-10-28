@@ -37,7 +37,7 @@ template <class T> void vidl_exception_error(T exception)
 {
   std::cerr << "\nERROR: " << exception.what() << std::endl;
 
-#if !defined VIDL_EXCEPTIONS_DISABLE && VCL_HAS_EXCEPTIONS
+#if !defined VIDL_EXCEPTIONS_DISABLE
   throw exception;
 #else
   std::abort();
@@ -52,7 +52,7 @@ template <class T> void vidl_exception_warning(T exception)
 {
   std::cerr << "\nWARNING: " << exception.what() << std::endl;
 
-#if !defined VIDL_EXCEPTIONS_DISABLE && VCL_HAS_EXCEPTIONS
+#if !defined VIDL_EXCEPTIONS_DISABLE
   throw exception;
 #endif
 }

@@ -184,6 +184,21 @@
 #define VCL_FREEBSD "ERROR: VCL_FREBSD has no use in VXL"
 #define VCL_VOID_RETURN "ERROR: VCL_VOID_RETURN has no use in VXL"
 #define VCL_CYGWIN_GCC "ERROR: VCL_CYGWIN_GCC has no use in VXL"
+
+//REDUNDANT WITH write_compiler_detection_header
+#define VCL_HAS_EXPORT "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_BOOL "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_TYPENAME "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_MUTABLE "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_DYNAMIC_CAST "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_RTTI "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_DEFAULT_VALUE "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_MEMBER_TEMPLATES "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_CAN_DO_STATIC_TEMPLATE_MEMBER "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_CAN_DO_NON_TYPE_FUNCTION_TEMPLATE_PARAMETER "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_EXCEPTIONS "ERROR: Removed in favor of write_compiler_detection_header detections"
+#define VCL_HAS_NAMESPACE "ERROR: Removed in favor of write_compiler_detection_header detections"
+
 #endif
 
 #ifdef VNL_CONFIG_LEGACY_METHODS

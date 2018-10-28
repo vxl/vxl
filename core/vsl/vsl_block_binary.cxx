@@ -23,7 +23,6 @@ vsl_block_t allocate_up_to(std::size_t nbytes)
   vsl_block_t block = {nullptr, nbytes};
   while (true)
   {
-#if VCL_HAS_EXCEPTIONS
     try
     {
       block.ptr = new char[block.size];
@@ -31,10 +30,6 @@ vsl_block_t allocate_up_to(std::size_t nbytes)
     catch (const std::bad_alloc& )
     {
     }
-#else
-    //use malloc because gcc's new still tries to throw a bad alloc even with -fno_exceptions
-    block.ptr = (char *)std::malloc(block.size);
-#endif
     if (block.ptr)
       return block;
     block.size /= 2;
@@ -87,11 +82,7 @@ void vsl_block_binary_write_float_impl(vsl_b_ostream &os, const T* begin, std::s
     begin += items;
     nelems -= items;
   }
-#if VCL_HAS_EXCEPTIONS
    delete [] block.ptr;
-#else
-  std::free(block.ptr);
-#endif
 }
 
 //: Read a block of floats from a vsl_b_ostream
@@ -158,11 +149,7 @@ void vsl_block_binary_write_int_impl(vsl_b_ostream &os, const T* begin, std::siz
       n -= items;
     }
   }
-#if VCL_HAS_EXCEPTIONS
    delete [] block.ptr;
-#else
-  std::free(block.ptr);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////
@@ -243,11 +230,7 @@ void vsl_block_binary_read_int_impl(vsl_b_istream &is, T* begin, std::size_t nel
              << " Corrupted data stream\n";
     is.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
-#if VCL_HAS_EXCEPTIONS
    delete [] block.ptr;
-#else
-  std::free(block.ptr);
-#endif
 }
 
 /////////////////////////////////////////////////////////////////////////

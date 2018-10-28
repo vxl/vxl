@@ -23,13 +23,6 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-#ifdef VCL_HAS_EXPORT
-  std::cout << "is set to " << quote(VCL_HAS_EXPORT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_HAS_EXPLICIT ";
 #ifdef VCL_HAS_EXPLICIT
   std::cout << "is set to " << quote(VCL_HAS_EXPLICIT);
@@ -129,22 +122,6 @@ void test_config()
   std::cout << "VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER ";
 #ifdef VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
   std::cout << "is set to " << quote(VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_EXCEPTIONS ";
-#ifdef VCL_HAS_EXCEPTIONS
-  std::cout << "is set to " << quote(VCL_HAS_EXCEPTIONS);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_HAS_NAMESPACES ";
-#ifdef VCL_HAS_NAMESPACES
-  std::cout << "is set to " << quote(VCL_HAS_NAMESPACES);
 #else
   std::cout << "is not set";
 #endif
