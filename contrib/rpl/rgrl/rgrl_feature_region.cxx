@@ -7,7 +7,7 @@
 // \date   Oct 2004
 
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
 

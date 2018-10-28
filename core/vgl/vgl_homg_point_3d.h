@@ -20,7 +20,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a homogeneous 3D point
 template <class Type>

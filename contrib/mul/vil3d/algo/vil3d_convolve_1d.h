@@ -12,7 +12,8 @@
 // If you don't want this to happen, the behaviour you want is not
 // called "convolution".
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil3d/vil3d_image_view.h>
 

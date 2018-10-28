@@ -7,7 +7,6 @@
 
 #include <rgrl/rgrl_matcher_k_nearest.h>
 #include <vnl/vnl_random.h>
-#include <vcl_stlfwd.h>
 
 //: For each "from" feature, match the k nearest "to" features.
 //

@@ -7,7 +7,7 @@
 #include <vector>
 #include "clsfy_classifier_1d.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 

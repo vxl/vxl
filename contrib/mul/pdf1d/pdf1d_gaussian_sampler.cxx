@@ -7,7 +7,8 @@
 
 #include "pdf1d_gaussian_sampler.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <pdf1d/pdf1d_gaussian.h>
 
 //=======================================================================

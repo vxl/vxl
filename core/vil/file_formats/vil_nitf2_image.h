@@ -11,7 +11,7 @@
 #include <vil/vil_blocked_image_resource.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_stream.h>
 

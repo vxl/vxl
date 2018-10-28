@@ -17,7 +17,7 @@
 #include <bapl/bapl_lowe_keypoint.h>
 
 #include <vil/vil_copy.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Constructor
 bapl_lowe_pyramid_set::bapl_lowe_pyramid_set( const vil_image_resource_sptr& image,

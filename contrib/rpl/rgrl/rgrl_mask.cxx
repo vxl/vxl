@@ -3,7 +3,7 @@
 #include "rgrl_mask.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 // not used? #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 

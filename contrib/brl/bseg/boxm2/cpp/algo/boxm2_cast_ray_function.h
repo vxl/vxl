@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <vgl/vgl_ray_3d.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_block.h>

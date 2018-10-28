@@ -6,7 +6,7 @@
 #include "rrel_muset_obj.h"
 //
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_muse_table.h>
 

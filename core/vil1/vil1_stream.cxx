@@ -5,7 +5,8 @@
 
 #include "vil1_stream.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #define log_xtor 0
 #if log_xtor

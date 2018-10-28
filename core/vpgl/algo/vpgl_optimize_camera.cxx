@@ -12,7 +12,8 @@
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #endif
 #include <vgl/algo/vgl_rotation_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: Constructor

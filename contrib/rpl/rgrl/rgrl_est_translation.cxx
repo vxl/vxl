@@ -4,7 +4,8 @@
 // \author Charlene Tsai
 // \date   Dec 2003
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 #include "rgrl_trans_translation.h"
 #include "rgrl_match_set.h"

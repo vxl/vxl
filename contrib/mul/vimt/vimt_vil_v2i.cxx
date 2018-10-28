@@ -7,7 +7,7 @@
 #include <fstream>
 #include "vimt_vil_v2i.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vxl_config.h> // for VXL_BIG_ENDIAN and vxl_byte

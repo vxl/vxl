@@ -3,7 +3,8 @@
 #include <bsta/bsta_histogram.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vnl_vector<double> brad_grad_int_feature_vector::
 operator()(vil_image_view<float> const& view) const

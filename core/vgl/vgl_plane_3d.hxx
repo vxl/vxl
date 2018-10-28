@@ -16,7 +16,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_tolerance.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Construct from homogeneous plane
 template <class T>

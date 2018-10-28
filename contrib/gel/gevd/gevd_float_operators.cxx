@@ -9,7 +9,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h> // for pi_over_2
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_cross.h>

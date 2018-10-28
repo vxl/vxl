@@ -9,7 +9,7 @@
 #include <cmath>
 #include "rgtl_sqt_space.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------

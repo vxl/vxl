@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Draws current shape instance to an eps file
 //  Uses writer.draw_polygon() function to write

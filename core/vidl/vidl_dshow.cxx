@@ -18,7 +18,7 @@
 #include <vidl/vidl_exception.h>
 #include <vidl/vidl_pixel_format.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------

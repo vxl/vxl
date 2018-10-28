@@ -7,7 +7,8 @@
 #include <vsol/vsol_curve_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //***************************************************************************
 // Initialization

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstddef>
 #include "vgui_win32_utils.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // (Create if necessary and) return singleton instance of this class.

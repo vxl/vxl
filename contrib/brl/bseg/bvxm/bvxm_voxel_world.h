@@ -76,7 +76,7 @@
 #include <iostream>
 #include <sstream>
 #include <utility>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vbl/vbl_ref_count.h>
 
 #include <vgl/vgl_point_3d.h>

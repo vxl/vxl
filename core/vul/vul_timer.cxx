@@ -47,7 +47,7 @@ struct vul_timer_data
 #endif
 };
 
-#include <vcl_climits.h>   // for CLK_TCK
+// for CLK_TCK
 
 
 //#define CLK_TCK _sysconf(3) in <climits> has error

@@ -11,7 +11,8 @@
 #include <vsol/vsol_conic_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }

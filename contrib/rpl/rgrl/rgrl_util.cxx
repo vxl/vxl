@@ -7,7 +7,7 @@
 #include <iostream>
 #include <algorithm>
 #include "rgrl_util.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_vector.h>

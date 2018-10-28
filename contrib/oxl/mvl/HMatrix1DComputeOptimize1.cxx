@@ -4,7 +4,7 @@
 #include "HMatrix1DComputeOptimize1.h"
 #include "HMatrix1DComputeDesign.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_least_squares_function.h>

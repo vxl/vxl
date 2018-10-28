@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_rotation.cxx
 #include "vcsl_rotation.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------
 // Are `new_axis' a list of unit axes ?

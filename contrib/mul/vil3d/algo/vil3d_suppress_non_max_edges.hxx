@@ -12,7 +12,7 @@
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: Given gradient images, computes magnitude image containing maximal edges

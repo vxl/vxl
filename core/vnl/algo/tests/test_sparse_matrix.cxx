@@ -5,6 +5,7 @@
 #include <vnl/algo/vnl_sparse_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
+#include <testlib/testlib_test.h>
 
 // Test the sparse matrix operations.
 void doTest1()

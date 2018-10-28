@@ -16,7 +16,7 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/vil_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Calculate the Mutual Information between the images.

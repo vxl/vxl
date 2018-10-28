@@ -48,7 +48,7 @@
 #include <cstddef>
 #include <cstring>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 typedef unsigned int uint;
 

@@ -25,7 +25,7 @@
 #include "clsfy_builder_1d.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vbl/vbl_triple.h>
 #include <mbl/mbl_file_data_collector.h>
 #include <mbl/mbl_data_collector_list.h>

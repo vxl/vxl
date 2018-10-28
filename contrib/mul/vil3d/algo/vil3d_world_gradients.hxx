@@ -13,7 +13,7 @@
 #include <vil3d/vil3d_transform.h>
 #include <vil3d/vil3d_plane.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Functor class to scale by s
 class vil3d_math_scale_functor

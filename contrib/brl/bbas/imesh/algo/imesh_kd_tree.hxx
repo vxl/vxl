@@ -18,7 +18,7 @@
 #include "imesh_kd_tree.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: returns the index of the closest leaf node

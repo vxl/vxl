@@ -9,7 +9,7 @@
 #include <vil/vil_plane.h>
 #include <vil/vil_crop.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 // Dflt ctor

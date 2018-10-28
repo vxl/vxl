@@ -31,7 +31,7 @@
 #include <vsol/vsol_polyline_2d_sptr.h>
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #define ZERO_TOLERANCE 1E-1 // used in bsol_intrinsic_curve_2d.cxx
 

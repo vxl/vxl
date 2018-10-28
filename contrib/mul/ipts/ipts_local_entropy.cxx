@@ -9,7 +9,7 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 inline double histo_entropy_sum(const std::vector<int>& histo,
                                 unsigned min_v, unsigned max_v)

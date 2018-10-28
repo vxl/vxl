@@ -7,7 +7,7 @@
 // \date Feb 2005
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_util.h>

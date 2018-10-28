@@ -4,7 +4,8 @@
 // \file
 #include <bgrl2/bgrl2_vertex.h>
 #include <bgrl2/bgrl2_edge.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: return the euler tour of the graph starting from the given edge and in the direction towards the given node
 //  (the given node should be either source or target of the given node)

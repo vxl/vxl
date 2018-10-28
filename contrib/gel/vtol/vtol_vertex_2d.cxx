@@ -6,7 +6,8 @@
 #include <vsol/vsol_point_2d.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_edge.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //***************************************************************************
 // Initialization

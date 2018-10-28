@@ -1,7 +1,7 @@
 // This is core/vil/algo/tests/test_algo_cartesian_differential_invariants.cxx
 #include <iostream>
 #include <cmath>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_print.h>

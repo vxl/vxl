@@ -5,7 +5,7 @@
 #include <limits>
 #include "vgui_range_map.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class Type>

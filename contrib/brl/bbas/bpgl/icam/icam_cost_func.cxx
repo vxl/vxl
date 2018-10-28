@@ -6,7 +6,8 @@
 #include <vbl/vbl_array_1d.h>
 #include <icam/icam_sample.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Constructor
 icam_cost_func::icam_cost_func( const vil_image_view<float>& source_img,

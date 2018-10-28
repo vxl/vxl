@@ -10,7 +10,7 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vnl/algo/vnl_cholesky.h>

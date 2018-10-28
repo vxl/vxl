@@ -6,7 +6,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 bsta_k_medoid::bsta_k_medoid(const unsigned n_elements, bool verbose)
 {

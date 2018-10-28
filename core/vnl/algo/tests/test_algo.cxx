@@ -24,14 +24,17 @@
 // \author Peter Vanroose, KULeuven/ESAT.
 // \date 20 September 2003
 
+#include <vnl/algo/vnl_adjugate.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>
 #include <vnl/algo/vnl_discrete_diff.h>
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
+#include <vnl/algo/vnl_generalized_schur.h>
 #include <vnl/algo/vnl_lbfgs.h>
 #include <vnl/algo/vnl_lbfgsb.h>
 #include <vnl/algo/vnl_lsqr.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
+#include <vnl/algo/vnl_orthogonal_complement.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vnl/algo/vnl_svd_economy.h>
 #include <vnl/algo/vnl_svd.h>

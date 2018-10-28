@@ -4,7 +4,7 @@
 #include <rgrl/rgrl_transformation.h>
 #include <vnl/algo/vnl_svd.h>
 // not used? #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <rgrl/rgrl_cast.h>
 #include <rgrl/rgrl_util.h>
 

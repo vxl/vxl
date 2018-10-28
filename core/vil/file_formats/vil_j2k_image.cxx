@@ -16,7 +16,7 @@
 
 #include <NCSFile.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_image_view.h>

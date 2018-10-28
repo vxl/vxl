@@ -7,7 +7,7 @@
 #include <bundler/bundler_inters.h>
 #include <bundler/bundler_utils.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vpgl/vpgl_calibration_matrix.h>

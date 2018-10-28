@@ -4,7 +4,8 @@
 // \author Tim Cootes
 
 #include "vil3d_binary_erode.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_crop.h>
 
 //: Erodes src_image to produce dest_image (assumed single plane)

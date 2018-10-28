@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include "vil_png.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_view.h>

@@ -7,7 +7,7 @@
 #include <cmath>
 #include "vil3d_make_distance_filter.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Create filter such that d[a] is distance from origin of se[a]
 //  Pixel widths are (width_i,width_j,width_k).  Elements are

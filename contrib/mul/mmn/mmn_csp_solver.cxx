@@ -7,7 +7,7 @@
 // \author Martin Roberts
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Default constructor
 mmn_csp_solver::mmn_csp_solver():nnodes_(0),verbose_(false)

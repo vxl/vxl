@@ -13,7 +13,7 @@
 #include <cmath>
 #include <iostream>
 #include "vnl_symmetric_eigensystem.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_math.h>

@@ -29,7 +29,7 @@
 
 #include <vul/vul_timer.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template<class F, class T_loc, class T_data, class T_aux = typename boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype>

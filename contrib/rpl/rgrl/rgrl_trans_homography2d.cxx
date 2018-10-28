@@ -1,7 +1,8 @@
 #include "rgrl_trans_homography2d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>

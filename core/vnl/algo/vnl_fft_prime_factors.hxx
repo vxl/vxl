@@ -5,7 +5,8 @@
 */
 #include "vnl_fft_prime_factors.h"
 #include <vnl/algo/vnl_fft.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 template <class T>
 vnl_fft_prime_factors<T>::vnl_fft_prime_factors()

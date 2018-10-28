@@ -11,7 +11,7 @@
 #include <cstdlib>
 #include "vil1_png.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

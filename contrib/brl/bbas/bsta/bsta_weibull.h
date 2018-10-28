@@ -27,7 +27,7 @@
 #include <iosfwd>
 #include "bsta_distribution.h"
 #include <vnl/vnl_gamma.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // A Weibull distribution does not have a natural, unique extension to

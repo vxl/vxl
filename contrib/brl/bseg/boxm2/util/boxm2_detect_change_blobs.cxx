@@ -6,7 +6,8 @@
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_threshold.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 float boxm2_change_blob::percent_overlap(boxm2_change_blob& blob)

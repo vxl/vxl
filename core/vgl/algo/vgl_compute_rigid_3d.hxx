@@ -12,7 +12,7 @@
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <class T>
 vgl_compute_rigid_3d<T>::

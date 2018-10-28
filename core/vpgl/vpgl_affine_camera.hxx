@@ -11,7 +11,8 @@
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_ray_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //-------------------------------------------
 template <class T>

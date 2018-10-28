@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "vmap_2_tmap.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class V, class E, class F, class D>

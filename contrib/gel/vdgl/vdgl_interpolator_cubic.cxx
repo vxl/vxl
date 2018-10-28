@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include "vdgl_interpolator_cubic.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>

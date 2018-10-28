@@ -7,7 +7,7 @@
 
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include "brip_vil_float_ops.h"
 
 //-----------------------------------------------------------------------

@@ -8,7 +8,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <bocl/bocl_kernel.h>
 
 bocl_mem::bocl_mem(const cl_context& context, void* buffer, unsigned num_bytes, std::string id)

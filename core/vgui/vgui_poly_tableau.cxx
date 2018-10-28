@@ -26,7 +26,7 @@
 #include "vgui_poly_tableau.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vgui/vgui_gl.h>
 #include <vgui/vgui_macro.h>

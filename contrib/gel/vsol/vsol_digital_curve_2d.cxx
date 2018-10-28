@@ -10,7 +10,7 @@
 #include <vgl/vgl_closest_point.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //***************************************************************************
 // Initialization

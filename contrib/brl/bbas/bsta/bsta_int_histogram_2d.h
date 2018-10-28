@@ -33,7 +33,7 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <bsta/bsta_int_histogram_1d.h>
 
 class bsta_int_histogram_2d

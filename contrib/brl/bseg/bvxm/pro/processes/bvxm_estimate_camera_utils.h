@@ -15,7 +15,7 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgl/vgl_box_3d.h>

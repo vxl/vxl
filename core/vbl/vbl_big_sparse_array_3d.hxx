@@ -5,7 +5,7 @@
 #include <utility>
 #include <iostream>
 #include "vbl_big_sparse_array_3d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // locals

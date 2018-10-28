@@ -2,7 +2,8 @@
 #include "vsol_line_3d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

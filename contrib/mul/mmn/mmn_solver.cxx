@@ -9,7 +9,7 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

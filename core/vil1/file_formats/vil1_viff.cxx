@@ -9,7 +9,7 @@
 extern "C" {
 #include "vil1_viff_support.h"
 }
-#include <vcl_cassert.h>
+#include <cassert>
 
 char const* vil1_viff_format_tag = "viff";
 

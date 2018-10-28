@@ -9,7 +9,7 @@
 #include <cstring>
 #include "vil1_block_cache_image_impl.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Constructors/Destructors--------------------------------------------------
 

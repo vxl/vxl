@@ -8,7 +8,7 @@
 // \brief Identify and enumerate all disjoint blobs in a binary image.
 // \author Ian Scott, Kevin de Souza
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil3d/vil3d_image_view.h>

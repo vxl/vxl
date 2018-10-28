@@ -12,7 +12,7 @@
 #include <fstream>
 #include <vector>
 #include "osl_load_topology.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 void osl_load_topology(char const *f, std::list<osl_edge*> &e, std::list<osl_vertex*> &v)

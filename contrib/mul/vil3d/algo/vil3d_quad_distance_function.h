@@ -9,7 +9,8 @@
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil/algo/vil_quad_distance_function.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Apply quadratic distance transform along each row of src
 //

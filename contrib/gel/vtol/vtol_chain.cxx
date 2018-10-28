@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //***************************************************************************
 // Initialization

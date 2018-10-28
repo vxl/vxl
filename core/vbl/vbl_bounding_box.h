@@ -20,7 +20,7 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // Helper class for vbl_bounding_box

@@ -7,7 +7,8 @@
 // \author Tim Cootes
 
 #include "vil_gauss_reduce.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_plane.h>
 #include <vil/vil_convert.h>

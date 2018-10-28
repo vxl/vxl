@@ -5,7 +5,7 @@
 #include <iostream>
 #include "vnl_convolve.h"
 #include <vnl/algo/vnl_fft_1d.h> // this #includes <std::complex.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class T1, class T2, class U>

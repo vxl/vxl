@@ -8,7 +8,7 @@
 
 #include <vcl_compiler.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 
 rrel_lts_obj::rrel_lts_obj( unsigned int num_sam_inst, double inlier_frac )
   : num_sam_inst_( num_sam_inst ),

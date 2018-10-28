@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Return the indices of half edges that are on the mesh boundary
 // The results are organized into loops

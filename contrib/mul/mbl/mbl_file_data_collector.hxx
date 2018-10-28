@@ -9,7 +9,7 @@
 #include "mbl_file_data_collector.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>

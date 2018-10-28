@@ -7,7 +7,7 @@
 #include <cmath>
 #include <iostream>
 #include "vgl_homg_plane_3d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_homg_point_3d.h>

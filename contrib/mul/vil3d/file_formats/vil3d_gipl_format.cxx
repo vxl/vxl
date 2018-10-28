@@ -20,7 +20,7 @@
 #include <vil3d/vil3d_image_resource.h>
 #include <vil/vil_open.h>
 #include <vsl/vsl_binary_explicit_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // GIPL magic number
 constexpr unsigned GIPL_MAGIC1 = 719555000;

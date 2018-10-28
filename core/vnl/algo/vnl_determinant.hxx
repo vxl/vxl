@@ -5,7 +5,8 @@
 */
 #include "vnl_determinant.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_qr.h>
 
 

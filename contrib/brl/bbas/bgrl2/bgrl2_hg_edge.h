@@ -16,7 +16,7 @@
 #include "bgrl2_edge.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 class bgrl2_hg_vertex;
 class bgrl2_hg_hyperedge;

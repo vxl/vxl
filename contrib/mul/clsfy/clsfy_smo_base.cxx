@@ -14,7 +14,7 @@
 // Minimal Optimisation. In Advances in Kernel Methods - Support Vector Learning.
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
-#include <vcl_cassert.h>
+#include <cassert>
 
 // ----------------------------------------------------------------
 

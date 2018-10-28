@@ -34,7 +34,7 @@
 #include <iostream>
 #include <vector>
 #include <cstddef>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 

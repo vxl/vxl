@@ -1,7 +1,8 @@
 #include "rgrl_trans_mixed_spline.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 void
 rgrl_trans_mixed_spline::

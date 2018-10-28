@@ -6,7 +6,8 @@
 // \author Tim Cootes
 
 #include "vil_greyscale_erode.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Erodes src_image to produce dest_image (assumed single plane).
 // dest_image(i0,j0) is the maximum value of the pixels under the

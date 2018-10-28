@@ -4,7 +4,7 @@
 #include "rgrl_initializer_inv_indexing.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <rsdl/rsdl_kd_tree.h>
 

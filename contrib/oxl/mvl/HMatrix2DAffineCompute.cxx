@@ -10,7 +10,7 @@
 #include "HMatrix2DAffineCompute.h"
 //
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_matrix.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgPoint2D.h>

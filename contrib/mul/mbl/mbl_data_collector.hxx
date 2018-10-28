@@ -8,7 +8,7 @@
 #include <algorithm>
 #include "mbl_data_collector.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //=======================================================================

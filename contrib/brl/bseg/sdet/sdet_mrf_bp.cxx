@@ -4,7 +4,8 @@
 #include <vil/vil_math.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_numeric_traits.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 //
 // index for relative image position of neighbors
 //      u

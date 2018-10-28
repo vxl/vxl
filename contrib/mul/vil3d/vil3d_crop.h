@@ -7,7 +7,8 @@
 
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_image_resource.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vgl/vgl_box_3d.h>
 
 //: Create a view that is a window onto an existing image.

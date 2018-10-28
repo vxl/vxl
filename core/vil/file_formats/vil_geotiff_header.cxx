@@ -3,7 +3,7 @@
 #include "vil_geotiff_header.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <geo_tiffp.h>
 #include <geotiffio.h>

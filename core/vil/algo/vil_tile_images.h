@@ -10,7 +10,7 @@
 #include <cmath>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Create a big image by tiling images in patches (must be of same size).
 //  Creates a large image by putting smaller images into an approximately

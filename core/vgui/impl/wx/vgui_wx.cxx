@@ -16,7 +16,7 @@
 #include <vgui/vgui_gl.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <wx/app.h>
 #include <wx/log.h>

@@ -8,7 +8,7 @@
 
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_image_view.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_box_3d.h>

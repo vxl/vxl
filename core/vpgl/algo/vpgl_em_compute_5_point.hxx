@@ -7,7 +7,7 @@
 #include <cstdlib>
 #include "vpgl_em_compute_5_point.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_matrix_fixed.h>

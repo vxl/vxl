@@ -5,7 +5,7 @@
 #include "vsph_segment_sphere.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h>
 #include <vbl/vbl_graph_partition.h>
 #include <vbl/vbl_edge.h>

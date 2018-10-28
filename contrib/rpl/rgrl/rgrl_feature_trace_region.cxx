@@ -9,7 +9,7 @@
 #include <rgrl/rgrl_cast.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 // not used? #include <vcl_compiler.h>
 
 rgrl_feature_trace_region::

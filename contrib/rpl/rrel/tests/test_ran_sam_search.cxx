@@ -1,7 +1,7 @@
 // This is rpl/rrel/tests/test_ran_sam_search.cxx
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_4.h>

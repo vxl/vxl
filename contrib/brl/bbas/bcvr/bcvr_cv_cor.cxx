@@ -8,7 +8,7 @@
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #define TOL                   (1.0e-1)

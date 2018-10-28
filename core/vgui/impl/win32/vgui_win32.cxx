@@ -5,7 +5,7 @@
 
 #include <vgui/vgui_gl.h> // for glFlush()
 #include <vcl_compiler.h>
-#include <vcl_cassert.h> // for assert
+#include <cassert>// for assert
 #include "vgui_win32_window.h"
 #include "vgui_win32_dialog_impl.h"
 

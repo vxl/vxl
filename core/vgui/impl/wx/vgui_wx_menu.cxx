@@ -19,7 +19,7 @@
 #endif
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //-------------------------------------------------------------------------
 // Private helpers - declarations.

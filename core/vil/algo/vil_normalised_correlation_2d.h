@@ -10,7 +10,7 @@
 #include <cstddef>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Evaluate dot product between kernel and src_im

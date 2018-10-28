@@ -6,7 +6,7 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 bool operator< ( rrel_muse_key_type const& left_t, rrel_muse_key_type const& right_t )
 {

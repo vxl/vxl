@@ -9,7 +9,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_find_peaks.h>
 #include <vil/vil_fill.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Suppress all non-maximal (non peaks) pixels in the image
 //  If image(i,j) is strictly larger than all neighbouring pixels,

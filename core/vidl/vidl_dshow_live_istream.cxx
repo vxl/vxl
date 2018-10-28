@@ -12,7 +12,7 @@
 
 #include <vidl/vidl_config.h>
 #include <vidl/vidl_dshow.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------

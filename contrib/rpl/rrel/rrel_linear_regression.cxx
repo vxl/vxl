@@ -8,7 +8,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 rrel_linear_regression::rrel_linear_regression( const std::vector< vnl_vector<double> >& pts,
                                                 bool use_intercept )

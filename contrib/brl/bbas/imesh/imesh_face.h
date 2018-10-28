@@ -20,7 +20,7 @@
 #include <string>
 #include <algorithm>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 

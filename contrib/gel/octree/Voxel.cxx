@@ -15,7 +15,7 @@
 #include <iostream>
 #include "Voxel.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #if 0
 bool operator==( const Voxel &a, const Voxel &b)

@@ -19,7 +19,7 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsol/vsol_curve_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>

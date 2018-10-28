@@ -10,7 +10,7 @@
 #include "rgrl_match_set.h"
 #include "rgrl_spline.h"
 #include "rgrl_trans_spline.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/algo/vnl_amoeba.h>
 #include <vnl/algo/vnl_conjugate_gradient.h>

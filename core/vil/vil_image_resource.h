@@ -12,7 +12,8 @@
 // \date 20 Sep 2002
 
 #include <vil/vil_image_view_base.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vcl_atomic_count.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>

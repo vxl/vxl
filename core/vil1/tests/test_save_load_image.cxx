@@ -27,7 +27,7 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h> // vpl_unlink()

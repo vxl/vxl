@@ -1,7 +1,8 @@
 #include "boxm2_compute_derivative_function.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #if 1
 # define PROB

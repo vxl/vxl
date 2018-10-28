@@ -4,7 +4,7 @@
 //
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Default constructor
 bvxm_synth_world_generator::bvxm_synth_world_generator()

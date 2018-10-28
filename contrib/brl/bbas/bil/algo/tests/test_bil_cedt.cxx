@@ -5,7 +5,7 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <bil/algo/bil_cedt.h>
 #include <vil/vil_image_view.h>

@@ -24,7 +24,7 @@
 #include <bpgl/bpgl_camera_estimator_amoeba.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include "bvxm_expected_edge_functor.h"
 

@@ -6,7 +6,7 @@
 //
 #include <iostream>
 #include <cstddef>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_trilin_interp.h>

@@ -13,7 +13,7 @@
 static char const* vil_mit_format_tag = "mit";
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_stream.h>
 #include <vil/vil_image_resource.h>

@@ -4,7 +4,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <mvl/Probability.h>

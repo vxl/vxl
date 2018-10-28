@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <string>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include "msdi_points_subset.h"

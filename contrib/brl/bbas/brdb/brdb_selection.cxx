@@ -9,7 +9,7 @@
 // \author Yong Zhao
 // \date Apr 4th, 2007
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <brdb/brdb_query.h>
 #include <brdb/brdb_relation.h>

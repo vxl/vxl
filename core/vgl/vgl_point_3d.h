@@ -21,7 +21,7 @@
 #include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_plane_3d
 #include <vgl/vgl_vector_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a cartesian 3D point
 template <class Type>

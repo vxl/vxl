@@ -19,7 +19,7 @@
 #include <iostream>
 #include <algorithm>
 #include "vil3d_image_view.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 

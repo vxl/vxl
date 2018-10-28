@@ -18,7 +18,8 @@
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vpgl/algo/vpgl_ray.h>
 #include <bpgl/bpgl_camera_utils.h>

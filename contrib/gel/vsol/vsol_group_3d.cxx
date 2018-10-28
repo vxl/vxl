@@ -2,7 +2,8 @@
 #include "vsol_group_3d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vsl/vsl_string_io.h>
 #include <vsl/vsl_vector_io.h>
 

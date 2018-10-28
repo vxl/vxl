@@ -2,7 +2,7 @@
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 5 October 2001.
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

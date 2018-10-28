@@ -4,7 +4,7 @@
 #include "boxm2_points_to_volume_function.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <bbas/imesh/imesh_vertex.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/imesh_operations.h>

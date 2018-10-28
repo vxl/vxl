@@ -11,7 +11,7 @@
 #include <vil/vil_convert.h>
 #include <vul/vul_file.h>
 #include <vul/vul_sprintf.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 mvl2_video_from_sequence::mvl2_video_from_sequence()

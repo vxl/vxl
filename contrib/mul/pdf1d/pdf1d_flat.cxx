@@ -10,7 +10,7 @@
 #include <cmath>
 #include "pdf1d_flat.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_flat_sampler.h>

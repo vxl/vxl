@@ -12,7 +12,7 @@
 #include <cmath>
 #include "vil_rotate.h"
 #include <vil/vil_resample_bilin.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Calculate theta in range 0 to x

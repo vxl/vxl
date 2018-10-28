@@ -13,7 +13,7 @@
 #include <fstream>
 #include "bxml_read.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file.h>
 #ifdef WIN32
  #define _LIB

@@ -8,7 +8,7 @@
 
 #include <cstddef>
 #include "vil1_byte_swap.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // this is not efficient

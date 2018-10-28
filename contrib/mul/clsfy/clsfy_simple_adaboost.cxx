@@ -10,7 +10,7 @@
 #include <vector>
 #include <cmath>
 #include "clsfy_simple_adaboost.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>

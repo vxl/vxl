@@ -10,7 +10,8 @@
 
 #include "vpdfl_axis_gaussian_sampler.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>
 
 //=======================================================================

@@ -4,7 +4,8 @@
 // \author Tim Cootes
 
 #include "vil_binary_erode.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Erodes src_image to produce dest_image (assumed single plane)
 void vil_binary_erode(const vil_image_view<bool>& src_image,

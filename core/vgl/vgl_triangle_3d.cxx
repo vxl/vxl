@@ -14,7 +14,7 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Define a file-scope vgl_nan constant
 static const double vgl_nan = std::sqrt(-1.0);

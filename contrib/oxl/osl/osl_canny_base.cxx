@@ -8,7 +8,7 @@
 
 #include <osl/osl_canny_port.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //--------------------------------------------------------------
 

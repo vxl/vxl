@@ -13,7 +13,7 @@
 #include "rgtl_serialize_istream.h"
 #include "rgtl_serialize_ostream.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------

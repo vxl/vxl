@@ -12,7 +12,7 @@
 
 #include <vcl_compiler.h> // for macro decisions based on compiler type
 #include <vxl_config.h>   // for checking supported integer data types
-#include <vcl_cfloat.h>   // for DBL_MAX and FLT_MAX
+#include <cfloat>// for DBL_MAX and FLT_MAX
 
 #include <vnl/vnl_config.h> // is SSE enabled
 #include <vnl/vnl_alloc.h>  // is SSE enabled
@@ -70,7 +70,7 @@
 # define VNL_SSE_ALLOC(n,s,a) __mingw_aligned_malloc(n*s,a)
 # define VNL_SSE_FREE(v,n,s) __mingw_aligned_free(v)
 #elif VNL_CONFIG_ENABLE_SSE2 && VXL_HAS_POSIX_MEMALIGN
-# include <vcl_cstdlib.h>
+#include <cstdlib>
 # define VNL_SSE_ALLOC(n,s,a) memalign(a,n*s)
 # define VNL_SSE_FREE(v,n,s) std::free(v)
 #else // sse2 disabled or could not get memory alignment support, use slower unaligned based intrinsics

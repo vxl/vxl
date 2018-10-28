@@ -9,7 +9,7 @@
 #include "ImageMetric.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_math.h>

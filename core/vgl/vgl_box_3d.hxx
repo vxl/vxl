@@ -9,7 +9,7 @@
 #include <cmath>
 #include "vgl_box_3d.h"
 #include <vgl/vgl_point_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // Constructors/Destructor---------------------------------------------------

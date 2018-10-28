@@ -7,7 +7,8 @@
 #include <bvrml/bvrml_write.h>
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 
 // constructor

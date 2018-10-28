@@ -13,7 +13,7 @@
 #include "vil1_mit.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

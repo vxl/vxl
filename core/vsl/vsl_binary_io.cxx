@@ -8,7 +8,7 @@
 // \brief Functions to perform consistent binary IO within vsl
 // \author Tim Cootes and Ian Scott
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 

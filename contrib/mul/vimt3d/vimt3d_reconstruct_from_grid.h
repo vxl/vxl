@@ -10,7 +10,8 @@
 #include <vnl/vnl_fwd.h>
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Fill voxel which x,y,z is in with val
 //  Image is nx * ny * nz array of T. x,y,z element is data[z*zstep+ystep*y+x*xstep]

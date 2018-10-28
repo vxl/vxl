@@ -10,7 +10,7 @@
 #include "vgl_homg_operators_2d.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_point_2d.h>

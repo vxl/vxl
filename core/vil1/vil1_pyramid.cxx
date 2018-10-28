@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "vil1_pyramid.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil1/vil1_resample.h>
 #include <vil1/vil1_memory_image.h>

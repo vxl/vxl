@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "sdet_sel_base.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 //#include <mbl/mbl_stats_1d.h>
 

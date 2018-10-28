@@ -12,7 +12,7 @@
 #include <iterator>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #define imesh_invalid_idx (static_cast<unsigned int>(-1))
 

@@ -3,7 +3,8 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_one_chain.h>

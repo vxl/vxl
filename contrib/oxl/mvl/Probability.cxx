@@ -7,7 +7,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_diag_matrix.h>

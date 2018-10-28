@@ -11,7 +11,7 @@
 //   23 Oct.2003 - Peter Vanroose - Added support for 64-bit int pixels
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 static unsigned component_size[] =

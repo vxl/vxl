@@ -14,7 +14,7 @@
 // for TREs
 #include "vil_nitf2_tagged_record_definition.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 vil_nitf2_field_definitions* vil_nitf2_image_subheader::s_field_definitions_21 = nullptr;

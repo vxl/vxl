@@ -9,7 +9,8 @@
 // \author Tim Cootes.
 
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: Return a view of im's plane p.

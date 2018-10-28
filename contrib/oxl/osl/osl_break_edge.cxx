@@ -8,7 +8,8 @@
 
 #include "osl_break_edge.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <osl/osl_edge.h>
 #include <osl/osl_ortho_regress.h>
 

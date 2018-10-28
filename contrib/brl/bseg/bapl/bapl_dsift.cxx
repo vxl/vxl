@@ -1,7 +1,8 @@
 //this is /brl/bseg/bapl/bapl_dsift.cxx
 #include "bapl_dsift.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_orientations.h>
 #include <vnl/vnl_math.h>
 

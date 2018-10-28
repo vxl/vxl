@@ -12,7 +12,7 @@
 #include <mbl/mbl_read_props.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 msm_box_limiter::msm_box_limiter()

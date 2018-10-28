@@ -20,7 +20,7 @@
 // \endverbatim
 
 #include <string>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 class vil1_image;

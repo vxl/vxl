@@ -7,7 +7,7 @@
 #include <limits>
 #include "bsta_von_mises_updater.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 //: The main function
 template <class von_mises_dist_>
 void bsta_von_mises_updater<von_mises_dist_>::update(obs_vm_dist_& pdist, const vect_t& vsum, math_t alpha) const

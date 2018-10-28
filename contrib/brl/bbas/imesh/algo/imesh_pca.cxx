@@ -10,7 +10,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 imesh_pca_mesh::imesh_pca_mesh(const std::vector<imesh_mesh>& meshes)
   : imesh_mesh(meshes[0]), mean_verts_(this->vertices().clone())

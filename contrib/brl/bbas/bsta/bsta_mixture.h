@@ -18,7 +18,7 @@
 #include <iostream>
 #include <algorithm>
 #include "bsta_distribution.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include "bsta_sampler.h"
 #include <vpdl/vpdt/vpdt_dist_traits.h>

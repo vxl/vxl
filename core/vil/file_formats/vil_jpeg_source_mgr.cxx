@@ -13,7 +13,7 @@
 #include <cstddef>
 #include <limits>
 #include "vil_jpeg_source_mgr.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 

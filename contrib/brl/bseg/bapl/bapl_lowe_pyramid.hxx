@@ -8,7 +8,7 @@
 #include <cmath>
 #include "bapl_lowe_pyramid.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Constructor
 template < class T >

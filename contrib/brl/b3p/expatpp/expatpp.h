@@ -27,7 +27,7 @@
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 /**

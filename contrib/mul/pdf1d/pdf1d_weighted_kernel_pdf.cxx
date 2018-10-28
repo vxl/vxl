@@ -11,7 +11,7 @@
 #include <string>
 #include "pdf1d_weighted_kernel_pdf.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>
 #include <vnl/io/vnl_io_vector.h>

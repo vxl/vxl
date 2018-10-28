@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vnl/vnl_sym_matrix.h>
 #include <vnl/io/vnl_io_sym_matrix.h>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_sym_matrix_double_io()
 {

@@ -12,7 +12,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vcl_compiler.h>
 

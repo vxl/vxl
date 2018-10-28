@@ -9,7 +9,7 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_triangle_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_plane_3d.h>

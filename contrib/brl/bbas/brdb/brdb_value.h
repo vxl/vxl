@@ -17,7 +17,7 @@
 #include <iostream>
 #include <utility>
 #include <brdb/brdb_value_sptr.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>

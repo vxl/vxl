@@ -15,7 +15,7 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vgl/vgl_vector_3d.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Reconstruct structure from set of 2d pts

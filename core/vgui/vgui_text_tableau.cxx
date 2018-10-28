@@ -17,7 +17,8 @@
 #include <vgui/vgui_text_put.h>
 #include <vgui/vgui_event.h>
 #include <vgui/vgui_gl.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vgui_text_tableau::vgui_text_tableau()
   : cur_r_( 1 ), cur_g_( 0 ), cur_b_( 0 ),

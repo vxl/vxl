@@ -3,6 +3,9 @@
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_diag_matrix.h>
+#include <vnl/io/vnl_io_diag_matrix.h>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_diag_matrix_double_io()
 {

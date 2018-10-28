@@ -9,7 +9,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vul/vul_reg_exp.h>
 #include <vul/vul_sprintf.h>

@@ -11,7 +11,8 @@
 
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 
 //: Compute the 2-D cross product

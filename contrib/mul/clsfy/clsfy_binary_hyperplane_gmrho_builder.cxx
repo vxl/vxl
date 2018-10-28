@@ -15,7 +15,7 @@
 
 //=======================================================================
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_vector_ref.h>
 #include <vnl/algo/vnl_lbfgs.h>

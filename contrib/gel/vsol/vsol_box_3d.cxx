@@ -4,7 +4,8 @@
 // \file
 
 #include <vbl/io/vbl_io_bounding_box.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 double vsol_box_3d::get_min_x() const
 {

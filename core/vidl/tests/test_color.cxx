@@ -5,7 +5,7 @@
 // \file
 #include <vcl_compiler.h>
 #include <vidl/vidl_color.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Define the function pointer for pixel format conversion functions
 // These are the functions that use types other than vxl_byte

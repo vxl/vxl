@@ -17,7 +17,7 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <bsta/bsta_histogram_base.h>
 

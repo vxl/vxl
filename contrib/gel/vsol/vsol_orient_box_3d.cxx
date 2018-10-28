@@ -6,7 +6,8 @@
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_box_3d.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box)
  : orient_box_(orient_box)

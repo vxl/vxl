@@ -9,7 +9,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vul/vul_file.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Main boxm2_convert_bundle function
 //  Takes in bundle.out file and image directory that created img_dir

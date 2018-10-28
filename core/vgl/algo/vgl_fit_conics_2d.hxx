@@ -9,7 +9,7 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/algo/vgl_conic_2d_regression.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //--------------------------------------------------------------
 //: Constructor

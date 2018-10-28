@@ -2,7 +2,8 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, double const phi,
                                 vnl_matrix<double> & R)

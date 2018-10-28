@@ -5,7 +5,7 @@
 #include <cmath>
 #include <iomanip>
 #include "brip_max_scale_response.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>

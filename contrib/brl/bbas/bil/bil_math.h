@@ -6,7 +6,8 @@
 // \brief Various mathematical manipulations of 2D images
 // \author Matt Leotta
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: compute the boolean "and" of two boolean images

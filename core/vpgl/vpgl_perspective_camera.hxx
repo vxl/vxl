@@ -26,7 +26,7 @@
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_trace.h>

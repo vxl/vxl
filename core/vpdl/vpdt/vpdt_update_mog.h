@@ -15,7 +15,7 @@
 #include <vpdl/vpdt/vpdt_mog_fitness.h>
 #include <vpdl/vpdt/vpdt_num_obs.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: A mixture of Gaussians updater
 //  Base class for common functionality in adaptive updating schemes

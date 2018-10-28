@@ -7,7 +7,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )

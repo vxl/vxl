@@ -6,7 +6,6 @@
 // \brief Access to certain POSIX functions.
 
 #include <cstddef>
-#include "vcl_compiler.h"
 #include "vpl/vpl_export.h"
 
 //: Get the pathname of the current working directory.

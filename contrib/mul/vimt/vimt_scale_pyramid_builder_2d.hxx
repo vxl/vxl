@@ -11,7 +11,7 @@
 #include <iostream>
 #include <cmath>
 #include "vimt_scale_pyramid_builder_2d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_bilin_interp.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

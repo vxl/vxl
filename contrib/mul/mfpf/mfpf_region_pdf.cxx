@@ -8,7 +8,7 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_resample_bilin.h>
 #include <vil/io/vil_io_image_view.h>

@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "vil1_image.h"
-#include <vcl_climits.h> // for CHAR_BIT
+#include <climits>// for CHAR_BIT
 #include <vcl_compiler.h>
 
 std::ostream& vil1_image::print(std::ostream& s) const

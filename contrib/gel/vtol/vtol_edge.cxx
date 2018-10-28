@@ -2,7 +2,8 @@
 #include "vtol_edge.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vtol/vtol_zero_chain.h>
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_macros.h>

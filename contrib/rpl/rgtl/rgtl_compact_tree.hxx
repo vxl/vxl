@@ -7,7 +7,8 @@
 
 #include "rgtl_compact_tree.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D, typename Policy1, typename Policy2>

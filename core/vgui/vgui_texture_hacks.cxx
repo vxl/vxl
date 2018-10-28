@@ -14,7 +14,7 @@
 
 #include <dlfcn.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 static bool debug = false;
 #define return_GLboolean(x) return x

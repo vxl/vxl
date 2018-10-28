@@ -7,7 +7,7 @@
 #include <iostream>
 #include <limits>
 #include "bsta_gaussian_sphere.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_erf.h>
 

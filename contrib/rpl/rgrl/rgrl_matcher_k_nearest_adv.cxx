@@ -13,7 +13,7 @@
 #include <rgrl/rgrl_match_set.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //-----------------------------------------------
 //: a struct for fast look up of the from feature

@@ -21,7 +21,7 @@
 #include <string>
 #include <sstream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_point_3d.h>
 
 #include "bmsh3d_ptr_list.h"

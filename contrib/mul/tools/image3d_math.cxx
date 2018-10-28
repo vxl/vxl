@@ -22,7 +22,7 @@
 
 #if VCL_HAS_EXCEPTIONS
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_deque_io.hxx>
 #include <vsl/vsl_map_io.hxx>
 #include <vsl/vsl_stream.h>

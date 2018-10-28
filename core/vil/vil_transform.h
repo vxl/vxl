@@ -9,7 +9,8 @@
 // \brief STL algorithm like methods.
 // \author Ian Scott.
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: Apply a unary operation to each pixel in image.

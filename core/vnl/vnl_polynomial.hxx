@@ -13,7 +13,7 @@
 // \date  August 2011
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Evaluate polynomial at value x
 template <class T>

@@ -20,7 +20,7 @@
 //-------------------------------------------------------------------------
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file.h>
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_3d.h>

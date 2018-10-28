@@ -4,7 +4,8 @@
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bkml/bkml_write.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: construct the locs_ and pixels_ vectors by generating a hypothesis according to interval amounts in given the tile.
 //  Intervals are in meters.

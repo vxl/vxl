@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil1/vil1_load.h>

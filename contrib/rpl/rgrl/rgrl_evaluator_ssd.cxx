@@ -2,7 +2,8 @@
 //:
 // \file
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 // Normalized SSD
 double

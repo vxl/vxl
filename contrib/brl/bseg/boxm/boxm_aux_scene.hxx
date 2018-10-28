@@ -5,7 +5,8 @@
 #include <boxm/boxm_aux_traits.h>
 
 #include <vpl/vpl.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 template <class T_loc, class T, class T_AUX>
 boxm_aux_scene<T_loc,T,T_AUX>::boxm_aux_scene(boxm_scene<tree_type>* scene,

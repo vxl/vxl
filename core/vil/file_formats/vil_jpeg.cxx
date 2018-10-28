@@ -20,7 +20,7 @@
 #include "vil_jpeg_destination_mgr.h"
 #include "vil_jpeg_compressor.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vxl_config.h> // vxl_byte
 

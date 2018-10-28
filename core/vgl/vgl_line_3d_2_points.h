@@ -17,7 +17,7 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_point_3d.h> // data member of this class
 #include <vgl/vgl_vector_3d.h>
 

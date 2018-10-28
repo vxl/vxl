@@ -3,7 +3,7 @@
 #include <iostream>
 #include <queue>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //executable args
 #include <vul/vul_arg.h>

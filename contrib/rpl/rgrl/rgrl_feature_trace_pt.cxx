@@ -8,7 +8,8 @@
 #include "rgrl_util.h"
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <rgrl/rgrl_cast.h>
 

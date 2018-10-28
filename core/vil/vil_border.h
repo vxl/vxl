@@ -10,7 +10,7 @@
 // \author Nicolas Burrus - Paris
 
 #include <limits>
-#include <vcl_cassert.h>
+#include <cassert>
 // not used? #include <vcl_compiler.h>
 
 //: Vil border modes.

@@ -9,7 +9,7 @@
 // \author Ian Scott
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_real_polynomial.h>

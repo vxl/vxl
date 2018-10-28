@@ -3,7 +3,8 @@
 // \file
 #include <vgl/vgl_closest_point.h>
 #include <vul/vul_file.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <volm/volm_buffered_index.h>             // for parameter class
 #include <bkml/bkml_write.h>
 

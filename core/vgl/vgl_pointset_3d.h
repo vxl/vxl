@@ -19,7 +19,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 template <class Type>

@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include <vcl_compiler.h>
 #if VCL_HAS_EXCEPTIONS
-# include <vcl_stdexcept.h>
+#include <stdexcept>
 #endif
 
 

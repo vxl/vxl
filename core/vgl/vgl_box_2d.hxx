@@ -8,7 +8,7 @@
 #include <algorithm>
 #include <cmath>
 #include "vgl_box_2d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 

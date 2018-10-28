@@ -8,7 +8,8 @@
 #include "rgrl_feature_set.h"
 #include "rgrl_feature_trace_pt.h"
 #include "rgrl_cast.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 rgrl_matcher_k_nearest_boundary::
 rgrl_matcher_k_nearest_boundary( unsigned int k )

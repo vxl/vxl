@@ -24,7 +24,7 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_closest_point.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class T>

@@ -12,7 +12,8 @@
 // \date 2 Mar 2003
 
 #include <vil3d/vil3d_image_view_base.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>
 

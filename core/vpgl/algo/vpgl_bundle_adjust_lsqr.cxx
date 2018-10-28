@@ -10,7 +10,7 @@
 #include <vnl/vnl_double_3.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: Constructor

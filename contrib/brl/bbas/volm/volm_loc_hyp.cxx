@@ -8,7 +8,7 @@
 #include <vgl/vgl_polygon.h>
 #include <bkml/bkml_write.h>
 #include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
 

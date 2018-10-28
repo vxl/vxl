@@ -16,7 +16,7 @@
 #include <vpdl/vpdl_gaussian_base.h>
 #include <vnl/vnl_erf.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vpdl/vpdt/vpdt_gaussian.h>
 #include <vpdl/vpdt/vpdt_probability.h>

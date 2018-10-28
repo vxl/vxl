@@ -4,7 +4,7 @@
 #include <volm/conf/volm_conf_query.h>
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <bpgl/bpgl_camera_utils.h>
 #include <vul/vul_file.h>

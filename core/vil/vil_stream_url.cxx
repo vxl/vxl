@@ -15,7 +15,7 @@
 #include "vil_stream_url.h"
 #include <vil/vil_stream_core.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #undef sprintf
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>

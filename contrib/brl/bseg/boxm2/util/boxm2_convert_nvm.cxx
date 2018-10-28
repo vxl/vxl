@@ -9,7 +9,8 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 

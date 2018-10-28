@@ -14,7 +14,6 @@
 
 #include <string>
 #include <complex>
-#include <vcl_compiler.h>
 
 //: initialise test counters, check test name 'name' exists
 void testlib_test_start(const char* name = nullptr);

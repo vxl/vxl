@@ -11,7 +11,7 @@
 #include <iostream>
 #include "vgui_dialog_impl.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>
 #include <vgui/internals/vgui_file_field.h>

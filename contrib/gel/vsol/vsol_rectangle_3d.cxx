@@ -3,7 +3,7 @@
 #include "vsol_rectangle_3d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_vector_3d.h>
 #include <vsol/vsol_point_3d.h>
 #include <vcl_compiler.h>

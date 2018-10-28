@@ -7,7 +7,8 @@
 // \author Matt Leotta
 
 #include <vil/vil_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Equalize the pixels values relative to a model image
 // \relatesalso vil_image_view

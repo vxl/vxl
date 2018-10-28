@@ -12,7 +12,7 @@
 #include <fstream>
 #include <list>
 #include <vector>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vxl_config.h>
 

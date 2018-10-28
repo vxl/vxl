@@ -11,7 +11,7 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>

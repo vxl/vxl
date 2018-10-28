@@ -16,7 +16,7 @@
 #include <vector>
 #include <cmath>
 #include <limits>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vpgl/vpgl_perspective_camera.h>

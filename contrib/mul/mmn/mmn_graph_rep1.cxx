@@ -4,7 +4,8 @@
 // \brief Representation of a graph, stored by links at each node.
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()

@@ -9,7 +9,7 @@
 #include "FMatrixCompute.h"
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/HomgInterestPointSet.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //---------------------------------------------------------------

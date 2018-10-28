@@ -7,7 +7,7 @@
 // \date   Feb 2003
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_math.h>
 #include <rrel/rrel_m_est_obj.h>

@@ -1,6 +1,7 @@
 #include "rgrl_invariant_match.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 rgrl_invariant_match::
 rgrl_invariant_match( rgrl_invariant_sptr from,

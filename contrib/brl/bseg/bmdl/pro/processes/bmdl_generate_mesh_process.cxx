@@ -9,7 +9,7 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>

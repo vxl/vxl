@@ -28,7 +28,7 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_cubic_spline_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <class T>
 static inline T square(T x) { return x*x; }

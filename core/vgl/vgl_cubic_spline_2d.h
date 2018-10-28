@@ -25,7 +25,7 @@
 #include <iosfwd>
 #include <utility>
 #include <vector>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

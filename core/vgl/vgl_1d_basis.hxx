@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include "vgl_1d_basis.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class T>

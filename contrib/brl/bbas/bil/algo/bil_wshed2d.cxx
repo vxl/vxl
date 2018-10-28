@@ -6,7 +6,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_climits.h>
+#include <climits>
 
 #include <vil/vil_image_view.h>
 #include <vil/vil_copy.h>

@@ -7,7 +7,7 @@
 // \author MingChing Chang
 
 #include "bmsh3d_mesh_tri.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_vector_3d.h>
 #ifdef DEBUG

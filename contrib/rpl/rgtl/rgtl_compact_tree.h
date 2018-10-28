@@ -18,7 +18,8 @@
 #include "rgtl_serialize_access.h"
 #include "rgtl_serialize_base.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Represent a tree structure compactly using a few contiguous arrays.
 //

@@ -17,7 +17,7 @@
 //                          Cleaner struct: hdr params moved to vil_tiff_header
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>

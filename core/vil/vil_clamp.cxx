@@ -16,7 +16,7 @@
 #include <cstring>
 #include "vil_clamp.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_property.h>
 #include <vil/vil_exception.h>
 

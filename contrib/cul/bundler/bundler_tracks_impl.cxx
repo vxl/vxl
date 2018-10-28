@@ -15,7 +15,7 @@
 #include <rsdl/rsdl_kd_tree.h>
 #include <rsdl/rsdl_point.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 static const double TOL = .01;

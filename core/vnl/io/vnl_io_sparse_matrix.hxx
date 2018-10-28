@@ -8,7 +8,8 @@
 #include "vnl_io_sparse_matrix.h"
 #include <vnl/vnl_sparse_matrix.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 // I/O for vnl_sparse_matrix_pair
 //==================================================================================

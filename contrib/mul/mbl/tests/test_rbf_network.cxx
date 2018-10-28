@@ -3,7 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_random.h>
 #include <mbl/mbl_rbf_network.h>

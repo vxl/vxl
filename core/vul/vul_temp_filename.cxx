@@ -11,7 +11,7 @@
 #include <vcl_compiler.h>
 
 #if defined (VCL_VC) || defined(__MINGW32__)
-# include <vcl_cstdio.h>
+
 # include <Windows.h>
 #else
 #if defined(unix) || defined(__unix) || defined(__unix__) || defined(__APPLE__)

@@ -7,7 +7,7 @@
 // \file
 // \author  J. L. Mundy after Matt Leotta original
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil1/vil1_memory_image_of.h>

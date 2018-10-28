@@ -7,7 +7,7 @@
 #include <vcl_compiler.h>
 #include <boxm2/boxm2_util.h>
 #include <bpgl/bpgl_camera_utils.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #define RAD_FACTOR (vnl_math::pi_over_180) //radians per one degree
 #define AZ_STEP (vnl_math::pi_over_180) //step around the volume is 1 degree

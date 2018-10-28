@@ -1,5 +1,6 @@
 #include "msm_shape_perturber.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 msm_shape_perturber::msm_shape_perturber()
 {

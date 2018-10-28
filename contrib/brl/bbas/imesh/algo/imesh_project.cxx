@@ -21,7 +21,7 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 void

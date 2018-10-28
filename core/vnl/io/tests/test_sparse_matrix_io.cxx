@@ -2,6 +2,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_sparse_matrix.h>
+#include <vnl/io/vnl_io_sparse_matrix.h>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 static bool Compare(vnl_sparse_matrix<double>& M1, vnl_sparse_matrix<double>& M2)
 {

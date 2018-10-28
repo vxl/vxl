@@ -5,7 +5,8 @@
 
 #include "HMatrix2DEuclideanCompute.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vnl/vnl_double_2.h>
 #include <vnl/vnl_double_2x2.h>

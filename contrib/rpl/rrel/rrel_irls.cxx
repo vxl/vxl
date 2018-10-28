@@ -14,7 +14,7 @@
 #include <vnl/vnl_matrix.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // -------------------------------------------------------------------------
 rrel_irls::rrel_irls( int max_iterations )

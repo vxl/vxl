@@ -10,7 +10,7 @@
 #include <mfpf/mfpf_norm_corr1d.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>

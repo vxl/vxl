@@ -11,7 +11,8 @@
 #include "rgrl_feature_sptr.h"
 #include "rgrl_feature_set_sptr.h"
 #include "rgrl_mask_sptr.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Cast down the hierarchy.
 //

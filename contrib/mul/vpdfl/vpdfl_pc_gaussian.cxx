@@ -18,7 +18,7 @@
 #include <cstdlib>
 #include "vpdfl_pc_gaussian.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_math.h>

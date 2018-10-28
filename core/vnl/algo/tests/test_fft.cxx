@@ -12,6 +12,8 @@
 #include <vnl/algo/vnl_fft_1d.h>
 #include <vnl/algo/vnl_fft_2d.h>
 
+#include <testlib/testlib_test.h>
+
 #include "test_util.h"
 
 void test_fft_1d(unsigned int N)

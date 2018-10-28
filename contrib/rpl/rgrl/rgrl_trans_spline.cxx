@@ -8,7 +8,7 @@
 #include "rgrl_trans_spline.h"
 #include <rgrl/rgrl_trans_reader.h>
 #include <rgrl/rgrl_util.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 rgrl_trans_spline::

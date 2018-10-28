@@ -14,7 +14,7 @@
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: True if value is strictly above *im and its 8 neighbours
 template <class T>

@@ -9,7 +9,8 @@
 
 #include "vpdfl_gaussian_kernel_pdf_sampler.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vpdfl/vpdfl_gaussian_kernel_pdf.h>
 
 //=======================================================================

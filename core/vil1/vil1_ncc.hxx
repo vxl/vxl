@@ -7,7 +7,7 @@
 */
 #include <cmath>
 #include "vil1_ncc.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 template <class I1, class I2, class O>

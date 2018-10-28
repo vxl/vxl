@@ -10,6 +10,7 @@
 #include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 
+#include <testlib/testlib_test.h>
 
 template <class T, class S> static
 void test_hilbert(T /*dummy*/, char const* type, S residual)

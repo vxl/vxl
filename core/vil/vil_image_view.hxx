@@ -25,7 +25,7 @@
 #include <cstring>
 #include <algorithm>
 #include "vil_image_view.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_exception.h>

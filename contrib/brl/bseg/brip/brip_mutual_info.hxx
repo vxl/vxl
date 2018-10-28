@@ -12,7 +12,7 @@
 
 #include "brip_histogram.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: Calculate the Mutual Information between the images.

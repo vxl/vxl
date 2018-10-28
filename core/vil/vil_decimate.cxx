@@ -14,7 +14,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil_decimate.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_copy.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_exception.h>

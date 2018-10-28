@@ -8,7 +8,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil1_memory_image_of.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil1/vil1_memory_image_of_format.hxx>
 
 template <class T>

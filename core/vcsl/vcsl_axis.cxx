@@ -1,7 +1,8 @@
 // This is core/vcsl/vcsl_axis.cxx
 #include "vcsl_axis.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vcsl/vcsl_dimension.h>
 #include <vcsl/vcsl_length.h>

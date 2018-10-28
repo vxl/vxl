@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vxl_config.h> // for vxl_byte
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_math.h>

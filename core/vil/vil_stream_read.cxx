@@ -20,7 +20,8 @@
 // \endverbatim
 
 #include "vil_stream_read.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>
 #include <vxl_config.h>

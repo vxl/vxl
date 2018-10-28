@@ -12,7 +12,7 @@
 #include <iostream>
 #include "vgui_rubberband_tableau.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_clip.h>
 #include <vnl/vnl_math.h> // for twopi

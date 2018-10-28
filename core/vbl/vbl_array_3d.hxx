@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include "vbl_array_3d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 
 //--------------------------------------------------------------
 //

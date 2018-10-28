@@ -14,7 +14,7 @@
 #include <vgl/vgl_point_3d.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_double_4.h>
 
 vnl_double_4x4

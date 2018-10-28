@@ -6,7 +6,7 @@
 #include <vil/vil_stream.h>
 #include <dcerror.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // ===========================================================================

@@ -10,7 +10,7 @@
 #include <iostream>
 #include <limits>
 #include "bsta_von_mises.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for pi
 

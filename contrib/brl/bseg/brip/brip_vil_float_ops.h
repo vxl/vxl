@@ -26,7 +26,7 @@
 #include <iostream>
 #include <complex>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vgl/vgl_box_2d.h>

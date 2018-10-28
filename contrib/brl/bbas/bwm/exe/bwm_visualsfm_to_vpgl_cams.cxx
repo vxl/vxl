@@ -10,7 +10,7 @@
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vgl/algo/vgl_fit_plane_3d.h>

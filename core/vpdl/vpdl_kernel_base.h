@@ -15,7 +15,7 @@
 #include <vector>
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_access.h> // function vpdt_size(v)
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: A base class for kernel (aka Parzen window) distributions

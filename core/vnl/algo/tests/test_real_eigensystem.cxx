@@ -1,6 +1,8 @@
 // This is core/vnl/algo/tests/test_real_eigensystem.cxx
 #include <iostream>
 #include <complex>
+#include <testlib/testlib_test.h>
+
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

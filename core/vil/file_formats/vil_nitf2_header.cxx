@@ -8,7 +8,8 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_1 = nullptr;
 vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_20 = nullptr;

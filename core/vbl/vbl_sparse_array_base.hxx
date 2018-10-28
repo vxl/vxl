@@ -8,7 +8,7 @@
 
 #include <utility>
 #include "vbl_sparse_array_base.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Empty the sparse matrix.

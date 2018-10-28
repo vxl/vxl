@@ -39,21 +39,16 @@
 #include <stack>
 #include <vector>
 #include <functional>
-#include <vcl_cassert.h>
+#include <cassert>
 
-#include <vcl_ciso646.h>
+#include <ciso646>
 #include <vcl_atomic_count.h>
 
-#include <vcl_climits.h>
-#ifndef __FreeBSD__ //FreeBSD4
-#endif
-#include <vcl_clocale.h>
-#include <vcl_cfloat.h>
+#include <climits>
+#include <clocale>
+#include <cfloat>
 #include <vcl_compiler.h>
-#if VCL_CXX_HAS_HEADER_TYPEINFO
-#endif
 
-#include <vcl_stlfwd.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
 #include <vcl_deprecated.h>

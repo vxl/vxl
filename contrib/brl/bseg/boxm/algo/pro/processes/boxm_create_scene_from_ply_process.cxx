@@ -11,7 +11,8 @@
 
 #include <boxm/boxm_scene.h>
 #include <rply.h>   //.ply parser
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <boct/util/boct_construct_tree.h>
 #define DEBUG_PLY

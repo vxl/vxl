@@ -23,7 +23,7 @@
 #include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include "vnl/vnl_export.h"
 
 //:Evaluation of real polynomials at real and complex points.

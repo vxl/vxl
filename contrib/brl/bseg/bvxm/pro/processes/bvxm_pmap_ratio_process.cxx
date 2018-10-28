@@ -8,7 +8,8 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view_base.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: set input and output types
 bool bvxm_pmap_ratio_process_cons(bprb_func_process& pro)

@@ -7,7 +7,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include "msdi_array_of_marked_images.h"

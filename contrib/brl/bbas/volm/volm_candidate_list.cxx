@@ -1,7 +1,8 @@
 #include "volm_candidate_list.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vgl/vgl_area.h>
 #include <vgl/vgl_area.hxx>
 

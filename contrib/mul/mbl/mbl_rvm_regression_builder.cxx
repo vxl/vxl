@@ -12,7 +12,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_matxvec.h>
 #include <mbl/mbl_matrix_products.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 // Note on indexing

@@ -12,7 +12,7 @@
 #include <cstddef>
 #include "rsdl_bins.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //:

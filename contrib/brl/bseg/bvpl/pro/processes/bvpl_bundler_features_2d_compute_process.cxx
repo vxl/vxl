@@ -25,7 +25,7 @@
 #include <bwm/video/bwm_video_corr_sptr.h>
 #include <bwm/video/bwm_video_corr.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include<vgl/vgl_point_2d.h>

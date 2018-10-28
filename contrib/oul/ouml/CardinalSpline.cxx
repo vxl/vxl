@@ -2,7 +2,8 @@
 //:
 // \file
 #include <vsl/vsl_vector_io.hxx>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Return a list of points on the boundary of the curve.
 // This is intended for drawing the curve as a list of line segments.

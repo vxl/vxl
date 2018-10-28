@@ -19,7 +19,7 @@
 #include <iosfwd>
 #include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_point_2d and vgl_line_2d
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_vector_2d.h>
 
 //: Represents a homogeneous 2D line.

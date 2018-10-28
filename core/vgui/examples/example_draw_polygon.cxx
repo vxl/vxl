@@ -7,7 +7,7 @@
 
 #include <cmath>
 #include <vector>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vul/vul_arg.h>

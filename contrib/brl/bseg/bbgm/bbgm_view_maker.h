@@ -19,7 +19,8 @@
 #include <vpdl/vpdt/vpdt_mixture_accessors.h>
 #include <vpdl/vpdt/vpdt_enable_if.h>
 #include <vil/vil_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: base class for objects that extract the mean from an image of distribution
 class bbgm_view_maker_base : public vbl_ref_count

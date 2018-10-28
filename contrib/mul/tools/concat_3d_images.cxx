@@ -6,7 +6,7 @@
 #include <numeric>
 #include <functional>
 #include <cstring>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vul/vul_file.h>
 #include <vbl/vbl_array_3d.hxx>

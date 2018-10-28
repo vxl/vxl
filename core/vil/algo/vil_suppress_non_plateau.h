@@ -9,7 +9,8 @@
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_find_plateaus.h>
 #include <vil/vil_fill.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Suppress all non-plateau pixels in the image.
 //  If image(i,j) is greater than or equal to all neighbouring pixels,

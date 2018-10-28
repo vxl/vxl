@@ -45,7 +45,7 @@
 #include <msm/msm_points.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Structure to hold parameters
 struct tool_params

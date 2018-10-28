@@ -7,7 +7,7 @@
 #include "bsta_joint_histogram_3d.h"
 
 #include <vcl_compiler.h>
-#include<vcl_cstdlib.h>//for div
+#include <cstdlib>//for div
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 template <class T>

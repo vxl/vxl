@@ -5,7 +5,7 @@
 #include "sdet_graph_img_seg_sptr.h"
 //
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>
 

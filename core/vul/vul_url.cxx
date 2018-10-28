@@ -20,7 +20,7 @@
 #include "vul_url.h"
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file.h>
 
 #if defined(unix) || defined(__unix) || defined(__unix__)

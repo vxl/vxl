@@ -8,7 +8,7 @@
 #include <vpgl/algo/vpgl_camera_compute.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

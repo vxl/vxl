@@ -6,7 +6,7 @@
 //  \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/algo/vnl_svd.h>
 #include <mvl/HMatrix2D.h>
 #include <mvl/HomgMetric.h>

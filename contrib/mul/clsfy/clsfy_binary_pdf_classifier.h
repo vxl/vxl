@@ -11,7 +11,7 @@
 #include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vpdfl/vpdfl_pdf_base.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //:  Decisions are based on an explicit multivariate probability distribution

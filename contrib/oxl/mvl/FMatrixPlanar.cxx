@@ -9,7 +9,7 @@
 #include <cmath>
 #include "FMatrixPlanar.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_double_3.h>
 

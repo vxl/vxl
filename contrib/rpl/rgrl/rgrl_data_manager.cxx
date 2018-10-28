@@ -14,7 +14,8 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_tukey_obj.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 // ---------------------------------------------------------------------------
 //                                                  data manager

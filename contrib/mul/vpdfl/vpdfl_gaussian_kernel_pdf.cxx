@@ -13,7 +13,7 @@
 #include <cmath>
 #include "vpdfl_gaussian_kernel_pdf.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>

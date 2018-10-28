@@ -7,7 +7,7 @@
 // \author Tim Cootes
 // \brief Use F&H's DP style algorithm to search for global solutions
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>

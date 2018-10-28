@@ -5,7 +5,8 @@
 #include "bil_bounded_image_view.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/io/vil_io_image_view.h>
 
 

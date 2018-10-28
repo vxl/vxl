@@ -11,7 +11,7 @@
 #include <map>
 #include <utility>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Least recently used cache
 // This cache is optimised for speed and is not very memory efficient.

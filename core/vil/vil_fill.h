@@ -7,7 +7,7 @@
 // \author Tim Cootes - Manchester
 
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
 

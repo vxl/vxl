@@ -17,7 +17,7 @@
 #include <iostream>
 #include "vil1_tiff.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #if 0 // commented out
 #include <vcl_compiler.h>
 #endif

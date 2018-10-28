@@ -19,7 +19,7 @@
 #include <vcl_compiler.h>
 #include "mbl_log.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_string.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>

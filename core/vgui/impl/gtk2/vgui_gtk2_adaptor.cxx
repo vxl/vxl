@@ -20,7 +20,7 @@
 #include <iostream>
 #include "vgui_gtk2_adaptor.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtkgl.h>
 #include <gdk/gdkgl.h>

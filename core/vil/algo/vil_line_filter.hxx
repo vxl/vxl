@@ -8,7 +8,8 @@
 
 #include "vil_line_filter.h"
 #include <vil/vil_fill.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Find line like structures in image (light lines on dark backgrounds)
 //  On exit line_str contains line strength at each pixel,

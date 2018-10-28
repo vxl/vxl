@@ -9,7 +9,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil3d_crop.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vil3d_image_resource_sptr vil3d_crop(
   const vil3d_image_resource_sptr &src,

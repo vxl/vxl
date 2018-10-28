@@ -23,7 +23,7 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_plane_3d, vgl_point_3d
 #include <vgl/vgl_vector_3d.h>
 

@@ -3,7 +3,7 @@
 
 #include <rgrl/rgrl_spline.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h> // for vnl_math::isnan()
 

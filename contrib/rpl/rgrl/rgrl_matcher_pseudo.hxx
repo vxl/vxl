@@ -12,7 +12,8 @@
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_bilin_interp.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 static const unsigned int verbose_ = 2;
 static const double rgrl_matcher_pseudo_max_response_value = 1.0e30;

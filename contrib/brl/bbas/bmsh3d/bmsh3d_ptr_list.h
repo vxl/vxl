@@ -9,7 +9,7 @@
 #include <iostream>
 #include <set>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 class bmsh3d_ptr_node
 {

@@ -8,7 +8,8 @@
 // \author Ian Scott - Manchester
 
 #include "vil3d_gen_synthetic.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_new.h>
 #include <vil/vil_pixel_format.h>

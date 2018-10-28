@@ -5,7 +5,7 @@
 #include "sdet_edgel.h"
 #include "sdet_sel_utils.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //------------------------------------------------------------------------------

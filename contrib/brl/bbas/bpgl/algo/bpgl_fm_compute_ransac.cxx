@@ -7,7 +7,7 @@
 #include "bpgl_fm_compute_ransac.h"
 #include <vpgl/algo/vpgl_fm_compute_8_point.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

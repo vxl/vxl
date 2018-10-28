@@ -4,7 +4,8 @@
 //  \file
 
 #include <osl/osl_roi_window.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //-----------------------------------------------------------------------------
 

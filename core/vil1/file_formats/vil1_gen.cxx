@@ -9,7 +9,7 @@
 #include <iostream>
 #include "vil1_gen.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>

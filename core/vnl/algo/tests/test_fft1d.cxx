@@ -4,6 +4,7 @@
 #include <iostream>
 #include <complex>
 #include <vector>
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for 1D FFT routines.

@@ -6,7 +6,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vgl/algo/vgl_norm_trans_2d.h>

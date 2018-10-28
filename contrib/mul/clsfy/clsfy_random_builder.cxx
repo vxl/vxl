@@ -14,7 +14,7 @@
 #include "clsfy_random_builder.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <clsfy/clsfy_random_classifier.h>
 #include <vnl/vnl_c_vector.h>

@@ -8,7 +8,7 @@
 #include <iostream>
 #include <iosfwd>
 #include <string>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vgl/vgl_vector_2d.h>

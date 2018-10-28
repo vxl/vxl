@@ -23,7 +23,8 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //==============================================================================
 // vpdt_size

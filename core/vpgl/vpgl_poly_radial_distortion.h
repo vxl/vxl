@@ -16,7 +16,7 @@
 #include "vpgl_radial_distortion.h"
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: A class for nth order polynomial radial lens distortion
 template <class T, int n>

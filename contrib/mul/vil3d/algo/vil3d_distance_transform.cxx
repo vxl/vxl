@@ -11,7 +11,7 @@
 #include <vil3d/algo/vil3d_threshold.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil/vil_fill.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Compute signed distance transform in 3d from zeros in original image.

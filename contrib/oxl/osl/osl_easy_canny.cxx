@@ -9,7 +9,7 @@
 #include <iostream>
 #include "osl_easy_canny.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <osl/osl_topology.h>

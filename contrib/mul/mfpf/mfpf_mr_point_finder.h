@@ -9,7 +9,7 @@
 #include <iosfwd>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 class vimt_image_pyramid;

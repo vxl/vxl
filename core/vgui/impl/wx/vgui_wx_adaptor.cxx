@@ -25,7 +25,7 @@
     (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
 #endif
 
-#include <vcl_cassert.h>
+#include <cassert>
 // not used? #include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------

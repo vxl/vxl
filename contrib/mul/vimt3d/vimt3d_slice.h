@@ -14,7 +14,8 @@
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vimt3d/vimt3d_transform_3d.h>
 #include <vimt/vimt_transform_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Return a 2D view of slice k of 3D image aligned as (j,i).
 //  result(x,y,p)=im(y,x,k,p)

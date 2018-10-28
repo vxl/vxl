@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <vnl/vnl_real_npolynomial.h>
 #include <vnl/algo/vnl_rnpoly_solve.h>
+#include <testlib/testlib_test.h>
 
 static void print_roots(vnl_rnpoly_solve& solver)
 {

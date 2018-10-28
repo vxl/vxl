@@ -2,7 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include "vcsl_matrix.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------

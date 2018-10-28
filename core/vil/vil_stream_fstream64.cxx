@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include "vil_stream_fstream64.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #if defined(WIN32)

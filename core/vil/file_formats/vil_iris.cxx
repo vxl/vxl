@@ -19,7 +19,7 @@
 #include <iostream>
 #include "vil_iris.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>

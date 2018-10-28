@@ -18,7 +18,7 @@
 #include <algorithm>
 #include "vmap_types.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //:
 template< typename F, typename Ref, typename Ptr, typename It >

@@ -5,7 +5,8 @@
 // \date October 01, 2008
 
 #include <bvxm/grid/bvxm_voxel_slab.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 double brec_bg_pair_density::operator()(const double y0, const double y1)
 {

@@ -4,7 +4,8 @@
 #include "vsph_defs.h"
 #include "vsph_unit_sphere.h"
 #include <bvrml/bvrml_write.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>
 
 double vsph_sph_box_2d::pye() const

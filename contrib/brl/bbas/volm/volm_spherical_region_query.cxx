@@ -4,7 +4,7 @@
 #include <vsph/vsph_unit_sphere.h>
 #include <bsol/bsol_algs.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsph/vsph_utils.h>
 #include <volm/volm_char_codes.h>
 #include <depth_map/depth_map_region.h>

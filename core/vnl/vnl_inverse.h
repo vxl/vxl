@@ -18,7 +18,8 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_det.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include "vnl/vnl_export.h"
 
 //: Calculates inverse of a small vnl_matrix_fixed (not using svd)

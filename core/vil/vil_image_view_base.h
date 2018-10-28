@@ -17,7 +17,7 @@
 #include <iosfwd>
 #include <string>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_atomic_count.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
