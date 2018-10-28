@@ -18,7 +18,7 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_distance.h>

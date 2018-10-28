@@ -20,7 +20,8 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 const static unsigned int maxval_unsigned = vnl_numeric_traits<unsigned int>::maxval;
 

@@ -1,6 +1,7 @@
 #include "HMatrix1DComputeDesign.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vnl/algo/vnl_svd.h>
 #include <vgl/vgl_homg_point_1d.h>

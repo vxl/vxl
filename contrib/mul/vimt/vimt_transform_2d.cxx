@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include "vimt_transform_2d.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

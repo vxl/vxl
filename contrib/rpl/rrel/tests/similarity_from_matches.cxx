@@ -2,7 +2,7 @@
 #include <utility>
 #include <vector>
 #include "similarity_from_matches.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_inverse.h>

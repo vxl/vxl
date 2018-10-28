@@ -26,7 +26,7 @@
 #include <vdgl/vdgl_edgel_chain_sptr.h>
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file.h>
 #include <volm/volm_io_tools.h>
 #include <bil/algo/bil_blob_finder.h>

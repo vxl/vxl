@@ -16,7 +16,8 @@
 #include "rgrl_util.h"
 #include "rgrl_convergence_on_median_error.h"
 #include "rgrl_event.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 rgrl_feature_based_registration::
 rgrl_feature_based_registration( rgrl_data_manager_sptr data,

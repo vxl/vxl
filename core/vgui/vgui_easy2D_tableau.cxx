@@ -17,7 +17,7 @@
 #include <cstdlib>
 #include "vgui_easy2D_tableau.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_byte

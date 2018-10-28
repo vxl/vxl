@@ -11,7 +11,8 @@
 #include "vpdfl_sampler_base.h"
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //=======================================================================
 // Dflt ctor

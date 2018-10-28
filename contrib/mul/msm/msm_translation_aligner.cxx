@@ -8,7 +8,7 @@
 #include "msm_translation_aligner.h"
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //=======================================================================

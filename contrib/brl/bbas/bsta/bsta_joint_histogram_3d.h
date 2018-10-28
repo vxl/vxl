@@ -18,7 +18,7 @@
 #include <iostream>
 #include <vbl/vbl_array_3d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <bsta/bsta_joint_histogram_3d_base.h>
 template <class T> class bsta_joint_histogram_3d :
 public bsta_joint_histogram_3d_base

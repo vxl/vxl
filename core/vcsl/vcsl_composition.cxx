@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_composition.cxx
 #include "vcsl_composition.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------
 // Is `this' invertible at time `time'?

@@ -13,7 +13,7 @@
 // the same change.
 
 #include <cstddef>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_fwd.h>
 

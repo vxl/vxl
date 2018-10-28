@@ -11,7 +11,8 @@
 #include "vnl_real.h"
 #include "vnl_imag.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //-----------------------------------------------------------------------
 

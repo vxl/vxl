@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 class bgrl2_hg_vertex;
 class bgrl2_hg_edge;

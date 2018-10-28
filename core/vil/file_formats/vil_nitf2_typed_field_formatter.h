@@ -11,7 +11,7 @@
 #include "vil_nitf2_field_formatter.h"
 #include "vil_nitf2_tagged_record.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // All subclasses of NITF field formatter derive from this template

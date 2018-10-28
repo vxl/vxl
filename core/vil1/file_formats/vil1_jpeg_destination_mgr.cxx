@@ -8,7 +8,7 @@
 
 #include <cstddef>
 #include "vil1_jpeg_destination_mgr.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil1/vil1_stream.h>
 

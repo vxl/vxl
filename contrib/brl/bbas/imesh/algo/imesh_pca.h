@@ -17,7 +17,7 @@
 #include <vector>
 #include <imesh/imesh_mesh.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vpgl/vpgl_proj_camera.h>

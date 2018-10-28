@@ -8,7 +8,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #define RANGE(a,b,c) { if ((a) < (b)) (a) = b;  if ((a) > (c)) (a) = c; }
 #define in_range(a) ((a) < 0x100)

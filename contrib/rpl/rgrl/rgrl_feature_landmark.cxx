@@ -10,7 +10,8 @@
 #include <rgrl/rgrl_util.h>
 
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 typedef std::vector< vnl_vector<double> > vec_vec_type;

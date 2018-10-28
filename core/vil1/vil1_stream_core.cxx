@@ -6,7 +6,8 @@
 
 #include "vil1_stream_core.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vil1_stream_core::~vil1_stream_core()
 {

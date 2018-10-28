@@ -19,7 +19,7 @@
 #include <iosfwd>
 #include <map>
 #include <utility>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 

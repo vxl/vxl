@@ -9,7 +9,7 @@
 #include <cmath>
 #include "vdgl_ortho_regress.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // convenience methods
 

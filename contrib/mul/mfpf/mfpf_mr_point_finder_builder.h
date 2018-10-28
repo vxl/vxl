@@ -9,7 +9,7 @@
 #include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 class vimt_image_pyramid;

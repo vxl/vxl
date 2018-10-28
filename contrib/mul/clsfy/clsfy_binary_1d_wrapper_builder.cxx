@@ -13,7 +13,7 @@
 
 //=======================================================================
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

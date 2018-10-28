@@ -4,7 +4,8 @@
 #include "grid/bvxm_voxel_slab.h"
 #include "grid/bvxm_voxel_slab_iterator.h"
 #ifdef OPTION2 // currently FALSE
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #endif
 
 #include <vgl/vgl_box_2d.h>

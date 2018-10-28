@@ -12,7 +12,7 @@
 #include <vul/vul_string.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>

@@ -4,7 +4,7 @@
 #include "vsol_rectangle_2d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
 #include <vgl/vgl_vector_2d.h>

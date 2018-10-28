@@ -10,7 +10,8 @@
 #include <rgrl/rgrl_transformation.h>
 #include <rgrl/rgrl_util.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #if 0 // unused static function
 static

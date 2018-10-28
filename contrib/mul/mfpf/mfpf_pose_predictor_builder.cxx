@@ -9,7 +9,7 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/algo/vnl_svd.h>
 
 #include <vsl/vsl_indent.h>

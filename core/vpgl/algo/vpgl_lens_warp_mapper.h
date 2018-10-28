@@ -13,7 +13,8 @@
 #include <vgl/vgl_vector_2d.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_homg_point_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute a bounding box in the distorted space for an existing box
 // This is computed by sampling along the box boundary edges

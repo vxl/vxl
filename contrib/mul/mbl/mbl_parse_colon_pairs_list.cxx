@@ -9,7 +9,7 @@
 #include <mbl/mbl_exception.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Parse list of string pairs separated by colons
 // Expects format of data string to contain pairs of

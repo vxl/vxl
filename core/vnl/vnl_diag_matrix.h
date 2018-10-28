@@ -21,7 +21,7 @@
 // \endverbatim
 
 #include <iosfwd>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

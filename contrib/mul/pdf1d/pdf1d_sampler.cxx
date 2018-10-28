@@ -9,7 +9,8 @@
 #include "pdf1d_sampler.h"
 #include <pdf1d/pdf1d_pdf.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //=======================================================================
 // Dflt ctor

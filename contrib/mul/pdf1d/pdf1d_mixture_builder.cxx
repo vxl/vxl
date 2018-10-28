@@ -9,7 +9,7 @@
 // \brief Implements builder for a mixture model PDF.
 // \author Tim Cootes and Ian Scott
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>

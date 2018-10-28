@@ -9,7 +9,7 @@
 #include "clsfy_k_nearest_neighbour.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_math.h>
 #include <vsl/vsl_binary_io.h>

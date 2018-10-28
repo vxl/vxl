@@ -11,7 +11,7 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_keypoint.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: For sorting keypoint_match_sets
 bool second_less( const bapl_keypoint_match_set_sptr& left_set, const bapl_keypoint_match_set_sptr& right_set)

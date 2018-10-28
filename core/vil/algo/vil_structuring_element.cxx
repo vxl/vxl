@@ -6,7 +6,7 @@
 // \brief Structuring element for morphology represented as a list of non-zero pixels
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Define elements { (p_i[k],p_j[k]) }

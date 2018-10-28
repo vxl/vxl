@@ -10,7 +10,8 @@
 #include <vil/vil_convert.h>
 #include <vil3d/vil3d_tricub_interp.h>
 #include <vil3d/vil3d_plane.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 inline bool vil3dresample_tricub_corner_in_image(double x0, double y0, double z0,

@@ -11,7 +11,7 @@
 #include <mfpf/mfpf_hog_box_finder.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_read_props.h>

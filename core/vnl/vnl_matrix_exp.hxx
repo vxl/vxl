@@ -6,7 +6,7 @@
 // \author fsm
 #include <iostream>
 #include "vnl_matrix_exp.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #ifdef DEBUG
 #include <vcl_compiler.h>
 #endif

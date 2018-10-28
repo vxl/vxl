@@ -8,7 +8,7 @@
 // \date   Sep 2003
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include "rgrl_match_set.h"
 #include "rgrl_estimator.h"

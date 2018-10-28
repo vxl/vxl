@@ -25,7 +25,7 @@
 #include <vsol/vsol_box_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file_iterator.h>
 
 std::vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(std::string const& poly_path)

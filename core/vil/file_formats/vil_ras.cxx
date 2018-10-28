@@ -9,7 +9,7 @@
 #include <vector>
 #include "vil_ras.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil/vil_stream.h>

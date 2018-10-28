@@ -17,7 +17,7 @@
 
 #include <vcl_compiler.h>
 #if 0
-#include <vcl_cassert.h>
+#include <cassert>
 #endif
 
 //-------------------------------------------------------------------------

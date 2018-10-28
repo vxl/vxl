@@ -12,9 +12,9 @@
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_pixel.h>
 #include <vxl_config.h>
-#include <vcl_climits.h> // CHAR_BIT
+#include <climits>// CHAR_BIT
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 vil1_resample_image_impl::vil1_resample_image_impl(vil1_image const &underlying, unsigned nw, unsigned nh)
   : base(underlying)

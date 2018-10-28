@@ -7,7 +7,7 @@
 #include "rgrl_cast.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>

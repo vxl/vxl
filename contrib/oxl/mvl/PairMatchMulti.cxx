@@ -10,7 +10,7 @@
 #include <utility>
 #include "PairMatchMulti.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vbl/vbl_sparse_array_2d.h>

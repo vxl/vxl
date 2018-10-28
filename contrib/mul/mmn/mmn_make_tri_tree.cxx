@@ -4,7 +4,8 @@
 // \brief Compute arcs defining a graph s.t. triangles form a tree.
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 static void  update_best_arcs(const vnl_matrix<double>& D,
                               const std::vector<bool>& node_free,

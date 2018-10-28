@@ -97,7 +97,7 @@
 #include <vgl/vgl_conic.h>         // data member of this class
 #include <vgl/vgl_point_2d.h>      // return type of some methods
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a 2D conic segment using two points.
 template <class Type>

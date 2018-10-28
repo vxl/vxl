@@ -7,7 +7,8 @@
 
 #include <vil/algo/vil_orientations.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute edge orientations at each level of a scale space pyramid.
 //  smooth_pyramid must be of type float. orient_pyramid is set to be of type vxl_byte.

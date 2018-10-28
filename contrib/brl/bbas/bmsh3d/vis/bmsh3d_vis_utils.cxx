@@ -8,7 +8,7 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_3d.h>

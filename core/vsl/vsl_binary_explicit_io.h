@@ -32,7 +32,7 @@
 #include <cstddef>
 #include <iostream>
 #include <vxl_config.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include "vsl_binary_io.h"
 

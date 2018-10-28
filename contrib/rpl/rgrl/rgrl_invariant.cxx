@@ -1,6 +1,7 @@
 #include "rgrl_invariant.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 vnl_vector<double> rgrl_invariant::zero_vec = vnl_vector<double>(0);
 

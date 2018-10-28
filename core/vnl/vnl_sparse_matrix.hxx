@@ -8,7 +8,7 @@
 #include <iostream>
 #include "vnl_sparse_matrix.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_math.h>

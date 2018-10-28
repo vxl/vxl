@@ -17,7 +17,7 @@
 #include "bmdl_classify.h"
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/algo/vil_binary_dilate.h>
 #include <vil/algo/vil_binary_erode.h>

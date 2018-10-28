@@ -2,7 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vpl/vpl.h> // vpl_unlink()
 

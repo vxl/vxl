@@ -7,7 +7,7 @@
 #include <iostream>
 #include <cmath>
 #include "bsta_weibull.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 

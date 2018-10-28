@@ -10,7 +10,7 @@
 #include "vgui_glut_impl.h"
 #include "vgui_glut_window.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgui/vgui_glut.h>
 
 //--------------------------------------------------------------------------------

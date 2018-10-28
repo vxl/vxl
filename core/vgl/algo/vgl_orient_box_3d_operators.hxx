@@ -7,7 +7,8 @@
 #include "vgl_orient_box_3d_operators.h"
 #include <vnl/vnl_quaternion.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 template <class T>
 vgl_orient_box_3d<T>

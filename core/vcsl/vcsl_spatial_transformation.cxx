@@ -2,7 +2,7 @@
 #include <cmath>
 #include "vcsl_spatial_transformation.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //---------------------------------------------------------------------------
 // Is `time' between the two time bounds ?

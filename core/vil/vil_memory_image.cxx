@@ -13,7 +13,7 @@
 
 #include <cstdlib>
 #include "vil_memory_image.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil/vil_image_view.h>

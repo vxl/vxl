@@ -34,7 +34,7 @@
 #include <vpl/vpl.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vul/vul_file.h>
 

@@ -16,7 +16,7 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_sptr.h>

@@ -10,7 +10,7 @@
 #include <iostream>
 #include <vcl_compiler.h>
 #if VCL_HAS_EXCEPTIONS
-# include <vcl_stdexcept.h>
+#include <stdexcept>
 #endif
 #include <vil/vil_pixel_format.h>
 

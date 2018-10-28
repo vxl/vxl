@@ -12,7 +12,7 @@
 #include <memory>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <imesh/imesh_vertex.h>
 #include <imesh/imesh_face.h>

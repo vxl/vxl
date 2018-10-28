@@ -8,7 +8,7 @@
 // \brief A class to define and apply a 3D transformation up to affine.
 // \author Graham Vincent, Tim Cootes
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_matrix_fixed.h>

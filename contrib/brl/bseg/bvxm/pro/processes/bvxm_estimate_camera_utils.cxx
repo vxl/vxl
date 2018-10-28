@@ -2,7 +2,8 @@
 #include <vgl/algo/vgl_convex_hull_2d.h>
 #include <vgl/algo/vgl_homg_operators_3d.h>
 #include <vnl/vnl_double_3.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 // Default constructor
 bvxm_camera_estimator::bvxm_camera_estimator()

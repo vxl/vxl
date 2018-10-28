@@ -55,7 +55,7 @@
 #include <vgl/vgl_fwd.h>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //----------------------------------------------------------------------
 

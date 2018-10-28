@@ -12,7 +12,7 @@
 #if defined(VCL_VC)
 #  include <crtdbg.h>
 #  include <windows.h>
-#  include <vcl_cstdio.h>
+#include <cstdio>
 
 LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
 {

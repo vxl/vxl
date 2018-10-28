@@ -11,7 +11,8 @@
 //   (none yet)
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: Return the complement query comparison type

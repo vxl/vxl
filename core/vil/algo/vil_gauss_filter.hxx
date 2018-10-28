@@ -11,7 +11,7 @@
 #include <vil/vil_transpose.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 

@@ -5,7 +5,8 @@
 
 #include "vil3d_grad_1x3.h"
 #include <vil3d/vil3d_slice.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Fill 1 pixel border in image with zeros
 void vil3d_zero_border_1plane(vil3d_image_view<float>& image)

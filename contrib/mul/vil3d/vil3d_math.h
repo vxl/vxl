@@ -9,7 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 // not used? #include <functional> // for std::less<T>
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_plane.h>

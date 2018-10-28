@@ -11,7 +11,8 @@
 // \endverbatim
 //
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include "rgrl_set_of.h"
 #include "rgrl_match_set_sptr.h"

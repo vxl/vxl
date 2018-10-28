@@ -22,7 +22,8 @@
 
 #include <vul/vul_file.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //#define DEBUG_PROJ
 

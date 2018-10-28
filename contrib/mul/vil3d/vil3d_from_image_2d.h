@@ -12,7 +12,8 @@
 
 #include <vil/vil_image_view.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: Return a 3D image view containing a single slice obtained from a 2D image.

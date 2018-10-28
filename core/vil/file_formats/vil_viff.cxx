@@ -3,7 +3,7 @@
 #include <iostream>
 #include <cstring>
 #include "vil_viff.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 static char const* vil_viff_format_tag = "viff";

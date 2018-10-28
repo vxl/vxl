@@ -11,7 +11,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Constructor from a vector of matches (pairs of keypoint smart pointers)

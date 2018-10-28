@@ -10,7 +10,7 @@
 #include <fstream>
 #include "mvl_multi_view_matches.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vul/vul_awk.h>

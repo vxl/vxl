@@ -5,7 +5,8 @@
 
 #include "rgrl_converge_status.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 rgrl_converge_status::

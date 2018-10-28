@@ -7,7 +7,8 @@
 #include <fstream>
 #include <functional>
 #include <utility>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include "boxm2_vecf_fit_fat_pocket.h"
 #include "boxm2_vecf_middle_fat_pocket.h"
 #include <vnl/vnl_matrix.h>

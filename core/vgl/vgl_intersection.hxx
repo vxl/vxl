@@ -11,7 +11,7 @@
 #include "vgl_intersection.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_line_3d_2_points.h>

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include "brad_illum_util.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_vector_3d.h>

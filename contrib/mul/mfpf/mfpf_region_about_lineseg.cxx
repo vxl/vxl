@@ -7,7 +7,7 @@
 // \author Tim Cootes
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>

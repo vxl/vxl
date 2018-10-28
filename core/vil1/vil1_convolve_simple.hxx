@@ -10,7 +10,7 @@
 #include <iostream>
 #include "vil1_convolve_simple.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #ifndef TRACE

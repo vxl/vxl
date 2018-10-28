@@ -20,7 +20,7 @@
 #include "vpdfl_gaussian_builder.h"
 //
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <mbl/mbl_data_wrapper.h>
 #include <vpdfl/vpdfl_gaussian.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

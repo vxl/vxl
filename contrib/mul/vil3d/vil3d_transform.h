@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 

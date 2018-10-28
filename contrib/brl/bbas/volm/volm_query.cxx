@@ -14,7 +14,7 @@
 #include <volm/volm_tile.h>
 #include <volm/volm_spherical_layers.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <volm/volm_camera_space.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_set_io.h>

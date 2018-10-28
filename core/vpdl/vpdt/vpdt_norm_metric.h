@@ -19,7 +19,7 @@
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vpdl/vpdt/vpdt_eigen_sym_matrix.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: A metric in field \c F with metric tensor \c Tensor

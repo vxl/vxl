@@ -10,7 +10,7 @@
 #include "mipa_orientation_histogram.h"
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for pi
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Generate an image containing histograms of oriented gradients (HOG)
 //  At each pixel in src, compute angle and quantise into n_angles.

@@ -17,7 +17,7 @@
 #include <rgrl/rgrl_transformation.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 rgrl_match_set::
 rgrl_match_set(  )

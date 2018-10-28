@@ -6,6 +6,7 @@
 #include <vnl/algo/vnl_simpson_integral.h>
 #include <vnl/vnl_analytic_integrant.h>
 #include <vnl/vnl_double_3.h>
+#include <vnl/vnl_math.h>
 
 class my_test_integrant : public vnl_analytic_integrant
 {

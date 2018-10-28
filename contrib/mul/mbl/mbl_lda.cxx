@@ -15,7 +15,7 @@
 #include "mbl_lda.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_binary_io.h>

@@ -4,7 +4,8 @@
 // \author Amitha Perera
 // \date   Feb 2003
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/vnl_fastops.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rgrl/rgrl_util.h>

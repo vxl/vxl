@@ -12,7 +12,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_memory_chunk.h>
 
 //: Create a view of a vil1_memory_image_of<T>

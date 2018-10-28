@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "vil_stream_section.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // underlying_: pointer to underlying stream.

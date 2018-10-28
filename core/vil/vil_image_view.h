@@ -17,7 +17,7 @@
 #include <string>
 #include <cstddef>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_memory_chunk.h>
 #include <vil/vil_pixel_format.h>

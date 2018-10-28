@@ -5,7 +5,7 @@
 */
 #include <iostream>
 #include "vgl_rtree.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #ifdef DEBUG

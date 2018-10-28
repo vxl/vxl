@@ -12,7 +12,7 @@
 #include <wx/wx.h>
 #endif
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgui/vgui_message.h>
 #include "bitmaps/prev.xpm"
 #include "bitmaps/play.xpm"

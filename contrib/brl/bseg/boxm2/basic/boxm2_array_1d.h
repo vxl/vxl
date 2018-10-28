@@ -6,7 +6,7 @@
 #include <iosfwd>
 #include <iostream>
 #include <cstddef>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: A simple wrapper for a buffer.

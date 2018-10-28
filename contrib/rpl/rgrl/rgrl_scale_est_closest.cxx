@@ -13,7 +13,7 @@
 #include "rgrl_util.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 rgrl_scale_est_closest::
 rgrl_scale_est_closest( std::unique_ptr<rrel_objective>  obj,

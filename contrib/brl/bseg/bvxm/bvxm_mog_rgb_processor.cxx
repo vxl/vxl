@@ -4,7 +4,8 @@
 #include "grid/bvxm_voxel_slab.h"
 #include "grid/bvxm_voxel_slab.hxx"
 #include "grid/bvxm_voxel_slab_iterator.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Return probability density of observing pixel values
 bvxm_voxel_slab<float>

@@ -11,7 +11,7 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_crop.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Create windowed view of given image
 //  The parameters should be in image co-ords.

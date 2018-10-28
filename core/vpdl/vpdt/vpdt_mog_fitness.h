@@ -9,7 +9,8 @@
 
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_gaussian.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: The Stauffer-Grimson ordering function of mixture component fitness

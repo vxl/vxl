@@ -6,7 +6,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>
 //: destructor

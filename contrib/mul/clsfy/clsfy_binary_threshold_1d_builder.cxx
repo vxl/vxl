@@ -8,7 +8,7 @@
 // \author dac
 // \date   Tue Mar  5 01:11:31 2002
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>

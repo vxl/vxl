@@ -17,7 +17,7 @@
 #include <boct/boct_bit_tree.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <rply.h>
 

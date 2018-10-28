@@ -15,7 +15,7 @@
 #include <algorithm>
 #include "vimt3d_vil3d_v3m.h"
 //
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_block_binary_rle.h>

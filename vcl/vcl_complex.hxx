@@ -2,6 +2,7 @@
 #define vcl_complex_hxx_
 // -*- c++ -*-
 
-#include "vcl_complex.h"
-
+#include <complex>
+#include <vcl_compiler.h>
+#error "vcl_complex.hxx no longer needed"
 #endif

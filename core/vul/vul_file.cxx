@@ -285,7 +285,7 @@ std::string vul_file::expand_tilde(char const* vul_filename)
 
 
 #if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
-#  include <vcl_cwchar.h>
+#include <cwchar>
 
 std::wstring
 vul_file::get_cwd(wchar_t* /*dummy*/)

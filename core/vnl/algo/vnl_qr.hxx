@@ -9,7 +9,7 @@
 #include <iostream>
 #include <complex>
 #include "vnl_qr.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>  // vnl_math::squared_magnitude()

@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include "vsl_block_binary.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 struct vsl_block_t
 {

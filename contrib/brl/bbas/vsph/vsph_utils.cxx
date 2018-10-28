@@ -1,7 +1,8 @@
 #include "vsph_utils.h"
 #include <vgl/vgl_polygon.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 // compute b-a on the circle
 double vsph_utils::azimuth_diff(double a, double b,

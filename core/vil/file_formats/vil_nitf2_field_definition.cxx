@@ -6,7 +6,8 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_field_formatter.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //==============================================================================

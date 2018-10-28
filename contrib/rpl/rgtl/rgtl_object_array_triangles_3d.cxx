@@ -29,7 +29,7 @@
 
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //----------------------------------------------------------------------------
 // Represent the geometry of a single triangle for use by closest point

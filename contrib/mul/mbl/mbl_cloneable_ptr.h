@@ -5,7 +5,8 @@
 // \file
 
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //=======================================================================
 //: Cunning pointer for objects that can be cloned.

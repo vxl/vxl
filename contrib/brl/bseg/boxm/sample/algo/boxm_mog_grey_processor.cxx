@@ -13,7 +13,8 @@
 
 #include "boxm_sigma_normalizer.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Expected value
 boxm_apm_traits<BOXM_APM_MOG_GREY>::obs_datatype

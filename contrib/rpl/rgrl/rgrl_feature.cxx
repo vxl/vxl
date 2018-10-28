@@ -6,7 +6,8 @@
 
 #include "rgrl_transformation.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 double

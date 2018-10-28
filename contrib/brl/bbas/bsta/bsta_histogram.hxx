@@ -8,7 +8,7 @@
 #include "bsta_histogram.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 

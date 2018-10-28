@@ -4,7 +4,8 @@
 #endif
 #include "vil_blocked_image_resource.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>

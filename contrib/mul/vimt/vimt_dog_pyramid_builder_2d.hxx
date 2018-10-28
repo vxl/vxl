@@ -14,7 +14,7 @@
 
 #include <vcl_compiler.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h> // for sqrt2
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

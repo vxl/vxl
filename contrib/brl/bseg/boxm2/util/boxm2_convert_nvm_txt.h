@@ -14,7 +14,7 @@
 #include <bwm/video/bwm_video_corr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 typedef vpgl_perspective_camera<double> CamType;

@@ -10,7 +10,7 @@
 #include <cstdlib>
 #include "vdgl_edgel_chain.h"
 #include <vgl/vgl_distance.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 vdgl_edgel_chain::vdgl_edgel_chain( const double x0, const double y0,

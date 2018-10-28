@@ -6,7 +6,8 @@
 // \author Daniel Crispell (dec@lems.brown.edu)
 // \date January 22, 2008
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include "bvxm_voxel_slab_base.h"
 #include "bvxm_memory_chunk.h"

@@ -19,7 +19,7 @@
 #include <utility>
 #include "vgui_gtk_adaptor.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <gtkgl/gtkglarea.h>

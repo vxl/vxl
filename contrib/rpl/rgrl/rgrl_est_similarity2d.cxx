@@ -5,7 +5,8 @@
 
 #include "rgrl_est_similarity2d.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>

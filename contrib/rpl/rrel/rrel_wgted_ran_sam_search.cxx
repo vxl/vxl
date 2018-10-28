@@ -7,7 +7,7 @@
 #include <rrel/rrel_estimation_problem.h>
 #include <rrel/rrel_util.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )

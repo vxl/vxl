@@ -7,7 +7,7 @@
 #include <iostream>
 #include <string>
 #include <utility>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include "msdi_reflected_marked_images.h"

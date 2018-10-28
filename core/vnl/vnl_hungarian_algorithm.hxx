@@ -9,7 +9,7 @@
 
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #ifdef DEBUG
 #endif

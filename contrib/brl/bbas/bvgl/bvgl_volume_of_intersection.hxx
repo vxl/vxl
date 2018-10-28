@@ -12,7 +12,7 @@
 #include <vector>
 #include "bvgl_volume_of_intersection.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_sphere_3d.h>

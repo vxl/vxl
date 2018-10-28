@@ -9,7 +9,7 @@
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 rrel_homography2d_est :: rrel_homography2d_est( const std::vector< vgl_homg_point_2d<double> > & from_pts,

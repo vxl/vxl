@@ -9,7 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "vil3d_memory_image.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vxl_config.h> // for vxl_uint_32 etc.
 #include <vil3d/vil3d_image_view.h>

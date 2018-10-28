@@ -7,7 +7,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vtol/vtol_intensity_face.h>

@@ -82,7 +82,7 @@
 
 #include <limits>
 #include <cmath>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_transform.h>
 #include <vil/vil_math.h>

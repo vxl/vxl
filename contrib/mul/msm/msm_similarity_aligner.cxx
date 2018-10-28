@@ -11,7 +11,7 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 

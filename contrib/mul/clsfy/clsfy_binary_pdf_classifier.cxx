@@ -11,7 +11,7 @@
 #include <vcl_compiler.h>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 

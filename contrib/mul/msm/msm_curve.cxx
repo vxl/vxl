@@ -16,7 +16,7 @@
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_keyword_list.h>
 #include <vul/vul_string.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Default Constructor
 msm_curve::msm_curve() = default;

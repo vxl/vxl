@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_displacement.cxx
 #include "vcsl_displacement.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------
 // Set the point for a static displacement

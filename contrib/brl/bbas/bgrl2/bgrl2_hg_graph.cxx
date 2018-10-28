@@ -7,7 +7,7 @@
 // author: Ming-Ching Chang
 // date:   Apr 04, 2005
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 ////////////////////////////////////////////////////////////////////

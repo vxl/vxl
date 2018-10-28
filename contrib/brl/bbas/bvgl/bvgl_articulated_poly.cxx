@@ -4,7 +4,7 @@
 #include "bvgl_articulated_poly.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_numeric_traits.h>

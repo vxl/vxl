@@ -15,7 +15,7 @@
 
 #include "vil_dicom.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vxl_config.h> // for vxl_byte and such

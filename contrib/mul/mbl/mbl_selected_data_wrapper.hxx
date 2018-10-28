@@ -9,7 +9,7 @@
 #include "mbl_selected_data_wrapper.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Default constructor.
 template<class T>

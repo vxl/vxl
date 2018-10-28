@@ -5,12 +5,14 @@
 #include "test_util.h"
 //:
 // \file
+#include <testlib/testlib_test.h>
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd_fixed.h>
 #include <vnl/algo/vnl_svd.h>
+#include <vnl/vnl_inverse.h>
 
 
 template <class T, class S> static

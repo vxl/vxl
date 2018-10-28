@@ -11,7 +11,8 @@
 
 #include "vil1_image_impl.h"
 #include <vil1/vil1_image.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //--------------------------------------------------------------------------------
 

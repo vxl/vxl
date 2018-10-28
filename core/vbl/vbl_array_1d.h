@@ -19,7 +19,7 @@
 #include <iosfwd>
 #include <cstddef>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: A simple container.
 // This container stores its elements in contiguous

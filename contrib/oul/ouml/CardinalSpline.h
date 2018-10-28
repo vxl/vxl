@@ -7,7 +7,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/io/vnl_io_vector_fixed.hxx>
 #include <vnl/io/vnl_io_matrix.hxx>
 #include <vsl/vsl_binary_io.h>

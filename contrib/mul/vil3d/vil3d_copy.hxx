@@ -10,7 +10,8 @@
 // \date   2 Feb 2003
 
 #include "vil3d_copy.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil3d/vil3d_image_view.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.

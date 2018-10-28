@@ -35,7 +35,7 @@
 #include <vector>
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include "vnl/vnl_export.h"
 
 //: Evaluation of polynomials.

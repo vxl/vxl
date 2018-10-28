@@ -3,7 +3,7 @@
 #include "bwm_image_processor.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgui/vgui_range_map_params.h>
 #include <bgui/bgui_graph_tableau.h>
 #include <bsta/bsta_histogram.h>

@@ -8,7 +8,7 @@
 #include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Add parabola y=y0+(x-x0)^2 to lower envelope defined by (x,y,z)
 //  Parabolas are  y' = y[i]+a(x'-x[i])^2

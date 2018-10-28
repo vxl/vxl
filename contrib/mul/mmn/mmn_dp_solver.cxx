@@ -9,7 +9,7 @@
 
 #include <mmn/mmn_order_cost.h>
 #include <mmn/mmn_graph_rep1.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_parse_block.h>

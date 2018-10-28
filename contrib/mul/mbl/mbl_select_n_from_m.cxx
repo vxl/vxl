@@ -5,7 +5,7 @@
 
 #include <iostream>
 #include "mbl_select_n_from_m.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 mbl_select_n_from_m::mbl_select_n_from_m()

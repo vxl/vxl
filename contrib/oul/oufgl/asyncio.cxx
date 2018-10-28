@@ -6,7 +6,7 @@
 // \file
 #include <vcl_sys/types.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Initialise shared state to "no operation in progress"
 

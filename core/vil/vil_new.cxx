@@ -11,7 +11,7 @@
 #include "vil_new.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_save.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_stream_fstream.h>

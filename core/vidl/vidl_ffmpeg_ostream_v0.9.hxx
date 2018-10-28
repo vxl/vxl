@@ -21,7 +21,7 @@
 #include "vidl_frame.h"
 #include "vidl_convert.h"
 #include <vcl_compiler.h>
-#include <vcl_climits.h>
+#include <climits>
 #include <vil/vil_memory_chunk.h>
 
 extern "C" {

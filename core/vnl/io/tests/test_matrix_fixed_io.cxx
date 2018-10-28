@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/io/vnl_io_matrix_fixed.h>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_matrix_fixed_double_2_2_io()
 {

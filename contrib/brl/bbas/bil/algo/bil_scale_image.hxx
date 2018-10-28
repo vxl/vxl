@@ -9,7 +9,7 @@
 #include "bil_scale_image.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_math.h>
 #include <vil/vil_resample_bilin.h>

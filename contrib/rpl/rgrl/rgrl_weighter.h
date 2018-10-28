@@ -6,7 +6,8 @@
 // \author Chuck Stewart
 // \date   25 Nov 2002
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include "rgrl_scale_sptr.h"
 #include "rgrl_match_set_sptr.h"
 #include "rgrl_object.h"

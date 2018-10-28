@@ -15,7 +15,7 @@
 #include <vcsl/vcsl_rotation.h>
 #include <vnl/vnl_math.h>
 #include <vcsl/vcsl_graph.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 int main()

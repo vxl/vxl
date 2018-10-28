@@ -7,7 +7,7 @@
 #include <iostream>
 #include <ios>
 #include "vil_stream_fstream.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 static std::ios::openmode modeflags(char const* mode)

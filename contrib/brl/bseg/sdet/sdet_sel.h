@@ -30,7 +30,7 @@
 #include <sdet/sdet_sel_utils.h>
 #include <sdet/sdet_sel_base.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: A templatized subclass that can work with different curve models

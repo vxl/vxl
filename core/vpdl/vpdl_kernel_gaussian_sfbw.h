@@ -18,7 +18,7 @@
 #include <vnl/vnl_erf.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: A fixed bandwidth spherical Gaussian kernel distribution
 // The bandwidth is the standard deviation of the Gaussian kernel.

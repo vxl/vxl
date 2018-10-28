@@ -6,7 +6,7 @@
 #include <rrel/rrel_wls_obj.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,
                                                   unsigned int num_samples_for_fit )

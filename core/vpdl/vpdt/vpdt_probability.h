@@ -19,7 +19,8 @@
 
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute the probability from the density and normalization constant.
 template <class dist>

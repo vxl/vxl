@@ -6,7 +6,8 @@
 #include "vil1_warp.h"
 #include "vil1_warp.hxx"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <vil1/vil1_rgb.h>
 #include <vil1/vil1_pixel.h>

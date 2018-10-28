@@ -15,7 +15,7 @@
 
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include "bmsh3d_mesh.h"
 

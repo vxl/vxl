@@ -15,7 +15,7 @@
 #include <vector>
 #include <iostream>
 #include <vxl_config.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vbl/vbl_ref_count.h>

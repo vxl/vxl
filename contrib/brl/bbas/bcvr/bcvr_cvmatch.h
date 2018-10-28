@@ -21,7 +21,8 @@
 
 #include <bsol/bsol_intrinsic_curve_2d.h>
 #include <bsol/bsol_intrinsic_curve_2d_sptr.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include "bcvr_cv_cor_sptr.h"
 

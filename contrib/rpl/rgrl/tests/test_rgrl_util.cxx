@@ -4,7 +4,7 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <rgrl/rgrl_util.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>

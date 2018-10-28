@@ -8,7 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include "osl_1d_half_kernel.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: helper routine used by create_gaussian

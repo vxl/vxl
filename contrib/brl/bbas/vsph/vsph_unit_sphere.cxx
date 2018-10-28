@@ -11,7 +11,7 @@
 #include <vcl_compiler.h>
 
 #include <bvrml/bvrml_write.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #define DEBUG
 

@@ -5,7 +5,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include "bgui3d_algo.h"
 #include <vgui/vgui_gl.h>

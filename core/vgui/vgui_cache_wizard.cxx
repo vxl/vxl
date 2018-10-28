@@ -12,7 +12,7 @@
 #include <vil1/vil1_crop.h>
 #include <vil1/vil1_pixel.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_pixel.h>

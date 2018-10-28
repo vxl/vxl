@@ -22,7 +22,8 @@
 #include <mvl/Homg.h>
 #include <vnl/vnl_double_4.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 class Homg3D : public Homg
 {

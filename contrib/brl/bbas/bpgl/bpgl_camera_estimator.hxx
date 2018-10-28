@@ -7,7 +7,7 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vil/vil_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // Default constructor

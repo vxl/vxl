@@ -5,7 +5,8 @@
 //:
 // \file
 #include "vdgl_digital_curve.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_2d.h>
 #include <vdgl/vdgl_edgel_chain.h>

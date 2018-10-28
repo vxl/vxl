@@ -19,7 +19,7 @@
 #include <vcl_compiler.h>
 #include <vpdl/vpdt/vpdt_dist_traits.h>
 #include <vpdl/vpdt/vpdt_probability.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 // forward declarations

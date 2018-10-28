@@ -15,8 +15,8 @@
 #include "vil1_jpeg_destination_mgr.h"
 #include "vil1_jpeg_compressor.h"
 
-#include <vcl_cassert.h>
-#include <vcl_climits.h> // CHAR_BIT
+#include <cassert>
+#include <climits>// CHAR_BIT
 #include <vcl_compiler.h>
 
 #include <vil1/vil1_stream.h>

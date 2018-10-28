@@ -7,7 +7,7 @@
 // \author Tim Cootes
 // \brief Builds Epanechnikov kernel pdfs
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf.h>
 

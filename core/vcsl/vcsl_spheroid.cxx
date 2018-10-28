@@ -2,7 +2,7 @@
 #include <cmath>
 #include "vcsl_spheroid.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //---------------------------------------------------------------------------
 // Set from a standard spheroid

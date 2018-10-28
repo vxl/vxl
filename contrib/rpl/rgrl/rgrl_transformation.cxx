@@ -12,7 +12,7 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_cross.h>
 #include <vnl/vnl_double_3.h>

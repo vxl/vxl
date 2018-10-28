@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "vil_blob.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 namespace
 {

@@ -14,9 +14,9 @@
 #include <iostream>
 #include "vbl_bit_array_3d.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
-#include <vcl_climits.h>
+#include <climits>
 
 void vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bool v)
 {

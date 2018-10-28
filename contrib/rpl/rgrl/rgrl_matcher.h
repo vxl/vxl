@@ -10,8 +10,7 @@
 #include <rgrl/rgrl_mask.h>
 #include <rgrl/rgrl_object.h>
 #include <rgrl/rgrl_feature_sptr.h>
-
-#include <vcl_stlfwd.h>
+#include <vector>
 
 class rgrl_feature_set;
 class rgrl_view;

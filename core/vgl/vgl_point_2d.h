@@ -21,7 +21,7 @@
 #include <vcl_compiler.h>
 #include <vgl/vgl_fwd.h> // declare vgl_homg_point_2d and vgl_line_2d
 #include <vgl/vgl_vector_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a cartesian 2D point
 template <class Type>

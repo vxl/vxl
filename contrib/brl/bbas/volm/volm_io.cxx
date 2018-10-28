@@ -15,7 +15,7 @@
 #include <bsol/bsol_algs.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_vector_io.h>
 #include "volm_utils.h"
 

@@ -16,7 +16,7 @@
 #include <ihog/ihog_world_roi.h>
 #include <ihog/ihog_transform_2d.h>
 #include <ihog/ihog_transform_2d_sptr.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 static void filenames_from_directory(std::string const& dirname,

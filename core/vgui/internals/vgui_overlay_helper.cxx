@@ -9,7 +9,7 @@
 #include <iostream>
 #include "vgui_overlay_helper.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_event.h>

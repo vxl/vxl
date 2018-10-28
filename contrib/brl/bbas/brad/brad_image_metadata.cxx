@@ -10,7 +10,7 @@
 #include <vul/vul_awk.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>

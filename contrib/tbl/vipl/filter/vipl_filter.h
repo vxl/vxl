@@ -28,8 +28,6 @@ template < class ImgIn, class ImgOut, class DataIn, class DataOut, int Arity, cl
 #include <vipl/section/vipl_section_descriptor.h>
 #include <vipl/section/vipl_section_container.h>
 
-#include <vcl_stlfwd.h> // forward declaration for std::vector
-
 #ifdef USE_NAMED_ACCESSORS // cannot have both set,
 #undef USE_OPERATOR_ACCESSORS // to be safe if we have named we undefine operator()
 #else

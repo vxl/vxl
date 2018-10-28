@@ -10,7 +10,7 @@
 #include "vgl_homg_operators_3d.h"
 //
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>

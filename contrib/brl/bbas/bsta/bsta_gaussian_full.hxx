@@ -10,7 +10,7 @@
 #include "bsta_gaussian_full.h"
 #include <vcl_compiler.h>
 #if 0
-#include <vcl_cassert.h>
+#include <cassert>
 #endif
 
 #include <vnl/algo/vnl_svd.h>

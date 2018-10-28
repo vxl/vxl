@@ -16,7 +16,8 @@
 #include <vbl/vbl_bounding_box.h>
 #include <vbl/vbl_array_2d.h>
 #include <vbl/vbl_array_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 static const double rgrl_matcher_pseudo_int_3d_max_response_value = 1.0e30;
 

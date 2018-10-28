@@ -19,7 +19,8 @@
 #include "bmsh3d_utils.h"
 #include "bmsh3d_vertex.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //#######################################################
 //     The Modified Half-Edge Data Structure

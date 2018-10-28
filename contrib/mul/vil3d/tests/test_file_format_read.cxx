@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vxl_config.h> // for vxl_uint_16 etc.
 

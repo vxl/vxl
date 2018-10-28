@@ -4,7 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_vector.h>
 #include <vbl/vbl_array_1d.h>
 

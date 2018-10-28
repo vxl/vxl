@@ -9,7 +9,7 @@
 // make it work with the database initially
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //======================= Constructors / Destructors ========================

@@ -7,7 +7,7 @@
 
 #include <iostream>
 #include <ctime>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vxl_config.h> // for vxl_byte
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>

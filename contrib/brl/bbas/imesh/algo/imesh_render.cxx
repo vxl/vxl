@@ -6,7 +6,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <imesh/algo/imesh_project.h>
 #include <imesh/imesh_operations.h>
 #include <vil/vil_bilin_interp.h>

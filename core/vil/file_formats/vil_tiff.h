@@ -28,7 +28,7 @@
 #include <vector>
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_config.h>
 #include <vil/vil_file_format.h>
 #include <vil/vil_image_resource.h>

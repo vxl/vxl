@@ -10,7 +10,7 @@
 #include <vidl/vidl_istream.h>
 #include "vidl_convert.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vil/vil_image_view.h>

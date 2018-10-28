@@ -2,6 +2,8 @@
 #define vcl_iterator_hxx_
 // -*- c++ -*-
 
-#include "vcl_iterator.h"
+#include <iterator>
+#include <vcl_compiler.h>
+#error "vcl_iterator.hxx not used in any files."
 
 #endif

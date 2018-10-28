@@ -18,7 +18,7 @@
 //
 // For readability reasons, the rows are split in 2x 5 rows, with an extra
 // indentation for the second half of each row.
-
+#include <vnl/algo/vnl_chi_squared.h>
 double cdf_baseline[] =
 {
   0.0, 0.9999922488859869, 0.9999999997449120, 0.9999999999999905, 1.0,

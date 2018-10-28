@@ -9,7 +9,7 @@
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //=======================================================================
 

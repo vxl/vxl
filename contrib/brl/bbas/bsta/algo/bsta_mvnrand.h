@@ -6,7 +6,8 @@
 #include"bsta/bsta_gaussian_indep.h"
 #include"bsta/bsta_gaussian_sphere.h"
 
-#include<vcl_cmath.h>
+#include <cmath>
+#include <vcl_compiler.h>
 
 #include"vnl/algo/vnl_cholesky.h"
 #include"vnl/vnl_matrix_fixed.h"

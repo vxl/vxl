@@ -8,7 +8,7 @@
 // \author fsm
 // \brief  See vgui_parent_child_link.h for a description of this file.
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_event.h>

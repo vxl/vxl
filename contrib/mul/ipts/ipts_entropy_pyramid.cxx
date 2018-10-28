@@ -7,7 +7,8 @@
 
 #include "ipts_local_entropy.h"
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute local entropy at each level of a scale space pyramid
 //  Build smooth gaussian pyramid from the image.

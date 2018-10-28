@@ -25,7 +25,7 @@
 //  definition. I'll check one day.
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/algo/vnl_svd.h>

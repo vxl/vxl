@@ -25,7 +25,7 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_displacement.h>
 #include <vcsl/vcsl_translation.h>

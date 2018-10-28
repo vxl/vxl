@@ -27,7 +27,7 @@
 #include <vnl/algo/vnl_chi_squared.h>
 #include <bsta/bsta_gaussian_sphere.h>
 #include <brip/brip_vil_float_ops.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 vil_image_view<float> bvxm_edge_util::multiply_image_with_gaussian_kernel(vil_image_view<float> img, double gaussian_sigma)
 {

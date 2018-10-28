@@ -10,7 +10,8 @@
 // \date   4 Oct 2002
 
 #include "vil_copy.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.

@@ -13,7 +13,8 @@
 
 #include "bprb_parameters.h"
 //
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Set the current value to \p val
 template<class T>

@@ -6,7 +6,7 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 namespace {
   inline void shft2(double &a, double &b, const double c)

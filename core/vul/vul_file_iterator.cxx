@@ -6,7 +6,7 @@
 #include <string>
 #include "vul_file_iterator.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vul/vul_file.h>
 #include <vul/vul_reg_exp.h>

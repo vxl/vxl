@@ -19,7 +19,7 @@
 #include <cmath>
 #include "vpdfl_gaussian.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vsl/vsl_indent.h>

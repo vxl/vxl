@@ -7,7 +7,8 @@
 #include <vbl/vbl_array_2d.h>
 #include <vnl/vnl_math.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //********************* NOTE *************************
 // The map constructed is only valid 1 pixel inside it.

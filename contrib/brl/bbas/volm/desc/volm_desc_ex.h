@@ -21,7 +21,7 @@
 #include <vcl_compiler.h>
 #include <volm_io.h>
 #include <volm_category_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_io.h>
 #include <bpgl/depth_map/depth_map_region.h>
 #include <bpgl/depth_map/depth_map_region_sptr.h>

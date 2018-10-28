@@ -16,7 +16,7 @@ VNL_QR_INSTANTIATE(std::complex<float>);
 //
 // hmm... that still doesn't work.
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_copy.h>

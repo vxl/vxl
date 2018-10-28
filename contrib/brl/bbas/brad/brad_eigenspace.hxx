@@ -7,7 +7,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>

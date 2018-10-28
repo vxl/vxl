@@ -11,7 +11,7 @@
 #include <cmath>
 #include <new>
 #include "vnl_c_vector.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex_traits.h>
 #include <vnl/vnl_numeric_traits.h>

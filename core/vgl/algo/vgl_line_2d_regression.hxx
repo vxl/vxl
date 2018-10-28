@@ -11,7 +11,7 @@
 #include <vgl/vgl_distance.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Constructor
 template <class T>

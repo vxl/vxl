@@ -23,7 +23,7 @@
 
 #include <vpl/vpl.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <class T>
 boxm_scene<T>::boxm_scene(const vpgl_lvcs& lvcs,

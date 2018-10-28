@@ -20,7 +20,7 @@
 #include <vgl/vgl_vector_3d.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: Reconstruct structure of 3D points given multiple 2D views

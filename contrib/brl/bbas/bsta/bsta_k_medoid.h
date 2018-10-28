@@ -23,7 +23,7 @@
 
 #include <vector>
 #include <iostream>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vbl/vbl_array_2d.h>
 

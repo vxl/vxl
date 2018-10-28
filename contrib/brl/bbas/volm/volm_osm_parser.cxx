@@ -7,7 +7,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <typename T>
 void convert(const char* t, T& d)

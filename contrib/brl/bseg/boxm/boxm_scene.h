@@ -25,7 +25,7 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <boct/boct_tree.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 class boxm_scene_parser;
 template <class T> class boxm_block_iterator;

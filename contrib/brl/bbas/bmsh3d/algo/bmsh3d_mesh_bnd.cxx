@@ -16,7 +16,7 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vul/vul_printf.h>
 

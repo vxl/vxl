@@ -13,7 +13,7 @@
 #include <functional>
 #include <utility>
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 namespace

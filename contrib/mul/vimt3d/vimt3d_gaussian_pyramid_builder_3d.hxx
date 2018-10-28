@@ -20,7 +20,7 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vimt3d/vimt3d_save.h>
 #include <vil3d/algo/vil3d_gauss_reduce.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <mbl/mbl_log.h>
 

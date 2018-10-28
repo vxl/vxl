@@ -14,7 +14,7 @@
 #include <cstdio>
 #include "vil1_stream_url.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil1/vil1_stream_core.h>
 #undef sprintf // This works around a bug in libintl.h

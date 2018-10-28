@@ -15,7 +15,7 @@
 #include <vnl/vnl_fwd.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Base for classes which solve Markov Random Field problems.

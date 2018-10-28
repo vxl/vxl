@@ -9,7 +9,7 @@
 #include <string>
 #include "vimt_image_2d_of.h"
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vil/vil_print.h>

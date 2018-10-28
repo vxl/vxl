@@ -6,7 +6,8 @@
   fsm
 */
 #include "vil1_ssd.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 template <class I1, class I2, class O>
 O vil1_ssd(vil1_memory_image_of<I1> const &a,

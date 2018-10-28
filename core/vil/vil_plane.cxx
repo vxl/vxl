@@ -14,7 +14,8 @@
 //-----------------------------------------------------------------------------
 
 #include "vil_plane.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 vil_image_resource_sptr vil_plane(const vil_image_resource_sptr &src, unsigned p)

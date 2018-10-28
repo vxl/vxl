@@ -5,7 +5,7 @@
 #include <vul/vul_timer.h>
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_load.h>
 // test if a given texture category is an atmospheric effect
 bool sdet_atmospheric_image_classifier::atmos_cat(std::string const& cat)

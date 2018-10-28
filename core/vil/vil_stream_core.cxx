@@ -9,7 +9,7 @@
 #include <cstddef>
 #include <limits>
 #include "vil_stream_core.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 vil_stream_core::vil_stream_core(unsigned block_size)

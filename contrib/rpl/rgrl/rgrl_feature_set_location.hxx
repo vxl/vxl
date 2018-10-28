@@ -16,7 +16,8 @@
 #include <rsdl/rsdl_kd_tree.h>
 
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 template<unsigned N>
 rgrl_feature_set_location<N>::

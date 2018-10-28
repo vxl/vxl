@@ -9,7 +9,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vul/vul_file.h>
 
 // cutoff ratio determines Gaussian values that are assumed negligible

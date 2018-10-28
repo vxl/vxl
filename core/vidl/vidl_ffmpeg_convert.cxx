@@ -15,7 +15,7 @@
 #include "vidl_ffmpeg_convert.h"
 #include "vidl_ffmpeg_pixel_format.h"
 #include "vidl_frame.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vidl/vidl_config.h>

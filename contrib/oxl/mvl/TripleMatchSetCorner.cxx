@@ -9,7 +9,7 @@
 #include <vector>
 #include "TripleMatchSetCorner.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <mvl/PairMatchSetCorner.h>

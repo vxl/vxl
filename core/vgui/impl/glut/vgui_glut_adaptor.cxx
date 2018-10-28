@@ -13,7 +13,7 @@
 #include "vgui_glut_popup_impl.h"
 #include "menu_hack.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_glut.h>

@@ -10,7 +10,8 @@
 
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: Create a view which is a cropped version of src.

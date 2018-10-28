@@ -4,7 +4,7 @@
 #include "vsol_line_2d.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 #include <vbl/io/vbl_io_smart_ptr.h>

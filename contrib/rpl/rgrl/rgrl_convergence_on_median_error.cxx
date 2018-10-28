@@ -4,7 +4,7 @@
 #include "rgrl_convergence_on_median_error.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include "rgrl_match_set.h"
 #include "rgrl_set_of.h"

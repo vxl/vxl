@@ -15,7 +15,7 @@
 #include "clsfy_random_forest_builder.h"
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_data_array_wrapper.h>

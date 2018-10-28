@@ -18,7 +18,7 @@
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //: wrapper for the vnl eigensystem function for fixed size data

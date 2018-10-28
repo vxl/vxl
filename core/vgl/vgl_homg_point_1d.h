@@ -17,7 +17,7 @@
 #include <iosfwd>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a homogeneous 1-D point, i.e., a homogeneous pair \a (x,w)
 template <class T>

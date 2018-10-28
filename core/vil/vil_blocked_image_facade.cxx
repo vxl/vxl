@@ -6,7 +6,7 @@
 #include "vil_blocked_image_facade.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_property.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_crop.h>

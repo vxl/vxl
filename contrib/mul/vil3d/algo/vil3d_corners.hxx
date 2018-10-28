@@ -12,7 +12,8 @@
 #include <vil3d/vil3d_plane.h>
 #include <vil3d/algo/vil3d_grad_3x3x3.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute gradients, products and smoothed versions
 template <class srcT, class destT>

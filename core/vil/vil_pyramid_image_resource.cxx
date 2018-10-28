@@ -7,7 +7,7 @@
 #include "vil_pyramid_image_resource.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_property.h>
 #include <vil/vil_convert.h>

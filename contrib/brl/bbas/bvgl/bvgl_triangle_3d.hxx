@@ -10,7 +10,7 @@
 #include "bvgl_triangle_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Constructors/Destructor---------------------------------------------------
 

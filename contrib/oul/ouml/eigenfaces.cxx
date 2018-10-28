@@ -11,7 +11,7 @@
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vil1/vil1_save.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 //----------------------------------------------------------------------

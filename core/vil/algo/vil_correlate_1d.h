@@ -10,7 +10,7 @@
 #include <cstring>
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_property.h>

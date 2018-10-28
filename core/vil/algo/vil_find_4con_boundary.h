@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <vil/vil_image_view.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //:

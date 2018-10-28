@@ -11,7 +11,7 @@
 #include <vtol/vtol_macros.h>
 #include <vtol/vtol_list_functions.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //***************************************************************************
 // Initialization

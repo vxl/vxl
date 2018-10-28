@@ -6,7 +6,7 @@
 // \file
 
 #include <boxm/boxm_scene.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h> // for vnl_math::sqr()
 

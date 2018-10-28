@@ -6,7 +6,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <brip/brip_vil_float_ops.h>
 #include <bkml/bkml_write.h>

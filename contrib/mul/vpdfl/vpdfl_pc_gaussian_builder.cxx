@@ -20,7 +20,7 @@
 #include <cstdlib>
 #include "vpdfl_pc_gaussian_builder.h"
 //
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_math.h>

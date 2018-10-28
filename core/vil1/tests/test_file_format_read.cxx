@@ -10,7 +10,7 @@
 #include <vil1/vil1_load.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vxl_config.h> // for vxl_uint_16 etc.
 

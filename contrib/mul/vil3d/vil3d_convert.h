@@ -57,7 +57,7 @@
 
 #include <iostream>
 #include <limits>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_convert.h>
 #include <vil3d/vil3d_transform.h>

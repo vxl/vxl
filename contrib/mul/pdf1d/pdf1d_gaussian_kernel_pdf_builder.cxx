@@ -3,7 +3,7 @@
 #include <string>
 #include "pdf1d_gaussian_kernel_pdf_builder.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <pdf1d/pdf1d_gaussian_kernel_pdf.h>

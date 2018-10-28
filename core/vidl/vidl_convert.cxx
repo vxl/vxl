@@ -32,7 +32,7 @@
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>
 #include <vil/vil_memory_chunk.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
 

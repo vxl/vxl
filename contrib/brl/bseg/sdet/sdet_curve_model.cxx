@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "sdet_curve_model.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgl/vgl_polygon.h>

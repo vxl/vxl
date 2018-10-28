@@ -12,7 +12,7 @@
 #include <vnl/vnl_random.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Random number generator. This will be shared by all ran_sam instances.
 static vnl_random global_generator_;

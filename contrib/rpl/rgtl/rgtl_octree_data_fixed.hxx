@@ -8,7 +8,8 @@
 #include "rgtl_octree_data_fixed.h"
 #include "rgtl_octree_cell_location.h"
 #include "rgtl_compact_tree.hxx"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------------
 template <unsigned int D, class LeafDataType, class NodeDataType>

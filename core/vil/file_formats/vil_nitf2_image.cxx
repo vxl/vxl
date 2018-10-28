@@ -10,7 +10,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_view.h>

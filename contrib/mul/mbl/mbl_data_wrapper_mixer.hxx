@@ -9,7 +9,7 @@
 #include "mbl_data_wrapper_mixer.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Default constructor
 template<class T>

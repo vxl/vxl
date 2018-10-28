@@ -5,7 +5,7 @@
 // \brief Functions to compute orientations and gradient magnitude
 // \author Tim Cootes
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel

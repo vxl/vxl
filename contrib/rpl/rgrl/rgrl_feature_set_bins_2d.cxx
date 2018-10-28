@@ -9,7 +9,8 @@
 //   April 2004 Charlene: allow the use of kd_tree and user-defined bin_size.
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <rsdl/rsdl_bins.h>
 #include <rsdl/rsdl_bins.hxx> // to avoid explicit instantiation

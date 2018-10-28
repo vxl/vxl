@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Generate first combination (n.size() zeros)

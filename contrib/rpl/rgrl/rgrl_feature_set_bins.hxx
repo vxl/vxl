@@ -12,7 +12,8 @@
 
 #include "rgrl_feature_set_bins.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 #include <rsdl/rsdl_bins.h>
 #include <rsdl/rsdl_bins.hxx> // to avoid explicit instantiation

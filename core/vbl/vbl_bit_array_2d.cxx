@@ -10,8 +10,8 @@
 #include "vbl_bit_array_2d.h"
 
 #include <vcl_compiler.h>
-#include <vcl_climits.h>  // for CHAR_BIT
-#include <vcl_cassert.h>
+#include <climits>// for CHAR_BIT
+#include <cassert>
 
 //: Copy constructor
 vbl_bit_array_2d::vbl_bit_array_2d(vbl_bit_array_2d const& that)

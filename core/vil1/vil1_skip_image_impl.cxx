@@ -10,8 +10,8 @@
 #include <vector>
 #include "vil1_skip_image_impl.h"
 
-#include <vcl_climits.h> // CHAR_BIT
-#include <vcl_cassert.h>
+#include <climits>// CHAR_BIT
+#include <cassert>
 #include <vcl_compiler.h>
 
 vil1_skip_image_impl::vil1_skip_image_impl(vil1_image const &underlying, unsigned sx, unsigned sy)

@@ -16,7 +16,8 @@
 
 #include "vil1_copy.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image.h>
 

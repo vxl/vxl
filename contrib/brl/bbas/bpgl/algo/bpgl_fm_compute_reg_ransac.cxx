@@ -6,7 +6,7 @@
 #include <cmath>
 #include "bpgl_fm_compute_reg_ransac.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_2d.h>

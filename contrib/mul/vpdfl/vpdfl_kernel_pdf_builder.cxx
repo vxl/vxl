@@ -15,7 +15,7 @@
 #include <vector>
 #include "vpdfl_kernel_pdf_builder.h"
 //
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_data_wrapper.h>

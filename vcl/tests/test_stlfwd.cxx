@@ -7,17 +7,6 @@
 #include <list>
 #include <vcl_compiler.h>
 
-#if defined(TEST) && TEST == 2
-// stl included first
-
-#include <vcl_stlfwd.h>
-
-#else
-// Normal
-#include <vcl_stlfwd.h>
-
-#endif
-
 void f(std::map<int, std::string,std::less<int> >*,
        std::set<int,std::less<int> >*,
        std::list<int>*

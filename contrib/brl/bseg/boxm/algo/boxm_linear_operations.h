@@ -15,7 +15,7 @@
 #include <iostream>
 #include <boxm/boxm_block.h>
 #include <boct/boct_tree.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #ifdef DEBUG
 #include <vcl_compiler.h>
 #endif

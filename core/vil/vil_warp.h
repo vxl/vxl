@@ -15,7 +15,8 @@
 // \endverbatim
 
 #include <vil/vil_fwd.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Warp an image under a 2D map.
 // The size of the output map and the mapper defines the region of

@@ -18,7 +18,7 @@
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_block.h>
 #include <vtol/vtol_macros.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //***************************************************************************
 // Initialization

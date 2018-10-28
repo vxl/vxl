@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 #include <iterator>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vcl_compiler.h>
 

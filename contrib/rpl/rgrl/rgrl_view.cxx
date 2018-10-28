@@ -12,7 +12,7 @@
 #include <rgrl/rgrl_feature_set.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 rgrl_view::
 rgrl_view()

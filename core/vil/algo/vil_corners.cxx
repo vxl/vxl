@@ -5,7 +5,8 @@
 
 #include "vil_corners.h"
 #include <vil/vil_fill.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_math.h>
 

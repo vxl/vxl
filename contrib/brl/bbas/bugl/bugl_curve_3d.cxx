@@ -1,6 +1,7 @@
 #include "bugl_curve_3d.h"
 #include <bugl/bugl_normal_point_3d_sptr.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 bugl_normal_point_3d_sptr bugl_curve_3d::get_point(unsigned int index) const
 {

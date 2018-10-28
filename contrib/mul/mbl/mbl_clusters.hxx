@@ -12,7 +12,7 @@
 #include <iostream>
 #include <algorithm>
 #include "mbl_clusters.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

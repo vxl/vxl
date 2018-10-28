@@ -14,7 +14,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/algo/vnl_determinant.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,

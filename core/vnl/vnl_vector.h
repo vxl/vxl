@@ -26,7 +26,7 @@
 #include "vnl/vnl_export.h"
 #ifndef NDEBUG
 # if VNL_CONFIG_CHECK_BOUNDS
-#  include <vcl_cassert.h>
+#include <cassert>
 # endif
 #else
 # undef VNL_CONFIG_CHECK_BOUNDS

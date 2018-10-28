@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include <iostream>
 #include "vgui.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vgui/vgui_macro.h>

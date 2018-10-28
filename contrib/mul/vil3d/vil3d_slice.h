@@ -10,7 +10,8 @@
 
 #include <vil/vil_image_view.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Return a 2D view of slice k of 3D image aligned as (j,i).
 //  result(x,y,p)=im(y,x,k,p)

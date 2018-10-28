@@ -36,7 +36,7 @@
 
 #include "vgui_mfc_app.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vgui/vgui_gl.h>
 

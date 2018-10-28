@@ -10,7 +10,7 @@
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>

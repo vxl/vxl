@@ -4,7 +4,7 @@
 #include "vgl_h_matrix_1d_compute_optimize.h"
 #include <vgl/algo/vgl_h_matrix_1d_compute_linear.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_least_squares_function.h>

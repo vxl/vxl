@@ -20,7 +20,7 @@
 #include <stdexcept>
 #include <limits>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vil/vil_stream.h>
 #include <vbl/vbl_smart_ptr.h>

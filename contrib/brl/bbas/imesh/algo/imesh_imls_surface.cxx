@@ -10,7 +10,7 @@
 #include <imesh/algo/imesh_intersect.h>
 #include <imesh/algo/imesh_kd_tree.hxx>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_double_3.h>

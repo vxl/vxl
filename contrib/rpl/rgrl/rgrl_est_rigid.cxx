@@ -5,7 +5,8 @@
 
 #include "rgrl_est_rigid.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_determinant.h>
 #if 0

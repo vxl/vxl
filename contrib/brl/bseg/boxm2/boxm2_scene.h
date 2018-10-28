@@ -10,7 +10,7 @@
 #include <iosfwd>
 #include <vector>
 #include <string>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/boxm2_block_metadata.h>
 #include <vpgl/vpgl_lvcs.h>

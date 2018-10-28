@@ -25,7 +25,7 @@
 #include <vil/vil_new.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/vgl_line_2d.h>
 #include <vsol/vsol_line_2d.h>
 #include <vsol/vsol_point_2d_sptr.h>

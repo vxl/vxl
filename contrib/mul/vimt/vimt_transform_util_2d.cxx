@@ -2,7 +2,8 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //: Compute similarity transform which maps the p1,p2 to q1,q2
 void vimt_calc_transform_2d( vimt_transform_2d& trans,

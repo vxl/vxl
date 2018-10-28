@@ -4,7 +4,8 @@
 // \file
 #include<pop/pop_point_2d.h>
 #include<pop/pop_point_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 //: constructor

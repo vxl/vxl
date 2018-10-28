@@ -3,7 +3,7 @@
 //:
 // \file
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 unsigned long bcell::time_ = 0;
 

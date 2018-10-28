@@ -14,7 +14,7 @@
 #include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 
 vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)

@@ -8,7 +8,7 @@
 
 #include <vil/vil_fill.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Compute distance function from zeros in original image
 //  Image is assumed to be filled with max_dist where there

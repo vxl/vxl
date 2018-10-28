@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include <iostream>
 #include <complex>
+#include <testlib/testlib_test.h>
 //:
 // \file
 // \brief test program for 2D FFT routines.

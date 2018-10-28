@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_coordinate_system.cxx
 #include "vcsl_coordinate_system.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vcsl/vcsl_axis.h>
 #include <vcsl/vcsl_unit.h> // for method vcsl_axis::unit()
 

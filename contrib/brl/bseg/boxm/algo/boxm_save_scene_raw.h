@@ -31,7 +31,7 @@
 #include <vpl/vpl.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <class T_loc, class T_data>
 void boxm_save_scene_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,

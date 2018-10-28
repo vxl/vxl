@@ -18,7 +18,7 @@
 #include <string>
 #include <iostream>
 #include <cstddef>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>

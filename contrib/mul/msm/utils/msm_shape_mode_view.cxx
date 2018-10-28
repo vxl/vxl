@@ -10,7 +10,7 @@
 #include "msm_shape_mode_view.h"
 #include <msm/msm_ref_shape_model.h>
 #include <vsl/vsl_indent.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //=======================================================================

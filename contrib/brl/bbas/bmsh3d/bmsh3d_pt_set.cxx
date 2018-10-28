@@ -17,7 +17,7 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_random.h>
 #include <vgl/vgl_point_3d.h>

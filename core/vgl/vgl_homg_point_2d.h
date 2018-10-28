@@ -21,7 +21,7 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_fwd.h> // forward declare vgl_homg_line_2d
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Represents a homogeneous 2D point
 template <class T>

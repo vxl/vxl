@@ -8,7 +8,7 @@
 // \date   Sept 2003
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_math.h>
 
 static double g( int a1, int a2, int m );

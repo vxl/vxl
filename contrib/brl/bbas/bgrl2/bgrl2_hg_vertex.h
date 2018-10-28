@@ -14,7 +14,7 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <bgrl2/bgrl2_vertex.h>
 

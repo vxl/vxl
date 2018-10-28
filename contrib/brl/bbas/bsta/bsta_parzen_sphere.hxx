@@ -10,7 +10,8 @@
 #include <vnl/vnl_matrix_fixed.h> // needed for bsta_parzen_sphere<T,n>::covar_type
 #include <vnl/vnl_numeric_traits.h>
 #include "bsta_gaussian_sphere.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //helper classes to support partial template instantiation on dimension
 //these functions work for any dimension

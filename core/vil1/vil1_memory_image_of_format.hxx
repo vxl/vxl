@@ -12,7 +12,8 @@
 //-----------------------------------------------------------------------------
 
 #include <complex>
-#include <vcl_climits.h>  // for CHAR_BIT, number of bits in a char.
+#include <climits>
+#include <vcl_compiler.h>// for CHAR_BIT, number of bits in a char.
 
 #include <vil1/vil1_memory_image.h>
 #include <vil1/vil1_rgb.h>

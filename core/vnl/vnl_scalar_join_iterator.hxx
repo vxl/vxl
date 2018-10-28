@@ -19,7 +19,7 @@ template class VNL_EXPORT vnl_scalar_join_iterator_indexed_pair<T >;\
 template class VNL_EXPORT vnl_scalar_join_iterator<T >; \
 template VNL_EXPORT std::ostream& operator<<(std::ostream& s, const vnl_scalar_join_iterator_indexed_pair<T >& p);\
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vnl/vnl_matrix.h>
 
 // Helper class to hold the sorted arrays of indices.

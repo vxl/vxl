@@ -12,7 +12,8 @@
 //   <none yet>
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 #include "bbgm_image_of.h"

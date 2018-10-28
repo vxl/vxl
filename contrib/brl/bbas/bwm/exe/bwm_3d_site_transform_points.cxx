@@ -9,7 +9,7 @@
 #include <bwm/bwm_observer_mgr.h>
 #include <bwm/bwm_3d_corr.h>
 #include <bwm/bwm_3d_corr_sptr.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>

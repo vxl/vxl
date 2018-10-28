@@ -2,7 +2,7 @@
 #include <limits>
 #include <vsph/vsph_sph_cover_2d.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 double vsph_sph_cover_2d::
 inside_area(vsph_sph_box_2d const& bb,

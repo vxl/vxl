@@ -11,7 +11,7 @@
 // \date Apr 4th, 2007
 // Make it work with the whole database initially based on Matt's sketch.
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vsl/vsl_vector_io.h>
 #include <brdb/brdb_value.h>

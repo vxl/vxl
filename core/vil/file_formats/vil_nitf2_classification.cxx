@@ -8,7 +8,8 @@
 #include "vil_nitf2_field_definition.h"
 #include "vil_nitf2_typed_field_formatter.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 
 vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_field_definitions()

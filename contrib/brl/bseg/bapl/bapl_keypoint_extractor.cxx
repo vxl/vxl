@@ -7,7 +7,7 @@
 // \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vil/vil_image_resource.h>
 #include <bapl/bapl_lowe_keypoint.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>

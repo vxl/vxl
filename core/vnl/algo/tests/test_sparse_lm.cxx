@@ -4,6 +4,7 @@
 #include <vnl/vnl_sparse_lst_sqr_function.h>
 #include <vnl/algo/vnl_sparse_lm.h>
 #include <vnl/vnl_random.h>
+#include <vnl/vnl_math.h>
 
 
 // translate, scale, and rotate all cameras and points into a

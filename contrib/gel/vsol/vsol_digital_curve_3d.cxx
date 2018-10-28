@@ -11,7 +11,7 @@
 #include <vgl/vgl_distance.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Copy constructor
 vsol_digital_curve_3d::vsol_digital_curve_3d(const vsol_digital_curve_3d &other)

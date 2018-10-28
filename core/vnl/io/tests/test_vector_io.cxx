@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_io.h>
+#include <testlib/testlib_test.h>
+#include <vpl/vpl.h>
 
 void test_vector_double_io()
 {

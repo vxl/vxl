@@ -11,7 +11,8 @@
 //   Sep 2003 Charlene Tsai, added inv_map(.) functions.
 // \endverbatim
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vnl/algo/vnl_svd.h>
 #include <rgrl/rgrl_util.h>
 

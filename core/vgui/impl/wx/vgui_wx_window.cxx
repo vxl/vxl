@@ -17,7 +17,8 @@
 #include <wx/frame.h>
 #include <wx/statusbr.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //-------------------------------------------------------------------------
 // vgui_wx_window implementation - construction & destruction.

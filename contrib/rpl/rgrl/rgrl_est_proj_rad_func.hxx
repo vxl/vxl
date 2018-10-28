@@ -23,7 +23,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 template <unsigned int Tdim, unsigned int Fdim>
 rgrl_est_proj_rad_func<Tdim, Fdim>::

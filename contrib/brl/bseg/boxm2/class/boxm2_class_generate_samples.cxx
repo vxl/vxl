@@ -7,7 +7,7 @@
 #include <vil/vil_save.h>
 #include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 boxm2_class_generate_samples::boxm2_class_generate_samples(std::string xml_label,
                                                            std::string eoPath,

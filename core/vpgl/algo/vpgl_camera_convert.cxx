@@ -8,7 +8,7 @@
 #include "vpgl_camera_convert.h"
 //:
 // \file
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_det.h>

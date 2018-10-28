@@ -17,7 +17,7 @@
 //
 //-------------------------------------------------------------------------
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include "bmsh3d_edge.h"

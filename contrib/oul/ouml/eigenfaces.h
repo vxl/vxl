@@ -12,7 +12,7 @@
 
 #include <iostream>
 #include <vector>
-#include <vcl_cfloat.h> // for DBL_MAX
+#include <cfloat>// for DBL_MAX
 #include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vil1/vil1_memory_image_of.h>

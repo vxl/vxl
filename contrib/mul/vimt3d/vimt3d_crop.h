@@ -12,7 +12,7 @@
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <vil3d/vil3d_crop.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //: Create windowed view of given image by specifying a cropping region in image co-ords.

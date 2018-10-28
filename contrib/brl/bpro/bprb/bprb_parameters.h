@@ -21,7 +21,7 @@
 #include <vector>
 #include <map>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vbl/vbl_ref_count.h>
 #include <bxml/bxml_document.h>
 #include <bprb/bprb_parameters_sptr.h>

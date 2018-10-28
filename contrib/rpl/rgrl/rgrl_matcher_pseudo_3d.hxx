@@ -13,7 +13,8 @@
 #include <vnl/vnl_int_3.h>
 #include <vnl/vnl_inverse.h>
 #include <vil3d/vil3d_trilin_interp.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 static const double rgrl_matcher_pseudo_3d_max_response_value = 1.0e30;
 

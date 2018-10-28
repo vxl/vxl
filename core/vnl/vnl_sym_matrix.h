@@ -11,7 +11,7 @@
 // \date   6 Dec 2001
 
 #include <iosfwd>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>

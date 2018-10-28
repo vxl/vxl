@@ -6,7 +6,8 @@
 #include "msm_pose_maker.h"
 #include <vsl/vsl_binary_loader.h>
 #include <vsl/vsl_vector_io.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //=======================================================================
 

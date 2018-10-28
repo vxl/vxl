@@ -15,7 +15,7 @@
 #include "clsfy_parzen_builder.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>

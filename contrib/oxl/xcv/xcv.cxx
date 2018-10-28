@@ -17,7 +17,7 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vul/vul_arg.h>
 

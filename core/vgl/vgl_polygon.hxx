@@ -18,7 +18,7 @@
 #include "vgl_tolerance.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 // Constructors/Destructor---------------------------------------------------
 

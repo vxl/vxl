@@ -1,6 +1,7 @@
 // This is core/vgl/algo/vgl_h_matrix_1d_compute_3point.cxx
 #include "vgl_h_matrix_1d_compute_3point.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //
 // computes 1d Moebius map from three point correspondences :

@@ -12,7 +12,7 @@
 #include <vsl/vsl_block_binary.h>
 #include <vsl/vsl_b_read_block_old.h>
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 
 //====================================================================================

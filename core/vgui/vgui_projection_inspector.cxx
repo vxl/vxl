@@ -7,7 +7,7 @@
 // \author fsm
 // \brief  See vgui_projection_inspector.h for a description of this file.
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <vnl/vnl_double_2.h>

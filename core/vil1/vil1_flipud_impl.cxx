@@ -7,7 +7,8 @@
 // \author fsm
 
 #include "vil1_flipud_impl.h"
-#include <vcl_climits.h> // for CHAR_BIT
+#include <climits>
+#include <vcl_compiler.h>// for CHAR_BIT
 
 vil1_image vil1_flipud_impl::get_plane(unsigned int p) const {
   return new vil1_flipud_impl(base.get_plane(p));

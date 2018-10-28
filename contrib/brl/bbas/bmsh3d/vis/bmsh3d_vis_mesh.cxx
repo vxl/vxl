@@ -7,7 +7,7 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <bmsh3d/pro/bmsh3d_cmdpara.h>
 #include <bmsh3d/algo/bmsh3d_mesh_bnd.h>

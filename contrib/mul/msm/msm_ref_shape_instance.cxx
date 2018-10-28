@@ -13,7 +13,7 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <msm/msm_ref_shape_model.h>
 #include <msm/msm_no_limiter.h>

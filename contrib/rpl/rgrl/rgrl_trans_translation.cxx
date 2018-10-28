@@ -5,7 +5,7 @@
 // \author Charlene Tsai
 // \date   Dec 2003
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <rgrl/rgrl_util.h>
 

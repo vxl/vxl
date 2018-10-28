@@ -8,7 +8,7 @@
 #include <cstdlib>
 #include "pdf1d_flat_builder.h"
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 #include <mbl/mbl_data_wrapper.h>

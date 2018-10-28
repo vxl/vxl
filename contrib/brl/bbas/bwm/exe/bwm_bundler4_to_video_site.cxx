@@ -11,7 +11,7 @@
 #include <bwm/video/bwm_video_corr.h>
 #include <bwm/video/bwm_video_site_io.h>
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>

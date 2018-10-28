@@ -6,7 +6,7 @@
 //:
 // \file
 
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>

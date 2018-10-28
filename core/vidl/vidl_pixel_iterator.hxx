@@ -17,7 +17,8 @@
 #include "vidl_pixel_iterator.h"
 #include "vidl_color.h"
 #include <vxl_config.h>
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 
 //-----------------------------------------------------------------------------
 

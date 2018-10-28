@@ -43,7 +43,7 @@
 
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_stlfwd.h> // for std::vector
+#include <vector>
 
 class gevd_region_edge : public vbl_ref_count
 {

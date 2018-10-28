@@ -22,7 +22,7 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vpdfl/vpdfl_mixture_sampler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_math.h>

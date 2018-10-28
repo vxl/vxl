@@ -1,7 +1,7 @@
 // This is core/vcsl/vcsl_cylindrical_to_cartesian_3d.cxx
 #include <cmath>
 #include "vcsl_cylindrical_to_cartesian_3d.h"
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 
 //---------------------------------------------------------------------------

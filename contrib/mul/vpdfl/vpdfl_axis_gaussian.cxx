@@ -15,7 +15,7 @@
 #include "vpdfl_axis_gaussian.h"
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vpdfl/vpdfl_axis_gaussian_sampler.h>
 #include <vpdfl/vpdfl_sampler_base.h>

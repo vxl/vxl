@@ -3,7 +3,8 @@
 // \author Tim Cootes
 // \brief Example program using F&H method to locate matches on a pair of images
 
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vul/vul_arg.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d.h>

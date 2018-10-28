@@ -8,7 +8,7 @@
 //  \file
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Find k cluster centres
 // Uses batch k-means clustering.

@@ -48,7 +48,7 @@
 #include <vil/vil_save.h> // for debug saving
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 class bvxm_util
 {

@@ -3,7 +3,7 @@
 #include "bundler.h"
 //
 #include <bundler/bundler_inters.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #include <vcl_compiler.h>
 

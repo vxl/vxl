@@ -1,6 +1,7 @@
 // This is core/vcsl/vcsl_spatial.cxx
 #include "vcsl_spatial.h"
-#include <vcl_cassert.h>
+#include <cassert>
+#include <vcl_compiler.h>
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_graph.h>
 

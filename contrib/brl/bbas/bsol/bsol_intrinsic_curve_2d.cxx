@@ -10,7 +10,7 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
-#include <vcl_cassert.h>
+#include <cassert>
 #include <vcl_compiler.h>
 #include <vnl/vnl_math.h>
 

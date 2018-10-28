@@ -12,7 +12,7 @@
 #include "mvl_psi.h"
 
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 #if 0
 # define mvl_psi_temp_name(l, r) U l = r

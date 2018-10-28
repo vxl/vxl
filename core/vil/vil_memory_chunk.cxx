@@ -6,7 +6,7 @@
 // \brief Ref. counted block of data on the heap
 // \author Tim Cootes
 #include <vcl_compiler.h>
-#include <vcl_cassert.h>
+#include <cassert>
 
 //: Dflt ctor
 vil_memory_chunk::vil_memory_chunk()
