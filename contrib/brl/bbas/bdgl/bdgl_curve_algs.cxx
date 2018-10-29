@@ -570,18 +570,18 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
   vgl_homg_point_2d<double> rph(ref_point.x(), ref_point.y());
   double dist = 1e10;
   bool found_valid_intersection = false;
-  for (double & indice : indices)
+  for (double & index : indices)
   {
-    double grad_angle = dc->get_theta(indice);
+    double grad_angle = dc->get_theta(index);
     if (std::fabs(ref_gradient_angle-grad_angle)>angle_tol)
       continue;
-    double ca = dc->get_tangent_angle(indice);
+    double ca = dc->get_tangent_angle(index);
     if (ca<0)
       ca+=180;
     double delt = std::fabs(std::sin(std::fabs(vnl_math::pi_over_180*(ca-la)))*vnl_math::deg_per_rad);
     if (delt<angle_thresh)
       continue;
-    vgl_homg_point_2d<double> ph(dc->get_x(indice), dc->get_y(indice));
+    vgl_homg_point_2d<double> ph(dc->get_x(index), dc->get_y(index));
     double d = vgl_homg_operators_2d<double>::distance_squared(rph, ph);
     d = std::sqrt(d);
     found_valid_intersection = true;
@@ -590,7 +590,7 @@ bdgl_curve_algs::match_intersection(vdgl_digital_curve_sptr const& dc,
       //double best_delt = delt;
       //double best_ind = *iit;
       dist = d;
-      point = vgl_point_2d<double>(dc->get_x(indice), dc->get_y(indice));
+      point = vgl_point_2d<double>(dc->get_x(index), dc->get_y(index));
     }
   }
   return found_valid_intersection;
