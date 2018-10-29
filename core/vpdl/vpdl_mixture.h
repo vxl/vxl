@@ -20,8 +20,6 @@
 #include <vpdl/vpdl_multi_cmp_dist.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <cassert>
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 //: A mixture of distributions
 // A mixture is a weighted linear combination of other mixtures.

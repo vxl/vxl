@@ -12,7 +12,6 @@
 
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_binary_io.h>

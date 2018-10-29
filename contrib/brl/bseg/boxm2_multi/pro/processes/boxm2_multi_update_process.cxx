@@ -17,7 +17,6 @@
 #include <boxm2_multi/algo/boxm2_multi_refine.h>
 
 #include <vcl_where_root_dir.h>
-#include <vcl_compiler.h>
 
 //executable args
 #include <vil/vil_image_view_base.h>
@@ -33,10 +32,8 @@
 #include <brdb/brdb_value.h>
 
 //directory utility
-#include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vul/vul_timer.h>
 
 namespace boxm2_multi_update_process_globals
 {

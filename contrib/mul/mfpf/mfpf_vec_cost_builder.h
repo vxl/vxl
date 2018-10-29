@@ -13,7 +13,6 @@
 #include <mfpf/mfpf_vec_cost.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 
 //: Base for classes which build mfpf_vec_cost objects.
 class mfpf_vec_cost_builder

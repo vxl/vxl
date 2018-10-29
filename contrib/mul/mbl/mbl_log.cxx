@@ -16,13 +16,12 @@
 #include <algorithm>
 #include <sstream>
 #include <utility>
-#include <vcl_compiler.h>
-#include "mbl_log.h"
-#include <vcl_compiler.h>
 #include <cassert>
+#include <vcl_compiler.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
+#include "mbl_log.h"
 
 std::ostream& operator<<(std::ostream&os, mbl_logger::levels level)
 {

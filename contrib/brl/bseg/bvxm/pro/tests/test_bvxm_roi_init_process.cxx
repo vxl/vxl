@@ -6,7 +6,6 @@
 
 //For backwards compatibility
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

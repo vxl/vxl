@@ -12,8 +12,6 @@
 #include <vil/vil_save.h>
 #include <vil/algo/vil_gauss_filter.h>
 
-#include <vul/vul_file.h>
-
 #include <vgl/vgl_intersection.h>
 
 #include <vpgl/vpgl_local_rational_camera.h>

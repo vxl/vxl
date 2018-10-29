@@ -1,8 +1,6 @@
 #ifndef mvl_linear_backproject_h_
 #define mvl_linear_backproject_h_
 
-// not used? #include <iostream>
-// not used? #include <vcl_compiler.h>
 #include <iostream>
 #include <cmath>
 #include <vector>

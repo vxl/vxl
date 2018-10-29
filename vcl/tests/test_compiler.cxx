@@ -63,8 +63,6 @@ int test_compiler_main(int /*argc*/,char* /*argv*/[])
   return result;
 }
 
-#include <vcl_compiler.h>
-
 struct mystery_type
 {
   mystery_type();

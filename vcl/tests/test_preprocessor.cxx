@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
 {

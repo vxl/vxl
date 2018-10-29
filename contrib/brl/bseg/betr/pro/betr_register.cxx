@@ -6,8 +6,6 @@
 #include <bprb/bprb_batch_process_manager.h>
 #include <bprb/bprb_func_process.h>
 
-#include "betr_processes.h"
-
 void betr_register::register_datatype()
 {
   REGISTER_DATATYPE( betr_site_sptr );

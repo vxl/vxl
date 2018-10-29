@@ -21,7 +21,6 @@ typedef vbl_smart_ptr<rsdl_kd_tree> rsdl_kd_tree_sptr;
 
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
-// not used? #include <vcl_compiler.h>
 
 //: A set of features grouped only by N-d location.
 //

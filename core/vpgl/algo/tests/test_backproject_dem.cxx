@@ -10,7 +10,7 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
+//
 //#define test_enabled
 static void test_backproject_dem()
 {

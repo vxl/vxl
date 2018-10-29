@@ -40,7 +40,6 @@
 #include <vul/vul_file.h>
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 //:
 vpgl_rational_camera<double>

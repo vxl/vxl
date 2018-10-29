@@ -10,7 +10,6 @@
 #include <vcl_compiler.h>
 
 #include "vul_redirector.h"
-#include <vcl_compiler.h>
 
 //----------------------------------------------------------------------
 // This class is used as a stream buffer that can

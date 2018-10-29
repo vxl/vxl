@@ -19,7 +19,6 @@
 #include <memory>
 #include <string>
 #include <algorithm>
-#include <vcl_compiler.h>
 #include <cassert>
 #include <vcl_compiler.h>
 #include <vgl/vgl_vector_3d.h>

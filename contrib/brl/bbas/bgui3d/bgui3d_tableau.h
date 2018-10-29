@@ -15,7 +15,6 @@
 #include <iostream>
 #include <memory>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vpgl/vpgl_proj_camera.h>

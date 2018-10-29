@@ -14,7 +14,6 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
-#include <vcl_compiler.h>
 
 //: Base for objects which perform some form of linear component analysis.
 // Derived classes (such as mcal_pca) generate linear modes to span

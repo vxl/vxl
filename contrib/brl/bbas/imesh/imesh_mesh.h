@@ -11,7 +11,6 @@
 #include <iostream>
 #include <memory>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <cassert>
 
 #include <imesh/imesh_vertex.h>

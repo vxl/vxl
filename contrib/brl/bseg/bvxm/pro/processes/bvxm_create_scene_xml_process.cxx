@@ -10,6 +10,14 @@
 #include <vcl_compiler.h>
 #include <vul/vul_file.h>
 
+#include <bvgl/algo/bvgl_2d_geo_index.h>
+#include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
+#include <bkml/bkml_parser.h>
+#include <bkml/bkml_write.h>
+#include <vgl/vgl_intersection.h>
+#include <vil/vil_image_view.h>
+#include <volm/volm_io_tools.h>
+
 // set up input types
 bool bvxm_create_scene_xml_process_cons(bprb_func_process& pro)
 {
@@ -81,14 +89,6 @@ bool bvxm_create_scene_xml_process(bprb_func_process& pro)
   return true;
 }
 
-#include <bvgl/algo/bvgl_2d_geo_index.h>
-#include <bvgl/algo/bvgl_2d_geo_index_sptr.h>
-#include <bkml/bkml_parser.h>
-#include <bkml/bkml_write.h>
-#include <vul/vul_file.h>
-#include <vgl/vgl_intersection.h>
-#include <vil/vil_image_view.h>
-#include <volm/volm_io_tools.h>
 // process to generate scenes that are arranged by a quad-tree structure to cover a large scale region
 // Note that the scene may have a land mask ratio to quantify the scene urban coverage, if land masks are available.  (-1.0 is unknown)
 bool bvxm_create_scene_xml_large_scale_process_cons(bprb_func_process& pro)

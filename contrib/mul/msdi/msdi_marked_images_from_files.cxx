@@ -8,7 +8,6 @@
 #include <iterator>
 #include <cassert>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #include "msdi_marked_images_from_files.h"
 #include <vil/vil_load.h>

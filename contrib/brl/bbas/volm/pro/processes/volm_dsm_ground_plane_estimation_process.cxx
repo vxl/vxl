@@ -14,8 +14,6 @@
 #include <vil/vil_math.h>
 #include <bsta/bsta_histogram.h>
 #include <mbl/mbl_thin_plate_spline_3d.h>
-//#include <string>
-//#include <vcl_compiler.h>
 #include <vil/vil_image_view.h>
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_math.h>

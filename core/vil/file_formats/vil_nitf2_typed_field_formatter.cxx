@@ -11,8 +11,6 @@
 
 #include <vcl_compiler.h> //for VCL_WIN32
 
-#include <vcl_compiler.h>
-
 //==============================================================================
 // Class vil_nitf2_date_time_formatter
 

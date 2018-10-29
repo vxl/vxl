@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vcl_compiler.h>
 #include <vxl_config.h>
-#include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
 // It is quite difficult to do anything out of the norm with the C preprocessor

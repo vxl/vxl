@@ -12,7 +12,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 
-#include <vcl_compiler.h>
 #if defined(VCL_VC) || defined(VCL_GCC) || defined(__INTEL_COMPILER)
 #define iostream_char char
 #else

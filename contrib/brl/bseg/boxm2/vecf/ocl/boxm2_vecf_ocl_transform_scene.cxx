@@ -22,7 +22,7 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
-#include <vnl/vnl_vector_fixed.h>
+
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 static bool transform_scene_compiled = false;
 bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scene,

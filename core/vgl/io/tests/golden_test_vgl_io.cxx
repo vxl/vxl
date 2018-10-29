@@ -42,6 +42,7 @@
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vgl/io/vgl_io_polygon.h>
 
+
 void golden_test_vgl_io(bool save_file=false);
 
 // This nasty macro stuff is to allow the program to be compiled either as

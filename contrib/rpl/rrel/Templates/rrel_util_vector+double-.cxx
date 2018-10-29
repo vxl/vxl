@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <rrel/rrel_util.hxx>
 
 // Apply explicit instantiation

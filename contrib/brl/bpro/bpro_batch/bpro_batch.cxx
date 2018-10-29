@@ -17,7 +17,6 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_byte.h>
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 static PyObject *init_process(PyObject *self, PyObject *args);
 static PyObject *set_input_bool(PyObject *self, PyObject *args);

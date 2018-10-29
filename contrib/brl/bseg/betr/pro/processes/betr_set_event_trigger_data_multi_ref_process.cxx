@@ -1,4 +1,9 @@
 // This is brl/bseg/betr/pro/processes/betr_set_event_trigger_data_multi_ref_process.cxx
+//:
+// \file
+// \brief  A process for seting an event_trigger data to an event_trigger from paths
+//
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -9,18 +14,10 @@
 #include <core/bbas_pro/bbas_1d_array_string.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
-//:
-// \file
-// \brief  A process for seting an event_trigger data to an event_trigger from paths
-//
 
-
-#include <vcl_compiler.h>
 #include <betr/betr_event_trigger.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_camera.h>
-#include <vpgl/vpgl_rational_camera.h>
-#include <vpgl/vpgl_local_rational_camera.h>
 
 
 namespace betr_set_event_trigger_data_multi_ref_process_globals

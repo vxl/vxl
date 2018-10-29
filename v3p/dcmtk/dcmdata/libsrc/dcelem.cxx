@@ -34,7 +34,6 @@
 #include "dcdefine.h"    /* for memzero() */
 #include "dcelem.h"
 #include "dcobject.h"
-#include "dcdefine.h"
 #include "dcswap.h"
 #include "dcdebug.h"
 #include "dcistrma.h"    /* for class DcmInputStream */

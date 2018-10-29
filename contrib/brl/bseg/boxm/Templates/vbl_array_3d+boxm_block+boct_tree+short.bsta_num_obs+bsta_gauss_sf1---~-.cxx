@@ -2,7 +2,6 @@
 #include <bsta/bsta_gauss_sf1.h>
 #include <boxm/boxm_block.hxx>
 #include <vbl/vbl_array_3d.hxx>
-#include <boxm/boxm_block.hxx>
 #include <boct/boct_tree.hxx>
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;

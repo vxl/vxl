@@ -20,7 +20,6 @@
 #include <rgrl/rgrl_trans_spline.h>
 #include <rgrl/rgrl_util.h>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 // initialize the static variables
 std::vector< rgrl_transformation_sptr >  rgrl_trans_reader::xform_candidates_;

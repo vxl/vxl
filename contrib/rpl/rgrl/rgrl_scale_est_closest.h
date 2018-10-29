@@ -11,7 +11,6 @@
 #include <vcl_compiler.h>
 #include "rgrl_scale_estimator.h"
 
-#include <vcl_compiler.h>
 #include <vnl/vnl_matrix.h>
 
 class rrel_objective;

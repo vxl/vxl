@@ -10,7 +10,6 @@
 //
 
 
-#include <vcl_compiler.h>
 #include <betr/betr_event_trigger.h>
 #include <vgl/vgl_point_3d.h>
 

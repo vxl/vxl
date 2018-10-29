@@ -30,8 +30,6 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector_fixed.h>
 
-#include <vcl_compiler.h>
-
 //----------------------------------------------------------------------------
 template <unsigned int N>
 class rtvl_refine_internal

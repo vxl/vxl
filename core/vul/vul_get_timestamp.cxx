@@ -23,7 +23,6 @@
 
 // for vul_get_time_string()
 #include <vul/vul_string.h>
-#include <vcl_compiler.h>
 //
 
 #if !defined(VCL_WIN32) || defined(__CYGWIN__)

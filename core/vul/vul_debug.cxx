@@ -11,7 +11,6 @@
 
 #include <vxl_config.h>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #ifdef _WIN32
 

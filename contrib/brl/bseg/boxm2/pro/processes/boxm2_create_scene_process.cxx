@@ -18,6 +18,25 @@
 #include <vpgl/vpgl_utm.h>
 #include <vgl/vgl_distance.h>
 
+#include <bkml/bkml_parser.h>
+#include <bpgl/bpgl_camera_utils.h>
+#include <vgl/vgl_polygon.h>
+#include <vgl/vgl_intersection.h>
+
+#include <boxm2/io/boxm2_cache.h>
+
+#include <vil/vil_image_view.h>
+#include <vil/vil_image_view_base.h>
+#include <vil/vil_image_resource_sptr.h>
+#include <vpgl/file_formats/vpgl_geo_camera.h>
+#include <vcl_compiler.h>
+#include <vul/vul_file_iterator.h>
+#include <vil/vil_load.h>
+#include <vil/vil_convert.h>
+#include <vil/vil_crop.h>
+#include <vpgl/vpgl_lvcs.h>
+#include <vpgl/vpgl_lvcs_sptr.h>
+
 namespace boxm2_create_scene_process_globals
 {
   constexpr unsigned n_inputs_ = 10;
@@ -298,11 +317,6 @@ bool boxm2_create_poly_scene_and_blocks_process_cons(bprb_func_process& pro)
   pro.set_input(10, idx);
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
-
-#include <bkml/bkml_parser.h>
-#include <bpgl/bpgl_camera_utils.h>
-#include <vgl/vgl_polygon.h>
-#include <vgl/vgl_intersection.h>
 
 bool boxm2_create_poly_scene_and_blocks_process(bprb_func_process& pro)
 {
@@ -771,7 +785,6 @@ bool boxm2_prune_scene_blocks_process_cons(bprb_func_process& pro)
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
-#include <boxm2/io/boxm2_cache.h>
 bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
 {
   using namespace boxm2_prune_scene_blocks_process_globals;
@@ -835,18 +848,6 @@ bool boxm2_prune_scene_blocks_process(bprb_func_process& pro)
   return true;
 }
 
-#include <vil/vil_image_view.h>
-#include <vil/vil_image_view_base.h>
-#include <vil/vil_image_resource_sptr.h>
-#include <vpgl/file_formats/vpgl_geo_camera.h>
-#include <vcl_compiler.h>
-#include <vgl/vgl_intersection.h>
-#include <vul/vul_file_iterator.h>
-#include <vil/vil_load.h>
-#include <vil/vil_convert.h>
-#include <vil/vil_crop.h>
-#include <vpgl/vpgl_lvcs.h>
-#include <vpgl/vpgl_lvcs_sptr.h>
 //: A process to prune the blocks which are below the ground surface defined by ASTER DEM
 namespace boxm2_prune_scene_blocks_by_dem_process_globals
 {
@@ -1211,9 +1212,6 @@ bool boxm2_prune_scene_blocks_by_dem_process_globals::find_min_max_height(vgl_po
 }
 
 #if 0
-#include <vil/vil_image_view.h>
-#include <vil/vil_load.h>
-#include <vgl/vgl_intersection.h>
 //: A process to change the resolution/refinement of blocks based on the land type
 //: e.g: rural regon like mountain can be low resolution but urban region requires high resolution
 namespace boxm2_change_scene_res_by_geo_cover_process_globals

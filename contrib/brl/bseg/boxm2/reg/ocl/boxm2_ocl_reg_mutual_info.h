@@ -11,7 +11,6 @@
 #include <bocl/bocl_device.h>
 #include <boxm2/io/boxm2_stream_scene_cache.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
 //: A cost function for registering video frames by minimizing square difference in intensities.

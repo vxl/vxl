@@ -32,7 +32,6 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <cassert>
-#include <vcl_compiler.h>
 
 // TODO: During tree construction we should check the set of objects
 // in the current node.  Those with no boundary inside the node should

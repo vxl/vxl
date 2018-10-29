@@ -14,7 +14,6 @@
 #include <vgl/vgl_fwd.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 
 class mfpf_point_finder;
 class mbl_read_props_type;

@@ -30,7 +30,6 @@
 #include <bkml/bkml_write.h>
 #include <bkml/bkml_parser.h>
 #include <vul/vul_file_iterator.h>
-#include <volm/volm_osm_parser.h>
 #include <brip/brip_line_generator.h>
 
 bool find_key_value_from_tags(std::string const& key, std::string const& value,
