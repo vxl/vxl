@@ -20,7 +20,6 @@
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 
 class clsfy_classifier_base;
 

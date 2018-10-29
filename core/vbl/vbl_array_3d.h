@@ -157,7 +157,6 @@ class vbl_array_3d
 //
 // formatted I/O
 //
-#include <vcl_compiler.h>
 template <class T> std::ostream& operator<<(std::ostream&,
                                                   vbl_array_3d<T >const&);
 

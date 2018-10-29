@@ -8,7 +8,6 @@
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_line_3d.h>
 #include <vsol/vsol_point_3d.h>
-#include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_intersection.h>

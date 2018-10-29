@@ -18,8 +18,6 @@
 #include <rgrl/rgrl_feature_set.h>
 #include <rgrl/rgrl_mask.h>
 
-#include <vcl_compiler.h>
-
 //: A set of features grouped only by N-d location.
 //
 // This class is used to store a collection of discrete features for

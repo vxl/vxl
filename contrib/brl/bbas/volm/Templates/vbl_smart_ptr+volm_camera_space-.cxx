@@ -1,4 +1,3 @@
-//#include <volm/volm_camera_space.h>
 #include <vbl/vbl_smart_ptr.hxx>
 #include <volm/volm_camera_space.h>
 #include <volm/volm_io.h>

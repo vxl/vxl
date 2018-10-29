@@ -1,16 +1,15 @@
 // This is brl/bseg/betr/pro/processes/betr_add_site_object_process.cxx
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 //:
 // \file
 // \brief  A process for adding an site object to a site
 //
 
-
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+
 #include <betr/betr_site.h>
 #include <vgl/vgl_point_3d.h>
 

@@ -15,7 +15,6 @@
 #include <cstddef>
 #include <vcl_compiler.h>
 #include "rgtl_serialize_access.h"
-#include <vcl_compiler.h>
 
 //: Store a flagged index for rgtl_compact_tree.
 //

@@ -21,7 +21,6 @@
 #include <vcsl/vcsl_spatial_transformation_sptr.h>
 #include <vcsl/vcsl_graph_sptr.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 class vcsl_cartesian_2d;
 class vcsl_polar;
 class vcsl_cartesian_3d;

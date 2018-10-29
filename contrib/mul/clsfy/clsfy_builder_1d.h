@@ -14,7 +14,6 @@
 #include <vbl/vbl_triple.h>
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 
 class clsfy_classifier_1d;
 

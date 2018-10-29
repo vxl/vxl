@@ -23,7 +23,6 @@
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
 #include <vsl/vsl_quick_file.h>
-#include <vcl_compiler.h>
 
 #include <msm/msm_shape_model_builder.h>
 #include <msm/msm_reflect_shape.h>

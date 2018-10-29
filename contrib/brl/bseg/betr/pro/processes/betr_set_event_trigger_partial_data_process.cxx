@@ -1,16 +1,15 @@
 // This is brl/bseg/betr/pro/processes/betr_set_event_trigger_data_process.cxx
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 //:
 // \file
 // \brief  A process for seting an event_trigger data to an event_trigger
 //
 
-
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+
 #include <betr/betr_event_trigger.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vpgl/vpgl_camera.h>

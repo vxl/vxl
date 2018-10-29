@@ -3,8 +3,6 @@
 #include <memory>
 #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_frame_sptr.h>
 #include <vidl/vidl_pixel_iterator.h>

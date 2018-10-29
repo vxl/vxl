@@ -1,5 +1,3 @@
-//#include <depth_map/depth_map_scene.h>
-
 #include <vsol/vsol_box_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_box_2d.h>

@@ -12,7 +12,6 @@
 #include <string>
 #include <sstream>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_export.h>

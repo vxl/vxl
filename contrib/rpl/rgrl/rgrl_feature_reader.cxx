@@ -14,7 +14,6 @@
 
 #include <rgrl/rgrl_util.h>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 // initialize the static variables
 std::vector< rgrl_feature_sptr >  rgrl_feature_reader::feature_candidates_;

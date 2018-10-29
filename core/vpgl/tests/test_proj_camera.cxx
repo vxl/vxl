@@ -1,6 +1,5 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
-// not used? #include <vcl_compiler.h>
 
 #include <vpgl/vpgl_proj_camera.h>
 #include <vnl/vnl_fwd.h>

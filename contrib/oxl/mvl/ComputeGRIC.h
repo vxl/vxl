@@ -8,7 +8,6 @@
 #include <mvl/PairMatchSetCorner.h>
 #include <mvl/FMatrix.h>
 #include <mvl/HMatrix2D.h>
-#include <vcl_compiler.h>
 
 class ComputeGRIC
 {

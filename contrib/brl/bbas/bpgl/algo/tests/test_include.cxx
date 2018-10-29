@@ -23,7 +23,6 @@
 #include <bpgl/algo/bpgl_nitf_camera_coverage.h>
 //#include <bpgl/algo/bpgl_optimize_camera.h>
 //#include <bpgl/algo/bpgl_ortho_procrustes.h>
-//#include <bpgl/algo/bpgl_project.h>
 //#include <bpgl/algo/bpgl_rational_geo_adjust.h>
 //#include <bpgl/algo/bpgl_ray.h>
 //#include <bpgl/algo/bpgl_ray_intersect.h>

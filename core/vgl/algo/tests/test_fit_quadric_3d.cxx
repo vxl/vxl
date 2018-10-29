@@ -13,7 +13,7 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vnl/vnl_matrix.h>
+//
 // creates points on the unit sphere
 static void test_linear_fit_sphere_taubin()
 {

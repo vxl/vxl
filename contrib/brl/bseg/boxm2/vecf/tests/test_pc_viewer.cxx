@@ -10,7 +10,6 @@
 #include <testlib/testlib_test.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 #include <vcl_compiler.h>
 #include "../boxm2_vecf_point_cloud_orbit_viewer.h"
 #include "../boxm2_vecf_orbit_params.h"

@@ -13,7 +13,6 @@
 #include <vcl_compiler.h>
 
 #include <bstm/bstm_scene.h>
-#include <vcl_compiler.h>
 
 namespace {
 constexpr unsigned n_inputs_ = 1;

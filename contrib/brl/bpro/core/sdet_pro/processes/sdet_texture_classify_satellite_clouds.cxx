@@ -16,7 +16,6 @@
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vil/vil_image_view.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_crop.h>

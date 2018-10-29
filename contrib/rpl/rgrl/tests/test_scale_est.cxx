@@ -5,8 +5,6 @@
 #include <vcl_compiler.h>
 #include <testlib/testlib_test.h>
 
-#include <vcl_compiler.h>
-
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h>
 

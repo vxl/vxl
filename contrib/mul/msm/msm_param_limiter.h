@@ -10,7 +10,6 @@
 #include <memory>
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_fwd.h>
 

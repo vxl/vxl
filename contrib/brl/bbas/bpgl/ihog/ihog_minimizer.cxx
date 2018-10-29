@@ -183,7 +183,7 @@ ihog_minimizer::minimize(ihog_transform_2d& xform)
   vnl_vector<double> param, fx;
   xform.params(param);
   // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
-  // and it avoids having to #include <cmath> :       -- PVr
+  // :       -- PVr
   double init_scale = 1.0/(1<<n_levels);
 
   ihog_transform_2d undo_xform;
@@ -267,7 +267,7 @@ void ihog_minimizer::minimize_exhaustive_minfo(int radius, ihog_transform_2d& xf
   vnl_vector<double> param, fx;
   xform.params(param);
   // the expression 1.0/(1<<X) is a bit more efficient than std::pow(0.5,X),
-  // and it avoids having to #include <cmath> :       -- PVr
+  // :       -- PVr
   double init_scale = 1.0/(1<<n_levels);
 
   ihog_transform_2d undo_xform;

@@ -11,10 +11,8 @@
 #include <cstring>
 #include <sstream>
 #include <utility>
+#include <vcl_compiler.h>
 #include "space_time_scene_parser.h"
-
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #include <bstm/bstm_scene_parser.h>
 

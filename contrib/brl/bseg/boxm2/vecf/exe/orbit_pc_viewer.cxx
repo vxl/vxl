@@ -7,7 +7,7 @@
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_orbit_params.h"
 #include "../boxm2_vecf_point_cloud_orbit_viewer.h"
-#include <vcl_compiler.h>
+
 int main(int argc, char ** argv)
 {
 

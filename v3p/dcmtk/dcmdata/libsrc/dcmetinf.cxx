@@ -40,7 +40,6 @@
 #include "dcvrul.h"
 #include "dcdebug.h"
 #include "dcdeftag.h"
-#include "dcdefine.h"
 #include "dcistrma.h"    /* for class DcmInputStream */
 #include "dcostrma.h"    /* for class DcmOutputStream */
 

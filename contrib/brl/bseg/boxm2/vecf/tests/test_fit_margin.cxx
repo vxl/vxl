@@ -10,7 +10,6 @@
 #include <vcl_compiler.h>
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
-#include <vul/vul_timer.h>
 #include "../boxm2_vecf_orbit_params.h"
 #include "../boxm2_vecf_fit_orbit.h"
 #include "../boxm2_vecf_fit_margins.h"

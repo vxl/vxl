@@ -15,7 +15,6 @@
 #include <memory>
 #include <iosfwd>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 class rgtl_serialize_access;
 

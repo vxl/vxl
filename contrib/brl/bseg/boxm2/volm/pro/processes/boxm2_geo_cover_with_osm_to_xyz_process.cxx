@@ -15,8 +15,6 @@
 #include <volm/volm_io.h>
 #include <volm/volm_category_io.h>
 #include <volm/volm_tile.h>
-#include <volm/volm_category_io.h>
-#include <volm/volm_osm_objects.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>

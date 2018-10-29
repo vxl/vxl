@@ -4,7 +4,6 @@
 #include "../bmdl_processes.h"
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>

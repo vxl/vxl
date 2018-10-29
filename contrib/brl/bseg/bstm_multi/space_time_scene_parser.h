@@ -23,7 +23,6 @@
 #include <expatpplib.h>
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 

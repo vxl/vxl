@@ -1,16 +1,15 @@
 // This is brl/bseg/betr/pro/processes/betr_execute_event_trigger_process.cxx
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <bprb/bprb_func_process.h>
-#include <vcl_compiler.h>
 //:
 // \file
 // \brief  A process for executing an event_trigger (process change)
 //
 
-
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+
 #include <betr/betr_event_trigger.h>
 #include <vgl/vgl_point_3d.h>
 

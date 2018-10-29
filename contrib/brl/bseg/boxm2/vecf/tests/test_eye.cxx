@@ -19,7 +19,6 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_eye_scene.h"
-#include <vul/vul_timer.h>
 #include "../boxm2_vecf_eye_params.h"
 typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 

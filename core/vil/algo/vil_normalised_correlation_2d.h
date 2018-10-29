@@ -11,7 +11,6 @@
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
 #include <cassert>
-#include <vcl_compiler.h>
 
 //: Evaluate dot product between kernel and src_im
 // Assumes that the kernel has been normalised to have zero mean

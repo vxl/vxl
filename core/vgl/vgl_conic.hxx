@@ -7,10 +7,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <vcl_compiler.h>
 #include "vgl_conic.h"
-
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 static const char *vgl_conic_name[] =
 {

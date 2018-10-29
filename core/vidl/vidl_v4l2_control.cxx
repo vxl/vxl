@@ -13,7 +13,6 @@
 #include <iostream>
 #include "vidl_v4l2_control.h"
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 extern "C" {
 #include <sys/ioctl.h>

@@ -19,7 +19,6 @@
 // for each object. For a polygonal object the base is the polygon itself.
 // For a 3-d mesh object the base is the lowest face of the mesh.
 //
-#include <vcl_compiler.h>
 #include <betr/betr_event_trigger.h>
 #include <vgl/vgl_point_3d.h>
 

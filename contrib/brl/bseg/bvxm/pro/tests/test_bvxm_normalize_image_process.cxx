@@ -12,7 +12,6 @@
 #include <bvxm/pro/processes/bvxm_normalization_util.h>
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #include <brdb/brdb_value.h>
 #include <brdb/brdb_selection.h>

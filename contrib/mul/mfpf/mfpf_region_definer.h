@@ -13,8 +13,6 @@
 #include <mfpf/mfpf_region_form.h>
 #include <vsl/vsl_binary_io.h>
 
-#include <vcl_compiler.h>
-
 constexpr unsigned mfpf_invalid_index = 99999;
 
 //: Base for objects which generate regions from sets of points

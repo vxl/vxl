@@ -15,8 +15,6 @@
 #include <vil/vil_plane.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vil/vil_save.h>
 
 //: this process extracts the filter bank of an image (assumes a float image in the range [0, 1])
 //  and saves it in the filter_bank object of the passed texture_classifier instance
@@ -291,7 +289,6 @@ bool sdet_add_responses_to_filter_bank_process_cons(bprb_func_process& pro)
   return pro.set_output_types(output_types);
 }
 
-#include <vil/vil_math.h>
 bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
 {
   if (!pro.verify_inputs())

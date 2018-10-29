@@ -4,7 +4,6 @@
 #undef printf // to work around a bug in libintl.h
 
 #include <v3p_netlib.h> // resides in v3p/netlib
-#include <testlib/testlib_test.h>
 
 static
 void test_qsvd()

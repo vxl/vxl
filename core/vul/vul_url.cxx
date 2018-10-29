@@ -19,7 +19,6 @@
 #include <iostream>
 #include "vul_url.h"
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 #include <cassert>
 #include <vul/vul_file.h>
 

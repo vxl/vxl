@@ -28,6 +28,9 @@
 #include <cassert>
 #include <vul/vul_file_iterator.h>
 
+#include <vil/vil_convert.h>
+#include <vul/vul_file.h>
+
 std::vector<vgl_polygon<double> > sdet_texture_classifier::load_polys(std::string const& poly_path)
 {
   std::vector<vsol_spatial_object_2d_sptr> sos;
@@ -172,10 +175,6 @@ compute_filter_bank(vil_image_view<float> const& img)
 #endif
   return true;
 }
-
-#include <vil/vil_convert.h>
-#include <vil/vil_math.h>
-#include <vul/vul_file.h>
 
 //: check the folder if already computed using the image name, otherwise compute and save
 bool sdet_texture_classifier::compute_filter_bank_color_img(std::string const& filter_folder, std::string const& img_name)
@@ -401,7 +400,6 @@ bool sdet_texture_classifier::compute_training_data(std::string const& category)
   std::cout << "Collect texture samples in texture box region" << t.real()/1000.0 << " secs.\n";
   return true;
 }
-#include <vul/vul_file.h>
 //: save filter responses
 bool sdet_texture_classifier::save_filter_responses(std::string const& dir)
 {

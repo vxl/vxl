@@ -10,10 +10,7 @@
 // \author Martin Roberts
 
 #include <vcl_compiler.h>
-// not used? #include <cmath>
 #include <cassert>
-// not used? #include <vector>
-// not used? #include <iostream>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_svd.h>
 #include <mbl/mbl_stl.h>

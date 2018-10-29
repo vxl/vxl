@@ -12,9 +12,6 @@
 //       Problems have been encountered because when the lines are almost parallel
 //       to the epipolar lines, big errors occurred.
 //
-//   It could be useful to #include <vnl/vnl_double_3.h> to overload the methods
-//   to make them handle vgl_point_2d and vgl_lines_segment_2d.
-//
 // \author
 //   L. Guichard
 //--------------------------------------------------------------------------------

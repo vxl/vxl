@@ -22,7 +22,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
-#include <boxm2/io/boxm2_lru_cache.h>
 
 // boxm files
 #include <boxm/boxm_scene.h>

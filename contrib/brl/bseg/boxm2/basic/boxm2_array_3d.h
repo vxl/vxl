@@ -8,8 +8,6 @@
 #include <iosfwd>
 #include <cstdlib>
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)

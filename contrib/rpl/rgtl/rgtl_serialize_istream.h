@@ -17,7 +17,6 @@
 #include "rgtl_serialize_direction.h"
 
 #include <vcl_compiler.h>
-#include <vcl_compiler.h>
 
 //: Serialization load object that reads from a stream.
 //  See rgtl_serialize.txt for serialization interface details.

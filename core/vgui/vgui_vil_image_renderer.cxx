@@ -16,7 +16,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_pyramid_image_resource.h>
 #include <vil/vil_image_view.h>
-#include <vil/vil_new.h>
 #include <vgui/vgui_section_render.h>
 #include "vgui_gl.h"
 #include "vgui_macro.h"
