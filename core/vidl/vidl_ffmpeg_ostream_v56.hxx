@@ -99,8 +99,8 @@ vidl_ffmpeg_ostream::
 
 //: Constructor - opens a stream
 vidl_ffmpeg_ostream::
-vidl_ffmpeg_ostream(std::string  filename,
-                    vidl_ffmpeg_ostream_params  params)
+vidl_ffmpeg_ostream(const std::string  & filename,
+                    const vidl_ffmpeg_ostream_params  & params)
   : os_( new vidl_ffmpeg_ostream::pimpl ),
     filename_(std::move(filename)), params_(std::move(params))
 {
