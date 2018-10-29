@@ -361,8 +361,8 @@ get_matches(const std::vector<int>&  point_indices, unsigned int total_num_match
     sub_match_set = new rgrl_match_set( match_set_->from_feature_type(), match_set_->to_feature_type() );
 
   if ( total_num_matches == match_set_->from_size() ) { //unique matches
-    for (int point_indice : point_indices) {
-      FIter fi = match_set_->from_begin() + point_indice;
+    for (int point_index : point_indices) {
+      FIter fi = match_set_->from_begin() + point_index;
       TIter ti = fi.begin();
       sub_match_set->add_feature_and_match( fi.from_feature(),
                                             fi.mapped_from_feature(),
@@ -372,9 +372,9 @@ get_matches(const std::vector<int>&  point_indices, unsigned int total_num_match
   else {
     int match_count = 0;
     for ( FIter fi = match_set_->from_begin(); fi != match_set_->from_end(); ++fi ) {
-      for (int point_indice : point_indices) {
-        if ( match_count <= point_indice && match_count + (int)fi.size() > point_indice) {
-          unsigned int offset = point_indice - match_count;
+      for (int point_index : point_indices) {
+        if ( match_count <= point_index && match_count + (int)fi.size() > point_index) {
+          unsigned int offset = point_index - match_count;
           TIter ti = fi.begin() + offset;
           sub_match_set->add_feature_and_match( fi.from_feature(),
                                                 fi.mapped_from_feature(),
@@ -393,7 +393,7 @@ rgrl_initializer_ran_sam::
 trace_sample( const std::vector<int>& indices ) const
 {
   std::cout << "\nNew sample: ";
-  for (int indice : indices)
-    std::cout << ' ' << indice;
+  for (int index : indices)
+    std::cout << ' ' << index;
   std::cout << std::endl;
 }

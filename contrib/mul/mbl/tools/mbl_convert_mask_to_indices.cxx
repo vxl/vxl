@@ -32,9 +32,9 @@ static void save_indices(const std::vector<unsigned>& indices,
   std::ofstream afs(path.c_str());
   if (!afs)
     mbl_exception_throw_os_error(path, "save_indices() could not open file");
-  for (unsigned int indice : indices)
+  for (unsigned int index : indices)
   {
-    afs << indice << delim;
+    afs << index << delim;
   }
   afs.close();
 }
