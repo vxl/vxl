@@ -41,7 +41,9 @@ subdirs(basic)
 subdirs(io)
 
 #c plus plus library
-subdirs(cpp)
+# Missing functions that prevent building with shared Libs:
+# bstm_multi_cpp_bstm_to_bstm_multi_scene_process
+# NOT SUPPORTED OR TESTED subdirs(cpp)  -- Does not compile with shared libs due to many missing function definitions.
 
 # #opencl section
 #subdirs(ocl)
@@ -53,7 +55,12 @@ subdirs(cpp)
 #subdirs(util)
 
 #processes
-subdirs(pro)
+# Missing functions that prevent building with shared Libs:
+#  bstm_multi_bundle_to_scene_process,
+#  bstm_multi_boxm2_scene_to_bstm_multi_process,
+#  bstm_multi_scene_lvcs_process,
+#  bstm_multi_scene_bbox_process,
+# NOT SUPPORTED OR TESTED subdirs(pro)  -- Does not compile with shared libs due to many missing function definitions.
 
 else()
   message(STATUS "Skipping contrib/brl/bseg/bstm_multi: requires geotiff")
