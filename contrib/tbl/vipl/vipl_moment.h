@@ -30,7 +30,7 @@
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
 //: computation of n-th order moment
-template <class ImgIn,class ImgOut,class DataIn,class DataOut,VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut,class PixelItr = vipl_trivial_pixeliter >
 class vipl_moment : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
   // -+-+- data members: -+-+-

@@ -72,7 +72,7 @@
 //   consistency and allow one to chose which "column" in the 2D output image
 //   was used to store the histogram.
 //
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_histogram : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
   // -+-+- data members: -+-+-

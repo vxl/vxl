@@ -9,7 +9,7 @@
 
 #include <vipl/filter/vipl_filter.h>
 
-template < class ImgIn, class ImgOut, class DataIn, class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template < class ImgIn, class ImgOut, class DataIn, class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_filter_2d : public vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, PixelItr >
 {
  public:

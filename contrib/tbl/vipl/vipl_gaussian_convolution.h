@@ -33,7 +33,7 @@
 //   according to a Gaussian distribution (with given sigma= std deviation).
 //   (The window is cut when `cutoff' (default: 0.01) of the probability mass
 //   lies out of the window.)
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_gaussian_convolution : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
   // -+-+- data members: -+-+-

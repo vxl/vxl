@@ -31,7 +31,7 @@
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
 //: apply any (fixed) function to all (out,in) pixel pairs
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_dyadic : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
  public:

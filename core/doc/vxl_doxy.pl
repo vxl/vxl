@@ -47,7 +47,6 @@ $replace_relates = $ENV{"REPLACE_RELATES_WITH_RELATESALSO"};
 while (<>)
 {
     # preprocessing
-    s/\bVCL_DFL_TYPE_PARAM_STLDECL\s*\(([^,()]*),([^,()]*)\)/class $1 = $2 /g;
     s/\bDECLARE_DYNCREATE\s*\([^()]*\)//g; # for MFC
     s/\bTODO\b/\\todo/g;
 

@@ -94,22 +94,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER ";
-#ifdef VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
-  std::cout << "is set to " << quote(VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER ";
-#ifdef VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
-  std::cout << "is set to " << quote(VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_ALLOWS_NAMESPACE_STD ";
 #ifdef VCL_ALLOWS_NAMESPACE_STD
   std::cout << "is set to " << quote(VCL_ALLOWS_NAMESPACE_STD);

@@ -37,7 +37,7 @@
 enum vipl_random_noise_type { UNIFORM_NOISE, GAUSSIAN_NOISE, EXPONENTIAL_NOISE };
 
 //: add random noise to all pixels
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_add_random_noise : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
   // -+-+- data members: -+-+-
