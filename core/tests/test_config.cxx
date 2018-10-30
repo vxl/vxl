@@ -22,14 +22,6 @@ void test_config()
 
   std::cout << "All macro definitions are shown inside parentheses\n";
 
-  std::cout << "VCL_HAS_EXPLICIT ";
-#ifdef VCL_HAS_EXPLICIT
-  std::cout << "is set to " << quote(VCL_HAS_EXPLICIT);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_CAN_DO_PARTIAL_SPECIALIZATION ";
 #ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
   std::cout << "is set to " << quote(VCL_CAN_DO_PARTIAL_SPECIALIZATION);
