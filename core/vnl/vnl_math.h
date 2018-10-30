@@ -131,16 +131,6 @@ namespace vnl_math
   VNL_EXPORT double angle_minuspi_to_pi(double angle);
 }
 
-// We do not want to make assumptions about unknown types that happen
-// to have conversions to one of the fundamental types.  The templated
-// versions of isnan, isinf, and isfinite below serve as catch-alls to
-// cause linker errors if these functions are invoked with an unknown
-// type.  However, due to compiler bugs, the templates sometimes match
-// too often (see documentation of VCL_TEMPLATE_MATCHES_TOO_OFTEN) and
-// are selected over reference-binding overloads like those in
-// vnl_rational.h.  We add the catch-all templates only if the
-// compiler does not have this bug. -- Brad King
-
 // Note that the three template functions below should not be declared "inline"
 // since that would override the non-inline specialisations. - PVr.
 //

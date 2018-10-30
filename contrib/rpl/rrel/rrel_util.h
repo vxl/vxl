@@ -57,8 +57,6 @@ O
 rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residuals_end,
                           const InpIter& weights_first, int dof, O* );
 
-#if !VCL_TEMPLATE_MATCHES_TOO_OFTEN // not for compilers with overload problems
-
 //: Convenience function.
 // Calls the other rrel_util_weighted_scale() with a return type of
 // double.
@@ -71,8 +69,6 @@ rrel_util_weighted_scale( const InpIter& residuals_first, const InpIter& residua
   return rrel_util_weighted_scale( residuals_first, residuals_end,
                                    weights_first, dof, (double*)nullptr );
 }
-
-#endif
 
 //: Compute the median and the scale (relative to the median).
 //
