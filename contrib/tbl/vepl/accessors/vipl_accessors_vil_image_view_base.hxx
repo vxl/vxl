@@ -34,7 +34,6 @@ inline void setpixel(vil_image_view_base& i, int x, int y, DataType const e)
   im(x,y) = e;
 }
 
-#if VCL_HAS_TEMPLATE_SYMBOLS
 template <class DataType>
 inline vil_rgb<DataType> fgetpixel(vil_image_view_base const& i, int x, int y, vil_rgb<DataType> /* dummy */)
 {
@@ -93,63 +92,6 @@ inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<DataType> con
     im(x,y) = e;
   }
 }
-#else // compilers with overload problems ...
-inline vil_rgb<vxl_byte> fgetpixel(vil_image_view_base const& i, int x, int y, vil_rgb<vxl_byte> /* dummy */)
-{
-  if (i.nplanes() == 3)
-  {
-    vil_image_view<vxl_byte> const& im = static_cast<vil_image_view<vxl_byte>const&>(i);
-    return vil_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
-  }
-  else
-  {
-    vil_image_view<vil_rgb<vxl_byte> > const& im = static_cast<vil_image_view<vil_rgb<vxl_byte> >const&>(i);
-    return im(x,y);
-  }
-}
-inline void fsetpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> const e)
-{
-  if (i.nplanes() == 3)
-  {
-    vil_image_view<vxl_byte>& im = static_cast<vil_image_view<vxl_byte>&>(i);
-    im(x,y,0) = e.r; im(x,y,1) = e.g; im(x,y,2) = e.b;
-  }
-  else
-  {
-    vil_image_view<vil_rgb<vxl_byte> >& im = static_cast<vil_image_view<vil_rgb<vxl_byte> >&>(i);
-    im(x,y) = e;
-  }
-}
-inline vil_rgb<vxl_byte> getpixel(vil_image_view_base const& i, int x, int y, vil_rgb<vxl_byte> /* dummy */)
-{
-  if (x<0 || y<0 || x>=(int)i.ni() || y>=(int)i.nj()) return vil_rgb<vxl_byte>();
-  if (i.nplanes() == 3)
-  {
-    vil_image_view<vxl_byte> const& im = static_cast<vil_image_view<vxl_byte>const&>(i);
-    return vil_rgb<vxl_byte>(im(x,y,0),im(x,y,1),im(x,y,2));
-  }
-  else
-  {
-    vil_image_view<vil_rgb<vxl_byte> > const& im = static_cast<vil_image_view<vil_rgb<vxl_byte> >const&>(i);
-    return im(x,y);
-  }
-}
-inline void setpixel(vil_image_view_base& i, int x, int y, vil_rgb<vxl_byte> const e)
-{
-  if (x<0 || y<0 || (unsigned int)x >= i.ni() || (unsigned int)y >= i.nj())
-    return;
-  if (i.nplanes() == 3)
-  {
-    vil_image_view<vxl_byte>& im = static_cast<vil_image_view<vxl_byte>&>(i);
-    im(x,y,0) = e.r; im(x,y,1) = e.g; im(x,y,2) = e.b;
-  }
-  else
-  {
-    vil_image_view<vil_rgb<vxl_byte> >& im = static_cast<vil_image_view<vil_rgb<vxl_byte> >&>(i);
-    im(x,y) = e;
-  }
-}
-#endif
 
 #undef VIPL_INSTANTIATE_ACCESSORS
 #define VIPL_INSTANTIATE_ACCESSORS(T) \

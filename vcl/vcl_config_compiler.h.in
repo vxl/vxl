@@ -96,16 +96,6 @@ template <> text { return ret; }
 //
 #define VCL_NO_STATIC_DATA_MEMBERS @VCL_NO_STATIC_DATA_MEMBERS@
 
-
-//: VCL_HAS_TEMPLATE_SYMBOLS
-//
-// True if the compiler mangles function template instances differently
-// from non-templated functions with the same name and signature.
-// This is correct behaviour.
-//
-#define VCL_HAS_TEMPLATE_SYMBOLS @VCL_HAS_TEMPLATE_SYMBOLS@
-
-
 //----------------------------------------------------------------------
 // default template arguments
 
