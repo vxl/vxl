@@ -530,30 +530,6 @@ PERFORM_CHECK_C_HEADER(sys/times.h VCL_HAS_SYS_TIME_H)
 PERFORM_CHECK_C_HEADER(sys/types.h VCL_HAS_SYS_TYPES_H)
 PERFORM_CHECK_C_HEADER(unistd.h   VCL_HAS_UNISTD_H)
 
-#
-# Check for new C++0x standard additions (including TR1)
-#
-
-PERFORM_CHECK_HEADER(tr1/memory VCL_CXX_HAS_TR1)
-CHECK_TYPE_EXISTS_ZERO(std::shared_ptr<void> memory VCL_MEMORY_HAS_SHARED_PTR)
-CHECK_TYPE_EXISTS_ZERO(std::tr1::shared_ptr<void> memory VCL_MEMORY_HAS_TR1_SHARED_PTR)
-CHECK_TYPE_EXISTS_ZERO(std::tr1::shared_ptr<void> tr1/memory VCL_TR1_MEMORY_HAS_SHARED_PTR)
-
-if(VCL_MEMORY_HAS_SHARED_PTR OR VCL_TR1_MEMORY_HAS_SHARED_PTR)
-  option(VCL_INCLUDE_CXX_0X "Enable C++0x standard extensions" ${BUILD_FOR_VXL_DASHBOARD})
-else()
-  set(VCL_INCLUDE_CXX_0X 0)
-endif()
-
-# Make sure boolean values are (0,1) not (NO,YES)
-if(VCL_INCLUDE_CXX_0X)
-  set(VCL_INCLUDE_CXX_0X 1)
-else()
-  set(VCL_INCLUDE_CXX_0X 0)
-endif()
-
-
-
 # check for hardware support for sse2 with the current compiler flags
 PERFORM_CMAKE_TEST_RUN(${VXL_PLFM_TEST_FILE} VXL_HAS_SSE2_HARDWARE_SUPPORT)
 

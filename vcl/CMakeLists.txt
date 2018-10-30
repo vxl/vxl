@@ -111,8 +111,6 @@ else()
   set(_config_destination ${VXL_INSTALL_INCLUDE_DIR})
 endif()
 vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_compiler.h.in ${PROJECT_BINARY_DIR}/vcl_config_compiler.h ${_config_destination})
-vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_headers.h.in ${PROJECT_BINARY_DIR}/vcl_config_headers.h  ${_config_destination})
-vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_manual.h.in ${PROJECT_BINARY_DIR}/vcl_config_manual.h   ${_config_destination})
 vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_where_root_dir.h.in ${PROJECT_BINARY_DIR}/vcl_where_root_dir.h  ${_config_destination})
 
 include_directories(${PROJECT_BINARY_DIR})

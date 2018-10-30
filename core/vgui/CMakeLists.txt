@@ -588,12 +588,10 @@ endif()
 if( NOT CAN_BUILD_VGUI )
   # Dashboard builds will try to build vgui if possible,
   # so don't warn if we can't.
-  if( NOT BUILD_FOR_VXL_DASHBOARD )
-    message(SEND_ERROR "vgui could not be built.\n"
-                       "Make sure the OpenGL libraries "
-                       "(GL and GLU) are specified correctly,\n"
-                       "or set BUILD_VGUI to OFF." )
-  endif()
+  message(SEND_ERROR "vgui could not be built.\n"
+                     "Make sure the OpenGL libraries "
+                     "(GL and GLU) are specified correctly,\n"
+                     "or set BUILD_VGUI to OFF." )
 endif()
 
 endif()
