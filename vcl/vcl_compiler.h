@@ -111,17 +111,7 @@
 
 #define VCL_DFL_TMPL_ARG(classname) , classname
 
-   //-------------------- template instantiation ------------------------------
-#if VCL_NEEDS_INLINE_INSTANTIATION
-# define VCL_INSTANTIATE_INLINE(symbol) template symbol
-#else
-# define VCL_INSTANTIATE_INLINE(symbol) /* */
-#endif
-
-// fix to instantiate template functions
-#define VCL_INSTANTIATE_NONINLINE(fn_decl) template fn_decl
-
-   // -------------------- handy macros ---------------------------------------
+// -------------------- handy macros ---------------------------------------
 
 //: VCL_COMMA
 //

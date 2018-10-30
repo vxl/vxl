@@ -831,9 +831,9 @@ std::istream& operator>>(std::istream& s, vnl_vector<T>& M)
 #define VNL_VECTOR_INSTANTIATE_COMMON(T) \
 template class VNL_EXPORT vnl_vector<T >; \
 /* arithmetic, comparison etc */ \
-VCL_INSTANTIATE_INLINE(vnl_vector<T > operator+(T const, vnl_vector<T > const &)); \
-VCL_INSTANTIATE_INLINE(vnl_vector<T > operator-(T const, vnl_vector<T > const &)); \
-VCL_INSTANTIATE_INLINE(vnl_vector<T > operator*(T const, vnl_vector<T > const &)); \
+/*template VNL_EXPORT vnl_vector<T > operator+(T const, vnl_vector<T > const &) ; */ \
+/*template VNL_EXPORT vnl_vector<T > operator-(T const, vnl_vector<T > const &) ; */ \
+/*template VNL_EXPORT vnl_vector<T > operator*(T const, vnl_vector<T > const &) ; */ \
 template VNL_EXPORT vnl_vector<T > operator*(vnl_matrix<T > const &, vnl_vector<T > const &); \
 /* element-wise */ \
 template VNL_EXPORT vnl_vector<T > element_product(vnl_vector<T > const &, vnl_vector<T > const &); \

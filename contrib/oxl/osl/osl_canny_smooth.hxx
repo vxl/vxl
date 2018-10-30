@@ -216,6 +216,6 @@ template void osl_canny_smooth_rothwell_adaptive(T const * const *in, int xsize_
 template void osl_canny_smooth(T const * const *image_in, int xsize_, int ysize_, \
                                float const *kernel_, int width_, float const *sub_area_, \
                                float * const * image_out)
-//VCL_INSTANTIATE_INLINE(float as_float(T const &));
+///*template float as_float(T const &) */;
 
 #endif // osl_canny_smooth_hxx_

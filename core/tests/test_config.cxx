@@ -54,22 +54,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_ALLOWS_INLINE_INSTANTIATION ";
-#ifdef VCL_ALLOWS_INLINE_INSTANTIATION
-  std::cout << "is set to " << quote(VCL_ALLOWS_INLINE_INSTANTIATION);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_NEEDS_INLINE_INSTANTIATION ";
-#ifdef VCL_NEEDS_INLINE_INSTANTIATION
-  std::cout << "is set to " << quote(VCL_NEEDS_INLINE_INSTANTIATION);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DO_NOT_INSTANTIATE(text,ret) ";
 #ifdef VCL_DO_NOT_INSTANTIATE
   std::cout << "is set to " << quote(VCL_DO_NOT_INSTANTIATE(text,ret));

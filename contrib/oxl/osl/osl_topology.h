@@ -79,7 +79,7 @@ void osl_topology_unref(Container &C)
 }
 
 #define OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(C) \
-VCL_INSTANTIATE_INLINE(void osl_topology_ref(C &)); \
-VCL_INSTANTIATE_INLINE(void osl_topology_unref(C &))
+/*template void osl_topology_ref(C &) ; */ \
+/*template void osl_topology_unref(C &) */
 
 #endif // osl_topology_h_

@@ -103,7 +103,7 @@ template <> std::string vsl_binary_loader<T >::is_a() const \
 template class vsl_binary_loader<T >
 #define VSL_BINARY_LOADER_INSTANTIATE(T) \
 VSL_BINARY_LOADER_WITH_SPECIALIZATION_INSTANTIATE(T); \
-VCL_INSTANTIATE_INLINE(void vsl_b_read( vsl_b_istream& bfs, (T)*& b)); \
+/*template void vsl_b_read( vsl_b_istream& bfs, (T)*& b) ; */ \
 template void vsl_b_write(vsl_b_ostream& bfs, const T* b)
 
 #endif // vsl_binary_loader_hxx_

@@ -1630,8 +1630,8 @@ vnl_matrix<T>& vnl_matrix<T>::inplace_transpose()
 #define VNL_MATRIX_INSTANTIATE(T) \
 template class VNL_EXPORT vnl_matrix<T >; \
 template VNL_EXPORT vnl_matrix<T > operator-(T const &, vnl_matrix<T > const &); \
-VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &)); \
-VCL_INSTANTIATE_INLINE(vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &)); \
+/*template VNL_EXPORT vnl_matrix<T > operator+(T const &, vnl_matrix<T > const &) ; */ \
+/*template VNL_EXPORT vnl_matrix<T > operator*(T const &, vnl_matrix<T > const &) ; */ \
 template VNL_EXPORT T dot_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template VNL_EXPORT T inner_product(vnl_matrix<T > const &, vnl_matrix<T > const &); \
 template VNL_EXPORT T cos_angle(vnl_matrix<T > const &, vnl_matrix<T > const &); \

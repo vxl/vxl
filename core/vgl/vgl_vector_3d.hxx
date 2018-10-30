@@ -200,28 +200,28 @@ std::istream&  operator>>(std::istream& is, vgl_vector_3d<T>& p)
 #undef VGL_VECTOR_3D_INSTANTIATE
 #define VGL_VECTOR_3D_INSTANTIATE(T) \
 template class vgl_vector_3d<T >;\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator+=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator-=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator*         (double, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator*         (vgl_vector_3d<T > const&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  operator/         (vgl_vector_3d<T > const&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator*=        (vgl_vector_3d<T >&, double));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& operator/=        (vgl_vector_3d<T >&, double));\
-VCL_INSTANTIATE_INLINE(T                  dot_product       (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(T                  inner_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  cross_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(double             cos_angle         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
+/*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >& operator+=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >& operator-=        (vgl_vector_3d<T >&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  operator+         (vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  operator-         (vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  operator*         (double, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  operator*         (vgl_vector_3d<T > const&, double); */\
+/*template vgl_vector_3d<T >  operator/         (vgl_vector_3d<T > const&, double); */\
+/*template vgl_vector_3d<T >& operator*=        (vgl_vector_3d<T >&, double); */\
+/*template vgl_vector_3d<T >& operator/=        (vgl_vector_3d<T >&, double); */\
+/*template T                  dot_product       (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template T                  inner_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >  cross_product     (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template double             cos_angle         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
 template               double             angle             (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&);\
 template               bool               orthogonal        (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
 template               bool               parallel          (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&, double);\
 template               vgl_vector_3d<T >  orthogonal_vectors(vgl_vector_3d<T > const&, double);\
-VCL_INSTANTIATE_INLINE(double             operator/         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >& normalize         (vgl_vector_3d<T >&));\
-VCL_INSTANTIATE_INLINE(vgl_vector_3d<T >  normalized        (vgl_vector_3d<T > const&));\
+/*template double             operator/         (vgl_vector_3d<T > const&, vgl_vector_3d<T > const&); */\
+/*template vgl_vector_3d<T >& normalize         (vgl_vector_3d<T >&); */\
+/*template vgl_vector_3d<T >  normalized        (vgl_vector_3d<T > const&); */\
 template               std::ostream&       operator<<        (std::ostream&, vgl_vector_3d<T >const&);\
 template               std::istream&       operator>>        (std::istream&, vgl_vector_3d<T >&)
 

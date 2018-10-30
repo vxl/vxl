@@ -18,7 +18,7 @@ vil1_image vil1_clamp(vil1_image src, double range_min, double range_max) {
 
 #undef VIL1_CLAMP_PIXEL_INSTANTIATE
 #define VIL1_CLAMP_PIXEL_INSTANTIATE(T) \
-VCL_INSTANTIATE_INLINE(T vil1_clamp_pixel(T const& b, double range_min, double range_max))
+/*template T vil1_clamp_pixel(T const& b, double range_min, double range_max) */
 
 VIL1_CLAMP_PIXEL_INSTANTIATE(unsigned char);
 VIL1_CLAMP_PIXEL_INSTANTIATE(unsigned short);

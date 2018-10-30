@@ -403,7 +403,7 @@ template class vgl_rtree_node<V, B, C >; \
 template class vgl_rtree_iterator_base<V, B, C >; \
 typedef vgl_rtree_iterator_base<V, B, C > itVBC##tag; \
 template bool operator==(itVBC##tag const &, itVBC##tag const &); \
-VCL_INSTANTIATE_INLINE(bool operator!=(itVBC##tag const &, itVBC##tag const &)); \
+/*template bool operator!=(itVBC##tag const &, itVBC##tag const &) ; */ \
 template class vgl_rtree_iterator<V, B, C >; \
 template class vgl_rtree_const_iterator<V, B, C >; \
 template class vgl_rtree<V, B, C >

@@ -131,24 +131,6 @@
 //#define VCL_NULL_TMPL_ARGS <>
 #define VCL_NULL_TMPL_ARGS @VCL_NULL_TMPL_ARGS@
 
-
-//----------------------------------------------------------------------
-// template instantiation
-
-//: VCL_ALLOWS_INLINE_INSTANTIATION
-//
-// True if the compiler allows explicit instantiation of inline
-// function templates. The native SGI CC 7.2.1 does not.
-#define VCL_ALLOWS_INLINE_INSTANTIATION @VCL_ALLOWS_INLINE_INSTANTIATION@
-
-
-//: VCL_NEEDS_INLINE_INSTANTIATION
-//
-// True if the compiler needs explicit instantiation of inline
-// function templates. gcc 2.7.2 (with -fno-implicit-templates) does.
-#define VCL_NEEDS_INLINE_INSTANTIATION @VCL_NEEDS_INLINE_INSTANTIATION@
-
-
 //: VCL_DO_NOT_INSTANTIATE(text, ret)
 //
 // If a method is defined on some template, but makes no sense for some

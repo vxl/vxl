@@ -305,6 +305,6 @@ vnl_vector_fixed<T,3> vnl_quaternion<T>::rotate(vnl_vector_fixed<T,3> const& v) 
 #undef VNL_QUATERNION_INSTANTIATE
 #define VNL_QUATERNION_INSTANTIATE(T) \
 template class VNL_EXPORT vnl_quaternion<T >;\
-VCL_INSTANTIATE_INLINE(std::ostream& operator<< (std::ostream&, vnl_quaternion<T > const&))
+/*template VNL_EXPORT std::ostream& operator<< (std::ostream&, vnl_quaternion<T > const&) */
 
 #endif // vnl_quaternion_hxx_
