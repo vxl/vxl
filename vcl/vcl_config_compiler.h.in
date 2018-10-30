@@ -26,37 +26,6 @@
 // Set to 1 if "long long" is accepted by the compiler as a built-in type.
 #define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
 
-//: VCL_DO_NOT_INSTANTIATE(text, ret)
-//
-// If a method is defined on some template, but makes no sense for some
-// instances of that template, the compiler should not complain unless the
-// method is actually used.  For example
-// \code
-//     template <class T>
-//     class T {
-//       int bad_method() {
-//         return T::f();  // Requires T to have static method f
-//       }
-//     };
-// \endcode
-//
-// The language allows you to use a T<int> even though int::f() is garbage,
-// *providing* you never call T.bad_method().
-//
-// Most compilers don't implement that yet, so the solution is to provide a
-// dummy specialization of T::bad_method that returns something mundane and
-// stops the standard bad_method from being generated.  For this, use:
-// \code
-//     VCL_DO_NOT_INSTANTIATE(int T::bad_method(), some_return_value)
-// \endcode
-
-//#define VCL_DO_NOT_INSTANTIATE(text, ret) text { return ret; }
-//#define VCL_DO_NOT_INSTANTIATE(text, ret) template <> text { return ret; }
-//#define VCL_DO_NOT_INSTANTIATE(text, ret) /* no need -- magic compiler */
-//FIXME #define VCL_DO_NOT_INSTANTIATE(text, ret) @VCL_DO_NOT_INSTANTIATE@
-#define VCL_DO_NOT_INSTANTIATE(text, ret) \
-template <> text { return ret; }
-
 //----------------------------------------------------------------------
 // signedness of char
 
