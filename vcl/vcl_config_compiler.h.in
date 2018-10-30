@@ -26,18 +26,6 @@
 // Set to 1 if "long long" is accepted by the compiler as a built-in type.
 #define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
 
-//----------------------------------------------------------------------
-// various template issues.
-
-//: VCL_CAN_DO_PARTIAL_SPECIALIZATION
-//
-// True if the compiler supports partial specializations of templates. e.g.
-// \code
-// template <class T>
-// class vector<T*> : public vector<void *> { .. inline methods .. };
-// \endcode
-//
-#define VCL_CAN_DO_PARTIAL_SPECIALIZATION @VCL_CAN_DO_PARTIAL_SPECIALIZATION@
 
 //: VCL_TEMPLATE_MATCHES_TOO_OFTEN
 //

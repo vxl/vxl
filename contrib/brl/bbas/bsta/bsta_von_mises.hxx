@@ -69,7 +69,7 @@ namespace
   }
 }//namespace
 
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
+
 template <class T>
 T bsta_von_mises<T,3>::prob_density( typename bsta_von_mises<T,3>::vector_type const& v) const
 {
@@ -148,7 +148,6 @@ T bsta_von_mises<T,2>::prob_density(typename bsta_von_mises<T,2>::vector_type co
   norm /= vnl_math::twopi;
   return static_cast<T>(norm*ex);
 }
-#endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 
 #define BSTA_VON_MISES_INSTANTIATE(T,n) \
