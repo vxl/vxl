@@ -9,15 +9,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_HAS_EXPLICIT
-
-class X { public: explicit X(int) {} };
-
-int main() { return 0; }
-#endif // VCL_HAS_EXPLICIT
-
-//-------------------------------------
-
 #ifdef VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 template <class T>
