@@ -286,27 +286,6 @@ int main() {
 
 //-------------------------------------
 
-#ifdef VCL_TEMPLATE_MATCHES_TOO_OFTEN
-// VCL_TEMPLATE_MATCHES_TOO_OFTEN is set to 1 if this fails to compile
-
-// Some compilers will incorrectly choose the template over the
-// non-template.  This will not compile if the template is chosen,
-// which will reveal the bug.
-
-class A {};
-template <class T> void f(T t) { t.compiler_selected_wrong_overload(); }
-void f(const A&) {}
-
-int main()
-{
-  f(A());
-  return 0;
-}
-
-#endif // VCL_TEMPLATE_MATCHES_TOO_OFTEN
-
-//-------------------------------------
-
 #ifdef VCL_HAS_SLICED_DESTRUCTOR_BUG
 // VCL_HAS_SLICED_DESTRUCTOR_BUG is set to 1 if this program exist(1)s
 
