@@ -485,6 +485,6 @@ static int ReadKey(GTIF *gt, GTIFReadMethod scan, void *aux)
 static void DefaultRead(char *string, void *aux)
 {
     /* Pretty boring */
-    fscanf((FILE *)aux,"%[^\n]\n",string);
+    (void)fscanf((FILE *)aux,"%[^\n]\n",string);
 }
 
