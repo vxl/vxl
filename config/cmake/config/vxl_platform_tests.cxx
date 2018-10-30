@@ -328,43 +328,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_SUNPRO_CLASS_SCOPE_HACK
-// VCL_SUNPRO_CLASS_SCOPE_HACK(A) is set to ", A" if this fails to compile, to "" otherwise
-
-template < class T >
-struct allocator
-{
-  allocator() {}
-  allocator(const allocator<T>& ) {}
-};
-
-template < class T , class Allocator = allocator < T > >
-struct vector
-{
-  vector() {}
-  ~vector() {}
-};
-
-template < class T >
-struct spoof
-{
-  void set_row( unsigned , vector < T /*, allocator<T>*/ > const & );
-};
-
-template < class T >
-void spoof < T > :: set_row( unsigned , vector < T /*, allocator<T>*/ > const & )
-{
-}
-
-template class spoof < double >;
-
-// If the program compiles, we don't need the hack
-
-int main() { return 0; }
-#endif // VCL_SUNPRO_CLASS_SCOPE_HACK
-
-//-------------------------------------
-
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
 // VXL_UNISTD_USLEEP_IS_VOID is set to 1 if this test fails
 #include <unistd.h>
