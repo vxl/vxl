@@ -113,29 +113,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_HAS_TEMPLATE_SYMBOLS
-// VCL_HAS_TEMPLATE_SYMBOLS is set to 1 if this fails to link
-
-// Declare a function template.
-template <class T> void function(T *ptr, int n);
-
-int caller()
-{
-  double array[3];
-  function(array, 0); // This should call function<double>(double *, int);
-  return 0;
-}
-
-// Define a non-template function with the same name and signature.
-void function(double *, int) {}
-
-// If the program links, the compiler didn't make a distinction.
-
-int main() { return 0; }
-#endif // VCL_HAS_TEMPLATE_SYMBOLS
-
-//-------------------------------------
-
 #ifdef VCL_CAN_DO_IMPLICIT_TEMPLATES
 
 # ifdef _MSC_VER

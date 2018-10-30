@@ -62,14 +62,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_HAS_TEMPLATE_SYMBOLS ";
-#ifdef VCL_HAS_TEMPLATE_SYMBOLS
-  std::cout << "is set to " << quote(VCL_HAS_TEMPLATE_SYMBOLS);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DEFAULT_TMPL_ARG(arg) ";
 #ifdef VCL_DEFAULT_TMPL_ARG
   std::cout << "is set to " << quote(VCL_DEFAULT_TMPL_ARG(arg));
