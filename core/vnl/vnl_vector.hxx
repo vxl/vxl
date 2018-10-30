@@ -53,12 +53,7 @@
 
 //--------------------------------------------------------------------------------
 
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-// vnl_vector owns its data by default.
-# define vnl_vector_construct_hack() vnl_vector_own_data = 1
-#else
 # define vnl_vector_construct_hack()
-#endif
 
 // This macro allocates the dynamic storage used by a vnl_vector.
 
@@ -228,11 +223,7 @@ vnl_vector<T>::vnl_vector (vnl_vector<T> const &v, vnl_matrix<T> const &M, vnl_t
 template<class T>
 vnl_vector<T>::~vnl_vector()
 {
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-  if (data && vnl_vector_own_data) destroy();
-#else
   if (data) destroy();
-#endif
 }
 
 //: Frees up the array inside vector. O(1).

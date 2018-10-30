@@ -679,12 +679,6 @@ class VNL_EXPORT vnl_matrix
   unsigned num_cols;   // Number of columns
   T** data;            // Pointer to the vnl_matrix
 
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-  // Since this bug exists, we need a flag that can be set during
-  // construction to tell our destructor whether we own data.
-  char vnl_matrix_own_data;
-#endif
-
   void assert_size_internal(unsigned r, unsigned c) const;
   void assert_finite_internal() const;
 

@@ -94,13 +94,7 @@
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_numeric_traits.h>
 //--------------------------------------------------------------------------------
-
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-// vnl_matrix owns its data by default.
-# define vnl_matrix_construct_hack() vnl_matrix_own_data = 1
-#else
 # define vnl_matrix_construct_hack()
-#endif
 
 // This macro allocates and initializes the dynamic storage used by a vnl_matrix.
 #define vnl_matrix_alloc_blah() \
@@ -363,11 +357,7 @@ template <class T>
 vnl_matrix<T>::~vnl_matrix()
 {
   // save some fcalls if data is 0 (i.e. in matrix_fixed)
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-  if (data && vnl_matrix_own_data) destroy();
-#else
   if (data) destroy();
-#endif
 }
 
 //: Frees up the dynamic storage used by matrix.

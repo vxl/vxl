@@ -48,9 +48,6 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
       Base::data[i] = datablck + i * n;
     Base::num_rows = m;
     Base::num_cols = n;
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-    this->vnl_matrix_own_data = 0;
-#endif
   }
 
   vnl_matrix_ref(vnl_matrix_ref<T> const & other) : vnl_matrix<T>() {
@@ -59,9 +56,6 @@ class VNL_EXPORT vnl_matrix_ref : public vnl_matrix<T>
       Base::data[i] = const_cast<T*>(other.data_block()) + i * other.cols();
     Base::num_rows = other.rows();
     Base::num_cols = other.cols();
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-    this->vnl_matrix_own_data = 0;
-#endif
   }
 
   ~vnl_matrix_ref() {

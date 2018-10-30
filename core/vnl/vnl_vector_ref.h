@@ -34,9 +34,6 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   vnl_vector_ref(unsigned n, T *space) : vnl_vector<T>() {
     Base::data = space;
     Base::num_elmts = n;
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-    this->vnl_vector_own_data = 0;
-#endif
   }
 
   //: Copy constructor
@@ -45,9 +42,6 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   vnl_vector_ref(vnl_vector_ref<T> const& v) : vnl_vector<T>() {
     Base::data = const_cast<T*>(v.data_block()); // const incorrect!
     Base::num_elmts = v.size();
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-    this->vnl_vector_own_data = 0;
-#endif
   }
 
   //: Destructor
