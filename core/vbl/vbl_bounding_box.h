@@ -130,10 +130,10 @@ class vbl_bounding_box_base
 
   inline T const& xmin() const { return min_[0]; }
   inline T const& xmax() const { return max_[0]; }
-  inline T const& ymin() const { assert(DIM_::value >= 2); return min_[1]; }
-  inline T const& ymax() const { assert(DIM_::value >= 2); return max_[1]; }
-  inline T const& zmin() const { assert(DIM_::value >= 3); return min_[2]; }
-  inline T const& zmax() const { assert(DIM_::value >= 3); return max_[2]; }
+  inline T const& ymin() const { assert(DIM_::value >= 2); return (DIM_::value >= 2) ? min_[1] : min_[0]; }
+  inline T const& ymax() const { assert(DIM_::value >= 2); return (DIM_::value >= 2) ? max_[1] : max_[0]; }
+  inline T const& zmin() const { assert(DIM_::value >= 3); return (DIM_::value >= 3) ? min_[2] : min_[0]; }
+  inline T const& zmax() const { assert(DIM_::value >= 3); return (DIM_::value >= 3) ? max_[2] : max_[0]; }
 
   //#pragma dogma
   // There is no need for the data members to be private to
