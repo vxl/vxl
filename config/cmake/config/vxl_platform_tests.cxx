@@ -365,48 +365,12 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_ALLOWS_NAMESPACE_STD
-
-#include <cmath>
-#include <vector>
-#include <iostream>
-void function() {
-  std::vector<double> flaz;
-  flaz.push_back(std::sqrt(2.0));
-  flaz.push_back(std::fabs(1.0f));
-  std::cerr << "hello, std::world" << std::endl;
-}
-
-int main() { return 0; }
-#endif // VCL_ALLOWS_NAMESPACE_STD
-
-//-------------------------------------
-
-#ifdef VCL_NEEDS_NAMESPACE_STD
-// VCL_NEEDS_NAMESPACE_STD is set to 1 if this fails to compile
-
-#include <cmath>
-#include <vector>
-//#include <iostream>
-void function() {
-  vector<double> flaz; // correct should be:  std::vector<double>
-  flaz.push_back(sqrt(2.0));   // should be:  std::sqrt(2.0)
-  flaz.push_back(fabs(1.0f));  // should be:  std::fabs(1.0)
-  //cerr << "hello, world" << endl;
-}
-
-int main() { return 0; }
-#endif // VCL_NEEDS_NAMESPACE_STD
-
-//-------------------------------------
-
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
 // VXL_UNISTD_USLEEP_IS_VOID is set to 1 if this test fails
 #include <unistd.h>
 
 int main() { int x = usleep(0); return x*0; }
 #endif // VXL_UNISTD_USLEEP_IS_VOID
-
 //-------------------------------------
 #ifdef VCL_NUMERIC_LIMITS_HAS_INFINITY
 // Does vcl_numeric_limits<float>::has_infinity == 1?
