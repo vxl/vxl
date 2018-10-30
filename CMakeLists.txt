@@ -243,13 +243,9 @@ option( BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
 CMAKE_DEPENDENT_OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
                       "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
 
-# Option to specify whether this is a build for the dashboard.  Each
-# dashboard build should set BUILD_FOR_VXL_DASHBOARD to ON in the
-# initial cache (set in the CTest script).
-option( BUILD_FOR_VXL_DASHBOARD "Enable deprecated code and known failing test?)" OFF )
 option( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
 
-CMAKE_DEPENDENT_OPTION(BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "BUILD_CORE_NUMERICS;BUILD_FOR_VXL_DASHBOARD" OFF)
+CMAKE_DEPENDENT_OPTION(BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "BUILD_CORE_NUMERICS" OFF)
 
 # Build the core vxl + support libraries
 add_subdirectory(vcl)

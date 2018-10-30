@@ -78,7 +78,6 @@
 //      with respect to shared mutable object OBJ; OBJ destructors
 //      are called driven by smart_ptr interface...
 //
-#include <vcl_config_manual.h>
 
 #if defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
 

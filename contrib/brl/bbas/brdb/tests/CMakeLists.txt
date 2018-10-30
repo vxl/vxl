@@ -15,10 +15,7 @@ target_link_libraries( brdb_test_all brdb ${VXL_LIB_PREFIX}testlib )
 
 add_test( NAME brdb_test_value COMMAND $<TARGET_FILE:brdb_test_all> test_value )
 add_test( NAME brdb_test_tuple COMMAND $<TARGET_FILE:brdb_test_all> test_tuple )
-if( BUILD_FOR_VXL_DASHBOARD )
-## This test always fails in travis builds
-add_test( NAME brdb_test_relation COMMAND $<TARGET_FILE:brdb_test_all> test_relation )
-endif()
+
 add_test( NAME brdb_test_database COMMAND $<TARGET_FILE:brdb_test_all> test_database )
 #add_test( NAME brdb_test_database_manager COMMAND $<TARGET_FILE:brdb_test_all> test_database_manager )
 add_test( NAME brdb_test_query COMMAND $<TARGET_FILE:brdb_test_all> test_query )
