@@ -90,12 +90,6 @@ template <> text { return ret; }
 // stuff
 
 
-//: VCL_NO_STATIC_DATA_MEMBERS
-//
-// True if compiler does not support static data members in template classes.
-//
-#define VCL_NO_STATIC_DATA_MEMBERS @VCL_NO_STATIC_DATA_MEMBERS@
-
 //----------------------------------------------------------------------
 // default template arguments
 

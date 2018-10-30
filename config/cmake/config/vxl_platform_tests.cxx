@@ -102,17 +102,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_NO_STATIC_DATA_MEMBERS
-// VCL_NO_STATIC_DATA_MEMBERS is set to 1 if this fails to compile
-
-template <class T> class vvv { static T xxx; };
-template class vvv<int>;
-
-int main() { return 0; }
-#endif // VCL_NO_STATIC_DATA_MEMBERS
-
-//-------------------------------------
-
 #ifdef VCL_CAN_DO_IMPLICIT_TEMPLATES
 
 # ifdef _MSC_VER
