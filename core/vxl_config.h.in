@@ -150,9 +150,6 @@
 #define VXL_UNISTD_HAS_GETPID     @VXL_UNISTD_HAS_GETPID@
 #define VXL_UNISTD_HAS_GETHOSTNAME      @VXL_UNISTD_HAS_GETHOSTNAME@
 
-/* true if <cmath> declares lround() */
-#define VXL_C_MATH_HAS_LROUND      @VXL_C_MATH_HAS_LROUND@
-
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@
 

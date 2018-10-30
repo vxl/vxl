@@ -342,14 +342,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VXL_C_MATH_HAS_LROUND ";
-#ifdef VXL_C_MATH_HAS_LROUND
-  std::cout << "is set to " << quote(VXL_C_MATH_HAS_LROUND);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_UNISTD_USLEEP_IS_VOID ";
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
   std::cout << "is set to " << quote(VXL_UNISTD_USLEEP_IS_VOID);
