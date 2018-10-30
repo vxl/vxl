@@ -7,26 +7,6 @@ void function(int i, void *ptr, long long v) {}
 int main() { return 0; }
 #endif // VCL_HAS_LONG_LONG
 
-//-------------------------------------
-
-#ifdef VCL_DEFINE_SPECIALIZATION
-// VCL_DEFINE_SPECIALIZATION is set to "template <>" if this compiles, to "" otherwise
-
-// declaration
-template <class T> class traits {};
-
-// specialization
-template <>
-class traits<double> {
- public:
-  typedef double abs_t;
-  typedef double float_t;
-};
-
-int main() { return 0; }
-#endif // VCL_DEFINE_SPECIALIZATION
-
-//-------------------------------------
 
 #ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 // VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD is set to 1 if this fails to compile
@@ -303,26 +283,6 @@ int main() {
          std::numeric_limits<float>::has_infinity ? 0 : 1;
 }
 #endif // VCL_NUMERIC_LIMITS_HAS_INFINITY
-
-//-------------------------------------
-
-#ifdef VCL_CANNOT_SPECIALIZE_CV
-// VCL_CANNOT_SPECIALIZE_CV is set to 1 if this fails to compile
-
-// Some compilers do not distinguish between A<int> and A<int const>.
-
-template <class T> struct A;
-#if !defined(NOT_CONFORMING_SPECIALIZATION)
-template <> struct A<int> {};
-template <> struct A<int const> {};
-#else
-struct A<int> {};
-struct A<int const> {};
-#endif // VCL_CANNOT_SPECIALIZE_CV
-
-int main() { return 0; }
-
-#endif
 
 //-------------------------------------
 
