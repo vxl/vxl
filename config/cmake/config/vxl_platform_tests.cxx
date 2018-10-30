@@ -7,46 +7,6 @@ void function(int i, void *ptr, long long v) {}
 int main() { return 0; }
 #endif // VCL_HAS_LONG_LONG
 
-
-#ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-// VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD is set to 1 if this fails to compile
-
-template <class T>
-class victor_base {
- public:
-  T &operator[](unsigned i) { return data[i]; }
-
- protected:
-  victor_base(T *p, unsigned n) : data(p), size(n) {}
-
- private:
-  T *data;
-  unsigned size;
-};
-
-template <class T>
-bool operator==(victor_base<T> const&, victor_base<T> const&) { return false; }
-
-template <class T, int n>
-class victor_fixed : public victor_base<T> {
- public:
-  T data_fixed[n];
-
-  victor_fixed() : victor_base<T>(data_fixed, n) {}
-};
-
-int function(victor_fixed<double, 3> const &a,
-             victor_fixed<double, 3> const &b)
-{
-  if (a == b) // 2.7 fails to resolve this.
-    return 3141;
-  else
-    return 2718;
-}
-
-int main() { return 0; }
-#endif // VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
-
 //-------------------------------------
 
 #ifdef VCL_OVERLOAD_CAST
