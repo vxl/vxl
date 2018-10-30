@@ -55,7 +55,6 @@ class bsta_von_mises : public bsta_distribution<T,n>
 };
 
 
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 template <class T>
 class bsta_von_mises<T,3>
 {
@@ -121,7 +120,6 @@ class bsta_von_mises<T,2>
   T kappa_;
 };
 
-#endif //VCL_CAN_DO_PARTIAL_SPECIALIZATION
 
 template <class T , unsigned n>
 inline std::ostream& operator<< (std::ostream& os,

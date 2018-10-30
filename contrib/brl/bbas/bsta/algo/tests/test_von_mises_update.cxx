@@ -93,10 +93,8 @@ void test_von_mises_update_type(T epsilon, const std::string& type_name)
 
 static void test_von_mises_update()
 {
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
   test_von_mises_update_type(1e-5f,"float");
   test_von_mises_update_type(1e-5 ,"double");
-#endif
 }
 
 TESTMAIN(test_von_mises_update);

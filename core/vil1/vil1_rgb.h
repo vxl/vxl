@@ -184,7 +184,6 @@ vil1_rgb<double> operator/(vil1_rgb<T> const& a, double b)
   return vil1_rgb<double>(a.r / b, a.g / b, a.b / b);
 }
 
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
 template <class T>
 inline
 vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& b, double range_min , double range_max)
@@ -193,7 +192,6 @@ vil1_rgb<T> vil1_clamp_pixel(vil1_rgb<T> const& b, double range_min , double ran
                           vil1_clamp_pixel(b.g, range_min , range_max),
                           vil1_clamp_pixel(b.b, range_min , range_max));
 }
-#endif
 
 #if 0 // capes@robots : These vil1_clamp functions are deprecated. See vil1_clamp.h
 inline

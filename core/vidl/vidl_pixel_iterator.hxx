@@ -77,9 +77,6 @@ class vidl_pixel_iterator_arranged
   }
 };
 
-
-#if VCL_CAN_DO_PARTIAL_SPECIALIZATION
-
 template <>
 struct vidl_pixel_iterator_arrange_valid<VIDL_PIXEL_ARRANGE_PLANAR>
 {
@@ -230,9 +227,6 @@ class vidl_pixel_iterator_arranged<VIDL_PIXEL_ARRANGE_PACKED,FMT>
       ptr_[vidl_pixel_pack_of<FMT>::offset[mode_][i]] = data[i];
   }
 };
-
-
-#endif
 
 
 template <vidl_pixel_format FMT>
