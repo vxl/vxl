@@ -26,15 +26,6 @@
 // Set to 1 if "long long" is accepted by the compiler as a built-in type.
 #define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
 
-//: VCL_NULL_TMPL_ARGS
-//
-// Define to <> for compilers that require them in friend template function
-// declarations (i.e., VC C++.NET 2003).
-
-//#define VCL_NULL_TMPL_ARGS /* <> */
-//#define VCL_NULL_TMPL_ARGS <>
-#define VCL_NULL_TMPL_ARGS @VCL_NULL_TMPL_ARGS@
-
 //: VCL_DO_NOT_INSTANTIATE(text, ret)
 //
 // If a method is defined on some template, but makes no sense for some

@@ -306,6 +306,7 @@ vil_image_resource_sptr vil_convolve_1d(
 template <class kernelT, class accumT, class destT>
 class vil_convolve_1d_resource : public vil_image_resource
 {
+ public:
   //: Construct a convolve filter.
   // You can't create one of these directly, use vil_convolve_1d instead
   vil_convolve_1d_resource(const vil_image_resource_sptr& src,
@@ -320,7 +321,7 @@ class vil_convolve_1d_resource : public vil_image_resource
               end_option != vil_convolve_periodic_extend);
     }
 
-  friend vil_image_resource_sptr vil_convolve_1d VCL_NULL_TMPL_ARGS (
+  friend vil_image_resource_sptr vil_convolve_1d <> (
     const vil_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     int k_lo, int k_hi, const accumT ac,
     vil_convolve_boundary_option start_option,

@@ -61,47 +61,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_NULL_TMPL_ARGS
-// VCL_NULL_TMPL_ARGS is set to "<>" if this fails to compile, to "" otherwise
-
-template <class T> class victor;
-template <class T> T dot(victor<T> const &u, victor<T> const &v);
-
-template <class T> class victor {
- public:
-  // Without -fguiding-decls, egcs and 2.95 will rightly think
-  // this declares a non-template and so the program will fail
-  // due to access violation below (and missing symbols at link time).
-  friend T dot(victor<T> const &, victor<T> const &);
-
- private:
-  T data[3];
-};
-
-template <class T> T dot(victor<T> const &u, victor<T> const &v)
-{
-  return  // access violation here:
-    u.data[0] * v.data[0] +
-    u.data[1] * v.data[1] +
-    u.data[2] * v.data[2];
-}
-
-template double dot(victor<double> const &, victor<double> const &);
-
-double function(victor<double> const &u,
-                victor<double> const &v)
-{
-  double uu = dot(u, u);
-  double uv = dot(u, v);
-  double vv = dot(v, v);
-  return (uv*uv)/(uu*vv);
-}
-
-int main() { return 0; }
-#endif // VCL_NULL_TMPL_ARGS
-
-//-------------------------------------
-
 #ifdef VCL_CAN_DO_IMPLICIT_TEMPLATES
 
 # ifdef _MSC_VER

@@ -118,6 +118,7 @@ vil_image_resource_sptr vil_correlate_1d(
 template <class kernelT, class accumT, class destT>
 class vil_correlate_1d_resource : public vil_image_resource
 {
+ public:
   //: Construct a correlate filter.
   // You can't create one of these directly, use vil_correlate_1d instead
   vil_correlate_1d_resource(const vil_image_resource_sptr& src,
@@ -132,7 +133,7 @@ class vil_correlate_1d_resource : public vil_image_resource
               end_option != vil_convolve_periodic_extend);
     }
 
-  friend vil_image_resource_sptr vil_correlate_1d VCL_NULL_TMPL_ARGS (
+  friend vil_image_resource_sptr vil_correlate_1d <> (
     const vil_image_resource_sptr& src_im, const destT dt, const kernelT* kernel,
     std::ptrdiff_t k_lo, std::ptrdiff_t k_hi, const accumT ac,
     vil_convolve_boundary_option start_option,
