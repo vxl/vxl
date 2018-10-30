@@ -221,18 +221,6 @@ template <> text { return ret; }
 #define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
 
 //----------------------------------------------------------------------
-// exception and namespace issues
-
-//: VCL_ALLOWS_NAMESPACE_STD
-// Set to true if the compiler allows namespace std:: for the standard library.
-#define VCL_ALLOWS_NAMESPACE_STD @VCL_ALLOWS_NAMESPACE_STD@
-
-
-//: VCL_NEEDS_NAMESPACE_STD
-// Set to true if the compiler needs namespace std:: for the standard library.
-#define VCL_NEEDS_NAMESPACE_STD @VCL_NEEDS_NAMESPACE_STD@
-
-//----------------------------------------------------------------------
 // signedness of char
 
 //: VCL_CHAR_IS_SIGNED

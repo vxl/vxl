@@ -94,22 +94,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_ALLOWS_NAMESPACE_STD ";
-#ifdef VCL_ALLOWS_NAMESPACE_STD
-  std::cout << "is set to " << quote(VCL_ALLOWS_NAMESPACE_STD);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VCL_NEEDS_NAMESPACE_STD ";
-#ifdef VCL_NEEDS_NAMESPACE_STD
-  std::cout << "is set to " << quote(VCL_NEEDS_NAMESPACE_STD);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_LITTLE_ENDIAN ";
 #ifdef VXL_LITTLE_ENDIAN
   std::cout << "is set to " << quote(VXL_LITTLE_ENDIAN);
