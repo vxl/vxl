@@ -71,43 +71,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_ALLOWS_INLINE_INSTANTIATION
-
-template <class T>
-inline
-T dot(T const *a, T const *b)
-{
-  return a[0]*b[0];
-}
-
-template double dot(double const *, double const *);
-
-int main() { return 0; }
-#endif // VCL_ALLOWS_INLINE_INSTANTIATION
-
-//-------------------------------------
-
-#ifdef VCL_NEEDS_INLINE_INSTANTIATION
-// VCL_NEEDS_INLINE_INSTANTIATION is set to 1 if this fails to compile
-
-template <class T>
-inline T dot(T const *a, T const *b) { return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
-int function();
-int call_this() { function(); return 0; }
-int function()
-{
-  double a[3] = {1.0, 2.0, 3.0};
-  double b[3] = {4.0, 5.0, 6.0};
-  double a_b = dot(a, b);
-  return int(a_b);
-}
-// If the program links, the compiler inlined the function template.
-
-int main() { return 0; }
-#endif // VCL_NEEDS_INLINE_INSTANTIATION
-
-//-------------------------------------
-
 #ifdef VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD
 // VCL_NEED_FRIEND_FOR_TEMPLATE_OVERLOAD is set to 1 if this fails to compile
 

@@ -43,11 +43,11 @@ std::ostream& operator << (std::ostream& s, const vbl_bounding_box_base<T,DIM_>&
 template class vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > >; \
 template class vbl_bounding_box<T , DIM >; \
 template std::ostream& operator << (std::ostream&, vbl_bounding_box_base<T, vbl_bounding_box_DIM< DIM > > const&); \
-VCL_INSTANTIATE_INLINE(bool nested  (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&)); \
-VCL_INSTANTIATE_INLINE(bool disjoint(vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&)); \
-VCL_INSTANTIATE_INLINE(bool meet    (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
-                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&))
+/* template bool nested  (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
+                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */ \
+/* template bool disjoint(vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
+                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&); */ \
+/* template bool meet    (vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&, \
+                                     vbl_bounding_box_base<T , vbl_bounding_box_DIM< DIM > > const&) */
 
 #endif // vbl_bounding_box_hxx_
