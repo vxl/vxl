@@ -85,38 +85,6 @@ template <> text { return ret; }
 //#define VCL_OVERLOAD_CAST(T, x) (x)
 #define VCL_OVERLOAD_CAST(T, x) @VCL_OVERLOAD_CAST@
 
-
-//----------------------------------------------------------------------
-// stuff
-
-
-//----------------------------------------------------------------------
-// default template arguments
-
-//: VCL_DEFAULT_TMPL_ARG(arg)
-//
-// It is wrong to provide a default for a template parameter in two
-// declarations in the same scope (14.1.12), e.g.
-// \code
-//   template <class S, class T = int> class X;
-//   template <class S, class T = int> class X { /* ... */ };
-// \endcode
-// is wrong.
-// However, some older compilers insist on seeing the default argument
-// again when defining a class body or instantiating.
-// To satisfy them, use this macro as follows :
-// \code
-//   template <class S, class T VCL_DEFAULT_TMPL_ARG(= int)> X { /* ... */ };
-//   template X<double VCL_DEFAULT_TMPL_ARG(, int)>;
-// \endcode
-//
-// It's possible we need two macros, one for redeclaration and
-// one for instantiation.
-
-//#define VCL_DEFAULT_TMPL_ARG(arg) /* no need */
-//#define VCL_DEFAULT_TMPL_ARG(arg) arg
-#define VCL_DEFAULT_TMPL_ARG(arg) @VCL_DEFAULT_TMPL_ARG@
-
 //----------------------------------------------------------------------
 // signedness of char
 
