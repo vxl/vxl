@@ -47,7 +47,7 @@ aux_source_directory(Templates osl_sources)
 vxl_add_library(LIBRARY_NAME osl LIBRARY_SOURCES ${osl_sources})
 target_link_libraries(osl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vbl)
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 

@@ -292,9 +292,9 @@ ENDIF( BUILD_TESTING )
 
 # Same goes for examples.
 
-IF( BUILD_EXAMPLES )
+IF( VXL_BUILD_EXAMPLES )
   add_subdirectory(examples)
-ENDIF( BUILD_EXAMPLES )
+ENDIF( VXL_BUILD_EXAMPLES )
 
 @end example
 

@@ -54,7 +54,7 @@ endif()
 vxl_add_library(LIBRARY_NAME vepl LIBRARY_SOURCES ${vepl_sources})
 target_link_libraries(vepl vipl ${VXL_LIB_PREFIX}vil ${CMAKE_THREAD_LIBS})
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 

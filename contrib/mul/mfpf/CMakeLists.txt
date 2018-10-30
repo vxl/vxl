@@ -72,7 +72,7 @@ aux_source_directory(Templates mfpf_sources)
 vxl_add_library(LIBRARY_NAME mfpf LIBRARY_SOURCES ${mfpf_sources} )
 target_link_libraries(mfpf clsfy mipa)
 
-if(BUILD_MUL_TOOLS)
+if(VXL_BUILD_MUL_TOOLS)
   add_subdirectory(tools)
 endif()
 

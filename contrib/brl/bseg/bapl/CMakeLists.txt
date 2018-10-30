@@ -30,7 +30,7 @@ aux_source_directory(Templates bapl_sources)
 vxl_add_library(LIBRARY_NAME bapl LIBRARY_SOURCES  ${bapl_sources})
 target_link_libraries(bapl bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo ipts vimt brip rrel ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil_io ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl)
 
-#if( BUILD_EXAMPLES )
+#if( VXL_BUILD_EXAMPLES )
   add_subdirectory(examples)
 #endif()
 

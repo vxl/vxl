@@ -48,19 +48,19 @@ set(vipl_sources
  vipl_with_section/vipl_filterable_section_container_generator_section.hxx
  vipl_with_section/accessors/vipl_accessors_section.hxx  vipl_with_section/accessors/vipl_accessors_section.h
 )
-if(BUILD_CORE_IMAGING)
+if(VXL_BUILD_CORE_IMAGING)
   set(vipl_sources ${vipl_sources}
       section/vipl_filterable_section_container_generator_vil_image_view.hxx
       accessors/vipl_accessors_vil_image_view.hxx accessors/vipl_accessors_vil_image_view.h
      )
 endif()
-if(BUILD_CORE_UTILITIES)
+if(VXL_BUILD_CORE_UTILITIES)
   set(vipl_sources ${vipl_sources}
       vipl_with_vbl_array_2d/vipl_filterable_section_container_generator_vbl_array_2d.hxx
       vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.hxx vipl_with_vbl_array_2d/accessors/vipl_accessors_vbl_array_2d.h
      )
 endif()
-if(BUILD_CORE_NUMERICS)
+if(VXL_BUILD_CORE_NUMERICS)
   set(vipl_sources ${vipl_sources}
       vipl_with_vnl_matrix/vipl_filterable_section_container_generator_vnl_matrix.hxx
       vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.hxx     vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_matrix.h
@@ -74,17 +74,17 @@ add_definitions(-DINSTANTIATE_TEMPLATES)
 vxl_add_library(LIBRARY_NAME vipl LIBRARY_SOURCES ${vipl_sources})
 
 # No unconditional library dependencies:
-if(BUILD_CORE_IMAGING)
+if(VXL_BUILD_CORE_IMAGING)
   target_link_libraries(vipl ${VXL_LIB_PREFIX}vil)
 endif()
-if(BUILD_CORE_UTILITIES)
+if(VXL_BUILD_CORE_UTILITIES)
   target_link_libraries(vipl ${VXL_LIB_PREFIX}vbl)
 endif()
-if(BUILD_CORE_NUMERICS)
+if(VXL_BUILD_CORE_NUMERICS)
   target_link_libraries(vipl ${VXL_LIB_PREFIX}vnl)
 endif()
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 

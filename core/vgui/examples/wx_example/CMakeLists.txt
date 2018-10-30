@@ -43,7 +43,7 @@ if(wxWidgets_FOUND)
 
 
   # Examples using vgui_wx
-  if(BUILD_VGUI_WX AND wxWidgets_wxrc_EXECUTABLE)
+  if(VXL_BUILD_VGUI_WX AND wxWidgets_wxrc_EXECUTABLE)
 
     # Example uses the wxWidgets XML resource fi
     set(wx_xrc_example_sources

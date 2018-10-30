@@ -28,7 +28,7 @@ if( PYTHON_FOUND )
          reg_bstm.h   reg_bstm.cxx
         )
 
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       vxl_add_library(LIBRARY_NAME bstm_batch LIBRARY_SOURCES SHARED ${bstm_batch_sources})
 
       #library has to have different name depending on debug or release version.

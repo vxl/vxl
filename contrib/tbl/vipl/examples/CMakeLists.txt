@@ -18,7 +18,7 @@
 add_definitions(-DINSTANTIATE_TEMPLATES)
 
 # A. using vil_image_view<T> as 2D storage class:
-if(BUILD_CORE_IMAGING)
+if(VXL_BUILD_CORE_IMAGING)
   add_executable(vipl_example_convert example_convert.cxx)
   target_link_libraries( vipl_example_convert vipl ${VXL_LIB_PREFIX}vil )
 
@@ -33,7 +33,7 @@ if(BUILD_CORE_IMAGING)
 endif()
 
 # C. using vnl_matrix<T> as 2D storage class:
-if(BUILD_CORE_NUMERICS)
+if(VXL_BUILD_CORE_NUMERICS)
   add_executable(vipl_example3_threshold example3_threshold.cxx)
   target_link_libraries( vipl_example3_threshold vipl ${VXL_LIB_PREFIX}vnl )
 
@@ -45,7 +45,7 @@ if(BUILD_CORE_NUMERICS)
 endif()
 
 # D. using vbl_array_2d<T> as 2D storage class:
-if(BUILD_CORE_UTILITIES)
+if(VXL_BUILD_CORE_UTILITIES)
   add_executable(vipl_example_gradient_mag example_gradient_mag.cxx)
   target_link_libraries( vipl_example_gradient_mag vipl ${VXL_LIB_PREFIX}vbl )
 

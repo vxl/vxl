@@ -35,6 +35,6 @@ add_subdirectory(mfpf)
 add_subdirectory(fhs)
 
 
-if( BUILD_MUL_TOOLS )
+if( VXL_BUILD_MUL_TOOLS )
   add_subdirectory(tools)
 endif()

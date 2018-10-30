@@ -51,6 +51,7 @@ project(VXL #Project name must be all caps to have properly generated VXL_VERSIO
     LANGUAGES CXX C)
 
 include(CMakeDependentOption)
+include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
 
 #Disable overzealous compiler warning.  If the definition is truely missing a link error will be created.
 include(CheckCXXCompilerFlag)
@@ -139,6 +140,7 @@ if(VXL_LEGACY_ERROR_REPORTING)
   add_definitions( -DVXL_LEGACY_ERROR_REPORTING )
 endif()
 option(VXL_RUN_FAILING_TESTS "Enable long-time failing tests. If tests are failing for a long time, turn them off by default." OFF)
+mark_as_advanced(VXL_RUN_FAILING_TESTS)
 
 # Option to build Windows Unicode support, the string
 # type of which is wchar_t, each character is a 16-bit unsigned integer.
@@ -162,10 +164,10 @@ endif()
 # compiler flag must be added.  Only do this if we are on a x86_64 *nix platform, we're building
 # static libraries, and the user has not explicitly requested position dependent code.
 if(UNIX)
-  if(NOT VXL_BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
-    option(BUILD_POSITION_DEPENDENT_CODE "Generate position dependent code (i.e. code cannot be used in shared library)" OFF)
-    mark_as_advanced(BUILD_POSITION_DEPENDENT_CODE)
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+  if(NOT BUILD_SHARED_LIBS AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64")
+    option(VXL_BUILD_POSITION_DEPENDENT_CODE "Generate position dependent code (i.e. code cannot be used in shared library)" OFF)
+    mark_as_advanced(VXL_BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       message(STATUS "Adding -fPIC compiler flag to generate position independent code.")
       set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
       set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
@@ -233,19 +235,21 @@ endif()
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
 # Options for selecting the core core libraries
-option( BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
-option( BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
-option( BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
-option( BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
-option( BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
+option( VXL_BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
+option( VXL_BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
+option( VXL_BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
+option( VXL_BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
+option( VXL_BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
 
 # By default, build examples when building tests. Examples require most of the core libraries
-CMAKE_DEPENDENT_OPTION( BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
-                      "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
+CMAKE_DEPENDENT_OPTION( VXL_BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
+                      "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING" OFF)
+mark_as_advanced(VXL_BUILD_EXAMPLES)
 
-option( BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
+option( VXL_BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
+mark_as_advanced(VXL_BUILD_NONDEPRECATED_ONLY)
 
-CMAKE_DEPENDENT_OPTION(BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "BUILD_CORE_NUMERICS" OFF)
+CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "VXL_BUILD_CORE_NUMERICS" OFF)
 
 # Build the core vxl + support libraries
 add_subdirectory(vcl)
@@ -254,7 +258,8 @@ add_subdirectory(core)
 
 # Optionally build the contributed libraries
 if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
-  CMAKE_DEPENDENT_OPTION(BUILD_CONTRIB "Build the contributed libraries?" OFF "BUILD_CORE_GEOMETRY;BUILD_CORE_NUMERICS;BUILD_CORE_UTILITIES;BUILD_CORE_SERIALISATION;BUILD_CORE_IMAGING" OFF)
+  CMAKE_DEPENDENT_OPTION(VXL_BUILD_CONTRIB "Build the contributed libraries?" OFF "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING" OFF)
+  mark_as_advanced(VXL_BUILD_CONTRIB)
   add_subdirectory(contrib)
 endif()
 
@@ -279,3 +284,4 @@ if(NOT VXL_NO_EXPORT)
 endif()
 
 option(VXL_BUILD_OBJECT_LIBRARIES "Build object libraries (to enable all in a single library)?" OFF)
+mark_as_advanced(VXL_BUILD_OBJECT_LIBRARIES)

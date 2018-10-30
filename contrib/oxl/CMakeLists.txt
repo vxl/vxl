@@ -18,6 +18,6 @@ add_subdirectory(vrml)
 add_subdirectory(osl)
 
 # using vgui:
-if( BUILD_VGUI )
+if( VXL_BUILD_VGUI )
   add_subdirectory(xcv)
 endif()

@@ -21,7 +21,7 @@ if( DIRECTSHOW_FOUND )
 # An example use of vidl_dshow_file_istream
 add_executable(vidl_dshow_file_example vidl_dshow_file_example.cxx)
 target_link_libraries(vidl_dshow_file_example ${VXL_LIB_PREFIX}vidl)
-if(BUILD_MUL)
+if(VXL_BUILD_MUL)
 # An example use of vidl_dshow_live_istream
 include_directories( ${VXL_MUL_INCLUDE_DIR} )
 add_executable(vidl_dshow_live_example vidl_dshow_live_example.cxx)

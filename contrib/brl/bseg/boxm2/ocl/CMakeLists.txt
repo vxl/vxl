@@ -1,5 +1,5 @@
 #boxm2/ocl source dir
-if(BUILD_BRL)
+if(VXL_BUILD_BRL)
   set(BOXM2_OPENCL_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/cl CACHE STRING "Location of OpenCL source files for brl/bseg/boxm2/ (defaults to source tree)")
 endif()
 

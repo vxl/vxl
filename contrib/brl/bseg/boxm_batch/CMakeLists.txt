@@ -22,7 +22,7 @@ if( PYTHON_FOUND )
      set(boxm_batch_sources
          reg_boxm.h   reg_boxm.cxx
         )
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       vxl_add_library(LIBRARY_NAME boxm_batch LIBRARY_SOURCES SHARED ${boxm_batch_sources})
 
       #library has to have different name depending on debug or release version.

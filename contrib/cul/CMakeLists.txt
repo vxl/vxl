@@ -15,6 +15,6 @@ include_directories( ${VXL_CORE_INCLUDE_DIR} )
 include_directories( ${VXL_CUL_INCLUDE_DIR} )
 
 # The bundler library requires BRL, RPL, and GEL
-if(BUILD_BRL AND BUILD_GEL AND BUILD_RPL)
+if(VXL_BUILD_BRL AND VXL_BUILD_GEL AND VXL_BUILD_RPL)
   add_subdirectory(bundler)
 endif()

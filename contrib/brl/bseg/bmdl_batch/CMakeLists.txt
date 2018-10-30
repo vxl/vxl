@@ -28,7 +28,7 @@ if( PYTHON_FOUND )
         set(bmdl_batch_sources
             reg_bmdl.cxx          reg_bmdl.h
            )
-        if(NOT BUILD_POSITION_DEPENDENT_CODE)
+        if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
           vxl_add_library(LIBRARY_NAME bmdl_batch LIBRARY_SOURCES SHARED ${bmdl_batch_sources})
 
           if(WIN32)

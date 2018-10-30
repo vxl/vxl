@@ -25,7 +25,7 @@ set(vpyr_sources
 vxl_add_library(LIBRARY_NAME vpyr LIBRARY_SOURCES ${vpyr_sources})
 target_link_libraries(vpyr vmap)
 
-#if(BUILD_EXAMPLES)
+#if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples/simple_segmentation)
 #endif()
 

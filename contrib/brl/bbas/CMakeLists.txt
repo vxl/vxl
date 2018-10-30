@@ -50,7 +50,7 @@ add_subdirectory(brad)
 # camera library
   add_subdirectory (bpgl)
 
-if( BUILD_GEL )
+if( VXL_BUILD_GEL )
   # spatial object algorithms
   add_subdirectory(bsol)
 

@@ -29,7 +29,7 @@ if( PYTHON_FOUND )
             reg_bbgm.cxx          reg_bbgm.h
            )
 
-        if(NOT BUILD_POSITION_DEPENDENT_CODE)
+        if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
           vxl_add_library(LIBRARY_NAME bbgm_batch LIBRARY_SOURCES SHARED ${bbgm_batch_sources})
 
           if(WIN32)

@@ -79,7 +79,7 @@ bool bocl_mem::create_image_buffer(const cl_mem_flags& flags, const cl_image_for
   // Even better would be for FindOpenCL.cmake to automatically figure this out.
   // - D. Crispell 4/2013
   //
-#if OPENCL_IS_PRE_V12 // use this call for versions prior to v1.2
+#if VXL_OPENCL_IS_PRE_V12 // use this call for versions prior to v1.2
   buffer_ = clCreateImage2D(this->context_, flags, format, width, height,
                             this->num_bytes_, this->cpu_buf_, &status);
 #else // use this call for version v1.2 and later

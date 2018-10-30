@@ -92,7 +92,7 @@ if(NOT VXL_USING_NATIVE_PNG)
     if(CYGWIN)
       # in Cygwin a define is needed by any file including
       # vxl/v3p/png/png.h (which in turn includes pngconf.h)
-      if(VXL_BUILD_SHARED_LIBS)
+      if(BUILD_SHARED_LIBS)
         add_definitions(-DPNG_BUILD_DLL)
       else()
         add_definitions(-DPNG_STATIC)

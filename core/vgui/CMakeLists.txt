@@ -13,7 +13,7 @@ doxygen_add_library(core/vgui
 # Initialize to NO. Change below if yes.
 set( VGUI_FOUND "NO" CACHE INTERNAL "Was vgui successfully built?" )
 
-if( BUILD_VGUI )
+if( VXL_BUILD_VGUI )
 
 find_package(OpenGL)
 
@@ -22,7 +22,7 @@ if(OPENGL_FOUND)
  if(OPENGL_GLU_FOUND)
 
   # For (not) reporting an error below
-  set( CAN_BUILD_VGUI "YES" )
+  set( CAN_VXL_BUILD_VGUI "YES" )
 
   # Apple can use OpenGL either with or without X11
   # Finding X11 can cause problems when the native
@@ -499,8 +499,8 @@ if(wxWidgets_FOUND)
 
     set( vgui_sources ${vgui_sources} ${vgui_wx_sources} )
 
-    option(BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
-    if(BUILD_VGUI_WX)
+    option(VXL_BUILD_VGUI_WX "Build extras for VGUI use in wxWidgets apps" NO)
+    if(VXL_BUILD_VGUI_WX)
       add_subdirectory(wx)
     endif()
 
@@ -574,7 +574,7 @@ if(X11_FOUND)
   target_link_libraries(${VXL_LIB_PREFIX}vgui ${X11_LIBRARIES})
 endif()
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
@@ -585,13 +585,13 @@ endif()
 endif()
 endif()
 
-if( NOT CAN_BUILD_VGUI )
+if( NOT CAN_VXL_BUILD_VGUI )
   # Dashboard builds will try to build vgui if possible,
   # so don't warn if we can't.
   message(SEND_ERROR "vgui could not be built.\n"
                      "Make sure the OpenGL libraries "
                      "(GL and GLU) are specified correctly,\n"
-                     "or set BUILD_VGUI to OFF." )
+                     "or set VXL_BUILD_VGUI to OFF." )
 endif()
 
 endif()

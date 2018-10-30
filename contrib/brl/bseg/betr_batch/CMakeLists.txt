@@ -21,7 +21,7 @@ if( PYTHON_FOUND )
          reg_betr.h   reg_betr.cxx
         )
 
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       vxl_add_library(LIBRARY_NAME betr_batch LIBRARY_SOURCES SHARED ${betr_batch_sources})
 
       #library has to have different name depending on debug or release version.

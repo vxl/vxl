@@ -39,7 +39,7 @@ target_link_libraries(vtol vdgl vsol ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl $
 
 add_subdirectory(algo)
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 
