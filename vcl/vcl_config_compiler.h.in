@@ -58,25 +58,6 @@
 template <> text { return ret; }
 
 //----------------------------------------------------------------------
-// overload resolution problems.
-
-//: VCL_OVERLOAD_CAST
-//
-// Some compilers (gcc 2.7.2.3) often won't perform
-// certain implicit casts. E.g. casting a templated derived class to a
-// templated base class (see above), or even realizing that
-// "template void foo(float const * const *, float * const *, int, int)"
-// can be called with parameters of type "(float **, float **, int, int)".
-//
-//   To fix the code, it is tempting to add an explicit cast and get on
-// with things, but that would throw away the checking performed by more
-// helpful compilers. Use VCL_OVERLOAD_CAST instead.
-
-//#define VCL_OVERLOAD_CAST(T, x) ((T)(x))
-//#define VCL_OVERLOAD_CAST(T, x) (x)
-#define VCL_OVERLOAD_CAST(T, x) @VCL_OVERLOAD_CAST@
-
-//----------------------------------------------------------------------
 // signedness of char
 
 //: VCL_CHAR_IS_SIGNED

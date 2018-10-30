@@ -9,58 +9,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_OVERLOAD_CAST
-// VCL_OVERLOAD_CAST(x) is set to "(x)" if this compiles, to "((T)(x))" otherwise
-
-template <class T>
-class vnl_vector {
- public:
-  unsigned size;
-  T *data;
-  vnl_vector(unsigned n, T *ptr) : size(n), data(ptr) {}
-};
-
-template <class T>
-bool operator==(vnl_vector<T> const&, vnl_vector<T> const&) { return false; }
-
-//
-template <unsigned n, class T>
-class vnl_vector_fixed : public vnl_vector<T> {
- public:
-  T data_fixedn;
-  vnl_vector_fixed() : vnl_vector<T>(n, data_fixed) {}
-};
-
-//
-void print_it(vnl_vector<double> const &){}
-
-void try_it(vnl_vector_fixed<3, double> const &u,
-            vnl_vector_fixed<3, double> const &v)
-{
-  // gcc 2.7 fails in this function.
-  if (u == v)
-    print_it(u);
-  else {
-    print_it(u);
-    print_it(v);
-  }
-}
-
-//
-template <class S, class T>
-void copy_image(S const * const *src, T * const *dst, int, int) {}
-
-typedef unsigned char byte;
-
-void do_vision(int w, int h, byte **image_i, float **image_f) {
-  copy_image(image_i, image_f, w, h);
-}
-
-int main() { return 0; }
-#endif // VCL_OVERLOAD_CAST
-
-//-------------------------------------
-
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
 // VXL_UNISTD_USLEEP_IS_VOID is set to 1 if this test fails
 #include <unistd.h>
