@@ -33,7 +33,7 @@ class vcl_multimap_uint_uint : public std::multimap<unsigned,unsigned, std::less
 
 class PairMatchMultiIterator
 {
-  VCL_SAFE_BOOL_DEFINE;
+
   vcl_multimap_uint_uint::const_iterator first_;
   vcl_multimap_uint_uint::const_iterator last_;
  public:
@@ -49,8 +49,8 @@ class PairMatchMultiIterator
   PairMatchMultiIterator(PairMatchMulti const& pmm);
 
   //: Return true if the iterator is still valid.
-  operator safe_bool () const
-    { return (first_ != last_)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (first_ != last_)? true : false; }
 
   //: Return false if the iterator is still valid.
   bool operator!() const

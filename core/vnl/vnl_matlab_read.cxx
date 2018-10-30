@@ -69,9 +69,9 @@ vnl_matlab_readhdr::~vnl_matlab_readhdr()
   varname = nullptr;
 }
 
-vnl_matlab_readhdr::operator vnl_matlab_readhdr::safe_bool () const
+vnl_matlab_readhdr::operator bool () const
 {
-  return (s.good() && !s.eof())? VCL_SAFE_BOOL_TRUE : nullptr; // FIXME
+  return (s.good() && !s.eof())? true : false; // FIXME
 }
 
 bool vnl_matlab_readhdr::operator!() const
@@ -187,7 +187,7 @@ bool vnl_matlab_readhdr::read_data(T &v) { \
   if (need_swap) { \
     if (sizeof(v) == 4U) byteswap::swap32(&v); else byteswap::swap64(&v); \
   } \
-  data_read = true; return *this; \
+  data_read = true; return !!*this; \
 } \
 bool vnl_matlab_readhdr::read_data(T *p) { \
   if (!type_chck(p[0])) { std::cerr << "type_check\n"; return false; } \
@@ -198,7 +198,7 @@ bool vnl_matlab_readhdr::read_data(T *p) { \
       if (sizeof(*p) == 4U) byteswap::swap32(&(p[i])); else byteswap::swap64(&(p[i])); \
     } \
   } \
-  data_read = true; return *this; \
+  data_read = true; return !!*this; \
 } \
 bool vnl_matlab_readhdr::read_data(T * const *m) { \
   if (!type_chck(m[0][0])) { std::cerr << "type_check\n"; return false; } \
@@ -216,7 +216,7 @@ bool vnl_matlab_readhdr::read_data(T * const *m) { \
     for (long j=0; j<cols(); ++j) \
       m[i][j] = tmp[a*i + b*j]; \
   vnl_c_vector<T >::deallocate(tmp, rows()*cols()); \
-  data_read = true; return *this; \
+  data_read = true; return !!*this; \
 }
 
 fsm_define_methods(float);

@@ -41,7 +41,7 @@ template <class T>
 class vil_image_view : public vil_image_view_base
 {
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  protected:
   //: Pointer to pixel at origin.
   T * top_left_;
@@ -153,8 +153,8 @@ class vil_image_view : public vil_image_view_base
   inline std::ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
-  operator safe_bool() const
-  { return (top_left_ != nullptr)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool() const
+  { return (top_left_ != nullptr)? true : false; }
 
   //: Return false if pointing at some data.
   bool operator!() const

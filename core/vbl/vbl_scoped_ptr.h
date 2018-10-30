@@ -59,7 +59,7 @@ class vbl_scoped_ptr
 
   typedef vbl_scoped_ptr<T> this_type;
 
-  VCL_SAFE_BOOL_DEFINE;
+
 
  public:
   typedef T element_type;
@@ -106,9 +106,9 @@ class vbl_scoped_ptr
   //: Safe implicit conversion to bool.
   //
   // This allows for if (sp) type of usage.
-  operator safe_bool () const
+  explicit operator bool () const
   {
-    return ptr_ ? VCL_SAFE_BOOL_TRUE : 0;
+    return ptr_ ? true : false;
   }
 
   //:

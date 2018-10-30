@@ -296,7 +296,7 @@ bool vgui_parent_child_link::handle(vgui_event const &e)
 
 vgui_parent_child_link::operator vgui_parent_child_link::safe_bool() const
 {
-  return (pimpl && (pimpl->child() != nullptr))? VCL_SAFE_BOOL_TRUE : nullptr;
+  return (pimpl && (pimpl->child() != nullptr))? true : false;
 }
 
 bool vgui_parent_child_link::operator!() const

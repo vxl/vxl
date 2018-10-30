@@ -47,7 +47,7 @@ typedef rgtl_tagged_index<rgtl_node_index_tag> rgtl_node_index_type;
 template <unsigned int D>
 class rgtl_compact_tree_index
 {
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   //: Type-safe index type for nodes.
   typedef rgtl_node_index_type node_index_type;
@@ -70,8 +70,8 @@ class rgtl_compact_tree_index
   child_index_type child() const { return child_index_type(c_); }
 
   //: Return true if the index is valid.
-  operator safe_bool () const
-  { return p_ != invalid_parent_value()? VCL_SAFE_BOOL_TRUE : 0; }
+  explicit operator bool () const
+  { return p_ != invalid_parent_value()? true : false; }
 
   //: Return true if the index is invalid.
   bool operator!() const

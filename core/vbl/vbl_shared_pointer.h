@@ -121,11 +121,11 @@ class vbl_shared_pointer
   }
 
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   // conversion to bool
-  operator safe_bool () const
-    { return (pointer != 0)? VCL_SAFE_BOOL_TRUE : 0; }
+  explicit operator bool () const
+    { return (pointer != 0)? true : false; }
 
   // inverse conversion to bool
   bool operator!() const

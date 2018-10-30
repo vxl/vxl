@@ -28,7 +28,7 @@
 
 class vil1_image
 {
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
 // use this delegation macro for consistency, not convenience.
 #define vil1_image_delegate(m, args, default) { return ptr ? ptr->m args : default; }
@@ -140,8 +140,8 @@ class vil1_image
   }
 
   //: conversion to bool
-  operator safe_bool () const
-    { return (ptr != nullptr)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (ptr != nullptr)? true : false; }
 
   //: inverse conversion to bool
   bool operator!() const
