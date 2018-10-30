@@ -298,17 +298,6 @@ int main()
 
 //-------------------------------------
 
-#ifdef VXL_C_MATH_HAS_LROUND
-
-// This C99 func is a much faster version of standard vnl_math_round
-#include <cmath>
-
-int main() { long c = lround(100.0); }
-
-#endif // VXL_C_MATH_HAS_LROUND
-
-//-------------------------------------
-
 #ifdef VCL_HAS_LFS
 
 // Return 1 if compiler has #define-switchable Large File Support
