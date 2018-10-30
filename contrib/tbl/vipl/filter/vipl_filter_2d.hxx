@@ -23,7 +23,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
                    int ninputs,
                    int img_border ,
                    DataOut fill_val)
-    : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)>
+    : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, vipl_trivial_pixeliter>
       (src_img, dst_img, ninputs, img_border, fill_val)
 {}
 
@@ -42,7 +42,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
                 int ninputs,
                 int img_border ,
                 DataOut fill_val)
-     : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)>
+     : vipl_filter<ImgIn, ImgOut, DataIn, DataOut, 2, vipl_trivial_pixeliter>
        (src_img, dst_img, ninputs, img_border, fill_val)
 {}
 
@@ -50,7 +50,7 @@ template < class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr >
   vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr >
   ::vipl_filter_2d(const vipl_filter_2d< ImgIn,ImgOut,DataIn,DataOut,PixelItr > &t)
   :
-  vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2 VCL_DFL_TMPL_ARG(vipl_trivial_pixeliter)> (t)
+  vipl_filter< ImgIn, ImgOut, DataIn, DataOut, 2, vipl_trivial_pixeliter> (t)
 // C++ special low-level copy constructor
 {}
 

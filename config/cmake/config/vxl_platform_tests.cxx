@@ -328,44 +328,6 @@ int main() { return 0; }
 
 //-------------------------------------
 
-#ifdef VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
-
-template <class T> struct less {};
-
-template <class T, class C=less<int> >
-struct X
-{
-  typedef X<T,C> self;
-  self foo(self const & t) {
-    if ( t.a == 0 )
-      return *this;
-    else
-      return t;
-  }
- private:
-  int a;
-};
-
-X<int> a;
-X<int, less<short> > b;
-
-int main() { return 0; }
-#endif // VCL_CAN_DO_COMPLETE_DEFAULT_TYPE_PARAMETER
-
-//-------------------------------------
-
-#ifdef VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
-
-template <class T> struct less {};
-template <class T, class C=less<T> > struct X { C t1; };
-X<int> a;
-X<int, less<short> > b;
-
-int main() { return 0; }
-#endif // VCL_CAN_DO_TEMPLATE_DEFAULT_TYPE_PARAMETER
-
-//-------------------------------------
-
 #ifdef VCL_SUNPRO_CLASS_SCOPE_HACK
 // VCL_SUNPRO_CLASS_SCOPE_HACK(A) is set to ", A" if this fails to compile, to "" otherwise
 

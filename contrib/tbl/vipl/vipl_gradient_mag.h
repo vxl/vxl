@@ -24,7 +24,7 @@
 #include <vipl/filter/vipl_filter_2d.h> // parent class
 
 //: sqrt of vipl_x_gradient square plus vipl_y_gradient square
-template <class ImgIn,class ImgOut,class DataIn,class DataOut, VCL_DFL_TYPE_PARAM_STLDECL(PixelItr, vipl_trivial_pixeliter) >
+template <class ImgIn,class ImgOut,class DataIn,class DataOut, class PixelItr = vipl_trivial_pixeliter >
 class vipl_gradient_mag : public vipl_filter_2d<ImgIn,ImgOut,DataIn,DataOut,PixelItr>
 {
   // -+-+- data members: -+-+-
