@@ -246,35 +246,6 @@ int main() {
 
 //-------------------------------------
 
-#ifdef VCL_HAS_WORKING_STRINGSTREAM
-// VCL_HAS_WORKING_STRINGSTREAM is set to 1 if a fully functional std::stringstream is found.
-
-// Some compilers don't provide a fully functional std::stringstream.
-// This program will return 0 whenever sufficient functionality is detected.
-
-#include <sstream>
-
-int main()
-{
-  std::istringstream s1("text"); char c;
-  s1 >> c; if (c != 't') return 1;
-  s1 >> c; if (c != 'e') return 1;
-  s1 >> c; if (c != 'x') return 1;
-  std::ostringstream s2; s2 << "text";
-  if (s2.str() != "text") return 1;
-  std::ostringstream s3;
-  c = 't'; s3 << c;
-  c = 'e'; s3 << c;
-  c = 'x'; s3 << c;
-  c = 't'; s3 << c;
-  if (s3.str() != "text") return 1;
-  return 0; // success
-}
-
-#endif // VCL_HAS_WORKING_STRINGSTREAM
-
-//-------------------------------------
-
 #ifdef VXL_HAS_TYPE_OF_SIZE
 // This is used to check if (1) a type exists, (2) is has the required
 // size in bytes, and (3) it is functional. The last requirement is

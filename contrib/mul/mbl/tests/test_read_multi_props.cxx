@@ -26,8 +26,6 @@ void test_read_multi_props_ws()
   std::cout << "\n*********************************\n"
            <<   " Testing mbl_read_multi_props_ws\n"
            <<   "*********************************\n";
-
-#if VCL_HAS_WORKING_STRINGSTREAM
   {
     std::cout << "\nCase 1\n";
     std::istringstream ss("{}");
@@ -486,9 +484,6 @@ void test_read_multi_props_ws()
   }
 
   std::cout << "\n\n";
-#else // VCL_HAS_WORKING_STRINGSTREAM
-  std::cout << "\nTests not run since this compiler has no fully functional std:stringstream\n\n";
-#endif // VCL_HAS_WORKING_STRINGSTREAM
 }
 
 void test_read_multi_props()
