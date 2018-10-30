@@ -38,14 +38,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_OVERLOAD_CAST(T,x) ";
-#ifdef VCL_OVERLOAD_CAST
-  std::cout << "is set to " << quote(VCL_OVERLOAD_CAST(T,x));
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_LITTLE_ENDIAN ";
 #ifdef VXL_LITTLE_ENDIAN
   std::cout << "is set to " << quote(VXL_LITTLE_ENDIAN);

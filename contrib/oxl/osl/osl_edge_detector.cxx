@@ -387,19 +387,19 @@ void osl_edge_detector::Set_thresholds()
   int** bdist = Make_int_image(xsize_,ysize_);
   int**a1dist = Make_int_image(xsize_,ysize_);
   int**a2dist = Make_int_image(xsize_,ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), fdist, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_), bdist, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_),a1dist, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(int const*const*, dist_),a2dist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( dist_, fdist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( dist_, bdist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( dist_,a1dist, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( dist_,a2dist, xsize_, ysize_);
 
   float** fth = Make_float_image(xsize_,ysize_);
   float** bth = Make_float_image(xsize_,ysize_);
   float**a1th = Make_float_image(xsize_,ysize_);
   float**a2th = Make_float_image(xsize_,ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), fth, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_), bth, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_),a1th, xsize_, ysize_);
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const *const*, thresh_),a2th, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( thresh_, fth, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( thresh_, bth, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( thresh_,a1th, xsize_, ysize_);
+  osl_canny_base_copy_raw_image( thresh_,a2th, xsize_, ysize_);
 
   osl_chamfer_Forward (xsize_, ysize_, fdist, fth);
   osl_chamfer_Backward(xsize_, ysize_, bdist, bth);

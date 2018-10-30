@@ -126,8 +126,7 @@ void osl_canny_rothwell::detect_edges(vil1_image const &image, std::list<osl_edg
 
   // Thin the edge image, though keep the original thick one
   if (verbose) std::cerr << "thinning edges\n";
-  osl_canny_base_copy_raw_image(VCL_OVERLOAD_CAST(float const*const*, thick_),
-                                VCL_OVERLOAD_CAST(float *const*, thin_), xsize_, ysize_);
+  osl_canny_base_copy_raw_image( thick_, thin_, xsize_, ysize_);
   Thin_edges();
 
   if (verbose) std::cerr << "doing hysteresis\n";
