@@ -30,14 +30,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_NULL_TMPL_ARGS ";
-#ifdef VCL_NULL_TMPL_ARGS
-  std::cout << "is set to " << quote(VCL_NULL_TMPL_ARGS);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DO_NOT_INSTANTIATE(text,ret) ";
 #ifdef VCL_DO_NOT_INSTANTIATE
   std::cout << "is set to " << quote(VCL_DO_NOT_INSTANTIATE(text,ret));
