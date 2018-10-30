@@ -397,12 +397,6 @@ class VNL_EXPORT vnl_vector
   size_t num_elmts;           // Number of elements (length)
   T* data;                      // Pointer to the actual data
 
-#if VCL_HAS_SLICED_DESTRUCTOR_BUG
-  // Since this bug exists, we need a flag that can be set during
-  // construction to tell our destructor whether we own data.
-  char vnl_vector_own_data;
-#endif
-
   void assert_size_internal(size_t sz) const;
   void assert_finite_internal() const;
 
