@@ -439,10 +439,10 @@ template VNL_EXPORT std::ostream& print_vector(std::ostream &,T const *,unsigned
 
 #undef VNL_C_VECTOR_INSTANTIATE_unordered
 #define VNL_C_VECTOR_INSTANTIATE_unordered(T) \
-VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::max_value(T const *, unsigned), T(0)); \
-VCL_DO_NOT_INSTANTIATE(T vnl_c_vector<T >::min_value(T const *, unsigned), T(0)); \
-VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_max(T const *, unsigned), 0U); \
-VCL_DO_NOT_INSTANTIATE(unsigned vnl_c_vector<T >::arg_min(T const *, unsigned), 0U); \
+template <> T vnl_c_vector<T >::max_value(T const *, unsigned) { return T(0); } \
+template <> T vnl_c_vector<T >::min_value(T const *, unsigned) { return T(0); } \
+template <> unsigned vnl_c_vector<T >::arg_max(T const *, unsigned) { return  0U; } \
+template <> unsigned vnl_c_vector<T >::arg_min(T const *, unsigned) { return  0U; } \
 template class vnl_c_vector<T >; \
 VNL_C_VECTOR_INSTANTIATE_norm(T, vnl_c_vector<T >::abs_t);
 
