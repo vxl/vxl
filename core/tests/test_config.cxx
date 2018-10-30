@@ -54,14 +54,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_NO_STATIC_DATA_MEMBERS ";
-#ifdef VCL_NO_STATIC_DATA_MEMBERS
-  std::cout << "is set to " << quote(VCL_NO_STATIC_DATA_MEMBERS);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VCL_DEFAULT_TMPL_ARG(arg) ";
 #ifdef VCL_DEFAULT_TMPL_ARG
   std::cout << "is set to " << quote(VCL_DEFAULT_TMPL_ARG(arg));
