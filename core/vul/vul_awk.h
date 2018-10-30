@@ -56,7 +56,7 @@
 
 class vul_awk
 {
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   // Constructors/Destructors--------------------------------------------------
   enum ModeFlags {
@@ -93,8 +93,8 @@ class vul_awk
   char const* line_from(int field_number) const;
 
 //: Return true if this line is not the last.
-  operator safe_bool () const
-    { return (!done_)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (!done_)? true : false; }
 
 //: Return false if this line is not the last.
   bool operator!() const

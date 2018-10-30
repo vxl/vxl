@@ -47,7 +47,7 @@ struct vul_file_iterator_data;
 // if you want to process files in (for example) alphanumeric order.
 class vul_file_iterator
 {
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
 
   vul_file_iterator() : p(nullptr) {}
@@ -62,7 +62,7 @@ class vul_file_iterator
 
   //: Ask if done.
   // Won't spin the disk
-  operator safe_bool() const;
+  explicit operator bool() const;
 
   //: Inverse boolean value
   bool operator!() const;

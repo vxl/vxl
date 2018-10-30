@@ -27,7 +27,7 @@ template <class T>
 struct vnl_fft_prime_factors
 {
 private:
-  VCL_SAFE_BOOL_DEFINE;
+
 public:
   vnl_fft_prime_factors();
 
@@ -45,8 +45,8 @@ public:
   //: exponents P, Q, R.
   long const *pqr () const { return pqr_; }
 
-  operator safe_bool () const
-    { return (trigs_ && info_ >= 0)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (trigs_ && info_ >= 0)? true : false; }
   bool operator!() const
     { return (trigs_ && info_ >= 0)? false : true; }
 

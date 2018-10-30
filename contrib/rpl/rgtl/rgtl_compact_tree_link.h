@@ -23,7 +23,7 @@
 // using bit field storage in a single integer.
 class rgtl_compact_tree_link
 {
-  VCL_SAFE_BOOL_DEFINE;
+
 public:
   typedef std::size_t index_type;
 
@@ -37,7 +37,7 @@ public:
   index_type index() const { return i_; }
 
   //: Returns the boolean flag portion of the link.
-  operator safe_bool () const { return f_? VCL_SAFE_BOOL_TRUE : 0; }
+  explicit operator bool () const { return f_? true : false; }
 
   //: Returns the inverse of the boolean flag portion of the link.
   bool operator!() const { return !f_; }

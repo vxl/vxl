@@ -47,12 +47,12 @@ template <class T> VNL_EXPORT void vnl_matlab_read_data(std::istream &s, T *ptr,
 class VNL_EXPORT vnl_matlab_readhdr
 {
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   vnl_matlab_readhdr(std::istream &);
   ~vnl_matlab_readhdr();
 
-  operator safe_bool () const;
+  explicit operator bool () const;
   bool operator!() const;
   void read_next(); // skip to next header in file
 

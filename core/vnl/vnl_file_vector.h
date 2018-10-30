@@ -26,12 +26,12 @@ template <class T>
 class VNL_EXPORT vnl_file_vector : public vnl_vector<T>
 {
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   vnl_file_vector(char const* filename);
 
-  operator safe_bool () const
-    { return (ok_)? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (ok_)? true : false; }
   bool operator!() const
     { return !ok_; }
 

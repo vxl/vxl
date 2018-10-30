@@ -61,7 +61,7 @@ static void test_convert()
     vil_image_view<vxl_byte> img8(16,16,3);
     img8.fill(100);
     vidl_frame_sptr frame = vidl_convert_to_frame(img8);
-    bool valid = frame;
+    bool valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == img8.ni() && frame->nj() == img8.nj();
@@ -74,7 +74,7 @@ static void test_convert()
 
     vil_image_view<vxl_byte> img8nc = vil_crop(img8,3,2,5,3);
     frame = vidl_convert_to_frame(img8nc);
-    valid = frame;
+    valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == img8nc.ni() && frame->nj() == img8nc.nj();
@@ -89,7 +89,7 @@ static void test_convert()
     vil_image_view<vxl_uint_16> img16(10,20,1);
     img16.fill(150);
     frame = vidl_convert_to_frame(img16);
-    valid = frame;
+    valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == img16.ni() && frame->nj() == img16.nj();
@@ -102,7 +102,7 @@ static void test_convert()
 
     vil_image_view<vxl_uint_16> img16nc = vil_crop(img16,0,5,0,10);
     frame = vidl_convert_to_frame(img16nc);
-    valid = frame;
+    valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == img16nc.ni() && frame->nj() == img16nc.nj();
@@ -117,7 +117,7 @@ static void test_convert()
     vil_image_view<vil_rgb<vxl_ieee_32> > imgf(25,25);
     imgf.fill(3.14159f);
     frame = vidl_convert_to_frame(imgf);
-    valid = frame;
+    valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == imgf.ni() && frame->nj() == imgf.nj();
@@ -130,7 +130,7 @@ static void test_convert()
 
     vil_image_view<vil_rgb<vxl_ieee_32> > imgfnc = vil_crop(imgf,5,5,5,5);
     frame = vidl_convert_to_frame(imgfnc);
-    valid = frame;
+    valid = !!frame;
     if(valid)
     {
       valid = valid && frame->ni() == imgfnc.ni() && frame->nj() == imgfnc.nj();

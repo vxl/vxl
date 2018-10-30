@@ -115,13 +115,6 @@
 # define VXL_USED_IN_DEBUG(x) x
 #endif
 
-//----------------------------------------------------------------------------
-// Macros for safe-bool idiom.
-# define VCL_SAFE_BOOL_TRUE (&safe_bool_dummy::dummy)
-# define VCL_SAFE_BOOL_DEFINE \
-   struct safe_bool_dummy { void dummy() {} }; \
-   typedef void (safe_bool_dummy::* safe_bool)()
-
 //----------------------------------------------------------------------
 // constant initializer issues.
 #ifdef VXL_LEGACY_FUTURE_REMOVE
@@ -132,8 +125,8 @@
 # define VCL_STATIC_CONST_INIT_INT_DEFN(x) "ERROR: VCL_STATIC_CONST_INIT_INT_DEFN is a noop"
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) "ERROR: repace VCL_STATIC_CONST_INIT_FLOAT_DECL with ' = '"
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) "ERROR: VCL_STATIC_CONST_INIT_FLOAT_DEFN is a noop"
-//# define VCL_SAFE_BOOL_TRUE "ERROR: Use true for VCL_SAFE_BOOL_TRUE"
-//# define VCL_SAFE_BOOL_DEFINE "ERROR: VCL_SAFE_BOOL_DEFINE is a noop in C++11"
+# define VCL_SAFE_BOOL_TRUE "ERROR: Use true for VCL_SAFE_BOOL_TRUE"
+# define VCL_SAFE_BOOL_DEFINE "ERROR: VCL_SAFE_BOOL_DEFINE is a noop in C++11"
 
 /* Check for C99 versions of is[finite|inf|nan|normal] in <cmath> */
 #define VXL_HAS_STD_ISFINITE    "ERROR:  Use C++11 cmath"

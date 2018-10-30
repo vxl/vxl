@@ -34,7 +34,7 @@
 template <class T>
 class vil_smart_ptr
 {
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   vil_smart_ptr ()
     :  ptr_(nullptr) { }
@@ -83,8 +83,8 @@ class vil_smart_ptr
   }
 
   //: Cast to bool
-  operator safe_bool () const
-    { return (ptr_ != nullptr) ? VCL_SAFE_BOOL_TRUE : nullptr; }
+  explicit operator bool () const
+    { return (ptr_ != nullptr) ? true : false; }
 
   //: Inverse bool
   bool operator!() const

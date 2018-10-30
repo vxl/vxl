@@ -69,7 +69,7 @@ struct vgui_parent_child_link_impl;   // implementation class.
 struct vgui_parent_child_link
 {
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  public:
   //: Constructor - creates a default vgui_parent_child_link.
   vgui_parent_child_link() : pimpl(nullptr) {}
@@ -112,7 +112,7 @@ struct vgui_parent_child_link
   vgui_tableau_sptr child () const;
 
   //: Return true if both parent and child tableaux exist.
-  operator safe_bool () const;
+  explicit operator bool () const;
 
   //: Return false if both parent and child tableaux exist.
   bool operator!() const;

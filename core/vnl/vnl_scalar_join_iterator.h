@@ -71,7 +71,7 @@ template <class T>
 class VNL_EXPORT vnl_scalar_join_iterator
 {
  private:
-  VCL_SAFE_BOOL_DEFINE;
+
  protected:
   unsigned n1;
   unsigned n2;
@@ -95,8 +95,8 @@ class VNL_EXPORT vnl_scalar_join_iterator
 
 
   //: Return true if all pairs have been seen.
-  operator safe_bool () const
-    { return (!done())? VCL_SAFE_BOOL_TRUE : 0; }
+  explicit operator bool () const
+    { return (!done())? true : false; }
 
   //: Return false if all pairs have been seen.
   bool operator!() const
