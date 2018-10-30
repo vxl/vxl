@@ -51,7 +51,7 @@ aux_source_directory(Templates pdf1d_sources)
 vxl_add_library(LIBRARY_NAME pdf1d LIBRARY_SOURCES ${pdf1d_sources})
 target_link_libraries( pdf1d mbl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vnl_io ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vsl )
 
-if(BUILD_MUL_TOOLS)
+if(VXL_BUILD_MUL_TOOLS)
   add_subdirectory(tools)
 endif()
 

@@ -115,7 +115,7 @@ endif()
 vxl_add_library(LIBRARY_NAME mvl LIBRARY_SOURCES ${mvl_sources})
 target_link_libraries(mvl ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vul)
 
-if(BUILD_EXAMPLES)
+if(VXL_BUILD_EXAMPLES)
   add_subdirectory(examples)
 endif()
 

@@ -13,7 +13,7 @@ doxygen_add_library(core/vil
 # This is useful when building APIs where the caller is responsible
 # for loading/saving images, reducing the number of dependencies of the library.
 option(VXL_VIL_INCLUDE_IMAGE_IO "Include image file format readers?" ON)
-
+mark_as_advanced(VXL_VIL_INCLUDE_IMAGE_IO)
 
 # List of all file_format reader sources.
 # Collected into one list so that we can easily build a version
@@ -152,6 +152,7 @@ if(TIFF_FOUND)
   )
 
   option(VXL_USE_GEOTIFF "Use the GEOTIFF Library if available" True)
+  mark_as_advanced(VXL_USE_GEOTIFF)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
     set(HAS_GEOTIFF 1 )
@@ -164,6 +165,7 @@ endif()
 
 # Let users decide if they should include DCMTK since we don't build against all versions.
 option(VXL_USE_DCMTK "" TRUE)
+mark_as_advanced(VXL_USE_DCMTK)
 set( HAS_DCMTK 0 )
 if (VXL_USE_DCMTK)
   include(${VXL_CMAKE_DIR}/FindDCMTK.cmake)
@@ -181,6 +183,7 @@ endif()
 option(VIL_CONFIG_ENABLE_SSE2_ROUNDING
        "Enable Streaming SIMD Extensions 2 implementation of rounding (hardware dependant)."
        ${VXL_HAS_SSE2_HARDWARE_SUPPORT} )
+mark_as_advanced( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
 if( VIL_CONFIG_ENABLE_SSE2_ROUNDING )
   if( NOT VXL_HAS_SSE2_HARDWARE_SUPPORT )
     if( VXL_SSE2_HARDWARE_SUPPORT_POSSIBLE )
@@ -375,7 +378,7 @@ if(OPENJPEG2_FOUND)
 endif()
 
 # Examples and tests use a lot of image I/O
-if( BUILD_EXAMPLES AND VXL_VIL_INCLUDE_IMAGE_IO)
+if( VXL_BUILD_EXAMPLES AND VXL_VIL_INCLUDE_IMAGE_IO)
   add_subdirectory(examples)
 endif()
 if( BUILD_TESTING AND VXL_VIL_INCLUDE_IMAGE_IO)

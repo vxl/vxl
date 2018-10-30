@@ -5,7 +5,7 @@ include( ${BRL_MODULE_PATH}/FindEXPAT.cmake )
 if(NOT VXL_USING_NATIVE_EXPAT)
 
   if(WIN32)
-    if(NOT VXL_BUILD_SHARED_LIBS)
+    if(NOT BUILD_SHARED_LIBS)
       set(CM_EXPAT_STATIC 1)
     endif()
   endif()

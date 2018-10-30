@@ -17,7 +17,7 @@ target_link_libraries( bpgl_algo_test_all bpgl_algo ${VXL_LIB_PREFIX}vpgl_algo $
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/07JAN27.RPB ${CMAKE_CURRENT_BINARY_DIR}/07JAN27.RPB )
 
 # the ransac implementations use rpl/rrel
-if(BUILD_RPL)
+if(VXL_BUILD_RPL)
 add_test( NAME bpgl_algo_test_fm_compute COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_fm_compute )
 endif()
 

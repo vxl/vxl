@@ -1,9 +1,9 @@
 #ifndef RGRL_EXPORT_H
 #define RGRL_EXPORT_H
 
-#include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
+#include <vxl_config.h> // get BUILD_SHARED_LIBS
 
-#ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
+#ifndef BUILD_SHARED_LIBS  // if not a shared build
 # define RGRL_EXPORT
 #else  // this is a shared build
 # ifdef rgrl_EXPORTS  // if building this library

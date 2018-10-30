@@ -22,7 +22,7 @@ vxl_add_library(LIBRARY_NAME ihog LIBRARY_SOURCES  ${ihog_sources})
 
 target_link_libraries(ihog ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vgl_io ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vbl_io ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vsl ${VXL_LIB_PREFIX}vul)
 
-if( BUILD_EXAMPLES )
+if( VXL_BUILD_EXAMPLES )
 #  add_subdirectory(examples)
 endif()
 

@@ -50,7 +50,6 @@ endif()
 #mark_as_advanced(EXPAT_INCLUDE_DIR EXPAT_LIBRARY)
 
 if(EXPAT_FOUND) # EXPATPP requires EXPAT
-
   find_path(EXPATPP_SYSTEM_INCLUDE_DIR NAMES expatpp.h )
   find_library(EXPATPP_SYSTEM_LIBRARY NAMES expatpp libexpatpp )
 
@@ -68,6 +67,8 @@ if(EXPAT_FOUND) # EXPATPP requires EXPAT
       set( EXPATPP_INCLUDE_DIR ${VXL_ROOT_SOURCE_DIR}/contrib/brl/b3p/expatpp ${BRL_BINARY_DIR}/b3p/expatpp )
       set( EXPATPP_INSTALL_INCLUDE_DIR ${CMAKE_INSTALL_PREFIX}/include/vxl/contrib/brl/b3p/expatpp)
     else()
+      unset(EXPATPP_SYSTEM_INCLUDE_DIR) #If not found, keep out of cmake window
+      unset(EXPATPP_SYSTEM_LIBRARY)  # If not found, keep out of cmake window
       unset(EXPATPP_LIBRARIES)
       unset(EXPATPP_INCLUDE_DIRS)
       unset(EXPAT_FOUND)
@@ -82,4 +83,5 @@ if(EXPAT_FOUND) # EXPATPP requires EXPAT
              FAIL_MESSAGE "MISSING: "
      )
 endif()
+mark_as_advanced(EXPATPP_SYSTEM_INCLUDE_DIR EXPATPP_SYSTEM_LIBRARY)
 mark_as_advanced(EXPATPP_INCLUDE_DIR EXPATPP_LIBRARY)

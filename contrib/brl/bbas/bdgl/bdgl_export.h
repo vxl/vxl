@@ -1,9 +1,9 @@
 #ifndef BDGL_EXPORT_H
 #define BDGL_EXPORT_H
 
-#include <vxl_config.h> // get VXL_BUILD_SHARED_LIBS
+#include <vxl_config.h> // get BUILD_SHARED_LIBS
 
-#ifndef VXL_BUILD_SHARED_LIBS  // if not a shared build
+#ifndef BUILD_SHARED_LIBS  // if not a shared build
 # define bdgl_EXPORT_DATA
 #else  // this is a shared build
 # ifdef bdgl_EXPORTS  // if building this library

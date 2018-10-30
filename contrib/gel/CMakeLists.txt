@@ -38,7 +38,7 @@ add_subdirectory(vmal)
 add_subdirectory(gtrl)
 
 # octree stuff from Geoff's thesis
-if(BUILD_OXL)
+if(VXL_BUILD_OXL)
   add_subdirectory(octree)
 endif()
 

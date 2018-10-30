@@ -18,7 +18,7 @@ set(ipts_sources
 vxl_add_library(LIBRARY_NAME ipts LIBRARY_SOURCES ${ipts_sources})
 target_link_libraries(ipts vimt_algo vimt ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil)
 
-if(BUILD_MUL_TOOLS)
+if(VXL_BUILD_MUL_TOOLS)
   add_subdirectory(tools)
 endif()
 

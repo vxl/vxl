@@ -1,6 +1,6 @@
 # This is bseg/bvxm/breg3d/CMakeLists.txt
 # 3-d video registration using the bvxm library
-if(BUILD_MUL)
+if(VXL_BUILD_MUL)
   include_directories( ${BRL_INCLUDE_DIR}/bseg )
   include_directories( ${BRL_INCLUDE_DIR}/bbas/bpgl )
   include_directories( ${MUL_INCLUDE_DIR})

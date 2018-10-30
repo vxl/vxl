@@ -30,7 +30,7 @@ script:
   - ${TOOLS_DIR}/cmake/bin/cmake
           -DCMAKE_INSTALL_PREFIX:PATH=${HERE}/install
           -DCMAKE_CXX_STANDARD:STRING=11
-          -DBUILD_BRL:BOOL=OFF
+          -DVXL_BUILD_BRL:BOOL=OFF
           -DCMAKE_BUILD_TYPE:STRING=Release
           ../
   - ${TOOLS_DIR}/cmake/bin/ctest -D ExperimentalStart

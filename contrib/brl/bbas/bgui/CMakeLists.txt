@@ -36,7 +36,7 @@ if(HAS_VGUI)
 
  target_link_libraries(bgui bsta vdgl vtol vsol ${VXL_LIB_PREFIX}vgui ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vil_algo ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl ${VXL_LIB_PREFIX}vcl)
 
- if(BUILD_EXAMPLES)
+ if(VXL_BUILD_EXAMPLES)
    add_subdirectory(examples)
  endif()
 

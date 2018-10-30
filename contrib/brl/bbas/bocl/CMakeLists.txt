@@ -7,8 +7,8 @@ if(OPENCL_FOUND)
   include_directories( ${BRL_INCLUDE_DIR}/bbas )
 
   # some calls may be different for versions prior to 1.2 (e.g. clCreateImage2D)
-  CMAKE_DEPENDENT_OPTION(OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON "BUILD_BRL;OPENCL_FOUND" OFF)
-  if(OPENCL_IS_PRE_V1.2)
+  CMAKE_DEPENDENT_OPTION(VXL_OPENCL_IS_PRE_V1.2 "OpenCL library version prior to 1.2" ON "VXL_BUILD_BRL;OPENCL_FOUND" OFF)
+  if(VXL_OPENCL_IS_PRE_V1.2)
     add_definitions(-DOPENCL_IS_PRE_V12)
   endif()
 

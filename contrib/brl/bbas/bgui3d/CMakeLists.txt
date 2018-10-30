@@ -13,7 +13,7 @@ include_directories( ${GEL_INCLUDE_DIR}/mrc )
 include( ${VXL_CMAKE_DIR}/UseVGUI.cmake )
 
 set(HAS_BGUI3D "NO")
-if(BUILD_BGUI3D)
+if(VXL_BUILD_BGUI3D)
 
   # Find the Coin3D library
   find_package(Coin3D)
@@ -66,7 +66,7 @@ if( BUILD_TESTING )
   add_subdirectory(tests)
 endif()
 
-if( BUILD_EXAMPLES )
+if( VXL_BUILD_EXAMPLES )
   add_subdirectory(examples)
 endif()
 

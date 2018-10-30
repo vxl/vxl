@@ -15,7 +15,7 @@ if( PYTHON_FOUND )
     set(brec_batch_sources
         reg_brec.cxx          reg_brec.h
        )
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       vxl_add_library(LIBRARY_NAME brec_batch LIBRARY_SOURCES SHARED ${brec_batch_sources})
 
       if(WIN32)

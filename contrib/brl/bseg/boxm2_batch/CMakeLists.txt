@@ -28,7 +28,7 @@ if( PYTHON_FOUND )
      set(boxm2_batch_sources
          reg_boxm2.h   reg_boxm2.cxx
         )
-    if(NOT BUILD_POSITION_DEPENDENT_CODE)
+    if(NOT VXL_BUILD_POSITION_DEPENDENT_CODE)
       vxl_add_library(LIBRARY_NAME boxm2_batch LIBRARY_SOURCES SHARED ${boxm2_batch_sources})
 
       #library has to have different name depending on debug or release version.
@@ -41,7 +41,7 @@ if( PYTHON_FOUND )
       set_target_properties(boxm2_batch PROPERTIES PREFIX "")
 
       target_link_libraries(boxm2_batch bpro_batch boxm2_pro boxm2_cpp_pro vpgl_pro vil_pro bvgl_pro ihog_pro brip_pro bsvg_pro bvrml_pro bbgm_pro sdet_pro brad_pro brad_io brdb icam_pro bvpl_kernels_pro bsgm_pro)
-      if(BOXM2_USE_VOLM)
+      if(VXL_BOXM2_USE_VOLM)
         add_definitions(-DUSE_VOLM=1)
         target_link_libraries(boxm2_batch volm_pro)
       endif()
@@ -53,7 +53,7 @@ if( PYTHON_FOUND )
       if(OPENCL_FOUND)
         add_definitions(-DHAS_OPENCL=1)
         target_link_libraries(boxm2_batch bocl_pro  boxm2_ocl_pro boxm2_multi_pro boxm2_vecf_ocl_pro)
-        if(BOXM2_USE_VOLM)
+        if(VXL_BOXM2_USE_VOLM)
              target_link_libraries(boxm2_batch boxm2_volm_pro boxm2_volm_io )
         endif()
 

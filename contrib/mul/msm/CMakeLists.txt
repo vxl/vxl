@@ -48,7 +48,7 @@ target_link_libraries(msm mcal vimt)
 
 add_subdirectory(utils)
 
-if(BUILD_MUL_TOOLS)
+if(VXL_BUILD_MUL_TOOLS)
   add_subdirectory(tools)
 endif()
 

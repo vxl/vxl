@@ -5,8 +5,8 @@ project( brl )
 
 doxygen_add_package(contrib/brl "Brown University Libraries")
 
-if (NOT BUILD_CORE_VIDEO)
-  message(FATAL_ERROR "BUILD_CORE_VIDEO:BOOL=ON is required for building BRL")
+if (NOT VXL_BUILD_CORE_VIDEO)
+  message(FATAL_ERROR "VXL_BUILD_CORE_VIDEO:BOOL=ON is required for building BRL")
 endif()
 
 # In contrib/brl there is sometimes an "extra" level in the directory structure
@@ -42,7 +42,7 @@ include_directories( ${BRL_INCLUDE_DIR} )
 # basic services package
 add_subdirectory(bbas)
 
-if( BUILD_GEL )
+if( VXL_BUILD_GEL )
   # segmentation package
   add_subdirectory(bseg)
 endif()

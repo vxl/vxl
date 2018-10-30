@@ -15,6 +15,6 @@ include_directories(${TBL_INCLUDE_DIR})
 add_subdirectory(vipl)
 # Although this is the "image processing" library, it does not (necessary) depend on vil!
 # vil-specific implementations are in the "vepl" specialisation library,
-if(BUILD_CORE_IMAGING)
+if(VXL_BUILD_CORE_IMAGING)
   add_subdirectory(vepl)
 endif()

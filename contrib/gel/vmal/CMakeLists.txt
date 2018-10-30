@@ -5,7 +5,7 @@ doxygen_add_library(contrib/gel/vmal
   PACKAGE contrib/gel
   DESCRIPTION "Multi-View Line matching"
   )
-if(BUILD_OXL)
+if(VXL_BUILD_OXL)
 set(vmal_sources
  vmal_dense_matching.cxx    vmal_dense_matching.h
  vmal_homog2d.cxx           vmal_homog2d.h
@@ -29,7 +29,7 @@ aux_source_directory(Templates vmal_sources)
 
 vxl_add_library(LIBRARY_NAME vmal LIBRARY_SOURCES ${vmal_sources})
 
-if(BUILD_OXL)
+if(VXL_BUILD_OXL)
  target_link_libraries(vmal mvl osl ${VXL_LIB_PREFIX}vil)
 endif()
 

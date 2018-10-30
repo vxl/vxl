@@ -289,7 +289,7 @@ endif()
 
 add_subdirectory(algo)
 
-if( BUILD_EXAMPLES )
+if( VXL_BUILD_EXAMPLES )
   add_subdirectory(examples)
 endif()
 
