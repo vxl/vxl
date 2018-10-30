@@ -21,6 +21,7 @@
 #include <iosfwd>
 #include <vcl_compiler.h>
 #include <cassert>
+#include <type_traits>
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS
 // Helper class for vbl_bounding_box
@@ -80,21 +81,25 @@ class vbl_bounding_box_base
 
   //:  is a 2D point inside the bounding box
   inline bool inside( const T& x, const T& y) const {
-    assert (DIM_::value == 2);
+    assert (DIM_::value == 2); //NOTE: in case of DIM_  != 2 this never occurs.
+    constexpr unsigned int xdim = 0;
+    constexpr unsigned int ydim = (DIM_::value == 2) ? 1 : 0;
     return
       initialized_ &&
-      min_[0] <= x && x <= max_[0] &&
-      min_[1] <= y && y <= max_[1];
+      min_[xdim] <= x && x <= max_[xdim] &&
+      min_[ydim] <= y && y <= max_[ydim];
   }
 
   //:  is a 3D point inside the bounding box
   inline bool inside( const T& x, const T& y, const T& z) const {
-    assert (DIM_::value == 3);
-    return
-      initialized_ &&
-      min_[0] <= x && x <= max_[0] &&
-      min_[1] <= y && y <= max_[1] &&
-      min_[2] <= z && z <= max_[2];
+    assert (DIM_::value == 3); //NOTE: in case of DIM_  != 3 this never occurs.
+    constexpr unsigned int xdim = 0;
+    constexpr unsigned int ydim = (DIM_::value == 3) ? 1 : 0;
+    constexpr unsigned int zdim = (DIM_::value == 3) ? 2 : 0;
+    return initialized_ &&
+      min_[xdim] <= x && x <= max_[xdim] &&
+      min_[ydim] <= y && y <= max_[ydim] &&
+      min_[zdim] <= z && z <= max_[zdim];
   }
 
   //:  inside test for arbitrary dimension
