@@ -21,6 +21,7 @@ class bundler_tracks_detect
   virtual bundler_inters_image_sptr operator() (
       const vil_image_resource_sptr &image,
       const double exif_focal_len) = 0;
+  virtual ~bundler_tracks_detect() = default;
 };
 
 
@@ -34,6 +35,7 @@ class bundler_tracks_propose_matches
   virtual void operator() (
       const std::vector<bundler_inters_image_sptr> &features,
       std::vector<bundler_inters_image_pair> &matches) = 0;
+  virtual ~bundler_tracks_propose_matches() = default;
 };
 
 
@@ -47,6 +49,7 @@ class bundler_tracks_match
   virtual void operator() (
       const bundler_inters_image_pair &to_match,
       bundler_inters_match_set &matches) = 0;
+  virtual ~bundler_tracks_match() = default;
 };
 
 
@@ -58,6 +61,7 @@ class bundler_tracks_refine
  public:
   //: Performs the feature matching
   virtual void operator() (bundler_inters_match_set &matches) = 0;
+  virtual ~bundler_tracks_refine() = default;
 };
 
 
@@ -72,6 +76,7 @@ class bundler_tracks_chain_matches
       std::vector<bundler_inters_match_set> &match_sets,
       std::vector<bundler_inters_image_sptr> &images,
       std::vector<bundler_inters_track_sptr> &tracks) = 0;
+  virtual ~bundler_tracks_chain_matches() = default;
 };
 
 #endif // BUNDLER_TRACKS_H
