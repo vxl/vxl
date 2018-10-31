@@ -1413,7 +1413,6 @@ bool tcd_dc_level_shift_encode (
         opj_tcd_tilecomp_t * l_tile_comp = 00;
         opj_tccp_t * l_tccp = 00;
         opj_image_comp_t * l_img_comp = 00;
-        opj_tcp_t * l_tcp = 00;
         opj_tcd_tile_t * l_tile;
         OPJ_UINT32 l_nb_elem,i;
         OPJ_INT32 * l_current_ptr;
@@ -1870,7 +1869,6 @@ bool tcd_dc_level_shift_decode (
         opj_tccp_t * l_tccp = 00;
         opj_image_comp_t * l_img_comp = 00;
         opj_tcd_resolution_t* l_res = 00;
-        opj_tcp_t * l_tcp = 00;
         opj_tcd_tile_t * l_tile;
         OPJ_UINT32 l_width,l_height,i,j;
         OPJ_INT32 * l_current_ptr;

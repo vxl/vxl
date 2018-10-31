@@ -407,7 +407,7 @@ namespace vnl_math
   //:
   // \relatesalso vnl_finite_int
   template <int N>
-  inline bool isfinite(vnl_finite_int<N> const& x) {return true;}
+  inline bool isfinite(vnl_finite_int<N> const& ) {return true;}
 
  } // end namespace vnl_math
 
