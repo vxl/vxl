@@ -235,11 +235,13 @@ endif()
 #-------------------------------------------------------------------
 #-- BUILD SELECTION OPTIONS
 # Options for selecting the core core libraries
+option( VXL_BUILD_CORE_NUMERICS_ONLY "Turn off everything except the core numerics" OFF)
+mark_as_advanced(VXL_BUILD_CORE_NUMERICS_ONLY)
 option( VXL_BUILD_CORE_NUMERICS "Build VXL's numerics libraries" ON )
-option( VXL_BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON )
-option( VXL_BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON )
-option( VXL_BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON )
-option( VXL_BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON )
+CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_GEOMETRY "Build VXL's geometry libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
+CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_SERIALISATION "Build VXL's serialisation libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
+CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_UTILITIES "Build VXL's utility libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
+CMAKE_DEPENDENT_OPTION( VXL_BUILD_CORE_IMAGING "Build VXL's imaging libraries" ON "NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
 
 # By default, build examples when building tests. Examples require most of the core libraries
 CMAKE_DEPENDENT_OPTION( VXL_BUILD_EXAMPLES "Should the examples be built?" ${BUILD_TESTING}
@@ -249,7 +251,8 @@ mark_as_advanced(VXL_BUILD_EXAMPLES)
 option( VXL_BUILD_NONDEPRECATED_ONLY "Build only nondeprecated libraries (Experimental)" ON )
 mark_as_advanced(VXL_BUILD_NONDEPRECATED_ONLY)
 
-CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON "VXL_BUILD_CORE_NUMERICS" OFF)
+CMAKE_DEPENDENT_OPTION(VXL_BUILD_CORE_PROBABILITY "Build VXL's probability libraries (Experimental)" ON
+                       "VXL_BUILD_CORE_NUMERICS;NOT VXL_BUILD_CORE_NUMERICS_ONLY" OFF)
 
 # Build the core vxl + support libraries
 add_subdirectory(vcl)
@@ -259,7 +262,6 @@ add_subdirectory(core)
 # Optionally build the contributed libraries
 if( EXISTS ${CMAKE_CURRENT_LIST_DIR}/contrib/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(VXL_BUILD_CONTRIB "Build the contributed libraries?" OFF "VXL_BUILD_CORE_GEOMETRY;VXL_BUILD_CORE_NUMERICS;VXL_BUILD_CORE_UTILITIES;VXL_BUILD_CORE_SERIALISATION;VXL_BUILD_CORE_IMAGING" OFF)
-  mark_as_advanced(VXL_BUILD_CONTRIB)
   add_subdirectory(contrib)
 endif()
 
