@@ -351,7 +351,11 @@ class VNL_EXPORT vnl_matrix_fixed_ref_const
 
   //: abort if size is not as expected
   // This function does or tests nothing if NDEBUG is defined
+#ifndef NDEBUG
   void assert_size(unsigned rowz, unsigned colz) const
+#else
+  void assert_size(unsigned , unsigned ) const
+#endif
   {
 #ifndef NDEBUG
     assert_size_internal(rowz, colz);

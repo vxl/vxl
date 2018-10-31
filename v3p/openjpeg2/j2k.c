@@ -726,11 +726,13 @@ static void j2k_copy_tile_quantization_parameters(
  * @param        p_header_size        the size of the data contained in the SOD marker.
  * @param        p_manager                the user event manager.
 */
+#if 0 //UNUSED FUNCTION
 static bool j2k_read_eoc (
                                             opj_j2k_t *p_j2k,
                                                 struct opj_stream_private *p_stream,
                                                 struct opj_event_mgr * p_manager
                                         ) ;
+#endif
 
 /**
  * Inits the Info
@@ -753,11 +755,14 @@ static bool j2k_init_info(
  *
  * @return        true                        if the marker could be deduced.
 */
+#if 0 // UNUSED FUNCTION
 static bool j2k_read_unk (
                                                 opj_j2k_t *p_j2k,
                                                 struct opj_stream_private *p_stream,
                                                 struct opj_event_mgr * p_manager
                                         );
+#endif
+
 /**
  * Ends the encoding, i.e. frees memory.
  *
@@ -2041,7 +2046,7 @@ bool j2k_read_siz (
                                         struct opj_event_mgr * p_manager
                                         )
 {
-        OPJ_UINT32 l_size, i;
+        OPJ_UINT32 i;
         OPJ_UINT32 l_nb_comp;
         OPJ_UINT32 l_nb_comp_remain;
         OPJ_UINT32 l_remaining_size;
@@ -3479,7 +3484,6 @@ bool j2k_write_qcd(
                                                   )
 {
         opj_cp_t *l_cp = 00;
-        opj_tcp_t *l_tcp = 00;
         OPJ_UINT32 l_qcd_size,l_remaining_size;
         OPJ_BYTE * l_current_data = 00;
 
@@ -4648,7 +4652,6 @@ bool j2k_read_mco (
         opj_tcp_t * l_tcp;
         opj_tccp_t * l_tccp;
         opj_image_t * l_image;
-        opj_image_comp_t * l_img_comp;
 
         // preconditions
         assert(p_header_data != 00);
@@ -4873,7 +4876,6 @@ bool j2k_write_poc(
         OPJ_UINT32 l_poc_size;
         OPJ_UINT32 l_written_size = 0;
         opj_tcp_t *l_tcp = 00;
-        opj_tccp_t *l_tccp = 00;
         OPJ_UINT32 l_poc_room;
 
         // preconditions
@@ -5379,7 +5381,7 @@ bool j2k_read_tlm (
                                                 struct opj_event_mgr * p_manager
                                         )
 {
-        OPJ_UINT32 l_Ztlm, l_Stlm, l_ST, l_SP, l_tot_num_tp, l_tot_num_tp_remaining, l_quotient, l_Ptlm_size;
+        OPJ_UINT32 l_Ztlm, l_Stlm, l_ST, l_SP, l_tot_num_tp_remaining, l_quotient, l_Ptlm_size;
         // preconditions
         assert(p_header_data != 00);
         assert(p_j2k != 00);
@@ -6024,11 +6026,9 @@ bool j2k_write_sod(
                                                 struct opj_event_mgr * p_manager
                                   )
 {
-        opj_tcp_t *l_tcp = 00;
         opj_codestream_info_t *l_cstr_info = 00;
         opj_cp_t *l_cp = 00;
 
-        OPJ_UINT32 l_size_tile;
         OPJ_UINT32 l_remaining_data;
 
         // preconditions
@@ -6517,6 +6517,7 @@ bool j2k_update_rates(
  * @param        p_header_size        the size of the data contained in the SOD marker.
  * @param        p_manager                the user event manager.
 */
+#if 0 // UNUSED FUNCTION
 bool j2k_read_eoc (
                                                 opj_j2k_t *p_j2k,
                                                 struct opj_stream_private *p_stream,
@@ -6575,6 +6576,7 @@ bool j2k_read_eoc (
         tcd_destroy(l_tcd);
         return true;
 }
+#endif
 
 /**
  * Writes the image components.
@@ -6765,6 +6767,7 @@ bool j2k_get_end_header(
  *
  * @return        true                        if the marker could be deduced.
 */
+#if 0
 bool j2k_read_unk (
                                                 opj_j2k_t *p_j2k,
                                                 struct opj_stream_private *p_stream,
@@ -6857,6 +6860,7 @@ bool j2k_read_unk (
         }
         return true;
 }
+#endif
 
 /**
  * Reads the lookup table containing all the marker, status and action, and returns the handler associated
@@ -8068,7 +8072,6 @@ bool j2k_write_first_tile_part (
         OPJ_UINT32 l_current_nb_bytes_written;
         OPJ_BYTE * l_begin_data = 00;
 
-        opj_tcp_t *l_tcp = 00;
         opj_tcd_t * l_tcd = 00;
         opj_cp_t * l_cp = 00;
 
@@ -8323,7 +8326,6 @@ bool j2k_post_write_tile (
 {
         opj_tcd_t * l_tcd = 00;
         opj_cp_t * l_cp = 00;
-        opj_tcp_t * l_tcp = 00;
         OPJ_UINT32 l_nb_bytes_written;
         OPJ_BYTE * l_current_data = 00;
         OPJ_UINT32 l_tile_size = 0;

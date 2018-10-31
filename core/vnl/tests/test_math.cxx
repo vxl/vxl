@@ -10,7 +10,7 @@ std::string print_hex(const T p)
   {
   std::stringstream str;
   str << std::hex<<std::setfill('0')<<std::setw(2);
-  for(int i = 0; i < (16-sizeof(p) ); ++i)
+  for(int i = 0; i < static_cast<int>(16-sizeof(p) ); ++i)
     {
     str << ".." ;
     }

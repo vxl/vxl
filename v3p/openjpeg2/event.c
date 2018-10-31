@@ -33,6 +33,7 @@
      Utility functions
    ==========================================================*/
 
+#if 0
 #if !defined(_MSC_VER) && !defined(__MINGW32__)
 static OPJ_CHAR*
 i2a(OPJ_UINT32 i, OPJ_CHAR *a, OPJ_UINT32 r) {
@@ -40,6 +41,7 @@ i2a(OPJ_UINT32 i, OPJ_CHAR *a, OPJ_UINT32 r) {
         *a = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[i%r];
         return a+1;
 }
+#endif
 #endif
 /* ----------------------------------------------------------------------- */
 
