@@ -265,7 +265,7 @@ class brip_h0_Gxxy_kernel : public brip_gaussian_kernel
   ~brip_h0_Gxxy_kernel() override= default;
 
   //: compute the kernel
-  virtual void compute_kernel(bool /**/ = false)
+  void compute_kernel(bool ) override
   {
     //kernel half size
     int khs = (int) std::ceil(4*sigma);
