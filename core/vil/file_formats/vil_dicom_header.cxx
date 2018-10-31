@@ -771,9 +771,9 @@ void vil_dicom_header_format::readProcedureElements(short element,
   char *data_p = 0;
 
   // Check the elements
+  //std::cout << "Proecedure group; element: " << element << std::endl;
   switch ((vxl_uint_16)element)
   {
-   std::cout << "Proecedure group; element: " << element << std::endl;
    CASE(VIL_DICOM_HEADER_PRREALWORLDVALUEINTERCEPT,real_world_value_intercept_,(double)std::atof); // It's the real world intercept value
    CASE(VIL_DICOM_HEADER_PRREALWORLDVALUESLOPE    ,real_world_value_slope_,(double)std::atof); // It's the real world intercept value
    default: // It's nothing we want, so skip it!
@@ -795,9 +795,9 @@ void vil_dicom_header_format::readNSPhilipsElements(short element,
   char *data_p = 0;
 
   // Check the elements
+  //std::cout << "Non-standard Philips group; element: " << element << std::endl;
   switch ((vxl_uint_16)element)
   {
-   std::cout << "Non-standard Philips group; element: " << element << std::endl;
    CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATEINTERCEPT,philips_private_intercept_,(float)std::atof); // It's the Philips private intercept value
    CASE(VIL_DICOM_HEADER_NSPHILIPSPRIVATESLOPE    ,philips_private_slope_,(float)std::atof); // It's the Philips private slope value
    default: // It's nothing we want, so skip it!
