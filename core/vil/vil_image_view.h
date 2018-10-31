@@ -153,7 +153,8 @@ class vil_image_view : public vil_image_view_base
   inline std::ptrdiff_t planestep() const { return planestep_; }
 
   //: Cast to bool is true if pointing at some data.
-  explicit operator bool() const
+  /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
+  operator bool() const
   { return (top_left_ != nullptr)? true : false; }
 
   //: Return false if pointing at some data.
