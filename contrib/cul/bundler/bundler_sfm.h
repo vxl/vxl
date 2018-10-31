@@ -17,6 +17,7 @@ class bundler_sfm_create_initial_recon
  public:
   virtual bool operator() (
       bundler_inters_reconstruction &reconstruction) = 0;
+  virtual ~bundler_sfm_create_initial_recon() = default;
 };
 
 
@@ -34,6 +35,7 @@ class bundler_sfm_select_next_images
       bundler_inters_reconstruction &reconstruction,
 
       std::vector<bundler_inters_image_sptr> &to_add) = 0;
+  virtual ~bundler_sfm_select_next_images() = default;
 };
 
 
@@ -50,6 +52,7 @@ class bundler_sfm_add_next_images
 
       bundler_inters_reconstruction &reconstruction,
       std::vector<bundler_inters_image_sptr> &added_images) = 0;
+  virtual ~bundler_sfm_add_next_images() = default;
 };
 
 
@@ -63,6 +66,7 @@ class bundler_sfm_add_new_points
   virtual void operator() (
       bundler_inters_reconstruction &reconstruction,
       const std::vector<bundler_inters_image_sptr> &added) = 0;
+  virtual ~bundler_sfm_add_new_points() = default;
 };
 
 
@@ -73,6 +77,7 @@ class bundler_sfm_bundle_adjust
  public:
   virtual void operator() (
       bundler_inters_reconstruction &reconstruction) = 0;
+  virtual ~bundler_sfm_bundle_adjust() = default;
 };
 
 #endif // BUNDLER_SFM_H
