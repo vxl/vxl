@@ -140,7 +140,8 @@ class vil1_image
   }
 
   //: conversion to bool
-  explicit operator bool () const
+  /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
+  operator bool () const
     { return (ptr != nullptr)? true : false; }
 
   //: inverse conversion to bool

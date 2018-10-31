@@ -37,7 +37,8 @@ public:
   index_type index() const { return i_; }
 
   //: Returns the boolean flag portion of the link.
-  explicit operator bool () const { return f_? true : false; }
+  /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
+  operator bool () const { return f_? true : false; }
 
   //: Returns the inverse of the boolean flag portion of the link.
   bool operator!() const { return !f_; }

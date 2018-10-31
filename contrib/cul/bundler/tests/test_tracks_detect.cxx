@@ -61,7 +61,7 @@ static void test_tracks_detect(int argc, char* argv[])
 
         TEST("The track is not yet set.",
             (*i)->track,
-            NULL);
+            nullptr);
 
         TEST_EQUAL("Descriptors are the same size.",
             (*i)->descriptor.size(),

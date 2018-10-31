@@ -59,7 +59,6 @@ class vbl_smart_ptr
   //: Pointer to object, or 0.
   T *ptr_;
 
-
  public:
   vbl_smart_ptr ()
     : protected_(true), ptr_(nullptr) { }
@@ -118,7 +117,8 @@ class vbl_smart_ptr
   }
 
   //: Cast to bool
-   explicit operator bool () const { return ptr_? true : false; }
+  /* The old 'safe_bool' did implicit conversions, best practice would be to use explicit operator bool */
+  operator bool () const { return ptr_? true : false; }
 
   //: Inverse boolean value
   bool operator!() const { return ptr_? false : true; }
