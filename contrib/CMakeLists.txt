@@ -30,10 +30,12 @@ endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/prip/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(VXL_BUILD_PRIP "Build the T.U.Wien library package?" ON "VXL_BUILD_CONTRIB" OFF)
+  mark_as_advanced(VXL_BUILD_PRIP)
 endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/oxl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(VXL_BUILD_OXL "Build the Oxford University library package?" ON "VXL_BUILD_CONTRIB" OFF)
+  mark_as_advanced(VXL_BUILD_PRIP)
 endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/rpl/CMakeLists.txt )
@@ -46,10 +48,12 @@ endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/tbl/CMakeLists.txt )
   CMAKE_DEPENDENT_OPTION(VXL_BUILD_TBL "Build the TB library package?" ON "VXL_BUILD_CONTRIB" OFF)
+  mark_as_advanced(VXL_BUILD_TBL)
 endif()
 
 if( EXISTS ${VXL_ROOT_SOURCE_DIR}/contrib/cul/CMakeLists.txt )
     CMAKE_DEPENDENT_OPTION(VXL_BUILD_CUL OFF "Build the Cornell University library package?" "VXL_BUILD_CONTRIB" OFF)
+    mark_as_advanced(VXL_BUILD_CUL)
 endif()
 
 

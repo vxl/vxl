@@ -47,7 +47,7 @@ if(VXL_MATH_LIBRARY_FOUND)
   # specifying the link is required.
   target_link_libraries(openjpeg2 m)
 endif()
-
+mark_as_advanced(VXL_MATH_LIBRARY_FOUND)
 set_target_properties(openjpeg2 PROPERTIES
   VERSION       2.0.0
   DEFINE_SYMBOL OPJ_EXPORTS)
