@@ -481,10 +481,10 @@ static int ReadKey(GTIF *gt, GTIFReadMethod scan, void *aux)
     return 1;
 }
 
-
 static void DefaultRead(char *string, void *aux)
 {
     /* Pretty boring */
-    (void)fscanf((FILE *)aux,"%[^\n]\n",string);
+    const int status = fscanf((FILE *)aux,"%[^\n]\n",string);
+    (void) status; // avoid ignoring return value of ‘fscanf’, declared with attribute warn_unused_result [-Wunused-result]
 }
 
