@@ -1,11 +1,13 @@
 #ifndef VCL_LEGACY_ALIASES_H_
 #define VCL_LEGACY_ALIASES_H_
 
+#if !defined(VXL_LEGACY_FUTURE_REMOVE)
 # define VXL_CONSTEXPR_FUNC constexpr  //constexpr in C++11, empty in C++98
 # define VXL_CONSTEXPR_VAR  constexpr  //constexpr in C++11, empty in C++98
 # define VXL_FULLCXX11SUPPORT 1
 # define VCL_STATIC_CONST_INIT_FLOAT_DECL(x) = x
 # define VCL_STATIC_CONST_INIT_FLOAT_DEFN(x) /* initialized at declaration */
+#endif
 
 /*
  * These defines need to be here for backwards
@@ -659,4 +661,4 @@ __inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
 #define vnl_math_hypot vnl_math::hypot
 
 
-#endif VCL_LEGACY_ALIASES_H_
+#endif //VCL_LEGACY_ALIASES_H_
