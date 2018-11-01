@@ -36,9 +36,9 @@ VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(char);
 VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(short);
 VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(int);
 VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long);
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 VCL_DEFINE_SPECIALIZATION_MACRO_SIGNED_UNSIGNED(long long);
-#endif
+
 //3.9.1 Fundamental types [basic.fundamental]
 //Plain char, signed char, and unsigned char are three distinct types
 // We must explicitly instantiate the char type without signed/unsigned prefix

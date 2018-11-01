@@ -289,30 +289,8 @@ class VNL_EXPORT vnl_numeric_traits<unsigned long>
 template<>
 class VNL_EXPORT vnl_numeric_traits<unsigned long const> : public vnl_numeric_traits<unsigned long> {};
 
-#if defined(_WIN64) && !VCL_HAS_LONG_LONG
-template<>
-class VNL_EXPORT vnl_numeric_traits<size_t>
-{
- public:
-  //: Additive identity
-  static VNL_EXPORT constexpr size_t zero  = 0;
-  //: Multiplicative identity
-  static VNL_EXPORT constexpr size_t one = 1;
-  //: Maximum value which this type can assume
-  static VNL_EXPORT constexpr size_t maxval = 0x7fffffff; // = 0x7fffffff;
-  //: Return value of abs()
-  typedef size_t abs_t;
-  //: Name of a type twice as long as this one for accumulators and products.
-  typedef size_t double_t;
-  //: Name of type which results from multiplying this type with a double
-  typedef double real_t;
-};
 
-template<>
-class VNL_EXPORT vnl_numeric_traits<size_t const> : public vnl_numeric_traits<size_t> {};
-#endif
-
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 template<>
 class VNL_EXPORT vnl_numeric_traits<long long>
 {
@@ -354,7 +332,7 @@ class VNL_EXPORT vnl_numeric_traits<unsigned long long>
 
 template<>
 class VNL_EXPORT vnl_numeric_traits<unsigned long long const> : public vnl_numeric_traits<unsigned long long> {};
-#endif
+
 
 template<>
 class VNL_EXPORT vnl_numeric_traits<float>

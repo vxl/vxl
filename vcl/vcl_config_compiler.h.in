@@ -21,11 +21,6 @@
   #warning "WARNING:  The current project is configured to use a C++ standard version older than the C++ standard used for this build of VXL"
 #endif
 
-
-//: VCL_HAS_LONG_LONG
-// Set to 1 if "long long" is accepted by the compiler as a built-in type.
-#define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
-
 //----------------------------------------------------------------------
 // architecture macros removed -- they're not in the C++ standard
 

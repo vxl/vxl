@@ -217,7 +217,7 @@
 #define VCL_CXX_HAS_HEADER_FUNCTIONAL "ERROR: C++11 headers are mandatory"
 #define VCL_CXX_HAS_HEADER_STRSTREAM  "ERROR: C++11 headers are mandatory"
 #define VCL_CHAR_IS_SIGNED            "ERROR: Use std::numeric_limits<char>::is_signed instead of VCL_CHAR_IS_SIGNED"
-
+#define VCL_HAS_LONG_LONG             "ERROR:  C++11 always defines long long and unsigned long long."
 #endif
 
 #ifdef VNL_CONFIG_LEGACY_METHODS
