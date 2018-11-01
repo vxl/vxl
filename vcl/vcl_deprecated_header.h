@@ -4,11 +4,11 @@
   fsm
 */
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 
+#include <vcl_compiler_detection.h>
 #if defined(VXL_COMPILER_IS_GNU)
 # warning "deprecated"
 

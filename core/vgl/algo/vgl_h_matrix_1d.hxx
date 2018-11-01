@@ -10,7 +10,7 @@
 #include <vnl/vnl_inverse.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_compiler.h>
+#include <vcl_compiler_detection.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
