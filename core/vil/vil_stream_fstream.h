@@ -1,9 +1,6 @@
 // This is core/vil/vil_stream_fstream.h
 #ifndef vil_stream_fstream_h_
 #define vil_stream_fstream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 #include <fstream>
 #ifdef VIL_USE_FSTREAM64

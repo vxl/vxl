@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_polynomial.h
 #ifndef vnl_polynomial_h_
 #define vnl_polynomial_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Evaluation of univariate polynomials

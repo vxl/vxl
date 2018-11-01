@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_infinite_line_3d.h
 #ifndef vgl_infinite_line_3d_h_
 #define vgl_infinite_line_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A 3-d infinite line with position parameterized by orthogonal plane coordinates

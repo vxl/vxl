@@ -1,9 +1,6 @@
 // This is core/vil/file_formats/vil_jpeg_destination_mgr.h
 #ifndef vil_jpeg_destination_mgr_h_
 #define vil_jpeg_destination_mgr_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

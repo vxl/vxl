@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk2/vgui_gtk2.h
 #ifndef vgui_gtk2_h_
 #define vgui_gtk2_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford

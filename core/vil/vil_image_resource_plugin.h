@@ -1,9 +1,6 @@
 // This is core/vil/vil_image_resource_plugin.h
 #ifndef vil_image_resource_plugin_h_
 #define vil_image_resource_plugin_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Interface for loading new image formats

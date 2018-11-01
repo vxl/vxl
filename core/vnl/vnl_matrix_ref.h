@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matrix_ref.h
 #ifndef vnl_matrix_ref_h_
 #define vnl_matrix_ref_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief vnl_matrix reference to user-supplied storage.

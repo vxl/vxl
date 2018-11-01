@@ -1,10 +1,7 @@
 // This is core/vidl/vidl_ffmpeg_pixel_format.h
 #ifndef vidl_ffmpeg_pixel_format_h_
 #define vidl_ffmpeg_pixel_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#pragma once
-#endif
+
 //:
 // \file
 // \brief Use FFMPEG for optimized pixel format conversions

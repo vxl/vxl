@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_find.h
 #ifndef vgui_find_h_
 #define vgui_find_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  fsm

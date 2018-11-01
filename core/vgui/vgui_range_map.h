@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_range_map.h
 #ifndef vgui_range_map_h
 #define vgui_range_map_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  J.L. Mundy

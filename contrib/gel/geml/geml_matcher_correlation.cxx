@@ -1,7 +1,4 @@
 // This is gel/geml/geml_matcher_correlation.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <iostream>
 #include "geml_matcher_correlation.h"
 //:

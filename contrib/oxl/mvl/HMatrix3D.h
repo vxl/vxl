@@ -1,9 +1,6 @@
 // This is oxl/mvl/HMatrix3D.h
 #ifndef HMatrix3D_h_
 #define HMatrix3D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

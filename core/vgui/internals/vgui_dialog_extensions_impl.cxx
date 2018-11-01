@@ -1,7 +1,4 @@
 // This is core/vgui/internals/vgui_dialog_extensions_impl.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Gamze Tunali, LEMS, Brown University

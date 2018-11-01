@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matlab_filewrite.h
 #ifndef vnl_matlab_filewrite_h_
 #define vnl_matlab_filewrite_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \author David Capel, Oxford RRG

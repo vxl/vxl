@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_loader_tableau.h
 #ifndef vgui_loader_tableau_h_
 #define vgui_loader_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau where the user can set the projection and modelview matrices.

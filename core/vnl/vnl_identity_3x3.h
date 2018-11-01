@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_identity_3x3.h
 #ifndef vnl_identity_3x3_h_
 #define vnl_identity_3x3_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class vnl_identity_3x3

@@ -1,9 +1,6 @@
 // This is gel/octree/Voxel.h
 #ifndef Voxel_h_
 #define Voxel_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author

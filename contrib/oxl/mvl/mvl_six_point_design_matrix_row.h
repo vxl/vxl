@@ -1,9 +1,6 @@
 // This is oxl/mvl/mvl_six_point_design_matrix_row.h
 #ifndef mvl_six_point_design_matrix_row_h_
 #define mvl_six_point_design_matrix_row_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

@@ -1,9 +1,6 @@
 // This is gel/pop/pop_geometric_cost_function.h
 #ifndef pop_geometric_cost_function_h_
 #define pop_geometric_cost_function_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief compute cost between an observable and an observation

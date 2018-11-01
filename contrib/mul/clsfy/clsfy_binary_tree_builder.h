@@ -1,9 +1,6 @@
 // This is mul/clsfy/clsfy_binary_tree_builder.h
 #ifndef clsfy_binary_tree_builder_h_
 #define clsfy_binary_tree_builder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Build a binary tree classifier

@@ -1,7 +1,4 @@
 // This is core/vidl/vidl_frame.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta

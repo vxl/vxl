@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_edgel.h
 #ifndef vdgl_edgel_h
 #define vdgl_edgel_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Represents a 2D image edgel

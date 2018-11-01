@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_iidc1394_params.h
 #ifndef vidl_iidc1394_params_h_
 #define vidl_iidc1394_params_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A parameters struct for IIDC 1394 camera streams

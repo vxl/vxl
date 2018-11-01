@@ -1,9 +1,6 @@
 // This is core/vil/algo/vil_colour_space.h
 #ifndef vil_colour_space_h_
 #define vil_colour_space_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Functions to convert between different colour spaces.

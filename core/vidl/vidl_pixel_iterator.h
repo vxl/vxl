@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_pixel_iterator.h
 #ifndef vidl_pixel_iterator_h_
 #define vidl_pixel_iterator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Iterators over pixels in a frame

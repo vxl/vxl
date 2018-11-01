@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_local_minima.h
 #ifndef vbl_local_minima_h_
 #define vbl_local_minima_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Find local minima in arrays

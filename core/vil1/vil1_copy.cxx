@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_copy.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Contains function vil1_copy()

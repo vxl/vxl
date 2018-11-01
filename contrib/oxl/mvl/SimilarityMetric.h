@@ -1,9 +1,6 @@
 // This is oxl/mvl/SimilarityMetric.h
 #ifndef SimilarityMetric_h_
 #define SimilarityMetric_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Scale + translate ImageMetric

@@ -1,9 +1,6 @@
 // This is oxl/mvl/ImageMetric.h
 #ifndef ImageMetric_h_
 #define ImageMetric_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Converting between image and metric coordinates

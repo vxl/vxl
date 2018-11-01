@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_fit_line.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "vdgl_fit_line.h"
 #include <vnl/vnl_vector.h>

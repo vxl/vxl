@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrixPlanar.h
 #ifndef FMatrixPlanar_h_
 #define FMatrixPlanar_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //--------------------------------------------------------------
 //:

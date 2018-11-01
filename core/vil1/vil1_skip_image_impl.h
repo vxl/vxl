@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_skip_image_impl.h
 #ifndef vil1_skip_image_h_
 #define vil1_skip_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Adaptor which produces a new image by skipping rows and columns

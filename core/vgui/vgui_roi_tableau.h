@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_roi_tableau.h
 #ifndef vgui_roi_tableau_h_
 #define vgui_roi_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau which makes an ROI of an image act like a whole image.

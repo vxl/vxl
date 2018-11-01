@@ -2,9 +2,6 @@
 #ifndef vil3d_from_image_2d_h_
 #define vil3d_from_image_2d_h_
 
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //:
 // \file

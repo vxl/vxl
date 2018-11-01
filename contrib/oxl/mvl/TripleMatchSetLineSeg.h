@@ -1,9 +1,6 @@
 // This is oxl/mvl/TripleMatchSetLineSeg.h
 #ifndef TripleMatchSetLineSeg_h_
 #define TripleMatchSetLineSeg_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Three-view line matches

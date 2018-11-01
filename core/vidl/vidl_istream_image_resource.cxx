@@ -1,7 +1,4 @@
 // This is core/vidl/vidl_istream_image_resource.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

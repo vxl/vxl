@@ -1,9 +1,6 @@
 // This is core/vgl/algo/boxm2_vecf_fit_margins.h
 #ifndef boxm2_vecf_fit_margins_h_
 #define boxm2_vecf_fit_margins_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fits the inferior and superior margin models in the X-Y plane

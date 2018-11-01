@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_flip_components.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vil1_flip_components.h"
 #include <vil1/vil1_flip_components_impl.h>
 

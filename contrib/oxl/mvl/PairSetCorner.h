@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairSetCorner.h
 #ifndef PairSetCorner_h_
 #define PairSetCorner_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Copy matches out of PairMatchSetCorner

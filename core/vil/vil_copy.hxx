@@ -1,9 +1,6 @@
 // This is core/vil/vil_copy.hxx
 #ifndef vil_copy_hxx_
 #define vil_copy_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Ian Scott, ISBE, Manchester

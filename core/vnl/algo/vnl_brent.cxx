@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_brent.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <cassert>
 #include "vnl_brent.h"

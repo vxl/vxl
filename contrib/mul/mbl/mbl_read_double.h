@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_read_double.h
 #ifndef mbl_read_double_h_
 #define mbl_read_double_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Asks question and waits for an answer

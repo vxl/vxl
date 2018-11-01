@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_save.h
 #ifndef vil1_save_h_
 #define vil1_save_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author    awf@robots.ox.ac.uk

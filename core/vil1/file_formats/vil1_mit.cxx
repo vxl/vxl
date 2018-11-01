@@ -1,7 +1,4 @@
 // This is core/vil1/file_formats/vil1_mit.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //
 // Author: Joris Schouteden
 // Created: 18 Feb 2000

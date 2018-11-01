@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk/vgui_gtk_dialog_impl.h
 #ifndef vgui_gtk_dialog_impl_h_
 #define vgui_gtk_dialog_impl_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  The GTK implementation of vgui_dialog_impl.

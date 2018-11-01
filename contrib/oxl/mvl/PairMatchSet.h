@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairMatchSet.h
 #ifndef PairMatchSet_h_
 #define PairMatchSet_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Set of pairs of integers

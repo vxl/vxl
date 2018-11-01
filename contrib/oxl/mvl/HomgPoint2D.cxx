@@ -1,7 +1,4 @@
 // This is oxl/mvl/HomgPoint2D.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

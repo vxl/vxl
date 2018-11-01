@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_homg_line_3d_2_points.h
 #ifndef vgl_homg_line_3d_2_points_h_
 #define vgl_homg_line_3d_2_points_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Don HAMILTON Peter TU Francois BERTEL

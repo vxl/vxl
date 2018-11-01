@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_text_graph.h
 #ifndef vgui_text_graph_h_
 #define vgui_text_graph_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

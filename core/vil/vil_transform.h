@@ -1,9 +1,6 @@
 // This is core/vil/vil_transform.h
 #ifndef vil_transform_h_
 #define vil_transform_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief STL algorithm like methods.

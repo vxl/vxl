@@ -1,7 +1,4 @@
 // This is core/vbl/vbl_bit_array_2d.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

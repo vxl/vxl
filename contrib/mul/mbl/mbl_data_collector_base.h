@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_data_collector_base.h
 #ifndef mbl_data_collector_base_h_
 #define mbl_data_collector_base_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

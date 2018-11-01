@@ -1,6 +1,3 @@
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Reader/Writer for DICOM format images.

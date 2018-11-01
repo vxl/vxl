@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_line_2d.h
 #ifndef vgl_line_2d_h_
 #define vgl_line_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Don Hamilton, Peter Tu, Peter Vanroose, Francois BERTEL, Franck Bettinger

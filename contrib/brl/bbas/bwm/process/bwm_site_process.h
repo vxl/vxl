@@ -1,9 +1,6 @@
 #ifndef bwm_site_process_h_
 #define bwm_site_process_h_
 
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 #include "bwm_process.h"
 #include "bwm/io/bwm_site_sptr.h"

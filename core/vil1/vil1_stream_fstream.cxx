@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_stream_fstream.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include "vil1_stream_fstream.h"

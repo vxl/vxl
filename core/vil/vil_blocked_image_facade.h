@@ -1,9 +1,6 @@
 // This is core/vil/vil_blocked_image_facade.h
 #ifndef vil_blocked_image_facade_h_
 #define vil_blocked_image_facade_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A blocked image facade for any image resource

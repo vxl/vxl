@@ -1,6 +1,3 @@
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <sstream>
 #include <iostream>

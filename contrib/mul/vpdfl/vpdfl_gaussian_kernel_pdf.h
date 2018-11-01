@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_gaussian_kernel_pdf.h
 #ifndef vpdfl_gaussian_kernel_pdf_h
 #define vpdfl_gaussian_kernel_pdf_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Multi-variate spherical gaussian kernel PDF.

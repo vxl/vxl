@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_sym_matrix.h
 #ifndef vnl_sym_matrix_h_
 #define vnl_sym_matrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class for symmetric matrices

@@ -1,7 +1,4 @@
 // This is core/vil1/file_formats/vil1_png.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // http://www.mirror.ac.uk/sites/ftp.cdrom.com/pub/png/libpng.html

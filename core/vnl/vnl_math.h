@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_math.h
 #ifndef vnl_math_h_
 #define vnl_math_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Namespace with standard math functions

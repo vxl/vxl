@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_bracket_minimum.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Function to bracket a minimum

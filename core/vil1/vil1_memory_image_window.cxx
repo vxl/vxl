@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_memory_image_window.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

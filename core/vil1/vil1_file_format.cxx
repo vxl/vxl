@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_file_format.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "vil1_file_format.h"
 

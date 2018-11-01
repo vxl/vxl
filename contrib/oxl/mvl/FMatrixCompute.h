@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrixCompute.h
 #ifndef _FMatrixCompute_h
 #define _FMatrixCompute_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Base class for fundamental matrix fitters

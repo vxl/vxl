@@ -1,7 +1,4 @@
 // This is mul/vpdfl/vpdfl_pc_gaussian_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Interface for Multi-variate Principle Component gaussian PDF Builder.

@@ -1,7 +1,4 @@
 // This is core/vil/vil_cached_image_resource.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "vil_cached_image_resource.h"
 #include <vil/vil_image_view_base.h>

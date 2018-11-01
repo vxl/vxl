@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_style.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief  See vgui_style.h for a description of this file.

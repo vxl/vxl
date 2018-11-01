@@ -1,7 +1,4 @@
 // This is core/vsl/vsl_indent.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

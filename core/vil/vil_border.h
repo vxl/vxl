@@ -1,9 +1,6 @@
 // This is core/vil/vil_border.h
 #ifndef vil_border_h_
 #define vil_border_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Border handling for images.

@@ -1,9 +1,6 @@
 // This is core/vnl/io/vnl_io_bignum.h
 #ifndef vnl_io_bignum_h
 #define vnl_io_bignum_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott

@@ -1,9 +1,6 @@
 // This is core/vil/file_formats/vil_bmp_core_header.h
 #ifndef vil_bmp_core_header_h_
 #define vil_bmp_core_header_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

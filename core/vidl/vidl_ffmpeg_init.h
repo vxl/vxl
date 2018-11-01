@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_ffmpeg_init.h
 #ifndef vidl_ffmpeg_init_h_
 #define vidl_ffmpeg_init_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Initialization routine for FFMPEG

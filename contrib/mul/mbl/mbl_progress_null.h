@@ -1,8 +1,5 @@
 #ifndef mbl_progress_null_h_
 #define mbl_progress_null_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Progress object that does nothing.

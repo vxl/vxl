@@ -1,9 +1,6 @@
 // This is gel/octree/VoxmapImagePoints.h
 #ifndef VoxmapImagePoints_h_
 #define VoxmapImagePoints_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  Geoffrey Cross, Oxford RRG, 20 May 99

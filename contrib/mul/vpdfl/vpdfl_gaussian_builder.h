@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_gaussian_builder.h
 #ifndef vpdfl_gaussian_builder_h
 #define vpdfl_gaussian_builder_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Builders for Multi-variate gaussian PDF with arbitrary axes.

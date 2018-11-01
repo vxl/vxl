@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_sampler_base.h
 #ifndef vpdfl_sampler_base_h
 #define vpdfl_sampler_base_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott

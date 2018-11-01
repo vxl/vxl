@@ -1,9 +1,6 @@
 // This is tbl/vipl/section/vipl_section_descriptor_2d.h
 #ifndef vipl_section_descriptor_2d_h_
 #define vipl_section_descriptor_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 

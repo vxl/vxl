@@ -1,9 +1,6 @@
 // This is core/vul/vul_get_timestamp.h
 #ifndef vul_get_timestamp_h_
 #define vul_get_timestamp_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //:
 // \file

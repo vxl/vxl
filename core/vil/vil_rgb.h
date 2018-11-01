@@ -1,9 +1,6 @@
 // This is core/vil/vil_rgb.h
 #ifndef vil_rgb_h_
 #define vil_rgb_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Pixel type for 24 bit images

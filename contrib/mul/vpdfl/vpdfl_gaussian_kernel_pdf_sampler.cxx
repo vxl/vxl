@@ -1,7 +1,4 @@
 // This is mul/vpdfl/vpdfl_gaussian_kernel_pdf_sampler.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Tim Cootes

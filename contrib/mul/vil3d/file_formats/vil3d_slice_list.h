@@ -1,8 +1,5 @@
 #ifndef vil3d_slice_list_h_
 #define vil3d_slice_list_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Interface/base for a volume made up of slices.

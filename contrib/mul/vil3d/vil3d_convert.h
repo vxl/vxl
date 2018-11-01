@@ -1,9 +1,6 @@
 // This is mul/vil3d/vil3d_convert.h
 #ifndef vil3d_convert_h_
 #define vil3d_convert_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Some standard conversion functions.

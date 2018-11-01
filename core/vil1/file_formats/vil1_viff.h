@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_viff.h
 #ifndef vil1_viff_h_
 #define vil1_viff_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Loader for 1-banded Khoros 1.0 images

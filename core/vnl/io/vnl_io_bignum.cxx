@@ -1,7 +1,4 @@
 // This is core/vnl/io/vnl_io_bignum.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

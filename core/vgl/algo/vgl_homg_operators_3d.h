@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_homg_operators_3d.h
 #ifndef vgl_homg_operators_3d_h_
 #define vgl_homg_operators_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief 3D homogeneous functions

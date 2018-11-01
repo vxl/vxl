@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_button.h
 #ifndef vgui_button_h_
 #define vgui_button_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Enumeration of possible mouse buttons.

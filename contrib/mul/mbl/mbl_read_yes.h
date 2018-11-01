@@ -5,9 +5,6 @@
 // \brief Get yes or no response from keyboard
 // \author Tim Cootes
 // Converted to VXL by Louise Butcher
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //: True if 'y' or 'Y' pressed
 //Waits for returns to be pressed.

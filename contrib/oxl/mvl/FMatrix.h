@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrix.h
 #ifndef _FMatrix_h
 #define _FMatrix_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \brief General fundamental matrix

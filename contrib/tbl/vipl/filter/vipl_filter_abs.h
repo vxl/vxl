@@ -1,9 +1,6 @@
 // This is tbl/vipl/filter/vipl_filter_abs.h
 #ifndef vipl_filter_abs_h_
 #define vipl_filter_abs_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //   This class provides a non-templated abstract class for all filters.  It

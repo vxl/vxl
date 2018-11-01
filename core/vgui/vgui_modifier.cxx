@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_modifier.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <iostream>
 #include "vgui_modifier.h"
 #ifdef _MSC_VER

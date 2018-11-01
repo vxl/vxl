@@ -1,9 +1,6 @@
 // This is core/vil/vil_block_cache.h
 #ifndef vil_block_cache_h_
 #define vil_block_cache_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A block cache with block population prioritized by age

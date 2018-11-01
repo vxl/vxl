@@ -1,7 +1,4 @@
 // This is core/vil1/file_formats/vil1_bmp.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include <vector>

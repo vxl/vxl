@@ -1,8 +1,5 @@
 #ifndef mvl2_image_format_plugin_h_
 #define mvl2_image_format_plugin_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Interface for loading avi frames as image formats

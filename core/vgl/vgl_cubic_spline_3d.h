@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_cubic_spline_3d.h
 #ifndef vgl_cubic_spline_3d_h_
 #define vgl_cubic_spline_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A 3-d cubic spline curve defined by a set of knots (3-d points)

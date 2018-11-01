@@ -2,9 +2,6 @@
 #ifndef clsfy_null_classifier_h_
 #define clsfy_null_classifier_h_
 // Copyright: (C) 2001 British Telecommunications plc
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Describe a null classifier

@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_file_format.h
 #ifndef vil1_file_format_h_
 #define vil1_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Base class for image formats

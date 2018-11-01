@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgInterestPointSet.h
 #ifndef HomgInterestPointSet_h_
 #define HomgInterestPointSet_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Set of interest points on an image

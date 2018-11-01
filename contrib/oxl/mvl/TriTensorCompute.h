@@ -1,9 +1,6 @@
 // This is oxl/mvl/TriTensorCompute.h
 #ifndef BaseTriTensorCompute_h_
 #define BaseTriTensorCompute_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

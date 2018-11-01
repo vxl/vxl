@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_bool_ostream.h
 #ifndef vbl_bool_ostream_h_
 #define vbl_bool_ostream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

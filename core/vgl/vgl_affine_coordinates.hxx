@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_affine_coordinates.hxx
 #ifndef vgl_affine_coordinates_hxx_
 #define vgl_affine_coordinates_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 #include <cassert>
 #include <cmath>
 #include <vgl/vgl_affine_coordinates.h>

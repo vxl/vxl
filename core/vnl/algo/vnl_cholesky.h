@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_cholesky.h
 #ifndef vnl_cholesky_h_
 #define vnl_cholesky_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Decomposition of symmetric matrix

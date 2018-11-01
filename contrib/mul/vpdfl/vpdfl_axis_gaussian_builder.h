@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_axis_gaussian_builder.h
 #ifndef vpdfl_axis_gaussian_builder_h
 #define vpdfl_axis_gaussian_builder_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

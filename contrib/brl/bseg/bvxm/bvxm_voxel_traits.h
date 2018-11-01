@@ -1,9 +1,6 @@
 // This is brl/bseg/bvxm/bvxm_voxel_traits.h
 #ifndef bvxm_voxel_traits_h_
 #define bvxm_voxel_traits_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated component for voxel datatype details

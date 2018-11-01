@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_clear_tableau.h
 #ifndef vgui_clear_tableau_h_
 #define vgui_clear_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau performing OpenGL clearing.

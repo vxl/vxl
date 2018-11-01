@@ -1,7 +1,4 @@
 // This is core/vbl/vbl_bool_ostream.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include "vbl_bool_ostream.h"

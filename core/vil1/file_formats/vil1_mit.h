@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_mit.h
 #ifndef vil1_mit_file_format_h_
 #define vil1_mit_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Image in MIT format

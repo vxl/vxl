@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_int_matrix.h
 #ifndef vnl_int_matrix_h_
 #define vnl_int_matrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Specializes vnl_matrix for integers

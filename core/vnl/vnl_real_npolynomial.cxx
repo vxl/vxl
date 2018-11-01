@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_real_npolynomial.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 //  \file
 //  \brief a degree n real polynomial

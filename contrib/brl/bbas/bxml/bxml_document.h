@@ -1,9 +1,6 @@
 // This is brl/bbas/bxml/bxml_document.h
 #ifndef bxml_document_h_
 #define bxml_document_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief An XML document representation

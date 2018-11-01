@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_load.h
 #ifndef vil1_load_h_
 #define vil1_load_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief read an image from a file

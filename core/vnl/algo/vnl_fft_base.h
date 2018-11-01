@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_fft_base.h
 #ifndef vnl_fft_base_h_
 #define vnl_fft_base_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief In-place n-D fast Fourier transform

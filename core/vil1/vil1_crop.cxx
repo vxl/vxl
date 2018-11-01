@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_crop.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //
 // vil1_crop
 // Author: Andrew W. Fitzgibbon, Oxford RRG

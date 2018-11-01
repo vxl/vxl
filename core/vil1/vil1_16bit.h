@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_16bit.h
 #ifndef vil1_16bit_h_
 #define vil1_16bit_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief read/write integers to/from vil1_stream

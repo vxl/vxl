@@ -1,7 +1,4 @@
 // This is brl/bbas/bil/bil_arf_image_istream.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Vishal Jain

@@ -1,7 +1,4 @@
 // This is mul/vil3d/vil3d_file_format.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Base for objects capable of reading/writing different image formats.

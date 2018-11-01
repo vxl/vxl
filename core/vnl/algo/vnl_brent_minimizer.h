@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_brent_minimizer.h
 #ifndef vnl_brent_minimizer_h_
 #define vnl_brent_minimizer_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

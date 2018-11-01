@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford

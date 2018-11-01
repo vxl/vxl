@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_convex_hull_2d.h
 #ifndef vgl_convex_hull_2d_h_
 #define vgl_convex_hull_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Compute the convex hull of a 2-d point set

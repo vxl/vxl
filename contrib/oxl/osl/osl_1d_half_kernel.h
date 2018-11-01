@@ -1,9 +1,6 @@
 // This is oxl/osl/osl_1d_half_kernel.h
 #ifndef osl_1d_half_kernel_h_
 #define osl_1d_half_kernel_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \author fsm

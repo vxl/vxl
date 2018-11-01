@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_drag_mixin.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 //:
 // \file

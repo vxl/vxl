@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_complex.h
 #ifndef vnl_complex_h_
 #define vnl_complex_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Complex additions to vnl_math.

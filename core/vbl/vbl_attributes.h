@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_attributes.h
 #ifndef vbl_attributes_h_
 #define vbl_attributes_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Find summary attributes of an array

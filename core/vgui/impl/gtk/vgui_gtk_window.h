@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk/vgui_gtk_window.h
 #ifndef vgui_gtk_window_h_
 #define vgui_gtk_window_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  Robotics Research Group, University of Oxford

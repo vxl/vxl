@@ -1,6 +1,3 @@
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
 

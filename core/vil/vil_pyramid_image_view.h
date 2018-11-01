@@ -1,8 +1,5 @@
 #ifndef vil_pyramid_image_view_h_
 #define vil_pyramid_image_view_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Representation of a pyramid hierarchy of image views.

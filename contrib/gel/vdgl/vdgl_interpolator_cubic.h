@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_interpolator_cubic.h
 #ifndef vdgl_interpolator_cubic_h
 #define vdgl_interpolator_cubic_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Represents a 2D interpolator_cubic for a vdgl_edgel_chain

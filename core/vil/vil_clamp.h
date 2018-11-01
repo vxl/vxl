@@ -1,9 +1,6 @@
 // This is core/vil/vil_clamp.h
 #ifndef vil_clamp_h_
 #define vil_clamp_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

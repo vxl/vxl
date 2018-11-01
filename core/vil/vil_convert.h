@@ -1,9 +1,6 @@
 // This is core/vil/vil_convert.h
 #ifndef vil_convert_h_
 #define vil_convert_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Some standard conversion functions.

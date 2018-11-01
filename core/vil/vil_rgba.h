@@ -1,9 +1,6 @@
 // This is core/vil/vil_rgba.h
 #ifndef vil_rgba_h_
 #define vil_rgba_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated four-value colour cell

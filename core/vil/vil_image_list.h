@@ -1,9 +1,6 @@
 // This is core/vil/vil_image_list.h
 #ifndef vil_image_list_h_
 #define vil_image_list_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author J.L. Mundy  March 22, 2006

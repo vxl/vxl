@@ -1,9 +1,6 @@
 // This is core/vidl/gui/vidl_capture_tableau.h
 #ifndef vidl_capture_tableau_h_
 #define vidl_capture_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau for capturing OpenGL rendering to a video

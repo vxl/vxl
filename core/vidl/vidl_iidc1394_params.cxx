@@ -1,7 +1,4 @@
 // This is core/vidl/vidl_iidc1394_params.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta

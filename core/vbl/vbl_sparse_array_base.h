@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_sparse_array_base.h
 #ifndef vbl_sparse_array_base_h_
 #define vbl_sparse_array_base_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief base class for sparse arrays.

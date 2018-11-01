@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_ldl_cholesky.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Updateable Cholesky decomposition: A=LDL'

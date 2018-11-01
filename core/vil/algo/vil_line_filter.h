@@ -1,9 +1,6 @@
 // This is core/vil/algo/vil_line_filter.h
 #ifndef vil_line_filter_h_
 #define vil_line_filter_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief Find line-like structures in a 2D image

@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_conjugate_gradient.h
 #ifndef vnl_conjugate_gradient_h_
 #define vnl_conjugate_gradient_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief  real function minimization

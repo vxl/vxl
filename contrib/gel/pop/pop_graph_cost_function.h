@@ -1,9 +1,6 @@
 // This is gel/pop/pop_graph_cost_function.h
 #ifndef pop_graph_cost_function_h_
 #define pop_graph_cost_function_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph

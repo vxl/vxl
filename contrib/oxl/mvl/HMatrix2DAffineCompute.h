@@ -1,9 +1,6 @@
 // This is oxl/mvl/HMatrix2DAffineCompute.h
 #ifndef HMatrix2DAffineCompute_h_
 #define HMatrix2DAffineCompute_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

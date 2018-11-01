@@ -1,7 +1,4 @@
 // This is mul/vpdfl/vpdfl_gaussian.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Multi-variate Gaussian PDF with arbitrary axes.

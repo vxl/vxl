@@ -1,9 +1,6 @@
 // This is core/vil/vil_decimate.h
 #ifndef vil_decimate_h_
 #define vil_decimate_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

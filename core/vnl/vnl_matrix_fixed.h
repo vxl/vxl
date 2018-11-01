@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matrix_fixed.h
 #ifndef vnl_matrix_fixed_h_
 #define vnl_matrix_fixed_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief fixed size matrix

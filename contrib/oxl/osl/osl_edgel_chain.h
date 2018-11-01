@@ -1,9 +1,6 @@
 // This is oxl/osl/osl_edgel_chain.h
 #ifndef osl_edgel_chain_h_
 #define osl_edgel_chain_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 // .NAME osl_edgel_chain
 // .INCLUDE osl/osl_edgel_chain.h
 // .FILE osl_edgel_chain.cxx

@@ -1,6 +1,3 @@
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Interface for loading avi frames as image formats

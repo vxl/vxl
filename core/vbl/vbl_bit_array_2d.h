@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_bit_array_2d.h
 #ifndef vbl_bit_array_2d_h_
 #define vbl_bit_array_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class for a 2d bit array; interface as vbl_array_2d<T>

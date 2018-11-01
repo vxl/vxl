@@ -1,9 +1,6 @@
 // This is oxl/osl/internals/osl_reorder_chain.h
 #ifndef osl_reorder_chain_h_
 #define osl_reorder_chain_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 // .NAME osl_reorder_chain
 // .INCLUDE osl/internals/osl_reorder_chain.h
 // .FILE internals/osl_reorder_chain.cxx

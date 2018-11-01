@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrixComputeLinear.h
 #ifndef FMatrixComputeLinear_h_
 #define FMatrixComputeLinear_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Hartley 8-point fundamental matrix fit

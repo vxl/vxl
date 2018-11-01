@@ -1,9 +1,6 @@
 // This is tbl/vipl/section/vipl_section_iterator.h
 #ifndef vipl_section_iterator_h_
 #define vipl_section_iterator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 template < class DataType > class vipl_section_descriptor; //template forward reference
 template < class DataType > class vipl_section_container; //template forward reference

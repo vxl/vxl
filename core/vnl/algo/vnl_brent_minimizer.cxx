@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_brent_minimizer.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 #include <cmath>

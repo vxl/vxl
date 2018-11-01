@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_string_field.h
 #ifndef vgui_string_field_h_
 #define vgui_string_field_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford

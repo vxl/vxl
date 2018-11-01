@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_stream_section.h
 #ifndef vil1_stream_section_h_
 #define vil1_stream_section_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief make a section of a vil1_stream behave like a vil1_stream

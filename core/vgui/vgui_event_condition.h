@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_event_condition.h
 #ifndef vgui_event_condition_h_
 #define vgui_event_condition_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

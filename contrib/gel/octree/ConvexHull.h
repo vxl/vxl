@@ -1,9 +1,6 @@
 // This is gel/octree/ConvexHull.h
 #ifndef ConvexHull_h_
 #define ConvexHull_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author

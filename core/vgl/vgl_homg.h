@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_homg.h
 #ifndef vgl_homg_h_
 #define vgl_homg_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief General purpose support class for vgl_homg_ classes

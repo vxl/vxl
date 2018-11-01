@@ -1,7 +1,4 @@
 // This is oxl/mvl/PairMatchMulti.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 //  \file
 

@@ -1,9 +1,6 @@
 // This is core/vil/vil_cached_image_resource.h
 #ifndef vil_cached_image_resource_h_
 #define vil_cached_image_resource_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A cached and blocked representation of the image_resource

@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_listmanager2D_tableau.h
 #ifndef vgui_listmanager2D_tableau_h_
 #define vgui_listmanager2D_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau which manages a set of vgui_displaylist2D_tableau children

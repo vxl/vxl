@@ -1,9 +1,6 @@
 // This is mul/vimt3d/vimt3d_slice.h
 #ifndef vimt3d_slice_h_
 #define vimt3d_slice_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Chris Wolstenholme

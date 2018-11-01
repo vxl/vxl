@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_graph_partition.h
 #ifndef vbl_graph_partition_h_
 #define vbl_graph_partition_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Partitions a graph into disjoint connected components

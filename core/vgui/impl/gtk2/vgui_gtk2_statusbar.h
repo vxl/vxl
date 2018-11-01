@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk2/vgui_gtk2_statusbar.h
 #ifndef vgui_gtk2_statusbar_h_
 #define vgui_gtk2_statusbar_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  The GTK implementation of vgui_statusbar.

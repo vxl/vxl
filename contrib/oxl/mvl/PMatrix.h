@@ -1,9 +1,6 @@
 // This is oxl/mvl/PMatrix.h
 #ifndef PMatrix_h_
 #define PMatrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief General 3x4 perspective projection matrix

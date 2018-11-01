@@ -1,9 +1,6 @@
 // This is core/vil/vil_crop.h
 #ifndef vil_crop_h_
 #define vil_crop_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

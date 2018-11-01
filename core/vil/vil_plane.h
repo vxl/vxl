@@ -1,9 +1,6 @@
 // This is core/vil/vil_plane.h
 #ifndef vil_plane_h_
 #define vil_plane_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

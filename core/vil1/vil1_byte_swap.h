@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_byte_swap.h
 #ifndef vil1_byte_swap_h_
 #define vil1_byte_swap_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

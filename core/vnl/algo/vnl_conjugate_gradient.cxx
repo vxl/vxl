@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_conjugate_gradient.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG

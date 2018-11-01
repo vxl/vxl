@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_stream_fstream.h
 #ifndef vil1_stream_fstream_h_
 #define vil1_stream_fstream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A vil1_stream implementation using std::fstream

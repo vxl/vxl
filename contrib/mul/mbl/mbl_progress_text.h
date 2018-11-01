@@ -1,8 +1,5 @@
 #ifndef mbl_progress_text_h_
 #define mbl_progress_text_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Progress class that outputs simple text reporting on progress

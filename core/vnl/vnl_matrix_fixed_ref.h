@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matrix_fixed_ref.h
 #ifndef vnl_matrix_fixed_ref_h_
 #define vnl_matrix_fixed_ref_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fixed size stack-stored vnl_matrix

@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_observable.h
 #ifndef vgui_observable_h_
 #define vgui_observable_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Base class for classes that want to broadcast messages to observers.

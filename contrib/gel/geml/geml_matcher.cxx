@@ -1,7 +1,4 @@
 // This is gel/geml/geml_matcher.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //
 // Author: Geoffrey Cross, Oxford RRG
 // Created: ${DATE}

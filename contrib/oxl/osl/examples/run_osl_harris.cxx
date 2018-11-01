@@ -1,7 +1,4 @@
 // This is oxl/osl/examples/run_osl_harris.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
-#endif
 
 #include <string>
 #include <iostream>

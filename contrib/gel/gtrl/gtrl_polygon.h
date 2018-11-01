@@ -1,9 +1,6 @@
 // This is gel/gtrl/gtrl_polygon.h
 #ifndef gtrl_polygon_h_
 #define gtrl_polygon_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author crossge@crd.ge.com

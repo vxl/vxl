@@ -1,9 +1,6 @@
 // This is mul/vil3d/file_formats/vil3d_meta_image_format.h
 #ifndef vil3d_meta_image_format_h_
 #define vil3d_meta_image_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader/Writer for Meta Image format images.

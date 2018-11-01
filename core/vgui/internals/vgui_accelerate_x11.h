@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_accelerate_x11.h
 #ifndef vgui_accelerate_x11_h_
 #define vgui_accelerate_x11_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author VGG, Oxford

@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_sparse_lm.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta (Brown)

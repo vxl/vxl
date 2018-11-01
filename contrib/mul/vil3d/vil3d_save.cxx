@@ -1,7 +1,4 @@
 // This is mul/vil3d/vil3d_save.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 //

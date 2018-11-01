@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_data_array_ptr_wrapper.h
 #ifndef mbl_data_array_ptr_wrapper_h
 #define mbl_data_array_ptr_wrapper_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

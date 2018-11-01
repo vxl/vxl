@@ -1,9 +1,6 @@
 // This is gel/pop/pop_transform.h
 #ifndef pop_transform_h_
 #define pop_transform_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph

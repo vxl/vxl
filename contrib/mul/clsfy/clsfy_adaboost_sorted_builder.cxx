@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_adaboost_sorted_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm

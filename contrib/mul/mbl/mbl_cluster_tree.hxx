@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_cluster_tree.hxx
 #ifndef mbl_cluster_hxx_
 #define mbl_cluster_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Record trees of clusters of data, for faster neighbour finding

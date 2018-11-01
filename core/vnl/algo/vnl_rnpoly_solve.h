@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_rnpoly_solve.h
 #ifndef vnl_rnpoly_solve_h_
 #define vnl_rnpoly_solve_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Solves for roots of system of real polynomials

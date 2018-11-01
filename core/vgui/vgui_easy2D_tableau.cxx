@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_easy2D_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief  See vgui_easy2D_tableau.h for a description of this file.

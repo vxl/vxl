@@ -1,9 +1,6 @@
 // This is core/vil/file_formats/vil_pnm.h
 #ifndef vil_pnm_file_format_h_
 #define vil_pnm_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author awf@robots.ox.ac.uk

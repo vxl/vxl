@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_int_matrix.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 //

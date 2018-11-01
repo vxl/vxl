@@ -1,7 +1,4 @@
 // This is oxl/mvl/HomgLineSeg3D.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 //  \file
 

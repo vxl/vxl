@@ -1,9 +1,6 @@
 // This is core/vul/vul_expand_path.h
 #ifndef vul_expand_path_h_
 #define vul_expand_path_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains two functions to compute expanded form of a given path.

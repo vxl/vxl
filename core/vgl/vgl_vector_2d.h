@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_vector_2d.h
 #ifndef vgl_vector_2d_h_
 #define vgl_vector_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief direction vector in Euclidean 2D space

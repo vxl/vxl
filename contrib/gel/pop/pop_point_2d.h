@@ -1,9 +1,6 @@
 // This is gel/pop/pop_point_2d.h
 #ifndef pop_point_2d_h_
 #define pop_point_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a 2d point with a coordinate system

@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_easy3D_tableau.h
 #ifndef vgui_easy3D_tableau_h_
 #define vgui_easy3D_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau to display three-dimensional geometric objects.

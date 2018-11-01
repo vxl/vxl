@@ -1,9 +1,6 @@
 // This is oxl/mvl/mvl_five_point_camera_pencil.h
 #ifndef mvl_five_point_camera_pencil_h_
 #define mvl_five_point_camera_pencil_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgLine3D.h
 #ifndef HomgLine3D_h_
 #define HomgLine3D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Homogeneous 3D Line

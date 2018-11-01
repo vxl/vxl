@@ -1,9 +1,6 @@
 // This is core/vil/vil_flip.h
 #ifndef vil_flip_h_
 #define vil_flip_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

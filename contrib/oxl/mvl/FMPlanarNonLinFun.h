@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMPlanarNonLinFun.h
 #ifndef FMPlanarNonLinFun_h_
 #define FMPlanarNonLinFun_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a class that contains the functions required for FMPlanarComputeLinear.

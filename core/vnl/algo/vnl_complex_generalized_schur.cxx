@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_complex_generalized_schur.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

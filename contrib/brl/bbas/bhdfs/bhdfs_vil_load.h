@@ -1,9 +1,6 @@
 // This is brl/bbas/bhdfs/bhdfs_vil_load.h
 #ifndef bhdfs_vil_load_h_
 #define bhdfs_vil_load_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief read an image from an hdfs file

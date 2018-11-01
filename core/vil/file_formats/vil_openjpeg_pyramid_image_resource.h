@@ -1,9 +1,6 @@
 // This is core/vil/file_formats/vil_openjpeg_pyramid_image_resource.h
 #ifndef vil_openjpeg_pyramid_image_resource_h_
 #define vil_openjpeg_pyramid_image_resource_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Representation of a pyramid resolution hierarchy based on the openjpeg_image

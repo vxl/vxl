@@ -1,9 +1,6 @@
 // This is core/vul/vul_sprintf.h
 #ifndef vul_sprintf_h_
 #define vul_sprintf_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief creates a formatted ANSI C++ string

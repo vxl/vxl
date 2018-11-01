@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_selected_data_wrapper.h
 #ifndef mbl_selected_data_wrapper_h
 #define mbl_selected_data_wrapper_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott

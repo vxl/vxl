@@ -1,9 +1,6 @@
 // This is oxl/mvl/FDesignMatrix.h
 #ifndef FDesignMatrix_h_
 #define FDesignMatrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Design matrix for linear FMatrix least squares

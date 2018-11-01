@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_enhance_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief  See vgui_enhance_tableau.h for a description of this file.

@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_iris.h
 #ifndef vil1_iris_file_format_h_
 #define vil1_iris_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Joris Schouteden, ESAT, KULeuven.

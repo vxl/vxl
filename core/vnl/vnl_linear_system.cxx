@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_linear_system.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author David Capel, capes@robots

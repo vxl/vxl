@@ -1,7 +1,4 @@
 // This is brl/bbas/bxml/bxml_document.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta

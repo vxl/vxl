@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_binary_tree_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Implement a binary_tree classifier builder

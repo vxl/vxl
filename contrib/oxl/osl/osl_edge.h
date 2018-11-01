@@ -1,9 +1,6 @@
 // This is oxl/osl/osl_edge.h
 #ifndef osl_edge_h_
 #define osl_edge_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

@@ -1,9 +1,6 @@
 // This is mul/clsfy/clsfy_random_forest_builder.h
 #ifndef clsfy_random_forest_builder_h_
 #define clsfy_random_forest_builder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Build a random forest classifier

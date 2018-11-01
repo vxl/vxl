@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_axis_gaussian.h
 #ifndef vpdfl_axis_gaussian_h
 #define vpdfl_axis_gaussian_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Multi-variate Gaussian PDF, with a diagonal covariance matrix

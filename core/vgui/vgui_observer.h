@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_observer.h
 #ifndef vgui_observer_h_
 #define vgui_observer_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Base class for classes that receive messages from observables.

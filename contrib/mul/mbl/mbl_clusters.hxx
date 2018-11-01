@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_clusters.hxx
 #ifndef mbl_clusters_hxx_
 #define mbl_clusters_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Class to record clusters of data, for faster neighbour finding

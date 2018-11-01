@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_ras.h
 #ifndef vil1_ras_file_format_h_
 #define vil1_ras_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Amitha Perera <perera@cs.rpi.edu>

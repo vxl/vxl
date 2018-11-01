@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_jpeg_decompressor.h
 #ifndef vil1_jpeg_decompressor_h_
 #define vil1_jpeg_decompressor_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

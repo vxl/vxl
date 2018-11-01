@@ -1,9 +1,6 @@
 // This is oxl/mvl/ProjStructure.h
 #ifndef ProjStructure_h_
 #define ProjStructure_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \author awf@robots.ox.ac.uk

@@ -2,9 +2,6 @@
 // Copyright: (C) 2001 British Telecommunications plc
 #ifndef clsfy_knn_builder_h_
 #define clsfy_knn_builder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Describe a knn classifier builder

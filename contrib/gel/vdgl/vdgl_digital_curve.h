@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_digital_curve.h
 #ifndef vdgl_digital_curve_h_
 #define vdgl_digital_curve_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Represents a 2D digital_curve

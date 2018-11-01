@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_v4l_params.h
 #ifndef vidl_v4l_params_h_
 #define vidl_v4l_params_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A parameters struct for v4l1 camera streams

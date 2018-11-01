@@ -1,8 +1,5 @@
 #include "mbl_progress.h"
 // This is mul/mbl/mbl_progress.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

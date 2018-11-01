@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_c_na_vector.h
 #ifndef vnl_c_na_vector_h_
 #define vnl_c_na_vector_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Math on blocks of memory

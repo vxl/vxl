@@ -1,9 +1,6 @@
 // This is oxl/vrml/vrml_out.h
 #ifndef vrml_io_h_
 #define vrml_io_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author awf@robots.ox.ac.uk

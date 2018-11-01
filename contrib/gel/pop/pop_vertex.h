@@ -1,9 +1,6 @@
 // This is gel/pop/pop_vertex.h
 #ifndef pop_vertex_h_
 #define pop_vertex_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief this is a vertex/coordinate system in a coordinate system graph

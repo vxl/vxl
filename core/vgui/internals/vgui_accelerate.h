@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_accelerate.h
 #ifndef vgui_accelerate_h_
 #define vgui_accelerate_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author David Capel, Robotics Research Group, University of Oxford

@@ -1,7 +1,4 @@
 // This is gel/gst/gst_polygon_2d_operators.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author crossge@crd.ge.com

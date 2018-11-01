@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_p_matrix.h
 #ifndef vgl_p_matrix_h_
 #define vgl_p_matrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief General 3x4 perspective projection matrix

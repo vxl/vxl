@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_rtree.h
 #ifndef vgl_rtree_h_
 #define vgl_rtree_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

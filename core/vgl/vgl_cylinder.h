@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_cylinder.h
 #ifndef vgl_cylinder_h_
 #define vgl_cylinder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  defines a cylinder in 3D by a center point, radius, length and orientation

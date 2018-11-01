@@ -1,8 +1,5 @@
 // This is core/vil/vil_stream_fstream64.cxx
 #ifdef VIL_USE_FSTREAM64 // only compile this file when needed
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include "vil_stream_fstream64.h"

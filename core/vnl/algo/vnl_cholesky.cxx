@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_cholesky.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // vnl_cholesky

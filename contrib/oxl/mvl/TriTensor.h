@@ -1,9 +1,6 @@
 // This is oxl/mvl/TriTensor.h
 #ifndef TriTensor_h_
 #define TriTensor_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief The trifocal tensor

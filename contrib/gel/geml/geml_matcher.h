@@ -1,9 +1,6 @@
 // This is gel/geml/geml_matcher.h
 #ifndef geml_matcher_h_
 #define geml_matcher_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Geoffrey Cross, CRD, ${DATE}

@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_scale_intensities_image.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "vil1_scale_intensities_image.h"
 #include <vil1/vil1_image.h>

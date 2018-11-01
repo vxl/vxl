@@ -1,9 +1,6 @@
 // This is tbl/vipl/filter/vipl_filter_2d.h
 #ifndef vipl_filter_2d_h_
 #define vipl_filter_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 

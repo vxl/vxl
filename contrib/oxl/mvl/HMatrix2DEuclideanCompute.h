@@ -1,9 +1,6 @@
 // This is oxl/mvl/HMatrix2DEuclideanCompute.h
 #ifndef HMatrix2DEuclideanCompute_h_
 #define HMatrix2DEuclideanCompute_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

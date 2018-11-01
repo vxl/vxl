@@ -1,8 +1,5 @@
 #ifndef vil_pyramid_image_list_h_
 #define vil_pyramid_image_list_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A pyramid image resource based on multiple file-based image resources

@@ -1,7 +1,4 @@
 // This is core/vul/vul_file_iterator.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <string>
 #include "vul_file_iterator.h"

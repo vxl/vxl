@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_sparse_matrix_linear_system.h
 #ifndef vnl_sparse_matrix_linear_system_h_
 #define vnl_sparse_matrix_linear_system_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief vnl_sparse_matrix -> vnl_linear_system adaptor

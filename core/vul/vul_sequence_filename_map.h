@@ -1,9 +1,6 @@
 // This is core/vul/vul_sequence_filename_map.h
 #ifndef vul_sequence_filename_map_h_
 #define vul_sequence_filename_map_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class for mapping sequence frame indices to filenames

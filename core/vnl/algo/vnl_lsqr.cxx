@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_lsqr.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //
 // vnl_lsqr
 // Author: David Capel

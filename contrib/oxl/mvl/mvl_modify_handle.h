@@ -1,9 +1,6 @@
 // This is oxl/mvl/mvl_modify_handle.h
 #ifndef mvl_modify_handle_h_
 #define mvl_modify_handle_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Temporarily modify a value, restoring on end-of-block

@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_sphere_3d.h
 #ifndef vgl_sphere_3d_h
 #define vgl_sphere_3d_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a sphere in 3D nonhomogeneous space

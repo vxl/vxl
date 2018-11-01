@@ -1,8 +1,5 @@
 #ifndef mvl2_video_writer_linux_h_
 #define mvl2_video_writer_linux_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A class for writing videos

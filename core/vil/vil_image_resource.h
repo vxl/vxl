@@ -1,9 +1,6 @@
 // This is core/vil/vil_image_resource.h
 #ifndef vil_image_resource_h_
 #define vil_image_resource_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Representation of a generic image source or destination.

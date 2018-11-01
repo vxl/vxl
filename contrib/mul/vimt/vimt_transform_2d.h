@@ -1,9 +1,6 @@
 // This is mul/vimt/vimt_transform_2d.h
 #ifndef vimt_transform_2d_h_
 #define vimt_transform_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_numeric_traits.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

@@ -1,7 +1,4 @@
 // This is oxl/mvl/PairMatchSet2D3D.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include "PairMatchSet2D3D.h"

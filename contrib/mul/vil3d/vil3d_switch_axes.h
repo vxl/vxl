@@ -1,8 +1,5 @@
 #ifndef vil3d_switch_axes_h_
 #define vil3d_switch_axes_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes.

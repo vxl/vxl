@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_real_polynomial.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Evaluation of real polynomials - the implementation

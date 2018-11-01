@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgLine2D.h
 #ifndef HomgLine2D_h_
 #define HomgLine2D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //--------------------------------------------------------------
 //:

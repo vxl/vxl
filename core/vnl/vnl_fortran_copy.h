@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_fortran_copy.h
 #ifndef vnl_fortran_copy_h_
 #define vnl_fortran_copy_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Convert row-stored matrix to column-stored

@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgMatchPoint3D2D.h
 #ifndef HomgMatchPoint3D2D_h_
 #define HomgMatchPoint3D2D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A match between a 3D and 2D point

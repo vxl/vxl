@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairMatchSetCorner.h
 #ifndef PairMatchSetCorner_h_
 #define PairMatchSetCorner_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Matches between corners

@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_data_collector.h
 #ifndef mbl_data_collector_h_
 #define mbl_data_collector_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated base class for objects which collect sets of data.

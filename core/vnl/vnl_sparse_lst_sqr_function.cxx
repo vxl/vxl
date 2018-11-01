@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_sparse_lst_sqr_function.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta (Brown)
