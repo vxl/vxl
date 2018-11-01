@@ -2,10 +2,6 @@
 #include <iomanip>
 #include <complex>
 #include <vnl/vnl_rational.h>
-
-#ifdef NEED_COMPLEX_RATIONAL
-# include <vnl/vnl_complex.h>
-#endif
 #include <testlib/testlib_test.h>
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_matrix_fixed.h>
@@ -235,29 +231,6 @@ static void test_zero_one()
   TEST("one", u, 1L);
 }
 
-#ifdef NEED_COMPLEX_RATIONAL // see vnl_complex.h
-static void test_complex()
-{
-  std::complex<vnl_rational> c(0L,1L);
-  vnl_rational cc(-1L);
-  TEST("complex square", c*c, cc);
-  TEST("complex abs", vnl_math::abs(c), 1);
-  TEST("complex sqr mag", vnl_math::squared_magnitude(c), 1);
-  TEST("complex vnl_math::isfinite", vnl_math::isfinite(c), true);
-  TEST("complex vnl_math::isnan", vnl_math::isnan(c), false);
-}
-
-static void test_complex_zero_one()
-{
-  std::complex<vnl_rational> n = vnl_numeric_traits<std::complex<vnl_rational> >::zero;
-  std::cout << "zero = " << n << '\n';
-  TEST("zero", n, std::complex<vnl_rational>(0L,0L));
-  std::complex<vnl_rational> u = vnl_numeric_traits<std::complex<vnl_rational> >::one;
-  std::cout << "one  = " << u << '\n';
-  TEST("one", u, std::complex<vnl_rational>(1L,0L));
-}
-#endif // NEED_COMPLEX_RATIONAL
-
 void test_rational()
 {
   test_operators();
@@ -267,10 +240,7 @@ void test_rational()
   test_determinant();
   test_sqrt();
   test_zero_one();
-#ifdef NEED_COMPLEX_RATIONAL // see vnl_complex.h
-  test_complex();
-  test_complex_zero_one();
-#endif
+
 #if VXL_INT_64_IS_LONG
   test_long_64();
 #endif
