@@ -9,7 +9,7 @@
 #include <cstdlib>
 #include "vgl_h_matrix_3d.h"
 #include <cassert>
-#include <vcl_compiler.h>
+#include <vcl_compiler_detection.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

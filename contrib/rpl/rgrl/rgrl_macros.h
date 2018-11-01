@@ -6,6 +6,7 @@
 #include <typeinfo>
 #include <iostream>
 #include <vcl_compiler.h>
+#include <vcl_compiler_detection.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

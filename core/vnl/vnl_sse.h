@@ -10,7 +10,10 @@
 //   2009-03-30 Peter Vanroose - Added arg_min() & arg_max() and reimplemented min() & max()
 // \endverbatim
 
-#include <vcl_compiler.h> // for macro decisions based on compiler type
+#include <vcl_compiler_detection.h>
+#ifdef __MSVC
+#  include <vcl_msvc_warnings.h>
+#endif // for macro decisions based on compiler type
 #include <vxl_config.h>   // for checking supported integer data types
 #include <cfloat>// for DBL_MAX and FLT_MAX
 

@@ -1,9 +1,9 @@
-#ifndef vcl_compiler_h_
-#define vcl_compiler_h_
+#ifndef vcl_compiler_h__
+#define vcl_compiler_h__
 
 //:
 // \file
-// This file either is generated from vcl_compiler.h.in
+// This file either is generated from vcl_compiler_detection.h.in
 // This file has mostly been replaced with
 // CMake supported features in the auto-generated
 // vcl_compiler_detection.h that should be included
@@ -215,4 +215,4 @@
 #include "vcl_legacy_aliases.h"
 #endif
 
-#endif // vcl_compiler_h_
+#endif // vcl_compiler_h__

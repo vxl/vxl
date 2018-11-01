@@ -1,7 +1,6 @@
 // Try to check that compiler preprocessor definitions are sane.
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
