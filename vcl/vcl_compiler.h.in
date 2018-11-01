@@ -6,9 +6,9 @@
 // This file either is generated from vcl_compiler.h.in
 // This file has mostly been replaced with
 // CMake supported features in the auto-generated
-// vcl_compiler_detection.h
+// vcl_compiler_detection.h that should be included
+// independently where needed
 //
-#include "vcl_compiler_detection.h"
 
 //----------------------------------------------------------------------
 // syntax-like things.
@@ -196,28 +196,19 @@
 
 #define VXL_LEGACY_ERROR_REPORTING "ERROR: Legacy error reporting no longer supported."
 
-#if VXL_COMPILER_IS_GNU
-# if (__GNUC__ < 4)  //Feature support is now more finely tested in the vcl_compiler_detection.h file
-#  error "Invalid VXL_COMPILER_IS_GNU version not supported."
-# endif
+#if __GNUC__ && (__GNUC__ < 4)  //Feature support is now more finely tested in the vcl_compiler_detection.h file
+#  error "Invalid __GNUC__ version not supported."
 #endif
 
-#if VXL_COMPILER_IS_MSVC
-# if defined(_MSC_VER)
+#if defined(_MSC_VER)
 #  if _MSC_VER < 1900     // Visual Studio 2015 = Version 14.x is needed to support
 #   error "Invalid _MSC_VER version Visual Studio 2015 = Version 14.x is needed to support C++11 features"
 #  endif // <1900
-#endif //VXL_COMPILER_IS_MSVC
-
-
-#define _MSC_VER_DOTNET "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define _MSC_VER_9 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define _MSC_VER_10 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define _MSC_VER_11 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#endif // WIN32
-
-
-
+#  define VCL_VC_DOTNET "error: VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#  define VCL_VC_9 "error: VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#  define VCL_VC_10 "error: VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#  define VCL_VC_11 "error: VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#endif // _MSC_VER
 #endif
 
 #ifdef VNL_CONFIG_LEGACY_METHODS
