@@ -27,13 +27,6 @@
 #define VCL_HAS_LONG_LONG @VCL_HAS_LONG_LONG@
 
 //----------------------------------------------------------------------
-// signedness of char
-
-//: VCL_CHAR_IS_SIGNED
-// Set to true if the type "char" is signed.
-#define VCL_CHAR_IS_SIGNED @VCL_CHAR_IS_SIGNED@
-
-//----------------------------------------------------------------------
 // architecture macros removed -- they're not in the C++ standard
 
 #endif // vcl_config_compiler_h_

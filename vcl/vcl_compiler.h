@@ -216,7 +216,7 @@
 #define VCL_CXX_HAS_HEADER_VECTOR     "ERROR: C++11 headers are mandatory"
 #define VCL_CXX_HAS_HEADER_FUNCTIONAL "ERROR: C++11 headers are mandatory"
 #define VCL_CXX_HAS_HEADER_STRSTREAM  "ERROR: C++11 headers are mandatory"
-
+#define VCL_CHAR_IS_SIGNED            "ERROR: Use std::numeric_limits<char>::is_signed instead of VCL_CHAR_IS_SIGNED"
 
 #endif
 
