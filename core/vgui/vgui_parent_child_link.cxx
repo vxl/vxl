@@ -294,7 +294,7 @@ bool vgui_parent_child_link::handle(vgui_event const &e)
   return c->handle(e);
 }
 
-vgui_parent_child_link::operator vgui_parent_child_link::safe_bool() const
+vgui_parent_child_link::operator bool() const
 {
   return (pimpl && (pimpl->child() != nullptr))? true : false;
 }
