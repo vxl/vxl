@@ -509,10 +509,10 @@ inline unsigned int       abs(int x)                { return x < 0 ? -x : x; }
 inline unsigned int       abs(unsigned int x)       { return x; }
 inline unsigned long      abs(long x)               { return x < 0L ? -x : x; }
 inline unsigned long      abs(unsigned long x)      { return x; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline unsigned long long abs(long long x)          { return x < 0LL ? -x : x; }
 inline unsigned long long abs(unsigned long long x) { return x; }
-#endif
+
 inline float              abs(float x)              { return x < 0.0f ? -x : x; }
 inline double             abs(double x)             { return x < 0.0 ? -x : x; }
 inline long double        abs(long double x)        { return x < 0.0 ? -x : x; }
@@ -523,10 +523,10 @@ inline int                sqr(int x)                { return x*x; }
 inline unsigned int       sqr(unsigned int x)       { return x*x; }
 inline long               sqr(long x)               { return x*x; }
 inline unsigned long      sqr(unsigned long x)      { return x*x; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline long long          sqr(long long x)          { return x*x; }
 inline unsigned long long sqr(unsigned long long x) { return x*x; }
-#endif
+
 inline float              sqr(float x)              { return x*x; }
 inline double             sqr(double x)             { return x*x; }
 
@@ -536,28 +536,28 @@ inline int                cube(int x)                { return x*x*x; }
 inline unsigned int       cube(unsigned int x)       { return x*x*x; }
 inline long               cube(long x)               { return x*x*x; }
 inline unsigned long      cube(unsigned long x)      { return x*x*x; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline long long          cube(long long x)          { return x*x*x; }
 inline unsigned long long cube(unsigned long long x) { return x*x*x; }
-#endif
+
 inline float              cube(float x)              { return x*x*x; }
 inline double             cube(double x)             { return x*x*x; }
 
 // sgn (sign in -1, 0, +1)
 inline int sgn(int x)       { return x?((x>0)?1:-1):0; }
 inline int sgn(long x)      { return x?((x>0)?1:-1):0; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline int sgn(long long x) { return x?((x>0)?1:-1):0; }
-#endif
+
 inline int sgn(float x)     { return (x != 0)?((x>0)?1:-1):0; }
 inline int sgn(double x)    { return (x != 0)?((x>0)?1:-1):0; }
 
 // sgn0 (sign in -1, +1 only, useful for reals)
 inline int sgn0(int x)         { return (x>=0)?1:-1; }
 inline int sgn0(long x)        { return (x>=0)?1:-1; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline int sgn0(long long x)   { return (x>=0)?1:-1; }
-#endif
+
 inline int sgn0(float x)       { return (x>=0)?1:-1; }
 inline int sgn0(double x)      { return (x>=0)?1:-1; }
 
@@ -568,10 +568,10 @@ inline unsigned int       squared_magnitude(int                x) { return x*x; 
 inline unsigned int       squared_magnitude(unsigned int       x) { return x*x; }
 inline unsigned long      squared_magnitude(long               x) { return x*x; }
 inline unsigned long      squared_magnitude(unsigned long      x) { return x*x; }
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 inline unsigned long long squared_magnitude(long long          x) { return x*x; }
 inline unsigned long long squared_magnitude(unsigned long long x) { return x*x; }
-#endif
+
 inline float              squared_magnitude(float              x) { return x*x; }
 inline double             squared_magnitude(double             x) { return x*x; }
 inline long double        squared_magnitude(long double        x) { return x*x; }

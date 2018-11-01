@@ -5,7 +5,6 @@
 #include <vepl/section/vipl_filterable_section_container_generator_vil_image_view_base.hxx>
 #include <vil/vil_rgb.h>
 #include <vil/vil_image_view.h>
-#include <vcl_config_compiler.h>
 
 template <class DataType>
 inline DataType fgetpixel(vil_image_view_base const& i, int x, int y, DataType /* dummy */)

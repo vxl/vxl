@@ -22,10 +22,10 @@ constexpr int vnl_numeric_traits<int>::zero;
 constexpr unsigned int vnl_numeric_traits<unsigned int>::zero;
 constexpr long vnl_numeric_traits<long>::zero;
 constexpr unsigned long vnl_numeric_traits<unsigned long>::zero;
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 constexpr long long vnl_numeric_traits<long long>::zero;
 constexpr unsigned long long vnl_numeric_traits<unsigned long long>::zero;
-#endif
+
 
 constexpr bool vnl_numeric_traits<bool>::one;
 constexpr char vnl_numeric_traits<char>::one;
@@ -37,10 +37,10 @@ constexpr int vnl_numeric_traits<int>::one;
 constexpr unsigned int vnl_numeric_traits<unsigned int>::one;
 constexpr long vnl_numeric_traits<long>::one;
 constexpr unsigned long vnl_numeric_traits<unsigned long>::one;
-#if VCL_HAS_LONG_LONG
+
+//long long - target type will have width of at least 64 bits. (since C++11)
 constexpr long long vnl_numeric_traits<long long>::one;
 constexpr unsigned long long vnl_numeric_traits<unsigned long long>::one;
-#endif
 
 constexpr bool vnl_numeric_traits<bool>::maxval;
 constexpr char vnl_numeric_traits<char>::maxval;
@@ -53,11 +53,9 @@ constexpr int vnl_numeric_traits<int>::maxval;
 constexpr unsigned int vnl_numeric_traits<unsigned int>::maxval;
 constexpr long vnl_numeric_traits<long>::maxval;
 constexpr unsigned long vnl_numeric_traits<unsigned long>::maxval;
-#if VCL_HAS_LONG_LONG
+//long long - target type will have width of at least 64 bits. (since C++11)
 constexpr long long vnl_numeric_traits<long long>::maxval;
 constexpr unsigned long long vnl_numeric_traits<unsigned long long>::maxval;
-#endif
-
 
 constexpr float vnl_numeric_traits<float>::zero;
 constexpr double vnl_numeric_traits<double>::zero;
