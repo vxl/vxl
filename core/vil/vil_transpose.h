@@ -1,9 +1,6 @@
 // This is core/vil/vil_transpose.h
 #ifndef vil_transpose_h_
 #define vil_transpose_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott.

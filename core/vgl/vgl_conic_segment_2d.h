@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_conic_segment_2d.h
 #ifndef vgl_conic_segment_2d_h_
 #define vgl_conic_segment_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author J.L. Mundy  June 18, 2005

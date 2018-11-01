@@ -1,8 +1,4 @@
 // This is core/vil1/examples/vil1_convolve.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
-#endif
-
 #include <cmath>
 #include <iostream>
 #ifdef _MSC_VER

@@ -1,9 +1,6 @@
 // This is oxl/mvl/ProjectiveBasis2D.h
 #ifndef ProjectiveBasis2D_h_
 #define ProjectiveBasis2D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \brief Canonical basis of 4 points

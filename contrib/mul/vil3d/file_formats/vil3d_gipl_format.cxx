@@ -1,7 +1,4 @@
 // This is mul/vil3d/file_formats/vil3d_gipl_format.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Reader/Writer for GIPL format images.

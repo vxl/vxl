@@ -1,7 +1,4 @@
 // This is mul/vil3d/file_formats/vil3d_gen_synthetic.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Reader for simple images generated on the fly.

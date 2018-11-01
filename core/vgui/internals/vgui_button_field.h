@@ -2,9 +2,6 @@
 #ifndef vgui_button_field_h_
 #define vgui_button_field_h_
 
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  Lianqing Yu

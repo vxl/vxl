@@ -1,9 +1,6 @@
 // This is core/vul/vul_trace.h
 #ifndef vul_trace_h_
 #define vul_trace_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief writes out file, line to stderr.

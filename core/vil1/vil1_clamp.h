@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_clamp.h
 #ifndef vil1_clamp_h_
 #define vil1_clamp_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated vil1_clamping functions

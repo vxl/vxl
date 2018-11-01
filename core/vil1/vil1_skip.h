@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_skip.h
 #ifndef vil1_skip_h_
 #define vil1_skip_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a function

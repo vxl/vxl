@@ -1,7 +1,4 @@
 // This is core/vgui/internals/vgui_un_project.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

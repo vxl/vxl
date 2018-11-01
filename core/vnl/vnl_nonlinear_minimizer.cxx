@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_nonlinear_minimizer.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG, 22 Aug 99

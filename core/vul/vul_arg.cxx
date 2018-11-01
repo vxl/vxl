@@ -1,7 +1,4 @@
 // This is core/vul/vul_arg.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // Note that even though this file defines instances of a templated

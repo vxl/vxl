@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_color.h
 #ifndef vidl_color_h_
 #define vidl_color_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Color space conversions and related functions

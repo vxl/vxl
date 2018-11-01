@@ -1,8 +1,5 @@
 #ifndef vgl_sphere_3d_hxx_
 #define vgl_sphere_3d_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief a sphere in 3D nonhomogeneous space

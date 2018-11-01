@@ -1,7 +1,4 @@
 // This is mul/vimt/vimt_image.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

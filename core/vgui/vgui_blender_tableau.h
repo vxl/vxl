@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_blender_tableau.h
 #ifndef vgui_blender_tableau_h_
 #define vgui_blender_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau to blend two images.

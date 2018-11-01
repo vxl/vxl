@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_sparse_lm.h
 #ifndef vnl_sparse_lm_h_
 #define vnl_sparse_lm_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Sparse Levenberg Marquardt nonlinear least squares

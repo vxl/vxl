@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_1d_basis.h
 #ifndef vgl_1d_basis_h_
 #define vgl_1d_basis_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief storage for 3 collinear points to serve as 1-D projective basis

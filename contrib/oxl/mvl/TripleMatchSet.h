@@ -1,9 +1,6 @@
 // This is oxl/mvl/TripleMatchSet.h
 #ifndef TripleMatchSet_h_
 #define TripleMatchSet_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Store integer triplets

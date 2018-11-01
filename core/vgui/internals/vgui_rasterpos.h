@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_rasterpos.h
 #ifndef vgui_rasterpos_h_
 #define vgui_rasterpos_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

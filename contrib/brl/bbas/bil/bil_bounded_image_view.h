@@ -1,9 +1,6 @@
 // This is brl/bbas/bil/bil_bounded_image_view.h
 #ifndef bil_bounded_image_view_h_
 #define bil_bounded_image_view_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A type of image view that masquerades as a larger image

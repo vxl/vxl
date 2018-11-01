@@ -2,9 +2,6 @@
 #ifndef vil_stream_fstream64_h_
 #define vil_stream_fstream64_h_
 #ifdef VIL_USE_FSTREAM64
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A vil_stream implementation that can handle files bigger than 2GB

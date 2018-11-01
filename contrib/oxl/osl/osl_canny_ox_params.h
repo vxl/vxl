@@ -1,9 +1,6 @@
 // This is oxl/osl/osl_canny_ox_params.h
 #ifndef osl_canny_ox_params_h_
 #define osl_canny_ox_params_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 // .NAME osl_canny_ox_params
 // .INCLUDE osl/osl_canny_ox_params.h
 // .FILE osl_canny_ox_params.cxx

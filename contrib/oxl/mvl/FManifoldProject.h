@@ -1,9 +1,6 @@
 // This is oxl/mvl/FManifoldProject.h
 #ifndef FManifoldProject_h_
 #define FManifoldProject_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fast 2-view Hartley-Sturm

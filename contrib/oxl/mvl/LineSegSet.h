@@ -1,9 +1,6 @@
 // This is oxl/mvl/LineSegSet.h
 #ifndef LineSegSet_h_
 #define LineSegSet_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //
 // \author
 //     Andrew W. Fitzgibbon, Oxford RRG, 19 Sep 96

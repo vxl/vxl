@@ -1,9 +1,6 @@
 // This is oxl/mvl/ClosestImagePointFinder.h
 #ifndef ClosestImagePointFinder_h_
 #define ClosestImagePointFinder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief HomgInterestPointSet closest points

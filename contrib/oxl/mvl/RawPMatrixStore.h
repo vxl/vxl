@@ -1,9 +1,6 @@
 // This is oxl/mvl/RawPMatrixStore.h
 #ifndef RawPMatrixStore_h_
 #define RawPMatrixStore_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Demand-load image sequence from disk

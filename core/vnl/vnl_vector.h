@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_vector.h
 #ifndef vnl_vector_h_
 #define vnl_vector_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon

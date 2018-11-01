@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_blender_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford

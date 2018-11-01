@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_array_1d.h
 #ifndef vbl_array_1d_h_
 #define vbl_array_1d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A simple container.

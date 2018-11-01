@@ -1,7 +1,4 @@
 // This is oxl/osl/osl_canny_smooth.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

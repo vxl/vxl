@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_edge.h
 #ifndef vbl_edge_h_
 #define vbl_edge_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A class representing a graph edge with integer vertex ids

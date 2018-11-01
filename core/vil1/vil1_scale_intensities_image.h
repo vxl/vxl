@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_scale_intensities_image.h
 #ifndef vil1_scale_intensities_image_h_
 #define vil1_scale_intensities_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Support function for vil1_scale_intensities_image_impl

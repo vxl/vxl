@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_gaussian_sampler.h
 #ifndef vpdfl_gaussian_sampler_h
 #define vpdfl_gaussian_sampler_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott

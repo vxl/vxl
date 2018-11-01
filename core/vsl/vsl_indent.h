@@ -1,9 +1,6 @@
 // This is core/vsl/vsl_indent.h
 #ifndef vsl_indent_h_
 #define vsl_indent_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

@@ -1,9 +1,6 @@
 // This is oxl/mvl/NViewMatches.h
 #ifndef NViewMatches_h_
 #define NViewMatches_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Multiple view matches with wildcards

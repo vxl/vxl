@@ -1,9 +1,6 @@
 // This is tbl/vipl/filter/vipl_filter.h
 #ifndef vipl_filter_h_
 #define vipl_filter_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // Here is how the get/set macros are used.

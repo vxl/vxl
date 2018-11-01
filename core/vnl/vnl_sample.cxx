@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_sample.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <cmath>
 #include <ctime>

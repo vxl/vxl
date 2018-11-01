@@ -1,7 +1,4 @@
 // This is gel/octree/ConvexHull.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation "ConvexHull.h"
-#endif
 //
 // Class: ConvexHull
 // Author: Geoffrey Cross, Oxford RRG

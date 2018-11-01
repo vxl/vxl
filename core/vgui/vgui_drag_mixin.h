@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_drag_mixin.h
 #ifndef vgui_drag_mixin_h_
 #define vgui_drag_mixin_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Simplifies the handling of drag events.

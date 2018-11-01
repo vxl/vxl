@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matlab_print.h
 #ifndef vnl_matlab_print_h_
 #define vnl_matlab_print_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief Print matrices and vectors in nice MATLAB format.

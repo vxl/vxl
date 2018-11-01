@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_toolkit.h
 #ifndef vgui_toolkit_h_
 #define vgui_toolkit_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

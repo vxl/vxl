@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_edgel_chain.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_lda.h
 #ifndef mbl_lda_h_
 #define mbl_lda_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Class to perform linear discriminant analysis

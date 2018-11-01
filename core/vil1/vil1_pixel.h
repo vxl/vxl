@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_pixel.h
 #ifndef vil1_pixel_h_
 #define vil1_pixel_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Convenient descriptions of format combinations

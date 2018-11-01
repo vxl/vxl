@@ -1,9 +1,6 @@
 // This is oxl/mvl/HMatrix2D.h
 #ifndef _HMatrix2D_h
 #define _HMatrix2D_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \brief 3x3 plane-to-plane projectivity

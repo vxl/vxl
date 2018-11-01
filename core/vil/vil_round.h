@@ -1,9 +1,6 @@
 // This is core/vil/vil_round.h
 #ifndef vil_round_h_
 #define vil_round_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Namespace with standard rounding functions.

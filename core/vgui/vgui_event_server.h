@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_event_server.h
 #ifndef vgui_event_server_h_
 #define vgui_event_server_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Procedural event grabbing from a tableau

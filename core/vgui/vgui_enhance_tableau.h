@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_enhance_tableau.h
 #ifndef vgui_enhance_tableau_h_
 #define vgui_enhance_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Magnify/display another tableau in a region around the mouse pointer.

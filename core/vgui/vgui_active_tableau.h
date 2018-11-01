@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_active_tableau.h
 #ifndef vgui_active_tableau_h_
 #define vgui_active_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau which toggles between visible/invisible and active/inactive.

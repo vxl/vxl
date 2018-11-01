@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_point_3d.h
 #ifndef vgl_point_3d_h
 #define vgl_point_3d_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a point in 3D nonhomogeneous space

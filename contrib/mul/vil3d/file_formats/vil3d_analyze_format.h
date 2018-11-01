@@ -1,9 +1,6 @@
 // This is mul/vil3d/file_formats/vil3d_analyze_format.h
 #ifndef vil3d_analyze_format_h_
 #define vil3d_analyze_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader/Writer for analyze format images.

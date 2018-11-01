@@ -1,9 +1,6 @@
 // This is oxl/osl/osl_vertex.h
 #ifndef osl_vertex_h_
 #define osl_vertex_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

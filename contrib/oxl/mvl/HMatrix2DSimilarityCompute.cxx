@@ -1,7 +1,4 @@
 // This is oxl/mvl/HMatrix2DSimilarityCompute.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "HMatrix2DSimilarityCompute.h"
 

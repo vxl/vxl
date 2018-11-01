@@ -1,7 +1,4 @@
 // This is core/vgui/impl/gtk2/vgui_gtk2_dialog_impl.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, RRG, University of Oxford

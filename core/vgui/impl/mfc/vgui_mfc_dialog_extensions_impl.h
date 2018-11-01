@@ -1,9 +1,6 @@
 // This is core/vgui/impl/mfc/vgui_mfc_dialog_extensions_impl.h
 #ifndef vgui_mfc_dialog_extensions_impl_h_
 #define vgui_mfc_dialog_extensions_impl_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Gamze Tunali, LEMS, Brown University

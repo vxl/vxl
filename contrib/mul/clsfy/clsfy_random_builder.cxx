@@ -1,8 +1,5 @@
 // This is mul/clsfy/clsfy_random_builder.cxx
 // Copyright (c) 2001: British Telecommunications plc
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Implement a random classifier builder

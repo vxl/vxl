@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_memory_image.h
 #ifndef vil1_memory_image_h_
 #define vil1_memory_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief vil1_image, stored entirely in RAM

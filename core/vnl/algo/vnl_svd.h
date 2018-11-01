@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_svd.h
 #ifndef vnl_svd_h_
 #define vnl_svd_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Holds the singular value decomposition of a vnl_matrix.

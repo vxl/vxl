@@ -1,7 +1,4 @@
 // This is core/vnl/vnl_matlab_read.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <ios>
 #include <iostream>
 #include <complex>

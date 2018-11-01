@@ -14,9 +14,6 @@
 //    3-Feb-07 Peter Vanroose - added get_vector()
 // \endverbatim
 //-----------------------------------------------------------------------------
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 #include <vgl/vgl_homg_point_1d.h>
 #include <vnl/vnl_fwd.h>

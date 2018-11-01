@@ -1,7 +1,4 @@
 // This is mul/vpdfl/vpdfl_axis_gaussian_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 //  \file
 

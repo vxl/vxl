@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_roi_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Marko Bacic, RRG, University of Oxford

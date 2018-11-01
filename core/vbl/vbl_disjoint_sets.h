@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_disjoint_sets.h
 #ifndef vbl_disjoint_sets_h_
 #define vbl_disjoint_sets_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief implements a disjoint set (union, find)

@@ -1,9 +1,6 @@
 // This is core/vul/vul_ios_state.h
 #ifndef vul_ios_state_h_
 #define vul_ios_state_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief saves and restores stream state

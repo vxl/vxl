@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_style.h
 #ifndef vgui_style_h_
 #define vgui_style_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Style (colour, line width, point radius) of a geometric object.

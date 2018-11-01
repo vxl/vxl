@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrixAffine.h
 #ifndef FMatrixAffine_h_
 #define FMatrixAffine_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //--------------------------------------------------------------
 //:

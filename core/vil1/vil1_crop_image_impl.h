@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_crop_image_impl.h
 #ifndef vil1_crop_image_h_
 #define vil1_crop_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A generic_image adaptor that behaves like a cropped version of its input

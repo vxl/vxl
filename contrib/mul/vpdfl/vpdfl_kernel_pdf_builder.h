@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_kernel_pdf_builder.h
 #ifndef vpdfl_kernel_pdf_builder_h
 #define vpdfl_kernel_pdf_builder_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Tim Cootes

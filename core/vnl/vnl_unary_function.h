@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_unary_function.h
 #ifndef vnl_unary_function_h_
 #define vnl_unary_function_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief Abstract 1D map

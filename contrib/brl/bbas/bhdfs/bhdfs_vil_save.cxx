@@ -1,7 +1,4 @@
 // This is brl/bbas/bhdfs/bhdfs_vil_save.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <iostream>
 #include <cctype>
 #include <cstring>

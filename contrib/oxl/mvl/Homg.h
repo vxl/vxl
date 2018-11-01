@@ -1,9 +1,6 @@
 // This is oxl/mvl/Homg.h
 #ifndef Homg_h_
 #define Homg_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Private base class for homogeneous vectors

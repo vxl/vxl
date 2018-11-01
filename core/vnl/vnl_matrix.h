@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matrix.h
 #ifndef vnl_matrix_h_
 #define vnl_matrix_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 #ifdef __INTEL_COMPILER
 #pragma warning disable 444
 #endif

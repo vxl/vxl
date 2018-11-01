@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_convert.h
 #ifndef vidl_convert_h_
 #define vidl_convert_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Convert frames to vil_image_views

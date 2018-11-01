@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_random_forest_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Implement a random_forest classifier builder

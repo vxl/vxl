@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_pointset_3d.h
 #ifndef vgl_pointset_3d_h_
 #define vgl_pointset_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A 3-d pointset. points can have normals to represent sampled surface patches

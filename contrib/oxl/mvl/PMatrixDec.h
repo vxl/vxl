@@ -1,9 +1,6 @@
 // This is oxl/mvl/PMatrixDec.h
 #ifndef PMatrixDec_h_
 #define PMatrixDec_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //

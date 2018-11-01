@@ -1,9 +1,6 @@
 // This is core/vnl/io/vnl_io_rational.h
 #ifndef vnl_io_rational_h
 #define vnl_io_rational_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Peter Vanroose

@@ -1,7 +1,4 @@
 // This is core/vgui/impl/gtk2/vgui_gtk2_adaptor.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief  See vgui_gtk2_adaptor.h for a description of this file.

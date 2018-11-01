@@ -1,9 +1,6 @@
 // This is oxl/mvl/AffineMetric.h
 #ifndef AffineMetric_h_
 #define AffineMetric_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief AffineMetric is an ImageMetric that is an affine transformation.

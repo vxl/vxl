@@ -1,9 +1,6 @@
 // This is gel/pop/pop_projective.h
 #ifndef pop_projective_h_
 #define pop_projective_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A projection of a point in 3d to a point in 2D.

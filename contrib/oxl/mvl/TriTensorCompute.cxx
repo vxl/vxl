@@ -1,7 +1,4 @@
 // This is oxl/mvl/TriTensorCompute.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // Ported from TargetJr's MViewCompute by Peter Vanroose, 17 June 2002.

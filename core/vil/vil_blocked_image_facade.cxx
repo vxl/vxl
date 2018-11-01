@@ -1,7 +1,4 @@
 // This is core/vil/vil_blocked_image_facade.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <cstring>
 #include "vil_blocked_image_facade.h"
 

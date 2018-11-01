@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_tview_tableau.h
 #ifndef vgui_tview_tableau_h_
 #define vgui_tview_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau displaying a tableau tree.

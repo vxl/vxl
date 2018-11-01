@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_viewer2D_tableau.h
 #ifndef vgui_viewer2D_tableau_h_
 #define vgui_viewer2D_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford

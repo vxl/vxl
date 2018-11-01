@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_warp.h
 #ifndef vil1_warp_h_
 #define vil1_warp_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author awf@robots.ox.ac.uk

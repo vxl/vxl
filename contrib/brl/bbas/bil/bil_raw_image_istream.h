@@ -1,9 +1,6 @@
 // This is brl/bbas/bil/bil_raw_image_istream.h
 #ifndef bil_raw_image_istream_h_
 #define bil_raw_image_istream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A video input stream from a list of images on disk

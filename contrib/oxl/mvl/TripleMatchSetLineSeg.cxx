@@ -1,7 +1,4 @@
 // This is oxl/mvl/TripleMatchSetLineSeg.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include <vector>

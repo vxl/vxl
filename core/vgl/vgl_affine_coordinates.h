@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_affine_coordinates.h
 #ifndef vgl_affine_coordinates_h_
 #define vgl_affine_coordinates_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Computes 2-d and 3-d affine coordinates of point sets

@@ -1,7 +1,4 @@
 // This is core/vil/vil_pyramid_image_resource.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <cstring>
 #include <vector>
 #include "vil_pyramid_image_resource.h"

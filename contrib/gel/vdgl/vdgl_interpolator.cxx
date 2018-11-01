@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_interpolator.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "vdgl_interpolator.h"
 #include <vsol/vsol_point_2d.h>

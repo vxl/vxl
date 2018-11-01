@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_edgel_chain.h
 #ifndef vdgl_edgel_chain_h
 #define vdgl_edgel_chain_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Represents an edgel list which is a 2d set of edgels

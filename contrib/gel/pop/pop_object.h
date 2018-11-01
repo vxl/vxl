@@ -1,9 +1,6 @@
 // This is gel/pop/pop_object.h
 #ifndef pop_object_h_
 #define pop_object_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief an object that has parameters

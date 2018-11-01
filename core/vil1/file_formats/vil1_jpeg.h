@@ -1,9 +1,6 @@
 // This is core/vil1/file_formats/vil1_jpeg.h
 #ifndef vil1_jpeg_file_format_h_
 #define vil1_jpeg_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains classes vil1_jpeg_file_format and vil1_jpeg_generic_image

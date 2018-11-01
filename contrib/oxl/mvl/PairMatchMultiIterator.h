@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairMatchMultiIterator.h
 #ifndef PairMatchMultiIterator_h_
 #define PairMatchMultiIterator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \brief Iterator for PairMatchMulti

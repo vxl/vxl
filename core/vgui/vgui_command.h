@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_command.h
 #ifndef vgui_command_h_
 #define vgui_command_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm and pcp@robots.ox.ac.uk

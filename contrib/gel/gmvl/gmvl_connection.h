@@ -1,9 +1,6 @@
 // This is gel/gmvl/gmvl_connection.h
 #ifndef gmvl_connection_h_
 #define gmvl_connection_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author crossge@crd.ge.com

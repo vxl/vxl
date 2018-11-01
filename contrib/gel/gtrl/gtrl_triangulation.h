@@ -1,9 +1,6 @@
 // This is gel/gtrl/gtrl_triangulation.h
 #ifndef gtrl_triangulation_h_
 #define gtrl_triangulation_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author crossge@crd.ge.com

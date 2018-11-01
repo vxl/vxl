@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_symmetric_eigensystem.h
 #ifndef vnl_symmetric_eigensystem_h_
 #define vnl_symmetric_eigensystem_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Find eigenvalues of a symmetric matrix

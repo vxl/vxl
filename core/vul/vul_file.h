@@ -1,9 +1,6 @@
 // This is core/vul/vul_file.h
 #ifndef vul_file_h_
 #define vul_file_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A collection of miscellaneous filesystem-type utilities

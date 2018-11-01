@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_digital_curve.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 #include "vdgl_digital_curve.h"

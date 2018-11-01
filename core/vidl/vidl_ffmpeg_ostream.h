@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_ffmpeg_ostream.h
 #ifndef vidl_ffmpeg_ostream_h_
 #define vidl_ffmpeg_ostream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A video output stream to an encoded file using FFMPEG

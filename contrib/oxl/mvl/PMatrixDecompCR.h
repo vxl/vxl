@@ -1,9 +1,6 @@
 // This is oxl/mvl/PMatrixDecompCR.h
 #ifndef PMatrixDecompCR_h_
 #define PMatrixDecompCR_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Decompose PMatrix into calibration + rotation

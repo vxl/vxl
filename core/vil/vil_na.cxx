@@ -1,7 +1,4 @@
 // This is core/vil/vil_na.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // This file is a cut-and-paste of vnl_na.cxx

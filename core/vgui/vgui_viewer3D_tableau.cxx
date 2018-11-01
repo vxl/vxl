@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_viewer3D_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief  See vgui_viewer3D_tableau.h for a description of this file

@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_box_2d.h
 #ifndef vgl_box_2d_h
 #define vgl_box_2d_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class to represent a cartesian 2D bounding box.

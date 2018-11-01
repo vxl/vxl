@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_scale_intensities.h
 #ifndef vil1_scale_intensities_h_
 #define vil1_scale_intensities_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated functions to scale/shift image pixel values

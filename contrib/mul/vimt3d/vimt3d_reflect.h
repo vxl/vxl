@@ -1,9 +1,6 @@
 // This is mul/vimt3d/vimt3d_reflect.h
 #ifndef vimt3d_reflect_h_
 #define vimt3d_reflect_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Kevin de Souza

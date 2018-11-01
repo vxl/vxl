@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_smooth.h
 #ifndef vil1_smooth_h_
 #define vil1_smooth_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Functions to convolve a vil1_image with a smoothing kernel

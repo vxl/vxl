@@ -1,7 +1,4 @@
 // This is core/vil/algo/vil_colour_space.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

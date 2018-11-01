@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_na.h
 #ifndef vnl_na_h_
 #define vnl_na_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 
 #include <iosfwd>

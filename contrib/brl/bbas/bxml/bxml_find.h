@@ -1,9 +1,6 @@
 // This is brl/bbas/bxml/bxml_find.h
 #ifndef bxml_find_h_
 #define bxml_find_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief functions to search XML documents

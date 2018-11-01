@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_alloc.h
 #ifndef vnl_alloc_h_
 #define vnl_alloc_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author unknown

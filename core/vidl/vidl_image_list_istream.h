@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_image_list_istream.h
 #ifndef vidl_image_list_istream_h_
 #define vidl_image_list_istream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A video input stream from a list of images on disk

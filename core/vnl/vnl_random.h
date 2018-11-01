@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_random.h
 #ifndef vnl_random_h
 #define vnl_random_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

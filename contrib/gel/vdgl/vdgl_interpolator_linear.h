@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_interpolator_linear.h
 #ifndef vdgl_interpolator_linear_h
 #define vdgl_interpolator_linear_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Represents a linear 2D interpolator for a vdgl_edgel_chain

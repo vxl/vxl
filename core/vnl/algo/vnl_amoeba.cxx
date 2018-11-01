@@ -1,7 +1,4 @@
 // This is core/vnl/algo/vnl_amoeba.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

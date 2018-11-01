@@ -1,9 +1,6 @@
 // This is mul/clsfy/clsfy_adaboost_trainer.h
 #ifndef clsfy_adaboost_trainer_h_
 #define clsfy_adaboost_trainer_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm

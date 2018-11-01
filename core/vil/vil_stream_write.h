@@ -1,9 +1,6 @@
 // This is core/vil/vil_stream_write.h
 #ifndef vil_stream_write_h_
 #define vil_stream_write_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief write integers to vil_stream

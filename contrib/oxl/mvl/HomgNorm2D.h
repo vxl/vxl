@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgNorm2D.h
 #ifndef HomgNorm2D_h_
 #define HomgNorm2D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 // \brief Normalize homogeneous points

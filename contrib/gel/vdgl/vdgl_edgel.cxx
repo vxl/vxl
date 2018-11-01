@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_edgel.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include "vdgl_edgel.h"

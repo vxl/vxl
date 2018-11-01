@@ -1,7 +1,4 @@
 // This is gel/octree/VoxmapImagePoints.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation "VoxmapImagePoints.h"
-#endif
 //
 // Class: VoxmapImagePoints
 // Author: Geoffrey Cross, Oxford RRG

@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk/vgui_gtk_adaptor.h
 #ifndef vgui_gtk_adaptor_h_
 #define vgui_gtk_adaptor_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Philip C. Pritchett, Robotics Research Group, University of Oxford

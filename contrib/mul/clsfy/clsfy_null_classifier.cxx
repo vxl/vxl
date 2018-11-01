@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_null_classifier.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 // Copyright (c) 2009: Imorphics plc
 
 //:

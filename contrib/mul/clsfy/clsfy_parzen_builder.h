@@ -2,9 +2,6 @@
 // Copyright: (C) 2001 British Telecommunications plc
 #ifndef clsfy_parzen_builder_h_
 #define clsfy_parzen_builder_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Describe a Parzen window classifier builder

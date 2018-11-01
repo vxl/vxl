@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgMetric.h
 #ifndef HomgMetric_h_
 #define HomgMetric_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Measurements on homogeneous coordinates

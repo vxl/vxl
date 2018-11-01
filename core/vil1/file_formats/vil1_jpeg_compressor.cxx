@@ -1,7 +1,4 @@
 // This is core/vil1/file_formats/vil1_jpeg_compressor.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

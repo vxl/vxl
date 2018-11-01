@@ -1,9 +1,6 @@
 // This is oxl/mvl/MatchSet.h
 #ifndef MatchSet_h_
 #define MatchSet_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Base class for correspondences

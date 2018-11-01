@@ -1,9 +1,6 @@
 // This is gel/pop/pop_edge.h
 #ifndef pop_edge_h_
 #define pop_edge_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief This is an edge/coordinate system transform in a coordinate system graph

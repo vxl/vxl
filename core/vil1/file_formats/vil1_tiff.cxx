@@ -1,7 +1,4 @@
 // This is core/vil1/file_formats/vil1_tiff.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief See vil1_tiff.h for a description of this file.

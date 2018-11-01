@@ -1,7 +1,4 @@
 // This is core/vil/vil_image_resource_plugin.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Interface for loading new image formats

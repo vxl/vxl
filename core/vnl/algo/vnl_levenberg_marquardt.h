@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_levenberg_marquardt.h
 #ifndef vnl_levenberg_marquardt_h_
 #define vnl_levenberg_marquardt_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Levenberg Marquardt nonlinear least squares

@@ -1,9 +1,6 @@
 // This is core/vgl/algo/boxm2_vecf_fit_fat_pocket.h
 #ifndef boxm2_vecf_fit_fat_pocket_h_
 #define boxm2_vecf_fit_fat_pocket_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Estimates the fat pocket parameters to match a point cloud of the skin

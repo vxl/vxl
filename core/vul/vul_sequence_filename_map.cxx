@@ -1,7 +1,4 @@
 // This is core/vul/vul_sequence_filename_map.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 // Author: David Capel, Oxford RRG
 // Created: 15 April 2000

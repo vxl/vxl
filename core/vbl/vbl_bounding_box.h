@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_bounding_box.h
 #ifndef vbl_bounding_box_h_
 #define vbl_bounding_box_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains a bounding box class

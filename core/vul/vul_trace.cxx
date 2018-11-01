@@ -1,7 +1,4 @@
 // This is core/vul/vul_trace.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include <iostream>
 #include "vul_trace.h"
 #ifdef _MSC_VER

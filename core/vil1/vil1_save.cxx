@@ -1,7 +1,4 @@
 // This is core/vil1/vil1_save.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

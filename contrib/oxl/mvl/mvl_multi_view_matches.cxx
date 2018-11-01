@@ -1,7 +1,4 @@
 // This is oxl/mvl/mvl_multi_view_matches.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include <iostream>
 #include <cstdlib>

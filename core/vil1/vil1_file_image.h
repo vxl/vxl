@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_file_image.h
 #ifndef vil1_file_image_h_
 #define vil1_file_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Class to load an image from disk

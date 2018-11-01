@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgPrettyPrint.h
 #ifndef HomgPrettyPrint_h_
 #define HomgPrettyPrint_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author

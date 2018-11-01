@@ -1,7 +1,4 @@
 // This is mul/vpdfl/vpdfl_pc_gaussian.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Implementation of Multi-variate principal Component Gaussian PDF.

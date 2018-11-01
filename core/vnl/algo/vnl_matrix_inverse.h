@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_matrix_inverse.h
 #ifndef vnl_matrix_inverse_h_
 #define vnl_matrix_inverse_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Calculates inverse of a matrix (wrapper around vnl_svd<double>)

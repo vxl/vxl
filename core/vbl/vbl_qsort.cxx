@@ -1,7 +1,4 @@
 // This is core/vbl/vbl_qsort.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //
 
 // Author: Andrew W. Fitzgibbon, Oxford RRG

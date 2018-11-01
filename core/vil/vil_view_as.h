@@ -1,9 +1,6 @@
 // This is core/vil/vil_view_as.h
 #ifndef vil_view_as_h_
 #define vil_view_as_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Various view conversion functions.

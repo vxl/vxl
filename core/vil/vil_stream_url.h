@@ -1,9 +1,6 @@
 // This is core/vil/vil_stream_url.h
 #ifndef vil_stream_url_h_
 #define vil_stream_url_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief open an URL

@@ -1,8 +1,5 @@
 #ifndef vil_dicom_header_h_
 #define vil_dicom_header_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief DICOM Header reader and writer.

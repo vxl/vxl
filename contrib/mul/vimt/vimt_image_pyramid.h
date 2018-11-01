@@ -1,9 +1,6 @@
 // This is mul/vimt/vimt_image_pyramid.h
 #ifndef vimt_image_pyramid_h_
 #define vimt_image_pyramid_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Pyramid of images of arbitrary type

@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairMatchSetLineSeg.h
 #ifndef PairMatchSetLineSeg_h_
 #define PairMatchSetLineSeg_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Matches between homogeneous line segments

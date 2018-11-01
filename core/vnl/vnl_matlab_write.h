@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_matlab_write.h
 #ifndef vnl_matlab_write_h_
 #define vnl_matlab_write_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 //  \brief Write to a MAT file

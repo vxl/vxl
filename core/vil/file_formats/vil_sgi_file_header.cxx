@@ -1,7 +1,4 @@
 // This is core/vil/file_formats/vil_sgi_file_header.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author David Hughes

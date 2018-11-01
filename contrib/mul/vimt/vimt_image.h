@@ -1,9 +1,6 @@
 // This is mul/vimt/vimt_image.h
 #ifndef vimt_image_h_
 #define vimt_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A base class for images of any dimension and type

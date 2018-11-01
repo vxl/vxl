@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_homg_point_1d.h
 #ifndef vgl_homg_point_1d_h_
 #define vgl_homg_point_1d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a point in homogeneous 1-D space, i.e., a homogeneous pair \a (x,w)

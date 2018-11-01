@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_h_matrix_1d.h
 #ifndef vgl_h_matrix_1d_h_
 #define vgl_h_matrix_1d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief 2x2 line-to-line projectivity

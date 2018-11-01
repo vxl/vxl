@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_rubberband_tableau.h
 #ifndef vgui_rubberband_tableau_h_
 #define vgui_rubberband_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author  K.Y.McGaul

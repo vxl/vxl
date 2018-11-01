@@ -1,7 +1,4 @@
 // This is core/vidl/vidl_ffmpeg_ostream_params.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 #include "vidl_ffmpeg_ostream_params.h"
 //:
 // \file

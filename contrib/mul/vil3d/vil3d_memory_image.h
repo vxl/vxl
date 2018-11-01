@@ -1,9 +1,6 @@
 // This is mul/vil3d/vil3d_memory_image.h
 #ifndef vil3d_memory_image_h_
 #define vil3d_memory_image_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott

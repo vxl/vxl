@@ -1,9 +1,6 @@
 // This is core/vil/vil_print.h
 #ifndef vil_print_h_
 #define vil_print_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Ian Scott, Tim Cootes.

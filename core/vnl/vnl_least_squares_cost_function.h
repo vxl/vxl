@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_least_squares_cost_function.h
 #ifndef vnl_least_squares_cost_function_h_
 #define vnl_least_squares_cost_function_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief vnl_least_squares_function -> vnl_cost_function adaptor

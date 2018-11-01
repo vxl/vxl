@@ -1,9 +1,6 @@
 // This is gel/vdgl/vdgl_ortho_regress.h
 #ifndef vdgl_ortho_regress_h_
 #define vdgl_ortho_regress_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 // .NAME vdgl_ortho_regress
 // .INCLUDE vdgl/vdgl_ortho_regress.h
 // .FILE vdgl_ortho_regress.cxx

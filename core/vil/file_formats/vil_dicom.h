@@ -1,9 +1,6 @@
 // This is core/vil/file_formats/vil_dicom.h
 #ifndef vil_dicom_file_format_h_
 #define vil_dicom_file_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader/Writer for DICOM format 2D images.

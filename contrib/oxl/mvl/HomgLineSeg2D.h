@@ -1,9 +1,6 @@
 // This is oxl/mvl/HomgLineSeg2D.h
 #ifndef HomgLineSeg2D_h_
 #define HomgLineSeg2D_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Homogeneous 2D line segment

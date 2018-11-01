@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMatrixComputeNonLinear.h
 #ifndef FMatrixComputeNonLinear_h_
 #define FMatrixComputeNonLinear_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 //    FMatrixComputeNonLinear is a class that contains the functions required for

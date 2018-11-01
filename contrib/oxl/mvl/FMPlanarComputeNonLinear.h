@@ -1,9 +1,6 @@
 // This is oxl/mvl/FMPlanarComputeNonLinear.h
 #ifndef FMPlanarComputeNonLinear_h_
 #define FMPlanarComputeNonLinear_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Nonlinear least squares planar fundamental matrix fit

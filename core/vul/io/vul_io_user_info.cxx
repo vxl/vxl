@@ -1,7 +1,4 @@
 // This is core/vul/io/vul_io_user_info.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 #include <iostream>

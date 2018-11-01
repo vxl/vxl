@@ -1,9 +1,6 @@
 // This is core/vil/vil_blocked_image_resource.h
 #ifndef vil_blocked_image_resource_h_
 #define vil_blocked_image_resource_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A blocked representation of the image_resource

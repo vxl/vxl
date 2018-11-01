@@ -1,7 +1,4 @@
 // This is core/vgui/vgui_loader_tableau.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Geoffrey Cross, Oxford RRG

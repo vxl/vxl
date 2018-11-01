@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_pixel_iterator.hxx
 #ifndef vidl_pixel_iterator_hxx_
 #define vidl_pixel_iterator_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated definitions for pixel iterators

@@ -1,9 +1,6 @@
 // This is mul/vil3d/vil3d_copy.hxx
 #ifndef vil3d_copy_hxx_
 #define vil3d_copy_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Ian Scott, ISBE, Manchester

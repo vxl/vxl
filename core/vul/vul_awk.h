@@ -1,9 +1,6 @@
 // This is core/vul/vul_awk.h
 #ifndef vul_awk_h_
 #define vul_awk_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Andrew W. Fitzgibbon, Oxford RRG

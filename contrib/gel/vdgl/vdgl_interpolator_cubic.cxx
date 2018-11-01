@@ -1,7 +1,4 @@
 // This is gel/vdgl/vdgl_interpolator_cubic.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 

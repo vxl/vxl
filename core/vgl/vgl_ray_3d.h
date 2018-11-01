@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_ray_3d.h
 #ifndef vgl_ray_3d_h_
 #define vgl_ray_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A 3-d ray defined by an origin and a direction vector

@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_gaussian.h
 #ifndef vpdfl_gaussian_h
 #define vpdfl_gaussian_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Multi-variate gaussian PDF with arbitrary axes.

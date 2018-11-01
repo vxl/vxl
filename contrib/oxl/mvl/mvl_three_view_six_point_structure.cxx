@@ -1,7 +1,4 @@
 // This is oxl/mvl/mvl_three_view_six_point_structure.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

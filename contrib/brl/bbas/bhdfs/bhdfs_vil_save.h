@@ -1,9 +1,6 @@
 // This is contrib/brl/bbas/bhdfs/bhdfs_vil_save.h
 #ifndef bhdfs_vil_save_h_
 #define bhdfs_vil_save_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author    Ozge C. Ozcanli, Dec 08, 2011

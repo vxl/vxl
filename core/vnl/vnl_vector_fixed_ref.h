@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_vector_fixed_ref.h
 #ifndef vnl_vector_fixed_ref_h_
 #define vnl_vector_fixed_ref_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fixed size vnl_vector using user-supplied storage

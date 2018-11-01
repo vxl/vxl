@@ -1,7 +1,4 @@
 // This is core/vil/vil_image_resource.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Ian Scott  ISBE Manchester

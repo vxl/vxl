@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_numeric_traits.h
 #ifndef vnl_numeric_traits_h_
 #define vnl_numeric_traits_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Templated zero/one/precision

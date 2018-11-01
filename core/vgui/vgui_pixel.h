@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_pixel.h
 #ifndef vgui_pixel_h_
 #define vgui_pixel_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief contains struct vgui_pixel_rgb<r,g,b> and other similar ones

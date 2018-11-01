@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_crs_index.h
 #ifndef vnl_crs_index_h_
 #define vnl_crs_index_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Compressed Row Storage (CRS) indexing

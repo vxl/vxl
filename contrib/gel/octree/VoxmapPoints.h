@@ -1,9 +1,6 @@
 // This is gel/octree/VoxmapPoints.h
 #ifndef VoxmapPoints_h_
 #define VoxmapPoints_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author

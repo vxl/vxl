@@ -1,7 +1,4 @@
 // This is core/vgui/impl/mfc/vgui_mfc_window.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief   See vgui_mfc_window.h for a description of this file.

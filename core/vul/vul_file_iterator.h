@@ -1,9 +1,6 @@
 // This is core/vul/vul_file_iterator.h
 #ifndef vul_file_iterator_h_
 #define vul_file_iterator_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief class to iterate through directories and/or "glob" patterns (*.*)

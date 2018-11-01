@@ -1,9 +1,6 @@
 // This is mul/vpdfl/vpdfl_pdf_base.h
 #ifndef vpdfl_pdf_base_h
 #define vpdfl_pdf_base_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Base class for Multi-Variate Probability Density Function classes.

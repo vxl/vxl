@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_array_3d.h
 #ifndef vbl_array_3dh
 #define vbl_array_3dh
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains class for templated 3d array

@@ -1,9 +1,6 @@
 // This is gel/octree/OctreeLevel.h
 #ifndef OctreeLevel_h_
 #define OctreeLevel_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author

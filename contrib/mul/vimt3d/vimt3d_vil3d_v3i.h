@@ -1,9 +1,6 @@
 // This is mul/vimt3d/vimt3d_vil3d_v3i.h
 #ifndef vimt3d_vil3d_v3i_h_
 #define vimt3d_vil3d_v3i_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader/Writer for v3i format images.

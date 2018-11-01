@@ -1,9 +1,6 @@
 // This is core/vil1/vil1_flip_components_impl.h
 #ifndef vil1_flip_components_impl_h_
 #define vil1_flip_components_impl_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Peter Vanroose, ESAT, KULeuven.

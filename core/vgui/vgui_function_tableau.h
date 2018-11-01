@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_function_tableau.h
 #ifndef vgui_function_tableau_h_
 #define vgui_function_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau where functions passed in are called for various events.

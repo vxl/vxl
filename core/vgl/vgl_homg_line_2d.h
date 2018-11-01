@@ -1,9 +1,6 @@
 // This is core/vgl/vgl_homg_line_2d.h
 #ifndef vgl_homg_line_2d_h
 #define  vgl_homg_line_2d_h
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief line in projective 2D space

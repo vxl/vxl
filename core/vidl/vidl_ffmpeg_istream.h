@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_ffmpeg_istream.h
 #ifndef vidl_ffmpeg_istream_h_
 #define vidl_ffmpeg_istream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A video input stream using FFMPEG to decoded files

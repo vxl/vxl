@@ -1,9 +1,6 @@
 // This is core/vgui/impl/gtk2/vgui_gtk2_utils.h
 #ifndef vgui_gtk2_utils_h_
 #define vgui_gtk2_utils_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author Robotics Research Group, University of Oxford

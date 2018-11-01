@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_quaternion.h
 #ifndef vnl_quaternion_h_
 #define vnl_quaternion_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Unit quaternion represents rotation in 3D.

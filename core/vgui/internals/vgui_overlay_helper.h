@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_overlay_helper.h
 #ifndef vgui_overlay_helper_h_
 #define vgui_overlay_helper_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

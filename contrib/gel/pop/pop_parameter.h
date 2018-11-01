@@ -1,9 +1,6 @@
 // This is gel/pop/pop_parameter.h
 #ifndef pop_parameter_h_
 #define pop_parameter_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief a parameter that can be optimized

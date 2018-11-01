@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_direct_boost_builder.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \brief Functions to train classifiers using AdaBoost algorithm

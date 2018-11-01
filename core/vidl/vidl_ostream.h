@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_ostream.h
 #ifndef vidl_ostream_h_
 #define vidl_ostream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A base class for output video streams

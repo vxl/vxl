@@ -1,9 +1,6 @@
 // This is core/vsl/vsl_clipon_binary_loader.h
 #ifndef vsl_clipon_binary_loader_h_
 #define vsl_clipon_binary_loader_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 

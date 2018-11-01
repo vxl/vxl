@@ -1,7 +1,4 @@
 // This is core/vidl/vidl_dc1394_istream.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author Matt Leotta

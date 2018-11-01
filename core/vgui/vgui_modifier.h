@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_modifier.h
 #ifndef vgui_modifier_h_
 #define vgui_modifier_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author VGG, Oxford University

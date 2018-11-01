@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_lsqr.h
 #ifndef vnl_lsqr_h_
 #define vnl_lsqr_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Linear least squares

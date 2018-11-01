@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_tag.h
 #ifndef vgui_tag_h_
 #define vgui_tag_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Allow clients to register 'tag functions' which are called later.

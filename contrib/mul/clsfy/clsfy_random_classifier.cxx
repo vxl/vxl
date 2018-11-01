@@ -1,7 +1,4 @@
 // This is mul/clsfy/clsfy_random_classifier.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 // Copyright (c) 2001: British Telecommunications plc
 
 //:

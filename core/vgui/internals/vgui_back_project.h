@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_back_project.h
 #ifndef vgui_back_project_h_
 #define vgui_back_project_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm@robots.ox.ac.uk

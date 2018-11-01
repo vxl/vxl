@@ -1,8 +1,5 @@
 #ifndef vbl_test_array_x_h_
 #define vbl_test_array_x_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A simple object to test a container.

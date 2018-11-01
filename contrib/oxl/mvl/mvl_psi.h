@@ -1,9 +1,6 @@
 // This is oxl/mvl/mvl_psi.h
 #ifndef mvl_psi_h_
 #define mvl_psi_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

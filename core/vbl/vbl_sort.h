@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_sort.h
 #ifndef vbl_sort_h_
 #define vbl_sort_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Collection of common predicates for sorting

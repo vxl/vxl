@@ -1,9 +1,6 @@
 // This is core/vbl/vbl_qsort.h
 #ifndef vbl_qsort_h_
 #define vbl_qsort_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Collection of common predicates for library sort routines

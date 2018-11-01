@@ -1,9 +1,6 @@
 // This is mul/mbl/mbl_data_wrapper.hxx
 #ifndef mbl_data_wrapper_hxx_
 #define mbl_data_wrapper_hxx_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 //  \file
 

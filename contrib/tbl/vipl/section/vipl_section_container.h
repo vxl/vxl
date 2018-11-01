@@ -1,9 +1,6 @@
 // This is tbl/vipl/section/vipl_section_container.h
 #ifndef vipl_section_container_h_
 #define vipl_section_container_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 #include <vector>
 #include <iostream>

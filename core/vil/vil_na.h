@@ -1,9 +1,6 @@
 // This is core/vil/vil_na.h
 #ifndef vil_na_h_
 #define vil_na_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 //:
 // \file

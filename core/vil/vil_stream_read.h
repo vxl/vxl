@@ -1,8 +1,5 @@
 #ifndef vil_stream_read_h_
 #define vil_stream_read_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief read numbers from vil_stream

@@ -1,9 +1,6 @@
 // This is gel/pop/pop_geometric_object.h
 #ifndef pop_geometric_object_h_
 #define pop_geometric_object_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief this is a geometric object which has a coordinate system.

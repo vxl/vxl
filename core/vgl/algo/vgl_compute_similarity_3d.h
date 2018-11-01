@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_compute_similarity_3d.h
 #ifndef vgl_compute_similarity_3d_h_
 #define vgl_compute_similarity_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Compute a similarity transformation between two corresponding sets of 3D points

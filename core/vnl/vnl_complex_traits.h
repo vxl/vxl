@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_complex_traits.h
 #ifndef vnl_complex_traits_h_
 #define vnl_complex_traits_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief To allow templated algorithms to determine appropriate actions of conjugation, complexification etc.

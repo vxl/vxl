@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_fit_plane_3d.h
 #ifndef vgl_fit_plane_3d_h_
 #define vgl_fit_plane_3d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fits a plane to a set of 3D points

@@ -1,9 +1,6 @@
 // This is core/vnl/algo/vnl_complex_generalized_schur.h
 #ifndef vnl_complex_generalized_schur_h_
 #define vnl_complex_generalized_schur_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Solves the generalized eigenproblem det(t A - s B) = 0.

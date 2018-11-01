@@ -1,9 +1,6 @@
 // This is core/vgui/vgui_viewer3D_tableau.h
 #ifndef vgui_viewer3D_tableau_h_
 #define vgui_viewer3D_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief  Tableau with functions to view 3D objects (eg, rotate, zoom, etc).

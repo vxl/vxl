@@ -1,7 +1,4 @@
 // This is gel/gst/gst_edge_2d.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author crossge@crd.ge.com

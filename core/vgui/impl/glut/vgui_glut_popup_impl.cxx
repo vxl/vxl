@@ -1,7 +1,4 @@
 // This is core/vgui/impl/glut/vgui_glut_popup_impl.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

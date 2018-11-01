@@ -1,7 +1,4 @@
 // This is oxl/mvl/PairSetCorner.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 
 #include "PairSetCorner.h"
 

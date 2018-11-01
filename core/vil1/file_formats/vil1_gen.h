@@ -12,9 +12,6 @@
 //   12 Sept. 2002 Peter Vanroose - Changed type of params_ from float to int
 // \endverbatim
 
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 
 #include <string>
 #ifdef _MSC_VER

@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_istream_image_resource.h
 #ifndef vidl_istream_image_resource_h_
 #define vidl_istream_image_resource_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Wraps an input stream and frame number as a vil_image_resource

@@ -1,9 +1,6 @@
 // This is mul/vil3d/file_formats/vil3d_gen_synthetic.h
 #ifndef vil3d_gen_synthetic_h_
 #define vil3d_gen_synthetic_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader for simple synthetic images generated on the fly.

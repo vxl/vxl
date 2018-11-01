@@ -1,8 +1,5 @@
 #ifndef vil3d_dicom_format_h_
 #define vil3d_dicom_format_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Reader/Writer for DICOM format images.

@@ -1,9 +1,6 @@
 // This is core/vgl/algo/vgl_fit_lines_2d.h
 #ifndef vgl_fit_lines_2d_h_
 #define vgl_fit_lines_2d_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Fits a contiguous set of line segments to a sampled curve

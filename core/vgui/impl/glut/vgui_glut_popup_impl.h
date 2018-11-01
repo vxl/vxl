@@ -1,9 +1,6 @@
 // This is core/vgui/impl/glut/vgui_glut_popup_impl.h
 #ifndef vgui_glut_popup_impl_h_
 #define vgui_glut_popup_impl_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 // .NAME vgui_glut_popup_impl
 // .LIBRARY vgui-glut
 // .INCLUDE vgui/impl/glut/vgui_glut_popup_impl.h

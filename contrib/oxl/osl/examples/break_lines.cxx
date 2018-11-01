@@ -1,7 +1,4 @@
 // This is oxl/osl/examples/break_lines.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation "vul_arg.h"//otherwise "unresolved typeinfo vul_arg_base"
-#endif
 //:
 // \file
 // \author fsm

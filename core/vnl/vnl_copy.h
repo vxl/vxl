@@ -1,9 +1,6 @@
 // This is core/vnl/vnl_copy.h
 #ifndef vnl_copy_h_
 #define vnl_copy_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 #include "vnl/vnl_export.h"
 //:
 //   \file

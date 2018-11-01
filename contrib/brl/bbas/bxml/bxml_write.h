@@ -1,9 +1,6 @@
 // This is brl/bbas/bxml/bxml_write.h
 #ifndef bxml_write_h_
 #define bxml_write_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief functions to write XML documents

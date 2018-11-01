@@ -1,9 +1,6 @@
 // This is core/vgui/internals/vgui_adaptor_tableau.h
 #ifndef vgui_adaptor_tableau_h_
 #define vgui_adaptor_tableau_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \author fsm

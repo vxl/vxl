@@ -1,7 +1,4 @@
 // This is oxl/osl/internals/osl_reorder_chain.cxx
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma implementation
-#endif
 //:
 // \file
 // \author fsm

@@ -1,9 +1,6 @@
 // This is core/vul/vul_printf.h
 #ifndef vul_printf_h_
 #define vul_printf_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Contains vul_printf function

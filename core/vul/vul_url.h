@@ -1,9 +1,6 @@
 // This is core/vul/vul_url.h
 #ifndef vul_url_h_
 #define vul_url_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Static class methods to test and open streams via a URL

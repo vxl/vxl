@@ -1,9 +1,6 @@
 // This is core/vidl/vidl_v4l_istream.h
 #ifndef vidl_v4l_istream_h_
 #define vidl_v4l_istream_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief A class for input video streams from a video-4-linux device

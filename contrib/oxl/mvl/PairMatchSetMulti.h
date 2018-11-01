@@ -1,9 +1,6 @@
 // This is oxl/mvl/PairMatchSetMulti.h
 #ifndef PairMatchSetMulti_h_
 #define PairMatchSetMulti_h_
-#ifdef VCL_NEEDS_PRAGMA_INTERFACE
-#pragma interface
-#endif
 //:
 // \file
 // \brief Multimap of ints
