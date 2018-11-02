@@ -16,7 +16,7 @@
 #include <vpl/vpl.h>
 #include <vpl/vpl_fileno.h>
 #include <vpl/vpl_fdopen.h>
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
   #include <winsock2.h>
 #endif
 
@@ -47,7 +47,7 @@ static void test_unistd(int argc, char *argv[])
     if (retval != 0)
     {
       std::cerr << "errno: " << errno
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
                << "WSAErr: " << WSAGetLastError()
 #endif
                << std::endl;

@@ -9,14 +9,6 @@ int test_preprocessor_main(int /*argc*/,char* /*argv*/[])
   unsigned major_count = 0;
   unsigned minor_count = 0;
 
-#ifdef VCL_GCC
-  ++compiler_count;
-#endif
-
-#ifdef VCL_VC
-  ++compiler_count;
-#endif
-
   int result = 0;
 
   std::cout << "Compiler brand uniquely identified: ";

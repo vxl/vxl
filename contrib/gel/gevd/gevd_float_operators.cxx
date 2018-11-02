@@ -22,7 +22,7 @@
 # include <vul/vul_timer.h>
 #endif
 
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
 inline static double rint(double v)
 {
   return  v - std::floor(v) < 0.5  ?  std::floor(v)  :  std::ceil(v);

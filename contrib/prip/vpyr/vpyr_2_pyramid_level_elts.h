@@ -132,7 +132,7 @@ class vpyr_2_pyramid_level_dart_base_iterator : protected FD
   //:
   vpyr_2_pyramid_level_dart_base_iterator() = default;
 
-#ifndef VCL_VC // already covered by the next, more general, copy constructor
+#ifndef _MSC_VER // already covered by the next, more general, copy constructor
   //:
   vpyr_2_pyramid_level_dart_base_iterator(const self_type &it)
     :element_type(it),it_(it.it_)                              {}

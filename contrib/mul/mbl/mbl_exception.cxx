@@ -10,7 +10,7 @@
 
 #include <vcl_compiler.h>
 
-#if 0 // should be #ifdef VCL_VC, but it doesn't work yet - I can't get it to link
+#if 0 // should be #ifdef _MSC_VER, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")
 #pragma comment (lib, "dbghelp")
 #include <vxl_config.h>
@@ -56,14 +56,14 @@ static std::string LotsOfInfo()
   return text;
 }
 
-#else // 0, should be VCL_VC
+#else // 0, should be _MSC_VER
 
 static std::string LotsOfInfo()
 {
   return "";
 }
 
-#endif // 0, should be VCL_VC
+#endif // 0, should be _MSC_VER
 
 mbl_exception_abort::mbl_exception_abort(const std::string& comment):
   std::logic_error(comment + LotsOfInfo()) {}

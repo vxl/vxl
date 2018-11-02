@@ -65,7 +65,7 @@ int vpl_putenv ( const char * envvar )
 
 int vpl_gethostname(char *name, std::size_t len)
 {
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
   static bool wsa_initialised = false;
 
   if (!wsa_initialised)

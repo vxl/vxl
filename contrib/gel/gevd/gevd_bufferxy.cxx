@@ -12,7 +12,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 
-#if defined(VCL_VC) || defined(VCL_GCC) || defined(__INTEL_COMPILER)
+#if defined(_MSC_VER) || defined(__GNUC__) || defined(__INTEL_COMPILER)
 #define iostream_char char
 #else
 #define iostream_char unsigned char

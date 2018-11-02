@@ -7,7 +7,7 @@
 #include <iostream>
 #include <vcl_compiler.h>
 
-#if defined(VCL_VC) || defined(VCL_GCC)
+#if defined(_MSC_VER) || defined(__GNUC__)
 # define RGRL_HERE __FUNCTION__
 #else
 # define RGRL_HERE __FILE__

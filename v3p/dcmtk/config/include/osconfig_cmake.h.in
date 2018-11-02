@@ -12,7 +12,7 @@
 #define END_EXTERN_C
 #endif
 
-#include <vcl_config_compiler.h>
+#include <vcl_compiler.h>
 
 #define HAVE_LONG_FILE_NAMES 1
 /* #undef HAVE_DECLARATION_STD___IOS_OPENMODE */

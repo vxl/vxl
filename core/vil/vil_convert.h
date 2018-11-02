@@ -216,7 +216,7 @@ macro( vxl_uint_64 )
 #endif // DOXYGEN_SHOULD_SKIP_THIS
 // declare general case in case anyone needs something weird.
 
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
 // Visual C++ intentionally warns when a non-bool is assigned or
 // cast to a bool. Since the following cast is valid, we suppress the
 // warning.
@@ -230,7 +230,7 @@ inline void vil_convert_cast_pixel<In, Out>::operator () (In v, Out &d) const
   d = static_cast<Out>(v);
 }
 
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
 # pragma warning( pop )
 #endif
 

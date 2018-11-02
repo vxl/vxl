@@ -1,95 +1,31 @@
 #ifndef vcl_compiler_h_
 #define vcl_compiler_h_
-#define VXL_LEGACY_FUTURE_REMOVE
+
 //:
 // \file
-// \brief Uniform macro definition scheme for finding out about the compiler
+// This file either is generated from vcl_compiler.h.in
+// This file has mostly been replaced with
+// CMake supported features in the auto-generated
+// vcl_compiler_detection.h
 //
-// It's much better to determine the compiler automatically here than to depend
-// on command-line flags being set.
-//
-// Note that this is most commonly implemented using a cascade of if
-// statements. Be careful to add your statements to the correct place
-// in the cascade list.
-//
-// Naming scheme:
-// If you have a compiler name XYZ, then
-//     #define VCL_XYZ
-// Each each major release, define a release number
-//     #define VCL_XYZ_4
-// Avoid using the marketing name for the release number, because it's
-// harder to follow. For example, Microsoft Visual C++ .NET 2003 is
-// better called Visual C++ 7.
-// For each minor version, define the appropriate minor version number
-//     #define VCL_XYZ_40
-// If necessary, define the patchlevel too:
-//     #define VCL_XYZ_401
-//
-// Make sure that if the minor version is defined, then the release
-// number and the compiler name are also defined.
-//
-// Add the corresponding test to tests/test_platform to make sure.
+#include "vcl_compiler_detection.h"
 
-#if defined(__GNUC__) && !defined(__ICC) // icc 8.0 defines __GNUC__
-# define VCL_GCC
-# if (__GNUC__ < 4)
-#  error "Invalid VCL_GCC version not supported."
-# endif
-#define VCL_GCC_4  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_40 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_41 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_42 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_43 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_5  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_50 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_51 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_52 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_53 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_6  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_60 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_61 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_62 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_63 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_7  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_70  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_71 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_GCC_72 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+//----------------------------------------------------------------------
+// syntax-like things.
+
+/* The version of the CXX compiler used when VXL was built */
+#define VXL_COMPILED_CXX_STANDARD_VERSION @VXL_COMPILED_CXX_STANDARD_VERSION@
+
+/* Test external applications to ensure that compatible compiler C++ standard API are used
+ * by assuming that compiler standards are backwards (but not forwards) compatible with each
+ * other.  Strange behaviors may occur if external applications do not use the same compiler
+ * and compiler language featues (i.e. compiler flags). */
+#if VXL_COMPILED_CXX_STANDARD_VERSION > __cplusplus
+#warning "WARNING:  The current project is configured to use a C++ standard version older than the C++ standard used for this build of VXL"
 #endif
 
-#if defined(_WIN32) || defined(WIN32)
-# define VCL_WIN32
-
-# if defined(_MSC_VER)
-#  define VCL_VC
-#  if _MSC_VER < 1900     // Visual Studio 2015 = Version 14.x is needed to support
-#   error "Invalid VCL_VC version Visual Studio 2015 = Version 14.x is needed to support C++11 features"
-#  endif // <1900
-// Disable some common warnings in MS VC++. This is the set of warnings suppressed by ITK
-#  pragma warning ( disable : 4244 ) // 'conversion' conversion from 'type1' to 'type2', possible loss of data
-#  pragma warning ( disable : 4305 ) // 'identifier' : truncation from 'type1' to 'type2'
-#  pragma warning ( disable : 4309 ) // 'conversion' : truncation of constant value
-#  pragma warning ( disable : 4503 ) // decorated name length exceeded, name was truncated
-#  pragma warning ( disable : 4800 ) // 'type' : forcing value to bool 'true' or 'false' (performance warning)
-#  pragma warning ( disable : 4251 ) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
-#  pragma warning ( disable : 4275 ) // non dll-interface class 'type' used as base for dll-interface class 'type2'
-#  pragma warning ( disable : 4290 ) // C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
-#  pragma warning ( disable : 4273 ) // 'type' : inconsistent dll linkage.  dllexport assumed.
-#  pragma warning ( disable : 4127 ) // conditional expression is constant
-#  pragma warning ( disable : 4505 ) // unreferenced local function has been removed
-#  pragma warning ( disable : 4786 ) // 'identifier' : identifier was truncated to 'number' characters in the debug information
-#  pragma warning ( disable : 4231 ) // nonstandard extension used : 'extern' before template explicit instantiation
-#  pragma warning ( disable : 4267 ) // data-conversion related to 'size_t'
-# endif // _MSC_VER
-
-#define VCL_VC_DOTNET "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_VC_9 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_VC_10 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#define VCL_VC_11 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
-#endif // WIN32
-
-
-// include header files generated by configure.
-#include <vcl_config_compiler.h>
+#cmakedefine01 VXL_LEGACY_FUTURE_REMOVE
+#cmakedefine01 VXL_RUN_FAILING_TESTS
 
 // -------------------- handy macros ---------------------------------------
 
@@ -115,9 +51,28 @@
 # define VXL_USED_IN_DEBUG(x) x
 #endif
 
+
+#if VXL_COMPILER_IS_MSVC
+// Disable some common warnings in MS VC++. This is the set of warnings suppressed by ITK
+#  pragma warning ( disable : 4244 ) // 'conversion' conversion from 'type1' to 'type2', possible loss of data
+#  pragma warning ( disable : 4305 ) // 'identifier' : truncation from 'type1' to 'type2'
+#  pragma warning ( disable : 4309 ) // 'conversion' : truncation of constant value
+#  pragma warning ( disable : 4503 ) // decorated name length exceeded, name was truncated
+#  pragma warning ( disable : 4800 ) // 'type' : forcing value to bool 'true' or 'false' (performance warning)
+#  pragma warning ( disable : 4251 ) // 'identifier' : class 'type' needs to have dll-interface to be used by clients of class 'type2'
+#  pragma warning ( disable : 4275 ) // non dll-interface class 'type' used as base for dll-interface class 'type2'
+#  pragma warning ( disable : 4290 ) // C++ exception specification ignored except to indicate a function is not __declspec(nothrow)
+#  pragma warning ( disable : 4273 ) // 'type' : inconsistent dll linkage.  dllexport assumed.
+#  pragma warning ( disable : 4127 ) // conditional expression is constant
+#  pragma warning ( disable : 4505 ) // unreferenced local function has been removed
+#  pragma warning ( disable : 4786 ) // 'identifier' : identifier was truncated to 'number' characters in the debug information
+#  pragma warning ( disable : 4231 ) // nonstandard extension used : 'extern' before template explicit instantiation
+#  pragma warning ( disable : 4267 ) // data-conversion related to 'size_t'
+# endif // VXL_COMPILER_IS_MSVC
+
 //----------------------------------------------------------------------
 // constant initializer issues.
-#ifdef VXL_LEGACY_FUTURE_REMOVE
+#if VXL_LEGACY_FUTURE_REMOVE
 # define VXL_CONSTEXPR_FUNC constexpr  "ERROR: VXL_CONSTEXPR_FUNC deprecated, use C++11 constexpr"
 # define VXL_CONSTEXPR_VAR  constexpr  "ERROR: VXL_CONSTEXPR_VAR deprecated, use C++11 constexpr"
 # define VXL_FULLCXX11SUPPORT "ERROR: ONLY VXL_FULLCXX11SUPPORT supported"
@@ -218,6 +173,51 @@
 #define VCL_CXX_HAS_HEADER_STRSTREAM  "ERROR: C++11 headers are mandatory"
 #define VCL_CHAR_IS_SIGNED            "ERROR: Use std::numeric_limits<char>::is_signed instead of VCL_CHAR_IS_SIGNED"
 #define VCL_HAS_LONG_LONG             "ERROR:  C++11 always defines long long and unsigned long long."
+
+#define VXL_COMPILER_IS_GNU_4  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_40 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_41 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_42 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_43 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_5  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_50 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_51 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_52 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_53 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_6  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_60 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_61 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_62 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_63 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_7  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_70  "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_71 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define VXL_COMPILER_IS_GNU_72 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+
+#define VXL_LEGACY_ERROR_REPORTING "ERROR: Legacy error reporting no longer supported."
+
+#if VXL_COMPILER_IS_GNU
+# if (__GNUC__ < 4)  //Feature support is now more finely tested in the vcl_compiler_detection.h file
+#  error "Invalid VXL_COMPILER_IS_GNU version not supported."
+# endif
+#endif
+
+#if VXL_COMPILER_IS_MSVC
+# if defined(_MSC_VER)
+#  if _MSC_VER < 1900     // Visual Studio 2015 = Version 14.x is needed to support
+#   error "Invalid _MSC_VER version Visual Studio 2015 = Version 14.x is needed to support C++11 features"
+#  endif // <1900
+#endif //VXL_COMPILER_IS_MSVC
+
+
+#define _MSC_VER_DOTNET "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define _MSC_VER_9 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define _MSC_VER_10 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#define _MSC_VER_11 "VXL no longer supplies aliases for compiler versions, use the compiler defines directly"
+#endif // WIN32
+
+
+
 #endif
 
 #ifdef VNL_CONFIG_LEGACY_METHODS

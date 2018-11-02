@@ -24,7 +24,7 @@
 // top() returns the value that is closest to being thrown out,
 // which is the largest value in the case of the default predicate.
 template <class T, class C= std::vector<T>, class O= std::less<
-#ifndef VCL_VC
+#ifndef _MSC_VER
 typename
 #endif
   C::value_type> >

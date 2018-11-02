@@ -3,7 +3,7 @@
 #include <sstream>
 #include <ctime>
 #include <vcl_compiler.h>
-#include <vcl_config_compiler.h>
+#include <vcl_compiler.h>
 #include <vsl/vsl_binary_explicit_io.h>
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
