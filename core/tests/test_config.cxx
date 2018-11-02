@@ -310,9 +310,9 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VCL_WIN32 ";
-#ifdef VCL_WIN32
-  std::cout << "is set to " << quote(VCL_WIN32);
+  std::cout << "_WIN32 ";
+#ifdef _WIN32
+  std::cout << "is set to " << quote(_WIN32);
 #else
   std::cout << "is not set";
 #endif

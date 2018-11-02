@@ -18,7 +18,7 @@ class bhdfs_vil_stream : public vil_stream
   //: supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
   bhdfs_vil_stream(char const* filename, char const* mode);
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
   //: supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
   bhdfs_vil_stream(wchar_t const* filename, char const* mode);
 #endif

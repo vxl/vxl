@@ -34,7 +34,7 @@ static void test_match_keypoints(int argc, char* argv[])
 
   if ( argc >= 2 ) {
     dir_base = argv[1];
-#ifdef VCL_WIN32
+#ifdef _WIN32
     dir_base += "\\";
 #else
     dir_base += "/";

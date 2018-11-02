@@ -426,7 +426,7 @@ void vul_reg_exp::compile (char const* exp)
   }
 
   // Allocate space.
-//#ifndef VCL_WIN32
+//#ifndef _WIN32
   if (this->program != nullptr) delete [] this->program;
 //#endif
   this->program = new char[regsize];

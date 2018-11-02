@@ -37,7 +37,7 @@ std::string vul_expand_path/*cached*/(std::string path);
 //: Expand given path.
 std::string vul_expand_path_uncached (std::string path);
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 //: Expand given path.
 std::wstring vul_expand_path/*cached*/(std::wstring path);

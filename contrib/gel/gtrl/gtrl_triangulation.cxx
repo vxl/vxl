@@ -11,7 +11,7 @@
 #include <vcl_compiler.h>
 
 // UNIX specific timer close
-#ifdef VCL_WIN32
+#ifdef _WIN32
 #define NO_TIMER
 #endif
 

@@ -21,7 +21,7 @@
 #endif
 
 
-#ifdef VCL_WIN32
+#ifdef _WIN32
 #define ROOT_PATH "C:/"
 #else
 #define ROOT_PATH "/tmp"

@@ -22,7 +22,7 @@
 #include <sys/stat.h>
 #include <vcl_compiler.h>
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #include <direct.h> // for getcwd, mkdir
 #else
 #include <unistd.h>
@@ -47,7 +47,7 @@ bool vul_file::change_directory(char const* dirname)
 
 bool vul_file::make_directory(char const* name)
 {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   return -1 != mkdir(name);
 #else
   return -1 != mkdir(name, 0755);
@@ -68,7 +68,7 @@ std::time_t vul_file::time_modified(char const* filename){
   return fs.st_mtime;
 }
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 bool vul_file::is_drive(char const* fn)
 {
   // a drive string looks like "c:", "z:"
@@ -84,7 +84,7 @@ bool vul_file::is_drive(char const* fn)
 // Implemented by calling itself recursively on the parent directory.
 bool vul_file::make_directory_path(char const* filename)
 {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (is_directory(filename) || is_drive(filename)) return true;
 #else
   if (is_directory(filename)) return true;
@@ -112,7 +112,7 @@ bool vul_file::exists(char const* fn)
   struct stat fs;
   std::string name(fn);
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type last_non_slash_index = name.find_last_not_of("\\/");
 #else
   std::string::size_type last_non_slash_index = name.find_last_not_of('/');
@@ -127,7 +127,7 @@ std::string vul_file::dirname(char const* fn)
 {
   std::string self(fn);
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
   std::string::size_type slash_index = self.rfind('/');
@@ -154,7 +154,7 @@ std::string vul_file::strip_directory(char const* fn)
 {
   std::string self(fn);
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
   std::string::size_type slash_index = self.rfind('/');
@@ -181,7 +181,7 @@ std::string vul_file::basename(char const* fn, char const * suffix)
   // First strip dir
   std::string self(fn);
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   std::string::size_type slash_index = self.find_last_of("\\/");
 #else
   std::string::size_type slash_index = self.rfind('/');
@@ -201,7 +201,7 @@ std::string vul_file::basename(char const* fn, char const * suffix)
 }
 
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 //: replace instances of 'from' in 's' with 'to'
 static unsigned replace(char from, char to, std::string &s)
 {
@@ -222,7 +222,7 @@ static unsigned replace(char from, char to, std::string &s)
 // Takes Posix path separators i.e. '/'
 bool vul_file::delete_file_glob(std::string const& file_glob)
 {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   std::string command = file_glob;
   replace('/', '\\', command);
   command = "del /Q " + command;
@@ -238,7 +238,7 @@ std::string vul_file::expand_tilde(char const* vul_filename)
   if (!vul_filename || (std::strlen(vul_filename) == 0))
     return "";
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   // ~ meaningless on win32
   return std::string(vul_filename);
 #else
@@ -284,7 +284,7 @@ std::string vul_file::expand_tilde(char const* vul_filename)
 }
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 #include <cwchar>
 
 std::wstring

@@ -62,7 +62,7 @@ vil_load_pyramid_resource(char const* directory_or_file, bool verbose = true);
 vil_image_view_base_sptr vil_load(const char *, bool verbose = true);
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Load an image resource object from a file.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr vil_load_image_resource(wchar_t const* filename, bool verbose = true);
@@ -74,7 +74,7 @@ vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*, bool verbose
 //: Convenience function for loading an image into an image view.
 // \relatesalso vil_image_view
 vil_image_view_base_sptr vil_load(const wchar_t *, bool verbose = true);
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 #endif // vil_load_h_

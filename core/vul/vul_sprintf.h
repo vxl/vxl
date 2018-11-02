@@ -40,7 +40,7 @@ struct vul_sprintf : public std::string
   //   vul_sprintf(std::string fmt, ...);
   vul_sprintf(char const *fmt, ...);
 
-#ifndef VCL_WIN32
+#ifndef _WIN32
   // assignment
   vul_sprintf& operator=(std::string const& s)
   { std::string::operator=(s); return *this; }

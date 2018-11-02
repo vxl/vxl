@@ -51,7 +51,7 @@ vil_stream_fstream::vil_stream_fstream(char const* fn, char const* mode):
 #endif // 0
 }
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 vil_stream_fstream::vil_stream_fstream(wchar_t const* fn, char const* mode):
   flags_(modeflags(mode)),
   f_(fn, flags_ | std::ios::binary), // need ios::binary on windows.
@@ -59,7 +59,7 @@ vil_stream_fstream::vil_stream_fstream(wchar_t const* fn, char const* mode):
 {
   id_ = ++id;
 }
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #if 0
 vil_stream_fstream::vil_stream_fstream(std::fstream& f):

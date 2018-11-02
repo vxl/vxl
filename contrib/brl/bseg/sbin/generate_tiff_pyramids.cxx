@@ -30,7 +30,7 @@ static bool generate_pyramids(std::string const& image_indir,
 {
   std::string slash;
   //generate the temporary dir
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";

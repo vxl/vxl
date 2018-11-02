@@ -10,14 +10,14 @@ bhdfs_vil_stream::bhdfs_vil_stream(char const* fn, char const* mode)
   f_ = new bhdfs_fstream(fn, mode);
 }
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //:
 // supported flags are "r" (read only), "w" (for write and truncate), (append is not supported by libdhfs yet)
 bhdfs_vil_stream::bhdfs_vil_stream(wchar_t const* fn, char const* mode)
 {
   f_ = new bhdfs_fstream(fn, mode);
 }
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 bhdfs_vil_stream::~bhdfs_vil_stream()
 {

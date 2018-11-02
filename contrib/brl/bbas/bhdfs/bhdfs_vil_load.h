@@ -57,7 +57,7 @@ bhdfs_vil_load_pyramid_resource(char const* directory_or_file, bool verbose = tr
 // \relatesalso vil_image_view
 vil_image_view_base_sptr bhdfs_vil_load(const char *, bool verbose = true);
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #if 0
 //: Load an image resource object from a file.
@@ -77,6 +77,6 @@ vil_image_resource_sptr vil_load_image_resource_raw(wchar_t const*, bool verbose
 vil_image_view_base_sptr vil_load(const wchar_t *, bool verbose = true);
 #endif
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif // bhdfs_vil_load_h_

@@ -243,7 +243,7 @@ static std::string level_filename(std::string& directory, std::string& filename,
 {
   std::string slash;
 
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";
