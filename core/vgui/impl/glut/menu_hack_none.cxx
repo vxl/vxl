@@ -2,7 +2,7 @@
   fsm
 */
 #include "menu_hack.h"
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 
 // without X11, I don't know how to do this.
 // fsm

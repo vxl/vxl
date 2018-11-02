@@ -15,7 +15,7 @@
 // \author  rob@stellarscience.com
 // \date 28 Jun 05
 
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 #include <vil/vil_stream.h>
 
 //: A vil_stream implementation using std::fstream
