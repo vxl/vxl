@@ -1,4 +1,5 @@
 // This is core/vil/tests/test_image_view.cxx
+#define VXL_LEGACY_ERROR_REPORTING // REQUIRED FOR PASSING TESTS 2018-11-02
 #include <iostream>
 #include <sstream>
 #include <functional>

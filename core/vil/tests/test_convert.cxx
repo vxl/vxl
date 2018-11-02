@@ -1,4 +1,5 @@
 // This is core/vil/tests/test_convert.cxx
+#define VXL_LEGACY_ERROR_REPORTING // REQUIRED FOR PASSING TESTS 2018-11-02
 #include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #ifdef _MSC_VER
