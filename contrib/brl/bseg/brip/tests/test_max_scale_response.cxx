@@ -7,7 +7,6 @@
 #include <vil/vil_resample_bilin.h>
 
 #ifdef DEBUG // I/O only for debugging output
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -8,7 +8,6 @@
 #include <bwm/bwm_3d_corr.h>
 #include <bwm/bwm_3d_corr_sptr.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

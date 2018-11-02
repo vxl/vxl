@@ -12,7 +12,6 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_basic_xml_element.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

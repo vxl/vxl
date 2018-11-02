@@ -47,7 +47,6 @@ VNL_ALGO_EXPORT bool vnl_generalized_schur(vnl_matrix<std::complex<double> > *A,
                            vnl_matrix<std::complex<double> > *L,
                            vnl_matrix<std::complex<double> > *R);
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

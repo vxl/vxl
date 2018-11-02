@@ -10,7 +10,6 @@
 #include <boxm2/ocl/tests/boxm2_ocl_test_utils.h>
 
 #include <brad/brad_phongs_model_est.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

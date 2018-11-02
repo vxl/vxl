@@ -7,7 +7,6 @@
 #include <vpgl/algo/vpgl_triangulate_points.h>
 #include <vpgl/algo/vpgl_camera_compute.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

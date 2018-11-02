@@ -19,7 +19,6 @@
 #include "bbgm_planes_to_sample.h"
 #include <bsta/bsta_detector_mixture.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

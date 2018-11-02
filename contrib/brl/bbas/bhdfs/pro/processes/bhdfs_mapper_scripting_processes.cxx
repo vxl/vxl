@@ -12,7 +12,6 @@
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_fstream.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

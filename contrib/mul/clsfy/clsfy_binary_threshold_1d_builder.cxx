@@ -13,7 +13,6 @@
 #include <vnl/vnl_double_2.h>
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

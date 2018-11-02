@@ -4,7 +4,6 @@
 #include "sdet_watershed_region_proc.h"
 //:
 // \file
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

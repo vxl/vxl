@@ -10,7 +10,6 @@
 #include <brad/brad_hist_prob_feature_vector.h>
 #include <brad/brad_eigenspace.h>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

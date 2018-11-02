@@ -14,7 +14,6 @@
 //   2012-09-10 Yi Dong - Modified to parser the polygon and path(LineString) coordinates stored in kml
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

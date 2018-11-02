@@ -9,7 +9,6 @@
 // \author Ozge C. Ozcanli
 // \date Jan 18, 2013
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

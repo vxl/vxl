@@ -7,7 +7,6 @@
 #include <iostream>
 #include <string>
 #include "mbl_stochastic_data_collector.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

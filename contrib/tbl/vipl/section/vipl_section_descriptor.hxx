@@ -7,7 +7,6 @@
 #include "vipl_section_descriptor.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cstdlib>
 #include "sdet_denoise_mrf.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

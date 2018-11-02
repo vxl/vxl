@@ -14,7 +14,6 @@
 #include <bprb/bprb_null_process.h>
 #include <bprb/bprb_parameters.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

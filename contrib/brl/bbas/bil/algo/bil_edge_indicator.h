@@ -21,7 +21,6 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/algo/vil_sobel_3x3.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

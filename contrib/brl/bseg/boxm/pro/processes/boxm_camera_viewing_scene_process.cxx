@@ -24,7 +24,6 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <bpgl/algo/bpgl_project.h>
 #include <vnl/vnl_math.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 // \author Tim Cootes
 // \brief Generate pure 3x3 rotation matrices
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

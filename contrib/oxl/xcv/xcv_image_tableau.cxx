@@ -15,7 +15,6 @@
 //    06-AUG-2002 K.Y.McGaul - Print RGB value on status bar.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

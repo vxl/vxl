@@ -19,7 +19,6 @@
 #include <iostream>
 #include "vgui_mfc_utils.h"
 #include <vgui/vgui_command.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

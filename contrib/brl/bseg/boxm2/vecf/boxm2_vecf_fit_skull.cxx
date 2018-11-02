@@ -13,7 +13,6 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <bvrml/bvrml_write.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

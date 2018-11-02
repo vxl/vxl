@@ -28,7 +28,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

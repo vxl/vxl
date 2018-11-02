@@ -12,7 +12,6 @@
 #include <clsfy/clsfy_classifier_base.h>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

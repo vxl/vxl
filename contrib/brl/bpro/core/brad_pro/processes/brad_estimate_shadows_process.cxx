@@ -12,7 +12,6 @@
 #include <brad/brad_atmospheric_parameters.h>
 #include <brad/brad_estimate_shadows.h>
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

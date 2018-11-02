@@ -8,7 +8,6 @@
 // \brief Use F&H's DP style algorithm to search for global solutions
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

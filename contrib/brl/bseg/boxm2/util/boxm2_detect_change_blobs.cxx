@@ -7,7 +7,6 @@
 #include <vil/algo/vil_binary_erode.h>
 #include <vil/algo/vil_threshold.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

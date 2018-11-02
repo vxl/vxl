@@ -13,7 +13,6 @@
 //   2009-03-30 Peter Vanroose - Added arg_min() & arg_max() and reimplemented min_value() & max_value()
 // \endverbatim
 //
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -1,7 +1,6 @@
 // This is core/vcsl/vcsl_perspective.cxx
 #include "vcsl_perspective.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

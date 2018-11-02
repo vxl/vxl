@@ -1,6 +1,5 @@
 // This is core/vil/algo/tests/test_algo_line_filter.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 #include <iosfwd>
 #include <vimt/vimt_image_2d.h>
 #include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -7,7 +7,6 @@
 // \date October 16, 2016
 //
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

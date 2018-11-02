@@ -2,7 +2,6 @@
 #include <queue>
 #include <boxm2/boxm2_blocks_vis_graph.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

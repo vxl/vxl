@@ -6,7 +6,6 @@
 // \file
 // \brief A process that performs edge detection on a grey image and returns the corresponding edge map
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

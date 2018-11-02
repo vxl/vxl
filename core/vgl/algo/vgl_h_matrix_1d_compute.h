@@ -21,7 +21,6 @@
 #include <vector>
 #include <vgl/vgl_homg_point_1d.h>
 #include <vgl/algo/vgl_h_matrix_1d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

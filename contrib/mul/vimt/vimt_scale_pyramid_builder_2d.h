@@ -11,7 +11,6 @@
 #include <iosfwd>
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vimt/vimt_image_2d_of.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

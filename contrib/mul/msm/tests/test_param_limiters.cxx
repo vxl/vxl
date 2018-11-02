@@ -12,7 +12,6 @@
 // \brief test msm_param_limiter
 
 #include <msm/msm_ellipsoid_limiter.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

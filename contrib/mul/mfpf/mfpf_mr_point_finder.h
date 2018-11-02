@@ -10,7 +10,6 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mfpf/mfpf_point_finder.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

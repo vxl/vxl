@@ -17,7 +17,6 @@
 #include "boct_loc_code.h"
 #include <vgl/vgl_box_3d.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

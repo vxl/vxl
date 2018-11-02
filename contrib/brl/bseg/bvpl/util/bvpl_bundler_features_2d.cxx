@@ -7,7 +7,6 @@
 #include <vgl/io/vgl_io_point_3d.h>
 #include <vnl/io/vnl_io_vector.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 #include <boxm/boxm_apm_traits.h>
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #if 1
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -13,7 +13,6 @@
 #include <vnl/vnl_inverse.h>
 #include <vil/vil_bilin_interp.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

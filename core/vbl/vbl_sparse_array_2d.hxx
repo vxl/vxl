@@ -7,7 +7,6 @@
 #include <iostream>
 #include "vbl_sparse_array_2d.h"
 #include "vbl_sparse_array_base.hxx"
-
 #include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

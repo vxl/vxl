@@ -11,7 +11,6 @@
 #include <algorithm>
 #include "bvxm_voxel_slab.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

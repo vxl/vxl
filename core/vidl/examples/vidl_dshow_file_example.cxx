@@ -2,7 +2,6 @@
 #include <vidl/vidl_dshow_file_istream.h>
 #include <vidl/vidl_image_list_ostream.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

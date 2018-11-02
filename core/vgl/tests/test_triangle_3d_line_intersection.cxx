@@ -1,7 +1,6 @@
 // Some tests for vgl_triangle_3d_line_intersection
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

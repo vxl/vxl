@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include "mbl_data_wrapper_mixer.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -17,7 +17,6 @@
 #include <bvpl/kernels/bvpl_create_directions.h>
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <vgl/vgl_line_3d_2_points.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

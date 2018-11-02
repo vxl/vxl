@@ -5,7 +5,6 @@
 // \file
 // \brief A process to convert a local_rational_camera to a generic_camera, using user-defined min and max z planes.
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

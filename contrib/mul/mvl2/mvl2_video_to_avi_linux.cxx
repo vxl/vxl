@@ -9,7 +9,6 @@
 #include <iostream>
 #include <cstring>
 #include "mvl2_video_to_avi_linux.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

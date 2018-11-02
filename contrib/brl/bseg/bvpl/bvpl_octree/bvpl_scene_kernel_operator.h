@@ -16,7 +16,6 @@
 #include <bvpl/kernels/bvpl_kernel.h>
 #include <boxm/boxm_scene.h>
 #include "bvpl_octree_kernel_operator.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

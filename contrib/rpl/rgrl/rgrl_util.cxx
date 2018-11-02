@@ -8,7 +8,6 @@
 #include <algorithm>
 #include "rgrl_util.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -1,7 +1,6 @@
 // This is rpl/rrel/tests/test_m_est_obj.cxx
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

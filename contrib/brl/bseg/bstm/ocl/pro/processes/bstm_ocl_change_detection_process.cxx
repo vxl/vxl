@@ -27,7 +27,6 @@
 // directory utility
 #include <vul/vul_timer.h>
 #include <vcl_where_root_dir.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

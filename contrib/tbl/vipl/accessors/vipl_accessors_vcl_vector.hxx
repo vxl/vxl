@@ -4,7 +4,6 @@
 #include "vipl_accessors_vcl_vector.h"
 #include <vipl/section/vipl_filterable_section_container_generator_vcl_vector.hxx>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -16,7 +16,6 @@
 #include <vil3d/vil3d_switch_axes.h>
 #include <vil3d/vil3d_convert.h>
 #include <vil3d/vil3d_print.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

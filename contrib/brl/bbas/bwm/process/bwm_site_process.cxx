@@ -15,7 +15,6 @@
 #include <vil/vil_image_list.h>
 #include <vpgl/vpgl_rational_camera.h>
 #include <vgui/vgui_error_dialog.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

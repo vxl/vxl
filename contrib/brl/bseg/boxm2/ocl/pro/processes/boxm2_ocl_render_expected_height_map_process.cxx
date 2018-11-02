@@ -9,7 +9,6 @@
 // \author Vishal Jain
 // \date Mar 30, 2011
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

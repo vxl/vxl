@@ -2,7 +2,6 @@
 #include <cmath>
 #include <cstdlib>
 #include "mbl_gamma.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

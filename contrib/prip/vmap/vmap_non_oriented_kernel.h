@@ -16,7 +16,6 @@
 #include <iostream>
 #include <vector>
 #include "vmap_types.h" // for vmap_dart_index
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

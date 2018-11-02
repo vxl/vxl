@@ -24,7 +24,6 @@
 //  I'm not sure if this is exactly an RBF network in the original
 //  definition. I'll check one day.
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

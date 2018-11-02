@@ -10,7 +10,6 @@
 #include <cmath>
 #include <string>
 #include "vimt_gaussian_pyramid_builder_2d_general.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

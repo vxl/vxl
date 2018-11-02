@@ -21,7 +21,6 @@
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

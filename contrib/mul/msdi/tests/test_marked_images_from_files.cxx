@@ -11,7 +11,6 @@
 // \author Tim Cootes
 // \brief Test msdi_marked_images_from_files
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

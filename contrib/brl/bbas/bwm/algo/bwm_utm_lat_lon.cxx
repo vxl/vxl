@@ -10,7 +10,6 @@
 #include <iostream>
 #include <limits>
 #include "bwm_utm_lat_lon.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

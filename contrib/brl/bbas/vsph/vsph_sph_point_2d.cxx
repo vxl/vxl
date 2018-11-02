@@ -2,7 +2,6 @@
 #include "vsph_sph_point_2d.h"
 #include <vnl/vnl_math.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

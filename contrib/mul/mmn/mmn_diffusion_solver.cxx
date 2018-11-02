@@ -13,7 +13,6 @@
 // IEEE Trans on Pattern Recog & Machine Intell, July 2007
 
 #include <mmn/mmn_csp_solver.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

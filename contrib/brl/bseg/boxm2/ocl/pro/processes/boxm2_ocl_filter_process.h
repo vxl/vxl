@@ -7,7 +7,6 @@
 #include <bprb/bprb_func_process.h>
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

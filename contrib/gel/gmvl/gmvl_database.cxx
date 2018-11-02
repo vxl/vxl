@@ -9,7 +9,6 @@
 #include <iostream>
 #include "gmvl_database.h"
 #include <gmvl/gmvl_tag_node.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

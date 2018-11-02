@@ -6,7 +6,6 @@
 // \author Tim Cootes
 // \date   23 Feb 2005
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -18,7 +18,6 @@
 #include <vidl/vidl_istream_sptr.h>
 #include <vidl/vidl_frame.h>
 #include <vidl/vidl_convert.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

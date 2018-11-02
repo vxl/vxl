@@ -8,7 +8,6 @@
 #include <vsol/vsol_line_2d.h>
 #include <vdgl/vdgl_digital_curve.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

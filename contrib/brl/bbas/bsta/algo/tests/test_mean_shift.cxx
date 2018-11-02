@@ -6,7 +6,6 @@
 #include <bsta/algo/bsta_sample_set.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_full.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

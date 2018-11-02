@@ -14,7 +14,6 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_tolerance.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

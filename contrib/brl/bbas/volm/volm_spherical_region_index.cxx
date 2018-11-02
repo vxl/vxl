@@ -6,7 +6,6 @@
 #include <bpgl/depth_map/depth_map_scene.h>
 #include "volm_spherical_container.h"
 #include <bsol/bsol_algs.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

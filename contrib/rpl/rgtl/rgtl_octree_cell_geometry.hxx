@@ -12,7 +12,6 @@
 #include "rgtl_octree_cell_bounds.h"
 #include "rgtl_sqt_space.hxx"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

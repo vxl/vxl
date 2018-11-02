@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_thin_plate_spline_weights_3d.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

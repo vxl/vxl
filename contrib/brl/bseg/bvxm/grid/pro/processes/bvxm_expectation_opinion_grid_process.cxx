@@ -17,7 +17,6 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bvxm/grid/bvxm_opinion.h>
 #include <bvxm/grid/bvxm_voxel_grid_opinion_basic_ops.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

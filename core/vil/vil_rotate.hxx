@@ -13,7 +13,6 @@
 #include "vil_rotate.h"
 #include <vil/vil_resample_bilin.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

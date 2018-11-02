@@ -78,7 +78,6 @@
 #include <string>
 #include <utility>
 #include "vnl/vnl_export.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

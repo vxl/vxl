@@ -18,7 +18,6 @@
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 #include <vil/vil_new.h>
 #include <vil/vil_image_view.h>
 #include <vxl_config.h> // for vxl_byte etc.
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

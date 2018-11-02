@@ -21,7 +21,6 @@
 //    -#  min and max of vil_rgba<byte>  values, useful for morphological operations.
 //    -#  arithmetic operations
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -23,7 +23,6 @@
 #include "boxm2_vecf_cranium_params.h"
 #include "boxm2_vecf_cranium.h"
 #include <vgl/vgl_point_3d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

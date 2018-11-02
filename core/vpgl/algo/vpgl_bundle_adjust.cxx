@@ -14,7 +14,6 @@
 #include <vpgl/algo/vpgl_ba_shared_k_lsqr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

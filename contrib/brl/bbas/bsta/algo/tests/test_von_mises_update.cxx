@@ -5,7 +5,6 @@
 #include <bsta/algo/bsta_von_mises_updater.h>
 #include <bsta/bsta_attributes.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

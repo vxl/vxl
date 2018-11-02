@@ -12,7 +12,6 @@
 #include <bpgl/bpgl_camera_utils.h>
 #include <vul/vul_file.h>
 #include <bpgl/algo/bpgl_interpolate.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

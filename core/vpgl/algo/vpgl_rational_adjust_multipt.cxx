@@ -12,7 +12,6 @@
 #include <vpgl/algo/vpgl_ray_intersect.h>
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

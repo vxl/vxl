@@ -8,7 +8,6 @@
 #include "vgl_norm_trans_3d.h"
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -5,7 +5,6 @@
 #include <vector>
 #include <vmap/tests/my_map_functions.hxx>
 #include <vmap/vmap_types.h> // for vmap_vertex_index & vmap_face_index
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

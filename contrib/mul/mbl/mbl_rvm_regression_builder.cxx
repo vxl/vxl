@@ -8,7 +8,6 @@
 // \brief Object to train Relevance Vector Machines for regression
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

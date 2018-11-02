@@ -11,7 +11,6 @@
 #include "boxm2_vecf_articulated_params.h"
 #include "boxm2_vecf_mandible_params.h"
 #include "boxm2_vecf_cranium_params.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

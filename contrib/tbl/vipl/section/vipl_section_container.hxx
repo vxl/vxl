@@ -7,7 +7,6 @@
 #include <vipl/filter/vipl_filter_abs.h> // for filter_abs::X_Axis()
 #include <vipl/section/vipl_section_iterator.hxx>
 #include <vipl/section/vipl_section_descriptor.hxx>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

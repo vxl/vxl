@@ -16,7 +16,6 @@
 #include "vimt3d_vil3d_v3m.h"
 //
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

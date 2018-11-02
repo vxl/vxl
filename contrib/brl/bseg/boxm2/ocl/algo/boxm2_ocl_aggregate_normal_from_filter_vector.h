@@ -2,7 +2,6 @@
 #define boxm2_ocl_aggregate_normal_from_filter_h_included_
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

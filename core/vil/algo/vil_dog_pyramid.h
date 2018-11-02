@@ -10,7 +10,6 @@
 #include <vil/algo/vil_gauss_filter.h>
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_math.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -21,7 +21,6 @@
 //   Mar. 2011 - Patrick Sauer - added variant that returns normalisation multipliers
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

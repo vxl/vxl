@@ -6,7 +6,6 @@
 #include "vil3d_grad_1x3.h"
 #include <vil3d/vil3d_slice.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

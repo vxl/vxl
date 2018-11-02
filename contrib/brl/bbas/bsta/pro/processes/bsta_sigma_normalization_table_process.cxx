@@ -12,7 +12,6 @@
 #include <bsta/algo/bsta_sigma_normalizer.h>
 
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

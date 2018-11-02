@@ -7,7 +7,6 @@
 // \brief Simple statistics (mean, variance) on vectors.
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

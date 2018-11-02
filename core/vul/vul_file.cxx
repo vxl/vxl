@@ -20,7 +20,6 @@
 #include "vul_file.h"
 
 #include <sys/stat.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

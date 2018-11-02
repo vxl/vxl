@@ -21,7 +21,6 @@
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
 #include <bbas/bocl/bocl_manager.h>
 #include <bbas/bocl/bocl_device.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

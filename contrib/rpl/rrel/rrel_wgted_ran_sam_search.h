@@ -9,7 +9,6 @@
 #include <iostream>
 #include <vector>
 #include <rrel/rrel_ran_sam_search.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -11,7 +11,6 @@ class vil_stream;
 #include "vil_nitf2_classification.h"
 #include "vil_nitf2_field_sequence.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 // \brief Class to independently normalise sub-blocks with a region at several (SIFT-like) scales
 // \author Martin Roberts
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

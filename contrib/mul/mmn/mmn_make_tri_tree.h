@@ -11,7 +11,6 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_triplet.h>
 #include <mmn/mmn_dependancy.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

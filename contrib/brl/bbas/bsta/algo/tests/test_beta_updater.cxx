@@ -8,7 +8,6 @@
 #include <bsta/algo/bsta_beta_updater.h>
 #include <bsta/algo/bsta_adaptive_updater.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

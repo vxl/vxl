@@ -8,7 +8,6 @@
 // \brief A simple object to test a container.
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

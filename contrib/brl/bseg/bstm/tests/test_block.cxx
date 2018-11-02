@@ -15,7 +15,6 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/bstm_time_block.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

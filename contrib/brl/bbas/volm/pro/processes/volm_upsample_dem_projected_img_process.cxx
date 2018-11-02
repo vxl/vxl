@@ -17,7 +17,6 @@
 #include <rsdl/rsdl_bins_2d.h>
 #include <vnl/vnl_float_4.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

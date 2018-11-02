@@ -1,6 +1,5 @@
 // This is mul/mbl/tests/test_matxvec.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

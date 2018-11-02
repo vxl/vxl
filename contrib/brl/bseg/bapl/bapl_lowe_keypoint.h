@@ -18,7 +18,6 @@
 #include <bapl/bapl_lowe_keypoint_sptr.h>
 #include <bapl/bapl_lowe_pyramid_set_sptr.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

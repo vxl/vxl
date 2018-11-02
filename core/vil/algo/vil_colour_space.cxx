@@ -10,7 +10,6 @@
 #include <algorithm>
 #include <cmath>
 #include "vil_colour_space.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

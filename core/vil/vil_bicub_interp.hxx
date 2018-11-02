@@ -15,7 +15,6 @@
 // vil_bilin_interp.hxx file, see vil_bilin_interp.h instead.
 
 #include "vil_bicub_interp.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

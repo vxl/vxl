@@ -2,7 +2,6 @@
 #include <cmath>
 #include <testlib/testlib_test.h>
 #include <bnl/algo/bnl_fresnel.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

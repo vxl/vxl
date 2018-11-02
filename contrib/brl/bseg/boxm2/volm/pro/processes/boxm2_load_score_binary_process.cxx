@@ -17,7 +17,6 @@
 #include <volm/volm_loc_hyp.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <bkml/bkml_parser.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

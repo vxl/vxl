@@ -5,7 +5,6 @@
 // \file
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <pop/pop_graph_cost_function.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

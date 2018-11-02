@@ -21,7 +21,6 @@
 #include <iostream>
 #include <cstddef>
 #include "vil3d_analyze_format.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

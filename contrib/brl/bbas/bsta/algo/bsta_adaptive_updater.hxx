@@ -9,7 +9,6 @@
 #include "bsta_gaussian_updater.h"
 #include "bsta_gaussian_stats.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

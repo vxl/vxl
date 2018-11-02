@@ -8,7 +8,6 @@
 #include "mvl2_video_from_avi_windows.h"
 #include <vil/vil_flip.h>
 #include <vil/vil_convert.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

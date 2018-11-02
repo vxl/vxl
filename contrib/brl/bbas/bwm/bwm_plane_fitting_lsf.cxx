@@ -1,7 +1,6 @@
 #include <iostream>
 #include "bwm_plane_fitting_lsf.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

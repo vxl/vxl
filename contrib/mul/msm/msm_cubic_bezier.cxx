@@ -14,7 +14,6 @@
 #include <vgl/io/vgl_io_point_2d.h>
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vnl/algo/vnl_cholesky.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

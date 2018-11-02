@@ -19,7 +19,6 @@
 #include <rrel/rrel_lms_obj.h>
 #include <rrel/rrel_ran_sam_search.h>
 #include <rrel/rrel_muset_obj.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

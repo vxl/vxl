@@ -21,7 +21,6 @@
 // For 2-d, three points are required to form the basis
 // For 3-d, four points are required to form the basis
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

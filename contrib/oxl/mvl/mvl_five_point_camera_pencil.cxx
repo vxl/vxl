@@ -10,7 +10,6 @@
 #include <cmath>
 #include "mvl_five_point_camera_pencil.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

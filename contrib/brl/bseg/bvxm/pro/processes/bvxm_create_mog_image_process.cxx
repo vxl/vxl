@@ -14,7 +14,6 @@
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_voxel_world.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

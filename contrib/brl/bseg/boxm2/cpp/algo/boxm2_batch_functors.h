@@ -8,7 +8,6 @@
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

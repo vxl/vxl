@@ -13,7 +13,6 @@
 #include <iostream>
 #include <cmath>
 #include "brec_fg_pair_density.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

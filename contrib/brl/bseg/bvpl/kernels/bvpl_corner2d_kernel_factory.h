@@ -14,7 +14,6 @@
 
 #include <iostream>
 #include "bvpl_kernel_factory.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

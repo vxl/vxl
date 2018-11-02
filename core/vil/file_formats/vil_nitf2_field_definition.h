@@ -27,7 +27,6 @@
 #define NITF_STR_BCSA(LEN) NITF_STR(LEN, vil_nitf2_string_formatter::BCSA)
 
 #include <list>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

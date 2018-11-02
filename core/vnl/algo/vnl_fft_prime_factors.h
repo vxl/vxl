@@ -12,7 +12,6 @@
 //   10/4/2001 Ian Scott (Manchester) Converted perceps header to doxygen
 // \endverbatim
 
-#include <vcl_compiler.h> // for "export" keyword
 #include "vnl/vnl_export.h"
 #include <vnl/algo/vnl_algo_export.h>
 

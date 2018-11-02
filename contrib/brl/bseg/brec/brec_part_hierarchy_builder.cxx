@@ -7,7 +7,6 @@
 // \author Ozge C Ozcanli (ozge at lems dot brown dot edu)
 // \date Oct. 16, 2008
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

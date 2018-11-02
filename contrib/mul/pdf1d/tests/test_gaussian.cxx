@@ -6,7 +6,6 @@
 // \author Tim Cootes
 // \brief test pdf1d_gaussian, building, sampling, saving etc.
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

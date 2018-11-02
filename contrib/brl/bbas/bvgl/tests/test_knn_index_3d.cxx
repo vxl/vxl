@@ -4,7 +4,6 @@
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_knn_index_3d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

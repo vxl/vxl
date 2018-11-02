@@ -16,7 +16,6 @@
 #include <boxm/boxm_scene.h>
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_apm_traits.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

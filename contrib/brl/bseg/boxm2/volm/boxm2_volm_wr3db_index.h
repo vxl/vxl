@@ -38,7 +38,6 @@
 #include <bbas/volm/volm_spherical_container_sptr.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/volm/boxm2_volm_locations_sptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

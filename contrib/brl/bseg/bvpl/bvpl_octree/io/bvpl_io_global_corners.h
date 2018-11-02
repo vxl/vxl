@@ -15,7 +15,6 @@
 #include <iostream>
 #include <bvpl/bvpl_octree/bvpl_global_corners.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

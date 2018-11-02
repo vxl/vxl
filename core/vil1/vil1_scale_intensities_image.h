@@ -8,7 +8,6 @@
 // \file
 // \brief Support function for vil1_scale_intensities_image_impl
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -8,7 +8,6 @@
 
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_block.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

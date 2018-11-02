@@ -1,4 +1,3 @@
-#include <vcl_compiler.h>
 
 #ifdef _MSC_VER
 // They are performance warnings, but you can't really do anything faster.

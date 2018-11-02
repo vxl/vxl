@@ -17,7 +17,6 @@
 #include <boxm2/io/boxm2_lru_cache1.h>
 #include <brdb/brdb_value_sptr.h>
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

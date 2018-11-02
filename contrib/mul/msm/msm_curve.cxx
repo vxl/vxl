@@ -7,7 +7,6 @@
 // \brief List of points making a curve - for defining boundaries
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

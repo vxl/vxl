@@ -2,7 +2,6 @@
 #define vcl_memory_h_
 
 #include <memory>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

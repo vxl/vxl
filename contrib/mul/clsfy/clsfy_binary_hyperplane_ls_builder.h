@@ -12,7 +12,6 @@
 #include <iosfwd>
 #include <clsfy/clsfy_binary_hyperplane.h>
 #include <clsfy/clsfy_builder_base.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

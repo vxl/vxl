@@ -8,7 +8,6 @@
 #include <boxm2/cpp/algo/boxm2_cast_ray_function.h>
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

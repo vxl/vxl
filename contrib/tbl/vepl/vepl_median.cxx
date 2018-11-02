@@ -1,7 +1,6 @@
 // This is tbl/vepl/vepl_median.cxx
 #include <iostream>
 #include "vepl_median.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

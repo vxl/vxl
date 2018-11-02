@@ -6,7 +6,6 @@
 #include "vnl_fft_prime_factors.h"
 #include <vnl/algo/vnl_fft.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

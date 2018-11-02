@@ -9,7 +9,6 @@
 #include <rsdl/rsdl_bounding_box.h>
 #include <rsdl/rsdl_point.h>
 #include <vbl/vbl_ref_count.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

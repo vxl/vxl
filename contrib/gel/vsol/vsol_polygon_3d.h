@@ -27,7 +27,6 @@
 #include <iosfwd>
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

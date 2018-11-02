@@ -25,7 +25,6 @@
 #include <utility>
 #include <limits>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

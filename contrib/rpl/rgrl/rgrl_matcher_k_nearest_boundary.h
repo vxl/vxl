@@ -10,7 +10,6 @@
 #include "rgrl_matcher_k_nearest.h"
 #include "rgrl_feature_sptr.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

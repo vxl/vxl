@@ -6,7 +6,6 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <bstm/bstm_data_traits.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

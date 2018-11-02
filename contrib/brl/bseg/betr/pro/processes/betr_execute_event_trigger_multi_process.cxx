@@ -5,7 +5,6 @@
 #include <bprb/bprb_func_process.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

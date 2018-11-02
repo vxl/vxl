@@ -1,7 +1,6 @@
 #ifndef vbl_fwd_h_
 #define vbl_fwd_h_
 
-#include <vcl_compiler.h> // for export keyword
 
 template <class T> class vbl_array_1d;
 template <class T> class vbl_array_2d;

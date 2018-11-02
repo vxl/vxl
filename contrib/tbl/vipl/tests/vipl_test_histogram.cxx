@@ -19,7 +19,6 @@
 #include <vipl/vipl_with_vnl_matrix/accessors/vipl_accessors_vnl_vector.h>
 #include <vipl/vipl_histogram.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

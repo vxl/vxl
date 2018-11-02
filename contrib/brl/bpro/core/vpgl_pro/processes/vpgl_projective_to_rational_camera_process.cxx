@@ -6,7 +6,6 @@
 // \file
 // \brief A process to convert perspective camera to rational camera.
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

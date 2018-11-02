@@ -24,7 +24,6 @@
 #include <volm/volm_geo_index2_sptr.h>
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

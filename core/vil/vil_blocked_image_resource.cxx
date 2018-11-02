@@ -5,7 +5,6 @@
 #include "vil_blocked_image_resource.h"
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

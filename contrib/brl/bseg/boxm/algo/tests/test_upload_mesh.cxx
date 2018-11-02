@@ -14,7 +14,6 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

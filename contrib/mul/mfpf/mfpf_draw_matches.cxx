@@ -10,7 +10,6 @@
 #include <mfpf/mfpf_draw_pose_lines.h>
 #include <mfpf/mfpf_pose_set.h>
 #include <vgl/vgl_point_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

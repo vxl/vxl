@@ -53,7 +53,6 @@ typedef vxl_uint_32 ulonglong;
 # error "only implemented with 32 and 64-bit ints"
 #endif
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

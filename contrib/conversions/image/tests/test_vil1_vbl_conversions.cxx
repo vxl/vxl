@@ -4,7 +4,6 @@
 #include <image/vbl_array_to_vil1.h>
 #include <image/vil1_to_vbl_array.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

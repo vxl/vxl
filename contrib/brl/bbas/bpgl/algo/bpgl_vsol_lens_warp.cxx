@@ -13,7 +13,6 @@
 #include <vsol/vsol_polyline_2d.h>
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

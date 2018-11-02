@@ -12,7 +12,6 @@
 //   K.Y.McGaul 26-APR-2001   Initial version.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

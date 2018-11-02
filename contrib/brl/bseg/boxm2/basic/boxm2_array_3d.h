@@ -7,7 +7,6 @@
 #include <cstddef>
 #include <iosfwd>
 #include <cstdlib>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -7,7 +7,6 @@
 // \author Tim Cootes
 // \brief Probability used in Kolmogorov-Smirnov test
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

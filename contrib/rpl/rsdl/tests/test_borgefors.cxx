@@ -2,7 +2,6 @@
 #include <vector>
 #include <string>
 #include <rsdl/rsdl_borgefors.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

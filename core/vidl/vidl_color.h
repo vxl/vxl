@@ -15,7 +15,6 @@
 #include <cstring>
 #include <typeinfo>
 #include "vidl_pixel_format.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

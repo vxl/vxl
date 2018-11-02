@@ -14,7 +14,6 @@
 #include <bvpl/bvpl_octree/sample/bvpl_taylor_basis_sample.h>
 
 #include <vul/vul_file.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 #include <cmath>
 #include <sstream>
 #include "bapl_lowe_pyramid_set.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

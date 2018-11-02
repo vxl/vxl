@@ -5,7 +5,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_fit_line.h>
 #include <vsol/vsol_line_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

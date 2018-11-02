@@ -7,7 +7,6 @@
 #include <vdgl/vdgl_edgel_chain.h>
 #include <vdgl/vdgl_edgel.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

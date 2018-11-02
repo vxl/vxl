@@ -6,7 +6,6 @@
 // \brief Functions to smooth and sub-sample an image in one direction
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

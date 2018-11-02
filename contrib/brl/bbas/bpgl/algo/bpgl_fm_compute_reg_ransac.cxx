@@ -7,7 +7,6 @@
 #include "bpgl_fm_compute_reg_ransac.h"
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

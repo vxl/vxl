@@ -12,7 +12,6 @@
 #include "rgrl_feature_set_sptr.h"
 #include "rgrl_mask_sptr.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

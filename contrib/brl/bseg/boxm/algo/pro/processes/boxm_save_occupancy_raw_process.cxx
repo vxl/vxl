@@ -17,7 +17,6 @@
 //                  combined to generate 1 raw file for the whole scene
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 #include <cmath>
 #include "mvl_six_point_design_matrix_row.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

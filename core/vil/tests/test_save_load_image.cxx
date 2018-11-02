@@ -29,7 +29,6 @@
 //   14 Nov 2011 - Gehua Yang     - added tests for saving/loading 32bpp ARGB image with PNG, TIFF, and BMP format
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

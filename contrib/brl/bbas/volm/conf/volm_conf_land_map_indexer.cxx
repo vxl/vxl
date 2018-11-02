@@ -7,7 +7,6 @@
 #include <vil/vil_new.h>
 #include <vsol/vsol_box_2d.h>
 #include <brip/brip_roi.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -1,7 +1,6 @@
 // This is tbl/vepl/vepl_gaussian_convolution.cxx
 #include <iostream>
 #include "vepl_gaussian_convolution.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

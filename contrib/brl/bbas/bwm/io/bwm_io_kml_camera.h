@@ -2,7 +2,6 @@
 #define bwm_io_kml_camera_h_
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

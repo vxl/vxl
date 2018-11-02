@@ -11,7 +11,6 @@
 #include <memory>
 #include <string>
 #include <sstream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

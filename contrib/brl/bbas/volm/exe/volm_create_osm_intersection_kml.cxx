@@ -28,7 +28,6 @@
 #include <vil/vil_load.h>
 #include <vpgl/vpgl_utm.h>
 #include <bkml/bkml_write.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

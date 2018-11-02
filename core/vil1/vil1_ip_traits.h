@@ -1,7 +1,6 @@
 // This is core/vil1/vil1_ip_traits.h
 #ifndef vil1_ip_traits_h_
 #define vil1_ip_traits_h_
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

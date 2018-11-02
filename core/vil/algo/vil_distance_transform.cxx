@@ -7,7 +7,6 @@
 // \author Tim Cootes
 
 #include <vil/vil_fill.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -5,7 +5,6 @@
 // \file
 // \author Peter Vanroose
 // \date   26 Aug. 2004
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

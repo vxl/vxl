@@ -1,7 +1,6 @@
 // This is gel/vifa/tests/test_region_proc.cxx
 #include <iostream>
 #include <ostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

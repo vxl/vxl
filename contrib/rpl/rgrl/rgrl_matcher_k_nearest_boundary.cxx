@@ -9,7 +9,6 @@
 #include "rgrl_feature_trace_pt.h"
 #include "rgrl_cast.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

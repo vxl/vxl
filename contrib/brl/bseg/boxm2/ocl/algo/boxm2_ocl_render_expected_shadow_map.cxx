@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "boxm2_ocl_render_expected_shadow_map.h"
 #include <boxm2/ocl/boxm2_ocl_util.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

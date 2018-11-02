@@ -20,7 +20,6 @@
 #include <bvxm/grid/bvxm_voxel_grid.h>
 #include <bsta/bsta_gauss_sf1.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

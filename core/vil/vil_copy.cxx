@@ -6,7 +6,6 @@
 // \author Ian Scott, ISBE, Manchester
 // \date   21 Aug 2003
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

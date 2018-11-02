@@ -6,7 +6,6 @@
 
 #include <vul/vul_temp_filename.h>
 #include <vpl/vpl.h>  // for vpl_unlink and vpl_sleep
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

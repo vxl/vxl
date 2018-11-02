@@ -12,7 +12,6 @@
 //   PVr -  4 May 2009 - added tests for operator>>
 //   PVr - 21 May 2009 - added more tests for operator>>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
