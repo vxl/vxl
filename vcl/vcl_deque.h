@@ -2,6 +2,6 @@
 #define vcl_deque_h_
 
 #include <deque>
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 
 #endif // vcl_deque_h_

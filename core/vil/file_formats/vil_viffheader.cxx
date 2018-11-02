@@ -2,7 +2,7 @@
 // \file
 #include <cstring>
 #include "vil_viffheader.h"
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 
 
 //: Construct an image header

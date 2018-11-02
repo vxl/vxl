@@ -4,7 +4,7 @@
   fsm
 */
 
-#include "vcl_compiler.h"
+#include <vcl_compiler.h>
 
 #if defined(VXL_COMPILER_IS_GNU)
 # warning "deprecated"
