@@ -306,7 +306,7 @@ vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&
   return dest;
 }
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 #include <windows.h>
 
 //: Make a new image.
@@ -380,4 +380,4 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
   return vil_new_image_resource(os, ni, nj, nplanes, format, file_format);
 }
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T

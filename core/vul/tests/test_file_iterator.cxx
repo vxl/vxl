@@ -307,7 +307,7 @@ void test_file_iterator_dos()
 
 static void test_file_iterator()
 {
-#ifndef VCL_WIN32
+#ifndef _WIN32
   test_file_iterator_unix();
 #else
   test_file_iterator_dos();

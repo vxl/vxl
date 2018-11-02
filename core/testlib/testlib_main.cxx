@@ -42,7 +42,7 @@ LONG WINAPI vxl_exception_filter( struct _EXCEPTION_POINTERS *ExceptionInfo )
   std::printf("Execution aborted!\n");
   return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif // defined(VCL_WIN32)
+#endif // defined(_WIN32)
 
 static std::vector<TestMainFunction> testlib_test_func_;
 static std::vector<std::string>       testlib_test_name_;

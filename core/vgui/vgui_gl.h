@@ -6,7 +6,7 @@
 #include <vcl_compiler.h>
 #include <vgui/vgui_config.h>
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 // fix windows gl.h :
 # include <windows.h>
 # ifdef _MSC_VER // exclude when using MinGW

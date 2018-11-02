@@ -72,7 +72,7 @@ static bool generate_rset(std::string const& base_image_path,
 {
   std::string slash;
   //generate the temporary dir
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";

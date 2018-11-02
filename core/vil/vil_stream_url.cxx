@@ -29,7 +29,7 @@
 #  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
 # endif
 # define SOCKET int
-#elif defined (VCL_WIN32) && !defined(__CYGWIN__)
+#elif defined (_WIN32) && !defined(__CYGWIN__)
 # include <winsock2.h>
 #endif
 
@@ -163,7 +163,7 @@ vil_stream_url::vil_stream_url(char const *url)
            << "port = " << port << std::endl;
 #endif
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   static int called_WSAStartup;
   if (called_WSAStartup==0)
   {
@@ -181,7 +181,7 @@ vil_stream_url::vil_stream_url(char const *url)
                              SOCK_STREAM,  // two-way, reliable, connection-based stream socket.
                              PF_UNSPEC);   // protocol number.
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
     std::cerr << __FILE__ ": failed to create socket.\n";
 # ifndef NDEBUG
@@ -202,7 +202,7 @@ vil_stream_url::vil_stream_url(char const *url)
   hostent *hp = gethostbyname(host.c_str());
   if (! hp) {
     std::cerr << __FILE__ ": failed to lookup host\n";
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -220,7 +220,7 @@ vil_stream_url::vil_stream_url(char const *url)
   if (connect(tcp_socket , (sockaddr *) &my_addr, sizeof my_addr) < 0) {
     std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -244,7 +244,7 @@ vil_stream_url::vil_stream_url(char const *url)
     std::abort();
   }
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0)
   {
     std::cerr << __FILE__ ": error sending HTTP request\n";
@@ -269,7 +269,7 @@ vil_stream_url::vil_stream_url(char const *url)
   {
     unsigned entity_marker = 0; // count end of header CR and LFs
     vil_streampos n;
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0L)
 #else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0L)
@@ -313,7 +313,7 @@ vil_stream_url::vil_stream_url(char const *url)
 
 
   // close connection to server.
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);

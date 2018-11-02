@@ -56,7 +56,7 @@ struct vul_file
     return is_directory(filename.c_str());
   }
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   //: Return true iff filename is a drive, e.g., "c:" or "Z:".
   static bool is_drive(char const* filename);
   static bool is_drive(const std::string& filename) {
@@ -118,7 +118,7 @@ struct vul_file
   { return delete_file_glob(std::string(file_glob)); }
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
   //: Return current working directory
   //  This function is provided as an overloading

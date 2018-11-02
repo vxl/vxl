@@ -21,7 +21,7 @@ int malloc_count = 0;
 // FIXME: Win32 will have different operator new in vnl dll from
 // the one generated here, so this test fails - RWMC.
 # define reset_count malloc_count = 0
-#if defined(VCL_WIN32)
+#if defined(_WIN32)
 # define check_count TEST("mallocs (no test)",true,true)
 #else
 # define check_count TEST("mallocs",malloc_count<=1,true)

@@ -24,7 +24,7 @@ static bool generate_rset(std::string const& dirpath,
 {
   std::string slash;
   //generate the temporary dir
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";
@@ -50,7 +50,7 @@ static bool generate_rset(std::string const& dirpath,
 int main(int argc,char * argv[])
 {
   std::string slash;
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";

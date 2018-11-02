@@ -33,13 +33,13 @@
 # endif
 # define SOCKET int
 
-#elif defined (VCL_WIN32) && !defined(__CYGWIN__)
+#elif defined (_WIN32) && !defined(__CYGWIN__)
 
 # include <winsock2.h>
 
 #endif // unix
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 // So that we don't call WSAStartup more than we need to
 static int called_WSAStartup = 0;
 #endif
@@ -103,7 +103,7 @@ std::istream * vul_http_open(char const *url)
            << "port = " << port << std::endl;
 #endif
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup==0)
   {
     WORD wVersionRequested;
@@ -120,7 +120,7 @@ std::istream * vul_http_open(char const *url)
                              SOCK_STREAM,  // two-way, reliable,
                                            // connection-based stream socket.
                              PF_UNSPEC);   // protocol number.
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
     std::cerr << __FILE__ "error code : " << WSAGetLastError() << '\n';
@@ -141,7 +141,7 @@ std::istream * vul_http_open(char const *url)
   if (! hp) {
     std::cerr << __FILE__ ": failed to lookup host\n";
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -162,7 +162,7 @@ std::istream * vul_http_open(char const *url)
     std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -190,14 +190,14 @@ std::istream * vul_http_open(char const *url)
     std::abort();
   }
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
 #endif
     std::cerr << __FILE__ ": error sending HTTP request\n";
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -210,7 +210,7 @@ std::istream * vul_http_open(char const *url)
   std::string contents;
   {
     int n;
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     while ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     while ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
@@ -223,7 +223,7 @@ std::istream * vul_http_open(char const *url)
   }
 
   // close connection to server.
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);
@@ -307,7 +307,7 @@ bool vul_http_exists(char const *url)
            << "port = " << port << std::endl;
 #endif
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (called_WSAStartup==0)
   {
     WORD wVersionRequested;
@@ -325,7 +325,7 @@ bool vul_http_exists(char const *url)
                                            // connection-based stream socket.
                              PF_UNSPEC);   // protocol number.
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (tcp_socket == INVALID_SOCKET) {
 # ifndef NDEBUG
     std::cerr << "error code : " << WSAGetLastError() << std::endl;
@@ -360,7 +360,7 @@ bool vul_http_exists(char const *url)
   {
     std::cerr << __FILE__ ": failed to connect to host\n";
     //perror(__FILE__);
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -387,14 +387,14 @@ bool vul_http_exists(char const *url)
     std::abort();
   }
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   if (send(tcp_socket, buffer, (int)std::strlen(buffer), 0) < 0) {
 #else
   if (::write(tcp_socket, buffer, std::strlen(buffer)) < 0) {
 #endif
     std::cerr << __FILE__ ": error sending HTTP request\n";
 
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     closesocket(tcp_socket);
 #else
     close(tcp_socket);
@@ -407,7 +407,7 @@ bool vul_http_exists(char const *url)
   std::string contents;
   {
     int n;
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
     if ((n = recv(tcp_socket, buffer, sizeof buffer,0 )) > 0) {
 #else
     if ((n = ::read(tcp_socket, buffer, sizeof buffer)) > 0) {
@@ -417,7 +417,7 @@ bool vul_http_exists(char const *url)
     }
     else
     {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
       closesocket(tcp_socket);
 #else
       close(tcp_socket);
@@ -427,7 +427,7 @@ bool vul_http_exists(char const *url)
   }
 
   // close connection to server.
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   closesocket(tcp_socket);
 #else
   close(tcp_socket);

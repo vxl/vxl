@@ -18,7 +18,7 @@
 // \endverbatim
 
 //: Declare pimpl, reset, and iteration routines for each OS
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 
 #include <io.h>
 
@@ -143,7 +143,7 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
   }
 }
 
-#else // !defined(VCL_WIN32) || defined(__CYGWIN__)
+#else // !defined(_WIN32) || defined(__CYGWIN__)
 
 #include <dirent.h>
 
@@ -249,7 +249,7 @@ vul_file_iterator_data::vul_file_iterator_data(char const* glob)
   next();
 }
 
-#endif // !defined(VCL_WIN32) || defined(__CYGWIN__)
+#endif // !defined(_WIN32) || defined(__CYGWIN__)
 
 // -----------------------------------------------------------------------------
 

@@ -134,7 +134,7 @@ vil_image_view_base_sptr vil_load(const char *file, bool verbose)
 }
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //  --------------------------------------------------------------------------------
 //  Windows' wchar_t overloading version
 //
@@ -168,4 +168,4 @@ vil_image_view_base_sptr vil_load(const wchar_t *file, bool verbose)
   return data -> get_view();
 }
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T

@@ -34,7 +34,7 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
 char const *vil_save_guess_file_format(char const* filename);
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Send a vil_image_view to disk, deducing format from filename
 // \relatesalso vil_image_view
 bool vil_save(const vil_image_view_base &, wchar_t const* filename);
@@ -55,6 +55,6 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, wchar_t const* f
 //: Given a filename, guess the file format tag
 // The returned pointer may point into the filename string - so keep it valid.
 wchar_t const *vil_save_guess_file_format(wchar_t const* filename);
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 #endif // vil_save_h_

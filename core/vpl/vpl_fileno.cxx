@@ -3,7 +3,7 @@
 
 int vpl_fileno(std::FILE *fp)
 {
-#if defined(VCL_WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
   return _fileno(fp);
 #else
   return fileno(fp);

@@ -73,7 +73,7 @@ vil_stream_fstream64::vil_stream_fstream64(char const* fn, char const* mode) :
   }
 }
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 vil_stream_fstream64::vil_stream_fstream64(wchar_t const* fn, char const* mode):
   mode_(modeflags(mode))
 {
@@ -86,7 +86,7 @@ vil_stream_fstream64::vil_stream_fstream64(wchar_t const* fn, char const* mode):
     std::cerr << "vil_stream_fstream64::Could not open [" << fn << "]\n";
   }
 }
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 vil_stream_fstream64::~vil_stream_fstream64()
 {

@@ -12,7 +12,7 @@
 #include <cstdlib>
 #include "vul_expand_path.h"
 
-#if defined(VCL_WIN32)
+#if defined(_WIN32)
 
 //:
 // \note This Windows version only performs some of the operations done by the Unix version.
@@ -182,7 +182,7 @@ std::wstring vul_expand_path(std::wstring path)
 
 #endif  //VXL_USE_WIN_WCHAR_T
 
-#else // #if defined(VCL_WIN32)
+#else // #if defined(_WIN32)
 
 #include <vcl_compiler.h>
 #include <sys/types.h>
@@ -364,4 +364,4 @@ std::string vul_expand_path_uncached(std::string path)
   return vul_expand_path_internal(path);
 }
 
-#endif // VCL_WIN32
+#endif // _WIN32

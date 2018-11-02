@@ -153,7 +153,7 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, char const* file
 
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //  --------------------------------------------------------------------------------
 //  Windows' wchar_t overloading version
 //
@@ -283,5 +283,5 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, wchar_t const* f
   return vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 

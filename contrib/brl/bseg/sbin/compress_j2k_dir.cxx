@@ -16,7 +16,7 @@ static bool compress_images(std::string const& in_image_dir,
 {
   std::string slash;
   //generate the temporary dir
-#ifdef VCL_WIN32
+#ifdef _WIN32
   slash =  "\\";
 #else
   slash = "/";

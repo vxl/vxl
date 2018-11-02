@@ -26,7 +26,7 @@ class vil_stream_fstream : public vil_stream
  public:
   vil_stream_fstream(char const* filename, char const* mode);
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
   vil_stream_fstream(wchar_t const* filename, char const* mode);
 #endif
 

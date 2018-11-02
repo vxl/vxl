@@ -207,7 +207,7 @@ vil_image_view<T> vil_new_image_view_i_j_plane(unsigned ni, unsigned nj, unsigne
 vil_image_view_base_sptr vil_new_image_view_base_sptr(const vil_image_view_base&);
 
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 //: Make a new image.
 // \relatesalso vil_image_resource
 vil_image_resource_sptr vil_new_image_resource(vil_stream* os,
@@ -231,7 +231,7 @@ vil_image_resource_sptr vil_new_image_resource(wchar_t const* filename,
                                                vil_image_resource_sptr const &prototype,
                                                wchar_t const* format = 0);
 
-#endif //defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
 
 
 #endif // vil_new_h_

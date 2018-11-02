@@ -11,7 +11,7 @@ void test_expand_path()
   // vul_expand_path
   TEST("expand path", vul_expand_path("/abc///d/e/../"), "/abc/d");
 
-#if defined(VCL_WIN32) && VXL_USE_WIN_WCHAR_T
+#if defined(_WIN32) && VXL_USE_WIN_WCHAR_T
   TEST("expand path (wchar_t)", vul_expand_path(L"/abc///d/e/../"), L"/abc/d");
 #endif
 }

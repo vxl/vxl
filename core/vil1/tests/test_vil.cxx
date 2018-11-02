@@ -15,7 +15,7 @@ static void test_vil(int argc, char* argv[])
   if ( argc >= 2 )
   {
     image_base = argv[1];
-#ifdef VCL_WIN32
+#ifdef _WIN32
     image_base += "\\";
 #else
     image_base += "/";
