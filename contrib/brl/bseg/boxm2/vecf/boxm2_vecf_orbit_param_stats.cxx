@@ -5,6 +5,9 @@
 #include "boxm2_vecf_plot_orbit.h"
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 void boxm2_vecf_orbit_param_stats::average_params(){
   for(auto & pit : param_map_){
     const std::string& pid = pit.first;

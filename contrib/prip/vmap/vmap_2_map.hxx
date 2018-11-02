@@ -5,6 +5,9 @@
 #include <iostream>
 #include "vmap_2_map.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class D>
 vmap_2_map<D>::vmap_2_map(self_type const& m) : dart_sequence(m)

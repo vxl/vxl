@@ -1,6 +1,9 @@
 #include <iostream>
 #include "bsta_histogram.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <>
 void bsta_histogram<char>::pretty_print(std::ostream& os) const

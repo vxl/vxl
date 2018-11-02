@@ -9,6 +9,9 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif // 0
 
 void test_gauss_fit()

@@ -5,6 +5,9 @@
 #include <bsta/bsta_sampler.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void test_sampler_helper(void)
 {

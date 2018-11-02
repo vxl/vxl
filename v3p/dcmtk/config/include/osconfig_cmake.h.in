@@ -13,6 +13,9 @@
 #endif
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define HAVE_LONG_FILE_NAMES 1
 /* #undef HAVE_DECLARATION_STD___IOS_OPENMODE */

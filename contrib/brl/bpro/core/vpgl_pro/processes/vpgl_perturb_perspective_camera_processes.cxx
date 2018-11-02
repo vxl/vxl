@@ -19,6 +19,9 @@
 #include <bsta/bsta_random_wrapper.h>
 #if 0
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 struct ang_pair {

@@ -16,6 +16,9 @@
 #include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A Binary k-Nearest Neighbour classifier
 class clsfy_k_nearest_neighbour : public clsfy_classifier_base

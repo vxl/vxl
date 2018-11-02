@@ -34,6 +34,9 @@
 #include <map>
 #include <queue>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_array_2d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_memory_image_of.h>

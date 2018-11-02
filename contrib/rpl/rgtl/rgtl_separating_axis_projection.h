@@ -16,6 +16,9 @@
 #include "rgtl_serialize_access.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Represent the projection of an object onto a separating axis.
 template <class T>

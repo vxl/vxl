@@ -10,6 +10,9 @@
 #include "rgrl_cast.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rgrl_matcher_k_nearest_boundary::
 rgrl_matcher_k_nearest_boundary( unsigned int k )

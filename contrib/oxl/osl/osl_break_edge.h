@@ -13,6 +13,9 @@ class osl_edge;
 #include <list>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Break the given edge at the positions indicated.
 //

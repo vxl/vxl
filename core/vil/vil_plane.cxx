@@ -16,6 +16,9 @@
 #include "vil_plane.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 vil_image_resource_sptr vil_plane(const vil_image_resource_sptr &src, unsigned p)

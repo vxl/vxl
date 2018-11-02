@@ -5,6 +5,9 @@
 #include <testlib/testlib_root_dir.h>
 #endif
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_generic_camera.h>

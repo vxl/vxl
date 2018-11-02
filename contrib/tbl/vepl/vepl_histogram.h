@@ -25,6 +25,9 @@
 #include <vector>
 #include <vil/vil_image_resource.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: pixel value histogram of 2D image, stored in a vector
 std::vector<unsigned int> vepl_histogram(vil_image_resource_sptr );

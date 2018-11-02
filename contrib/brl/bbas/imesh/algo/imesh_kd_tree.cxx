@@ -13,6 +13,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <imesh/algo/imesh_intersect.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: The minimum square distance between \a p and any point in \a b

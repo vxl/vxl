@@ -6,6 +6,9 @@
 // \file
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream_fstream.h>
 #include <vil/vil_image_list.h>
 #include <vil/vil_blocked_image_facade.h>

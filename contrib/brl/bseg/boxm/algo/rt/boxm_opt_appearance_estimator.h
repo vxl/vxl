@@ -8,6 +8,9 @@
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>
 #if 0
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 template <boxm_apm_type APM>

@@ -12,6 +12,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <osl/osl_edge.h>
 
 void osl_load_topology(char const *f, std::list<osl_edge*> &, std::list<osl_vertex*> &);

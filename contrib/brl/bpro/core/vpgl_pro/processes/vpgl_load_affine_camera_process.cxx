@@ -6,6 +6,9 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
 

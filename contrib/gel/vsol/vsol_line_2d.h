@@ -31,6 +31,9 @@
 #include <vgl/vgl_line_segment_2d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vsol_line_2d : public vsol_curve_2d
 {

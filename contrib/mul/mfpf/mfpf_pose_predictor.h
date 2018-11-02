@@ -14,6 +14,9 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Types of 2D transformation

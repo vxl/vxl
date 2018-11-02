@@ -8,6 +8,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int test_algorithm_main(int, char*[]);
 int test_cctype_main(int, char*[]);

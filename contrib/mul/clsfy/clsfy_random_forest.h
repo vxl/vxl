@@ -11,6 +11,9 @@
 #include <clsfy/clsfy_binary_tree.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Forest of clsfy_binary_tree trees

@@ -15,6 +15,9 @@
 #include <string>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: A video input stream from a list of images on disk

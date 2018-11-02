@@ -6,6 +6,9 @@
 #include <iostream>
 #include <exception>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_arg.h>
 #include <mbl/mbl_log.h>
 #include <vimt/vimt_add_all_binary_loaders.h>

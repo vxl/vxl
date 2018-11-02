@@ -26,6 +26,9 @@
 //         elev(NAD27) = elev(WGS84)-d_H
 //
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 
 #define degree_to_rad   (vnl_math::pi_over_180)      // Degree to rad conv.

@@ -4,6 +4,9 @@
 // \file
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/io/vbl_io_smart_ptr.h>
 #include <vsol/vsol_point_3d.h>
 #include <vgl/vgl_vector_3d.h>

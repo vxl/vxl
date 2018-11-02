@@ -22,6 +22,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vifa/vifa_bbox.h>
 #include <vifa/vifa_group_pgram_params.h>
 #include <vifa/vifa_histogram.h>

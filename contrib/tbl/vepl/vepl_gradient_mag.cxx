@@ -2,6 +2,9 @@
 #include <iostream>
 #include "vepl_gradient_mag.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vepl/accessors/vipl_accessors_vil_image_view_base.h>
 #include <vipl/vipl_gradient_mag.h>
 #include <vil/vil_image_view.h>

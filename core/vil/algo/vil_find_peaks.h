@@ -9,6 +9,9 @@
 #include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: True if pixel at *im is strictly above 8 neighbours.
 // \sa vil_is_plateau_3x3()

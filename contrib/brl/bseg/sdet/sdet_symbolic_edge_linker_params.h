@@ -10,6 +10,9 @@
 #include <iosfwd>
 #include <gevd/gevd_param_mixin.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 class sdet_symbolic_edge_linker_params : public gevd_param_mixin

@@ -15,6 +15,9 @@
 #include <iostream>
 #include "Voxel.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 #if 0

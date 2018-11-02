@@ -2,6 +2,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rgrl_invariant_match::
 rgrl_invariant_match( rgrl_invariant_sptr from,

@@ -15,6 +15,9 @@
 #include <iostream>
 #include <boct/boct_tree.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Construct a tree from leaf nodes. Cells are initialized to the default value given
 template <class T_loc,class T_data>

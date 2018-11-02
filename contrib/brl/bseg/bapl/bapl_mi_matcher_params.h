@@ -15,6 +15,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:A block of parameters for the bapl_mi_matcher class
 // The member variable are kept public here for easy access,

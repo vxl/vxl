@@ -12,6 +12,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bstm/io/bstm_cache.h>
 
 class bstm_refine_blk_in_spacetime_function

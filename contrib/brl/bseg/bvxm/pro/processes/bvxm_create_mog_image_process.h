@@ -25,6 +25,9 @@
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bvxm_create_mog_image_process_cons(bprb_func_process& pro);
 

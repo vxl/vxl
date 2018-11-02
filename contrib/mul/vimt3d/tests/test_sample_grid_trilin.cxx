@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <vil/vil_na.h>
 #include <vgl/vgl_point_3d.h>

@@ -5,6 +5,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Write brad_atmospheric_parameters to stream
 std::ostream&  operator<<(std::ostream& s, brad_atmospheric_parameters const& atm)

@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include "mbl_gamma.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 constexpr int MAX_ITS = 200;
 const double EPS = 3.0e-7;

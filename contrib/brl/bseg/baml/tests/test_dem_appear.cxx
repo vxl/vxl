@@ -12,6 +12,9 @@
 #include <vgl/algo/vgl_h_matrix_2d_compute_4point.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>

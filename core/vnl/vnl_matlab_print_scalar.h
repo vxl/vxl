@@ -10,6 +10,9 @@
 #include <iosfwd>
 #include <complex>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_matlab_print_format.h>
 #include "vnl/vnl_export.h"
 

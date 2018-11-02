@@ -26,6 +26,9 @@
 #include <ostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_2d.h>
 #include "bvgl_eulerspiral_base.h"
 

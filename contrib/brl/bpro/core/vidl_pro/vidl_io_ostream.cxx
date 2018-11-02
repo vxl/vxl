@@ -5,6 +5,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vidl/vidl_ostream.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Binary write vidl ostream to stream
 void vsl_b_write(vsl_b_ostream & /*os*/, vidl_ostream_sptr const& /*view_base*/)

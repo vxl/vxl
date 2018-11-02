@@ -9,6 +9,9 @@
 #include <iosfwd>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Structuring element for morphology represented as a list of non-zero pixels
 // Elements in box bounded by [min_i(),max_i()][min_j(),max_j()]

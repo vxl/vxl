@@ -19,6 +19,9 @@
 //brdb stuff
 #include <brdb/brdb_value.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //directory utility
 #include <vcl_where_root_dir.h>
 #include <bocl/bocl_device.h>

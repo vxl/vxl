@@ -6,6 +6,9 @@
 #include <boxm2/ocl/boxm2_ocl_util.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timer.h>
 
 // declare bocl_kernel* maps

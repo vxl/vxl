@@ -13,6 +13,9 @@
 #include <gevd/gevd_param_mixin.h>
 #include <brip/brip_watershed_params.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class sdet_watershed_region_proc_params : public gevd_param_mixin
 {

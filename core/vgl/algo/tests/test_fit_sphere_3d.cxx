@@ -7,6 +7,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_random.h>
 // creates points on the unit sphere
 static void test_linear_fit_unit_sphere()

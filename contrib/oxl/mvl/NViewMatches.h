@@ -37,6 +37,9 @@
 #include <iosfwd>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 struct NViewMatch : public vnl_vector<int>
 {

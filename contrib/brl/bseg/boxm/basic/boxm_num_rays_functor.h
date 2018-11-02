@@ -5,6 +5,9 @@
 #include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_histogram.h>
 #include <boxm/boxm_apm_traits.h>
 #include "boxm_raytrace_function.h"

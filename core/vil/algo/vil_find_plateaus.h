@@ -9,6 +9,9 @@
 #include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: True if pixel at *im is greater than or equal to all 8 neighbours.
 // \sa vil_is_peak_3x3()

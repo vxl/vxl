@@ -17,6 +17,9 @@
 #include <iosfwd>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Represents a homogeneous 1-D point, i.e., a homogeneous pair \a (x,w)

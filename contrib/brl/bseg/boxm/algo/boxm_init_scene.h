@@ -8,6 +8,9 @@
 #include <boxm/sample/boxm_sample.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: This method inits the blocks (octrees) of the scene of type boxm_sample

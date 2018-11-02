@@ -15,6 +15,9 @@
 #include <iostream>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T1, class T2, unsigned n>
 struct bbgm_planes_to_sample

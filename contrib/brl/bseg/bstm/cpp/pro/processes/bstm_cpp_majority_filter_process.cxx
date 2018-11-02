@@ -10,6 +10,9 @@
 // \date June 25, 2013
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bstm/bstm_scene.h>
 #include <bstm/bstm_util.h>
 #include <bstm/io/bstm_cache.h>

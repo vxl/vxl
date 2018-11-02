@@ -9,6 +9,9 @@
 #include <vil3d/vil3d_image_resource.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_box_3d.h>
 
 //: Create a view that is a window onto an existing image.

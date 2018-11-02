@@ -20,6 +20,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Constructor
 bgui3d_fullviewer_tableau::bgui3d_fullviewer_tableau(SoNode * scene_root)

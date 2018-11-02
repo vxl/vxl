@@ -7,6 +7,9 @@
 #include <vector>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_affine_coordinates.h>
 #include <vgl/vgl_point_2d.h>

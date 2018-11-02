@@ -22,6 +22,9 @@
 #include <vgl/vgl_homg_point_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: base class bundle adjustment sparse least squares function

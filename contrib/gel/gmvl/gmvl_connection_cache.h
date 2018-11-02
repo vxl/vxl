@@ -12,6 +12,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vbl/vbl_bit_array_2d.h>
 #include <gmvl/gmvl_connection_sptr.h>

@@ -18,6 +18,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h> // data member of this class
 
 //: Represents a 3D line segment using two points.

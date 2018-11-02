@@ -17,6 +17,9 @@
 #include <vpdl/vpdt/vpdt_access.h> // function vpdt_size(v)
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A base class for kernel (aka Parzen window) distributions
 // A kernel distribution is restricted form of a mixture where each component

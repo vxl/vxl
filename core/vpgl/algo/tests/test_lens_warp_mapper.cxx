@@ -1,6 +1,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_poly_radial_distortion.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>

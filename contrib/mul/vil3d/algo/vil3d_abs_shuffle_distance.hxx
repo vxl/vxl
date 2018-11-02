@@ -8,6 +8,9 @@
 #include "vil3d_abs_shuffle_distance.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Computes shuffle distance between image1 and image2
 // For each pixel in image1 it finds the pixel in image2 with

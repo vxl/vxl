@@ -7,6 +7,9 @@
 #include "bsol_algs.h"
 #ifdef DEBUG
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 static void clear_flag(vsol_point_3d_sptr& p)

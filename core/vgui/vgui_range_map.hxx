@@ -7,6 +7,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class Type>
 void vgui_range_map<Type>::init_map_domain(const Type min, const Type max,

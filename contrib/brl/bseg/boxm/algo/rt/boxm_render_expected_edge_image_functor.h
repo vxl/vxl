@@ -15,6 +15,9 @@
 
 #ifdef DEBUG
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 template <boxm_apm_type APM, class T_aux>

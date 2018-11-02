@@ -6,6 +6,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: constructor
 boxm_quad_scan_iterator::boxm_quad_scan_iterator(double *verts_x, double *verts_y,

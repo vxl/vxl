@@ -16,6 +16,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_value.h>

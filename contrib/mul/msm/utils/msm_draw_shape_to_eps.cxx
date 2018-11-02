@@ -7,6 +7,9 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Draws current shape instance to an eps file

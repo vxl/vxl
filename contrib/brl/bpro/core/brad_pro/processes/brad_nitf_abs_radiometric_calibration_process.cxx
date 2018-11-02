@@ -17,6 +17,9 @@
 #include <vector>
 #include <fstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bprb/bprb_func_process.h>
 #include <vnl/vnl_math.h>
 

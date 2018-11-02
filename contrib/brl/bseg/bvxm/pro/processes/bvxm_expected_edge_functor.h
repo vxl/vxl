@@ -14,6 +14,9 @@
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 class bvxm_expected_edge_functor

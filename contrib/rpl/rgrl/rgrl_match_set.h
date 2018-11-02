@@ -11,6 +11,9 @@
 #include <cstddef>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <rgrl/rgrl_feature_sptr.h>
 #include <rgrl/rgrl_feature_set.h>

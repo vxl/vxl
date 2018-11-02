@@ -6,6 +6,9 @@
 #include <vector>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
 #include <vul/vul_arg.h>

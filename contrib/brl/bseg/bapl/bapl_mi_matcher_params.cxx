@@ -5,6 +5,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define BAPL_MIN_SCALE 1.0
 #define BAPL_MAX_SCALE 10.0

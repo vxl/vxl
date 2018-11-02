@@ -9,6 +9,9 @@
 #include <iosfwd>
 #include <mfpf/mfpf_vec_cost.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Computes log prob based on output of a linear classifier
 //  Linear classifier gives output z = w.x - bias

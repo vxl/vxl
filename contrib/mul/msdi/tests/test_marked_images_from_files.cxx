@@ -12,6 +12,9 @@
 // \brief Test msdi_marked_images_from_files
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <msdi/msdi_marked_images_from_files.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_save.h>

@@ -3,6 +3,9 @@
 #include <string>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <bwm/video/bwm_video_site_io.h>
 #include <bwm/video/bwm_video_corr.h>

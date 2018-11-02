@@ -25,6 +25,9 @@
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Traits for saving grids of different datatypes to Drishti .raw file
 template <class T>

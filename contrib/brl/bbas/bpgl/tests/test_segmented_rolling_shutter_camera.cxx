@@ -2,6 +2,9 @@
 #include <fstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h>
 
 #include <bpgl/bpgl_segmented_rolling_shutter_camera.h>

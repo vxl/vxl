@@ -10,6 +10,9 @@
 #include <vector>
 #include <functional>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 
 //: Type of connectivity to use in finding the regions

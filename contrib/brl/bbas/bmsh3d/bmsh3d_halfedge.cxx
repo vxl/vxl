@@ -21,6 +21,9 @@
 #include "bmsh3d_face.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: warning: this vertex may be different than the he->edge's sV
 bmsh3d_vertex* bmsh3d_halfedge::s_vertex() const

@@ -19,6 +19,9 @@
 #include <rgrl/rgrl_match_set.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: observer to view transformations at each iteration of feature-based registration engine
 void

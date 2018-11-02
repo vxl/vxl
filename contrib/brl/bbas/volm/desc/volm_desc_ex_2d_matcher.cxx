@@ -2,6 +2,9 @@
 #include <algorithm>
 #include "volm_desc_ex_2d_matcher.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //
 // \file
 

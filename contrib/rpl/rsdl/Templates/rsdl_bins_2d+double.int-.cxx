@@ -2,6 +2,9 @@
 #include <vector>
 #include <rsdl/rsdl_bins_2d.hxx>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_array_2d.hxx>
 
 RSDL_BINS_2D_INSTANTIATE( double, int );

@@ -20,6 +20,9 @@
 #include <iosfwd>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_line_2d_sptr.h>
 
 class bsol_distance_histogram

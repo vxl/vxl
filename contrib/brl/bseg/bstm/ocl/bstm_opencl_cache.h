@@ -15,6 +15,9 @@
 #include <bstm/io/bstm_cache.h>
 #include <bstm/io/bstm_lru_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //open cl includes
 #include <bocl/bocl_cl.h>

@@ -11,6 +11,9 @@
 #include <string>
 #include <vepl/vepl_gradient_mag.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "test_driver.h"
 #include <vxl_config.h> // for vxl_byte
 

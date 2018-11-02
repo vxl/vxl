@@ -9,6 +9,9 @@
 // \author Yi Dong
 // \date August 17, 2013
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <volm/volm_tile.h>

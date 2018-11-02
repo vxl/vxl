@@ -11,6 +11,9 @@
 #include <iostream>
 #include "vgui_dialog_impl.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vgui/internals/vgui_simple_field.h>
 #include <vgui/internals/vgui_string_field.h>

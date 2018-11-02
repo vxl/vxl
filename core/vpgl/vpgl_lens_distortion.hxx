@@ -12,6 +12,9 @@
 #endif
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Return the original point that was distorted to this location (inverse of distort)
 // \param init is an initial guess at the solution for the iterative solver

@@ -1,6 +1,9 @@
 // This is mul/mbl/tests/test_rvm_regression_builder.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_rvm_regression_builder.h>
 #include <mbl/mbl_data_array_wrapper.h>
 #include <testlib/testlib_test.h>

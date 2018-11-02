@@ -4,6 +4,9 @@
 #include "../bmdl_processes.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vgl/vgl_polygon.h>
 #include <vgl/io/vgl_io_polygon.h>

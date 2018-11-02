@@ -16,6 +16,9 @@
 #include <vgui/vgui_dialog.h>
 #include <vgui/internals/vgui_accelerate.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //-----------------------------------------------------------------------------
 //: Constructor - don't use this, use vgui_clear_tableau_new.

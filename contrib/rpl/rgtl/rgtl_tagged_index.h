@@ -15,6 +15,9 @@
 #include <cstddef>
 #include "rgtl_serialize_access.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Wraps an unsigned integer for use as an index.
 //  The index is compatible only with other indexes using the same tag.

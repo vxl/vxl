@@ -10,6 +10,9 @@
 // \date Aug 22, 2012
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>

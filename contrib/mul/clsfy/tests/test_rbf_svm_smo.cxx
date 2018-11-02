@@ -13,6 +13,9 @@
 // Test construction, IO etc.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <clsfy/clsfy_rbf_svm.h>
 #include <clsfy/clsfy_rbf_svm_smo_1_builder.h>
 #include <clsfy/clsfy_k_nearest_neighbour.h>

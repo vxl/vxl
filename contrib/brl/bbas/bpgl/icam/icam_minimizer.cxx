@@ -16,6 +16,9 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timer.h>
 #include <icam/icam_depth_trans_pyramid.h>
 #include <icam/icam_sample.h>

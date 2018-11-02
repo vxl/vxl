@@ -5,6 +5,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: add a label pair equivalence
 void brip_label_equivalence::add_label_pair(unsigned la, unsigned lb)

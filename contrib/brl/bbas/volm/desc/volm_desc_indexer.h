@@ -20,6 +20,9 @@
 #include <vector>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 

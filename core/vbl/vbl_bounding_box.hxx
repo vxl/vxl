@@ -14,6 +14,9 @@
 #include "vbl_bounding_box.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T, class DIM_>
 std::ostream& vbl_bounding_box_base<T, DIM_>::print(std::ostream& s) const

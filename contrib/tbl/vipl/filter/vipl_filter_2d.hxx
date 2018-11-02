@@ -5,6 +5,9 @@
 #include <iostream>
 #include "vipl_filter_2d.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Main constructor for this abstract class. If dst_image
 // (by default) the output will be generated automatically when

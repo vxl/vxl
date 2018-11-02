@@ -6,6 +6,9 @@
 #include <cassert>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 const double INLIER_PERCENT_NOT_SET = -1.0;
 

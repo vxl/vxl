@@ -16,6 +16,9 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_det.h>
 #include <vnl/algo/vnl_symmetric_eigensystem.h>
 #include <vnl/algo/vnl_svd_fixed.h>

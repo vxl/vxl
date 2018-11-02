@@ -6,6 +6,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_basic_xml_element.h>
 #include <vsol/vsol_point_2d.h>

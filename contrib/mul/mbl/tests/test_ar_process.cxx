@@ -1,6 +1,9 @@
 // This is mul/mbl/tests/test_ar_process.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_ar_process.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_double_2.h>

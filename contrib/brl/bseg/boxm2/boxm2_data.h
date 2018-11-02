@@ -13,6 +13,9 @@
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <boxm2/boxm2_data_traits.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Specific, templated derived class for data blocks
 template <boxm2_data_type T>

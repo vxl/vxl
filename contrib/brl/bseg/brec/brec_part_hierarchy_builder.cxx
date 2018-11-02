@@ -8,6 +8,9 @@
 // \date Oct. 16, 2008
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "brec_part_hierarchy.h"
 #include "brec_part_base_sptr.h"

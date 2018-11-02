@@ -11,6 +11,9 @@
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <bvgl/bvgl_grid_index_3d.h>

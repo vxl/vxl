@@ -8,6 +8,9 @@
 // \author TFC
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_logit_loss_function.h>
 #include <vpdfl/vpdfl_axis_gaussian.h>

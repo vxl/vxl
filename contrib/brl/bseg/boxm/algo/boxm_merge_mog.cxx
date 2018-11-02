@@ -8,6 +8,9 @@
 #include <boxm/boxm_scene.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h> // for vnl_math::sqr()
 
 #include <boxm/sample/algo/boxm_mog_grey_processor.h>

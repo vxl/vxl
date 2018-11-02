@@ -5,6 +5,9 @@
 #include "vil_viff.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static char const* vil_viff_format_tag = "viff";
 

@@ -21,6 +21,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vidl/vidl_iidc1394_params.h>
 #include <vidl/vidl_istream.h>
 #include <vidl/vidl_ostream.h>

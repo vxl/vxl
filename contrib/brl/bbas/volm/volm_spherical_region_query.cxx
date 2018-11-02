@@ -4,6 +4,9 @@
 #include <vsph/vsph_unit_sphere.h>
 #include <bsol/bsol_algs.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsph/vsph_utils.h>
 #include <volm/volm_char_codes.h>

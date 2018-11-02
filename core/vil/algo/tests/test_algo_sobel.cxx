@@ -6,6 +6,9 @@
 // \author Peter Vanroose
 // \date   26 Aug. 2004
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_sobel_1x3.h>
 #include <vil/algo/vil_sobel_3x3.h>

@@ -5,6 +5,9 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_float.h>
 #include <brad/brad_phongs_model_est.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/vnl_math.h>
 //:

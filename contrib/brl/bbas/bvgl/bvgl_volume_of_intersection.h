@@ -20,6 +20,9 @@
 #include <vector>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_sphere_3d.h>
 
 template <typename T>

@@ -10,6 +10,9 @@
 #include <istream>
 #include <ostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //-----------------------------------------------------------------------------
 // NITF compound field types

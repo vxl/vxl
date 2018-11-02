@@ -20,6 +20,9 @@
 #include <cassert>
 #if 0 // commented out
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 #include <vil1/vil1_stream.h>

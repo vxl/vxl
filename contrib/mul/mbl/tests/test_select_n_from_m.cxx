@@ -1,6 +1,9 @@
 // This is mul/mbl/tests/test_select_n_from_m.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_select_n_from_m.h>
 #include <testlib/testlib_test.h>
 

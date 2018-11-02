@@ -19,6 +19,9 @@
 #include <bmsh3d/bmsh3d_edge.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if 0 // commented out
 bmsh3d_face_mc::bmsh3d_face_mc(const bmsh3d_face_mc& face)

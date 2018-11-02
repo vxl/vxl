@@ -11,6 +11,9 @@
 #include "vil1_jpeg_source_mgr.h"
 #include <vil1/vil1_stream.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define trace if (true) { } else std::cerr
 

@@ -6,6 +6,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // the local time is [0,sub_block_num_t_)
 bool bstm_block_metadata::contains_t(double const t, double &local_time) const {

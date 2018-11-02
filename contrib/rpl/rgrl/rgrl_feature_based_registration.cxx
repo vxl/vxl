@@ -18,6 +18,9 @@
 #include "rgrl_event.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rgrl_feature_based_registration::
 rgrl_feature_based_registration( rgrl_data_manager_sptr data,

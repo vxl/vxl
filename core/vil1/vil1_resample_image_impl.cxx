@@ -14,6 +14,9 @@
 #include <vxl_config.h>
 #include <climits>// CHAR_BIT
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 vil1_resample_image_impl::vil1_resample_image_impl(vil1_image const &underlying, unsigned nw, unsigned nh)

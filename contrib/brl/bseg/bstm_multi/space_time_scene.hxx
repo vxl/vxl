@@ -9,6 +9,9 @@
 #include "space_time_scene.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_intersection.h>

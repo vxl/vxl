@@ -28,6 +28,9 @@
 #include <vgl/vgl_homg_line_2d.h>
 #include <vgl/vgl_conic.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix

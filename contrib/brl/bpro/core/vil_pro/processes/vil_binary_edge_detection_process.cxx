@@ -12,6 +12,9 @@
 #include <vil/algo/vil_binary_closing.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace vil_binary_edge_detection_process_globals
 {

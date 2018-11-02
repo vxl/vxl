@@ -7,6 +7,9 @@
 #include <map>
 #include "bvpl_taylor_basis_factory.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Constructor from filename
 bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(std::string filename)

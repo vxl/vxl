@@ -6,6 +6,9 @@
 #include <boxm/boxm_scene.hxx>
 #include <vbl/vbl_array_3d.hxx>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gauss_sf1.h>
 

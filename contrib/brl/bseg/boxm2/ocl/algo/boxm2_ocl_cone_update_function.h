@@ -10,6 +10,9 @@
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 float boxm2_ocl_cone_update( boxm2_scene_sptr & scene,
                              bocl_device_sptr & device,

@@ -10,6 +10,9 @@
 #include <rgrl/rgrl_util.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rgrl_trans_spline::
 rgrl_trans_spline( unsigned int dim )

@@ -4,6 +4,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgui/vgui_config.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)

@@ -5,6 +5,9 @@
 #include "vsph_sph_point_3d.h"
 //
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define RADIUS_THRESH 0.0001
 

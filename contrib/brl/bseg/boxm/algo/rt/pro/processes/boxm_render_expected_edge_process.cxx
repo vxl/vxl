@@ -23,6 +23,9 @@
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace boxm_render_expected_edge_process_globals
 {

@@ -11,6 +11,9 @@
 #include <rgrl/rgrl_command.h>
 #include <rgrl/rgrl_mask_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: observer to view transformations at each iteration of feature-based registration engine
 class rgrl_debug_feature_iteration_print: public rgrl_command

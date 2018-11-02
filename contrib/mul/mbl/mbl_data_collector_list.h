@@ -12,6 +12,9 @@
 #include <mbl/mbl_data_array_wrapper.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Collect data and store them in a list.
 template<class T>

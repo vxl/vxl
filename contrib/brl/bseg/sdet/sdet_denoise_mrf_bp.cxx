@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include "sdet_denoise_mrf_bp.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timer.h>
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_line_generator.h>

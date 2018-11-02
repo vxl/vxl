@@ -16,6 +16,9 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Convert a string naming a colour to a string of the RGB values.
 std::string text_to_color(const std::string&);

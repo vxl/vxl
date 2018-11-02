@@ -13,6 +13,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Constructor from a vector of matches (pairs of keypoint smart pointers)
 bapl_affine2d_est::bapl_affine2d_est( const std::vector< bapl_keypoint_match > & matches )

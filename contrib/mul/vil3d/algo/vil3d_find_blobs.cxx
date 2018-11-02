@@ -10,6 +10,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vil3d/vil3d_image_view.h>
 #include <vil3d/vil3d_math.h>

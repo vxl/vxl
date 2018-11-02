@@ -22,6 +22,9 @@
 #include <vnl/vnl_random.h>
 #include <bbas/bsta/bsta_gaussian_indep.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/algo/vgl_orient_box_3d.h>
 
 class bstm_ocl_particle_filter

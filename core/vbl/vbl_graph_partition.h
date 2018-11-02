@@ -22,6 +22,9 @@
 // The result is a set of isolated sub-graphs of the original graph.
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_disjoint_sets.h>
 #include <vbl/vbl_edge.h>
 #include <vil/vil_image_view.h>

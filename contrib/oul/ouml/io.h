@@ -7,6 +7,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <vil1/vil1_rgb.h>
 

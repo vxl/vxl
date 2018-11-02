@@ -11,6 +11,9 @@
 #include <iostream>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Look-up table for the MUSET objective function.
 //  Look-up table for the MUSET objective function, derived in James

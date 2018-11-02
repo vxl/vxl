@@ -6,6 +6,9 @@
 #include <boxm2/io/boxm2_cache1.h>
 #include <boxm2/io/boxm2_sio_mgr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: an example cache that loads in the nearest neighbors of the requested block (asynchronously)
 class boxm2_nn_cache : public boxm2_cache1

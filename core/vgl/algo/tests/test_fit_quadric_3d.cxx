@@ -9,6 +9,9 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_generalized_eigensystem.h>

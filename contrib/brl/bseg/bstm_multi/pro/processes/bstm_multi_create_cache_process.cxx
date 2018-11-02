@@ -12,6 +12,9 @@
 #include <vector>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bstm_multi/bstm_multi_block.h>
 #include <bstm_multi/bstm_multi_typedefs.h>

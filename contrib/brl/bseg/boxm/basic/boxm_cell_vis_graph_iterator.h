@@ -8,6 +8,9 @@
 #include <boct/boct_tree.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, class T_data>
 class boxm_cell_vis_graph_iterator

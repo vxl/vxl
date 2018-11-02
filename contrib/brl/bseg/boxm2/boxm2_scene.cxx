@@ -9,6 +9,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 /* xml includes */
 #include <vsl/vsl_basic_xml_element.h>
 #include <vgl/xio/vgl_xio_point_3d.h>

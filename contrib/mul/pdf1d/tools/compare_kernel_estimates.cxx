@@ -14,6 +14,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_stats_1d.h>
 #include <vnl/vnl_vector.h>
 #include <pdf1d/pdf1d_compare_to_pdf_bhat.h>

@@ -16,6 +16,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 typedef vpgl_perspective_camera<double> CamType;
 

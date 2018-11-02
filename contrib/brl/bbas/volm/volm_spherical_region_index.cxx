@@ -7,6 +7,9 @@
 #include "volm_spherical_container.h"
 #include <bsol/bsol_algs.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsph/vsph_utils.h>
 #include <vsph/vsph_segment_sphere.h>

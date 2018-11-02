@@ -9,6 +9,9 @@
 #include <iostream>
 #include <set>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 class bmsh3d_ptr_node

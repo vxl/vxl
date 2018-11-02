@@ -17,6 +17,9 @@
 #include <iosfwd>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_ref_count.h>
 
 class gmvl_node_cache;

@@ -12,6 +12,9 @@
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // no need to check cause get data checks it anyway
 void get_block(int i, int j, int bb, std::vector<std::pair<int, int> >& pixels)

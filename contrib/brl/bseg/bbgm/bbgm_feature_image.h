@@ -18,6 +18,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: base class for images of features
 class bbgm_feature_image_base : public vbl_ref_count

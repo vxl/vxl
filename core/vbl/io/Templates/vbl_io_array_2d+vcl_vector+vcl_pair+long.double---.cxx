@@ -1,6 +1,9 @@
 #include <utility>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_pair_io.hxx>
 #include <vsl/vsl_vector_io.hxx>
 #include <vbl/io/vbl_io_array_2d.hxx>

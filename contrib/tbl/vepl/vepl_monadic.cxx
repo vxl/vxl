@@ -7,6 +7,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_new.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h> // for vxl_byte
 
 vxl_sbyte abs_byte(vxl_sbyte const& a) { return (a<0) ? -a : a; }

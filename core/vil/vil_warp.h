@@ -17,6 +17,9 @@
 #include <vil/vil_fwd.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Warp an image under a 2D map.
 // The size of the output map and the mapper defines the region of

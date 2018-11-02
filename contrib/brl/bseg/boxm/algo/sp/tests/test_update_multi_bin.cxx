@@ -16,6 +16,9 @@
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_convert.h>

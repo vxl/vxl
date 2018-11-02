@@ -6,6 +6,9 @@
 #include <boxm/util/boxm_utils.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, class T_data>
 float boxm_compute_point_visibility(vgl_point_3d<double> point,

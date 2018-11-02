@@ -26,6 +26,9 @@
 #include "grid/bvxm_voxel_slab.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bvxm_util::read_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {

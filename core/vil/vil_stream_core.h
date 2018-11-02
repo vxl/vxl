@@ -11,6 +11,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream.h>
 
 //: An in-core vil_stream implementation.

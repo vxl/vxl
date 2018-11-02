@@ -9,6 +9,9 @@
 #include <vector>
 #include "vsl_clipon_binary_loader.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template<class BaseClass, class BaseClassIO>
 vsl_clipon_binary_loader<BaseClass,BaseClassIO>& vsl_clipon_binary_loader<BaseClass,BaseClassIO>::instance()

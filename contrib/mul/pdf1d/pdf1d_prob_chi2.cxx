@@ -4,6 +4,9 @@
 #include "pdf1d_prob_chi2.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_gamma.h>
 
 double pdf1d_chi2_for_cum_prob(double p, int n_dof, double tol)

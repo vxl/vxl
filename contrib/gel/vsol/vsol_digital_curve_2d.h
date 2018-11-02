@@ -26,6 +26,9 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsol/vsol_digital_curve_2d_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Digital curve class, part of the vsol_curve_2d hierarchy
 // This class is more basic and "pure" than the vdgl counterpart.

@@ -10,6 +10,9 @@
 #include <vil/vil_fill.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Find line like structures in image (light lines on dark backgrounds)
 //  On exit line_str contains line strength at each pixel,

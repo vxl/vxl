@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_stats_nd.h>
 #include <testlib/testlib_test.h>
 

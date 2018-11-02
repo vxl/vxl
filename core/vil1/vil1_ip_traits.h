@@ -2,6 +2,9 @@
 #ifndef vil1_ip_traits_h_
 #define vil1_ip_traits_h_
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #ifdef VCL_NEEDS_PRAGMA_INTERFACE
 #pragma interface
 #endif

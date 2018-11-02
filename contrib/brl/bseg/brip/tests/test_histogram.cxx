@@ -3,6 +3,9 @@
 #include <sstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <brip/brip_histogram.h>
 

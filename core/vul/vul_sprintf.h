@@ -21,6 +21,9 @@
 #include <string>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: C++ conforming replacement to the ANSI C functions sprintf and printf.
 // vul_sprintf works in the same way as sprintf but is itself an ANSI C++ string

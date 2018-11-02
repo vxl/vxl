@@ -8,6 +8,9 @@
 #include "bvxm_util.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_camera.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vnl/vnl_double_3x1.h>

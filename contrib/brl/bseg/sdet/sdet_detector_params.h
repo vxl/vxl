@@ -64,6 +64,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <gevd/gevd_param_mixin.h>
 
 class sdet_detector_params : public gevd_param_mixin

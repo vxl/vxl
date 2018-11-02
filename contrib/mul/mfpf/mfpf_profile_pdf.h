@@ -12,6 +12,9 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Searches along a profile using a statistical model.
 class mfpf_profile_pdf : public mfpf_point_finder

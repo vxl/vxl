@@ -8,6 +8,9 @@
 #include <vidl/vidl_config.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_arg.h>
 #include <vidl/vidl_ffmpeg_istream.h>
 #include <vidl/vidl_ffmpeg_ostream.h>

@@ -2,6 +2,9 @@
 #include "vcsl_rotation.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //---------------------------------------------------------------------------
 // Are `new_axis' a list of unit axes ?

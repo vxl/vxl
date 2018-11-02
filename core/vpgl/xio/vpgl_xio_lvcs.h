@@ -18,6 +18,9 @@
 #include <iosfwd>
 #include <vpgl/vpgl_lvcs.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: XML save vpgl_lvcs to stream.
 // \relatesalso vpgl_lvcs

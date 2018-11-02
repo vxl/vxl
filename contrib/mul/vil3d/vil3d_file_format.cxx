@@ -11,6 +11,9 @@
 #include <vector>
 #include "vil3d_file_format.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_open.h>
 #include <vil3d/file_formats/vil3d_analyze_format.h>
 #include <vil3d/file_formats/vil3d_gipl_format.h>

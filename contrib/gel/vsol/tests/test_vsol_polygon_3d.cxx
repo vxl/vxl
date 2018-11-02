@@ -17,6 +17,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vsol/vsol_polygon_3d.h>
 #include <vsol/vsol_polygon_3d_sptr.h>

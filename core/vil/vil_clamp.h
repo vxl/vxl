@@ -17,6 +17,9 @@
 #include <vil/vil_image_view.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Clamp an image view between two values.
 // \relatesalso vil_image_view

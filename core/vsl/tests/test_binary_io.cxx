@@ -3,6 +3,9 @@
 #include <cstring>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_quick_file.h>
 #include <testlib/testlib_root_dir.h>

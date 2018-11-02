@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_vector_3d.h>
 #include "boxm2_normal_albedo_array.h"

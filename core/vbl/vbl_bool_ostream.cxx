@@ -6,6 +6,9 @@
 #include <iostream>
 #include "vbl_bool_ostream.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::on_off& proxy)
 {

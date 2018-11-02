@@ -21,6 +21,9 @@
 #include <core/bbas_pro/bbas_1d_array_float.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 //  Take a colored segmentation output and map it to volm labels

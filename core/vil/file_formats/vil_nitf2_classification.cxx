@@ -10,6 +10,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 vil_nitf2_classification::type_field_defs_map & vil_nitf2_classification::s_field_definitions()

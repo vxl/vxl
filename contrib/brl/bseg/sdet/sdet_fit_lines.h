@@ -24,6 +24,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vsol/vsol_line_2d_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>

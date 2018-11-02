@@ -2,6 +2,9 @@
 #include <bugl/bugl_normal_point_3d_sptr.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bugl_normal_point_3d_sptr bugl_curve_3d::get_point(unsigned int index) const
 {

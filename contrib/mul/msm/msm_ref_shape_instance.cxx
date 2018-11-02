@@ -13,6 +13,9 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 #include <msm/msm_ref_shape_model.h>

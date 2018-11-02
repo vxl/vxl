@@ -28,6 +28,9 @@
 #include <vsol/vsol_region_3d.h>
 #include <vsol/vsol_point_3d_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d
 #include <vgl/vgl_homg_plane_3d.h>

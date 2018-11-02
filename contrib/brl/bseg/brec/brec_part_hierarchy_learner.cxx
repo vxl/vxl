@@ -18,6 +18,9 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: check the "true" part of the mask
 bool check_equal(vbl_array_2d<bool>& left_array, vbl_array_2d<bool>& right_array)

@@ -8,6 +8,9 @@
 // \brief test vpdfl_gaussian, building, sampling, saving etc.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <vsl/vsl_binary_loader.h>

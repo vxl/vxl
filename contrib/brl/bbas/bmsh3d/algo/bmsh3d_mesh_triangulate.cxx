@@ -12,6 +12,9 @@
 #include <vgl/vgl_vector_3d.h>
 #ifdef DEBUG
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 //: Triangulate the input mesh face F into a set of triangular faces.

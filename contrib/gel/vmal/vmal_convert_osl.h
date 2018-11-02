@@ -19,6 +19,9 @@
 #include <mvl/HomgPoint2D.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in);
 

@@ -2,6 +2,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <osl/osl_topology.h>
 #include <osl/osl_load_topology.h>

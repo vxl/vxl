@@ -5,6 +5,9 @@
 #include <iostream>
 #include "vgl_conic_segment_2d.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // stream operators
 template <class Type>

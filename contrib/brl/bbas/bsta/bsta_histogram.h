@@ -19,6 +19,9 @@
 #include <iostream>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_histogram_base.h>
 
 template <class T> class bsta_histogram : public bsta_histogram_base

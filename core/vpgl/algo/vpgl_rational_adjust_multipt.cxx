@@ -13,6 +13,9 @@
 #include <vpgl/algo/vpgl_rational_adjust_onept.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 double compute_projection_error(std::vector<vpgl_rational_camera<double> > const& cams,
                                 std::vector<vgl_point_2d<double> > const& corrs, vgl_point_3d<double>& intersection)

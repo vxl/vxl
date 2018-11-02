@@ -11,6 +11,9 @@
 #include <vil/vil_fill.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Suppress all non-plateau pixels in the image.
 //  If image(i,j) is greater than or equal to all neighbouring pixels,

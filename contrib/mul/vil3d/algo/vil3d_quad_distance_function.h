@@ -11,6 +11,9 @@
 #include <vil/algo/vil_quad_distance_function.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Apply quadratic distance transform along each row of src
 //

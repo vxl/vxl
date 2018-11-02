@@ -45,6 +45,9 @@
 
 #include <ios>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Use RAII to save and restore precision and other state on an iostream
 class vul_ios_state_saver

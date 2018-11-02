@@ -54,6 +54,9 @@ typedef vxl_uint_32 ulonglong;
 #endif
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 class vbl_big_sparse_array_3d

@@ -8,6 +8,9 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_printf.h>
 
 #include <bmsh3d/bmsh3d_mesh.h>

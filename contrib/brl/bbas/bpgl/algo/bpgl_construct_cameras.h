@@ -21,6 +21,9 @@
 #include <vector>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vpgl/vpgl_calibration_matrix.h>

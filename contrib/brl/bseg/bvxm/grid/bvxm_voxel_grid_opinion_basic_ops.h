@@ -19,6 +19,9 @@
 #include "bvxm_voxel_grid.h"
 #include <bvxm/grid/bvxm_opinion.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void bvxm_expectation_opinion_voxel_grid(bvxm_voxel_grid<bvxm_opinion> * grid_in_base,
                                          bvxm_voxel_grid<float> * grid_out_base);

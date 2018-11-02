@@ -10,6 +10,9 @@
 // \date Mar 5, 2012
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/view/boxm2_trajectory.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 

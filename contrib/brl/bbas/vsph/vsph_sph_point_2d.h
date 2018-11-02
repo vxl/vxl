@@ -5,6 +5,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: a point in the spherical coordinate system on the surface of a unit sphere
 // \p theta is elevation with zero at the North Pole, 180 degress at the South Pole

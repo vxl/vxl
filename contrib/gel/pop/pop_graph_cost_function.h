@@ -17,6 +17,9 @@
 #include <vector>
 #include <vnl/vnl_least_squares_function.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <pop/pop_parameter.h>
 #include <pop/pop_geometric_cost_function.h>
 #include <pop/pop_manager.h>

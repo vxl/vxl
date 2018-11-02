@@ -9,6 +9,9 @@
 #include <vil/vil_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Default constructor
 template <class exp_edge_func>

@@ -15,6 +15,9 @@
 #include "vil_jpeg_destination_mgr.h"
 #include <vil/vil_stream.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 
 vil_jpeg_compressor::vil_jpeg_compressor(vil_stream *s)

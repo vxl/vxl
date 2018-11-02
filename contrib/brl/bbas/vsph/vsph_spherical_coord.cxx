@@ -4,6 +4,9 @@
 #include <cmath>
 #include "vsph_spherical_coord.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vgl/io/vgl_io_point_3d.h>
 

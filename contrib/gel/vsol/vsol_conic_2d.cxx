@@ -14,6 +14,9 @@
 #include <vgl/io/vgl_io_conic.h>
 #include <vgl/algo/vgl_homg_operators_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //---------------------------------------------------------------------------

@@ -1,5 +1,8 @@
 #include <sstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "betr_event_trigger.h"
 #include "betr_geo_object_3d.h"
 #include "betr_gridded_geo_polygon_3d.h"

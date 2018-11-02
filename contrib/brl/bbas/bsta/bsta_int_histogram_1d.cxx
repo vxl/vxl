@@ -6,6 +6,9 @@
 
 #include "bsta_gauss.h" // for gausian parzan window filter
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // constructor
 bsta_int_histogram_1d::bsta_int_histogram_1d(unsigned int bins) // const??

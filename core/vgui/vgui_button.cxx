@@ -9,6 +9,9 @@
 #include <iostream>
 #include "vgui_button.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 std::ostream& operator<<(std::ostream& s, vgui_button b)
 {

@@ -15,6 +15,9 @@
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/vpgl_lvcs_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/algo/vgl_fit_lines_2d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_line_segment_3d.h>

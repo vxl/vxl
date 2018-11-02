@@ -18,6 +18,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Functions to test and open streams via a URL
 // Currently supports file and HTTP only.

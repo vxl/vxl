@@ -5,6 +5,9 @@
 #include <vul/vul_file.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_buffered_index.h>             // for parameter class
 #include <bkml/bkml_write.h>
 

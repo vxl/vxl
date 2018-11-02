@@ -15,6 +15,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vpyr_2_tpyramid_level.h"
 #include "vpyr_2_pyramid.h"
 

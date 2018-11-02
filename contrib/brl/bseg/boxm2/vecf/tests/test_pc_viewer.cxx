@@ -11,6 +11,9 @@
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "../boxm2_vecf_point_cloud_orbit_viewer.h"
 #include "../boxm2_vecf_orbit_params.h"
 

@@ -3,6 +3,9 @@
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "brad_image_metadata.h"
 #include "brad_atmospheric_parameters.h"

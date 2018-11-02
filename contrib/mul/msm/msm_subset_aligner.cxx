@@ -12,6 +12,9 @@
 #include <vsl/vsl_vector_io.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_block.h>
 #include <mbl/mbl_parse_int_list.h>

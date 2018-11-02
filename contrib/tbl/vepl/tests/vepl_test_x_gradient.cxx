@@ -11,6 +11,9 @@
 
 #include <vepl/vepl_x_gradient.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h> // for vxl_byte
 
 int vepl_test_x_gradient()

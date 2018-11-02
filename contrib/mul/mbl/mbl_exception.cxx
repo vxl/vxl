@@ -9,6 +9,9 @@
 // \author Ian Scott.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if 0 // should be #ifdef _MSC_VER, but it doesn't work yet - I can't get it to link
 #pragma comment(lib, "user32")

@@ -11,6 +11,9 @@
 #include <cstring>
 #include "osl_topology.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <osl/osl_hacks.h>
 
 // Set this to 1 if you think it can avoid heap corruption, and

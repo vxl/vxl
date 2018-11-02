@@ -7,6 +7,9 @@
 // \brief Link between one node and another
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
     //: Write to binary stream
 void fhs_arc::b_write(vsl_b_ostream& bfs) const

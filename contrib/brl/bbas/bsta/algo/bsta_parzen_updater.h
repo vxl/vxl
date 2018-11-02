@@ -24,6 +24,9 @@
 #include <vector>
 #include <bsta/bsta_parzen_sphere.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A parzen window (kernel) updater.
 // If a new sample is within tol of the existing samples then don't insert.

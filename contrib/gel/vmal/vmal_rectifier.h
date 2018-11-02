@@ -23,6 +23,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vmal/vmal_multi_view_data_vertex_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>

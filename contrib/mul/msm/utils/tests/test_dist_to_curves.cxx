@@ -12,6 +12,9 @@
 // \brief Test msm_dist_to_curves functions
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <msm/utils/msm_closest_pt.h>
 #include <msm/utils/msm_dist_to_curves.h>
 

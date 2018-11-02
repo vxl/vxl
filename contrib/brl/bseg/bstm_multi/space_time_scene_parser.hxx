@@ -12,6 +12,9 @@
 #include <sstream>
 #include <utility>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "space_time_scene_parser.h"
 
 #include <bstm/bstm_scene_parser.h>

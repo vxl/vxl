@@ -6,6 +6,9 @@
 #include <vil/algo/vil_histogram.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void bwm_lidar_algo::label_lidar(vil_image_view<float> first_ret,
                                  vil_image_view<float> last_ret,

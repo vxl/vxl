@@ -4,6 +4,9 @@
 #include <vbl/vbl_edge.h>
 #include <vbl/vbl_graph_partition.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static void print_element_sets(const vbl_disjoint_sets & s)
 {

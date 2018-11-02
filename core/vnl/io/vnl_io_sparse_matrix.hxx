@@ -10,6 +10,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // I/O for vnl_sparse_matrix_pair
 //==================================================================================

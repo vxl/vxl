@@ -3,6 +3,9 @@
 #include "bstm_sio_mgr.h"
 //
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <sys/stat.h>  //for getting file sizes
 #include <vul/vul_file.h>
 

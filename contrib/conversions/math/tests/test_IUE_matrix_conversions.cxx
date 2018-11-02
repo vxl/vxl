@@ -4,6 +4,9 @@
 #ifdef HAS_NO_NUMERICS
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 void test_IUE_matrix_conversions()
 {
   std::cerr << "test not run since you do not have the TargetJr Numerics package\n";

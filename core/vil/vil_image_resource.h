@@ -14,6 +14,9 @@
 #include <vil/vil_image_view_base.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vcl_atomic_count.h>
 #include <vil/vil_smart_ptr.h>
 #include <vil/vil_pixel_format.h>

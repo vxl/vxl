@@ -22,6 +22,9 @@
 #include <vbl/vbl_array_3d.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template<class data_type>
 void fill_in_data(vbl_array_3d<data_type> & data,data_type min_p, data_type max_p, vnl_float_3 axis)

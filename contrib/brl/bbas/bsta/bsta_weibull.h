@@ -29,6 +29,9 @@
 #include <vnl/vnl_gamma.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // A Weibull distribution does not have a natural, unique extension to
 // multi-dimensional variables. However, various approaches do exist

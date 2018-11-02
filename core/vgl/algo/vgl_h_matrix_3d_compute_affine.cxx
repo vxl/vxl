@@ -10,6 +10,9 @@
 #include <vgl/algo/vgl_norm_trans_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 constexpr int TM_UNKNOWNS_COUNT = 9;
 constexpr double DEGENERACY_THRESHOLD = 0.00001;

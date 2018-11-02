@@ -6,6 +6,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvxm/grid/bvxm_voxel_slab_base.h>
 
 // Binary io, NOT IMPLEMENTED, signatures defined to use bvxm_voxel_slab_base as a brdb_value

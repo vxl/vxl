@@ -16,6 +16,9 @@
 #endif
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 bsta_kent<T>::bsta_kent(vnl_matrix_fixed<T,3,3> const& m)

@@ -10,6 +10,9 @@
 //  Copyright: (C) 1994 Victoria University of Manchester
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 char* mbl_read_str(char *reply, int max_str_len, const char *q_str, const char *default_str)
 {

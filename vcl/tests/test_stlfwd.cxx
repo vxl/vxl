@@ -6,6 +6,9 @@
 #include <set>
 #include <list>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void f(std::map<int, std::string,std::less<int> >*,
        std::set<int,std::less<int> >*,

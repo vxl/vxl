@@ -19,6 +19,9 @@
 #include <vgui/vgui_gl.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vgui_text_tableau::vgui_text_tableau()
   : cur_r_( 1 ), cur_g_( 0 ), cur_b_( 0 ),

@@ -14,6 +14,9 @@
 #include <map>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A fully featured sparse array which devolves indexing to its templated type
 // If you just want an ordinary sparse array use vbl_sparse_array_1d,

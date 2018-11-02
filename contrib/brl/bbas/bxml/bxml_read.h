@@ -18,6 +18,9 @@
 #include <iostream>
 #include "bxml_document.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Read the entire contents of \p filepath into an XML document class
 bxml_document bxml_read(const std::string& filepath);

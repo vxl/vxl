@@ -15,6 +15,9 @@
 #include <cerrno>
 #include "vidl_istream.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // this is linux specific
 using namespace std;

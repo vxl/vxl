@@ -39,6 +39,9 @@
 #include <vil/vil_image_resource_sptr.h>
 #include <vil/vil_rgb.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 class brip_para_cvrg : public brip_para_cvrg_params
 {
   // PUBLIC INTERFACE----------------------------------------------------------

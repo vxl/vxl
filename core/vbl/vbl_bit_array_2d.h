@@ -18,6 +18,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: simple 2D bit array
 // essentially identical to vbl_array_2d<bool> but more efficiently stored

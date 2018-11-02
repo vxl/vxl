@@ -10,6 +10,9 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_intersection.h>

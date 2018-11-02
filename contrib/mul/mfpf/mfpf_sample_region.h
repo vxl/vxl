@@ -12,6 +12,9 @@
 #include <mbl/mbl_chord.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Sample vector from image, assuming istep==np, pstep=1
 //  Assumes vector already correct size, and region completely

@@ -16,6 +16,9 @@
 #include <vector>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class  boxm2_gauss_rgb_processor
 {

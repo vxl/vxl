@@ -26,6 +26,9 @@
 #include <vsol/vsol_polygon_3d.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vsol_triangle_3d : public vsol_polygon_3d
 {

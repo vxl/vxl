@@ -5,6 +5,9 @@
 #include <mvl/HMatrix2DComputeMLESAC.h>
 #include <mvl/HomgInterestPointSet.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 ComputeGRIC::ComputeGRIC(double std) : std_(std) {}
 

@@ -5,6 +5,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_perspective_camera.h>
 #include "vsph_sph_box_2d.h"
 #include "vsph_sph_point_2d.h"

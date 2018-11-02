@@ -28,6 +28,9 @@
 #include <imesh/imesh_fileio.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace bvxm_fill_mesh_normals_grid_process_globals
 {

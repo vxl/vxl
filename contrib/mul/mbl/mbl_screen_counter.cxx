@@ -7,6 +7,9 @@
 // \author Ian Scott
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 mbl_screen_counter::mbl_screen_counter(std::ostream & os):
 count_(0), symbol_('a'), skip_(1), os_(os)

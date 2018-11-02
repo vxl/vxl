@@ -16,6 +16,9 @@
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool boxm_utils::is_visible(vgl_box_3d<double> const& bbox,
                             vpgl_camera_double_sptr const& camera,

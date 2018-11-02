@@ -13,6 +13,9 @@
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:sets input and output types
 bool bvxm_create_synth_lidar_data_process_cons(bprb_func_process& pro)

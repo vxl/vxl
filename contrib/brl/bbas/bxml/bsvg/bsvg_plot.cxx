@@ -9,6 +9,9 @@
 #include <bxml/bxml_find.h>
 #include <bxml/bsvg/bsvg_element.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void bsvg_plot::add_axes(float x_min, float x_max, float y_min, float y_max, float stroke_width)
 {

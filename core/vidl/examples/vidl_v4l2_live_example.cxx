@@ -6,6 +6,9 @@
 #include <vidl/vidl_image_list_ostream.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int select_device(vidl_v4l2_devices& devs)
 {

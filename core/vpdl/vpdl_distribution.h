@@ -16,6 +16,9 @@
 #include <vpdl/vpdt/vpdt_field_traits.h>
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: The base class for all probability distributions.
 // There is a distinct polymorphic class hierarchy for each choice of

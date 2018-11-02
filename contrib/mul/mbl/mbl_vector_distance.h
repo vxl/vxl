@@ -9,6 +9,9 @@
 #include <cmath>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Functor object to compute distance between two vectors
 template<class T>

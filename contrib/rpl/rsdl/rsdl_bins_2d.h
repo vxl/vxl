@@ -9,6 +9,9 @@
 
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template < class COORD_T, class VALUE_T >
 class rsdl_bins_2d_entry

@@ -25,6 +25,9 @@
 #include <vnl/algo/vnl_svd.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bvpl/bvpl_octree/sample/bvpl_pca_basis_sample.h>
 

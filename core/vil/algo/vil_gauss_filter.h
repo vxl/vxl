@@ -8,6 +8,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_convolve_1d.h>
 #include <vil/vil_transpose.h>

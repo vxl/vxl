@@ -13,6 +13,9 @@
 #include <vsl/vsl_fwd.h>
 #include <vnl/vnl_bignum.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Binary save vnl_bignum to stream.
 //  \relatesalso vnl_bignum

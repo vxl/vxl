@@ -9,6 +9,9 @@
 #include <iosfwd>
 #include <complex>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vsl_b_ostream;
 class vsl_b_istream;

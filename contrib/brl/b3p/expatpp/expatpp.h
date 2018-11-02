@@ -27,6 +27,9 @@
   #include "expat.h"  // since some version of expat moved to SourceForge
 #endif
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 

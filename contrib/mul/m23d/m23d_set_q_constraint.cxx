@@ -7,6 +7,9 @@
 // \brief Functions to construct linear constraints as rows in a matrix
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Defines constraint on elements of Q of form a'Qb=r

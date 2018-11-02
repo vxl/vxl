@@ -57,6 +57,9 @@ VNL_ALGO_EXPORT bool vnl_generalized_schur(vnl_matrix<double> *A,
                            vnl_matrix<double> *R);
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 T vnl_generalized_schur_convert_cast(double a) { return static_cast<T>(a); }

@@ -1,6 +1,9 @@
 // This is core/vgl/io/tests/test_line_segment_3d_io.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_line_segment_3d.h>
 #include <testlib/testlib_test.h>

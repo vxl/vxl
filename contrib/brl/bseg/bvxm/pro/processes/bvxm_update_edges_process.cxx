@@ -26,6 +26,9 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_update_edges_process_cons(bprb_func_process& pro)

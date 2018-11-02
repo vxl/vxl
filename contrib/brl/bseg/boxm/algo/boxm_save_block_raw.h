@@ -16,6 +16,9 @@
 #include <bsta/bsta_attributes.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, class T_data>
 void boxm_save_block_raw(boxm_scene<boct_tree<T_loc, T_data > > &scene,

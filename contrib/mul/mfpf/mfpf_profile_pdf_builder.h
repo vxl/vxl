@@ -12,6 +12,9 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Builder for mfpf_profile_pdf objects.
 class mfpf_profile_pdf_builder : public mfpf_point_finder_builder

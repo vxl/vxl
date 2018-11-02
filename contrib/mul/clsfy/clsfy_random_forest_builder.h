@@ -17,6 +17,9 @@
 #include <clsfy/clsfy_builder_base.h>
 #include <clsfy/clsfy_random_forest.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_random.h>
 

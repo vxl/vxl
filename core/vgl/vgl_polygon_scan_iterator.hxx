@@ -10,6 +10,9 @@
 #include <algorithm>
 #include "vgl_polygon_scan_iterator.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // It used to be necessary to add 0.5 to the scanline coordinates
 // obtained from a vgl_polygon_scan_iterator. Presumably this had

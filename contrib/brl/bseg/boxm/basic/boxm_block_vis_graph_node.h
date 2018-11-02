@@ -6,6 +6,9 @@
 #include <iostream>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 
 //: A comparison functor for vgl_point_3d's. Needed to create a std::set of vgl_point_3d<int>'s.

@@ -5,6 +5,9 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_k_medoid.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Test bsta histograms
 void test_k_medoid()

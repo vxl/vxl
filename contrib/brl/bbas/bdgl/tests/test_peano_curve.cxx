@@ -1,6 +1,9 @@
 // This is brl/bbas/bdgl/tests/test_peano_curve.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bdgl/bdgl_peano_curve.h>
 #include <testlib/testlib_test.h>
 

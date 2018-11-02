@@ -6,6 +6,9 @@
 #include "boct_tree_cell.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_intersection.h>
 
 #ifdef DEBUG_LEAKS

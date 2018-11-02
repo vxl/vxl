@@ -21,6 +21,9 @@
 #include <cstdlib>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_deque_io.hxx>
 #include <vsl/vsl_map_io.hxx>

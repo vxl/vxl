@@ -7,6 +7,9 @@
 //
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: The total number of pixel datatypes
 constexpr unsigned int num_types = 5;

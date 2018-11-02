@@ -14,6 +14,9 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 // Define a file-scope vgl_nan constant

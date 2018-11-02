@@ -372,6 +372,9 @@ void vnl_c_vector<T>::deallocate(T** v, const std::size_t n)
 
 // "T *" is POD, but "T" might not be.
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 template <class T> inline void vnl_c_vector_construct(T *p, std::size_t n)
 {
   for (std::size_t i=0; i<n; ++i)

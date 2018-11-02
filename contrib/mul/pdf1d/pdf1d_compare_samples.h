@@ -8,6 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Return true if x1[i] significantly larger than x2[j]
 //  Essentially tests if on average a sample from x1 is larger than

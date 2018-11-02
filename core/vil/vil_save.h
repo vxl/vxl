@@ -10,6 +10,9 @@
 
 #include <vil/vil_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 
 //: Send a vil_image_view to disk, deducing format from filename

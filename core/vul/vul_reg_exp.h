@@ -29,6 +29,9 @@
 #include <string>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 constexpr int vul_reg_exp_nsubexp = 10;
 

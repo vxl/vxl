@@ -2,6 +2,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/algo/vil3d_binary_erode.h>
 
 inline void print_binary_image(const vil3d_image_view<bool>& im)

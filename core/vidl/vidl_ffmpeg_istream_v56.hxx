@@ -24,6 +24,9 @@
 #include "vidl_ffmpeg_convert.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 extern "C" {
 #if FFMPEG_IN_SEVERAL_DIRECTORIES

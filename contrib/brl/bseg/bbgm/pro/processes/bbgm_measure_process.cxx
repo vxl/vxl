@@ -28,6 +28,9 @@
 #include <bbgm/bbgm_measure.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bbgm_measure_process_cons(bprb_func_process& pro)
 {

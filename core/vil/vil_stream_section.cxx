@@ -10,6 +10,9 @@
 #include "vil_stream_section.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // underlying_: pointer to underlying stream.
 // begin_     : start of section in the underlying stream.

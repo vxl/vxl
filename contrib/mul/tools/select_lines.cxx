@@ -9,6 +9,9 @@
 #include <iterator>
 #include <limits>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_arg.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_index_sort.h>

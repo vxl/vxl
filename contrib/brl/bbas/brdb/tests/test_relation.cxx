@@ -4,6 +4,9 @@
 #include <brdb/brdb_tuple.h>
 #include <brdb/brdb_relation.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static void test_relation()
 {

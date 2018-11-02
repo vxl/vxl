@@ -22,6 +22,9 @@
 #include <iomanip>
 #include <functional>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_double_2.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_polygon.h>

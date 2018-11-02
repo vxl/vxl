@@ -10,6 +10,9 @@
 #include <utility>
 #include "vsl_indent.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 constexpr int default_tab = 2;
 

@@ -23,6 +23,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, class T_data>
 class boct_tree

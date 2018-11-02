@@ -6,6 +6,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 void bvxm_merge_mog::kl_merge(bvxm_merge_mog::mix_gauss_type const& mixture, bsta_gauss_sf1 &gaussian)

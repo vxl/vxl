@@ -38,6 +38,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_tag.h>
 #include <vnl/vnl_c_vector.h>
 #include <vnl/vnl_config.h>

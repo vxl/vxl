@@ -13,6 +13,9 @@
 #include <bhdfs/bhdfs_fstream.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: generate an input file on the output hdfs folder, this file will be streamed to mapper processes

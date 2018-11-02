@@ -14,6 +14,9 @@
 #include <string>
 #include "vidl_ostream.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:A video output stream to a list of images
 class VIDL_EXPORT vidl_image_list_ostream

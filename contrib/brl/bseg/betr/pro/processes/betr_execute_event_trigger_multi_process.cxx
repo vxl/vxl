@@ -6,6 +6,9 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_double.h>
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //:
 // \file
 // \brief  A process for executing an event_trigger (process change)

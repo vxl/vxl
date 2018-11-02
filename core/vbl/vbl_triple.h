@@ -12,6 +12,9 @@
 #include <iosfwd>
 #include <utility>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: a templated 3-tuple
 template <class T1, class T2, class T3>

@@ -5,6 +5,9 @@
 #include <iostream>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bbgm/bbgm_image_of.h>
 #include <bbgm/bbgm_image_sptr.h>
 #include <bbgm/bbgm_update.h>

@@ -9,6 +9,9 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute edge orientations at each level of a scale space pyramid.
 //  smooth_pyramid must be of type float. orient_pyramid is set to be of type vxl_byte.

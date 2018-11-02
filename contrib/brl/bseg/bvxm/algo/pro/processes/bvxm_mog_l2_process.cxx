@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <bprb/bprb_func_process.h>
 #include <brdb/brdb_value.h>

@@ -11,6 +11,9 @@
 #include <istream>
 #include <sstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_exception.h>
 
 //: Read a 2-tuple of PODs from a config file.

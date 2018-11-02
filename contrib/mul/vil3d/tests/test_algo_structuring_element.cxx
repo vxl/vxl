@@ -2,6 +2,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/algo/vil3d_structuring_element.h>
 
 static void test_algo_structuring_element()

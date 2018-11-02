@@ -12,6 +12,9 @@
 #include "vil_copy.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 
 //: Create a copy of the data viewed by this, and return a view of copy.

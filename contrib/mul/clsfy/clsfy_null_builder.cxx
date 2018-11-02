@@ -15,6 +15,9 @@
 #include "clsfy_null_builder.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_loader.h>
 #include <vul/vul_string.h>
 #include <mbl/mbl_parse_block.h>

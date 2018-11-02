@@ -13,6 +13,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Functor class to compute (1-x) - useful for probability calculations
 // Here not means the log of the probability of not the predicate

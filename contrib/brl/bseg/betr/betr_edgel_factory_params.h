@@ -25,6 +25,9 @@
 //                             computing edges.
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "betr_params.h"
 #include <sdet/sdet_detector_params.h>
 class betr_edgel_factory_params : public betr_params

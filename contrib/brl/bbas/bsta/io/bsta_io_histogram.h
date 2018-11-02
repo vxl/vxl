@@ -23,6 +23,9 @@
 #include <vbl/vbl_array_3d.h>
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Binary save bsta_histogram to stream.
 template <class T>

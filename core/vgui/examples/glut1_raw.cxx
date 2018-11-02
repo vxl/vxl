@@ -21,6 +21,9 @@
 #include <vgui/vgui_deck_tableau.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vgui_deck_tableau_new   deck;
 vgui_loader_tableau_new load(deck);

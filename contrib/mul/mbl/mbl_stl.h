@@ -22,6 +22,9 @@
 #include <ostream>
 #include <utility>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Fill an output sequence with incrementing values.
 // A bit like std::fill, but after each assignment, the value is incremented.

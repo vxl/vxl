@@ -3,6 +3,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_box_2d.h>
 #include <vgl/vgl_line_segment_2d.h>

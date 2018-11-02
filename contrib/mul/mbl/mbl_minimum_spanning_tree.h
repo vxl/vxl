@@ -12,6 +12,9 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute the minimum spanning tree given a distance matrix
 //  \param pairs[0].first is the root node

@@ -7,6 +7,9 @@
 #include <iostream>
 #include <bstm/io/bstm_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: A cache that keeps the most recently used blocks and data, while kicking out the least recently used blocks and data to make more room.

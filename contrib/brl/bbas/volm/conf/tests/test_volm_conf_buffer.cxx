@@ -5,6 +5,9 @@
 #include <volm/conf/volm_conf_buffer.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static void test_volm_conf_buffer()
 {

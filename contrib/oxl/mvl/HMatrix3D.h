@@ -26,6 +26,9 @@
 #include <mvl/HomgLine3D.h>
 #include <mvl/HomgLineSeg3D.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class PMatrix;
 

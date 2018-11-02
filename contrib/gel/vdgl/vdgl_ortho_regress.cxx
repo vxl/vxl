@@ -9,6 +9,9 @@
 #include <cmath>
 #include "vdgl_ortho_regress.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 // convenience methods

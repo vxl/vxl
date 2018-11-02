@@ -14,6 +14,9 @@
 #include <vil/vil_plane.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute 1st, 2nd, and 3rd order C.d.i.s of an image.
 // The input must be 1 plane, the output will be 8 planes.

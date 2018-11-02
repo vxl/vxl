@@ -24,6 +24,9 @@
 #include <bkml/bkml_write.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>

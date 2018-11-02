@@ -18,6 +18,9 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class volm_utils
 {

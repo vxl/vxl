@@ -13,6 +13,9 @@
 #include <clsfy/clsfy_builder_1d.h>
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Note this is used by clsfy_binary_tree_builder
 // Derived from clsfy_binary_threshold_1d_builder but uses a slightly different

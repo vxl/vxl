@@ -12,6 +12,9 @@
 #include <vil1/vil1_image_impl.h>
 #include <vil1/vil1_image.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: vil1_block_cache_image_impl - adaptor which caches the given image in blocks of given size.
 class vil1_block_cache_image_impl : public vil1_image_impl

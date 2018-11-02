@@ -10,6 +10,9 @@
 
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvxm/grid/bvxm_voxel_grid.h>
 
 //: Computes the l2 distances between the mixtures of gaussians in a bvxm_grid and a reference.

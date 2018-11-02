@@ -2,6 +2,9 @@
 #include <fstream>
 #include "boxm2_vecf_point_cloud_orbit_viewer.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "boxm2_vecf_plot_orbit.h"
 std::vector<vgl_point_3d<double> >  boxm2_vecf_point_cloud_orbit_viewer::draw_sphere(vgl_sphere_3d<double> const& sph){
   std::vector<vgl_point_3d<double> > pts;

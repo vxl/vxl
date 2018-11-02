@@ -15,6 +15,9 @@
 #include <iostream>
 #include <limits>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_attributes.h> // for bsta_num_obs<T>
 #include <bsta/bsta_mixture.h>
 

@@ -24,6 +24,9 @@
 #include <vgl/vgl_polygon.h>
 #include <vil/algo/vil_find_4con_boundary.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvrml/bvrml_write.h>
 #include <vil/vil_crop.h>
 #include <bkml/bkml_parser.h>

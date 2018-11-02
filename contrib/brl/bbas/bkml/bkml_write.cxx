@@ -5,6 +5,9 @@
 #include <iomanip>
 #include "bkml_write.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 std::string rgb_color_to_hex_color(int alpha, int rNum, int gNum, int bNum)
 {

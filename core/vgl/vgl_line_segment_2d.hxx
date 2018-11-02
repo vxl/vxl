@@ -7,6 +7,9 @@
 #include <string>
 #include "vgl_line_segment_2d.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // stream operators
 template <class Type>
 std::ostream& operator<<(std::ostream& s, vgl_line_segment_2d<Type> const & p)

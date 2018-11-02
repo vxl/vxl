@@ -22,6 +22,9 @@
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_save.h> // for debug saving
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bvxm_slab_to_image
 {

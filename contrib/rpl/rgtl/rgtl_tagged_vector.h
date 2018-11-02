@@ -20,6 +20,9 @@
 #include "rgtl_serialize_stl_vector.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Wrap an STL vector and replace the indexing operators with tagged-indexing equivalents.
 template <typename Tag, typename T>

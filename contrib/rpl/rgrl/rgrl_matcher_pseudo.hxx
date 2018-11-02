@@ -14,6 +14,9 @@
 #include <vil/vil_bilin_interp.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static const unsigned int verbose_ = 2;
 static const double rgrl_matcher_pseudo_max_response_value = 1.0e30;

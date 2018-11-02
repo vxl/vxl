@@ -4,6 +4,9 @@
 // \file
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bwm_3d_corr::match(std::string const& site, vgl_point_3d<double> &pt) const
 {

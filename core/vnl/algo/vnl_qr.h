@@ -28,6 +28,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_algo_export.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Extract the Q*R decomposition of matrix M.
 //  The decomposition is stored in a compact and time-efficient

@@ -18,6 +18,9 @@
 #include <vpdl/vpdt/vpdt_field_default.h>
 #include <vpdl/vpdt/vpdt_access.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 

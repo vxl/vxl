@@ -45,6 +45,9 @@
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_spatial_object.h>
 #include <vsl/vsl_fwd.h>
 #include <vsol/vsol_spatial_object_2d_sptr.h>

@@ -28,6 +28,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_array_1d.h>
 #include <vil1/vil1_image.h>
 #include <vil1/vil1_pixel.h>

@@ -15,6 +15,9 @@
 #include <map>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bstm_multi/block_data_base.h>
 #include <bstm_multi/io/block_cache.h>

@@ -18,6 +18,9 @@
 #include "bocl_cl.h"
 #include "bocl_utils.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //Just in case NVIDIA extensions are not defined
 #ifndef CL_DEVICE_COMPUTE_CAPABILITY_MAJOR_NV

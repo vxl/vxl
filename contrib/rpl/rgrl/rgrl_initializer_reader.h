@@ -10,6 +10,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <rgrl/rgrl_initializer.h>
 #include <rgrl/rgrl_scale_sptr.h>

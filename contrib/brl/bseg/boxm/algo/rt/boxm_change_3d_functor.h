@@ -7,6 +7,9 @@
 #include <boxm/basic/boxm_raytrace_function.h>
 #include <boxm/sample/boxm_scalar_sample.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 template <boxm_apm_type APM>

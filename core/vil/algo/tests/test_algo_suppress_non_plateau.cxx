@@ -2,6 +2,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/algo/vil_suppress_non_plateau.h>
 
 static void test_algo_suppress_non_plateau_byte()

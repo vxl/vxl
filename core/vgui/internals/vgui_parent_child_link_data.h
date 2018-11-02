@@ -13,6 +13,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 struct vgui_parent_child_link_impl;
 struct vgui_parent_child_link;

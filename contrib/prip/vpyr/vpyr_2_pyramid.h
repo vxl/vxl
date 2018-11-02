@@ -17,6 +17,9 @@
 #include <map>
 #include "vpyr_2_pyramid_level.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vmap/vmap_map_iterator_wrapper.h>
 
 //: enables to handle combinatorial pyramids.

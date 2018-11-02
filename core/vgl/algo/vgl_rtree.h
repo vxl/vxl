@@ -12,6 +12,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // forward declare all classes.
 template <class V, class B, class C> class vgl_rtree_probe;
 template <class V, class B, class C> class vgl_rtree_node;

@@ -7,6 +7,9 @@
 #include <rgrl/rgrl_trans_affine.h>
 #include <rgrl/rgrl_cast.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static void test_trans_reader(int argc, char* argv[])
 {

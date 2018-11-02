@@ -5,6 +5,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_smart_ptr.h>
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_intensity_face_sptr.h>

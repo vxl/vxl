@@ -10,6 +10,9 @@
 #include <iostream>
 #include <sstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_histogram.h>
 #include <bsta/bsta_joint_histogram.h>
 #include <bxml/bsvg/bsvg_plot.h>

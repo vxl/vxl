@@ -20,6 +20,9 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_combine_grids_process_cons(bprb_func_process& pro)

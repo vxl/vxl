@@ -12,6 +12,9 @@
 #include <vector>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_fwd.h>
 
 //: List of points making a curve - for defining boundaries

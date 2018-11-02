@@ -7,6 +7,9 @@
 #include <iostream>
 #include <iomanip>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/vil3d_image_view.h>
 #include <boxm2/io/boxm2_cache.h>
 class boxm2_export_stack_images_function

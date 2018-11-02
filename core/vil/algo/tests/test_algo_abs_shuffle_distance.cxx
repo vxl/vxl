@@ -7,6 +7,9 @@
 // \date   23 Feb 2005
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_abs_shuffle_distance.h>
 #include <vil/vil_crop.h>

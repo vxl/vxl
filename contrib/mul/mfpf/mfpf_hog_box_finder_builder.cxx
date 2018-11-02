@@ -24,6 +24,9 @@
 #include <vsl/vsl_vector_io.h>
 #include <vsl/vsl_indent.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <mipa/mipa_orientation_histogram.h>
 #include <mipa/mipa_sample_histo_boxes.h>

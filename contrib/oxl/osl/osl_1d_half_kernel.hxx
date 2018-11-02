@@ -10,6 +10,9 @@
 #include "osl_1d_half_kernel.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: helper routine used by create_gaussian
 //static/*FIXME*/

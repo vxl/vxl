@@ -2,6 +2,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/algo/vil3d_exp_filter.h>
 #include <vil3d/vil3d_crop.h>
 

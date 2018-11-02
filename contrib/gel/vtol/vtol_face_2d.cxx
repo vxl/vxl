@@ -5,6 +5,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vtol/vtol_topology_object.h>
 #include <vtol/vtol_edge_2d.h>
 #include <vtol/vtol_one_chain.h>

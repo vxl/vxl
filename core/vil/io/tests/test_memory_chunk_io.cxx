@@ -7,6 +7,9 @@
 #include <vil/io/vil_io_memory_chunk.h>
 #include <vil/io/vil_io_smart_ptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 #include <vpl/vpl.h> // vpl_unlink()
 

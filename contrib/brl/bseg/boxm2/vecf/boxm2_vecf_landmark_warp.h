@@ -9,6 +9,9 @@
 #include <boxm2/boxm2_data_traits.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // forward declare rsdl_kd_tree so we can use pointers to it
 class rsdl_kd_tree;

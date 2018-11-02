@@ -3,6 +3,9 @@
 #include "my_map_functions.hxx"
 #include <vmap/vmap_set_grid_structure.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void tmap_test()
 {

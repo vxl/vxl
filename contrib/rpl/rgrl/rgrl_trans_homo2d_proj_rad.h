@@ -12,6 +12,9 @@
 #include <rgrl/rgrl_est_proj_rad_func.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Represents a 2D homography plus radial distortion transformation.
 //  A transformation for x'_u=Hx, and x'_d = x'_u + k*radial_dist( x'_u )

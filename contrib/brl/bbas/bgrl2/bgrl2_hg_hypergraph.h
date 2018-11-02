@@ -14,6 +14,9 @@
 #include <iostream>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bgrl2/bgrl2_hg_graph.h>
 #include <bgrl2/bgrl2_hg_hyperedge.h>

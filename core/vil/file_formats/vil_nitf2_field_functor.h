@@ -15,6 +15,9 @@ class vil_nitf2_index_vector;
 #include <vector>
 #include "vil_nitf2_field_sequence.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //-----------------------------------------------------------------------------
 //:

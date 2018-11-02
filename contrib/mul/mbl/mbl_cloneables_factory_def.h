@@ -12,6 +12,9 @@
 #include <string>
 #include <sstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_export.h>

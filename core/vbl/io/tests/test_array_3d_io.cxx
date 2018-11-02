@@ -1,6 +1,9 @@
 // This is core/vbl/io/tests/test_array_3d_io.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/io/vbl_io_array_3d.h>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_indent.h>

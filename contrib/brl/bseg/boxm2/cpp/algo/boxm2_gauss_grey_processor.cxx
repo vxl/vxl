@@ -8,6 +8,9 @@
 
 #include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bsta/bsta_distribution.h>
 #include <bsta/bsta_gauss_sf1.h>

@@ -17,6 +17,9 @@
 #include <string>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
 //

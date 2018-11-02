@@ -10,6 +10,9 @@
 #include <vnl/vnl_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_pmap_ratio_process_cons(bprb_func_process& pro)

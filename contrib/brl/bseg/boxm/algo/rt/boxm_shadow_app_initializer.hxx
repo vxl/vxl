@@ -14,6 +14,9 @@
 #include <boxm/boxm_aux_scene.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, boxm_apm_type APM, boxm_aux_type AUX>
 boxm_shadow_app_initializer<T_loc,APM,AUX>::boxm_shadow_app_initializer(

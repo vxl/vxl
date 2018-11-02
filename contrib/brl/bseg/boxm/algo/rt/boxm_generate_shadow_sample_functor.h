@@ -13,6 +13,9 @@
 #include <vil/vil_math.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <boxm_apm_type APM, class T_aux>
 class boxm_generate_shadow_sample_functor_pass_2

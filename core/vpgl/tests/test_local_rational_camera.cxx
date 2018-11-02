@@ -4,6 +4,9 @@
 #include <testlib/testlib_test.h>
 #include <vpl/vpl.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>

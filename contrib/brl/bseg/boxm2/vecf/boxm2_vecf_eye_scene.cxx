@@ -11,6 +11,9 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 static double gauss(double d, double sigma){
   return std::exp((-0.5*d*d)/(sigma*sigma));
 }

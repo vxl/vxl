@@ -6,6 +6,9 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vgui/vgui_modifier.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bocl/bocl_device.h>
 #include <bocl/bocl_kernel.h>

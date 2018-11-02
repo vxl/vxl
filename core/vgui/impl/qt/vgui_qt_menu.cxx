@@ -1,6 +1,9 @@
 #include <iostream>
 #include "vgui_qt_menu.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //---------------------------------------------------------------------------
 vgui_qt_menu::vgui_qt_menu(const vgui_menu& menu)

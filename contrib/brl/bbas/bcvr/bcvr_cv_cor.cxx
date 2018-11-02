@@ -10,6 +10,9 @@
 #include <vnl/vnl_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define TOL                   (1.0e-1)
 #define IS_ALMOST_ZERO(X)     (std::abs(X) < TOL)

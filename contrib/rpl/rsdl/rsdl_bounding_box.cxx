@@ -4,6 +4,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rsdl_bounding_box::rsdl_bounding_box( const rsdl_point& min_point,
                                       const rsdl_point& max_point )

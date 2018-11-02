@@ -6,6 +6,9 @@
 #include <mbl/mbl_clusters.h>
 #include <mbl/mbl_clusters.hxx>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Distance class
 class test_scalar_distance

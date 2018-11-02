@@ -17,6 +17,9 @@
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: functor used for normalizing cell_expected image
 template <class T_loc, class T_data>

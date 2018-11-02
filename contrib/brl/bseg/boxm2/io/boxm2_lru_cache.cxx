@@ -7,6 +7,9 @@
 // \file
 #include <boxm2/boxm2_block_metadata.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/boxm2_data_traits.h>
 //: PUBLIC create method, for creating singleton instance of boxm2_cache
 void boxm2_lru_cache::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)

@@ -8,6 +8,9 @@
 #include <iosfwd>
 #include <cstdlib>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #ifdef __OPTIMIZE__
 # define RANGECHECK(i,j,k) ((void)0)

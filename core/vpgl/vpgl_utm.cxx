@@ -11,6 +11,9 @@
 #include <limits>
 #include "vpgl_utm.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #define DBLLONG 4.61168601e18
 #define EPSLN   1.0e-10

@@ -4,6 +4,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 std::string boxm2_block_id::to_string() const
 {

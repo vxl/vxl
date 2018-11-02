@@ -15,6 +15,9 @@
 #include "brdb_value.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/io/vbl_io_smart_ptr.h>
 
 //: Test for equality under polymorphism

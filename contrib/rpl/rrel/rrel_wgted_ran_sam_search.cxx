@@ -9,6 +9,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rrel_wgted_ran_sam_search::~rrel_wgted_ran_sam_search( )
 {

@@ -3,6 +3,9 @@
 #include "brip_phase_correlation.h"
 #include "brip_vil_float_ops.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <vil/vil_math.h>
 #include <vnl/vnl_random.h>

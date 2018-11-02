@@ -15,6 +15,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 
 //: Return true if a string contains a substring

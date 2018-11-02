@@ -11,6 +11,9 @@
 #include <boxm2/basic/boxm2_block_id.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_cost_function.h>
 
 #include <brad/brad_image_metadata.h>

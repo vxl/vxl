@@ -8,6 +8,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 namespace bbas_core_merge_string_array
 {
   std::vector<std::string> strings;

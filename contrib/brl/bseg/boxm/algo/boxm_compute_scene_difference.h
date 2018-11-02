@@ -11,6 +11,9 @@
 #include <imesh/imesh_operations.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 void boxm_compute_block_difference(boxm_block<boct_tree<short, boxm_sample<BOXM_APM_MOG_GREY> > > * block1,

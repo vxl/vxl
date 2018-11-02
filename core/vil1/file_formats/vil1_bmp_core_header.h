@@ -15,6 +15,9 @@
 class vil1_stream;
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 struct vil1_bmp_core_header
 {

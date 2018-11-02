@@ -4,6 +4,9 @@
 #include <vnl/vnl_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void rgrl_rotation_3d_to_matrix(double const theta, double const alpha, double const phi,
                                 vnl_matrix<double> & R)

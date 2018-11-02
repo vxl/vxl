@@ -11,6 +11,9 @@
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #if 0
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 #ifdef _MSC_VER

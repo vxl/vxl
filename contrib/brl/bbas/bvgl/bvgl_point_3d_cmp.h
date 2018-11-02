@@ -16,6 +16,9 @@
 #include <functional>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A comparison functor for vgl_point_3d's. Needed to create a std::set of vgl_point_3d<int>'s.
 template <class T>

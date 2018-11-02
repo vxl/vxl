@@ -7,6 +7,9 @@
 #include "clsfy_logit_loss_function.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 clsfy_logit_loss_function::clsfy_logit_loss_function(
             mbl_data_wrapper<vnl_vector<double> >& x,

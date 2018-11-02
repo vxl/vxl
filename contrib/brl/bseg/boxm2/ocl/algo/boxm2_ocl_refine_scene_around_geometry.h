@@ -4,6 +4,9 @@
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/io/boxm2_cache.h>
 #include <bocl/bocl_device.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>

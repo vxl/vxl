@@ -7,6 +7,9 @@
 
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/algo/vpgl_camera_compute.h>
 #include <vgl/vgl_box_3d.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

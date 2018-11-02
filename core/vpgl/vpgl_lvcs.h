@@ -38,6 +38,9 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 #include <vbl/vbl_ref_count.h>
 //#include <vpgl/vpgl_dll.h>

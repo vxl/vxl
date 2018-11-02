@@ -7,6 +7,9 @@
 
 #include <vmal/vmal_convert_vtol.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_bounding_box.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_inverse.h>

@@ -7,6 +7,9 @@
 #include <cassert>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_vector_2d.h>
 #include <vsol/vsol_point_2d.h>
 #include <vbl/io/vbl_io_smart_ptr.h>

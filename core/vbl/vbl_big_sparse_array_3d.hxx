@@ -7,6 +7,9 @@
 #include "vbl_big_sparse_array_3d.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // locals
 inline ulonglong bigencode(unsigned i, unsigned j, unsigned k)

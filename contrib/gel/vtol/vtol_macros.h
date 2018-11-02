@@ -12,6 +12,9 @@
 #include <iostream>
 #include <list>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define SEL_SUP(suptype,target)\
   std::vector<suptype *> *new_list=new std::vector<suptype *>();\

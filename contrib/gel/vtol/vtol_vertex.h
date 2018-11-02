@@ -25,6 +25,9 @@
 #include <iosfwd>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 class vtol_vertex_2d;
 class vtol_edge;
 class vtol_zero_chain;

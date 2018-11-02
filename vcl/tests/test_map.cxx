@@ -3,6 +3,9 @@
 #include <functional>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int test_map_main(int /*argc*/,char* /*argv*/[])
 {

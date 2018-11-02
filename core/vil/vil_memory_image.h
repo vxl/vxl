@@ -17,6 +17,9 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_property.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Generic image implementation for PNM files
 // You can't create one of these yourself - use vil_new_image_resource() instead.

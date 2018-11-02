@@ -13,6 +13,9 @@
 #include <vil3d/vil3d_plane.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 inline bool vil3dresample_trilin_corner_in_image(double x0, double y0, double z0,

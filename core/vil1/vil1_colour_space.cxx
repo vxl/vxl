@@ -11,6 +11,9 @@
 #include <cmath>
 #include "vil1_colour_space.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 void vil1_colour_space_RGB_to_YIQ(T const in[3], T out[3])

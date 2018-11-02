@@ -15,6 +15,9 @@
 #include "clsfy_random_forest_builder.h"
 #include <vxl_config.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>

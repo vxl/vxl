@@ -9,6 +9,9 @@
 // \author Tim Cootes
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_vector_io.h>
 #include <vnl/vnl_math.h>

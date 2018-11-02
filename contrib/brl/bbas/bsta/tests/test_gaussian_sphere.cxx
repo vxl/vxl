@@ -5,6 +5,9 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 void test_gaussian_sphere_type(T epsilon, const std::string& type_name)

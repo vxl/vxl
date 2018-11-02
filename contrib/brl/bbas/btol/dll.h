@@ -3,6 +3,9 @@
 #define btol_dll_h_
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define BTOL_DLL_DATA
 

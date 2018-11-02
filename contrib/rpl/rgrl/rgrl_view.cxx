@@ -12,6 +12,9 @@
 #include <rgrl/rgrl_feature_set.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 rgrl_view::

@@ -6,6 +6,9 @@
 // \brief A process to KRT cameras to a NVM file ( input for Viosual SFM)
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vnl/vnl_quaternion.h>
 #include <vul/vul_file_iterator.h>

@@ -2,6 +2,9 @@
 #include <testlib/testlib_test.h>
 // not used? #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/algo/vil3d_quad_distance_function.h>
 #include <vil3d/vil3d_print.h>
 

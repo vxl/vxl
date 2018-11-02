@@ -20,6 +20,9 @@
 #include <vpgl/vpgl_proj_camera.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Render a triangle defined by its vertices.
 // For each 3d point, X and Y map to image coordinates and Z maps to depth.

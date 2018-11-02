@@ -6,6 +6,9 @@
 
 #include <cstdio>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vpl/vpl_export.h"
 
 //: Return the file descriptor (int) of an open file stream (FILE *).

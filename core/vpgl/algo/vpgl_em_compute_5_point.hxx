@@ -9,6 +9,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>

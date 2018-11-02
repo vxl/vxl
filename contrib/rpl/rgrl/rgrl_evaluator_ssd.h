@@ -12,6 +12,9 @@
 #include <vector>
 #include <rgrl/rgrl_evaluator.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class rgrl_evaluator_ssd
   : public rgrl_evaluator

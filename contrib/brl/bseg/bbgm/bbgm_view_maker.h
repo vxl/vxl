@@ -21,6 +21,9 @@
 #include <vil/vil_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: base class for objects that extract the mean from an image of distribution
 class bbgm_view_maker_base : public vbl_ref_count

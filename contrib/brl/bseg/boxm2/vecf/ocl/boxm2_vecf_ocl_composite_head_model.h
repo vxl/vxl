@@ -4,6 +4,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <boxm2/boxm2_scene.h>
 #include "../boxm2_vecf_orbit_scene.h"

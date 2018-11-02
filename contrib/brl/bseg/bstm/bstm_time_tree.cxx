@@ -6,6 +6,9 @@
 #include <list>
 #include "bstm_time_tree.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: default constructor
 bstm_time_tree::bstm_time_tree() : is_owning_(true) {

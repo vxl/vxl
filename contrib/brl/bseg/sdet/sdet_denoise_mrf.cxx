@@ -3,6 +3,9 @@
 #include <cstdlib>
 #include "sdet_denoise_mrf.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <vil/vil_new.h>
 #include <vnl/vnl_numeric_traits.h>

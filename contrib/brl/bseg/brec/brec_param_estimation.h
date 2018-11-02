@@ -17,6 +17,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vil/vil_image_resource_sptr.h>
 #include <bvgl/bvgl_changes_sptr.h>

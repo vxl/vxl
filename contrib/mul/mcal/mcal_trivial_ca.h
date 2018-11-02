@@ -13,6 +13,9 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Generates set of axis aligned modes for non-zero element
 //  Given n-D input data, for each element which contains non-zero

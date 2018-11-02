@@ -242,6 +242,9 @@ static inline void fixNumericLocaleInput(char* begin, const char* end) {
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if defined(_MSC_VER)
 #if !defined(WINCE) && defined(__STDC_SECURE_LIB__) && _MSC_VER >= 1500 // VC++ 9.0 and above
@@ -4058,6 +4061,9 @@ Value& Path::make(Value& root) const {
 #include "json_tool.h"
 #endif // if !defined(JSON_IS_AMALGAMATION)
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if defined(_MSC_VER) && _MSC_VER >= 1200 && _MSC_VER < 1800 // Between VC++ 6.0 and VC++ 11.0
 #define isfinite _finite

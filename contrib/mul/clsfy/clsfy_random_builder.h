@@ -19,6 +19,9 @@
 #include <iosfwd>
 #include <clsfy/clsfy_builder_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_data_wrapper.h>
 #include <vnl/vnl_vector.h>
 

@@ -8,6 +8,9 @@
 #include <fstream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timer.h>
 #include <vul/vul_file.h>
 #include "../boxm2_vecf_orbit_params.h"

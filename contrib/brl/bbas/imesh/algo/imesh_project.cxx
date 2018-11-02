@@ -21,6 +21,9 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_triangle_scan_iterator.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 

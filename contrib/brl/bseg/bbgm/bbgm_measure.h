@@ -14,6 +14,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <vbl/vbl_array_2d.h>
 #include "bbgm_image_of.h"

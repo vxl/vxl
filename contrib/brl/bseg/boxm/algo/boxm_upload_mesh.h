@@ -13,6 +13,9 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T_loc, class T_data>
 void boxm_upload_mesh_into_block(boxm_block<boct_tree<T_loc, T_data> > *block,

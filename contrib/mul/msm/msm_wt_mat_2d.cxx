@@ -9,6 +9,9 @@
 #include <vsl/vsl_indent.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Sets axis (eigenvector) of matrix and var along each
 //  Sets to s1*u*u' + s2*v*v', where u is the unit vector

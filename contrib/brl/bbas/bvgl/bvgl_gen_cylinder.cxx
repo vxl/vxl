@@ -9,6 +9,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 bvgl_gen_cylinder
 ::bvgl_gen_cylinder(vgl_cubic_spline_3d<double>  axis,
                     std::vector<bvgl_cross_section> const& cross_sects,

@@ -5,6 +5,9 @@
 #include <image/vil1_to_vbl_array.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // for vpl_unlink()
 #include <vil1/vil1_load.h>
 #include <testlib/testlib_test.h>

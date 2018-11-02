@@ -11,6 +11,9 @@
 #include <vnl/io/vnl_io_vector.h>
 #include <vnl/io/vnl_io_matrix.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Cost function returning variance along given vector
 class mcal_var_basis_cost : public mcal_single_basis_cost

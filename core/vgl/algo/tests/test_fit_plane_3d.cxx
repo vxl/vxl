@@ -6,6 +6,9 @@
 #include <vgl/algo/vgl_fit_plane_3d.h>
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // creates points on the z=0 plane
 static void test_fit_plane_z()

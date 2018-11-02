@@ -15,6 +15,9 @@
 #include "vnl_symmetric_eigensystem.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_copy.h>
 #include <vnl/vnl_math.h>
 #include <vnl/algo/vnl_netlib.h> // rs_()

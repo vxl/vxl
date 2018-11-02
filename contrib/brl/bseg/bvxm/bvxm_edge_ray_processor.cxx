@@ -19,6 +19,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static const bool edge_debug = false;
 static const bool print_arrays = false;

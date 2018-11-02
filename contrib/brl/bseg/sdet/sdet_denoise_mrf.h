@@ -35,6 +35,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <sdet/sdet_denoise_mrf_params.h>
 #include <vil/vil_image_resource.h>

@@ -16,6 +16,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <rrel/rrel_estimation_problem.h>

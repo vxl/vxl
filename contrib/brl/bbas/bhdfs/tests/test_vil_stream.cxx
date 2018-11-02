@@ -5,6 +5,9 @@
 #include <bhdfs/bhdfs_manager.h>
 #include <bhdfs/bhdfs_vil_stream.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Test bhdfs vil stream
 void test_vil_stream()

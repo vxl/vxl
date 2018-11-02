@@ -22,6 +22,9 @@
 #include <bocl/bocl_kernel.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 static bool transform_scene_compiled = false;

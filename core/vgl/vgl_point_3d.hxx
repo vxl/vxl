@@ -15,6 +15,9 @@
 #include <vgl/vgl_tolerance.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Construct from homogeneous point
 template <class Type>

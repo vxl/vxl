@@ -8,6 +8,9 @@
 // \date Feb 12, 2007
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bmsh3d/bmsh3d_utils.h>
 
 //#####################################################################

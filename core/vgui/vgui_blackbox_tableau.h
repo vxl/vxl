@@ -25,6 +25,9 @@
 #include <vgui/vgui_wrapper_tableau.h>
 #include <vgui/vgui_event.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Tableau for event record and playback.
 //

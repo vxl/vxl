@@ -18,6 +18,9 @@
 #include <bvxm/grid/io/bvxm_vrml_voxel_grid.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace bvxm_save_rgba_grid_vrml_process_globals
 {

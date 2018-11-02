@@ -15,6 +15,9 @@
 #include <iostream>
 #include "vmap_grid_structure.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template < class TMap >
 void vmap_set_grid_structure(TMap & arg, const vmap_grid_structure& grid, vmap_2_tmap_tag)

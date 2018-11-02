@@ -18,6 +18,9 @@
 #include <vsol/vsol_point_3d_sptr.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 class bwm_tableau_cam : public bwm_tableau_img

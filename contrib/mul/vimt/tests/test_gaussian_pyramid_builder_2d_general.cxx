@@ -1,6 +1,9 @@
 // This is mul/vimt/tests/test_gaussian_pyramid_builder_2d_general.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_gaussian_pyramid_builder_2d_general.h>

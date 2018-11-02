@@ -17,6 +17,9 @@
 #include <set>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <brdb/brdb_database.h>
 #include "brdb_export.h"
 

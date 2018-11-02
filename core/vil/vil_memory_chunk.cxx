@@ -6,6 +6,9 @@
 // \brief Ref. counted block of data on the heap
 // \author Tim Cootes
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Dflt ctor

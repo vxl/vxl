@@ -6,6 +6,9 @@
 #include <vul/vul_file.h>
 #include <bkml/bkml_write.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // create volm_osm_objects from open street map xml file
 volm_osm_objects::volm_osm_objects(std::string const& osm_file, std::string const& osm_to_volm_file)

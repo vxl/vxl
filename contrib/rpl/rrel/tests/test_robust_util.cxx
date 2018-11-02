@@ -3,6 +3,9 @@
 #include <cmath>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 
 #include <rrel/rrel_util.h>

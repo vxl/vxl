@@ -19,6 +19,9 @@
 #include <vnl/vnl_double_2x3.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A quadrilateral region of an image
 class ihog_transform_2d : public vgl_h_matrix_2d<double>, public vbl_ref_count

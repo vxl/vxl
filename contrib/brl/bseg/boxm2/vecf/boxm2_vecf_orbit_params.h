@@ -11,6 +11,9 @@
 #include "boxm2_vecf_articulated_params.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_sphere_3d.h>
 
 class boxm2_vecf_orbit_params

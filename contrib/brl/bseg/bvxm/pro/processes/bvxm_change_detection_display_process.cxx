@@ -19,6 +19,9 @@
 #endif
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:sets input and output types for  bvxm_change_detection_display_process
 bool bvxm_change_detection_display_process_cons(bprb_func_process& pro)

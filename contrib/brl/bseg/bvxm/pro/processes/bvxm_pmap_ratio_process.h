@@ -22,6 +22,9 @@
 #include <string>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: globals variables/functions
 namespace bvxm_pmap_ratio_process_globals

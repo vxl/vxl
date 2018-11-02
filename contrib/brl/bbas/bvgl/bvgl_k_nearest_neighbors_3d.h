@@ -15,6 +15,9 @@
 #include <vgl/vgl_pointset_3d.h>
 #include <bnabo/bnabo.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class Type>
 class bvgl_k_nearest_neighbors_3d

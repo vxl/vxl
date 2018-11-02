@@ -24,6 +24,9 @@
 #include <bbas/bsta/bsta_spherical_histogram.h>
 #include <vnl/vnl_double_3.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class brad_sun_dir_index
 {

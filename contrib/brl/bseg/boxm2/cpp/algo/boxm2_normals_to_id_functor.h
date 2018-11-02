@@ -5,6 +5,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class boxm2_normals_to_id_functor
 {

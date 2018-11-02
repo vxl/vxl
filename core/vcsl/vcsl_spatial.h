@@ -30,6 +30,9 @@ class vcsl_spherical;
 
 // This is needed for icc-7.0 to solve a strange link problem.
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #define VCSL_SPATIAL_VECTOR_BOOL std::vector<bool>
 
 //: A spatial coordinate system

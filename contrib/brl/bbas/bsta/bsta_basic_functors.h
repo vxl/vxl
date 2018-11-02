@@ -15,6 +15,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_attributes.h>
 #include <bsta/bsta_gaussian_indep.h>
 #include <bsta/bsta_gaussian_sphere.h>

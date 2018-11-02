@@ -11,6 +11,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "gst_edge_2d_sptr.h"
 #include "gst_polygon_2d_sptr.h"

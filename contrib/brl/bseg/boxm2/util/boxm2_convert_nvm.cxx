@@ -11,6 +11,9 @@
 #include <vnl/vnl_quaternion.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <vpgl/algo/vpgl_ortho_procrustes.h>
 

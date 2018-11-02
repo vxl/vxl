@@ -9,6 +9,9 @@
 #include <boct/boct_bit_tree.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/io/boxm2_cache.h>
 #include <vnl/vnl_operators.h>
 #include <vgl/vgl_point_3d.h>

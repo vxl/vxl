@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include "mcal_single_basis_cost.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mbl/mbl_parse_block.h>

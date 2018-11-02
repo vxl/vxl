@@ -16,6 +16,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bprb/bprb_process_sptr.h>
 #include <bprb/bprb_process_manager.h>
 #include <brdb/brdb_value_sptr.h>

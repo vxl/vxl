@@ -16,6 +16,9 @@
 #include "vil_decimate.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_copy.h>
 #include <vil/vil_crop.h>
 #include <vil/vil_exception.h>

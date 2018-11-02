@@ -10,6 +10,9 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class boxm2_cone_update_pass0_functor
 {

@@ -7,6 +7,9 @@
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_quaternion.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 bool boxm2_point_util::fit_plane_ransac(std::vector<vgl_homg_point_3d<double> > & points, vgl_homg_plane_3d<double>  & plane)

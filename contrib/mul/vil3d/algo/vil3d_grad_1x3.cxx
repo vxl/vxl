@@ -7,6 +7,9 @@
 #include <vil3d/vil3d_slice.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Fill 1 pixel border in image with zeros
 void vil3d_zero_border_1plane(vil3d_image_view<float>& image)

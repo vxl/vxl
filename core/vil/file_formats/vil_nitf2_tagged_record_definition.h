@@ -10,6 +10,9 @@
 #include <map>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "vil_nitf2_field_functor.h"
 

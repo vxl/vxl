@@ -6,6 +6,9 @@
 #include "vmap_2_tmap.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class V, class E, class F, class D>
 vmap_2_tmap< V,E,F,D >::vmap_2_tmap(self_type const& tmap)

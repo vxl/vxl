@@ -11,6 +11,9 @@
 #include <vil/file_formats/vil_nitf2_image.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_illum_index_process_cons(bprb_func_process& pro)

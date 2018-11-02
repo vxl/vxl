@@ -11,6 +11,9 @@
 // \date Aug 28, 2014
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2_multi/boxm2_multi_cache.h>
 #include <boxm2_multi/algo/boxm2_multi_render.h>
 

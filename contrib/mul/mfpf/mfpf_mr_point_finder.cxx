@@ -13,6 +13,9 @@
 #include <vimt/vimt_image_pyramid.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 #include <vsl/vsl_indent.h>

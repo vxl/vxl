@@ -26,6 +26,9 @@
 #include <vbl/vbl_bounding_box.h>
 #include "vsol_box_2d_sptr.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A bounding box for 2d spatial objects
 

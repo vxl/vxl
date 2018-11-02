@@ -7,6 +7,9 @@
 #include <testlib/testlib_test.h>
 #include <mmn/mmn_parse_arcs.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 void test_parse_arcs_a()

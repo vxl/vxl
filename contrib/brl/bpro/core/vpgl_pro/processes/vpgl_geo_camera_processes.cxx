@@ -8,6 +8,9 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
 #include <vpgl/vpgl_lvcs_sptr.h>

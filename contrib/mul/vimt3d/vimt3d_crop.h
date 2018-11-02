@@ -14,6 +14,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Create windowed view of given image by specifying a cropping region in image co-ords.
 //  The world2im transform is set so that this appears identical to im when addressed in world co-ords.

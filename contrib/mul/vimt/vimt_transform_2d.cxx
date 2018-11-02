@@ -10,6 +10,9 @@
 #include <cstdlib>
 #include "vimt_transform_2d.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_indent.h>
 #include <vnl/vnl_vector.h>

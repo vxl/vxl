@@ -15,6 +15,9 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_sym_matrix.h>
 
 void create_basis(std::string test_dir, std::map<std::string, float> &values)

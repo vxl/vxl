@@ -4,6 +4,9 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdt/vpdt_update_mog.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 void test_update_mog_type(T epsilon, const std::string& type_name, T inf)

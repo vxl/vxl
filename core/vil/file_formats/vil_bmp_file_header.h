@@ -10,6 +10,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 class vil_stream;
 
 struct vil_bmp_file_header

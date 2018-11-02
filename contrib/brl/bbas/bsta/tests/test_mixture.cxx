@@ -2,6 +2,9 @@
 #include <string>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_mixture_fixed.h>
 #include <bsta/bsta_gauss_sf1.h>

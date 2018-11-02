@@ -14,6 +14,9 @@
 #include <vgl/algo/vgl_h_matrix_3d_compute_affine.h>
 #include <bvrml/bvrml_write.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_matrix_fixed.h>
 void boxm2_vecf_fit_skull::fill_smid_map(){
   smid_map_["left_lateral_canthus"]=LEFT_LATERAL_CANTHUS;

@@ -10,6 +10,9 @@
 #include <vgl/vgl_intersection.h>
 #include <volm/volm_loc_hyp.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_area.h>
 
 volm_geo_index_node::~volm_geo_index_node()

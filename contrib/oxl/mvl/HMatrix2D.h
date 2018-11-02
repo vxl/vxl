@@ -28,6 +28,9 @@
 #include <mvl/HomgLine2D.h>
 #include <mvl/HomgLineSeg2D.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // A class to hold a plane-to-plane projective transformation matrix

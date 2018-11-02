@@ -13,6 +13,9 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bgui_vsol2D_tableau::bgui_vsol2D_tableau(const char* n) :
   vgui_easy2D_tableau(n) { this->init(); }

@@ -5,6 +5,9 @@
 #include <bvgl/bvgl_cross_section.h>
 #include <bvgl/bvgl_gen_cylinder.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #define TEST_GEN_CYLINDER 0
 //: Test changes
 static void test_gen_cylinder()

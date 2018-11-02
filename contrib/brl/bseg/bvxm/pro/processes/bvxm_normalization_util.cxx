@@ -6,6 +6,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Float specialized function to normalize and image given a,b where new_I = a*I +b;
 bool bvxm_normalization_util::normalize_image(const vil_image_view<float>& in_view,

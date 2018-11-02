@@ -10,6 +10,9 @@
 vil_file_format::~vil_file_format() = default;
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_config.h> // for list of configured file formats
 #include <vil/vil_exception.h>
 

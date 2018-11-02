@@ -10,6 +10,9 @@
 #include <iostream>
 #include "boxm2_vecf_articulated_params.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_vector_3d.h>
 class boxm2_vecf_cranium_params : public boxm2_vecf_articulated_params{
  public:

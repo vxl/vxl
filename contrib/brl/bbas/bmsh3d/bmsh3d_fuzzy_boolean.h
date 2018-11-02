@@ -15,6 +15,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define BMSH3D_FINE_EPSILON     5E-15
 #define BMSH3D_MID_EPSILON      5E-10

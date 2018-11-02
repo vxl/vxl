@@ -11,6 +11,9 @@
 #include <iostream>
 #include <algorithm>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A bounded priority queue
 // This is identical to a std::priority_queue, but

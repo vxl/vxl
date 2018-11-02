@@ -11,6 +11,9 @@
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_fill.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Given gradient images, computes magnitude image containing maximal edges

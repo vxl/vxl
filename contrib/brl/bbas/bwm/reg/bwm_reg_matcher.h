@@ -22,6 +22,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_digital_curve_2d.h>
 #include <bsta/bsta_histogram.h>
 #include "bwm_reg_edge_champher.h"

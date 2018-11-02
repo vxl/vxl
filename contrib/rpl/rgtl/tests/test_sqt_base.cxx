@@ -10,6 +10,9 @@
 
 #include <rgtl/rgtl_sqt_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static double const test_directions[100][3] =
 {{0.9409, 0.1315, -0.9139},

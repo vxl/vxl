@@ -1,6 +1,9 @@
 #include <string>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define Assert(x) {std::cout << "TEST " #x " : "; std::cout << ((x)?"PASSED":"FAILED")}
 

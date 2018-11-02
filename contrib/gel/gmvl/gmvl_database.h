@@ -16,6 +16,9 @@
 #include <vector>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <gmvl/gmvl_node_cache.h>
 #include <gmvl/gmvl_connection_cache.h>

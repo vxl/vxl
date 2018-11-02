@@ -11,6 +11,9 @@
 #include <bmsh3d/bmsh3d_textured_face_mc.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bwm_observable_textured_mesh : public bwm_observable_mesh
 {

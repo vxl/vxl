@@ -27,6 +27,9 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Return true if the two points intersect, i.e., coincide
 // \relatesalso vgl_point_2d

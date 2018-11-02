@@ -11,6 +11,9 @@
 #include <mmn/mmn_arc.h>
 #include <mmn/mmn_dependancy.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Given a graph with n.size() nodes and arc.size() arcs, deduce dependencies
 //  If returns true, then dep is an ordered list of dependencies

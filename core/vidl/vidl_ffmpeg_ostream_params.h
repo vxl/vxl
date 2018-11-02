@@ -18,6 +18,9 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vidl/vidl_export.h>
 
 //: A parameters struct for vidl_ffmpeg_ostream

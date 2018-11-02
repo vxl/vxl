@@ -8,6 +8,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vtol/vtol_edge.h>
 #include <vifa/vifa_incr_var.h>
 #include <vifa/vifa_parallel.h>

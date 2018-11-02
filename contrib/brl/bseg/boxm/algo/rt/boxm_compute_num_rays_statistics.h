@@ -4,6 +4,9 @@
 #include <iostream>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsta/bsta_histogram.h>
 #include <boxm/basic/boxm_num_rays_functor.h>
 #include <boxm/sample/boxm_scalar_sample.h>

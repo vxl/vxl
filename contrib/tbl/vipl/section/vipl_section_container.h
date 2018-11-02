@@ -9,6 +9,9 @@
 #include <iostream>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <  class DataType > class vipl_section_descriptor; //template forward reference
 template <  class DataType > class vipl_section_iterator; //template forward reference

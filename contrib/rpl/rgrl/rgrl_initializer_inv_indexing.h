@@ -11,6 +11,9 @@
 #include "rgrl_initializer.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "rgrl_view_sptr.h"
 #include "rgrl_mask.h"

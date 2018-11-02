@@ -10,6 +10,9 @@
 #include <iostream>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vimt3d/vimt3d_load.h>
 #include <vil3d/vil3d_slice.h>
 #include <vil3d/vil3d_resample_trilinear.h>

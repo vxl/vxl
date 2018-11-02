@@ -15,6 +15,9 @@
 
 #include <vsl/vsl_binary_loader.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <mbl/mbl_cloneables_factory.h>
 #include <mcal/mcal_add_all_loaders.h>

@@ -27,6 +27,9 @@
 #include <boxm2/ocl/algo/boxm2_ocl_camera_converter.h>
 #include <boxm2/boxm2_util.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_save.h>
 #include <vil/vil_resample_nearest.h>
 

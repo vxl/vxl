@@ -18,6 +18,9 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: purpose: obtain time elapsed since 1 Jan 1970, in seconds and milliseconds.

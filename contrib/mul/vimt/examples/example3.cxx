@@ -10,6 +10,9 @@
 #include <vimt/vimt_sample_profile_bilin.h>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

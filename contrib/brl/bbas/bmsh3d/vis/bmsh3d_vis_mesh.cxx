@@ -7,6 +7,9 @@
 // \date May 03, 2005.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 #include <bmsh3d/pro/bmsh3d_cmdpara.h>

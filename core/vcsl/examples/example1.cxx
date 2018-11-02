@@ -25,6 +25,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vcsl/vcsl_cartesian_3d.h>
 #include <vcsl/vcsl_displacement.h>

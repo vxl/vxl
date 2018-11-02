@@ -14,6 +14,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // This class is used in n_nearest_impl. It stores a pointer to an

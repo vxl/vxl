@@ -6,6 +6,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_bounding_box.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 boxm2_vecf_cranium::boxm2_vecf_cranium(std::string const& geometry_file, unsigned nbins): nbins_(nbins){
   std::ifstream istr(geometry_file.c_str());

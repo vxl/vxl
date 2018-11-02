@@ -2,6 +2,9 @@
 #include <vcl_where_root_dir.h>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <bocl/bocl_manager.h>

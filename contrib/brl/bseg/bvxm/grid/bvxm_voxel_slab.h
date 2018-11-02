@@ -8,6 +8,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "bvxm_voxel_slab_base.h"
 #include "bvxm_memory_chunk.h"
