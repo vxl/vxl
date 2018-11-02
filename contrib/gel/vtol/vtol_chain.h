@@ -21,6 +21,9 @@
 #include <vtol/vtol_chain_sptr.h>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Base class of vtol_two_chain and vtol_one_chain (representation of holes)
 //

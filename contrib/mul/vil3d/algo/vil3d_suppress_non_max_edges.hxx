@@ -12,6 +12,9 @@
 #include <vil3d/algo/vil3d_fill_border.h>
 #include <vil3d/vil3d_trilin_interp.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 

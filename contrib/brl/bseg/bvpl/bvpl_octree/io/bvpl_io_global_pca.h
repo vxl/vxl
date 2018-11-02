@@ -16,6 +16,9 @@
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 
 typedef bvpl_global_pca<125> bvpl_global_pca_125;

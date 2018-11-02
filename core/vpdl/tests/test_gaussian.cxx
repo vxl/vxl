@@ -4,6 +4,9 @@
 #include <testlib/testlib_test.h>
 #include <vpdl/vpdl_gaussian.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h> // for twopi
 #include <vnl/vnl_inverse.h>
 #include <vnl/algo/vnl_determinant.h>

@@ -6,6 +6,9 @@
 #include <stack>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bstm/bstm_block.h>
 #include <bstm/bstm_block_metadata.h>

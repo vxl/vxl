@@ -4,6 +4,9 @@
 #include <ctime>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 #include <vimt3d/vimt3d_reflect.h>
 #include <vul/vul_ios_state.h>

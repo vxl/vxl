@@ -19,6 +19,9 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vgui_dialog_field.h"
 
 //: A dialog field implementation that holds a std::string.

@@ -55,6 +55,9 @@
 #include <vgl/vgl_polygon.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class volm_candidate_region_parser : public expatpp
 {

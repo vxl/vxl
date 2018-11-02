@@ -9,6 +9,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/io/vnl_io_vector.h>
 #include <vsl/vsl_binary_loader.h>
 #include <cassert>

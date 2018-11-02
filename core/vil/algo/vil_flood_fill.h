@@ -9,6 +9,9 @@
 #include <utility>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_chord.h>
 
 //: Search along i direction either side for limits of pixels matching v

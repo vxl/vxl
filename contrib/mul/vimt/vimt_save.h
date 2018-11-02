@@ -10,6 +10,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_fwd.h>
 class vimt_transform_2d;
 class vimt_image_2d;

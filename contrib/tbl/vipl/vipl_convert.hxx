@@ -5,6 +5,9 @@
 
 #include <vcl_compiler.h>
 #ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
+#ifdef _MSC_VER
 # pragma warning(disable:4244) // disable conversion warning for explicit cast at line 23
 #endif
 

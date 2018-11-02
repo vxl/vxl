@@ -5,6 +5,9 @@
 #include <iostream>
 #include <boxm2/io/boxm2_cache1.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: boxm2_dumb_cache - example realization of abstract cache class
 class boxm2_dumb_cache : public boxm2_cache1

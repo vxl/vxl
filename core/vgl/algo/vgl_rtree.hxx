@@ -7,6 +7,9 @@
 #include "vgl_rtree.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #ifdef DEBUG
 #define trace(str) { std::cerr << str << std::endl; }

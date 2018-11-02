@@ -7,6 +7,9 @@
 #include <bvxm/grid/bvxm_voxel_slab.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 double brec_bg_pair_density::operator()(const double y0, const double y1)
 {

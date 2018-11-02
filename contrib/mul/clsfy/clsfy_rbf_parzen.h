@@ -16,6 +16,9 @@
 #include <iosfwd>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A Parzen binary classifier using an RBF Window
 // A given vector, x0, is classified, by placing a window defined by w = exp(-1/(2*sigma^p) * |x-x0|^p),

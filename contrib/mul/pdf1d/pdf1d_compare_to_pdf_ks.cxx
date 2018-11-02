@@ -11,6 +11,9 @@
 #include "pdf1d_compare_to_pdf_ks.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_qsort.h>
 #include <vnl/vnl_vector.h>
 

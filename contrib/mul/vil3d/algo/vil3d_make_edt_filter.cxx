@@ -8,6 +8,9 @@
 #include "vil3d_make_edt_filter.h"
 #include "vil3d_make_distance_filter.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute filter for an exp. distance transform.
 // width_i gives the width at half maxima (in voxels) for the

@@ -8,6 +8,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
   //: Define elements { (p_i[a],p_j[a],p_k[a]) }
 vil3d_structuring_element::vil3d_structuring_element(const std::vector<int>& p_i,

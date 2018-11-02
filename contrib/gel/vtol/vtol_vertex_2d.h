@@ -27,6 +27,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_double_2.h>
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vtol/vtol_vertex.h>

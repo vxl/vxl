@@ -5,6 +5,9 @@
 // \file
 #include <pop/pop_edge.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: constructor
 pop_geometric_object::pop_geometric_object(pop_vertex *coordinate_system)

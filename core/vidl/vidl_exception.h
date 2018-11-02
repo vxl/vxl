@@ -28,6 +28,9 @@
 #include <string>
 #include <utility>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //-------------------------------------------------------------------------
 //: Throw an exception indicating a definite problem.

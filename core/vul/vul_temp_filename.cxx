@@ -9,6 +9,9 @@
 #include <cstdio>
 #include "vul_temp_filename.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if defined (_MSC_VER) || defined(__MINGW32__)
 

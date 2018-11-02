@@ -6,6 +6,9 @@
 // \author Tim Cootes
 // \date   15 June 2005
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h> // for vxl_byte
 #include <vil/algo/vil_suppress_non_max_edges.h>
 #include <vil/algo/vil_sobel_3x3.h>

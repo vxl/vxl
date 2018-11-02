@@ -10,6 +10,9 @@
 #include <imesh/algo/imesh_kd_tree.hxx>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: area integral of the squared weight function times a linearly interpolated value

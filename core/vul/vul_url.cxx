@@ -19,6 +19,9 @@
 #include <iostream>
 #include "vul_url.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vul/vul_file.h>
 

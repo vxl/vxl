@@ -8,6 +8,9 @@
 // \author Dan Crispell
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_smart_ptr.hxx>
 
 //: Default constructor

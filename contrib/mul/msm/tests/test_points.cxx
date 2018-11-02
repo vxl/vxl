@@ -12,6 +12,9 @@
 // \brief test msm_points
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_loader.h>
 #include <msm/msm_points.h>
 #include <vgl/vgl_point_2d.h>

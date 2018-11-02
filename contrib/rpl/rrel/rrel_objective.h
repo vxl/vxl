@@ -9,6 +9,9 @@
 #include <vector>
 #include <vnl/vnl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: An objective function to be minimised.
 //  It returns a "cost" given the residuals, and thus gives a cost for

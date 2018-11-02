@@ -11,6 +11,9 @@
 #include <bstm/basic/bstm_block_id.h>
 #include <bstm/bstm_data_traits.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: disk level storage class.
 //  handles all of the synchronous IO read and write requests

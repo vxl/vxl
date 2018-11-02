@@ -22,6 +22,9 @@
 #include <vpdl/vpdt/vpdt_norm_metric.h>
 #include <vnl/vnl_math.h> // for twopi
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_erf.h>
 
 

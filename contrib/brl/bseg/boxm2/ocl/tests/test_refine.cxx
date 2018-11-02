@@ -22,6 +22,9 @@
 #include <boxm2/ocl/pro/boxm2_opencl_processor.h> // beware: does not exist anymore
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 //: Three unit tests for the three main refine kernel functions

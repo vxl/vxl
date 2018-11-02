@@ -34,6 +34,9 @@
 #include <imesh/imesh_fileio.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace boxm_upload_mesh_process_globals
 {

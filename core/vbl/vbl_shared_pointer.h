@@ -13,6 +13,9 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define vbl_shared_pointer_zero(var) (var) = 0
 

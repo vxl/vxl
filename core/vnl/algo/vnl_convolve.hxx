@@ -7,6 +7,9 @@
 #include <vnl/algo/vnl_fft_1d.h> // this #includes <std::complex.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T1, class T2, class U>
 inline

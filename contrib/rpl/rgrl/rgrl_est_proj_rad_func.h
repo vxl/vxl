@@ -14,6 +14,9 @@
 #include <rgrl/rgrl_match_set_sptr.h>
 #include <rgrl/rgrl_est_proj_func.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <unsigned int Tdim, unsigned int Fdim>
 class rgrl_est_proj_rad_func

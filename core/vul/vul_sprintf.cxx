@@ -15,6 +15,9 @@
 #include "vul_sprintf.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #undef vsprintf // this works around a bug in libintl.h
 
 vul_sprintf::vul_sprintf(char const *fmt, ...) : std::string("")

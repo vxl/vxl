@@ -4,6 +4,9 @@
 #include "test_share.h"
 #include <imesh/algo/imesh_transform.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <imesh/imesh_fileio.h>
 #include <imesh/imesh_operations.h>

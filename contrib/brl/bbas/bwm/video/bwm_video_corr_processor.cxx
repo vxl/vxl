@@ -31,6 +31,9 @@
 #include <vpgl/vpgl_lvcs.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //Minimum number of correspondences on a frame to compute cameras
 //static const unsigned min_corrs = 10;

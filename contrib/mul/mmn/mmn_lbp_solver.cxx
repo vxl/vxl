@@ -5,6 +5,9 @@
 #include <sstream>
 #include "mmn_lbp_solver.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_stl.h>
 #include <mbl/mbl_parse_block.h>

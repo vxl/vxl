@@ -26,6 +26,9 @@
 #include <bsta/bsta_von_mises.h>
 #include <bsta/bsta_attributes.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A von_mises window updater based on samples of the space of unit vectors.
 // Implemented only for vector dimensions 2 and 3.

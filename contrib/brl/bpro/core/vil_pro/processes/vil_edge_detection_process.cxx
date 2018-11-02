@@ -7,6 +7,9 @@
 // \brief A process that performs edge detection on a grey image and returns the corresponding edge map
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <sdet/sdet_detector.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_image_view.h>

@@ -4,6 +4,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_point_2d.h>
 #include <bsol/bsol_algs.h>
 

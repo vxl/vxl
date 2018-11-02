@@ -29,6 +29,9 @@
 #include <complex>
 #include <vxl_config.h> // for type vxl_uint_64
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vnl/vnl_export.h"
 
 // this is an empty class template.

@@ -48,6 +48,9 @@
 #include <iostream>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_edge_2d_sptr.h>

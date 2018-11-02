@@ -13,6 +13,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <osl/osl_hacks.h>
 #include <osl/osl_ortho_regress.h>
 

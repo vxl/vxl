@@ -16,6 +16,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <climits>
 
 void vbl_bit_array_3d::put(unsigned int i1, unsigned int i2, unsigned int i3, bool v)

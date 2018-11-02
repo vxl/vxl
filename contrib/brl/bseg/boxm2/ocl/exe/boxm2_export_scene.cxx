@@ -42,6 +42,9 @@
 #include <bprb/bprb_func_process.h>
 #include <brip/brip_vil_float_ops.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/file_formats/vil_jpeg.h>
 #include <vil/vil_open.h>
 // Boxm2_Export_Scene executable will create a small, portable, pre rendered

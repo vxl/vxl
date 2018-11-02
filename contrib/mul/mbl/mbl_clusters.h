@@ -8,6 +8,9 @@
 #include <vector>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_fwd.h>
 
 //:  Class to record clusters of data, for faster neighbour finding

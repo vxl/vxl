@@ -17,6 +17,9 @@
 #include <vnl/vnl_cost_function.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class func_>
 class bpgl_camera_estimator_amoeba : public vnl_cost_function

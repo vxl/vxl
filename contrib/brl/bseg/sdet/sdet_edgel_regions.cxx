@@ -6,6 +6,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_qsort.h> // for sorting labels
 
 #include <vxl_config.h>

@@ -20,6 +20,9 @@
 #include <map>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <bvrml/bvrml_write.h>
 #include <vnl/vnl_math.h>

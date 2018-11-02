@@ -13,6 +13,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 template <boxm_apm_type APM, class T_aux>

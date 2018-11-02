@@ -14,6 +14,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <vimt/vimt_image_pyramid.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: True if value is strictly above *im and its 8 neighbours

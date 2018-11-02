@@ -21,6 +21,9 @@
 #include <volm/desc/volm_desc_indexer.h>
 #include <vbl/vbl_smart_ptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_geo_index.h>
 #include <volm/volm_geo_index_sptr.h>
 #include <volm/volm_io.h>

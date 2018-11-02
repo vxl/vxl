@@ -1,6 +1,9 @@
 // This is core/vgl/io/tests/test_line_3d_2_points_io.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vsl/vsl_indent.h>
 #include <vgl/io/vgl_io_line_3d_2_points.h>

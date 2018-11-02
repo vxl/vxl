@@ -18,6 +18,9 @@
 #include <vbl/vbl_array_3d.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static const double rgrl_matcher_pseudo_int_3d_max_response_value = 1.0e30;
 

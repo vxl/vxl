@@ -11,6 +11,9 @@
 // Test construction, IO etc
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_binary_tree.h>
 #include <clsfy/clsfy_binary_tree_builder.h>

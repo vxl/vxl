@@ -15,6 +15,9 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute a bounding box in the distorted space for an existing box
 // This is computed by sampling along the box boundary edges

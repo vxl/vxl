@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Load vector from file with format "v1 v2 .. vn"
 // \throws on error, or returns false if exceptions are disabled.

@@ -12,6 +12,9 @@
 #include <iosfwd>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_ref_count.h>
 #include "gst_edge_2d_sptr.h"
 

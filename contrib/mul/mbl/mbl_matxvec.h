@@ -25,6 +25,9 @@
 
 #if 0 // commented out
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
   //: Compute R = V*M
   //  R is resized to the number of rows of V * cols of M
 void NC_VecXMat(const vnl_vector<double>& V,const vnl_matrix<double>& M,

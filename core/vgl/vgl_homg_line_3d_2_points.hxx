@@ -8,6 +8,9 @@
 #include "vgl_homg_line_3d_2_points.h"
 #include "vgl_tolerance.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //***************************************************************************

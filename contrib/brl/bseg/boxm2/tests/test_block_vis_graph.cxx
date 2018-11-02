@@ -13,6 +13,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 void create_scene(boxm2_scene_sptr & scene)
 {
   //create block metadata

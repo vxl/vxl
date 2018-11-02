@@ -2,6 +2,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vnl_vector<double> rgrl_invariant::zero_vec = vnl_vector<double>(0);
 

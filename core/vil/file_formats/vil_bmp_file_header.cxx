@@ -10,6 +10,9 @@
 #include <iostream>
 #include "vil_bmp_file_header.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream.h>
 #include <vil/vil_stream_write.h>
 #include <vil/vil_stream_read.h>

@@ -11,6 +11,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_cloneable_ptr.h>
 #include <clsfy/clsfy_binary_1d_wrapper.h>
 #include <clsfy/clsfy_builder_1d.h>

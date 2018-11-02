@@ -12,6 +12,9 @@
 #include <vtol/vtol_vertex_sptr.h>
 #include <vifa/vifa_group_pgram.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vifa_int_face_attr_common::
 vifa_int_face_attr_common(vdgl_fit_lines_params*    fitter_params,

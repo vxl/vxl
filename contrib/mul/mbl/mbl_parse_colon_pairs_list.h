@@ -10,6 +10,9 @@
 #include <vector>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Parse list of string pairs separated by colons
 // Expects format of data string to contain pairs of

@@ -4,6 +4,9 @@
 #include <string>
 #include "vidl_pro_utils.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 
 bool vidl_pro_utils::create_directory(std::string const& dir, bool force)

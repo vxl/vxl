@@ -12,6 +12,9 @@
 #include <cmath>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 
 //: Calculate the Mutual Information between the images.

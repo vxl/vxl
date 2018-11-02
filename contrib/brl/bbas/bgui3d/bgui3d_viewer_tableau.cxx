@@ -7,6 +7,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "bgui3d_algo.h"
 #include <vgui/vgui_gl.h>
 #include <vnl/vnl_quaternion.h>

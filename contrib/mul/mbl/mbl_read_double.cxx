@@ -32,6 +32,9 @@
 #include <cstdio>
 #include "mbl_read_double.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 constexpr int MAX_LEN = 40;
 

@@ -4,6 +4,9 @@
 #include <osl/osl_save_topology.h>
 #include <vil1/vil1_load.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // runs Canny on the given input image, followed by line fitting
 int main(int argc, char *argv[])

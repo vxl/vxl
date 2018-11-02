@@ -17,6 +17,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_homg_point_3d.h> // data member of this class
 
 //:Represents a homogeneous 3D line using two points

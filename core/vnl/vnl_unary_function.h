@@ -22,6 +22,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vnl/vnl_export.h"
 
 //: Abstract 1D map between two types (read spaces)

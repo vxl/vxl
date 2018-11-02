@@ -18,6 +18,9 @@
 #include <vpdl/vpdt/vpdt_probability.h>
 #include <vpdl/vpdt/vpdt_log_probability.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A Gaussian with variance independent in each dimension
 template<class T, unsigned int n=0>

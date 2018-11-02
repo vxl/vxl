@@ -9,6 +9,9 @@
 #include <iosfwd>
 #include <mfpf/mfpf_vec_cost.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Computes weighted sum of square differences to a mean
 class mfpf_ssd_vec_cost : public mfpf_vec_cost

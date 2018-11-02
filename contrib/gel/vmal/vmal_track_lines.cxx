@@ -9,6 +9,9 @@
 #include <vtol/vtol_edge_2d.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vmal/vmal_lines_correlation.h>
 #include <vmal/vmal_refine_lines.h>

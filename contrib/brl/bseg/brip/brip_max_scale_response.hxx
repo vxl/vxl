@@ -7,6 +7,9 @@
 #include "brip_max_scale_response.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_convert.h>
 #include <vil/vil_resample_bilin.h>
 #include <brip/brip_vil_float_ops.h>

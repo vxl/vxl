@@ -15,6 +15,9 @@
 #include <vgl/io/vgl_io_vector_2d.h>
 #include <vnl/algo/vnl_cholesky.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Return position at t (in [0,1]) given end point q
 vgl_point_2d<double> msm_cubic_bezier_node::point(double t, const vgl_point_2d<double>& q) const

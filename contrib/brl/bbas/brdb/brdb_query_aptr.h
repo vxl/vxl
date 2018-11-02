@@ -9,6 +9,9 @@ class brdb_query;
 #include <iostream>
 #include <memory>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 typedef std::unique_ptr<brdb_query> brdb_query_aptr;
 

@@ -1,6 +1,9 @@
 #include <iostream>
 #include "bocl_buffer.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bocl_buffer::bocl_buffer(const cl_context& context)
 : context_(context)

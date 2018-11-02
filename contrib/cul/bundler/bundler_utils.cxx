@@ -8,6 +8,9 @@
 #include <vpgl/algo/vpgl_camera_compute.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 #include <vgl/vgl_point_2d.h>

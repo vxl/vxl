@@ -7,6 +7,9 @@
 #include <iostream>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/vil3d_property.h>
 #include <vil3d/vil3d_load.h>
 #include <vil3d/vil3d_convert.h>

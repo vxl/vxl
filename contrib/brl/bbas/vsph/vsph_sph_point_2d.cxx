@@ -3,6 +3,9 @@
 #include <vnl/vnl_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vsph_sph_point_2d::vsph_sph_point_2d(double theta, double phi, bool in_radians)
   : in_radians_(in_radians), theta_(theta),phi_(phi){

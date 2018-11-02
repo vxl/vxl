@@ -11,6 +11,9 @@
 #include <boxm/boxm_scene_parser.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bvpl_discover_pca_kernels::bvpl_discover_pca_kernels(const std::string &path)
 {

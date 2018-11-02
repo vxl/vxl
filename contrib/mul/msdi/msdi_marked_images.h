@@ -13,6 +13,9 @@ class msm_points;
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Base for iterator which returns images+points
 class msdi_marked_images

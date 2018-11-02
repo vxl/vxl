@@ -12,6 +12,9 @@
 // \brief test mfpf_dp_snake
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mfpf/mfpf_dp_snake.h>
 #include <mfpf/mfpf_edge_finder.h>
 #include <vgl/vgl_point_2d.h>

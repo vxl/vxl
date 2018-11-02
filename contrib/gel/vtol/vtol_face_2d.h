@@ -39,6 +39,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_region_2d_sptr.h>
 #include <vtol/vtol_face.h>
 

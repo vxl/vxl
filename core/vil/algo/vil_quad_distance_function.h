@@ -8,6 +8,9 @@
 #include <vector>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Add parabola y=y0+(x-x0)^2 to lower envelope defined by (x,y,z)

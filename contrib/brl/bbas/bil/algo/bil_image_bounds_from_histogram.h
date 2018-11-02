@@ -12,6 +12,9 @@
 #include <vil/vil_blocked_image_resource_sptr.h>
 #include <bsta/bsta_histogram.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_polygon.h>
 class bil_image_bounds_from_histogram{
  public:

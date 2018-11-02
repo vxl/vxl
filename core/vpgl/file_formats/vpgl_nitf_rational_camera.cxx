@@ -11,6 +11,9 @@
 // \date Dec 2006
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_load.h>
 // for calls to get nitf_rational parameters from vil
 #include <vil/file_formats/vil_nitf2_image.h>

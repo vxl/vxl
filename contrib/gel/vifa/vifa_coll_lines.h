@@ -18,6 +18,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_smart_ptr.h>
 #include <vgl/vgl_point_2d.h>
 #include <vtol/vtol_edge.h>

@@ -7,6 +7,9 @@
 //
 //-----------------------------------------------------------------------------
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //--------------------------------------------
 // Carmen Includes
 #define DEFINED_MAX_MIN

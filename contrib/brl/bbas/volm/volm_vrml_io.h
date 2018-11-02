@@ -7,6 +7,9 @@
 #include <iosfwd>
 #include <volm/volm_spherical_region.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsph/vsph_segment_sphere.h>
 
 namespace volm_vrml_io_data

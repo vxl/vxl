@@ -11,6 +11,9 @@
 #include "osl_reorder_chain.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <osl/osl_edgel_chain.h>
 #include <osl/osl_OrthogRegress.h>

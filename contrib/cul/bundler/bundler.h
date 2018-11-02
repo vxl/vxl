@@ -17,6 +17,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_sparse_matrix.h>
 
 // We use vil_image_resources since they are not in memory, and we might

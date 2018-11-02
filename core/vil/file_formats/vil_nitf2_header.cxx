@@ -10,6 +10,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_1 = nullptr;
 vil_nitf2_field_definitions* vil_nitf2_header::s_field_definitions_20 = nullptr;

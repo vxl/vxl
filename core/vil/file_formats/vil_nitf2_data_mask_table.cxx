@@ -9,6 +9,9 @@
 #include <vil/vil_stream.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vil_nitf2_data_mask_table::vil_nitf2_data_mask_table(
   unsigned int num_blocks_x, unsigned int num_blocks_y,

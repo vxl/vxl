@@ -32,6 +32,9 @@
 #include <vgl/vgl_vector_3d.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bvxm_synth_world_generator
 {

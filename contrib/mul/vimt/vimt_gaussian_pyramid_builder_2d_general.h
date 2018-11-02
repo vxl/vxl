@@ -13,6 +13,9 @@
 #include <vil/vil_image_view.h>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Build pyramids of vimt_image_2d_of<vxl_byte> at any scale step
 

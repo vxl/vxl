@@ -10,6 +10,9 @@
 #include "bsta_gaussian_stats.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // The update equations used here are based on the following
 // paper that extends the Stauffer-Grimson approach.

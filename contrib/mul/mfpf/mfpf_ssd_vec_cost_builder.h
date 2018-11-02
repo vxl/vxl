@@ -11,6 +11,9 @@
 #include <mfpf/mfpf_vec_cost_builder.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Builder for mfpf_ssd_vec_cost objects.
 //  Computes mean and weights given the training data.

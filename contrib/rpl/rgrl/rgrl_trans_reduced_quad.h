@@ -10,6 +10,9 @@
 #include <iosfwd>
 #include "rgrl_transformation.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // A reduced quadratic transformation, when centered, consists of a

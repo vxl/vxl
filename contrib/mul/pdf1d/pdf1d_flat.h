@@ -11,6 +11,9 @@
 #include <cmath>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <pdf1d/pdf1d_pdf.h>
 
 //: Class for univariate flat distributions: p(x)=1/(hi-lo) in [lo,hi]

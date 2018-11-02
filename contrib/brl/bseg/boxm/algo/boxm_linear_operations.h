@@ -18,6 +18,9 @@
 #include <cassert>
 #ifdef DEBUG
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 //: Computes the linear combination of two blocks in place. i.e block1 = s1*block1 +  s2*block2

@@ -7,6 +7,9 @@
 #include <cstdlib>
 #include "mbl_random_n_from_m.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 mbl_random_n_from_m::mbl_random_n_from_m() = default;
 

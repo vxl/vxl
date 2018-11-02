@@ -11,6 +11,9 @@
 #include <vul/vul_file.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Main boxm2_convert_bundle function
 //  Takes in bundle.out file and image directory that created img_dir

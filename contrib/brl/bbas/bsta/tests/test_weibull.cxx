@@ -3,6 +3,9 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_weibull.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 void test_weibull_type(T epsilon, const std::string& type_name)

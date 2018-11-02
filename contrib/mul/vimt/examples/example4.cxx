@@ -8,6 +8,9 @@
 #include <iostream>
 #include <vxl_config.h> // for vxl_byte
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vimt/algo/vimt_find_peaks.h>
 #include <vimt/algo/vimt_correlate_2d.h>
 #include <vimt/vimt_resample_bilin.h>

@@ -2,6 +2,9 @@
 #include <cmath>
 #include <volm/volm_vrml_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsph/vsph_unit_sphere.h>
 #include <vgl/vgl_point_3d.h>
 

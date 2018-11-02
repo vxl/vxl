@@ -10,6 +10,9 @@
 #include <iostream>
 #include <bgrl2/bgrl2_edge.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "test_node.h"
 #include "test_node_sptr.h"

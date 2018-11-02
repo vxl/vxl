@@ -16,6 +16,9 @@
 #include <iostream>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <boxm2/basic/boxm2_array_1d.h>
 #include <bstm/bstm_data_base.h>

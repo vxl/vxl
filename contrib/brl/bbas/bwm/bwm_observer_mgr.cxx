@@ -17,6 +17,9 @@
 #include <vgui/vgui_soview.h>
 #include <vgui/vgui_dialog.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bwm_observer_cam* bwm_observer_mgr::BWM_MASTER_OBSERVER = nullptr;
 bwm_observer_cam* bwm_observer_mgr::BWM_EO_OBSERVER = nullptr;

@@ -9,6 +9,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <stdexcept>
 #include <vil/vil_pixel_format.h>
 

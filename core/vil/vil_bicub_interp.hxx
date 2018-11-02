@@ -16,6 +16,9 @@
 
 #include "vil_bicub_interp.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // vil_bilin_interp.h defines only inline functions, but some of the
 // corresponding vil_bicub_interp functions are a little big to be

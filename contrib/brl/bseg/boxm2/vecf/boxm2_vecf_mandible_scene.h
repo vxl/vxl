@@ -26,6 +26,9 @@
 #include "boxm2_vecf_mandible.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 class boxm2_vecf_mandible_scene : public boxm2_vecf_articulated_scene
 {
  public:

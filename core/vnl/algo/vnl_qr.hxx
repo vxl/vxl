@@ -11,6 +11,9 @@
 #include "vnl_qr.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_complex.h>  // vnl_math::squared_magnitude()
 #include <vnl/vnl_matlab_print.h>

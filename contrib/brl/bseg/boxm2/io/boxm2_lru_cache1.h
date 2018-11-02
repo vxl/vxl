@@ -7,6 +7,9 @@
 #include <iostream>
 #include <boxm2/io/boxm2_cache1.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define MAX_BYTES 1024*1024*1024*4 // 4 gigs of memory is max...
 

@@ -6,6 +6,9 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>

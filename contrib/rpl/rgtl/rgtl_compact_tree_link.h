@@ -14,6 +14,9 @@
 #include <iostream>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "rgtl_serialize_access.h"
 
 //: Store a flagged index for rgtl_compact_tree.

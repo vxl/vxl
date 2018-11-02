@@ -11,6 +11,9 @@
 #include <iosfwd>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Link between one node and another
 //  Indicates that position of node j, p(j) = p(i) + (N(dx,var_x),N(dy,var_y))

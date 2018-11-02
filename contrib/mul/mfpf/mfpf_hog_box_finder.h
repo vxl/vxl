@@ -12,6 +12,9 @@
 #include <mfpf/mfpf_vec_cost.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Searches for rectangular region using HOG features.
 //  Features are combinations of histograms of orientations of

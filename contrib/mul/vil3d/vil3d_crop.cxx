@@ -11,6 +11,9 @@
 #include "vil3d_crop.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vil3d_image_resource_sptr vil3d_crop(
   const vil3d_image_resource_sptr &src,

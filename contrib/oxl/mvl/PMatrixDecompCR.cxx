@@ -10,6 +10,9 @@
 
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vnl/vnl_matlab_print.h>
 #include <vnl/vnl_double_3.h>

@@ -3,6 +3,9 @@
 #include <vector>
 #include <section/section.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // this must be here for filter-2d to work
 #include "../vipl_filterable_section_container_generator_section.hxx"

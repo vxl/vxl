@@ -20,6 +20,9 @@
 #include <bsta/bsta_gauss_sf1.h>
 #include <vnl/vnl_float_4.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bvxm_vrml_voxel_grid
 {

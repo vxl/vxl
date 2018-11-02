@@ -7,6 +7,9 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/io/vgl_io_polygon.h>
 #include <volm/volm_utils.h>
 #include <volm/volm_candidate_list.h>

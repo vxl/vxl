@@ -6,6 +6,9 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_inverse.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vgl_point_2d<double> icam_transform_2d::origin() const
 {

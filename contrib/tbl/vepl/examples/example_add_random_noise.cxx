@@ -16,6 +16,9 @@
 
 #include <vepl/vepl_add_random_noise.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int
 main(int argc, char** argv) {

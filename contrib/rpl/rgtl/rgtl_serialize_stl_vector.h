@@ -17,6 +17,9 @@
 
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class Serializer, typename T>
 void rgtl_serialize_save(Serializer& sr, std::vector<T>& self)

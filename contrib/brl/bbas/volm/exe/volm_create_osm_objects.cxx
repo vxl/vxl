@@ -12,6 +12,9 @@
 #include <iostream>
 #include <volm/volm_tile.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_osm_objects.h>
 #include <volm/volm_geo_index2.h>
 #include <volm/volm_geo_index2_sptr.h>

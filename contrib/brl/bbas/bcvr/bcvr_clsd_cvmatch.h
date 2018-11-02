@@ -23,6 +23,9 @@
 #include <iostream>
 #include <ctime>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsol/vsol_polygon_2d_sptr.h>
 #include "bcvr_cv_cor_sptr.h"
 #include "bcvr_cvmatch.h"

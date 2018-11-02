@@ -1,6 +1,9 @@
 // This is mul/vimt/tests/test_v2i.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h>
 #include <vnl/vnl_matrix.h> // for frobenius_norm()
 #include <vul/vul_temp_filename.h>

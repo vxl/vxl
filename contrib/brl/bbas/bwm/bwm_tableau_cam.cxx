@@ -29,6 +29,9 @@
 
 #include <volm/volm_category_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 
 #define NUM_CIRCL_SEC 12

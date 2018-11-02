@@ -4,6 +4,9 @@
 #include <cerrno>
 #include "frame_grabber_vil.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Constructor
 // Sets up the framegrabber.

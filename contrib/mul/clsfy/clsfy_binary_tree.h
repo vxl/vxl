@@ -11,6 +11,9 @@
 #include <clsfy/clsfy_binary_threshold_1d.h>
 #include <clsfy/clsfy_classifier_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: One node of a binary tree classifier - wrapper round clsfy_binary_threshold_1d

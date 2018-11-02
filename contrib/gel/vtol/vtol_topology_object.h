@@ -13,6 +13,9 @@
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h> // parent class
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vtol/vtol_vertex_sptr.h>
 #include <vtol/vtol_zero_chain_sptr.h>
 #include <vtol/vtol_edge_sptr.h>

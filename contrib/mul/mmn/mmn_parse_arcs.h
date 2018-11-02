@@ -10,6 +10,9 @@
 #include <vector>
 #include <mmn/mmn_arc.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Expects "{ arc: { name1 name2 } arc: { name3 name 4 } }"
 //Format

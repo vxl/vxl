@@ -2,6 +2,9 @@
 #include <iostream>
 #include <typeinfo>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_exception.h>
 #include <testlib/testlib_test.h>
 #include <vul/vul_file.h>

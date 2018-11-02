@@ -2,6 +2,9 @@
 #include "vgl_h_matrix_1d_compute_linear.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/algo/vnl_svd.h>
 
 //********************************************************************************

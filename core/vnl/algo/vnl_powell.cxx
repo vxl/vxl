@@ -20,6 +20,9 @@
 #ifdef DEBUG
 #include <vnl/vnl_matlab_print.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #endif
 
 class vnl_powell_1dfun : public vnl_cost_function

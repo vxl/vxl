@@ -2,6 +2,9 @@
 #include <cmath>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/io/vpgl_io_lvcs.h>
 #include <vpl/vpl.h>

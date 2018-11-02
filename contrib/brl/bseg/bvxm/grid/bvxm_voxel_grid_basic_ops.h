@@ -31,6 +31,9 @@
 #include <vil3d/algo/vil3d_distance_transform.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Multiplies 2 grids. The types of input grids must have a * operator
 template <class T>

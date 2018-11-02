@@ -14,6 +14,9 @@
 // \date 26 Dec 2007
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 struct vidl_ffmpeg_ostream::pimpl
 {

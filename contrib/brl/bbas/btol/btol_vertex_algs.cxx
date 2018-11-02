@@ -5,6 +5,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "btol_edge_algs.h"
 #include <vtol/vtol_vertex.h>
 #include <vtol/vtol_vertex_2d.h>

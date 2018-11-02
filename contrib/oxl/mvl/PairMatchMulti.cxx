@@ -12,6 +12,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vbl/vbl_sparse_array_2d.h>
 #include <vnl/vnl_matrix.h>

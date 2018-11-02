@@ -10,6 +10,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_fwd.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mipa/mipa_vector_normaliser.h>

@@ -19,6 +19,9 @@
 #include <bvpl/kernels/bvpl_kernel_factory.h>
 #include <bvpl/functors/bvpl_local_max_functor.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h>
 #include <vul/vul_file.h>
 

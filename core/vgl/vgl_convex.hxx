@@ -8,6 +8,9 @@
 #include <list>
 #include "vgl_convex.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Calculate the negative cosine of the angle from dir to next - current.

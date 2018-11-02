@@ -8,6 +8,9 @@
 #include "bocl_device_info.h"
 #include "bocl_mem.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bocl_kernel::create_kernel(cl_context* context,
                                 cl_device_id* device,

@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <pop/pop_vertex.h>
 #include <pop/pop_edge.h>

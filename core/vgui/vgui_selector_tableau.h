@@ -15,6 +15,9 @@
 #include <vector>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vgui/vgui_tableau.h>
 #include <vgui/vgui_parent_child_link.h>

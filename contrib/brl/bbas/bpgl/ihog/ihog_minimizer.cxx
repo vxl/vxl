@@ -12,6 +12,9 @@
 #include <vnl/algo/vnl_levenberg_marquardt.h>
 #include <vnl/algo/vnl_powell.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // generate a pyramid of transforms corresponding to the vil_image_pyramid
 static  std::vector<ihog_transform_2d>

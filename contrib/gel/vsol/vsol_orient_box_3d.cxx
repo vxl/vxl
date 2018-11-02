@@ -8,6 +8,9 @@
 #include <vgl/vgl_point_3d.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vsol_orient_box_3d::vsol_orient_box_3d(vgl_orient_box_3d<double> const& orient_box)
  : orient_box_(orient_box)

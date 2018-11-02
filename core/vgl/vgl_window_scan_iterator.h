@@ -13,6 +13,9 @@
 
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_region_scan_iterator.h>
 
 //: Iterator to scan rectangular windows

@@ -17,6 +17,9 @@
 #include <bvpl/bvpl_octree/bvpl_taylor_scenes_map.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 
 //: Binary save parameters to stream.

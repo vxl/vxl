@@ -6,6 +6,9 @@
 #include "vil_binary_erode.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Erodes src_image to produce dest_image (assumed single plane)
 void vil_binary_erode(const vil_image_view<bool>& src_image,

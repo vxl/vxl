@@ -1,6 +1,9 @@
 // This is core/vul/io/tests/test_user_info_io.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_user_info.h>
 #include <vul/io/vul_io_user_info.h>
 #include <vsl/vsl_binary_io.h>

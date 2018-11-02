@@ -6,6 +6,9 @@
 #include <bkml/bkml_write.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: construct the locs_ and pixels_ vectors by generating a hypothesis according to interval amounts in given the tile.
 //  Intervals are in meters.

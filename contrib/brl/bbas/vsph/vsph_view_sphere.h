@@ -23,6 +23,9 @@
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 class vsph_view_sphere

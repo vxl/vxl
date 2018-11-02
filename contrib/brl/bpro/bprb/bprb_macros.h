@@ -20,6 +20,9 @@
 #include <brdb/brdb_relation.h>
 #include <brdb/brdb_tuple.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define REG_PROCESS(proc, T) \
   T ::register_process( bprb_process_sptr( new proc() ) )

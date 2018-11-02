@@ -26,6 +26,9 @@
 #include <mcal/mcal_sparse_basis_cost.h>
 #include <mcal/mcal_var_basis_cost.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //=======================================================================
 

@@ -8,6 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <pdf1d/pdf1d_sampler.h>
 #include <vnl/vnl_random.h>
 class pdf1d_mixture;

@@ -10,6 +10,9 @@
 //=========================================================================
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Draw a string of font symbols.
 void vgui_font::draw(const std::string& str, unsigned int size) const

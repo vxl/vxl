@@ -19,6 +19,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Binary save bsta_von_mises to stream.
 template <class T, unsigned n>

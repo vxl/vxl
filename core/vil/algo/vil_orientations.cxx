@@ -7,6 +7,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute orientation (in radians) and gradient magnitude at each pixel
 void vil_orientations(const vil_image_view<float>& grad_i,

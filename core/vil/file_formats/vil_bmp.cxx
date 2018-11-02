@@ -10,6 +10,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream.h>
 #include <vil/vil_property.h>
 #include <vil/vil_memory_chunk.h>

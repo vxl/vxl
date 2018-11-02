@@ -20,6 +20,9 @@
 #include <boxm2/boxm2_util.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // camera includes
 #include <vpgl/vpgl_perspective_camera.h>

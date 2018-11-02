@@ -16,6 +16,9 @@
 #include <vector>
 #include <vtol/vtol_topology_object.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timestamp.h>
 
 class vtol_vertex;

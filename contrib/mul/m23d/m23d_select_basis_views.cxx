@@ -10,6 +10,9 @@
 #include <mbl/mbl_random_n_from_m.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Select a subset most suitable for use as a basis set
 //  Data matrix is 2ns x np (ns= number of samples, np = number of points)

@@ -16,6 +16,9 @@
 #include <vgl/algo/vgl_p_matrix.h>
 #include <vgl/algo/vgl_h_matrix_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_distance.h>

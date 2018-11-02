@@ -17,6 +17,9 @@
 #include <vnl/vnl_inverse.h> // used for negative powers
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vnl/vnl_export.h"
 
 //: Calculates nth power of a vnl_matrix_fixed (not using svd)

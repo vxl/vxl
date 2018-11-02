@@ -4,6 +4,9 @@
 #include "test_driver.h"
 #include <testlib/testlib_register.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 DECLARE( vipl_test_histogram );
 DECLARE( vipl_test_erode_disk );

@@ -8,6 +8,9 @@
 #include <cstddef>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A simple wrapper for a buffer.
 //  This class does not have ownership over data,

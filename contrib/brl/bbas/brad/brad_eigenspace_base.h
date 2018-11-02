@@ -14,6 +14,9 @@
 #include <string>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_binary_io.h>
 #include <brad/brad_eigenspace_sptr.h>
 #include <brad/brad_hist_prob_feature_vector.h>

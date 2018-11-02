@@ -5,6 +5,9 @@
 #include "bwm_io_kml_parser.h"
 #include <expatpp.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 bool bwm_io_kml_camera::read_camera(std::string const& camera_path,
                                     double& right_fov, double& top_fov,
                                     double& altitude, double& heading,

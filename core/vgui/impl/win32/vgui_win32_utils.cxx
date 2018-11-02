@@ -5,6 +5,9 @@
 #include "vgui_win32_utils.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // (Create if necessary and) return singleton instance of this class.
 vgui_win32_utils* vgui_win32_utils::instance()

@@ -7,6 +7,9 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvgl/bvgl_changes.h>
 #include <bvgl/bvgl_changes_sptr.h>
 #define NI "ni"

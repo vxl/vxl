@@ -8,6 +8,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static int MEAN_FLAG = 1;
 static int SD_FLAG = 2;

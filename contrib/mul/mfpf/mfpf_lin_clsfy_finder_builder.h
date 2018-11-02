@@ -13,6 +13,9 @@
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Builds mfpf_region_finder objects which use a linear classifier.
 //  Resulting mfpf_region_finder is set up with a mfpf_log_lin_class_cost

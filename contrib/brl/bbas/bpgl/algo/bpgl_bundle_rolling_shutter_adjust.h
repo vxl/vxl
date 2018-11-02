@@ -17,6 +17,9 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Computes the residuals for bundle adjustment given that the cameras share a fixed internal calibration, shared rolling rate which needs to be estimated

@@ -11,6 +11,9 @@
 #include "rgrl_feature_sptr.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_array_2d.h>
 
 //: For each "from" feature, match the boundary points with the k nearest "to" features.

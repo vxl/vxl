@@ -22,6 +22,9 @@
 #include <vil3d/algo/vil3d_gauss_reduce.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mbl/mbl_log.h>
 
 

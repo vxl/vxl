@@ -11,6 +11,9 @@
 #include <fstream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vtol/vtol_intensity_face_sptr.h>
 #include <vsol/vsol_polygon_3d_sptr.h>
 #include <vil/vil_image_view.h>

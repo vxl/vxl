@@ -20,6 +20,9 @@
 #include <vnl/io/vnl_io_vector_fixed.h>
 #include <vsl/vsl_vector_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Binary save bsta_parzen_sphere to stream.
 template <class T, unsigned n>

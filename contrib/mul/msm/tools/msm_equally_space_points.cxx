@@ -13,6 +13,9 @@
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <msm/msm_equally_space.h>
 #include <mbl/mbl_stats_1d.h>
 /*

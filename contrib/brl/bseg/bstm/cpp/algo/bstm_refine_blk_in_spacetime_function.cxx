@@ -3,6 +3,9 @@
 #include "bstm_refine_blk_in_spacetime_function.h"
 #include <bstm/io/bstm_lru_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 bool bstm_refine_blk_in_spacetime_function::init_data(bstm_time_block* blk_t, bstm_block* blk, std::vector<bstm_data_base*> & datas, float prob_thresh)

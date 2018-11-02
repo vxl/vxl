@@ -11,6 +11,9 @@
 #include <rgrl/rgrl_transformation_sptr.h>
 #include <rgrl/rgrl_transformation.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A base class that represents a pair of transformation: forward & backward
 //

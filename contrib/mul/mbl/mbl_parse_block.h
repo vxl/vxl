@@ -11,6 +11,9 @@
 #include <istream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Read a block of text from a stream.
 // This function will read through a stream, and store the text found to a string.

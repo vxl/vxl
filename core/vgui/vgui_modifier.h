@@ -11,6 +11,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Enum of modifiers for key-strokes and mouse presses.
 enum vgui_modifier {

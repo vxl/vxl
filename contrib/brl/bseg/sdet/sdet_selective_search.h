@@ -25,6 +25,9 @@
 #include <queue>
 #include <set>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include "sdet_region.h"
 #include "sdet_selective_search_params.h"

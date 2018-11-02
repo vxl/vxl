@@ -13,6 +13,9 @@
 // \brief test mfpf_patch_data
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mfpf/mfpf_patch_data.h>
 #include <mfpf/mfpf_add_all_loaders.h>
 

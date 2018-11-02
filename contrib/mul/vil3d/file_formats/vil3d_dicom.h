@@ -11,6 +11,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/vil3d_file_format.h>
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/file_formats/vil3d_slice_list.h>

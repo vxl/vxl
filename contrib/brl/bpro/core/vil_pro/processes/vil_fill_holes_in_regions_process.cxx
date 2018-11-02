@@ -10,6 +10,9 @@
 #include <vil/algo/vil_blob.h>
 #include <vil/algo/vil_binary_closing.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Constructor
 bool vil_fill_holes_in_regions_process_cons(bprb_func_process& pro)

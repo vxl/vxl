@@ -19,6 +19,9 @@
 #include <algorithm>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //const char* spherical_attributes_names[] = {"MIN_DEPTH","MAX_DEPTH","DEPTH_ORDER","DEPTH_INTERVAL","ORIENTATION","NLCD","SKY"};
 enum spherical_region_attributes

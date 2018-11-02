@@ -10,6 +10,9 @@
 #include <utility>
 #include <mfpf/mfpf_pose.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Defines pose and shape (box/ellipse etc) of a region
 //  General purpose object.  form() gives shape (eg "box", "ellipse")

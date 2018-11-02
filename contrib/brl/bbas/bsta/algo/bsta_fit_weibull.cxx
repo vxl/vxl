@@ -7,6 +7,9 @@
 #include <vnl/vnl_gamma.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //this function computes the model value for (mean/standard_dev)^2 as

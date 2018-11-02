@@ -29,6 +29,9 @@
 #include <vsl/vsl_binary_io.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // Ignores Scale and Orientation computations and produces a sift descriptor at the scale of the image,

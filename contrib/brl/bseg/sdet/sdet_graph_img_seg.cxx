@@ -5,6 +5,9 @@
 #include "sdet_graph_img_seg_sptr.h"
 //
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vil/vil_load.h>
 #include <vil/vil_math.h>

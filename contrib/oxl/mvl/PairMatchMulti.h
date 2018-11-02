@@ -28,6 +28,9 @@
 #include <cstdlib>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "PairMatchMultiIterator.h"
 
 template <class T> class vbl_sparse_array_2d;

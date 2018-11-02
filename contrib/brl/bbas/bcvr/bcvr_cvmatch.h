@@ -23,6 +23,9 @@
 #include <bsol/bsol_intrinsic_curve_2d_sptr.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "bcvr_cv_cor_sptr.h"
 

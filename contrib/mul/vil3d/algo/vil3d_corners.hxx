@@ -14,6 +14,9 @@
 #include <vil3d/algo/vil3d_smooth_121.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute gradients, products and smoothed versions
 template <class srcT, class destT>

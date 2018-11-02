@@ -12,6 +12,9 @@ class vil_stream;
 #include "vil_nitf2_field_sequence.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Class for representing a single data extension segment (DES) in
 // a NITF 2.x file.  This class can handle TRE overflow DES (DESID=TRE_OVERFLOW)

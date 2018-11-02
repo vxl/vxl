@@ -4,6 +4,9 @@
 #include <ctime>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 #include <vil3d/vil3d_reflect.h>
 #include <vil3d/vil3d_print.h>

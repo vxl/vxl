@@ -32,6 +32,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A templatized subclass that can work with different curve models
 template <class curve_model>

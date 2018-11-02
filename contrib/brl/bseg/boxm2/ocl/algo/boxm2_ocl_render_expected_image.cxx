@@ -10,6 +10,9 @@
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <brad/brad_image_metadata.h>
 #include <brad/brad_atmospheric_parameters.h>

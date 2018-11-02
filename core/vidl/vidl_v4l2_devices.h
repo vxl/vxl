@@ -13,6 +13,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vidl_v4l2_device.h"
 #include "vidl_v4l2_device_sptr.h"
 

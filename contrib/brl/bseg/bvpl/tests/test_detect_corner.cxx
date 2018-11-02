@@ -20,6 +20,9 @@
 #include <vnl/vnl_float_3.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_sf1;
 

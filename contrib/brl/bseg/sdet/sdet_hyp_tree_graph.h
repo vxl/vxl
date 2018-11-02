@@ -16,6 +16,9 @@
 #include <list>
 #include <set>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <sdet/sdet_edgel.h>
 #include <sdet/sdet_curvelet.h>

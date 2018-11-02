@@ -13,6 +13,9 @@
 #include <mbl/mbl_chord.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Searches to minimise a cost of pixels in an arbitrary region.
 //  Samples intensities in a region of interest, defined by the set of mbl_chords roi_.

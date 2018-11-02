@@ -11,6 +11,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_fwd.h>
 #include <vnl/vnl_fwd.h>
 #include <vpgl/vpgl_calibration_matrix.h>

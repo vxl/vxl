@@ -11,6 +11,9 @@
 #include "vil_na.h"
 #include <vxl_config.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A particular qNaN to indicate not available.
 // This returns the bit pattern 0x7ff00000000007a2, as used by Octave and R

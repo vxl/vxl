@@ -3,6 +3,9 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/vil3d_image_resource.h>
 #include <vil3d/vil3d_math.h>
 #include <vil3d/vil3d_new.h>

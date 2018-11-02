@@ -7,6 +7,9 @@
 #include "bsta_joint_histogram.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "bsta_gauss.h"
 #include <vnl/vnl_math.h> // for log2e == 1/std::log(2.0)
 template <class T>

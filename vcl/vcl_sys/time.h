@@ -2,6 +2,9 @@
 #define vcl_sys_time_h_
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #ifndef _WIN32
 #include <sys/times.h>

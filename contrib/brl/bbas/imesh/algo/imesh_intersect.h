@@ -18,6 +18,9 @@
 #include <imesh/imesh_mesh.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Intersect the ray from point p with direction d and the triangle defined by a,b,c

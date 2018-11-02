@@ -14,6 +14,9 @@ extern "C" {
 char const* vil1_viff_format_tag = "viff";
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vil1/vil1_stream.h>
 #include <vil1/vil1_image_impl.h>

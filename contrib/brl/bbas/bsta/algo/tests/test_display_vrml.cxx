@@ -6,6 +6,9 @@
 #include <bsta/algo/bsta_display_vrml.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 static void test_display_vrml()
 {
   vnl_vector_fixed<float, 3> mean(0.0f, 0.0f, 0.0f);

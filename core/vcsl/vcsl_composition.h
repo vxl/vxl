@@ -18,6 +18,9 @@
 #include <vcsl/vcsl_spatial_transformation.h>
 #include <vcsl/vcsl_composition_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Composition of transformations
 // This transformation handles a composition of transformations, that is,

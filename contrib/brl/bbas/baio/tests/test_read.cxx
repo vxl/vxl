@@ -5,6 +5,9 @@
 #include <testlib/testlib_root_dir.h>
 #include <baio/baio.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_random.h>
 #include <vpl/vpl.h>
 

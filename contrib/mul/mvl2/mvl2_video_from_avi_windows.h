@@ -8,6 +8,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // If we must use windows.h, we should at least sanitise it first
 #ifndef NOMINMAX
 # define NOMINMAX

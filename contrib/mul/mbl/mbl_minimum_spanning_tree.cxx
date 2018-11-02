@@ -6,6 +6,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vnl/vnl_vector.h> // for vnl_matrix<double>::get_row()
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Select the smallest pair s.t. first is in \param a, second in \param b
 static std::pair<unsigned,unsigned> mbl_mst_next_pair(

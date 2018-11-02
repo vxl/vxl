@@ -1,6 +1,9 @@
 // This is mul/pdf1d/tests/test_exponential.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <pdf1d/pdf1d_exponential.h>
 #include <pdf1d/pdf1d_sampler.h>
 #include <testlib/testlib_test.h>

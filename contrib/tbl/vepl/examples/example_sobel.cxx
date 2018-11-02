@@ -15,6 +15,9 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int
 main(int argc, char** argv) {

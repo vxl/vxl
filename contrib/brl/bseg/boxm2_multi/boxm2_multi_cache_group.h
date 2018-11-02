@@ -13,6 +13,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: a helper class that groups together contiguous blocks across devices.
 // Essentially this enforces that a group contains just one block per device,

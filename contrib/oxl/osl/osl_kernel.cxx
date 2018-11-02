@@ -10,6 +10,9 @@
 #include <cmath>
 #include "osl_kernel.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 
 // Construct one half of a Gaussian convolution kernel.

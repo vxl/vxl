@@ -21,6 +21,9 @@
 
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgui/vgui_toolkit.h>
 class vgui_mfc_adaptor;
 class vgui_mfc_window;

@@ -5,6 +5,9 @@
 // \file
 #include <vgl/vgl_distance.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Returns indices in visibility order (for group's blocks)
 std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr cam)

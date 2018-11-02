@@ -25,6 +25,9 @@
 // other includes
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class boxm2_multi_cache;
 typedef vbl_smart_ptr<boxm2_multi_cache> boxm2_multi_cache_sptr;

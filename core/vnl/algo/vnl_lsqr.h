@@ -27,6 +27,9 @@
 #include <vnl/vnl_vector.h>
 #include <vnl/vnl_linear_system.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vnl/algo/vnl_algo_export.h>
 

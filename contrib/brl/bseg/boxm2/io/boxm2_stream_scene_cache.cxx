@@ -6,6 +6,9 @@
 // \file
 #include <vgl/vgl_box_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 boxm2_stream_scene_cache::boxm2_stream_scene_cache(boxm2_scene_sptr scene,
                                                    std::vector<std::string> data_types,

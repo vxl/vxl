@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil3d/vil3d_fwd.h>
 class vimt3d_transform_3d;
 class vimt3d_image_3d;

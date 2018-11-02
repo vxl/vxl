@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // Utilities, OpenCL and system includes
 #include <GL/glew.h>
 #include <bocl/bocl_cl.h>

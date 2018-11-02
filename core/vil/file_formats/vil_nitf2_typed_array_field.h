@@ -10,6 +10,9 @@
 #include <map>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2.h"

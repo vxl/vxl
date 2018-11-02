@@ -23,6 +23,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vdgl/vdgl_fit_lines_params.h>
 #include <vtol/vtol_edge.h>
 #include <vtol/vtol_edge_sptr.h>

@@ -9,6 +9,9 @@
 #include <string>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // not used? #include <iostream>
 
 #include "vil_nitf2.h" // vil_nitf2_istream, vil_nitf2_ostream

@@ -6,6 +6,9 @@
 #include <vil/vil_load.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // TODO: Save an image with the location of all the features.
 

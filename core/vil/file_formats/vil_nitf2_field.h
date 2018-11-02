@@ -10,6 +10,9 @@
 #include <string>
 // not used? #include <sstream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vil_nitf2_date_time;
 class vil_nitf2_location;

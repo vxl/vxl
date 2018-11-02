@@ -10,6 +10,9 @@
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Builder for mfpf_edge_finder objects.
 class mfpf_edge_finder_builder : public mfpf_point_finder_builder

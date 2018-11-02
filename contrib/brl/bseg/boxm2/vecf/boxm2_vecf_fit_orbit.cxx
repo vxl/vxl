@@ -11,6 +11,9 @@
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 # define USE_SPHERE 0
 # define SET_CREASE_T 0
 void boxm2_vecf_fit_orbit::fill_smid_map(){

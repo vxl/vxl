@@ -12,6 +12,9 @@
 // \brief test msdi_reflected_marked_images
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <msdi/msdi_reflected_marked_images.h>
 #include <msdi/msdi_array_of_marked_images.h>
 #include <vimt/vimt_image_2d_of.h>

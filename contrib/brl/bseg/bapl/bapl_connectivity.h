@@ -19,6 +19,9 @@
 #include <bapl/bapl_keypoint_sptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 typedef std::pair< int, bapl_keypoint_sptr > bapl_image_key;
 typedef std::vector< bapl_image_key > bapl_image_key_vector;

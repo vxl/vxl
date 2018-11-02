@@ -18,6 +18,9 @@
 #include <cstring>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vil/vil_image_view.h>
 #include <vil/vil_image_resource.h>

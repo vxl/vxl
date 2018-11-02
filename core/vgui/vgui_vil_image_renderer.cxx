@@ -11,6 +11,9 @@
 // Cut-n-paste and modify from vil1_image_renderer.cxx
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_timer.h>
 #include <vil/vil_property.h>
 #include <vil/vil_image_resource.h>

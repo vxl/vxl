@@ -1,6 +1,9 @@
 #include <iostream>
 #include <cctype>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Test the functionality, and also cause a link to make sure the
 // function exists.

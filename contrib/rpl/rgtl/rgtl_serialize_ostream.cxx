@@ -9,6 +9,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //----------------------------------------------------------------------------
 bool rgtl_serialize_ostream::okay() const

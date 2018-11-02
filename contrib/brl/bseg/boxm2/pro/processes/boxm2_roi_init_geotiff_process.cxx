@@ -25,6 +25,9 @@
 #include <vil/vil_resample_bilin.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace boxm2_roi_init_geotiff_process_globals
 {

@@ -9,6 +9,9 @@
 #include <iostream>
 #include <memory>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "rgrl_scale_estimator.h"
 
 #include <vnl/vnl_matrix.h>

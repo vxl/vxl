@@ -20,6 +20,9 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/file_formats/vpgl_geo_camera.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>

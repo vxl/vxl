@@ -14,6 +14,9 @@
 #include <vgl/vgl_intersection.h>
 #include <vgl/algo/vgl_intersection.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool is_mesh_in_block(imesh_mesh & mesh, vgl_box_3d<double> block_bbox,vpgl_lvcs& lvcs, bool use_lvcs)
 {

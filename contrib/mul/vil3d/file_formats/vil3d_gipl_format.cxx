@@ -12,6 +12,9 @@
 #include <vector>
 #include "vil3d_gipl_format.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream_read.h>
 #include <vil/vil_stream_fstream.h>
 #include <vil3d/vil3d_image_view.h>

@@ -34,6 +34,9 @@ bool vul_debug_core_dump_in_windows_se(const char * filename,
                                        void* pep);
 #include <exception>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A translated structured exception.
 class vul_debug_windows_structured_exception : public std::exception

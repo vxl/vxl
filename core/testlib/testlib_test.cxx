@@ -20,6 +20,9 @@
 // Created: 25-Apr-2002: AGAP Modified copy of testlib_test
 //
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static int num_test;
 static int tests_passed;

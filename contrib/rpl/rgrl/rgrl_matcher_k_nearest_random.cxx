@@ -13,6 +13,9 @@
 #include <rgrl/rgrl_match_set.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rgrl_matcher_k_nearest_random::
 rgrl_matcher_k_nearest_random( unsigned int k, unsigned int max_num )

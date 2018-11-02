@@ -25,6 +25,9 @@
 #include <bvxm/bvxm_edge_ray_processor.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_rpc_registration_process_cons(bprb_func_process& pro)

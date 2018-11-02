@@ -12,6 +12,9 @@
 #include <mfpf/mfpf_pose.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Draw an open polygon by jointing pose(ref_pts[i]) to pose(ref_pts[i+1])
 void mfpf_draw_pose_lines(vimt_image_2d_of<vxl_byte>& image,

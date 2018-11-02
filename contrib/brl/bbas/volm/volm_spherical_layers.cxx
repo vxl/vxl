@@ -6,6 +6,9 @@
 #include <volm/volm_spherical_container.h>
 #include <volm/volm_spherical_shell_container.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bsol/bsol_algs.h>
 
 #define TOL -1E-8

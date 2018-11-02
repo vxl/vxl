@@ -4,6 +4,9 @@
 #include <bvpl/bvpl_direction_to_color_map.h>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Test changes
 static void test_direction_to_color_map()

@@ -5,6 +5,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_numeric_traits.h>
 #include <vil1/vil1_memory_image_of.h>
 #include <vsol/vsol_box_2d.h>

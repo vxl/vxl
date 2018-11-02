@@ -33,6 +33,9 @@
 #include <vsol/vsol_point_2d_sptr.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 class vsol_triangle_2d;
 class vsol_rectangle_2d;
 

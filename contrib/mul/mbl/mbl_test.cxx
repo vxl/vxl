@@ -13,6 +13,9 @@
 // \date  Aug 2005
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <vul/vul_expand_path.h>
 #include <mbl/mbl_config.h>

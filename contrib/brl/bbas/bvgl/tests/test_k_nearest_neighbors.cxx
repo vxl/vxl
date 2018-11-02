@@ -6,6 +6,9 @@
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <bnabo/bnabo.h>

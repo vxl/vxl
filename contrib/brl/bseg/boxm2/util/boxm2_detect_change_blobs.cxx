@@ -8,6 +8,9 @@
 #include <vil/algo/vil_threshold.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 float boxm2_change_blob::percent_overlap(boxm2_change_blob& blob)

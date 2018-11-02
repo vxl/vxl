@@ -14,6 +14,9 @@
 #include <volm/volm_buffered_index.h>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void error_report(std::string error_file, std::string error_msg)
 {

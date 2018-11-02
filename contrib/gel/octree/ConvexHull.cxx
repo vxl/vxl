@@ -15,6 +15,9 @@
 #include <cstdlib>
 #include "ConvexHull.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define CMPM(c,A,B) \
         v = (*(const double*const*)A)[c] - (*(const double*const*)B)[c];\

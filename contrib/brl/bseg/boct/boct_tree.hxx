@@ -6,6 +6,9 @@
 #include <cmath>
 #include "boct_tree.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/io/vgl_io_box_3d.h>

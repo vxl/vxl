@@ -3,6 +3,9 @@
 #include "volm_desc_land.h"
 #include <volm/volm_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_category_io.h>
 
 #if 0

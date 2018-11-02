@@ -10,6 +10,9 @@
 #include <vgui/vgui_clear_tableau.h>
 #include <vgui/vgui_tview_launcher_tableau.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vgui_event_condition vgui_shell_tableau_bindings::default_quit  = vgui_event_condition( vgui_key('q'), vgui_ALT );
 vgui_event_condition vgui_shell_tableau_bindings::default_close = vgui_event_condition( vgui_key('w'), vgui_ALT );

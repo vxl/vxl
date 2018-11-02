@@ -6,6 +6,9 @@
 #include <rrel/rrel_wls_obj.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 rrel_estimation_problem::rrel_estimation_problem( unsigned int dof,

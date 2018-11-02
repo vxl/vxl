@@ -8,6 +8,9 @@
 #include "mipa_sample_histo_boxes.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Extract data from an image of histograms over nested boxes
 //  Assume h_im(i,j,A) gives frequency stored in angle bin A

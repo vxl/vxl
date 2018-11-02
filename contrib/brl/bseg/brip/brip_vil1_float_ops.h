@@ -25,6 +25,9 @@
 #include <iostream>
 #include <complex>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_matrix.h>
 #include <vbl/vbl_array_2d.h>
 #include <vsol/vsol_box_2d_sptr.h>

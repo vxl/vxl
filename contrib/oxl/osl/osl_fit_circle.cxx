@@ -7,6 +7,9 @@
 #include <cmath>
 #include "osl_fit_circle.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_double_2.h>
 #include <vnl/algo/vnl_svd.h>
 

@@ -9,6 +9,9 @@
 #include <utility>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "boxm2_vecf_fit_fat_pocket.h"
 #include "boxm2_vecf_middle_fat_pocket.h"
 #include <vnl/vnl_matrix.h>

@@ -22,6 +22,9 @@
 #include <list>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Return the intersection point of vector of planes.
 // \relatesalso vgl_plane_3d

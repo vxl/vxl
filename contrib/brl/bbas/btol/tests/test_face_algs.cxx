@@ -3,6 +3,9 @@
 #include <string>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_polygon.h>
 #include <vtol/vtol_vertex_2d_sptr.h>

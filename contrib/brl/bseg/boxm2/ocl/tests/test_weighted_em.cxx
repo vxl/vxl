@@ -17,6 +17,9 @@
 #include <bocl/bocl_mem.h>
 #include <bocl/bocl_device.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>

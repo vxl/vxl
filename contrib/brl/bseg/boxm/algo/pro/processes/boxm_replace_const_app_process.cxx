@@ -9,6 +9,9 @@
 // \date July 28, 2009
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <boxm/boxm_scene_base.h>
 #include <boxm/boxm_scene.h>

@@ -14,6 +14,9 @@
 #include <vnl/vnl_vector_fixed.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:global variables
 namespace bvpl_grad_scene_to_bin_process_globals

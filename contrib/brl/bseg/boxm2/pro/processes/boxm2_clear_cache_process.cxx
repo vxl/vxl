@@ -11,6 +11,9 @@
 #include <bprb/bprb_func_process.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/io/boxm2_cache.h>
 #include <boxm2/io/boxm2_lru_cache.h>

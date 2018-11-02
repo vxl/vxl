@@ -16,6 +16,9 @@
 #include <cmath>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: the canny_deriche filter for 1d pass.
 template <class srcT, class destT, class accumT>

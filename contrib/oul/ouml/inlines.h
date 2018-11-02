@@ -4,6 +4,9 @@
 #include <iostream>
 #include <cmath>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 inline bool epsilon_equals(double d1, double d2, double epsilon=1.0e-6)
 {

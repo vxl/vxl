@@ -45,6 +45,9 @@
 #include <iostream>
 #include <list>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <osl/osl_fit_lines_params.h>
 #include <osl/osl_topology.h>
 #include <osl/osl_canny_port.h>

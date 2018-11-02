@@ -17,6 +17,9 @@
 #include <vgl/vgl_line_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // The old signature vgl_lineseg_test() was incorrectly documented. Its
 // meaning was the same as the new vgl_lineseg_test_line(). Only you can

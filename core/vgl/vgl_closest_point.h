@@ -26,6 +26,9 @@
 #include <limits>
 #include <vgl/vgl_fwd.h> // forward declare various vgl classes
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_infinite_line_3d.h>
 //: Closest point to \a (x,y) on the line segment \a (x1,y1)-(x2,y2)
 template <class T>

@@ -16,6 +16,9 @@
 #include <cstddef>
 #include "bocl/bocl_cl.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define SDK_SUCCESS 0
 #define SDK_FAILURE 1

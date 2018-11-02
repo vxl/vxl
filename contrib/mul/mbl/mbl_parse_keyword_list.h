@@ -10,6 +10,9 @@
 #include <vector>
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Read in keyword separated blocks of text from stream.
 // Assumes list of blocks separated by a keyword.

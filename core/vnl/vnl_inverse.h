@@ -20,6 +20,9 @@
 #include <vnl/vnl_det.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vnl/vnl_export.h"
 
 //: Calculates inverse of a small vnl_matrix_fixed (not using svd)

@@ -13,6 +13,9 @@
 #include <vimt/vimt_image_pyramid_builder.h>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Build difference of gaussian pyramids of vimt_image_2d_of<T>
 //  Computes each layer of a pyramid by smoothing

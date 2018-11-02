@@ -76,6 +76,9 @@
 #include <map>
 #include <ios>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 // define MBL_LOG_DISABLE_ALL_LOGGING to stop all logging.

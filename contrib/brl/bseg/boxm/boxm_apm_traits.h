@@ -21,6 +21,9 @@
 #include <boxm/sample/boxm_edge_sample.h>
 #include <boxm/sample/boxm_inf_line_sample.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "boxm_export.h"
 
 class boxm_mog_grey_processor;

@@ -8,6 +8,9 @@
 #include <boxm2/volm/boxm2_volm_locations.h>
 #include <vgl/vgl_box_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool volm_buffered_index_params::write_params_file(std::string index_file_name_pre)
 {

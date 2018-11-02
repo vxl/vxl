@@ -11,6 +11,9 @@
 #include <string>
 #include "vimt_gaussian_pyramid_builder_2d_general.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vil/algo/vil_gauss_reduce.h>
 #include <vgl/vgl_point_2d.h>

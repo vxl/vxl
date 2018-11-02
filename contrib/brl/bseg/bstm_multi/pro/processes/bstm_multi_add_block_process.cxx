@@ -15,6 +15,9 @@
 #include <utility>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_box_3d.h>
 
 #include <bprb/bprb_func_process.h>

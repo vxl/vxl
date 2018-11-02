@@ -14,6 +14,9 @@
 #include <vil/vil_resample_bilin.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Calculate theta in range 0 to x
 static inline double calc_theta_mod(double theta, double x)

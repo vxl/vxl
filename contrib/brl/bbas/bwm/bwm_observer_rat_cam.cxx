@@ -37,6 +37,9 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bmsh3d/bmsh3d_textured_mesh_mc.h>
 #include <vpgl/vpgl_local_rational_camera.h>

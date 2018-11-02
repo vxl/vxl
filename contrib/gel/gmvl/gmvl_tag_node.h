@@ -15,6 +15,9 @@
 #include <utility>
 #include <gmvl/gmvl_node.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class gmvl_tag_node : public gmvl_node
 {

@@ -26,6 +26,9 @@
 #include <vector>
 #include <cstdio>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #undef sprintf // works around a bug in libintl.h
 
 #include <vnl/vnl_matrix.h>

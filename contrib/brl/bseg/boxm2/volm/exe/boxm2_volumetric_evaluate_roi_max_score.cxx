@@ -16,6 +16,9 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bvrml/bvrml_write.h>
 
 int main(int argc, char** argv)

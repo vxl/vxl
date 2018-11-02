@@ -18,6 +18,9 @@
 #include <vgl/vgl_infinite_line_3d.h>
 #include <vnl/vnl_random.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static const unsigned int test_num=10;
 static const unsigned int test_set=10;

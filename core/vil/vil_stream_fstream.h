@@ -17,6 +17,9 @@
 // \date 16 Feb 00
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_stream.h>
 #include <vxl_config.h>
 

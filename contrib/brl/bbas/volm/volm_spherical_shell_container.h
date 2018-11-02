@@ -30,6 +30,9 @@
 #include <cstddef>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vsph/vsph_spherical_coord_sptr.h>
 #include <vsph/vsph_spherical_coord.h>

@@ -5,6 +5,9 @@
 #include <iostream>
 #include "bapl_keypoint.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Print a summary of the keypoint data to a stream
 std::ostream& operator<< (std::ostream& os, bapl_keypoint const & k)

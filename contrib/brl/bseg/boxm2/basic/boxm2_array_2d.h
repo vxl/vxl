@@ -6,6 +6,9 @@
 #include <iostream>
 #include <cstddef>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: simple wrapper for a 1D buffer (re interpreted as 2D)
 template <class T>

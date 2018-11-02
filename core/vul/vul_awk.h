@@ -24,6 +24,9 @@
 #include <iosfwd>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: The core of awk
 // vul_awk reads lines from a std::istream and breaks them into whitespace-separated

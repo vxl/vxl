@@ -10,6 +10,9 @@
 #include <bprb/bprb_parameters.h>
 #include <bsta/bsta_random_wrapper.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <brdb/brdb_value.h>
 
 //: sets input and output types

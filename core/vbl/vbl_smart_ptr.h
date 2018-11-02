@@ -19,6 +19,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A templated smart pointer class
 // This class requires that the class being templated over has

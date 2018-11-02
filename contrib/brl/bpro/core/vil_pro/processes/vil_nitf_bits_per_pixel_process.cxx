@@ -9,6 +9,9 @@
 #include <vil/vil_load.h>
 #include <vil/file_formats/vil_nitf2_image.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bprb/bprb_func_process.h>
 //: set input and output types
 bool vil_nitf_bits_per_pixel_process_cons(bprb_func_process& pro)

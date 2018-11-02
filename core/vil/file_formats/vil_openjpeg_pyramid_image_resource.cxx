@@ -7,6 +7,9 @@
 // DISTAR Case 14074
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // By definition, each level is a factor of 2 reduced in scale
 static float scale_at_level(unsigned level)

@@ -12,6 +12,9 @@
 #include "bsta_gaussian_sphere.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //helper classes to support partial template instantiation on dimension
 //these functions work for any dimension

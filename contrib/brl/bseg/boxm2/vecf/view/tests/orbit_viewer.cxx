@@ -3,6 +3,9 @@
 #include "../boxm2_vecf_orbit_tableau.h"
 //executable args
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vgui/vgui.h>

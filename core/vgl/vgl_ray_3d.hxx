@@ -8,6 +8,9 @@
 #include "vgl_ray_3d.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_tolerance.h>
 template <class Type>

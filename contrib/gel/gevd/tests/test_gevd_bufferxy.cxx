@@ -4,6 +4,9 @@
 #include <iostream>
 #include <cstring>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h>
 #include <testlib/testlib_test.h>
 #include <gevd/gevd_bufferxy.h>

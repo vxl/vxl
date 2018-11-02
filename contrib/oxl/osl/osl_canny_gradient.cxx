@@ -10,6 +10,9 @@
 #include <cmath>
 #include "osl_canny_gradient.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // smooth_  is the (smoothed, presumably) input image.
 // dx_, dy_ are the output x, y gradient images.

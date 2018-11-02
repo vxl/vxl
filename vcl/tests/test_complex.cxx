@@ -5,6 +5,9 @@
 #include <iostream>
 #include <complex>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 std::complex<double> doublify(std::complex<float> const &z)

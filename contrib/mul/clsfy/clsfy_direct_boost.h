@@ -12,6 +12,9 @@
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Classifier using adaboost on combinations of simple 1D classifiers
 //  Uses a weighted combination of 1D classifiers applied to the

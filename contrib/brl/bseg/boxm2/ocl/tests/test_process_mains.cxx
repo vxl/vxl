@@ -8,6 +8,9 @@
 #include <testlib/testlib_root_dir.h>
 #include <vcl_where_root_dir.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_util.h>
 #include <bocl/bocl_manager.h>

@@ -28,6 +28,9 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // TODO: During tree construction we should check the set of objects
 // in the current node.  Those with no boundary inside the node should

@@ -15,6 +15,9 @@
 // Test construction, IO etc.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 
 #include <clsfy/clsfy_add_all_loaders.h>

@@ -9,6 +9,9 @@
 // \date April 14, 2014
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_utm.h>
 
 // global variables and functions

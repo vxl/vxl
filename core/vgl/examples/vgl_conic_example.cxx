@@ -2,6 +2,9 @@
 // written by Peter Vanroose, ESAT, K.U.Leuven, Belgium, 5 October 2001.
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vgl/vgl_conic.h>
 #include <vgl/vgl_box_2d.h>

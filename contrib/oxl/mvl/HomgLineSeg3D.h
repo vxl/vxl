@@ -21,6 +21,9 @@
 #include <mvl/HomgOperator3D.h>
 #include <mvl/HomgPoint3D.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class HomgLineSeg3D : public HomgLine3D
 {

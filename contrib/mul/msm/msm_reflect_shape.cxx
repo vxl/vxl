@@ -9,6 +9,9 @@
 #include "msm_reflect_shape.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Reflect points in the line x=ax, then re-number
 //  On exit, new_points[i] = points[relabel[i]] reflected in x=ax

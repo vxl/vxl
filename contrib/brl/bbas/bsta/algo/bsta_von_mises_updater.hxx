@@ -7,6 +7,9 @@
 #include <limits>
 #include "bsta_von_mises_updater.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 //: The main function
 template <class von_mises_dist_>

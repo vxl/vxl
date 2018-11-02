@@ -11,6 +11,9 @@
 #include <mfpf/mfpf_point_finder.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Locates strongest edge along a profile.
 class mfpf_edge_finder : public mfpf_point_finder

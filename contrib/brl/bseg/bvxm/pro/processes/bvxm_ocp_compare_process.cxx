@@ -8,6 +8,9 @@
 #include <bprb/bprb_parameters.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bprb/bprb_process.h>
 
 #include <bvxm/bvxm_world_params.h>

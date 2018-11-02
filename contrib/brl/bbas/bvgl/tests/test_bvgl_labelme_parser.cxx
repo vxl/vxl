@@ -7,6 +7,9 @@
 
 #include <bvgl/bvgl_labelme_parser.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 
 static std::string test_xml_file()

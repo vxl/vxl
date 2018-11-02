@@ -5,6 +5,9 @@
 #include <iostream>
 #include "boxm2_array_1d.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template<class T>
 std::ostream& operator<< (std::ostream &os, boxm2_array_1d<T> const& array)

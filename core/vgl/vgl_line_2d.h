@@ -24,6 +24,9 @@
 
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vgl/vgl_fwd.h> // forward declare vgl_point_2d and vgl_homg_line_2d
 #include <vgl/vgl_vector_2d.h>

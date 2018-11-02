@@ -13,6 +13,9 @@
 #include <vil/vil_chord.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 namespace brip_blob_intersection_process_globals
 {

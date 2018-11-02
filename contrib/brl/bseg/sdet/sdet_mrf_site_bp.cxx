@@ -7,6 +7,9 @@
 
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 sdet_mrf_site_bp::sdet_mrf_site_bp(unsigned n_labels, float lambda, float truncation_cost)
   : lambda_(lambda), truncation_cost_(truncation_cost), prior_(0),

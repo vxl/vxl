@@ -20,6 +20,9 @@
 #include <cstddef>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_pixel_format.h>
 #include <vil/vil_smart_ptr.h>
 #include <vgl/vgl_box_3d.h>

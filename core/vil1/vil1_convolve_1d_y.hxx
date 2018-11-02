@@ -9,6 +9,9 @@ croak
 #include <cstdlib>
 #include "vil1_convolve.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class I1, class I2, class AC, class O>
 void vil1_convolve_1d_y(vil1_convolve_signal_1d<I1 const> const &kernel,

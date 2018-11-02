@@ -8,6 +8,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Define elements { (p_i[k],p_j[k]) }
 void vil_structuring_element::set(const std::vector<int>& v_p_i,const std::vector<int>& v_p_j)

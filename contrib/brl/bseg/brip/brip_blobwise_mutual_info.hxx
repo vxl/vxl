@@ -18,6 +18,9 @@
 #include <vil/vil_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Calculate the Mutual Information between the images.
 template<class T>

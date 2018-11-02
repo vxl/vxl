@@ -11,6 +11,9 @@
 #include <boxm2/cpp/algo/boxm2_gauss_grey_processor.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <boxm2_data_type APM_TYPE>
 class boxm2_update_with_shadow_pass2_functor

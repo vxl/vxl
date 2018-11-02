@@ -16,6 +16,9 @@
 
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vgui_dialog_impl.h"
 
 //: vgui_dialog_extensions_impl is the abstract base class for dialog extensions implementation.

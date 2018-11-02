@@ -10,6 +10,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_fwd.h>
 #include <mipa/mipa_block_normaliser.h>
 #include <mipa/mipa_identity_normaliser.h>

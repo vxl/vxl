@@ -15,6 +15,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: enables to handle partitions with actually choosing the representative for each set.
 // vbl_controlled_partition provides a way to choose while merging the representative for each set. It can be used

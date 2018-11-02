@@ -2,6 +2,9 @@
 #include <vxl_copyright.h>
 #include <vxl_version.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int main (int argc, char * argv[])
 {

@@ -22,6 +22,9 @@
 #include <vtol/vtol_face_2d_sptr.h>
 #include <vtol/vtol_one_chain_sptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class btol_face_algs
 {

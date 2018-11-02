@@ -15,6 +15,9 @@
 #include <utility>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vcsl/vcsl_axis_sptr.h>
 #include <vcsl/vcsl_dimension_sptr.h>
 #include <vcsl/vcsl_unit_sptr.h>

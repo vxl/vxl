@@ -6,6 +6,9 @@
 #include <bstm/bstm_block_metadata.h>
 #include <bstm/io/bstm_sio_mgr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: PUBLIC create method, for creating singleton instance of bstm_cache
 void bstm_lru_cache::create(bstm_scene_sptr scene)

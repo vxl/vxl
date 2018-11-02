@@ -6,6 +6,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Default constructor
 mmn_graph_rep1::mmn_graph_rep1()

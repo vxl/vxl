@@ -10,6 +10,9 @@
 #include <boxm/sample/algo/boxm_simple_grey_processor.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T, class T_aux>
 class boxm_generate_edge_sample_functor

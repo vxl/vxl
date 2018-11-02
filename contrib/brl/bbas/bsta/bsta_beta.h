@@ -16,6 +16,9 @@
 #include <iostream>
 #include "bsta_distribution.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 class bsta_beta : public bsta_distribution<T,1>

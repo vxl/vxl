@@ -16,6 +16,9 @@
 #include <vnl/io/vnl_io_matrix.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: A class to perform some of the functions of a Radial Basis Function Network.
 //  This is a special case of a mixture model pdf, where the same

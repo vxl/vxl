@@ -17,6 +17,9 @@
 // B. Scholkopf, C. Burges and A. Smola, MIT Press: 185-208. and other papers.
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <cassert>
 

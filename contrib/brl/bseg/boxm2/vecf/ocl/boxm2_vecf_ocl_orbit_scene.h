@@ -61,6 +61,9 @@
 #include "../boxm2_vecf_eyelid_crease.h"
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/ocl/boxm2_opencl_cache.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_orbit_vector_field.h>
 #include "boxm2_vecf_ocl_transform_scene.h"

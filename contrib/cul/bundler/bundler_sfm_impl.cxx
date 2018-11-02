@@ -9,6 +9,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <vpgl/vpgl_calibration_matrix.h>
 #include <vpgl/algo/vpgl_em_compute_5_point.h>

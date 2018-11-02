@@ -9,6 +9,9 @@
 #include <vnl/vnl_rational.h>
 #include <vnl/vnl_numeric_traits.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_export.h>
 
 template <>

@@ -7,6 +7,9 @@
 #include <cmath>
 #include "vil3d_make_distance_filter.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Create filter such that d[a] is distance from origin of se[a]

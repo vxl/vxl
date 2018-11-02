@@ -13,6 +13,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vnl/vnl_nonlinear_minimizer.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Base for objects which provide IO
 //  for classes derived from vnl_nonlinear_minimizer

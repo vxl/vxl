@@ -17,6 +17,9 @@
 #include <brip/brip_kernel.h>
 #include <vnl/vnl_math.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Gaussian derivative kernel base class
 class brip_gaussian_kernel : public brip_kernel

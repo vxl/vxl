@@ -17,6 +17,9 @@
 
 #include <ostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Convert a vsl_print_summary function call to a streamable object.

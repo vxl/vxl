@@ -17,6 +17,9 @@
 #include <vgl/vgl_box_3d.h>
 #include <boxm/boxm_scene.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 template <class T_data>

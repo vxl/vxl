@@ -9,6 +9,9 @@
 #include <iostream>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Value to indicate no valid arc
 constexpr unsigned mmn_no_arc = 99999;

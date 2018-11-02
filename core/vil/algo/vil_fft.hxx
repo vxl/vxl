@@ -10,6 +10,9 @@
 #include <vector>
 #include "vil_fft.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_image_view.h>
 #include <vnl/algo/vnl_fft_1d.h>
 

@@ -13,6 +13,9 @@
 #include <vul/vul_file.h>
 #include <bpgl/algo/bpgl_interpolate.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //: Init function
 bool vpgl_interpolate_perspective_cameras_process_cons(bprb_func_process& pro)
 {

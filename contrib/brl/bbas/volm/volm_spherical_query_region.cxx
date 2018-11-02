@@ -9,6 +9,9 @@
 #include "volm_char_codes.h"
 #include <bpgl/depth_map/depth_map_region.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 void volm_spherical_query_region::
 set_from_depth_map_region(vpgl_perspective_camera<double> const& cam,

@@ -17,6 +17,9 @@
 #include <set>
 #include <imesh/imesh_mesh.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_vector_3d.h>
 
 

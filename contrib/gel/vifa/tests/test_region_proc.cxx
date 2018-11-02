@@ -2,6 +2,9 @@
 #include <iostream>
 #include <ostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_vector_2d.h>
 #include <testlib/testlib_test.h>
 #include <sdet/sdet_detector_params.h>

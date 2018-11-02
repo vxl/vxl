@@ -13,6 +13,9 @@
 #include <iostream>
 #include "vnl_scalar_join_iterator.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define VNL_SCALAR_JOIN_ITERATOR_INSTANTIATE(T) \
 template class VNL_EXPORT vnl_scalar_join_iterator_indexed_pair<T >;\

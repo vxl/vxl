@@ -13,6 +13,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // All subclasses of NITF field formatter derive from this template
 // The template handles both scalars and vectors of type T.

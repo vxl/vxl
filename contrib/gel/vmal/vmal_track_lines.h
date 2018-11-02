@@ -18,6 +18,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vxl_config.h>
 #include <vtol/vtol_edge_2d_sptr.h>
 #include <vmal/vmal_multi_view_data_edge_sptr.h>

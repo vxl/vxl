@@ -1,6 +1,9 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h>
 #include <vsl/vsl_binary_io.h>
 #include <bbas/volm/volm_spherical_container.h>

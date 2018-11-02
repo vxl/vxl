@@ -39,6 +39,9 @@
 #include <vil/vil_image_view.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int convert_uncertainty_from_meters_to_pixels(float uncertainty,
                                               vpgl_lvcs lvcs,

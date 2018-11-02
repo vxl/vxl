@@ -10,6 +10,9 @@
 #include "vil1_byte_swap.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // this is not efficient
 void vil1_byte_swap(void *b_, void *e_)

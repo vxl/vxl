@@ -26,6 +26,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vsol/vsol_spatial_object_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vsol_group_2d : public vsol_spatial_object_2d
 {

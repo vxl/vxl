@@ -15,6 +15,9 @@
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vsl/vsl_quick_file.h>
 #include <msm/msm_points.h>
 #include <msm/msm_add_all_loaders.h>

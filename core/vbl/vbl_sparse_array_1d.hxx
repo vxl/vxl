@@ -8,6 +8,9 @@
 #include "vbl_sparse_array_1d.h"
 #include "vbl_sparse_array_base.hxx"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if 0 // capes@robots - moved print implementation to header file
 //: Print the Array to a stream in "(i): value" format.

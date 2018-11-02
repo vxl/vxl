@@ -7,6 +7,9 @@
 #include <bsta/algo/bsta_adaptive_updater.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // This test was first written to verify whether the basic functionality of
 // bsta_mixtures is consistent across platforms.

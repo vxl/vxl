@@ -2,6 +2,9 @@
 #include <cstdio>
 #include <vcl_atomic_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define TEST(str,x,y) std::printf(str ":   "); if ((x)!=(y)) { std::printf("FAILED\n"); status = 1; } else { std::printf("PASSED\n"); }
 

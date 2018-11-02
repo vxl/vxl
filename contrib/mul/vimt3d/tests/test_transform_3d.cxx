@@ -2,6 +2,9 @@
 #include <iostream>
 #include <cstdlib>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vnl/vnl_math.h>
 #include <vnl/vnl_vector.h>

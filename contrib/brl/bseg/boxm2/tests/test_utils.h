@@ -5,6 +5,9 @@
 
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data.h>
 #include <testlib/testlib_test.h>

@@ -22,6 +22,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 const static unsigned int maxval_unsigned = vnl_numeric_traits<unsigned int>::maxval;
 

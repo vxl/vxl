@@ -38,6 +38,9 @@
 #include <iostream>
 #include "bvpl_kernel_factory.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bxml/bxml_document.h>
 
 class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory

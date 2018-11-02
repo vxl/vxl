@@ -9,6 +9,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 rrel_orthogonal_regression::rrel_orthogonal_regression( const vnl_matrix<double>& pts )
   : vars_( pts )

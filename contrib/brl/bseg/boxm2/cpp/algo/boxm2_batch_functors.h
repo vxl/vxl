@@ -9,6 +9,9 @@
 #include <bsta/algo/bsta_sigma_normalizer.h>
 #include <boxm2/io/boxm2_stream_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: accumulate seg_lengths and intensities over all rays that pass through a cell to compute normalized intensity later
 class boxm2_batch_update_pass0_functor

@@ -31,6 +31,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template<class F, class T_loc, class T_data, class T_aux = typename boxm_aux_traits<BOXM_AUX_NULL>::sample_datatype>
 class boxm_raytrace_function

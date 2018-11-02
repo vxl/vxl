@@ -11,6 +11,9 @@
 // Test construction, IO etc
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 #include <vpl/vpl.h> // vpl_unlink()
 #include <clsfy/clsfy_random_forest.h>

@@ -11,6 +11,9 @@
 #include <mfpf/mfpf_region_definer.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Defines region size, shape, and form of model to use
 //  Object to hold information about how to set up an

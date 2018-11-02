@@ -7,6 +7,9 @@
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_matrix.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>

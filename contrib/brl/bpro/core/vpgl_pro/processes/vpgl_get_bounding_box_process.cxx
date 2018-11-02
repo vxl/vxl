@@ -7,6 +7,9 @@
 
 #include <bprb/bprb_parameters.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vsph/vsph_camera_bounds.h>

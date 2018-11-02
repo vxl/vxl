@@ -8,6 +8,9 @@
 #include "vil_stream_fstream64.h"
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if defined(WIN32)
 #include <io.h>

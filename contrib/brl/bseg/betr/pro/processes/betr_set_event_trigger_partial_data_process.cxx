@@ -9,6 +9,9 @@
 #include <string>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <betr/betr_event_trigger.h>
 #include <vpgl/vpgl_camera_double_sptr.h>

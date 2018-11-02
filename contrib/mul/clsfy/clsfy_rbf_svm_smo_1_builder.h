@@ -15,6 +15,9 @@
 #include <vnl/vnl_vector.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Base for classes to build clsfy_classifier_base objects
 class clsfy_rbf_svm_smo_1_builder : public clsfy_builder_base

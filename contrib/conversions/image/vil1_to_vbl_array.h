@@ -5,6 +5,9 @@
 #include <vil1/vil1_image.h>
 #include <vbl/vbl_array_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 inline vbl_array_2d<unsigned char> vil1_to_vbl_array(vil1_image const& im)
 {

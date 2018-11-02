@@ -3,6 +3,9 @@
 #include <vnl/vnl_math.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // compute b-a on the circle
 double vsph_utils::azimuth_diff(double a, double b,

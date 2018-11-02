@@ -12,6 +12,9 @@
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 static void test_constructor()
 {
   double a = 0.0, b = 10.0, c = 0.0, d = 0.0;

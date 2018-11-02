@@ -13,6 +13,9 @@
 #include "rgtl_sqt_space.hxx"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define RGTL_OCTREE_CELL_GEOMETRY_CONE_SPECIALIZE_3
 

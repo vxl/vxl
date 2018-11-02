@@ -10,6 +10,9 @@
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: No limits applied to parameters
 class msm_no_limiter : public msm_param_limiter

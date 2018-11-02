@@ -15,6 +15,9 @@
 #include <cstddef>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vil/vil_fwd.h>
 
 //: Compute nearest neighbour interpolation at (x,y), no bound checks. Requires -0.5<x<ni-0.5, -0.5<y<nj-0.5

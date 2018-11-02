@@ -21,6 +21,9 @@
 #include <iostream>
 #include <bprb/bprb_process_ext.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bprb_func_process: public bprb_process_ext
 {

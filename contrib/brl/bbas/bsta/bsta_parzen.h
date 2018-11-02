@@ -21,6 +21,9 @@
 #include <iostream>
 #include "bsta_distribution.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: forward declare vnl_vector_fixed
 template<class T, unsigned n> class vnl_vector_fixed;

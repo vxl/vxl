@@ -19,6 +19,9 @@
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <imesh/imesh_mesh.h>
 #include <imesh/imesh_fileio.h>
 #include <vnl/vnl_matrix_fixed.h>

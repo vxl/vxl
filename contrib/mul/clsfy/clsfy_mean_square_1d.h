@@ -11,6 +11,9 @@
 #include <clsfy/clsfy_classifier_1d.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Simplest possible 1D classifier: A single thresholding function.
 //  Returns class zero if s_*x<threshold_

@@ -8,6 +8,9 @@
 #include <vgl/vgl_area.h>
 #include <vgl/vgl_box_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_fit_oriented_box_2d.h>
 
 static void test_oriented_box_2d()

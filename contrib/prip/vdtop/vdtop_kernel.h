@@ -16,6 +16,9 @@
 #include <vector>
 #include "vdtop_neighborhood.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #define BORDER_PIXEL (vxl_byte)2
 #define FALSE_PIXEL (vxl_byte)0

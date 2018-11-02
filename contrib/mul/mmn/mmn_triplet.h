@@ -10,6 +10,9 @@
 #include <vector>
 #include <vsl/vsl_binary_io.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Representation of three vertex indices, eg a triangle
 //  For comparison, order not important.

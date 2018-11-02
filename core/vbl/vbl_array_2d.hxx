@@ -6,6 +6,9 @@
 #include "vbl_array_2d.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template<class T>
 std::ostream& operator<<(std::ostream &os, vbl_array_2d<T> const &array)

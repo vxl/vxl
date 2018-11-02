@@ -28,6 +28,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <vgl/vgl_fwd.h> // vgl_vector_3d, vgl_homg_line_3d_2_points
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class vsol_line_3d : public vsol_curve_3d
 {

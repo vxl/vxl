@@ -9,6 +9,9 @@
 #include <iosfwd>
 #include <mfpf/mfpf_point_finder_builder.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_fwd.h>
 
 //: Builder for mfpf_norm_corr2d objects.

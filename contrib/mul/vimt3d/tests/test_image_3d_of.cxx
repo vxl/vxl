@@ -1,6 +1,9 @@
 // This is mul/vimt3d/tests/test_image_3d_of.cxx
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpl/vpl.h> // vpl_unlink()
 #include <vimt3d/vimt3d_image_3d_of.h>
 #include <testlib/testlib_test.h>

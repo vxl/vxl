@@ -13,6 +13,9 @@
 #include <iosfwd>
 #include <vpdfl/vpdfl_kernel_pdf.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Multi-variate spherical gaussian kernel PDF.
 class vpdfl_gaussian_kernel_pdf : public vpdfl_kernel_pdf

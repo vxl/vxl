@@ -15,6 +15,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "vmap_types.h" // for vmap_dart_index
 #include "vmap_ptr_sequences.h"
 #include "vmap_kernel.h"

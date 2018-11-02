@@ -14,6 +14,9 @@
 #include <vsol/vsol_digital_curve_2d.h>
 #include <vsol/vsol_polygon_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 //: Apply lens distortion to this vsol_spatial_object_2d and produce a new spatial object

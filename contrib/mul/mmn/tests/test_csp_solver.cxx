@@ -11,6 +11,9 @@
 #include <mmn/mmn_dp_solver.h>
 #include <mmn/mmn_lbp_solver.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_vector_2d.h>

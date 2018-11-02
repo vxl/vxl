@@ -7,6 +7,9 @@
 #include "vipl_section_descriptor_2d.h"
 #include <vipl/section/vipl_section_container.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Ctor useful to define 2D section descriptors for ROA's. If you.
 // Once constructed there is no way to change the data in the section descriptor.

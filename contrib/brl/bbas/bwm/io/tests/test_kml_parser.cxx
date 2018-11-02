@@ -5,6 +5,9 @@
 #include "../bwm_io_kml_camera.h"
 #include <expatpp.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 void test_kml_parser()
 {
   std::string path = "";//FIXME need test kml file

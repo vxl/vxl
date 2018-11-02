@@ -21,6 +21,9 @@
 #include <bsta/bsta_gauss_sf1.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: set input and output types
 bool bvxm_mog_to_mpm_process_cons(bprb_func_process& pro)

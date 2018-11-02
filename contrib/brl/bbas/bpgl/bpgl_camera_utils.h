@@ -18,6 +18,9 @@
 #include <limits>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_line_2d.h>
 #include <vpgl/vpgl_perspective_camera.h>
 class bpgl_camera_utils

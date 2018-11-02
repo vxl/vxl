@@ -10,6 +10,9 @@
 #include <vil/vil_convert.h>
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // do pixelwise sort on the image, and then
 struct Pair

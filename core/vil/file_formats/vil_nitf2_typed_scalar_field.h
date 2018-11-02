@@ -11,6 +11,9 @@
 #include "vil_nitf2_scalar_field.h"
 #include "vil_nitf2_tagged_record.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Typed concrete class for scalar NITF fields.
 // During file reading, this class is instantiated only for non-blank

@@ -7,6 +7,9 @@
 // this process is the companion to vil_resample_image_process and
 // adjusts the calibration matrix to correspond to the resampled image
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpgl/vpgl_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_calibration_matrix.h>

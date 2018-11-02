@@ -11,6 +11,9 @@
 
 #include <mbl/mbl_exception.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Save vector to file with format  { n v1 v2 .. vn }
 template <class T>

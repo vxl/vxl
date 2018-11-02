@@ -67,6 +67,9 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_ref_count.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 struct sdet_neighbor
 {

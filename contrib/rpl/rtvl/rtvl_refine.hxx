@@ -14,6 +14,9 @@
 #include <functional>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "rtvl_refine.h"
 
 #include "rtvl_tensor.h"

@@ -12,6 +12,9 @@
 #include <iostream>
 #include "mbl_cluster_tree.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_binary_io.h>
 #include <vsl/vsl_vector_io.h>

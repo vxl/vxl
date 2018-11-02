@@ -8,6 +8,9 @@
 #include <vdgl/vdgl_edgel.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 inline vdgl_digital_curve DigitalCurve_to_vdgl(DigitalCurve const& dc)
 {

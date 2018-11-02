@@ -2,6 +2,9 @@
 #include <functional>
 #include <set>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 int test_set_main(int /*argc*/,char* /*argv*/[])
 {

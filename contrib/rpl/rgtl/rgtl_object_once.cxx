@@ -15,6 +15,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //----------------------------------------------------------------------------
 rgtl_object_once::rgtl_object_once(): marks_(), mark_(0)

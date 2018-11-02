@@ -3,6 +3,9 @@
 #include <boxm2/boxm2_blocks_vis_graph.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 boxm2_block_vis_graph::boxm2_block_vis_graph(std::map<boxm2_block_id,boxm2_block_metadata> & blkmetadata, vpgl_generic_camera<double> const& cam ): nodes_()
 {

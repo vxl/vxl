@@ -12,6 +12,9 @@
 #include <mbl/mbl_cloneable_ptr.h>
 #include <mbl/mbl_chord.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <mfpf/mfpf_region_form.h>
 #include <vgl/vgl_fwd.h>
 

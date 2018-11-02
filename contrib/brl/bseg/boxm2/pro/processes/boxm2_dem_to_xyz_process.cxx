@@ -23,6 +23,9 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_load.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //#include <vil/vil_resample_bilin.h>
 #include <vil/vil_convert.h>
 #include <vil/vil_new.h>

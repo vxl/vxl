@@ -8,6 +8,9 @@
 // \file
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Constructor
 bool bbas_remove_from_db_process_cons(bprb_func_process& pro)

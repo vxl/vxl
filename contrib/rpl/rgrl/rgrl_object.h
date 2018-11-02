@@ -11,6 +11,9 @@
 #include <vbl/vbl_ref_count.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include "rgrl_command_sptr.h"
 #include "rgrl_event_sptr.h"

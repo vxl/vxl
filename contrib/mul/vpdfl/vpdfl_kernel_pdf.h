@@ -14,6 +14,9 @@
 #include <iosfwd>
 #include <vpdfl/vpdfl_pdf_base.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Multi-variate kernel PDF
 //  Distribution is the sum of a set of kernel functions placed on the training

@@ -2,6 +2,9 @@
 #include <fstream>
 #include "boxm2_sio_mgr.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <sys/stat.h>  //for getting file sizes
 
 #if defined(HAS_HDFS) && HAS_HDFS

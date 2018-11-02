@@ -12,6 +12,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vgl/vgl_point_2d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/vnl_math.h>
 #include <cassert>

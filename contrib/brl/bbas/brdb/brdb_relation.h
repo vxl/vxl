@@ -21,6 +21,9 @@
 #include <iostream>
 #include <string>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_ref_count.h>
 #include <brdb/brdb_tuple_sptr.h>
 #include <brdb/brdb_relation_sptr.h>

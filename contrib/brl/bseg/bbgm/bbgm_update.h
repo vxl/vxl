@@ -16,6 +16,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vpdl/vpdt/vpdt_field_traits.h>
 
 #include "bbgm_planes_to_sample.h"

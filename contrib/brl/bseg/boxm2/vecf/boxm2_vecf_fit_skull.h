@@ -12,6 +12,9 @@
 #include <fstream>
 #include <map>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include "boxm2_vecf_skull_params.h"
 #include "boxm2_vecf_labeled_point.h"
 #include <vgl/vgl_vector_3d.h>

@@ -26,6 +26,9 @@
 #include <vgl/vgl_closest_point.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 static inline T square_of(T x) { return x*x; }

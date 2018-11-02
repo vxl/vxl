@@ -9,6 +9,9 @@
 #include <vnl/vnl_matrix_fixed.h>
 #include <vgl/vgl_homg.h> // for infinity
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 vnl_vector_fixed<T,2> vgl_homg_operators_1d<T>::get_vector(vgl_homg_point_1d<T> const& p)

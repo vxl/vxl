@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cstdio>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vbl/vbl_bounding_box.h>
 #include <vul/vul_sprintf.h>
 #include <vul/vul_file.h>

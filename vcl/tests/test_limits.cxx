@@ -1,6 +1,9 @@
 #include <iostream>
 #include <limits>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 static
 void test_if_bool_defined( bool )

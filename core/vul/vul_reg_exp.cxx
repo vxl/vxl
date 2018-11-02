@@ -121,6 +121,9 @@
 //    the line.  It would match "drepa qrepb" in "rep drepa qrepb".
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Copies the given regular expression.
 

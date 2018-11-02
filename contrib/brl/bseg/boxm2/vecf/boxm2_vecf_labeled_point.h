@@ -14,6 +14,9 @@
 #include <map>
 #include <vgl/vgl_point_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //: a structure for holding a 3-d point with associated label
 struct boxm2_vecf_labeled_point{
   boxm2_vecf_labeled_point()= default;

@@ -29,5 +29,8 @@ bool operator==(osl_vertex const &a, osl_vertex const &b) {
 }
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::list<osl_vertex*>);
 OSL_TOPOLOGY_REF_UNREF_INSTANTIATE(std::vector<osl_vertex*>);

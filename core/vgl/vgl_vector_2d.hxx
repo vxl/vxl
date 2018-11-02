@@ -10,6 +10,9 @@
 #include "vgl_vector_2d.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 template <class T>
 double vgl_vector_2d<T>::length() const

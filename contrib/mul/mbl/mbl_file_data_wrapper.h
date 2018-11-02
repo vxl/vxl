@@ -14,6 +14,9 @@
 #include <vsl/vsl_binary_io.h>
 #include <mbl/mbl_data_wrapper.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Base class for objects which can return a set of objects, one at a time
 //  This is an iterator-like object.  However, unlike STL, generality is

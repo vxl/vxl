@@ -10,6 +10,9 @@
 #include <msm/msm_param_limiter.h>
 #include <vnl/vnl_vector.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Apply limits to each parameter independently
 //  Each parameter is forced to lie in range [-k*s_i,+k*s_i],

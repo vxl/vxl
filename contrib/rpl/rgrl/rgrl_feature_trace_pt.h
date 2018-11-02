@@ -10,6 +10,9 @@
 #include <iosfwd>
 #include "rgrl_feature.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Represent a point along a trace (of a vessel, neuron, etc.)
 //

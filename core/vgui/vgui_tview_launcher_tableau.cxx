@@ -18,6 +18,9 @@
 #include <iostream>
 #include "vgui_tview_launcher_tableau.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgui/vgui.h>
 #include <vgui/vgui_adaptor.h>
 #include <vgui/vgui_viewer2D_tableau.h>

@@ -10,6 +10,9 @@
 // \author Andy Miller
 // \date Sep 16, 2011
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bstm/bstm_scene.h>
 #include <boxm2/util/boxm2_convert_nvm.h>
 #include <bstm/util/bstm_cams_and_box_to_scene.h>

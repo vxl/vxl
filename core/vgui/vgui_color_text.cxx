@@ -14,6 +14,9 @@
 // \endverbatim
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgui/vgui_macro.h>
 
 static bool debug = false;

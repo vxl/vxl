@@ -15,6 +15,9 @@
 
 #include <vul/vul_timer.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts)

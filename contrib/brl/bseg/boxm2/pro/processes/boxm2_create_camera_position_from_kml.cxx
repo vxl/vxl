@@ -15,6 +15,9 @@
 //   <none yet>
 // \endverbatim
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vul/vul_file.h>
 #include <boxm2/boxm2_scene.h>
 #include <bkml/bkml_parser.h>

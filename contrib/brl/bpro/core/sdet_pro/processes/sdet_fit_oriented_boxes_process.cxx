@@ -6,6 +6,9 @@
 
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <bbas_pro/bbas_1d_array_float.h>
 #include <sdet/sdet_region.h>
 

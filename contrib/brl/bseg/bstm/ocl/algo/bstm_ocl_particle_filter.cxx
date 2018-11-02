@@ -11,6 +11,9 @@
 #include <vul/vul_timer.h>
 #include <bstm/cpp/algo/bstm_label_bb_function.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_sphere_3d.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/vnl_det.h>

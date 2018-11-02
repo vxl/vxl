@@ -11,6 +11,9 @@
 #include "vgui_observable.h"
 #include <vgui/vgui_observer.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //
 // Base class for classes which want to broadcast messages to vgui_observers

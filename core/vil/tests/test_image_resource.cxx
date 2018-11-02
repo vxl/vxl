@@ -4,6 +4,9 @@
 #include <testlib/testlib_test.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // These are "dummy" operator< for complex<T>.  These functions are never
 // to be actually called, but declaring these makes it possible to use a

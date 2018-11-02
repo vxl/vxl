@@ -20,6 +20,9 @@
 #include <iosfwd>
 #include <vpdfl/vpdfl_gaussian_builder.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //=======================================================================
 

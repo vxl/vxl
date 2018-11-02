@@ -8,6 +8,9 @@
 #include <iostream>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 // Linear interpolation of tabulated data
 class mbl_linear_interpolator

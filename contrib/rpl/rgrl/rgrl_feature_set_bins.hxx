@@ -14,6 +14,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <rsdl/rsdl_bins.h>
 #include <rsdl/rsdl_bins.hxx> // to avoid explicit instantiation

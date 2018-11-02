@@ -6,6 +6,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 // for gausian parzan window filter
 #include "bsta_gauss.h"
 #include "bsta_int_histogram_1d.h"

@@ -10,6 +10,9 @@
 #include <string>
 #include <vector>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #include <bprb/bprb_func_process.h>
 #include <bstm_multi/bstm_multi_typedefs.h>

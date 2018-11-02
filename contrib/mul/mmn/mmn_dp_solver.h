@@ -15,6 +15,9 @@
 #include <vnl/vnl_matrix.h>
 #include <vil/vil_image_view.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Solve restricted class of Markov problems (trees and tri-trees)
 //  Find choice of values at each node which minimises Markov problem.

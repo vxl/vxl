@@ -4,6 +4,9 @@
 #include <string>
 #include <bprb/bprb_func_process.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 //:
 // \file
 // \brief  A process for seting an event_trigger data to an event_trigger

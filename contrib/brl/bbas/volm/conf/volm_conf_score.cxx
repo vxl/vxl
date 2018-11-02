@@ -6,6 +6,9 @@
 //:
 // \file
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vnl/vnl_math.h>
 
 // note the angular value is from 0 to 2*pi and 0 refers to the east direction

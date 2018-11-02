@@ -11,6 +11,9 @@
 #include <vnl/vnl_math.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 vsph_view_point<double> create_view_point(vsph_spherical_coord_sptr coord, double theta, double phi, double* data)
 {

@@ -11,6 +11,9 @@
 
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, std::string pca_path, unsigned dim)
 {

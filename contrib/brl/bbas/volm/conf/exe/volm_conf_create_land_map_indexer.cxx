@@ -18,6 +18,9 @@
 #include <vul/vul_file_iterator.h>
 #include <vgl/vgl_intersection.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <volm/volm_io.h>
 #include <volm/volm_io_tools.h>
 #include <volm/volm_tile.h>

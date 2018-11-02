@@ -27,6 +27,9 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_pointset_3d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //:
 // A class to hold a 3-d projective transformation matrix

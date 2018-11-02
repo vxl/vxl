@@ -18,6 +18,9 @@
 #include <bvpl/kernels/bvpl_kernel_iterator.h>
 #include <vgl/vgl_line_3d_2_points.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 class bvpl_corner_search_functor
 {

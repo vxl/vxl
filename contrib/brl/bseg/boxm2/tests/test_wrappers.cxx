@@ -4,6 +4,9 @@
 // \date 26-Oct-2010
 #include <iostream>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <testlib/testlib_test.h>
 #include <testlib/testlib_root_dir.h>
 #include <boxm2/basic/boxm2_array_1d.h>

@@ -13,6 +13,9 @@
 #include <iostream>
 #include <iosfwd>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <gmvl/gmvl_node_sptr.h>
 
 //: to print out a lot of nodes

@@ -12,6 +12,9 @@
 #include <vector>
 #include "boxm2_vecf_orbit_params.h"
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_sphere_3d.h>
 struct cpoint{

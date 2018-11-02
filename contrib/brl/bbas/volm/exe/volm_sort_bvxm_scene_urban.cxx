@@ -25,6 +25,9 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 
 void error(std::string log_file, std::string msg)

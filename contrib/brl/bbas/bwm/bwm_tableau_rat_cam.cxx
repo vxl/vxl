@@ -9,6 +9,9 @@
 #include <vsol/vsol_point_2d.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 bool bwm_tableau_rat_cam::handle(const vgui_event &e)
 {

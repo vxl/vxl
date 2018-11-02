@@ -12,6 +12,9 @@
 #include <iosfwd>
 #include <pdf1d/pdf1d_pdf.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Class for univariate gaussian.
 class pdf1d_gaussian : public pdf1d_pdf

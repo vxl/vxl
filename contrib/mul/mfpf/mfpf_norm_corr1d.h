@@ -12,6 +12,9 @@
 #include <vnl/vnl_vector.h>
 #include <vgl/vgl_fwd.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Searches along a profile using normalised correlation.
 class mfpf_norm_corr1d : public mfpf_point_finder

@@ -13,6 +13,9 @@
 #include <vil/vil_fill.h>
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Compute signed distance transform in 3d from zeros in original image.
 //  Image is assumed to be filled with max_dist

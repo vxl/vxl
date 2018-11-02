@@ -17,6 +17,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Reconstruct structure from set of 2d pts
 // Formulates measurement matrix P2D then calls reconstruct function above

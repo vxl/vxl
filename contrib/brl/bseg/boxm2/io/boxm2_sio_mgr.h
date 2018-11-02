@@ -11,6 +11,9 @@
 #include <boxm2/boxm2_data.h>
 #include <vul/vul_file.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: enabling to allow different filesystems to load blocks
 typedef enum {LOCAL=0, HDFS} BOXM2_IO_FS_TYPE;

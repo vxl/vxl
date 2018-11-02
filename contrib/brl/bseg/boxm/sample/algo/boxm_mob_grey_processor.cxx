@@ -10,6 +10,9 @@
 
 #include <cassert>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 //: Expected value
 boxm_apm_traits<BOXM_APM_MOB_GREY>::obs_datatype

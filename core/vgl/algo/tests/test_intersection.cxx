@@ -4,6 +4,9 @@
 #include <limits>
 #include <list>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <testlib/testlib_test.h>
 #include <vgl/vgl_plane_3d.h>
 #include <vgl/vgl_point_2d.h>

@@ -17,6 +17,9 @@
 #include <clsfy/clsfy_binary_threshold_1d_gini_builder.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 #include <vsl/vsl_binary_loader.h>
 #include <mbl/mbl_stl.h>

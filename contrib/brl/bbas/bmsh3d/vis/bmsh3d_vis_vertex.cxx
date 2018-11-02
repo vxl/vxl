@@ -20,6 +20,9 @@
 #include <Inventor/nodes/SoDrawStyle.h>
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 SoSeparator* draw_vertex_geom_SoPoint (const bmsh3d_vertex* V)
 {

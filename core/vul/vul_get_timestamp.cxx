@@ -12,6 +12,9 @@
 #include "vul_get_timestamp.h"
 
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include <direct.h>

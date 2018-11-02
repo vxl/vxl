@@ -45,6 +45,9 @@
 #include <msm/msm_points.h>
 #include <mbl/mbl_stats_1d.h>
 #include <vcl_compiler.h>
+#ifdef _MSC_VER
+#  include <vcl_msvc_warnings.h>
+#endif
 #include <cassert>
 
 //: Structure to hold parameters
