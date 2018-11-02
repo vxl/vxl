@@ -6,7 +6,6 @@
 // \file
 // this process is the companion to vil_resample_image_process and
 // adjusts the calibration matrix to correspond to the resampled image
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -12,7 +12,6 @@
 
 #include <rgtl/rgtl_object_array_points.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

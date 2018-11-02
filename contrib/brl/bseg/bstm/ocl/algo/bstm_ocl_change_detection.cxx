@@ -12,7 +12,6 @@
 #include <sstream>
 #include "bstm_ocl_change_detection.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

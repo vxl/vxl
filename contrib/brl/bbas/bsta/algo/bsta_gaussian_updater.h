@@ -20,7 +20,6 @@
 #include <bsta/bsta_gaussian_full.h>
 #include <bsta/bsta_mixture.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

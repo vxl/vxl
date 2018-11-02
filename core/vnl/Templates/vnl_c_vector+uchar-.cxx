@@ -1,4 +1,3 @@
-#include <vcl_compiler.h>
 // Disable warning
 #ifdef _MSC_VER
 // 4146: unary minus operator applied to unsigned type, result still unsigned

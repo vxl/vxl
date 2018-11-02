@@ -5,7 +5,6 @@
 #include <testlib/testlib_test.h>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_histogram.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

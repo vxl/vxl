@@ -10,7 +10,6 @@
 #include <fstream>
 #include <bprb/bprb_func_process.h>
 #include <boxm2/ocl/boxm2_opencl_cache.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

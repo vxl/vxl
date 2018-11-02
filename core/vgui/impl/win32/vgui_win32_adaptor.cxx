@@ -5,7 +5,6 @@
 #include "vgui_win32_adaptor.h"
 #include "vgui_win32_utils.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -16,7 +16,6 @@
 #include <boxm2/cpp/algo/boxm2_mog3_grey_processor.h>
 #include <boct/boct_bit_tree.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

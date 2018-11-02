@@ -8,7 +8,6 @@
 #include "vnl_matrix_exp.h"
 #include <cassert>
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

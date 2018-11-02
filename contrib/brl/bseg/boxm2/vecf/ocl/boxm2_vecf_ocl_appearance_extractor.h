@@ -6,7 +6,6 @@
 #include <boxm2/vecf/boxm2_vecf_orbit_scene.h>
 #include <boxm2/vecf/ocl/boxm2_vecf_ocl_composite_head_model.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

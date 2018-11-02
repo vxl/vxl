@@ -1,7 +1,6 @@
 // This is core/vbl/tests/vbl_test_local_minima.cxx
 #include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

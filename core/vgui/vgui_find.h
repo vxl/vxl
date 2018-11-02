@@ -10,7 +10,6 @@
 // \brief   Functions to search for tableaux in the tableau hierarchy.
 
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

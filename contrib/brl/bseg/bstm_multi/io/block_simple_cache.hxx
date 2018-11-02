@@ -6,7 +6,6 @@
 #include <string>
 #include "block_simple_cache.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

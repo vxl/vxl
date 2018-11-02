@@ -7,7 +7,6 @@
 // \brief Converts floating point image (0,1.0) to byte image (0,255) for compression/saveability reasons
 
 #include <bprb/bprb_parameters.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

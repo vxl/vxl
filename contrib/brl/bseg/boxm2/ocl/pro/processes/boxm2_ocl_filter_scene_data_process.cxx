@@ -9,7 +9,6 @@
 // \author Octi Biris
 // \date Jun 16, 2015
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

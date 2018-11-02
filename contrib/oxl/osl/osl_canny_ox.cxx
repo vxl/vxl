@@ -13,7 +13,6 @@
 #include <osl/osl_canny_gradient.h>
 #include <osl/osl_canny_nms.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

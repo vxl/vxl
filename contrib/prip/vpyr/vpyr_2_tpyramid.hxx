@@ -5,7 +5,6 @@
 #include <iostream>
 #include "vpyr_2_tpyramid.h"
 #include <vmap/vbl_controlled_partition.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

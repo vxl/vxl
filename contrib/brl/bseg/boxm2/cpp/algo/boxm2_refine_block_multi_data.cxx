@@ -1,7 +1,6 @@
 #include <iostream>
 #include <algorithm>
 #include "boxm2_refine_block_multi_data.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

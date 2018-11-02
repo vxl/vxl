@@ -1,6 +1,5 @@
 // This is core/vul/tests/test_sleep_timer.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

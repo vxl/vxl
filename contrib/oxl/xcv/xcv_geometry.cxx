@@ -9,7 +9,6 @@
 // See xcv_geometry.h for a description of this file.
 // \author K.Y.McGaul
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

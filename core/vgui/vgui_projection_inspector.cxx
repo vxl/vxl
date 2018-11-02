@@ -8,7 +8,6 @@
 // \brief  See vgui_projection_inspector.h for a description of this file.
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

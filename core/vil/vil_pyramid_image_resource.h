@@ -12,7 +12,6 @@
 // \date 19 March 2006
 
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

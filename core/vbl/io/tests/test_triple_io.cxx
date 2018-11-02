@@ -1,6 +1,5 @@
 // This is core/vbl/io/tests/test_triple_io.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

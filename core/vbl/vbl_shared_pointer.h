@@ -12,7 +12,6 @@
 //   13 Feb. 2007 Amitha Perera   Change implementation to allow base class conversions.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -9,7 +9,6 @@
 #include <iostream>
 #include "vil1_image.h"
 #include <climits>// for CHAR_BIT
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

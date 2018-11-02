@@ -19,7 +19,6 @@
 // Created: 11-Mar-2001: TFC Copy of vnl_test
 // Created: 25-Apr-2002: AGAP Modified copy of testlib_test
 //
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

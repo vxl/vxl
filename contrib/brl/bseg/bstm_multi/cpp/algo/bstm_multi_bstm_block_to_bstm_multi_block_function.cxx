@@ -5,7 +5,6 @@
 #include <utility>
 #include "bstm_multi_bstm_block_to_bstm_multi_block_function.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

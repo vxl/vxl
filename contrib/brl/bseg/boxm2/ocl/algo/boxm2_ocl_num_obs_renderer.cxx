@@ -10,7 +10,6 @@
 #include <stdexcept>
 #include "boxm2_ocl_num_obs_renderer.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

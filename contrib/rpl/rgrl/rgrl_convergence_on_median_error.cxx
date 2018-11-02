@@ -3,7 +3,6 @@
 #include <algorithm>
 #include "rgrl_convergence_on_median_error.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

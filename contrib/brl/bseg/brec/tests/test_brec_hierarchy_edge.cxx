@@ -14,7 +14,6 @@
 #include <brip/brip_vil_float_ops.h>
 #include <bsta/algo/bsta_gaussian_updater.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

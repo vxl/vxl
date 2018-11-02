@@ -5,7 +5,6 @@
 #include <boxm/boxm_scene.hxx>
 #include <vnl/vnl_vector_fixed.h>
 #include <vbl/vbl_array_3d.hxx>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -5,7 +5,6 @@
 #include "vsph_unit_sphere.h"
 #include <bvrml/bvrml_write.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

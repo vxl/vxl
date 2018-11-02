@@ -2,7 +2,6 @@
 #define vcl_queue_h_
 
 #include <queue>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

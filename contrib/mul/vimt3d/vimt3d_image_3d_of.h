@@ -13,7 +13,6 @@
 #include <iosfwd>
 #include <vimt3d/vimt3d_image_3d.h>
 #include <vil3d/vil3d_image_view.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

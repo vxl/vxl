@@ -11,7 +11,6 @@
 #include "vil_nitf2_array_field.h"
 #include "vil_nitf2_compound_field_value.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

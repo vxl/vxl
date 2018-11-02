@@ -3,7 +3,6 @@
 #include <map>
 #include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

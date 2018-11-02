@@ -23,7 +23,6 @@
 #include <algorithm>
 #include <bsta/bsta_beta.h>
 #include <bsta/bsta_attributes.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

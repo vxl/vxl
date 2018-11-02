@@ -4,7 +4,6 @@
 #include <iostream>
 #include <cmath>
 #include "vipl_gaussian_convolution.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

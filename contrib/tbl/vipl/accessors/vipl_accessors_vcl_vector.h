@@ -2,7 +2,6 @@
 #define vipl_accessors_vcl_vector_h_
 #include <iostream>
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

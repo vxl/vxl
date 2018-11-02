@@ -3,7 +3,6 @@
 #include <testlib/testlib_test.h>
 #include <bcvr/bcvr_clsd_cvmatch.h>
 #include <bcvr/bcvr_clsd_cvmatch_sptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

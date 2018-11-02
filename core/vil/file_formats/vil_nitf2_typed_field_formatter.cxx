@@ -9,7 +9,6 @@
 #include <cerrno>
 #include "vil_nitf2_typed_field_formatter.h"
 
-#include <vcl_compiler.h> //for _WIN32
 
 //==============================================================================
 // Class vil_nitf2_date_time_formatter

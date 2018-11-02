@@ -11,7 +11,6 @@
 #include "rgrl_transformation.h"
 #include <rgrl/rgrl_est_proj_rad_func.h>
 #include <vnl/vnl_matrix_fixed.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

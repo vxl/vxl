@@ -8,7 +8,6 @@
 #include <cstdio>
 #include "bstm_scene_parser.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

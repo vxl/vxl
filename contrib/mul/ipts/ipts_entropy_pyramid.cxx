@@ -8,7 +8,6 @@
 #include "ipts_local_entropy.h"
 #include <vimt/vimt_scale_pyramid_builder_2d.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

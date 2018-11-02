@@ -12,7 +12,6 @@
 #include <iosfwd>
 #include <vtol/vtol_topology_object_sptr.h>
 #include <vsol/vsol_spatial_object_2d.h> // parent class
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

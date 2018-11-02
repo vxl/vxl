@@ -10,7 +10,6 @@
 // \date August 17, 2013
 
 #include <vul/vul_file.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

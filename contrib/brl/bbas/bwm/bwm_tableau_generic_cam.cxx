@@ -4,7 +4,6 @@
 #include <vpgl/vpgl_generic_camera.h>
 #include "bwm_observer_mgr.h"
 #include "algo/bwm_utils.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

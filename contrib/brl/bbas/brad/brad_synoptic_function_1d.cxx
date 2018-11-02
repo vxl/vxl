@@ -4,7 +4,6 @@
 #include <algorithm>
 #include "brad_synoptic_function_1d.h"
 //
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/algo/vgl_fit_sphere_3d.h>
 #include <bvrml/bvrml_write.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

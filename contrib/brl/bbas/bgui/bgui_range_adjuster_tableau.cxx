@@ -8,7 +8,6 @@
 // \author  J. L. Mundy after Matt Leotta original
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

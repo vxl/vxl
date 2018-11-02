@@ -11,7 +11,6 @@
 #include <cstring>
 #include <vector>
 #include "vil3d_gipl_format.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

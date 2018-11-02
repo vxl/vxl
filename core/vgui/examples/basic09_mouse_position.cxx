@@ -1,7 +1,6 @@
 // This displays the mouse position when the left mouse button is pressed.
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

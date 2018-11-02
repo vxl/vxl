@@ -16,7 +16,6 @@
 #include "clsfy_binary_tree_builder.h"
 #include <clsfy/clsfy_binary_threshold_1d_gini_builder.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

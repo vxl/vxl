@@ -12,7 +12,6 @@
 #include <boxm2/boxm2_scene.h>
 #include <bpgl/algo/bpgl_camera_from_box.h>
 #include <vpgl/algo/vpgl_camera_convert.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

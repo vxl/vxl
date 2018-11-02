@@ -8,7 +8,6 @@
 // \brief Exceptions thrown by mbl, and a mechanism for turning them off.
 // \author Ian Scott.
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

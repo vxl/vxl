@@ -9,7 +9,6 @@
 #include <iosfwd>
 #include <msm/msm_ref_shape_instance.h>
 #include <msm/msm_shape_model.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

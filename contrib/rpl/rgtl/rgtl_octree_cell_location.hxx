@@ -8,7 +8,6 @@
 #include <iostream>
 #include "rgtl_octree_cell_location.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

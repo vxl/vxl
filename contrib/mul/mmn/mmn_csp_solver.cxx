@@ -6,7 +6,6 @@
 // \brief see if the Constraint Satisfaction Problem is satisfiable
 // \author Martin Roberts
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

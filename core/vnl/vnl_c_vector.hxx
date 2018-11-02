@@ -371,7 +371,6 @@ void vnl_c_vector<T>::deallocate(T** v, const std::size_t n)
 }
 
 // "T *" is POD, but "T" might not be.
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

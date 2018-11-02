@@ -5,7 +5,6 @@
 #include <bgrl2/bgrl2_vertex.h>
 #include <bgrl2/bgrl2_edge.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

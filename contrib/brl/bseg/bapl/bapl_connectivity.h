@@ -18,7 +18,6 @@
 #include <bapl/bapl_keypoint_set_sptr.h>
 #include <bapl/bapl_keypoint_sptr.h>
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

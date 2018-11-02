@@ -1,7 +1,6 @@
 // This is core/vcsl/vcsl_rotation.cxx
 #include "vcsl_rotation.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

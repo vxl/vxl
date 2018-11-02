@@ -24,7 +24,6 @@
 #include <vbl/vbl_array_3d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <boct/boct_tree.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

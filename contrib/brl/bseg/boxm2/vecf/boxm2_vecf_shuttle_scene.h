@@ -13,7 +13,6 @@
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_scene.h>
 #include <boxm2/boxm2_data.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

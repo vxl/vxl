@@ -5,7 +5,6 @@
 #include "grid/bvxm_voxel_slab_iterator.h"
 #ifdef OPTION2 // currently FALSE
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

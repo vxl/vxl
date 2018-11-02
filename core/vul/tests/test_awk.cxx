@@ -10,7 +10,6 @@
 // \date   15 July 2009
 // History: built upon the shell of test_regexp, but has no tests in common
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

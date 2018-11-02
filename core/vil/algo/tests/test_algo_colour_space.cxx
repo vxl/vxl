@@ -3,7 +3,6 @@
 #include <testlib/testlib_test.h>
 #include <vil/algo/vil_colour_space.h>
 // not used? #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

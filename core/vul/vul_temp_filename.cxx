@@ -8,7 +8,6 @@
 #include <cstdlib>
 #include <cstdio>
 #include "vul_temp_filename.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -12,7 +12,6 @@
 #include <boxm2/io/boxm2_lru_cache.h>
 #include <boct/boct_bit_tree.h>
 #include <vgl/vgl_point_3d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

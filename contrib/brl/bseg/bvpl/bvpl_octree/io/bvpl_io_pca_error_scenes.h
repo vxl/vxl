@@ -16,7 +16,6 @@
 #include <iostream>
 #include <bvpl/bvpl_octree/bvpl_pca_error_scenes.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

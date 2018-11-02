@@ -2,7 +2,6 @@
 #define boxm2_export_oriented_point_cloud_h_included_
 #include <iostream>
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

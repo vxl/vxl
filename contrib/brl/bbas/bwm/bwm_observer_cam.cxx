@@ -17,7 +17,6 @@
 #include <bwm/bwm_tableau_mgr.h>
 #include <bwm/bwm_world.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

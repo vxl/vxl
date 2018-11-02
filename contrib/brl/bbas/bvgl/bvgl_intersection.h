@@ -10,7 +10,6 @@
 #include <vector>
 #include <bvgl/bvgl_triangle_3d.h>
 #include <vgl/vgl_box_3d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

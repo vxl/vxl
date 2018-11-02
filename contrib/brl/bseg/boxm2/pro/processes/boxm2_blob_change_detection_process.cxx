@@ -13,7 +13,6 @@
 #include <boxm2/util/boxm2_detect_change_blobs.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

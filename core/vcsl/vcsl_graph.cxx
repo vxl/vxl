@@ -1,7 +1,6 @@
 // This is core/vcsl/vcsl_graph.cxx
 #include "vcsl_graph.h"
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

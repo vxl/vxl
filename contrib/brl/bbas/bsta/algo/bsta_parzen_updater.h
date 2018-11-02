@@ -23,7 +23,6 @@
 #include <cmath>
 #include <vector>
 #include <bsta/bsta_parzen_sphere.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

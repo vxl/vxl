@@ -8,7 +8,6 @@
 #include <bpro/core/bbas_pro/bbas_1d_array_string.h>
 #include <vsl/vsl_binary_io.h>
 #include <vil/vil_load.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

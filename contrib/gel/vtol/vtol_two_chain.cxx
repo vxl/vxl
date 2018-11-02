@@ -10,7 +10,6 @@
 //   05/13/98  RIH replaced append by insert_after to avoid n^2 behavior
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -13,7 +13,6 @@
 #include <pdf1d/pdf1d_builder.h>
 #include <pdf1d/pdf1d_mixture_builder.h>
 #include <pdf1d/pdf1d_mixture.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

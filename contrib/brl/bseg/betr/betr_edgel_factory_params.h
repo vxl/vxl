@@ -24,7 +24,6 @@
 //   min_region_edge_length_ - the smallest dimension (in pixels) allowed for the region of interest for
 //                             computing edges.
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -4,7 +4,6 @@
 #include "boxm2_volm_io.h"
 #include "boxm2_volm_locations.h";
 #include <vsl/vsl_binary_io.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

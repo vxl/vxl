@@ -4,7 +4,6 @@
 // \brief Example program using F&H method to locate matches on a pair of images
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

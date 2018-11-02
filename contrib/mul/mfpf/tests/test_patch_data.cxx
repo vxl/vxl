@@ -12,7 +12,6 @@
 // \author Tim Cootes
 // \brief test mfpf_patch_data
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

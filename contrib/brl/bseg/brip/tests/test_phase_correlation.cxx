@@ -10,7 +10,6 @@
 #include <brip/brip_vil_float_ops.h>
 #include <brip/brip_phase_correlation.h>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

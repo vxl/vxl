@@ -6,7 +6,6 @@
 #include <cmath>
 #include <string>
 #include "vgl_line_segment_2d.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

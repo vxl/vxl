@@ -28,7 +28,6 @@ bool operator==(osl_vertex const &a, osl_vertex const &b) {
   return a.x==b.x && a.y==b.y && a.id==b.id;
 }
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

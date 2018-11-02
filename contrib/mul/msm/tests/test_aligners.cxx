@@ -18,7 +18,6 @@
 #include <msm/msm_similarity_aligner.h>
 #include <msm/msm_affine_aligner.h>
 #include <vnl/vnl_vector.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

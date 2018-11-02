@@ -2,7 +2,6 @@
 // J.L. Mundy June 13, 2014
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

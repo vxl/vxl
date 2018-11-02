@@ -25,7 +25,6 @@
 // Reproduction rights limited as described in the COPYRIGHT file.
 //----------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -12,7 +12,6 @@
 #include <cmath>
 #include <gevd/gevd_float_operators.h>
 #include <gevd/gevd_bufferxy.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

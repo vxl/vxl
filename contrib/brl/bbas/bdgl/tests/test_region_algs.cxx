@@ -1,6 +1,5 @@
 // This is brl/bbas/bdgl/tests/test_region_algs.cxx
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -26,7 +26,6 @@
 #include <bkml/bkml_parser.h>
 #include <bkml/bkml_write.h>
 #include <vgl/vgl_intersection.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

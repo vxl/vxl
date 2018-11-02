@@ -1,7 +1,6 @@
 // In this example a line is drawn by clicking on the end points.
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

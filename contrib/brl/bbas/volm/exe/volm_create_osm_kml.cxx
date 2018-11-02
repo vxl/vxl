@@ -19,7 +19,6 @@
 #include <bkml/bkml_write.h>
 #include <volm/volm_osm_parser.h>
 #include <volm/volm_io.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

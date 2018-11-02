@@ -23,7 +23,6 @@
 //   Jun 23, 2003 Peter Vanroose - made compute_pl() etc. pure virtual
 // \endverbatim
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

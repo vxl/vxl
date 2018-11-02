@@ -8,7 +8,6 @@
 // \brief Compute entropy in region around each image pixel
 // \author Tim Cootes
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -23,7 +23,6 @@
 #include <vil/vil_load.h>
 #include <vgl/vgl_polygon.h>
 #include <vil/algo/vil_find_4con_boundary.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

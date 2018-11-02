@@ -1,7 +1,6 @@
 // This example displays an image with a popup-menu.
 
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

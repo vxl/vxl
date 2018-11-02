@@ -11,7 +11,6 @@
 // \author Brad King
 // \date December 2006
 
-#include <vcl_compiler.h> // for safe bool
 
 #include "rgtl_tagged_index.h"
 #include "rgtl_serialize_access.h"

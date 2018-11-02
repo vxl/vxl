@@ -6,7 +6,6 @@
 #include <vsol/vsol_box_2d.h>
 #include "bsol_algs.h"
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

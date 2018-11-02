@@ -12,7 +12,6 @@
 
 static char const* vil_mit_format_tag = "mit";
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -14,7 +14,6 @@
 #include "vidl_v4l_params.h"
 #include "vidl_pixel_format.h"
 #include "vidl_frame.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

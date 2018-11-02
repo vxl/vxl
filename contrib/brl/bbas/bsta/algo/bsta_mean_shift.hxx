@@ -7,7 +7,6 @@
 #include <map>
 #include "bsta_mean_shift.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

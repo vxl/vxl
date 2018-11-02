@@ -11,7 +11,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_closest_point.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

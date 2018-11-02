@@ -14,7 +14,6 @@
 #include <vimt/vimt_image_2d_of.h>
 #include <vil/vil_resample_bilin.h>
 #include <vnl/vnl_math.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

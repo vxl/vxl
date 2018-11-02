@@ -13,7 +13,6 @@
 #include <vil3d/algo/vil3d_grad_3x3x3.h>
 #include <vil3d/algo/vil3d_smooth_121.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

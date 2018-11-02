@@ -8,7 +8,6 @@
 // \file
 // \brief Support function for vil1_clamp_image_impl
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

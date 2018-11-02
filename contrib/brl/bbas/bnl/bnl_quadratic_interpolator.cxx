@@ -3,7 +3,6 @@
 #include "bnl_quadratic_interpolator.h"
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_svd.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -19,7 +19,6 @@
 #include <iosfwd>
 #include <iostream>
 #include <boxm2/basic/boxm2_block_id.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -9,7 +9,6 @@
 #include <vil3d/vil3d_crop.h>
 #include <vil3d/algo/vil3d_structuring_element.h>
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

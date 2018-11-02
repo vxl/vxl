@@ -85,7 +85,6 @@ void osl_edge::SetEndY(float v) { v2->y = v; }
 
 //--------------------------------------------------------------------------------
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

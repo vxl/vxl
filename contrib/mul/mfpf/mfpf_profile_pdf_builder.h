@@ -11,7 +11,6 @@
 #include <vpdfl/vpdfl_builder_base.h>
 #include <mbl/mbl_cloneable_ptr.h>
 #include <vgl/vgl_fwd.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

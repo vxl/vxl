@@ -10,7 +10,6 @@
 #include <vgl/vgl_distance.h>
 #include <vgl/vgl_closest_point.h>
 #include <vil/algo/vil_colour_space.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

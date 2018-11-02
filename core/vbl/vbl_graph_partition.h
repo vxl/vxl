@@ -21,7 +21,6 @@
 // than the smallest weight edge between a pair of adjacent components.
 // The result is a set of isolated sub-graphs of the original graph.
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

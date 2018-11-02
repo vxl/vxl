@@ -21,7 +21,6 @@
 #include <volm/volm_loc_hyp_sptr.h>
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

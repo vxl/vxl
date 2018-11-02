@@ -22,7 +22,6 @@
 #include "bmsh3d_halfedge.h"
 #include "bmsh3d_utils.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

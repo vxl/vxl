@@ -14,7 +14,6 @@
 //   Aug 3, 2009  Gamze Tunali - Moved from lemsvxl/psm_opt to vxl
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

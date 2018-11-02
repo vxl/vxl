@@ -19,7 +19,6 @@
 //    Yi Dong Nov, 2015.  Modify the inputs to avoid usage of land cover image and land cover camera
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

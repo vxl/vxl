@@ -6,7 +6,6 @@
 // \brief Printing dots to the screen to indicate events
 // \author Ian Scott
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 #include <pdf1d/pdf1d_weighted_epanech_kernel_pdf.h>
 #include <pdf1d/pdf1d_epanech_kernel_pdf_builder.h>
 #include <pdf1d/pdf1d_weighted_epanech_kernel_sampler.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

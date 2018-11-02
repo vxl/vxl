@@ -5,7 +5,6 @@
 #include <vgl/xio/vgl_xio_vector_3d.h>
 
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

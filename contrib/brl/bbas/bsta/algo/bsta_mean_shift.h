@@ -23,7 +23,6 @@
 #include <bsta/bsta_gaussian_sphere.h>
 #include <bsta/bsta_gaussian_full.h>
 #include <vnl/vnl_random.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

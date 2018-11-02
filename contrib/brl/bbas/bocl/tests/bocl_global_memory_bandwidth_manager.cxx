@@ -2,7 +2,6 @@
 #include <cstdio>
 #include "bocl_global_memory_bandwidth_manager.h"
 //
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

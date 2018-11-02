@@ -24,7 +24,6 @@
 #include <vbl/io/vbl_io_sparse_array_1d.h>
 #include <vbl/io/vbl_io_bounding_box.h>
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

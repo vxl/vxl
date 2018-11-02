@@ -148,7 +148,6 @@
 #include <imagehlp.h>       // For ::MakeSureDirectoryPathExists()
 
 #include "vgui_dir_dialog.h"      // Our own header file
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -9,7 +9,6 @@
 // \author Ali Osman Ulusoy
 // \date Jan 28, 2013
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

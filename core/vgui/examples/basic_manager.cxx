@@ -1,7 +1,6 @@
 // This is core/vgui/examples/basic_manager.cxx
 #include <cstdlib>
 #include "basic_manager.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

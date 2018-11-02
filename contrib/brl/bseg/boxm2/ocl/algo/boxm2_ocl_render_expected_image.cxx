@@ -9,7 +9,6 @@
 #include <vsph/vsph_camera_bounds.h>
 #include <vgl/vgl_ray_3d.h>
 #include <boct/boct_bit_tree.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

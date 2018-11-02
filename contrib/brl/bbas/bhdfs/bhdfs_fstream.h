@@ -23,7 +23,6 @@
 #include <iostream>
 #include <string>
 #include <vxl_config.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

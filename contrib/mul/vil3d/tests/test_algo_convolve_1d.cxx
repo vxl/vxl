@@ -1,7 +1,6 @@
 // This is mul/vil3d/tests/test_algo_convolve_1d.cxx
 #include <iostream>
 #include <testlib/testlib_test.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

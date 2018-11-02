@@ -8,7 +8,6 @@
 //   2009-03-08 Peter Vanroose - Increased test coverage: added "inside" & "plane intersection" tests
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

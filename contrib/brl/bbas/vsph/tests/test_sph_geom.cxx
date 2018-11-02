@@ -6,7 +6,6 @@
 #include <vsph/vsph_sph_point_2d.h>
 #include <vsph/vsph_sph_box_2d.h>
 #include <vsph/vsph_utils.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

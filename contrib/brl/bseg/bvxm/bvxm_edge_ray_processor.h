@@ -17,7 +17,6 @@
 #include <bvxm/bvxm_voxel_world_sptr.h>
 #include <bvxm/bvxm_image_metadata.h>
 #include <bvxm/bvxm_von_mises_tangent_processor.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

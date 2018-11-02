@@ -9,7 +9,6 @@
 // \brief Reader/Writer for a volume made up of a list of slices.
 // \author Ian Scott - Manchester
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

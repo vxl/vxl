@@ -20,7 +20,6 @@
 #include <vector>
 #include <vtol/vtol_chain_sptr.h>
 #include <vtol/vtol_topology_object.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

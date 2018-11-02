@@ -18,7 +18,6 @@
 #include "icam_depth_transform.h"
 #include "icam_minimizer.h"
 #include "icam_minimizer_params.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

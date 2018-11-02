@@ -12,7 +12,6 @@
 #include <brdb/brdb_value.h>
 #include <boxm/algo/rt/boxm_rpc_registration.h>
 #include <vil/vil_image_view.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

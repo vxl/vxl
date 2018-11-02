@@ -11,7 +11,6 @@
 #include <boxm/basic/boxm_seg_length_functor.h>
 #include <boxm/algo/rt/boxm_pre_infinity_functor.h>
 #include <vil/vil_math.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

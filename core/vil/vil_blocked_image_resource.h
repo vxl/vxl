@@ -9,7 +9,6 @@
 // \brief A blocked representation of the image_resource
 // \author J. L. Mundy
 #include <vector>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -2,7 +2,6 @@
 #define vcl_stack_h_
 
 #include <stack>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

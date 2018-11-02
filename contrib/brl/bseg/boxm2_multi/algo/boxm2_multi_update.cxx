@@ -5,7 +5,6 @@
 #include "boxm2_multi_pre_vis_inf.h"
 #include "boxm2_multi_update_cell.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 // \brief Functions to select a pdf or form of pdf for given data.
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

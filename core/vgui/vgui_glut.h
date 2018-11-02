@@ -11,7 +11,6 @@
 // the comments at the top of glut.h
 //  - Amitha Perera
 
-# include <vcl_compiler.h>
 # include <vgui/vgui_gl.h>
 # include <vgui/vgui_glu.h>
 #ifdef __APPLE__

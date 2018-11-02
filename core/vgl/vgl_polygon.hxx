@@ -17,7 +17,6 @@
 #include "vgl_line_2d.h"
 #include "vgl_tolerance.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

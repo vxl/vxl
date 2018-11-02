@@ -16,7 +16,6 @@
 #include <cstddef>
 #include "rgtl_serialize_direction.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

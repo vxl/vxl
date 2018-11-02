@@ -59,7 +59,6 @@
 #include <iosfwd>
 #include <vsl/vsl_fwd.h>
 #include <vbl/vbl_smart_ptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -18,7 +18,6 @@
 #include <string>
 #include <algorithm>
 #include <vsph/vsph_sph_box_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

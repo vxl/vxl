@@ -15,7 +15,6 @@
 // \author  rob@stellarscience.com
 // \date 28 Jun 05
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

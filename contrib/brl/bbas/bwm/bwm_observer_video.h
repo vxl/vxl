@@ -7,7 +7,6 @@
 #include <map>
 #include "bwm_observer_cam.h"
 #include "video/bwm_video_corr_sptr.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

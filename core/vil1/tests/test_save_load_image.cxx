@@ -26,7 +26,6 @@
 //  6 Jan 2003 - Peter Vanroose - test added for ras images
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

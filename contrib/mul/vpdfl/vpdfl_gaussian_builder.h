@@ -19,7 +19,6 @@
 #include <iosfwd>
 #include <vpdfl/vpdfl_builder_base.h>
 #include <vnl/vnl_fwd.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

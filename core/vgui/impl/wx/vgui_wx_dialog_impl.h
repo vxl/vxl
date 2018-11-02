@@ -20,7 +20,6 @@ class  vgui_wx_adaptor;
 class  vgui_dialog_field;
 struct vgui_wx_dialog_choice;
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

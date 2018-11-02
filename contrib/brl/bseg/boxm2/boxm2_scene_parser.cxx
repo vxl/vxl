@@ -9,7 +9,6 @@
 #include <iomanip>
 #include "boxm2_scene_parser.h"
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

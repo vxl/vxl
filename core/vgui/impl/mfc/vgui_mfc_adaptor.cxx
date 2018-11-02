@@ -15,7 +15,6 @@
 //                          - Set event.ascii_char to be the actual key stroke.
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

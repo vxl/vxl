@@ -9,7 +9,6 @@
 #include "vil_nitf2_typed_field_formatter.h"
 
 #include <cassert>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -10,7 +10,6 @@
 // \file
 // Based on ITK, Testing/Code/Common/itkSystemInformationTest.cxx
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

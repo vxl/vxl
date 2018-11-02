@@ -17,7 +17,6 @@
 #include <iosfwd>
 #include <boxm/boxm_apm_traits.h>
 #if 0 // operator<< in commented-out section
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

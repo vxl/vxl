@@ -16,7 +16,6 @@
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_property.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

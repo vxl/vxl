@@ -7,7 +7,6 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
 #include <vil/vil_color_table.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

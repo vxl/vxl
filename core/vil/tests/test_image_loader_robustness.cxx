@@ -1,7 +1,6 @@
 // This is core/vil/tests/test_image_loader_robustness.cxx
 #include <cstddef>
 #include <iostream>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

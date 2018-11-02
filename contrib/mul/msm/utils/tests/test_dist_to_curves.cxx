@@ -11,7 +11,6 @@
 // \author Tim Cootes
 // \brief Test msm_dist_to_curves functions
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

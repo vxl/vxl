@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cstdio>
 #include <vcl_atomic_count.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

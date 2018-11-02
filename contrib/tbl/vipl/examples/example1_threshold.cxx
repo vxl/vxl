@@ -23,7 +23,6 @@
 #include <vil/vil_image_view.h>
 #include <vipl/accessors/vipl_accessors_vil_image_view.h>
 #include <vipl/vipl_threshold.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

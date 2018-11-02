@@ -8,7 +8,6 @@
 #include <typeinfo>
 #include "bbgm_feature_image.h"
 #include <vbl/io/vbl_io_array_2d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

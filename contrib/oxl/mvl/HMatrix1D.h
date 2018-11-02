@@ -20,7 +20,6 @@
 #include <iosfwd>
 #include <vnl/vnl_double_2x2.h>
 #include <vgl/vgl_homg_point_1d.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

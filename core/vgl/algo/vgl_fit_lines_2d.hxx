@@ -7,7 +7,6 @@
 #include <iostream>
 #include "vgl_fit_lines_2d.h"
 #include <vgl/algo/vgl_line_2d_regression.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -13,7 +13,6 @@
 // \date        Sun Mar 17 22:57:00 2002
 
 #include <string>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

@@ -6,7 +6,6 @@
 // Approved for public Release, distribution unlimited
 // DISTAR Case 14074
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

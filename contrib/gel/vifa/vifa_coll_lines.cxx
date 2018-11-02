@@ -2,7 +2,6 @@
 #include <iostream>
 #include <cmath>
 #include "vifa_coll_lines.h"
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

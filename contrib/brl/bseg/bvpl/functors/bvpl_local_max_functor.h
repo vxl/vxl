@@ -20,7 +20,6 @@
 #include <bsta/bsta_gauss_sf1.h>
 #include <bsta/bsta_attributes.h>
 #ifdef DEBUG
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

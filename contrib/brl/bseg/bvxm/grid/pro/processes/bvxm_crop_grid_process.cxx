@@ -13,7 +13,6 @@
 //   Aug 13 2009 added support for Gaussian grids
 // \endverbatim
 
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif

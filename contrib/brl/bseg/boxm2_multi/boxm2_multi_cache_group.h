@@ -12,7 +12,6 @@
 #include <boxm2/ocl/boxm2_opencl_cache1.h>
 #include <vgl/vgl_box_3d.h>
 #include <vpgl/vpgl_camera_double_sptr.h>
-#include <vcl_compiler.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
