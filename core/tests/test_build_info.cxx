@@ -99,7 +99,7 @@ static void test_build_info()
     vxl_BUILD_DIR "/CMakeCache.txt",
     vxl_BUILD_DIR "/CMakeError.log",
     vxl_BUILD_DIR "/core/vxl_config.h",
-    vxl_BUILD_DIR "/vcl/vcl_config_compiler.h",
+    vxl_BUILD_DIR "/vcl/vcl_compiler.h",
     vxl_BUILD_DIR "/core/vil/vil_config.h",
     vxl_BUILD_DIR "/core/vnl/vnl_config.h",
     vxl_BUILD_DIR "/v3p/dcmtk/osconfig.h",

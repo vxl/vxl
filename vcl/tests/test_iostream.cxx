@@ -10,7 +10,7 @@
 
 // This appears to do nothing, and it doesn't compile on MSVC with some weird error
 //      'flux' : illegal member initialization: 'fstream' is not a base or member
-#ifndef VCL_VC
+#ifndef _MSC_VER
 struct flux : public std::fstream
 {
   // check that bitwise OR of {openmode}s works.

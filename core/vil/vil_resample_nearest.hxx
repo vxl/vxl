@@ -16,7 +16,7 @@
 #include <vil/vil_nearest_interp.h>
 
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 // Get rid of double to bool conversion warnings
 #pragma warning( disable : 4800 )
 #endif

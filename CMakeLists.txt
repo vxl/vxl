@@ -135,10 +135,8 @@ set( CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${VXL_EXTRA_CMAKE_S
 
 # Optionally use old error reporting methods, rather than exceptions.
 # The main use is in vil which often uses/used null images to imply an error.
-option(VXL_LEGACY_ERROR_REPORTING "Use old error reporting methods rather than exceptions?" ON)
-if(VXL_LEGACY_ERROR_REPORTING)
-  add_definitions( -DVXL_LEGACY_ERROR_REPORTING )
-endif()
+option( VXL_LEGACY_FUTURE_REMOVE "Disable features and cause errors for code deprecated, or listed for removal" ON)
+mark_as_advanced(VXL_LEGACY_FUTURE_REMOVE)
 option(VXL_RUN_FAILING_TESTS "Enable long-time failing tests. If tests are failing for a long time, turn them off by default." OFF)
 mark_as_advanced(VXL_RUN_FAILING_TESTS)
 

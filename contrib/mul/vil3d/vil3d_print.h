@@ -13,7 +13,7 @@
 #include <vil3d/vil3d_image_view.h>
 #include <vcl_compiler.h>
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 #  pragma warning( push )
 #  pragma warning( disable: 4244 )  // conversion from ptrdiff_t to int, possible loss of data
 #endif
@@ -50,7 +50,7 @@ inline void vil3d_print_all(std::ostream& os,const vil3d_image_view<T>& view)
   }
 }
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 #  pragma warning( pop )
 #endif
 

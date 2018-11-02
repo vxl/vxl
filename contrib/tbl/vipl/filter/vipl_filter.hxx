@@ -9,7 +9,7 @@
 #include "vipl_filter.h"
 #include <vcl_compiler.h>
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 #pragma warning( disable: 4390 )
 #endif
 

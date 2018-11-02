@@ -110,12 +110,12 @@ if("${VXL_INSTALL_INCLUDE_DIR}" STREQUAL "include/vxl")
 else()
   set(_config_destination ${VXL_INSTALL_INCLUDE_DIR})
 endif()
-vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_config_compiler.h.in ${PROJECT_BINARY_DIR}/vcl_config_compiler.h ${_config_destination})
+vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_compiler.h.in ${PROJECT_BINARY_DIR}/vcl_compiler.h ${_config_destination})
 vxl_configure_file(${CMAKE_CURRENT_LIST_DIR}/vcl_where_root_dir.h.in ${PROJECT_BINARY_DIR}/vcl_where_root_dir.h  ${_config_destination})
 
 include_directories(${PROJECT_BINARY_DIR})
 set( vcl_sources
-  vcl_compiler.h      ${VCL_COMPILER_DETECTION_HEADER}
+  ${VCL_COMPILER_DETECTION_HEADER}
   vcl_deprecated.cxx  vcl_deprecated.h
 
   vcl_cmath.h

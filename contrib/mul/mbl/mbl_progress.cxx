@@ -4,7 +4,7 @@
 #pragma implementation
 #endif
 
-#include <vcl_config_compiler.h>
+#include <vcl_compiler.h>
 
 
 //=======================================================================

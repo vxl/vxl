@@ -7,7 +7,7 @@
 
 #include <vcl_compiler.h>
 
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
 #  include <crtdbg.h>
 #  include <windows.h>
 #include <cstdio>
@@ -66,7 +66,7 @@ testlib_enter_stealth_mode()
   if ( env_var1 || env_var2 ) {
 
   // Don't allow DART test to open critical error dialog boxes
-#if defined(VCL_VC)
+#if defined(_MSC_VER)
     // No abort or ANSI assertion failure dialog box
     _CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
@@ -78,7 +78,7 @@ testlib_enter_stealth_mode()
     // No unhandled exceptions dialog box,
     // such as access violation and integer division by zero
     SetUnhandledExceptionFilter( vxl_exception_filter );
-#endif //defined(VCL_VC)
+#endif //defined(_MSC_VER)
 
     // Disable Borland's floating point exceptions.
   }

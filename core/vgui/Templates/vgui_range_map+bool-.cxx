@@ -1,6 +1,6 @@
 #include <vcl_compiler.h>
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 // They are performance warnings, but you can't really do anything faster.
 # pragma warning(disable : 4800)
 #endif

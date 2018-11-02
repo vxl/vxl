@@ -151,7 +151,7 @@ read_vcl_stream(std::istream& input, vil_nitf2_long& out_value, bool& out_blank)
 
 #if VXL_HAS_INT_64
 
-#if defined VCL_VC
+#if defined _MSC_VER
   out_value = _strtoi64(cstr, &endp, 10);
   conversion_ok = (endp-cstr)==field_width;   // processed all chars
 #else

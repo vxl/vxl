@@ -13,7 +13,7 @@
 #include <vcl_compiler.h>
 #endif
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 // Disable complaints about empty controlled statements (from blank macro expansion)
 # pragma warning( push )
 # pragma warning( disable : 4390 )
@@ -36,7 +36,7 @@ template < class DataType >
 #endif
 }
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 // Disable complaints about empty controlled statements (from blank macro expansion)
 # pragma warning( pop )
 # pragma warning( disable : 4390 )

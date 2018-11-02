@@ -4,7 +4,7 @@
 #include "vipl_convert.h"
 
 #include <vcl_compiler.h>
-#ifdef VCL_VC
+#ifdef _MSC_VER
 # pragma warning(disable:4244) // disable conversion warning for explicit cast at line 23
 #endif
 

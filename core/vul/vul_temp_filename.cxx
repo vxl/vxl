@@ -10,7 +10,7 @@
 #include "vul_temp_filename.h"
 #include <vcl_compiler.h>
 
-#if defined (VCL_VC) || defined(__MINGW32__)
+#if defined (_MSC_VER) || defined(__MINGW32__)
 
 # include <Windows.h>
 #else
@@ -69,7 +69,7 @@
 std::string
 vul_temp_filename( )
 {
-#if defined(VCL_VC) || defined(__MINGW32__)
+#if defined(_MSC_VER) || defined(__MINGW32__)
   char path[ _MAX_PATH ];
   char* file;
   if ( GetTempPath( _MAX_PATH, path ) == 0 )

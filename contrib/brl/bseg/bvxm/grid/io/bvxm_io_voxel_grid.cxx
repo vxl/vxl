@@ -3,7 +3,7 @@
 // \file
 // \brief This file contains template instantiations of functions
 
-#include <vcl_config_compiler.h>
+#include <vcl_compiler.h>
 
 //: Save to Drishti raw file
 template <>

@@ -9,7 +9,7 @@
 #include <vipl/filter/vipl_filter_abs.h> // for default def of FILTER_IMPTR_INC_REFCOUNT
 #include <vcl_compiler.h>
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 // Disable complaints about empty controlled statements (from blank macro expansion)
 # pragma warning( push )
 # pragma warning( disable : 4390 )
@@ -37,7 +37,7 @@ vipl_section_descriptor< DataType > ::vipl_section_descriptor(
 #endif
 }
 
-#ifdef VCL_VC
+#ifdef _MSC_VER
 # pragma warning( pop )
 #endif
 
