@@ -1,5 +1,6 @@
 #ifndef vil_exception_h_
 #define vil_exception_h_
+#define VXL_LEGACY_ERROR_REPORTING // REQUIRED FOR PASSING TESTS 2018-11-02
 //:
 // \file
 // \brief Exceptions thrown by vil, and a mechanism for turning them off.
