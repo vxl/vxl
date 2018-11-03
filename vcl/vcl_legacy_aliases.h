@@ -657,7 +657,7 @@ __inline int vcl_snprintf(char *outBuf, size_t size, const char *format, ...)
 #define vnl_math_sgn vnl_math::sgn
 #define vnl_math_sgn0 vnl_math::sgn0
 #define vnl_math_squared_magnitude vnl_math::squared_magnitude
-#define vnl_math_cuberoot vnl_math::cuberoot
+#define vnl_math_cuberoot std::cbrt
 #define vnl_math_hypot vnl_math::hypot
 
 

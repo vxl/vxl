@@ -115,7 +115,7 @@ int main2(int argc, char*argv[])
   else
   {
     blockwidth_k = std::min<unsigned long>(nk,
-                                          vnl_math::rnd(vnl_math::cuberoot(static_cast<double>(max_voxels))) );
+                                          vnl_math::rnd(std::cbrt(static_cast<double>(max_voxels))) );
     blockcount_k = (nk+blockwidth_k-1) / blockwidth_k;
     blockwidth_j = std::min<unsigned long>(nj,
                                           vnl_math::rnd(std::sqrt(static_cast<double>(max_voxels/blockwidth_k))));
