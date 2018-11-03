@@ -152,11 +152,13 @@ namespace vnl_math
   using std::max;
   using std::min;
   using std::cbrt;
+#if 0 // Use std::cbrt
   template <typename TArg>
   TArg cuberoot(TArg&& arg)
     {
     return std::cbrt(std::forward<TArg>(arg));
     }
+#endif
   using std::hypot;
 
 #if USE_SSE2_IMPL // Fast sse2 implementation
