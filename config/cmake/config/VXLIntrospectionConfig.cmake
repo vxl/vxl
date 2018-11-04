@@ -472,6 +472,8 @@ endif()
 
 # Check C++ <cmath> first, where the C++11 standard says these must be.
 include(${CMAKE_CURRENT_LIST_DIR}/CheckCXXExpressionCompiles.cmake) ## From VTK
+PERFORM_C_CHECK_FUNCTION(drand48 "stdlib.h" VXL_STDLIB_HAS_DRAND48)
+PERFORM_C_CHECK_FUNCTION(srand48 "stdlib.h" VXL_STDLIB_HAS_SRAND48)
 
 if(UNIX)
   list(REMOVE_ITEM CMAKE_REQUIRED_LIBRARIES m)
