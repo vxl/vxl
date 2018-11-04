@@ -6,6 +6,7 @@
 #endif
 #include <vul/vul_timer.h>
 #include <mvl/mvl_multi_view_matches.h>
+#include <vnl/vnl_sample.h>
 
 static const int W = -1;
 
@@ -77,9 +78,9 @@ int main ()
     int i2[50000];
 
     for (int i=0; i < 50000; ++i) {
-      f[i] = (int)(498*drand48());
-      i1[i] = (int)(299*drand48());
-      i2[i] = (int)(299*drand48());
+      f[i] = (int)(498*vnl_sample_uniform01()());
+      i1[i] = (int)(299*vnl_sample_uniform01()());
+      i2[i] = (int)(299*vnl_sample_uniform01()());
     }
     vul_timer timer;
     for (int i=0; i < 50000; ++i) {

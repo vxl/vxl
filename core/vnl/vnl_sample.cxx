@@ -2,24 +2,41 @@
 
 #include <cmath>
 #include <ctime>
+#include <random>
 
 #include "vnl_sample.h"
 #include <cstdlib>
 #include <vnl/vnl_math.h>
 
+static std::random_device private_vnl_sample_rd;  //Will be used to obtain a seed for the random number engine
+
+#if 1 // Use linear_congruential_engine similar to drand48
+//minstd_rand	std::linear_congruential_engine<std::uint_fast32_t, 48271, 0, 2147483647>
+//Newer "Minimum standard", recommended by Park, Miller, and Stockmeyer in 1993
+static std::minstd_rand private_vnl_sample_gen(private_vnl_sample_rd()); //
+#else
+//Standard mersenne_twister_engine seeded with rd()
+static std::mt19937 private_vnl_sample_gen(private_vnl_sample_rd());
+#endif
+
 void vnl_sample_reseed()
 {
-  srand48( std::time(nullptr) );
+	private_vnl_sample_gen.seed();
 }
 
 void vnl_sample_reseed(int seed)
 {
-  srand48( seed );
+	private_vnl_sample_gen.seed(seed);
+}
+
+double vnl_sample_uniform01()
+{
+	return std::generate_canonical<double, 48>(private_vnl_sample_gen); // uniform on [0, 1)
 }
 
 double vnl_sample_uniform(double a, double b)
 {
-  double u = drand48(); // uniform on [0, 1)
+  const double u = std::generate_canonical<double, 48>(private_vnl_sample_gen); // uniform on [0, 1)
   return (1.0 - u)*a + u*b;
 }
 
