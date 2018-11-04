@@ -1,6 +1,7 @@
 // This is core/vnl/algo/tests/test_symmetric_eigensystem.cxx
 #include <iostream>
 #include <ctime>
+#include <algorithm>
 #include <testlib/testlib_test.h>
 //:
 // \file

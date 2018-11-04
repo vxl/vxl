@@ -4,6 +4,7 @@
 #include <cmath>
 #include <cassert>
 #include <iostream>
+#include  <algorithm>
 #include <vnl/algo/vnl_brent_minimizer.h>
 #include <vnl/algo/vnl_bracket_minimum.h>
 
