@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <iostream>
+#include  <algorithm>
 #include "vnl_lsqr.h"
 #include <vnl/vnl_vector_ref.h>
 
