@@ -297,22 +297,6 @@ void test_config()
 #endif
   std::cout << std::endl;
 
-  std::cout << "VXL_STDLIB_HAS_SRAND48 ";
-#ifdef VXL_STDLIB_HAS_SRAND48
-  std::cout << "is set to " << quote(VXL_STDLIB_HAS_SRAND48);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
-  std::cout << "VXL_STDLIB_HAS_DRAND48 ";
-#ifdef VXL_STDLIB_HAS_DRAND48
-  std::cout << "is set to " << quote(VXL_STDLIB_HAS_DRAND48);
-#else
-  std::cout << "is not set";
-#endif
-  std::cout << std::endl;
-
   std::cout << "VXL_UNISTD_USLEEP_IS_VOID ";
 #ifdef VXL_UNISTD_USLEEP_IS_VOID
   std::cout << "is set to " << quote(VXL_UNISTD_USLEEP_IS_VOID);

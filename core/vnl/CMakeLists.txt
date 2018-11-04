@@ -236,6 +236,7 @@ set( vnl_sources
   vnl_gamma.cxx                vnl_gamma.h
                                vnl_beta.h
   vnl_erf.cxx                  vnl_erf.h
+  vnl_drand48.cpp              vnl_drand48.h
   vnl_sample.cxx               vnl_sample.h
   vnl_unary_function.hxx       vnl_unary_function.h
   vnl_identity.h

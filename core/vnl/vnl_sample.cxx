@@ -4,45 +4,21 @@
 #include <ctime>
 #include "vnl_sample.h"
 #include <vnl/vnl_math.h>
-#if VXL_STDLIB_HAS_DRAND48
-#  include <stdlib.h>
-#endif
-
-#if !VXL_STDLIB_HAS_DRAND48
-// rand() is not always a good random number generator,
-// so use a simple congruential random number generator when drand48 not available - PVr
-static unsigned long vnl_sample_seed = 12345;
-#endif
-
+#include "vnl_drand48.h"
 
 void vnl_sample_reseed()
 {
-#if VXL_STDLIB_HAS_SRAND48
-  srand48( std::time(0) );
-#elif !VXL_STDLIB_HAS_DRAND48
-  vnl_sample_seed = (unsigned long)std::time(0);
-#endif
+  vnl_srand48( std::time(0) );
 }
 
 void vnl_sample_reseed(int seed)
 {
-#if VXL_STDLIB_HAS_SRAND48
-  srand48( seed );
-#elif !VXL_STDLIB_HAS_DRAND48
-  vnl_sample_seed = seed;
-#endif
+  vnl_srand48( seed );
 }
 
 double vnl_sample_uniform(double a, double b)
 {
-#if VXL_STDLIB_HAS_DRAND48
-  double u = drand48(); // uniform on [0, 1)
-#else
-// rand() is not always a good random number generator,
-// so use a simple congruential random number generator when drand48 not available - PVr
-  vnl_sample_seed = (vnl_sample_seed*16807)%2147483647L;
-  double u = double(vnl_sample_seed)/2147483647L; // uniform on [0, 1)
-#endif
+  double u = vnl_drand48(); // uniform on [0, 1)
   return (1.0 - u)*a + u*b;
 }
 

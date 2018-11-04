@@ -150,12 +150,6 @@
 #define VXL_UNISTD_HAS_GETPID     @VXL_UNISTD_HAS_GETPID@
 #define VXL_UNISTD_HAS_GETHOSTNAME      @VXL_UNISTD_HAS_GETHOSTNAME@
 
-/* true if <stdlib.h> declares drand48() */
-#define VXL_STDLIB_HAS_DRAND48    @VXL_STDLIB_HAS_DRAND48@
-
-/* true if <stdlib.h> declares srand48() */
-#define VXL_STDLIB_HAS_SRAND48    @VXL_STDLIB_HAS_SRAND48@
-
 /* true if usleep() returns void */
 #define VXL_UNISTD_USLEEP_IS_VOID @VXL_UNISTD_USLEEP_IS_VOID@
 

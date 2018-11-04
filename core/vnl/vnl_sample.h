@@ -9,7 +9,6 @@
 // \author fsm
 // \verbatim
 //  Modifications
-//   2005-01-01 Peter Vanroose - use simple (but robust) rng when no DRAND48
 //   2007-03-26 Peter Vanroose - avoid returning log(0.0) by switching params
 //   2010-09-12 Peter Vanroose - added implementation for binomial sampling
 //   2010-09-12 Peter Vanroose - added Bernoulli (unfair coin toss) sampling
