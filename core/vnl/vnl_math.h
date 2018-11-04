@@ -136,17 +136,32 @@ namespace vnl_math
 
 namespace vnl_math
 {
+#if defined(_MSC_VER)
+  // MSVC does not properly implement isfinite, iinf, isnan for C++11 conformance for integral types
+  // For integral types only:
+  template<typename T>
+  typename std::enable_if<std::is_integral<T>::value>::type isnan(T t)
+  {
+    return std::isnan(static_cast<double>(t));
+  }
+  template<typename T>
+  typename std::enable_if<std::is_integral<T>::value>::type isinf(T t)
+  {
+    return std::isinf(static_cast<double>(t));
+  }
+  template<typename T>
+  typename std::enable_if<std::is_integral<T>::value>::type isfinite(T t)
+  {
+    return std::isfinite(static_cast<double>(t));
+  }
+  template<typename T>
+  typename std::enable_if<std::is_integral<T>::value>::type isnormal(T t)
+  {
+    return std::isnormal(static_cast<double>(t));
+  }
+#endif
   using std::isnan;
-  // Ensure proper conversion to bool type.
-  // Return a signed integer type has been seen with the following
-  // compilers/libstdc++:
-  //  g++ (GCC) 7.2.1 20170829 (Red Hat 7.2.1-1)
-  //  g++ (GCC) 6.3.1 20170216 (Red Hat 6.3.1-3)
-  template <typename TArg>
-  bool isinf(TArg&& arg)
-    {
-    return bool(std::isinf(std::forward<TArg>(arg)));
-    }
+  using std::isinf;
   using std::isfinite;
   using std::isnormal;
   using std::max;
