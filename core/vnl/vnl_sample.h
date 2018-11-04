@@ -21,6 +21,9 @@ VNL_EXPORT void vnl_sample_reseed();
 //: re-seed the random number generator given a seed.
 VNL_EXPORT void vnl_sample_reseed(int seed);
 
+//: return a random number uniformly drawn on [0, 1.0)
+VNL_EXPORT double vnl_sample_uniform01();
+
 //: return a random number uniformly drawn on [a, b)
 VNL_EXPORT double vnl_sample_uniform(double a, double b);
 
