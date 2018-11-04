@@ -82,8 +82,6 @@
 #pragma GCC poison VXL_STDLIB_HAS_QSORT                  //"ERROR:  Use C++11 cstdlib"
 
 #pragma GCC poison VXL_STDLIB_HAS_LRAND48                //"ERROR:  Use C++11 cstdlib"
-#pragma GCC poison VXL_STDLIB_HAS_DRAND48                //"ERROR:  Use C++11 cstdlib"
-#pragma GCC poison VXL_STDLIB_HAS_SRAND48                //"ERROR:  Use C++11 cstdlib"
 
 #pragma GCC poison VCL_FREEBSD                           //"ERROR: VCL_FREBSD has no use in VXL"
 #pragma GCC poison VCL_VOID_RETURN                       //"ERROR: VCL_VOID_RETURN has no use in VXL"
