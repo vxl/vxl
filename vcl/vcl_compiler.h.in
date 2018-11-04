@@ -20,8 +20,11 @@
  * by assuming that compiler standards are backwards (but not forwards) compatible with each
  * other.  Strange behaviors may occur if external applications do not use the same compiler
  * and compiler language featues (i.e. compiler flags). */
+#if !defined(_MSC_VER) //MSVC does not consistently define __cplusplus
+// https://developercommunity.visualstudio.com/content/problem/139261/msvc-incorrectly-defines-cplusplus.html
 #if VXL_COMPILED_CXX_STANDARD_VERSION > __cplusplus
 #warning "WARNING:  The current project is configured to use a C++ standard version older than the C++ standard used for this build of VXL"
+#endif
 #endif
 
 #cmakedefine01 VXL_LEGACY_FUTURE_REMOVE
