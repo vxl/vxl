@@ -140,30 +140,53 @@ namespace vnl_math
   // MSVC does not properly implement isfinite, iinf, isnan for C++11 conformance for integral types
   // For integral types only:
   template<typename T>
-  typename std::enable_if<std::is_integral<T>::value>::type isnan(T t)
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isnan(_In_ T t) throw()
   {
     return std::isnan(static_cast<double>(t));
   }
   template<typename T>
-  typename std::enable_if<std::is_integral<T>::value>::type isinf(T t)
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isinf(_In_ T t) throw()
   {
     return std::isinf(static_cast<double>(t));
   }
   template<typename T>
-  typename std::enable_if<std::is_integral<T>::value>::type isfinite(T t)
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isfinite(_In_ T t) throw()
   {
     return std::isfinite(static_cast<double>(t));
   }
   template<typename T>
-  typename std::enable_if<std::is_integral<T>::value>::type isnormal(T t)
+  _Check_return_ typename std::enable_if<std::is_integral<T>::value, bool>::type isnormal(_In_ T t) throw()
   {
     return std::isnormal(static_cast<double>(t));
   }
+
+  // Floating point types can alias C++ standard that is implemented
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isnan(_In_ T t) throw()
+  {
+	  return std::isnan(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isinf(_In_ T t) throw()
+  {
+	  return std::isinf(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isfinite(_In_ T t) throw()
+  {
+	  return std::isfinite(t);
+  }
+  template<typename T>
+  _Check_return_ typename std::enable_if<std::is_floating_point<T>::value, bool>::type isnormal(_In_ T t) throw()
+  {
+	  return std::isnormal(t);
+  }
+#else
+	using std::isnan;
+	using std::isinf;
+	using std::isfinite;
+	using std::isnormal;
 #endif
-  using std::isnan;
-  using std::isinf;
-  using std::isfinite;
-  using std::isnormal;
   using std::max;
   using std::min;
   using std::cbrt;
