@@ -4,6 +4,7 @@
 
 #include <istream>
 #include <sstream>
+#include <cctype>
 #include "vnl_na.h"
 
 #include <vxl_config.h>
