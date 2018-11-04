@@ -1,5 +1,4 @@
 # vxl/core/vnl/CMakeLists.txt
-
 project(vnl)
 
 doxygen_add_library(core/vnl
