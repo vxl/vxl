@@ -3,7 +3,7 @@
 
 //:
 // \file
-// This file either is generated from vcl_compiler_detection.h.in
+// This file is generated from vcl_compiler_detection.h.in
 // This file has mostly been replaced with
 // CMake supported features in the auto-generated
 // vcl_compiler_detection.h that should be included
@@ -193,8 +193,8 @@
 #endif
 
 #if defined(_MSC_VER)
-#  if _MSC_VER < 1900     // Visual Studio 2015 = Version 14.x is needed to support
-#   error "Invalid _MSC_VER version Visual Studio 2015 = Version 14.x is needed to support C++11 features"
+#  if _MSC_VER < 1900
+#   error "Invalid _MSC_VER version. Visual Studio 2015 = Version 14.x is needed to support C++11 features"
 #  endif // <1900
 #endif // _MSC_VER
 #endif
