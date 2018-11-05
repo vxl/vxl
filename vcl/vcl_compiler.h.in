@@ -82,6 +82,8 @@
 #pragma GCC poison VXL_STDLIB_HAS_QSORT                  //"ERROR:  Use C++11 cstdlib"
 
 #pragma GCC poison VXL_STDLIB_HAS_LRAND48                //"ERROR:  Use C++11 cstdlib"
+#pragma GCC poison VXL_STDLIB_HAS_DRAND48                //"ERROR:  drand48 is a posix functions and not generally portable. Use C++ <random> features"
+#pragma GCC poison VXL_STDLIB_HAS_SRAND48                //"ERROR:  srand48 is a posix functions and not generally portable. Use C++ <random> features"
 
 #pragma GCC poison VCL_FREEBSD                           //"ERROR: VCL_FREBSD has no use in VXL"
 #pragma GCC poison VCL_VOID_RETURN                       //"ERROR: VCL_VOID_RETURN has no use in VXL"
