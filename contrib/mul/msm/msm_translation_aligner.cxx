@@ -195,6 +195,12 @@ void msm_translation_aligner::align_set(const std::vector<msm_points>& points,
 
   for (unsigned i=0;i<n_shapes;++i)
   {
+    if (points[i].size()!=ref_mean_shape.size())
+    {
+      std::cerr<<"msm_translation_aligner::align_set() shape "<<i
+                <<" has different number of points to first shape"<<std::endl;
+      std::abort();
+    }
     calc_transform_from_ref(ref_mean_shape,points[i],pose_from_ref);
     pose_to_ref[i]=inverse(pose_from_ref);
     average_pose+=pose_from_ref;
