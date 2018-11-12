@@ -46,4 +46,14 @@ double angle_minuspi_to_pi(double angle)
   if (angle<-vnl_math::pi) angle += vnl_math::twopi;
   return angle;
 }
+
+bool isfinite(const std::complex<double> & v)
+{
+  return vnl_math::isfinite(v.imag())  && vnl_math::isfinite(v.real());
+}
+bool isfinite(const std::complex<float> & v)
+{
+  return vnl_math::isfinite(v.imag())  && vnl_math::isfinite(v.real());
+}
+
 }; // end namespace vnl_math
