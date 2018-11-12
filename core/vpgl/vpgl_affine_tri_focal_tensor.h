@@ -338,9 +338,8 @@ bool fmatrix_12(vpgl_affine_fundamental_matrix<Type>& f_12){
   // INTERNALS---------------------------------------------------------------
   private:
   static vpgl_affine_fundamental_matrix<Type> null_F(){
-    vpgl_affine_fundamental_matrix<Type> ret;
-    ret.set_from_params(Type(0),Type(0),Type(0),Type(0),Type(0));
-    return ret;
+    vnl_matrix_fixed<Type, 3, 3> M(Type(0));
+    return vpgl_affine_fundamental_matrix<Type>(M);
   }
   vpgl_affine_camera<Type> null_acam(){
     vnl_matrix_fixed<Type, 2, 4> M(Type(0));
