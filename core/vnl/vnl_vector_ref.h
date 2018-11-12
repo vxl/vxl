@@ -61,7 +61,7 @@ class VNL_EXPORT vnl_vector_ref : public vnl_vector<T>
   // \attention Use this only to pass the reference to a
   // function. Otherwise, the underlying object will be destructed and
   // you'll be left with undefined behaviour.
-  vnl_vector_ref& non_const() { return *this; }
+  inline vnl_vector_ref& non_const() { return *this; }
 
  private:
 

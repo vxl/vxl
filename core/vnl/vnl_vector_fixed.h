@@ -196,14 +196,7 @@ class VNL_EXPORT vnl_vector_fixed
   }
 
   //: Get value at element i
-  inline T get (unsigned int i) const
-  {
-#if VNL_CONFIG_CHECK_BOUNDS
-    if (i >= this->size())            // If invalid index specified
-      vnl_error_vector_index("get", i);  // Raise exception
-#endif
-    return this->data_[i];
-  }
+  T get(unsigned int i) const;
 
   //: Set all values to v
   vnl_vector_fixed& fill( T const& v )

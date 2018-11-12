@@ -36,6 +36,7 @@
 
 #include <cmath>
 #include <algorithm>
+#include <complex>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -211,6 +212,8 @@ namespace vnl_math
     }
 #endif
   using std::hypot;
+  bool VNL_EXPORT isfinite(const std::complex<double> & v);
+  bool VNL_EXPORT isfinite(const std::complex<float> & v);
 
 #if USE_SSE2_IMPL // Fast sse2 implementation
 
