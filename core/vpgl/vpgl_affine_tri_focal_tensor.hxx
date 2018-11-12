@@ -69,7 +69,7 @@ bool affine(vpgl_fundamental_matrix<Type> const& F, vpgl_affine_fundamental_matr
     for(size_t c = 0; c<2; ++c)
       if(fabs(M[r][c]) > tol)
         return false;
-  aF.set_from_params(M[2][0], M[2][1], M[2][2], M[1][2], M[0][2]);
+  aF.set_matrix(M);
   return true;
 }
 
