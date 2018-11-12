@@ -14,6 +14,7 @@ DECLARE( test_generic_camera );
 DECLARE( test_lvcs );
 DECLARE( test_tri_focal_tensor );
 DECLARE( test_affine_tri_focal_tensor );
+DECLARE( test_affine_fundamental_matrix);
 
 void register_tests()
 {
@@ -31,6 +32,7 @@ void register_tests()
   REGISTER( test_lvcs );
   REGISTER( test_tri_focal_tensor );
   REGISTER( test_affine_tri_focal_tensor );
+  REGISTER( test_affine_fundamental_matrix);
 }
 
 DEFINE_MAIN;
