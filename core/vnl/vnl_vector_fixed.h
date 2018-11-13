@@ -229,39 +229,28 @@ class VNL_EXPORT vnl_vector_fixed
 
   //: Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T       & operator() (unsigned int i)
-  {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-    assert(i<n);   // Check the index is valid.
-#endif
-    return data_[i];
-  }
+  T       & operator() (unsigned int i);
 
   //: Return reference to the element at specified index.
   // There are assert style boundary checks - #define NDEBUG to turn them off.
-  T const & operator() (unsigned int i) const
-  {
-#if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
-    assert(i<n);   // Check the index is valid
-#endif
-    return data_[i];
-  }
+  T const & operator() (unsigned int i) const;
+
 
   //: Return the i-th element
-  T& operator[] ( const size_t i ) { return data_[i]; }
+  T& operator[] (const size_t i);
 
   //: Return the i-th element
-  const T& operator[] ( const size_t i ) const { return data_[i]; }
+  const T& operator[] (const size_t i) const;
 
   //: Access the contiguous block storing the elements in the vector.
   //  O(1).
   //  data_block()[0] is the first element of the vector
-  T const* data_block() const { return data_; }
+  T const* data_block() const;
 
   //: Access the contiguous block storing the elements in the vector.
   //  O(1).
   //  data_block()[0] is the first element of the vector
-  T      * data_block() { return data_; }
+  T      * data_block();
 
   //----------------------------------------------------------------------
   // Conversion to vnl_vector_ref.
@@ -355,7 +344,7 @@ class VNL_EXPORT vnl_vector_fixed
   vnl_vector_fixed<T,n> operator-() const
   {
     vnl_vector_fixed<T,n> result;
-    self::sub( (T)0, data_, result.data_ );
+    self::sub( (T)0, data_, result.data_ );	
     return result;
   }
 

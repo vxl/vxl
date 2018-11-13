@@ -15,6 +15,7 @@
 
 #include <vnl/vnl_error.h>
 #include <vnl/vnl_math.h>
+#include <vnl/vnl_complex.h>  //vnl_math functions for complex variables
 #include <vnl/vnl_vector_fixed.h>
 
 template<class T, unsigned nrows, unsigned ncols>
