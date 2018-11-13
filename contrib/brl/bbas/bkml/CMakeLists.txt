@@ -19,7 +19,7 @@ endif()
 
 vxl_add_library(LIBRARY_NAME bkml LIBRARY_SOURCES  ${bkml_sources})
 
-target_link_libraries(bkml ${VXL_LIB_PREFIX}vgl)
+target_link_libraries(bkml ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vgl)
 
 if(EXPAT_FOUND)
   target_link_libraries(bkml ${EXPAT_LIBRARIES})
