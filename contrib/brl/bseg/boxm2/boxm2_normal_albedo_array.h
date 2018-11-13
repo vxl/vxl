@@ -31,10 +31,10 @@ class boxm2_normal_albedo_array
 class boxm2_normal_albedo_array_constants
 {
  public:
-  static boxm2_EXPORT_DATA const double sigma_albedo;
-  static boxm2_EXPORT_DATA const double sigma_optical_depth;
-  static boxm2_EXPORT_DATA const double sigma_airlight;
-  static boxm2_EXPORT_DATA const double sigma_skylight;
+  static boxm2_EXPORT_DATA constexpr double sigma_albedo = 0.02;
+  static boxm2_EXPORT_DATA constexpr double sigma_optical_depth = 5.0;
+  static boxm2_EXPORT_DATA constexpr double sigma_airlight = 0.04;
+  static boxm2_EXPORT_DATA constexpr double sigma_skylight = 10.0;
 };
 
 #endif

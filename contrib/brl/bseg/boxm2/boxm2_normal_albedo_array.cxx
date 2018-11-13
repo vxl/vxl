@@ -7,11 +7,6 @@
 #include <vgl/vgl_vector_3d.h>
 #include "boxm2_normal_albedo_array.h"
 
-constexpr double boxm2_normal_albedo_array_constants::sigma_albedo = 0.02;
-constexpr double boxm2_normal_albedo_array_constants::sigma_airlight = 5.0;
-constexpr double boxm2_normal_albedo_array_constants::sigma_optical_depth = 0.04;
-constexpr double boxm2_normal_albedo_array_constants::sigma_skylight = 10.0;
-
 std::vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
 {
   std::vector<vgl_vector_3d<double> > normals;

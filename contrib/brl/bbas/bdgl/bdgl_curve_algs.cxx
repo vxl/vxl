@@ -25,12 +25,6 @@
 #include <vdgl/vdgl_digital_curve.h>
 #include <vnl/algo/vnl_gaussian_kernel_1d.h>
 
-const double bdgl_curve_algs::tol = 1e-16;
-constexpr double bdgl_curve_algs::max_edgel_sep = 2.0; // the maximum separation
-                                                   // of edgels (in pixels)
-constexpr double bdgl_curve_algs::synthetic = 0;//Indicates synthetic edgel
-                                            //default constructor is -1
-
 //: Destructor
 bdgl_curve_algs::~bdgl_curve_algs()
 = default;
