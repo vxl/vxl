@@ -21,9 +21,13 @@
 class bdgl_curve_algs
 {
  public:
-  static bdgl_EXPORT_DATA const double tol;
-  static bdgl_EXPORT_DATA const double max_edgel_sep;
-  static bdgl_EXPORT_DATA const double synthetic;
+  static bdgl_EXPORT_DATA constexpr double tol = 1e-16;
+  static bdgl_EXPORT_DATA constexpr double max_edgel_sep = 2.0; // the maximum separation
+                                                                // of edgels (in pixels)
+  static bdgl_EXPORT_DATA constexpr double synthetic = 0; //Indicates synthetic edgel
+                                                          //default constructor is -1
+
+
   ~bdgl_curve_algs();
 
   //:Finds the index on a digital curve closest to the given point
