@@ -351,7 +351,7 @@ void brad_spectral_angle_mapper::add_aster_dir(const std::string aster_dir) {
     std::ifstream is(fi());     // open file
     char c;
     while (is.get(c)) {          // loop getting single characters
-      if (c <= -1 || c >= 255) { // check if the file contains bad character
+      if (c <= -1 || c == 255) { // check if the file contains bad character
         good_file = false;
         std::cerr << "File " << vul_file::strip_directory(fi()) << " contains an invalid character. Continuing to next file...\n";
         break;
