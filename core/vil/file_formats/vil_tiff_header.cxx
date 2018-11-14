@@ -626,7 +626,7 @@ bool vil_tiff_header::compute_pixel_format()
               default:
                 pix_fmt = VIL_PIXEL_FORMAT_UNKNOWN;
                 return false;
-            }		
+            }
 		}
 	}
   //Separate TIFF transparency mask - not handled
