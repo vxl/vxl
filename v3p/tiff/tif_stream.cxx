@@ -170,7 +170,7 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 			ios::off_type offset = static_cast<ios::off_type>(new_offset);
 			if (static_cast<uint64>(offset) != new_offset)
 				return static_cast<uint64>(-1);
-			
+
 			os->seekp(offset, ios::beg);
 		break;
 		}
@@ -225,7 +225,7 @@ _tiffosSeekProc(thandle_t fd, uint64 off, int whence)
 				break;
 		}
 		// restore original stream state
-		os->clear(old_state);	
+		os->clear(old_state);
 
 		// only do something if desired seek position is valid
 		if( (static_cast<uint64>(origin) + off) > static_cast<uint64>(data->start_pos) ) {
@@ -258,7 +258,7 @@ _tiffisSeekProc(thandle_t fd, uint64 off, int whence)
 		{
 			// Compute 64-bit offset
 			uint64 new_offset = static_cast<uint64>(data->start_pos) + off;
-			
+
 			// Verify that value does not overflow
 			ios::off_type offset = static_cast<ios::off_type>(new_offset);
 			if (static_cast<uint64>(offset) != new_offset)

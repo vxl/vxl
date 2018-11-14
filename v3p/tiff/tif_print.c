@@ -4,23 +4,23 @@
  * Copyright (c) 1988-1997 Sam Leffler
  * Copyright (c) 1991-1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -70,7 +70,7 @@ _TIFFPrintField(FILE* fd, const TIFFField *fip,
 		uint32 value_count, void *raw_data)
 {
 	uint32 j;
-		
+
 	fprintf(fd, "  %s: ", fip->field_name);
 
 	for(j = 0; j < value_count; j++) {
@@ -149,7 +149,7 @@ _TIFFPrettyPrintField(TIFF* tif, const TIFFField *fip, FILE* fd, uint32 tag,
 	if (strncmp(fip->field_name,"Tag ", 4) == 0) {
 		return 0;
 	}
-        
+
 	switch (tag)
 	{
 		case TIFFTAG_INKSET:
@@ -182,7 +182,7 @@ _TIFFPrettyPrintField(TIFF* tif, const TIFFField *fip, FILE* fd, uint32 tag,
 				fprintf(fd, "  White Point: %g-%g\n",
 					((float *)raw_data)[0], ((float *)raw_data)[1]);
 				return 1;
-			} 
+			}
 			return 0;
 
 		case TIFFTAG_XMLPACKET:
@@ -216,7 +216,7 @@ _TIFFPrettyPrintField(TIFF* tif, const TIFFField *fip, FILE* fd, uint32 tag,
 			return 1;
 
 		case TIFFTAG_STONITS:
-			if (value_count == 1 && fip->field_type == TIFF_DOUBLE) { 
+			if (value_count == 1 && fip->field_type == TIFF_DOUBLE) {
 				fprintf(fd,
 					"  Sample to Nits conversion factor: %.4e\n",
 					*((double*)raw_data));
@@ -393,10 +393,10 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 		fprintf(fd, "  Ink Names: ");
 		i = td->td_samplesperpixel;
 		sep = "";
-		for (cp = td->td_inknames; 
-		     i > 0 && cp < td->td_inknames + td->td_inknameslen; 
+		for (cp = td->td_inknames;
+		     i > 0 && cp < td->td_inknames + td->td_inknameslen;
 		     cp = strchr(cp,'\0')+1, i--) {
-			size_t max_chars = 
+			size_t max_chars =
 				td->td_inknameslen - (cp - td->td_inknames);
 			fputs(sep, fd);
 			_TIFFprintAsciiBounded(fd, cp, max_chars);
@@ -600,7 +600,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 					assert (fip->field_readcount == TIFF_VARIABLE
 						|| fip->field_readcount == TIFF_VARIABLE2);
 					continue;
-				} 
+				}
 			} else {
 				if (fip->field_readcount == TIFF_VARIABLE
 				    || fip->field_readcount == TIFF_VARIABLE2)
@@ -613,7 +613,7 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 				    && strcmp(fip->field_name,"DotRange") == 0) {
 					/* TODO: This is an evil exception and should not have been
 					   handled this way ... likely best if we move it into
-					   the directory structure with an explicit field in 
+					   the directory structure with an explicit field in
 					   libtiff 4.1 and assign it a FIELD_ value */
 					static uint16 dotrange[2];
 					raw_data = dotrange;
@@ -650,12 +650,12 @@ TIFFPrintDirectory(TIFF* tif, FILE* fd, long flags)
 				_TIFFfree(raw_data);
 		}
 	}
-        
+
 	if (tif->tif_tagmethods.printdir)
 		(*tif->tif_tagmethods.printdir)(tif, fd, flags);
 
         _TIFFFillStriles( tif );
-        
+
 	if ((flags & TIFFPRINT_STRIPS) &&
 	    TIFFFieldSet(tif,FIELD_STRIPOFFSETS)) {
 		uint32 s;

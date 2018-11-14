@@ -344,7 +344,7 @@ class VNL_EXPORT vnl_vector_fixed
   vnl_vector_fixed<T,n> operator-() const
   {
     vnl_vector_fixed<T,n> result;
-    self::sub( (T)0, data_, result.data_ );	
+    self::sub( (T)0, data_, result.data_ );
     return result;
   }
 

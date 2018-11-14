@@ -1166,7 +1166,7 @@ bool ClipperBase::AddPath(const Path &pg, PolyType PolyTyp, bool Closed)
     }
     m_MinimaList.push_back(locMin);
     m_edges.push_back(edges);
-	  return true;
+    return true;
   }
 
   m_edges.push_back(edges);
@@ -1572,7 +1572,7 @@ bool Clipper::ExecuteInternal()
     while (PopScanbeam(topY) || LocalMinimaPending())
     {
       ProcessHorizontals();
-	    ClearGhostJoins();
+      ClearGhostJoins();
       if (!ProcessIntersections(topY))
       {
         succeeded = false;
@@ -2012,13 +2012,13 @@ void Clipper::InsertLocalMinimaIntoAEL(const cInt botY)
 
      if (rb)
      {
-		 if (IsHorizontal(*rb))
-		 {
-			 AddEdgeToSEL(rb);
-			 if (rb->NextInLML)
-				 InsertScanbeam(rb->NextInLML->Top.Y);
-		 }
-		 else InsertScanbeam( rb->Top.Y );
+         if (IsHorizontal(*rb))
+         {
+             AddEdgeToSEL(rb);
+             if (rb->NextInLML)
+                 InsertScanbeam(rb->NextInLML->Top.Y);
+         }
+         else InsertScanbeam( rb->Top.Y );
      }
 
     if (!lb || !rb) continue;
@@ -2115,7 +2115,7 @@ void Clipper::IntersectEdges(TEdge *e1, TEdge *e2, IntPoint &Pt)
   {
     //ignore subject-subject open path intersections UNLESS they
     //are both open paths, AND they are both 'contributing maximas' ...
-	if (e1->WindDelta == 0 && e2->WindDelta == 0) return;
+    if (e1->WindDelta == 0 && e2->WindDelta == 0) return;
 
     //if intersecting a subj line with a subj poly ...
     else if (e1->PolyTyp == e2->PolyTyp &&
@@ -2479,8 +2479,8 @@ OutPt* Clipper::AddOutPt(TEdge *e, const IntPoint &pt)
     //OutRec.Pts is the 'Left-most' point & OutRec.Pts.Prev is the 'Right-most'
     OutPt* op = outRec->Pts;
 
-	bool ToFront = (e->Side == esLeft);
-	if (ToFront && (pt == op->Pt)) return op;
+    bool ToFront = (e->Side == esLeft);
+    if (ToFront && (pt == op->Pt)) return op;
     else if (!ToFront && (pt == op->Prev->Pt)) return op->Prev;
 
     auto* newOp = new OutPt;
@@ -2498,11 +2498,11 @@ OutPt* Clipper::AddOutPt(TEdge *e, const IntPoint &pt)
 
 OutPt* Clipper::GetLastOutPt(TEdge *e)
 {
-	OutRec *outRec = m_PolyOuts[e->OutIdx];
-	if (e->Side == esLeft)
-		return outRec->Pts;
-	else
-		return outRec->Pts->Prev;
+    OutRec *outRec = m_PolyOuts[e->OutIdx];
+    if (e->Side == esLeft)
+        return outRec->Pts;
+    else
+        return outRec->Pts->Prev;
 }
 //------------------------------------------------------------------------------
 
@@ -2701,36 +2701,36 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
         };
 
         if ((dir == dLeftToRight && e->Curr.X > horzRight) ||
-			(dir == dRightToLeft && e->Curr.X < horzLeft)) break;
+            (dir == dRightToLeft && e->Curr.X < horzLeft)) break;
 
-		//Also break if we've got to the end of an intermediate horizontal edge ...
-		//nb: Smaller Dx's are to the right of larger Dx's ABOVE the horizontal.
-		if (e->Curr.X == horzEdge->Top.X && horzEdge->NextInLML &&
-			e->Dx < horzEdge->NextInLML->Dx) break;
+        //Also break if we've got to the end of an intermediate horizontal edge ...
+        //nb: Smaller Dx's are to the right of larger Dx's ABOVE the horizontal.
+        if (e->Curr.X == horzEdge->Top.X && horzEdge->NextInLML &&
+            e->Dx < horzEdge->NextInLML->Dx) break;
 
     if (horzEdge->OutIdx >= 0 && !IsOpen)  //note: may be done multiple times
-		{
+        {
 #ifdef use_xyz
-			if (dir == dLeftToRight) SetZ(e->Curr, *horzEdge, *e);
-			else SetZ(e->Curr, *e, *horzEdge);
+            if (dir == dLeftToRight) SetZ(e->Curr, *horzEdge, *e);
+            else SetZ(e->Curr, *e, *horzEdge);
 #endif
-			op1 = AddOutPt(horzEdge, e->Curr);
-			TEdge* eNextHorz = m_SortedEdges;
-			while (eNextHorz)
-			{
-				if (eNextHorz->OutIdx >= 0 &&
-					HorzSegmentsOverlap(horzEdge->Bot.X,
-					horzEdge->Top.X, eNextHorz->Bot.X, eNextHorz->Top.X))
-				{
+            op1 = AddOutPt(horzEdge, e->Curr);
+            TEdge* eNextHorz = m_SortedEdges;
+            while (eNextHorz)
+            {
+                if (eNextHorz->OutIdx >= 0 &&
+                    HorzSegmentsOverlap(horzEdge->Bot.X,
+                    horzEdge->Top.X, eNextHorz->Bot.X, eNextHorz->Top.X))
+                {
                     OutPt* op2 = GetLastOutPt(eNextHorz);
                     AddJoin(op2, op1, eNextHorz->Top);
-				}
-				eNextHorz = eNextHorz->NextInSEL;
-			}
-			AddGhostJoin(op1, horzEdge->Bot);
-		}
+                }
+                eNextHorz = eNextHorz->NextInSEL;
+            }
+            AddGhostJoin(op1, horzEdge->Bot);
+        }
 
-		//OK, so far we're still in range of the horizontal Edge  but make sure
+        //OK, so far we're still in range of the horizontal Edge  but make sure
         //we're at the last of consec. horizontals when matching with eMaxPair
         if(e == eMaxPair && IsLastHorz)
         {
@@ -2741,7 +2741,7 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
           return;
         }
 
-		if(dir == dLeftToRight)
+        if(dir == dLeftToRight)
         {
           IntPoint Pt = IntPoint(e->Curr.X, horzEdge->Curr.Y);
           IntersectEdges(horzEdge, e, Pt);
@@ -2756,10 +2756,10 @@ void Clipper::ProcessHorizontal(TEdge *horzEdge)
         e = eNext;
     } //end while(e)
 
-	//Break out of loop if HorzEdge.NextInLML is not also horizontal ...
-	if (!horzEdge->NextInLML || !IsHorizontal(*horzEdge->NextInLML)) break;
+    //Break out of loop if HorzEdge.NextInLML is not also horizontal ...
+    if (!horzEdge->NextInLML || !IsHorizontal(*horzEdge->NextInLML)) break;
 
-	UpdateEdgeIntoAEL(horzEdge);
+    UpdateEdgeIntoAEL(horzEdge);
     if (horzEdge->OutIdx >= 0) AddOutPt(horzEdge, horzEdge->Bot);
     GetHorzDirection(*horzEdge, dir, horzLeft, horzRight);
 
@@ -3040,9 +3040,9 @@ void Clipper::ProcessEdgesAtTopOfScanbeam(const cInt topY)
         e->Curr.X = TopX( *e, topY );
         e->Curr.Y = topY;
 #ifdef use_xyz
-		e->Curr.Z = topY == e->Top.Y ? e->Top.Z : (topY == e->Bot.Y ? e->Bot.Z : 0);
+        e->Curr.Z = topY == e->Top.Y ? e->Top.Z : (topY == e->Bot.Y ? e->Bot.Z : 0);
 #endif
-	  }
+      }
 
       //When StrictlySimple and 'e' is being touched by another edge, then
       //make sure both edges have a vertex here ...
@@ -4317,10 +4317,10 @@ double DistanceFromLineSqrd(
   const IntPoint& pt, const IntPoint& ln1, const IntPoint& ln2)
 {
   //The equation of a line in general form (Ax + By + C = 0)
-  //given 2 points (x¹,y¹) & (x²,y²) is ...
-  //(y¹ - y²)x + (x² - x¹)y + (y² - y¹)x¹ - (x² - x¹)y¹ = 0
-  //A = (y¹ - y²); B = (x² - x¹); C = (y² - y¹)x¹ - (x² - x¹)y¹
-  //perpendicular distance of point (x³,y³) = (Ax³ + By³ + C)/Sqrt(A² + B²)
+  //given 2 points (x^1,y^1) & (x^2,y^2) is ...
+  //(y^1 - y^2)x + (x^2 - x^1)y + (y^2 - y^1)x^1 - (x^2 - x^1)y^1 = 0
+  //A = (y^1 - y^2); B = (x^2 - x^2); C = (y^2 - y^2)x^1 - (x^2 - x^1)y^1
+  //perpendicular distance of point (x^3,y^3) = (Ax^3 + By^3 + C)/Sqrt(A^3 + B^3)
   //see http://en.wikipedia.org/wiki/Perpendicular_distance
   auto A = double(ln1.Y - ln2.Y);
   auto B = double(ln2.X - ln1.X);
@@ -4336,24 +4336,24 @@ bool SlopesNearCollinear(const IntPoint& pt1,
   //this function is more accurate when the point that's geometrically
   //between the other 2 points is the one that's tested for distance.
   //ie makes it more likely to pick up 'spikes' ...
-	if (Abs(pt1.X - pt2.X) > Abs(pt1.Y - pt2.Y))
-	{
+    if (Abs(pt1.X - pt2.X) > Abs(pt1.Y - pt2.Y))
+    {
     if ((pt1.X > pt2.X) == (pt1.X < pt3.X))
       return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
     else if ((pt2.X > pt1.X) == (pt2.X < pt3.X))
       return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
-		else
-	    return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
-	}
-	else
-	{
+        else
+        return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
+    }
+    else
+    {
     if ((pt1.Y > pt2.Y) == (pt1.Y < pt3.Y))
       return DistanceFromLineSqrd(pt1, pt2, pt3) < distSqrd;
     else if ((pt2.Y > pt1.Y) == (pt2.Y < pt3.Y))
       return DistanceFromLineSqrd(pt2, pt1, pt3) < distSqrd;
-		else
+        else
       return DistanceFromLineSqrd(pt3, pt1, pt2) < distSqrd;
-	}
+    }
 }
 //------------------------------------------------------------------------------
 

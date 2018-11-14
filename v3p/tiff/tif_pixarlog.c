@@ -4,23 +4,23 @@
  * Copyright (c) 1996-1997 Sam Leffler
  * Copyright (c) 1996 Pixar
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Pixar, Sam Leffler and Silicon Graphics may not be used in any advertising or
  * publicity relating to the software without the specific, prior written
  * permission of Pixar, Sam Leffler and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL PIXAR, SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
  * ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -34,10 +34,10 @@
  * Contributed by Dan McCoy.
  *
  * PixarLog film support uses the TIFF library to store companded
- * 11 bit values into a tiff file, which are compressed using the 
- * zip compressor.  
+ * 11 bit values into a tiff file, which are compressed using the
+ * zip compressor.
  *
- * The codec can take as input and produce as output 32-bit IEEE float values 
+ * The codec can take as input and produce as output 32-bit IEEE float values
  * as well as 16-bit or 8-bit unsigned integer values.
  *
  * On writing any of the above are converted into the internal
@@ -51,7 +51,7 @@
  * than the human eye can perceive with extra room to allow for
  * error introduced by further image computation.  As with any quantized
  * color format, it is possible to perform image calculations which
- * expose the quantization error. This format should certainly be less 
+ * expose the quantization error. This format should certainly be less
  * susceptible to such errors than standard 8-bit encodings, but more
  * susceptible than straight 16-bit or 32-bit encodings.
  *
@@ -289,7 +289,7 @@ horizontalAccumulate16(uint16 *wp, int n, int stride, uint16 *op,
     }
 }
 
-/* 
+/*
  * Returns the log encoded 11-bit values with the horizontal
  * differencing undone.
  */
@@ -325,7 +325,7 @@ horizontalAccumulate11(uint16 *wp, int n, int stride, uint16 *op)
 		op[1] = (uint16)((cg += wp[1]) & mask);
 		op[2] = (uint16)((cb += wp[2]) & mask);
 		op[3] = (uint16)((ca += wp[3]) & mask);
-	    } 
+	    }
 	} else {
 	    REPEAT(stride, *op = *wp&mask; wp++; op++)
 	    n -= stride;
@@ -460,7 +460,7 @@ typedef	struct {
 	TIFFPredictorState	predict;
 	z_stream		stream;
 	tmsize_t		tbuf_size; /* only set/used on reading for now */
-	uint16			*tbuf; 
+	uint16			*tbuf;
 	uint16			stride;
 	int			state;
 	int			user_datafmt;
@@ -476,7 +476,7 @@ typedef	struct {
 	uint16  *FromLT2;
 	uint16  *From14; /* Really for 16-bit data, but we shift down 2 */
 	uint16  *From8;
-	
+
 } PixarLogState;
 
 static int
@@ -489,7 +489,7 @@ PixarLogMakeTables(PixarLogState *sp)
  *    11-bit companded representation.  The 11-bit representation has two
  *    distinct regions.  A linear bottom end up through .018316 in steps
  *    of about .000073, and a region of constant ratio up to about 25.
- *    These floating point numbers are stored in the main table ToLinearF. 
+ *    These floating point numbers are stored in the main table ToLinearF.
  *    All other tables are derived from this one.  The tables (and the
  *    ratios) are continuous at the internal seam.
  */
@@ -504,7 +504,7 @@ PixarLogMakeTables(PixarLogState *sp)
     uint16  *From14; /* Really for 16-bit data, but we shift down 2 */
     uint16  *From8;
 
-    c = log(RATIO);	
+    c = log(RATIO);
     nlin = (int)(1./c);	/* nlin must be an integer */
     c = 1./nlin;
     b = exp(-c*ONE);	/* multiplicative scale factor [b*exp(c*ONE) = 1] */
@@ -684,7 +684,7 @@ PixarLogSetupDecode(TIFF* tif)
 
 	/* Make sure no byte swapping happens on the data
 	 * after decompression. */
-	tif->tif_postdecode = _TIFFNoPostDecode;  
+	tif->tif_postdecode = _TIFFNoPostDecode;
 
 	/* for some reason, we can't do this in TIFFInitPixarLog */
 
@@ -707,7 +707,7 @@ PixarLogSetupDecode(TIFF* tif)
                 sp->tbuf = NULL;
                 sp->tbuf_size = 0;
 		TIFFErrorExt(tif->tif_clientdata, module,
-			"PixarLog compression can't handle bits depth/data format combination (depth: %d)", 
+			"PixarLog compression can't handle bits depth/data format combination (depth: %d)",
 			td->td_bitspersample);
 		return (0);
 	}
@@ -846,7 +846,7 @@ PixarLogDecode(TIFF* tif, uint8* op, tmsize_t occ, uint16 s)
 	 * may overflow the output buffer, so truncate it enough to prevent
 	 * that but still salvage as much data as possible.
 	 */
-	if (nsamples % llen) { 
+	if (nsamples % llen) {
 		TIFFWarningExt(tif->tif_clientdata, module,
 			"stride %lu is not a multiple of sample count, "
 			"%lu, data truncated.", (unsigned long) llen, (unsigned long) nsamples);
@@ -1013,7 +1013,7 @@ horizontalDifferenceF(float *ip, int n, int stride, uint16 *wp, uint16 *FromLT2)
 }
 
 static void
-horizontalDifference16(unsigned short *ip, int n, int stride, 
+horizontalDifference16(unsigned short *ip, int n, int stride,
 	unsigned short *wp, uint16 *From14)
 {
     register int  r1, g1, b1, a1, r2, g2, b2, a2, mask;
@@ -1064,7 +1064,7 @@ horizontalDifference16(unsigned short *ip, int n, int stride,
 
 
 static void
-horizontalDifference8(unsigned char *ip, int n, int stride, 
+horizontalDifference8(unsigned char *ip, int n, int stride,
 	unsigned short *wp, uint16 *From8)
 {
     register int  r1, g1, b1, a1, r2, g2, b2, a2, mask;
@@ -1160,17 +1160,17 @@ PixarLogEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 	for (i = 0, up = sp->tbuf; i < n; i += llen, up += llen) {
 		switch (sp->user_datafmt)  {
 		case PIXARLOGDATAFMT_FLOAT:
-			horizontalDifferenceF((float *)bp, llen, 
+			horizontalDifferenceF((float *)bp, llen,
 				sp->stride, up, sp->FromLT2);
 			bp += llen * sizeof(float);
 			break;
 		case PIXARLOGDATAFMT_16BIT:
-			horizontalDifference16((uint16 *)bp, llen, 
+			horizontalDifference16((uint16 *)bp, llen,
 				sp->stride, up, sp->From14);
 			bp += llen * sizeof(uint16);
 			break;
 		case PIXARLOGDATAFMT_8BIT:
-			horizontalDifference8((unsigned char *)bp, llen, 
+			horizontalDifference8((unsigned char *)bp, llen,
 				sp->stride, up, sp->From8);
 			bp += llen * sizeof(unsigned char);
 			break;
@@ -1181,7 +1181,7 @@ PixarLogEncode(TIFF* tif, uint8* bp, tmsize_t cc, uint16 s)
 			return 0;
 		}
 	}
- 
+
 	sp->stream.next_in = (unsigned char *) sp->tbuf;
 	assert(sizeof(sp->stream.avail_in)==4);  /* if this assert gets raised,
 	    we need to simplify this code to reflect a ZLib that is likely updated
@@ -1270,7 +1270,7 @@ PixarLogClose(TIFF* tif)
              * a TransferFunction is set. The size of the TransferFunction
              * depends on 1<<bitspersample. So if we increase it, an access
              * out of the buffer will happen at directory flushing.
-             * Another option would be to clear those targs. 
+             * Another option would be to clear those targs.
              */
             td->td_bitspersample = 8;
             td->td_sampleformat = SAMPLEFORMAT_UINT;
@@ -1427,18 +1427,18 @@ TIFFInitPixarLog(TIFF* tif, int scheme)
 	/*
 	 * Install codec methods.
 	 */
-	tif->tif_fixuptags = PixarLogFixupTags; 
+	tif->tif_fixuptags = PixarLogFixupTags;
 	tif->tif_setupdecode = PixarLogSetupDecode;
 	tif->tif_predecode = PixarLogPreDecode;
 	tif->tif_decoderow = PixarLogDecode;
-	tif->tif_decodestrip = PixarLogDecode;  
+	tif->tif_decodestrip = PixarLogDecode;
 	tif->tif_decodetile = PixarLogDecode;
 	tif->tif_setupencode = PixarLogSetupEncode;
 	tif->tif_preencode = PixarLogPreEncode;
 	tif->tif_postencode = PixarLogPostEncode;
-	tif->tif_encoderow = PixarLogEncode;  
+	tif->tif_encoderow = PixarLogEncode;
 	tif->tif_encodestrip = PixarLogEncode;
-	tif->tif_encodetile = PixarLogEncode;  
+	tif->tif_encodetile = PixarLogEncode;
 	tif->tif_close = PixarLogClose;
 	tif->tif_cleanup = PixarLogCleanup;
 
@@ -1452,13 +1452,13 @@ TIFFInitPixarLog(TIFF* tif, int scheme)
 	sp->quality = Z_DEFAULT_COMPRESSION; /* default comp. level */
 	sp->state = 0;
 
-	/* we don't wish to use the predictor, 
+	/* we don't wish to use the predictor,
 	 * the default is none, which predictor value 1
 	 */
 	(void) TIFFPredictorInit(tif);
 
 	/*
-	 * build the companding tables 
+	 * build the companding tables
 	 */
 	PixarLogMakeTables(sp);
 

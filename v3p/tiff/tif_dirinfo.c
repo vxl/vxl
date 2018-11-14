@@ -286,7 +286,7 @@ exifFieldArray = { tfiatExif, 0, TIFFArrayCount(exifFields), (TIFFField*) exifFi
 
 /*
  *  We have our own local lfind() equivalent to avoid subtle differences
- *  in types passed to lfind() on different systems. 
+ *  in types passed to lfind() on different systems.
  */
 
 static void *
@@ -549,7 +549,7 @@ _TIFFFindFieldByName(TIFF* tif, const char *field_name, TIFFDataType dt)
 	key.field_name = (char *)field_name;
 	key.field_type = dt;
 
-	ret = (const TIFFField **) 
+	ret = (const TIFFField **)
             td_lfind(&pkey, tif->tif_fields, &tif->tif_nfields,
                      sizeof(TIFFField *), tagNameCompare);
 
@@ -717,16 +717,16 @@ _TIFFCreateAnonField(TIFF *tif, uint32 tag, TIFFDataType field_type)
 	}
 	fld->field_subfields = NULL;
 
-	/* 
+	/*
 	 * note that this name is a special sign to TIFFClose() and
 	 * _TIFFSetupFields() to free the field
 	 */
 #if defined(_MSC_VER) && _MSC_VER < 1900 // classical problem with sprintf on Windows(JLM)
         (void) sprintf_s(fld->field_name, 32, "Tag %d", (int) tag);
 #else
-        (void) snprintf(fld->field_name, 32, "Tag %d", (int) tag); 
+        (void) snprintf(fld->field_name, 32, "Tag %d", (int) tag);
 #endif
-	return fld;    
+	return fld;
 }
 
 /****************************************************************************
