@@ -16,7 +16,7 @@
 #include <vnl/vnl_math.h>  // for vnl_math::isfinite
 
 template<class T, unsigned int n>
-T       & 
+T       &
 vnl_vector_fixed<T, n>::operator() (unsigned int i)
   {
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
@@ -26,7 +26,7 @@ vnl_vector_fixed<T, n>::operator() (unsigned int i)
   }
 
 template<class T, unsigned int n>
-T const & 
+T const &
 vnl_vector_fixed<T, n>::operator() (unsigned int i) const
 {
 #if VNL_CONFIG_CHECK_BOUNDS  && (!defined NDEBUG)
@@ -36,23 +36,23 @@ vnl_vector_fixed<T, n>::operator() (unsigned int i) const
 }
 
 template<class T, unsigned int n>
-T& 
+T&
 vnl_vector_fixed<T, n>::operator[] (const size_t i)
 { return data_[i]; }
 
 template<class T, unsigned int n>
-const T& 
+const T&
 vnl_vector_fixed<T, n>::operator[] (const size_t i) const
 { return data_[i]; }
 
 template<class T, unsigned int n>
-T const* 
-vnl_vector_fixed<T, n>::data_block() const 
+T const*
+vnl_vector_fixed<T, n>::data_block() const
 { return data_; }
 
 template<class T, unsigned int n>
-T      * 
-vnl_vector_fixed<T, n>::data_block() 
+T      *
+vnl_vector_fixed<T, n>::data_block()
 { return data_; }
 
 template<class T, unsigned int n>

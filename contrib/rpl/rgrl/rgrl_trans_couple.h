@@ -59,7 +59,7 @@ class rgrl_trans_couple
   // This gives the additional uncertainty of the transferred point
   // location due to the uncertainty of the transform estimate.
   //
-  
+
   vnl_matrix<double> transfer_error_covar( vnl_vector<double> const& p ) const override;
 
 
@@ -104,7 +104,7 @@ class rgrl_trans_couple
 
   //:  Apply the transformation to create a new (mapped) location
   //
-  
+
   void map_loc( vnl_vector<double> const& from,
                 vnl_vector<double>      & to    ) const override;
 
@@ -112,7 +112,7 @@ class rgrl_trans_couple
   //
   // The resulting direction \a to_dir is a unit vector.
   //
-  
+
   void map_dir( vnl_vector<double> const& from_loc,
                 vnl_vector<double> const& from_dir,
                 vnl_vector<double>      & to_dir    ) const override;

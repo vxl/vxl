@@ -144,7 +144,7 @@ vnl_matrix<std::complex<T> >
 
 //: Return complex fixed matrix R+j*I from two real fixed matrices R and I.
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned int r, unsigned int c> 
+template <class T, unsigned int r, unsigned int c>
 vnl_matrix_fixed<std::complex<T >,r,c>
   vnl_complexify(vnl_matrix_fixed<T,r,c> const& R, vnl_matrix_fixed<T,r,c> const& I)
 {
@@ -161,7 +161,7 @@ vnl_diag_matrix<std::complex<T> >
 
 //: Return complex fixed diagonal matrix R+j*I from two real fixed diagonal matrices R and I.
 // \relatesalso vnl_matrix_fixed
-template <class T, unsigned int n> 
+template <class T, unsigned int n>
 vnl_diag_matrix_fixed<std::complex<T>,n>
   vnl_complexify(vnl_diag_matrix_fixed<T,n> const& R, vnl_diag_matrix_fixed<T,n> const& I)
 {

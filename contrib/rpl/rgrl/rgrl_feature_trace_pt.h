@@ -40,11 +40,11 @@ class rgrl_feature_trace_pt
                          double                    radius );
 
   //: read in feature
-  
+
   bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  
+
   void write( std::ostream& os ) const override;
 
   virtual vnl_vector<double> const&

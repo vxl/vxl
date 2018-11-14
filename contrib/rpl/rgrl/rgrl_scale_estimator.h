@@ -35,7 +35,7 @@ class rgrl_scale_estimator_unwgted
  public:
   rgrl_scale_estimator_unwgted();
 
-  
+
   ~rgrl_scale_estimator_unwgted() override;
 
   //: Estimated an unweighted scale.
@@ -66,7 +66,7 @@ class rgrl_scale_estimator_wgted
  public:
   rgrl_scale_estimator_wgted();
 
-  
+
   ~rgrl_scale_estimator_wgted() override;
 
   //: Estimated a weighted scale.

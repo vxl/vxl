@@ -42,7 +42,7 @@ class rgrl_feature_set_location_masked
   bounding_box() const override;
 
   //:  Return the type of feature
-  
+
   const std::type_info&
   type() const override
   { return fea_set_sptr_->type(); }

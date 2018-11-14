@@ -33,11 +33,11 @@ class rgrl_feature_point
   rgrl_feature_point( vnl_vector<double> const& loc, double scale );
 
   //: read in feature
-  
+
   bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  
+
   void write( std::ostream& os ) const override;
 
   vnl_matrix<double> const&
@@ -47,7 +47,7 @@ class rgrl_feature_point
   error_projector_sqrt() const override;
 
   //: Result is a rgrl_feature_point.
-  
+
   rgrl_feature_sptr
   transform( rgrl_transformation const& xform ) const override;
 

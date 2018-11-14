@@ -19,7 +19,7 @@ class vgl_h_matrix_3d_compute_affine : public vgl_h_matrix_3d_compute
 {
  protected:
   //: compute from matched points
-  
+
   bool compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
                  std::vector<vgl_homg_point_3d<double> > const& points2,
                  vgl_h_matrix_3d<double>& H) override;

@@ -36,7 +36,7 @@ class rgrl_initializer_ran_sam
   //: Constructor using a given random-sampling seed.
   rgrl_initializer_ran_sam( int seed );
 
-  
+
   ~rgrl_initializer_ran_sam() override;
 
   //  Parameters to control the search technique.  The default set

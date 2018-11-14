@@ -61,7 +61,7 @@ class rgrl_matcher_k_nearest
 
   //: This is internal to invert matches function.
   //  It is to restrict the number of nearest neighbors
-  
+
   void
   add_one_flipped_match( rgrl_match_set_sptr&      inv_set,
                          rgrl_view          const& current_view,

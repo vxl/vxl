@@ -23,7 +23,7 @@ public:
   //
   // The weights will be stored in the match_set structure.
   //
-  
+
   void compute_weights( rgrl_scale const&     scales,
                         rgrl_match_set&       match_set ) const override;
 

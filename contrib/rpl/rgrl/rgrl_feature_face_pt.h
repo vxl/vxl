@@ -28,18 +28,18 @@ class rgrl_feature_face_pt
                         vnl_vector< double > const& normal );
 
   //: read in feature
-  
+
   bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  
+
   void write( std::ostream& os ) const override;
 
-  
+
   vnl_matrix<double> const&
   error_projector() const override;
 
-  
+
   vnl_matrix<double> const&
   error_projector_sqrt() const override;
 

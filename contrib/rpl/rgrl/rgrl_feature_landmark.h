@@ -38,11 +38,11 @@ class rgrl_feature_landmark
                          std::vector< vnl_vector<double> >  outgoing_directions );
 
   //: read in feature
-  
+
   bool read( std::istream& is, bool skip_tag=false ) override;
 
   //: write out feature
-  
+
   void write( std::ostream& os ) const override;
 
   vnl_matrix<double> const&
