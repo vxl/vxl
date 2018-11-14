@@ -33,19 +33,19 @@ class vgl_h_matrix_2d_optimize_lmq : public vgl_h_matrix_2d_optimize
                   vgl_h_matrix_2d<double>& h_optimized);
 
   //: compute from matched points
-  
+
   bool optimize_p(std::vector<vgl_homg_point_2d<double> > const& points1,
                   std::vector<vgl_homg_point_2d<double> > const& points2,
                   vgl_h_matrix_2d<double>& H) override;
 
   //:compute from matched lines
-  
+
   bool optimize_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
                   std::vector<vgl_homg_line_2d<double> > const& lines2,
                   vgl_h_matrix_2d<double>& H) override;
 
   //:compute from matched points and lines
-  
+
   bool optimize_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
                    std::vector<vgl_homg_point_2d<double> > const& points2,
                    std::vector<vgl_homg_line_2d<double> > const& lines1,

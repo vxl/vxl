@@ -30,7 +30,7 @@ class rgrl_weighter_indiv_scale
 
   ~rgrl_weighter_indiv_scale() override;
 
-  
+
   void
   compute_weights( rgrl_scale const&  scale,
                    rgrl_match_set&    match_set ) const override;
@@ -40,7 +40,7 @@ class rgrl_weighter_indiv_scale
 
   // Auxiliary functions related to the m_est
 
-  
+
   double
   aux_sum_rho_values( rgrl_scale const&  scale,
                       rgrl_match_set&    match_set,

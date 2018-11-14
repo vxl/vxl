@@ -126,7 +126,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
     //finish queues before moving on
     for (int i : indices) {
-      
+
 #if 1
 
       vul_timer cpuTimer; cpuTimer.mark();

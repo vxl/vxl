@@ -516,7 +516,7 @@ void vdtop_set_veinerization_structure(TMap & res, const vil_image_view<T> & arg
 template <class T, class TMap>
 void vdtop_set_structure_from_masks(TMap & res, const vil_image_view<vdtop_8_neighborhood_mask> & mask,int plane, vmap_2_map_tag)
 {
-  unsigned ni = mask.ni(),nj = mask.nj(); 
+  unsigned ni = mask.ni(),nj = mask.nj();
   // Precompute steps
   std::ptrdiff_t istepM=mask.istep(),jstepM=mask.jstep(),pstepM = mask.planestep();
   std::ptrdiff_t movesM[8] ;

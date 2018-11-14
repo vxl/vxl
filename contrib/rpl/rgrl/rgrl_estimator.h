@@ -42,7 +42,7 @@ class rgrl_estimator
   // some algorithms such as random sampling and DBICP.
   rgrl_estimator( unsigned int param_dof );
 
-  
+
   ~rgrl_estimator() override;
 
   //: whether this method is iterative or non-iterative
@@ -144,12 +144,12 @@ class rgrl_linear_estimator
    : rgrl_estimator( param_dof )
   { }
 
-  
+
   ~rgrl_linear_estimator() override = default;
 
   //: Linear estimator is non-iterative
   //
-  
+
   bool
   is_iterative_method() const override
   { return false; }
@@ -184,12 +184,12 @@ class rgrl_nonlinear_estimator
      relative_threshold_(1e-8)
   { }
 
-  
+
   ~rgrl_nonlinear_estimator() override = default;
 
   //: Linear estimator is non-iterative
   //
-  
+
   bool
   is_iterative_method() const override
   { return true; }

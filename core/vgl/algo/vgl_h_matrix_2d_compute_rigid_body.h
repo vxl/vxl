@@ -18,26 +18,26 @@ class vgl_h_matrix_2d_compute_rigid_body : public vgl_h_matrix_2d_compute
 {
  protected:
   //: compute from matched points
-  
+
   bool compute_p(std::vector<vgl_homg_point_2d<double> > const& points1,
                  std::vector<vgl_homg_point_2d<double> > const& points2,
                  vgl_h_matrix_2d<double>& H) override;
 
   //:compute from matched lines
-  
+
   bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
                  std::vector<vgl_homg_line_2d<double> > const& lines2,
                  vgl_h_matrix_2d<double>& H) override;
 
   //:compute from matched lines with weight vector (not implemented)
-  
+
   bool compute_l(std::vector<vgl_homg_line_2d<double> > const& lines1,
                  std::vector<vgl_homg_line_2d<double> > const& lines2,
                  std::vector<double> const& weights,
                  vgl_h_matrix_2d<double>& H) override;
 
   //:compute from matched points and lines
-  
+
   bool compute_pl(std::vector<vgl_homg_point_2d<double> > const& points1,
                   std::vector<vgl_homg_point_2d<double> > const& points2,
                   std::vector<vgl_homg_line_2d<double> > const& lines1,
