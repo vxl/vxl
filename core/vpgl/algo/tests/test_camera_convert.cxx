@@ -116,7 +116,7 @@ vpgl_local_rational_camera<double> construct_local_rational_camera()
   return loc_rat_cam;
 }
 
-void test_rational_camera_approx()
+void test_rational_camera_approx_perspective()
 {
   vpgl_rational_camera<double> rat_cam = construct_rational_camera();
   std::cout << rat_cam;
@@ -138,6 +138,33 @@ void test_rational_camera_approx()
   std::cout << "Test Result\n" << pc;
   TEST("vpgl_perspective_camera_convert",pc.get_calibration().get_matrix()(0,1), 0);
   std::cout << '\n';
+}
+
+void test_rational_camera_approx_affine()
+{
+  vpgl_local_rational_camera<double> loc_rat_cam = construct_local_rational_camera();
+
+  // a 500x500x100 roi centered at the lvcs origin
+  vgl_point_3d<double> roi_center(0,0,0);
+  vgl_point_3d<double> roi_min = roi_center - vgl_vector_3d<double>(250,250,0);
+  vgl_point_3d<double> roi_max = roi_center + vgl_vector_3d<double>(250,250,100);
+  vgl_box_3d<double> roi(roi_min, roi_max);
+
+  vpgl_affine_camera<double> ac;
+  bool success = vpgl_affine_camera_convert::convert(loc_rat_cam, roi, ac);
+
+  TEST("vpgl_affine_camera_convert success", success, true);
+
+  // project center and corners of volume into image
+  
+  std::vector<vgl_point_3d<double> > test_points {roi_center, roi_min, roi_max};
+  for (vgl_point_3d<double> const& test_pt : test_points) {
+    vgl_point_2d<double> img_pt1 = loc_rat_cam.project(test_pt);
+    vgl_point_2d<double> img_pt2 = ac.project(test_pt);
+    double dist = (img_pt2 - img_pt1).length();
+    // test to within one pixel
+    TEST_NEAR("vpgl_affine_camera_convert projection", dist, 0.0, 0.5);
+  }
 }
 
 void test_generic_camera_convert()
@@ -248,7 +275,8 @@ void test_generic_camera_convert()
 
 static void test_camera_convert()
 {
-  test_rational_camera_approx();
+  test_rational_camera_approx_perspective();
+  test_rational_camera_approx_affine();
   std::cout << "=== End test_rational_camera_approx" << std::endl;
   test_generic_camera_convert();
 }
