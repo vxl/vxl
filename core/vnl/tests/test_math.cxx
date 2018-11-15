@@ -627,7 +627,7 @@ static void test_math()
 #define RETURN_TYPE_TEST( funcname, argtypename, returntypename ) \
   { \
   const bool test_return_type = std::is_same< decltype( vnl_math :: funcname( static_cast< argtypename >(123.4) ) ), returntypename >(); \
-  TEST("vnl_math::" #funcname " returns " #returntypename " type", test_return_type, true); \
+  TEST("vnl_math::" #funcname "<" #argtypename "> returns " #returntypename " type", test_return_type, true); \
   } void()
 
   RETURN_TYPE_TEST(isinf,int, bool);
