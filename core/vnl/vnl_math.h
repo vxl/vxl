@@ -137,7 +137,6 @@ namespace vnl_math
 
 namespace vnl_math
 {
-#if defined(_MSC_VER)
   // MSVC does not properly implement isfinite, iinf, isnan for C++11 conformance for integral types
   // For integral types only:
   template<typename T>
@@ -183,9 +182,7 @@ namespace vnl_math
 	  return std::isnormal(t);
   }
 #else
-	using std::isnan;
-	using std::isfinite;
-	using std::isnormal;
+
 # if defined(__GNUC__) // https://en.cppreference.com/w/cpp/numeric/math/isinf indicates taht isinf should return bool
         // Ensure proper conversion to bool type.
         // Return a signed integer type has been seen with the following
