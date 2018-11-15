@@ -16,6 +16,7 @@
 #include <vnl/vnl_det.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_random.h>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_qr.h>
 #include <vgl/algo/vgl_rotation_3d.h>
@@ -1394,6 +1395,39 @@ bool vpgl_generic_camera_convert::convert( vpgl_geo_camera& geocam, int ni, int 
     }
   gen_cam = vpgl_generic_camera<double>(rays);
   return true;
+}
+
+bool vpgl_affine_camera_convert::
+convert( vpgl_local_rational_camera<double> const& camera_in,
+         vgl_box_3d<double> const& region_of_interest,
+         vpgl_affine_camera<double>& camera_out,
+         unsigned int num_points)
+{
+  vnl_random rng;
+  const double width = region_of_interest.width();
+  const double height = region_of_interest.height();
+  const double depth = region_of_interest.depth();
+  double min_x = region_of_interest.min_x();
+  double min_y = region_of_interest.min_y();
+  double min_z = region_of_interest.min_z();
+
+  std::vector< vgl_point_2d<double> > image_pts;
+  std::vector< vgl_point_3d<double> > world_pts;
+  for (unsigned i=0; i<num_points; ++i) {
+    double x = rng.drand64()*width + min_x;  // sample in local coords
+    double y = rng.drand64()*depth + min_y;
+    double z = rng.drand64()*height + min_z;
+    world_pts.emplace_back(x,y,z);
+    double u, v;
+    camera_in.project(x,y,z,u,v);  // local rational camera has an lvcs, so it handles, local coord to global to image point projection internally
+    image_pts.emplace_back(u,v);
+  }
+
+  bool success = vpgl_affine_camera_compute::compute(image_pts, world_pts, camera_out);
+  // it is assumed that the camera is above the region of interest
+  camera_out.set_viewing_distance(height*10);
+  camera_out.orient_ray_direction(vgl_vector_3d<double>(0,0,-1));
+  return success;
 }
 
 #endif // HAS_GEOTIFF
