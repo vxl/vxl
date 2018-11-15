@@ -155,4 +155,19 @@ class vpgl_generic_camera_convert
   vpgl_generic_camera_convert() = delete;
 };
 
+//:methods for computing to an affine camera
+class vpgl_affine_camera_convert
+{
+ public:
+
+  //: Convert from rational camera using a local Euclidean coordinate system.
+  static bool convert( vpgl_local_rational_camera<double> const& camera_in,
+                       vgl_box_3d<double> const& region_of_interest,
+                       vpgl_affine_camera<double>& camera_out,
+                       unsigned int num_points=10000);
+
+ private:
+  vpgl_affine_camera_convert() = delete;
+};
+
 #endif // vpgl_camera_convert_h_
