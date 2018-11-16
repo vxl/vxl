@@ -52,15 +52,19 @@ background_colour: white
 // Approximate width of region to display shape
 width: 200
 
-basename: shape
+// Path to save EPS file to
+out_path: shapes.eps
 <END FILE>
 
 shape_params.txt should include shape parameters, in order, on each line.
+Blank lines are ignored. For instance:
 <START FILE>
 -0.5
 +0.5
+
 0 -0.3
 0 + 0.3
+
 0 0 -0.2
 0 0 +0.2
 <END FILE>
@@ -68,7 +72,7 @@ shape_params.txt should include shape parameters, in order, on each line.
 
 void print_usage()
 {
-  std::cout << "msm_draw_shapes -p param_file [-s shape_model.msm] [-c curves.crvs] [-c base_name]\n"
+  std::cout << "msm_draw_shapes -p param_file [-s shape_model.msm] [-c curves.crvs] [-o shapes.eps]\n"
            << "Tool to write eps files showing shapes for given shape parameters.\n"
            << std::endl;
 
@@ -87,7 +91,7 @@ struct tool_params
   double width;
 
   //: Base name for output
-  std::string base_name;
+  std::string out_path;
 
   //: Line colour
   std::string line_colour;
@@ -131,7 +135,7 @@ void tool_params::read_from_file(const std::string& path)
   line_colour=props.get_optional_property("line_colour","black");
   point_colour=props.get_optional_property("point_colour","red");
   background_colour=props.get_optional_property("background_colour","white");
-  base_name=props.get_optional_property("base_name","./shapes");
+  out_path=props.get_optional_property("out_path","shapes.eps");
   shape_model_path=props.get_optional_property("shape_model_path",
                                                "shape_model.msm");
 
@@ -180,7 +184,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg<std::string> model_path("-s","Shape model (overriding that in parameter file)");
   vul_arg<std::string> curves_path("-c","Curves path (overriding that in parameter file)");
-  vul_arg<std::string> base_name("-b","Base name for output (overriding that in parameter file)");
+  vul_arg<std::string> out_path("-o","Output path (overriding that in parameter file)");
   vul_arg<std::string> sp_path("-sp","Shape parameter path (overriding that in parameter file)");
   vul_arg_parse(argc,argv);
 
@@ -205,7 +209,7 @@ int main(int argc, char** argv)
 
   if (model_path()!="") params.shape_model_path=model_path();
   if (curves_path()!="") params.curves_path=curves_path();
-  if (base_name()!="") params.base_name=base_name();
+  if (out_path()!="") params.out_path=out_path();
   if (sp_path()!="") params.shape_params_path=sp_path();
 
   msm_shape_model shape_model;
@@ -281,9 +285,7 @@ int main(int argc, char** argv)
     points[i].translate_by(t.x()+i*w_width,t.y());
   }
 
-  std::stringstream ss;
-  ss<<params.base_name<<".eps";
-  mbl_eps_writer writer(ss.str().c_str(),
+  mbl_eps_writer writer(params.out_path.c_str(),
                         params.width,w_height);
 
   if (params.background_colour!="none")
@@ -303,7 +305,7 @@ int main(int argc, char** argv)
     msm_draw_shape_to_eps(writer,points[i],curves);
   }
   writer.close();
-  std::cout<<"Saved to "<<ss.str()<<std::endl;
+  std::cout<<"Saved to "<<params.out_path<<std::endl;
 
   return 0;
 }
