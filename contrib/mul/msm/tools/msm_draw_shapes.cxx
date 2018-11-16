@@ -41,7 +41,7 @@ shape_params_path: shape_params.txt
 point_radius: 2
 
 //: Line width
-line-width: 1
+line_width: 1
 
 line_colour: black
 point_colour: red
@@ -146,7 +146,6 @@ void tool_params::read_from_file(const std::string& path)
 bool load_shape_params(std::string path,
                        std::vector<vnl_vector<double> >& b)
 {
-  std::cout<<"Load shape params not yet implemented."<<std::endl;
   std::ifstream ifs(path.c_str());
   if (!ifs)
   {
