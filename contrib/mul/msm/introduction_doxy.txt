@@ -20,6 +20,8 @@
 * - msm_zoom_aligner         : Scale and translation (s,tx,ty)
 * - msm_rigid_aligner        : Rotation and translation (A,tx,ty)
 * - msm_similarity_aligner   : Scale, rotation and translation (a,b,tx,ty)
+* - msm_affine_aligner       : Six parameter affine transformations
+* - msm_subset_aligner       : Align using only a subset of the points
 *
 * The shape model itself is a linear model of the form
 * - shape = mean + P*b
@@ -62,8 +64,11 @@
 * - msm_build_shape_model : Construct a shape model from a set of files
 * - msm_draw_shape_modes : Generate EPS files displaying modes of a model
 * - msm_draw_points_on_image : Generate an EPS file showing points + curves on an image
+* - msm_draw_shapes : Draw a row of shapes based on shape parameters in a text file
 * - msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
 * - msm_get_shape_params: Compute shape parameters for each example and save to a file
 * - msm_add_dir_to_names: Create new image list files by adding directory to points/image paths
 * - msm_concat_points: Concatenate two or more points files into one
+* - msm_concat_curves: Concatenate two or more curves files (assuming points also concatenated)
+* - msm_reflect_points: Reflect points.
 */
