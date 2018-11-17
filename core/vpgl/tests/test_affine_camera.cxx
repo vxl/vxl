@@ -3,7 +3,10 @@
 #include <vpgl/vpgl_affine_camera.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_ray_3d.h>
+#include <vgl/vgl_distance.h>
 #include <vnl/vnl_math.h>
+
 
 static void test_affine_camera()
 {
@@ -41,6 +44,26 @@ static void test_affine_camera()
   vgl_homg_plane_3d<double> pp = C.principal_plane();
   double algd = (pp.a()+pp.b()+pp.c())*1000*sq3+pp.d();
   TEST_NEAR("principal plane", algd, 0.0, 1e-08);
+
+  // test realistic affine camera
+  vnl_vector_fixed<double, 4> row1, row2;
+  row1[0] = 1.3483235713495938;  row1[1] = 0.0038174980872772743;
+  row1[2] = 0.27647870881886161; row1[3] = 8.8599950663932052;
+
+  row2[0] = 0.21806927892797245; row2[1] = -0.92631091145800215;
+  row2[2] = -1.0010535330976205; row2[3] = 538.93376518200034;
+
+  vpgl_affine_camera<double> row_cam(row1, row2);
+  row_cam.set_viewing_distance( 9325.6025071654913);
+  vgl_vector_3d<double> row_ray_dir = row_cam.ray_dir();
+  vgl_vector_3d<double> test_dir(0.13271023792536230, 0.74172901339587183,-0.65743901879686173);
+  TEST_NEAR("row ray dir", (row_ray_dir-test_dir).length(), 0.0, 1e-5);
+
+  vgl_point_3d<double> wrld_pt(274.30804459155252,85.614875071463018,-35.273309156122778);
+  vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
+  vgl_ray_3d<double> row_ray = row_cam.backproject_ray(img_pt);
+  double ray_dist = vgl_distance(row_ray,wrld_pt);
+  TEST_NEAR("row_ray_dist", ray_dist, 0.0, 0.05);
 }
 
 TESTMAIN(test_affine_camera);
