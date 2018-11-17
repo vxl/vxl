@@ -80,7 +80,7 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
             this->viewing_distance() == that.viewing_distance() );
   }
 
-//: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
+  //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
   vgl_homg_point_3d<T> camera_center() const override;
 
   //: Find the 3d ray that goes through the camera center.
@@ -95,6 +95,9 @@ class vpgl_affine_camera : public vpgl_proj_camera<T>
 
   //: Clone `this': creation of a new object and initialization
   vpgl_affine_camera<T>* clone(void) const override;
+
+  //: the direction of all affine camera rays
+  vgl_vector_3d<T> ray_dir() const {return ray_dir_;}
 
  private:
   T view_distance_; // distance from origin along rays

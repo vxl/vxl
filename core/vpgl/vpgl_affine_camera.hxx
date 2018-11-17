@@ -7,11 +7,13 @@
 #include "vpgl_affine_camera.h"
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_cross.h>
+#include <vnl/vnl_det.h>
+#include <vnl/vnl_inverse.h>
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_tolerance.h>
 #include <vgl/vgl_ray_3d.h>
-#include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -41,15 +43,8 @@ vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_vector_fixed<T,4>& row1,
 template <class T>
 vpgl_affine_camera<T>::vpgl_affine_camera( const vnl_matrix_fixed<T,3,4>& camera_matrix )
 {
-  assert( camera_matrix(2,3) != 0 );
-  vnl_matrix_fixed<T,3,4> C( camera_matrix );
-  C = C/C(2,3);
-  C(2,0) = (T)0; C(2,1) = (T)0; C(2,2) = (T)0;
-  vpgl_proj_camera<T>::set_matrix( C );
+  set_matrix( camera_matrix );
   view_distance_ = (T)0;
-  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
-  ray_dir_.set(cc.x(), cc.y(), cc.z());
-  ray_dir_ = normalize(ray_dir_);
 }
 
 template <class T>
@@ -123,28 +118,35 @@ void vpgl_affine_camera<T>::set_rows(
   C(2,3) = (T)1;
   vpgl_proj_camera<T>::set_matrix( C );
 
-  // set ray_dir to match new projection matrix
-  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
-  ray_dir_.set(cc.x(), cc.y(), cc.z());
-  ray_dir_ = normalize(ray_dir_);
+  // camera center for affine ray direction r is given by
+  //  r . (a00, a01, a02) = r. A0 = 0
+  //  r . (a10, a11, a12) = r. A1 = 0
+  // so r is orthogonal to both A0 and A1
+  vnl_vector_fixed<T, 3> A0, A1, r;
+  for (size_t i = 0; i < 3; ++i) {
+    A0[i] = row1[i];
+    A1[i] = row2[i];
+  }
+  r = vnl_cross_3d<T>(A0, A1);
+  ray_dir_.set(r[0], r[1], r[2]);
+  ray_dir_ /= ray_dir_.length();
 }
 
 template <class T>
 bool vpgl_affine_camera<T>::set_matrix( const vnl_matrix_fixed<T,3,4>& new_camera_matrix )
 {
-  assert( new_camera_matrix(2,3) != 0 );
-  vnl_matrix_fixed<T,3,4> C( new_camera_matrix );
-  C = C/C(2,3);
-  C(2,0) = (T)0; C(2,1) = (T)0; C(2,2) = (T)0;
-  vpgl_proj_camera<T>::set_matrix( C );
+  T norm = new_camera_matrix(2,3);
+  if (norm == T(0)) {
+    std::cerr << "vpgl_affine_camera::set_matrix normalization failure" << std::endl;
+    return false;
+  }
 
-  vgl_homg_point_3d<T> cc = vpgl_proj_camera<T>::camera_center();
-  vgl_vector_3d<T> old_ray_dir = ray_dir_;
-  ray_dir_.set(cc.x(), cc.y(), cc.z());
-  ray_dir_ = normalize(ray_dir_);
-  // assume that new and old ray directions should not differ by more than 90 deg.
-  // if this assumption is false, caller should call orient_ray_direction() afterwards.
-  orient_ray_direction(old_ray_dir);
+  vnl_vector_fixed<T, 4> row0, row1;
+  for (size_t i = 0; i < 4; ++i) {
+    row0[i] = new_camera_matrix[0][i] / norm;
+    row1[i] = new_camera_matrix[1][i] / norm;
+  }
+  this->set_rows(row0, row1);
   return true;
 }
 
@@ -152,8 +154,7 @@ template <class T>
 bool vpgl_affine_camera<T>::set_matrix( const T* new_camera_matrix_p )
 {
   vnl_matrix_fixed<T,3,4> new_camera_matrix( new_camera_matrix_p );
-  set_matrix( new_camera_matrix );
-  return true;
+  return set_matrix( new_camera_matrix );
 }
 
 //: Find the 3d coordinates of the center of the camera. Will be an ideal point with the sense of the ray direction.
@@ -169,29 +170,72 @@ template <class T>
 vgl_homg_line_3d_2_points<T> vpgl_affine_camera<T>::
 backproject( const vgl_homg_point_2d<T>& image_point ) const
 {
-  vgl_homg_line_3d_2_points<T> ret;
-  //get line from projective camera
-  vgl_homg_line_3d_2_points<T> line =
-    vpgl_proj_camera<T>::backproject(image_point);
-  vgl_homg_point_3d<T> cph = vgl_closest_point_origin(line);
-  if (!is_ideal(cph, vgl_tolerance<T>::position)) {
-  vgl_point_3d<T> cp(cph);
-  vgl_point_3d<T> eye_pt = cp-(view_distance_*ray_dir_);
-  vgl_homg_point_3d<T> pt_fin(eye_pt.x(), eye_pt.y(), eye_pt.z());
-  vgl_homg_point_3d<T> pinf(ray_dir_.x(), ray_dir_.y(), ray_dir_.z(), (T)0);
-  ret = vgl_homg_line_3d_2_points<T>(pt_fin, pinf);
-  }
+  // use affine construction of ray to produce the line
+  vgl_ray_3d<T> r = this->backproject_ray(image_point);
+  vgl_point_3d<T> org = r.origin();
+  vgl_vector_3d<T> dir = r.direction();
+
+  // return line (degenerate if appropriate)
+  if(dir.length() == T(0))
+    return vgl_homg_line_3d_2_points<T>(vgl_homg_point_3d<T>(org),vgl_homg_point_3d<T>(org));
   else
-    std::cout << "Warning vpgl_affine_camera::backproject produced line at infinity\n";
-  return ret;
+    return vgl_homg_line_3d_2_points<T>(vgl_homg_point_3d<T>(org),vgl_homg_point_3d<T>(org+dir));
 }
 
 template <class T>
 vgl_ray_3d<T> vpgl_affine_camera<T>::
 backproject_ray( const vgl_homg_point_2d<T>& image_point ) const
 {
-  vgl_homg_line_3d_2_points<T> line = backproject( image_point );
-  return vgl_ray_3d<T>(vgl_point_3d<T>(line.point_finite()), ray_dir_);
+  // return degnerate ray on failure
+  if(image_point.ideal(vgl_tolerance<T>::position)){
+    std::cerr << "Backproject ray from ideal point - degenerate result" << std::endl;
+    vgl_point_3d<T> org = vgl_point_3d<T>(T(0), T(0), T(0));
+    return vgl_ray_3d<T>(org,org);
+  }
+
+  // ray direction is already known only have to get a point in the ray.
+  // form the A0, A1 vectors
+  vnl_matrix_fixed<T, 3, 4> P = this->get_matrix();
+  vnl_vector_fixed<T, 3> A0, A1;
+  for(size_t i = 0; i<3; ++i){
+    A0[i] = P[0][i];
+    A1[i] = P[1][i];
+  }
+  vnl_matrix_fixed<T, 2, 2> D(T(0)), Dinv;
+  D[0][0] = dot_product(A0, A0);
+  D[0][1] = dot_product(A0, A1);
+  D[1][0] = D[0][1];
+  D[1][1] = dot_product(A1, A1);
+  double det = vnl_det(D);
+
+  // check singular determinant
+  if (fabs(det) < T(2)*vgl_tolerance<T>::position) {
+    std::cerr << "Backproject ray singular determinant - degenerate result" << std::endl;
+    vgl_point_3d<T> org = vgl_point_3d<T>(T(0), T(0), T(0));
+    return vgl_ray_3d<T>(org,org);
+  }
+
+  Dinv = vnl_inverse(D);
+  vnl_vector_fixed<T, 2> uv;
+  uv[0] = image_point.x() / image_point.w();
+  uv[1] = image_point.y() / image_point.w();
+  vnl_vector_fixed<T, 2> UV, a;
+  UV[0] = uv[0]-P[0][3];
+  UV[1] = uv[1]-P[1][3];
+  a = Dinv*UV;
+  vnl_vector_fixed<T, 3> p;
+  p = a[0]*A0 + a[1]*A1;
+  vgl_point_3d<T> org(p[0], p[1], p[2]);
+
+  // intersect ray with principal plane (specified by "view_distance")
+  // to obtain ray origin on the plane
+  if(view_distance_ == T(0)) {
+     return vgl_ray_3d<T>(org, ray_dir_);
+  } else {
+    T md = -view_distance_;
+    vgl_point_3d<T> pl_org = org + md*ray_dir_;
+    return vgl_ray_3d<T>(pl_org, ray_dir_);
+  }
 }
 
 template <class T>
