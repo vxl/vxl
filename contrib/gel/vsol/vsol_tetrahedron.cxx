@@ -98,7 +98,7 @@ double vsol_tetrahedron::volume(void) const
 //---------------------------------------------------------------------------
 //: Set the first vertex
 //---------------------------------------------------------------------------
-void vsol_tetrahedron::set_p0(vsol_point_3d_sptr new_p0)
+void vsol_tetrahedron::set_p0(const vsol_point_3d_sptr& new_p0)
 {
   storage_[0]=new_p0;
   touch();
@@ -107,7 +107,7 @@ void vsol_tetrahedron::set_p0(vsol_point_3d_sptr new_p0)
 //---------------------------------------------------------------------------
 //: Set the second vertex
 //---------------------------------------------------------------------------
-void vsol_tetrahedron::set_p1(vsol_point_3d_sptr new_p1)
+void vsol_tetrahedron::set_p1(const vsol_point_3d_sptr& new_p1)
 {
   storage_[1]=new_p1;
   touch();
@@ -116,7 +116,7 @@ void vsol_tetrahedron::set_p1(vsol_point_3d_sptr new_p1)
 //---------------------------------------------------------------------------
 //: Set the third vertex
 //---------------------------------------------------------------------------
-void vsol_tetrahedron::set_p2(vsol_point_3d_sptr new_p2)
+void vsol_tetrahedron::set_p2(const vsol_point_3d_sptr& new_p2)
 {
   storage_[2]=new_p2;
   touch();
@@ -125,7 +125,7 @@ void vsol_tetrahedron::set_p2(vsol_point_3d_sptr new_p2)
 //---------------------------------------------------------------------------
 //: Set the last vertex
 //---------------------------------------------------------------------------
-void vsol_tetrahedron::set_p3(vsol_point_3d_sptr new_p3)
+void vsol_tetrahedron::set_p3(const vsol_point_3d_sptr& new_p3)
 {
   storage_[3]=new_p3;
   touch();

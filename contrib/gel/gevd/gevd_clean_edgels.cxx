@@ -26,7 +26,7 @@ static bool verbose = false;
 
 //:
 // \todo not yet implemented
-static bool near_equal(vdgl_digital_curve_sptr /*dc1*/, vdgl_digital_curve_sptr /*dc2*/, float /*tolerance*/)
+static bool near_equal(const vdgl_digital_curve_sptr& /*dc1*/, const vdgl_digital_curve_sptr& /*dc2*/, float /*tolerance*/)
 {
   std::cerr << __FILE__ << ": near_equal(dc1,dc2) not yet implemented\n";
   return false; // TODO
@@ -131,7 +131,7 @@ void gevd_clean_edgels::detect_similar_edges(std::vector<vtol_edge_2d_sptr >& co
   }
   for (auto & eit : temp)
   {
-    vtol_edge_2d_sptr e = eit;
+    const vtol_edge_2d_sptr& e = eit;
     // e->unlink_all_inferiors(); // -tpk-
     deleted_edges.push_back(e);
   }
@@ -170,7 +170,7 @@ void gevd_clean_edgels::remove_similar_edges(vtol_vertex_2d*& v1, std::vector<vt
 
 
 //: Find if an edge already exists between the given vertices
-bool gevd_clean_edgels::edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr v2, std::vector<vtol_edge_2d_sptr >& intersection)
+bool gevd_clean_edgels::edge_exists(const vtol_vertex_2d_sptr& v1, const vtol_vertex_2d_sptr& v2, std::vector<vtol_edge_2d_sptr >& intersection)
 {
   bool found = false;
   intersection.clear();
@@ -198,7 +198,7 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, std::vector<vt
   std::vector<vtol_edge_2d_sptr > tmp;
   for (auto & edge : edges)
   {
-    vtol_edge_2d_sptr e = edge;
+    const vtol_edge_2d_sptr& e = edge;
     if (e->v1() != v && e->v2() != v)
       tmp.push_back(e);
   }
@@ -211,7 +211,7 @@ void gevd_clean_edgels::remove_connected_edges(vtol_vertex_2d* v, std::vector<vt
 //  Otherwise return a vertex which lies on, and interior to, the edge.
 //  Original compared end vertex distances to radius, now with actual
 //  jump span - JLM Sept. 99
-bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v)
+bool gevd_clean_edgels::closest_vertex(const vtol_edge_2d_sptr& e, const vsol_point_2d_sptr& p, float radius, vtol_vertex_2d_sptr& v)
 {
   vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
   if (!dc) { v = nullptr; return false; }
@@ -247,7 +247,7 @@ bool gevd_clean_edgels::closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p
 
 
 //: Split an edge at a vertex which is assumed geometrically to lie on the edge.
-bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_v,
+bool gevd_clean_edgels::split_edge(const vtol_edge_2d_sptr& e, const vtol_vertex_2d_sptr& new_v,
                                    vtol_edge_2d_sptr & e1, vtol_edge_2d_sptr & e2)
 {
   if (!e||!new_v)
@@ -284,7 +284,7 @@ bool gevd_clean_edgels::split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr new_
   vdgl_interpolator_sptr it= new vdgl_interpolator_linear( ec);
   vdgl_digital_curve_sptr dc1 = new vdgl_digital_curve( it);
   edge1->set_curve(*dc1);
-  vdgl_edgel_chain_sptr cxy1= ec;
+  const vdgl_edgel_chain_sptr& cxy1= ec;
 
   for (int k = 0; k < index; k++)
     cxy1->add_edgel( (*cxy)[k] );

@@ -29,7 +29,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bool bvxm_util::read_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_util::read_cameras(const std::string& filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {
   std::ifstream file_inp(filename.c_str());
   if (!file_inp.good()) {
@@ -55,7 +55,7 @@ bool bvxm_util::read_cameras(const std::string filename, std::vector<vnl_double_
 }
 
 
-bool bvxm_util::write_cameras(const std::string filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
+bool bvxm_util::write_cameras(const std::string& filename, std::vector<vnl_double_3x3> &Ks, std::vector<vnl_double_3x3> &Rs, std::vector<vnl_double_3x1> &Ts)
 {
   std::ofstream file_out(filename.c_str());
   if (!file_out.good()) {
@@ -77,7 +77,7 @@ bool bvxm_util::write_cameras(const std::string filename, std::vector<vnl_double
 }
 
 
-void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, unsigned ny_out, vnl_matrix<unsigned> &xvals, vnl_matrix<unsigned> &yvals, vnl_matrix<float> &weights)
+void bvxm_util::bilinear_weights(const vgl_h_matrix_2d<double>& invH, unsigned nx_out, unsigned ny_out, vnl_matrix<unsigned> &xvals, vnl_matrix<unsigned> &yvals, vnl_matrix<float> &weights)
 {
   // perform bilinear interpolation.
   vnl_matrix_fixed<float,3,3> H;
@@ -125,7 +125,7 @@ void bvxm_util::bilinear_weights(vgl_h_matrix_2d<double> invH, unsigned nx_out, 
 }
 
 
-vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_sptr image)
+vil_image_view_base_sptr bvxm_util::downsample_image_by_two(const vil_image_view_base_sptr& image)
 {
   auto*img_view_float = new vil_image_view<float>(image->ni(),image->nj(),image->nplanes());
 
@@ -174,7 +174,7 @@ vil_image_view_base_sptr bvxm_util::downsample_image_by_two(vil_image_view_base_
 }
 
 
-vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale)
+vpgl_camera_double_sptr bvxm_util::downsample_camera(const vpgl_camera_double_sptr& camera,unsigned int scale)
 {
   if ( auto* rat_camera = dynamic_cast<vpgl_local_rational_camera<double>*> (camera.as_pointer()))
   {
@@ -196,7 +196,7 @@ vpgl_camera_double_sptr bvxm_util::downsample_camera(vpgl_camera_double_sptr cam
   }
 }
 
-vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale)
+vpgl_camera_double_sptr bvxm_util::downsample_persp_camera(const vpgl_camera_double_sptr& camera,unsigned int scale)
 {
   if ( auto* persp_camera =    dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer()))
   {
@@ -239,7 +239,7 @@ void bvxm_util::logical_and(bvxm_voxel_slab<bool> const& s1, bvxm_voxel_slab<boo
   return;
 }
 
-int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
+int bvxm_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, const vpgl_lvcs_sptr& lvcs, const vpgl_camera_double_sptr& camera)
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);

@@ -231,7 +231,7 @@ bvxm_synth_world_generator::generate_cameras_yz(vgl_box_3d<double>& world)
 }
 
 bool bvxm_synth_world_generator::update(vgl_vector_3d<unsigned> grid_size,
-                                        bvxm_voxel_world_sptr world,
+                                        const bvxm_voxel_world_sptr& world,
                                         bvxm_voxel_grid<float>* intensity_grid,
                                         bvxm_voxel_grid<float>*  /*ocp_grid*/, // FIXME - unused parameter
                                         bvxm_voxel_grid<apm_datatype>* apm_grid,
@@ -497,7 +497,7 @@ void bvxm_synth_world_generator::gen_voxel_world_plane(vgl_vector_3d<unsigned> /
 
 bool
 bvxm_synth_world_generator::gen_lidar_2box(vgl_vector_3d<unsigned> grid_size,
-                                           bvxm_voxel_world_sptr /*world*/)
+                                           const bvxm_voxel_world_sptr& /*world*/)
 {
   vil_image_view<unsigned char> lidar(grid_size.x(), grid_size.y());
   lidar.fill((unsigned char)0);

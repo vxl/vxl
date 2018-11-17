@@ -38,7 +38,7 @@ public:
   bool contains(vgl_point_2d<double> point) const { return bbox.contains(point); }
   bool contains(double const& lon, double const& lat) const { return this->contains(vgl_point_2d<double>(lon, lat)); }
   bool valid_pixel(int uu, int vv) const { return (uu >= 0 && vv >= 0 && uu < (int)ni && vv < (int)nj) ? true : false; }
-  void save_box_kml(std::string out_name);
+  void save_box_kml(const std::string& out_name);
 
   unsigned ni, nj;
   vpgl_geo_camera* cam;   // in UTM for NAIP imgs
@@ -59,7 +59,7 @@ public:
   static bool load_naip_imgs(std::string const& img_folder, std::vector<volm_img_info>& imgs, bool load_resource = false);
 
   // load vxl_byte image, the associate is either loaded from img filename or from a camera tfw file
-  static int load_lidar_img(std::string img_file, volm_img_info& info,
+  static int load_lidar_img(const std::string& img_file, volm_img_info& info,
                             bool load_resource = false,
                             bool is_cam_global = false,
                             bool load_cam_from_tfw = false,
@@ -81,10 +81,10 @@ public:
   static bool expend_line(std::vector<vgl_point_2d<double> > line, double const& width, vgl_polygon<double>& poly);
 
   // a method to read the binary osm object file and also contstruct the volm_geo_index2, the method returns the root and the min_size of the tree
-  static volm_geo_index2_node_sptr read_osm_data_and_tree(std::string geoindex_filename_pre, std::string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size);
+  static volm_geo_index2_node_sptr read_osm_data_and_tree(const std::string& geoindex_filename_pre, const std::string& osm_bin_filename, volm_osm_objects& osm_objs, double& min_size);
 
   //: load a geotiff file (usually .tif) and read its ortho camera info from its header, puts a dummy lvcs to vpgl_geo_cam object so lvcs is not valid
-  static void load_geotiff_image(std::string filename, volm_img_info& info, bool load_cam_from_name = false);
+  static void load_geotiff_image(const std::string& filename, volm_img_info& info, bool load_cam_from_name = false);
 
   //: load a satellite height map and read its ortho camera from image header, if image header is missing, load associated camera file
   static bool load_satellite_height_map(std::string const& filename, volm_img_info& info, bool const& load_cam_from_file = false);

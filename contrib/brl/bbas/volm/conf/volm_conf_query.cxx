@@ -27,7 +27,7 @@ volm_conf_query::volm_conf_query()
 }
 
 // create query from labeled depth map scene
-volm_conf_query::volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, int const& tol_in_pixel)
+volm_conf_query::volm_conf_query(const volm_camera_space_sptr& cam_space, const depth_map_scene_sptr& depth_scene, int const& tol_in_pixel)
 {
   tol_in_pixel_ = tol_in_pixel;
   dm_ = depth_scene;
@@ -51,7 +51,7 @@ volm_conf_query::volm_conf_query(volm_camera_space_sptr cam_space, depth_map_sce
   assert(success && "volm_conf_query: construct configurational objects failed");
 }
 
-bool volm_conf_query::parse_ref_object(depth_map_scene_sptr dm)
+bool volm_conf_query::parse_ref_object(const depth_map_scene_sptr& dm)
 {
   ref_obj_name_.clear();
   if (dm == nullptr)
@@ -70,7 +70,7 @@ bool volm_conf_query::parse_ref_object(depth_map_scene_sptr dm)
   return true;
 }
 
-bool volm_conf_query::create_perspective_cameras(volm_camera_space_sptr cam_space)
+bool volm_conf_query::create_perspective_cameras(const volm_camera_space_sptr& cam_space)
 {
   // iterate over valid cameras in the camera space
   // Note that ground plane construct has been applied on camera space

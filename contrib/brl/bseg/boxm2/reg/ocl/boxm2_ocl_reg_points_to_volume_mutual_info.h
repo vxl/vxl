@@ -21,7 +21,7 @@ class boxm2_ocl_reg_points_to_volume_mutual_info
   boxm2_ocl_reg_points_to_volume_mutual_info(boxm2_opencl_cache_sptr& opencl_cache,
                                              float * pts,
                                              boxm2_scene_sptr& sceneB,
-                                             bocl_device_sptr device,
+                                             const bocl_device_sptr& device,
                                              int npts,
                                              bool do_vary_scale);
 
@@ -32,7 +32,7 @@ class boxm2_ocl_reg_points_to_volume_mutual_info
   double cost(vnl_vector<double> const& x,  int depth =3 );
  protected:
   bool compile_kernel();
-  bool boxm2_ocl_register_world(vgl_rotation_3d<double>  rot,
+  bool boxm2_ocl_register_world(const vgl_rotation_3d<double>&  rot,
                                 vgl_vector_3d<double> tx,
                                 double s,
                                 int depth,

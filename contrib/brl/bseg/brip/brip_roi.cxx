@@ -49,7 +49,7 @@ brip_roi::brip_roi(brip_roi const& roi, float delta)
   }
 }
 
-vsol_box_2d_sptr brip_roi::clip_to_image_bounds(vsol_box_2d_sptr box)
+vsol_box_2d_sptr brip_roi::clip_to_image_bounds(const vsol_box_2d_sptr& box)
 {
   if (!box||!n_image_cols_||!n_image_rows_)
     return box;

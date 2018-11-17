@@ -24,16 +24,16 @@ class gmvl_connection_cache
   ~gmvl_connection_cache();
 
   // simple accessors
-  void add( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
+  void add( const gmvl_node_sptr& node1, const gmvl_node_sptr& node2);
 
   // clever accessors
   std::vector<int> get_connected_nodes( const gmvl_node_sptr node) const { return cache_[node->ref_]; }
-  std::vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-                                       const gmvl_node_sptr node2) const;
-  std::vector<int> get_connected_nodes( const gmvl_node_sptr node1,
-                                       const gmvl_node_sptr node2,
-                                       const gmvl_node_sptr node3) const;
-  std::vector<int> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes) const;
+  std::vector<int> get_connected_nodes( const gmvl_node_sptr& node1,
+                                       const gmvl_node_sptr& node2) const;
+  std::vector<int> get_connected_nodes( const gmvl_node_sptr& node1,
+                                       const gmvl_node_sptr& node2,
+                                       const gmvl_node_sptr& node3) const;
+  std::vector<int> get_connected_nodes( const std::vector<gmvl_node_sptr>& nodes) const;
 
   void rebuild();
 

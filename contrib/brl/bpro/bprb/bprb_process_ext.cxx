@@ -21,7 +21,7 @@ bool bprb_process_ext::set_output_types(std::vector<std::string> const& types)
   return true;
 }
 
-bool bprb_process_ext::set_output(unsigned i, brdb_value_sptr val)
+bool bprb_process_ext::set_output(unsigned i, const brdb_value_sptr& val)
 {
   if (i < output_data_.size())
     output_data_[i] = val;

@@ -49,7 +49,7 @@ std::vector<vsph_sph_point_3d> volm_spherical_shell_container::sph_points() cons
   return temp;
 }
 
-void volm_spherical_shell_container::draw_template(std::string vrml_file_name)
+void volm_spherical_shell_container::draw_template(const std::string& vrml_file_name)
 {
   std::ofstream ofs(vrml_file_name.c_str());
   if (!ofs.is_open()) {
@@ -84,7 +84,7 @@ void volm_spherical_shell_container::draw_template(std::string vrml_file_name)
 }
 
 //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
-void volm_spherical_shell_container::draw_template(std::string vrml_file_name, std::vector<unsigned char>& values, unsigned char special)
+void volm_spherical_shell_container::draw_template(const std::string& vrml_file_name, std::vector<unsigned char>& values, unsigned char special)
 {
   assert(values.size() == usph_->size());
 

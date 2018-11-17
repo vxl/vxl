@@ -71,7 +71,7 @@ class boxm2_nn_cache : public boxm2_cache1
     void update_block_cache(boxm2_block* blk);
 
     //: private update data generic
-    void update_data_base_cache(boxm2_data_base*, std::string type);
+    void update_data_base_cache(boxm2_data_base*, const std::string& type);
 
     //: private update block cache method
     template <boxm2_data_type T>
@@ -81,16 +81,16 @@ class boxm2_nn_cache : public boxm2_cache1
     void finish_async_blocks();
 
     //: finish async data
-    void finish_async_data(std::string data_type);
+    void finish_async_data(const std::string& data_type);
 
     //: helper method returns a reference to correct data map (ensures one exists)
-    std::map<boxm2_block_id, boxm2_data_base*>& cached_data_map(std::string prefix);
+    std::map<boxm2_block_id, boxm2_data_base*>& cached_data_map(const std::string& prefix);
 
     //: returns a list of neighbors for a given ID
-    std::vector<boxm2_block_id> get_neighbor_list(boxm2_block_id center);
+    std::vector<boxm2_block_id> get_neighbor_list(const boxm2_block_id& center);
 
     //: helper method determines if this block is valid
-    bool is_valid_id(boxm2_block_id);
+    bool is_valid_id(const boxm2_block_id&);
     // --------------------------------------------------------------------------
 };
 

@@ -78,7 +78,7 @@ void print_probs(boxm2_block* blk, const float* alphas, boxm2_block_metadata dat
   }
 }
 
-void print_alphas(boxm2_block* blk, const float* alphas, boxm2_block_metadata /*data*/, int /*dataSize*/)
+void print_alphas(boxm2_block* blk, const float* alphas, const boxm2_block_metadata& /*data*/, int /*dataSize*/)
 {
   //print in 3x3
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;
@@ -127,12 +127,12 @@ void print_alphas(boxm2_block* blk, const float* alphas, boxm2_block_metadata /*
 //
 // Each outer cell will need the sub tree combo of the inner cell - and some
 // will store it as their own (will be the median).
-void test_inner_cluster(boxm2_scene_sptr scene,
+void test_inner_cluster(const boxm2_scene_sptr& scene,
                         boxm2_block* blk,
                         boxm2_block_metadata& data,
                         bocl_device_sptr& device,
                         boxm2_opencl_cache_sptr& opencl_cache,
-                        boxm2_block_id id,
+                        const boxm2_block_id& id,
                         bocl_kernel* kern,
                         cl_command_queue& queue)
 {
@@ -264,12 +264,12 @@ void test_inner_cluster(boxm2_scene_sptr scene,
 // |_|_|_|_|_|_|
 // |_|_|_|_|_|_|
 //
-void test_outer_cluster(boxm2_scene_sptr scene,
+void test_outer_cluster(const boxm2_scene_sptr& scene,
                         boxm2_block* blk,
                         boxm2_block_metadata& data,
                         bocl_device_sptr& device,
                         boxm2_opencl_cache_sptr& opencl_cache,
-                        boxm2_block_id id,
+                        const boxm2_block_id& id,
                         bocl_kernel* kern,
                         cl_command_queue& queue)
 {

@@ -46,7 +46,7 @@ sdet_detector::sdet_detector(sdet_detector_params& params)
   use_roi_ = false;
 }
 
-sdet_detector::sdet_detector(vil1_image img, float smoothSigma, float noiseSigma,
+sdet_detector::sdet_detector(const vil1_image& img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
   : image(img), vimage(nullptr), noise(noiseSigma), edgel(nullptr), direction(nullptr),
@@ -449,7 +449,7 @@ void sdet_detector::DoBreakCorners(std::vector<vtol_edge_2d_sptr >& /* in_edgels
   std::cerr << "sdet_detector::DoBreakCorners() NYI\n";
 }
 
-void sdet_detector::SetImage(vil1_image img)
+void sdet_detector::SetImage(const vil1_image& img)
 {
   use_vil_image = false;
   image = img;

@@ -42,7 +42,7 @@ class boxm2_ocl_camera_converter
                                            bool create_ray_o_d_buffers);
 
     //: compile helper kernel, should only occur once
-    static bocl_kernel* compile_persp_to_generic_kernel(bocl_device_sptr device);
+    static bocl_kernel* compile_persp_to_generic_kernel(const bocl_device_sptr& device);
 
     //:
     // \todo make this a map of kernels (by device)

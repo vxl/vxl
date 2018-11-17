@@ -26,7 +26,7 @@ std::ostream &operator<<( std::ostream &os, const std::vector<gmvl_node_sptr> &r
 
 // loaders and savers
 
-std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string filename)
+std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string& filename)
 {
   std::vector<gmvl_node_sptr> corners;
 
@@ -46,7 +46,7 @@ std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string filename)
   return corners;
 }
 
-gmvl_node_sptr gmvl_load_image( const std::string filename)
+gmvl_node_sptr gmvl_load_image( const std::string& filename)
 {
   vil1_image image= vil1_load( filename.c_str());
   gmvl_image_node *node= new gmvl_image_node( image);

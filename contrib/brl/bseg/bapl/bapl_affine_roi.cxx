@@ -6,7 +6,7 @@
 
 
 //: Constructor
-bapl_affine_roi::bapl_affine_roi(vil_image_view<vxl_byte> src_image,
+bapl_affine_roi::bapl_affine_roi(const vil_image_view<vxl_byte>& src_image,
                                  bapl_affine_transform xform,
                                  unsigned ni, unsigned nj )
   :  rectified_valid_(false), src_img_(src_image), rectified_img_(ni,nj),

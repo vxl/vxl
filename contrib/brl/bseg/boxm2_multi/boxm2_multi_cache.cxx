@@ -13,7 +13,7 @@
 #include <vsph/vsph_camera_bounds.h>
 
 //: init opencl cache for each device
-boxm2_multi_cache::boxm2_multi_cache(boxm2_scene_sptr             scene,
+boxm2_multi_cache::boxm2_multi_cache(const boxm2_scene_sptr&             scene,
                                const std::vector<bocl_device_sptr> &devices)
 {
   scene_ = scene;
@@ -184,7 +184,7 @@ boxm2_multi_cache::get_vis_sub_scenes(vpgl_generic_camera<double>* cam)
 }
 
 std::vector<boxm2_opencl_cache1*>
-boxm2_multi_cache::get_vis_sub_scenes(vpgl_camera_double_sptr cam)
+boxm2_multi_cache::get_vis_sub_scenes(const vpgl_camera_double_sptr& cam)
 {
   if ( cam->type_name() == "vpgl_generic_camera" )
     return this->get_vis_sub_scenes( (vpgl_generic_camera<double>*) cam.ptr() );
@@ -229,7 +229,7 @@ boxm2_multi_cache::get_vis_order_from_pt(vgl_point_3d<double> const& pt)
 // Cache block group visibility order functions
 //----------------------------------------------
 std::vector<boxm2_multi_cache_group*>
-boxm2_multi_cache::get_vis_groups(vpgl_camera_double_sptr cam)
+boxm2_multi_cache::get_vis_groups(const vpgl_camera_double_sptr& cam)
 {
   vgl_point_3d<double> center;
   vgl_box_2d<double> camBox;

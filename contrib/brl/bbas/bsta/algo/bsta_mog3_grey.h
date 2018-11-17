@@ -61,13 +61,13 @@ class  bsta_mog3_grey
      static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                          std::vector<float> const& obs,
                                          std::vector<float> const& obs_weights,
-                                         bsta_sigma_normalizer_sptr n_table,
+                                         const bsta_sigma_normalizer_sptr& n_table,
                                          float min_sigma = 0.01f);
      static void compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                    std::vector<float> const& obs,
                                    std::vector<float> const& pre,
                                    std::vector<float> const& vis,
-                                   bsta_sigma_normalizer_sptr n_table,
+                                   const bsta_sigma_normalizer_sptr& n_table,
                                    float min_sigma=0.01f);
 
      static void force_mog3_sigmas_to_value(vnl_vector_fixed<unsigned char, 8> & mog3,float sigma);

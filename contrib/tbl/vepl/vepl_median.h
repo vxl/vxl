@@ -29,6 +29,6 @@
 #include <vil/vil_image_resource.h>
 
 //: median filter with circular element of supplied radius
-vil_image_resource_sptr vepl_median(vil_image_resource_sptr , float radius=1.0);
+vil_image_resource_sptr vepl_median(const vil_image_resource_sptr& , float radius=1.0);
 
 #endif // vepl_median_h_

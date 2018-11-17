@@ -1,8 +1,9 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <cstdio>
 #include "bocl_kernel.h"
+#include <cstdio>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <utility>
 //:
 // \file
 #include "bocl_device_info.h"
@@ -20,7 +21,7 @@ bool bocl_kernel::create_kernel(cl_context* context,
 {
   context_  = context;
   device_   = device;
-  id_       = id;
+  id_       = std::move(id);
 
   //make sure paths exist
   if (src_paths.empty()) {
@@ -69,7 +70,7 @@ bool bocl_kernel::create_kernel(const cl_context& context,
                                 std::string const& src,
                                 std::string const& kernel_name,
                                 std::string options,
-                                std::string id )
+                                const std::string& id )
 {
   id_ = id;
   device_ = device;
@@ -323,7 +324,7 @@ bool bocl_kernel::append_process_kernels(std::string const& path)
 }
 
 //: build opencl program
-bool bocl_kernel::build_kernel_program(cl_program &program, std::string options)
+bool bocl_kernel::build_kernel_program(cl_program &program, const std::string& options)
 {
   cl_int status = CL_SUCCESS;
   std::size_t sourceSize[] = { this->prog_.size() };

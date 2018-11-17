@@ -24,7 +24,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-void create_grid(std::string grid_filename)
+void create_grid(const std::string& grid_filename)
 {
   if (vul_file_exists(grid_filename))
     vul_file::delete_file_glob(grid_filename);

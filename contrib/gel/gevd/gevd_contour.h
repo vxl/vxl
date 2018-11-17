@@ -124,17 +124,17 @@ class gevd_contour
 
   static int LengthCmp(vtol_edge_2d_sptr const& dc1, vtol_edge_2d_sptr const& dc2); // pixel length
   static std::vector<vtol_edge_2d_sptr>* CreateLookupTable(std::vector<vtol_edge_2d_sptr>&);
-  static void LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+  static void LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set, const vtol_edge_2d_sptr& elmt);
   static void LookupTableReplace(std::vector<vtol_edge_2d_sptr>& set,
-                                 vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted);
-  static void LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set, vtol_edge_2d_sptr elmt);
+                                 const vtol_edge_2d_sptr& deleted, const vtol_edge_2d_sptr& inserted);
+  static void LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set, const vtol_edge_2d_sptr& elmt);
   static void LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set);
 
   static std::vector<vtol_vertex_2d_sptr >* CreateLookupTable(std::vector<vtol_vertex_2d_sptr >&);
-  static void LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+  static void LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set, const vtol_vertex_2d_sptr&  elmt);
   static void LookupTableReplace(std::vector<vtol_vertex_2d_sptr >& set,
-                                 vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted);
-  static void LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set, vtol_vertex_2d_sptr  elmt);
+                                 const vtol_vertex_2d_sptr&  deleted, const vtol_vertex_2d_sptr&  inserted);
+  static void LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set, const vtol_vertex_2d_sptr&  elmt);
   static void LookupTableCompress(std::vector<vtol_vertex_2d_sptr >& set);
 
   static void BeSilent() {talkative = false;}

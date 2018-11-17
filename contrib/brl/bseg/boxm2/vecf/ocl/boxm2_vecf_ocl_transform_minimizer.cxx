@@ -4,7 +4,7 @@
 
 boxm2_vecf_ocl_transform_minimizer::boxm2_vecf_ocl_transform_minimizer(boxm2_scene_sptr& source_scene,
                                                                        boxm2_scene_sptr& target_scene,
-                                                                       boxm2_opencl_cache_sptr ocl_cache,
+                                                                       const boxm2_opencl_cache_sptr& ocl_cache,
                                                                        vil_image_view<float> const& ref_img,
                                                                        vpgl_camera_double_sptr const& cam):
   boxm2_vecf_ocl_ssd_func(3, ref_img.ni(), ref_img.nj(), (new boxm2_vecf_ocl_transform_scene( source_scene, target_scene, ocl_cache )), target_scene, ocl_cache)

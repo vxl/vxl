@@ -20,7 +20,7 @@
 #include <bbgm/bbgm_image_sptr.h>
 
 template <bvxm_voxel_type APM_T>
-bbgm_image_sptr create_bbgm_image(bvxm_voxel_slab_base_sptr mog_image_)
+bbgm_image_sptr create_bbgm_image(const bvxm_voxel_slab_base_sptr& mog_image_)
 {
   typedef typename bvxm_voxel_traits<APM_T>::voxel_datatype mog_type;
   bbgm_image_sptr out_model_img_ = new bbgm_image_of<mog_type>();

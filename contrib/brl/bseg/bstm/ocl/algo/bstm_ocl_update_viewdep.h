@@ -17,20 +17,20 @@
 class bstm_ocl_update_viewdep
 {
   public:
-    static bool update( bstm_scene_sptr         scene,
+    static bool update( const bstm_scene_sptr&         scene,
                           bocl_device_sptr         device,
-                          bstm_opencl_cache_sptr  opencl_cache,
+                          const bstm_opencl_cache_sptr&  opencl_cache,
                           vpgl_camera_double_sptr  cam,
-                          vil_image_view_base_sptr img,
+                          const vil_image_view_base_sptr& img,
                           float                   time,
                           float                    mog_var,
-                          vil_image_view_base_sptr mask_img,
+                          const vil_image_view_base_sptr& mask_img,
                           bool                     update_alpha,
                           bool                    update_changes_only);
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="", bool isRGB = false);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="", bool isRGB = false);
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
@@ -39,7 +39,7 @@ class bstm_ocl_update_viewdep
     static float* prep_image_buffer(vil_image_view_base_sptr floatImg, bool isRGB, int& numFloats);
 
     //helper method to validate appearances
-    static bool validate_appearances(bstm_scene_sptr scene,
+    static bool validate_appearances(const bstm_scene_sptr& scene,
                                          std::string& data_type,
                                          int& appTypeSize,
                                          std::string& nobs_type,

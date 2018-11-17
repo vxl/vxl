@@ -29,7 +29,7 @@
 #endif
 #include <bkml/bkml_parser.h>
 
-void add_directories(std::string root, std::vector<std::string>& directories) {
+void add_directories(const std::string& root, std::vector<std::string>& directories) {
   if (vul_file::is_directory(root))
     directories.push_back(root);
 
@@ -46,7 +46,7 @@ void add_directories(std::string root, std::vector<std::string>& directories) {
 
 }
 
-void volm_satellite_resources::add_resource(std::string name)
+void volm_satellite_resources::add_resource(const std::string& name)
 {
   volm_satellite_resource res;
   res.full_path_ = name;
@@ -86,7 +86,7 @@ volm_satellite_resources::volm_satellite_resources(vgl_box_2d<double>& bbox, dou
 void volm_satellite_resources::add_path(std::string path)
 {
   std::vector<std::string> directories;
-  add_directories(path, directories);
+  add_directories(std::move(path), directories);
   if (!directories.size())
     return;
   std::cout << "found " << directories.size() << " directories!\n";
@@ -477,7 +477,7 @@ bool volm_satellite_resources::query_pairs_print_to_file(double lower_left_lon, 
 }
 
 //: return the full path of a satellite image given its name, if not found returns empty string
-std::pair<std::string, std::string> volm_satellite_resources::full_path(std::string name)
+std::pair<std::string, std::string> volm_satellite_resources::full_path(const std::string& name)
 {
   for (auto & resource : resources_) {
     if (name.compare(resource.name_) == 0) {
@@ -660,7 +660,7 @@ template<class T> struct index_cmp {
 
 void
 volm_satellite_resources::query_resources(std::vector<vgl_polygon<double> >& footprints, std::vector<unsigned>& footprint_ids,
-  volm_satellite_resources_sptr res, const std::string& kml_file, const std::string& band, double gsd_thres)
+  const volm_satellite_resources_sptr& res, const std::string& kml_file, const std::string& band, double gsd_thres)
 {
   // parse the polygon and construct its bounding box
   if (!vul_file::exists(kml_file)) {
@@ -705,7 +705,7 @@ volm_satellite_resources::query_resources(std::vector<vgl_polygon<double> >& foo
 }
 
 void
-volm_satellite_resources::highly_overlapping_resources(std::vector<std::string>& overlapping_res, volm_satellite_resources_sptr res,
+volm_satellite_resources::highly_overlapping_resources(std::vector<std::string>& overlapping_res, const volm_satellite_resources_sptr& res,
   const std::string& kml_file, float downsample_factor, const std::string& band, double gsd_thres)
 {
   // query_resources
@@ -1073,7 +1073,7 @@ private:
 };
 
 void
-volm_satellite_resources::highly_intersecting_resources(std::vector<std::string>& overlapping_res, volm_satellite_resources_sptr res,
+volm_satellite_resources::highly_intersecting_resources(std::vector<std::string>& overlapping_res, const volm_satellite_resources_sptr& res,
   const std::string& kml_file, int k, int l, const std::string& band, double gsd_thres)
 {
   // query_resources

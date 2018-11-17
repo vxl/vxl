@@ -64,7 +64,7 @@ compute_alignment_error( rgrl_set_of<rgrl_match_set_sptr> const& current_match_s
     rgrl_match_set const& ms = *current_match_sets[ds];
     for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
       //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
-      rgrl_feature_sptr mapped = fitr.mapped_from_feature();
+      const rgrl_feature_sptr& mapped = fitr.mapped_from_feature();
       for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
       {
         error = titr.to_feature()->geometric_error( *mapped );
@@ -96,7 +96,7 @@ compute_alignment_error( rgrl_match_set_sptr const& current_match_set ) const
   rgrl_match_set const& ms = *current_match_set;
   for ( from_iter fitr = ms.from_begin(); fitr != ms.from_end(); ++fitr ) {
     //rgrl_feature_sptr mapped = fitr.from_feature()->transform( *current_xform );
-    rgrl_feature_sptr mapped = fitr.mapped_from_feature();
+    const rgrl_feature_sptr& mapped = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr )
     {
       error = titr.to_feature()->geometric_error( *mapped );

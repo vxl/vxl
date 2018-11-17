@@ -83,7 +83,7 @@ vpgl_camera_double_sptr create_camera()
   return cam1;
 }
 
-bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(std::string model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
+bvxm_voxel_slab_base_sptr create_mog_image_using_grey_processor(const std::string& model_dir, bvxm_voxel_world_sptr& vox_world, vil_image_view_base_sptr& expected_img)
 {
   vul_file::make_directory(model_dir);
 

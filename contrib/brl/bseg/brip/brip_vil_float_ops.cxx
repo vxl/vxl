@@ -936,7 +936,7 @@ brip_vil_float_ops::sqrt_grad_singular_values(vil_image_view<float>& input,
 }
 
 vil_image_view<float> brip_vil_float_ops::
-max_scale_trace(vil_image_view<float> input,
+max_scale_trace(const vil_image_view<float>& input,
                 float min_scale, float max_scale, float scale_inc)
 {
   unsigned ni = input.ni(), nj = input.nj();
@@ -967,7 +967,7 @@ max_scale_trace(vil_image_view<float> input,
 
 //: exactly same as max_scale_trace, only return the image with actual trace values at max scales instead of the image with max scale values
 vil_image_view<float> brip_vil_float_ops::
-max_scale_trace_value(vil_image_view<float> input,
+max_scale_trace_value(const vil_image_view<float>& input,
                       float min_scale, float max_scale, float scale_inc)
 {
   unsigned ni = input.ni(), nj = input.nj();
@@ -3596,8 +3596,8 @@ bool brip_vil_float_ops::vimt_homography(vil_image_view<float> const& curr_view,
 
 #endif // 0
 
-std::vector<float> brip_vil_float_ops::scan_region(vil_image_resource_sptr img,
-                                                  vgl_polygon<double> poly,
+std::vector<float> brip_vil_float_ops::scan_region(const vil_image_resource_sptr& img,
+                                                  const vgl_polygon<double>& poly,
                                                   float& min,
                                                   float& max)
 {

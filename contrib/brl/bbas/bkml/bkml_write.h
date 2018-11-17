@@ -39,18 +39,18 @@ class bkml_write
   static void close_document(std::ofstream& str);
 
   //: Write a box
-  static void write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr);
+  static void write_box(std::ofstream &ofs, const std::string& name, const std::string& description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr);
   static void write_box(std::ofstream &ofs, std::string name, std::string description, vgl_box_2d<double> bbox);
 
   //: Write a box with color, color is in hexadecimale format: 0 - 255 --> 00 to ff, aabbggrr --> alpha alpha, blue blue, gree green , red red.. alpha is the opacity, ffffffff is white fully opaque
-  static void write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, std::string hex_color,
+  static void write_box(std::ofstream &ofs, const std::string& name, const std::string& description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, const std::string& hex_color,
                         unsigned const& fill = 0);
   static void write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr,
                         unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a = 85,
                         unsigned const& fill = 0);
 
   //: put a pin at the given location
-  static void write_location(std::ofstream& ofs, std::string name, std::string description, double lat, double lon, double elev);
+  static void write_location(std::ofstream& ofs, const std::string& name, const std::string& description, double lat, double lon, double elev);
   static void write_location(std::ofstream& ofs, double lat, double lon, double elev,
                              std::string const& name = "location",
                              std::string const& description = "",
@@ -78,7 +78,7 @@ class bkml_write
 
 
   //: Write a photooverlay without img and correct near parameter though)
-  static void write_photo_overlay(std::ofstream& ofs, std::string name,
+  static void write_photo_overlay(std::ofstream& ofs, const std::string& name,
                                   double lon, double lat, double alt,
                                   double head, double tilt, double roll,
                                   double t_fov, double r_fov,
@@ -122,7 +122,7 @@ class bkml_write
 
   //: Write a style include LineStyle and PolyStyle
   static void write_kml_style(std::ofstream& ofs,
-                              std::string style_name = "kml_style",
+                              const std::string& style_name = "kml_style",
                               double const& scale = 1.0,
                               double const& line_width = 3.0,
                               double const& alpha = 0.45,

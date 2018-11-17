@@ -9,7 +9,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-gmvl_connection::gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2)
+gmvl_connection::gmvl_connection( const gmvl_node_sptr& node1, const gmvl_node_sptr& node2)
   : n1_( node1), n2_( node2)
 {
 }

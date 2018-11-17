@@ -47,7 +47,7 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: set primitive data type input on current process
   bool set_input(unsigned i, brdb_value_sptr const& input);
 
-  bool set_input_from_db(unsigned i, unsigned id, std::string type);
+  bool set_input_from_db(unsigned i, unsigned id, const std::string& type);
 
   //: set input from the database
   bool set_input_from_db(unsigned i, unsigned id);
@@ -84,7 +84,7 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
 
   //: Set stdout
   // \return false on failure
-  bool set_stdout(std::string file);
+  bool set_stdout(const std::string& file);
 
   //: Reset stdout back to the console
   // \return false on failure

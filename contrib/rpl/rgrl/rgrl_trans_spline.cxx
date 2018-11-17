@@ -22,7 +22,7 @@ rgrl_trans_spline( unsigned int dim )
 rgrl_trans_spline::
 rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
-                   rgrl_transformation_sptr xform )
+                   const rgrl_transformation_sptr& xform )
   : xform_( xform ), splines_(std::move( splines )),
     x0_( x0 ), delta_( delta )
 {
@@ -34,7 +34,7 @@ rgrl_trans_spline::
 rgrl_trans_spline( std::vector<rgrl_spline_sptr>  splines,
                    vnl_vector< double > const& x0, vnl_vector< double > const& delta,
                    vnl_matrix< double > const& covar,
-                   rgrl_transformation_sptr xform )
+                   const rgrl_transformation_sptr& xform )
   : rgrl_transformation( covar ),
     xform_( xform ), splines_(std::move( splines )), x0_( x0 ), delta_( delta )
 {

@@ -30,7 +30,7 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
  public:
   //: Constructor.
   boxm2_vecf_ocl_store_nbrs(boxm2_scene_sptr& source_scene,
-                            boxm2_opencl_cache_sptr ocl_cache);
+                            const boxm2_opencl_cache_sptr& ocl_cache);
 
   ~boxm2_vecf_ocl_store_nbrs() override;
 
@@ -43,7 +43,7 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
  protected:
   bool compile_kernel();
   bool init_ocl_store();
-  bool get_scene_appearance(boxm2_scene_sptr scene,
+  bool get_scene_appearance(const boxm2_scene_sptr& scene,
                             std::string&      options);
 
   boxm2_opencl_cache_sptr  opencl_cache_;

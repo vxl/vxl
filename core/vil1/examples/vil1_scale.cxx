@@ -12,7 +12,7 @@
 #include <vil1/vil1_load.h>
 #include <vil1/vil1_rgb.h>
 
-void vil1_scale(vil1_image in, int newxsize, int newysize, vil1_image out);
+void vil1_scale(const vil1_image& in, int newxsize, int newysize, const vil1_image& out);
 
 int main(int argc, char ** argv)
 {
@@ -138,7 +138,7 @@ struct pnmscale {
   int current_outrow;
   vil1_image out;
 
-  void init(vil1_image in, vil1_image out)
+  void init(const vil1_image& in, const vil1_image& out)
   {
     this->in = in;
     this->out = out;
@@ -361,7 +361,7 @@ template struct pnmscaleT<unsigned char, long>;
 
 template struct pnmscaleT<vil1_rgb<unsigned char>, vil1_rgb<long> >;
 
-void vil1_scale(vil1_image in, int newxsize, int newysize, vil1_image out)
+void vil1_scale(const vil1_image& in, int newxsize, int newysize, const vil1_image& out)
 {
   pnmscaleT<vil1_rgb<unsigned char> , vil1_rgb<long> > p;
   p.set_xsize(newxsize);

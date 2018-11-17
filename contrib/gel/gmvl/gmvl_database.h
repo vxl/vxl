@@ -24,30 +24,30 @@ class gmvl_database
  public:
 
   // methods on database nodes
-  void add_node( const gmvl_node_sptr node);
-  void remove_node( const gmvl_node_sptr node);
+  void add_node( const gmvl_node_sptr& node);
+  void remove_node( const gmvl_node_sptr& node);
 
   // methods on connections
-  void add_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
-  void add_connections( const gmvl_node_sptr node1, std::vector<gmvl_node_sptr> nodes);
+  void add_connection( const gmvl_node_sptr& node1, const gmvl_node_sptr& node2);
+  void add_connections( const gmvl_node_sptr& node1, std::vector<gmvl_node_sptr> nodes);
 
   // clever accessors
 
   //   nodes of a particular type
-  std::vector<gmvl_node_sptr> get_nodes( const std::string type) const;
+  std::vector<gmvl_node_sptr> get_nodes( const std::string& type) const;
 
   //   nodes with a particular connection list
-  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node) const;
-  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
-                                                  const gmvl_node_sptr node2) const;
-  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node1,
-                                                  const gmvl_node_sptr node2,
-                                                  const gmvl_node_sptr node3) const;
-  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr& node) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr& node1,
+                                                  const gmvl_node_sptr& node2) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr& node1,
+                                                  const gmvl_node_sptr& node2,
+                                                  const gmvl_node_sptr& node3) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr>& nodes) const;
 
   //   nodes with a particular connection list and a particular type
-  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr node, const std::string type) const;
-  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr> nodes, const std::string type) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const gmvl_node_sptr& node, const std::string& type) const;
+  std::vector<gmvl_node_sptr> get_connected_nodes( const std::vector<gmvl_node_sptr>& nodes, const std::string& type) const;
 
   // lookup a particular tag (returns null if not found)
   gmvl_node_sptr find_tag( const std::string &string) const;

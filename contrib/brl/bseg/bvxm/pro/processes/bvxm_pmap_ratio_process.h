@@ -32,7 +32,7 @@ namespace bvxm_pmap_ratio_process_globals
   constexpr unsigned n_outputs_ = 0;
 
   // functions
-  bool compute(std::string pmap1,std::string pmap2, std::string path);
+  bool compute(const std::string& pmap1,const std::string& pmap2, const std::string& path);
 }
 
 //: set input and output types

@@ -27,7 +27,7 @@ inline float next_mult_2(float val)
 }
 
 // find the elevation of the point and add it to the geo index if found
-bool add_hypo(volm_geo_index_node_sptr hyp_root, std::vector<volm_img_info> const& infos, std::vector<volm_img_info> const& class_map_infos,
+bool add_hypo(const volm_geo_index_node_sptr& hyp_root, std::vector<volm_img_info> const& infos, std::vector<volm_img_info> const& class_map_infos,
               vgl_point_2d<double> const& pt, double inc_in_sec_radius, bool search)
 {
   // find the elevation of the hypotheses
@@ -298,7 +298,7 @@ int main(int argc,  char** argv)
 
         // now go over each road in the osm file and insert into the tree of loc hyps
         std::vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
-        for (auto r : roads) {
+        for (const auto& r : roads) {
           std::string name = r->prop().name_;
           std::vector<vgl_point_2d<double> > points = r->line();
           for (unsigned kk = 1; kk < points.size(); kk++) {
@@ -750,7 +750,7 @@ int main(int argc,  char** argv)
       if (land().compare("") == 0) {
         std::cout << "generate locations along the roads with constant density" << std::endl;
         std::vector<volm_osm_object_line_sptr>& roads = osm_objs.loc_lines();
-        for (auto r : roads) {
+        for (const auto& r : roads) {
           if (r->prop().name_ == "water_river" || r->prop().name_ == "water_stream" || r->prop().name_ == "water_large_river"  || r->prop().name_ == "water_canal")
             continue;
           std::vector<vgl_point_2d<double> > points = r->line();

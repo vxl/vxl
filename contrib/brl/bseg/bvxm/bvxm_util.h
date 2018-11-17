@@ -56,12 +56,12 @@ class bvxm_util
 {
  public:
 
-  static bool read_cameras(const std::string filename,
+  static bool read_cameras(const std::string& filename,
                            std::vector<vnl_double_3x3> &Ks,
                            std::vector<vnl_double_3x3> &Rs,
                            std::vector<vnl_double_3x1> &Ts);
 
-  static bool write_cameras(const std::string filename,
+  static bool write_cameras(const std::string& filename,
                             std::vector<vnl_double_3x3> &Ks,
                             std::vector<vnl_double_3x3> &Rs,
                             std::vector<vnl_double_3x1> &Ts);
@@ -138,17 +138,17 @@ class bvxm_util
   static bool intersection(vgl_box_3d<T> const& b, std::vector<vgl_point_3d<T> > const& poly)
   { return vgl_intersection(b,poly).size() > 0; }
 
-  static vil_image_view_base_sptr downsample_image_by_two(vil_image_view_base_sptr img);
+  static vil_image_view_base_sptr downsample_image_by_two(const vil_image_view_base_sptr& img);
 
-  static vpgl_camera_double_sptr downsample_camera(vpgl_camera_double_sptr camera,unsigned int scale);
+  static vpgl_camera_double_sptr downsample_camera(const vpgl_camera_double_sptr& camera,unsigned int scale);
 
-  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
+  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, const vpgl_lvcs_sptr& lvcs, const vpgl_camera_double_sptr& camera);
 
-  static vpgl_camera_double_sptr downsample_persp_camera(vpgl_camera_double_sptr camera,unsigned int scale);
+  static vpgl_camera_double_sptr downsample_persp_camera(const vpgl_camera_double_sptr& camera,unsigned int scale);
 
  protected:
 
-  static void bilinear_weights(vgl_h_matrix_2d<double> invH,
+  static void bilinear_weights(const vgl_h_matrix_2d<double>& invH,
                                unsigned nx_out,
                                unsigned ny_out,
                                vnl_matrix<unsigned> &xvals,

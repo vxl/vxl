@@ -7,11 +7,11 @@ rgrl_convergence_tester::
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-compute_status( rgrl_converge_status_sptr               prev_status,
+compute_status( const rgrl_converge_status_sptr&               prev_status,
                 rgrl_view                        const& prev_view,
                 rgrl_view                        const& current_view,
-                rgrl_match_set_sptr                     current_match_set,
-                rgrl_scale_sptr                         current_scale,
+                const rgrl_match_set_sptr&                     current_match_set,
+                const rgrl_scale_sptr&                         current_scale,
                 bool                                    penalize_scaling )const
 {
   rgrl_set_of<rgrl_match_set_sptr> match_sets;
@@ -24,9 +24,9 @@ compute_status( rgrl_converge_status_sptr               prev_status,
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-compute_status( rgrl_converge_status_sptr               prev_status,
-                rgrl_transformation_sptr                xform_estimate,
-                rgrl_estimator_sptr                     xform_estimator,
+compute_status( const rgrl_converge_status_sptr&               prev_status,
+                const rgrl_transformation_sptr&                xform_estimate,
+                const rgrl_estimator_sptr&                     xform_estimator,
                 rgrl_set_of<rgrl_match_set_sptr> const& current_match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& current_scales,
                 bool                                    penalize_scaling )const
@@ -42,11 +42,11 @@ compute_status( rgrl_converge_status_sptr               prev_status,
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-compute_status( rgrl_converge_status_sptr               prev_status,
-                rgrl_transformation_sptr                xform_estimate,
-                rgrl_estimator_sptr                     xform_estimator,
-                rgrl_match_set_sptr                     current_match_set,
-                rgrl_scale_sptr                         current_scale,
+compute_status( const rgrl_converge_status_sptr&               prev_status,
+                const rgrl_transformation_sptr&                xform_estimate,
+                const rgrl_estimator_sptr&                     xform_estimator,
+                const rgrl_match_set_sptr&                     current_match_set,
+                const rgrl_scale_sptr&                         current_scale,
                 bool                                    penalize_scaling )const
 {
   rgrl_set_of<rgrl_match_set_sptr> match_sets;
@@ -84,8 +84,8 @@ verify( rgrl_view                        const& /*view*/,
 
 rgrl_converge_status_sptr
 rgrl_convergence_tester::
-initialize_status( rgrl_transformation_sptr                xform_estimate,
-                   rgrl_estimator_sptr                     xform_estimator,
+initialize_status( const rgrl_transformation_sptr&                xform_estimate,
+                   const rgrl_estimator_sptr&                     xform_estimator,
                    rgrl_scale_sptr                  const& prior_scale,
                    bool                                    penalize_scaling )const
 {

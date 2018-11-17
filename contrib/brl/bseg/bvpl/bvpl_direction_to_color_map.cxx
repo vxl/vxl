@@ -144,7 +144,7 @@ bvpl_direction_to_color_map::find_closest_points_from_cube_to_peano_curve(std::v
 }
 
 
-void bvpl_direction_to_color_map::make_svg_color_map(std::string outfile)
+void bvpl_direction_to_color_map::make_svg_color_map(const std::string& outfile)
 {
   bsvg_document doc(400, 400);
 
@@ -184,7 +184,7 @@ void bvpl_direction_to_color_map::make_svg_color_map(std::string outfile)
 }
 
 
-bvpl_direction_to_color_map::bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples, std::string type)
+bvpl_direction_to_color_map::bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples, const std::string& type)
 {
   samples_=samples;
   std::vector<float> oneparam;
@@ -209,7 +209,7 @@ bvpl_direction_to_color_map::bvpl_direction_to_color_map(std::vector<vgl_point_3
 }
 
 
-void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel_vector,
+void bvpl_generate_direction_samples_from_kernels(const bvpl_kernel_vector_sptr& kernel_vector,
                                                   std::vector<vgl_point_3d<double> > & samples)
 {
   std::vector< bvpl_kernel_sptr >::iterator iter;
@@ -371,7 +371,7 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 }
 
 
-void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector, std::vector<float> hue_vector, std::string outfile)
+void bvpl_write_colors_to_svg(const bvpl_kernel_vector_sptr& kernel_vector, std::vector<float> hue_vector, const std::string& outfile)
 {
   bsvg_document doc(600.f, float(hue_vector.size())*20.f);
 

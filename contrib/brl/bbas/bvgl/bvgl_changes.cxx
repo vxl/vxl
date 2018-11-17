@@ -7,7 +7,7 @@
 #include <vgl/vgl_polygon_scan_iterator.h>
 
 vil_image_view_base_sptr
-bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, std::string change_type)
+bvgl_changes::create_mask_from_objs(unsigned ni, unsigned nj, const std::string& change_type)
 {
   auto* mask = new vil_image_view<vxl_byte>(ni, nj);
   mask->fill(0);
@@ -62,12 +62,12 @@ bvgl_changes::create_mask_from_objs_all_types(unsigned ni, unsigned nj)
   return mask;
 }
 
-void bvgl_changes::add_obj(bvgl_change_obj_sptr obj)
+void bvgl_changes::add_obj(const bvgl_change_obj_sptr& obj)
 {
   objs_.push_back(obj);
 }
 
-void bvgl_changes::remove_obj(bvgl_change_obj_sptr obj)
+void bvgl_changes::remove_obj(const bvgl_change_obj_sptr& obj)
 {
   auto iter = objs_.begin();
   while (iter!=objs_.end()) {

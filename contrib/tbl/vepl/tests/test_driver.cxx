@@ -141,8 +141,8 @@ vil_image_resource_sptr CreateTestdoubleImage(int wd, int ht)
 }
 
 // Compare two images and return true if their difference is not v
-bool difference(vil_image_resource_sptr a,
-                vil_image_resource_sptr b,
+bool difference(const vil_image_resource_sptr& a,
+                const vil_image_resource_sptr& b,
                 vxl_uint_32 v, std::string const& m, bool exact)
 {
   unsigned int sx = a->ni(),  sy = a->nj(), sp = a->nplanes();

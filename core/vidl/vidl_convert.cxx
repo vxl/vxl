@@ -791,7 +791,7 @@ vidl_convert_wrap_in_view(vidl_frame const& frame)
   if ( const auto* cf =
        dynamic_cast<const vidl_memory_chunk_frame*>(&frame) )
   {
-    vil_memory_chunk_sptr chunk = cf->memory_chunk();
+    const vil_memory_chunk_sptr& chunk = cf->memory_chunk();
     if (format == VIDL_PIXEL_FORMAT_MONO_16) {
       const vxl_uint_16* top_left = static_cast<const vxl_uint_16*>(cf->data()) + top_left_offset;
       return new vil_image_view<vxl_uint_16>(chunk,top_left, ni,nj,np, i_step,j_step,p_step);

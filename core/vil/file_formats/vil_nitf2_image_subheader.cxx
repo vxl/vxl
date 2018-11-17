@@ -55,7 +55,7 @@ bool vil_nitf2_image_subheader::read(vil_stream* stream)
     // If this image has a data mask, we need to parse that too
     std::string compression_code;
     get_property("IC", compression_code);
-    if (compression_code.find_first_of("M") != std::string::npos) {
+    if (compression_code.find_first_of('M') != std::string::npos) {
       std::string imode;
       get_property("IMODE", imode);
       m_data_mask_table = new vil_nitf2_data_mask_table(

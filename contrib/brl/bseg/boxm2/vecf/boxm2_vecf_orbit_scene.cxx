@@ -262,7 +262,7 @@ boxm2_vecf_orbit_scene
 
 boxm2_vecf_orbit_scene
 ::boxm2_vecf_orbit_scene(std::string const& scene_file,
-                         std::string params_file_name,
+                         const std::string& params_file_name,
                          bool is_single_instance,
                          bool is_right ) :
   boxm2_vecf_articulated_scene(scene_file),

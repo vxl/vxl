@@ -35,10 +35,10 @@ class bstm_time_block : public vbl_ref_count
  public:
 
   //: creates possibly refined time block from existing data
-  bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, std::size_t length);
+  bstm_time_block(const bstm_block_id& id, bstm_block_metadata data, char* buffer, std::size_t length);
 
   //: creates possibly refined time block with specified number of elements
-  bstm_time_block(bstm_block_id id, bstm_block_metadata data, unsigned num_el);
+  bstm_time_block(const bstm_block_id& id, bstm_block_metadata data, unsigned num_el);
 
   //: creates empty block from metadata
   bstm_time_block(bstm_block_metadata data);

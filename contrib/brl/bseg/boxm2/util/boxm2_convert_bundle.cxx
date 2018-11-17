@@ -2,14 +2,15 @@
 #include "boxm2_point_util.h"
 //:
 // \file
-#include <vsph/vsph_camera_bounds.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vgl/vgl_box_3d.h>
+#include <cassert>
+#include <utility>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vidl/vidl_image_list_istream.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vsph/vsph_camera_bounds.h>
 #include <vul/vul_file.h>
-#include <cassert>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -22,14 +23,14 @@ void boxm2_util_convert_bundle (std::string bundle_file,
                                 vgl_box_3d<double>& bbox,
                                 double& resolution)
 {
-  boxm2_convert_bundle b2s(bundle_file, img_dir);
+  boxm2_convert_bundle b2s(std::move(bundle_file), std::move(img_dir));
   cams        = b2s.get_cams();
   bbox        = b2s.get_bbox();
   resolution  = b2s.get_resolution();
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
-boxm2_convert_bundle::boxm2_convert_bundle(std::string bundle_file, std::string img_dir)
+boxm2_convert_bundle::boxm2_convert_bundle(const std::string& bundle_file, const std::string& img_dir)
 {
   img_dir_ = img_dir;
   bundle_file_ = bundle_file;

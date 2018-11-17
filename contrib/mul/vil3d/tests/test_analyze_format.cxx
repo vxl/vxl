@@ -14,7 +14,7 @@
 #include <vil3d/vil3d_save.h>
 
 template <class T>
-inline void test_analyze_format(const std::string& dir,std::string type, vil_pixel_format format, T /*dummy*/)
+inline void test_analyze_format(const std::string& dir,const std::string& type, vil_pixel_format format, T /*dummy*/)
 {
   std::cout << "******************************************************************\n"
            << " Testing vil3d_analyze_format objects with pixel type = " << type << '\n'

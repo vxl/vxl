@@ -34,7 +34,7 @@ class vdgl_digital_curve : public vsol_curve_2d
  public:
   // Constructors/Destructors--------------------------------------------------
   vdgl_digital_curve(); // for use by binary I/O only
-  vdgl_digital_curve( vdgl_interpolator_sptr interpolator);
+  vdgl_digital_curve( const vdgl_interpolator_sptr& interpolator);
   vdgl_digital_curve(vsol_point_2d_sptr const& p0,
                      vsol_point_2d_sptr const& p1);
 

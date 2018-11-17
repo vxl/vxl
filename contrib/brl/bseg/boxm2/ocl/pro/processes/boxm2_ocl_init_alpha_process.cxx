@@ -31,7 +31,7 @@ namespace boxm2_ocl_init_alpha_process_globals
 {
     constexpr unsigned n_inputs_ = 5;
     constexpr unsigned n_outputs_ = 0;
-    void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
+    void compile_kernel(const bocl_device_sptr& device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
         std::vector<std::string> src_paths;

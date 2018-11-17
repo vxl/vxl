@@ -51,8 +51,8 @@ bool bvxm_ocp_hist_process(bprb_func_process& pro)
   return true;
 }
 
-bool bvxm_ocp_hist_process_globals::compute(bvxm_voxel_world_sptr w,
-                                            unsigned scale, std::string path)
+bool bvxm_ocp_hist_process_globals::compute(const bvxm_voxel_world_sptr& w,
+                                            unsigned scale, const std::string& path)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 

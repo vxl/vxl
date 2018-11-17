@@ -37,7 +37,7 @@ class  bvxm_lidar_processor
                                        bvxm_voxel_slab<float> const& obs,
                                        float voxel_width = 0.0 );
 
-  float prob_density(vil_image_view_base_sptr lidar,
+  float prob_density(const vil_image_view_base_sptr& lidar,
                      float z_dim,
                      vnl_vector_fixed<float,3>& covar,  // sigma vals
                      vgl_box_2d<double> lidar_roi,

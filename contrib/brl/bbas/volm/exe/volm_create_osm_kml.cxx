@@ -11,22 +11,23 @@
 // \endverbatim
 //
 
-#include <iostream>
 #include <algorithm>
-#include <vul/vul_file.h>
-#include <vul/vul_arg.h>
-#include <vcl_where_root_dir.h>
 #include <bkml/bkml_write.h>
-#include <volm/volm_osm_parser.h>
+#include <iostream>
+#include <utility>
+#include <vcl_where_root_dir.h>
 #include <volm/volm_io.h>
+#include <volm/volm_osm_parser.h>
+#include <vul/vul_arg.h>
+#include <vul/vul_file.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 
-static void error(std::string error_file, std::string error_msg)
+static void error(std::string error_file, const std::string& error_msg)
 {
   std::cerr << error_msg;
-  volm_io::write_post_processing_log(error_file, error_msg);
+  volm_io::write_post_processing_log(std::move(error_file), error_msg);
 }
 
 static void write_pts_to_kml(std::ofstream& ofs, std::string const& key, std::string const& value,

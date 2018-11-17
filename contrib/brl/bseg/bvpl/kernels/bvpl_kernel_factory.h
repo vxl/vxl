@@ -152,7 +152,7 @@ class bvpl_kernel_factory: public vbl_ref_count
   kernel_type rotate(float angle);
 
   //: Rotates "class-kernel_" using the given rotation matrix
-  kernel_type rotate(vgl_rotation_3d<float> R);
+  kernel_type rotate(const vgl_rotation_3d<float>& R);
 };
 
 

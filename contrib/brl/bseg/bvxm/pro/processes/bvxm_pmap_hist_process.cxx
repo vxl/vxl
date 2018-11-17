@@ -49,7 +49,7 @@ bool bvxm_pmap_hist_process(bprb_func_process& pro)
   return true;
 }
 
-bool bvxm_pmap_hist_process_globals::compute(std::string pmap,  std::string path)
+bool bvxm_pmap_hist_process_globals::compute(const std::string& pmap,  const std::string& path)
 {
   vil_image_view_base_sptr img = vil_load(pmap.c_str());
   bsta_histogram<double> hist(0.0, 20.0, 60);

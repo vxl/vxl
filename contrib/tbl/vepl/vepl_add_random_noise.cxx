@@ -11,7 +11,7 @@
 #include <vil/vil_new.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil_image_resource_sptr vepl_add_random_noise(vil_image_resource_sptr image, double maxdev)
+vil_image_resource_sptr vepl_add_random_noise(const vil_image_resource_sptr& image, double maxdev)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 

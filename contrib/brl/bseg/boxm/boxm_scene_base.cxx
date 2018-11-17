@@ -6,7 +6,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bool boxm_scene_base::load_scene(std::string filename, boxm_scene_parser& parser)
+bool boxm_scene_base::load_scene(const std::string& filename, boxm_scene_parser& parser)
 {
 
   if (filename.size() > 0) {

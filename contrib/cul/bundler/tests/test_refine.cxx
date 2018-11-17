@@ -13,7 +13,7 @@ static const char* IMG2_PATH =
 
 
 static int num_matches(
-    bundler_inters_feature_sptr f,
+    const bundler_inters_feature_sptr& f,
     std::vector< bundler_inters_feature_pair > const& m){
 
     int num = 0;

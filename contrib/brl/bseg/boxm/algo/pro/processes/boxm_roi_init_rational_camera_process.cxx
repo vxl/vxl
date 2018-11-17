@@ -47,7 +47,7 @@ namespace boxm_roi_init_rational_camera_process_globals
   bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
                 vgl_box_3d<double> box,
-                vpgl_lvcs lvcs,
+                const vpgl_lvcs& lvcs,
                 float uncertainty,
                 vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vpgl_local_rational_camera<double>& local_camera);
@@ -153,7 +153,7 @@ bool boxm_roi_init_rational_camera_process(bprb_func_process& pro)
 bool boxm_roi_init_rational_camera_process_globals::roi_init(std::string const& image_path,
                                                              vpgl_rational_camera<double>* camera,
                                                              vgl_box_3d<double> box,
-                                                             vpgl_lvcs lvcs,
+                                                             const vpgl_lvcs& lvcs,
                                                              float uncertainty,
                                                              vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                                              vpgl_local_rational_camera<double>& local_camera)

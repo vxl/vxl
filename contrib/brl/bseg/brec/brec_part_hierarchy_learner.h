@@ -117,11 +117,11 @@ class brec_part_hierarchy_learner : public vbl_ref_count
   //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hierarchy
   //  Radius is used to initialize the histograms
   //  We use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
-  bool initialize_layer_n_as_pairs(brec_part_hierarchy_sptr h, unsigned layer_id, unsigned nclasses, float radius);
+  bool initialize_layer_n_as_pairs(const brec_part_hierarchy_sptr& h, unsigned layer_id, unsigned nclasses, float radius);
 
   //: collect stats to construct parts of layer with layer_id using detected parts of layer_id-1
   //  Collect stats for a pair if they exist within radius pixels of each other
-  bool layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id);
+  bool layer_n_collect_stats(const brec_part_hierarchy_detector_sptr& hd, unsigned layer_id, unsigned class_id);
 
   //: uses the joint histograms to fit gaussian distributions to distance for 8 orientations
   //  Replaces the histograms with the fitted distributions' histograms
@@ -129,11 +129,11 @@ class brec_part_hierarchy_learner : public vbl_ref_count
 
   std::vector<std::pair<brec_part_instance_sptr, bsta_histogram<float>*> >& stats_layer0() { return stats_layer0_; }
 
-  void print_to_m_file_layer0(std::string file_name);
-  void print_to_m_file_layer0_fitted_dists(std::string file_name);
+  void print_to_m_file_layer0(const std::string& file_name);
+  void print_to_m_file_layer0_fitted_dists(const std::string& file_name);
   void print_layer0();
 
-  void print_to_m_file_layer_n(std::string file_name, unsigned class_id, bool print_set);
+  void print_to_m_file_layer_n(const std::string& file_name, unsigned class_id, bool print_set);
 
  public:
 

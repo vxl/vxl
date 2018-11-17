@@ -53,29 +53,29 @@ class boxm_utils
   //: returns the visible faces of a box given a camera.
   // It puts a bit 1 for each face visible based on the boct_cell_face values.
   static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox,
-                                     vpgl_camera_double_sptr camera,
+                                     const vpgl_camera_double_sptr& camera,
                                      double *xverts, double *yerts);
   static boct_face_idx visible_faces_cell(vgl_box_3d<double> const& bbox,
-                                          vpgl_camera_double_sptr camera,
+                                          const vpgl_camera_double_sptr& camera,
                                           double *xverts, double *yverts);
 
-  static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera);
+  static boct_face_idx visible_faces(vgl_box_3d<double> const& bbox, const vpgl_camera_double_sptr& camera);
 
   static void faces_of_box_3d(vgl_box_3d<double> const& bbox,
                               std::map<boct_face_idx, std::vector<vgl_point_3d<double> > > & faces);
 
-  static void project_corners(std::vector<vgl_point_3d<double> > const& corners,vpgl_camera_double_sptr camera,
+  static void project_corners(std::vector<vgl_point_3d<double> > const& corners,const vpgl_camera_double_sptr& camera,
                               double * xverts, double *yerts);
   static void project_point3d(vgl_point_3d<double> const& point,
-                              vpgl_camera_double_sptr camera,
+                              const vpgl_camera_double_sptr& camera,
                               double & xvert, double &yert, double & vertdist);
 
   static void project_corners(std::vector<vgl_point_3d<double> > const& corners,
-                              vpgl_camera_double_sptr camera,
+                              const vpgl_camera_double_sptr& camera,
                               double* xverts, double* yverts,
                               float* vertdist);
   static void project_cube(vgl_box_3d<double> &bbox,
-                           vpgl_camera_double_sptr camera,
+                           const vpgl_camera_double_sptr& camera,
                            std::map<boct_face_idx, std::vector< vgl_point_3d<double> > > & faces,
                            boct_face_idx & vis_face_ids);
 
@@ -101,7 +101,7 @@ class boxm_utils
                                boct_face_idx & vis_face_ids,
                                vil_image_view<float> &front_xyz,
                                vil_image_view<float> &back_xyz,
-                               vpgl_camera_double_sptr camera);
+                               const vpgl_camera_double_sptr& camera);
 
  static bool project_cube_xyz(std::vector< vgl_point_3d<double> >  & corners,
                               boct_face_idx & vis_face_ids,
@@ -118,7 +118,7 @@ class boxm_utils
   static bool project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > & faces,
                                      boct_face_idx & vis_face_ids,
                                      vil_image_view<float> &fill_img,
-                                     float val, vpgl_camera_double_sptr cam);
+                                     float val, const vpgl_camera_double_sptr& cam);
 
   static bool project_cube_fill_val(boct_face_idx & vis_face_ids,
                                     vil_image_view<float> &fill_img,

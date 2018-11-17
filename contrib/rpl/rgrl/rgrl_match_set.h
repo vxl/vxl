@@ -110,21 +110,21 @@ class rgrl_match_set
 
   //: Add from feature, the transformed feature, and its matching "to" features.
   //
-  void add_feature_and_matches( rgrl_feature_sptr                      from_feature,
-                                rgrl_feature_sptr                      mapped_feature,
+  void add_feature_and_matches( const rgrl_feature_sptr&                      from_feature,
+                                const rgrl_feature_sptr&                      mapped_feature,
                                 std::vector< rgrl_feature_sptr > const& matching_to );
 
   //: Add from feature, the transformed feature, and its matching "to" features, and the signature weight.
   //
-  void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-                                        rgrl_feature_sptr                      mapped_feature,
+  void add_feature_matches_and_weights( const rgrl_feature_sptr&                      from_feature,
+                                        const rgrl_feature_sptr&                      mapped_feature,
                                         std::vector< rgrl_feature_sptr > const& matching_to,
                                         std::vector< double > const&            signature_weights );
 
   //: Add from feature, the transformed feature, and its matching "to" features, and ALL weights.
   //
-  void add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-                                        rgrl_feature_sptr                      mapped_feature,
+  void add_feature_matches_and_weights( const rgrl_feature_sptr&                      from_feature,
+                                        const rgrl_feature_sptr&                      mapped_feature,
                                         std::vector< rgrl_feature_sptr > const& matching_to,
                                         std::vector< double > const&            sig_wgts,
                                         std::vector< double > const&            geo_wgts,
@@ -136,8 +136,8 @@ class rgrl_match_set
   // wgt parameter is used to initialize all the weights for the
   // correspondence (geometric, signature, and cumulative weights).
   //
-  void add_feature_and_match( rgrl_feature_sptr                      from_feature,
-                              rgrl_feature_sptr                      mapped_feature,
+  void add_feature_and_match( const rgrl_feature_sptr&                      from_feature,
+                              const rgrl_feature_sptr&                      mapped_feature,
                               rgrl_feature_sptr                      matching_to,
                               double                                 wgt = 1.0 );
 
@@ -185,19 +185,19 @@ class rgrl_match_set
     // geometric and cumulative weights are set to -1 to allow
     //  a safety check on their usage.
     //
-    match_info( rgrl_feature_sptr to_feat );
+    match_info( const rgrl_feature_sptr& to_feat );
 
     //:
     // All the weights are initialized
     //
-    match_info( rgrl_feature_sptr to_feat,
+    match_info( const rgrl_feature_sptr& to_feat,
                 double geometric_wgt,
                 double signature_wgt,
                 double cumulative_wgt = 0);
 
     //:  Initialize the signature weight only
     //
-    match_info( rgrl_feature_sptr to_feat,
+    match_info( const rgrl_feature_sptr& to_feat,
                 double signature_wgt );
 
     rgrl_feature_sptr to_feature;

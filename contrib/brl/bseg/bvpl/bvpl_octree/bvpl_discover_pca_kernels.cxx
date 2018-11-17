@@ -575,7 +575,7 @@ void bvpl_discover_pca_kernels::compute_testing_error(vnl_vector<double> &proj_e
 
 
 //: Reconstructions error on testing samples. By block. Error is given as average error per sample
-void bvpl_discover_pca_kernels::compute_testing_error(boxm_scene_base_sptr error_scene_base, unsigned ncomponents,
+void bvpl_discover_pca_kernels::compute_testing_error(const boxm_scene_base_sptr& error_scene_base, unsigned ncomponents,
                                                       int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;

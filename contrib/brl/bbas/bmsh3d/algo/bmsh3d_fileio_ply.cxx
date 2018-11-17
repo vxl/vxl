@@ -238,7 +238,7 @@ int bmsh3d_fileio_face_cb_(p_ply_argument argument)
 // ----------------------------------------------------------------------------
 //: save mesh to a .ply file
 // This implementation uses LITTLE_ENDIAN and uses '\n' for new line
-bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, std::string comment)
+bool bmsh3d_save_ply (bmsh3d_mesh* M, const char* file, bool ascii_mode, const std::string& comment)
 {
   // determine storage mode
   e_ply_storage_mode storage_mode = (ascii_mode) ? PLY_ASCII : PLY_LITTLE_ENDIAN;

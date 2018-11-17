@@ -41,7 +41,7 @@ namespace boxm2_ocl_flip_normals_using_vis_process_globals
       DECIDE_NORMAL = 1
   };
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,const std::string& opts)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

@@ -24,7 +24,7 @@
 class boxm2_vecf_ocl_composite_head_model : public boxm2_vecf_ocl_head_model{
 friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor needs to signal a change to the original model when its apm is updated
 public:
-  boxm2_vecf_ocl_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize =false);
+  boxm2_vecf_ocl_composite_head_model(std::string const& head_model_path, std::string const& eye_model_path,const bocl_device_sptr& device,const boxm2_opencl_cache_sptr& opencl_cache,bool optimize =false);
 
   void map_to_target(boxm2_scene_sptr target) override;
 
@@ -33,7 +33,7 @@ public:
   // virtual bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const;
   // virtual bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) ;
 
-  void update_gpu_target(boxm2_scene_sptr target_scene);
+  void update_gpu_target(const boxm2_scene_sptr& target_scene);
   bool set_params(boxm2_vecf_articulated_params const& params) override;
   boxm2_vecf_composite_head_parameters const& get_params() const {return params_;}
   // retrieve the estimated look dir from imagery

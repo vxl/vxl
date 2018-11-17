@@ -15,7 +15,7 @@
 //---------------------------------------------------------------------------
 // Default constructor
 //---------------------------------------------------------------------------
-vil1_block_cache_image_impl::vil1_block_cache_image_impl(vil1_image i_, unsigned bx, unsigned by)
+vil1_block_cache_image_impl::vil1_block_cache_image_impl(const vil1_image& i_, unsigned bx, unsigned by)
   : base(i_),block_size_x(bx),block_size_y(by)
 {
 }

@@ -43,8 +43,8 @@ class vpgl_geo_camera : public vpgl_camera<double>
   vpgl_geo_camera(vpgl_camera<double> const& rhs);
 
   //: uses lvcs to convert local x-y to global longitude and latitude
-  static bool init_geo_camera(vil_image_resource_sptr const geotiff_img,
-                              vpgl_lvcs_sptr lvcs,
+  static bool init_geo_camera(vil_image_resource_sptr const& geotiff_img,
+                              const vpgl_lvcs_sptr& lvcs,
                               vpgl_geo_camera*& camera);
 
   //: Assumes geographic coordinates are global
@@ -57,13 +57,13 @@ class vpgl_geo_camera : public vpgl_camera<double>
   //: warning, use this camera cautiously, the output of img_to_global method needs to be adjusted sign wise
   //  for 'S' use -lat and for 'W' -lon
   //  TODO: generalize geo_camera so that img_to_global method makes this adjustment internally if camera is created using this method
-  static bool init_geo_camera(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
+  static bool init_geo_camera(const std::string& img_name, unsigned ni, unsigned nj, const vpgl_lvcs_sptr& lvcs, vpgl_geo_camera*& camera);
 
   // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
-  static bool init_geo_camera_from_filename(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera);
+  static bool init_geo_camera_from_filename(const std::string& img_name, unsigned ni, unsigned nj, const vpgl_lvcs_sptr& lvcs, vpgl_geo_camera*& camera);
 
   //: init using a tfw file, reads the transformation matrix from the tfw
-  static bool init_geo_camera(std::string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
+  static bool init_geo_camera(const std::string& tfw_name, const vpgl_lvcs_sptr& lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera);
 
   //: init without lvcs. Assumes geographic coordinates are global
   static bool init_geo_camera(std::string tfw_name,  int utm_zone, unsigned northing, vpgl_geo_camera*& camera){

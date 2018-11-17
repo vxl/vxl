@@ -24,7 +24,7 @@
 #include <vul/vul_timer.h>
 #include <boct/boct_bit_tree.h>
 
-void boxm2_ocl_filter_process_globals::compile_filter_kernel(bocl_device_sptr device,bocl_kernel * refine_data_kernel)
+void boxm2_ocl_filter_process_globals::compile_filter_kernel(const bocl_device_sptr& device,bocl_kernel * refine_data_kernel)
 {
   std::vector<std::string> src_paths;
   std::string source_dir = boxm2_ocl_util::ocl_src_root();

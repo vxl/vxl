@@ -139,7 +139,7 @@ vtol_edge_2d::vtol_edge_2d(zero_chain_list const& newchains)
 
 vtol_edge_2d::vtol_edge_2d(double x1, double y1,
                            double x2, double y2,
-                           vsol_curve_2d_sptr curve)
+                           const vsol_curve_2d_sptr& curve)
 {
   v1_=new vtol_vertex_2d(x1,y1);
   v2_=new vtol_vertex_2d(x2,y2);

@@ -20,7 +20,7 @@ void boxm2_vecf_orbit_exporter::export_orbit(bool is_right,
                                             std::vector<vgl_point_3d<double> >& crease_pts,
                                             std::vector<vgl_point_3d<double> >& sup_pts,
                                              std::vector<vgl_point_3d<double> >& inf_pts,
-                                             std::string export_fname_base){
+                                             const std::string& export_fname_base){
   // get parameter bounds and model to image transformation parameters
   boxm2_vecf_orbit_params params = is_right? right_params_ : left_params_;
 

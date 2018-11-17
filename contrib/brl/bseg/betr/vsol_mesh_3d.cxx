@@ -13,7 +13,7 @@
 #include <vgl/vgl_intersection.h>
 
 
-static vsol_polygon_3d_sptr move_poly_points_to_plane(vsol_polygon_3d_sptr polygon)
+static vsol_polygon_3d_sptr move_poly_points_to_plane(const vsol_polygon_3d_sptr& polygon)
 {
   vgl_fit_plane_3d<double> fitter;
   for (unsigned i=0; i<polygon->size(); i++) {
@@ -106,7 +106,7 @@ static vgl_point_3d<double> fit_sphere_to_corner(vgl_point_3d<double> P1, vgl_ve
 }
 
 // construct from box
-vsol_mesh_3d::vsol_mesh_3d(vsol_box_3d_sptr box){
+vsol_mesh_3d::vsol_mesh_3d(const vsol_box_3d_sptr& box){
 // get the bottom polygon
   double xmin = box->get_min_x(), xmax = box->get_max_x();
   double ymin = box->get_min_y(), ymax = box->get_max_y();
@@ -125,7 +125,7 @@ vsol_mesh_3d::vsol_mesh_3d(vsol_box_3d_sptr box){
   // extrude the bottom till top
   this->extrude(0, zmax-zmin);
 }
-void vsol_mesh_3d::create_mesh_HE(vsol_polygon_3d_sptr polygon,
+void vsol_mesh_3d::create_mesh_HE(const vsol_polygon_3d_sptr& polygon,
                                   double dist,
                                   std::map<int, vsol_polygon_3d_sptr> inner_faces)
 {
@@ -227,7 +227,7 @@ std::vector<vsol_point_3d_sptr> vsol_mesh_3d::vertices() const{
   }
   return ret;
 }
-void vsol_mesh_3d::attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly)
+void vsol_mesh_3d::attach_inner_face(unsigned face_id, const vsol_polygon_3d_sptr& poly)
 {
   bmsh3d_face* inner_face = create_inner_face(poly);
   auto* outer_face = (bmsh3d_face_mc*) mesh_->facemap(face_id);
@@ -579,7 +579,7 @@ void vsol_mesh_3d::set_mesh(bmsh3d_mesh_mc* obj)
   mesh_ = obj;
 }
 
-void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly, double z)
+void vsol_mesh_3d::set_mesh(const vsol_polygon_3d_sptr& poly, double z)
 {
   if (mesh_ != nullptr)
     delete mesh_;
@@ -589,7 +589,7 @@ void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly, double z)
   create_mesh_HE(poly, z, inner_faces);
 }
 
-void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly)
+void vsol_mesh_3d::set_mesh(const vsol_polygon_3d_sptr& poly)
 {
   if (!poly || poly->size()==0)
     return;
@@ -603,7 +603,7 @@ void vsol_mesh_3d::set_mesh(vsol_polygon_3d_sptr poly)
 }
 
 //: Creates a polygon from the given vertex list and adds it to the mesh
-bmsh3d_face_mc* vsol_mesh_3d::create_face(vsol_polygon_3d_sptr polygon)
+bmsh3d_face_mc* vsol_mesh_3d::create_face(const vsol_polygon_3d_sptr& polygon)
 {
   //  polygon = bwm_algo::move_points_to_plane(polygon); //later
   unsigned n = polygon->size();

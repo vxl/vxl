@@ -165,7 +165,7 @@ bool bapl_match_display_process(bprb_func_process& pro)
   std::vector<bapl_key_match>& matches = match_set->matches_;
 
   vnl_random rng;
-  for (auto m : matches) {
+  for (const auto& m : matches) {
     bapl_lowe_keypoint_sptr kp1;
     kp1.vertical_cast(m.first);
     bapl_lowe_keypoint_sptr kp2;

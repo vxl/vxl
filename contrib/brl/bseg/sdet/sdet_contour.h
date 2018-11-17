@@ -208,16 +208,16 @@ class sdet_contour
 
   //: insert an edge into a table indexed by vsol id
   static void LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set,
-                                vtol_edge_2d_sptr elmt);
+                                const vtol_edge_2d_sptr& elmt);
 
   //: replace an edge in a table indexed by vsol id
   static void LookupTableReplace(std::vector<vtol_edge_2d_sptr>& set,
-                                 vtol_edge_2d_sptr deleted,
-                                 vtol_edge_2d_sptr inserted);
+                                 const vtol_edge_2d_sptr& deleted,
+                                 const vtol_edge_2d_sptr& inserted);
 
   //: remove an edge from a table indexed by vsol id
   static void LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set,
-                                vtol_edge_2d_sptr elmt);
+                                const vtol_edge_2d_sptr& elmt);
 
   //: eliminate gaps in the table by removing empty entries
   static void LookupTableCompress(std::vector<vtol_edge_2d_sptr>& set);
@@ -225,16 +225,16 @@ class sdet_contour
 
   //: insert a vertex into a table indexed by vsol id
   static void LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set,
-                                vtol_vertex_2d_sptr  elmt);
+                                const vtol_vertex_2d_sptr&  elmt);
 
   //: replace a vertex in a table indexed by vsol id
   static void LookupTableReplace(std::vector<vtol_vertex_2d_sptr >& set,
-                                 vtol_vertex_2d_sptr  deleted,
-                                 vtol_vertex_2d_sptr  inserted);
+                                 const vtol_vertex_2d_sptr&  deleted,
+                                 const vtol_vertex_2d_sptr&  inserted);
 
   //: remove a vertex from a table indexed by vsol id
   static void LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set,
-                                vtol_vertex_2d_sptr  elmt);
+                                const vtol_vertex_2d_sptr&  elmt);
 
   //: eliminate gaps in the table by removing empty entries
   static void LookupTableCompress(std::vector<vtol_vertex_2d_sptr >& set);

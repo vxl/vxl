@@ -16,7 +16,7 @@
 class boxm2_extract_point_cloud
 {
   public:
-    static bool extract_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
+    static bool extract_point_cloud(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache,
                                     float prob_thresh, unsigned int depth);
 
 };

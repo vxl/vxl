@@ -218,7 +218,7 @@ bgrl_graph::version(  ) const
 //-----------------------------------------------------------------------------------------
 
 //: Constructor
-bgrl_graph::iterator::iterator( bgrl_graph* graph, bgrl_search_func_sptr func )
+bgrl_graph::iterator::iterator( bgrl_graph* graph, const bgrl_search_func_sptr& func )
  : graph_(graph), search_func_(func),
    use_internal_(false), internal_(graph->vertices_.begin())
 {

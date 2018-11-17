@@ -20,7 +20,7 @@ gmvl_connection_cache::~gmvl_connection_cache() = default;
 
 // simple accessors
 
-void gmvl_connection_cache::add(const gmvl_node_sptr node1, const gmvl_node_sptr node2)
+void gmvl_connection_cache::add(const gmvl_node_sptr& node1, const gmvl_node_sptr& node2)
 {
   if (node1.ptr()!= node2.ptr())
   {
@@ -53,8 +53,8 @@ void gmvl_connection_cache::add(const gmvl_node_sptr node1, const gmvl_node_sptr
 
 // clever accessors
 
-std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
-                                                           const gmvl_node_sptr node2) const
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr& node1,
+                                                           const gmvl_node_sptr& node2) const
 {
   std::vector<int> c= get_connected_nodes(node1);
   std::vector<int> d;
@@ -66,9 +66,9 @@ std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr
   return d;
 }
 
-std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr node1,
-                                                           const gmvl_node_sptr node2,
-                                                           const gmvl_node_sptr node3) const
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr& node1,
+                                                           const gmvl_node_sptr& node2,
+                                                           const gmvl_node_sptr& node3) const
 {
   std::vector<int> c= get_connected_nodes(node1);
   std::vector<int> d;
@@ -81,7 +81,7 @@ std::vector<int> gmvl_connection_cache::get_connected_nodes(const gmvl_node_sptr
   return d;
 }
 
-std::vector<int> gmvl_connection_cache::get_connected_nodes(const std::vector<gmvl_node_sptr> nodes) const
+std::vector<int> gmvl_connection_cache::get_connected_nodes(const std::vector<gmvl_node_sptr>& nodes) const
 {
   std::vector<int> c= get_connected_nodes(nodes[0]);
   std::vector<int> d;

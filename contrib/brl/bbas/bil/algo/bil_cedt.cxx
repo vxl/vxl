@@ -15,7 +15,7 @@ bil_cedt::bil_cedt()
 bil_cedt::~bil_cedt()
 = default;
 
-bil_cedt::bil_cedt(vil_image_view<unsigned char> im)
+bil_cedt::bil_cedt(const vil_image_view<unsigned char>& im)
 {
     img_=im;
     ni_=img_.ni();

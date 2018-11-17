@@ -49,8 +49,8 @@ class bapl_conn_table : public vbl_ref_count
   //: Constructor
   bapl_conn_table(int n_images) : conns_(n_images), img_data_(n_images), img_data_key_flags_(n_images, std::vector<bool>()) {}  // initialize with an empty connectivity
   //: add this match set symmetrically, i.e. into the list of img id 1 as well img id 2, while adding for img id 2, reverse the keypoint pairs
-  bool add_sym(bapl_keypoint_match_set_sptr set);
-  bool add(bapl_keypoint_match_set_sptr set);
+  bool add_sym(const bapl_keypoint_match_set_sptr& set);
+  bool add(const bapl_keypoint_match_set_sptr& set);
 
   //: add keypoints for the given image with id i
   void add_image_data(int i, bapl_keypoint_set_sptr data) { img_data_[i] = data; }

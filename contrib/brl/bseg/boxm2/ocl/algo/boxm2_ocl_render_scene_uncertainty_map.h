@@ -22,7 +22,7 @@ class boxm2_ocl_render_scene_uncertainty_map
                                               boxm2_opencl_cache_sptr & opencl_cache,
                                               unsigned ni,
                                               unsigned nj,
-                                              std::string ident,
+                                              const std::string& ident,
                                               vil_image_view<float> * exp_image,
                                               vil_image_view<unsigned char> * vis_image,
                                               std::string cam_dir_1,
@@ -32,7 +32,7 @@ class boxm2_ocl_render_scene_uncertainty_map
                                                   float theta_min, float theta_max,
                                                   vil_image_view<float> * uimg);
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="" );
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="" );
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;

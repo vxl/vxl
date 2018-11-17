@@ -145,14 +145,14 @@ class vtol_chain : public vtol_topology_object
   //  REQUIRE: valid_chain_type(chain_inferior)
   //           and !is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
-  void link_chain_inferior(vtol_chain_sptr chain_inferior);
+  void link_chain_inferior(const vtol_chain_sptr& chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with the chain_inferior `chain_inferior'
   //  REQUIRE: valid_chain_type(chain_inferior)
   //           and is_chain_inferior(chain_inferior)
   //---------------------------------------------------------------------------
-  void unlink_chain_inferior(vtol_chain_sptr chain_inferior);
+  void unlink_chain_inferior(const vtol_chain_sptr& chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' with all its chain inferiors

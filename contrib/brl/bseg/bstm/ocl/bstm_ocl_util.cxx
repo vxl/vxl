@@ -179,7 +179,7 @@ void bstm_ocl_util::set_bit_lookup(cl_uchar* lookup)
 }
 
 void
-bstm_ocl_util::load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam)
+bstm_ocl_util::load_perspective_camera(const std::string& filename, vpgl_perspective_camera<double> & pcam)
 {
   std::ifstream ifile(filename.c_str());
   if (!ifile)
@@ -231,7 +231,7 @@ void bstm_ocl_util::get_render_transfer_function(std::vector<std::string> imgfil
   }
 }
 
-std::string bstm_ocl_util::mog_options(std::string data_type)
+std::string bstm_ocl_util::mog_options(const std::string& data_type)
 {
   if ( data_type == bstm_data_traits<BSTM_MOG3_GREY>::prefix() )
     return "-D MOG_TYPE_8 ";
@@ -249,7 +249,7 @@ std::string bstm_ocl_util::mog_options(std::string data_type)
     return "";
 }
 
-std::string bstm_ocl_util::label_options(std::string data_type)
+std::string bstm_ocl_util::label_options(const std::string& data_type)
 {
   if ( data_type == bstm_data_traits<BSTM_LABEL>::prefix() )
     return "-D LABEL_UCHAR ";

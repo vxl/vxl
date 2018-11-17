@@ -39,7 +39,7 @@ class boxm2_compute_derivative_function
             const std::vector<std::pair<vgl_point_3d<int>, vgl_point_3d<double> > >& neighbors,  const boxm2_array_3d<uchar16>& trees,
             const boxm2_data_traits<BOXM2_ALPHA>::datatype* alpha_data, int curr_depth);
   //: load kernel from file
-  std::vector<std::pair<vgl_point_3d<int>, float> > load_kernel(std::string filename);
+  std::vector<std::pair<vgl_point_3d<int>, float> > load_kernel(const std::string& filename);
   //: apply a filter to given neighborhood
   float apply_filter(std::vector<std::pair<vgl_point_3d<int>, float> > neighbors, std::vector<std::pair<vgl_point_3d<int>, float> > filter);
 

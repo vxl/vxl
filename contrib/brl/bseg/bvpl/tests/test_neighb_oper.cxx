@@ -15,7 +15,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bool save_occupancy_raw(std::string filename, bvxm_voxel_grid<float>* grid)
+bool save_occupancy_raw(const std::string& filename, bvxm_voxel_grid<float>* grid)
 {
   std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {

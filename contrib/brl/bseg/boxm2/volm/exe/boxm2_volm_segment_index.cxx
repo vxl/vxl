@@ -110,7 +110,7 @@ int main(int argc, char** argv)
     //while (leaf_id <  leaves.size())
     {
         std::cout<<"Leaf " <<leaf_id<<std::endl;
-        volm_geo_index_node_sptr hyp_leaf =  test_leaf;//leaves[leaf_id];//volm_geo_index::get_closest(root,32.6607, -79.9264, test_hyp_id); //
+        const volm_geo_index_node_sptr& hyp_leaf =  test_leaf;//leaves[leaf_id];//volm_geo_index::get_closest(root,32.6607, -79.9264, test_hyp_id); //
         std::string index_depth_file = hyp_leaf->get_index_name(data_file_name_pre.str());
         std::string index_orient_file = hyp_leaf->get_label_index_name(data_file_name_pre.str(), "orientation");
         std::string index_land_file = hyp_leaf->get_label_index_name(data_file_name_pre.str(), "");

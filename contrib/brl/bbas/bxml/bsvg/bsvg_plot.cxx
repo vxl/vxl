@@ -309,7 +309,7 @@ void bsvg_plot::add_bars(const std::vector<float>& heights, const std::vector<fl
 }
 
 //: recursive helper to find number of bars
-int number_of_bars_helper(bxml_data_sptr d)
+int number_of_bars_helper(const bxml_data_sptr& d)
 {
   auto* r_elm = dynamic_cast<bxml_element*>(d.ptr());
   if (!r_elm)

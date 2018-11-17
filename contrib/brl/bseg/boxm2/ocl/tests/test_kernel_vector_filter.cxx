@@ -58,7 +58,7 @@ bool test_gauss_gradients_filter()
   std::map<boxm2_block_id, boxm2_block_metadata> blocks = scene->blocks();
   std::map<boxm2_block_id, boxm2_block_metadata>::iterator blk_iter;
   bool result = true;
-  for (auto filter : filter_vector->kernels_)
+  for (const auto& filter : filter_vector->kernels_)
   {
     for (blk_iter = blocks.begin(); blk_iter != blocks.end(); ++blk_iter)
     {

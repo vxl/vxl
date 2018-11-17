@@ -58,8 +58,8 @@ class vtol_cycle_processor
   static bool connect_paths(std::vector<vtol_edge_2d_sptr>& edges,
                             std::vector<vtol_vertex_sptr>& bad_verts);
 
-  static double angle_between_edges(vtol_edge_2d_sptr e0, vtol_edge_2d_sptr e1,
-                                    vtol_vertex_sptr v);
+  static double angle_between_edges(const vtol_edge_2d_sptr& e0, const vtol_edge_2d_sptr& e1,
+                                    const vtol_vertex_sptr& v);
 
  protected:
   //internal utilities
@@ -67,7 +67,7 @@ class vtol_cycle_processor
   void set_bridge_vars();
   void init(std::vector<vtol_edge_2d_sptr>& edges);
   vtol_edge_2d_sptr search_for_next_edge(std::vector<vtol_edge_2d_sptr>& edges_at_last);
-  bool assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr last);
+  bool assignable(vtol_edge_2d_sptr edg, const vtol_vertex_sptr& last);
   void assign_initial_edge(vtol_edge_2d_sptr& e, vtol_vertex_sptr& first,
                            vtol_vertex_sptr& last);
   void assign_ends(vtol_edge_2d_sptr edg, vtol_vertex_sptr& last);

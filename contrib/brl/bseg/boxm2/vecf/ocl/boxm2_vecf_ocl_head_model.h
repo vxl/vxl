@@ -22,7 +22,7 @@ typedef vnl_vector_fixed<float,4> float4;
 class boxm2_vecf_ocl_head_model : public boxm2_vecf_articulated_scene
 {
  public:
-  boxm2_vecf_ocl_head_model(std::string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache, bool optimize = false, std::string color_apm_ident = "frontalized");
+  boxm2_vecf_ocl_head_model(std::string const& scene_file,const bocl_device_sptr& device,const boxm2_opencl_cache_sptr& opencl_cache, bool optimize = false, std::string color_apm_ident = "frontalized");
 
 
   //: map eye data to the target scene

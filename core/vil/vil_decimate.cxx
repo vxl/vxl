@@ -112,7 +112,7 @@ vil_image_view_base_sptr vil_decimate_image_resource::get_view(unsigned i0, unsi
     return get_copy_view(i0, ni, j0, nj);
 }
 
-vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr im, unsigned i_factor,
+vil_image_view_base_sptr vil_decimate(const vil_image_view_base_sptr& im, unsigned i_factor,
                                       unsigned j_factor)
 {
   if (j_factor==0) j_factor=i_factor;

@@ -83,7 +83,7 @@ sdet_mrf_bp::sdet_mrf_bp(unsigned ni, unsigned nj,
       sites_[j][i]=new sdet_mrf_site_bp(n_labels_,lambda_, truncation_cost_);
 }
 
-sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr obs_labels, unsigned n_labels,
+sdet_mrf_bp::sdet_mrf_bp(const vil_image_resource_sptr& obs_labels, unsigned n_labels,
                          float discontinuity_cost, float truncation_cost,
                          float kappa, float lambda)
   : ni_(0), nj_(0), n_labels_(n_labels),
@@ -157,8 +157,8 @@ sdet_mrf_bp::sdet_mrf_bp(vil_image_view<float> const& obs_labels,
     }
 }
 
-sdet_mrf_bp::sdet_mrf_bp(vil_image_resource_sptr  obs_labels,
-                         vil_image_resource_sptr  var,
+sdet_mrf_bp::sdet_mrf_bp(const vil_image_resource_sptr&  obs_labels,
+                         const vil_image_resource_sptr&  var,
                          unsigned n_labels, float discontinuity_cost,
                          float truncation_cost, float kappa, float lambda)
   :  n_labels_(n_labels),discontinuity_cost_(discontinuity_cost),

@@ -132,7 +132,7 @@ bool bvxm_roi_init_process(bprb_func_process& pro)
 //: roi_init function
 bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
                                               vpgl_rational_camera<double>* camera,
-                                              bvxm_world_params_sptr world_params,
+                                              const bvxm_world_params_sptr& world_params,
                                               float error,
                                               vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                               vpgl_local_rational_camera<double>& local_camera)
@@ -267,7 +267,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
 
 bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
                                               vpgl_rational_camera<double>* camera,
-                                              bvxm_world_params_sptr world_params,
+                                              const bvxm_world_params_sptr& world_params,
                                               float error,
                                               vil_image_view<vxl_uint_16>* nitf_image_unsigned_short,
                                               vpgl_local_rational_camera<double>& local_camera)
@@ -395,7 +395,7 @@ bool bvxm_roi_init_process_globals::roi_init( std::string const& image_path,
 
 //: project_box function
 vgl_box_2d<double>* bvxm_roi_init_process_globals::project_box( vpgl_rational_camera<double>* cam,
-                                                                vpgl_lvcs_sptr lvcs,
+                                                                const vpgl_lvcs_sptr& lvcs,
                                                                 vgl_box_3d<double> box,
                                                                 float r)
 {

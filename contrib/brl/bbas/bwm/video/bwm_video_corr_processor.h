@@ -106,7 +106,7 @@ class bwm_video_corr_processor
   std::vector<vgl_point_3d<double> > world_pts();
 
   //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
-  void convert_world_pts_to_local(vpgl_lvcs_sptr lvcs);
+  void convert_world_pts_to_local(const vpgl_lvcs_sptr& lvcs);
 
   std::string site_name() const {return site_name_;}
   std::string video_path() const {return video_path_;}

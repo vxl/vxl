@@ -52,17 +52,17 @@ class boxm2_vecf_shuttle_scene : public boxm2_scene
   boxm2_scene_sptr scene(){ return base_model_;}
 
   vil_image_view<float> silhouette(vpgl_camera_double_sptr const& cam, unsigned ni, unsigned nj) const;
-  void generate_particles(vpgl_camera_double_sptr cam, double txmin, double txmax, double dtx);
-  void generate_particles_txy(vpgl_camera_double_sptr cam,
+  void generate_particles(const vpgl_camera_double_sptr& cam, double txmin, double txmax, double dtx);
+  void generate_particles_txy(const vpgl_camera_double_sptr& cam,
                           double txmin, double txmax, double dtx,
                           double tymin, double tymax, double dty);
   void generate_particles_txs(vpgl_camera_double_sptr cam,
                           double txmin, double txmax, double dtx,
                           double smin, double smax, double ds);
-  void generate_particles_txry(vpgl_camera_double_sptr cam,
+  void generate_particles_txry(const vpgl_camera_double_sptr& cam,
                                double txmin, double txmax, double dtx,
                                double rymin, double rymax, double dry);
-  void generate_particles_txrz(vpgl_camera_double_sptr cam,
+  void generate_particles_txrz(const vpgl_camera_double_sptr& cam,
                                double txmin, double txmax, double dtx,
                                double rzmin, double rzmax, double drz);
   void evaluate_particles(vil_image_view<vxl_byte> const& observed_img, vgl_box_2d<int> const& bkg_box);

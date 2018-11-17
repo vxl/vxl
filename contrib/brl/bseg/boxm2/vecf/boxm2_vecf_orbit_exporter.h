@@ -10,7 +10,7 @@ public:
                     std::vector<vgl_point_3d<double> >& crease_pts,
                     std::vector<vgl_point_3d<double> >& sup_pts,
                     std::vector<vgl_point_3d<double> >& inf_pts,
-                    std::string export_fname_base="");
+                    const std::string& export_fname_base="");
 private:
   boxm2_vecf_orbit_params left_params_,right_params_;
   unsigned int num_pts_;

@@ -167,7 +167,7 @@ void boxm2_vecf_ocl_orbit_scene::extract_target_block_data(boxm2_scene_sptr targ
   }
   this->determine_target_box_cell_centers(); // get cell centers in target corresponding to the source block (blk_)
 }
-bool boxm2_vecf_ocl_orbit_scene::update_target_gpu_buffers(boxm2_scene_sptr target_scene, boxm2_block_id id,bool write){
+bool boxm2_vecf_ocl_orbit_scene::update_target_gpu_buffers(const boxm2_scene_sptr& target_scene, const boxm2_block_id& id,bool write){
   target_alpha_base_ = opencl_cache_->get_data(target_scene,id,boxm2_data_traits<BOXM2_ALPHA>::prefix());
   target_app_base_   = opencl_cache_->get_data(target_scene,id,boxm2_data_traits<BOXM2_MOG3_GREY>::prefix());
   target_nobs_base_  = opencl_cache_->get_data(target_scene,id,boxm2_data_traits<BOXM2_NUM_OBS>::prefix());
@@ -287,7 +287,7 @@ void boxm2_vecf_ocl_orbit_scene::cache_cell_centers_from_anatomy_labels(){
 }
 
 //Main constructor
-boxm2_vecf_ocl_orbit_scene::boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache, bool is_single_instance , bool is_right ):
+boxm2_vecf_ocl_orbit_scene::boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, const bocl_device_sptr& device, const boxm2_opencl_cache_sptr& opencl_cache, bool is_single_instance , bool is_right ):
   boxm2_vecf_articulated_scene(scene_file), is_right_(is_right),alpha_data_(nullptr), app_data_(nullptr), nobs_data_(nullptr), sphere_(nullptr), iris_(nullptr), pupil_(nullptr),device_(device),opencl_cache_(opencl_cache)
 {
 
@@ -1391,7 +1391,7 @@ bool boxm2_vecf_ocl_orbit_scene::get_scene_appearance(std::string&      options)
 
     return true;
 }
- bool boxm2_vecf_ocl_orbit_scene::map_orbit_to_target_single_pass(boxm2_scene_sptr target_scene){
+ bool boxm2_vecf_ocl_orbit_scene::map_orbit_to_target_single_pass(const boxm2_scene_sptr& target_scene){
   float rotation_buff   [9];
   float offset_buff     [3];
 

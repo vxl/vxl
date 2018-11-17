@@ -11,7 +11,7 @@
 std::vector<vgl_point_3d<double> >
 transform_points(const std::vector<vgl_point_3d<double> >& points,
                  double s,
-                 vgl_rotation_3d<double> R,
+                 const vgl_rotation_3d<double>& R,
                  vgl_vector_3d<double> t)
 {
   std::vector<vgl_point_3d<double> > t_pts;

@@ -35,8 +35,8 @@ vmal_rectifier::vmal_rectifier()
   //  rectR =  NULL;
 }
 
-vmal_rectifier::vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
-                               vmal_multi_view_data_edge_sptr mvd_edge,
+vmal_rectifier::vmal_rectifier(const vmal_multi_view_data_vertex_sptr& mvd_vertex,
+                               const vmal_multi_view_data_edge_sptr& mvd_edge,
                                int ima_height, int ima_width) :
   is_f_compute_(false)
 {
@@ -525,8 +525,8 @@ void vmal_rectifier::conditional_rectify_rotate180 (
 // through the provided pointers.
 
 void vmal_rectifier::resample(vnl_double_3x3 H0, vnl_double_3x3 H1,
-                              vil_image_view<vxl_byte> imgL,
-                              vil_image_view<vxl_byte> imgR)
+                              const vil_image_view<vxl_byte>& imgL,
+                              const vil_image_view<vxl_byte>& imgR)
 {
   // Find the bound of the image to be resampled
   vnl_double_3 ipointL; // input and output image points

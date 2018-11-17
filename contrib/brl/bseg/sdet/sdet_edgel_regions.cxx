@@ -778,7 +778,7 @@ bool sdet_edgel_regions::InitRegionArray(std::vector< vtol_edge_2d_sptr>& sg)
   int counter=0;
   for (auto & sgit : sg)
   {
-    vtol_edge_2d_sptr e = sgit;
+    const vtol_edge_2d_sptr& e = sgit;
     if (!e)
       continue;
     e->set_id(counter++);
@@ -1208,7 +1208,7 @@ void sdet_edgel_regions::print_edge_colis(unsigned int x, unsigned int y,
 //  is used to remove "hairs" which are extra edges attached to a
 //  closed contour by the pixel-level granularity of the region growing
 //  process.
-static bool embedded_T(vtol_vertex_sptr v, vtol_edge_2d_sptr bar, std::vector<vtol_edge_2d_sptr>& real_edges)
+static bool embedded_T(const vtol_vertex_sptr& v, const vtol_edge_2d_sptr& bar, std::vector<vtol_edge_2d_sptr>& real_edges)
 {
   std::vector<vtol_edge_sptr> edges; v->edges(edges);
   int tedges = 0;
@@ -1473,7 +1473,7 @@ bool sdet_edgel_regions::out_of_bounds(unsigned int x, unsigned int y)
 //: Get the a region label for an edge used to construct the boundaries.
 //  A return corresponding to UNLABELED means the domain outside the ROI
 //  or nr is larger than the number of adjacent regions.
-unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr) const
+unsigned int sdet_edgel_regions::GetLabel(const vtol_edge_2d_sptr& e, unsigned int nr) const
 {
   auto reit = region_edges_.find(e->get_id());
   if ( reit == region_edges_.end())
@@ -1483,7 +1483,7 @@ unsigned int sdet_edgel_regions::GetLabel(vtol_edge_2d_sptr e, unsigned int nr) 
 
 //--------------------------------------------------------------------
 //: Insert an Edge into the adjacency list for a region
-void sdet_edgel_regions::insert_adjacency(unsigned int r, vtol_edge_2d_sptr e)
+void sdet_edgel_regions::insert_adjacency(unsigned int r, const vtol_edge_2d_sptr& e)
 {
   if (!e) return;
   //  e->Protect();

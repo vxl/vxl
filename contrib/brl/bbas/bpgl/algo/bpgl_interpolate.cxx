@@ -172,8 +172,8 @@ interpolate(vpgl_perspective_camera<double> const& cam0,
   cams.clear();
   if (!n_between)
     return false;
-  vpgl_calibration_matrix<double> K0 = cam0.get_calibration();
-  vpgl_calibration_matrix<double> K1 = cam1.get_calibration();
+  const vpgl_calibration_matrix<double>& K0 = cam0.get_calibration();
+  const vpgl_calibration_matrix<double>& K1 = cam1.get_calibration();
   if (K0 != K1)
     return false;
   //interpolate camera center
@@ -191,8 +191,8 @@ interpolate(vpgl_perspective_camera<double> const& cam0,
   }
 #endif
   //interpolate rotation
-  vgl_rotation_3d<double> rot0 = cam0.get_rotation();
-  vgl_rotation_3d<double> rot1 = cam1.get_rotation();
+  const vgl_rotation_3d<double>& rot0 = cam0.get_rotation();
+  const vgl_rotation_3d<double>& rot1 = cam1.get_rotation();
   vnl_double_3x3 R0 = rot0.as_matrix();
   vnl_double_3x3 R1 = rot1.as_matrix();
   std::vector<vnl_double_3x3> Rmats;
@@ -217,8 +217,8 @@ interpolate_next(vpgl_perspective_camera<double> const& cam_prev,
                  double const& rel_step_size,
                  vpgl_perspective_camera<double>& cam_next)
 {
-  vpgl_calibration_matrix<double> K_prev = cam_prev.get_calibration();
-  vpgl_calibration_matrix<double> K_curr = cam_curr.get_calibration();
+  const vpgl_calibration_matrix<double>& K_prev = cam_prev.get_calibration();
+  const vpgl_calibration_matrix<double>& K_curr = cam_curr.get_calibration();
   if (K_prev != K_curr)
     return false;
 

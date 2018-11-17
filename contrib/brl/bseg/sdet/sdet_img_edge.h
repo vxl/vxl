@@ -38,7 +38,7 @@ class sdet_img_edge
   //           Negative value indicates no edge is present
   // plane 2 - Orientation of local edge tangent direction in radians
   // range is [0, 2pi).
-  static vil_image_view<float> detect_edge_tangent(vil_image_view<vxl_byte> img,
+  static vil_image_view<float> detect_edge_tangent(const vil_image_view<vxl_byte>& img,
                                                    double noise_multiplier,
                                                    double smooth,
                                                    bool automatic_threshold,
@@ -47,14 +47,14 @@ class sdet_img_edge
 
   // return image has three planes as in detect_edge_tangent
   // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator
-  static vil_image_view<float> detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
+  static vil_image_view<float> detect_edge_tangent_interpolated(const vil_image_view<vxl_byte>& img,
                                                                 double noise_multiplier,
                                                                 double smooth,
                                                                 bool automatic_threshold,
                                                                 bool junctionp,
                                                                 bool aggressive_junction_closure);
   // return image has three planes as in detect_edge_tangent
-  static vil_image_view<float> detect_edge_line_fitted(vil_image_view<vxl_byte> img,
+  static vil_image_view<float> detect_edge_line_fitted(const vil_image_view<vxl_byte>& img,
                                                    double noise_multiplier,
                                                    double smooth,
                                                    bool automatic_threshold,

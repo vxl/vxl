@@ -12,7 +12,7 @@
 #include <vil/vil_new.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil_image_resource_sptr vepl_threshold(vil_image_resource_sptr image, double threshold, double below, double above)
+vil_image_resource_sptr vepl_threshold(const vil_image_resource_sptr& image, double threshold, double below, double above)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 

@@ -71,7 +71,7 @@ class boxm2_compute_normal_albedo_functor_opt
 
   bool init_data(std::vector<brad_image_metadata> const& metadata,
                  std::vector<brad_atmospheric_parameters> const& atm_params,
-                 boxm2_stream_cache_sptr str_cache,
+                 const boxm2_stream_cache_sptr& str_cache,
                  boxm2_data_base * alpha_data,
                  boxm2_data_base * normal_albedo_model);
 

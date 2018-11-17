@@ -14,7 +14,7 @@
 class bstm_ocl_minfo_function
 {
  public:
-  bstm_ocl_minfo_function(bocl_device_sptr device, bstm_scene_sptr scene, bstm_opencl_cache_sptr opencl_cache,
+  bstm_ocl_minfo_function(const bocl_device_sptr& device, const bstm_scene_sptr& scene, const bstm_opencl_cache_sptr& opencl_cache,
                               vgl_box_3d<double> bb, vgl_rotation_3d<double> rot, vgl_vector_3d<double> T,
                               float time1, float time2, std::string kernel_opt, int nbins );
 

@@ -49,7 +49,7 @@ void bkml_parser::init_params()
 }
 
 void
-bkml_parser ::cdataHandler(std::string  /*name*/, std::string  /*data*/)
+bkml_parser ::cdataHandler(const std::string&  /*name*/, const std::string&  /*data*/)
 {
 }
 
@@ -325,13 +325,13 @@ void bkml_parser::charData(const XML_Char* s, int len)
 
 void bkml_parser::trim_string(std::string& s)
 {
-  int i = (int)s.find_first_not_of(" ");
-  int j = (int)s.find_last_not_of(" ");
+  int i = (int)s.find_first_not_of(' ');
+  int j = (int)s.find_last_not_of(' ');
   std::string t = s.substr(i,j-i+1);
   s = t;
 }
 
-std::vector<vgl_point_3d<double> > bkml_parser::parse_points(std::string kml_file)
+std::vector<vgl_point_3d<double> > bkml_parser::parse_points(const std::string& kml_file)
 {
   auto* parser = new bkml_parser();
   std::vector<vgl_point_3d<double> > out;
@@ -352,7 +352,7 @@ std::vector<vgl_point_3d<double> > bkml_parser::parse_points(std::string kml_fil
 }
 
 //: the returned polygon only contains outer boundary
-vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
+vgl_polygon<double> bkml_parser::parse_polygon(const std::string& poly_kml_file)
 {
   auto* parser = new bkml_parser();
   vgl_polygon<double> out;
@@ -384,7 +384,7 @@ vgl_polygon<double> bkml_parser::parse_polygon(std::string poly_kml_file)
   return out;
 }
 
-vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inner,
+vgl_polygon<double> bkml_parser::parse_polygon_with_inner(const std::string& poly_kml_file, vgl_polygon<double>& outer, vgl_polygon<double>& inner,
                                                           unsigned& n_out, unsigned& n_in)
 {
   auto* parser = new bkml_parser();
@@ -430,7 +430,7 @@ vgl_polygon<double> bkml_parser::parse_polygon_with_inner(std::string poly_kml_f
   return out;
 }
 
-bool bkml_parser::parse_location_from_kml(std::string kml_file, double& lat, double& lon)
+bool bkml_parser::parse_location_from_kml(const std::string& kml_file, double& lat, double& lon)
 {
   auto* parser = new bkml_parser();
   std::FILE* xmlFile = std::fopen(kml_file.c_str(), "r");

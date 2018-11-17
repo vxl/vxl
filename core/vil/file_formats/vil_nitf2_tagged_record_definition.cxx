@@ -44,7 +44,7 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
   std::string name, std::string pretty_name)
 {
   vil_nitf2_tagged_record_definition* definition =
-    new vil_nitf2_tagged_record_definition(name, pretty_name);
+    new vil_nitf2_tagged_record_definition(name, std::move(pretty_name));
   if (all_definitions().find(name) != all_definitions().end()) {
     throw("vil_nitf2_tagged_record_definition already defined.");
   }
@@ -52,7 +52,7 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::define(
   return *definition;
 }
 
-bool vil_nitf2_tagged_record_definition::undefine(std::string name)
+bool vil_nitf2_tagged_record_definition::undefine(const std::string& name)
 {
   auto definition = all_definitions().find(name);
   if (definition == all_definitions().end()) {
@@ -77,8 +77,8 @@ vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::field(
     std::cerr << "vil_nitf2_tagged_record_definition:field() failed; definition already complete.";
   } else {
     vil_nitf2_field_definition* field_definition = new vil_nitf2_field_definition(
-      tag, pretty_name, formatter, blanks_ok,
-      width_functor, condition_functor, units, description);
+      std::move(tag), std::move(pretty_name), formatter, blanks_ok,
+      width_functor, condition_functor, std::move(units), std::move(description));
     m_field_definitions->push_back(field_definition);
   }
   return *this;
@@ -104,7 +104,7 @@ void vil_nitf2_tagged_record_definition::end()
   m_definition_completed = true;
 }
 
-vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(std::string name)
+vil_nitf2_tagged_record_definition* vil_nitf2_tagged_record_definition::find(const std::string& name)
 {
   auto definition = all_definitions().find(name);
   if (definition == all_definitions().end()) return nullptr;
@@ -119,7 +119,7 @@ vil_nitf2_tagged_record_definition::~vil_nitf2_tagged_record_definition()
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(
   std::string int_tag, vil_nitf2_field_definitions& field_definitions)
 {
-  return repeat(new vil_nitf2_field_value<int>(int_tag), field_definitions);
+  return repeat(new vil_nitf2_field_value<int>(std::move(int_tag)), field_definitions);
 }
 
 vil_nitf2_tagged_record_definition& vil_nitf2_tagged_record_definition::repeat(

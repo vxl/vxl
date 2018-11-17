@@ -39,15 +39,15 @@ class boxm2_asio_mgr
     ~boxm2_asio_mgr();
 
     //: creates a BAIO object that loads block data from disk
-     void load_block(std::string dir, boxm2_block_id block_id,boxm2_block_metadata mdata);
+     void load_block(const std::string& dir, const boxm2_block_id& block_id,const boxm2_block_metadata& mdata);
 
     //: creates a BAIO object that saves block data to disk
-    void save_block(std::string dir, boxm2_block* block );
+    void save_block(const std::string& dir, boxm2_block* block );
 
     //: creates a BAIO object that loads data from disk
     template <boxm2_data_type data_type>
     void load_block_data(std::string dir, boxm2_block_id block_i);
-    void load_block_data_generic(std::string dir, boxm2_block_id block_id, std::string type);
+    void load_block_data_generic(const std::string& dir, const boxm2_block_id& block_id, const std::string& type);
 
     //: creates a BAIO object that saves data to disk
     template <boxm2_data_type data_type>
@@ -64,7 +64,7 @@ class boxm2_asio_mgr
 
     //: access completed data loads
     // \returns a map of data pointers (generic pointers)
-    std::map<boxm2_block_id, boxm2_data_base*> get_loaded_data_generic(std::string prefix);
+    std::map<boxm2_block_id, boxm2_data_base*> get_loaded_data_generic(const std::string& prefix);
 
   private:
 

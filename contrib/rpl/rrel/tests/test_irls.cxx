@@ -101,7 +101,7 @@ inline bool
 check( const vnl_vector<double>& correct_params,
        rrel_irls* irls )
 {
-  vnl_vector<double> res(irls->params());
+  const vnl_vector<double>& res(irls->params());
   double s = irls->scale();
   vnl_matrix<double> covar(irls->cofactor()*s*s);
   vnl_vector<double> err_vector(res - correct_params);

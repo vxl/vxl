@@ -52,7 +52,7 @@ class vsl_basic_xml_element
 #if 0
   bool delete_attribute(std::string attr_name);
 #endif
-  void append_cdata(std::string cdata);
+  void append_cdata(const std::string& cdata);
   void append_cdata(double cdata);
   void append_cdata(int cdata);
 

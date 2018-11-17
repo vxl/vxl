@@ -52,7 +52,7 @@ class vifa_group_pgram : public vifa_group_pgram_params
   ~vifa_group_pgram() override;
 
   // Index insertion
-  void    Index(imp_line_sptr    il);
+  void    Index(const imp_line_sptr&    il);
   void    Index(imp_line_list&  lg);
   void    Clear();
 
@@ -69,7 +69,7 @@ class vifa_group_pgram : public vifa_group_pgram_params
   double         norm_parallel_line_length(void);
 
  protected:
-  int            AngleLoc(imp_line_sptr  il);
+  int            AngleLoc(const imp_line_sptr&  il);
   imp_line_sptr  LineAtAngle(int  angle_bin);
   void           CheckUpdateBoundingBox(void);
   void           ComputeBoundingBox(void);

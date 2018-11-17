@@ -15,7 +15,7 @@ gmvl_node_cache::gmvl_node_cache() = default;
 gmvl_node_cache::~gmvl_node_cache() = default;
 
 // trivial accessors
-void gmvl_node_cache::add( const gmvl_node_sptr node)
+void gmvl_node_cache::add( const gmvl_node_sptr& node)
 {
   node->ref_= nodes_.size();
   nodes_.push_back( node);
@@ -43,7 +43,7 @@ void gmvl_node_cache::add( const gmvl_node_sptr node)
   }
 }
 
-void gmvl_node_cache::remove( const gmvl_node_sptr node)
+void gmvl_node_cache::remove( const gmvl_node_sptr& node)
 {
   std::vector<gmvl_node_sptr> newnodes;
 
@@ -61,14 +61,14 @@ void gmvl_node_cache::remove( const gmvl_node_sptr node)
   rebuild();
 }
 
-bool gmvl_node_cache::cached( const gmvl_node_sptr node) const
+bool gmvl_node_cache::cached( const gmvl_node_sptr& node) const
 {
   return node->ref_!= -1;
 }
 
 // clever accessors
 
-std::vector<gmvl_node_sptr> gmvl_node_cache::get( const std::string type) const
+std::vector<gmvl_node_sptr> gmvl_node_cache::get( const std::string& type) const
 {
   std::vector<gmvl_node_sptr> empty;
 

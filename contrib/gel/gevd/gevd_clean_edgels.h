@@ -65,10 +65,10 @@ class gevd_clean_edgels
   void detect_similar_edges(std::vector<vtol_edge_2d_sptr>& common_edges, float tolerance,
                             std::vector<vtol_edge_2d_sptr>& deleted_edges);
   void remove_similar_edges(vtol_vertex_2d*& v1, std::vector<vtol_edge_2d_sptr>& deleted_edges);
-  bool edge_exists(vtol_vertex_2d_sptr v1, vtol_vertex_2d_sptr v2, std::vector<vtol_edge_2d_sptr>& intersection);
+  bool edge_exists(const vtol_vertex_2d_sptr& v1, const vtol_vertex_2d_sptr& v2, std::vector<vtol_edge_2d_sptr>& intersection);
   void remove_connected_edges(vtol_vertex_2d* v, std::vector<vtol_edge_2d_sptr>& edges);
-  bool closest_vertex(vtol_edge_2d_sptr e, vsol_point_2d_sptr p, float radius, vtol_vertex_2d_sptr& v);
-  bool split_edge(vtol_edge_2d_sptr e, vtol_vertex_2d_sptr v, vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2);
+  bool closest_vertex(const vtol_edge_2d_sptr& e, const vsol_point_2d_sptr& p, float radius, vtol_vertex_2d_sptr& v);
+  bool split_edge(const vtol_edge_2d_sptr& e, const vtol_vertex_2d_sptr& v, vtol_edge_2d_sptr& e1, vtol_edge_2d_sptr& e2);
   std::vector<vtol_edge_2d_sptr>* out_edgels_;
 };
 

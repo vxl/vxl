@@ -5,7 +5,7 @@
 
 //: constructor
 sdet_curvelet_map
-::sdet_curvelet_map(sdet_edgemap_sptr EM,
+::sdet_curvelet_map(const sdet_edgemap_sptr& EM,
                     sdet_curvelet_params params):
   EM_(EM),
   params_(params),

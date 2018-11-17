@@ -13,7 +13,7 @@
 
 
 template <class T>
-inline void test_image_resource(std::string type, vil_pixel_format format, T /*dummy*/)
+inline void test_image_resource(const std::string& type, vil_pixel_format format, T /*dummy*/)
 {
   std::cout << "******************************************************************\n"
            << " Testing vil3d_image_resource objects with pixel type = " << type << '\n'

@@ -32,7 +32,7 @@ static void write_osm_samples()
   ofs_road.close();
 }
 
-static void test_category_io_read_land_category(std::string filename)
+static void test_category_io_read_land_category(const std::string& filename)
 {
   std::map<std::pair<std::string, std::string>, volm_land_layer> osm_land_table;
   TEST("land_category_io", volm_osm_category_io::load_category_table(filename, osm_land_table), true);

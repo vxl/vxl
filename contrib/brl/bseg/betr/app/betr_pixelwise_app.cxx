@@ -325,7 +325,7 @@ int main(int  /*argc*/, char *  /*argv*/[])
   vil_image_resource_sptr evt_imgr;
   vpgl_camera_double_sptr evt_camera;
   std::string valid_str;
-  for (auto evt_name : img_names) {
+  for (const auto& evt_name : img_names) {
     std::cerr << "Processing event: " << evt_name << " with reference: " << ref_name << "\n";
     getline(is, valid_str);
     if (strcmp(ref_name.c_str(), evt_name.c_str()) == 0) {

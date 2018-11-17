@@ -9,7 +9,7 @@
 #endif
 #include <vtol/vtol_edge_2d.h>
 
-sdet_region_edge::sdet_region_edge(vtol_edge_2d_sptr e)
+sdet_region_edge::sdet_region_edge(const vtol_edge_2d_sptr& e)
 : edge_(e)
 {
 }

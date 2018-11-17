@@ -143,7 +143,7 @@ void tool_params::read_from_file(const std::string& path)
 }
 
 
-bool load_shape_params(std::string path,
+bool load_shape_params(const std::string& path,
                        std::vector<vnl_vector<double> >& b)
 {
   std::ifstream ifs(path.c_str());

@@ -54,7 +54,7 @@ int main(int argc, char ** argv)
     return -1;
   }
 
-  std::string xml_name = id;
+  const std::string& xml_name = id;
 
   boxm2_vecf_composite_face_scene cfs(avg_face_paths);
 

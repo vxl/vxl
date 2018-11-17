@@ -2,7 +2,7 @@
 #include <vsol/vsol_point_3d.h>
 #include <vsol/vsol_polygon_3d.h>
 #include <bmsh3d/algo/bmsh3d_fileio.h>
-bool betr_io::read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj){
+bool betr_io::read_so_ply(const std::string& ply_path, vsol_spatial_object_3d_sptr& obj){
   auto* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, ply_path.c_str());
   if(!good){

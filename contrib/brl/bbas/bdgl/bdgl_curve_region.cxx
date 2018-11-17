@@ -15,7 +15,7 @@
 #endif
 
 //-----------------------------------------------------------------------------
-void bdgl_curve_region::init(vdgl_edgel_chain_sptr curve)
+void bdgl_curve_region::init(const vdgl_edgel_chain_sptr& curve)
 {
   vdgl_edgel ed;
   double dist;

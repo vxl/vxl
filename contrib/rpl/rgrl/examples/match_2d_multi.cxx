@@ -133,7 +133,7 @@ struct scaled_feature_node {
   unsigned size() const { return features_.size(); }
 
   //: push back function
-  void push_back( rgrl_feature_sptr sptr ) { features_.push_back(sptr); }
+  void push_back( const rgrl_feature_sptr& sptr ) { features_.push_back(sptr); }
 };
 
 // The example read in a text file containing features , each with an

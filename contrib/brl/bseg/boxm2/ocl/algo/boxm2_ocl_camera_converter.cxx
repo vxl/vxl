@@ -151,7 +151,7 @@ float boxm2_ocl_camera_converter::convert_persp_to_generic(bocl_device_sptr & de
 }
 
 
-bocl_kernel* boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(bocl_device_sptr device)
+bocl_kernel* boxm2_ocl_camera_converter::compile_persp_to_generic_kernel(const bocl_device_sptr& device)
 {
   //gather all cam convert sources
   std::vector<std::string> src_paths;

@@ -73,7 +73,7 @@ bool bwm_video_site_io::open(std::string const& xml_path)
 }
 
 void
-bwm_video_site_io ::cdataHandler(std::string name, std::string data)
+bwm_video_site_io ::cdataHandler(const std::string& name, std::string data)
 {
   // clean up the empty chars before and after the file paths
   trim_string(data);
@@ -206,8 +206,8 @@ void bwm_video_site_io::charData(const XML_Char* s, int len)
 
 void bwm_video_site_io::trim_string(std::string& s)
 {
-  int i = s.find_first_not_of(" ");
-  int j = s.find_last_not_of(" ");
+  int i = s.find_first_not_of(' ');
+  int j = s.find_last_not_of(' ');
   std::string t = s.substr(i,j-i+1);
   s = t;
 }

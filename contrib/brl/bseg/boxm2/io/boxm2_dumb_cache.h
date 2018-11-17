@@ -45,7 +45,7 @@ class boxm2_dumb_cache : public boxm2_cache1
     void update_block_cache(boxm2_block* blk);
 
     //: private update method (very simple)
-    void update_data_base_cache(boxm2_data_base* dat, std::string type);
+    void update_data_base_cache(boxm2_data_base* dat, const std::string& type);
 
     //: private update block cache method
     template <boxm2_data_type T>

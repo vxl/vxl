@@ -41,9 +41,9 @@ struct point_3d_cmp
 class bvpl_direction_to_color_map
 {
  public:
-  bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples,std::string type);
+  bvpl_direction_to_color_map(std::vector<vgl_point_3d<double> > samples,const std::string& type);
   ~bvpl_direction_to_color_map()= default;
-  void make_svg_color_map(std::string outfile);
+  void make_svg_color_map(const std::string& outfile);
   float get_color(vgl_point_3d<double> dir){return colors_[dir];}
  private:
   std::vector<vgl_point_3d<double> > samples_;
@@ -54,7 +54,7 @@ class bvpl_direction_to_color_map
 };
 
 //: function to map direction vectors to a color map.
-void bvpl_generate_direction_samples_from_kernels(bvpl_kernel_vector_sptr kernel_vector,
+void bvpl_generate_direction_samples_from_kernels(const bvpl_kernel_vector_sptr& kernel_vector,
                                                   std::vector<vgl_point_3d<double> > & samples);
 
 void bvpl_convert_grid_to_hsv_grid(bvxm_voxel_grid<vnl_float_4 > *grid,
@@ -73,6 +73,6 @@ void bvpl_convert_id_grid_to_hsv_grid(bvxm_voxel_grid<int> *id_grid,
 
 //: Function to write a vector of hues, to an svg file.
 //  This function is useful, when the hue is identified by an id (index in the vector)
-void bvpl_write_colors_to_svg(bvpl_kernel_vector_sptr kernel_vector,std::vector<float> hue_vector, std::string outfile);
+void bvpl_write_colors_to_svg(const bvpl_kernel_vector_sptr& kernel_vector,std::vector<float> hue_vector, const std::string& outfile);
 
 #endif // bvpl_direction_to_color_map_h_

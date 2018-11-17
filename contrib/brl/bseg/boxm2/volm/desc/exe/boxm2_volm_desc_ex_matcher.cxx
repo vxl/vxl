@@ -4,23 +4,24 @@
 // \author Yi Dong
 // \date June 04, 2013
 
-#include <iostream>
 #include <algorithm>
-#include <boxm2/volm/desc/boxm2_volm_desc_ex_matcher.h>
 #include <boxm2/volm/desc/boxm2_volm_desc_ex_land_only_matcher.h>
+#include <boxm2/volm/desc/boxm2_volm_desc_ex_matcher.h>
+#include <iostream>
+#include <utility>
 #include <volm/desc/volm_desc_ex_2d_matcher.h>
+#include <volm/volm_buffered_index.h>
 #include <volm/volm_io.h>
 #include <volm/volm_tile.h>
-#include <volm/volm_buffered_index.h>
 #include <vul/vul_arg.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 
-void error_report(std::string error_file, std::string error_msg)
+void error_report(std::string error_file, const std::string& error_msg)
 {
   std::cerr << error_msg;
-  volm_io::write_post_processing_log(error_file, error_msg);
+  volm_io::write_post_processing_log(std::move(error_file), error_msg);
 }
 
 int main(int argc, char** argv)

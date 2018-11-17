@@ -544,7 +544,7 @@ GetPerimeterEdges()
   {
     edge_list edges; face->edges(edges);
 
-    for (auto e : edges)
+    for (const auto& e : edges)
     {
       int        e_id = e->get_id();
 
@@ -569,7 +569,7 @@ GetPerimeterEdges()
   for (auto & face : faces_)
   {
     edge_list edges; face->edges(edges);
-    for (auto e : edges)
+    for (const auto& e : edges)
     {
       int        count;
 
@@ -830,7 +830,7 @@ EightyPercentParallel()
 }
 
 vifa_int_face_attr_sptr vifa_int_faces_attr::
-factory_new_attr(vtol_intensity_face_sptr face)
+factory_new_attr(const vtol_intensity_face_sptr& face)
 {
   if (factory_)
     return factory_->obtain_int_face_attr(face,

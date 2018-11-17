@@ -414,7 +414,7 @@ find_peak(float&  max_value)
 }
 
 vtol_intensity_face_sptr vifa_parallel::
-get_adjacent_iface(vtol_intensity_face_sptr  known_face,
+get_adjacent_iface(const vtol_intensity_face_sptr&  known_face,
                    vtol_edge_2d*         e)
 {
   vtol_intensity_face_sptr  adj_face = nullptr;

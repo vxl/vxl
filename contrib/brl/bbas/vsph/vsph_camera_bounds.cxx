@@ -209,8 +209,8 @@ relative_transf(vpgl_perspective_camera<double> const& c0,
 {
   vgl_vector_3d<double> t0 = c0.get_translation();
   vgl_vector_3d<double> t1 = c1.get_translation();
-  vgl_rotation_3d<double> R0 = c0.get_rotation();
-  vgl_rotation_3d<double> R1 = c1.get_rotation();
+  const vgl_rotation_3d<double>& R0 = c0.get_rotation();
+  const vgl_rotation_3d<double>& R1 = c1.get_rotation();
   rel_rot = R1*(R0.transpose());
   vgl_vector_3d<double> td = rel_rot*t0;
   rel_trans = -td + t1;

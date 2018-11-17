@@ -21,10 +21,12 @@
 #include <vgl/vgl_intersection.h>
 #include <bkml/bkml_parser.h>
 
-void error_report(std::string error_file, std::string error_msg)
+#include <utility>
+
+void error_report(std::string error_file, const std::string& error_msg)
 {
   std::cerr << error_msg;
-  volm_io::write_post_processing_log(error_file, error_msg);
+  volm_io::write_post_processing_log(std::move(error_file), error_msg);
 }
 
 int main(int argc, char** argv)

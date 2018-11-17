@@ -413,7 +413,7 @@ void bsol_intrinsic_curve_3d::clear(void)
   totalAngleChange_ = 0;
 }
 
-bool bsol_intrinsic_curve_3d::LoadCON3File(std::string fileName)
+bool bsol_intrinsic_curve_3d::LoadCON3File(const std::string& fileName)
 {
   std::FILE* fp;
   char buffer[128];
@@ -452,7 +452,7 @@ bool bsol_intrinsic_curve_3d::LoadCON3File(std::string fileName)
   return true;
 }
 
-bool bsol_intrinsic_curve_3d::SaveCON3File(std::string fileName)
+bool bsol_intrinsic_curve_3d::SaveCON3File(const std::string& fileName)
 {
   std::FILE* fp;
 

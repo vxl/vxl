@@ -33,7 +33,7 @@ namespace boxm2_ocl_ingest_dem_process_globals
   constexpr unsigned n_inputs_ = 7;
   constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;
@@ -262,7 +262,7 @@ namespace boxm2_ocl_ingest_dem_space_process_globals
   constexpr unsigned n_inputs_ = 7;
   constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[2]={8,8};
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, std::string options)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

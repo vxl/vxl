@@ -87,7 +87,7 @@ bvpl_global_corners::bvpl_global_corners(const std::string &path)
 
 //: Compute Harris' measure extension to 3-d as proposed by:
 //  I. Laptev. On space-time interest points. Int. J. Computer Vision, 64(2):107--123, 2005
-void bvpl_global_corners::compute_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, int block_i, int block_j, int block_k)
+void bvpl_global_corners::compute_laptev_corners(const bvpl_global_taylor_sptr& global_taylor,int scene_id, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
@@ -134,7 +134,7 @@ void bvpl_global_corners::compute_laptev_corners(bvpl_global_taylor_sptr global_
 
 //: Compute corner measure extension to 3-d as proposed by:
 // P. Beaudet, Rotationally invariant image operators, in Proc. 4th Int. Joint Conf. Patt. Recog. 1978.
-void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, int block_i, int block_j, int block_k)
+void bvpl_global_corners::compute_beaudet_corners(const bvpl_global_taylor_sptr& global_taylor,int scene_id, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
   typedef boct_tree_cell<short,vnl_vector_fixed<double,10> > taylor_cell_type;
@@ -175,7 +175,7 @@ void bvpl_global_corners::compute_beaudet_corners(bvpl_global_taylor_sptr global
 
 //: Threshold a percentage of corners, based of the Harris' measure extension to 3-d proposed by:
 //  I. Laptev. On space-time interest points. Int. J. Computer Vision, 64(2):107--123, 2005
-void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, float harris_thresh, std::string output_path)
+void bvpl_global_corners::threshold_laptev_corners(const bvpl_global_taylor_sptr& global_taylor,int scene_id, float harris_thresh, const std::string& output_path)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
 
@@ -274,7 +274,7 @@ void bvpl_global_corners::threshold_laptev_corners(bvpl_global_taylor_sptr globa
 }
 
 //: Take a histogram of corners and get different values for percentage of thresholds
-void bvpl_global_corners::explore_corner_statistics(bvpl_global_taylor_sptr global_taylor,int scene_id)
+void bvpl_global_corners::explore_corner_statistics(const bvpl_global_taylor_sptr& global_taylor,int scene_id)
 {
   typedef boct_tree<short,vnl_vector_fixed<double,10> > taylor_tree_type;
 

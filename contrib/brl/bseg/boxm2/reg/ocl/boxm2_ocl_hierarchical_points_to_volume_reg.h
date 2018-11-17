@@ -28,7 +28,7 @@ class boxm2_ocl_hierarchical_points_to_volume_reg : public boxm2_ocl_reg_points_
                                                float *pts,
                                                boxm2_scene_sptr sceneB,
                                                int npts,
-                                               bocl_device_sptr device, bool do_vary_scale);
+                                               const bocl_device_sptr& device, bool do_vary_scale);
 
   //: initialize the monte carlo reg function
   bool init(vnl_vector<double> const& mu, vnl_vector<double> const & cov);

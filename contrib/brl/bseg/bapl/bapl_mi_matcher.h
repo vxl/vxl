@@ -30,13 +30,13 @@ class bapl_mi_matcher
 {
  public:
   //: Constructor
-  bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
-                  vil_image_view<vxl_byte> target_patch,
+  bapl_mi_matcher(const vil_image_view<vxl_byte>& src_image,
+                  const vil_image_view<vxl_byte>& target_patch,
                   bapl_affine_transform init_xform,
                   bapl_mi_matcher_params params = bapl_mi_matcher_params());
 
   //: Constructor
-  bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
+  bapl_mi_matcher(const vil_image_view<vxl_byte>& src_image,
                   bapl_affine_roi& roi,
                   bapl_mi_matcher_params params = bapl_mi_matcher_params());
 

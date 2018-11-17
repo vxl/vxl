@@ -12,7 +12,7 @@ boxm2_ocl_hierarchical_points_to_volume_reg::boxm2_ocl_hierarchical_points_to_vo
                                                    float *pts,
                                                    boxm2_scene_sptr sceneB,
                                                    int npts,
-                                                   bocl_device_sptr device, bool do_vary_scale):  boxm2_ocl_reg_points_to_volume_mutual_info(cache,pts,sceneB,device,npts, do_vary_scale), do_vary_scale_(do_vary_scale)
+                                                   const bocl_device_sptr& device, bool do_vary_scale):  boxm2_ocl_reg_points_to_volume_mutual_info(cache,pts,sceneB,device,npts, do_vary_scale), do_vary_scale_(do_vary_scale)
 {
 
 }

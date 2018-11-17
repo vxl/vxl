@@ -79,7 +79,7 @@ std::string error_to_string(cl_int  status )
     return output;
 }
 
-int check_val(cl_int status, cl_int result, std::string message)
+int check_val(cl_int status, cl_int result, const std::string& message)
 {
   if (status != result) {
     std::cout << message << '\n';

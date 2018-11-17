@@ -108,7 +108,7 @@ class volm_candidate_region_parser : public expatpp
   void endElement(const XML_Char* name) override;
   void charData(const XML_Char* s, int len) override;
   void handleAtts(const XML_Char** atts);
-  void cdataHandler(std::string name, std::string data);
+  void cdataHandler(const std::string& name, const std::string& data);
   void init_params();
 
   std::string current_name_;

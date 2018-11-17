@@ -33,16 +33,16 @@
 std::map<std::string,std::vector<bocl_kernel*> > bstm_ocl_update_color::kernels_;
 
 //Main public method, updates color model
-bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
+bool bstm_ocl_update_color::update(const bstm_scene_sptr&         scene,
                                 bocl_device_sptr         device,
-                                bstm_opencl_cache_sptr  opencl_cache,
+                                const bstm_opencl_cache_sptr&  opencl_cache,
                                 vpgl_camera_double_sptr  cam,
-                                vil_image_view_base_sptr img,
+                                const vil_image_view_base_sptr& img,
                                 float                   time,
                                 float                   mog_var,
                                 bool                     update_alpha,
                                 bool                     update_changes_only,
-                                vil_image_view_base_sptr mask_sptr)
+                                const vil_image_view_base_sptr& mask_sptr)
 {
 
   enum {
@@ -508,7 +508,7 @@ bool bstm_ocl_update_color::update(bstm_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
+std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool  /*isRGB*/)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -534,7 +534,7 @@ std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr d
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = opts ;
+  const std::string& options = opts ;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
@@ -580,7 +580,7 @@ std::vector<bocl_kernel*>& bstm_ocl_update_color::get_kernels(bocl_device_sptr d
 
 
 //makes sure appearance types correspond correctly
-bool bstm_ocl_update_color::validate_appearances(bstm_scene_sptr scene,
+bool bstm_ocl_update_color::validate_appearances(const bstm_scene_sptr& scene,
                                             std::string& data_type,
                                             int& appTypeSize,
                                             std::string& num_obs_type,

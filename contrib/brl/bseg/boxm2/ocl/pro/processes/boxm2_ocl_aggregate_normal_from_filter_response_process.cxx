@@ -1,7 +1,8 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_aggregate_normal_from_filter_response_process.cxx
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief A process to take in filter responses (from boxm2CppFilterResponseProcess) and aggregate them to a gradient direction.
@@ -36,7 +37,7 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
   //declare the response data type used to store in boxm2CppFilterResponseProcess.
   typedef boxm2_data_traits<BOXM2_FLOAT> RESPONSE_DATATYPE;
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     std::vector<std::string> src_paths;
     std::string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -44,7 +45,7 @@ namespace boxm2_ocl_aggregate_normal_from_filter_process_globals
     src_paths.push_back(source_dir + "aggregate_filter_response.cl");
 
     //compilation options
-    std::string options = opts;
+    const std::string& options = std::move(opts);
 
     auto* compute_vis = new bocl_kernel();
     std::string seg_opts = options + " -D DODECAHEDRON";

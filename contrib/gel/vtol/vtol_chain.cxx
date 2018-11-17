@@ -95,7 +95,7 @@ vtol_chain::is_chain_superior(vtol_chain const* chain_superior) const
 // Require: valid_chain_type(chain_inferior)
 //          and !is_chain_inferior(chain_inferior)
 //---------------------------------------------------------------------------
-void vtol_chain::link_chain_inferior(vtol_chain_sptr chain_inferior)
+void vtol_chain::link_chain_inferior(const vtol_chain_sptr& chain_inferior)
 {
   // require
   assert(valid_chain_type(chain_inferior));
@@ -112,7 +112,7 @@ void vtol_chain::link_chain_inferior(vtol_chain_sptr chain_inferior)
 // Require: valid_chain_type(chain_inferior)
 //          and is_chain_inferior(chain_inferior)
 //---------------------------------------------------------------------------
-void vtol_chain::unlink_chain_inferior(vtol_chain_sptr chain_inferior)
+void vtol_chain::unlink_chain_inferior(const vtol_chain_sptr& chain_inferior)
 {
   // require
   assert(valid_chain_type(chain_inferior));

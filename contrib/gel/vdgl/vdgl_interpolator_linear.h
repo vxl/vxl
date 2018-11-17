@@ -13,7 +13,7 @@ class vdgl_interpolator_linear : public vdgl_interpolator
  public:
   // Constructors/Destructors--------------------------------------------------
 
-  vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain);
+  vdgl_interpolator_linear( const vdgl_edgel_chain_sptr& chain);
   ~vdgl_interpolator_linear() override;
 
   // Operators----------------------------------------------------------------

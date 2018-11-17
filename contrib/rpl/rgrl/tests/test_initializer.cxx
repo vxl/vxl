@@ -28,9 +28,9 @@ namespace {
 class simple_invariant_feature: public rgrl_invariant
 {
  public:
-  simple_invariant_feature(vnl_vector<double> location,
-                           vnl_vector<double> cart_inv,
-                           vnl_vector<double> ang_inv)
+  simple_invariant_feature(const vnl_vector<double>& location,
+                           const vnl_vector<double>& cart_inv,
+                           const vnl_vector<double>& ang_inv)
     : location_(location),
       cart_inv_(cart_inv),
       ang_inv_(ang_inv)

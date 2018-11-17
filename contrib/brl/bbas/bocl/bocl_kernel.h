@@ -56,7 +56,7 @@ class bocl_kernel
                       std::string const& src,
                       std::string const& kernel_name,
                       std::string options,
-                      std::string id );
+                      const std::string& id );
 
   //: execute this kernel on given command queue with given workspace size
   bool execute(const cl_command_queue& cmd_queue, cl_uint dim,
@@ -133,7 +133,7 @@ class bocl_kernel
   //: for creating kernels from a list of sources
   bool load_kernel_source(std::string const& path);
   bool append_process_kernels(std::string const& path);
-  bool build_kernel_program(cl_program &program, std::string options);
+  bool build_kernel_program(cl_program &program, const std::string& options);
 };
 
 #endif

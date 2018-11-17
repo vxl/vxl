@@ -10,7 +10,7 @@ bvgl_ray_pyramid::bvgl_ray_pyramid(vbl_array_2d<vgl_ray_3d<float> >& finest_leve
   }
 
   //side length
-  vbl_array_2d<vgl_ray_3d<float> > level0(finest_level);
+  const vbl_array_2d<vgl_ray_3d<float> >& level0(finest_level);
   pyramid_.push_back(level0);
 
   //create the levels

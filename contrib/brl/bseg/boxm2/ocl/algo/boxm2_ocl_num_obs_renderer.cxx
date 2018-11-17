@@ -30,9 +30,9 @@
 #include <vul/vul_timer.h>
 
 boxm2_ocl_num_obs_renderer
-::boxm2_ocl_num_obs_renderer(boxm2_scene_sptr scene,
-                             boxm2_opencl_cache_sptr ocl_cache,
-                             std::string ident) :
+::boxm2_ocl_num_obs_renderer(const boxm2_scene_sptr& scene,
+                             const boxm2_opencl_cache_sptr& ocl_cache,
+                             const std::string& ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
   buffers_allocated_(false),
@@ -261,7 +261,7 @@ boxm2_ocl_num_obs_renderer
   return render_success_;
 }
 
-bool boxm2_ocl_num_obs_renderer::compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
+bool boxm2_ocl_num_obs_renderer::compile_kernels(const bocl_device_sptr& device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
 {
 
   if (data_type == BOXM2_NUM_OBS_VIEW)

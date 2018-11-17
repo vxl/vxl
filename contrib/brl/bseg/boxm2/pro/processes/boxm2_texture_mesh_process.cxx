@@ -55,9 +55,9 @@ namespace boxm2_texture_mesh_process_globals
   std::vector<vil_image_view<float>* > normx_, normy_, normz_;
 
   //main helper method - fills out a map of imesh_mesh's, each texture mapped with a separate image
-  void boxm2_texture_mesh_from_imgs(std::string im_dir,
-                                    std::string cam_dir,
-                                    std::string out_dir,
+  void boxm2_texture_mesh_from_imgs(const std::string& im_dir,
+                                    const std::string& cam_dir,
+                                    const std::string& out_dir,
                                     imesh_mesh& in_mesh,
                                     std::map<std::string, imesh_mesh>& meshes);
 
@@ -177,9 +177,9 @@ bool boxm2_texture_mesh_process(bprb_func_process& pro)
 
 //: Given a directory of images, dir cams, an input mesh, this function creates a map of textured meshes
 // (imesh doesn't ostensibly handle meshes from multiple textures)
-void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(std::string im_dir,
-                                                                      std::string cam_dir,
-                                                                      std::string out_dir,
+void boxm2_texture_mesh_process_globals::boxm2_texture_mesh_from_imgs(const std::string& im_dir,
+                                                                      const std::string& cam_dir,
+                                                                      const std::string& out_dir,
                                                                       imesh_mesh& in_mesh,
                                                                       std::map<std::string, imesh_mesh>& meshes)
 {

@@ -31,6 +31,6 @@
 #include <vil/vil_image_resource.h>
 
 //: morphological dilation with circular element
-vil_image_resource_sptr vepl_dilate_disk(vil_image_resource_sptr , float radius);
+vil_image_resource_sptr vepl_dilate_disk(const vil_image_resource_sptr& , float radius);
 
 #endif // vepl_dilate_disk_h_

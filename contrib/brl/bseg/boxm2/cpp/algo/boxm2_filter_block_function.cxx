@@ -5,7 +5,7 @@
 // \file
 
 //: "default" constructor
-boxm2_filter_block_function::boxm2_filter_block_function(boxm2_scene_sptr scene, boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas)
+boxm2_filter_block_function::boxm2_filter_block_function(const boxm2_scene_sptr& scene, boxm2_block_metadata data, boxm2_block* blk, boxm2_data_base* alphas)
   : scene_(scene)
 {
   //1. allocate new alpha data array (stays the same size)

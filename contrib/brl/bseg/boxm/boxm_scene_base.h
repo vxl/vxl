@@ -29,7 +29,7 @@ class boxm_scene_base : public vbl_ref_count
 
   ~boxm_scene_base() override = default;
 
-  bool load_scene(std::string filename, boxm_scene_parser& parser);
+  bool load_scene(const std::string& filename, boxm_scene_parser& parser);
 
   boxm_apm_type appearence_model() { return app_model_; }
 

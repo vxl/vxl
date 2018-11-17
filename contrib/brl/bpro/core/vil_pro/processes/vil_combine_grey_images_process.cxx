@@ -27,7 +27,7 @@ bool vil_combine_grey_images_process_cons(bprb_func_process& pro)
 }
 
 // Get images from a file.
-bool get_images(std::string file,
+bool get_images(const std::string& file,
                 std::vector<vil_image_view_base_sptr>  &grey_imgs,
                 unsigned& width, unsigned& height)
 {

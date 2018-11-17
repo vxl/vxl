@@ -1,7 +1,8 @@
-#include <iostream>
-#include <iomanip>
 #include "volm_geo_index.h"
 #include "volm_io.h"
+#include <iomanip>
+#include <iostream>
+#include <utility>
 //:
 // \file
 
@@ -139,7 +140,7 @@ volm_geo_index_node_sptr volm_geo_index::construct_tree(volm_tile t, float min_s
 }
 
 //: prune the children which do not intersect the poly
-bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<double> const& poly)
+bool volm_geo_index::prune_tree(const volm_geo_index_node_sptr& root, vgl_polygon<double> const& poly)
 {
   if (!vgl_intersection(root->extent_, poly))
     return false;
@@ -154,7 +155,7 @@ bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<doubl
   return true;
 }
 
-bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<float> const& poly)
+bool volm_geo_index::prune_tree(const volm_geo_index_node_sptr& root, vgl_polygon<float> const& poly)
 {
   vgl_polygon<double> poly2;
   volm_io::convert_polygons(poly, poly2);
@@ -162,7 +163,7 @@ bool volm_geo_index::prune_tree(volm_geo_index_node_sptr root, vgl_polygon<float
 }
 
 //: prune nodes whose bbox is not in the utm_zone
-bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_zone)
+bool volm_geo_index::prune_by_zone(const volm_geo_index_node_sptr& root, unsigned utm_zone)
 {
   vpgl_utm u; int zone1, zone2;  double x, y;
   u.transform(root->extent_.min_point().y(), root->extent_.min_point().x(), x, y, zone1);
@@ -179,7 +180,7 @@ bool volm_geo_index::prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_z
   return true;
 }
 
-unsigned volm_geo_index::depth(volm_geo_index_node_sptr node)
+unsigned volm_geo_index::depth(const volm_geo_index_node_sptr& node)
 {
   if (!node->children_.size())
     return 0;
@@ -195,7 +196,7 @@ unsigned volm_geo_index::depth(volm_geo_index_node_sptr node)
 }
 
 //: kml requires first lat, then lon
-void volm_geo_index::write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation)
+void volm_geo_index::write_to_kml_node(std::ofstream& ofs, const volm_geo_index_node_sptr& n, unsigned current_depth, unsigned depth, std::string explanation)
 {
   if (!n)
     return;
@@ -206,7 +207,7 @@ void volm_geo_index::write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_s
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
+    bkml_write::write_box(ofs, " ", std::move(explanation), ul, ur,ll,lr);
   }
   else {
     for (const auto & i : n->children_)
@@ -215,7 +216,7 @@ void volm_geo_index::write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_s
 }
 
 //: write the bboxes of the nodes at the given depth to kml file
-void volm_geo_index::write_to_kml(volm_geo_index_node_sptr root, unsigned depth, std::string const& file_name)
+void volm_geo_index::write_to_kml(const volm_geo_index_node_sptr& root, unsigned depth, std::string const& file_name)
 {
   std::ofstream ofs(file_name.c_str());
   bkml_write::open_document(ofs);
@@ -223,7 +224,7 @@ void volm_geo_index::write_to_kml(volm_geo_index_node_sptr root, unsigned depth,
   bkml_write::close_document(ofs);
 }
 
-void write_to_text(std::ofstream& ofs, volm_geo_index_node_sptr n)
+void write_to_text(std::ofstream& ofs, const volm_geo_index_node_sptr& n)
 {
   ofs << std::setprecision(6) << std::fixed << n->extent_.min_point().x() << ' '
       << std::setprecision(6) << std::fixed << n->extent_.min_point().y() << ' '
@@ -241,7 +242,7 @@ void write_to_text(std::ofstream& ofs, volm_geo_index_node_sptr n)
   }
 }
 
-void volm_geo_index::write(volm_geo_index_node_sptr root, std::string const& file_name, float min_size)
+void volm_geo_index::write(const volm_geo_index_node_sptr& root, std::string const& file_name, float min_size)
 {
   std::ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
@@ -279,7 +280,7 @@ volm_geo_index_node_sptr volm_geo_index::read_and_construct(std::string const& f
   return root;
 }
 
-void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves)
+void volm_geo_index::get_leaves(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves)
 {
   if (!root)
     return;
@@ -301,7 +302,7 @@ void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_
 }
 
 //: return all the leaves that intersect a given rectangular area
-void volm_geo_index::get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area)
+void volm_geo_index::get_leaves(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area)
 {
   if (!root)
     return;
@@ -337,7 +338,7 @@ std::string volm_geo_index_node::get_string()
   return str.str();
 }
 
-void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre)
+void volm_geo_index::write_hyps(const volm_geo_index_node_sptr& root, std::string const& file_name_pre)
 {
   if (!root)
     return;
@@ -349,7 +350,7 @@ void volm_geo_index::write_hyps(volm_geo_index_node_sptr root, std::string const
     write_hyps(i, file_name_pre);
 }
 
-void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre)
+void volm_geo_index::read_hyps(const volm_geo_index_node_sptr& root, std::string const& file_name_pre)
 {
   if (!root)
     return;
@@ -362,7 +363,7 @@ void volm_geo_index::read_hyps(volm_geo_index_node_sptr root, std::string const&
     read_hyps(i, file_name_pre);
 }
 
-unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
+unsigned volm_geo_index::hypo_size(const volm_geo_index_node_sptr& root)
 {
   if (!root)
     return 0;
@@ -374,7 +375,7 @@ unsigned volm_geo_index::hypo_size(volm_geo_index_node_sptr root)
   return cnt;
 }
 
-bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, double lat, double elev)
+bool volm_geo_index::add_hypothesis(const volm_geo_index_node_sptr& root, double lon, double lat, double elev)
 {
   if (!root)
     return false;
@@ -400,7 +401,7 @@ bool volm_geo_index::add_hypothesis(volm_geo_index_node_sptr root, double lon, d
   return added;
 }
 
-void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves)
+void volm_geo_index::get_leaves_with_hyps(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves)
 {
   if (!root)
     return;
@@ -422,7 +423,7 @@ void volm_geo_index::get_leaves_with_hyps(volm_geo_index_node_sptr root, std::ve
 }
 
 //: return the leaf and the hyp id of the closest hyp to the given location
-volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr root, double lat, double lon, unsigned& hyp_id)
+volm_geo_index_node_sptr volm_geo_index::get_closest(const volm_geo_index_node_sptr& root, double lat, double lon, unsigned& hyp_id)
 {
   if (!root)
     return nullptr;
@@ -447,7 +448,7 @@ volm_geo_index_node_sptr volm_geo_index::get_closest(volm_geo_index_node_sptr ro
 }
 
 //: return true if a hyp exists within the given radius to the given point
-bool volm_geo_index::exists(volm_geo_index_node_sptr root, double lat, double lon, double inc_in_sec_rad)
+bool volm_geo_index::exists(const volm_geo_index_node_sptr& root, double lat, double lon, double inc_in_sec_rad)
 {
   if (!root)
     return false;

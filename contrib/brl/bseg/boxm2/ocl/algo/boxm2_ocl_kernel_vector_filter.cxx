@@ -10,7 +10,7 @@
 #endif
 
 boxm2_ocl_kernel_vector_filter::
-boxm2_ocl_kernel_vector_filter( bocl_device_sptr device,bool optimize_transfers) :
+boxm2_ocl_kernel_vector_filter( const bocl_device_sptr& device,bool optimize_transfers) :
   device_(device),optimize_transfers_(optimize_transfers)
 {
   compile_filter_kernel();
@@ -34,7 +34,7 @@ bool boxm2_ocl_kernel_vector_filter::compile_filter_kernel()
 }
 
 
-bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_vector_sptr filter_vector)
+bool boxm2_ocl_kernel_vector_filter::run(const boxm2_scene_sptr& scene, const boxm2_opencl_cache_sptr& opencl_cache, const bvpl_kernel_vector_sptr& filter_vector)
 {
   float gpu_time=0.0f;
 
@@ -73,7 +73,7 @@ bool boxm2_ocl_kernel_vector_filter::run(boxm2_scene_sptr scene, boxm2_opencl_ca
 
   //iterate though the filters in the vector
 
-  for (auto filter : filter_vector->kernels_)
+  for (const auto& filter : filter_vector->kernels_)
   {
     std::stringstream filter_ident; filter_ident << filter->name() << '_' << filter->id();
     std::cout<<"Computing Filter: " << filter_ident.str() << " of size: " << filter->float_kernel_.size() <<std::endl;

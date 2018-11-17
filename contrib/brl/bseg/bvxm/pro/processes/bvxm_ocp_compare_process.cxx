@@ -79,7 +79,7 @@ bool bvxm_ocp_compare_process(bprb_func_process& pro)
 }
 
 
-bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, int z, std::string filename)
+bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, int z, const std::string& filename)
 {
   std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
@@ -106,8 +106,8 @@ bool bvxm_ocp_compare_process_gloabals::save_raw(char *ocp_array, int x, int y, 
   return true;
 }
 
-double bvxm_ocp_compare_process_gloabals::compare(bvxm_voxel_world_sptr w1,
-                                                  bvxm_voxel_world_sptr w2,
+double bvxm_ocp_compare_process_gloabals::compare(const bvxm_voxel_world_sptr& w1,
+                                                  const bvxm_voxel_world_sptr& w2,
                                                   unsigned n, unsigned scale)
 {
   typedef bvxm_voxel_traits<LIDAR>::voxel_datatype lidar_datatype;

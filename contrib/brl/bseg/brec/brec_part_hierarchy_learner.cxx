@@ -243,7 +243,7 @@ brec_part_hierarchy_sptr brec_part_hierarchy_learner::layer0_rank_and_create_hie
 //: initialize learner to construct layer_n as pairs of layer_n-1 of the given hierarchy.
 //  radius is used to initialize the histograms
 //  we use 8 bins for angle in [0, 2*pi] range and 8 bins for distance in [0,radius] range
-bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(brec_part_hierarchy_sptr h, unsigned layer_id, unsigned nclasses, float radius)
+bool brec_part_hierarchy_learner::initialize_layer_n_as_pairs(const brec_part_hierarchy_sptr& h, unsigned layer_id, unsigned nclasses, float radius)
 {
   if (!layer_id)
     return false;
@@ -339,7 +339,7 @@ void map_to_cartesian(float angle, float radius, float max_radius, float& x, flo
 
 //: collect joint stats to construct parts of layer with layer_id using detected parts of layer_id-1
 //  Collect stats for a pair if they exist within radius pixels of each other
-bool brec_part_hierarchy_learner::layer_n_collect_stats(brec_part_hierarchy_detector_sptr hd, unsigned layer_id, unsigned class_id)
+bool brec_part_hierarchy_learner::layer_n_collect_stats(const brec_part_hierarchy_detector_sptr& hd, unsigned layer_id, unsigned class_id)
 {
   if (!layer_id) {
     std::cout << "In brec_part_hierarchy_learner::layer_n_collect_stats() -- layer_id is zero!!\n";
@@ -698,7 +698,7 @@ void brec_part_hierarchy_learner::print_layer0()
   }
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer0(std::string file_name)
+void brec_part_hierarchy_learner::print_to_m_file_layer0(const std::string& file_name)
 {
   std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
@@ -728,7 +728,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer0(std::string file_name)
   ofs.close();
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer_n(std::string file_name, unsigned class_id, bool print_set)
+void brec_part_hierarchy_learner::print_to_m_file_layer_n(const std::string& file_name, unsigned class_id, bool print_set)
 {
   std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms\n";
@@ -854,7 +854,7 @@ void brec_part_hierarchy_learner::print_to_m_file_layer_n(std::string file_name,
   ofs.close();
 }
 
-void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(std::string file_name)
+void brec_part_hierarchy_learner::print_to_m_file_layer0_fitted_dists(const std::string& file_name)
 {
   std::ofstream ofs(file_name.c_str());
   ofs << "% dump histograms of fitted distributions\n";

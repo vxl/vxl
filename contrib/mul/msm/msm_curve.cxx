@@ -10,15 +10,16 @@
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
-#include <vsl/vsl_indent.h>
-#include <vsl/vsl_binary_io.h>
-#include <vsl/vsl_vector_io.h>
+#include <cassert>
 #include <mbl/mbl_parse_block.h>
-#include <mbl/mbl_read_props.h>
 #include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_keyword_list.h>
+#include <mbl/mbl_read_props.h>
+#include <utility>
+#include <vsl/vsl_binary_io.h>
+#include <vsl/vsl_indent.h>
+#include <vsl/vsl_vector_io.h>
 #include <vul/vul_string.h>
-#include <cassert>
 
 // Default Constructor
 msm_curve::msm_curve() = default;
@@ -27,7 +28,7 @@ msm_curve::msm_curve() = default;
 msm_curve::msm_curve(unsigned lo, unsigned hi,
                      bool open, std::string name)
 {
-  set(lo,hi,open,name);
+  set(lo,hi,open,std::move(name));
 }
 
 void msm_curve::set(const std::vector<unsigned>& index,
@@ -35,7 +36,7 @@ void msm_curve::set(const std::vector<unsigned>& index,
 {
   index_ = index;
   open_=open;
-  name_=name;
+  name_=std::move(name);
 }
 
 //: Define as range of indices [lo,hi]
@@ -46,7 +47,7 @@ void msm_curve::set(unsigned lo, unsigned hi,
   index_.resize(1+hi-lo);
   for (unsigned i=lo;i<=hi;++i) index_[i-lo]=i;
   open_=open;
-  name_=name;
+  name_=std::move(name);
 }
 
 //: Return the largest index value
@@ -228,7 +229,7 @@ msm_curves::msm_curves(unsigned lo, unsigned hi,
                        bool open, std::string name)
 {
   resize(1);
-  operator[](0)=msm_curve(lo,hi,open,name);
+  operator[](0)=msm_curve(lo,hi,open,std::move(name));
 }
 
 //: Return index of first curve with given name, or -1

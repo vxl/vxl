@@ -69,9 +69,9 @@ class volm_spherical_shell_container : public vbl_ref_count
 
   std::size_t get_container_size() const { return usph_->size(); }
 
-  void draw_template(std::string vrml_file_name);
+  void draw_template(const std::string& vrml_file_name);
   //: draw each disk with a color with respect to the values, the size and order of the values should be the size and order of the cart_points
-  void draw_template(std::string vrml_file_name, std::vector<unsigned char>& values, unsigned char special);
+  void draw_template(const std::string& vrml_file_name, std::vector<unsigned char>& values, unsigned char special);
 
   //: generate panaroma image
   void panaroma_img(vil_image_view<vil_rgb<vxl_byte> >& img, std::vector<unsigned char>& values);

@@ -281,7 +281,7 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //---------------------------------------------------------------------------
   //: Is `inferior' already an inferior of `this' ?
   //---------------------------------------------------------------------------
-  bool is_inferior(vtol_topology_object_sptr inferior) const;
+  bool is_inferior(const vtol_topology_object_sptr& inferior) const;
 
   //---------------------------------------------------------------------------
   //: Is `superior' already a superior of `this' ?
@@ -325,13 +325,13 @@ class vtol_topology_object : public vsol_spatial_object_2d
   //: Link `this' with an inferior `inferior'
   //  REQUIRE: valid_inferior_type(inferior) and !is_inferior(inferior)
   //---------------------------------------------------------------------------
-  void link_inferior(vtol_topology_object_sptr inferior);
+  void link_inferior(const vtol_topology_object_sptr& inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' from the inferior `inferior'
   //  REQUIRE: valid_inferior_type(inferior) and is_inferior(inferior)
   //---------------------------------------------------------------------------
-  void unlink_inferior(vtol_topology_object_sptr inferior);
+  void unlink_inferior(const vtol_topology_object_sptr& inferior);
 
   //---------------------------------------------------------------------------
   //: Unlink `this' from all its inferiors

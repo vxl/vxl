@@ -352,7 +352,7 @@ bool bvxm_edge_ray_processor::expected_edge_image_and_heights(bvxm_image_metadat
 
 
 //: save the edge probability grid as an 8-bit 3-d vff image
-bool bvxm_edge_ray_processor::save_edges_vff(std::string filename,unsigned scale)
+bool bvxm_edge_ray_processor::save_edges_vff(const std::string& filename,unsigned scale)
 {
   // open file for binary writing
   std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
@@ -415,7 +415,7 @@ bool bvxm_edge_ray_processor::save_edges_vff(std::string filename,unsigned scale
 }
 
 //: save the edge probability grid in a ".raw" format readable by Drishti volume rendering software
-bool bvxm_edge_ray_processor::save_edges_raw(std::string filename, float n_normal, unsigned scale)
+bool bvxm_edge_ray_processor::save_edges_raw(const std::string& filename, float n_normal, unsigned scale)
 {
   std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {

@@ -13,7 +13,7 @@ icam_view_metadata::icam_view_metadata(std::string  exp_img,
 }
 
 void icam_view_metadata::create_minimizer(vil_image_view<float>*& exp_img, vil_image_view<double>*& depth_img,
-                                          vpgl_camera_double_sptr camera, icam_minimizer_params const& params,
+                                          const vpgl_camera_double_sptr& camera, icam_minimizer_params const& params,
                                           icam_minimizer*& minimizer)
 {
   vil_image_view_base_sptr exp=vil_load(exp_img_path_.c_str());
@@ -22,7 +22,7 @@ void icam_view_metadata::create_minimizer(vil_image_view<float>*& exp_img, vil_i
     auto* cam = dynamic_cast<vpgl_perspective_camera<double>*> (camera.as_pointer());
     if (cam) {
       vnl_matrix_fixed<double, 3, 3> K = cam->get_calibration().get_matrix();
-      vgl_rotation_3d<double> rot=cam->get_rotation();
+      const vgl_rotation_3d<double>& rot=cam->get_rotation();
       vgl_vector_3d<double> t=cam->get_translation();
       icam_depth_transform dt(K, *depth_img, rot, t);
       minimizer=new icam_minimizer (*exp_img, dt, params, false);
@@ -112,7 +112,7 @@ void icam_view_metadata::refine_camera(vil_image_view<float> const& source_img,
 }
 
 void icam_view_metadata::mapped_image(vil_image_view<float> const& source_img,
-                                      vpgl_camera_double_sptr camera,
+                                      const vpgl_camera_double_sptr& camera,
                                       vgl_rotation_3d<double>& rot,
                                       vgl_vector_3d<double>& trans,
                                       unsigned level,

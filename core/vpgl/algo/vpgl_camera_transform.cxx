@@ -30,7 +30,7 @@ vpgl_camera_transform_f::vpgl_camera_transform_f(unsigned cnt_residuals, unsigne
 {
 
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
     Ks_.push_back(K);
     vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
     Rs_.push_back(R);
@@ -57,7 +57,8 @@ void vpgl_camera_transform_f::f(vnl_vector<double> const& x, vnl_vector<double>&
     compute_cams_selective(x, current_cams);
 
   std::vector<vnl_matrix_fixed<double, 3, 4> > current_cam_Ms;
-  for (auto & current_cam : current_cams)
+  current_cam_Ms.reserve(current_cams.size());
+for (auto & current_cam : current_cams)
     current_cam_Ms.push_back(current_cam.get_matrix());
 
   // compute the new projections and the residuals
@@ -243,7 +244,7 @@ void vpgl_camera_transform::normalize_img_pts(const std::vector<vpgl_perspective
 
   // normalize the K matrices
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> Ki = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& Ki = input_cam.get_calibration();
 
     vnl_vector<double> K_vals(5,0.0);
     K_vals[0] = Ki.focal_length()*Ki.x_scale();
@@ -368,8 +369,8 @@ bool vpgl_camera_transform::compute_fixed_transformation_sample(const std::vecto
 
     std::vector<vpgl_perspective_camera<double> > input_cams_norm_off;
     for (auto & j : input_cams_norm) {
-      vpgl_calibration_matrix<double> K = j.get_calibration();
-      vgl_rotation_3d<double> R = j.get_rotation();
+      const vpgl_calibration_matrix<double>& K = j.get_calibration();
+      const vgl_rotation_3d<double>& R = j.get_rotation();
       vgl_point_3d<double> C = j.get_camera_center();
       vgl_point_3d<double> Cnew(C.x() + offsets[i][0], C.y() + offsets[i][1], C.z() + offsets[i][2]);
       vpgl_perspective_camera<double> cnew(K, Cnew, R);
@@ -434,7 +435,7 @@ bool vpgl_camera_transform::compute_initial_transformation(const std::vector<vpg
   //////////////////////////////////////////////////////////////////////////////////////////////
   std::vector<vnl_matrix_fixed<double, 3, 3> > input_cam_K_invs;
   for (auto & i : input_cams_norm) {
-    vpgl_calibration_matrix<double> K = i.get_calibration();
+    const vpgl_calibration_matrix<double>& K = i.get_calibration();
     vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
     vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
@@ -522,7 +523,7 @@ bool vpgl_camera_transform::compute_initial_transformation(const std::vector<vpg
 
   // denormalize and compute R and t
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
     vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
     vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
@@ -570,7 +571,7 @@ bool vpgl_camera_transform::compute_initial_transformation_t(const std::vector<v
   //////////////////////////////////////////////////////////////////////////////////////////////
   std::vector<vnl_matrix_fixed<double, 3, 3> > input_cam_K_invs;
   for (auto & i : input_cams_norm) {
-    vpgl_calibration_matrix<double> K = i.get_calibration();
+    const vpgl_calibration_matrix<double>& K = i.get_calibration();
     vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
     vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
@@ -644,8 +645,8 @@ bool vpgl_camera_transform::compute_initial_transformation_t(const std::vector<v
 
   // denormalize and compute R and t
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
-    vgl_rotation_3d<double> R = input_cam.get_rotation();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
+    const vgl_rotation_3d<double>& R = input_cam.get_rotation();
     vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
     tv[0] = t.x(); tv[1] = t.y(); tv[2] = t.z();
@@ -732,7 +733,7 @@ bool vpgl_camera_transform::compute_initial_transformation_R(const std::vector<v
   //////////////////////////////////////////////////////////////////////////////////////////////
   std::vector<vnl_matrix_fixed<double, 3, 3> > input_cam_K_invs;
   for (auto & i : input_cams_norm) {
-    vpgl_calibration_matrix<double> K = i.get_calibration();
+    const vpgl_calibration_matrix<double>& K = i.get_calibration();
     vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
     vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);
@@ -821,7 +822,7 @@ bool vpgl_camera_transform::compute_initial_transformation_R(const std::vector<v
 
   // denormalize and compute R and t
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
     vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
     vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
@@ -850,7 +851,7 @@ void vpgl_camera_transform::apply_fixed_transformation(const std::vector<vpgl_pe
                                                        std::vector<vpgl_perspective_camera<double>  >& output_cams)
 {
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
     vnl_matrix_fixed<double, 3, 3> R = input_cam.get_rotation().as_matrix();
     vgl_vector_3d<double> t = input_cam.get_translation();
     vnl_vector_fixed<double, 3> tv;
@@ -885,7 +886,7 @@ void vpgl_camera_transform::K_normalize_img_pts(const std::vector<vpgl_perspecti
   //////////////////////////////////////////////////////////////////////////////////////////////
   std::vector<vnl_matrix_fixed<double, 3, 3> > input_cam_K_invs;
   for (const auto & input_cam : input_cams) {
-    vpgl_calibration_matrix<double> K = input_cam.get_calibration();
+    const vpgl_calibration_matrix<double>& K = input_cam.get_calibration();
     vnl_matrix_fixed<double, 3, 3> Km = K.get_matrix();
     vnl_matrix_fixed<double, 3, 3> Kinv = vnl_inverse(Km);
     input_cam_K_invs.push_back(Kinv);

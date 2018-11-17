@@ -30,7 +30,7 @@
 
 
 // this method creates a regular boxm2 world, i.e. each subblock/octree is one voxel of the bvxm_world, octrees are not refined/sub-divided.
-void create_regular_world_scene_xml(boxm2_scene& new_scene, bvxm_world_params_sptr params, bvxm_voxel_world_sptr  /*world*/, int max_level)
+void create_regular_world_scene_xml(boxm2_scene& new_scene, const bvxm_world_params_sptr& params, const bvxm_voxel_world_sptr&  /*world*/, int max_level)
 {
   std::cout << "boxm2 scene directory: " << new_scene.data_path() << std::endl;
   std::cout << "setting 1 block only. number of subblocks, dimx: " << params->num_voxels().x() << " dimy: " << params->num_voxels().y() << " dimz: " << params->num_voxels().z() << std::endl;
@@ -55,7 +55,7 @@ void create_regular_world_scene_xml(boxm2_scene& new_scene, bvxm_world_params_sp
 }
 
 // this method creates a regular boxm2 world, i.e. each subblock/octree is one voxel of the bvxm_world, octrees are not refined/sub-divided.
-void initialize_regular_world_scene(boxm2_scene_sptr new_scene, boxm2_cache_sptr cache, bvxm_world_params_sptr  /*params*/, bvxm_voxel_world_sptr world)
+void initialize_regular_world_scene(boxm2_scene_sptr new_scene, const boxm2_cache_sptr& cache, const bvxm_world_params_sptr&  /*params*/, const bvxm_voxel_world_sptr& world)
 {
 
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;

@@ -45,7 +45,7 @@ bapl_bbf_box::operator= ( const bapl_bbf_box& old )
 
 //: Return the minimum square distance between \a p and any point in \a b.
 double
-bapl_bbf_dist_sq( const bapl_keypoint_sptr p, const bapl_bbf_box& b )
+bapl_bbf_dist_sq( const bapl_keypoint_sptr& p, const bapl_bbf_box& b )
 {
   double sum_sq = 0;
   unsigned int dim = p->descriptor().size();
@@ -211,7 +211,7 @@ bapl_bbf_tree::greatest_variation( const std::vector<int>& indices )
 
 //: Return an estimate of the n closest points to the query point
 void
-bapl_bbf_tree::n_nearest( const bapl_keypoint_sptr query_point,
+bapl_bbf_tree::n_nearest( const bapl_keypoint_sptr& query_point,
                           std::vector< bapl_keypoint_sptr >& closest_points,
                           int n, int max_search_nodes)
 {
@@ -221,7 +221,7 @@ bapl_bbf_tree::n_nearest( const bapl_keypoint_sptr query_point,
 
 //: Return an estimate of the n closest points to the query point
 void
-bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
+bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr& query_point,
                          std::vector< bapl_keypoint_sptr >& closest_points,
                          std::vector< int >& closest_indices,
                          int n, int max_search_nodes)
@@ -337,9 +337,9 @@ bapl_bbf_tree::n_nearest(const bapl_keypoint_sptr query_point,
 }
 
 void
-bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
+bapl_bbf_tree::update_closest( const bapl_keypoint_sptr& query_point,
                                int n,
-                               bapl_bbf_node_sptr p,
+                               const bapl_bbf_node_sptr& p,
                                std::vector< int >& closest_indices,
                                std::vector< double >& sq_distances,
                                int & num_found )
@@ -395,9 +395,9 @@ bapl_bbf_tree::update_closest( const bapl_keypoint_sptr query_point,
 //  anywhere else in the tree will can replace any of the closest
 //  points.
 bool
-bapl_bbf_tree::bounded_at_leaf( const bapl_keypoint_sptr query_point,
+bapl_bbf_tree::bounded_at_leaf( const bapl_keypoint_sptr& query_point,
                                 int n,
-                                bapl_bbf_node_sptr current,
+                                const bapl_bbf_node_sptr& current,
                                 const std::vector< double >& sq_distances,
                                 int & num_found )
 {

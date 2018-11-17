@@ -10,7 +10,7 @@
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_sun_visibilities::kernels_;
 
-void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+void boxm2_ocl_update_sun_visibilities::compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,const std::string& opts)
 {
     std::vector<std::string> src_paths;
     std::string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -43,14 +43,14 @@ void boxm2_ocl_update_sun_visibilities::compile_kernel(bocl_device_sptr device,s
     return ;
 }
 
-bool boxm2_ocl_update_sun_visibilities::update( boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_sun_visibilities::update( const boxm2_scene_sptr&         scene,
                                                 bocl_device_sptr         device,
-                                                boxm2_opencl_cache_sptr  opencl_cache,
-                                                boxm2_cache_sptr          /*cache*/,
+                                                const boxm2_opencl_cache_sptr&  opencl_cache,
+                                                const boxm2_cache_sptr&          /*cache*/,
                                                 vpgl_camera_double_sptr  sun_cam,
                                                 unsigned ni,
                                                 unsigned nj,
-                                                std::string               prefix_name
+                                                const std::string&               prefix_name
                                               )
 {
   float transfer_time=0.0f;

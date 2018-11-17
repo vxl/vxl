@@ -65,7 +65,7 @@ bool betr_edgel_factory::add_region_from_origin_and_size(std::string const& inam
   regions_[iname][region_name] = n;
   return true;
 }
-bool betr_edgel_factory::process(std::string iname, std::string region_name){
+bool betr_edgel_factory::process(const std::string& iname, const std::string& region_name){
   vil_image_resource_sptr imgr = images_[iname];
   if(!imgr){
     std::cout << "image " << iname << " not found in map \n";
@@ -157,7 +157,7 @@ bool betr_edgel_factory::process(std::string iname, std::string region_name){
   grad_hists_[iname][region_name] = h;
   return true;
 }
-bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, std::vector<double>& mags){
+bool betr_edgel_factory::grad_mags(const std::string& iname, const std::string& region_name, std::vector<double>& mags){
   std::vector< vdgl_digital_curve_sptr >  vd_edges = edgels_[iname][region_name];
   if(!vd_edges.size()){
     std::cout << "no edgels for the specified region " << iname << ':' << region_name << '\n';
@@ -178,7 +178,7 @@ bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, s
   }
   return true;
 }
-bool betr_edgel_factory::grad_mags(std::string iname, std::string region_name, vsol_polygon_2d_sptr const& poly,
+bool betr_edgel_factory::grad_mags(const std::string& iname, const std::string& region_name, vsol_polygon_2d_sptr const& poly,
                                    std::vector<double>& mags){
   vgl_polygon<double>  vpoly = bsol_algs::vgl_from_poly(poly); // THIS IS WHERE YOU CAN CHECK IF IT IS INSIDE POLY
   brip_roi_sptr broi = rois_[iname];
@@ -285,7 +285,7 @@ bool betr_edgel_factory::save_edgels_in_poly(std::string const& identifier, std:
 
 }
 vil_image_resource_sptr betr_edgel_factory::
-edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsigned& j_offset){
+edgel_image(const std::string& iname, const std::string& region_name, unsigned& i_offset, unsigned& j_offset){
   brip_roi_sptr roi = rois_[iname];
   if(!roi){
     std::cout << "roi for " << iname << " not found in map \n";

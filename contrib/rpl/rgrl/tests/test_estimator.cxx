@@ -1597,7 +1597,7 @@ namespace {
     }
   }
 
-  void test_homography2d_lm(rgrl_estimator_sptr estimator)
+  void test_homography2d_lm(const rgrl_estimator_sptr& estimator)
   {
     vnl_double_3x3 H(0.0), est_H(0.0);
     vnl_matrix<double> cofact;
@@ -1784,7 +1784,7 @@ namespace {
   }
 
   void
-  test_homography2d_points_on_circle(rgrl_estimator_sptr estimator)
+  test_homography2d_points_on_circle(const rgrl_estimator_sptr& estimator)
   {
     vnl_double_3x3 H;
     H.set_identity();
@@ -1860,7 +1860,7 @@ namespace {
   }
 
   void
-  test_homo2d_rad_points_on_circle(rgrl_estimator_sptr estimator,
+  test_homo2d_rad_points_on_circle(const rgrl_estimator_sptr& estimator,
                                    vnl_double_2 const& camera_centre)
   {
     vnl_double_3x3 H;
@@ -1953,7 +1953,7 @@ namespace {
   }
 
   void
-  test_homography2d_points_on_circle_w_noise( rgrl_estimator_sptr estimator,
+  test_homography2d_points_on_circle_w_noise( const rgrl_estimator_sptr& estimator,
                                               double noise_level,
                                               double tol_xform,
                                               double tol_trans_error )

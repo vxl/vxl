@@ -31,7 +31,7 @@ void max_int(vxl_uint_32& a, vxl_uint_32 const& b) { if (a<b) a = b; }
 void max_float(float& a, float const& b) { if (a<b) a = b; }
 void max_double(double& a, double const& b) { if (a<b) a = b; }
 
-void vepl_dyadic_sum(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
+void vepl_dyadic_sum(const vil_image_resource_sptr& im_out, const vil_image_resource_sptr& image)
 {
   // byte greyscale
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
@@ -98,7 +98,7 @@ void vepl_dyadic_sum(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
     std::cerr << __FILE__ ": vepl_dyadic_sum() not implemented for " << image << '\n';
 }
 
-void vepl_dyadic_dif(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
+void vepl_dyadic_dif(const vil_image_resource_sptr& im_out, const vil_image_resource_sptr& image)
 {
   // byte greyscale
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
@@ -165,7 +165,7 @@ void vepl_dyadic_dif(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
     std::cerr << __FILE__ ": vepl_dyadic_dif() not implemented for " << image << '\n';
 }
 
-void vepl_dyadic_min(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
+void vepl_dyadic_min(const vil_image_resource_sptr& im_out, const vil_image_resource_sptr& image)
 {
   // byte greyscale
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {
@@ -222,7 +222,7 @@ void vepl_dyadic_min(vil_image_resource_sptr im_out, vil_image_resource_sptr ima
     std::cerr << __FILE__ ": vepl_dyadic_min() not implemented for " << image << '\n';
 }
 
-void vepl_dyadic_max(vil_image_resource_sptr im_out, vil_image_resource_sptr image)
+void vepl_dyadic_max(const vil_image_resource_sptr& im_out, const vil_image_resource_sptr& image)
 {
   // byte greyscale
   if (image->pixel_format() == VIL_PIXEL_FORMAT_BYTE) {

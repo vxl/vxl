@@ -1171,7 +1171,7 @@ bool t1_encode_cblks(
                                                                         datap[(j * cblk_w) + i] =
                                                                                 fix_mul(
                                                                                 tmp,
-                                                                                8192 * 8192 / ((OPJ_INT32) floor(band->stepsize * 8192))) >> (11 - T1_NMSEDEC_FRACBITS);
+                                                                                8192 * 8192 / ((OPJ_INT32) floorf(band->stepsize * 8192))) >> (11 - T1_NMSEDEC_FRACBITS);
                                                                 }
                                                         }
                                                 }

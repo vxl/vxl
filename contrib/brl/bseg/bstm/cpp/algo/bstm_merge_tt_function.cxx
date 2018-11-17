@@ -170,7 +170,7 @@ bool bstm_merge_tt_function::merge(std::vector<bstm_data_base*>&  /*datas*/)
   return true;
 }
 
-void bstm_merge_tt_function::move_data(bstm_time_tree old_tree, bstm_time_tree merged_tree,  int depth, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
+void bstm_merge_tt_function::move_data(const bstm_time_tree& old_tree, const bstm_time_tree& merged_tree,  int depth, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
                                             bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype* mog_cpy, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype* numobs_cpy)
 {
   std::vector<int> merged_tree_leaves = merged_tree.get_leaf_bits();

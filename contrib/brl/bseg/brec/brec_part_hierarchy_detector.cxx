@@ -36,7 +36,7 @@ brec_part_hierarchy_detector::~brec_part_hierarchy_detector()
   map_instance_.clear();
 }
 
-bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
+bool brec_part_hierarchy_detector::detect(const vil_image_resource_sptr& img)
 {
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
@@ -90,7 +90,7 @@ bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img)
 }
 
 //: extracts instances of each layer in the given image, by rotating the detector with the given amount
-bool brec_part_hierarchy_detector::detect(vil_image_resource_sptr img, float angle)
+bool brec_part_hierarchy_detector::detect(const vil_image_resource_sptr& img, float angle)
 {
   // start from the primitives
   std::vector<brec_part_instance_sptr> dumm_ins = h_->get_dummy_primitive_instances();
@@ -251,8 +251,8 @@ bool brec_part_hierarchy_detector::detect(vil_image_view<float>& img, vil_image_
 
 // check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
 brec_part_instance_sptr
-brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
-                                     brec_part_instance_sptr central_p, unsigned /*ni*/, unsigned /*nj*/, // FIXME - ni and nj unused
+brec_part_hierarchy_detector::exists(const brec_part_base_sptr& upper_p,
+                                     const brec_part_instance_sptr& central_p, unsigned /*ni*/, unsigned /*nj*/, // FIXME - ni and nj unused
                                      Rtree_type* lower_rtree,
                                      float det_threshold)
 {
@@ -317,8 +317,8 @@ brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
 //: check for existence of \p upper_p with \p central_p as its central part and map will tell if all the other parts exist
 //  No thresholding, \return a probabilistic score
 brec_part_instance_sptr
-brec_part_hierarchy_detector::exists(brec_part_base_sptr upper_p,
-                                     brec_part_instance_sptr central_p,
+brec_part_hierarchy_detector::exists(const brec_part_base_sptr& upper_p,
+                                     const brec_part_instance_sptr& central_p,
                                      Rtree_type* lower_rtree)
 {
   // first check if types and layers of central_p instance matches with upper_p's info
@@ -379,7 +379,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
                                                        std::vector<brec_part_instance_sptr>& extracted_upper_parts)
 {
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
-  for (auto p : extracted_parts) {
+  for (const auto& p : extracted_parts) {
     // find this type in the primitive layer of the hierarchy
     brec_part_base_sptr hp = h_->get_node(p->layer_, p->type_);
     if (!hp)
@@ -405,8 +405,8 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
 //: check for existence of \p upper_p with \p central_p as its central part and map will tell if all the other parts exist
 //  No thresholding, \return a probabilistic score
 brec_part_instance_sptr
-brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
-                                                  brec_part_instance_sptr central_p,
+brec_part_hierarchy_detector::exists_for_training(const brec_part_base_sptr& upper_p,
+                                                  const brec_part_instance_sptr& central_p,
                                                   Rtree_type* lower_rtree)
 {
   // first check if types and layers of central_p instance matches with upper_p's info
@@ -463,8 +463,8 @@ brec_part_hierarchy_detector::exists_for_training(brec_part_base_sptr upper_p,
 //: check for existence of \p upper_p with \p central_p as its central part and map will tell if all the other parts exist
 //  No thresholding, \return a probabilistic score
 brec_part_instance_sptr
-brec_part_hierarchy_detector::exists_using_hierarchies(brec_part_base_sptr upper_p,
-                                                       brec_part_instance_sptr central_p,
+brec_part_hierarchy_detector::exists_using_hierarchies(const brec_part_base_sptr& upper_p,
+                                                       const brec_part_instance_sptr& central_p,
                                                        Rtree_type* lower_rtree, double radius)
 {
   // first check if types and layers of central_p instance matches with upper_p's info
@@ -581,7 +581,7 @@ void brec_part_hierarchy_detector::extract_upper_layer(std::vector<brec_part_ins
                                                        std::vector<brec_part_instance_sptr>& extracted_upper_parts, unsigned rho_calculation_method, double radius)
 {
   // for each detected part, check for the existence of each upper layer part that uses it as a central part
-  for (auto p : extracted_parts) {
+  for (const auto& p : extracted_parts) {
     // find this type
     brec_part_base_sptr hp = h_->get_node(p->layer_, p->type_);
     if (!hp)

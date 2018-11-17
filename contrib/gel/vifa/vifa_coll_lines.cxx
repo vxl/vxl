@@ -12,7 +12,7 @@
 // Static initialization
 int  vifa_coll_lines::serial_num_ = 0;
 
-vifa_coll_lines::vifa_coll_lines(vtol_edge_2d_sptr  e,
+vifa_coll_lines::vifa_coll_lines(const vtol_edge_2d_sptr&  e,
                                  double             cutoff_angle_deg,
                                  double             endpt_distance,
                                  bool               discard_flag)
@@ -72,7 +72,7 @@ face_list* vifa_coll_lines::get_contributor_faces(void)
   {
     face_list faces; contributor->faces(faces);
 
-    for (auto nbr_face : faces)
+    for (const auto& nbr_face : faces)
     {
       bool      add_me = true;
 
@@ -132,7 +132,7 @@ void vifa_coll_lines::lms_fit(const std::vector<double>&  x,
   B = -1;
 }
 
-void vifa_coll_lines::add_and_update(vtol_edge_2d_sptr  e)
+void vifa_coll_lines::add_and_update(const vtol_edge_2d_sptr&  e)
 {
   contributors_.push_back(e);
   this->fit_line();

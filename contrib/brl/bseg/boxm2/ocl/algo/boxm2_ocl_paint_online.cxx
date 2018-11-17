@@ -31,11 +31,11 @@
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_paint_online::kernels_;
 
 //paint block
-bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
-                                         bocl_device_sptr          device,
-                                         boxm2_opencl_cache_sptr    opencl_cache,
-                                         vil_image_view_base_sptr   img,
-                                         vpgl_camera_double_sptr    cam,
+bool boxm2_ocl_paint_online::paint_scene(const boxm2_scene_sptr&          scene,
+                                         const bocl_device_sptr&          device,
+                                         const boxm2_opencl_cache_sptr&    opencl_cache,
+                                         const vil_image_view_base_sptr&   img,
+                                         const vpgl_camera_double_sptr&    cam,
                                          std::string const& apm_id)
 {
   vil_image_view<float> weights(img->ni(), img->nj());
@@ -43,10 +43,10 @@ bool boxm2_ocl_paint_online::paint_scene(boxm2_scene_sptr          scene,
   return paint_scene_with_weights(scene, device, opencl_cache, img, weights, cam, apm_id);
 }
 
-bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          scene,
+bool boxm2_ocl_paint_online::paint_scene_with_weights(const boxm2_scene_sptr&          scene,
                                                       bocl_device_sptr          device,
-                                                      boxm2_opencl_cache_sptr    opencl_cache,
-                                                      vil_image_view_base_sptr   img,
+                                                      const boxm2_opencl_cache_sptr&    opencl_cache,
+                                                      const vil_image_view_base_sptr&   img,
                                                       vil_image_view<float> const& weights,
                                                       vpgl_camera_double_sptr    cam,
                                                       std::string const& apm_id)
@@ -295,8 +295,8 @@ bool boxm2_ocl_paint_online::paint_scene_with_weights(boxm2_scene_sptr          
 
 
 //: Keeps track of already compiled kernels, and returns matching ones
-std::vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( bocl_device_sptr device,
-                                                                    std::string opts )
+std::vector< bocl_kernel* > boxm2_ocl_paint_online::compile_kernels( const bocl_device_sptr& device,
+                                                                    const std::string& opts )
 {
   //make id out of device
   std::string identifier = device->device_identifier();

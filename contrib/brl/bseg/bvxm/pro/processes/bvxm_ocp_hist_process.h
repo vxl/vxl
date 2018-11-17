@@ -32,7 +32,7 @@ namespace bvxm_ocp_hist_process_globals
   constexpr unsigned n_outputs_ = 0;
 
   // functions
-  bool compute(bvxm_voxel_world_sptr w, unsigned scale, std::string path);
+  bool compute(const bvxm_voxel_world_sptr& w, unsigned scale, const std::string& path);
 }
 
 //: set input and output types

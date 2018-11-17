@@ -64,43 +64,43 @@ class volm_geo_index
   static volm_geo_index_node_sptr construct_tree(volm_tile t, float min_size, vgl_polygon<double> const& poly);
 
   //: prune the children which do not intersect the poly
-  static bool prune_tree(volm_geo_index_node_sptr root, vgl_polygon<float> const& poly);
-  static bool prune_tree(volm_geo_index_node_sptr root, vgl_polygon<double> const& poly);
+  static bool prune_tree(const volm_geo_index_node_sptr& root, vgl_polygon<float> const& poly);
+  static bool prune_tree(const volm_geo_index_node_sptr& root, vgl_polygon<double> const& poly);
   //: prune nodes whose bbox is not in the utm_zone
-  static bool prune_by_zone(volm_geo_index_node_sptr root, unsigned utm_zone);
+  static bool prune_by_zone(const volm_geo_index_node_sptr& root, unsigned utm_zone);
 
   //: depth at leaf level is 0
-  static unsigned depth(volm_geo_index_node_sptr node);
+  static unsigned depth(const volm_geo_index_node_sptr& node);
 
   //: write the bboxes of the nodes at the given depth to kml file
-  static void write_to_kml(volm_geo_index_node_sptr root, unsigned depth, std::string const& file_name);
-  static void write_to_kml_node(std::ofstream& ofs, volm_geo_index_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation = "location");
+  static void write_to_kml(const volm_geo_index_node_sptr& root, unsigned depth, std::string const& file_name);
+  static void write_to_kml_node(std::ofstream& ofs, const volm_geo_index_node_sptr& n, unsigned current_depth, unsigned depth, std::string explanation = "location");
 
   //: write index quadtree in a text file, only the tree structure and not the leaf data
-  static void write(volm_geo_index_node_sptr root, std::string const& file_name, float min_size);
+  static void write(const volm_geo_index_node_sptr& root, std::string const& file_name, float min_size);
 
   //: even if a child has zero pointer, it's order in the children_ array is the same, this is to make sure that the children have consistent geographic meaning
   static volm_geo_index_node_sptr read_and_construct(std::string const& file_name, float& min_size);
 
-  static void get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves);
+  static void get_leaves(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves);
 
   //: return all the leaves that intersect a given rectangular area
-  static void get_leaves(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area);
+  static void get_leaves(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves, vgl_box_2d<double>& area);
 
-  static void get_leaves_with_hyps(volm_geo_index_node_sptr root, std::vector<volm_geo_index_node_sptr>& leaves);
+  static void get_leaves_with_hyps(const volm_geo_index_node_sptr& root, std::vector<volm_geo_index_node_sptr>& leaves);
   //: write the geo index hyps
-  static void write_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre);
-  static void read_hyps(volm_geo_index_node_sptr root, std::string const& file_name_pre);
+  static void write_hyps(const volm_geo_index_node_sptr& root, std::string const& file_name_pre);
+  static void read_hyps(const volm_geo_index_node_sptr& root, std::string const& file_name_pre);
 
-  static unsigned hypo_size(volm_geo_index_node_sptr root);
+  static unsigned hypo_size(const volm_geo_index_node_sptr& root);
 
-  static bool add_hypothesis(volm_geo_index_node_sptr root, double lon, double lat, double elev);
+  static bool add_hypothesis(const volm_geo_index_node_sptr& root, double lon, double lat, double elev);
 
   //: return the leaf and the hyp id of the closest hyp to the given location
-  static volm_geo_index_node_sptr get_closest(volm_geo_index_node_sptr root, double lat, double lon, unsigned& hyp_id);
+  static volm_geo_index_node_sptr get_closest(const volm_geo_index_node_sptr& root, double lat, double lon, unsigned& hyp_id);
 
   //: return true if a hyp exists within the given radius to the given point
-  static bool exists(volm_geo_index_node_sptr root, double lat, double lon, double inc_in_sec_rad);
+  static bool exists(const volm_geo_index_node_sptr& root, double lat, double lon, double inc_in_sec_rad);
 };
 
 #endif // volm_geo_index_h_

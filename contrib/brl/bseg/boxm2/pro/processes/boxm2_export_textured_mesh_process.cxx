@@ -1,7 +1,8 @@
 // This is brl/bseg/boxm2/pro/processes/boxm2_export_textured_mesh_process.cxx
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief  A process for exporting a texture mapped mesh of a scene
@@ -255,8 +256,8 @@ void boxm2_export_textured_mesh_process_globals::boxm2_texture_mesh_from_imgs(st
   // BEGIN TEXTURE MAPPING
   // Gather cameras and iamges that will contribute to the texture
   ////////////////////////////////////////////////////////////////////////////////
-  std::vector<std::string> camfiles = boxm2_util::camfiles_from_directory(cam_dir);
-  std::vector<std::string> imfiles = boxm2_util::images_from_directory(im_dir);
+  std::vector<std::string> camfiles = boxm2_util::camfiles_from_directory(std::move(cam_dir));
+  std::vector<std::string> imfiles = boxm2_util::images_from_directory(std::move(im_dir));
 
   std::vector<vpgl_perspective_camera<double>* > cameras;
   for (auto & camfile : camfiles) {

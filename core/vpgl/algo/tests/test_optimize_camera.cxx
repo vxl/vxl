@@ -34,8 +34,8 @@ void test_opt_orient_pos(vpgl_perspective_camera<double> const& cam,
            << "Initial principal ray:" << cam.principal_axis() << std::endl;
 
   vgl_point_3d<double> c = cam.get_camera_center();
-  vpgl_calibration_matrix<double> K = cam.get_calibration();
-  vgl_rotation_3d<double> R = cam.get_rotation();
+  const vpgl_calibration_matrix<double>& K = cam.get_calibration();
+  const vgl_rotation_3d<double>& R = cam.get_rotation();
 
   vgl_point_3d<double> new_center = c + max_t_err*dc;
   std::cout << "new center = " << new_center << std::endl;
@@ -78,8 +78,8 @@ void test_opt_orient_pos_f(vpgl_perspective_camera<double> const& cam,
            << "Initial focal length:" << cam.get_calibration().focal_length() << std::endl;
 
   vgl_point_3d<double> c = cam.get_camera_center();
-  vpgl_calibration_matrix<double> K = cam.get_calibration();
-  vgl_rotation_3d<double> R = cam.get_rotation();
+  const vpgl_calibration_matrix<double>& K = cam.get_calibration();
+  const vgl_rotation_3d<double>& R = cam.get_rotation();
 
   vgl_point_3d<double> new_center = c + max_t_err*dc;
   std::cout << "new center = " << new_center << std::endl;

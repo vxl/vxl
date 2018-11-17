@@ -62,7 +62,7 @@ write_intensity_regions_3d(std::ofstream& str,
 {
   for (const auto & face : faces)
   {
-    vtol_intensity_face_sptr f = face;
+    const vtol_intensity_face_sptr& f = face;
     if (f->area()==0) continue;
     //average region height
     double z0 = f->Io();
@@ -96,7 +96,7 @@ void sdet_vrml_display::
 write_vsol_polys_3d(std::ofstream& str,
                     std::vector<vsol_polygon_3d_sptr> const& polys)
 {
-  for (auto poly : polys)
+  for (const auto& poly : polys)
   {
     unsigned n = poly->size();
     if (!n)

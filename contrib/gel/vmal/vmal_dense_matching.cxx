@@ -38,8 +38,8 @@ void vmal_dense_matching::set_hmatrix(const vnl_double_3x3 & H)
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
 // using the fundamental constraint.
-void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mvd_edge,
-                                               vmal_multi_view_data_edge_sptr res)
+void vmal_dense_matching::refine_lines_using_F(const vmal_multi_view_data_edge_sptr& mvd_edge,
+                                               const vmal_multi_view_data_edge_sptr& res)
 {
   // We assume that the lines have been sorted. It means that, for example, the
   // first end-point of the first segment correspond to the first end-point of
@@ -128,8 +128,8 @@ void vmal_dense_matching::refine_lines_using_F(vmal_multi_view_data_edge_sptr mv
 
 // Between two set of lines in 2 images that are matched, it compute the best lines
 // using the homography
-void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mvd_edge,
-                                               vmal_multi_view_data_edge_sptr res)
+void vmal_dense_matching::refine_lines_using_H(const vmal_multi_view_data_edge_sptr& mvd_edge,
+                                               const vmal_multi_view_data_edge_sptr& res)
 {
   //the second segment.
   if (type_==2)
@@ -211,7 +211,7 @@ void vmal_dense_matching::refine_lines_using_H(vmal_multi_view_data_edge_sptr mv
 }
 
 
-void vmal_dense_matching::disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
+void vmal_dense_matching::disparity_map(const vmal_multi_view_data_edge_sptr& mvd_edge,
                                         int h,int w)
 {
   vnl_double_3* lines0_p;

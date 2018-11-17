@@ -36,13 +36,13 @@
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_max_vis::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
+bool boxm2_ocl_update_max_vis::update_max_vis(const boxm2_scene_sptr& scene,
                                       bocl_device_sptr         device,
-                                      boxm2_opencl_cache_sptr  opencl_cache,
+                                      const boxm2_opencl_cache_sptr&  opencl_cache,
                                       vpgl_camera_double_sptr  cam,
                                       unsigned int ni,
                                       unsigned int nj,
-                                      vil_image_view_base_sptr mask_sptr,
+                                      const vil_image_view_base_sptr& mask_sptr,
                                       float resnearfactor,
                                       float resfarfactor)
 {
@@ -339,7 +339,7 @@ bool boxm2_ocl_update_max_vis::update_max_vis(boxm2_scene_sptr scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -364,7 +364,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_spt
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  const std::string& options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
@@ -392,13 +392,13 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_max_vis::get_kernels(bocl_device_spt
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_cosine_angle::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
+bool boxm2_ocl_update_cosine_angle::update_cosine_angle(const boxm2_scene_sptr& scene,
                                                         bocl_device_sptr         device,
-                                                        boxm2_opencl_cache_sptr  opencl_cache,
+                                                        const boxm2_opencl_cache_sptr&  opencl_cache,
                                                         vpgl_camera_double_sptr  cam,
                                                         unsigned int ni,
                                                         unsigned int nj,
-                                                        vil_image_view_base_sptr mask_sptr,
+                                                        const vil_image_view_base_sptr& mask_sptr,
                                                         float resnearfactor,
                                                         float resfarfactor)
 {
@@ -712,7 +712,7 @@ bool boxm2_ocl_update_cosine_angle::update_cosine_angle(boxm2_scene_sptr scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -736,7 +736,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_devic
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  const std::string& options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
@@ -762,9 +762,9 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_cosine_angle::get_kernels(bocl_devic
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_surface_density::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr scene,
+bool boxm2_ocl_update_surface_density::update_surface_density(const boxm2_scene_sptr& scene,
                                                         bocl_device_sptr         device,
-                                                        boxm2_opencl_cache_sptr  opencl_cache,
+                                                        const boxm2_opencl_cache_sptr&  opencl_cache,
                                                         vpgl_camera_double_sptr  cam,
                                                         unsigned int ni,
                                                         unsigned int nj,
@@ -1057,7 +1057,7 @@ bool boxm2_ocl_update_surface_density::update_surface_density(boxm2_scene_sptr s
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -1081,7 +1081,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_surface_density::get_kernels(bocl_de
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  const std::string& options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;

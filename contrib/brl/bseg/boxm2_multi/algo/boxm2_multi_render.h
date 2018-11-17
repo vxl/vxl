@@ -30,16 +30,16 @@ class boxm2_multi_render
     std::map<std::string,std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts);
 
     //: pick out data type
-    bool get_scene_appearances(boxm2_scene_sptr    scene,
+    bool get_scene_appearances(const boxm2_scene_sptr&    scene,
                                std::string&         data_type,
                                std::string&         options,
                                int&                apptypesize);
 
     //: renders single image
-    float render_scene( boxm2_scene_sptr scene,
+    float render_scene( const boxm2_scene_sptr& scene,
                         bocl_device_sptr device,
                         boxm2_opencl_cache1* opencl_cache,
                         cl_command_queue & queue,
@@ -47,7 +47,7 @@ class boxm2_multi_render
                         bocl_mem_sptr & exp_image,
                         bocl_mem_sptr & vis_image,
                         bocl_mem_sptr & exp_img_dim,
-                        std::string data_type,
+                        const std::string& data_type,
                         bocl_kernel* kernel,
                         std::size_t * lthreads,
                         unsigned cl_ni,
@@ -56,7 +56,7 @@ class boxm2_multi_render
 
     //:calls render block code
     float render_block( boxm2_scene_sptr& scene,
-                        boxm2_block_id id,
+                        const boxm2_block_id& id,
                         boxm2_opencl_cache1* opencl_cache,
                         cl_command_queue& queue,
                         bocl_mem_sptr & ray_o_buff,

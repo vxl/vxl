@@ -1,4 +1,5 @@
 #include <sstream>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -30,7 +31,7 @@
 #include <bil/bil_convert_to_grey.h>
 unsigned betr_event_trigger::process_counter_ = 0;
 
-void betr_event_trigger::set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask, bool keep_data){
+void betr_event_trigger::set_ref_image(const vil_image_resource_sptr& ref_imgr, bool apply_mask, bool keep_data){
   vil_image_resource_sptr temp;
   bil_convert_resource_to_grey cnv;
   cnv(ref_imgr, temp, apply_mask);
@@ -48,7 +49,7 @@ void betr_event_trigger::set_ref_images(std::vector<vil_image_resource_sptr> con
     ref_rescs_.push_back(temp);
   }
 }
-void betr_event_trigger::set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask){
+void betr_event_trigger::set_evt_image(const vil_image_resource_sptr& evt_imgr, bool apply_mask){
   bil_convert_resource_to_grey cnv;
   cnv(evt_imgr, evt_imgr_, apply_mask);
 }
@@ -239,7 +240,7 @@ void betr_event_trigger::add_geo_object(std::string const& obj_name, betr_geo_ob
     evt_trigger_objects_[obj_name] = geo_object;
   local_trans_[obj_name]=transl;
 }
-bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly_2d){
+bool betr_event_trigger::project_object(const vpgl_camera_double_sptr& cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly_2d){
   // determine if object is a reference or event object
   std::map<std::string, betr_geo_object_3d_sptr>::iterator oit;
   bool is_ref_obj = false;
@@ -310,7 +311,7 @@ bool betr_event_trigger::project_object(vpgl_camera_double_sptr cam, std::string
  return false;
 }
 vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr const& camera,
-                                                       vsol_polygon_3d_sptr poly_3d,
+                                                       const vsol_polygon_3d_sptr& poly_3d,
                                                        vgl_vector_3d<double> const& transl){
  std::vector<vsol_point_2d_sptr> vertices;
   for (unsigned i=0; i<poly_3d->size(); i++) {
@@ -332,7 +333,7 @@ vsol_polygon_2d_sptr  betr_event_trigger::project_poly(vpgl_camera_double_sptr c
 
 bool betr_event_trigger::process(std::string alg_name, double& prob_change,std::string const& params_json){
   std::vector<double> scores;
-  bool good = this->process(alg_name, scores, params_json);
+  bool good = this->process(std::move(alg_name), scores, params_json);
   if(good&&scores.size()>=1){
     prob_change = scores[0];
     return good;
@@ -343,7 +344,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change,std::
 bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,std::string const& params_json){
   std::vector<vil_image_resource_sptr> rescs;
   std::vector<vgl_point_2d<unsigned> > offsets;
-  bool good = this->process(alg_name, prob_change, rescs, offsets, params_json);
+  bool good = this->process(std::move(alg_name), prob_change, rescs, offsets, params_json);
   return good;
 }
 bool betr_event_trigger::process(std::string alg_name, double& prob_change,
@@ -352,7 +353,7 @@ bool betr_event_trigger::process(std::string alg_name, double& prob_change,
   std::vector<double> scores;
   std::vector<vil_image_resource_sptr> rescs;
   std::vector<vgl_point_2d<unsigned> > offsets;
-  bool good = this->process(alg_name, scores, rescs, offsets, params_json);
+  bool good = this->process(std::move(alg_name), scores, rescs, offsets, params_json);
   if(good&&scores.size()>=1){
     prob_change = scores[0];
     change_img = rescs[0];
@@ -366,10 +367,10 @@ bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob
                                  std::vector<vil_image_resource_sptr>& change_images,
                                  std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){
   std::vector<std::string> event_region_names;
-  return process(alg_name, prob_change, event_region_names, change_images, offsets, params_json);
+  return process(std::move(alg_name), prob_change, event_region_names, change_images, offsets, params_json);
 }
 
-bool betr_event_trigger::process(std::string alg_name, std::vector<double>& prob_change,
+bool betr_event_trigger::process(const std::string& alg_name, std::vector<double>& prob_change,
                                  std::vector<std::string>& event_region_names,
                                  std::vector<vil_image_resource_sptr>& change_images,
                                  std::vector<vgl_point_2d<unsigned> >& offsets, std::string const& params_json){

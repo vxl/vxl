@@ -33,14 +33,14 @@ bool near_eq_pt(vgl_point_2d<double> a, vgl_point_2d<double> b)
 }
 
 
-void volm_img_info::save_box_kml(std::string out_name) {
+void volm_img_info::save_box_kml(const std::string& out_name) {
     std::ofstream ofs(out_name.c_str());
     bkml_write::open_document(ofs);
     bkml_write::write_box(ofs, name, "", bbox);
     bkml_write::close_document(ofs);
   }
 
-bool read_box(std::string bbox_file, vgl_box_2d<double>& bbox) {
+bool read_box(const std::string& bbox_file, vgl_box_2d<double>& bbox) {
   char buffer[1000];
   std::ifstream ifs(bbox_file.c_str());
   if (!ifs.is_open()) {
@@ -133,7 +133,7 @@ bool volm_io_tools::load_naip_imgs(std::string const& img_folder, std::vector<vo
   return true;
 }
 
-int volm_io_tools::load_lidar_img(std::string img_file, volm_img_info& info, bool load_image_resource,
+int volm_io_tools::load_lidar_img(const std::string& img_file, volm_img_info& info, bool load_image_resource,
                                   bool is_cam_global,
                                   bool load_cam_from_tfw, std::string const& cam_tfw_file)
 {
@@ -177,12 +177,12 @@ int volm_io_tools::load_lidar_img(std::string img_file, volm_img_info& info, boo
 
   std::string n_coords = name.substr(0, name.find_first_of('_'));
   std::string hemisphere, direction;
-  std::size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
   else
     hemisphere = "S";
-  n = n_coords.find("E");
+  n = n_coords.find('E');
   if (n < n_coords.size())
     direction = "E";
   else
@@ -303,7 +303,8 @@ bool volm_io_tools::expend_line(std::vector<vgl_point_2d<double> > line, double 
     }
   }
   // rearrange the point list
-  for (auto i : pts_u)
+  sheet.reserve(pts_u.size());
+for (auto i : pts_u)
     sheet.push_back(i);
   for (int i = pts_d.size()-1; i >=0; i--)
     sheet.push_back(pts_d[i]);
@@ -316,7 +317,7 @@ bool volm_io_tools::expend_line(std::vector<vgl_point_2d<double> > line, double 
 #include <volm/volm_osm_objects.h>
 
 // a method to read the binary osm object file and also contstruct the volm_geo_index2, the method returns the root of the tree
-volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(std::string geoindex_filename_pre, std::string osm_bin_filename, volm_osm_objects& osm_objs, double& min_size)
+volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(const std::string& geoindex_filename_pre, const std::string& osm_bin_filename, volm_osm_objects& osm_objs, double& min_size)
 {
   std::string filename = geoindex_filename_pre + ".txt";
   volm_geo_index2_node_sptr root = volm_geo_index2::read_and_construct<volm_osm_object_ids_sptr>(filename, min_size);
@@ -363,7 +364,7 @@ volm_geo_index2_node_sptr volm_io_tools::read_osm_data_and_tree(std::string geoi
 
 //: load a geotiff file with .tif file and read its ortho camera info from its header, puts a dummy lvcs to vpgl_geo_cam object so lvcs is not valid
 //  even though it reads the camera from filename with N/S and W/E distinction, it constructs a camera in global WGS84 coordinates, so the global coordinates should be used to fetch pixels, (i.e. no need to make them always positive)
-void volm_io_tools::load_geotiff_image(std::string filename, volm_img_info& info, bool load_cam_from_name)
+void volm_io_tools::load_geotiff_image(const std::string& filename, volm_img_info& info, bool load_cam_from_name)
 {
   info.img_name = filename;
   info.name = vul_file::strip_directory(info.img_name);

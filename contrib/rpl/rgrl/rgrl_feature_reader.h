@@ -48,7 +48,7 @@ class rgrl_feature_reader
 
   //: add a feature candidate
   static
-  void add_feature( rgrl_feature_sptr feat );
+  void add_feature( const rgrl_feature_sptr& feat );
 
  protected:
   static std::vector< rgrl_feature_sptr >   feature_candidates_;

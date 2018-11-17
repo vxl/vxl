@@ -25,7 +25,7 @@ class sdet_symbolic_edge_linker : public sdet_symbolic_edge_linker_params
   sdet_symbolic_edge_linker(sdet_symbolic_edge_linker_params const& params)
     : sdet_symbolic_edge_linker_params(params) {}
 
-  void apply(sdet_edgemap_sptr edgemap);
+  void apply(const sdet_edgemap_sptr& edgemap);
 
   sdet_curvelet_map const & curvelet_map() { return CM; }
   sdet_edgel_link_graph const & edgel_link_graph() { return ELG; }

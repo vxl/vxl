@@ -1,7 +1,8 @@
-#include <iostream>
-#include <algorithm>
 #include "boxm2_ocl_render_expected_shadow_map.h"
+#include <algorithm>
 #include <boxm2/ocl/boxm2_ocl_util.h>
+#include <iostream>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -59,7 +60,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
   // run expected image function
   render_expected_shadow_map(scene, device, opencl_cache, queue,
                              cam, exp_image, vis_image, exp_img_dim,
-                             ident, kernels_[identifier][0], lthreads, cl_ni, cl_nj);
+                             std::move(ident), kernels_[identifier][0], lthreads, cl_ni, cl_nj);
 
   // normalize
   //{
@@ -96,7 +97,7 @@ bool boxm2_ocl_render_expected_shadow_map::render(bocl_device_sptr device,
 }
 
 
-void boxm2_ocl_render_expected_shadow_map::compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
+void boxm2_ocl_render_expected_shadow_map::compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, const std::string& opts)
 {
   //gather all render sources... seems like a lot for rendering...
   std::vector<std::string> src_paths;

@@ -11,7 +11,7 @@
 boxm2_ocl_hierarchical_reg::boxm2_ocl_hierarchical_reg( boxm2_opencl_cache_sptr  & cache,
                                                    boxm2_scene_sptr sceneA,
                                                    boxm2_scene_sptr sceneB,
-                                                    bocl_device_sptr device,
+                                                    const bocl_device_sptr& device,
                                                     int nbins, bool do_vary_scale):  boxm2_ocl_reg_mutual_info(cache,sceneA,sceneB,device,nbins, do_vary_scale), do_vary_scale_(do_vary_scale)
 {
 

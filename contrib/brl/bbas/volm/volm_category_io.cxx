@@ -17,7 +17,7 @@ vil_rgb<vxl_byte> color(unsigned char id)
                              bvrml_color::heatmap_classic[id][2]);
 }
 
-bool volm_land_layer::contains(std::string name)
+bool volm_land_layer::contains(const std::string& name)
 {
   return name_.find(name) != std::string::npos ||
          name.find(name_) != std::string::npos;
@@ -230,7 +230,8 @@ std::vector<std::string> create_volm_land_layer_name_table()
 {
   std::vector<std::string> out;
   std::map<unsigned, volm_land_layer> m = create_volm_land_table();
-  for (auto & mit : m)
+  out.reserve(m.size());
+for (auto & mit : m)
     out.push_back(mit.second.name_);
   return out;
 }

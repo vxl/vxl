@@ -19,10 +19,10 @@
 #include <vnl/vnl_matrix_fixed.h>
 
 rgrl_invariant_single_landmark::
-rgrl_invariant_single_landmark(vnl_vector<double> location,
-                               vnl_vector<double> vessel_dir1,
-                               vnl_vector<double> vessel_dir2,
-                               vnl_vector<double> vessel_dir3,
+rgrl_invariant_single_landmark(const vnl_vector<double>& location,
+                               const vnl_vector<double>& vessel_dir1,
+                               const vnl_vector<double>& vessel_dir2,
+                               const vnl_vector<double>& vessel_dir3,
                                double width1, double width2, double width3,
                                double angular_std,
                                double width_ratio_std):

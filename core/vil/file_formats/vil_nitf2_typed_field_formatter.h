@@ -306,7 +306,7 @@ class vil_nitf2_enum_string_formatter : public vil_nitf2_string_formatter
   vil_nitf2_field_formatter* copy() const override;
 
   // Is specified value valid?
-  bool is_valid_value(std::string value) const;
+  bool is_valid_value(const std::string& value) const;
 
  private:
   void validate_value_map();

@@ -58,7 +58,8 @@ bool vdgl_edgel_chain::add_edgels( const std::vector<vdgl_edgel> &es, int index)
   else
   {
     std::vector<vdgl_edgel> temp;
-    for (int i=0; i< index; i++)
+    temp.reserve(index);
+for (int i=0; i< index; i++)
       temp.push_back( es_[i]);
 
     for (const auto & e : es)

@@ -7,8 +7,8 @@
 #include "rgrl_transformation.h"
 
 rgrl_initializer_prior::
-rgrl_initializer_prior( rgrl_view_sptr           prior_view,
-                        rgrl_scale_sptr          prior_scale )
+rgrl_initializer_prior( const rgrl_view_sptr&           prior_view,
+                        const rgrl_scale_sptr&          prior_scale )
   : init_view_( prior_view ),
     prior_scale_( prior_scale ),
     xform_index_( 0 )
@@ -20,10 +20,10 @@ rgrl_initializer_prior::
 rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
                         rgrl_mask_sptr             const& to_image_roi,
                         rgrl_mask_box              const& initial_from_image_roi,
-                        rgrl_estimator_sptr        xform_estimator,
-                        rgrl_transformation_sptr   xform_estimate,
+                        const rgrl_estimator_sptr&        xform_estimator,
+                        const rgrl_transformation_sptr&   xform_estimate,
                         unsigned                   initial_resolution,
-                        rgrl_scale_sptr            prior_scale )
+                        const rgrl_scale_sptr&            prior_scale )
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
@@ -39,10 +39,10 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
 rgrl_initializer_prior::
 rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
                         rgrl_mask_sptr             const& to_image_roi,
-                        rgrl_estimator_sptr        xform_estimator,
-                        rgrl_transformation_sptr   xform_estimate,
+                        const rgrl_estimator_sptr&        xform_estimator,
+                        const rgrl_transformation_sptr&   xform_estimate,
                         unsigned                   initial_resolution,
-                        rgrl_scale_sptr            prior_scale )
+                        const rgrl_scale_sptr&            prior_scale )
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
@@ -56,10 +56,10 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
 
 rgrl_initializer_prior::
 rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
-                        rgrl_estimator_sptr        xform_estimator,
-                        rgrl_transformation_sptr   xform_estimate,
+                        const rgrl_estimator_sptr&        xform_estimator,
+                        const rgrl_transformation_sptr&   xform_estimate,
                         unsigned                   initial_resolution,
-                        rgrl_scale_sptr            prior_scale )
+                        const rgrl_scale_sptr&            prior_scale )
   : prior_scale_( prior_scale ),
     xform_index_( 0 )
 {
@@ -71,7 +71,7 @@ rgrl_initializer_prior( rgrl_mask_sptr             const& from_image_roi,
 }
 
 void
-rgrl_initializer_prior::add_prior_xform( rgrl_transformation_sptr   xform_estimate )
+rgrl_initializer_prior::add_prior_xform( const rgrl_transformation_sptr&   xform_estimate )
 {
 
   rgrl_view_sptr view = new rgrl_view( init_view_->from_image_roi(),

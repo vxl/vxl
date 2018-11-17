@@ -20,7 +20,7 @@ void init_tree(boct_tree<short,float> *tree, unsigned i, float init_val)
 }
 
 boxm_scene<boct_tree<short, float> >* create_scene(unsigned world_dimx,unsigned world_dimy,unsigned world_dimz,
-                                                   bool uniform, float val, std::string scene_prefix)
+                                                   bool uniform, float val, const std::string& scene_prefix)
 {
   float init_val = 0.5f;
 
@@ -82,7 +82,7 @@ void clean_up()
   }
 }
 
-void clean_up(std::string dir, std::string ext)
+void clean_up(const std::string& dir, const std::string& ext)
 {
   //clean temporary files
   vul_file_iterator file_it(dir+"/"+ext);

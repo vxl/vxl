@@ -6,9 +6,11 @@
 #include <vgl/vgl_homg_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
 
+#include <utility>
+
 //: project a 3-d bounding box and derive the corresponding 2-d bounding box
 vgl_box_2d<double> bpgl_project::
-project_bounding_box(vpgl_perspective_camera<double>   cam,
+project_bounding_box(const vpgl_perspective_camera<double>&   cam,
                      vgl_box_3d<double> const & box)
 {
   vpgl_proj_camera<double> pcam = static_cast<vpgl_proj_camera<double> >(cam);
@@ -19,12 +21,12 @@ vgl_box_2d<double> bpgl_project::
 project_bounding_box(vpgl_affine_camera<double>  cam,
                      vgl_box_3d<double> const & box){
 
-  vpgl_proj_camera<double> pcam = static_cast<vpgl_proj_camera<double> >(cam);
+  vpgl_proj_camera<double> pcam = static_cast<vpgl_proj_camera<double> >(std::move(cam));
   return bpgl_project::project_bounding_box(pcam, box);
 
 }
 
-vgl_box_2d<double> bpgl_project::project_bounding_box(vpgl_proj_camera<double>  cam,
+vgl_box_2d<double> bpgl_project::project_bounding_box(const vpgl_proj_camera<double>&  cam,
                                                       vgl_box_3d<double> const & box)
 {
   //compute the vertices of the box

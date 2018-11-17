@@ -23,7 +23,7 @@ unsigned bvpl_kernel::get_next_id()
 }
 
 //: Saves the kernel to ascii file
-void bvpl_kernel::print_to_file(std::string filename)
+void bvpl_kernel::print_to_file(const std::string& filename)
 {
   std::fstream ofs(filename.c_str(), std::ios::out);
   if (!ofs.is_open()) {
@@ -45,7 +45,7 @@ void bvpl_kernel::print_to_file(std::string filename)
 //: Saves the kernel to Drishti .raw data format.
 // The kernel does not occupy the entire volume, so the empty voxels are set to 0.
 // The size of the box is max(x,y,z) * max(x,y,z) * max(x,y,z)
-bool bvpl_kernel::save_raw(std::string filename)
+bool bvpl_kernel::save_raw(const std::string& filename)
 {
   std::fstream ofs(filename.c_str(), std::ios::binary | std::ios::out);
   if (!ofs.is_open()) {
@@ -150,7 +150,7 @@ bxml_data_sptr bvpl_kernel::xml_element()
   return kernel;
 }
 
-bvpl_kernel_sptr bvpl_kernel::parse_xml_element(bxml_data_sptr d)
+bvpl_kernel_sptr bvpl_kernel::parse_xml_element(const bxml_data_sptr& d)
 {
   bxml_element query("bvpl_kernel");
 

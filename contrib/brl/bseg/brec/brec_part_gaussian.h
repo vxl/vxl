@@ -93,7 +93,7 @@ class brec_part_gaussian : public brec_part_instance
   //  \return all the instances which have a posterior larger than zero (--> no thresholding, return "all" the responses)
   //  \p fg_prob_img is the probability of being foreground for each pixel
   //  \p pb_zero is the constant required for the background response model (probability of zero response)
-  bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, std::string model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class);
+  bool extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_img, float rot_angle, const std::string& model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class);
 
   //: extract and set rho to class probability density of the response
   //  Assumes weibull parameters have already been fitted (i.e. fitted_weibull_ = true)
@@ -128,8 +128,8 @@ class brec_part_gaussian : public brec_part_instance
 
 //: extracts only one type of primitive and adds to the part vector
 //  Strength_threshold in [0,1] - min strength to declare the part as detected
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts);
+bool extract_gaussian_primitives(const vil_image_resource_sptr& img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts);
 
-bool draw_gauss_to_ps(vul_psfile& ps, brec_part_gaussian_sptr pi, float x, float y, float cr, float cg, float cb);
+bool draw_gauss_to_ps(vul_psfile& ps, const brec_part_gaussian_sptr& pi, float x, float y, float cr, float cg, float cb);
 
 #endif // brec_part_gaussian_h_

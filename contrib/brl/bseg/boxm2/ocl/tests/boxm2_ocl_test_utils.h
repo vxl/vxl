@@ -25,7 +25,7 @@ public:
                                               int init_level,
                                               int max_level,
                                               int max_mb );
-  static std::string save_test_simple_scene(std::string filename= "test.xml");
+  static std::string save_test_simple_scene(const std::string& filename= "test.xml");
   static bool create_test_simple_scene(boxm2_scene_sptr & scene);
   static void create_edge_scene(boxm2_scene_sptr scene, float val1, float val2);
   static void print_alpha_scene(boxm2_scene_sptr scene);

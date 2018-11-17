@@ -76,7 +76,7 @@ col_collapse()
 }
 
 double vifa_int_face_attr_common::
-get_contrast_across_edge(vtol_edge_sptr  e, double dflt_cont)
+get_contrast_across_edge(const vtol_edge_sptr&  e, double dflt_cont)
 {
   double    cont = dflt_cont;
   face_list faces; e->faces(faces);
@@ -335,7 +335,7 @@ find_collinear_lines()
 }
 
 bool vifa_int_face_attr_common::
-find_collinear_match(vtol_edge_2d_sptr edge,
+find_collinear_match(const vtol_edge_2d_sptr& edge,
                      coll_list&        lines,
                      double            dist_threshold,
                      coll_iterator&    result)
@@ -362,7 +362,7 @@ find_collinear_match(vtol_edge_2d_sptr edge,
 }
 
 float vifa_int_face_attr_common::
-compute_parallel_sal(vifa_group_pgram_params_sptr  gpp)
+compute_parallel_sal(const vifa_group_pgram_params_sptr&  gpp)
 {
   float      sal = 0.f;
   edge_2d_list  fedges = this->GetFittedEdges();

@@ -20,7 +20,7 @@ class boxm2_lru_cache1 : public boxm2_cache1
   public:
 
     //: create function used instead of constructor
-    static void create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type=LOCAL);
+    static void create(const boxm2_scene_sptr& scene, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: returns block pointer to block specified by ID
     boxm2_block* get_block(boxm2_block_id id) override;
@@ -51,7 +51,7 @@ class boxm2_lru_cache1 : public boxm2_cache1
   private:
 
     //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
-    boxm2_lru_cache1(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE=LOCAL);
+    boxm2_lru_cache1(const boxm2_scene_sptr& scene, BOXM2_IO_FS_TYPE=LOCAL);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
     ~boxm2_lru_cache1() override;
@@ -68,10 +68,10 @@ class boxm2_lru_cache1 : public boxm2_cache1
     // ---------Helper Methods --------------------------------------------------
 
     //: helper method returns a reference to correct data map (ensures one exists)
-    std::map<boxm2_block_id, boxm2_data_base*>& cached_data_map(std::string prefix);
+    std::map<boxm2_block_id, boxm2_data_base*>& cached_data_map(const std::string& prefix);
 
     //: helper method determines if this block is
-    bool is_valid_id(boxm2_block_id);
+    bool is_valid_id(const boxm2_block_id&);
     // --------------------------------------------------------------------------
 };
 

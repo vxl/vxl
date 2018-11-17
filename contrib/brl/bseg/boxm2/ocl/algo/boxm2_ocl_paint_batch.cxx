@@ -1,7 +1,8 @@
+#include "boxm2_ocl_paint_batch.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
-#include "boxm2_ocl_paint_batch.h"
+#include <utility>
 //:
 // \file
 #include <boxm2/ocl/boxm2_opencl_cache.h>
@@ -30,13 +31,13 @@ std::map<std::string, bocl_kernel*> boxm2_ocl_paint_batch::kernels_;
 
 //paint block
 void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
-                                         bocl_device_sptr           device,
-                                         boxm2_stream_cache_sptr    str_cache,
-                                         boxm2_opencl_cache_sptr    opencl_cache,
+                                         const bocl_device_sptr&           device,
+                                         const boxm2_stream_cache_sptr&    str_cache,
+                                         const boxm2_opencl_cache_sptr&    opencl_cache,
                                          cl_command_queue           &queue,
-                                         std::string                 data_type,
-                                         boxm2_block_id             id,
-                                         bsta_sigma_normalizer_sptr  /*n_table*/ )
+                                         const std::string&                 data_type,
+                                         const boxm2_block_id&             id,
+                                         const bsta_sigma_normalizer_sptr&  /*n_table*/ )
 {
   typedef boxm2_data_traits<BOXM2_AUX0>::datatype aux0_datatype;
   typedef boxm2_data_traits<BOXM2_AUX1>::datatype aux1_datatype;
@@ -186,7 +187,7 @@ void boxm2_ocl_paint_batch::paint_block( boxm2_scene_sptr           scene,
 
 
 //: Keeps track of already compiled kernels, and returns matching ones
-bocl_kernel* boxm2_ocl_paint_batch::compile_kernels( bocl_device_sptr device,
+bocl_kernel* boxm2_ocl_paint_batch::compile_kernels( const bocl_device_sptr& device,
                                                      std::string       opts )
 {
   //make id out of device
@@ -206,7 +207,7 @@ bocl_kernel* boxm2_ocl_paint_batch::compile_kernels( bocl_device_sptr device,
 
   //compilation options
   auto* kernel = new bocl_kernel();
-  kernel->create_kernel(&device->context(),device->device_id(), src_paths, "batch_update_appearance", opts, "batch_paint::paint_kernel");
+  kernel->create_kernel(&device->context(),device->device_id(), src_paths, "batch_update_appearance", std::move(opts), "batch_paint::paint_kernel");
 
   //store in map
   kernels_[identifier] = kernel;

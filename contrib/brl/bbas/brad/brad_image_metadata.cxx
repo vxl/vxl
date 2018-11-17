@@ -374,7 +374,7 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
     if (tag.compare("satId") == 0) {
       linestr >> tag;
       linestr >> satellite_name_;
-      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of('\"')+1, satellite_name_.find_last_of('\"')-1);
       continue;
     }
     if (tag.compare("LLLon") == 0 || tag.compare("URLon") == 0 || tag.compare("ULLon") == 0 || tag.compare("LRLon") == 0) {
@@ -437,9 +437,9 @@ bool brad_image_metadata::parse_from_imd(std::string const& filename)
       linestr >> tag;
       std::string band_str;
       linestr >> band_str;
-      if (band_str.find("P") != std::string::npos) {
+      if (band_str.find('P') != std::string::npos) {
         band_ = "PAN";
-      } else if (band_str.find("S") != std::string::npos) {
+      } else if (band_str.find('S') != std::string::npos) {
         band_ = "SWIR";
       } else
         band_ = "MULTI";
@@ -520,7 +520,7 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
     if (tag.compare("satId") == 0) {
       linestr >> tag;
       linestr >> satellite_name_;
-      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of('\"')+1, satellite_name_.find_last_of('\"')-1);
       continue;
     }
     // image footprint and cover extent
@@ -582,9 +582,9 @@ bool brad_image_metadata::parse_from_imd_only(std::string const& filename)
       linestr >> tag;
       std::string band_str;
       linestr >> band_str;
-      if (band_str.find("P") != std::string::npos) {
+      if (band_str.find('P') != std::string::npos) {
         band_ = "PAN";
-      } else if (band_str.find("S") != std::string::npos) {
+      } else if (band_str.find('S') != std::string::npos) {
         band_ = "SWIR";
       } else
         band_ = "MULTI";
@@ -755,7 +755,7 @@ bool brad_image_metadata::parse_from_pvl_only(std::string const& filename)
     if (tag.compare("satelliteName") == 0) {
       linestr >> tag;
       linestr >> satellite_name_;
-      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of("\"")+1, satellite_name_.find_last_of("\"")-1);
+      satellite_name_ = satellite_name_.substr(satellite_name_.find_first_of('\"')+1, satellite_name_.find_last_of('\"')-1);
       continue;
     }
     // gain and offset

@@ -61,7 +61,7 @@ double brad_nearest_ill_dir(std::vector<vnl_double_3> const& ill_dirs,
                             vnl_double_3 const& dir);
 
 // new model requires scene irradiance for each image
-void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+void brad_solve_atmospheric_model(const vnl_matrix<double>& illum_dirs,
                                   vnl_matrix<double> intensities,
                                   vnl_vector<double> airlight,
                                   unsigned max_iterations,
@@ -71,25 +71,25 @@ void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
                                   vnl_vector<double>& reflectances);
 
 
-void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+void brad_solve_atmospheric_model(const vnl_matrix<double>& illum_dirs,
                                   vnl_matrix<double> corr_intens,
                                   unsigned max_iterations,
                                   double max_fitting_error,
                                   vnl_matrix<double>& surf_normals,
                                   vnl_vector<double>& reflectances);
 
-void brad_solution_error(vnl_matrix<double> illum_dirs,
+void brad_solution_error(const vnl_matrix<double>& illum_dirs,
                          vnl_matrix<double> intensities,
                          vnl_vector<double> airlight,
                          vnl_vector<double> scene_irrad,
-                         vnl_matrix<double> surf_normals,
+                         const vnl_matrix<double>& surf_normals,
                          vnl_vector<double> reflectances,
                          vnl_matrix<double>& fit_errors,
                          vnl_matrix<double>& pred_intensities);
 
-void brad_solution_error(vnl_matrix<double> illum_dirs,
+void brad_solution_error(const vnl_matrix<double>& illum_dirs,
                          vnl_matrix<double> corr_intens,
-                         vnl_matrix<double> surf_normals,
+                         const vnl_matrix<double>& surf_normals,
                          vnl_vector<double> reflectances,
                          vnl_matrix<double>& fit_errors);
 

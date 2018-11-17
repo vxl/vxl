@@ -24,7 +24,7 @@ class bapl_affine_roi
 {
  public:
   //: Constructor
-  bapl_affine_roi(vil_image_view<vxl_byte> src_image,
+  bapl_affine_roi(const vil_image_view<vxl_byte>& src_image,
                   bapl_affine_transform xform,
                   unsigned ni, unsigned nj );
 

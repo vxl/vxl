@@ -55,7 +55,7 @@ static void test_volm_wr3db_ind()
 
   TEST("finalize write", ind->finalize(), true);
 
-  boxm2_volm_wr3db_index_sptr ind2 = ind;
+  const boxm2_volm_wr3db_index_sptr& ind2 = ind;
 
   // initialize_read() finalizes write operations in case there is any active write operation
   TEST("initialize read", ind2->initialize_read("./test_ind.bin"), true);

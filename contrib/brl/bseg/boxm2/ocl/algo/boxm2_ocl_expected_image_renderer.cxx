@@ -30,9 +30,9 @@
 
 
 boxm2_ocl_expected_image_renderer
-::boxm2_ocl_expected_image_renderer(boxm2_scene_sptr scene,
-                                    boxm2_opencl_cache_sptr ocl_cache,
-                                    std::string ident) :
+::boxm2_ocl_expected_image_renderer(const boxm2_scene_sptr& scene,
+                                    const boxm2_opencl_cache_sptr& ocl_cache,
+                                    const std::string& ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
   buffers_allocated_(false),
@@ -277,7 +277,7 @@ boxm2_ocl_expected_image_renderer
 
 bool
 boxm2_ocl_expected_image_renderer
-::compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
+::compile_kernels(const bocl_device_sptr& device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type)
 {
   std::string options_basic = boxm2_ocl_util::mog_options( boxm2_data_info::prefix(data_type) );
 

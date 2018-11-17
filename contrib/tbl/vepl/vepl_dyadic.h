@@ -20,12 +20,12 @@
 #include <vil/vil_image_resource.h>
 
 //: add the second image to the first one pixelwise
-void vepl_dyadic_sum(vil_image_resource_sptr, vil_image_resource_sptr);
+void vepl_dyadic_sum(const vil_image_resource_sptr&, const vil_image_resource_sptr&);
 //: subtract the second image from the first one pixelwise
-void vepl_dyadic_dif(vil_image_resource_sptr, vil_image_resource_sptr);
+void vepl_dyadic_dif(const vil_image_resource_sptr&, const vil_image_resource_sptr&);
 //: replace pixels of the first image by minimum pixel value of both
-void vepl_dyadic_min(vil_image_resource_sptr, vil_image_resource_sptr);
+void vepl_dyadic_min(const vil_image_resource_sptr&, const vil_image_resource_sptr&);
 //: replace pixels of the first image by maximum pixel value of both
-void vepl_dyadic_max(vil_image_resource_sptr, vil_image_resource_sptr);
+void vepl_dyadic_max(const vil_image_resource_sptr&, const vil_image_resource_sptr&);
 
 #endif // vepl_dyadic_h_

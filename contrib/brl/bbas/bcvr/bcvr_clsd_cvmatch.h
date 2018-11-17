@@ -61,18 +61,18 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
   void findDPCorrespondence(int startPoint);
   virtual double computeIntervalCost(int i, int ip, int j, int jp);
 
-  double stretchCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip);
-  double bendCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip);
+  double stretchCost (const bsol_intrinsic_curve_2d_sptr& curve, int i, int ip);
+  double bendCost (const bsol_intrinsic_curve_2d_sptr& curve, int i, int ip);
 
  public:
   bcvr_clsd_cvmatch();
-  bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1,
-                    const bsol_intrinsic_curve_2d_sptr c2,
+  bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr& c1,
+                    const bsol_intrinsic_curve_2d_sptr& c2,
                     double R,
                     int template_size=3);
 
-  bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr p1,
-                    const vsol_polygon_2d_sptr p2,
+  bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr& p1,
+                    const vsol_polygon_2d_sptr& p2,
                     double R,
                     double rms = 0.0f,  // fit lines to the input polygon before using
                     int template_size = 3);
@@ -104,7 +104,7 @@ class bcvr_clsd_cvmatch : public vbl_ref_count
 
   //display functions (debug)
   void printCost();
-  void writeCost(std::string f);
+  void writeCost(const std::string& f);
   void printMap();
 
   //: Match() corresponds to closedCurveDPMatch(ClosedDPMatch *d) in original source code

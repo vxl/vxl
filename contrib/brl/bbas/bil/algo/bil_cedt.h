@@ -20,7 +20,7 @@ class bil_cedt
     bil_cedt();
     ~bil_cedt();
 
-    bil_cedt(vil_image_view<unsigned char> im);
+    bil_cedt(const vil_image_view<unsigned char>& im);
 
     bool compute_cedt();
 

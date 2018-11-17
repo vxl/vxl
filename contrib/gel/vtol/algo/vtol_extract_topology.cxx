@@ -59,7 +59,7 @@ vtol_extract_topology_vertex_node( unsigned in_i, unsigned in_j )
 
 void
 vtol_extract_topology_region_type::
-push_back( edgel_chain_sptr chain )
+push_back( const edgel_chain_sptr& chain )
 {
   list_.push_back( chain );
 }

@@ -40,7 +40,7 @@ class vifa_coll_lines : public vifa_coll_lines_params
   double         endpt_distance_;
 
  public:
-  vifa_coll_lines(vtol_edge_2d_sptr  e,
+  vifa_coll_lines(const vtol_edge_2d_sptr&  e,
                   double        angle_cutoff_deg = 5.0,
                   double        endpt_distance = 3.0,
                   bool        src_from_discard = false
@@ -64,7 +64,7 @@ class vifa_coll_lines : public vifa_coll_lines_params
                        double&            C
                       );
 
-  void  add_and_update(vtol_edge_2d_sptr  e);
+  void  add_and_update(const vtol_edge_2d_sptr&  e);
   double  spanning_length(void);
   double  spanning_length(vgl_point_2d<double>&  p1,
                           vgl_point_2d<double>&  p2

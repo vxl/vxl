@@ -26,7 +26,7 @@ class bvpl_gauss_convolution_functor
   bvpl_gauss_convolution_functor();
 
   //: constructor that passes kernel to find normalization constant
-  bvpl_gauss_convolution_functor(bvpl_kernel_iterator kernel);
+  bvpl_gauss_convolution_functor(const bvpl_kernel_iterator& kernel);
 
   //: Destructor
   ~bvpl_gauss_convolution_functor() = default;

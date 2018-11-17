@@ -52,7 +52,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
                      vifa_group_pgram_params*  gpp_w = nullptr,
                      vifa_norm_params*         np = nullptr
                     );
-  vifa_int_face_attr(vtol_intensity_face_sptr  f,
+  vifa_int_face_attr(const vtol_intensity_face_sptr&  f,
                      vdgl_fit_lines_params*    fitter_params = nullptr,
                      vifa_group_pgram_params*  gpp = nullptr,
                      vifa_group_pgram_params*  gpp_w = nullptr,
@@ -71,7 +71,7 @@ class vifa_int_face_attr: public vifa_int_face_attr_common
 
   // Data access for non-attributes
   vtol_intensity_face_sptr  GetFace() const { return face_; }
-  void                      SetFace(vtol_intensity_face_sptr  f);
+  void                      SetFace(const vtol_intensity_face_sptr&  f);
   edge_2d_list&             GetEdges() override;
 
   //: Centroid X

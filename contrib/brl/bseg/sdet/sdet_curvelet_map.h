@@ -95,7 +95,7 @@ public:
   std::vector<sdet_curvelet_list > map2_;
 
   //: constructor
-  sdet_curvelet_map(sdet_edgemap_sptr EM=nullptr, sdet_curvelet_params params=sdet_curvelet_params());
+  sdet_curvelet_map(const sdet_edgemap_sptr& EM=nullptr, sdet_curvelet_params params=sdet_curvelet_params());
 
   //: destructor
   ~sdet_curvelet_map();

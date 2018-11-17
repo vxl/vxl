@@ -107,7 +107,7 @@ class bgrl_graph : public vbl_ref_count
   {
    public:
     //: Constructor
-    iterator( bgrl_graph* graph, bgrl_search_func_sptr func );
+    iterator( bgrl_graph* graph, const bgrl_search_func_sptr& func );
 
     //: Constructor - for end iterator
     iterator( bgrl_graph* graph );

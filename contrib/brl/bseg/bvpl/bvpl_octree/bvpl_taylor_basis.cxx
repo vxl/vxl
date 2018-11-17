@@ -8,10 +8,10 @@
 
 #include <boxm/boxm_scene.h>
 
-bool bvpl_taylor_basis::compute_approximation_error(boxm_scene_base_sptr data_scene_base,
-                                                    boxm_scene_base_sptr basis_scene_base,
-                                                    boxm_scene_base_sptr error_scene_base,
-                                                    bvpl_taylor_basis_loader loader,
+bool bvpl_taylor_basis::compute_approximation_error(const boxm_scene_base_sptr& data_scene_base,
+                                                    const boxm_scene_base_sptr& basis_scene_base,
+                                                    const boxm_scene_base_sptr& error_scene_base,
+                                                    const bvpl_taylor_basis_loader& loader,
                                                     int block_i, int block_j, int block_k, double cell_length)
 {
   typedef boct_tree<short,float> float_tree_type;
@@ -109,7 +109,7 @@ bool bvpl_taylor_basis::compute_approximation_error(boxm_scene_base_sptr data_sc
 }
 
 
-double bvpl_taylor_basis::sum_errors(boxm_scene_base_sptr error_scene_base,
+double bvpl_taylor_basis::sum_errors(const boxm_scene_base_sptr& error_scene_base,
                                      int block_i, int block_j, int block_k, unsigned long tree_nsamples)
 {
   typedef boct_tree<short,float> float_tree_type;
@@ -148,7 +148,7 @@ double bvpl_taylor_basis::sum_errors(boxm_scene_base_sptr error_scene_base,
 }
 
 //: Reads the values of basis responses and assembles them into matrices and vectors
-bool bvpl_taylor_basis::assemble_basis(bvpl_taylor_scenes_map_sptr taylor_scenes,int block_i, int block_j, int block_k)
+bool bvpl_taylor_basis::assemble_basis(const bvpl_taylor_scenes_map_sptr& taylor_scenes,int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree<short, bvpl_taylor_basis2_sample > taylor_tree_type;

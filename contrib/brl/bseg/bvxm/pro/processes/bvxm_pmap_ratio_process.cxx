@@ -50,7 +50,7 @@ bool bvxm_pmap_ratio_process(bprb_func_process& pro)
   return true;
 }
 
-bool bvxm_pmap_ratio_process_globals::compute(std::string pmap1,std::string pmap2, std::string path)
+bool bvxm_pmap_ratio_process_globals::compute(const std::string& pmap1,const std::string& pmap2, const std::string& path)
 {
   vil_image_view_base_sptr lidar_img = vil_load(pmap1.c_str());
   vil_image_view_base_sptr nonlidar_img = vil_load(pmap2.c_str());

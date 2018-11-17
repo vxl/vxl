@@ -10,8 +10,8 @@
 class boxm2_ocl_vis_score_renderer
 {
   public:
-    boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene,
-                                 boxm2_opencl_cache_sptr ocl_cache,
+    boxm2_ocl_vis_score_renderer(const boxm2_scene_sptr& scene,
+                                 const boxm2_opencl_cache_sptr& ocl_cache,
                                  std::string ident="");
     ~boxm2_ocl_vis_score_renderer();
 
@@ -27,7 +27,7 @@ class boxm2_ocl_vis_score_renderer
     std::string ident_;
     bool buffers_allocated_;
     bocl_kernel ray_trace_kernel_;
-    bool compile_kernels(bocl_device_sptr device);
+    bool compile_kernels(const bocl_device_sptr& device);
     bool cleanup_render_buffers();
     bool allocate_render_buffers(int cl_ni, int cl_nj);
 

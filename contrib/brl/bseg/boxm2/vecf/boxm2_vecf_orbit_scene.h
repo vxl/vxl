@@ -97,7 +97,7 @@ public:
                          bool is_right = false);
 
   boxm2_vecf_orbit_scene(std::string const& scene_file,
-                         std::string params_file,
+                         const std::string& params_file,
                          bool is_single_instance = true,
                          bool is_right =false);
 

@@ -34,13 +34,13 @@
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update::update(const boxm2_scene_sptr&         scene,
                               bocl_device_sptr         device,
-                              boxm2_opencl_cache_sptr  opencl_cache,
+                              const boxm2_opencl_cache_sptr&  opencl_cache,
                               vpgl_camera_double_sptr  cam,
-                              vil_image_view_base_sptr img,
-                              std::string               ident,
-                              vil_image_view_base_sptr mask_sptr,
+                              const vil_image_view_base_sptr& img,
+                              const std::string&               ident,
+                              const vil_image_view_base_sptr& mask_sptr,
                               bool                     update_alpha,
                               float                    mog_var,
                               bool                     update_app,
@@ -500,7 +500,7 @@ bool boxm2_ocl_update::update(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device, std::string opts, bool isRGB)
+std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool isRGB)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -533,7 +533,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  const std::string& options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
@@ -585,7 +585,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update::get_kernels(bocl_device_sptr device
 
 
 //makes sure appearance types correspond correctly
-bool boxm2_ocl_update::validate_appearances(boxm2_scene_sptr scene,
+bool boxm2_ocl_update::validate_appearances(const boxm2_scene_sptr& scene,
                                             std::string& data_type,
                                             int& appTypeSize,
                                             std::string& num_obs_type,

@@ -43,7 +43,7 @@ class volm_attributes
  public:
   volm_attributes() : id_(0), name_(""), color_(vil_rgb<vxl_byte>(0,0,0)) {}
   volm_attributes(unsigned char id, std::string name, vil_rgb<vxl_byte> color): id_(id), name_(std::move(name)), color_(color) {}
-  bool contains(std::string name);
+  bool contains(const std::string& name);
   unsigned char id_;
   std::string name_;
   vil_rgb<vxl_byte> color_;
@@ -58,7 +58,7 @@ class volm_label_table
   static std::string land_string(unsigned char id);
   //: pass the id of the class labeled in the query (volm_attribute.id_)
   static vil_rgb<vxl_byte> get_color(unsigned char id);
-  static unsigned char get_id_closest_name(std::string name);
+  static unsigned char get_id_closest_name(const std::string& name);
   static unsigned compute_number_of_labels();
 };
 
@@ -68,7 +68,7 @@ class volm_category_attribute
  public:
   volm_category_attribute() : lnd_("invalid"), ori_("porous"), is_active_(0) {}
   volm_category_attribute(std::string lnd, std::string ori, unsigned is_active) : lnd_(std::move(lnd)), ori_(std::move(ori)), is_active_(is_active) {}
-  static void read_category(std::map<std::string, volm_category_attribute> & category_table, std::string fname);
+  static void read_category(std::map<std::string, volm_category_attribute> & category_table, const std::string& fname);
   std::string lnd_;
   std::string ori_;
   unsigned is_active_;
@@ -124,16 +124,16 @@ class volm_io
   //: scale value is STRONG_POSITIVE-STRONG_NEGATIVE
   enum VOLM_IMAGE_CODES {UNEVALUATED = 0, STRONG_NEGATIVE = 1, UNKNOWN = 127, STRONG_POSITIVE = 255, SCALE_VALUE = 254};
 
-  static bool write_status(std::string out_folder, int status_code, int percent=0, std::string log_message = "", std::string status_file="status.xml");
-  static bool write_log(std::string out_folder, std::string log);
-  static bool write_composer_log(std::string out_folder, std::string log);
-  static bool write_post_processing_log(std::string log_file, std::string log);
+  static bool write_status(const std::string& out_folder, int status_code, int percent=0, const std::string& log_message = "", const std::string& status_file="status.xml");
+  static bool write_log(const std::string& out_folder, const std::string& log);
+  static bool write_composer_log(const std::string& out_folder, const std::string& log);
+  static bool write_post_processing_log(const std::string& log_file, const std::string& log);
   static bool write_error_log(std::string const& log_file, std::string const& log);
 
   //: return true if MATCHER_EXE_FINISHED, otherwise return false
-  static bool check_matcher_status(std::string out_folder);
+  static bool check_matcher_status(const std::string& out_folder);
 
-  static bool read_camera(std::string kml_file,
+  static bool read_camera(const std::string& kml_file,
                           unsigned const& ni, unsigned const& nj,
                           double& heading,   double& heading_dev,
                           double& tilt,      double& tilt_dev,
@@ -173,20 +173,20 @@ class volm_io
   static unsigned char scale_score_to_1_127(float threshold, float score);
 
   //: read the specific polygon format given by python parser for candidate list processing
-  static void read_polygons(std::string poly_file, vgl_polygon<double>& out);
+  static void read_polygons(const std::string& poly_file, vgl_polygon<double>& out);
   static void convert_polygons(vgl_polygon<double> const& in, vgl_polygon<float>& out);
   static void convert_polygons(vgl_polygon<float> const& in, vgl_polygon<double>& out);
 
-  static int read_gt_file(std::string gt_file, std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > >& samples);
-  static bool read_ray_index_data(std::string path, std::vector<unsigned char>& data);
+  static int read_gt_file(const std::string& gt_file, std::vector<std::pair<vgl_point_3d<double>, std::pair<std::pair<std::string, int>, std::string> > >& samples);
+  static bool read_ray_index_data(const std::string& path, std::vector<unsigned char>& data);
 
   //: read the building footprints file
-  static bool read_building_file(std::string file, std::vector<std::pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, std::vector<double>& heights);
+  static bool read_building_file(const std::string& file, std::vector<std::pair<vgl_polygon<double>, vgl_point_2d<double> > >& builds, std::vector<double>& heights);
 
   //: read the sme labels
-  static bool read_sme_file(std::string file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
-  static bool write_sme_kml(std::string file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
-  static bool write_sme_kml_type(std::string file, std::string type_name, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
+  static bool read_sme_file(const std::string& file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
+  static bool write_sme_kml(const std::string& file, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
+  static bool write_sme_kml_type(const std::string& file, const std::string& type_name, std::vector<std::pair<vgl_point_2d<double>, int> >& objects);
 
   //: read peak files (first element in pair is the location represented by it wgs84 coords,
   static bool read_dem_peak_file(std::string const& file, std::vector<std::pair<vgl_point_2d<double>, double> >& objects);
@@ -272,7 +272,7 @@ class volm_weight
   //: functions that reads the weight parameters from weight_param.txt
   static void read_weight(std::vector<volm_weight>& weights, std::string const& file_name);
   //: functions that implements a default equal weight parameters, given the depth_map_scene
-  static void equal_weight(std::vector<volm_weight>& weights, depth_map_scene_sptr dms);
+  static void equal_weight(std::vector<volm_weight>& weights, const depth_map_scene_sptr& dms);
 };
 
 #include <vbl/vbl_smart_ptr.h>

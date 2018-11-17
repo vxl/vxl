@@ -104,7 +104,7 @@ bool bvxm_illum_index_process(bprb_func_process& pro)
 
 
 unsigned
-bvxm_illum_index_process_globals::bin_index(std::string map_type,
+bvxm_illum_index_process_globals::bin_index(const std::string& map_type,
                                             double sun_el, double sun_az,
                                             unsigned num_lat, unsigned num_long)
 {

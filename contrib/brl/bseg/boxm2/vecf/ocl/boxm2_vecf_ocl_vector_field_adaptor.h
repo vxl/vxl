@@ -12,7 +12,7 @@
 class boxm2_vecf_ocl_vector_field_adaptor: public boxm2_vecf_ocl_vector_field
 {
   public:
-    boxm2_vecf_ocl_vector_field_adaptor(boxm2_vecf_vector_field_base_sptr cpu_xform);
+    boxm2_vecf_ocl_vector_field_adaptor(const boxm2_vecf_vector_field_base_sptr& cpu_xform);
 
     //: compute vector field, writing to gpu cache
     bool compute_forward_transform(boxm2_scene_sptr source,

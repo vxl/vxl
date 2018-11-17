@@ -172,7 +172,7 @@ main( int argc, char* argv[] )
   vector_2d x0(0,0);          //upper left corner
   vector_2d x1(1023,1023);    //bottom right corner
   rgrl_mask_sptr moving_image_roi = new rgrl_mask_box(x0.as_ref(), x1.as_ref());
-  rgrl_mask_sptr fixed_image_roi = moving_image_roi; // assume two are identical
+  const rgrl_mask_sptr& fixed_image_roi = moving_image_roi; // assume two are identical
   rgrl_initializer_sptr initializer =
     new rgrl_initializer_prior(moving_image_roi,
                                fixed_image_roi,

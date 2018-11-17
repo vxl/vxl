@@ -25,7 +25,7 @@ using namespace boxm2_ocl_render_expected_image_globals;
 //verifies data type for scene
 //--------------------------------------------------
 bool boxm2_ocl_render_expected_image_globals::validate_appearances(
-    boxm2_scene_sptr scene,
+    const boxm2_scene_sptr& scene,
     std::string& data_type,
     int& appTypeSize,
     std::string& options)
@@ -79,7 +79,7 @@ bool boxm2_ocl_render_expected_image::render(
     bocl_device_sptr         device,
     boxm2_opencl_cache_sptr  opencl_cache,
     vpgl_camera_double_sptr  cam,
-    std::string               ident,
+    const std::string&               ident,
     unsigned                 ni,
     unsigned                 nj,
     float                    nearfactor,
@@ -216,7 +216,7 @@ bool boxm2_ocl_render_expected_image::render(
 }
 
 std::vector<bocl_kernel*>& boxm2_ocl_render_expected_image::get_kernel(
-    bocl_device_sptr device, std::string opts)
+    const bocl_device_sptr& device, const std::string& opts)
 {
   // check to see if this device has compiled kernels already
   std::string identifier = device->device_identifier() + opts;

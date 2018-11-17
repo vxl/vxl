@@ -58,7 +58,7 @@ static bool write_homographies(std::string const& filename,
 static ihog_transform_2d
 register_image(vil_image_view<float> & curr_view,
                vil_image_view<float> & last_view,
-               std::string transform_type ="Affine")
+               const std::string& transform_type ="Affine")
 {
   // do registration
   vul_timer time;

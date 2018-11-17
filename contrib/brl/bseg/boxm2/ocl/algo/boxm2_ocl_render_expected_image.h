@@ -9,7 +9,7 @@
 
 namespace boxm2_ocl_render_expected_image_globals
 {
-  bool validate_appearances(boxm2_scene_sptr scene,
+  bool validate_appearances(const boxm2_scene_sptr& scene,
                             std::string& data_type,
                             int& appTypeSize,
                             std::string& options);
@@ -24,7 +24,7 @@ public:
                       bocl_device_sptr         device,
                       boxm2_opencl_cache_sptr  opencl_cache,
                       vpgl_camera_double_sptr  cam,
-                      std::string               ident,
+                      const std::string&               ident,
                       unsigned                 ni,
                       unsigned                 nj,
                       float                    nearfactor,
@@ -33,7 +33,7 @@ public:
                       std::size_t               startJ=0);
 
 private:
-  static std::vector<bocl_kernel*>& get_kernel(bocl_device_sptr device, std::string opts);
+  static std::vector<bocl_kernel*>& get_kernel(const bocl_device_sptr& device, const std::string& opts);
 
   static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };

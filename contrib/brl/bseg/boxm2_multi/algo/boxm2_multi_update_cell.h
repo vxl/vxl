@@ -27,17 +27,17 @@ class boxm2_multi_update_cell
     //                          boxm2_multi_update_helper& helper);
     static float update_cells(boxm2_multi_cache& cache,
                               const vil_image_view<float>& img,
-                              vpgl_camera_double_sptr cam,
+                              const vpgl_camera_double_sptr& cam,
                               float* norm_image,
                               boxm2_multi_update_helper& helper);
 
   private:
     //runs pre/vis on single block
     static float calc_beta_per_block(const boxm2_block_id&     id,
-                                    boxm2_scene_sptr    scene,
+                                    const boxm2_scene_sptr&    scene,
                                     boxm2_opencl_cache1* opencl_cache,
                                     cl_command_queue&   queue,
-                                    std::string          data_type,
+                                    const std::string&          data_type,
                                     bocl_kernel*        kern,
                                     bocl_mem_sptr&      vis_image,
                                     bocl_mem_sptr&      pre_image,
@@ -52,14 +52,14 @@ class boxm2_multi_update_cell
                                     std::size_t*         gThreads);
 
     static float calc_beta_reduce( boxm2_multi_cache& mcache,
-                                   vpgl_camera_double_sptr cam,
+                                   const vpgl_camera_double_sptr& cam,
                                    boxm2_multi_update_helper& helper);
 
     //map keeps track of all kernels compiled and cached
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts);
 };
 
 #endif

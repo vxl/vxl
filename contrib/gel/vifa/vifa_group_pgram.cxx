@@ -56,7 +56,7 @@ vifa_group_pgram::
 //-----------------------------------------------------
 //: Add an ImplicitLine to the index
 void vifa_group_pgram::
-Index(imp_line_sptr il)
+Index(const imp_line_sptr& il)
 {
   int  ang_bin = this->AngleLoc(il);
   curves_[ang_bin]->push_back(il);
@@ -281,7 +281,7 @@ norm_parallel_line_length(void)
 //---------------------------------------------------------
 //: Find the angle bin corresponding to an implicit_line
 int vifa_group_pgram::
-AngleLoc(imp_line_sptr  il)
+AngleLoc(const imp_line_sptr&  il)
 {
   // Compute angle index
   double  angle = std::fmod(il->slope_degrees(), 180.0);
@@ -329,7 +329,7 @@ ComputeBoundingBox(void)
   {
     for (auto & ili : *illp)
     {
-      imp_line_sptr  il = ili;
+      const imp_line_sptr&  il = ili;
 
       bb_->add(il->point1());
       bb_->add(il->point2());

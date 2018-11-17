@@ -48,7 +48,7 @@ namespace bvxm_roi_init_process_globals
   //: roi_init function (the most significant 5 bits and less significant 3 bits of the input 16 bits NITF image pixels will be ignored)
   bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
-                bvxm_world_params_sptr world_params,
+                const bvxm_world_params_sptr& world_params,
                 float uncertainty,
                 vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vpgl_local_rational_camera<double>& local_camera);
@@ -56,14 +56,14 @@ namespace bvxm_roi_init_process_globals
   //: roi init function to output a short image (the most significant 5 bits of the input 16 bits NITF image pixels will be ignored and all other 11 bits are kept)
   bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
-                bvxm_world_params_sptr world_params,
+                const bvxm_world_params_sptr& world_params,
                 float uncertainty,
                 vil_image_view<vxl_uint_16>* nitf_image_unsigned_short,
                 vpgl_local_rational_camera<double>& local_camera);
 
   //: projects the box on the image by taking the union of all the projected corners
   vgl_box_2d<double>* project_box(vpgl_rational_camera<double>* cam,
-                                  vpgl_lvcs_sptr lvcs,
+                                  const vpgl_lvcs_sptr& lvcs,
                                   vgl_box_3d<double> box,
                                   float r);
 }

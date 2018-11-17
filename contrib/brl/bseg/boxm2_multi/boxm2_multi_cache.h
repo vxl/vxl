@@ -37,7 +37,7 @@ class boxm2_multi_cache: public vbl_ref_count
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   public:
-    boxm2_multi_cache( boxm2_scene_sptr               scene,
+    boxm2_multi_cache( const boxm2_scene_sptr&               scene,
                  const std::vector<bocl_device_sptr> & devices );
     ~boxm2_multi_cache() override;
 
@@ -50,7 +50,7 @@ class boxm2_multi_cache: public vbl_ref_count
     void clear();
 
     //get group order
-    std::vector<boxm2_multi_cache_group*> get_vis_groups(vpgl_camera_double_sptr cam);
+    std::vector<boxm2_multi_cache_group*> get_vis_groups(const vpgl_camera_double_sptr& cam);
     std::vector<boxm2_multi_cache_group*> group_order_from_pt(vgl_point_3d<double> const& pt,
                                                              vgl_box_2d<double> const& camBox);
 
@@ -58,7 +58,7 @@ class boxm2_multi_cache: public vbl_ref_count
     std::vector<boxm2_opencl_cache1*> get_vis_order_from_pt(vgl_point_3d<double> const& pt);
     std::vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_perspective_camera<double>* cam);
     std::vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_generic_camera<double>* cam);
-    std::vector<boxm2_opencl_cache1*> get_vis_sub_scenes(vpgl_camera_double_sptr cam);
+    std::vector<boxm2_opencl_cache1*> get_vis_sub_scenes(const vpgl_camera_double_sptr& cam);
 
   private:
     boxm2_scene_sptr                     scene_;

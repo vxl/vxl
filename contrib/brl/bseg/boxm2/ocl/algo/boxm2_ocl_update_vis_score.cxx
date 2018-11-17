@@ -46,9 +46,9 @@ boxm2_ocl_update_vis_score
 }
 
 boxm2_ocl_update_vis_score
-::boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
-                             bocl_device_sptr device,
-                             boxm2_opencl_cache_sptr ocl_cache,
+::boxm2_ocl_update_vis_score(const boxm2_scene_sptr& scene,
+                             const bocl_device_sptr& device,
+                             const boxm2_opencl_cache_sptr& ocl_cache,
                              bool use_surface_normals,
                              bool optimize_transfers) :
   use_surface_normals_(use_surface_normals),
@@ -67,7 +67,7 @@ boxm2_ocl_update_vis_score
 ::run(vpgl_camera_double_sptr cam,
       unsigned ni,
       unsigned nj,
-      std::string prefix_name )
+      const std::string& prefix_name )
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -288,7 +288,7 @@ boxm2_ocl_update_vis_score
 
 void
 boxm2_ocl_update_vis_score
-::reset(std::string prefix_name){
+::reset(const std::string& prefix_name){
   int status=0;
   cl_command_queue queue = clCreateCommandQueue(device_->context(),*(device_->device_id()),
                                                 CL_QUEUE_PROFILING_ENABLE,&status);

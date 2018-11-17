@@ -9,7 +9,7 @@
 #include "rgrl_view.h"
 
 rgrl_matcher_fixed::
-rgrl_matcher_fixed( rgrl_match_set_sptr  init_match_set_ ):
+rgrl_matcher_fixed( const rgrl_match_set_sptr&  init_match_set_ ):
   match_set_( init_match_set_ )
 {
 }

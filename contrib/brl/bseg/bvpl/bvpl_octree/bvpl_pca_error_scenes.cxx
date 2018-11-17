@@ -14,7 +14,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bvpl_pca_error_scenes::bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, std::string pca_path, unsigned dim)
+bvpl_pca_error_scenes::bvpl_pca_error_scenes(const boxm_scene_base_sptr& data_scene_base, const std::string& pca_path, unsigned dim)
 {
   typedef boct_tree<short,float> tree_type;
   for (unsigned i =0; i<dim+1; i++)

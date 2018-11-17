@@ -162,8 +162,8 @@ class vtol_edge : public vtol_topology_object
   // Status report
   //***************************************************************************
 
-  void link_inferior(vtol_zero_chain_sptr inf);
-  void unlink_inferior(vtol_zero_chain_sptr inf);
+  void link_inferior(const vtol_zero_chain_sptr& inf);
+  void unlink_inferior(const vtol_zero_chain_sptr& inf);
 
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?

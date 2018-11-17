@@ -116,7 +116,7 @@ static bool extract_snippets(std::string const& spatial_object_path,
   unsigned ni = 0, nj = 0;
   for (auto & soit : sos)
   {
-    vsol_spatial_object_2d_sptr so = soit;
+    const vsol_spatial_object_2d_sptr& so = soit;
     if (!so)
       continue;
     vsol_box_2d_sptr bb = so->get_bounding_box();

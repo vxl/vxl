@@ -95,7 +95,7 @@ class vpdfl_mixture : public vpdfl_pdf_base
 
   //: Set the contents of the mixture model.
   // Clones are taken of all the data, and the class will be responsible for their deletion.
-  void set(const std::vector<vpdfl_pdf_base*> components, const std::vector<double> & weights);
+  void set(const std::vector<vpdfl_pdf_base*>& components, const std::vector<double> & weights);
 
   //: Add a component to current model
   //  Clone taken of comp

@@ -29,7 +29,7 @@ std::vector< rgrl_feature_sptr >  rgrl_feature_reader::feature_candidates_;
     return fea_ptr; \
   }
 
-void rgrl_feature_reader::add_feature( rgrl_feature_sptr feat )
+void rgrl_feature_reader::add_feature( const rgrl_feature_sptr& feat )
 {
   feature_candidates_.push_back(feat);
 }

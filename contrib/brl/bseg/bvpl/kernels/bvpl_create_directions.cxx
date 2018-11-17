@@ -152,7 +152,7 @@ bvpl_create_directions_c::bvpl_create_directions_c()
   save_directions_map("directions_c.svg");
 }
 
-void bvpl_create_directions_base::save_directions_map(std::string outfile)
+void bvpl_create_directions_base::save_directions_map(const std::string& outfile)
 {
   bsvg_document doc(400, 800);
   auto iter1 = axes_.begin();

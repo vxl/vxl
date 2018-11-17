@@ -54,7 +54,7 @@ void boxm2_vecf_point_cloud_orbit_viewer::add_sphere(vgl_sphere_3d<double> const
   }
 }
 
-bool boxm2_vecf_point_cloud_orbit_viewer::display_orbit(boxm2_vecf_orbit_params opr, bool is_right){
+bool boxm2_vecf_point_cloud_orbit_viewer::display_orbit(const boxm2_vecf_orbit_params& opr, bool is_right){
   double xm_min = opr.x_min()-10.0;
   double xm_max = opr.x_max()+10.0;
   std::vector<vgl_point_3d<double> > inf_pts, sup_pts, crease_pts;

@@ -29,7 +29,7 @@ bool vpgl_nitf_camera_coverage_process_cons(bprb_func_process& pro)
 }
 
 // Get regions from a file.
-void  get_regions(std::string file, std::vector< vgl_point_2d<double> > &region)
+void  get_regions(const std::string& file, std::vector< vgl_point_2d<double> > &region)
 {
   region.clear();
   std::ifstream ifs( file.c_str() );

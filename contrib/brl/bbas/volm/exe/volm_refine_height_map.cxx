@@ -11,29 +11,30 @@
 // \endverbatim
 //
 
-#include <iostream>
 #include <algorithm>
-#include <vul/vul_arg.h>
-#include <vul/vul_file.h>
-#include <volm/volm_io.h>
-#include <volm/volm_io_tools.h>
-#include <volm/volm_category_io.h>
-#include <volm/volm_geo_index2.h>
-#include <volm/volm_osm_objects.h>
+#include <iostream>
+#include <utility>
+#include <vil/algo/vil_region_finder.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
-#include <vil/algo/vil_region_finder.h>
+#include <volm/volm_category_io.h>
+#include <volm/volm_geo_index2.h>
+#include <volm/volm_io.h>
+#include <volm/volm_io_tools.h>
+#include <volm/volm_osm_objects.h>
+#include <vul/vul_arg.h>
+#include <vul/vul_file.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <vul/vul_file_iterator.h>
 
 
-static void error(std::string log_file, std::string msg)
+static void error(std::string log_file, const std::string& msg)
 {
   std::cerr << msg;
-  volm_io::write_post_processing_log(log_file, msg);
+  volm_io::write_post_processing_log(std::move(log_file), msg);
 }
 
 static bool float_equal(float const& a, float const& b)

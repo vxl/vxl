@@ -52,32 +52,32 @@ class vmal_track_lines
   void track_lines(const std::vector<std::vector<vtol_edge_2d_sptr>*>* fit_lines,
                    const std::vector<std::vector<vtol_edge_2d_sptr>*>* transformed_lines,
                    const std::vector<vil1_image> &images, const std::vector<vnl_double_3x3> &homo,
-                   vmal_multi_view_data_edge_sptr matches);
+                   const vmal_multi_view_data_edge_sptr& matches);
 
 //---------------------------------------------------------------------------
 //: Sort the input matches.
 // The first end-point of the first line of a match
 // must be linked to the corresponding end-point of the second line.
 //---------------------------------------------------------------------------
-  void sort_lines(vmal_multi_view_data_edge_sptr matches,
-                  vmal_multi_view_data_edge_sptr sorted_matches);
+  void sort_lines(const vmal_multi_view_data_edge_sptr& matches,
+                  const vmal_multi_view_data_edge_sptr& sorted_matches);
 
 //---------------------------------------------------------------------------
 //: Compute the correlation between two lines using the homography.
 // It also computes a translation vector to correct the error due to
 // the homography.
 //---------------------------------------------------------------------------
-  double lines_correlation(vtol_edge_2d_sptr line0,
-                           vtol_edge_2d_sptr line1,
+  double lines_correlation(const vtol_edge_2d_sptr& line0,
+                           const vtol_edge_2d_sptr& line1,
                            const vnl_double_3x3 & H,
                            vil1_memory_image_of<vxl_byte> &image0,
                            vil1_memory_image_of<vxl_byte> &image1);
 
  private:
 
-  double seg_angle(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
-  bool belong(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
-  double dist(vtol_edge_2d_sptr, vtol_edge_2d_sptr);
+  double seg_angle(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
+  bool belong(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
+  double dist(const vtol_edge_2d_sptr&, const vtol_edge_2d_sptr&);
 //-----------------------------------------------------------------------------
 //: Project the point (x0,y0) on the line ((ax,ay),(bx,by)).
 // The resulting projected point is (x,y).
@@ -89,11 +89,11 @@ class vmal_track_lines
                        double bx,double by,
                        double *x,double *y);
 
-  int is_cur_best(vtol_edge_2d_sptr trans_line,vtol_edge_2d_sptr fitted_line,vtol_edge_2d_sptr other_line);
+  int is_cur_best(const vtol_edge_2d_sptr& trans_line,const vtol_edge_2d_sptr& fitted_line,const vtol_edge_2d_sptr& other_line);
 //-----------------------------------------------------------------------------
 //: Find the transformed of line.
 //-----------------------------------------------------------------------------
-  vtol_edge_2d_sptr find_transfo(vtol_edge_2d_sptr line,
+  vtol_edge_2d_sptr find_transfo(const vtol_edge_2d_sptr& line,
                                  std::vector<vtol_edge_2d_sptr>& fit_lines,
                                  const std::vector<vtol_edge_2d_sptr>& transformed_lines);
 //-----------------------------------------------------------------------------
@@ -103,15 +103,15 @@ class vmal_track_lines
                           vtol_edge_2d_sptr &new_line0, vtol_edge_2d_sptr &new_line1,
                           const vnl_double_3x3 &H);
 
-  void sort_a_pair_of_line(vtol_edge_2d_sptr line0,
-                           vtol_edge_2d_sptr line1,
+  void sort_a_pair_of_line(const vtol_edge_2d_sptr& line0,
+                           const vtol_edge_2d_sptr& line1,
                            vtol_edge_2d_sptr &new_line0,
                            vtol_edge_2d_sptr &new_line1);
 
 
-  void cost_function(vtol_edge_2d_sptr line0,
-                     vtol_edge_2d_sptr t_line0,
-                     vtol_edge_2d_sptr line1,
+  void cost_function(const vtol_edge_2d_sptr& line0,
+                     const vtol_edge_2d_sptr& t_line0,
+                     const vtol_edge_2d_sptr& line1,
                      const vil1_image &image0, const vil1_image &image1,
                      const vnl_double_3x3 homo,
                      double &result);

@@ -45,7 +45,7 @@ public:
   ~volm_land_layer() = default;
 
   //: check the existence of certain land layer
-  bool contains(std::string name);
+  bool contains(const std::string& name);
   //: screen print
   void print() const
   {

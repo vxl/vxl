@@ -50,12 +50,12 @@ class boxm2_volm_wr3db_index_params
     boxm2_volm_wr3db_index_params() : start(0), skip(1), vmin(-1.0), dmax(-1.0), solid_angle(-1.0), layer_size(0) {}
 
     // text i/o
-    bool write_params_file(std::string index_file_name);
-    bool read_params_file(std::string index_file_name);
+    bool write_params_file(const std::string& index_file_name);
+    bool read_params_file(const std::string& index_file_name);
 
     // text i/o
-    static bool write_size_file(std::string index_file_name, unsigned long size);
-    static bool read_size_file(std::string index_file_name, unsigned long& size);
+    static bool write_size_file(const std::string& index_file_name, unsigned long size);
+    static bool read_size_file(const std::string& index_file_name, unsigned long& size);
 
     static bool query_params_equal(boxm2_volm_wr3db_index_params& p1, boxm2_volm_wr3db_index_params& p2);
 
@@ -80,8 +80,8 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     ~boxm2_volm_wr3db_index() override;
 
     //: io as chunks of data to a set of files in the specified folder
-    bool initialize_read(std::string file_name);
-    bool initialize_write(std::string file_name);
+    bool initialize_read(const std::string& file_name);
+    bool initialize_write(const std::string& file_name);
     bool finalize();
 
     //: return the max number of indices on active cache
@@ -106,7 +106,7 @@ class boxm2_volm_wr3db_index : public vbl_ref_count
     bool close_file(std::string out_file);
 
     //: inflate an index value array and return a vector of chars whose values are one of the combinations VIS_OCC, VIS_UNOCC, NONVIS_UNKNOWN
-    static bool inflate_index_vis_and_prob(std::vector<uchar>& values, volm_spherical_container_sptr cont, std::vector<char>& vis_prob);
+    static bool inflate_index_vis_and_prob(std::vector<uchar>& values, const volm_spherical_container_sptr& cont, std::vector<char>& vis_prob);
 
   protected:
     unsigned int read_to_buffer(uchar* buf);

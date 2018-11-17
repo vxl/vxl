@@ -29,7 +29,7 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_multi_update_cell::kerne
 //-------------------------------------------------------------
 float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
                                             const vil_image_view<float>& img,
-                                            vpgl_camera_double_sptr      cam,
+                                            const vpgl_camera_double_sptr&      cam,
                                             float*                       norm_image,
                                             boxm2_multi_update_helper&   helper)
 {
@@ -162,10 +162,10 @@ float boxm2_multi_update_cell::update_cells(boxm2_multi_cache&           cache,
 
 //runs pre/vis on single block
 float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
-                                                   boxm2_scene_sptr     /*scene*/,
+                                                   const boxm2_scene_sptr&     /*scene*/,
                                                    boxm2_opencl_cache1* opencl_cache,
                                                    cl_command_queue&   queue,
-                                                   std::string          data_type,
+                                                   const std::string&          data_type,
                                                    bocl_kernel*        kern,
                                                    bocl_mem_sptr&      vis_image,
                                                    bocl_mem_sptr&      pre_image,
@@ -253,7 +253,7 @@ float boxm2_multi_update_cell::calc_beta_per_block(const boxm2_block_id&     id,
 
 
 float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
-                                                 vpgl_camera_double_sptr cam,
+                                                 const vpgl_camera_double_sptr& cam,
                                                  boxm2_multi_update_helper& helper )
 {
   vul_timer ttime; ttime.mark();
@@ -412,7 +412,7 @@ float boxm2_multi_update_cell::calc_beta_reduce( boxm2_multi_cache& mcache,
 //-----------------------------------------------------------------
 // returns vector of bocl_kernels for this specific device
 //-----------------------------------------------------------------
-std::vector<bocl_kernel*>& boxm2_multi_update_cell::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_multi_update_cell::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // check to see if this device has compiled kernels already
   std::string identifier = device->device_identifier()+opts;

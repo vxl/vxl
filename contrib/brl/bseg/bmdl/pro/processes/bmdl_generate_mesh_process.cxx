@@ -81,7 +81,7 @@ void generate_kml(std::string& kml_filename,
 
   imesh_half_edge_set he = mesh.half_edges();
   std::vector<std::set<unsigned int> > cc = imesh_detect_connected_components(he);
-  for (auto sel_faces : cc) {
+  for (const auto& sel_faces : cc) {
     imesh_mesh building = imesh_submesh_from_faces(mesh, sel_faces);
     update_mesh_coord(building, lidar_cam);
     imesh_write_kml(os, building);
@@ -344,10 +344,10 @@ void generate_kml_collada(std::string& kmz_dir,
 }
 
 
-bool generate_mesh(std::string fpath_poly,
-                   vil_image_view_base_sptr label_img,
-                   vil_image_view_base_sptr height_img,
-                   vil_image_view_base_sptr ground_img,
+bool generate_mesh(const std::string& fpath_poly,
+                   const vil_image_view_base_sptr& label_img,
+                   const vil_image_view_base_sptr& height_img,
+                   const vil_image_view_base_sptr& ground_img,
                    std::string fpath_mesh,
                    vpgl_geo_camera* const lidar_cam,
                    unsigned& num_of_buildings)

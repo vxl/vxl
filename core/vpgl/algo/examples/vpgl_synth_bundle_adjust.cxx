@@ -27,7 +27,8 @@ int main(int argc, char** argv)
   vnl_random rnd(seed);
 
   std::vector<vgl_point_3d<double> > world;
-  for (int i=0; i<a_num_cameras(); ++i)
+  world.reserve(a_num_cameras());
+for (int i=0; i<a_num_cameras(); ++i)
     world.emplace_back(rnd.drand32(-1,1), rnd.drand32(-1,1), rnd.drand32(-1,1));
 
   // our known internal calibration

@@ -117,7 +117,7 @@ class vtol_edge_2d : public vtol_edge
   explicit vtol_edge_2d(vsol_curve_2d &);
 
   //: Constructor from two vertices (alternate interface)
-  vtol_edge_2d(double, double, double, double, vsol_curve_2d_sptr c=nullptr);
+  vtol_edge_2d(double, double, double, double, const vsol_curve_2d_sptr& c=nullptr);
 
   //---------------------------------------------------------------------------
   //: Destructor

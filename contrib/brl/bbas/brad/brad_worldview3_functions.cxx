@@ -336,8 +336,8 @@ void brad_wv3_bands(
 };
 
 void save_corrected_wv3(
-  const vil_image_view<float> corr_img,
-  const std::string save_dir)
+  const vil_image_view<float>& corr_img,
+  const std::string& save_dir)
 {
   int np = corr_img.nplanes();
   vil_image_view<float> cur_plane;
@@ -351,7 +351,7 @@ void save_corrected_wv3(
 };
 
 void load_corrected_wv3(
-  const std::string img_dir,
+  const std::string& img_dir,
   vil_image_view<float>& cal_img) {
 
   // load first band to get the image size

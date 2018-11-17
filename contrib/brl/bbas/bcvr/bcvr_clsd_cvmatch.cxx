@@ -18,8 +18,8 @@ bcvr_clsd_cvmatch::bcvr_clsd_cvmatch()
   setTemplateSize(3);
 }
 
-bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1,
-                                     const bsol_intrinsic_curve_2d_sptr c2,
+bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr& c1,
+                                     const bsol_intrinsic_curve_2d_sptr& c2,
                                      double R,
                                      int template_size)
 {
@@ -62,8 +62,8 @@ bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const bsol_intrinsic_curve_2d_sptr c1,
   setTemplateSize(template_size);
 }
 
-bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr p1,
-                                     const vsol_polygon_2d_sptr p2,
+bcvr_clsd_cvmatch::bcvr_clsd_cvmatch(const vsol_polygon_2d_sptr& p1,
+                                     const vsol_polygon_2d_sptr& p2,
                                      double R,
                                      double rms,  // fit lines to the input polygon before using
                                      int template_size)
@@ -223,7 +223,7 @@ void bcvr_clsd_cvmatch::printCost()
   }
 }
 
-void bcvr_clsd_cvmatch::writeCost(std::string fname)
+void bcvr_clsd_cvmatch::writeCost(const std::string& fname)
 {
   std::FILE *fp=std::fopen(fname.c_str(),"w");
   int i,j;
@@ -519,12 +519,12 @@ void bcvr_clsd_cvmatch::Match()
 #endif
 }
 
-double bcvr_clsd_cvmatch::stretchCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip)
+double bcvr_clsd_cvmatch::stretchCost (const bsol_intrinsic_curve_2d_sptr& curve, int i, int ip)
 {
   return curve->arcLength(i) - curve->arcLength(ip);
 }
 
-double bcvr_clsd_cvmatch::bendCost (bsol_intrinsic_curve_2d_sptr curve, int i, int ip)
+double bcvr_clsd_cvmatch::bendCost (const bsol_intrinsic_curve_2d_sptr& curve, int i, int ip)
 {
   return curve_angleDiff (curve->angle(i), curve->angle(ip));
 }

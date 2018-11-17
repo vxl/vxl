@@ -83,9 +83,9 @@ set_sampling_params( double max_outlier_frac,
 
 void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set,
-         rgrl_scale_estimator_unwgted_sptr  scale_est,
-         rgrl_view_sptr                     prior_view,
+set_data(const rgrl_match_set_sptr&                init_match_set,
+         const rgrl_scale_estimator_unwgted_sptr&  scale_est,
+         const rgrl_view_sptr&                     prior_view,
          bool should_estimate_global_region)
 {
   match_set_ = init_match_set;
@@ -99,12 +99,12 @@ set_data(rgrl_match_set_sptr                init_match_set,
 
 void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set,
-         rgrl_scale_estimator_unwgted_sptr  scale_est,
+set_data(const rgrl_match_set_sptr&                init_match_set,
+         const rgrl_scale_estimator_unwgted_sptr&  scale_est,
          rgrl_mask_sptr           const&    from_image_roi,
          rgrl_mask_sptr           const&    to_image_roi,
          rgrl_mask_box            const&    initial_from_image_roi,
-         rgrl_estimator_sptr                xform_estimator,
+         const rgrl_estimator_sptr&                xform_estimator,
          unsigned                           initial_resolution,
          bool should_estimate_global_region)
 {
@@ -118,11 +118,11 @@ set_data(rgrl_match_set_sptr                init_match_set,
 
 void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set,
-         rgrl_scale_estimator_unwgted_sptr  scale_est,
+set_data(const rgrl_match_set_sptr&                init_match_set,
+         const rgrl_scale_estimator_unwgted_sptr&  scale_est,
          rgrl_mask_sptr      const&         from_image_roi,
          rgrl_mask_sptr      const&         to_image_roi,
-         rgrl_estimator_sptr                xform_estimator,
+         const rgrl_estimator_sptr&                xform_estimator,
          unsigned                           initial_resolution )
 {
   rgrl_mask_box global_region( from_image_roi->bounding_box() );
@@ -135,10 +135,10 @@ set_data(rgrl_match_set_sptr                init_match_set,
 
 void
 rgrl_initializer_ran_sam::
-set_data(rgrl_match_set_sptr                init_match_set,
-         rgrl_scale_estimator_unwgted_sptr  scale_est,
+set_data(const rgrl_match_set_sptr&                init_match_set,
+         const rgrl_scale_estimator_unwgted_sptr&  scale_est,
          rgrl_mask_sptr      const&         from_image_roi,
-         rgrl_estimator_sptr                xform_estimator,
+         const rgrl_estimator_sptr&                xform_estimator,
          unsigned                           initial_resolution )
 {
   rgrl_mask_box global_region( from_image_roi->bounding_box() );

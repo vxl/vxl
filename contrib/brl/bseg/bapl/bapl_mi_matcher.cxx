@@ -19,8 +19,8 @@
 
 
 //: Constructor
-bapl_mi_matcher::bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
-                                 vil_image_view<vxl_byte> target_patch,
+bapl_mi_matcher::bapl_mi_matcher(const vil_image_view<vxl_byte>& src_image,
+                                 const vil_image_view<vxl_byte>& target_patch,
                                  bapl_affine_transform init_xform,
                                  bapl_mi_matcher_params params)
   :  src_img_(src_image), tgt_img_(target_patch), tgt_entropy_(0.0),
@@ -34,7 +34,7 @@ bapl_mi_matcher::bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
 
 
 //: Constructor
-bapl_mi_matcher::bapl_mi_matcher(vil_image_view<vxl_byte> src_image,
+bapl_mi_matcher::bapl_mi_matcher(const vil_image_view<vxl_byte>& src_image,
                                  bapl_affine_roi& roi,
                                  bapl_mi_matcher_params params)
   :  src_img_(src_image), tgt_img_(roi.rectified_image()), tgt_entropy_(0.0),

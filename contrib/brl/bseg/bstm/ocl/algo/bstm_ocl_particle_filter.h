@@ -29,7 +29,7 @@
 class bstm_ocl_particle_filter
 {
  public:
-  bstm_ocl_particle_filter(bocl_device_sptr device, bstm_scene_sptr scene, bstm_cache_sptr cache, bstm_opencl_cache_sptr opencl_cache,
+  bstm_ocl_particle_filter(const bocl_device_sptr& device, const bstm_scene_sptr& scene, const bstm_cache_sptr& cache, const bstm_opencl_cache_sptr& opencl_cache,
                            unsigned start_t, unsigned end_t, vgl_box_3d<double> initial_bb, int num_particles, double t_sigma, double w_sigma,
                            std::string kernel_opt, int nbins, int label, double radius = 0 );
 
@@ -63,7 +63,7 @@ class bstm_ocl_particle_filter
 
   void mean_state( unsigned t, vgl_vector_3d<double> & mean_T, vgl_rotation_3d<double>& mean_R);
   vgl_rotation_3d<double> mean_rot( std::vector< vgl_rotation_3d<double> > rot, std::vector< double > weights );
-  vgl_rotation_3d<double> sample_rot(vgl_rotation_3d<double> rot, double kappa , double w_sigma );
+  vgl_rotation_3d<double> sample_rot(const vgl_rotation_3d<double>& rot, double kappa , double w_sigma );
 
 
   //helper

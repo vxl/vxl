@@ -25,7 +25,7 @@ vifa_line_cover()
 }
 
 vifa_line_cover::
-vifa_line_cover(imp_line_sptr  prototype_line,
+vifa_line_cover(const imp_line_sptr&  prototype_line,
                 int            indexdimension)
 {
   line_ = prototype_line;
@@ -54,7 +54,7 @@ vifa_line_cover::
 //------------------------------------------------------------
 //: Insert a line in the index. The line is inserted in each index bin it covers.
 void vifa_line_cover::
-InsertLine(imp_line_sptr  l)
+InsertLine(const imp_line_sptr&  l)
 {
   int  rdim1 = dim_ - 1;
 

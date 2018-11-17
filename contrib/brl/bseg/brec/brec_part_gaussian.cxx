@@ -31,7 +31,7 @@
 #include <vul/vul_psfile.h>
 
 //: strength_threshold in [0,1] - min strength to declare the part as detected
-bool extract_gaussian_primitives(vil_image_resource_sptr img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts)
+bool extract_gaussian_primitives(const vil_image_resource_sptr& img, float lambda0, float lambda1, float theta, bool bright, float cutoff_percentage, float strength_threshold, unsigned type, std::vector<brec_part_instance_sptr>& parts)
 {
   vil_image_view<float> fimg = brip_vil_float_ops::convert_to_float(img);
   vil_image_view<float> extr = brip_vil_float_ops::extrema(fimg, lambda0, lambda1, theta, bright, false,true);
@@ -569,7 +569,7 @@ bool brec_part_gaussian::update_response_hist(vil_image_view<float>& img, vil_im
 //  fg_prob_image is the probability of being foreground for each pixel
 //  pb_zero is the constant required for the background response model (probability of zero response)
 bool brec_part_gaussian::extract(vil_image_view<float>& img, vil_image_view<float>& fg_prob_image,
-                                 float rot_angle, std::string model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class)
+                                 float rot_angle, const std::string& model_dir, std::vector<brec_part_instance_sptr>& instances, float prior_class)
 {
   unsigned ni = img.ni();
   unsigned nj = img.nj();
@@ -828,7 +828,7 @@ bool brec_part_gaussian::update_foreground_posterior(vil_image_view<float>& img,
   return true;
 }
 
-bool draw_gauss_to_ps(vul_psfile& ps, brec_part_gaussian_sptr pi, float x, float y, float cr, float cg, float cb)
+bool draw_gauss_to_ps(vul_psfile& ps, const brec_part_gaussian_sptr& pi, float x, float y, float cr, float cg, float cb)
 {
   ps.set_fg_color(cr,cg,cb);
   ps.set_line_width(1.f);

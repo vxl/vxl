@@ -32,12 +32,12 @@
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_auxQ::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_auxQ::update_auxQ(const boxm2_scene_sptr&         scene,
                               bocl_device_sptr         device,
-                              boxm2_opencl_cache_sptr  opencl_cache,
+                              const boxm2_opencl_cache_sptr&  opencl_cache,
                               vpgl_camera_double_sptr  cam,
-                              vil_image_view_base_sptr img,
-                              std::string               app_ident,
+                              const vil_image_view_base_sptr& img,
+                              const std::string&               app_ident,
                               std::string               view_ident,
                               float resnearfactor ,
                               float resfarfactor )
@@ -407,7 +407,7 @@ bool boxm2_ocl_update_auxQ::update_auxQ(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -433,7 +433,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr d
   src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
   //compilation options
-  std::string options = /*"-D ATOMIC_FLOAT " +*/ opts;
+  const std::string& options = /*"-D ATOMIC_FLOAT " +*/ opts;
 
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
@@ -475,7 +475,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_auxQ::get_kernels(bocl_device_sptr d
   return kernels_[identifier];
 }
 //makes sure appearance types correspond correctly
-bool boxm2_ocl_update_auxQ::validate_appearances(boxm2_scene_sptr scene,
+bool boxm2_ocl_update_auxQ::validate_appearances(const boxm2_scene_sptr& scene,
                                             std::string& data_type,
                                             int& appTypeSize,
                                             std::string& num_obs_type,
@@ -519,7 +519,7 @@ bool boxm2_ocl_update_auxQ::validate_appearances(boxm2_scene_sptr scene,
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_PusingQ::kernels_;
 
-bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, boxm2_cache_sptr cache)
+bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache)
 {
     std::vector<boxm2_block_id> vis_order = scene->get_block_ids();
     std::vector<boxm2_block_id>::iterator id;
@@ -533,10 +533,10 @@ bool boxm2_ocl_update_PusingQ::init_product(boxm2_scene_sptr scene, boxm2_cache_
     return true;
 }
 
-bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene,
-                                                  bocl_device_sptr         device,
-                                                  boxm2_opencl_cache_sptr  opencl_cache,
-                                                  std::string identifier)
+bool boxm2_ocl_update_PusingQ::accumulate_product(const boxm2_scene_sptr&         scene,
+                                                  const bocl_device_sptr&         device,
+                                                  const boxm2_opencl_cache_sptr&  opencl_cache,
+                                                  const std::string& identifier)
 {
   float transfer_time=0.0f;
   float gpu_time=0.0f;
@@ -605,9 +605,9 @@ bool boxm2_ocl_update_PusingQ::accumulate_product(boxm2_scene_sptr         scene
   clReleaseCommandQueue(queue);
   return true;
 }
-bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scene,
-                                                   bocl_device_sptr         device,
-                                                   boxm2_opencl_cache_sptr  opencl_cache)
+bool boxm2_ocl_update_PusingQ::compute_probability(const boxm2_scene_sptr&         scene,
+                                                   const bocl_device_sptr&         device,
+                                                   const boxm2_opencl_cache_sptr&  opencl_cache)
 
 {
   float transfer_time=0.0f;
@@ -701,7 +701,7 @@ bool boxm2_ocl_update_PusingQ::compute_probability(boxm2_scene_sptr         scen
   return true;
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_update_PusingQ::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_PusingQ::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;

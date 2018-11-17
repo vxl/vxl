@@ -34,15 +34,15 @@ void convert_points_double_3(std::vector<vtol_vertex_2d_sptr> in,
                              vnl_double_3 * &out);
 
 //Convert a vtol_edge_2d to two vnl_double_3 representing its end-points.
-void convert_line_double_3(vtol_edge_2d_sptr in,
+void convert_line_double_3(const vtol_edge_2d_sptr& in,
                            vnl_double_3 &outp,
                            vnl_double_3 &outq);
 
-void convert_line_double_2(vtol_edge_2d_sptr in,
+void convert_line_double_2(const vtol_edge_2d_sptr& in,
                            vnl_double_2 &outp,
                            vnl_double_2 &outq);
 
-void convert_point_double_3(vtol_vertex_2d_sptr in,
+void convert_point_double_3(const vtol_vertex_2d_sptr& in,
                             vnl_double_3 &out);
 
 void convert_grey_memory_image(const vil1_image & image,

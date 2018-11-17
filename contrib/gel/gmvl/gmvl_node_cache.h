@@ -24,14 +24,14 @@ class gmvl_node_cache
   ~gmvl_node_cache();
 
   // normal accessors
-  void add( const gmvl_node_sptr node);
-  void remove( const gmvl_node_sptr node);
+  void add( const gmvl_node_sptr& node);
+  void remove( const gmvl_node_sptr& node);
   gmvl_node_sptr get( const int index) const { return nodes_[index]; }
 
-  bool cached( const gmvl_node_sptr node) const;
+  bool cached( const gmvl_node_sptr& node) const;
 
   // clever accessors
-  std::vector<gmvl_node_sptr> get( const std::string type) const;
+  std::vector<gmvl_node_sptr> get( const std::string& type) const;
 
   // input / output
   friend std::ostream &operator<<( std::ostream &os, const gmvl_node_cache &c);

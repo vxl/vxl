@@ -22,7 +22,7 @@ class boxm2_multi_store_aux
     //three separate sub procedures (three separate map reduce tasks)
     static float store_aux( boxm2_multi_cache& cache,
                             vil_image_view<float>& img,
-                            vpgl_camera_double_sptr cam,
+                            const vpgl_camera_double_sptr& cam,
                             boxm2_multi_update_helper& helper);
 
     //static float store_aux_color( boxm2_multi_cache& cache,
@@ -33,7 +33,7 @@ class boxm2_multi_store_aux
   private:
 
     static void store_aux_per_block(const boxm2_block_id& id,
-                                          boxm2_scene_sptr    scene,
+                                          const boxm2_scene_sptr&    scene,
                                           boxm2_opencl_cache1* opencl_cache,
                                           cl_command_queue&   queue,
                                           bocl_kernel*        kernel,
@@ -57,10 +57,10 @@ class boxm2_multi_store_aux
     static std::map<std::string, bocl_kernel*> kernels_;
 
     //compile kernels and cache
-    static bocl_kernel* get_kernels(bocl_device_sptr device, std::string opts);
+    static bocl_kernel* get_kernels(const bocl_device_sptr& device, const std::string& opts);
 
     //compile rgb kernels and store
-    static bocl_kernel* get_kernels_color(bocl_device_sptr device, std::string opts);
+    static bocl_kernel* get_kernels_color(const bocl_device_sptr& device, const std::string& opts);
 };
 
 #endif

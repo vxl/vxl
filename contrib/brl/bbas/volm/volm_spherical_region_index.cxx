@@ -16,7 +16,7 @@
 
 volm_spherical_region_index::
 volm_spherical_region_index(std::map<std::string,std::string> & index_file_paths,
-                            std::string usph_file_path)
+                            const std::string& usph_file_path)
 {
     auto iter = index_file_paths.begin();
     for (;iter!=index_file_paths.end(); iter++)
@@ -200,7 +200,7 @@ volm_spherical_region_index::volm_spherical_region_index(std::map<std::string,st
     }
 }
 
-void volm_spherical_region_index::load_unitsphere(std::string usph_file_path)
+void volm_spherical_region_index::load_unitsphere(const std::string& usph_file_path)
 {
   vsl_b_ifstream is(usph_file_path);
   if (!is)

@@ -52,9 +52,9 @@ static float min_diff(vil_image_view<float> const & view0, float v1, size_t i1, 
   }
   return min_v;
 }
-static void update_hist_dem(vil_image_resource_sptr img0, vpgl_rational_camera<double>* cam0,
-                            vil_image_resource_sptr img1, vpgl_rational_camera<double>* cam1,
-                            vil_image_resource_sptr dem_resc,
+static void update_hist_dem(const vil_image_resource_sptr& img0, vpgl_rational_camera<double>* cam0,
+                            const vil_image_resource_sptr& img1, vpgl_rational_camera<double>* cam1,
+                            const vil_image_resource_sptr& dem_resc,
                             bsta_joint_histogram<float>& h, bool use_inten = true/* vs x_grad*/){
     if(!img0||!img1||!cam0||!cam1||!dem_resc)
       return;

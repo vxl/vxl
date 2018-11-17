@@ -37,8 +37,8 @@ class bcvr_cv_cor : public vbl_ref_count
  public:
   //: constructors
   bcvr_cv_cor();
-  bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
-              const bsol_intrinsic_curve_2d_sptr c2,
+  bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr& c1,
+              const bsol_intrinsic_curve_2d_sptr& c2,
               std::vector<std::pair<int,int> >& map,
               int n1);
 
@@ -73,7 +73,7 @@ class bcvr_cv_cor : public vbl_ref_count
   double get_length2() { return length2_; }
 
   //: write points to a file
-  bool write_correspondence(std::string file_name, int increment = 1);
+  bool write_correspondence(const std::string& file_name, int increment = 1);
 
   vsol_polygon_2d_sptr get_poly1() { return poly1_; }
   vsol_polygon_2d_sptr get_poly2() { return poly2_; }

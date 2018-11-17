@@ -12,7 +12,7 @@
 #include <vil/vil_new.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil_image_resource_sptr vepl_gradient_mag(vil_image_resource_sptr image, double scale, double shift)
+vil_image_resource_sptr vepl_gradient_mag(const vil_image_resource_sptr& image, double scale, double shift)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 

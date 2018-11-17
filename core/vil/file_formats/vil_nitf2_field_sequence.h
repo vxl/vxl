@@ -120,7 +120,7 @@ class vil_nitf2_field_sequence
 #endif // 0
 
   // Returns a field with specified tag, or 0 if not found.
-  vil_nitf2_field* get_field(std::string tag) const;
+  vil_nitf2_field* get_field(const std::string& tag) const;
 
   // Removes the field with the specified tag, returning whether successful.
   // Not yet implemented.
@@ -132,7 +132,7 @@ class vil_nitf2_field_sequence
   // field definitions only.
   bool read(vil_nitf2_istream& input,
             const vil_nitf2_field_definitions* field_defs = nullptr,
-            vil_nitf2_index_vector indexes = vil_nitf2_index_vector());
+            const vil_nitf2_index_vector& indexes = vil_nitf2_index_vector());
 
   // Attempts to write field sequence to the output stream. Arg
   // 'indexes' is used only during recursive calls to write nested sequences.
@@ -150,7 +150,7 @@ class vil_nitf2_field_sequence
                                   const vil_nitf2_index_vector& index, int repeat_count);
 
   // Returns field definition if found
-  vil_nitf2_field_definition* find_field_definition(std::string tag);
+  vil_nitf2_field_definition* find_field_definition(const std::string& tag);
 
   // I allocate the return value, but you own it after I return it to you
   // so you need to delete it.  If you pass in 'tr', then I'll add my stuff to that.

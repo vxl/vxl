@@ -11,7 +11,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bool volm_buffered_index_params::write_params_file(std::string index_file_name_pre)
+bool volm_buffered_index_params::write_params_file(const std::string& index_file_name_pre)
 {
   //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::string index_params_file = index_file_name_pre + ".params";
@@ -23,7 +23,7 @@ bool volm_buffered_index_params::write_params_file(std::string index_file_name_p
   return true;
 }
 
-bool volm_buffered_index_params::read_params_file(std::string index_file_name_pre)
+bool volm_buffered_index_params::read_params_file(const std::string& index_file_name_pre)
 {
   //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::string index_params_file = index_file_name_pre + ".params";
@@ -36,7 +36,7 @@ bool volm_buffered_index_params::read_params_file(std::string index_file_name_pr
   return true;
 }
 
-bool volm_buffered_index_params::write_ex_param_file(std::string index_file_name_pre)
+bool volm_buffered_index_params::write_ex_param_file(const std::string& index_file_name_pre)
 {
   //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::string index_params_file = index_file_name_pre + ".params";
@@ -55,7 +55,7 @@ bool volm_buffered_index_params::write_ex_param_file(std::string index_file_name
   return true;
 }
 
-bool volm_buffered_index_params::read_ex_param_file(std::string index_file_name_pre)
+bool volm_buffered_index_params::read_ex_param_file(const std::string& index_file_name_pre)
 {
   //std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::string index_params_file = index_file_name_pre + ".params";
@@ -99,7 +99,7 @@ bool volm_buffered_index_params::read_conf_param_file(std::string const& index_f
   return true;
 }
 
-bool volm_buffered_index_params::write_size_file(std::string index_file_name, unsigned long indexed_cnt)
+bool volm_buffered_index_params::write_size_file(const std::string& index_file_name, unsigned long indexed_cnt)
 {
   std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
   std::ofstream ofs(index_size_file.c_str());
@@ -110,7 +110,7 @@ bool volm_buffered_index_params::write_size_file(std::string index_file_name, un
   return true;
 }
 
-bool volm_buffered_index_params::read_size_file(std::string index_file_name, unsigned long& size)
+bool volm_buffered_index_params::read_size_file(const std::string& index_file_name, unsigned long& size)
 {
   std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
   std::ifstream ifs(index_size_file.c_str());
@@ -137,7 +137,7 @@ volm_buffered_index::~volm_buffered_index()
     delete [] active_buffer_;
 }
 
-bool volm_buffered_index::initialize_write(std::string file_name)
+bool volm_buffered_index::initialize_write(const std::string& file_name)
 {
   if (m_ == READ)
     this->finalize();
@@ -152,7 +152,7 @@ bool volm_buffered_index::initialize_write(std::string file_name)
   return true;
 }
 
-bool volm_buffered_index::initialize_read(std::string file_name)
+bool volm_buffered_index::initialize_read(const std::string& file_name)
 {
   if (m_ == WRITE)
     this->finalize();

@@ -37,7 +37,7 @@ namespace bstm_ocl_label_along_ray_process_globals
   constexpr unsigned n_inputs_ = 8;
   constexpr unsigned n_outputs_ = 0;
 
-  bocl_kernel* compile_kernel(bocl_device_sptr device,std::string opts)
+  bocl_kernel* compile_kernel(const bocl_device_sptr& device,const std::string& opts)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

@@ -78,7 +78,7 @@ int main( int argc, char* argv[] )
   int max_dim2 = (image2.ni()>image2.nj())?image2.ni():image2.nj();
   bapl_lowe_clusterer clusterer(max_dim1, max_dim2, 10.0);
 
-  for (auto query : keypoints2){
+  for (const auto& query : keypoints2){
     std::vector<bapl_keypoint_sptr> matches;
     bbf.n_nearest(query, matches, 2, 50);
     if ( vnl_vector_ssd(query->descriptor(),matches[0]->descriptor()) <

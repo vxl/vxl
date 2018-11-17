@@ -6,7 +6,7 @@
 #include "bvpl_scene_statistics.h"
 
 
-double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples)
+double bvpl_average_value(const boxm_scene_base_sptr& scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples)
 {
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;
@@ -43,7 +43,7 @@ double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int bloc
   return avg_val/tree_nsamples;
 }
 
-double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k)
+double bvpl_average_value(const boxm_scene_base_sptr& scene_base, int block_i, int block_j, int block_k)
 {
   typedef boct_tree<short,float> float_tree_type;
   typedef boct_tree_cell<short,float> float_cell_type;

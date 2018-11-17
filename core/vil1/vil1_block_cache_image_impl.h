@@ -18,7 +18,7 @@ class vil1_block_cache_image_impl : public vil1_image_impl
  public:
 
  //: Constructor with image and x and y bock-size
-  vil1_block_cache_image_impl(vil1_image , unsigned blocksizex, unsigned blocksizey);
+  vil1_block_cache_image_impl(const vil1_image& , unsigned blocksizex, unsigned blocksizey);
 
   //: Destructor
   ~vil1_block_cache_image_impl() override;

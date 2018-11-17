@@ -130,7 +130,7 @@ static inline void incXbyYplusXXv(vnl_vector<double> *X, const vnl_vector<double
 //=======================================================================
 //: Set the contents of the mixture model.
 // Clones are taken of all the data, and the class will be responsible for their deletion.
-void vpdfl_mixture::set(const std::vector<vpdfl_pdf_base*> components, const std::vector<double> & weights)
+void vpdfl_mixture::set(const std::vector<vpdfl_pdf_base*>& components, const std::vector<double> & weights)
 {
   unsigned n = components.size();
   assert (weights.size() == n);

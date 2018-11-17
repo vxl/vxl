@@ -279,7 +279,7 @@ float bocl_mem::exec_time()
 std::map<std::string, bocl_kernel*> bocl_mem::set_kernels_;
 
 //: Get set kernel
-bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, std::string type)
+bocl_kernel* bocl_mem::get_set_kernel(cl_device_id dev_id, cl_context context, const std::string& type)
 {
   std::string opts = " -D TYPE=" + type;
 

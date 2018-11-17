@@ -29,13 +29,13 @@ class vifa_image_histogram : public vifa_histogram
   unsigned int      byte_depth_;
 
  public:
-  vifa_image_histogram(vil_image_view_base_sptr  image,
+  vifa_image_histogram(const vil_image_view_base_sptr&  image,
                        double                    percentage = 100.0
                       );
 
  protected:
   void init(void);
-  void fill_histogram(vil_image_view_base_sptr  src_buf,
+  void fill_histogram(const vil_image_view_base_sptr&  src_buf,
                       double                    percentage = 100.0
                      );
 };

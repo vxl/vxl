@@ -92,7 +92,8 @@ std::vector<unsigned> volm_desc_ex_2d::bin_index(double const& distance, unsigne
     if (heading_value >= heading_intervals_[hidx].first && heading_value < heading_intervals_[hidx].second)
       heading_indice.push_back(hidx);
   std::vector<unsigned> bin_indice;
-  for (unsigned int & it : heading_indice)
+  bin_indice.reserve(heading_indice.size());
+for (unsigned int & it : heading_indice)
     bin_indice.push_back(this->bin_index(dist_idx, land_type, it));
   return bin_indice;
 }

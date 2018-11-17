@@ -31,7 +31,7 @@ float shear_float(float const& a) { return float((a+shift_)*scale_); }
 double shear_double(double const& a) { return (a+shift_)*scale_; }
 
 
-vil_image_resource_sptr vepl_monadic_abs(vil_image_resource_sptr image)
+vil_image_resource_sptr vepl_monadic_abs(const vil_image_resource_sptr& image)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 
@@ -127,7 +127,7 @@ vil_image_resource_sptr vepl_monadic_abs(vil_image_resource_sptr image)
   return img_out;
 }
 
-vil_image_resource_sptr vepl_monadic_sqrt(vil_image_resource_sptr image)
+vil_image_resource_sptr vepl_monadic_sqrt(const vil_image_resource_sptr& image)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 
@@ -160,7 +160,7 @@ vil_image_resource_sptr vepl_monadic_sqrt(vil_image_resource_sptr image)
   return img_out;
 }
 
-vil_image_resource_sptr vepl_monadic_sqr(vil_image_resource_sptr image)
+vil_image_resource_sptr vepl_monadic_sqr(const vil_image_resource_sptr& image)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 
@@ -226,7 +226,7 @@ vil_image_resource_sptr vepl_monadic_sqr(vil_image_resource_sptr image)
   return img_out;
 }
 
-vil_image_resource_sptr vepl_monadic_shear(vil_image_resource_sptr image, double shift, double scale)
+vil_image_resource_sptr vepl_monadic_shear(const vil_image_resource_sptr& image, double shift, double scale)
 {
   shift_ = shift; scale_ = scale;
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());

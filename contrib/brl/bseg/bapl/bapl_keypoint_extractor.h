@@ -34,7 +34,7 @@ bool bapl_keypoint_extractor( const vil_image_resource_sptr & image,
 
 //: Find the peaks in the DoG pyramid
 void bapl_dog_peaks( std::vector<vgl_point_3d<float> >& peak_pts,
-                     bapl_lowe_pyramid_set_sptr pyramid_set,
+                     const bapl_lowe_pyramid_set_sptr& pyramid_set,
                      float curve_ratio = 10.0f);
 
 class bapl_lowe_orientation

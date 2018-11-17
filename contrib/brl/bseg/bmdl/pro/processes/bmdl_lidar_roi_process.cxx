@@ -41,9 +41,9 @@ std::vector<vgl_point_3d<T> > corners_of_box_3d(vgl_box_3d<T> box)
   return corners;
 }
 
-bool compute_ground(vil_image_resource_sptr ground,
-                    vil_image_view_base_sptr first_roi,
-                    vil_image_view_base_sptr last_roi,
+bool compute_ground(const vil_image_resource_sptr& ground,
+                    const vil_image_view_base_sptr& first_roi,
+                    const vil_image_view_base_sptr& last_roi,
                     vil_image_view_base_sptr& ground_roi)
 {
   if (ground == nullptr)
@@ -80,9 +80,9 @@ bool compute_ground(vil_image_resource_sptr ground,
 
 
 bool lidar_roi(unsigned type,  //0 for geo coordinates, 1 for image coord
-               vil_image_resource_sptr lidar_first,
-               vil_image_resource_sptr lidar_last,
-               vil_image_resource_sptr ground,
+               const vil_image_resource_sptr& lidar_first,
+               const vil_image_resource_sptr& lidar_last,
+               const vil_image_resource_sptr& ground,
                float min_lat, float min_lon,
                float max_lat, float max_lon,
                vil_image_view_base_sptr& first_roi,

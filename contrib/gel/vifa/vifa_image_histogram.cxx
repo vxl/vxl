@@ -6,7 +6,7 @@
 #include <vil/vil_image_view.h>
 
 vifa_image_histogram::
-vifa_image_histogram(vil_image_view_base_sptr  image,
+vifa_image_histogram(const vil_image_view_base_sptr&  image,
                      double                    percentage)
 {
   // Compute max. # of pixel intensities
@@ -74,7 +74,7 @@ init(void)
 }
 
 void vifa_image_histogram::
-fill_histogram(vil_image_view_base_sptr  image,
+fill_histogram(const vil_image_view_base_sptr&  image,
                double                    /* percentage */)
 {
   // Get the base histogram's array of counts

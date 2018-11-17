@@ -47,10 +47,10 @@ public:
 
   //: initializes empty data buffer
   bstm_data_base(bstm_block_metadata data,
-                 std::string type,
+                 const std::string& type,
                  bool read_only = true);
 
-  void set_default_value(std::string data_type, bstm_block_metadata data);
+  void set_default_value(const std::string& data_type, bstm_block_metadata data);
 
   //: This destructor is correct - by our design the original data_buffer
   // becomes OWNED by the data_base class

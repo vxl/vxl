@@ -14,7 +14,7 @@ vtol_vertex_2d_sptr convert_vertex_2d(osl_vertex & in)
   return new vtol_vertex_2d(in.GetX(),in.GetY());
 }
 
-vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,std::string type)
+vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,const std::string& type)
 {
   vtol_edge_2d_sptr out;
 
@@ -40,7 +40,7 @@ vtol_edge_2d_sptr convert_edge_2d(osl_edge & in,std::string type)
   return out;
 }
 
-std::vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(std::list<osl_edge*> & in,std::string type)
+std::vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(std::list<osl_edge*> & in,const std::string& type)
 {
   std::list<osl_edge*>::iterator iter;
   auto* out=new std::vector<vtol_edge_2d_sptr>();
@@ -53,7 +53,7 @@ std::vector<vtol_edge_2d_sptr>* convert_vector_edge_2d(std::list<osl_edge*> & in
 }
 
 std::vector<std::vector<vtol_edge_2d_sptr>*>* convert_array_edge_2d(std::list<std::list<osl_edge *>*> & in,
-                                                                  std::string type)
+                                                                  const std::string& type)
 {
   std::list<std::list<osl_edge *>*>::iterator iter;
   auto* out=new std::vector<std::vector<vtol_edge_2d_sptr>*>;

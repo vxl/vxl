@@ -94,7 +94,7 @@ class gevd_edgel_regions
   bool InsertRegionEquivalence(unsigned int label_b, unsigned int label_a);
   void GrowEquivalenceClasses();
   void PropagateEquivalence();
-  unsigned int GetLabel(vtol_edge_2d_sptr e, unsigned int nr);
+  unsigned int GetLabel(const vtol_edge_2d_sptr& e, unsigned int nr);
   // Debug print methods
   void print_region_array();
   void print_region_equivalence();
@@ -114,7 +114,7 @@ class gevd_edgel_regions
   void AssignEdgeLabels(unsigned int x, unsigned int y);
   void ApplyRegionEquivalence();
   bool out_of_bounds(unsigned int x, unsigned int y);
-  void insert_adjacency(unsigned int region, vtol_edge_2d_sptr e);
+  void insert_adjacency(unsigned int region, const vtol_edge_2d_sptr& e);
   void CollectEdges();
   void CollectFaceEdges();
   void ConstructFaces();

@@ -103,7 +103,7 @@ class vtol_extract_topology_region_type
 
   //: Add an edge to this region
   void
-  push_back( edgel_chain_sptr chain );
+  push_back( const edgel_chain_sptr& chain );
 
   //: The number of edges in the boundary
   unsigned

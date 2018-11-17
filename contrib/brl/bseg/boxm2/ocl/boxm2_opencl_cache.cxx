@@ -8,7 +8,7 @@
 // \file
 
 //: scene/device constructor
-boxm2_opencl_cache::boxm2_opencl_cache(bocl_device_sptr device)
+boxm2_opencl_cache::boxm2_opencl_cache(const bocl_device_sptr& device)
 : bytesInCache_(0), block_info_(nullptr), device_(device)
 {
   // store max bytes allowed in cache - use only 70 percent of the memory
@@ -118,7 +118,7 @@ bool boxm2_opencl_cache::finish_queue() {
   return true;
 }
 
-void boxm2_opencl_cache::shallow_remove_block(boxm2_scene_sptr scene, boxm2_block_id id)
+void boxm2_opencl_cache::shallow_remove_block(const boxm2_scene_sptr& scene, const boxm2_block_id& id)
 {
     if(cached_blocks_.find(scene)!=cached_blocks_.end())
     {
@@ -262,7 +262,7 @@ bocl_mem* boxm2_opencl_cache::get_block(boxm2_scene_sptr scene, boxm2_block_id i
   return blk;
 }
 
-bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_scene_sptr scene, boxm2_block_id id)
+bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_scene_sptr scene, const boxm2_block_id& id)
 {
   // clean up
   if (block_info_) {
@@ -281,7 +281,7 @@ bocl_mem* boxm2_opencl_cache::get_block_info(boxm2_scene_sptr scene, boxm2_block
   block_info_->create_buffer(CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR );
   return block_info_;
 }
-bocl_mem* boxm2_opencl_cache::get_copy_of_block_info(boxm2_scene_sptr scene, boxm2_block_id id)
+bocl_mem* boxm2_opencl_cache::get_copy_of_block_info(const boxm2_scene_sptr& scene, const boxm2_block_id& id)
 {
   // get block info from scene/block
   boxm2_scene_info* info_buffer = scene->get_blk_metadata(id);
@@ -291,7 +291,7 @@ bocl_mem* boxm2_opencl_cache::get_copy_of_block_info(boxm2_scene_sptr scene, box
 }
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, std::string type,
+bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id, const std::string& type,
                                         std::size_t num_bytes, bool read_only)
 {
 
@@ -365,7 +365,7 @@ bocl_mem* boxm2_opencl_cache::get_data(boxm2_scene_sptr scene, boxm2_block_id id
 
 //: Get data new generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_scene_sptr scene, boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache::get_data_new(boxm2_scene_sptr scene, boxm2_block_id id, const std::string& type, std::size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(std::pair<boxm2_scene_sptr, boxm2_block_id>(scene,id));
@@ -448,7 +448,7 @@ bocl_mem* boxm2_opencl_cache::alloc_mem(std::size_t num_bytes, void* cpu_buff, s
 
 
   //allocate mem
-  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, id);
+  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, std::move(id));
   mem_pool_[data] = num_bytes;
   return data;
 }
@@ -486,7 +486,7 @@ void boxm2_opencl_cache::free_mem(bocl_mem* mem)
 //: Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)
-void boxm2_opencl_cache::deep_replace_data(boxm2_scene_sptr scene, boxm2_block_id id, std::string type, bocl_mem* mem, bool read_only)
+void boxm2_opencl_cache::deep_replace_data(boxm2_scene_sptr scene, const boxm2_block_id& id, const std::string& type, bocl_mem* mem, bool read_only)
 {
   // instantiate new data block
   std::size_t numDataBytes = mem->num_bytes();
@@ -514,7 +514,7 @@ void boxm2_opencl_cache::deep_replace_data(boxm2_scene_sptr scene, boxm2_block_i
 }
 
 //: deep remove data, removes from ocl cache as well
-void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, boxm2_block_id id, std::string type, bool write_out)
+void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, const boxm2_block_id& id, const std::string& type, bool write_out)
 {
   //find the data in this map
   std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(scene, type);
@@ -539,10 +539,10 @@ void boxm2_opencl_cache::deep_remove_data(boxm2_scene_sptr scene, boxm2_block_id
 }
 
 //: shallow_remove_data removes data with id and type from ocl cache only
-void boxm2_opencl_cache::shallow_remove_data(boxm2_scene_sptr scene, boxm2_block_id id, std::string type)
+void boxm2_opencl_cache::shallow_remove_data(const boxm2_scene_sptr& scene, const boxm2_block_id& id, std::string type)
 {
   //find the data in this map
-  std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(scene, type);
+  std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(scene, std::move(type));
   auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
@@ -554,7 +554,7 @@ void boxm2_opencl_cache::shallow_remove_data(boxm2_scene_sptr scene, boxm2_block
 }
 
 //: helper method, \returns a reference to correct data map (ensures one exists)
-std::map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(boxm2_scene_sptr scene, std::string prefix)
+std::map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache::cached_data_map(const boxm2_scene_sptr& scene, const std::string& prefix)
 {
   if(cached_data_.find(scene) == cached_data_.end() )
   {

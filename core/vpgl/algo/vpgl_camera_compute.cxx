@@ -42,9 +42,11 @@ vpgl_proj_camera_compute::compute(
 {
   std::vector< vgl_homg_point_2d<double> > image_pts2;
   std::vector< vgl_homg_point_3d<double> > world_pts2;
-  for (auto image_pt : image_pts)
+  image_pts2.reserve(image_pts.size());
+for (auto image_pt : image_pts)
     image_pts2.emplace_back( image_pt );
-  for (const auto & world_pt : world_pts)
+  world_pts2.reserve(world_pts.size());
+for (const auto & world_pt : world_pts)
     world_pts2.emplace_back( world_pt );
   return compute( image_pts2, world_pts2, camera );
 }

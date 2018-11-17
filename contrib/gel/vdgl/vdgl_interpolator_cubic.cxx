@@ -20,7 +20,7 @@
 #include <vdgl/vdgl_edgel_chain.h>
 
 
-vdgl_interpolator_cubic::vdgl_interpolator_cubic(vdgl_edgel_chain_sptr chain)
+vdgl_interpolator_cubic::vdgl_interpolator_cubic(const vdgl_edgel_chain_sptr& chain)
   : vdgl_interpolator(chain)
 {
   recompute_all();

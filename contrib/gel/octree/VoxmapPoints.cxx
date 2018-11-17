@@ -17,7 +17,7 @@ VoxmapPoints::VoxmapPoints( int d, vnl_double_3 c, double s)
   : depth(d),
     nocorners( int(1<<depth)+1),
     nocentres( int(1<<depth)),
-    centre(std::move(c)),
+    centre(c),
     size(s)
     //    corners( nocorners, nocorners, nocorners),
     //    centres( nocentres, nocentres, nocentres)

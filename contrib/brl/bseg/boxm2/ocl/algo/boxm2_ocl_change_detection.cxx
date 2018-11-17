@@ -6,11 +6,12 @@
 // \author Vishal Jain
 // \date Mar 10, 2011
 
+#include "boxm2_ocl_change_detection.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
 #include <sstream>
-#include "boxm2_ocl_change_detection.h"
+#include <utility>
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -40,12 +41,12 @@ using namespace boxm2_ocl_change_detection_globals;
 //--------------------------------------------------
 //verifies data type for scene
 //--------------------------------------------------
-bool boxm2_ocl_change_detection_globals::get_scene_appearances( boxm2_scene_sptr scene,
+bool boxm2_ocl_change_detection_globals::get_scene_appearances( const boxm2_scene_sptr& scene,
                                                                 std::string&      data_type,
                                                                 std::string&      num_obs_type,
                                                                 std::string&      options,
                                                                 int&             apptypesize,
-                                                                std::string identifier = "")
+                                                                const std::string& identifier = "")
 {
     std::vector<std::string> apps = scene->appearances();
     bool foundDataType = false, foundNumObsType = false;
@@ -90,13 +91,13 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_change_detection::ke
 bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change_img,
                                                 vil_image_view<vxl_byte>& rgb_change_img,
                                                 bocl_device_sptr          device,
-                                                boxm2_scene_sptr          scene,
-                                                boxm2_opencl_cache_sptr   opencl_cache,
+                                                const boxm2_scene_sptr&          scene,
+                                                const boxm2_opencl_cache_sptr&   opencl_cache,
                                                 vpgl_camera_double_sptr   cam,
-                                                vil_image_view_base_sptr  img,
-                                                vil_image_view_base_sptr  exp_img,
+                                                const vil_image_view_base_sptr&  img,
+                                                const vil_image_view_base_sptr&  exp_img,
                                                 int                       n,
-                                                std::string                norm_type,
+                                                const std::string&                norm_type,
                                                 bool                      pmax,
                                                 std::string                identifier,
                                                 std::size_t                startI,
@@ -114,7 +115,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
     //---- get scene info -----
     std::string data_type,num_obs_type,options;
     int apptypesize;
-    get_scene_appearances(scene, data_type, num_obs_type, options, apptypesize, identifier);
+    get_scene_appearances(scene, data_type, num_obs_type, options, apptypesize, std::move(identifier));
 
     //specify max mode options
     if ( pmax )
@@ -482,7 +483,7 @@ bool boxm2_ocl_change_detection::change_detect( vil_image_view<float>&    change
 //-------------------------------------------------
 // Creates full in image (float4 pixels, each along one level of the pyramid
 //-------------------------------------------------
-void boxm2_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj)
+void boxm2_ocl_change_detection::full_pyramid(const vil_image_view_base_sptr& in_img, float* img_buff, unsigned cl_ni, unsigned cl_nj)
 {
     // half the size of the previous image
     vil_pyramid_image_view<float> pyramid(in_img, 4);
@@ -517,7 +518,7 @@ void boxm2_ocl_change_detection::full_pyramid(vil_image_view_base_sptr in_img, f
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-std::vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_change_detection::get_kernels(const bocl_device_sptr& device, std::string opts)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;
@@ -667,13 +668,13 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_two_pass_change::ker
 
 bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               bocl_device_sptr          device,
-                                              boxm2_scene_sptr          scene,
-                                              boxm2_opencl_cache_sptr   opencl_cache,
+                                              const boxm2_scene_sptr&          scene,
+                                              const boxm2_opencl_cache_sptr&   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
-                                              vil_image_view_base_sptr  img,
-                                              vil_image_view_base_sptr  exp_img,
+                                              const vil_image_view_base_sptr&  img,
+                                              const vil_image_view_base_sptr&  exp_img,
                                               int                       n,
-                                              std::string                 /*norm_type*/,
+                                              const std::string&                 /*norm_type*/,
                                               bool                      pmax )
 {
     float transfer_time=0.0f;
@@ -1061,7 +1062,7 @@ bool boxm2_ocl_two_pass_change::change_detect(vil_image_view<float>&    change_i
     return true;
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_two_pass_change::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;
@@ -1147,11 +1148,11 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_aux_pass_change::ker
 bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               vil_image_view<float>&    vis_img,
                                               bocl_device_sptr          device,
-                                              boxm2_scene_sptr          scene,
-                                              boxm2_opencl_cache_sptr   opencl_cache,
+                                              const boxm2_scene_sptr&          scene,
+                                              const boxm2_opencl_cache_sptr&   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
-                                              vil_image_view_base_sptr  img,
-                                              std::string identifier,
+                                              const vil_image_view_base_sptr&  img,
+                                              const std::string& identifier,
                                               bool max_density,
                                               float nearfactor,
                                               float farfactor)
@@ -1450,7 +1451,7 @@ bool boxm2_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_i
     return true;
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, std::string opts, bool maxdensity)
+std::vector<bocl_kernel*>& boxm2_ocl_aux_pass_change::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool maxdensity)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;

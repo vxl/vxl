@@ -65,7 +65,8 @@ bool boxm2_scene_from_box_cams_process(bprb_func_process& pro)
                          vgl_point_3d<double>(xmin+width,ymin+height,zmin+depth));
   std::vector<vpgl_perspective_camera<double>* > ptrcams = bpgl_camera_utils::cameras_from_directory(camdir);
   std::vector<vpgl_perspective_camera<double> > cams;
-  for(auto & ptrcam : ptrcams)
+  cams.reserve(ptrcams.size());
+for(auto & ptrcam : ptrcams)
       cams.push_back( * ptrcam );
 
   std::vector<std::string> appearance;

@@ -127,10 +127,10 @@ void vsl_b_read(vsl_b_istream& is, boxm2_cache1_sptr const& sptr);
 class boxm2_cache1_destroyer
 {
  public:
-  boxm2_cache1_destroyer(boxm2_cache1_sptr s = nullptr);
+  boxm2_cache1_destroyer(const boxm2_cache1_sptr& s = nullptr);
   ~boxm2_cache1_destroyer();
 
-  void set_singleton(boxm2_cache1_sptr s);
+  void set_singleton(const boxm2_cache1_sptr& s);
  private:
   boxm2_cache1_sptr s_;
 };

@@ -47,7 +47,7 @@ namespace boxm2_ocl_batch_update_scene_process_globals
     COMPUTE_MOG = 1
   };
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts_app)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, const std::string& opts_app)
   {
     std::vector<std::string> src_paths;
     std::string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -73,7 +73,7 @@ namespace boxm2_ocl_batch_update_scene_process_globals
   }
 
   template <boxm2_data_type type>
-  std::map<std::string, char*> helper(boxm2_scene_sptr scene, boxm2_block_id id, boxm2_data_traits<type> data_type, std::vector<std::string> image_ids)
+  std::map<std::string, char*> helper(const boxm2_scene_sptr& scene, const boxm2_block_id& id, boxm2_data_traits<type> data_type, std::vector<std::string> image_ids)
   {
     std::map<std::string, char*> map;
     for (auto & image_id : image_ids) {

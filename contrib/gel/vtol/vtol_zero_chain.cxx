@@ -16,22 +16,22 @@
 // Initialization
 //***************************************************************************
 
-void vtol_zero_chain::link_inferior(vtol_vertex_sptr inf)
+void vtol_zero_chain::link_inferior(const vtol_vertex_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_zero_chain::unlink_inferior(vtol_vertex_sptr inf)
+void vtol_zero_chain::unlink_inferior(const vtol_vertex_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_zero_chain::link_inferior(vtol_vertex_2d_sptr inf)
+void vtol_zero_chain::link_inferior(const vtol_vertex_2d_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_zero_chain::unlink_inferior(vtol_vertex_2d_sptr inf)
+void vtol_zero_chain::unlink_inferior(const vtol_vertex_2d_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }

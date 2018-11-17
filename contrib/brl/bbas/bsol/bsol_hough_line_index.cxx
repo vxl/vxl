@@ -339,7 +339,7 @@ lines_in_interval(vsol_line_2d_sptr const & l,
         continue;
       std::vector<vsol_line_2d_sptr> temp;
       this->lines_at_index(r_indx, t_indx,temp);
-      for (auto line : temp)
+      for (const auto& line : temp)
       {
         //Note, these tests should eventually be more
         //sophisticated - JLM
@@ -426,7 +426,7 @@ bsol_hough_line_index::parallel_lines(const float angle,
       std::vector<vsol_line_2d_sptr> temp;
       this->lines_at_index(j, t_indx, temp);
 
-      for (auto line : temp)
+      for (const auto& line : temp)
       {
         //Test angular error
         auto line_angle = (float)line->tangent_angle();

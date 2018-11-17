@@ -32,9 +32,9 @@ std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_based_visibility
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr         sceneA,
-                                                            boxm2_scene_sptr         sceneB,
-                                                            bocl_device_sptr         device,
-                                                            boxm2_opencl_cache_sptr  opencl_cache)
+                                                            const boxm2_scene_sptr&         sceneB,
+                                                            const bocl_device_sptr&         device,
+                                                            const boxm2_opencl_cache_sptr&  opencl_cache)
 {
 
 
@@ -152,7 +152,7 @@ bool boxm2_ocl_fuse_based_visibility::fuse_based_visibility(boxm2_scene_sptr    
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -172,7 +172,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_visibility::get_kernels(bocl_dev
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  std::string options = opts;
+  const std::string& options = opts;
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
@@ -191,9 +191,9 @@ std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_based_orientatio
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr         sceneA,
-                                                                            boxm2_scene_sptr         sceneB,
-                                                                            bocl_device_sptr         device,
-                                                                            boxm2_opencl_cache_sptr  opencl_cache)
+                                                                            const boxm2_scene_sptr&         sceneB,
+                                                                            const bocl_device_sptr&         device,
+                                                                            const boxm2_opencl_cache_sptr&  opencl_cache)
 {
 
 
@@ -315,7 +315,7 @@ bool boxm2_ocl_fuse_based_orientation::fuse_based_orientation(boxm2_scene_sptr  
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -335,7 +335,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_based_orientation::get_kernels(bocl_de
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  std::string options = opts;
+  const std::string& options = opts;
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR
@@ -356,9 +356,9 @@ std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_fuse_surface_density:
 
 //Main public method, updates color model
 bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr         sceneA,
-                                                          boxm2_scene_sptr         sceneB,
-                                                          bocl_device_sptr         device,
-                                                          boxm2_opencl_cache_sptr  opencl_cache)
+                                                          const boxm2_scene_sptr&         sceneB,
+                                                          const bocl_device_sptr&         device,
+                                                          const boxm2_opencl_cache_sptr&  opencl_cache)
 {
 
 
@@ -480,7 +480,7 @@ bool boxm2_ocl_fuse_surface_density::fuse_surface_density(boxm2_scene_sptr      
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -500,7 +500,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_fuse_surface_density::get_kernels(bocl_devi
   src_paths.push_back(source_dir + "ray_bundle_library_opt.cl");
   src_paths.push_back(source_dir + "fusion/fusion_kernels.cl");
   //compilation options
-  std::string options = opts;
+  const std::string& options = opts;
   //populate vector of kernels
   std::vector<bocl_kernel*> vec_kernels;
   //may need DIFF LIST OF SOURCES FOR

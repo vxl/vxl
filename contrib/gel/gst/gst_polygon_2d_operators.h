@@ -20,10 +20,10 @@
 //
 //  The edges must be correctly oriented (which makes possible shared edges
 //  difficult).
-std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edge_2d_sptr> edges);
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edge_2d_sptr>& edges);
 
 //: Turn a list of edges into a list of polygons.
 // Each edge can only be used  once, BUT orientation is not important.
-std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const std::vector<gst_edge_2d_sptr> edges);
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const std::vector<gst_edge_2d_sptr>& edges);
 
 #endif // gst_polygon_2d_operators_h_

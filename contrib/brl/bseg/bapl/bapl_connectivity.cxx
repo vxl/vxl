@@ -23,7 +23,7 @@ bool second_less( const bapl_keypoint_match_set_sptr& left_set, const bapl_keypo
 
 
 //: add this match set symmetrically, i.e. into the list of img id 1 as well img id 2, while adding for img id 2, reverse the keypoint pairs
-bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
+bool bapl_conn_table::add_sym(const bapl_keypoint_match_set_sptr& set)
 {
   // first add match set directly for id1, id2:
   if (this->contains(set->id_left_, set->id_right_) || this->contains(set->id_right_, set->id_left_))
@@ -48,7 +48,7 @@ bool bapl_conn_table::add_sym(bapl_keypoint_match_set_sptr set)
 }
 
 //: add this match set
-bool bapl_conn_table::add(bapl_keypoint_match_set_sptr set)
+bool bapl_conn_table::add(const bapl_keypoint_match_set_sptr& set)
 {
   // first add match set directly for id1, id2:
   if (this->contains(set->id_left_, set->id_right_))
@@ -64,7 +64,7 @@ bool bapl_conn_table::add(bapl_keypoint_match_set_sptr set)
 void bapl_conn_table::make_symmetric()
 {
   for (auto & conn : conns_) {
-    for (auto ms : conn) {
+    for (const auto& ms : conn) {
       //: reverse the match set
       std::vector<bapl_key_match>& matches = ms->matches_;
       std::vector<bapl_key_match> reversed_matches;
@@ -92,7 +92,7 @@ bool bapl_conn_table::contains(int id1, int id2)
 
 void bapl_conn_table::print_table()
 {
-  for (auto conn : conns_) {
+  for (const auto& conn : conns_) {
     int crnt_id = 0;
     for (auto & j : conn) {
       int id2 = j->id_right_;
@@ -109,7 +109,7 @@ void bapl_conn_table::print_table()
 
 void bapl_conn_table::print_table_with_matches()
 {
-  for (auto conn : conns_) {
+  for (const auto& conn : conns_) {
     for (auto & j : conn) {
       std::cout << j->id_left_ << ' ' << j->id_right_ << '\n'
                << j->matches_.size() << '\n';

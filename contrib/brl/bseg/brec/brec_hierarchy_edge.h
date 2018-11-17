@@ -50,18 +50,18 @@ class brec_hierarchy_edge : public bgrl2_edge<brec_part_base>
   double var_dist() const { return dist_model_.var(); }
   double var_angle() const { return angle_model_.var(); }
 
-  static void calculate_dist_angle(brec_part_instance_sptr pi, vnl_vector_fixed<float,2>& dif_to_center, float& dist, float& angle);
+  static void calculate_dist_angle(const brec_part_instance_sptr& pi, vnl_vector_fixed<float,2>& dif_to_center, float& dist, float& angle);
 
   bool to_central() const { return to_central_; }
 
   void set_min_stand_dev_dist(float d) { min_stad_dev_dist_ = d; }
   void set_min_stand_dev_angle(float a) { min_stad_dev_angle_ = a; }
 
-  vgl_box_2d<float> get_probe_box(brec_part_instance_sptr central_p);
+  vgl_box_2d<float> get_probe_box(const brec_part_instance_sptr& central_p);
 
   //: samples the position of the part linked with this edge wrt to the position (x,y)
-  vnl_vector_fixed<float,2> sample_position(brec_part_instance_sptr central_p, float x, float y, vnl_random& rng);
-  vnl_vector_fixed<float,2> mean_position(brec_part_instance_sptr central_p, float x, float y);
+  vnl_vector_fixed<float,2> sample_position(const brec_part_instance_sptr& central_p, float x, float y, vnl_random& rng);
+  vnl_vector_fixed<float,2> mean_position(const brec_part_instance_sptr& central_p, float x, float y);
 
   virtual bxml_data_sptr xml_element();
   virtual bool xml_parse_element(bxml_data_sptr data);

@@ -11,12 +11,13 @@
 // \endverbatim
 //
 
-#include <iostream>
 #include <algorithm>
+#include <iostream>
+#include <utility>
+#include <vgl/vgl_intersection.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_file.h>
 #include <vul/vul_file_iterator.h>
-#include <vgl/vgl_intersection.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -29,9 +30,9 @@
 #include <bkml/bkml_parser.h>
 
 
-static void error(std::string log_file, std::string msg)
+static void error(std::string log_file, const std::string& msg)
 {
-  std::cerr << msg;  volm_io::write_post_processing_log(log_file, msg);
+  std::cerr << msg;  volm_io::write_post_processing_log(std::move(log_file), msg);
 }
 
 int main(int argc, char** argv)

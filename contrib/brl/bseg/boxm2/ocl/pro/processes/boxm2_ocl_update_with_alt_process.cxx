@@ -43,7 +43,7 @@ namespace boxm2_ocl_update_with_alt_process_globals
       UPDATE_CELL = 4
   };
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,const std::string& opts)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

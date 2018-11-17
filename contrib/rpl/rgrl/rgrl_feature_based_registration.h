@@ -31,12 +31,12 @@ class rgrl_feature_based_registration: public rgrl_object
 {
  public:
   //: Initialize with the data storage and the convergence tester
-  rgrl_feature_based_registration( rgrl_data_manager_sptr data,
-                                   rgrl_convergence_tester_sptr conv_tester );
+  rgrl_feature_based_registration( const rgrl_data_manager_sptr& data,
+                                   const rgrl_convergence_tester_sptr& conv_tester );
   //: Initialize with the data storage.
   //
   //  The default convergence tester is set to median error
-  rgrl_feature_based_registration( rgrl_data_manager_sptr data );
+  rgrl_feature_based_registration( const rgrl_data_manager_sptr& data );
 
   ~rgrl_feature_based_registration() override;
 
@@ -49,18 +49,18 @@ class rgrl_feature_based_registration: public rgrl_object
   //: Running from multiple initial estimates, produced by the initializer during registration
   //
   //  Loop through the set of initial estimates.
-  void run( rgrl_initializer_sptr initializer );
+  void run( const rgrl_initializer_sptr& initializer );
 
   //: Running from a given initial estimate.
   //
   //  Based on if data_->is_multi_feature(), call run_single_feature(.)
   //  or run_multi_feature(.)
   //
-  void run( rgrl_mask_box              from_image_region,
-            rgrl_mask_box              to_image_region,
-            rgrl_estimator_sptr        estimator,
-            rgrl_transformation_sptr   initial_xform,
-            rgrl_scale_sptr            prior_scale = nullptr,
+  void run( const rgrl_mask_box&              from_image_region,
+            const rgrl_mask_box&              to_image_region,
+            const rgrl_estimator_sptr&        estimator,
+            const rgrl_transformation_sptr&   initial_xform,
+            const rgrl_scale_sptr&            prior_scale = nullptr,
             unsigned                   init_resolution = 0);
 
   //////////////// functions to access internal data  ////////////////////////
@@ -132,16 +132,16 @@ class rgrl_feature_based_registration: public rgrl_object
   //: registration of single feature type at each stage/resolution
   void register_single_feature( rgrl_mask_box            from_image_region,
                                 rgrl_mask_box            to_image_region,
-                                rgrl_estimator_sptr      initial_xform_estimator,
-                                rgrl_transformation_sptr xform_estimate,
+                                const rgrl_estimator_sptr&      initial_xform_estimator,
+                                const rgrl_transformation_sptr& xform_estimate,
                                 rgrl_scale_sptr          prior_scale,
                                 unsigned                 init_resolution);
 
   //: registration of multiple feature types at each stage/resolution
   void register_multi_feature( rgrl_mask_box            from_image_region,
                                rgrl_mask_box            to_image_region,
-                               rgrl_estimator_sptr      initial_xform_estimator,
-                               rgrl_transformation_sptr xform_estimate,
+                               const rgrl_estimator_sptr&      initial_xform_estimator,
+                               const rgrl_transformation_sptr& xform_estimate,
                                rgrl_scale_sptr          prior_scale,
                                unsigned                 init_resolution);
 

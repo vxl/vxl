@@ -18,12 +18,12 @@
 // Initialization
 //***************************************************************************
 
-void vtol_block::link_inferior(vtol_two_chain_sptr inf)
+void vtol_block::link_inferior(const vtol_two_chain_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_block::unlink_inferior(vtol_two_chain_sptr inf)
+void vtol_block::unlink_inferior(const vtol_two_chain_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }

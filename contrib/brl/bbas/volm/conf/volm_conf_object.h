@@ -81,7 +81,7 @@ public:
 
   //: check whether the two configuration object is same or not
   bool is_same(volm_conf_object const& other);
-  bool is_same(volm_conf_object_sptr other_sptr);
+  bool is_same(const volm_conf_object_sptr& other_sptr);
   bool is_same(volm_conf_object const* other_ptr);
 
   //: print method

@@ -163,7 +163,8 @@ std::vector<vgl_point_2d<unsigned short> > bbgm_mask_pair_feature::pixels()
   std::vector<vgl_point_2d<unsigned short> > pixm0 = mf0.pixels(i0_, j0_);
   std::vector<vgl_point_2d<unsigned short> > pixm1 = mf0.pixels(i1_, j1_);
   std::vector<vgl_point_2d<unsigned short> > pix;
-  for (auto & pit : pixp)
+  pix.reserve(pixp.size());
+for (auto & pit : pixp)
     pix.push_back(pit);
   //add mask pixels (removing duplicates)
   for (auto & pit : pixm0) {

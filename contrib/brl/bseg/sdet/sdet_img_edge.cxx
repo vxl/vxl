@@ -104,7 +104,7 @@ vil_image_view<vxl_byte> sdet_img_edge::detect_edges(vil_image_view<vxl_byte> im
 }
 
 vil_image_view<float>
-sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
+sdet_img_edge::detect_edge_tangent(const vil_image_view<vxl_byte>& img,
                                    double noise_multiplier,
                                    double smooth,
                                    bool automatic_threshold,
@@ -203,7 +203,7 @@ sdet_img_edge::detect_edge_tangent(vil_image_view<vxl_byte> img,
 // return image has three planes as in detect_edge_tangent
 // Canny edge detector returns edgel chains with a linear interpolator by default, replace this interpolator with a cubic one and read the edge tangents from this interpolator
 vil_image_view<float>
-sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
+sdet_img_edge::detect_edge_tangent_interpolated(const vil_image_view<vxl_byte>& img,
                                                 double noise_multiplier,
                                                 double smooth,
                                                 bool automatic_threshold,
@@ -232,7 +232,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
   // iterate over each connected edge component
   //for (std::vector<vtol_edge_2d_sptr>::iterator eit = edges->begin(); eit != edges->end(); eit++)
-  for (auto dc : edges)
+  for (const auto& dc : edges)
   {
     if (!dc)
       continue;
@@ -277,7 +277,7 @@ sdet_img_edge::detect_edge_tangent_interpolated(vil_image_view<vxl_byte> img,
 
 // return image has three planes as in detect_edge_tangent
 vil_image_view<float>
-sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
+sdet_img_edge::detect_edge_line_fitted(const vil_image_view<vxl_byte>& img,
                                        double noise_multiplier,
                                        double smooth,
                                        bool automatic_threshold,
@@ -320,7 +320,7 @@ sdet_img_edge::detect_edge_line_fitted(vil_image_view<vxl_byte> img,
   fl.fit_lines();
   std::vector<vsol_line_2d_sptr> lines = fl.get_line_segs();
 
-  for (auto l : lines) {
+  for (const auto& l : lines) {
     int length = (int)std::ceil(l->length());
     double angle = vnl_math::angle_0_to_2pi(vnl_math::pi_over_180*l->tangent_angle());
 #if 0

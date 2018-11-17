@@ -26,11 +26,11 @@ class boxm2_stream_block_cache: public vbl_ref_count
 
   public:
     //: hidden constructor (singleton class)
-    boxm2_stream_block_cache(boxm2_scene_sptr scene,
+    boxm2_stream_block_cache(const boxm2_scene_sptr& scene,
                              std::vector<std::string>  data_types,
                              std::vector<std::string>  identifier_list);
 
-    bool init(boxm2_block_id id);
+    bool init(const boxm2_block_id& id);
 
 
     bool clear();

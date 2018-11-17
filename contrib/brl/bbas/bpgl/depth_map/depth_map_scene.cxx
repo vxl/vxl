@@ -36,7 +36,7 @@ depth_map_scene(unsigned ni, unsigned nj,
     scene_regions_[scene_region->name()]=scene_region;
 }
 
-void depth_map_scene::set_ground_plane(vsol_polygon_2d_sptr ground_plane)
+void depth_map_scene::set_ground_plane(const vsol_polygon_2d_sptr& ground_plane)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0);//z axis is the plane normal
   depth_map_region_sptr ground = new depth_map_region(ground_plane, gp,
@@ -54,7 +54,7 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
                                  double height)
 {
   vgl_plane_3d<double> gp(0.0, 0.0, 1.0, 0.0); // z axis is the plane normal
-  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, name, depth_map_region::HORIZONTAL, land_id);
+  depth_map_region_sptr ground = new depth_map_region(ground_plane, gp, std::move(name), depth_map_region::HORIZONTAL, land_id);
   ground->set_order(order);
   ground->set_min_depth(min_depth);
   ground->set_max_depth(max_depth);
@@ -62,7 +62,7 @@ void depth_map_scene::add_ground(vsol_polygon_2d_sptr const& ground_plane,
   ground_plane_.push_back(ground);
 }
 
-void depth_map_scene::set_sky(vsol_polygon_2d_sptr sky)
+void depth_map_scene::set_sky(const vsol_polygon_2d_sptr& sky)
 {
   depth_map_region_sptr sky_pt = new depth_map_region(sky, "sky");
   sky_.push_back(sky_pt);
@@ -72,7 +72,7 @@ void depth_map_scene::add_sky(vsol_polygon_2d_sptr const& sky,
                               unsigned order,
                               std::string name)
 {
-  depth_map_region_sptr sky_pt = new depth_map_region(sky, name);
+  depth_map_region_sptr sky_pt = new depth_map_region(sky, std::move(name));
   sky_pt->set_order(order);
   sky_.push_back(sky_pt);
 }
@@ -81,7 +81,7 @@ void depth_map_scene::add_region(vsol_polygon_2d_sptr const& region,
                                  vgl_vector_3d<double> region_normal,
                                  double min_depth,
                                  double max_depth,
-                                 std::string name,
+                                 const std::string& name,
                                  depth_map_region::orientation orient,
                                  unsigned order,
                                  unsigned land_id,
@@ -107,7 +107,7 @@ add_ortho_perp_region(vsol_polygon_2d_sptr const& region,
                       std::string name)
 {
   vgl_vector_3d<double> normal_dir = depth_map_region::perp_ortho_dir(cam_);
-  this->add_region(region, normal_dir, min_depth, max_depth, name,
+  this->add_region(region, normal_dir, min_depth, max_depth, std::move(name),
                    depth_map_region::VERTICAL);
 }
 
@@ -199,7 +199,7 @@ depth_map(unsigned log2_downsample_ratio)
 }
 
 vil_image_view<float> depth_map_scene::
-depth_map(std::string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff)
+depth_map(const std::string& region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff)
 {
   double ratio = std::pow(2.0, static_cast<double>(log2_downsample_ratio));
   double dni = static_cast<double>(ni_)/ratio,

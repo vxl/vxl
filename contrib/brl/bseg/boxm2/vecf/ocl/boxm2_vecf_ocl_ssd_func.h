@@ -27,7 +27,7 @@ class boxm2_vecf_ocl_ssd_func : public vnl_least_squares_function
  // boxm2_vecf_ocl_ssd_func():vnl_least_squares_function(0, 0) {}
  // boxm2_vecf_ocl_ssd_func(unsigned nx, unsigned ni, unsigned nj):
  //  vnl_least_squares_function(nx, ni*nj,vnl_least_squares_function::no_gradient), ni_(ni), nj_(nj) {}
-  boxm2_vecf_ocl_ssd_func(unsigned nx, unsigned ni, unsigned nj, boxm2_vecf_ocl_transform_scene_sptr tscn, boxm2_scene_sptr target_scene,boxm2_opencl_cache_sptr ocl_cache);
+  boxm2_vecf_ocl_ssd_func(unsigned nx, unsigned ni, unsigned nj, const boxm2_vecf_ocl_transform_scene_sptr& tscn, const boxm2_scene_sptr& target_scene,const boxm2_opencl_cache_sptr& ocl_cache);
   void set_reference_image(vil_image_view<float> const& ref_img)
   { ref_img_ = ref_img;}
   void set_reference_camera(vpgl_camera_double_sptr const& cam)

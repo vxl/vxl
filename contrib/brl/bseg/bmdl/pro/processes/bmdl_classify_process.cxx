@@ -32,9 +32,9 @@ bool classify(const vil_image_view<T>& lidar_first,
 }
 
 
-bool classify(vil_image_view_base_sptr lidar_first,
-              vil_image_view_base_sptr lidar_last,
-              vil_image_view_base_sptr ground,
+bool classify(const vil_image_view_base_sptr& lidar_first,
+              const vil_image_view_base_sptr& lidar_last,
+              const vil_image_view_base_sptr& ground,
               vil_image_view_base_sptr& label_img,
               vil_image_view_base_sptr& height_img,
               float gthresh, float vthresh, float athresh, float hres)

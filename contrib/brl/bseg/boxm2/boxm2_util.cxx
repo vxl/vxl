@@ -1,11 +1,12 @@
-#include <iostream>
-#include <fstream>
-#include <cstdio>
-#include <algorithm>
-#include <limits>
-#include <ios>
 #include "boxm2_util.h"
+#include <algorithm>
 #include <boxm2/boxm2_data_traits.h>
+#include <cstdio>
+#include <fstream>
+#include <ios>
+#include <iostream>
+#include <limits>
+#include <utility>
 //:
 // \file
 
@@ -61,7 +62,7 @@ float boxm2_util::clamp(float x, float a, float b)
 }
 
 //: returns a single camera from file
-vpgl_camera_double_sptr boxm2_util::camera_from_file(std::string camfile)
+vpgl_camera_double_sptr boxm2_util::camera_from_file(const std::string& camfile)
 {
     //load camera from file
     std::ifstream ifs(camfile.c_str());
@@ -95,7 +96,7 @@ std::vector<std::string> boxm2_util::images_from_directory(std::string dir)
     std::sort(img_files.begin(), img_files.end());
     return img_files;
 #endif
-    return boxm2_util::files_from_dir(dir, "???");
+    return boxm2_util::files_from_dir(std::move(dir), "???");
 }
 
 //: returns a list of image strings from directory
@@ -117,10 +118,10 @@ std::vector<std::string> boxm2_util::camfiles_from_directory(std::string dir)
     std::sort(cam_files.begin(), cam_files.end());
     return cam_files;
 #endif
-    return boxm2_util::files_from_dir(dir, "txt");
+    return boxm2_util::files_from_dir(std::move(dir), "txt");
 }
 
-std::vector<std::string> boxm2_util::files_from_dir(std::string dir, std::string ext)
+std::vector<std::string> boxm2_util::files_from_dir(const std::string& dir, const std::string& ext)
 {
     std::vector<std::string> files;
     if (!vul_file::is_directory(dir.c_str())) {
@@ -240,7 +241,7 @@ int boxm2_util::find_nearest_cam(vgl_vector_3d<double>& normal,
 }
 
 
-bool boxm2_util::copy_file(std::string file, std::string dest)
+bool boxm2_util::copy_file(const std::string& file, const std::string& dest)
 {
     std::string line;
     std::ifstream myfile (file.c_str());
@@ -262,7 +263,7 @@ bool boxm2_util::copy_file(std::string file, std::string dest)
     return true;
 }
 
-bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, std::string dest)
+bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, const std::string& dest)
 {
     char html[4096];
     std::sprintf(html,
@@ -344,7 +345,7 @@ bool boxm2_util::generate_html(int height, int width, int nrows, int ncols, std:
 }
 
 
-bool boxm2_util::generate_jsfunc(vbl_array_2d<std::string> img_files, std::string dest)
+bool boxm2_util::generate_jsfunc(vbl_array_2d<std::string> img_files, const std::string& dest)
 {
     std::string js = "function scene_frames(frames) {\n var stack = [ ";
 
@@ -373,7 +374,7 @@ bool boxm2_util::generate_jsfunc(vbl_array_2d<std::string> img_files, std::strin
 }
 
 // private helper method prepares an input image to be processed by update
-vil_image_view_base_sptr boxm2_util::prepare_input_rgb_image(vil_image_view_base_sptr loaded_image)
+vil_image_view_base_sptr boxm2_util::prepare_input_rgb_image(const vil_image_view_base_sptr& loaded_image)
 {
 #ifdef DEBUG
   std::cout<<"preparing rgb image"<<std::endl;
@@ -393,7 +394,7 @@ vil_image_view_base_sptr boxm2_util::prepare_input_rgb_image(vil_image_view_base
 }
 
 // private helper method prepares an input image to be processed by update
-vil_image_view_base_sptr boxm2_util::prepare_input_image(vil_image_view_base_sptr loaded_image, bool force_grey)
+vil_image_view_base_sptr boxm2_util::prepare_input_image(const vil_image_view_base_sptr& loaded_image, bool force_grey)
 {
     //then it's an RGB image (assumes byte image...)
     if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
@@ -495,7 +496,7 @@ vil_rgba<vxl_byte> boxm2_util::mean_pixel(vil_image_view<vil_rgba<vxl_byte> >& i
 }
 
 bsta_histogram_sptr
-    boxm2_util::generate_image_histogram(vil_image_view_base_sptr  img, unsigned int numbins)
+    boxm2_util::generate_image_histogram(const vil_image_view_base_sptr&  img, unsigned int numbins)
 {
     auto * hist= new bsta_histogram<float>(0.0,1.0,numbins);
     if (auto * float_img = dynamic_cast<vil_image_view<float> *> (img.ptr()))
@@ -582,7 +583,7 @@ bool boxm2_util::query_point(boxm2_scene_sptr& scene,
     return true;
 }
 
-std::vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr scene, boxm2_block_id curr_block, double distance)
+std::vector<boxm2_block_id> boxm2_util::order_about_a_block(const boxm2_scene_sptr& scene, const boxm2_block_id& curr_block, double distance)
 {
   std::vector<boxm2_block_id> vis_order;
   std::vector<boxm2_dist_id_pair> distances;
@@ -673,7 +674,7 @@ std::vector<boxm2_block_id> boxm2_util::order_about_a_block(boxm2_scene_sptr sce
 #endif
 }
 
-bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, std::string kml_file, std::vector<boxm2_block_id> blks)
+bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, const std::string& kml_file, std::vector<boxm2_block_id> blks)
 {
   vpgl_lvcs lvcs = scene->lvcs();
   std::ofstream ofs(kml_file.c_str());
@@ -716,7 +717,7 @@ bool boxm2_util::write_blocks_to_kml(boxm2_scene_sptr& scene, std::string kml_fi
   return true;
 }
 
-bool boxm2_util::get_raydirs_tfinal(std::string depthdir, std::string camsfile,
+bool boxm2_util::get_raydirs_tfinal(const std::string& depthdir, const std::string& camsfile,
     vgl_point_3d<double> origin,
     std::vector<vil_image_view<float>*> & raydirs,
     std::vector<vil_image_view<float>*> & tfinals,
@@ -797,7 +798,7 @@ bool boxm2_util::get_raydirs_tfinal(std::string depthdir, std::string camsfile,
 }
 
 std::vector<boxm2_block_id>
-boxm2_util::blocks_along_a_ray(boxm2_scene_sptr scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1)
+boxm2_util::blocks_along_a_ray(const boxm2_scene_sptr& scene, vgl_point_3d<double> p0, vgl_point_3d<double> p1)
 {
     boxm2_block_id id0,id1;
     vgl_point_3d<double> local_coords;

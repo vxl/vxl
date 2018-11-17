@@ -92,7 +92,7 @@ void expand_quad( const vnl_vector<double>& s,
 
 inline
 void copy_to_nth_pos( vnl_vector<double>& des, unsigned c,
-                      const vnl_vector<double> s )
+                      const vnl_vector<double>& s )
 {
   for ( unsigned int i=0; i<s.size(); ++i )
     des(c+i) = s(i);

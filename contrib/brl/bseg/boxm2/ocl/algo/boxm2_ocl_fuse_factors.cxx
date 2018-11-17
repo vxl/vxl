@@ -31,9 +31,9 @@
 //: Map of kernels should persist between process executions
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_fuse_factors::fuse_factors_kernels_;
-bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
-                                          bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache,
+bool boxm2_ocl_fuse_factors::fuse_factors(const boxm2_scene_sptr&         scene,
+                                          const bocl_device_sptr&         device,
+                                          const boxm2_opencl_cache_sptr&  opencl_cache,
                                           std::vector<std::string>   factors_ident,
                                           std::vector<float>   weights)
 {
@@ -186,7 +186,7 @@ bool boxm2_ocl_fuse_factors::fuse_factors(boxm2_scene_sptr         scene,
 
 
 
-std::vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_fuse_factors::get_fuse_factors_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;

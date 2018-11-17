@@ -47,7 +47,7 @@ class icam_view_metadata
 
    //: for debug purposes
    void mapped_image(vil_image_view<float> const& source_img,
-                     vpgl_camera_double_sptr camera,
+                     const vpgl_camera_double_sptr& camera,
                      vgl_rotation_3d<double>& rot,
                      vgl_vector_3d<double>& trans, unsigned level,
                      icam_minimizer_params const& params,
@@ -71,7 +71,7 @@ class icam_view_metadata
    unsigned final_level_;
 
    void create_minimizer(vil_image_view<float>*& exp_img, vil_image_view<double>*& depth_img,
-                         vpgl_camera_double_sptr camera, icam_minimizer_params const& params,
+                         const vpgl_camera_double_sptr& camera, icam_minimizer_params const& params,
                          icam_minimizer*& minimizer);
 };
 

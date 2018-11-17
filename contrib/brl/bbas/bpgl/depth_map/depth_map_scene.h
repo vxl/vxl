@@ -77,8 +77,8 @@ class depth_map_scene : public vbl_ref_count
   void set_image_path(std::string const& path){image_path_ = path;}
   void set_image_size(unsigned const& ni, unsigned const& nj) { ni_ = ni;  nj_ = nj; }
   void set_camera(vpgl_perspective_camera<double> const& cam) {cam_ = cam;}
-  void set_ground_plane(vsol_polygon_2d_sptr ground_plane);
-  void set_sky(vsol_polygon_2d_sptr ground_plane);
+  void set_ground_plane(const vsol_polygon_2d_sptr& ground_plane);
+  void set_sky(const vsol_polygon_2d_sptr& ground_plane);
 
   //: set the scene depth of a movable plane. returns false if plane is fixed
   bool set_depth(double depth, std::string const& name);
@@ -101,7 +101,7 @@ class depth_map_scene : public vbl_ref_count
                   vgl_vector_3d<double> plane_normal,
                   double min_distance,
                   double max_distance,
-                  std::string name,
+                  const std::string& name,
                   depth_map_region::orientation orient,
                   unsigned order = 0,
                   unsigned land_id = 40,
@@ -126,7 +126,7 @@ class depth_map_scene : public vbl_ref_count
   vil_image_view<float> depth_map(unsigned log2_downsample_ratio);
 
   //: return a depth map of the specified region, use the 'ground_plane' and 'sky' strings to specify those two regions. downsample accordingly.
-  vil_image_view<float> depth_map(std::string region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff = 20000);
+  vil_image_view<float> depth_map(const std::string& region_name, unsigned log2_downsample_ratio, double gp_dist_cutoff = 20000);
 
   //: the iterator at the start of depth search. resets the depth_states_.
   scene_depth_iterator begin();

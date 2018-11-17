@@ -35,7 +35,7 @@ class rgrl_est_spline
   //
   // global_xform is used as the global xformation. No global
   // estimation will be performed.
-  rgrl_est_spline( unsigned dof, rgrl_transformation_sptr global_xform,
+  rgrl_est_spline( unsigned dof, const rgrl_transformation_sptr& global_xform,
                    rgrl_mask_box  roi, vnl_vector<double> const& delta,
                    vnl_vector< unsigned > const& m,
                    bool use_thin_plate = false, double lambda = 0.001 );

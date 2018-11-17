@@ -90,9 +90,9 @@ brec_param_estimation::estimate_fg_pair_density_sigma_amoeba(std::vector<std::pa
 }
 
 bool
-brec_param_estimation::create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c,
+brec_param_estimation::create_fg_pairs(const vil_image_resource_sptr& img, const bvgl_changes_sptr& c,
                                        std::vector<std::pair<float, float> >& pairs,
-                                       bool print_histogram, std::string out_name)
+                                       bool print_histogram, const std::string& out_name)
 {
   unsigned ni = img->ni();
   unsigned nj = img->nj();

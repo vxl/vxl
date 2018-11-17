@@ -9,7 +9,7 @@
 #include <vul/vul_timer.h>
 
 
-bstm_ocl_minfo_function::bstm_ocl_minfo_function(bocl_device_sptr device, bstm_scene_sptr scene, bstm_opencl_cache_sptr opencl_cache,
+bstm_ocl_minfo_function::bstm_ocl_minfo_function(const bocl_device_sptr& device, const bstm_scene_sptr& scene, const bstm_opencl_cache_sptr& opencl_cache,
                         vgl_box_3d<double> bb,vgl_rotation_3d<double> rot, vgl_vector_3d<double> T, float time1, float time2, std::string kernel_opt,int nbins ):
                         device_(device), scene_(scene), opencl_cache_(opencl_cache),bb_(bb), T_(T), time1_(time1), time2_(time2), R_(std::move(rot)), kernel_opt_(std::move(kernel_opt)),
                         app_nbins_(nbins), surf_nbins_(2), app_view_dir_num_(8)

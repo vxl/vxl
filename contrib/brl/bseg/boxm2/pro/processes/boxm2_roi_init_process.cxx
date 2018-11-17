@@ -63,7 +63,7 @@ namespace boxm2_roi_init_process_globals
   //: roi_init function
   bool roi_init(std::string const& image_path,
                 vpgl_rational_camera<double>* camera,
-                boxm2_scene_sptr scene,
+                const boxm2_scene_sptr& scene,
                 float uncertainty,
                 //vil_image_view<unsigned char>* nitf_image_unsigned_char,
                 vil_image_view_base_sptr& img_ptr,
@@ -83,7 +83,7 @@ namespace boxm2_roi_init_process_globals
 //: roi_init function
 bool boxm2_roi_init_process_globals::roi_init( std::string const& image_path,
                                                vpgl_rational_camera<double>* camera,
-                                               boxm2_scene_sptr scene,
+                                               const boxm2_scene_sptr& scene,
                                                float error,
                                                //vil_image_view<unsigned char>* nitf_image_unsigned_char,
                                                vil_image_view_base_sptr& img_ptr,

@@ -66,7 +66,7 @@ bvxm_lidar_processor::prob_density(float z_dim,  bvxm_voxel_slab<float> const& o
   return probabilities;
 }
 
-float bvxm_lidar_processor::prob_density(vil_image_view_base_sptr lidar,
+float bvxm_lidar_processor::prob_density(const vil_image_view_base_sptr& lidar,
                                          float z_dim,
                                          vnl_vector_fixed<float,3>& covar,  // sigma vals
                                          vgl_box_2d<double> lidar_roi,

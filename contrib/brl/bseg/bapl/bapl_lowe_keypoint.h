@@ -28,11 +28,11 @@ class bapl_lowe_keypoint : public bapl_keypoint
   //: Constructor
   bapl_lowe_keypoint();
   //: Constructor
-  bapl_lowe_keypoint( bapl_lowe_pyramid_set_sptr pyramid_set,
+  bapl_lowe_keypoint( const bapl_lowe_pyramid_set_sptr& pyramid_set,
                       double i, double j, double s=1, double o=0 );
 
   //: Constructor - do not extract descriptor from the pyramid but use the one that is passed, assumes the passed descriptor is normalized
-  bapl_lowe_keypoint( bapl_lowe_pyramid_set_sptr pyramid_set,
+  bapl_lowe_keypoint( const bapl_lowe_pyramid_set_sptr& pyramid_set,
                       double i , double j, double s, double o, vnl_vector_fixed<double, 128>& desc);
 
   //: Destructor

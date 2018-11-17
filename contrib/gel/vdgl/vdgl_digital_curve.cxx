@@ -20,7 +20,7 @@ vdgl_digital_curve::vdgl_digital_curve()
   assert(interpolator_);
 }
 
-vdgl_digital_curve::vdgl_digital_curve( vdgl_interpolator_sptr interpolator)
+vdgl_digital_curve::vdgl_digital_curve( const vdgl_interpolator_sptr& interpolator)
   : interpolator_(interpolator)
 {
   assert(interpolator);

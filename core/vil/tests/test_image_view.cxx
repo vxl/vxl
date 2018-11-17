@@ -115,7 +115,7 @@ void test_image_view_rgba(vil_image_view<float> &image2, vil_image_view<double> 
 
 
 template <class S, class T>
-void test_image_view(S /*d1*/, std::string s_name, T /*d2*/)
+void test_image_view(S /*d1*/, const std::string& s_name, T /*d2*/)
 {
   vil_image_view<S> image0;
   image0.set_size(10,8);

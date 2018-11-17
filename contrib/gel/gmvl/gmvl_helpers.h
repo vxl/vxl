@@ -20,7 +20,7 @@ std::ostream &operator<<( std::ostream &os, const std::vector<gmvl_node_sptr> &r
 // standard input and output
 
 // standard double, double list
-std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string filename);
-gmvl_node_sptr gmvl_load_image( const std::string filename);
+std::vector<gmvl_node_sptr> gmvl_load_raw_corners( const std::string& filename);
+gmvl_node_sptr gmvl_load_image( const std::string& filename);
 
 #endif // gmvl_helpers_h_

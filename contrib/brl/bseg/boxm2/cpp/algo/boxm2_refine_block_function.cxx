@@ -6,7 +6,7 @@
 
 
 //: initialize generic data base pointers as their data type
-bool boxm2_refine_block_function::init_data(boxm2_scene_sptr scene, boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh)
+bool boxm2_refine_block_function::init_data(const boxm2_scene_sptr& scene, boxm2_block* blk, std::vector<boxm2_data_base*> & datas, float prob_thresh)
 {
     //store block and pointer to uchar16 3d block
     scene_ = scene;
@@ -281,7 +281,7 @@ int boxm2_refine_block_function::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_refine_block( boxm2_scene_sptr scene,
+void boxm2_refine_block( const boxm2_scene_sptr& scene,
                          boxm2_block* blk,
                          std::vector<boxm2_data_base*> & datas,
                          float prob_thresh,

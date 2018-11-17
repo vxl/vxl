@@ -1,6 +1,7 @@
-#include <iostream>
-#include <cstdio>
 #include "bocl_global_memory_bandwidth_manager.h"
+#include <cstdio>
+#include <iostream>
+#include <utility>
 //
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -275,11 +276,11 @@ bool bocl_global_memory_bandwidth_manager::run_kernel_using_image()
 }
 
 int bocl_global_memory_bandwidth_manager::create_kernel(std::string const& kernel_name,
-                                                        std::string src_path,
+                                                        const std::string& src_path,
                                                         std::string options)
 {
   std::vector<std::string> src_paths;
   src_paths.push_back(src_path);
   return kernel_.create_kernel(&this->context(),&this->devices()[0],
-                               src_paths, kernel_name, options, "the kernel");
+                               src_paths, kernel_name, std::move(options), "the kernel");
 }

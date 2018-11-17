@@ -47,7 +47,7 @@ class bvxm_world_params : public vbl_ref_count
     const vgl_point_3d<float>& corner,
     const vgl_vector_3d<unsigned int>& num_voxels,
     float voxel_length,
-    vpgl_lvcs_sptr lvcs = vpgl_lvcs_sptr(nullptr),
+    const vpgl_lvcs_sptr& lvcs = vpgl_lvcs_sptr(nullptr),
     float min_ocp_prob = 0.001f,
     float max_ocp_prob = 0.999f,
     unsigned max_scale = 1,

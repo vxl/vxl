@@ -20,18 +20,18 @@ class boxm2_ocl_paint_batch
 {
   public:
     static void paint_block( boxm2_scene_sptr           scene,
-                             bocl_device_sptr           device,
-                             boxm2_stream_cache_sptr    str_cache,
-                             boxm2_opencl_cache_sptr    opencl_cache,
+                             const bocl_device_sptr&           device,
+                             const boxm2_stream_cache_sptr&    str_cache,
+                             const boxm2_opencl_cache_sptr&    opencl_cache,
                              cl_command_queue           &queue,
-                             std::string                 data_type,
-                             boxm2_block_id             id,
-                             bsta_sigma_normalizer_sptr n_table );
+                             const std::string&                 data_type,
+                             const boxm2_block_id&             id,
+                             const bsta_sigma_normalizer_sptr& n_table );
 
   private:
 
     //compile kernels and place in static map
-    static bocl_kernel* compile_kernels( bocl_device_sptr device, std::string opts="" );
+    static bocl_kernel* compile_kernels( const bocl_device_sptr& device, std::string opts="" );
 
     //map of paint kernel by device
     static std::map<std::string, bocl_kernel*> kernels_;
