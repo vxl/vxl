@@ -233,7 +233,7 @@ char* boxm2_ocl_test_utils::construct_block_test_stream(int  /*numBuffers*/,
     return bsize;
 }
 
-std::string boxm2_ocl_test_utils::save_test_simple_scene(std::string filename )
+std::string boxm2_ocl_test_utils::save_test_simple_scene(const std::string& filename )
 {
     std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/ocl/tests/";
     std::string test_file = test_dir + filename;

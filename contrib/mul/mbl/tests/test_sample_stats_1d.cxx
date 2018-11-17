@@ -43,7 +43,8 @@ void test_original()
 
   // check construct with samples
   std::vector<double> samples;
-  for (int i=0;i<5;++i)
+  samples.reserve(5);
+for (int i=0;i<5;++i)
     samples.push_back(i);
   mbl_sample_stats_1d stats_c(samples);
   stats_c.set_use_mvue(false);

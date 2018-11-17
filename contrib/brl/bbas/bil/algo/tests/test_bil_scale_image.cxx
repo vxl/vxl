@@ -10,7 +10,7 @@
 #include <vil/vil_convert.h>
 
 
-static void save_and_display(const vil_image_view<float> img,
+static void save_and_display(const vil_image_view<float>& img,
                              const std::string& name)
 {
   vil_image_view<vxl_byte> save_img;

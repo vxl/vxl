@@ -32,6 +32,8 @@
 #include <vul/vul_file_iterator.h>
 #include <brip/brip_line_generator.h>
 
+#include <utility>
+
 bool find_key_value_from_tags(std::string const& key, std::string const& value,
                               std::vector<std::pair<std::string, std::string> >& tags,
                               std::string& name)
@@ -53,9 +55,9 @@ bool find_key_value_from_tags(std::string const& key, std::string const& value,
   return found;
 }
 
-static void error(std::string log_file, std::string msg)
+static void error(std::string log_file, const std::string& msg)
 {
-  std::cerr << msg;  volm_io::write_post_processing_log(log_file, msg);
+  std::cerr << msg;  volm_io::write_post_processing_log(std::move(log_file), msg);
 }
 using namespace std;
 int main(int argc, char** argv)

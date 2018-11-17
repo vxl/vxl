@@ -6,8 +6,8 @@
 #endif
 
 rgrl_invariant_match::
-rgrl_invariant_match( rgrl_invariant_sptr from,
-                      rgrl_invariant_sptr to)
+rgrl_invariant_match( const rgrl_invariant_sptr& from,
+                      const rgrl_invariant_sptr& to)
   : from_(from),
     to_(to),
     is_estimate_set_(false)

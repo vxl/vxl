@@ -30,7 +30,7 @@ namespace{
   // for Levenberg Marquardt
   struct spline_least_squares_func : public vnl_least_squares_function
   {
-    spline_least_squares_func( rgrl_spline_sptr spline,
+    spline_least_squares_func( const rgrl_spline_sptr& spline,
                                std::vector< vnl_vector< double > > const& pts,
                                vnl_diag_matrix<double> const& wgt,    // ( num of residuals ) x ( num of residuals )
                                vnl_vector<double> const& displacement, // ( num of residuals ) x 1
@@ -91,13 +91,13 @@ namespace{
   // for Conjugate Gradient and other optimizers
   struct spline_cost_function : public vnl_cost_function
   {
-    spline_cost_function( rgrl_spline_sptr spline,
+    spline_cost_function( const rgrl_spline_sptr& spline,
                           std::vector< vnl_vector< double > >  pts,
-                          vnl_diag_matrix<double> wgt,    // ( num of residuals ) x ( num of residuals )
-                          vnl_vector<double> displacement ) // ( num of residuals ) x 1
+                          const vnl_diag_matrix<double>& wgt,    // ( num of residuals ) x ( num of residuals )
+                          const vnl_vector<double>& displacement ) // ( num of residuals ) x 1
       : vnl_cost_function( spline->num_of_control_points() ),  //number of unknowns
                            spline_( spline ),
-                           pts_( pts ), wgt_( wgt ), displacement_( displacement )
+                           pts_( std::move(pts) ), wgt_( wgt ), displacement_( displacement )
     {
       assert( pts.size() == wgt.rows() );
       assert( displacement.size() == wgt.rows() );
@@ -157,7 +157,7 @@ rgrl_est_spline( unsigned dof,
 
 rgrl_est_spline::
 rgrl_est_spline( unsigned dof,
-                 rgrl_transformation_sptr global_xform,
+                 const rgrl_transformation_sptr& global_xform,
                  rgrl_mask_box  roi, vnl_vector<double> const& delta,
                  vnl_vector< unsigned > const& m,
                  bool use_thin_plate, double lambda )

@@ -44,7 +44,7 @@ volm_tile::volm_tile(float lat, float lon, char hemisphere, char direction, floa
 }
 
 //: parse the name string and construct tile
-volm_tile::volm_tile(std::string file_name, unsigned ni, unsigned nj) : ni_(ni), nj_(nj)
+volm_tile::volm_tile(const std::string& file_name, unsigned ni, unsigned nj) : ni_(ni), nj_(nj)
 {
   std::string name = vul_file::strip_directory(file_name);
   name = name.substr(name.find_first_of('_')+1, name.size());
@@ -53,10 +53,10 @@ volm_tile::volm_tile(std::string file_name, unsigned ni, unsigned nj) : ni_(ni),
   std::string n_scale = name.substr(name.find_first_of('_')+1, name.find_last_of('_')-name.find_first_of('_')-1);
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
-  std::size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find('N');
   if (n < n_coords.size())  hemisphere_ = 'N';
   else                      hemisphere_ = 'S';
-  n = n_coords.find("E");
+  n = n_coords.find('E');
   if (n < n_coords.size())  direction_ = 'E';
   else                      direction_ = 'W';
 
@@ -677,7 +677,7 @@ void volm_tile::mark_uncertainty_region(int i, int j, float score, vbl_array_2d<
 }
 
 // create a kml file of the tile as a box and with circular marks throughout at every n pixels in each direction
-void volm_tile::write_kml(std::string name, int n)
+void volm_tile::write_kml(const std::string& name, int n)
 {
   std::ofstream ofs(name.c_str());
   bkml_write::open_document(ofs);

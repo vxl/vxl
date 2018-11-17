@@ -15,6 +15,6 @@
 #include <vil/vil_image_resource.h>
 
 //: Sobel convolution filter
-vil_image_resource_sptr vepl_sobel(vil_image_resource_sptr );
+vil_image_resource_sptr vepl_sobel(const vil_image_resource_sptr& );
 
 #endif // vepl_sobel_h_

@@ -87,7 +87,7 @@ void boxm2_dumb_cache::replace_data_base(boxm2_block_id, std::string  /*type*/, 
 
 
 //: update data cache by type
-void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, std::string type)
+void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, const std::string& type)
 {
   std::map<std::string, boxm2_data_base* >::iterator iter;
   iter = cached_data_.find(type);

@@ -95,7 +95,7 @@ class sdet_detector : public sdet_detector_params
   //
   sdet_detector(sdet_detector_params& params);
 
-  sdet_detector(vil1_image, float smoothSigma = 1.0, float noiseSigma =2.0,
+  sdet_detector(const vil1_image&, float smoothSigma = 1.0, float noiseSigma =2.0,
                 float contourFactor = 1.0, float junctionFactor = 1.5,
                 int minLength = 6, float maxGap = 2.23606, float minJump=1.0);
 
@@ -144,7 +144,7 @@ class sdet_detector : public sdet_detector_params
 
   bool get_vsol_edges(std::vector<vsol_digital_curve_2d_sptr>& edges );
   //:The last type set is used in the execution if both types are valid
-  void SetImage(vil1_image img);
+  void SetImage(const vil1_image& img);
   void SetImage(vil_image_resource_sptr const& img);
   void SetImage(vil_image_resource_sptr const& img, brip_roi const& roi);
 

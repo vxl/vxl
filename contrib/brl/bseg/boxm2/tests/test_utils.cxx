@@ -133,7 +133,7 @@ void boxm2_test_utils::save_test_scene_to_disk()
   }
 }
 
-void boxm2_test_utils::delete_test_scene_from_disk(std::string dir)
+void boxm2_test_utils::delete_test_scene_from_disk(const std::string& dir)
 {
   //use vul_file to
   vul_file::delete_file_glob(dir+"/"+"*id_*.bin");
@@ -208,7 +208,7 @@ std::string boxm2_test_utils::save_test_empty_scene()
 }
 
 
-std::string boxm2_test_utils::save_test_simple_scene(std::string filename )
+std::string boxm2_test_utils::save_test_simple_scene(const std::string& filename )
 {
     std::string test_dir  = testlib_root_dir()+ "/contrib/brl/bseg/boxm2/tests/";
     std::string test_file = test_dir + filename;

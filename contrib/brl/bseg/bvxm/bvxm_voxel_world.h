@@ -222,14 +222,14 @@ class bvxm_voxel_world: public vbl_ref_count
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
-  bool heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx=0);
+  bool heightmap(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx=0);
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the expected z values and variance along the corresponding camera ray
-  bool heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float&max_depth, unsigned scale_idx=0);
+  bool heightmap_exp(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float&max_depth, unsigned scale_idx=0);
 
   //: measure the average uncertainty along the rays
-  bool uncertainty(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx=0);
+  bool uncertainty(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx=0);
 
   //: generate a heightmap from the viewpoint of a virtual camera
   // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
@@ -263,7 +263,7 @@ class bvxm_voxel_world: public vbl_ref_count
   bvxm_voxel_grid_base_sptr get_grid(unsigned bin_index, unsigned scale, bool use_memory = false);
 
   //: save the occupancy grid as a 3-d tiff image
-  bool save_occupancy_vff(std::string filename, unsigned scale_idx=0);
+  bool save_occupancy_vff(const std::string& filename, unsigned scale_idx=0);
 
   //: save the occupancy grid in a ".raw" format readable by Drishti volume rendering software
   template<bvxm_voxel_type APM_T>

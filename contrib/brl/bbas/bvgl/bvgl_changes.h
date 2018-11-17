@@ -44,11 +44,11 @@ class bvgl_changes : public vbl_ref_count
   //void xml_read();
   //void xml_write();
 
-  vil_image_view_base_sptr create_mask_from_objs(unsigned ni, unsigned nj, std::string change_type);
+  vil_image_view_base_sptr create_mask_from_objs(unsigned ni, unsigned nj, const std::string& change_type);
   vil_image_view_base_sptr create_mask_from_objs_all_types(unsigned ni, unsigned nj);
 
-  void add_obj(bvgl_change_obj_sptr obj);
-  void remove_obj(bvgl_change_obj_sptr obj);
+  void add_obj(const bvgl_change_obj_sptr& obj);
+  void remove_obj(const bvgl_change_obj_sptr& obj);
 
  private:
   std::vector<bvgl_change_obj_sptr> objs_;

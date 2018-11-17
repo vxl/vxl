@@ -140,7 +140,7 @@ void bvxm_edge_util::edge_distance_transform(vil_image_view<vxl_byte>& inp_image
   }
 }
 
-int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera)
+int bvxm_edge_util::convert_uncertainty_from_meters_to_pixels(float uncertainty, const vpgl_lvcs_sptr& lvcs, const vpgl_camera_double_sptr& camera)
 {
   // estimate the offset search size in the image space
   vgl_box_3d<double> box_uncertainty(-uncertainty,-uncertainty,-uncertainty,uncertainty,uncertainty,uncertainty);

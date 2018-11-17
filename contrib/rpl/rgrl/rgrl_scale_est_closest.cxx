@@ -82,7 +82,7 @@ compute_geometric_scale( double& return_scale,
     else {
       to_iter titr = fitr.begin();
 
-      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+      const rgrl_feature_sptr& mapped_from = fitr.mapped_from_feature();
       double min_distance = titr.to_feature()->geometric_error( *mapped_from );
 
       for ( ++titr; titr != fitr.end(); ++titr ) {
@@ -156,7 +156,7 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
       to_iter titr = fitr.begin();
       to_iter best_titr = titr;
 
-      rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+      const rgrl_feature_sptr& mapped_from = fitr.mapped_from_feature();
       double min_distance = titr.to_feature()->geometric_error( *mapped_from );
 
       for ( ++titr; titr != fitr.end(); ++titr ) {

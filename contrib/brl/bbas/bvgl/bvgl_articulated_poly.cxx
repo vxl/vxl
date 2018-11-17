@@ -117,7 +117,8 @@ sub_manifold_transform(const double t,
                        std::vector<double > const& basis_angles)
 {
   std::vector<double > angles;
-  for (double basis_angle : basis_angles)
+  angles.reserve(basis_angles.size());
+for (double basis_angle : basis_angles)
     angles.push_back(t*basis_angle);
   this->transform(angles);
   this->update();

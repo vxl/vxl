@@ -1,3 +1,5 @@
+#include <utility>
+
 #include "bstm_opencl_cache.h"
 //:
 // \file
@@ -5,8 +7,8 @@
 
 //: scene/device constructor
 bstm_opencl_cache
-::bstm_opencl_cache(bstm_scene_sptr scene,
-                    bocl_device_sptr device) :
+::bstm_opencl_cache(const bstm_scene_sptr& scene,
+                    const bocl_device_sptr& device) :
   scene_(scene),
   bytesInCache_(0),
   block_info_(nullptr),
@@ -204,7 +206,7 @@ bstm_opencl_cache
 //: realization of abstract "get_block(block_id)"
 bocl_mem*
 bstm_opencl_cache
-::get_block(bstm_block_id id)
+::get_block(const bstm_block_id& id)
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(id);
@@ -285,7 +287,7 @@ bstm_opencl_cache
 //: realization of abstract "get_block(block_id)"
 bocl_mem*
 bstm_opencl_cache
-::get_time_block(bstm_block_id id)
+::get_time_block(const bstm_block_id& id)
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(id);
@@ -354,7 +356,7 @@ bstm_opencl_cache
 
 bocl_mem*
 bstm_opencl_cache
-::get_block_info(bstm_block_id id)
+::get_block_info(const bstm_block_id& id)
 {
   // clean up
   if (block_info_) {
@@ -377,7 +379,7 @@ bstm_opencl_cache
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
 bocl_mem*
 bstm_opencl_cache
-::get_data(bstm_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+::get_data(const bstm_block_id& id, const std::string& type, std::size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -457,7 +459,7 @@ bstm_opencl_cache
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
 bocl_mem*
 bstm_opencl_cache
-::get_data_new(bstm_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+::get_data_new(const bstm_block_id& id, const std::string& type, std::size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -541,7 +543,7 @@ bstm_opencl_cache
   }
 
   //allocate mem
-  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, id);
+  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, std::move(id));
   mem_pool_[data] = num_bytes;
   return data;
 }
@@ -587,7 +589,7 @@ bstm_opencl_cache
 // in the cpu cache as well (by creating a new one)
 void
 bstm_opencl_cache
-::deep_replace_data(bstm_block_id id, std::string type, bocl_mem* mem, bool read_only)
+::deep_replace_data(const bstm_block_id& id, const std::string& type, bocl_mem* mem, bool read_only)
 {
   // instantiate new data block
   std::size_t numDataBytes = mem->num_bytes();
@@ -617,7 +619,7 @@ bstm_opencl_cache
 //: deep remove data, removes from ocl cache as well
 void
 bstm_opencl_cache
-::deep_remove_data(bstm_block_id id, std::string type, bool  /*write_out*/)
+::deep_remove_data(const bstm_block_id& id, const std::string& type, bool  /*write_out*/)
 {
   //find the data in this map
   std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -642,10 +644,10 @@ bstm_opencl_cache
 //: shallow_remove_data removes data with id and type from ocl cache only
 void
 bstm_opencl_cache
-::shallow_remove_data(bstm_block_id id, std::string type)
+::shallow_remove_data(const bstm_block_id& id, std::string type)
 {
   //find the data in this map
-  std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+  std::map<bstm_block_id, bocl_mem*>& data_map = this->cached_data_map(std::move(type));
   auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
@@ -658,7 +660,7 @@ bstm_opencl_cache
 //: helper method, \returns a reference to correct data map (ensures one exists)
 std::map<bstm_block_id, bocl_mem*>&
 bstm_opencl_cache
-::cached_data_map(std::string prefix)
+::cached_data_map(const std::string& prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -675,7 +677,7 @@ bstm_opencl_cache
 //: helper method to insert into LRU list
 void
 bstm_opencl_cache
-::lru_push_front( bstm_block_id id )
+::lru_push_front( const bstm_block_id& id )
 {
   //serach for it in the list, if it's there, delete it
   std::list<bstm_block_id>::iterator iter;

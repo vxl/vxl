@@ -17,19 +17,19 @@
 class boxm2_ocl_update_auxQ
 {
   public:
-    static bool update_auxQ( boxm2_scene_sptr         scene,
+    static bool update_auxQ( const boxm2_scene_sptr&         scene,
                              bocl_device_sptr         device,
-                             boxm2_opencl_cache_sptr  opencl_cache,
+                             const boxm2_opencl_cache_sptr&  opencl_cache,
                              vpgl_camera_double_sptr  cam,
-                             vil_image_view_base_sptr img,
-                             std::string               in_identifier="",
+                             const vil_image_view_base_sptr& img,
+                             const std::string&               in_identifier="",
                              std::string               view_ident="",
                              float resnearfactor = 100000.0,
                              float resfarfactor = 100000.0);
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="");
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
@@ -38,7 +38,7 @@ class boxm2_ocl_update_auxQ
     static float* prep_image_buffer(vil_image_view_base_sptr floatImg, bool isRGB, int& numFloats);
 
     //helper method to validate appearances
-    static bool validate_appearances(boxm2_scene_sptr scene,
+    static bool validate_appearances(const boxm2_scene_sptr& scene,
                                      std::string& data_type,
                                      int& appTypeSize,
                                      std::string& nobs_type,
@@ -49,21 +49,21 @@ class boxm2_ocl_update_auxQ
 class boxm2_ocl_update_PusingQ
 {
 public:
-    static bool init_product(boxm2_scene_sptr scene, boxm2_cache_sptr ocl_cache);
+    static bool init_product(boxm2_scene_sptr scene, const boxm2_cache_sptr& ocl_cache);
 
 
-    static bool accumulate_product(boxm2_scene_sptr         scene,
-                                   bocl_device_sptr         device,
-                                   boxm2_opencl_cache_sptr  opencl_cache,
-                                   std::string identifier);
+    static bool accumulate_product(const boxm2_scene_sptr&         scene,
+                                   const bocl_device_sptr&         device,
+                                   const boxm2_opencl_cache_sptr&  opencl_cache,
+                                   const std::string& identifier);
 
-    static bool compute_probability(boxm2_scene_sptr         scene,
-                                  bocl_device_sptr         device,
-                                  boxm2_opencl_cache_sptr  opencl_cache);
+    static bool compute_probability(const boxm2_scene_sptr&         scene,
+                                  const bocl_device_sptr&         device,
+                                  const boxm2_opencl_cache_sptr&  opencl_cache);
 
 private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="");
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;

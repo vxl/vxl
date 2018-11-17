@@ -9,14 +9,14 @@
 //:
 // \file
 
-boxm2_stream_block_cache::boxm2_stream_block_cache(boxm2_scene_sptr scene,
+boxm2_stream_block_cache::boxm2_stream_block_cache(const boxm2_scene_sptr& scene,
                                                    std::vector<std::string>  data_types,
                                                    std::vector<std::string>  identifier_list)
 : scene_(scene), data_types_list_(std::move(data_types)),identifier_list_(std::move(identifier_list))
 {
 }
 
-bool boxm2_stream_block_cache::init(boxm2_block_id id)
+bool boxm2_stream_block_cache::init(const boxm2_block_id& id)
 {
     clear();
     current_block_id_ = id;

@@ -373,7 +373,7 @@ bool vil_nitf2_string_formatter::read_vcl_stream(std::istream& input,
   }
   std::string str = std::string(cstr);
   delete[] cstr;
-  std::string::size_type end_pos = str.find_last_not_of(" ")+1;
+  std::string::size_type end_pos = str.find_last_not_of(' ')+1;
   if (end_pos == std::string::npos) {
     out_value = str;
   } else {
@@ -427,7 +427,7 @@ void vil_nitf2_enum_string_formatter::validate_value_map()
   }
 }
 
-bool vil_nitf2_enum_string_formatter::is_valid_value(std::string token) const
+bool vil_nitf2_enum_string_formatter::is_valid_value(const std::string& token) const
 {
   return value_map.find(token) != value_map.end();
 }

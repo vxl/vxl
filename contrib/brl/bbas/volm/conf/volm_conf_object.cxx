@@ -133,7 +133,7 @@ volm_conf_object
 
 bool
 volm_conf_object
-::is_same(volm_conf_object_sptr other_sptr)
+::is_same(const volm_conf_object_sptr& other_sptr)
 {
   return this->is_same(*other_sptr);
 }

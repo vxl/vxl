@@ -959,7 +959,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
 
     if (!h_lines.size())
       continue;
-    for (auto l0 : h_lines)
+    for (const auto& l0 : h_lines)
     {
       // check x offset
       vsol_line_2d_sptr l0_xformed = this->transform_line(Htrans,l0);
@@ -1000,7 +1000,7 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
     chamf90_.get_lines_in_interval(dx, collection_grid_radius, v_lines);
     if (!v_lines.size())
       continue;
-    for (auto l90 : v_lines)
+    for (const auto& l90 : v_lines)
     {
       // check y offset
       vsol_line_2d_sptr l90_xformed = this->transform_line(Htrans,l90);
@@ -1069,10 +1069,10 @@ compute_homography_linear_chamfer(vgl_h_matrix_2d<double> & H)
 //: The user will select the four corners of the grid in order to provide
 //  a rough estimate of the homography, then grid lines will be used to
 //  calculate a fine-tuned homography
-bool sdet_grid_finder::compute_manual_homography(vsol_point_2d_sptr ul,
-                                                 vsol_point_2d_sptr ur,
-                                                 vsol_point_2d_sptr lr,
-                                                 vsol_point_2d_sptr ll)
+bool sdet_grid_finder::compute_manual_homography(const vsol_point_2d_sptr& ul,
+                                                 const vsol_point_2d_sptr& ur,
+                                                 const vsol_point_2d_sptr& lr,
+                                                 const vsol_point_2d_sptr& ll)
 {
   // compute initial homography estimate based on manually picked points
   std::vector<vgl_homg_point_2d<double> > image_pts, grid_pts;
@@ -1461,7 +1461,7 @@ void sdet_grid_finder::clear()
 
 
 //: Check grid match by verifying image intensity values within grid squares
-bool sdet_grid_finder::check_grid_match(vil1_image img)
+bool sdet_grid_finder::check_grid_match(const vil1_image& img)
 {
   if (!homography_valid_)
     return false;
@@ -1541,7 +1541,7 @@ bool sdet_grid_finder::check_grid_match(vil1_image img)
 
 //: gets pixels stats from img within grid square specified by x,y
 //  Not returning a valid sigma value for now -DEC
-bool sdet_grid_finder::get_square_pixel_stats(vil1_image img,
+bool sdet_grid_finder::get_square_pixel_stats(const vil1_image& img,
                                               int x,int y,
                                               double & mean_intensity,
                                               double & /* intensity_sigma */)

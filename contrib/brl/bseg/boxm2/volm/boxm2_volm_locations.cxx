@@ -14,7 +14,7 @@
 //  Only one elev hypothesis per location for now..
 //  keep only the locations that the scene covers
 void
-boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
+boxm2_volm_loc_hypotheses::add_dems(const boxm2_scene_sptr& scene,
                                     unsigned interval_i, unsigned interval_j,
                                     float altitude,
                                     std::vector<vil_image_view<float> >& dems, std::vector<vpgl_geo_camera*>& cams)
@@ -51,7 +51,7 @@ boxm2_volm_loc_hypotheses::add_dems(boxm2_scene_sptr scene,
 }
 
 //: add a hypothesis given as a global lon, lat and elev for the pixel (i,j) of the tile
-bool boxm2_volm_loc_hypotheses::add(boxm2_scene_sptr scene, vgl_box_3d<double>& scene_bounding_box, double lon, double lat, double elev, unsigned i, unsigned j)
+bool boxm2_volm_loc_hypotheses::add(const boxm2_scene_sptr& scene, vgl_box_3d<double>& scene_bounding_box, double lon, double lat, double elev, unsigned i, unsigned j)
 {
   double lx, ly, lz;
   scene->lvcs().global_to_local(lon, lat, elev, vpgl_lvcs::wgs84, lx, ly, lz);
@@ -80,7 +80,7 @@ bool boxm2_volm_loc_hypotheses::add(double lon, double lat, float cent_x, float 
 
 
 //: construct by reading from a binary file
-boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(std::string bin_file)
+boxm2_volm_loc_hypotheses::boxm2_volm_loc_hypotheses(const std::string& bin_file)
 {
   vsl_b_ifstream is(bin_file.c_str());
   if (!is) {
@@ -118,7 +118,7 @@ void boxm2_volm_loc_hypotheses::generate_output_tile(std::vector<float>& scores,
     volm_tile::mark_uncertainty_region(pixels_[i].first,  pixels_[i].second, scores[i], mask, kernel, out);
 }
 
-bool boxm2_volm_loc_hypotheses::write_hypotheses(std::string out_file)
+bool boxm2_volm_loc_hypotheses::write_hypotheses(const std::string& out_file)
 {
   vsl_b_ofstream os(out_file.c_str());
   if (!os)
@@ -182,7 +182,7 @@ void boxm2_volm_loc_hypotheses::b_read(vsl_b_istream &is)
 }
 
 //: for debugging purposes
-bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(boxm2_scene_sptr scene, std::string kml_file)
+bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(const boxm2_scene_sptr& scene, const std::string& kml_file)
 {
   std::ofstream ofs(kml_file.c_str());
   if (!ofs) {

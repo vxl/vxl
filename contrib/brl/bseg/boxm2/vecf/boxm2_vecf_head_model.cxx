@@ -1,21 +1,22 @@
-#include <iostream>
-#include <algorithm>
-#include <limits>
 #include "boxm2_vecf_head_model.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
+#include <algorithm>
+#include <boct/boct_bit_tree.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <boct/boct_bit_tree.h>
+#include <iostream>
+#include <limits>
+#include <utility>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_distance.h>
+#include <vgl/vgl_sphere_3d.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 
 boxm2_vecf_head_model::boxm2_vecf_head_model(std::string const& scene_file,std::string color_apm_ident):
-  boxm2_vecf_articulated_scene(scene_file,color_apm_ident),
+  boxm2_vecf_articulated_scene(scene_file,std::move(color_apm_ident)),
   scale_(1.0, 1.0, 1.0)
 {
 
@@ -47,7 +48,7 @@ bool boxm2_vecf_head_model::get_data(boxm2_scene_sptr scene, boxm2_block_id cons
 
   bool get_color_data(boxm2_scene_sptr scene, boxm2_block_id const& blk_id,
                       std::string app_id, boxm2_data_base **color_data){
-    *color_data = boxm2_cache::instance()->get_data_base(scene, blk_id, app_id);
+    *color_data = boxm2_cache::instance()->get_data_base(scene, blk_id, std::move(app_id));
     if (color_data)
       return true;
     return false;

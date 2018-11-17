@@ -127,7 +127,7 @@ class bocl_mem : public vbl_ref_count
   bool is_gl_;
 
   //compile kernels and cache
-  bocl_kernel* get_set_kernel(cl_device_id dev_id, cl_context context, std::string type="float");
+  bocl_kernel* get_set_kernel(cl_device_id dev_id, cl_context context, const std::string& type="float");
 
   //map keeps track of all kernels compiled and cached
   static std::map<std::string, bocl_kernel*> set_kernels_;

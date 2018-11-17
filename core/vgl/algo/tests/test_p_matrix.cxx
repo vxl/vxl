@@ -49,7 +49,7 @@ static void test_constructors()
   {
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12}; // the "ground truth"
     vgl_p_matrix<double> P0(gold);
-    vgl_p_matrix<double> P(P0); P.get(data);
+    const vgl_p_matrix<double>& P(P0); P.get(data);
     TEST( "Copy constructor", equals(data, gold), true );
   }
   {

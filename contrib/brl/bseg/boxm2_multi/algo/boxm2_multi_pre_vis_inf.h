@@ -28,7 +28,7 @@ class boxm2_multi_pre_vis_inf
     //                          boxm2_multi_update_helper&      helper);
     static float pre_vis_inf( boxm2_multi_cache&              cache,
                               const vil_image_view<float>&    img,
-                              vpgl_camera_double_sptr         cam,
+                              const vpgl_camera_double_sptr&         cam,
                               float*                          norm_img,
                               boxm2_multi_update_helper&      helper);
 
@@ -36,10 +36,10 @@ class boxm2_multi_pre_vis_inf
 
     //runs pre/vis on single block
     static float pre_vis_per_block(const boxm2_block_id&     id,
-                                        boxm2_scene_sptr    scene,
+                                        const boxm2_scene_sptr&    scene,
                                         boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue&   queue,
-                                        std::string          data_type,
+                                        const std::string&          data_type,
                                         bocl_kernel*        kernel,
                                         bocl_mem_sptr&      vis_image,
                                         bocl_mem_sptr&      pre_image,
@@ -69,10 +69,10 @@ class boxm2_multi_pre_vis_inf
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 
     //compile kernels and cache
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts);
 
     //debug write imgs to disk method
-    static void write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj,std::string name);
+    static void write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj,const std::string& name);
 
     template <class T>
     static inline T clamp(T x, T a, T b) { return x < a ? a : (x > b ? b : x); }

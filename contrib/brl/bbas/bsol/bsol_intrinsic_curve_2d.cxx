@@ -41,14 +41,14 @@ bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const std::vector<vsol_point_2d
 }
 
 //: Constructor from a vsol_polyline_2d_sptr
-bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly)
+bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr& poly)
 {
   storage_ = new std::vector<vsol_point_2d_sptr>();
   for (unsigned i = 0; i < poly->size(); i++)
     storage_->push_back(poly->vertex(i));
   isOpen_=true;
 }
-bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly)
+bsol_intrinsic_curve_2d::bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr& poly)
 {
   storage_ = new std::vector<vsol_point_2d_sptr>();
   for (unsigned i = 0; i < poly->size(); i++)
@@ -239,7 +239,7 @@ void bsol_intrinsic_curve_2d::insert_vertex(const int i, double x, double y, boo
   if (bRecomputeProperties) computeProperties();
 }
 
-void bsol_intrinsic_curve_2d::readCONFromFile(std::string fileName)
+void bsol_intrinsic_curve_2d::readCONFromFile(const std::string& fileName)
 {
   double x, y;
   char buffer[2000];

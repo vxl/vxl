@@ -84,7 +84,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   //: construct from scene file specification, use exising database unless initialize == true
   // otherwise scan a spherical shell to define the voxel surface
 
-  boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache, bool is_single_instance = true, bool is_right = false);
+  boxm2_vecf_ocl_orbit_scene(std::string const& scene_file, const bocl_device_sptr& device, const boxm2_opencl_cache_sptr& opencl_cache, bool is_single_instance = true, bool is_right = false);
 
   //: refine target cells to match the refinement level of the source block
   int prerefine_target_sub_block(vgl_point_3d<double> const& sub_block_pt, unsigned pt_index) override{return -1;}//FIXME
@@ -93,7 +93,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
   bool inverse_vector_field(vgl_point_3d<double> const& target_pt, vgl_vector_3d<double>& inv_vf) const override{return false;}//FIXME
   bool apply_vector_field(cell_info const& target_cell, vgl_vector_3d<double> const& inv_vf) override{return false;}//FIXME
 
-  bool map_orbit_to_target_single_pass(boxm2_scene_sptr target_scene);
+  bool map_orbit_to_target_single_pass(const boxm2_scene_sptr& target_scene);
   //: map eye data to the target scene
   void map_to_target(boxm2_scene_sptr target_scene) override;
 
@@ -302,7 +302,7 @@ friend class boxm2_vecf_ocl_appearance_extractor; //the appearance extractor nee
 private:
   bool compile_kernels();
   bool get_scene_appearance( std::string& options);
-  bool update_target_gpu_buffers(boxm2_scene_sptr target_scene, boxm2_block_id id,bool write = false);
+  bool update_target_gpu_buffers(const boxm2_scene_sptr& target_scene, const boxm2_block_id& id,bool write = false);
 
   std::string app_type_,color_app_type_id_;
   bool extrinsic_only_;

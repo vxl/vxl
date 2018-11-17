@@ -28,7 +28,7 @@ class vsol_mesh_3d : public vsol_volume_3d
 {
  public:
  vsol_mesh_3d():mesh_(nullptr),current_extr_face_(nullptr){}
-  vsol_mesh_3d(vsol_box_3d_sptr box);
+  vsol_mesh_3d(const vsol_box_3d_sptr& box);
   ~vsol_mesh_3d() override{delete mesh_;}
 
   //: required virtual functions for vsol
@@ -51,10 +51,10 @@ class vsol_mesh_3d : public vsol_volume_3d
   bmsh3d_mesh_mc* get_object() { return mesh_; }
 
   void set_mesh(bmsh3d_mesh_mc* obj);
-  void set_mesh(vsol_polygon_3d_sptr poly, double dist);
-  void set_mesh(vsol_polygon_3d_sptr poly);
+  void set_mesh(const vsol_polygon_3d_sptr& poly, double dist);
+  void set_mesh(const vsol_polygon_3d_sptr& poly);
 
-  void attach_inner_face(unsigned face_id, vsol_polygon_3d_sptr poly);
+  void attach_inner_face(unsigned face_id, const vsol_polygon_3d_sptr& poly);
 
   std::map<int, vsol_polygon_3d_sptr> extract_faces();
 
@@ -99,11 +99,11 @@ class vsol_mesh_3d : public vsol_volume_3d
   bmsh3d_face_mc* current_extr_face_;
 
 
-  void create_mesh_HE(vsol_polygon_3d_sptr polygon, double dist, std::map<int, vsol_polygon_3d_sptr> inner_faces);
+  void create_mesh_HE(const vsol_polygon_3d_sptr& polygon, double dist, std::map<int, vsol_polygon_3d_sptr> inner_faces);
 
   bmsh3d_face* create_inner_face(vsol_polygon_3d_sptr polygon);
 
-  bmsh3d_face_mc* create_face(vsol_polygon_3d_sptr polygon);
+  bmsh3d_face_mc* create_face(const vsol_polygon_3d_sptr& polygon);
 
   bool single_face_with_vertices(unsigned face_id, vsol_polygon_3d_sptr& poly,
                                  std::vector<bmsh3d_vertex*>& verts);

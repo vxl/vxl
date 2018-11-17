@@ -78,7 +78,7 @@ breg3d_ekf_camera_optimizer_state breg3d_ekf_camera_optimizer::optimize(bvxm_vox
                                                                         vil_image_view_base_sptr &prev_img,
                                                                         bvxm_image_metadata &curr_img,
                                                                         breg3d_ekf_camera_optimizer_state &prev_state,
-                                                                        std::string apm_type, unsigned bin_idx)
+                                                                        const std::string& apm_type, unsigned bin_idx)
 {
   breg3d_ekf_camera_optimizer_state state_og = prev_state;
   auto* cam_est =

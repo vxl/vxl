@@ -29,7 +29,7 @@ bool vsph_unit_sphere::find_edge(vsph_edge const&  e)
 {
   std::set<int>& ss = neighbors_[e.vs_];
   std::set<int>::iterator sit;
-  sit = std::find(ss.begin(), ss.end(), e.ve_);
+  sit = ss.find(e.ve_);
   return sit != ss.end();
 }
 

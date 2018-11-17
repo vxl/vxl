@@ -10,7 +10,7 @@
 #endif
 
 //: PUBLIC create method, for creating singleton instance of bstm_cache
-void bstm_lru_cache::create(bstm_scene_sptr scene)
+void bstm_lru_cache::create(const bstm_scene_sptr& scene)
 {
   if (bstm_cache::exists())
   {
@@ -32,7 +32,7 @@ void bstm_lru_cache::create(bstm_scene_sptr scene)
 }
 
 //: constructor, set the directory path
-bstm_lru_cache::bstm_lru_cache(bstm_scene_sptr scene) : bstm_cache(scene)
+bstm_lru_cache::bstm_lru_cache(const bstm_scene_sptr& scene) : bstm_cache(scene)
 {
   scene_dir_ = scene->data_path();
 }
@@ -321,7 +321,7 @@ void bstm_lru_cache::replace_time_block(bstm_block_id id, bstm_time_block* repla
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)
-std::map<bstm_block_id, bstm_data_base*>& bstm_lru_cache::cached_data_map(std::string prefix)
+std::map<bstm_block_id, bstm_data_base*>& bstm_lru_cache::cached_data_map(const std::string& prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -336,7 +336,7 @@ std::map<bstm_block_id, bstm_data_base*>& bstm_lru_cache::cached_data_map(std::s
 }
 
 //: helper method says whether or not block id is valid
-bool bstm_lru_cache::is_valid_id(bstm_block_id id)
+bool bstm_lru_cache::is_valid_id(const bstm_block_id& id)
 {
   // use scene here to determine if this id is valid
   return scene_->block_exists(id);

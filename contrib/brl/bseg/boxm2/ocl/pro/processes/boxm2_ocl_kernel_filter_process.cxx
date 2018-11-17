@@ -4,10 +4,11 @@
 // \author Isabel Restrepo
 // \date April 12, 2012
 
-#include <iostream>
-#include <fstream>
 #include "boxm2_ocl_kernel_filter_process.h"
 #include <boct/boct_bit_tree.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 
 #include <boxm2/boxm2_block.h>
 #include <boxm2/boxm2_data_base.h>
@@ -19,7 +20,7 @@
 #endif
 
 
-bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts)
+bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(const bocl_device_sptr& device, bocl_kernel * filter_kernel, std::string opts)
 {
   std::vector<std::string> src_paths;
   std::string source_dir = boxm2_ocl_util::ocl_src_root();
@@ -28,7 +29,7 @@ bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_
   src_paths.push_back(source_dir + "bit/kernel_filter_block.cl");
 
   //compilation options
-  std::string options = opts;
+  const std::string& options = std::move(opts);
 
   return filter_kernel->create_kernel(  &device->context(), device->device_id(),
                                         src_paths, "kernel_filter_block", options ,
@@ -36,7 +37,7 @@ bool boxm2_ocl_kernel_filter_process_globals::compile_filter_kernel(bocl_device_
 }
 
 
-bool boxm2_ocl_kernel_filter_process_globals::process(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_sptr filter)
+bool boxm2_ocl_kernel_filter_process_globals::process(const bocl_device_sptr& device, const boxm2_scene_sptr& scene, const boxm2_opencl_cache_sptr& opencl_cache, const bvpl_kernel_sptr& filter)
 {
   float gpu_time=0.0f;
 

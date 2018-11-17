@@ -178,7 +178,7 @@ void vtol_vertex::explore_vertex(vertex_list &verts)
   // it will be put as the second element, during the first recursive call.
 
   edge_list e_list; this->edges(e_list);
-  for (auto e : e_list)
+  for (const auto& e : e_list)
   {
     vtol_vertex_sptr vv;
     if (e->v1()==this)

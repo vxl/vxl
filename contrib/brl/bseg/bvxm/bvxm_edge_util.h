@@ -51,7 +51,7 @@ class bvxm_edge_util
 
   static void edge_distance_transform(vil_image_view<vxl_byte>& inp_image, vil_image_view<float>& out_edt);
 
-  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, vpgl_lvcs_sptr lvcs, vpgl_camera_double_sptr camera);
+  static int convert_uncertainty_from_meters_to_pixels(float uncertainty, const vpgl_lvcs_sptr& lvcs, const vpgl_camera_double_sptr& camera);
 
   static float convert_edge_statistics_to_probability(float edge_statistic, float n_normal, int dof);
 

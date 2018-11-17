@@ -22,17 +22,17 @@
 class boxm2_ocl_update_vis_score
 {
   public:
-    boxm2_ocl_update_vis_score(boxm2_scene_sptr scene,
-                               bocl_device_sptr device,
-                               boxm2_opencl_cache_sptr ocl_cache,
+    boxm2_ocl_update_vis_score(const boxm2_scene_sptr& scene,
+                               const bocl_device_sptr& device,
+                               const boxm2_opencl_cache_sptr& ocl_cache,
                                bool use_surface_normals,
                                bool optimize_transfers_ = false);
 
     bool run( vpgl_camera_double_sptr camera,
               unsigned ni, unsigned nj,
-              std::string apm_id="");
+              const std::string& apm_id="");
 
-  void reset(std::string prefix_name);
+  void reset(const std::string& prefix_name);
   private:
     bool compile_kernels();
 

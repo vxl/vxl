@@ -30,13 +30,13 @@ class boxm2_ocl_util
     static void set_dodecahedron_orientations_lookup(cl_float4* dir);
 
 
-    static void load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam);
+    static void load_perspective_camera(const std::string& filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.
     static void get_render_transfer_function(std::vector<std::string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf);
 
     //: mog optoins
-    static std::string mog_options(std::string data_type);
+    static std::string mog_options(const std::string& data_type);
 
     //: generate a look up table for chi square cdf
     static void set_cdf_chisqr_lookup(cl_float* chisqr_lookup);

@@ -41,7 +41,7 @@ static void eval_e_mats(
     const std::vector<vpgl_essential_matrix<double> > &ems,
     const std::vector<vgl_point_2d<double> > &corres1,
     const std::vector<vgl_point_2d<double> > &corres2,
-    std::string test_name)
+    const std::string& test_name)
 {
     //Check each essential matrix.
     std::vector<vpgl_essential_matrix<double> >::const_iterator i;

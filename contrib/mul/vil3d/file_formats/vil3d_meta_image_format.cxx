@@ -446,14 +446,14 @@ bool vil3d_meta_image_header::check_next_header_line(const std::string &nxt_line
 std::string vil3d_meta_image_header::get_header_value(const std::string &nxt_line)
 {
   std::string::size_type pos, epos;
-  pos = nxt_line.find("=");
+  pos = nxt_line.find('=');
   if (pos == std::string::npos || pos == nxt_line.size()-1)
   {
     return "";
   }
 
-  pos = nxt_line.find_first_not_of(" ", pos+1);
-  epos = nxt_line.find_last_not_of(" ");
+  pos = nxt_line.find_first_not_of(' ', pos+1);
+  epos = nxt_line.find_last_not_of(' ');
   if (pos == std::string::npos || epos == std::string::npos)
   {
     return "";
@@ -468,7 +468,7 @@ std::string vil3d_meta_image_header::get_header_value(const std::string &nxt_lin
 bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
 {
   std::string::size_type pos,epos;
-  epos=offs.find_first_of(" ");
+  epos=offs.find_first_of(' ');
   if (epos==std::string::npos)
   {
     std::cerr << "Offset does not contain three values.\n";
@@ -476,8 +476,8 @@ bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
   }
 
   offset_i_=std::atof(offs.substr(0,epos).c_str());
-  pos=offs.find_first_not_of(" ",epos);
-  epos=offs.find_first_of(" ",pos);
+  pos=offs.find_first_not_of(' ',epos);
+  epos=offs.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
   {
     std::cerr << "Offset does not contain three values.\n";
@@ -485,15 +485,15 @@ bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
   }
 
   offset_j_=std::atof(offs.substr(pos,epos).c_str());
-  pos=offs.find_first_not_of(" ",epos);
+  pos=offs.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Offset does not contain three values.\n";
     return false;
   }
   offset_k_=std::atof(offs.substr(pos).c_str());
-  epos = offs.find_first_of(" ",pos);
-  pos=offs.find_first_not_of(" ",epos);
+  epos = offs.find_first_of(' ',pos);
+  pos=offs.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
   {
      std::cerr << "Offset contains more than three values.\n";
@@ -509,30 +509,30 @@ bool vil3d_meta_image_header::set_header_offset(const std::string &offs)
 bool vil3d_meta_image_header::set_header_dim_size(const std::string &dims)
 {
   std::string::size_type pos,epos;
-  epos=dims.find_first_of(" ");
+  epos=dims.find_first_of(' ');
   if (epos==std::string::npos)
   {
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
   dim_size_i_=std::atoi(dims.substr(0,epos).c_str());
-  pos=dims.find_first_not_of(" ",epos);
-  epos=dims.find_first_of(" ",pos);
+  pos=dims.find_first_not_of(' ',epos);
+  epos=dims.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
   {
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
   dim_size_j_=std::atoi(dims.substr(pos,epos).c_str());
-  pos=dims.find_first_not_of(" ",epos);
+  pos=dims.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Dim Size does not contain three values.\n";
     return false;
   }
   dim_size_k_=std::atoi(dims.substr(pos).c_str());
-  epos = dims.find_first_of(" ",pos);
-  pos=dims.find_first_not_of(" ",epos);
+  epos = dims.find_first_of(' ',pos);
+  pos=dims.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
   {
      std::cerr << "Dim Size contains more than three values.\n";
@@ -550,30 +550,30 @@ bool vil3d_meta_image_header::set_header_dim_size(const std::string &dims)
 bool vil3d_meta_image_header::set_header_voxel_size(const std::string &vsize)
 {
   std::string::size_type pos,epos;
-  epos=vsize.find_first_of(" ");
+  epos=vsize.find_first_of(' ');
   if (epos==std::string::npos)
   {
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
   vox_size_i_=std::atof(vsize.substr(0,epos).c_str());
-  pos=vsize.find_first_not_of(" ",epos);
-  epos=vsize.find_first_of(" ",pos);
+  pos=vsize.find_first_not_of(' ',epos);
+  epos=vsize.find_first_of(' ',pos);
   if (pos==std::string::npos || epos==std::string::npos)
   {
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
   vox_size_j_=std::atof(vsize.substr(pos,epos).c_str());
-  pos=vsize.find_first_not_of(" ",epos);
+  pos=vsize.find_first_not_of(' ',epos);
   if (pos==std::string::npos)
   {
     std::cerr << "Element Spacing/Size does not contain three values.\n";
     return false;
   }
   vox_size_k_=std::atof(vsize.substr(pos).c_str());
-  epos = vsize.find_first_of(" ",pos);
-  pos=vsize.find_first_not_of(" ",epos);
+  epos = vsize.find_first_of(' ',pos);
+  pos=vsize.find_first_not_of(' ',epos);
   if (pos != std::string::npos)
   {
      std::cerr << "Element Spacing/Size contains more than three values.\n";

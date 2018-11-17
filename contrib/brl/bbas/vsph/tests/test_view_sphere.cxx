@@ -14,7 +14,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-vsph_view_point<double> create_view_point(vsph_spherical_coord_sptr coord, double theta, double phi, double* data)
+vsph_view_point<double> create_view_point(const vsph_spherical_coord_sptr& coord, double theta, double phi, double* data)
 {
   auto* cam = new vpgl_perspective_camera<double>();
   vsph_sph_point_3d view_point(coord->radius(), theta, phi);

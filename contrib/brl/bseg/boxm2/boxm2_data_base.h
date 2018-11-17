@@ -33,9 +33,9 @@ class boxm2_data_base : public vbl_ref_count
     : read_only_(read_only), id_(id), data_buffer_(data_buffer), buffer_length_(length) {}
 
     //: initializes empty data buffer
-    boxm2_data_base(boxm2_block_metadata data, std::string type, bool read_only = true);
+    boxm2_data_base(boxm2_block_metadata data, const std::string& type, bool read_only = true);
 
-    void set_default_value(std::string data_type, boxm2_block_metadata data);
+    void set_default_value(const std::string& data_type, boxm2_block_metadata data);
 
     //: This destructor is correct - by our design the original data_buffer becomes OWNED by the data_base class
     ~boxm2_data_base() override { if (data_buffer_) delete [] data_buffer_; }

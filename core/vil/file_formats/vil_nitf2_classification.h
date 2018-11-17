@@ -58,7 +58,7 @@ public:
   // of returning them.
   static void add_field_defs(
     vil_nitf2_field_definitions* defs, const file_version& version,
-    std::string prefix, std::string pretty_name_prefix);
+    std::string prefix, const std::string& pretty_name_prefix);
 
 private:
   // Purely static class; don't instantiate.

@@ -38,12 +38,12 @@ rgrl_data_manager::
 void
 rgrl_data_manager::
 add_data( unsigned stage,
-          rgrl_feature_set_sptr                    from_set,
-          rgrl_feature_set_sptr                    to_set,
+          const rgrl_feature_set_sptr&                    from_set,
+          const rgrl_feature_set_sptr&                    to_set,
           rgrl_matcher_sptr                        matcher,
           rgrl_weighter_sptr                       weighter,
           rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
-          rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
+          const rgrl_scale_estimator_wgted_sptr&          wgted_scale_est,
           const std::string&                        label )
 {
   // Both feature sets are mandatory
@@ -66,12 +66,12 @@ add_data( unsigned stage,
 //: For single-stage
 void
 rgrl_data_manager::
-add_data( rgrl_feature_set_sptr                    from_set,
-          rgrl_feature_set_sptr                    to_set,
-          rgrl_matcher_sptr                        matcher,
-          rgrl_weighter_sptr                       weighter,
-          rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est,
-          rgrl_scale_estimator_wgted_sptr          wgted_scale_est,
+add_data( const rgrl_feature_set_sptr&                    from_set,
+          const rgrl_feature_set_sptr&                    to_set,
+          const rgrl_matcher_sptr&                        matcher,
+          const rgrl_weighter_sptr&                       weighter,
+          const rgrl_scale_estimator_unwgted_sptr&        unwgted_scale_est,
+          const rgrl_scale_estimator_wgted_sptr&          wgted_scale_est,
           const std::string&                        label )
 {
   assert( !multi_stage_ );
@@ -85,7 +85,7 @@ add_data( rgrl_feature_set_sptr                    from_set,
 void
 rgrl_data_manager::
 add_estimator( unsigned                           stage,
-               rgrl_estimator_sptr                estimator)
+               const rgrl_estimator_sptr&                estimator)
 {
   data_.add_estimator(stage, estimator);
 }
@@ -93,7 +93,7 @@ add_estimator( unsigned                           stage,
 //: For single-stage
 void
 rgrl_data_manager::
-add_estimator( rgrl_estimator_sptr                estimator)
+add_estimator( const rgrl_estimator_sptr&                estimator)
 {
   assert( !multi_stage_ );
 

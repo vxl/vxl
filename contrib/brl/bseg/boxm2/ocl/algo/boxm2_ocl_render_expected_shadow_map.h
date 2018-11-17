@@ -23,7 +23,7 @@ private:
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels_;
 
-  static void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts);
+  static void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, const std::string& opts);
 };
 
 

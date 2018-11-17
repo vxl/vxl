@@ -91,7 +91,7 @@ class gevd_detector : public gevd_detector_params
   // be the most important in controlling performance - JLM
   //
   gevd_detector(gevd_detector_params& params);
-  gevd_detector(vil1_image, float smoothSigma = 1.0f, float noiseSigma = 2.0f,
+  gevd_detector(const vil1_image&, float smoothSigma = 1.0f, float noiseSigma = 2.0f,
                 float contourFactor = 1.0f, float junctionFactor = 1.5f,
                 int minLength = 6, float maxGap = 2.23606f, float minJump=1.0f);
   ~gevd_detector() override;
@@ -123,7 +123,7 @@ class gevd_detector : public gevd_detector_params
 
   std::vector<vtol_vertex_2d_sptr> *GetVertices() {return vertices;}
   std::vector<vtol_edge_2d_sptr> *GetEdges() {return edges;}
-  void SetImage(vil1_image img);
+  void SetImage(const vil1_image& img);
 
   void print(std::ostream &strm=std::cout) const;
 

@@ -1,9 +1,10 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_aggregate_normal_from_filter_vector.cxx
-#include <stdexcept>
-#include <map>
-#include <iostream>
-#include <fstream>
 #include "boxm2_ocl_aggregate_normal_from_filter_vector.h"
+#include <fstream>
+#include <iostream>
+#include <map>
+#include <stdexcept>
+#include <utility>
 
 
 #include <boxm2/ocl/boxm2_ocl_util.h>
@@ -18,7 +19,7 @@
 
 
 boxm2_ocl_aggregate_normal_from_filter_vector::
-boxm2_ocl_aggregate_normal_from_filter_vector(boxm2_scene_sptr scene, boxm2_opencl_cache_sptr ocl_cache, bocl_device_sptr device, bvpl_kernel_vector_sptr filter_vector,bool optimize_transfers) :
+boxm2_ocl_aggregate_normal_from_filter_vector(const boxm2_scene_sptr& scene, const boxm2_opencl_cache_sptr& ocl_cache, const bocl_device_sptr& device, const bvpl_kernel_vector_sptr& filter_vector,bool optimize_transfers) :
   scene_(scene), ocl_cache_(ocl_cache), device_(device), filter_vector_(filter_vector),optimize_transfers_(optimize_transfers)
 {
   unsigned num_filters = filter_vector->kernels_.size();
@@ -50,7 +51,7 @@ bool boxm2_ocl_aggregate_normal_from_filter_vector::compile_kernel(bocl_kernel &
   src_paths.push_back(source_dir + "scene_info.cl");
   src_paths.push_back(source_dir + "aggregate_filter_response.cl");
 
-  return aggregate_kernel.create_kernel(&device_->context(),device_->device_id(), src_paths, "aggregate", opts, "aggregate");
+  return aggregate_kernel.create_kernel(&device_->context(),device_->device_id(), src_paths, "aggregate", std::move(opts), "aggregate");
 }
 
 

@@ -8,7 +8,7 @@
 #include <vil/vil_new.h>
 #include <vxl_config.h> // for vxl_byte
 
-vil_image_resource_sptr vepl_erode_disk(vil_image_resource_sptr image, float radius)
+vil_image_resource_sptr vepl_erode_disk(const vil_image_resource_sptr& image, float radius)
 {
   vil_image_resource_sptr img_out = vil_new_image_resource(image->ni(), image->nj(), image->nplanes(), image->pixel_format());
 

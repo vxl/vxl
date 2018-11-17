@@ -19,7 +19,7 @@
 #include <imesh/imesh_vertex.h>
 
 
-bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, boxm2_cache_sptr cache, imesh_mesh const& mesh,
+bool boxm2_import_triangle_mesh(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache, imesh_mesh const& mesh,
                                 bool zero_model, float occupied_prob)
 {
   const imesh_face_array_base& mesh_faces = mesh.faces();

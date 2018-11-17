@@ -35,7 +35,7 @@ void boxm2_util_convert_nvm (std::string nvm_file,
 class boxm2_convert_nvm
 {
   public:
-    boxm2_convert_nvm(std::string nvm_file, std::string img_dir,bool axis_align = true);
+    boxm2_convert_nvm(const std::string& nvm_file, const std::string& img_dir,bool axis_align = true);
     std::map<std::string, CamType*>&       get_cams() { return final_cams_; }
     vgl_box_3d<double>                   get_bbox() const { return bbox_; }
     double                               get_resolution() const { return resolution_; }

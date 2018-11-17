@@ -39,7 +39,7 @@ namespace boxm2_ocl_render_expected_z_image_process_globals
   std::size_t lthreads[2]={8,8};
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

@@ -27,7 +27,7 @@
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
 static bool transform_scene_compiled = false;
-bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scene,
+bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( const boxm2_scene_sptr& scene,
           std::string&      options)
 {
 
@@ -70,9 +70,9 @@ bool boxm2_vecf_ocl_transform_scene::get_scene_appearance( boxm2_scene_sptr scen
 }
 
 
-boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
-                                                               boxm2_scene_sptr target_scene,
-                                                               boxm2_opencl_cache_sptr ocl_cache,
+boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(const boxm2_scene_sptr& source_scene,
+                                                               const boxm2_scene_sptr& target_scene,
+                                                               const boxm2_opencl_cache_sptr& ocl_cache,
                                                                std::string gray_app_id,
                                                                std::string color_app_id,
                                                                bool do_alpha,
@@ -95,8 +95,8 @@ boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr 
     std::cout<<"target scene buffers failed to initialize"<<std::endl;
 }
 
-boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(boxm2_scene_sptr source_scene,
-                                                               boxm2_opencl_cache_sptr ocl_cache,
+boxm2_vecf_ocl_transform_scene::boxm2_vecf_ocl_transform_scene(const boxm2_scene_sptr& source_scene,
+                                                               const boxm2_opencl_cache_sptr& ocl_cache,
                                                                std::string gray_app_id,
                                                                std::string color_app_id,
                                                                bool do_alpha,
@@ -312,20 +312,20 @@ bool boxm2_vecf_ocl_transform_scene::init_ocl_trans()
 }
 // the transform is the inverse, i.e. a map from the target to the source
 // an arbitrary number of blocks are handled, no interpolation
-bool boxm2_vecf_ocl_transform_scene::transform(vgl_rotation_3d<double>  /*rot*/,
+bool boxm2_vecf_ocl_transform_scene::transform(const vgl_rotation_3d<double>&  /*rot*/,
             vgl_vector_3d<double>  /*trans*/,
             vgl_vector_3d<double>  /*scale*/)
 
 {
   return true;
 }
-bool boxm2_vecf_ocl_transform_scene::transform_1_blk(vgl_rotation_3d<double>   /*rot*/,
+bool boxm2_vecf_ocl_transform_scene::transform_1_blk(const vgl_rotation_3d<double>&   /*rot*/,
            vgl_vector_3d<double>  /*trans*/,
            vgl_vector_3d<double>  /*scale*/,
            bool  /*finish*/){
    return true;
 }
-bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(vgl_rotation_3d<double>  rot,
+bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp(const vgl_rotation_3d<double>&  rot,
                                                             vgl_vector_3d<double> trans,
                                                             vgl_vector_3d<double> scale,
                                                             bool  /*finish*/){
@@ -634,8 +634,8 @@ transform_1_blk_interp_trilin(boxm2_vecf_ocl_vector_field &vec_field,
   return true;
 }
 
-bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(boxm2_scene_sptr target_scene,
-                                                                   vgl_rotation_3d<double>  rot,
+bool boxm2_vecf_ocl_transform_scene::transform_1_blk_interp_trilin(const boxm2_scene_sptr& target_scene,
+                                                                   const vgl_rotation_3d<double>&  rot,
                                                                    vgl_vector_3d<double> trans,
                                                                    vgl_vector_3d<double> scale,
                                                                    bool finish)

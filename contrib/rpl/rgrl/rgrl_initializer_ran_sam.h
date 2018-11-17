@@ -58,35 +58,35 @@ class rgrl_initializer_ran_sam
   // from_image_roi will be re-estimated/updated based on the
   // transform estimate computed by the random sampling process.
   //
-  void set_data(rgrl_match_set_sptr                init_match_set,
-                rgrl_scale_estimator_unwgted_sptr  scale_est,
-                rgrl_view_sptr                     prior_view,
+  void set_data(const rgrl_match_set_sptr&                init_match_set,
+                const rgrl_scale_estimator_unwgted_sptr&  scale_est,
+                const rgrl_view_sptr&                     prior_view,
                 bool should_estimate_global_region = true);
 
   //: Initialize with a set of information without packing everything into a vie
-  void set_data(rgrl_match_set_sptr                init_match_set,
-                rgrl_scale_estimator_unwgted_sptr  scale_est,
+  void set_data(const rgrl_match_set_sptr&                init_match_set,
+                const rgrl_scale_estimator_unwgted_sptr&  scale_est,
                 rgrl_mask_sptr      const&         from_image_roi,
                 rgrl_mask_sptr      const&         to_image_roi,
                 rgrl_mask_box       const&         initial_from_image_roi,
-                rgrl_estimator_sptr                xform_estimator,
+                const rgrl_estimator_sptr&                xform_estimator,
                 unsigned                           initial_resolution = 0,
                 bool should_estimate_global_region = true);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always.
-  void set_data(rgrl_match_set_sptr                init_match_set,
-                rgrl_scale_estimator_unwgted_sptr  scale_est,
+  void set_data(const rgrl_match_set_sptr&                init_match_set,
+                const rgrl_scale_estimator_unwgted_sptr&  scale_est,
                 rgrl_mask_sptr      const&         from_image_roi,
                 rgrl_mask_sptr      const&         to_image_roi,
-                rgrl_estimator_sptr                xform_estimator,
+                const rgrl_estimator_sptr&                xform_estimator,
                 unsigned                           initial_resolution = 0);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always;
   //  And \a from_image_roi and \a to_image_roi are the same
-  void set_data(rgrl_match_set_sptr                init_match_set,
-                rgrl_scale_estimator_unwgted_sptr  scale_est,
+  void set_data(const rgrl_match_set_sptr&                init_match_set,
+                const rgrl_scale_estimator_unwgted_sptr&  scale_est,
                 rgrl_mask_sptr      const&         from_image_roi,
-                rgrl_estimator_sptr                xform_estimator,
+                const rgrl_estimator_sptr&                xform_estimator,
                 unsigned                           initial_resolution = 0);
 
 

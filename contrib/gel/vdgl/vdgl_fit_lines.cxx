@@ -29,7 +29,7 @@ bool vdgl_fit_lines::fit_lines()
   fitter_.set_rms_error_tol(rms_distance_);
   for (auto & curve : curves_)
   {
-    vdgl_digital_curve_sptr dc = curve;
+    const vdgl_digital_curve_sptr& dc = curve;
     vdgl_interpolator_sptr intp = dc->get_interpolator();
     vdgl_edgel_chain_sptr ec = intp->get_edgel_chain();
     fitter_.clear();

@@ -18,7 +18,7 @@ struct scorecomp
 boxm2_volm_matcher_p0::~boxm2_volm_matcher_p0()
 = default;
 
-boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold)
+boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(const volm_camera_space_sptr& cam_space,volm_spherical_region_query srq,float threshold)
 : count_(0),cam_space_(cam_space),query_(std::move(srq)),threshold_(threshold)
 {
     unsigned int count = 0;
@@ -66,7 +66,7 @@ boxm2_volm_matcher_p0::boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,vo
 }
 
 //: matcher function
-bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, volm_score_sptr score)
+bool boxm2_volm_matcher_p0::match(volm_spherical_region_index & index, const volm_score_sptr& score)
 {
     vul_timer t;
     t.mark();

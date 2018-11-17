@@ -45,7 +45,7 @@ bool volm_loc_hyp::add(double lat, double lon, double elev)
 
 
 //: construct by reading from a binary file
-volm_loc_hyp::volm_loc_hyp(std::string bin_file) : current_(0)
+volm_loc_hyp::volm_loc_hyp(const std::string& bin_file) : current_(0)
 {
   vsl_b_ifstream is(bin_file.c_str());
   if (!is) {
@@ -56,7 +56,7 @@ volm_loc_hyp::volm_loc_hyp(std::string bin_file) : current_(0)
   is.close();
 }
 
-bool volm_loc_hyp::write_hypotheses(std::string out_file)
+bool volm_loc_hyp::write_hypotheses(const std::string& out_file)
 {
   vsl_b_ofstream os(out_file.c_str());
   if (!os)
@@ -178,7 +178,7 @@ void volm_loc_hyp::b_read(vsl_b_istream &is)
 
 
 //: create a kml file, size is in seconds, e.g. 0.001
-void volm_loc_hyp::write_to_kml(std::string out_file, double size, bool const& write_as_dot)
+void volm_loc_hyp::write_to_kml(const std::string& out_file, double size, bool const& write_as_dot)
 {
   std::ofstream ofs(out_file.c_str());
   bkml_write::open_document(ofs);

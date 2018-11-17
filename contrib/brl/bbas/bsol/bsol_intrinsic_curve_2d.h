@@ -84,8 +84,8 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //: Constructor from a std::vector of points
   bsol_intrinsic_curve_2d(const std::vector<vsol_point_2d_sptr> &new_vertices);
   //: Constructor from a vsol_polyline_2d_sptr
-  bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr poly);
-  bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr poly);
+  bsol_intrinsic_curve_2d(const vsol_polyline_2d_sptr& poly);
+  bsol_intrinsic_curve_2d(const vsol_polygon_2d_sptr& poly);
 
   //: Copy constructor
   bsol_intrinsic_curve_2d(const bsol_intrinsic_curve_2d &other);
@@ -212,7 +212,7 @@ class bsol_intrinsic_curve_2d : public vsol_curve_2d
   //  Note that it insert the vertex into `i-1'
   void insert_vertex (int i, double x, double y, bool bRecomputeProterties=false);
 
-  void readCONFromFile(std::string fileName);
+  void readCONFromFile(const std::string& fileName);
 
   //: Added by Ozge Can Ozcanli to upsample the curve
   bool upsample(int new_size);

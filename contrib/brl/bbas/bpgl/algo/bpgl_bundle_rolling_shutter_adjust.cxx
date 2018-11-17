@@ -744,7 +744,8 @@ bpgl_bundle_rolling_shutter_adjust::optimize(std::vector<vpgl_perspective_camera
   std::vector<vpgl_calibration_matrix<double> > K;
   a_ = bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(cameras,motion);
   b_ = bpgl_bundle_rolling_shutter_adj_lsqr::create_param_vector(world_points);
-  for (auto & camera : cameras) {
+  K.reserve(cameras.size());
+for (auto & camera : cameras) {
     K.push_back(camera.get_calibration());
   }
 

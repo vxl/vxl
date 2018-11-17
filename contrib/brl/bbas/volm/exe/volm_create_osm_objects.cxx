@@ -10,6 +10,7 @@
 // \endverbatim
 //
 #include <iostream>
+#include <utility>
 #include <volm/volm_tile.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -22,10 +23,10 @@
 #include <vul/vul_arg.h>
 #include <vcl_where_root_dir.h>
 
-static void error_report(std::string error_file, std::string error_msg)
+static void error_report(std::string error_file, const std::string& error_msg)
 {
   std::cerr << error_msg;
-  volm_io::write_post_processing_log(error_file, error_msg);
+  volm_io::write_post_processing_log(std::move(error_file), error_msg);
 }
 
 

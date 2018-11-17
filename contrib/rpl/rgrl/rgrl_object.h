@@ -89,7 +89,7 @@ class rgrl_object
   // to and an rgrl_command to execute. It returns an unsigned long tag
   // which can be used later to remove the event or retrieve the
   // command.
-  unsigned int add_observer( rgrl_event_sptr event, rgrl_command_sptr );
+  unsigned int add_observer( const rgrl_event_sptr& event, const rgrl_command_sptr& );
 
   //: Get the command associated with the given tag.
   rgrl_command_sptr get_command(unsigned int tag);

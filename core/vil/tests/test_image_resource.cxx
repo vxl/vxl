@@ -26,7 +26,7 @@ static inline bool operator> (std::complex<double>const&, std::complex<double>co
 #include <vil/vil_decimate.h>
 
 template <class T>
-void test_image_resource(std::string type, vil_pixel_format format, T /*dummy*/)
+void test_image_resource(const std::string& type, vil_pixel_format format, T /*dummy*/)
 {
   std::cout << "*****************************************************************\n"
            << " Testing vil_image_resource objects with pixel type = " << type << '\n'

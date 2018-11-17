@@ -96,7 +96,7 @@ static void golden_test_vbl_io(bool save_file)
   // Smart Pointer
   n = 50;
   vbl_smart_ptr<impl > sp1_out(new impl(n));
-  vbl_smart_ptr<impl> sp2_out(sp1_out);
+  const vbl_smart_ptr<impl>& sp2_out(sp1_out);
   vbl_smart_ptr<impl > sp1_in, sp2_in;
 
 

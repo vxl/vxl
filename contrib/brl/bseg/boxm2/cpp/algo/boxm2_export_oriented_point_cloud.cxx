@@ -4,10 +4,10 @@
 #include <vgl/vgl_intersection.h>
 
 bool boxm2_export_oriented_point_cloud::
-export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
-                            std::string output_filename, bool output_aux,
+export_oriented_point_cloud(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache,
+                            const std::string& output_filename, bool output_aux,
                             float vis_t, float nmag_t, float prob_t, float exp_t,
-                            std::string bb_filename)
+                            const std::string& bb_filename)
 {
   unsigned num_vertices = 0;
 
@@ -83,11 +83,11 @@ export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
 
 
     boxm2_block_metadata data = blk_iter->second;
-    if (output_filename.substr(output_filename.find_last_of(".") + 1) == "xyz")
+    if (output_filename.substr(output_filename.find_last_of('.') + 1) == "xyz")
       boxm2_export_oriented_point_cloud_function::exportPointCloudXYZ(scene, data, blk, alpha, vis, vis_sum, exp, nobs, points,normals, ray_dir_sum, myfile, output_aux, vis_t, nmag_t, prob_t, exp_t, bb_expanded);
  /*   else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
       boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, mog, vis,  exp, nobs, points,normals, ray_dir_sum , ray_dir_weighted_sum, myfile, output_aux, vis_t, nmag_t, prob_t, exp_t, bb_expanded, num_vertices);*/
-    else if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply")
+    else if (output_filename.substr(output_filename.find_last_of('.') + 1) == "ply")
       boxm2_export_oriented_point_cloud_function::exportPointCloudPLY(scene, data, blk, alpha, vis, points,normals, myfile, output_aux, vis_t, nmag_t, prob_t,  bb_expanded, num_vertices);
 
     else
@@ -97,7 +97,7 @@ export_oriented_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
   myfile.close();
 
   //if ply, have to write annoying header at the beginning
-  if (output_filename.substr(output_filename.find_last_of(".") + 1) == "ply") {
+  if (output_filename.substr(output_filename.find_last_of('.') + 1) == "ply") {
     std::ifstream myfile_input;
     myfile_input.open(output_filename.c_str());
     std::stringstream ss;

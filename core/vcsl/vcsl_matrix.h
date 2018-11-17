@@ -55,7 +55,7 @@ class vcsl_matrix
   //***************************************************************************
 
   //: Set the parameters of a static translation
-  void set_static( vcsl_matrix_param_sptr new_matrix);
+  void set_static( const vcsl_matrix_param_sptr& new_matrix);
 
   //: Set the direction vector variation along the time
   void set_matrix(list_of_vcsl_matrix_param_sptr const& m) { matrix_=m; }
@@ -71,7 +71,7 @@ class vcsl_matrix
                                      double time) const override;
 
  protected:
-  vnl_matrix<double> param_to_matrix(vcsl_matrix_param_sptr from,bool type) const;
+  vnl_matrix<double> param_to_matrix(const vcsl_matrix_param_sptr& from,bool type) const;
   vnl_matrix<double> matrix_value(double time, bool type) const;
   list_of_vcsl_matrix_param_sptr matrix_;
 };

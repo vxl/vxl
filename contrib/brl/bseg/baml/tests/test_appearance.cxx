@@ -89,8 +89,8 @@ static void read_meshes( std::vector<std::string> const& mesh_paths,
     region_verts.push_back(temp);
   }
 }
-static void update_hist_multi_regions(vil_image_resource_sptr img0, vpgl_camera<double>* cam0,
-                                      vil_image_resource_sptr img1, vpgl_camera<double>* cam1,
+static void update_hist_multi_regions(const vil_image_resource_sptr& img0, vpgl_camera<double>* cam0,
+                                      const vil_image_resource_sptr& img1, vpgl_camera<double>* cam1,
                                       std::vector<std::vector<vgl_point_3d<double> > > const& region_verts,
                                       bsta_joint_histogram<float>& h){
     if(!img0||!img1||!cam0||!cam1)

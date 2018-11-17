@@ -10,7 +10,7 @@
 #include <boct/boct_bit_tree.h>
 
 
-bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, boxm2_cache_sptr cache,
+bool boxm2_extract_point_cloud::extract_point_cloud(boxm2_scene_sptr scene, const boxm2_cache_sptr& cache,
                                                     float prob_thresh, unsigned int depth)
 {
   typedef vnl_vector_fixed<unsigned char, 16> uchar16;

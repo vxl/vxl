@@ -40,7 +40,7 @@ vil_nitf2_field_definition(std::string tag,
                            std::string units,
                            std::string description)
   : vil_nitf2_field_definition_node(type_field),
-    tag(tag),
+    tag(std::move(tag)),
     pretty_name(std::move(pretty_name)),
     formatter(formatter),
     blanks_ok(blanks_ok),
@@ -108,8 +108,8 @@ vil_nitf2_field_definitions& vil_nitf2_field_definitions::field(
     std::string description)
 {
   push_back(new vil_nitf2_field_definition(
-                  tag, pretty_name, formatter, blanks_ok,
-                  width_functor, condition_functor, units, description));
+                  std::move(tag), std::move(pretty_name), formatter, blanks_ok,
+                  width_functor, condition_functor, std::move(units), std::move(description)));
   return *this;
 }
 

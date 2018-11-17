@@ -17,7 +17,7 @@ unsigned int volm_desc::get_area()
   return area;
 }
 
-void volm_desc::visualize(std::string outfile, unsigned char const& y_max) const
+void volm_desc::visualize(const std::string& outfile, unsigned char const& y_max) const
 {
   // use bsvg_plot to visualize the bin
   // define the width and height from descriptor

@@ -36,7 +36,7 @@ class breg3d_ekf_camera_optimizer
   breg3d_ekf_camera_optimizer_state optimize(bvxm_voxel_world_sptr const& vox_world,
                                            vil_image_view_base_sptr &prev_img, bvxm_image_metadata &curr_img,
                                            breg3d_ekf_camera_optimizer_state &prev_state,
-                                           std::string apm_type = "apm_mog_grey", unsigned bin_idx = 0);
+                                           const std::string& apm_type = "apm_mog_grey", unsigned bin_idx = 0);
 
  protected:
   //breg3d_ekf_camera_optimizer() : homography_gen_(0) {}

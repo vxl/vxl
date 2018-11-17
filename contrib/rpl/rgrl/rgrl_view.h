@@ -42,10 +42,10 @@ class rgrl_view
              rgrl_mask_sptr      const& to_image_roi,
              rgrl_mask_box  region,
              rgrl_mask_box  global_region,
-             rgrl_estimator_sptr        xform_estimator,
-             rgrl_transformation_sptr   xform_estimate,
+             const rgrl_estimator_sptr&        xform_estimator,
+             const rgrl_transformation_sptr&   xform_estimate,
              unsigned                   resolution = 0,
-             rgrl_transformation_sptr   inverse_estimate = nullptr );
+             const rgrl_transformation_sptr&   inverse_estimate = nullptr );
 
   // default copy and assignment are good.
 

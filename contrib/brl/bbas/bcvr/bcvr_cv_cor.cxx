@@ -25,8 +25,8 @@ bcvr_cv_cor::bcvr_cv_cor()
   open_curve_matching_ = false;
 }
 
-bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
-                         const bsol_intrinsic_curve_2d_sptr c2,
+bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr& c1,
+                         const bsol_intrinsic_curve_2d_sptr& c2,
                          std::vector< std::pair <int,int> >& map,
                          int n1)
 : final_cost_(0), final_norm_cost_(0)
@@ -36,7 +36,8 @@ bcvr_cv_cor::bcvr_cv_cor(const bsol_intrinsic_curve_2d_sptr c1,
   // save pointers to the original polygons also
   // (might be line fitted versions of input polygons to dbcvr_clsd_cvmatch)
   std::vector<vsol_point_2d_sptr> tmp;
-  for (int i = 0; i<n1; i++)
+  tmp.reserve(n1);
+for (int i = 0; i<n1; i++)
     tmp.push_back(c1->vertex(i));
   poly1_ = new vsol_polygon_2d(tmp);
   tmp.clear();
@@ -150,7 +151,7 @@ double bcvr_cv_cor::get_arclength_on_curve1(double s2)
 }
 
 //: write points to a file
-bool bcvr_cv_cor::write_correspondence(std::string file_name, int increment)
+bool bcvr_cv_cor::write_correspondence(const std::string& file_name, int increment)
 {
   std::ofstream of(file_name.c_str());
   if (!of) {

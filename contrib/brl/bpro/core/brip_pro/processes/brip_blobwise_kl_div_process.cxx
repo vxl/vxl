@@ -20,7 +20,7 @@ namespace brip_blobwise_kl_div_process_globals
   constexpr unsigned n_outputs_ = 2;
 
   // private helper method prepares an input image to be processed by update
-  vil_image_view<float>* prepare_input_image(vil_image_view_base_sptr loaded_image) {
+  vil_image_view<float>* prepare_input_image(const vil_image_view_base_sptr& loaded_image) {
     //then it's an RGB image (assumes byte image...)
     if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4)
     {

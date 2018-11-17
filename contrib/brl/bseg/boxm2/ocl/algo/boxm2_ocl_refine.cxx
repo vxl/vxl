@@ -14,17 +14,17 @@
 std::map<std::string, bocl_kernel *> boxm2_ocl_refine::tree_kernels_;
 std::map<std::string, bocl_kernel *> boxm2_ocl_refine::data_kernels_;
 
-int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
-                                   boxm2_scene_sptr scene,
-                                   boxm2_opencl_cache_sptr opencl_cache,
+int boxm2_ocl_refine::refine_scene(const bocl_device_sptr& device,
+                                   const boxm2_scene_sptr& scene,
+                                   const boxm2_opencl_cache_sptr& opencl_cache,
                                    float thresh) {
   return boxm2_ocl_refine::refine_scene(device, scene, opencl_cache, thresh,
                                         scene->appearances());
 }
 
-int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
+int boxm2_ocl_refine::refine_scene(const bocl_device_sptr& device,
                                    boxm2_scene_sptr scene,
-                                   boxm2_opencl_cache_sptr opencl_cache,
+                                   const boxm2_opencl_cache_sptr& opencl_cache,
                                    float thresh,
                                    std::vector<std::string> prefixes) {
   float transfer_time = 0.0f;
@@ -303,8 +303,8 @@ int boxm2_ocl_refine::refine_scene(bocl_device_sptr device,
 }
 
 // compile kernels and place in static map
-bocl_kernel *boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device,
-                                                      std::string  /*opts*/) {
+bocl_kernel *boxm2_ocl_refine::get_refine_tree_kernel(const bocl_device_sptr& device,
+                                                      const std::string&  /*opts*/) {
   // find cached kernel
   std::string identifier = device->device_identifier();
   std::string tree_identifier = identifier + "tree";
@@ -332,8 +332,8 @@ bocl_kernel *boxm2_ocl_refine::get_refine_tree_kernel(bocl_device_sptr device,
   return tree_kernels_[tree_identifier];
 }
 
-bocl_kernel *boxm2_ocl_refine::get_refine_data_kernel(bocl_device_sptr device,
-                                                      std::string data_type) {
+bocl_kernel *boxm2_ocl_refine::get_refine_data_kernel(const bocl_device_sptr& device,
+                                                      const std::string& data_type) {
   std::string identifier = device->device_identifier();
   std::string options = get_option_string(boxm2_data_info::datasize(data_type));
   std::string data_identifier = identifier + options;

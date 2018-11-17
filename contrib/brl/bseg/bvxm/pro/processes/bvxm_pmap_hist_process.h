@@ -31,7 +31,7 @@ namespace bvxm_pmap_hist_process_globals
   constexpr unsigned n_outputs_ = 0;
 
   // functions
-  bool compute(std::string pmap, std::string path);
+  bool compute(const std::string& pmap, const std::string& path);
 }
 
 //: set input and output types

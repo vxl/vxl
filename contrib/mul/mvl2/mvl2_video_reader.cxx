@@ -24,7 +24,7 @@ std::string mvl2_video_reader::is_a() const
   return std::string("mvl2_video_reader");
 }
 
-std::vector<std::string> mvl2_video_reader::load_configs(std::string filename)
+std::vector<std::string> mvl2_video_reader::load_configs(const std::string& filename)
 {
   config_names_.clear();
   config_sizes_.clear();
@@ -96,7 +96,7 @@ void mvl2_video_reader::display_configs()
   }
 }
 
-bool mvl2_video_reader::use_config(std::string configname)
+bool mvl2_video_reader::use_config(const std::string& configname)
 {
   std::size_t position=std::find(config_names_.begin(), config_names_.end(), configname) - config_names_.begin();
   if (position<config_names_.size())

@@ -33,7 +33,7 @@ namespace boxm2_ocl_render_expected_height_map_process_globals
   constexpr unsigned n_outputs_ = 5;
   std::size_t local_threads[2]={8,8};
   static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
-  std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts)
+  std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts)
   {
       std::string identifier = device->device_identifier() + opts;
       if (kernels_.find(identifier) != kernels_.end())

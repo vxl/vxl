@@ -47,7 +47,7 @@ class bwm_video_site_io : public expatpp
   void charData(const XML_Char* s, int len) override;
 
   void handleAtts(const XML_Char** atts);
-  void cdataHandler(std::string name, std::string data);
+  void cdataHandler(const std::string& name, std::string data);
   void init_params();
   //Data
   int mDepth;

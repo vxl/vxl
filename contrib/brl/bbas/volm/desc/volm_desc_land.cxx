@@ -45,9 +45,9 @@ volm_desc_land::volm_desc_land(int land_type_id, std::string const& id_type)
 
 std::string trim(const std::string & s)
 {
-  std::size_t start = s.find_first_not_of(" ");
+  std::size_t start = s.find_first_not_of(' ');
   if (start == std::string::npos) return "";
-  unsigned end = s.find_last_not_of(" ");
+  unsigned end = s.find_last_not_of(' ');
   return s.substr(start, 1+end-start);
 }
 

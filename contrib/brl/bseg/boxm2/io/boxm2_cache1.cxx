@@ -29,7 +29,7 @@ void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1_sptr&  /*sptr*/){}
 void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_cache1_sptr const&  /*sptr*/){}
 
 
-boxm2_cache1_destroyer::boxm2_cache1_destroyer(boxm2_cache1_sptr s)
+boxm2_cache1_destroyer::boxm2_cache1_destroyer(const boxm2_cache1_sptr& s)
 {
   s_ = s;
 }
@@ -41,7 +41,7 @@ boxm2_cache1_destroyer::~boxm2_cache1_destroyer()
     s_->unref();  // smart pointer is deleted when ref cnt is zero
 }
 
-void boxm2_cache1_destroyer::set_singleton(boxm2_cache1_sptr s)
+void boxm2_cache1_destroyer::set_singleton(const boxm2_cache1_sptr& s)
 {
   s_ = s;
 }

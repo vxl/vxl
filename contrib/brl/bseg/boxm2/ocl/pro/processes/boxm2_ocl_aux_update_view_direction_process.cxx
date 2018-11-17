@@ -6,10 +6,11 @@
 // \author Vishal Jain
 // \date Aug 08, 2011
 
-#include <fstream>
-#include <iostream>
 #include <algorithm>
 #include <bprb/bprb_func_process.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -39,7 +40,7 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
     constexpr unsigned n_inputs_ = 9;
     constexpr unsigned n_outputs_ = 0;
 
-    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+    void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
     {
         //gather all render sources... seems like a lot for rendering...
         std::vector<std::string> src_paths;
@@ -55,7 +56,7 @@ namespace boxm2_ocl_aux_update_view_direction_process_globals
         src_paths.push_back(source_dir + "batch_update_functors.cl");
         src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
         //compilation options
-        std::string options = opts;
+        const std::string& options = std::move(opts);
         //create all passes
         auto* aux_direction_kernel = new bocl_kernel();
         std::string seg_opts = options + " -D UPDATE_AUX_DIRECTION -D STEP_CELL=step_cell_directions(aux_args,data_ptr,d) ";

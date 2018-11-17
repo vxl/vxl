@@ -27,7 +27,7 @@ class bvpl_pca_error_scenes : public vbl_ref_count
 {
 public:
 
-  bvpl_pca_error_scenes(boxm_scene_base_sptr data_scene_base, std::string taylor_path, unsigned dim);
+  bvpl_pca_error_scenes(const boxm_scene_base_sptr& data_scene_base, const std::string& taylor_path, unsigned dim);
 
   //: Return the error scene associated with a number of components used for reconstruction
   boxm_scene_base_sptr get_scene(unsigned ncomponent) {return scenes_[ncomponent];}

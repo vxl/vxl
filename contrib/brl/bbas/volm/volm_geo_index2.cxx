@@ -8,6 +8,8 @@
 #include "volm_io.h"
 #include <vgl/vgl_area.h>
 
+#include <utility>
+
 // function to check whether the given box intersect with a line defined by a vector of points
 static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d<double> > const& line)
 {
@@ -27,7 +29,7 @@ static bool is_intersect(vgl_box_2d<double> const& box, std::vector<vgl_point_2d
 }
 
 // write node to kml
-void volm_geo_index2::write_to_kml_node(std::ofstream& ofs, volm_geo_index2_node_sptr n, unsigned current_depth, unsigned depth, std::string explanation)
+void volm_geo_index2::write_to_kml_node(std::ofstream& ofs, const volm_geo_index2_node_sptr& n, unsigned current_depth, unsigned depth, std::string explanation)
 {
   if (!n)
     return;
@@ -38,7 +40,7 @@ void volm_geo_index2::write_to_kml_node(std::ofstream& ofs, volm_geo_index2_node
     ul[0] = n->extent_.max_point().y(); ul[1] = n->extent_.min_point().x();
     lr[0] = n->extent_.min_point().y(); lr[1] = n->extent_.max_point().x();
     ur[0] = n->extent_.max_point().y(); ur[1] = n->extent_.max_point().x();
-    bkml_write::write_box(ofs, " ", explanation, ul, ur,ll,lr);
+    bkml_write::write_box(ofs, " ", std::move(explanation), ul, ur,ll,lr);
   }
   else {
     for (const auto & c_idx : n->children_)
@@ -46,7 +48,7 @@ void volm_geo_index2::write_to_kml_node(std::ofstream& ofs, volm_geo_index2_node
   }
 }
 
-bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<double> const& poly)
+bool volm_geo_index2::prune_tree(const volm_geo_index2_node_sptr& root, vgl_polygon<double> const& poly)
 {
   // note that the tree will not be pruned if the root bounding box does not intersect with the polygon
   if (!vgl_intersection(root->extent_, poly))
@@ -61,14 +63,14 @@ bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<dou
   return true;
 }
 
-bool volm_geo_index2::prune_tree(volm_geo_index2_node_sptr root, vgl_polygon<float> const& poly)
+bool volm_geo_index2::prune_tree(const volm_geo_index2_node_sptr& root, vgl_polygon<float> const& poly)
 {
   vgl_polygon<double> poly_double;
   volm_io::convert_polygons(poly, poly_double);
   return volm_geo_index2::prune_tree(root, poly_double);
 }
 
-bool volm_geo_index2::prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm_zone)
+bool volm_geo_index2::prune_by_zone(const volm_geo_index2_node_sptr& root, unsigned utm_zone)
 {
   // note the tree will not be pruned if the root is outside the utm_zone;
   vpgl_utm u;
@@ -87,7 +89,7 @@ bool volm_geo_index2::prune_by_zone(volm_geo_index2_node_sptr root, unsigned utm
   return true;
 }
 
-void volm_geo_index2::write_to_kml(volm_geo_index2_node_sptr root, unsigned depth, std::string const& file_name)
+void volm_geo_index2::write_to_kml(const volm_geo_index2_node_sptr& root, unsigned depth, std::string const& file_name)
 {
   std::ofstream ofs(file_name.c_str());
   bkml_write::open_document(ofs);
@@ -95,7 +97,7 @@ void volm_geo_index2::write_to_kml(volm_geo_index2_node_sptr root, unsigned dept
   bkml_write::close_document(ofs);
 }
 
-unsigned volm_geo_index2::depth(volm_geo_index2_node_sptr node)
+unsigned volm_geo_index2::depth(const volm_geo_index2_node_sptr& node)
 {
   if (node->children_.empty())  // alreay at leaf level
     return 0;
@@ -110,7 +112,7 @@ unsigned volm_geo_index2::depth(volm_geo_index2_node_sptr node)
   return d+1;
 }
 
-void write_to_text(std::ofstream& ofs, volm_geo_index2_node_sptr n)
+void write_to_text(std::ofstream& ofs, const volm_geo_index2_node_sptr& n)
 {
   ofs << std::setprecision(6) << std::fixed << n->extent_.min_point().x() << ' '
       << std::setprecision(6) << std::fixed << n->extent_.min_point().y() << ' '
@@ -128,14 +130,14 @@ void write_to_text(std::ofstream& ofs, volm_geo_index2_node_sptr n)
   }
 }
 
-void volm_geo_index2::write(volm_geo_index2_node_sptr root, std::string const& file_name, double const& min_size)
+void volm_geo_index2::write(const volm_geo_index2_node_sptr& root, std::string const& file_name, double const& min_size)
 {
   std::ofstream ofs(file_name.c_str());
   ofs << min_size << '\n';
   write_to_text(ofs, root);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves)
 {
   if (!root)
     return;
@@ -156,7 +158,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<double> const& area)
 {
   if (!root) // the node is empty
     return;
@@ -180,14 +182,14 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_box_2d<float> const& area)
 {
   vgl_box_2d<double> area_double( (double)(area.min_point().x()), (double)(area.max_point().x()),
                                   (double)(area.min_point().y()), (double)(area.max_point().y()) );
   get_leaves(root, leaves, area_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<double> const& poly)
 {
   if (!root) // the node is empty
     return;
@@ -215,14 +217,14 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, vgl_polygon<float> const& poly)
 {
   vgl_polygon<double> poly_double;
   volm_io::convert_polygons(poly, poly_double);
   get_leaves(root, leaves, poly_double);
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<double> > const& line)
 {
   if (!root) // the tree is empty
     return;
@@ -248,7 +250,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
   }
 }
 
-void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<float> > const& line)
+void volm_geo_index2::get_leaves(const volm_geo_index2_node_sptr& root, std::vector<volm_geo_index2_node_sptr>& leaves, std::vector<vgl_point_2d<float> > const& line)
 {
   // transfer double to float since our tree bounding box is float
   std::vector<vgl_point_2d<double> > line_double;
@@ -258,7 +260,7 @@ void volm_geo_index2::get_leaves(volm_geo_index2_node_sptr root, std::vector<vol
   get_leaves(root, leaves, line_double);
 }
 
-void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point)
+void volm_geo_index2::get_leaf(const volm_geo_index2_node_sptr& root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<double> const& point)
 {
   if (!root)
     return;
@@ -283,7 +285,7 @@ void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_n
   }
 }
 
-void volm_geo_index2::get_leaf(volm_geo_index2_node_sptr root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point)
+void volm_geo_index2::get_leaf(const volm_geo_index2_node_sptr& root, volm_geo_index2_node_sptr& leaf, vgl_point_2d<float> const& point)
 {
   vgl_point_2d<double> pt_double((double)point.x(), (double)point.y());
   get_leaf(root, leaf, pt_double);

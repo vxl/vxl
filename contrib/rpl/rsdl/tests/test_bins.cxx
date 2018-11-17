@@ -317,7 +317,7 @@ test_bins_nearest ( unsigned n,
                     bool square_bins,
                     bool bound_points,
                     int single_bin_dim,
-                    std::string name )
+                    const std::string& name )
 {
   vnl_random mz_rand;
 
@@ -430,7 +430,7 @@ static void test_bins_nearest_all_inst( unsigned n,
                                         bool square_bins,
                                         bool bound_points,
                                         int single_bin_dim,
-                                        std::string name )
+                                        const std::string& name )
 {
   test_bins_nearest< 2, float, int >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=2,C=float,V=int" );
   test_bins_nearest< 3, float, int >( n, npoints, square_bins, bound_points, single_bin_dim, name+",N=3,C=float,V=int" );

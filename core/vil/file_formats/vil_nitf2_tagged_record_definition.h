@@ -75,7 +75,7 @@ class vil_nitf2_tagged_record_definition
   void end();
 
   //: Look up a record definition
-  static vil_nitf2_tagged_record_definition* find(std::string name);
+  static vil_nitf2_tagged_record_definition* find(const std::string& name);
 
   //: Look up a field definition
   vil_nitf2_field_definition* find_field(std::string name);
@@ -93,7 +93,7 @@ class vil_nitf2_tagged_record_definition
     return *m_field_definitions; }
 
   //: Undefines a TRE. Returns whether TRE with specified name was found.
-  static bool undefine(std::string name);
+  static bool undefine(const std::string& name);
 
   //: Registers some TREs for testing
   static void register_test_tre();

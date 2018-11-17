@@ -29,13 +29,13 @@
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_view_dep_app_color::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_view_dep_app_color::update(const boxm2_scene_sptr&         scene,
                               bocl_device_sptr         device,
-                              boxm2_opencl_cache_sptr  opencl_cache,
+                              const boxm2_opencl_cache_sptr&  opencl_cache,
                               vpgl_camera_double_sptr  cam,
-                              vil_image_view_base_sptr img,
-                              std::string               ident,
-                              vil_image_view_base_sptr mask_sptr,
+                              const vil_image_view_base_sptr& img,
+                              const std::string&               ident,
+                              const vil_image_view_base_sptr& mask_sptr,
                               bool                     update_alpha,
                               float                    mog_var,
                               std::size_t               startI,
@@ -526,7 +526,7 @@ bool boxm2_ocl_update_view_dep_app_color::update(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;
@@ -609,7 +609,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_view_dep_app_color::get_kernels(bocl
 
 
 //makes sure appearance types correspond correctly
-bool boxm2_ocl_update_view_dep_app_color::validate_appearances(boxm2_scene_sptr scene,
+bool boxm2_ocl_update_view_dep_app_color::validate_appearances(const boxm2_scene_sptr& scene,
                                                                std::string const& ident,
                                                                std::string& data_type,
                                                                int& appTypeSize,

@@ -93,15 +93,15 @@ class bvpl_kernel: public vbl_ref_count
   float max_val();
   float min_val();
 
-  void print_to_file(std::string filename);
+  void print_to_file(const std::string& filename);
 
-  bool save_raw(std::string filename);
+  bool save_raw(const std::string& filename);
 
   //: Return an xml element
   bxml_data_sptr xml_element();
 
   //: Read an xml element
-  static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
+  static bvpl_kernel_sptr parse_xml_element(const bxml_data_sptr& d);
 
   // Returns a sum of kernel values. Useful to check if they add up to zero
   float cum_sum()

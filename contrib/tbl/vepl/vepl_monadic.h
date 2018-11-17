@@ -25,12 +25,12 @@
 #include <vil/vil_image_resource.h>
 
 //: replace pixels by their absolute value
-vil_image_resource_sptr vepl_monadic_abs(vil_image_resource_sptr );
+vil_image_resource_sptr vepl_monadic_abs(const vil_image_resource_sptr& );
 //: replace pixels by their square root
-vil_image_resource_sptr vepl_monadic_sqrt(vil_image_resource_sptr );
+vil_image_resource_sptr vepl_monadic_sqrt(const vil_image_resource_sptr& );
 //: replace pixels by their square
-vil_image_resource_sptr vepl_monadic_sqr(vil_image_resource_sptr );
+vil_image_resource_sptr vepl_monadic_sqr(const vil_image_resource_sptr& );
 //: replace pixels by a linear distortion
-vil_image_resource_sptr vepl_monadic_shear(vil_image_resource_sptr , double shift, double scale);
+vil_image_resource_sptr vepl_monadic_shear(const vil_image_resource_sptr& , double shift, double scale);
 
 #endif // vepl_monadic_h_

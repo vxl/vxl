@@ -41,7 +41,8 @@ static void test_camera_compute_setup()
   world_pts.emplace_back( -1, 3, 4 );
   world_pts.emplace_back( 1, 2, -7 );
   std::vector< vgl_point_2d<double> > image_pts;
-  for (const auto & world_pt : world_pts)
+  image_pts.reserve(world_pts.size());
+for (const auto & world_pt : world_pts)
     image_pts.emplace_back(C1.project( vgl_homg_point_3d<double>(world_pt) ) );
 
   vpgl_affine_camera<double> C1e;

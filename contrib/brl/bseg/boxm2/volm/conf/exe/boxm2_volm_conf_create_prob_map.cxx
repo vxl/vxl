@@ -174,7 +174,7 @@ int main(int argc, char** argv)
   std::cout << "There are " << loc_leaves.size() << " leaves for tile " << tile_id() << std::endl;
   std::stringstream score_file_pre;
   score_file_pre << out_folder() << "/conf_score_tile_" << tile_id();
-  for (auto leaf : loc_leaves)
+  for (const auto& leaf : loc_leaves)
   {
     std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
     if (!vul_file::exists(score_bin_file))

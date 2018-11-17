@@ -35,7 +35,7 @@ namespace boxm2_ocl_merge_process_globals
 {
     constexpr unsigned n_inputs_ = 4;
     constexpr unsigned n_outputs_ = 0;
-    void compile_merge_tree_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
+    void compile_merge_tree_kernel(const bocl_device_sptr& device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
         std::vector<std::string> src_paths;
@@ -54,7 +54,7 @@ namespace boxm2_ocl_merge_process_globals
                                      " -D MOG_TYPE_8 ",
                                      "boxm2 opencl merge trees (pass one)"); //kernel identifier (for error checking)
     }
-    void compile_merge_data_kernel(bocl_device_sptr device, bocl_kernel* merge_data_kernel, std::string option)
+    void compile_merge_data_kernel(const bocl_device_sptr& device, bocl_kernel* merge_data_kernel, const std::string& option)
     {
         std::vector<std::string> src_paths;
         std::string source_dir = boxm2_ocl_util::ocl_src_root();

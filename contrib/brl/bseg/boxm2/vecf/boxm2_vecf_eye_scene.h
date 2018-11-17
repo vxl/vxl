@@ -74,7 +74,7 @@ class boxm2_vecf_eye_scene : public boxm2_scene
   boxm2_vecf_eye_scene(std::string const& scene_file, bool initialize = false);
 
   //: map eye data to the target scene
-  void map_to_target(boxm2_scene_sptr target_scene, std::string const& app_id="");
+  void map_to_target(const boxm2_scene_sptr& target_scene, std::string const& app_id="");
 
   //: compute an inverse vector field defined at sphere points (debug helper)
   std::vector<vgl_vector_3d<double> > inverse_vector_field(vgl_rotation_3d<double> const& rot) const;

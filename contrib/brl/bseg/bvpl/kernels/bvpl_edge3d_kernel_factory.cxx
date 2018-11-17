@@ -99,7 +99,7 @@ bxml_data_sptr bvpl_edge3d_kernel_factory::xml_element()
 }
 
 //: Read an xml element
-bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(bxml_data_sptr d)
+bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(const bxml_data_sptr& d)
 {
   bxml_element query("bvpl_edge3d_kernel_factory");
   bxml_data_sptr root = bxml_find_by_name(d, query);

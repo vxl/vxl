@@ -1,7 +1,8 @@
 // This is brl/bbas/bmsh3d/bmsh3d_textured_face_mc.cxx
 //---------------------------------------------------------------------
-#include <iostream>
 #include "bmsh3d_textured_face_mc.h"
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief A textured mesh
@@ -27,7 +28,7 @@
 bmsh3d_textured_face_mc::bmsh3d_textured_face_mc(const bmsh3d_face* face, std::string tex_map_uri)
 : bmsh3d_face_mc(face->id())
 {
-  tex_map_uri_ = tex_map_uri;
+  tex_map_uri_ = std::move(tex_map_uri);
 
   // copy vertices
   std::vector<bmsh3d_vertex*> old_verts = face->vertices();

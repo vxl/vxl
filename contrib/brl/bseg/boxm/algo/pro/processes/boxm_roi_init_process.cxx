@@ -46,13 +46,13 @@ namespace boxm_roi_init_process_globals
   constexpr unsigned n_outputs_ = 3;
 
   //functions
-  bool roi_init(std::string img_path,
-                vpgl_camera_double_sptr camera,
+  bool roi_init(const std::string& img_path,
+                const vpgl_camera_double_sptr& camera,
                 vgl_box_3d<double> box,
                 vil_image_view<unsigned char> & roi_img);
 
   //: projects the box on the image by taking the union of all the projected corners
-  vgl_box_2d<double>* project_box(vpgl_camera_double_sptr cam,
+  vgl_box_2d<double>* project_box(const vpgl_camera_double_sptr& cam,
                                   vgl_box_3d<double> box);
 }
 
@@ -139,8 +139,8 @@ bool boxm_roi_init_process(bprb_func_process& pro)
 }
 
 //: roi_init function
-bool boxm_roi_init_process_globals::roi_init(std::string  img_path,
-                                             vpgl_camera_double_sptr camera,
+bool boxm_roi_init_process_globals::roi_init(const std::string&  img_path,
+                                             const vpgl_camera_double_sptr& camera,
                                              vgl_box_3d<double> box,
                                              vil_image_view<unsigned char> & roi_img)
 {
@@ -176,7 +176,7 @@ bool boxm_roi_init_process_globals::roi_init(std::string  img_path,
 }
 
 //: project_box function
-vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( vpgl_camera_double_sptr cam,
+vgl_box_2d<double>* boxm_roi_init_process_globals::project_box( const vpgl_camera_double_sptr& cam,
                                                                 vgl_box_3d<double> box)
 {
   // create a box with uncertainty

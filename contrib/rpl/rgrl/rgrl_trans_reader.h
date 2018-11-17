@@ -43,7 +43,7 @@ public:
 
   //: add a transformation candidate
   static
-  void add_xform( rgrl_transformation_sptr );
+  void add_xform( const rgrl_transformation_sptr& );
 
 protected:
   static std::vector< rgrl_transformation_sptr >   xform_candidates_;

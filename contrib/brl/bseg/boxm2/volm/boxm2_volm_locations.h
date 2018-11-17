@@ -35,24 +35,24 @@ class boxm2_volm_loc_hypotheses : public vbl_ref_count
   //  Intervals are in meters.
   //  Only one elev hypothesis per location for now..
   //  keep only the locations that the scene covers
-  void add_dems(boxm2_scene_sptr scene, unsigned interval_i, unsigned interval_j, float altitude, std::vector<vil_image_view<float> >& dems, std::vector<vpgl_geo_camera*>& cams);
+  void add_dems(const boxm2_scene_sptr& scene, unsigned interval_i, unsigned interval_j, float altitude, std::vector<vil_image_view<float> >& dems, std::vector<vpgl_geo_camera*>& cams);
 
   //: add a hypothesis given as a global lon, lat and elev for the pixel (i,j) of the tile, pass the pre-computed bounding box
-  bool add(boxm2_scene_sptr scene, vgl_box_3d<double>& scene_bounding_box, double lon, double lat, double elev, unsigned i, unsigned j);
+  bool add(const boxm2_scene_sptr& scene, vgl_box_3d<double>& scene_bounding_box, double lon, double lat, double elev, unsigned i, unsigned j);
 
   //: add a hypothesis given as a global lon, lat and as local coords for the scene
   bool add(double lon, double lat, float cent_x, float cent_y, float cent_z);
 
   //: construct by reading from a binary file
-  boxm2_volm_loc_hypotheses(std::string bin_file);
+  boxm2_volm_loc_hypotheses(const std::string& bin_file);
 
   //: construct the output tile image using the score, score vector's size need to be same as locs_ size
   void generate_output_tile(std::vector<float>& scores, int uncertainty_size_i, int uncertainty_size_j, float cut_off, vil_image_view<unsigned int>& out);
 
-  bool write_hypotheses(std::string out_file);
+  bool write_hypotheses(const std::string& out_file);
 
   //: for debugging purposes
-  bool write_hypotheses_kml(boxm2_scene_sptr scene, std::string kml_file);
+  bool write_hypotheses_kml(const boxm2_scene_sptr& scene, const std::string& kml_file);
 
   //: Binary save self to stream.
   void b_write(vsl_b_ostream &os) const;

@@ -38,7 +38,7 @@ namespace boxm2_ocl_render_gl_expected_image_process_globals
 
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels, std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels, const std::string& opts)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

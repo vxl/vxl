@@ -32,7 +32,7 @@ class boxm2_vecf_point_cloud_orbit_viewer{
   bool set_point_cloud(std::string const& pc_path);
   void add_sphere(vgl_sphere_3d<double> const& sph, int r = 0, int g = 255, int b = 0);
   bool save_point_cloud(std::string const& pc_path) const;
-  bool display_orbit(boxm2_vecf_orbit_params opr, bool is_right);
+  bool display_orbit(const boxm2_vecf_orbit_params& opr, bool is_right);
 
  private:
    std::vector<vgl_point_3d<double> > draw_sphere(vgl_sphere_3d<double> const& sph);

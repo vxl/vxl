@@ -1,8 +1,9 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_render_scene_uncertainty_map.cxx
+#include "boxm2_ocl_render_scene_uncertainty_map.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
-#include "boxm2_ocl_render_scene_uncertainty_map.h"
+#include <utility>
 //:
 // \file
 // \brief  A class for rendering scene on a sphaerical map.
@@ -41,7 +42,7 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
                                                                       boxm2_opencl_cache_sptr & opencl_cache,
                                                                       unsigned ni,
                                                                       unsigned nj,
-                                                                      std::string ident,
+                                                                      const std::string& ident,
                                                                       vil_image_view<float>* exp_image,
                                                                       vil_image_view<unsigned char>* radial_image,
                                                                       std::string cam_dir_1,
@@ -312,8 +313,8 @@ boxm2_ocl_render_scene_uncertainty_map::render_scene_uncertainty_map( boxm2_scen
         }
 
 
-    std::vector<std::string> cams_used = boxm2_util::camfiles_from_directory( cam_dir_1 );
-    std::vector<std::string> cams_unused = boxm2_util::camfiles_from_directory( cam_dir_2 );
+    std::vector<std::string> cams_used = boxm2_util::camfiles_from_directory( std::move(cam_dir_1) );
+    std::vector<std::string> cams_unused = boxm2_util::camfiles_from_directory( std::move(cam_dir_2) );
 
     std::map<float,std::string>  view_uncertainty_map;
 #if 0
@@ -460,7 +461,7 @@ vnl_float_4 boxm2_ocl_render_scene_uncertainty_map::compute_cubic_trajectory(flo
 }
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -484,7 +485,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_render_scene_uncertainty_map::get_kernels(b
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //set kernel options
-    std::string options = opts ;
+    const std::string& options = opts ;
 
     std::vector<bocl_kernel*> vec_kernels;
     //have kernel construct itself using the context and device

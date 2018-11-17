@@ -1,6 +1,7 @@
-#include <iostream>
-#include <algorithm>
 #include "boxm2_multi_render.h"
+#include <algorithm>
+#include <iostream>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -385,7 +386,7 @@ float boxm2_multi_render::render(boxm2_multi_cache&      cache,
 #endif //Using second block method (commented out)
 }
 
-float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
+float boxm2_multi_render::render_scene( const boxm2_scene_sptr& scene,
                                         bocl_device_sptr device,
                                         boxm2_opencl_cache1*  /*opencl_cache*/,
                                         cl_command_queue & queue,
@@ -393,7 +394,7 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
                                         bocl_mem_sptr &  /*exp_image*/,
                                         bocl_mem_sptr &  /*vis_image*/,
                                         bocl_mem_sptr &  /*exp_img_dim*/,
-                                        std::string  /*data_type*/,
+                                        const std::string&  /*data_type*/,
                                         bocl_kernel*  /*kernel*/,
                                         std::size_t *  /*lthreads*/,
                                         unsigned cl_ni,
@@ -447,7 +448,7 @@ float boxm2_multi_render::render_scene( boxm2_scene_sptr scene,
 }
 
 float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
-                                        boxm2_block_id id,
+                                        const boxm2_block_id& id,
                                         boxm2_opencl_cache1* opencl_cache,
                                         cl_command_queue& queue,
                                         bocl_mem_sptr & ray_o_buff,
@@ -484,7 +485,7 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
         return false;
     }
 
-    bocl_mem* mog       = opencl_cache->get_data(id,data_type,alpha->num_bytes()/alphaTypeSize*apptypesize,true);
+    bocl_mem* mog       = opencl_cache->get_data(id,std::move(data_type),alpha->num_bytes()/alphaTypeSize*apptypesize,true);
     auto transfer_time = (float) transfer.all();
 
     ////3. SET args
@@ -518,7 +519,7 @@ float boxm2_multi_render::render_block( boxm2_scene_sptr& scene,
 
 //multi_render compile
 std::vector<bocl_kernel*>&
-boxm2_multi_render::get_kernels(bocl_device_sptr device, std::string opts)
+boxm2_multi_render::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     //store list
   std::vector<bocl_kernel*> kerns;
@@ -581,7 +582,7 @@ boxm2_multi_render::get_kernels(bocl_device_sptr device, std::string opts)
 
 
 //pick out data type
-bool boxm2_multi_render::get_scene_appearances(boxm2_scene_sptr    scene,
+bool boxm2_multi_render::get_scene_appearances(const boxm2_scene_sptr&    scene,
                                                std::string&         data_type,
                                                std::string&         options,
                                                int&                apptypesize)

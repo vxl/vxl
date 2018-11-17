@@ -17,29 +17,29 @@
 #include <sdet/sdet_region.h>
 
 //Gives a sort on region intensity in increasing order
-static bool region_intensity_compare_increasing(sdet_region_sptr const r1,
-                                                sdet_region_sptr const r2)
+static bool region_intensity_compare_increasing(sdet_region_sptr const& r1,
+                                                sdet_region_sptr const& r2)
 {
   return r2->Io() > r1->Io();
 }
 
 //Gives a sort on region intensity in decreasing order
-static bool region_intensity_compare_decreasing(sdet_region_sptr const r1,
-                                                sdet_region_sptr const r2)
+static bool region_intensity_compare_decreasing(sdet_region_sptr const& r1,
+                                                sdet_region_sptr const& r2)
 {
   return r1->Io() > r2->Io();
 }
 
 //Gives a sort on region area in increasing order
-static bool region_area_compare_increasing(sdet_region_sptr const r1,
-                                           sdet_region_sptr const r2)
+static bool region_area_compare_increasing(sdet_region_sptr const& r1,
+                                           sdet_region_sptr const& r2)
 {
   return r2->Npix() > r1->Npix();
 }
 
 //Gives a sort on region area in decreasing order
-static bool region_area_compare_decreasing(sdet_region_sptr const r1,
-                                           sdet_region_sptr const r2)
+static bool region_area_compare_decreasing(sdet_region_sptr const& r1,
+                                           sdet_region_sptr const& r2)
 {
   return r1->Npix() > r2->Npix();
 }

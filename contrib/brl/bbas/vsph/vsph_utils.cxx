@@ -207,7 +207,7 @@ void vsph_utils::
 ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
                           double u, double v,
                           double& elevation, double& azimuth,
-                          std::string units)
+                          const std::string& units)
 {
   vgl_ray_3d<double> ray = cam.backproject_ray(u, v);
   vgl_vector_3d<double> dir = ray.direction();
@@ -237,7 +237,7 @@ ray_spherical_coordinates(vpgl_perspective_camera<double> const& cam,
 vgl_polygon<double> vsph_utils::
 project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
                               vgl_polygon<double> const& image_poly,
-                              std::string units)
+                              const std::string& units)
 {
   std::vector<std::vector<vgl_point_2d<double> > > sph_sheets;
   unsigned n_sh = image_poly.num_sheets();
@@ -260,7 +260,7 @@ project_poly_onto_unit_sphere(vpgl_perspective_camera<double> const& cam,
   return vgl_polygon<double>(sph_sheets);
 }
 
-bool vsph_utils::read_ray_index_data(std::string path, std::vector<unsigned char>& data)
+bool vsph_utils::read_ray_index_data(const std::string& path, std::vector<unsigned char>& data)
 {
   std::ifstream is(path.c_str());
   if (!is.is_open())
@@ -278,13 +278,13 @@ bool vsph_utils::read_ray_index_data(std::string path, std::vector<unsigned char
   return true;
 }
 
-vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, std::string units)
+vsph_sph_box_2d vsph_utils::box_from_camera(vpgl_perspective_camera<double> const& cam, const std::string& units)
 {
   bool in_radians = true;
   if (units == "degrees")
     in_radians = false;
   // extract the image bounds
-  vpgl_calibration_matrix<double> K = cam.get_calibration();
+  const vpgl_calibration_matrix<double>& K = cam.get_calibration();
   vgl_point_2d<double> pp = K.principal_point();
   double ni = 2.0*pp.x(), nj = 2.0*pp.y();
   double elevation, azimuth;

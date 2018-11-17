@@ -22,8 +22,8 @@ class geml_matcher
  public:
   // Constructors/Destructors--------------------------------------------------
 
-  geml_matcher( const vil1_memory_image_of<vxl_byte> image1,
-                const vil1_memory_image_of<vxl_byte> image2,
+  geml_matcher( const vil1_memory_image_of<vxl_byte>& image1,
+                const vil1_memory_image_of<vxl_byte>& image2,
                 std::vector< std::pair<float,float> > corners1,
                 std::vector< std::pair<float,float> > corners2);
 

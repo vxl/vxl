@@ -46,7 +46,7 @@ estimate( rgrl_set_of<rgrl_match_set_sptr> const& matches,
   {
     auto const& trans = static_cast<rgrl_trans_homo2d_proj_rad const&>( cur_transform );
     init_H = trans.H();
-    const std::vector<double> k = trans.normalized_radial_params();
+    const std::vector<double>& k = trans.normalized_radial_params();
     for ( unsigned int i=0; i<k.size()&&i<camera_dof_; ++i )
       radk[i] = k[i];
   }

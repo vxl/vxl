@@ -56,11 +56,11 @@ class volm_spherical_container : public vbl_ref_count
   //: find the interval of the given depth value, i.e. return interval such that d1 <= value < d2 (caution: interval id is 1 + index in depth_interval_map_)
   unsigned char get_depth_interval(double value);
 
-  void draw_template(std::string vrml_file_name, double dmin);
+  void draw_template(const std::string& vrml_file_name, double dmin);
   void draw_helper(std::ofstream& ofs, double dmin);
   //: paint the wireframe of the voxels with the given ids with the given color
-  void draw_template_painted(std::string vrml_file_name, double dmin, std::vector<unsigned int>& ids, float r, float g, float b, float trans);
-  void draw_template_vis_prob(std::string vrml_file_name, double dmin, std::vector<char>& ids);
+  void draw_template_painted(const std::string& vrml_file_name, double dmin, std::vector<unsigned int>& ids, float r, float g, float b, float trans);
+  void draw_template_vis_prob(const std::string& vrml_file_name, double dmin, std::vector<char>& ids);
 
   double min_voxel_res() { return vmin_; }
 

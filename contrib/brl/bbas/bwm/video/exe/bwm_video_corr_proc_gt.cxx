@@ -313,7 +313,8 @@ static bool process(std::string const& site_path,
 
   // get the output world points
   std::vector<vgl_homg_point_3d<double> > points1;
-  for (unsigned int i : world_pt_indices) {
+  points1.reserve(world_pt_indices.size());
+for (unsigned int i : world_pt_indices) {
     //for (unsigned i = 0; i < cp.correspondences().size(); i++) {
     points1.emplace_back(cp.correspondences()[i]->world_pt());
   }

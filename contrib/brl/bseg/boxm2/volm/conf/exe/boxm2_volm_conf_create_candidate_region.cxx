@@ -111,7 +111,7 @@ int main(int argc, char** argv)
     std::cout << "  loading and sorting scores for tile " << t_idx << " from " << loc_leaves.size() << " leaves" << std::endl;
     std::stringstream score_file_pre;
     score_file_pre << score_folder() << "/conf_score_tile_" << t_idx;
-    for (auto leaf : loc_leaves)
+    for (const auto& leaf : loc_leaves)
     {
       std::string score_bin_file = score_file_pre.str() + "_" + leaf->get_string() + "_" + index_name() + ".bin";
       if (!vul_file::exists(score_bin_file))

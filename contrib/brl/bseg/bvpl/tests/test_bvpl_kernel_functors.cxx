@@ -79,7 +79,7 @@ void fill_in_data(vbl_array_3d<bsta_gauss_sf1> & data,bsta_gauss_sf1 min_p, bsta
 
 
 template <class F, class data_type>
-data_type run_kernel_at_the_center(vbl_array_3d<data_type> & data, bvpl_kernel_sptr kernel, F func)
+data_type run_kernel_at_the_center(vbl_array_3d<data_type> & data, const bvpl_kernel_sptr& kernel, F func)
 {
   unsigned ni=data.get_row1_count();
   unsigned nj=data.get_row2_count();
@@ -106,7 +106,7 @@ data_type run_kernel_at_the_center(vbl_array_3d<data_type> & data, bvpl_kernel_s
 
 
 template <class F,class data_type >
-bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
+bool is_correct_solution(const bvpl_kernel_vector_sptr& kernel_vec,
                          vbl_array_3d<data_type> & data, F func,
                          data_type min_p, data_type max_p, float sigma_noise, data_type maxval)
 {
@@ -156,7 +156,7 @@ bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
 }
 
 template <class F>//,class bsta_gauss_sf1 >
-bool is_correct_solution(bvpl_kernel_vector_sptr kernel_vec,
+bool is_correct_solution(const bvpl_kernel_vector_sptr& kernel_vec,
                          vbl_array_3d<bsta_gauss_sf1> & data, F func,
                          bsta_gauss_sf1 min_p, bsta_gauss_sf1 max_p, float sigma_noise, bsta_gauss_sf1 maxval,
                          vnl_vector<float> &response)

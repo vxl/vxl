@@ -18,24 +18,24 @@
 class boxm2_ocl_paint_online
 {
   public:
-    static bool paint_scene( boxm2_scene_sptr         scene,
-                             bocl_device_sptr         device,
-                             boxm2_opencl_cache_sptr  opencl_cache,
-                             vil_image_view_base_sptr img,
-                             vpgl_camera_double_sptr  cam,
+    static bool paint_scene( const boxm2_scene_sptr&         scene,
+                             const bocl_device_sptr&         device,
+                             const boxm2_opencl_cache_sptr&  opencl_cache,
+                             const vil_image_view_base_sptr& img,
+                             const vpgl_camera_double_sptr&  cam,
                              std::string const& apm_id="");
 
-    static bool paint_scene_with_weights( boxm2_scene_sptr         scene,
+    static bool paint_scene_with_weights( const boxm2_scene_sptr&         scene,
                                           bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache,
-                                          vil_image_view_base_sptr img,
+                                          const boxm2_opencl_cache_sptr&  opencl_cache,
+                                          const vil_image_view_base_sptr& img,
                                           vil_image_view<float> const& weights,
                                           vpgl_camera_double_sptr  cam,
                                           std::string const& apm_id="");
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*> compile_kernels( bocl_device_sptr device, std::string opts="" );
+    static std::vector<bocl_kernel*> compile_kernels( const bocl_device_sptr& device, const std::string& opts="" );
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;

@@ -1,22 +1,23 @@
-#include <iostream>
-#include <algorithm>
-#include <limits>
 #include "boxm2_vecf_ocl_head_model.h"
-#include <vnl/vnl_vector_fixed.h>
-#include <vgl/vgl_distance.h>
-#include <vgl/vgl_box_3d.h>
-#include <vnl/vnl_math.h>
-#include <vgl/vgl_sphere_3d.h>
+#include <algorithm>
+#include <boct/boct_bit_tree.h>
 #include <boxm2/boxm2_util.h>
 #include <boxm2/io/boxm2_lru_cache.h>
-#include <boct/boct_bit_tree.h>
+#include <iostream>
+#include <limits>
+#include <utility>
+#include <vgl/vgl_box_3d.h>
+#include <vgl/vgl_distance.h>
+#include <vgl/vgl_sphere_3d.h>
+#include <vnl/vnl_math.h>
+#include <vnl/vnl_vector_fixed.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 
-boxm2_vecf_ocl_head_model::boxm2_vecf_ocl_head_model(std::string const& scene_file,bocl_device_sptr device,boxm2_opencl_cache_sptr opencl_cache,bool optimize, std::string color_apm_ident):
+boxm2_vecf_ocl_head_model::boxm2_vecf_ocl_head_model(std::string const& scene_file,const bocl_device_sptr& device,const boxm2_opencl_cache_sptr& opencl_cache,bool optimize, std::string color_apm_ident):
 
-  boxm2_vecf_articulated_scene(scene_file,color_apm_ident),
+  boxm2_vecf_articulated_scene(scene_file,std::move(color_apm_ident)),
   scale_(1.0, 1.0, 1.0),opencl_cache_(opencl_cache),device_(device), scene_transformer_(base_model_,opencl_cache_,"",color_apm_id_),optimize_(optimize)
 {
 }

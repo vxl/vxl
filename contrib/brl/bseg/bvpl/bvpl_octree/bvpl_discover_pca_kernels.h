@@ -99,7 +99,7 @@ class bvpl_discover_pca_kernels: public vbl_ref_count
   void compute_testing_error(vnl_vector<double> &proj_error);
 
   //: Reconstructions error on testing samples. By block. Error is given as average error per sample
-  void compute_testing_error(boxm_scene_base_sptr error_scene_base, unsigned ncomponents,
+  void compute_testing_error(const boxm_scene_base_sptr& error_scene_base, unsigned ncomponents,
                              int block_i, int block_j, int block_k);
 
 #if BVPL_OCTREE_HAS_PTHREADS

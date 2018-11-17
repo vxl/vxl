@@ -44,8 +44,8 @@ class vmal_rectifier
 //---------------------------------------------------------------------------
 //: Constructor.
 //---------------------------------------------------------------------------
-  vmal_rectifier(vmal_multi_view_data_vertex_sptr mvd_vertex,
-                 vmal_multi_view_data_edge_sptr mvd_edge,
+  vmal_rectifier(const vmal_multi_view_data_vertex_sptr& mvd_vertex,
+                 const vmal_multi_view_data_edge_sptr& mvd_edge,
                  int ima_height, int ima_width);
 
   vmal_rectifier(std::vector< vnl_vector<double> >* pts0,
@@ -115,8 +115,8 @@ class vmal_rectifier
     vnl_double_3x3 &H1);
 
   void resample (vnl_double_3x3 H0, vnl_double_3x3 H1,
-                 vil_image_view<vxl_byte> imgL,
-                 vil_image_view<vxl_byte> imgR);
+                 const vil_image_view<vxl_byte>& imgL,
+                 const vil_image_view<vxl_byte>& imgR);
 
   vil_image_view<vxl_byte>* GetRectifiedImageLeft() {return rectL;}
   vil_image_view<vxl_byte>* GetRectifiedImageRight() {return rectR;}

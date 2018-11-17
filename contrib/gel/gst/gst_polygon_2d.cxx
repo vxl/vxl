@@ -116,7 +116,7 @@ bool gst_polygon_2d::inside( const double x, const double y) const
   return c;
 }
 
-bool gst_polygon_2d::inside( const gst_vertex_2d_sptr v) const
+bool gst_polygon_2d::inside( const gst_vertex_2d_sptr& v) const
 {
   return inside( v->get_x(), v->get_y());
 }

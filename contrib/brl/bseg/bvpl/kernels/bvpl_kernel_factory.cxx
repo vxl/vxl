@@ -189,7 +189,7 @@ bvpl_kernel_factory::rotate(float angle)
 
 //: Rotates "class-kernel_" using the given rotation matrix
 bvpl_kernel_factory::kernel_type
-bvpl_kernel_factory::rotate(vgl_rotation_3d<float> R)
+bvpl_kernel_factory::rotate(const vgl_rotation_3d<float>& R)
 {
 #ifdef DEBUG
   std::cout << "Rotating kernel using the following matrix" << std::endl

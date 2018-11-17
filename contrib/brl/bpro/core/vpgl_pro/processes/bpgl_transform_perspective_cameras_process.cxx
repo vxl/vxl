@@ -147,7 +147,7 @@ vpgl_transform_space_process_transform_camera(vpgl_perspective_camera<double> co
   vnl_matrix_fixed<double,3,3> Rms = Rs.as_matrix();
   //Get input camera components
   //note, the homogeneous calibration matrix is unaffected by the scale
-  vpgl_calibration_matrix<double> K = cam.get_calibration();
+  const vpgl_calibration_matrix<double>& K = cam.get_calibration();
   vnl_matrix_fixed<double, 3, 3> R = cam.get_rotation().as_matrix();
   vgl_vector_3d<double> tv = cam.get_translation();
   vnl_vector_fixed<double, 3> t(tv.x(), tv.y(), tv.z());

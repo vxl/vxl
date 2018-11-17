@@ -2,6 +2,7 @@
 //:
 // \file
 #include <cassert>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -17,9 +18,9 @@ boxm2_compute_derivative_function::boxm2_compute_derivative_function(
             float normal_threshold, std::string kernel_x_name, std::string kernel_y_name, std::string kernel_z_name)
 {
   //initialize kernels
-  kernel_x_ = load_kernel(kernel_x_name);
-  kernel_y_ = load_kernel(kernel_y_name);
-  kernel_z_ = load_kernel(kernel_z_name);
+  kernel_x_ = load_kernel(std::move(kernel_x_name));
+  kernel_y_ = load_kernel(std::move(kernel_y_name));
+  kernel_z_ = load_kernel(std::move(kernel_z_name));
 
   boxm2_block_id id = blk->block_id();
 
@@ -227,7 +228,7 @@ std::vector<std::pair<vgl_point_3d<int>, float> >  boxm2_compute_derivative_func
 }
 
 
-std::vector<std::pair<vgl_point_3d<int>, float> > boxm2_compute_derivative_function::load_kernel(std::string filename)
+std::vector<std::pair<vgl_point_3d<int>, float> > boxm2_compute_derivative_function::load_kernel(const std::string& filename)
 {
     std::vector<std::pair<vgl_point_3d<int>, float> > filter;
 

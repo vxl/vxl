@@ -19,9 +19,9 @@ class boxm2_volm_matcher_p0
 {
  public:
     ~boxm2_volm_matcher_p0();
-    boxm2_volm_matcher_p0(volm_camera_space_sptr cam_space,volm_spherical_region_query srq,float threshold);
+    boxm2_volm_matcher_p0(const volm_camera_space_sptr& cam_space,volm_spherical_region_query srq,float threshold);
     // matcher function
-    bool match(volm_spherical_region_index & index, volm_score_sptr score);
+    bool match(volm_spherical_region_index & index, const volm_score_sptr& score);
 
     bool match_order(volm_spherical_regions_layer & index_layer, double & score, volm_spherical_regions_layer & q_regions, camera_space_iterator & iter, vsph_sph_box_2d & imbox);
     long count_ ;

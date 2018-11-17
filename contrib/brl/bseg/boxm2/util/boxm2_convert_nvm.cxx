@@ -2,14 +2,15 @@
 #include "boxm2_point_util.h"
 //:
 // \file
-#include <vsph/vsph_camera_bounds.h>
-#include <vidl/vidl_image_list_istream.h>
-#include <vgl/vgl_box_3d.h>
+#include <cassert>
+#include <utility>
 #include <vgl/algo/vgl_rotation_3d.h>
+#include <vgl/vgl_box_3d.h>
+#include <vidl/vidl_image_list_istream.h>
 #include <vnl/vnl_double_3.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_quaternion.h>
-#include <cassert>
+#include <vsph/vsph_camera_bounds.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -24,7 +25,7 @@ void boxm2_util_convert_nvm(std::string nvm_file,
                             vgl_box_3d<double>& bbox,
                             double& resolution,bool axis_align)
 {
-    boxm2_convert_nvm b2s(nvm_file, img_dir,axis_align);
+    boxm2_convert_nvm b2s(std::move(nvm_file), std::move(img_dir),axis_align);
     cams        = b2s.get_cams();
     bbox        = b2s.get_bbox();
     resolution  = b2s.get_resolution();
@@ -37,7 +38,7 @@ void boxm2_util_convert_nvm(std::string nvm_file,
 }
 
 // reads bundler file and populates list of cameras, and a scene bounding box
-boxm2_convert_nvm::boxm2_convert_nvm(std::string nvm_file, std::string img_dir,bool axis_align)
+boxm2_convert_nvm::boxm2_convert_nvm(const std::string& nvm_file, const std::string& img_dir,bool axis_align)
 {
     img_dir_ = img_dir;
     nvm_file_ = nvm_file;
@@ -223,7 +224,7 @@ bool boxm2_convert_nvm::read_cameras(std::ifstream& in, vgl_point_2d<double> ppo
 
         //scrub name
         std::size_t found = 0;
-        while ( (found=token.find("\\")) != std::string::npos )
+        while ( (found=token.find('\\')) != std::string::npos )
             token.replace(found, 1, "/");
 #ifdef DEBUG
         std::cout<<"Scrubbed filename: "<<token<<std::endl;

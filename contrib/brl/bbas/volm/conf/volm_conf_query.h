@@ -42,7 +42,7 @@ public:
   //: default constructor
   volm_conf_query();
   //: constructor from depth map scene
-  volm_conf_query(volm_camera_space_sptr cam_space, depth_map_scene_sptr depth_scene, int const& tol_in_pixel = 4);
+  volm_conf_query(const volm_camera_space_sptr& cam_space, const depth_map_scene_sptr& depth_scene, int const& tol_in_pixel = 4);
 
   //: destructor
   ~volm_conf_query() override = default;
@@ -96,9 +96,9 @@ private:
   std::vector<std::map<std::string, std::pair<unsigned, unsigned> > > conf_objects_pixels_  ;
 
   //: construct reference objects list
-  bool parse_ref_object(depth_map_scene_sptr depth_scene);
+  bool parse_ref_object(const depth_map_scene_sptr& depth_scene);
   //: construct cameras -- also prune the camera
-  bool create_perspective_cameras(volm_camera_space_sptr cam_space);
+  bool create_perspective_cameras(const volm_camera_space_sptr& cam_space);
   //: construct the configurational objects for each camera
   bool create_conf_object();
   //: project all ground vertices of a polygon from image plane to world coordinates, return the nearest point distance and its angle relative to camera

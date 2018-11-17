@@ -68,7 +68,7 @@ class bvpl_edge3d_kernel_factory : public bvpl_kernel_factory
   bxml_data_sptr xml_element() override;
 
   //: Parse an xml element
-  static bvpl_kernel_sptr parse_xml_element(bxml_data_sptr d);
+  static bvpl_kernel_sptr parse_xml_element(const bxml_data_sptr& d);
 
  private:
 

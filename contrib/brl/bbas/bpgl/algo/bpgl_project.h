@@ -18,11 +18,11 @@ class bpgl_project
  public:
 
     ~bpgl_project();
-    static vgl_box_2d<double> project_bounding_box(vpgl_perspective_camera<double>  cam,
+    static vgl_box_2d<double> project_bounding_box(const vpgl_perspective_camera<double>&  cam,
                                                    vgl_box_3d<double> const & box);
     static vgl_box_2d<double> project_bounding_box(vpgl_affine_camera<double>  cam,
                                                    vgl_box_3d<double> const & box);
-    static vgl_box_2d<double> project_bounding_box(vpgl_proj_camera<double>  cam,
+    static vgl_box_2d<double> project_bounding_box(const vpgl_proj_camera<double>&  cam,
                                                    vgl_box_3d<double> const & box);
  private:
   //: constructor private - static methods only

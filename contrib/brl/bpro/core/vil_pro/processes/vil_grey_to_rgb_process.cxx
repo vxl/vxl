@@ -23,7 +23,7 @@ namespace vil_grey_to_rgb_process_globals
   constexpr unsigned  n_inputs_ = 2;
   constexpr unsigned n_outputs_ = 1;
 
-  std::map<float, vil_rgb<vxl_byte> > get_color_id(std::string color_text)
+  std::map<float, vil_rgb<vxl_byte> > get_color_id(const std::string& color_text)
   {
     std::map<float, vil_rgb<vxl_byte> > color_map;
     unsigned id;

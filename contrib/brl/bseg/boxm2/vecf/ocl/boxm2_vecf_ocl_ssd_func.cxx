@@ -1,6 +1,6 @@
 #include "boxm2_vecf_ocl_ssd_func.h"
 
-boxm2_vecf_ocl_ssd_func::boxm2_vecf_ocl_ssd_func(unsigned nx, unsigned ni, unsigned nj, boxm2_vecf_ocl_transform_scene_sptr tscn,boxm2_scene_sptr target_scene,boxm2_opencl_cache_sptr ocl_cache):
+boxm2_vecf_ocl_ssd_func::boxm2_vecf_ocl_ssd_func(unsigned nx, unsigned ni, unsigned nj, const boxm2_vecf_ocl_transform_scene_sptr& tscn,const boxm2_scene_sptr& target_scene,const boxm2_opencl_cache_sptr& ocl_cache):
   ni_(ni), nj_(nj),
   vnl_least_squares_function(nx, ni*nj, vnl_least_squares_function::no_gradient), tscn_(tscn),renderer_(target_scene,ocl_cache),depth_renderer_(target_scene , ocl_cache)
 {

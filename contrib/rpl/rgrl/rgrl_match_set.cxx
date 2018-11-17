@@ -103,8 +103,8 @@ clear()
 
 void
 rgrl_match_set ::
-add_feature_and_matches( rgrl_feature_sptr                      from_feature,
-                         rgrl_feature_sptr                      mapped_feature,
+add_feature_and_matches( const rgrl_feature_sptr&                      from_feature,
+                         const rgrl_feature_sptr&                      mapped_feature,
                          std::vector< rgrl_feature_sptr > const& matching_to )
 {
   std::vector< rgrl_feature_sptr >::const_iterator to_itr;
@@ -135,8 +135,8 @@ add_feature_and_matches( rgrl_feature_sptr                      from_feature,
 
 void
 rgrl_match_set ::
-add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-                                 rgrl_feature_sptr                      mapped_feature,
+add_feature_matches_and_weights( const rgrl_feature_sptr&                      from_feature,
+                                 const rgrl_feature_sptr&                      mapped_feature,
                                  std::vector< rgrl_feature_sptr > const& matching_to,
                                  std::vector< double > const&            signature_weights )
 {
@@ -173,8 +173,8 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
 
 void
 rgrl_match_set ::
-add_feature_matches_and_weights( rgrl_feature_sptr                      from_feature,
-                                 rgrl_feature_sptr                      mapped_feature,
+add_feature_matches_and_weights( const rgrl_feature_sptr&                      from_feature,
+                                 const rgrl_feature_sptr&                      mapped_feature,
                                  std::vector< rgrl_feature_sptr > const& matching_to,
                                  std::vector< double > const&            sig_wgts,
                                  std::vector< double > const&            geo_wgts,
@@ -217,8 +217,8 @@ add_feature_matches_and_weights( rgrl_feature_sptr                      from_fea
 
 void
 rgrl_match_set ::
-add_feature_and_match( rgrl_feature_sptr from_feature,
-                       rgrl_feature_sptr mapped_feature,
+add_feature_and_match( const rgrl_feature_sptr& from_feature,
+                       const rgrl_feature_sptr& mapped_feature,
                        rgrl_feature_sptr matching_to,
                        double            wgt )
 {
@@ -514,7 +514,7 @@ operator>> ( std::istream& is, rgrl_match_set& set )
 //
 
 rgrl_match_set::match_info::
-match_info( rgrl_feature_sptr to_feat )
+match_info( const rgrl_feature_sptr& to_feat )
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),
     signature_weight( 1.0 ),
@@ -524,7 +524,7 @@ match_info( rgrl_feature_sptr to_feat )
 
 
 rgrl_match_set::match_info::
-match_info( rgrl_feature_sptr to_feat,
+match_info( const rgrl_feature_sptr& to_feat,
             double geometric_wgt,
             double signature_wgt,
             double cumulative_wgt )
@@ -537,7 +537,7 @@ match_info( rgrl_feature_sptr to_feat,
 
 
 rgrl_match_set::match_info::
-match_info( rgrl_feature_sptr to_feat,
+match_info( const rgrl_feature_sptr& to_feat,
             double signature_wgt )
   : to_feature( to_feat ),
     geometric_weight( -1.0 ),

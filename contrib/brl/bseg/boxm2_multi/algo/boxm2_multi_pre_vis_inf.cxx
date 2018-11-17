@@ -37,7 +37,7 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_multi_pre_vis_inf::kerne
 //-------------------------------------------------------------
 float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cache,
                                             const vil_image_view<float>&    img,
-                                            vpgl_camera_double_sptr         cam,
+                                            const vpgl_camera_double_sptr&         cam,
                                             float*                          norm_img,
                                             boxm2_multi_update_helper&      helper)
 {
@@ -229,10 +229,10 @@ float boxm2_multi_pre_vis_inf::pre_vis_inf( boxm2_multi_cache&              cach
 
 
 float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
-                                                 boxm2_scene_sptr      scene,
+                                                 const boxm2_scene_sptr&      scene,
                                                  boxm2_opencl_cache1*   opencl_cache,
                                                  cl_command_queue&     queue,
-                                                 std::string            data_type,
+                                                 const std::string&            data_type,
                                                  bocl_kernel*          kern,
                                                  bocl_mem_sptr&        vis_image,
                                                  bocl_mem_sptr&        pre_image,
@@ -307,7 +307,7 @@ float boxm2_multi_pre_vis_inf::pre_vis_per_block(const boxm2_block_id& id,
 //-----------------------------------------------------------------
 // returns vector of bocl_kernels for this specific device
 //-----------------------------------------------------------------
-std::vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // check to see if this device has compiled kernels already
   std::string identifier = device->device_identifier()+opts;
@@ -361,7 +361,7 @@ std::vector<bocl_kernel*>& boxm2_multi_pre_vis_inf::get_kernels(bocl_device_sptr
 }
 
 
-void boxm2_multi_pre_vis_inf::write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj, std::string name)
+void boxm2_multi_pre_vis_inf::write_imgs_out(std::map<bocl_device*, float*>& img_map, int ni, int nj, const std::string& name)
 {
   std::map<bocl_device*, float*>::iterator iter;
   for (iter=img_map.begin(); iter!=img_map.end(); ++iter) {

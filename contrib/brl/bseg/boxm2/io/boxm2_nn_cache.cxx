@@ -102,7 +102,7 @@ void boxm2_nn_cache::update_block_cache(boxm2_block* blk)
   std::map<boxm2_block_id, boxm2_block*> new_cache;
 
   // find neighbors in the cache already, store 'em
-  for (auto id : neighbor_list)
+  for (const auto& id : neighbor_list)
   {
     // if cached_blocks_ has this neighbor, add it to new cache (delete from old)
     if ( cached_blocks_.find(id) != cached_blocks_.end() )
@@ -202,7 +202,7 @@ void boxm2_nn_cache::replace_data_base(boxm2_block_id  /*id*/, std::string  /*ty
 
 
 //: update data cache by type
-void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, std::string data_type)
+void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, const std::string& data_type)
 {
   // grab a reference to the map of cached_data
   std::map<boxm2_block_id, boxm2_data_base*>& data_map =
@@ -219,7 +219,7 @@ void boxm2_nn_cache::update_data_base_cache(boxm2_data_base* dat, std::string da
   std::map<boxm2_block_id, boxm2_data_base*> new_cache;
 
   // find neighbors in the cache already, store 'em
-  for (auto id : neighbor_list)
+  for (const auto& id : neighbor_list)
   {
     // if cached_blocks_ has this neighbor, add it to new cache (delete from old)
     if ( data_map.find(id) != data_map.end() )
@@ -280,7 +280,7 @@ void boxm2_nn_cache::finish_async_blocks()
 
 
 //: finish async data
-void boxm2_nn_cache::finish_async_data(std::string data_type)
+void boxm2_nn_cache::finish_async_data(const std::string& data_type)
 {
   // grab a reference to the map of cached_data_
   std::map<boxm2_block_id, boxm2_data_base*>& data_map =
@@ -302,7 +302,7 @@ void boxm2_nn_cache::finish_async_data(std::string data_type)
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)
-std::map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(std::string prefix)
+std::map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(const std::string& prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -317,7 +317,7 @@ std::map<boxm2_block_id, boxm2_data_base*>& boxm2_nn_cache::cached_data_map(std:
 }
 
 //: returns a list of neighbors to center
-std::vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id center)
+std::vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(const boxm2_block_id& center)
 {
   std::vector<boxm2_block_id> neighbor_list;
   for (int i=-1; i<=1; ++i) {
@@ -332,7 +332,7 @@ std::vector<boxm2_block_id> boxm2_nn_cache::get_neighbor_list(boxm2_block_id cen
 }
 
 //: helper method says whether or not block id is valid
-bool boxm2_nn_cache::is_valid_id(boxm2_block_id id)
+bool boxm2_nn_cache::is_valid_id(const boxm2_block_id& id)
 {
   // use scene here to determine if this id is valid
   return scene_->block_exists(id);

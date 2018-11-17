@@ -44,7 +44,7 @@ public:
                                 int &appTypeSize);
 
   static vil_image_view_base_sptr
-  prepare_input_image(vil_image_view_base_sptr loaded_image,
+  prepare_input_image(const vil_image_view_base_sptr& loaded_image,
                       bool force_grey = true);
   static vil_image_view_base_sptr prepare_input_image(std::string filename,
                                                       bool force_grey = true) {

@@ -47,20 +47,20 @@ class volm_query : public vbl_ref_count
   //: default consturctor
   volm_query() = default;
   //: constructor from files
-  volm_query(volm_camera_space_sptr cam_space,
+  volm_query(const volm_camera_space_sptr& cam_space,
              std::string const& label_xml_file,
              std::string const& category_file,
              volm_spherical_container_sptr const& sph,
              volm_spherical_shell_container_sptr const& sph_shell);
 
   //: constructor from depth map scene
-  volm_query(volm_camera_space_sptr cam_space,
+  volm_query(const volm_camera_space_sptr& cam_space,
              std::string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
              volm_spherical_container_sptr const& sph);
 
   //: constructor from a binary file of data members
-  volm_query(std::string const& query_file, volm_camera_space_sptr cam_space,
+  volm_query(std::string const& query_file, const volm_camera_space_sptr& cam_space,
              std::string const& depth_map_scene_file,
              volm_spherical_shell_container_sptr const& sph_shell,
              volm_spherical_container_sptr const& sph);
@@ -141,7 +141,7 @@ class volm_query : public vbl_ref_count
   void visualize_query(std::string const& prefix);
 
   //: generate rgb depth image for given camera id and given depth value
-  void depth_rgb_image(std::vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img, std::string value_type = "depth");
+  void depth_rgb_image(std::vector<unsigned char> const& values, unsigned const& cam_id, vil_image_view<vil_rgb<vxl_byte> >& out_img, const std::string& value_type = "depth");
 
   //: draw the polygons of regions on top of an rgb image
   void draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_img);

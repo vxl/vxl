@@ -15,13 +15,13 @@
 class gtrl_polygon
 {
  public:
-  gtrl_polygon( const std::vector<gtrl_vertex_sptr> ps);
+  gtrl_polygon( const std::vector<gtrl_vertex_sptr>& ps);
 
   int size() const { return ps_.size(); }
   gtrl_vertex_sptr operator[]( const int i) const { return ps_[i]; }
 
   // computations
-  bool inside( const gtrl_vertex_sptr point) const;
+  bool inside( const gtrl_vertex_sptr& point) const;
 
  protected:
   std::vector<gtrl_vertex_sptr> ps_;

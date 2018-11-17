@@ -24,6 +24,6 @@
 #include <vil/vil_image_resource.h>
 
 //: computation of n-th order moment of given order, width and height
-vil_image_resource_sptr vepl_moment(vil_image_resource_sptr, int order, int width=3, int height=3);
+vil_image_resource_sptr vepl_moment(const vil_image_resource_sptr&, int order, int width=3, int height=3);
 
 #endif // vepl_moment_h_

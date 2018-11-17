@@ -1844,7 +1844,7 @@ vil1_image brip_vil1_float_ops::insert_chip_in_image(vil1_image const & image,
   if (!chip||!roi)
     return image;
   //copy the input
-  vil1_image temp(image);
+  const vil1_image& temp(image);
   const int chip_cols = chip.width(), chip_rows = chip.height();
   //need to do cases
   //but just color now

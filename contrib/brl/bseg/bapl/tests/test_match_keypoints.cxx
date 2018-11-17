@@ -13,7 +13,7 @@
 #include <vul/vul_timer.h>
 #include <bpgl/algo/bpgl_fm_compute_ransac.h>
 
-void draw_keypoint(vil_image_view<vxl_byte>& img, bapl_keypoint_sptr k)
+void draw_keypoint(vil_image_view<vxl_byte>& img, const bapl_keypoint_sptr& k)
 {
   bapl_lowe_keypoint_sptr kp;
   kp.vertical_cast(k);

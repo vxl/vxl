@@ -48,9 +48,9 @@ class betr_event_trigger : public vbl_ref_count{
   void set_lvcs(vpgl_lvcs const& lvcs){lvcs_=lvcs; lvcs_valid_=true;}
   // the mask is for the case of RGBA images and it is desired to apply the alpha value
   // by setting the intensity to zero when alpha = 0.
-  void set_ref_image(vil_image_resource_sptr ref_imgr, bool apply_mask = false, bool keep_data = false);
+  void set_ref_image(const vil_image_resource_sptr& ref_imgr, bool apply_mask = false, bool keep_data = false);
   void set_ref_images(std::vector<vil_image_resource_sptr> const& ref_rescs, bool apply_mask = false);
-  void set_evt_image(vil_image_resource_sptr evt_imgr, bool apply_mask = false);
+  void set_evt_image(const vil_image_resource_sptr& evt_imgr, bool apply_mask = false);
 
   void set_ref_camera(vpgl_camera_double_sptr const& camera, bool keep_data = false);
   void set_ref_cameras(std::vector<vpgl_camera_double_sptr> const& cameras);
@@ -79,7 +79,7 @@ class betr_event_trigger : public vbl_ref_count{
                std::string const& params_json = "{}");
   //: execute change algorithm multiple event objects with event names, scores, change images and offsets return
   // note that event objects can be retrieved using the name as a key (see evt_trigger_objects_ below)
-  bool process(std::string alg_name, std::vector<double>& prob_change,
+  bool process(const std::string& alg_name, std::vector<double>& prob_change,
                std::vector<std::string>& event_region_names,
                std::vector<vil_image_resource_sptr>& change_images,
                std::vector<vgl_point_2d<unsigned> >& offsets,
@@ -93,7 +93,7 @@ class betr_event_trigger : public vbl_ref_count{
 
   //utilities
   //: projected 2-d polygon for the 3-d trigger object
-  bool project_object(vpgl_camera_double_sptr cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
+  bool project_object(const vpgl_camera_double_sptr& cam, std::string const& obj_name, vsol_polygon_2d_sptr& poly);
   bool save_projected_polys(std::string const& path, std::vector<vsol_polygon_2d_sptr> const& polys);
   // debug
   void set_verbose(bool verbose){verbose_ = verbose;}
@@ -102,7 +102,7 @@ class betr_event_trigger : public vbl_ref_count{
  private:
   void update_local_bounding_box();
   vsol_polygon_2d_sptr project_poly(vpgl_camera_double_sptr const& camera,
-                                    vsol_polygon_3d_sptr poly_3d,
+                                    const vsol_polygon_3d_sptr& poly_3d,
                                     vgl_vector_3d<double> const& transl);
   void register_algorithms();
   vpgl_camera_double_sptr cast_camera(vpgl_camera_double_sptr const& camera);

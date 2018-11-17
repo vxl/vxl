@@ -31,9 +31,11 @@
 #include <bkml/bkml_parser.h>
 #include <vul/vul_file_iterator.h>
 
-static void error(std::string log_file, std::string msg)
+#include <utility>
+
+static void error(std::string log_file, const std::string& msg)
 {
-  std::cerr << msg;  volm_io::write_post_processing_log(log_file, msg);
+  std::cerr << msg;  volm_io::write_post_processing_log(std::move(log_file), msg);
 }
 
 #if 0

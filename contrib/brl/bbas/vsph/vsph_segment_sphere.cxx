@@ -120,7 +120,8 @@ double vsph_segment_sphere::region_median(int id)
 {
     std::vector<double> vals;
     std::vector<int>  region = regions_[id];
-    for (int i : region)
+    vals.reserve(region.size());
+for (int i : region)
         vals.push_back( data_[i] );
     std::sort(vals.begin(), vals.end());
     if ( vals.size() > 0)

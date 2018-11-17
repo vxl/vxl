@@ -92,11 +92,11 @@ bool bvpl_compute_scene_statistics(boxm_scene<boct_tree<T_loc, T_data > >* scene
 
 //: Function that compute average value of a fraction of samples in the specified block.
 //  Datatype is assumed to be float, but if could be templated to expand to other types
-double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples);
+double bvpl_average_value(const boxm_scene_base_sptr& scene_base, int block_i, int block_j, int block_k, unsigned long tree_nsamples);
 
 //: Function that compute average value of all positive samples in the specified block.
 //  Datatype is assumed to be float, but if could be templated to expand to other types
-double bvpl_average_value(boxm_scene_base_sptr scene_base, int block_i, int block_j, int block_k);
+double bvpl_average_value(const boxm_scene_base_sptr& scene_base, int block_i, int block_j, int block_k);
 
 
 #endif // bvpl_scene_statistics_h

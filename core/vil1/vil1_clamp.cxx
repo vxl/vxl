@@ -9,7 +9,7 @@
 #include "vil1_clamp.h"
 #include <vil1/vil1_clamp_image_impl.h>
 
-vil1_image vil1_clamp(vil1_image src, double range_min, double range_max) {
+vil1_image vil1_clamp(const vil1_image& src, double range_min, double range_max) {
   return new vil1_clamp_image_impl(src, range_min, range_max);
 }
 

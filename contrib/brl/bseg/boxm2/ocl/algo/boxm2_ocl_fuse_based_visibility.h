@@ -18,13 +18,13 @@ class boxm2_ocl_fuse_based_visibility
 {
   public:
     static bool fuse_based_visibility( boxm2_scene_sptr         sceneA,
-                                       boxm2_scene_sptr         sceneB,
-                                       bocl_device_sptr         device,
-                                       boxm2_opencl_cache_sptr  opencl_cache);
+                                       const boxm2_scene_sptr&         sceneB,
+                                       const bocl_device_sptr&         device,
+                                       const boxm2_opencl_cache_sptr&  opencl_cache);
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="");
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
@@ -37,13 +37,13 @@ class boxm2_ocl_fuse_based_orientation
 {
   public:
     static bool fuse_based_orientation( boxm2_scene_sptr         sceneA,
-                                               boxm2_scene_sptr         sceneB,
-                                               bocl_device_sptr         device,
-                                               boxm2_opencl_cache_sptr  opencl_cache);
+                                               const boxm2_scene_sptr&         sceneB,
+                                               const bocl_device_sptr&         device,
+                                               const boxm2_opencl_cache_sptr&  opencl_cache);
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="");
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
@@ -57,13 +57,13 @@ class boxm2_ocl_fuse_surface_density
 {
   public:
     static bool fuse_surface_density( boxm2_scene_sptr         sceneA,
-                                               boxm2_scene_sptr         sceneB,
-                                               bocl_device_sptr         device,
-                                               boxm2_opencl_cache_sptr  opencl_cache);
+                                               const boxm2_scene_sptr&         sceneB,
+                                               const bocl_device_sptr&         device,
+                                               const boxm2_opencl_cache_sptr&  opencl_cache);
 
   private:
     //compile kernels and place in static map
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts="");
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts="");
 
     //map of paint kernel by device
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;

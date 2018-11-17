@@ -205,7 +205,7 @@ void boxm2_point_util::calc_projection_error(std::vector<vpgl_perspective_camera
 {
   double err=0;
   double cnt=0;
-  for (auto corr : corrs)
+  for (const auto& corr : corrs)
   {
     vgl_homg_point_3d<double> wpt(corr->world_pt());
 

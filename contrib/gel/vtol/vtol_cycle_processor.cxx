@@ -236,7 +236,7 @@ static bool touched(vtol_one_chain_sptr& ch)
 //    present in the given edge array are considered attached. Previously
 //    un-traversed edges are returned unless force == true. Then edges
 //    which are half-used are allowed in the returned set.
-static void v_edges(vtol_vertex_sptr v, std::vector<vtol_edge_2d_sptr>& b_edges,
+static void v_edges(const vtol_vertex_sptr& v, std::vector<vtol_edge_2d_sptr>& b_edges,
                     bool force, std::vector<vtol_edge_2d_sptr>& edges_at_vertex)
 {
   edges_at_vertex.clear();
@@ -264,7 +264,7 @@ inline static double flip_y(double ang)
   return 360.0-ang;
 }
 
-static double tangent_angle_at_vertex(vtol_vertex_sptr v, vtol_edge_2d_sptr e)
+static double tangent_angle_at_vertex(const vtol_vertex_sptr& v, const vtol_edge_2d_sptr& e)
 {
   double ang = 0;
   if (!e||!v||!(v==e->v1()||v==e->v2()))
@@ -315,9 +315,9 @@ static vtol_vertex_sptr common_vertex(vtol_edge_2d_sptr& e0, vtol_edge_2d_sptr& 
 //    The angle is mapped to the interval [-180, 180].  The angle sense is
 //    defined so that the e0 orientation is towards v and the e1
 //    orientation is away from v.
-double vtol_cycle_processor::angle_between_edges(vtol_edge_2d_sptr e0,
-                                                 vtol_edge_2d_sptr e1,
-                                                 vtol_vertex_sptr v)
+double vtol_cycle_processor::angle_between_edges(const vtol_edge_2d_sptr& e0,
+                                                 const vtol_edge_2d_sptr& e1,
+                                                 const vtol_vertex_sptr& v)
 {
   double theta0 = 180+tangent_angle_at_vertex(v, e0);
   if (theta0>360)
@@ -334,7 +334,7 @@ double vtol_cycle_processor::angle_between_edges(vtol_edge_2d_sptr e0,
 //------------------------------------------------------------
 //:   Find the most counter clockwise vtol_edge at the input vtol_vertex, from.
 //
-static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr from,
+static vtol_edge_2d_sptr ccw_edge(const vtol_edge_2d_sptr& in_edg, const vtol_vertex_sptr& from,
                                   std::vector<vtol_edge_2d_sptr>& edges)
 {
   double most_ccw = -360;
@@ -364,7 +364,7 @@ static vtol_edge_2d_sptr ccw_edge(vtol_edge_2d_sptr in_edg, vtol_vertex_sptr fro
 //    (V1 to V2) has occurred then dir1 is true.  A second traversal
 //    is not allowed and the edge is considered un-assignable.
 //
-bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, vtol_vertex_sptr last)
+bool vtol_cycle_processor::assignable(vtol_edge_2d_sptr edg, const vtol_vertex_sptr& last)
 {
   if (debug2_)
   {
@@ -950,7 +950,7 @@ bool vtol_cycle_processor::intersect_edges(std::vector<vtol_edge_sptr>& s1,
 
   //Scan s2 again and push edges also in s1  onto the set intersection
   //mark the edge as in the output list with flag2.
-  for (auto e : s2)
+  for (const auto& e : s2)
   {
     if (e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
     {
@@ -994,7 +994,7 @@ bool vtol_cycle_processor::difference_edges(std::vector<vtol_edge_sptr>& s1,
 
   //Scan s1 again and push edges exclusively in s1 onto the output
   //mark the edge as in the output list with flag2.
-  for (auto e : s1)
+  for (const auto& e : s1)
   {
     if (!e->get_user_flag(flag1)&&!e->get_user_flag(flag2))
     {

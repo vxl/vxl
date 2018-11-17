@@ -20,8 +20,8 @@ class gst_face_2d
 {
  public:
 
-  gst_face_2d( gst_polygon_2d_sptr polygon);
-  gst_face_2d( gst_polygon_2d_sptr polygon, std::vector<gst_polygon_2d_sptr> holes);
+  gst_face_2d( const gst_polygon_2d_sptr& polygon);
+  gst_face_2d( const gst_polygon_2d_sptr& polygon, std::vector<gst_polygon_2d_sptr> holes);
   ~gst_face_2d();
 
  protected:

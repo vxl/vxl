@@ -53,7 +53,7 @@ vtol_topology_object::~vtol_topology_object()
 //: Is `inferior' already an inferior of `this' ?
 //---------------------------------------------------------------------------
 bool
-vtol_topology_object::is_inferior(vtol_topology_object_sptr inferior) const
+vtol_topology_object::is_inferior(const vtol_topology_object_sptr& inferior) const
 {
   topology_list::const_iterator i;
   for (i=inferiors_.begin(); i!=inferiors_.end(); ++i)
@@ -103,7 +103,7 @@ const topology_list * vtol_topology_object::superiors(void) const
 //: Link `this' with an inferior `inferior'
 // Require: valid_inferior_type(inferior) and !is_inferior(inferior)
 //---------------------------------------------------------------------------
-void vtol_topology_object::link_inferior(vtol_topology_object_sptr inferior)
+void vtol_topology_object::link_inferior(const vtol_topology_object_sptr& inferior)
 {
   // require
   assert(valid_inferior_type(inferior->cast_to_topology_object()));
@@ -124,7 +124,7 @@ void vtol_topology_object::link_inferior(vtol_topology_object_sptr inferior)
 //: Unlink `this' with the inferior `inferior'
 // Require: valid_inferior_type(inferior) and is_inferior(inferior)
 //---------------------------------------------------------------------------
-void vtol_topology_object::unlink_inferior(vtol_topology_object_sptr inferior)
+void vtol_topology_object::unlink_inferior(const vtol_topology_object_sptr& inferior)
 {
   // require
   assert(valid_inferior_type(inferior->cast_to_topology_object()));

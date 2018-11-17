@@ -35,11 +35,11 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_compute_heightmap_pr
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_heightmap_factor::update_heightmap_factor_kernels_;
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_smooth_heightmap_pdata::smooth_heightmap_pdata_kernels_;
 //Main public method, updates color model
-bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         scene,
-                                                      bocl_device_sptr         device,
-                                                      boxm2_opencl_cache_sptr  opencl_cache,
-                                                      vil_image_view_base_sptr ximg,
-                                                      vil_image_view_base_sptr yimg,
+bool boxm2_ocl_compute_heightmap_pre_post::update_pre(const boxm2_scene_sptr&         scene,
+                                                      const bocl_device_sptr&         device,
+                                                      const boxm2_opencl_cache_sptr&  opencl_cache,
+                                                      const vil_image_view_base_sptr& ximg,
+                                                      const vil_image_view_base_sptr& yimg,
                                                       float  /*resnearfactor*/,
                                                       float  /*resfarfactor*/)
 {
@@ -251,11 +251,11 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_pre(boxm2_scene_sptr         s
 }
 
 //Main public method, updates color model
-bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         scene,
-    bocl_device_sptr         device,
-    boxm2_opencl_cache_sptr  opencl_cache,
-    vil_image_view_base_sptr ximg,
-    vil_image_view_base_sptr yimg,
+bool boxm2_ocl_compute_heightmap_pre_post::update_post(const boxm2_scene_sptr&         scene,
+    const bocl_device_sptr&         device,
+    const boxm2_opencl_cache_sptr&  opencl_cache,
+    const vil_image_view_base_sptr& ximg,
+    const vil_image_view_base_sptr& yimg,
     float  /*resnearfactor*/,
     float  /*resfarfactor*/)
 {
@@ -467,13 +467,13 @@ bool boxm2_ocl_compute_heightmap_pre_post::update_post(boxm2_scene_sptr         
 }
 
 //Main public method, updates color model
-bool boxm2_ocl_compute_heightmap_pre_post::compute_pre_post(boxm2_scene_sptr         scene,
-    bocl_device_sptr         device,
-    boxm2_opencl_cache_sptr  opencl_cache,
-    vil_image_view_base_sptr hmap_mean,
-    vil_image_view_base_sptr hmap_var,
-    vil_image_view_base_sptr ximg,
-    vil_image_view_base_sptr yimg,
+bool boxm2_ocl_compute_heightmap_pre_post::compute_pre_post(const boxm2_scene_sptr&         scene,
+    const bocl_device_sptr&         device,
+    const boxm2_opencl_cache_sptr&  opencl_cache,
+    const vil_image_view_base_sptr& hmap_mean,
+    const vil_image_view_base_sptr& hmap_var,
+    const vil_image_view_base_sptr& ximg,
+    const vil_image_view_base_sptr& yimg,
     int smoothingradius,
     float resnearfactor,
     float resfarfactor)
@@ -483,9 +483,9 @@ bool boxm2_ocl_compute_heightmap_pre_post::compute_pre_post(boxm2_scene_sptr    
     boxm2_ocl_compute_heightmap_pre_post::update_post(scene, device, opencl_cache, ximg, yimg, resnearfactor, resfarfactor);
     return true;
 }
-bool boxm2_ocl_update_heightmap_factor::update_heightmap_factor(boxm2_scene_sptr         scene,
-                                                                bocl_device_sptr         device,
-                                                                boxm2_opencl_cache_sptr  opencl_cache,
+bool boxm2_ocl_update_heightmap_factor::update_heightmap_factor(const boxm2_scene_sptr&         scene,
+                                                                const bocl_device_sptr&         device,
+                                                                const boxm2_opencl_cache_sptr&  opencl_cache,
                                                                 bool add)
 {
     float transfer_time = 0.0f;
@@ -564,7 +564,7 @@ bool boxm2_ocl_update_heightmap_factor::update_heightmap_factor(boxm2_scene_sptr
 }
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_pre_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_pre_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -605,7 +605,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_pre_kernels
     return pre_kernels_[identifier];
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_post_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_post_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -647,7 +647,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_heightmap_pre_post::get_post_kernel
     return post_kernels_[identifier];
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightmap_factor_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightmap_factor_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -672,7 +672,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightm
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
     auto* computez = new bocl_kernel();
-    std::string computez_opts = options;
+    const std::string& computez_opts = options;
     computez->create_kernel(&device->context(), device->device_id(), src_paths, "add_subtract_factor_main", computez_opts, "update::add_subtract_factor_main");
     vec_kernels.push_back(computez);
 
@@ -684,12 +684,12 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_heightmap_factor::get_update_heightm
 
 bool boxm2_ocl_smooth_heightmap_pdata::
 compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
-                                bocl_device_sptr         device,
-                                boxm2_opencl_cache_sptr  opencl_cache,
-                                vil_image_view_base_sptr hmap_mean,
-                                vil_image_view_base_sptr hmap_var,
-                                vil_image_view_base_sptr ximg,
-                                vil_image_view_base_sptr yimg,
+                                const bocl_device_sptr&         device,
+                                const boxm2_opencl_cache_sptr&  opencl_cache,
+                                const vil_image_view_base_sptr& hmap_mean,
+                                const vil_image_view_base_sptr& hmap_var,
+                                const vil_image_view_base_sptr& ximg,
+                                const vil_image_view_base_sptr& yimg,
                                 int smoothingradius = 16,
                                 float  /*resnearfactor*/,
                                 float  /*resfarfactor*/)
@@ -939,7 +939,7 @@ compute_smooth_heightmap_pdata(boxm2_scene_sptr         scene,
     return true;
 }
 std::vector<bocl_kernel*>& boxm2_ocl_smooth_heightmap_pdata::
-get_smooth_heightmap_pdata_kernels(bocl_device_sptr device, std::string opts)
+get_smooth_heightmap_pdata_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;

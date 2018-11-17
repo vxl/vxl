@@ -30,8 +30,8 @@ class boxm2_points_to_volume
   typedef vnl_vector_fixed<ushort, 4> ushort4;
 
   //: "default" constructor
-  boxm2_points_to_volume(boxm2_scene_sptr scene,
-                         boxm2_cache_sptr cache,
+  boxm2_points_to_volume(const boxm2_scene_sptr& scene,
+                         const boxm2_cache_sptr& cache,
                          imesh_mesh& points);
 
   //: fillVolume function

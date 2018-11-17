@@ -43,12 +43,12 @@ std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_change_detection::ker
 //main change detect function
 bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_img,
                                                 bocl_device_sptr          device,
-                                                bstm_scene_sptr          scene,
-                                                bstm_opencl_cache_sptr   opencl_cache,
+                                                const bstm_scene_sptr&          scene,
+                                                const bstm_opencl_cache_sptr&   opencl_cache,
                                                 vpgl_camera_double_sptr   cam,
-                                                vil_image_view_base_sptr  img,
-                                                vil_image_view_base_sptr  mask_sptr,
-                                                std::string                 /*norm_type*/,
+                                                const vil_image_view_base_sptr&  img,
+                                                const vil_image_view_base_sptr&  mask_sptr,
+                                                const std::string&                 /*norm_type*/,
                                                 float                     time)
 {
     float transfer_time=0.0f;
@@ -352,7 +352,7 @@ bool bstm_ocl_change_detection::change_detect( vil_image_view<float>&    change_
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-std::vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(bocl_device_sptr device, std::string opts, bool isColor)
+std::vector<bocl_kernel*>& bstm_ocl_change_detection::get_kernels(const bocl_device_sptr& device, std::string opts, bool isColor)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;
@@ -421,11 +421,11 @@ std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_aux_pass_change::kern
 
 bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_img,
                                               bocl_device_sptr          device,
-                                              bstm_scene_sptr           scene,
-                                              bstm_opencl_cache_sptr   opencl_cache,
+                                              const bstm_scene_sptr&           scene,
+                                              const bstm_opencl_cache_sptr&   opencl_cache,
                                               vpgl_camera_double_sptr   cam,
-                                              vil_image_view_base_sptr  img,
-                                              vil_image_view_base_sptr  mask_sptr,
+                                              const vil_image_view_base_sptr&  img,
+                                              const vil_image_view_base_sptr&  mask_sptr,
                                               float                     time)
 {
     float transfer_time=0.0f;
@@ -750,7 +750,7 @@ bool bstm_ocl_aux_pass_change::change_detect(vil_image_view<float>&    change_im
     return true;
 }
 
-std::vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& bstm_ocl_aux_pass_change::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;
@@ -830,11 +830,11 @@ std::map<std::string, std::vector<bocl_kernel*> > bstm_ocl_update_change::kernel
 //main change detect function
 bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
                                                 bocl_device_sptr          device,
-                                                bstm_scene_sptr          scene,
-                                                bstm_opencl_cache_sptr   opencl_cache,
+                                                const bstm_scene_sptr&          scene,
+                                                const bstm_opencl_cache_sptr&   opencl_cache,
                                                 vpgl_camera_double_sptr   cam,
-                                                vil_image_view_base_sptr  img,
-                                                vil_image_view_base_sptr  mask_sptr,
+                                                const vil_image_view_base_sptr&  img,
+                                                const vil_image_view_base_sptr&  mask_sptr,
                                                 float                    time)
 {
     float transfer_time=0.0f;
@@ -1352,7 +1352,7 @@ bool bstm_ocl_update_change::update_change(vil_image_view<float>&    change_img,
 //---------------------------------------------------
 // compiles, caches and returns list of kernels
 //---------------------------------------------------
-std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr device, std::string opts, bool isColor)
+std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool isColor)
 {
     // check to see if this device has compiled kernels already
     std::string identifier = device->device_identifier() + opts;
@@ -1400,7 +1400,7 @@ std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr 
 
 
     //create normalize image kernel
-    std::string norm_options=opts;
+    const std::string& norm_options=opts;
     std::vector<std::string> norm_src_paths;
     norm_src_paths.push_back(source_dir + "pixel_conversion.cl");
     norm_src_paths.push_back(source_dir + "bit/normalize_kernels.cl");
@@ -1427,7 +1427,7 @@ std::vector<bocl_kernel*>& bstm_ocl_update_change::get_kernels(bocl_device_sptr 
                                      accum_options,              //options
                                      "bstm 1x1 ocl change detection"); //kernel identifier (for error checking)
 
-    std::string update_options=opts;
+    const std::string& update_options=opts;
     std::vector<std::string> update_paths;
     update_paths.push_back(source_dir + "scene_info.cl");
     update_paths.push_back(source_dir + "change/change_detection.cl");

@@ -37,7 +37,7 @@ class bvpl_create_directions_base
  std::vector<float> get_angles() const { return angles_; }
 
  //:Print to file
- void save_directions_map(std::string outfile);
+ void save_directions_map(const std::string& outfile);
 
  protected:
   std::vector<vnl_float_3> axes_;

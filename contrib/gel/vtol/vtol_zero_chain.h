@@ -127,10 +127,10 @@ class vtol_zero_chain : public vtol_topology_object
   // Status report
   //***************************************************************************
 
-  void link_inferior(vtol_vertex_sptr inf);
-  void unlink_inferior(vtol_vertex_sptr inf);
-  void link_inferior(vtol_vertex_2d_sptr inf);
-  void unlink_inferior(vtol_vertex_2d_sptr inf);
+  void link_inferior(const vtol_vertex_sptr& inf);
+  void unlink_inferior(const vtol_vertex_sptr& inf);
+  void link_inferior(const vtol_vertex_2d_sptr& inf);
+  void unlink_inferior(const vtol_vertex_2d_sptr& inf);
 
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?

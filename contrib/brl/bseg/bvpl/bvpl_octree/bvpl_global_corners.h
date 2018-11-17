@@ -27,17 +27,17 @@ class bvpl_global_corners : public vbl_ref_count
 
   //: Compute Harris' measure extension to 3-d as proposed by:
   //  I. Laptev. On space-time interest points. Int. J. Computer Vision, 64(2):107--123, 2005
-  void compute_laptev_corners(bvpl_global_taylor_sptr global_taylor, int scene_id, int block_i, int block_j, int block_k);
+  void compute_laptev_corners(const bvpl_global_taylor_sptr& global_taylor, int scene_id, int block_i, int block_j, int block_k);
 
   //: Compute corner measure extension to 3-d as proposed by:
   // P. Beaudet, Rotationally invariant image operators, in Proc. 4th Int. Joint Conf. Patt. Recog. 1978.
-  void compute_beaudet_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, int block_i, int block_j, int block_k);
+  void compute_beaudet_corners(const bvpl_global_taylor_sptr& global_taylor,int scene_id, int block_i, int block_j, int block_k);
 
   //: Threshold corners below a threshold
-  void threshold_laptev_corners(bvpl_global_taylor_sptr global_taylor,int scene_id, float thresh, std::string output_path);
+  void threshold_laptev_corners(const bvpl_global_taylor_sptr& global_taylor,int scene_id, float thresh, const std::string& output_path);
 
   //: Take a histogram of corners and get different values for percentage of thresholds
-  void explore_corner_statistics(bvpl_global_taylor_sptr global_taylor,int scene_id);
+  void explore_corner_statistics(const bvpl_global_taylor_sptr& global_taylor,int scene_id);
 
   //: Write to global_corners_info.xml
   void xml_write();

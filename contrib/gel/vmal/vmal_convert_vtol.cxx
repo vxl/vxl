@@ -57,7 +57,7 @@ void convert_points_vect_double_3(std::vector<vtol_vertex_2d_sptr> & in,
   }
 }
 
-void convert_line_double_3(vtol_edge_2d_sptr in,
+void convert_line_double_3(const vtol_edge_2d_sptr& in,
                            vnl_double_3 &outp,
                            vnl_double_3 &outq)
 {
@@ -70,7 +70,7 @@ void convert_line_double_3(vtol_edge_2d_sptr in,
   outq[2]=1;
 }
 
-void convert_line_double_2(vtol_edge_2d_sptr in,
+void convert_line_double_2(const vtol_edge_2d_sptr& in,
                            vnl_double_2 &outp,
                            vnl_double_2 &outq)
 {
@@ -81,7 +81,7 @@ void convert_line_double_2(vtol_edge_2d_sptr in,
   outq[1]=in->v2()->cast_to_vertex_2d()->y();
 }
 
-void convert_point_double_3(vtol_vertex_2d_sptr in,
+void convert_point_double_3(const vtol_vertex_2d_sptr& in,
                             vnl_double_3 &out)
 {
   out[0]=in->x();

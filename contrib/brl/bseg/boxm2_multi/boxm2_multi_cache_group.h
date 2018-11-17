@@ -48,7 +48,7 @@ class boxm2_multi_cache_group
     }
 
     //: visibility order of blocks from camera (returns indices)
-    std::vector<int> order_from_cam(vpgl_camera_double_sptr cam);
+    std::vector<int> order_from_cam(const vpgl_camera_double_sptr& cam);
 
     //: set visibility image, set pre image
     void set_vis(int i, float* vis) { vis_imgs_[i] = vis; }

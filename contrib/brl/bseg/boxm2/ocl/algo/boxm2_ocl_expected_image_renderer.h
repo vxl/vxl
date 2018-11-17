@@ -10,9 +10,9 @@
 class boxm2_ocl_expected_image_renderer
 {
   public:
-    boxm2_ocl_expected_image_renderer(boxm2_scene_sptr scene,
-                                      boxm2_opencl_cache_sptr ocl_cache,
-                                      std::string ident="");
+    boxm2_ocl_expected_image_renderer(const boxm2_scene_sptr& scene,
+                                      const boxm2_opencl_cache_sptr& ocl_cache,
+                                      const std::string& ident="");
     ~boxm2_ocl_expected_image_renderer();
 
     bool render(vpgl_camera_double_sptr camera,
@@ -35,7 +35,7 @@ class boxm2_ocl_expected_image_renderer
     int num_planes_;
     int apptypesize_;
     std::vector<bocl_kernel*> kernels_;
-    bool compile_kernels(bocl_device_sptr device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
+    bool compile_kernels(const bocl_device_sptr& device, std::vector<bocl_kernel*> & vec_kernels, boxm2_data_type data_type);
     bool cleanup_render_buffers();
     bool allocate_render_buffers(int cl_ni, int cl_nj);
 

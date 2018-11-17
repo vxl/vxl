@@ -9,7 +9,7 @@
 #endif
 
 //: Returns indices in visibility order (for group's blocks)
-std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr cam)
+std::vector<int> boxm2_multi_cache_group::order_from_cam(const vpgl_camera_double_sptr& cam)
 {
   vgl_point_3d<double> pt;
   if ( cam->type_name() == "vpgl_generic_camera" ) {
@@ -30,7 +30,8 @@ std::vector<int> boxm2_multi_cache_group::order_from_cam(vpgl_camera_double_sptr
 
   //write and return order
   std::vector<int> vis_order;
-  for (auto & distance : distances)
+  vis_order.reserve(distances.size());
+for (auto & distance : distances)
     vis_order.push_back(distance.dat_);
   return vis_order;
 }

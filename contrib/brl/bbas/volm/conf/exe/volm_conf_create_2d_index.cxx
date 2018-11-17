@@ -18,8 +18,10 @@
 #include <volm/conf/volm_conf_2d_indexer.h>
 #include <volm/conf/volm_conf_indexer.h>
 
-static void error(std::string log_file, std::string msg)
-{  std::cerr << msg;  volm_io::write_post_processing_log(log_file, msg);  }
+#include <utility>
+
+static void error(std::string log_file, const std::string& msg)
+{  std::cerr << msg;  volm_io::write_post_processing_log(std::move(log_file), msg);  }
 
 int main(int argc, char** argv)
 {

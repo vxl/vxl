@@ -79,7 +79,7 @@ perspective_to_rational(vpgl_perspective_camera<double>& cam_pers)
 
 
 //:
-vpgl_camera_double_sptr create_syn_world_camera(bvxm_voxel_world_sptr vox_world)
+vpgl_camera_double_sptr create_syn_world_camera(const bvxm_voxel_world_sptr& vox_world)
 {
   vgl_point_3d<double> min_pt(vox_world->get_params()->corner().x(),
                               vox_world->get_params()->corner().y(),

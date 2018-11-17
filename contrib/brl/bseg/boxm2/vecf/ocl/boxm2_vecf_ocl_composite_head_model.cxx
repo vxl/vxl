@@ -1,7 +1,7 @@
 #include "boxm2_vecf_ocl_composite_head_model.h"
 // #include "boxm2_vecf_eye_params.h"
 
-    boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path,bocl_device_sptr device, boxm2_opencl_cache_sptr opencl_cache,bool optimize)
+    boxm2_vecf_ocl_composite_head_model::boxm2_vecf_ocl_composite_head_model( std::string const& head_model_path, std::string const& eye_model_path,const bocl_device_sptr& device, const boxm2_opencl_cache_sptr& opencl_cache,bool optimize)
     : boxm2_vecf_ocl_head_model(head_model_path,device,opencl_cache,optimize),
 
   params_()
@@ -73,7 +73,7 @@ void boxm2_vecf_ocl_composite_head_model::map_to_target(boxm2_scene_sptr target)
   this->update_gpu_target   (target);
 #endif
 }
-void boxm2_vecf_ocl_composite_head_model::update_gpu_target(boxm2_scene_sptr target_scene)
+void boxm2_vecf_ocl_composite_head_model::update_gpu_target(const boxm2_scene_sptr& target_scene)
 {
   // for each block of the target scene
   std::vector<boxm2_block_id> target_blocks = target_scene->get_block_ids();

@@ -80,7 +80,7 @@ class rgrl_initializer
 
  protected:
   //: Generate a prior scale depending on current settings
-  rgrl_scale_sptr enforce_prior_scale( rgrl_scale_sptr match_scale );
+  rgrl_scale_sptr enforce_prior_scale( const rgrl_scale_sptr& match_scale );
 
  protected:
   rgrl_scale_sptr prior_scale_;

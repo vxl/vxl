@@ -1,8 +1,9 @@
 // This is brl/bseg/boxm2/ocl/algo/boxm2_ocl_update_color.cxx
+#include "boxm2_ocl_update_color.h"
+#include <algorithm>
 #include <fstream>
 #include <iostream>
-#include <algorithm>
-#include "boxm2_ocl_update_color.h"
+#include <utility>
 //:
 // \file
 // \brief  A process for updating a color model
@@ -32,13 +33,13 @@
 //: Map of kernels should persist between process executions
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_color::kernels_;
 
-bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
-                                          bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache,
-                                          vpgl_camera_double_sptr  cam,
-                                          vil_image_view_base_sptr img,
+bool boxm2_ocl_update_color::update_color(const boxm2_scene_sptr&         scene,
+                                          const bocl_device_sptr&         device,
+                                          const boxm2_opencl_cache_sptr&  opencl_cache,
+                                          const vpgl_camera_double_sptr&  cam,
+                                          const vil_image_view_base_sptr& img,
                                           std::string               in_identifier,
-                                          std::string    mask_filename,
+                                          const std::string&    mask_filename,
                                           bool                     update_alpha,
                                           std::size_t               startI,
                                           std::size_t               startJ)
@@ -49,17 +50,17 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
     std::cout<<"MASK FOUND"<<std::endl;
     mask_img=vil_load(mask_filename.c_str());
   }
-  return update_color(scene, device, opencl_cache, cam, img, in_identifier, mask_img, update_alpha, startI, startJ);
+  return update_color(scene, device, opencl_cache, cam, img, std::move(in_identifier), mask_img, update_alpha, startI, startJ);
 }
 
 //Main public method, updates color model
-bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_color::update_color(const boxm2_scene_sptr&         scene,
                                           bocl_device_sptr         device,
-                                          boxm2_opencl_cache_sptr  opencl_cache,
+                                          const boxm2_opencl_cache_sptr&  opencl_cache,
                                           vpgl_camera_double_sptr  cam,
-                                          vil_image_view_base_sptr img,
-                                          std::string               in_identifier,
-                                          vil_image_view_base_sptr mask_img,
+                                          const vil_image_view_base_sptr& img,
+                                          const std::string&               in_identifier,
+                                          const vil_image_view_base_sptr& mask_img,
                                           bool                     update_alpha,
                                           std::size_t               startI,
                                           std::size_t               startJ)
@@ -506,7 +507,7 @@ bool boxm2_ocl_update_color::update_color(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_color::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts;

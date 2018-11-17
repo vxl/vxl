@@ -11,7 +11,7 @@ bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor()
 }
 
 //: Constructor
-bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor(bvpl_kernel_iterator kernel)
+bvpl_gauss_convolution_functor::bvpl_gauss_convolution_functor(const bvpl_kernel_iterator& kernel)
 {
   //compute max
   set_max(kernel);

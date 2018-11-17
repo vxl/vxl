@@ -36,12 +36,12 @@ std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_update_image_factor:
 
 //Main public method, updates color model
 bool boxm2_ocl_compute_image_term::
-compute_image_term(boxm2_scene_sptr         scene,
+compute_image_term(const boxm2_scene_sptr&         scene,
                    bocl_device_sptr         device,
-                   boxm2_opencl_cache_sptr  opencl_cache,
+                   const boxm2_opencl_cache_sptr&  opencl_cache,
                    vpgl_camera_double_sptr  cam,
-                   vil_image_view_base_sptr img,
-                   std::string view_identifier,
+                   const vil_image_view_base_sptr& img,
+                   const std::string& view_identifier,
                    float resnearfactor,
                    float resfarfactor)
 {
@@ -232,7 +232,7 @@ compute_image_term(boxm2_scene_sptr         scene,
     return true;
 }
 // Returns vector of image density update kernels(and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_compute_image_term::get_image_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_compute_image_term::get_image_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -278,12 +278,12 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_image_term::get_image_kernels(bocl_
 
 
 //Main public method, updates color model
-bool boxm2_ocl_compute_pre_post::update_pre(boxm2_scene_sptr         scene,
+bool boxm2_ocl_compute_pre_post::update_pre(const boxm2_scene_sptr&         scene,
                                             bocl_device_sptr         device,
-                                            boxm2_opencl_cache_sptr  opencl_cache,
+                                            const boxm2_opencl_cache_sptr&  opencl_cache,
                                             vpgl_camera_double_sptr  cam,
                                             unsigned int ni, unsigned int nj,
-                                            std::string view_identifier,
+                                            const std::string& view_identifier,
                                             float resnearfactor,
                                             float resfarfactor)
 {
@@ -486,12 +486,12 @@ bool boxm2_ocl_compute_pre_post::update_pre(boxm2_scene_sptr         scene,
 }
 
 //Main public method, updates color model
-bool boxm2_ocl_compute_pre_post::update_post(boxm2_scene_sptr         scene,
+bool boxm2_ocl_compute_pre_post::update_post(const boxm2_scene_sptr&         scene,
     bocl_device_sptr         device,
-    boxm2_opencl_cache_sptr  opencl_cache,
+    const boxm2_opencl_cache_sptr&  opencl_cache,
     vpgl_camera_double_sptr  cam,
     unsigned int ni, unsigned int nj,
-    std::string view_identifier,
+    const std::string& view_identifier,
     float resnearfactor,
     float resfarfactor)
 {
@@ -686,12 +686,12 @@ bool boxm2_ocl_compute_pre_post::update_post(boxm2_scene_sptr         scene,
 }
 
 //Main public method, updates color model
-bool boxm2_ocl_compute_pre_post::compute_pre_post(boxm2_scene_sptr         scene,
-    bocl_device_sptr         device,
-    boxm2_opencl_cache_sptr  opencl_cache,
-    vpgl_camera_double_sptr  cam,
-    vil_image_view_base_sptr img,
-    std::string view_identifier,
+bool boxm2_ocl_compute_pre_post::compute_pre_post(const boxm2_scene_sptr&         scene,
+    const bocl_device_sptr&         device,
+    const boxm2_opencl_cache_sptr&  opencl_cache,
+    const vpgl_camera_double_sptr&  cam,
+    const vil_image_view_base_sptr& img,
+    const std::string& view_identifier,
     float resnearfactor,
     float resfarfactor)
 {
@@ -702,11 +702,11 @@ bool boxm2_ocl_compute_pre_post::compute_pre_post(boxm2_scene_sptr         scene
     return false;
   return true;
 }
-bool boxm2_ocl_update_image_factor::update_image_factor(boxm2_scene_sptr         scene,
-                                                        bocl_device_sptr         device,
-                                                        boxm2_opencl_cache_sptr  opencl_cache,
+bool boxm2_ocl_update_image_factor::update_image_factor(const boxm2_scene_sptr&         scene,
+                                                        const bocl_device_sptr&         device,
+                                                        const boxm2_opencl_cache_sptr&  opencl_cache,
                                                         bool add,
-                                                        std::string view_identifier)
+                                                        const std::string& view_identifier)
 {
     float transfer_time = 0.0f;
     float gpu_time = 0.0f;
@@ -794,7 +794,7 @@ bool boxm2_ocl_update_image_factor::update_image_factor(boxm2_scene_sptr        
 }
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_pre_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_pre_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -834,7 +834,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_pre_kernels(bocl_devi
     return pre_kernels_[identifier];
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_post_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_post_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -877,7 +877,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_compute_pre_post::get_post_kernels(bocl_dev
     return post_kernels_[identifier];
 }
 
-std::vector<bocl_kernel*>& boxm2_ocl_update_image_factor::get_update_image_factor_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_update_image_factor::get_update_image_factor_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -902,7 +902,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_image_factor::get_update_image_facto
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
     auto* computez = new bocl_kernel();
-    std::string computez_opts = options;
+    const std::string& computez_opts = options;
     computez->create_kernel(&device->context(), device->device_id(), src_paths, "add_subtract_factor_main", computez_opts, "update::add_subtract_factor_main");
     vec_kernels.push_back(computez);
 

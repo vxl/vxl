@@ -32,10 +32,10 @@ rgrl_view( rgrl_mask_sptr          const& from_image_roi,
            rgrl_mask_sptr          const& to_image_roi,
            rgrl_mask_box  region,
            rgrl_mask_box  global_region,
-           rgrl_estimator_sptr       xform_estimator,
-           rgrl_transformation_sptr  xform_estimate,
+           const rgrl_estimator_sptr&       xform_estimator,
+           const rgrl_transformation_sptr&  xform_estimate,
            unsigned                  resolution,
-           rgrl_transformation_sptr  inverse_estimate )
+           const rgrl_transformation_sptr&  inverse_estimate )
   : from_image_roi_( from_image_roi ),
     to_image_roi_( to_image_roi ),
     current_region_(std::move( region )),

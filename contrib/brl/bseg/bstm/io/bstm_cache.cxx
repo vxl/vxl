@@ -29,7 +29,7 @@ void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache_sptr&  /*sptr*/){}
 void vsl_b_read(vsl_b_istream&  /*is*/, bstm_cache_sptr const&  /*sptr*/){}
 
 
-bstm_cache_destroyer::bstm_cache_destroyer(bstm_cache_sptr s)
+bstm_cache_destroyer::bstm_cache_destroyer(const bstm_cache_sptr& s)
 {
   s_ = s;
 }
@@ -41,7 +41,7 @@ bstm_cache_destroyer::~bstm_cache_destroyer()
     s_->unref();  // smart pointer is deleted when ref cnt is zero
 }
 
-void bstm_cache_destroyer::set_singleton(bstm_cache_sptr s)
+void bstm_cache_destroyer::set_singleton(const bstm_cache_sptr& s)
 {
   s_ = s;
 }

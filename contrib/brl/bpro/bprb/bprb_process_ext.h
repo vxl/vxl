@@ -32,7 +32,7 @@ class bprb_process_ext : public bprb_process
   bool set_input(unsigned i, brdb_value_sptr const& value) override;
   bool set_input_data(std::vector<brdb_value_sptr> const& inputs) override;
   bool set_output_types(std::vector<std::string> const& types);
-  bool set_output(unsigned i, brdb_value_sptr val);
+  bool set_output(unsigned i, const brdb_value_sptr& val);
 
  protected:
 #if 0

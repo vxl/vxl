@@ -47,7 +47,7 @@ static void test_constructors()
   {
     double gold[] = {1,2,3,4, 5,6,7,8, 9,10,11,12, 13,14,15,16}; // the "ground truth"
     vgl_h_matrix_3d<double> H0(gold);
-    vgl_h_matrix_3d<double> H(H0); H.get(data);
+    const vgl_h_matrix_3d<double>& H(H0); H.get(data);
     TEST( "Copy constructor", equals(data, gold), true );
   }
   {

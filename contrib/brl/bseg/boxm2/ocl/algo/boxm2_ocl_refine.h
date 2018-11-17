@@ -13,19 +13,19 @@
 //: refine class
 class boxm2_ocl_refine {
 public:
-  static int refine_scene(bocl_device_sptr device, boxm2_scene_sptr scene,
-                          boxm2_opencl_cache_sptr cache, float thresh);
+  static int refine_scene(const bocl_device_sptr& device, const boxm2_scene_sptr& scene,
+                          const boxm2_opencl_cache_sptr& cache, float thresh);
 
-  static int refine_scene(bocl_device_sptr device, boxm2_scene_sptr scene,
-                          boxm2_opencl_cache_sptr opencl_cache, float thresh,
+  static int refine_scene(const bocl_device_sptr& device, boxm2_scene_sptr scene,
+                          const boxm2_opencl_cache_sptr& opencl_cache, float thresh,
                           std::vector<std::string> prefixes);
 
 private:
   // compile kernels and place in static map
-  static bocl_kernel *get_refine_tree_kernel(bocl_device_sptr device,
-                                             std::string opts = "");
-  static bocl_kernel *get_refine_data_kernel(bocl_device_sptr device,
-                                             std::string opts = "");
+  static bocl_kernel *get_refine_tree_kernel(const bocl_device_sptr& device,
+                                             const std::string& opts = "");
+  static bocl_kernel *get_refine_data_kernel(const bocl_device_sptr& device,
+                                             const std::string& opts = "");
 
   // map of paint kernel by device
   static std::map<std::string, bocl_kernel *> tree_kernels_, data_kernels_;

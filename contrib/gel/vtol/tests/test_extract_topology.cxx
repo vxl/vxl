@@ -334,7 +334,7 @@ test_image_6()
 
 static
 bool
-has_vertex( vtol_intensity_face_sptr face, double x, double y )
+has_vertex( const vtol_intensity_face_sptr& face, double x, double y )
 {
   static const double tol = 1e-5;
 

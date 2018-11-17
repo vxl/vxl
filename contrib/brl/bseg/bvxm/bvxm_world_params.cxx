@@ -34,7 +34,7 @@ bvxm_world_params::set_params(
   const vgl_point_3d<float>& corner,
   const vgl_vector_3d<unsigned int>& num_voxels,
   float voxel_length,
-  vpgl_lvcs_sptr lvcs,
+  const vpgl_lvcs_sptr& lvcs,
   float min_ocp_prob,
   float max_ocp_prob,
   unsigned max_scale,

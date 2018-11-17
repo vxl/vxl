@@ -48,7 +48,7 @@ bcvr_cvmatch::bcvr_cvmatch()
   setTemplateSize(3);
 }
 
-bcvr_cvmatch::bcvr_cvmatch (bsol_intrinsic_curve_2d_sptr c1, bsol_intrinsic_curve_2d_sptr c2)
+bcvr_cvmatch::bcvr_cvmatch (const bsol_intrinsic_curve_2d_sptr& c1, const bsol_intrinsic_curve_2d_sptr& c2)
 {
   curve1_ = c1;
   curve2_ = c2;
@@ -259,7 +259,7 @@ void bcvr_cvmatch::findDPCorrespondence (void)
   }
 }
 //################################################################
-double getTFromIndex (bsol_intrinsic_curve_2d_sptr curve1, int previ1, int i1, int curi1)
+double getTFromIndex (const bsol_intrinsic_curve_2d_sptr& curve1, int previ1, int i1, int curi1)
 {
   assert (previ1<=curi1 && curi1<=i1);
   int i;
@@ -278,7 +278,7 @@ double getTFromIndex (bsol_intrinsic_curve_2d_sptr curve1, int previ1, int i1, i
   return t;
 }
 
-void getMappingPointFromT (bsol_intrinsic_curve_2d_sptr curve2, int previ2, int i2, double t, double& pointx, double& pointy)
+void getMappingPointFromT (const bsol_intrinsic_curve_2d_sptr& curve2, int previ2, int i2, double t, double& pointx, double& pointy)
 {
   if (t==0) {
     pointx = curve2->x(previ2);
@@ -323,7 +323,7 @@ void getMappingPointFromT (bsol_intrinsic_curve_2d_sptr curve2, int previ2, int 
   }
 }
 
-void bcvr_cvmatch::GetAverageCurveFromAMatch (bsol_intrinsic_curve_2d_sptr AverageCurve)
+void bcvr_cvmatch::GetAverageCurveFromAMatch (const bsol_intrinsic_curve_2d_sptr& AverageCurve)
 {
   AverageCurve->clear();
   double x, y;
@@ -360,7 +360,7 @@ void bcvr_cvmatch::GetAverageCurveFromAMatch (bsol_intrinsic_curve_2d_sptr Avera
 
 //The number of sample points of AverageCurve is the same as the one in the reference curve.
 //Here the reference curve is always curve1.
-void bcvr_cvmatch::GetSumCurveFromAMatch (bsol_intrinsic_curve_2d_sptr SumCurve)
+void bcvr_cvmatch::GetSumCurveFromAMatch (const bsol_intrinsic_curve_2d_sptr& SumCurve)
 {
   SumCurve->clear();
   double x, y;
@@ -395,7 +395,7 @@ void bcvr_cvmatch::GetSumCurveFromAMatch (bsol_intrinsic_curve_2d_sptr SumCurve)
   assert(SumCurve->size() == curve1_->size());
 }
 
-void bcvr_cvmatch::GetMorphingCurvesFromAMatch (bsol_intrinsic_curve_2d_sptr MorphingCurves, int NumMorphs)
+void bcvr_cvmatch::GetMorphingCurvesFromAMatch (const bsol_intrinsic_curve_2d_sptr& MorphingCurves, int NumMorphs)
 {
   double w;
 

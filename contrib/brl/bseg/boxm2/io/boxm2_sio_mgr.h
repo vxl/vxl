@@ -23,14 +23,14 @@ class boxm2_sio_mgr
 {
   public:
     //: loads block from disk
-    static boxm2_block*   load_block(std::string dir, boxm2_block_id block_id,
+    static boxm2_block*   load_block(const std::string& dir, const boxm2_block_id& block_id,
                                      BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
-    static boxm2_block* load_block(std::string dir, boxm2_block_id block_id,
-                                   boxm2_block_metadata data, BOXM2_IO_FS_TYPE fs_type=LOCAL);
+    static boxm2_block* load_block(const std::string& dir, const boxm2_block_id& block_id,
+                                   const boxm2_block_metadata& data, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: saves block to disk
-    static void save_block(std::string dir, boxm2_block* block);
+    static void save_block(const std::string& dir, boxm2_block* block);
 
     //: load data from disk
     template <boxm2_data_type data_type>
@@ -38,8 +38,8 @@ class boxm2_sio_mgr
 
     //: load data generically
     // loads a generic boxm2_data_base* from disk (given data_type string prefix)
-    static boxm2_data_base*  load_block_data_generic(std::string dir, boxm2_block_id id,
-                                                     std::string data_type, BOXM2_IO_FS_TYPE fs_type=LOCAL);
+    static boxm2_data_base*  load_block_data_generic(const std::string& dir, const boxm2_block_id& id,
+                                                     const std::string& data_type, BOXM2_IO_FS_TYPE fs_type=LOCAL);
 
     //: saves data to disk
     template <boxm2_data_type data_type>
@@ -47,10 +47,10 @@ class boxm2_sio_mgr
 
     //: saves data generically
     // generically saves data_base * to disk (given prefix)
-    static void save_block_data_base(std::string dir, boxm2_block_id block_id, boxm2_data_base* data, std::string prefix);
+    static void save_block_data_base(const std::string& dir, const boxm2_block_id& block_id, boxm2_data_base* data, const std::string& prefix);
 
   private:
-    static char* load_from_hdfs(std::string filepath, unsigned long &numBytes);
+    static char* load_from_hdfs(const std::string& filepath, unsigned long &numBytes);
 };
 
 template <boxm2_data_type data_type>

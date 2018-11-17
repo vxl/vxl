@@ -9,7 +9,7 @@
 #endif
 
 //: PUBLIC create method, for creating singleton instance of boxm2_cache1
-void boxm2_lru_cache1::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
+void boxm2_lru_cache1::create(const boxm2_scene_sptr& scene, BOXM2_IO_FS_TYPE fs_type)
 {
   if (boxm2_cache1::exists())
   {
@@ -29,7 +29,7 @@ void boxm2_lru_cache1::create(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type)
 }
 
 //: constructor, set the directory path
-boxm2_lru_cache1::boxm2_lru_cache1(boxm2_scene_sptr scene, BOXM2_IO_FS_TYPE fs_type) : boxm2_cache1(scene,fs_type)
+boxm2_lru_cache1::boxm2_lru_cache1(const boxm2_scene_sptr& scene, BOXM2_IO_FS_TYPE fs_type) : boxm2_cache1(scene,fs_type)
 {
   scene_dir_ = scene->data_path();
 }
@@ -267,7 +267,7 @@ void boxm2_lru_cache1::replace_data_base(boxm2_block_id id, std::string type, bo
 }
 
 //: helper method returns a reference to correct data map (ensures one exists)
-std::map<boxm2_block_id, boxm2_data_base*>& boxm2_lru_cache1::cached_data_map(std::string prefix)
+std::map<boxm2_block_id, boxm2_data_base*>& boxm2_lru_cache1::cached_data_map(const std::string& prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -282,7 +282,7 @@ std::map<boxm2_block_id, boxm2_data_base*>& boxm2_lru_cache1::cached_data_map(st
 }
 
 //: helper method says whether or not block id is valid
-bool boxm2_lru_cache1::is_valid_id(boxm2_block_id id)
+bool boxm2_lru_cache1::is_valid_id(const boxm2_block_id& id)
 {
   // use scene here to determine if this id is valid
   return scene_->block_exists(id);

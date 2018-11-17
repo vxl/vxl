@@ -32,7 +32,7 @@ class volm_loc_hyp : public vbl_ref_count
   volm_loc_hyp() : current_(0) {}
 
   //: construct by reading from a binary file
-  volm_loc_hyp(std::string bin_file);
+  volm_loc_hyp(const std::string& bin_file);
 
   //: add the location to the set
   bool add(double lat, double lon, double elev);
@@ -46,7 +46,7 @@ class volm_loc_hyp : public vbl_ref_count
   //unsigned size() { return cnt_; }
   unsigned size() { return (unsigned)locs_.size(); }
 
-  bool write_hypotheses(std::string out_file);
+  bool write_hypotheses(const std::string& out_file);
 
   //: return false when all hyps are returned
   bool get_next(vgl_point_3d<double>& h);
@@ -74,7 +74,7 @@ class volm_loc_hyp : public vbl_ref_count
   void release_memory() { locs_.clear(); }
 
   //: create a kml file
-  void write_to_kml(std::string out_file, double size, bool const& write_as_dot = false);
+  void write_to_kml(const std::string& out_file, double size, bool const& write_as_dot = false);
 
  public:
   // lon is x, lat is y

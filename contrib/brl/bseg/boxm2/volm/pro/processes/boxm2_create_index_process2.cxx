@@ -41,7 +41,7 @@ namespace boxm2_create_index_process2_globals
   constexpr unsigned n_inputs_ = 14;
   constexpr unsigned n_outputs_ = 0;
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;
@@ -83,7 +83,7 @@ namespace boxm2_create_index_process2_globals
   static std::map<std::string,std::vector<bocl_kernel*> > kernels;
 
   // function to construct 2d_geo_index quad-tree for scene blocks
-  bvgl_2d_geo_index_node_sptr construct_2d_geo_index_for_blks(boxm2_scene_sptr scene)
+  bvgl_2d_geo_index_node_sptr construct_2d_geo_index_for_blks(const boxm2_scene_sptr& scene)
   {
     vgl_box_3d<double> scene_bbox = scene->bounding_box();
     // set the leaf size 4 times larger than the block size

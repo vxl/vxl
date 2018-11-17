@@ -292,7 +292,8 @@ bool vpgl_isfm_rational_camera_seed_process(bprb_func_process& pro)
   {
     // re-arrange the correspondence
     std::vector<vgl_point_2d<double> > corrs_i;
-    for (auto & new_corr : new_corrs)
+    corrs_i.reserve(new_corrs.size());
+for (auto & new_corr : new_corrs)
       corrs_i.push_back(new_corr[i]);
     std::vector<vgl_vector_2d<double> > cam_trans_i;
     vgl_point_3d<double> intersection;

@@ -10,7 +10,7 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 
-bool boxm2_volm_wr3db_index_params::write_params_file(std::string index_file_name)
+bool boxm2_volm_wr3db_index_params::write_params_file(const std::string& index_file_name)
 {
   std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::ofstream ofs(index_params_file.c_str());
@@ -32,7 +32,7 @@ bool boxm2_volm_wr3db_index_params::write_params_file(std::string index_file_nam
   return true;
 }
 
-bool boxm2_volm_wr3db_index_params::read_params_file(std::string index_file_name)
+bool boxm2_volm_wr3db_index_params::read_params_file(const std::string& index_file_name)
 {
   std::string index_params_file = vul_file::strip_extension(index_file_name) + ".params";
   std::ifstream ifs(index_params_file.c_str());
@@ -68,7 +68,7 @@ bool boxm2_volm_wr3db_index_params::query_params_equal(boxm2_volm_wr3db_index_pa
 }
 
 
-bool boxm2_volm_wr3db_index_params::write_size_file(std::string index_file_name, unsigned long indexed_cnt)
+bool boxm2_volm_wr3db_index_params::write_size_file(const std::string& index_file_name, unsigned long indexed_cnt)
 {
   std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
   std::ofstream ofs(index_size_file.c_str());
@@ -79,7 +79,7 @@ bool boxm2_volm_wr3db_index_params::write_size_file(std::string index_file_name,
   return true;
 }
 
-bool boxm2_volm_wr3db_index_params::read_size_file(std::string index_file_name, unsigned long& size)
+bool boxm2_volm_wr3db_index_params::read_size_file(const std::string& index_file_name, unsigned long& size)
 {
   std::string index_size_file = vul_file::strip_extension(index_file_name) + ".txt";
   std::ifstream ifs(index_size_file.c_str());
@@ -106,7 +106,7 @@ boxm2_volm_wr3db_index::~boxm2_volm_wr3db_index()
     delete [] active_buffer_;
 }
 
-bool boxm2_volm_wr3db_index::initialize_write(std::string file_name)
+bool boxm2_volm_wr3db_index::initialize_write(const std::string& file_name)
 {
   if (m_ == READ)
     this->finalize();
@@ -121,7 +121,7 @@ bool boxm2_volm_wr3db_index::initialize_write(std::string file_name)
   return true;
 }
 
-bool boxm2_volm_wr3db_index::initialize_read(std::string file_name)
+bool boxm2_volm_wr3db_index::initialize_read(const std::string& file_name)
 {
   if (m_ == WRITE)
     this->finalize();
@@ -263,7 +263,7 @@ bool boxm2_volm_wr3db_index::get_next(uchar* values, unsigned size)
 
 //: inflate the index for ith location and return a vector of char values where last bit is visibility and second to last is prob (occupied or not)
 bool boxm2_volm_wr3db_index::inflate_index_vis_and_prob(std::vector<uchar>& values,
-                                                        volm_spherical_container_sptr cont,
+                                                        const volm_spherical_container_sptr& cont,
                                                         std::vector<char>& vis_prob)
 {
   // get the voxel on the indexed layer for a given voxel

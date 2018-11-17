@@ -14,12 +14,12 @@
 #include <vtol/vtol_one_chain.h>
 #include <vtol/vtol_list_functions.h>
 
-void vtol_face::link_inferior(vtol_one_chain_sptr inf)
+void vtol_face::link_inferior(const vtol_one_chain_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_face::unlink_inferior(vtol_one_chain_sptr inf)
+void vtol_face::unlink_inferior(const vtol_one_chain_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }

@@ -27,7 +27,7 @@ class boxm2_ocl_hierarchical_reg : public boxm2_ocl_reg_mutual_info
   boxm2_ocl_hierarchical_reg( boxm2_opencl_cache_sptr  & cache,
                                boxm2_scene_sptr sceneA,
                                boxm2_scene_sptr sceneB,
-                               bocl_device_sptr device, int nbins,
+                               const bocl_device_sptr& device, int nbins,
                                bool do_vary_scale);
 
   //: initialize the monte carlo reg function

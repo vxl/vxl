@@ -220,7 +220,8 @@ bool volm_correct_rational_cameras_ransac_process(bprb_func_process& pro)
     std::vector<unsigned> corrs_ids;
     for (unsigned i = 0; i < n; i++) {
         std::vector<vgl_point_2d<double> > corrs_i;
-        for (auto & new_corr : new_corrs) {
+        corrs_i.reserve(new_corrs.size());
+for (auto & new_corr : new_corrs) {
             corrs_i.push_back(new_corr[i]);
         }
         //std::cout << "Executing adjust image offsets\n";
@@ -489,7 +490,8 @@ bool volm_correct_rational_cameras_ransac_process2(bprb_func_process& pro)
   std::vector<unsigned> corrs_ids;
   for (unsigned i = 0; i < n; i++) {
     std::vector<vgl_point_2d<double> > corrs_i;
-    for (auto & new_corr : new_corrs) {
+    corrs_i.reserve(new_corrs.size());
+for (auto & new_corr : new_corrs) {
       corrs_i.push_back(new_corr[i]);
     }
 

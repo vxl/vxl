@@ -62,7 +62,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
 
  public:
   vifa_int_faces_adj_attr();
-  vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
+  vifa_int_faces_adj_attr(const vtol_intensity_face_sptr&  seed,
                           int              depth,
                           int              size_filter = -1,
                           vdgl_fit_lines_params*    fitter_params = nullptr,
@@ -74,7 +74,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
                           float          junk_area_percentage = 0.2
                          );
 
-  vifa_int_faces_adj_attr(vtol_intensity_face_sptr  seed,
+  vifa_int_faces_adj_attr(const vtol_intensity_face_sptr&  seed,
                           int                       depth,
                           iface_list&               neighborhood,
                           int                       size_filter  =  -1,
@@ -96,7 +96,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
   bool  GetNativeAttributes(std::vector<float>&  attrs) override;
 
   vtol_intensity_face_sptr  GetSeed() { return seed_; }
-  void                      SetSeed(vtol_intensity_face_sptr  seed);
+  void                      SetSeed(const vtol_intensity_face_sptr&  seed);
 
   int    GetDepth() const { return depth_; }
   void   SetDepth(int depth) { depth_ = depth; closure_valid_ = false; }
@@ -123,7 +123,7 @@ class vifa_int_faces_adj_attr: public vifa_int_faces_attr
  protected:
   void  init() override;
   bool  add_unique_face(iface_list&               facelist,
-                        vtol_intensity_face_sptr  face,
+                        const vtol_intensity_face_sptr&  face,
                         int                       size_filter);
   void  compute_closure_step(int                       current_depth,
                              vtol_intensity_face_sptr  seed);

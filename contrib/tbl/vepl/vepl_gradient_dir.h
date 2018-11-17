@@ -18,6 +18,6 @@
 #include <vil/vil_image_resource.h>
 
 //: gradient direction: atan2 of x_gradient and y_gradient
-vil_image_resource_sptr vepl_gradient_dir(vil_image_resource_sptr , double scale=1.0, double shift=0.0);
+vil_image_resource_sptr vepl_gradient_dir(const vil_image_resource_sptr& , double scale=1.0, double shift=0.0);
 
 #endif // vepl_gradient_dir_h_

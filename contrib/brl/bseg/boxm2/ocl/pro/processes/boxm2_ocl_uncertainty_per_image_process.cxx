@@ -42,7 +42,7 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
         UPDATE_AVG_RATIO_EMPTY_SURFACE = 3,
         CONVERT_AUX_INT_FLOAT = 4
     };
-    void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+    void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,const std::string& opts)
     {
         //gather all render sources... seems like a lot for rendering...
         std::vector<std::string> src_paths;
@@ -61,7 +61,7 @@ namespace boxm2_ocl_uncertainty_per_image_process_globals
         src_paths.push_back(source_dir + "update_cubic_functors.cl");
         src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
         //compilation options
-        std::string options = opts;
+        const std::string& options = opts;
         auto* seg_len = new bocl_kernel();
         std::string seg_opts = options + " -D SEGLEN -D STEP_CELL=step_cell_seglen(aux_args,data_ptr,llid,d) ";
         seg_len->create_kernel(&device->context(),device->device_id(), src_paths, "seg_len_main", seg_opts, "update::seg_len");

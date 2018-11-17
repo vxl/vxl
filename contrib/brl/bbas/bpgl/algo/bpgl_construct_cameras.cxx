@@ -1,7 +1,8 @@
 // This is bbas/bpgl/algo/bpgl_construct_cameras.cxx
-#include <iostream>
-#include <cmath>
 #include "bpgl_construct_cameras.h"
+#include <cmath>
+#include <iostream>
+#include <utility>
 //:
 // \file
 
@@ -25,12 +26,12 @@ bpgl_construct_cameras::bpgl_construct_cameras()
 
 //: constructor with initialization of corresponding points
 bpgl_construct_cameras::bpgl_construct_cameras(
-    std::vector<vgl_point_2d<double> > p0,
+    const std::vector<vgl_point_2d<double> >& p0,
     std::vector<vgl_point_2d<double> > p1,
     const vpgl_calibration_matrix<double>* K )
 {
     points0_=p0;
-    points1_=p1;
+    points1_=std::move(p1);
 
     if ( p0.size() < 8 )
       std::cerr << "ERROR: bpgl_construct_cameras: need at least 7 correspondences.\n";

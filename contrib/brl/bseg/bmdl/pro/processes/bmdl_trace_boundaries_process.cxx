@@ -7,7 +7,7 @@
 
 #include <bmdl/bmdl_mesh.h>
 
-bool trace_boundaries(vil_image_view_base_sptr label_img, std::string fpath)
+bool trace_boundaries(const vil_image_view_base_sptr& label_img, const std::string& fpath)
 {
   if (label_img->pixel_format() != VIL_PIXEL_FORMAT_UINT_32) {
     std::cout << "bmdl_trace_boundaries_process::the Label Image pixel format" << label_img->pixel_format() << " undefined" << std::endl;

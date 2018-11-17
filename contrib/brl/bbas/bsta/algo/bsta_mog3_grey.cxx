@@ -368,7 +368,7 @@ void  bsta_mog3_grey::merge_mixtures(vnl_vector_fixed<unsigned char, 8> & mog3_1
 void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & apm,
                                                   std::vector<float> const& obs,
                                                   std::vector<float> const& obs_weights,
-                                                  bsta_sigma_normalizer_sptr n_table,
+                                                  const bsta_sigma_normalizer_sptr& n_table,
                                                   float min_sigma)
 {
   //compute_gauss_mixture_3(apm,obs,obs_weights,n_table,min_sigma);
@@ -380,7 +380,7 @@ void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3
                                                   std::vector<float> const& obs,
                                                   std::vector<float> const& pre,
                                                   std::vector<float> const& vis,
-                                                  bsta_sigma_normalizer_sptr n_table,
+                                                  const bsta_sigma_normalizer_sptr& n_table,
                                                   float min_sigma)
 {
   constexpr unsigned int nmodes = 3;

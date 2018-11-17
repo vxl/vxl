@@ -39,7 +39,7 @@ class bstm_merge_tt_function
   bstm_time_tree merge_tt(const bstm_time_tree& old_tree, int curr_depth);
 
   //move the data from old trees to new
-  void move_data(bstm_time_tree old_tree, bstm_time_tree merged_tree,  int depth, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
+  void move_data(const bstm_time_tree& old_tree, const bstm_time_tree& merged_tree,  int depth, bstm_data_traits<BSTM_ALPHA>::datatype* alpha_cpy,
                   bstm_data_traits<BSTM_MOG6_VIEW_COMPACT>::datatype* mog_cpy, bstm_data_traits<BSTM_NUM_OBS_VIEW_COMPACT>::datatype* numobs_cpy);
 
   bstm_time_block* blk_t_;

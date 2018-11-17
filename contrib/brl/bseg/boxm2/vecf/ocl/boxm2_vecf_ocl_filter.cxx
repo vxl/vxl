@@ -23,7 +23,7 @@
 #endif
 
 typedef vnl_vector_fixed<unsigned char,16> uchar16;
-bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,
+bool boxm2_vecf_ocl_filter::get_scene_appearance( const boxm2_scene_sptr& scene,
           std::string&      options)
 {
     std::vector<std::string> apps = scene->appearances();
@@ -54,7 +54,7 @@ bool boxm2_vecf_ocl_filter::get_scene_appearance( boxm2_scene_sptr scene,
 
 boxm2_vecf_ocl_filter::boxm2_vecf_ocl_filter(boxm2_scene_sptr& source_scene,
                                              boxm2_scene_sptr& temp_scene,
-                                             boxm2_opencl_cache_sptr ocl_cache)
+                                             const boxm2_opencl_cache_sptr& ocl_cache)
   : source_scene_(source_scene),
      temp_scene_(temp_scene),
      opencl_cache_(ocl_cache)

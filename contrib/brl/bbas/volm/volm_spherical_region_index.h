@@ -34,7 +34,7 @@ class volm_spherical_region_index
 {
  public:
   volm_spherical_region_index(std::map<std::string,std::string> & index_file_paths,
-                              std::string usph_file_path);
+                              const std::string& usph_file_path);
   volm_spherical_region_index(std::map<std::string,std::vector<unsigned char> > & index_file_paths,
                               vsph_unit_sphere_sptr & usph);
   volm_spherical_region_index(float * boxes,int num_depth_regions, int num_orientation_regions, int num_nlcd_regions, int sky_regions);
@@ -46,7 +46,7 @@ class volm_spherical_region_index
   vsph_segment_sphere * seg() { return seg_; }
  private:
   void construct_spherical_regions();
-  void load_unitsphere(std::string usph_file_path);
+  void load_unitsphere(const std::string& usph_file_path);
   volm_spherical_regions_layer  sph_regions_;
   float check_phi_bounds(float  phi);
   std::vector<double> data_;

@@ -32,9 +32,9 @@
 
 std::map<std::string, std::vector<bocl_kernel*> > boxm2_ocl_remove_low_nobs::remove_low_nobs_kernels_;
 
-bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
-                                                bocl_device_sptr         device,
-                                                boxm2_opencl_cache_sptr  opencl_cache,
+bool boxm2_ocl_remove_low_nobs::remove_low_nobs(const boxm2_scene_sptr&         scene,
+                                                const bocl_device_sptr&         device,
+                                                const boxm2_opencl_cache_sptr&  opencl_cache,
                                                 float                    nobs_threshold_multiplier)
 
 {
@@ -168,7 +168,7 @@ bool boxm2_ocl_remove_low_nobs::remove_low_nobs(boxm2_scene_sptr         scene,
 
 
 
-std::vector<bocl_kernel*>& boxm2_ocl_remove_low_nobs::get_remove_low_nobs_kernels(bocl_device_sptr device, std::string opts)
+std::vector<bocl_kernel*>& boxm2_ocl_remove_low_nobs::get_remove_low_nobs_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -192,7 +192,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_remove_low_nobs::get_remove_low_nobs_kernel
     std::vector<bocl_kernel*> vec_kernels;
     std::string options = "-D REMOVE_LOW_NOBS";
     auto* remove_low_nobs = new bocl_kernel();
-    std::string remove_low_nobs_opts = options;
+    const std::string& remove_low_nobs_opts = options;
     remove_low_nobs->create_kernel(&device->context(), device->device_id(), src_paths, "remove_low_nobs_main", remove_low_nobs_opts, "update::remove_low_nobs");
     vec_kernels.push_back(remove_low_nobs);
     //store and return

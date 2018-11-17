@@ -32,6 +32,6 @@ std::size_t RoundUp(int global_size,int group_size);
 //: function to display decoded error message.
 std::string error_to_string(cl_int  status );
 //: Check for error returns
-int check_val(cl_int status, cl_int result, std::string message);
+int check_val(cl_int status, cl_int result, const std::string& message);
 
 #endif

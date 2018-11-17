@@ -127,8 +127,8 @@ bool bvxm_lidar_init_process(bprb_func_process& pro)
 }
 
 
-bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
-                                                  bvxm_world_params_sptr params,
+bool bvxm_lidar_init_process_globals::lidar_init( const vil_image_resource_sptr& lidar,
+                                                  const bvxm_world_params_sptr& params,
                                                   vil_image_view_base_sptr& roi,
                                                   vpgl_geo_camera*& camera)
 {
@@ -196,9 +196,9 @@ bool bvxm_lidar_init_process_globals::lidar_init( vil_image_resource_sptr lidar,
 #endif // HAS_GEOTIFF
 }
 
-bool bvxm_lidar_init_process_globals::gen_mask( vil_image_view_base_sptr roi_first,
+bool bvxm_lidar_init_process_globals::gen_mask( const vil_image_view_base_sptr& roi_first,
                                                 vpgl_geo_camera* cam_first,
-                                                vil_image_view_base_sptr roi_second,
+                                                const vil_image_view_base_sptr& roi_second,
                                                 vpgl_geo_camera* cam_second,
                                                 vil_image_view_base_sptr& mask,
                                                 double thresh)

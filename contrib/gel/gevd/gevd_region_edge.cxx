@@ -4,7 +4,7 @@
 // \file
 #include <vtol/vtol_edge_2d.h>
 
-gevd_region_edge::gevd_region_edge(vtol_edge_2d_sptr e)
+gevd_region_edge::gevd_region_edge(const vtol_edge_2d_sptr& e)
 : edge_(e)
 {
 }

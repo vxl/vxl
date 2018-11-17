@@ -163,35 +163,35 @@ class rgrl_data_manager: public rgrl_object
   //  is not an essential component.
   //
   void add_data( unsigned stage,
-                 rgrl_feature_set_sptr                    from_set,
-                 rgrl_feature_set_sptr                    to_set,
+                 const rgrl_feature_set_sptr&                    from_set,
+                 const rgrl_feature_set_sptr&                    to_set,
                  rgrl_matcher_sptr                        matcher = nullptr,
                  rgrl_weighter_sptr                       weighter = nullptr,
                  rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = nullptr,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = nullptr,
+                 const rgrl_scale_estimator_wgted_sptr&          wgted_scale_est = nullptr,
                  const std::string&                        label = std::string() );
 
   //: Add a data item to a single-stage data storage.
   //
   //  The stage is assumed to be 0.
   //
-  void add_data( rgrl_feature_set_sptr                    from_set,
-                 rgrl_feature_set_sptr                    to_set,
-                 rgrl_matcher_sptr                        matcher = nullptr,
-                 rgrl_weighter_sptr                       weighter = nullptr,
-                 rgrl_scale_estimator_unwgted_sptr        unwgted_scale_est = nullptr,
-                 rgrl_scale_estimator_wgted_sptr          wgted_scale_est = nullptr,
+  void add_data( const rgrl_feature_set_sptr&                    from_set,
+                 const rgrl_feature_set_sptr&                    to_set,
+                 const rgrl_matcher_sptr&                        matcher = nullptr,
+                 const rgrl_weighter_sptr&                       weighter = nullptr,
+                 const rgrl_scale_estimator_unwgted_sptr&        unwgted_scale_est = nullptr,
+                 const rgrl_scale_estimator_wgted_sptr&          wgted_scale_est = nullptr,
                  const std::string&                        label = std::string() );
 
   //: Add an estimator to a multi-stage data storage.
   void add_estimator( unsigned                           stage,
-                      rgrl_estimator_sptr                estimator);
+                      const rgrl_estimator_sptr&                estimator);
 
   //: Add an estimator to a single-stage data storage.
   //
   //  The stage is assumed to be 0
   //
-  void add_estimator( rgrl_estimator_sptr                estimator);
+  void add_estimator( const rgrl_estimator_sptr&                estimator);
 
   //: Set the dimension increase to go from the current stage to the next
   //

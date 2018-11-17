@@ -39,7 +39,7 @@ vil_pyramid_image_list_format::make_pyramid_output_image(char const* file)
 }
 
 static bool copy_base_resc(vil_image_resource_sptr const& base_image,
-                           std::string full_filename,
+                           const std::string& full_filename,
                            char const* file_format,
                            vil_blocked_image_resource_sptr& copy)
 {

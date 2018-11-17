@@ -3,9 +3,10 @@
 // \author Isabel Restrepo
 // \date 25-Jan-2011
 
+#include "bvpl_taylor_basis_factory.h"
 #include <iostream>
 #include <map>
-#include "bvpl_taylor_basis_factory.h"
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -14,7 +15,7 @@
 bvpl_taylor_basis_factory::bvpl_taylor_basis_factory(std::string filename)
 {
   //initialize variables
-  filename_ = filename;
+  filename_ = std::move(filename);
   angle_ = 0.0f;
   rotation_axis_ = canonical_rotation_axis_;
   parallel_axis_ = canonical_parallel_axis_;

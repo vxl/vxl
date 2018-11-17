@@ -18,7 +18,7 @@ class bstm_lru_cache : public bstm_cache
   public:
 
     //: create function used instead of constructor
-    static void create(bstm_scene_sptr scene);
+    static void create(const bstm_scene_sptr& scene);
 
     //: returns block pointer to block specified by ID
     bstm_block* get_block(bstm_block_id id) override;
@@ -54,7 +54,7 @@ class bstm_lru_cache : public bstm_cache
   private:
 
     //: hidden constructor (private so it cannot be called -- forces the class to be singleton)
-    bstm_lru_cache(bstm_scene_sptr scene);
+    bstm_lru_cache(const bstm_scene_sptr& scene);
 
     //: hidden destructor (private so it cannot be called -- forces the class to be singleton)
     ~bstm_lru_cache() override;
@@ -74,10 +74,10 @@ class bstm_lru_cache : public bstm_cache
     // ---------Helper Methods --------------------------------------------------
 
     //: helper method returns a reference to correct data map (ensures one exists)
-    std::map<bstm_block_id, bstm_data_base*>& cached_data_map(std::string prefix);
+    std::map<bstm_block_id, bstm_data_base*>& cached_data_map(const std::string& prefix);
 
     //: helper method determines if this block is
-    bool is_valid_id(bstm_block_id);
+    bool is_valid_id(const bstm_block_id&);
     // --------------------------------------------------------------------------
 };
 

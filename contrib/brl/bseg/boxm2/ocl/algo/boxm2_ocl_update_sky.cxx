@@ -33,11 +33,11 @@
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_sky::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_sky::update_sky(const boxm2_scene_sptr&         scene,
                                   bocl_device_sptr         device,
-                                  boxm2_opencl_cache_sptr  opencl_cache,
+                                  const boxm2_opencl_cache_sptr&  opencl_cache,
                                   vpgl_camera_double_sptr  cam,
-                                  vil_image_view_base_sptr skyimg)
+                                  const vil_image_view_base_sptr& skyimg)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -180,7 +180,7 @@ bool boxm2_ocl_update_sky::update_sky(boxm2_scene_sptr         scene,
 
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool  /*isRGB*/)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -207,7 +207,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr de
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    std::string options = opts;
+    const std::string& options = opts;
 
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;
@@ -229,11 +229,11 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_sky::get_kernels(bocl_device_sptr de
 std::map<std::string,std::vector<bocl_kernel*> > boxm2_ocl_update_sky2::kernels_;
 
 //Main public method, updates color model
-bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         scene,
+bool boxm2_ocl_update_sky2::accumulate_sky_evidence(const boxm2_scene_sptr&         scene,
                                                      bocl_device_sptr         device,
-                                                     boxm2_opencl_cache_sptr  opencl_cache,
+                                                     const boxm2_opencl_cache_sptr&  opencl_cache,
                                                      vpgl_camera_double_sptr  cam,
-                                                     vil_image_view_base_sptr skyimg)
+                                                     const vil_image_view_base_sptr& skyimg)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -430,9 +430,9 @@ bool boxm2_ocl_update_sky2::accumulate_sky_evidence(boxm2_scene_sptr         sce
     clReleaseCommandQueue(queue);
     return true;
 }
-bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
-                                         bocl_device_sptr         device,
-                                         boxm2_opencl_cache_sptr  opencl_cache)
+bool boxm2_ocl_update_sky2::update_sky2( const boxm2_scene_sptr&         scene,
+                                         const bocl_device_sptr&         device,
+                                         const boxm2_opencl_cache_sptr&  opencl_cache)
 {
     float transfer_time=0.0f;
     float gpu_time=0.0f;
@@ -521,7 +521,7 @@ bool boxm2_ocl_update_sky2::update_sky2( boxm2_scene_sptr         scene,
 }
 
 //Returns vector of color update kernels (and caches them per device
-std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr device, std::string opts, bool  /*isRGB*/)
+std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(const bocl_device_sptr& device, const std::string& opts, bool  /*isRGB*/)
 {
     // compile kernels if not already compiled
     std::string identifier = device->device_identifier() + opts;
@@ -548,7 +548,7 @@ std::vector<bocl_kernel*>& boxm2_ocl_update_sky2::get_kernels(bocl_device_sptr d
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    std::string options = opts;
+    const std::string& options = opts;
 
     //populate vector of kernels
     std::vector<bocl_kernel*> vec_kernels;

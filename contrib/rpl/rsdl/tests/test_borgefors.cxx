@@ -9,7 +9,7 @@
 #include <testlib/testlib_test.h>
 
 static inline
-void TEST_NEAR_vec(std::string msg,
+void TEST_NEAR_vec(const std::string& msg,
                    const vnl_vector_fixed<double,2>& v1,
                    const vnl_vector_fixed<double,2>& v2,
                    double tol)

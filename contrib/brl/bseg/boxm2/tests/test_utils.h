@@ -26,9 +26,9 @@ class boxm2_test_utils
                                               int max_mb );
 
     static void   save_test_scene_to_disk();
-    static void   delete_test_scene_from_disk(std::string dir="");
+    static void   delete_test_scene_from_disk(const std::string& dir="");
 
-    static std::string   save_test_simple_scene(std::string filename= "test.xml");
+    static std::string   save_test_simple_scene(const std::string& filename= "test.xml");
     static   std::map<boxm2_block_id,boxm2_block_metadata> generate_simple_metadata();
     static std::string   save_test_empty_scene();
     static bool create_test_simple_scene(boxm2_scene_sptr & scene);

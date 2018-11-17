@@ -76,7 +76,7 @@ void sdet_selective_search::compute_initial_similarity(){
   }
   std::cout << "compute initial similarity " << t.real() << "msecs" << std::endl;
 }
-void sdet_selective_search::insert_similarities(sdet_region_sptr newr, std::set<unsigned>& removed_labels){
+void sdet_selective_search::insert_similarities(const sdet_region_sptr& newr, std::set<unsigned>& removed_labels){
   unsigned lab = newr->label();
   const std::set<unsigned>& nbrs = newr->nbrs();
   //float npix_n = static_cast<float>(newr->Npix());

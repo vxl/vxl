@@ -50,7 +50,7 @@ class sdet_region_edge : public vbl_ref_count
 {
  public:
   //Constructors/Destructors
-  sdet_region_edge(vtol_edge_2d_sptr e);
+  sdet_region_edge(const vtol_edge_2d_sptr& e);
   sdet_region_edge(sdet_region_edge const& e)
     : vbl_ref_count(), edge_(e.edge_), labels_(e.labels_) {}
   ~sdet_region_edge() override;

@@ -39,16 +39,16 @@ class bstm_ocl_change_detection
   public:
     static bool change_detect(vil_image_view<float>&    change_img,
                               bocl_device_sptr          device,
-                              bstm_scene_sptr          scene,
-                              bstm_opencl_cache_sptr   opencl_cache,
+                              const bstm_scene_sptr&          scene,
+                              const bstm_opencl_cache_sptr&   opencl_cache,
                               vpgl_camera_double_sptr   cam,
-                              vil_image_view_base_sptr  img,
-                              vil_image_view_base_sptr  mask_img,
-                              std::string                norm_type,
+                              const vil_image_view_base_sptr&  img,
+                              const vil_image_view_base_sptr&  mask_img,
+                              const std::string&                norm_type,
                               float                     time);
 
   private:
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts, bool isColor);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, std::string opts, bool isColor);
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
@@ -58,15 +58,15 @@ class bstm_ocl_update_change
   public:
     static bool update_change( vil_image_view<float>&    change_img,
                                   bocl_device_sptr          device,
-                                  bstm_scene_sptr          scene,
-                                  bstm_opencl_cache_sptr   opencl_cache,
+                                  const bstm_scene_sptr&          scene,
+                                  const bstm_opencl_cache_sptr&   opencl_cache,
                                   vpgl_camera_double_sptr   cam,
-                                  vil_image_view_base_sptr  img,
-                                  vil_image_view_base_sptr  mask_img,
+                                  const vil_image_view_base_sptr&  img,
+                                  const vil_image_view_base_sptr&  mask_img,
                                   float                     time );
 
   private:
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts, bool isColor);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts, bool isColor);
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 
@@ -75,15 +75,15 @@ class bstm_ocl_aux_pass_change
   public:
     static bool change_detect(  vil_image_view<float>&    change_img,
                                 bocl_device_sptr          device,
-                                bstm_scene_sptr          scene,
-                                bstm_opencl_cache_sptr   opencl_cache,
+                                const bstm_scene_sptr&          scene,
+                                const bstm_opencl_cache_sptr&   opencl_cache,
                                 vpgl_camera_double_sptr   cam,
-                                vil_image_view_base_sptr  img,
-                                vil_image_view_base_sptr  mask_img,
+                                const vil_image_view_base_sptr&  img,
+                                const vil_image_view_base_sptr&  mask_img,
                                 float                     time);
 
   private:
-    static std::vector<bocl_kernel*>& get_kernels(bocl_device_sptr device, std::string opts);
+    static std::vector<bocl_kernel*>& get_kernels(const bocl_device_sptr& device, const std::string& opts);
     static std::map<std::string, std::vector<bocl_kernel*> > kernels_;
 };
 

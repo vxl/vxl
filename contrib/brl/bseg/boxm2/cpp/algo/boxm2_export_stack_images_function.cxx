@@ -13,7 +13,7 @@
 #include <vil/vil_save.h>
 #include <vil/vil_load.h>
 
-void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, std::string outdir)
+void boxm2_export_stack_images_function::export_opacity_stack_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, const std::string& outdir)
 {
   auto& nc_scene = const_cast<boxm2_scene_sptr&>(scene);
   vgl_point_3d<int> min_index;
@@ -353,7 +353,7 @@ void boxm2_export_stack_images_function::export_color_stack_images(const boxm2_s
 }
 
 
-void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, std::string ident, vil3d_image_view<float> & img3d)
+void boxm2_export_stack_images_function::export_float_images(const boxm2_scene_sptr& scene, boxm2_cache_sptr & cache, const std::string& ident, vil3d_image_view<float> & img3d)
 {
     // we need to const_cast to call the new cache functions which take a (non const) scene as 1st arg.
     // perhaps const versions of get_block and friends could be added

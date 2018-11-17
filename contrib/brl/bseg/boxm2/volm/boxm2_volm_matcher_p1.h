@@ -50,7 +50,7 @@ class boxm2_volm_matcher_p1
                         unsigned const& tile_id,
                         std::vector<float>  depth_interval,
                         vgl_polygon<double> const& cand_poly,
-                        bocl_device_sptr gpu,
+                        const bocl_device_sptr& gpu,
                         bool const& is_candidate,
                         bool const& is_last_pass,
                         std::string  out_folder,
@@ -219,7 +219,7 @@ class boxm2_volm_matcher_p1
 #endif
 
   // kernel execution function with orientation
-  bool execute_matcher_kernel_orient(bocl_device_sptr                  device,
+  bool execute_matcher_kernel_orient(const bocl_device_sptr&                  device,
                                      cl_command_queue&                  queue,
                                      std::vector<bocl_kernel*>        kern_vec,
                                      bocl_mem*                  n_ind_cl_mem_,

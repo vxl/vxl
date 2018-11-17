@@ -51,8 +51,8 @@ class vtol_two_chain : public vtol_chain
   // Initialization
   //***************************************************************************
 
-  void link_chain_inferior(vtol_two_chain_sptr chain_inferior);
-  void unlink_chain_inferior(vtol_two_chain_sptr chain_inferior);
+  void link_chain_inferior(const vtol_two_chain_sptr& chain_inferior);
+  void unlink_chain_inferior(const vtol_two_chain_sptr& chain_inferior);
 
   //---------------------------------------------------------------------------
   //: Default constructor
@@ -153,8 +153,8 @@ class vtol_two_chain : public vtol_chain
   // Status report
   //***************************************************************************
 
-  void link_inferior(vtol_face_sptr inf);
-  void unlink_inferior(vtol_face_sptr inf);
+  void link_inferior(const vtol_face_sptr& inf);
+  void unlink_inferior(const vtol_face_sptr& inf);
 
   //---------------------------------------------------------------------------
   //: Is `inferior' type valid for `this' ?

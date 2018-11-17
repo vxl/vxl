@@ -28,7 +28,7 @@ void print_usage()
 
 void save_slice(const vil_image_view<float>& image,
                 float wi, float wj, double border,
-                std::string path)
+                const std::string& path)
 {
   // Resize so that image has square pixels
   float w=std::min(wi,wj);

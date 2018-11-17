@@ -23,7 +23,7 @@
 
 // This returns default-initialized parser on failure.
 template <typename Block>
-space_time_scene_parser<Block> load_file(std::string filename) {
+space_time_scene_parser<Block> load_file(const std::string& filename) {
   space_time_scene_parser<Block> parser;
   if (filename.size() > 0) {
     std::FILE *xml_file = std::fopen(filename.c_str(), "r");

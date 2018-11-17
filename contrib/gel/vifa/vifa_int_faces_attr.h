@@ -110,7 +110,7 @@ class vifa_int_faces_attr : public vifa_int_face_attr_common
 
   // hmm, need to think about this
 
-  vifa_int_face_attr_sptr factory_new_attr(vtol_intensity_face_sptr face);
+  vifa_int_face_attr_sptr factory_new_attr(const vtol_intensity_face_sptr& face);
 
   //: centroid X
   float Xo() override;

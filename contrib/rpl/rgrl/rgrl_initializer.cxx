@@ -96,7 +96,7 @@ set_prior_geometric_scale( double scale )
 
 rgrl_scale_sptr
 rgrl_initializer::
-enforce_prior_scale( rgrl_scale_sptr match_scale )
+enforce_prior_scale( const rgrl_scale_sptr& match_scale )
 {
   if ( use_prior_scale_from_match_ )
     return match_scale;

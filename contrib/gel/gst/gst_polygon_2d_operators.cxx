@@ -5,7 +5,7 @@
 
 #include "gst_polygon_2d_operators.h"
 
-std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edge_2d_sptr> edges)
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edge_2d_sptr>& edges)
 {
   // flags showing edges already used
   std::vector<int> used( edges.size(), 0);
@@ -72,7 +72,7 @@ std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d( const std::vector<gst_edg
 }
 
 
-std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const std::vector<gst_edge_2d_sptr> edges)
+std::vector<gst_polygon_2d_sptr> gst_make_polygons_2d_unoriented( const std::vector<gst_edge_2d_sptr>& edges)
 {
   // flags showing edges already used
   std::vector<int> used( edges.size(), 0);

@@ -49,7 +49,7 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   static void generate_output_img(std::vector<brec_part_instance_sptr>& extracted_parts, vil_image_view<vxl_byte>& input_img, vil_image_view<vxl_byte>& output_img, unsigned posterior_type);
 
   //: check for existence of upper_p with central_p as its central part and map will tell if all the other parts exist
-  brec_part_instance_sptr exists(brec_part_base_sptr upper_p, brec_part_instance_sptr central_p, vil_image_view<float>& map, vil_image_view<unsigned>& type_map, std::vector<std::vector<brec_part_instance_sptr> >& part_map, float det_threshold);
+  brec_part_instance_sptr exists(const brec_part_base_sptr& upper_p, const brec_part_instance_sptr& central_p, vil_image_view<float>& map, vil_image_view<unsigned>& type_map, std::vector<std::vector<brec_part_instance_sptr> >& part_map, float det_threshold);
 
   //: given a set of detected lower level parts, create a set of instance detections for one layer above in the hierarchy
   void extract_upper_layer(std::vector<brec_part_instance_sptr>& extracted_parts,
@@ -81,10 +81,10 @@ class brec_part_hierarchy : public bgrl2_graph<brec_part_base , brec_hierarchy_e
   bool read_xml(std::istream& is);
 
   //: draw a ps image with sampled parts, draw N samples from the distributions
-  bool draw_to_ps(unsigned N, std::string output_img, float drawing_radius);
+  bool draw_to_ps(unsigned N, const std::string& output_img, float drawing_radius);
 
   //: draw the nodes of the given layer side by side to the output image
-  bool draw_to_image(unsigned N, unsigned layer_id, float drawing_radius, std::string output_img);
+  bool draw_to_image(unsigned N, unsigned layer_id, float drawing_radius, const std::string& output_img);
 
  public:
   //: a map to store dummy instances of primitive parts, so that they could be extracted properly for a constructed hierarchy

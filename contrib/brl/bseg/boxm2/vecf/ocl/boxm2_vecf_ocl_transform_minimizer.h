@@ -17,7 +17,7 @@ class boxm2_vecf_ocl_transform_minimizer : public boxm2_vecf_ocl_ssd_func
  public:
   boxm2_vecf_ocl_transform_minimizer(boxm2_scene_sptr& source_scene,
                                      boxm2_scene_sptr& target_scene,
-                                     boxm2_opencl_cache_sptr ocl_cache,
+                                     const boxm2_opencl_cache_sptr& ocl_cache,
                                      vil_image_view<float> const& ref_img,
                                      vpgl_camera_double_sptr const& cam);
   bool minimize();

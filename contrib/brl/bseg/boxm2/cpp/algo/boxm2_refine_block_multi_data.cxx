@@ -44,7 +44,7 @@ uchar16 boxm2_refine_block_multi_data::fully_refined(int depth, int& data_size){
 }
 
 //: initialize data base pointers and associated data buffers for each prefix (data type)
-bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, boxm2_block_sptr blk, std::vector<std::string> const& prefixes, float prob_thresh)
+bool boxm2_refine_block_multi_data::init_data(boxm2_scene_sptr scene, const boxm2_block_sptr& blk, std::vector<std::string> const& prefixes, float prob_thresh)
 {
   //the prefix set must include "alpha" , occupation density
   std::vector<std::string>::const_iterator pit;
@@ -444,8 +444,8 @@ int boxm2_refine_block_multi_data::free_space(int startPtr, int endPtr)
 ////////////////////////////////////////////////////////////////////////////////
 //REFINE FUNCTION BASED ON ALPHA
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
-                                             boxm2_block_sptr blk,
+void boxm2_refine_block_multi_data_function( const boxm2_scene_sptr& scene,
+                                             const boxm2_block_sptr& blk,
                                              std::vector<std::string> const& prefixes,
                                              float prob_thresh)
 {
@@ -458,8 +458,8 @@ void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
 //REFINE FUNCTION TO MATCH SPECIFIED DEPTHS
 ////////////////////////////////////////////////////////////////////////////////
 
-void boxm2_refine_block_multi_data_function( boxm2_scene_sptr scene,
-                                             boxm2_block_sptr blk,
+void boxm2_refine_block_multi_data_function( const boxm2_scene_sptr& scene,
+                                             const boxm2_block_sptr& blk,
                                              std::vector<std::string> const& prefixes,
                                              vbl_array_3d<int> const& depths_to_match){
   boxm2_refine_block_multi_data refine_block;

@@ -29,6 +29,6 @@
 #endif
 
 //: pixel value histogram of 2D image, stored in a vector
-std::vector<unsigned int> vepl_histogram(vil_image_resource_sptr );
+std::vector<unsigned int> vepl_histogram(const vil_image_resource_sptr& );
 
 #endif // vepl_histogram_h_

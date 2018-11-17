@@ -780,11 +780,11 @@ rgrl_util_extract_region_locations( vnl_vector< double >             const& cent
 }
 
 bool
-rgrl_util_irls( rgrl_match_set_sptr              match_set,
-                rgrl_scale_sptr                  scale,
-                rgrl_weighter_sptr               weighter,
+rgrl_util_irls( const rgrl_match_set_sptr&              match_set,
+                const rgrl_scale_sptr&                  scale,
+                const rgrl_weighter_sptr&               weighter,
                 rgrl_convergence_tester   const& conv_tester,
-                rgrl_estimator_sptr              estimator,
+                const rgrl_estimator_sptr&              estimator,
                 rgrl_transformation_sptr       & estimate,
                 const bool                        /*fast_remapping*/,
                 unsigned int                     debug_flag )
@@ -806,7 +806,7 @@ rgrl_util_irls( rgrl_set_of<rgrl_match_set_sptr> const& match_sets,
                 rgrl_set_of<rgrl_scale_sptr>     const& scales,
                 std::vector<rgrl_weighter_sptr>   const& weighters,
                 rgrl_convergence_tester          const& conv_tester,
-                rgrl_estimator_sptr              estimator,
+                const rgrl_estimator_sptr&              estimator,
                 rgrl_transformation_sptr&        estimate,
                 const bool                       fast_remapping,
                 unsigned int                     debug_flag )

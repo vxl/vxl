@@ -8,7 +8,7 @@ boxm2_stream_cache_helper::~boxm2_stream_cache_helper()
   if (ifs_) ifs_.close();
 }
 
-bool boxm2_stream_cache_helper::open_file(std::string filename)
+bool boxm2_stream_cache_helper::open_file(const std::string& filename)
 {
   ifs_.clear();
   ifs_.open(filename.c_str(), std::ios::in | std::ios::binary);
@@ -17,7 +17,7 @@ bool boxm2_stream_cache_helper::open_file(std::string filename)
   return true;
 }
 
-void boxm2_stream_cache_helper::read(unsigned long size, boxm2_block_id id)
+void boxm2_stream_cache_helper::read(unsigned long size, const boxm2_block_id& id)
 {
   char * bytes = new char[size];
   ifs_.read(bytes, size);
@@ -35,7 +35,7 @@ void boxm2_stream_cache_helper::close_file()
 }
 
 //: return the byte buffer that contains ith cell, i is with respect to the global file
-char *boxm2_stream_cache_helper::get_cell(int i, std::size_t cell_size, boxm2_block_id  /*id*/)
+char *boxm2_stream_cache_helper::get_cell(int i, std::size_t cell_size, const boxm2_block_id&  /*id*/)
 {
   if (i < index_) { std::cerr << "cannot backtrack in the file!\n"; throw 0; }
   int dif = i-index_;
@@ -51,7 +51,7 @@ int boxm2_stream_cache_helper::num_cells(std::size_t cell_size)
 }
 
 
-boxm2_stream_cache::boxm2_stream_cache(boxm2_scene_sptr scene,
+boxm2_stream_cache::boxm2_stream_cache(const boxm2_scene_sptr& scene,
                                        const std::vector<std::string>& data_types,
                                        const std::vector<std::string>& identifier_list,
                                        float num_giga)

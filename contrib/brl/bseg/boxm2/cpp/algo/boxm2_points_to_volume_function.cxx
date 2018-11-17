@@ -17,8 +17,8 @@
 #endif
 
 //: constructor - populates list of AABBs
-boxm2_points_to_volume::boxm2_points_to_volume(boxm2_scene_sptr scene,
-                                               boxm2_cache_sptr cache,
+boxm2_points_to_volume::boxm2_points_to_volume(const boxm2_scene_sptr& scene,
+                                               const boxm2_cache_sptr& cache,
                                                imesh_mesh& points)
 : scene_(scene),
   cache_(cache),

@@ -78,7 +78,7 @@ class sdet_sel_base : public vbl_ref_count
 public:
 
   //: constructor
-  sdet_sel_base(sdet_edgemap_sptr edgemap,
+  sdet_sel_base(const sdet_edgemap_sptr& edgemap,
                  sdet_curvelet_map& cvlet_map,
                  sdet_edgel_link_graph& edge_link_graph,
                  sdet_curve_fragment_graph& curve_frag_graph,

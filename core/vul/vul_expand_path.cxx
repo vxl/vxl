@@ -3,11 +3,12 @@
 // \file
 // \author fsm
 
-#include <vector>
+#include "vul_expand_path.h"
+#include <cstdlib>
 #include <functional>
 #include <map>
-#include <cstdlib>
-#include "vul_expand_path.h"
+#include <utility>
+#include <vector>
 
 #if defined(_WIN32)
 
@@ -360,7 +361,7 @@ std::string vul_expand_path(std::string path)
 
 std::string vul_expand_path_uncached(std::string path)
 {
-  return vul_expand_path_internal(path);
+  return vul_expand_path_internal(std::move(path));
 }
 
 #endif // _WIN32

@@ -25,22 +25,22 @@ vtol_edge_sptr vtol_one_chain::edge(int i) const
 // Initialization
 //***************************************************************************
 
-void vtol_one_chain::link_inferior(vtol_edge_sptr inf)
+void vtol_one_chain::link_inferior(const vtol_edge_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_one_chain::unlink_inferior(vtol_edge_sptr inf)
+void vtol_one_chain::unlink_inferior(const vtol_edge_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_one_chain::link_chain_inferior(vtol_one_chain_sptr chain_inferior)
+void vtol_one_chain::link_chain_inferior(const vtol_one_chain_sptr& chain_inferior)
 {
   vtol_chain::link_chain_inferior(chain_inferior->cast_to_chain());
 }
 
-void vtol_one_chain::unlink_chain_inferior(vtol_one_chain_sptr chain_inferior)
+void vtol_one_chain::unlink_chain_inferior(const vtol_one_chain_sptr& chain_inferior)
 {
   vtol_chain::unlink_chain_inferior(chain_inferior->cast_to_chain());
 }

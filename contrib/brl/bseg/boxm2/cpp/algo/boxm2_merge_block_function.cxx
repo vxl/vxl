@@ -326,7 +326,7 @@ int boxm2_merge_block_function::move_data( boct_bit_tree& old_tree,
 ////////////////////////////////////////////////////////////////////////////////
 //MAIN REFINE FUNCTION
 ////////////////////////////////////////////////////////////////////////////////
-void boxm2_merge_block( boxm2_scene_sptr scene,
+void boxm2_merge_block( const boxm2_scene_sptr& scene,
                         boxm2_block* blk,
                         std::vector<boxm2_data_base*> & datas,
                         float prob_thresh,

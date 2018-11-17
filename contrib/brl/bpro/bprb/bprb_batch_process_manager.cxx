@@ -98,7 +98,7 @@ set_input(unsigned i, brdb_value_sptr const& input)
 //: set input from the database
 bool bprb_batch_process_manager::set_input_from_db(unsigned i,
                                                    unsigned id,
-                                                   std::string type)
+                                                   const std::string& type)
 {
   if (!current_process_)
     return false;
@@ -285,7 +285,7 @@ void bprb_batch_process_manager::print_db()
 }
 
 
-bool bprb_batch_process_manager::set_stdout(std::string file)
+bool bprb_batch_process_manager::set_stdout(const std::string& file)
 {
    return std::freopen (file.c_str(),"a",stdout) != nullptr;
 }

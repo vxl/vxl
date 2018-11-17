@@ -31,7 +31,7 @@ class rgrl_initializer_inv_indexing
 {
  public:
   //: Constructor
-  rgrl_initializer_inv_indexing( rgrl_view_sptr prior_view,
+  rgrl_initializer_inv_indexing( const rgrl_view_sptr& prior_view,
                                  bool should_estimate_global_region = true,
                                  int max_num_matches_tried = -1);
 

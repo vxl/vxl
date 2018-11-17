@@ -214,7 +214,7 @@ bool bstm_util::verify_appearance(const bstm_scene &scene,
 
 // private helper method prepares an input image to be processed by update
 vil_image_view_base_sptr
-bstm_util::prepare_input_image(vil_image_view_base_sptr loaded_image,
+bstm_util::prepare_input_image(const vil_image_view_base_sptr& loaded_image,
                                bool force_grey) {
   // then it's an RGB image (assumes byte image...)
   if (loaded_image->nplanes() == 3 || loaded_image->nplanes() == 4) {

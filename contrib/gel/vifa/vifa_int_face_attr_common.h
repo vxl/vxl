@@ -131,7 +131,7 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
   float  normalize_intensity(float  raw_intensity)
     { return np_ ? np_->normalize(raw_intensity) : raw_intensity; }
 
-  double      get_contrast_across_edge(vtol_edge_sptr  e,
+  double      get_contrast_across_edge(const vtol_edge_sptr&  e,
                                        double          dflt_cont = 0.0);
   vifa_coll_lines_sptr  get_line_along_edge(vtol_edge* edge);
 
@@ -162,12 +162,12 @@ class vifa_int_face_attr_common : public vifa_int_face_attr_common_params
   virtual void  init();
   void      fit_lines();
   void      find_collinear_lines();
-  bool      find_collinear_match(vtol_edge_2d_sptr edge,
+  bool      find_collinear_match(const vtol_edge_2d_sptr& edge,
                                  coll_list&        lines,
                                  double            dist_threshold,
                                  coll_iterator&    result
                                 );
-  float      compute_parallel_sal(vifa_group_pgram_params_sptr  gpp);
+  float      compute_parallel_sal(const vifa_group_pgram_params_sptr&  gpp);
 };
 
 #endif  // VIFA_INT_FACE_ATTR_COMMON_H

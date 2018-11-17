@@ -46,15 +46,15 @@ class betr_edgel_factory{
   //: process edgels on all rois for a given image
   bool process(std::string iname);
   //: process edgels on a roi for a given image
-  bool process(std::string iname, std::string region_name);
+  bool process(const std::string& iname, const std::string& region_name);
   //: gradient magnitudes for a region
-  bool grad_mags(std::string iname, std::string region_name, std::vector<double>& mags);
-  bool grad_mags(std::string iname, std::string region_name, vsol_polygon_2d_sptr const& poly,
+  bool grad_mags(const std::string& iname, const std::string& region_name, std::vector<double>& mags);
+  bool grad_mags(const std::string& iname, const std::string& region_name, vsol_polygon_2d_sptr const& poly,
                  std::vector<double>& mags);
   const bsta_histogram<double>& hist(std::string iname, std::string region_name){return grad_hists_[iname][region_name];}
   bool save_edgels(std::string const& dir) const;
   bool save_edgels_in_poly(std::string const& identifier, std::string const& dir);
-  vil_image_resource_sptr edgel_image(std::string iname, std::string region_name, unsigned& i_offset, unsigned& j_offset);
+  vil_image_resource_sptr edgel_image(const std::string& iname, const std::string& region_name, unsigned& i_offset, unsigned& j_offset);
 
  private:
   std::map<std::string, vil_image_resource_sptr> images_;

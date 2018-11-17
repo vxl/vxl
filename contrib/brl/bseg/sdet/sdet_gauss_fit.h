@@ -58,7 +58,7 @@ class sdet_gauss_fit
  public:
   ~sdet_gauss_fit()= default;
 
-  static vnl_vector<double> adjust(std::vector<vgl_point_3d<double> > img_pts,
+  static vnl_vector<double> adjust(const std::vector<vgl_point_3d<double> >& img_pts,
                                    std::vector<vsol_point_2d_sptr> ps_list,
                                    int n_peaks,
                                    std::ofstream& outfile,

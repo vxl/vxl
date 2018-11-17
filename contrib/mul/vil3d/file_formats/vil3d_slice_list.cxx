@@ -35,14 +35,14 @@ void parse_globbed_filenames(const std::string & input,
   std::string filename = input;
 
   // Avoid confusing globbing functions
-  if (filename.find("*") != filename.npos) return;
-  if (filename.find("?") != filename.npos) return;
+  if (filename.find('*') != filename.npos) return;
+  if (filename.find('?') != filename.npos) return;
 
   // Check that all the #s are in a single group.
-  std::size_t start = filename.find_first_of("#");
+  std::size_t start = filename.find_first_of('#');
   if (start == filename.npos) return;
-  std::size_t end = filename.find_first_not_of("#", start);
-  if (filename.find_first_of("#",end) != filename.npos) return;
+  std::size_t end = filename.find_first_not_of('#', start);
+  if (filename.find_first_of('#',end) != filename.npos) return;
   if (end == filename.npos) end = filename.length();
   for (std::size_t i=start, j=start; i!=end; ++i, j+=12)
     filename.replace(j,1,"[0123456789]");

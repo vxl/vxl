@@ -257,7 +257,7 @@ void boxm2_ocl_util::set_bit_lookup(cl_uchar* lookup)
 }
 
 void
-boxm2_ocl_util::load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam)
+boxm2_ocl_util::load_perspective_camera(const std::string& filename, vpgl_perspective_camera<double> & pcam)
 {
   std::ifstream ifile(filename.c_str());
   if (!ifile)
@@ -309,7 +309,7 @@ void boxm2_ocl_util::get_render_transfer_function(std::vector<std::string> imgfi
   }
 }
 
-std::string boxm2_ocl_util::mog_options(std::string data_type)
+std::string boxm2_ocl_util::mog_options(const std::string& data_type)
 {
   if ( data_type == boxm2_data_traits<BOXM2_MOG3_GREY>::prefix() )
     return "-D MOG_TYPE_8 ";

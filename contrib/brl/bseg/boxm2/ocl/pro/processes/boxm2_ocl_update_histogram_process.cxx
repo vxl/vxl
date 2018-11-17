@@ -33,7 +33,7 @@ namespace boxm2_ocl_update_histogram_process_globals
   constexpr unsigned n_inputs_ = 5;
   constexpr unsigned n_outputs_ = 0;
   std::size_t local_threads[]={8,8};
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels)
   {
     std::vector<std::string> src_paths;
     std::string source_dir = boxm2_ocl_util::ocl_src_root();

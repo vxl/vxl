@@ -1,9 +1,10 @@
 
-#include <iostream>
-#include <string>
-#include <algorithm>
-#include <limits>
 #include "bstm_scene.h"
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <string>
+#include <utility>
 //:
 // \file
 #ifdef _MSC_VER
@@ -29,13 +30,13 @@
 bstm_scene::bstm_scene(std::string data_path, vgl_point_3d<double> const& origin, int version)
 {
     local_origin_=origin;
-    data_path_   = data_path;
+    data_path_   = std::move(data_path);
     xml_path_  = data_path_ + "/scene.xml";
     version_ = version;
 }
 
 //: initializes Scene from XML file
-bstm_scene::bstm_scene(std::string filename)
+bstm_scene::bstm_scene(const std::string& filename)
 {
     //xml parser
     xml_path_ = filename;
@@ -116,7 +117,7 @@ std::vector<bstm_block_id> bstm_scene::get_block_ids(vgl_box_3d<double> bb, floa
 }
 
 bstm_block_metadata bstm_scene::
-get_block_metadata_const(bstm_block_id id) const
+get_block_metadata_const(const bstm_block_id& id) const
 {
   std::map<bstm_block_id, bstm_block_metadata>::const_iterator iter;
   for (iter = blocks_.begin(); iter != blocks_.end(); ++iter)
@@ -412,7 +413,7 @@ vgl_vector_3d<unsigned int>  bstm_scene::scene_dimensions() const
 }
 
 //: returns true if the scene has specified data type (simple linear search)
-bool bstm_scene::has_data_type(std::string data_type)
+bool bstm_scene::has_data_type(const std::string& data_type)
 {
   for (const auto & appearance : appearances_)
     if ( appearance == data_type )
@@ -427,7 +428,7 @@ bool bstm_scene::has_data_type(std::string data_type)
 void x_write(std::ostream &os, bstm_scene& scene, std::string name)
 {
   //open root tag
-  vsl_basic_xml_element scene_elm(name);
+  vsl_basic_xml_element scene_elm(std::move(name));
   scene_elm.x_write_open(os);
 
   //write lvcs information

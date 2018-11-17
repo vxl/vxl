@@ -39,7 +39,7 @@ void volm_candidate_region_parser::init_params()
   current_name_ = "";
 }
 
-void volm_candidate_region_parser::cdataHandler(std::string  /*name*/, std::string  /*data*/)
+void volm_candidate_region_parser::cdataHandler(const std::string&  /*name*/, const std::string&  /*data*/)
 {
 }
 

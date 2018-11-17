@@ -2,7 +2,7 @@
 //:
 // \file
 
-bstm_block::bstm_block(bstm_block_id id, bstm_block_metadata data, char* buffer)
+bstm_block::bstm_block(const bstm_block_id& id, bstm_block_metadata data, char* buffer)
 {
   init_level_ = data.init_level_;
   max_level_  = data.max_level_;

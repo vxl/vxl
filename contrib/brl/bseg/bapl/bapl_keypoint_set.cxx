@@ -123,7 +123,7 @@ void bapl_keypoint_match_set::prune_spurious_matches(std::vector<bapl_key_match>
 void bapl_keypoint_match_set::refine_matches(float outlier_threshold, std::vector<bapl_key_match>& refined_matches)
 {
   std::vector<vgl_point_2d<double> > lpts, rpts; std::vector<vgl_point_2d<double> > lpts_refined, rpts_refined;
-  for (auto m : matches_) {
+  for (const auto& m : matches_) {
     bapl_lowe_keypoint_sptr kp1;
     kp1.vertical_cast(m.first);
     bapl_lowe_keypoint_sptr kp2;

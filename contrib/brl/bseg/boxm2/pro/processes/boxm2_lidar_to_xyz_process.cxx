@@ -192,10 +192,10 @@ bool boxm2_lidar_to_xyz_process(bprb_func_process& pro)
 
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   char hemisphere, direction;
-  std::size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find('N');
   if (n < n_coords.size())  hemisphere = 'N';
   else                      hemisphere = 'S';
-  n = n_coords.find("E");
+  n = n_coords.find('E');
   if (n < n_coords.size())  direction = 'E';
   else                      direction = 'W';
   float lon, lat, scale_i, scale_j;

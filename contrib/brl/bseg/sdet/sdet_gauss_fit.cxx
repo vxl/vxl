@@ -227,7 +227,7 @@ static bool init(std::vector<vgl_point_3d<double> > img_pts, std::vector<double>
 //: Adjust the parameters of the 2d gaussian
 //    Returns adjusted fit parameters
 
-vnl_vector<double> sdet_gauss_fit::adjust( std::vector<vgl_point_3d<double> > img_pts,
+vnl_vector<double> sdet_gauss_fit::adjust( const std::vector<vgl_point_3d<double> >& img_pts,
                                            std::vector<vsol_point_2d_sptr> ps_list,
                                            int n_peaks, std::ofstream& outfile,
                                            double xmin, double ymin)
@@ -250,7 +250,7 @@ vnl_vector<double> sdet_gauss_fit::adjust( std::vector<vgl_point_3d<double> > im
   std::vector<double> syy;
   std::vector<double> sxy;
 
-  if (!init(img_pts, peak, plane, ux, uy, sxx, syy, sxy, ps_list, n_peaks, xmin, ymin))
+  if (!init(img_pts, peak, plane, ux, uy, sxx, syy, sxy, std::move(ps_list), n_peaks, xmin, ymin))
   {
     outfile << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()" << std::endl;
     std::cerr << "ERROR!! sdet_gauss_fit::adjust(), Cannot init()\n";

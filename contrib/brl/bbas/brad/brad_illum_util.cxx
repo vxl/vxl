@@ -237,8 +237,8 @@ void brad_solution_error(std::vector<vnl_double_3> const& ill_dirs,
 // Find the range in surface normal orientation angle for which
 // the dot product with respect to illumination direction is
 // positive for all images
-static void brad_search_range(vnl_matrix<double> illum_dirs,
-                              vnl_vector<double> u, vnl_vector<double> v,
+static void brad_search_range(const vnl_matrix<double>& illum_dirs,
+                              const vnl_vector<double>& u, const vnl_vector<double>& v,
                               double& theta_min, double& theta_max)
 {
   unsigned n_dirs = illum_dirs.rows();
@@ -281,7 +281,7 @@ static void nearest_to_z(vnl_vector<double> u, vnl_vector<double> v,
   if (n[2]<0) n = -n;
 }
 
-void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+void brad_solve_atmospheric_model(const vnl_matrix<double>& illum_dirs,
                                   vnl_matrix<double> intensities,
                                   vnl_vector<double> airlight,
                                   unsigned max_iterations,
@@ -476,11 +476,11 @@ void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
 }
 
 
-void brad_solution_error(vnl_matrix<double> illum_dirs,
+void brad_solution_error(const vnl_matrix<double>& illum_dirs,
                          vnl_matrix<double> intensities,
                          vnl_vector<double> airlight,
                          vnl_vector<double> scene_irrad,
-                         vnl_matrix<double> surf_normals,
+                         const vnl_matrix<double>& surf_normals,
                          vnl_vector<double> reflectances,
                          vnl_matrix<double>& fit_errors,
                          vnl_matrix<double>& pred_intensities)
@@ -522,7 +522,7 @@ double brad_atmos_prediction(vnl_double_3 const& ill_dir,
   return radiance + airlight;
 }
 
-void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
+void brad_solve_atmospheric_model(const vnl_matrix<double>& illum_dirs,
                                   vnl_matrix<double> corr_intens,
                                   unsigned max_iterations,
                                   double  /*max_fitting_error*/,
@@ -660,9 +660,9 @@ void brad_solve_atmospheric_model(vnl_matrix<double> illum_dirs,
   reflectances = reflec;
 }
 
-void brad_solution_error(vnl_matrix<double> illum_dirs,
+void brad_solution_error(const vnl_matrix<double>& illum_dirs,
                          vnl_matrix<double> corr_intens,
-                         vnl_matrix<double> surf_normals,
+                         const vnl_matrix<double>& surf_normals,
                          vnl_vector<double> reflectances,
                          vnl_matrix<double>& fit_errors)
 {

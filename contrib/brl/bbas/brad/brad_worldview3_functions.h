@@ -80,13 +80,13 @@ void brad_wv3_bands(
 
 //: Save a corrected WV3 image to individual bands
 void save_corrected_wv3(
-  const vil_image_view<float> corr_img,
-  const std::string save_dir);
+  const vil_image_view<float>& corr_img,
+  const std::string& save_dir);
 
 
 //: Load a corrected WV3 image from individual bands
 void load_corrected_wv3(
-  const std::string img_dir,
+  const std::string& img_dir,
   vil_image_view<float>& cal_img);
 
 

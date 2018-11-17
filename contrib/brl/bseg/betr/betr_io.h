@@ -15,7 +15,7 @@
 class betr_io
 {
  public:
-  static bool read_so_ply(std::string ply_path, vsol_spatial_object_3d_sptr& obj);
+  static bool read_so_ply(const std::string& ply_path, vsol_spatial_object_3d_sptr& obj);
  private:
   betr_io() = delete;
 };

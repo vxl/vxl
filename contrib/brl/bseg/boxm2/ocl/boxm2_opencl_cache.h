@@ -36,7 +36,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     typedef vnl_vector_fixed<unsigned char, 16> uchar16;
 
   public:
-    boxm2_opencl_cache(bocl_device_sptr device);
+    boxm2_opencl_cache(const bocl_device_sptr& device);
     ~boxm2_opencl_cache() override { if (cpu_cache_) cpu_cache_ = nullptr;
                             this->clear_cache();
                           }
@@ -50,18 +50,18 @@ class boxm2_opencl_cache: public vbl_ref_count
     bocl_mem* get_block(boxm2_scene_sptr scene, boxm2_block_id id);
 
     //: get scene info in bocl_mem*
-    bocl_mem* get_block_info(boxm2_scene_sptr scene, boxm2_block_id id);
-    bocl_mem* get_copy_of_block_info(boxm2_scene_sptr scene, boxm2_block_id id);
+    bocl_mem* get_block_info(boxm2_scene_sptr scene, const boxm2_block_id& id);
+    bocl_mem* get_copy_of_block_info(const boxm2_scene_sptr& scene, const boxm2_block_id& id);
     bocl_mem* loaded_block_info() { return block_info_; }
 
     //: returns data pointer to data block specified by ID
     template<boxm2_data_type T>
     bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, std::size_t num_bytes=0, bool read_only = true,std::string ident = "");
-    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, std::string type, std::size_t num_bytes=0, bool read_only = true);
+    bocl_mem* get_data(boxm2_scene_sptr scene,boxm2_block_id, const std::string& type, std::size_t num_bytes=0, bool read_only = true);
 
     template<boxm2_data_type T>
         bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id, std::size_t num_bytes=0, bool read_only = true);
-    bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, std::size_t num_bytes = 0, bool read_only = true);
+    bocl_mem* get_data_new(boxm2_scene_sptr scene,boxm2_block_id id, const std::string& type, std::size_t num_bytes = 0, bool read_only = true);
 
     //: returns a flat bocl_mem of a certain size
     bocl_mem* alloc_mem(std::size_t num_bytes, void* cpu_buff=nullptr, std::string id="bocl_mem in pool");
@@ -81,16 +81,16 @@ class boxm2_opencl_cache: public vbl_ref_count
     std::size_t bytes_in_cache();
 
     //: deep_replace data replaces not only the current data on the gpu cached, but pushes a block to the cpu cache
-    void deep_replace_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, bocl_mem* mem, bool read_only=true);
+    void deep_replace_data(boxm2_scene_sptr scene,const boxm2_block_id& id, const std::string& type, bocl_mem* mem, bool read_only=true);
 
     //: deep_remove_data removes this id and type from ocl cache, as well as the cpu cache
-    void deep_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type, bool write_out=true);
+    void deep_remove_data(boxm2_scene_sptr scene,const boxm2_block_id& id, const std::string& type, bool write_out=true);
 
     //: shallow_remove_data removes data with id and type from ocl cache only
-    void shallow_remove_data(boxm2_scene_sptr scene,boxm2_block_id id, std::string type);
+    void shallow_remove_data(const boxm2_scene_sptr& scene,const boxm2_block_id& id, std::string type);
 
     //: removes block data with id from opencl cache only, caution if block data changed: this method does not enqueu a read event before deletion!
-    void shallow_remove_block(boxm2_scene_sptr scene,boxm2_block_id id);
+    void shallow_remove_block(const boxm2_scene_sptr& scene,const boxm2_block_id& id);
 
     //: to string method prints out LRU order
     std::string to_string();
@@ -124,7 +124,7 @@ class boxm2_opencl_cache: public vbl_ref_count
     std::map<boxm2_scene_sptr, std::map<std::string, std::map<boxm2_block_id, bocl_mem*> >,ltstr1 > cached_data_;
 
     //: helper method for finding the right data map
-    std::map<boxm2_block_id, bocl_mem*>& cached_data_map(boxm2_scene_sptr scene, std::string prefix);
+    std::map<boxm2_block_id, bocl_mem*>& cached_data_map(const boxm2_scene_sptr& scene, const std::string& prefix);
 
     //: memory cache - caches various non model memory (images, some aux data)
     // Does not account for block/data_base data

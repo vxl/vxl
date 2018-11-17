@@ -33,16 +33,16 @@ class volm_buffered_index_params
     volm_buffered_index_params() : layer_size(0) {}
 
     // text i/o
-    bool write_params_file(std::string index_file_name);
-    bool read_params_file(std::string index_file_name);
+    bool write_params_file(const std::string& index_file_name);
+    bool read_params_file(const std::string& index_file_name);
 
     // text i/o
-    static bool write_size_file(std::string index_file_name, unsigned long size);
-    static bool read_size_file(std::string index_file_name, unsigned long& size);
+    static bool write_size_file(const std::string& index_file_name, unsigned long size);
+    static bool read_size_file(const std::string& index_file_name, unsigned long& size);
 
     //: text i/o for existence histogram parameters
-    bool write_ex_param_file(std::string index_file_name);
-    bool read_ex_param_file(std::string index_file_name);
+    bool write_ex_param_file(const std::string& index_file_name);
+    bool read_ex_param_file(const std::string& index_file_name);
 
     //: text i/o for 2d configurational index parameters
     bool write_conf_param_file(std::string const& index_file_name_pre);
@@ -69,8 +69,8 @@ class volm_buffered_index : public vbl_ref_count
     ~volm_buffered_index() override;
 
     //: io as chunks of data to a set of files in the specified folder
-    bool initialize_read(std::string file_name);
-    bool initialize_write(std::string file_name);
+    bool initialize_read(const std::string& file_name);
+    bool initialize_write(const std::string& file_name);
     bool finalize();
 
     //: return the max number of indices on active cache

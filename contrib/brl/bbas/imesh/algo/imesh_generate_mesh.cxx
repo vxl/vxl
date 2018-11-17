@@ -277,6 +277,6 @@ imesh_generate_mesh_2d_2(std::vector<vgl_point_2d<double> > const& convex_hull,
     faces->push_back(tri);
   }
   //set the faces on the mesh
-  std::unique_ptr<imesh_face_array_base> f(std::move(faces));
+  std::unique_ptr<imesh_face_array_base> f(faces);
   mesh.set_faces(std::move(f));
 }

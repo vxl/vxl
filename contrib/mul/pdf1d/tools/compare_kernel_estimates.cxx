@@ -13,6 +13,7 @@
 // We then estimate the Bhat. overlap with the true pdf.
 
 #include <iostream>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -44,7 +45,7 @@ void test_comparison(std::vector<mbl_stats_1d>& B_stats,
 void test_comparison(std::vector<mbl_stats_1d>& B_stats,
                      int n_samples, int n_repeats,
                      const pdf1d_pdf& true_pdf,
-                     std::vector<pdf1d_compare_to_pdf*> comparator)
+                     const std::vector<pdf1d_compare_to_pdf*>& comparator)
 {
   vnl_vector<double> x(n_samples);
   pdf1d_sampler *sampler = true_pdf.new_sampler();
@@ -65,7 +66,7 @@ void test_comparison(int n_samples, int n_trials,
 {
   std::vector<mbl_stats_1d> B_stats;
 
-  test_comparison(B_stats,n_samples,n_trials,true_pdf,comparator);
+  test_comparison(B_stats,n_samples,n_trials,true_pdf,std::move(comparator));
 
   std::cout<<"PDF: "<<true_pdf<<std::endl
           <<"Sampling "<<n_samples

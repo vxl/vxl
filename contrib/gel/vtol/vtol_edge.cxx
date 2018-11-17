@@ -15,12 +15,12 @@
 // Initialization
 //***************************************************************************
 
-void vtol_edge::link_inferior(vtol_zero_chain_sptr inf)
+void vtol_edge::link_inferior(const vtol_zero_chain_sptr& inf)
 {
   vtol_topology_object::link_inferior(inf->cast_to_topology_object());
 }
 
-void vtol_edge::unlink_inferior(vtol_zero_chain_sptr inf)
+void vtol_edge::unlink_inferior(const vtol_zero_chain_sptr& inf)
 {
   vtol_topology_object::unlink_inferior(inf->cast_to_topology_object());
 }

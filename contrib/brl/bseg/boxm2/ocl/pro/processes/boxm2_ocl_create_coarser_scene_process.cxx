@@ -32,7 +32,7 @@ namespace boxm2_ocl_create_coarser_scene_process_globals
 {
     constexpr unsigned n_inputs_ = 4;
     constexpr unsigned n_outputs_ = 0;
-    void compile_kernel(bocl_device_sptr device, bocl_kernel* merge_kernel)
+    void compile_kernel(const bocl_device_sptr& device, bocl_kernel* merge_kernel)
     {
         //gather all render sources... seems like a lot for rendering...
         std::vector<std::string> src_paths;
@@ -54,7 +54,7 @@ namespace boxm2_ocl_create_coarser_scene_process_globals
 bool copy_fine_to_coarse(boxm2_block & blk,
                          boxm2_block_metadata & mdata,
                          boxm2_data_base * alpha_base ,
-                         boxm2_cache_sptr cache)
+                         const boxm2_cache_sptr& cache)
 {
     // assuming exactly one scene in cache!
     std::vector<boxm2_scene_sptr> scenes = cache->get_scenes();

@@ -48,8 +48,8 @@ namespace bvxm_lidar_init_process_globals
   const std::string param_mask_thresh_ = "mask_thresh";
 
   // helper functions
-  bool lidar_init(vil_image_resource_sptr lidar,
-                  bvxm_world_params_sptr params,
+  bool lidar_init(const vil_image_resource_sptr& lidar,
+                  const bvxm_world_params_sptr& params,
                   vil_image_view_base_sptr& roi,
                   vpgl_geo_camera*& camera);
 
@@ -57,9 +57,9 @@ namespace bvxm_lidar_init_process_globals
                          std::vector<std::vector<double> > tiepoints,
                          vnl_matrix<double>& trans_matrix);
 
-  bool gen_mask(vil_image_view_base_sptr roi_first,
+  bool gen_mask(const vil_image_view_base_sptr& roi_first,
                 vpgl_geo_camera* cam_first,
-                vil_image_view_base_sptr roi_second,
+                const vil_image_view_base_sptr& roi_second,
                 vpgl_geo_camera* cam_second,
                 vil_image_view_base_sptr& mask,
                 double thresh);

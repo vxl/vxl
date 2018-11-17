@@ -40,7 +40,7 @@ static bool is_contained(vgl_polygon<double> const& polygon, vgl_point_3d<double
 // generate a circle (points of lat/lon) given the center (lat/lon) and the radius value (in meters)
 static bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const& radius, std::vector<vgl_point_2d<double> >& circle);
 // obtain camera angles from camera space and camera id
-static bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj, std::vector<unsigned> cam_ids,
+static bool generate_camera_angles(const volm_camera_space_sptr& cam_space, unsigned const& ni, unsigned const& nj, std::vector<unsigned> cam_ids,
                                    std::vector<cam_angles>& top_cameras, std::vector<double>& right_fovs);
 
 class pin_pt_loc
@@ -276,7 +276,7 @@ bool generate_pin_point_circle(vgl_point_3d<double> const& center, double const&
   return true;
 }
 
-bool generate_camera_angles(volm_camera_space_sptr cam_space, unsigned const& ni, unsigned const& nj, std::vector<unsigned> cam_ids,
+bool generate_camera_angles(const volm_camera_space_sptr& cam_space, unsigned const& ni, unsigned const& nj, std::vector<unsigned> cam_ids,
                             std::vector<cam_angles>& top_cameras, std::vector<double>& right_fovs)
 {
   top_cameras.clear();

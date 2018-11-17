@@ -57,8 +57,8 @@ void bvpl_convert_pair_grid_to_float_grid(bvxm_voxel_grid<bvpl_pair> *pair_grid,
 }
 
 bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>* id_grid,
-                                                           bvpl_kernel_vector_sptr search_kernels,
-                                                           bvpl_kernel_vector_sptr corner_kernels)
+                                                           const bvpl_kernel_vector_sptr& search_kernels,
+                                                           const bvpl_kernel_vector_sptr& corner_kernels)
 {
   //sanity check
   if (search_kernels->size() != corner_kernels->size()){
@@ -120,8 +120,8 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
 bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>* id_grid,
                                                            bvxm_voxel_grid<float>* response_grid,
-                                                           bvpl_kernel_vector_sptr search_kernels,
-                                                           bvpl_kernel_vector_sptr corner_kernels)
+                                                           const bvpl_kernel_vector_sptr& search_kernels,
+                                                           const bvpl_kernel_vector_sptr& corner_kernels)
 {
   std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
   std::vector<std::vector<vgl_box_3d<int> > > all_boxes;
@@ -206,8 +206,8 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
 bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>* id_grid,
                                                            bvxm_voxel_grid<float>* response_grid,
-                                                           bvpl_kernel_vector_sptr search_kernels,
-                                                           bvpl_kernel_vector_sptr corner_kernels,
+                                                           const bvpl_kernel_vector_sptr& search_kernels,
+                                                           const bvpl_kernel_vector_sptr& corner_kernels,
                                                            bvxm_voxel_grid<bvpl_pair> *pair_grid)
 {
   std::vector<std::vector<vgl_line_segment_3d<int> > > all_lines;
@@ -296,8 +296,8 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<int>*
 
 void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
                                                   bvxm_voxel_grid<float>* response_grid,
-                                                  bvpl_kernel_vector_sptr search_kernels,
-                                                  bvpl_kernel_vector_sptr corner_kernels,
+                                                  const bvpl_kernel_vector_sptr& search_kernels,
+                                                  const bvpl_kernel_vector_sptr& corner_kernels,
                                                   bvxm_voxel_grid<bvpl_pair> *pair_grid)
 {
   //1. run the same direction(id) kernel as the one we are interested in
@@ -368,7 +368,7 @@ void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<int>* id_grid,
 }
 
 bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_pair> *pair_grid_in,
-                                                           bvpl_kernel_vector_sptr search_kernels,
+                                                           const bvpl_kernel_vector_sptr& search_kernels,
                                                            bvxm_voxel_grid<bvpl_pair> *pair_grid_out,
                                                            int opposite_angle)
 {
@@ -470,7 +470,7 @@ bvpl_corner_pairs_sptr bvpl_corner_pair_finder::find_pairs(bvxm_voxel_grid<bvpl_
 }
 
 void bvpl_corner_pair_finder::find_pairs_no_lines(bvxm_voxel_grid<bvpl_pair> *pair_grid_in,
-                                                  bvpl_kernel_vector_sptr search_kernels,
+                                                  const bvpl_kernel_vector_sptr& search_kernels,
                                                   bvxm_voxel_grid<bvpl_pair> *pair_grid_out,
                                                   int opposite_angle)
 {

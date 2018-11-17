@@ -35,14 +35,14 @@ class vmal_dense_matching
 
   // Between two set of lines in 2 images that are matched, it compute
   //the best lines using the fundamental constraint.
-  void refine_lines_using_F(vmal_multi_view_data_edge_sptr mvd_edge,
-                            vmal_multi_view_data_edge_sptr res);
+  void refine_lines_using_F(const vmal_multi_view_data_edge_sptr& mvd_edge,
+                            const vmal_multi_view_data_edge_sptr& res);
   // Between two set of lines in 2 images that are matched, it compute
   //the best lines using the homography.
-  void refine_lines_using_H(vmal_multi_view_data_edge_sptr mvd_edge,
-                            vmal_multi_view_data_edge_sptr res);
+  void refine_lines_using_H(const vmal_multi_view_data_edge_sptr& mvd_edge,
+                            const vmal_multi_view_data_edge_sptr& res);
 
-  void disparity_map(vmal_multi_view_data_edge_sptr mvd_edge,
+  void disparity_map(const vmal_multi_view_data_edge_sptr& mvd_edge,
                      int h, int w);
 
  private:

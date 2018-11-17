@@ -101,7 +101,7 @@ class sdet_selective_search : public sdet_selective_search_params
  //: IO functions
   void save_bboxes(std::ostream& ostr);
  private:
-  void insert_similarities(sdet_region_sptr r,  std::set<unsigned>& removed_labels);
+  void insert_similarities(const sdet_region_sptr& r,  std::set<unsigned>& removed_labels);
   bool initial_regions_valid_;
   float image_area_;
   unsigned max_label_;

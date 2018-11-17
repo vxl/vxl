@@ -38,7 +38,7 @@ gevd_detector::gevd_detector(gevd_detector_params& params)
   image_float_buf_ = nullptr;
 }
 
-gevd_detector::gevd_detector(vil1_image img, float smoothSigma, float noiseSigma,
+gevd_detector::gevd_detector(const vil1_image& img, float smoothSigma, float noiseSigma,
                              float contour_factor, float junction_factor, int min_length,
                              float maxgap, float min_jump)
   : image(img), noise(noiseSigma), edgel(nullptr), direction(nullptr),
@@ -307,7 +307,7 @@ gevd_bufferxy* gevd_detector::GetBufferFromImage()
 }
 
 // If we're setting a new image, we need to start from scratch
-void gevd_detector::SetImage(vil1_image img)
+void gevd_detector::SetImage(const vil1_image& img)
 {
   image = img;
   if (image_float_buf_) {

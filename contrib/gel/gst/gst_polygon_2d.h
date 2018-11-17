@@ -36,7 +36,7 @@ class gst_polygon_2d : public vbl_ref_count
 
   // useful computational accessors
   bool inside(const double x, const double y) const;
-  bool inside(const gst_vertex_2d_sptr v) const;
+  bool inside(const gst_vertex_2d_sptr& v) const;
 
   double get_centroid_x() const;
   double get_centroid_y() const;

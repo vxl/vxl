@@ -23,7 +23,7 @@
 
 #define TOL -1E-8
 
-volm_query::volm_query(volm_camera_space_sptr cam_space,
+volm_query::volm_query(const volm_camera_space_sptr& cam_space,
                        std::string const& label_xml_file,
                        std::string const& category_file,
                        volm_spherical_container_sptr const& sph,
@@ -124,7 +124,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
 }
 
 // build a query from an existing depth map scene
-volm_query::volm_query(volm_camera_space_sptr cam_space,
+volm_query::volm_query(const volm_camera_space_sptr& cam_space,
                        std::string const& depth_map_scene_file,
                        volm_spherical_shell_container_sptr const& sph_shell,
                        volm_spherical_container_sptr const& sph)
@@ -169,7 +169,7 @@ volm_query::volm_query(volm_camera_space_sptr cam_space,
   //this->weight_ingest();
 }
 
-volm_query::volm_query(std::string const& query_file, volm_camera_space_sptr cam_space,
+volm_query::volm_query(std::string const& query_file, const volm_camera_space_sptr& cam_space,
                        std::string const& depth_map_scene_file,
                        volm_spherical_shell_container_sptr const& sph_shell,
                        volm_spherical_container_sptr const& sph)
@@ -481,7 +481,7 @@ bool volm_query::order_ingest()
 bool volm_query::query_ingest()
 {
   // loop over the set of camera hypotheses
-  for (auto cam : cameras_)
+  for (const auto& cam : cameras_)
   {
     // the layers for camera hypothesis i
     // the minimum distance for each ray
@@ -907,7 +907,7 @@ void volm_query::draw_depth_map_regions(vil_image_view<vil_rgb<vxl_byte> >& out_
 void volm_query::depth_rgb_image(std::vector<unsigned char> const& values,
                                  unsigned const& cam_id,
                                  vil_image_view<vil_rgb<vxl_byte> >& out_img,
-                                 std::string value_type)
+                                 const std::string& value_type)
 {
   this->draw_depth_map_regions(out_img);
 
@@ -1058,7 +1058,8 @@ std::vector<double> volm_query::get_valid_top_fov() const
     top_fov_set.insert(this->get_top_fov(i));
   }
   std::vector<double> valid_top_fov;
-  for (const auto & it : top_fov_set)
+  valid_top_fov.reserve(top_fov_set.size());
+for (const auto & it : top_fov_set)
     valid_top_fov.push_back(it);
   return valid_top_fov;
 }

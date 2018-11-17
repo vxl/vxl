@@ -30,7 +30,7 @@ void vsl_basic_xml_element::add_attribute(std::string attr_name, long value)
   attrs_.push_back(attr);
 }
 
-void vsl_basic_xml_element::append_cdata(std::string cdata)
+void vsl_basic_xml_element::append_cdata(const std::string& cdata)
 {
   if (cdata_.size() > 0)
     cdata_.append(" ");

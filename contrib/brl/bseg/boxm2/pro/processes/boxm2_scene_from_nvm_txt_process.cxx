@@ -86,7 +86,7 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
   appearance.emplace_back("boxm2_mog3_grey");
   appearance.emplace_back("boxm2_num_obs");
 
-  std::string scene_dir = modeldir;
+  const std::string& scene_dir = modeldir;
   if (!vul_file::make_directory_path( scene_dir.c_str()))
     return false;
   boxm2_scene_sptr uscene = new boxm2_scene(scene_dir, box.min_point());
@@ -95,7 +95,8 @@ bool boxm2_scene_from_nvm_txt_process(bprb_func_process& pro)
 
   //build the two scenes
   std::vector<vpgl_perspective_camera<double> > cs;
-  for (auto & cam : cams)
+  cs.reserve(cams.size());
+for (auto & cam : cams)
     cs.push_back(* cam.second);
 
   boxm2_util_cams_and_box_to_scene(cs, box, *uscene);

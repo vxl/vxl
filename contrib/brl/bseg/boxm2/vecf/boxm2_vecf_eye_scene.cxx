@@ -534,7 +534,7 @@ void boxm2_vecf_eye_scene::apply_vector_field_to_target(std::vector<vgl_vector_3
   }
 }
 
-void boxm2_vecf_eye_scene::map_to_target(boxm2_scene_sptr target_scene, std::string const& app_id){
+void boxm2_vecf_eye_scene::map_to_target(const boxm2_scene_sptr& target_scene, std::string const& app_id){
   this->extract_target_block_data(target_scene, app_id);
   vnl_vector_fixed<double, 3> Z(0.0, 0.0, 1.0);
   vnl_vector_fixed<double, 3> to_dir(params_.eye_pointing_dir_.x(),

@@ -164,7 +164,7 @@ void print_gauss_x_kernels()
 
 //: Prints to file the directions of the kernels
 //  The file can be read in MATLAB for visualization
-void print_directions( bvpl_kernel_vector_sptr kernel_vector)
+void print_directions( const bvpl_kernel_vector_sptr& kernel_vector)
 {
   auto vit = kernel_vector->kernels_.begin();
 

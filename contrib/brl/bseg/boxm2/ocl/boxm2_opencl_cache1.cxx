@@ -1,10 +1,12 @@
+#include <utility>
+
 #include "boxm2_opencl_cache1.h"
 //:
 // \file
 
 //: scene/device constructor
-boxm2_opencl_cache1::boxm2_opencl_cache1(boxm2_scene_sptr scene,
-                                       bocl_device_sptr device,
+boxm2_opencl_cache1::boxm2_opencl_cache1(const boxm2_scene_sptr& scene,
+                                       const bocl_device_sptr& device,
                                        unsigned int maxBlocks)
 : scene_(scene), maxBlocksInCache(maxBlocks), bytesInCache_(0), block_info_(nullptr), device_(device)
 {
@@ -106,7 +108,7 @@ bool boxm2_opencl_cache1::finish_queue() {
   return true;
 }
 
-void boxm2_opencl_cache1::shallow_remove_block(boxm2_block_id id)
+void boxm2_opencl_cache1::shallow_remove_block(const boxm2_block_id& id)
 {
   // delete blocks in cache
   auto iter = cached_blocks_.find(id);
@@ -162,7 +164,7 @@ std::size_t boxm2_opencl_cache1::bytes_in_cache()
 }
 
 //: realization of abstract "get_block(block_id)"
-bocl_mem* boxm2_opencl_cache1::get_block(boxm2_block_id id)
+bocl_mem* boxm2_opencl_cache1::get_block(const boxm2_block_id& id)
 {
   //requesting block pushes it to the front of the list
   this->lru_push_front(id);
@@ -241,7 +243,7 @@ bocl_mem* boxm2_opencl_cache1::get_block(boxm2_block_id id)
   return blk;
 }
 
-bocl_mem* boxm2_opencl_cache1::get_block_info(boxm2_block_id id)
+bocl_mem* boxm2_opencl_cache1::get_block_info(const boxm2_block_id& id)
 {
   // clean up
   if (block_info_) {
@@ -263,7 +265,7 @@ bocl_mem* boxm2_opencl_cache1::get_block_info(boxm2_block_id id)
 
 //: Get data generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache1::get_data(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache1::get_data(const boxm2_block_id& id, const std::string& type, std::size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -335,7 +337,7 @@ bocl_mem* boxm2_opencl_cache1::get_data(boxm2_block_id id, std::string type, std
 
 //: Get data new generic
 // Possible issue: if \p num_bytes is greater than 0, should it then always initialize a new data object?
-bocl_mem* boxm2_opencl_cache1::get_data_new(boxm2_block_id id, std::string type, std::size_t num_bytes, bool read_only)
+bocl_mem* boxm2_opencl_cache1::get_data_new(const boxm2_block_id& id, const std::string& type, std::size_t num_bytes, bool read_only)
 {
   //push id to front of LRU list
   this->lru_push_front(id);
@@ -418,7 +420,7 @@ bocl_mem* boxm2_opencl_cache1::alloc_mem(std::size_t num_bytes, void* cpu_buff, 
 
 
   //allocate mem
-  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, id);
+  bocl_mem* data = new bocl_mem(*context_, cpu_buff, num_bytes, std::move(id));
   mem_pool_[data] = num_bytes;
   return data;
 }
@@ -456,7 +458,7 @@ void boxm2_opencl_cache1::free_mem(bocl_mem* mem)
 //: Deep data replace.
 // This replaces not only the data in the GPU cache, but
 // in the cpu cache as well (by creating a new one)
-void boxm2_opencl_cache1::deep_replace_data(boxm2_block_id id, std::string type, bocl_mem* mem, bool read_only)
+void boxm2_opencl_cache1::deep_replace_data(const boxm2_block_id& id, const std::string& type, bocl_mem* mem, bool read_only)
 {
   // instantiate new data block
   std::size_t numDataBytes = mem->num_bytes();
@@ -484,7 +486,7 @@ void boxm2_opencl_cache1::deep_replace_data(boxm2_block_id id, std::string type,
 }
 
 //: deep remove data, removes from ocl cache as well
-void boxm2_opencl_cache1::deep_remove_data(boxm2_block_id id, std::string type, bool  /*write_out*/)
+void boxm2_opencl_cache1::deep_remove_data(const boxm2_block_id& id, const std::string& type, bool  /*write_out*/)
 {
   //find the data in this map
   std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
@@ -509,10 +511,10 @@ void boxm2_opencl_cache1::deep_remove_data(boxm2_block_id id, std::string type, 
 }
 
 //: shallow_remove_data removes data with id and type from ocl cache only
-void boxm2_opencl_cache1::shallow_remove_data(boxm2_block_id id, std::string type)
+void boxm2_opencl_cache1::shallow_remove_data(const boxm2_block_id& id, std::string type)
 {
   //find the data in this map
-  std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(type);
+  std::map<boxm2_block_id, bocl_mem*>& data_map = this->cached_data_map(std::move(type));
   auto iter = data_map.find(id);
   if ( iter != data_map.end() ) {
     // release existing memory
@@ -524,7 +526,7 @@ void boxm2_opencl_cache1::shallow_remove_data(boxm2_block_id id, std::string typ
 }
 
 //: helper method, \returns a reference to correct data map (ensures one exists)
-std::map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache1::cached_data_map(std::string prefix)
+std::map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache1::cached_data_map(const std::string& prefix)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( cached_data_.find(prefix) == cached_data_.end() )
@@ -539,7 +541,7 @@ std::map<boxm2_block_id, bocl_mem*>& boxm2_opencl_cache1::cached_data_map(std::s
 }
 
 //: helper method to insert into LRU list
-void boxm2_opencl_cache1::lru_push_front( boxm2_block_id id )
+void boxm2_opencl_cache1::lru_push_front( const boxm2_block_id& id )
 {
   //serach for it in the list, if it's there, delete it
   std::list<boxm2_block_id>::iterator iter;

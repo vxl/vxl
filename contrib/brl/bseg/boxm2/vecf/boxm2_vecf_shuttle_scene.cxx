@@ -96,7 +96,7 @@ vil_image_view<float> boxm2_vecf_shuttle_scene::silhouette(vpgl_camera_double_sp
 bool boxm2_vecf_particle::operator () (boxm2_vecf_particle const& p0, boxm2_vecf_particle const& p1){
   return (p0.p_ > p1.p_);
 }
-void boxm2_vecf_shuttle_scene::generate_particles(vpgl_camera_double_sptr cam, double txmin, double txmax, double dtx){
+void boxm2_vecf_shuttle_scene::generate_particles(const vpgl_camera_double_sptr& cam, double txmin, double txmax, double dtx){
   if(cam->type_name() != "vpgl_affine_camera"){
     std::cout << "currently only support affine cameras" << std::endl;
     return;
@@ -114,7 +114,7 @@ void boxm2_vecf_shuttle_scene::generate_particles(vpgl_camera_double_sptr cam, d
     particles_.push_back(part);
   }
 }
-void boxm2_vecf_shuttle_scene::generate_particles_txry(vpgl_camera_double_sptr cam,
+void boxm2_vecf_shuttle_scene::generate_particles_txry(const vpgl_camera_double_sptr& cam,
                                                       double txmin, double txmax, double dtx,
                                                       double rymin, double rymax, double dry){
 if(cam->type_name() != "vpgl_affine_camera"){
@@ -147,7 +147,7 @@ if(cam->type_name() != "vpgl_affine_camera"){
     }
   }
 }
-void boxm2_vecf_shuttle_scene::generate_particles_txrz(vpgl_camera_double_sptr cam,
+void boxm2_vecf_shuttle_scene::generate_particles_txrz(const vpgl_camera_double_sptr& cam,
                                                        double txmin, double txmax, double dtx,
                                                        double rzmin, double rzmax, double drz){
 if(cam->type_name() != "vpgl_affine_camera"){
@@ -180,7 +180,7 @@ if(cam->type_name() != "vpgl_affine_camera"){
     }
   }
 }
-void boxm2_vecf_shuttle_scene::generate_particles_txy(vpgl_camera_double_sptr cam,
+void boxm2_vecf_shuttle_scene::generate_particles_txy(const vpgl_camera_double_sptr& cam,
                                                   double txmin, double txmax, double dtx,
                                                   double tymin, double tymax, double dty){
   if(cam->type_name() != "vpgl_affine_camera"){

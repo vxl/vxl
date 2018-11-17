@@ -1750,7 +1750,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
   // 1. Create vertices at the end of edges (digital_curve geometry)
   constexpr float connect_fuzz = 2;
 
-  for (auto edge : edges)
+  for (const auto& edge : edges)
   {
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
     vdgl_edgel_chain_sptr cxy= dc->get_interpolator()->get_edgel_chain();
@@ -1980,7 +1980,7 @@ sdet_contour::FindJunctions(gevd_bufferxy& edgels,
 
   // 4. Insert virtual junction for isolated 1-cycles
   int ncycle = 0;
-  for (auto edge : edges)
+  for (const auto& edge : edges)
   {
     //continue; //JLM no virtual junctions
     if (!edge->v1())    // vertices not created from 1.
@@ -2026,7 +2026,7 @@ sdet_contour::SubPixelAccuracy(std::vector<vtol_edge_2d_sptr>& edges,
     std::cout << "Insert subpixel accuracy into edges/vertices";
 
   // 1. Subpixel accuracy for end points
-  for (auto vert : vertices)
+  for (const auto& vert : vertices)
   {
     int x = int(vert->x()), y = int(vert->y());
     vert->set_x(x + floatPixel(locationx, x, y));
@@ -2034,7 +2034,7 @@ sdet_contour::SubPixelAccuracy(std::vector<vtol_edge_2d_sptr>& edges,
   }
 
   // 2. Subpixel accuracy for chain pixels
-  for (auto edge : edges)
+  for (const auto& edge : edges)
   {
     if (!edge) continue;
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
@@ -2436,7 +2436,7 @@ sdet_contour::EqualizeSpacing(std::vector<vtol_edge_2d_sptr>& chains)
   if (talkative_)
     std::cout << "Equalize the spacing between pixels in chains\n";
 
-  for (auto e : chains)
+  for (const auto& e : chains)
   {
     vdgl_digital_curve_sptr dc = e->curve()->cast_to_vdgl_digital_curve();
     const int len = dc->get_interpolator()->get_edgel_chain()->size();
@@ -2485,12 +2485,12 @@ sdet_contour::Translate(std::vector<vtol_edge_2d_sptr>& edges, // translate loc 
   if (talkative_)
     std::cout << "Translate edges/vertices\n";
 
-  for (auto vert : vertices)
+  for (const auto& vert : vertices)
   {
     vert->set_x(vert->x() + tx);
     vert->set_y(vert->y() + ty);
   }
-  for (auto edge : edges)
+  for (const auto& edge : edges)
   {
     vdgl_digital_curve_sptr dc = edge->curve()->cast_to_vdgl_digital_curve();
 
@@ -2532,7 +2532,7 @@ sdet_contour::ClearNetwork(std::vector<vtol_edge_2d_sptr>*& edges,
 void
 sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, std::vector<vtol_edge_2d_sptr>& edges)
 {
-  for (auto e : edges)
+  for (const auto& e : edges)
   {
     vdgl_digital_curve_sptr dc= e->curve()->cast_to_vdgl_digital_curve();
 
@@ -2578,7 +2578,7 @@ sdet_contour::SetEdgelData(gevd_bufferxy& grad_mag, gevd_bufferxy& angle, std::v
 // using Id and dynamic array. Protect it in the network.
 void
 sdet_contour::LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set,
-                                vtol_edge_2d_sptr elmt)
+                                const vtol_edge_2d_sptr& elmt)
 {
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push_back at end of array
@@ -2588,7 +2588,7 @@ sdet_contour::LookupTableInsert(std::vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 sdet_contour::LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set,
-                                vtol_vertex_2d_sptr  elmt)
+                                const vtol_vertex_2d_sptr&  elmt)
 {
   elmt->set_id(set.size());     // index in global array
   set.push_back(elmt);          // push at end of array
@@ -2599,7 +2599,7 @@ sdet_contour::LookupTableInsert(std::vector<vtol_vertex_2d_sptr >& set,
 // Also remove object from the network.
 void
 sdet_contour::LookupTableReplace(std::vector<vtol_edge_2d_sptr>& set,
-                                 vtol_edge_2d_sptr deleted, vtol_edge_2d_sptr inserted)
+                                 const vtol_edge_2d_sptr& deleted, const vtol_edge_2d_sptr& inserted)
 {
   const int i = deleted->get_id();
   inserted->set_id(i);
@@ -2611,7 +2611,7 @@ sdet_contour::LookupTableReplace(std::vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 sdet_contour::LookupTableReplace(std::vector<vtol_vertex_2d_sptr >& set,
-                                 vtol_vertex_2d_sptr  deleted, vtol_vertex_2d_sptr  inserted)
+                                 const vtol_vertex_2d_sptr&  deleted, const vtol_vertex_2d_sptr&  inserted)
 {
   const int i = deleted->get_id();
   inserted->set_id(i);
@@ -2623,7 +2623,7 @@ sdet_contour::LookupTableReplace(std::vector<vtol_vertex_2d_sptr >& set,
 // Also remove object from the network.
 void
 sdet_contour::LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set,
-                                vtol_edge_2d_sptr elmt)
+                                const vtol_edge_2d_sptr& elmt)
 {
   btol_edge_algs::unlink_all_inferiors_twoway(elmt);
   set[elmt->get_id()] = nullptr;   // remove from global array
@@ -2633,7 +2633,7 @@ sdet_contour::LookupTableRemove(std::vector<vtol_edge_2d_sptr>& set,
 //: As above for vertices.
 void
 sdet_contour::LookupTableRemove(std::vector<vtol_vertex_2d_sptr >& set,
-                                vtol_vertex_2d_sptr  elmt)
+                                const vtol_vertex_2d_sptr&  elmt)
 {
   set[elmt->get_id()] = nullptr;   // remove from global array
 }

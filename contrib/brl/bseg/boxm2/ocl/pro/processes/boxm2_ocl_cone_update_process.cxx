@@ -6,9 +6,10 @@
 // \author Andrew Miller
 // \date June 1, 2011
 
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -40,7 +41,7 @@ namespace boxm2_ocl_cone_update_process_globals
       UPDATE_CELL = 2,
   };
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
       //gather all render sources... seems like a lot for rendering...
       std::vector<std::string> src_paths;
@@ -57,7 +58,7 @@ namespace boxm2_ocl_cone_update_process_globals
       src_paths.push_back(source_dir + "cone/cast_cone_ray.cl");
 
       //compilation options
-      std::string options = opts;
+      const std::string& options = std::move(opts);
 
       //proc norm pass computes the proc_norm image, mean_obs for each cell
       auto* pass_one = new bocl_kernel();

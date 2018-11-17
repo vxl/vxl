@@ -13,8 +13,8 @@
 #include <vgl/vgl_polygon.h>
 
 bool bpgl_nitf_camera_coverage::coverage_list(std::vector<vgl_point_2d<double> > geo_pts,
-                                              std::string img_list,
-                                              std::string img_coverage_list)
+                                              const std::string& img_list,
+                                              const std::string& img_coverage_list)
 {
   std::ifstream ifs( img_list.c_str() );
   std::ofstream ofs( img_coverage_list.c_str() );
@@ -71,7 +71,7 @@ bool bpgl_nitf_camera_coverage::coverage_list(std::vector<vgl_point_2d<double> >
 }
 
 //Not implemented yet
-bool bpgl_nitf_camera_coverage::compute_coverage_region(std::string /*camera_list*/, std::string /*out_imfile*/)
+bool bpgl_nitf_camera_coverage::compute_coverage_region(const std::string& /*camera_list*/, const std::string& /*out_imfile*/)
 {
   return true;
 }

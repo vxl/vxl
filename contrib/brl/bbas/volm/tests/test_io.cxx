@@ -1,5 +1,6 @@
 #include <iostream>
 #include <testlib/testlib_test.h>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -24,7 +25,7 @@ static void test_load_conf_tag_file(std::string xml_file)
   float floor_height = 4.5f;
   std::string world_region, query_name;
   unsigned img_ni, img_nj;
-  bool success = volm_io::read_conf_query_tags(xml_file, floor_height, dms, world_region, img_ni, img_nj, query_name);
+  bool success = volm_io::read_conf_query_tags(std::move(xml_file), floor_height, dms, world_region, img_ni, img_nj, query_name);
   //bool parser_success = volm_io::read_conf_query_tags(xml_file, floor_height, dms, world_region, img_ni, img_nj, query_name);
   TEST("parse LCM matcher tag file",success,true);
 

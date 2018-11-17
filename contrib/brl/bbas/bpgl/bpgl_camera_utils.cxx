@@ -130,7 +130,7 @@ vpgl_perspective_camera<double> bpgl_camera_utils::
 }
 
 //: returns a list of cameras from specified directory
-std::vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_directory(std::string dir)
+std::vector<vpgl_perspective_camera<double>* > bpgl_camera_utils::cameras_from_directory(const std::string& dir)
 {
     std::vector<vpgl_perspective_camera<double>* > toReturn;
     if (!vul_file::is_directory(dir.c_str()) ) {

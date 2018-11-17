@@ -23,6 +23,6 @@
 #include <vil/vil_image_resource.h>
 
 //: Convolve image with vertical [-1 1] filter
-vil_image_resource_sptr vepl_y_gradient(vil_image_resource_sptr , double scale=1.0, double shift=0.0);
+vil_image_resource_sptr vepl_y_gradient(const vil_image_resource_sptr& , double scale=1.0, double shift=0.0);
 
 #endif // vepl_y_gradient_h_

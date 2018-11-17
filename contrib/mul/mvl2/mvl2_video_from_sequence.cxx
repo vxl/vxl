@@ -69,7 +69,7 @@ bool mvl2_video_from_sequence::initialize( int /* width */, int /* height */,
 
   //knock off the extension
   std::size_t name_length=file_name.length();
-  std::size_t dot_pos = file_name.find_last_of(".");
+  std::size_t dot_pos = file_name.find_last_of('.');
   file_name.erase(dot_pos, name_length);
 
   //Extract the largest possible number off the end

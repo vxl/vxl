@@ -115,7 +115,7 @@ read( std::istream& is )
 
 void
 rgrl_trans_reader::
-add_xform( rgrl_transformation_sptr xform )
+add_xform( const rgrl_transformation_sptr& xform )
 {
   xform_candidates_.push_back( xform );
 }

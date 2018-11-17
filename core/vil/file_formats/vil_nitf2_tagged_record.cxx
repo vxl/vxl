@@ -2,11 +2,12 @@
 // Stellar Science Ltd. Co. (stellarscience.com) for
 // Air Force Research Laboratory, 2005.
 
-#include <sstream>
+#include "vil_nitf2_tagged_record.h"
 #include <iomanip>
 #include <iostream>
+#include <sstream>
 #include <string>
-#include "vil_nitf2_tagged_record.h"
+#include <utility>
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -129,58 +130,58 @@ bool vil_nitf2_tagged_record::read(vil_nitf2_istream& input)
 }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, int& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, double& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, char& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 bool vil_nitf2_tagged_record::get_value(std::string tag, void*& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, std::string& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_location*& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_date_time& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
 bool vil_nitf2_tagged_record::get_value(std::string tag, vil_nitf2_long& out_value) const
-{ return m_field_sequence->get_value(tag, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), out_value); }
 #endif
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, int& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, double& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, char& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, void*& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, std::string& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_location*& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_date_time& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 
 #if VXL_HAS_INT_64
 // if not VXL_HAS_INT_64 isn't defined the vil_nitf2_long is the same as just plain 'int'
 // and this function will be a duplicate of that get_value
 bool vil_nitf2_tagged_record::get_value(std::string tag, const vil_nitf2_index_vector& indexes, vil_nitf2_long& out_value) const
-{ return m_field_sequence->get_value(tag, indexes, out_value); }
+{ return m_field_sequence->get_value(std::move(tag), indexes, out_value); }
 #endif
 
 // Macro to define both overloads of get_values()
@@ -485,7 +486,7 @@ vil_nitf2_tagged_record::~vil_nitf2_tagged_record()
   delete m_field_sequence;
 }
 
-vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(std::string tag)
+vil_nitf2_field_definition* vil_nitf2_field_sequence::find_field_definition(const std::string& tag)
 {
   for (auto m_field_definition : *m_field_definitions)
   {

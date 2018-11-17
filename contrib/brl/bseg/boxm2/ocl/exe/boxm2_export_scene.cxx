@@ -221,7 +221,7 @@ int main(int argc,  char** argv)
 
                 //set focal length and image size for camera
                 auto* cam = static_cast<vpgl_perspective_camera<double>* >(cam_sptr.ptr());
-                vpgl_calibration_matrix<double> mat = cam->get_calibration();
+                const vpgl_calibration_matrix<double>& mat = cam->get_calibration();
                 vgl_vector_3d<double> pp = normalized(cam->principal_axis());
                 vgl_vector_3d<double> vdir(cam->get_rotation().as_matrix()(1,0),
                                            cam->get_rotation().as_matrix()(1,1),

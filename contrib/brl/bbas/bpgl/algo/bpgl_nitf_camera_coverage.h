@@ -31,11 +31,11 @@ class bpgl_nitf_camera_coverage
   //   * The filename of a file containing a list of NITF images to go through.
   //   * A filename to write the image for which the points project within the image
   static bool coverage_list(std::vector<vgl_point_2d<double> > geo_pts,
-                            std::string camera_list,
-                            std::string img_coverage_list);
+                            const std::string& camera_list,
+                            const std::string& img_coverage_list);
 
   //: Saves an image where the areas covered by the cameras on the "camera_list" file are colored as red
-  static bool compute_coverage_region(std::string camera_list, std::string out_imfile);
+  static bool compute_coverage_region(const std::string& camera_list, const std::string& out_imfile);
 };
 
 

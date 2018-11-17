@@ -23,7 +23,7 @@ class gmvl_connection : public vbl_ref_count
  public:
   // constructors / destructors
 
-  gmvl_connection( const gmvl_node_sptr node1, const gmvl_node_sptr node2);
+  gmvl_connection( const gmvl_node_sptr& node1, const gmvl_node_sptr& node2);
   gmvl_connection(gmvl_connection const& x)
     : vbl_ref_count(), n1_(x.n1_), n2_(x.n2_) {}
   ~gmvl_connection() override;

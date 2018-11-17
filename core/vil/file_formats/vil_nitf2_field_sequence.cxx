@@ -90,7 +90,7 @@ void vil_nitf2_field_sequence::set_array_fields_dimension(
 
 bool vil_nitf2_field_sequence::read(vil_nitf2_istream& input,
                                     const vil_nitf2_field_definitions* field_defs,
-                                    vil_nitf2_index_vector indexes)
+                                    const vil_nitf2_index_vector& indexes)
 {
   if (!field_defs)
     field_defs = m_field_definitions;
@@ -361,7 +361,7 @@ vil_nitf2_field_sequence::~vil_nitf2_field_sequence()
   }
 }
 
-vil_nitf2_field* vil_nitf2_field_sequence::get_field(std::string tag) const
+vil_nitf2_field* vil_nitf2_field_sequence::get_field(const std::string& tag) const
 {
   auto field_map_entry = fields.find(tag);
   if (field_map_entry == fields.end())

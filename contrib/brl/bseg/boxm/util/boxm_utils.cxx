@@ -104,7 +104,7 @@ boxm_utils::corners_of_box_3d(vgl_box_3d<double> const& box)
 
 void
 boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
-                            vpgl_camera_double_sptr camera,
+                            const vpgl_camera_double_sptr& camera,
                             double* xverts, double* yverts)
 {
   for (unsigned i=0; i<corners.size(); ++i)
@@ -113,7 +113,7 @@ boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
 
 void
 boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
-                            vpgl_camera_double_sptr camera,
+                            const vpgl_camera_double_sptr& camera,
                             double* xverts, double* yverts,
                             float* vertdist)
 {
@@ -130,7 +130,7 @@ boxm_utils::project_corners(std::vector<vgl_point_3d<double> > const& corners,
 
 void
 boxm_utils::project_point3d(vgl_point_3d<double> const& point,
-                            vpgl_camera_double_sptr camera,
+                            const vpgl_camera_double_sptr& camera,
                             double & xvert, double &yvert,
                             double & vertdist)
 {
@@ -187,7 +187,7 @@ boxm_utils::project_face(std::vector<vgl_point_3d<double> > &face,
 }
 
 boct_face_idx
-boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera)
+boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, const vpgl_camera_double_sptr& camera)
 {
   boct_face_idx face_idx = NONE;
   //if (camera->type_name().compare("vpgl_perspective_camera")==0) {
@@ -269,7 +269,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& bbox, vpgl_camera_double_spt
 
 boct_face_idx
 boxm_utils::visible_faces(vgl_box_3d<double> const& /*bbox*/, // FIXME: currently unused -- see commented out code
-                          vpgl_camera_double_sptr /*camera*/, // idem
+                          const vpgl_camera_double_sptr& /*camera*/, // idem
                           double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
@@ -355,7 +355,7 @@ boxm_utils::visible_faces(vgl_box_3d<double> const& /*bbox*/, // FIXME: currentl
 }
 
 boct_face_idx
-boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, vpgl_camera_double_sptr camera,
+boxm_utils::visible_faces_cell(vgl_box_3d<double> const& bbox, const vpgl_camera_double_sptr& camera,
                                double *xverts, double *yverts)
 {
   boct_face_idx face_idx = NONE;
@@ -491,7 +491,7 @@ void boxm_utils::faces_of_box_3d(vgl_box_3d<double> const& bbox,
 
 //: returns the union of the projected faces of a polygon
 void boxm_utils::project_cube(vgl_box_3d<double> &bbox,
-                              vpgl_camera_double_sptr camera,
+                              const vpgl_camera_double_sptr& camera,
                               std::map<boct_face_idx, std::vector< vgl_point_3d<double> > > & faces,
                               boct_face_idx & vis_face_ids)
 {
@@ -758,7 +758,7 @@ bool boxm_utils::project_cube_xyz( std::map<boct_face_idx,std::vector< vgl_point
                                    boct_face_idx & vis_face_ids,
                                    vil_image_view<float> &front_xyz,
                                    vil_image_view<float> &back_xyz,
-                                   vpgl_camera_double_sptr cam)
+                                   const vpgl_camera_double_sptr& cam)
 {
   auto face_it=faces.begin();
   for (; face_it!=faces.end(); ++face_it)
@@ -1022,7 +1022,7 @@ bool boxm_utils::project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_
 }
 #else
 bool boxm_utils::project_cube_fill_val( std::map<boct_face_idx,std::vector< vgl_point_3d<double> > > &,
-                                        boct_face_idx &, vil_image_view<float> &, float, vpgl_camera_double_sptr)
+                                        boct_face_idx &, vil_image_view<float> &, float, const vpgl_camera_double_sptr&)
 { return false; }
 #endif // 0
 

@@ -14,7 +14,7 @@ vifa_int_faces_adj_attr(void)
 }
 
 vifa_int_faces_adj_attr::
-vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
+vifa_int_faces_adj_attr(const vtol_intensity_face_sptr&     seed,
                         int                          depth,
                         int                          size_filter,
                         vdgl_fit_lines_params*       fitter_params,
@@ -38,7 +38,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
 }
 
 vifa_int_faces_adj_attr::
-vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
+vifa_int_faces_adj_attr(const vtol_intensity_face_sptr&     seed,
                         int                          depth,
                         iface_list&                  neighborhood,
                         int                          size_filter,
@@ -63,7 +63,7 @@ vifa_int_faces_adj_attr(vtol_intensity_face_sptr     seed,
 }
 
 void vifa_int_faces_adj_attr::
-SetSeed(vtol_intensity_face_sptr  seed)
+SetSeed(const vtol_intensity_face_sptr&  seed)
 {
   seed_ = seed;
   closure_valid_ = false;
@@ -331,7 +331,7 @@ init()
 
 bool vifa_int_faces_adj_attr::
 add_unique_face(iface_list&               facelist,
-                vtol_intensity_face_sptr  face,
+                const vtol_intensity_face_sptr&  face,
                 int                       size_filter)
 {
   for (auto & check : facelist)

@@ -67,7 +67,7 @@ compute_geometric_scale( double& return_scale,
   DebugMacro(2, '\n');
   DebugMacro_abv(2, "from\t to\t residuals\t signature_wgt\t cumulative_wgt\t weight :\n");
   for ( from_iter fitr = match_set.from_begin(); fitr != match_set.from_end(); ++fitr ) {
-    rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+    const rgrl_feature_sptr& mapped_from = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
       double error = titr.to_feature()->geometric_error( *mapped_from );
       double weight;
@@ -122,7 +122,7 @@ compute_signature_inv_covar( vnl_matrix<double>& inv_covar, rgrl_match_set const
   double sum_weights = 0.0;
 
   for ( ; fitr != match_set.from_end(); ++fitr ) {
-    rgrl_feature_sptr mapped_from = fitr.mapped_from_feature();
+    const rgrl_feature_sptr& mapped_from = fitr.mapped_from_feature();
     for ( to_iter titr = fitr.begin(); titr != fitr.end(); ++titr ) {
       vnl_vector<double> error_vec = titr.to_feature()->signature_error_vector( *mapped_from );
       double weight = titr.cumulative_weight();

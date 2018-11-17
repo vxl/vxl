@@ -49,7 +49,7 @@ boxm2_asio_mgr::~boxm2_asio_mgr()
 
 //: creates a BAIO object that loads/saves block data from disk
 // Make sure asio_mgr doesn't try to load a block that's already loading
-void boxm2_asio_mgr::load_block(std::string dir, boxm2_block_id block_id,boxm2_block_metadata mdata)
+void boxm2_asio_mgr::load_block(const std::string& dir, const boxm2_block_id& block_id,const boxm2_block_metadata& mdata)
 {
   //if it's not already loading...
   if ( load_list_.find(block_id) == load_list_.end())
@@ -71,7 +71,7 @@ void boxm2_asio_mgr::load_block(std::string dir, boxm2_block_id block_id,boxm2_b
 
 
 //: method of saving block
-void boxm2_asio_mgr::save_block(std::string dir, boxm2_block* block)
+void boxm2_asio_mgr::save_block(const std::string& dir, boxm2_block* block)
 {
   std::string filepath = dir + block->block_id().to_string() + ".bin";
   std::cout<<"boxm2_asio_mgr::write save to file: "<<filepath<<std::endl;
@@ -131,7 +131,7 @@ std::map<boxm2_block_id, boxm2_block*> boxm2_asio_mgr::get_loaded_blocks()
 
 
 //: generic get loaded data
-std::map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generic(std::string prefix)
+std::map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_generic(const std::string& prefix)
 {
   std::map<boxm2_block_id, boxm2_data_base*> toReturn;
 
@@ -172,7 +172,7 @@ std::map<boxm2_block_id, boxm2_data_base*> boxm2_asio_mgr::get_loaded_data_gener
 
 
 //: load_block_data creates and stores async request for data of data_type with block_id
-void boxm2_asio_mgr::load_block_data_generic(std::string dir, boxm2_block_id block_id, std::string type)
+void boxm2_asio_mgr::load_block_data_generic(const std::string& dir, const boxm2_block_id& block_id, const std::string& type)
 {
   // if map for this particular data type doesn't exist, initialize it
   if ( load_data_list_.find(type) == load_data_list_.end() )

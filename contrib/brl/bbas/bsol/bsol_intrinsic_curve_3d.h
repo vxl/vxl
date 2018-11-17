@@ -375,8 +375,8 @@ class bsol_intrinsic_curve_3d : public vsol_curve_3d
   }
 
   //: File I/O
-  bool LoadCON3File (std::string fileName);
-  bool SaveCON3File (std::string fileName);
+  bool LoadCON3File (const std::string& fileName);
+  bool SaveCON3File (const std::string& fileName);
 
   //***************************************************************************
   // Basic operations

@@ -32,7 +32,7 @@ class boxm2_multi_refine
                                         bocl_mem_sptr& cl_output );
 
     //: refines trees in block
-    static void swap_data_per_block(boxm2_scene_sptr scene,
+    static void swap_data_per_block(const boxm2_scene_sptr& scene,
                                     const boxm2_block_id& id,
                                     int numTrees,
                                     boxm2_opencl_cache1* ocl_cache,
@@ -41,11 +41,11 @@ class boxm2_multi_refine
                                     BlockMemMap& blockCopies,
                                     BlockMemMap& newDatas,
                                     BlockIntMap& newDataSizes,
-                                    bocl_mem_sptr cl_output,
-                                    bocl_mem_sptr lookup,
-                                    std::string data_type,
+                                    const bocl_mem_sptr& cl_output,
+                                    const bocl_mem_sptr& lookup,
+                                    const std::string& data_type,
                                     int  apptypesize,
-                                    bocl_mem_sptr prob_thresh );
+                                    const bocl_mem_sptr& prob_thresh );
 
 
     //does in place, zero based cumulative sum on cpu, returns total size
@@ -62,8 +62,8 @@ class boxm2_multi_refine
     }
 
     //compile kernels and cache
-    static bocl_kernel* get_refine_tree_kernel(bocl_device_sptr device, std::string opts);
-    static bocl_kernel* get_refine_data_kernel(bocl_device_sptr device, std::string opts);
+    static bocl_kernel* get_refine_tree_kernel(const bocl_device_sptr& device, const std::string& opts);
+    static bocl_kernel* get_refine_data_kernel(const bocl_device_sptr& device, const std::string& opts);
 
     //map keeps track of all kernels compiled and cached
     static std::map<std::string, bocl_kernel*> refine_tree_kernels_;

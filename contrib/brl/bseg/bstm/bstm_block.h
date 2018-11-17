@@ -38,7 +38,7 @@ class bstm_block : public vbl_ref_count
 
  public:
 
-  bstm_block(bstm_block_id id, bstm_block_metadata data, char* buffer);
+  bstm_block(const bstm_block_id& id, bstm_block_metadata data, char* buffer);
 
   //: creates empty block from metadata
   bstm_block(bstm_block_metadata data);

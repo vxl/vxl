@@ -1,7 +1,8 @@
 // This is brl/bseg/boxm2/ocl/pro/processes/boxm2_ocl_update_alpha_wcubic_process.cxx
-#include <iostream>
-#include <fstream>
 #include <bprb/bprb_func_process.h>
+#include <fstream>
+#include <iostream>
+#include <utility>
 //:
 // \file
 // \brief  A process for updating the scene.
@@ -42,7 +43,7 @@ namespace boxm2_ocl_update_alpha_wcubic_process_globals
       UPDATE_CELL = 4
   };
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels,std::string opts)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;
@@ -60,7 +61,7 @@ namespace boxm2_ocl_update_alpha_wcubic_process_globals
     src_paths.push_back(source_dir + "bit/cast_ray_bit.cl");
 
     //compilation options
-    std::string options = opts;
+    std::string options = std::move(opts);
 
     //create all passes
     auto* seg_len = new bocl_kernel();

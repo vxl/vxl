@@ -17,7 +17,7 @@
 #include "rgrl_est_translation.h"
 
 rgrl_initializer_inv_indexing::
-rgrl_initializer_inv_indexing( rgrl_view_sptr prior_view,
+rgrl_initializer_inv_indexing( const rgrl_view_sptr& prior_view,
                                bool should_estimate_global_region,
                                int max_num_matches_tried )
   : view_ (prior_view),

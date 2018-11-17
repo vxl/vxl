@@ -27,10 +27,10 @@
 
 static
 rgrl_match_set_sptr
-generate_match_set(rgrl_transformation_sptr trans)
+generate_match_set(const rgrl_transformation_sptr& trans)
 {
   auto* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-  vnl_matrix<double> A = xform->A();
+  const vnl_matrix<double>& A = xform->A();
   vnl_vector<double> t = xform->t();
 
   //generate 15 correct matches
@@ -168,11 +168,11 @@ generate_match_set(rgrl_transformation_sptr trans)
 
 static
 rgrl_match_set_sptr
-generate_ambiguous_match_set(rgrl_transformation_sptr trans)
+generate_ambiguous_match_set(const rgrl_transformation_sptr& trans)
 {
   //generate 15 correct matches, with 5 having incorrect 2nd match
   auto* xform = dynamic_cast<rgrl_trans_affine*>(trans.as_pointer());
-  vnl_matrix<double> A = xform->A();
+  const vnl_matrix<double>& A = xform->A();
   vnl_vector<double> t = xform->t();
 
   //generate 15 correct matches
@@ -324,11 +324,11 @@ gen_num_samples(unsigned int total_matches, unsigned int unique_matches, bool al
 
 static
 void
-test_on_matches(rgrl_transformation_sptr xform, rgrl_match_set_sptr matches, unsigned int total_matches)
+test_on_matches(const rgrl_transformation_sptr& xform, const rgrl_match_set_sptr& matches, unsigned int total_matches)
 {
   rgrl_mask_sptr from_roi = new rgrl_mask_box( vnl_double_2(-50.0, -50.0).as_ref(),
                                                vnl_double_2(100.0, 100.0).as_ref());
-  rgrl_mask_sptr to_roi = from_roi;
+  const rgrl_mask_sptr& to_roi = from_roi;
   rgrl_estimator_sptr est = new rgrl_est_affine(2);
   rgrl_view_sptr  view = new rgrl_view( from_roi, to_roi, from_roi->bounding_box(), from_roi->bounding_box(), est, xform, 0 );
   std::unique_ptr<rrel_objective> obj( new rrel_muset_obj(matches->from_size()) );

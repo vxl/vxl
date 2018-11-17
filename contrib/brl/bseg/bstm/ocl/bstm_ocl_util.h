@@ -21,16 +21,16 @@ class bstm_ocl_util
     //: fills in a 256 char array with number of BITS for each value (255 = 8, 254 = 7 etc)
     static void set_bit_lookup(cl_uchar* lookup);
 
-    static void load_perspective_camera(std::string filename, vpgl_perspective_camera<double> & pcam);
+    static void load_perspective_camera(const std::string& filename, vpgl_perspective_camera<double> & pcam);
 
     //: this function obtains a cdf of the intensity distribution over a sequcne of image which can be used for rendering images.
     static void get_render_transfer_function(std::vector<std::string> imgfilenames, float & min, float & max, vbl_array_1d<float> & tf);
 
     //: mog optoins
-    static std::string mog_options(std::string data_type);
+    static std::string mog_options(const std::string& data_type);
 
     //: label optoins
-    static std::string label_options(std::string data_type);
+    static std::string label_options(const std::string& data_type);
  };
 
 #endif // bstm_ocl_util_h

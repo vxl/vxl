@@ -95,7 +95,7 @@ class brec_param_estimation
   //: we always assume that the intensities are scaled to [0,1] range, so we get a vector of float pairs
   static double estimate_fg_pair_density_sigma_amoeba(std::vector<std::pair<float, float> >& pairs, double initial_sigma);
 
-  static bool create_fg_pairs(vil_image_resource_sptr img, bvgl_changes_sptr c, std::vector<std::pair<float, float> >& pairs, bool print_histogram = false, std::string out_name = "");
+  static bool create_fg_pairs(const vil_image_resource_sptr& img, const bvgl_changes_sptr& c, std::vector<std::pair<float, float> >& pairs, bool print_histogram = false, const std::string& out_name = "");
 };
 
 #endif // brec_param_estimation_H_

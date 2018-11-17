@@ -41,7 +41,7 @@ static const unsigned min_corrs = 6;
 // if an element of pixels is negative it indicates the point was outside the
 // image
 static void extract_window(float u, float v, int radius,
-                           vil_image_view<float> image,
+                           const vil_image_view<float>& image,
                            std::vector<float>& pixels)
 {
   pixels.clear();
@@ -239,7 +239,7 @@ std::vector<vgl_point_3d<double> > bwm_video_corr_processor::world_pts()
 }
 
 //: if the world coordinates are given in global coordinates of satellite cameras, convert them to local coordinate frame of the given lvcs
-void bwm_video_corr_processor::convert_world_pts_to_local(vpgl_lvcs_sptr lvcs)
+void bwm_video_corr_processor::convert_world_pts_to_local(const vpgl_lvcs_sptr& lvcs)
 {
   for (auto & corr : corrs_)
   {

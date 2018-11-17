@@ -27,9 +27,9 @@ class betr_site : public vbl_ref_count{
   betr_site(vgl_point_3d<double> const& origin_wgs_deg_m){
     origin_ = origin_wgs_deg_m;
   }
-  bool add_event_trigger(betr_event_trigger_sptr);
-  bool add_geo_object(std::string name, double lon, double lat , double elev, std::string geom_path);
-  void add_geo_object(std::string name, vgl_point_3d<double> const& location_wgs_deg_m, vsol_spatial_object_3d_sptr const& obj);
+  bool add_event_trigger(const betr_event_trigger_sptr&);
+  bool add_geo_object(std::string name, double lon, double lat , double elev, const std::string& geom_path);
+  void add_geo_object(const std::string& name, vgl_point_3d<double> const& location_wgs_deg_m, vsol_spatial_object_3d_sptr const& obj);
  private:
   vgl_point_3d<double> origin_;
   betr_geo_box_3d bbox_;

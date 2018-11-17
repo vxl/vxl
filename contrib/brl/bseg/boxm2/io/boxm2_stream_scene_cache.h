@@ -26,7 +26,7 @@ class boxm2_stream_scene_cache: public vbl_ref_count
 
   public:
     //: hidden constructor (singleton class)
-    boxm2_stream_scene_cache(boxm2_scene_sptr scene,
+    boxm2_stream_scene_cache(const boxm2_scene_sptr& scene,
                              std::vector<data_type> data_types,
                              std::vector<identifier> identifiers);
 

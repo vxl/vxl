@@ -32,9 +32,9 @@ namespace boxm2_ocl_kernel_filter_process_globals
   constexpr unsigned n_inputs_ = 4;
   constexpr unsigned n_outputs_ = 0;
 
-  bool compile_filter_kernel(bocl_device_sptr device, bocl_kernel * filter_kernel, std::string opts);
+  bool compile_filter_kernel(const bocl_device_sptr& device, bocl_kernel * filter_kernel, std::string opts);
 
-  bool process(bocl_device_sptr device, boxm2_scene_sptr scene, boxm2_opencl_cache_sptr opencl_cache, bvpl_kernel_sptr filter);
+  bool process(const bocl_device_sptr& device, const boxm2_scene_sptr& scene, const boxm2_opencl_cache_sptr& opencl_cache, const bvpl_kernel_sptr& filter);
 
   static std::map<std::string,bocl_kernel* > kernels;
 }

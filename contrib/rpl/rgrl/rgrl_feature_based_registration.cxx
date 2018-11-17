@@ -22,8 +22,8 @@
 #endif
 
 rgrl_feature_based_registration::
-rgrl_feature_based_registration( rgrl_data_manager_sptr data,
-                                 rgrl_convergence_tester_sptr conv_tester )
+rgrl_feature_based_registration( const rgrl_data_manager_sptr& data,
+                                 const rgrl_convergence_tester_sptr& conv_tester )
   :data_( data ),
    conv_tester_( conv_tester ),
    num_xforms_tested_( 0 ),
@@ -37,7 +37,7 @@ rgrl_feature_based_registration( rgrl_data_manager_sptr data,
 }
 
 rgrl_feature_based_registration::
-rgrl_feature_based_registration( rgrl_data_manager_sptr data )
+rgrl_feature_based_registration( const rgrl_data_manager_sptr& data )
   :data_( data ),
    num_xforms_tested_( 0 ),
    max_icp_iter_(25),
@@ -68,7 +68,7 @@ clear_results()
 //  Loop through the set of initial estimates, and call the next \a run(.) in the loop.
 void
 rgrl_feature_based_registration::
-run( rgrl_initializer_sptr initializer )
+run( const rgrl_initializer_sptr& initializer )
 {
   //  Clear previous results
   this->clear_results();
@@ -108,11 +108,11 @@ run( rgrl_initializer_sptr initializer )
 //
 void
 rgrl_feature_based_registration::
-run( rgrl_mask_box              from_image_region,
-     rgrl_mask_box              to_image_region,
-     rgrl_estimator_sptr        init_xform_estimator,
-     rgrl_transformation_sptr   initial_xform,
-     rgrl_scale_sptr            prior_scale,
+run( const rgrl_mask_box&              from_image_region,
+     const rgrl_mask_box&              to_image_region,
+     const rgrl_estimator_sptr&        init_xform_estimator,
+     const rgrl_transformation_sptr&   initial_xform,
+     const rgrl_scale_sptr&            prior_scale,
      unsigned                   init_resolution)
 {
   if ( data_->is_multi_feature() ) {
@@ -277,8 +277,8 @@ void
 rgrl_feature_based_registration::
 register_single_feature( rgrl_mask_box            from_image_region,
                          rgrl_mask_box            to_image_region,
-                         rgrl_estimator_sptr      initial_xform_estimator,
-                         rgrl_transformation_sptr xform_estimate,
+                         const rgrl_estimator_sptr&      initial_xform_estimator,
+                         const rgrl_transformation_sptr& xform_estimate,
                          rgrl_scale_sptr          scale,
                          unsigned                 resolution )
 {
@@ -545,8 +545,8 @@ void
 rgrl_feature_based_registration::
 register_multi_feature( rgrl_mask_box            from_image_region,
                         rgrl_mask_box            to_image_region,
-                        rgrl_estimator_sptr      initial_xform_estimator,
-                        rgrl_transformation_sptr xform_estimate,
+                        const rgrl_estimator_sptr&      initial_xform_estimator,
+                        const rgrl_transformation_sptr& xform_estimate,
                         rgrl_scale_sptr          prior_scale,
                         unsigned                 resolution )
 {

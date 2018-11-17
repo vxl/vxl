@@ -47,7 +47,7 @@ void helper(const bstm_block_metadata& data, long& num_cells, double& side_len)
 }
 
 //: allocate an empty data diddy
-bstm_data_base::bstm_data_base(bstm_block_metadata data, const std::string data_type, bool read_only)
+bstm_data_base::bstm_data_base(bstm_block_metadata data, const std::string& data_type, bool read_only)
 {
   read_only_ = read_only;
   id_ = data.id_;
@@ -71,7 +71,7 @@ bstm_data_base::bstm_data_base(bstm_block_metadata data, const std::string data_
   this->set_default_value(data_type, data);
 }
 //: accessor to a portion of the byte buffer
-void bstm_data_base::set_default_value(std::string data_type, bstm_block_metadata data)
+void bstm_data_base::set_default_value(const std::string& data_type, bstm_block_metadata data)
 {
   long num_cells;
   double side_len;

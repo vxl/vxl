@@ -11,7 +11,7 @@
 #include <bhdfs/bhdfs_fstream.h>
 #endif
 
-boxm2_block* boxm2_sio_mgr::load_block(std::string dir, boxm2_block_id block_id, BOXM2_IO_FS_TYPE fs_type)
+boxm2_block* boxm2_sio_mgr::load_block(const std::string& dir, const boxm2_block_id& block_id, BOXM2_IO_FS_TYPE fs_type)
 {
   std::string filepath = dir + block_id.to_string() + ".bin";
   unsigned long numBytes = 0;
@@ -52,7 +52,7 @@ boxm2_block* boxm2_sio_mgr::load_block(std::string dir, boxm2_block_id block_id,
   return new boxm2_block(block_id, bytes);
 }
 
-boxm2_block* boxm2_sio_mgr::load_block(std::string dir, boxm2_block_id block_id,boxm2_block_metadata data, BOXM2_IO_FS_TYPE fs_type)
+boxm2_block* boxm2_sio_mgr::load_block(const std::string& dir, const boxm2_block_id& block_id,const boxm2_block_metadata& data, BOXM2_IO_FS_TYPE fs_type)
 {
   std::string filepath = dir + block_id.to_string() + ".bin";
   unsigned long numBytes = 0;
@@ -93,7 +93,7 @@ boxm2_block* boxm2_sio_mgr::load_block(std::string dir, boxm2_block_id block_id,
   return returnboxm2_block;
 }
 
-void boxm2_sio_mgr::save_block(std::string dir, boxm2_block* block)
+void boxm2_sio_mgr::save_block(const std::string& dir, boxm2_block* block)
 {
   std::string filepath = dir + block->block_id().to_string() + ".bin";
   //std::cout<<"boxm2_sio_mgr::write save to file: "<<filepath<<std::endl;
@@ -107,7 +107,7 @@ void boxm2_sio_mgr::save_block(std::string dir, boxm2_block* block)
 }
 
 // loads a generic boxm2_data_base* from disk (given data_type string prefix)
-boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(std::string dir, boxm2_block_id id, std::string data_type, BOXM2_IO_FS_TYPE fs_type)
+boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(const std::string& dir, const boxm2_block_id& id, const std::string& data_type, BOXM2_IO_FS_TYPE fs_type)
 {
   // file name
   std::string filename = dir + data_type + "_" + id.to_string() + ".bin";
@@ -148,7 +148,7 @@ boxm2_data_base* boxm2_sio_mgr::load_block_data_generic(std::string dir, boxm2_b
 }
 
 // generically saves data_base * to disk (given prefix)
-void boxm2_sio_mgr::save_block_data_base(std::string dir, boxm2_block_id block_id, boxm2_data_base* data, std::string prefix)
+void boxm2_sio_mgr::save_block_data_base(const std::string& dir, const boxm2_block_id& block_id, boxm2_data_base* data, const std::string& prefix)
 {
   std::string filename = dir + prefix + "_" + block_id.to_string() + ".bin";
 
@@ -159,7 +159,7 @@ void boxm2_sio_mgr::save_block_data_base(std::string dir, boxm2_block_id block_i
   return;
 }
 
-char* boxm2_sio_mgr::load_from_hdfs(std::string  /*filepath*/, unsigned long & /*numBytes*/)
+char* boxm2_sio_mgr::load_from_hdfs(const std::string&  /*filepath*/, unsigned long & /*numBytes*/)
 {
 #if defined(HAS_HDFS) && HAS_HDFS
   if (!bhdfs_manager::exists())

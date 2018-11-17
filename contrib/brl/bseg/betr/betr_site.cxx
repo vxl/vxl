@@ -7,9 +7,11 @@
 #include <bmsh3d/algo/bmsh3d_fileio.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vsol/vsol_spatial_object_3d.h>
+
+#include <utility>
 betr_site::betr_site()= default;
 
-bool betr_site::add_geo_object(std::string name, double lon, double lat , double elev, std::string geom_path){
+bool betr_site::add_geo_object(std::string name, double lon, double lat , double elev, const std::string& geom_path){
   bmsh3d_mesh* mesh = new bmsh3d_mesh_mc();
   bool good = bmsh3d_load_ply(mesh, geom_path.c_str());
   if(!good){
@@ -21,10 +23,10 @@ bool betr_site::add_geo_object(std::string name, double lon, double lat , double
   vmesh->set_mesh(mesh_mc);
   vsol_spatial_object_3d_sptr so = vmesh;
   vgl_point_3d<double> geo_loc(lon, lat, elev);
-  this->add_geo_object(name, geo_loc, so);
+  this->add_geo_object(std::move(name), geo_loc, so);
   return good;
 }
-void betr_site::add_geo_object(std::string name, vgl_point_3d<double> const& geo_location_deg_m, vsol_spatial_object_3d_sptr const& obj){
+void betr_site::add_geo_object(const std::string& name, vgl_point_3d<double> const& geo_location_deg_m, vsol_spatial_object_3d_sptr const& obj){
   vpgl_lvcs lvcs(geo_location_deg_m.y(), geo_location_deg_m.x(), geo_location_deg_m.z(), vpgl_lvcs::wgs84, vpgl_lvcs::DEG);
   betr_geo_object_3d_sptr go = new betr_geo_object_3d(obj, lvcs);
   site_objects_[name]=go;
@@ -36,7 +38,7 @@ void betr_site::add_geo_object(std::string name, vgl_point_3d<double> const& geo
   vgl_point_3d<double> aux_pt = obox.aux_point();
   bbox_.add(min_pt);   bbox_.add(max_pt);   bbox_.add(aux_pt);
 }
-bool betr_site::add_event_trigger(betr_event_trigger_sptr etr){
+bool betr_site::add_event_trigger(const betr_event_trigger_sptr& etr){
   if(!etr){
     std::cout << "null event trigger \n";
     return false;

@@ -79,7 +79,7 @@ class vifa_parallel: public vifa_parallel_params
   float           map_x(float  raw_x);
   vifa_histogram* normalize_histogram(vifa_histogram*  h);
   float           find_peak(float&  max_value);
-  vtol_intensity_face_sptr get_adjacent_iface(vtol_intensity_face_sptr known_face,
+  vtol_intensity_face_sptr get_adjacent_iface(const vtol_intensity_face_sptr& known_face,
                                               vtol_edge_2d*            e);
 };
 

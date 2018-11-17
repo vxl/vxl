@@ -38,8 +38,8 @@ vpgl_geo_camera::vpgl_geo_camera(vpgl_geo_camera const& rhs)
   scale_tag_(rhs.scale_tag_)
 {}
 
-bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
-                                      vpgl_lvcs_sptr lvcs,
+bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const& geotiff_img,
+                                      const vpgl_lvcs_sptr& lvcs,
                                       vpgl_geo_camera*& camera)
 {
   // check if the image is tiff
@@ -108,7 +108,7 @@ bool vpgl_geo_camera::init_geo_camera(vil_image_resource_sptr const geotiff_img,
 }
 
 //: define a geo_camera by the image file name (filename should have format such as xxx_N35W73_S0.6x0.6_xxx.tif)
-bool vpgl_geo_camera::init_geo_camera(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera(const std::string& img_name, unsigned ni, unsigned nj, const vpgl_lvcs_sptr& lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
   std::string name = vul_file::strip_directory(img_name);
@@ -121,12 +121,12 @@ bool vpgl_geo_camera::init_geo_camera(std::string img_name, unsigned ni, unsigne
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
   float lon, lat, scale_lat, scale_lon;
-  std::size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
   else
     hemisphere = "S";
-  n = n_coords.find("E");
+  n = n_coords.find('E');
   if (n < n_coords.size())
     direction = "E";
   else
@@ -202,7 +202,7 @@ bool vpgl_geo_camera::init_geo_camera(std::string img_name, unsigned ni, unsigne
 }
 
 // loads a geo_camera from the file and uses global WGS84 coordinates, so no need to convert negative values to positives in the global_to_img method as in the previous method
-bool vpgl_geo_camera::init_geo_camera_from_filename(std::string img_name, unsigned ni, unsigned nj, vpgl_lvcs_sptr lvcs, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera_from_filename(const std::string& img_name, unsigned ni, unsigned nj, const vpgl_lvcs_sptr& lvcs, vpgl_geo_camera*& camera)
 {
   // determine the translation matrix from the image file name and construct a geo camera
   std::string name = vul_file::strip_directory(img_name);
@@ -215,12 +215,12 @@ bool vpgl_geo_camera::init_geo_camera_from_filename(std::string img_name, unsign
   // determine the lat, lon, hemisphere (North or South) and direction (East or West)
   std::string hemisphere, direction;
   float lon, lat, scale;
-  std::size_t n = n_coords.find("N");
+  std::size_t n = n_coords.find('N');
   if (n < n_coords.size())
     hemisphere = "N";
   else
     hemisphere = "S";
-  n = n_coords.find("E");
+  n = n_coords.find('E');
   if (n < n_coords.size())
     direction = "E";
   else
@@ -262,7 +262,7 @@ bool vpgl_geo_camera::init_geo_camera_from_filename(std::string img_name, unsign
 
 
 //: init using a tfw file, reads the transformation matrix from the tfw
-bool vpgl_geo_camera::init_geo_camera(std::string tfw_name, vpgl_lvcs_sptr lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
+bool vpgl_geo_camera::init_geo_camera(const std::string& tfw_name, const vpgl_lvcs_sptr& lvcs, int utm_zone, unsigned northing, vpgl_geo_camera*& camera)
 {
 
   std::ifstream ifs(tfw_name.c_str());

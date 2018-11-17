@@ -33,7 +33,7 @@ std::map<std::string, bocl_kernel*> boxm2_multi_store_aux::kernels_;
 //-------------------------------------------------------------
 float boxm2_multi_store_aux::store_aux(boxm2_multi_cache&       cache,
                                        vil_image_view<float>&   img,
-                                       vpgl_camera_double_sptr  cam,
+                                       const vpgl_camera_double_sptr&  cam,
                                        boxm2_multi_update_helper& helper)
 {
   std::cout<<"  -- boxm2_multi_store_aux store aux --"<<std::endl;
@@ -156,7 +156,7 @@ void boxm2_multi_store_aux::read_aux(boxm2_block_id const& id,
 
 //: helper to call ocl kernel - stores aux per block
 void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
-                                                boxm2_scene_sptr      scene,
+                                                const boxm2_scene_sptr&      scene,
                                                 boxm2_opencl_cache1*   opencl_cache,
                                                 cl_command_queue&     queue,
                                                 bocl_kernel*          kernel,
@@ -234,7 +234,7 @@ void boxm2_multi_store_aux::store_aux_per_block(boxm2_block_id const& id,
 //-----------------------------------------------------------------
 // returns vector of bocl_kernels for this specific device
 //-----------------------------------------------------------------
-bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, std::string opts)
+bocl_kernel* boxm2_multi_store_aux::get_kernels(const bocl_device_sptr& device, const std::string& opts)
 {
   // check to see if this device has compiled kernels already
   std::string identifier = device->device_identifier()+opts;
@@ -273,7 +273,7 @@ bocl_kernel* boxm2_multi_store_aux::get_kernels(bocl_device_sptr device, std::st
 }
 
 
-bocl_kernel* boxm2_multi_store_aux::get_kernels_color(bocl_device_sptr device, std::string opts)
+bocl_kernel* boxm2_multi_store_aux::get_kernels_color(const bocl_device_sptr& device, const std::string& opts)
 {
   // compile kernels if not already compiled
   std::string identifier = device->device_identifier() + opts + "_color";

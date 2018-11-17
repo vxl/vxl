@@ -9,6 +9,6 @@
 #include "vil1_scale_intensities.h"
 #include <vil1/vil1_scale_intensities_image_impl.h>
 
-vil1_image vil1_scale_intensities(vil1_image src, double scale, double shift) {
+vil1_image vil1_scale_intensities(const vil1_image& src, double scale, double shift) {
   return new vil1_scale_intensities_image_impl(src, scale, shift);
 }

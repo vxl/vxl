@@ -10,9 +10,9 @@
 class boxm2_ocl_depth_renderer
 {
   public:
-    boxm2_ocl_depth_renderer(boxm2_scene_sptr scene,
-                             boxm2_opencl_cache_sptr ocl_cache,
-                             std::string ident="");
+    boxm2_ocl_depth_renderer(const boxm2_scene_sptr& scene,
+                             const boxm2_opencl_cache_sptr& ocl_cache,
+                             const std::string& ident="");
     ~boxm2_ocl_depth_renderer();
 
     bool render(vpgl_camera_double_sptr camera,
@@ -30,7 +30,7 @@ class boxm2_ocl_depth_renderer
     boxm2_opencl_cache_sptr opencl_cache_;
     std::string data_type_;
     bool buffers_allocated_;
-    bool compile_kernels(bocl_device_sptr device);
+    bool compile_kernels(const bocl_device_sptr& device);
     bool cleanup_render_buffers();
     bool allocate_render_buffers(int cl_ni, int cl_nj);
 

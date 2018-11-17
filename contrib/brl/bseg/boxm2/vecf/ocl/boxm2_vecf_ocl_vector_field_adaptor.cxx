@@ -1,6 +1,6 @@
 #include "boxm2_vecf_ocl_vector_field_adaptor.h"
 
-boxm2_vecf_ocl_vector_field_adaptor::boxm2_vecf_ocl_vector_field_adaptor(boxm2_vecf_vector_field_base_sptr cpu_xform)
+boxm2_vecf_ocl_vector_field_adaptor::boxm2_vecf_ocl_vector_field_adaptor(const boxm2_vecf_vector_field_base_sptr& cpu_xform)
   : cpu_xform_(cpu_xform)
 {
 }

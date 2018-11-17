@@ -31,8 +31,8 @@
 #include <vul/vul_timer.h>
 
 boxm2_ocl_vis_score_renderer
-::boxm2_ocl_vis_score_renderer(boxm2_scene_sptr scene,
-                               boxm2_opencl_cache_sptr ocl_cache,
+::boxm2_ocl_vis_score_renderer(const boxm2_scene_sptr& scene,
+                               const boxm2_opencl_cache_sptr& ocl_cache,
                                std::string ident) :
   scene_(scene),
   opencl_cache_(ocl_cache),
@@ -232,7 +232,7 @@ boxm2_ocl_vis_score_renderer
 
 bool
 boxm2_ocl_vis_score_renderer
-::compile_kernels(bocl_device_sptr device)
+::compile_kernels(const bocl_device_sptr& device)
 {
 
     std::vector<std::string> src_paths;

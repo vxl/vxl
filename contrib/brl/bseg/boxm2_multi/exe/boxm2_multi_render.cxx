@@ -34,8 +34,8 @@
 #include <bprb/bprb_macros.h>
 #include <bprb/bprb_func_process.h>
 
-void test_render_expected_images(boxm2_scene_sptr scene,
-                                 bocl_device_sptr device,
+void test_render_expected_images(const boxm2_scene_sptr& scene,
+                                 const bocl_device_sptr& device,
                                  boxm2_opencl_cache1* cache,
                                  std::vector<vpgl_camera_double_sptr>& cams,
                                  unsigned ni, unsigned nj)

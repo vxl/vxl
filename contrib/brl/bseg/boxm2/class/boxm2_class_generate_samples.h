@@ -17,8 +17,8 @@ class boxm2_class_generate_samples
 {
   public:
     boxm2_class_generate_samples(std::string xml_label,
-                                 std::string eoPath,
-                                 std::string irPath,
+                                 const std::string& eoPath,
+                                 const std::string& irPath,
                                  std::size_t K=1000);
 
     //return ground truth samples

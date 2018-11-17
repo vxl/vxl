@@ -16,7 +16,7 @@
 #include <cassert>
 
 
-vdgl_interpolator_linear::vdgl_interpolator_linear( vdgl_edgel_chain_sptr chain)
+vdgl_interpolator_linear::vdgl_interpolator_linear( const vdgl_edgel_chain_sptr& chain)
   : vdgl_interpolator( chain)
 {
   recompute_all();

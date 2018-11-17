@@ -37,8 +37,8 @@ namespace bvxm_ocp_compare_process_gloabals
   constexpr unsigned n_outputs_ = 1;
 
   // functions
-  bool save_raw(char *ocp_array, int x, int y, int z, std::string filename);
-  double compare(bvxm_voxel_world_sptr w1, bvxm_voxel_world_sptr w2, unsigned n, unsigned scale);
+  bool save_raw(char *ocp_array, int x, int y, int z, const std::string& filename);
+  double compare(const bvxm_voxel_world_sptr& w1, const bvxm_voxel_world_sptr& w2, unsigned n, unsigned scale);
 }
 
 //: set input and output types

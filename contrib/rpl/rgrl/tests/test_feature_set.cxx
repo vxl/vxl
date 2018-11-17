@@ -20,8 +20,8 @@ namespace {
 
 bool
 in_vec_2( std::vector< rgrl_feature_sptr > const& vec,
-          rgrl_feature_sptr p1,
-          rgrl_feature_sptr p2 )
+          const rgrl_feature_sptr& p1,
+          const rgrl_feature_sptr& p2 )
 {
   return vec.size() == 2 &&
          ( ( vec[0] == p1 && vec[1] == p2 ) ||

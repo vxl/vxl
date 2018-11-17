@@ -80,7 +80,7 @@ std::ostream&  operator<<(std::ostream& s, bvxm_voxel_world const& vox_world)
 }
 
 //: save the occupancy grid as an 8-bit 3-d vff image
-bool bvxm_voxel_world::save_occupancy_vff(std::string filename,unsigned scale_idx)
+bool bvxm_voxel_world::save_occupancy_vff(const std::string& filename,unsigned scale_idx)
 {
   // open file for binary writing
   std::fstream ofs(filename.c_str(),std::ios::binary | std::ios::out);
@@ -580,7 +580,7 @@ bool bvxm_voxel_world::update_edges_lidar(vil_image_view_base_sptr& lidar_height
 }
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the z values of the most likely voxel intercepted by the corresponding camera ray
-bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx)
+bool bvxm_voxel_world::heightmap(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<unsigned> &heightmap, vil_image_view<float> &conf_map, unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -730,7 +730,7 @@ bool bvxm_voxel_world::heightmap(vpgl_camera_double_sptr virtual_camera, vil_ima
 
 //: generate a heightmap from the viewpoint of a virtual camera
 // The pixel values are the expected z values and variance along the corresponding camera ray
-bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float& max_depth, unsigned scale_idx)
+bool bvxm_voxel_world::heightmap_exp(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<float> &heightmap, vil_image_view<float> &var, float& max_depth, unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 
@@ -884,7 +884,7 @@ bool bvxm_voxel_world::heightmap_exp(vpgl_camera_double_sptr virtual_camera, vil
 }
 
 //: measure the average uncertainty along the rays
-bool bvxm_voxel_world::uncertainty(vpgl_camera_double_sptr virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx)
+bool bvxm_voxel_world::uncertainty(const vpgl_camera_double_sptr& virtual_camera, vil_image_view<float> &uncertainty, unsigned scale_idx)
 {
   typedef bvxm_voxel_traits<OCCUPANCY>::voxel_datatype ocp_datatype;
 

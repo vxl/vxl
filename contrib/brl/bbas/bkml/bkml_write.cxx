@@ -1,9 +1,10 @@
 //:
 // \file
-#include <iostream>
+#include "bkml_write.h"
 #include <cstdio>
 #include <iomanip>
-#include "bkml_write.h"
+#include <iostream>
+#include <utility>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -41,7 +42,7 @@ void bkml_write::close_document(std::ofstream& str)
 }
 
 //: Write a box
-void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr)
+void bkml_write::write_box(std::ofstream &ofs, const std::string& name, const std::string& description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr)
 {
   ofs.precision(8);
   ofs << "<Placemark>\n"
@@ -85,11 +86,11 @@ void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string des
   vnl_double_2 ur(bbox.max_y(), bbox.max_x());
   vnl_double_2 ll(bbox.min_y(), bbox.min_x());
   vnl_double_2 lr(bbox.min_y(), bbox.max_x());
-  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr);
+  bkml_write::write_box(ofs, std::move(name), std::move(description), ul, ur, ll, lr);
 }
 
 //: Write a box with color
-void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, std::string hex_color, unsigned const& fill)
+void bkml_write::write_box(std::ofstream &ofs, const std::string& name, const std::string& description, vnl_double_2 ul, vnl_double_2 ur, vnl_double_2 ll, vnl_double_2 lr, const std::string& hex_color, unsigned const& fill)
 {
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n"
@@ -129,7 +130,7 @@ void bkml_write::write_box(std::ofstream &ofs, std::string name, std::string des
                            unsigned char const& r, unsigned char const& g, unsigned char const& b, unsigned char const&a, unsigned const& fill)
 {
   std::string hex_color = rgb_color_to_hex_color((int)a, (int)r, (int)g, (int)b);
-  bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, hex_color, fill);
+  bkml_write::write_box(ofs, std::move(name), std::move(description), ul, ur, ll, lr, hex_color, fill);
 }
 
 // write a polygon with color (only outerBoundary)
@@ -215,7 +216,7 @@ void bkml_write::write_path(std::ofstream& ofs, std::vector<vgl_point_2d<double>
 }
 
 //: put a pin at the given location
-void bkml_write::write_location(std::ofstream &ofs, std::string name, std::string description, double lat, double lon, double elev)
+void bkml_write::write_location(std::ofstream &ofs, const std::string& name, const std::string& description, double lat, double lon, double elev)
 {
   ofs << "<Placemark>\n"
       << "  <name>" << name << "</name>\n"
@@ -290,7 +291,7 @@ void bkml_write::write_location_as_box(std::ofstream& ofs, double lon, double la
   bkml_write::write_box(ofs, name, description, ul, ur, ll, lr, r, g, b);
 }
 
-void bkml_write::write_photo_overlay(std::ofstream& ofs, std::string name,
+void bkml_write::write_photo_overlay(std::ofstream& ofs, const std::string& name,
                                      double lon, double lat, double alt,
                                      double head, double tilt, double roll,
                                      double t_fov, double r_fov, double value)
@@ -320,7 +321,7 @@ void bkml_write::write_photo_overlay(std::ofstream& ofs, std::string name,
 }
 
 void bkml_write::write_kml_style(std::ofstream& ofs,
-                                 std::string style_name,
+                                 const std::string& style_name,
                                  double const& scale,
                                  double const& line_width,
                                  double const& alpha,

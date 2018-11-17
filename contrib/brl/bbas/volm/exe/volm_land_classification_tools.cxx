@@ -30,8 +30,8 @@ unsigned int northing = 0;  // WARNING: north hard-coded
 
 struct img_info {
 public:
-  bool intersects(vgl_polygon<double> poly) { return vgl_intersection(bbox, poly); }
-  void save_box_kml(std::string out_name) {
+  bool intersects(const vgl_polygon<double>& poly) { return vgl_intersection(bbox, poly); }
+  void save_box_kml(const std::string& out_name) {
     std::ofstream ofs(out_name.c_str());
     bkml_write::open_document(ofs);
     bkml_write::write_box(ofs, name, "", bbox);
@@ -45,7 +45,7 @@ public:
   std::string img_name;
 };
 
-void load_naip_imgs(std::string img_folder, std::vector<img_info>& imgs, int utm_zone) {
+void load_naip_imgs(const std::string& img_folder, std::vector<img_info>& imgs, int utm_zone) {
 
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
 
@@ -80,7 +80,7 @@ void load_naip_imgs(std::string img_folder, std::vector<img_info>& imgs, int utm
   }
 }
 
-void load_lidar_imgs(std::string img_folder, std::vector<img_info>& imgs) {
+void load_lidar_imgs(const std::string& img_folder, std::vector<img_info>& imgs) {
   std::string glob = img_folder + "/*.tif";
   vpgl_lvcs_sptr lvcs = new vpgl_lvcs; // just the default, no concept of local coordinate system here, so won't be used
 
@@ -126,7 +126,7 @@ void prepare_site_file(std::string const& site_file, std::vector<std::string >& 
   ofs.close();
 }
 
-void collect_lidar_pixels(vpgl_lvcs_sptr lvcs, std::string const& mask_name, std::string const& img_name, std::vector<std::pair<int, int> >& pixels, std::vector<std::pair<double, double> >& local_coords)
+void collect_lidar_pixels(const vpgl_lvcs_sptr& lvcs, std::string const& mask_name, std::string const& img_name, std::vector<std::pair<int, int> >& pixels, std::vector<std::pair<double, double> >& local_coords)
 {
   vil_image_view<vxl_byte> mask = vil_load(mask_name.c_str());
   vpgl_geo_camera *cam;
@@ -182,7 +182,7 @@ void enlarge_neighborhood(std::vector<std::pair<int, int> >& img_pixels, int ni,
 }
 
 // use local coords given by lidar pixels to check if there is a corresponding masked img pixel.
-bool collect_img_pixels(vpgl_lvcs_sptr lvcs, int utm_zone, std::string const& mask_name, std::string const& img_tfw_name, std::vector<std::pair<double, double> >& local_coords, std::vector<std::pair<int, int> >& img_pixels, int n_size)
+bool collect_img_pixels(const vpgl_lvcs_sptr& lvcs, int utm_zone, std::string const& mask_name, std::string const& img_tfw_name, std::vector<std::pair<double, double> >& local_coords, std::vector<std::pair<int, int> >& img_pixels, int n_size)
 {
   vil_image_view<vxl_byte> mask = vil_load(mask_name.c_str());
 
@@ -217,7 +217,7 @@ bool in_zone(vgl_polygon<double> poly, int zone) {
     return false;
 }
 
-bool read_training_img(std::string txt_file, std::vector<std::string>& names, std::vector<std::pair<std::string, std::string> >& lidar_imgs, std::vector<std::pair<std::string, std::string> >& imgs)
+bool read_training_img(const std::string& txt_file, std::vector<std::string>& names, std::vector<std::pair<std::string, std::string> >& lidar_imgs, std::vector<std::pair<std::string, std::string> >& imgs)
 {
   std::ifstream ifs(txt_file.c_str());
   if (!vul_file::exists(txt_file) || !ifs.is_open()) {

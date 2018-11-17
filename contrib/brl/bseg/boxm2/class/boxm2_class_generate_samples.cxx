@@ -12,8 +12,8 @@
 #include <cassert>
 
 boxm2_class_generate_samples::boxm2_class_generate_samples(std::string xml_label,
-                                                           std::string eoPath,
-                                                           std::string irPath,
+                                                           const std::string& eoPath,
+                                                           const std::string& irPath,
                                                            std::size_t K)
 {
   //parse file

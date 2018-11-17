@@ -45,7 +45,7 @@ std::vector<spherical_region_attributes> volm_spherical_region::attribute_types(
     return attributes;
 }
 
-void volm_spherical_regions_layer::add_region(volm_spherical_region region)
+void volm_spherical_regions_layer::add_region(const volm_spherical_region& region)
 {
     regions_.push_back(region);
     this->update_attribute_map(regions_.size()-1);

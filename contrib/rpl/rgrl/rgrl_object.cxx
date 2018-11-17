@@ -42,7 +42,7 @@ warning() const
 
 unsigned int
 rgrl_object::
-add_observer( rgrl_event_sptr event, rgrl_command_sptr cmd )
+add_observer( const rgrl_event_sptr& event, const rgrl_command_sptr& cmd )
 {
   rgrl_object_observer new_observer( cmd, event );
   observers_[observer_count_] = new_observer;

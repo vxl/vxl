@@ -313,7 +313,7 @@ class brip_vil_float_ops
 
   //:
   // Returns the image with max scale values
-  static vil_image_view<float> max_scale_trace(vil_image_view<float> input,
+  static vil_image_view<float> max_scale_trace(const vil_image_view<float>& input,
                                                float min_scale,
                                                float max_scale,
                                                float scale_inc);
@@ -321,7 +321,7 @@ class brip_vil_float_ops
   //:
   // Exactly same as max_scale_trace,
   // only return the image with actual trace values at max scales instead of the image with max scale values
-  static vil_image_view<float> max_scale_trace_value(vil_image_view<float> input,
+  static vil_image_view<float> max_scale_trace_value(const vil_image_view<float>& input,
                                                      float min_scale,
                                                      float max_scale,
                                                      float scale_inc);
@@ -598,8 +598,8 @@ class brip_vil_float_ops
                               vgl_box_2d<double> const& box);
 
   //: scan a polygon and return the pixel values as well as max min
-  static std::vector<float> scan_region(vil_image_resource_sptr img,
-                                       vgl_polygon<double> poly,
+  static std::vector<float> scan_region(const vil_image_resource_sptr& img,
+                                       const vgl_polygon<double>& poly,
                                        float& min,
                                        float& max);
   //: cross-correlate two images at a given sub-pixel location

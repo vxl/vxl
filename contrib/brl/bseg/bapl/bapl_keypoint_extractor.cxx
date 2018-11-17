@@ -226,7 +226,7 @@ bapl_is_less_3x3(const float value, const float* im, std::ptrdiff_t i_step, std:
 
 //: Find the peaks in the DoG pyramid
 void bapl_dog_peaks( std::vector<vgl_point_3d<float> >& peak_pts,
-                     bapl_lowe_pyramid_set_sptr pyramid_set,
+                     const bapl_lowe_pyramid_set_sptr& pyramid_set,
                      float curve_ratio )
 {
   int num_oct = pyramid_set->num_octaves();

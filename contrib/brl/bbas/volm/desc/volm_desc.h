@@ -57,7 +57,7 @@ public:
   virtual float similarity(volm_desc_sptr other);
 
   //: visualization using bsvg
-  void visualize(std::string outfile, unsigned char const& y_max = 10) const;
+  void visualize(const std::string& outfile, unsigned char const& y_max = 10) const;
 
   //: return the value of bin
   unsigned char count(unsigned const& i) const { return h_[i]; }

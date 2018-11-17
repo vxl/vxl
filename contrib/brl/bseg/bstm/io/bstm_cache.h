@@ -102,10 +102,10 @@ void vsl_b_read(vsl_b_istream& is, bstm_cache_sptr const& sptr);
 class bstm_cache_destroyer
 {
  public:
-  bstm_cache_destroyer(bstm_cache_sptr s = nullptr);
+  bstm_cache_destroyer(const bstm_cache_sptr& s = nullptr);
   ~bstm_cache_destroyer();
 
-  void set_singleton(bstm_cache_sptr s);
+  void set_singleton(const bstm_cache_sptr& s);
  private:
   bstm_cache_sptr s_;
 };

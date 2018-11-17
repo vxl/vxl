@@ -23,36 +23,36 @@ class rgrl_initializer_prior
 {
  public:
   //: Initialize with a view
-  rgrl_initializer_prior( rgrl_view_sptr            prior_view,
-                          rgrl_scale_sptr           prior_scale = nullptr);
+  rgrl_initializer_prior( const rgrl_view_sptr&            prior_view,
+                          const rgrl_scale_sptr&           prior_scale = nullptr);
 
   //: Initialize with a set of information without packing everything into a view
   rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
                            rgrl_mask_sptr             const& to_image_roi,
                            rgrl_mask_box              const& init_from_region_roi,
-                           rgrl_estimator_sptr        xform_estimator,
-                           rgrl_transformation_sptr   xform_estimate,
+                           const rgrl_estimator_sptr&        xform_estimator,
+                           const rgrl_transformation_sptr&   xform_estimate,
                            unsigned                   resolution,
-                           rgrl_scale_sptr            prior_scale = nullptr);
+                           const rgrl_scale_sptr&            prior_scale = nullptr);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always
   rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
                            rgrl_mask_sptr             const& to_image_roi,
-                           rgrl_estimator_sptr        xform_estimator,
-                           rgrl_transformation_sptr   xform_estimate,
+                           const rgrl_estimator_sptr&        xform_estimator,
+                           const rgrl_transformation_sptr&   xform_estimate,
                            unsigned                   resolution = 0,
-                           rgrl_scale_sptr            prior_scale = nullptr);
+                           const rgrl_scale_sptr&            prior_scale = nullptr);
 
   //: Initialize with a set of information, assuming that registration applies to \a from_image_roi always;
   //  And \a from_image_roi and \a to_image_roi are the same
   rgrl_initializer_prior(  rgrl_mask_sptr             const& from_image_roi,
-                           rgrl_estimator_sptr        xform_estimator,
-                           rgrl_transformation_sptr   xform_estimate,
+                           const rgrl_estimator_sptr&        xform_estimator,
+                           const rgrl_transformation_sptr&   xform_estimate,
                            unsigned                   resolution = 0,
-                           rgrl_scale_sptr            prior_scale = nullptr);
+                           const rgrl_scale_sptr&            prior_scale = nullptr);
 
   //: Add more potential prior transformations
-  void add_prior_xform( rgrl_transformation_sptr   xform_estimate );
+  void add_prior_xform( const rgrl_transformation_sptr&   xform_estimate );
 
   //: Get next initial estimate when first called, but return false thereafter.
   bool next_initial( rgrl_view_sptr           & view,

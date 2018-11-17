@@ -41,7 +41,7 @@ namespace boxm2_create_label_index_process_globals
   constexpr unsigned n_inputs_ = 15;
   constexpr unsigned n_outputs_ = 0;
 
-  void compile_kernel(bocl_device_sptr device,std::vector<bocl_kernel*> & vec_kernels)
+  void compile_kernel(const bocl_device_sptr& device,std::vector<bocl_kernel*> & vec_kernels)
   {
     //gather all render sources... seems like a lot for rendering...
     std::vector<std::string> src_paths;

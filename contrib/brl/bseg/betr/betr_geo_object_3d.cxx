@@ -5,7 +5,7 @@
 #include <vsol/vsol_volume_3d.h>
 #include <betr/vsol_mesh_3d.h>
 
-  void betr_geo_object_3d::update_box_from_from_vsol_box(vsol_box_3d_sptr sbox, betr_geo_box_3d& box) const{
+  void betr_geo_object_3d::update_box_from_from_vsol_box(const vsol_box_3d_sptr& sbox, betr_geo_box_3d& box) const{
   if(!sbox)
     return;
   // derive four points from the box (three is minimum for geo box)

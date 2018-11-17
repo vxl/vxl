@@ -6,7 +6,7 @@
 //:
 // \file
 
-bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, char* buffer, std::size_t length)
+bstm_time_block::bstm_time_block(const bstm_block_id& id, bstm_block_metadata data, char* buffer, std::size_t length)
 {
   //data has already been read, save length
   byte_count_ = length;
@@ -23,7 +23,7 @@ bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, cha
   read_only_ = false; // make sure that it is written back to disc
 }
 
-bstm_time_block::bstm_time_block(bstm_block_id id, bstm_block_metadata data, unsigned num_el)
+bstm_time_block::bstm_time_block(const bstm_block_id& id, bstm_block_metadata data, unsigned num_el)
 {
   //this info is not so relevant (now) but save it anyway
   init_level_t_ = data.init_level_t_;

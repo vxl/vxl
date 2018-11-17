@@ -121,11 +121,13 @@ std::vector<vgl_point_3d<double> >  peano_curve_on_cube(unsigned level)
 
   // high y face
   std::vector<vgl_point_3d<double> > high_y;
-  for (auto & i : local_peano)
+  high_y.reserve(local_peano.size());
+for (auto & i : local_peano)
     high_y.emplace_back(i.x(),1,i.y());
   // high x face
   std::vector<vgl_point_3d<double> > high_x;
-  for (auto & i : local_peano)
+  high_x.reserve(local_peano.size());
+for (auto & i : local_peano)
      high_x.emplace_back(1,-i.x(),i.y());
   // low z face
   std::vector<vgl_point_3d<double> > low_z;
