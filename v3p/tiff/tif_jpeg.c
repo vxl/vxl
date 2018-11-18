@@ -156,7 +156,7 @@ typedef struct {
 	uint16		photometric;	/* copy of PhotometricInterpretation */
 	uint16		h_sampling;	/* luminance sampling factors */
 	uint16		v_sampling;
-	tmsize_t   	bytesperline;	/* decompressed bytes per scanline */
+	tmsize_t        bytesperline;	/* decompressed bytes per scanline */
 	/* pointers to intermediate buffers when processing downsampled data */
 	JSAMPARRAY	ds_buffer[MAX_COMPONENTS];
 	int		scancount;	/* number of "scanlines" accumulated */

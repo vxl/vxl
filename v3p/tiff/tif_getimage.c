@@ -663,7 +663,7 @@ gtTileContig(TIFFRGBAImage* img, uint32* raster, uint32 w, uint32 h)
     for (row = 0; row < h; row += nrow)
     {
         rowstoread = th - (row + img->row_offset) % th;
-    	nrow = (row + rowstoread > h ? h - row : rowstoread);
+        nrow = (row + rowstoread > h ? h - row : rowstoread);
 	fromskew = leftmost_fromskew;
 	this_tw = leftmost_tw;
 	this_toskew = leftmost_toskew;
@@ -2854,9 +2854,9 @@ int
 TIFFReadRGBAStripExt(TIFF* tif, uint32 row, uint32 * raster, int stop_on_error)
 
 {
-    char 	emsg[1024] = "";
+    char         emsg[1024] = "";
     TIFFRGBAImage img;
-    int 	ok;
+    int         ok;
     uint32	rowsperstrip, rows_to_read;
 
     if( TIFFIsTiled( tif ) )
@@ -2912,9 +2912,9 @@ TIFFReadRGBATile(TIFF* tif, uint32 col, uint32 row, uint32 * raster)
 int
 TIFFReadRGBATileExt(TIFF* tif, uint32 col, uint32 row, uint32 * raster, int stop_on_error )
 {
-    char 	emsg[1024] = "";
+    char        emsg[1024] = "";
     TIFFRGBAImage img;
-    int 	ok;
+    int         ok;
     uint32	tile_xsize, tile_ysize;
     uint32	read_xsize, read_ysize;
     uint32	i_row;

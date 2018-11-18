@@ -90,7 +90,7 @@ extern "C" {
 	static uint64   _tiffisSizeProc(thandle_t fd);
 	static int      _tiffosCloseProc(thandle_t fd);
 	static int      _tiffisCloseProc(thandle_t fd);
-	static int 	_tiffDummyMapProc(thandle_t , void** base, toff_t* size );
+	static int      _tiffDummyMapProc(thandle_t , void** base, toff_t* size );
 	static void     _tiffDummyUnmapProc(thandle_t , void* base, toff_t size );
 	static TIFF*    _tiffStreamOpen(const char* name, const char* mode, void *fd);
 

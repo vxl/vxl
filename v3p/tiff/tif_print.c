@@ -48,7 +48,7 @@ static const char * const photoNames[] = {
     "7 (0x7)",
     "CIE L*a*b*",				/* PHOTOMETRIC_CIELAB */
     "ICC L*a*b*",				/* PHOTOMETRIC_ICCLAB */
-    "ITU L*a*b*" 				/* PHOTOMETRIC_ITULAB */
+    "ITU L*a*b*"				/* PHOTOMETRIC_ITULAB */
 };
 #define	NPHOTONAMES	(sizeof (photoNames) / sizeof (photoNames[0]))
 

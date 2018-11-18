@@ -43,7 +43,7 @@
 
 #define LITERALROW	0x00
 #define LITERALSPAN	0x40
-#define WHITE   	((1<<2)-1)
+#define WHITE           ((1<<2)-1)
 
 static int
 NeXTDecode(TIFF* tif, uint8* buf, tmsize_t occ, uint16 s)
