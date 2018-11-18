@@ -138,4 +138,3 @@ void vsl_print_summary(std::ostream& os,const pdf1d_compare_to_pdf* b)
   else
     os << "No pdf1d_compare_to_pdf defined.";
 }
-

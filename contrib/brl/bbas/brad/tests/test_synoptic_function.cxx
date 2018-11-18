@@ -55,4 +55,3 @@ static void test_synoptic_function()
 #endif
 }
 TESTMAIN( test_synoptic_function );
-

@@ -913,4 +913,3 @@ double brad_radiance_variance_chavez(double reflectance,
 
    return radiance_var;
 }
-

@@ -32,4 +32,3 @@ std::ostream& operator<<(std::ostream& s, const vbl_bool_ostream::true_false& pr
     s << "false";
   return s;
 }
-

@@ -169,4 +169,3 @@ double cvg_hemisphere_tableau::compress_range(double rad)
 {
   return vnl_math::angle_minuspi_to_pi(rad);
 }
-

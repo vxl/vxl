@@ -291,4 +291,3 @@ bool volm_buffered_index::get_next(uchar* values, unsigned size)
   current_id_++;
   return true;
 }
-

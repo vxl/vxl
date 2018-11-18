@@ -82,10 +82,3 @@ double mbl_linear_interpolator::y(double x) const
 
   return yval;
 }
-
-
-
-
-
-
-

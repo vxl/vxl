@@ -103,5 +103,3 @@ enforce_prior_scale( const rgrl_scale_sptr& match_scale )
   else
     return prior_scale_;   // return the prior scale in this object
 }
-
-

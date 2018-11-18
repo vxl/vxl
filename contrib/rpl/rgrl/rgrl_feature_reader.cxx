@@ -101,4 +101,3 @@ operator>> (std::istream& is, rgrl_feature_sptr& fea_sptr)
   fea_sptr = rgrl_feature_reader( is );
   return is;
 }
-

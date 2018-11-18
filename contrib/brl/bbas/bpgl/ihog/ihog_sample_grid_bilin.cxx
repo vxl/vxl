@@ -131,4 +131,3 @@ void ihog_sample_grid_bilin(vnl_vector<double>& vec,
     }
   }
 }
-

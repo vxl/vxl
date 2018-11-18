@@ -203,4 +203,3 @@ bool brec_glitch_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -135,4 +135,3 @@ bapl_mi_matcher::mutual_info(const bapl_affine_transform& T)
 
   return tgt_entropy_ + match_entropy - joint_entropy;
 }
-

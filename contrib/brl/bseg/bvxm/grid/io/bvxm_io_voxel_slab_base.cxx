@@ -45,4 +45,3 @@ void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_slab_base* &ph)
     vsl_b_write(os,*ph);
   }
 }
-

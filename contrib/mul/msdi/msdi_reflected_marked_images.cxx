@@ -161,6 +161,3 @@ std::string msdi_reflected_marked_images::points_name() const
 
   return "ref_"+marked_images_.points_name();
 }
-
-
-

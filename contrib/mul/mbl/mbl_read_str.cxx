@@ -41,4 +41,3 @@ char* mbl_read_str(char *reply, int max_str_len, const char *q_str, const char *
   delete [] new_reply;
   return reply;
 }
-

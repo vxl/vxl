@@ -388,4 +388,3 @@ adjust_with_weights(std::vector<vpgl_rational_camera<double> > const& cams, std:
   }
   return true;
 }
-

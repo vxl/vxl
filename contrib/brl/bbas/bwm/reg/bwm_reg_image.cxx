@@ -181,4 +181,3 @@ if(!edges_back_projected_)
  edges = edges_3d_;
  return true;
 }
-

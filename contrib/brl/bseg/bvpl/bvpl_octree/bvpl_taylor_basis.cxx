@@ -256,4 +256,3 @@ bool bvpl_taylor_basis::assemble_basis(const bvpl_taylor_scenes_map_sptr& taylor
 
   return true;
 }
-

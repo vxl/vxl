@@ -121,4 +121,3 @@ std::istream& operator>>(std::istream& is, bpgl_comp_rational_camera<T>& p);
 
 
 #endif // bpgl_comp_rational_camera_h_
-

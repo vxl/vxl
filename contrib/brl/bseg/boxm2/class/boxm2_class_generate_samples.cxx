@@ -82,4 +82,3 @@ pixel_class(int i, int j, std::vector<vgl_polygon<double> >& polygons, std::vect
       return classes[c];
   return "noclass";
 }
-

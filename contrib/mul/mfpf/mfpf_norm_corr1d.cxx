@@ -248,4 +248,3 @@ bool mfpf_norm_corr1d::operator==(const mfpf_norm_corr1d& nc) const
   if (kernel_.size()!=nc.kernel_.size()) return false;
   return vnl_vector_ssd(kernel_,nc.kernel_)<1e-4;
 }
-

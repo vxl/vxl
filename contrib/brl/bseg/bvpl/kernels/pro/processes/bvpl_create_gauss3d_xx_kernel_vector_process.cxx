@@ -70,4 +70,3 @@ bool bvpl_create_gauss3d_xx_kernel_vector_process(bprb_func_process& pro)
 
   return true;
 }
-

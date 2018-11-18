@@ -2044,4 +2044,3 @@ gevd_contour::CheckInvariants(std::vector<vtol_edge_2d_sptr>& edges,
 
   return nerror;
 }
-

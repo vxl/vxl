@@ -143,4 +143,3 @@ bool vpgl_get_rpc_backproject_ray_process(bprb_func_process& pro)
   pro.set_output_val<double>(2, (double)point.z()); // height
   return true;
 }
-

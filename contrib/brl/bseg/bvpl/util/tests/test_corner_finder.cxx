@@ -85,5 +85,3 @@ MAIN(test_corner_finder)
   test_corner_pair_finder();
   return 0;
 }
-
-

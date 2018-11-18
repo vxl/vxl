@@ -216,5 +216,3 @@ void vsl_b_read(vsl_b_istream&  /*is*/, bil_raw_image_istream*  /*p*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, bil_raw_image_istream_sptr&  /*sptr*/) {}
 //: Binary load boxm2_data_base_sptr from stream.
 void vsl_b_read(vsl_b_istream&  /*is*/, bil_raw_image_istream_sptr const&  /*sptr*/) {}
-
-

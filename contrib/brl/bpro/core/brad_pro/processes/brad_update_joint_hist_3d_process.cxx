@@ -95,4 +95,3 @@ bool brad_update_joint_hist_3d_process(bprb_func_process& pro)
   pro.set_output_val<bsta_joint_histogram_3d_base_sptr>(0, out_ptr);
   return true;
 }
-

@@ -60,4 +60,3 @@ bool bocl_info_process(bprb_func_process&  /*pro*/)
   std::cout<<std::endl;
   return true;
 }
-

@@ -58,4 +58,3 @@ bool vpgl_create_lvcs_process(bprb_func_process& pro)
   return true;
 
 }
-

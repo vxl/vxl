@@ -88,4 +88,3 @@ static void test_add_next_image(int argc, char** argv)
 }
 
 TESTMAIN_ARGS(test_add_next_image);
-

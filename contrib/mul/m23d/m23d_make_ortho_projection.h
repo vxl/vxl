@@ -27,4 +27,3 @@ vnl_matrix<double> m23d_make_ortho_projection(vnl_random& r,
                                               bool basis_true=false);
 
 #endif // m23d_make_ortho_projection_h_
-

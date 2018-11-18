@@ -104,4 +104,3 @@ bool ihog_compute_mi_cost_surface_process(bprb_func_process& pro)
 
   return true;
 }
-

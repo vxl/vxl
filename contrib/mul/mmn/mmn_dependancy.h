@@ -103,4 +103,3 @@ inline void vsl_b_read(vsl_b_istream& bfs, mmn_dependancy& t)
 }
 
 #endif // mmn_dependancy_h_
-

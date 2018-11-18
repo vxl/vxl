@@ -31,4 +31,3 @@ vgui_menu basic_menus::get_menu()
   menubar.add( "File", menufile);
   return menubar;
 }
-

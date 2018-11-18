@@ -106,4 +106,3 @@ bool load_image(vil_image_view_base_sptr const& base_img, vil_image_view<T>*& im
 }
 
 #endif // icam_view_metadata_h_
-

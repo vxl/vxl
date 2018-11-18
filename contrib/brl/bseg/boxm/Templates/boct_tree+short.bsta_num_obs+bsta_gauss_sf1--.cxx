@@ -7,4 +7,3 @@
 typedef bsta_num_obs<bsta_gauss_sf1> gauss_type;
 
 BOCT_TREE_INSTANTIATE(short, gauss_type);
-

@@ -93,4 +93,3 @@ boxm2_bounding_box_parser::startElement(const char* name, const char** atts)
     verts_[entity_id_][volume_id_].push_back(temp);
   }
 }
-

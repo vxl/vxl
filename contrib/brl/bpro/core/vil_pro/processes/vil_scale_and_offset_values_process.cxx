@@ -68,4 +68,3 @@ bool vil_scale_and_offset_values_process(bprb_func_process& pro)
   }
   return true;
 }
-

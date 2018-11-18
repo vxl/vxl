@@ -615,4 +615,3 @@ bool boxm2_update_using_quality(boxm2_scene_sptr & scene,
     }
     return true;
 }
-

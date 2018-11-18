@@ -30,4 +30,3 @@ void msm_reflect_shape_along_x(const msm_points& points,
     new_points.set_point(sym_pts[i],x,p.y());
   }
 }
-

@@ -330,4 +330,3 @@ bool sdet_add_responses_to_filter_bank_process(bprb_func_process& pro)
 
   return true;
 }
-

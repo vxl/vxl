@@ -206,4 +206,3 @@ void sdet_harris_detector::clear()
   points_.clear();
   points_valid_ = false;
 }
-

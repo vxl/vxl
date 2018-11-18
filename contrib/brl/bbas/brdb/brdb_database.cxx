@@ -362,4 +362,3 @@ void brdb_database::b_read(vsl_b_istream is)
     }
   }
 }
-

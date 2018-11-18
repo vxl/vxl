@@ -38,4 +38,3 @@ void vsl_b_write(vsl_b_ostream& os, const bbas_1d_array_string_sptr & aptr){
     return;
   vsl_b_write(os, *(aptr.ptr()));
 }
-

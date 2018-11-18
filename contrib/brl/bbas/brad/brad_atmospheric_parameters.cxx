@@ -46,5 +46,3 @@ std::istream&  operator>>(std::istream& s, brad_atmospheric_parameters& atm)
    }
    return s;
 }
-
-

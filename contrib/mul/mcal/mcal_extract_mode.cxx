@@ -176,4 +176,3 @@ void mcal_extract_modes(std::vector<vnl_vector<double> >& dv,
     mode_var[i]=var_set[i];
   }
 }
-

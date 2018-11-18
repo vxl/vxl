@@ -29,4 +29,3 @@ void initialise_ids(my_top_level & p)
     i++ ;
   }
 }
-

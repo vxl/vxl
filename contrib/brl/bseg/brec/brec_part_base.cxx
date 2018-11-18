@@ -219,4 +219,3 @@ brec_part_instance::get_probe_box(float radius)
 
   return probe;
 }
-

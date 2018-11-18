@@ -484,4 +484,3 @@ void ihog_minimizer::minimize_using_minfo(ihog_transform_2d& xform)
            << " tx: " << xform.get_translation().x()
            << " ty: " << xform.get_translation().y() << '\n';
 }
-

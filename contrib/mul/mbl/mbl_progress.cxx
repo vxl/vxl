@@ -134,4 +134,3 @@ bool mbl_progress::is_cancelled(const std::string &identifier) const
   }
   return retval;
 }
-

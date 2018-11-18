@@ -75,5 +75,3 @@ static void test_bvgl_intersection()
 }
 
 TESTMAIN( test_bvgl_intersection );
-
-

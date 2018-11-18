@@ -399,4 +399,3 @@ void bsvg_plot::add_splice(float center_x, float center_y, float radius, float s
   splice_g->set_stroke_color("black");
   this->add_element(splice_g);
 }
-

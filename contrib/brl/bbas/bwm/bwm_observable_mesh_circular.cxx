@@ -38,4 +38,3 @@ void bwm_observable_mesh_circular::increase_radius(double p)
   r_ *= (1+p);
   this->notify_observers("update");
 }
-

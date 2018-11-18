@@ -103,4 +103,3 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy* ph);
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy* &ph);
 
 #endif  //brec_part_hierarchy_h_
-

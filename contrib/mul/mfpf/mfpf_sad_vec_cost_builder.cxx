@@ -245,4 +245,3 @@ void mfpf_sad_vec_cost_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

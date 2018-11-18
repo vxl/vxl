@@ -123,4 +123,3 @@ bool bil_arf_seek_frame_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(1, time);
   return true;
 }
-

@@ -127,4 +127,3 @@ std::string vidl_v4l2_control_menu::description() const
 }
 
 // ----------------- Control boolean ---------------
-

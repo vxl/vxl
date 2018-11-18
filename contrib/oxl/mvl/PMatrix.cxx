@@ -635,4 +635,3 @@ PMatrix PMatrix::premultiply(vnl_double_3x3 const& H) const
 {
   return PMatrix(H * p_matrix_);
 }
-

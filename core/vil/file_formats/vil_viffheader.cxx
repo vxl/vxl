@@ -63,4 +63,3 @@ vil_viff_xvimage::vil_viff_xvimage()
 {
   memset(this,0, sizeof(vil_viff_xvimage));
 }
-

@@ -103,4 +103,3 @@ bool bvxm_proj_local_cam_process(bprb_func_process& pro)
   std::cout<<"(u,v):"<<u<<','<<v<<'\n';
   return true;
 }
-

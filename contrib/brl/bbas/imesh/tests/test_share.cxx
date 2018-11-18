@@ -26,4 +26,3 @@ void make_cube(imesh_mesh& cube)
   std::unique_ptr<imesh_face_array_base> f(faces);
   cube.set_faces(std::move(f));
 }
-

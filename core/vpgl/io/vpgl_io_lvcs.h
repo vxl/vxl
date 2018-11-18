@@ -22,4 +22,3 @@ void vsl_b_write(vsl_b_ostream & os, vpgl_lvcs_sptr const& lvcs_sptr);
 void vsl_b_read(vsl_b_istream & is, vpgl_lvcs_sptr &lvcs);
 
 #endif
-

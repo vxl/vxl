@@ -111,5 +111,3 @@ std::ostream& operator<<(std::ostream& os,const mbl_dyn_prog& b);
 
 //=======================================================================
 #endif
-
-

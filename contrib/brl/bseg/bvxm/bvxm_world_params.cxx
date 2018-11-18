@@ -186,4 +186,3 @@ void bvxm_world_params::write_xml(std::string const& filename, std::string const
       << "</bvxmCreateVoxelWorldProcess>\n";
   ofs.close();
 }
-

@@ -110,4 +110,3 @@ vidl_v4l2_devices::vidl_v4l2_devices()
 
   load_devices(dir);
 }
-

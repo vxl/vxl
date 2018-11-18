@@ -34,4 +34,3 @@ double pop_geometric_cost_function::cost()
     return 0;
   }
 }
-

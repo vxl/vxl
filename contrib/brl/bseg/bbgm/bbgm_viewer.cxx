@@ -165,4 +165,3 @@ bbgm_weight_viewer::find_view_maker(const std::type_info& dist_type)
       return *i;
   return bbgm_view_maker_sptr(nullptr);
 }
-

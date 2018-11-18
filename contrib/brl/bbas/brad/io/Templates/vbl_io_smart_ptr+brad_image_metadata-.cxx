@@ -3,4 +3,3 @@
 #include <brad/io/brad_io_image_metadata.h>
 
 VBL_IO_SMART_PTR_INSTANTIATE(brad_image_metadata);
-

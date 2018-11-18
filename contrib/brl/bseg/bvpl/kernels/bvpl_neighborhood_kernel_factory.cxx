@@ -73,4 +73,3 @@ void bvpl_neighborhood_kernel_factory::create_canonical()
 
   return;
 }
-

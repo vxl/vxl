@@ -106,4 +106,3 @@ bool vil_pixel_value_process(bprb_func_process& pro)
   pro.set_output_val<float>(0, -1.0f);
   return true;
 }
-

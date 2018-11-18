@@ -252,4 +252,3 @@ int main(int argc,  char** argv)
         ofile<<distance.first.x()<<' '<<distance.first.y()<<' '<<distance.first.z()<<' '<<distance.second<<std::endl;
     return 0;
 }
-

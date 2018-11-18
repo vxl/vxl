@@ -114,4 +114,3 @@ bool brip_extrema_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, mask);
   return true;
 }
-

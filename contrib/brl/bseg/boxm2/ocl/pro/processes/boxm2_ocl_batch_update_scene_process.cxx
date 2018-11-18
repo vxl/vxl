@@ -468,5 +468,3 @@ bool boxm2_ocl_batch_update_scene_process(bprb_func_process& pro)
 
   return true;
 }
-
-

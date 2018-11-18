@@ -78,4 +78,3 @@ void pop_rigid_3d::update()
                          params_[4]->value_,
                          params_[5]->value_);
 }
-

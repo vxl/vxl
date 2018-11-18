@@ -53,4 +53,3 @@ class mfpf_searcher
 
 
 #endif // mfpf_searcher_h_
-

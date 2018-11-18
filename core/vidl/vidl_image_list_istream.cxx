@@ -200,4 +200,3 @@ seek_frame(unsigned int frame_nr)
   }
   return false;
 }
-

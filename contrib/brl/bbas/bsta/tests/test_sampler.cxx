@@ -76,5 +76,3 @@ static void test_sampler()
 }
 
 TESTMAIN(test_sampler);
-
-

@@ -30,4 +30,3 @@ float prob_correspondence(boxm2_feature_vector& f1, float surface_prob1, boxm2_f
   float prob_cor = surface_prob1*surface_prob2 + (1.0f-surface_prob1)*(1.0f-surface_prob2);
   return prob_cor*dif_prob;
 }
-

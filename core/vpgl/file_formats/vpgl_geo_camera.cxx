@@ -668,4 +668,3 @@ void vpgl_geo_camera::b_read(vsl_b_istream& is)
     return;
   }
 }
-

@@ -27,4 +27,3 @@ public:
 
 
 #endif  //wxSliderPanelXmlHandler_h_
-

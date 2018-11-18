@@ -392,4 +392,3 @@ bapl_lowe_orientation::orient_at( float x, float y, float scale,
     }
   }
 }
-

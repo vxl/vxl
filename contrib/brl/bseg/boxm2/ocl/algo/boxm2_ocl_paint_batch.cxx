@@ -258,4 +258,3 @@ void boxm2_ocl_paint_batch::weighted_mean_var(const float* obs, const float* vis
   mean = sample_mean;
   return;
 }
-

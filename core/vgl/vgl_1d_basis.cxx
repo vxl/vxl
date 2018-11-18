@@ -12,4 +12,3 @@ VGL_1D_BASIS_INSTANTIATE(vgl_point_3d<double>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_1d<double>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_2d<double>);
 VGL_1D_BASIS_INSTANTIATE(vgl_homg_point_3d<double>);
-

@@ -55,4 +55,3 @@ bool brad_eigenimage_pixel_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(eignimage));
   return true;
 }
-

@@ -266,4 +266,3 @@ static void test_ocl_lm_phongs_model()
 }
 
 TESTMAIN( test_ocl_lm_phongs_model );
-

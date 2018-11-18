@@ -103,5 +103,3 @@ bool boxm2_ortho_geo_cam_from_scene_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(2, nj);
   return true;
 }
-
-

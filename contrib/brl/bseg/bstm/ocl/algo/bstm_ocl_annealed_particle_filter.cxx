@@ -195,4 +195,3 @@ float bstm_ocl_annealed_particle_filter::scale_obs_density(unsigned cur_time, do
 
   return cur_beta;
 }
-

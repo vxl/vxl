@@ -404,4 +404,3 @@ std::vector< std::string > vgui_displaybase_tableau::get_grouping_names()
 
   return to_return;
 }
-

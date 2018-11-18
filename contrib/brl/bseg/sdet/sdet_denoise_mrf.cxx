@@ -204,4 +204,3 @@ bool sdet_denoise_mrf::denoise()
   output_valid_ = true;
   return true;
 }
-

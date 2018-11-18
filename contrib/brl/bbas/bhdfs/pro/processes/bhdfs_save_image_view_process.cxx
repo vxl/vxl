@@ -52,4 +52,3 @@ bool bhdfs_save_image_view_process(bprb_func_process& pro)
   else
     return true;
 }
-

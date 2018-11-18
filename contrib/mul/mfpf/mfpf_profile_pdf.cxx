@@ -243,4 +243,3 @@ bool mfpf_profile_pdf::operator==(const mfpf_profile_pdf& nc) const
   // Doesn't check pdf, though it should.
   return true;
 }
-

@@ -87,4 +87,3 @@ bool vil_nitf_date_time_process(bprb_func_process& pro)
   pro.set_output_val<int>(5, sec);
   return true;
 }
-

@@ -55,4 +55,3 @@ bool brad_get_sun_angles_date_time_process(bprb_func_process& pro)
   pro.set_output_val<float>(1, float(sun_el));
   return true;
 }
-

@@ -130,4 +130,3 @@ initbstm_batch(void)
 
   Py_InitModule("bstm_batch", bstm_batch_methods);
 }
-

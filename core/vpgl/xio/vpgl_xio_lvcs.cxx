@@ -37,4 +37,3 @@ void x_write(std::ostream & os, vpgl_lvcs const& v, std::string element_name)
   xml_element.add_attribute("theta", theta);
   xml_element.x_write(os);
 }
-

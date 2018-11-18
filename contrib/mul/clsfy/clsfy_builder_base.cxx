@@ -124,4 +124,3 @@ std::ostream& operator<<(std::ostream& os,const clsfy_builder_base* b)
   vsl_print_summary(os, b);
   return os;
 }
-

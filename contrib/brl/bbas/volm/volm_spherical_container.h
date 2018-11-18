@@ -83,4 +83,3 @@ protected:
 };
 
 #endif  // volm_spherical_container_h_
-

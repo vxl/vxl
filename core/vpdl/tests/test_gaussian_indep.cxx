@@ -261,5 +261,3 @@ static void test_gaussian_indep()
 }
 
 TESTMAIN(test_gaussian_indep);
-
-

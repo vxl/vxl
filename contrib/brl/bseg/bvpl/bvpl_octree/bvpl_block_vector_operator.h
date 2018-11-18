@@ -144,4 +144,3 @@ void bvpl_block_vector_operator::operate(boxm_scene<boct_tree<short, T_data_in >
 }
 
 #endif // bvpl_block_vector_operator_h
-

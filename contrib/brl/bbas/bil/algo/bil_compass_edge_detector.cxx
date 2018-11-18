@@ -790,4 +790,3 @@ double bil_gray_EMD(const bil_bin dirt[], const bil_bin hole[])
     leftoverhole = hole_amt - massmoved;
   }
 }
-

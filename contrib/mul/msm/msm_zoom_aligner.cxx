@@ -339,5 +339,3 @@ msm_aligner* msm_zoom_aligner::clone() const
 {
   return new msm_zoom_aligner(*this);
 }
-
-

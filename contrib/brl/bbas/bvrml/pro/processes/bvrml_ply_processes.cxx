@@ -297,4 +297,3 @@ int bvrml_plyio_vertex_cb_(p_ply_argument argument)
   }
   return 1;
 }
-

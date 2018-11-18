@@ -403,4 +403,3 @@ std::ostream& operator<<(std::ostream& os ,const mfpf_pose_type& pt)
   }
   return os;
 }
-

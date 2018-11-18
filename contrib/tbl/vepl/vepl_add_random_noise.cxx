@@ -94,4 +94,3 @@ vil_image_resource_sptr vepl_add_random_noise(const vil_image_resource_sptr& ima
 
   return img_out;
 }
-

@@ -67,4 +67,3 @@ class betr_edgel_change_detection_params : public betr_params
 std::ostream&  operator<<(std::ostream& s, betr_edgel_change_detection_params const& ecdp);
 std::istream&  operator>>(std::istream& s, betr_edgel_change_detection_params& ecdp);
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_edgel_change_detection_params.
-

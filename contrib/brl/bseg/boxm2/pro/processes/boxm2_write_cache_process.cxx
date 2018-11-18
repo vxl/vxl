@@ -64,4 +64,3 @@ bool boxm2_write_cache_process(bprb_func_process& pro)
     cache->clear_cache();
   return true;
 }
-

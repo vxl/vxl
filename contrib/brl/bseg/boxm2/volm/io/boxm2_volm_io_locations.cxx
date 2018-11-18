@@ -61,4 +61,3 @@ void vsl_print_summary(std::ostream& os, const boxm2_volm_loc_hypotheses* &p)
     vsl_print_summary(os, *p);
   }
 }
-

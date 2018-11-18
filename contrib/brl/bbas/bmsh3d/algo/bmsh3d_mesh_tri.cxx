@@ -140,5 +140,3 @@ bool Triangulate::Process(const Vector2dVector &contour,Vector2dVector &result)
 
   return true;
 }
-
-

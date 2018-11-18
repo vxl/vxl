@@ -89,5 +89,3 @@ void pdf1d_epanech_kernel_pdf_builder::print_summary(std::ostream& /*os*/) const
 {
   std::cerr << "pdf1d_epanech_kernel_pdf_builder::print_summary() NYI\n";
 }
-
-

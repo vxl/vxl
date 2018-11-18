@@ -184,4 +184,3 @@ bool bhdfs_generate_file_process(bprb_func_process& pro)
 
   return true;
 }
-

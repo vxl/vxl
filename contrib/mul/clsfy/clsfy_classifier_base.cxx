@@ -168,4 +168,3 @@ double clsfy_test_error(const clsfy_classifier_base &classifier,
   if (n_class==0) return -1.0;
   return ((double) n_bad) / ((double) n_class);
 }
-

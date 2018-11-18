@@ -594,5 +594,3 @@ bool mfpf_grad_corr2d::operator==(const mfpf_grad_corr2d& nc) const
   if (vil_math_ssd(kernel_x_,nc.kernel_x_,double(0))>1e-4) return false;
   return (vil_math_ssd(kernel_y_,nc.kernel_y_,double(0))<1e-4);
 }
-
-

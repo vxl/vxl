@@ -339,4 +339,3 @@ void vsl_b_write(vsl_b_ostream& os, const bapl_conn_table* &ph)
     vsl_b_write(os,*ph);
   }
 }
-

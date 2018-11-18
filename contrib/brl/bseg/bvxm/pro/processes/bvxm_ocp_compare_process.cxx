@@ -177,4 +177,3 @@ double bvxm_ocp_compare_process_gloabals::compare(const bvxm_voxel_world_sptr& w
   save_raw(comp_array,dim,dim,dim,"data_comp.raw");
   return maxN;
 }
-

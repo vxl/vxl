@@ -108,5 +108,3 @@ bool breg3d_set_occupancy_plane_process::execute()
 
   return true;
 }
-
-

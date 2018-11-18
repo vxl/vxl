@@ -103,4 +103,3 @@ ihog_cost_func::last_xformed_image()
 {
   return roi_.resample(to_image_);
 }
-

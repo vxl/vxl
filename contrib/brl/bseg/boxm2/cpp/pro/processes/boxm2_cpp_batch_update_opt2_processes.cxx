@@ -355,4 +355,3 @@ bool boxm2_cpp_batch_update_opt2_process(bprb_func_process& pro)
 
   return true;
 }
-

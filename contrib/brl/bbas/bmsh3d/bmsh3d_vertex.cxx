@@ -393,4 +393,3 @@ const bmsh3d_edge* V_find_other_E(const bmsh3d_vertex* V, const bmsh3d_edge* inp
   }
   return nullptr;
 }
-

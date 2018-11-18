@@ -181,4 +181,3 @@ double distance_intensity(double plus_mean, double minus_mean, double intensity_
   double E = std::abs(plus_mean - minus_mean);
   return std::exp(-E/intensity_gamma);
 }
-

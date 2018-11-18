@@ -34,4 +34,3 @@ void mfpf_draw_pose_cross(vimt_image_2d_of<vxl_byte>& image,
   mbl_draw_line(image.image(),w2im(p1),w2im(p2),r,g,b);
   mbl_draw_line(image.image(),w2im(p3),w2im(p4),r,g,b);
 }
-

@@ -163,4 +163,3 @@ bool operator==(vgui_event const& a, vgui_event const& b)
           a.user    == b.user &&
           a.data    == b.data;
 }
-

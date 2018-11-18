@@ -264,4 +264,3 @@ bool brec_hierarchy_edge::xml_parse_element(bxml_data_sptr data)
   else
     return false;
 }
-

@@ -160,5 +160,3 @@ static void test_rational_camera()
 }
 
 TESTMAIN(test_rational_camera);
-
-

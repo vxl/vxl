@@ -40,4 +40,3 @@ void vsl_b_read(vsl_b_istream&  /*is*/, brad_image_metadata*  /*p*/){}
 void vsl_b_read(vsl_b_istream&  /*is*/, brad_image_metadata_sptr&  /*sptr*/){}
 //: Binary load brad_image_metadata scene from stream.
 void vsl_b_read(vsl_b_istream&  /*is*/, brad_image_metadata_sptr const&  /*sptr*/){}
-

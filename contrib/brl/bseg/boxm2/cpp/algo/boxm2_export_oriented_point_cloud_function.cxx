@@ -453,4 +453,3 @@ void boxm2_export_oriented_point_cloud_function::readBBFromPLY(const std::string
 
   box=parsed_ply.bbox;
 }
-

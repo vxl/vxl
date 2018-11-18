@@ -284,4 +284,3 @@ void boxm_mog_grey_processor::compute_appearance(std::vector<boxm_apm_traits<BOX
 
   return;
 }
-

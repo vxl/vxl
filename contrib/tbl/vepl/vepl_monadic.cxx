@@ -292,4 +292,3 @@ vil_image_resource_sptr vepl_monadic_shear(const vil_image_resource_sptr& image,
 
   return img_out;
 }
-

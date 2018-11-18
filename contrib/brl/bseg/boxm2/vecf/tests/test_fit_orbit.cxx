@@ -295,4 +295,3 @@ bool good = false;
 #endif //BUILD_FIT_ORBIT
 }
 TESTMAIN( test_fit_orbit );
-

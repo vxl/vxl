@@ -68,4 +68,3 @@ bool vpgl_get_rpc_offsets_process(bprb_func_process& pro)
   pro.set_output_val<double>(1, offset_v);
   return true;
 }
-

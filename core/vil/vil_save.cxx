@@ -283,4 +283,3 @@ bool vil_save_image_resource(const vil_image_resource_sptr &ir, wchar_t const* f
 }
 
 #endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
-

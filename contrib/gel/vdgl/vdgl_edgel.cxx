@@ -35,4 +35,3 @@ std::ostream&  operator<<(std::ostream& s, const vdgl_edgel& p)
   return s << "<vdgl_edgel (" << p.p_.x() << ", " << p.p_.y() << "),("
            << p.grad_ << ", " << p.theta_ <<  ")>";
 }
-

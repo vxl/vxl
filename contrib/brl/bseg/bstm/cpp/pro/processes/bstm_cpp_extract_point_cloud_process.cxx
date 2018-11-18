@@ -141,4 +141,3 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
   std::cout << "Done extracting." << std::endl;
   return true;
 }
-

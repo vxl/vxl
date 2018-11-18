@@ -13,4 +13,3 @@ class brec_hierarchy_edge;
 typedef vbl_smart_ptr<brec_hierarchy_edge> brec_hierarchy_edge_sptr;
 
 #endif // brec_hierarchy_edge_sptr_h_
-

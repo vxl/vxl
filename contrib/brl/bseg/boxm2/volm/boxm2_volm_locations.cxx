@@ -200,8 +200,3 @@ bool boxm2_volm_loc_hypotheses::write_hypotheses_kml(const boxm2_scene_sptr& sce
   bkml_write::close_document(ofs);
   return true;
 }
-
-
-
-
-

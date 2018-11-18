@@ -134,4 +134,3 @@ vsl_b_read(vsl_b_istream &is, vsol_cylinder_sptr &cyl)
     cyl->b_read(is);
   }
 }
-

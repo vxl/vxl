@@ -107,4 +107,3 @@ bool bwm_create_corr_file_process(bprb_func_process& pro)
 
   return true;
 }
-

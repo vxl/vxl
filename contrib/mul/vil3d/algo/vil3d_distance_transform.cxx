@@ -692,4 +692,3 @@ void vil3d_distance_transform(const vil3d_image_view<bool>& mask,
 
   vil3d_distance_transform(distance_image);
 }
-

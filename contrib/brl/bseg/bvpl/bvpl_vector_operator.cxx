@@ -5,4 +5,3 @@
 //  Copyright 2009 Brown University. All rights reserved.
 //
 #include "bvpl_vector_operator.h"
-

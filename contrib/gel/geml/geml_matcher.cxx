@@ -24,4 +24,3 @@ geml_matcher::geml_matcher( const vil1_memory_image_of<vxl_byte>& image1,
 }
 
 geml_matcher::~geml_matcher() = default;
-

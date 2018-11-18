@@ -210,4 +210,3 @@ vnl_double_4 HMatrix2D::transform_bounding_box(double /*x0*/, double /*y0*/, dou
   return vnl_double_4(min[0], min[1], max[0], max[1]);
 #endif
 }
-

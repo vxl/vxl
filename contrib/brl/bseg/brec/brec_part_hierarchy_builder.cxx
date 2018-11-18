@@ -620,4 +620,3 @@ brec_part_hierarchy_sptr brec_part_hierarchy_builder::construct_test_detector()
 
   return h;
 }
-

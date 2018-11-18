@@ -127,4 +127,3 @@ vil_rgb<vxl_byte> color_value(int theme, int color_index)
   vil_rgb<vxl_byte> val((vxl_byte)r_val, (vxl_byte)g_val, (vxl_byte)b_val);
   return val;
 }
-

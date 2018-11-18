@@ -65,4 +65,3 @@ vidl_frame_sptr vidl_v4l2_istream::read_frame()
   advance();
   return cur_frame_;
 }
-

@@ -142,5 +142,3 @@ void clsfy_quad_regulariser::gradf(vnl_vector<double> const& v,
   gradient = (2*alpha_)*v;
   gradient[0]=0.0;  // Function independent of first element
 }
-
-

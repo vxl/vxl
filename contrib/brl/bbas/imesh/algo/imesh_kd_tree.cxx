@@ -393,4 +393,3 @@ void imesh_kd_tree_traverse(const vgl_point_3d<double>& query,
                               current->right_.get());
   }
 }
-

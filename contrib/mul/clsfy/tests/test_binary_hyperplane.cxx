@@ -444,4 +444,3 @@ void test_clsfy_geman_mcclure_build()
 }
 
 TESTMAIN(test_binary_hyperplane);
-

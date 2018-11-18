@@ -4,5 +4,3 @@
 
 BOCT_TREE_INSTANTIATE(short, bvpl_pca_basis_sample<10>);
 BOCT_TREE_CELL_INSTANTIATE(short, bvpl_pca_basis_sample<10>);
-
-

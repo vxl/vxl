@@ -230,4 +230,3 @@ void bvxm_edge_util::estimate_edge_prob_image(const vil_image_view<vxl_byte>& im
     }
   }
 }
-

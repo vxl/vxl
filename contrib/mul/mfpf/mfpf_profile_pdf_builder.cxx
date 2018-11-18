@@ -230,4 +230,3 @@ void mfpf_profile_pdf_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

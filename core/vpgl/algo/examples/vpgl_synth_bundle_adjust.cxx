@@ -113,4 +113,3 @@ for (int i=0; i<a_num_cameras(); ++i)
 
   vpgl_bundle_adjust::write_vrml("results.wrl",unknown_cameras,unknown_world);
 }
-

@@ -78,4 +78,3 @@ bool bstm_cpp_majority_filter_process (bprb_func_process& pro)
 
   return true;
 }
-

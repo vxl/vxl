@@ -69,5 +69,3 @@ void vsl_print_summary(std::ostream& os, const std::vector<bool> &v)
   if (v.size() > 5)
     os << " ..." << '\n';
 }
-
-

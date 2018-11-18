@@ -62,4 +62,3 @@ vnl_vector<double> pop_graph_cost_function::get_current_costs()
 
   return costs;
 }
-

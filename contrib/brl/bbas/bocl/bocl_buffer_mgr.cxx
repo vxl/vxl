@@ -113,4 +113,3 @@ bool bocl_buffer_mgr::release_buffers()
   }
   return true;
 }
-

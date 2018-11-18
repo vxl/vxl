@@ -364,4 +364,3 @@ bool boxm2_ocl_merge_process(bprb_func_process& pro)
     std::cout<<" Merge GPU Time: "<<gpu_time<<", transfer time: "<<transfer_time<<std::endl;
     return true;
 }
-

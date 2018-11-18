@@ -164,4 +164,3 @@ void vsl_b_read(vsl_b_istream&, bstm_block_sptr&) {}
 //: Binary load bstm_block from stream.
 // DUMMY IMPLEMENTATION: does nothing!
 void vsl_b_read(vsl_b_istream&, bstm_block_sptr const&) {}
-

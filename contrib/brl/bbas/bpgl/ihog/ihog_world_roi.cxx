@@ -84,4 +84,3 @@ ihog_world_roi::resample( const ihog_image<float>& image) const
   result.set_world2im(d_i2w.inverse());
   return result.image();
 }
-

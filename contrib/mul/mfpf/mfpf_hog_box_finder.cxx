@@ -475,5 +475,3 @@ bool mfpf_hog_box_finder::operator==(const mfpf_hog_box_finder& nc) const
   // Strictly should compare costs
   return true;
 }
-
-

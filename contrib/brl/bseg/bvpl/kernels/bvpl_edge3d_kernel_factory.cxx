@@ -135,5 +135,3 @@ bvpl_kernel_sptr bvpl_edge3d_kernel_factory::parse_xml_element(const bxml_data_s
   kernel->set_xml_element(factory.xml_element());
   return kernel;
 }
-
-

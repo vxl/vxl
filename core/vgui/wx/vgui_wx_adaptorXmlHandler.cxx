@@ -28,4 +28,3 @@ bool vgui_wx_adaptorXmlHandler::CanHandle(wxXmlNode *node)
 {
   return IsOfClass(node, wxT("vgui_wx_adaptor"));
 }
-

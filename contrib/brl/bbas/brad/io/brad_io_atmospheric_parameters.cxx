@@ -40,4 +40,3 @@ void vsl_b_read(vsl_b_istream&  /*is*/, brad_atmospheric_parameters*  /*p*/){}
 void vsl_b_read(vsl_b_istream&  /*is*/, brad_atmospheric_parameters_sptr&  /*sptr*/){}
 //: Binary load brad_atmospheric_parameters scene from stream.
 void vsl_b_read(vsl_b_istream&  /*is*/, brad_atmospheric_parameters_sptr const&  /*sptr*/){}
-

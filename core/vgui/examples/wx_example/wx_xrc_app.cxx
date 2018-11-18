@@ -47,7 +47,3 @@ bool wx_xrc_app::OnInit(void)
   // start the event loop
   return true;
 }
-
-
-
-

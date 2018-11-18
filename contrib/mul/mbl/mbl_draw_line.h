@@ -82,5 +82,3 @@ inline void mbl_draw_line(vil_image_view<T>& image,
 
 
 #endif // mbl_draw_line_h_
-
-

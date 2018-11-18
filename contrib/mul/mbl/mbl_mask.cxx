@@ -214,7 +214,3 @@ void mbl_indices_to_mask(const std::vector<unsigned>& inds,
     mask[ind]=true;
   }
 }
-
-
-
-

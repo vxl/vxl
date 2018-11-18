@@ -168,4 +168,3 @@ inline bool del_ptr (bmsh3d_ptr_node*& head, const void* input)
 }
 
 #endif
-

@@ -1359,4 +1359,3 @@ std::map<std::string, float> create_satellite_reliability()
 
 //: use the corresponding global reliability for each satellite when setting weights for camera correction
 std::map<std::string, float> volm_satellite_resources::satellite_geo_reliability = create_satellite_reliability();
-

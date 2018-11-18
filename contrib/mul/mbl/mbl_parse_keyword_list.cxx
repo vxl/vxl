@@ -123,5 +123,3 @@ void mbl_parse_keyword_list2(std::istream& is, const std::string& keyword,
     items.push_back(string2);
   }
 }
-
-

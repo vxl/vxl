@@ -27,4 +27,3 @@ void vsl_b_write(vsl_b_ostream& os, const bvxm_voxel_world* &p);
 void vsl_print_summary(std::ostream& os, const bvxm_voxel_world* &p);
 
 #endif
-

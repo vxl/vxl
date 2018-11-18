@@ -58,4 +58,3 @@ ihog_transform_2d breg3d_lm_direct_homography_generator::compute_homography()
   delete minimizer;
   return init_xform;
 }
-

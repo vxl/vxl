@@ -80,4 +80,3 @@ std::ostream& operator<<(std::ostream& os, vsph_sph_point_2d const& sp)
   sp.print(os);
   return os;
 }
-

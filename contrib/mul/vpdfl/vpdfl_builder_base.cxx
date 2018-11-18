@@ -170,4 +170,3 @@ void vpdfl_builder_base::config_from_stream(
     this->is_a() + " expects no properties in initialisation,\n"
     "But the following properties were given:\n" + s);
 }
-

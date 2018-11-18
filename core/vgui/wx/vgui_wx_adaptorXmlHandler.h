@@ -27,4 +27,3 @@ public:
 
 
 #endif  //vgui_wx_adaptorXmlHandler_h_
-

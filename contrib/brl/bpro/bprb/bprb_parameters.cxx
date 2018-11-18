@@ -289,4 +289,3 @@ std::istream& operator>>( std::istream& strm, bprb_filepath& fp )
   strm >> fp.path >> fp.ext;
   return strm;
 }
-

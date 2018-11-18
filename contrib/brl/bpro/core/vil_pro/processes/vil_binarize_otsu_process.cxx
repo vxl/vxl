@@ -87,4 +87,3 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   pro.set_output_val<double>(1, dt);
   return true;
 }
-

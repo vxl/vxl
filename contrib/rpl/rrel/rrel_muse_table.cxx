@@ -131,4 +131,3 @@ rrel_muse_table::calculate_sq_divisor( unsigned int k, unsigned int n,
   return k - (n+1) * expected_kth * std::sqrt(2/vnl_math::pi)
     * std::exp(-vnl_math::sqr(expected_kth)/2.0);
 }
-

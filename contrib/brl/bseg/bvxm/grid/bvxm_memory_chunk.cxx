@@ -64,4 +64,3 @@ void bvxm_memory_chunk::set_size(vxl_uint_64 n)
 }
 
 VBL_SMART_PTR_INSTANTIATE(bvxm_memory_chunk);
-

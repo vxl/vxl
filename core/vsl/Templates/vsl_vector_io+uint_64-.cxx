@@ -6,5 +6,3 @@ VSL_VECTOR_IO_INSTANTIATE(vxl_uint_64);
 
 
 #endif // VXL_HAS_INT_64
-
-

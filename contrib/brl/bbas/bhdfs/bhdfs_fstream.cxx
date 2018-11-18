@@ -86,4 +86,3 @@ bhdfs_streampos bhdfs_fstream::file_size() const
   return info[0].mSize;
   hdfsFreeFileInfo(info, 1);
 }
-

@@ -569,4 +569,3 @@ bvxm_voxel_world_sptr bvxm_synth_world_generator::generate_world()
 
   return world;
 }
-

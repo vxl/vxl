@@ -46,4 +46,3 @@ void test_store_nbrs()
   snbrs.augment_1_blk();
 }
 TESTMAIN( test_store_nbrs );
-

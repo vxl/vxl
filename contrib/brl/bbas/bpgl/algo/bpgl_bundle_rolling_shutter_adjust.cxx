@@ -815,4 +815,3 @@ bpgl_bundle_rolling_shutter_adjust::write_vrml(const std::string& filename,
 
   os.close();
 }
-

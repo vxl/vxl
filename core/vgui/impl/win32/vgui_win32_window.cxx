@@ -264,4 +264,3 @@ BOOL vgui_win32_window::OnCmdMsg(UINT message, WPARAM wParam, LPARAM lParam)
 
   return FALSE;
 }
-

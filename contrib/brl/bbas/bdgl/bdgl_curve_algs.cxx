@@ -761,4 +761,3 @@ create_digital_curves(std::vector<vgl_point_2d<double> > & curve)
   vdgl_digital_curve_sptr dc = new vdgl_digital_curve(interp);
   return dc;
 }
-

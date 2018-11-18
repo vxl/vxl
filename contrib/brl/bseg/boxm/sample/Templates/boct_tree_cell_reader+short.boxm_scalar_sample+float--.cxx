@@ -3,4 +3,3 @@
 
 typedef boxm_scalar_sample<float> sample;
 BOCT_TREE_CELL_READER_INSTANTIATE(short,sample);
-

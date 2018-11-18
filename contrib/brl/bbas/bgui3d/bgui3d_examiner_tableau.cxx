@@ -763,4 +763,3 @@ bgui3d_examiner_tableau::draw_arrow()
   glVertex3f(1.0f - 1.0f / 3.0f, 0.0f, -0.5f / 4.0f);
   glEnd();
 }
-

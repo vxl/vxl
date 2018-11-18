@@ -54,4 +54,3 @@ bool vil_image_size_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(i++, image->nj());
   return true;
 }
-

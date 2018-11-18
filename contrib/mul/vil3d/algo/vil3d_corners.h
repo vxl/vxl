@@ -42,4 +42,3 @@ public:
 };
 
 #endif // vil3d_corners_h_
-

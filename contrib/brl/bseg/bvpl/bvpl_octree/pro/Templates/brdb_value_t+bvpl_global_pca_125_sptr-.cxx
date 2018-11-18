@@ -4,6 +4,3 @@
 #include <bvpl/bvpl_octree/bvpl_global_pca.h>
 
 BRDB_VALUE_INSTANTIATE(bvpl_global_pca_125_sptr, "bvpl_global_pca_125_sptr");
-
-
-

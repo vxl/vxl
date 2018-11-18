@@ -192,5 +192,3 @@ rrel_kernel_density_obj::kernel_function(double u) const
   double t = 1 - u * u;
   return 1.09375 * t * t * t;
 }
-
-

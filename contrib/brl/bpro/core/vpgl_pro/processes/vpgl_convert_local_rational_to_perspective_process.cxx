@@ -72,4 +72,3 @@ bool vpgl_convert_local_rational_to_perspective_process(bprb_func_process& pro)
 
   return true;
 }
-

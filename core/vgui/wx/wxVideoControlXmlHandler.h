@@ -27,4 +27,3 @@ public:
 
 
 #endif  //wxVideoControlXmlHandler_h_
-

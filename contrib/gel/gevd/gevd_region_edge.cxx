@@ -43,4 +43,3 @@ void gevd_region_edge::Prop(gevd_region_edge const* re, unsigned int label)
       this->SetNewLabel(re->GetLabel(i));
   this->SetNewLabel(label);
 }
-

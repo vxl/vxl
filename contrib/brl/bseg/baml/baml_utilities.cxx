@@ -333,4 +333,3 @@ bool baml_overlay_red(
 
   return true;
 }
-

@@ -97,4 +97,3 @@ vil_image_resource_sptr vil_copy_deep( const vil_image_resource_sptr &src )
   }
   return result;
 }
-

@@ -209,4 +209,3 @@ bapl_lowe_clusterer::is_inlier( const bapl_affine_transform& A,
          std::fabs(err_x) < trans_step_*0.25 &&
          std::fabs(err_y) < trans_step_*0.25;
 }
-

@@ -52,4 +52,3 @@ initbmdl_batch(void)
 
   Py_InitModule("bmdl_batch", bmdl_batch_methods);
 }
-

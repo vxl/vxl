@@ -51,4 +51,3 @@ bool vpgl_convert_to_local_rational_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

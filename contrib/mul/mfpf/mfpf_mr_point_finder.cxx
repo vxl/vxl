@@ -397,5 +397,3 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_mr_point_finder& b)
 {
   b.b_read(bfs);
 }
-
-

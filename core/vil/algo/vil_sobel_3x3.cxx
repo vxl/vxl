@@ -416,4 +416,3 @@ void vil_sobel_3x3_1plane(const double* src,
     *gj_data = 0; gj_data+=gj_istep;
   }
 }
-

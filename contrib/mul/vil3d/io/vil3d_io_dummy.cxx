@@ -8,4 +8,3 @@
 #ifdef _MSC_VER
 char * vil3d_io_dummy = "dummy";
 #endif
-

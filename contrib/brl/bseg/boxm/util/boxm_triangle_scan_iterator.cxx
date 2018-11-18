@@ -57,4 +57,3 @@ int  boxm_triangle_scan_iterator::endx() const
 {
   return tri_it_.endx() + 1;
 }
-

@@ -121,4 +121,3 @@ void vsl_print_summary(std::ostream& os,const pdf1d_sampler* b)
   else
     os << "No pdf1d_sampler defined.";
 }
-

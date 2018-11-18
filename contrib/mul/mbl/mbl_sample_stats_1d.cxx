@@ -472,4 +472,3 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_sample_stats_1d& b)
 {
   b.b_read(bfs);
 }
-

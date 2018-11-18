@@ -405,4 +405,3 @@ void bvrml_write::write_vrml_line(std::ofstream& str,vgl_point_3d<double> pt,
       <<  " ]\n"
       << "}\n";
 }
-

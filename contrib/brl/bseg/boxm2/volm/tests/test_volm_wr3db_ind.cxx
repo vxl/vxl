@@ -123,4 +123,3 @@ TESTMAIN(test_volm_wr3db_ind);
     ind->read_index(name);
   }
 #endif
-

@@ -94,4 +94,3 @@ int main(int argc, char ** argv)
     std::cout<<allClasses[i]<<"  "<<allInts[i]<<std::endl;
   }
 }
-

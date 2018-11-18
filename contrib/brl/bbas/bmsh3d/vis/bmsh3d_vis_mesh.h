@@ -127,4 +127,3 @@ void draw_faces_in_switch (SoSeparator* root,
 
 
 #endif
-

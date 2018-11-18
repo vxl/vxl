@@ -233,4 +233,3 @@ void vil3d_compute_offsets(std::vector<std::ptrdiff_t>& offset,
     offset[a] = element.p_i()[a]*istep + element.p_j()[a]*jstep
               + element.p_k()[a]*kstep;
 }
-

@@ -40,4 +40,3 @@ vbl_array_2d<vgl_ray_3d<float> > bvgl_ray_pyramid::scale_down(vbl_array_2d<vgl_r
   }
   return scaled;
 }
-

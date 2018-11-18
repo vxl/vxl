@@ -135,4 +135,3 @@ bool boxm2_export_color_point_cloud_process(bprb_func_process& pro)
   }
   return true;
 }
-

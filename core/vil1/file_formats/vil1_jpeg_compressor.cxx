@@ -92,4 +92,3 @@ vil1_jpeg_compressor::~vil1_jpeg_compressor() {
   stream->unref();
   stream = nullptr;
 }
-

@@ -8,4 +8,3 @@ typedef sdet_region_sptr r;
 typedef vgl_box_2d<float> container;
 typedef sdet_rtree_region_box_2d<float> c;
 VGL_RTREE_INSTANTIATE(r, container, c);
-

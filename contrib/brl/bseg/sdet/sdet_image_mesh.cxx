@@ -325,4 +325,3 @@ void sdet_image_mesh::set_image(vil_image_resource_sptr const& resource)
     resc_ = vil_new_image_resource_of_view(*converted.ptr());
   }
 }
-

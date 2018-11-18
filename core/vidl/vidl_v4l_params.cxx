@@ -58,4 +58,3 @@ vidl_pixel_format vidl_v4l_params::v4lpf_to_vidlpf(int v4l_pf)
     default: return VIDL_PIXEL_FORMAT_UNKNOWN;
     }
 }
-

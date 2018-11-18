@@ -33,4 +33,3 @@ bool wxSliderPanelXmlHandler::CanHandle(wxXmlNode *node)
 {
   return IsOfClass(node, wxT("wxSliderPanel"));
 }
-

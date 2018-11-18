@@ -58,4 +58,3 @@ double vil3d_overlap_jaccard(const vil3d_image_view<bool>& im1,
   if (f.n_union()==0) return 0.0;
   return double(f.n_intersection())/f.n_union();
 }
-

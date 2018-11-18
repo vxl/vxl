@@ -925,4 +925,3 @@ register_basic_datatypes()
   REGISTER_DATATYPE(bbas_1d_array_int_sptr);
   REGISTER_DATATYPE(bbas_1d_array_byte_sptr);
 }
-

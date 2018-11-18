@@ -337,4 +337,3 @@ vsl_print_summary(std::ostream &os, const bgrl_graph* g)
   g->print_summary(os);
   os << '}';
 }
-

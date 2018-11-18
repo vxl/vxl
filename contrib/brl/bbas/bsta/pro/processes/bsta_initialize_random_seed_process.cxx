@@ -53,4 +53,3 @@ bool bsta_initialize_random_seed_process(bprb_func_process& pro)
   }
   return true;
 }
-

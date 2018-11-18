@@ -27,4 +27,3 @@ double pdf1d_cum_prob_chi2(int n_dof, double chi2);
 double pdf1d_chi2_for_cum_prob(double p, int n, double tol=0.001);
 
 #endif
-

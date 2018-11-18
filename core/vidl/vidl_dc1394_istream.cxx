@@ -592,4 +592,3 @@ seek_frame(unsigned int frame)
 {
   return false;
 }
-

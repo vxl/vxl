@@ -149,4 +149,3 @@ vil_j2k_nitf2_pyramid_image_resource::get_resource(const unsigned level) const
 void vil_j2k_nitf2_pyramid_image_resource::print(const unsigned level)
 {
 }
-

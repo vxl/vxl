@@ -49,5 +49,3 @@ SoSeparator* draw_F_with_id (const bmsh3d_face* F,
                              const SoBaseColor* idbasecolor,
                              const bool user_defined_class = true);
 #endif
-
-

@@ -115,4 +115,3 @@ std::istream& operator>>(std::istream& is, vpgl_local_rational_camera<T>& p);
 
 
 #endif // vpgl_local_rational_camera_h_
-

@@ -11,5 +11,3 @@
 
 typedef boct_tree<short, boxm_scalar_sample<float> > tree_type;
 VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
-
-

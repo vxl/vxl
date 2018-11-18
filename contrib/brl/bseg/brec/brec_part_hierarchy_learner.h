@@ -164,4 +164,3 @@ void vsl_b_read(vsl_b_istream& is, brec_part_hierarchy_learner* hl);
 void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &hl);
 
 #endif // brec_part_hierarchy_learner_h_
-

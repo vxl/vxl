@@ -164,5 +164,3 @@ bool boxm2_cpp_compute_3d_points_and_covs_normalize_process(bprb_func_process& p
 
   return true;
 }
-
-

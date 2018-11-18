@@ -40,4 +40,3 @@ double distance_LAB(vnl_vector_fixed<double, 3>& c1, vnl_vector_fixed<double, 3>
 double distance_intensity(double plus_mean, double minus_mean, double intensity_gamma);
 
 #endif // bil_color_conversions_h_
-

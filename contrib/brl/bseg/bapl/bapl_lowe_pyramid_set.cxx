@@ -209,4 +209,3 @@ bapl_lowe_pyramid_set::make_descriptor(bapl_lowe_keypoint* keypoint)
 
   return true;
 }
-

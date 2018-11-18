@@ -78,5 +78,3 @@ void bvpl_weighted_cube_kernel_factory::create_canonical()
 
   return;
 }
-
-

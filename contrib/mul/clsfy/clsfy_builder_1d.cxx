@@ -105,4 +105,3 @@ std::ostream& operator<<(std::ostream& os,const clsfy_builder_1d* b)
   else
     return os << "No clsfy_builder_1d defined.";
 }
-

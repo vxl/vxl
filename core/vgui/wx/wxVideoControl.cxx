@@ -336,4 +336,3 @@ void wxVideoControl::OnKillTextFocus( wxCommandEvent& event )
   wxVideoControl* vc = dynamic_cast<wxVideoControl*>(text->GetParent());
   text->SetValue(wxString::Format(wxT("%d"),vc->frame_));
 }
-

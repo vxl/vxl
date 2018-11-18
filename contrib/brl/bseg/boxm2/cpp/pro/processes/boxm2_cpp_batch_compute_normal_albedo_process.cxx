@@ -161,4 +161,3 @@ bool boxm2_cpp_batch_compute_normal_albedo_process(bprb_func_process& pro)
   }
   return true;
 }
-

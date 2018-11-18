@@ -235,4 +235,3 @@ bool bhdfs_fs_get_working_dir_process(bprb_func_process& pro)
   pro.set_output_val<std::string>(0, hdfs_path); //  fix the path names in stdin.txt file in the script s4
   return true;
 }
-

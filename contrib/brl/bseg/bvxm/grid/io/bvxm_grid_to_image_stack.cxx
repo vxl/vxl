@@ -66,4 +66,3 @@ std::string bvxm_extension<float>() { return ".tiff"; }
 
 template<>
 std::string bvxm_extension<unsigned char>() { return ".tiff"; }
-

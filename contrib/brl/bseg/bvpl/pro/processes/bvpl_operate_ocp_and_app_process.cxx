@@ -175,4 +175,3 @@ bool bvpl_operate_ocp_and_app_process(bprb_func_process& pro)
 
    return false;
 }
-

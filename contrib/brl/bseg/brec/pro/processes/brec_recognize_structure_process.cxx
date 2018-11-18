@@ -234,4 +234,3 @@ bool brec_recognize_structure2_process(bprb_func_process& pro)
 
   return true;
 }
-

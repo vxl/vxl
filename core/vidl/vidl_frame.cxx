@@ -111,5 +111,3 @@ vidl_memory_chunk_frame(const vil_image_view_base& image,
   if (format_ == VIDL_PIXEL_FORMAT_UNKNOWN)
     memory_ = nullptr;
 }
-
-

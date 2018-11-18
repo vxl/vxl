@@ -336,4 +336,3 @@ bool boxm2_cpp_image_density_masked_process(bprb_func_process& pro)
 
   return true;
 }
-

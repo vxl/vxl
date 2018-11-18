@@ -60,4 +60,3 @@ bool pop_edge::search(pop_vertex* destination, std::list<pop_edge*> &path)
   // it appears that this edge does not lead to the destination
   return false;
 }
-

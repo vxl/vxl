@@ -80,4 +80,3 @@ bool vpgl_resample_perspective_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

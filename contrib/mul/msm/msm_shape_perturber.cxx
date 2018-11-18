@@ -172,4 +172,3 @@ double msm_shape_perturber::random_value( vnl_random& rand,
   else
     return max_v * trunc_normal_sample( rand, rel_gauss_sd, 1 );
 }
-

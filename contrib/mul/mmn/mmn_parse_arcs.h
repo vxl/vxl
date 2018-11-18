@@ -33,4 +33,3 @@ void  mmn_parse_arcs(std::istream& is,
                      std::vector<mmn_arc>& arcs);
 
 #endif // mmn_parse_arcs_h_
-

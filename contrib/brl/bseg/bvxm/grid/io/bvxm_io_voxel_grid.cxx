@@ -68,4 +68,3 @@ bool bvxm_grid_save_raw<bsta_num_obs<bsta_gauss_sf1> >(bvxm_voxel_grid<bsta_num_
 
     return true;
 }
-

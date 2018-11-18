@@ -326,4 +326,3 @@ vgui_menu segv_vil_menus::get_menu()
   menubar.add( "Image Ops", menuops);
   return menubar;
 }
-

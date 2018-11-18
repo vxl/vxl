@@ -121,4 +121,3 @@ bool brad_estimate_phongs_model_process(bprb_func_process& pro)
   pro.set_output_val<float>(i++, f.error_var(x));
   return true;
 }
-

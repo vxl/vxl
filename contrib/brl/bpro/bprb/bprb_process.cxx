@@ -120,4 +120,3 @@ bool bprb_process::verify_inputs()
   }
   return true;
 }
-

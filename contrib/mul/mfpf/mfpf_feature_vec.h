@@ -83,4 +83,3 @@ inline void mfpf_feature_vec_to_pose_set(const mfpf_feature_vec& feature_vec, mf
 }
 
 #endif // mfpf_feature_vec_h_
-

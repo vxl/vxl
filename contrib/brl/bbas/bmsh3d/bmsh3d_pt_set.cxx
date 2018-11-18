@@ -343,4 +343,3 @@ void subsample_points (bmsh3d_pt_set* pt_set, const unsigned int subsam_pts)
 
   assert (pt_set->vertexmap().size() == subsam_pts);
 }
-

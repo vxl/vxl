@@ -84,5 +84,3 @@ int main(int argc, char ** argv)
   ops.separation_stats();
   return 0;
 }
-
-

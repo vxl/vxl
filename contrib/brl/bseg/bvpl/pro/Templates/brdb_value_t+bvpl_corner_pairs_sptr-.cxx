@@ -4,4 +4,3 @@
 #include <bvpl/util/bvpl_corner_pair_finder.h>
 
 BRDB_VALUE_INSTANTIATE(bvpl_corner_pairs_sptr, "bvpl_corner_pairs_sptr");
-

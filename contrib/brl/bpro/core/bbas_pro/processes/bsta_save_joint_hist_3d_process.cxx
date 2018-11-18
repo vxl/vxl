@@ -48,4 +48,3 @@ bool bsta_save_joint_hist_3d_process(bprb_func_process& pro)
   vsl_b_write(os, jhist3d_ptr);
   return true;
 }
-

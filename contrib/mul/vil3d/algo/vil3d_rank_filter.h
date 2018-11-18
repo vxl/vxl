@@ -152,4 +152,3 @@ inline void vil3d_median_filter(const vil3d_image_view<T>& src_image,
 }
 
 #endif // vil3d_rank_filter_h_
-

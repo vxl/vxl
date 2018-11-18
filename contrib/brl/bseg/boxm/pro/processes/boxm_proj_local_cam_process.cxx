@@ -101,4 +101,3 @@ bool boxm_proj_local_cam_process(bprb_func_process& pro)
   std::cout<<"(u,v):"<<u<<','<<v<<std::endl;
   return true;
 }
-

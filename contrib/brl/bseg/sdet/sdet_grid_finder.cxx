@@ -1684,4 +1684,3 @@ bool sdet_grid_finder::get_square_pixel_stats(const vil1_image& img,
     std::cout << '('<<x<<','<<y<<") mean_intensity = "<<mean_intensity<<'\n';
   return true;
 }
-

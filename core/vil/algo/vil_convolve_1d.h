@@ -415,4 +415,3 @@ vil_image_resource_sptr vil_convolve_1d(
 }
 
 #endif // vil_convolve_1d_h_
-

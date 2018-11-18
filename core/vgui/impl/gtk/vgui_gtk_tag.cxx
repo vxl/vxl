@@ -11,4 +11,3 @@ vgui_tag(gtk) {
   vul_trace;
   return 0;
 }
-

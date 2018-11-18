@@ -50,4 +50,3 @@ bool vil_invert_float_image_process(bprb_func_process& pro)
     std::cout << "The image is not a float image " << std::endl;
     return false;
 }
-

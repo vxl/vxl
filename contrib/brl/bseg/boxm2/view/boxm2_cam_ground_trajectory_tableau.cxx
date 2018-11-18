@@ -124,4 +124,3 @@ bool boxm2_cam_ground_trajectory_tableau::handle(vgui_event const &e)
 
   return false;
 }
-

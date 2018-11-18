@@ -420,4 +420,3 @@ bool boxm2_roi_init_process(bprb_func_process& pro)
 
   return true;
 }
-

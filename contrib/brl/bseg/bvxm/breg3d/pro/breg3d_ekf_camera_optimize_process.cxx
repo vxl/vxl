@@ -160,5 +160,3 @@ bool breg3d_ekf_camera_optimize_process::execute()
 
   return true;
 }
-
-

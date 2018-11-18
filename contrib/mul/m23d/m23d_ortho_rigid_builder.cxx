@@ -531,4 +531,3 @@ void m23d_ortho_rigid_builder::get_shape_3d_pts( std::vector< vgl_point_3d<doubl
     pts[p]= pts[p] + tran_vec;
   }
 }
-

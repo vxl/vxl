@@ -146,5 +146,3 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
 
   return true;
 }
-
-

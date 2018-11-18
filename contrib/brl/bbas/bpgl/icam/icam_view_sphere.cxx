@@ -269,4 +269,3 @@ void vsl_b_write(vsl_b_ostream &os, const icam_view_sphere* sp)
 {
   sp->b_write(os);
 }
-

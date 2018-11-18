@@ -83,4 +83,3 @@ bool brad_compute_eigenspace_process(bprb_func_process& pro)
   std::cout << "in compute_eigenspace_process - unknown eigenspace type\n";
   return true;
 }
-

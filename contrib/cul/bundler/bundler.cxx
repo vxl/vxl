@@ -346,4 +346,3 @@ bool bundler_sfm::run_sfm_stage(
 
     return true;
 }
-

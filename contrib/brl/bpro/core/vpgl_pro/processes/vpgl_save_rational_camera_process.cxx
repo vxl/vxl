@@ -59,4 +59,3 @@ bool vpgl_save_rational_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

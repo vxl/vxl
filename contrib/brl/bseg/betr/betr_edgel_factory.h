@@ -66,4 +66,3 @@ class betr_edgel_factory{
   betr_edgel_factory_params params_;
 };
 #endif //guard
-

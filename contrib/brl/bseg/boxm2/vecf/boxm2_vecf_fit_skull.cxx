@@ -203,4 +203,3 @@ bool boxm2_vecf_fit_skull::transform_skull(std::string const& source_skull_path,
   tostr.close();
   return true;
 }
-

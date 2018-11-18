@@ -512,4 +512,3 @@ brdb_selection::refine(const brdb_query_aptr& q, selection_t& s)
 
   return true;
 }
-

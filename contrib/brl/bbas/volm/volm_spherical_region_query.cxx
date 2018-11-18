@@ -172,4 +172,3 @@ void volm_spherical_region_query::print(std::ostream& os) const
         std::cout << '\n';
     }
 }
-

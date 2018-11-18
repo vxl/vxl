@@ -49,4 +49,3 @@ void OctreeLevel::InheritFromAbove()
       // TODO
     }
 }
-

@@ -265,6 +265,3 @@ void sdet_segment_img2_using_edges(vil_image_view<float> const& img1, vil_image_
 
   delete ss;
 }
-
-
-

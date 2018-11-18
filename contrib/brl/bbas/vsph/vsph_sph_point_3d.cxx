@@ -49,5 +49,3 @@ void vsl_b_read(vsl_b_istream &is, vsph_sph_point_3d& p)
 {
   p.b_read(is);
 }
-
-

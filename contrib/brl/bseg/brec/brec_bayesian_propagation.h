@@ -80,4 +80,3 @@ class brec_area_density
 
 
 #endif // brec_bayesian_propagation_H_
-

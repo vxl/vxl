@@ -33,4 +33,3 @@ bool vimt3d_save(const std::string& path,
                  bool use_millimetres =false);
 
 #endif // vimt3d_save_h_
-

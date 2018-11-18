@@ -49,4 +49,3 @@ vpdfl_sampler_base* vpdfl_pc_gaussian_sampler::clone() const
 {
   return new vpdfl_pc_gaussian_sampler(*this);
 }
-

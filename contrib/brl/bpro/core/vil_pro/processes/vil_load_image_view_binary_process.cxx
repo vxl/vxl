@@ -57,4 +57,3 @@ bool vil_load_image_view_binary_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, loaded_image);
   return true;
 }
-

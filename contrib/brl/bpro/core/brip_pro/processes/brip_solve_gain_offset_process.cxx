@@ -148,4 +148,3 @@ bool brip_solve_gain_offset_constraints_process(bprb_func_process& pro)
     pro.set_output_val<vil_image_view_base_sptr>(0, map_img_ptr);
     return true;
 }
-

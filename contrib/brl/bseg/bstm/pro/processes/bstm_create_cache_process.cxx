@@ -63,4 +63,3 @@ bool bstm_create_cache_process(bprb_func_process& pro)
   pro.set_output_val<bstm_cache_sptr>(0, bstm_cache::instance());
   return true;
 }
-

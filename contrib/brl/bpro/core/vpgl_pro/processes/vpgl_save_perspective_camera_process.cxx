@@ -105,4 +105,3 @@ bool vpgl_save_projective_camera_process(bprb_func_process& pro)
   ofs.close();
   return true;
 }
-

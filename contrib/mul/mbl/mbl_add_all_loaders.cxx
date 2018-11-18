@@ -9,4 +9,3 @@ void mbl_add_all_loaders()
 {
   vsl_add_to_binary_loader(mbl_data_collector_list<vnl_vector<double> >());
 }
-

@@ -106,4 +106,3 @@ bool bstm_cpp_export_point_cloud_process (bprb_func_process& pro)
   std::cout << "Done exporting." << std::endl;
   return true;
 }
-

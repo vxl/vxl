@@ -74,4 +74,3 @@ rrel_lts_obj::fcn( vect_const_iter begin, vect_const_iter end,
 
   return sum;
 }
-

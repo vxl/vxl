@@ -66,4 +66,3 @@ bool brad_estimate_shadow_model_process(bprb_func_process& pro)
   pro.set_output_val<float>(0, reflectance);
   return true;
 }
-

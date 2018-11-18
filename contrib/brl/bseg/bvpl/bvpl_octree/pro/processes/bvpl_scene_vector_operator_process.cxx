@@ -149,4 +149,3 @@ bool bvpl_scene_vector_operator_process(bprb_func_process& pro)
   else
     return false;
 }
-

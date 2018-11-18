@@ -192,4 +192,3 @@ void bapl_keypoint_match_set::refine_matches(float outlier_threshold, std::vecto
   std::cout << "After F optimization found: " << matches_pruned2.size() << " matches, initial number was: " << matches_pruned.size() << "!\n";
 #endif
 }
-

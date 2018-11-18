@@ -105,4 +105,3 @@ vil_image_resource_sptr vepl_median(const vil_image_resource_sptr& image, float 
 
   return img_out;
 }
-

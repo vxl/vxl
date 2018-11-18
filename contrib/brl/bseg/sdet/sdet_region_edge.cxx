@@ -67,4 +67,3 @@ void sdet_region_edge::Prop(sdet_region_edge_sptr const& re, unsigned int label,
   //set the new label onto this
   this->SetNewLabel(label);
 }
-

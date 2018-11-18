@@ -30,5 +30,3 @@ static void test_neighborhood_ops()
 }
 
 TESTMAIN(test_neighborhood_ops);
-
-

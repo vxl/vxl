@@ -165,4 +165,3 @@ static void test_brec_hierarchy()
 }
 
 TESTMAIN( test_brec_hierarchy );
-

@@ -240,5 +240,3 @@ unsigned bil_blob_finder::n_8con_regions(const vil_image_view<bool>& image)
   while (next_8con_region(tmp_bi,tmp_bj)) n++;
   return n;
 }
-
-

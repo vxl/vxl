@@ -304,4 +304,3 @@ clsfy_random_forest operator+(const clsfy_random_forest& forest1,
                                forest2.trees_.begin(),forest2.trees_.end());
     return mergedForest;
 }
-

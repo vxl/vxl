@@ -62,4 +62,3 @@ bool vpgl_persp_cam_distance_process(bprb_func_process& pro)
   pro.set_output_val<float>(0, (float)dist);
   return true;
 }
-

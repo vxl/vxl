@@ -38,4 +38,3 @@ class boxm2_normal_albedo_array_constants
 };
 
 #endif
-

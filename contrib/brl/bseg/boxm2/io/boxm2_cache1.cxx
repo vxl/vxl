@@ -45,4 +45,3 @@ void boxm2_cache1_destroyer::set_singleton(const boxm2_cache1_sptr& s)
 {
   s_ = s;
 }
-

@@ -63,4 +63,3 @@ class vil_line_filter
 };
 
 #endif
-

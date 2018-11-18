@@ -118,4 +118,3 @@ bool vgui_displaylist3D_tableau::mouse_down(int x, int y, vgui_button button, vg
   }// end deselecting
   return false;
 }
-

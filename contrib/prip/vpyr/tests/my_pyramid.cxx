@@ -50,4 +50,3 @@ void build_base_grid(my_tpyramid & p)
 
   display_tpyramid(p) ;
 }
-

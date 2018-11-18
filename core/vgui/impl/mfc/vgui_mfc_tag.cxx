@@ -13,4 +13,3 @@ vgui_tag(mfc) {
   vul_trace;
   return 0;
 }
-

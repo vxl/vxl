@@ -101,5 +101,3 @@ void vsl_print_summary(std::ostream& os,const msm_param_limiter* b);
 double msm_chi2_for_cum_prob(double p, int n, double tol=0.001);
 
 #endif // msm_param_limiter_h_
-
-

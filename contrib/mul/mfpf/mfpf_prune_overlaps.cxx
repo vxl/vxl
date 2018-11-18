@@ -158,4 +158,3 @@ void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
     if (max_n>0 && poses.size()>=max_n) return;
   }
 }
-

@@ -379,4 +379,3 @@ void TripleMatchSet::update_from(MA_MATCH_TABLE_STR* matchtable)
   mt_3image_match_to_affinity (matchtable, match12_->get_table(), match23_->get_table());
 }
 #endif
-

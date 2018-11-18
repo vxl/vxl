@@ -36,6 +36,3 @@ void m23d_set_q_constraints(const vnl_matrix<double> & M, unsigned k,
                             vnl_vector<double>& rhs);
 
 #endif // m23d_set_q_constraint_h_
-
-
-

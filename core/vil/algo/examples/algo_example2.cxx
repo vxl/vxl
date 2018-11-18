@@ -75,4 +75,3 @@ int main( int argc, char* argv[] )
   vil_save(imageOut, outputFilename);
   return 0;
 }
-

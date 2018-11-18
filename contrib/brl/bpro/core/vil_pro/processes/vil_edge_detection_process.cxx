@@ -128,4 +128,3 @@ bool vil_edge_detection_process(bprb_func_process& pro)
 
   return true;
 }
-

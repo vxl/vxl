@@ -106,6 +106,3 @@ public:
 };
 
 #endif // msdi_reflected_marked_images_h_
-
-
-

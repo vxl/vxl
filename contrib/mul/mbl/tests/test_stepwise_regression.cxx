@@ -152,4 +152,3 @@ void test_stepwise_regression()
 }
 
 TESTMAIN(test_stepwise_regression);
-

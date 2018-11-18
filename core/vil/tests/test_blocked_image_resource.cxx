@@ -362,4 +362,3 @@ test_blocked_image_resource_main( int argc, char* argv[] )
   test_blocked_image_resource();
   return 0;
 }
-

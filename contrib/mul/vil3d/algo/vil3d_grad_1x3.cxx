@@ -384,4 +384,3 @@ void vil3d_grad_1x3_mag_sq_1plane(const vil3d_image_view<vxl_int_32>& src_im,
 
   vil3d_zero_border_1plane(grad_mag2);
 }
-

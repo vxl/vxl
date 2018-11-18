@@ -65,4 +65,3 @@ bool boxm2_extract_point_cloud_process (bprb_func_process& pro)
   return boxm2_extract_point_cloud::extract_point_cloud(scene, cache, prob_t, depth);
 
 }
-

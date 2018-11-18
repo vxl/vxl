@@ -245,4 +245,3 @@ void vil_distance_transform_r2(vil_image_view<float>& image)
                                    image.nplanes());
   vil_distance_transform_r2_one_way(flip_image);
 }
-

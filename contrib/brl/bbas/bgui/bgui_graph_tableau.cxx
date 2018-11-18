@@ -418,4 +418,3 @@ bool bgui_graph_tableau::handle(const vgui_event& event)
   }
   return false;
 }
-

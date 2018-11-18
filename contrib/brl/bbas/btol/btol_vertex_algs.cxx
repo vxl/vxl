@@ -57,4 +57,3 @@ transform(vtol_vertex_2d_sptr const& v,
   else
     return new vtol_vertex_2d(p[0]/p[2], p[1]/p[2]);
 }
-

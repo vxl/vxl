@@ -66,5 +66,3 @@ void add_HE_to_circular_chain_end (bmsh3d_halfedge* headHE, bmsh3d_halfedge* inp
   prevHE->set_next (inputHE);
   inputHE->set_next (headHE);
 }
-
-

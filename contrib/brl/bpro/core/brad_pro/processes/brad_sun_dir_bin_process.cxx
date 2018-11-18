@@ -89,4 +89,3 @@ bool brad_sun_dir_bin_process(bprb_func_process& pro)
   is.close();
   return true;
 }
-

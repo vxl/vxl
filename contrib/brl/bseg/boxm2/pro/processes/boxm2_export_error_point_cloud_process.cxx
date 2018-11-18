@@ -138,4 +138,3 @@ bool boxm2_export_error_point_cloud_process (bprb_func_process& pro)
 
   return true;
 }
-

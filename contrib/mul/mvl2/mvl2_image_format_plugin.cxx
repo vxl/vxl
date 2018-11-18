@@ -170,4 +170,3 @@ bool mvl2_image_format_plugin::can_be_loaded(const std::string& filename)
 
   return get_frame_number_and_filename(real_filename,frame_number,filename);
 }
-

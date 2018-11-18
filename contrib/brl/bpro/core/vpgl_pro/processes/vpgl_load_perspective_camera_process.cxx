@@ -127,5 +127,3 @@ bool vpgl_load_perspective_camera_from_kml_file_process(bprb_func_process& pro)
   pro.set_output_val<double>(3, parser->altitude_);
   return true;
 }
-
-

@@ -521,4 +521,3 @@ void boxm2_export_textured_mesh_process_globals::boxm2_visible_faces( std::vecto
     vil_save(depth_im, "/media/VXL/mesh/downtown/dist_im.tif");
   }
 }
-

@@ -63,4 +63,3 @@ bool vil3d_copy_deep(const vil3d_image_resource_sptr &src, vil3d_image_resource_
   }
 #endif
 }
-

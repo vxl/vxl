@@ -114,4 +114,3 @@ void clsfy_binary_hyperplane::b_read(vsl_b_istream& bfs)
       bfs.is().clear(std::ios::badbit); // Set an unrecoverable IO error on stream
   }
 }
-

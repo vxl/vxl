@@ -52,4 +52,3 @@ bool bbgm_save_image_of_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -248,4 +248,3 @@ bool brec_construct_class_op_models_process(bprb_func_process& pro)
 
   return true;
 }
-

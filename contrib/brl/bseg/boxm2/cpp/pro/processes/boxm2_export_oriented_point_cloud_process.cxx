@@ -95,4 +95,3 @@ bool boxm2_export_oriented_point_cloud_process (bprb_func_process& pro)
                                                                         bb_filename);
 
 }
-

@@ -22,4 +22,3 @@ bool volm_desc_land_indexer::extract(double lat, double lon, double elev, std::v
   desc->get_char_array(values);
   return true;
 }
-

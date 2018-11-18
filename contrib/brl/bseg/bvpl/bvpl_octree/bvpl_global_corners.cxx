@@ -473,4 +473,3 @@ void bvpl_global_corners::xml_write()
   bxml_write(os, doc);
   os.close();
 }
-

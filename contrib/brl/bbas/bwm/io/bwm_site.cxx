@@ -238,4 +238,3 @@ void bwm_site::convert_object_groups_obj_to_multiple_ply(std::string const& obj_
     ostr.close();
   }
 }
-

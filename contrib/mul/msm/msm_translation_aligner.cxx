@@ -222,5 +222,3 @@ msm_aligner* msm_translation_aligner::clone() const
 {
   return new msm_translation_aligner(*this);
 }
-
-

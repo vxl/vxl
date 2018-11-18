@@ -112,4 +112,3 @@ int main(int argc, char** argv)
 
   bpgl_bundle_adjust::write_vrml("results.wrl",unknown_cameras,unknown_world);
 }
-

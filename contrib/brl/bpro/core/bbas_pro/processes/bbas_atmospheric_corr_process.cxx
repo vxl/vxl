@@ -122,4 +122,3 @@ bool bbas_atmospheric_corr_process(bprb_func_process& pro)
 #endif
   return true;
 }
-

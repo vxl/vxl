@@ -155,4 +155,3 @@ bool vpgl_backproject::direction_to_camera(vpgl_local_rational_camera<double> co
   return true;
 
 }
-

@@ -9,4 +9,3 @@ class bsvg_register
 };
 
 #endif  // bsvg_register_h_
-

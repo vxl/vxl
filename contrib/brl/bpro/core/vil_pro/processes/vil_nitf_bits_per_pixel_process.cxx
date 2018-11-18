@@ -76,4 +76,3 @@ bool vil_nitf_bits_per_pixel_process(bprb_func_process& pro)
   pro.set_output_val<int>(0, bits);
   return true;
 }
-

@@ -56,4 +56,3 @@ bool brad_create_eigenspace_process(bprb_func_process& pro)
   pro.set_output_val<brad_eigenspace_sptr>(0, eptr);
   return true;
 }
-

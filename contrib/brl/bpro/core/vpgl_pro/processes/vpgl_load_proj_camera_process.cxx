@@ -70,4 +70,3 @@ bool vpgl_load_proj_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

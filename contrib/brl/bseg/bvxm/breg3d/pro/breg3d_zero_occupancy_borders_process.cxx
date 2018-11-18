@@ -64,5 +64,3 @@ bool breg3d_zero_occupancy_borders_process::execute()
   }
   return true;
 }
-
-

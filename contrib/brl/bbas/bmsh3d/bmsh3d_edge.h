@@ -215,4 +215,3 @@ inline bool same_incident_Vs(const bmsh3d_edge* E1, const bmsh3d_edge* E2)
 }
 
 #endif
-

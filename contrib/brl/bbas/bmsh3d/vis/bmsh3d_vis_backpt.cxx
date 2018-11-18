@@ -56,4 +56,3 @@ bmsh3dvis_face_SoFaceSet::bmsh3dvis_face_SoFaceSet (const bmsh3d_face* face)
   _element = (vispt_elm*) face; // casting away const !!!
   _element->set_vis_pointer ((void*)this);
 }
-

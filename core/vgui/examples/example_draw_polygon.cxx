@@ -147,4 +147,3 @@ int main(int argc, char **argv)
   vgui_viewer2D_tableau_new zoom(tab);
   return vgui::run(zoom, 512, 512);
 }
-

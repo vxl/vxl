@@ -48,4 +48,3 @@ bool bsta_load_joint_hist_3d_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -664,4 +664,3 @@ void m23d_ortho_flexible_builder::mat_to_3d_pts(std::vector< vgl_point_3d<double
     pt_vec[i].set( M(0,i), M(1,i), M(2,i) );
   }
 }
-

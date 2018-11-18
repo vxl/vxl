@@ -86,4 +86,3 @@ bool vil_BGR_to_RGB_process(bprb_func_process& pro)
         return false;
 
 }
-

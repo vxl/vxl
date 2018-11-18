@@ -53,4 +53,3 @@ double pop_point_2d::cost(pop_geometric_object *other)
   }
   return 0;
 }
-

@@ -234,4 +234,3 @@ inline void vpgl_lvcs::radians_to_dms(double rad, int& degrees, int& minutes, do
   degrees_to_dms(radians_to_degrees(rad), degrees,  minutes, seconds);
 }
 #endif // vpgl_lvcs_h_
-

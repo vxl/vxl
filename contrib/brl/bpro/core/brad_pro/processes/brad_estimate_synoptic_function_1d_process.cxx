@@ -96,4 +96,3 @@ bool brad_estimate_synoptic_function_1d_process(bprb_func_process& pro)
   }
   return true;
 }
-

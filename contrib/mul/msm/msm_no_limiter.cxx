@@ -74,5 +74,3 @@ msm_param_limiter* msm_no_limiter::clone() const
 {
   return new msm_no_limiter(*this);
 }
-
-

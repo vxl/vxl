@@ -55,5 +55,3 @@ static void test_bvgl_volume_of_intersection()
 }
 
 TESTMAIN( test_bvgl_volume_of_intersection );
-
-

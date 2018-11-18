@@ -122,4 +122,3 @@ HMatrix1DComputeOptimize1::compute_cool_homg(const std::vector<vgl_homg_point_1d
   *M=HMatrix1D(K,*M);      // refine M using the correction K.
   return true;
 }
-

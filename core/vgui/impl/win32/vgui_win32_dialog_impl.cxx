@@ -1097,4 +1097,3 @@ void vgui_win32_dialog_impl::DrawImageOnButton(HDC hDC, RECT* lprcItem,
 
   return;
 }
-

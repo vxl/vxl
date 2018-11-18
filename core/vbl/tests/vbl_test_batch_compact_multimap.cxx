@@ -122,4 +122,3 @@ static void vbl_test_batch_compact_multimap()
 }
 
 TESTMAIN(vbl_test_batch_compact_multimap);
-

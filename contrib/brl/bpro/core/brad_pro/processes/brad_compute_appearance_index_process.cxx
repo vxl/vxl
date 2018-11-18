@@ -81,4 +81,3 @@ bool brad_compute_appearance_index_process(bprb_func_process& pro)
 
   return true;
 }
-

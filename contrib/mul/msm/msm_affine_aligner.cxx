@@ -437,5 +437,3 @@ msm_aligner* msm_affine_aligner::clone() const
 {
   return new msm_affine_aligner(*this);
 }
-
-

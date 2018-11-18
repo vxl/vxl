@@ -1232,4 +1232,3 @@ std::ostream& operator<<(std::ostream& os, vsph_sph_box_2d const& p)
   p.print(os);
   return os;
 }
-

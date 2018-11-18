@@ -84,4 +84,3 @@ bool brad_estimate_shadows_process(bprb_func_process& pro)
 
    return result;
 }
-

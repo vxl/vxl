@@ -75,4 +75,3 @@ bool test_opencl_cache2()
 }
 
 TESTMAIN( test_opencl_cache2 );
-

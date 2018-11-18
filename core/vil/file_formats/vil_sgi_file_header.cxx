@@ -90,4 +90,3 @@ bool vil_sgi_file_header::signature_valid() const
     magic[0] == SGI_SIGNATURE_BYTE_0 &&
     magic[1] == SGI_SIGNATURE_BYTE_1;
 }
-

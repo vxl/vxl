@@ -90,5 +90,3 @@ void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser& b);
 void vsl_print_summary(std::ostream& os,const mipa_vector_normaliser* b);
 
 #endif // mipa_vector_normaliser_h_
-
-

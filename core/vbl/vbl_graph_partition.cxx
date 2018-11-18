@@ -39,6 +39,3 @@ void vbl_graph_partition(vbl_disjoint_sets& ds, std::vector<vbl_edge>& edges, fl
     }
   }
 }
-
-
-

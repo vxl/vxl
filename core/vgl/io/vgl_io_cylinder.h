@@ -24,5 +24,3 @@ void vsl_print_summary(std::ostream& os, const vgl_cylinder<T> & cyl);
 #define VGL_IO_CYLINDER_INSTANTIATE(T) extern "Please #include <vgl/io/vgl_io_cylinder.hxx>"
 
 #endif // vgl_io_cylinder_h
-
-

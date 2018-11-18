@@ -220,5 +220,3 @@ bool boxm2_cpp_create_mog_image_process(bprb_func_process& pro)
   delete mog_img;
   return true;
 }
-
-

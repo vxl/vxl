@@ -2,5 +2,3 @@
 #include <vbl/vbl_smart_ptr.hxx>
 
 VBL_SMART_PTR_INSTANTIATE(bvpl_discover_pca_kernels);
-
-

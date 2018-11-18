@@ -144,4 +144,3 @@ bool brad_estimate_radiance_values_process(bprb_func_process& pro)
 
   return true;
 }
-

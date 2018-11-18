@@ -530,5 +530,3 @@ void vsl_print_summary(std::ostream& os, const mbl_lda& b)
 {
   b.print_summary(os);
 }
-
-

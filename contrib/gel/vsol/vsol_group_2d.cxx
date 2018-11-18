@@ -394,4 +394,3 @@ vsl_b_read(vsl_b_istream &is, vsol_group_2d* &g)
   else
     g = nullptr;
 }
-

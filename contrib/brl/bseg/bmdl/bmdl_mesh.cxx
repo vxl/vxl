@@ -957,4 +957,3 @@ void bmdl_mesh::roof_subtract_hole(const imesh_vertex_array<3>& verts,
   new_idxs.push_back(hole[i2]);
   face.insert(face.begin()+i1, new_idxs.begin(), new_idxs.end());
 }
-

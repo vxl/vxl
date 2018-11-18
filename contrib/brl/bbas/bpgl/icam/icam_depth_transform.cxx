@@ -189,4 +189,3 @@ vnl_vector<double> icam_depth_transform::params()
   scl_res = element_product(res, scale_factors_);
   return scl_res;
 }
-

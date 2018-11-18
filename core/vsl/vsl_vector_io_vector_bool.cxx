@@ -50,6 +50,3 @@ void vsl_b_read_vec_vec_bool_old(vsl_b_istream& is, std::vector<std::vector<bool
     return;
   }
 }
-
-
-

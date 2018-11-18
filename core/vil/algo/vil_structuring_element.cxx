@@ -93,4 +93,3 @@ void vil_compute_offsets(std::vector<std::ptrdiff_t>& offset, const vil_structur
   for (unsigned int k=0;k<n;++k)
     offset[k] = static_cast<std::ptrdiff_t>(element.p_i()[k]*istep +  element.p_j()[k]*jstep);
 }
-

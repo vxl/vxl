@@ -323,4 +323,3 @@ void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem & /*scene*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem* /*p*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem_sptr& /*sptr*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, bocl_mem_sptr const& /*sptr*/) {}
-

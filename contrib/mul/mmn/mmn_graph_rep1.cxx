@@ -221,4 +221,3 @@ bool mmn_graph_rep1::compute_dependancies(std::vector<mmn_dependancy>& deps)
 
   return n_arcs_==0;
 }
-

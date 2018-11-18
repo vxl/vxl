@@ -30,5 +30,3 @@ brec_pair_density::prob_density(vil_image_view<float>& obs)
 
   return map;
 }
-
-

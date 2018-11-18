@@ -150,5 +150,3 @@ std::ostream& operator<<(std::ostream& os,const msm_pose_maker& b)
   b.print_summary(os);
   return os;
 }
-
-

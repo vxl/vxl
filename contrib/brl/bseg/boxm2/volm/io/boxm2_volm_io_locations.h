@@ -26,4 +26,3 @@ void vsl_b_write(vsl_b_ostream& os, const boxm2_volm_loc_hypotheses* &p);
 void vsl_print_summary(std::ostream& os, const boxm2_volm_loc_hypotheses* &p);
 
 #endif
-

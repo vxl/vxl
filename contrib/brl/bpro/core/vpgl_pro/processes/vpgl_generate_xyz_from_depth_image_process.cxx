@@ -109,4 +109,3 @@ bool vpgl_generate_xyz_from_depth_image_process(bprb_func_process& pro)
   return true;
 
 }
-

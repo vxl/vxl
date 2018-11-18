@@ -276,4 +276,3 @@ bool volm_project_dem_to_sat_img_process_globals::project_dem_to_ortho(vpgl_geo_
   else
     return false;
 }
-

@@ -56,4 +56,3 @@ void bmsh3d_textured_face_mc::print()
     } while (HE != he);
   }
 }
-

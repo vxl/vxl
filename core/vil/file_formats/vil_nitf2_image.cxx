@@ -864,4 +864,3 @@ vil_nitf2_field::field_tree* vil_nitf2_image::get_tree( ) const
   }
   return t;
 }
-

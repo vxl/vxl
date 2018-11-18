@@ -100,4 +100,3 @@ vil_image_resource_sptr vepl_dilate_disk(const vil_image_resource_sptr& image, f
 
   return img_out;
 }
-

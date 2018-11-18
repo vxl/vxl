@@ -54,4 +54,3 @@ bool vil_save_image_resource_process(bprb_func_process& pro)
   }
   return true;
 }
-

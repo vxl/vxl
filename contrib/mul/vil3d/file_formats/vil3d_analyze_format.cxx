@@ -732,4 +732,3 @@ bool vil3d_analyze_image::set_voxel_size_mm(float si,float sj,float sk)
   if (!header_.write_file(base_path_+".hdr")) return false;
   return true;
 }
-

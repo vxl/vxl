@@ -64,4 +64,3 @@ initbetr_batch(void)
 
   Py_InitModule("betr_batch", betr_batch_methods);
 }
-

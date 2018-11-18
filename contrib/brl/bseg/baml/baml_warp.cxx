@@ -224,4 +224,3 @@ bool baml_warp_via_dem(
   // Occlusion?
   return true;
 }
-

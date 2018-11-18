@@ -20,4 +20,3 @@ template <class T>
 void vsl_print_summary(std::ostream& os,const vpgl_rational_camera<T> & c);
 
 #endif
-

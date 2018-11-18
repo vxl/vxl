@@ -221,4 +221,3 @@ void pdf1d_gaussian_kernel_pdf::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

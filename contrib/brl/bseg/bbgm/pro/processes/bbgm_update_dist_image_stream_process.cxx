@@ -162,4 +162,3 @@ bool bbgm_update_dist_image_stream_process(bprb_func_process& pro)
   pro.set_output(0, output);
   return true;
 }
-

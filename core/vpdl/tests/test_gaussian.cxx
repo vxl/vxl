@@ -273,4 +273,3 @@ static void test_gaussian()
 }
 
 TESTMAIN(test_gaussian);
-

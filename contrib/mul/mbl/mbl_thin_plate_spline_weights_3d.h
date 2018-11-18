@@ -131,5 +131,3 @@ void vsl_b_read(vsl_b_istream& bfs, mbl_thin_plate_spline_weights_3d& b);
 std::ostream& operator<<(std::ostream& os,const mbl_thin_plate_spline_weights_3d& b);
 
 #endif
-
-

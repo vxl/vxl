@@ -70,4 +70,3 @@ vgui::init
             ... vgui_mfc_mainfrm::OnCreate
                   CFrameWnd::CreateView
                     new vgui_mfc_view
-

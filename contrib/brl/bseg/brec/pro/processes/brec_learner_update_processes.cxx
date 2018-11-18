@@ -240,5 +240,3 @@ bool brec_learner_layer_n_update_stats_process(bprb_func_process& pro)
 
   return true;
 }
-
-

@@ -291,4 +291,3 @@ bool vsph_camera_bounds::planar_bounding_box(std::vector<vpgl_perspective_camera
   }
   return good;
 }
-

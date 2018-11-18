@@ -9,4 +9,3 @@
 typedef bsta_num_obs<bsta_gauss_ff3> gauss_type;
 typedef bsta_num_obs<bsta_mixture<gauss_type> > mix_gauss_type;
 BBGM_IMAGE_INSTANTIATE(mix_gauss_type);
-

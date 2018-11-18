@@ -197,4 +197,3 @@ bsvg_splice::bsvg_splice(float center_x, float center_y, float radius, float sta
   el->set_attribute("d", attr.str());
   this->add_element(el);
 }
-

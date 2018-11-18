@@ -229,4 +229,3 @@ class mbl_stl_pred_is_near
 };
 
 #endif
-

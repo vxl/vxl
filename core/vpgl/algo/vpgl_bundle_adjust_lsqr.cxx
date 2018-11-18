@@ -389,4 +389,3 @@ vpgl_bundle_adjust_lsqr::rod_to_matrix(vnl_vector<double> const& r)
 
   return R;
 }
-

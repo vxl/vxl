@@ -60,4 +60,3 @@ bool bsta_sigma_normalization_table_process(bprb_func_process& pro)
   pro.set_output_val<bsta_sigma_normalizer_sptr>(0, new bsta_sigma_normalizer(under_estimation_probability, n_precomputed));
   return true;
 }
-

@@ -96,4 +96,3 @@ bool bvxm_merge_mog::mpm_grid(const bvxm_voxel_grid_base_sptr& apm_base,
   }
   return true;
 }
-

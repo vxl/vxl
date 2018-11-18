@@ -145,4 +145,3 @@ bool boxm2_create_cache_process(bprb_func_process& pro)
   pro.set_output_val<boxm2_cache_sptr>(i++, boxm2_cache::instance());
   return true;
 }
-

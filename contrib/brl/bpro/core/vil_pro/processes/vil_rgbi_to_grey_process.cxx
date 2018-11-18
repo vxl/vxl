@@ -43,4 +43,3 @@ bool vil_rgbi_to_grey_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img_ptr);
   return true;
 }
-

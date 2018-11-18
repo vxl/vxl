@@ -218,4 +218,3 @@ bool  boxm2_cpp_get_3d_point_from_index_process(bprb_func_process& pro)
 
   return false;
 }
-

@@ -93,4 +93,3 @@ std::string vul_get_time_as_string(vul_time_style style/*default=vul_asc*/)
 
   return timestr;
 }
-

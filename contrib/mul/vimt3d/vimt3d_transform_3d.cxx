@@ -1187,4 +1187,3 @@ bool vimt3d_transform_is_zoom_only(const vimt3d_transform_3d& transf,
 
   return true;
 }
-

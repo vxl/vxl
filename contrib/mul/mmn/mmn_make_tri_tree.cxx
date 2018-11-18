@@ -243,4 +243,3 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
   for (unsigned i=0;i<n_deps;++i)
     deps[i]=deps0[n_deps-1-i];
 }
-

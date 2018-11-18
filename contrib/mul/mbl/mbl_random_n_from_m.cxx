@@ -120,4 +120,3 @@ void mbl_random_n_from_m::choose_n_from_m(std::vector<int>& chosen,
     if (!used_[i])
       not_chosen[j++]=i;
 }
-

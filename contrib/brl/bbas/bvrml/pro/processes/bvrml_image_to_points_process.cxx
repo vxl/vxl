@@ -88,4 +88,3 @@ bool bvrml_image_to_points_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -181,4 +181,3 @@ inline void vsl_print_summary(std::ostream &os, const ihog_transform_2d* t)
 }
 
 #endif // ihog_transform_2d_h_
-

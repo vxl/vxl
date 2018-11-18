@@ -102,5 +102,3 @@ float boxm_sigma_normalizer::normalization_factor_int(unsigned int number_of_obs
   static const float b = unbias_const_[N_PRECOMPUTED_]  - m*(1.0f/N_PRECOMPUTED_);
   return m/number_of_observations + b;
 }
-
-

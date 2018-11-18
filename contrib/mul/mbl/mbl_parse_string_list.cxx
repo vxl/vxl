@@ -75,5 +75,3 @@ void mbl_parse_string_list(const std::string& data,
   std::istringstream data_stream(data);
   mbl_parse_string_list(data_stream,items,comment_str);
 }
-
-

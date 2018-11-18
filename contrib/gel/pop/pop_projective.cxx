@@ -76,4 +76,3 @@ void pop_projective::update()
   trans_(1,2) = params_[4]->value_; // the v offset
   trans_(2,2) = 1.0;
 }
-

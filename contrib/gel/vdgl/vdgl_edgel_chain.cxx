@@ -293,4 +293,3 @@ vsl_print_summary(std::ostream &os, const vdgl_edgel_chain* e)
 {
   os << *e;
 }
-
