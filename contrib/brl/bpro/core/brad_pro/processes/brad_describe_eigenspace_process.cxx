@@ -46,4 +46,3 @@ bool brad_describe_eigenspace_process(bprb_func_process& pro)
   std::cout << '\n';
   return true;
 }
-

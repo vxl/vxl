@@ -32,4 +32,3 @@ bool vidl_ffmpeg_convert(const vidl_frame_sptr& in_frame,
 
 
 #endif // vidl_ffmpeg_convert_h_
-

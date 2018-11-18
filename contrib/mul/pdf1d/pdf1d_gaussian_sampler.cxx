@@ -112,4 +112,3 @@ const pdf1d_gaussian& pdf1d_gaussian_sampler::gaussian() const
 {
   return static_cast<const pdf1d_gaussian&>( model());
 }
-

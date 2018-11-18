@@ -229,4 +229,3 @@ void pdf1d_compare_to_pdf_bhat::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

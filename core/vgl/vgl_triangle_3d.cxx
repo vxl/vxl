@@ -1567,4 +1567,3 @@ double vgl_triangle_3d_aspect_ratio(
 {
   return vgl_triangle_3d_longest_side( p0, p1, p2 ) / vgl_triangle_3d_shortest_side( p0, p1, p2 );
 }
-

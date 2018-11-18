@@ -211,4 +211,3 @@ bool boxm2_ocl_reg_points_to_volume_mutual_info::boxm2_ocl_register_world(const 
     opencl_cache_->unref_mem(ocl_depth.ptr());
     return true;
 }
-

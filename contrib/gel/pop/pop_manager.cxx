@@ -105,4 +105,3 @@ void pop_manager::optimize(std::vector<pop_geometric_cost_function*> &obs_costs)
     std::cout << "warning minimization routine did not converge\n";
   }
 }
-

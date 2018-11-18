@@ -5,4 +5,3 @@
 
 VBL_SMART_PTR_INSTANTIATE(brec_part_base);
 VBL_SMART_PTR_INSTANTIATE(brec_part_instance);
-

@@ -280,4 +280,3 @@ bool bsvg_roc_plot_add_process(bprb_func_process& pro)
   p->add_line(xs, ys, color);
   return true;
 }
-

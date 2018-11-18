@@ -85,4 +85,3 @@ bool vpgl_create_local_rational_camera_nitf_process(bprb_func_process& pro)
 
   return true;
 }
-

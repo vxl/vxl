@@ -54,4 +54,3 @@ initbbgm_batch(void)
 
   Py_InitModule("bbgm_batch", bbgm_batch_methods);
 }
-

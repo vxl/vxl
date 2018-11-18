@@ -406,5 +406,3 @@ vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
     std::cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
   }
 }
-
-

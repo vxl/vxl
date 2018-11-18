@@ -172,5 +172,3 @@ void vsl_print_summary(std::ostream& os,const msm_aligner& b);
 void vsl_print_summary(std::ostream& os,const msm_aligner* b);
 
 #endif // msm_aligner_h_
-
-

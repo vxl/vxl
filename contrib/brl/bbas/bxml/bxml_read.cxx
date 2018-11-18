@@ -214,4 +214,3 @@ bxml_stream_read::next_element(std::istream& is, unsigned int& depth)
   }
   return nullptr;
 }
-

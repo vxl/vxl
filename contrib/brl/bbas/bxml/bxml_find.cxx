@@ -103,4 +103,3 @@ std::vector<bxml_data_sptr> bxml_find_all_with_name(const bxml_data_sptr& head,
   }
   return all_results;
 }
-

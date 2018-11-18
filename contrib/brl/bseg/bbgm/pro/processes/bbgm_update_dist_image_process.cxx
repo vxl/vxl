@@ -147,4 +147,3 @@ bool bbgm_update_dist_image_process(bprb_func_process& pro)
   }
   return false;
 }
-

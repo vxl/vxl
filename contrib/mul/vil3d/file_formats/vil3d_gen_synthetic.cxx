@@ -223,4 +223,3 @@ bool vil3d_gen_synthetic_image::put_view(const vil3d_image_view_base&,
   std::cerr << "ERROR: Cannot write to generated synthetic images.\n";
   return false;
 }
-

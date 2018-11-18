@@ -52,4 +52,3 @@ bool vpgl_load_lvcs_process(bprb_func_process& pro)
   pro.set_output_val<vpgl_lvcs_sptr>(0, lvcs);
   return true;
 }
-

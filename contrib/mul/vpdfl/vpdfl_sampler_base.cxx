@@ -121,4 +121,3 @@ void vsl_print_summary(std::ostream& os,const vpdfl_sampler_base* b)
   else
     os << "No vpdfl_sampler_base defined.";
 }
-

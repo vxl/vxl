@@ -108,4 +108,3 @@ vil_image_resource_sptr vepl_y_gradient(const vil_image_resource_sptr& image, do
 
   return img_out;
 }
-

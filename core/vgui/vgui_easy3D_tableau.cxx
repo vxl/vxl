@@ -101,4 +101,3 @@ set_point_radius(float r)
   style_ = vgui_style::new_style( style_ );
   style_->point_size = r;
 }
-

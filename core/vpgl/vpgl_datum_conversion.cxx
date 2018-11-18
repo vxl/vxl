@@ -1034,4 +1034,3 @@ void wgs72_to_nad27n
   wgs84_to_nad27n(wgs84_phi, wgs84_lamda, wgs84_hgt,
                   nad27n_phi, nad27n_lamda, nad27n_hgt);
 }
-

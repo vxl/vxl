@@ -110,4 +110,3 @@ const pdf1d_exponential& pdf1d_exponential_sampler::exponential() const
 {
   return static_cast<const pdf1d_exponential&>(model());
 }
-

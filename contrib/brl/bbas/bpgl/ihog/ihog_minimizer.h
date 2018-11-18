@@ -82,4 +82,3 @@ class ihog_minimizer
 };
 
 #endif // ihog_minimizer_h_
-

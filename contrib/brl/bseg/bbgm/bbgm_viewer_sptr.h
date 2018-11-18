@@ -7,4 +7,3 @@ class bbgm_viewer;
 typedef vbl_smart_ptr<bbgm_viewer > bbgm_viewer_sptr;
 
 #endif
-

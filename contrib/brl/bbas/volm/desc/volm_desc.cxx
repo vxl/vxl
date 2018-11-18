@@ -94,5 +94,3 @@ void volm_desc::get_char_array(std::vector<unsigned char>& values) const
   values.resize(nbins_);
   values = h_;
 }
-
-

@@ -86,5 +86,3 @@ void pdf1d_gaussian_kernel_pdf_builder::print_summary(std::ostream& /*os*/) cons
 {
   std::cerr << "pdf1d_gaussian_kernel_pdf_builder::print_summary() NYI\n";
 }
-
-

@@ -148,5 +148,3 @@ void vsl_b_write(vsl_b_ostream& os, const bxml_document* &ph)
     vsl_b_write(os,*ph);
   }
 }
-
-

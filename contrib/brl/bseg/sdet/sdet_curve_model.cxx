@@ -2699,6 +2699,3 @@ void sdet_ES_curve_model_perturbed::print_info()
     std::cout << "pos: " << i << " : (th=" << tangents[i] << ", k=" << ks[i] << ", gamma=" << gammas[i] << " " << std::endl;
   }
 }
-
-
-

@@ -100,4 +100,3 @@ bool bvxm_locate_region_process(bprb_func_process& pro)
 
   return result;
 }
-

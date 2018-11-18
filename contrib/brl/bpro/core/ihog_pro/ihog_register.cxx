@@ -17,6 +17,3 @@ void ihog_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, ihog_mutual_information_process, "ihogMutualInformationProcess");
 
 }
-
-
-

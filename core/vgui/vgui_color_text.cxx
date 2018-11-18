@@ -99,4 +99,3 @@ float blue_value(const std::string& txt)
   std::sscanf(nb_txt.c_str(), "%f %f %f", &red, &green, &blue);
   return blue;
 }
-

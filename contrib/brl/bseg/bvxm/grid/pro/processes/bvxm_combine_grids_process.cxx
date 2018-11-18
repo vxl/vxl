@@ -129,4 +129,3 @@ bool bvxm_combine_grids_process(bprb_func_process& pro)
   }
   return false;
 }
-

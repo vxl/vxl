@@ -87,4 +87,3 @@ bool vil_map_image_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, map_image);
   return true;
 }
-

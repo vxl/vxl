@@ -119,4 +119,3 @@ bool brec_prob_map_area_process(bprb_func_process& pro)
 
   return true;
 }
-

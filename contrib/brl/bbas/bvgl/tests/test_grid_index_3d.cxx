@@ -31,5 +31,3 @@ static void test_grid_index_3d()
 }
 
 TESTMAIN( test_grid_index_3d );
-
-

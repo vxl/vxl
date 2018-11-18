@@ -114,5 +114,4 @@ class brad_appearance_neighborhood_index
   void fill_near_illum_dir_map();
 };
 
-
 #endif

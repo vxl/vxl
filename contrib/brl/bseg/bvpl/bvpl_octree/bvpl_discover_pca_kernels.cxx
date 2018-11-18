@@ -1026,4 +1026,3 @@ bool bvpl_discover_pca_kernels::write_pca_matrices()
 
   return true;
 }
-

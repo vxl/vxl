@@ -517,5 +517,3 @@ bool mfpf_norm_corr2d::operator==(const mfpf_norm_corr2d& nc) const
   if (kernel_.size()==0) return true;  // ssd fails on empty
   return (vil_math_ssd(kernel_,nc.kernel_,double(0))<1e-4);
 }
-
-

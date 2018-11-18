@@ -63,4 +63,3 @@ bool vil_init_float_image_process(bprb_func_process& pro)
 
   return true;
 }
-

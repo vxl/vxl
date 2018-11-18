@@ -246,4 +246,3 @@ inline void vsol_triangle_2d::describe(std::ostream &strm, int blanking) const
     strm << ' ' << *(vertex(i));
   strm << '>' << std::endl;
 }
-

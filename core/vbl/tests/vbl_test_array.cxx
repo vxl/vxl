@@ -154,4 +154,3 @@ static void vbl_test_array()
 }
 
 TESTMAIN(vbl_test_array);
-

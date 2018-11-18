@@ -81,4 +81,3 @@ vil_image_resource_sptr vepl_moment(const vil_image_resource_sptr& image, int or
 
   return img_out;
 }
-

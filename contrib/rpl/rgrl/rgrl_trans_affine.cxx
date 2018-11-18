@@ -278,4 +278,3 @@ clone() const
 {
   return new rgrl_trans_affine( *this );
 }
-

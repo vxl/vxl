@@ -301,4 +301,3 @@ vpgl_bundle_adjust::write_vrml(const std::string& filename,
 
   os.close();
 }
-

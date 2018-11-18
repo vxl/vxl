@@ -226,4 +226,3 @@ bool sdet_detect_third_order_edges_dt_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(1,new vil_image_view<float>(out_imgf));
   return true;
 }
-

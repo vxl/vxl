@@ -435,4 +435,3 @@ void mmn_dp_solver::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

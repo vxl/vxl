@@ -258,5 +258,3 @@ bool boxm2_compute_normal_albedo_functor::process_cell(unsigned int index, bool 
 #endif
    return true;
 }
-
-

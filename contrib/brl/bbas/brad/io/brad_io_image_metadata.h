@@ -47,4 +47,3 @@ void vsl_b_read(vsl_b_istream& is, brad_image_metadata_sptr const& sptr);
 
 
 #endif // brad_io_image_metadata_h_
-

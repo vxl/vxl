@@ -125,4 +125,3 @@ bool vil_combine_grey_images_process(bprb_func_process& pro)
 
   return true;
 }
-

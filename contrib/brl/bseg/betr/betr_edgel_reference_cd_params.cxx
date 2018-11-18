@@ -19,4 +19,3 @@ std::istream&  operator>>(std::istream& s, betr_edgel_reference_cd_params& ercdp
     std::cout << "Failed to parse JSON file for betr_edgel_reference_cd_params" << std::endl;
   return s;
 }
-

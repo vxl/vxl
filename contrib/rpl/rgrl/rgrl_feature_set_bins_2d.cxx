@@ -150,4 +150,3 @@ type() const
 {
   return *feature_type_;
 }
-

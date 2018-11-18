@@ -128,4 +128,3 @@ void boxm2_ocl_render_expected_shadow_map::compile_kernel(const bocl_device_sptr
                                    "boxm2 opencl render random blocks"); //kernel identifier (for error checking)
   vec_kernels.push_back(ray_trace_kernel);
 }
-

@@ -140,4 +140,3 @@ double clsfy_test_error(const clsfy_classifier_1d &classifier,
     if (results[i] != test_outputs[i]) sum_diff++;
   return ((double) sum_diff) / ((double) n);
 }
-

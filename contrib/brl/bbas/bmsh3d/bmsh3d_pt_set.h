@@ -184,4 +184,3 @@ void shift_points_to_first_octant (bmsh3d_pt_set* pt_set);
 void subsample_points (bmsh3d_pt_set* pt_set, const unsigned int subsam_pts);
 
 #endif
-

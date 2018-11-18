@@ -423,5 +423,3 @@ msm_aligner* msm_similarity_aligner::clone() const
 {
   return new msm_similarity_aligner(*this);
 }
-
-

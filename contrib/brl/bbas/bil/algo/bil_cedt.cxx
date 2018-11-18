@@ -806,4 +806,3 @@ bil_cedt_contour::~bil_cedt_contour()
   delete[] y;
   delete[] dir;
 }
-

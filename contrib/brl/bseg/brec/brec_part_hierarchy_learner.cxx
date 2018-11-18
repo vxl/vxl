@@ -945,4 +945,3 @@ void vsl_b_write(vsl_b_ostream& os, const brec_part_hierarchy_learner* &ph)
     vsl_b_write(os,*ph);
   }
 }
-

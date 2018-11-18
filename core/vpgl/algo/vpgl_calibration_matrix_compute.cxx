@@ -119,6 +119,3 @@ vpgl_calibration_matrix_compute::natural(const std::vector< vgl_point_2d<double>
 
   return vpgl_calibration_matrix_compute::natural(H, principal_point, K);
 }
-
-
-

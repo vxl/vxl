@@ -66,4 +66,3 @@ void clsfy_add_all_loaders()
   mbl_cloneables_factory<clsfy_builder_1d>::add(clsfy_binary_threshold_1d_builder());
 
 }
-

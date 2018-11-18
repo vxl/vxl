@@ -82,4 +82,3 @@ bool bsvg_document::add_element(const bxml_data_sptr& element)
 
   return true;
 }
-

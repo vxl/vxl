@@ -620,5 +620,3 @@ for (auto & new_corr : new_corrs) {
 
   return true;
 }
-
-

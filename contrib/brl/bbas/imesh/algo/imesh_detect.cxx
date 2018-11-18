@@ -280,4 +280,3 @@ imesh_detect_exterior_faces(const imesh_mesh& mesh,
       backfacing.insert(i);
   }
 }
-

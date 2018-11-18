@@ -46,4 +46,3 @@ bool vgui_drag_mixin::mouse_drag(int, int, vgui_button, vgui_modifier)
   if (debug) std::cerr << "vgui_drag_mixin::mouse_drag\n";
   return false;
 }
-

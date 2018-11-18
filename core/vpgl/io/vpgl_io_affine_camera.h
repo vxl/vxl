@@ -19,4 +19,3 @@ template <class T>
 void vsl_print_summary(std::ostream& os,const vpgl_affine_camera<T> & c);
 
 #endif
-

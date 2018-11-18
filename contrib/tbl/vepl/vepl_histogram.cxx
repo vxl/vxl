@@ -70,4 +70,3 @@ std::vector<unsigned int> vepl_histogram(const vil_image_resource_sptr& image)
     return std::vector<unsigned int>();
   }
 }
-

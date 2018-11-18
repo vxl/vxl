@@ -276,4 +276,3 @@ std::ostream& operator<<(std::ostream& os,const mfpf_pose_predictor_builder& b)
   vsl_indent_dec(os);
   return os;
 }
-

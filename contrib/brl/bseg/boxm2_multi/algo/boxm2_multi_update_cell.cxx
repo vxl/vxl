@@ -460,4 +460,3 @@ std::vector<bocl_kernel*>& boxm2_multi_update_cell::get_kernels(const bocl_devic
   kernels_[identifier] = kerns;
   return kernels_[identifier];
 }
-

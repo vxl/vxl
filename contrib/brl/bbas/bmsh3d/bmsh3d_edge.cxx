@@ -455,4 +455,3 @@ void bmsh3d_edge::getInfo(std::ostringstream& ostrm)
 
   ostrm << '\n';
 }
-

@@ -508,4 +508,3 @@ bcvr_cv_cor_sptr bcvr_cvmatch::get_cv_cor()
   cv_cor->set_open_curve_matching(true);
   return cv_cor;
 }
-

@@ -189,4 +189,3 @@ brdb_tuple::b_write_values(vsl_b_ostream &os) const
   for (const auto & value : values_)
     value->b_write_value(os);
 }
-

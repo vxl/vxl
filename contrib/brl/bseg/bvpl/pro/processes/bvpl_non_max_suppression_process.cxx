@@ -112,4 +112,3 @@ bool bvpl_non_max_suppression_process(bprb_func_process& pro)
 
   return false;
 }
-

@@ -357,4 +357,3 @@ void msm_curves::parse_or_load(const std::string& curves_data)
     throw mbl_exception_parse_error(err_msg);
   }
 }
-

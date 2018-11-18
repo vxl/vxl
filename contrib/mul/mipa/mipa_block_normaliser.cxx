@@ -269,4 +269,3 @@ void mipa_block_normaliser::config_from_stream(
     mbl_read_props_look_for_unused_props(
             "mipa_block_normaliser::config_from_stream", props, extra_props);
 }
-

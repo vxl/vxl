@@ -112,4 +112,3 @@ void bil_detect_ridges(const vil_image_view<float>& Ix,
   lambda = max_lambda;
   vil_convert_cast(rho,rho_int);
 }
-

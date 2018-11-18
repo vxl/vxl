@@ -30,4 +30,3 @@ void mbl_progress_null::on_set_progress(const std::string&,const int )
 void mbl_progress_null::on_end_progress(const std::string &)
 {
 }
-

@@ -180,4 +180,3 @@ bool volm_desc_ex_2d_indexer::write_params_file()
     return false;
   return true;
 }
-

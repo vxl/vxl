@@ -100,4 +100,3 @@ void vil_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_multi_plane_view_to_grey_process, "vilMultiPlaneViewToGreyProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, vil_binarize_otsu_process, "vilBinarizeOtsuProcess");
 }
-

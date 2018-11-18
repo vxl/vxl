@@ -44,4 +44,3 @@ bool brad_set_sun_angles_process(bprb_func_process& pro)
   // no outputs
   return true;
 }
-

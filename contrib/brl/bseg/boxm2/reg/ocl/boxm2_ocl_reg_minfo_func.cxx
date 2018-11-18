@@ -24,7 +24,3 @@ double boxm2_ocl_reg_minfo_func2:: error(vgl_rotation_3d<double> rot,vgl_vector_
 {
     return (-this->mutual_info(rot,trans));
 }
-
-
-
-

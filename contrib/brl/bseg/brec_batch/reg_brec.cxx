@@ -77,6 +77,3 @@ initbrec_batch(void)
 
   Py_InitModule("brec_batch", brec_batch_methods);
 }
-
-
-

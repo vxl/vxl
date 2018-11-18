@@ -230,4 +230,3 @@ void pdf1d_flat_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

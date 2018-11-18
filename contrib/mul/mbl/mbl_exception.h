@@ -190,4 +190,3 @@ MACRO(mbl_exception_os_invalid_value);
 #undef MACRO
 
 #endif // mbl_exception_h_
-

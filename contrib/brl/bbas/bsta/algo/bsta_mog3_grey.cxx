@@ -539,4 +539,3 @@ void bsta_mog3_grey::compute_app_model(vnl_vector_fixed<unsigned char, 8> & mog3
 
   return;
 }
-

@@ -307,4 +307,3 @@ bool bvrml_write_line_process(bprb_func_process& pro)
 
   return true;
 }
-

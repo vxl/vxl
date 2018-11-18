@@ -137,4 +137,3 @@ void bhdfs_manager_destroyer::set_singleton(bhdfs_manager_sptr s)
 {
   s_ = s;
 }
-

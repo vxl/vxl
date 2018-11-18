@@ -261,4 +261,3 @@ bool sdet_dump_vsol_binary_data_process(bprb_func_process& pro)
   ofs.close();
   return true;
 }
-

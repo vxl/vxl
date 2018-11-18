@@ -288,4 +288,3 @@ std::ostream& operator<<(std::ostream& os,const mbl_rbf_network& b)
   vsl_indent_dec(os);
   return os;
 }
-

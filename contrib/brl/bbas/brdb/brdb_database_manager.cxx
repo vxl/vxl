@@ -153,4 +153,3 @@ brdb_database_manager::merge_database(const std::string& path)
 
   return instance()->merge(from_file);
 }
-

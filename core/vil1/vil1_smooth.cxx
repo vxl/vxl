@@ -47,4 +47,3 @@ vil1_image vil1_smooth_gaussian(vil1_image const & in, double sigma)
     default: return nullptr;
   }
 }
-

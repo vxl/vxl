@@ -254,4 +254,3 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   else
     return -1.0f;
 }
-

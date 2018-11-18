@@ -88,4 +88,3 @@ int check_val(cl_int status, cl_int result, const std::string& message)
   else
     return 1;
 }
-

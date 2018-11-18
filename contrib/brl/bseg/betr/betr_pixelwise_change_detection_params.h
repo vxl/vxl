@@ -98,4 +98,3 @@ std::ostream&  operator<<(std::ostream& s, betr_pixelwise_change_detection_param
 std::istream&  operator>>(std::istream& s, betr_pixelwise_change_detection_params& ecdp);
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_pixelwise_change_detection_params.
-

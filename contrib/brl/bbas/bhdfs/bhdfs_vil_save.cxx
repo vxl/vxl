@@ -108,4 +108,3 @@ bool bhdfs_vil_save_image_resource(const vil_image_resource_sptr &ir, char const
 {
   return bhdfs_vil_save_image_resource(ir, filename, vil_save_guess_file_format(filename));
 }
-

@@ -179,4 +179,3 @@ void msm_ellipsoid_limiter::config_from_stream(std::istream &is)
   mbl_read_props_look_for_unused_props(
       "msm_ellipsoid_limiter::config_from_stream", props, mbl_read_props_type());
 }
-

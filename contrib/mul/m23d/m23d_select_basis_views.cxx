@@ -85,4 +85,3 @@ double m23d_evaluate_basis(const vnl_matrix<double>& P2D,
   vnl_svd<double> svd(M);
   return svd.W(2*n-1)/svd.W(0);  // Smallest singular value/largest SV
 }
-

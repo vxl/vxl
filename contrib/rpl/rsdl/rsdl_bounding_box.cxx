@@ -43,5 +43,3 @@ std::ostream& operator<< ( std::ostream& ostr, const rsdl_bounding_box& box )
     ostr << "Angular  " << i << ": [" << box.min_angular(i) << "," << box.max_angular(i) << "]\n";
   return ostr;
 }
-
-

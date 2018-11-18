@@ -376,4 +376,3 @@ void bvgl_2d_geo_index::get_leaf(const bvgl_2d_geo_index_node_sptr& root, bvgl_2
   vgl_point_2d<double> pt_double( (double)(point.x()), (double)(point.y()) );
   get_leaf(root, leaf, pt_double);
 }
-

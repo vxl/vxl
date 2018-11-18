@@ -101,4 +101,3 @@ vil_image_resource_sptr vepl_sobel(const vil_image_resource_sptr& image)
 
   return img_out;
 }
-

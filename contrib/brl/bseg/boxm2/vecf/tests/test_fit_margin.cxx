@@ -413,4 +413,3 @@ bool good = false;
 #endif //BUILD_FIT_MARGIN
 }
 TESTMAIN( test_fit_margin );
-

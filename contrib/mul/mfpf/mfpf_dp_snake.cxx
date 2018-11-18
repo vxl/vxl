@@ -296,4 +296,3 @@ void vsl_b_read(vsl_b_istream& bfs, mfpf_dp_snake& b)
 {
   b.b_read(bfs);
 }
-

@@ -39,4 +39,3 @@ bool brad_get_sun_angles_process(bprb_func_process& pro)
   pro.set_output_val<float>(1, float(mdata->sun_elevation_));
   return true;
 }
-

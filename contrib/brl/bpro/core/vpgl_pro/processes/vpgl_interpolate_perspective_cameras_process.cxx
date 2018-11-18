@@ -83,4 +83,3 @@ bool vpgl_interpolate_perspective_cameras_process(bprb_func_process& pro)
   }
   return true;
 }
-

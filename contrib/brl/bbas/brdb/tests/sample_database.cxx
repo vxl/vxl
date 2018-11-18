@@ -108,4 +108,3 @@ brdb_database_sptr generate_sample_database()
 
   return new brdb_database(test_relations, relation_names);
 }
-

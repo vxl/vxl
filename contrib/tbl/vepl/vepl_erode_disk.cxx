@@ -101,4 +101,3 @@ vil_image_resource_sptr vepl_erode_disk(const vil_image_resource_sptr& image, fl
 
   return img_out;
 }
-

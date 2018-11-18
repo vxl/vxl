@@ -579,4 +579,3 @@ void mmn_lbp_solver::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

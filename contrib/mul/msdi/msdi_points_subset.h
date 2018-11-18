@@ -66,6 +66,3 @@ public:
 };
 
 #endif // msdi_points_subset_h_
-
-
-

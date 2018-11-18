@@ -244,4 +244,3 @@ bool vpgl_rational_cam_rotation_to_up_vector_process(bprb_func_process& pro)
   pro.set_output_val<double>(1, v2-v1);
   return true;
 }
-

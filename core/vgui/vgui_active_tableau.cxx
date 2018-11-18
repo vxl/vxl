@@ -103,4 +103,3 @@ void vgui_active_tableau::toggle_visible()
   visible_ = !visible_;
   post_redraw();
 }
-

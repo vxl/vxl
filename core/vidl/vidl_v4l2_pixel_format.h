@@ -20,4 +20,3 @@ unsigned int vidl_to_v4l2 (vidl_pixel_format pf);
 vidl_pixel_format v4l2_to_vidl(unsigned int pf);
 
 #endif // vidl_v4l2_pixel_format_h_
-

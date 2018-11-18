@@ -84,4 +84,3 @@ bool bsl_fusion_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img);
   return true;
 }
-

@@ -7,6 +7,3 @@ typedef vnl_vector_fixed<float,10> vector;
 
 BOCT_TREE_INSTANTIATE(short, vector );
 BOCT_TREE_CELL_INSTANTIATE(short, vector);
-
-
-

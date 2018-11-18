@@ -39,4 +39,3 @@ static void test_unit_sphere()
   vpl_unlink("./temp.bin");
 }
 TESTMAIN(test_unit_sphere);
-

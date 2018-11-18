@@ -73,4 +73,3 @@ void vgui_command_toggle::execute()
   std::cerr << "; new state : " << state << ".\n\n";
 #endif
 }
-

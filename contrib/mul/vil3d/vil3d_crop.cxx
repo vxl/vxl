@@ -38,4 +38,3 @@ vil3d_crop_image_resource::vil3d_crop_image_resource(
          j0 + n_j <= src_->nj() &&
          k0 + n_k <= src_->nk() );
 }
-

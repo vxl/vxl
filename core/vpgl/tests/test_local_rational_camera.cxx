@@ -115,4 +115,3 @@ static void test_local_rational_camera()
 }
 
 TESTMAIN(test_local_rational_camera);
-

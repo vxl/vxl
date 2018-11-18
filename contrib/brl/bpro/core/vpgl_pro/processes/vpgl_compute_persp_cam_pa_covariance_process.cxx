@@ -68,4 +68,3 @@ bool vpgl_compute_persp_cam_pa_covariance_process(bprb_func_process& pro)
 
   return true;
 }
-

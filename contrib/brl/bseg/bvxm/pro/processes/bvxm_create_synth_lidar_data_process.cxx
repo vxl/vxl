@@ -121,5 +121,3 @@ bool bvxm_create_synth_lidar_data_process(bprb_func_process& pro)
 
   return true;
 }
-
-

@@ -5,4 +5,3 @@
 typedef vimt_image_2d_of<vxl_byte> im;
 
 VIMT_IMAGE_PYRAMID_INSTANTIATE(im );
-

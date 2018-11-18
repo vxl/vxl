@@ -140,5 +140,3 @@ bool boxm2_convert_nvm_txt::read_cameras(std::ifstream& in)
   }
   return true;
 }
-
-

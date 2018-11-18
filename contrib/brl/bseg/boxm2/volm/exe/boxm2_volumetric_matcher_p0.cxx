@@ -187,4 +187,3 @@ int main(int argc, char** argv)
     volm_io::write_status(out_folder(), volm_io::MATCHER_EXE_FINISHED);
     return volm_io::SUCCESS;
 }
-

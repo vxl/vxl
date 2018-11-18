@@ -202,4 +202,3 @@ vil1_jpeg_stream_src_rewind(j_decompress_ptr cinfo, vil1_stream *vs)
 
   vs->seek(0L);
 }
-

@@ -48,4 +48,3 @@ compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >& points1,
   H.set(&T[0][0]);
   return true;
 }
-

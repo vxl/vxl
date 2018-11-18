@@ -100,6 +100,3 @@ public:
 };
 
 #endif // msdi_array_of_marked_images_h_
-
-
-

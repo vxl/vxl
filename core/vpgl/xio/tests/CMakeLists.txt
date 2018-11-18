@@ -10,5 +10,3 @@ target_link_libraries(vpgl_xio_test_all ${VXL_LIB_PREFIX}vpgl_xio ${VXL_LIB_PREF
 #vpgl_test_include executable
 add_executable(vpgl_xio_test_include test_include.cxx)
 target_link_libraries(vpgl_xio_test_include ${VXL_LIB_PREFIX}vpgl_xio)
-
-

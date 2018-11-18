@@ -61,4 +61,3 @@ bool brad_get_meta_data_info_process(bprb_func_process& pro)
   pro.set_output_val<std::string>(12, mdata->band_);
   return true;
 }
-

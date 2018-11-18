@@ -48,4 +48,3 @@ AVPixelFormat
 vidl_pixel_format_to_ffmpeg(vidl_pixel_format vidl_pix_fmt);
 
 #endif // vidl_ffmpeg_pixel_format_h_
-

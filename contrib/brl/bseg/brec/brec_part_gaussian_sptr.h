@@ -13,4 +13,3 @@ class brec_part_gaussian;
 typedef vbl_smart_ptr<brec_part_gaussian> brec_part_gaussian_sptr;
 
 #endif // brec_part_gaussian_sptr_h_
-

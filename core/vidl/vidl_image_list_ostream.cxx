@@ -133,4 +133,3 @@ write_frame(const vidl_frame_sptr& frame)
 
   return vil_save(*v,file_name.c_str(),file_format_.c_str());
 }
-

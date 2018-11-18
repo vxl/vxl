@@ -100,4 +100,3 @@ bool boxm_clean_scene_process(bprb_func_process& pro)
   }
   return true;
 }
-

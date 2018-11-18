@@ -138,4 +138,3 @@ void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache & /*scene*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache*  /*p*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache_sptr&  /*sptr*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, boxm2_stream_scene_cache_sptr const&  /*sptr*/) {}
-

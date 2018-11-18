@@ -40,4 +40,3 @@ float bvpl_algebraic_functor::result()
 
   return result;
 }
-

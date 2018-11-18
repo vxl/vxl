@@ -487,4 +487,3 @@ void mbl_read_props_look_for_unused_props(
     mbl_exception_error(mbl_exception_unused_props(function_name, ss.str()));
   }
 }
-

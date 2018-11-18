@@ -67,4 +67,3 @@ std::ostream& operator<<(std::ostream& os, bapl_mi_matcher_params const& p)
      << "---]" << std::endl;
   return os;
 }
-

@@ -124,4 +124,3 @@ bool brad_train_histograms_process(bprb_func_process& pro)
   pro.set_output_val<bsta_joint_histogram_3d_sptr>(1, high_ptr);
   return true;
 }
-

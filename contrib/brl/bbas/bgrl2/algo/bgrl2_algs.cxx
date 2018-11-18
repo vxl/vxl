@@ -84,4 +84,3 @@ int depth_no_loop(vbl_smart_ptr<G> g, vbl_smart_ptr<E> e, vbl_smart_ptr<V> n)
 
 #undef DBGRL_DEPTH_NO_LOOP_INSTANTIATE
 #define DBGRL_DEPTH_NO_LOOP_INSTANTIATE( G, E, V ) template int depth_no_loop(vbl_smart_ptr<G > g, vbl_smart_ptr<E > e, vbl_smart_ptr<V > n)
-

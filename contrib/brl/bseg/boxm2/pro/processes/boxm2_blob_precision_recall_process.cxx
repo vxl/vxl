@@ -205,4 +205,3 @@ bool boxm2_blob_precision_recall_process(bprb_func_process& pro)
   pro.set_output_val<bbas_1d_array_float_sptr>(1, recall);
   return true;
 }
-

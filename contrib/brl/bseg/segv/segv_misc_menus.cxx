@@ -63,4 +63,3 @@ vgui_menu segv_misc_menus::get_menu()
   menubar.add( "Image Ops", menuops);
   return menubar;
 }
-

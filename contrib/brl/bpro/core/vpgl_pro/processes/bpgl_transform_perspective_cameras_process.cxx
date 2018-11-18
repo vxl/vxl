@@ -351,5 +351,3 @@ bool vpgl_transform_box_process(bprb_func_process& pro)
   pro.set_output_val<bbas_1d_array_double_sptr>(1, outmax);
   return true;
 }
-
-

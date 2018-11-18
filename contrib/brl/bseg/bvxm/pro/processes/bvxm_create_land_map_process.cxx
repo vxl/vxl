@@ -239,4 +239,3 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, out_img);
   return true;
 }
-

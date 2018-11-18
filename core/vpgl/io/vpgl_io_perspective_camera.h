@@ -17,4 +17,3 @@ void vsl_b_read(vsl_b_istream & is, vpgl_perspective_camera<T> &camera);
 template <class T>
 void vsl_print_summary(std::ostream& os,const vpgl_perspective_camera<T> & c);
 #endif
-

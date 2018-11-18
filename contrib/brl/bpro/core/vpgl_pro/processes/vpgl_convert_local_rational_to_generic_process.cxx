@@ -83,4 +83,3 @@ bool vpgl_convert_local_rational_to_generic_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(2,gcam.rows());
   return true;
 }
-

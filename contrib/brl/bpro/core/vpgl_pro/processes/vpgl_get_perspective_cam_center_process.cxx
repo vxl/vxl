@@ -56,4 +56,3 @@ bool vpgl_get_perspective_cam_center_process(bprb_func_process& pro)
 
   return true;
 }
-

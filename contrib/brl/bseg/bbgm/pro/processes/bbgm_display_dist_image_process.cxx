@@ -170,4 +170,3 @@ bool bbgm_display_dist_image_process(bprb_func_process& pro)
   pro.set_output(0, output0);
   return true;
 }
-

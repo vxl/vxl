@@ -442,4 +442,3 @@ bool mmn_diffusion_solver::continue_diffusion()
     }
     return retstate;
 }
-

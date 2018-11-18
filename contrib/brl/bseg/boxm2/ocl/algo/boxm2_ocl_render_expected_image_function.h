@@ -118,4 +118,3 @@ float render_expected_albedo_normal(  boxm2_scene_sptr & scene,
                                       unsigned cl_nj);
 
 #endif // boxm2_ocl_render_expected_image_function_h_
-

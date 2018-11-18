@@ -388,4 +388,3 @@ void volm_spherical_container::get_depth_intervals(std::vector<float>& ints)
   for (; iter != depth_interval_map_.end(); ++iter)
     ints.push_back((float)iter->first);
 }
-

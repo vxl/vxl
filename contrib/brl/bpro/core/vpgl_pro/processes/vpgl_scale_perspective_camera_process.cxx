@@ -63,4 +63,3 @@ bool vpgl_scale_perspective_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

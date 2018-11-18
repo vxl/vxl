@@ -165,4 +165,3 @@ PyMODINIT_FUNC
 #endif
     Py_InitModule("boxm2_batch", boxm2_batch_methods);
 }
-

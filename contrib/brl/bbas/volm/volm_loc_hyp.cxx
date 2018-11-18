@@ -207,5 +207,3 @@ void volm_loc_hyp::write_to_kml(const std::string& out_file, double size, bool c
 
   bkml_write::close_document(ofs);
 }
-
-

@@ -163,4 +163,3 @@ macro(VIL_PIXEL_FORMAT_DOUBLE , double )
     return false;
   }
 }
-

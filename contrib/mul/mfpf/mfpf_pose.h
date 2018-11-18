@@ -216,4 +216,3 @@ inline void vsl_b_read(vsl_b_istream& bfs,
 }
 
 #endif // mfpf_pose_h_
-

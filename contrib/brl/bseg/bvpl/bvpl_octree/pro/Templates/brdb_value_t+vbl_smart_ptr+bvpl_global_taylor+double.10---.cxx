@@ -6,5 +6,3 @@
 typedef vbl_smart_ptr<bvpl_global_taylor<double, 10> > bvpl_global_taylor_sptr;
 
 BRDB_VALUE_INSTANTIATE(bvpl_global_taylor_sptr, "bvpl_global_taylor_sptr");
-
-

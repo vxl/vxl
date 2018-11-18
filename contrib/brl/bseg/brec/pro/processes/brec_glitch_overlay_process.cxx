@@ -104,4 +104,3 @@ bool brec_glitch_overlay_process(bprb_func_process& pro)
 
   return true;
 }
-

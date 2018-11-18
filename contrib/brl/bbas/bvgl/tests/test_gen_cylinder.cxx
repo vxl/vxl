@@ -81,5 +81,3 @@ static void test_gen_cylinder()
 }
 
 TESTMAIN( test_gen_cylinder );
-
-

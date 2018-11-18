@@ -326,4 +326,3 @@ generate_similarity_matches( const vnl_vector<double>& params,
   id = 12;
   matches.emplace_back( from_loc, to_loc, id );  // 19 - id 12 - good
 }
-

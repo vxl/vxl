@@ -107,4 +107,3 @@ void mbl_exception_throw_os_error(const std::string& filename,
     break;
   }
 }
-

@@ -131,4 +131,3 @@ bool boxm2_stream_cache_close_files_process(bprb_func_process& pro)
   cache->close_streams();
   return true;
 }
-

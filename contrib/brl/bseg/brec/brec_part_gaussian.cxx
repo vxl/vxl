@@ -836,4 +836,3 @@ bool draw_gauss_to_ps(vul_psfile& ps, const brec_part_gaussian_sptr& pi, float x
   ps.ellipse(x*4, -y*4, pi->lambda0_*4, pi->lambda1_*4, int(-pi->theta_));
   return true;
 }
-

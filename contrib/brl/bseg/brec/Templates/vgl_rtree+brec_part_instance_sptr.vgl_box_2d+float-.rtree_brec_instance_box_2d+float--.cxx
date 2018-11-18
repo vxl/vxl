@@ -8,4 +8,3 @@ typedef brec_part_instance_sptr pt;
 typedef vgl_box_2d<float> container;
 typedef rtree_brec_instance_box_2d<float> c;
 VGL_RTREE_INSTANTIATE(pt, container, c);
-

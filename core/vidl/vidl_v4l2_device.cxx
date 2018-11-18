@@ -658,4 +658,3 @@ operator<<(std::ostream &os, const vidl_v4l2_device & dev)
      << " width: "<< dev.get_width()<< " height: " << dev.get_height() << std::endl;
   return os;
 }
-

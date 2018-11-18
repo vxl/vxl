@@ -29,4 +29,3 @@ void mipa_orientation_histogram(const vil_image_view<srcT>& src,
                                 bool bilin_interp=true);
 
 #endif // mipa_orientation_histogram_h_
-

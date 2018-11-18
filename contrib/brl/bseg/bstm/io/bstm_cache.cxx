@@ -45,4 +45,3 @@ void bstm_cache_destroyer::set_singleton(const bstm_cache_sptr& s)
 {
   s_ = s;
 }
-

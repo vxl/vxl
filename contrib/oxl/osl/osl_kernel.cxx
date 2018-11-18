@@ -62,4 +62,3 @@ void osl_kernel_DOG(float *kernel_, float *sub_area_, int &k_size_,
   // kernel size
   k_size_ = 2*width_ - 1;
 }
-

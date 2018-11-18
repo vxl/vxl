@@ -106,4 +106,3 @@ inline void vil3d_transform(const vil3d_image_view<inA >&srcA,
 
 
 #endif // vil3d_transform_h_
-

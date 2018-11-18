@@ -750,4 +750,3 @@ struct vidl_color_component<VIDL_PIXEL_FORMAT_UYV_444>
 };
 
 #endif // vidl_color_h_
-

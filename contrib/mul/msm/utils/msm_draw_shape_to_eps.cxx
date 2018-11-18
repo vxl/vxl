@@ -51,4 +51,3 @@ void msm_draw_points_to_eps(mbl_eps_writer& writer,
       writer.draw_circle(points[i],radius);
   }
 }
-

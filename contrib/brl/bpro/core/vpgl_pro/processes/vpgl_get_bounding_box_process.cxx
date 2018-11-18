@@ -134,4 +134,3 @@ bool vpgl_get_bounding_box_process(bprb_func_process& pro)
 
   return good;
 }
-

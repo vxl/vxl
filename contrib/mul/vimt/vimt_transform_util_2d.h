@@ -33,4 +33,3 @@ void vimt_transform_util_2d( std::vector< vgl_point_2d<double> >& dest_pt_vec,
 
 
 #endif
-

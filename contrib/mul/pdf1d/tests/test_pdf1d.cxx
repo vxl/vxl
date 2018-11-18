@@ -26,4 +26,3 @@ void run_test_pdf1d()
 
 
 TESTLIB_DEFINE_MAIN(run_test_pdf1d);
-

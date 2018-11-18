@@ -89,4 +89,3 @@ bool bvpl_create_corner2d_kernel_vector_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -348,4 +348,3 @@ bool vpgl_perturb_uniform_persp_cam_orient_process(bprb_func_process& pro)
   pro.set_output_val<float>(2,float(ap.phi));
   return true;
 }
-

@@ -67,5 +67,3 @@ void vidl_capture_tableau::close_ostream()
     ostream_ = nullptr;
   }
 }
-
-

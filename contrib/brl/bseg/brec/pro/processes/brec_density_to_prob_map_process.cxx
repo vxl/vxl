@@ -70,4 +70,3 @@ bool brec_density_to_prob_map_process(bprb_func_process& pro)
 
   return true;
 }
-

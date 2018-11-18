@@ -431,4 +431,3 @@ bool vil_combine_palnes_8_bands_process(bprb_func_process& pro)
   }
   return true;
 }
-

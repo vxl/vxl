@@ -198,4 +198,3 @@ void sli_cons_to_nuages_cnt (std::string sli_file, std::string cnt_file);
 
 
 #endif // bmsh3d_fileio_h_
-

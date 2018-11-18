@@ -169,5 +169,3 @@ bool bvpl_suppress_and_combine_process(bprb_func_process& pro)
   }
   return false;
 }
-
-

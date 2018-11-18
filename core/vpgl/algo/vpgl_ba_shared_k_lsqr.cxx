@@ -198,4 +198,3 @@ vpgl_ba_shared_k_lsqr::create_param_vector(const std::vector<vgl_point_3d<double
   }
   return b;
 }
-

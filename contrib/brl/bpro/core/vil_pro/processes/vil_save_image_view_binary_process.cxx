@@ -48,4 +48,3 @@ bool vil_save_image_view_binary_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -245,4 +245,3 @@ std::istream& operator>>(std::istream& is, rgrl_mask_oriented_box& box)
   box = temp_box;
   return is;
 }
-

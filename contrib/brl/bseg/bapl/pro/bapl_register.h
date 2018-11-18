@@ -9,4 +9,3 @@ class bapl_register
 };
 
 #endif  // bapl_register_h_
-

@@ -424,4 +424,3 @@ void mfpf_grad_corr2d_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

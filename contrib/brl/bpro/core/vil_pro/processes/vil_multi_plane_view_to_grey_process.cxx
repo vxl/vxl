@@ -49,4 +49,3 @@ bool vil_multi_plane_view_to_grey_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_resource_sptr>(0, grey_resc);
   return true;
 }
-

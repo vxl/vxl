@@ -24,4 +24,3 @@ std::vector<vgl_vector_3d<double> > boxm2_normal_albedo_array::get_normals()
   }
   return normals;
 }
-

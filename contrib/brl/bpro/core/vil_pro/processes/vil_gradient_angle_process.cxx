@@ -65,4 +65,3 @@ bool vil_gradient_angle_process(bprb_func_process& pro)
 
   return true;
 }
-

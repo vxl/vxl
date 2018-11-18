@@ -174,4 +174,3 @@ bool boxm2_ocl_filter_process(bprb_func_process& pro)
 
     return true;
 }
-

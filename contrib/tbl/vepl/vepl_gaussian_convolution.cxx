@@ -105,4 +105,3 @@ vil_image_resource_sptr vepl_gaussian_convolution(const vil_image_resource_sptr&
 
   return img_out;
 }
-

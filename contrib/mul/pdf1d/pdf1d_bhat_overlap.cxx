@@ -122,4 +122,3 @@ double pdf1d_bhat_overlap_gaussian_with_pdf(const pdf1d_pdf& g, const pdf1d_pdf&
 {
   return pdf1d_bhat_overlap_gaussian_with_pdf(g.mean(),g.variance(),pdf,n);
 }
-

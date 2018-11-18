@@ -749,4 +749,3 @@ BOOL vgui_mfc_adaptor::OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 #endif
   return FALSE;
 }
-

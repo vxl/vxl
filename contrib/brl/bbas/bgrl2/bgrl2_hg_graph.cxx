@@ -116,4 +116,3 @@ bool bgrl2_hg_graph::topo_remove_edge (int id)
   //: for scaffold_graph, can remove the graph edge directly.
   return remove_edge (id);
 }
-

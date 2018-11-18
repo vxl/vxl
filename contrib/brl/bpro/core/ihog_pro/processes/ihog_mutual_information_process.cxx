@@ -95,4 +95,3 @@ bool ihog_mutual_information_process(bprb_func_process& pro)
 
   return true;
 }
-

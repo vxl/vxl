@@ -4,5 +4,3 @@
 
 typedef boct_tree<short,boxm_edge_tangent_sample<float> > tree;
 BOXM_BLOCK_INSTANTIATE(tree);
-
-

@@ -146,4 +146,3 @@ vil_image_view_base_sptr vil_load(const wchar_t *file, bool verbose)
 #endif // 0
 
 #endif //defined(_WIN32) && VXL_USE_WIN_WCHAR_T
-

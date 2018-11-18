@@ -167,4 +167,3 @@ bvxm_voxel_slab<bvxm_mog_rgb_processor::obs_datatype> bvxm_mog_rgb_processor::sa
 
   return color;
 }
-

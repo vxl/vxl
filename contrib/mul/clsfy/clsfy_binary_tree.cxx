@@ -449,4 +449,3 @@ void clsfy_binary_tree_op::b_read(vsl_b_istream& bfs)
         vsl_b_read(bfs,classifier_);
     }
 }
-

@@ -18,4 +18,3 @@ void vsl_b_read(vsl_b_istream & is, bvxm_world_params &params)
 {
   params.b_read(is);
 }
-

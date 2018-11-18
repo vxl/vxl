@@ -130,6 +130,3 @@ compute_p(std::vector<vgl_homg_point_3d<double> > const& points1,
   H = tr2_inv*hh*tr1;
   return true;
 }
-
-
-

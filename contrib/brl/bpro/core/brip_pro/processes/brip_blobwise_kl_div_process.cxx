@@ -172,4 +172,3 @@ bool brip_blobwise_kl_div_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i++, new_blobs);
   return true;
 }
-

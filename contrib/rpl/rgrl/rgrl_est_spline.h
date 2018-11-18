@@ -75,4 +75,3 @@ class rgrl_est_spline
 };
 
 #endif
-

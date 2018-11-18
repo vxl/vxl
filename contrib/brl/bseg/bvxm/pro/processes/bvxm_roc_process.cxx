@@ -165,4 +165,3 @@ bool bvxm_roc_process(bprb_func_process& pro)
   std::cerr << '\n';
   return true;
 }
-

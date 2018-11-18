@@ -403,4 +403,3 @@ std::wstring vul_file::basename(wchar_t const* fn, wchar_t const * suffix)
 }
 
 #endif
-

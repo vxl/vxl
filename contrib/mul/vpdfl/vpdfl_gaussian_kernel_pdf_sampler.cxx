@@ -132,4 +132,3 @@ const vpdfl_gaussian_kernel_pdf& vpdfl_gaussian_kernel_pdf_sampler::gaussian_ker
 {
   return static_cast<const vpdfl_gaussian_kernel_pdf&>( model());
 }
-

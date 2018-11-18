@@ -104,4 +104,3 @@ rrel_wgted_ran_sam_search::next_sample( unsigned int taken,
     }
   }
 }
-

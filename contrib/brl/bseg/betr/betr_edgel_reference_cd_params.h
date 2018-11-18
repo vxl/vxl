@@ -51,4 +51,3 @@ std::ostream&  operator<<(std::ostream& s, betr_edgel_reference_cd_params const&
 std::istream&  operator>>(std::istream& s, betr_edgel_reference_cd_params& ercdp);
 
 #endif   // DO NOT ADD CODE AFTER THIS LINE! END OF DEFINITION FOR CLASS betr_edgel_reference_cd_params.
-

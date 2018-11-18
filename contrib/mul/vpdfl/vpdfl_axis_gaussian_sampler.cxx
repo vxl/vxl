@@ -98,4 +98,3 @@ const vpdfl_axis_gaussian& vpdfl_axis_gaussian_sampler::axis_gaussian() const
 {
   return static_cast<const vpdfl_axis_gaussian&>(model());
 }
-

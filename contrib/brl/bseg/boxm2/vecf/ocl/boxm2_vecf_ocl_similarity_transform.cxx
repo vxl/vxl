@@ -11,4 +11,3 @@ boxm2_vecf_ocl_similarity_transform::boxm2_vecf_ocl_similarity_transform(vgl_rot
       )
 {
 }
-

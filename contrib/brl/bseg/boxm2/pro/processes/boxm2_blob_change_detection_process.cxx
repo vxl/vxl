@@ -127,4 +127,3 @@ bool boxm2_blob_change_detection_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(i, blobImg);
   return true;
 }
-

@@ -133,4 +133,3 @@ initboxm_batch(void)
 
   Py_InitModule("boxm_batch", boxm_batch_methods);
 }
-

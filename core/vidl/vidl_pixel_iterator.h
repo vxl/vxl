@@ -55,4 +55,3 @@ bool vidl_has_pixel_iterator(vidl_pixel_format FMT);
 
 
 #endif // vidl_pixel_iterator_h_
-

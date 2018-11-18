@@ -135,4 +135,3 @@ bool vil_plane_image_resource::put_view(const vil_image_view_base& im,
     return false;
   }
 }
-

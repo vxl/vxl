@@ -65,4 +65,3 @@ bool vidl_open_istream_process(bprb_func_process& pro)
   pro.set_output_val<vidl_istream_sptr>(0, vistr);
   return true;
 }
-

@@ -50,5 +50,3 @@ vnl_matrix<double> m23d_make_ortho_projection(vnl_random& r,
   }
   return P;
 }
-
-

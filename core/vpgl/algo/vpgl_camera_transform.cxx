@@ -1000,4 +1000,3 @@ bool vpgl_camera_transform::compute_covariance(unsigned cam_i, unsigned cam_j, c
 
   return true;
 }
-

@@ -77,4 +77,3 @@ void bnl_parabolic_interpolator::print()
     std::cout << p_[i] << '\t' << v_[i] << '\n';
   std::cout << std::flush;
 }
-

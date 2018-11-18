@@ -19,4 +19,3 @@ void vpdfl_calc_mean_var(vnl_vector<double>& mean,
                          mbl_data_wrapper<vnl_vector<double> >& data);
 
 #endif // vpdfl_calc_mean_var_h
-

@@ -195,4 +195,3 @@ void mfpf_read_from_stream(std::istream &is,
     data.push_back(patch);
   }
 }
-

@@ -159,4 +159,3 @@ bool boxm2_ocl_update_parents_alpha_process(bprb_func_process& pro)
     std::cout<<"Update Parents Alpha: "<<gpu_time<<std::endl;
     return true;
 }
-

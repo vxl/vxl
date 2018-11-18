@@ -174,4 +174,3 @@ bool vil_shadow_ridge_detection_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(2, shadow_border_dist_thresholded);
   return true;
 }
-

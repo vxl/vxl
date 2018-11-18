@@ -155,4 +155,3 @@ bool brad_convert_reflectance_to_digital_count_process(bprb_func_process& pro)
 
   return true;
 }
-

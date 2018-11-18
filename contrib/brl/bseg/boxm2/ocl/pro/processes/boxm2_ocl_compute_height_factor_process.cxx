@@ -81,5 +81,3 @@ bool boxm2_ocl_compute_height_factor_process(bprb_func_process& pro)
     boxm2_ocl_compute_heightmap_pre_post::compute_pre_post(scene, device, opencl_cache, z_img, z_var_img, x_img, y_img,sradius);
     return true;
 }
-
-

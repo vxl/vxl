@@ -66,4 +66,3 @@ bool bpgl_generate_depth_maps_process(bprb_func_process& pro)
 
   return true;
 }
-

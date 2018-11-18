@@ -132,4 +132,3 @@ bool bsvg_plot_write_process(bprb_func_process& pro)
   bxml_write(out_file, *doc);
   return true;
 }
-

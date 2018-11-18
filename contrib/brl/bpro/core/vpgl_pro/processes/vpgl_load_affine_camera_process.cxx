@@ -73,4 +73,3 @@ bool vpgl_load_affine_camera_process(bprb_func_process& pro)
 
   return true;
 }
-

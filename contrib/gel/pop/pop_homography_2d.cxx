@@ -72,4 +72,3 @@ void pop_homography_2d::update()
       mat(r,c)=params_[r*3+c]->value_;
   trans_.set(mat);
 }
-

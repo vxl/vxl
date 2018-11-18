@@ -72,4 +72,3 @@ bool vidl_open_ostream_process(bprb_func_process& pro)
   pro.set_output_val<vidl_ostream_sptr>(0, vostr);
   return true;
 }
-

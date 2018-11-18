@@ -120,5 +120,3 @@ bool vpgl_get_rational_camera_offsets_process(bprb_func_process& pro)
 
   return true;
 }
-
-

@@ -9,4 +9,3 @@
 
 typedef boct_tree<short, char > tree_type;
 VBL_ARRAY_3D_INSTANTIATE(boxm_block<tree_type>*);
-

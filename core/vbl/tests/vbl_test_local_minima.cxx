@@ -148,4 +148,3 @@ static void vbl_test_local_minima()
 }
 
 TESTMAIN(vbl_test_local_minima);
-

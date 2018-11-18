@@ -633,4 +633,3 @@ bcvr_cv_cor_sptr bcvr_clsd_cvmatch::get_cv_cor(int minIndex)
 {
   return new bcvr_cv_cor(_curve1, _curve2, _finalMap[minIndex], n1_);
 }
-

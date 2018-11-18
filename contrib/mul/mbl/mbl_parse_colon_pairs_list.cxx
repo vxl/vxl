@@ -127,4 +127,3 @@ void mbl_write_colon_pairs_list(std::ostream& os,
   vsl_indent_dec(os);
   os<<'}'<<std::endl;
 }
-

@@ -72,4 +72,3 @@ vnl_vector<double> vcsl_composition::inverse(const vnl_vector<double> &v,
     result=(*i)->inverse(result,time);
   return result;
 }
-

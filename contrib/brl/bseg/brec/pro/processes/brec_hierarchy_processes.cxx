@@ -218,5 +218,3 @@ bool brec_set_hierarchy_model_dir_process(bprb_func_process& pro)
   h->set_model_dir(name);
   return true;
 }
-
-

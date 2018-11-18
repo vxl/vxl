@@ -186,4 +186,3 @@ bvxm_voxel_slab<float> bvxm_mog_grey_processor::sample(bvxm_voxel_slab<mix_gauss
 
   return color;
 }
-

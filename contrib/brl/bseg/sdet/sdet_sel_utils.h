@@ -236,4 +236,3 @@ inline bool sdet_intersect_angle_range_mpi_pi(double a1, double b1, double a2, d
 }
 
 #endif // sdet_sel_utils_h
-

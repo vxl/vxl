@@ -163,4 +163,3 @@ pdf1d_sampler* pdf1d_weighted_epanech_kernel_sampler::clone() const
 {
   return new pdf1d_weighted_epanech_kernel_sampler(*this);
 }
-

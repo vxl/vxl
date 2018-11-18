@@ -9,4 +9,3 @@ static PyMethodDef brec_batch_methods[METHOD_NUM+2];
 
 
 #endif
-

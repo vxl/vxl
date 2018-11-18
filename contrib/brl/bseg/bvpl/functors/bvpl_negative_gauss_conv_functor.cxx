@@ -36,4 +36,3 @@ bsta_gauss_sf1 bvpl_negative_gauss_conv_functor::result()
 
   return final_gauss;
 }
-

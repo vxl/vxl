@@ -221,4 +221,3 @@ vidl_istream_image_resource::create_empty_view() const
   }
   return nullptr;
 }
-

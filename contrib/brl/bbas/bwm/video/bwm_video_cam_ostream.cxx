@@ -118,4 +118,3 @@ write_camera(const vpgl_proj_camera<double>*  cam)
   bp_out.close();
   return true;
 }
-

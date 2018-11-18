@@ -38,4 +38,3 @@ void vgui_dialog_extensions_impl::line_break()
 }
 
 void* vgui_dialog_extensions_impl::dir_browser_widget(const char*, std::string&, std::string&) { return nullptr; }
-

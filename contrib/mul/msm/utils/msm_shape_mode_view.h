@@ -116,5 +116,3 @@ public:
 };
 
 #endif // msm_shape_mode_view_h_
-
-

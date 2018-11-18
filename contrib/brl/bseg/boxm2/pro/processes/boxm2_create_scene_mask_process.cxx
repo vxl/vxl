@@ -130,4 +130,3 @@ bool boxm2_create_scene_mask_process(bprb_func_process& pro)
 
   return true;
 }
-

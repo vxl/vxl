@@ -257,5 +257,3 @@ bwm_algo::extract_nitf_camera(std::string img_path)
   //vil_image_resource_sptr img_res = load_image(img_path, params);
   return extract_nitf_camera(img_res);
 }
-
-

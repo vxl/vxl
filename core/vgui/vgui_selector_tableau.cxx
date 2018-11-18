@@ -447,4 +447,3 @@ void vgui_selector_tableau::get_popup(const vgui_popup_params& params,
     }
   }
 }
-

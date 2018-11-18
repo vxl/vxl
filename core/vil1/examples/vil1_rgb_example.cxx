@@ -65,4 +65,3 @@ char* as_hex(vil1_rgb_cell const& rgb)
   s[6] = (char)('0'+(b%16)); if (s[6] > '9') s[6] += (char)('a'-'9'-1);
   return s;
 }
-

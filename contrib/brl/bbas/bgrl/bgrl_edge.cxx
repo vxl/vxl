@@ -80,4 +80,3 @@ vsl_print_summary(std::ostream &os, const bgrl_edge* e)
   e->print_summary(os);
   os << " }";
 }
-

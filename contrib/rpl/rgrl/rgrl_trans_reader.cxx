@@ -127,4 +127,3 @@ operator>> (std::istream& is, rgrl_transformation_sptr& trans_sptr)
   trans_sptr = rgrl_trans_reader::read( is );
   return is;
 }
-

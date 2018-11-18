@@ -47,4 +47,3 @@ class bvxm_memory_chunk : public vbl_ref_count
 typedef vbl_smart_ptr<bvxm_memory_chunk> bvxm_memory_chunk_sptr;
 
 #endif
-

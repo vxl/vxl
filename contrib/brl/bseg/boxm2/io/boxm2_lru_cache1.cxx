@@ -343,4 +343,3 @@ std::ostream& operator<<(std::ostream &s, boxm2_lru_cache1& scene)
 {
   return s << scene.to_string();
 }
-

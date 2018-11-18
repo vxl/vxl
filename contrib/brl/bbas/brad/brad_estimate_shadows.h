@@ -19,4 +19,3 @@ bool brad_estimate_shadow_prob(vil_image_view<float> const& radiance_image, brad
 
 
 #endif
-

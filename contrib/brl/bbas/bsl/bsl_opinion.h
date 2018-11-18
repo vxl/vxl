@@ -103,4 +103,3 @@ inline std::ostream& operator<< (std::ostream& s, bsl_opinion const& o) { s << "
 
 
 #endif
-

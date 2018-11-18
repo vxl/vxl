@@ -61,4 +61,3 @@ bool bsta_joint_hist_3d_vrml_process(bprb_func_process& pro)
   h3df->print_to_vrml(os, relative_prob, r, g, b);
   return true;
 }
-

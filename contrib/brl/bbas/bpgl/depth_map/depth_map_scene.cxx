@@ -855,4 +855,3 @@ bool depth_map_scene::match_with_ground(vil_image_view<float> const& depth_img, 
   region_imgs.clear();
   return true;
 }
-

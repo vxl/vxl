@@ -58,4 +58,3 @@ static void test_utils()
 }
 
 TESTMAIN(test_utils);
-

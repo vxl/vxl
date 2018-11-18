@@ -55,5 +55,3 @@ vpdfl_builder_base* vpdfl_gaussian_kernel_pdf_builder::clone() const
 {
   return new vpdfl_gaussian_kernel_pdf_builder(*this);
 }
-
-

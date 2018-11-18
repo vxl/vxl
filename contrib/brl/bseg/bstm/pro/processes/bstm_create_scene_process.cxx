@@ -121,4 +121,3 @@ bool bstm_write_scene_xml_process(bprb_func_process& pro)
   x_write(ofile,(*scene.ptr()), "scene");
   return true;
 }
-

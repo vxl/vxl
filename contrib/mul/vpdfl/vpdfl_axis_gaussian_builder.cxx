@@ -314,4 +314,3 @@ void vpdfl_axis_gaussian_builder::config_from_stream(std::istream & is)
     throw mbl_exception_parse_error(e.what());
   }
 }
-

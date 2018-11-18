@@ -72,4 +72,3 @@ bool bvxm_mog_to_mpm_process(bprb_func_process& pro)
 
   return true;
 }
-

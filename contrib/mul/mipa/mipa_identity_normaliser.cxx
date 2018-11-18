@@ -47,5 +47,3 @@ void mipa_identity_normaliser::b_read(vsl_b_istream& bfs)
     short version;
     vsl_b_read(bfs,version);
 }
-
-

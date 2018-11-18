@@ -165,4 +165,3 @@ bool vil3d_save(const vil3d_image_view_base & im,
     return out->put_view(im, 0, 0, 0);
   }
 }
-

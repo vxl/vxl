@@ -176,4 +176,3 @@ void mfpf_searcher::search_around_set(mfpf_point_finder& pf,
   // Return pf to original state
   pf.set_search_area(search_ni0,search_nj0);
 }
-

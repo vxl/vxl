@@ -115,4 +115,3 @@ rgrl_est_matches_residual_number(rgrl_set_of<rgrl_match_set_sptr> const& matches
 
   return tot_num;
 }
-

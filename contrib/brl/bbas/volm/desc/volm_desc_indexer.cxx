@@ -113,4 +113,3 @@ bool volm_desc_indexer::index(float buffer_capacity, int min_leaf_id, int max_le
   return true;
 
 }
-

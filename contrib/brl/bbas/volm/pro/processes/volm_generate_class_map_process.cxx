@@ -160,4 +160,3 @@ bool volm_update_class_map_process(bprb_func_process& pro)
   }
   return true;
 }
-

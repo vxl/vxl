@@ -152,6 +152,3 @@ std::string msdi_array_of_marked_images::points_name() const
   ss<<"points"<<index_<<".pts";
   return ss.str();
 }
-
-
-

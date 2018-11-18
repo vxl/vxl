@@ -314,4 +314,3 @@ std::ostream& operator<<(std::ostream &s, boxm2_multi_cache& cache)
   s << cache.to_string();
   return s;
 }
-

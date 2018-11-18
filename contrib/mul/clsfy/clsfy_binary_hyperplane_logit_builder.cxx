@@ -170,4 +170,3 @@ clsfy_builder_base* clsfy_binary_hyperplane_logit_builder::clone() const
 {
   return new clsfy_binary_hyperplane_logit_builder(*this);
 }
-

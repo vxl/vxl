@@ -26,4 +26,3 @@ float render_expected_image( bstm_scene_sptr & scene,
 
 
 #endif // bstm_ocl_render_expected_image_function_h_
-

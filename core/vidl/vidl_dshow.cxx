@@ -577,4 +577,3 @@ void vidl_dshow::connect_filters(CComPtr<IFilterGraph2>& filter_graph,
   vidl_exception_error(vidl_dshow_exception(
     "Couldn't connect the filters." + DSHOW_GET_ERROR_TEXT(E_FAIL)));
 }
-

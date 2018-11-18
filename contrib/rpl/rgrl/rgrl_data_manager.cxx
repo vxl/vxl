@@ -301,5 +301,3 @@ get_label( std::vector<std::string>& labels) const
   constexpr unsigned stage = 0;
   get_label( stage, labels );
 }
-
-

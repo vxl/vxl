@@ -697,4 +697,3 @@ bool vil_j2k_image::s_encode_jpeg2000(const char* in_filename,
   vs->unref();
   return success;
 }
-

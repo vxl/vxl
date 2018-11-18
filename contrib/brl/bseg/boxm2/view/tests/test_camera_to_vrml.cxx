@@ -39,4 +39,3 @@ static void test_camera_to_vrml()
 }
 
 TESTMAIN(test_camera_to_vrml);
-

@@ -57,4 +57,3 @@ bool bhdfs_load_image_view_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(i++, loaded_image->nj());
   return true;
 }
-

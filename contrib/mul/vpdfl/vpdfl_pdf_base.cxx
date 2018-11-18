@@ -279,4 +279,3 @@ std::ostream& operator<<(std::ostream& os,const vpdfl_pdf_base* b)
   vsl_print_summary(os,b);
   return os;
 }
-

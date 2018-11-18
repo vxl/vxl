@@ -57,4 +57,3 @@ bool vil_load_from_ascii_process(bprb_func_process& pro)
 
   return true;
 }
-

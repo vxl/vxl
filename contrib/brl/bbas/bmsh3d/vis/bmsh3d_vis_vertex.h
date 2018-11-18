@@ -29,4 +29,3 @@ SoSeparator* draw_vertex_vispt_SoCube (const bmsh3d_vertex* V,
                                        const bool show_id = false);
 
 #endif // bmsh3d_vis_vertex_h_
-

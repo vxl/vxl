@@ -400,5 +400,3 @@ msm_aligner* msm_rigid_aligner::clone() const
 {
   return new msm_rigid_aligner(*this);
 }
-
-

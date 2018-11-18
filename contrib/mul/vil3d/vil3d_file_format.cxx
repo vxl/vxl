@@ -88,4 +88,3 @@ const vil3d_file_format& vil3d_file_format::format(unsigned i)
 {
   return *formats_available.v[i];
 }
-

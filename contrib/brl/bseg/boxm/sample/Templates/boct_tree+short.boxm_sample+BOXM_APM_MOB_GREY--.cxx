@@ -3,4 +3,3 @@
 #include <boxm/sample/boxm_sample.h>
 
 BOCT_TREE_INSTANTIATE(short, boxm_sample<BOXM_APM_MOB_GREY>);
-

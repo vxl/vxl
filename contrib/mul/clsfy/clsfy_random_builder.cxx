@@ -148,4 +148,3 @@ clsfy_classifier_base* clsfy_random_builder::new_classifier() const
 {
   return new clsfy_random_classifier();
 }
-

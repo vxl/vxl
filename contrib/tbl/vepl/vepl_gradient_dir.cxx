@@ -94,4 +94,3 @@ vil_image_resource_sptr vepl_gradient_dir(const vil_image_resource_sptr& image, 
 
   return img_out;
 }
-

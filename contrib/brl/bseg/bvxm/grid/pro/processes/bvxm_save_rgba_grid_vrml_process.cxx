@@ -76,5 +76,3 @@ bool bvxm_save_rgba_grid_vrml_process(bprb_func_process& pro)
       std::cerr << "Grid type not supportted yet, but you can add one!\n";
   return false;
 }
-
-

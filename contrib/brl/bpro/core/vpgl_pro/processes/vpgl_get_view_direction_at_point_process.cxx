@@ -70,4 +70,3 @@ bool vpgl_get_view_direction_at_point_process(bprb_func_process& pro)
   pro.set_output_val<float>(1, phi);
   return true;
 }
-

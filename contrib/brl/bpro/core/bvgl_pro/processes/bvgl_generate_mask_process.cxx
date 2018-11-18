@@ -191,4 +191,3 @@ bvgl_generate_mask_process2(bprb_func_process& pro)
 
   return true;
 }
-

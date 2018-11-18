@@ -40,4 +40,3 @@ class pop_point_3d:public vgl_point_3d<double>, public pop_geometric_object
 };
 
 #endif // pop_point_3d_h_
-

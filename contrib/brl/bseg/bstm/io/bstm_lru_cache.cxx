@@ -413,4 +413,3 @@ std::ostream& operator<<(std::ostream &s, bstm_lru_cache& scene)
 {
   return s << scene.to_string();
 }
-

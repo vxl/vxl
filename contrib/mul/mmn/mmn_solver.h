@@ -91,5 +91,3 @@ std::ostream& operator<<(std::ostream& os,const mmn_solver& b);
 std::ostream& operator<<(std::ostream& os,const mmn_solver* b);
 
 #endif
-
-

@@ -524,5 +524,3 @@ bool mfpf_region_finder::operator==(const mfpf_region_finder& nc) const
   // Strictly should compare costs
   return true;
 }
-
-

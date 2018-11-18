@@ -702,4 +702,3 @@ void vgui_win32_adaptor::domouse(vgui_event_type et, vgui_button b, UINT nFlags,
    }
 #endif // 0
 }
-

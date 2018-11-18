@@ -185,4 +185,3 @@ void mipa_ms_block_normaliser::config_from_stream(
     std::istringstream ssDummy(dummy);
     mipa_block_normaliser::config_from_stream(ssDummy,props);
 }
-

@@ -28,4 +28,3 @@ bool vimt_save(const std::string& path,
                bool use_millimetres =false);
 
 #endif // vimt_save_h_
-

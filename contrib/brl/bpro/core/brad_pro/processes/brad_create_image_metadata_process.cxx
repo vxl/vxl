@@ -72,4 +72,3 @@ bool brad_create_image_metadata_process(bprb_func_process& pro)
 
   return true;
 }
-

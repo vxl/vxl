@@ -608,4 +608,3 @@ static void test_non_standard_type()
   vil_math_scale_values(my_int_image, 2.0);
   vil_print_all(std::cout, my_int_image);
 }
-

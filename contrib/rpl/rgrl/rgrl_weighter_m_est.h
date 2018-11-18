@@ -84,5 +84,3 @@ class rgrl_weighter_m_est
 };
 
 #endif
-
-

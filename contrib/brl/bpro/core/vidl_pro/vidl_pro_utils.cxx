@@ -43,5 +43,3 @@ std::string vidl_pro_utils::image_sequence_path(std::string const& dir_path,
   std::string save_path = path + '.' + format;
   return save_path;
 }
-
-

@@ -73,4 +73,3 @@ bool vpgl_export_cameras_to_nvm_process(bprb_func_process& pro)
   ofile.close();
   return true;
 }
-

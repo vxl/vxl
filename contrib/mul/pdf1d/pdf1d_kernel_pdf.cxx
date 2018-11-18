@@ -235,4 +235,3 @@ void pdf1d_kernel_pdf::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

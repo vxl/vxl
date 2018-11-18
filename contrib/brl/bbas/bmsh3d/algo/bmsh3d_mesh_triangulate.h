@@ -23,5 +23,3 @@ bmsh3d_mesh* generate_tri_mesh (bmsh3d_mesh* M);
 
 
 #endif
-
-

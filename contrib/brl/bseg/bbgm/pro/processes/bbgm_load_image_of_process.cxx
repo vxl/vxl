@@ -51,4 +51,3 @@ bool bbgm_load_image_of_process(bprb_func_process& pro)
   pro.set_output(0, output0);
   return true;
 }
-

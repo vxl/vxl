@@ -120,5 +120,3 @@ void vsl_b_read(vsl_b_istream& /*is*/, bsta_sigma_normalizer* /*ph*/) {}
 void vsl_b_read(vsl_b_istream& /*is*/, bsta_sigma_normalizer_sptr&) {}
 //: Binary load boxm scene smart pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, bsta_sigma_normalizer_sptr const&) {}
-
-

@@ -67,4 +67,3 @@ void bwm_shape_file::print()
     }
   }
 }
-

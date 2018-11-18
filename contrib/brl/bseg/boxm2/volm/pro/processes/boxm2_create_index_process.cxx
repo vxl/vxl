@@ -766,4 +766,3 @@ bool boxm2_visualize_index_process2(bprb_func_process& pro)
 
   return true;
 }
-

@@ -49,4 +49,3 @@ class ihog_cost_func : public vnl_cost_function
 };
 
 #endif // ihog_cost_func_h_
-

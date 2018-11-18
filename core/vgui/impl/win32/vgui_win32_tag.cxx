@@ -29,4 +29,3 @@ vgui_tag(win32)
   vul_trace;
   return 0;
 }
-

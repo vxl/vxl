@@ -690,7 +690,3 @@ void vsl_print_summary(std::ostream& os,const msm_cubic_bezier& b)
 {
  os << b;
 }
-
-
-
-

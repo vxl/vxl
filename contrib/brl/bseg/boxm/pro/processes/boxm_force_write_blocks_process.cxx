@@ -100,4 +100,3 @@ bool boxm_force_write_blocks_process(bprb_func_process& pro)
   }
   return true;
 }
-

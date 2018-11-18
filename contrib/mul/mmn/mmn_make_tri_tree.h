@@ -57,4 +57,3 @@ void mmn_make_tri_tree(const vnl_matrix<double>& D,
 
 
 #endif // mmn_make_tri_tree_h_
-

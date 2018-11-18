@@ -157,4 +157,3 @@ bool brip_blob_intersection_process(bprb_func_process& pro)
   pro.set_output_val<int>(2, gt_blobs.size());
   return true;
 }
-

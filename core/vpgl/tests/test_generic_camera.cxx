@@ -153,4 +153,3 @@ static void test_generic_camera()
 }
 
 TESTMAIN(test_generic_camera);
-

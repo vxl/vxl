@@ -368,5 +368,3 @@ bool bapl_write_match_process(bprb_func_process& pro)
     ofs << matche.first->id() << ' ' << matche.second->id() << std::endl;
   return true;
 }
-
-

@@ -237,4 +237,3 @@ bool compute_expected_color(boxm_scene<boct_tree<short, boxm_sample<BOXM_APM_MOG
 }
 
 #endif
-

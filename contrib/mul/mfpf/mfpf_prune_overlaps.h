@@ -33,4 +33,3 @@ void mfpf_prune_and_sort_overlaps(mfpf_point_finder& pf,
 
 
 #endif // mfpf_prune_overlaps_h_
-

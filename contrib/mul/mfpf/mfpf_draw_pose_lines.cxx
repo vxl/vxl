@@ -42,4 +42,3 @@ void mfpf_draw_pose_lines(vimt_image_2d_of<vxl_byte>& image,
     p=q;
   }
 }
-

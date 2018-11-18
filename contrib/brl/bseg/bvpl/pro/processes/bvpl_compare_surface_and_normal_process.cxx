@@ -74,4 +74,3 @@ bool bvpl_compare_surface_and_normal_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -188,4 +188,3 @@ double boxm2_vecf_eyelid_crease::distance(vgl_point_3d<double> const& p) const{
   // the distance to the plane
   return vgl_distance(p, plc);
 }
-

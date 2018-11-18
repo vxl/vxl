@@ -70,4 +70,3 @@ bool boxm_fill_internal_cells_process(bprb_func_process& pro)
   std::cerr << "In boxm_fill_internal_cells_process: Unsupportted scene type\n";
   return false;
 }
-

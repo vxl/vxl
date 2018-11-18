@@ -190,4 +190,3 @@ bool sdet_load_texture_dictionary_process(bprb_func_process& pro)
   pro.set_output_val<sdet_texture_classifier_sptr>(0, tc_ptr);
   return true;
 }
-

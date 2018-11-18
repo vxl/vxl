@@ -182,4 +182,3 @@ float boxm2_multi_update::update(boxm2_multi_cache& cache,
   //report gpu time
   return gpu_time;
 }
-

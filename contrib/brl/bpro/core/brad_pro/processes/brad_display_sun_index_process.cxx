@@ -66,4 +66,3 @@ bool brad_display_sun_index_process(bprb_func_process& pro)
   os.close();
   return true;
 }
-

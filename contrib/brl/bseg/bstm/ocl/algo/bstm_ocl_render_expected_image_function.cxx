@@ -152,4 +152,3 @@ float render_expected_image(  bstm_scene_sptr & scene,
     std::cout<<"Gpu time "<<gpu_time<<" transfer time "<<transfer_time<<std::endl;
     return gpu_time + transfer_time;
 }
-

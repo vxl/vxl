@@ -33,4 +33,3 @@ void vsl_b_read(vsl_b_istream & is, vpgl_camera_float_sptr &camera)
   vsl_b_read(is, cam);
   camera = cam;
 }
-

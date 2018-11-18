@@ -106,4 +106,3 @@ static void test_minimizer()
 
 
 TESTMAIN( test_minimizer );
-

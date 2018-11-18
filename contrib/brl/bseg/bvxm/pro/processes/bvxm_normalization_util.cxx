@@ -57,4 +57,3 @@ bool bvxm_normalization_util::normalize_image(const vil_image_view<vxl_byte>& in
 #endif
   return true;
 }
-

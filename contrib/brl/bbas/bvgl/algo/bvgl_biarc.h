@@ -191,4 +191,3 @@ private:
 
 
 #endif // bbas/bvgl/algo/bvgl_biarc.h
-

@@ -116,4 +116,3 @@ bool vil_convert_pixel_type_process(bprb_func_process& pro)
   else
     return false;
 }
-

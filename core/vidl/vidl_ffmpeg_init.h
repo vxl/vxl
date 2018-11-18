@@ -22,4 +22,3 @@
 void vidl_ffmpeg_init();
 
 #endif // vidl_ffmpeg_init_h_
-

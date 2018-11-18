@@ -211,4 +211,3 @@ void mfpf_norm_corr1d_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

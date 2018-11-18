@@ -156,4 +156,3 @@ bool breg3d_init_ekf_camera_optimizer_planar_process::execute()
 
   return true;
 }
-

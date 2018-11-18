@@ -93,6 +93,3 @@ std::string msdi_points_subset::points_name() const
 {
   return marked_images_.points_name();
 }
-
-
-

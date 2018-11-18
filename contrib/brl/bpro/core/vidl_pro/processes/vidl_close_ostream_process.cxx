@@ -41,4 +41,3 @@ bool vidl_close_ostream_process(bprb_func_process& pro)
   o_stream->close();
   return true;
 }
-

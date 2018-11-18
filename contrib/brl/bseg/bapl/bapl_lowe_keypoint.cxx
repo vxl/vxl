@@ -112,4 +112,3 @@ bapl_lowe_keypoint_sptr read_from_file(std::istream& ifs, int len, int img_width
   bapl_lowe_keypoint_sptr kp = new bapl_lowe_keypoint(py, loc_y, loc_x, scale, orientation, desc);
   return kp;
 }
-

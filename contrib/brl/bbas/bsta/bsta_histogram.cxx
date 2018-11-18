@@ -20,4 +20,3 @@ void bsta_histogram<char>::pretty_print(std::ostream& os) const
     os << (int)count << ' ';
 
 }
-

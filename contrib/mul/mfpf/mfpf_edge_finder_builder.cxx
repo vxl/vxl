@@ -147,4 +147,3 @@ void mfpf_edge_finder_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

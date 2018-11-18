@@ -179,4 +179,3 @@ point_3d(vnl_vector<double> const& x, vnl_vector_fixed<double, 3>& xyz)
     }
   }
 }
-

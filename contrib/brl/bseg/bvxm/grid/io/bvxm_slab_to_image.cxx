@@ -65,5 +65,3 @@ bool bvxm_slab_to_image::slab_to_image(bvxm_voxel_slab<vnl_float_4> const& slab,
 
     return true;
 }
-
-

@@ -272,5 +272,3 @@ std::ostream& operator <<(std::ostream &s, bocl_device_info& info)
 
   return s;
 }
-
-

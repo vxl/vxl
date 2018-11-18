@@ -53,4 +53,3 @@ static void test_from_image_2d()
 //
 //========================================================================
 TESTMAIN(test_from_image_2d);
-

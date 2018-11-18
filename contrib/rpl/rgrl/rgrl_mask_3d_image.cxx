@@ -62,4 +62,3 @@ update_bounding_box()
     x1_.fill( 0.0 );
   }
 }
-

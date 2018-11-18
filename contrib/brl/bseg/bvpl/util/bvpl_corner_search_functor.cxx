@@ -105,4 +105,3 @@ void bvpl_corner2d_kernel_factory::create_canonical()
 
   return;
 }
-

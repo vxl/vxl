@@ -76,4 +76,3 @@ double mbl_read_double( const char *q_str, double default_d,
       return R; // acceptable
   }
 }
-

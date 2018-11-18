@@ -941,4 +941,3 @@ bool vil3d_meta_image::get_property(const char *label, void *property_value) con
 
   return false;
 }
-

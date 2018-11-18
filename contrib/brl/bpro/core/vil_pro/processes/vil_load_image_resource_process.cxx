@@ -60,4 +60,3 @@ bool vil_load_image_resource_process(bprb_func_process& pro)
   pro.set_output_val<unsigned>(i++, loaded_image->nplanes());
   return true;
 }
-

@@ -23,4 +23,3 @@ void vimt_add_all_binary_loaders()
 
   vil_file_format::add_file_format(new vimt_vil_v2i_format);
 }
-

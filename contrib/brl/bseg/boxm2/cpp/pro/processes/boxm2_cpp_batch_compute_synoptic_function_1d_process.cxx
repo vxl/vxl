@@ -93,4 +93,3 @@ bool boxm2_cpp_batch_compute_synoptic_function_1d_process(bprb_func_process& pro
   std::cout<<"Finished Cubic "<<std::endl;
   return true;
 }
-

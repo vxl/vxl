@@ -111,5 +111,3 @@ bool boxm2_cpp_batch_compute_3d_points_process(bprb_func_process& pro)
 
   return true;
 }
-
-

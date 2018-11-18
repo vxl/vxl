@@ -200,4 +200,3 @@ bool boxm2_cpp_data_print_process(bprb_func_process& pro)
 #endif // 0
   return true;
 }
-

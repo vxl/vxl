@@ -34,4 +34,3 @@ double m23d_evaluate_basis(const vnl_matrix<double>& P2D,
                            const std::vector<unsigned>& selected);
 
 #endif // m23d_select_basis_views_h_
-

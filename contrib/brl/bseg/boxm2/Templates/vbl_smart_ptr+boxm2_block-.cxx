@@ -4,4 +4,3 @@
 
 VBL_SMART_PTR_INSTANTIATE(boxm2_block);
 VBL_SMART_PTR_INSTANTIATE(boxm2_block_metadata);
-

@@ -8,4 +8,3 @@
 typedef vbl_smart_ptr<bbgm_feature_image_base > bbgm_feature_image_sptr;
 
 #endif
-

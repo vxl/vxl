@@ -86,4 +86,3 @@ bool brad_atmo_radiance_to_reflectance(
   vil_image_view<float> &reflectance);
 
 #endif
-

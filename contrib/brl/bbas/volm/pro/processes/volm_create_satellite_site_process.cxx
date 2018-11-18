@@ -787,5 +787,3 @@ bool volm_satellite_pair_intersection_process(bprb_func_process& pro)
 
 
 }
-
-

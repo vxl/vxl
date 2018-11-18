@@ -106,4 +106,3 @@ bool boxm2_cpp_batch_compute_shadow_model_process(bprb_func_process& pro)
   pro.set_output_val<float>(0, ambient_light);
   return true;
 }
-

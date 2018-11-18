@@ -26,4 +26,3 @@ bool wxVideoControlXmlHandler::CanHandle(wxXmlNode *node)
 {
   return IsOfClass(node, wxT("wxVideoControl"));
 }
-

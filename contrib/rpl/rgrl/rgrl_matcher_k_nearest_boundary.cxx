@@ -163,4 +163,3 @@ match_boundary_pts_helper(vbl_array_2d<double> const& dist_error,
 
   return best_assignment;
 }
-

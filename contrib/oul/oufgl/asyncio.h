@@ -106,4 +106,3 @@ class AsyncIO : protected AsyncIO_Shared_State
 };
 
 #endif // OTAGO_Asyncio_IO__h_INCLUDED
-

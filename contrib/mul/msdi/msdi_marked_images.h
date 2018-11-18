@@ -50,5 +50,3 @@ class msdi_marked_images
 
 
 #endif // msdi_marked_images_h_
-
-

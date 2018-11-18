@@ -355,4 +355,3 @@ vil_pyramid_image_list::get_copy_view(unsigned int i0, unsigned int n_i,
   unsigned int level = pl->cur_level_;
   return this->get_copy_view(i0, n_i, j0, n_j, level);
 }
-

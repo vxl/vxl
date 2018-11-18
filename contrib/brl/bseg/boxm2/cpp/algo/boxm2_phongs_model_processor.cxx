@@ -72,4 +72,3 @@ brad_phongs_model boxm2_phongs_model_processor::compute_phongs_model(float & var
     }
     return brad_phongs_model(float(x[0]),float(x[1]),float(x[2]),float(x[3]),float(x[4]));
 }
-

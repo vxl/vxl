@@ -99,4 +99,3 @@ class brec_param_estimation
 };
 
 #endif // brec_param_estimation_H_
-

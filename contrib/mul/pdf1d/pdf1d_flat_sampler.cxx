@@ -106,4 +106,3 @@ const pdf1d_flat& pdf1d_flat_sampler::flat() const
 {
   return static_cast<const pdf1d_flat&>(model());
 }
-

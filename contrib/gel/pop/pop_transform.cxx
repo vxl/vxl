@@ -18,4 +18,3 @@ pop_transform::pop_transform(std::vector<pop_parameter*> params,
 pop_transform::~pop_transform()
 {
 }
-

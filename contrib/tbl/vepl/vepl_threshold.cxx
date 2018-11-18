@@ -100,4 +100,3 @@ vil_image_resource_sptr vepl_threshold(const vil_image_resource_sptr& image, dou
 
   return img_out;
 }
-

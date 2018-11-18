@@ -14,4 +14,3 @@ void vsl_b_read(vsl_b_istream&  /*is*/, bsta_random_wrapper & /*scene*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, bsta_random_wrapper*  /*p*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, bsta_random_wrapper_sptr&  /*sptr*/) {}
 void vsl_b_read(vsl_b_istream&  /*is*/, bsta_random_wrapper_sptr const&  /*sptr*/) {}
-

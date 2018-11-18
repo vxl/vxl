@@ -459,5 +459,3 @@ bool mfpf_region_pdf::operator==(const mfpf_region_pdf& nc) const
   // Strictly should compare PDFs
   return true;
 }
-
-

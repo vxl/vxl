@@ -303,4 +303,3 @@ bool boxm2_ocl_reg_mutual_info::boxm2_ocl_register_world(const vgl_rotation_3d<d
 
 
 }
-

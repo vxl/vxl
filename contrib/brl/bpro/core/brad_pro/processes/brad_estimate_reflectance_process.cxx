@@ -92,4 +92,3 @@ bool brad_estimate_reflectance_process(bprb_func_process& pro)
   pro.set_output_val<vil_image_view_base_sptr>(0, output_img);
   return true;
 }
-

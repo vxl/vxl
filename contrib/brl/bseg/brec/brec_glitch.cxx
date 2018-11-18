@@ -105,4 +105,3 @@ void brec_glitch::extend_prob_to_square_region(int c_size, vil_image_view<float>
     }
   }
 }
-

@@ -117,4 +117,3 @@ void sdet_fit_conics::clear()
   conic_segs_.clear();
   segs_valid_ = false;
 }
-

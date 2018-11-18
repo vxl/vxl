@@ -308,4 +308,3 @@ vgl_box_2d<double>*boxm_roi_init_rational_camera_process_globals::project_box( v
   }
   return roi;
 }
-

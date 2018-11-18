@@ -79,5 +79,3 @@ void vil_memory_chunk::set_size(unsigned long n, vil_pixel_format pixel_form)
   size_ = n;
   pixel_format_ = pixel_form;
 }
-
-

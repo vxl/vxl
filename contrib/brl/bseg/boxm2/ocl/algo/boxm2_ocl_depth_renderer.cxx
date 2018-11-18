@@ -384,4 +384,3 @@ boxm2_ocl_depth_renderer
   }
   return true;
 }
-

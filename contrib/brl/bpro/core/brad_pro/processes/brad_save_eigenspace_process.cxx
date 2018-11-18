@@ -53,4 +53,3 @@ bool brad_save_eigenspace_process(bprb_func_process& pro)
   vsl_b_write(os, espace);
   return true;
 }
-

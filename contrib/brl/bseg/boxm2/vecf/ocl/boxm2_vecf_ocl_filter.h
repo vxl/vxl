@@ -75,5 +75,3 @@ class boxm2_vecf_ocl_filter
 };
 
 #endif
-
-

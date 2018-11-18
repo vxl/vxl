@@ -177,4 +177,3 @@ bool vil_nitf_remove_margin_process(bprb_func_process& pro)
 
   return true;
 }
-

@@ -238,4 +238,3 @@ bsgm_multiscale_disparity_estimator::compute(
 
   return true;
 }
-

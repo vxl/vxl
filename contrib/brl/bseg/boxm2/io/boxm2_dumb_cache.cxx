@@ -98,4 +98,3 @@ void boxm2_dumb_cache::update_data_base_cache(boxm2_data_base* dat, const std::s
   }
   cached_data_[type] = dat;
 }
-

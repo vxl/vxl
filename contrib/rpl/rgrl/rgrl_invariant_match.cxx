@@ -95,4 +95,3 @@ bool dist_greater (const vbl_smart_ptr<rgrl_invariant_match>& left,
 {
   return left->distance() > right->distance();
 }
-

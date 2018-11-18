@@ -247,4 +247,3 @@ void pdf1d_gaussian_builder::b_read(vsl_b_istream& bfs)
       return;
   }
 }
-

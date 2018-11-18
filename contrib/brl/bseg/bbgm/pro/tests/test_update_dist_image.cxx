@@ -52,4 +52,3 @@ static void test_update_dist_image()
 }
 
 TESTMAIN(test_update_dist_image);
-

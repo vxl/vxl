@@ -44,4 +44,3 @@ std::ostream& operator<<(std::ostream &s, boxm2_multi_cache_group& grp)
   s << ']';
   return s;
 }
-

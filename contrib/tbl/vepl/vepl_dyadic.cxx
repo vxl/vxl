@@ -278,4 +278,3 @@ void vepl_dyadic_max(const vil_image_resource_sptr& im_out, const vil_image_reso
   else
     std::cerr << __FILE__ ": vepl_dyadic_max() not implemented for " << image << '\n';
 }
-

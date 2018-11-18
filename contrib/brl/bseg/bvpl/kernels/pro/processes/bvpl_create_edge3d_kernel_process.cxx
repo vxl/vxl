@@ -85,4 +85,3 @@ bool bvpl_create_edge3d_kernel_process(bprb_func_process& pro)
 
   return true;
 }
-

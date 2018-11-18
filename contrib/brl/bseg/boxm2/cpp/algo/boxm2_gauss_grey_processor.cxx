@@ -224,4 +224,3 @@ void boxm2_gauss_grey_processor::update_app_model(vnl_vector_fixed<unsigned char
   apm[1] = (unsigned char)std::floor(sigma*255.0f);
   nobs[0] += 1;
 }
-

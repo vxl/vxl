@@ -454,4 +454,3 @@ std::string boxm2_multi_refine::get_option_string(int datasize)
   }
   return options;
 }
-

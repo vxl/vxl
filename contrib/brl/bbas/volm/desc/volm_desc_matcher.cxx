@@ -362,4 +362,3 @@ bool volm_desc_matcher::create_candidate_list(std::string const& prob_map_folder
   volm_candidate_list::close_kml_document(ofs_kml);
   return true;
 }
-

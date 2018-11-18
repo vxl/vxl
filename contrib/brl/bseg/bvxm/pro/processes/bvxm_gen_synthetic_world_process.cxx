@@ -31,4 +31,3 @@ bool bvxm_gen_synthetic_world_process(bprb_func_process& pro)
   std::cout << "synth world params " << *world->get_params();
   return true;
 }
-

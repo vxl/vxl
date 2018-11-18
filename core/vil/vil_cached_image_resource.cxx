@@ -22,4 +22,3 @@ vil_cached_image_resource::get_block( unsigned  block_index_i,
   non_const->cache_.add_block(block_index_i, block_index_j, blk);
   return blk;
 }
-

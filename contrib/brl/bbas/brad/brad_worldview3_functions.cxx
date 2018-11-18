@@ -378,4 +378,3 @@ void load_corrected_wv3(
     cur_plane.deep_copy(cal_rsc->get_view());
   }
 }
-

@@ -70,5 +70,3 @@ bool bil_compass_edge_detector_process(bprb_func_process& pro)
   }
   return true;
 }
-
-

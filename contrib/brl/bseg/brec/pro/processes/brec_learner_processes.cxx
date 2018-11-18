@@ -228,6 +228,3 @@ bool brec_learner_layer_n_fit_process(bprb_func_process& pro)
 
   return true;
 }
-
-
-

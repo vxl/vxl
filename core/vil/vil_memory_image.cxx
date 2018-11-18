@@ -220,4 +220,3 @@ bool vil_memory_image::put_view(const vil_image_view_base& im,unsigned i0, unsig
     return false;
   }
 }
-

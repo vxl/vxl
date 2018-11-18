@@ -882,4 +882,3 @@ void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper*) {}
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr&) {}
 //: Binary load boxm2_scene_info_wrapper smart pointer from stream.
 void vsl_b_read(vsl_b_istream& /*is*/, boxm2_scene_info_wrapper_sptr const&) {}
-

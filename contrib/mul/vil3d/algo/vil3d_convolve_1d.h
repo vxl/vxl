@@ -108,4 +108,3 @@ inline void vil3d_convolve_1d(const vil3d_image_view<srcT>& src_im,
 }
 
 #endif // vil3d_algo_convolve_1d_h_
-

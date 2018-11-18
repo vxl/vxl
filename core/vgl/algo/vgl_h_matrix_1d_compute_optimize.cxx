@@ -124,4 +124,3 @@ compute_cool_homg(const std::vector<vgl_homg_point_1d<double> >&p1,
   M= K * M;      // refine M using the correction K.
   return true;
 }
-

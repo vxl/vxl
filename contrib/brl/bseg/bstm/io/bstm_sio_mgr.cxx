@@ -107,5 +107,3 @@ void bstm_sio_mgr::save_block_data_base(const std::string& dir, const bstm_block
   myFile.close();
   return;
 }
-
-

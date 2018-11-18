@@ -105,4 +105,3 @@ class icam_depth_trans_pyramid
 };
 
 #endif // icam_depth_trans_pyramid_h_
-

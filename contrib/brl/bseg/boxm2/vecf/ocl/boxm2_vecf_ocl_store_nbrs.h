@@ -75,5 +75,3 @@ class boxm2_vecf_ocl_store_nbrs : public vbl_ref_count
 };
 
 #endif
-
-

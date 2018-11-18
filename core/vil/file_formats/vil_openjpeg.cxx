@@ -844,4 +844,3 @@ vil_openjpeg_image
 {
   return false;
 }
-

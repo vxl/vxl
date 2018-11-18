@@ -47,4 +47,3 @@ void vsl_b_read(vsl_b_istream& is, brad_atmospheric_parameters_sptr const& sptr)
 
 
 #endif // brad_io_atmospheric_parameters_h_
-

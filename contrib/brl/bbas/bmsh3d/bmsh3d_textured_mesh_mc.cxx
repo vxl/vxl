@@ -164,4 +164,3 @@ bmsh3d_textured_mesh_mc* bmsh3d_textured_mesh_mc::clone() const
   }
   return mesh;
 }
-

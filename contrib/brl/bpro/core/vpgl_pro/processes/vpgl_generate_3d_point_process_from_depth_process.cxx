@@ -74,4 +74,3 @@ bool vpgl_generate_3d_point_from_depth_process(bprb_func_process& pro)
   pro.set_output_val<float>(2, (float)pt3d.z());
   return true;
 }
-

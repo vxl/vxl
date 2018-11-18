@@ -227,4 +227,3 @@ static void test_kernel_gaussian_sfbw()
 }
 
 TESTMAIN(test_kernel_gaussian_sfbw);
-

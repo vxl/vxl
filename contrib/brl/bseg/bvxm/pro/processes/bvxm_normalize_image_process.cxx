@@ -229,4 +229,3 @@ template <bvxm_voxel_type APM_T>
 
   return true;
 }
-
