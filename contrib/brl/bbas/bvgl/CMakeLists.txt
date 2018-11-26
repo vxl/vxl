@@ -30,6 +30,7 @@ set(bvgl_sources
  bvgl_poly_region_3d.h                   bvgl_poly_region_3d.hxx
  bvgl_scaled_shape_3d.h                  bvgl_scaled_shape_3d.hxx
  bvgl_k_nearest_neighbors_3d.h
+ bvgl_k_nearest_neighbors_2d.h
  bvgl_knn_index_3d.h
 )
 aux_source_directory(Templates bvgl_sources)
