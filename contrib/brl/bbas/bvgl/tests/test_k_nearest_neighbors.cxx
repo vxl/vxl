@@ -5,6 +5,7 @@
 #include <string>
 #include <testlib/testlib_test.h>
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
+#include <bvgl/bvgl_k_nearest_neighbors_2d.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -13,7 +14,7 @@
 #include <bnabo/bnabo.h>
 #define TEST_K_NEAREST_NEIGHBORS 1
 //: Test changes
-static void test_k_nearest_neighbors()
+static void test_k_nearest_neighbors_3d()
 {
 #if TEST_K_NEAREST_NEIGHBORS
 #if 0 // shows nabo usage
@@ -96,6 +97,55 @@ static void test_k_nearest_neighbors()
     TEST("k indices", true, false);
   }
 #endif
+}
+
+static void test_k_nearest_neighbors_2d()
+{
+  vgl_point_2d<double> p0(1.5, 3.0);
+  vgl_point_2d<double> p1(4.0, 0.0);
+  vgl_point_2d<double> p2(-3.0, -2.0);
+  vgl_point_2d<double> p3(0.0, 0.0);
+  vgl_point_2d<double> p4(0.0, 4.0);
+  std::vector<vgl_point_2d<double>> ptset {p0, p1, p2, p3, p4};
+
+  bvgl_k_nearest_neighbors_2d<double> knn2d(ptset);
+
+  unsigned index=0;
+  vgl_point_2d<double> q1(0.5, 0.5);
+  bool good = knn2d.closest_index(q1, index);
+  TEST("closest_index success", good, true);
+  TEST("closest_index correct index", index, 3);
+
+  vgl_point_2d<double> cp;
+  vgl_point_2d<double> q2(-1000, -1000);
+  good = knn2d.closest_point(q2, cp);
+  TEST("closest_point success", good, true);
+  double d = (cp - vgl_point_2d<double>(-3.0, -2.0)).length();
+  TEST_NEAR("closest_point correct point", d, 0, 1e-6);
+
+  vgl_point_2d<double> q3(2.0, 1.0);
+  std::vector<vgl_point_2d<double> > neighbors;
+  good = knn2d.knn(q3, 3, neighbors);
+  TEST("knn success", good, true);
+  bool correct = true;
+  correct &= neighbors.size() == 3;
+  for (auto pt : std::vector<vgl_point_2d<double>>{p0, p1, p3}) {
+    double mindist = 1000.0;
+    for (auto pn : neighbors) {
+      double dist = (pt - pn).length();
+      if (dist < mindist) {
+        mindist = dist;
+      }
+    }
+    correct &= mindist < 1e-6;
+  }
+  TEST("knn correct neighbors", correct, true);
+}
+
+void test_k_nearest_neighbors()
+{
+  test_k_nearest_neighbors_2d();
+  test_k_nearest_neighbors_3d();
 }
 
 TESTMAIN( test_k_nearest_neighbors );
