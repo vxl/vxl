@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_string_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #ifdef _MSC_VER
@@ -46,8 +47,18 @@ line_width: 1
 line_colour: black
 point_colour: red
 
+// When defined, cycle through these colours when drawing each shape
+point_colours: { red green blue }
+
+// When defined, cycle through these colours when drawing each shape
+line_colours: { red green blue }
+
 //: Colour of background (or "none" for transparent)
 background_colour: white
+
+//: When true, overlap all the shapes (all have same centre point)
+overlap_shapes: false
+
 
 // Approximate width of region to display shape
 width: 200
@@ -96,6 +107,13 @@ struct tool_params
   //: Line colour
   std::string line_colour;
 
+  // When defined, cycle through these colours when drawing each shape
+  std::vector<std::string> line_colours;
+
+  // When defined, cycle through these colours when drawing each shape
+  std::vector<std::string> point_colours;
+
+
   //: Point colour
   std::string point_colour;
 
@@ -108,6 +126,10 @@ struct tool_params
 
   //: Line width
   double line_width;
+
+  //: When true, overlap all the shapes (all have same centre point)
+  bool overlap_shapes;
+
 
   //: Parse named text file to read in data
   //  Throws a mbl_exception_parse_error if fails
@@ -135,6 +157,42 @@ void tool_params::read_from_file(const std::string& path)
   line_colour=props.get_optional_property("line_colour","black");
   point_colour=props.get_optional_property("point_colour","red");
   background_colour=props.get_optional_property("background_colour","white");
+  overlap_shapes=vul_string_to_bool(props.get_optional_property("overlap_shapes","false"));
+
+  std::string point_colours_str=props.get_optional_property("point_colours","");
+  if (point_colours_str!="")
+  {
+    std::stringstream lcss(point_colours_str);
+    mbl_parse_string_list(lcss,point_colours);
+
+    std::cout<<"PointColours: ";
+    for (unsigned i=0;i<line_colours.size();++i) std::cout<<point_colours[i]<<" ";
+    std::cout<<std::endl;
+  }
+
+  if (point_colours.size()<1)
+  {
+    point_colours.resize(1);
+    point_colours[0]=point_colour;
+  }
+
+  std::string line_colours_str=props.get_optional_property("line_colours","");
+  if (line_colours_str!="")
+  {
+    std::stringstream lcss(line_colours_str);
+    mbl_parse_string_list(lcss,line_colours);
+
+    std::cout<<"LineColours: ";
+    for (unsigned i=0;i<line_colours.size();++i) std::cout<<line_colours[i]<<" ";
+    std::cout<<std::endl;
+  }
+
+  if (line_colours.size()<1)
+  {
+    line_colours.resize(1);
+    line_colours[0]=line_colour;
+  }
+
   out_path=props.get_optional_property("out_path","shapes.eps");
   shape_model_path=props.get_optional_property("shape_model_path",
                                                "shape_model.msm");
@@ -262,6 +320,7 @@ int main(int argc, char** argv)
 
   // Estimate box size for each shape.
   double w_width = params.width/n_shapes;
+  if (params.overlap_shapes) w_width=params.width;
   double w_height = w_width*bbox.height()/bbox.width();
   double s=0.95*w_width/bbox.width();
 
@@ -276,12 +335,15 @@ int main(int argc, char** argv)
   vgl_point_2d<double> view_centre(0.5*w_width,0.5*w_height);
   vgl_vector_2d<double> t=view_centre-bbox_c;
 
+  // Horizontal distance between shapes is either 0 or w_width
+  double x_step=(params.overlap_shapes?0:w_width);
+
   // Translate each example to create a row
   // Assume each model centred on origin
   for (unsigned i=0;i<n_shapes;++i)
   {
     // Centre each example along a row
-    points[i].translate_by(t.x()+i*w_width,t.y());
+    points[i].translate_by(t.x()+i*x_step,t.y());
   }
 
   mbl_eps_writer writer(params.out_path.c_str(),
@@ -295,11 +357,15 @@ int main(int argc, char** argv)
 
   for (unsigned i=0;i<n_shapes;++i)
   {
-    writer.set_colour(params.point_colour);
+      // Cycle through colours for points
+    writer.set_colour(params.point_colours[i%params.point_colours.size()]);
+
     if (params.point_radius>0)
       msm_draw_points_to_eps(writer,points[i],
                              params.point_radius);
-    writer.set_colour(params.line_colour);
+
+      // Cycle through colours for lines
+    writer.set_colour(params.line_colours[i%params.line_colours.size()]);
     writer.set_line_width(params.line_width);
     msm_draw_shape_to_eps(writer,points[i],curves);
   }
