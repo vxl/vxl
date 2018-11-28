@@ -113,11 +113,7 @@ set( vil1_network_sources
 # vil1_stream_url not working on Apple MacOSX
 if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
-  if(SOLARIS)
-    vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil1_network LIBRARY_SOURCES ${vil1_network_sources})
-  else()
-    set(vil1_sources ${vil1_sources} ${vil1_network_sources})
-  endif()
+  set(vil1_sources ${vil1_sources} ${vil1_network_sources})
 endif()
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
@@ -183,11 +179,6 @@ target_link_libraries( ${VXL_LIB_PREFIX}vil1 ${VXL_LIB_PREFIX}vcl )
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vil1 ws2_32 )
 endif()
-
-if(SOLARIS)
-  target_link_libraries( ${VXL_LIB_PREFIX}vil1 nsl ${VXL_LIB_PREFIX}vil1_network socket )
-endif()
-
 
 if( VXL_BUILD_EXAMPLES )
   add_subdirectory(examples)

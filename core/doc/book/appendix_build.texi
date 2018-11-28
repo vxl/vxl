@@ -470,11 +470,6 @@ defined under Cygwin.
 @itemx @bullet{} Preprocessor: @code{__CYGWIN__} (gcc under Cygwin)
 The Cygwin API is present.
 
-@item  @bullet{} CMake: @code{SOLARIS} (VXL top level @file{UseVXL.cmake} file)
-@itemx @bullet{} Preprocessor: [???]
-The OS is Solaris.  This variable is set in the top level
-@file{CMakeLists.txt} file.
-
 @item  @bullet{} CMake: @code{MODULE_PATH} (VXL top level @file{CMakeLists.txt} file)
 @itemx @bullet{} Preprocessor: (none)
 Directory holding the VXL versions of the @file{FindXXX.cmake} files.

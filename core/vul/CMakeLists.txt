@@ -59,19 +59,10 @@ if(APPLE)
   vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
 else()
 
-if(NOT SOLARIS)
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources} ${vul_network_sources})
-else()
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul_network LIBRARY_SOURCES ${vul_network_sources})
-endif()
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources} ${vul_network_sources})
 
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
-endif()
-
-if(SOLARIS)
-  target_link_libraries( ${VXL_LIB_PREFIX}vul nsl ${VXL_LIB_PREFIX}vul_network socket )
 endif()
 
 endif()
