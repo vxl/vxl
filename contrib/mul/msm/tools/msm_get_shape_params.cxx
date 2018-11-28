@@ -137,6 +137,7 @@ void load_shapes(const std::string& points_dir,
 int main(int argc, char** argv)
 {
   vul_arg<std::string> param_path("-p","Parameter filename");
+  vul_arg<std::string> shape_model_path("-s","Shape model path (over-riding param file)");
   vul_arg<std::string> out_path("-o","Output path (over-riding param file)");
   vul_arg<bool> no_pose("-no_pose","Don't display pose",false);
   vul_arg<bool> rel_params("-rel_p","Record params[i]/sd[i]",false);
@@ -163,6 +164,7 @@ int main(int argc, char** argv)
   }
 
   if (out_path()!="") params.output_path = out_path();
+  if (shape_model_path()!="") params.shape_model_path = shape_model_path();
 
   msm_shape_model shape_model;
 
