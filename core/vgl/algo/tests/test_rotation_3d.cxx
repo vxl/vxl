@@ -192,7 +192,7 @@ void test_rotation_3d()
          + sqr(double(r_abi.as_quaternion()[2]) + vnl_math::sqrt1_2)
          + sqr(double(r_abi.as_quaternion()[3]) - vnl_math::sqrt1_2);
   TEST_NEAR("rotation is 90 deg in XY plane", error1, 0.0, epsilon);
-#if VXL_INT_64_IS_LONG
+#if VXL_INT_64_IS_LONG || VXL_INT_64_IS_LONGLONG
   // temporary fix for a "bug" (actually just integer overflow) in vnl_rational:
   vnl_rational sqrthalf(453016774L,640662461L);
   r_abi = vnl_quaternion<vnl_rational>(0,0,-sqrthalf,sqrthalf);

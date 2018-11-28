@@ -137,6 +137,14 @@ void test_config()
 #endif
   std::cout << std::endl;
 
+  std::cout << "VXL_INT_64_IS_LONGLONG ";
+#ifdef VXL_INT_64_IS_LONGLONG
+  std::cout << "is set to " << quote(VXL_INT_64_IS_LONGLONG);
+#else
+  std::cout << "is not set";
+#endif
+  std::cout << std::endl;
+
   std::cout << "VXL_HAS_IEEE_32 ";
 #ifdef VXL_HAS_IEEE_32
   std::cout << "is set to " << quote(VXL_HAS_IEEE_32);

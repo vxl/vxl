@@ -218,7 +218,7 @@ inline void vsl_block_binary_read(vsl_b_istream &is, unsigned long* begin, std::
 }
 
 /////////////////////////////////////////////////////////////////////////
-#if VXL_HAS_INT_64 && !VXL_INT_64_IS_LONG
+#if VXL_HAS_INT_64 && !( VXL_INT_64_IS_LONG || VXL_INT_64_IS_LONGLONG )
 
 //: Write a block of signed longs to a vsl_b_ostream
 // This function is very speed efficient, but
