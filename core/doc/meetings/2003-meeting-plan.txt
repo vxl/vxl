@@ -1,6 +1,6 @@
 This is vxl/core/doc/meetings/2003-meeting-plan.txt.
 
-http://cvs.sourceforge.net/viewcvs.py/vxl/vxl/core/doc/meetings/2003-meeting-plan.txt?view=markup
+https://github.com/vxl/vxl/blob/master/core/doc/meetings/2003-meeting-plan.txt?view=markup
 will get you to this file, but SourceForge WebCVS is a few hours
 behind the live CVS.
 
@@ -131,7 +131,7 @@ Brendan McCane e-mailed me about this issue, but his concern may be
 settled by the fact that Ian has started the regular release process.
 I don't plan to do the next release myself - IMS?
 
-*** Communication - http://vxl.sourceforge.net/developers.html
+*** Communication - https://vxl.github.io/developers.html
 Is it a good idea? Should we encourage all maintainers to use it. IMS.
 Remove this line to second this item.
 

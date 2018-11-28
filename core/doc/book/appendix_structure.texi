@@ -82,11 +82,11 @@ be documented. If you find them useful, and think they deserve full
 the code tidied up and promoted to @vxl{x}.
 
 You can find any overview documentation about these modules from the
-@uref{http://vxl.sourceforge.net/,vxl homepage} by following the
+@uref{https://vxl.github.io/,vxl homepage} by following the
 ``documentation'' link.
 
 @section Subversion (svn) Repository
 
-The VXL repository is provided by SourceForge---Thanks guys! The
+The VXL repository is provided by GitHUb! The
 instructions for downloading @vxl{x} are documented at
-@url{http://vxl.sourceforge.net/#download}.
+@url{https://vxl.github.io/#download}.

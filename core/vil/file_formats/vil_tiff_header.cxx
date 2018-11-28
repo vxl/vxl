@@ -736,7 +736,7 @@ bool vil_tiff_header::set_header(unsigned ni, unsigned nj, unsigned nplns,
   planar_config.val = 1; planar_config.valid = true;
   // The sensible way ..
   orientation.val = ORIENTATION_TOPLEFT; orientation.valid = true;
-  software = "http://vxl.sourceforge.net/  vil image library";
+  software = "https://vxl.github.io/  vil image library";
   return true;
 }
 
