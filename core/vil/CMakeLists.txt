@@ -334,12 +334,7 @@ set( vil_network_sources
   vil_stream_url.cxx vil_stream_url.h
 )
 
-if(NOT SOLARIS)
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources} ${vil_network_sources})
-else()
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources})
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil_network LIBRARY_SOURCES ${vil_network_sources})
-endif()
+vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vil LIBRARY_SOURCES ${vil_sources} ${vil_network_sources})
 
 if(JPEG_FOUND)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ${JPEG_LIBRARIES} )
@@ -364,10 +359,6 @@ target_link_libraries( ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vcl )
 
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vil ws2_32 )
-endif()
-
-if(SOLARIS)
-  target_link_libraries( ${VXL_LIB_PREFIX}vil nsl ${VXL_LIB_PREFIX}vil_network socket )
 endif()
 
 if(ECW_FOUND)
