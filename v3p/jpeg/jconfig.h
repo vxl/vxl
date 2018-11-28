@@ -1,12 +1,9 @@
-/* jconfig.h.  Generated automatically by configure.  */
-/* jconfig.cfg --- source file edited by configure script */
-/* see jconfig.doc for explanations */
+/* jconfig.h --- source file edited by configure script */
+/* see jconfig.txt for explanations */
 
 #define HAVE_PROTOTYPES
 #define HAVE_UNSIGNED_CHAR
 #define HAVE_UNSIGNED_SHORT
-#undef void
-#undef const
 #undef CHAR_IS_UNSIGNED
 #ifndef HAVE_STDDEF_H
 #define HAVE_STDDEF_H
@@ -20,6 +17,14 @@
 #undef NEED_SHORT_EXTERNAL_NAMES
 /* Define this if you get warnings about undefined structures. */
 #undef INCOMPLETE_TYPES_BROKEN
+
+/* Define "boolean" as unsigned char, not int, on Windows systems. */
+#ifdef _WIN32
+#ifndef __RPCNDR_H__		/* don't conflict if rpcndr.h already read */
+typedef unsigned char boolean;
+#endif
+#define HAVE_BOOLEAN		/* prevent jmorecfg.h from redefining it */
+#endif
 
 #ifdef JPEG_INTERNALS
 
@@ -47,3 +52,12 @@
 #undef PROGRESS_REPORT
 
 #endif /* JPEG_CJPEG_DJPEG */
+
+
+/* names mangling */
+
+#include "vxl_jpeg_mangle.h"
+
+#if defined(__BORLANDC__)
+#pragma warn -8004 /* Disable "foo is assigned a value that is never used." */
+#endif
