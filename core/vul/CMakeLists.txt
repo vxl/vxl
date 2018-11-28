@@ -55,16 +55,11 @@ if(CMAKE_COMPILER_IS_GNUCXX)
 endif()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-if(APPLE)
-  vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources})
-else()
 
 vxl_add_library(LIBRARY_NAME ${VXL_LIB_PREFIX}vul LIBRARY_SOURCES ${vul_sources} ${vul_network_sources})
 
 if(NOT UNIX)
   target_link_libraries( ${VXL_LIB_PREFIX}vul ws2_32 )
-endif()
-
 endif()
 
 set(CURR_LIB_NAME vul)

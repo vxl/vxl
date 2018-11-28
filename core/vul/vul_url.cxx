@@ -21,18 +21,14 @@
 #include <cassert>
 #include <vul/vul_file.h>
 
-#if defined(unix) || defined(__unix) || defined(__unix__)
-
+#if defined (_WIN32) && !defined(__CYGWIN__)
+# include <winsock2.h>
+#else
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
 # include <sys/socket.h>
 # include <netinet/in.h>   // htons()
 # define SOCKET int
-
-#elif defined (_WIN32) && !defined(__CYGWIN__)
-
-# include <winsock2.h>
-
 #endif // unix
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
@@ -507,6 +503,10 @@ bool vul_url::is_url(const char * url)
 
   // maybe it's an http URL?
   if (l > 7 && std::strncmp(url, "http://", 7) == 0)
+    return true;
+
+  // maybe it's an https URL?
+  if (l > 8 && std::strncmp(url, "https://", 7) == 0)
     return true;
 
   // maybe it's an ftp URL?

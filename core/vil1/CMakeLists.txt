@@ -111,10 +111,8 @@ set( vil1_network_sources
 )
 
 # vil1_stream_url not working on Apple MacOSX
-if(NOT APPLE)
 # vil1_stream_url in separate library on Solaris
-  set(vil1_sources ${vil1_sources} ${vil1_network_sources})
-endif()
+set(vil1_sources ${vil1_sources} ${vil1_network_sources})
 
 # vil1_file_formats.cxx uses -DTIFF, etc, so we need to do this here.
 include(${VXL_CMAKE_DIR}/FindJPEG.cmake)
