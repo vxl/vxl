@@ -62,27 +62,27 @@ void test_url()
 
   std::cout<<"======== url determination ===========\n";
 
-  TEST("http://vxl.sourceforge.net/ is a URL",
-       vul_url::is_url("http://vxl.sourceforge.net/"), true);
+  TEST("https://vxl.github.io/ is a URL",
+       vul_url::is_url("https://vxl.github.io/"), true);
 
   TEST("/tmp/file is not URL",
        vul_url::is_url("/tmp/file"), false);
 
   std::cout<<"======== http downloading ===========\n";
 
-  bool no_download = !vul_url::exists("http://vxl.sourceforge.net/index.html");
+  bool no_download = !vul_url::exists("https://vxl.github.io/index.html");
   if (no_download)
     std::cout << "vul_url::exists() and vil_url::open() tests disabled: probably behind firewall\n";
   else
   {
-    TEST("vul_url::exists(\"http://vxl.sourceforge.net/index.html\")",
-         vul_url::exists("http://vxl.sourceforge.net/index.html"), true);
+    TEST("vul_url::exists(\"https://vxl.github.io/index.html\")",
+         vul_url::exists("https://vxl.github.io/index.html"), true);
 
-    TEST("! vul_url::exists(\"http://vxl.sourceforge.net/foobarwobble.html\")",
-         vul_url::exists("http://vxl.sourceforge.net/foobarwobble.html"), false);
+    TEST("! vul_url::exists(\"https://vxl.github.io/foobarwobble.html\")",
+         vul_url::exists("https://vxl.github.io/foobarwobble.html"), false);
 
-    std::istream* i = vul_url::open("http://vxl.sourceforge.net/");
-    TEST("vul_url::open(\"http://vxl.sourceforge.net/\")", i==0, false);
+    std::istream* i = vul_url::open("https://vxl.github.io/");
+    TEST("vul_url::open(\"https://vxl.github.io/\")", i==0, false);
 
     char b[]="<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">\n"
              "<html>\n  <head>\n    <title>VXL - C++ Libraries for Computer Vision</title>";

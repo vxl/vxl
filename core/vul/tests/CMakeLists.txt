@@ -18,11 +18,11 @@ set(vul_test_sources
   test_checksum.cxx
 )
 
-if(NOT APPLE)
+#if(NOT APPLE)
   set(vul_test_sources ${vul_test_sources}
     test_url.cxx
   )
-endif()
+#endif()
 
 GENERATE_TEST_DRIVER(${VXL_LIB_PREFIX}vul vul_test_sources ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vpl ${VXL_LIB_PREFIX}testlib ${VXL_LIB_PREFIX}vcl)
 

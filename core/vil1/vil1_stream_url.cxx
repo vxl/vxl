@@ -18,14 +18,14 @@
 #include <vil1/vil1_stream_core.h>
 #undef sprintf // This works around a bug in libintl.h
 
-#if defined(unix) || defined(__unix) || defined(__unix__)
+#if defined (_WIN32) && !defined(__CYGWIN__)
+# include <winsock2.h>
+#else
 # include <unistd.h>       // read(), write(), close()
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
 # include <sys/socket.h>
 # include <netinet/in.h>   // htons()
 # define SOCKET int
-#elif defined (_WIN32) && !defined(__CYGWIN__)
-# include <winsock2.h>
 #endif
 
 
@@ -113,7 +113,7 @@ static std::string encode_base64(const std::string& in)
 vil1_stream_url::vil1_stream_url(char const *url)
   : u_(0)
 {
-  if (std::strncmp(url, "http://", 7) != 0)
+  if (std::strncmp(url, "http://", 7) != 0 && std::strncmp(url, "https://", 8) != 0 )
     return; // doesn't look like a URL to me....
 
   char const *p = url+7;
