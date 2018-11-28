@@ -23,9 +23,6 @@
 # include <netdb.h>        // gethostbyname(), sockaddr_in()
 # include <sys/socket.h>
 # include <netinet/in.h>   // htons()
-# ifdef __alpha
-#  include <fp.h>           // htons() [ on e.g. DEC alpha, htons is in machine/endian.h]
-# endif
 # define SOCKET int
 #elif defined (_WIN32) && !defined(__CYGWIN__)
 # include <winsock2.h>
