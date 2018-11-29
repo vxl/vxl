@@ -1429,7 +1429,15 @@ convert( vpgl_local_rational_camera<double> const& camera_in,
   camera_out.orient_ray_direction(vgl_vector_3d<double>(0,0,-1));
   return success;
 }
-
+#else
+bool vpgl_affine_camera_convert::
+convert(vpgl_local_rational_camera<double> const& camera_in,
+  vgl_box_3d<double> const& region_of_interest,
+  vpgl_affine_camera<double>& camera_out,
+  unsigned int num_points)
+{
+  return false; //Always report failure if GEOTIFF not available.
+}
 #endif // HAS_GEOTIFF
 
 #endif // vpgl_camera_convert_cxx_
