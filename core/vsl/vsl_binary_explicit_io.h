@@ -141,7 +141,7 @@ macro (int);
 macro (unsigned int);
 macro (long);
 macro (unsigned long);
-#if VXL_HAS_INT_64 && ! ( VXL_INT_64_IS_LONG || VXL_INT_64_IS_LONGLONG )
+#if VXL_INT_64_IS_LONGLONG
 macro (vxl_int_64);
 macro (vxl_uint_64);
 #endif
@@ -486,7 +486,7 @@ inline std::size_t vsl_convert_from_arbitrary_length(const unsigned char* buffer
 
 /////////////////////////////////////////////////////////////////////////
 
-#if VXL_HAS_INT_64 && !( VXL_INT_64_IS_LONG || VXL_INT_64_IS_LONGLONG )
+#if VXL_INT_64_IS_LONGLONG
 
 //: Decode a buffer of arbitrary length integers
 // Converts from the integers from the arbitrary length format into
