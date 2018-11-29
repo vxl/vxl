@@ -36,6 +36,9 @@ CMakeLists.txt.user*
 *.kdev*
 .kdev*
 
+# VSCode
+.vscode/settings.json
+
 # back-up files when conflicts occur
 *.orig
 *.rej
