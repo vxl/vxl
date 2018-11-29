@@ -1,11 +1,15 @@
+#ifndef bpgl_3d_from_disparity_hxx_
+#define bpgl_3d_from_disparity_hxx_
+
 #include "bpgl_3d_from_disparity.h"
 
 #include <vnl/vnl_matrix.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 
+template<typename DISP_T>
 vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& cam1,
                                              vpgl_affine_camera<double> const& cam2,
-                                             vil_image_view<float> const& disparity)
+                                             vil_image_view<DISP_T> const& disparity)
 {
   // create matrix inverse of stacked affine projection matrices
   vnl_matrix_fixed<double,3,4> P1(cam1.get_matrix());
@@ -24,17 +28,30 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
   vil_image_view<float> img3d(ni, nj, 3);
   for (int j=0; j<nj; ++j) {
     for (int i=0; i<ni; ++i) {
-      vnl_vector<double> b(4);
-      b[0] = i - P1[0][3];
-      b[1] = j - P1[1][3];
-      b[2] = i + disparity(i,j) - P2[0][3];
-      b[3] = j - P2[1][3];
-      vnl_vector_fixed<double,3> x = invA * b;
+      double i2 = i - disparity(i,j);
+      vnl_vector_fixed<double,3> x(NAN);
+      if ((i2 >= 0) && (i2 < ni)) {
+        // valid disparity value
+        vnl_vector<double> b(4);
+        b[0] = i - P1[0][3];
+        b[1] = j - P1[1][3];
+        b[2] = i2 - P2[0][3];
+        b[3] = j - P2[1][3];
+        x = invA * b;
+      }
       for (int d=0; d<3; ++d) {
         img3d(i,j,d) = x[d];
       }
     }
   }
-  
   return img3d;
 }
+
+// explicit template instantiations macro
+#define BPGL_3D_FROM_DISPARITY_INSTANIATE(DISP_T) \
+template vil_image_view<float> \
+bpgl_3d_from_disparity<DISP_T>(vpgl_affine_camera<double> const& cam1, \
+                               vpgl_affine_camera<double> const& cam2, \
+                               vil_image_view<DISP_T> const& disparity)
+
+#endif

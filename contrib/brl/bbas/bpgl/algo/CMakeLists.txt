@@ -15,7 +15,7 @@ set( bpgl_algo_sources
   bpgl_project.h                   bpgl_project.cxx
   bpgl_transform_camera.h                   bpgl_transform_camera.cxx
   bpgl_gridding.h
-  bpgl_3d_from_disparity.h  bpgl_3d_from_disparity.cxx
+  bpgl_3d_from_disparity.h  bpgl_3d_from_disparity.hxx
 )
 
 # the ransac implementations use rpl/rrel
