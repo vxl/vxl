@@ -42,7 +42,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-bool baio::read(std::string filename, char* buffer, long BUFSIZE)
+bool baio::read(const std::string &filename, char* buffer, long BUFSIZE)
 {
   info_->fhandle = CreateFile(filename.c_str(),
                               FILE_READ_DATA,
@@ -70,7 +70,7 @@ bool baio::read(std::string filename, char* buffer, long BUFSIZE)
 }
 
 //: Opens and reads file asynchronously
-bool baio::write(std::string filename, char* buffer, long BUFSIZE)
+bool baio::write(const std::string &filename, char* buffer, long BUFSIZE)
 {
   info_->fhandle = CreateFile(filename.c_str(),
                               FILE_WRITE_DATA,
