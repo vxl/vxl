@@ -34,7 +34,7 @@ baio::~baio()
 }
 
 //: Opens and reads file asynchronously
-bool baio::read(std::string filename, char* buff, long BUFSIZE)
+bool baio::read(const std::string &filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_RDONLY);
@@ -68,7 +68,7 @@ bool baio::read(std::string filename, char* buff, long BUFSIZE)
 }
 
 //: opens and writes file asynchronously
-bool baio::write(std::string filename, char* buff, long BUFSIZE)
+bool baio::write(const std::string &filename, char* buff, long BUFSIZE)
 {
   // 1. call c open to get standard file handle
   int fhandle = open(filename.c_str(), O_WRONLY | O_CREAT, 0666);
