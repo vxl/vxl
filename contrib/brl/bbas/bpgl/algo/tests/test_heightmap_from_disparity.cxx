@@ -8,9 +8,9 @@
 #include <vnl/vnl_math.h>
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_affine_camera.h>
-#include <bpgl/algo/bpgl_3d_from_disparity.h>
+#include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 
-static void test_3d_from_disparity_affine()
+static void test_heightmap_from_disparity_affine()
 {
   double theta = vnl_math::pi_over_180 * 45.0;
   double z = 5.0;
@@ -35,6 +35,14 @@ static void test_3d_from_disparity_affine()
   img3d_truth(1,0,0) = 1.0f; img3d_truth(1,0,1) = 0.0f; img3d_truth(1,0,2) = -1.0;
   img3d_truth(1,1,0) = 1.0f; img3d_truth(1,1,1) = 1.0f; img3d_truth(1,1,2) = 5.0;
 
+  // convert img3d into heightmap
+  vil_image_view<float> hmap_truth(2,2);
+  for (int j=0; j<2; ++j) {
+    for (int i=0; i<2; ++i) {
+      hmap_truth(i,j) = img3d_truth(i,1-j,2);
+    }
+  }
+
   vil_image_view<float> disparity(2,2);
   for (int j=0; j<2; ++j) {
     for(int i=0; i<2; ++i) {
@@ -47,25 +55,28 @@ static void test_3d_from_disparity_affine()
     }
   }
 
-  vil_image_view<float> img3d_pred = bpgl_3d_from_disparity(cam1, cam2, disparity);
+  vgl_box_2d<double> hmap_bounds(vgl_point_2d<double>(0,0), vgl_point_2d<double>(1,1));
+  double GSD = 1.0;
+  vil_image_view<float> hmap_pred = bpgl_heightmap_from_disparity(cam1, cam2, disparity,
+                                                                  hmap_bounds, GSD);
+
+  TEST_EQUAL("heightmap size (x)", hmap_pred.ni(), 2);
+  TEST_EQUAL("heightmap size (y)", hmap_pred.nj(), 2);
 
   bool all_good = true;
   for (int j=0; j<2; ++j) {
     for (int i=0; i<2; ++i) {
-      std::cout << "i,j: " << i << "," << j << "  truth: " << img3d_truth(i,j,0) << "," << img3d_truth(i,j,1) << "," << img3d_truth(i,j,2);
-      std::cout << "   pred: " << img3d_pred(i,j,0) << "," << img3d_pred(i,j,1) << "," << img3d_pred(i,j,2) << std::endl;
-      for (int d=0; d<3; ++d) {
-        float diff = img3d_pred(i,j,d) - img3d_truth(i,j,d);
-        all_good &= std::fabs(diff) < 1e-4;
-      }
+      std::cout << "i,j: " << i << "," << j << "  truth: " << hmap_truth(i,j) << "   pred: " << hmap_pred(i,j) << std::endl;
+      float diff = hmap_pred(i,j) - hmap_truth(i,j);
+      all_good &= std::fabs(diff) < 1e-4;
     }
   }
-  TEST("predicted 3D matches truth", all_good, true);
+  TEST("predicted heights match truth", all_good, true);
 }
 
-static void test_3d_from_disparity()
+static void test_heightmap_from_disparity()
 {
-  test_3d_from_disparity_affine();
+  test_heightmap_from_disparity_affine();
 }
 
-TESTMAIN(test_3d_from_disparity);
+TESTMAIN(test_heightmap_from_disparity);
