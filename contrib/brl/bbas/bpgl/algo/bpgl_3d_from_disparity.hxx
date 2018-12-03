@@ -30,7 +30,7 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
     for (int i=0; i<ni; ++i) {
       double i2 = i - disparity(i,j);
       vnl_vector_fixed<double,3> x(NAN);
-      if ((i2 >= 0) && (i2 < ni)) {
+      if (i2 >= 0) {
         // valid disparity value
         vnl_vector<double> b(4);
         b[0] = i - P1[0][3];
