@@ -13,7 +13,7 @@
 template<class CAM_T>
 vil_image_view<float>
 bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
-                              vil_image_view<float> disparity, vgl_box_2d<double> heightmap_bounds,
+                              vil_image_view<float> disparity, vgl_box_3d<double> heightmap_bounds,
                               double ground_sample_distance)
 {
   // convert disparity to set of 3D points
@@ -23,16 +23,23 @@ bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
   std::vector<vgl_point_2d<double>> triangulated_xy;
   std::vector<float> height_vals;
 
+  const float min_z = heightmap_bounds.min_z();
+  const float max_z = heightmap_bounds.max_z();
+
   for (int j=0; j<triangulated.nj(); ++j) {
     for (int i=0; i<triangulated.ni(); ++i) {
       if (vnl_math::isfinite(triangulated(i,j,0)) &&
           vnl_math::isfinite(triangulated(i,j,1)) &&
           vnl_math::isfinite(triangulated(i,j,2)) ) {
+        const float z = triangulated(i,j,2);
+        if ((z < min_z) || (z > max_z)) { 
+          continue;
+        }
         // x,y goes in ground samples
         triangulated_xy.emplace_back(triangulated(i,j,0),
                                      triangulated(i,j,1));
         // z coordinates are what we want to grid
-        height_vals.push_back(triangulated(i,j,2));
+        height_vals.push_back(z);
       }
     }
   }
@@ -51,6 +58,15 @@ bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
                                                            upper_left, ni, nj, ground_sample_distance,
                                                            interp_fun, num_neighbors);
 
+  // final bounds check to remove outliers
+  for (int j=0; j<nj; ++j) {
+    for (int i=0; i<ni; ++i) {
+      if ((hmap(i,j) < min_z) || (hmap(i,j) > max_z)) {
+        hmap(i,j) = NAN;
+      }
+    }
+  }
+
   return hmap;
 }
 
@@ -58,7 +74,7 @@ bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
 template vil_image_view<float> \
 bpgl_heightmap_from_disparity<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
                                      vil_image_view<float> disparity, \
-                                     vgl_box_2d<double> heightmap_bounds, \
+                                     vgl_box_3d<double> heightmap_bounds, \
                                      double ground_sample_distance)
 
 #endif

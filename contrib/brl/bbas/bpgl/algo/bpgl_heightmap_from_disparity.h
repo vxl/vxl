@@ -8,7 +8,7 @@
 // \date Nov 15, 2018
 //
 
-#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vil/vil_image_view.h>
 
 /**
@@ -19,7 +19,7 @@
 template<class CAM_T>
 vil_image_view<float> 
 bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
-                              vil_image_view<float> disparity, vgl_box_2d<double> heightmap_bounds,
+                              vil_image_view<float> disparity, vgl_box_3d<double> heightmap_bounds,
                               double ground_sample_distance);
 
 #endif
