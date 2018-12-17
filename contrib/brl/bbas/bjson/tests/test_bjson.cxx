@@ -25,6 +25,12 @@ public:
        root["testfloatA"] = m_fTestFloat;
        root["teststringA"] = m_TestString;
        root["testboolA"] = m_bTestBool;
+       Json::Value ilist;
+       for(size_t i = 0; i<m_IntList.size(); ++i){
+         Json::Value::ArrayIndex ai = static_cast<Json::Value::ArrayIndex>(i);
+         ilist[ai] = m_IntList[i];
+       }
+       root["testListA"] = ilist;
      }
      void Deserialize( Json::Value& root) override{
    // deserialize primitives
@@ -32,11 +38,16 @@ public:
        m_fTestFloat = root.get("testfloatA", 0.0).asDouble();
        m_TestString = root.get("teststringA", "").asString();
        m_bTestBool = root.get("testboolA", false).asBool();
+       const Json::Value ilist = root["testListA"];
+       for(Json::Value::const_iterator lit = ilist.begin();
+           lit != ilist.end(); ++lit)
+         m_IntList.push_back((*lit).asInt());
      }
    int           m_nTestInt;
    double        m_fTestFloat;
    std::string   m_TestString;
    bool          m_bTestBool;
+  std::vector<int>  m_IntList;
 };
 
 /* sample json
@@ -45,6 +56,7 @@ public:
 "testfloatA" : 3.14159,
 "testintA" : 42,
 "teststringA" : "foo"
+"testListA" : [ 1, 2 ]
 }
 
 */
@@ -85,7 +97,7 @@ private:
 static void test_bjson()
 {
    TestClassA testClass;
-   std::string input = "{ \"testintA\" : 42, \"testfloatA\" : 3.14159, \"teststringA\" : \"foo\", \"testboolA\" : true }\n";
+   std::string input = "{ \"testintA\" : 42, \"testfloatA\" : 3.14159, \"teststringA\" : \"foo\", \"testboolA\" : true , \"testListA\" : [ 1, 2 ] }\n";
    CJsonSerializer::Deserialize( &testClass, input );
    bool good = testClass.m_nTestInt == 42;
     good = good && testClass.m_fTestFloat == 3.14159;
@@ -96,7 +108,7 @@ static void test_bjson()
    std::string output;
    CJsonSerializer::Serialize( &testClass, output);
    std::cout << "testClass Serialized Output\n" << output << "\n\n\n";
-   std::string actual_output ="{\n   \"testboolA\" : true,\n   \"testfloatA\" : 3.1415899999999999,\n   \"testintA\" : 42,\n   \"teststringA\" : \"foo\"\n}\n";
+   std::string actual_output ="{\n   \"testListA\" : [ 1, 2 ],\n   \"testboolA\" : true,\n   \"testfloatA\" : 3.1415899999999999,\n   \"testintA\" : 42,\n   \"teststringA\" : \"foo\"\n}\n";
    good = output==actual_output;
    TEST("test construct json string",good, true);
 }
