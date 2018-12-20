@@ -40,6 +40,7 @@ set(msm_sources
 
   msm_cubic_bezier.h          msm_cubic_bezier.cxx
   msm_equally_space.h         msm_equally_space.cxx
+  msm_rotate_to_axes.h        msm_rotate_to_axes.cxx
 )
 
 aux_source_directory(Templates msm_sources)
