@@ -26,6 +26,7 @@ set(mbl_sources
   mbl_data_collector_base.cxx           mbl_data_collector_base.h
   mbl_stats_1d.cxx                      mbl_stats_1d.h
   mbl_stats_nd.cxx                      mbl_stats_nd.h
+  mbl_mv_stats.cxx                      mbl_mv_stats.h
   mbl_sum_1d.cxx                        mbl_sum_1d.h
   mbl_parse_block.cxx                   mbl_parse_block.h
                                         mbl_parse_sequence.h
