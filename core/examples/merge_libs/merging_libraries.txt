@@ -35,3 +35,8 @@ VXL_VIL_INCLUDE_IMAGE_IO:BOOL=OFF
 VXL_BUILD_OBJECT_LIBRARIES:BOOL=ON
 
 The approach can be extended to include all the libraries one needs for a particular API.
+
+Background:
+This feature was added because we needed to create a single library containing image analysis functions that could easily be passed to a third party (as a .lib and a single .h with a simple API).
+It was assumed that the caller would handle all the image loading/saving, which meant that there was no need to include any of the image IO functions in the VXL build.  This simplified things considerably, because there are many IO libraries, and not all of them are necessarily in the VXL tree.
+Adding the image IO is possible, but more complex.
