@@ -156,7 +156,7 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   unsigned int time_id = 0;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, time_id);
   brdb_query_aptr Q = brdb_query_comp_new("id", brdb_query::EQ, time_id);
-  brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+  brdb_selection_sptr S = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q));
   if (S->size()!=1){
       std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " no selections\n";
@@ -194,7 +194,7 @@ float boxm2_ocl_change_tableau::change_detect(int frame)
   unsigned int change_id = 0;
   good = good && bprb_batch_process_manager::instance()->commit_output(0, change_id);
   Q = brdb_query_comp_new("id", brdb_query::EQ, change_id);
-  S = DATABASE->select("vil_image_view_base_sptr_data", Q);
+  S = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q));
   if (S->size()!=1){
       std::cout << "in bprb_batch_process_manager (from ocl_change_tableau)::set_input_from_db(.) -"
                << " no selections\n";
