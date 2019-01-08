@@ -143,7 +143,7 @@ static void test_bvxm_update_lidar_process()
 
     //retrieve world
     brdb_query_aptr Q_world = brdb_query_comp_new("id", brdb_query::EQ, id_world);
-    brdb_selection_sptr S_world = DATABASE->select("bvxm_voxel_world_sptr_data", Q_world);
+    brdb_selection_sptr S_world = DATABASE->select("bvxm_voxel_world_sptr_data", std::move(Q_world));
     if (S_world->size()!=1) {
       std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
                << " no selections\n";
@@ -368,7 +368,7 @@ static void test_bvxm_update_lidar_process()
 
   //retrieve camera
   brdb_query_aptr Q_img = brdb_query_comp_new("id", brdb_query::EQ, id_img);
-  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", Q_img);
+  brdb_selection_sptr S_img = DATABASE->select("vil_image_view_base_sptr_data", std::move(Q_img));
   if (S_img->size()!=1) {
     std::cout << "in bprb_batch_process_manager::set_input_from_db(.) -"
              << " no selections\n";
