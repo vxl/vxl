@@ -15,6 +15,7 @@
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
+#include <vul/vul_file.h>
 #include <msm/msm_points.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vgl/vgl_intersection.h>
@@ -137,6 +138,18 @@ void load_shapes(const std::string& points_dir,
   }
 }
 
+void make_dir_if_needed(std::string path)
+{
+  std::string dir=vul_file::dirname(path);
+  if (!vul_file::is_directory(dir))
+  {
+    std::cout<<"Directory "<<dir<<" does not exist. Creating it."<<std::endl;
+    if (!vul_file::make_directory_path(dir))
+    {
+      std::cout<<"Unable to create directory."<<std::endl;
+    }
+  }
+}
 
 int main(int argc, char** argv)
 {
@@ -198,6 +211,7 @@ int main(int argc, char** argv)
     vil_convert_stretch_range(crop_im,patch);
 
     std::string out_im_path=params.out_image_dir+"/"+params.image_names[i]+params.im_ext_str;
+    make_dir_if_needed(out_im_path);
     if (!vil_save(patch,out_im_path.c_str()))
     {
       std::cerr<<"Failed to save image to "<<out_im_path<<std::endl;
@@ -208,6 +222,7 @@ int main(int argc, char** argv)
     points.translate_by(-double(ilo),-double(jlo));
 
     std::string out_pts_path=params.out_points_dir+"/"+params.points_names[i];
+    make_dir_if_needed(out_pts_path);
     if (!points.write_text_file(out_pts_path))
     {
       std::cerr<<"Failed to write new points to "<<out_pts_path<<std::endl;
