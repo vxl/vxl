@@ -14,16 +14,16 @@
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
-#ifdef _MSC_VER
-#  include <vcl_msvc_warnings.h>
-#endif
-#include <vsl/vsl_quick_file.h>
-#include <vul/vul_file.h>
-#include <msm/msm_shape_model.h>
-#include <msm/msm_shape_instance.h>
-#include <msm/msm_add_all_loaders.h>
+#include <vul/vul_string.h>
+#include <msm/msm_points.h>
+#include <vimt/vimt_image_2d_of.h>
+#include <vgl/vgl_intersection.h>
+#include <vil/vil_crop.h>
+#include <vil/vil_convert.h>
+#include <vil/vil_save.h>
+#include <vnl/vnl_math.h>
+#include <vimt/vimt_load.h>
 
-#include <mbl/mbl_stats_1d.h>
 /*
 Parameter file format:
 <START FILE>
@@ -33,6 +33,10 @@ out_image_dir: cropped_images
 
 // Where to save new points
 out_points_dir: cropped_points
+
+//: Border width (as proportion of size)
+border_width: 0.2
+
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -61,6 +65,10 @@ struct tool_params
   // Where to save new images
   std::string out_image_dir;
 
+  //: Optional new extension for image path (enabling saving as new type)
+  // If "-" then set to empty.
+  std::string im_ext_str;
+
   // Where to save new points
   std::string out_points_dir;
 
@@ -72,9 +80,6 @@ struct tool_params
 
   //: Directory containing points
   std::string points_dir;
-
-  //: Directory to save best fit points
-  std::string out_points_dir;
 
   //: List of image names
   std::vector<std::string> image_names;
@@ -100,16 +105,13 @@ void tool_params::read_from_file(const std::string& path)
 
   mbl_read_props_type props = mbl_read_props_ws(ifs);
 
-
-
   out_image_dir=props.get_optional_property("out_image_dir","./cropped_images");
   out_points_dir=props.get_optional_property("out_points_dir","./cropped_points");
+  im_ext_str=props.get_optional_property("im_ext_str","");
+  if (im_ext_str=="-") im_ext_str="";
   image_dir=props.get_optional_property("image_dir","./");
-  border_width=vul_string_atoi(props.get_optional_property("border_width","0.1"));
+  border_width=vul_string_atof(props.get_optional_property("border_width","0.1"));
   points_dir=props.get_optional_property("points_dir","./");
-  output_path=props.get_optional_property("output_path",
-                                          "shape_params.txt");
-  out_points_dir=props.get_optional_property("out_points_dir","");
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -141,8 +143,6 @@ int main(int argc, char** argv)
   vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg_parse(argc,argv);
 
-  msm_add_all_loaders();
-
   if (param_path()=="")
   {
     print_usage();
@@ -169,20 +169,53 @@ int main(int argc, char** argv)
     std::string pts_path = params.points_dir+"/"+params.points_names[i];
     if (!points.read_text_file(pts_path))
     {
-      std::cerr<<"Failed to load points from "+path<<std::endl;
+      std::cerr<<"Failed to load points from "+pts_path<<std::endl;
       return 1;
     }
 
     std::string image_path = params.image_dir+"/"+params.image_names[i];
-
-// load as float
+    vimt_load_to_float(image_path,image,1.0);
 
     // Project points into image frame
-    points.apply_transform(image.world2im());
-    vgl_box_2d<double> bbox=points.bounds();
+    points.transform_by(image.world2im());
+    vgl_box_2d<double> box=points.bounds();
 
+    box.scale_about_centroid(1.0+params.border_width);
+
+    const vil_image_view<float>& im=image.image();
+
+    // Ensure box still in image
+    box=vgl_intersection(box,vgl_box_2d<double>(0,im.ni()-1,  0,im.nj()-1));
+
+    // Crop image to this box.
+    unsigned ilo=vnl_math::rnd(box.min_x());
+    unsigned ihi=vnl_math::rnd(box.max_x());
+    unsigned jlo=vnl_math::rnd(box.min_y());
+    unsigned jhi=vnl_math::rnd(box.max_y());
+    vil_image_view<float> crop_im = vil_crop(im,ilo,1+ihi-ilo, jlo, 1+jhi-jlo);
+
+    vil_image_view<vxl_byte> patch;
+    vil_convert_stretch_range(crop_im,patch);
+
+    std::string out_im_path=params.out_image_dir+"/"+params.image_names[i]+params.im_ext_str;
+    if (!vil_save(patch,out_im_path.c_str()))
+    {
+      std::cerr<<"Failed to save image to "<<out_im_path<<std::endl;
+      return 2;
+    }
+
+    // Compute point positions in new image
+    points.translate_by(-double(ilo),-double(jlo));
+
+    std::string out_pts_path=params.out_points_dir+"/"+params.points_names[i];
+    if (!points.write_text_file(out_pts_path))
+    {
+      std::cerr<<"Failed to write new points to "<<out_pts_path<<std::endl;
+      return 3;
+    }
+
+    std::cout<<"Saved cropped image to "<<out_im_path<<" and points to "<<out_pts_path<<std::endl;
   }
-
 
   return 0;
 }
