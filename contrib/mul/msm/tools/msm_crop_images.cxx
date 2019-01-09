@@ -24,7 +24,8 @@
 #include <vil/vil_save.h>
 #include <vnl/vnl_math.h>
 #include <vimt/vimt_load.h>
-
+#include <vimt/vimt_gaussian_pyramid_builder_2d.h>
+#include <vimt/vimt_image_pyramid.h>
 /*
 Parameter file format:
 <START FILE>
@@ -38,6 +39,9 @@ out_points_dir: cropped_points
 //: Border width (as proportion of size)
 border_width: 0.2
 
+//: Downsampling factor for image (integer)
+// Image downsampled by a factor of 2^(log2_scale)
+log2_scale: 0
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -76,6 +80,11 @@ struct tool_params
   //: Border width (as proportion of size)
   double border_width;
 
+  //: Downsampling factor for image (integer)
+  // Image downsampled by a factor of 2^(log2_scale)
+  unsigned log2_scale;
+
+
   //: Directory containing images
   std::string image_dir;
 
@@ -112,6 +121,7 @@ void tool_params::read_from_file(const std::string& path)
   if (im_ext_str=="-") im_ext_str="";
   image_dir=props.get_optional_property("image_dir","./");
   border_width=vul_string_atof(props.get_optional_property("border_width","0.1"));
+  log2_scale=vul_string_atoi(props.get_optional_property("log2_scale","0"));
   points_dir=props.get_optional_property("points_dir","./");
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
@@ -176,6 +186,9 @@ int main(int argc, char** argv)
 
   msm_points points;
   vimt_image_2d_of<float> image;
+  vimt_gaussian_pyramid_builder_2d<float> pyr_builder;
+  vimt_image_pyramid image_pyr;
+
   unsigned n=params.image_names.size();
   for (unsigned i=0;i<n;++i)
   {
@@ -189,13 +202,21 @@ int main(int argc, char** argv)
     std::string image_path = params.image_dir+"/"+params.image_names[i];
     vimt_load_to_float(image_path,image,1.0);
 
+    const vimt_image_2d_of<float>* used_image=&image;
+    if (params.log2_scale>0)
+    {
+      pyr_builder.build(image_pyr,image);
+      // Pick out image at suitable level of pyramid.
+      used_image=static_cast<const vimt_image_2d_of<float>*>(&image_pyr(params.log2_scale));
+    }
+
     // Project points into image frame
-    points.transform_by(image.world2im());
+    points.transform_by(used_image->world2im());
     vgl_box_2d<double> box=points.bounds();
 
     box.scale_about_centroid(1.0+params.border_width);
 
-    const vil_image_view<float>& im=image.image();
+    const vil_image_view<float>& im=used_image->image();
 
     // Ensure box still in image
     box=vgl_intersection(box,vgl_box_2d<double>(0,im.ni()-1,  0,im.nj()-1));
