@@ -230,7 +230,7 @@ std::unique_ptr<vpgl_proj_camera<double> >
 bgui3d_viewer_tableau::camera() const
 {
   if (!scene_camera_)
-    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(nullptr);
 
   const SbVec3f& t_vec = scene_camera_->position.getValue();
   vnl_double_3 t(t_vec[0], t_vec[1], t_vec[2]);
@@ -267,10 +267,10 @@ bgui3d_viewer_tableau::camera() const
     double h = cam->height.getValue();
 #endif // 0
     std::cerr << "WARNING: not implemented yet\n";
-    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(nullptr);
    default:
     std::cerr << "WARNING: no such camera_type_\n";
-    return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
+    return std::unique_ptr<vpgl_proj_camera<double> >(nullptr);
   }
 }
 
