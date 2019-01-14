@@ -293,7 +293,7 @@ bgui3d_tableau::set_camera(const vpgl_proj_camera<double>& /*camera*/)
 std::unique_ptr<vpgl_proj_camera<double> >
 bgui3d_tableau::camera() const
 {
-  return std::unique_ptr<vpgl_proj_camera<double> >(NULL);
+  return std::unique_ptr<vpgl_proj_camera<double> >(nullptr);
 }
 
 
