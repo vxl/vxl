@@ -13,7 +13,13 @@
 #
 #   vxl-maintainers@lists.sf.net
 
-cmake_minimum_required(VERSION 3.10.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.2)
+if(CMAKE_VERSION VERSION_LESS 3.12.0)
+  cmake_policy(VERSION ${CMAKE_VERSION})
+else()
+  cmake_policy(VERSION 3.10.2...3.13.2)
+endif()
+
 if( "${CMAKE_CXX_STANDARD}" MATCHES "(11|14|17|20)")
    # If building for modern C++ language standards,
    # require use of newer cmake version
