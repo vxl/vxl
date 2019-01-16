@@ -45,6 +45,9 @@ ref_pose_source: first_shape
 //: Object to apply limits to parameters
 param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
 
+// Minimum number of shape modes
+min_modes: 0
+
 // Maximum number of shape modes
 max_modes: 99
 
@@ -103,6 +106,9 @@ struct tool_params
   //: Object to apply limits to parameters
   std::unique_ptr<msm_param_limiter> limiter;
 
+  //: Minimum number of shape modes
+  unsigned min_modes;
+
   //: Maximum number of shape modes
   unsigned max_modes;
 
@@ -158,6 +164,7 @@ void tool_params::read_from_file(const std::string& path)
 
   mbl_read_props_type props = mbl_read_props_ws(ifs);
 
+  min_modes=vul_string_atoi(props.get_optional_property("min_modes","0"));
   max_modes=vul_string_atoi(props.get_optional_property("max_modes","99"));
   var_prop=vul_string_atof(props.get_optional_property("var_prop","0.95"));
   image_dir=props.get_optional_property("image_dir","./");
@@ -307,7 +314,7 @@ int main(int argc, char** argv)
   builder.set_aligner(*params.aligner);
   builder.set_ref_pose_source(params.ref_pose_source);
   builder.set_param_limiter(*params.limiter);
-  builder.set_mode_choice(0,params.max_modes,params.var_prop);
+  builder.set_mode_choice(params.min_modes,params.max_modes,params.var_prop);
 
   std::cout<<"Building shape model from "<<shapes.size()<<" examples."<<std::endl;
 
