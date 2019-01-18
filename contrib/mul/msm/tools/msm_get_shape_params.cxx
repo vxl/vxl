@@ -21,6 +21,8 @@
 #include <msm/msm_add_all_loaders.h>
 
 #include <mbl/mbl_stats_1d.h>
+#include <mbl/mbl_histogram.h>
+
 /*
 Parameter file format:
 <START FILE>
@@ -47,13 +49,16 @@ Note: You can use the same file as was used to build the model, defining the out
 
 void print_usage()
 {
-  std::cout << "msm_get_shape_params -p param_file\n"
+  std::cout << "msm_get_shape_params -p param_file  [-h histo_base] [-no_pose] [-rel_p] [-use_pts_name]\n"
            << "Compute shape parameters for each set of points.\n"
            << "Loads in named model and each set of points\n"
            << "Fits model to each set of points and saves\n"
            << "pose and shape parameters to a text file.\n"
            << "One row per shape.\n"
            << "Also save best fit points for every image.\n"
+           << "If histo_base name supplied (-h) then saves (normalised) histogram for each parameter.\n"
+           << "If -rel_p flag is used then divide each parameter by the\n"
+           << "standard deviation for that mode (both for the list of parameters and the histograms)\n"
            << std::endl;
 
   vul_arg_display_usage_and_exit();
@@ -142,6 +147,7 @@ int main(int argc, char** argv)
   vul_arg<bool> no_pose("-no_pose","Don't display pose",false);
   vul_arg<bool> rel_params("-rel_p","Record params[i]/sd[i]",false);
   vul_arg<bool> use_pts_name("-use_pts_name","Include name of points at beginning of the line",false);
+  vul_arg<std::string> histo_name("-h","Base name for histogram files");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -199,6 +205,21 @@ int main(int argc, char** argv)
   for (double & i : sd) i=std::sqrt(i);
   mbl_stats_1d mahal_stats;
 
+  bool make_histos=(histo_name()!="");
+  double n_sds=3.0;
+  unsigned n_bins=51;
+  std::vector<mbl_histogram> histo;
+  if (make_histos)
+  {
+    histo.resize(sd.size());
+    for (unsigned i=0;i<sd.size();++i)
+    {
+      double w=sd[i];
+      if (rel_params()) w=1.0;  // Parameters normalised so SD=1
+      histo[i].set_bins(-n_sds * w, n_sds * w,n_bins);
+    }
+  }
+
   for (unsigned i=0;i<shapes.size();++i)
   {
     if (shapes[i].size()==0) continue;
@@ -219,10 +240,17 @@ int main(int argc, char** argv)
     for (unsigned j=0;j<b.size();++j)
     {
       if (rel_params())
+      {
         ofs<<b[j]/sd[j]<<' ';
+        if (make_histos)  histo[j].obs(b[j]/sd[j]);
+      }
       else
+      {
         ofs<<b[j]<<' ';
+        if (make_histos)  histo[j].obs(b[j]);
+      }
       M += b[j]*b[j]/(sd[j]*sd[j]);
+
     }
     mahal_stats.obs(M);
 
@@ -256,6 +284,28 @@ int main(int argc, char** argv)
   std::cout<<"Next "<<sm_instance.params().size()<<" values are shape params";
   if (rel_params()) std::cout<<" in units of SD.";
   std::cout<<std::endl;
+
+  if (make_histos)
+  {
+    std::cout<<"Saving histograms of parameters to "<<histo_name()<<"_b?.txt"<<std::endl;
+    for (unsigned i=0;i<histo.size();++i)
+    {
+      std::stringstream h_path;
+      h_path<<histo_name()<<"_b"<<i<<".txt";
+      if (!histo[i].write_probabilities(h_path.str().c_str()))
+      {
+        std::cout<<"Failed to save histogram to "<<h_path.str()<<std::endl;
+        break;
+      }
+    }
+    std::cout<<"In gnuplot use:   plot \""<<histo_name()<<"_b0.txt\" with boxes"<<std::endl;
+    if (rel_params())
+    {
+      std::cout<<"\nOr : plot \""<<histo_name()
+      <<"_b0.txt\" with boxes, exp(-0.5*x*x)/sqrt(2*pi)"<<std::endl;
+      std::cout<<" to compare with unit Gaussian."<<std::endl;
+    }
+  }
 
   return 0;
 }
