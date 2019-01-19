@@ -19,6 +19,7 @@
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
+#include <msm/msm_no_limiter.h>
 
 #include <mbl/mbl_stats_1d.h>
 #include <mbl/mbl_histogram.h>
@@ -49,13 +50,15 @@ Note: You can use the same file as was used to build the model, defining the out
 
 void print_usage()
 {
-  std::cout << "msm_get_shape_params -p param_file  [-h histo_base] [-no_pose] [-rel_p] [-use_pts_name]\n"
+  std::cout << "msm_get_shape_params -p param_file [-u] [-h histo_base] [-no_pose] [-rel_p] [-use_pts_name]\n"
            << "Compute shape parameters for each set of points.\n"
            << "Loads in named model and each set of points\n"
            << "Fits model to each set of points and saves\n"
            << "pose and shape parameters to a text file.\n"
            << "One row per shape.\n"
            << "Also save best fit points for every image.\n"
+           << "Note that by default the msm_param_limiter is applied, constraining the\n"
+           << "parameters.  If the -u flag is on, then the limiter is not used (the parameters are unconstrained).\n"
            << "If histo_base name supplied (-h) then saves (normalised) histogram for each parameter.\n"
            << "If -rel_p flag is used then divide each parameter by the\n"
            << "standard deviation for that mode (both for the list of parameters and the histograms)\n"
@@ -144,10 +147,13 @@ int main(int argc, char** argv)
   vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg<std::string> shape_model_path("-s","Shape model path (over-riding param file)");
   vul_arg<std::string> out_path("-o","Output path (over-riding param file)");
+  vul_arg<bool> is_unconstrained("-u","Don't apply limits with msm_param_limiter",false);
   vul_arg<bool> no_pose("-no_pose","Don't display pose",false);
   vul_arg<bool> rel_params("-rel_p","Record params[i]/sd[i]",false);
   vul_arg<bool> use_pts_name("-use_pts_name","Include name of points at beginning of the line",false);
   vul_arg<std::string> histo_name("-h","Base name for histogram files");
+  vul_arg<double> histo_range("-hr","Half range of histogram (in SDs)",3.0);
+  vul_arg<unsigned> histo_nbins("-hn","Number of bins in histogram",51);
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -181,6 +187,11 @@ int main(int argc, char** argv)
     return 2;
   }
 
+  if (is_unconstrained())
+  {
+    shape_model.set_param_limiter(msm_no_limiter());
+  }
+
   msm_shape_instance sm_instance(shape_model);
 
   // Load in all the shapes
@@ -206,8 +217,7 @@ int main(int argc, char** argv)
   mbl_stats_1d mahal_stats;
 
   bool make_histos=(histo_name()!="");
-  double n_sds=3.0;
-  unsigned n_bins=51;
+  double n_sds=histo_range();
   std::vector<mbl_histogram> histo;
   if (make_histos)
   {
@@ -216,7 +226,7 @@ int main(int argc, char** argv)
     {
       double w=sd[i];
       if (rel_params()) w=1.0;  // Parameters normalised so SD=1
-      histo[i].set_bins(-n_sds * w, n_sds * w,n_bins);
+      histo[i].set_bins(-n_sds * w, n_sds * w,histo_nbins());
     }
   }
 
