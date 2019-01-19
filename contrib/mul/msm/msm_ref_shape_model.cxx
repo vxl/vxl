@@ -51,6 +51,14 @@ void msm_ref_shape_model::set(const msm_points& mean,
   param_limiter_ = param_limiter;
 }
 
+//: Replace parameter limiter object
+//  Use with care.
+void msm_ref_shape_model::set_param_limiter(const msm_param_limiter& p)
+{
+  param_limiter_=p;
+}
+
+
 //: Equality test
 bool msm_ref_shape_model::operator==(const msm_ref_shape_model& model) const
 {

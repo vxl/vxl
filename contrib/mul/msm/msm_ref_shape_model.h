@@ -85,6 +85,10 @@ class msm_ref_shape_model
   msm_param_limiter& param_limiter()
   { return param_limiter_; }
 
+  //: Replace parameter limiter object
+  //  Use with care.
+  void set_param_limiter(const msm_param_limiter& p);
+
   //: Number of points
   unsigned size() const { return mean_.size(); }
 
