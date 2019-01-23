@@ -1,0 +1,225 @@
+<html>
+<head>
+<title>msm: Manchester Shape Model libraries and tools</title>
+</head>
+<body>
+<h1>msm: Manchester Shape Model libraries and tools</h1>
+The msm library contains classes, functions and tools to build and use linear statistical
+shape models.<br>
+<ul>
+<li><a href="#introduction">Introduction</a>
+<li><a href="#data_formats">Data File Formats</a>
+  <ul>
+  <li><a href="#points">msm_points: Points file</a>
+  <li><a href="#curves">msm_curves: Curves file</a>
+  <li><a href="#file_structure">Organising Files</a>
+  <li><a href="#image_list">Image Lists</a>
+  </ul>
+<li><a href="#building_shape">Building Shape Models</a>
+<li><a href="#msm_tools">Other tools</a>
+</ul>
+
+<h2><a name="introduction">Introduction</h2>
+A shape is represented as a set of points, stored in a msm_points
+object, which encodes the co-ordinates in a vector (x0,y0,x1,y1,...).<br>
+
+Shape is defined as that variation in geometry which is invariant
+to some class of transformations.  Usually one considers
+similarity transformations (scale, rotation and translation),
+though others are also used.  To build a model from sets of shapes,
+one first aligns the shapes to remove the effects of the global
+transform.<br>
+
+The alignment and representation of transformations
+is encoded using the msm_aligner objects.<br>
+
+The shape model itself is a linear model of the form
+<pre>
+  shape = mean + P*b
+</pre>
+where mean is the mean shape, P is a matrix of modes of variation
+and b is a vector of shape parameters.
+
+
+<h2><a name="data_formats">Data File Formats</h3>
+Key data files encode sets of points (*.pts) and curves (*.crvs).
+
+<h3><a name="points">msm_points: Points file</h3>
+<p>All the tools assume that points are provided in text files in one of the two formats shown below.<br>
+The <tt>msm_points</tt> class encodes a set of points which can be read from/written to a text file in the format shown below.</p>
+
+This is the default format which is written by the tools and library functions:
+<tt><pre>
+version: 1
+n_points: 3
+{
+316.069 201.255
+410.593 206.549
+333.881 320.539
+}
+</pre></tt>
+
+Note that points in a simpler two column format can also be read in:
+<tt><pre>
+3
+316.069 201.255
+410.593 206.549
+333.881 320.539
+</pre></tt>
+The first line indicates how many points follow.
+
+<h3><a name="curves">msm_curves: Curves file</h3>
+The <tt>msm_curves</tt> class encodes one or more "curves" as a set of point indices.<br>
+Each curve is assumed to join the given points in the order supplied.<br>
+If the curve is not open, then it is assumed to be closed and the last point is
+connected to the first point.<br>
+The <tt>crvs</tt> file is a text file defining the curves in a fairly easy to read/edit way.<br>
+For example, <tt>face_68pts.crvs</tt> defines the curves on a 68 point face markup:<br>
+<tt><pre>
+curves: {
+  curve:  { name: Chin open: true indices: { 0:14 } }
+  curve:  { name: LEyebrow open: false indices: { 15:20 } }
+  curve:  { name: REyebrow open: false indices: { 21:26 } }
+  curve:  { name: LEye open: false indices: { 27:30 } }
+  curve:  { name: REye open: false indices: { 32:35 } }
+  curve:  { name: Nose open: true indices: { 37:45 } }
+  curve:  { name: Nostrils open: true indices: { 46 47 } }
+  curve:  { name: OuterLips open: false indices: { 48:59 } }
+  curve:  { name: TopLip open: true indices: { 48 60 61 62 54 } }
+  curve:  { name: BottomLip open: true indices: { 54 63 64 65 48 } }
+}
+</pre></tt>
+
+The elements of each curve are:
+<ul>
+<li>name: The following text (which must not include any whitespace) defines a name for the curve
+<li>open: true/false  - Defines whether the curve is open or closed
+<li>indices: A list of integers defining the points to be connected. Ranges can be specified, such as 0:14 or 45:40 (for counting backwards) to indicate all integers in the given range.
+</ul>
+
+<h3><a name="file_structure">Organising Files</h3>
+Generally a shape is defined by a set of points annotated on an image.<br>
+For convenience we usually use similar names for points and image files, so that <tt>image7.pts</tt> will be the points annotated on <tt>image7.png</tt>.  This is not a strict requirement though.<br>
+Usually we also arrange that all the images are in one directory (say "images") and all the points are in another (say "points"), leading to a file structure like this:<br>
+<ul>
+<li>images
+  <ul>
+  <li>image001.png
+  <li>image002.png
+  <li>image003.png
+  <li>...
+  </ul>
+<li>points
+  <ul>
+  <li>image001.pts
+  <li>image002.pts
+  <li>image003.pts
+  <li>...
+  </ul>
+<li>models
+  <ul>
+  <li>image_list.txt
+  <li>face_68.crvs
+  <li>build_shape_model.params
+  <li>...
+  </ul>
+</ul>
+The models directory contains parameter files for the various tools.<br>
+The files to be used by any tool are stored in a standard format in an image_list text file.
+
+<h3><a name="image_list">Image Lists</h3>
+The image list file (e.g. <tt>image_list.txt</tt>) contains the paths to points and associated images in the following format:
+
+<tt><pre>
+// Directories containing data:
+points_dir: ../points/
+image_dir: ../images/
+
+images:
+{
+  image001.pts : image001.png
+  image002.pts : image002.png
+  image003.pts : image003.png
+  // ...
+}
+</pre></tt>
+Comments can be added using "//" - anything after this on the line will be ignored (C++ style).
+
+<h2><a name="building_shape">Building Shape Models</h2>
+To build a shape model, from within the <tt>models</tt> directory run a command such as:
+<tt><pre>
+msm_build_shape_model -p build_shape_model.params
+</pre></tt>
+
+The parameter file should look something like this:
+<tt><pre>
+/: Aligner for shape model
+aligner: msm_similarity_aligner
+
+//: Define how to align mean shape in reference frame
+// Options: { first_shape, mean_pose }
+ref_pose_source: first_shape
+
+//: Object to apply limits to parameters
+param_limiter: msm_ellipsoid_limiter { accept_prop: 0.98 }
+
+// Minimum number of shape modes
+min_modes: 0
+
+// Maximum number of shape modes
+max_modes: 99
+
+// Proportion of shape variation to explain
+var_prop: 0.95
+
+//: File to save model to
+shape_model_path: shape_model.msm
+
+image_dir: ../images/
+points_dir: ../points/
+images: {
+  image1.pts : image1.jpg
+  image2.pts : image2.jpg
+  // ...
+}
+</pre></tt>
+
+This will build a linear statistical shape model from the supplied examples (image1.pts etc) and save it to the named file (<tt>shape_model.msm</tt>)
+
+The main choices to be made are
+<ul>
+<li>Type of aligner
+<li>How to select the number of modes
+<li>The way parameters will be limited when the model is fitted to new points
+</ul>
+
+<h3>msm_aligner : How to align shapes</h3>
+Options include:
+<ul>
+<li> msm_translation_aligner  : Translation (tx,ty)
+<li> msm_zoom_aligner         : Scale and translation (s,tx,ty)
+<li> msm_rigid_aligner        : Rotation and translation (A,tx,ty)
+<li> msm_similarity_aligner   : Scale, rotation and translation (a,b,tx,ty)
+<li> msm_affine_aligner       : Six parameter affine transformations
+<li> msm_subset_aligner       : Align using only a subset of the points
+</ul>
+
+The number of modes of the model is chosen to be in the range [min_modes,max_modes] such that
+the variance explained by the chosen modes is at least a proportion var_prop of the total variance of the training data.
+
+<h2><a name="msm_tools">Other tools</h2>
+<ul>
+<li> msm_build_shape_model : Construct a shape model from a set of files
+<li> msm_draw_shape_modes : Generate EPS files displaying modes of a model
+<li> msm_draw_points_on_image : Generate an EPS file showing points + curves on an image
+<li> msm_draw_shapes : Draw a row of shapes based on shape parameters in a text file
+<li> msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
+<li> msm_get_shape_params: Compute shape parameters for each example and save to a file
+<li> msm_add_dir_to_names: Create new image list files by adding directory to points/image paths
+<li> msm_concat_points: Concatenate two or more points files into one
+<li> msm_concat_curves: Concatenate two or more curves files (assuming points also concatenated)
+<li> msm_reflect_points: Reflect points.
+</ul>
+
+</body>
+</html>
