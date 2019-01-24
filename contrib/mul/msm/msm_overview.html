@@ -411,22 +411,28 @@ In that case the histograms can easily be compared to that of a unit gaussian in
 The range of the histo can be set with" -hr 4.0", and the number of bins with "-hn 101".
 
 <h2><a name="msm_tools">Other tools</h2>
+Manipulating sets of images and points:
+<ul>
+<li> msm_add_dir_to_names: Modify an image list file, adding directories to each name
+<li> msm_crop_images: Crop region around points, creating new image and points in that image
+<li> msm_get_bounds: Calculate four points at corners of bounding box of input points.
+<li> msm_get_image_corners: Compute points at corners of image region
+<li> msm_images_from_list: Extracts list of image names from image_list file
+<li> msm_select_large_shapes: Tool to find larger shapes in an image list
+<li> msm_compare_markups: Analyse differences between sets of points from two annotators.
+<li> msm_guess_ref_sym: Estimate point index mapping from a shape to its reflection
+</ul>
+Drawing tools:
 <ul>
 <li> msm_draw_points_on_image : Generate an EPS file showing points + curves on an image
 <li> msm_draw_shapes : Draw a row of shapes based on shape parameters in a text file
 <li> msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
-<li> msm_add_dir_to_names: Create new image list files by adding directory to points/image paths
-<li> msm_add_dir_to_names: Modify an image list file, adding directories to each name
-<li> msm_compare_markups: Analyse differences between sets of points from two annotators.
-<li> msm_crop_images: Crop region around points, creating new image and points in that image
+</ul>
+Using Shape Models:
+<ul>
 <li> msm_estimate_residuals: Estimate how accurately a model can fit to sets of points
-<li> msm_get_bounds: Calculate four points at corners of bounding box of input points.
-<li> msm_get_image_corners: Compute points at corners of image region
 <li> msm_get_two_class_mode: Calculates optimal vector separating two shape classes
-<li> msm_guess_ref_sym: Estimate point index mapping from a shape to its reflection
-<li> msm_images_from_list: Extracts list of image names from image_list file
 <li> msm_reset_shape_modes: Resets selected modes to 0 and saves updated model points.
-<li> msm_select_large_shapes: Tool to find larger shapes in an image list
 </ul>
 
 
