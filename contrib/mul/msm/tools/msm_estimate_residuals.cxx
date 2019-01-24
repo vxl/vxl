@@ -60,7 +60,7 @@ images: {
 
 void print_usage()
 {
-  std::cout << "msm_build_shape_model -p param_file -t test_points_list.txt\n"
+  std::cout << "msm_estimate_residuals -p param_file -t test_points_list.txt\n"
            << "Builds the shape model from the supplied data, tests on shapes in test_points_list.txt\n"
            << "If no test_points_list.txt provided, performs leave-some-out tests on training data."
            << std::endl;

@@ -14,11 +14,11 @@
 
 void print_usage()
 {
-  std::cout<<"points_subset index_file in_pts out_pts"<<std::endl;
-  std::cout<<"Load list of indices from text file index_file"<<std::endl;
-  std::cout<<"Load set of points from in_pts"<<std::endl;
-  std::cout<<"Select subset of in_pts, using indices in index_file"<<std::endl;
-  std::cout<<"Save to out_pts"<<std::endl;
+  std::cout<<"msm_points_subset pt_index.txt in.pts out.pts"<<std::endl;
+  std::cout<<"Load list of indices from text file pt_index.txt"<<std::endl;
+  std::cout<<"Load set of points from in.pts"<<std::endl;
+  std::cout<<"Select subset of in.pts, using indices in index file"<<std::endl;
+  std::cout<<"Save to out.pts"<<std::endl;
   std::cout<<"Index file just lists integers, in range [0,n_pts-1], to be used."<<std::endl;
   std::cout<<"Note, it can have comments using //"<<std::endl;
   std::cout<<"For instance:"<<std::endl;

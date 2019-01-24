@@ -15,8 +15,21 @@ shape models.<br>
   <li><a href="#file_structure">Organising Files</a>
   <li><a href="#image_list">Image Lists</a>
   </ul>
+<li><a href="#manip_points">Manipulating Points</a>
+  <ul>
+  <li><a href="#points_subset">Extracting a subset of points</a>
+  <li><a href="#concat_points">Concatenating sets of points  (and curves)</a>
+  <li><a href="#equal_space">Equally spacing points along curves</a>
+  <li><a href="#warp_points">Warping points using a Thin Plate Spline</a>
+  </ul>
 <li><a href="#building_shape">Building Shape Models</a>
+<li><a href="#show_modes">Examining Shape Modes</a>
+<li><a href="#get_shape_params">Getting shape parameters</a>
 <li><a href="#msm_tools">Other tools</a>
+<li><a href="#advanced_features">Advanced Features</a>
+  <ul>
+  <li><a href="#symmetry">Exploiting symmetry</a>
+  </ul>
 </ul>
 
 <h2><a name="introduction">Introduction</h2>
@@ -145,6 +158,86 @@ images:
 </pre></tt>
 Comments can be added using "//" - anything after this on the line will be ignored (C++ style).
 
+<h2><a name="manip_points">Manipulating Points</h2>
+<h3><a name="points_subset">Extracting a subset of points</h2>
+The <tt>msm_subset_points</tt> tool creates a new points file containing a subset of points from another file.<br>
+Useage:
+<tt><pre>
+msm_subset_points pt_index.txt in.pts out.pts
+</pre></tt>
+This loads in a list of point indices from pt_index.txt and a set of points from in.pts.  It then saves only the subset into out.pts.<br>
+The index file just lists integers, in range [0,n_pts-1], to be used.<br>
+Note, it can have comments using //<br>
+For instance:
+
+<tt><pre>
+ 0 1 // Eyes
+ 5 6 7 8 9 // Mouth
+</pre></tt>
+
+It can be used to process all the files in a directory with a (bash) script such as:
+<tt><pre>
+mkdir new_points
+for i in *.pts
+do
+  msm_subset_points pt_index.txt $i new_points/$i
+done
+</pre></tt>
+
+<h3><a name="concat_points">Concatenating sets of points (and curves)</h2>
+
+<tt><pre>
+msm_concat_points points1.pts points2.pts ...  output.pts
+</pre></tt>
+Load in two or more of points, write out a file containing all points (in the order listed).<br>
+
+If shape1.crvs and shape2.crvs are the <a href="#curves">curves files</a> for points1 and points2, then a new curves file suitable for the concatenated points can be generated using:
+<tt><pre>
+msm_concat_curves shape1.crvs shape2.crvs all_shapes.crvs
+</pre></tt>
+This assumes that each curves file includes the point with the largest index (which it uses to work out how many points are in the set).
+
+<h3><a name="ref_points">Reflecting sets of points</h2>
+<tt><pre>
+msm_reflect_points -i input.pts -x 511 -o output.pts
+</pre></tt>
+Load in a set of points, reflect about line x=value, save to output.pts
+
+<h3><a name="equal_space">Equally spacing points along curves</h2>
+<tt><pre>
+msm_equally_space_points -p param_file [-c curves][-od output_dir]
+</pre></tt>
+For each curve, fit a cubic bezier, then move internal points so that they are equally spaced along the curve.<br>
+The parameter file has this form:
+<tt><pre>
+// Curves file (or curves themselves) defining which points to be moved.
+// All internal points on a curve are slid along the cubic bezier through
+// the points so that they are equally spaced.
+curves: equal_spacing.crvs
+
+//: Directory to new points
+out_points_dir: /home/equal_spaced_points/
+
+//: Smallest separation of points on bezier curve
+min_bez_sep: 0.5
+
+image_dir: /home/images/
+points_dir: /home/points/
+images: {
+  image1.pts : image1.jpg
+  image2.pts : image2.jpg
+}
+</pre></tt>
+
+<h3><a name="warp_points">Warping points using a Thin Plate Spline</h2>
+<tt><pre>
+msm_apply_tps_warp -sc src_control.pts -dc dest_control.pts -sp src.pts -dp new_dest.pts
+</pre></tt>
+Uses a Thin Plate Spline, constructed from src_control points and dest_control points to warp src points.<br>
+Results saved to new_dest.pts<br>
+Useful to add new intermediate points to a set, controlled by existing points.
+
+
 <h2><a name="building_shape">Building Shape Models</h2>
 To build a shape model, from within the <tt>models</tt> directory run a command such as:
 <tt><pre>
@@ -207,19 +300,175 @@ Options include:
 The number of modes of the model is chosen to be in the range [min_modes,max_modes] such that
 the variance explained by the chosen modes is at least a proportion var_prop of the total variance of the training data.
 
+<h2><a name="show_modes">Examining Shape Modes</h2>
+Animations of the shape model modes can be viewed with the <a href="../../../uomqvxl/html/qmsm/qmsm_shape_mode_viewer.html">qmsm_shape_mode_viewer</a> tool (in the uomqvxl package).<br>
+
+Alternatives EPS files can be generated using the <tt>msm_draw_shape_modes</tt> tool.  This creates vector graphics which are more suitable for including in documents (e.g. LaTeX papers).<br>
+
+<h2><a name="get_shape_params">Getting shape parameters</h2>
+To get the shape parameters associated with each set of points, use:
+<tt><pre>
+msm_draw_shape_modes -p draw_shape_modes.params
+</pre></tt>
+where <tt>draw_shape_modes.params</tt> looks something like this:
+<tt><pre>
+//: File to load model from
+shape_model_path: face_68pts.msm
+
+curves_path: face_68pts.crvs
+
+// Maximum number of shape modes
+max_modes: 5
+
+//: Number of SDs to vary mode by
+n_sds: 3.0
+
+//: Current number of shapes per mode
+n_per_mode: 3
+
+//: When true, generate 2*n_per_mode frames of a movie for each mode
+make_movie: false
+
+//: When true, overlap all the shapes to highlight changes
+//  Shapes on one side of mean are drawn with dashes, on the other with dots.
+overlap_shapes: false
+
+//: Radius of points to display (if <0, then don't draw points)
+point_radius: 2
+
+//: Line width
+line-width: 1
+
+line_colour: black
+point_colour: red
+
+//: Colour of background (or "none" for transparent)
+background_colour: white
+
+// Approximate width of region to display shape
+width: 200
+
+base_name: face
+output_dir: ./
+</pre></tt>
+This will generate one file per mode, showing the mean shape and the effect of varying each parameter by +/-3SDs.<br>
+If you change the parameter <tt>make_movie</tt> to true, it will generate a sequence of movie frames, which can be collected and displayed with your favourite animation tool.<br>
+If you change the parameter <tt>overlap_shapes</tt> to true, the shapes for a single mode will be centered on the same point, making it easier to see small changes (though this can look cluttered).
+
+
+<tt><pre>
+msm_get_shape_params -p param_file.txt -o params.txt
+</pre></tt>
+
+param_file.txt should contain:
+
+<tt><pre>
+shape_model_path:  shape_model.msm
+
+image_dir: ./images
+points_dir: ./points
+images:
+{
+  image1.pts : image1.png
+// ...
+}
+</pre></tt>
+
+Parameters are saved to params.txt, one line per example.<br>
+The first columns contain the pose parameters (as defined by the msm_aligner), the next the shape parameters.  So with a similarity transform (msm_similarity_aligner) the first four
+numbers correspond to the four pose parameters.<br>
+
+If you add the <tt>-no_pose</tt> flag, then the pose parameters are not included.<br>
+If you add the <tt>-use_pts_name</tt> flag, then the points name string is put in the first column.<br>
+
+If you have built a shape model with parameter file <tt>build_shape_model.params</tt>, you can use the same file.<br>
+
+To get histograms for each parameter, use the -h flag to define the path:<br>
+
+<tt><pre>
+msm_get_shape_params -p param_file.txt -o params.txt -h histo
+</pre></tt>
+
+This will then save histogram information to histo_b1.txt, bisto_b2.txt etc<br>
+You can display this with gnuplot:
+<tt><pre>
+  plot "histo_b1.txt" with boxes
+</pre></tt>
+
+By default the parameters are in units defined in the model frame.<br>
+You can change to use units of standard deviation (ie normalise them) by adding the -rel_p flag:
+
+<tt><pre>
+msm_get_shape_params -p param_file.txt -o params.txt -h histo -rel_p
+</pre></tt>
+
+In that case the histograms can easily be compared to that of a unit gaussian in gnuplot:
+
+<tt><pre>
+  plot "histo_b1.txt" with boxes, exp(-0.5*x*x)/sqrt(2*pi)
+</pre></tt>
+
+The range of the histo can be set with" -hr 4.0", and the number of bins with "-hn 101".
+
 <h2><a name="msm_tools">Other tools</h2>
 <ul>
-<li> msm_build_shape_model : Construct a shape model from a set of files
-<li> msm_draw_shape_modes : Generate EPS files displaying modes of a model
 <li> msm_draw_points_on_image : Generate an EPS file showing points + curves on an image
 <li> msm_draw_shapes : Draw a row of shapes based on shape parameters in a text file
 <li> msm_plot_aligned_shapes : Generate EPS file showing scatterplots of aligned shapes
-<li> msm_get_shape_params: Compute shape parameters for each example and save to a file
 <li> msm_add_dir_to_names: Create new image list files by adding directory to points/image paths
-<li> msm_concat_points: Concatenate two or more points files into one
-<li> msm_concat_curves: Concatenate two or more curves files (assuming points also concatenated)
-<li> msm_reflect_points: Reflect points.
+<li> msm_add_dir_to_names: Modify an image list file, adding directories to each name
+<li> msm_compare_markups: Analyse differences between sets of points from two annotators.
+<li> msm_crop_images: Crop region around points, creating new image and points in that image
+<li> msm_estimate_residuals: Estimate how accurately a model can fit to sets of points
+<li> msm_get_bounds: Calculate four points at corners of bounding box of input points.
+<li> msm_get_image_corners: Compute points at corners of image region
+<li> msm_get_two_class_mode: Calculates optimal vector separating two shape classes
+<li> msm_guess_ref_sym: Estimate point index mapping from a shape to its reflection
+<li> msm_images_from_list: Extracts list of image names from image_list file
+<li> msm_reset_shape_modes: Resets selected modes to 0 and saves updated model points.
+<li> msm_select_large_shapes: Tool to find larger shapes in an image list
 </ul>
+
+
+<h2><a name="advanced_features">Advanced Features</h2>
+<h3><a name="symmetry">Exploiting symmetry</h3>
+When you have annotated an approximately symmetric object, such as the face. You get two examples per image by reflecting both the image and the points.  In this case the points must be renumbered (using the list supplied by the ref_point_index() function).<br>
+
+When points are reflected, their order must be changed.  For instance, consider 10 points around the eyes of a face:
+<tt><pre>
+         3                7
+    2    0    4      8    1    6
+         5                9
+</pre></tt>
+
+when reflected, this becomes:
+<tt><pre>
+         7                3
+    6    1    8      4    0    2
+         9                5
+</pre></tt>
+To construct the permutation list, identify the new index for each point:
+<tt><pre>
+Original : 0 1 2 3 4 5 6 7 8 9
+Reflected: 1 0 6 7 8 9 2 3 4 5
+</pre></tt>
+The lower line gives the list describing the permutation required.<br>
+When supplied in a parameter file, this can be summarised as { 1 0 6:9 2:5 }<br>
+
+The tool <tt>msm_guess_ref_sym</tt> can estimate this mapping given one or more shapes
+and a pair of points which map to each other:
+<tt><pre>
+msm_guess_ref_sym -i image_list.txt -r0 1 -r1 7 -o ref_sym.txt
+</pre></tt>
+
+This information can be used in the parameter files by adding the line:
+
+<tt><pre>
+reflection_symmetry: { 1 0 6:9 2:5 }
+</pre></tt>
+
+When this is supplied the tool will generate a reflected version of the shape and include it in the set, doubling the number of examples available.
+
 
 </body>
 </html>
