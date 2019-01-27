@@ -28,9 +28,12 @@
 #include <vpgl/algo/vpgl_optimize_camera.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_box_2d.h>
+#include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_homg_point_2d.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/algo/vpgl_backproject.h>
+#include <vpgl/algo/vpgl_fit_rational_cubic.h>
 
 //#define CAMERA_DEBUG
 //------------------------------------------
@@ -500,6 +503,60 @@ compute( const std::vector< vgl_point_2d<double> >& image_pts,
   }
   camera = vpgl_optimize_camera::opt_orient_pos(camera, h_world_pts, image_pts);
 
+  return true;
+}
+
+bool vpgl_rational_camera_compute::compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                                            const std::vector< vgl_point_3d<double> >& ground_pts,
+                                            vpgl_rational_camera<double>& camera )
+{
+  size_t n = ground_pts.size();
+  if(image_pts.size() != n){
+    std::cout << "in rational camera compute, require the same number of image and ground pts" << std::endl;
+    return false;
+  }
+  vgl_box_2d<double> b2;
+  vgl_box_3d<double> b3;
+  for(size_t i = 0; i<n; ++i){
+    b2.add(image_pts[i]);
+    b3.add(ground_pts[i]);
+  }
+  std::vector<vpgl_scale_offset<double> > scale_offsets(5);
+  double x_scale = 0.5*(b3.max_x()-b3.min_x());
+  double y_scale = 0.5*(b3.max_y()-b3.min_y());
+  double z_scale = 0.5*(b3.max_z()-b3.min_z());
+  double x_off = b3.centroid_x();
+  double y_off = b3.centroid_y();
+  double z_off = b3.centroid_z();
+  scale_offsets[0] = vpgl_scale_offset<double>(x_scale, x_off);
+  scale_offsets[1] = vpgl_scale_offset<double>(y_scale, y_off);
+  scale_offsets[2] = vpgl_scale_offset<double>(z_scale, z_off);
+  double u_scale = 0.5*(b2.max_x()-b2.min_x());
+  double v_scale = 0.5*(b2.max_y()-b2.min_y());
+  double u_off = b2.centroid_x();
+  double v_off = b2.centroid_y();
+  scale_offsets[3] = vpgl_scale_offset<double>(u_scale, u_off);
+  scale_offsets[4] = vpgl_scale_offset<double>(v_scale, v_off);
+  std::vector< vgl_point_2d<double> > norm_image_pts;
+  std::vector< vgl_point_3d<double> > norm_ground_pts;
+  for(size_t i = 0; i<n; ++i){
+    const vgl_point_3d<double>& p = ground_pts[i];
+    const vgl_point_2d<double>& uv = image_pts[i];
+    double xn = scale_offsets[0].normalize(p.x());
+    double yn = scale_offsets[1].normalize(p.y());
+    double zn = scale_offsets[2].normalize(p.z());
+    double un = scale_offsets[3].normalize(uv.x());
+    double vn = scale_offsets[4].normalize(uv.y());
+    norm_ground_pts.push_back(vgl_point_3d<double>(xn, yn, zn));
+    norm_image_pts.push_back(vgl_point_2d<double>(un, vn));
+  }
+  vpgl_fit_rational_cubic frc(norm_image_pts, norm_ground_pts);
+  if(!frc.compute_initial_guess())
+    return false;
+  if(!frc.fit())
+    return false;
+  std::vector<std::vector<double> > rational_coeffs = frc.rational_coeffs();
+  camera = vpgl_rational_camera<double>(rational_coeffs, scale_offsets);
   return true;
 }
 
