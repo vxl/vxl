@@ -28,6 +28,7 @@ set( vpgl_algo_sources
   vpgl_ba_shared_k_lsqr.h          vpgl_ba_shared_k_lsqr.cxx
   vpgl_affine_rectification.h      vpgl_affine_rectification.cxx
   vpgl_camera_transform.h          vpgl_camera_transform.cxx
+  vpgl_fit_rational_cubic.h        vpgl_fit_rational_cubic.cxx
 )
 include(${VXL_CMAKE_DIR}/FindTIFF.cmake)
 if(TIFF_FOUND)

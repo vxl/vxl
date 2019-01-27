@@ -9,6 +9,7 @@
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_random.h>
 #include <vgl/vgl_homg_point_3d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_point_2d.h>
@@ -248,6 +249,76 @@ static void test_calibration_compute_natural()
   TEST_NEAR( "   K Discrepancy", ( trueK.get_matrix() - K.get_matrix() ).frobenius_norm(), 0, 1e-6 );
 }
 
+static void test_compute_rational()
+{
+  double neu_u1[20] =
+    { 8.96224e-005,  5.01302e-005,  -7.67889e-006,  -0.010342,
+      -6.89891e-005,  7.97337e-006,  0.00149824,  -1.38598e-005,
+      0.000188125,  0.980305,  -6.26076e-005,  2.9209e-006,
+      -0.0021416,  3.32719e-008,  -0.000322074,  -7.1486e-005,
+      -2.9938e-007,  1.36383e-005,  0.023163, 0.0108915};
+  double den_u1[20] =
+    { 7.47152e-007,  1.90129e-006,  -1.90195e-007,  -1.31851e-005,
+      1.99123e-006,  -3.32589e-008,  -3.46297e-005,  -1.27463e-007,
+      5.46123e-006,  -0.000542706,  1.32208e-006,  -6.82432e-008,
+      7.26265e-005,  3.35976e-008,  -3.78315e-006,  -0.00145714,
+      0,  -1.42542e-005,  -0.000437505, 1};
+  double neu_v1[20] =
+    { -8.19635e-006,  -4.83573e-005,  7.79866e-007,  -0.00106039,
+      -5.42129e-006,  0,  -0.00193506,  -6.93011e-006,
+      4.74326e-005, -0.132446,  -0.000200527,  -2.45944e-006,
+      0.00300919,  -5.85355e-005,  0.000148533,  -1.12081,
+      5.08764e-007,  -2.81721e-006,  0.0116155,  -0.00375141};
+  double den_v1[20] =
+    { -6.9545e-007,  -1.47008e-005,  2.14085e-007,  2.83534e-005,
+      -0.000119086,  2.32147e-006,  -3.8376e-005,  -2.77014e-007,
+      5.07729e-007,  -0.00280166,  -0.000309513,  9.6094e-006,
+      -0.000178701,  -2.26873e-007,  1.61618e-006,  -0.00102174,
+      -2.21943e-008,  5.21377e-005,  0.000211917, 1};
+
+  //Scale and offsets
+  double sx = 0.117798, ox =44.2834  ;
+  double sy = 0.114598, oy = 33.2609;
+  double sz = 526.733, oz = 36.9502;
+  double su = 14106 , ou = 13785;
+  double sv = 15402 , ov = 15216;
+
+  vpgl_rational_camera<double> rcam(neu_u1, den_u1, neu_v1, den_v1,
+                                    sx, ox, sy, oy, sz, oz,
+                                    su, ou, sv, ov);
+  std::vector<vgl_point_2d<double> > image_pts;
+  std::vector<vgl_point_3d<double> > ground_pts;
+  size_t n_points = 1000;
+  vnl_random rng;
+  for (unsigned i = 0; i < n_points; i++) {
+    double x = 2.0*sx*rng.drand64() +(ox-sx);
+    double y = 2.0*sy*rng.drand64() +(oy-sy);
+    double z = 2.0*sz*rng.drand64() +(oz-sz);
+    vgl_point_3d<double> p3d(x,y,z);
+    ground_pts.push_back(p3d);
+    double u, v;
+    rcam.project(x, y, z, u, v);
+    image_pts.push_back(vgl_point_2d<double>(u, v));
+  }
+  vpgl_rational_camera<double> fcam;
+  bool good = vpgl_rational_camera_compute::compute(image_pts, ground_pts, fcam);
+  if(good){
+  double rms_er = 0.0;
+  for(size_t i = 0; i<n_points; ++i){
+    const vgl_point_3d<double>& p3 = ground_pts[i];
+    double u, v;
+    fcam.project(p3.x(), p3.y(), p3.z(), u, v);
+    double sq_err = (u-image_pts[i].x())*(u-image_pts[i].x()) + (v-image_pts[i].y())*(v-image_pts[i].y());
+    rms_er += sq_err;
+  }
+  rms_er /= n_points;
+  rms_er = sqrt(rms_er);
+  std::cout << "fitted rational camera rms projection error " << rms_er << std::endl;
+  good = good && (rms_er < 1.0e-5);
+  }
+  TEST("compute rational camera ", good, true);
+}
+
 static void test_camera_compute()
 {
   test_camera_compute_setup();
@@ -255,6 +326,7 @@ static void test_camera_compute()
   test_perspective_compute_direct_linear_transform();
   test_perspective_compute_ground();
   test_calibration_compute_natural();
+  test_compute_rational();
 }
 
 TESTMAIN(test_camera_compute);

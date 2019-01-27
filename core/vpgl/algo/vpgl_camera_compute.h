@@ -13,6 +13,7 @@
 #include <vpgl/vpgl_perspective_camera.h>
 #include <vpgl/vpgl_proj_camera.h>
 #include <vpgl/vpgl_affine_camera.h>
+#include <vpgl/vpgl_rational_camera.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -95,6 +96,16 @@ class vpgl_perspective_camera_compute
 
  private:
   vpgl_perspective_camera_compute() = delete;
+};
+
+// ground points are in wgs84: x = longitude (deg), y = latitude (deg), z = elevation(meters)
+class vpgl_rational_camera_compute{
+ public:
+  static bool compute( const std::vector< vgl_point_2d<double> >& image_pts,
+                       const std::vector< vgl_point_3d<double> >& ground_pts,
+                       vpgl_rational_camera<double>& camera );
+ private:
+  vpgl_rational_camera_compute() = delete;
 };
 
 #endif // vpgl_camera_compute_h_
