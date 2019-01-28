@@ -10,7 +10,6 @@
 #include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_random.h>
-#include <vpgl/vpgl_rational_camera.h>
 #include <vpgl/algo/vpgl_fit_rational_cubic.h>
 
 static vnl_vector_fixed<double, 20> power_vector(double x, double y, double z){
@@ -86,7 +85,8 @@ static void project(const double x, const double y, const double z, double& u, d
 static void test_fit_rational_cubic()
 {
   vnl_random rng;
-  //Rational polynomial coefficients
+
+  // Rational polynomial coefficients (RPCs)
   vnl_vector_fixed<double,20> neu_u, den_u, neu_v, den_v;
   neu_u.fill(0.0);  den_u.fill(0.0);   neu_v.fill(0.0); den_v.fill(0.0);
   neu_u[0]=0.1; neu_u[10]=0.071; neu_u[7]=0.01;  neu_u[9]=0.3;
@@ -124,16 +124,15 @@ static void test_fit_rational_cubic()
 	  coeffs[60 + i] = den_v[i];
   }
   vpgl_fit_rational_cubic frc(image_pts, ground_pts);
-  //frc.set_initial_guess(coeffs);
   frc.compute_initial_guess();
   std::cout << "initial rms error " << frc.initial_rms_error() << std::endl;
   frc.fit();
   std::cout << "final rms error " << frc.final_rms_error() << std::endl;
-  bool good = frc.final_rms_error() < 1.0e-7;
+  bool good = frc.final_rms_error() < 1.0e-6;
   std::vector<std::vector<double> > result = frc.rational_coeffs();
   TEST("fit test rpc", good, true);
 
-  // actual rpc
+  // realistic RPC
   neu_u.fill(0.0);  den_u.fill(0.0);   neu_v.fill(0.0); den_v.fill(0.0);
   neu_u[0]=0.01666376; neu_u[1]=1.025488; neu_u[2]=-0.0001935893; neu_u[3]=0.02406288; neu_u[4]=0.002217166;  neu_u[5]=-7.561634e-05;
   neu_u[6]=4.181984e-05; neu_u[7]=-0.01500574; neu_u[8]=-0.0005594865; neu_u[9]=6.275384e-06; neu_u[10]=4.613564e-06; neu_u[11]=0.0002020006;
@@ -154,6 +153,7 @@ static void test_fit_rational_cubic()
   den_v[6]=-3.838019e-05; den_v[7]=0.0001847707; den_v[8]=0.0006151288; den_v[9]=-4.760751e-05; den_v[10]=8.566625e-06; den_v[11]=-1.928669e-05;
   den_v[12]=-0.0001572831; den_v[13]=-4.532898e-07; den_v[14]=-9.574717e-05; den_v[15]=-8.064254e-05; den_v[16]=6.411648e-08; den_v[17]=2.63149e-06;
   den_v[18]=6.70456e-06; den_v[19]=1.77085e-08;
+
   image_pts.clear();
   ground_pts.clear();
   for (unsigned i = 0; i < n_points; i++) {
@@ -168,12 +168,12 @@ static void test_fit_rational_cubic()
   }
   vpgl_fit_rational_cubic act_frc(image_pts, ground_pts);
   act_frc.compute_initial_guess();
-  std::cout << "\n\ninitial rms error " << act_frc.initial_rms_error() << std::endl;
+  std::cout << "initial rms error " << act_frc.initial_rms_error() << std::endl;
   act_frc.fit();
   std::cout << "final rms error " << act_frc.final_rms_error() << std::endl;
-  good = act_frc.final_rms_error() < 1.0e-7;
+  good = act_frc.final_rms_error() < 1.0e-6;
   std::vector<std::vector<double> > act_result = act_frc.rational_coeffs();
-  TEST("test fit rational coefficients", good, true);
+  TEST("fit test realistic rpc", good, true);
 
 }
 

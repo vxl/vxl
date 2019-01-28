@@ -1,5 +1,6 @@
 #include <limits>
 #include <math.h>
+#include <iostream>
 #include <sstream>
 #include <vnl/algo/vnl_svd.h>
 #include <vnl/algo/vnl_levenberg_marquardt.h>
@@ -101,10 +102,18 @@ bool vpgl_fit_rational_cubic::compute_initial_guess(){
     const vgl_point_2d<double>& uv = image_pts_[k];
     vnl_vector_fixed<double, 20> pv = vpgl_cubic_lsqr::power_vector(p.x(), p.y(), p.z());
     double u = uv.x(), v = uv.y();
+    // the n x 80 data matrix is formed by:
+    //     20                20            20            20
+    // [pv(x0,y0,z0)  -u*pv(x0,y0,z0)       0             0      ]
+    // [      0               0      pv(x0,y0,z0) -v*pv(x0,y0,z0)]
+    // [pv(x1,y1,z1)  -u*pv(x1,y1,z1)       0             0      ]
+    // [      0               0      pv(x1,y1,z1) -v*pv(x1,y1,z1)]
+    // [                       ...                               ]
+    //
     for(size_t i = 0; i<20; ++i){
-      A[2*k][i]      = pv[i];
+      A[2*k][i]      =    pv[i];
       A[2*k][i+20]   = -u*pv[i];
-      A[2*k+1][i+40] = pv[i];
+      A[2*k+1][i+40] =    pv[i];
       A[2*k+1][i+60] = -v*pv[i];
     }
   }
@@ -148,10 +157,10 @@ bool vpgl_fit_rational_cubic::fit(){
   vpgl_cubic_lsqr lsq(image_pts_, ground_pts_);
   vnl_levenberg_marquardt levmarq(lsq);
   // same as internal default settings
-  double xtol = 1e-10;
-  double maxfev = 400 * 80; // Termination maximum number of iterations.
-  double ftol = xtol * 0.01;    // Termination tolerance on F (sum of squared residuals)
-  double gtol = 1e-5;           // Termination tolerance on Grad(F)' * F = 0
+  double xtol   = 1e-10;
+  double maxfev = 400 * 80;     // Termination maximum number of iterations.
+  double ftol   = xtol * 0.01;  // Termination tolerance on F (sum of squared residuals)
+  double gtol   = 1e-5;         // Termination tolerance on Grad(F)' * F = 0
   double epsfcn = xtol * 0.001; // Step length for FD Jacobian
   levmarq.set_verbose(true);
   // Set the x-tolerance.  Minimization terminates when the length of the steps taken in X (variables) are less than input x-tolerance
