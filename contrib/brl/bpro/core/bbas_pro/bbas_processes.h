@@ -21,5 +21,6 @@ DECLARE_FUNC_CONS(bsl_fusion_process);
 
 DECLARE_FUNC_CONS(imesh_ply_bbox_process);
 DECLARE_FUNC_CONS(bpgl_generate_depth_maps_process);
+DECLARE_FUNC_CONS(bpgl_heightmap_from_disparity_process);
 
 #endif // bbas_processes_h_
