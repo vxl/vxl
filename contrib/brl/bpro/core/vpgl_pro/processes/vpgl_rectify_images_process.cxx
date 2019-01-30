@@ -482,7 +482,7 @@ bool vpgl_construct_height_map_process_cons(bprb_func_process& pro)
   std::vector<std::string> input_types;
   input_types.emplace_back("vil_image_view_base_sptr");  // image1
   input_types.emplace_back("vpgl_camera_double_sptr");  // camera1 local rational
-  input_types.emplace_back("vcl_string");
+  input_types.emplace_back("vil_image_view_base_sptr");  // disparity image
   input_types.emplace_back("float");
   input_types.emplace_back("vil_image_view_base_sptr");  // image2
   input_types.emplace_back("vpgl_camera_double_sptr");  // camera2 local rational
@@ -517,8 +517,7 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   unsigned i = 0;
   vil_image_view_base_sptr img1_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam1_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
-  //vil_image_view_base_sptr img1_disp_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
-  std::string disp_name = pro.get_input<std::string>(i++);
+  vil_image_view_base_sptr img1_disp_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   auto min_disparity = pro.get_input<float>(i++);
   vil_image_view_base_sptr img2_sptr = pro.get_input<vil_image_view_base_sptr>(i++);
   vpgl_camera_double_sptr cam2_rational = pro.get_input<vpgl_camera_double_sptr>(i++);
@@ -542,25 +541,9 @@ bool vpgl_construct_height_map_process(bprb_func_process& pro)
   std::cout << "read H1:\n " << H1 << "\n H2:\n " << H2 << "\n";
 
   vil_image_view<float> img1 = *vil_convert_cast(float(), img1_sptr);
-
-  std::ifstream ifsd(disp_name.c_str());
-  if (!ifsd) {
-    std::cerr << "In vpgl_construct_height_map_process() -- cannot open disparity file: " << disp_name << std::endl;
-    return false;
-  }
-  unsigned ni, nj;
-  ifsd >> nj; ifsd >> ni;
-  vil_image_view<float> img1_disp(ni, nj);
-  for (unsigned j = 0; j < nj; j++) {
-    for (unsigned i = 0; i < ni; i++) {
-      float val;
-      ifsd >> val;
-      img1_disp(i,j) = val;
-    }
-  }
-  ifsd.close();
-
+  vil_image_view<float> img1_disp = *vil_convert_cast(float(), img1_disp_sptr);
   vil_image_view<float> img2 = *vil_convert_cast(float(), img2_sptr);
+  
   double width = max_x-min_x;
   double depth = max_y-min_y;
   double height = max_z - min_z;
