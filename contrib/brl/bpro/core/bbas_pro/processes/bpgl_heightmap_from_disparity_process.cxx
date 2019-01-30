@@ -14,6 +14,7 @@
 #include <vil/vil_image_view.h>
 #include <vil/vil_convert.h>
 #include <vgl/vgl_box_3d.h>
+#include <vnl/vnl_math.h>
 
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 
@@ -27,7 +28,7 @@
 
 namespace bpgl_heightmap_from_disparity_process_globals
 {
-  unsigned n_inputs_  = 11;
+  unsigned n_inputs_  = 12;
   unsigned n_outputs_ = 1;
 }
 
@@ -48,6 +49,7 @@ bool bpgl_heightmap_from_disparity_process_cons(bprb_func_process& pro)
   input_types_.emplace_back("double"); // max point z
   input_types_.emplace_back("double"); // ground sample distance
   input_types_.emplace_back("double"); // minimum disparity
+  input_types_.emplace_back("double"); // z-offset
 
   std::vector<std::string> output_types_;
   output_types_.emplace_back("vil_image_view_base_sptr"); // vil_image_view<float> heightmap
@@ -79,6 +81,7 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   auto max_z = pro.get_input<double>(i++);
   auto gsd = pro.get_input<double>(i++);
   auto min_disparity = pro.get_input<double>(i++);
+  auto z_offset = pro.get_input<double>(i++);
 
   // convert cameras
   auto* camera1_ptr = dynamic_cast<vpgl_affine_camera<double>*> (camera1_sptr.as_pointer());
@@ -102,7 +105,9 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
     return false;
   }
 
-  // set invalid disparity to NaN
+  // WORKAROUND: set invalid disparity to NaN
+  // bpgl_heightmap_from_disparity does not test for valid disparity
+  // other than NAN values
   vil_image_view<float> disparity_nan(disparity_ptr->ni(),disparity_ptr->nj());
   disparity_nan.deep_copy(*disparity_ptr);
 
@@ -120,6 +125,18 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   // process
   vil_image_view<float> heightmap = bpgl_heightmap_from_disparity(
       *camera1_ptr, *camera2_ptr, disparity_nan, heightmap_bounds, gsd);
+
+  // add offset to elevation estimates
+  // Additional WORKAROUND - set invalid to value below min_z (-9999.0)
+  for (int j=0; j<heightmap.nj(); ++j) {
+    for (int i=0; i<heightmap.ni(); ++i) {
+      if (!vnl_math::isfinite(heightmap(i,j))) {
+        heightmap(i,j) = -9999.0;
+      } else {
+        heightmap(i,j) += (float)z_offset;
+      }
+    }
+  }
 
   // return
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(heightmap));
