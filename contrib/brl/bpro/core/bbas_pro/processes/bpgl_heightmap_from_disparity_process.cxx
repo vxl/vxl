@@ -27,7 +27,7 @@
 
 namespace bpgl_heightmap_from_disparity_process_globals
 {
-  unsigned n_inputs_  = 5;
+  unsigned n_inputs_  = 11;
   unsigned n_outputs_ = 1;
 }
 
@@ -47,6 +47,7 @@ bool bpgl_heightmap_from_disparity_process_cons(bprb_func_process& pro)
   input_types_.emplace_back("double"); // max point y
   input_types_.emplace_back("double"); // max point z
   input_types_.emplace_back("double"); // ground sample distance
+  input_types_.emplace_back("double"); // minimum disparity
 
   std::vector<std::string> output_types_;
   output_types_.emplace_back("vil_image_view_base_sptr"); // vil_image_view<float> heightmap
@@ -77,28 +78,48 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   auto max_y = pro.get_input<double>(i++);
   auto max_z = pro.get_input<double>(i++);
   auto gsd = pro.get_input<double>(i++);
+  auto min_disparity = pro.get_input<double>(i++);
 
   // convert cameras
-  auto* camera1 = dynamic_cast<vpgl_affine_camera<double>*> (camera1_sptr.as_pointer());
-  if (!camera1) {
+  auto* camera1_ptr = dynamic_cast<vpgl_affine_camera<double>*> (camera1_sptr.as_pointer());
+  if (!camera1_ptr) {
     std::cerr << pro.name() << " :-- camera 1 is not affine" << std::endl;
     return false;
   }
-  auto* camera2 = dynamic_cast<vpgl_affine_camera<double>*> (camera2_sptr.as_pointer());
-  if (!camera2) {
+  auto* camera2_ptr = dynamic_cast<vpgl_affine_camera<double>*> (camera2_sptr.as_pointer());
+  if (!camera2_ptr) {
     std::cerr << pro.name() << " :-- camera 2 is not affine" << std::endl;
     return false;
   }
 
-  // convert image
-  vil_image_view<float> disparity = *vil_convert_cast(float(), disparity_sptr);
+  // convert disparity image
+  auto* disparity_ptr = dynamic_cast<vil_image_view<float>*> (disparity_sptr.as_pointer());
+  if (!disparity_ptr) {
+    std::cerr << pro.name() << " :-- disparity is not vil_image_view<float>" << std::endl;
+    return false;
+  } else if (disparity_ptr->nplanes() != 1) {
+    std::cerr << pro.name() << " :-- disparity is not single band" << std::endl;
+    return false;
+  }
+
+  // set invalid disparity to NaN
+  vil_image_view<float> disparity_nan(disparity_ptr->ni(),disparity_ptr->nj());
+  disparity_nan.deep_copy(*disparity_ptr);
+
+  for (int j=0; j<disparity_nan.nj(); ++j) {
+    for (int i=0; i<disparity_nan.ni(); ++i) {
+      if (disparity_nan(i,j) < min_disparity) {
+        disparity_nan(i,j) = NAN;
+      }
+    }
+  }
 
   // bounding box
   vgl_box_3d<double> heightmap_bounds(min_x,min_y,min_z, max_x,max_y,max_z);
 
   // process
   vil_image_view<float> heightmap = bpgl_heightmap_from_disparity(
-      camera1, camera2, disparity, heightmap_bounds, gsd);
+      *camera1_ptr, *camera2_ptr, disparity_nan, heightmap_bounds, gsd);
 
   // return
   pro.set_output_val<vil_image_view_base_sptr>(0, new vil_image_view<float>(heightmap));
