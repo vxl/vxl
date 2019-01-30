@@ -1108,7 +1108,7 @@ def construct_height_map_from_disparity(img1, img1_disp, min_disparity, local_ra
     batch.init_process("vpglConstructHeightMapProcess")
     batch.set_input_from_db(0, img1)
     batch.set_input_from_db(1, local_rational_cam1)
-    batch.set_input_string(2, img1_disp)
+    batch.set_input_from_db(2, img1_disp)
     batch.set_input_float(3, min_disparity)
     batch.set_input_from_db(4, img2)
     batch.set_input_from_db(5, local_rational_cam2)
