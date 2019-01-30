@@ -375,12 +375,12 @@ def generate_depth_maps(depth_scene_file, output_folder, output_name_prefix, dow
 
 
 def heightmap_from_disparity(camera1, camera2, disparity,
-                             min_x, min_y, min_z, max_x, max_y, max_x,
-                             gsd):
+                             min_x, min_y, min_z, max_x, max_y, max_z,
+                             gsd, min_disparity):
     batch.init_process("bpglHeightmapFromDisparityProcess")
     batch.set_input_from_db(0, camera1)
     batch.set_input_from_db(1, camera2)
-    batch.set_input_string(2, disparity)
+    batch.set_input_from_db(2, disparity)
     batch.set_input_double(3, min_x)
     batch.set_input_double(4, min_y)
     batch.set_input_double(5, min_z)
@@ -388,6 +388,7 @@ def heightmap_from_disparity(camera1, camera2, disparity,
     batch.set_input_double(7, max_y)
     batch.set_input_double(8, max_z)
     batch.set_input_double(9, gsd)
+    batch.set_input_double(10, min_disparity)
     if batch.run_process():
         (id, type) = batch.commit_output(0)
         heightmap = dbvalue(id, type)
