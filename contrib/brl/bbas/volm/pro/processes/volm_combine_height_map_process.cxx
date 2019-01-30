@@ -299,7 +299,7 @@ bool volm_combine_height_map_process2(bprb_func_process& pro)
     {
       std::vector<float> pixel_values;
       for (auto & in_img : in_imgs)
-        if ( (in_img(i,j)-threshold)*(in_img(i,j)-threshold) > 1E-5 )
+        if (in_img(i,j) > threshold)
           pixel_values.push_back( in_img(i,j) );
       float median_value = median(pixel_values);
       (*out_img)(i,j) = median_value;
@@ -317,7 +317,7 @@ float volm_combine_height_map_process2_globals::median(std::vector<float> values
   std::sort(values.begin(), values.end());
   int size = values.size();
   int s2 = size / 2;
-  return size == 0 ? 0.0 : size%2 ? values[s2] : (values[s2]+values[s2-1])*0.5;
+  return size == 0 ? -9999.0 : size%2 ? values[s2] : (values[s2]+values[s2-1])*0.5;
 }
 
 
