@@ -143,17 +143,19 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   bsgm_invert_disparities( disp_r, invalid_disp_inv, invalid_disp );
 
   // convert a text file to save all disparity value
-  std::ofstream ofs(out_disparity_txt.c_str());
-  std::cout << "disparity size row: " << disp_r.nj() << ", cols: " << disp_r.ni() << std::endl;
-  ofs << disp_r.nj() << " " << disp_r.ni() << std::endl;
-  for (unsigned row_id = 0; row_id < disp_r.nj(); row_id++) {
-    for (unsigned col_id = 0; col_id < disp_r.ni(); col_id++) {
-      ofs << disp_r(col_id, row_id) << " ";
+  if (!out_disparity_txt.empty()) {
+    std::ofstream ofs(out_disparity_txt.c_str());
+    std::cout << "disparity size row: " << disp_r.nj() << ", cols: " << disp_r.ni() << std::endl;
+    ofs << disp_r.nj() << " " << disp_r.ni() << std::endl;
+    for (unsigned row_id = 0; row_id < disp_r.nj(); row_id++) {
+      for (unsigned col_id = 0; col_id < disp_r.ni(); col_id++) {
+        ofs << disp_r(col_id, row_id) << " ";
+      }
+      ofs << std::endl;
     }
     ofs << std::endl;
+    ofs.close();
   }
-  ofs << std::endl;
-  ofs.close();
 
   // convert floating point image to byte for visualization/saving
   vil_image_view<vxl_byte> disp_r_8u;
