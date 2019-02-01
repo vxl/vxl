@@ -33,7 +33,7 @@ jobs:
             set(CTEST_BINARY_DIRECTORY "/build")
             set(CTEST_COMMAND "/usr/bin/ctest")
             set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DCMAKE_BUILD_TYPE:STRING=\"${CTEST_BUILD_CONFIGURATION}\"")
-            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DVXL_BUILD_CONTRIB=1 -DVXL_BUILD_CORE_VIDEO=1 -DVXL_BUILD_BRL_PYTHON=1 -DVXL_BUILD_VGUI=1 -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=98")
+            set(CTEST_CONFIGURE_COMMAND "${CMAKE_COMMAND} -DCMAKE_INSTALL_PREFIX=/install -DCMAKE_CXX_STANDARD=11 -DVXL_BUILD_CONTRIB=1 -DVXL_BUILD_CORE_VIDEO=1 -DVXL_BUILD_VGUI=1 -DVXL_BUILD_BRL_PYTHON=1")
             set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} ${CTEST_BUILD_OPTIONS}")
             set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"-G${CTEST_CMAKE_GENERATOR}\"")
             set(CTEST_CONFIGURE_COMMAND "${CTEST_CONFIGURE_COMMAND} \"${CTEST_SOURCE_DIRECTORY}\"")
@@ -58,8 +58,12 @@ jobs:
           name: Submitting to open.cdash.org
           working_directory: /build
           command: |
-            env | grep ^CIRCLE > circleci.env
-            ctest -A circleci.env -D ExperimentalSubmit -V
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              env | grep ^CIRCLE > circleci.env
+              ctest -A circleci.env -D ExperimentalSubmit -V
+            else
+              echo "Skipping open.cdash.org submission..."
+            fi
       - run:
           name: Install
           working_directory: /build
