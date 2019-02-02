@@ -18,7 +18,7 @@ if(EXPAT_FOUND)
 
   vxl_add_library(LIBRARY_NAME bvpl_kernels_pro LIBRARY_SOURCES ${bvpl_kernels_pro_sources})
 
-  target_link_libraries(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io bvpl_octree bvpl_octree_io bsta bprb brdb bvpl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io)
+  target_link_libraries(bvpl_kernels_pro bvpl_kernels bvpl_kernels_io  bsta bprb brdb bvpl ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}vbl_io)
 
   if( BUILD_TESTING )
     add_subdirectory(tests)

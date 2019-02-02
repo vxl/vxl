@@ -1,4 +1,0 @@
-add_executable( boxm_sample_test_include test_include.cxx )
-target_link_libraries( boxm_sample_test_include boxm_sample)
-add_executable( boxm_sample_test_template_include test_template_include.cxx )
-target_link_libraries( boxm_sample_test_template_include boxm_sample)
