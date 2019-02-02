@@ -24,7 +24,6 @@ target_link_libraries(bvpl bvpl_kernels bvpl_functors bvxm_grid bdgl bsta ${VXL_
 
 add_subdirectory(pro)
 add_subdirectory(util)
-add_subdirectory(bvpl_octree)
 add_subdirectory(kernels)
 add_subdirectory(functors)
 

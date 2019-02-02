@@ -1,4 +1,0 @@
-add_executable( bvpl_octree_sample_test_include test_include.cxx )
-target_link_libraries( bvpl_octree_sample_test_include bvpl_octree_sample)
-add_executable( bvpl_octree_sample_test_template_include test_template_include.cxx )
-target_link_libraries( bvpl_octree_sample_test_template_include bvpl_octree_sample)

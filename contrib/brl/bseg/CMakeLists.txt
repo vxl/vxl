@@ -41,17 +41,11 @@ add_subdirectory(brec_batch)
 # octree
 add_subdirectory(boct)
 
-# octree based modeling
-add_subdirectory(boxm)
-
 # updated, gpu compatible octree based modeling
 add_subdirectory(boxm2)
 
 # updated, gpu compatible octree based modeling
 add_subdirectory(boxm2_batch)
-
-# octree based modeling python interface
-add_subdirectory(boxm_batch)
 
 # semi-global matching
 add_subdirectory(bsgm)
@@ -62,14 +56,8 @@ add_subdirectory(bvpl)
 # voxel processing library python interface
 add_subdirectory(bvpl_batch)
 
-# voxel processing library python interface for octrees
-add_subdirectory(bvpl_octree_batch)
-
 # Brown affine patch library, SIFT keypoint & descriptor
 add_subdirectory(bapl)
-
-#the bridge lib to convert between boxm and boxm2 scenes
-add_subdirectory(boxm_bridge)
 
 #multi gpu library
 add_subdirectory(boxm2_multi)

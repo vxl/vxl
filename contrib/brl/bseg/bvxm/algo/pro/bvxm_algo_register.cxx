@@ -19,5 +19,5 @@ void bvxm_algo_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_merge_mog_process, "bvxmMergeMogProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_mog_to_mpm_process, "bvxmMogToMpmProcess");
  // REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bvxm_mog_l2_process, "bvxmMogL2Process");
-  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_scene_to_bvxm_grid_process, "boxmSceneToBvxmGridProcess");
+  //  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, boxm_scene_to_bvxm_grid_process, "boxmSceneToBvxmGridProcess");
 }
