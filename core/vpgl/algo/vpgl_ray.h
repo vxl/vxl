@@ -11,6 +11,8 @@
 #include <vgl/algo/vgl_rotation_3d.h>
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/vpgl_perspective_camera.h>
+#include <vpgl/vpgl_proj_camera.h>
+#include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_generic_camera.h>
 #include <vnl/vnl_double_3.h>
 #include <vgl/vgl_point_3d.h>
@@ -98,6 +100,13 @@ class vpgl_ray
 
   static bool principal_ray(vpgl_proj_camera<double> const& cam,
                             vgl_ray_3d<double>& pray);
+
+ // ====== affine camera =====
+  static bool ray(vpgl_affine_camera<double> const& cam,
+                  vgl_point_3d<double> const& world_pt,
+                  vgl_ray_3d<double>& ray);
+
+
 
   // ====== perspective camera =====
   static bool ray(vpgl_perspective_camera<double> const& cam,

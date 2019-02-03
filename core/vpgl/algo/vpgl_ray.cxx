@@ -249,6 +249,13 @@ bool vpgl_ray::principal_ray(vpgl_proj_camera<double> const& cam,
   pray = vgl_ray_3d<double>(cent, cent + dir);
   return true;
 }
+bool vpgl_ray::ray(vpgl_affine_camera<double> const& cam,
+                   vgl_point_3d<double> const& world_pt,
+                   vgl_ray_3d<double>& ray){
+  vgl_point_2d<double> p2d = cam.project(world_pt);
+  ray = cam.backproject_ray(vgl_homg_point_2d<double>(p2d));
+  return true;
+}
 
 bool vpgl_ray::ray(vpgl_perspective_camera<double> const& cam,
                    vgl_point_3d<double> const& world_pt,
