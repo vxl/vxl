@@ -6,8 +6,10 @@
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
 #include <vgl/vgl_plane_3d.h>
+#include <vgl/vgl_closest_point.h>
 #include <vgl/vgl_vector_3d.h>
 #include <vpgl/vpgl_rational_camera.h>
+#include <vpgl/vpgl_affine_camera.h>
 #include <vpgl/vpgl_lvcs.h>
 #include <vpgl/algo/vpgl_ray.h>
 
@@ -82,6 +84,22 @@ static void test_ray()
   vpgl_ray::plane_ray(lrcam,impt1,impt2,outp);
   err=dot_product<double>(outp.normal(),dir);
   TEST_NEAR("test local rational plane", err, 0.0, 1e-8);
+
+  // test ray for affine camera
+  vnl_vector_fixed<double, 4> row1, row2;
+  row1[0]=1.3483235713495938; row1[1]= 0.0038174980872772743; row1[2]= 0.27647870881886161; row1[3] = 8.8599950663932052;
+  row2[0] = 0.21806927892797245; row2[1] = -0.92631091145800215; row2[2] = -1.0010535330976205; row2[3] = 538.93376518200034;
+  vpgl_affine_camera<double> row_cam(row1, row2);
+  row_cam.set_viewing_distance( 9325.6025071654913);
+  vgl_point_3d<double> wrld_pt(274.30804459155252,85.614875071463018,-35.273309156122778);
+  vgl_ray_3d<double> affine_ray;
+   good = vpgl_ray::ray(row_cam, wrld_pt, affine_ray);
+  vgl_homg_point_2d<double> img_pt(369.28342202880049, 554.72813713086771);
+  vgl_ray_3d<double> gt_ray = row_cam.backproject_ray(img_pt);
+  double dir_dist = (affine_ray.direction() - gt_ray.direction()).length();
+  vgl_point_3d<double> cp = vgl_closest_point(affine_ray, wrld_pt);
+  double gnd_pt_dist = (cp - wrld_pt).length();
+  TEST_NEAR("affine ray ", dir_dist + gnd_pt_dist, 0.0, 1e-5);
 }
 
 TESTMAIN(test_ray);
