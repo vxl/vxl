@@ -429,7 +429,7 @@ if(GTK2_FOUND)
     if (GTKGL2_FOUND)
       list(APPEND GTK2_INCLUDE_DIRS ${GTKGL2_INCLUDE_DIRS})
       list(REMOVE_DUPLICATES GTK2_INCLUDE_DIRS)
-      list(APPEND GTK2_LIBRARIES ${GTKGL2_LIBRARIES})
+      list(APPEND GTK2_LIBRARIES ${GTKGL2_LINK_LIBRARIES})
       list(REMOVE_DUPLICATES GTK2_LIBRARIES)
       # TODO: libraries are not full paths, a known limitation of pkg_*_module.
       # If a GTK library is installed on a non-standard path, this will fail.
