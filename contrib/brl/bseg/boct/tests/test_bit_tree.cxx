@@ -143,7 +143,7 @@ static void test_bit_tree()
         good &= !t2.bit_at(0);
         // This buffer should.
         bits1[0] = 0xff;
-        good &= t2.bit_at(0);
+        good = good && t2.bit_at(0);
         TEST("TEST copy-assignment between two non-owning trees", good, true);
 
         delete[] bits1;
@@ -188,7 +188,8 @@ static void test_bit_tree()
         good &= !t2.bit_at(0);
         TEST("TEST tree copy-assignment t2 = t1 when t1 is owning", good, true);
         // Not sure how to test this, but bits2 should still be un-deleted, since t2 was non-owning.
-        TEST("TEST old t2's buffer is still valid", boct_bit_tree(bits2).bit_at(5), true);
+        good = boct_bit_tree(bits2).bit_at(5);
+        TEST("TEST old t2's buffer is still valid", good , true);
         delete[] bits2;
       }
 
@@ -207,7 +208,7 @@ static void test_bit_tree()
         good = t2.bit_at(4) && !t2.bit_at(5) && (t2.get_data_ptr() == 1);
         // This buffer should affect t2
         bits1[0] = 0xff;
-        good &= t2.bit_at(0);
+        good = good && t2.bit_at(0);
         TEST("TEST tree copy-assignment t2 = t1 when t2 is owning", good, true);
         delete[] bits1;
       }
@@ -225,7 +226,7 @@ static void test_bit_tree()
         good = t2.bit_at(4) && t2.bit_at(5) && (t2.get_data_ptr() == 2);
         // This buffer should affect t2
         bits1[0] = 0xff;
-        good &= t2.bit_at(0);
+        good = good && t2.bit_at(0);
         TEST("TEST tree copy-assignment t2 = t1 when t2 is owning", good, true);
         delete[] bits1;
       }
