@@ -8,6 +8,7 @@ DECLARE( test_bil_finite_differences);
 DECLARE( test_bil_finite_second_differences);
 DECLARE( test_bil_detect_ridges);
 DECLARE( test_image_bounds_from_histogram);
+DECLARE( test_warp);
 
 
 void
@@ -21,6 +22,7 @@ register_tests()
   REGISTER( test_bil_finite_second_differences);
   REGISTER( test_bil_detect_ridges);
   REGISTER( test_image_bounds_from_histogram);
+  REGISTER( test_warp);
 
 }
 
