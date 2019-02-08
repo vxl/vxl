@@ -28,6 +28,7 @@ set( bil_algo_sources
      bil_trace_8con_boundary.cxx        bil_trace_8con_boundary.h
      bil_debayer_image.cxx              bil_debayer_image.h
      bil_image_bounds_from_histogram.cxx bil_image_bounds_from_histogram.h
+     bil_warp.h
 )
 
 aux_source_directory(Templates bil_algo_sources)
