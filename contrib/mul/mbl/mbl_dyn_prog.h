@@ -39,8 +39,6 @@ private:
     //: Workspace for previous running cost.
   vnl_vector<double> next_cost_;
 
-    //: Construct path from links_, assuming it ends at end_state
-  void construct_path(std::vector<int>& x, int end_state);
 
     //: Compute running costs for DP problem with costs W
     //  Pair cost term:  C_i(x1,x2) = c(|x1-x2|)
@@ -49,6 +47,15 @@ private:
     //  If first_state>=0 then the first is constrained to that index value
   void running_costs(const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost,
+               int first_state);
+
+    //: Compute running costs for DP problem with costs W, asymmetric pair cost
+    //  Pair cost term:  C_i(x1,x2) = c(i0+x2-x1)
+    //  Size of c indicates maximum displacement between neighbouring
+    //  states.
+    //  If first_state>=0 then the first is constrained to that index value
+  void running_costs_asym(const vnl_matrix<double>& W,
+               const vnl_vector<double>& pair_cost, int i0,
                int first_state);
 
 public:
@@ -83,6 +90,21 @@ public:
                const vnl_matrix<double>& W,
                const vnl_vector<double>& pair_cost);
 
+    //: Solve the dynamic programming problem with costs W
+    //  Pair cost term:  C_i(x1,x2) = pair_cost(i0+x2-x1)
+    //  Size of pair_cost indicates maximum displacement between neighbouring
+    //  states.
+    //  If first_state>=0 then the first is constrained to that index value
+    //  If last_state>=0 then the last is constrained to that index value
+    // \retval x  Optimal path
+    // \return Total cost of given path
+  double solve_asym(std::vector<int>& x,
+               const vnl_matrix<double>& W,
+               const vnl_vector<double>& pair_cost, int i0,
+               int first_state=-1, int last_state=-1);
+
+    //: Construct path from links_, assuming it ends at end_state
+  void construct_path(std::vector<int>& x, int end_state);
 
     //: Version number for I/O
   short version_no() const;

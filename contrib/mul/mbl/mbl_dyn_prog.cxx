@@ -117,6 +117,84 @@ void mbl_dyn_prog::running_costs(
 }
 
 //=======================================================================
+//: Compute running costs for DP problem with costs W
+//  Pair cost term:  C_i(x1,x2) = c(i0+x2-x1)
+//  Size of c indicates maximum displacement between neighbouring
+//  states.
+//  If first_state>=0 then the first is constrained to that index value
+void mbl_dyn_prog::running_costs_asym(
+               const vnl_matrix<double>& W,
+               const vnl_vector<double>& pair_cost,
+               int i0, int first_state)
+{
+  int n = W.rows();
+  int n_states = W.columns();
+  const double * const* W_data = W.data_array();
+  int max_d = pair_cost.size()-1;
+
+   // On completion b(i,j) shows the best prior state (ie at i)
+   // leading to state j at time i+1
+  links_.resize(n-1,n_states);
+  int ** b_data = links_.get_rows()-1;
+     // So that b_data[i] corresponds to i-th row
+
+    // ci(j) is total cost to get to current state j
+  running_cost_ = W.get_row(0);
+  double *ci = running_cost_.data_block();
+  next_cost_.set_size(n_states);
+  double *ci_new = next_cost_.data_block();
+
+  for (int i=1;i<n;++i)
+  {
+    int *bi = b_data[i];
+    const double *wi = W_data[i];
+
+    for (int j=0;j<n_states;++j)
+    {
+      // Evaluate best route to get to state j at time i
+      int k_best = 0;
+      double cost;
+      double wj = wi[j];
+      double cost_best;
+
+      if (i==1 && first_state>=0)
+      {
+        // Special case: First point pinned down to first_pt
+        k_best = first_state;
+        int d = i0+j-k_best;
+        if (d<0 || d>max_d)
+          cost_best=9e9;
+        else
+          cost_best = ci[k_best] + pair_cost[d]+ wj;
+      }
+      else
+      {
+        // Compute range of k's that can reach this j
+        int klo = std::max(0,j-(max_d-i0));
+        int khi = std::min(n_states-1,j+i0);
+        k_best=klo;
+        cost_best = ci[klo] + pair_cost[i0+j-klo] + wj;
+        for (int k=klo+1;k<=khi;++k)
+        {
+          cost = ci[k] + pair_cost[i0+j-k] + wj;
+          if (cost<cost_best)
+          {
+            cost_best=cost;
+            k_best = k;
+          }
+        }
+      }
+
+      ci_new[j] = cost_best;
+      bi[j] = k_best;
+    }
+
+    running_cost_=next_cost_;
+  }
+}
+
+
+//=======================================================================
 //: Solve the dynamic programming problem with costs W
 //  Pair cost term:  C_i(x1,x2) = c(|x1-x2|)
 //  Size of c indicates maximum displacement between neighbouring
@@ -146,6 +224,46 @@ double mbl_dyn_prog::solve(std::vector<int>& x,
 
   return best_cost;
 }
+
+//: Solve the dynamic programming problem with costs W
+//  Pair cost term:  C_i(x1,x2) = pair_cost(i0+x2-x1)
+//  Size of pair_cost indicates maximum displacement between neighbouring
+//  states.
+//  If first_state>=0 then the first is constrained to that index value
+// \retval x  Optimal path
+// \return Total cost of given path
+double mbl_dyn_prog::solve_asym(std::vector<int>& x,
+               const vnl_matrix<double>& W,
+               const vnl_vector<double>& pair_cost, int i0,
+               int first_state, int last_state)
+{
+  running_costs_asym(W,pair_cost,i0,first_state);
+
+  double *ci = running_cost_.data_block();
+  int n_states = W.columns();
+
+  // Find the best final cost
+  int best_j = 0;
+  double best_cost;
+
+  if (last_state>=0)
+  {
+    best_j=last_state;
+    best_cost=ci[last_state];
+  }
+  else
+  {
+    best_cost = ci[0];
+    for (int j=1;j<n_states;++j)
+    {
+      if (ci[j]<best_cost) { best_j=j; best_cost=ci[j]; }
+    }
+  }
+  construct_path(x,best_j);
+
+  return best_cost;
+}
+
 
 //: Solve the DP problem including constraint between first and last
 //  Cost of moving from state i to state j is move_cost[j-i]
