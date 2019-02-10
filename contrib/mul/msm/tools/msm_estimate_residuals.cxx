@@ -14,6 +14,7 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
+#include <mbl/mbl_parse_int_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
 #ifdef _MSC_VER
@@ -23,6 +24,7 @@
 
 #include <msm/msm_shape_model_builder.h>
 #include <msm/msm_shape_instance.h>
+#include <msm/msm_reflect_shape.h>
 
 #include <msm/msm_add_all_loaders.h>
 #include <mbl/mbl_stats_1d.h>
@@ -47,6 +49,14 @@ ref0: 0 ref1: 1
 
 // Number of chunks in n-fold cross validation
 n_chunks: 10
+
+//: Define renumbering required under reflection
+//  If defined, a reflected version of each shape is included in build
+reflection_symmetry: { 7 6 5 4 3 2 1 0 }
+
+//: When true, only use reflection. When false, use both reflection and original.
+only_reflect: false
+
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -88,6 +98,14 @@ struct tool_params
 
   //: Number of chunks in n-fold cross validation
   unsigned n_chunks;
+
+  //: Define renumbering required under reflection
+  //  If defined, a reflected version of each shape is included in build
+  std::vector<unsigned> reflection_symmetry;
+
+  //: When true, only use reflection. When false, use both reflection and original.
+  bool only_reflect;
+
 
   //: Directory containing images
   std::string image_dir;
@@ -142,6 +160,18 @@ void tool_params::read_from_file(const std::string& path)
     std::stringstream ss(limiter_str);
     limiter = msm_param_limiter::create_from_stream(ss);
   }
+
+  std::string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
+  reflection_symmetry.resize(0);
+  if (ref_sym_str!="-")
+  {
+    std::stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, std::back_inserter(reflection_symmetry),
+                       unsigned());
+  }
+
+  only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
+
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -299,6 +329,7 @@ int main(int argc, char** argv)
 {
   vul_arg<std::string> param_path("-p","Parameter filename");
   vul_arg<std::string> test_list_path("-t","List of points files to test on");
+  vul_arg<std::string> output_path("-o","Path for residual statistics output");
   vul_arg_parse(argc,argv);
 
   msm_add_all_loaders();
@@ -343,6 +374,20 @@ int main(int argc, char** argv)
   std::vector<msm_points> shapes(params.points_names.size());
   msm_load_shapes(params.points_dir,params.points_names,shapes);
 
+  if (params.reflection_symmetry.size()>0)
+  {
+    // Use reflections
+    msm_points ref_points;
+    unsigned n=shapes.size();
+    for (unsigned i=0;i<n;++i)
+    {
+      msm_reflect_shape_along_x(shapes[i],params.reflection_symmetry,
+                                ref_points,shapes[i].cog().x());
+      if (params.only_reflect) shapes[i]=ref_points;
+      else                     shapes.push_back(ref_points);
+    }
+  }
+
   std::vector<msm_test_stats> test_stats(params.max_modes+1);
 
   if (test_list_path()!="")
@@ -366,21 +411,33 @@ int main(int argc, char** argv)
     leave_some_out_tests(builder,shapes,params.ref0,params.ref1,params.n_chunks,test_stats);
   }
 
-  std::cout<<"NModes WorldMean   RefMean ";
-  if (params.ref0!=params.ref1) std::cout<<"     RelMean(%)";
-  std::cout<<"RefXSD RefYSD ";
-  std::cout<<std::endl;
+  std::string out_path="residual_stats.txt";
+  if (output_path()!="") out_path=output_path();
+  std::ofstream ofs(out_path.c_str());
+  if (!ofs)
+  {
+    std::cerr<<"Unable to open "<<out_path<<" for results."<<std::endl;
+    return 2;
+  }
+
+  ofs<<"NModes WorldMean WorldSD   RefMean ";
+  if (params.ref0!=params.ref1) ofs<<"     RelMean(%)";
+  ofs<<"RefXSD RefYSD ";
+  ofs<<std::endl;
   for (unsigned nm=0;nm<test_stats.size();++nm)
   {
     if (test_stats[nm].world_d_stats.nObs()==0) continue;
-    std::cout<<nm<<"      "<<test_stats[nm].world_d_stats.mean();
-    std::cout<<"    "<<test_stats[nm].ref_d_stats.mean();
+    ofs<<nm<<"      "<<test_stats[nm].world_d_stats.mean();
+    ofs<<" "<<test_stats[nm].world_d_stats.sd();
+    ofs<<"    "<<test_stats[nm].ref_d_stats.mean();
     if (params.ref0!=params.ref1)
-      std::cout<<"    "<<test_stats[nm].rel_d_stats.mean();
-    std::cout<<"    "<<test_stats[nm].ref_x_stats.sd();
-    std::cout<<"    "<<test_stats[nm].ref_y_stats.sd();
-    std::cout<<std::endl;
+      ofs<<"    "<<test_stats[nm].rel_d_stats.mean();
+    ofs<<"    "<<test_stats[nm].ref_x_stats.sd();
+    ofs<<"    "<<test_stats[nm].ref_y_stats.sd();
+    ofs<<std::endl;
   }
+  ofs.close();
+  std::cout<<"Saved residual statistics to "<<out_path<<std::endl;
 
   return 0;
 }

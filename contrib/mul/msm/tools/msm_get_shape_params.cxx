@@ -10,16 +10,19 @@
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
+#include <mbl/mbl_parse_int_list.h>
 #include <vul/vul_arg.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <vsl/vsl_quick_file.h>
 #include <vul/vul_file.h>
+#include <vul/vul_string.h>
 #include <msm/msm_shape_model.h>
 #include <msm/msm_shape_instance.h>
 #include <msm/msm_add_all_loaders.h>
 #include <msm/msm_no_limiter.h>
+#include <msm/msm_reflect_shape.h>
 
 #include <mbl/mbl_stats_1d.h>
 #include <mbl/mbl_histogram.h>
@@ -35,6 +38,14 @@ output_path: shape_params.txt
 //: Directory to save best fit points
 //  If parameter is not set then do not write best fit points.
 out_points_dir: /home/bestfit_points/
+
+//: Define renumbering required under reflection
+//  If defined, a reflected version of each shape is included in build
+reflection_symmetry: { 7 6 5 4 3 2 1 0 }
+
+//: When true, only use reflection. When false, use both reflection and original.
+only_reflect: false
+
 
 image_dir: /home/images/
 points_dir: /home/points/
@@ -76,6 +87,13 @@ struct tool_params
   //: File to save parameters to
   std::string output_path;
 
+  //: Define renumbering required under reflection
+  //  If defined, a reflected version of each shape is included in build
+  std::vector<unsigned> reflection_symmetry;
+
+  //: When true, only use reflection. When false, use both reflection and original.
+  bool only_reflect;
+
   //: Directory containing images
   std::string image_dir;
 
@@ -116,6 +134,17 @@ void tool_params::read_from_file(const std::string& path)
   output_path=props.get_optional_property("output_path",
                                           "shape_params.txt");
   out_points_dir=props.get_optional_property("out_points_dir","");
+
+  std::string ref_sym_str=props.get_optional_property("reflection_symmetry","-");
+  reflection_symmetry.resize(0);
+  if (ref_sym_str!="-")
+  {
+    std::stringstream ss(ref_sym_str);
+    mbl_parse_int_list(ss, std::back_inserter(reflection_symmetry),
+                       unsigned());
+  }
+
+  only_reflect=vul_string_to_bool(props.get_optional_property("only_reflect","false"));
 
   mbl_parse_colon_pairs_list(props.get_required_property("images"),
                              points_names,image_names);
@@ -198,6 +227,26 @@ int main(int argc, char** argv)
   std::vector<msm_points> shapes;
   load_shapes(params.points_dir,params.points_names,shapes);
 
+  std::vector<std::string> points_names=params.points_names;
+  if (params.reflection_symmetry.size()>0)
+  {
+    // Use reflections
+    msm_points ref_points;
+    unsigned n=shapes.size();
+    for (unsigned i=0;i<n;++i)
+    {
+      msm_reflect_shape_along_x(shapes[i],params.reflection_symmetry,
+                                ref_points,shapes[i].cog().x());
+      if (params.only_reflect) shapes[i]=ref_points;
+      else
+      {
+        shapes.push_back(ref_points);
+        points_names.push_back(points_names[i]+"-ref");
+      }
+    }
+  }
+
+
   // Open the text file for output
   std::ofstream ofs(params.output_path.c_str());
   if (!ofs)
@@ -235,7 +284,7 @@ int main(int argc, char** argv)
     if (shapes[i].size()==0) continue;
     sm_instance.fit_to_points(shapes[i]);
 
-    if (use_pts_name()) ofs<<params.points_names[i]<<' ';
+    if (use_pts_name()) ofs<<points_names[i]<<' ';
 
     if (!no_pose())
     {
@@ -270,7 +319,7 @@ int main(int argc, char** argv)
     if (write_bestfitpts)
     {
       // Check that the directory exists (points_name may include a dir)
-      std::string out_pts_dir = vul_file::dirname(params.out_points_dir+"/"+params.points_names[i]);
+      std::string out_pts_dir = vul_file::dirname(params.out_points_dir+"/"+points_names[i]);
       if (!vul_file::is_directory(out_pts_dir))
       {
         std::cout<<"Directory "<<out_pts_dir
@@ -281,7 +330,7 @@ int main(int argc, char** argv)
           return 12;
         }
       }
-      sm_instance.points().write_text_file(params.out_points_dir+"/"+params.points_names[i]);
+      sm_instance.points().write_text_file(params.out_points_dir+"/"+points_names[i]);
     }
   }
   ofs.close();
