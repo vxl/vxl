@@ -66,7 +66,7 @@ mode_part: { all all mouth eyebrows }
 
 
 //: File to save model to
-shape_model_path: shape_model.bfs
+shape_model_path: shape_model.msm
 
 //: Define renumbering required under reflection
 //  If defined, a reflected version of each shape is included in build
