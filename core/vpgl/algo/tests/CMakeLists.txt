@@ -33,6 +33,7 @@ add_executable( vpgl_algo_test_all
   test_affine_rectification.cxx
   test_affine_tensor_transfer.cxx
   test_fit_rational_cubic.cxx
+  test_equi_rectification.cxx
 )
 target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 endif()
@@ -61,6 +62,7 @@ add_executable( vpgl_algo_test_all
   test_affine_tensor_transfer.cxx
   test_backproject_dem.cxx
   test_fit_rational_cubic.cxx
+  test_equi_rectification.cxx
 )
 target_link_libraries( vpgl_algo_test_all ${VXL_LIB_PREFIX}vpgl_algo ${VXL_LIB_PREFIX}vpgl_file_formats ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}vgl ${VXL_LIB_PREFIX}vnl_algo ${VXL_LIB_PREFIX}vnl ${VXL_LIB_PREFIX}vil ${VXL_LIB_PREFIX}vul ${VXL_LIB_PREFIX}testlib )
 add_test( NAME vpgl_algo_test_backproject_dem COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_backproject_dem )
@@ -86,6 +88,7 @@ add_test( NAME vpgl_algo_test_ba_shared_k_lsqr COMMAND $<TARGET_FILE:vpgl_algo_t
 add_test( NAME vpgl_algo_test_affine_rect COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_rect )
 add_test( NAME vpgl_algo_test_affine_tensor_transfer COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_affine_tensor_transfer )
 add_test( NAME vpgl_algo_test_fit_rational_cubic COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_fit_rational_cubic )
+add_test( NAME vpgl_algo_test_equi_rectification COMMAND $<TARGET_FILE:vpgl_algo_test_all> test_equi_rectification )
 
 add_executable( vpgl_algo_test_include test_include.cxx )
 target_link_libraries( vpgl_algo_test_include ${VXL_LIB_PREFIX}vpgl_algo )

@@ -78,8 +78,8 @@ bool vpgl_affine_rectification::compute_rectification(const vpgl_affine_fundamen
                                                       vnl_matrix_fixed<double, 3, 3>& H2)
 {
   vnl_matrix_fixed<double, 3, 3> FAM = FA.get_matrix();
-  vnl_vector_fixed<double, 2> e1; e1[0] = -FAM[2][1]; e1[1] = FAM[2][0]; e1[2] = 0;
-  vnl_vector_fixed<double, 2> e2; e2[0] = -FAM[1][2]; e2[1] = FAM[0][2]; e2[2] = 0;
+  vnl_vector_fixed<double, 3> e1; e1[0] = -FAM[2][1]; e1[1] = FAM[2][0]; e1[2] = 0;
+  vnl_vector_fixed<double, 3> e2; e2[0] = -FAM[1][2]; e2[1] = FAM[0][2]; e2[2] = 0;
 
   double e1l = e1.magnitude();
   double e2l = e2.magnitude();

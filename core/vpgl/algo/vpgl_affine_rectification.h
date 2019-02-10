@@ -14,10 +14,12 @@
 class vpgl_affine_rectification
 {
  public:
+
   static vpgl_affine_camera<double>* compute_affine_cam(const std::vector< vgl_point_2d<double> >& image_pts,
                                                         const std::vector< vgl_point_3d<double> >& world_pts);
 
   //:extract the fundamental matrix from a pair of affine cameras
+  // DEPRECATED - see constructor for vpgl_affine_fundamental_matrix
   static bool compute_affine_f(const vpgl_affine_camera<double>* cam1,
                                const vpgl_affine_camera<double>* cam2,
                                vpgl_affine_fundamental_matrix<double>& FA);
@@ -25,6 +27,7 @@ class vpgl_affine_rectification
   //: compute the rectification homographies using the affine fundamental matrix
   //  an image correspondence needs to be passed to find homographies
   //  (if cameras are known, one can use a known point in 3d in the scene, project it using the cameras and pass the output image points to this routine)
+  // DEPRECATED - see vpgl/algo/vpgl_equi_rectification
   static bool compute_rectification(const vpgl_affine_fundamental_matrix<double>& FA,
                                     const std::vector<vnl_vector_fixed<double, 3> >& img_p1,
                                     const std::vector<vnl_vector_fixed<double, 3> >& img_p2,
