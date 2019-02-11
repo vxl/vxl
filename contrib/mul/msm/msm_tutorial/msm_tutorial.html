@@ -1,0 +1,145 @@
+<html>
+<head>
+<title>Manchester Shape Modelling Tutorial</title>
+</head>
+<body>
+<h1>Manchester Shape Modelling Tutorial</h1>
+<h2>Introduction</h2>
+This tutorial demonstrates how to use several of the key tools in the msm library to build a shape model, display its modes and explore the distributions of shape parameters.<br>
+It assumes that you are familiar with running tools on a command line, and that your system is set up so that it knows where the <tt>msm_*</tt> tools are (for instance, by setting your $PATH variable to include the directory with the binaries).<br>
+The tutorial is in the directory <tt>msm_tutorial</tt>, and includes a sub-directory (<tt>points_80</tt>) which contains 50 face shape examples, each annotated with 80 points.<br>
+<img src="figs/face_shape_eg.png"><br>
+You can run the commands below directly in the tutorial directory, but you might want to take a copy of it to avoid changing the original when you edit files.<br>
+See also the <a href="../msm_overview.html">overview of msm tools</a>.
+
+<h2>Building a shape model</h2>
+To build a shape model from the available examples, use the following command (from within the <tt>msm_tutorial</tt> directory:
+
+<tt><pre>
+msm_build_shape_model -p build_shape_model.params
+</pre></tt>
+
+This will load in the 50 sets of points listed in the parameter file. Since a <tt>reflection_symmetry</tt> is defined it will generate an additional set of 50 examples by reflecting each original example (and renumbering the points as defined).<br>
+Thus the model is built from 100 examples in total, and saved to the file <tt>face_80pts.msm</tt> (defined in the parameter file).<br>
+
+If you have the <a href="http://uomqvxl.sourceforge.net">uomqvxl</a> tools available, then you can display the modes of the model using the command:
+
+<tt><pre>
+qmsm_shape_mode_viewer -s face_80pts.msm -c face_80pts.crvs
+</pre></tt>
+
+The <tt>face_80pts.crvs</tt> is a text file defining how curves should be drawn through the points.
+<h3>Activity</h3>
+<ul>
+<li>Copy <tt>face_80pts.crvs</tt> to <tt>face_80pts-b.crvs</tt>
+<li>Edit <tt>face_80pts-b.crvs</tt> to add an additional line between points 0 and 14
+<li>Display the result using qmsm_shape_mode_viewer
+</ul>
+
+<h2>Drawing the shape modes</h2>
+We can generate EPS files showing the modes, which are better for including into papers (they use vector graphics so can be displayed at arbitrary resolutions).
+
+Run:
+<tt><pre>
+msm_draw_shape_modes -p draw_shape_modes.params
+</pre></tt>
+
+This will generate three .eps files, which can be viewed with PDF viewers such as okular.<br>
+To convert to PDF files, under Ubuntu, use:
+
+<tt><pre>
+ps2pdf face_80pts_s1.eps tmp.pdf
+pdfcrop -clip tmp.pdf face_80pts_s1.pdf
+</pre></tt>
+The first command converts the eps to a PDF file, but fills a whole page.<br>
+The second command creates a PDF cropped just to the area of interest, suitable for including in a document.<br>
+
+
+<h3>Activity</h3>
+Try editing the parameter file <tt>draw_shape_modes.params</tt> to change the appearance of the resulting plots:
+<ul>
+<li> Change the point size and colour
+<li> Change the line-width
+<li> Switch overlap_shapes to true
+</ul>
+
+<h2>Getting shape parameters</h3>
+To get the shape parameters for each example, use the following:
+<tt><pre>
+msm_get_shape_params -p build_shape_model.params -o face_params.txt -u
+</pre></tt>
+
+This will read in all the shapes listed in <tt>build_shape_model.params</tt>, fit the shape model, then save the parameters to the named file, one line per shape.<br>
+By default the first few numbers on each line are the parameters of the pose transformation.  So in this case (a similarity transformation), the first four are the pose, then columns 5 onwards are the shape parameters (the elements of the b-vector)<br>
+To suppress the inclusion of the pose parameters you can add the <tt>-no_pose</tt> flag - in that case the first numbers will be the shape parameters.<br>
+
+You can use your favourite plotting tool to display the scatter of the parameters.<br>
+For instance, running <tt>gnuplot</tt>:
+<tt><pre>
+plot "face_params.txt" using 5:6
+</pre></tt>
+will create a scatter of the first shape parameter against the second.
+
+<h3>Looking at histograms of the parameters</h3>
+The tool can also create histograms for each parameter.<br>
+Add flags to the call as follows:
+<tt><pre>
+msm_get_shape_params -p build_shape_model.params -o face_params.txt -u -h face_histo
+</pre></tt>
+The <tt>-h face_histo</tt> flag tells the tool to generate text files containing information describing histograms for each shape parameter, such as <tt>face_histo_b0.txt</tt> for the first parameter.<br>
+This can be displayed using gnuplot with the command:
+<tt><pre>
+plot "face_histo_b0.txt" with boxes
+</pre></tt>
+
+<h2>Drawing shapes given parameters</h3>
+The <tt>msm_draw_shapes</tt> tool can read in one or more sets of parameters from a text file and draw the resulting shape(s).<br>
+For instance, run:
+<tt><pre>
+msm_draw_shapes -p draw_shapes.params -o face_80pts-egs.eps
+</pre></tt>
+This reads in a set of parameters for three shapes from the text file <tt>params_to_draw.txt</tt> (named in the <tt>draw_shapes.params</tt> file).
+<tt>params_to_draw.txt</tt> looks like this:
+<tt><pre>
+-0.012 0.018 -0.019 0
+0.057 -0.028 -0.008 0.001
+-0.014 0.075  0.015 0
+</pre></tt>
+The tool saves the resulting EPS to the named file (<tt>face_80pts-egs.eps</tt>).
+
+<h3>Activity</h3>
+<ul>
+<li>Edit <tt>params_to_draw.txt</tt> and examine the effect.
+<li>Edit <tt>draw_shapes.params</tt> to change the colours etc
+</ul>
+
+<h2>Exploring the number of modes to use</h2>
+One commonly decides how many modes to use either by specifying an upper limit (e.g. max_modes: 7) or by defining the proportion of the total variance to explain (e.g. var_prop: 95).<br>
+
+The tool: <tt>msm_estimate_residuals</tt> can evaluate how well the shape model can approximate a given set of shapes using different numbers of modes, which can help when trying to decide a suitable number.
+
+For example, try running:
+
+
+<tt><pre>
+msm_estimate_residuals -p build_shape_model.params -o residual_stats.txt
+</pre></tt>
+
+This will use leave-some-out experiments to evaluate the shape model's accuracy on unseen data as a function of the number of modes.<br>
+Plot the second column (the mean approximation error) against the first (the number of modes).
+For instance, in gnuplot use:
+<tt><pre>
+plot "residual_stats.txt" using 1:2:3 w errorbars
+</pre></tt>
+This shows the reduction in error (in image co-ordinates) as the number increases - enabling a choice of the number of modes to achieve a desired level of accuracy.<br>
+Other columns in the output file give the approximation accuracy measured in the model reference frame.<br>
+
+
+
+
+<h3>Next steps</h3>
+Study the <a href="../msm_overview.html">overview of msm tools</a>.
+
+
+</body>
+</html>

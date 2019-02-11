@@ -1,0 +1,35 @@
+//: File to load model from
+shape_model_path: face_80pts.msm
+
+curves_path: face_80pts.crvs
+
+//: Path to text file containing shape parameters (one vector per line)
+shape_params_path: params_to_draw.txt
+
+//: Radius of points to display (if <0, then don't draw points)
+point_radius: 1
+
+//: Line width
+line_width: 1
+
+line_colour: black
+point_colour: red
+
+// When defined, cycle through these colours when drawing each shape
+point_colours: { red green blue }
+
+// When defined, cycle through these colours when drawing each shape
+line_colours: { red green blue }
+
+//: Colour of background (or "none" for transparent)
+background_colour: white
+
+//: When true, overlap all the shapes (all have same centre point)
+overlap_shapes: true
+
+
+// Approximate width of region to display shape
+width: 200
+
+// Path to save EPS file to
+out_path: face_80pts-egs.eps

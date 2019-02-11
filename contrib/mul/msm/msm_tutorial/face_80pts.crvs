@@ -1,0 +1,15 @@
+curves: {
+  curve:  { name: Curve open: true indices: { 0:14 } }
+  curve:  { name: Curve open: false indices: { 15:20 } }
+  curve:  { name: Curve open: false indices: { 21:26 } }
+  curve:  { name: Curve open: false indices: { 27 68 28 69 29 70 30 71 } }
+  curve:  { name: Curve open: false indices: { 32 74 33 75 34 76 35 77 } }
+  curve:  { name: Curve open: true indices: { 37:45 } }
+  curve:  { name: Curve open: true indices: { 46 47 } }
+  curve:  { name: Curve open: false indices: { 48:59 } }
+  curve:  { name: Curve open: false indices: { 48 60:62 54 63:65 } }
+  curve:  { name: Curve open: true indices: { 66 } }
+  curve:  { name: Curve open: true indices: { 67 } }
+  curve:  { name: Curve open: true indices: { 72 31 73 } }
+  curve:  { name: Curve open: true indices: { 78 36 79 } }
+}

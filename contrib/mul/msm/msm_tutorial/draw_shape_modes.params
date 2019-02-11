@@ -1,0 +1,40 @@
+//: File to load model from
+shape_model_path: face_80pts.msm
+
+curves_path: face_80pts.crvs
+
+// Maximum number of shape modes
+max_modes: 3
+
+//: Number of SDs to vary mode by
+n_sds: 3.0
+
+//: Current number of shapes per mode
+n_per_mode: 3
+
+//: When true, generate 2*n_per_mode frames of a movie for each mode
+make_movie: false
+
+//: When true, overlap all the shapes to highlight changes
+//  Shapes on one side of mean are drawn with dashes, on the other with dots.
+overlap_shapes: false
+
+//: Radius of points to display (if <0, then don't draw points)
+point_radius: 2
+
+//: Line width
+line-width: 1
+
+line_colour: black
+point_colour: red
+
+
+//: Colour of background (or "none" for transparent)
+background_colour: white
+
+// Approximate width of region to display shape
+width: 200
+
+
+base_name: face_80pts
+output_dir: ./

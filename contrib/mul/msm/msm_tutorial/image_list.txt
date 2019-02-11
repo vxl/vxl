@@ -1,0 +1,55 @@
+image_dir: ../images/
+points_dir: ./points_80/
+images:
+{
+face_0000.pts : face_0000.png
+face_0020.pts : face_0020.png
+face_0040.pts : face_0040.png
+face_0060.pts : face_0060.png
+face_0080.pts : face_0080.png
+face_0100.pts : face_0100.png
+face_0120.pts : face_0120.png
+face_0140.pts : face_0140.png
+face_0160.pts : face_0160.png
+face_0180.pts : face_0180.png
+face_0200.pts : face_0200.png
+face_0220.pts : face_0220.png
+face_0240.pts : face_0240.png
+face_0260.pts : face_0260.png
+face_0280.pts : face_0280.png
+face_0300.pts : face_0300.png
+face_0320.pts : face_0320.png
+face_0340.pts : face_0340.png
+face_0360.pts : face_0360.png
+face_0380.pts : face_0380.png
+face_0400.pts : face_0400.png
+face_0420.pts : face_0420.png
+face_0440.pts : face_0440.png
+face_0460.pts : face_0460.png
+face_0480.pts : face_0480.png
+face_0500.pts : face_0500.png
+face_0520.pts : face_0520.png
+face_0540.pts : face_0540.png
+face_0560.pts : face_0560.png
+face_0580.pts : face_0580.png
+face_0600.pts : face_0600.png
+face_0620.pts : face_0620.png
+face_0640.pts : face_0640.png
+face_0660.pts : face_0660.png
+face_0680.pts : face_0680.png
+face_0700.pts : face_0700.png
+face_0720.pts : face_0720.png
+face_0740.pts : face_0740.png
+face_0760.pts : face_0760.png
+face_0780.pts : face_0780.png
+face_0800.pts : face_0800.png
+face_0820.pts : face_0820.png
+face_0840.pts : face_0840.png
+face_0860.pts : face_0860.png
+face_0880.pts : face_0880.png
+face_0900.pts : face_0900.png
+face_0920.pts : face_0920.png
+face_0940.pts : face_0940.png
+face_0960.pts : face_0960.png
+face_0980.pts : face_0980.png
+}

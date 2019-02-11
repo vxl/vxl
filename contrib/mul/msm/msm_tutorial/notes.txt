@@ -1,0 +1,52 @@
+# Build the first shape model
+
+msm_build_shape_model -p build_shape_model.params
+
+qmsm_shape_mode_viewer -s face_80pts.msm -c face_80pts.crvs
+
+# Estimate symmetry  (pts 27 and 32 correspond - outside eye corners)
+msm_guess_ref_sym -i build_shape_model.params -r0 27 -r1 32
+
+Add the resulting line (ref_sym.txt) to parameter file to create build_shape_model+ref.params
+
+# Build a new shape model
+msm_build_shape_model -p build_shape_model+ref.params
+
+qmsm_shape_mode_viewer -s face_80pts.msm -c face_80pts.crvs
+
+msm_draw_shape_modes -p draw_shape_modes.params
+
+Try:
+- Changing point size and colour
+- Changing line-width
+- Switch overlap_shapes to true
+
+
+msm_get_shape_params -p build_shape_model.params -o face_params.txt -u -h face_histo
+
+Look at histograms of shape parameters (in face_histo_b0.txt, face_histo_b0.txt...)
+In gnuplot:
+  plot "face_histo_b0.txt" with boxes
+
+Look at scatter of parameters
+In gnuplot:
+plot "face_params.txt" using 5:6
+
+(parameters 1-4 are the similarity (pose) parameters)
+
+
+Draw shapes for specific shape parameters (e.g. to compare them).
+msm_draw_shapes -p draw_shapes.params
+
+- Try changing the parameters controlling the colours
+- Change the overlap shapes flag to false
+
+
+Selecting the number of shape modes.
+
+msm_estimate_residuals -p build_shape_model.params -o residual_stats.txt
+
+gnuplot:
+plot "residual_stats.txt" using 1:2:3 w errorbars
+
+- Shows the way the approximation error decreases as the number of modes increases.
