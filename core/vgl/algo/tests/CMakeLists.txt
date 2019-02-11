@@ -20,6 +20,7 @@ add_executable( vgl_algo_test_all
   test_p_matrix.cxx
   test_rotation_3d.cxx
   test_rtree.cxx
+  test_hough_index_2d.cxx
 )
 target_link_libraries( vgl_algo_test_all ${VXL_LIB_PREFIX}vgl_algo ${VXL_LIB_PREFIX}testlib )
 
@@ -41,6 +42,7 @@ add_test( NAME vgl_test_intersection COMMAND $<TARGET_FILE:vgl_algo_test_all> te
 add_test( NAME vgl_test_p_matrix COMMAND $<TARGET_FILE:vgl_algo_test_all> test_p_matrix)
 add_test( NAME vgl_test_rotation_3d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_rotation_3d)
 add_test( NAME vgl_test_rtree COMMAND $<TARGET_FILE:vgl_algo_test_all> test_rtree)
+add_test( NAME vgl_test_hough_index_2d COMMAND $<TARGET_FILE:vgl_algo_test_all> test_hough_index_2d)
 
 add_executable( vgl_algo_test_include test_include.cxx )
 target_link_libraries( vgl_algo_test_include ${VXL_LIB_PREFIX}vgl_algo)
