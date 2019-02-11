@@ -432,7 +432,7 @@ lines_in_interval(vgl_line_segment_2d<T> const & l,
         continue;
       std::vector<vgl_line_segment_2d<T> > temp;
       this->lines_at_index(r_indx, t_indx,temp);
-      for (std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
+      for (typename std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
            lit != temp.end(); lit++)
       {
         //Note, these tests should eventually be more
@@ -529,8 +529,7 @@ void vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const
       if (i==0 && j == 0) continue;//skip center query bin
 	  
       int r_indx = r_index + j;
-	  if (t_indx == 5 && r_indx == 43)
-		  std::cout << ' ';
+	  
       if ((r_indx<0)||(r_indx>=static_cast<int>(r_dim_)))
         continue;
       std::vector<vgl_line_segment_2d<T> > temp;
@@ -538,14 +537,14 @@ void vgl_hough_index_2d<T>::line_indices_in_interval(const size_t r_index, const
       std::vector<size_t> temp_i;
       this ->line_indices_at_index(r_indx, t_indx, temp_i);
       size_t idx_tmp = 0;
-      for (std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
+      for (typename std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
            lit != temp.end(); lit++, ++idx_tmp)
       {
         //Note, these tests should eventually be more
         //sophisticated - JLM
         const vgl_line_segment_2d<T>& line = *lit;
         size_t idx_cent = 0;
-        for(std::vector<vgl_line_segment_2d<T> >::iterator cit = lines_at_center.begin();
+        for(typename std::vector<vgl_line_segment_2d<T> >::iterator cit = lines_at_center.begin();
             cit != lines_at_center.end(); ++cit, ++idx_cent){
           if(lines_near_eq(*cit, line, r_dist, theta_dist))
             line_indices.push_back(temp_i[idx_tmp]); //line, passed both tests
@@ -603,7 +602,7 @@ vgl_hough_index_2d<T>::parallel_lines(const T angle,
       std::vector<vgl_line_segment_2d<T> > temp;
       this->lines_at_index(j, t_indx, temp);
 
-      for (std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
+      for (typename std::vector<vgl_line_segment_2d<T> >::iterator lit = temp.begin();
            lit != temp.end(); lit++)
       {
         const vgl_line_segment_2d<T>& line = *lit;
