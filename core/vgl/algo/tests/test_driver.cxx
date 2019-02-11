@@ -18,6 +18,7 @@ DECLARE( test_orient_box_3d );
 DECLARE( test_p_matrix );
 DECLARE( test_rotation_3d );
 DECLARE( test_rtree );
+DECLARE( test_hough_index_2d );
 
 void
 register_tests()
@@ -40,6 +41,7 @@ register_tests()
   REGISTER( test_p_matrix );
   REGISTER( test_rotation_3d );
   REGISTER( test_rtree );
+  REGISTER( test_hough_index_2d );
 }
 
 DEFINE_MAIN;

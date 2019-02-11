@@ -74,6 +74,8 @@ class vgl_line_segment_2d
   //: unit vector orthogonal to line
   vgl_vector_2d<Type> normal() const;
 
+  vgl_point_2d<Type> mid_point() const;
+
   //: angle with the oriented horizontal line y=0, measured in radians.
   //  Returns values between -pi and pi.
   double slope_radians() const;

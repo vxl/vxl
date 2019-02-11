@@ -65,6 +65,14 @@ vgl_vector_2d<Type>  vgl_line_segment_2d<Type>::normal() const
   vgl_vector_2d<Type> v(point1_.y()-point2_.y(),point2_.x()-point1_.x());
   return normalized(v);
 }
+template <class Type>
+vgl_point_2d<Type> vgl_line_segment_2d<Type>::mid_point() const{
+  vgl_vector_2d<Type> dir = point2_ - point1_;
+  dir*=Type(1)/Type(2);
+  vgl_point_2d<Type> mid = point1_ + dir;
+  return mid;
+}
+
 
 template <class Type>
 double vgl_line_segment_2d<Type>::slope_degrees() const
