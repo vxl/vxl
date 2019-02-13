@@ -27,4 +27,7 @@ vgl_box_3d<T>  vgl_bounding_box(vgl_pointset_3d<T> const& ptset);
 template <class T>
 vgl_box_3d<T>  vgl_bounding_box(vgl_cubic_spline_3d<T> const& spline);
 
+//: bounding box for a polygon
+template <class T>
+vgl_box_2d<T>  vgl_bounding_box(vgl_polygon<T> const& poly);
 #endif // vgl_bounding_box_h_

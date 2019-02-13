@@ -52,7 +52,9 @@ vgl_intersection(const std::list<vgl_plane_3d<T> >& planes, std::vector<T> ws, v
 template <class T>
 bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& p);
 
-
+//: Return true if a set of rays intersect in a point
+template <class T>
+bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt);
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) extern "please include vgl/algo/vgl_intersection.hxx first"
 
 #endif // vgl_algo_intersection_h_

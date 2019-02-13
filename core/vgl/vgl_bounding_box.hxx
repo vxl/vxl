@@ -1,8 +1,10 @@
 #include "vgl_bounding_box.h"
+#include "vgl_polygon.h"
 #include "vgl_sphere_3d.h"
 #include "vgl_pointset_3d.h"
 #include "vgl_cubic_spline_3d.h"
 #include "vgl_box_3d.h"
+#include "vgl_box_2d.h"
 
 template <class T>
 vgl_box_3d<T>  vgl_bounding_box(vgl_sphere_3d<T> const& sph){
@@ -34,8 +36,17 @@ vgl_box_3d<T>  vgl_bounding_box(vgl_cubic_spline_3d<T> const& spline){
     ret.add(*kit);
   return ret;
 }
-
+template <class T>
+vgl_box_2d<T>  vgl_bounding_box(vgl_polygon<T> const& poly){
+  vgl_box_2d<T> ret;
+  for(size_t s = 0; s<poly.num_sheets(); ++s){
+    for(size_t i = 0; i<poly[s].size(); ++i)
+      ret.add(poly[s][i]);
+  }
+  return ret;
+}
 #define VGL_BOUNDING_BOX_INSTANTIATE(T) \
 template vgl_box_3d<T> vgl_bounding_box(vgl_sphere_3d<T> const&); \
 template vgl_box_3d<T> vgl_bounding_box(vgl_pointset_3d<T> const&); \
-template vgl_box_3d<T> vgl_bounding_box(vgl_cubic_spline_3d<T> const&)
+template vgl_box_3d<T> vgl_bounding_box(vgl_cubic_spline_3d<T> const&); \
+template vgl_box_2d<T> vgl_bounding_box(vgl_polygon<T> const&)

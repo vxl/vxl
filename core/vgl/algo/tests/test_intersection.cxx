@@ -432,6 +432,27 @@ static void test_poly_line_intersection()
   TEST_NEAR("vertex intersection", t, 4.0, 0.001);
 }
 
+static void test_ray_intersection()
+{
+  vgl_vector_3d<double> dir0(-1.0, 0.0, 0.0); vgl_point_3d<double> org0(1001.0, 2.0, 3.0);
+  vgl_vector_3d<double> dir1(0.0, -1.0, 0.0); vgl_point_3d<double> org1(1.0, 1002.0, 3.0);
+  vgl_vector_3d<double> dir2(0.0, 0.0, -1.0); vgl_point_3d<double> org2(1.0, 2.0, 1003.0);
+  vgl_vector_3d<double> dir3(-0.57735027, -0.57735027, -0.57735027); vgl_point_3d<double> org3(578.35027, 579.35027, 580.35027);
+  vgl_ray_3d<double> r0(org0, dir0), r1(org1, dir1), r2(org2, dir2), r3(org3, dir3);
+  std::vector<vgl_ray_3d<double> > rays;
+  rays.push_back(r0);   rays.push_back(r1);   rays.push_back(r2);   rays.push_back(r3);
+  vgl_point_3d<double> inter_pt;
+  bool good = vgl_intersection(rays, inter_pt);
+  if (good) {
+    vgl_point_3d<double> origin(1.0, 2.0, 3.0);
+    double er = (inter_pt - origin).length();
+    TEST_NEAR("ray_intersection", er, 0.0, 0.001);
+  }
+  else {
+    TEST("ray_intersection", true, false);
+  }
+}
+
 void test_intersection()
 {
   std::cout << "**************************\n"
@@ -447,6 +468,7 @@ void test_intersection()
   test_box_3d_intersection();
   test_box_poly_intersection();
   test_poly_line_intersection();
+  test_ray_intersection();
 }
 
 TESTMAIN(test_intersection);

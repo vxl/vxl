@@ -499,7 +499,37 @@ bool vgl_intersection(vgl_box_2d<T> const& box,
   }
   return false;
 }
-
+template <class T>
+bool vgl_intersection(vgl_line_segment_2d<T> const& line1,
+                      vgl_line_segment_2d<T> const& line2,
+                      vgl_point_2d<T>& int_pt){
+	T tol = T(1000)*vgl_tolerance<T>::position;
+  vgl_line_2d<T> l1(line1.point1(), line1.point2());
+  vgl_line_2d<T> l2(line2.point1(), line2.point2());
+  if(!vgl_intersection(l1, l2, int_pt))
+    return false;
+  vgl_vector_2d<T> vs1 = line1.point2() - line1.point1();
+  vgl_vector_2d<T> vs2 = line2.point2() - line2.point1();
+  vgl_vector_2d<T> vp1 = int_pt - line1.point1();
+  vgl_vector_2d<T> vp2 = int_pt - line2.point1();
+  if(dot_product(vs1, vp1)< -tol)
+    return false;
+  if(dot_product(vs2, vp2)< -tol)
+    return false;
+  // check if the intersection point lies inside the
+  // segment boundaries, including the endpoints
+  // require a tolerance due to the inaccuracy of intersection
+  
+  T mag_s1 = vs1.length(), mag_s2 = vs2.length();
+  T mag_p1 = vp1.length(), mag_p2 = vp2.length();
+  T v1 = mag_p1 - mag_s1;
+  T v2 = mag_p2 - mag_s2;
+  if(v1 > tol)
+    return false;
+  if (v2 > tol)
+    return false;
+  return true;
+}
 //: Return the intersection point of two concurrent lines
 template <class T>
 vgl_point_3d<T> vgl_intersection(vgl_line_3d_2_points<T> const& l1,
@@ -1165,6 +1195,7 @@ template bool vgl_intersection(vgl_box_3d<T > const&,vgl_ray_3d<T > const&,vgl_p
 template vgl_pointset_3d<T> vgl_intersection(vgl_plane_3d<T> const&, vgl_pointset_3d<T> const&, T); \
 template vgl_pointset_3d<T> vgl_intersection(vgl_box_3d<T> const&, vgl_pointset_3d<T> const&); \
 template vgl_point_3d<T > vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_3d_2_points<T > const&); \
+template bool vgl_intersection(vgl_line_segment_2d<T> const&, vgl_line_segment_2d<T> const&, vgl_point_2d<T>&); \
 template bool vgl_intersection(vgl_line_segment_3d<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_line_3d_2_points<T > const&,vgl_line_segment_3d<T > const&,vgl_point_3d<T >&); \
 template bool vgl_intersection(vgl_ray_3d<T > const&,vgl_ray_3d<T > const&,vgl_point_3d<T >&); \
