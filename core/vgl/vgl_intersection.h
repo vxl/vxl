@@ -67,6 +67,13 @@ unsigned vgl_intersection(vgl_box_2d<T> const& box,
                           vgl_point_2d<T>& p0,
                           vgl_point_2d<T>& p1);
 
+//: Return true if two line segments intersect. If so,return the intersection point.
+// \relatesalso vgl_line_segment_2d
+template <class T>
+bool vgl_intersection(vgl_line_segment_2d<T> const& line1,
+                      vgl_line_segment_2d<T> const& line2,
+                      vgl_point_2d<T>& int_pt);
+
 //: Return the intersection point of two concurrent lines
 // \relatesalso vgl_line_3d_2_points
 //Allows intersection points outside the line segments

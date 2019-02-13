@@ -322,7 +322,7 @@ void vgl_selfintersections(vgl_polygon<T> const& p,
   }
 }
 
-//turn all sheets into counterclockwise polygons
+//turn the first sheet into counterclockwise polygon
 template <class T>
 vgl_polygon<T> vgl_reorient_polygon(vgl_polygon<T> const &p)
 {

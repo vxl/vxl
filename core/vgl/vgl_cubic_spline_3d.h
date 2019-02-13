@@ -146,7 +146,7 @@ template <class Type>
 }
 template <class Type>
   vgl_point_3d<Type> vgl_cubic_spline_3d<Type>::operator ()(Type t) const{
-  vgl_point_3d<Type> ret;
+  vgl_point_3d<Type> ret=vgl_point_3d<Type>(Type(0), Type(0), Type(0));
   if(knots_.size() < 2)
     return ret;
   assert(t>=Type(0) && t<=max_t());

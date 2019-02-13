@@ -12,10 +12,12 @@
 #include <vgl/vgl_homg_plane_3d.h>
 #include <vgl/vgl_box_3d.h>
 #include <vgl/vgl_point_3d.h>
+#include <vgl/vgl_ray_3d.h>
 #include <vgl/vgl_intersection.h>
 #include <vgl/vgl_polygon.h>
 
 #include <vnl/vnl_matrix.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_vector.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vnl/algo/vnl_svd.h>
@@ -281,12 +283,51 @@ bool vgl_intersection(vgl_box_3d<T> const& b, std::list<vgl_point_3d<T> >& poly)
   vnl_matrix<T> ci(R*tv);
   return poly2d.contains(ci.get(0,0),ci.get(1,0));
 }
+//
+// the linear least squares equation to solve is given by, Rp = q, where p is the unknown intersection point
+// the 3x3 matrix R is Sum_i [ I - dir_i dir_i^T ], where dir_i is the unit direction vector of the ray.
+// the 3x1 vector q is given by, Sum_i [ I - dir_i dir_i^T ]org_i, where org_i is the ray origin point.
+// 
+template <class T>
+bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt){
+  size_t n = rays.size();
+  if(n<2){
+    std::cout << "insufficient number of rays " << n << " to compute intersection" << std::endl;
+    return false;
+  }
+  // compute R and q
+  vnl_matrix_fixed<T, 3, 3> R(T(0)), I(T(0));
+  vnl_matrix_fixed<T, 3, 1> q(T(0));
+  I[0][0] = T(1);   I[1][1] = T(1);   I[2][2] = T(1);
 
+  for(size_t i = 0; i<n; ++i){
+    const vgl_ray_3d<T>& r = rays[i];
+    vgl_point_3d<T> org_i = r.origin();
+    vgl_vector_3d<T> dir_i = r.direction();
+    vnl_matrix_fixed<T, 3, 1> ndir_i, norg_i;
+    norg_i[0][0] = org_i.x(); norg_i[1][0] = org_i.y(); norg_i[2][0] = org_i.z();
+    ndir_i[0][0] = dir_i.x(); ndir_i[1][0] = dir_i.y(); ndir_i[2][0] = dir_i.z();
+    vnl_matrix_fixed<T, 3, 3> temp = ndir_i * (ndir_i.transpose()), temp2;
+    temp2 = (I - temp);
+    R += temp2;
+    q += temp2*norg_i;
+  }
+  R/=T(n); q/=T(n);
+  vnl_svd<T> svd(R);
+  size_t rank = svd.rank();
+  if(rank < 3){
+   std::cout << "insufficient svd rank " << rank << " to compute intersection" << std::endl;
+    return false;
+  } 
+  vnl_matrix<T> p = svd.solve(q);
+  inter_pt.set(p[0][0], p[1][0], p[2][0]);
+  return true;
+}
 #undef VGL_ALGO_INTERSECTION_INSTANTIATE
 #define VGL_ALGO_INTERSECTION_INSTANTIATE(T) \
 template vgl_point_3d<T > vgl_intersection(const std::vector<vgl_plane_3d<T > >&); \
 template bool vgl_intersection(vgl_box_3d<T > const&, std::list<vgl_point_3d<T > >&); \
 template vgl_infinite_line_3d<T > vgl_intersection(const std::list<vgl_plane_3d<T > >& planes); \
-template bool vgl_intersection(const std::list<vgl_plane_3d<T > >& planes, std::vector<T > ws,vgl_infinite_line_3d<T >&,T& residual)
-
+template bool vgl_intersection(const std::list<vgl_plane_3d<T > >& planes, std::vector<T > ws,vgl_infinite_line_3d<T >&,T& residual); \
+template bool vgl_intersection(std::vector<vgl_ray_3d<T> > const& rays, vgl_point_3d<T>& inter_pt)
 #endif // vgl_algo_intersection_hxx_
