@@ -82,6 +82,7 @@ class vpgl_lvcs : public vbl_ref_count
             AngUnits ang_unit=DEG, LenUnits elev_unit=METERS);
 
   vpgl_lvcs(const vpgl_lvcs&);
+  ~vpgl_lvcs() = default;
   vpgl_lvcs& operator=(const vpgl_lvcs&);
 
 
