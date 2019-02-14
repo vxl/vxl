@@ -30,6 +30,8 @@ vil_image_view<float> bpgl_3d_from_disparity(vpgl_affine_camera<double> const& c
     for (int i=0; i<ni; ++i) {
       double i2 = i - disparity(i,j);
       vnl_vector_fixed<double,3> x(NAN);
+
+      // could check against maximum valid value here as well, if we knew the size of the second image.
       if (i2 >= 0) {
         // valid disparity value
         vnl_vector<double> b(4);

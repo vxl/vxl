@@ -15,6 +15,7 @@
 #include <vnl/vnl_numeric_traits.h>
 #include <vnl/algo/vnl_matrix_inverse.h>
 #include <vil/vil_image_view.h>
+#include <vnl/vnl_math.h>
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
 #endif
@@ -150,6 +151,25 @@ grid_data_2d(std::vector<vgl_point_2d<T>> const& data_in_loc,
     }
   }
   return gridded;
+}
+
+ template<class pointT, class pixelT>
+void  pointset_from_grid(vil_image_view<pixelT> const& grid, vgl_point_2d<pointT> const& upper_left, pointT step_size,
+                         std::vector<vgl_point_3d<pointT> >& ptset, double out_theta_radians = 0.0){
+  ptset.clear();
+  vgl_vector_2d<pointT> i_vec(std::cos(out_theta_radians), std::sin(out_theta_radians));
+  vgl_vector_2d<pointT> j_vec(std::sin(out_theta_radians), -std::cos(out_theta_radians));
+  pointT xul = upper_left.x(), yul = upper_left.y();
+  size_t ni = grid.ni(), nj = grid.nj();
+  for(size_t j = 0; j<nj; ++j)
+    for(size_t i = 0; i<ni; ++i){
+      vgl_point_2d<pixelT> loc = upper_left +
+        i*step_size*i_vec + j*step_size*j_vec;
+      pointT z = grid(i,j);
+      if(!vnl_math::isfinite(z))
+        continue;
+      ptset.emplace_back(loc.x(), loc.y(), z);
+    }
 }
 
 
