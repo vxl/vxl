@@ -4,7 +4,11 @@ set(bsgm_sources
     bsgm_census.h                          bsgm_census.cxx
     bsgm_disparity_estimator.h             bsgm_disparity_estimator.cxx
     bsgm_multiscale_disparity_estimator.h  bsgm_multiscale_disparity_estimator.cxx
+    bsgm_align_pointsets_3d.h              bsgm_align_pointsets_3d.hxx
+    bsgm_prob_align_pointsets_3d.h         bsgm_prob_align_pointsets_3d.hxx
    )
+
+aux_source_directory(Templates bsgm_sources)
 
 vxl_add_library(LIBRARY_NAME bsgm LIBRARY_SOURCES ${bsgm_sources})
 
