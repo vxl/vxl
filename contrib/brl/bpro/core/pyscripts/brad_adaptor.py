@@ -388,6 +388,39 @@ def get_image_coverage(mdata):
     else:
         return 0.0, 0.0, 0.0, 0.0, 0.0, 0.0
 
+def get_image_footprint(mdata):
+    batch.init_process("bradGetImageFootprintProcess")
+    batch.set_input_from_db(0, mdata)
+    status = batch.run_process()
+    if status:
+
+        # output size parameters
+        (id, type) = batch.commit_output(0)
+        nsheets = batch.get_output_unsigned(id)
+        batch.remove_data(id)
+        (id, type) = batch.commit_output(1)
+        nverts = batch.get_bbas_1d_array_unsigned(id)
+        batch.remove_data(id)
+
+        # output vertices
+        (id, type) = batch.commit_output(2);
+        verts = batch.get_output_double_array(id);
+        batch.remove_data(id)
+
+        # reshape output vertices
+        verts_out = []
+        idx = 0
+        for i in xrange(nsheets):
+            verts_out.append([])
+            for j in xrange(nverts[i]):
+                x = verts[idx]; idx += 1
+                y = verts[idx]; idx += 1
+                verts_out[i].append((x,y))
+
+        return verts_out
+    else:
+        return None
+
 def get_cloud_coverage(mdata):
     batch.init_process("bradGetCloudCoverageProcess")
     batch.set_input_from_db(0, mdata)
