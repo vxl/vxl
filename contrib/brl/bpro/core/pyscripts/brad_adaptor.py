@@ -12,12 +12,12 @@ batch = brl_init.DummyBatch()
 
 # parse metadata of a sat image, reads sat image, nitf2 header and a
 # metadata file in the same folder as the image if found
-def read_nitf_metadata(nitf_filename, imd_folder="", verbose = False):
+def read_nitf_metadata(nitf_filename, img_folder="", verbose = False):
     batch.init_process("bradNITFReadMetadataProcess")
     # requires full path and name
     batch.set_input_string(0, nitf_filename)
     # pass empty if meta is in img folder
-    batch.set_input_string(1, imd_folder)
+    batch.set_input_string(1, img_folder)
     batch.set_input_bool(2, verbose)
     status = batch.run_process()
     meta = None
