@@ -31,23 +31,23 @@ vil_nitf2_field_definition_node::repeat_node()
 // Class vil_nitf2_field_definition
 
 vil_nitf2_field_definition::
-vil_nitf2_field_definition(std::string tag,
-                           std::string pretty_name,
-                           vil_nitf2_field_formatter* formatter,
-                           bool blanks_ok,
-                           vil_nitf2_field_functor<int>* width_functor,
-                           vil_nitf2_field_functor<bool>* condition_functor,
-                           std::string units,
-                           std::string description)
+vil_nitf2_field_definition(std::string tag_,
+                           std::string pretty_name_,
+                           vil_nitf2_field_formatter* formatter_,
+                           bool blanks_ok_,
+                           vil_nitf2_field_functor<int>* width_functor_,
+                           vil_nitf2_field_functor<bool>* condition_functor_,
+                           std::string units_,
+                           std::string description_)
   : vil_nitf2_field_definition_node(type_field),
-    tag(std::move(tag)),
-    pretty_name(std::move(pretty_name)),
-    formatter(formatter),
-    blanks_ok(blanks_ok),
-    width_functor(width_functor),
-    condition_functor(condition_functor),
-    units(std::move(units)),
-    description(std::move(description))
+    tag(std::move(tag_)),
+    pretty_name(std::move(pretty_name_)),
+    formatter(formatter_),
+    blanks_ok(blanks_ok_),
+    width_functor(width_functor_),
+    condition_functor(condition_functor_),
+    units(std::move(units_)),
+    description(std::move(description_))
 {
   assert(!tag.empty() && "vil_nitf2_field_definition:: null tag");
   assert(formatter != nullptr && "vil_nitf2_field_definition:: null formatter");
