@@ -47,9 +47,22 @@ class vil_math_abs_functor
 
 static void test_bil_detect_ridges(int argc, char* argv[])
 {
-  assert(argc > 1);
-  vil_image_resource_sptr res = vil_load_image_resource((std::string(argv[1]) + "/c.20.tif").c_str());
-  TEST("File loading", !res, false);
+  // test data path passed as argument
+  if (argc < 2) {
+    TEST("Test directory", false, true);
+    std::cout << "no test directory specified" << std::endl;
+    return;
+  }
+
+  // load test file
+  std::string file = std::string(argv[1]) + "/c.20.tif";
+  vil_image_resource_sptr res = vil_load_image_resource(file.c_str());
+  if (!res) {
+    TEST("Test file", false, true);
+    std::cout << "failed file path: " << file << std::endl;
+    return;
+  }
+
   vil_image_view<vxl_uint_16> view_uint16 = res->get_view();
   vil_image_view<float> view_float;
 
