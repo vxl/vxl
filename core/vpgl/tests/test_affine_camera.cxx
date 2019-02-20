@@ -64,6 +64,15 @@ static void test_affine_camera()
   vgl_ray_3d<double> row_ray = row_cam.backproject_ray(img_pt);
   double ray_dist = vgl_distance(row_ray,wrld_pt);
   TEST_NEAR("row_ray_dist", ray_dist, 0.0, 0.05);
+
+  // test postmultiply with a translation
+  vgl_vector_3d<double> trans(3.0, -10.0, 5.0);
+  vpgl_affine_camera<double> trans_row_cam = postmultiply_a(row_cam, trans);
+  vgl_homg_point_2d<double> hpt = trans_row_cam.project(vgl_point_3d<double>(0, 0, 0));
+  vgl_point_2d<double> pt(hpt);
+  vgl_point_2d<double> test_pt(14.24918434, 543.8458145);
+  double pdist = (pt-test_pt).length();
+  TEST_NEAR("postmultiply translation", pdist, 0.0, 0.0001);
 }
 
 TESTMAIN(test_affine_camera);
