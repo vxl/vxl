@@ -324,6 +324,19 @@ vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
   return vpgl_affine_camera<T>(in_camera.get_matrix()*transform);
 }
 
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                      const vnl_vector_fixed<T,3>& translation ){
+  const vnl_matrix_fixed<T, 3, 4> m = in_camera.get_matrix();
+  vnl_matrix_fixed<T, 3, 4> tm = m;
+  vnl_vector_fixed<T, 4> r0 = m.get_row(0), r1 = m.get_row(1);
+  vnl_vector_fixed<T, 4> t;
+  for(size_t c = 0; c<3; ++c) t[c] = translation[c]; t[3] = T(1);
+  T dp0 = dot_product(r0, t); tm[0][3] = dp0;
+  T dp1 = dot_product(r1, t); tm[1][3] = dp1;
+  return vpgl_affine_camera<T>(tm);
+}
+
 // Code for easy instantiation.
 #undef vpgl_AFFINE_CAMERA_INSTANTIATE
 #define vpgl_AFFINE_CAMERA_INSTANTIATE(T) \
@@ -334,7 +347,9 @@ template vgl_h_matrix_3d<T> get_canonical_h(const vpgl_affine_camera<T>&); \
 template vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>&, const vnl_matrix_fixed<T,3,3>&); \
 template vpgl_affine_camera<T> premultiply_a( const vpgl_affine_camera<T>&, const vgl_h_matrix_2d<T>&); \
 template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vnl_matrix_fixed<T,4,4>&); \
-template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vgl_h_matrix_3d<T>&)
+template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vgl_h_matrix_3d<T>&); \
+template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vnl_vector_fixed<T,3>&); \
+template vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>&, const vgl_vector_3d<T>&)
 
 
 #endif // vpgl_affine_camera_hxx_

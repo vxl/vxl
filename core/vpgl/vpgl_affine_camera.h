@@ -133,6 +133,19 @@ vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
   return postmultiply_a(in_camera, transform.get_matrix());
 }
 
+//: compute At = A*H, where H is just 3-d translation
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                      const vnl_vector_fixed<T,3>& translation );
+
+//: compute At = A*H, where H is just 3-d translation
+template <class T>
+vpgl_affine_camera<T> postmultiply_a( const vpgl_affine_camera<T>& in_camera,
+                                      const vgl_vector_3d<T>& translation ){
+  vnl_vector_fixed<T, 3> tr(translation.x(), translation.y(), translation.z());
+  return postmultiply_a(in_camera, tr);
+}
+
 //: Read vpgl_affine_camera  from stream
 template <class Type>
 std::istream&  operator>>(std::istream& s, vpgl_affine_camera<Type>& c);
