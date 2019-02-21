@@ -30,6 +30,9 @@ add_subdirectory(ihog)
 # reasoning about scenes from a single image
 add_subdirectory(depth_map)
 
+# calibrate affine cameras derived from rational cameras
+add_subdirectory(acal)
+
 if(BUILD_TESTING)
   add_subdirectory(tests)
 endif()
