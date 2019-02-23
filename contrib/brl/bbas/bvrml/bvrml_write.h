@@ -32,6 +32,19 @@ class bvrml_color
   static bvrml_EXPORT_DATA unsigned char heatmap_classic[256][3];
 };
 
+class bvrml_custom_color
+{
+ public:
+  static bvrml_EXPORT_DATA unsigned heatmap_custom_size;
+  static bvrml_EXPORT_DATA unsigned char heatmap_custom[256][3];
+
+  //apply a function to compute the custom map (one time only)
+  //since the result is coded as an array initializer for future use
+  static void compute_custom();
+ private:
+  static void custom_map(float t, float& r, float& g, float& b);// a function that defines the map
+};
+
 class bvrml_write
 {
  public:
