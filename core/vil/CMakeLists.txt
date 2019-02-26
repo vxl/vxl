@@ -104,10 +104,18 @@ else()
 endif()
 
 ################################
-# JPEG 2000
+# JPEG2000 via ECW
 ################################
+option(VXL_USE_ECW "Use the ECW J2K library if available" OFF)
+mark_as_advanced(VXL_USE_ECW)
 include( ${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake )
 if(ECW_FOUND)
+  if( VXL_USING_NATIVE_ECW )
+    message("-- Found ECW J2K (native library)")
+  else()
+    message("-- Found ECW J2K (v3p library)")
+  endif()
+
   set( vil_ff_sources ${vil_ff_sources}
     file_formats/vil_j2k_image.h           file_formats/vil_j2k_image.cxx
     file_formats/NCSJPCVilIOStream.h       file_formats/NCSJPCVilIOStream.cxx
