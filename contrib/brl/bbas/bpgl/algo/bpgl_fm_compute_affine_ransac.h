@@ -8,6 +8,17 @@
 // A robust algorithm for computing the fundamental matrix from lists of
 // corresponding points between two rectified images.
 // This uses RREL to do the robust computation.
+//
+// Internally, the affine fundamental matrix has the form
+// (using Hartly and Zisserman convention for a-e):
+//       | 0  0  a |
+//   A = | 0  0  b |
+//       | c  d  e |
+//
+// which results in the following constraint matrix during "fit_from_minimal_set"
+//   PL^T * A * PR = 0
+//   a*pl.x + b*pl.y + c*pr.x + d*pl.y + e = 0
+//
 // \author Thomas Pollard
 // \date May 08, 2005
 //
