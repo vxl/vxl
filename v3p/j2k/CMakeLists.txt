@@ -1,10 +1,13 @@
-PROJECT (J2K)
-INCLUDE(${MODULE_PATH}/NewCMake/FindECW.cmake)
-#MESSAGE(${MODULE_PATH})
-INCLUDE(${MODULE_PATH}/NewCMake/FindWin32SDK.cmake)
-INCLUDE(${CMAKE_ROOT}/Modules/FindMFC.cmake)
-IF(J2K_SOURCES_FOUND) 
+project(J2K)
 
-INCLUDE_DIRECTORIES(./Source/include)
-SUBDIRS(./Source/C/NCSEcw/NCSEcw)
-ENDIF(J2K_SOURCES_FOUND) 
+if ( VXL_USE_ECW )
+  include(${VXL_CMAKE_DIR}/NewCMake/FindECW.cmake)
+
+  if( ECW_FOUND )
+    if( NOT VXL_USING_NATIVE_ECW )
+      include_directories(${CMAKE_CURRENT_LIST_DIR}/Source/include)
+      add_subdirectory(${CMAKE_CURRENT_LIST_DIR}/Source/C/NCSEcw/NCSEcw)
+    endif()
+  endif()
+
+endif()
