@@ -12,6 +12,7 @@
 #include <bpgl/algo/bpgl_fm_compute_affine_ransac.h>
 #include <vnl/vnl_fwd.h>
 #include <vnl/vnl_vector_fixed.h>
+#include <vnl/vnl_matrix_fixed.h>
 #include <vnl/vnl_double_3x3.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_homg_point_3d.h>
@@ -19,11 +20,15 @@
 static void test_fm_compute()
 {
   // PART 1: Test the affine fundamental matrix computation.
-  vpgl_affine_fundamental_matrix<double> fm_aff1;
-  fm_aff1.set_from_params(-3,2,5,-1,2);
+  double m[] = { 0, 0, 2,
+                 0, 0,-1,
+                -3, 2, 5 };
+  vnl_double_3x3 M(m);
+  vpgl_affine_fundamental_matrix<double> fm1_aff(M);
+
   vpgl_proj_camera<double> rc_aff;
   vpgl_proj_camera<double> lc_aff =
-    fm_aff1.extract_left_camera( vnl_vector_fixed<double,3>(1,2,3), 1 );
+    fm1_aff.extract_left_camera( vnl_vector_fixed<double,3>(1,2,3), 1 );
 
   bpgl_fm_compute_affine_ransac_params params_aff;
   bpgl_fm_compute_affine_ransac R( &params_aff );
@@ -53,11 +58,19 @@ static void test_fm_compute()
   lp_aff.emplace_back(4,-5 );
   rp_aff.emplace_back(-1,2 );
 
-  vpgl_affine_fundamental_matrix<double> fm_aff_est1;
-  R.compute( rp_aff, lp_aff, fm_aff_est1 );
-  std::cerr << "True registered fundamental matrix:\n" << fm_aff1.get_matrix()
-           << "Estimated registered fundamental matrix:\n" << fm_aff_est1.get_matrix();
+  vpgl_affine_fundamental_matrix<double> fm1_aff_est;
+  R.compute( rp_aff, lp_aff, fm1_aff_est );
 
+  vnl_double_3x3 fm1_vnl = fm1_aff.get_matrix();
+  vnl_double_3x3 fm1_vnl_est = fm1_aff_est.get_matrix();
+
+  double scale_factor = fm1_vnl[0][2] / fm1_vnl_est[0][2];
+  fm1_vnl_est *= scale_factor;
+
+  std::cerr << "True affine fundamental matrix:\n" << fm1_vnl
+            << "Estimated affine fundamental matrix (scaled):\n" << fm1_vnl_est;
+  TEST_NEAR( "fm compute affine ransac from perfect correspondences",
+             (fm1_vnl-fm1_vnl_est).frobenius_norm(), 0, 2.5 );
 
   // PART 3: Test the ransac algorithm with perfect correspondences.
   double random_list2r[12] = { -4, 15, 19, -12, 2, -26, -9, 17, -.5, -26, 11, 7 };

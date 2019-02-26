@@ -41,6 +41,7 @@ bpgl_fm_compute_affine_ransac::compute(
 
   // The following block is hacked from similar code in rrel_homography2d_est.
   auto* estimator = new rrel_fm_affine_problem( pr, pl );
+  estimator->verbose = false;
   auto* ransac = new rrel_muset_obj((int)std::floor(pr.size()*.75));
   estimator->set_prior_scale( 1.0 );
   auto* ransam = new rrel_ran_sam_search;
@@ -111,12 +112,18 @@ rrel_fm_affine_problem::fit_from_minimal_set(
 
   vnl_matrix<double> S(4,5);
   for ( int i = 0; i < 4; i++ ){
-    S(i,0)=pr_[point_indices[i]].x(); S(i,1)=pr_[point_indices[i]].y();
-    S(i,2)=1;
-    S(i,3)=pl_[point_indices[i]].y(); S(i,4)=pl_[point_indices[i]].x();
+    S(i,0) = pl_[point_indices[i]].x();
+    S(i,1) = pl_[point_indices[i]].y();
+    S(i,2) = pr_[point_indices[i]].x();
+    S(i,3) = pr_[point_indices[i]].y();
+    S(i,4) = 1.0;
   }
   vnl_svd<double> svdS( S );
   params = svdS.nullvector();
+
+  // normalize parameters
+  double norm = 1.0 / std::sqrt( params[0]*params[0] + params[1]*params[1] );
+  params *= norm;
 
   if ( verbose ) std::cerr << "params: " << params << '\n';
   return true;
@@ -161,15 +168,13 @@ rrel_fm_affine_problem::fm_to_params(
   const vpgl_affine_fundamental_matrix<double>& fm,
   vnl_vector<double>& p ) const
 {
-  p.set_size(2);
-  vnl_matrix_fixed<double,3,3> fm_vnl = fm.get_matrix();
-  p(0) = fm_vnl(2,0);
-  p(1) = fm_vnl(2,1);
-  p(2) = fm_vnl(2,2);
-  p(3) = fm_vnl(1,2);
-  p(4) = fm_vnl(0,2);
-  double norm = std::sqrt( p(0)*p(0)+p(1)*p(1) );
-  p=p/norm;
+  vnl_matrix_fixed<double,3,3> F = fm.get_matrix();
+  p.set_size(5);
+  p(0) = F(0,2);
+  p(1) = F(1,2);
+  p(2) = F(2,0);
+  p(3) = F(2,1);
+  p(4) = F(2,2);
 }
 
 
@@ -179,7 +184,13 @@ rrel_fm_affine_problem::params_to_fm(
   const vnl_vector<double>& p,
   vpgl_affine_fundamental_matrix<double>& fm ) const
 {
-  fm.set_from_params( p(0), p(1), p(2), p(3), p(4) );
+  vnl_matrix_fixed<double,3,3> F( (double)0.0 );
+  F(0,2) = p(0);
+  F(1,2) = p(1);
+  F(2,0) = p(2);
+  F(2,1) = p(3);
+  F(2,2) = p(4);
+  fm.set_matrix(F);
 }
 
 
