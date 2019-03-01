@@ -155,6 +155,12 @@ if(TIFF_FOUND)
   mark_as_advanced(VXL_USE_GEOTIFF)
   include( ${VXL_CMAKE_DIR}/FindGEOTIFF.cmake)
   if(GEOTIFF_FOUND)
+    if( VXL_USING_NATIVE_GEOTIFF )
+      message("-- Found GeoTiff (native library)")
+    else()
+      message("-- Found GeoTiff (v3p library)")
+    endif()
+
     set(HAS_GEOTIFF 1 )
     include_directories(${GEOTIFF_INCLUDE_DIR})
     set( vil_ff_sources ${vil_ff_sources}
