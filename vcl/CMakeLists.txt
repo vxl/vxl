@@ -54,7 +54,7 @@ write_compiler_detection_header(
       cxx_generic_lambdas                     # Generic lambdas, as defined in N3649.
       cxx_inheriting_constructors             # Inheriting constructors, as defined in N2540.
       cxx_inline_namespaces                   # Inline namespaces, as defined in N2535.
-      cxx_lambdas                             #Lambda functions, as defined in N2927.
+      cxx_lambdas                             # Lambda functions, as defined in N2927.
       cxx_lambda_init_captures                # Initialized lambda captures, as defined in N3648.
       cxx_local_type_template_args            # Local and unnamed types as template arguments, as defined in N2657.
       cxx_long_long_type                      # long long type, as defined in N1811.
@@ -65,14 +65,14 @@ write_compiler_detection_header(
       cxx_range_for                           # Range-based for, as defined in N2930.
       cxx_raw_string_literals                 # Raw string literals, as defined in N2442.
       cxx_reference_qualified_functions       # Reference qualified functions, as defined in N2439.
-      cxx_relaxed_constexpr                   #Relaxed constexpr, as defined in N3652.
+      cxx_relaxed_constexpr                   # Relaxed constexpr, as defined in N3652.
       cxx_return_type_deduction               # Return type deduction on normal functions, as defined in N3386.
       cxx_right_angle_brackets                # Right angle bracket parsing, as defined in N1757.
       cxx_rvalue_references                   # R-value references, as defined in N2118.
       cxx_sizeof_member                       # Size of non-static data members, as defined in N2253.
       cxx_static_assert                       # Static assert, as defined in N1720.
       cxx_strong_enums                        # Strongly typed enums, as defined in N2347.
-      cxx_thread_local                        #Thread-local variables, as defined in N2659.
+      cxx_thread_local                        # Thread-local variables, as defined in N2659.
       cxx_trailing_return_types               # Automatic function return type, as defined in N2541.
       cxx_unicode_literals                    # Unicode string literals, as defined in N2442.
       cxx_uniform_initialization              # Uniform intialization, as defined in N2640.
