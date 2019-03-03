@@ -5,9 +5,11 @@
 #endif
 #include <vgl/vgl_point_2d.h>
 #include <vpgl/vpgl_poly_radial_distortion.h>
+#include <vpgl_radial_tangential_distortion.h>
 #include <vpgl/algo/vpgl_lens_warp_mapper.h>
 #include <vil/vil_image_view.h>
 #include <vil/vil_save.h>
+#include <vil/vil_load.h>
 #include <vil/vil_bilin_interp.h>
 #include <vil/vil_math.h>
 #include <vul/vul_timer.h>
@@ -55,6 +57,11 @@ static void test_lens_warp_mapper()
     std::cout << "<DartMeasurementFile name=\"Unwarped Checker Board\" type=\"image/jpeg\"> "
              << "unwarp_cb.jpg </DartMeasurementFile>" <<std::endl;
 
+    //Pixel coords
+    vpgl_calibration_matrix<double> I;// identity
+    vil_image_view<vxl_byte> unwarp_pixel_cb(cb.ni(), cb.nj(), 1);
+    vpgl_lens_unwarp_pixel(cb, unwarp_pixel_cb, rd, I, interpolator);
+
     vil_image_view<vxl_byte> warp_cb(cb.ni(),cb.nj(),1);
     vpgl_lens_warp(unwarp_cb,warp_cb,rd,interpolator);
     vil_save(warp_cb,"warp_cb.jpg");
@@ -79,6 +86,7 @@ static void test_lens_warp_mapper()
     TEST("compare unwarped to original", rms < 50, true);
     std::cout << "image rms error: " << rms << std::endl;
   }
+
   //===================================================
   // timing tests
   {
