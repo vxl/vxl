@@ -21,6 +21,7 @@ set( vpgl_sources
   vpgl_lens_distortion.h           vpgl_lens_distortion.hxx
   vpgl_radial_distortion.h         vpgl_radial_distortion.hxx
   vpgl_poly_radial_distortion.h    vpgl_poly_radial_distortion.hxx
+  vpgl_radial_tangential_distortion.h vpgl_radial_tangential_distortion.hxx
   vpgl_rational_camera.h           vpgl_rational_camera.hxx
                                    vpgl_rational_camera.cxx
   vpgl_local_rational_camera.h     vpgl_local_rational_camera.hxx
