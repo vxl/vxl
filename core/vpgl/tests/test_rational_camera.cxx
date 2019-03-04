@@ -7,10 +7,16 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 #include <vpgl/vpgl_rational_camera.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
 
 static void test_rational_camera()
 {
+  bool good;
+  double eu, ev;
+
   //Test indentity camera
   vpgl_rational_camera<double> icam;//default constructor
   double x = 1.0, y = 2.0, z = 10.0;
@@ -51,17 +57,53 @@ static void test_rational_camera()
                                     sz, oz,
                                     su, ou,
                                     sv, ov);
-  bool good = true;
+
+  good = true;
   for (unsigned i = 0; i<8; ++i)
   {
     rcam.project(act_x[i], act_y[i], act_z[i], u, v);
     std::cout << '(' << act_x[i]<< ' '<< act_y[i]<< ' '<<act_z[i]
-             << ")-> (" << u << ' ' << v << ")\n";
-    double eu = std::fabs(u-act_u[i]), ev = std::fabs(v-act_v[i]);
-    std::cout << "error = (" << eu << ' ' << ev << ")\n";
+             << ")-> (" << u << ' ' << v << ")" << std::endl;
+
+    eu = std::fabs(u-act_u[i]);
+    ev = std::fabs(v-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")" << std::endl;
     good = good && eu<0.01 && ev < 0.01;
   }
-  TEST("test rational camera projection", good, true);
+  TEST("test rational camera projection (generic)", good, true);
+
+  good = true;
+  for (unsigned i = 0; i<8; ++i)
+  {
+    vnl_vector_fixed<double,3> world_point_vnl(act_x[i], act_y[i], act_z[i]);
+    auto image_point_vnl = rcam.project(world_point_vnl);
+
+    rcam.project(act_x[i], act_y[i], act_z[i], u, v);
+    std::cout << "vnl: " << world_point_vnl << "->" << image_point_vnl << std::endl;
+
+    eu = std::fabs(image_point_vnl[0]-act_u[i]);
+    ev = std::fabs(image_point_vnl[1]-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")" << std::endl;
+    good = good && eu<0.01 && ev < 0.01;
+  }
+  TEST("test rational camera projection (vnl)", good, true);
+
+  good = true;
+  for (unsigned i = 0; i<8; ++i)
+  {
+    vgl_point_3d<double> world_point_vgl(act_x[i], act_y[i], act_z[i]);
+    auto image_point_vgl = rcam.project(world_point_vgl);
+
+    rcam.project(act_x[i], act_y[i], act_z[i], u, v);
+    std::cout << world_point_vgl << "->" << image_point_vgl << std::endl;
+
+    eu = std::fabs(image_point_vgl.x()-act_u[i]);
+    ev = std::fabs(image_point_vgl.y()-act_v[i]);
+    std::cout << "error = (" << eu << ' ' << ev << ")" << std::endl;
+    good = good && eu<0.01 && ev < 0.01;
+  }
+  TEST("test rational camera projection (vgl)", good, true);
+
   //Test various constructors
   // Set values on default constructor
   std::vector<std::vector<double> > coeff_array;

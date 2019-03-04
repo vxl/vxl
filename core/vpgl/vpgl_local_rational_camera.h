@@ -39,7 +39,6 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
   vpgl_local_rational_camera(T longitude, T latitude, T elevation,
                              vpgl_rational_camera<T> const& rcam);
 
-
   ~vpgl_local_rational_camera() override = default;
 
   std::string type_name() const override { return "vpgl_local_rational_camera"; }
@@ -55,51 +54,33 @@ class vpgl_local_rational_camera : public vpgl_rational_camera<T>
              static_cast<vpgl_rational_camera<T> const&>(that)      &&
              this->lvcs() == that.lvcs() );
   }
-// Mutators/Accessors
 
-//: set the local vertical coordinate system
-void set_lvcs(vpgl_lvcs const& lvcs) {lvcs_ = lvcs;}
+  //: set the local vertical coordinate system
+  void set_lvcs(vpgl_lvcs const& lvcs) {lvcs_ = lvcs;}
+  void set_lvcs(double const& lon, double const& lat, double const& elev);
 
-vpgl_lvcs lvcs() const {return lvcs_;}
+  //: get the local vertical coordinate system
+  vpgl_lvcs lvcs() const {return lvcs_;}
 
-//: The generic camera interface. u represents image column, v image row.
-void project(const T x, const T y, const T z, T& u, T& v) const override;
+  //: project 3D->2D, x,y,z are relative to the lvcs
+  using vpgl_rational_camera<T>::project; // "project" overload from base class
+  void project(const T x, const T y, const T z, T& u, T& v) const override;
 
-// Interface for vnl
+  // write PVL (paramter value language) to output stream
+  void write_pvl(std::ostream& s, vpgl_rational_order output_order) const override;
 
-//: Project a world point onto the image
-vnl_vector_fixed<T, 2> project(vnl_vector_fixed<T, 3> const& world_point) const override;
+  //: read from PVL (parameter value language) file/stream
+  using vpgl_rational_camera<T>::read_pvl; // "read_pvl" overload from base class
+  bool read_pvl(std::istream& istr) override;
 
-// Interface for vgl
+  //: read from TXT file/stream
+  using vpgl_rational_camera<T>::read_txt; // "read_txt" overload from base class
+  bool read_txt(std::istream& istr) override;
 
-//: Project a world point onto the image
-vgl_point_2d<T> project(vgl_point_3d<T> world_point) const override;
-
-
-//: print the camera parameters
-void print(std::ostream& s = std::cout) const override;
-
-//: save to file (the lvcs is after the global rational camera parameters)
-bool save(std::string cam_path) override;
-
-
-protected:
-vpgl_lvcs lvcs_;
+ protected:
+  // members
+  vpgl_lvcs lvcs_;
 };
-
-//: Creates a local rational camera from a file
-// \relatesalso vpgl_local_rational_camera
-template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path);
-
-//: Creates a local rational camera from a stream (RPB format)
-// \relatesalso vpgl_local_rational_camera
-template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr);
-
-//: read camera from txt file (small sat format)
-template <class T>
-vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string cam_path);
 
 //: Write to stream
 // \relatesalso vpgl_local_rational_camera
@@ -110,6 +91,27 @@ std::ostream& operator<<(std::ostream& s, const vpgl_local_rational_camera<T>& p
 // \relatesalso vpgl_local_rational_camera
 template <class T>
 std::istream& operator>>(std::istream& is, vpgl_local_rational_camera<T>& p);
+
+//: Creates a local rational camera from a PVL file
+// \relatesalso vpgl_local_rational_camera
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::string cam_path);
+
+//: Creates a local rational camera from a PVL input stream
+// \relatesalso vpgl_local_rational_camera
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera(std::istream& istr);
+
+//: Creates a local rational camera from a TXT file
+// \relatesalso vpgl_local_rational_camera
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::string cam_path);
+
+//: Creates a local rational camera from a TXT input stream
+// \relatesalso vpgl_local_rational_camera
+template <class T>
+vpgl_local_rational_camera<T>* read_local_rational_camera_from_txt(std::istream& istr);
+
 
 #define VPGL_LOCAL_RATIONAL_CAMERA_INSTANTIATE(T) extern "please include vgl/vpgl_local_rational_camera.hxx first"
 

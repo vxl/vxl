@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <fstream>
+#include <iomanip>
 #include "vpgl_rational_camera.h"
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>
@@ -14,9 +15,10 @@
 //#include <vnl/io/vnl_io_matrix_fixed.h>
 #include <vgl/vgl_point_2d.h>
 #include <vgl/vgl_point_3d.h>
+
+
 //--------------------------------------
 // Constructors
-//
 
 // Create an identity projection, i.e. (x,y) identically maps to (u,v)
 template <class T>
@@ -31,109 +33,216 @@ vpgl_rational_camera<T>::vpgl_rational_camera()
   scale_offsets_.resize(5, soff);
 }
 
-//: Constructor with an array encoding of the coefficients
-template <class T>
-vpgl_rational_camera<T>::
-vpgl_rational_camera(std::vector<std::vector<T> > const& rational_coeffs,
-                     std::vector<vpgl_scale_offset<T> > const& scale_offsets)
-{
-  this->set_coefficients(rational_coeffs);
-  this->set_scale_offsets(scale_offsets);
-}
 
 template <class T>
-vpgl_rational_camera<T>::
-vpgl_rational_camera(std::vector<T> const& neu_u,
-                     std::vector<T> const& den_u,
-                     std::vector<T> const& neu_v,
-                     std::vector<T> const& den_v,
-                     const T x_scale, const T x_off,
-                     const T y_scale, const T y_off,
-                     const T z_scale, const T z_off,
-                     const T u_scale, const T u_off,
-                     const T v_scale, const T v_off
-                    )
+vpgl_rational_camera<T>::vpgl_rational_camera(
+    std::vector<T> const& neu_u,
+    std::vector<T> const& den_u,
+    std::vector<T> const& neu_v,
+    std::vector<T> const& den_v,
+    const T x_scale, const T x_off,
+    const T y_scale, const T y_off,
+    const T z_scale, const T z_off,
+    const T u_scale, const T u_off,
+    const T v_scale, const T v_off,
+    vpgl_rational_order input_order
+    )
 {
-  for (unsigned i = 0; i<20; ++i)
-  {
-    rational_coeffs_[NEU_U][i] = neu_u[i];
-    rational_coeffs_[DEN_U][i] = den_u[i];
-    rational_coeffs_[NEU_V][i] = neu_v[i];
-    rational_coeffs_[DEN_V][i] = den_v[i];
-  }
-  scale_offsets_.resize(5);
-  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
-  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
-  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
-  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
-  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
+  this->set_coefficients(neu_u, den_u, neu_v, den_v, input_order);
+  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                          u_scale, u_off, v_scale, v_off);
 }
 
 //: Constructor from 4 coefficient arrays and 5 scale, offset pairs.
 template <class T>
-vpgl_rational_camera<T>::
-vpgl_rational_camera(const double*  neu_u,
-                     const double* den_u,
-                     const double* neu_v,
-                     const double* den_v,
-                     const T x_scale, const T x_off,
-                     const T y_scale, const T y_off,
-                     const T z_scale, const T z_off,
-                     const T u_scale, const T u_off,
-                     const T v_scale, const T v_off
-                    )
+vpgl_rational_camera<T>::vpgl_rational_camera(
+    const double* neu_u,
+    const double* den_u,
+    const double* neu_v,
+    const double* den_v,
+    const T x_scale, const T x_off,
+    const T y_scale, const T y_off,
+    const T z_scale, const T z_off,
+    const T u_scale, const T u_off,
+    const T v_scale, const T v_off,
+    vpgl_rational_order input_order
+    )
 {
-  for (unsigned i = 0; i<20; ++i)
-  {
-    rational_coeffs_[NEU_U][i] = T(neu_u[i]);
-    rational_coeffs_[DEN_U][i] = T(den_u[i]);
-    rational_coeffs_[NEU_V][i] = T(neu_v[i]);
-    rational_coeffs_[DEN_V][i] = T(den_v[i]);
-  }
-  scale_offsets_.resize(5);
-  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
-  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
-  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
-  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
-  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
+  this->set_coefficients(neu_u, den_u, neu_v, den_v, input_order);
+  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                          u_scale, u_off, v_scale, v_off);
 }
 
+// Constructor with an array encoding of the coefficients
+template <class T>
+vpgl_rational_camera<T>::vpgl_rational_camera(
+    std::vector<std::vector<T> > const& rational_coeffs,
+    std::vector<vpgl_scale_offset<T> > const& scale_offsets,
+    vpgl_rational_order input_order
+    )
+{
+  this->set_coefficients(rational_coeffs,input_order);
+  this->set_scale_offsets(scale_offsets);
+}
+
+// Constructor with a vnl matrix of coefficients
+template <class T>
+vpgl_rational_camera<T>::vpgl_rational_camera(
+    vnl_matrix_fixed<T, 4, 20> const& rational_coeffs,
+    std::vector<vpgl_scale_offset<T> > const& scale_offsets,
+    vpgl_rational_order input_order
+    )
+{
+  this->set_coefficients(rational_coeffs,input_order);
+  this->set_scale_offsets(scale_offsets);
+}
+
+
+//--------------------------------------
+// Clone
+
+// clone rational camera
 template <class T>
 vpgl_rational_camera<T>* vpgl_rational_camera<T>::clone(void) const
 {
   return new vpgl_rational_camera<T>(*this);
 }
 
-template <class T>
-void vpgl_rational_camera<T>::
-set_coefficients(std::vector<std::vector<T> > const& rational_coeffs)
-{
-  for (unsigned j = 0; j<4; ++j)
-    for (unsigned i = 0; i<20; ++i)
-      rational_coeffs_[j][i] = rational_coeffs[j][i];
-}
 
-template <class T>
-void vpgl_rational_camera<T>::
-set_scale_offsets(std::vector<vpgl_scale_offset<T> > const& scale_offsets)
-{
-  scale_offsets_=scale_offsets;
-}
+//--------------------------------------
+// Set coefficient matrix
 
+// set coefficients from 4 vectors
 template <class T>
-std::vector<std::vector<T> > vpgl_rational_camera<T>::coefficients() const
+void vpgl_rational_camera<T>::set_coefficients(
+    std::vector<T> const& neu_u,
+    std::vector<T> const& den_u,
+    std::vector<T> const& neu_v,
+    std::vector<T> const& den_v,
+    vpgl_rational_order input_order
+    )
 {
-  std::vector<std::vector<T> > result(4);
-  for (unsigned j = 0; j<4; ++j)
-  {
-    result[j].resize(20);
-    for (unsigned i = 0; i<20; ++i)
-      result[j][i]=rational_coeffs_[j][i];
+  vnl_matrix_fixed<T, 4, 20> coeffs;
+  for (unsigned i = 0; i<20; ++i) {
+    coeffs[NEU_U][i] = neu_u[i];
+    coeffs[DEN_U][i] = den_u[i];
+    coeffs[NEU_V][i] = neu_v[i];
+    coeffs[DEN_V][i] = den_v[i];
   }
+  this->set_coefficients(coeffs,input_order);
+}
+
+// set coefficients from 4 vector pointers
+template <class T>
+void vpgl_rational_camera<T>::set_coefficients(
+    const double* neu_u,
+    const double* den_u,
+    const double* neu_v,
+    const double* den_v,
+    vpgl_rational_order input_order
+    )
+{
+  vnl_matrix_fixed<T, 4, 20> coeffs;
+  for (unsigned i = 0; i<20; ++i) {
+    coeffs[NEU_U][i] = neu_u[i];
+    coeffs[DEN_U][i] = den_u[i];
+    coeffs[NEU_V][i] = neu_v[i];
+    coeffs[DEN_V][i] = den_v[i];
+  }
+  this->set_coefficients(coeffs,input_order);
+}
+
+// set coefficients from array encoding
+template <class T>
+void vpgl_rational_camera<T>::set_coefficients(
+    std::vector<std::vector<T> > const& rational_coeffs,
+    vpgl_rational_order input_order
+    )
+{
+  auto order = vpgl_rational_order_func::to_vector(input_order);
+  for (unsigned j = 0; j<4; ++j)
+    for (unsigned i = 0; i<20; ++i)
+      rational_coeffs_[j][i] = rational_coeffs[j][order[i]];
+}
+
+// set coefficients from vnl matrix
+template <class T>
+void vpgl_rational_camera<T>::set_coefficients(
+    vnl_matrix_fixed<T, 4, 20> const& rational_coeffs,
+    vpgl_rational_order input_order
+    )
+{
+  auto order = vpgl_rational_order_func::to_vector(input_order);
+  for (unsigned j = 0; j<4; ++j)
+    for (unsigned i = 0; i<20; ++i)
+      rational_coeffs_[j][i] = rational_coeffs[j][order[i]];
+}
+
+//--------------------------------------
+// Get coefficient matrix
+
+// get coefficients as vnl matrix
+template <class T>
+vnl_matrix_fixed<T, 4, 20>
+vpgl_rational_camera<T>::coefficient_matrix(vpgl_rational_order output_order) const
+{
+  auto order = vpgl_rational_order_func::to_vector(output_order);
+  vnl_matrix_fixed<T, 4, 20> result;
+  for (unsigned j = 0; j<4; ++j)
+    for (unsigned i = 0; i<20; ++i)
+      result[j][order[i]] = rational_coeffs_[j][i];
   return result;
 }
 
-//: Create a vector with the standard order of monomial terms
+// get coefficients as std vector of vectors
+template <class T>
+std::vector<std::vector<T> >
+vpgl_rational_camera<T>::coefficients(vpgl_rational_order output_order) const
+{
+  auto order = vpgl_rational_order_func::to_vector(output_order);
+  std::vector<std::vector<T> > result(4, std::vector<T>(20));
+  for (unsigned j = 0; j<4; ++j)
+    for (unsigned i = 0; i<20; ++i)
+      result[j][order[i]] = rational_coeffs_[j][i];
+  return result;
+}
+
+
+//--------------------------------------
+// Set scale/offset values
+
+// set all scale offsets from individual values
+template <class T>
+void vpgl_rational_camera<T>::set_scale_offsets(
+    const T x_scale, const T x_off,
+    const T y_scale, const T y_off,
+    const T z_scale, const T z_off,
+    const T u_scale, const T u_off,
+    const T v_scale, const T v_off
+    )
+{
+  scale_offsets_.resize(5);
+  scale_offsets_[X_INDX] = vpgl_scale_offset<T>(x_scale, x_off);
+  scale_offsets_[Y_INDX] = vpgl_scale_offset<T>(y_scale, y_off);
+  scale_offsets_[Z_INDX] = vpgl_scale_offset<T>(z_scale, z_off);
+  scale_offsets_[U_INDX] = vpgl_scale_offset<T>(u_scale, u_off);
+  scale_offsets_[V_INDX] = vpgl_scale_offset<T>(v_scale, v_off);
+}
+
+// set all scale offsets from vector
+template <class T>
+void vpgl_rational_camera<T>::set_scale_offsets(
+    std::vector<vpgl_scale_offset<T> > const& scale_offsets
+    )
+{
+  scale_offsets_ = scale_offsets;
+}
+
+
+//--------------------------------------
+// Utility functions
+
+//: Create a vector with the internal VXL order of monomial terms
 template <class T>
 vnl_vector_fixed<T, 20>
 vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
@@ -192,15 +301,21 @@ vpgl_rational_camera<T>::power_vector(const T x, const T y, const T z) const
   return pv;
 }
 
-// Base projection method
+
+//--------------------------------------
+// Project 3D world point into 2D image space
+
+// generic interface
 template <class T>
-void vpgl_rational_camera<T>::project(const T x, const T y, const T z,
-                                      T& u, T& v) const
+void vpgl_rational_camera<T>::project(
+    const T x, const T y, const T z,
+    T& u, T& v) const
 {
   // scale, offset the world point before projection
   T sx = scale_offsets_[X_INDX].normalize(x);
   T sy = scale_offsets_[Y_INDX].normalize(y);
   T sz = scale_offsets_[Z_INDX].normalize(z);
+  // projection
   vnl_vector_fixed<T, 4> polys = rational_coeffs_*power_vector(sx, sy, sz);
   T su = polys[NEU_U]/polys[DEN_U];
   T sv = polys[NEU_V]/polys[DEN_V];
@@ -209,245 +324,148 @@ void vpgl_rational_camera<T>::project(const T x, const T y, const T z,
   v = scale_offsets_[V_INDX].un_normalize(sv);
 }
 
-//vnl interface methods
+// vnl interface
 template <class T>
 vnl_vector_fixed<T, 2>
-vpgl_rational_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point)const
+vpgl_rational_camera<T>::project(vnl_vector_fixed<T, 3> const& world_point) const
 {
   vnl_vector_fixed<T, 2> image_point;
   this->project(world_point[0], world_point[1], world_point[2],
-                image_point[0], image_point[1]);
+                         image_point[0], image_point[1]);
   return image_point;
 }
 
-//vgl interface methods
+// vgl interface
 template <class T>
-vgl_point_2d<T> vpgl_rational_camera<T>::project(vgl_point_3d<T> world_point)const
+vgl_point_2d<T> vpgl_rational_camera<T>::project(vgl_point_3d<T> world_point) const
 {
   T u = 0, v = 0;
   this->project(world_point.x(), world_point.y(), world_point.z(), u, v);
   return vgl_point_2d<T>(u, v);
 }
 
-//: print the camera parameters
+
+//--------------------------------------
+// Output
+
+// write camera parameters to output stream as PVL (paramter value language)
 template <class T>
-void vpgl_rational_camera<T>::print(std::ostream& s) const
+void vpgl_rational_camera<T>::write_pvl(
+    std::ostream& ostr,
+    vpgl_rational_order output_order
+    ) const
 {
-  vpgl_scale_offset<T> sox = scale_offsets_[X_INDX];
-  vpgl_scale_offset<T> soy = scale_offsets_[Y_INDX];
-  vpgl_scale_offset<T> soz = scale_offsets_[Z_INDX];
-  vpgl_scale_offset<T> sou = scale_offsets_[U_INDX];
-  vpgl_scale_offset<T> sov = scale_offsets_[V_INDX];
+  // current ostream flags (restore at end of function)
+  std::ios_base::fmtflags old_settings = ostr.flags();
 
-  s << "vpgl_rational_camera:\n"
-    << "------------------------\n"
-    << "xoff = " << sox.offset()
-    << "  yoff = " << soy.offset()
-    << "  zoff = " << soz.offset() << '\n'
-    << "xscale = " << sox.scale()
-    << "  yscale = " << soy.scale()
-    << "  zscale = " << soz.scale() << '\n'
+  // print header & scale/offset values
+  ostr << "satId = \"????\";\n"
+       << "bandId = \"RGB\";\n"
+       << "SpecId = \"" << vpgl_rational_order_func::to_string(output_order)
+          << "\";" << std::endl
+       << "BEGIN_GROUP = IMAGE" << std::endl
+       <<  std::endl <<  std::endl  // skip errBias and errRand fields
+       << "\tlineOffset = "   << offset(V_INDX) << std::endl
+       << "\tsampOffset = "   << offset(U_INDX) << std::endl
+       << "\tlatOffset = "    << offset(Y_INDX) << std::endl
+       << "\tlongOffset = "   << offset(X_INDX) << std::endl
+       << "\theightOffset = " << offset(Z_INDX) << std::endl
+       << "\tlineScale = "    <<  scale(V_INDX) << std::endl
+       << "\tsampScale = "    <<  scale(U_INDX) << std::endl
+       << "\tlatScale = "     <<  scale(Y_INDX) << std::endl
+       << "\tlongScale = "    <<  scale(X_INDX) << std::endl
+       << "\theightScale = "  <<  scale(Z_INDX) << std::endl
+       ;
 
-    << "uoff = " << sou.offset()
-    << "  voff = " << sov.offset() << '\n'
-    << "uscale = " << sou.scale()
-    << "  vscale = " << sov.scale() << "\n\n"
+  // print coefficients in specified order
+  auto coeffs = this->coefficient_matrix(output_order);
 
-    << "U Numerator\n"
-    << "[0] " << rational_coeffs_[0][0]
-    << " [1] " << rational_coeffs_[0][1]
-    << " [2] " << rational_coeffs_[0][2]
-    << " [3] " << rational_coeffs_[0][3] <<'\n'
-    << "[4] " << rational_coeffs_[0][4]
-    << " [5] " << rational_coeffs_[0][5]
-    << " [6] " << rational_coeffs_[0][6]
-    << " [7] " << rational_coeffs_[0][7] <<'\n'
-    << "[8] "  << rational_coeffs_[0][8]
-    << " [9] " << rational_coeffs_[0][9]
-    << " [10] " << rational_coeffs_[0][10]
-    << " [11] " << rational_coeffs_[0][11] <<'\n'
-    << "[12] " << rational_coeffs_[0][12]
-    << " [13] " << rational_coeffs_[0][13]
-    << " [14] " << rational_coeffs_[0][14]
-    << " [15] "  << rational_coeffs_[0][15] <<'\n'
-    << "[16] " << rational_coeffs_[0][16]
-    << " [17] " << rational_coeffs_[0][17]
-    << " [18] " << rational_coeffs_[0][18]
-    << " [19] " << rational_coeffs_[0][19] <<"\n\n"
+  std::vector<std::pair<std::string, poly_index> > items;
+  items.push_back(std::make_pair("lineNumCoef",NEU_V));
+  items.push_back(std::make_pair("lineDenCoef",DEN_V));
+  items.push_back(std::make_pair("sampNumCoef",NEU_U));
+  items.push_back(std::make_pair("sampDenCoef",DEN_U));
 
-    << "U Denominator\n"
-    << "[0] " << rational_coeffs_[1][0]
-    << " [1] " << rational_coeffs_[1][1]
-    << " [2] " << rational_coeffs_[1][2]
-    << " [3] " << rational_coeffs_[1][3] <<'\n'
-    << "[4] " << rational_coeffs_[1][4]
-    << " [5] " << rational_coeffs_[1][5]
-    << " [6] " << rational_coeffs_[1][6]
-    << " [7] " << rational_coeffs_[1][7]  <<'\n'
-    << "[8] " << rational_coeffs_[1][8]
-    << " [9] " << rational_coeffs_[1][9]
-    << " [10] " << rational_coeffs_[1][10]
-    << " [11] " << rational_coeffs_[1][11] <<'\n'
-    << "[12] " << rational_coeffs_[1][12]
-    << " [13] " << rational_coeffs_[1][13]
-    << " [14] " << rational_coeffs_[1][14]
-    << " [15] " << rational_coeffs_[1][15] <<'\n'
-    << "[16] " << rational_coeffs_[1][16]
-    << " [17] " << rational_coeffs_[1][17]
-    << " [18] " << rational_coeffs_[1][18]
-    << " [19] " << rational_coeffs_[1][19] <<"\n\n"
+  ostr << std::scientific << std::showpos;
+  for (auto const& item : items) {
+    ostr << "\t" << item.first << " = (" << std::endl;
+    for (int i=0; i<20; i++) {
+      ostr << "\t\t" << std::setprecision(12) << coeffs[item.second][i];
+      if (i < 19)
+        ostr << "," << std::endl;
+      else
+        ostr << ");" << std::endl;
+    }
+  }
 
-    << "V Numerator\n"
-    << "[0] " << rational_coeffs_[2][0]
-    << " [1] " << rational_coeffs_[2][1]
-    << " [2] " << rational_coeffs_[2][2]
-    << " [3] " << rational_coeffs_[2][3]<<'\n'
-    << "[4] " << rational_coeffs_[2][4]
-    << " [5] " << rational_coeffs_[2][5]
-    << " [6] " << rational_coeffs_[2][6]
-    << " [7] " << rational_coeffs_[2][7] <<'\n'
-    << "[8] " << rational_coeffs_[2][8]
-    << " [9] " << rational_coeffs_[2][9]
-    << " [10] " << rational_coeffs_[2][10]
-    << " [11] " << rational_coeffs_[2][11] <<'\n'
-    << "[12] " << rational_coeffs_[2][12]
-    << " [13] " << rational_coeffs_[2][13]
-    << " [14] " << rational_coeffs_[2][14]
-    << " [15] " << rational_coeffs_[2][15]<<'\n'
-    << "[16] " << rational_coeffs_[2][16]
-    << " [17] " << rational_coeffs_[2][17]
-    << " [18] " << rational_coeffs_[2][18]
-    << " [19] " << rational_coeffs_[2][19] <<"\n\n"
+  // print footer
+  ostr << "END_GROUP = IMAGE" << std::endl
+       << "END;" << std::endl;
 
-    << "V Denominator\n"
-    << "[0] " << rational_coeffs_[3][0]
-    << " [1] " << rational_coeffs_[3][1]
-    << " [2] " << rational_coeffs_[3][2]
-    << " [3] " << rational_coeffs_[3][3]<<'\n'
-    << "[4] " << rational_coeffs_[3][4]
-    << " [5] " << rational_coeffs_[3][5]
-    << " [6] " << rational_coeffs_[3][6]
-    << " [7] " << rational_coeffs_[3][7] <<'\n'
-    << "[8] " << rational_coeffs_[3][8]
-    << " [9] " << rational_coeffs_[3][9]
-    << " [10] " << rational_coeffs_[3][10]
-    << " [11] " << rational_coeffs_[3][11] <<'\n'
-    << "[12] " << rational_coeffs_[3][12]
-    << " [13] " << rational_coeffs_[3][13]
-    << " [14] " << rational_coeffs_[3][14]
-    << " [15] " << rational_coeffs_[3][15]<<'\n'
-    << "[16] " << rational_coeffs_[3][16]
-    << " [17] " << rational_coeffs_[3][17]
-    << " [18] " << rational_coeffs_[3][18]
-    << " [19] " << rational_coeffs_[3][19] <<'\n'
-    <<"------------------------------------------------\n\n";
+  // restore ostream flags
+  ostr.flags(old_settings);
 }
 
+// print camera parameters to output stream
 template <class T>
-bool vpgl_rational_camera<T>::save(std::string cam_path)
+void vpgl_rational_camera<T>::print(
+    std::ostream& ostr,
+    vpgl_rational_order output_order
+    ) const
 {
+  this->write_pvl(ostr,output_order);
+}
+
+// save camera parameters to file
+template <class T>
+bool vpgl_rational_camera<T>::save(
+    std::string cam_path,
+    vpgl_rational_order output_order
+    ) const
+{
+  // open file
   std::ofstream file_out;
   file_out.open(cam_path.c_str());
   if (!file_out.good()) {
     std::cerr << "error: bad filename: " << cam_path << std::endl;
     return false;
   }
-  file_out.precision(12);
 
-  int map[20];
-  map[0]=19;
-  map[1]=9;
-  map[2]=15;
-  map[3]=18;
-  map[4]=6;
-  map[5]=8;
-  map[6]=14;
-  map[7]=3;
-  map[8]=12;
-  map[9]=17;
-  map[10]=5;
-  map[11]=0;
-  map[12]=4;
-  map[13]=7;
-  map[14]=1;
-  map[15]=10;
-  map[16]=13;
-  map[17]=2;
-  map[18]=11;
-  map[19]=16;
+  // print to file
+  this->write_pvl(file_out,output_order);
 
-  file_out << "satId = \"????\";\n"
-           << "bandId = \"RGB\";\n"
-           << "SpecId = \"RPC00B\";\n"
-           << "BEGIN_GROUP = IMAGE\n"
-           << "\n\n"  // skip errBias and errRand fields
-           << "  lineOffset = " << offset(V_INDX) << '\n'
-           << "  sampOffset = " << offset(U_INDX) << '\n'
-           << "  latOffset = " << offset(Y_INDX) << '\n'
-           << "  longOffset = " << offset(X_INDX) << '\n'
-           << "  heightOffset = " << offset(Z_INDX) << '\n'
-           << "  lineScale = " << scale(V_INDX) << '\n'
-           << "  sampScale = " << scale(U_INDX) << '\n'
-           << "  latScale = " << scale(Y_INDX) << '\n'
-           << "  longScale = " << scale(X_INDX) << '\n'
-           << "  heightScale = " << scale(Z_INDX) << '\n';
-  vnl_matrix_fixed<T,4,20> coeffs = this->coefficient_matrix();
-  file_out << "  lineNumCoef = (";
-  for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_V][map[i]];
-    if (i < 19)
-      file_out << ',';
-  }
-  file_out << ");\n  lineDenCoef = (";
-  for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_V][map[i]];
-    if (i < 19)
-      file_out << ',';
-  }
-  file_out << ");\n  sampNumCoef = (";
-  for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[NEU_U][map[i]];
-    if (i < 19)
-      file_out << ',';
-  }
-  file_out << ");\n  sampDenCoef = (";
-  for (int i=0; i<20; i++) {
-    file_out << "\n    " << coeffs[DEN_U][map[i]];
-    if (i < 19)
-      file_out << ',';
-  }
-  file_out << ");\n"
-           << "END_GROUP = IMAGE\n"
-           << "END;\n";
-
+  // cleanup
+  file_out.close();
   return true;
 }
 
-//: Write to stream
-template <class T>
-std::ostream&  operator<<(std::ostream& s, const vpgl_rational_camera<T >& c )
-{
-  c.print(s);
-  return s;
-}
 
-//: read from a file
+//--------------------------------------
+// Input
+
+// read from PVL (parameter value language) file
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(std::string cam_path)
+bool vpgl_rational_camera<T>::read_pvl(std::string cam_path)
 {
+  // open file
   std::ifstream file_inp;
   file_inp.open(cam_path.c_str());
   if (!file_inp.good()) {
     std::cout << "error: bad filename: " << cam_path << std::endl;
-    return nullptr;
+    return false;
   }
-  vpgl_rational_camera<T>* rcam = read_rational_camera<T>(file_inp);
+
+  // read from file stream
+  bool success = read_pvl(file_inp);
+
+  // cleanup
   file_inp.close();
-  return rcam;
+  return success;
 }
-//: read from an open istream
+
+// read from PVL input stream
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
+bool vpgl_rational_camera<T>::read_pvl(std::istream& istr)
 {
   std::vector<T> neu_u;
   std::vector<T> den_u;
@@ -455,59 +473,86 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
   std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
+  bool has_xs=0,has_xo=0,has_ys=0,has_yo=0,has_zs=0,has_zo=0;
+  bool has_us=0,has_uo=0,has_vs=0,has_vo=0;
+
+  // assume RPC00B ordering as default
+  auto input_order = vpgl_rational_order::RPC00B;
+
   std::string input;
   char bulk[100];
+  T temp_dbl;
 
   while (!istr.eof()) {
     istr >> input;
 
-    if (input=="sampScale") {
+    if (input=="SpecId") {
+      istr >> input;
+      istr >> input;
+      try {
+        input_order = vpgl_rational_order_func::from_string(input);
+      } catch (const std::exception& err) {
+        std::cerr << "<" << input << "> unrecognized as vpgl_rational_order" << std::endl;
+        return false;
+      }
+    }
+
+    else if (input=="sampScale") {
       istr >> input;
       istr >> u_scale;
+      has_us = 1;
     }
-    if (input=="sampOffset") {
+    else if (input=="sampOffset") {
       istr >> input;
       istr >> u_off;
+      has_uo = 1;
     }
 
-    if (input=="lineScale") {
+    else if (input=="lineScale") {
       istr >> input;
       istr >> v_scale;
+      has_vs = 1;
     }
-    if (input=="lineOffset") {
+    else if (input=="lineOffset") {
       istr >> input;
       istr >> v_off;
+      has_vo = 1;
     }
 
-    if (input=="longScale") {
+    else if (input=="longScale") {
       istr >> input;
       istr >> x_scale;
+      has_xs = 1;
     }
-    if (input=="longOffset") {
+    else if (input=="longOffset") {
       istr >> input;
       istr >> x_off;
+      has_xo = 1;
     }
 
-    if (input=="latScale") {
+    else if (input=="latScale") {
       istr >> input;
       istr >> y_scale;
+      has_ys = 1;
     }
-    if (input=="latOffset") {
+    else if (input=="latOffset") {
       istr >> input;
       istr >> y_off;
+      has_yo = 1;
     }
 
-    if (input=="heightScale") {
+    else if (input=="heightScale") {
       istr >> input;
       istr >> z_scale;
+      has_zs = 1;
     }
-    if (input=="heightOffset") {
+    else if (input=="heightOffset") {
       istr >> input;
       istr >> z_off;
+      has_zo = 1;
     }
 
-    T temp_dbl;
-    if (input=="lineNumCoef") {
+    else if (input=="lineNumCoef") {
       istr >> input;
       istr >> input;
       for (int i=0; i<20; i++) {
@@ -517,7 +562,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
       }
     }
 
-    if (input=="lineDenCoef") {
+    else if (input=="lineDenCoef") {
       istr >> input;
       istr >> input;
       for (int i=0; i<20; i++) {
@@ -527,7 +572,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
       }
     }
 
-    if (input=="sampNumCoef") {
+    else if (input=="sampNumCoef") {
       istr >> input;
       istr >> input;
       for (int i=0; i<20; i++) {
@@ -537,7 +582,7 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
       }
     }
 
-    if (input=="sampDenCoef") {
+    else if (input=="sampDenCoef") {
       istr >> input;
       istr >> input;
       for (int i=0; i<20; i++) {
@@ -548,97 +593,81 @@ vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
       break;
     }
   }
+
   istr >> input;
   if (input!="END_GROUP")
-    return nullptr;
+    return false;
   istr >> input;
   if (input!="=")
-    return nullptr;
+    return false;
   istr >> input;
   if (input!="IMAGE")
-    return nullptr;
+    return false;
   istr >> input;
   if (input!="END;")
-    return nullptr;
-  int map[20];
-  map[0]=19;
-  map[1]=9;
-  map[2]=15;
-  map[3]=18;
-  map[4]=6;
-  map[5]=8;
-  map[6]=14;
-  map[7]=3;
-  map[8]=12;
-  map[9]=17;
-  map[10]=5;
-  map[11]=0;
-  map[12]=4;
-  map[13]=7;
-  map[14]=1;
-  map[15]=10;
-  map[16]=13;
-  map[17]=2;
-  map[18]=11;
-  map[19]=16;
+    return false;
 
-  if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    std::cerr << "the input is not a valid rational camera\n";
-    return nullptr;
+  if ( (!has_xs) || (!has_xo) || (!has_ys) || (!has_yo) || (!has_zs) || (!has_zo) ||
+       (!has_us) || (!has_uo) || (!has_vs) || (!has_vo) )
+  {
+    std::cerr << "rational camera missing scale/offset values" << std::endl;
+    return false;
   }
 
-  T temp_vector[20];
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_v[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_v[map[j]] = temp_vector[j];
+  if ((neu_u.size() != 20) || (den_u.size() != 20) ||
+      (neu_v.size() != 20) || (den_v.size() != 20))
+  {
+    std::cerr << "the input is not a valid rational camera" << std::endl;
+    return false;
   }
 
-  vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
-                                                             x_scale, x_off, y_scale, y_off, z_scale, z_off,
-                                                             u_scale, u_off, v_scale, v_off);
-  return cam;
+  // set values & cleanup
+  this->set_coefficients(neu_u, den_u, neu_v, den_v, input_order);
+  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                          u_scale, u_off, v_scale, v_off);
+  return true;
 }
 
-//: Creates a rational camera from a txt file
-// \relatesalso vpgl_rational_camera
+
+// read from TXT file
 template <class T>
-vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
+bool vpgl_rational_camera<T>::read_txt(std::string cam_path)
 {
-  std::ifstream istr;
-  istr.open(cam_path.c_str());
-  if (!istr.good()) {
+  // open file
+  std::ifstream file_inp;
+  file_inp.open(cam_path.c_str());
+  if (!file_inp.good()) {
     std::cout << "error: bad filename: " << cam_path << std::endl;
-    return nullptr;
+    return false;
   }
 
+  // read from file stream
+  bool success = read_txt(file_inp);
+
+  // cleanup
+  file_inp.close();
+  return success;
+}
+
+// read from TXT input stream
+template <class T>
+bool vpgl_rational_camera<T>::read_txt(std::istream& istr)
+{
   std::vector<T> neu_u;
   std::vector<T> den_u;
   std::vector<T> neu_v;
   std::vector<T> den_v;
   T x_scale,x_off,y_scale,y_off,z_scale,z_off,u_scale,u_off,v_scale,v_off;
 
+  bool has_xs=0,has_xo=0,has_ys=0,has_yo=0,has_zs=0,has_zo=0;
+  bool has_us=0,has_uo=0,has_vs=0,has_vo=0;
+
+  // assume RPC00B ordering as default
+  auto input_order = vpgl_rational_order::RPC00B;
+
   std::string input;
   char bulk[100];
+  T temp_dbl;
 
   while (!istr.eof()) {
     istr >> input;
@@ -646,50 +675,59 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
     if (input=="SAMP_SCALE:") {
       //istr >> input;
       istr >> u_scale;
+      has_us = 1;
     }
-    if (input=="SAMP_OFF:") {
+    else if (input=="SAMP_OFF:") {
       //istr >> input;
       istr >> u_off;
+      has_uo = 1;
     }
 
-    if (input=="LINE_SCALE:") {
+    else if (input=="LINE_SCALE:") {
       //istr >> input;
       istr >> v_scale;
+      has_vs = 1;
     }
-    if (input=="LINE_OFF:") {
+    else if (input=="LINE_OFF:") {
       //istr >> input;
       istr >> v_off;
+      has_vo = 1;
     }
 
-    if (input=="LONG_SCALE:") {
+    else if (input=="LONG_SCALE:") {
       //istr >> input;
       istr >> x_scale;
+      has_xs = 1;
     }
-    if (input=="LONG_OFF:") {
+    else if (input=="LONG_OFF:") {
       //istr >> input;
       istr >> x_off;
+      has_xo = 1;
     }
 
-    if (input=="LAT_SCALE:") {
+    else if (input=="LAT_SCALE:") {
       //istr >> input;
       istr >> y_scale;
+      has_ys = 1;
     }
-    if (input=="LAT_OFF:") {
+    else if (input=="LAT_OFF:") {
       //istr >> input;
       istr >> y_off;
+      has_yo = 1;
     }
 
-    if (input=="HEIGHT_SCALE:") {
+    else if (input=="HEIGHT_SCALE:") {
       //istr >> input;
       istr >> z_scale;
+      has_zs = 1;
     }
-    if (input=="HEIGHT_OFF:") {
+    else if (input=="HEIGHT_OFF:") {
       //istr >> input;
       istr >> z_off;
+      has_zo = 1;
     }
 
-    T temp_dbl;
-    if (input=="LINE_NUM_COEFF_1:") {
+    else if (input=="LINE_NUM_COEFF_1:") {
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
@@ -702,7 +740,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
       }
     }
 
-    if (input=="LINE_DEN_COEFF_1:") {
+    else if (input=="LINE_DEN_COEFF_1:") {
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
@@ -715,7 +753,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
       }
     }
 
-    if (input=="SAMP_NUM_COEFF_1:") {
+    else if (input=="SAMP_NUM_COEFF_1:") {
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
@@ -728,7 +766,7 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
       }
     }
 
-    if (input=="SAMP_DEN_COEFF_1:") {
+    else if (input=="SAMP_DEN_COEFF_1:") {
       //istr >> input;
       //istr >> input;
       istr >> temp_dbl;
@@ -743,76 +781,89 @@ vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
     }
   }
 
-  int map[20];
-  map[0]=19;
-  map[1]=9;
-  map[2]=15;
-  map[3]=18;
-  map[4]=6;
-  map[5]=8;
-  map[6]=14;
-  map[7]=3;
-  map[8]=12;
-  map[9]=17;
-  map[10]=5;
-  map[11]=0;
-  map[12]=4;
-  map[13]=7;
-  map[14]=1;
-  map[15]=10;
-  map[16]=13;
-  map[17]=2;
-  map[18]=11;
-  map[19]=16;
-
-  if ((neu_u.size() != 20) || (den_u.size() != 20)) {
-    std::cerr << "the input is not a valid rational camera\n";
-    return nullptr;
+  if ( (!has_xs) || (!has_xo) || (!has_ys) || (!has_yo) || (!has_zs) || (!has_zo) ||
+       (!has_us) || (!has_uo) || (!has_vs) || (!has_vo) )
+  {
+    std::cerr << "rational camera missing scale/offset values" << std::endl;
+    return false;
   }
 
-  T temp_vector[20];
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_u[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_u[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = neu_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    neu_v[map[j]] = temp_vector[j];
-  }
-  for (int j=0; j<20; j++) {
-    temp_vector[j] = den_v[j];
-  }
-  for (int j=0; j<20; j++) {
-    den_v[map[j]] = temp_vector[j];
+  if ((neu_u.size() != 20) || (den_u.size() != 20) ||
+      (neu_v.size() != 20) || (den_v.size() != 20))
+  {
+    std::cerr << "the input is not a valid rational camera" << std::endl;
+    return false;
   }
 
-  vpgl_rational_camera<T>* cam = new vpgl_rational_camera<T>(neu_u, den_u, neu_v, den_v,
-                                                             x_scale, x_off, y_scale, y_off, z_scale, z_off,
-                                                             u_scale, u_off, v_scale, v_off);
-
-  istr.close();
-  return cam;
+  // set values & cleanup
+  this->set_coefficients(neu_u, den_u, neu_v, den_v, input_order);
+  this->set_scale_offsets(x_scale, x_off, y_scale, y_off, z_scale, z_off,
+                          u_scale, u_off, v_scale, v_off);
+  return true;
 }
 
 
-//: Read from stream
+//--------------------------------------
+// Convenience functions
+
+// write to stream
 template <class T>
-std::istream&  operator >>(std::istream& s, vpgl_rational_camera<T >& c )
+std::ostream& operator<<(std::ostream& s, const vpgl_rational_camera<T >& c )
 {
-  vpgl_rational_camera<T>* cptr = read_rational_camera<T>(s);
-  c = *cptr;
+  c.print(s);
   return s;
 }
+
+// read from stream
+template <class T>
+std::istream& operator >>(std::istream& s, vpgl_rational_camera<T >& c )
+{
+  c.read_pvl(s);
+  return s;
+}
+
+// read from a PVL file/stream
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera(std::string cam_path)
+{
+  vpgl_rational_camera<T> cam;
+  if (!cam.read_pvl(cam_path))
+    return nullptr;
+  else
+    return cam.clone();
+}
+
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera(std::istream& istr)
+{
+  vpgl_rational_camera<T> cam;
+  if (!cam.read_pvl(istr))
+    return nullptr;
+  else
+    return cam.clone();
+}
+
+// read from a TXT file/stream
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera_from_txt(std::string cam_path)
+{
+  vpgl_rational_camera<T> cam;
+  if (!cam.read_txt(cam_path))
+    return nullptr;
+  else
+    return cam.clone();
+}
+
+template <class T>
+vpgl_rational_camera<T>* read_rational_camera_from_txt(std::istream& istr)
+{
+  vpgl_rational_camera<T> cam;
+  if (!cam.read_txt(istr))
+    return nullptr;
+  else
+    return cam.clone();
+}
+
 
 // Code for easy instantiation.
 #undef vpgl_RATIONAL_CAMERA_INSTANTIATE
@@ -823,7 +874,8 @@ template std::ostream& operator<<(std::ostream&, const vpgl_rational_camera<T >&
 template std::istream& operator>>(std::istream&, vpgl_rational_camera<T >&); \
 template vpgl_rational_camera<T > * read_rational_camera(std::string); \
 template vpgl_rational_camera<T > * read_rational_camera(std::istream&); \
-template vpgl_rational_camera<T > * read_rational_camera_from_txt(std::string);
+template vpgl_rational_camera<T > * read_rational_camera_from_txt(std::string); \
+template vpgl_rational_camera<T > * read_rational_camera_from_txt(std::istream&)
 
 
 #endif // vpgl_rational_camera_hxx_

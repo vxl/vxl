@@ -34,7 +34,7 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
  public:
 
   enum geopt_coord { LAT, LON };
-  vpgl_nitf_rational_camera();
+  vpgl_nitf_rational_camera() = default;
 
   //: Construct from a nitf image file
   vpgl_nitf_rational_camera(std::string const& nitf_image_path,
@@ -54,11 +54,16 @@ class vpgl_nitf_rational_camera : public vpgl_rational_camera<double>
   vnl_double_2 lower_left() const {return ll_;}
   vnl_double_2 lower_right() const {return lr_;}
 
+  //: print all camera information
+  void print(
+      std::ostream& ostr = std::cout,
+      vpgl_rational_order output_order = vpgl_rational_order::VXL
+      ) const;
+
  private:
-  //internal functions
-  // NITF_RATIONAL00B - commercial + airborne
-  void set_order_b(int*);
+  // internal functions
   bool init(vil_nitf2_image* nitf_image, bool verbose);
+
   // data members
   std::string nitf_rational_type_;
   std::string image_id_;

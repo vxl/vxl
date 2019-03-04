@@ -214,31 +214,6 @@ static int geostr_to_latlon(const char* str, double* lat, double* lon)
   return latstrlen+lonstrlen;
 }
 
-// Coefficient ordering possibilities
-// NITF_RATIONAL00B - commercial + airborne
-void vpgl_nitf_rational_camera::set_order_b(int* ord)
-{
-  ord[0]  = 11; //  0, xxx);
-  ord[1]  = 14; //  1, xxy);
-  ord[2]  = 17; //  2, xxz);
-  ord[3]  =  7; //  3, xx );
-  ord[4]  = 12; //  4, xyy);
-  ord[5]  = 10; //  5, xyz);
-  ord[6]  =  4; //  6, xy );
-  ord[7]  = 13; //  7, xzz);
-  ord[8]  =  5; //  8, xz );
-  ord[9]  =  1; //  9, x  );
-  ord[10] = 15; // 10, yyy);
-  ord[11] = 18; // 11, yyz);
-  ord[12] =  8; // 12, yy );
-  ord[13] = 16; // 13, yzz);
-  ord[14] =  6; // 14, yz );
-  ord[15] =  2; // 15, y  );
-  ord[16] = 19; // 16, zzz);
-  ord[17] =  9; // 17, zz );
-  ord[18] =  3; // 18, z  );
-  ord[19] =  0; // 19, 1  );
-}
 
 bool vpgl_nitf_rational_camera::
 init(vil_nitf2_image* nitf_image, bool verbose)
@@ -246,31 +221,27 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   std::vector< vil_nitf2_image_subheader* > headers = nitf_image->get_image_headers();
   vil_nitf2_image_subheader* hdr = headers[0];
 
-  double tre_data[90];
   // initialize the array
+  double tre_data[90];
   for (double & i : tre_data) i = 0;
 
-
+  // read information
   bool success =
-    hdr->get_rpc_params(nitf_rational_type_, image_id_, image_igeolo_,  tre_data);
+    hdr->get_rpc_params(nitf_rational_type_, image_id_, image_igeolo_, tre_data);
   if (!success)
   {
-    std::cout << "Failed to get rational camera parameters from nitf image in"
-             << " vgpl_nitf_rational_camera\n";
+    std::cerr << "Failed to get rational camera parameters from nitf image in"
+              << " vgpl_nitf_rational_camera\n";
     return false;
   }
 
-  if (verbose)
-    std::cout << " nitf_rational type " << nitf_rational_type_ << '\n'
-             << " Image Id " << image_id_ << '\n'
-             << " IGEOLO " << image_igeolo_ << '\n';
+  // extract corner coordinates from image_geolo field
   // example 324158N1171117W324506N1171031W324428N1170648W324120N1170734W
   double ULlat, ULlon;
   double URlat, URlon;
   double LLlat, LLlon;
   double LRlat, LRlon;
 
-  // Extract them from the image_igeolo field
   geostr_to_latlon (image_igeolo_.c_str(),    &ULlat, &ULlon);
   geostr_to_latlon (image_igeolo_.c_str()+15, &URlat, &URlon);
   geostr_to_latlon (image_igeolo_.c_str()+30, &LRlat, &LRlon);
@@ -281,45 +252,27 @@ init(vil_nitf2_image* nitf_image, bool verbose)
   ll_[LAT]=LLlat;   ll_[LON]=LLlon;
   lr_[LAT]=LRlat;   lr_[LON]=LRlon;
 
-  if (verbose)
-    std::cout << "ULlon " << ULlon << " ULlat " << ULlat << '\n'
-             << "URlon " << URlon << " URlat " << URlat << '\n'
-             << "LRlon " << LRlon << " LRlat " << LRlat << '\n'
-             << "LLlon " << LLlon << " lLlat " << LLlat << '\n';
-  int ord[20];
-  // set order of coefficients depending on call parameter "coef_ordering" = coefficient order
-  if (nitf_rational_type_ == "RPC00A")
-    set_order_b(ord);
-  else if (nitf_rational_type_ == "RPC00B")
-    set_order_b(ord);
-  else
-  {
-    std::cout << "Unknown rational type from nitf image in"
-             << " vgpl_nitf_rational_camera\n";
-    return false;
+  // set coefficients
+  vnl_matrix_fixed<double,4,20> coeffs;
+  for (unsigned i=0; i<20; i++) {
+    coeffs[NEU_V][i] = tre_data[i];
+    coeffs[DEN_V][i] = tre_data[i + 20];
+    coeffs[NEU_U][i] = tre_data[i + 40];
+    coeffs[DEN_U][i] = tre_data[i + 60];
   }
+  auto input_order = vpgl_rational_order_func::from_string(nitf_rational_type_);
+  this->set_coefficients(coeffs,input_order);
 
+  // set scale/offset
+  this->set_scale_offsets(
+      tre_data[88], tre_data[83], // x
+      tre_data[87], tre_data[82], // y
+      tre_data[89], tre_data[84], // z
+      tre_data[86], tre_data[81], // u
+      tre_data[85], tre_data[80]  // v
+      );
 
-  // apply the 80 coefficients to the std::vectors to instance the vpgl_rational_camera
-  for (int i=0; i<20; i++)
-  {
-    rational_coeffs_[2][i] = tre_data[ord[i]];
-    rational_coeffs_[3][i] = tre_data[ord[i] + 20];
-    rational_coeffs_[0][i] = tre_data[ord[i] + 40];
-    rational_coeffs_[1][i] = tre_data[ord[i] + 60];
-  }
-  // also fill in the scale & offset normalization parameters
-  scale_offsets_[X_INDX].set_scale(tre_data[88]);
-  scale_offsets_[X_INDX].set_offset(tre_data[83]);
-  scale_offsets_[Y_INDX].set_scale(tre_data[87]);
-  scale_offsets_[Y_INDX].set_offset(tre_data[82]);
-  scale_offsets_[Z_INDX].set_scale(tre_data[89]);
-  scale_offsets_[Z_INDX].set_offset(tre_data[84]);
-  scale_offsets_[U_INDX].set_scale(tre_data[86]);
-  scale_offsets_[U_INDX].set_offset(tre_data[81]);
-  scale_offsets_[V_INDX].set_scale(tre_data[85]);
-  scale_offsets_[V_INDX].set_offset(tre_data[80]);
-
+  // correction offset
   double correction_u_off,correction_v_off;
   success=hdr->get_correction_offset(correction_u_off,correction_v_off);
 
@@ -328,11 +281,14 @@ init(vil_nitf2_image* nitf_image, bool verbose)
       scale_offsets_[U_INDX].set_offset(scale_offsets_[U_INDX].offset()-correction_u_off);
       scale_offsets_[V_INDX].set_offset(scale_offsets_[V_INDX].offset()-correction_v_off);
   }
+
+  // verbose report
+  if (verbose)
+    this->print();
+
+  // cleanup
   return true;
 }
-
-vpgl_nitf_rational_camera::vpgl_nitf_rational_camera() = default;
-
 
 vpgl_nitf_rational_camera::
 vpgl_nitf_rational_camera(std::string const& nitf_image_path,
@@ -355,54 +311,56 @@ vpgl_nitf_rational_camera(std::string const& nitf_image_path,
   }
   //cast to an nitf2_image
   auto* nitf_image = (vil_nitf2_image*)image.ptr();
-  //Get and set the information
-  if (!this->init(nitf_image, verbose))
-    return;
-  vpgl_scale_offset<double> z = scale_offsets_[Z_INDX];
-  double z_off = z.offset();
-  if (verbose)
-  {
-    double ul_u=0, ul_v=0, ur_u=0, ur_v=0, ll_u=0, ll_v=0, lr_u=0, lr_v=0;
-    // Project upper left corner
-    this->project(ul_[LON], ul_[LAT], z_off, ul_u, ul_v);
-    std::cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
-    // Project upper right corner
-    this->project(ur_[LON], ur_[LAT], z_off, ur_u, ur_v);
-    std::cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
-    // Project lower left corner
-    this->project(ll_[LON], ll_[LAT], z_off, ll_u, ll_v);
-    std::cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
-    // Project lower right corner
-    this->project(lr_[LON], lr_[LAT], z_off, lr_u, lr_v);
-    std::cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
-  }
+
+  //read information
+  this->init(nitf_image, verbose);
 }
 
 vpgl_nitf_rational_camera::
 vpgl_nitf_rational_camera(vil_nitf2_image* nitf_image, bool verbose)
 {
-  //Get and set the information
-  if (!this->init(nitf_image, verbose))
-    return;
+  this->init(nitf_image, verbose);
+}
 
-  if (verbose)
-    std::cout << *this;
-  vpgl_scale_offset<double> z = scale_offsets_[Z_INDX];
-  double z_off = z.offset();
-  if (verbose)
-  {
-    double ul_u=0, ul_v=0, ur_u=0, ur_v=0, ll_u=0, ll_v=0, lr_u=0, lr_v=0;
-    // Project upper left corner
-    this->project(ul_[LON], ul_[LAT], z_off, ul_u, ul_v);
-    std::cout << "Upper left image corner(" << ul_u << ' ' << ul_v << ")\n";
-    // Project upper right corner
-    this->project(ur_[LON], ur_[LAT], z_off, ur_u, ur_v);
-    std::cout << "Upper right image corner(" << ur_u << ' ' << ur_v << ")\n";
-    // Project lower left corner
-    this->project(ll_[LON], ll_[LAT], z_off, ll_u, ll_v);
-    std::cout << "Lower left image corner(" << ll_u << ' ' << ll_v << ")\n";
-    // Project lower right corner
-    this->project(lr_[LON], lr_[LAT], z_off, lr_u, lr_v);
-    std::cout << "Lower right image corner(" << lr_u << ' ' << lr_v << ")\n";
-  }
+
+// print all camera information
+void vpgl_nitf_rational_camera::
+print(std::ostream& ostr, vpgl_rational_order output_order) const
+{
+  // print basic information
+  ostr << " nitf_rational_type " << nitf_rational_type_ << std::endl
+       << " Image Id " << image_id_ << std::endl
+       << " IGEOLO " << image_igeolo_ << std::endl
+       ;
+
+  // print rational camera in PVL format
+  this->write_pvl(ostr,output_order);
+
+  // print corners & projections
+  double z_off = this->offset(Z_INDX);
+  double u,v;
+
+  this->project(ul_[LON], ul_[LAT], z_off, u, v);
+  ostr << "upper left: " << std::endl
+       << "  lon/lat = " << ul_[LON] << "/" << ul_[LAT] << std::endl
+       << "  row/col = " << v << "/" << u << std::endl
+       ;
+
+  this->project(ur_[LON], ur_[LAT], z_off, u, v);
+  ostr << "upper right: " << std::endl
+       << "  lon/lat = " << ur_[LON] << "/" << ur_[LAT] << std::endl
+       << "  row/col = " << v << "/" << u << std::endl
+       ;
+
+  this->project(lr_[LON], lr_[LAT], z_off, u, v);
+  ostr << "lower right: " << std::endl
+       << "  lon/lat = " << lr_[LON] << "/" << lr_[LAT] << std::endl
+       << "  row/col = " << v << "/" << u << std::endl
+       ;
+
+  this->project(ll_[LON], ll_[LAT], z_off, u, v);
+  ostr << "lower left: " << std::endl
+       << "  lon/lat = " << ll_[LON] << "/" << ll_[LAT] << std::endl
+       << "  row/col = " << v << "/" << u << std::endl
+       ;
 }

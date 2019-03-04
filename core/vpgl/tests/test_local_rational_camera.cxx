@@ -9,7 +9,11 @@
 #include <vpgl/vpgl_local_rational_camera.h>
 #include <vpgl/io/vpgl_io_local_rational_camera.h>
 #include <vpgl/vpgl_lvcs.h>
+#include <vnl/vnl_vector_fixed.h>
 #include <vnl/vnl_matrix_fixed.h>
+#include <vgl/vgl_point_2d.h>
+#include <vgl/vgl_point_3d.h>
+
 
 //a rational camera from a commercial satellite image
 vpgl_rational_camera<double> construct_rational_camera()
@@ -64,6 +68,8 @@ vpgl_rational_camera<double> construct_rational_camera()
 
 static void test_local_rational_camera()
 {
+  double eu, ev;
+
   vpgl_rational_camera<double> rcam = construct_rational_camera();
   double xoff = rcam.offset(vpgl_rational_camera<double>::X_INDX);
   double yoff = rcam.offset(vpgl_rational_camera<double>::Y_INDX);
@@ -71,12 +77,34 @@ static void test_local_rational_camera()
 
   vpgl_lvcs lvcs(yoff, xoff, zoff);
   vpgl_local_rational_camera<double> lrcam(lvcs, rcam);
+
   double ug, vg, ul, vl;
   rcam.project(xoff, yoff, zoff, ug, vg);
   lrcam.project(0.0, 0.0, 0.0, ul, vl);
-  std::cout << "Global (u v) (" << ug << ' ' << vg << ")\n"
-           << "Local (u v) (" << ul << ' ' << vl << ")\n";
-  TEST_NEAR("local projection", std::fabs(ug-ul)+std::fabs(vg-vl), 0.0, 1e-3);
+  std::cout << "Global (u v) (" << ug << ' ' << vg << std::endl
+            << "Local  (u v) (" << ul << ' ' << vl << std::endl;
+  eu = std::fabs(ug-ul);
+  ev = std::fabs(vg-vl);
+  TEST_NEAR("local projection (generic)", eu+ev, 0.0, 1e-3);
+
+  auto image_point_vnl_g = rcam.project(vnl_vector_fixed<double,3>(xoff, yoff, zoff));
+  auto image_point_vnl_l = lrcam.project(vnl_vector_fixed<double,3>(0.0, 0.0, 0.0));
+
+  std::cout << "Global vnl " << image_point_vnl_g << std::endl
+            << "Local vnl  " << image_point_vnl_l << std::endl;
+  eu = std::fabs(image_point_vnl_g[0]-image_point_vnl_l[0]);
+  ev = std::fabs(image_point_vnl_g[1]-image_point_vnl_l[1]);
+  TEST_NEAR("local projection (vnl)", eu+ev, 0.0, 1e-3);
+
+  auto image_point_vgl_g = rcam.project(vgl_point_3d<double>(xoff, yoff, zoff));
+  auto image_point_vgl_l = lrcam.project(vgl_point_3d<double>(0.0, 0.0, 0.0));
+
+  std::cout << "Global " << image_point_vgl_g << std::endl
+            << "Local  " << image_point_vgl_l << std::endl;
+  eu = std::fabs(image_point_vgl_g.x()-image_point_vgl_l.x());
+  ev = std::fabs(image_point_vgl_g.y()-image_point_vgl_l.y());
+  TEST_NEAR("local projection (vgl)", eu+ev, 0.0, 1e-3);
+
   //---- test file I/O
   std::string path = "./test.lrcam";
   bool good = lrcam.save(path);
