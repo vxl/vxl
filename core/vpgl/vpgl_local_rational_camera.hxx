@@ -160,13 +160,12 @@ bool vpgl_local_rational_camera<T>::read_txt(std::istream& istr)
     if (input=="lvcs") {
       istr >> longitude >> latitude >> elevation;
       has_lvcs = true;
+	  return true;
     }
   }
 
-  if (!has_lvcs) {
     //std::cerr << "error: not a composite rational camera file\n";
     return false;
-  }
 }
 
 
