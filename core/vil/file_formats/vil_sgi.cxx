@@ -178,7 +178,7 @@ vil_image_view_base_sptr vil_sgi_image::get_copy_view(
   // Number of bytes per pixel is equal to the number of channels
   vil_memory_chunk_sptr chunk = new vil_memory_chunk(nx*ny*nplanes(), VIL_PIXEL_FORMAT_BYTE);
 
-  for(int i = 0; i < ny; i++)
+  for(size_t i = 0; i < ny; i++)
   {
     is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(nj()-1-y0-i)+x0*nplanes());
     is_->read(reinterpret_cast<vxl_byte *>(chunk->data()) + i*nx*nplanes(), nx*nplanes());
@@ -203,7 +203,8 @@ bool vil_sgi_image::put_view(const vil_image_view_base& view,
   }
   const auto & view2 = static_cast<const vil_image_view<vxl_byte> &>(view);
 
-  for(int i = 0; i < view2.nj(); i++)
+
+  for(size_t i = 0; i < view2.nj(); i++)
   {
     is_->seek(SGI_HDR_SIZE+ni()*nplanes()*(nj()-1-y0-i)+x0*nplanes());
     is_->write(&view2(0, i, view2.nplanes()-1), view2.ni()*view2.nplanes());
