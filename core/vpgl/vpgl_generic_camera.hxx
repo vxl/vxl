@@ -39,8 +39,8 @@ vpgl_generic_camera<T>::
     double min_dist = vnl_numeric_traits<double>::maxval;
     double max_dist = 0.0;
     vgl_point_3d<T> datum(T(0), T(0), T(0));
-    for (int v = 0; v<nr; ++v)
-        for (int u = 0; u<nc; ++u) {
+    for (size_t v = 0; v<nr; ++v)
+        for (size_t u = 0; u<nc; ++u) {
             vgl_point_3d<T> org = rays[v][u].origin();
             double d = vgl_distance(datum, org);
             if (d>max_dist) {
@@ -69,7 +69,7 @@ vpgl_generic_camera<T>::
         rays_[0]=rays;
         nr_[0]=nr; nc_[0]=nc;
         int nrlv = (nr)/2, nclv = (nc)/2;
-        for (int lev = 1; lev<n_levels_; ++lev) {
+        for (size_t lev = 1; lev<n_levels_; ++lev) {
             rays_[lev].resize(nrlv, nclv);
             nr_[lev]=nrlv; nc_[lev]=nclv;
             for (int r = 0; r<nrlv; ++r)
@@ -122,7 +122,8 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
                                          int start_c, int end_c,
                                          int& nearest_r, int& nearest_c) const
 {
-    assert(level>=0 && level<n_levels_);
+	int n_levels1_ = static_cast<int>(n_levels_);
+    assert(level>=0 && level<n_levels1_);
     assert(start_r>=0 && end_r < nr_[level]);
     assert(start_c>=0 && end_c < nc_[level]);
     nearest_r = 0, nearest_c = 0;
