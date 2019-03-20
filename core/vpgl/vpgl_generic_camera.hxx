@@ -122,7 +122,7 @@ void vpgl_generic_camera<T>::nearest_ray(int level,
                                          int start_c, int end_c,
                                          int& nearest_r, int& nearest_c) const
 {
-	int n_levels1_ = static_cast<int>(n_levels_);
+    int n_levels1_ = static_cast<int>(n_levels_);
     assert(level>=0 && level<n_levels1_);
     assert(start_r>=0 && end_r < nr_[level]);
     assert(start_c>=0 && end_c < nc_[level]);
