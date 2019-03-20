@@ -30,9 +30,9 @@ add_test( NAME bpgl_algo_test_interpolate COMMAND $<TARGET_FILE:bpgl_algo_test_a
 add_test( NAME bpgl_algo_test_camera_homographies COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_camera_homographies )
 add_test( NAME bpgl_algo_test_camera_from_box COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_camera_from_box )
 add_test( NAME bpgl_algo_test_project COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_project )
-add_test( NAME bpgl_algo_test_gridding COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_project )
-add_test( NAME bpgl_algo_test_3d_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_project )
-add_test( NAME bpgl_algo_test_heightmap_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_project )
+add_test( NAME bpgl_algo_test_gridding COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_gridding )
+add_test( NAME bpgl_algo_test_3d_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_3d_from_disparity )
+add_test( NAME bpgl_algo_test_heightmap_from_disparity COMMAND $<TARGET_FILE:bpgl_algo_test_all> test_heightmap_from_disparity )
 
 add_executable( bpgl_algo_test_include test_include.cxx )
 target_link_libraries( bpgl_algo_test_include bpgl_algo )
