@@ -107,10 +107,12 @@ vpgl_affine_camera_compute::compute(
 {
   assert( image_pts.size() == world_pts.size() );
   assert( image_pts.size() > 3 );
+  vgl_box_3d<double> bb;
 
   // Form the solution matrix.
   vnl_matrix<double> A(static_cast<unsigned int>(world_pts.size()), 4, 1 );
   for (unsigned int i = 0; i < world_pts.size(); ++i) {
+    bb.add(world_pts[i]);
     A(i,0) = world_pts[i].x(); A(i,1) = world_pts[i].y(); A(i,2) = world_pts[i].z();
   }
   vnl_vector<double> b1( image_pts.size() );
@@ -132,6 +134,7 @@ vpgl_affine_camera_compute::compute(
 
   // Fill in the camera.
   camera.set_rows( x1, x2 );
+  camera.set_viewing_distance(10.0*bb.max_z());
   return true;
 }
 

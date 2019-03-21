@@ -249,6 +249,52 @@ static void test_calibration_compute_natural()
   TEST_NEAR( "   K Discrepancy", ( trueK.get_matrix() - K.get_matrix() ).frobenius_norm(), 0, 1e-6 );
 }
 
+static void test_compute_affine()
+{
+  std::vector<vgl_point_3d<double> > pts_3d;
+  pts_3d.emplace_back(31.191099166870,121.919998168945,53.835998535156);
+  pts_3d.emplace_back(67.191101074219,66.720397949219,74.165496826172);
+  pts_3d.emplace_back(54.891101837158,97.920303344727,66.359802246094);
+  pts_3d.emplace_back(50.991100311279,80.220397949219,67.610298156738);
+  pts_3d.emplace_back(28.791099548340,67.320396423340,67.759902954102);
+  pts_3d.emplace_back(53.091098785400,40.920299530029,68.854202270508);
+  pts_3d.emplace_back(43.791099548340,49.620399475098,67.872703552246);
+  pts_3d.emplace_back(93.290100097656,30.420299530029,79.595397949219);
+  pts_3d.emplace_back(94.790100097656,52.020401000977,74.720100402832);
+  pts_3d.emplace_back(100.489997863770,86.520401000977,68.012802124023);
+  pts_3d.emplace_back(91.790100097656,102.419998168945,68.957199096680);
+  pts_3d.emplace_back(87.891098022461,127.620002746582,67.613098144531);
+  pts_3d.emplace_back(31.491100311279,107.220001220703,60.077598571777);
+  pts_3d.emplace_back(59.391101837158,115.319999694824,61.324699401855);
+  pts_3d.emplace_back(59.991100311279,133.320007324219,62.057498931885);
+  pts_3d.emplace_back(36.891101837158,144.119995117188,55.506599426270);
+  pts_3d.emplace_back(18.891099929810,111.419998168945,57.615100860596);
+  pts_3d.emplace_back(19.491100311279,78.720397949219,85.827499389648);
+  pts_3d.emplace_back(26.991100311279,35.220401763916,83.151901245117);
+  pts_3d.emplace_back(61.191101074219,16.320400238037,68.855102539063);
+  pts_3d.emplace_back(127.489997863770,32.220401763916,96.971298217773);
+  pts_3d.emplace_back(123.290000915527,16.920299530029,99.897903442383);
+  pts_3d.emplace_back(122.089996337891,92.220397949219,69.267196655273);
+  pts_3d.emplace_back(85.491096496582,92.820396423340,67.331802368164);
+  vnl_vector_fixed<double,4> row00, row01;
+  row00[0] = 2.13641;   row00[1] = 0.000728937; row00[2] = -0.103897; row00[3] = 253.827;
+  row01[0] = -0.0107484;   row01[1] = -2.13683; row01[2] = -0.229387; row01[3] = 648.49;
+  vpgl_affine_camera<double> acam(row00, row01), fitted_acam;
+  std::vector< vgl_point_2d<double> > pts_2d;
+  for (const auto & i : pts_3d) {
+    pts_2d.push_back( acam.project( i ) );
+  }
+  bool good = vpgl_affine_camera_compute::compute(pts_2d, pts_3d, fitted_acam);
+  double er0 = 0.0;
+  vnl_matrix_fixed<double, 3, 4> Mgt = acam.get_matrix(), Mfitted = fitted_acam.get_matrix();
+  for (size_t r = 0; r<2; ++r)
+	  for (size_t c = 0; c < 2; ++c) {
+		  er0 += fabs(Mgt[r][c] - Mfitted[r][c]);
+	  }
+  good = good && er0 < 1,0e-6;
+  TEST("compute affine camera from pts", good, true);
+}
+
 static void test_compute_rational()
 {
   double neu_u1[20] =
@@ -326,6 +372,7 @@ static void test_camera_compute()
   test_perspective_compute_direct_linear_transform();
   test_perspective_compute_ground();
   test_calibration_compute_natural();
+  test_compute_affine();
   test_compute_rational();
 }
 
