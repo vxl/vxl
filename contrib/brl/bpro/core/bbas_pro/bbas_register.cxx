@@ -29,4 +29,5 @@ void bbas_register::register_process()
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, imesh_ply_bbox_process, "imeshPlyBboxProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_generate_depth_maps_process, "bpglGenerateDepthMapsProcess");
   REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_heightmap_from_disparity_process, "bpglHeightmapFromDisparityProcess");
+  REG_PROCESS_FUNC_CONS(bprb_func_process, bprb_batch_process_manager, bpgl_rectify_affine_image_pair_process, "bpglRectifyAffineImagePairProcess");
 }
