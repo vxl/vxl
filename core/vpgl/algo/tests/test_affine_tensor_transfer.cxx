@@ -383,6 +383,10 @@ static void test_affine_tensor_transfer()
   vpgl_affine_fundamental_matrix<double> aF12, aF13, vF12, vF13;
   bool good12 = aT.fmatrix_12(aF12);
   bool good13 = aT.fmatrix_13(aF13);
+
+  TEST("fmatrix_12 success", good12, true);
+  TEST("fmatrix_13 success", good13, true);
+
   vpgl_affine_rectification::compute_affine_f(&acam0, &acam1, vF12);
   vpgl_affine_rectification::compute_affine_f(&acam0, &acam2, vF13);
   vnl_matrix_fixed<double, 3,3> vFm12 = vF12.get_matrix();
