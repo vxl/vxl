@@ -16,7 +16,7 @@ void vpgl_affine_tri_focal_tensor<Type>::set(const vpgl_affine_camera<Type>& c1,
 
 template<class Type>
 bool affine(vpgl_proj_camera<Type> const& pcam, vpgl_affine_camera<Type>& acam ){
-  Type tol = vgl_tolerance<Type>::position;
+  Type tol = Type(2)*vgl_tolerance<Type>::position;
   vnl_matrix_fixed<Type, 3, 4> M = pcam.get_matrix();
   // swap cols 3 and 4
   vnl_vector_fixed<Type, 3> col2 = M.get_column(2);
@@ -59,7 +59,7 @@ bool proj(vpgl_affine_camera<Type> const& acam, vpgl_proj_camera<Type>& pcam){
 template<class Type>
 bool affine(vpgl_fundamental_matrix<Type> const& F, vpgl_affine_fundamental_matrix<Type>& aF )
 {
-  Type tol = vgl_tolerance<Type>::position;
+  Type tol = Type(2)*vgl_tolerance<Type>::position;
   vnl_matrix_fixed<Type, 3, 3> M = F.get_matrix();
   Type max = M.absolute_value_max();
   if(max < tol)
