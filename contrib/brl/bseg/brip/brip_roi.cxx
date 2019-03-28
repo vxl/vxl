@@ -60,19 +60,19 @@ vsol_box_2d_sptr brip_roi::clip_to_image_bounds(const vsol_box_2d_sptr& box)
   //clip to image bounds
   if (x0 < 0)
     x0 = 0;
-  if ((unsigned int)x0 >= n_image_cols_)
+  if (x0 >= (int)n_image_cols_)
     x0 = n_image_cols_-1;
   if (y0 < 0)
     y0 = 0;
-  if ((unsigned int)y0 >= n_image_rows_)
+  if (y0 >= (int)n_image_rows_)
     y0 = n_image_rows_-1;
   if (xm < 0)
     xm = 0;
-  if ((unsigned int)xm >= n_image_cols_)
+  if (xm >= (int)n_image_cols_)
     xm = n_image_cols_-1;
   if (ym < 0)
     ym = 0;
-  if ((unsigned int)ym >= n_image_rows_)
+  if (ym >= (int)n_image_rows_)
     ym = n_image_rows_-1;
   vsol_box_2d_sptr cbox = new vsol_box_2d();
   cbox->add_point(x0, y0);
