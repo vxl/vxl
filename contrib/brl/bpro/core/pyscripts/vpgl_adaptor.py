@@ -53,9 +53,8 @@ def load_projective_camera(file_path):
     (id, type) = batch.commit_output(0)
     cam = dbvalue(id, type)
     return cam
+
 #Scale = (scale_u, scale_v), ppoint = (u,v), center = (x,y,z), look_pt = (x,y,z), up = (x,y,z);
-
-
 def create_perspective_camera(scale, ppoint, center, look_pt, up=[0, 1, 0]):
     batch.init_process("vpglCreatePerspectiveCameraProcess")
     batch.set_input_double(0, scale[0])
@@ -112,8 +111,6 @@ def load_perspective_camera_from_kml_file(NI, NJ, kml_file):
     return cam, longitude, latitude, altitude
 
 # resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1);
-
-
 def resample_perspective_camera(cam, size0, size1):
     batch.init_process("vpglResamplePerspectiveCameraProcess")
     batch.set_input_from_db(0, cam)
@@ -126,8 +123,6 @@ def resample_perspective_camera(cam, size0, size1):
     out = dbvalue(id, type)
     return out
 # resize a camera from size0 =(ni,nj) to size1 (ni_1, nj_1);
-
-
 def get_perspective_camera_center(cam):
     batch.init_process("vpglGetPerspectiveCamCenterProcess")
     batch.set_input_from_db(0, cam)
@@ -160,10 +155,9 @@ def get_backprojected_ray(cam, u, v):
     z = batch.get_output_float(id)
     batch.remove_data(id)
     return x, y, z
+
 # returns cartesian cam center from azimuth (degrees), elevation
 # (degrees), radius, look point;
-
-
 def get_rpc_backprojected_ray(cam, u, v, altitude, initial_lon, initial_lat, initial_alt):
     batch.init_process("vpglGetRpcBackprojectRayProcess")
     batch.set_input_from_db(0, cam)
@@ -197,8 +191,6 @@ def get_camera_center(azimuth, elevation, radius, lookPt):
     return center
 
 # returns spherical coordinates about sCenter given cartesian point;
-
-
 def cart2sphere(cartPt, sCenter):
     # offset cart point;
     cartPt = numpy.subtract(cartPt, sCenter)
@@ -334,8 +326,6 @@ def save_proj_camera(camera, path):
 # ;
 # perspective go generic conversion;
 # ;
-
-
 def persp2gen(pcam, ni, nj, level=0):
     batch.init_process("vpglConvertToGenericCameraProcess")
     batch.set_input_from_db(0, pcam)
@@ -408,8 +398,6 @@ def get_generic_cam_ray(cam, u, v):
     return orig_x, orig_y, orig_z, dir_x, dir_y, dir_z
 
 # gets bounding box from a directory of cameras... (incomplete)_;
-
-
 def camera_dir_planar_bbox(dir_name):
     batch.init_process("vpglGetBoundingBoxProcess")
     batch.set_input_string(0, dir_name)
@@ -432,8 +420,6 @@ def project_point(camera, x, y, z):
     return (u, v)
 
 # gets view direction at a point for a perspective camera;
-
-
 def get_view_at_point(persp_cam, x, y, z):
     batch.init_process("vpglGetViewDirectionAtPointProcess")
     batch.set_input_from_db(0, persp_cam)
@@ -484,8 +470,6 @@ def get_3d_from_depth(cam, u, v, t):
     return x, y, z
 
 # triangulates a list of cams and a list of points;
-
-
 def get_3d_from_cams(cams, points):
     assert(len(cams) == len(points) and len(cams) > 1)
     # list of points will just be [u1,v1,u2,v2...];
@@ -513,8 +497,6 @@ def get_3d_from_cams(cams, points):
     return x, y, z
 
 # create a generic camera;
-
-
 def convert_to_generic_camera(cam_in, ni, nj, level=0):
     batch.init_process('vpglConvertToGenericCameraProcess')
     batch.set_input_from_db(0, cam_in)
@@ -531,8 +513,6 @@ def convert_to_generic_camera(cam_in, ni, nj, level=0):
         raise VpglException("Failed to convert to generic camera")
 
 # create a generic camera from a local rational with user-specified z range;
-
-
 def convert_local_rational_to_generic(cam_in, ni, nj, min_z, max_z, level=0):
     batch.init_process('vpglConvertLocalRationalToGenericProcess')
     batch.set_input_from_db(0, cam_in)
@@ -548,14 +528,14 @@ def convert_local_rational_to_generic(cam_in, ni, nj, min_z, max_z, level=0):
     return generic_cam
 
 # correct a rational camera;
-
-
-def correct_rational_camera(cam_in, offset_x, offset_y):
+def correct_rational_camera(cam_in, offset_x, offset_y, verbose = False):
     batch.init_process('vpglCorrectRationalCameraProcess')
     batch.set_input_from_db(0, cam_in)
     batch.set_input_double(1, offset_x)
     batch.set_input_double(2, offset_y)
-    batch.run_process()
+    batch.set_input_bool(3, verbose)
+    if not batch.run_process():
+        return None
     (id, type) = batch.commit_output(0)
     corrected_cam = dbvalue(id, type)
     return corrected_cam
@@ -591,8 +571,6 @@ def find_offset_and_correct_rational_camera(cam_orig, cam_corrected, cam_to_be_c
     return cam_out
 
 # convert lat,lon,el to local coordinates;
-
-
 def convert_to_local_coordinates(lvcs_filename, lat, lon, el):
     batch.init_process('vpglConvertToLocalCoordinatesProcess')
     batch.set_input_string(0, lvcs_filename)
@@ -612,8 +590,6 @@ def convert_to_local_coordinates(lvcs_filename, lat, lon, el):
     return (x, y, z)
 
 # convert lat,lon,el to local coordinates;
-
-
 def convert_to_local_coordinates2(lvcs, lat, lon, el):
     batch.init_process('vpglConvertToLocalCoordinatesProcess2')
     batch.set_input_from_db(0, lvcs)
@@ -631,9 +607,8 @@ def convert_to_local_coordinates2(lvcs, lat, lon, el):
     z = batch.get_output_double(id)
     batch.remove_data(id)
     return (x, y, z)
+
 # convert lat,lon,el to local coordinates;
-
-
 def convert_local_to_global_coordinates(lvcs, x, y, z):
     batch.init_process('vpglConvertLocalToGlobalCoordinatesProcess')
     batch.set_input_from_db(0, lvcs)
@@ -651,9 +626,8 @@ def convert_local_to_global_coordinates(lvcs, x, y, z):
     el = batch.get_output_double(id)
     batch.remove_data(id)
     return (lat, lon, el)
+
 # convert lat,lon,el to local coordinates;
-
-
 def convert_local_to_global_coordinates_array(lvcs, x, y, z):
     batch.init_process('vpglConvertLocalToGlobalCoordinatesArrayProcess')
     batch.set_input_from_db(0, lvcs)
@@ -671,9 +645,8 @@ def convert_local_to_global_coordinates_array(lvcs, x, y, z):
     el = batch.get_output_double_array(id)
     batch.remove_data(id)
     return (lat, lon, el)
+
 # convert lat,lon,el to local coordinates;
-
-
 def create_lvcs(lat, lon, el, csname):
     batch.init_process('vpglCreateLVCSProcess')
     batch.set_input_double(0, lat)
@@ -686,8 +659,6 @@ def create_lvcs(lat, lon, el, csname):
     return lvcs
 
 # randomly sample a camera rotated around principal axis;
-
-
 def perturb_camera(cam_in, angle, rng):
     batch.init_process('vpglPerturbPerspCamOrientProcess')
     batch.set_input_from_db(0, cam_in)
@@ -717,8 +688,6 @@ def write_perspective_cam_vrml(vrml_filename, pcam, camera_rad, axis_length, r, 
     batch.run_process()
 
 # rotate a camera around principal axis;
-
-
 def rotate_perspective_camera(cam_in, theta, phi):
     batch.init_process('vpglRotatePerspCamProcess')
     batch.set_input_from_db(0, cam_in)
@@ -802,8 +771,6 @@ def get_single_nitf_footprint(nitf_filename, out_kml_filename="", isKml=False, m
     return llon, llat, lele, rlon, rlat, rele
 
 # use a local lvcs to calculate GSD of nitf image
-
-
 def calculate_nitf_gsd(rational_cam, lon1, lat1, elev1, distance=1000.0):
     # create a local lvcs
     lvcs = create_lvcs(lat1, lon1, elev1, 'wgs84')
@@ -1053,8 +1020,6 @@ def compute_affine_from_local_rational(cropped_cam, min_x, min_y, min_z, max_x, 
 # use the affine cameras of the images to compute an affine fundamental matrix and rectify them (flatten epipolar lines to scan lines and align them)
 # use the 3-d box that the cameras see to compute correspondences for
 # minimally distortive alignment
-
-
 def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, min_z, max_x, max_y, max_z, local_ground_plane_height=5, n_points=100):
     batch.init_process("vpglAffineRectifyImagesProcess")
     batch.set_input_from_db(0, img1)
@@ -1084,8 +1049,6 @@ def affine_rectify_images(img1, affine_cam1, img2, affine_cam2, min_x, min_y, mi
 # use the 3-d box that the cameras see to compute correspondences for
 # minimally distortive alignment, use the local rational cameras to find
 # the correspondence points
-
-
 def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_cam2, local_rational_cam2, min_x, min_y, min_z, max_x, max_y, max_z, output_path_H1, output_path_H2, local_ground_plane_height=5, n_points=100):
     batch.init_process("vpglAffineRectifyImagesProcess2")
     batch.set_input_from_db(0, img1)
@@ -1121,8 +1084,6 @@ def affine_rectify_images2(img1, affine_cam1, local_rational_cam1, img2, affine_
 
 # use the affine cameras of the images to compute an affine fundamental
 # matrix and write the f matrix out
-
-
 def affine_f_matrix(affine_cam1, affine_cam2, output_path):
     batch.init_process("vpglAffineFMatrixProcess")
     batch.set_input_from_db(0, affine_cam1)
@@ -1174,8 +1135,6 @@ def compute_camera_to_world_homography(cam, plane, inverse=False):
 
 # use the 3-d box to crop an image using image camera, given certain uncertainty value in meter unit
 # note that the input 3-d box is in unit of wgs84 geo coordinates
-
-
 def crop_image_using_3d_box(img_res_ni, img_res_nj, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=0):
     batch.init_process("vpglCropImgUsing3DboxProcess")
     batch.set_input_unsigned(0, img_res_ni)
@@ -1244,8 +1203,6 @@ def crop_image_using_3d_box_dem(img_res, camera, ll_lon, ll_lat, ur_lon, ur_lat,
 
 # use the 3-d box to crop an ortho image using its geo camera
 # note that the input 3-d box is in unit of wgs84 geo coordinates
-
-
 def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev):
     batch.init_process("vpglCropOrthoUsing3DboxPRocess")
     batch.set_input_from_db(0, img_res)
@@ -1275,8 +1232,6 @@ def crop_ortho_image_using_3d_box(img_res, camera, lower_left_lon, lower_left_la
 
 # use the 3-d box to offset the local camera using image camera, given certain uncertainty value in meter unit
 # note that the input 3-d box is in unit of wgs84 geo coordinates
-
-
 def offset_cam_using_3d_box(camera, lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev, uncertainty, lvcs=None):
     batch.init_process("vpglOffsetCamUsing3DboxProcess")
     batch.set_input_from_db(0, camera)
@@ -1588,8 +1543,6 @@ def compute_transformation(pts0_xs, pts0_ys, pts0_zs,
 # 4  5  6  7
 # 8  9  10 11
 # 12 13 14 15
-
-
 def compute_transformed_box(min_pt, max_pt, matrix_as_array):
     batch.init_process("vpglTransformBoxProcess")
     batch.set_input_double_array(0, min_pt)
@@ -1605,8 +1558,6 @@ def compute_transformed_box(min_pt, max_pt, matrix_as_array):
     return out_min_pt, out_max_pt
 
 # get connected component of a geotiff image
-
-
 def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
     batch.init_process("vpglFindConnectedComponentProcess")
     batch.set_input_from_db(0, in_img)
@@ -1626,8 +1577,6 @@ def find_connected_component(in_img, in_cam, threshold, out_kml, is_above=True):
 
 # rotate a image north up based on its RPC camera.  The return value is
 # rotation angle between -Pi to Pi
-
-
 def rational_camera_rotate_to_north(in_cam):
     batch.init_process("vpglRationalCamRotationToNorthProcess")
     batch.set_input_from_db(0, in_cam)
@@ -1641,8 +1590,6 @@ def rational_camera_rotate_to_north(in_cam):
 
 # rotate a image north up based on its RPC camera.  The return value is
 # rotation angle between -Pi to Pi
-
-
 def rational_camera_get_up_vector(in_cam):
     batch.init_process("vpglRationalCamRotationToUpVectorProcess")
     batch.set_input_from_db(0, in_cam)
