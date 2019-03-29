@@ -123,8 +123,15 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   vgl_box_3d<double> heightmap_bounds(min_x,min_y,min_z, max_x,max_y,max_z);
 
   // process
-  vil_image_view<float> heightmap = bpgl_heightmap_from_disparity(
-      *camera1_ptr, *camera2_ptr, disparity_nan, heightmap_bounds, gsd);
+  vil_image_view<float> heightmap;
+  try {
+    heightmap = bpgl_heightmap_from_disparity(
+        *camera1_ptr, *camera2_ptr, disparity_nan, heightmap_bounds, gsd);
+  }
+  catch (const std::exception &err) {
+    std::cerr << "EXCEPTION: " << pro.name() << ", " << err.what() << std::endl;
+    return false;
+  }
 
   // add offset to elevation estimates
   // Additional WORKAROUND - set invalid to value below min_z (-9999.0)
