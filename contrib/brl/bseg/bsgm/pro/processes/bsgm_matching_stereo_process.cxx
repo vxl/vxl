@@ -14,20 +14,22 @@
 #include <vil/vil_image_view_base.h>
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
+#include <vil/vil_math.h>
 #include <bsgm/bsgm_disparity_estimator.h>
 #include <bsgm/bsgm_multiscale_disparity_estimator.h>
 
 //: Take two rectified images, generate their disparity map calculated using semi-global matching stereo algorithm
 namespace bsgm_matching_stereo_process_globals
 {
-  constexpr unsigned n_inputs_ = 9;
+  constexpr unsigned n_inputs_ = 10;
   constexpr unsigned n_outputs_ = 2;
 }
 
 bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
 {
   using namespace bsgm_matching_stereo_process_globals;
-  // process takes 7 inputs
+
+  // process inputs
   std::vector<std::string> input_types_(n_inputs_);
   input_types_[0] = "vil_image_view_base_sptr";  // input rectified image 1
   input_types_[1] = "vil_image_view_base_sptr";  // input rectified image 2
@@ -40,12 +42,15 @@ bool bsgm_matching_stereo_process_cons(bprb_func_process& pro)
   input_types_[6] = "int";                       // the mode parameter to specify how to use disparity estimate from coarse scale.  0 -- single median;
                                                  // 1 -- block wise disparity;  2 -- entire disparity image from coarse scale
   input_types_[7] = "vcl_string";                // output text file to store the matched disparities per pixel
-  input_types_[8] = "unsigned";                       // threshold that treats pixel as shadow pixels
+  input_types_[8] = "unsigned";                  // threshold that treats pixel as shadow pixels
+  input_types_[9] = "bool";                      // print timing parameters
 
-  // process takes 2 outputs
+  // process outputs
   std::vector<std::string> output_types_(n_outputs_);
   output_types_[0] = "vil_image_view_base_sptr";  // output disparity image
   output_types_[1] = "vil_image_view_base_sptr";  // scaled disparity image
+
+  // cleanup
   return pro.set_input_types(input_types_) && pro.set_output_types(output_types_);
 }
 
@@ -67,6 +72,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   int multi_scale_mode = pro.get_input<int>(in_i++);
   std::string out_disparity_txt = pro.get_input<std::string>(in_i++);
   auto shadow_thresh = pro.get_input<unsigned>(in_i++);
+  auto print_timing = pro.get_input<bool>(in_i++);
 
   // load image
   auto* img_ref = dynamic_cast<vil_image_view<vxl_byte>*>(img_ref_sptr.ptr());
@@ -90,7 +96,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
   params.census_weight = 0.3;
   params.xgrad_weight = 0.7;
   params.census_rad = 2;
-  params.print_timing = true;
+  params.print_timing = print_timing;
   params.error_check_mode = error_check_mode;
   params.shadow_thresh = static_cast<vxl_byte>(shadow_thresh);
 
@@ -141,6 +147,14 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
 
   // Flip the sign of the disparities to match OpenCV implementation.
   bsgm_invert_disparities( disp_r, invalid_disp_inv, invalid_disp );
+
+  // check that ANY value is valid
+  float min_value, max_value;
+  vil_math_value_range(disp_r, min_value, max_value);
+  if (max_value <= invalid_disp_inv) {
+    std::cerr << pro.name() << ": no valid disparity value" << std::endl;
+    return false;
+  }
 
   // convert a text file to save all disparity value
   if (!out_disparity_txt.empty()) {
