@@ -33,7 +33,7 @@ def box_2d_intersection(in_kml, out_kml=""):
 
 
 # obtain 2d quad tree geological leaves that intersect with given region
-def geo_index_region_resource(geo_index_txt, ll_lon, ll_lat, ur_lon, ur_lat, out_file):
+def geo_index_region_resource(geo_index_txt, ll_lon, ll_lat, ur_lon, ur_lat, out_file=""):
     batch.init_process("bvglGeoIndexRegionResourceProcess")
     batch.set_input_string(0, geo_index_txt)
     batch.set_input_double(1, ll_lon)
@@ -44,11 +44,11 @@ def geo_index_region_resource(geo_index_txt, ll_lon, ll_lat, ur_lon, ur_lat, out
     status = batch.run_process()
     if status:
         (id, type) = batch.commit_output(0)
-        n_leaves = batch.get_output_unsigned(id)
+        indices = batch.get_bbas_1d_array_unsigned(id)
         batch.remove_data(id)
-        return n_leaves
+        return indices
     else:
-        return 0
+        return None
 
 
 # obtain 2d quad tree geological leaves that intersect with given polygon
