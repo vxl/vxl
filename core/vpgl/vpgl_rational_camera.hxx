@@ -355,16 +355,25 @@ void vpgl_rational_camera<T>::write_pvl(
     vpgl_rational_order output_order
     ) const
 {
-  // current ostream flags (restore at end of function)
-  std::ios_base::fmtflags old_settings = ostr.flags();
+  // current ostream settings (restore at end of function)
+  auto ostr_flags = ostr.flags();
+  auto ostr_precision = ostr.precision();
 
   // print header & scale/offset values
   ostr << "satId = \"????\";\n"
        << "bandId = \"RGB\";\n"
        << "SpecId = \"" << vpgl_rational_order_func::to_string(output_order)
-          << "\";" << std::endl
-       << "BEGIN_GROUP = IMAGE" << std::endl
-       <<  std::endl <<  std::endl  // skip errBias and errRand fields
+          << "\";" << std::endl;
+
+  // begin image group
+  ostr << "BEGIN_GROUP = IMAGE" << std::endl;
+
+  // print scale/offset values
+  ostr << std::fixed;
+  ostr.precision(6);
+
+  ostr << std::endl // skip errBias
+       << std::endl // skip errRand
        << "\tlineOffset = "   << offset(V_INDX) << std::endl
        << "\tsampOffset = "   << offset(U_INDX) << std::endl
        << "\tlatOffset = "    << offset(Y_INDX) << std::endl
@@ -387,10 +396,12 @@ void vpgl_rational_camera<T>::write_pvl(
   items.push_back(std::make_pair("sampDenCoef",DEN_U));
 
   ostr << std::scientific << std::showpos;
+  ostr.precision(12);
+
   for (auto const& item : items) {
     ostr << "\t" << item.first << " = (" << std::endl;
     for (int i=0; i<20; i++) {
-      ostr << "\t\t" << std::setprecision(12) << coeffs[item.second][i];
+      ostr << "\t\t" << coeffs[item.second][i];
       if (i < 19)
         ostr << "," << std::endl;
       else
@@ -398,12 +409,15 @@ void vpgl_rational_camera<T>::write_pvl(
     }
   }
 
-  // print footer
-  ostr << "END_GROUP = IMAGE" << std::endl
-       << "END;" << std::endl;
+  // end image group
+  ostr << "END_GROUP = IMAGE" << std::endl;
 
-  // restore ostream flags
-  ostr.flags(old_settings);
+  // footer
+  ostr << "END;" << std::endl;
+
+  // restore ostream settings
+  ostr.flags(ostr_flags);
+  ostr.precision(ostr_precision);
 }
 
 // print camera parameters to output stream
