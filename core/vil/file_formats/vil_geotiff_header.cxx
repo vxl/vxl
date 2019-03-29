@@ -16,7 +16,7 @@ vil_geotiff_header::vil_geotiff_header(TIFF* tif) : tif_(tif)
   if (tif) {
     gtif_ = GTIFNew(tif);
     if (gtif_) {
-      GTIFPrint(gtif_, nullptr, nullptr);
+      //GTIFPrint(gtif_, nullptr, nullptr);
 
       // read the header of the GeoDirectoryKey Tag
       int version[3];

@@ -611,7 +611,7 @@ bool vpgl_geo_camera::comp_trans_matrix(double sx1, double sy1, double sz1,
   m[1][3] = Ty;
   m[2][3] = Tz;
   trans_matrix = m;
-  std::cout << trans_matrix << std::endl;
+  //std::cout << trans_matrix << std::endl;
   return true;
 }
 
