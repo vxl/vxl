@@ -33,7 +33,7 @@ bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
           vnl_math::isfinite(triangulated(i,j,1)) &&
           vnl_math::isfinite(triangulated(i,j,2)) ) {
         const float z = triangulated(i,j,2);
-        if ((z < min_z) || (z > max_z)) { 
+        if ((z < min_z) || (z > max_z)) {
           continue;
         }
         // x,y goes in ground samples

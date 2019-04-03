@@ -40,7 +40,8 @@
 
 struct pairwise_params{
   pairwise_params():active_disparity_factor_(0.5),downscale_exponent_(2), multi_scale_mode_(1),
-    point_sample_dist_(0.5f), max_consist_dist_(3.75*point_sample_dist_), num_nearest_nbrs_(5){}
+    point_sample_dist_(0.5f), max_consist_dist_(3.75*point_sample_dist_), num_nearest_nbrs_(5),
+    avg_z_(50.0), npts_(1000){}
 
   bsgm_disparity_estimator_params de_params_; // internal disparity estimator params
   float active_disparity_factor_; // what fraction of full disparity range is used for fine search
@@ -49,6 +50,8 @@ struct pairwise_params{
   float point_sample_dist_;  // the height map grid spacing, also relates to consistent distance tolerance
   float max_consist_dist_;   // the max distance between consistent forward/reverse 3-d points
   size_t num_nearest_nbrs_;  // number of nearest neighbors in the pointset to find closest and to interpolate
+  double avg_z_;        // the averge scene height where disparity == 0
+  size_t npts_;              // the number of points to use as rectification correspondences
 };
 
 
@@ -93,7 +96,7 @@ class bsgm_pairwise_dsm
   //: main process method
   bool process(vgl_box_3d<double> const& scene_box, bool with_consistency_check = true)
   {
-    if(!rip_.process(scene_box))
+    if(!rip_.process(scene_box, params_.npts_, params_.avg_z_))
       return false;
     this->compute_byte();
     if(with_consistency_check){
