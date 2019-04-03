@@ -57,9 +57,9 @@ class bpgl_rectify_affine_image_pair
   //: utility methods
   static bool load_affine_camera(std::string const& cam_path, vpgl_affine_camera<double>& acam);
 
-  bool process(vgl_box_3d<double>const& scene_box, size_t n_points = 1000)
+  bool process(vgl_box_3d<double>const& scene_box, size_t n_points = 1000, double average_z = NAN)
   {
-    if(!compute_rectification(scene_box,n_points))
+    if(!compute_rectification(scene_box,n_points, average_z))
       return false;
     warp_pair();
     return true;
@@ -72,7 +72,7 @@ class bpgl_rectify_affine_image_pair
  protected:
 
   // protected utility methods
-  bool compute_rectification(vgl_box_3d<double> const& scene_box, size_t n_points = 1000);
+  bool compute_rectification(vgl_box_3d<double> const& scene_box, size_t n_points = 1000, double average_z = NAN);
   void compute_warp_dimensions_offsets();
   static void warp_image(vil_image_view<float> fview,
                          vnl_matrix_fixed<double, 3, 3> const& H,

@@ -13,7 +13,7 @@
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 #include <bpgl/algo/bpgl_gridding.h>
-
+  
 void bsgm_prob_pairwise_dsm::compute_byte()
 {
   vil_convert_stretch_range(rip_.rectified_fview0(), rect_bview0_);
@@ -47,6 +47,7 @@ bool bsgm_prob_pairwise_dsm::compute_disparity()
   float invalid_disp = NAN;//required for Dan's implementation of triangulation
   bool good = mde.compute(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_,
                           invalid_disp, params_.multi_scale_mode_, disp_r_);
+
   return good;
 }
 

@@ -7,6 +7,7 @@
 #include <vil/vil_bicub_interp.h>
 #include <vnl/vnl_random.h>
 #include <vnl/vnl_det.h>
+#include <vnl/vnl_math.h>
 #include <vnl/vnl_inverse.h>
 
 #include <vpgl/algo/vpgl_camera_convert.h>
@@ -124,7 +125,7 @@ compute_warp_dimensions_offsets()
   corners_1[1] = vnl_vector_fixed<double, 3>(dni1,0,1);
   corners_1[2] = vnl_vector_fixed<double, 3>(dni1,dnj1,1);
   corners_1[3] = vnl_vector_fixed<double, 3>(0,dnj1,1);
-  for(size_t c = 0; c<4; ++c){
+  for (size_t c = 0; c<4; ++c){
     Hcorners_0[c] =  H0_*corners_0[c];
     Hcorners_0[c] /= Hcorners_0[c][2];
     Hcorners_1[c] =  H1_*corners_1[c];
@@ -164,13 +165,15 @@ compute_warp_dimensions_offsets()
     h = h1;
     dv_off_ = minj1;
   }
+
   out_ni_ = static_cast<size_t>(w+0.5) +1;
   out_nj_ = static_cast<size_t>(h+0.5) +1;
+
 }
 
 
 bool bpgl_rectify_affine_image_pair::
-compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points)
+compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, double average_z)
 {
   double min_x = scene_box.min_x();
   double min_y = scene_box.min_y();
@@ -179,6 +182,8 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points)
   double ni1=  fview1_.ni(), nj1 = fview1_.nj();
   vnl_random rng;
   double z0 = 0.5*(scene_box.min_z() + scene_box.max_z());
+  if(vnl_math::isfinite(average_z))
+    z0 = average_z;
   std::vector< vnl_vector_fixed<double, 3> > img_pts0, img_pts1;
   for (unsigned i = 0; i < n_points; i++) {
     double x = rng.drand64()*width + min_x;  // sample in local coords
@@ -191,6 +196,7 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points)
   if (u >= 0 || u<ni1 || v >= 0 || v<nj1)
      img_pts1.emplace_back(u,v,1);
   }
+
   // santity check
   bool epi_constraint = true;
   for (size_t k = 0; k < img_pts0.size(); ++k) {
@@ -214,6 +220,7 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points)
     std::cout << "vpgl rectification produced singular homography(s)" << std::endl;
     return false;
   }
+
   // second sanity check
   bool equal_y = true;
   for (size_t k = 0; k < img_pts0.size()&&equal_y; ++k) {
@@ -228,6 +235,23 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points)
     std::cout << "homographies do not map to equal row positions" << std::endl;
     return false;
   }
+
+  // third sanity check
+  double x_dif_sum = 0.0;
+  for (size_t k = 0; k < img_pts0.size(); ++k) {
+    vnl_vector_fixed<double, 3> p0 = img_pts0[k], hp0, p1 = img_pts1[k], hp1;
+    hp0 = H0_*p0;  hp1 = H1_*p1;
+    double x0 = hp0[0]/hp0[2], x1 = hp1[0]/hp1[2];
+    double dx = x1-x0;
+    x_dif_sum += dx;
+  }
+  x_dif_sum /= img_pts0.size();
+  bool x_shift_min = fabs(x_dif_sum)<0.1;
+  if(!x_shift_min){
+    std::cout << "homographies do not minimize column shift" << std::endl;
+    return false;
+  }
+
   this->compute_warp_dimensions_offsets();
 
   vnl_matrix_fixed<double, 3, 3> tr;

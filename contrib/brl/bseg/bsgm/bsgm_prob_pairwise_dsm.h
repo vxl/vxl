@@ -55,7 +55,8 @@ class bsgm_prob_pairwise_dsm
   bsgm_prob_pairwise_dsm(){}
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
-                      vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1)
+                         vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1):
+    mid_z_(NAN)
   {
     rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
   }
@@ -74,6 +75,8 @@ class bsgm_prob_pairwise_dsm
   int num_active_disparities() {
     return static_cast<int>(num_disparities()*params_.active_disparity_factor_); }
 
+  //: set the plane elevation for minimum least squares disparity
+  void set_midpoint_z(double mid_z){mid_z_ = mid_z;}
   //: estimate the forward disparities(arg order rectified image0:image1)
   bool compute_disparity();
   //: estimate the reverse disparities(arg order rectified image1:image0)
@@ -87,10 +90,20 @@ class bsgm_prob_pairwise_dsm
   void prob_heightmap(vgl_box_3d<double> const& scene_box);
   bool compute_dsm_and_ptset_prob(vgl_box_3d<double> const& scene_box);
 
+  bool rect(vgl_box_3d<double> const& scene_box)
+  {
+    bool good = rip_.process(scene_box);
+    if (good) {
+      this->compute_byte();
+    }
+    return good;
+  }
+
   //: main process method
   bool process(vgl_box_3d<double> const& scene_box, bool with_consistency_check = true)
   {
-    if(!rip_.process(scene_box))
+    size_t n_points = 1000;
+    if(!rip_.process(scene_box, n_points, mid_z_))
       return false;
     this->compute_byte();
     if(with_consistency_check){
@@ -152,6 +165,7 @@ class bsgm_prob_pairwise_dsm
   size_t nj_;
   int min_disparity_;
   int max_disparity_;
+  double mid_z_;
   vil_image_view<vxl_byte> rect_bview0_;
   vil_image_view<vxl_byte> rect_bview1_;
   vil_image_view<bool> invalid_map_;
