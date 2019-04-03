@@ -167,6 +167,10 @@ bool vpgl_local_rational_camera<T>::read_txt(std::istream& istr)
     //std::cerr << "error: not a composite rational camera file\n";
     return false;
   }
+
+  // store lvcs & return
+  this->set_lvcs(longitude, latitude, elevation);
+  return true;
 }
 
 
