@@ -87,6 +87,12 @@ bool boxm2_refine_block_function_with_labels<T>::init_data(boxm2_block* blk, std
     return true;
 }
 
+template<class T>
+bool boxm2_refine_block_function_with_labels<T>::refine()
+{
+	return false;
+}
+
 //----- IF THE BLOCK IS NOT RANDOMLY DISTRIBUTED, USE DETERMINISTIC METHOD -----
 // New Method Summary:
 //  - NEED TO CLEAR OUT THE GPU CACHE BEFORE YOU START.. so you don't overwrite stuff accidentally...

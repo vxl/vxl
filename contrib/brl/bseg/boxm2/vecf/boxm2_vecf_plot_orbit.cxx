@@ -8,7 +8,7 @@ plot_inferior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double x
   boxm2_vecf_eyelid lid = boxm2_vecf_eyelid(opr, false);
   double incr = n_pts != 0  ? (xm_max - xm_min)/(n_pts-1) : 0.25;
   unsigned N = n_pts  !=0 ? n_pts : static_cast<unsigned>((xm_max - xm_min) / 0.25 ) + 1;
-  double xm = xm_min; int i;
+  double xm = xm_min; size_t i;
   for(i = 0; i<N; i++, xm+=incr){
     double min_yy=0.0, min_zz = 0.0;
     double max_yy=0.0, max_zz = 0.0;
@@ -32,7 +32,7 @@ plot_superior_margin(boxm2_vecf_orbit_params const& opr, bool is_right, double x
   double lid_t = opr.eyelid_tmin_;
   double incr = n_pts != 0 ? (xm_max - xm_min)/(n_pts - 1) : 0.25;
   unsigned N = n_pts  !=0 ? n_pts : static_cast<unsigned>((xm_max - xm_min) / 0.25 ) + 1;
-  double xm = xm_min; int i;
+  double xm = xm_min; size_t i;
   for(i = 0; i<N; i++, xm+=incr){
     double yy=0.0, zz = 0.0;
     if(is_right){

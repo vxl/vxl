@@ -1220,6 +1220,10 @@ boxm2_vecf_orbit_scene
 {
 
    vul_timer t;
+<<<<<<< HEAD
+=======
+  // boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
+>>>>>>> corrected warnings in brl
 
   vnl_vector_fixed<unsigned char,8> color = random_color();
   int n = static_cast<unsigned>(box_cell_centers_.size());
@@ -1263,6 +1267,10 @@ boxm2_vecf_orbit_scene
 
   vul_timer t;
   vnl_vector_fixed<unsigned char,8> color = random_color();
+<<<<<<< HEAD
+=======
+  // boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
+>>>>>>> corrected warnings in brl
   int n = static_cast<unsigned>(box_cell_centers_.size());
 
   if(n==0)

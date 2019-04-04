@@ -274,6 +274,12 @@ void bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::move_data(
   }
 }
 
+template<bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE>
+inline bstm_time_tree bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::refine_bit_tree(const bstm_time_tree & input_tree)
+{
+	return bstm_time_tree();
+}
+
 template <bstm_data_type APM_DATA_TYPE, bstm_data_type NOBS_DATA_TYPE >
 bool bstm_refine_blk_in_time_function<APM_DATA_TYPE, NOBS_DATA_TYPE>::should_refine_tt(int data_ptr)
 {

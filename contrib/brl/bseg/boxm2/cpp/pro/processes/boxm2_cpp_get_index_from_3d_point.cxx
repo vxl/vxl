@@ -162,11 +162,11 @@ bool  boxm2_cpp_get_3d_point_from_index_process(bprb_func_process& pro)
 
   vgl_point_3d<double> subblock_origin;
 
-  for (int ix=0; ix<mdata.sub_block_num_.x(); ++ix)
+  for (size_t ix=0; ix<mdata.sub_block_num_.x(); ++ix)
   {
-    for (int iy=0; iy<mdata.sub_block_num_.y(); ++iy)
+    for (size_t iy=0; iy<mdata.sub_block_num_.y(); ++iy)
     {
-      for (int iz=0; iz<mdata.sub_block_num_.z(); ++iz)
+      for (size_t iz=0; iz<mdata.sub_block_num_.z(); ++iz)
       {
         vnl_vector_fixed<unsigned char, 16>  tree = trees(ix, iy, iz);
 

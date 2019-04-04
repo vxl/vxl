@@ -45,8 +45,8 @@ int main(int argc, char * argv[])
   vil_image_view<vxl_byte> mask = vil_load(material_mask_file.c_str());
   vil_image_view<bool> mask_b(mask.ni(), mask.nj());
   mask_b.fill(false);
-  for (int j = 0; j < mask.nj(); j++) {
-    for (int i = 0; i < mask.ni(); i++) {
+  for (size_t j = 0; j < mask.nj(); j++) {
+    for (size_t i = 0; i < mask.ni(); i++) {
       if (mask(i, j) > 0) {
         mask(i, j) = 255;
         mask_b(i, j) = true;
@@ -62,8 +62,8 @@ int main(int argc, char * argv[])
   else { //load valid mask
     vil_image_view<vxl_byte> valid_mask = vil_load(valid_mask_file.c_str());
     valid_mask_b.fill(false);
-    for (int j = 0; j < valid_mask.nj(); j++) {
-      for (int i = 0; i < valid_mask.ni(); i++) {
+    for (size_t j = 0; j < valid_mask.nj(); j++) {
+      for (size_t i = 0; i < valid_mask.ni(); i++) {
         if (valid_mask(i, j) > 0) {
           valid_mask(i, j) = 255;
           valid_mask_b(i, j) = true;
@@ -85,8 +85,8 @@ int main(int argc, char * argv[])
   // create rgb image and overlay bounding boxes
   std::cerr << "Saving bounding box image\n";
   vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
-  for (int y = 0; y < cal_img.nj(); y++)
-    for (int x = 0; x < cal_img.ni(); x++) {
+  for (size_t y = 0; y < cal_img.nj(); y++)
+    for (size_t x = 0; x < cal_img.ni(); x++) {
       rgb_img(x, y, 0) = cal_img(x, y, 4);
       rgb_img(x, y, 1) = cal_img(x, y, 2);
       rgb_img(x, y, 2) = cal_img(x, y, 1);
@@ -121,7 +121,7 @@ int main(int argc, char * argv[])
     // pick a color based on the confidence
     h_color = (color_max - color_min) / (max_conf - min_conf) * conf[i] + color_max - (color_max - color_min) / (max_conf - min_conf) * max_conf;
     // draw horizontal lines
-    for (int x = i_min[i]; x <= i_max[i]; x++) {
+    for (size_t x = i_min[i]; x <= i_max[i]; x++) {
       for (int bb = 0; bb <= bb_rad; bb++) {
         hsv_img(x, std::max(0, int(j_min[i]) - bb), 0) = h_color;
         hsv_img(x, std::max(0, int(j_min[i]) - bb), 1) = s_color;
@@ -132,7 +132,7 @@ int main(int argc, char * argv[])
       }
     }
     // draw verticle lines
-    for (int y = j_min[i] + 1; y < j_max[i]; y++) {
+    for (size_t y = j_min[i] + 1; y < j_max[i]; y++) {
       for (int bb = 0; bb <= bb_rad; bb++) {
         hsv_img(std::max(int(i_min[i]) - bb, 0), y, 0) = h_color;
         hsv_img(std::max(int(i_min[i]) - bb, 0), y, 1) = s_color;

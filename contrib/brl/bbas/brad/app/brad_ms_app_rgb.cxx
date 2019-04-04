@@ -59,8 +59,8 @@ int main(int  /*argc*/, char *  /*argv*/[])
   //// Create an RGB image for visualization
   std::cerr << "Saving RGB image\n";
   vil_image_view<float> rgb_img(cal_img.ni(), cal_img.nj(), 3);
-  for (int y = 0; y < cal_img.nj(); y++)
-    for (int x = 0; x < cal_img.ni(); x++) {
+  for (size_t y = 0; y < cal_img.nj(); y++)
+    for (size_t x = 0; x < cal_img.ni(); x++) {
       rgb_img(x, y, 0) = cal_img(x, y, 4);
       rgb_img(x, y, 1) = cal_img(x, y, 2);
       rgb_img(x, y, 2) = cal_img(x, y, 1);

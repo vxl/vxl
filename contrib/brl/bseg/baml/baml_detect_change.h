@@ -53,8 +53,8 @@ struct baml_change_detection_params {
   float pChange;
 
   //: Event trigger parameters
-  int event_width;
-  int event_height;
+  size_t event_width;
+  size_t event_height;
 
   // Birchfield-Tomasi specific parameters
  // float bt_std;

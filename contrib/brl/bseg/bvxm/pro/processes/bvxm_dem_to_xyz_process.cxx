@@ -125,8 +125,8 @@ bool bvxm_dem_to_xyz_process(bprb_func_process& pro)
   }
 
   // prepare an image for the finest resolution
-  int ni = (int)num_voxels.x();
-  int nj = (int)num_voxels.y();
+  size_t ni = num_voxels.x();
+  size_t nj = num_voxels.y();
 
   // create x y z images
   auto* out_img_x = new vil_image_view<float>(ni, nj, 1);
@@ -151,8 +151,8 @@ bool bvxm_dem_to_xyz_process(bprb_func_process& pro)
   if (fill_in_value < 0)
     fill_in_value = std::numeric_limits<float>::max();
 
-  for (int i = 0; i < ni; i++) {
-    for (int j = 0; j < nj; j++) {
+  for (size_t i = 0; i < ni; i++) {
+    for (size_t j = 0; j < nj; j++) {
       auto local_x = (float)(i*voxel_length+scene_bbox.min_x()+voxel_length/2.0f);
       auto local_y = (float)(scene_bbox.max_y()-j*voxel_length+voxel_length/2.0f);
       (*out_img_x)(i,j) = local_x;
@@ -244,8 +244,8 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
                                 (double)upper_rght.x(), (double)upper_rght.y(), (double)upper_rght.z());
 
   // prepare an image for the finest resolution
-  int ni = (int)num_voxels.x();
-  int nj = (int)num_voxels.y();
+  size_t ni = num_voxels.x();
+  size_t nj = num_voxels.y();
   double lon, lat, gz;
   lvcs->local_to_global(0,0,0,vpgl_lvcs::wgs84, lon, lat, gz);
   //gz += geoid_height;  // correct for the difference to geoid if necessary, geoid_height should have been passed 0 if that is not necessary
@@ -323,8 +323,8 @@ bool bvxm_dem_to_xyz_process2(bprb_func_process& pro)
     if (fill_in_value < 0)
       fill_in_value = std::numeric_limits<float>::max();
 
-    for (int i = 0; i < ni; i++) {
-      for (int j = 0; j < nj; j++) {
+    for (size_t i = 0; i < ni; i++) {
+      for (size_t j = 0; j < nj; j++) {
         auto local_x = (float)(i*voxel_length+scene_bbox.min_x()+voxel_length/2.0f);
         auto local_y = (float)(scene_bbox.max_y()-j*voxel_length+voxel_length/2.0f);
         (img_x)(i,j) = local_x;

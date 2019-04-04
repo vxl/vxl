@@ -138,6 +138,10 @@ int main(int argc, char** argv)
   std::map<unsigned, std::vector<unsigned> > max_cameras;
   // search for the top 30 scores
   for (unsigned i = 0; i < tiles.size(); i++) {
+<<<<<<< HEAD
+=======
+    // unsigned zone_id;
+>>>>>>> corrected warnings in brl
     std::stringstream score_file;
     score_file << out() << "/ps_1_scores_tile_" << i << ".bin";
     if (!vul_file::exists(score_file.str()))
@@ -164,6 +168,10 @@ int main(int argc, char** argv)
 
   // locate top 30 locations and cameras
   for (unsigned tile_id = 0; tile_id < tiles.size(); tile_id++) {
+<<<<<<< HEAD
+=======
+    // unsigned zone_id;
+>>>>>>> corrected warnings in brl
     std::string geo_hypo_folder;
     if (tile_id < 8 && tile_id != 5) {
       geo_hypo_folder = geo_hypo_folder_a();
