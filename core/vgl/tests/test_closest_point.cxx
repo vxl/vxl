@@ -545,6 +545,18 @@ static void test_infinite_line_3d_closest_points()
                     u);
     TEST("Non-parallel, non-intersecting infinite lines", success, true);
 }
+
+static void test_infinite_line_point()
+{
+  //tests a previous problem case where a point on a line generated from two points is checked against itself
+
+  vgl_point_3d<double> p1(17.7751,22.1568,28.3506);
+  vgl_point_3d<double> p2(22.894,16.3913,30.9384);
+  vgl_infinite_line_3d<double> l1(p1,p2);
+  vgl_point_3d<double> cp = vgl_closest_point(p1,l1);
+  TEST_NEAR("Infinite line, point on the line", vgl_distance(p1,cp), 0.0, 1e-8);
+}
+
 static void test_sphere_3d_closest_point(){
   std::cout << "-------------------------------------------------\n"
            << " Testing vgl_closest_point(3-d sphere):\n"
@@ -591,6 +603,7 @@ static void test_closest_point()
   testLine3DClosestPoints();
   testLineSegment3DClosestPoints();
   test_infinite_line_3d_closest_points();
+  test_infinite_line_point();
   test_sphere_3d_closest_point();
   test_spline_3d_closest_point();
 }
