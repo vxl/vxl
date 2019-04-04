@@ -18,7 +18,7 @@ std::string ste_as_string(space_time_enum ste) {
   case STE_TIME:
     return "time";
   default:
-	  return "STE not defined";
+	return "STE not defined";
   }
 }
 
@@ -68,7 +68,7 @@ std::size_t tree_size(space_time_enum ste) {
   case STE_TIME:
     return sizeof(time_tree_b);
   default:
-	  return 0;
+	return 0;
   }
 }
 
@@ -195,7 +195,7 @@ index_4d generic_tree::dimensions() const {
   case STE_TIME:
     return index_4d(1, 1, 1, 32);
   default:
-	  return index_4d(0, 0, 0, 0);
+	return index_4d(0, 0, 0, 0);
   }
 }
 
@@ -224,7 +224,7 @@ index_4d generic_tree::local_voxel_coords(int index) const {
     }
     return index_4d(0, 0, 0, index - 31);
   default:
-	  return index_4d(0, 0, 0, 0);
+	return index_4d(0, 0, 0, 0);
   }
 }
 
