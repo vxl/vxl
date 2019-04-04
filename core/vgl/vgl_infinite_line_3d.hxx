@@ -11,14 +11,9 @@
 #  include <vcl_msvc_warnings.h>
 #endif
 template <class Type>
-vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1,
-                                                 vgl_point_3d<Type> const& p2)
-{
-  vgl_vector_3d<Type> dir = p2-p1;
-  vgl_infinite_line_3d<Type> l(p1, dir);
-  x0_ = l.x0();
-  t_ = dir;
-}
+vgl_infinite_line_3d<Type>::vgl_infinite_line_3d(vgl_point_3d<Type> const& p1, vgl_point_3d<Type> const& p2)
+: vgl_infinite_line_3d<Type>(p1, p2-p1)
+{}
 
 template <class Type>
 void vgl_infinite_line_3d<Type>::
