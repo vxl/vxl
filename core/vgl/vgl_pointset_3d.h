@@ -109,7 +109,7 @@ class vgl_pointset_3d
   std::vector<vgl_point_3d<Type> > points() const {return points_;}
   std::vector<vgl_vector_3d<Type> > normals() const {return normals_;}
   std::vector< Type > scalars() const {return scalars_;}
-  void clear(){points_.clear(); normals_.clear();}
+  void clear(){points_.clear(); normals_.clear(); scalars_.clear();}
   void set_points(std::vector<vgl_point_3d<Type> > const& points)
   { points_ = points; has_normals_=false; has_scalars_ = false;}
 
