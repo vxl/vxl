@@ -45,6 +45,17 @@ void vpgl_lvcs::set_length_conversions(LenUnits len_unit, double& to_meters,
     to_feet = METERS_TO_FEET;
 }
 
+
+// destructor
+// Class is derived from vbl_ref_count, thus destructor is implictly virtual.
+// As destructor is the only virtual function in this class, DO NOT define inline;
+// destructor must be the "key function" (first non-inline, non-pure, virtual function).
+// Defining here protects against "undefined reference to vtable" linking errors.
+// https://gcc.gnu.org/wiki/VerboseDiagnostics#missing_vtable
+vpgl_lvcs::~vpgl_lvcs() = default;
+
+
+// constructor
 vpgl_lvcs::vpgl_lvcs(const vpgl_lvcs& lvcs)
  : vbl_ref_count(),
    local_cs_name_(lvcs.local_cs_name_),
