@@ -1,6 +1,7 @@
 // This is brl/bseg/bsgm/bsgm_pairwise_dsm.cxx
 
 #include "bsgm_pairwise_dsm.h"
+#include "bsgm_error_checking.h"
 #include "bsgm_multiscale_disparity_estimator.h"
 #include <limits>
 #include <vil/vil_convert.h>
@@ -39,7 +40,7 @@ bool bsgm_pairwise_dsm::compute_disparity()
 {
   vxl_byte border_val = 0;
 
-  compute_invalid_map(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_, num_disparities(),border_val);
+  bsgm_compute_invalid_map(rect_bview0_, rect_bview1_, invalid_map_, min_disparity_, num_disparities(), border_val);
 
   bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_, num_disparities(), num_active_disparities());
 
@@ -53,7 +54,7 @@ bool bsgm_pairwise_dsm::compute_rev_disparity()
 {
   vxl_byte border_val = 0;
 
-  compute_invalid_map(rect_bview1_, rect_bview0_, invalid_map_reverse_, min_disparity_, num_disparities(),border_val);
+  bsgm_compute_invalid_map(rect_bview1_, rect_bview0_, invalid_map_reverse_, min_disparity_, num_disparities(), border_val);
 
   bsgm_multiscale_disparity_estimator mde(params_.de_params_, ni_, nj_, num_disparities(), num_active_disparities());
 
