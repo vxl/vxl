@@ -48,8 +48,9 @@ bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sp
     const vgl_box_3d<double> &scene_bbox, double uncertainty,
     vgl_box_2d<double> &roi_box_2d);
 
-void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr,
-  const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera);
+vpgl_local_rational_camera<double> create_local_rational_camera(
+    const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs& lvcs,
+    unsigned min_x, unsigned min_y);
 
 
 // initialization
@@ -158,12 +159,11 @@ bool vpgl_crop_img_using_3d_box_process(bprb_func_process& pro)
   if (ni <= 0 || nj <= 0)
   {
     std::cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << std::endl;
-    return true;
+    return false;
   }
 
   // create the local camera
-  vpgl_local_rational_camera<double> local_camera;
-  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
+  auto local_camera = create_local_rational_camera(*rat_cam, *lvcs_sptr, i0, j0);
 
   // store output
   unsigned out_j = 0;
@@ -284,8 +284,7 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   }
 
   // create the local camera
-  vpgl_local_rational_camera<double> local_camera;
-  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
+  auto local_camera = create_local_rational_camera(*rat_cam, *lvcs_sptr, i0, j0);
 
   // store output
   unsigned out_j = 0;
@@ -297,17 +296,21 @@ bool vpgl_offset_cam_using_3d_box_process(bprb_func_process& pro)
   return true;
 }
 
-void create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr& lvcs_sptr,
-  const vsol_box_2d_sptr& bb, vpgl_local_rational_camera<double>& local_camera)
+vpgl_local_rational_camera<double>
+create_local_rational_camera(const vpgl_rational_camera<double>& rat_cam,
+                             const vpgl_lvcs& lvcs,
+                             unsigned min_x, unsigned min_y)
 {
   // calculate local camera offset from image bounding box
   double global_u, global_v, local_u, local_v;
   rat_cam.image_offset(global_u, global_v);
-  local_u = std::floor(global_u - bb->get_min_x());  // the image was cropped by pixel
-  local_v = std::floor(global_v - bb->get_min_y());
+  local_u = global_u - (double)min_x;  // the image was cropped by pixel
+  local_v = global_v - (double)min_y;
+
   // create the local camera
-  local_camera = vpgl_local_rational_camera<double>(*lvcs_sptr, rat_cam);
+  vpgl_local_rational_camera<double> local_camera(lvcs, rat_cam);
   local_camera.set_image_offset(local_u, local_v);
+  return local_camera;
 }
 
 bool project_box(const vpgl_rational_camera<double>& rat_cam, const vpgl_lvcs_sptr &lvcs_sptr,
@@ -623,9 +626,9 @@ bool vpgl_crop_img_using_3d_box_dem_process(bprb_func_process& pro)
     std::cout << pro.name() << ": clipping box is out of image boundary, empty crop image returned" << std::endl;
     return false;
   }
+
   // create the local camera
-  vpgl_local_rational_camera<double> local_camera;
-  create_local_rational_camera(*rat_cam, lvcs_sptr, bb, local_camera);
+  auto local_camera = create_local_rational_camera(*rat_cam, *lvcs_sptr, i0, j0);
 
   // store output
   unsigned out_j = 0;

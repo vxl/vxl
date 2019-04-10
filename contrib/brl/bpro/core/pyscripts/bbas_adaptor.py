@@ -397,3 +397,42 @@ def heightmap_from_disparity(camera1, camera2, disparity,
         return heightmap
     else:
         raise Exception("bpgl heightmap from disparity failed")
+
+
+def rectify_affine_image_pair(image0, affine_camera0, image1, affine_camera1,
+                              min_x, min_y, min_z, max_x, max_y, max_z,
+                              n_points = 1000,
+                              file_H0=None, file_H1=None):
+
+    batch.init_process("bpglRectifyAffineImagePairProcess")
+    batch.set_input_from_db(0, image0)
+    batch.set_input_from_db(1, affine_camera0)
+    batch.set_input_from_db(2, image1)
+    batch.set_input_from_db(3, affine_camera1)
+
+    batch.set_input_double(4, min_x)
+    batch.set_input_double(5, min_y)
+    batch.set_input_double(6, min_z)
+    batch.set_input_double(7, max_x)
+    batch.set_input_double(8, max_y)
+    batch.set_input_double(9, max_z)
+
+    batch.set_input_unsigned(10, n_points)
+
+    if not file_H0: file_H0 = ""
+    if not file_H1: file_H1 = ""
+    batch.set_input_string(11, file_H0)
+    batch.set_input_string(12, file_H1)
+
+    if batch.run_process():
+        (id, type) = batch.commit_output(0)
+        rect_image0 = dbvalue(id, type)
+        (id, type) = batch.commit_output(1)
+        rect_affine_camera0 = dbvalue(id, type)
+        (id, type) = batch.commit_output(2)
+        rect_image1 = dbvalue(id, type)
+        (id, type) = batch.commit_output(3)
+        rect_affine_camera1 = dbvalue(id, type)
+        return rect_image0, rect_affine_camera0, rect_image1, rect_affine_camera1
+    else:
+        raise Exception("bpgl_rectify_affine_image_pair failed")

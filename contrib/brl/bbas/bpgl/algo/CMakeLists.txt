@@ -17,6 +17,7 @@ set( bpgl_algo_sources
   bpgl_gridding.h
   bpgl_3d_from_disparity.h  bpgl_3d_from_disparity.hxx
   bpgl_heightmap_from_disparity.h  bpgl_heightmap_from_disparity.hxx
+  bpgl_rectify_affine_image_pair.h   bpgl_rectify_affine_image_pair.cxx
 )
 
 # the ransac implementations use rpl/rrel

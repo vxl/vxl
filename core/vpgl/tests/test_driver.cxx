@@ -8,6 +8,7 @@ DECLARE( test_fundamental_matrix );
 DECLARE( test_essential_matrix );
 DECLARE( test_calibration_matrix );
 DECLARE( test_poly_radial_distortion );
+DECLARE( test_rad_tan_distortion );
 DECLARE( test_rational_camera );
 DECLARE( test_local_rational_camera );
 DECLARE( test_generic_camera );
@@ -26,6 +27,7 @@ void register_tests()
   REGISTER( test_essential_matrix );
   REGISTER( test_calibration_matrix );
   REGISTER( test_poly_radial_distortion );
+  REGISTER( test_rad_tan_distortion );
   REGISTER( test_rational_camera );
   REGISTER( test_local_rational_camera );
   REGISTER( test_generic_camera );

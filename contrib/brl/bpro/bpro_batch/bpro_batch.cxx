@@ -45,6 +45,7 @@ static PyObject *run_process(PyObject *self, PyObject *args);
 static PyObject *finish_process(PyObject *self, PyObject *args);
 static PyObject *verbose(PyObject *self, PyObject *args);
 static PyObject *not_verbose(PyObject *self, PyObject *args);
+static PyObject *get_verbose(PyObject *self, PyObject *args);
 static PyObject *commit_output(PyObject *self, PyObject *args);
 static PyObject *set_input_from_db(PyObject* self, PyObject *args);
 static PyObject *remove_data(PyObject *self, PyObject *args);
@@ -551,6 +552,12 @@ PyObject *not_verbose(PyObject * /*self*/, PyObject * /*args*/)
 {
   bool result = bprb_batch_process_manager::instance()->not_verbose();
   verbose_state = result;
+  return Py_BuildValue("b", result);
+}
+
+PyObject *get_verbose(PyObject * /*self*/, PyObject * /*args*/)
+{
+  bool result = bprb_batch_process_manager::instance()->get_verbose();
   return Py_BuildValue("b", result);
 }
 

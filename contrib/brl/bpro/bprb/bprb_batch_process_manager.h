@@ -79,6 +79,9 @@ class bprb_batch_process_manager : public bprb_process_manager<bprb_batch_proces
   //: set verbose off
   bool not_verbose() {verbose_ = false; return verbose_;}
 
+  //: return current verbosity
+  bool get_verbose() {return verbose_;}
+
   //: Debug purposes
   void print_db();
 

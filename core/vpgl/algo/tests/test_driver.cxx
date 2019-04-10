@@ -21,6 +21,7 @@ DECLARE( test_affine_rect );
 DECLARE( test_backproject_dem );
 DECLARE( test_affine_tensor_transfer );
 DECLARE( test_fit_rational_cubic );
+DECLARE( test_equi_rectification );
 
 void register_tests()
 {
@@ -44,6 +45,7 @@ REGISTER( test_ba_shared_k_lsqr );
 REGISTER( test_affine_rect );
 REGISTER( test_affine_tensor_transfer );
 REGISTER( test_fit_rational_cubic );
+REGISTER( test_equi_rectification );
 #if HAS_GEOTIFF
  REGISTER( test_backproject_dem );
 #endif
