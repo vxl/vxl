@@ -15,6 +15,7 @@
 #include <vil/vil_load.h>
 #include <vil/vil_save.h>
 #include <vil/vil_math.h>
+#include <bsgm/bsgm_error_checking.h>
 #include <bsgm/bsgm_disparity_estimator.h>
 #include <bsgm/bsgm_multiscale_disparity_estimator.h>
 
@@ -102,7 +103,7 @@ bool bsgm_matching_stereo_process(bprb_func_process& pro)
 
   // compute invalid map
   vil_image_view<bool> invalid_right;
-  compute_invalid_map( img_right, img_left,
+  bsgm_compute_invalid_map( img_right, img_left,
     invalid_right, min_disparity, num_disparity );
 
   //vil_save(invalid_right, "D:/temp/sgm/mountain_pair/invalid_right.tif");
