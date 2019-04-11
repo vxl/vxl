@@ -1,4 +1,4 @@
-// This is brl/bseg/baml/baml_census.cxx
+// This is brl/bseg/baml/baml_census.hxx
 
 #include <algorithm>
 #include "baml_census.h"

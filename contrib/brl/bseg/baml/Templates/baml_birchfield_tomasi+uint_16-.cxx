@@ -1,4 +1,4 @@
-#include "baml_birchfield_tomasi.cxx"
+#include "baml_birchfield_tomasi.hxx"
 #include <vil/algo/vil_greyscale_erode.hxx>
 #include <vil/algo/vil_greyscale_dilate.hxx>
 VIL_GREYSCALE_ERODE_INSTANTIATE( vxl_uint_16 );

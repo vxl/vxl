@@ -40,8 +40,8 @@ set(bwm_sources
                                     bwm_tableau.h                    bwm_tableau_sptr.h
    bwm_tableau_text.cxx             bwm_tableau_text.h
    bwm_observable.h                 bwm_observable_sptr.h
-   bwm_observable_polyline.cxx      bwm_observable_polyline.h         bwm_observable_polyline_sptr.h
-   bwm_observable_point.cxx         bwm_observable_point.h            bwm_observable_point_sptr.h
+   bwm_observable_polyline.hxx      bwm_observable_polyline.h         bwm_observable_polyline_sptr.h
+   bwm_observable_point.hxx         bwm_observable_point.h            bwm_observable_point_sptr.h
    bwm_observer.cxx                 bwm_observer.h
    bwm_plane_fitting_lsf.cxx        bwm_plane_fitting_lsf.h  # moved from algo to fix cyclic dependency
 )

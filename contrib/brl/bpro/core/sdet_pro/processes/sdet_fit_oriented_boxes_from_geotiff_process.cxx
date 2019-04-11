@@ -25,7 +25,7 @@ namespace sdet_fit_oriented_boxes_from_geotiff_process_globals
 // count the number of poixels that are covered by a polygon using polygon iterator, including the polygon boundary pixels
 unsigned sdet_fit_oriented_boxes_from_geotiff_process_globals::polygon_size(vgl_polygon<int> const& poly)
 {
-  unsigned n_pixels;
+  unsigned n_pixels=0;
   vgl_polygon_scan_iterator<int> psi(poly, false);
   for (psi.reset(); psi.next(); ) {
     int y = psi.scany();
@@ -253,7 +253,9 @@ bool sdet_fit_oriented_boxes_from_geotiff_process(bprb_func_process& pro)
     for (psi.reset(); psi.next(); ) {
       int y = psi.scany();
       for (int x = psi.startx(); x <= psi.endx(); ++x) {
-        if ( x < 0 || y < 0 ||  x >= ni || y >= nj)
+        int ni_o = static_cast<int>(ni);
+        int nj_o = static_cast<int>(nj);
+        if ( x < 0 || y < 0 ||  x >= ni_o || y >= nj_o)
           continue;
         out_rgb(x, y) = random_color;
       }

@@ -58,10 +58,10 @@ set(sdet_sources
     sdet_region_classifier.h             sdet_region_classifier.cxx
     sdet_region_classifier_params.h      sdet_region_classifier_params.cxx
 # SEL Class
-    sdet_sel.cxx                         sdet_sel.h
+    sdet_sel.hxx                         sdet_sel.h
     sdet_sel_base.cxx                    sdet_sel_base.h
 # SEL Others
-    sdet_appearance.cxx                  sdet_appearance.h
+    sdet_appearance.hxx                  sdet_appearance.h
     sdet_curvelet.cxx                    sdet_curvelet.h
     sdet_curvelet_map.cxx                sdet_curvelet_map.h
     sdet_curve_model.cxx                 sdet_curve_model.h

@@ -16,7 +16,7 @@ set(betr_sources
  betr_edgel_factory_params.h  betr_edgel_factory_params.cxx
  betr_event_trigger.h  betr_event_trigger.cxx
  betr_io.h             betr_io.cxx
- betr_algorithm.h      betr_algorithm.cxx betr_algorithm_sptr.h
+ betr_algorithm.h      betr_algorithm.hxx betr_algorithm_sptr.h
  betr_edgel_change_detection.h  betr_edgel_change_detection.cxx
  betr_edgel_change_detection_params.h  betr_edgel_change_detection_params.cxx
  betr_edgel_reference_cd.h  betr_edgel_reference_cd.cxx
