@@ -16,7 +16,8 @@ set(bsta_sources
  bsta_joint_histogram_3d_base.h
  bsta_joint_histogram_3d_sptr.h
  bsta_k_medoid.cxx         bsta_k_medoid.h
- bsta_k_means.cxx         bsta_k_means.h    bsta_k_means.hxx
+ # removed bsta_k_means.cxx because of warning LNK4221. Previously there for this reason, so far no functionality but removes c/C++ ambiguity
+ bsta_k_means.h    bsta_k_means.hxx
  bsta_otsu_threshold.hxx   bsta_otsu_threshold.h
  bsta_int_histogram_1d.cxx  bsta_int_histogram_1d.h
  bsta_int_histogram_2d.cxx  bsta_int_histogram_2d.h

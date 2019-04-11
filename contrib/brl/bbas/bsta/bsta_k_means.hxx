@@ -8,6 +8,7 @@
 #include "bsta_k_means.h"
 //:
 //  \file
+//  removed bsta_k_means.cxx because of warning LNK4221. Previously there for this reason, so far no functionality but removes c/C++ ambiguity
 
 #ifdef _MSC_VER
 #  include <vcl_msvc_warnings.h>

@@ -21,7 +21,7 @@ set(bmsh3d_sources
    bmsh3d_mesh_mc.cxx               bmsh3d_mesh_mc.h
    bmsh3d_textured_mesh_mc.cxx      bmsh3d_textured_mesh_mc.h
 
-   bmsh3d_he_mesh.cxx               bmsh3d_he_mesh.h
+   bmsh3d_he_mesh.hxx               bmsh3d_he_mesh.h
 
    bmsh3d_mesh_conn_recov.cxx
 

@@ -21,7 +21,6 @@ bool baml_compute_census_img(
   vil_image_view<vxl_uint_64>& census_sal,
   int tol = 2 );
 
-
 //: Find the difference between two census bit-strings with saliences
 inline unsigned long long baml_compute_diff_string(
   unsigned long long int cen1,
@@ -89,6 +88,5 @@ inline void baml_generate_bit_set_lut(
   for (int b = 0; b < 256; b++ )
     lut[b] = (b&1) + lut[b/2];
 }
-
 
 #endif // baml_census_h
