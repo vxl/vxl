@@ -147,7 +147,7 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
   double ox=origin_.x(), oy=origin_.y(), oz = origin_.z();
   double dtheta = (vnl_math::pi-2.0*theta_cap_)/n_theta_;
   double dphi = twopi/n_phi_;
-  for(int ith = 0; ith<n_theta_; ++ith){
+  for(size_t ith = 0; ith<n_theta_; ++ith){
     double theta = theta_cap_ + ith*dtheta;
     double theta_map = theta_off + theta;
     if(theta_map<theta_cap_)

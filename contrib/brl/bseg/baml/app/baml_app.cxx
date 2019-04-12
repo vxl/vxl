@@ -232,8 +232,8 @@ int main(int  /*argc*/, char *  /*argv*/[])
     // Output the cropped images
     //vil_save(tar_blur, (output_namebase + "tar_" + tar_name + ".tif").c_str());
     vil_image_view<vxl_byte> ref_vis(ref_warped.ni(), ref_warped.nj());
-    for (int x = 0; x < ref_warped.ni(); x++) {
-      for (int y = 0; y < ref_warped.nj(); y++) {
+    for (size_t x = 0; x < ref_warped.ni(); x++) {
+      for (size_t y = 0; y < ref_warped.nj(); y++) {
         ref_vis(x, y) = (vxl_byte)( std::min( 255.0f, ref_warped(x,y)*255.0f / 4000.0f ));
       }
     }
