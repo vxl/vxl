@@ -120,12 +120,14 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
   // go over the pixels and collect pixels of positives and negatives
   std::vector<std::pair<int, int> > pos_pixels;
   std::vector<std::pair<int, int> > neg_pixels;
+  int nio = static_cast<int>(ni);
+  int njo = static_cast<int>(nj);
   for (const auto & positive : positives) {
     vgl_polygon_scan_iterator<double> psi(positive);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         pos_pixels.emplace_back(i,j);
       }
@@ -136,7 +138,7 @@ bool sdet_texture_classifier_roc_process(bprb_func_process& pro)
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         neg_pixels.emplace_back(i,j);
       }
@@ -288,13 +290,15 @@ bool sdet_texture_classifier_roc_process2(bprb_func_process& pro)
   // go over the pixels and collect pixel of positive and negative
   std::vector<std::pair<int, int> > pos_pixels;
   std::vector<std::pair<int, int> > neg_pixels;
+  int nio = static_cast<int>(ni);
+  int njo = static_cast<int>(nj);
   for (const auto & positive : positives)
   {
     vgl_polygon_scan_iterator<double> psi(positive);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i = psi.startx(); i <= psi.endx(); ++i) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         pos_pixels.emplace_back(i, j);
       }
@@ -502,12 +506,14 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
   unsigned ni = input_prob_img.ni(); unsigned nj = input_prob_img.nj();
   std::vector<std::pair<int, int> > pos_pixels;
   std::vector<std::pair<int, int> > neg_pixels;
+  int nio = static_cast<int>(ni);
+  int njo = static_cast<int>(nj);
   for (const auto & positive : positives) {
     vgl_polygon_scan_iterator<double> psi(positive);
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         pos_pixels.emplace_back(i,j);
       }
@@ -518,7 +524,7 @@ bool sdet_texture_classifier_roc_process3(bprb_func_process& pro)
     for (psi.reset(); psi.next(); ) {
       int j = psi.scany();
       for (int i  = psi.startx(); i <= psi.endx(); ++i) {
-        if (i < 0 || j < 0 || i >= ni || j >= nj)
+        if (i < 0 || j < 0 || i >= nio || j >= njo)
           continue;
         neg_pixels.emplace_back(i,j);
       }

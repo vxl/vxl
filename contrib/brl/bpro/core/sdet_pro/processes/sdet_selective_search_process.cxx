@@ -74,7 +74,7 @@ bool draw_box(vil_image_view<vil_rgb<vxl_byte> >& output_img, vgl_oriented_box_2
     for (it.reset(); it.next();  ) {
       int y = it.scany();
       for (int x = it.startx(); x <= it.endx(); ++x) {
-        if ( x >= 0 && y >= 0 && x < output_img.ni() && y < output_img.nj()) {
+        if ( x >= 0 && y >= 0 && x < static_cast<int>(output_img.ni()) && y < static_cast<int>(output_img.nj())) {
           output_img(x,y) = color;
         }
       }
