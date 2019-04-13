@@ -66,6 +66,8 @@ void mbl_eps_writer::set_colour(const std::string& colour_name)
   if (colour_name=="blue") { set_rgb(0,0,1); return; }
   if (colour_name=="cyan") { set_rgb(0,1,1); return; }
   if (colour_name=="yellow") { set_rgb(1,1,0); return; }
+  if (colour_name=="orange") { set_rgb(1,0.64,0); return; }
+  if (colour_name=="magenta") { set_rgb(1,0,1); return; }
 
   // Colour not recognised, so set to grey.
   set_grey_shade(0.5);
@@ -204,6 +206,17 @@ void mbl_eps_writer::draw_polygon(const std::vector<vgl_point_2d<double> >& pts,
   if (filled) ofs_<<"fill ";
   ofs_<<"stroke\n";
 }
+
+//: Write text in given font_size
+void mbl_eps_writer::write_text(double x, double y, int font_size,
+                                const std::string& text)
+{
+  ofs_<<"/Times-Roman findfont"<<std::endl;
+  ofs_<<"12 scalefont setfont"<<std::endl;
+  ofs_<<"newpath"<<std::endl;
+  ofs_<<x<<" "<<y<<" M ("<<text<<") show"<<std::endl;
+}
+
 
 
 //: Writes first plane of image in hex format to os

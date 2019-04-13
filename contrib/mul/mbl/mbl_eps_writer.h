@@ -140,6 +140,9 @@ class mbl_eps_writer
   void draw_polygon(const std::vector<vgl_point_2d<double> >& pts,
                     bool closed=true, bool filled=false);
 
+  //: Write text in given font_size
+  void write_text(double x, double y, int font_size, const std::string& text);
+
   //: Define line width.
   void set_line_width(double w);
 
