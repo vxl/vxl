@@ -15,6 +15,7 @@
 #include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
 #include <vul/vul_string.h>
@@ -36,11 +37,20 @@ live in separate directories.
 
 Parameter file format:
 <START FILE>
-points_dir1: /home/points/
-points_dir2: /home/points/
+// Directories containing points from each annotator
+points_dirs: {
+/home/points1/
+/home/points2/
+}
 
-point_colour1: green
-point_colour2: blue
+// Sequence of colours to use for the points
+point_colours:  { red blue }
+
+// Colour used for summary of all annotations
+summary_colour: green
+
+// Text for key (shown in top left of image)
+key_text: { Marker1   Marker2 }
 
 //: Aligner used to map to common frame
 aligner: msm_similarity_aligner
@@ -50,6 +60,21 @@ point_radius: 1.5
 
 //: Line width
 line_width: 1.5
+
+//: If greater than one, show points i*point_step
+// Enables display of subset of the points
+point_step: 2
+
+
+//: Path for image+ellipses, one for every annotation set.
+output_all_path: image+pts_all.eps
+
+//: Path for image+ellipses, one ellipse per point summarising all sets.
+output_summary_path: image+pts_sum.eps
+
+// If provided, generate one image + markup for each annotation set.
+// Name given by output_for_one_base_path+key_text[i].eps
+output_for_one_base_path: image+pts_
 
 
 image_dir: /home/images/
@@ -82,17 +107,36 @@ struct tool_params
   //: Line width
   double line_width;
 
+  //: If greater than one, show points i*point_step
+  // Enables display of subset of the points
+  unsigned point_step;
+
+
   //: Directory containing images
   std::string image_dir;
 
   //: Directories containing points
   std::vector<std::string> points_dir;
 
-  //: Colours for points
+  //: Colours for points (and key text)
   std::vector<std::string> point_colour;
 
-  //: File to save shape model to
-  std::string shape_model_path;
+  //: Colour used for summary of all annotations
+  std::string summary_colour;
+
+  //: Text for key
+  std::vector<std::string> key_text;
+
+  //: Path for image+ellipses, one for every annotation set.
+  std::string output_all_path;
+
+  //: Path for image+ellipses, one ellipse per point summarising all sets.
+  std::string output_summary_path;
+
+  // If provided, generate one image + markup for each annotation set.
+  // Name given by output_for_one_base_path+key_text[i].eps
+  std::string output_for_one_base_path;
+
 
   //: List of image names
   std::vector<std::string> image_names;
@@ -118,19 +162,54 @@ void tool_params::read_from_file(const std::string& path)
 
   mbl_read_props_type props = mbl_read_props_ws(ifs);
 
-  // Initially assume exactly two directories.
-  // Later may generalise.
-  points_dir.resize(2);
-  points_dir[0]=props.get_required_property("points_dir1");
-  points_dir[1]=props.get_required_property("points_dir2");
-  point_colour.resize(2);
-  point_colour[0]=props.get_required_property("point_colour1");
-  point_colour[1]=props.get_required_property("point_colour2");
+  output_all_path=props.get_optional_property("output_all_path","image+pts_all.eps");
+  output_summary_path=props.get_optional_property("output_summary_path",
+                                                  "image+pts_sum.eps");
+  output_for_one_base_path=props.get_optional_property("output_for_one_base_path","");
+
+  summary_colour=props.get_optional_property("summary_colour","green");
+
+  std::string points_dirs_str=props.get_optional_property("points_dirs","");
+  if (points_dirs_str!="")
+  {
+    mbl_parse_string_list(points_dirs_str,points_dir);
+  }
+  else
+  {
+    // Assume exactly two directories.
+    points_dir.resize(2);
+    points_dir[0]=props.get_required_property("points_dir1");
+    points_dir[1]=props.get_required_property("points_dir2");
+  }
+
+  std::string point_colours_str=props.get_optional_property("point_colours","");
+  if (point_colours_str!="")
+    mbl_parse_string_list(point_colours_str,point_colour);
+  else
+  {
+    point_colour.resize(2);
+    point_colour[0]=props.get_required_property("point_colour1");
+    point_colour[1]=props.get_required_property("point_colour2");
+  }
+
+  if (points_dir.size()!=point_colour.size())
+    std::cout<<"WARNING: "
+      <<"Number of colours does not match number of data sets"<<std::endl;
+
+  std::string key_text_str=props.get_optional_property("key_text","");
+  if (key_text_str!="")
+    mbl_parse_string_list(key_text_str,key_text);
+
+  if (key_text.size()>0 && key_text.size()!=points_dir.size())
+    std::cerr<<"WARNING: "
+      <<"Number of key text lines does not match number of data sets"<<std::endl;
+
 
   image_dir=props.get_optional_property("image_dir","./");
 
   point_radius=vul_string_atof(props.get_optional_property("point_radius","1.5"));
   line_width=vul_string_atof(props.get_optional_property("line_width","1"));
+  point_step=vul_string_atoi(props.get_optional_property("point_step","1"));
 
   {
     std::string aligner_str
@@ -235,7 +314,7 @@ class mbm_covar_stats_2d
   double var22() const { return sum22/n-mean_y()*mean_y(); }
 
   //: Calculate eigenvalues of the covariance matrix and angle of evector 1
-  void eigen_values(double& eval1, double& eval2, double& A)
+  void eigen_values(double& eval1, double& eval2, double& A) const
   {
     double dac=var11()-var22();
     double v12=var12();
@@ -248,6 +327,46 @@ class mbm_covar_stats_2d
   }
 
 };
+
+void write_ellipses(mbl_eps_writer& writer, double region_height,
+                    const msm_points& ref_shape, double point_radius,
+                    const std::vector<mbm_covar_stats_2d>& pt_stats,
+                    unsigned step=1)
+{
+  for (unsigned k=0;k<pt_stats.size();k+=step)
+  {
+    // Draw mean point
+    vgl_point_2d<double> pt(ref_shape[k].x()+pt_stats[k].mean_x(),
+                            ref_shape[k].y()+pt_stats[k].mean_y());
+
+    writer.draw_disk(pt,point_radius);
+
+    double rx,ry,A;
+    pt_stats[k].eigen_values(rx,ry,A);
+    draw_ellipse(writer.ofs(),region_height,pt,
+                 2*std::sqrt(rx),2*std::sqrt(ry),A*180/3.14159);
+  }
+}
+
+
+// Draw disk at each point, at ref_shape[k]+pt_stats[k].mean
+void write_centre_points(mbl_eps_writer& writer, double region_height,
+                    const msm_points& ref_shape, double point_radius,
+                    const std::vector<mbm_covar_stats_2d>& pt_stats,
+                    unsigned step=1)
+{
+  for (unsigned k=0;k<pt_stats.size();k+=step)
+  {
+    // Draw mean point
+    vgl_point_2d<double> pt(ref_shape[k].x()+pt_stats[k].mean_x(),
+                            ref_shape[k].y()+pt_stats[k].mean_y());
+
+    writer.draw_disk(pt,point_radius);
+  }
+}
+
+
+
 
 int main(int argc, char** argv)
 {
@@ -275,6 +394,9 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  if (out_path()!="")
+    params.output_all_path=out_path();
+
   unsigned n_sets = params.points_dir.size();
 
   // Load in all points
@@ -299,6 +421,7 @@ int main(int argc, char** argv)
 
   unsigned n_pts = points[0][0].size();
   std::vector<std::vector<mbm_covar_stats_2d> > pt_stats(n_sets);
+  std::vector<mbm_covar_stats_2d> pt_stats_all(n_pts);  // For all annotations
   std::vector<std::vector<mbl_sample_stats_1d> > d_stats(n_sets);  // Dist. to mean.
   for (unsigned i=0;i<pt_stats.size();++i)
   {
@@ -316,6 +439,7 @@ int main(int argc, char** argv)
       for (unsigned k=0;k<n_pts;++k)
       {
         pt_stats[i][k].obs(dpoints[k]);
+        pt_stats_all[k].obs(dpoints[k]);  // Record deviation for all markers
         double d2=dpoints[k].x()*dpoints[k].x() + dpoints[k].y()*dpoints[k].y();
         d_stats[i][k].add_sample(std::sqrt(d2));
       }
@@ -333,7 +457,9 @@ int main(int argc, char** argv)
 
   double region_width=pixel_width_i*image.image().ni();
   double region_height=pixel_width_j*image.image().nj();
-  mbl_eps_writer writer(out_path().c_str(),region_width,region_height);
+
+
+  mbl_eps_writer writer(params.output_all_path.c_str(),region_width,region_height);
 
   writer.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
 
@@ -355,24 +481,77 @@ int main(int argc, char** argv)
     }
   }
 
+  unsigned n_colours=params.point_colour.size();
+
+  vgl_point_2d<double> key_p(5,5);
+  double key_step=15;
+
   for (unsigned i=0;i<n_sets;++i)
   {
-    for (unsigned k=0;k<n_pts;++k)
+    for (unsigned k=0;k<n_pts;k+=params.point_step)
     {
       // Draw mean point
       vgl_point_2d<double> pt(ref_shape[k].x()+pt_stats[i][k].mean_x(),
                               ref_shape[k].y()+pt_stats[i][k].mean_y());
-      writer.set_colour(params.point_colour[i]);
+      writer.set_colour(params.point_colour[i%n_colours]);
       writer.draw_disk(pt,params.point_radius);
 
       double rx,ry,A;
       pt_stats[i][k].eigen_values(rx,ry,A);
       draw_ellipse(writer.ofs(),region_height,pt,2*std::sqrt(rx),2*std::sqrt(ry),A*180/3.14159);
     }
+
+    // Write text for key (using same colour)
+    if (i<params.key_text.size())
+      writer.write_text(key_p.x(),key_p.y()+i*key_step,12,params.key_text[i]);
   }
 
   writer.close();
-  std::cout<<"Graphics saved to "<<out_path()<<std::endl;
+  std::cout<<"Graphics saved to "<<params.output_all_path<<std::endl;
+
+  // Write summary file with one ellipse per point indicating spread
+  mbl_eps_writer writer2(params.output_summary_path.c_str(),region_width,region_height);
+  writer2.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
+  writer2.set_line_width(params.line_width);
+  writer2.set_colour(params.summary_colour);
+  write_ellipses(writer2,region_height,
+                 ref_shape,params.point_radius,
+                 pt_stats_all,params.point_step);
+
+  // Write points for mean displacement for each individual annotator
+  for (unsigned i=0;i<n_sets;++i)
+  {
+    writer2.set_colour(params.point_colour[i%n_colours]);
+    write_centre_points(writer2,region_height,
+                   ref_shape,params.point_radius,
+                   pt_stats[i],params.point_step);
+  }
+  writer2.close();
+  std::cout<<"Graphic summarising all variance saved to "
+           <<params.output_summary_path<<std::endl;
+
+  // Create one graphic per annotator, showing their result and the average.
+  for (unsigned i=0;i<params.key_text.size();++i)
+  {
+    std::string path=params.output_for_one_base_path+params.key_text[i]+".eps";
+    mbl_eps_writer writer3(path.c_str(),region_width,region_height);
+    writer3.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
+    writer3.set_line_width(params.line_width);
+    writer3.set_colour(params.point_colour[0]);
+    write_ellipses(writer3,region_height,
+                  ref_shape,params.point_radius,
+                  pt_stats_all,params.point_step);
+    writer3.write_text(key_p.x(),key_p.y(),12,"All");
+
+    writer3.set_colour(params.point_colour[1]);
+    write_ellipses(writer3,region_height,
+                  ref_shape,params.point_radius,
+                  pt_stats[i],params.point_step);
+    writer3.write_text(key_p.x(),key_p.y()+key_step,12,params.key_text[i]);
+    writer3.close();
+    std::cout<<"Graphic for one annotator saved to "<<path<<std::endl;
+  }
+
 
   if (n_sets==2)
   {
