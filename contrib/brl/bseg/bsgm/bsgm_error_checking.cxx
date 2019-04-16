@@ -246,8 +246,11 @@ bsgm_interpolate_errors(
   std::vector<float>::iterator sample_itr = sample_vol.begin();
   for( int y = 0; y < h; y++ ){
     for( int x = 0; x < w; x++, sample_itr += num_sample_dirs ){
-      if( sample_count(x,y) == 0 ) continue;
-      if( invalid(x,y) ) continue;
+      if (invalid(x, y)) continue;
+
+      // Require half of the directions return valid samples, which prevents 
+      // bogus interpolation on the boundary of the disparity map
+      if( sample_count(x,y) <= 4 ) continue;
 
       std::sort( sample_itr, sample_itr + sample_count(x,y) );
 
