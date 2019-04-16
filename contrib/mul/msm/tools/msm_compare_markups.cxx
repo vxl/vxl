@@ -15,6 +15,7 @@
 #include <string>
 #include <mbl/mbl_read_props.h>
 #include <mbl/mbl_exception.h>
+#include <mbl/mbl_parse_int_list.h>
 #include <mbl/mbl_parse_string_list.h>
 #include <mbl/mbl_parse_colon_pairs_list.h>
 #include <vul/vul_arg.h>
@@ -31,6 +32,9 @@
 #include <msm/utils/msm_draw_shape_to_eps.h>
 #include <vimt/vimt_image_2d_of.h>
 #include <vimt/vimt_load.h>
+#include <vnl/vnl_matrix_fixed.h>
+#include <vnl/vnl_inverse.h>
+
 /*
 Points from different annotators are assumed to have the same filenames, but
 live in separate directories.
@@ -65,6 +69,11 @@ line_width: 1.5
 // Enables display of subset of the points
 point_step: 2
 
+//: When true, use iterative algorithm
+//  This re-estimates offsets and taking account of uncertainties
+// WARNING: Experimental.  I'm unconvinced that this is doing the right thing.
+// May be missing a constraint, leading to odd solutions.
+use_iterations: false
 
 //: Path for image+ellipses, one for every annotation set.
 output_all_path: image+pts_all.eps
@@ -76,6 +85,8 @@ output_summary_path: image+pts_sum.eps
 // Name given by output_for_one_base_path+key_text[i].eps
 output_for_one_base_path: image+pts_
 
+//: When defined, only display listed points
+points_to_show: { 3 7 12 15 }
 
 image_dir: /home/images/
 images: {
@@ -111,6 +122,12 @@ struct tool_params
   // Enables display of subset of the points
   unsigned point_step;
 
+  //: When defined, only display listed points
+  std::vector<unsigned> points_to_show;
+
+  //: When true, use iterative algorithm
+  //  This re-estimates offsets and taking account of uncertainties
+  bool use_iterations;
 
   //: Directory containing images
   std::string image_dir;
@@ -169,6 +186,8 @@ void tool_params::read_from_file(const std::string& path)
 
   summary_colour=props.get_optional_property("summary_colour","green");
 
+  use_iterations=vul_string_to_bool(props.get_optional_property("use_iterations","false"));
+
   std::string points_dirs_str=props.get_optional_property("points_dirs","");
   if (points_dirs_str!="")
   {
@@ -204,6 +223,12 @@ void tool_params::read_from_file(const std::string& path)
     std::cerr<<"WARNING: "
       <<"Number of key text lines does not match number of data sets"<<std::endl;
 
+  std::string points_to_show_str=props.get_optional_property("points_to_show","");
+  if (points_to_show_str!="")
+  {
+    std::stringstream ss(points_to_show_str);
+    mbl_parse_int_list(ss,std::back_inserter(points_to_show),unsigned());
+  }
 
   image_dir=props.get_optional_property("image_dir","./");
 
@@ -302,6 +327,7 @@ class mbm_covar_stats_2d
   }
 
   void obs(vgl_point_2d<double> p) { obs(p.x(),p.y()); }
+  void obs(vgl_vector_2d<double> p) { obs(p.x(),p.y()); }
 
   unsigned n_obs() const { return n; }
 
@@ -326,6 +352,18 @@ class mbm_covar_stats_2d
     A = std::atan2(eval1-var11(),var12());
   }
 
+  double det() const { return var11()*var22()-var12()*var12(); }
+
+  //: Return inverse of covariance matrix (assumes |det()|>0)
+  vnl_matrix_fixed<double,2,2> inv_covar() const
+  {
+    double d=det(); if (abs(d)<0.0001) d=0.0001;
+    vnl_matrix_fixed<double,2,2> S_inv;
+    S_inv[0][0]=var22()/d;   S_inv[1][0]=-var12()/d;
+    S_inv[0][1]=S_inv[1][0]; S_inv[1][1]=var11()/d;
+    return S_inv;
+  }
+
 };
 
 void write_ellipses(mbl_eps_writer& writer, double region_height,
@@ -348,6 +386,42 @@ void write_ellipses(mbl_eps_writer& writer, double region_height,
   }
 }
 
+// Write ellipses for subset of points
+void write_ellipses(mbl_eps_writer& writer, double region_height,
+                    const msm_points& ref_shape, double point_radius,
+                    const std::vector<mbm_covar_stats_2d>& pt_stats,
+                    const std::vector<unsigned>& subset)
+{
+  for (unsigned ik=0;ik<subset.size();ik++)
+  {
+    unsigned k=subset[ik];
+
+    // Draw mean point
+    vgl_point_2d<double> pt(ref_shape[k].x()+pt_stats[k].mean_x(),
+                            ref_shape[k].y()+pt_stats[k].mean_y());
+
+    writer.draw_disk(pt,point_radius);
+
+    double rx,ry,A;
+    pt_stats[k].eigen_values(rx,ry,A);
+    draw_ellipse(writer.ofs(),region_height,pt,
+                 2*std::sqrt(rx),2*std::sqrt(ry),A*180/3.14159);
+  }
+}
+
+void write_ellipses(mbl_eps_writer& writer, double region_height,
+                    const msm_points& ref_shape, double point_radius,
+                    const std::vector<mbm_covar_stats_2d>& pt_stats,
+                    const std::vector<unsigned>& subset,
+                    unsigned point_step)
+{
+  if (subset.size()>0)
+    write_ellipses(writer,region_height,ref_shape,point_radius,pt_stats,subset);
+  else
+    write_ellipses(writer,region_height,ref_shape,point_radius,pt_stats,point_step);
+}
+
+
 
 // Draw disk at each point, at ref_shape[k]+pt_stats[k].mean
 void write_centre_points(mbl_eps_writer& writer, double region_height,
@@ -366,6 +440,104 @@ void write_centre_points(mbl_eps_writer& writer, double region_height,
 }
 
 
+// Draw disk at each point, at ref_shape[k]+pt_stats[k].mean
+void write_centre_points(mbl_eps_writer& writer, double region_height,
+                    const msm_points& ref_shape, double point_radius,
+                    const std::vector<mbm_covar_stats_2d>& pt_stats,
+                    const std::vector<unsigned>& subset)
+{
+  for (unsigned ik=0;ik<subset.size();ik++)
+  {
+    unsigned k=subset[ik];
+
+    // Draw mean point
+    vgl_point_2d<double> pt(ref_shape[k].x()+pt_stats[k].mean_x(),
+                            ref_shape[k].y()+pt_stats[k].mean_y());
+
+    writer.draw_disk(pt,point_radius);
+  }
+}
+
+
+//: Given estimates of point on multiple images from >1 marker, estimate true pos
+// Input: p[i][j] point produced by annotator i on image j
+// Output:
+//   true_p[j]  Estimate of true position for point on image j
+//   stats[i]   Mean (offset) and covariance of predictions of points for i
+void compute_stats(const std::vector<std::vector<vgl_point_2d<double> > >& p,
+                         std::vector<vgl_point_2d<double> >& true_p,
+                         std::vector<mbm_covar_stats_2d>& stats)
+{
+  unsigned n_sets=p.size();
+  unsigned n=p[0].size();
+  true_p.resize(n);
+  stats.resize(n_sets);
+
+  std::vector<mbm_covar_stats_2d> c_stats(n);
+
+  // First estimate mean for each point
+  for (unsigned j=0;j<n;++j)
+  {
+    for (unsigned i=0;i<n_sets;++i) c_stats[j].obs(p[i][j]);
+    true_p[j]=vgl_point_2d<double>(c_stats[j].mean_x(),c_stats[j].mean_y());
+  }
+
+//  std::cout<<"Estimate of pt 0: ("<<true_p[0].x()<<","<<true_p[0].y()<<")"<<std::endl;
+
+  // Estimate stats for each individual
+  for (unsigned i=0;i<n_sets;++i)
+  {
+    stats[i]=mbm_covar_stats_2d();  // Empty
+    for (unsigned j=0;j<n;++j)
+      stats[i].obs(p[i][j]-true_p[j]);
+  }
+
+  // Now re-estimate the true position, the offset and covar per marker.
+
+  unsigned n_its=13;
+  for (unsigned its=0;its<n_its;++its)
+  {
+    // Re-estimate the true position.
+    for (unsigned j=0;j<n;++j)
+    {
+      vnl_matrix_fixed<double,2,2> W_sum;
+      // First add constraint on true_p from prior
+      W_sum=c_stats[j].inv_covar();
+      double x_sum=W_sum[0][0]*c_stats[j].mean_x()+
+                   W_sum[0][1]*c_stats[j].mean_y();
+      double y_sum=W_sum[1][0]*c_stats[j].mean_x()+
+                   W_sum[1][1]*c_stats[j].mean_y();
+      // Prediction from each set
+      for (unsigned i=0;i<n_sets;++i)
+      {
+        double dx=p[i][j].x()-stats[i].mean_x();
+        double dy=p[i][j].y()-stats[i].mean_y();
+
+        vnl_matrix_fixed<double,2,2> W=stats[i].inv_covar();
+        x_sum += W[0][0]*dx + W[0][1]*dy;
+        y_sum += W[1][0]*dx + W[1][1]*dy;
+        W_sum+=W;
+      }
+
+      vnl_matrix_fixed<double,2,2> W_sum_inv=vnl_inverse(W_sum);
+      double mx=W_sum_inv[0][0]*x_sum + W_sum_inv[0][1]*y_sum;
+      double my=W_sum_inv[1][0]*x_sum + W_sum_inv[1][1]*y_sum;
+      true_p[j]=vgl_point_2d<double>(mx,my);
+    }
+  std::cout<<"Estimate of pt 0: ("<<true_p[0].x()<<","<<true_p[0].y()
+          <<") var_x[0]: "<<stats[0].var11()
+          <<" var_x[1]: "<<stats[1].var11()<<std::endl;
+
+    // Estimate stats for each individual
+    for (unsigned i=0;i<n_sets;++i)
+    {
+      stats[i]=mbm_covar_stats_2d();  // Empty
+      for (unsigned j=0;j<n;++j)
+        stats[i].obs(p[i][j]-true_p[j]);
+    }
+  }
+
+}
 
 
 int main(int argc, char** argv)
@@ -446,6 +618,34 @@ int main(int argc, char** argv)
     }
   }
 
+  // Experimental:
+  // Use iterative refinement of estimates,
+  // taking marker uncertainty into account
+  if (params.use_iterations)
+  {
+    std::cout<<"Using iterative approach to estimate mean positions and uncertainties"<<std::endl;
+    std::cout<<"WARNING: This may not work properly - it may converge to odd solutions."<<std::endl;
+    for (unsigned k=0;k<n_pts;++k)
+    {
+      // Perform calculations for point k
+      std::vector<std::vector<vgl_point_2d<double> > > p(n_sets);
+      std::vector<vgl_point_2d<double> > true_p;
+      std::vector<mbm_covar_stats_2d> stats;
+      for (unsigned i=0;i<n_sets;++i)
+      {
+        p[i].resize(n_egs);
+        for (unsigned j=0;j<n_egs;++j)
+          p[i][j]=points[i][j][k];
+      }
+      compute_stats(p,true_p,stats);
+
+      // Record results for point k
+      for (unsigned i=0;i<n_sets;++i)
+        pt_stats[i][k]=stats[i];
+      ref_shape.set_point(k,true_p[0]);
+    }
+  }
+
   // Create an image with mean point positions overlayed
   vimt_image_2d_of<vxl_byte> image;
   std::string image_path = params.image_dir+"/"+params.image_names[0];
@@ -514,17 +714,25 @@ int main(int argc, char** argv)
   writer2.draw_image(image.image(),0,0, pixel_width_i,pixel_width_j);
   writer2.set_line_width(params.line_width);
   writer2.set_colour(params.summary_colour);
+
   write_ellipses(writer2,region_height,
                  ref_shape,params.point_radius,
-                 pt_stats_all,params.point_step);
+                 pt_stats_all,params.points_to_show,
+                 params.point_step);
 
   // Write points for mean displacement for each individual annotator
   for (unsigned i=0;i<n_sets;++i)
   {
     writer2.set_colour(params.point_colour[i%n_colours]);
-    write_centre_points(writer2,region_height,
+    if (params.points_to_show.size()==0)
+      write_centre_points(writer2,region_height,
                    ref_shape,params.point_radius,
                    pt_stats[i],params.point_step);
+    else
+      write_centre_points(writer2,region_height,
+                   ref_shape,params.point_radius,
+                   pt_stats[i],params.points_to_show);
+
   }
   writer2.close();
   std::cout<<"Graphic summarising all variance saved to "
@@ -540,13 +748,13 @@ int main(int argc, char** argv)
     writer3.set_colour(params.point_colour[0]);
     write_ellipses(writer3,region_height,
                   ref_shape,params.point_radius,
-                  pt_stats_all,params.point_step);
+                  pt_stats_all,params.points_to_show,params.point_step);
     writer3.write_text(key_p.x(),key_p.y(),12,"All");
 
     writer3.set_colour(params.point_colour[1]);
     write_ellipses(writer3,region_height,
                   ref_shape,params.point_radius,
-                  pt_stats[i],params.point_step);
+                  pt_stats[i],params.points_to_show,params.point_step);
     writer3.write_text(key_p.x(),key_p.y()+key_step,12,params.key_text[i]);
     writer3.close();
     std::cout<<"Graphic for one annotator saved to "<<path<<std::endl;
