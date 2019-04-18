@@ -1114,8 +1114,8 @@ bool vpgl_tri_focal_tensor<Type>::compute_f_matrices(){
   // so must convert to double
   vnl_vector_fixed<double,3> ev12_d(ev12[0], ev12[1], ev12[2]), ev13_d(ev13[0], ev13[1], ev13[2]);
 
-  vnl_matrix_fixed<double, 3, 3> e12x = vnl_cross_product_matrix(ev12_d), F12;
-  vnl_matrix_fixed<double, 3, 3> e13x = vnl_cross_product_matrix(ev13_d), F13;
+  vnl_matrix_fixed<double, 3, 3> e12x = vnl_cross_product_matrix(ev12_d);
+  vnl_matrix_fixed<double, 3, 3> e13x = vnl_cross_product_matrix(ev13_d);
 
   vnl_matrix_fixed<Type, 3,3> temp12, temp13, F12_t, F13_t;
   vnl_matrix_fixed<double, 3,3> temp12_d, temp13_d, cp12, cp13;
