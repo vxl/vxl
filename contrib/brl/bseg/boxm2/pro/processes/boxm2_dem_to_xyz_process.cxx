@@ -187,7 +187,6 @@ bool boxm2_dem_to_xyz_process(bprb_func_process& pro)
   auto* out_img_y = new vil_image_view<float>(ni, nj, 1);
   auto* out_img_z = new vil_image_view<float>(ni, nj, 1);
   // initialize the image by scene origin
-  double orig_lat, orig_lon, orig_elev;
   out_img_x->fill(-10.0f);
   out_img_y->fill(-10.0f);
   out_img_z->fill(-1.0f);

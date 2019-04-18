@@ -144,7 +144,6 @@ bool  boxm2_cpp_get_3d_point_from_index_process(bprb_func_process& pro)
   int bk =pro.get_input<int>(i++);
   int index =pro.get_input<int>(i++);
 
-  vgl_point_3d<double> local;
   boxm2_block_id id(bi, bj, bk);
   boxm2_block * blk = cache->get_block(scene,id);
   boxm2_block_metadata mdata = scene->get_block_metadata_const(id);

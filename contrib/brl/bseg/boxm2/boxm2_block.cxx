@@ -368,7 +368,6 @@ std::vector<cell_info> boxm2_block::cells_in_box(vgl_box_3d<double> const& globa
   if(index_z_max >=nz) index_z_max = nz-1;
 
   // iterate over sub_blocks
-  vgl_point_3d<double> loc;
   for(int iz = index_z_min; iz<=index_z_max; ++iz){
     for(int iy = index_y_min; iy<=index_y_max; ++iy){
       for(int ix = index_x_min; ix<=index_x_max; ++ix){
