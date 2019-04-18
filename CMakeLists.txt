@@ -67,9 +67,16 @@ foreach(p
 endforeach()
 
 project(VXL #Project name must be all caps to have properly generated VXL_VERSION_* variables
-    VERSION 2.0.2.0
     DESCRIPTION "A multi-platform collection of C++ software libraries for Computer Vision and Image Understanding."
     LANGUAGES CXX C)
+
+SET(VXL_MAJOR_VERSION 2)
+SET(VXL_MINOR_VERSION 0)
+SET(VXL_BUILD_VERSION 2)
+SET(VXL_VERSION "${VXL_MAJOR_VERSION}.${VXL_MINOR_VERSION}.${VXL_BUILD_VERSION}")
+SET(VXL_API_VERSION "${VXL_MAJOR_VERSION}.${VXL_MINOR_VERSION}")
+SET(VXL_LIBRARY_PROPERTIES ${VXL_LIBRARY_PROPERTIES} VERSION "${VXL_VERSION}"
+    SOVERSION "${VXL_API_VERSION}")
 
 include(CMakeDependentOption)
 include(${CMAKE_CURRENT_SOURCE_DIR}/config/cmake/VXLInitializeBuildType.cmake)
