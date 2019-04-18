@@ -263,7 +263,6 @@ bool boxm2_export_oriented_point_cloud_function::calculateProbOfPoint(const boxm
                                                                       const float& alpha,
                                                                       float& prob, double&  /*color*/, vnl_vector_fixed<double, 3>& axes, double& LE, double& CE)
 {
-  vgl_point_3d<double> local;
   boxm2_block_id id;
 
   vgl_point_3d<double> vgl_point(point[0],point[1],point[2]);

@@ -355,7 +355,6 @@ void boxm2_vecf_eye_scene::paint_iris(){
 //run through all the pupil points and paint them
 //with the specified intensity
 void boxm2_vecf_eye_scene::paint_pupil(){
-  boxm2_data_traits<BOXM2_MOG3_GREY>::datatype app;
   params_.app_[0]=params_.pupil_intensity_;
   auto np = static_cast<unsigned>(pupil_cell_data_index_.size());
   for(unsigned i = 0; i<np; ++i){

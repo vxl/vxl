@@ -172,7 +172,6 @@ bool boxm2_add_aux_info_to_ply_process(bprb_func_process& pro)
 
   //iterate through the points
   float prob;
-  vnl_vector_fixed<float,3> intensity;
   vgl_point_3d<double> local;
   boxm2_block_id id;
   for (auto pt : points) {

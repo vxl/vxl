@@ -47,7 +47,6 @@ bool bvxm_create_land_map_process(bprb_func_process& pro)
   vpgl_lvcs_sptr lvcs = params->lvcs();
   vgl_point_3d<float> lower_left = params->corner();
   vgl_vector_3d<unsigned> num_voxels = params->num_voxels();
-  double dim_x, dim_y, dim_z;
   double lower_left_lon, lower_left_lat, lower_left_elev, upper_right_lon, upper_right_lat, upper_right_elev;
   lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84,
                         lower_left_lon, lower_left_lat, lower_left_elev);

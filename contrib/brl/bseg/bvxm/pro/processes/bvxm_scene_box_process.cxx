@@ -100,7 +100,7 @@ bool bvxm_scene_origin_process(bprb_func_process& pro)
 
   vpgl_lvcs_sptr lvcs = params->lvcs();
 
-  double lower_left_lon, lower_left_lat, gz, upper_right_lon, upper_right_lat;
+  double lower_left_lon, lower_left_lat, gz;
   lvcs->local_to_global(params->corner().x(), params->corner().y(), params->corner().z(), vpgl_lvcs::wgs84, lower_left_lon, lower_left_lat, gz);
 
   //Store outputs
