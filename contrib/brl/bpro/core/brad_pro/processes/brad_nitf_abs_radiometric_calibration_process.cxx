@@ -20,7 +20,7 @@
 #include <vil/vil_convert.h>
 
 #include <brad/brad_image_metadata.h>
-#include <brad/brad_nitf_abs_radiometric_calibration.h>
+#include <brad/brad_calibration.h>
 
 //: set input and output types
 bool brad_nitf_abs_radiometric_calibration_process_cons(bprb_func_process& pro)

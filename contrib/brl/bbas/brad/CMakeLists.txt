@@ -22,29 +22,29 @@
   include_directories(${GEL_INCLUDE_DIR})
 
   set(brad_sources
-      brad_illum_util.h                       brad_illum_util.cxx
+      brad_illum_util.h                     brad_illum_util.cxx
       brad_illum_cost_function.h
-      brad_sun_pos.h                          brad_sun_pos.cxx
-      brad_sun_dir_index.h                    brad_sun_dir_index.cxx
-      brad_hist_prob_feature_vector.h         brad_hist_prob_feature_vector.cxx
-      brad_grad_hist_feature_vector.h         brad_grad_hist_feature_vector.cxx
-      brad_grad_int_feature_vector.h          brad_grad_int_feature_vector.cxx
-      brad_eigenspace.h                       brad_eigenspace.hxx
-      brad_eigenspace_base.h                  brad_eigenspace_base.cxx
+      brad_sun_pos.h                        brad_sun_pos.cxx
+      brad_sun_dir_index.h                  brad_sun_dir_index.cxx
+      brad_hist_prob_feature_vector.h       brad_hist_prob_feature_vector.cxx
+      brad_grad_hist_feature_vector.h       brad_grad_hist_feature_vector.cxx
+      brad_grad_int_feature_vector.h        brad_grad_int_feature_vector.cxx
+      brad_eigenspace.h                     brad_eigenspace.hxx
+      brad_eigenspace_base.h                brad_eigenspace_base.cxx
       brad_eigenspace_sptr.h
-      brad_phongs_model_est.h                 brad_phongs_model_est.cxx
-      brad_synoptic_function_1d.h             brad_synoptic_function_1d.cxx
-      brad_image_metadata.h                   brad_image_metadata.cxx
-      brad_atmospheric_parameters.h           brad_atmospheric_parameters.cxx
-      brad_image_atmospherics_est.h           brad_image_atmospherics_est.cxx
-      brad_estimate_shadows.h                 brad_estimate_shadows.cxx
-      brad_appearance_neighborhood_index.h    brad_appearance_neighborhood_index.cxx
-      brad_belief_prop_utils.h                brad_belief_prop_utils.cxx
-      brad_sam_template_match.h               brad_sam_template_match.cxx
-      brad_spectral_angle_mapper.h            brad_spectral_angle_mapper.cxx
-      brad_multispectral_functions.h          brad_multispectral_functions.cxx
-      brad_worldview3_functions.h             brad_worldview3_functions.cxx
-      brad_nitf_abs_radiometric_calibration.h brad_nitf_abs_radiometric_calibration.cxx
+      brad_phongs_model_est.h               brad_phongs_model_est.cxx
+      brad_synoptic_function_1d.h           brad_synoptic_function_1d.cxx
+      brad_image_metadata.h                 brad_image_metadata.cxx
+      brad_atmospheric_parameters.h         brad_atmospheric_parameters.cxx
+      brad_image_atmospherics_est.h         brad_image_atmospherics_est.cxx
+      brad_estimate_shadows.h               brad_estimate_shadows.cxx
+      brad_appearance_neighborhood_index.h  brad_appearance_neighborhood_index.cxx
+      brad_belief_prop_utils.h              brad_belief_prop_utils.cxx
+      brad_sam_template_match.h             brad_sam_template_match.cxx
+      brad_spectral_angle_mapper.h          brad_spectral_angle_mapper.cxx
+      brad_multispectral_functions.h        brad_multispectral_functions.cxx
+      brad_worldview3_functions.h           brad_worldview3_functions.cxx
+      brad_calibration.h                    brad_calibration.cxx
 )
   aux_source_directory(Templates brad_sources)
   vxl_add_library(LIBRARY_NAME brad LIBRARY_SOURCES ${brad_sources} )
