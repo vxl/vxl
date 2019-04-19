@@ -120,8 +120,10 @@ bool bpgl_rectify_affine_image_pair_process(bprb_func_process& pro)
     std::cerr << pro.name() << " :-- set_images_and_cams failed" << std::endl;
     return false;
   }
-
-  success = rectify_object.process(scene_box, n_points);
+  rectify_params rp;
+  rp.n_points_ = n_points;
+  rectify_object.set_params(rp);
+  success = rectify_object.process(scene_box);
   if (!success) {
     std::cerr << pro.name() << " :-- process failed" << std::endl;
     return false;
