@@ -26,7 +26,6 @@ template<class T, class CAM_T>
 void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
                                   vil_image_view<float> disparity,
                                   vgl_box_3d<T> heightmap_bounds,
-                                  T ground_sample_distance,
                                   std::vector<vgl_point_3d<T> >& ptset);
 
 #endif

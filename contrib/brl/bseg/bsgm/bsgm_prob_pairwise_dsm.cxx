@@ -13,13 +13,19 @@
 #include <bvgl/bvgl_k_nearest_neighbors_3d.h>
 #include <bpgl/algo/bpgl_heightmap_from_disparity.h>
 #include <bpgl/algo/bpgl_gridding.h>
-  
 void bsgm_prob_pairwise_dsm::compute_byte()
 {
-  vil_convert_stretch_range(rip_.rectified_fview0(), rect_bview0_);
-  vil_convert_stretch_range(rip_.rectified_fview1(), rect_bview1_);
-  ni_ = rect_bview0_.ni();
-  nj_ = rect_bview0_.nj();
+  //remove small negative values due to interpolation during rectification
+  vil_image_view<float> fview0 = rip_.rectified_fview0(), fview1 = rip_.rectified_fview1();
+  ni_ = fview0.ni(); nj_ = fview0.nj();
+  for(size_t j = 0; j<nj_; ++j)
+    for(size_t i = 0; i<ni_; ++i){
+      float f0 = fview0(i,j), f1 = fview1(i,j);
+      if(f0<0.0f) fview0(i,j) = 0.0f;
+      if(f1<0.0f) fview1(i,j) = 0.0f;
+    }
+  vil_convert_stretch_range(fview0, rect_bview0_);
+  vil_convert_stretch_range(fview1, rect_bview1_);
 }
 
 vil_image_view<vxl_byte> bsgm_prob_pairwise_dsm::invalid_map() const
@@ -67,6 +73,7 @@ bool bsgm_prob_pairwise_dsm::compute_rev_disparity()
 
 void bsgm_prob_pairwise_dsm::compute_dsm_and_ptset(vgl_box_3d<double> const& scene_box)
 {
+	
   vgl_point_3d<double> pmin = scene_box.min_point(), pmax = scene_box.max_point();
   vgl_point_3d<float> pminf(pmin.x(), pmin.y(), pmin.z()), pmaxf(pmax.x(), pmax.y(), pmax.z());
   vgl_box_3d<float> fbox;
@@ -83,7 +90,7 @@ void bsgm_prob_pairwise_dsm::compute_dsm_and_ptset(vgl_box_3d<double> const& sce
   vgl_point_2d<float> ul(pminf.x(), pmaxf.y());
   std::vector<vgl_point_3d<float> > pts3d;
   ///  bpgl_gridding::pointset_from_grid(height_map_, ul, samp_dist, pts3d);
-  bpgl_pointset_from_disparity(rip_.rect_acam1(), rip_.rect_acam0(), disp_r_, fbox, samp_dist, pts3d);
+  bpgl_pointset_from_disparity(rip_.rect_acam1(), rip_.rect_acam0(), disp_r_, fbox, pts3d);
   ptset_ = vgl_pointset_3d<float>(pts3d);
 }
 
@@ -160,8 +167,8 @@ bool bsgm_prob_pairwise_dsm::compute_dsm_and_ptset_prob(vgl_box_3d<double> const
   height_map_reverse_ =  bpgl_heightmap_from_disparity(rip_.rect_acam0(), rip_.rect_acam1(), disp_r_reverse_, scene_box, samp_dist);
 
   std::vector<vgl_point_3d<float> > pts3d, pts3d_reverse;
-  bpgl_pointset_from_disparity(rip_.rect_acam1(), rip_.rect_acam0(), disp_r_, fbox, samp_dist, pts3d);
-  bpgl_pointset_from_disparity(rip_.rect_acam0(), rip_.rect_acam1(), disp_r_reverse_, fbox, samp_dist, pts3d_reverse);
+  bpgl_pointset_from_disparity(rip_.rect_acam1(), rip_.rect_acam0(), disp_r_, fbox, pts3d);
+  bpgl_pointset_from_disparity(rip_.rect_acam0(), rip_.rect_acam1(), disp_r_reverse_, fbox, pts3d_reverse);
   ptset_ = vgl_pointset_3d<float>(pts3d);
   ptset_reverse_ = vgl_pointset_3d<float>(pts3d_reverse);
   return this->compute_pointset_prob();

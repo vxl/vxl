@@ -165,10 +165,9 @@ compute_warp_dimensions_offsets()
     h = h1;
     dv_off_ = minj1;
   }
-
-  out_ni_ = static_cast<size_t>(w+0.5) +1;
-  out_nj_ = static_cast<size_t>(h+0.5) +1;
-
+  double scaled_w = w*params_.upsample_scale_, scaled_h = h*params_.upsample_scale_;
+  out_ni_ = static_cast<size_t>(scaled_w+0.5) +1;
+  out_nj_ = static_cast<size_t>(scaled_h+0.5) +1;
 }
 
 
@@ -254,11 +253,15 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
 
   this->compute_warp_dimensions_offsets();
 
-  vnl_matrix_fixed<double, 3, 3> tr;
+  vnl_matrix_fixed<double, 3, 3> tr,sc;
   tr.set_identity();
   tr[0][2] = -du_off_; tr[1][2] = -dv_off_;
   H0_ = tr*H0_;
   H1_ = tr*H1_;
+  sc.set_identity();
+  sc[0][0] = params_.upsample_scale_; sc[1][1] = sc[0][0];
+  H0_ = sc*H0_;
+  H1_ = sc*H1_;
   vnl_matrix_fixed<double, 3, 4> M0 = acam0_.get_matrix(), M1 = acam1_.get_matrix();
   M0 = H0_*M0;  M1 = H1_*M1;
   rect_acam0_.set_matrix(M0);

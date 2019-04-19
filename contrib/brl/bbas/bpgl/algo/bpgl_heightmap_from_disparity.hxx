@@ -50,7 +50,6 @@ bpgl_heightmap_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
   // set ni,nj such that image contains all samples within bounds, inclusive
   size_t ni = static_cast<unsigned>(std::floor(heightmap_bounds.width() / ground_sample_distance + 1));
   size_t nj = static_cast<unsigned>(std::floor(heightmap_bounds.height() / ground_sample_distance + 1));
-
   unsigned num_neighbors = 3;
 
   // grid the 3D points into a DSM
@@ -75,7 +74,6 @@ template<class pointT, class CAM_T>
 void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
                                   vil_image_view<float> disparity,
                                   vgl_box_3d<pointT> heightmap_bounds,
-                                  pointT ground_sample_distance,
                                   std::vector<vgl_point_3d<pointT> >& ptset){
   ptset.clear();
   vgl_box_2d<pointT> bounds_2d;
@@ -122,7 +120,6 @@ bpgl_heightmap_from_disparity<CAM_T>(CAM_T const& cam1, CAM_T const& cam2, \
 template void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2, \
                                            vil_image_view<float> disparity, \
                                            vgl_box_3d<pointT> heightmap_bounds, \
-                                           pointT ground_sample_distance, \
                                            std::vector<vgl_point_3d<pointT> >& )
 
 #endif
