@@ -1,4 +1,4 @@
-#include "brad_nitf_abs_radiometric_calibration.h"
+#include "brad_calibration.h"
 
 #include <iostream>
 #include <cmath>
@@ -21,13 +21,13 @@ vil_image_view_base_sptr brad_nitf_abs_radiometric_calibrate(vil_image_view_base
   float min_val, max_val;
   unsigned np = img.nplanes();
   vil_math_value_range(img, min_val, max_val);
-  std::cout << "brad_nitf_abs_radiometric_calibration" << "-- image plane: " << np << ", before calibration img min: " << min_val << " max: " << max_val << std::endl;
+  std::cout << "brad_nitf_abs_radiometric_calibrate" << "-- image plane: " << np << ", before calibration img min: " << min_val << " max: " << max_val << std::endl;
 
   //: perform absolute calibration on image
   std::vector<double> abscal = md->abscal_;
   std::vector<double> effect_band = md->effect_band_width_;
   if (np != abscal.size() || np != effect_band.size() ) {
-    std::cerr << "brad_nitf_abs_radiometric_calibration" << "ERROR: Mismatch of image plane number to the length of band dependent AbsCalFactor/EffectBandWidth.  "
+    std::cerr << "brad_nitf_abs_radiometric_calibrate" << "ERROR: Mismatch of image plane number to the length of band dependent AbsCalFactor/EffectBandWidth.  "
                             << "Image plane numebr: " << np
                             << ", gain length: " << abscal.size() << ", offset length: " << effect_band.size() << "!!!\n";
     return nullptr;
@@ -41,9 +41,9 @@ vil_image_view_base_sptr brad_nitf_abs_radiometric_calibrate(vil_image_view_base
 
   //: perform band dependent gain/offset correction
   if (md->band_ != "PAN" && md->band_ != "MULTI" && md->band_ != "SWIR") {
-    std::cout << "brad_nitf_abs_radiometric_calibration" << ": Unknown Image band type " << md->band_ << ", band dependent calibration is ignored." << std::endl;
+    std::cout << "brad_nitf_abs_radiometric_calibrate" << ": Unknown Image band type " << md->band_ << ", band dependent calibration is ignored." << std::endl;
     vil_math_value_range(img, min_val, max_val);
-    std::cout << "brad_nitf_abs_radiometric_calibration" << "after calibration img min: " << min_val << " max: " << max_val << std::endl;
+    std::cout << "brad_nitf_abs_radiometric_calibrate" << "after calibration img min: " << min_val << " max: " << max_val << std::endl;
     //output date time info
     return new vil_image_view<float>(img);
   }
@@ -51,7 +51,7 @@ vil_image_view_base_sptr brad_nitf_abs_radiometric_calibrate(vil_image_view_base
   std::vector<double> offset = md->offsets_;
 
   if (np != gain.size() || np != offset.size() ) {
-    std::cerr << "brad_nitf_abs_radiometric_calibration" << "ERROR: Mismatch of image plane number to the length of band dependent gain/offset.  "
+    std::cerr << "brad_nitf_abs_radiometric_calibrate" << "ERROR: Mismatch of image plane number to the length of band dependent gain/offset.  "
                             << "Image plane numebr: " << np
                             << ", gain length: " << gain.size() << ", offset length: " << offset.size() << "!!!\n";
     return nullptr;
@@ -67,7 +67,7 @@ vil_image_view_base_sptr brad_nitf_abs_radiometric_calibrate(vil_image_view_base
   // get normalized solar irradiance value from metadata
   std::vector<double> solar_irradiance_val = md->normal_sun_irradiance_values_;
   if (np != solar_irradiance_val.size()) {
-    std::cerr << "brad_nitf_abs_radiometric_calibration" << "ERROR: Mismatch of image plane numebr to the length of solar irradiance.  "
+    std::cerr << "brad_nitf_abs_radiometric_calibrate" << "ERROR: Mismatch of image plane numebr to the length of solar irradiance.  "
                             << "Image plane number: " << np
                             << ", solar irradiance value length: " << solar_irradiance_val.size() << "!!!\n";
     return nullptr;
@@ -81,7 +81,7 @@ vil_image_view_base_sptr brad_nitf_abs_radiometric_calibrate(vil_image_view_base
   }
 
   vil_math_value_range(img, min_val, max_val);
-  std::cout << "brad_nitf_abs_radiometric_calibration" << "after calibration img min: " << min_val << " max: " << max_val << std::endl;
+  std::cout << "brad_nitf_abs_radiometric_calibrate" << "after calibration img min: " << min_val << " max: " << max_val << std::endl;
 
   //output date time info
   return new vil_image_view<float>(img);
