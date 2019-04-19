@@ -36,9 +36,14 @@
 
 
 struct pairwise_params{
-  pairwise_params():active_disparity_factor_(0.5),downscale_exponent_(2), multi_scale_mode_(1),
-    point_sample_dist_(0.5f), std_dev_(3.75*point_sample_dist_), num_nearest_nbrs_(5){}
-
+  pairwise_params():active_disparity_factor_(0.5),downscale_exponent_(2), multi_scale_mode_(0),//1
+    point_sample_dist_(0.3f), std_dev_(3.75*point_sample_dist_), num_nearest_nbrs_(5)
+  {
+    de_params_.shadow_thresh = 20.0f;
+	  de_params_.census_weight = 0.3;
+	  de_params_.xgrad_weight = 0.7;
+	  de_params_.census_tol = 2;
+  }
   bsgm_disparity_estimator_params de_params_; // internal disparity estimator params
   float active_disparity_factor_; // what fraction of full disparity range is used for fine search
   int downscale_exponent_;   // in coarse to fine disparity, what is the downsample ratio as 2^exponent
@@ -52,11 +57,11 @@ struct pairwise_params{
 class bsgm_prob_pairwise_dsm
 {
  public:
-  bsgm_prob_pairwise_dsm(){}
+  bsgm_prob_pairwise_dsm():mid_z_(NAN), upsample_scale_(1.0){}
 
   bsgm_prob_pairwise_dsm(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
                          vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1):
-    mid_z_(NAN)
+    mid_z_(NAN), upsample_scale_(1.0)
   {
     rip_.set_images_and_cams(resc0, acam0, resc1, acam1);
   }
@@ -77,6 +82,8 @@ class bsgm_prob_pairwise_dsm
 
   //: set the plane elevation for minimum least squares disparity
   void set_midpoint_z(double mid_z){mid_z_ = mid_z;}
+  //: set the scale to upsample the rectified pair
+  void set_upsample_scale(double scale){ upsample_scale_ = scale;}
   //: estimate the forward disparities(arg order rectified image0:image1)
   bool compute_disparity();
   //: estimate the reverse disparities(arg order rectified image1:image0)
@@ -102,8 +109,11 @@ class bsgm_prob_pairwise_dsm
   //: main process method
   bool process(vgl_box_3d<double> const& scene_box, bool with_consistency_check = true)
   {
-    size_t n_points = 1000;
-    if(!rip_.process(scene_box, n_points, mid_z_))
+    rectify_params rp;
+    rp.min_disparity_z_ = mid_z_;
+    rp.upsample_scale_ = upsample_scale_;
+    rip_.set_params(rp);
+    if(!rip_.process(scene_box))
       return false;
     this->compute_byte();
     if(with_consistency_check){
@@ -166,6 +176,7 @@ class bsgm_prob_pairwise_dsm
   int min_disparity_;
   int max_disparity_;
   double mid_z_;
+  double upsample_scale_;
   vil_image_view<vxl_byte> rect_bview0_;
   vil_image_view<vxl_byte> rect_bview1_;
   vil_image_view<bool> invalid_map_;

@@ -13,10 +13,17 @@
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_matrix_fixed.h>
 
+struct rectify_params{
+  rectify_params(): min_disparity_z_(NAN), n_points_(1000), upsample_scale_(1.0){}
+  double min_disparity_z_; // horizontal plane where disparity at each pixel is minimum
+  size_t n_points_;            // number of points used to create correspondences
+  double upsample_scale_;      // scale factor to upsample rectified images
+};
+
 //
 // requires two images and associated affine cameras. Class can load the data from files if needed.
 // the output is a pair of images that have common epiplolar lines along image rows. The difference in
-// column coordinates of corresponding points is minimized.
+// column coordinates of corresponding points is minimized. 
 //
 class bpgl_rectify_affine_image_pair
 {
@@ -56,10 +63,12 @@ class bpgl_rectify_affine_image_pair
 
   //: utility methods
   static bool load_affine_camera(std::string const& cam_path, vpgl_affine_camera<double>& acam);
+  void set_params(rectify_params const& params) { params_ = params; }
 
-  bool process(vgl_box_3d<double>const& scene_box, size_t n_points = 1000, double average_z = NAN)
+  bool process(vgl_box_3d<double>const& scene_box)
   {
-    if(!compute_rectification(scene_box,n_points, average_z))
+    // if min_disparity_z_ is NAN then 1/2 the midpoint of scene_box z is used
+    if(!compute_rectification(scene_box, params_.n_points_, params_.min_disparity_z_))
       return false;
     warp_pair();
     return true;
@@ -81,6 +90,7 @@ class bpgl_rectify_affine_image_pair
   void warp_pair();
 
  private:
+  rectify_params params_;
   vil_image_view<float> fview0_;
   vil_image_view<float> fview1_;
   vil_image_view<float> rect_fview0_;
