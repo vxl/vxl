@@ -88,7 +88,7 @@ class bpgl_rectify_affine_image_pair
   bool process(vgl_box_3d<double>const& scene_box)
   {
     // if min_disparity_z_ is NAN then 1/2 the midpoint of scene_box z is used
-    if(!compute_rectification(scene_box, params_.n_points_, params_.min_disparity_z_))
+    if(!compute_rectification(scene_box))
       return false;
     warp_pair();
     return true;
@@ -101,7 +101,7 @@ class bpgl_rectify_affine_image_pair
  protected:
 
   // protected utility methods
-  bool compute_rectification(vgl_box_3d<double> const& scene_box, size_t n_points = 1000, double average_z = NAN);
+  bool compute_rectification(vgl_box_3d<double> const& scene_box);
   void compute_warp_dimensions_offsets();
   static void warp_image(vil_image_view<float> fview,
                          vnl_matrix_fixed<double, 3, 3> const& H,

@@ -172,7 +172,7 @@ compute_warp_dimensions_offsets()
 
 
 bool bpgl_rectify_affine_image_pair::
-compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, double average_z)
+compute_rectification(vgl_box_3d<double>const& scene_box)
 {
   double min_x = scene_box.min_x();
   double min_y = scene_box.min_y();
@@ -181,10 +181,10 @@ compute_rectification(vgl_box_3d<double>const& scene_box, size_t n_points, doubl
   double ni1=  fview1_.ni(), nj1 = fview1_.nj();
   vnl_random rng;
   double z0 = 0.5*(scene_box.min_z() + scene_box.max_z());
-  if(vnl_math::isfinite(average_z))
-    z0 = average_z;
+  if(vnl_math::isfinite(params_.min_disparity_z_))
+    z0 = params_.min_disparity_z_;
   std::vector< vnl_vector_fixed<double, 3> > img_pts0, img_pts1;
-  for (unsigned i = 0; i < n_points; i++) {
+  for (unsigned i = 0; i < params_.n_points_; i++) {
     double x = rng.drand64()*width + min_x;  // sample in local coords
     double y = rng.drand64()*height + min_y;
     double u, v;
