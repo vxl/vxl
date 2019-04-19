@@ -10,6 +10,7 @@
 #include <brad/brad_illum_util.h>
 #include <brad/brad_image_atmospherics_est.h>
 #include <brad/brad_image_metadata.h>
+#include <brad/brad_nitf_abs_radiometric_calibration.h>
 #include <brad/brad_phongs_model_est.h>
 #include <brad/brad_sun_dir_index.h>
 #include <brad/brad_sun_pos.h>
