@@ -36,7 +36,7 @@ bool ste_from_string(const std::string &s, space_time_enum &ste) {
 std::vector<space_time_enum> parse_subdivisions(const std::string &s) {
   std::vector<space_time_enum> result;
   std::stringstream ss(s);
-  while ((ss.good() ? 1 : 0) > 0) {
+  while (ss.good()) {
     std::string substr;
     space_time_enum ste;
     std::getline(ss, substr, ',');
