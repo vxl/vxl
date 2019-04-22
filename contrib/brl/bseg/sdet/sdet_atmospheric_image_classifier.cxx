@@ -320,7 +320,6 @@ classify_image_blocks_expected(vil_image_view<float> const& image,
       float b_good = pr - 0.5f*u;
       if (b_good< 0.0f) b_good = 0.0f;
       float b_bad = 1.0f - u - b_good;
-      // vnl_vector_fixed<float, 3> color; warning C4101: 'color': unreferenced local variable.
       //colorize output according to probabilities of each category
       for (unsigned r = 0; r<block_size_; ++r)
         for (unsigned c = 0; c<block_size_; ++c) {

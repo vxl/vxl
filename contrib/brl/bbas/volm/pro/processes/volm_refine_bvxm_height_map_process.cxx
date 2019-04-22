@@ -271,8 +271,6 @@ bool volm_extract_building_outlines_process(bprb_func_process& pro)
     double area = 0.0;
     for (auto & k : region) {
       for (unsigned i = k.ilo; i < k.ihi; i++) {
-        // warning C4101: 'lon': unreferenced local variable. 'lat': unreferenced local variable.
-        // double lon, lat;
         avg_height += height(i, k.j);
         cnt++;
       }
