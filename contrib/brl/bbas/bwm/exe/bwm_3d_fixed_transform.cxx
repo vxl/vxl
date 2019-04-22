@@ -48,7 +48,7 @@ int main(int argc, char** argv)
   vul_arg<std::string> output_cam_dir ("-out_cam_dir","directory to store cams", "");
 
   std::cout << " argc: " << argc << std::endl;
-  for (unsigned i = 0; i < argc; i++)
+  for (int i = 0; i < argc; i++)
     std::cout << i << " : " << argv[i] << std::endl;
 
   //if (argc != 7) {

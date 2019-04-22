@@ -125,8 +125,10 @@ void brad_template_bb(const vil_image_view<vxl_byte>& mask,
   int maxy = 0;
   int minx = mask.ni() - 1;
   int miny = mask.nj() - 1;
-  for (int y = 0; y < mask.nj(); y++) {
-    for (int x = 0; x < mask.ni(); x++) {
+  int mask_nj = static_cast<int>(mask.nj());
+  int mask_ni = static_cast<int>(mask.ni());
+  for (int y = 0; y < mask_nj; y++) {
+    for (int x = 0; x < mask_ni; x++) {
       // Skip if not in mask
       if (mask(x, y) == (vxl_byte)0) continue;
 

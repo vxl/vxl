@@ -1219,8 +1219,7 @@ boxm2_vecf_orbit_scene
                                             std::vector<bool> const& valid)
 {
 
-   vul_timer t;
-
+  vul_timer t;
   vnl_vector_fixed<unsigned char,8> color = random_color();
   int n = static_cast<unsigned>(box_cell_centers_.size());
     if(n==0)

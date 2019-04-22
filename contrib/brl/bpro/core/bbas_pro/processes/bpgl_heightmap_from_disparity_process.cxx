@@ -111,8 +111,8 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
   vil_image_view<float> disparity_nan(disparity_ptr->ni(),disparity_ptr->nj());
   disparity_nan.deep_copy(*disparity_ptr);
 
-  for (int j=0; j<disparity_nan.nj(); ++j) {
-    for (int i=0; i<disparity_nan.ni(); ++i) {
+  for (size_t j=0; j<disparity_nan.nj(); ++j) {
+    for (size_t i=0; i<disparity_nan.ni(); ++i) {
       if (disparity_nan(i,j) < min_disparity) {
         disparity_nan(i,j) = NAN;
       }
@@ -135,8 +135,8 @@ bool bpgl_heightmap_from_disparity_process(bprb_func_process& pro)
 
   // add offset to elevation estimates
   // Additional WORKAROUND - set invalid to value below min_z (-9999.0)
-  for (int j=0; j<heightmap.nj(); ++j) {
-    for (int i=0; i<heightmap.ni(); ++i) {
+  for (size_t j=0; j<heightmap.nj(); ++j) {
+    for (size_t i=0; i<heightmap.ni(); ++i) {
       if (!vnl_math::isfinite(heightmap(i,j))) {
         heightmap(i,j) = -9999.0;
       } else {

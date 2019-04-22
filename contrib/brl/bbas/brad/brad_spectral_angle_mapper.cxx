@@ -74,8 +74,8 @@ bool brad_spectral_angle_mapper::compute_sam_img(const vil_image_view<float>& im
   std::vector<float> img_vals;
   std::vector<float> angle; // will be a vector of size 1 (the max angle corresponding to our single material category, 'keyword')
   img_vals.resize(num_bands);
-  for (int y = 0; y < image.nj(); y++) {
-    for (int x = 0; x < image.ni(); x++) {
+  for (size_t y = 0; y < image.nj(); y++) {
+    for (size_t x = 0; x < image.ni(); x++) {
       for (int b = 0; b < num_bands; b++)
         img_vals[b] = image(x, y, b);
       compute_spectral_angles(img_vals, spec, angle);
@@ -273,8 +273,8 @@ bool brad_spectral_angle_mapper::add_material(const std::string& type,
   std::vector<float> spectra_sum;
   spectra_sum.resize(num_bands);
   // obtain relevant spectra from image
-  for (int y = 0; y < image.nj(); y++) {
-    for (int x = 0; x < image.ni(); x++) {
+  for (size_t y = 0; y < image.nj(); y++) {
+    for (size_t x = 0; x < image.ni(); x++) {
       if (mask(x, y)) { // if this spectrum is relevant then save it
         num_sample_spectra++;
         for (int s = 0; s < num_bands; s++) {
@@ -318,8 +318,8 @@ bool brad_spectral_angle_mapper::add_material_per_pixel(const std::string& type,
   }
 
   // obtain relevant spectra from image
-  for (int y = 0; y < image.nj(); y++) {
-    for (int x = 0; x < image.ni(); x++) {
+  for (size_t y = 0; y < image.nj(); y++) {
+    for (size_t x = 0; x < image.ni(); x++) {
       if (mask(x, y)) { // if this spectrum is relevant then save it
         std::vector<float> new_spectrum;
         new_spectrum.resize(num_bands);

@@ -46,7 +46,7 @@ int main(int argc, char** argv)
                                                                                                                      // input cameras will be read from these site files
 
   std::cout << " argc: " << argc << std::endl;
-  for (unsigned i = 0; i < argc; i++)
+  for (int i = 0; i < argc; i++)
     std::cout << i << " : " << argv[i] << std::endl;
 
   if (argc != 3) {

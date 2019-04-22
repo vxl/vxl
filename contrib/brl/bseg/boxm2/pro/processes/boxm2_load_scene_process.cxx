@@ -47,6 +47,7 @@ bool boxm2_load_scene_process(bprb_func_process& pro)
     scene = new boxm2_scene(scene_file);
   }
   catch(const std::ifstream::failure &e) {
+	std::cerr << e.what();
     return false;
   }
 

@@ -88,7 +88,7 @@ bool bstm_cpp_extract_point_cloud_process (bprb_func_process& pro)
     auto * alpha_data = (bstm_data_traits<BSTM_ALPHA>::datatype*) alpha->data_buffer();
     auto * points_data = (bstm_data_traits<BSTM_POINT>::datatype*) points->data_buffer();
 
-    for ( unsigned i = 0 ; i < num_time_trees; ++i)
+    for ( int i = 0 ; i < num_time_trees; ++i)
     {
       points_data[i].fill(-1.0);
     }

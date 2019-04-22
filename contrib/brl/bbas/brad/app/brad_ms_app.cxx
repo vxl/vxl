@@ -63,8 +63,8 @@ int main(int  /*argc*/, char *  /*argv*/[])
    vil_image_view<vxl_uint_8> mask_16 = mask_rsc->get_view();
    vil_image_view<vxl_byte> mask(mask_16.ni(), mask_16.nj());
    mask.fill(0);
-   for (int j = 0; j < mask_16.nj(); j++) {
-     for (int i = 0; i < mask_16.ni(); i++) {
+   for (size_t j = 0; j < mask_16.nj(); j++) {
+     for (size_t i = 0; i < mask_16.ni(); i++) {
        if (mask_16(i, j, 0) > 0) mask(i, j) = 255;
      }
    }
