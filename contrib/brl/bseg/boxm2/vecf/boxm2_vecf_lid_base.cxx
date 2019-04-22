@@ -219,7 +219,6 @@ double boxm2_vecf_lid_base::curve_distance(double t, double x, double y, double 
   double xminus = -opr_.medial_socket_radius()*margin;
   double xplus = opr_.lateral_socket_radius()*margin;
   double dmin = std::numeric_limits<double>::max();
-  // double xmin, ymin, zmin;// for debug purposes
   for(double xp = xminus; xp<=xplus; xp+=0.1){
     double dx = xp-x, dy = y-gi(xp,t), dz = z-Z(xp, t);
     double d = std::sqrt(dx*dx + dy*dy + dz*dz);
