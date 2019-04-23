@@ -167,7 +167,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
         double sum = 0.0;
         sum += cyl_map_(kth, iz, p);
         double w = 1.0;
-        if((kth+1)<n_theta_)
+		int n_theta_o_ = static_cast<int>(n_theta_);
+        if((kth+1)<n_theta_o_)
           {
           sum += 0.25*cyl_map_(kth+1, iz,p);
           w+=0.25;

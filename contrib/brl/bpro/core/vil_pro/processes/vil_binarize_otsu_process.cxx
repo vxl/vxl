@@ -55,8 +55,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
 
   //determine the range first
   range = 0;
-  for (unsigned j = margin; j < nj-margin; ++j) {
-    for (unsigned i = margin; i < ni-margin; ++i) {
+  for (unsigned j = margin; static_cast<int>(j) < nj-margin; ++j) {
+    for (unsigned i = margin; static_cast<int>(i) < ni-margin; ++i) {
       if (view(i,j) > range)
         range = view(i,j);
     }
@@ -64,8 +64,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
   std::cout << "Otsu Thresholding process, range: " << range << '\n';
   // binarize using otsu thresholding
   bsta_histogram<double> h(range, bins);
-  for (unsigned j = margin; j < nj-margin; ++j) {
-    for (unsigned i = margin; i < ni-margin; ++i) {
+  for (unsigned j = margin; static_cast<int>(j) < nj-margin; ++j) {
+    for (unsigned i = margin; static_cast<int>(i) < ni-margin; ++i) {
       if (std::fabs(view(i,j) - invalid_pix) > 1E-3)
         h.upcount(view(i,j), 1.0);
     }
@@ -76,8 +76,8 @@ bool vil_binarize_otsu_process(bprb_func_process& pro)
 
   auto* out_bin_img = new vil_image_view<vil_rgb<vxl_byte> >(ni, nj);
   out_bin_img->fill(vil_rgb<vxl_byte>(0,0,0));
-  for (unsigned j = 0; j < nj; ++j) {
-    for (unsigned i = 0; i < ni; ++i) {
+  for (unsigned j = 0; static_cast<int>(j) < nj; ++j) {
+    for (unsigned i = 0; static_cast<int>(i) < ni; ++i) {
       if (view(i,j) >= dt)
         (*out_bin_img)(i,j) = vil_rgb<vxl_byte>(255,255,255);
     }

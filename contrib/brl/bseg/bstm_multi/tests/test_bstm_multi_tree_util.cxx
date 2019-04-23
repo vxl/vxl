@@ -52,7 +52,7 @@ void test_generic_tree() {
     bool ok = true;
     try {
       boct_bit_tree space_tree2 = space_gen.space_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = false;
     }
     TEST("space tree get space tree", ok, true);
@@ -60,7 +60,7 @@ void test_generic_tree() {
     ok = false;
     try {
       bstm_time_tree space_tree2 = space_gen.time_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = true;
     }
     TEST("space tree get time tree", ok, true);
@@ -126,7 +126,7 @@ void test_generic_tree() {
     bool ok = true;
     try {
       bstm_time_tree time_tree2 = time_gen.time_tree();
-    } catch (const tree_type_exception &e) {
+    } catch (const tree_type_exception) {
       ok = false;
     }
     TEST("time tree get time tree", ok, true);
@@ -134,7 +134,7 @@ void test_generic_tree() {
     ok = false;
     try {
       boct_bit_tree time_tree2 = time_gen.space_tree();
-    } catch (const tree_type_exception &e) {	  
+    } catch (const tree_type_exception) {	  
       ok = true;
     }
     TEST("time tree get space tree", ok, true);
