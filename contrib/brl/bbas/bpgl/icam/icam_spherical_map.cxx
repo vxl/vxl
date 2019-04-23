@@ -155,7 +155,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
     if(theta_map>(vnl_math::pi-theta_cap_))
       continue;
     int kth = static_cast<int>(theta_map/dtheta);
-        if(kth>=n_theta_) kth = n_theta_-1;
+	int n_theta_o_ = static_cast<int>(n_theta_);
+      if(kth>=n_theta_o_) kth = n_theta_o_-1;
     for(unsigned iph = 0; iph<n_phi_; ++iph){
       //determine point on sphere
       double phi = iph*dphi;
@@ -185,7 +186,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
         double sum = 0.0;
         sum += sph_map_(kth, kphi, p);
         double w = 1.0;
-        if((kphi+1)<n_phi_){
+        int n_phi_o_ = static_cast<int>(n_phi_);
+        if((kphi+1)<n_phi_o_){
           sum += 0.25*sph_map_(kth, kphi+1,p);
           w+=0.25;
         }
@@ -193,7 +195,8 @@ render_map(vil_image_view<vxl_byte>const& backgnd,
           sum += 0.25*sph_map_(kth, kphi-1,p);
           w+=0.25;
         }
-        if((kth+1)<n_theta_){
+		int n_theta_o_ = static_cast<int>(n_theta_);
+        if((kth+1)<n_theta_o_){
           sum += 0.25*sph_map_(kth+1, kphi, p);
           w+=0.25;
         }

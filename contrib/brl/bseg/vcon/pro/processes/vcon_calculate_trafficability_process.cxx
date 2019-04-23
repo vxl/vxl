@@ -133,11 +133,13 @@ bool vcon_calculate_trafficability_process(bprb_func_process& pro)
   unsigned n_grd_pixel = 0;
   unsigned n_tot_pixel = 0;
   vgl_polygon_scan_iterator<double> it(rd_poly_img);
+  int nio = static_cast<int>(ni);
+  int njo = static_cast<int>(nj);
   for (it.reset(); it.next(); )
   {
     int y = it.scany();
     for (int x = it.startx(); x <= it.endx(); ++x) {
-      if ( x >= 0 && y >= 0 && x < ni && y < nj) {
+      if ( x >= 0 && y >= 0 && x < nio && y < njo) {
         n_tot_pixel++;
         if (!class_img(x, y))
           n_grd_pixel++;

@@ -173,7 +173,6 @@ bool vpgl_affine_rectify_images_process(bprb_func_process& pro)
   vnl_random rng(10);
   std::cout << " using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
   for (unsigned i = 0; i < n_points; i++) {
-    vgl_point_3d<float> corner_world;
     double x = rng.drand64()*width + min_x;  // sample in local coords
     double y = rng.drand64()*depth + min_y;
     double u, v;
@@ -338,7 +337,6 @@ bool vpgl_affine_rectify_images_process2(bprb_func_process& pro)
 
   std::cout << " using z = " << z << " as local ground plane height and will sample points on this plane randomly! the mid point z height would be: " << 0.5*height + min_z << '\n';
   for (unsigned i = 0; i < n_points; i++) {
-    vgl_point_3d<float> corner_world;
     double x = rng.drand64()*width + min_x;  // sample in local coords
     double y = rng.drand64()*depth + min_y;
     double u, v;
@@ -732,7 +730,7 @@ bool vpgl_construct_disparity_map_process(bprb_func_process& pro)
       int u1w = (int)std::floor((p1w[0]/p1w[2])+0.5);
       int v1w = (int)std::floor((p1w[1]/p1w[2])+0.5);
 
-      if (u1w >= out_ni || v1w >= out_nj || u1w < 0 || v1w < 0)
+      if (u1w >= static_cast<int>(out_ni) || v1w >= static_cast<int>(out_nj) || u1w < 0 || v1w < 0)
         continue;
 
       vnl_vector_fixed<double,3> p2(u2, v2, 1);

@@ -135,7 +135,7 @@ bool vpgl_isfm_rational_camera_process(bprb_func_process& pro)
         currpts.emplace_back(u, v);
         std::vector<int> ids;
         std::vector<vgl_point_2d<double> > pts;
-        for (unsigned int j = 1; j < numfeatures; j++)
+        for (int j = 1; j < numfeatures; j++)
         {
             int id; float u, v;
             ifs >> id >> u >> v;

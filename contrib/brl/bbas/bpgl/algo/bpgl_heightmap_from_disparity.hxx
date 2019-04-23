@@ -91,8 +91,8 @@ void bpgl_pointset_from_disparity(CAM_T const& cam1, CAM_T const& cam2,
   const float min_z = heightmap_bounds.min_z();
   const float max_z = heightmap_bounds.max_z();
 
-  for (int j=0; j<triangulated.nj(); ++j) {
-    for (int i=0; i<triangulated.ni(); ++i) {
+  for (size_t j=0; j<triangulated.nj(); ++j) {
+    for (size_t i=0; i<triangulated.ni(); ++i) {
       if (vnl_math::isfinite(triangulated(i,j,0)) &&
           vnl_math::isfinite(triangulated(i,j,1)) &&
           vnl_math::isfinite(triangulated(i,j,2)) ) {
