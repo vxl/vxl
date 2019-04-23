@@ -41,6 +41,7 @@ include(CheckFunctionExists)
 include(CheckTypeSize)
 include(CheckIncludeFiles)
 include(CheckIncludeFileCXX)
+include(GNUInstallDirs)
 include(TestBigEndian)
 #
 # Perform the VXL specific test with status output

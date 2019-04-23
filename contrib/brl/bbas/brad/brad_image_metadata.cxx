@@ -32,9 +32,11 @@
 
 #ifdef BRAD_WHERE_BRL_LIB_DIR_H_EXISTS
   #include <brad_where_brl_lib_dir.h>
-  const std::string brad_image_metadata::calibration_dir = std::string(BRL_LIB_DIR);
+  const std::string brad_image_metadata::calibration_build_dir = std::string(BRL_LIB_DIR);
+  const std::string brad_image_metadata::calibration_install_dir = std::string(BRL_INSTALL_DIR);
 #else
-  const std::string brad_image_metadata::calibration_dir = std::string();
+  const std::string brad_image_metadata::calibration_build_dir = std::string();
+  const std::string brad_image_metadata::calibration_install_dir = std::string();
 #endif
 
 const std::string brad_image_metadata::gain_offset_file_name = std::string("brad_sat_img_calibration_table.txt");
@@ -153,11 +155,15 @@ std::istream&  operator>>(std::istream& s, brad_image_metadata& md)
 // if satellite name not in the default, it will set default gain/offset, i.e., gain = 1.0, offset = 0.0
 bool brad_image_metadata::read_band_dependent_gain_offset()
 {
-  std::string file_path = this->calibration_dir + std::string("/") + this->gain_offset_file_name;
+  std::string file_path = this->calibration_build_dir + std::string("/") + this->gain_offset_file_name;
   std::ifstream ifs(file_path.c_str());
   if (!ifs.good()) {
-    std::cerr << "Error opening band dependent calibration factor file: " << file_path << std::endl;
-    return false;
+    file_path = this->calibration_install_dir + std::string("/") + this->gain_offset_file_name;
+    ifs.open(file_path);
+    if (!ifs.good()) {
+      std::cerr << "Error opening band dependent calibration factor file: " << file_path << std::endl;
+      return false;
+    }
   }
   // read the file, starting by ignore header comments
   std::string header;
@@ -258,11 +264,15 @@ bool brad_image_metadata::read_band_dependent_gain_offset()
 // Read band dependent solar irradiance from file
 bool brad_image_metadata::read_band_dependent_solar_irradiance()
 {
-  std::string file_path = this->calibration_dir + std::string("/") + this->sun_irradiance_file_name;
+  std::string file_path = this->calibration_build_dir + std::string("/") + this->sun_irradiance_file_name;
   std::ifstream ifs(file_path.c_str());
   if (!ifs.good()) {
-    std::cerr << "Error opening band dependent solar exoatmospheric irradiance file: " << file_path << std::endl;
-    return false;
+    file_path = this->calibration_install_dir + std::string("/") + this->gain_offset_file_name;
+    ifs.open(file_path);
+    if (!ifs.good()) {
+      std::cerr << "Error opening band dependent solar exoatmospheric irradiance file: " << file_path << std::endl;
+      return false;
+    }
   }
   // read the file, starting by ignore header comments
   std::string header;

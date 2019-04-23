@@ -139,8 +139,8 @@ private:
   //   (Ref: http://www.digitalglobe.com/resources/technical-information)
   static const std::string gain_offset_file_name;    // ("brad_sat_img_calibration_table.txt")
   static const std::string sun_irradiance_file_name; // ("brad_sat_img_sub_irradiance_table.txt")
-  static const std::string calibration_dir;          // (VXL_LIB_DIR)
-
+  static const std::string calibration_build_dir;    // (VXL_LIB_DIR)
+  static const std::string calibration_install_dir;  // (VXL_INSTALL_DIR)
 };
 
 typedef vbl_smart_ptr<brad_image_metadata> brad_image_metadata_sptr;
