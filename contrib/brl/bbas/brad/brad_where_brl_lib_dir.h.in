@@ -14,3 +14,7 @@
 #ifndef BRL_LIB_DIR // file guard
 #define BRL_LIB_DIR "@CMAKE_LIBRARY_OUTPUT_DIRECTORY@"
 #endif
+
+#ifndef BRL_INSTALL_DIR // file guard
+#define BRL_INSTALL_DIR "@CMAKE_INSTALL_FULL_DATAROOTDIR@/vxl/bbas/brad"
+#endif
