@@ -1361,40 +1361,56 @@ def isfm_rational_camera(trackfile, output_folder, pixel_radius):
 
 
 # geo-register a rational camera to group of geo-registered cameras
-def isfm_rational_camera_seed(track_file, out_folder, dem_folder, ll_lon=0.0, ll_lat=0.0, ur_lon=0.0, ur_lat=0.0, height_diff=20.0, pixel_radius=2.0, enforce_existing=False):
+def isfm_rational_camera_seed(track_file, out_folder,
+                              ll_lon, ll_lat, ll_elev,
+                              ur_lon, ur_lat, ur_elev,
+                              pixel_radius=2.0, enforce_existing=False,
+                              verbose = False,
+                              ):
     batch.init_process("vpglIsfmRationalCameraSeedProcess")
     batch.set_input_string(0, track_file)
     batch.set_input_string(1, out_folder)
-    batch.set_input_string(2, dem_folder)
-    batch.set_input_float(3, ll_lon)
-    batch.set_input_float(4, ll_lat)
-    batch.set_input_float(5, ur_lon)
-    batch.set_input_float(6, ur_lat)
-    batch.set_input_double(7, height_diff)
-    batch.set_input_float(8, pixel_radius)
+    batch.set_input_double(2, ll_lon)
+    batch.set_input_double(3, ll_lat)
+    batch.set_input_double(4, ll_elev)
+    batch.set_input_double(5, ur_lon)
+    batch.set_input_double(6, ur_lat)
+    batch.set_input_double(7, ur_elev)
+    batch.set_input_double(8, pixel_radius)
     batch.set_input_bool(9, enforce_existing)
+    batch.set_input_bool(10, verbose)
+
     status = batch.run_process()
     return status
 
 
-def isfm_rational_camera_with_init(track_file, dem_folder, ll_lon=0.0, ll_lat=0.0, ur_lon=0.0, ur_lat=0.0, height_diff=20.0, pixel_radius=2.0):
+def isfm_rational_camera_with_init(track_file,
+                                   ll_lon, ll_lat, ll_elev,
+                                   ur_lon, ur_lat, ur_elev,
+                                   pixel_radius=2.0,
+                                   verbose = False,
+                                   ):
     batch.init_process("vpglIsfmRationalCameraWithInitialProcess")
     batch.set_input_string(0, track_file)
-    batch.set_input_string(1, dem_folder)
-    batch.set_input_double(2, ll_lon)
-    batch.set_input_double(3, ll_lat)
+    batch.set_input_double(1, ll_lon)
+    batch.set_input_double(2, ll_lat)
+    batch.set_input_double(3, ll_elev)
     batch.set_input_double(4, ur_lon)
     batch.set_input_double(5, ur_lat)
-    batch.set_input_double(6, height_diff)
-    batch.set_input_float(7, pixel_radius)
+    batch.set_input_double(6, ur_elev)
+    batch.set_input_double(7, pixel_radius)
+    batch.set_input_bool(8, verbose)
+
     if not batch.run_process():
         return None, -1.0, -1.0
     (id, type) = batch.commit_output(0)
     cam = dbvalue(id, type)
     (id, type) = batch.commit_output(1)
-    error = batch.get_output_float(id)
+    error = batch.get_output_double(id)
+    batch.remove_data(id)
     (id, type) = batch.commit_output(2)
-    inliers = batch.get_output_float(id)
+    inliers = batch.get_output_double(id)
+    batch.remove_data(id)
     return cam, error, inliers
 
 
