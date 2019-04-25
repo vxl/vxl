@@ -86,7 +86,6 @@ void bsgm_prob_pairwise_dsm::compute_dsm_and_ptset(vgl_box_3d<double> const& sce
   // thus the order is reversed                          ^
   //
   height_map_ =  bpgl_heightmap_from_disparity(rip_.rect_acam1(), rip_.rect_acam0(), disp_r_, scene_box, samp_dist);
-
   vgl_point_2d<float> ul(pminf.x(), pmaxf.y());
   std::vector<vgl_point_3d<float> > pts3d;
   ///  bpgl_gridding::pointset_from_grid(height_map_, ul, samp_dist, pts3d);
