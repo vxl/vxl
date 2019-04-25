@@ -11,6 +11,7 @@
 #include <vpgl/vpgl_affine_fundamental_matrix.h>
 #include <vil/vil_image_resource.h>
 #include <vil/vil_image_view.h>
+#include <vil/vil_new.h>
 #include <vnl/vnl_matrix_fixed.h>
 
 struct rectify_params{
@@ -23,7 +24,7 @@ struct rectify_params{
 //
 // requires two images and associated affine cameras. Class can load the data from files if needed.
 // the output is a pair of images that have common epiplolar lines along image rows. The difference in
-// column coordinates of corresponding points is minimized. 
+// column coordinates of corresponding points is minimized.
 //
 class bpgl_rectify_affine_image_pair
 {
@@ -36,15 +37,34 @@ class bpgl_rectify_affine_image_pair
     bool good = this->set_images_and_cams(view0,acam0,view1,acam1);
   }
 
+  bpgl_rectify_affine_image_pair(vil_image_view<unsigned char> const& view0, vpgl_affine_camera<double> const& acam0,
+                                 vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1)
+  {
+    bool good = this->set_images_and_cams(view0,acam0,view1,acam1);
+  }
+
   bpgl_rectify_affine_image_pair(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
                                  vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1)
   {
     bool good = this->set_images_and_cams(resc0,acam0,resc1,acam1);
   }
 
+  //: set parameter values
+  void set_param_values(double min_disparity_z = NAN, size_t n_points = 1000, double upsample_scale =1.0){
+    params_.min_disparity_z_ = min_disparity_z;
+    params_.n_points_ = n_points;
+    params_.upsample_scale_ = upsample_scale;
+  }
+
   //: set images & cameras
   bool set_images_and_cams(vil_image_view_base_sptr const& view0, vpgl_affine_camera<double> const& acam0,
                            vil_image_view_base_sptr const& view1, vpgl_affine_camera<double> const& acam1);
+
+  bool set_images_and_cams(vil_image_view<unsigned char> const& view0, vpgl_affine_camera<double> const& acam0,
+                           vil_image_view<unsigned char> const& view1, vpgl_affine_camera<double> const& acam1)
+  {
+    return set_images_and_cams(vil_new_image_resource_of_view(view0), acam0, vil_new_image_resource_of_view(view1), acam1);
+  }
 
   bool set_images_and_cams(vil_image_resource_sptr const& resc0, vpgl_affine_camera<double> const& acam0,
                            vil_image_resource_sptr const& resc1, vpgl_affine_camera<double> const& acam1);
