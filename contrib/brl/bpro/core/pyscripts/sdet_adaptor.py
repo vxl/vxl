@@ -181,8 +181,8 @@ def test_classifier_clouds(tclsf, dictionary_name, image_resource, i, j, ni, nj,
     batch.set_input_unsigned(5, ni)
     batch.set_input_unsigned(6, nj)
     batch.set_input_unsigned(7, block_size)
-    batch.set_input_string(8, category_id_file)
-    batch.set_input_string(9, percent_cat_name)
+    batch.set_input_string(8, percent_cat_name)
+    batch.set_input_string(9, category_id_file)
     batch.set_input_float(10, scale_factor)
     status = batch.run_process()
     if status:

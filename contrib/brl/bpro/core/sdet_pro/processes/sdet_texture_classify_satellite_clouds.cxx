@@ -1,6 +1,7 @@
 // This is brl/bpro/core/sdet_pro/processes/sdet_texture_classify_satellite_clouds.cxx
 #include <iostream>
 #include <algorithm>
+#include <tuple>
 #include <bprb/bprb_func_process.h>
 //:
 // \file
@@ -9,6 +10,7 @@
 #include <brdb/brdb_value.h>
 #include <sdet/sdet_atmospheric_image_classifier.h>
 #include <sdet/sdet_texture_classifier_params.h>
+#include <sdet/algo/sdet_classify_clouds.h>
 #include <vil/vil_image_view.h>
 #include <vnl/vnl_random.h>
 #ifdef _MSC_VER
@@ -63,150 +65,39 @@ bool sdet_texture_classify_satellite_clouds_process(bprb_func_process& pro)
     std::cout << pro.name() << "texture classifier process inputs are not valid"<< std::endl;
     return false;
   }
+
   // get inputs
   sdet_texture_classifier_sptr tcptr = pro.get_input<sdet_texture_classifier_sptr>(0);
-  auto* tcp = static_cast<sdet_texture_classifier_params*>(tcptr.ptr());
-  sdet_atmospheric_image_classifier tc(*tcp);
   std::string texton_dict_path = pro.get_input<std::string>(1);
-  tc.load_dictionary(texton_dict_path);
-
-  std::cout << "max filter radius in dictionary: " << tc.max_filter_radius() << std::endl;
-  unsigned ntextons = tc.get_number_of_textons();
-  std::cout << " testing using the dictionary with the number of textons: " << ntextons << "\n categories:\n";
-  std::vector<std::string> cats = tc.get_dictionary_categories();
-  if (!cats.size()) {
-    std::cerr << "The number of categories is zero!! in the classifier dictionary!\n";
-    return false;
-  }
-
-  //std::string img_name = pro.get_input<std::string>(2);
   vil_image_resource_sptr image = pro.get_input<vil_image_resource_sptr>(2);
   auto i = pro.get_input<unsigned>(3);
   auto j = pro.get_input<unsigned>(4);
   auto ni = pro.get_input<unsigned>(5);
   auto nj = pro.get_input<unsigned>(6);
+  auto block_size = pro.get_input<unsigned>(7);
+  std::string first_category = pro.get_input<std::string>(8);
+  std::string cat_ids_file = pro.get_input<std::string>(9);
+  float scale_factor  = pro.get_input<float>(10);
 
-  tc.block_size_ = pro.get_input<unsigned>(7);
-  std::string cat_ids_file = pro.get_input<std::string>(8);
-  std::string first_category = pro.get_input<std::string>(9);
+  try {
+    std::tuple<vil_image_view<float>, vil_image_view<vxl_byte>, vil_image_view<vil_rgb<vxl_byte> >, float>
+      ret = sdet_classify_clouds(*tcptr, texton_dict_path, image, i, j, ni, nj, block_size, first_category, cat_ids_file, scale_factor);
 
-  // input maximum graylevel
-  auto scale_factor  = pro.get_input<float>(10);
-  std::cout << "Scale Factor = " << scale_factor << std::endl;
+    vil_image_view_base_sptr img_ptr = new vil_image_view<float>(std::get<0>(ret));
+    pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
+    vil_image_view_base_sptr img_ptr2 = new vil_image_view<vxl_byte>(std::get<1>(ret));
+    pro.set_output_val<vil_image_view_base_sptr>(1, img_ptr2);
+    vil_image_view_base_sptr img_ptr3 = new vil_image_view<vil_rgb<vxl_byte> >(std::get<2>(ret));
+    pro.set_output_val<vil_image_view_base_sptr>(2, img_ptr3);
+    pro.set_output_val<float>(3, std::get<3>(ret));  // returns the percentage of the "first" category
 
-  int invalid = tc.max_filter_radius();
-
-  //std::map<std::string, vil_rgb<vxl_byte> > cat_color_map;
-  std::map<unsigned char, vil_rgb<vxl_byte> > cat_color_map;
-  std::map<std::string, unsigned char> cat_id_map;
-
-  if (cat_ids_file.compare("") == 0) {
-    /*first_category = cats[0];*/
-    for (unsigned kk = 0; kk < cats.size(); kk++)
-      cat_id_map[cats[kk]] = kk;
-  } else {
-    std::ifstream ifs(cat_ids_file.c_str());
-    std::string cat_name; int id; int r, g, b;
-    ifs >> cat_name;
-    /*first_category = cat_name;*/
-    while (!ifs.eof()) {
-      ifs >> id; ifs >> r; ifs >> g; ifs >> b;
-      cat_id_map[cat_name] = (unsigned char)id;
-      cat_color_map[(unsigned char)id] = vil_rgb<vxl_byte>(r,g,b);
-      std::cout << "\t\t" << cat_name << " color: " << cat_color_map[(unsigned char)id] << '\n';
-      ifs >> cat_name;
-    }
+    return true;
   }
-
-  // check input of first_category
-  if (cat_id_map.find(first_category) == cat_id_map.end()) {
-    std::cout << pro.name() << ": can not find the input first category " << first_category << " among all categories!" << std::endl;
+  catch (std::invalid_argument& e) {
+    std::cout << e.what();
     return false;
   }
 
-  std::vector<std::string> cats2;
-  std::cout << " output id image will use the following ids for the categories:\n";
-  for (auto & iter : cat_id_map) {
-    std::cout << iter.first << " " << (int)iter.second << std::endl;
-    cats2.push_back(iter.first);
-  }
-  tc.set_atmospheric_categories(cats2);
-
-
-  //vil_image_resource_sptr image = vil_load_image_resource(img_name.c_str());
-  if (!image)
-  {
-    std::cout << "problems with the input image resource handle!\n";
-    return false;
-  }
-
-  // report resource info
-  std::cout << " image: ni=" << image->ni() << ", nj=" << image->nj() << ", nplanes=" << image->nplanes()
-    << " file_format=" << image->file_format() << ", pixel_format=" << image->pixel_format() << std::endl;
-
-  // crop info
-  unsigned nii = ni+2*invalid;
-  unsigned njj = nj+2*invalid;
-  int ii = i-invalid; int jj = j-invalid;
-
-  // crop via get_copy_view (try blocked_image_resource for speed)
-  vil_image_view_base_sptr roi;
-  vil_blocked_image_resource_sptr bir = blocked_image_resource(image);
-  if (!bir) {
-    roi = image->get_copy_view(ii, nii, jj, njj);
-  } else {
-    roi = bir->get_copy_view(ii, nii, jj, njj);
-  }
-
-  // check for valid roi
-  if (!roi) {
-    std::cerr << "Could not crop from image with size (" << image->ni() << "," << image->nj()
-      << ") at position (" << i << "," << j << ") of size (" << ni << ", " << nj << ") with margin: " << invalid << std::endl;
-    return false;
-  }
-
-  // report roi info
-  std::cout << " roi: ni=" << roi->ni() << ", nj=" << roi->nj() << ", nplanes=" << roi->nplanes()
-      << ", pixel_format=" << roi->pixel_format() << std::endl;
-
-  // cast to float
-  vil_image_view<float> roi_float = *vil_convert_cast(float(), roi);
-
-  // convert to grey (if necessary)
-  vil_image_view<float> roi_float_grey;
-  if (roi->nplanes() > 1) {
-    vil_convert_planes_to_grey(roi_float, roi_float_grey);
-  } else {
-    roi_float_grey = roi_float;
-  }
-
-  // scale
-  vil_math_scale_values(roi_float_grey, scale_factor);
-
-  // report roi float info
-  std::cout << " roi_float_grey:  ni=" << roi_float_grey.ni() << ", nj=" << roi_float_grey.nj() << ", nplanes=" << roi_float_grey.nplanes()
-      << ", pixel_format=" << roi_float_grey.pixel_format() << std::endl;
-
-  vil_image_view<float> outf = vil_crop(roi_float_grey, invalid, ni, invalid, nj);
-  std::map<std::string, float> cat_percentage_map;
-  vil_image_view<vxl_byte> class_img = tc.classify_image_blocks_qual2(roi_float_grey, cat_id_map, cat_percentage_map);
-  vil_image_view<vxl_byte> out_class_img = vil_crop(class_img, invalid, ni, invalid, nj);
-
-  // transfer id map to color map
-  vil_image_view<vil_rgb<vxl_byte> > out_rgb_img(out_class_img.ni(), out_class_img.nj());
-  for (unsigned i = 0; i < out_class_img.ni(); i++)
-    for (unsigned j = 0; j < out_class_img.nj(); j++)
-      out_rgb_img(i,j) = cat_color_map[out_class_img(i, j)];
-
-
-  vil_image_view_base_sptr img_ptr = new vil_image_view<float>(outf);
-  pro.set_output_val<vil_image_view_base_sptr>(0, img_ptr);
-  vil_image_view_base_sptr img_ptr2 = new vil_image_view<vxl_byte>(out_class_img);
-  pro.set_output_val<vil_image_view_base_sptr>(1, img_ptr2);
-  vil_image_view_base_sptr img_ptr3 = new vil_image_view<vil_rgb<vxl_byte> >(out_rgb_img);
-  pro.set_output_val<vil_image_view_base_sptr>(2, img_ptr3);
-  pro.set_output_val<float>(3, cat_percentage_map[first_category]);  // returns the percentage of the "first" category
-  return true;
 }
 
 //: perform the cloud classification for the given image
@@ -222,7 +113,7 @@ bool sdet_texture_classify_satellite_clouds_process2_cons(bprb_func_process& pro
   input_types.emplace_back("unsigned");   // i
   input_types.emplace_back("unsigned");   // j (i,j) is the upper left pixel coordinate for ROI in the image resource
   input_types.emplace_back("unsigned");   // width
-  input_types.emplace_back("unsigned");   // height (widht, height) is the size of the ROI in terms of pixels
+  input_types.emplace_back("unsigned");   // height (width, height) is the size of the ROI in terms of pixels
   input_types.emplace_back("unsigned");   //texture block size
   input_types.emplace_back("vcl_string");  // a simple text file with the list of ids&colors for each category, if passed as "" just use 0, 1, 2, .. etc.
   input_types.emplace_back("vcl_string");  // the category whose percentage of pixels among all classified pixel will be returned
