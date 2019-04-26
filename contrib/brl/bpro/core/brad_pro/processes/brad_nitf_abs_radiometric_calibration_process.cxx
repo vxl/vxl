@@ -49,12 +49,13 @@ bool brad_nitf_abs_radiometric_calibration_process(bprb_func_process& pro)
   brad_image_metadata_sptr md = pro.get_input<brad_image_metadata_sptr>(1);
 
   // call the function
-  vil_image_view_base_sptr output_img_view = brad_nitf_abs_radiometric_calibrate(img_sptr, md);
+  vil_image_view<float> output_img = brad_nitf_abs_radiometric_calibrate(*img_sptr, *md);
 
-  // set output
-  if (output_img_view) {
-    //output date time info
-    pro.set_output_val<vil_image_view_base_sptr>(0, output_img_view);
+  // create a smart pointer to return
+  vil_image_view_base_sptr output = new vil_image_view<float>(output_img);
+
+  if (output) {
+    pro.set_output_val<vil_image_view_base_sptr>(0, output);
     return true;
   } else {
     return false;

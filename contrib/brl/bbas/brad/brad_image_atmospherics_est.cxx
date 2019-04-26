@@ -211,7 +211,7 @@ bool brad_estimate_reflectance_image(vil_image_view<float> const& radiance,
   unsigned ni = radiance.ni();
   unsigned nj = radiance.nj();
   unsigned np = radiance.nplanes();
-  // compuate airlight
+  // compute airlight
   std::vector<double> airlight;
   brad_estimate_airlight(radiance, mdata, airlight, average_airlight);
 

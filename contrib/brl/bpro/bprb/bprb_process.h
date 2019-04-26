@@ -115,7 +115,7 @@ class bprb_process : public vbl_ref_count
   brdb_value_sptr output(unsigned i)
   { if (i<n_outputs()) return output_data_[i]; else return nullptr; }
 
-  //: Insure that inputs are valid
+  //: Ensure that inputs are valid
   bool verify_inputs();
 
   //: Perform any initialization required by the process
